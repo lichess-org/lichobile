@@ -24,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/veloce/lichess-mobile/issues"
   },
-  "homepage": "https://github.com/veloce/lichess-mobile"
+  "homepage": "https://github.com/veloce/lichess-mobile",
+  "devDependencies": {
+    "gulp": "~3.6.2",
+    "gulp-browserify": "~0.5.0"
+  },
+  "dependencies": {
+    "cordova": "~3.4.1-0.1.0"
+  }
 }

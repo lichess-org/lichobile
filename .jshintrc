@@ -1,0 +1,20 @@
+// See https://github.com/jshint/jshint/blob/2.x/examples/.jshintrc
+{
+  "globals": {
+    "window": true,
+    "document": true
+  },
+  "indent": 2,
+  "node": true,
+  "bitwise": true,
+  "camelcase": true,
+  "newcap": false,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": true,
+  "undef": true,
+  "unused": true,
+  "trailing": true,
+  "smarttabs": false,
+  "forin": false
+}

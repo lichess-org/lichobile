@@ -1,0 +1,28 @@
+{
+  "name": "lichess-mobile",
+  "version": "0.1.0",
+  "description": "lichess.org mobile application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veloce/lichess-mobile.git"
+  },
+  "keywords": [
+    "lichess",
+    "chess",
+    "application",
+    "mobile",
+    "realtime",
+    "android",
+    "ios"
+  ],
+  "author": "Vincent Velociter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/veloce/lichess-mobile/issues"
+  },
+  "homepage": "https://github.com/veloce/lichess-mobile"
+}

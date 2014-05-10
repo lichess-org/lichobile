@@ -1,0 +1,9 @@
+<platform name="ios">
+    <config-file target="config.xml" parent="/*">
+        <feature name="%pluginName%">
+            <param name="ios-package" value="%pluginName%" />
+        </feature>
+    </config-file>
+
+    <source-file src="src/ios/CDV%pluginName%.m" />
+</platform>

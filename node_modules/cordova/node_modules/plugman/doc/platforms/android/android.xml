@@ -1,0 +1,12 @@
+<platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="%pluginName%">
+            <param name="android-package" value="%pluginID%.%pluginName%"/>
+        </feature>
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/*">
+        <!--add permissions -->
+    </config-file>
+
+    <source-file src="src/android/%pluginName%.java" target-dir="src/%packageName%/%pluginName%" />
+</platform>

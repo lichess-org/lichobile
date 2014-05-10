@@ -3,6 +3,7 @@
 'use strict';
 
 var Chess = require('chess.js').Chess;
+var ChessBoard = require('./chessboard');
 
 var board,
   game = new Chess();

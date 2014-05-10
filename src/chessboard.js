@@ -1,11 +1,11 @@
 /*!
- * chessboard.js v0.3.0
+ * chessboard.js $version$
  *
  * Copyright 2013 Chris Oakman
  * Released under the MIT license
- * http://chessboardjs.com/license
+ * https://github.com/oakmac/chessboardjs/blob/master/LICENSE
  *
- * Date: 10 Aug 2013
+ * Date: $date$
  */
 
 // start anonymous scope
@@ -185,8 +185,7 @@ function objToFen(obj) {
   return fen;
 }
 
-window['ChessBoard'] = window['ChessBoard'] || function(containerElOrId, cfg) {
-'use strict';
+module.exports = function(containerElOrId, cfg) {
 
 cfg = cfg || {};
 
@@ -194,12 +193,12 @@ cfg = cfg || {};
 // Constants
 //------------------------------------------------------------------------------
 
-var MINIMUM_JQUERY_VERSION = '1.7.0',
-  START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+var START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
   START_POSITION = fenToObj(START_FEN);
 
 // use unique class names to prevent clashing with anything else on the page
 // and simplify selectors
+// NOTE: these should never change
 var CSS = {
   alpha: 'alpha-d2270',
   black: 'black-3c85d',
@@ -254,8 +253,8 @@ var ANIMATION_HAPPENING = false,
 // JS Util Functions
 //------------------------------------------------------------------------------
 
-// http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
-function createId() {
+// http://tinyurl.com/3ttloxj
+function uuid() {
   return 'xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx'.replace(/x/g, function(c) {
     var r = Math.random() * 16 | 0;
     return r.toString(16);
@@ -372,15 +371,6 @@ function checkDeps() {
       typeof JSON.parse !== 'function') {
     window.alert('ChessBoard Error 1004: JSON does not exist. ' +
       'Please include a JSON polyfill.\n\nExiting...');
-    return false;
-  }
-
-  // check for a compatible version of jQuery
-  if (! (typeof window.$ && $.fn && $.fn.jquery &&
-      compareSemVer($.fn.jquery, MINIMUM_JQUERY_VERSION) === true)) {
-    window.alert('ChessBoard Error 1005: Unable to find a valid version ' +
-      'of jQuery. Please include jQuery ' + MINIMUM_JQUERY_VERSION + ' or ' +
-      'higher on the page.\n\nExiting...');
     return false;
   }
 
@@ -522,7 +512,7 @@ function createElIds() {
   for (var i = 0; i < COLUMNS.length; i++) {
     for (var j = 1; j <= 8; j++) {
       var square = COLUMNS[i] + j;
-      SQUARE_ELS_IDS[square] = square + '-' + createId();
+      SQUARE_ELS_IDS[square] = square + '-' + uuid();
     }
   }
 
@@ -531,8 +521,8 @@ function createElIds() {
   for (var i = 0; i < pieces.length; i++) {
     var whitePiece = 'w' + pieces[i];
     var blackPiece = 'b' + pieces[i];
-    SPARE_PIECE_ELS_IDS[whitePiece] = whitePiece + '-' + createId();
-    SPARE_PIECE_ELS_IDS[blackPiece] = blackPiece + '-' + createId();
+    SPARE_PIECE_ELS_IDS[whitePiece] = whitePiece + '-' + uuid();
+    SPARE_PIECE_ELS_IDS[blackPiece] = blackPiece + '-' + uuid();
   }
 }
 
@@ -696,7 +686,7 @@ function animateSquareToSquare(src, dest, piece, completeFn) {
 
   // create the animated piece and absolutely position it
   // over the source square
-  var animatedPieceId = createId();
+  var animatedPieceId = uuid();
   $('body').append(buildPiece(piece, true, animatedPieceId));
   var animatedPieceEl = $('#' + animatedPieceId);
   animatedPieceEl.css({
@@ -737,7 +727,7 @@ function animateSparePieceToSquare(piece, dest, completeFn) {
   var destOffset = destSquareEl.offset();
 
   // create the animate piece
-  var pieceId = createId();
+  var pieceId = uuid();
   $('body').append(buildPiece(piece, true, pieceId));
   var animatedPieceEl = $('#' + pieceId);
   animatedPieceEl.css({
@@ -772,6 +762,10 @@ function animateSparePieceToSquare(piece, dest, completeFn) {
 
 // execute an array of animations
 function doAnimations(a, oldPos, newPos) {
+  if (a.length === 0) {
+    return;
+  }
+
   ANIMATION_HAPPENING = true;
 
   var numFinished = 0;
@@ -1294,17 +1288,6 @@ widget.clear = function(useAnimation) {
   widget.position({}, useAnimation);
 };
 
-/*
-// get or set config properties
-// TODO: write this, GitHub Issue #1
-widget.config = function(arg1, arg2) {
-  // get the current config
-  if (arguments.length === 0) {
-    return deepCopy(cfg);
-  }
-};
-*/
-
 // remove the widget from the page
 widget.destroy = function() {
   // remove markup
@@ -1322,7 +1305,7 @@ widget.fen = function() {
 
 // flip orientation
 widget.flip = function() {
-  widget.orientation('flip');
+  return widget.orientation('flip');
 };
 
 /*
@@ -1378,14 +1361,14 @@ widget.orientation = function(arg) {
   if (arg === 'white' || arg === 'black') {
     CURRENT_ORIENTATION = arg;
     drawBoard();
-    return;
+    return CURRENT_ORIENTATION;
   }
 
   // flip orientation
   if (arg === 'flip') {
     CURRENT_ORIENTATION = (CURRENT_ORIENTATION === 'white') ? 'black' : 'white';
     drawBoard();
-    return;
+    return CURRENT_ORIENTATION;
   }
 
   error(5482, 'Invalid value passed to the orientation method.', arg);
@@ -1639,8 +1622,8 @@ function addEvents() {
     mousedownSparePiece);
 
   // mouse enter / leave square
-  boardEl.on('mouseenter', '.' + CSS.square, mouseenterSquare);
-  boardEl.on('mouseleave', '.' + CSS.square, mouseleaveSquare);
+  boardEl.on('mouseenter', '.' + CSS.square, mouseenterSquare)
+    .on('mouseleave', '.' + CSS.square, mouseleaveSquare);
 
   // IE doesn't like the events on the window object, but other browsers
   // perform better that way
@@ -1648,12 +1631,12 @@ function addEvents() {
     // IE-specific prevent browser "image drag"
     document.ondragstart = function() { return false; };
 
-    $('body').on('mousemove', mousemoveWindow);
-    $('body').on('mouseup', mouseupWindow);
+    $('body').on('mousemove', mousemoveWindow)
+      .on('mouseup', mouseupWindow);
   }
   else {
-    $(window).on('mousemove', mousemoveWindow);
-    $(window).on('mouseup', mouseupWindow);
+    $(window).on('mousemove', mousemoveWindow)
+      .on('mouseup', mouseupWindow);
   }
 
   // touch drag pieces
@@ -1661,12 +1644,15 @@ function addEvents() {
     boardEl.on('touchstart', '.' + CSS.square, touchstartSquare);
     containerEl.on('touchstart', '.' + CSS.sparePieces + ' .' + CSS.piece,
       touchstartSparePiece);
-    $(window).on('touchmove', touchmoveWindow);
-    $(window).on('touchend', touchendWindow);
+    $(window).on('touchmove', touchmoveWindow)
+      .on('touchend', touchendWindow);
   }
 }
 
 function initDom() {
+  // create unique IDs for all the elements we will create
+  createElIds();
+
   // build board and save it in memory
   containerEl.html(buildBoardContainer());
   boardEl = containerEl.find('.' + CSS.board);
@@ -1677,7 +1663,7 @@ function initDom() {
   }
 
   // create the drag piece
-  var draggedPieceId = createId();
+  var draggedPieceId = uuid();
   $('body').append(buildPiece('wP', true, draggedPieceId));
   draggedPieceEl = $('#' + draggedPieceId);
 
@@ -1692,9 +1678,6 @@ function init() {
   if (checkDeps() !== true ||
       expandConfig() !== true) return;
 
-  // create unique IDs for all the elements we will create
-  createElIds();
-
   initDom();
   addEvents();
 }
@@ -1706,9 +1689,5 @@ init();
 return widget;
 
 }; // end window.ChessBoard
-
-// expose util functions
-window.ChessBoard.fenToObj = fenToObj;
-window.ChessBoard.objToFen = objToFen;
 
 })(); // end anonymous wrapper

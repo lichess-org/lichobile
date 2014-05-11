@@ -1,18 +1,16 @@
 /*!
- * chessboard.js $version$
+ * chessboard.js 0.3.0
  *
  * Copyright 2013 Chris Oakman
  * Released under the MIT license
  * https://github.com/oakmac/chessboardjs/blob/master/LICENSE
  *
- * Date: $date$
+ * Modified to adapt to Zepto and browserify
+ *
  */
+'use strict';
 
 var $ = require('./vendor/zepto');
-
-// start anonymous scope
-;(function() {
-'use strict';
 
 //------------------------------------------------------------------------------
 // Chess Util Functions
@@ -1690,5 +1688,3 @@ init();
 return widget;
 
 }; // end window.ChessBoard
-
-})(); // end anonymous wrapper

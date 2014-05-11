@@ -1,16 +1,12 @@
 var _ = require('lodash'),
     $ = require('./vendor/zepto'),
+    Qajax = require('qajax'),
     storage = require('./storage');
 
 var lichessSri = Math.random().toString(36).substring(2);
 
 var strongSocketDefaults = {
   events: {
-    // fen: function(e) {
-    //   $('a.live_' + e.id).each(function() {
-    //     parseFen($(this).data("fen", e.fen).data("lastmove", e.lm));
-    //   });
-    // }
   },
   params: {
     sri: lichessSri
@@ -25,8 +21,9 @@ var strongSocketDefaults = {
   }
 };
 
-var strongSocket = function(url, version, settings) {
+var StrongSocket = function(url, version, settings) {
   var self = this;
+  console.log('bluk');
   self.settings = strongSocketDefaults;
   $.extend(true, self.settings, settings);
   self.url = url;
@@ -54,12 +51,12 @@ var strongSocket = function(url, version, settings) {
   });
 };
 
-strongSocket.prototype = {
+StrongSocket.prototype = {
   connect: function() {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + $.param($.extend(self.settings.params, {
+    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + Qajax.serialize($.extend(self.settings.params, {
       version: self.version
     }));
     self.debug("connection attempt to " + fullUrl, true);
@@ -177,7 +174,7 @@ strongSocket.prototype = {
       }
       if (m.v > self.version + 1) {
         self.debug("event gap detected from " + self.version + " to " + m.v);
-        if (!self.options.prodPipe) return;
+        // if (!self.options.prodPipe) return;
       }
       self.version = m.v;
     }
@@ -234,22 +231,11 @@ strongSocket.prototype = {
     storage.set("wsok", 1);
   },
   baseUrl: function() {
-    var key = this.options.baseUrlKey;
-    var urls = this.options.baseUrls;
-    var url = storage.get(key);
-    if (!url) {
-      url = urls[0];
-      storage.set(key, url);
-    } else if (this.tryOtherUrl) {
-      this.tryOtherUrl = false;
-      url = urls[(urls.indexOf(url) + 1) % urls.length];
-      storage.set(key, url);
-    }
-    return url;
+    return 'socket.en.l.org:9021';
   },
   pingInterval: function() {
     return this.options.pingDelay + this.averageLag;
   }
 };
 
-module.exports = strongSocket;
+module.exports = StrongSocket;

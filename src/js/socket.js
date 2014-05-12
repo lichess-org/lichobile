@@ -224,7 +224,7 @@ StrongSocket.prototype = {
     storage.set("wsok", 1);
   },
   baseUrl: function() {
-    return 'socket.en.l.org:9663';
+    return window.socketEndPoint;
   },
   pingInterval: function() {
     return this.options.pingDelay + this.averageLag;

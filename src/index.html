@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="css/chessboard.css" />
     <title>lichess mobile</title>
   </head>
+  <script>
+    window.apiEndPoint = "<!-- @echo API_END_POINT -->";
+    window.socketEndPoint = "<!-- @echo SOCKET_END_POINT -->";
+  </script>
   <body>
     <div id="board"></div>
     <!-- @if PLATFORM='cordova' -->

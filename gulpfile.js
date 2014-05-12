@@ -2,8 +2,10 @@ var gulp = require('gulp');
 var browserify = require('gulp-browserify');
 var jshint = require('gulp-jshint');
 var preprocess = require('gulp-preprocess');
+var argv = require('yargs').argv;
 
-var env = require('./env.json');
+var defaults = require('./env.json');
+var env = argv.env ? require('./' + argv.env) : defaults;
 
 var paths = {
   scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js']

@@ -21,7 +21,7 @@ var onSnapEnd = function() {
 
 Qajax({
   headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
-  url: '/setup/ai',
+  url: window.apiEndPoint + '/setup/ai',
   method: 'POST',
   data: {
     variant: 1,

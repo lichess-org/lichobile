@@ -2,6 +2,9 @@
 
 ROOT=$(cd `dirname $0` && pwd)/..
 
+cd $ROOT
+gulp html --env=env/mobile.json
+
 cd $ROOT/app
 $ROOT/node_modules/cordova/bin/cordova prepare android
 cd $ROOT/app/platforms/android

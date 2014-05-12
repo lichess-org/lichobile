@@ -10,7 +10,7 @@
  */
 'use strict';
 
-var $ = require('./vendor/zepto');
+var $ = require('browserify-zepto');
 
 //------------------------------------------------------------------------------
 // Chess Util Functions

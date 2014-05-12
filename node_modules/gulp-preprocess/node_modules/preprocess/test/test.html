@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- @if NODE_ENV!='production' -->
+    <title>dev title</title>
+    <!-- @endif -->
+
+  <!-- @if NODE_ENV!='development' -->
+  <title>prod title</title>
+  <!-- @endif -->
+
+</head>
+<body>
+  <h1><!-- @echo` HOME --></h1>
+  <h2><!-- @include include.txt --></h2>
+<p><!-- @include ../README.md --></p>
+</body>
+</html>

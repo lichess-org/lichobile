@@ -28,7 +28,9 @@
   "devDependencies": {
     "gulp": "~3.6.2",
     "gulp-browserify": "~0.5.0",
-    "gulp-jshint": "~1.5.5"
+    "gulp-jshint": "~1.5.5",
+    "gulp-preprocess": "~1.0.1",
+    "yargs": "~1.2.1"
   },
   "dependencies": {
     "cordova": "~3.4.1-0.1.0",

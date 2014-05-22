@@ -6,18 +6,11 @@ var ChessBoard = require('./vendor/chessboard'),
     Qajax = require('qajax'),
     StrongSocket = require('./socket');
 
-var board;
+var board, player;
 
-// do not pick up pieces if the game is over
-// only pick up pieces for White
-var onDragStart = function(source, piece, position, orientation) {
-};
-
-var onDrop = function(source, target) {
-};
-
-var onSnapEnd = function() {
-};
+function isOpponentMove(d) {
+  return d.color !== player;
+}
 
 Qajax({
   headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -32,23 +25,53 @@ Qajax({
     color: 'random'
   }
 }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
+  console.log(data.game);
+  player = data.game.player;
+
   var socket = new StrongSocket(
     data.url.socket,
     data.player.version,
-    { options: { debug: true }}
+    {
+      options: { debug: true },
+      events: {
+        move: function(e) {
+          console.log('move', e);
+          if (isOpponentMove(e)) {
+            board.move(e.from + '-' + e.to);
+          }
+        }
+      }
+    }
   );
+
+  // var onDragStart = function(source, piece, position, orientation) {
+  // };
+
+  // var onSnapEnd = function() {
+  // };
+
+  var onDrop = function(source, target) {
+    console.log('dropped move: ' + source + ' ' + target);
+    socket.send('move', { from: source, to: target });
+  };
+
+  var cfg = {
+    draggable: true,
+    position: 'start',
+    onDrop: onDrop
+  };
+
+  board = new ChessBoard('board', cfg);
+  board.resize();
+
+  if (player === 'black') {
+    var firstmove = data.game.lastMove.substr(0,2) + '-' + data.game.lastMove.substr(2, 2);
+    console.log(firstmove);
+    board.move(firstmove);
+  }
+
 }, function(err) {
   console.log('post request to lichess failed', err);
 });
 
 
-var cfg = {
-  draggable: true,
-  position: 'start',
-  onDragStart: onDragStart,
-  onDrop: onDrop,
-  onSnapEnd: onSnapEnd
-};
-
-board = new ChessBoard('board', cfg);
-board.resize();

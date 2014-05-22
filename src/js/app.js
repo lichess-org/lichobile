@@ -4,13 +4,10 @@
 
 var ChessBoard = require('./vendor/chessboard'),
     Qajax = require('qajax'),
+    Game = require('./game'),
     StrongSocket = require('./socket');
 
-var board, player;
-
-function isOpponentMove(d) {
-  return d.color !== player;
-}
+var board, game;
 
 Qajax({
   headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -26,7 +23,9 @@ Qajax({
   }
 }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
   console.log(data.game);
-  player = data.game.player;
+  game = new Game(data.game.id);
+  game.player = data.game.player;
+  game.possibleMoves = data.possibleMoves;
 
   var socket = new StrongSocket(
     data.url.socket,
@@ -34,12 +33,18 @@ Qajax({
     {
       options: { debug: true },
       events: {
+        possibleMoves: function(e) {
+          game.possibleMoves = e;
+        },
         move: function(e) {
-          console.log('move', e);
-          if (isOpponentMove(e)) {
+          if (game.isOpponentToMove(e.color)) {
             board.move(e.from + '-' + e.to);
           }
-        }
+        },
+        state: function(e) {
+          game.player = e.color;
+          game.turns = e.turns;
+        },
       }
     }
   );
@@ -50,9 +55,11 @@ Qajax({
   // var onSnapEnd = function() {
   // };
 
-  var onDrop = function(source, target) {
-    console.log('dropped move: ' + source + ' ' + target);
-    socket.send('move', { from: source, to: target });
+  var onDrop = function(from, to) {
+    // illegal move
+    if (!game.isMoveAllowed(from, to)) return 'snapback';
+
+    socket.send('move', { from: from, to: to });
   };
 
   var cfg = {
@@ -64,9 +71,8 @@ Qajax({
   board = new ChessBoard('board', cfg);
   board.resize();
 
-  if (player === 'black') {
+  if (game.player === 'black') {
     var firstmove = data.game.lastMove.substr(0,2) + '-' + data.game.lastMove.substr(2, 2);
-    console.log(firstmove);
     board.move(firstmove);
   }
 

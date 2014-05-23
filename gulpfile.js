@@ -1,5 +1,7 @@
+var source = require('vinyl-source-stream');
 var gulp = require('gulp');
-var browserify = require('gulp-browserify');
+var gutil = require('gulp-util');
+var browserify = require('browserify');
 var jshint = require('gulp-jshint');
 var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
@@ -24,12 +26,12 @@ gulp.task('lint', function() {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src('src/js/app.js')
-    .pipe(browserify({
-      insertGlobals : false,
-      debug : true
-    }))
-    .pipe(gulp.dest('www/'));
+  var bundleStream = browserify('./src/js/app.js').bundle({debug: true});
+
+  return bundleStream
+    .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./www'));
 });
 
 gulp.task('dev', ['html', 'lint', 'scripts']);

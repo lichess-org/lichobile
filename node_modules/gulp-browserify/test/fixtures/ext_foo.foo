@@ -1,6 +1,0 @@
-var bar = require('./ext_bar');
- 
-module.exports = {
-  foo: 'Foo!',
-  bar: bar
-};

@@ -27,10 +27,12 @@
   "homepage": "https://github.com/veloce/lichess-mobile",
   "devDependencies": {
     "gulp": "~3.6.2",
-    "gulp-browserify": "~0.5.0",
     "gulp-jshint": "~1.5.5",
     "gulp-preprocess": "~1.0.1",
-    "yargs": "~1.2.1"
+    "yargs": "~1.2.1",
+    "browserify": "~4.1.5",
+    "vinyl-source-stream": "~0.1.1",
+    "gulp-util": "~2.2.14"
   },
   "dependencies": {
     "cordova": "~3.4.1-0.1.0",

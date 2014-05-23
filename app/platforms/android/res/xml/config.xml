@@ -15,5 +15,6 @@
         Vincent Velociter
     </author>
     <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
     <access origin="*" />
 </widget>

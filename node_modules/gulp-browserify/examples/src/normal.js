@@ -1,1 +1,0 @@
-var should = require('should');

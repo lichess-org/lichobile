@@ -18,7 +18,7 @@ Qajax({
     clock: false,
     time: 60,
     increment: 3,
-    level: 5,
+    level: 1,
     color: 'random'
   }
 }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
@@ -39,6 +39,19 @@ Qajax({
             board.move(e.from + '-' + e.to);
           }
         },
+        promotion: function(e) {
+          console.log(e);
+        },
+        enpassant: function(e) {
+          var pos = board.position();
+          delete pos[e];
+          board.position(pos, false);
+          console.log(e);
+        },
+        check: function(e) {
+        },
+        end: function(e) {
+        },
         state: function(e) {
           game.game.player = e.color;
           game.game.turns = e.turns;
@@ -49,9 +62,6 @@ Qajax({
       }
     }
   );
-
-  // var onSnapEnd = function() {
-  // };
 
   var onDragStart = function(source, piece, position, orientation) {
     // allow to pick up only pieces of player color
@@ -76,7 +86,6 @@ Qajax({
   };
 
   board = new ChessBoard('board', cfg);
-  board.resize();
 
   if (game.game.player === 'black') {
     var firstmove = game.game.lastMove.substr(0,2) + '-' + game.game.lastMove.substr(2, 2);

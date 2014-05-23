@@ -22,10 +22,8 @@ Qajax({
     color: 'random'
   }
 }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
-  console.log(data.game);
-  game = new Game(data.game.id);
-  game.player = data.game.player;
-  game.possibleMoves = data.possibleMoves;
+  console.log(data);
+  game = new Game(data);
 
   var socket = new StrongSocket(
     data.url.socket,
@@ -42,21 +40,29 @@ Qajax({
           }
         },
         state: function(e) {
-          game.player = e.color;
-          game.turns = e.turns;
+          game.game.player = e.color;
+          game.game.turns = e.turns;
         },
+        castling: function(e) {
+          board.move(e.rook[0] + '-' + e.rook[1]);
+        }
       }
     }
   );
 
-  // var onDragStart = function(source, piece, position, orientation) {
-  // };
-
   // var onSnapEnd = function() {
   // };
 
+  var onDragStart = function(source, piece, position, orientation) {
+    // allow to pick up only pieces of player color
+    var re = new RegExp('^' + game.opponent.color[0]);
+    if (piece.search(re) !== -1) {
+      return false;
+    }
+  };
+
   var onDrop = function(from, to) {
-    // illegal move
+    if (to === from || to === 'offboard') return false;
     if (!game.isMoveAllowed(from, to)) return 'snapback';
 
     socket.send('move', { from: from, to: to });
@@ -65,14 +71,15 @@ Qajax({
   var cfg = {
     draggable: true,
     position: 'start',
+    onDragStart: onDragStart,
     onDrop: onDrop
   };
 
   board = new ChessBoard('board', cfg);
   board.resize();
 
-  if (game.player === 'black') {
-    var firstmove = data.game.lastMove.substr(0,2) + '-' + data.game.lastMove.substr(2, 2);
+  if (game.game.player === 'black') {
+    var firstmove = game.game.lastMove.substr(0,2) + '-' + game.game.lastMove.substr(2, 2);
     board.move(firstmove);
   }
 

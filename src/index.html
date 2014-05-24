@@ -4,20 +4,42 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <link rel="stylesheet" type="text/css" href="css/chessboard.css" />
-    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi, minimal-ui" />
     <title>lichess mobile</title>
     <!-- @if PLATFORM='cordova' && WEINRE -->
     <script src="http://<!-- @echo WEINRE_HOST -->:<!-- @echo WEINRE_PORT -->/target/target-script-min.js#lichess" type="text/javascript"></script>
     <!-- @endif -->
+    <link href="ratchet/css/ratchet.css" rel="stylesheet">
+    <script src="ratchet/js/ratchet.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/chessboard.css" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
   </head>
   <script>
     window.apiEndPoint = "<!-- @echo API_END_POINT -->";
     window.socketEndPoint = "<!-- @echo SOCKET_END_POINT -->";
   </script>
   <body>
-    <div id="board"></div>
+    <header class="bar bar-nav">
+      <h1 class="title">lichess mobile</h1>
+    </header>
+    <nav class="bar bar-tab">
+      <a class="tab-item active" href="#">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+      </a>
+      <a id="play-button" class="tab-item" href="#">
+        <span class="icon icon-play"></span>
+        <span class="tab-label">Play</span>
+      </a>
+      <a class="tab-item" href="#">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+      </a>
+    </nav>
+
+    <div class="content">
+      <div id="board"></div>
+    </div>
     <!-- @if PLATFORM='cordova' -->
     <script type="text/javascript" src="cordova.js"></script>
     <!-- @endif -->

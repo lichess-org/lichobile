@@ -39,6 +39,7 @@ gulp.task('dev', ['html', 'lint', 'scripts']);
 // Watch Files For Changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['lint', 'scripts']);
+  gulp.watch('src/index.html', ['html']);
 });
 
 // Default Task

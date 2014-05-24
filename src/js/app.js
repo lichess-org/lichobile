@@ -11,7 +11,7 @@ var ChessBoard = require('./vendor/chessboard'),
 var board, game, socket;
 
 var onDragStart = function(source, piece, position, orientation) {
-  if (game) {
+  if (game && !game.game.finished) {
     // allow to pick up only pieces of player color
     var re = new RegExp('^' + game.opponent.color[0]);
     if (piece.search(re) !== -1) {
@@ -92,6 +92,7 @@ $('#play-button').tap(function() {
           check: function(e) {
           },
           end: function() {
+            console.log('game finished');
             game.game.finished = true;
           },
           state: function(e) {

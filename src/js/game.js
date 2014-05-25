@@ -27,6 +27,9 @@ Game.prototype = {
   isMoveAllowed: function(from, to) {
     var m = this.possibleMoves[from];
     return m && _.indexOf(m.match(/.{1,2}/g), to) !== -1;
+  },
+  lastPlayer: function() {
+    return (this.game.player === 'white') ? 'black' : 'white';
   }
 };
 

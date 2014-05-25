@@ -31,7 +31,7 @@
         <span class="icon icon-play"></span>
         <span class="tab-label">Play</span>
       </a>
-      <a class="tab-item" href="#">
+      <a class="tab-item" href="#settingsModal">
         <span class="icon icon-gear"></span>
         <span class="tab-label">Settings</span>
       </a>
@@ -39,6 +39,16 @@
 
     <div class="content">
       <div id="board"></div>
+    </div>
+    <div id="settingsModal" class="modal">
+      <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#settingsModal"></a>
+        <h1 class="title">Settings</h1>
+      </header>
+
+      <div class="content">
+        <p class="content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
+      </div>
     </div>
     <!-- @if PLATFORM='cordova' -->
     <script type="text/javascript" src="cordova.js"></script>

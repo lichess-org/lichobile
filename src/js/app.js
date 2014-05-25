@@ -58,7 +58,7 @@ $('#play-button').tap(function() {
       time: 60,
       increment: 3,
       level: 1,
-      color: 'random'
+      color: 'white'
     }
   }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
     console.log(data);
@@ -79,12 +79,11 @@ $('#play-button').tap(function() {
             }
           },
           promotion: function(e) {
-            console.log(e);
             var pos = board.position();
-            pos[e.key] = game.game.player[0] + 'Q';
+            pos[e.key] = game.lastPlayer()[0] + 'Q';
+            board.position(pos, false);
           },
           enpassant: function(e) {
-            console.log(e);
             var pos = board.position();
             delete pos[e];
             board.position(pos, false);
@@ -105,6 +104,10 @@ $('#play-button').tap(function() {
         }
       }
     );
+
+    if (game.game.fen) {
+      board.position(game.game.fen, false);
+    }
 
     if (game.game.player === 'black') {
       var firstmove = game.game.lastMove.substr(0,2) + '-' + game.game.lastMove.substr(2, 2);

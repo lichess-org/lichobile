@@ -31,7 +31,7 @@ function main() {
       if (!game.isMoveAllowed(from, to)) return 'snapback';
 
       socket.send('move', { from: from, to: to });
-      game.clocks[game.game.player].stop();
+      game.toggleClock();
     }
   };
 

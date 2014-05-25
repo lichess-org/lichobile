@@ -31,6 +31,7 @@ function main() {
       if (!game.isMoveAllowed(from, to)) return 'snapback';
 
       socket.send('move', { from: from, to: to });
+      game.clocks[game.game.player].stop();
     }
   };
 
@@ -74,7 +75,7 @@ function main() {
         time: 5,
         increment: 3,
         level: 1,
-        color: 'white'
+        color: 'random'
       }
     }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
       console.log(data);

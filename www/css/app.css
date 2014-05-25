@@ -1,0 +1,18 @@
+.clock {
+  position: absolute;
+  border: 1px solid #404040;
+  font-size: 22px;
+  width: 70px;
+  height: 25px;
+  display:none;
+  text-align:center;
+}
+
+.clock.top {
+  border-radius: 4px 4px 0px 0px;
+}
+
+.clock.bot {
+  border-radius: 0px 0px 4px 4px;
+}
+

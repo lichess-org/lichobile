@@ -20,6 +20,77 @@
 -->
 # Cordova-cli Release Notes
 
+### 3.5.0-0.2.0 (May 09, 2014)
+* CB-6649 Removing experimental flag from positional arguments
+* CB-6648 Adding a flag for experimental features
+* Fix require paths to use cordova-lib
+* Update package.json to use cordova-lib
+* Split out cordova-lib: move cordova-cli files
+* [Windows8] re-added BOM : CB-5421 Add BOM to all html, js, css files to ensure app can pass Windows Store Certification
+* CB-6491 add CONTRIBUTING.md
+* Adding support for privileged
+* Merge pull request #4 from rodms10/autoPermission
+* android-parser: Add AndroidLaunchMode preference
+* Fix CLI tests to work with node v0.11
+* Update version of jasmine-node. Fixes test warnings util.print with node 0.11
+* CB-2606 Andriod icon - do not attempt copy to undefined path
+* CB-2606 Icons support for iOS, Android, BB10, WP8, Win8, FxOS
+* CB-6329 Delete unused info-utils.js
+* CB-6329 Clean-up of cordova info changes previously merged.
+* CB-6329 improve 'cordova info' command
+* CB-5847 strictSSL is no longer ignored
+* CB-6432 pre_package hook does not populate %CORDOVA_PLATFORMS%
+* Revert "CB-6267 Windows8. Apply BackgroundColor from config.xml"
+* Recreate "platforms" dir if it was deleted.
+* CB-5093: Add versionCode and CFBundleVersion during prepare
+* CB-6312 Use "landscape" instead of "userLandscape" in AndroidManifest.xml
+* CB-6421: Move tests from e2e to spec - cli test
+* CB-6421: Move tests from e2e to spec
+* CB-6421: Move tests from e2e to spec
+* CB-6377 superspawn: always wrap non .exe with spaces to cmd with /s /c
+* CB-6245 Incremented package version to -dev
+
+### 3.4.1-0.1.0 (Apr 03, 2014)
+* updated to use iOS 3.4.1
+* CB-6377 Fix up superspawn's cmd fallback when there is a space in the args
+* CB-6377 Remove windowsVerbatimArguments from superspawn
+* CB-6344 Fix spy to return a default platform JSON instead of an empty object
+* CB-6382 platform list: sort output
+* CB-6377 Handle spaces in paths for cmd related scripts
+* CB-6292 Add a callback-based API for cordova info (in addition to promise API)
+* CB-6292 Revert commits that add explicit callbacks to APIs
+* CB-6322 Simplify platforms/platform code for platform specifics
+* README.md: Getting Started guides link was broke. Fix.
+* Make "cmd" executed more readable.
+* CB-6141 Fix Windows 8 tests
+* Use smarter BOM-skipping logic when parsing XML.
+* CB-6357 platform check - install each platform to determine working + version number
+* CB-6357 platform: provide exports for functions
+* CB-6357 platform: Refactor into distinct functions
+* CB-6338 Improve error for missing template
+* CB-6337 Print nice error when cordova-cli hits various expected things
+* This closes #147
+* CB-6267 Windows8. Apply BackgroundColor from config.xml
+* CB-6338 Improve error for missing template
+* CB-6030 - Automatically increment port for serve when default is in use
+* CB-6337 Print nice error when cordova-cli hits various expected things
+* CB-6323 Fix harmless typo in superspawn (cmd -> c)
+* CB-6323 Fix superspawn's resolve function on windows (was very broken)
+* CB-6306 Error creating project when path to project includes spaces
+* Tweak error message when hooks fail (wasn't showing correct command)
+* [CB-6296] callback/promise interface implemented
+* [CB-6293] additional tests for run command
+* [CB-6292] tests for build function's dual return method
+* updated jasmine dependency for timing
+* CB-6211 'cordova info' command fixed for Windows platform
+* Fix prepare command from hiding failures.
+* Fix ConfigParser.getPreference error + tests
+* CB-6209 Uplevel changes from android_parser to amazon_fireos_parser Added orientation related config changes from android_parser.
+* CB-6147 Enable CLI and Plugman with npm shrinkwrap
+* When searchpath is specified in config and CLI, merge them.
+* Add --searchpath to help.txt
+* Fix node-style-callbacks form of the CLI api not passing through results.
+
 ### 3.4.0-0.1.3 (Mar 3, 2014)
 * Update to plugman v0.20.2
 
@@ -247,44 +318,3 @@ Important note: This version targets Cordova version 3.1.0-rc1.
 - Plugins are now installed serially across all installed platforms, rather than in parallel. This avoids race conditions in dependency installation. [CB-4184](https://issues.apache.org/jira/browse/CB-4184)
 - (WP8) All files from project www dir are now copied into the binary, not the top-level www. This means merges and plugin assets are correctly handled.
 
-
-### 3.4.1-0.1.0 (Apr 03, 2014)
-* updated to use iOS 3.4.1
-* CB-6377 Fix up superspawn's cmd fallback when there is a space in the args
-* CB-6377 Remove windowsVerbatimArguments from superspawn
-* CB-6344 Fix spy to return a default platform JSON instead of an empty object
-* CB-6382 platform list: sort output
-* CB-6377 Handle spaces in paths for cmd related scripts
-* CB-6292 Add a callback-based API for cordova info (in addition to promise API)
-* CB-6292 Revert commits that add explicit callbacks to APIs
-* CB-6322 Simplify platforms/platform code for platform specifics
-* README.md: Getting Started guides link was broke. Fix.
-* Make "cmd" executed more readable.
-* CB-6141 Fix Windows 8 tests
-* Use smarter BOM-skipping logic when parsing XML.
-* CB-6357 platform check - install each platform to determine working + version number
-* CB-6357 platform: provide exports for functions
-* CB-6357 platform: Refactor into distinct functions
-* CB-6338 Improve error for missing template
-* CB-6337 Print nice error when cordova-cli hits various expected things
-* This closes #147
-* CB-6267 Windows8. Apply BackgroundColor from config.xml
-* CB-6338 Improve error for missing template
-* CB-6030 - Automatically increment port for serve when default is in use
-* CB-6337 Print nice error when cordova-cli hits various expected things
-* CB-6323 Fix harmless typo in superspawn (cmd -> c)
-* CB-6323 Fix superspawn's resolve function on windows (was very broken)
-* CB-6306 Error creating project when path to project includes spaces
-* Tweak error message when hooks fail (wasn't showing correct command)
-* [CB-6296] callback/promise interface implemented
-* [CB-6293] additional tests for run command
-* [CB-6292] tests for build function's dual return method
-* updated jasmine dependency for timing
-* CB-6211 'cordova info' command fixed for Windows platform
-* Fix prepare command from hiding failures.
-* Fix ConfigParser.getPreference error + tests
-* CB-6209 Uplevel changes from android_parser to amazon_fireos_parser Added orientation related config changes from android_parser.
-* CB-6147 Enable CLI and Plugman with npm shrinkwrap
-* When searchpath is specified in config and CLI, merge them.
-* Add --searchpath to help.txt
-* Fix node-style-callbacks form of the CLI api not passing through results.

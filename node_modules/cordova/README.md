@@ -151,7 +151,7 @@ project root. Any scripts you add to these directories will be executed before
 and after the commands corresponding to the directory name. Useful for
 integrating your own build systems or integrating with version control systems.
 
-Refer to [templates/hooks-README.md](templates/hooks-README.md) for more information.
+Refer to [hooks-README.md](https://github.com/apache/cordova-lib/blob/master/cordova-lib/templates/hooks-README.md) for more information.
 
 ## merges/
 Platform-specific web assets (HTML, CSS and JavaScript files) are contained within appropriate subfolders in this directory. These are deployed during a `prepare` to the appropriate native directory.  Files placed under `merges/` will override matching files in the `www/` folder for the relevant platform. A quick example, assuming a project structure of:

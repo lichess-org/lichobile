@@ -68,7 +68,7 @@ import android.widget.FrameLayout;
 public class CordovaWebView extends WebView {
 
     public static final String TAG = "CordovaWebView";
-    public static final String CORDOVA_VERSION = "3.4.0";
+    public static final String CORDOVA_VERSION = "3.5.0";
 
     private ArrayList<Integer> keyDownCodes = new ArrayList<Integer>();
     private ArrayList<Integer> keyUpCodes = new ArrayList<Integer>();
@@ -494,8 +494,7 @@ public class CordovaWebView extends WebView {
         // Load url
         this.cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                Thread thread = new Thread(timeoutCheck);
-                thread.start();
+                cordova.getThreadPool().execute(timeoutCheck);
                 me.loadUrlNow(url);
             }
         });
@@ -542,6 +541,11 @@ public class CordovaWebView extends WebView {
         this.loadUrlIntoView(url);
     }
     
+    @Override
+    public void stopLoading() {
+        viewClient.isCurrentlyLoading = false;
+        super.stopLoading();
+    }
     
     public void onScrollChanged(int l, int t, int oldl, int oldt)
     {

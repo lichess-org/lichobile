@@ -59,7 +59,7 @@ public class IceCreamCordovaWebViewClient extends CordovaWebViewClient {
             // Allow plugins to intercept WebView requests.
             Uri remappedUri = resourceApi.remapUri(origUri);
             
-            if (!origUri.equals(remappedUri) || needsSpecialsInAssetUrlFix(origUri)) {
+            if (!origUri.equals(remappedUri) || needsSpecialsInAssetUrlFix(origUri) || needsKitKatContentUrlFix(origUri)) {
                 OpenForReadResult result = resourceApi.openForRead(remappedUri, true);
                 return new WebResourceResponse(result.mimeType, "UTF-8", result.inputStream);
             }
@@ -72,6 +72,10 @@ public class IceCreamCordovaWebViewClient extends CordovaWebViewClient {
             // Results in a 404.
             return new WebResourceResponse("text/plain", "UTF-8", null);
         }
+    }
+
+    private static boolean needsKitKatContentUrlFix(Uri uri) {
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && "content".equals(uri.getScheme());
     }
 
     private static boolean needsSpecialsInAssetUrlFix(Uri uri) {

@@ -6,6 +6,4 @@ cd $ROOT
 gulp html --env=env/mobile.json
 
 cd $ROOT/app
-$ROOT/node_modules/cordova/bin/cordova prepare android
-cd $ROOT/app/platforms/android
-ant debug install
+$ROOT/node_modules/cordova/bin/cordova run android

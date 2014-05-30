@@ -107,6 +107,7 @@ function main() {
             // check: function(e) {
             // },
             clock: function(e) {
+              console.log(e);
               game.updateClocks(e);
             },
             end: function() {

@@ -1,78 +1,77 @@
 'use strict';
 
 var Clock = function(time, $el) {
-  var self = this;
-  self.time = time;
-  self.$el = $el;
-  self.isRunning = false;
-  self.interval = null;
+  time = time;
+  $el = $el;
+  var isRunning = false;
+  var interval = null;
 
   function prefixInteger(num, length) {
     return (num / Math.pow(10, length)).toFixed(length).substr(2);
   }
 
-  self.formatDate = function(date) {
+  function formatDate(date) {
     var minutes = prefixInteger(date.getMinutes(), 2);
     var seconds = prefixInteger(date.getSeconds(), 2);
     var tenths;
-    if (self.time < 10000) {
+    if (time < 10000) {
       tenths = Math.floor(date.getMilliseconds() / 100);
       return minutes + ':' + seconds + '<span>.' + tenths + '</span>';
-    } else if (self.time >= 3600000) {
+    } else if (time >= 3600000) {
       var hours = prefixInteger(date.getHours(), 2);
       return hours + ':' + minutes + ':' + seconds;
     } else {
       return minutes + ':' + seconds;
     }
-  };
+  }
 
-  self.tick = function() {
-    var html = self.formatDate(new Date(self.time));
-    if (html !== self.$el.html()) {
-      self.$el.html(html);
+  function tick() {
+    var html = formatDate(new Date(time));
+    if (html !== $el.html()) {
+      $el.html(html);
     }
-  };
+  }
 
-};
+  function show() {
+    $el.html(formatDate(new Date(time)));
+    $el.show();
+  }
 
-Clock.prototype = {
-  show: function() {
-    var self = this;
-    this.$el.html(self.formatDate(new Date(self.time)));
-    this.$el.show();
-
-    return this;
-  },
-  start: function() {
-    var self = this;
-    var endTime = new Date().getTime() + self.time;
-    self.isRunning = true;
-    self.interval = setInterval(function() {
-      if (self.isRunning) {
+  function start() {
+    var endTime = new Date().getTime() + time;
+    isRunning = true;
+    interval = setInterval(function() {
+      if (isRunning) {
         var currTime = endTime - new Date().getTime();
         if (currTime <= 0) {
-          clearInterval(self.interval);
+          clearInterval(interval);
           currTime = 0;
         }
-        self.time = currTime;
-        self.tick();
+        time = currTime;
+        tick();
       } else {
-        clearInterval(self.interval);
+        clearInterval(interval);
       }
     }, 100);
-
-    return self;
-  },
-  setTime: function(time) {
-    this.time = Math.round(parseFloat(time) * 1000);
-    this.tick();
-  },
-  stop: function() {
-    clearInterval(this.interval);
-    this.isRunning = false;
-
-    return this;
   }
+
+  function setTime(time) {
+    time = Math.round(parseFloat(time) * 1000);
+    tick();
+  }
+
+  function stop() {
+    clearInterval(interval);
+    isRunning = false;
+  }
+
+  return {
+    show: show,
+    start: start,
+    setTime: setTime,
+    stop: stop
+  };
 };
+
 
 module.exports = Clock;

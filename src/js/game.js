@@ -40,11 +40,11 @@ Game.prototype = {
     var bTime = Math.round(parseFloat(this.clock.black) * 1000);
     if (this.game.clock) {
       if (this.player.color === 'white') {
-        this.clocks.white = new Clock(wTime, $botC);
-        this.clocks.black = new Clock(bTime, $topC);
+        this.clocks.white = Clock(wTime, $botC);
+        this.clocks.black = Clock(bTime, $topC);
       } else {
-        this.clocks.white = new Clock(wTime, $topC);
-        this.clocks.black = new Clock(bTime, $botC);
+        this.clocks.white = Clock(wTime, $topC);
+        this.clocks.black = Clock(bTime, $botC);
       }
       this.clocks.white.show();
       this.clocks.black.show();

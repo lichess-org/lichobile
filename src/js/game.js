@@ -64,10 +64,6 @@ Game.prototype = {
   startClock: function() {
     this.clocks[this.game.player].start();
   },
-  toggleClock: function() {
-    this.clocks[this.game.player].stop();
-    this.clocks[this.lastPlayer()].start();
-  },
   stopClocks: function() {
     this.clocks.white.stop();
     this.clocks.black.stop();

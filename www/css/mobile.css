@@ -1,0 +1,41 @@
+.mobile .chessground .square.selected, .chessground .square.drag-over {
+  box-shadow: none;
+  background: rgba(216, 85, 0, 0.3);
+}
+
+.mobile .chessground.cburnett .piece.pawn.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wP.png');
+}
+.mobile .chessground.cburnett .piece.bishop.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wB.png');
+}
+.mobile .chessground.cburnett .piece.knight.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wN.png');
+}
+.mobile .chessground.cburnett .piece.rook.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wR.png');
+}
+.mobile .chessground.cburnett .piece.queen.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wQ.png');
+}
+.mobile .chessground.cburnett .piece.king.white {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/wK.png');
+}
+.mobile .chessground.cburnett .piece.pawn.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bP.png');
+}
+.mobile .chessground.cburnett .piece.bishop.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bB.png');
+}
+.mobile .chessground.cburnett .piece.knight.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bN.png');
+}
+.mobile .chessground.cburnett .piece.rook.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bR.png');
+}
+.mobile .chessground.cburnett .piece.queen.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bQ.png');
+}
+.mobile .chessground.cburnett .piece.king.black {
+  background-image: url('http://static.lichess.org/assets/piece-png/cburnett/bK.png');
+}

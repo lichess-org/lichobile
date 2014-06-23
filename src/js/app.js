@@ -2,8 +2,8 @@
 
 'use strict';
 
-var ChessBoard = require('./vendor/chessboard'),
-Qajax = require('qajax'),
+var Qajax = require('qajax'),
+Chessground = window.chessground,
 Game = require('./game'),
 $ = require('./vendor/zepto'),
 Elements = require('./elements'),
@@ -13,46 +13,31 @@ var board, game, socket;
 
 function main() {
 
-  var onDragStart = function(source, piece, position, orientation) {
-    if (game && !game.game.finished) {
-      // allow to pick up only pieces of player color
-      var re = new RegExp('^' + game.opponent.color[0]);
-      if (piece.search(re) !== -1) {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
-  var onDrop = function(from, to) {
-    if (game) {
-      if (to === from || to === 'offboard') return false;
-      if (!game.isMoveAllowed(from, to)) return 'snapback';
-
-      socket.send('move', { from: from, to: to });
-    }
+  var onMove = function(from, to) {
+    socket.send('move', { from: from, to: to });
   };
 
   function setBoard() {
     var cfg = {
-      draggable: true,
-      position: 'start',
-      onDragStart: onDragStart,
-      onDrop: onDrop
+      movable: {
+        free: false,
+      },
+      events: {
+        after: onMove
+      }
     };
 
-    board = new ChessBoard('board', cfg);
-    board.resize();
+    board = Chessground.main(document.getElementById('board'), cfg);
 
     var cHeight = $('body > .content').height();
-    var bHeight = $('#board').height();
-    $('#board').css({
+    var bHeight = Elements.board.height();
+    var size = $('body').width() - 5;
+    Elements.board.css({
       position: 'absolute',
       top: (cHeight - bHeight) / 2,
-      left: 2
+      left: 2,
     });
-
+    // $('.board', Elements.board).width(size).height(size);
   }
 
   setBoard();
@@ -61,8 +46,8 @@ function main() {
 
     if (game) game = undefined;
     if (socket) socket = undefined;
-    if (board.orientation() === 'black') board.flip();
-    board.start(false);
+    if (board.getOrientation() === 'black') board.toggleOrientation();
+    board.startPos();
 
     Qajax({
       headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -91,23 +76,27 @@ function main() {
             },
             move: function(e) {
               if (game.isOpponentToMove(e.color)) {
-                board.move(e.from + '-' + e.to);
+                var pieces = {};
+                var pos = board.getPosition();
+                pieces[e.from] = null;
+                pieces[e.to] = pos[e.from];
+                board.setPieces(pieces);
               }
             },
             promotion: function(e) {
-              var pos = board.position();
-              pos[e.key] = game.lastPlayer()[0] + 'Q';
-              board.position(pos, false);
+              var pieces = {};
+              pieces[e.key] = { color: game.lastPlayer(), role: 'queen'};
+              board.setPieces(pieces);
             },
             enpassant: function(e) {
-              var pos = board.position();
-              delete pos[e];
-              board.position(pos, false);
+              var pieces = {};
+              pieces[e] = null;
+
+              board.setPieces(pieces);
             },
             // check: function(e) {
             // },
             clock: function(e) {
-              console.log(e);
               game.updateClocks(e);
             },
             end: function() {
@@ -119,7 +108,11 @@ function main() {
               game.game.turns = e.turns;
             },
             castling: function(e) {
-              board.move(e.rook[0] + '-' + e.rook[1]);
+              var pieces = {};
+              var pos = board.getPosition();
+              pieces[e.rook[0]] = null;
+              pieces[e.rook[1]] = pos[e.rook[0]];
+              board.setPieces(pieces);
             }
           }
         }
@@ -142,13 +135,20 @@ function main() {
       }
 
       if (game.game.fen) {
-        board.position(game.game.fen, false);
+        board.setFen(game.game.fen);
       }
 
+      board.setDests(game.possibleMoves);
+      board.setColor(game.game.player);
+
       if (game.game.player === 'black') {
-        var firstmove = game.game.lastMove.substr(0,2) + '-' + game.game.lastMove.substr(2, 2);
-        board.flip();
-        board.move(firstmove);
+        var from = game.game.lastMove.substr(0,2);
+        var pieces = {};
+        var pos = board.getPosition();
+        pieces[from] = null;
+        pieces[game.game.lastMove.substr(2, 2)] = pos[from];
+        board.toggleOrientation();
+        board.setPieces(pieces);
       }
 
       game.startClock();

@@ -1,0 +1,203 @@
+body {
+  background: #202020;
+  text-align: center;
+  color: #b0b0b0;
+  font-size: 11px;
+}
+section {
+  display: inline-block;
+  margin: 0 5px 20px 0;
+  background: #404040;
+  padding: 5px;
+  border-radius: 2px;
+}
+section p {
+  margin: 5px 0 0 0;
+}
+.chessground {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.chessground .board {
+  line-height: 0;
+  background-size: cover;
+  position: relative;
+}
+.chessground.tiny .board {
+  width: 225px;
+  height: 225px;
+}
+.chessground.small .board {
+  width: 300px;
+  height: 300px;
+}
+.chessground.large .board {
+  width: 400px;
+  height: 400px;
+}
+.chessground.blue .board {
+  background-image: url('../images/board/blue2.jpg');
+}
+.chessground.wood .board {
+  background-image: url('../images/board/wood2.jpg');
+}
+.chessground.marble .board {
+  background-image: url('../images/board/marble.jpg');
+}
+.chessground .square {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+  cursor: pointer;
+}
+.chessground .square:hover {
+  box-shadow: inset 0 0 20px 10px rgba(255, 255, 255, 0.1);
+}
+.chessground .square.last {
+  background: radial-gradient(ellipse at center, rgba(155, 199, 00, 0.81) 0%, rgba(155, 199, 00, 0) 100%);
+}
+.chessground .square.dest {
+  background: radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208030 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0);
+}
+.chessground .square.selected, .chessground .square.drag-over {
+  box-shadow: none;
+  background: rgba(216, 85, 0, 0.3);
+}
+.chessground.coordinates .square::before {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  font-size: 10px;
+  line-height: 10px;
+  content: attr(data-key);
+  color: #fff;
+  opacity: 0.5;
+}
+.chessground .piece {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+.chessground .piece.dragging {
+  cursor: move;
+  z-index: 9;
+}
+.chessground.pirouetti .piece {
+  bottom: 0;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+}
+.chessground.pirouetti .piece.pawn.white {
+  background-image: url('../pieces/pirouetti/wP.svg');
+}
+.chessground.pirouetti .piece.bishop.white {
+  background-image: url('../pieces/pirouetti/wB.svg');
+}
+.chessground.pirouetti .piece.knight.white {
+  background-image: url('../pieces/pirouetti/wN.svg');
+}
+.chessground.pirouetti .piece.rook.white {
+  background-image: url('../pieces/pirouetti/wR.svg');
+}
+.chessground.pirouetti .piece.queen.white {
+  background-image: url('../pieces/pirouetti/wQ.svg');
+}
+.chessground.pirouetti .piece.king.white {
+  background-image: url('../pieces/pirouetti/wK.svg');
+}
+.chessground.pirouetti .piece.pawn.black {
+  background-image: url('../pieces/pirouetti/bP.svg');
+}
+.chessground.pirouetti .piece.bishop.black {
+  background-image: url('../pieces/pirouetti/bB.svg');
+}
+.chessground.pirouetti .piece.knight.black {
+  background-image: url('../pieces/pirouetti/bN.svg');
+}
+.chessground.pirouetti .piece.rook.black {
+  background-image: url('../pieces/pirouetti/bR.svg');
+}
+.chessground.pirouetti .piece.queen.black {
+  background-image: url('../pieces/pirouetti/bQ.svg');
+}
+.chessground.pirouetti .piece.king.black {
+  background-image: url('../pieces/pirouetti/bK.svg');
+}
+.chessground.cburnett .piece.pawn.white {
+  background-image: url('../pieces/cburnett/wP.svg');
+}
+.chessground.cburnett .piece.bishop.white {
+  background-image: url('../pieces/cburnett/wB.svg');
+}
+.chessground.cburnett .piece.knight.white {
+  background-image: url('../pieces/cburnett/wN.svg');
+}
+.chessground.cburnett .piece.rook.white {
+  background-image: url('../pieces/cburnett/wR.svg');
+}
+.chessground.cburnett .piece.queen.white {
+  background-image: url('../pieces/cburnett/wQ.svg');
+}
+.chessground.cburnett .piece.king.white {
+  background-image: url('../pieces/cburnett/wK.svg');
+}
+.chessground.cburnett .piece.pawn.black {
+  background-image: url('../pieces/cburnett/bP.svg');
+}
+.chessground.cburnett .piece.bishop.black {
+  background-image: url('../pieces/cburnett/bB.svg');
+}
+.chessground.cburnett .piece.knight.black {
+  background-image: url('../pieces/cburnett/bN.svg');
+}
+.chessground.cburnett .piece.rook.black {
+  background-image: url('../pieces/cburnett/bR.svg');
+}
+.chessground.cburnett .piece.queen.black {
+  background-image: url('../pieces/cburnett/bQ.svg');
+}
+.chessground.cburnett .piece.king.black {
+  background-image: url('../pieces/cburnett/bK.svg');
+}
+.chessground.merida .piece.pawn.white {
+  background-image: url('../pieces/merida/wP.svg');
+}
+.chessground.merida .piece.bishop.white {
+  background-image: url('../pieces/merida/wB.svg');
+}
+.chessground.merida .piece.knight.white {
+  background-image: url('../pieces/merida/wN.svg');
+}
+.chessground.merida .piece.rook.white {
+  background-image: url('../pieces/merida/wR.svg');
+}
+.chessground.merida .piece.queen.white {
+  background-image: url('../pieces/merida/wQ.svg');
+}
+.chessground.merida .piece.king.white {
+  background-image: url('../pieces/merida/wK.svg');
+}
+.chessground.merida .piece.pawn.black {
+  background-image: url('../pieces/merida/bP.svg');
+}
+.chessground.merida .piece.bishop.black {
+  background-image: url('../pieces/merida/bB.svg');
+}
+.chessground.merida .piece.knight.black {
+  background-image: url('../pieces/merida/bN.svg');
+}
+.chessground.merida .piece.rook.black {
+  background-image: url('../pieces/merida/bR.svg');
+}
+.chessground.merida .piece.queen.black {
+  background-image: url('../pieces/merida/bQ.svg');
+}
+.chessground.merida .piece.king.black {
+  background-image: url('../pieces/merida/bK.svg');
+}

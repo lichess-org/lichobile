@@ -63,7 +63,7 @@ Game.prototype = {
       }
     }
     this.stopClocks();
-    if (this.hasClock() && !this.game.finished && ((this.game.turns - this.game.startedAtTurn) > 1 || this.game.clockRunning)) {
+    if (this.hasClock() && !this.game.finished && ((this.game.turns - this.game.startedAtTurn) > 1)) {
       this.clocks[this.game.player].start();
     }
   },

@@ -3,7 +3,7 @@
 'use strict';
 
 var Qajax = require('qajax'),
-Chessground = window.chessground,
+Chessground = require('./vendor/chessground'),
 Game = require('./game'),
 $ = require('./vendor/zepto'),
 Elements = require('./elements'),

@@ -7,7 +7,6 @@ Chessground = require('./vendor/chessground'),
 Game = require('./game'),
 $ = require('./vendor/zepto'),
 Elements = require('./elements'),
-_ = require('lodash'),
 StrongSocket = require('./socket');
 
 var board, game, socket;
@@ -38,7 +37,7 @@ function main() {
       top: (cHeight - bHeight) / 2,
       left: 2,
     });
-    // $('.board', Elements.board).width(size).height(size);
+    Elements.board.width(size).height(size);
   }
 
   setBoard();

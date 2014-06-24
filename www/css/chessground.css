@@ -65,6 +65,9 @@ section p {
   box-shadow: none;
   background: rgba(216, 85, 0, 0.3);
 }
+.chessground .square.moved {
+  background: rgba(155, 199, 0, 0.41);
+}
 .chessground.coordinates .square::before {
   position: absolute;
   left: 2px;

@@ -7,6 +7,7 @@ Chessground = require('./vendor/chessground'),
 Game = require('./game'),
 $ = require('./vendor/zepto'),
 Elements = require('./elements'),
+_ = require('lodash'),
 StrongSocket = require('./socket');
 
 var board, game, socket;
@@ -73,17 +74,12 @@ function main() {
           events: {
             possibleMoves: function(e) {
               game.possibleMoves = e;
+              board.setDests(game.getPossibleMoves());
             },
             move: function(e) {
               if (game.isOpponentToMove(e.color)) {
-                var pieces = {};
-                var pos = board.getPosition();
-                pieces[e.from] = null;
-                pieces[e.to] = pos[e.from];
-
-                board.setPieces(pieces);
+                board.move(e.from, e.to);
               }
-              board.setDests(game.getPossibleMoves());
             },
             promotion: function(e) {
               var pieces = {};
@@ -108,6 +104,7 @@ function main() {
             state: function(e) {
               game.game.player = e.color;
               game.game.turns = e.turns;
+              board.setColor(game.game.player);
             },
             castling: function(e) {
               var pieces = {};
@@ -145,12 +142,9 @@ function main() {
 
       if (game.game.player === 'black') {
         var from = game.game.lastMove.substr(0,2);
-        var pieces = {};
-        var pos = board.getPosition();
-        pieces[from] = null;
-        pieces[game.game.lastMove.substr(2, 2)] = pos[from];
+        var to = game.game.lastMove.substr(2, 2);
         board.toggleOrientation();
-        board.setPieces(pieces);
+        board.move(from, to);
       }
 
       game.startClock();

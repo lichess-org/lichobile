@@ -63,7 +63,7 @@ function main() {
       }
     }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
       console.log(data);
-      game = new Game(data);
+      game = Game(data);
 
       socket = new StrongSocket(
         data.url.socket,
@@ -72,7 +72,7 @@ function main() {
           options: { debug: true },
           events: {
             possibleMoves: function(e) {
-              game.possibleMoves = e;
+              game.setPossibleMoves(e);
               board.setDests(game.getPossibleMoves());
             },
             move: function(e) {

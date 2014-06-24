@@ -4,79 +4,102 @@ var _ = require('lodash');
 var Clock = require('./clock');
 
 var Game = function(data) {
-  this.game = {};
-  this.player = {};
-  this.opponent = {};
-  this.possibleMoves = {};
-  this.pref = {};
-  this.url = {};
-  this.clock = null;
-  this.clocks = { white: null, black: null };
+  var game = {};
+  var player = {};
+  var opponent = {};
+  var possibleMoves = {};
+  var pref = {};
+  var url = {};
+  var clock = null;
+  var clocks = { white: null, black: null };
 
   if (_.isObject(data)) {
-    this.game = data.game;
-    this.player = data.player;
-    this.opponent = data.opponent;
-    this.possibleMoves = data.possibleMoves;
-    this.clock = data.clock;
-    this.pref = data.pref;
-    this.url = data.url;
+    game = data.game;
+    player = data.player;
+    opponent = data.opponent;
+    possibleMoves = data.possibleMoves;
+    clock = data.clock;
+    pref = data.pref;
+    url = data.url;
   }
-};
 
-Game.prototype = {
-  getPossibleMoves: function() {
-    var self = this;
-    return _.mapValues(self.possibleMoves, function(moves) {
+  function getPossibleMoves() {
+    return _.mapValues(possibleMoves, function(moves) {
       return moves.match(/.{1,2}/g);
     });
-  },
-  isOpponentToMove: function(color) {
-    return color !== this.player.color;
-  },
-  isMoveAllowed: function(from, to) {
-    var m = this.possibleMoves[from];
+  }
+
+  function setPossibleMoves(moves) {
+    possibleMoves = moves;
+  }
+
+  function isOpponentToMove(color) {
+    return color !== player.color;
+  }
+
+  function isMoveAllowed(from, to) {
+    var m = possibleMoves[from];
     return m && _.indexOf(m.match(/.{1,2}/g), to) !== -1;
-  },
-  lastPlayer: function() {
-    return (this.game.player === 'white') ? 'black' : 'white';
-  },
-  setClocks: function($topC, $botC) {
-    var wTime = Math.round(parseFloat(this.clock.white) * 1000);
-    var bTime = Math.round(parseFloat(this.clock.black) * 1000);
-    if (this.game.clock) {
-      if (this.player.color === 'white') {
-        this.clocks.white = Clock(wTime, $botC);
-        this.clocks.black = Clock(bTime, $topC);
+  }
+
+  function lastPlayer() {
+    return (game.player === 'white') ? 'black' : 'white';
+  }
+
+  function setClocks($topC, $botC) {
+    var wTime = Math.round(parseFloat(clock.white) * 1000);
+    var bTime = Math.round(parseFloat(clock.black) * 1000);
+    if (game.clock) {
+      if (player.color === 'white') {
+        clocks.white = Clock(wTime, $botC);
+        clocks.black = Clock(bTime, $topC);
       } else {
-        this.clocks.white = Clock(wTime, $topC);
-        this.clocks.black = Clock(bTime, $botC);
+        clocks.white = Clock(wTime, $topC);
+        clocks.black = Clock(bTime, $botC);
       }
-      this.clocks.white.show();
-      this.clocks.black.show();
+      clocks.white.show();
+      clocks.black.show();
     }
-  },
-  updateClocks: function(times) {
+  }
+
+  function updateClocks(times) {
     if (times) {
       for (var color in times) {
-        this.clocks[color].setTime(times[color]);
+        clocks[color].setTime(times[color]);
       }
     }
-    this.stopClocks();
-    if (this.hasClock() && !this.game.finished && ((this.game.turns - this.game.startedAtTurn) > 1)) {
-      this.clocks[this.game.player].start();
+    stopClocks();
+    if (hasClock() && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {
+      clocks[game.player].start();
     }
-  },
-  startClock: function() {
-    this.clocks[this.game.player].start();
-  },
-  stopClocks: function() {
-    this.clocks.white.stop();
-    this.clocks.black.stop();
-  },
-  hasClock: function() {
-    return this.game.clock && this.game.started;
   }
+
+  function startClock() {
+    clocks[game.player].start();
+  }
+
+  function stopClocks() {
+    clocks.white.stop();
+    clocks.black.stop();
+  }
+
+  function hasClock() {
+    return game.clock && game.started;
+  }
+
+  return {
+    game: game,
+    getPossibleMoves: getPossibleMoves,
+    setPossibleMoves: setPossibleMoves,
+    isOpponentToMove: isOpponentToMove,
+    isMoveAllowed: isMoveAllowed,
+    lastPlayer: lastPlayer,
+    setClocks: setClocks,
+    updateClocks: updateClocks,
+    startClock: startClock,
+    stopClocks: stopClocks,
+    hasClock: hasClock
+  };
 };
 
 module.exports = Game;

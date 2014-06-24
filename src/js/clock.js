@@ -1,8 +1,6 @@
 'use strict';
 
 var Clock = function(time, $el) {
-  time = time;
-  $el = $el;
   var isRunning = false;
   var interval = null;
 

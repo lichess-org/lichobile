@@ -21,13 +21,13 @@ function main() {
     var cfg = {
       movable: {
         free: false,
-      },
-      events: {
-        after: onMove
+        events: {
+          after: onMove
+        }
       }
     };
 
-    board = Chessground.main(document.getElementById('board'), cfg);
+    board = window.board = Chessground.main(document.getElementById('board'), cfg);
 
     var cHeight = $('body > .content').height();
     var bHeight = Elements.board.height();
@@ -80,8 +80,10 @@ function main() {
                 var pos = board.getPosition();
                 pieces[e.from] = null;
                 pieces[e.to] = pos[e.from];
+
                 board.setPieces(pieces);
               }
+              board.setDests(game.getPossibleMoves());
             },
             promotion: function(e) {
               var pieces = {};
@@ -138,7 +140,7 @@ function main() {
         board.setFen(game.game.fen);
       }
 
-      board.setDests(game.possibleMoves);
+      board.setDests(game.getPossibleMoves());
       board.setColor(game.game.player);
 
       if (game.game.player === 'black') {

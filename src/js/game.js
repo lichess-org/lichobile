@@ -25,8 +25,14 @@ var Game = function(data) {
 };
 
 Game.prototype = {
+  getPossibleMoves: function() {
+    var self = this;
+    return _.mapValues(self.possibleMoves, function(moves) {
+      return moves.match(/.{1,2}/g);
+    });
+  },
   isOpponentToMove: function(color) {
-    return color !== this.game.player;
+    return color !== this.player.color;
   },
   isMoveAllowed: function(from, to) {
     var m = this.possibleMoves[from];

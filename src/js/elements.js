@@ -2,4 +2,4 @@
 
 var $ = require('./vendor/zepto');
 
-module.exports.board = $('#board');
+module.exports.ground = $('#ground');

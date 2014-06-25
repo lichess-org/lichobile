@@ -23,6 +23,15 @@ var Game = function(data) {
     url = data.url;
   }
 
+  function updateState(state) {
+    game.player = state.color;
+    game.turns = state.turns;
+  }
+
+  function getFen() {
+    return game.fen;
+  }
+
   function getPossibleMoves() {
     return _.mapValues(possibleMoves, function(moves) {
       return moves.match(/.{1,2}/g);
@@ -44,6 +53,17 @@ var Game = function(data) {
 
   function lastPlayer() {
     return (game.player === 'white') ? 'black' : 'white';
+  }
+
+  function currentPlayer() {
+    return game.player;
+  }
+
+  function lastMove() {
+    return {
+      from: game.lastMove.substr(0,2),
+      to: game.lastMove.substr(2, 2)
+    };
   }
 
   function setClocks($topC, $botC) {
@@ -69,7 +89,7 @@ var Game = function(data) {
       }
     }
     stopClocks();
-    if (hasClock() && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {
+    if (hasClock() && game.started && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {
       clocks[game.player].start();
     }
   }
@@ -84,21 +104,29 @@ var Game = function(data) {
   }
 
   function hasClock() {
-    return game.clock && game.started;
+    return game.clock;
+  }
+
+  function finish() {
+    game.finished = true;
   }
 
   return {
-    game: game,
+    updateState: updateState,
+    getFen: getFen,
     getPossibleMoves: getPossibleMoves,
     setPossibleMoves: setPossibleMoves,
     isOpponentToMove: isOpponentToMove,
     isMoveAllowed: isMoveAllowed,
+    currentPlayer: currentPlayer,
     lastPlayer: lastPlayer,
+    lastMove: lastMove,
     setClocks: setClocks,
     updateClocks: updateClocks,
     startClock: startClock,
     stopClocks: stopClocks,
-    hasClock: hasClock
+    hasClock: hasClock,
+    finish: finish
   };
 };
 

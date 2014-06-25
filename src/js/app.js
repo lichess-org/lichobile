@@ -98,12 +98,11 @@ function main() {
             },
             end: function() {
               console.log('game finished');
-              game.game.finished = true;
+              game.finish();
             },
             state: function(e) {
-              game.game.player = e.color;
-              game.game.turns = e.turns;
-              board.setColor(game.game.player);
+              game.updateState(e);
+              board.setColor(game.currentPlayer());
             },
             castling: function(e) {
               var pieces = {};
@@ -116,7 +115,7 @@ function main() {
         }
       );
 
-      if (game.game.clock) {
+      if (game.hasClock()) {
         var boardPos = Elements.board.position();
         var leftPos = (Elements.board.width() - 70) / 2;
         var $topClock = $('#top-clock').css({
@@ -132,18 +131,16 @@ function main() {
         game.setClocks($topClock, $botClock);
       }
 
-      if (game.game.fen) {
-        board.setFen(game.game.fen);
+      if (game.getFen()) {
+        board.setFen(game.getFen());
       }
 
       board.setDests(game.getPossibleMoves());
-      board.setColor(game.game.player);
+      board.setColor(game.currentPlayer());
 
-      if (game.game.player === 'black') {
-        var from = game.game.lastMove.substr(0,2);
-        var to = game.game.lastMove.substr(2, 2);
+      if (game.currentPlayer() === 'black') {
         board.toggleOrientation();
-        board.move(from, to);
+        board.move(game.lastMove().from, game.lastMove().to);
       }
 
       game.startClock();

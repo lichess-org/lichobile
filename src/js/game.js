@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Clock = require('./clock');
 
+// Object that holds game data and receives updates from server
 var Game = function(data) {
   var game = {};
   var player = {};
@@ -10,7 +11,7 @@ var Game = function(data) {
   var possibleMoves = {};
   var pref = {};
   var url = {};
-  var clock = null;
+  var timer = null;
   var clocks = { white: null, black: null };
 
   if (_.isObject(data)) {
@@ -18,7 +19,7 @@ var Game = function(data) {
     player = data.player;
     opponent = data.opponent;
     possibleMoves = data.possibleMoves;
-    clock = data.clock;
+    timer = data.clock;
     pref = data.pref;
     url = data.url;
   }
@@ -67,9 +68,9 @@ var Game = function(data) {
   }
 
   function setClocks($topC, $botC) {
-    var wTime = Math.round(parseFloat(clock.white) * 1000);
-    var bTime = Math.round(parseFloat(clock.black) * 1000);
-    if (game.clock) {
+    var wTime = Math.round(parseFloat(timer.white) * 1000);
+    var bTime = Math.round(parseFloat(timer.black) * 1000);
+    if (hasClock()) {
       if (player.color === 'white') {
         clocks.white = Clock(wTime, $botC);
         clocks.black = Clock(bTime, $topC);

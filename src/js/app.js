@@ -21,7 +21,10 @@ function main() {
 
   $('#play-button').tap(function() {
 
-    if (game) game = undefined;
+    if (game) {
+      game.stopClocks();
+      game = undefined;
+    }
     if (socket) socket = undefined;
     if (ground.getOrientation() === 'black') ground.toggleOrientation();
     ground.startPos();
@@ -39,7 +42,6 @@ function main() {
         color: 'random'
       }
     }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
-      console.log(data);
       game = Game(data);
 
       socket = new StrongSocket(

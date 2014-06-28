@@ -1,10 +1,10 @@
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var browserify = require('browserify');
 var jshint = require('gulp-jshint');
 var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
+var watchify = require('watchify');
 
 var defaults = require('./env.json');
 var env = argv.env ? require('./' + argv.env) : defaults;
@@ -12,6 +12,15 @@ var env = argv.env ? require('./' + argv.env) : defaults;
 var paths = {
   scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js']
 };
+
+var localVendorLibs = [
+  'chessground',
+  'zepto'
+].map(function(path) {
+  return require.resolve('./src/js/vendor/' + path);
+});
+
+var allVendorLibs = localVendorLibs.concat(['lodash', 'q']);
 
 gulp.task('html', function() {
   return gulp.src('src/index.html')
@@ -26,19 +35,29 @@ gulp.task('lint', function() {
 });
 
 gulp.task('scripts', function() {
-  var bundleStream = browserify('./src/js/app.js').bundle({debug: true});
+  var bundleStream = watchify({
+    entries: './src/js/app.js',
+    noParse: allVendorLibs
+  });
 
-  return bundleStream
-    .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
-    .pipe(source('app.js'))
-    .pipe(gulp.dest('./www'));
+  function rebundle() {
+    return bundleStream.bundle({debug: true})
+      .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+      .pipe(source('app.js'))
+      .pipe(gulp.dest('./www'));
+  }
+
+  bundleStream.on('update', rebundle);
+  bundleStream.on('log', gutil.log);
+
+  return rebundle();
 });
 
 gulp.task('dev', ['html', 'lint', 'scripts']);
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-  gulp.watch(paths.scripts, ['lint', 'scripts']);
+  gulp.watch(paths.scripts, ['lint']);
   gulp.watch('src/index.html', ['html']);
 });
 

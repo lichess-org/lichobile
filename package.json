@@ -32,7 +32,8 @@
     "yargs": "~1.2.1",
     "browserify": "~4.1.5",
     "vinyl-source-stream": "~0.1.1",
-    "gulp-util": "~2.2.14"
+    "gulp-util": "~2.2.14",
+    "watchify": "~0.10.2"
   },
   "dependencies": {
     "lodash": "~2.4.1",

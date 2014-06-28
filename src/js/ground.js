@@ -17,14 +17,14 @@ module.exports = function(cfg) {
 
   _.defaults(defaults, cfg);
 
-  var size = $('body').width() - 5;
+  var size = $('body').width();
   var cHeight = $('body > .content').height();
   var bHeight = size;
 
   Elements.ground.css({
     position: 'absolute',
     top: (cHeight - bHeight) / 2,
-    left: 2,
+    left: 0,
     width: size,
     height: size
   });

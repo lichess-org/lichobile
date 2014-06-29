@@ -19,7 +19,8 @@ function main() {
 
   ground = ground({movable: { events: { after: onMove }}});
 
-  $('#play-button').tap(function() {
+  $('#play-button').tap(function(e) {
+    e.preventDefault();
 
     if (game) {
       game.stopClocks();

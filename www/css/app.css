@@ -1,5 +1,5 @@
 body {
-  font: 12px "Open Sans","Lucida Grande","Lucida Sans Unicode",Geneva,Verdana,Sans-Serif;
+  font-family: "Open Sans","Lucida Grande","Lucida Sans Unicode",Geneva,Verdana,Sans-Serif;
 }
 
 .title {
@@ -25,3 +25,6 @@ body {
   border-radius: 0px 0px 4px 4px;
 }
 
+.table-view-cell.extended {
+  padding-right: 15px;
+}

@@ -2,14 +2,22 @@
 
 'use strict';
 
+require('./knockoutExtend');
+
 var play = require('./play'),
     $ = require('./vendor/zepto');
+
+require('./settings');
 
 function main() {
 
   $('#play-button').tap(function(e) {
     e.preventDefault();
     play();
+  });
+
+  $('#settingsModal').tap(function(e) {
+    e.preventDefault();
   });
 
 }

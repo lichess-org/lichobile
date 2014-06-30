@@ -4,6 +4,7 @@
 var Game = require('./game'),
   Qajax = require('qajax'),
   render = require('./render'),
+  storage = require('./storage'),
   StrongSocket = require('./socket');
 
 var ground, game, socket;
@@ -29,12 +30,12 @@ function startGame() {
     url: window.apiEndPoint + '/setup/ai',
     method: 'POST',
     data: {
-      variant: 1,
-      clock: true,
-      time: 5,
-      increment: 3,
-      level: 1,
-      color: 'random'
+      variant: storage.get('settings.variant'),
+      clock: storage.get('settings.clock'),
+      time: storage.get('settings.time'),
+      increment: storage.get('settings.increment'),
+      level: storage.get('settings.aiLevel'),
+      color: storage.get('settings.color')
     }
   }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
     game = Game(data);
@@ -107,7 +108,8 @@ function startGame() {
       ground.move(game.lastMove().from, game.lastMove().to);
     }
 
-    game.startClock();
+    if (game.hasClock()) game.startClock();
+
 
   }, function(err) {
     console.log('post request to lichess failed', err);

@@ -5,7 +5,7 @@ _ = require('lodash'),
 $ = require('./vendor/zepto'),
 Elements = require('./elements');
 
-module.exports = function(cfg) {
+function ground(cfg) {
   var defaults = {
     movable: {
       free: false,
@@ -30,6 +30,26 @@ module.exports = function(cfg) {
   });
 
   return Chessground.main(document.getElementById('ground'), cfg);
+}
 
+function clocks() {
+  var groundPos = Elements.ground.position();
+  var leftPos = (Elements.ground.width() - 70) / 2;
+  var $topClock = $('#top-clock').css({
+    position: 'absolute',
+    top: groundPos.top - 25,
+    left: leftPos
+  });
+  var $botClock = $('#bot-clock').css({
+    position: 'absolute',
+    top: groundPos.top + Elements.ground.height(),
+    left: leftPos
+  });
+
+  return { top: $topClock, bot: $botClock };
+}
+
+module.exports = {
+  ground: ground,
+  clocks: clocks
 };
-

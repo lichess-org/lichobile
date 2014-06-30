@@ -2,8 +2,9 @@
 
 var Chessground = require('./vendor/chessground'),
 _ = require('lodash'),
-$ = require('./vendor/zepto'),
-Elements = require('./elements');
+$ = require('./vendor/zepto');
+
+var $ground = $('#ground');
 
 function ground(cfg) {
   var defaults = {
@@ -21,7 +22,7 @@ function ground(cfg) {
   var cHeight = $('body > .content').height();
   var bHeight = size;
 
-  Elements.ground.css({
+  $ground.css({
     position: 'absolute',
     top: (cHeight - bHeight) / 2,
     left: 0,
@@ -29,12 +30,12 @@ function ground(cfg) {
     height: size
   });
 
-  return Chessground.main(document.getElementById('ground'), cfg);
+  return Chessground.main($ground[0], cfg);
 }
 
 function clocks() {
-  var groundPos = Elements.ground.position();
-  var leftPos = (Elements.ground.width() - 70) / 2;
+  var groundPos = $ground.position();
+  var leftPos = ($ground.width() - 70) / 2;
   var $topClock = $('#top-clock').css({
     position: 'absolute',
     top: groundPos.top - 25,
@@ -42,7 +43,7 @@ function clocks() {
   });
   var $botClock = $('#bot-clock').css({
     position: 'absolute',
-    top: groundPos.top + Elements.ground.height(),
+    top: groundPos.top + $ground.height(),
     left: leftPos
   });
 

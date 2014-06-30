@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash'),
-    $ = require('./vendor/zepto'),
     Qajax = require('qajax'),
     storage = require('./storage');
 
@@ -26,7 +25,7 @@ var strongSocketDefaults = {
 var StrongSocket = function(url, version, settings) {
   var self = this;
   self.settings = strongSocketDefaults;
-  $.extend(true, self.settings, settings);
+  _.merge(self.settings, settings);
   self.url = url;
   self.version = version;
   self.options = self.settings.options;
@@ -44,7 +43,7 @@ var StrongSocket = function(url, version, settings) {
     storage.remove(self.options.baseUrlKey);
   }
   self.connect();
-  $(window).on('unload', function() {
+  window.addEventListener('unload', function() {
     self.destroy();
   });
 };
@@ -54,7 +53,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + Qajax.serialize($.extend(self.settings.params, {
+    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + Qajax.serialize(_.defaults(self.settings.params, {
       version: self.version
     }));
     self.debug("connection attempt to " + fullUrl, true);

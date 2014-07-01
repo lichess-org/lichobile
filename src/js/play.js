@@ -86,7 +86,7 @@ function initializeGame() {
   ground.setDests(game.getPossibleMoves());
   ground.setColor(game.currentPlayer());
 
-  if (game.currentPlayer() === 'black') {
+  if (game.player.color === 'black') {
     ground.toggleOrientation();
     if (game.currentTurn() === 1) ground.move(game.lastMove().from, game.lastMove().to);
   }
@@ -147,6 +147,8 @@ function resume(id) {
     game = Game(data);
 
     initializeGame();
+
+    if (game.currentTurn() > 1) game.updateClocks();
 
   }, function(err) {
     console.log('request to lichess failed', err);

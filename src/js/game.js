@@ -92,6 +92,9 @@ var Game = function(data) {
       for (var color in times) {
         clocks[color].setTime(times[color]);
       }
+    } else if (timer) {
+      clocks.white.setTime(timer.white);
+      clocks.black.setTime(timer.black);
     }
     stopClocks();
     if (hasClock() && game.started && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {

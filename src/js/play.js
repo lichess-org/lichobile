@@ -18,7 +18,7 @@ ground = render.ground({movable: { events: { after: onMove }}});
 function startGame() {
 
   if (game) {
-    game.stopClocks();
+    if (game.hasClock()) game.stopClocks();
     game = undefined;
   }
   if (socket) socket = undefined;

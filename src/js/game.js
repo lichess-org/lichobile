@@ -100,8 +100,8 @@ var Game = function(data) {
   }
 
   function stopClocks() {
-    clocks.white.stop();
-    clocks.black.stop();
+    clocks.white && clocks.white.stop();
+    clocks.black && clocks.black.stop();
   }
 
   function hasClock() {

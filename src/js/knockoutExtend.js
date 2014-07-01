@@ -34,7 +34,6 @@ ko.bindingHandlers.tap = {
   }
 };
 
-
 ko.bindingHandlers.toggle = {
   init: function (element, valueAccessor) {
     var value = valueAccessor();

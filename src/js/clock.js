@@ -1,5 +1,7 @@
 'use strict';
 
+var signals = require('./signals');
+
 var Clock = function(time, $el) {
   var isRunning = false;
   var interval = null;
@@ -47,6 +49,8 @@ var Clock = function(time, $el) {
         }
         time = currTime;
         tick();
+
+        if (currTime === 0) signals.buzzer.dispatch();
       } else {
         clearInterval(interval);
       }

@@ -115,6 +115,10 @@ var Game = function(data) {
     game.finished = true;
   }
 
+  function isFinished() {
+    return game.finished;
+  }
+
   return {
     // public properties
     url: url,
@@ -123,6 +127,7 @@ var Game = function(data) {
 
     // public methods
     updateState: updateState,
+    finish: finish,
 
     getFen: getFen,
     getPossibleMoves: getPossibleMoves,
@@ -137,7 +142,7 @@ var Game = function(data) {
     updateClocks: updateClocks,
     stopClocks: stopClocks,
     hasClock: hasClock,
-    finish: finish
+    isFinished: isFinished
   };
 };
 

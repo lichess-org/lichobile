@@ -6,6 +6,8 @@ Qajax = require('qajax'),
 render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
+signals = require('./signals'),
+_ = require('lodash'),
 StrongSocket = require('./socket');
 
 var ground, game, socket;
@@ -60,6 +62,11 @@ var gameEvents = {
   }
 };
 
+var outOfTime = _.throttle(function() {
+  console.log('time out!');
+  socket.send('outoftime');
+}, 200);
+
 function initializeGame() {
   var clockEls;
 
@@ -92,6 +99,13 @@ function initializeGame() {
       ground.showMoved(game.lastMove().from, game.lastMove().to);
     }
   }
+
+  // listen to buzzer event to notify server when time is out
+  signals.buzzer.add(function() {
+    if (!game.isFinished()) {
+      outOfTime();
+    }
+  });
 
 }
 

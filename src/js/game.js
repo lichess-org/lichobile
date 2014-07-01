@@ -60,6 +60,10 @@ var Game = function(data) {
     return game.player;
   }
 
+  function currentTurn() {
+    return game.turns;
+  }
+
   function lastMove() {
     return {
       from: game.lastMove.substr(0,2),
@@ -95,10 +99,6 @@ var Game = function(data) {
     }
   }
 
-  function startClock() {
-    clocks[game.player].start();
-  }
-
   function stopClocks() {
     clocks.white && clocks.white.stop();
     clocks.black && clocks.black.stop();
@@ -113,18 +113,25 @@ var Game = function(data) {
   }
 
   return {
+    // public properties
+    url: url,
+    player: player,
+    opponent: opponent,
+
+    // public methods
     updateState: updateState,
+
     getFen: getFen,
     getPossibleMoves: getPossibleMoves,
     setPossibleMoves: setPossibleMoves,
     isOpponentToMove: isOpponentToMove,
     isMoveAllowed: isMoveAllowed,
+    currentTurn: currentTurn,
     currentPlayer: currentPlayer,
     lastPlayer: lastPlayer,
     lastMove: lastMove,
     setClocks: setClocks,
     updateClocks: updateClocks,
-    startClock: startClock,
     stopClocks: stopClocks,
     hasClock: hasClock,
     finish: finish

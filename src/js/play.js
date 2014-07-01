@@ -88,7 +88,9 @@ function initializeGame() {
 
   if (game.player.color === 'black') {
     ground.toggleOrientation();
-    if (game.currentTurn() === 1) ground.move(game.lastMove().from, game.lastMove().to);
+    if (game.currentTurn() === 1) {
+      ground.showMoved(game.lastMove().from, game.lastMove().to);
+    }
   }
 
 }
@@ -123,8 +125,6 @@ function start() {
   }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
     // update game data from server
     game = Game(data);
-
-    console.log(data);
 
     initializeGame();
 

@@ -14,7 +14,7 @@ var Clock = function(time, $el) {
     var tenths;
     if (time < 10000) {
       tenths = Math.floor(date.getMilliseconds() / 100);
-      return minutes + ':' + seconds + '<span>.' + tenths + '</span>';
+      return seconds + '<span>.' + tenths + '</span>';
     } else if (time >= 3600000) {
       var hours = prefixInteger(date.getHours(), 2);
       return hours + ':' + minutes + ':' + seconds;

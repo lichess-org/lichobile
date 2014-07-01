@@ -5,11 +5,14 @@
 require('./knockoutExtend');
 
 var play = require('./play'),
-    $ = require('./vendor/zepto');
+    $ = require('./vendor/zepto'),
+    settings = require('./settings'),
+    ko = require('knockout');
 
-require('./settings');
 
 function main() {
+
+  ko.applyBindings(settings, document.getElementById('settingsModal'));
 
   $('#play-button').tap(function(e) {
     e.preventDefault();

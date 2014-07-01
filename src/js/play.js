@@ -4,7 +4,7 @@
 var Game = require('./game'),
   Qajax = require('qajax'),
   render = require('./render'),
-  storage = require('./storage'),
+  settings = require('./settings'),
   StrongSocket = require('./socket');
 
 var ground, game, socket;
@@ -30,12 +30,12 @@ function startGame() {
     url: window.apiEndPoint + '/setup/ai',
     method: 'POST',
     data: {
-      variant: storage.get('settings.variant'),
-      clock: storage.get('settings.clock'),
-      time: storage.get('settings.time'),
-      increment: storage.get('settings.increment'),
-      level: storage.get('settings.aiLevel'),
-      color: storage.get('settings.color')
+      variant: settings.variant(),
+      clock: settings.clock(),
+      time: settings.time(),
+      increment: settings.increment(),
+      level: settings.aiLevel(),
+      color: settings.color()
     }
   }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
     game = Game(data);

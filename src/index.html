@@ -26,7 +26,7 @@
     </header>
 
     <div class="content">
-      <div class="chessground wood small merida" id="ground"></div>
+      <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: showLastMove, withDest: showDests }"></div>
       <div id="top-clock" class="clock top">10:00</div>
       <div id="bot-clock" class="clock bot">10:00</div>
     </div>
@@ -98,10 +98,22 @@
               <input type="range" min="1" max="8" step="1" data-bind="value: aiLevel" />
             </div>
           </li>
-          <li class="table-view-divider" data-bind="visible: window.cordova">General</li>
+          <li class="table-view-divider">General</li>
           <li class="table-view-cell" data-bind="visible: window.cordova">
             Disable sleep
             <div class="toggle" data-bind="toggle: disableSleep, css: { active: disableSleep }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell">
+            Show last move
+            <div class="toggle" data-bind="toggle: showLastMove, css: { active: showLastMove }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell">
+            Show possible destinations
+            <div class="toggle" data-bind="toggle: showDests, css: { active: showDests }">
               <div class="toggle-handle"></div>
             </div>
           </li>

@@ -10,10 +10,12 @@ var settings = module.exports = {
   increment: ko.observable(3).extend({persist: 'settings.increment'}),
   aiLevel: ko.observable(5).extend({persist: 'settings.aiLevel'}),
 
-  disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'})
+  disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'}),
+  showLastMove: ko.observable(true).extend({persist: 'settings.showLastMove'}),
+  showDests: ko.observable(true).extend({persist: 'settings.showDests'})
 };
 
-ko.applyBindings(settings, document.getElementById('settingsModal'));
+ko.applyBindings(settings);
 
 settings.disableSleep.subscribe(function(isDisabled) {
   if (window.cordova) {

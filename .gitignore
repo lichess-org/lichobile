@@ -1,3 +1,5 @@
 npm-debug.log
 www/app.js
 www/index.html
+
+env/*.json

@@ -98,8 +98,8 @@
               <input type="range" min="1" max="8" step="1" data-bind="value: aiLevel" />
             </div>
           </li>
-          <li class="table-view-divider">General</li>
-          <li class="table-view-cell">
+          <li class="table-view-divider" data-bind="visible: window.cordova">General</li>
+          <li class="table-view-cell" data-bind="visible: window.cordova">
             Disable sleep
             <div class="toggle" data-bind="toggle: disableSleep, css: { active: disableSleep }">
               <div class="toggle-handle"></div>

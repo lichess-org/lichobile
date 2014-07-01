@@ -3,14 +3,11 @@
 'use strict';
 
 require('./knockoutExtend');
+require('./settings');
 
 var play = require('./play'),
     $ = require('./vendor/zepto'),
-    settings = require('./settings'),
-    storage = require('./storage'),
-    ko = require('knockout');
-
-ko.applyBindings(settings, document.getElementById('settingsModal'));
+    storage = require('./storage');
 
 function main() {
 
@@ -30,5 +27,7 @@ function main() {
   });
 
 }
+
+if (window.cordova && storage.get('settings.disableSleep')) window.plugins.insomnia.keepAwake();
 
 window.document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);

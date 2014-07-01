@@ -149,7 +149,7 @@ function resume(id) {
     initializeGame();
 
   }, function(err) {
-    console.log('post request to lichess failed', err);
+    console.log('request to lichess failed', err);
   });
 
 }

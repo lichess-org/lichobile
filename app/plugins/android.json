@@ -11,6 +11,10 @@
                         {
                             "xml": "<feature name=\"WebSocket\"><param name=\"android-package\" value=\"com.ququplay.websocket.WebSocket\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Insomnia\"><param name=\"android-package\" value=\"nl.xservices.plugins.Insomnia\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -19,6 +23,9 @@
     },
     "installed_plugins": {
         "com.ququplay.websocket.WebSocket": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "nl.x-services.plugins.insomnia": {
             "PACKAGE_NAME": "org.lichess.mobile"
         }
     },

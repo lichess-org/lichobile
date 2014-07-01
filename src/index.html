@@ -38,6 +38,7 @@
 
       <div class="content">
         <ul class="table-view">
+          <li class="table-view-divider">Game</li>
           <li class="table-view-cell extended">
             Color
             <div class="pull-right">
@@ -95,6 +96,13 @@
             <div class="pull-right">
               <span data-bind="text: aiLevel"></span>
               <input type="range" min="1" max="8" step="1" data-bind="value: aiLevel" />
+            </div>
+          </li>
+          <li class="table-view-divider">General</li>
+          <li class="table-view-cell">
+            Disable sleep
+            <div class="toggle" data-bind="toggle: disableSleep, css: { active: disableSleep }">
+              <div class="toggle-handle"></div>
             </div>
           </li>
         </ul>

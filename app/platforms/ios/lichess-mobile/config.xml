@@ -19,6 +19,9 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
+    <feature name="Insomnia">
+        <param name="ios-package" value="Insomnia" />
+    </feature>
     <name>lichess-mobile</name>
     <description>
         lichess.org mobile application
@@ -27,5 +30,6 @@
         Vincent Velociter
     </author>
     <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
     <access origin="*" />
 </widget>

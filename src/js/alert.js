@@ -19,7 +19,7 @@ function show(type, msg) {
   hideAll();
 
   var alert = $(template({type: type, msg: msg}));
-  $('#mainPage').prepend(alert);
+  $('#mainPage').append(alert);
 
   $(alert).tap(function() {
     $(this).remove();

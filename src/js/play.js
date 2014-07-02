@@ -2,7 +2,7 @@
 
 
 var Game = require('./game'),
-Qajax = require('qajax'),
+ajax = require('./ajax'),
 render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
@@ -124,19 +124,14 @@ function start() {
 
   reset();
 
-  Qajax({
-    headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
-    url: window.apiEndPoint + '/setup/ai',
-    method: 'POST',
-    data: {
-      variant: settings.variant(),
-      clock: settings.clock(),
-      time: settings.time(),
-      increment: settings.increment(),
-      level: settings.aiLevel(),
-      color: settings.color()
-    }
-  }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
+  ajax({ url: '/setup/ai', method: 'POST', data: {
+    variant: settings.variant(),
+    clock: settings.clock(),
+    time: settings.time(),
+    increment: settings.increment(),
+    level: settings.aiLevel(),
+    color: settings.color()
+  }}).done(function(data) {
     // update game data from server
     game = Game(data);
 
@@ -152,11 +147,7 @@ function resume(id) {
 
   if (!id) return;
 
-  Qajax({
-    headers: { 'Accept': 'application/vnd.lichess.v1+json', 'X-Requested-With': 'XMLHttpRequest' },
-    url: window.apiEndPoint + id,
-    method: 'GET',
-  }).then(Qajax.filterSuccess).then(Qajax.toJSON).done(function(data) {
+  ajax({ url: id, method: 'GET'}).done(function(data) {
     // update game data
     game = Game(data);
 

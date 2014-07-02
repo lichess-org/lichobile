@@ -28,3 +28,7 @@ body {
 .table-view-cell.extended {
   padding-right: 15px;
 }
+
+.icon:hover {
+  text-decoration: none;
+}

@@ -9,6 +9,7 @@
     <!-- @if PLATFORM='cordova' && WEINRE -->
     <script src="http://<!-- @echo WEINRE_HOST -->:<!-- @echo WEINRE_PORT -->/target/target-script-min.js#lichess" type="text/javascript"></script>
     <!-- @endif -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="ratchet/css/ratchet.css" rel="stylesheet">
     <script src="ratchet/js/ratchet.js"></script>
     <link rel="stylesheet" type="text/css" href="css/chessground.css" />
@@ -25,7 +26,7 @@
       <h1 class="title">lichess mobile</h1>
     </header>
 
-    <div class="content">
+    <div id="mainPage" class="content">
       <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: showLastMove, withDest: showDests }"></div>
       <div id="top-clock" class="clock top">10:00</div>
       <div id="bot-clock" class="clock bot">10:00</div>

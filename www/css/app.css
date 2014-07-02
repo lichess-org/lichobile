@@ -32,3 +32,11 @@ body {
 .icon:hover {
   text-decoration: none;
 }
+
+.bar-footer {
+  text-align: center;
+}
+
+#ping {
+  margin-top: 10px;
+}

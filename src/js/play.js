@@ -9,6 +9,7 @@ storage = require('./storage'),
 signals = require('./signals'),
 _ = require('lodash'),
 alert = require('./alert'),
+$ = require('./vendor/zepto'),
 StrongSocket = require('./socket');
 
 var ground, game, socket;
@@ -85,7 +86,7 @@ function initializeGame() {
   socket = new StrongSocket(
     game.url.socket,
     game.player.version,
-    { options: { debug: true }, events: gameEvents }
+    { options: { debug: true, lagTag: $('#lag')[0] }, events: gameEvents }
   );
 
   // initialize ground and ui

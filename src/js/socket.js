@@ -151,7 +151,7 @@ StrongSocket.prototype = {
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
     if (self.options.lagTag) {
-      // self.options.lagTag.html('<strong>' + self.currentLag + "</strong> ms");
+      self.options.lagTag.innerHTML = '<strong>' + self.currentLag + "</strong> ms";
     }
   },
   pingData: function() {
@@ -216,6 +216,7 @@ StrongSocket.prototype = {
   onError: function(e) {
     var self = this;
     self.options.debug = true;
+    self.options.lagTag.innerHTML = '<strong style="color: red;">Not connected</strong>';
     self.debug('error: ' + JSON.stringify(e));
     self.tryOtherUrl = true;
     clearTimeout(self.pingSchedule);

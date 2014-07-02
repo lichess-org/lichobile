@@ -44,7 +44,7 @@
 .chessground.withDest .square.dest {
   background: radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208030 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0);
 }
-.chessground .square.selected, .chessground .square.drag-over {
+.chessground .square.selected, .chessground .square.drag-over, .chessground.withDest .square.selected, .chessground.withDest .square.drag-over {
   box-shadow: none;
   background: rgba(216, 85, 0, 0.3);
 }

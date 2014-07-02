@@ -1,8 +1,7 @@
 'use strict';
 
 var _ = require('lodash'),
-    Qajax = require('qajax'),
-    storage = require('./storage');
+    Qajax = require('qajax');
 
 var lichessSri = Math.random().toString(36).substring(2);
 
@@ -39,9 +38,9 @@ var StrongSocket = function(url, version, settings) {
   self.tryOtherUrl = false;
   self.autoReconnect = true;
   self.debug('Debug is enabled');
-  if (self.options.resetUrl) {
-    storage.remove(self.options.baseUrlKey);
-  }
+  // if (self.options.resetUrl) {
+  //   storage.remove(self.options.baseUrlKey);
+  // }
   self.connect();
   window.addEventListener('unload', function() {
     self.destroy();
@@ -222,7 +221,7 @@ StrongSocket.prototype = {
     clearTimeout(self.pingSchedule);
   },
   onSuccess: function() {
-    storage.set("wsok", 1);
+    // storage.set("wsok", 1);
   },
   baseUrl: function() {
     return window.socketEndPoint;

@@ -72,7 +72,6 @@ var gameEvents = {
 };
 
 var outOfTime = _.throttle(function() {
-  console.log('time out!');
   socket.send('outoftime');
 }, 200);
 

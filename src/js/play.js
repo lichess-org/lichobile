@@ -54,6 +54,7 @@ var gameEvents = {
     game.updateClocks(e);
   },
   end: function() {
+    game.updateClocks();
     game.finish();
     handleEndGame();
   },

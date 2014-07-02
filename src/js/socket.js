@@ -184,7 +184,7 @@ StrongSocket.prototype = {
         var h = self.settings.events[m.t];
         if (_.isFunction(h)) h(m.d || null);
         else if (!self.options.ignoreUnknownMessages) {
-          self.debug('Message not supported ' + JSON.stringify(m));
+          // self.debug('Message not supported ' + JSON.stringify(m));
         }
     }
   },

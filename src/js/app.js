@@ -14,7 +14,9 @@ function main() {
   var currGame = storage.get('currentGame');
 
   if (currGame) {
-    play.resume(currGame);
+    play.resume(currGame).done(function(game) {
+      if (game.isFinished()) play.handleEndGame();
+    });
   }
 
   $('#play-button').tap(function(e) {

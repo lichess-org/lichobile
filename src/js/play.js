@@ -8,6 +8,7 @@ settings = require('./settings'),
 storage = require('./storage'),
 signals = require('./signals'),
 _ = require('lodash'),
+alert = require('./alert'),
 StrongSocket = require('./socket');
 
 var ground, game, socket;
@@ -18,6 +19,13 @@ var onMove = function(from, to) {
 
 ground = render.ground({movable: { events: { after: onMove }}});
 
+
+function handleEndGame() {
+  ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
+    if (data.winner.isMe) alert('info', '<strong>Yeah!</strong> You won :)');
+    else alert('info', '<strong>Hihihi!</strong> You lose :D');
+  });
+}
 
 var gameEvents = {
   possibleMoves: function(e) {
@@ -48,6 +56,7 @@ var gameEvents = {
   end: function() {
     console.log('game finished');
     game.finish();
+    handleEndGame();
   },
   state: function(e) {
     game.updateState(e);
@@ -124,30 +133,30 @@ function start() {
 
   reset();
 
-  ajax({ url: '/setup/ai', method: 'POST', data: {
+  return ajax({ url: '/setup/ai', method: 'POST', data: {
     variant: settings.variant(),
     clock: settings.clock(),
     time: settings.time(),
     increment: settings.increment(),
     level: settings.aiLevel(),
     color: settings.color()
-  }}).done(function(data) {
+  }}).then(function(data) {
     // update game data from server
     game = Game(data);
 
     initializeGame();
 
+    return game;
   }, function(err) {
     console.log('post request to lichess failed', err);
   });
-
 }
 
 function resume(id) {
 
   if (!id) return;
 
-  ajax({ url: id, method: 'GET'}).done(function(data) {
+  return ajax({ url: id, method: 'GET'}).then(function(data) {
     // update game data
     game = Game(data);
 
@@ -155,13 +164,14 @@ function resume(id) {
 
     if (game.currentTurn() > 1) game.updateClocks();
 
+    return game;
   }, function(err) {
     console.log('request to lichess failed', err);
   });
-
 }
 
 module.exports = {
   start: start,
-  resume: resume
+  resume: resume,
+  handleEndGame: handleEndGame
 };

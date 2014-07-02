@@ -10,8 +10,13 @@ var source = '<div class="alert alert-{{ type }} alert-dismissible" role="alert"
              '</div>';
 var template = Handlebars.compile(source);
 
-function show(type, msg) {
+function hideAll() {
   $('.alert').remove();
+}
+
+function show(type, msg) {
+
+  hideAll();
 
   var alert = $(template({type: type, msg: msg}));
   $('#mainPage').prepend(alert);
@@ -21,4 +26,4 @@ function show(type, msg) {
   });
 }
 
-module.exports = show;
+module.exports = { show: show, hideAll: hideAll };

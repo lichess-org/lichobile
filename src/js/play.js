@@ -22,8 +22,8 @@ ground = render.ground({movable: { events: { after: onMove }}});
 
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
-    if (data.winner.isMe) alert('info', '<strong>Yeah!</strong> You won :)');
-    else alert('info', '<strong>Hihihi!</strong> You lose :D');
+    if (data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
+    else alert.show('info', '<strong>Hihihi!</strong> You lose :D');
   });
 }
 
@@ -54,7 +54,6 @@ var gameEvents = {
     game.updateClocks(e);
   },
   end: function() {
-    console.log('game finished');
     game.finish();
     handleEndGame();
   },
@@ -129,6 +128,8 @@ function reset() {
 }
 
 function start() {
+
+  alert.hideAll();
 
   reset();
 

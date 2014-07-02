@@ -8,7 +8,7 @@ var Q = require('Q'),
 
 function errorHandler(xhr) {
   // catch errors globally
-  alert(
+  alert.show(
     'warning',
     '<strong>Oops!</strong> we have some connection issues with lichess...'
   );

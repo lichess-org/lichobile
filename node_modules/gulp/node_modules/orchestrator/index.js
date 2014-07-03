@@ -84,7 +84,7 @@ util.inherits(Orchestrator, EventEmitter);
 				if (typeof arg === 'string') {
 					names.push(arg);
 				} else if (Array.isArray(arg)) {
-					names.concat(arg); // FRAGILE: ASSUME: it's an array of strings
+					names = names.concat(arg); // FRAGILE: ASSUME: it's an array of strings
 				} else {
 					throw new Error('pass strings or arrays of strings');
 				}

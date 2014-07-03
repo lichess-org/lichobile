@@ -1,4 +1,5 @@
 var path = require('path');
+var findIndex = require('lodash.findindex');
 
 var flattenGlob = function(arr){
   var out = [];
@@ -15,23 +16,23 @@ var flattenGlob = function(arr){
 };
 
 var flattenExpansion = function(set) {
-  // dirty trick
-  // use the first two items in the set to figure out
-  // where the expansion starts
-  return findCommon(set[0], set[1]);
-};
+  var first = set[0];
+  var toCompare = set.slice(1);
 
-// algorithm assumes both arrays have the same length
-// because this is how globs work
-var findCommon = function(a1, a2) {
-  var len = a1.length;
-  for (var i = 0; i < len; i++) {
-    if (a1[i] !== a2[i]) {
-      if(typeof a1[i - 1] == 'string') return a1.slice(0, i);
-      return a1.slice(0, i - 1); // fix for double bracket expansion
-    }
-  }
-  return a1; // identical
+  // find index where the diff is
+  var idx = findIndex(first, function(v, idx){
+    if (typeof v !== 'string') return true;
+
+    var matched = toCompare.every(function(arr){
+      var v2 = arr[idx];
+      if (typeof v2 !== 'string') return false;
+      return v === v2;
+    });
+
+    return !matched;
+  });
+
+  return first.slice(0, idx);
 };
 
 var setToBase = function(set) {
@@ -46,6 +47,7 @@ var setToBase = function(set) {
 module.exports = function(glob) {
   var cwd = (glob.options && glob.options.cwd) ? glob.options.cwd : process.cwd();
   var set = glob.minimatch.set;
-  var basePath = path.normalize(setToBase(set).join(path.sep))+path.sep;
+  var baseParts = setToBase(set);
+  var basePath = path.normalize(baseParts.join(path.sep))+path.sep;
   return basePath;
 };

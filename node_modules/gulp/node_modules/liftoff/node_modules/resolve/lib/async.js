@@ -22,7 +22,6 @@ module.exports = function resolve (x, opts, cb) {
     
     var extensions = opts.extensions || [ '.js' ];
     var y = opts.basedir || path.dirname(caller());
-    var modules = opts.moduleDirectory || 'node_modules';
     
     opts.paths = opts.paths || [];
     

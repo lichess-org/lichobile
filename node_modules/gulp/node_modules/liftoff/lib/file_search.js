@@ -9,6 +9,6 @@ module.exports = function (search, paths) {
     } else {
       path = findup(search, {cwd: paths[i], nocase: true});
     }
-  };
+  }
   return path;
 };

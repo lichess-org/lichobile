@@ -48,7 +48,7 @@ var gameEvents = {
   },
   threefoldRepetition: function() {
     if (settings.threeFoldAutoDraw()) {
-      socket.send('draw-force', {});
+      socket.send('draw-claim', {});
     } else {
       alert.show(
         'info',
@@ -120,7 +120,7 @@ function initializeGame() {
 
   // listen to claimDraw event to notify server when a draw is claimed
   signals.claimDraw.add(function() {
-    socket.send('draw-force', {});
+    socket.send('draw-claim', {});
   });
 
 }

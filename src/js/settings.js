@@ -13,7 +13,8 @@ var settings = module.exports = {
 
   disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'}),
   showLastMove: ko.observable(true).extend({persist: 'settings.showLastMove'}),
-  showDests: ko.observable(true).extend({persist: 'settings.showDests'})
+  showDests: ko.observable(true).extend({persist: 'settings.showDests'}),
+  showCoords: ko.observable(true).extend({persist: 'settings.showCoords'})
 };
 
 settings.disableSleep.subscribe(function(isDisabled) {

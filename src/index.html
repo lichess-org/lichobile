@@ -27,7 +27,7 @@
     </header>
 
     <div id="mainPage" class="content">
-      <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: settings.showLastMove, withDest: settings.showDests }"></div>
+      <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: settings.showLastMove, withDest: settings.showDests, coordinates: settings.showCoords }"></div>
       <div id="top-clock" class="clock top">10:00</div>
       <div id="bot-clock" class="clock bot">10:00</div>
     </div>
@@ -126,6 +126,12 @@
           <li class="table-view-cell">
             Show possible destinations
             <div class="toggle" data-bind="toggle: settings.showDests, css: { active: settings.showDests }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell">
+            Show coordinates
+            <div class="toggle" data-bind="toggle: settings.showCoords, css: { active: settings.showCoords }">
               <div class="toggle-handle"></div>
             </div>
           </li>

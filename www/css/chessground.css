@@ -51,13 +51,23 @@
 .chessground.withMoved .square.moved {
   background: rgba(155, 199, 0, 0.41);
 }
-.chessground.coordinates .square::before {
+.chessground.coordinates .square[data-coord-x]::after {
   position: absolute;
-  left: 2px;
+  right: 2px;
   bottom: 2px;
   font-size: 10px;
   line-height: 10px;
-  content: attr(data-key);
+  content: attr(data-coord-x);
+  color: #fff;
+  opacity: 0.5;
+}
+.chessground.coordinates .square[data-coord-y]::before {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  font-size: 10px;
+  line-height: 10px;
+  content: attr(data-coord-y);
   color: #fff;
   opacity: 0.5;
 }

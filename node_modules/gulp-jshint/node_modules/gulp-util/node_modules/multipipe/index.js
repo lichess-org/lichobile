@@ -29,7 +29,7 @@ module.exports = pipe;
 /**
  * Pipe.
  *
- * @param {Stream,...}
+ * @param {Stream,...,[Function]}
  * @return {Stream}
  * @api public
  */
@@ -37,6 +37,10 @@ module.exports = pipe;
 function pipe(){
   if (arguments.length == 1) return arguments[0];
   var streams = slice.call(arguments);
+  var cb;
+  if ('function' == typeof streams[streams.length - 1]) {
+    cb = streams.splice(-1)[0];
+  }
   var first = streams[0];
   var last = streams[streams.length - 1];
   var ret;
@@ -51,6 +55,17 @@ function pipe(){
     if (next) stream.pipe(next);
     if (stream != ret) stream.on('error', ret.emit.bind(ret, 'error'));
   });
+
+  if (cb) {
+    var ended = false;
+    ret.on('error', end);
+    last.on('finish', end);
+    function end(err){
+      if (ended) return;
+      ended = true;
+      cb(err);
+    }
+  }
 
   return ret;
 }

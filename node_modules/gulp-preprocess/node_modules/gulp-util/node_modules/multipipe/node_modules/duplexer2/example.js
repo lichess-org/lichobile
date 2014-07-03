@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var stream = require("stream");
+var stream = require("readable-stream");
 
 var duplexer2 = require("./");
 

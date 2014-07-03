@@ -1,6 +1,6 @@
 var assert = require("chai").assert;
 
-var stream = require("stream");
+var stream = require("readable-stream");
 
 var duplexer2 = require("../");
 

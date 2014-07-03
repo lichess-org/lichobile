@@ -1,4 +1,4 @@
-var stream = require("stream");
+var stream = require("readable-stream");
 
 var duplex2 = module.exports = function duplex2(options, writable, readable) {
   return new DuplexWrapper(options, writable, readable);

@@ -80,6 +80,39 @@ describe('pipe(a, b, c)', function(){
   });
 });
 
+describe('pipe(a, b, c, fn)', function(){
+  it('should call on finish', function(done){
+    var finished = false;
+    var a = Readable();
+    var b = Transform();
+    var c = Writable(function(){
+      finished = true;
+    });
+
+    pipe(a, b, c, function(err){
+      assert(!err);
+      assert(finished);
+      done();
+    });
+  });
+
+  it('should call with error once', function(done){
+    var a = Readable();
+    var b = Transform();
+    var c = Writable();
+    var err = new Error;
+
+    pipe(a, b, c, function(err){
+      assert(err);
+      done();
+    });
+
+    a.emit('error', err);
+    b.emit('error', err);
+    c.emit('error', err);
+  });
+});
+
 function Readable(){
   var readable = new Stream.Readable({ objectMode: true });
   readable._read = function(){

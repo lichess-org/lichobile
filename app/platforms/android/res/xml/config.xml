@@ -11,7 +11,7 @@
     <feature name="Insomnia">
         <param name="android-package" value="nl.xservices.plugins.Insomnia" />
     </feature>
-    <name>lichess-mobile</name>
+    <name>lichess</name>
     <description>
         lichess.org mobile application
     </description>

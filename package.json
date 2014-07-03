@@ -36,11 +36,13 @@
     "watchify": "~0.10.2"
   },
   "dependencies": {
+    "chess.js": "~0.1.0",
     "lodash": "~2.4.1",
     "q": "~1.0.1",
     "qajax": "~0.2.2",
     "cordova": "~3.5.0-0.2.4",
     "knockout": "~3.1.0",
-    "signals": "~1.0.0"
+    "signals": "~1.0.0",
+    "handlebars": "~2.0.0-alpha.4"
   }
 }

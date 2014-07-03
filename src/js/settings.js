@@ -9,13 +9,12 @@ var settings = module.exports = {
   time: ko.observable(5).extend({persist: 'settings.time'}),
   increment: ko.observable(3).extend({persist: 'settings.increment'}),
   aiLevel: ko.observable(5).extend({persist: 'settings.aiLevel'}),
+  threeFoldAutoDraw: ko.observable(true).extend({persist: 'settings.threeFoldAutoDraw'}),
 
   disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'}),
   showLastMove: ko.observable(true).extend({persist: 'settings.showLastMove'}),
   showDests: ko.observable(true).extend({persist: 'settings.showDests'})
 };
-
-ko.applyBindings(settings);
 
 settings.disableSleep.subscribe(function(isDisabled) {
   if (window.cordova) {

@@ -3,5 +3,6 @@
 var Signal = require('signals');
 
 module.exports = {
-  buzzer: new Signal()
+  buzzer: new Signal(),
+  claimDraw: new Signal()
 };

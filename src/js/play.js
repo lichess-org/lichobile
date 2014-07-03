@@ -20,14 +20,6 @@ var onMove = function(from, to) {
 
 ground = render.ground({movable: { events: { after: onMove }}});
 
-
-function handleEndGame() {
-  ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
-    if (data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
-    else alert.show('info', '<strong>Hihihi!</strong> You lose :D');
-  });
-}
-
 var gameEvents = {
   possibleMoves: function(e) {
     game.setPossibleMoves(e);
@@ -53,6 +45,16 @@ var gameEvents = {
   // },
   clock: function(e) {
     game.updateClocks(e);
+  },
+  threefoldRepetition: function() {
+    if (settings.threeFoldAutoDraw()) {
+      socket.send('draw-force', {});
+    } else {
+      alert.show(
+        'info',
+        'Threefold repetition detected: <button data-bind="tap: claimDraw" class="btn">claim draw!</button>'
+      );
+    }
   },
   end: function() {
     game.updateClocks();
@@ -116,6 +118,11 @@ function initializeGame() {
     }
   });
 
+  // listen to claimDraw event to notify server when a draw is claimed
+  signals.claimDraw.add(function() {
+    socket.send('draw-force', {});
+  });
+
 }
 
 function reset() {
@@ -169,6 +176,13 @@ function resume(id) {
     return game;
   }, function(err) {
     console.log('request to lichess failed', err);
+  });
+}
+
+function handleEndGame() {
+  ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
+    if (data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
+    else alert.show('info', '<strong>Oops!</strong> You lost :D');
   });
 }
 

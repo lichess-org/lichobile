@@ -3,13 +3,23 @@
 'use strict';
 
 require('./knockoutExtend');
-require('./settings');
 
 var play = require('./play'),
     $ = require('./vendor/zepto'),
+    settings = require('./settings'),
+    ko = require('knockout'),
+    signals = require('./signals'),
     storage = require('./storage');
 
 function main() {
+
+  var view = {
+    claimDraw: function() {
+      signals.claimDraw.dispatch();
+    },
+    settings: settings
+  };
+  ko.applyBindings(view);
 
   var currGame = storage.get('currentGame');
 

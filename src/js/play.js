@@ -1,6 +1,5 @@
 'use strict';
 
-
 var Game = require('./game'),
 ajax = require('./ajax'),
 render = require('./render'),
@@ -181,8 +180,9 @@ function resume(id) {
 
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
-    if (data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
-    else alert.show('info', '<strong>Oops!</strong> You lost :D');
+    if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
+    else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');
+    else alert.show('info', '<strong>Oh!</strong> That\'s a draw :\\');
   });
 }
 

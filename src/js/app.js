@@ -15,7 +15,7 @@ function main() {
 
   if (currGame) {
     play.resume(currGame).done(function(game) {
-      if (game.isFinished()) play.handleEndGame();
+      if (game && game.isFinished()) play.handleEndGame();
     });
   }
 

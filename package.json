@@ -27,7 +27,6 @@
     "gulp-jshint": "~1.5.5",
     "gulp-preprocess": "~1.0.1",
     "yargs": "~1.2.1",
-    "browserify": "~4.1.5",
     "vinyl-source-stream": "~0.1.1",
     "gulp-util": "~2.2.19",
     "watchify": "~0.10.2"

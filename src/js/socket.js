@@ -151,7 +151,7 @@ StrongSocket.prototype = {
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
     if (self.options.lagTag) {
-      self.options.lagTag.innerHTML = '<strong>' + self.currentLag + "</strong> ms";
+      self.options.lagTag.innerHTML = '<strong>' + self.averageLag + "</strong> ms";
     }
   },
   pingData: function() {

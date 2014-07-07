@@ -88,6 +88,7 @@ var Game = function(data) {
   }
 
   function updateClocks(times) {
+    stopClocks();
     if (times) {
       for (var color in times) {
         clocks[color].setTime(times[color]);
@@ -96,7 +97,6 @@ var Game = function(data) {
       clocks.white.setTime(timer.white);
       clocks.black.setTime(timer.black);
     }
-    stopClocks();
     if (hasClock() && game.started && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {
       clocks[game.player].start();
     }

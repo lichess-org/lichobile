@@ -38,19 +38,18 @@ var Clock = function(time, $el) {
   }
 
   function start() {
-    var endTime = new Date().getTime() + time;
+    var endTime = Date.now() + time;
     isRunning = true;
     interval = setInterval(function() {
       if (isRunning) {
-        var currTime = endTime - new Date().getTime();
+        var currTime = endTime - Date.now();
         if (currTime <= 0) {
-          clearInterval(interval);
           currTime = 0;
+          stop();
+          signals.buzzer.dispatch();
         }
         time = currTime;
         tick();
-
-        if (currTime === 0) signals.buzzer.dispatch();
       } else {
         clearInterval(interval);
       }

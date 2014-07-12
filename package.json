@@ -29,7 +29,8 @@
     "yargs": "~1.2.1",
     "vinyl-source-stream": "~0.1.1",
     "gulp-util": "~2.2.19",
-    "watchify": "~0.10.2"
+    "watchify": "~0.10.2",
+    "browserify": "~4.2.0"
   },
   "dependencies": {
     "chess.js": "~0.1.0",

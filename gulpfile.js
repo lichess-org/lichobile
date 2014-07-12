@@ -5,6 +5,7 @@ var jshint = require('gulp-jshint');
 var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
 var watchify = require('watchify');
+var browserify = require('browserify');
 
 var defaults = require('./env.json');
 var env = argv.env ? require('./' + argv.env) : defaults;
@@ -35,6 +36,15 @@ gulp.task('lint', function() {
 });
 
 gulp.task('scripts', function() {
+  var bundleStream = browserify('./src/js/app.js').bundle({debug: true});
+
+  return bundleStream
+    .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./www'));
+});
+
+gulp.task('watch-scripts', function() {
   var bundleStream = watchify({
     entries: './src/js/app.js',
     noParse: allVendorLibs
@@ -53,13 +63,14 @@ gulp.task('scripts', function() {
   return rebundle();
 });
 
-gulp.task('dev', ['html', 'lint', 'scripts']);
-
 // Watch Files For Changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['lint']);
   gulp.watch('src/index.html', ['html']);
 });
 
+gulp.task('dev', ['html', 'lint', 'scripts']);
+gulp.task('dev-watch', ['html', 'lint', 'watch-scripts', 'watch']);
+
 // Default Task
-gulp.task('default', ['dev', 'watch']);
+gulp.task('default', ['dev-watch']);

@@ -3,3 +3,4 @@ www/app.js
 www/index.html
 
 env/*.json
+!env/prod.json

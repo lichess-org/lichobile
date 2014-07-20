@@ -56,8 +56,8 @@ var Clock = function(time, $el) {
     }, 100);
   }
 
-  function setTime(time) {
-    time = Math.round(parseFloat(time) * 1000);
+  function setTime(t) {
+    time = Math.round(parseFloat(t) * 1000);
     tick();
   }
 

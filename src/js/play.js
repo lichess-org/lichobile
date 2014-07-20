@@ -150,6 +150,7 @@ function start() {
     color: settings.game.color()
   }}).then(function(data) {
     // update game data from server
+    console.log(data);
     game = Game(data);
 
     initializeGame();

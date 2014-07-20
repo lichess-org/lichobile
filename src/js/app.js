@@ -31,6 +31,7 @@ function main() {
 
   $('#play-button').tap(function(e) {
     e.preventDefault();
+    $('#gameModal').removeClass('active');
     play.start();
   });
 

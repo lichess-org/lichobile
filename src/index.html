@@ -22,12 +22,12 @@
   <body>
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
-      <a id="play-button" class="icon icon-play pull-right"></a>
+      <a class="icon icon-play pull-right" href="#gameModal"></a>
       <h1 class="title">lichess mobile</h1>
     </header>
 
     <div id="mainPage" class="content">
-      <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: settings.showLastMove, withDest: settings.showDests, coordinates: settings.showCoords }"></div>
+      <div class="chessground wood small merida" id="ground" data-bind="css: { withMoved: settings.general.showLastMove, withDest: settings.general.showDests, coordinates: settings.general.showCoords }"></div>
       <div id="top-clock" class="clock top">10:00</div>
       <div id="bot-clock" class="clock bot">10:00</div>
     </div>
@@ -36,6 +36,77 @@
       <div id="ping"><small>Ping: <span id="lag"></span></small></div>
     </div>
 
+    <div id="gameModal" class="modal">
+      <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#gameModal"></a>
+        <h1 class="title">Game</h1>
+      </header>
+
+      <div class="content">
+        <ul class="table-view">
+          <li class="table-view-cell extended">
+            Color
+            <div class="pull-right">
+              <div>
+                <input type="radio" id="gameWhite" name="color" value="white" data-bind="checked: settings.game.color" />
+                <label for="gameWhite">White</label>
+              </div>
+              <div>
+                <input type="radio" id="gameBlack" name="color" value="black" data-bind="checked: settings.game.color" />
+                <label for="gameBlack">Black</label>
+              </div>
+              <div>
+                <input type="radio" id="gameRandom" name="color" value="random" data-bind="checked: settings.game.color" />
+                <label for="gameRandom">Random</label>
+              </div>
+            </div>
+          </li>
+          <li class="table-view-cell extended">
+            Variant
+            <div class="pull-right">
+              <div>
+                <input type="radio" id="gameStandard" name="variant" value="1" data-bind="checked: settings.game.variant" />
+                <label for="gameStandard">Standard</label>
+              </div>
+              <div>
+                <input type="radio" id="game960" name="variant" value="2" data-bind="checked: settings.game.variant" />
+                <label for="game960">960</label>
+              </div>
+            </div>
+          </li>
+          <li class="table-view-cell">
+            Clock
+            <div class="toggle" data-bind="toggle: settings.game.clock, css: { active: settings.game.clock }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell extended" data-bind="visible: settings.game.clock">
+            <div>
+              Time
+              <div class="pull-right">
+                <span data-bind="text: settings.game.time"></span>
+                <input type="range" min="1" max="10" step="1" data-bind="value: settings.game.time" />
+              </div>
+            </div>
+            <div>
+              Increment
+              <div class="pull-right">
+                <span data-bind="text: settings.game.increment"></span>
+                <input type="range" min="0" max="10" step="1" data-bind="value: settings.game.increment" />
+              </div>
+            </div>
+          </li>
+          <li class="table-view-cell extended">
+            AI level
+            <div class="pull-right">
+              <span data-bind="text: settings.game.aiLevel"></span>
+              <input type="range" min="1" max="8" step="1" data-bind="value: settings.game.aiLevel" />
+            </div>
+          </li>
+        </ul>
+        <button id="play-button" class="btn btn-primary btn-block">Play!</button>
+      </div>
+    </div>
     <div id="settingsModal" class="modal">
       <header class="bar bar-nav">
         <a class="icon icon-close pull-right" href="#settingsModal"></a>
@@ -44,94 +115,33 @@
 
       <div class="content">
         <ul class="table-view">
-          <li class="table-view-divider">Game</li>
-          <li class="table-view-cell extended">
-            Color
-            <div class="pull-right">
-              <div>
-                <input type="radio" id="settingsWhite" name="color" value="white" data-bind="checked: settings.color" />
-                <label for="settingsWhite">White</label>
-              </div>
-              <div>
-                <input type="radio" id="settingsBlack" name="color" value="black" data-bind="checked: settings.color" />
-                <label for="settingsBlack">Black</label>
-              </div>
-              <div>
-                <input type="radio" id="settingsRandom" name="color" value="random" data-bind="checked: settings.color" />
-                <label for="settingsRandom">Random</label>
-              </div>
-            </div>
-          </li>
-          <li class="table-view-cell extended">
-            Variant
-            <div class="pull-right">
-              <div>
-                <input type="radio" id="settingsStandard" name="variant" value="1" data-bind="checked: settings.variant" />
-                <label for="settingsStandard">Standard</label>
-              </div>
-              <div>
-                <input type="radio" id="settings960" name="variant" value="2" data-bind="checked: settings.variant" />
-                <label for="settings960">960</label>
-              </div>
-            </div>
-          </li>
-          <li class="table-view-cell">
-            Clock
-            <div class="toggle" data-bind="toggle: settings.clock, css: { active: settings.clock }">
-              <div class="toggle-handle"></div>
-            </div>
-          </li>
-          <li class="table-view-cell extended" data-bind="visible: settings.clock">
-            <div>
-              Time
-              <div class="pull-right">
-                <span data-bind="text: settings.time"></span>
-                <input type="range" min="1" max="10" step="1" data-bind="value: settings.time" />
-              </div>
-            </div>
-            <div>
-              Increment
-              <div class="pull-right">
-                <span data-bind="text: settings.increment"></span>
-                <input type="range" min="0" max="10" step="1" data-bind="value: settings.increment" />
-              </div>
-            </div>
-          </li>
-          <li class="table-view-cell extended">
-            AI level
-            <div class="pull-right">
-              <span data-bind="text: settings.aiLevel"></span>
-              <input type="range" min="1" max="8" step="1" data-bind="value: settings.aiLevel" />
-            </div>
-          </li>
-          <li class="table-view-cell">
-            Threefold auto draw
-            <div class="toggle" data-bind="toggle: settings.threeFoldAutoDraw, css: { active: settings.threeFoldAutoDraw }">
-              <div class="toggle-handle"></div>
-            </div>
-          </li>
-          <li class="table-view-divider">General</li>
           <li class="table-view-cell" data-bind="visible: window.cordova">
             Disable sleep
-            <div class="toggle" data-bind="toggle: settings.disableSleep, css: { active: settings.disableSleep }">
+            <div class="toggle" data-bind="toggle: settings.general.disableSleep, css: { active: settings.general.disableSleep }">
               <div class="toggle-handle"></div>
             </div>
           </li>
           <li class="table-view-cell">
             Show last move
-            <div class="toggle" data-bind="toggle: settings.showLastMove, css: { active: settings.showLastMove }">
+            <div class="toggle" data-bind="toggle: settings.general.showLastMove, css: { active: settings.general.showLastMove }">
               <div class="toggle-handle"></div>
             </div>
           </li>
           <li class="table-view-cell">
             Show possible destinations
-            <div class="toggle" data-bind="toggle: settings.showDests, css: { active: settings.showDests }">
+            <div class="toggle" data-bind="toggle: settings.general.showDests, css: { active: settings.general.showDests }">
               <div class="toggle-handle"></div>
             </div>
           </li>
           <li class="table-view-cell">
             Show coordinates
-            <div class="toggle" data-bind="toggle: settings.showCoords, css: { active: settings.showCoords }">
+            <div class="toggle" data-bind="toggle: settings.general.showCoords, css: { active: settings.general.showCoords }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell">
+            Threefold auto draw
+            <div class="toggle" data-bind="toggle: settings.general.threeFoldAutoDraw, css: { active: settings.general.threeFoldAutoDraw }">
               <div class="toggle-handle"></div>
             </div>
           </li>

@@ -40,3 +40,8 @@ body {
 #ping {
   margin-top: 10px;
 }
+
+#gameModal .btn-block {
+  width: 300px;
+  margin: 10px auto;
+}

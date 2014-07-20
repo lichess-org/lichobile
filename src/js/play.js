@@ -46,7 +46,7 @@ var gameEvents = {
     game.updateClocks(e);
   },
   threefoldRepetition: function() {
-    if (settings.threeFoldAutoDraw()) {
+    if (settings.general.threeFoldAutoDraw()) {
       socket.send('draw-claim', {});
     } else {
       alert.show(
@@ -142,12 +142,12 @@ function start() {
   reset();
 
   return ajax({ url: '/setup/ai', method: 'POST', data: {
-    variant: settings.variant(),
-    clock: settings.clock(),
-    time: settings.time(),
-    increment: settings.increment(),
-    level: settings.aiLevel(),
-    color: settings.color()
+    variant: settings.game.variant(),
+    clock: settings.game.clock(),
+    time: settings.game.time(),
+    increment: settings.game.increment(),
+    level: settings.game.aiLevel(),
+    color: settings.game.color()
   }}).then(function(data) {
     // update game data from server
     game = Game(data);

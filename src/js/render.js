@@ -30,7 +30,7 @@ function ground(cfg) {
     height: size
   });
 
-  return Chessground.main($ground[0], cfg);
+  return Chessground.main($ground[0], defaults);
 }
 
 function clocks() {

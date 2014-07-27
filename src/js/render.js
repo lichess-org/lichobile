@@ -9,14 +9,11 @@ var $ground = $('#ground');
 function ground(cfg) {
   var defaults = {
     movable: {
-      free: false,
-      events: {
-        after: function() { }
-      }
+      free: false
     }
   };
 
-  _.defaults(defaults, cfg);
+  _.assign(defaults, cfg);
 
   var size = $('body').width();
   var cHeight = $('body > .content').height();

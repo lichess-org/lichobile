@@ -106,7 +106,7 @@ function initializeGame() {
   if (game.player.color === 'black') {
     ground.toggleOrientation();
     if (game.currentTurn() === 1) {
-      ground.showMoved(game.lastMove().from, game.lastMove().to);
+      ground.showLastMove(game.lastMove().from, game.lastMove().to);
     }
   }
 

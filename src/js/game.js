@@ -34,28 +34,9 @@ var Game = function(data) {
   }
 
   function getPossibleMoves() {
-    return _.mapValues(possibleMoves, function(s) {
-      var moves = s.match(/.{1,2}/g);
-      return moves.reduce(function(a, m) {
-        a[m] = true;
-        return a;
-      }, {});
+    return _.mapValues(possibleMoves, function(moves) {
+      return moves.match(/.{1,2}/g);
     });
-    // return _.mapValues(possibleMoves, function(s) {
-    //   var t = "";
-    //   var o = {};
-    //   for (var i=0; i < s.length; i++) {
-    //     if (t.length < 2) { t += s[i]; }
-    //     else if (i === s.length - 1) {
-    //       o[t] = true;
-    //     }
-    //     else {
-    //       o[t] = true;
-    //       t = "";
-    //     }
-    //   }
-    //   return o;
-    // });
   }
 
   function setPossibleMoves(moves) {

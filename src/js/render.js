@@ -7,13 +7,8 @@ $ = require('./vendor/zepto');
 var $ground = $('#ground');
 
 function ground(cfg) {
-  var defaults = {
-    movable: {
-      free: false
-    }
-  };
 
-  _.assign(defaults, cfg);
+  cfg = _.assign({movable: {free: false}}, cfg);
 
   var size = $('body').width();
   var cHeight = $('body > .content').height();
@@ -27,7 +22,7 @@ function ground(cfg) {
     height: size
   });
 
-  return Chessground.main($ground[0], defaults);
+  return Chessground.main($ground[0], cfg);
 }
 
 function clocks() {

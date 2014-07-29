@@ -5,6 +5,12 @@ var Q = require('Q'),
     _ = require('lodash'),
     alert = require('./alert');
 
+var defaults = {
+  headers: {
+    'Accept': 'application/vnd.lichess.v1+json',
+    'X-Requested-With': 'XMLHttpRequest'
+  }
+};
 
 function errorHandler(xhr) {
   // catch errors globally
@@ -18,14 +24,7 @@ function errorHandler(xhr) {
 }
 
 function ajax(options) {
-  var defaults = {
-    headers: {
-      'Accept': 'application/vnd.lichess.v1+json',
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  };
-
-  options = _.assign(defaults, options);
+  options = _.defaults(_.clone(defaults), options);
   options.url = window.apiEndPoint + options.url;
 
   return Qajax(options)

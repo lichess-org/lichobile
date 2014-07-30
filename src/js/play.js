@@ -18,6 +18,14 @@ var onMove = function(from, to) {
 
 ground = render.ground({movable: { events: { after: onMove }}});
 
+function handleEndGame() {
+  ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
+    if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
+    else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');
+    else alert.show('info', '<strong>Oh!</strong> That\'s a draw :\\');
+  });
+}
+
 var gameEvents = {
   possibleMoves: function(e) {
     game.setPossibleMoves(e);
@@ -183,17 +191,12 @@ function resume(id) {
   });
 }
 
-function handleEndGame() {
+function closeConnection() {
   socket.destroy();
-  ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
-    if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
-    else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');
-    else alert.show('info', '<strong>Oh!</strong> That\'s a draw :\\');
-  });
 }
 
 module.exports = {
   start: start,
   resume: resume,
-  handleEndGame: handleEndGame
+  closeConnection: closeConnection
 };

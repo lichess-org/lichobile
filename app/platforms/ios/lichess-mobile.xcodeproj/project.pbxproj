@@ -39,6 +39,9 @@
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F6D8BCCF83EF42D4815FCEAA /* Insomnia.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C723BA046094114A6998E5A /* Insomnia.m */; };
+		46663F08F1BD4BECA8DEA969 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F4B82F6DF54BE6BAB6A47B /* CDVConnection.m */; };
+		75B44DE3E886452F8C574D74 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C18A3AE04484D459CDE7FE1 /* CDVReachability.m */; };
+		81FD86A060BB4253BDCC850E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4408BA209814BD0A272B96F /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +108,11 @@
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "lichess-mobile/config.xml"; sourceTree = "<group>"; };
 		8C723BA046094114A6998E5A /* Insomnia.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Insomnia.m"; path = "nl.x-services.plugins.insomnia/Insomnia.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		330E8A986818482C9929C0F5 /* Insomnia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Insomnia.h"; path = "nl.x-services.plugins.insomnia/Insomnia.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		E0F4B82F6DF54BE6BAB6A47B /* CDVConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVConnection.m"; path = "org.apache.cordova.network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		1C18A3AE04484D459CDE7FE1 /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "org.apache.cordova.network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		B250A0BB4D784BF4AA2FBE0C /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "org.apache.cordova.network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		6159768FFB964545A3851144 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "org.apache.cordova.network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		C4408BA209814BD0A272B96F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +125,7 @@
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */,
+				81FD86A060BB4253BDCC850E /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +219,7 @@
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
+				C4408BA209814BD0A272B96F /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -227,6 +237,10 @@
 			children = (
 				8C723BA046094114A6998E5A /* Insomnia.m */,
 				330E8A986818482C9929C0F5 /* Insomnia.h */,
+				E0F4B82F6DF54BE6BAB6A47B /* CDVConnection.m */,
+				1C18A3AE04484D459CDE7FE1 /* CDVReachability.m */,
+				B250A0BB4D784BF4AA2FBE0C /* CDVConnection.h */,
+				6159768FFB964545A3851144 /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "lichess-mobile/Plugins";
@@ -422,6 +436,8 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				F6D8BCCF83EF42D4815FCEAA /* Insomnia.m in Sources */,
+				46663F08F1BD4BECA8DEA969 /* CDVConnection.m in Sources */,
+				75B44DE3E886452F8C574D74 /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

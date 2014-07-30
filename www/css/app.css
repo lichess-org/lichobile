@@ -2,7 +2,7 @@ body {
   font-family: "Open Sans","Lucida Grande","Lucida Sans Unicode",Geneva,Verdana,Sans-Serif;
 }
 
-.title {
+#title {
   font-size: 20px;
   color: #848484;
 }
@@ -41,7 +41,6 @@ body {
   margin-top: 10px;
 }
 
-#gameModal .btn-block {
-  width: 300px;
-  margin: 10px auto;
+.modal .content {
+  margin: 10px 3% 0;
 }

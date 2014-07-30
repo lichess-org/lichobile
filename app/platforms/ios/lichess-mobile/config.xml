@@ -32,4 +32,7 @@
     <content src="index.html" />
     <preference name="Orientation" value="portrait" />
     <access origin="*" />
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
 </widget>

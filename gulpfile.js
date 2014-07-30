@@ -36,7 +36,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('scripts', function() {
-  var bundleStream = browserify('./src/js/app.js').bundle({debug: true});
+  var bundleStream = browserify('./src/js/main.js').bundle({debug: true});
 
   return bundleStream
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
@@ -46,7 +46,7 @@ gulp.task('scripts', function() {
 
 gulp.task('watch-scripts', function() {
   var bundleStream = watchify({
-    entries: './src/js/app.js',
+    entries: './src/js/main.js',
     noParse: allVendorLibs
   });
 

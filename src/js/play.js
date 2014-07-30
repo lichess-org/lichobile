@@ -66,6 +66,7 @@ var gameEvents = {
   end: function() {
     game.updateClocks();
     game.finish();
+    stop();
     handleEndGame();
   },
   state: function(e) {
@@ -190,12 +191,13 @@ function resume(id) {
   });
 }
 
-function closeConnection() {
+function stop() {
   socket.destroy();
+  if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
 
 module.exports = {
   start: start,
   resume: resume,
-  closeConnection: closeConnection
+  stop: stop
 };

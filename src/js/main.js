@@ -34,7 +34,7 @@ function main() {
 
   if (currGame) {
     play.resume(currGame).done(function (game) {
-      if (game && game.isFinished()) play.closeConnection();
+      if (game && game.isFinished()) play.stop();
     });
   }
 

@@ -40,6 +40,7 @@ var Clock = function(time, $el) {
   function start() {
     var endTime = Date.now() + time;
     isRunning = true;
+    $el.addClass('on');
     interval = setInterval(function() {
       if (isRunning) {
         var currTime = endTime - Date.now();
@@ -62,6 +63,7 @@ var Clock = function(time, $el) {
   }
 
   function stop() {
+    $el.removeClass('on');
     clearInterval(interval);
     isRunning = false;
   }

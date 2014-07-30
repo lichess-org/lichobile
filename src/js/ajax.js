@@ -23,9 +23,11 @@ function errorHandler(xhr) {
   return Q.reject(xhr);
 }
 
-function ajax(options) {
+function ajax(options, noJson) {
   options = _.defaults(_.clone(defaults), options);
   options.url = window.apiEndPoint + options.url;
+
+  if (noJson) return Qajax(options).then(Qajax.filterSuccess, errorHandler);
 
   return Qajax(options)
     .then(Qajax.filterSuccess)

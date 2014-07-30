@@ -22,14 +22,19 @@
   <body>
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
-      <a class="icon icon-person pull-right" href="#connectModal"></a>
+      <a class="icon icon-person pull-right" href="#userModal"></a>
       <h1 class="title" id="title">lichess mobile</h1>
     </header>
 
     <div id="mainPage" class="content">
       <div class="wood merida" id="ground" data-bind="css: { withMoved: settings.general.showLastMove, withDest: settings.general.showDests, coordinates: settings.general.showCoords }"></div>
-      <div id="top-clock" class="clock top">10:00</div>
-      <div id="bot-clock" class="clock bot">10:00</div>
+      <div id="opp-table" class="player-table">
+        <div id="opp-clock" class="clock"></div>
+      </div>
+      <div id="player-table" class="player-table">
+        <div class="player" data-bind="visible: user.name"><span data-bind="text: user.name"></span> (<span data-bind="text: user.rating"></span>)</div>
+        <div id="player-clock" class="clock"></div>
+      </div>
     </div>
 
     <div class="bar bar-tab">
@@ -41,17 +46,20 @@
       </a>
     </div>
 
-    <div id="connectModal" class="modal">
+    <div id="userModal" class="modal">
       <header class="bar bar-nav">
-        <a class="icon icon-close pull-right" href="#connectModal"></a>
+        <a class="icon icon-close pull-right" href="#userModal"></a>
         <h1 class="title">Connection</h1>
       </header>
       <div class="content">
-        <form id="login">
+        <form id="login" data-bind="ifnot: user.name">
           <input id="username" autocomplete="off" autocapitalize="off" autocorrect="off" type="text" placeholder="Username" />
           <input id="password" type="password" placeholder="Password" />
-          <button type="submit" class="btn btn-positive btn-block">Connect</button>
+          <button type="submit" class="btn btn-positive btn-block">Sign in</button>
         </form>
+        <div data-bind="visible: user.name">
+          <button id="signout" class="btn btn-negative btn-block" >Sign out</button>
+        </div>
       </div>
     </div>
 
@@ -147,6 +155,7 @@
               </div>
             </div>
           </li>
+        </ul>
         <button id="play-button" class="btn btn-primary btn-block">Play!</button>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 var Game = require('./game'),
 ajax = require('./ajax'),
+Zepto = require('./vendor/zepto'),
 render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
@@ -85,7 +86,6 @@ var outOfTime = _.throttle(function() {
 }, 200);
 
 function initializeGame() {
-  var clockEls;
 
   // save current game id
   storage.set('currentGame', game.url.pov);
@@ -102,8 +102,7 @@ function initializeGame() {
 
   // initialize ground and ui
   if (game.hasClock()) {
-    clockEls = render.clocks();
-    game.setClocks(clockEls.top, clockEls.bot);
+    game.setClocks(Zepto('#opp-clock'), Zepto('#player-clock'));
   }
 
   if (game.getFen()) {

@@ -71,16 +71,16 @@ var Game = function(data) {
     };
   }
 
-  function setClocks($topC, $botC) {
+  function setClocks($opponent, $player) {
     var wTime = Math.round(parseFloat(timer.white) * 1000);
     var bTime = Math.round(parseFloat(timer.black) * 1000);
     if (hasClock()) {
       if (player.color === 'white') {
-        clocks.white = Clock(wTime, $botC);
-        clocks.black = Clock(bTime, $topC);
+        clocks.white = Clock(wTime, $player);
+        clocks.black = Clock(bTime, $opponent);
       } else {
-        clocks.white = Clock(wTime, $topC);
-        clocks.black = Clock(bTime, $botC);
+        clocks.white = Clock(wTime, $opponent);
+        clocks.black = Clock(bTime, $player);
       }
       clocks.white.show();
       clocks.black.show();

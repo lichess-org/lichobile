@@ -15,26 +15,18 @@ var play = require('./play'),
     utils = require('./utils'),
     $ = utils.$;
 
-function showUser(user) {
-  $('#title').innerHTML = user.username + ' (' + user.rating + ')';
-}
-
 function main() {
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();
   });
 
-  // try to get session from cookie
-  session.refresh().done(function (data) {
-    showUser(data);
-  });
-
   var view = {
     claimDraw: function() {
       signals.claimDraw.dispatch();
     },
-    settings: settings
+    settings: settings,
+    user: session.userView
   };
   ko.applyBindings(view);
 
@@ -45,6 +37,10 @@ function main() {
       if (game && game.isFinished()) play.closeConnection();
     });
   }
+
+  // try to get session from cookie
+  session.refresh();
+
 
   $('#login').addEventListener('submit', function () {
     var usernameInput = $('#username');
@@ -60,10 +56,9 @@ function main() {
       return false;
     }
 
-    session.login(username, password).then(function(data) {
+    session.login(username, password).done(function(data) {
       console.log(data);
-      showUser(data);
-      $('#connectModal').classList.remove('active');
+      $('#userModal').classList.remove('active');
     }, function (error) {
       console.log(error);
       // handle error
@@ -71,6 +66,12 @@ function main() {
 
 
     return false;
+  });
+
+  Zepto('#signout').tap(function (e) {
+    e.preventDefault();
+    session.logout();
+    $('#userModal').classList.remove('active');
   });
 
   Zepto('#play-button').tap(function (e) {

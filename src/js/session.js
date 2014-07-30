@@ -1,7 +1,19 @@
 'use strict';
 
 var ajax = require('./ajax'),
+ko = require('knockout'),
 session;
+
+var userView = {
+  name: ko.observable(),
+  rating: ko.observable()
+};
+
+function trash() {
+  session = null;
+  userView.name(null);
+  userView.rating(null);
+}
 
 function login(username, password) {
   return ajax({ url: '/login', method: 'POST', data: {
@@ -9,11 +21,22 @@ function login(username, password) {
     password: password
   }}).then(function (data) {
     session = data;
+    userView.name(data.username);
+    userView.rating(data.rating);
     return session;
   });
 }
 
-function isAuthenticated() {
+function logout() {
+  return ajax({ url: '/logout', method: 'GET' }, true).then(function (data) {
+    trash();
+    return null;
+  }, function (error) {
+    throw new Error(error.responseText);
+  });
+}
+
+function isConnected() {
   return !!session;
 }
 
@@ -24,18 +47,18 @@ function get() {
 function refresh() {
   return ajax({ url: '/account/info', method: 'GET'}).then(function (data) {
     session = data;
+    userView.name(data.username);
+    userView.rating(data.rating);
     return session;
   });
 }
 
-function trash() {
-  session = null;
-}
-
 module.exports = {
-  isAuthenticated: isAuthenticated,
+  isConnected: isConnected,
   get: get,
   trash: trash,
   login: login,
-  refresh: refresh
+  logout: logout,
+  refresh: refresh,
+  userView: userView
 };

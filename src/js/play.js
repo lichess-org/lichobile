@@ -87,7 +87,10 @@ function initializeGame() {
   socket = new StrongSocket(
     game.url.socket,
     game.player.version,
-    { options: { debug: true, lagTag: $('#lag')[0] }, events: gameEvents }
+    {
+      options: { name: "game", debug: true, lagTag: $('#lag')[0] },
+      events: gameEvents
+    }
   );
 
   // initialize ground and ui
@@ -182,6 +185,7 @@ function resume(id) {
 }
 
 function handleEndGame() {
+  socket.destroy();
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
     if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
     else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');

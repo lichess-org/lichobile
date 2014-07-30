@@ -75,7 +75,7 @@ function main() {
 
   Zepto('#play-button').tap(function (e) {
     e.preventDefault();
-    $('#gameModal').classList.remove('active');
+    $('#computerGameModal').classList.remove('active');
     play.start();
   });
 

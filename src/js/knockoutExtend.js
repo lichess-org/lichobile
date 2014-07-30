@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('./vendor/zepto');
+var Zepto = require('./vendor/zepto');
 var ko = require('knockout');
 var storage = require('./storage');
 
@@ -28,7 +28,7 @@ ko.extenders.persist = function(target, key) {
 ko.bindingHandlers.tap = {
   init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var callback = allBindingsAccessor().tap;
-    $(element).tap(function() {
+    Zepto(element).tap(function() {
       callback(viewModel);
     });
   }

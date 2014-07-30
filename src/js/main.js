@@ -5,7 +5,7 @@
 require('./knockoutExtend');
 
 var play = require('./play'),
-    $ = require('./vendor/zepto'),
+    Zepto = require('./vendor/zepto'),
     settings = require('./settings'),
     ko = require('knockout'),
     signals = require('./signals'),
@@ -29,13 +29,13 @@ function main() {
     });
   }
 
-  $('#play-button').tap(function(e) {
+  Zepto('#play-button').tap(function(e) {
     e.preventDefault();
-    $('#gameModal').removeClass('active');
+    Zepto('#gameModal').removeClass('active');
     play.start();
   });
 
-  $('#settingsModal').tap(function(e) {
+  Zepto('#settingsModal').tap(function(e) {
     e.preventDefault();
   });
 

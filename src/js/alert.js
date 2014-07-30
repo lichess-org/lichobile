@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('./vendor/zepto');
+var Zepto = require('./vendor/zepto');
 var Handlebars = require('handlebars');
 
 
@@ -11,18 +11,18 @@ var source = '<div class="alert alert-{{ type }} alert-dismissible" role="alert"
 var template = Handlebars.compile(source);
 
 function hideAll() {
-  $('.alert').remove();
+  Zepto('.alert').remove();
 }
 
 function show(type, msg) {
 
   hideAll();
 
-  var alert = $(template({type: type, msg: msg}));
-  $('#mainPage').append(alert);
+  var alert = Zepto(template({type: type, msg: msg}));
+  Zepto('#mainPage').append(alert);
 
-  $(alert).tap(function() {
-    $(this).remove();
+  Zepto(alert).tap(function() {
+    Zepto(this).remove();
   });
 }
 

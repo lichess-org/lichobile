@@ -2,16 +2,16 @@
 
 var Chessground = require('./vendor/chessground'),
 _ = require('lodash'),
-$ = require('./vendor/zepto');
+Zepto = require('./vendor/zepto');
 
-var $ground = $('#ground');
+var $ground = Zepto('#ground');
 
 function ground(cfg) {
 
   cfg = _.assign({movable: {free: false}}, cfg);
 
-  var size = $('body').width();
-  var cHeight = $('body > .content').height();
+  var size = Zepto('body').width();
+  var cHeight = Zepto('body > .content').height();
   var bHeight = size;
 
   $ground.css({
@@ -28,12 +28,12 @@ function ground(cfg) {
 function clocks() {
   var groundPos = $ground.position();
   var leftPos = ($ground.width() - 70) / 2;
-  var $topClock = $('#top-clock').css({
+  var $topClock = Zepto('#top-clock').css({
     position: 'absolute',
     top: groundPos.top - 25,
     left: leftPos
   });
-  var $botClock = $('#bot-clock').css({
+  var $botClock = Zepto('#bot-clock').css({
     position: 'absolute',
     top: groundPos.top + $ground.height(),
     left: leftPos

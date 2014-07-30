@@ -122,6 +122,8 @@ function initializeGame() {
     socket.send('draw-claim', {});
   });
 
+  // disable sleep during play
+  if (window.cordova && settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
 }
 
 function reset() {

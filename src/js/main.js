@@ -41,6 +41,4 @@ function main() {
 
 }
 
-if (window.cordova && settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
-
 window.document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);

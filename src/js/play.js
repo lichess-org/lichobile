@@ -17,7 +17,9 @@ var onMove = function(from, to) {
   socket.send('move', { from: from, to: to });
 };
 
-ground = render.ground({movable: { events: { after: onMove }}});
+ground = render.ground({
+  movable: { free: false, color: "none", events: { after: onMove }}
+});
 
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {

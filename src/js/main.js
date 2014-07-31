@@ -12,10 +12,15 @@ var play = require('./play'),
     ko = require('knockout'),
     signals = require('./signals'),
     storage = require('./storage'),
+    ajax = require('./ajax'),
+    StrongSocket = require('./socket'),
     utils = require('./utils'),
+    Spinner = require('spin.js'),
     $ = utils.$;
 
 function main() {
+
+  var lobbySocket;
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -87,6 +92,45 @@ function main() {
     e.preventDefault();
     $('#computerGameModal').classList.remove('active');
     play.startAI();
+  });
+
+  Zepto('#play-human').tap(function (e) {
+    e.preventDefault();
+
+    var spinner = new Spinner().spin($('#mainPage'));
+
+    $('#humanGameModal').classList.remove('active');
+
+    // open lobby connection
+    lobbySocket = new StrongSocket(
+      '/lobby/socket/v1',
+      0,
+      {
+        options: { name: "lobby", debug: true },
+        events: {
+          redirect: function (id) {
+            lobbySocket.destroy();
+            spinner.stop();
+            play.startHuman(id);
+          }
+        }
+      }
+    );
+
+    // send a hook and wait for a fish...
+    ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
+      variant: settings.game.human.variant(),
+      clock: settings.game.human.clock(),
+      time: 5,
+      increment: 2,
+      mode: settings.game.human.mode()
+    }}).then(function() {
+      console.log('hook sent');
+    }, function(err) {
+      console.log('post request to lichess failed', err);
+      spinner.stop();
+    }).done();
+
   });
 
 }

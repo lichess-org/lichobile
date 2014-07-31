@@ -10,7 +10,8 @@ var strongSocketDefaults = {
   events: {
   },
   params: {
-    sri: lichessSri
+    sri: lichessSri,
+    mobile: 1
   },
   options: {
     name: "unnamed",

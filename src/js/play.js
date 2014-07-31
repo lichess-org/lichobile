@@ -9,8 +9,7 @@ storage = require('./storage'),
 signals = require('./signals'),
 _ = require('lodash'),
 alert = require('./alert'),
-StrongSocket = require('./socket'),
-utils = require('./utils');
+StrongSocket = require('./socket');
 
 var ground, game, socket;
 
@@ -158,7 +157,6 @@ function reset() {
 function startAI() {
 
   alert.hideAll();
-
   reset();
 
   return ajax({ url: '/setup/ai', method: 'POST', data: {
@@ -168,30 +166,6 @@ function startAI() {
     increment: settings.game.ai.increment(),
     level: settings.game.ai.aiLevel(),
     color: settings.game.ai.color()
-  }}).then(function(data) {
-    // update game data from server
-    console.log(data);
-    game = Game(data);
-
-    initializeGame();
-
-    return game;
-  }, function(err) {
-    console.log('post request to lichess failed', err);
-  });
-}
-
-function startHuman() {
-  alert.hideAll();
-
-  reset();
-
-  return ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
-    variant: settings.game.human.variant(),
-    clock: settings.game.human.clock(),
-    time: 5,
-    increment: 2,
-    mode: settings.game.human.mode()
   }}).then(function(data) {
     // update game data from server
     console.log(data);
@@ -221,6 +195,13 @@ function resume(id) {
   }, function(err) {
     console.log('request to lichess failed', err);
   });
+}
+
+function startHuman(id) {
+  alert.hideAll();
+  reset();
+
+  resume(id);
 }
 
 module.exports = {

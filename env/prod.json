@@ -1,7 +1,7 @@
 {
   "PLATFORM": "cordova",
   "API_END_POINT": "http://en.lichess.org",
-  "SOCKET_END_POINT": "socket.en.lichess.org:9024",
+  "SOCKET_END_POINT": "socket.en.lichess.org",
   "WEINRE": false,
   "WEINRE_HOST": "10.0.25.250",
   "WEINRE_PORT": 8081

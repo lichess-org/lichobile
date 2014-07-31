@@ -189,8 +189,8 @@ function startHuman() {
   return ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
     variant: settings.game.human.variant(),
     clock: settings.game.human.clock(),
-    time: settings.game.human.time(),
-    increment: settings.game.human.increment(),
+    time: 5,
+    increment: 2,
     mode: settings.game.human.mode()
   }}).then(function(data) {
     // update game data from server

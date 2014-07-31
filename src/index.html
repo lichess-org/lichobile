@@ -75,16 +75,16 @@
             Color
             <div class="pull-right">
               <div>
-                <input type="radio" id="gameWhite" name="color" value="white" data-bind="checked: settings.game.ai.color" />
-                <label for="gameWhite">White</label>
+                <input type="radio" id="computerGameWhite" name="color" value="white" data-bind="checked: settings.game.ai.color" />
+                <label for="computerGameWhite">White</label>
               </div>
               <div>
-                <input type="radio" id="gameBlack" name="color" value="black" data-bind="checked: settings.game.ai.color" />
-                <label for="gameBlack">Black</label>
+                <input type="radio" id="computerGameBlack" name="color" value="black" data-bind="checked: settings.game.ai.color" />
+                <label for="computerGameBlack">Black</label>
               </div>
               <div>
-                <input type="radio" id="gameRandom" name="color" value="random" data-bind="checked: settings.game.ai.color" />
-                <label for="gameRandom">Random</label>
+                <input type="radio" id="computerGameRandom" name="color" value="random" data-bind="checked: settings.game.ai.color" />
+                <label for="computerGameRandom">Random</label>
               </div>
             </div>
           </li>
@@ -92,12 +92,12 @@
             Variant
             <div class="pull-right">
               <div>
-                <input type="radio" id="gameStandard" name="variant" value="1" data-bind="checked: settings.game.ai.variant" />
-                <label for="gameStandard">Standard</label>
+                <input type="radio" id="computerGameStandard" name="variant" value="1" data-bind="checked: settings.game.ai.variant" />
+                <label for="computerGameStandard">Standard</label>
               </div>
               <div>
-                <input type="radio" id="game960" name="variant" value="2" data-bind="checked: settings.game.ai.variant" />
-                <label for="game960">960</label>
+                <input type="radio" id="computerGame960" name="variant" value="2" data-bind="checked: settings.game.ai.variant" />
+                <label for="computerGame960">960</label>
               </div>
             </div>
           </li>
@@ -131,7 +131,7 @@
             </div>
           </li>
         </ul>
-        <button id="play-button" class="btn btn-primary btn-block">Play!</button>
+        <button id="play-computer" class="btn btn-primary btn-block">Play!</button>
       </div>
     </div>
 
@@ -146,17 +146,30 @@
             Variant
             <div class="pull-right">
               <div>
-                <input type="radio" id="gameStandard" name="variant" value="1" data-bind="checked: settings.game.ai.variant" />
-                <label for="gameStandard">Standard</label>
+                <input type="radio" id="humanGameStandard" name="variant" value="1" data-bind="checked: settings.game.human.variant" />
+                <label for="humanGameStandard">Standard</label>
               </div>
               <div>
-                <input type="radio" id="game960" name="variant" value="2" data-bind="checked: settings.game.ai.variant" />
-                <label for="game960">960</label>
+                <input type="radio" id="humanGame960" name="variant" value="2" data-bind="checked: settings.game.human.variant" />
+                <label for="humanGame960">960</label>
+              </div>
+            </div>
+          </li>
+          <li class="table-view-cell extended">
+            Mode
+            <div class="pull-right">
+              <div>
+                <input type="radio" id="humanGameCasual" name="mode" value="casual" data-bind="checked: settings.game.human.mode" />
+                <label for="humanGameStandard">Casual</label>
+              </div>
+              <div>
+                <input type="radio" id="humanGameRated" name="mode" value="rated" data-bind="checked: settings.game.human.mode" />
+                <label for="humanGameRated">Rated</label>
               </div>
             </div>
           </li>
         </ul>
-        <button id="play-button" class="btn btn-primary btn-block">Play!</button>
+        <button id="play-human" class="btn btn-primary btn-block">Play!</button>
       </div>
     </div>
 

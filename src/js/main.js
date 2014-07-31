@@ -47,6 +47,9 @@ function main() {
     Zepto('.player-table').show();
   });
 
+  Zepto('#settingsModal').tap(function (e) {
+    e.preventDefault();
+  });
 
   $('#login').addEventListener('submit', function () {
     var usernameInput = $('#username');
@@ -80,14 +83,10 @@ function main() {
     $('#userModal').classList.remove('active');
   });
 
-  Zepto('#play-button').tap(function (e) {
+  Zepto('#play-computer').tap(function (e) {
     e.preventDefault();
     $('#computerGameModal').classList.remove('active');
     play.startAI();
-  });
-
-  Zepto('#settingsModal').tap(function (e) {
-    e.preventDefault();
   });
 
 }

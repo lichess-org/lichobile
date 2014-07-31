@@ -108,10 +108,10 @@ function main() {
       {
         options: { name: "lobby", debug: true },
         events: {
-          redirect: function (id) {
+          redirect: function (data) {
             lobbySocket.destroy();
             spinner.stop();
-            play.startHuman(id);
+            play.startHuman(data.url);
           }
         }
       }
@@ -121,10 +121,11 @@ function main() {
     ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
       variant: settings.game.human.variant(),
       clock: settings.game.human.clock(),
+      color: 'random',
       time: 5,
       increment: 2,
       mode: settings.game.human.mode()
-    }}).then(function() {
+    }}, true).then(function() {
       console.log('hook sent');
     }, function(err) {
       console.log('post request to lichess failed', err);

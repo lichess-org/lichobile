@@ -39,7 +39,13 @@ function main() {
   }
 
   // try to get session from cookie
-  session.refresh();
+  session.refresh()
+  // trick to initialize parts of ui that depends on session data
+  // it should not stay like that...
+  .fin(function () {
+    $('.signin-out').style.display = 'block';
+    Zepto('.player-table').show();
+  });
 
 
   $('#login').addEventListener('submit', function () {

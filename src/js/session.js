@@ -6,8 +6,13 @@ session;
 
 var userView = {
   name: ko.observable(),
-  rating: ko.observable()
+  rating: ko.observable(),
+  isConnected: ko.observable(false)
 };
+
+function isConnected() {
+  return !!session;
+}
 
 function trash() {
   session = null;
@@ -23,21 +28,18 @@ function login(username, password) {
     session = data;
     userView.name(data.username);
     userView.rating(data.rating);
+    userView.isConnected(isConnected());
     return session;
   });
 }
 
 function logout() {
-  return ajax({ url: '/logout', method: 'GET' }, true).then(function (data) {
+  return ajax({ url: '/logout', method: 'GET' }, true).then(function () {
     trash();
     return null;
   }, function (error) {
     throw new Error(error.responseText);
   });
-}
-
-function isConnected() {
-  return !!session;
 }
 
 function get() {
@@ -49,6 +51,7 @@ function refresh() {
     session = data;
     userView.name(data.username);
     userView.rating(data.rating);
+    userView.isConnected(isConnected());
     return session;
   });
 }

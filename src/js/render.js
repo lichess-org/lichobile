@@ -26,12 +26,12 @@ function ground(cfg) {
     position: 'absolute',
     top: groundPos.top - 40,
     left: 0
-  }).show();
+  });
   Zepto('#player-table').css({
     position: 'absolute',
     top: groundPos.top + $ground.height(),
     left: 0
-  }).show();
+  });
 
   return Chessground.main($ground[0], cfg);
 }

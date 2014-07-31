@@ -22,7 +22,10 @@
   <body>
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
-      <a class="icon icon-person pull-right" href="#userModal"></a>
+      <div class="signin-out">
+        <a data-bind="visible: user.isConnected() === false" class="icon icon-person pull-right" href="#userModal"></a>
+        <a data-bind="visible: user.isConnected" id="signout" class="icon icon-trash pull-right"></a>
+      </div>
       <h1 class="title" id="title">lichess mobile</h1>
     </header>
 
@@ -32,7 +35,7 @@
         <div id="opp-clock" class="clock"></div>
       </div>
       <div id="player-table" class="player-table">
-        <div class="player" data-bind="visible: user.name"><span data-bind="text: user.name"></span> (<span data-bind="text: user.rating"></span>)</div>
+        <div class="player" data-bind="visible: user.isConnected"><span data-bind="text: user.name"></span> (<span data-bind="text: user.rating"></span>)</div>
         <div id="player-clock" class="clock"></div>
       </div>
     </div>
@@ -52,14 +55,11 @@
         <h1 class="title">Connection</h1>
       </header>
       <div class="content">
-        <form id="login" data-bind="ifnot: user.name">
+        <form id="login">
           <input id="username" autocomplete="off" autocapitalize="off" autocorrect="off" type="text" placeholder="Username" />
           <input id="password" type="password" placeholder="Password" />
           <button type="submit" class="btn btn-positive btn-block">Sign in</button>
         </form>
-        <div data-bind="visible: user.name">
-          <button id="signout" class="btn btn-negative btn-block" >Sign out</button>
-        </div>
       </div>
     </div>
 

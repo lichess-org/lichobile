@@ -1,9 +1,10 @@
 'use strict';
 
 var _ = require('lodash'),
+    utils = require('./utils'),
     Qajax = require('qajax');
 
-var lichessSri = Math.random().toString(36).substring(2);
+var lichessSri = utils.lichessSri;
 
 var strongSocketDefaults = {
   events: {

@@ -14,3 +14,5 @@ hiddenA.href = "#";
 document.body.appendChild(hiddenA);
 
 module.exports.hideKeyboard = function () { hiddenA.focus(); };
+
+module.exports.lichessSri = Math.random().toString(36).substring(2);

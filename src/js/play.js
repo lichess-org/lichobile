@@ -9,7 +9,8 @@ storage = require('./storage'),
 signals = require('./signals'),
 _ = require('lodash'),
 alert = require('./alert'),
-StrongSocket = require('./socket');
+StrongSocket = require('./socket'),
+utils = require('./utils');
 
 var ground, game, socket;
 
@@ -27,6 +28,11 @@ function handleEndGame() {
     else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');
     else alert.show('info', '<strong>Oh!</strong> That\'s a draw :\\');
   });
+}
+
+function stop() {
+  socket.destroy();
+  if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
 
 var gameEvents = {
@@ -149,19 +155,43 @@ function reset() {
   ground.startPos();
 }
 
-function start() {
+function startAI() {
 
   alert.hideAll();
 
   reset();
 
   return ajax({ url: '/setup/ai', method: 'POST', data: {
-    variant: settings.game.variant(),
-    clock: settings.game.clock(),
-    time: settings.game.time(),
-    increment: settings.game.increment(),
-    level: settings.game.aiLevel(),
-    color: settings.game.color()
+    variant: settings.game.ai.variant(),
+    clock: settings.game.ai.clock(),
+    time: settings.game.ai.time(),
+    increment: settings.game.ai.increment(),
+    level: settings.game.ai.aiLevel(),
+    color: settings.game.ai.color()
+  }}).then(function(data) {
+    // update game data from server
+    console.log(data);
+    game = Game(data);
+
+    initializeGame();
+
+    return game;
+  }, function(err) {
+    console.log('post request to lichess failed', err);
+  });
+}
+
+function startHuman() {
+  alert.hideAll();
+
+  reset();
+
+  return ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
+    variant: settings.game.human.variant(),
+    clock: settings.game.human.clock(),
+    time: settings.game.human.time(),
+    increment: settings.game.human.increment(),
+    mode: settings.game.human.mode()
   }}).then(function(data) {
     // update game data from server
     console.log(data);
@@ -193,13 +223,9 @@ function resume(id) {
   });
 }
 
-function stop() {
-  socket.destroy();
-  if (window.cordova) window.plugins.insomnia.allowSleepAgain();
-}
-
 module.exports = {
-  start: start,
+  startAI: startAI,
+  startHuman: startHuman,
   resume: resume,
   stop: stop
 };

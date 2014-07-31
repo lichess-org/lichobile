@@ -83,7 +83,7 @@ function main() {
   Zepto('#play-button').tap(function (e) {
     e.preventDefault();
     $('#computerGameModal').classList.remove('active');
-    play.start();
+    play.startAI();
   });
 
   Zepto('#settingsModal').tap(function (e) {

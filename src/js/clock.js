@@ -2,7 +2,7 @@
 
 var signals = require('./signals');
 
-var Clock = function(time, $el) {
+var Clock = function(time, el) {
   var isRunning = false;
   var interval = null;
 
@@ -27,20 +27,20 @@ var Clock = function(time, $el) {
 
   function tick() {
     var html = formatDate(new Date(time));
-    if (html !== $el.html()) {
-      $el.html(html);
+    if (html !== el.innerHTML) {
+      el.innerHTML = html;
     }
   }
 
   function show() {
-    $el.html(formatDate(new Date(time)));
-    $el.show();
+    el.innerHTML = formatDate(new Date(time));
+    el.style.display = 'block';
   }
 
   function start() {
     var endTime = Date.now() + time;
     isRunning = true;
-    $el.addClass('on');
+    el.classList.add('on');
     interval = setInterval(function() {
       if (isRunning) {
         var currTime = endTime - Date.now();
@@ -63,7 +63,7 @@ var Clock = function(time, $el) {
   }
 
   function stop() {
-    $el.removeClass('on');
+    el.classList.remove('on');
     clearInterval(interval);
     isRunning = false;
   }

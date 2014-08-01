@@ -2,11 +2,11 @@
 
 var Game = require('./game'),
 ajax = require('./ajax'),
-Zepto = require('./vendor/zepto'),
 render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
 signals = require('./signals'),
+utils = require('./utils'),
 _ = require('lodash'),
 alert = require('./alert'),
 StrongSocket = require('./socket');
@@ -110,7 +110,7 @@ function initializeGame() {
 
   // initialize ground and ui
   if (game.hasClock()) {
-    game.setClocks(Zepto('#opp-clock'), Zepto('#player-clock'));
+    game.setClocks(utils.$('#opp-clock'), utils.$('#player-clock'));
   }
 
   if (game.getFen()) {

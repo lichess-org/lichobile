@@ -20,6 +20,7 @@ var play = require('./play'),
 
 function main() {
 
+  var lobbySocket;
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -96,26 +97,25 @@ function main() {
   Zepto('#play-human').tap(function (e) {
     e.preventDefault();
 
-    var lobbySocket;
-
     alert.hideAll();
     play.reset();
 
     render.showOverlay();
-
-    $('#humanGameModal').classList.remove('active');
 
     // open lobby connection
     lobbySocket = new StrongSocket(
       '/lobby/socket/v1',
       0,
       {
-        options: { name: "lobby", debug: true },
+        options: { name: "lobby", pingDelay: 3000, debug: true },
         events: {
           redirect: function (data) {
             lobbySocket.destroy();
             render.hideOverlay();
             play.startHuman(data.url);
+          },
+          n: function (e) {
+            $('#online-players').innerHTML = e;
           }
         }
       }
@@ -131,13 +131,19 @@ function main() {
       time: timePreset[0],
       increment: timePreset[1],
       mode: session.isConnected() ? settings.game.human.mode() : '0'
-    }}, true).then(function() {
+    }}, true).then(function () {
       console.log('hook sent');
-    }, function(err) {
-      console.log('post request to lichess failed', err);
-      spinner.stop();
+    }, function () {
+      render.hideOverlay();
     }).done();
 
+    $('#humanGameModal').classList.remove('active');
+  });
+
+  Zepto('#cancel-seek').tap(function (e) {
+    e.preventDefault();
+    lobbySocket.destroy();
+    render.hideOverlay();
   });
 
 }

@@ -84,7 +84,11 @@ StrongSocket.prototype = {
         var m = JSON.parse(e.data);
         if (m.t === "n") {
           self.pong();
-        } else if (m.t === "b") {
+        }
+        // else {
+        //   self.debug(e.data);
+        // }
+        if (m.t === "b") {
           _.each(m.d || [], function(x) { self.handle(x); });
         } else {
           self.handle(m);

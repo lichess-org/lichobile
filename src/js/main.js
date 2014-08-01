@@ -15,7 +15,7 @@ var play = require('./play'),
     ajax = require('./ajax'),
     StrongSocket = require('./socket'),
     utils = require('./utils'),
-    Spinner = require('spin.js'),
+    render = require('./render'),
     $ = utils.$;
 
 function main() {
@@ -97,7 +97,11 @@ function main() {
     e.preventDefault();
 
     var lobbySocket;
-    var spinner = new Spinner().spin($('#mainPage'));
+
+    alert.hideAll();
+    play.reset();
+
+    render.showOverlay();
 
     $('#humanGameModal').classList.remove('active');
 
@@ -110,7 +114,7 @@ function main() {
         events: {
           redirect: function (data) {
             lobbySocket.destroy();
-            spinner.stop();
+            render.hideOverlay();
             play.startHuman(data.url);
           }
         }

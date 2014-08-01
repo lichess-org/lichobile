@@ -36,6 +36,23 @@ function ground(cfg) {
   return Chessground.main($ground[0], cfg);
 }
 
+function showOverlay() {
+  var groundPos = $ground.position();
+
+  Zepto('#groundOverlay').css({
+    height: $ground.height() / 2,
+    width: $ground.width() / (8/6),
+    top: groundPos.top + $ground.height() * (2/8),
+    left: $ground.width() * (1/8)
+  }).show();
+}
+
+function hideOverlay() {
+  Zepto('#groundOverlay').hide();
+}
+
 module.exports = {
-  ground: ground
+  ground: ground,
+  showOverlay: showOverlay,
+  hideOverlay: hideOverlay
 };

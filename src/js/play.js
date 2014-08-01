@@ -198,9 +198,6 @@ function resume(id) {
 }
 
 function startHuman(id) {
-  alert.hideAll();
-  reset();
-
   resume(id);
 }
 
@@ -208,5 +205,6 @@ module.exports = {
   startAI: startAI,
   startHuman: startHuman,
   resume: resume,
-  stop: stop
+  stop: stop,
+  reset: reset
 };

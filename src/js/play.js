@@ -30,7 +30,9 @@ function handleEndGame() {
 }
 
 function stop() {
-  socket.destroy();
+  setTimeout(function () {
+    socket.destroy();
+  }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
 

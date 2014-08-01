@@ -117,13 +117,15 @@ function main() {
       }
     );
 
+    var timePreset = settings.game.human.timePreset().split(',');
+
     // send a hook and wait for a fish...
     ajax({ url: '/setup/hook/' + utils.lichessSri, method: 'POST', data: {
       variant: settings.game.human.variant(),
       clock: settings.game.human.clock(),
       color: 'random',
-      time: 5,
-      increment: 2,
+      time: timePreset[0],
+      increment: timePreset[1],
       mode: session.isConnected() ? settings.game.human.mode() : '0'
     }}, true).then(function() {
       console.log('hook sent');

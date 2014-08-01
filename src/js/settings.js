@@ -15,7 +15,7 @@ var settings = module.exports = {
     human: {
       variant: ko.observable('1').extend({persist: 'settings.game.human.variant'}),
       clock: ko.observable(true).extend({persist: 'settings.game.human.clock'}),
-      timePreset: ko.observable([5, 0]).extend({persist: 'settings.game.human.timePreset'}),
+      timePreset: ko.observable("5,0").extend({persist: 'settings.game.human.timePreset'}),
       mode: ko.observable('0').extend({persist: 'settings.game.human.mode'})
     }
   },

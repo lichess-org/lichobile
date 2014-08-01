@@ -20,7 +20,6 @@ var play = require('./play'),
 
 function main() {
 
-  var lobbySocket;
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -97,6 +96,7 @@ function main() {
   Zepto('#play-human').tap(function (e) {
     e.preventDefault();
 
+    var lobbySocket;
     var spinner = new Spinner().spin($('#mainPage'));
 
     $('#humanGameModal').classList.remove('active');
@@ -124,7 +124,7 @@ function main() {
       color: 'random',
       time: 5,
       increment: 2,
-      mode: settings.game.human.mode()
+      mode: session.isConnected() ? settings.game.human.mode() : '0'
     }}, true).then(function() {
       console.log('hook sent');
     }, function(err) {

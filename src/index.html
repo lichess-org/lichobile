@@ -155,15 +155,15 @@
               </div>
             </div>
           </li>
-          <li class="table-view-cell extended">
+          <li class="table-view-cell extended" data-bind="visible: user.isConnected">
             Mode
             <div class="pull-right">
               <div>
-                <input type="radio" id="humanGameCasual" name="mode" value="1" data-bind="checked: settings.game.human.mode" />
-                <label for="humanGameStandard">Casual</label>
+                <input type="radio" id="humanGameCasual" name="mode" value="0" data-bind="checked: settings.game.human.mode" />
+                <label for="humanGameCasual">Casual</label>
               </div>
               <div>
-                <input type="radio" id="humanGameRated" name="mode" value="2" data-bind="checked: settings.game.human.mode" />
+                <input type="radio" id="humanGameRated" name="mode" value="1" data-bind="checked: settings.game.human.mode" />
                 <label for="humanGameRated">Rated</label>
               </div>
             </div>

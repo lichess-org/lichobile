@@ -18,6 +18,7 @@ function trash() {
   session = null;
   userView.name(null);
   userView.rating(null);
+  userView.isConnected(isConnected());
 }
 
 function login(username, password) {

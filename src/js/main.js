@@ -70,8 +70,7 @@ function main() {
       return false;
     }
 
-    session.login(username, password).done(function(data) {
-      console.log(data);
+    session.login(username, password).done(function() {
       $('#userModal').classList.remove('active');
     }, function (error) {
       console.log(error);
@@ -112,7 +111,7 @@ function main() {
           redirect: function (data) {
             lobbySocket.destroy();
             render.hideOverlay();
-            play.startHuman(data.url);
+            play.startHuman(data.url).done();
           },
           n: function (e) {
             $('#online-players').innerHTML = e;

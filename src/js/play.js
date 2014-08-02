@@ -188,6 +188,7 @@ function resume(id) {
   return ajax({ url: id, method: 'GET'}).then(function(data) {
     // update game data
     game = Game(data);
+    console.log(data);
 
     initializeGame();
 
@@ -200,7 +201,7 @@ function resume(id) {
 }
 
 function startHuman(id) {
-  resume(id);
+  return resume(id);
 }
 
 module.exports = {

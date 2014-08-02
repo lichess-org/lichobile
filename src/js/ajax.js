@@ -27,7 +27,7 @@ function ajax(options, noJson) {
   options = _.defaults(_.clone(defaults), options);
   options.url = window.apiEndPoint + options.url;
 
-  if (noJson) return Qajax(options).then(Qajax.filterSuccess, errorHandler);
+  if (noJson) return Qajax(options).then(Qajax.filterSuccess).catch(errorHandler);
 
   return Qajax(options)
     .then(Qajax.filterSuccess)

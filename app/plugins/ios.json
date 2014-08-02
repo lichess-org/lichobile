@@ -15,6 +15,18 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"ios-package\" value=\"CDVFile\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"ios-package\" value=\"CDVSound\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -24,6 +36,18 @@
                     "SystemConfiguration.framework": [
                         {
                             "xml": "true",
+                            "count": 1
+                        }
+                    ],
+                    "AssetsLibrary.framework": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "MobileCoreServices.framework": [
+                        {
+                            "xml": "false",
                             "count": 1
                         }
                     ]
@@ -37,7 +61,17 @@
         },
         "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.media": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "org.lichess.mobile"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        }
+    }
 }

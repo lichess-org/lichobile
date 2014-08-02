@@ -24,7 +24,8 @@ var settings = module.exports = {
     disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'}),
     showLastMove: ko.observable(true).extend({persist: 'settings.showLastMove'}),
     showDests: ko.observable(true).extend({persist: 'settings.showDests'}),
-    showCoords: ko.observable(true).extend({persist: 'settings.showCoords'})
+    showCoords: ko.observable(true).extend({persist: 'settings.showCoords'}),
+    sound: ko.observable(true).extend({persist: 'settings.sound'})
   }
 };
 

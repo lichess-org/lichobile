@@ -9,11 +9,16 @@ signals = require('./signals'),
 utils = require('./utils'),
 _ = require('lodash'),
 alert = require('./alert'),
+sound = require('./sound'),
 StrongSocket = require('./socket');
 
 var ground, game, socket;
 
+var lastPosition = {};
+
 var onMove = function(from, to) {
+  if (lastPosition[to]) sound.capture();
+  else sound.move();
   socket.send('move', { from: from, to: to });
 };
 
@@ -44,7 +49,10 @@ var gameEvents = {
   move: function(e) {
     if (game.isOpponentToMove(e.color)) {
       ground.move(e.from, e.to);
+      if (lastPosition[e.to]) sound.capture();
+      else sound.move();
     }
+    lastPosition = ground.getPosition();
   },
   promotion: function(e) {
     var pieces = {};
@@ -119,6 +127,8 @@ function initializeGame() {
     ground.setFen(game.getFen());
   }
 
+  lastPosition = ground.getPosition();
+
   ground.setDests(game.getPossibleMoves());
   ground.setColor(game.currentPlayer());
 
@@ -126,6 +136,7 @@ function initializeGame() {
     ground.toggleOrientation();
     if (game.currentTurn() === 1) {
       ground.showLastMove(game.lastMove().from, game.lastMove().to);
+      sound.move();
     }
   }
 

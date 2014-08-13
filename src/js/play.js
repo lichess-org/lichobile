@@ -24,7 +24,7 @@ var onMove = function(from, to) {
 };
 
 ground = render.ground({
-  movable: { free: false, color: "none", events: { after: onMove }}
+  movable: { free: false, color: 'none', events: { after: onMove }}
 });
 
 function handleEndGame() {
@@ -37,6 +37,7 @@ function handleEndGame() {
 
 function stop() {
   setTimeout(function () {
+    ground.setColor('none');
     socket.destroy();
   }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();

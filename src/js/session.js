@@ -17,7 +17,6 @@ function isConnected() {
 function trash() {
   session = null;
   userView.name(null);
-  userView.rating(null);
   userView.isConnected(isConnected());
 }
 
@@ -28,7 +27,6 @@ function login(username, password) {
   }}).then(function (data) {
     session = data;
     userView.name(data.username);
-    userView.rating(data.rating);
     userView.isConnected(isConnected());
     return session;
   });
@@ -51,7 +49,6 @@ function refresh() {
   return ajax({ url: '/account/info', method: 'GET'}).then(function (data) {
     session = data;
     userView.name(data.username);
-    userView.rating(data.rating);
     userView.isConnected(isConnected());
     return session;
   });

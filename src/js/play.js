@@ -2,6 +2,7 @@
 
 var Game = require('./game'),
 ajax = require('./ajax'),
+session = require('./session'),
 render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
@@ -125,6 +126,23 @@ function initializeGame() {
 
   if (game.getFen()) {
     ground.setFen(game.getFen());
+  }
+
+  // set players name
+  var playerInfo = utils.$('#player-table > .player-info');
+  var oppInfo = utils.$('#opp-table > .player-info');
+  playerInfo.innerHTML = session.get().username +
+  ' (' + session.get().perfs[game.perf].rating + ')';
+  playerInfo.style.display = 'block';
+  if (game.opponent.ai) {
+    oppInfo.innerHTML = 'computer';
+    oppInfo.style.display = 'block';
+  } else {
+    ajax({ url: '/api/user/' + game.opponent.userId, method: 'GET' }).then(function (data) {
+      oppInfo.innerHTML = data.username +
+      ' (' + data.perfs[game.perf].rating + ')';
+      oppInfo.style.display = 'block';
+    });
   }
 
   lastPosition = ground.getPosition();

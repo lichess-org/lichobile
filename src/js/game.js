@@ -9,7 +9,6 @@ var Game = function(data) {
   var player = {};
   var opponent = {};
   var possibleMoves = {};
-  var pref = {};
   var url = {};
   var timer = null;
   var clocks = { white: null, black: null };
@@ -20,7 +19,6 @@ var Game = function(data) {
     opponent = data.opponent;
     possibleMoves = data.possibleMoves;
     timer = data.clock;
-    pref = data.pref;
     url = data.url;
   }
 
@@ -124,6 +122,9 @@ var Game = function(data) {
     url: url,
     player: player,
     opponent: opponent,
+    speed: game.speed,
+    perf: game.perf,
+    variant: game.variant,
 
     // public methods
     updateState: updateState,

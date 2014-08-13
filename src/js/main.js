@@ -31,7 +31,7 @@ function main() {
       signals.claimDraw.dispatch();
     },
     settings: settings,
-    user: session.userView
+    isConnected: session.isConnectedObs
   };
   ko.applyBindings(view);
 
@@ -49,7 +49,6 @@ function main() {
   // it should not stay like that...
   .fin(function () {
     $('.signin-out').style.display = 'block';
-    Zepto('.player-table').show();
   });
 
   Zepto('#settingsModal').tap(function (e) {

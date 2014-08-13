@@ -4,20 +4,15 @@ var ajax = require('./ajax'),
 ko = require('knockout'),
 session;
 
-var userView = {
-  name: ko.observable(),
-  rating: ko.observable(),
-  isConnected: ko.observable(false)
-};
-
 function isConnected() {
   return !!session;
 }
 
+var isConnectedObs = ko.observable(isConnected());
+
 function trash() {
   session = null;
-  userView.name(null);
-  userView.isConnected(isConnected());
+  isConnectedObs(isConnected());
 }
 
 function login(username, password) {
@@ -26,8 +21,7 @@ function login(username, password) {
     password: password
   }}).then(function (data) {
     session = data;
-    userView.name(data.username);
-    userView.isConnected(isConnected());
+    isConnectedObs(isConnected());
     return session;
   });
 }
@@ -48,18 +42,17 @@ function get() {
 function refresh() {
   return ajax({ url: '/account/info', method: 'GET'}).then(function (data) {
     session = data;
-    userView.name(data.username);
-    userView.isConnected(isConnected());
+    isConnectedObs(isConnected());
     return session;
   });
 }
 
 module.exports = {
   isConnected: isConnected,
+  isConnectedObs: isConnectedObs,
   get: get,
   trash: trash,
   login: login,
   logout: logout,
-  refresh: refresh,
-  userView: userView
+  refresh: refresh
 };

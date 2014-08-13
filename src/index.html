@@ -23,8 +23,8 @@
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
       <div class="signin-out">
-        <a data-bind="visible: user.isConnected() === false" class="icon icon-person pull-right" href="#userModal"></a>
-        <a data-bind="visible: user.isConnected" id="signout" class="icon icon-trash pull-right"></a>
+        <a data-bind="visible: isConnected === false" class="icon icon-person pull-right" href="#userModal"></a>
+        <a data-bind="visible: isConnected" id="signout" class="icon icon-trash pull-right"></a>
       </div>
       <h1 class="title" id="title">lichess mobile</h1>
     </header>
@@ -35,7 +35,7 @@
         <div id="opp-clock" class="clock"></div>
       </div>
       <div id="player-table" class="player-table">
-        <div class="player" data-bind="visible: user.isConnected"><span data-bind="text: user.name"></span></div>
+        <div class="player"></div>
         <div id="player-clock" class="clock"></div>
       </div>
     </div>
@@ -92,11 +92,11 @@
             Variant
             <div class="pull-right">
               <div>
-                <input type="radio" id="computerGameStandard" name="variant" value="1" data-bind="checked: settings.game.ai.variant" />
+                <input type="radio" id="computerGameStandard" name="computerVariant" value="1" data-bind="checked: settings.game.ai.variant" />
                 <label for="computerGameStandard">Standard</label>
               </div>
               <div>
-                <input type="radio" id="computerGame960" name="variant" value="2" data-bind="checked: settings.game.ai.variant" />
+                <input type="radio" id="computerGame960" name="computerVariant" value="2" data-bind="checked: settings.game.ai.variant" />
                 <label for="computerGame960">960</label>
               </div>
             </div>
@@ -163,7 +163,7 @@
               </div>
             </div>
           </li>
-          <li class="table-view-cell extended" data-bind="visible: user.isConnected">
+          <li class="table-view-cell extended" data-bind="visible: isConnected">
             Mode
             <div class="pull-right">
               <div>

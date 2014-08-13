@@ -104,7 +104,9 @@ var outOfTime = _.throttle(function() {
   socket.send('outoftime');
 }, 200);
 
-function initializeGame() {
+function _initGame(data) {
+  // update game data
+  game = Game(data);
 
   // save current game id
   storage.set('currentGame', game.url.pov);
@@ -122,6 +124,7 @@ function initializeGame() {
   // initialize ground and ui
   if (game.hasClock()) {
     game.setClocks(utils.$('#opp-clock'), utils.$('#player-clock'));
+    if (game.currentTurn() > 1) game.updateClocks();
   }
 
   if (game.getFen()) {
@@ -138,9 +141,9 @@ function initializeGame() {
     oppInfo.innerHTML = 'computer';
     oppInfo.style.display = 'block';
   } else {
-    ajax({ url: '/api/user/' + game.opponent.userId, method: 'GET' }).then(function (data) {
-      oppInfo.innerHTML = data.username +
-      ' (' + data.perfs[game.perf].rating + ')';
+    ajax({ url: '/api/user/' + game.opponent.userId, method: 'GET' }).then(function (user) {
+      oppInfo.innerHTML = user.username +
+      ' (' + user.perfs[game.perf].rating + ')';
       oppInfo.style.display = 'block';
     });
   }
@@ -198,39 +201,28 @@ function startAI() {
     level: settings.game.ai.aiLevel(),
     color: settings.game.ai.color()
   }}).then(function(data) {
-    // update game data from server
-    console.log(data);
-    game = Game(data);
-
-    initializeGame();
-
+    _initGame(data);
     return game;
   }, function(err) {
     console.log('post request to lichess failed', err);
   });
 }
 
-function resume(id) {
+function resume(game) {
+  if (!game && !_.isObject(game)) return;
 
-  if (!id) return;
+  _initGame(game);
 
+  return game;
+}
+
+function startHuman(id) {
   return ajax({ url: id, method: 'GET'}).then(function(data) {
-    // update game data
-    game = Game(data);
-    console.log(data);
-
-    initializeGame();
-
-    if (game.currentTurn() > 1) game.updateClocks();
-
+    _initGame(data);
     return game;
   }, function(err) {
     console.log('request to lichess failed', err);
   });
-}
-
-function startHuman(id) {
-  return resume(id);
 }
 
 module.exports = {

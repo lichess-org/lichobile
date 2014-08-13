@@ -38,8 +38,8 @@ function main() {
   var currGame = storage.get('currentGame');
 
   if (currGame) {
-    play.resume(currGame).done(function (game) {
-      if (game && game.isFinished()) play.stop();
+    ajax({ url: currGame, method: 'GET'}).then(function(data) {
+      if (!data.game.finished) play.resume(data);
     });
   }
 

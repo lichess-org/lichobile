@@ -86,8 +86,14 @@ function main() {
     $('#userModal').classList.remove('active');
   });
 
+  Zepto('#play-icon').tap(function (e) {
+    e.preventDefault();
+    render.showOverlay('#playOverlay');
+  });
+
   Zepto('#play-computer').tap(function (e) {
     e.preventDefault();
+    render.hideOverlay('#playOverlay');
     $('#computerGameModal').classList.remove('active');
     play.startAI();
   });
@@ -95,10 +101,11 @@ function main() {
   Zepto('#play-human').tap(function (e) {
     e.preventDefault();
 
+    render.hideOverlay('#playOverlay');
     alert.hideAll();
     play.reset();
 
-    render.showOverlay();
+    render.showOverlay('#seekOverlay');
 
     // open lobby connection
     lobbySocket = new StrongSocket(
@@ -109,7 +116,7 @@ function main() {
         events: {
           redirect: function (data) {
             lobbySocket.destroy();
-            render.hideOverlay();
+            render.hideOverlay('#seekOverlay');
             play.startHuman(data.url).done();
           },
           n: function (e) {
@@ -132,7 +139,7 @@ function main() {
     }}, true).then(function () {
       console.log('hook sent');
     }, function () {
-      render.hideOverlay();
+      render.hideOverlay('#seekOverlay');
     }).done();
 
     $('#humanGameModal').classList.remove('active');
@@ -141,7 +148,11 @@ function main() {
   Zepto('#cancel-seek').tap(function (e) {
     e.preventDefault();
     lobbySocket.destroy();
-    render.hideOverlay();
+    render.hideOverlay('#seekOverlay');
+  });
+
+  Zepto('#cancel-play').tap(function () {
+    render.hideOverlay('#playOverlay');
   });
 
 }

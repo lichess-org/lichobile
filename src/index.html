@@ -41,13 +41,9 @@
       </div>
     </div>
 
-    <div class="bar bar-tab">
-      <a class="tab-item" href="#humanGameModal">
-        Human
-      </a>
-      <a class="tab-item" href="#computerGameModal">
-        Computer
-      </a>
+    <div class="bar bar-standard bar-footer">
+      <a id="game-menu-icon" class="icon icon-bars pull-left"></a>
+      <a id="play-icon" class="icon icon-play pull-right"></a>
     </div>
 
     <div id="userModal" class="modal">
@@ -257,10 +253,19 @@
         </ul>
       </div>
     </div>
-    <div id="groundOverlay">
+    <div id="seekOverlay" class="overlay">
       <p>Looking for opponents...</p>
       <div><span id="online-players"></span> players online</div>
       <button id="cancel-seek" class="btn btn-negative btn-block">Cancel</button>
+    </div>
+    <div id="playOverlay" class="overlay">
+      <a href="#humanGameModal" class="btn btn-primary btn-block">Human</a>
+      <a href="#computerGameModal" class="btn btn-primary btn-outlined btn-block">Computer</a>
+      <button id="cancel-play" class="btn btn-negative">Cancel</button>
+    </div>
+    <div id="inGameOverlay" class="overlay">
+      <button id="resign" class="btn btn-primary">Resign</button>
+      <button id="cancel-game-menu" class="btn btn-negative">Cancel</button>
     </div>
 
     <!-- @if PLATFORM='cordova' -->

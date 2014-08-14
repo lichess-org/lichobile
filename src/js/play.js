@@ -7,6 +7,7 @@ render = require('./render'),
 settings = require('./settings'),
 storage = require('./storage'),
 signals = require('./signals'),
+Zepto = require('./vendor/zepto'),
 utils = require('./utils'),
 _ = require('lodash'),
 alert = require('./alert'),
@@ -27,6 +28,20 @@ ground = render.ground({
   movable: { free: false, color: 'none', events: { after: onMove }}
 });
 
+Zepto('#game-menu-icon').tap(function () {
+  render.showOverlay('#inGameOverlay');
+});
+
+Zepto('#resign').tap(function () {
+  socket.send('resign');
+  render.hideOverlay('#inGameOverlay');
+});
+
+Zepto('#cancel-game-menu').tap(function () {
+  render.hideOverlay('#inGameOverlay');
+});
+
+
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
     if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
@@ -37,6 +52,7 @@ function handleEndGame() {
 
 function stop() {
   setTimeout(function () {
+    utils.$('#game-menu-icon').style.display = 'none';
     ground.setColor('none');
     socket.destroy();
   }, 300);
@@ -161,6 +177,8 @@ function _initGame(data) {
       sound.move();
     }
   }
+
+  utils.$('#game-menu-icon').style.display = 'block';
 
   // listen to buzzer event to notify server when time is out
   signals.buzzer.add(function() {

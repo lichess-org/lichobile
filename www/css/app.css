@@ -63,7 +63,7 @@ body {
   margin: 10px 3% 0;
 }
 
-#groundOverlay {
+.overlay {
   position: absolute;
   padding: 5%;
   display: none;
@@ -76,4 +76,8 @@ body {
   position: absolute;
   width: 85%;
   bottom: 5%;
+}
+
+#game-menu-icon {
+  display: none;
 }

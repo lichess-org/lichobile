@@ -48,7 +48,8 @@ function showOverlay(id) {
 }
 
 function hideOverlay(id) {
-  Zepto(id).hide();
+  if (id) Zepto(id).hide();
+  else Zepto('.overlay').hide();
 }
 
 module.exports = {

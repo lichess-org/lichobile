@@ -151,8 +151,12 @@ function main() {
     render.hideOverlay('#seekOverlay');
   });
 
-  Zepto('#cancel-play').tap(function () {
-    render.hideOverlay('#playOverlay');
+  Zepto('.cancel-overlay').tap(function () {
+    render.hideOverlay();
+  });
+
+  Zepto('#game-menu-icon').tap(function () {
+    render.showOverlay('#inGameOverlay');
   });
 
 }

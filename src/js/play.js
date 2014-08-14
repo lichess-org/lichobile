@@ -9,6 +9,7 @@ storage = require('./storage'),
 signals = require('./signals'),
 Zepto = require('./vendor/zepto'),
 utils = require('./utils'),
+$ = utils.$,
 _ = require('lodash'),
 alert = require('./alert'),
 sound = require('./sound'),
@@ -28,25 +29,30 @@ ground = render.ground({
   movable: { free: false, color: 'none', events: { after: onMove }}
 });
 
-Zepto('#game-menu-icon').tap(function () {
-  render.showOverlay('#inGameOverlay');
-});
-
 Zepto('#resign').tap(function () {
   socket.send('resign');
   render.hideOverlay('#inGameOverlay');
 });
 
-Zepto('#cancel-game-menu').tap(function () {
-  render.hideOverlay('#inGameOverlay');
+Zepto('.rematch-yes').tap(function () {
+  socket.send('rematch-yes');
+  // var ov = $('#endGameOverlay');
+  // if (utils.isHidden($('.his', ov)))
+  //   $('.waiting', ov).style.display = 'block';
 });
 
+Zepto('.rematch-no').tap(function () {
+  socket.send('rematch-no');
+});
 
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
-    if (data.winner && data.winner.isMe) alert.show('info', '<strong>Yeah!</strong> You won :)');
-    else if (data.winner) alert.show('info', '<strong>Oops!</strong> You lost :D');
-    else alert.show('info', '<strong>Oh!</strong> That\'s a draw :\\');
+    var msg;
+    if (data.winner && data.winner.isMe) msg = 'You won :)';
+    else if (data.winner) msg = 'You lost :(';
+    else msg = 'That\'s a draw :\\';
+    utils.$('#endGameOverlay > .result').innerHTML = msg;
+    render.showOverlay('#endGameOverlay');
   });
 }
 
@@ -114,6 +120,18 @@ var gameEvents = {
     pieces[e.rook[0]] = null;
     pieces[e.rook[1]] = pos[e.rook[0]];
     ground.setPieces(pieces);
+  },
+  reloadTable: function (e) {
+    // rematch offer sent?
+    ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
+      if (data.opponent.isOfferingRematch) {
+        var ov = $('#endGameOverlay');
+        $('.mine', ov).style.display = 'none';
+        $('.his', ov).style.display = 'block';
+      }
+    });
+  },
+  redirect: function (e) {
   }
 };
 

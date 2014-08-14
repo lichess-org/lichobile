@@ -42,7 +42,7 @@
     </div>
 
     <div class="bar bar-standard bar-footer">
-      <a id="game-menu-icon" class="icon icon-bars pull-left"></a>
+      <a id="game-menu-icon" class="icon icon-bars pull-left hidden"></a>
       <a id="play-icon" class="icon icon-play pull-right"></a>
     </div>
 
@@ -256,16 +256,30 @@
     <div id="seekOverlay" class="overlay">
       <p>Looking for opponents...</p>
       <div><span id="online-players"></span> players online</div>
-      <button id="cancel-seek" class="btn btn-negative btn-block">Cancel</button>
+      <button id="cancel-seek" class="btn btn-negative btn-block cancel-overlay">Cancel</button>
     </div>
     <div id="playOverlay" class="overlay">
       <a href="#humanGameModal" class="btn btn-primary btn-block">Human</a>
       <a href="#computerGameModal" class="btn btn-primary btn-outlined btn-block">Computer</a>
-      <button id="cancel-play" class="btn btn-negative">Cancel</button>
+      <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
     <div id="inGameOverlay" class="overlay">
       <button id="resign" class="btn btn-primary">Resign</button>
-      <button id="cancel-game-menu" class="btn btn-negative">Cancel</button>
+      <button class="btn btn-negative cancel-overlay">Cancel</button>
+    </div>
+    <div id="endGameOverlay" class="overlay">
+      <div class="result"></div>
+      <div class="mine">
+        <button class="btn btn-primary rematch-yes">Rematch</button>
+        <div class="waiting hidden">Rematch offer sent...</div>
+      </div>
+      <div class="his hidden">
+        <p>Your opponent is proposing rematch...</p>
+        <button class="btn btn-primary rematch-yes">Accept</button>
+        <button class="btn btn-primary btn-outlined rematch-no">Decline</button>
+      </div>
+      <br />
+      <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
 
     <!-- @if PLATFORM='cordova' -->

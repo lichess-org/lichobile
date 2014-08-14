@@ -8,6 +8,10 @@ module.exports.isConnected = function () {
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
 };
 
+module.exports.isHidden = function (el) {
+  return (el.offsetParent === null);
+};
+
 // softkeyboard
 var hiddenA = document.createElement('a');
 hiddenA.href = "#";

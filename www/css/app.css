@@ -78,6 +78,10 @@ body {
   bottom: 5%;
 }
 
-#endGameOverlay .waiting, #endGameOverlay .his {
+.waiting, .his {
   display: none;
+}
+
+#inGameOverlay .mine {
+  display: inline-block;
 }

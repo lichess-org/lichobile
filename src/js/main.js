@@ -148,7 +148,8 @@ function main() {
     render.hideOverlay();
   });
 
-  Zepto('#game-menu-icon').tap(function () {
+  Zepto('#game-menu-icon').tap(function (e) {
+    e.preventDefault();
     render.showOverlay('#inGameOverlay');
   });
 

@@ -34,6 +34,18 @@ Zepto('#resign').tap(function () {
   render.hideOverlay('#inGameOverlay');
 });
 
+Zepto('.takeback-yes').tap(function () {
+  socket.send('takeback-yes');
+  var ov = $('#inGameOverlay');
+  if (utils.isHidden($('.his', ov)))
+    $('.waiting', ov).style.display = 'block';
+});
+
+Zepto('.takeback-no').tap(function () {
+  socket.send('takeback-no');
+  render.hideOverlay('#inGameOverlay');
+});
+
 Zepto('.rematch-yes').tap(function () {
   socket.send('rematch-yes');
   var ov = $('#endGameOverlay');
@@ -51,10 +63,6 @@ Zepto('#endGameOverlay > .cancel-overlay').tap(function () {
 });
 
 function resetEndGameOverlay() {
-  var ov = $('#endGameOverlay');
-  $('.mine', ov).style.display = 'block';
-  $('.his', ov).style.display = 'none';
-  $('.waiting', ov).style.display = 'none';
 }
 
 function handleEndGame() {
@@ -136,19 +144,38 @@ var gameEvents = {
     // rematch offer sent?
     ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
       if (data.opponent.isOfferingRematch) {
-        var ov = $('#endGameOverlay');
-        $('.mine', ov).style.display = 'none';
-        $('.his', ov).style.display = 'block';
+        var eov = $('#endGameOverlay');
+        $('.mine', eov).style.display = 'none';
+        $('.his', eov).style.display = 'block';
+      }
+      if (data.opponent.isProposingTakeback) {
+        var iov = $('#inGameOverlay');
+        $('.mine', iov).style.display = 'none';
+        $('.his', iov).style.display = 'block';
+        render.showOverlay('#inGameOverlay');
       }
     });
   },
   redirect: function (e) {
     ajax({ url: e.url, method: 'GET'}).then(function(data) {
-      resetEndGameOverlay();
+      var ov = $('#endGameOverlay');
+      $('.mine', ov).style.display = 'block';
+      $('.his', ov).style.display = 'none';
+      $('.waiting', ov).style.display = 'none';
       render.hideOverlay('#endGameOverlay');
       ground.startPos();
       resume(data);
     });
+  },
+  resync: function () {
+    if (game) {
+      var ov = $('#inGameOverlay');
+      $('.mine', ov).style.display = 'inline-block';
+      $('.his', ov).style.display = 'none';
+      $('.waiting', ov).style.display = 'none';
+      render.hideOverlay('#inGameOverlay');
+      resync();
+    }
   }
 };
 
@@ -240,6 +267,14 @@ function reset() {
   if (socket) socket.destroy();
   if (ground.getOrientation() === 'black') ground.toggleOrientation();
   ground.startPos();
+}
+
+function resync() {
+  ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
+    game.stopClocks();
+    socket.destroy();
+    resume(data);
+  });
 }
 
 function startAI() {

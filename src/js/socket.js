@@ -181,8 +181,8 @@ StrongSocket.prototype = {
     switch (m.t || false) {
       case false:
         break;
-      case 'resync':
-        break;
+      // case 'resync':
+      //   break;
       case 'ack':
         self.ackableMessages = [];
         break;

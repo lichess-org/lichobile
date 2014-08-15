@@ -42,7 +42,7 @@
     </div>
 
     <div class="bar bar-tab">
-      <a id="game-menu-icon" class="tab-item" href="#" style="display:none">
+      <a id="game-menu-icon" class="tab-item" style="display:none">
         <span class="icon icon-bars"></span>
         <span class="tab-label">Game Actions</span>
       </a>
@@ -285,14 +285,24 @@
     </div>
     <div id="inGameOverlay" class="overlay">
       <button id="resign" class="btn btn-primary">Resign</button>
-      <button id="takeback" class="btn btn-primary">Takeback</button>
+      <div class="mine">
+        <button class="btn btn-primary takeback-yes">Takeback</button>
+      </div>
+      <p class="waiting">Takeback offer sent...</p>
+      <div class="his">
+        <p>Your opponent wants takeback...</p>
+        <button class="btn btn-primary takeback-yes">Accept</button>
+        <button class="btn btn-primary btn-outlined takeback-no">Decline</button>
+      </div>
+      <br />
+      <br />
       <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
     <div id="endGameOverlay" class="overlay">
       <p class="result"></p>
       <div class="mine">
         <button class="btn btn-primary rematch-yes">Rematch</button>
-        <div class="waiting">Rematch offer sent...</div>
+        <p class="waiting">Rematch offer sent...</p>
       </div>
       <div class="his">
         <p>Your opponent wants rematch...</p>

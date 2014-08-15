@@ -226,6 +226,7 @@ function _initGame(data) {
   // update game data
   game = Game(data);
 
+
   // save current game id
   storage.set('currentGame', game.url.pov);
 
@@ -252,8 +253,10 @@ function _initGame(data) {
   // set players name
   var playerInfo = utils.$('#player-table > .player-info');
   var oppInfo = utils.$('#opp-table > .player-info');
-  playerInfo.innerHTML = session.get().username +
-  ' (' + session.get().perfs[game.perf].rating + ')';
+  if (session.get()) {
+    playerInfo.innerHTML = session.get().username +
+    ' (' + session.get().perfs[game.perf].rating + ')';
+  }
   playerInfo.style.display = 'block';
   if (game.opponent.ai) {
     oppInfo.innerHTML = 'computer';

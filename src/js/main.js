@@ -61,7 +61,7 @@ function main() {
     var username = usernameInput.value;
     var password = passwordInput.value;
 
-    if (window.cordova && !utils.isConnected()) {
+    if (window.cordova && !utils.hasNetwork()) {
       alert.show(
         'danger',
         'No network connection detected.'

@@ -23,7 +23,7 @@
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
       <div class="signin-out">
-        <a data-bind="visible: isConnected === false" class="icon icon-person pull-right" href="#userModal"></a>
+        <a data-bind="visible: isConnected() === false" class="icon icon-person pull-right" href="#userModal"></a>
         <a data-bind="visible: isConnected" id="signout" class="icon icon-trash pull-right"></a>
       </div>
       <h1 class="title" id="title">lichess.org</h1>

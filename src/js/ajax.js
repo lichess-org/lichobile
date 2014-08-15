@@ -14,10 +14,12 @@ var defaults = {
 
 function errorHandler(xhr) {
   // catch errors globally
-  alert.show(
-    'warning',
-    '<strong>Oops!</strong> we have some connection issues with lichess...'
-  );
+  if (xhr.status !== 401) {
+    alert.show(
+      'warning',
+      '<strong>Oops!</strong> we have some connection issues with lichess...'
+    );
+  }
 
   // for now just reject the promise
   return Q.reject(xhr);

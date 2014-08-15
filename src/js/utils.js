@@ -3,7 +3,7 @@
 module.exports.$ = function $(selector, context) { return (context || window.document).querySelector(selector); };
 module.exports.$$ = function $$(selector, context) { return (context || window.document).querySelectorAll(selector); };
 
-module.exports.isConnected = function () {
+module.exports.hasNetwork = function () {
   var t = window.navigator.connection.type;
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
 };

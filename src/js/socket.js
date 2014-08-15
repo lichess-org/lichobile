@@ -85,9 +85,9 @@ StrongSocket.prototype = {
         if (m.t === "n") {
           self.pong();
         }
-        // else {
-        //   self.debug(e.data);
-        // }
+        else {
+          self.debug(e.data);
+        }
         if (m.t === "b") {
           _.each(m.d || [], function(x) { self.handle(x); });
         } else {

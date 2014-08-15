@@ -69,12 +69,15 @@ function main() {
       return false;
     }
 
-    session.login(username, password).done(function() {
+    session.login(username, password).then(function() {
       $('#userModal').classList.remove('active');
     }, function (error) {
       console.log(error);
-      // handle error
-    });
+      if (error.status === 401) {
+        $('#userModal').classList.remove('active');
+        alert.show('danger', 'could not connect: ' + error.responseText);
+      }
+    }).done();
 
 
     return false;

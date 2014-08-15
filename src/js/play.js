@@ -46,6 +46,10 @@ Zepto('.rematch-no').tap(function () {
   render.hideOverlay('#endGameOverlay');
 });
 
+Zepto('#endGameOverlay > .cancel-overlay').tap(function () {
+  socket.destroy();
+});
+
 function resetEndGameOverlay() {
   var ov = $('#endGameOverlay');
   $('.mine', ov).style.display = 'block';
@@ -83,7 +87,7 @@ var gameEvents = {
       if (lastPosition[e.to]) sound.capture();
       else sound.move();
     }
-    setTimeout(function () { lastPosition = ground.getPosition(); }, 100);
+    setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
   },
   promotion: function(e) {
     var pieces = {};
@@ -196,7 +200,7 @@ function _initGame(data) {
     });
   }
 
-  setTimeout(function () { lastPosition = ground.getPosition(); }, 100);
+  setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
 
   ground.setDests(game.getPossibleMoves());
   ground.setColor(game.currentPlayer());

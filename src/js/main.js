@@ -86,14 +86,8 @@ function main() {
     $('#userModal').classList.remove('active');
   });
 
-  Zepto('#play-icon').tap(function (e) {
-    e.preventDefault();
-    render.showOverlay('#playOverlay');
-  });
-
   Zepto('#play-computer').tap(function (e) {
     e.preventDefault();
-    render.hideOverlay('#playOverlay');
     $('#computerGameModal').classList.remove('active');
     play.startAI();
   });
@@ -101,7 +95,6 @@ function main() {
   Zepto('#play-human').tap(function (e) {
     e.preventDefault();
 
-    render.hideOverlay('#playOverlay');
     alert.hideAll();
     play.reset();
 

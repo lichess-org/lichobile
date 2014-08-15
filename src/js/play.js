@@ -213,7 +213,7 @@ function _initGame(data) {
     sound.move();
   }
 
-  utils.$('#game-menu-icon').style.display = 'block';
+  utils.$('#game-menu-icon').style.display = 'table-cell';
 
   // listen to buzzer event to notify server when time is out
   signals.buzzer.add(function() {

@@ -41,9 +41,23 @@
       </div>
     </div>
 
-    <div class="bar bar-standard bar-footer">
-      <a id="game-menu-icon" class="icon icon-bars pull-left" style="display:none"></a>
-      <a id="play-icon" class="icon icon-play pull-right"></a>
+    <div class="bar bar-tab">
+      <a id="game-menu-icon" class="tab-item" href="#" style="display:none">
+        <span class="icon icon-bars"></span>
+        <span class="tab-label">Game Actions</span>
+      </a>
+      <a class="tab-item" href="#friendsModal">
+        <span class="icon icon-star-filled"></span>
+        <span class="tab-label">Friends</span>
+      </a>
+      <a class="tab-item" href="#humanGameModal">
+        <span class="icon icon-play"></span>
+        <span class="tab-label">Human</span>
+      </a>
+      <a class="tab-item" href="#computerGameModal">
+        <span class="icon icon-play"></span>
+        <span class="tab-label">Computer</span>
+      </a>
     </div>
 
     <div id="userModal" class="modal">
@@ -59,6 +73,17 @@
         </form>
       </div>
     </div>
+
+    <div id="friendsModal" class="modal">
+      <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#friendsModal"></a>
+        <h1 class="title">Friends</h1>
+      </header>
+      <div class="content">
+        todo
+      </div>
+    </div>
+
 
     <div id="computerGameModal" class="modal">
       <header class="bar bar-nav">
@@ -258,13 +283,9 @@
       <div><span id="online-players"></span> players online</div>
       <button id="cancel-seek" class="btn btn-negative btn-block cancel-overlay">Cancel</button>
     </div>
-    <div id="playOverlay" class="overlay">
-      <a href="#humanGameModal" class="btn btn-primary btn-block">Human</a>
-      <a href="#computerGameModal" class="btn btn-primary btn-outlined btn-block">Computer</a>
-      <button class="btn btn-negative cancel-overlay">Cancel</button>
-    </div>
     <div id="inGameOverlay" class="overlay">
       <button id="resign" class="btn btn-primary">Resign</button>
+      <button id="takeback" class="btn btn-primary">Takeback</button>
       <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
     <div id="endGameOverlay" class="overlay">

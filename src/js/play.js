@@ -163,16 +163,24 @@ var gameEvents = {
   reloadTable: function () {
     var eov = $('#endGameOverlay');
     var iov = $('#inGameOverlay');
-    // if (drawAsked) {
-    //   alert.show('info', 'Draw offer declined');
-    // }
-    // if (takebackAsked)
-    //   alert.show('info', 'Takeback offer declined');
-    // if (rematchAsked)
-    //   alert.show('info', 'Rematch offer declined');
-    // TODO: handle which offer is declined when we know it
-    reloadGameMenu();
     ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
+
+      if (game.player.isOfferingDraw && !data.player.isOfferingDraw) {
+        alert.show('info', 'Draw offer declined');
+        render.hideOverlay('#inGameOverlay');
+        reloadGameMenu();
+      }
+      if (game.player.isOfferingRematch && !data.player.isOfferingRematch) {
+        alert.show('info', 'Rematch offer declined');
+      }
+      if (game.player.isProposingTakeback && !data.player.isProposingTakeback) {
+        alert.show('info', 'Takeback offer declined');
+        render.hideOverlay('#inGameOverlay');
+        reloadGameMenu();
+      }
+
+      game.player = data.player;
+      game.opponent = data.opponent;
 
       if (data.opponent.isOfferingRematch) {
         $('.mine', eov).style.display = 'none';

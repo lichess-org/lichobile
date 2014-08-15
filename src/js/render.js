@@ -36,7 +36,13 @@ function ground(cfg) {
   return Chessground.main($ground[0], cfg);
 }
 
+function hideOverlay(id) {
+  if (id) Zepto(id).hide();
+  else Zepto('.overlay').hide();
+}
+
 function showOverlay(id) {
+  hideOverlay();
   var groundPos = $ground.position();
 
   Zepto(id).css({
@@ -45,11 +51,6 @@ function showOverlay(id) {
     top: groundPos.top + $ground.height() * (2/8),
     left: $ground.width() * (1/8)
   }).show();
-}
-
-function hideOverlay(id) {
-  if (id) Zepto(id).hide();
-  else Zepto('.overlay').hide();
 }
 
 module.exports = {

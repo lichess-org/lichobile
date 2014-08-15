@@ -34,23 +34,40 @@ Zepto('#resign').tap(function () {
   render.hideOverlay('#inGameOverlay');
 });
 
+Zepto('.draw-yes').tap(function () {
+  socket.send('draw-yes');
+  var ov = $('#inGameOverlay');
+  if (utils.isHidden($('.his.draw', ov))) {
+    $('.waiting.draw', ov).style.display = 'block';
+  }
+});
+
+Zepto('.draw-no').tap(function () {
+  reloadGameMenu();
+  socket.send('draw-no');
+  render.hideOverlay('#inGameOverlay');
+});
+
 Zepto('.takeback-yes').tap(function () {
   socket.send('takeback-yes');
   var ov = $('#inGameOverlay');
-  if (utils.isHidden($('.his', ov)))
-    $('.waiting', ov).style.display = 'block';
+  if (utils.isHidden($('.his.takeback', ov))) {
+    $('.waiting.takeback', ov).style.display = 'block';
+  }
 });
 
 Zepto('.takeback-no').tap(function () {
   socket.send('takeback-no');
+  reloadGameMenu();
   render.hideOverlay('#inGameOverlay');
 });
 
 Zepto('.rematch-yes').tap(function () {
   socket.send('rematch-yes');
   var ov = $('#endGameOverlay');
-  if (utils.isHidden($('.his', ov)))
+  if (utils.isHidden($('.his', ov))) {
     $('.waiting', ov).style.display = 'block';
+  }
 });
 
 Zepto('.rematch-no').tap(function () {
@@ -62,7 +79,10 @@ Zepto('#endGameOverlay > .cancel-overlay').tap(function () {
   socket.destroy();
 });
 
-function resetEndGameOverlay() {
+function reloadGameMenu() {
+  Zepto('#inGameOverlay > .mine').show();
+  Zepto('#inGameOverlay > .his').hide();
+  Zepto('#inGameOverlay .waiting').hide();
 }
 
 function handleEndGame() {
@@ -141,17 +161,31 @@ var gameEvents = {
     ground.setPieces(pieces);
   },
   reloadTable: function () {
-    // rematch offer sent?
+    var eov = $('#endGameOverlay');
+    var iov = $('#inGameOverlay');
+    // if (drawAsked) {
+    //   alert.show('info', 'Draw offer declined');
+    // }
+    // if (takebackAsked)
+    //   alert.show('info', 'Takeback offer declined');
+    // if (rematchAsked)
+    //   alert.show('info', 'Rematch offer declined');
+    // TODO: handle which offer is declined when we know it
+    reloadGameMenu();
     ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
+
       if (data.opponent.isOfferingRematch) {
-        var eov = $('#endGameOverlay');
         $('.mine', eov).style.display = 'none';
         $('.his', eov).style.display = 'block';
       }
       if (data.opponent.isProposingTakeback) {
-        var iov = $('#inGameOverlay');
-        $('.mine', iov).style.display = 'none';
-        $('.his', iov).style.display = 'block';
+        $('.mine.takeback', iov).style.display = 'none';
+        $('.his.takeback', iov).style.display = 'block';
+        render.showOverlay('#inGameOverlay');
+      }
+      if (data.opponent.isOfferingDraw) {
+        $('.mine.draw', iov).style.display = 'none';
+        $('.his.draw', iov).style.display = 'block';
         render.showOverlay('#inGameOverlay');
       }
     });
@@ -169,10 +203,7 @@ var gameEvents = {
   },
   resync: function () {
     if (game) {
-      var ov = $('#inGameOverlay');
-      $('.mine', ov).style.display = 'inline-block';
-      $('.his', ov).style.display = 'none';
-      $('.waiting', ov).style.display = 'none';
+      reloadGameMenu();
       render.hideOverlay('#inGameOverlay');
       resync();
     }

@@ -285,14 +285,23 @@
     </div>
     <div id="inGameOverlay" class="overlay">
       <button id="resign" class="btn btn-primary">Resign</button>
-      <div class="mine">
+      <div class="mine takeback">
         <button class="btn btn-primary takeback-yes">Takeback</button>
+        <p class="waiting takeback">Takeback offer sent...</p>
       </div>
-      <p class="waiting">Takeback offer sent...</p>
-      <div class="his">
+      <div class="mine draw">
+        <button class="btn btn-primary draw-yes">Propose draw</button>
+        <p class="waiting draw">Draw offer sent...</p>
+      </div>
+      <div class="his takeback">
         <p>Your opponent wants takeback...</p>
         <button class="btn btn-primary takeback-yes">Accept</button>
         <button class="btn btn-primary btn-outlined takeback-no">Decline</button>
+      </div>
+      <div class="his draw">
+        <p>Your opponent asks for a draw...</p>
+        <button class="btn btn-primary draw-yes">Accept</button>
+        <button class="btn btn-primary btn-outlined draw-no">Decline</button>
       </div>
       <br />
       <br />

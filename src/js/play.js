@@ -36,14 +36,22 @@ Zepto('#resign').tap(function () {
 
 Zepto('.rematch-yes').tap(function () {
   socket.send('rematch-yes');
-  // var ov = $('#endGameOverlay');
-  // if (utils.isHidden($('.his', ov)))
-  //   $('.waiting', ov).style.display = 'block';
+  var ov = $('#endGameOverlay');
+  if (utils.isHidden($('.his', ov)))
+    $('.waiting', ov).style.display = 'block';
 });
 
 Zepto('.rematch-no').tap(function () {
   socket.send('rematch-no');
+  render.hideOverlay('#endGameOverlay');
 });
+
+function resetEndGameOverlay() {
+  var ov = $('#endGameOverlay');
+  $('.mine', ov).style.display = 'block';
+  $('.his', ov).style.display = 'none';
+  $('.waiting', ov).style.display = 'none';
+}
 
 function handleEndGame() {
   ajax({ url: game.url.end, method: 'GET'}).done(function(data) {
@@ -60,7 +68,6 @@ function stop() {
   setTimeout(function () {
     utils.$('#game-menu-icon').style.display = 'none';
     ground.setColor('none');
-    socket.destroy();
   }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
@@ -76,7 +83,7 @@ var gameEvents = {
       if (lastPosition[e.to]) sound.capture();
       else sound.move();
     }
-    lastPosition = ground.getPosition();
+    setTimeout(function () { lastPosition = ground.getPosition(); }, 100);
   },
   promotion: function(e) {
     var pieces = {};
@@ -121,7 +128,7 @@ var gameEvents = {
     pieces[e.rook[1]] = pos[e.rook[0]];
     ground.setPieces(pieces);
   },
-  reloadTable: function (e) {
+  reloadTable: function () {
     // rematch offer sent?
     ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
       if (data.opponent.isOfferingRematch) {
@@ -132,6 +139,12 @@ var gameEvents = {
     });
   },
   redirect: function (e) {
+    ajax({ url: e.url, method: 'GET'}).then(function(data) {
+      resetEndGameOverlay();
+      render.hideOverlay('#endGameOverlay');
+      ground.startPos();
+      resume(data);
+    });
   }
 };
 
@@ -183,17 +196,17 @@ function _initGame(data) {
     });
   }
 
-  lastPosition = ground.getPosition();
+  setTimeout(function () { lastPosition = ground.getPosition(); }, 100);
 
   ground.setDests(game.getPossibleMoves());
   ground.setColor(game.currentPlayer());
 
-  if (game.player.color === 'black') {
+  if (game.player.color !== ground.getOrientation()) {
     ground.toggleOrientation();
-    if (game.currentTurn() === 1) {
-      ground.showLastMove(game.lastMove().from, game.lastMove().to);
-      sound.move();
-    }
+  }
+  if (game.currentTurn() === 1) {
+    ground.showLastMove(game.lastMove().from, game.lastMove().to);
+    sound.move();
   }
 
   utils.$('#game-menu-icon').style.display = 'block';
@@ -220,7 +233,7 @@ function reset() {
     if (game.hasClock()) game.stopClocks();
     game = null;
   }
-  if (socket) socket = null;
+  if (socket) socket.destroy();
   if (ground.getOrientation() === 'black') ground.toggleOrientation();
   ground.startPos();
 }
@@ -254,6 +267,7 @@ function resume(game) {
 }
 
 function startHuman(id) {
+
   return ajax({ url: id, method: 'GET'}).then(function(data) {
     _initGame(data);
     return game;

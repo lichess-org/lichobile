@@ -42,7 +42,7 @@
     </div>
 
     <div class="bar bar-standard bar-footer">
-      <a id="game-menu-icon" class="icon icon-bars pull-left hidden"></a>
+      <a id="game-menu-icon" class="icon icon-bars pull-left" style="display:none"></a>
       <a id="play-icon" class="icon icon-play pull-right"></a>
     </div>
 
@@ -268,13 +268,13 @@
       <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
     <div id="endGameOverlay" class="overlay">
-      <div class="result"></div>
+      <p class="result"></p>
       <div class="mine">
         <button class="btn btn-primary rematch-yes">Rematch</button>
-        <div class="waiting hidden">Rematch offer sent...</div>
+        <div class="waiting">Rematch offer sent...</div>
       </div>
-      <div class="his hidden">
-        <p>Your opponent is proposing rematch...</p>
+      <div class="his">
+        <p>Your opponent wants rematch...</p>
         <button class="btn btn-primary rematch-yes">Accept</button>
         <button class="btn btn-primary btn-outlined rematch-no">Decline</button>
       </div>

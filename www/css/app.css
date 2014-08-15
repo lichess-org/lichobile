@@ -2,10 +2,6 @@ body {
   font-family: "Open Sans","Lucida Grande","Lucida Sans Unicode",Geneva,Verdana,Sans-Serif;
 }
 
-.hidden {
-  display: none;
-}
-
 #title {
   font-size: 20px;
   color: #848484;
@@ -82,7 +78,6 @@ body {
   bottom: 5%;
 }
 
-#endGameOverlay .loading {
-  height: 40px;
-  width: 100%;
+#endGameOverlay .waiting, #endGameOverlay .his {
+  display: none;
 }

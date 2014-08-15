@@ -31,7 +31,7 @@ var audio = {
   capture2: [ 'wood_capture_hit_and_roll.mp3', 0.6 ],
 };
 
-var moveChoices = ['move1', 'move2', 'move3', 'move4'];
+var moveChoices = ['move1', 'move2', 'move3'];
 
 // var canPlay = window.cordova || (!!audio.move1.canPlayType && audio.move1.canPlayType('audio/mpeg'));
 

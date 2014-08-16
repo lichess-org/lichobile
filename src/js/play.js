@@ -13,9 +13,10 @@ $ = utils.$,
 _ = require('lodash'),
 alert = require('./alert'),
 sound = require('./sound'),
+Chat = require('./chat'),
 StrongSocket = require('./socket');
 
-var ground, game, socket;
+var ground, game, socket, chat;
 
 var lastPosition = {};
 
@@ -215,6 +216,9 @@ var gameEvents = {
       render.hideOverlay('#inGameOverlay');
       resync();
     }
+  },
+  message: function (msg) {
+    chat.append(msg);
   }
 };
 
@@ -225,7 +229,6 @@ var outOfTime = _.throttle(function() {
 function _initGame(data) {
   // update game data
   game = Game(data);
-
 
   // save current game id
   storage.set('currentGame', game.url.pov);
@@ -239,6 +242,9 @@ function _initGame(data) {
       events: gameEvents
     }
   );
+
+  // init chat
+  chat = Chat(socket);
 
   // initialize ground and ui
   if (game.hasClock()) {

@@ -24,7 +24,7 @@
       <a class="icon icon-gear pull-left" href="#settingsModal"></a>
       <div class="signin-out">
         <a data-bind="visible: isConnected() === false" class="icon icon-person pull-right" href="#userModal"></a>
-        <a data-bind="visible: isConnected" id="signout" class="icon icon-trash pull-right"></a>
+        <a data-bind="visible: isConnected" id="signout" class="icon icon-close pull-right"></a>
       </div>
       <h1 class="title" id="title">lichess.org</h1>
     </header>
@@ -44,7 +44,11 @@
     <div class="bar bar-tab">
       <a id="game-menu-icon" class="tab-item" style="display:none">
         <span class="icon icon-bars"></span>
-        <span class="tab-label">Game Actions</span>
+        <span class="tab-label">Actions</span>
+      </a>
+      <a id="chat-icon" class="tab-item" href="#chatModal" style="display:none">
+        <span class="icon icon-compose"></span>
+        <span class="tab-label">Chat</span>
       </a>
       <a class="tab-item" href="#friendsModal">
         <span class="icon icon-star-filled"></span>
@@ -84,6 +88,22 @@
       </div>
     </div>
 
+    <div id="chatModal" class="modal">
+      <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#chatModal"></a>
+        <h1 class="title">Chat</h1>
+      </header>
+      <div class="content">
+        <div id="chat">
+          <div class="messages">
+          </div>
+          <form class="talk-form">
+            <input class="talk-input" placeholder="Type message here..." type="text" />
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <div id="computerGameModal" class="modal">
       <header class="bar bar-nav">

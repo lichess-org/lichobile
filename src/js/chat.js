@@ -6,7 +6,7 @@ var Zepto = require('./vendor/zepto');
 
 var form = $('#chat > .talk-form'),
 input = $('#chat .talk-input'),
-messages = $('#chat > .messages');
+messagesWrapper = $('#chat > .messages');
 
 // msg is escaped server side
 var source = '<p class="chat-message"><span class="chat-user">{{ user }}</span>{{{ msg }}}</p>';
@@ -18,7 +18,8 @@ Zepto('#chatModal .icon-close').tap(function (e) {
 });
 
 function Chat(socket) {
-  messages.innerHTML = '';
+  messagesWrapper.innerHTML = '';
+
   $('#chat-icon').style.display = 'table-cell';
 
   form.addEventListener('submit', function () {
@@ -33,8 +34,8 @@ function Chat(socket) {
   });
 
   function append(msg) {
-    var rendered = Zepto(msgTemplate({ user: msg.u, msg: msg.t }));
-    Zepto(messages).append(rendered);
+    var rendered = Zepto(msgTemplate({ user: msg.u || msg.c, msg: msg.t }));
+    Zepto(messagesWrapper).append(rendered);
     $('#chat-icon').classList.add('active');
   }
 

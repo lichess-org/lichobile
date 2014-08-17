@@ -92,14 +92,14 @@ function handleEndGame() {
     if (data.winner && data.winner.isMe) msg = 'You won :)';
     else if (data.winner) msg = 'You lost :(';
     else msg = 'That\'s a draw :\\';
-    utils.$('#endGameOverlay > .result').innerHTML = msg;
+    $('#endGameOverlay > .result').innerHTML = msg;
     render.showOverlay('#endGameOverlay');
   });
 }
 
 function stop() {
   setTimeout(function () {
-    utils.$('#game-menu-icon').style.display = 'none';
+    $('#game-menu-icon').style.display = 'none';
     ground.setColor('none');
   }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();
@@ -213,7 +213,7 @@ var gameEvents = {
   resync: function () {
     if (game) {
       reloadGameMenu();
-      render.hideOverlay('#inGameOverlay');
+      render.hideOverlay();
       resync();
     }
   },
@@ -245,6 +245,11 @@ function _initGame(data) {
 
   // init chat
   chat = Chat(socket);
+  if (data.chat) {
+    data.chat.forEach(function (msg) {
+      chat.append(msg);
+    });
+  }
 
   // initialize ground and ui
   if (game.hasClock()) {

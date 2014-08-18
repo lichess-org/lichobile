@@ -158,11 +158,6 @@ function main() {
     render.hideOverlay();
   });
 
-  Zepto('#game-menu-icon').tap(function (e) {
-    e.preventDefault();
-    render.showOverlay('#inGameOverlay');
-  });
-
 }
 
 window.document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);

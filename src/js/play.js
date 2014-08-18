@@ -83,6 +83,12 @@ Zepto('#endGameOverlay > .cancel-overlay').tap(function () {
   if (!game.opponent.ai) $('#chat-icon').style.display = 'none';
 });
 
+Zepto('#game-menu-icon').tap(function (e) {
+  e.preventDefault();
+  render.showOverlay('#inGameOverlay');
+});
+
+
 function reloadGameMenu() {
   Zepto('#inGameOverlay > .mine').show();
   Zepto('#inGameOverlay > .his').hide();

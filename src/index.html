@@ -54,13 +54,9 @@
         <span class="icon icon-star-filled"></span>
         <span class="tab-label">Friends</span>
       </a>
-      <a class="tab-item" href="#humanGameModal">
+      <a class="tab-item" id="play-icon">
         <span class="icon icon-play"></span>
-        <span class="tab-label">Human</span>
-      </a>
-      <a class="tab-item" href="#computerGameModal">
-        <span class="icon icon-play"></span>
-        <span class="tab-label">Computer</span>
+        <span class="tab-label">Play</span>
       </a>
     </div>
 
@@ -302,6 +298,11 @@
       <p>Looking for opponents...</p>
       <div><span id="online-players"></span> players online</div>
       <button id="cancel-seek" class="btn btn-negative btn-block cancel-overlay">Cancel</button>
+    </div>
+    <div id="playOverlay" class="overlay">
+      <a href="#humanGameModal" class="btn btn-primary btn-block">Human</a>
+      <a href="#computerGameModal" class="btn btn-primary btn-outlined btn-block">Computer</a>
+      <button class="btn btn-negative cancel-overlay">Cancel</button>
     </div>
     <div id="inGameOverlay" class="overlay">
       <button id="resign" class="btn btn-primary">Resign</button>

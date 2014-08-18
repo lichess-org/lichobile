@@ -47,6 +47,9 @@
 .chessground-square.selected {
   background: rgba(216, 85, 0, 0.2);
 }
+.chessground-square.checked {
+  background: rgba(255, 0, 0, 0.4);
+}
 .withMoved .chessground-square.moved {
   background: rgba(216, 85, 0, 0.2);
 }

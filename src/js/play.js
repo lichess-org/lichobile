@@ -129,8 +129,9 @@ var gameEvents = {
 
     ground.setPieces(pieces);
   },
-  // check: function(e) {
-  // },
+  check: function(e) {
+    ground.showCheck(e);
+  },
   clock: function(e) {
     game.updateClocks(e);
   },

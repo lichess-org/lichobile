@@ -20,3 +20,9 @@ document.body.appendChild(hiddenA);
 module.exports.hideKeyboard = function () { hiddenA.focus(); };
 
 module.exports.lichessSri = Math.random().toString(36).substring(2);
+
+module.exports.userFullNameToId = function (fullName) {
+  var split = fullName.split(' ');
+  var id = split.length === 1 ? split[0] : split[1];
+  return id.toLowerCase();
+};

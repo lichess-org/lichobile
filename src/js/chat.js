@@ -7,9 +7,12 @@ var Iscroll = require('iscroll');
 
 var form = $('#chat > .talk-form'),
 input = $('#chat .talk-input'),
-messagesWrapper = $('#chat-messages');
+messagesWrapper = $('#chat-messages'),
+scrollerWrapper = $('#chat-scroller');
 
-var scroller = new Iscroll('#chat-scroller', { mouseWheel: true, scrollbars: false });
+Zepto(scrollerWrapper).height(Zepto('#chat').height() - 48);
+
+var scroller = new Iscroll(scrollerWrapper, { mouseWheel: true, scrollbars: false });
 
 // msg is escaped server side
 var source = '<p class="chat-message"><span class="chat-user">{{ user }}</span>{{{ msg }}}</p>';

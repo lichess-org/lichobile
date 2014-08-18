@@ -95,7 +95,6 @@ body {
   position: absolute;
   top: 0;
   border: 1px solid #ddd;
-  height: 92%;
   overflow: hidden;
   width: 100%;
 }
@@ -113,9 +112,13 @@ body {
 
 .talk-form {
   position: absolute;
-  bottom: 1%;
+  bottom: 5px;
   width: 100%;
-  height: 6%;
+  height: 34px;
+}
+
+.talk-form > button {
+  height: 34px;
 }
 
 #chat > .talk-form > .talk-input {

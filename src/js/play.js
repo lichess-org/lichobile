@@ -254,6 +254,8 @@ function _initGame(data) {
       });
     }
     $('#chat-icon').style.display = 'table-cell';
+  } else {
+    $('#chat-icon').style.display = 'none';
   }
 
 

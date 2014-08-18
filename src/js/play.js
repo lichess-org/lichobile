@@ -78,6 +78,7 @@ Zepto('.rematch-no').tap(function () {
 
 Zepto('#endGameOverlay > .cancel-overlay').tap(function () {
   socket.destroy();
+  if (!game.opponent.ai) $('#chat-icon').style.display = 'none';
 });
 
 function reloadGameMenu() {
@@ -245,12 +246,16 @@ function _initGame(data) {
   );
 
   // init chat
-  chat = Chat(socket);
-  if (data.chat) {
-    data.chat.forEach(function (msg) {
-      chat.append(msg);
-    });
+  if (!game.opponent.ai) {
+    chat = Chat(socket);
+    if (data.chat) {
+      data.chat.forEach(function (msg) {
+        chat.append(msg);
+      });
+    }
+    $('#chat-icon').style.display = 'table-cell';
   }
+
 
   // initialize ground and ui
   if (game.hasClock()) {

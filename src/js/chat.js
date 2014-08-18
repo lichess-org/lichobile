@@ -20,8 +20,6 @@ Zepto('#chatModal .icon-close').tap(function (e) {
 function Chat(socket) {
   messagesWrapper.innerHTML = '';
 
-  $('#chat-icon').style.display = 'table-cell';
-
   form.addEventListener('submit', function () {
     var msg = input.value.trim();
     if (!msg) return false;

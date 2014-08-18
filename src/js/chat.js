@@ -3,10 +3,13 @@
 var $ = require('./utils').$;
 var Handlebars = require('handlebars');
 var Zepto = require('./vendor/zepto');
+var Iscroll = require('iscroll');
 
 var form = $('#chat > .talk-form'),
 input = $('#chat .talk-input'),
-messagesWrapper = $('#chat > .messages');
+messagesWrapper = $('#chat-messages');
+
+var scroller = new Iscroll('#chat-scroller', { mouseWheel: true, scrollbars: false });
 
 // msg is escaped server side
 var source = '<p class="chat-message"><span class="chat-user">{{ user }}</span>{{{ msg }}}</p>';
@@ -34,6 +37,7 @@ function Chat(socket) {
   function append(msg) {
     var rendered = Zepto(msgTemplate({ user: msg.u || msg.c, msg: msg.t }));
     Zepto(messagesWrapper).append(rendered);
+    setTimeout(function () { scroller.refresh(); }, 0);
     $('#chat-icon').classList.add('active');
   }
 

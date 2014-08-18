@@ -91,11 +91,12 @@ body {
   height: 100%;
 }
 
-#chat > .messages {
+#chat-scroller {
   position: absolute;
   top: 0;
   border: 1px solid #ddd;
   height: 92%;
+  overflow: hidden;
   width: 100%;
 }
 

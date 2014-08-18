@@ -46,6 +46,7 @@ Zepto('.draw-yes').tap(function () {
 Zepto('.draw-no').tap(function () {
   reloadGameMenu();
   socket.send('draw-no');
+  $('#game-menu-icon').classList.remove('active');
   render.hideOverlay('#inGameOverlay');
 });
 
@@ -60,6 +61,7 @@ Zepto('.takeback-yes').tap(function () {
 Zepto('.takeback-no').tap(function () {
   socket.send('takeback-no');
   reloadGameMenu();
+  $('#game-menu-icon').classList.remove('active');
   render.hideOverlay('#inGameOverlay');
 });
 
@@ -169,16 +171,9 @@ var gameEvents = {
     ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
 
       if (game.player.isOfferingDraw && !data.player.isOfferingDraw) {
-        alert.show('info', 'Draw offer declined');
-        render.hideOverlay('#inGameOverlay');
         reloadGameMenu();
       }
-      if (game.player.isOfferingRematch && !data.player.isOfferingRematch) {
-        alert.show('info', 'Rematch offer declined');
-      }
       if (game.player.isProposingTakeback && !data.player.isProposingTakeback) {
-        alert.show('info', 'Takeback offer declined');
-        render.hideOverlay('#inGameOverlay');
         reloadGameMenu();
       }
 
@@ -192,12 +187,12 @@ var gameEvents = {
       if (data.opponent.isProposingTakeback) {
         $('.mine.takeback', iov).style.display = 'none';
         $('.his.takeback', iov).style.display = 'block';
-        render.showOverlay('#inGameOverlay');
+        $('#game-menu-icon').classList.add('active');
       }
       if (data.opponent.isOfferingDraw) {
         $('.mine.draw', iov).style.display = 'none';
         $('.his.draw', iov).style.display = 'block';
-        render.showOverlay('#inGameOverlay');
+        $('#game-menu-icon').classList.add('active');
       }
     });
   },

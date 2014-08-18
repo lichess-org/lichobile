@@ -1,5 +1,6 @@
 'use strict';
 
+var utils = require('./utils');
 var $ = require('./utils').$;
 var Handlebars = require('handlebars');
 var Zepto = require('./vendor/zepto');
@@ -20,6 +21,7 @@ var msgTemplate = Handlebars.compile(source);
 
 Zepto('#chatModal .icon-close').tap(function (e) {
   e.preventDefault();
+  utils.hideKeyboard();
   $('#chat-icon').classList.remove('active');
 });
 

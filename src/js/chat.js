@@ -13,7 +13,7 @@ scrollerWrapper = $('#chat-scroller');
 
 Zepto(scrollerWrapper).height(Zepto('#chat').height() - 48);
 
-var scroller = new Iscroll(scrollerWrapper, { mouseWheel: true, scrollbars: false });
+var scroller = new Iscroll(scrollerWrapper, { scrollbars: false });
 
 // msg is escaped server side
 var source = '<p class="chat-message"><span class="chat-user">{{ user }}</span>{{{ msg }}}</p>';

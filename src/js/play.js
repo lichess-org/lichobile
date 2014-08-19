@@ -304,18 +304,6 @@ function _initGame(data) {
 
   utils.$('#game-menu-icon').style.display = 'table-cell';
 
-  // listen to buzzer event to notify server when time is out
-  signals.buzzer.add(function() {
-    if (!game.isFinished()) {
-      outOfTime();
-    }
-  });
-
-  // listen to claimDraw event to notify server when a draw is claimed
-  signals.claimDraw.add(function() {
-    socket.send('draw-claim', {});
-  });
-
   // disable sleep during play
   if (window.cordova && settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
 }
@@ -376,6 +364,19 @@ function startHuman(id) {
     console.log('request to lichess failed', err);
   });
 }
+
+// listen to buzzer event to notify server when time is out
+signals.buzzer.add(function() {
+  if (game && !game.isFinished()) {
+    outOfTime();
+  }
+});
+
+// listen to claimDraw event to notify server when a draw is claimed
+signals.claimDraw.add(function() {
+  socket.send('draw-claim', {});
+});
+
 
 module.exports = {
   startAI: startAI,

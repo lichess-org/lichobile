@@ -71,7 +71,7 @@ gulp.task('watch', function() {
 
 gulp.task('dev', ['html', 'lint', 'scripts']);
 gulp.task('dev-watch', ['html', 'lint', 'watch-scripts', 'watch']);
-gulp.task('android', ['html', 'scripts']);
+gulp.task('mobile', ['html', 'scripts']);
 
 // Default Task
 gulp.task('default', ['dev-watch']);

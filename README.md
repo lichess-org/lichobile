@@ -39,7 +39,7 @@ Then plug your device with USB, check that usb debugging is enabled on it.
 
 You're all set! You can now run
 
-    $ bin/android
+    $ bin/android your_env
 
 
 ## iOs instructions
@@ -47,9 +47,9 @@ You're all set! You can now run
 Copy `env/mobile.json.example` to `env/your_env.json` and update according to your
 env.
 
-Generate assets:
+Generate assets and compile:
 
-    $ gulp mobile --env=env/your_env.json
+    $ bin/ios your_env
 
 Then open the xcode project at `app/platforms/ios/lichess-mobile.xcodeproj` and
 run the ios emulator.

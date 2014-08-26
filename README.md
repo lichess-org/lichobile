@@ -3,17 +3,26 @@ lichess-mobile
 
 lichess.org mobile application
 
-## Android instructions
+## Requirements
 
-Minimum version supported is 4.0.
+* [node](http://nodejs.org) and [gulp](http://gulpjs.com/) installed.
 
-### Requirements
+**For Android:**
 
-* install the [android SDK](http://developer.android.com/sdk/index.html)
-* add [SKD packages](http://developer.android.com/sdk/installing/adding-packages.html)
+* the [android SDK](http://developer.android.com/sdk/index.html)
+* [SKD packages](http://developer.android.com/sdk/installing/adding-packages.html)
 for API 14 to API 19
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.
+
+**For iOs:**
+
+* you need mac os and Xcode installed.
+
+
+## Android instructions
+
+Minimum version supported is 4.0.
 
 ### Run on your device
 
@@ -31,3 +40,16 @@ Then plug your device with USB, check that usb debugging is enabled on it.
 You're all set! You can now run
 
     $ bin/android
+
+
+## iOs instructions
+
+Copy `env/mobile.json.example` to `env/your_env.json` and update according to your
+env.
+
+Generate assets:
+
+    $ gulp mobile --env=env/your_env.json
+
+Then open the xcode project at `app/platforms/ios/lichess-mobile.xcodeproj` and
+run the ios emulator.

@@ -22,16 +22,6 @@
     <feature name="Insomnia">
         <param name="ios-package" value="Insomnia" />
     </feature>
-    <name>lichess-mobile</name>
-    <description>
-        lichess.org mobile application
-    </description>
-    <author email="vincent.velociter@gmail.com" href="https://github.com/veloce">
-        Vincent Velociter
-    </author>
-    <content src="index.html" />
-    <preference name="Orientation" value="portrait" />
-    <access origin="*" />
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
@@ -45,4 +35,14 @@
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
+    <name>lichess</name>
+    <description>
+        lichess.org mobile application
+    </description>
+    <author email="vincent.velociter@gmail.com" href="https://github.com/veloce">
+        Vincent Velociter
+    </author>
+    <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
+    <access origin="*" />
 </widget>

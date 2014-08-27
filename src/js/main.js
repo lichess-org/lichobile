@@ -115,7 +115,7 @@ function main() {
       '/lobby/socket/v1',
       0,
       {
-        options: { name: "lobby", pingDelay: 3000, debug: true },
+        options: { name: "lobby", pingDelay: 2000, debug: false },
         events: {
           redirect: function (data) {
             lobbySocket.destroy();

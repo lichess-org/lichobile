@@ -18,8 +18,7 @@ var strongSocketDefaults = {
     pingMaxLag: 7000, // time to wait for pong before reseting the connection
     pingDelay: 1000, // time between pong and ping
     autoReconnectDelay: 1000,
-    lagTag: false, // object showing ping lag
-    ignoreUnknownMessages: false
+    lagTag: false // object showing ping lag
   }
 };
 
@@ -37,12 +36,8 @@ var StrongSocket = function(url, version, settings) {
   self.lastPingTime = self.now();
   self.currentLag = 0;
   self.averageLag = 0;
-  self.tryOtherUrl = false;
   self.autoReconnect = true;
   self.debug('Debug is enabled');
-  // if (self.options.resetUrl) {
-  //   storage.remove(self.options.baseUrlKey);
-  // }
   self.connect();
   window.addEventListener('unload', function() {
     self.destroy();
@@ -126,7 +121,6 @@ StrongSocket.prototype = {
     clearTimeout(self.pingSchedule);
     clearTimeout(self.connectSchedule);
     self.connectSchedule = setTimeout(function() {
-      self.tryOtherUrl = true;
       self.connect();
     }, delay);
   },
@@ -189,9 +183,6 @@ StrongSocket.prototype = {
       default:
         var h = self.settings.events[m.t];
         if (_.isFunction(h)) h(m.d || null);
-        else if (!self.options.ignoreUnknownMessages) {
-          // self.debug('Message not supported ' + JSON.stringify(m));
-        }
     }
   },
   now: function() {
@@ -224,7 +215,6 @@ StrongSocket.prototype = {
     self.options.debug = true;
     self.options.lagTag.innerHTML = '<strong style="color: red;">Not connected</strong>';
     self.debug('error: ' + JSON.stringify(e));
-    self.tryOtherUrl = true;
     clearTimeout(self.pingSchedule);
   },
   onSuccess: function() {

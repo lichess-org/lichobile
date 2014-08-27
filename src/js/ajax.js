@@ -1,6 +1,6 @@
 'use strict';
 
-var Q = require('Q'),
+var Q = require('q'),
     Qajax = require('qajax'),
     _ = require('lodash'),
     alert = require('./alert');

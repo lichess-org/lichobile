@@ -16,9 +16,15 @@ var play = require('./play'),
     StrongSocket = require('./socket'),
     utils = require('./utils'),
     render = require('./render'),
+    ko = require('knockout'),
     $ = utils.$;
 
+
 function main() {
+
+  function refreshNowPlaying(data) {
+    view.nowPlaying(data.nowPlaying);
+  }
 
   var lobbySocket;
 
@@ -41,27 +47,42 @@ function main() {
       signals.claimDraw.dispatch();
     },
     settings: settings,
-    isConnected: session.isConnectedObs
+    isConnected: session.isConnectedObs,
+    nowPlaying: play.nowPlaying,
   };
+  view.activeFriends = ko.pureComputed(function () {
+    return this.nowPlaying().length > 0 ? 'active' : '';
+  }, view);
+
   ko.applyBindings(view);
 
   var currGame = storage.get('currentGame');
 
-  if (currGame) {
-    ajax({ url: currGame, method: 'GET'}).then(function(data) {
-      if (!data.game.finished) play.resume(data);
-    });
-  }
-
   // try to get session from cookie
   session.refresh()
+  .then(function (data) {
+    refreshNowPlaying(data);
+  })
   // trick to initialize parts of ui that depends on session data
   // it should not stay like that...
-  .then(function (data) {
-  })
   .fin(function () {
     $('.signin-out').style.display = 'block';
+
+    if (currGame) {
+      ajax({ url: currGame, method: 'GET'}).then(function(data) {
+        if (!data.game.finished) play.resume(data);
+      });
+    }
   });
+
+  // every 5 mins try to fetch current turn moves
+  setTimeout(function () {
+    if (session.isConnected()) {
+      session.refresh().then(function (data) {
+        refreshNowPlaying(data);
+      });
+    }
+  }, 1000 * 60 * 5);
 
   Zepto('#settingsModal').tap(function (e) {
     e.preventDefault();
@@ -167,6 +188,14 @@ function main() {
 
   Zepto('.cancel-overlay').tap(function () {
     render.hideOverlay();
+  });
+
+  Zepto('#friendsModal').on('tap', '.play-my-turn', function (e) {
+    var id = e.srcElement.getAttribute('data-id');
+    ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
+      play.resume(data);
+      $('#friendsModal').classList.remove('active');
+    });
   });
 
 }

@@ -14,16 +14,22 @@ _ = require('lodash'),
 alert = require('./alert'),
 sound = require('./sound'),
 Chat = require('./chat'),
+ko = require('knockout'),
 StrongSocket = require('./socket');
 
 var ground, game, socket, chat;
 
 var lastPosition = {};
 
+var nowPlaying = ko.observableArray();
+
 var onMove = function(from, to) {
   if (lastPosition[to]) sound.capture();
   else sound.move();
   socket.send('move', { from: from, to: to });
+  if (nowPlaying().map(function (e) { return e.id; }).indexOf(game.fullId()) !== -1) {
+    nowPlaying.remove(function (e) { return e.id === game.fullId(); });
+  }
 };
 
 ground = render.ground({
@@ -281,12 +287,14 @@ function _initGame(data) {
   if (game.opponent.ai) {
     oppInfo.innerHTML = 'A.I. level ' + game.opponent.ai;
     oppInfo.style.display = 'block';
-  } else {
+  } else if (game.opponent.userId) {
     ajax({ url: '/api/user/' + game.opponent.userId, method: 'GET' }).then(function (user) {
       oppInfo.innerHTML = user.username +
       ' (' + user.perfs[game.perf].rating + ')';
       oppInfo.style.display = 'block';
     });
+  } else {
+    oppInfo.innerHTML = 'Anonymous';
   }
 
   setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
@@ -383,5 +391,6 @@ module.exports = {
   startHuman: startHuman,
   resume: resume,
   stop: stop,
-  reset: reset
+  reset: reset,
+  nowPlaying: nowPlaying
 };

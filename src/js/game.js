@@ -22,6 +22,11 @@ var Game = function(data) {
     url = data.url;
   }
 
+  function fullId() {
+    if (player.id) return game.id + player.id;
+    return game.id;
+  }
+
   function updateState(state) {
     game.player = state.color;
     game.turns = state.turns;
@@ -130,6 +135,7 @@ var Game = function(data) {
     updateState: updateState,
     finish: finish,
 
+    fullId: fullId,
     getFen: getFen,
     getPossibleMoves: getPossibleMoves,
     setPossibleMoves: setPossibleMoves,

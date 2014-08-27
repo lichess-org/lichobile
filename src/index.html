@@ -49,7 +49,7 @@
         <span class="icon icon-compose"></span>
         <span class="tab-label">Chat</span>
       </a>
-      <a class="tab-item" href="#friendsModal">
+      <a id="friends-icon" class="tab-item" href="#friendsModal" data-bind="css: activeFriends">
         <span class="icon icon-star-filled"></span>
         <span class="tab-label">Friends</span>
       </a>
@@ -79,7 +79,10 @@
         <h1 class="title">Friends</h1>
       </header>
       <div class="content">
-        todo
+        <h3>It's your turn</h3>
+        <ul class="table-view" data-bind="foreach: nowPlaying">
+          <li class="table-view-cell"><span data-bind="text: opponent.username"></span> <button class="btn play-my-turn" data-bind="attr: { 'data-id': id }">Play</button></li>
+        </ul>
       </div>
     </div>
 

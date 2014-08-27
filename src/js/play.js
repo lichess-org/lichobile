@@ -279,7 +279,7 @@ function _initGame(data) {
   }
   playerInfo.style.display = 'block';
   if (game.opponent.ai) {
-    oppInfo.innerHTML = 'computer';
+    oppInfo.innerHTML = 'A.I. level ' + game.opponent.ai;
     oppInfo.style.display = 'block';
   } else {
     ajax({ url: '/api/user/' + game.opponent.userId, method: 'GET' }).then(function (user) {

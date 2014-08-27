@@ -31,16 +31,16 @@
     <div id="mainPage" class="content">
       <div class="wood merida" id="ground" data-bind="css: { withMoved: settings.general.showLastMove, withDest: settings.general.showDests, coordinates: settings.general.showCoords }"></div>
       <div id="opp-table" class="player-table">
-        <div class="player-info"></div>
         <div id="opp-clock" class="clock"></div>
+        <div class="player-info"></div>
       </div>
       <div id="player-table" class="player-table">
-        <div class="player-info"></div>
         <div id="player-clock" class="clock"></div>
+        <div class="player-info"></div>
       </div>
     </div>
 
-    <div class="bar bar-tab">
+    <footer class="bar bar-tab">
       <a id="game-menu-icon" class="tab-item" style="display:none">
         <span class="icon icon-bars"></span>
         <span class="tab-label">Actions</span>
@@ -57,7 +57,7 @@
         <span class="icon icon-play"></span>
         <span class="tab-label">Play</span>
       </a>
-    </div>
+    </footer>
 
     <div id="userModal" class="modal">
       <header class="bar bar-nav">

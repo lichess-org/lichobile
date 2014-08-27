@@ -22,27 +22,11 @@
   font-weight normal
   font-style normal
 
-// http://www.colourlovers.com/palette/110225/Vintage_Modern
-// $bg-base = rgb(140, 35, 24)
-// $bg-var1 = rgb(94, 140, 106)
-// $bg-var2 = rgb(136, 166, 94)
-// $bg-var3 = rgb(191, 179, 90)
-
-// http://www.colourlovers.com/palette/940086/mystery_machine
-// $bg-base = rgb(85,66,54)
-// $bg-var1 = rgb(247,120,37)
-// $bg-var2 = rgb(211,206,61)
-// $bg-var3 = rgb()
-
-// http://www.colourlovers.com/palette/292482/Terra
-$color-bg1 = rgb(3,54,73)
-$color-bg2 = rgb(3,22,52)
-$color-var1 = rgb(205,179,128)
-$color-text = #aec3cb
+$color-text = rgba(255,255,255,0.6)
 
 body
   font-family "Open Sans", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, Sans-Serif
-  background $color-bg1
+  background url(../../images/bg5.png)
   color $color-text
 
 a
@@ -51,49 +35,46 @@ a
 
 #title
   font-size 20px
-  color #848484
-  background $color-bg2
   color $color-text
+  font-weight bold
 
 #mainPage
-  background url(../../images/bg1.png)
+  background transparent
   color $color-text
 
-.bar-tab
-  background $color-bg2
+.bar-tab, .bar-nav
+  background rgba(0, 0, 0, 0.1)
   color $color-text
   border none
   .tab-item
     color $color-text
+
+header.bar-nav
+  box-shadow 0px 0 12px rgba(0, 0, 0, 0.4)
+
+footer.bar-tab
+  box-shadow 0px 0 12px rgba(0, 0, 0, 0.4)
 
 .signin-out
   display none
 
 .player-table
   width 100%
-  height 44px
-  padding 2px
-  & > .player-info
-    position absolute
-    top 5px
-    left 10px
-
-.clock
-  position absolute
-  top 5px
-  right 10px
-  border 1px solid #404040
-  border-radius 4px
-  color #444
-  font-size 20px
-  font-weight bold
-  width 70px
-  height 30px
-  padding-top 3px
-  display none
-  text-align center
-  &.on
-    background-color #fff077
+  height 36px
+  line-height 36px
+  overflow hidden
+  .player-info
+    margin-left 10px
+  .clock
+    float right
+    color $color-text
+    font-size 20px
+    font-weight bold
+    padding 0 10px
+    display none
+    background-color $color-bg2
+    &.on
+      background-color #fff077
 
 .table-view-cell
   &.extended

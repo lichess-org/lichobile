@@ -24,7 +24,7 @@ function ground(cfg) {
 
   Zepto('#opp-table').css({
     position: 'absolute',
-    top: groundPos.top - 40,
+    top: groundPos.top - 36,
     left: 0
   });
   Zepto('#player-table').css({

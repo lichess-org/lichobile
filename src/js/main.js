@@ -75,14 +75,14 @@ function main() {
     }
   });
 
-  // every 5 mins try to fetch current turn moves
+  // every min try to fetch current turn moves
   setTimeout(function () {
     if (session.isConnected()) {
       session.refresh().then(function (data) {
         refreshNowPlaying(data);
       });
     }
-  }, 1000 * 60 * 5);
+  }, 60000);
 
   Zepto('#settingsModal').tap(function (e) {
     e.preventDefault();

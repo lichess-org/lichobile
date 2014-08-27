@@ -6,12 +6,14 @@ var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
 var watchify = require('watchify');
 var browserify = require('browserify');
+var stylus = require('gulp-stylus');
 
 var defaults = require('./env.json');
 var env = argv.env ? require('./' + argv.env) : defaults;
 
 var paths = {
-  scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js']
+  scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js'],
+  styles: ['src/styl/*.styl'],
 };
 
 var localVendorLibs = [
@@ -27,6 +29,12 @@ gulp.task('html', function() {
   return gulp.src('src/index.html')
     .pipe(preprocess({context: env}))
     .pipe(gulp.dest('www/'));
+});
+
+gulp.task('styl', function() {
+  return gulp.src(paths.styles)
+    .pipe(stylus())
+    .pipe(gulp.dest('www/css/compiled/'));
 });
 
 gulp.task('lint', function() {
@@ -66,12 +74,13 @@ gulp.task('watch-scripts', function() {
 // Watch Files For Changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['lint']);
+  gulp.watch(paths.styles, ['styl']);
   gulp.watch('src/index.html', ['html']);
 });
 
-gulp.task('dev', ['html', 'lint', 'scripts']);
-gulp.task('dev-watch', ['html', 'lint', 'watch-scripts', 'watch']);
-gulp.task('mobile', ['html', 'scripts']);
+gulp.task('dev', ['html', 'styl', 'lint', 'scripts']);
+gulp.task('dev-watch', ['html', 'styl', 'lint', 'watch-scripts', 'watch']);
+gulp.task('mobile', ['html', 'styl', 'scripts']);
 
 // Default Task
 gulp.task('default', ['dev-watch']);

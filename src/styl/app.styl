@@ -1,150 +1,131 @@
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(../../fonts/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(../../fonts/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../../fonts/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
-}
-@font-face {
-  font-family: "lichess";
-  src: url("../../fonts/lichess.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
+@font-face
+  font-family 'Open Sans'
+  font-style normal
+  font-weight 300
+  src local('Open Sans Light'), local('OpenSans-Light'), url(../../fonts/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff')
+
+@font-face
+  font-family 'Open Sans'
+  font-style normal
+  font-weight 400
+  src local('Open Sans'), local('OpenSans'), url(../../fonts/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff')
+
+@font-face
+  font-family 'Open Sans'
+  font-style normal
+  font-weight 700
+  src local('Open Sans Bold'), local('OpenSans-Bold'), url(../../fonts/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff')
+
+@font-face
+  font-family "lichess"
+  src url("../../fonts/lichess.woff") format("woff")
+  font-weight normal
+  font-style normal
+
 body
-  font-family "Open Sans", "Lucida Grande","Lucida Sans Unicode",Geneva,Verdana,Sans-Serif
+  font-family "Open Sans", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, Sans-Serif
 
-#title {
-  font-size: 20px;
-  color: #848484;
-}
+#title
+  font-size 20px
+  color #848484
 
-.signin-out {
-  display: none;
-}
+.signin-out
+  display none
 
-.player-table {
-  width: 100%;
-  height: 44px;
-  padding: 2px;
-}
+.player-table
+  width 100%
+  height 44px
+  padding 2px
+  & > .player-info
+    position absolute
+    top 5px
+    left 10px
 
-.player-table > .player-info {
-  position: absolute;
-  top: 5px;
-  left: 10px;
-}
+.clock
+  position absolute
+  top 5px
+  right 10px
+  border 1px solid #404040
+  border-radius 4px
+  color #444
+  font-size 20px
+  font-weight bold
+  width 70px
+  height 30px
+  padding-top 3px
+  display none
+  text-align center
+  &.on
+    background-color #fff077
 
-.clock {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  border: 1px solid #404040;
-  border-radius: 4px;
-  color: #444;
-  font-size: 20px;
-  font-weight: bold;
-  width: 70px;
-  height: 30px;
-  padding-top: 3px;
-  display:none;
-  text-align:center;
-}
+.table-view-cell
+  &.extended
+    padding-right 15px
 
-.clock.on {
-  background-color: #fff077;
-}
+.icon
+  &:hover
+    text-decoration none
 
-.table-view-cell.extended {
-  padding-right: 15px;
-}
+.bar-footer
+  text-align center
 
-.icon:hover {
-  text-decoration: none;
-}
+#ping
+  margin-top 10px
 
-.bar-footer {
-  text-align: center;
-}
+.modal
+  .content
+    margin 10px 3% 0
 
-#ping {
-  margin-top: 10px;
-}
+.overlay
+  position absolute
+  padding 5%
+  display none
+  background-color rgba(255, 255, 255, 0.80)
+  border 1px solid #ddd
+  border-radius 2px
 
-.modal .content {
-  margin: 10px 3% 0;
-}
+#cancel-seek
+  position absolute
+  width 85%
+  bottom 5%
 
-.overlay {
-  position: absolute;
-  padding: 5%;
-  display: none;
-  background-color: rgba(255, 255, 255, 0.80);
-  border: 1px solid #ddd;
-  border-radius: 2px;
-}
+.waiting,
+.his
+  display none
 
-#cancel-seek {
-  position: absolute;
-  width: 85%;
-  bottom: 5%;
-}
+#inGameOverlay
+  .mine
+    display inline-block
 
-.waiting, .his {
-  display: none;
-}
+#chat
+  width 100%
+  height 100%
+  & > .talk-form
+    & > .talk-input
+      height 100%
+      width 83%
 
-#inGameOverlay .mine {
-  display: inline-block;
-}
+#chat-scroller
+  position absolute
+  top 0
+  border 1px solid #ddd
+  overflow hidden
+  width 100%
 
-#chat {
-  width: 100%;
-  height: 100%;
-}
+.chat-message
+  margin 0
+  padding 4px 2px
+  border-bottom 1px solid #ddd
 
-#chat-scroller {
-  position: absolute;
-  top: 0;
-  border: 1px solid #ddd;
-  overflow: hidden;
-  width: 100%;
-}
+.chat-user
+  font-weight bold
+  margin-right 3px
 
-.chat-message {
-  margin: 0;
-  padding: 4px 2px;
-  border-bottom: 1px solid #ddd;
-}
+.talk-form
+  position absolute
+  bottom 5px
+  width 100%
+  height 34px
+  & > button
+    height 34px
 
-.chat-user {
-  font-weight: bold;
-  margin-right: 3px;
-}
-
-.talk-form {
-  position: absolute;
-  bottom: 5px;
-  width: 100%;
-  height: 34px;
-}
-
-.talk-form > button {
-  height: 34px;
-}
-
-#chat > .talk-form > .talk-input {
-  height: 100%;
-  width: 83%;
-}

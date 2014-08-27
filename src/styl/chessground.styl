@@ -1,207 +1,187 @@
-.chessground-board {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  line-height: 0;
-  background-size: cover;
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.chessground-square {
-  position: absolute;
-  width: 12.5%;
-  height: 12.5%;
-  cursor: pointer;
-}
-.coordinates .chessground-square[data-coord-x]::after {
-  position: absolute;
-  left: 1px;
-  bottom: 1px;
-  font-size: 10px;
-  line-height: 10px;
-  content: attr(data-coord-x);
-  color: #fff;
-  opacity: 0.5;
-}
-.coordinates .chessground-square[data-coord-y]::before {
-  position: absolute;
-  right: 1px;
-  top: 1px;
-  font-size: 10px;
-  line-height: 10px;
-  content: attr(data-coord-y);
-  color: #fff;
-  opacity: 0.5;
-}
-.chessground-square.selected {
-  background: rgba(216, 85, 0, 0.2);
-}
-.chessground-square.checked {
-  background: rgba(255, 0, 0, 0.4);
-}
-.withMoved .chessground-square.moved {
-  background: rgba(216, 85, 0, 0.2);
-}
-.withDest .chessground-square.dest {
-  background: radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208030 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0);
-}
+.chessground-board
+  -webkit-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
+  line-height 0
+  background-size cover
+  position relative
+  width 100%
+  height 100%
 
-.chessground-piece {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  z-index: 2;
-  -webkit-transform: translate3d(0,0,0);
-}
-.chessground-piece.dragging {
-  z-index: 9;
-}
-.chessground-piece.dragging {
-  width: 200%;
-  height: 200%;
-}
-#chessground-moving-square {
-  display: none;
-  position: absolute;
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  -webkit-transform: translate3d(0,0,0);
-}
+.chessground-square
+  position absolute
+  width 12.5%
+  height 12.5%
+  cursor pointer
+  &.selected
+    background rgba(216, 85, 0, 0.2)
+  &.checked
+    background rgba(255, 0, 0, 0.4)
 
+.coordinates
+  .chessground-square[data-coord-x]::after
+    position absolute
+    left 1px
+    bottom 1px
+    font-size 10px
+    line-height 10px
+    content attr(data-coord-x)
+    color #fff
+    opacity 0.5
+  .chessground-square[data-coord-y]::before
+    position absolute
+    right 1px
+    top 1px
+    font-size 10px
+    line-height 10px
+    content attr(data-coord-y)
+    color #fff
+    opacity 0.5
 
-/*
- * themes
- */
+.withMoved
+  .chessground-square
+    &.moved
+      background rgba(216, 85, 0, 0.2)
 
-.blue > .chessground-board {
-  background-image: url('../../images/board/blue2.jpg');
-}
-.wood > .chessground-board {
-  background-image: url('../../images/board/wood2.jpg');
-}
-.marble > .chessground-board {
-  background-image: url('../../images/board/marble.jpg');
-}
+.withDest
+  .chessground-square
+    &.dest
+      background radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208030 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0)
 
-/*
- * Pieces
- */
-.pirouetti .chessground-piece {
-  bottom: 0;
-  left: -15%;
-  width: 130%;
-  height: 130%;
-}
-.pirouetti .chessground-piece.pawn.white {
-  background-image: url('../../images/pieces/pirouetti/wP.svg');
-}
-.pirouetti .chessground-piece.bishop.white {
-  background-image: url('../../images/pieces/pirouetti/wB.svg');
-}
-.pirouetti .chessground-piece.knight.white {
-  background-image: url('../../images/pieces/pirouetti/wN.svg');
-}
-.pirouetti .chessground-piece.rook.white {
-  background-image: url('../../images/pieces/pirouetti/wR.svg');
-}
-.pirouetti .chessground-piece.queen.white {
-  background-image: url('../../images/pieces/pirouetti/wQ.svg');
-}
-.pirouetti .chessground-piece.king.white {
-  background-image: url('../../images/pieces/pirouetti/wK.svg');
-}
-.pirouetti .chessground-piece.pawn.black {
-  background-image: url('../../images/pieces/pirouetti/bP.svg');
-}
-.pirouetti .chessground-piece.bishop.black {
-  background-image: url('../../images/pieces/pirouetti/bB.svg');
-}
-.pirouetti .chessground-piece.knight.black {
-  background-image: url('../../images/pieces/pirouetti/bN.svg');
-}
-.pirouetti .chessground-piece.rook.black {
-  background-image: url('../../images/pieces/pirouetti/bR.svg');
-}
-.pirouetti .chessground-piece.queen.black {
-  background-image: url('../../images/pieces/pirouetti/bQ.svg');
-}
-.pirouetti .chessground-piece.king.black {
-  background-image: url('../../images/pieces/pirouetti/bK.svg');
-}
-.cburnett .chessground-piece.pawn.white {
-  background-image: url('../../images/pieces/cburnett/wP.svg');
-}
-.cburnett .chessground-piece.bishop.white {
-  background-image: url('../../images/pieces/cburnett/wB.svg');
-}
-.cburnett .chessground-piece.knight.white {
-  background-image: url('../../images/pieces/cburnett/wN.svg');
-}
-.cburnett .chessground-piece.rook.white {
-  background-image: url('../../images/pieces/cburnett/wR.svg');
-}
-.cburnett .chessground-piece.queen.white {
-  background-image: url('../../images/pieces/cburnett/wQ.svg');
-}
-.cburnett .chessground-piece.king.white {
-  background-image: url('../../images/pieces/cburnett/wK.svg');
-}
-.cburnett .chessground-piece.pawn.black {
-  background-image: url('../../images/pieces/cburnett/bP.svg');
-}
-.cburnett .chessground-piece.bishop.black {
-  background-image: url('../../images/pieces/cburnett/bB.svg');
-}
-.cburnett .chessground-piece.knight.black {
-  background-image: url('../../images/pieces/cburnett/bN.svg');
-}
-.cburnett .chessground-piece.rook.black {
-  background-image: url('../../images/pieces/cburnett/bR.svg');
-}
-.cburnett .chessground-piece.queen.black {
-  background-image: url('../../images/pieces/cburnett/bQ.svg');
-}
-.cburnett .chessground-piece.king.black {
-  background-image: url('../../images/pieces/cburnett/bK.svg');
-}
-.merida .chessground-piece.pawn.white {
-  background-image: url('../../images/pieces/merida/wP.svg');
-}
-.merida .chessground-piece.bishop.white {
-  background-image: url('../../images/pieces/merida/wB.svg');
-}
-.merida .chessground-piece.knight.white {
-  background-image: url('../../images/pieces/merida/wN.svg');
-}
-.merida .chessground-piece.rook.white {
-  background-image: url('../../images/pieces/merida/wR.svg');
-}
-.merida .chessground-piece.queen.white {
-  background-image: url('../../images/pieces/merida/wQ.svg');
-}
-.merida .chessground-piece.king.white {
-  background-image: url('../../images/pieces/merida/wK.svg');
-}
-.merida .chessground-piece.pawn.black {
-  background-image: url('../../images/pieces/merida/bP.svg');
-}
-.merida .chessground-piece.bishop.black {
-  background-image: url('../../images/pieces/merida/bB.svg');
-}
-.merida .chessground-piece.knight.black {
-  background-image: url('../../images/pieces/merida/bN.svg');
-}
-.merida .chessground-piece.rook.black {
-  background-image: url('../../images/pieces/merida/bR.svg');
-}
-.merida .chessground-piece.queen.black {
-  background-image: url('../../images/pieces/merida/bQ.svg');
-}
-.merida .chessground-piece.king.black {
-  background-image: url('../../images/pieces/merida/bK.svg');
-}
+.chessground-piece
+  position absolute
+  bottom 0
+  left 0
+  width 100%
+  height 100%
+  background-size cover
+  z-index 2
+  -webkit-transform translate3d(0,0,0)
+  &.dragging
+    z-index 9
+    width 200%
+    height 200%
+
+#chessground-moving-square
+  display none
+  position absolute
+  background-color transparent
+  border 1px solid rgba(255, 255, 255, 0.5)
+  -webkit-transform translate3d(0,0,0)
+
+.blue
+  & > .chessground-board
+    background-image url('../../images/board/blue2.jpg')
+
+.wood
+  & > .chessground-board
+    background-image url('../../images/board/wood2.jpg')
+
+.marble
+  & > .chessground-board
+    background-image url('../../images/board/marble.jpg')
+
+.pirouetti
+  .chessground-piece
+    bottom 0
+    left -15%
+    width 130%
+    height 130%
+    &.pawn
+      &.white
+        background-image url('../../images/pieces/pirouetti/wP.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bP.svg')
+    &.bishop
+      &.white
+        background-image url('../../images/pieces/pirouetti/wB.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bB.svg')
+    &.knight
+      &.white
+        background-image url('../../images/pieces/pirouetti/wN.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bN.svg')
+    &.rook
+      &.white
+        background-image url('../../images/pieces/pirouetti/wR.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bR.svg')
+    &.queen
+      &.white
+        background-image url('../../images/pieces/pirouetti/wQ.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bQ.svg')
+    &.king
+      &.white
+        background-image url('../../images/pieces/pirouetti/wK.svg')
+      &.black
+        background-image url('../../images/pieces/pirouetti/bK.svg')
+
+.cburnett
+  .chessground-piece
+    &.pawn
+      &.white
+        background-image url('../../images/pieces/cburnett/wP.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bP.svg')
+    &.bishop
+      &.white
+        background-image url('../../images/pieces/cburnett/wB.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bB.svg')
+    &.knight
+      &.white
+        background-image url('../../images/pieces/cburnett/wN.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bN.svg')
+    &.rook
+      &.white
+        background-image url('../../images/pieces/cburnett/wR.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bR.svg')
+    &.queen
+      &.white
+        background-image url('../../images/pieces/cburnett/wQ.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bQ.svg')
+    &.king
+      &.white
+        background-image url('../../images/pieces/cburnett/wK.svg')
+      &.black
+        background-image url('../../images/pieces/cburnett/bK.svg')
+
+.merida
+  .chessground-piece
+    &.pawn
+      &.white
+        background-image url('../../images/pieces/merida/wP.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bP.svg')
+    &.bishop
+      &.white
+        background-image url('../../images/pieces/merida/wB.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bB.svg')
+    &.knight
+      &.white
+        background-image url('../../images/pieces/merida/wN.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bN.svg')
+    &.rook
+      &.white
+        background-image url('../../images/pieces/merida/wR.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bR.svg')
+    &.queen
+      &.white
+        background-image url('../../images/pieces/merida/wQ.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bQ.svg')
+    &.king
+      &.white
+        background-image url('../../images/pieces/merida/wK.svg')
+      &.black
+        background-image url('../../images/pieces/merida/bK.svg')
+

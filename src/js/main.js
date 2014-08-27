@@ -26,6 +26,16 @@ function main() {
     e.preventDefault();
   });
 
+  document.addEventListener('backbutton', function (e) {
+    var $active = Zepto('.modal.active');
+    if ($active.length > 0) {
+      e.preventDefault();
+      $active.removeClass('active');
+    } else {
+      window.navigator.app.exitApp();
+    }
+  }, false);
+
   var view = {
     claimDraw: function() {
       signals.claimDraw.dispatch();

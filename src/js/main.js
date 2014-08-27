@@ -57,6 +57,8 @@ function main() {
   session.refresh()
   // trick to initialize parts of ui that depends on session data
   // it should not stay like that...
+  .then(function (data) {
+  })
   .fin(function () {
     $('.signin-out').style.display = 'block';
   });
@@ -88,7 +90,6 @@ function main() {
         alert.show('danger', 'could not connect: ' + error.responseText);
       }
     }).done();
-
 
     return false;
   });

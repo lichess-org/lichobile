@@ -22,12 +22,49 @@
   font-weight normal
   font-style normal
 
+// http://www.colourlovers.com/palette/110225/Vintage_Modern
+// $bg-base = rgb(140, 35, 24)
+// $bg-var1 = rgb(94, 140, 106)
+// $bg-var2 = rgb(136, 166, 94)
+// $bg-var3 = rgb(191, 179, 90)
+
+// http://www.colourlovers.com/palette/940086/mystery_machine
+// $bg-base = rgb(85,66,54)
+// $bg-var1 = rgb(247,120,37)
+// $bg-var2 = rgb(211,206,61)
+// $bg-var3 = rgb()
+
+// http://www.colourlovers.com/palette/292482/Terra
+$color-bg1 = rgb(3,54,73)
+$color-bg2 = rgb(3,22,52)
+$color-var1 = rgb(205,179,128)
+$color-text = #aec3cb
+
 body
   font-family "Open Sans", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, Sans-Serif
+  background $color-bg1
+  color $color-text
+
+a
+  color #fff
+  opacity 0.7
 
 #title
   font-size 20px
   color #848484
+  background $color-bg2
+  color $color-text
+
+#mainPage
+  background url(../../images/bg1.png)
+  color $color-text
+
+.bar-tab
+  background $color-bg2
+  color $color-text
+  border none
+  .tab-item
+    color $color-text
 
 .signin-out
   display none
@@ -65,9 +102,6 @@ body
 .icon
   &:hover
     text-decoration none
-
-.bar-footer
-  text-align center
 
 #ping
   margin-top 10px

@@ -215,7 +215,13 @@
               </div>
             </div>
           </li>
-          <li class="table-view-cell extended">
+          <li class="table-view-cell">
+            Clock
+            <div class="toggle" data-bind="toggle: settings.game.human.clock, css: { active: settings.game.human.clock }">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell extended" data-bind="visible: settings.game.human.clock">
             Time presets
             <div class="pull-right">
               <div>

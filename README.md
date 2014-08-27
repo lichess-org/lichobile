@@ -1,5 +1,5 @@
-lichess-mobile
-==============
+lichobile
+=========
 
 lichess.org mobile application
 

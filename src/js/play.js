@@ -385,6 +385,16 @@ signals.claimDraw.add(function() {
   socket.send('draw-claim', {});
 });
 
+// listen to pause/resume native events
+if (window.cordova) {
+  document.addEventListener('pause', function () {
+    if (socket) socket.destroy();
+  }, false);
+  document.addEventListener('resume', function () {
+    if (socket) socket.connect();
+  }, false);
+}
+
 
 module.exports = {
   startAI: startAI,

@@ -44,6 +44,10 @@
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="StatusBarStyle" value="lightcontent" />
+    <feature name="LocalNotification">
+        <param name="ios-package" onload="true" value="APPLocalNotification" />
+        <param name="onload" value="true" />
+    </feature>
     <name>lichess</name>
     <description>
         lichess.org mobile application

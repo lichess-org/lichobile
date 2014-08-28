@@ -39,6 +39,10 @@
                         {
                             "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" onload=\"true\" value=\"org.apache.cordova.statusbar.StatusBar\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -66,6 +70,26 @@
                             "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
                             "count": 1
                         }
+                    ],
+                    "/manifest/application": [
+                        {
+                            "xml": "<receiver android:name=\"de.appplant.cordova.plugin.localnotification.Receiver\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:name=\"de.appplant.cordova.plugin.localnotification.Restore\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<activity android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.localnotification.ReceiverActivity\" />",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\" />",
+                            "count": 1
+                        }
                     ]
                 }
             }
@@ -91,6 +115,9 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "org.lichess.mobile"
         }
     },

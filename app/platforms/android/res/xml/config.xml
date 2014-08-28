@@ -30,6 +30,9 @@
     <feature name="StatusBar">
         <param name="android-package" onload="true" value="org.apache.cordova.statusbar.StatusBar" />
     </feature>
+    <feature name="LocalNotification">
+        <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
+    </feature>
     <name>lichess</name>
     <description>
         lichess.org mobile application

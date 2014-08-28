@@ -47,6 +47,10 @@
                         {
                             "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LocalNotification\"><param name=\"ios-package\" onload=\"true\" value=\"APPLocalNotification\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -98,6 +102,9 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "org.lichess.mobile"
         }
     },

@@ -49,6 +49,7 @@
 		FEEFED39FCB641F4BA83AA5D /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 035845FD2B9E4B24A58F99CC /* CDVAssetLibraryFilesystem.m */; };
 		E90A361557DE49B8A27700C8 /* CDVSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = D90D8D4C37394637A0D8A120 /* CDVSplashScreen.m */; };
 		B1845F7BAA31476D87E8EEE9 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */; };
+		06BD10AFB2E5449D9960C9BE /* APPLocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E41437BBADB145AC89B66BEF /* APPLocalNotification.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +135,8 @@
 		BAD7642DF2014189988D0BB2 /* CDVSplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVSplashScreen.h"; path = "org.apache.cordova.splashscreen/CDVSplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "org.apache.cordova.statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		220CC8FD59EC416EB9EA11C8 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "org.apache.cordova.statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		E41437BBADB145AC89B66BEF /* APPLocalNotification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "APPLocalNotification.m"; path = "de.appplant.cordova.plugin.local-notification/APPLocalNotification.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		5F1D3B37500947F19F2449EB /* APPLocalNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "APPLocalNotification.h"; path = "de.appplant.cordova.plugin.local-notification/APPLocalNotification.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +279,8 @@
 				BAD7642DF2014189988D0BB2 /* CDVSplashScreen.h */,
 				1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */,
 				220CC8FD59EC416EB9EA11C8 /* CDVStatusBar.h */,
+				E41437BBADB145AC89B66BEF /* APPLocalNotification.m */,
+				5F1D3B37500947F19F2449EB /* APPLocalNotification.h */,
 			);
 			name = Plugins;
 			path = lichess/Plugins;
@@ -485,6 +490,7 @@
 				4F0F875E77744C278C409963 /* CDVDevice.m in Sources */,
 				E90A361557DE49B8A27700C8 /* CDVSplashScreen.m in Sources */,
 				B1845F7BAA31476D87E8EEE9 /* CDVStatusBar.m in Sources */,
+				06BD10AFB2E5449D9960C9BE /* APPLocalNotification.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -112,7 +112,7 @@ function handleEndGame() {
   });
 }
 
-function stop() {
+function end() {
   setTimeout(function () {
     $('#game-menu-icon').style.display = 'none';
     ground.setColor('none');
@@ -163,7 +163,7 @@ var gameEvents = {
   end: function() {
     game.updateClocks();
     game.finish();
-    stop();
+    end();
     handleEndGame();
   },
   state: function(e) {
@@ -319,13 +319,16 @@ function _initGame(data) {
   if (window.cordova && settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
 }
 
-function reset() {
-
+function stop() {
   if (game) {
     if (game.hasClock()) game.stopClocks();
     game = null;
   }
   if (socket) socket.destroy();
+}
+
+function reset() {
+  stop();
   if (ground.getOrientation() === 'black') ground.toggleOrientation();
   ground.startPos();
 }
@@ -376,28 +379,48 @@ function startHuman(id) {
   });
 }
 
-// listen to buzzer event to notify server when time is out
-signals.buzzer.add(function() {
-  if (game && !game.isFinished()) {
-    outOfTime();
+function bindEvents() {
+  var bgNowPlayingSubscription;
+
+  // listen to buzzer event to notify server when time is out
+  signals.buzzer.add(function() {
+    if (game && !game.isFinished()) {
+      outOfTime();
+    }
+  });
+
+  // listen to claimDraw event to notify server when a draw is claimed
+  signals.claimDraw.add(function() {
+    socket.send('draw-claim', {});
+  });
+
+  // listen to pause/resume native events
+  if (window.cordova) {
+    document.addEventListener('pause', function () {
+      if (socket) socket.destroy();
+
+      // sends notifications of current moves
+      bgNowPlayingSubscription = nowPlaying.subscribeArrayChanged(function (added) {
+        console.log(added);
+        window.plugin.notification.local.add({
+          id: added.id,
+          message: added.opponent.username + ' (' + added.opponent.rating + ')',
+          json: JSON.stringify(added),
+          title: 'Your turn!',
+          autoCancel: true
+        });
+
+      });
+
+    }, false);
+
+    document.addEventListener('resume', function () {
+      if (socket) socket.connect();
+      if (bgNowPlayingSubscription) bgNowPlayingSubscription.dispose();
+    }, false);
+
   }
-});
-
-// listen to claimDraw event to notify server when a draw is claimed
-signals.claimDraw.add(function() {
-  socket.send('draw-claim', {});
-});
-
-// listen to pause/resume native events
-if (window.cordova) {
-  document.addEventListener('pause', function () {
-    if (socket) socket.destroy();
-  }, false);
-  document.addEventListener('resume', function () {
-    if (socket) socket.connect();
-  }, false);
 }
-
 
 module.exports = {
   startAI: startAI,
@@ -405,5 +428,6 @@ module.exports = {
   resume: resume,
   stop: stop,
   reset: reset,
-  nowPlaying: nowPlaying
+  nowPlaying: nowPlaying,
+  bindEvents: bindEvents
 };

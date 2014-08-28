@@ -193,10 +193,21 @@ function main() {
   Zepto('#friendsModal').on('tap', '.play-my-turn', function (e) {
     var id = e.srcElement.getAttribute('data-id');
     ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
+      play.stop();
       play.resume(data);
       $('#friendsModal').classList.remove('active');
     });
   });
+
+  play.bindEvents();
+
+  // when current move notification has been triggered
+  window.plugin.notification.local.ontrigger = function (id, state, json) {
+    ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
+      play.stop();
+      play.resume(data);
+    });
+  };
 
   if (window.cordova) {
     setTimeout(function() {

@@ -17,6 +17,11 @@
  *
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          laxcomma:true, sub:true
+*/
+
 function replaceAt(str, index, char) {
     return str.substr(0, index) + char + str.substr(index + char.length);
 }
@@ -29,7 +34,7 @@ function toCamelCase(str) {
 
 var fs = require('fs')
    , path = require('path')
-   , events = require('../events')
+   , events = require('../../events')
    , xml_helpers = require(path.join(__dirname, '..', '..', 'util', 'xml-helpers'));
 
 module.exports = {
@@ -42,33 +47,33 @@ module.exports = {
         var widget_doc = xml_helpers.parseElementtreeSync(config_path);
         return widget_doc._root.attrib['id'];
     },
-    "source-file":{
+    'source-file':{
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             var shell = require('shelljs');
-            var dest = path.join(project_dir, "build", "src", "plugins", plugin_id);
+            var dest = path.join(project_dir, 'build', 'src', 'plugins', plugin_id);
             shell.mkdir(dest);
             shell.cp(path.join(plugin_dir, source_el.attrib.src), dest);
 
-            shell.exec('touch ' + path.join(project_dir, "CMakeLists.txt"))
+            shell.exec('touch ' + path.join(project_dir, 'CMakeLists.txt'));
         },
         uninstall:function(source_el, project_dir, plugin_id) {
             var shell = require('shelljs');
 
-            var dest = path.join(project_dir, "build", "src", "plugins", plugin_id);
+            var dest = path.join(project_dir, 'build', 'src', 'plugins', plugin_id);
             shell.rm(path.join(dest, path.basename(source_el.attrib.src)));
         }
     },
-    "header-file":{
+    'header-file':{
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             var shell = require('shelljs');
-            var dest = path.join(project_dir, "build", "src", "plugins", plugin_id);
+            var dest = path.join(project_dir, 'build', 'src', 'plugins', plugin_id);
             shell.mkdir(dest);
             shell.cp(path.join(plugin_dir, source_el.attrib.src), dest);
 
-            var plugins = path.join(project_dir, "build", "src", "coreplugins.cpp");
-            src = String(fs.readFileSync(plugins));
+            var plugins = path.join(project_dir, 'build', 'src', 'coreplugins.cpp');
+            var src = String(fs.readFileSync(plugins));
 
-            src = src.replace('INSERT_HEADER_HERE', '#include "plugins/' + plugin_id + "/" + path.basename(source_el.attrib.src) +'"\nINSERT_HEADER_HERE');
+            src = src.replace('INSERT_HEADER_HERE', '#include "plugins/' + plugin_id + '/' + path.basename(source_el.attrib.src) +'"\nINSERT_HEADER_HERE');
             var class_name = plugin_id.match(/\.[^.]+$/)[0].substr(1);
             class_name = toCamelCase(class_name);
             src = src.replace('INSERT_PLUGIN_HERE', 'INIT_PLUGIN(' + class_name + ');INSERT_PLUGIN_HERE');
@@ -77,13 +82,13 @@ module.exports = {
         },
         uninstall:function(source_el, project_dir, plugin_id) {
             var shell = require('shelljs');
-            var dest = path.join(project_dir, "build", "src", "plugins", plugin_id);
+            var dest = path.join(project_dir, 'build', 'src', 'plugins', plugin_id);
             shell.rm(path.join(dest, path.basename(source_el.attrib.src)));
 
-            var plugins = path.join(project_dir, "build", "src", "coreplugins.cpp");
-            src = String(fs.readFileSync(plugins));
+            var plugins = path.join(project_dir, 'build', 'src', 'coreplugins.cpp');
+            var src = String(fs.readFileSync(plugins));
 
-            src = src.replace('#include "plugins/' + plugin_id + "/" + path.basename(source_el.attrib.src) +'"', '');
+            src = src.replace('#include "plugins/' + plugin_id + '/' + path.basename(source_el.attrib.src) +'"', '');
             var class_name = plugin_id.match(/\.[^.]+$/)[0].substr(1);
             class_name = toCamelCase(class_name);
             src = src.replace('INIT_PLUGIN(' + class_name + ');', '');
@@ -91,21 +96,21 @@ module.exports = {
             fs.writeFileSync(plugins, src);
         }
     },
-    "resource-file":{
+    'resource-file':{
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             var shell = require('shelljs');
-            var dest = path.join(project_dir, "qml");
+            var dest = path.join(project_dir, 'qml');
             shell.mkdir(dest);
             shell.cp(path.join(plugin_dir, source_el.attrib.src), dest);
         },
         uninstall:function(source_el, project_dir, plugin_id) {
             var shell = require('shelljs');
 
-            var dest = path.join(project_dir, "qml");
+            var dest = path.join(project_dir, 'qml');
             shell.rm(path.join(dest, path.basename(source_el.attrib.src)));
         }
     },
-    "framework": {
+    'framework': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'framework.install is not supported for ubuntu');
         },
@@ -113,7 +118,7 @@ module.exports = {
             events.emit('verbose', 'framework.uninstall is not supported for ubuntu');
         }
     },
-    "lib-file": {
+    'lib-file': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'lib-file.install is not supported for ubuntu');
         },

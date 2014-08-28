@@ -19,7 +19,11 @@
 
 // copyright (c) 2013 Andrew Lunny, Adobe Systems
 
-var events = require('./events');
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
+var events = require('../events');
 var Q = require('q');
 
 function addProperty(o, symbol, modulePath, doWrap) {
@@ -32,7 +36,7 @@ function addProperty(o, symbol, modulePath, doWrap) {
                 // If args exist and the last one is a function, it's the callback.
                 var args = Array.prototype.slice.call(arguments);
                 var cb = args.pop();
-                val.apply(o, args).done(function(result) {cb(undefined, result)}, cb);
+                val.apply(o, args).done(function(result) {cb(undefined, result);}, cb);
             } else {
                 val.apply(o, arguments).done(null, function(err){ throw err; });
             }
@@ -40,19 +44,21 @@ function addProperty(o, symbol, modulePath, doWrap) {
     } else {
         // The top-level plugman.foo
         Object.defineProperty(o, symbol, {
-            get : function() { return val = val || require(modulePath); },
+            configurable: true,
+            get : function() { val = val || require(modulePath); return val; },
             set : function(v) { val = v; }
         });
     }
 
     // The plugman.raw.foo
     Object.defineProperty(o.raw, symbol, {
-        get : function() { return val = val || require(modulePath); },
+        configurable: true,
+        get : function() { val = val || require(modulePath); return val; },
         set : function(v) { val = v; }
     });
 }
 
-plugman = {
+var plugman = {
     on:                 events.on.bind(events),
     off:                events.removeListener.bind(events),
     removeAllListeners: events.removeAllListeners.bind(events),
@@ -89,13 +95,16 @@ plugman.commands =  {
         if(!cli_opts.platform || !cli_opts.project || !cli_opts.plugin) {
             return console.log(plugman.help());
         }
-        var cli_variables = {}
+        if(cli_opts.browserify === true) {
+            plugman.prepare = require('./prepare-browserify');
+        }
+        var cli_variables = {};
         if (cli_opts.variable) {
             cli_opts.variable.forEach(function (variable) {
                     var tokens = variable.split('=');
                     var key = tokens.shift().toUpperCase();
                     if (/^[\w-_]+$/.test(key)) cli_variables[key] = tokens.join('=');
-                    });
+                });
         }
         var opts = {
             subdir: '.',
@@ -108,7 +117,7 @@ plugman.commands =  {
         cli_opts.plugin.forEach(function (pluginSrc) {
             p = p.then(function () {
                 return plugman.raw.install(cli_opts.platform, cli_opts.project, pluginSrc, cli_opts.plugins_dir, opts);
-            })
+            });
         });
 
         return p;
@@ -116,6 +125,10 @@ plugman.commands =  {
     'uninstall': function(cli_opts) {
         if(!cli_opts.platform || !cli_opts.project || !cli_opts.plugin) {
             return console.log(plugman.help());
+        }
+
+        if(cli_opts.browserify === true) {
+            plugman.prepare = require('./prepare-browserify');
         }
 
         var p = Q();
@@ -190,12 +203,12 @@ plugman.commands =  {
                     var tokens = variable.split('=');
                     var key = tokens.shift().toUpperCase();
                     if (/^[\w-_]+$/.test(key)) cli_variables[key] = tokens.join('=');
-                    });
+                });
         }
-        plugman.create( cli_opts.name, cli_opts.plugin_id, cli_opts.plugin_version, cli_opts.path || ".", cli_variables );
+        plugman.create( cli_opts.name, cli_opts.plugin_id, cli_opts.plugin_version, cli_opts.path || '.', cli_variables );
     },
     'platform': function(cli_opts) {
-        var operation = cli_opts.argv.remain[ 0 ] || "";
+        var operation = cli_opts.argv.remain[ 0 ] || '';
         if( ( operation !== 'add' && operation !== 'remove' ) ||  !cli_opts.platform_name ) {
             return console.log( plugman.help() );
         }

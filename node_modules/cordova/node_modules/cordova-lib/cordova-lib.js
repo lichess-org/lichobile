@@ -17,14 +17,22 @@
     under the License.
 */
 
-// For now expose plagman and cordova just as they were in the old repos
-exports.plugman = require('./src/plugman/plugman');
-exports.cordova = require('./src/cordova/cordova');
-exports.cordova_platforms = require('./src/cordova/platforms');
-
-
-////  MAIN CORDOVA TOOLS API
-exports.CordovaError = require('./src/CordovaError');
+// For now expose plugman and cordova just as they were in the old repos
+exports = module.exports = {
+    set binname(name) {
+        this.cordova.binname = name;
+    },
+    get binname() {
+       return this.cordova.binname;
+    },
+    plugman: require('./src/plugman/plugman'),
+    cordova: require('./src/cordova/cordova'),
+    events: require('./src/events'),
+    configparser: require('./src/configparser/ConfigParser.js'),
+    cordova_platforms: require('./src/cordova/platforms'),
+    ////  MAIN CORDOVA TOOLS API
+    CordovaError: require('./src/CordovaError')
+}
 
 
 

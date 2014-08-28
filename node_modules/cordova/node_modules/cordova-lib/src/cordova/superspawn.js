@@ -17,13 +17,17 @@
     under the License.
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var Q = require('q');
 var shell = require('shelljs');
-var events = require('./events');
+var events = require('../events');
 var iswin32 = process.platform == 'win32';
 
 // On Windows, spawn() for batch files requires absolute path & having the extension.
@@ -74,7 +78,7 @@ exports.spawn = function(cmd, args, opts) {
         // but for things like "del", cmd will do the trick.
         if (path.extname(cmd) != '.exe' && cmd.indexOf(' ') != -1) {
             // We need to use /s to ensure that spaces are parsed properly with cmd spawned content
-            args = [['/s', '/c', '"'+[cmd].concat(args).map(function(a){if (/^[^"].* .*[^"]/.test(a)) return '"'+a+'"'; return a;}).join(" ")+'"'].join(" ")];
+            args = [['/s', '/c', '"' + [cmd].concat(args).map(function(a){if (/^[^"].* .*[^"]/.test(a)) return '"' + a + '"'; return a;}).join(' ')+'"'].join(' ')];
             cmd = 'cmd';
             spawnOpts.windowsVerbatimArguments = true;
         } else if (!fs.existsSync(cmd)) {

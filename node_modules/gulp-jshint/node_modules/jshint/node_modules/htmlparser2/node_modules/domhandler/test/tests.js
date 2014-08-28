@@ -2,7 +2,6 @@ var fs = require("fs"),
     path = require("path"),
     assert = require("assert"),
     util = require("util"),
-    ElementType = require("domelementtype"),
     Parser = require("htmlparser2").Parser,
     Handler = require("../");
 

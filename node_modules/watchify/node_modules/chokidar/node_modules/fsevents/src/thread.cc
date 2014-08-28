@@ -4,8 +4,7 @@
 */
 
 void FSEvents::threadStart() {
-  if (threadStarted) return;
-  threadStarted = true;
+  if (threadloop) return;
   pthread_create(&thread, NULL, &FSEvents::threadRun, this);
 }
 
@@ -27,8 +26,8 @@ void HandleStreamEvents(ConstFSEventStreamRef stream, void *ctx, size_t numEvent
 void *FSEvents::threadRun(void *ctx) {
   FSEvents *fse = (FSEvents*)ctx;
   FSEventStreamContext context = { 0, ctx, NULL, NULL, NULL };
-  FSEventStreamRef stream = FSEventStreamCreate(NULL, &HandleStreamEvents, &context, fse->paths, kFSEventStreamEventIdSinceNow, (CFAbsoluteTime) 0.1, kFSEventStreamCreateFlagNone | kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes);
   fse->threadloop = CFRunLoopGetCurrent();
+  FSEventStreamRef stream = FSEventStreamCreate(NULL, &HandleStreamEvents, &context, fse->paths, kFSEventStreamEventIdSinceNow, (CFAbsoluteTime) 0.1, kFSEventStreamCreateFlagNone | kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes);
   FSEventStreamScheduleWithRunLoop(stream, fse->threadloop, kCFRunLoopDefaultMode);
   FSEventStreamStart(stream);
   CFRunLoopRun();
@@ -36,12 +35,12 @@ void *FSEvents::threadRun(void *ctx) {
   FSEventStreamUnscheduleFromRunLoop(stream, fse->threadloop, kCFRunLoopDefaultMode);
   FSEventStreamInvalidate(stream);
   FSEventStreamRelease(stream);
+  fse->threadloop = NULL;
   return NULL;
 }
 
 void FSEvents::threadStop() {
-  if (!threadStarted) return;
-  threadStarted = false;
+  if (!threadloop) return;
   CFRunLoopStop(threadloop);
   pthread_join(thread, NULL);
 }

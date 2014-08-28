@@ -17,16 +17,18 @@
  *
 */
 
-var http = require('http'),
-    os = require('os'),
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
+var os = require('os'),
     path = require('path'),
-    fs = require('fs'),
     util = require('util'),
     shell = require('shelljs'),
     child_process = require('child_process'),
     Q = require('q'),
     xml_helpers = require('../../util/xml-helpers'),
-    events = require('../events'),
+    events = require('../../events'),
     tmp_dir;
 
 module.exports = {
@@ -49,7 +51,7 @@ module.exports = {
         if(!shell.which('git')) {
             return Q.reject(new Error('"git" command line tool is not installed: make sure it is accessible on your PATH.'));
         }
-        tmp_dir = path.join(os.tmpdir(), 'plugman', 'git', String((new Date).valueOf()));
+        tmp_dir = path.join(os.tmpdir(), 'plugman', 'git', String((new Date()).valueOf()));
 
         shell.rm('-rf', tmp_dir);
 

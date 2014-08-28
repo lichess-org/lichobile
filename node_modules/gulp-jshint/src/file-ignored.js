@@ -1,34 +1,58 @@
 var fs = require('fs');
-var minimatch = require('minimatch');
+var Minimatch = require('minimatch').Minimatch;
 var resolve = require('path').resolve;
+var relative = require('path').relative;
+var gfPath = require('./gulpfile-path');
 var RcLoader = require('rcloader');
 
+var noSlashesRE = /^[^\/]*\/?$/;
+
 var ignoreLoader = new RcLoader('.jshintignore', {}, {
-  loader: function (path, done) {
+  loader: function (path) {
     // .jshintignore is a line-delimited list of patterns
     // convert to an array and filter empty lines
-    fs.readFile(path, function (err, contents) {
-      if (err) return done(err);
-      done(null, {
-        patterns: contents.toString('utf8')
-          .split(/\r?\n/)
-          .filter(function (line) { return !!line.trim(); })
-      });
-    });
+    var contents = fs.readFileSync(path, 'utf8');
+    return {
+      ignoreFile: path,
+      patterns: contents.toString('utf8')
+        .split(/\r?\n/)
+        .filter(function (line) { return !!line.trim(); })
+    };
   }
 });
 
-module.exports = function check(file, cb) {
-  ignoreLoader.for(file.path, function (err, cfg) {
-    var ignored = false;
+// get the .jshintignore closest to the directory containing the gruntFile
+var cfg = ignoreLoader.for(gfPath);
 
-    if (Array.isArray(cfg.patterns)) {
-      ignored = cfg.patterns.some(function (pattern) {
-        return minimatch(resolve(file.path), pattern, { nocase: true });
-      });
-    }
+module.exports = (function () {
+  if (!cfg.ignoreFile) {
+    return function (file, cb) {
+      cb(null, false);
+    };
+  }
 
-    return cb(null, ignored);
+  var mms = {};
+  cfg.patterns.forEach(function (pattern) {
+    mms[pattern] = new Minimatch(pattern, { nocase: true });
   });
-};
 
+  return function check(file, cb) {
+    var ignored = cfg.patterns.some(function (pattern) {
+      var resolvedPath = resolve(file.path);
+      var relativePath = relative(file.base, file.path);
+      var mm = mms[pattern];
+
+      if (resolvedPath === pattern) return true;
+      if (mm.match(resolvedPath)) return true;
+
+      if (noSlashesRE.test(pattern)) {
+        var relPath = relative(pattern, relativePath);
+        if (relPath.substring(0, 2) !== '..') return true;
+      }
+    });
+
+    if (!ignored) return cb(null, false);
+
+    cb(null, true);
+  };
+}());

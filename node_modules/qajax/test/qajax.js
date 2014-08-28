@@ -287,7 +287,7 @@ asyncTest("'method' in defaults", function() {
     ok(xhr.responseText, "has responseText");
     equal(xhr.responseText, data, "is exactly the same data");
   }
-  Qajax("/ECHO", { data: data })
+  Qajax("/ECHO", { data: data, responseType: "text/plain" })
     .then(Qajax.filterSuccess)
     .then(checkData, checkNotError)
     .fin(start);

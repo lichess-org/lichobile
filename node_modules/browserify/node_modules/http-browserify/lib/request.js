@@ -31,6 +31,10 @@ var Request = module.exports = function (xhr, params) {
         true
     );
 
+    xhr.onerror = function(event) {
+        self.emit('error', new Error('Network error'));
+    };
+
     self._headers = {};
     
     if (params.headers) {
@@ -55,6 +59,10 @@ var Request = module.exports = function (xhr, params) {
     
     res.on('ready', function () {
         self.emit('response', res);
+    });
+
+    res.on('error', function (err) {
+        self.emit('error', err);
     });
     
     xhr.onreadystatechange = function () {

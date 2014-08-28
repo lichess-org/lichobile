@@ -106,8 +106,15 @@ module.exports = function(grunt) {
     },
     docco: {
       all: {
-        src: ['src/*.js'],
-        dest: 'docs/'
+        files: [{
+          expand: true,
+          cwd: 'src',
+          src: ['**/*.js']
+        }],
+        options: {
+          dst: 'docs',
+          layout: 'parallel'
+        }
       }
     },
     watch: {

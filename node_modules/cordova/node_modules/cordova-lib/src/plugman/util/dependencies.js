@@ -1,7 +1,29 @@
+/**
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+*/
+
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          expr:true
+*/
+
 var dep_graph = require('dep-graph'),
     path = require('path'),
-    fs = require('fs'),
-    plugman = require('../plugman'),
     config_changes = require('./config-changes'),
     underscore = require('underscore'),
     xml_helpers = require('../../util/xml-helpers'),
@@ -30,7 +52,7 @@ module.exports = package = {
             tlps.push(plugin_id);
 
             var xml = xml_helpers.parseElementtreeSync( package.resolveConfig(plugin_id, plugins_dir) );
-            var deps = xml.findall('dependency');
+            var deps = xml.findall('.//dependency');
 
             deps && deps.forEach(function(dep) {
                 graph.add(plugin_id, dep.attrib.id);
@@ -38,7 +60,7 @@ module.exports = package = {
         });
         Object.keys(json.dependent_plugins).forEach(function(plugin_id) {
             var xml = xml_helpers.parseElementtreeSync( package.resolveConfig(plugin_id, plugins_dir) );
-            var deps = xml.findall('dependency');
+            var deps = xml.findall('.//dependency');
             deps && deps.forEach(function(dep) {
                 graph.add(plugin_id, dep.attrib.id);
             });
@@ -52,10 +74,11 @@ module.exports = package = {
 
     // Returns a list of top-level plugins which are (transitively) dependent on the given plugin.
     dependents: function(plugin_id, plugins_dir, platform) {
+        var depsInfo;
         if(typeof plugins_dir == 'object')
-            var depsInfo = plugins_dir;
+            depsInfo = plugins_dir;
         else
-            var depsInfo = package.generate_dependency_info(plugins_dir, platform);
+            depsInfo = package.generate_dependency_info(plugins_dir, platform);
 
         var graph = depsInfo.graph;
         var tlps = depsInfo.top_level_plugins;
@@ -69,10 +92,11 @@ module.exports = package = {
     // Returns a list of plugins which the given plugin depends on, for which it is the only dependent.
     // In other words, if the given plugin were deleted, these dangling dependencies should be deleted too.
     danglers: function(plugin_id, plugins_dir, platform) {
+        var depsInfo;
         if(typeof plugins_dir == 'object')
-            var depsInfo = plugins_dir;
+            depsInfo = plugins_dir;
         else
-            var depsInfo = package.generate_dependency_info(plugins_dir, platform);
+            depsInfo = package.generate_dependency_info(plugins_dir, platform);
 
         var graph = depsInfo.graph;
         var dependencies = graph.getChain(plugin_id);

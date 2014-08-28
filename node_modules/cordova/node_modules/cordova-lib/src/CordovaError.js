@@ -17,6 +17,10 @@
     under the License.
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          proto:true
+*/
 
 // A derived exception class. See usage example in cli.js
 // Based on:

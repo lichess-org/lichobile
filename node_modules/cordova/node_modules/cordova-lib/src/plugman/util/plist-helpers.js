@@ -17,39 +17,43 @@
  *
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
 // contains PLIST utility functions
 
-var et = require('elementtree'),
-    plist = require('plist-with-patches');
+var plist = require('plist-with-patches');
 
 // adds node to doc at selector
-module.exports = {
-    graftPLIST:function (doc, xml, selector) {
-        var obj = plist.parseStringSync("<plist>"+xml+"</plist>");
+module.exports.graftPLIST = graftPLIST;
+function graftPLIST(doc, xml, selector) {
+    var obj = plist.parseStringSync('<plist>'+xml+'</plist>');
 
-        var node = doc[selector];
-        if (node && Array.isArray(node) && Array.isArray(obj))
-            doc[selector] = node.concat(obj);
-        else
-            doc[selector] = obj;
+    var node = doc[selector];
+    if (node && Array.isArray(node) && Array.isArray(obj))
+        doc[selector] = node.concat(obj);
+    else
+        doc[selector] = obj;
 
-        return true;
-    },
-    // removes node from doc at selector
-    prunePLIST:function(doc, xml, selector) {
-        var obj = plist.parseStringSync("<plist>"+xml+"</plist>");
+    return true;
+}
 
-        pruneOBJECT(doc, selector, obj);
+// removes node from doc at selector
+module.exports.prunePLIST = prunePLIST;
+function prunePLIST(doc, xml, selector) {
+    var obj = plist.parseStringSync('<plist>'+xml+'</plist>');
 
-        return true;
-    }
+    pruneOBJECT(doc, selector, obj);
+
+    return true;
 }
 
 function pruneOBJECT(doc, selector, fragment) {
     if (Array.isArray(fragment) && Array.isArray(doc[selector])) {
         var empty = true;
-        for (i in fragment) {
-            for (j in doc[selector]) {
+        for (var i in fragment) {
+            for (var j in doc[selector]) {
                 empty = pruneOBJECT(doc[selector], j, fragment[i]) && empty;
             }
         }
@@ -71,7 +75,7 @@ function nodeEqual(node1, node2) {
     if (typeof node1 != typeof node2)
         return false;
     else if (typeof node1 == 'string') {
-        node2 = escapeRE(node2).replace(new RegExp("\\$[a-zA-Z0-9-_]+","gm"),"(.*?)");
+        node2 = escapeRE(node2).replace(new RegExp('\\$[a-zA-Z0-9-_]+','gm'),'(.*?)');
         return new RegExp('^' + node2 + '$').test(node1);
     }
     else {
@@ -84,5 +88,5 @@ function nodeEqual(node1, node2) {
 
 // escape string for use in regex
 function escapeRE(str) {
-     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\$&");
-};
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '$&');
+}

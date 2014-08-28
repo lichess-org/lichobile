@@ -46,8 +46,8 @@ Output:
 }]
 ```
 
-##Option: ignoreWhitespace
-Indicates whether the DOM should exclude text nodes that consists solely of whitespace. The default value is "false". 
+##Option: normalizeWhitespace
+Indicates whether the whitespace in text nodes should be normalized (= all whitespace should be replaced with single spaces). The default value is "false". 
 
 The following HTML will be used:
 
@@ -64,10 +64,13 @@ The following HTML will be used:
     type: 'tag',
     name: 'font',
     children: [{
+    	data: ' ',
+    	type: 'text'
+    }, {
     	type: 'tag',
     	name: 'br'
     }, {
-    	data: 'this is the text\n',
+    	data: 'this is the text ',
     	type: 'text'
     }, {
     	type: 'tag',
@@ -80,7 +83,7 @@ The following HTML will be used:
 
 ```javascript
 [{
-	type: 'tag',
+    type: 'tag',
     name: 'font',
     children: [{
     	data: '\n\t',

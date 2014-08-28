@@ -33,7 +33,7 @@ test('functionality testing', function(t) {
   });
 
   evt.on('change', function(name, info) {
-    //console.error(JSON.stringify(info));
+    console.error(JSON.stringify(info));
     if (name === __dirname + '/temp') return;
     t.ok(name === info.path, 'matched path');
     switch (info.event) {

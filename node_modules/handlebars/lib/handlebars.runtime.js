@@ -16,6 +16,7 @@ var create = function() {
   hb.SafeString = SafeString;
   hb.Exception = Exception;
   hb.Utils = Utils;
+  hb.escapeExpression = Utils.escapeExpression;
 
   hb.VM = runtime;
   hb.template = function(spec) {
@@ -27,5 +28,7 @@ var create = function() {
 
 var Handlebars = create();
 Handlebars.create = create;
+
+Handlebars['default'] = Handlebars;
 
 export default Handlebars;

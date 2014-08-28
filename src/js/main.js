@@ -76,7 +76,7 @@ function main() {
   });
 
   // every min try to fetch current turn moves
-  setTimeout(function () {
+  setInterval(function () {
     if (session.isConnected()) {
       session.refresh().then(function (data) {
         refreshNowPlaying(data);

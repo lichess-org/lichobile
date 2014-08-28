@@ -13,5 +13,8 @@
     <preference name="SplashScreenDelay" value="10000"/>
     <preference name="AutoHideSplashScreen" value="false"/>
     <preference name="ShowSplashScreenSpinner" value="false"/>
+    <preference name="EnableViewportScale" value="false"/>
+    <preference name="WebViewBounce" value="false"/>
+    <preference name="DisallowOverscroll" value="true"/>
     <access origin="*" />
 </widget>

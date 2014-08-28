@@ -4,7 +4,6 @@
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
-    <preference name="EnableViewportScale" value="false" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value=".25" />
     <preference name="KeyboardDisplayRequiresUserAction" value="true" />
@@ -52,5 +51,9 @@
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="WebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Fullscreen" value="true" />
     <access origin="*" />
 </widget>

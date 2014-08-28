@@ -1,4 +1,4 @@
-/* lichess-mobile application entry point */
+/* application entry point */
 
 'use strict';
 

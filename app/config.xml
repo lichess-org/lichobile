@@ -16,5 +16,6 @@
     <preference name="EnableViewportScale" value="false"/>
     <preference name="WebViewBounce" value="false"/>
     <preference name="DisallowOverscroll" value="true"/>
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <access origin="*" />
 </widget>

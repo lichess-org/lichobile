@@ -1,11 +1,11 @@
 {
-  "name": "lichess-mobile",
+  "name": "lichobile",
   "version": "0.1.0",
   "description": "lichess.org mobile application",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/veloce/lichess-mobile.git"
+    "url": "https://github.com/veloce/lichobile.git"
   },
   "keywords": [
     "lichess",
@@ -19,9 +19,9 @@
   "author": "Vincent Velociter (https://github.com/veloce)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/veloce/lichess-mobile/issues"
+    "url": "https://github.com/veloce/lichobile/issues"
   },
-  "homepage": "https://github.com/veloce/lichess-mobile",
+  "homepage": "https://github.com/veloce/lichobile",
   "devDependencies": {
     "gulp": "3.8.5",
     "gulp-jshint": "~1.5.5",

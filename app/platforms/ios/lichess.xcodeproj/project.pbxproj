@@ -48,6 +48,7 @@
 		F6D8BCCF83EF42D4815FCEAA /* Insomnia.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C723BA046094114A6998E5A /* Insomnia.m */; };
 		FEEFED39FCB641F4BA83AA5D /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 035845FD2B9E4B24A58F99CC /* CDVAssetLibraryFilesystem.m */; };
 		E90A361557DE49B8A27700C8 /* CDVSplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = D90D8D4C37394637A0D8A120 /* CDVSplashScreen.m */; };
+		B1845F7BAA31476D87E8EEE9 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,8 @@
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = lichess/config.xml; sourceTree = "<group>"; };
 		D90D8D4C37394637A0D8A120 /* CDVSplashScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVSplashScreen.m"; path = "org.apache.cordova.splashscreen/CDVSplashScreen.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		BAD7642DF2014189988D0BB2 /* CDVSplashScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVSplashScreen.h"; path = "org.apache.cordova.splashscreen/CDVSplashScreen.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "org.apache.cordova.statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		220CC8FD59EC416EB9EA11C8 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "org.apache.cordova.statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +274,8 @@
 				7FDD41FE50A448AE9BC732FA /* CDVDevice.h */,
 				D90D8D4C37394637A0D8A120 /* CDVSplashScreen.m */,
 				BAD7642DF2014189988D0BB2 /* CDVSplashScreen.h */,
+				1B5118F7A83D4F65AFF04311 /* CDVStatusBar.m */,
+				220CC8FD59EC416EB9EA11C8 /* CDVStatusBar.h */,
 			);
 			name = Plugins;
 			path = lichess/Plugins;
@@ -479,6 +484,7 @@
 				629980693679459C81A08ADF /* CDVSound.m in Sources */,
 				4F0F875E77744C278C409963 /* CDVDevice.m in Sources */,
 				E90A361557DE49B8A27700C8 /* CDVSplashScreen.m in Sources */,
+				B1845F7BAA31476D87E8EEE9 /* CDVStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

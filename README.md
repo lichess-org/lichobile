@@ -51,5 +51,5 @@ Generate assets and compile:
 
     $ bin/ios your_env
 
-Then open the xcode project at `app/platforms/ios/lichess-mobile.xcodeproj` and
+Then open the xcode project at `app/platforms/ios/lichess.xcodeproj` and
 run the ios emulator.

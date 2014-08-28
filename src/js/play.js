@@ -21,15 +21,15 @@ var ground, game, socket, chat;
 
 var lastPosition = {};
 
+// array of current long games where it's user's turn
+// it's refreshed by network every minute
 var nowPlaying = ko.observableArray();
 
 var onMove = function(from, to) {
   if (lastPosition[to]) sound.capture();
   else sound.move();
   socket.send('move', { from: from, to: to });
-  if (nowPlaying().map(function (e) { return e.id; }).indexOf(game.fullId()) !== -1) {
-    nowPlaying.remove(function (e) { return e.id === game.fullId(); });
-  }
+  nowPlaying.remove(function (e) { return e.id === game.fullId(); });
 };
 
 ground = render.ground({

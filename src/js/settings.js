@@ -2,7 +2,7 @@
 
 var ko = require('knockout');
 
-var settings = module.exports = {
+module.exports = {
   game: {
     ai: {
       color: ko.observable('random').extend({persist: 'settings.game.ai.color'}),
@@ -28,10 +28,3 @@ var settings = module.exports = {
     sound: ko.observable(true).extend({persist: 'settings.sound'})
   }
 };
-
-settings.general.disableSleep.subscribe(function(isDisabled) {
-  if (window.cordova) {
-    if (isDisabled) window.plugins.insomnia.keepAwake();
-    else window.plugins.insomnia.allowSleepAgain();
-  }
-});

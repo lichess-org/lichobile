@@ -6,6 +6,7 @@ var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
 var watchify = require('watchify');
 var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 
 var defaults = require('./env.json');
@@ -52,6 +53,16 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('./www'));
 });
 
+gulp.task('prod-scripts', function() {
+  var bundleStream = browserify('./src/js/main.js').bundle();
+
+  return bundleStream
+    .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
+    .pipe(source('app.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./www'));
+});
+
 gulp.task('watch-scripts', function() {
   var bundleStream = watchify({
     entries: './src/js/main.js',
@@ -80,7 +91,7 @@ gulp.task('watch', function() {
 
 gulp.task('dev', ['html', 'styl', 'lint', 'scripts']);
 gulp.task('dev-watch', ['html', 'styl', 'lint', 'watch-scripts', 'watch']);
-gulp.task('mobile', ['html', 'styl', 'scripts']);
+gulp.task('prod', ['html', 'styl', 'prod-scripts']);
 
 // Default Task
 gulp.task('default', ['dev-watch']);

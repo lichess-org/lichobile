@@ -68,10 +68,14 @@ var Game = function(data) {
   }
 
   function lastMove() {
-    return {
-      from: game.lastMove.substr(0,2),
-      to: game.lastMove.substr(2, 2)
-    };
+    if (game.lastMove) {
+      return {
+        from: game.lastMove.substr(0,2),
+        to: game.lastMove.substr(2, 2)
+      };
+    }
+
+    return null;
   }
 
   function setClocks(oppEl, playerEl) {

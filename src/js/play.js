@@ -239,6 +239,8 @@ function _initGame(data) {
   // update game data
   game = Game(data);
 
+  console.log(data);
+
   // save current game id
   storage.set('currentGame', game.url.pov);
 
@@ -264,7 +266,6 @@ function _initGame(data) {
   } else {
     $('#chat-icon').style.display = 'none';
   }
-
 
   // initialize ground and ui
   if (game.hasClock()) {
@@ -305,8 +306,10 @@ function _initGame(data) {
   if (game.player.color !== ground.getOrientation()) {
     ground.toggleOrientation();
   }
-  if (game.currentTurn() === 1) {
+  if (game.lastMove()) {
     ground.showLastMove(game.lastMove().from, game.lastMove().to);
+  }
+  if (game.currentTurn() === 1) {
     sound.move();
   }
 

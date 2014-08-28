@@ -79,7 +79,7 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "org.lichess.mobileapp"
+            "PACKAGE_NAME": "org.lichess.mobile"
         }
     },
     "dependent_plugins": {

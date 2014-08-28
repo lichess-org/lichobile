@@ -5,6 +5,7 @@ var $ = require('./utils').$;
 var Handlebars = require('handlebars');
 var Zepto = require('./vendor/zepto');
 var Iscroll = require('iscroll');
+var getModal = require('./modals').getModal;
 
 var form = $('#chat > .talk-form'),
 input = $('#chat .talk-input'),
@@ -19,10 +20,15 @@ var scroller = new Iscroll(scrollerWrapper, { scrollbars: false });
 var source = '<p class="chat-message"><span class="chat-user">{{ user }}</span>{{{ msg }}}</p>';
 var msgTemplate = Handlebars.compile(source);
 
-Zepto('#chatModal .icon-close').tap(function (e) {
-  e.preventDefault();
-  utils.hideKeyboard();
-  $('#chat-icon').classList.remove('active');
+window.addEventListener('touchend', function (event) {
+  var modal = getModal(event);
+  if (modal) {
+    if (modal.id === 'chatModal' && modal.classList.contains('active')) {
+      utils.hideKeyboard();
+      $('#chat-icon').classList.remove('active');
+    }
+    event.preventDefault();
+  }
 });
 
 function Chat(socket) {

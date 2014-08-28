@@ -45,4 +45,8 @@
     <content src="index.html" />
     <preference name="Orientation" value="portrait" />
     <access origin="*" />
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
 </widget>

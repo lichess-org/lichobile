@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -50,6 +54,12 @@
                             "xml": "false",
                             "count": 1
                         }
+                    ],
+                    "CoreGraphics.framework": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
                     ]
                 }
             }
@@ -67,6 +77,9 @@
         },
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "org.lichess.mobileapp"
         }
     },
     "dependent_plugins": {

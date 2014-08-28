@@ -34,4 +34,7 @@
     <content src="index.html" />
     <preference name="Orientation" value="portrait" />
     <access origin="*" />
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    </feature>
 </widget>

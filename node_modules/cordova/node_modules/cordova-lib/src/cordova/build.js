@@ -16,8 +16,12 @@
     specific language governing permissions and limitations
     under the License.
 */
+
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
 var cordova_util      = require('./util'),
-    Q                 = require('q'),
     hooker            = require('./hooker');
 
 // Returns a promise.

@@ -73,11 +73,14 @@ All scripts are run from the project's root directory and have the root director
 
 If a script returns a non-zero exit code, then the parent cordova command will be aborted.
 
-
 ## Writing hooks
 
 We highly recommend writting your hooks using Node.js so that they are
 cross-platform. Some good examples are shown here:
 
 [http://devgirl.org/2013/11/12/three-hooks-your-cordovaphonegap-project-needs/](http://devgirl.org/2013/11/12/three-hooks-your-cordovaphonegap-project-needs/)
+
+Also, note that even if you are working on Windows, and in case your hook scripts aren't bat files (which is recommended, if you want your scripts to work in non-Windows operating systems) Cordova CLI will expect a shebang line as the first line for it to know the interpreter it needs to use to launch the script. The shebang line should match the following example:
+
+    #!/usr/bin/env [name_of_interpreter_executable]
 

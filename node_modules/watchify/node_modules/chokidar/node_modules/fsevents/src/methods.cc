@@ -31,10 +31,10 @@ NAN_METHOD(FSEvents::Stop) {
 
   FSEvents* fse = node::ObjectWrap::Unwrap<FSEvents>(args.This());
 
-  fse->asyncStop();
   fse->threadStop();
+  fse->asyncStop();
 
-  NanReturnUndefined();
+  NanReturnValue(args.This());
 }
 
 NAN_METHOD(FSEvents::Start) {

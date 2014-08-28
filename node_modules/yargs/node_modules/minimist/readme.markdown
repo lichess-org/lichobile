@@ -59,6 +59,17 @@ strings
 * `opts.alias` - an object mapping string names to strings or arrays of string
 argument names to use as aliases
 * `opts.default` - an object mapping string argument names to default values
+* `opts['--']` - when true, populate `argv._` with everything before the `--`
+and `argv['--']` with everything after the `--`. Here's an example:
+
+```
+> require('./')('one two three -- four five --six'.split(' '), { '--': true })
+{ _: [ 'one', 'two', 'three' ],
+  '--': [ 'four', 'five', '--six' ] }
+```
+
+Note that with `opts['--']` set, parsing for arguments still stops after the
+`--`.
 
 # install
 

@@ -14,11 +14,13 @@ var jshintPlugin = function(opt){
     if (file.isStream()) return cb(new PluginError('gulp-jshint', 'Streaming not supported'));
 
     fileIgnored(file, function (err, ignored) {
-      if (err || ignored) return cb(err, file);
-      lint(file, function (err, output) {
+      if (err) return cb(err);
+      if (ignored) return cb(null, file);
+
+      lint(file, function (err, lintOut) {
         if (err) return cb(err);
 
-        file.jshint = output;
+        file.jshint = lintOut;
         cb(null, file);
       });
     });

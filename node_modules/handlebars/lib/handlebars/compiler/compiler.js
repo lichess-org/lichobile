@@ -1,4 +1,7 @@
 import Exception from "../exception";
+import {isArray} from "../utils";
+
+var slice = [].slice;
 
 export function Compiler() {}
 
@@ -10,30 +13,6 @@ export function Compiler() {}
 Compiler.prototype = {
   compiler: Compiler,
 
-  disassemble: function() {
-    var opcodes = this.opcodes, opcode, out = [], params, param;
-
-    for (var i=0, l=opcodes.length; i<l; i++) {
-      opcode = opcodes[i];
-
-      if (opcode.opcode === 'DECLARE') {
-        out.push("DECLARE " + opcode.name + "=" + opcode.value);
-      } else {
-        params = [];
-        for (var j=0; j<opcode.args.length; j++) {
-          param = opcode.args[j];
-          if (typeof param === "string") {
-            param = "\"" + param.replace("\n", "\\n") + "\"";
-          }
-          params.push(param);
-        }
-        out.push(opcode.opcode + " " + params.join(" "));
-      }
-    }
-
-    return out.join("\n");
-  },
-
   equals: function(other) {
     var len = this.opcodes.length;
     if (other.opcodes.length !== len) {
@@ -43,20 +22,14 @@ Compiler.prototype = {
     for (var i = 0; i < len; i++) {
       var opcode = this.opcodes[i],
           otherOpcode = other.opcodes[i];
-      if (opcode.opcode !== otherOpcode.opcode || opcode.args.length !== otherOpcode.args.length) {
+      if (opcode.opcode !== otherOpcode.opcode || !argEquals(opcode.args, otherOpcode.args)) {
         return false;
-      }
-      for (var j = 0; j < opcode.args.length; j++) {
-        if (opcode.args[j] !== otherOpcode.args[j]) {
-          return false;
-        }
       }
     }
 
+    // We know that length is the same between the two arrays because they are directly tied
+    // to the opcode behavior above.
     len = this.children.length;
-    if (other.children.length !== len) {
-      return false;
-    }
     for (i = 0; i < len; i++) {
       if (!this.children[i].equals(other.children[i])) {
         return false;
@@ -98,19 +71,7 @@ Compiler.prototype = {
   },
 
   accept: function(node) {
-    var strip = node.strip || {},
-        ret;
-    if (strip.left) {
-      this.opcode('strip');
-    }
-
-    ret = this[node.type](node);
-
-    if (strip.right) {
-      this.opcode('strip');
-    }
-
-    return ret;
+    return this[node.type](node);
   },
 
   program: function(program) {
@@ -214,15 +175,18 @@ Compiler.prototype = {
     if (partial.context) {
       this.accept(partial.context);
     } else {
-      this.opcode('push', 'depth0');
+      this.opcode('getContext', 0);
+      this.opcode('pushContext');
     }
 
-    this.opcode('invokePartial', partialName.name);
+    this.opcode('invokePartial', partialName.name, partial.indent || '');
     this.opcode('append');
   },
 
   content: function(content) {
-    this.opcode('appendContent', content.string);
+    if (content.string) {
+      this.opcode('appendContent', content.string);
+    }
   },
 
   mustache: function(mustache) {
@@ -244,6 +208,8 @@ Compiler.prototype = {
 
     this.opcode('pushProgram', program);
     this.opcode('pushProgram', inverse);
+
+    this.ID(id);
 
     this.opcode('invokeAmbiguous', name, isBlock);
   },
@@ -275,8 +241,10 @@ Compiler.prototype = {
     } else if (this.options.knownHelpersOnly) {
       throw new Exception("You specified knownHelpersOnly, but used the unknown helper " + name, sexpr);
     } else {
+      id.falsy = true;
+
       this.ID(id);
-      this.opcode('invokeHelper', params.length, id.original, sexpr.isRoot);
+      this.opcode('invokeHelper', params.length, id.original, id.isSimple);
     }
   },
 
@@ -298,23 +266,16 @@ Compiler.prototype = {
 
     var name = id.parts[0];
     if (!name) {
+      // Context reference, i.e. `{{foo .}}` or `{{foo ..}}`
       this.opcode('pushContext');
     } else {
-      this.opcode('lookupOnContext', id.parts[0]);
-    }
-
-    for(var i=1, l=id.parts.length; i<l; i++) {
-      this.opcode('lookup', id.parts[i]);
+      this.opcode('lookupOnContext', id.parts, id.falsy, id.isScoped);
     }
   },
 
   DATA: function(data) {
     this.options.data = true;
-    this.opcode('lookupData', data.id.depth);
-    var parts = data.id.parts;
-    for(var i=0, l=parts.length; i<l; i++) {
-      this.opcode('lookup', parts[i]);
-    }
+    this.opcode('lookupData', data.id.depth, data.id.parts);
   },
 
   STRING: function(string) {
@@ -333,11 +294,7 @@ Compiler.prototype = {
 
   // HELPERS
   opcode: function(name) {
-    this.opcodes.push({ opcode: name, args: [].slice.call(arguments, 1) });
-  },
-
-  declare: function(name, value) {
-    this.opcodes.push({ opcode: 'DECLARE', name: name, value: value });
+    this.opcodes.push({ opcode: name, args: slice.call(arguments, 1) });
   },
 
   addDepth: function(depth) {
@@ -424,6 +381,9 @@ export function precompile(input, options, env) {
   if (!('data' in options)) {
     options.data = true;
   }
+  if (options.compat) {
+    options.useDepths = true;
+  }
 
   var ast = env.parse(input);
   var environment = new env.Compiler().compile(ast, options);
@@ -439,6 +399,9 @@ export function compile(input, options, env) {
 
   if (!('data' in options)) {
     options.data = true;
+  }
+  if (options.compat) {
+    options.useDepths = true;
   }
 
   var compiled;
@@ -463,11 +426,26 @@ export function compile(input, options, env) {
     }
     return compiled._setup(options);
   };
-  ret._child = function(i) {
+  ret._child = function(i, data, depths) {
     if (!compiled) {
       compiled = compileInput();
     }
-    return compiled._child(i);
+    return compiled._child(i, data, depths);
   };
   return ret;
+}
+
+function argEquals(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (isArray(a) && isArray(b) && a.length === b.length) {
+    for (var i = 0; i < a.length; i++) {
+      if (!argEquals(a[i], b[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

@@ -17,8 +17,9 @@
     under the License.
 */
 
-/*global require: true, module: true, process: true*/
-/*jslint sloppy: true, white: true, newcap: true */
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
 
 var cordova_util      = require('./util'),
     path              = require('path'),
@@ -28,14 +29,14 @@ var cordova_util      = require('./util'),
 
 // Returns a promise.
 module.exports = function run(options) {
-    var projectRoot = cordova_util.cdProjectRoot(),
+    var projectRoot = cordova_util.cdProjectRoot();
     options = cordova_util.preProcessOptions(options);
 
     var hooks = new hooker(projectRoot);
     return hooks.fire('before_run', options)
     .then(function() {
         // Run a prepare first, then shell out to run
-        return require('./cordova').raw.prepare(options.platforms)
+        return require('./cordova').raw.prepare(options.platforms);
     }).then(function() {
         // Deploy in parallel (output gets intermixed though...)
         return Q.all(options.platforms.map(function(platform) {

@@ -57,7 +57,7 @@ Examples:
     $ cordova platform a<TAB>
 
     $ cordova platform add <TAB>
-    android     blackberry  ios         wp7         wp8         www
+    android     blackberry  ios         wp8         www
 
     $ cordova plugin rm <TAB>
 

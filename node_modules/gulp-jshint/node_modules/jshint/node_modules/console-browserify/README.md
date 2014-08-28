@@ -4,6 +4,7 @@
 
 [![browser support][3]][4]
 
+
 Emulate console for all the browsers
 
 ## Example

@@ -12,15 +12,26 @@
       "type": "tag",
       "name": "html",
       "attribs": {},
+      "parent": null,
       "children": [
         {
           "type": "tag",
           "name": "title",
           "attribs": {},
+          "parent": {
+            "type": "tag",
+            "name": "html",
+            "attribs": {}
+          },
           "children": [
             {
               "data": "The Title",
-              "type": "text"
+              "type": "text",
+              "parent": {
+                "type": "tag",
+                "name": "title",
+                "attribs": {}
+              }
             }
           ]
         },
@@ -33,7 +44,12 @@
               "data": "Hello world",
               "type": "text"
             }
-          ]
+          ],
+          "prev": {
+              "type": "tag",
+              "name": "title",
+              "attribs": {}
+          }
         }
       ]
     }

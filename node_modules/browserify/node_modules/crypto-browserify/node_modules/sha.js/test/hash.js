@@ -1,7 +1,7 @@
 var hexpp = require('../hexpp').defaults({bigendian: false})
 var u = require('../util')
 var tape = require('tape')
-var Buffer = require('native-buffer-browserify').Buffer
+var Buffer = require('buffer/').Buffer
 var Hash = require('../hash')(Buffer)
 
 var hex = '0A1B2C3D4E5F6G7H', hexbuf

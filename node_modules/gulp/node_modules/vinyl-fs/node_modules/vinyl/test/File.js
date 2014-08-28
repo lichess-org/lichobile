@@ -1,6 +1,7 @@
 var File = require('../');
 var Stream = require('stream');
 var fs = require('fs');
+var path = require('path');
 
 var should = require('should');
 require('mocha');
@@ -247,6 +248,29 @@ describe('File', function() {
       copy.stat.isDirectory().should.be.false;
       should(file.stat instanceof fs.Stats).be.true;
       should(copy.stat instanceof fs.Stats).be.true;
+
+      done();
+    });
+  
+    it('should copy custom properties', function(done) {
+      var options = {
+        cwd: "/",
+        base: "/test/",
+        path: "/test/test.coffee",
+        contents: null
+      };
+
+      var file = new File(options);
+      file.custom = { a: 'custom property' };
+
+      var file2 = file.clone();
+
+      file2.should.not.equal(file, 'refs should be different');
+      file2.cwd.should.equal(file.cwd);
+      file2.base.should.equal(file.base);
+      file2.path.should.equal(file.path);
+      file2.custom.should.not.equal(file.custom);
+      file2.custom.a.should.equal(file.custom.a);
 
       done();
     });
@@ -532,7 +556,7 @@ describe('File', function() {
         cwd: "/",
         path: "/test/test.coffee"
       });
-      file.relative.should.equal("test/test.coffee");
+      file.relative.should.equal(path.join("test","test.coffee"));
       done();
     });
   });

@@ -1,6 +1,6 @@
 /*!
 
- handlebars v2.0.0-alpha.4
+ handlebars v2.0.0-beta.1
 
 Copyright (C) 2011-2014 by Yehuda Katz
 
@@ -60,7 +60,7 @@ define(
     var possible = /[&<>"'`]/;
 
     function escapeChar(chr) {
-      return escape[chr] || "&amp;";
+      return escape[chr];
     }
 
     function extend(obj /* , ...source */) {
@@ -83,6 +83,7 @@ define(
       return typeof value === 'function';
     };
     // fallback for older versions of Chrome and Safari
+    /* istanbul ignore next */
     if (isFunction(/x/)) {
       isFunction = function(value) {
         return typeof value === 'function' && toString.call(value) === '[object Function]';
@@ -90,6 +91,7 @@ define(
     }
     var isFunction;
     __exports__.isFunction = isFunction;
+    /* istanbul ignore next */
     var isArray = Array.isArray || function(value) {
       return (value && typeof value === 'object') ? toString.call(value) === '[object Array]' : false;
     };
@@ -99,8 +101,10 @@ define(
       // don't escape SafeStrings, since they're already safe
       if (string instanceof SafeString) {
         return string.toString();
-      } else if (!string && string !== 0) {
+      } else if (string == null) {
         return "";
+      } else if (!string) {
+        return string + '';
       }
 
       // Force a string conversion as this will be done by the append regardless and
@@ -167,15 +171,16 @@ define(
     var Utils = __dependency1__;
     var Exception = __dependency2__["default"];
 
-    var VERSION = "2.0.0-alpha.4";
-    __exports__.VERSION = VERSION;var COMPILER_REVISION = 5;
+    var VERSION = "2.0.0-beta.1";
+    __exports__.VERSION = VERSION;var COMPILER_REVISION = 6;
     __exports__.COMPILER_REVISION = COMPILER_REVISION;
     var REVISION_CHANGES = {
       1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
       2: '== 1.0.0-rc.3',
       3: '== 1.0.0-rc.4',
       4: '== 1.x.x',
-      5: '>= 2.0.0'
+      5: '== 2.0.0-alpha.x',
+      6: '>= 2.0.0-beta.1'
     };
     __exports__.REVISION_CHANGES = REVISION_CHANGES;
     var isArray = Utils.isArray,
@@ -196,12 +201,11 @@ define(
       logger: logger,
       log: log,
 
-      registerHelper: function(name, fn, inverse) {
+      registerHelper: function(name, fn) {
         if (toString.call(name) === objectType) {
-          if (inverse || fn) { throw new Exception('Arg not supported with multiple helpers'); }
+          if (fn) { throw new Exception('Arg not supported with multiple helpers'); }
           Utils.extend(this.helpers, name);
         } else {
-          if (inverse) { fn.not = inverse; }
           this.helpers[name] = fn;
         }
       },
@@ -233,9 +237,8 @@ define(
       });
 
       instance.registerHelper('blockHelperMissing', function(context, options) {
-        var inverse = options.inverse || function() {}, fn = options.fn;
-
-        if (isFunction(context)) { context = context.call(this); }
+        var inverse = options.inverse,
+            fn = options.fn;
 
         if(context === true) {
           return fn(this);
@@ -263,10 +266,8 @@ define(
       });
 
       instance.registerHelper('each', function(context, options) {
-        // Allow for {{#each}}
         if (!options) {
-          options = context;
-          context = this;
+          throw new Exception('Must pass iterator to #each');
         }
 
         var fn = options.fn, inverse = options.inverse;
@@ -353,6 +354,8 @@ define(
           }
 
           return fn(context, options);
+        } else {
+          return options.inverse(this);
         }
       });
 
@@ -361,7 +364,7 @@ define(
         instance.log(level, context);
       });
 
-      instance.registerHelper('lookup', function(obj, field, options) {
+      instance.registerHelper('lookup', function(obj, field) {
         return obj && obj[field];
       });
     }
@@ -387,9 +390,9 @@ define(
       }
     };
     __exports__.logger = logger;
-    function log(level, obj) { logger.log(level, obj); }
-
-    __exports__.log = log;var createFrame = function(object) {
+    var log = logger.log;
+    __exports__.log = log;
+    var createFrame = function(object) {
       var frame = Utils.extend({}, object);
       frame._parent = object;
       return frame;
@@ -427,26 +430,43 @@ define(
     __exports__.checkRevision = checkRevision;// TODO: Remove this line and break up compilePartial
 
     function template(templateSpec, env) {
+      /* istanbul ignore next */
       if (!env) {
         throw new Exception("No environment passed to template");
+      }
+      if (!templateSpec || !templateSpec.main) {
+        throw new Exception('Unknown template object: ' + typeof templateSpec);
       }
 
       // Note: Using env.VM references rather than local var references throughout this section to allow
       // for external users to override these as psuedo-supported APIs.
       env.VM.checkRevision(templateSpec.compiler);
 
-      var invokePartialWrapper = function(partial, name, context, hash, helpers, partials, data) {
+      var invokePartialWrapper = function(partial, indent, name, context, hash, helpers, partials, data, depths) {
         if (hash) {
           context = Utils.extend({}, context, hash);
         }
 
-        var result = env.VM.invokePartial.call(this, partial, name, context, helpers, partials, data);
-        if (result != null) { return result; }
+        var result = env.VM.invokePartial.call(this, partial, name, context, helpers, partials, data, depths);
 
-        if (env.compile) {
-          var options = { helpers: helpers, partials: partials, data: data };
-          partials[name] = env.compile(partial, { data: data !== undefined }, env);
-          return partials[name](context, options);
+        if (result == null && env.compile) {
+          var options = { helpers: helpers, partials: partials, data: data, depths: depths };
+          partials[name] = env.compile(partial, { data: data !== undefined, compat: templateSpec.compat }, env);
+          result = partials[name](context, options);
+        }
+        if (result != null) {
+          if (indent) {
+            var lines = result.split('\n');
+            for (var i = 0, l = lines.length; i < l; i++) {
+              if (!lines[i] && i + 1 === l) {
+                break;
+              }
+
+              lines[i] = indent + lines[i];
+            }
+            result = lines.join('\n');
+          }
+          return result;
         } else {
           throw new Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
         }
@@ -454,6 +474,18 @@ define(
 
       // Just add water
       var container = {
+        lookup: function(depths, name) {
+          var len = depths.length;
+          for (var i = 0; i < len; i++) {
+            if (depths[i] && depths[i][name] != null) {
+              return depths[i][name];
+            }
+          }
+        },
+        lambda: function(current, context) {
+          return typeof current === 'function' ? current.call(context) : current;
+        },
+
         escapeExpression: Utils.escapeExpression,
         invokePartial: invokePartialWrapper,
 
@@ -462,17 +494,16 @@ define(
         },
 
         programs: [],
-        program: function(i, data) {
+        program: function(i, data, depths) {
           var programWrapper = this.programs[i],
               fn = this.fn(i);
-          if(data) {
-            programWrapper = program(this, i, fn, data);
+          if (data || depths) {
+            programWrapper = program(this, i, fn, data, depths);
           } else if (!programWrapper) {
             programWrapper = this.programs[i] = program(this, i, fn);
           }
           return programWrapper;
         },
-        programWithDepth: env.VM.programWithDepth,
 
         data: function(data, depth) {
           while (data && depth--) {
@@ -496,16 +527,20 @@ define(
 
       var ret = function(context, options) {
         options = options || {};
-        var helpers,
-            partials,
-            data = options.data;
+        var data = options.data;
 
         ret._setup(options);
         if (!options.partial && templateSpec.useData) {
           data = initData(context, data);
         }
-        return templateSpec.main.call(container, context, container.helpers, container.partials, data);
+        var depths;
+        if (templateSpec.useDepths) {
+          depths = options.depths ? [context].concat(options.depths) : [context];
+        }
+
+        return templateSpec.main.call(container, context, container.helpers, container.partials, data, depths);
       };
+      ret.isTop = true;
 
       ret._setup = function(options) {
         if (!options.partial) {
@@ -520,41 +555,29 @@ define(
         }
       };
 
-      ret._child = function(i) {
-        return container.programWithDepth(i);
+      ret._child = function(i, data, depths) {
+        if (templateSpec.useDepths && !depths) {
+          throw new Exception('must pass parent depths');
+        }
+
+        return program(container, i, templateSpec[i], data, depths);
       };
       return ret;
     }
 
-    __exports__.template = template;function programWithDepth(i, data /*, $depth */) {
-      /*jshint -W040 */
-      var args = Array.prototype.slice.call(arguments, 2),
-          container = this,
-          fn = container.fn(i);
-
+    __exports__.template = template;function program(container, i, fn, data, depths) {
       var prog = function(context, options) {
         options = options || {};
 
-        return fn.apply(container, [context, container.helpers, container.partials, options.data || data].concat(args));
+        return fn.call(container, context, container.helpers, container.partials, options.data || data, depths && [context].concat(depths));
       };
       prog.program = i;
-      prog.depth = args.length;
+      prog.depth = depths ? depths.length : 0;
       return prog;
     }
 
-    __exports__.programWithDepth = programWithDepth;function program(container, i, fn, data) {
-      var prog = function(context, options) {
-        options = options || {};
-
-        return fn.call(container, context, container.helpers, container.partials, options.data || data);
-      };
-      prog.program = i;
-      prog.depth = 0;
-      return prog;
-    }
-
-    __exports__.program = program;function invokePartial(partial, name, context, helpers, partials, data) {
-      var options = { partial: true, helpers: helpers, partials: partials, data: data };
+    __exports__.program = program;function invokePartial(partial, name, context, helpers, partials, data, depths) {
+      var options = { partial: true, helpers: helpers, partials: partials, data: data, depths: depths };
 
       if(partial === undefined) {
         throw new Exception("The partial " + name + " could not be found");
@@ -595,6 +618,7 @@ define(
       hb.SafeString = SafeString;
       hb.Exception = Exception;
       hb.Utils = Utils;
+      hb.escapeExpression = Utils.escapeExpression;
 
       hb.VM = runtime;
       hb.template = function(spec) {
@@ -607,6 +631,8 @@ define(
     var Handlebars = create();
     Handlebars.create = create;
 
+    Handlebars['default'] = Handlebars;
+
     __exports__["default"] = Handlebars;
   });
 define(
@@ -615,7 +641,7 @@ define(
     
     var Exception = __dependency1__["default"];
 
-    function LocationInfo(locInfo){
+    function LocationInfo(locInfo) {
       locInfo = locInfo || {};
       this.firstLine   = locInfo.first_line;
       this.firstColumn = locInfo.first_column;
@@ -624,38 +650,11 @@ define(
     }
 
     var AST = {
-      ProgramNode: function(statements, inverseStrip, inverse, locInfo) {
-        var inverseLocationInfo, firstInverseNode;
-        if (arguments.length === 3) {
-          locInfo = inverse;
-          inverse = null;
-        } else if (arguments.length === 2) {
-          locInfo = inverseStrip;
-          inverseStrip = null;
-        }
-
+      ProgramNode: function(statements, strip, locInfo) {
         LocationInfo.call(this, locInfo);
         this.type = "program";
         this.statements = statements;
-        this.strip = {};
-
-        if(inverse) {
-          firstInverseNode = inverse[0];
-          if (firstInverseNode) {
-            inverseLocationInfo = {
-              first_line: firstInverseNode.firstLine,
-              last_line: firstInverseNode.lastLine,
-              last_column: firstInverseNode.lastColumn,
-              first_column: firstInverseNode.firstColumn
-            };
-            this.inverse = new AST.ProgramNode(inverse, inverseStrip, inverseLocationInfo);
-          } else {
-            this.inverse = new AST.ProgramNode(inverse, inverseStrip);
-          }
-          this.strip.right = inverseStrip.left;
-        } else if (inverseStrip) {
-          this.strip.left = inverseStrip.right;
-        }
+        this.strip = strip;
       },
 
       MustacheNode: function(rawParams, hash, open, strip, locInfo) {
@@ -678,8 +677,6 @@ define(
           // Support old AST API
           this.sexpr = new AST.SexprNode(rawParams, hash);
         }
-
-        this.sexpr.isRoot = true;
 
         // Support old AST API that stored this info in MustacheNode
         this.id = this.sexpr.id;
@@ -719,27 +716,18 @@ define(
         this.context      = context;
         this.hash = hash;
         this.strip = strip;
+
+        this.strip.inlineStandalone = true;
       },
 
-      BlockNode: function(mustache, program, inverse, close, locInfo) {
+      BlockNode: function(mustache, program, inverse, strip, locInfo) {
         LocationInfo.call(this, locInfo);
-
-        if(mustache.sexpr.id.original !== close.path.original) {
-          throw new Exception(mustache.sexpr.id.original + " doesn't match " + close.path.original, this);
-        }
 
         this.type = 'block';
         this.mustache = mustache;
         this.program  = program;
         this.inverse  = inverse;
-
-        this.strip = {
-          left: mustache.strip.left,
-          right: close.strip.right
-        };
-
-        (program || inverse).strip.left = mustache.strip.right;
-        (inverse || program).strip.right = close.strip.left;
+        this.strip = strip;
 
         if (inverse && !program) {
           this.isInverse = true;
@@ -757,13 +745,13 @@ define(
 
         this.type = 'block';
         this.mustache = mustache;
-        this.program = new AST.ProgramNode([content], locInfo);
+        this.program = new AST.ProgramNode([content], {}, locInfo);
       },
 
       ContentNode: function(string, locInfo) {
         LocationInfo.call(this, locInfo);
         this.type = "content";
-        this.string = string;
+        this.original = this.string = string;
       },
 
       HashNode: function(pairs, locInfo) {
@@ -853,8 +841,13 @@ define(
         LocationInfo.call(this, locInfo);
         this.type = "comment";
         this.comment = comment;
+
+        this.strip = {
+          inlineStandalone: true
+        };
       }
     };
+
 
     // Must be exported as an object rather than the root of the module as the jison lexer
     // most modify the object to operate properly.
@@ -865,102 +858,95 @@ define(
   function(__exports__) {
     
     /* jshint ignore:start */
+    /* istanbul ignore next */
     /* Jison generated parser */
     var handlebars = (function(){
     var parser = {trace: function trace() { },
     yy: {},
-    symbols_: {"error":2,"root":3,"statements":4,"EOF":5,"program":6,"simpleInverse":7,"statement":8,"openRawBlock":9,"CONTENT":10,"END_RAW_BLOCK":11,"openInverse":12,"closeBlock":13,"openBlock":14,"mustache":15,"partial":16,"COMMENT":17,"OPEN_RAW_BLOCK":18,"sexpr":19,"CLOSE_RAW_BLOCK":20,"OPEN_BLOCK":21,"CLOSE":22,"OPEN_INVERSE":23,"OPEN_ENDBLOCK":24,"path":25,"OPEN":26,"OPEN_UNESCAPED":27,"CLOSE_UNESCAPED":28,"OPEN_PARTIAL":29,"partialName":30,"param":31,"partial_option0":32,"partial_option1":33,"sexpr_repetition0":34,"sexpr_option0":35,"dataName":36,"STRING":37,"NUMBER":38,"BOOLEAN":39,"OPEN_SEXPR":40,"CLOSE_SEXPR":41,"hash":42,"hash_repetition_plus0":43,"hashSegment":44,"ID":45,"EQUALS":46,"DATA":47,"pathSegments":48,"SEP":49,"$accept":0,"$end":1},
-    terminals_: {2:"error",5:"EOF",10:"CONTENT",11:"END_RAW_BLOCK",17:"COMMENT",18:"OPEN_RAW_BLOCK",20:"CLOSE_RAW_BLOCK",21:"OPEN_BLOCK",22:"CLOSE",23:"OPEN_INVERSE",24:"OPEN_ENDBLOCK",26:"OPEN",27:"OPEN_UNESCAPED",28:"CLOSE_UNESCAPED",29:"OPEN_PARTIAL",37:"STRING",38:"NUMBER",39:"BOOLEAN",40:"OPEN_SEXPR",41:"CLOSE_SEXPR",45:"ID",46:"EQUALS",47:"DATA",49:"SEP"},
-    productions_: [0,[3,2],[3,1],[6,2],[6,3],[6,2],[6,1],[6,1],[6,0],[4,1],[4,2],[8,3],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[9,3],[14,3],[12,3],[13,3],[15,3],[15,3],[16,5],[16,4],[7,2],[19,3],[19,1],[31,1],[31,1],[31,1],[31,1],[31,1],[31,3],[42,1],[44,3],[30,1],[30,1],[30,1],[36,2],[25,1],[48,3],[48,1],[32,0],[32,1],[33,0],[33,1],[34,0],[34,2],[35,0],[35,1],[43,1],[43,2]],
+    symbols_: {"error":2,"root":3,"program":4,"EOF":5,"program_repetition0":6,"statement":7,"mustache":8,"block":9,"rawBlock":10,"partial":11,"CONTENT":12,"COMMENT":13,"openRawBlock":14,"END_RAW_BLOCK":15,"OPEN_RAW_BLOCK":16,"sexpr":17,"CLOSE_RAW_BLOCK":18,"openBlock":19,"block_option0":20,"closeBlock":21,"openInverse":22,"block_option1":23,"OPEN_BLOCK":24,"CLOSE":25,"OPEN_INVERSE":26,"inverseAndProgram":27,"INVERSE":28,"OPEN_ENDBLOCK":29,"path":30,"OPEN":31,"OPEN_UNESCAPED":32,"CLOSE_UNESCAPED":33,"OPEN_PARTIAL":34,"partialName":35,"param":36,"partial_option0":37,"partial_option1":38,"sexpr_repetition0":39,"sexpr_option0":40,"dataName":41,"STRING":42,"NUMBER":43,"BOOLEAN":44,"OPEN_SEXPR":45,"CLOSE_SEXPR":46,"hash":47,"hash_repetition_plus0":48,"hashSegment":49,"ID":50,"EQUALS":51,"DATA":52,"pathSegments":53,"SEP":54,"$accept":0,"$end":1},
+    terminals_: {2:"error",5:"EOF",12:"CONTENT",13:"COMMENT",15:"END_RAW_BLOCK",16:"OPEN_RAW_BLOCK",18:"CLOSE_RAW_BLOCK",24:"OPEN_BLOCK",25:"CLOSE",26:"OPEN_INVERSE",28:"INVERSE",29:"OPEN_ENDBLOCK",31:"OPEN",32:"OPEN_UNESCAPED",33:"CLOSE_UNESCAPED",34:"OPEN_PARTIAL",42:"STRING",43:"NUMBER",44:"BOOLEAN",45:"OPEN_SEXPR",46:"CLOSE_SEXPR",50:"ID",51:"EQUALS",52:"DATA",54:"SEP"},
+    productions_: [0,[3,2],[4,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[10,3],[14,3],[9,4],[9,4],[19,3],[22,3],[27,2],[21,3],[8,3],[8,3],[11,5],[11,4],[17,3],[17,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,3],[47,1],[49,3],[35,1],[35,1],[35,1],[41,2],[30,1],[53,3],[53,1],[6,0],[6,2],[20,0],[20,1],[23,0],[23,1],[37,0],[37,1],[38,0],[38,1],[39,0],[39,2],[40,0],[40,1],[48,1],[48,2]],
     performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 
     var $0 = $$.length - 1;
     switch (yystate) {
-    case 1: return new yy.ProgramNode($$[$0-1], this._$); 
+    case 1: yy.prepareProgram($$[$0-1].statements, true); return $$[$0-1]; 
     break;
-    case 2: return new yy.ProgramNode([], this._$); 
+    case 2:this.$ = new yy.ProgramNode(yy.prepareProgram($$[$0]), {}, this._$);
     break;
-    case 3:this.$ = new yy.ProgramNode([], $$[$0-1], $$[$0], this._$);
+    case 3:this.$ = $$[$0];
     break;
-    case 4:this.$ = new yy.ProgramNode($$[$0-2], $$[$0-1], $$[$0], this._$);
+    case 4:this.$ = $$[$0];
     break;
-    case 5:this.$ = new yy.ProgramNode($$[$0-1], $$[$0], [], this._$);
+    case 5:this.$ = $$[$0];
     break;
-    case 6:this.$ = new yy.ProgramNode($$[$0], this._$);
+    case 6:this.$ = $$[$0];
     break;
-    case 7:this.$ = new yy.ProgramNode([], this._$);
+    case 7:this.$ = new yy.ContentNode($$[$0], this._$);
     break;
-    case 8:this.$ = new yy.ProgramNode([], this._$);
+    case 8:this.$ = new yy.CommentNode($$[$0], this._$);
     break;
-    case 9:this.$ = [$$[$0]];
+    case 9:this.$ = new yy.RawBlockNode($$[$0-2], $$[$0-1], $$[$0], this._$);
     break;
-    case 10: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+    case 10:this.$ = new yy.MustacheNode($$[$0-1], null, '', '', this._$);
     break;
-    case 11:this.$ = new yy.RawBlockNode($$[$0-2], $$[$0-1], $$[$0], this._$);
+    case 11:this.$ = yy.prepareBlock($$[$0-3], $$[$0-2], $$[$0-1], $$[$0], false, this._$);
     break;
-    case 12:this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0], this._$);
+    case 12:this.$ = yy.prepareBlock($$[$0-3], $$[$0-2], $$[$0-1], $$[$0], true, this._$);
     break;
-    case 13:this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0-1].inverse, $$[$0], this._$);
+    case 13:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], yy.stripFlags($$[$0-2], $$[$0]), this._$);
     break;
-    case 14:this.$ = $$[$0];
+    case 14:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], yy.stripFlags($$[$0-2], $$[$0]), this._$);
     break;
-    case 15:this.$ = $$[$0];
+    case 15:this.$ = { strip: yy.stripFlags($$[$0-1], $$[$0-1]), program: $$[$0] };
     break;
-    case 16:this.$ = new yy.ContentNode($$[$0], this._$);
+    case 16:this.$ = {path: $$[$0-1], strip: yy.stripFlags($$[$0-2], $$[$0])};
     break;
-    case 17:this.$ = new yy.CommentNode($$[$0], this._$);
+    case 17:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], yy.stripFlags($$[$0-2], $$[$0]), this._$);
     break;
-    case 18:this.$ = new yy.MustacheNode($$[$0-1], null, '', '', this._$);
+    case 18:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], yy.stripFlags($$[$0-2], $$[$0]), this._$);
     break;
-    case 19:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+    case 19:this.$ = new yy.PartialNode($$[$0-3], $$[$0-2], $$[$0-1], yy.stripFlags($$[$0-4], $$[$0]), this._$);
     break;
-    case 20:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+    case 20:this.$ = new yy.PartialNode($$[$0-2], undefined, $$[$0-1], yy.stripFlags($$[$0-3], $$[$0]), this._$);
     break;
-    case 21:this.$ = {path: $$[$0-1], strip: stripFlags($$[$0-2], $$[$0])};
+    case 21:this.$ = new yy.SexprNode([$$[$0-2]].concat($$[$0-1]), $$[$0], this._$);
     break;
-    case 22:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+    case 22:this.$ = new yy.SexprNode([$$[$0]], null, this._$);
     break;
-    case 23:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+    case 23:this.$ = $$[$0];
     break;
-    case 24:this.$ = new yy.PartialNode($$[$0-3], $$[$0-2], $$[$0-1], stripFlags($$[$0-4], $$[$0]), this._$);
+    case 24:this.$ = new yy.StringNode($$[$0], this._$);
     break;
-    case 25:this.$ = new yy.PartialNode($$[$0-2], undefined, $$[$0-1], stripFlags($$[$0-3], $$[$0]), this._$);
+    case 25:this.$ = new yy.NumberNode($$[$0], this._$);
     break;
-    case 26:this.$ = stripFlags($$[$0-1], $$[$0]);
+    case 26:this.$ = new yy.BooleanNode($$[$0], this._$);
     break;
-    case 27:this.$ = new yy.SexprNode([$$[$0-2]].concat($$[$0-1]), $$[$0], this._$);
+    case 27:this.$ = $$[$0];
     break;
-    case 28:this.$ = new yy.SexprNode([$$[$0]], null, this._$);
+    case 28:$$[$0-1].isHelper = true; this.$ = $$[$0-1];
     break;
-    case 29:this.$ = $$[$0];
+    case 29:this.$ = new yy.HashNode($$[$0], this._$);
     break;
-    case 30:this.$ = new yy.StringNode($$[$0], this._$);
+    case 30:this.$ = [$$[$0-2], $$[$0]];
     break;
-    case 31:this.$ = new yy.NumberNode($$[$0], this._$);
+    case 31:this.$ = new yy.PartialNameNode($$[$0], this._$);
     break;
-    case 32:this.$ = new yy.BooleanNode($$[$0], this._$);
+    case 32:this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0], this._$), this._$);
     break;
-    case 33:this.$ = $$[$0];
+    case 33:this.$ = new yy.PartialNameNode(new yy.NumberNode($$[$0], this._$));
     break;
-    case 34:$$[$0-1].isHelper = true; this.$ = $$[$0-1];
+    case 34:this.$ = new yy.DataNode($$[$0], this._$);
     break;
-    case 35:this.$ = new yy.HashNode($$[$0], this._$);
+    case 35:this.$ = new yy.IdNode($$[$0], this._$);
     break;
-    case 36:this.$ = [$$[$0-2], $$[$0]];
+    case 36: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
     break;
-    case 37:this.$ = new yy.PartialNameNode($$[$0], this._$);
+    case 37:this.$ = [{part: $$[$0]}];
     break;
-    case 38:this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0], this._$), this._$);
+    case 38:this.$ = [];
     break;
-    case 39:this.$ = new yy.PartialNameNode(new yy.NumberNode($$[$0], this._$));
-    break;
-    case 40:this.$ = new yy.DataNode($$[$0], this._$);
-    break;
-    case 41:this.$ = new yy.IdNode($$[$0], this._$);
-    break;
-    case 42: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
-    break;
-    case 43:this.$ = [{part: $$[$0]}];
+    case 39:$$[$0-1].push($$[$0]);
     break;
     case 48:this.$ = [];
     break;
@@ -972,8 +958,8 @@ define(
     break;
     }
     },
-    table: [{3:1,4:2,5:[1,3],8:4,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],26:[1,15],27:[1,16],29:[1,17]},{1:[3]},{5:[1,18],8:19,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],26:[1,15],27:[1,16],29:[1,17]},{1:[2,2]},{5:[2,9],10:[2,9],17:[2,9],18:[2,9],21:[2,9],23:[2,9],24:[2,9],26:[2,9],27:[2,9],29:[2,9]},{10:[1,20]},{4:23,6:21,7:22,8:4,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,24],24:[2,8],26:[1,15],27:[1,16],29:[1,17]},{4:23,6:25,7:22,8:4,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,24],24:[2,8],26:[1,15],27:[1,16],29:[1,17]},{5:[2,14],10:[2,14],17:[2,14],18:[2,14],21:[2,14],23:[2,14],24:[2,14],26:[2,14],27:[2,14],29:[2,14]},{5:[2,15],10:[2,15],17:[2,15],18:[2,15],21:[2,15],23:[2,15],24:[2,15],26:[2,15],27:[2,15],29:[2,15]},{5:[2,16],10:[2,16],17:[2,16],18:[2,16],21:[2,16],23:[2,16],24:[2,16],26:[2,16],27:[2,16],29:[2,16]},{5:[2,17],10:[2,17],17:[2,17],18:[2,17],21:[2,17],23:[2,17],24:[2,17],26:[2,17],27:[2,17],29:[2,17]},{19:26,25:27,36:28,45:[1,31],47:[1,30],48:29},{19:32,25:27,36:28,45:[1,31],47:[1,30],48:29},{19:33,25:27,36:28,45:[1,31],47:[1,30],48:29},{19:34,25:27,36:28,45:[1,31],47:[1,30],48:29},{19:35,25:27,36:28,45:[1,31],47:[1,30],48:29},{25:37,30:36,37:[1,38],38:[1,39],45:[1,31],48:29},{1:[2,1]},{5:[2,10],10:[2,10],17:[2,10],18:[2,10],21:[2,10],23:[2,10],24:[2,10],26:[2,10],27:[2,10],29:[2,10]},{11:[1,40]},{13:41,24:[1,42]},{4:43,8:4,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],24:[2,7],26:[1,15],27:[1,16],29:[1,17]},{7:44,8:19,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,24],24:[2,6],26:[1,15],27:[1,16],29:[1,17]},{19:32,22:[1,45],25:27,36:28,45:[1,31],47:[1,30],48:29},{13:46,24:[1,42]},{20:[1,47]},{20:[2,48],22:[2,48],28:[2,48],34:48,37:[2,48],38:[2,48],39:[2,48],40:[2,48],41:[2,48],45:[2,48],47:[2,48]},{20:[2,28],22:[2,28],28:[2,28],41:[2,28]},{20:[2,41],22:[2,41],28:[2,41],37:[2,41],38:[2,41],39:[2,41],40:[2,41],41:[2,41],45:[2,41],47:[2,41],49:[1,49]},{25:50,45:[1,31],48:29},{20:[2,43],22:[2,43],28:[2,43],37:[2,43],38:[2,43],39:[2,43],40:[2,43],41:[2,43],45:[2,43],47:[2,43],49:[2,43]},{22:[1,51]},{22:[1,52]},{22:[1,53]},{28:[1,54]},{22:[2,46],25:57,31:55,33:56,36:61,37:[1,58],38:[1,59],39:[1,60],40:[1,62],42:63,43:64,44:66,45:[1,65],47:[1,30],48:29},{22:[2,37],37:[2,37],38:[2,37],39:[2,37],40:[2,37],45:[2,37],47:[2,37]},{22:[2,38],37:[2,38],38:[2,38],39:[2,38],40:[2,38],45:[2,38],47:[2,38]},{22:[2,39],37:[2,39],38:[2,39],39:[2,39],40:[2,39],45:[2,39],47:[2,39]},{5:[2,11],10:[2,11],17:[2,11],18:[2,11],21:[2,11],23:[2,11],24:[2,11],26:[2,11],27:[2,11],29:[2,11]},{5:[2,12],10:[2,12],17:[2,12],18:[2,12],21:[2,12],23:[2,12],24:[2,12],26:[2,12],27:[2,12],29:[2,12]},{25:67,45:[1,31],48:29},{8:19,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],24:[2,3],26:[1,15],27:[1,16],29:[1,17]},{4:68,8:4,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],24:[2,5],26:[1,15],27:[1,16],29:[1,17]},{10:[2,26],17:[2,26],18:[2,26],21:[2,26],23:[2,26],24:[2,26],26:[2,26],27:[2,26],29:[2,26]},{5:[2,13],10:[2,13],17:[2,13],18:[2,13],21:[2,13],23:[2,13],24:[2,13],26:[2,13],27:[2,13],29:[2,13]},{10:[2,18]},{20:[2,50],22:[2,50],25:57,28:[2,50],31:70,35:69,36:61,37:[1,58],38:[1,59],39:[1,60],40:[1,62],41:[2,50],42:71,43:64,44:66,45:[1,65],47:[1,30],48:29},{45:[1,72]},{20:[2,40],22:[2,40],28:[2,40],37:[2,40],38:[2,40],39:[2,40],40:[2,40],41:[2,40],45:[2,40],47:[2,40]},{10:[2,20],17:[2,20],18:[2,20],21:[2,20],23:[2,20],24:[2,20],26:[2,20],27:[2,20],29:[2,20]},{10:[2,19],17:[2,19],18:[2,19],21:[2,19],23:[2,19],24:[2,19],26:[2,19],27:[2,19],29:[2,19]},{5:[2,22],10:[2,22],17:[2,22],18:[2,22],21:[2,22],23:[2,22],24:[2,22],26:[2,22],27:[2,22],29:[2,22]},{5:[2,23],10:[2,23],17:[2,23],18:[2,23],21:[2,23],23:[2,23],24:[2,23],26:[2,23],27:[2,23],29:[2,23]},{22:[2,44],32:73,42:74,43:64,44:66,45:[1,75]},{22:[1,76]},{20:[2,29],22:[2,29],28:[2,29],37:[2,29],38:[2,29],39:[2,29],40:[2,29],41:[2,29],45:[2,29],47:[2,29]},{20:[2,30],22:[2,30],28:[2,30],37:[2,30],38:[2,30],39:[2,30],40:[2,30],41:[2,30],45:[2,30],47:[2,30]},{20:[2,31],22:[2,31],28:[2,31],37:[2,31],38:[2,31],39:[2,31],40:[2,31],41:[2,31],45:[2,31],47:[2,31]},{20:[2,32],22:[2,32],28:[2,32],37:[2,32],38:[2,32],39:[2,32],40:[2,32],41:[2,32],45:[2,32],47:[2,32]},{20:[2,33],22:[2,33],28:[2,33],37:[2,33],38:[2,33],39:[2,33],40:[2,33],41:[2,33],45:[2,33],47:[2,33]},{19:77,25:27,36:28,45:[1,31],47:[1,30],48:29},{22:[2,47]},{20:[2,35],22:[2,35],28:[2,35],41:[2,35],44:78,45:[1,75]},{20:[2,43],22:[2,43],28:[2,43],37:[2,43],38:[2,43],39:[2,43],40:[2,43],41:[2,43],45:[2,43],46:[1,79],47:[2,43],49:[2,43]},{20:[2,52],22:[2,52],28:[2,52],41:[2,52],45:[2,52]},{22:[1,80]},{8:19,9:5,10:[1,10],12:6,14:7,15:8,16:9,17:[1,11],18:[1,12],21:[1,14],23:[1,13],24:[2,4],26:[1,15],27:[1,16],29:[1,17]},{20:[2,27],22:[2,27],28:[2,27],41:[2,27]},{20:[2,49],22:[2,49],28:[2,49],37:[2,49],38:[2,49],39:[2,49],40:[2,49],41:[2,49],45:[2,49],47:[2,49]},{20:[2,51],22:[2,51],28:[2,51],41:[2,51]},{20:[2,42],22:[2,42],28:[2,42],37:[2,42],38:[2,42],39:[2,42],40:[2,42],41:[2,42],45:[2,42],47:[2,42],49:[2,42]},{22:[1,81]},{22:[2,45]},{46:[1,79]},{5:[2,25],10:[2,25],17:[2,25],18:[2,25],21:[2,25],23:[2,25],24:[2,25],26:[2,25],27:[2,25],29:[2,25]},{41:[1,82]},{20:[2,53],22:[2,53],28:[2,53],41:[2,53],45:[2,53]},{25:57,31:83,36:61,37:[1,58],38:[1,59],39:[1,60],40:[1,62],45:[1,31],47:[1,30],48:29},{5:[2,21],10:[2,21],17:[2,21],18:[2,21],21:[2,21],23:[2,21],24:[2,21],26:[2,21],27:[2,21],29:[2,21]},{5:[2,24],10:[2,24],17:[2,24],18:[2,24],21:[2,24],23:[2,24],24:[2,24],26:[2,24],27:[2,24],29:[2,24]},{20:[2,34],22:[2,34],28:[2,34],37:[2,34],38:[2,34],39:[2,34],40:[2,34],41:[2,34],45:[2,34],47:[2,34]},{20:[2,36],22:[2,36],28:[2,36],41:[2,36],45:[2,36]}],
-    defaultActions: {3:[2,2],18:[2,1],47:[2,18],63:[2,47],74:[2,45]},
+    table: [{3:1,4:2,5:[2,38],6:3,12:[2,38],13:[2,38],16:[2,38],24:[2,38],26:[2,38],31:[2,38],32:[2,38],34:[2,38]},{1:[3]},{5:[1,4]},{5:[2,2],7:5,8:6,9:7,10:8,11:9,12:[1,10],13:[1,11],14:16,16:[1,20],19:14,22:15,24:[1,18],26:[1,19],28:[2,2],29:[2,2],31:[1,12],32:[1,13],34:[1,17]},{1:[2,1]},{5:[2,39],12:[2,39],13:[2,39],16:[2,39],24:[2,39],26:[2,39],28:[2,39],29:[2,39],31:[2,39],32:[2,39],34:[2,39]},{5:[2,3],12:[2,3],13:[2,3],16:[2,3],24:[2,3],26:[2,3],28:[2,3],29:[2,3],31:[2,3],32:[2,3],34:[2,3]},{5:[2,4],12:[2,4],13:[2,4],16:[2,4],24:[2,4],26:[2,4],28:[2,4],29:[2,4],31:[2,4],32:[2,4],34:[2,4]},{5:[2,5],12:[2,5],13:[2,5],16:[2,5],24:[2,5],26:[2,5],28:[2,5],29:[2,5],31:[2,5],32:[2,5],34:[2,5]},{5:[2,6],12:[2,6],13:[2,6],16:[2,6],24:[2,6],26:[2,6],28:[2,6],29:[2,6],31:[2,6],32:[2,6],34:[2,6]},{5:[2,7],12:[2,7],13:[2,7],16:[2,7],24:[2,7],26:[2,7],28:[2,7],29:[2,7],31:[2,7],32:[2,7],34:[2,7]},{5:[2,8],12:[2,8],13:[2,8],16:[2,8],24:[2,8],26:[2,8],28:[2,8],29:[2,8],31:[2,8],32:[2,8],34:[2,8]},{17:21,30:22,41:23,50:[1,26],52:[1,25],53:24},{17:27,30:22,41:23,50:[1,26],52:[1,25],53:24},{4:28,6:3,12:[2,38],13:[2,38],16:[2,38],24:[2,38],26:[2,38],28:[2,38],29:[2,38],31:[2,38],32:[2,38],34:[2,38]},{4:29,6:3,12:[2,38],13:[2,38],16:[2,38],24:[2,38],26:[2,38],28:[2,38],29:[2,38],31:[2,38],32:[2,38],34:[2,38]},{12:[1,30]},{30:32,35:31,42:[1,33],43:[1,34],50:[1,26],53:24},{17:35,30:22,41:23,50:[1,26],52:[1,25],53:24},{17:36,30:22,41:23,50:[1,26],52:[1,25],53:24},{17:37,30:22,41:23,50:[1,26],52:[1,25],53:24},{25:[1,38]},{18:[2,48],25:[2,48],33:[2,48],39:39,42:[2,48],43:[2,48],44:[2,48],45:[2,48],46:[2,48],50:[2,48],52:[2,48]},{18:[2,22],25:[2,22],33:[2,22],46:[2,22]},{18:[2,35],25:[2,35],33:[2,35],42:[2,35],43:[2,35],44:[2,35],45:[2,35],46:[2,35],50:[2,35],52:[2,35],54:[1,40]},{30:41,50:[1,26],53:24},{18:[2,37],25:[2,37],33:[2,37],42:[2,37],43:[2,37],44:[2,37],45:[2,37],46:[2,37],50:[2,37],52:[2,37],54:[2,37]},{33:[1,42]},{20:43,27:44,28:[1,45],29:[2,40]},{23:46,27:47,28:[1,45],29:[2,42]},{15:[1,48]},{25:[2,46],30:51,36:49,38:50,41:55,42:[1,52],43:[1,53],44:[1,54],45:[1,56],47:57,48:58,49:60,50:[1,59],52:[1,25],53:24},{25:[2,31],42:[2,31],43:[2,31],44:[2,31],45:[2,31],50:[2,31],52:[2,31]},{25:[2,32],42:[2,32],43:[2,32],44:[2,32],45:[2,32],50:[2,32],52:[2,32]},{25:[2,33],42:[2,33],43:[2,33],44:[2,33],45:[2,33],50:[2,33],52:[2,33]},{25:[1,61]},{25:[1,62]},{18:[1,63]},{5:[2,17],12:[2,17],13:[2,17],16:[2,17],24:[2,17],26:[2,17],28:[2,17],29:[2,17],31:[2,17],32:[2,17],34:[2,17]},{18:[2,50],25:[2,50],30:51,33:[2,50],36:65,40:64,41:55,42:[1,52],43:[1,53],44:[1,54],45:[1,56],46:[2,50],47:66,48:58,49:60,50:[1,59],52:[1,25],53:24},{50:[1,67]},{18:[2,34],25:[2,34],33:[2,34],42:[2,34],43:[2,34],44:[2,34],45:[2,34],46:[2,34],50:[2,34],52:[2,34]},{5:[2,18],12:[2,18],13:[2,18],16:[2,18],24:[2,18],26:[2,18],28:[2,18],29:[2,18],31:[2,18],32:[2,18],34:[2,18]},{21:68,29:[1,69]},{29:[2,41]},{4:70,6:3,12:[2,38],13:[2,38],16:[2,38],24:[2,38],26:[2,38],29:[2,38],31:[2,38],32:[2,38],34:[2,38]},{21:71,29:[1,69]},{29:[2,43]},{5:[2,9],12:[2,9],13:[2,9],16:[2,9],24:[2,9],26:[2,9],28:[2,9],29:[2,9],31:[2,9],32:[2,9],34:[2,9]},{25:[2,44],37:72,47:73,48:58,49:60,50:[1,74]},{25:[1,75]},{18:[2,23],25:[2,23],33:[2,23],42:[2,23],43:[2,23],44:[2,23],45:[2,23],46:[2,23],50:[2,23],52:[2,23]},{18:[2,24],25:[2,24],33:[2,24],42:[2,24],43:[2,24],44:[2,24],45:[2,24],46:[2,24],50:[2,24],52:[2,24]},{18:[2,25],25:[2,25],33:[2,25],42:[2,25],43:[2,25],44:[2,25],45:[2,25],46:[2,25],50:[2,25],52:[2,25]},{18:[2,26],25:[2,26],33:[2,26],42:[2,26],43:[2,26],44:[2,26],45:[2,26],46:[2,26],50:[2,26],52:[2,26]},{18:[2,27],25:[2,27],33:[2,27],42:[2,27],43:[2,27],44:[2,27],45:[2,27],46:[2,27],50:[2,27],52:[2,27]},{17:76,30:22,41:23,50:[1,26],52:[1,25],53:24},{25:[2,47]},{18:[2,29],25:[2,29],33:[2,29],46:[2,29],49:77,50:[1,74]},{18:[2,37],25:[2,37],33:[2,37],42:[2,37],43:[2,37],44:[2,37],45:[2,37],46:[2,37],50:[2,37],51:[1,78],52:[2,37],54:[2,37]},{18:[2,52],25:[2,52],33:[2,52],46:[2,52],50:[2,52]},{12:[2,13],13:[2,13],16:[2,13],24:[2,13],26:[2,13],28:[2,13],29:[2,13],31:[2,13],32:[2,13],34:[2,13]},{12:[2,14],13:[2,14],16:[2,14],24:[2,14],26:[2,14],28:[2,14],29:[2,14],31:[2,14],32:[2,14],34:[2,14]},{12:[2,10]},{18:[2,21],25:[2,21],33:[2,21],46:[2,21]},{18:[2,49],25:[2,49],33:[2,49],42:[2,49],43:[2,49],44:[2,49],45:[2,49],46:[2,49],50:[2,49],52:[2,49]},{18:[2,51],25:[2,51],33:[2,51],46:[2,51]},{18:[2,36],25:[2,36],33:[2,36],42:[2,36],43:[2,36],44:[2,36],45:[2,36],46:[2,36],50:[2,36],52:[2,36],54:[2,36]},{5:[2,11],12:[2,11],13:[2,11],16:[2,11],24:[2,11],26:[2,11],28:[2,11],29:[2,11],31:[2,11],32:[2,11],34:[2,11]},{30:79,50:[1,26],53:24},{29:[2,15]},{5:[2,12],12:[2,12],13:[2,12],16:[2,12],24:[2,12],26:[2,12],28:[2,12],29:[2,12],31:[2,12],32:[2,12],34:[2,12]},{25:[1,80]},{25:[2,45]},{51:[1,78]},{5:[2,20],12:[2,20],13:[2,20],16:[2,20],24:[2,20],26:[2,20],28:[2,20],29:[2,20],31:[2,20],32:[2,20],34:[2,20]},{46:[1,81]},{18:[2,53],25:[2,53],33:[2,53],46:[2,53],50:[2,53]},{30:51,36:82,41:55,42:[1,52],43:[1,53],44:[1,54],45:[1,56],50:[1,26],52:[1,25],53:24},{25:[1,83]},{5:[2,19],12:[2,19],13:[2,19],16:[2,19],24:[2,19],26:[2,19],28:[2,19],29:[2,19],31:[2,19],32:[2,19],34:[2,19]},{18:[2,28],25:[2,28],33:[2,28],42:[2,28],43:[2,28],44:[2,28],45:[2,28],46:[2,28],50:[2,28],52:[2,28]},{18:[2,30],25:[2,30],33:[2,30],46:[2,30],50:[2,30]},{5:[2,16],12:[2,16],13:[2,16],16:[2,16],24:[2,16],26:[2,16],28:[2,16],29:[2,16],31:[2,16],32:[2,16],34:[2,16]}],
+    defaultActions: {4:[2,1],44:[2,41],47:[2,43],57:[2,47],63:[2,10],70:[2,15],73:[2,45]},
     parseError: function parseError(str, hash) {
         throw new Error(str);
     },
@@ -1081,15 +1067,6 @@ define(
         return true;
     }
     };
-
-
-    function stripFlags(open, close) {
-      return {
-        left: open.charAt(2) === '~',
-        right: close.charAt(0) === '~' || close.charAt(1) === '~'
-      };
-    }
-
     /* Jison generated lexer */
     var lexer = (function(){
     var lexer = ({EOF:1,
@@ -1279,102 +1256,100 @@ define(
                                        } else {
                                          this.begin("mu");
                                        }
-                                       if(yy_.yytext) return 10;
+                                       if(yy_.yytext) return 12;
                                      
     break;
-    case 1:return 10;
+    case 1:return 12;
     break;
     case 2:
                                        this.popState();
-                                       return 10;
+                                       return 12;
                                      
     break;
     case 3:
                                       yy_.yytext = yy_.yytext.substr(5, yy_.yyleng-9);
                                       this.popState();
-                                      return 11;
+                                      return 15;
                                      
     break;
-    case 4: return 10; 
+    case 4: return 12; 
     break;
-    case 5:strip(0,4); this.popState(); return 17;
+    case 5:strip(0,4); this.popState(); return 13;
     break;
-    case 6:return 40;
+    case 6:return 45;
     break;
-    case 7:return 41;
+    case 7:return 46;
     break;
-    case 8: return 18; 
+    case 8: return 16; 
     break;
     case 9:
                                       this.popState();
                                       this.begin('raw');
-                                      return 20;
+                                      return 18;
                                      
     break;
-    case 10:
-                                      yy_.yytext = yy_.yytext.substr(4, yy_.yyleng-8);
-                                      this.popState();
-                                      return 'RAW_BLOCK';
-                                     
+    case 10:return 34;
     break;
-    case 11:return 29;
+    case 11:return 24;
     break;
-    case 12:return 21;
+    case 12:return 29;
     break;
-    case 13:return 24;
+    case 13:this.popState(); return 28;
     break;
-    case 14:return 23;
+    case 14:this.popState(); return 28;
     break;
-    case 15:return 23;
+    case 15:return 26;
     break;
-    case 16:return 27;
+    case 16:return 26;
     break;
-    case 17:return 26;
+    case 17:return 32;
     break;
-    case 18:this.popState(); this.begin('com');
+    case 18:return 31;
     break;
-    case 19:strip(3,5); this.popState(); return 17;
+    case 19:this.popState(); this.begin('com');
     break;
-    case 20:return 26;
+    case 20:strip(3,5); this.popState(); return 13;
     break;
-    case 21:return 46;
+    case 21:return 31;
     break;
-    case 22:return 45;
+    case 22:return 51;
     break;
-    case 23:return 45;
+    case 23:return 50;
     break;
-    case 24:return 49;
+    case 24:return 50;
     break;
-    case 25:// ignore whitespace
+    case 25:return 54;
     break;
-    case 26:this.popState(); return 28;
+    case 26:// ignore whitespace
     break;
-    case 27:this.popState(); return 22;
+    case 27:this.popState(); return 33;
     break;
-    case 28:yy_.yytext = strip(1,2).replace(/\\"/g,'"'); return 37;
+    case 28:this.popState(); return 25;
     break;
-    case 29:yy_.yytext = strip(1,2).replace(/\\'/g,"'"); return 37;
+    case 29:yy_.yytext = strip(1,2).replace(/\\"/g,'"'); return 42;
     break;
-    case 30:return 47;
+    case 30:yy_.yytext = strip(1,2).replace(/\\'/g,"'"); return 42;
     break;
-    case 31:return 39;
+    case 31:return 52;
     break;
-    case 32:return 39;
+    case 32:return 44;
     break;
-    case 33:return 38;
+    case 33:return 44;
     break;
-    case 34:return 45;
+    case 34:return 43;
     break;
-    case 35:yy_.yytext = strip(1,2); return 45;
+    case 35:return 50;
     break;
-    case 36:return 'INVALID';
+    case 36:yy_.yytext = strip(1,2); return 50;
     break;
-    case 37:return 5;
+    case 37:return 'INVALID';
+    break;
+    case 38:return 5;
     break;
     }
     };
-    lexer.rules = [/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/,/^(?:[^\x00]*?(?=(\{\{\{\{\/)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{\{\{)/,/^(?:\}\}\}\})/,/^(?:\{\{\{\{[^\x00]*\}\}\}\})/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{(~)?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)]))))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/];
-    lexer.conditions = {"mu":{"rules":[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37],"inclusive":false},"emu":{"rules":[2],"inclusive":false},"com":{"rules":[5],"inclusive":false},"raw":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,37],"inclusive":true}};
+    lexer.rules = [/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/,/^(?:[^\x00]*?(?=(\{\{\{\{\/)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{\{\{)/,/^(?:\}\}\}\})/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^\s*(~)?\}\})/,/^(?:\{\{(~)?\s*else\s*(~)?\}\})/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{(~)?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)]))))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/];
+    lexer.conditions = {"mu":{"rules":[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38],"inclusive":false},"emu":{"rules":[2],"inclusive":false},"com":{"rules":[5],"inclusive":false},"raw":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,38],"inclusive":true}};
     return lexer;})()
     parser.lexer = lexer;
     function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Parser;
@@ -1383,29 +1358,229 @@ define(
     /* jshint ignore:end */
   });
 define(
-  'handlebars/compiler/base',["./parser","./ast","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
+  'handlebars/compiler/helpers',["../exception","exports"],
+  function(__dependency1__, __exports__) {
+    
+    var Exception = __dependency1__["default"];
+
+    function stripFlags(open, close) {
+      return {
+        left: open.charAt(2) === '~',
+        right: close.charAt(close.length-3) === '~'
+      };
+    }
+
+    __exports__.stripFlags = stripFlags;
+    function prepareBlock(mustache, program, inverseAndProgram, close, inverted, locInfo) {
+      /*jshint -W040 */
+      if (mustache.sexpr.id.original !== close.path.original) {
+        throw new Exception(mustache.sexpr.id.original + ' doesn\'t match ' + close.path.original, mustache);
+      }
+
+      var inverse = inverseAndProgram && inverseAndProgram.program;
+
+      var strip = {
+        left: mustache.strip.left,
+        right: close.strip.right,
+
+        // Determine the standalone candiacy. Basically flag our content as being possibly standalone
+        // so our parent can determine if we actually are standalone
+        openStandalone: isNextWhitespace(program.statements),
+        closeStandalone: isPrevWhitespace((inverse || program).statements)
+      };
+
+      if (mustache.strip.right) {
+        omitRight(program.statements, null, true);
+      }
+
+      if (inverse) {
+        var inverseStrip = inverseAndProgram.strip;
+
+        if (inverseStrip.left) {
+          omitLeft(program.statements, null, true);
+        }
+        if (inverseStrip.right) {
+          omitRight(inverse.statements, null, true);
+        }
+        if (close.strip.left) {
+          omitLeft(inverse.statements, null, true);
+        }
+
+        // Find standalone else statments
+        if (isPrevWhitespace(program.statements)
+            && isNextWhitespace(inverse.statements)) {
+
+          omitLeft(program.statements);
+          omitRight(inverse.statements);
+        }
+      } else {
+        if (close.strip.left) {
+          omitLeft(program.statements, null, true);
+        }
+      }
+
+      if (inverted) {
+        return new this.BlockNode(mustache, inverse, program, strip, locInfo);
+      } else {
+        return new this.BlockNode(mustache, program, inverse, strip, locInfo);
+      }
+    }
+
+    __exports__.prepareBlock = prepareBlock;
+    function prepareProgram(statements, isRoot) {
+      for (var i = 0, l = statements.length; i < l; i++) {
+        var current = statements[i],
+            strip = current.strip;
+
+        if (!strip) {
+          continue;
+        }
+
+        var _isPrevWhitespace = isPrevWhitespace(statements, i, isRoot, current.type === 'partial'),
+            _isNextWhitespace = isNextWhitespace(statements, i, isRoot),
+
+            openStandalone = strip.openStandalone && _isPrevWhitespace,
+            closeStandalone = strip.closeStandalone && _isNextWhitespace,
+            inlineStandalone = strip.inlineStandalone && _isPrevWhitespace && _isNextWhitespace;
+
+        if (strip.right) {
+          omitRight(statements, i, true);
+        }
+        if (strip.left) {
+          omitLeft(statements, i, true);
+        }
+
+        if (inlineStandalone) {
+          omitRight(statements, i);
+
+          if (omitLeft(statements, i)) {
+            // If we are on a standalone node, save the indent info for partials
+            if (current.type === 'partial') {
+              current.indent = (/([ \t]+$)/).exec(statements[i-1].original) ? RegExp.$1 : '';
+            }
+          }
+        }
+        if (openStandalone) {
+          omitRight((current.program || current.inverse).statements);
+
+          // Strip out the previous content node if it's whitespace only
+          omitLeft(statements, i);
+        }
+        if (closeStandalone) {
+          // Always strip the next node
+          omitRight(statements, i);
+
+          omitLeft((current.inverse || current.program).statements);
+        }
+      }
+
+      return statements;
+    }
+
+    __exports__.prepareProgram = prepareProgram;function isPrevWhitespace(statements, i, isRoot) {
+      if (i === undefined) {
+        i = statements.length;
+      }
+
+      // Nodes that end with newlines are considered whitespace (but are special
+      // cased for strip operations)
+      var prev = statements[i-1],
+          sibling = statements[i-2];
+      if (!prev) {
+        return isRoot;
+      }
+
+      if (prev.type === 'content') {
+        return (sibling || !isRoot ? (/\r?\n\s*?$/) : (/(^|\r?\n)\s*?$/)).test(prev.original);
+      }
+    }
+    function isNextWhitespace(statements, i, isRoot) {
+      if (i === undefined) {
+        i = -1;
+      }
+
+      var next = statements[i+1],
+          sibling = statements[i+2];
+      if (!next) {
+        return isRoot;
+      }
+
+      if (next.type === 'content') {
+        return (sibling || !isRoot ? (/^\s*?\r?\n/) : (/^\s*?(\r?\n|$)/)).test(next.original);
+      }
+    }
+
+    // Marks the node to the right of the position as omitted.
+    // I.e. {{foo}}' ' will mark the ' ' node as omitted.
+    //
+    // If i is undefined, then the first child will be marked as such.
+    //
+    // If mulitple is truthy then all whitespace will be stripped out until non-whitespace
+    // content is met.
+    function omitRight(statements, i, multiple) {
+      var current = statements[i == null ? 0 : i + 1];
+      if (!current || current.type !== 'content' || (!multiple && current.rightStripped)) {
+        return;
+      }
+
+      var original = current.string;
+      current.string = current.string.replace(multiple ? (/^\s+/) : (/^[ \t]*\r?\n?/), '');
+      current.rightStripped = current.string !== original;
+    }
+
+    // Marks the node to the left of the position as omitted.
+    // I.e. ' '{{foo}} will mark the ' ' node as omitted.
+    //
+    // If i is undefined then the last child will be marked as such.
+    //
+    // If mulitple is truthy then all whitespace will be stripped out until non-whitespace
+    // content is met.
+    function omitLeft(statements, i, multiple) {
+      var current = statements[i == null ? statements.length - 1 : i - 1];
+      if (!current || current.type !== 'content' || (!multiple && current.leftStripped)) {
+        return;
+      }
+
+      // We omit the last node if it's whitespace only and not preceeded by a non-content node.
+      var original = current.string;
+      current.string = current.string.replace(multiple ? (/\s+$/) : (/[ \t]+$/), '');
+      current.leftStripped = current.string !== original;
+      return current.leftStripped;
+    }
+  });
+define(
+  'handlebars/compiler/base',["./parser","./ast","./helpers","../utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     
     var parser = __dependency1__["default"];
     var AST = __dependency2__["default"];
+    var Helpers = __dependency3__;
+    var extend = __dependency4__.extend;
 
     __exports__.parser = parser;
 
+    var yy = {};
+    extend(yy, Helpers, AST);
+
     function parse(input) {
       // Just return if an already-compile AST was passed in.
-      if(input.constructor === AST.ProgramNode) { return input; }
+      if (input.constructor === AST.ProgramNode) { return input; }
 
-      parser.yy = AST;
+      parser.yy = yy;
+
       return parser.parse(input);
     }
 
     __exports__.parse = parse;
   });
 define(
-  'handlebars/compiler/compiler',["../exception","exports"],
-  function(__dependency1__, __exports__) {
+  'handlebars/compiler/compiler',["../exception","../utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     
     var Exception = __dependency1__["default"];
+    var isArray = __dependency2__.isArray;
+
+    var slice = [].slice;
 
     function Compiler() {}
 
@@ -1417,30 +1592,6 @@ define(
     Compiler.prototype = {
       compiler: Compiler,
 
-      disassemble: function() {
-        var opcodes = this.opcodes, opcode, out = [], params, param;
-
-        for (var i=0, l=opcodes.length; i<l; i++) {
-          opcode = opcodes[i];
-
-          if (opcode.opcode === 'DECLARE') {
-            out.push("DECLARE " + opcode.name + "=" + opcode.value);
-          } else {
-            params = [];
-            for (var j=0; j<opcode.args.length; j++) {
-              param = opcode.args[j];
-              if (typeof param === "string") {
-                param = "\"" + param.replace("\n", "\\n") + "\"";
-              }
-              params.push(param);
-            }
-            out.push(opcode.opcode + " " + params.join(" "));
-          }
-        }
-
-        return out.join("\n");
-      },
-
       equals: function(other) {
         var len = this.opcodes.length;
         if (other.opcodes.length !== len) {
@@ -1450,20 +1601,14 @@ define(
         for (var i = 0; i < len; i++) {
           var opcode = this.opcodes[i],
               otherOpcode = other.opcodes[i];
-          if (opcode.opcode !== otherOpcode.opcode || opcode.args.length !== otherOpcode.args.length) {
+          if (opcode.opcode !== otherOpcode.opcode || !argEquals(opcode.args, otherOpcode.args)) {
             return false;
-          }
-          for (var j = 0; j < opcode.args.length; j++) {
-            if (opcode.args[j] !== otherOpcode.args[j]) {
-              return false;
-            }
           }
         }
 
+        // We know that length is the same between the two arrays because they are directly tied
+        // to the opcode behavior above.
         len = this.children.length;
-        if (other.children.length !== len) {
-          return false;
-        }
         for (i = 0; i < len; i++) {
           if (!this.children[i].equals(other.children[i])) {
             return false;
@@ -1505,19 +1650,7 @@ define(
       },
 
       accept: function(node) {
-        var strip = node.strip || {},
-            ret;
-        if (strip.left) {
-          this.opcode('strip');
-        }
-
-        ret = this[node.type](node);
-
-        if (strip.right) {
-          this.opcode('strip');
-        }
-
-        return ret;
+        return this[node.type](node);
       },
 
       program: function(program) {
@@ -1621,15 +1754,18 @@ define(
         if (partial.context) {
           this.accept(partial.context);
         } else {
-          this.opcode('push', 'depth0');
+          this.opcode('getContext', 0);
+          this.opcode('pushContext');
         }
 
-        this.opcode('invokePartial', partialName.name);
+        this.opcode('invokePartial', partialName.name, partial.indent || '');
         this.opcode('append');
       },
 
       content: function(content) {
-        this.opcode('appendContent', content.string);
+        if (content.string) {
+          this.opcode('appendContent', content.string);
+        }
       },
 
       mustache: function(mustache) {
@@ -1651,6 +1787,8 @@ define(
 
         this.opcode('pushProgram', program);
         this.opcode('pushProgram', inverse);
+
+        this.ID(id);
 
         this.opcode('invokeAmbiguous', name, isBlock);
       },
@@ -1682,8 +1820,10 @@ define(
         } else if (this.options.knownHelpersOnly) {
           throw new Exception("You specified knownHelpersOnly, but used the unknown helper " + name, sexpr);
         } else {
+          id.falsy = true;
+
           this.ID(id);
-          this.opcode('invokeHelper', params.length, id.original, sexpr.isRoot);
+          this.opcode('invokeHelper', params.length, id.original, id.isSimple);
         }
       },
 
@@ -1705,23 +1845,16 @@ define(
 
         var name = id.parts[0];
         if (!name) {
+          // Context reference, i.e. `{{foo .}}` or `{{foo ..}}`
           this.opcode('pushContext');
         } else {
-          this.opcode('lookupOnContext', id.parts[0]);
-        }
-
-        for(var i=1, l=id.parts.length; i<l; i++) {
-          this.opcode('lookup', id.parts[i]);
+          this.opcode('lookupOnContext', id.parts, id.falsy, id.isScoped);
         }
       },
 
       DATA: function(data) {
         this.options.data = true;
-        this.opcode('lookupData', data.id.depth);
-        var parts = data.id.parts;
-        for(var i=0, l=parts.length; i<l; i++) {
-          this.opcode('lookup', parts[i]);
-        }
+        this.opcode('lookupData', data.id.depth, data.id.parts);
       },
 
       STRING: function(string) {
@@ -1740,11 +1873,7 @@ define(
 
       // HELPERS
       opcode: function(name) {
-        this.opcodes.push({ opcode: name, args: [].slice.call(arguments, 1) });
-      },
-
-      declare: function(name, value) {
-        this.opcodes.push({ opcode: 'DECLARE', name: name, value: value });
+        this.opcodes.push({ opcode: name, args: slice.call(arguments, 1) });
       },
 
       addDepth: function(depth) {
@@ -1831,6 +1960,9 @@ define(
       if (!('data' in options)) {
         options.data = true;
       }
+      if (options.compat) {
+        options.useDepths = true;
+      }
 
       var ast = env.parse(input);
       var environment = new env.Compiler().compile(ast, options);
@@ -1846,6 +1978,9 @@ define(
 
       if (!('data' in options)) {
         options.data = true;
+      }
+      if (options.compat) {
+        options.useDepths = true;
       }
 
       var compiled;
@@ -1870,16 +2005,29 @@ define(
         }
         return compiled._setup(options);
       };
-      ret._child = function(i) {
+      ret._child = function(i, data, depths) {
         if (!compiled) {
           compiled = compileInput();
         }
-        return compiled._child(i);
+        return compiled._child(i, data, depths);
       };
       return ret;
     }
 
-    __exports__.compile = compile;
+    __exports__.compile = compile;function argEquals(a, b) {
+      if (a === b) {
+        return true;
+      }
+
+      if (isArray(a) && isArray(b) && a.length === b.length) {
+        for (var i = 0; i < a.length; i++) {
+          if (!argEquals(a[i], b[i])) {
+            return false;
+          }
+        }
+        return true;
+      }
+    }
   });
 define(
   'handlebars/compiler/javascript-compiler',["../base","../exception","exports"],
@@ -1887,7 +2035,6 @@ define(
     
     var COMPILER_REVISION = __dependency1__.COMPILER_REVISION;
     var REVISION_CHANGES = __dependency1__.REVISION_CHANGES;
-    var log = __dependency1__.log;
     var Exception = __dependency2__["default"];
 
     function Literal(value) {
@@ -1900,23 +2047,16 @@ define(
       // PUBLIC API: You can override these methods in a subclass to provide
       // alternative compiled forms for name lookup and buffering semantics
       nameLookup: function(parent, name /* , type*/) {
-        var wrap,
-            ret;
-        if (parent.indexOf('depth') === 0) {
-          wrap = true;
-        }
-
         if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
-          ret = parent + "." + name;
+          return parent + "." + name;
         } else {
-          ret = parent + "['" + name + "']";
+          return parent + "['" + name + "']";
         }
+      },
+      depthedLookup: function(name) {
+        this.aliases.lookup = 'this.lookup';
 
-        if (wrap) {
-          return '(' + parent + ' && ' + ret + ')';
-        } else {
-          return ret;
-        }
+        return 'lookup(depths, "' + name + '")';
       },
 
       compilerInfo: function() {
@@ -1946,12 +2086,10 @@ define(
 
       compile: function(environment, options, context, asObject) {
         this.environment = environment;
-        this.options = options || {};
+        this.options = options;
         this.stringParams = this.options.stringParams;
         this.trackIds = this.options.trackIds;
         this.precompile = !asObject;
-
-        log('debug', this.environment.disassemble() + "\n\n");
 
         this.name = this.environment.name;
         this.isChild = !!context;
@@ -1972,6 +2110,8 @@ define(
 
         this.compileChildren(environment, options);
 
+        this.useDepths = this.useDepths || environment.depths.list.length || this.options.compat;
+
         var opcodes = environment.opcodes,
             opcode,
             i,
@@ -1980,21 +2120,13 @@ define(
         for (i = 0, l = opcodes.length; i < l; i++) {
           opcode = opcodes[i];
 
-          if(opcode.opcode === 'DECLARE') {
-            this[opcode.name] = opcode.value;
-          } else {
-            this[opcode.opcode].apply(this, opcode.args);
-          }
-
-          // Reset the stripNext flag if it was not set by this operation.
-          if (opcode.opcode !== this.stripNext) {
-            this.stripNext = false;
-          }
+          this[opcode.opcode].apply(this, opcode.args);
         }
 
         // Flush any trailing content that might be pending.
         this.pushSource('');
 
+        /* istanbul ignore next */
         if (this.stackSlot || this.inlineStack.length || this.compileStack.length) {
           throw new Exception('Compile completed with content left on stack');
         }
@@ -2017,6 +2149,12 @@ define(
           }
           if (this.options.data) {
             ret.useData = true;
+          }
+          if (this.useDepths) {
+            ret.useDepths = true;
+          }
+          if (this.options.compat) {
+            ret.compat = true;
           }
 
           if (!asObject) {
@@ -2054,8 +2192,8 @@ define(
 
         var params = ["depth0", "helpers", "partials", "data"];
 
-        for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
-          params.push("depth" + this.environment.depths.list[i]);
+        if (this.useDepths) {
+          params.push('depths');
         }
 
         // Perform a second pass over the output to merge content when possible
@@ -2133,13 +2271,13 @@ define(
       blockValue: function(name) {
         this.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
 
-        var params = ["depth0"];
+        var params = [this.contextName(0)];
         this.setupParams(name, 0, params);
 
-        this.replaceStack(function(current) {
-          params.splice(1, 0, current);
-          return "blockHelperMissing.call(" + params.join(", ") + ")";
-        });
+        var blockName = this.popStack();
+        params.splice(1, 0, blockName);
+
+        this.push('blockHelperMissing.call(' + params.join(', ') + ')');
       },
 
       // [ambiguousBlockValue]
@@ -2152,7 +2290,7 @@ define(
         this.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
 
         // We're being a bit cheeky and reusing the options value from the prior exec
-        var params = ["depth0"];
+        var params = [this.contextName(0)];
         this.setupParams('', 0, params, true);
 
         this.flushInline();
@@ -2173,25 +2311,8 @@ define(
         if (this.pendingContent) {
           content = this.pendingContent + content;
         }
-        if (this.stripNext) {
-          content = content.replace(/^\s+/, '');
-        }
 
         this.pendingContent = content;
-      },
-
-      // [strip]
-      //
-      // On stack, before: ...
-      // On stack, after: ...
-      //
-      // Removes any trailing whitespace from the prior content node and flags
-      // the next operation for stripping if it is a content node.
-      strip: function() {
-        if (this.pendingContent) {
-          this.pendingContent = this.pendingContent.replace(/\s+$/, '');
-        }
-        this.stripNext = 'strip';
       },
 
       // [append]
@@ -2208,7 +2329,7 @@ define(
         // when we examine local
         this.flushInline();
         var local = this.popStack();
-        this.pushSource("if(" + local + " || " + local + " === 0) { " + this.appendToBuffer(local) + " }");
+        this.pushSource('if (' + local + ' != null) { ' + this.appendToBuffer(local) + ' }');
         if (this.environment.isSimple) {
           this.pushSource("else { " + this.appendToBuffer("''") + " }");
         }
@@ -2234,20 +2355,7 @@ define(
       //
       // Set the value of the `lastContext` compiler value to the depth
       getContext: function(depth) {
-        if(this.lastContext !== depth) {
-          this.lastContext = depth;
-        }
-      },
-
-      // [lookupOnContext]
-      //
-      // On stack, before: ...
-      // On stack, after: currentContext[name], ...
-      //
-      // Looks up the value of `name` on the current context and pushes
-      // it onto the stack.
-      lookupOnContext: function(name) {
-        this.push(this.nameLookup('depth' + this.lastContext, name, 'context'));
+        this.lastContext = depth;
       },
 
       // [pushContext]
@@ -2257,7 +2365,64 @@ define(
       //
       // Pushes the value of the current context onto the stack.
       pushContext: function() {
-        this.pushStackLiteral('depth' + this.lastContext);
+        this.pushStackLiteral(this.contextName(this.lastContext));
+      },
+
+      // [lookupOnContext]
+      //
+      // On stack, before: ...
+      // On stack, after: currentContext[name], ...
+      //
+      // Looks up the value of `name` on the current context and pushes
+      // it onto the stack.
+      lookupOnContext: function(parts, falsy, scoped) {
+        /*jshint -W083 */
+        var i = 0,
+            len = parts.length;
+
+        if (!scoped && this.options.compat && !this.lastContext) {
+          // The depthed query is expected to handle the undefined logic for the root level that
+          // is implemented below, so we evaluate that directly in compat mode
+          this.push(this.depthedLookup(parts[i++]));
+        } else {
+          this.pushContext();
+        }
+
+        for (; i < len; i++) {
+          this.replaceStack(function(current) {
+            var lookup = this.nameLookup(current, parts[i], 'context');
+            // We want to ensure that zero and false are handled properly if the context (falsy flag)
+            // needs to have the special handling for these values.
+            if (!falsy) {
+              return ' != null ? ' + lookup + ' : ' + current;
+            } else {
+              // Otherwise we can use generic falsy handling
+              return ' && ' + lookup;
+            }
+          });
+        }
+      },
+
+      // [lookupData]
+      //
+      // On stack, before: ...
+      // On stack, after: data, ...
+      //
+      // Push the data lookup operator
+      lookupData: function(depth, parts) {
+        /*jshint -W083 */
+        if (!depth) {
+          this.pushStackLiteral('data');
+        } else {
+          this.pushStackLiteral('this.data(data, ' + depth + ')');
+        }
+
+        var len = parts.length;
+        for (var i = 0; i < len; i++) {
+          this.replaceStack(function(current) {
+            return ' && ' + this.nameLookup(current, parts[i], 'data');
+          });
+        }
       },
 
       // [resolvePossibleLambda]
@@ -2268,38 +2433,9 @@ define(
       // If the `value` is a lambda, replace it on the stack by
       // the return value of the lambda
       resolvePossibleLambda: function() {
-        this.aliases.functionType = '"function"';
+        this.aliases.lambda = 'this.lambda';
 
-        this.replaceStack(function(current) {
-          return "typeof " + current + " === functionType ? " + current + ".apply(depth0) : " + current;
-        });
-      },
-
-      // [lookup]
-      //
-      // On stack, before: value, ...
-      // On stack, after: value[name], ...
-      //
-      // Replace the value on the stack with the result of looking
-      // up `name` on `value`
-      lookup: function(name) {
-        this.replaceStack(function(current) {
-          return current + " == null || " + current + " === false ? " + current + " : " + this.nameLookup(current, name, 'context');
-        });
-      },
-
-      // [lookupData]
-      //
-      // On stack, before: ...
-      // On stack, after: data, ...
-      //
-      // Push the data lookup operator
-      lookupData: function(depth) {
-        if (!depth) {
-          this.pushStackLiteral('data');
-        } else {
-          this.pushStackLiteral('this.data(data, ' + depth + ')');
-        }
+        this.push('lambda(' + this.popStack() + ', ' + this.contextName(0) + ')');
       },
 
       // [pushStringParam]
@@ -2311,8 +2447,7 @@ define(
       // provides the string value of a parameter along with its
       // depth rather than resolving it immediately.
       pushStringParam: function(string, type) {
-        this.pushStackLiteral('depth' + this.lastContext);
-
+        this.pushContext();
         this.pushString(type);
 
         // If it's a subexpression, the string result
@@ -2416,26 +2551,14 @@ define(
       // and pushes the helper's return value onto the stack.
       //
       // If the helper is not found, `helperMissing` is called.
-      invokeHelper: function(paramSize, name, isRoot) {
+      invokeHelper: function(paramSize, name, isSimple) {
         this.aliases.helperMissing = 'helpers.helperMissing';
-        this.useRegister('helper');
 
         var nonHelper = this.popStack();
         var helper = this.setupHelper(paramSize, name);
 
-        var lookup = 'helper = ' + helper.name + ' || ' + nonHelper + ' || helperMissing';
-        if (helper.paramsInit) {
-          lookup += ',' + helper.paramsInit;
-        }
-
-        this.push('(' + lookup + ',helper.call(' + helper.callParams + '))');
-
-        // Always flush subexpressions. This is both to prevent the compounding size issue that
-        // occurs when the code has to be duplicated for inlining and also to prevent errors
-        // due to the incorrect options object being passed due to the shared register.
-        if (!isRoot) {
-          this.flushInline();
-        }
+        var lookup = (isSimple ? helper.name + ' || ' : '') + nonHelper + ' || helperMissing';
+        this.push('((' + lookup + ').call(' + helper.callParams + '))');
       },
 
       // [invokeKnownHelper]
@@ -2464,16 +2587,18 @@ define(
       // `knownHelpersOnly` flags at compile-time.
       invokeAmbiguous: function(name, helperCall) {
         this.aliases.functionType = '"function"';
+        this.aliases.helperMissing = 'helpers.helperMissing';
         this.useRegister('helper');
+
+        var nonHelper = this.popStack();
 
         this.emptyHash();
         var helper = this.setupHelper(0, name, helperCall);
 
         var helperName = this.lastHelper = this.nameLookup('helpers', name, 'helper');
-        var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
 
         this.push(
-          '((helper = ' + helperName + ' || ' + nonHelper
+          '((helper = (helper = ' + helperName + ' || ' + nonHelper + ') != null ? helper : helperMissing'
             + (helper.paramsInit ? '),(' + helper.paramsInit : '') + '),'
           + '(typeof helper === functionType ? helper.call(' + helper.callParams + ') : helper))');
       },
@@ -2485,11 +2610,16 @@ define(
       //
       // This operation pops off a context, invokes a partial with that context,
       // and pushes the result of the invocation back.
-      invokePartial: function(name) {
-        var params = [this.nameLookup('partials', name, 'partial'), "'" + name + "'", this.popStack(), this.popStack(), "helpers", "partials"];
+      invokePartial: function(name, indent) {
+        var params = [this.nameLookup('partials', name, 'partial'), "'" + indent + "'", "'" + name + "'", this.popStack(), this.popStack(), "helpers", "partials"];
 
         if (this.options.data) {
           params.push("data");
+        } else if (this.options.compat) {
+          params.push('undefined');
+        }
+        if (this.options.compat) {
+          params.push('depths');
         }
 
         this.push("this.invokePartial(" + params.join(", ") + ")");
@@ -2558,6 +2688,8 @@ define(
             child.name = 'program' + index;
             this.context.programs[index] = compiler.compile(child, options, this.context, !this.precompile);
             this.context.environments[index] = child;
+
+            this.useDepths = this.useDepths || compiler.useDepths;
           } else {
             child.index = index;
             child.name = 'program' + index;
@@ -2574,27 +2706,18 @@ define(
       },
 
       programExpression: function(guid) {
-        if(guid == null) {
-          return 'this.noop';
-        }
-
         var child = this.environment.children[guid],
-            depths = child.depths.list, depth;
+            depths = child.depths.list,
+            useDepths = this.useDepths,
+            depth;
 
         var programParams = [child.index, 'data'];
 
-        for(var i=0, l = depths.length; i<l; i++) {
-          depth = depths[i];
-
-          programParams.push('depth' + (depth - 1));
+        if (useDepths) {
+          programParams.push('depths');
         }
 
-        return (depths.length === 0 ? 'this.program(' : 'this.programWithDepth(') + programParams.join(', ') + ')';
-      },
-
-      register: function(name, val) {
-        this.useRegister(name);
-        this.pushSource(name + " = " + val + ";");
+        return 'this.program(' + programParams.join(', ') + ')';
       },
 
       useRegister: function(name) {
@@ -2623,9 +2746,7 @@ define(
         this.flushInline();
 
         var stack = this.incrStack();
-        if (item) {
-          this.pushSource(stack + " = " + item + ";");
-        }
+        this.pushSource(stack + " = " + item + ";");
         this.compileStack.push(stack);
         return stack;
       },
@@ -2637,50 +2758,36 @@ define(
             createdStack,
             usedLiteral;
 
-        // If we are currently inline then we want to merge the inline statement into the
-        // replacement statement via ','
-        if (inline) {
-          var top = this.popStack(true);
+        /* istanbul ignore next */
+        if (!this.isInline()) {
+          throw new Exception('replaceStack on non-inline');
+        }
 
-          if (top instanceof Literal) {
-            // Literals do not need to be inlined
-            stack = top.value;
-            usedLiteral = true;
-          } else {
-            // Get or create the current stack name for use by the inline
-            createdStack = !this.stackSlot;
-            var name = !createdStack ? this.topStackName() : this.incrStack();
+        // We want to merge the inline statement into the replacement statement via ','
+        var top = this.popStack(true);
 
-            prefix = '(' + this.push(name) + ' = ' + top + '),';
-            stack = this.topStack();
-          }
+        if (top instanceof Literal) {
+          // Literals do not need to be inlined
+          prefix = stack = top.value;
+          usedLiteral = true;
         } else {
+          // Get or create the current stack name for use by the inline
+          createdStack = !this.stackSlot;
+          var name = !createdStack ? this.topStackName() : this.incrStack();
+
+          prefix = '(' + this.push(name) + ' = ' + top + ')';
           stack = this.topStack();
         }
 
         var item = callback.call(this, stack);
 
-        if (inline) {
-          if (!usedLiteral) {
-            this.popStack();
-          }
-          if (createdStack) {
-            this.stackSlot--;
-          }
-          this.push('(' + prefix + item + ')');
-        } else {
-          // Prevent modification of the context depth variable. Through replaceStack
-          if (!/^stack/.test(stack)) {
-            stack = this.nextStack();
-          }
-
-          this.pushSource(stack + " = (" + prefix + item + ");");
+        if (!usedLiteral) {
+          this.popStack();
         }
-        return stack;
-      },
-
-      nextStack: function() {
-        return this.pushStack();
+        if (createdStack) {
+          this.stackSlot--;
+        }
+        this.push('(' + prefix + item + ')');
       },
 
       incrStack: function() {
@@ -2717,6 +2824,7 @@ define(
           return item.value;
         } else {
           if (!inline) {
+            /* istanbul ignore next */
             if (!this.stackSlot) {
               throw new Exception('Invalid stack pop');
             }
@@ -2726,14 +2834,22 @@ define(
         }
       },
 
-      topStack: function(wrapped) {
+      topStack: function() {
         var stack = (this.isInline() ? this.inlineStack : this.compileStack),
             item = stack[stack.length - 1];
 
-        if (!wrapped && (item instanceof Literal)) {
+        if (item instanceof Literal) {
           return item.value;
         } else {
           return item;
+        }
+      },
+
+      contextName: function(context) {
+        if (this.useDepths && context) {
+          return 'depths[' + context + ']';
+        } else {
+          return 'depth' + context;
         }
       },
 
@@ -2768,7 +2884,7 @@ define(
           params: params,
           paramsInit: paramsInit,
           name: foundHelper,
-          callParams: ["depth0"].concat(params).join(", ")
+          callParams: [this.contextName(0)].concat(params).join(", ")
         };
       },
 
@@ -2919,6 +3035,8 @@ define(
 
     Handlebars = create();
     Handlebars.create = create;
+
+    Handlebars['default'] = Handlebars;
 
     __exports__["default"] = Handlebars;
   });

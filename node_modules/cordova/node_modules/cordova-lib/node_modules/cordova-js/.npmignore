@@ -1,0 +1,5 @@
+pkg/
+tags
+.DS_Store
+node_modules/
+.gitkeep

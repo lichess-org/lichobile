@@ -11,7 +11,7 @@ var gen = generator()
 
   , base64 = gen.base64Encode()
   , comment = gen.inlineMappingUrl()
-  , json = '{"version":3,"file":"","sources":["foo.js","bar.js"],"names":[],"mappings":";;;;;;;;;UACG;;;;;;;;;;;;;;sBCDH;sBACA"}'
+  , json = gen.toString()
   , obj = JSON.parse(json)
 
 test('different formats', function (t) {
@@ -25,7 +25,7 @@ test('different formats', function (t) {
   t.equal(convert.fromBase64(base64).toComment(), comment, 'base64 -> comment')
   t.equal(convert.fromBase64(base64).toJSON(), json, 'base64 -> json')
   t.deepEqual(convert.fromBase64(base64).toObject(), obj, 'base64 -> object')
-  
+
   t.equal(convert.fromJSON(json).toJSON(), json, 'json -> json')
   t.equal(convert.fromJSON(json).toBase64(), base64, 'json -> base64')
   t.equal(convert.fromJSON(json).toComment(), comment, 'json -> comment')
@@ -58,7 +58,7 @@ test('from source', function (t) {
     var map = convert.fromSource(src);
     return map ? map.toComment() : null;
   }
-  
+
   t.equal(getComment(foo), null, 'no comment returns null')
   t.equal(getComment(foo + map), map, 'beginning of last line')
   t.equal(getComment(foo + '    ' +  map), map, 'indented of last line')
@@ -108,11 +108,13 @@ test('remove map file comments', function (t) {
 })
 
 test('pretty json', function (t) {
-  var mod = convert.fromJSON(json).toJSON(2);
+  var mod = convert.fromJSON(json).toJSON(2)
+    , expected = JSON.stringify(obj, null, 2);
+
   t.equal(
       mod
-    , '{\n  "version": 3,\n  "file": "",\n  "sources": [\n    "foo.js",\n    "bar.js"\n  ],\n  "names": [],\n  "mappings": ";;;;;;;;;UACG;;;;;;;;;;;;;;sBCDH;sBACA"\n}'
-    , 'pretty prints json whe space is given')
+    , expected
+    , 'pretty prints json when space is given')
   t.end()
 })
 
@@ -120,11 +122,12 @@ test('adding properties', function (t) {
   var mod = convert
     .fromJSON(json)
     .addProperty('foo', 'bar')
-    .toJSON()    
-
+    .toJSON()
+    , expected = JSON.parse(json);
+    expected.foo = 'bar';
   t.equal(
       mod
-    , '{"version":3,"file":"","sources":["foo.js","bar.js"],"names":[],"mappings":";;;;;;;;;UACG;;;;;;;;;;;;;;sBCDH;sBACA","foo":"bar"}'
+    , JSON.stringify(expected)
     , 'includes added property'
   )
   t.end()
@@ -136,11 +139,14 @@ test('setting properties', function (t) {
     .setProperty('version', '2')
     .setProperty('mappings', ';;;UACG')
     .setProperty('should add', 'this')
-    .toJSON()    
-
+    .toJSON()
+    , expected = JSON.parse(json);
+    expected.version = '2';
+    expected.mappings = ';;;UACG';
+    expected['should add'] = 'this';
   t.equal(
       mod
-    , '{"version":"2","file":"","sources":["foo.js","bar.js"],"names":[],"mappings":";;;UACG","should add":"this"}'
+    , JSON.stringify(expected)
     , 'includes new property and changes existing properties'
   )
   t.end()

@@ -1,6 +1,6 @@
 # rcfinder
 
-[![Travis CI](https://travis-ci.org/spenceralger/rcfinder.png)](https://travis-ci.org/spenceralger/rcfinder)
+[![Travis CI](https://travis-ci.org/spenceralger/rcfinder.svg)](https://travis-ci.org/spenceralger/rcfinder)
 
 **This module provides the file lookup logic for the generally more useful [rcloader](https://www.npmjs.org/package/rcloader) package**.
 
@@ -11,26 +11,26 @@ the file system are cached so that you can find files relative to every file
 in a project without making a ton of unnecessary calls.
 
 ## install
-```
+```js
 npm install rcfinder
 ```
 
 ## Use
 Create an instance of the RcFinder class, passing it the name of your config file and an object specifying other options.
 
-```
+```js
 var RcFinder = require('rcfinder');
 var rcFinder = new RcFinder('.jshintrc', {});
 ```
 
 Then you can use the finder to look up the proper config file for a directory.
-```
+```js
 // get the closet .jshintc file for this file
 var config = rcFinder.find(__dirname);
 ```
 
 If you want to use async file system calls, just specify a callback to find.
-```
+```js
 rcFinder.find(__dirname, function (err, config) {
 
 });
@@ -42,7 +42,7 @@ When creating an instance of the RcFinder class, you can specify options to dict
 A function to call that will load a given path. Once the path for a config file is determined, this will be called with that path as it's only argument and it should return a proper value.
 
 The default loader is:
-```
+```js
 function loader(path) {
   return JSON.parse(fs.readFileSync(path));
 }

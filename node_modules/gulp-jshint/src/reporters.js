@@ -1,6 +1,10 @@
 var map = require('map-stream');
 var PluginError = require('gulp-util').PluginError;
 
+var gfDir = require('path').dirname(require('./gulpfile-path'));
+var _ = require('lodash');
+var relative = _.memoize(_.partial(require('path').relative, gfDir));
+
 exports.failReporter = function(){
   return map(function (file, cb) {
     // nothing to report or no errors
@@ -36,7 +40,7 @@ exports.loadReporter = function(reporter) {
   }
 };
 
-exports.reporter = function (reporter) {
+exports.reporter = function (reporter, reporterCfg) {
   if (!reporter) reporter = 'default';
   if (reporter === 'fail') {
     return exports.failReporter();
@@ -52,7 +56,13 @@ exports.reporter = function (reporter) {
     // nothing to report or no errors
     if (!file.jshint || file.jshint.success) return cb(null, file);
 
-    rpt(file.jshint.results, file.jshint.data, file.jshint.opt);
+    // merge in reporter config
+    var opt = _.defaults({}, reporterCfg || {}, file.jshint.opt);
+
+    if (!file.jshint.ignored) {
+      rpt(file.jshint.results, file.jshint.data, opt);
+    }
+
     return cb(null, file);
   });
 };

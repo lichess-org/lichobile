@@ -17,6 +17,11 @@
  *
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          sub:true, laxcomma:true
+*/
+
 /**
  * contains XML utility functions, some of which are specific to elementtree
  */
@@ -24,7 +29,8 @@
 var fs = require('fs')
   , path = require('path')
   , _ = require('underscore')
-  , et = require('elementtree');
+  , et = require('elementtree')
+  ;
 
 module.exports = {
     // compare two et.XML nodes, see if they match
@@ -69,7 +75,7 @@ module.exports = {
         if (!parent) {
             //Try to create the parent recursively if necessary
             try {
-                var parentToCreate = et.XML("<" + path.basename(selector) + ">"),
+                var parentToCreate = et.XML('<' + path.basename(selector) + '>'),
                     parentSelector = path.dirname(selector);
 
                 this.graftXML(doc, [parentToCreate], parentSelector);
@@ -101,7 +107,7 @@ module.exports = {
 
         nodes.forEach(function (node) {
             var matchingKid = null;
-            if ((matchingKid = findChild(node, parent)) != null) {
+            if ((matchingKid = findChild(node, parent)) !== null) {
                 // stupid elementtree takes an index argument it doesn't use
                 // and does not conform to the python lib
                 parent.remove(0, matchingKid);
@@ -115,7 +121,7 @@ module.exports = {
         var contents = fs.readFileSync(filename, 'utf-8');
         if(contents) {
             //Windows is the BOM. Skip the Byte Order Mark.
-            contents = contents.substring(contents.indexOf("<"));
+            contents = contents.substring(contents.indexOf('<'));
         }
         return new et.ElementTree(et.XML(contents));
     }
@@ -137,7 +143,7 @@ function uniqueChild(node, parent) {
     var matchingKids = parent.findall(node.tag)
       , i = 0;
 
-    if (matchingKids.length == 0) {
+    if (matchingKids.length === 0) {
         return true;
     } else  {
         for (i; i < matchingKids.length; i++) {
@@ -165,13 +171,13 @@ function resolveParent(doc, selector) {
             // could be an absolute path, but not selecting the root
             if (ABSOLUTE.test(selector)) {
                 subSelector = selector.match(ABSOLUTE)[2];
-                parent = parent.find(subSelector)
+                parent = parent.find(subSelector);
             }
         } else {
             return false;
         }
     } else {
-        parent = doc.find(selector)
+        parent = doc.find(selector);
     }
     return parent;
 }
@@ -182,7 +188,7 @@ function resolveParent(doc, selector) {
 // As, Bs, Cs. After will be equal to "C;B;A".
 function findInsertIdx(children, after) {
     var childrenTags = children.map(function(child) { return child.tag; });
-    var afters = after.split(";");
+    var afters = after.split(';');
     var afterIndexes = afters.map(function(current) { return childrenTags.lastIndexOf(current); });
     var foundIndex = _.find(afterIndexes, function(index) { return index != -1; });
 

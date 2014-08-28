@@ -28,22 +28,23 @@
     "gulp-preprocess": "~1.0.1",
     "yargs": "~1.2.1",
     "vinyl-source-stream": "~0.1.1",
-    "gulp-util": "~2.2.19",
+    "gulp-util": "~2.2.20",
     "watchify": "~0.10.2",
-    "browserify": "~4.2.0",
+    "browserify": "~4.2.3",
     "stylus": "^0.48.1",
     "gulp-stylus": "^1.3.0"
   },
   "dependencies": {
     "chess.js": "~0.1.0",
-    "cordova": "~3.5.0-0.2.4",
-    "handlebars": "~2.0.0-alpha.4",
+    "cordova": "~3.5.0-0.2.7",
+    "handlebars": "~2.0.0-beta.1",
     "iscroll": "~5.1.2",
-    "knockout": "~3.1.0",
+    "knockout": "~3.2.0",
     "lodash": "~2.4.1",
     "q": "~1.0.1",
-    "qajax": "~0.2.2",
+    "qajax": "~0.2.4",
     "signals": "~1.0.0",
-    "spin.js": "~2.0.1"
+    "spin.js": "~2.0.1",
+    "gulp-uglify": "~0.3.2"
   }
 }

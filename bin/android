@@ -10,7 +10,7 @@ fi
 ROOT=$(cd `dirname $0` && pwd)/..
 
 cd $ROOT
-gulp mobile --env=env/$1.json
+gulp dev --env=env/$1.json
 
 cd $ROOT/app
 $ROOT/node_modules/cordova/bin/cordova run android

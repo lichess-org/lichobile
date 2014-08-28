@@ -15,7 +15,11 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
- */
+*/
+
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
 
 /*
 A utility funciton to help output the information needed
@@ -70,15 +74,14 @@ module.exports = function info() {
             //Get Platforms information
             getPlatforms(projectRoot)
         ]).then(function(promises) {
-        promises.forEach(function(p) {
-            output += p.state === 'fulfilled' ? p.value + '\n\n' : p.reason + '\n\n';
+            promises.forEach(function(p) {
+                output += p.state === 'fulfilled' ? p.value + '\n\n' : p.reason + '\n\n';
+            });
+            console.info(output);
+            fs.writeFile(path.join(projectRoot, 'info.txt'), output, 'utf-8', function (err) {
+                if (err) throw err;
+            });
         });
-        console.info(output);
-        fs.writeFile(path.join(projectRoot, 'info.txt'), output, 'utf-8', function (err) {
-            if (err)
-                throw err;
-        });
-    });
 };
 
 function getPlatforms(projectRoot) {
@@ -87,7 +90,7 @@ function getPlatforms(projectRoot) {
         return Q.all(platforms.map(function(p) {
             return getPlatformInfo(p, projectRoot);
         })).then(function(outs) {
-          return outs.join('\n\n');
+            return outs.join('\n\n');
         });
     }
     return Q.reject('No Platforms Currently Installed');

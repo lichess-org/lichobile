@@ -1,0 +1,6 @@
+{
+  "node": true,
+  "undef": true,
+  "-W058": true,
+  "expr": true
+}

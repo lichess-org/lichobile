@@ -17,6 +17,10 @@
     under the License.
 */
 
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
 var path          = require('path'),
     fs            = require('fs'),
     url           = require('url'),
@@ -37,7 +41,7 @@ function config(project_root, opts) {
         configCache[project_root] = JSON.stringify(json);
     }
     return json;
-};
+}
 
 config.setAutoPersist = function(value) {
     autoPersist = value;

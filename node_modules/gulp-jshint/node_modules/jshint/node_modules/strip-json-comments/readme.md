@@ -71,4 +71,4 @@ cat <input-file> | strip-json-comments > <output-file>
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](http://sindresorhus.com)

@@ -16,8 +16,12 @@
     specific language governing permissions and limitations
     under the License.
 */
-var xml = require('../util/xml-helpers'),
-    fs  = require('fs');
+
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
+var xml = require('../util/xml-helpers');
 
 function plugin_parser(xmlPath) {
     this.path = xmlPath;

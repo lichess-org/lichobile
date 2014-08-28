@@ -4,7 +4,7 @@ var OrderedStreams = require('../');
 
 describe('ordered-read-streams', function () {
   it('should end if no streams are given', function (done) {
-    var streams = new OrderedStreams();
+    var streams = OrderedStreams();
     streams.on('data', function () {
       done('error');
     });

@@ -17,11 +17,16 @@
  *
 */
 
-var fs = require('fs')  // use existsSync in 0.6.x
-   , path = require('path')
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          laxcomma:true, sub:true
+*/
+
+var path = require('path')
    , common = require('./common')
-   , events = require('../events')
-   , xml_helpers = require(path.join(__dirname, '..', '..', 'util', 'xml-helpers'));
+   , events = require('../../events')
+   , xml_helpers = require(path.join(__dirname, '..', '..', 'util', 'xml-helpers'))
+   ;
 
 module.exports = {
     www_dir:function(project_dir) {
@@ -35,7 +40,7 @@ module.exports = {
 
         return mDoc._root.attrib['package'];
     },
-    "source-file":{
+    'source-file':{
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             var dest = path.join(source_el.attrib['target-dir'], path.basename(source_el.attrib['src']));
             common.copyFile(plugin_dir, source_el.attrib['src'], project_dir, dest);
@@ -45,7 +50,7 @@ module.exports = {
             common.deleteJava(project_dir, dest);
         }
     },
-    "header-file": {
+    'header-file': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'header-fileinstall is not supported for amazon-fireos');
         },
@@ -53,19 +58,19 @@ module.exports = {
             events.emit('verbose', 'header-file.uninstall is not supported for amazon-fireos');
         }
     },
-    "lib-file":{
+    'lib-file':{
         install:function(lib_el, plugin_dir, project_dir, plugin_id) {
             var src = lib_el.attrib.src;
-            var dest = path.join("libs", path.basename(src));
+            var dest = path.join('libs', path.basename(src));
             common.copyFile(plugin_dir, src, project_dir, dest);
         },
         uninstall:function(lib_el, project_dir, plugin_id) {
             var src = lib_el.attrib.src;
-            var dest = path.join("libs", path.basename(src));
+            var dest = path.join('libs', path.basename(src));
             common.removeFile(project_dir, dest);
         }
     },
-    "resource-file":{
+    'resource-file':{
         install:function(el, plugin_dir, project_dir, plugin_id) {
             var src = el.attrib.src;
             var target = el.attrib.target;
@@ -77,7 +82,7 @@ module.exports = {
             common.removeFile(project_dir, target);
         }
     },
-    "framework": {
+    'framework': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'framework.install is not supported for amazon-fireos');
         },

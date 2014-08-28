@@ -53,6 +53,16 @@ Project-Level Commands
     serve [PORT] .............................. runs a local web server for www/ assets. Port defaults to 8000.
                                                 Access projects at: http://HOST_IP:PORT/PLATFORM/www
 
+Experimental Commands
+
+    These commands require the --experimental flag.
+
+    save plugins .............................. save the list of currently installed plugins to config.xml
+         [--shrinkwrap] ....................... lock down plugin versions to currently installed versions
+
+    restore plugins ........................... install all plugins that are currently listed in config.xml
+
+
 Command-line Flags/Options
 
     -v, --version ............................. prints out this utility's version

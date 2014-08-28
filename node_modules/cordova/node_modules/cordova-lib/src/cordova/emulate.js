@@ -17,8 +17,9 @@
     under the License.
 */
 
-/*global require: true, module: true, process: true*/
-/*jslint sloppy: true, white: true, newcap: true */
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
 
 var cordova_util      = require('./util'),
     path              = require('path'),

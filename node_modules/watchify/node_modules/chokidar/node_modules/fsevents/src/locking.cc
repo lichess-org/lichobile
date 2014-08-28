@@ -23,5 +23,5 @@ void FSEvents::lockingStop() {
   if (!lockStarted) return;
   lockStarted = false;
   
-  //pthread_mutex_destroy(&lockmutex);
+  pthread_mutex_destroy(&lockmutex);
 }

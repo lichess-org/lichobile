@@ -16,15 +16,19 @@
     specific language governing permissions and limitations
     under the License.
 */
+
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc
+*/
+
 var util  = require('./util'),
     fs    = require('fs'),
     os    = require('os'),
-    events= require('./events'),
+    events= require('../events'),
     superspawn = require('./superspawn'),
     CordovaError = require('../CordovaError'),
     Q     = require('q'),
-    path  = require('path'),
-    _ = require('underscore');
+    path  = require('path');
 
 module.exports = function hooker(root) {
     var r = util.isCordova(root);
@@ -33,16 +37,22 @@ module.exports = function hooker(root) {
 };
 
 // Returns a promise.
-module.exports.fire = function global_fire(hook, opts) {
+module.exports.fire = global_fire;
+function global_fire(hook, opts) {
     opts = opts || {};
     var handlers = events.listeners(hook);
     return execute_handlers_serially(handlers, opts);
-};
+}
 
 function compareNumbers(a, b) {
-    return isNaN (parseInt(a))
-        ? a.toLowerCase().localeCompare(b.toLowerCase ? b.toLowerCase(): b)
-        : parseInt(a) > parseInt(b) ? 1 : parseInt(a) < parseInt(b) ? -1 : 0;
+    var intA = parseInt(a);
+    var intB = parseInt(b);
+    if ( isNaN(intA) ) {
+        a = a.toLowerCase();
+        b = b.toLowerCase ? b.toLowerCase() : b;
+        return a.localeCompare(b);
+    }
+    return intA == intB ? 0 : intA > intB ? 1 : -1;
 }
 
 module.exports.prototype = {
@@ -75,12 +85,13 @@ module.exports.prototype = {
 };
 
 function extractSheBangInterpreter(fullpath) {
-    var hookFd = fs.openSync(fullpath, "r");
+    var hookFd = fs.openSync(fullpath, 'r');
+    var fileData, octetsRead, fileChunk;
     try {
         // this is a modern cluster size. no need to read less
-        var fileData = new Buffer (4096);
-        var octetsRead = fs.readSync(hookFd, fileData, 0, 4096, 0);
-        var fileChunk = fileData.toString();
+        fileData = new Buffer (4096);
+        octetsRead = fs.readSync(hookFd, fileData, 0, 4096, 0);
+        fileChunk = fileData.toString();
     } finally {
         fs.closeSync(hookFd);
     }
@@ -94,9 +105,9 @@ function extractSheBangInterpreter(fullpath) {
         hookCmd = shebangMatch[1];
     // Likewise, make /usr/bin/bash work like "bash".
     if (hookCmd)
-        shMatch = hookCmd.match(/bin\/((?:ba)?sh)$/)
+        shMatch = hookCmd.match(/bin\/((?:ba)?sh)$/);
     if (shMatch)
-        hookCmd = shMatch[1]
+        hookCmd = shMatch[1];
     return hookCmd;
 }
 
@@ -123,7 +134,7 @@ function execute_scripts_serially(scripts, root, dir, opts) {
                 }
             }
 
-            var execOpts = {cwd: root, printCommand: true, stdio: 'inherit'};
+            var execOpts = {cwd: root, printCommand: opts.verbose, stdio: 'inherit'};
             execOpts.env = {};
             execOpts.env.CORDOVA_VERSION = require('../../package').version;
             execOpts.env.CORDOVA_PLATFORMS = opts.platforms ? opts.platforms.join() : '';
@@ -153,7 +164,7 @@ function execute_handlers_serially(handlers, opts) {
     if (handlers.length) {
         // Chain the handlers in series.
         return handlers.reduce(function(soFar, f) {
-            return soFar.then(function() { return f(opts) });
+            return soFar.then(function() { return f(opts); });
         }, Q());
     } else {
         return Q(); // Nothing to do.

@@ -17,13 +17,18 @@
  *
 */
 
-var fs = require('fs')  // use existsSync in 0.6.x
-   , path = require('path')
-   , common = require('./common')
-   , events = require('../events')
-   , xml_helpers = require(path.join(__dirname, '..', '..', 'util', 'xml-helpers'));
+/* jshint node:true, bitwise:true, undef:true, trailing:true, quotmark:true,
+          indent:4, unused:vars, latedef:nofunc,
+          laxcomma:true, sub:true
+*/
 
-var TARGETS = ["device", "simulator"];
+var path = require('path')
+   , common = require('./common')
+   , events = require('../../events')
+   , xml_helpers = require(path.join(__dirname, '..', '..', 'util', 'xml-helpers'))
+   ;
+
+var TARGETS = ['device', 'simulator'];
 
 module.exports = {
     www_dir:function(project_dir) {
@@ -34,12 +39,12 @@ module.exports = {
         var widget_doc = xml_helpers.parseElementtreeSync(config_path);
         return widget_doc._root.attrib['id'];
     },
-    "source-file":{
+    'source-file':{
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             var src = source_el.attrib['src'];
             var target = source_el.attrib['target-dir'] || plugin_id;
             TARGETS.forEach(function(arch) {
-                var dest = path.join("native", arch, "chrome", "plugin", target, path.basename(src));
+                var dest = path.join('native', arch, 'chrome', 'plugin', target, path.basename(src));
 
                 common.copyNewFile(plugin_dir, src, project_dir, dest);
             });
@@ -48,12 +53,12 @@ module.exports = {
             var src = source_el.attrib['src'];
             var target = source_el.attrib['target-dir'] || plugin_id;
             TARGETS.forEach(function(arch) {
-                var dest = path.join("native", arch, "chrome", "plugin", target, path.basename(src));
+                var dest = path.join('native', arch, 'chrome', 'plugin', target, path.basename(src));
                 common.removeFile(project_dir, dest);
             });
         }
     },
-    "header-file": {
+    'header-file': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'header-file.install is not supported for blackberry');
         },
@@ -61,21 +66,21 @@ module.exports = {
             events.emit('verbose', 'header-file.uninstall is not supported for blackberry');
         }
     },
-    "lib-file":{
+    'lib-file':{
         install:function(lib_el, plugin_dir, project_dir, plugin_id) {
             var src = lib_el.attrib.src;
             var arch = lib_el.attrib.arch;
-            var dest = path.join("native", arch, "plugins", "jnext", path.basename(src));
+            var dest = path.join('native', arch, 'plugins', 'jnext', path.basename(src));
             common.copyFile(plugin_dir, src, project_dir, dest);
         },
         uninstall:function(lib_el, project_dir, plugin_id) {
             var src = lib_el.attrib.src;
             var arch = lib_el.attrib.arch;
-            var dest = path.join("native", arch, "plugins", "jnext", path.basename(src));
+            var dest = path.join('native', arch, 'plugins', 'jnext', path.basename(src));
             common.removeFile(project_dir, dest);
         }
     },
-    "resource-file":{
+    'resource-file':{
         install:function(el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'resource-file.install is not supported for blackberry');
         },
@@ -83,7 +88,7 @@ module.exports = {
             events.emit('verbose', 'resource-file.uninstall is not supported for blackberry');
         }
     },
-    "framework": {
+    'framework': {
         install:function(source_el, plugin_dir, project_dir, plugin_id) {
             events.emit('verbose', 'framework.install is not supported for blackberry');
         },

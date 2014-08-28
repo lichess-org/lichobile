@@ -198,6 +198,12 @@ function main() {
     });
   });
 
+  if (window.cordova) {
+    setTimeout(function() {
+      window.navigator.splashscreen.hide();
+    }, 2000);
+  }
+
 }
 
 window.document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);

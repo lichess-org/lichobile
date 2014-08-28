@@ -22,6 +22,22 @@
   font-weight normal
   font-style normal
 
+.is::before,
+.is::after,
+[data-icon]::before {
+  font-size: 1.2em;
+  vertical-align: middle;
+  font-family: "lichess" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: attr(data-icon);
+}
+
 $color-text = rgba(255,255,255,0.6)
 
 body
@@ -48,6 +64,13 @@ a
   border none
   .tab-item
     color $color-text
+
+.bar
+  [data-icon]::before
+    padding-top 10px
+    padding-bottom 10px
+    font-size 34px
+
 
 header.bar-nav
   box-shadow 0px 0 12px rgba(0, 0, 0, 0.4)

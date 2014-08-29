@@ -37,6 +37,10 @@ var Clock = function(time, el) {
     el.style.display = 'block';
   }
 
+  function hide() {
+    el.style.display = 'none';
+  }
+
   function start() {
     var endTime = Date.now() + time;
     isRunning = true;
@@ -70,6 +74,7 @@ var Clock = function(time, el) {
 
   return {
     show: show,
+    hide: hide,
     start: start,
     setTime: setTime,
     stop: stop

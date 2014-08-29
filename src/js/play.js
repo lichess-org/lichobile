@@ -332,6 +332,8 @@ function stop() {
 
 function reset() {
   stop();
+  $('#opp-clock').style.display = 'none';
+  $('#player-clock').style.display = 'none';
   if (ground.getOrientation() === 'black') ground.toggleOrientation();
   ground.startPos();
 }

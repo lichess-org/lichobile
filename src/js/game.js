@@ -11,7 +11,7 @@ var Game = function(data) {
   var possibleMoves = {};
   var url = {};
   var timer = null;
-  var clocks = { white: null, black: null };
+  var clocks = {};
 
   if (_.isObject(data)) {
     game = data.game;

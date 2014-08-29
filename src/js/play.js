@@ -306,9 +306,11 @@ function _initGame(data) {
   ground.setDests(game.getPossibleMoves());
   if (game.isMyTurn()) ground.setColor(game.currentPlayer());
 
-  if (game.player.color !== ground.getOrientation()) {
-    ground.toggleOrientation();
-  }
+  setTimeout(function() {
+    if (game.player.color !== ground.getOrientation()) {
+      ground.toggleOrientation();
+    }
+  }, 50);
   if (game.lastMove()) {
     ground.showLastMove(game.lastMove().from, game.lastMove().to);
   }

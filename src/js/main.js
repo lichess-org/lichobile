@@ -192,8 +192,8 @@ function main() {
 
   Zepto('#friendsModal').on('tap', '.play-my-turn', function (e) {
     var id = e.srcElement.getAttribute('data-id');
+    play.reset();
     ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
-      play.reset();
       play.resume(data);
       $('#friendsModal').classList.remove('active');
     });
@@ -203,8 +203,8 @@ function main() {
 
   // when current move notification has been triggered
   window.plugin.notification.local.ontrigger = function (id, state, json) {
+    play.reset();
     ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
-      play.reset();
       play.resume(data);
     });
   };

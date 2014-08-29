@@ -126,7 +126,7 @@ var gameEvents = {
     ground.setDests(game.getPossibleMoves());
   },
   move: function(e) {
-    if (game.isOpponentToMove(e.color)) {
+    if (e.color !== game.player.color) {
       ground.move(e.from, e.to);
       if (lastPosition[e.to]) sound.capture();
       else sound.move();
@@ -168,7 +168,10 @@ var gameEvents = {
   },
   state: function(e) {
     game.updateState(e);
-    ground.setColor(game.currentPlayer());
+    if (game.isMyTurn())
+      ground.setColor(game.currentPlayer());
+    else
+      ground.setColor('none');
   },
   castling: function(e) {
     var pieces = {};
@@ -301,7 +304,7 @@ function _initGame(data) {
   setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
 
   ground.setDests(game.getPossibleMoves());
-  ground.setColor(game.currentPlayer());
+  if (game.isMyTurn()) ground.setColor(game.currentPlayer());
 
   if (game.player.color !== ground.getOrientation()) {
     ground.toggleOrientation();

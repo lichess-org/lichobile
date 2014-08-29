@@ -46,8 +46,8 @@ var Game = function(data) {
     possibleMoves = moves;
   }
 
-  function isOpponentToMove(color) {
-    return color !== player.color;
+  function isMyTurn() {
+    return game.player === player.color;
   }
 
   function isMoveAllowed(from, to) {
@@ -127,7 +127,7 @@ var Game = function(data) {
   }
 
   return {
-    // public properties
+    // public static properties
     url: url,
     player: player,
     opponent: opponent,
@@ -143,7 +143,7 @@ var Game = function(data) {
     getFen: getFen,
     getPossibleMoves: getPossibleMoves,
     setPossibleMoves: setPossibleMoves,
-    isOpponentToMove: isOpponentToMove,
+    isMyTurn: isMyTurn,
     isMoveAllowed: isMoveAllowed,
     currentTurn: currentTurn,
     currentPlayer: currentPlayer,

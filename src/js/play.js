@@ -404,9 +404,9 @@ function bindEvents() {
         console.log(added);
         window.plugin.notification.local.add({
           id: added.id,
-          message: added.opponent.username + ' (' + added.opponent.rating + ')',
+          message: 'Your turn against ' + added.opponent.username + ' (' + added.opponent.rating + ')',
           json: JSON.stringify(added),
-          title: 'Your turn!',
+          title: 'lichess',
           autoCancel: true
         });
 

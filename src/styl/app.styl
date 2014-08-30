@@ -38,20 +38,23 @@
   content: attr(data-icon);
 }
 
-$color-text = rgba(255,255,255,0.6)
+$color-text = rgb(200,200,200)
+$color-border = rgba(255,255,255,0.3)
 
 body
   font-family "Open Sans", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, Sans-Serif
   background url(../../images/bg5.png)
   color $color-text
+  text-shadow 0px 1px 0px #000
 
 a
-  color #fff
-  opacity 0.7
+  color $color-text
+  text-shadow 0px 1px 0px #000
 
-#title
+.title
   font-size 20px
   color $color-text
+  text-shadow 0px 1px 0px #000
   font-weight bold
 
 #mainPage
@@ -70,7 +73,6 @@ a
     padding-top 10px
     padding-bottom 10px
     font-size 34px
-
 
 header.bar-nav
   box-shadow 0px 0 12px rgba(0, 0, 0, 0.4)
@@ -111,8 +113,18 @@ footer.bar-tab
   margin-top 10px
 
 .modal
+  background url(../../images/bg5.png)
   .content
+    background none
     margin 10px 3% 0
+    .table-view
+      background none
+      border-color $color-border
+      li
+        border-color $color-border
+
+.toggle
+  background-color none
 
 .overlay
   position absolute

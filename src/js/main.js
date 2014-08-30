@@ -203,7 +203,7 @@ function main() {
 
   // when current move notification has been triggered
   if (window.plugin && window.plugin.notification) {
-    window.plugin.notification.local.ontrigger = function (id, state, json) {
+    window.plugin.notification.local.ontrigger = function (id) {
       play.reset();
       ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
         play.resume(data);

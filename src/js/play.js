@@ -131,7 +131,9 @@ var gameEvents = {
       if (lastPosition[e.to]) sound.capture();
       else sound.move();
     }
-    setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
+    ground.getPosition(function(p) {
+      lastPosition = p;
+    });
   },
   promotion: function(e) {
     var pieces = {};
@@ -145,7 +147,7 @@ var gameEvents = {
     ground.setPieces(pieces);
   },
   check: function(e) {
-    ground.showCheck(e);
+    ground.setCheck(e);
   },
   clock: function(e) {
     game.updateClocks(e);
@@ -175,10 +177,11 @@ var gameEvents = {
   },
   castling: function(e) {
     var pieces = {};
-    var pos = ground.getPosition();
-    pieces[e.rook[0]] = null;
-    pieces[e.rook[1]] = pos[e.rook[0]];
-    ground.setPieces(pieces);
+    ground.getPosition(function(pos) {
+      pieces[e.rook[0]] = null;
+      pieces[e.rook[1]] = pos[e.rook[0]];
+      ground.setPieces(pieces);
+    });
   },
   reloadTable: function () {
     var eov = $('#endGameOverlay');
@@ -218,7 +221,7 @@ var gameEvents = {
       $('.his', ov).style.display = 'none';
       $('.waiting', ov).style.display = 'none';
       render.hideOverlay('#endGameOverlay');
-      ground.startPos();
+      ground.setStartPos();
       resume(data);
     });
   },
@@ -301,18 +304,20 @@ function _initGame(data) {
     oppInfo.innerHTML = 'Anonymous';
   }
 
-  setTimeout(function () { lastPosition = ground.getPosition(); }, 50);
+  ground.getPosition(function(p) {
+    lastPosition = p;
+  });
 
   ground.setDests(game.getPossibleMoves());
   if (game.isMyTurn()) ground.setColor(game.currentPlayer());
 
-  setTimeout(function() {
-    if (game.player.color !== ground.getOrientation()) {
+  ground.getOrientation(function(o) {
+    if (game.player.color !== o) {
       ground.toggleOrientation();
     }
-  }, 50);
+  });
   if (game.lastMove()) {
-    ground.showLastMove(game.lastMove().from, game.lastMove().to);
+    ground.setLastMove(game.lastMove().from, game.lastMove().to);
   }
   if (game.currentTurn() === 1) {
     sound.move();
@@ -337,7 +342,7 @@ function reset() {
   $('#opp-clock').style.display = 'none';
   $('#player-clock').style.display = 'none';
   if (ground.getOrientation() === 'black') ground.toggleOrientation();
-  ground.startPos();
+  ground.setStartPos();
 }
 
 function resync() {

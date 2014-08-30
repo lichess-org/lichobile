@@ -202,12 +202,14 @@ function main() {
   play.bindEvents();
 
   // when current move notification has been triggered
-  window.plugin.notification.local.ontrigger = function (id, state, json) {
-    play.reset();
-    ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
-      play.resume(data);
-    });
-  };
+  if (window.plugin && window.plugin.notification) {
+    window.plugin.notification.local.ontrigger = function (id, state, json) {
+      play.reset();
+      ajax({ url: '/' + id, method: 'GET'}).then(function(data) {
+        play.resume(data);
+      });
+    };
+  }
 
   if (window.cordova) {
     setTimeout(function() {

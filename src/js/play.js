@@ -241,6 +241,9 @@ var gameEvents = {
   },
   message: function (msg) {
     chat.append(msg);
+  },
+  premove: function (msg) {
+    ground.playPremove();
   }
 };
 

@@ -23,6 +23,8 @@
     background rgba(216, 85, 0, 0.2)
   &.checked
     background rgba(255, 0, 0, 0.4)
+  &.current-premove
+    background-color rgba(20, 30, 85, 0.5)
 
 .coordinates
   .cg-square[data-coord-x]::after
@@ -50,8 +52,10 @@
 
 .withDest
   .cg-square
-    &.dest
-      background radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208030 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0)
+    &.move-dest
+      background radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208530 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0)
+    &.premove-dest
+      background radial-gradient(rgba(20, 30, 85, 0.5) 22%, #203085 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0)
 
 .cg-piece
   position absolute

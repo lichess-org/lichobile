@@ -33,8 +33,18 @@ var onMove = function(from, to) {
 };
 
 ground = render.ground({
-  movable: { free: false, color: 'none', events: { after: onMove }}
+  movable: {
+    'free?': false,
+    color: null,
+    events: {
+      after: onMove
+    }
+  },
+  premovable: {
+    'enabled?': true
+  }
 });
+ground.getState(function(s) { console.log(s); });
 
 Zepto('#resign').tap(function () {
   socket.send('resign');
@@ -115,7 +125,7 @@ function handleEndGame() {
 function end() {
   setTimeout(function () {
     $('#game-menu-icon').style.display = 'none';
-    ground.setColor('none');
+    ground.setMovableColor(null);
   }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
@@ -170,10 +180,7 @@ var gameEvents = {
   },
   state: function(e) {
     game.updateState(e);
-    if (game.isMyTurn())
-      ground.setColor(game.currentPlayer());
-    else
-      ground.setColor('none');
+    ground.setTurnColor(game.currentPlayer());
   },
   castling: function(e) {
     var pieces = {};
@@ -308,14 +315,11 @@ function _initGame(data) {
     lastPosition = p;
   });
 
+  ground.setOrientation(game.player.color);
+  ground.setMovableColor(game.player.color);
+  ground.setTurnColor(game.currentPlayer());
   ground.setDests(game.getPossibleMoves());
-  if (game.isMyTurn()) ground.setColor(game.currentPlayer());
 
-  ground.getOrientation(function(o) {
-    if (game.player.color !== o) {
-      ground.toggleOrientation();
-    }
-  });
   if (game.lastMove()) {
     ground.setLastMove(game.lastMove().from, game.lastMove().to);
   }

@@ -102,7 +102,8 @@ function main() {
       return false;
     }
 
-    session.login(username, password).then(function() {
+    session.login(username, password).then(function(data) {
+      refreshNowPlaying(data);
       $('#userModal').classList.remove('active');
     }, function (error) {
       console.log(error);

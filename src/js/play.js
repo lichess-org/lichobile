@@ -44,7 +44,6 @@ ground = render.ground({
     'enabled?': true
   }
 });
-ground.getState(function(s) { console.log(s); });
 
 Zepto('#resign').tap(function () {
   socket.send('resign');

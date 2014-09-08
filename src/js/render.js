@@ -1,7 +1,6 @@
 'use strict';
 
-var Chessground = require('./vendor/chessground'),
-Zepto = require('./vendor/zepto');
+var Zepto = require('./vendor/zepto');
 
 var $ground = Zepto('#ground');
 
@@ -33,7 +32,7 @@ function ground(cfg) {
     left: 0
   });
 
-  return Chessground.main($ground[0], cfg);
+  return window.chessground.main($ground[0], cfg);
 }
 
 function hideOverlay(id) {

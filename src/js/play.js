@@ -124,7 +124,11 @@ function handleEndGame() {
 function end() {
   setTimeout(function () {
     $('#game-menu-icon').style.display = 'none';
-    ground.setMovableColor(null);
+    ground.set({
+      movable: {
+        color: null
+      }
+    });
   }, 300);
   if (window.cordova) window.plugins.insomnia.allowSleepAgain();
 }
@@ -132,7 +136,11 @@ function end() {
 var gameEvents = {
   possibleMoves: function(e) {
     game.setPossibleMoves(e);
-    ground.setDests(game.getPossibleMoves());
+    ground.set({
+      movable: {
+        dests: game.getPossibleMoves()
+      }
+    });
   },
   move: function(e) {
     if (e.color !== game.player.color) {
@@ -156,7 +164,7 @@ var gameEvents = {
     ground.setPieces(pieces);
   },
   check: function(e) {
-    ground.setCheck(e);
+    ground.set({check: e});
   },
   clock: function(e) {
     game.updateClocks(e);
@@ -179,7 +187,7 @@ var gameEvents = {
   },
   state: function(e) {
     game.updateState(e);
-    ground.setTurnColor(game.currentPlayer());
+    ground.set({'turn-color': game.currentPlayer()});
   },
   castling: function(e) {
     var pieces = {};
@@ -227,7 +235,7 @@ var gameEvents = {
       $('.his', ov).style.display = 'none';
       $('.waiting', ov).style.display = 'none';
       render.hideOverlay('#endGameOverlay');
-      ground.setStartPos();
+      ground.set({fen:'start'});
       resume(data);
     });
   },
@@ -253,8 +261,6 @@ var outOfTime = _.throttle(function() {
 function _initGame(data) {
   // update game data
   game = Game(data);
-
-  console.log(data);
 
   // save current game id
   storage.set('currentGame', game.url.pov);
@@ -289,7 +295,7 @@ function _initGame(data) {
   }
 
   if (game.getFen()) {
-    ground.setFen(game.getFen());
+    ground.set({fen: game.getFen()});
   }
 
   // set players name
@@ -317,14 +323,17 @@ function _initGame(data) {
     lastPosition = p;
   });
 
-  ground.setOrientation(game.player.color);
-  ground.setMovableColor(game.player.color);
-  ground.setTurnColor(game.currentPlayer());
-  ground.setDests(game.getPossibleMoves());
+  var lm = game.lastMove();
 
-  if (game.lastMove()) {
-    ground.setLastMove(game.lastMove().from, game.lastMove().to);
-  }
+  ground.set({
+    orientation: game.player.color,
+    'turn-color': game.currentPlayer(),
+    'last-move': lm ? [lm.from, lm.to] : null,
+    movable: {
+      color: game.player.color,
+      dests: game.getPossibleMoves()
+    }
+  });
   if (game.currentTurn() === 1) {
     sound.move();
   }
@@ -347,8 +356,10 @@ function reset() {
   stop();
   $('#opp-clock').style.display = 'none';
   $('#player-clock').style.display = 'none';
-  ground.setOrientation('white');
-  ground.setStartPos();
+  ground.set({
+    orientation: 'white',
+    fen: 'start'
+  });
 }
 
 function resync() {

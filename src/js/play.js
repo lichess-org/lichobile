@@ -34,14 +34,14 @@ var onMove = function(from, to) {
 
 ground = render.ground({
   movable: {
-    'free?': false,
+    free: false,
     color: null,
     events: {
       after: onMove
     }
   },
   premovable: {
-    'enabled?': true
+    enabled: true
   }
 });
 
@@ -187,7 +187,7 @@ var gameEvents = {
   },
   state: function(e) {
     game.updateState(e);
-    ground.set({'turn-color': game.currentPlayer()});
+    ground.set({turnColor: game.currentPlayer()});
   },
   castling: function(e) {
     var pieces = {};
@@ -294,10 +294,6 @@ function _initGame(data) {
     if (game.currentTurn() > 1) game.updateClocks();
   }
 
-  if (game.getFen()) {
-    ground.set({fen: game.getFen()});
-  }
-
   // set players name
   var playerInfo = utils.$('#player-table > .player-info');
   var oppInfo = utils.$('#opp-table > .player-info');
@@ -319,16 +315,13 @@ function _initGame(data) {
     oppInfo.innerHTML = 'Anonymous';
   }
 
-  ground.getPosition(function(p) {
-    lastPosition = p;
-  });
-
   var lm = game.lastMove();
 
   ground.set({
+    fen: game.getFen() ? game.getFen() : 'start',
     orientation: game.player.color,
-    'turn-color': game.currentPlayer(),
-    'last-move': lm ? [lm.from, lm.to] : null,
+    turnColor: game.currentPlayer(),
+    lastMove: lm ? [lm.from, lm.to] : null,
     movable: {
       color: game.player.color,
       dests: game.getPossibleMoves()
@@ -337,6 +330,9 @@ function _initGame(data) {
   if (game.currentTurn() === 1) {
     sound.move();
   }
+  ground.getPosition(function(p) {
+    lastPosition = p;
+  });
 
   utils.$('#game-menu-icon').style.display = 'table-cell';
 
@@ -357,8 +353,15 @@ function reset() {
   $('#opp-clock').style.display = 'none';
   $('#player-clock').style.display = 'none';
   ground.set({
+    fen: 'start',
     orientation: 'white',
-    fen: 'start'
+    turnColor: 'white',
+    lastMove: null,
+    selected: null,
+    movable: {
+      color: null,
+      dests: null
+    }
   });
 }
 

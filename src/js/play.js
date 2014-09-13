@@ -40,6 +40,9 @@ ground = render.ground({
       after: onMove
     }
   },
+  animation: {
+    enabled: false
+  },
   premovable: {
     enabled: true
   }

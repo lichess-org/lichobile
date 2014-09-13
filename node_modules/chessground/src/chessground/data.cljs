@@ -89,6 +89,12 @@
 (defn set-premovable-current [state keys]
   (assoc-in state [:premovable :current] keys))
 
+(defn set-animation-enabled? [state enabled?]
+  (assoc-in state [:animation :enabled?] (boolean enabled?)))
+
+(defn set-animation-duration [state duration]
+  (assoc-in state [:animation :duration] duration))
+
 (defn set-orientation [state color]
   (cond-> state
     (common/seq-contains? chess/colors color) (assoc :orientation color)))

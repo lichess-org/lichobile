@@ -44,6 +44,8 @@
              [config :check data/set-check]
              [config :lastMove data/set-last-move]
              [config :selected data/set-selected]
+             [(:animation config) :enabled data/set-animation-enabled?]
+             [(:animation config) :duration data/set-animation-duration]
              [(:movable config) :free data/set-movable-free?]
              [(:movable config) :color data/set-movable-color]
              [(:movable config) :dests data/set-movable-dests]

@@ -38,6 +38,16 @@
   (and obj (or (.hasOwnProperty obj prop)
                (js-in? (.-__proto__ obj) prop))))
 
+(def transform-prop
+  "Fun fact: this won't work if chessground is included in the <head>
+   Because the <body> element must exist at the time this code runs."
+  (do (or (.-body js/document) (throw "chessground must be included in the <body> tag!"))
+      (let [style (-> js/document .-body .-style)
+            props ["transform" "webkitTransform" "mozTransform" "oTransform"]]
+        (first (or (filter #(js-in? style %) props) props)))))
+
+(defn translate [x y] (str "translate3d(" x "px, " y "px, 0)"))
+
 (def touch-device? (js-in? js/document "ontouchstart"))
 
 (defn map-values [f hmap]

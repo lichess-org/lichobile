@@ -1,10 +1,10 @@
 (ns chessground.ui
-  (:require [cljs.core.async :as a]
-            [chessground.common :as common :refer [pp]]
+  (:require [chessground.common :as common :refer [pp]]
             [chessground.data :as data]
             [chessground.chess :as chess]
             [chessground.premove :as premove]
-            [chessground.drag :as drag])
+            [chessground.drag :as drag]
+            [chessground.animation :as animation])
   (:require-macros [cljs.core.async.macros :as am]))
 
 (def ^private dom (.-DOM js/React))
@@ -24,18 +24,22 @@
   (js/React.createClass
     #js
     {:displayName "Piece"
-     :shouldComponentUpdate
-     (fn [next-props _]
-       (this-as this
-                (not (== (piece-hash (.-props this))
-                         (piece-hash next-props)))))
+     :getInitialState (fn [] #js {:x 0 :y 0})
+     ; :shouldComponentUpdate
+     ; (fn [next-props next-state]
+     ;   (this-as this
+     ;            (or (not= 0 (aget next-state "x") (aget next-state "y"))
+     ;                (not (== (piece-hash (.-props this))
+     ;                         (piece-hash next-props))))))
      :componentDidMount
      (fn []
        (this-as this
                 (.setState this #js {:draggable-instance (drag/piece
                                                            (.getDOMNode this)
                                                            (aget (.-props this) "ctrl")
-                                                           (aget (.-props this) "draggable?"))})))
+                                                           (aget (.-props this) "draggable?"))})
+                (when-let [anim (aget (.-props this) "anim")]
+                  (animation/piece this anim))))
      :componentWillUpdate
      (fn [next-props _]
        (this-as this
@@ -50,9 +54,17 @@
      :render
      (fn []
        (this-as this
-                (div #js {:className (.join #js ["cg-piece"
-                                                 (aget (.-props this) "color")
-                                                 (aget (.-props this) "role")] " ")})))}))
+                (let [dx (aget (.-state this) "x")
+                      dy (aget (.-state this) "y")
+                      style (when (not= 0 dx dy)
+                              (let [translation (common/translate dx dy)
+                                    st (js-obj)]
+                                (aset st common/transform-prop translation)
+                                st))]
+                  (div #js {:className (.join #js ["cg-piece"
+                                                   (aget (.-props this) "color")
+                                                   (aget (.-props this) "role")] " ")
+                            :style style}))))}))
 
 (def ^private square-component
   (js/React.createClass
@@ -137,7 +149,9 @@
   (let [orientation (get app :orientation)
         chess (get app :chess)
         draggable-color (data/draggable-color app)
-        last-move (array-of (get app :last-move))
+        last-move (get app :last-move)
+        last-move-orig (get last-move 0)
+        last-move-dest (get last-move 1)
         selected (get app :selected)
         check (get app :check)
         current-premove (array-of (get (get app :premovable) :current))
@@ -149,20 +163,26 @@
                                     (when-let [piece (get chess orig)]
                                       (premove/possible chess orig piece)))))
         make-square (fn [key]
-                      #js {:key key
-                           :ctrl ctrl
-                           :orientation orientation
-                           :piece (when-let [piece (get chess key)]
-                                    (let [color (get piece :color)]
-                                      #js {:ctrl ctrl
-                                           :color color
-                                           :role (get piece :role)
-                                           :draggable? (or (= draggable-color "both")
-                                                           (= draggable-color color))}))
-                           :selected? (== selected key)
-                           :check? (== check key)
-                           :last-move? (not (== -1 (.indexOf last-move key)))
-                           :move-dest? (not (== -1 (.indexOf move-dests key)))
-                           :premove-dest? (not (== -1 (.indexOf premove-dests key)))
-                           :current-premove? (not (== -1 (.indexOf current-premove key)))})]
+                      (let [last-move-index (.indexOf move-dests key)]
+                        #js {:key key
+                             :ctrl ctrl
+                             :orientation orientation
+                             :piece (when-let [piece (get chess key)]
+                                      (let [color (get piece :color)]
+                                        #js {:ctrl ctrl
+                                             :color color
+                                             :role (get piece :role)
+                                             :anim (when (and (== last-move-dest key)
+                                                              (get-in app [:animation :enabled?]))
+                                                     #js {:orig last-move-orig
+                                                          :dest key
+                                                          :duration (get-in app [:animation :duration])})
+                                             :draggable? (or (= draggable-color "both")
+                                                             (= draggable-color color))}))
+                             :selected? (== selected key)
+                             :check? (== check key)
+                             :last-move? (or (== last-move-orig key) (== last-move-dest key))
+                             :move-dest? (not (== -1 (.indexOf move-dests key)))
+                             :premove-dest? (not (== -1 (.indexOf premove-dests key)))
+                             :current-premove? (not (== -1 (.indexOf current-premove key)))}))]
     #js {:chess (.map all-keys make-square)}))

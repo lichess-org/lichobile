@@ -10,14 +10,6 @@
 (def ^private dragging-div-pos
   (atom {}))
 
-(def ^private transform-prop
-  "Fun fact: this won't work if chessground is included in the <head>
-   Because the <body> element must exist at the time this code runs."
-  (do (or (.-body js/document) (throw "chessground must be included in the <body> tag!"))
-      (let [style (-> js/document .-body .-style)
-            props ["transform" "webkitTransform" "mozTransform" "oTransform"]]
-        (first (or (filter #(common/js-in? style %) props) props)))))
-
 (when common/touch-device?
   (.addEventListener js/document "DOMContentLoaded"
                      (fn []
@@ -63,15 +55,15 @@
   (let [piece (.-target event)
         x (+ (or (.-x piece) 0) (.-dx event))
         y (+ (or (.-y piece) 0) (.-dy event))
-        transform (str "translate3d(" x "px, " y "px, 0)")]
+        transform (common/translate x y)]
     (set! (.-x piece) x)
     (set! (.-y piece) y)
-    (aset (.-style piece) transform-prop transform)))
+    (aset (.-style piece) common/transform-prop transform)))
 
 (defn- unfuck [piece]
   (set! (.-x piece) 0)
   (set! (.-y piece) 0)
-  (aset (.-style piece) transform-prop ""))
+  (aset (.-style piece) common/transform-prop ""))
 
 (defn- on-end [event ctrl]
   (let [piece (.-target event)
@@ -109,10 +101,9 @@
       (set! (-> dragging-div .-style .-display) "block")
       (reset! dragging-div-pos rect))
     (let [pos @dragging-div-pos
-          dx (- (:left rect) (:left pos))
-          dy (- (:top rect) (:top pos))]
-      (aset (.-style dragging-div)
-            transform-prop (str "translate3d(" dx "px, " dy "px, 0)")))))
+          x (- (:left rect) (:left pos))
+          y (- (:top rect) (:top pos))]
+      (aset (.-style dragging-div) common/transform-prop (common/translate x y)))))
 
 (defn- on-touch-dragleave [] nil)
 

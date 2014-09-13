@@ -1,7 +1,7 @@
 .lein-repl-history
 out/
 target/
-out/
+out-dev/
 out-prod/
 checkouts/
 .repl/

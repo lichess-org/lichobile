@@ -18,7 +18,6 @@ var paths = {
 };
 
 var localVendorLibs = [
-  'chessground',
   'zepto'
 ].map(function(path) {
   return require.resolve('./src/js/vendor/' + path);

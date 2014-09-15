@@ -24,7 +24,7 @@ function hideOverlay(id) {
 
 function showOverlay(id) {
   hideOverlay();
-  var groundPos = $ground.position();
+  var groundPos = $ground.offset();
 
   Zepto(id).css({
     height: $ground.height() / 2,

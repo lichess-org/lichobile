@@ -28,7 +28,7 @@ var nowPlaying = ko.observableArray();
 var onMove = function(from, to) {
   if (lastPosition[to]) sound.capture();
   else sound.move();
-  socket.send('move', { from: from, to: to });
+  socket.sendAckable('move', { from: from, to: to });
   nowPlaying.remove(function (e) { return e.id === game.fullId(); });
 };
 
@@ -369,6 +369,7 @@ function reset() {
 }
 
 function resync() {
+  console.log('resync called');
   ajax({ url: game.url.pov, method: 'GET'}).then(function(data) {
     game.stopClocks();
     socket.destroy();

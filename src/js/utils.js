@@ -4,8 +4,12 @@ module.exports.$ = function $(selector, context) { return (context || window.doc
 module.exports.$$ = function $$(selector, context) { return (context || window.document).querySelectorAll(selector); };
 
 module.exports.hasNetwork = function () {
-  var t = window.navigator.connection.type;
-  return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
+  if (window.cordova) {
+    var t = window.navigator.connection.type;
+    return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
+  }
+
+  return true;
 };
 
 module.exports.isHidden = function (el) {

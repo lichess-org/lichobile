@@ -59,25 +59,27 @@ function main() {
   var currGame = storage.get('currentGame');
 
   // try to get session from cookie
-  session.refresh()
-  .then(function (data) {
-    refreshNowPlaying(data);
-  })
-  // trick to initialize parts of ui that depends on session data
-  // it should not stay like that...
-  .fin(function () {
-    $('.signin-out').style.display = 'block';
+  if (utils.hasNetwork()) {
+    session.refresh()
+    .then(function (data) {
+      refreshNowPlaying(data);
+    })
+    // trick to initialize parts of ui that depends on session data
+    // it should not stay like that...
+    .fin(function () {
+      $('.signin-out').style.display = 'block';
 
-    if (currGame) {
-      ajax({ url: currGame, method: 'GET'}).then(function(data) {
-        if (!data.game.finished) play.resume(data);
-      });
-    }
-  });
+      if (currGame) {
+        ajax({ url: currGame, method: 'GET'}).then(function(data) {
+          if (!data.game.finished) play.resume(data);
+        });
+      }
+    });
+  }
 
   // every min try to fetch current turn moves
   setInterval(function () {
-    if (session.isConnected()) {
+    if (utils.hasNetwork() && session.isConnected()) {
       session.refresh().then(function (data) {
         refreshNowPlaying(data);
       });
@@ -94,7 +96,7 @@ function main() {
     var username = usernameInput.value;
     var password = passwordInput.value;
 
-    if (window.cordova && !utils.hasNetwork()) {
+    if (!utils.hasNetwork()) {
       alert.show(
         'danger',
         'No network connection detected.'

@@ -59,23 +59,21 @@ function main() {
   var currGame = storage.get('currentGame');
 
   // try to get session from cookie
-  if (utils.hasNetwork()) {
-    session.refresh()
-    .then(function (data) {
-      refreshNowPlaying(data);
-    })
-    // trick to initialize parts of ui that depends on session data
-    // it should not stay like that...
-    .fin(function () {
-      $('.signin-out').style.display = 'block';
+  session.refresh()
+  .then(function (data) {
+    refreshNowPlaying(data);
+  })
+  // trick to initialize parts of ui that depends on session data
+  // it should not stay like that...
+  .fin(function () {
+    $('.signin-out').style.display = 'block';
 
-      if (currGame) {
-        ajax({ url: currGame, method: 'GET'}).then(function(data) {
-          if (!data.game.finished) play.resume(data);
-        });
-      }
-    });
-  }
+    if (currGame) {
+      ajax({ url: currGame, method: 'GET'}).then(function(data) {
+        if (!data.game.finished) play.resume(data);
+      });
+    }
+  });
 
   // every min try to fetch current turn moves
   setInterval(function () {

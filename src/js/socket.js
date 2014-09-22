@@ -2,9 +2,15 @@
 
 var _ = require('lodash'),
     utils = require('./utils'),
+    storage = require('./storage'),
     Qajax = require('qajax');
 
 var lichessSri = utils.lichessSri;
+
+var urlsPool = _.range(9021, 9030).map(function(e) {
+  return window.socketEndPoint + ':' + e;
+});
+urlsPool.unshift(window.socketEndPoint);
 
 var strongSocketDefaults = {
   events: {
@@ -37,6 +43,7 @@ var StrongSocket = function(url, version, settings) {
   self.currentLag = 0;
   self.averageLag = 0;
   self.autoReconnect = true;
+  self.tryAnotherUrl = false;
   self.debug('Debug is enabled');
   self.connect();
   window.addEventListener('unload', function() {
@@ -121,6 +128,7 @@ StrongSocket.prototype = {
     clearTimeout(self.pingSchedule);
     clearTimeout(self.connectSchedule);
     self.connectSchedule = setTimeout(function() {
+      self.tryAnotherUrl = true;
       self.connect();
     }, delay);
   },
@@ -215,12 +223,26 @@ StrongSocket.prototype = {
     self.options.debug = true;
     self.options.lagTag.innerHTML = '<strong style="color: red;">Not connected</strong>';
     self.debug('error: ' + JSON.stringify(e));
+    self.tryAnotherUrl = true;
     clearTimeout(self.pingSchedule);
   },
   onSuccess: function() {
-    // storage.set("wsok", 1);
   },
   baseUrl: function() {
+    if (window.socketEndPoint.indexOf(':') === -1) {
+      var key = 'socket.baseUrl';
+      var url = storage.get(key);
+      if (!url) {
+        url = urlsPool[0];
+        storage.set(key, url);
+      } else if (this.tryAnotherUrl) {
+        this.tryAnotherUrl = false;
+        url = urlsPool[(urlsPool.indexOf(url) + 1) % urlsPool.length];
+        storage.set(key, url);
+      }
+      return url;
+    }
+
     return window.socketEndPoint;
   },
   pingInterval: function() {

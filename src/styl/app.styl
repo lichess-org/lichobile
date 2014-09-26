@@ -55,3 +55,90 @@ footer
   span.lichess
     font-size: 25px
     margin-left: calc(33% - 20px)
+
+div
+  header
+    background-color: black
+    color: white
+
+    ul
+      overflow: hidden
+      position: relative
+      height: 40px
+      li
+        display: inline-block
+        &.title
+          width: 100%
+          text-align: center
+          position: absolute
+          line-height: 40px
+        &.close
+          float: right
+
+
+ul.settings
+  li
+    overflow: hidden
+
+    span
+      display: inline-block
+      margin: 1em 2em
+
+    label
+      margin: 0.5em;
+      float: right
+
+
+a[rel=close]
+  color: transparent
+  text-indent: -9999px;
+  position: relative
+  display: inline-block
+  width: 40px
+  height: 40px
+  outline: 0 none
+  float: right
+  cursor: pointer
+  -webkit-transform: translateZ(1px)
+  -moz-transform: translateZ(1px)
+  -ms-transform: translateZ(1px)
+  -o-transform: translateZ(1px)
+  transform: translateZ(1px)
+  z-index: 2
+
+  &:before
+    content: ''
+    pointer-events: none
+    position: absolute
+    display: block
+    width: 30px
+    height: 30px
+    top: 14px
+    left: -6px
+    border-width: 0 2px 0 0
+    border-style: solid
+    border-color: #fff
+    -webkit-transform: rotate(-45deg)
+    -moz-transform: rotate(-45deg)
+    -ms-transform: rotate(-45deg)
+    -o-transform: rotate(-45deg)
+    transform: rotate(-45deg)
+    z-index: 1
+
+  &:after
+    content: ''
+    pointer-events: none
+    position: absolute
+    display: block
+    width: 30px
+    height: 30px
+    top: -6px
+    left: -6px
+    border-width: 0 2px 0 0
+    border-style: solid
+    border-color: #fff
+    -webkit-transform: rotate(45deg)
+    -moz-transform: rotate(45deg)
+    -ms-transform: rotate(45deg)
+    -o-transform: rotate(45deg)
+    transform: rotate(45deg)

@@ -9,8 +9,10 @@
     <!-- @if PLATFORM='cordova' && WEINRE -->
     <script src="http://<!-- @echo WEINRE_HOST -->:<!-- @echo WEINRE_PORT -->/target/target-script-min.js#lichess" type="text/javascript"></script>
     <!-- @endif -->
+    <link rel="stylesheet" type="text/css" href="css/compiled/reset.css" />
     <link rel="stylesheet" type="text/css" href="css/compiled/chessground.css" />
     <link rel="stylesheet" type="text/css" href="css/compiled/app.css" />
+    <link rel="stylesheet" type="text/css" href="css/compiled/checkbox.css" />
     <script>
       window.apiEndPoint = "<!-- @echo API_END_POINT -->";
       window.socketEndPoint = "<!-- @echo SOCKET_END_POINT -->";

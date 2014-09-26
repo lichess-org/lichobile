@@ -25,16 +25,32 @@ function controller() {
   ];
 }
 
-function view(ctrl) {
-  return m('ul', [
-    ctrl.settings.map(function(setting, index) {
-      return m('li', [
-        m('span', setting.label),
-        m('label', { 'for': "setting-" + index }),
-        m('input[type=checkbox]', { checked: setting.active(), onchange: m.withAttr('checked', setting.active) })
+function topbar(block) {
+  return m('div', [
+    m('header', [
+      m('ul', [
+        m('li.title', 'Settings'),
+        m('li.close', [
+          m('a', { 'rel': 'close' }, 'Close')
+        ])
       ])
-    })
+    ]),
+    block()
   ]);
+}
+
+function view(ctrl) {
+  return topbar(function() {
+    return m('ul.settings', [
+      ctrl.settings.map(function(setting, index) {
+        return m('li', [
+          m('span', setting.label),
+          m('input[type=checkbox]', { 'class': 'tgl tgl-flat', 'id': ('setting-' + index), checked: setting.active(), onchange: m.withAttr('checked', setting.active) }),
+          m('label', { 'for': ('setting-' + index), 'class': 'tgl-btn' })
+        ])
+      })
+    ]);
+  });
 }
 
 module.exports = {

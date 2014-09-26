@@ -1,30 +1,43 @@
 'use strict';
 
-var ko = require('knockout');
+var m = require('mithril');
+var store = require('./storage');
+
+function localstorageprop(key) {
+  function getset(value) {
+    if (arguments.length > 0) store.set(key, new String(value));
+    return store.get(key) !== "false";
+  }
+
+  getset.toJSON = function() { return store.get(key) === "false"; }
+
+  return getset;
+}
+
+function controller() {
+  this.settings = [
+    { label: "Disable sleep", active: localstorageprop('settings.disableSleep') },
+    { label: "Show last move", active: localstorageprop('settings.showLastMove') },
+    { label: "Show possible destinations", active: localstorageprop('settings.showDests') },
+    { label: "Show coordinates", active: localstorageprop('settings.showCoords') },
+    { label: "Threefold auto draw", active: localstorageprop('settings.threeFoldAutoDraw') },
+    { label: "Sound", active: localstorageprop('settings.sound') }
+  ];
+}
+
+function view(ctrl) {
+  return m('ul', [
+    ctrl.settings.map(function(setting, index) {
+      return m('li', [
+        m('span', setting.label),
+        m('label', { 'for': "setting-" + index }),
+        m('input[type=checkbox]', { checked: setting.active(), onchange: m.withAttr('checked', setting.active) })
+      ])
+    })
+  ]);
+}
 
 module.exports = {
-  game: {
-    ai: {
-      color: ko.observable('random').extend({persist: 'settings.game.ai.color'}),
-      variant: ko.observable('1').extend({persist: 'settings.game.ai.variant'}),
-      clock: ko.observable(true).extend({persist: 'settings.game.ai.clock'}),
-      time: ko.observable(5).extend({persist: 'settings.game.ai.time'}),
-      increment: ko.observable(3).extend({persist: 'settings.game.ai.increment'}),
-      aiLevel: ko.observable(5).extend({persist: 'settings.game.ai.aiLevel'})
-    },
-    human: {
-      variant: ko.observable('1').extend({persist: 'settings.game.human.variant'}),
-      clock: ko.observable(true).extend({persist: 'settings.game.human.clock'}),
-      timePreset: ko.observable("5,0").extend({persist: 'settings.game.human.timePreset'}),
-      mode: ko.observable('0').extend({persist: 'settings.game.human.mode'})
-    }
-  },
-  general: {
-    threeFoldAutoDraw: ko.observable(true).extend({persist: 'settings.threeFoldAutoDraw'}),
-    disableSleep: ko.observable(true).extend({persist: 'settings.disableSleep'}),
-    showLastMove: ko.observable(true).extend({persist: 'settings.showLastMove'}),
-    showDests: ko.observable(true).extend({persist: 'settings.showDests'}),
-    showCoords: ko.observable(true).extend({persist: 'settings.showCoords'}),
-    sound: ko.observable(true).extend({persist: 'settings.sound'})
-  }
+  controller: controller,
+  view: view
 };

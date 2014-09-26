@@ -1,10 +1,8 @@
 'use strict';
 
 var chessground = require('chessground');
+var game        = require('./game2');
 
 module.exports = function() {
-
-  this.chessground = new chessground.controller({
-  });
-
+  this.game = new game.controller()
 };

@@ -3,5 +3,7 @@ www/app.js
 www/index.html
 www/css/compiled
 
+node_modules/gulp/
+
 env/*.json
 !env/prod.json

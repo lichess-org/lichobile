@@ -47,7 +47,6 @@ module.exports = function(cfg) {
        *  rel: [100, 170] // x, y of the piece at original position
        *  pos: [20, -12] // relative current position
        *  over: "b3" // square being moused over
-       *  isDragging: false // is currently being moved
        *}*/
       current: {}
     },

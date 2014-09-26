@@ -12,7 +12,6 @@ function start(e) {
   var piece = this.pieces.get(orig);
   if (!piece || !board.isDraggable.call(this, orig)) return;
   this.draggable.current = {
-    isDragging: false,
     orig: orig,
     rel: position,
     pos: [0, 0],
@@ -32,7 +31,6 @@ function move(e) {
     position[1] - cur.rel[1]
   ];
   cur.over = board.getKeyAtDomPos.call(this, position, cur.bounds);
-  cur.isDragging = true;
   this.render();
 }
 

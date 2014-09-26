@@ -79,7 +79,7 @@ function isMovable(orig) {
 
 function canMove(orig, dest) {
   return orig !== dest && isMovable.call(this, orig) && (
-    this.movable.free || util.containX(this.movable.dests[orig], dest)
+    this.movable.free || util.containsX(this.movable.dests[orig], dest)
   );
 }
 
@@ -94,7 +94,7 @@ function isPremovable(orig) {
 function canPremove(orig, dest) {
   return orig !== dest &&
     isPremovable.call(this, orig) &&
-    util.containX(premove(this.pieces, orig), dest);
+    util.containsX(premove(this.pieces, orig), dest);
 }
 
 function isDraggable(orig) {

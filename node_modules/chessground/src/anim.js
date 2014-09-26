@@ -71,15 +71,19 @@ function compute(prev, current) {
 function go(render) {
   var self = this;
   var rest = 1 - (new Date().getTime() - self.current.start) / self.current.duration;
-  if (rest <= 0) {
-    self.current = {};
-    render();
-  } else {
-    forIn(self.current.anims, function(cfg, key) {
-      self.current.anims[key][1] = [cfg[0][0] * rest, cfg[0][1] * rest];
-    });
-    render();
-    requestAnimationFrame(go.bind(self, render));
+  try {
+    if (rest <= 0) {
+      self.current = {};
+      render();
+    } else {
+      forIn(self.current.anims, function(cfg, key) {
+        self.current.anims[key][1] = [cfg[0][0] * rest, cfg[0][1] * rest];
+      });
+      render();
+      requestAnimationFrame(go.bind(self, render));
+    }
+  } catch (e) {
+    // breaks if the DOM node was removed. Who cares.
   }
 }
 

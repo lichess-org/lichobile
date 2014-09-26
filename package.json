@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/veloce/lichobile",
   "devDependencies": {
-    "gulp": "3.8.5",
     "gulp-jshint": "~1.5.5",
     "gulp-preprocess": "~1.0.1",
     "yargs": "~1.2.1",

@@ -2,7 +2,17 @@
 
 'use strict';
 
+var ctrl = require('./ctrl');
+var view = require('./view');
+var m = require('mithril');
+
 function main() {
+
+  var controller = new ctrl();
+  m.module(document.querySelector('body'), {
+    controller: function () { return controller; },
+    view: view
+  });
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();

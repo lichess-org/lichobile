@@ -1,7 +1,7 @@
 'use strict';
 
-var chessground = require('chessground');
-var m = require('mithril');
+var m    = require('mithril');
+var game = require('./game2');
 
 function renderHeader(){
   return m('header', [
@@ -11,11 +11,9 @@ function renderHeader(){
   ]);
 }
 
-function renderBoard(ctrl){
+function renderContent(ctrl){
   return m('div.content', [
-    m('div.chessground.wood.merida', [
-      chessground.view(ctrl.chessground)
-    ])
+    game.view(ctrl.game)
   ]);
 }
 
@@ -26,10 +24,11 @@ function renderFooter(){
   ]);
 }
 
+
 module.exports = function(ctrl) {
   return m('div', [
     renderHeader(),
-    renderBoard(ctrl),
+    renderContent(ctrl),
     renderFooter()
   ]);
 };

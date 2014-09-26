@@ -47,6 +47,7 @@
     "signals": "~1.0.0",
     "spin.js": "~2.0.1",
     "gulp-uglify": "~0.3.2",
-    "chessground": "git://github.com/ornicar/chessground"
+    "chessground": "git://github.com/ornicar/chessground",
+    "mithril": "~0.1.21"
   }
 }

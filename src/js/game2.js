@@ -1,7 +1,9 @@
 'use strict';
 
 var chessground = require('chessground');
-var m = require('mithril');
+var m           = require('mithril');
+var model       = require('./model');
+var clock       = require('./clock2');
 
 var controller = function(){
 
@@ -33,7 +35,7 @@ var controller = function(){
       "emerg": 30               // critical threshold
     },
     "player": {
-      "color": "black",
+      "color": "white",
       "id": "toto",
       "rating": 1954
     },
@@ -59,33 +61,37 @@ var controller = function(){
     }
   });
 
+  this.clock = {
+    player: new clock.controller(true, this.play.clock[this.play.player.color]),
+    opponent: new clock.controller(false, this.play.clock[model.negate(this.play.player.color)])
+  }
+
 };
 
 var view = function(ctrl) {
   function renderGame(ctrl){
     return m('div.content', [
-        renderPlayer(ctrl.play),
+        renderPlayer(ctrl),
         renderBoard(ctrl),
-        renderOponnent(ctrl.play)
+        renderOponnent(ctrl)
     ]);
   }
 
-  function renderPlayer(play){
+  function renderPlayer(ctrl){
     return m('div.player', [
-      m('h1', [play.player.id]),
-      m('span', [play.player.rating]),
-      m('div.clock', [play.clock[play.player.color]])
+      m('h1', [ctrl.play.player.id]),
+      m('span', [ctrl.play.player.rating]),
+      clock.view(ctrl.clock.player)
     ]);
   }
 
-  function renderOponnent(play){
-    var color = ( play.player.color === "white" ? "black" : "white" );
-    var name  = ( "id" in play.opponent ? play.opponent.id : "AI" );
+  function renderOponnent(ctrl){
+    var name  = ( "id" in ctrl.play.opponent ? ctrl.play.opponent.id : "AI" );
 
     return m('div.player', [
       m('h1', [name]),
-      m('span', [play.opponent.rating]),
-      m('div.clock', [play.clock[color]])
+      m('span', [ctrl.play.opponent.rating]),
+      clock.view(ctrl.clock.opponent)
     ]);
   }
 

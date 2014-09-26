@@ -5,9 +5,8 @@ var game = require('./game2');
 
 function renderHeader(){
   return m('header', [
-    m('span.lichess', ["%"]),
-    m('h1.title', [ "lichess.org" ]),
-    m('span.lichess', ["r"]),
+    m('span.lichess', ["."]),
+    m('h1.title', [ "lichess.org" ])
   ]);
 }
 

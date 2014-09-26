@@ -30,13 +30,13 @@ var controller = function(){
       // all durations are expressed in seconds
       "initial": 300,           // initial time of the clock, here 5 minutes
       "increment": 8,           // fisher increment
-      "black": 36.0,            // current time left for black
-      "white": 78.0,            // current time left for white
+      "black": 86.0,            // current time left for black
+      "white": 128.0,            // current time left for white
       "emerg": 30               // critical threshold
     },
     "player": {
       "color": "white",
-      "id": "toto",
+      "id": "Toto",
       "rating": 1954
     },
     "opponent": {
@@ -62,8 +62,8 @@ var controller = function(){
   });
 
   this.clock = {
-    player: new clock.controller(true, this.play.clock[this.play.player.color]),
-    opponent: new clock.controller(false, this.play.clock[model.negate(this.play.player.color)])
+    player: new clock.controller(true, this.play.clock[this.play.player.color], ".timer.after", this.play.clock.initial),
+    opponent: new clock.controller(false, this.play.clock[model.negate(this.play.player.color)], ".timer.before", this.play.clock.initial)
   }
 
 };
@@ -71,9 +71,9 @@ var controller = function(){
 var view = function(ctrl) {
   function renderGame(ctrl){
     return m('div.content', [
-        renderPlayer(ctrl),
+        renderOponnent(ctrl),
         renderBoard(ctrl),
-        renderOponnent(ctrl)
+        renderPlayer(ctrl)
     ]);
   }
 
@@ -81,17 +81,19 @@ var view = function(ctrl) {
     return m('div.player', [
       m('h1', [ctrl.play.player.id]),
       m('span', [ctrl.play.player.rating]),
-      clock.view(ctrl.clock.player)
+      clock.view(ctrl.clock.player),
+      m('div.timer.after'),
     ]);
   }
 
   function renderOponnent(ctrl){
     var name  = ( "id" in ctrl.play.opponent ? ctrl.play.opponent.id : "AI" );
 
-    return m('div.player', [
+    return m('div.opponent', [
       m('h1', [name]),
       m('span', [ctrl.play.opponent.rating]),
-      clock.view(ctrl.clock.opponent)
+      clock.view(ctrl.clock.opponent),
+      m('div.timer.before'),
     ]);
   }
 

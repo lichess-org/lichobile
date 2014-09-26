@@ -2,8 +2,9 @@
 
 var m = require('mithril');
 
-var controller = function(isRunning, time){
+var controller = function(isRunning, time, selector, initial){
   this.isRunning = isRunning;
+  this.initialTime = initial * 1000;
   this.time = time * 1000;
   this.interval = undefined;
 
@@ -20,6 +21,7 @@ var controller = function(isRunning, time){
           self.stop();
         }
         self.time = currTime;
+        document.querySelector(selector).style.width= parseInt(self.time / self.initialTime  * 100) + "%";
         m.redraw();
       } else {
         clearInterval(self.interval);

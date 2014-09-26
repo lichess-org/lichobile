@@ -13,6 +13,8 @@
 
 body
   margin: 0
+  background-color: black
+  color: white
 
 h1
   margin: 0
@@ -30,8 +32,9 @@ header
     width: calc(100% - 50px)
   span
     font-size: 25px
+    color: #C4A86F
 
-.player
+.player, .opponent
   position: relative
   width: 100%
   padding: 5px
@@ -40,17 +43,31 @@ header
     position: absolute
     right: 5px
     top: 50%
-    transform: translateY(-50%);
+    transform: translateY(-50%)
+    color: #C4A86F
+    font-weight: bold
+    font-size: 30px
+
+.opponent
+  background-color: white
+  color: black
 
 .chessground
   width: 100%
   height: 350px
+
+.timer
+  height: 5px
+  background-color: #C4A86F
+  width: 30%
 
 footer
   height: 40px
   position: absolute
   bottom: 0
   width: 100%
+  background-color: #C4A86F
+  padding: 5px
 
   span.lichess
     font-size: 25px

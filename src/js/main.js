@@ -5,6 +5,7 @@
 var ctrl = require('./ctrl');
 var view = require('./view');
 var m = require('mithril');
+var chessground = require('chessground');
 
 function main() {
   var controller = new ctrl();

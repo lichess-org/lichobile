@@ -17,10 +17,10 @@ function start(ctrl, e) {
       orig: orig,
       rel: position,
       pos: [0, 0],
-      dec: [
+      dec: ctrl.data.draggable.centerPiece ? [
         position[0] - (pieceBounds.left + pieceBounds.width / 2),
         position[1] - (pieceBounds.top + pieceBounds.height / 2)
-      ],
+      ] : [0, 0],
       bounds: bounds,
       started: false
     };

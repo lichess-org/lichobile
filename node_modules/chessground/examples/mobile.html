@@ -46,6 +46,9 @@
           console.log(ground.getFen());
         };
         ground = Chessground(document.getElementById('ground'), {
+          draggable: {
+            squareTarget: true
+          }
         });
       })();
     </script>

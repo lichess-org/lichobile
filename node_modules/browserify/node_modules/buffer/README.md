@@ -13,6 +13,7 @@ instance methods, and class methods that are supported.
 
 ## features
 
+- Manipulate binary data like a boss, in all browsers -- even IE6!
 - Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
 - Extremely small bundle size (**5.04KB minified + gzipped**, 35.5KB with comments)
 - Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.)

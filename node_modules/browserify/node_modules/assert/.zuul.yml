@@ -1,7 +1,7 @@
 ui: mocha-qunit
 browsers:
   - name: chrome
-    version: 27..latest
+    version: latest
   - name: firefox
     version: latest
   - name: safari

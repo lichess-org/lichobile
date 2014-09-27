@@ -15,16 +15,16 @@ module.exports = function(element, controller, view) {
     set: action(controller.reconfigure),
     toggleOrientation: action(controller.toggleOrientation),
     getOrientation: function() {
-      return controller.board.orientation;
+      return controller.data.orientation;
     },
     getPieces: function() {
-      return controller.board.pieces.all;
+      return controller.data.pieces;
     },
     getFen: function() {
-      return fen.write(controller.board.pieces.all);
+      return fen.write(controller.data.pieces.all);
     },
     dump: function() {
-      return controller.board;
+      return controller.data;
     },
     move: action(controller.apiMove),
     setPieces: action(controller.setPieces),

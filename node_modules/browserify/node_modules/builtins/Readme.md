@@ -3,6 +3,8 @@
 
   List of node.js [builtin modules](http://nodejs.org/api/).
 
+  [![build status](https://secure.travis-ci.org/juliangruber/builtins.svg)](http://travis-ci.org/juliangruber/builtins)
+
 ## Example
 
 ```js

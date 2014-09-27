@@ -72,6 +72,9 @@ Remove an http header.
 
 Write some data to the request body.
 
+If only 1 piece of data is written, `data` can be a FormData, Blob, or
+ArrayBuffer instance. Otherwise, `data` should be a string or a buffer.
+
 ## req.end(data)
 
 Close and send the request body, optionally with additional `data` to append.

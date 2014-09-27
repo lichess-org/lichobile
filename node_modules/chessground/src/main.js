@@ -1,7 +1,6 @@
 var ctrl = require('./ctrl');
 var view = require('./view');
 var api = require('./api');
-var fen = require('./fen');
 
 // for usage outside of mithril
 function init(element, config) {
@@ -21,4 +20,5 @@ function init(element, config) {
 module.exports = init;
 module.exports.controller = ctrl;
 module.exports.view = view;
-module.exports.fen = fen;
+module.exports.fen = require('./fen');
+module.exports.util = require('./util');

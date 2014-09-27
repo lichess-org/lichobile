@@ -46,6 +46,7 @@ module.exports = function(cfg) {
       distance: 3, // minimum distance to initiate a drag, in pixels
       squareTarget: false, // display big square target intended for mobile
       centerPiece: true, // center the piece on cursor at drag start
+      showGhost: true, // show ghost of piece being dragged
       /*{ // current
        *  orig: "a2", // orig key of dragging piece
        *  rel: [100, 170] // x, y of the piece at original position

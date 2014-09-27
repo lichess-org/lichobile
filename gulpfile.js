@@ -1,7 +1,6 @@
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var jshint = require('gulp-jshint');
 var preprocess = require('gulp-preprocess');
 var argv = require('yargs').argv;
 var watchify = require('watchify');
@@ -17,14 +16,6 @@ var paths = {
   styles: ['src/styl/*.styl'],
 };
 
-var localVendorLibs = [
-  'zepto'
-].map(function(path) {
-  return require.resolve('./src/js/vendor/' + path);
-});
-
-var allVendorLibs = localVendorLibs.concat(['lodash', 'q']);
-
 gulp.task('html', function() {
   return gulp.src('src/index.html')
     .pipe(preprocess({context: env}))
@@ -37,14 +28,8 @@ gulp.task('styl', function() {
     .pipe(gulp.dest('www/css/compiled/'));
 });
 
-gulp.task('lint', function() {
-  return gulp.src(paths.scripts)
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
-});
-
 gulp.task('scripts', function() {
-  var bundleStream = browserify('./src/js/main.js').bundle({debug: true});
+  var bundleStream = browserify('./src/js/main.js', {debug: true}).bundle();
 
   return bundleStream
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
@@ -63,13 +48,13 @@ gulp.task('prod-scripts', function() {
 });
 
 gulp.task('watch-scripts', function() {
-  var bundleStream = watchify({
-    entries: './src/js/main.js',
-    noParse: allVendorLibs
-  });
+  var opts = watchify.args;
+  opts.debug = true;
+
+  var bundleStream = watchify(browserify('./src/js/main.js', opts));
 
   function rebundle() {
-    return bundleStream.bundle({debug: true})
+    return bundleStream.bundle()
       .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
       .pipe(source('app.js'))
       .pipe(gulp.dest('./www'));
@@ -83,13 +68,12 @@ gulp.task('watch-scripts', function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-  gulp.watch(paths.scripts, ['lint']);
   gulp.watch(paths.styles, ['styl']);
   gulp.watch('src/index.html', ['html']);
 });
 
-gulp.task('dev', ['html', 'styl', 'lint', 'scripts']);
-gulp.task('dev-watch', ['html', 'styl', 'lint', 'watch-scripts', 'watch']);
+gulp.task('dev', ['html', 'styl', 'scripts']);
+gulp.task('dev-watch', ['html', 'styl', 'watch-scripts', 'watch']);
 gulp.task('prod', ['html', 'styl', 'prod-scripts']);
 
 // Default Task

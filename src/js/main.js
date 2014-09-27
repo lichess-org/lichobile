@@ -5,7 +5,6 @@
 var ctrl = require('./ctrl');
 var view = require('./view');
 var m = require('mithril');
-var chessground = require('chessground');
 
 function main() {
   var controller = new ctrl();
@@ -26,7 +25,7 @@ function main() {
     e.preventDefault();
   });
 
-  document.addEventListener('backbutton', function (e) {
+  document.addEventListener('backbutton', function () {
     // todo
     window.navigator.app.exitApp();
   }, false);
@@ -37,7 +36,6 @@ function main() {
       window.navigator.splashscreen.hide();
     }, 2000);
   }
-
 }
 
 window.document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);

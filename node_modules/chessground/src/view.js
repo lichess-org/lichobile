@@ -76,7 +76,7 @@ function renderSquare(ctrl, pos) {
   var children = [];
   if (piece) {
     children.push(renderPiece(ctrl, key, piece));
-    if (ctrl.data.draggable.current.orig === key) {
+    if (ctrl.data.draggable.current.orig === key && ctrl.data.draggable.showGhost) {
       children.push(renderGhost(piece));
     }
   }

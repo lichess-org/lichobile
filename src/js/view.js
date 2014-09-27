@@ -1,7 +1,7 @@
 'use strict';
 
 var m    = require('mithril');
-var game = require('./game2');
+var game = require('./game');
 
 function renderHeader(){
   return m('header', [

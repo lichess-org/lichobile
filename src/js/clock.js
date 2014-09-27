@@ -27,12 +27,12 @@ var controller = function(isRunning, time, selector, initial){
         clearInterval(self.interval);
       }
     }, 100);
-  },
+  };
 
   this.stop = function() {
     clearInterval(this.interval);
     this.isRunning = false;
-  }
+  };
 
   if( this.isRunning ) this.start();
 };

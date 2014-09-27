@@ -2,7 +2,6 @@
 
 var settings = require('./settings');
 
-
 function play(file, volume) {
   var a, soundsLoc;
   if (window.cordova) {

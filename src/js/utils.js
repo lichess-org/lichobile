@@ -1,8 +1,5 @@
 'use strict';
 
-module.exports.$ = function $(selector, context) { return (context || window.document).querySelector(selector); };
-module.exports.$$ = function $$(selector, context) { return (context || window.document).querySelectorAll(selector); };
-
 module.exports.hasNetwork = function () {
   if (window.cordova) {
     var t = window.navigator.connection.type;

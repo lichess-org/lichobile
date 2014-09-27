@@ -1,156 +1,68 @@
 'use strict';
 
-var _ = require('lodash');
-var Clock = require('./clock');
+var Chessground = require('chessground');
+var m           = require('mithril');
+var model       = require('./model');
+var clock       = require('./clock');
 
-// Object that holds game data and receives updates from server
-var Game = function(data) {
-  var game = {};
-  var player = {};
-  var opponent = {};
-  var possibleMoves = {};
-  var url = {};
-  var timer = null;
-  var clocks = {};
+var controller = function() {
 
-  if (_.isObject(data)) {
-    game = data.game;
-    player = data.player;
-    opponent = data.opponent;
-    possibleMoves = data.possibleMoves;
-    timer = data.clock;
-    url = data.url;
-  }
-
-  function fullId() {
-    if (player.id) return game.id + player.id;
-    return game.id;
-  }
-
-  function updateState(state) {
-    game.player = state.color;
-    game.turns = state.turns;
-  }
-
-  function getFen() {
-    return game.fen;
-  }
-
-  function getPossibleMoves() {
-    return _.mapValues(possibleMoves, function(moves) {
-      return moves.match(/.{1,2}/g);
-    });
-  }
-
-  function setPossibleMoves(moves) {
-    possibleMoves = moves;
-  }
-
-  function isMyTurn() {
-    return game.player === player.color;
-  }
-
-  function isMoveAllowed(from, to) {
-    var m = possibleMoves[from];
-    return m && _.indexOf(m.match(/.{1,2}/g), to) !== -1;
-  }
-
-  function lastPlayer() {
-    return (game.player === 'white') ? 'black' : 'white';
-  }
-
-  function currentPlayer() {
-    return game.player;
-  }
-
-  function currentTurn() {
-    return game.turns;
-  }
-
-  function lastMove() {
-    return game.lastMove ? {
-      from: game.lastMove.substr(0, 2),
-      to: game.lastMove.substr(2, 2)
-    } : null;
-  }
-
-  function setClocks(oppEl, playerEl) {
-    var wTime = Math.round(parseFloat(timer.white) * 1000);
-    var bTime = Math.round(parseFloat(timer.black) * 1000);
-    if (hasClock()) {
-      if (player.color === 'white') {
-        clocks.white = Clock(wTime, playerEl);
-        clocks.black = Clock(bTime, oppEl);
-      } else {
-        clocks.white = Clock(wTime, oppEl);
-        clocks.black = Clock(bTime, playerEl);
-      }
-      clocks.white.show();
-      clocks.black.show();
+  this.ground = new Chessground.controller({
+    orientation: 'white',
+    movable: {
+      free: false,
+      color: null
+    },
+    premovable: {
+      enabled: true
     }
-  }
+  });
 
-  function updateClocks(times) {
-    stopClocks();
-    if (times) {
-      for (var color in times) {
-        clocks[color].setTime(times[color]);
-      }
-    } else if (timer) {
-      clocks.white.setTime(timer.white);
-      clocks.black.setTime(timer.black);
-    }
-    if (hasClock() && game.started && !game.finished && ((game.turns - game.startedAtTurn) > 1)) {
-      clocks[game.player].start();
-    }
-  }
-
-  function stopClocks() {
-    if (clocks.white) clocks.white.stop();
-    if (clocks.black) clocks.black.stop();
-  }
-
-  function hasClock() {
-    return game.clock;
-  }
-
-  function finish() {
-    game.finished = true;
-  }
-
-  function isFinished() {
-    return game.finished;
-  }
-
-  return {
-    // public static properties
-    url: url,
-    player: player,
-    opponent: opponent,
-    speed: game.speed,
-    perf: game.perf,
-    variant: game.variant,
-
-    // public methods
-    updateState: updateState,
-    finish: finish,
-
-    fullId: fullId,
-    getFen: getFen,
-    getPossibleMoves: getPossibleMoves,
-    setPossibleMoves: setPossibleMoves,
-    isMyTurn: isMyTurn,
-    isMoveAllowed: isMoveAllowed,
-    currentTurn: currentTurn,
-    currentPlayer: currentPlayer,
-    lastPlayer: lastPlayer,
-    lastMove: lastMove,
-    setClocks: setClocks,
-    updateClocks: updateClocks,
-    stopClocks: stopClocks,
-    hasClock: hasClock,
-    isFinished: isFinished
-  };
+  // this.clock = {
+  //   player: new clock.controller(true, this.play.clock[this.play.player.color], ".timer.after", this.play.clock.initial),
+  //   opponent: new clock.controller(false, this.play.clock[model.negate(this.play.player.color)], ".timer.before", this.play.clock.initial)
+  // };
 };
 
-module.exports = Game;
+var view = function(ctrl) {
+  function renderGame(ctrl){
+    return m('div', [
+        renderOponnent(ctrl),
+        renderBoard(ctrl),
+        renderPlayer(ctrl)
+    ]);
+  }
+
+  function renderPlayer(ctrl){
+    return m('div.player', [
+      m('h1', 'player'),
+      m('span', '1459'),
+      // clock.view(ctrl.clock.player),
+      // m('div.timer.after'),
+    ]);
+  }
+
+  function renderOponnent(ctrl){
+    // var name  = ( "id" in ctrl.play.opponent ? ctrl.play.opponent.id : "AI" );
+
+    return m('div.opponent', [
+      m('h1', 'ai'),
+      m('span', '1564'),
+      // clock.view(ctrl.clock.opponent),
+      // m('div.timer.before'),
+    ]);
+  }
+
+  function renderBoard(ctrl){
+    return m('div.chessground.wood.merida', [
+      Chessground.view(ctrl.ground)
+    ]);
+  }
+
+  return renderGame(ctrl);
+};
+
+module.exports = {
+  controller: controller,
+  view: view
+};

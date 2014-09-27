@@ -1,6 +1,8 @@
 // var B = require('../').Buffer
 // var test = require('tape')
 // var useragent = require('useragent')
+// if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
+
 
 // test('expected browsers get Uint8Array implementation', function (t) {
 //   if (typeof navigator === 'undefined') {

@@ -1,6 +1,6 @@
 # assert
 
-[![Build Status](https://travis-ci.org/defunctzombie/commonjs-assert.png?branch=master)](https://travis-ci.org/defunctzombie/commonjs-assert)
+[![Build Status](https://travis-ci.org/defunctzombie/commonjs-assert.svg?branch=master)](https://travis-ci.org/defunctzombie/commonjs-assert)
 
 This module is used for writing unit tests for your applications, you can access it with require('assert').
 

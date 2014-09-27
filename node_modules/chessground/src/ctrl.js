@@ -1,3 +1,4 @@
+var partial = require('lodash-node/modern/functions/partial');
 var board = require('./board');
 var data = require('./data');
 var configure = require('./configure');
@@ -5,17 +6,17 @@ var anim = require('./anim');
 
 module.exports = function(cfg) {
 
-  this.board = data(cfg);
+  this.data = data(cfg);
 
-  this.reconfigure = anim(this.board, configure);
+  this.reconfigure = anim(configure, this.data);
 
-  this.toggleOrientation = anim(this.board, board.toggleOrientation);
+  this.toggleOrientation = anim(board.toggleOrientation, this.data);
 
-  this.setPieces = anim(this.board, board.setPieces);
+  this.setPieces = anim(board.setPieces, this.data);
 
-  this.selectSquare = board.selectSquare.bind(this.board);
+  this.selectSquare = partial(board.selectSquare, this.data);
 
-  this.apiMove = board.apiMove.bind(this.board);
+  this.apiMove = partial(board.apiMove, this.data);
 
-  this.playPremove = board.playPremove.bind(this.board);
+  this.playPremove = partial(board.playPremove, this.data);
 };

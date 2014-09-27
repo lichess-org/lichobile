@@ -3,6 +3,7 @@
   "buffer",
   "child_process",
   "cluster",
+  "constants",
   "crypto",
   "dns",
   "domain",

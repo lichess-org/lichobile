@@ -9,6 +9,7 @@ var StrongSocket = require('./socket');
 var controller = function() {
 
   var ground, socket, game;
+  var clocks = {};
 
   function onMove(from, to) {
     socket.sendAckable('move', { from: from, to: to });
@@ -42,13 +43,21 @@ var controller = function() {
     check: function(e) {
       ground.reconfigure({check: e});
     },
-    clock: function(e) {
-      // game.updateClocks(e);
+    clock: function(times) {
+      if (times && clocks) {
+        stopClocks();
+        clocks.player.setTime(times[game.player.color]);
+        clocks.opponent.setTime(times[game.opponent.color]);
+        if (game.hasClock() && game.isStarted() && !game.isFinished() &&
+          ((game.currentTurn() - game.startedAtTurn()) > 1)) {
+          clocks[game.currentPlayer() === game.player.color ? 'player' : 'opponent'].start();
+        }
+      }
     },
     threefoldRepetition: function() {
     },
     end: function() {
-      game.updateClocks();
+      stopClocks();
       game.finish();
     },
     state: function(e) {
@@ -56,12 +65,11 @@ var controller = function() {
       ground.reconfigure({turnColor: game.currentPlayer()});
     },
     castling: function(e) {
-      var pieces = {};
-      // ground.getPosition(function(pos) {
-      //   pieces[e.rook[0]] = null;
-      //   pieces[e.rook[1]] = pos[e.rook[0]];
-      //   ground.setPieces(pieces);
-      // });
+      var change = {};
+      var pieces = ground.getPieces();
+      change[e.rook[0]] = null;
+      change[e.rook[1]] = pieces[e.rook[0]];
+      ground.setPieces(change);
     },
     reloadTable: function () {
     },
@@ -82,7 +90,7 @@ var controller = function() {
       free: false,
       color: null,
       events: {
-        after: onMove.bind(this)
+        after: onMove
       }
     },
     premovable: {
@@ -112,25 +120,28 @@ var controller = function() {
           dests: game.getPossibleMoves()
         }
       });
-      console.log(game, ground);
+      setClocks();
       m.redraw();
     });
   }
 
-  function startClock() {
+  function setClocks() {
     if (game && game.hasClock()) {
-      return {
-        player: new clock.controller(game.clock[game.player.color], ".timer.after", game.clock.initial),
-        opponent: new clock.controller(game.clock[model.negate(game.player.color)], ".timer.before", game.clock.initial)
-      };
+      clocks.player = new clock.controller(game.clock[game.player.color], ".timer.after", game.clock.initial);
+      clocks.opponent = new clock.controller(game.clock[game.opponent.color], ".timer.before", game.clock.initial);
     }
+  }
 
-    return null;
+  function stopClocks() {
+    if (clocks) {
+      clocks.player.stop();
+      clocks.opponent.stop();
+    }
   }
 
   return {
     startAiGame: startAiGame,
-    startClock: startClock,
+    clocks: clocks,
     ground: ground
   };
 };
@@ -152,7 +163,7 @@ var view = function(ctrl) {
       m('h1', 'player'),
       m('span', '1459')
     ];
-    if (ctrl.startClock()) children.push(clock.view(ctrl.startClock().player), m('div.timer.after'));
+    if (ctrl.clocks.player) children.push(clock.view(ctrl.clocks.player), m('div.timer.after'));
     return m('div.player', children);
   }
 
@@ -162,7 +173,7 @@ var view = function(ctrl) {
       m('h1', 'ai'),
       m('span', '1459')
     ];
-    if (ctrl.startClock()) children.push(clock.view(ctrl.startClock().opponent), m('div.timer.before'));
+    if (ctrl.clocks.opponent) children.push(clock.view(ctrl.clocks.opponent), m('div.timer.before'));
 
     return m('div.opponent', children);
   }

@@ -22,3 +22,5 @@ module.exports.controller = ctrl;
 module.exports.view = view;
 module.exports.fen = require('./fen');
 module.exports.util = require('./util');
+module.exports.configure = require('./configure');
+module.exports.anim = require('./anim');

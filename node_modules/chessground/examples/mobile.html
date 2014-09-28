@@ -45,7 +45,7 @@
           });
           console.log(ground.getFen());
         };
-        ground = Chessground(document.getElementById('ground'), {
+        ground = window.ground = Chessground(document.getElementById('ground'), {
           draggable: {
             squareTarget: true
           }

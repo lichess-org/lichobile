@@ -66,6 +66,10 @@ var Game = function(data) {
     return game.turns;
   }
 
+  function startedAtTurn() {
+    return game.startedAtTurn;
+  }
+
   function lastMove() {
     return game.lastMove ? {
       from: game.lastMove.substr(0, 2),
@@ -83,6 +87,10 @@ var Game = function(data) {
 
   function isFinished() {
     return game.finished;
+  }
+
+  function isStarted() {
+    return game.started;
   }
 
   return {
@@ -105,11 +113,13 @@ var Game = function(data) {
     setPossibleMoves: setPossibleMoves,
     isMyTurn: isMyTurn,
     isMoveAllowed: isMoveAllowed,
+    startedAtTurn: startedAtTurn,
     currentTurn: currentTurn,
     currentPlayer: currentPlayer,
     lastPlayer: lastPlayer,
     lastMove: lastMove,
     hasClock: hasClock,
+    isStarted: isStarted,
     isFinished: isFinished
   };
 };
@@ -127,9 +137,8 @@ module.exports = {
       time: 5,
       increment: 3,
       level: 1,
-      color: 'random'
+      color: 'white'
     }}).then(function(data) {
-    console.log(data);
       return Game(data);
     }, function(err) {
       console.log('post request to lichess failed', err);

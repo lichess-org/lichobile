@@ -16,9 +16,6 @@ module.exports.init = function() {
     socket.sendAckable('move', { from: from, to: to });
   }
 
-  function resync() {
-  }
-
   var gameEvents = {
     possibleMoves: function(e) {
       game.setPossibleMoves(e);
@@ -80,6 +77,13 @@ module.exports.init = function() {
     redirect: function () {
     },
     resync: function () {
+      if (game) {
+        server.game(game.url.pov).then(function (data) {
+          stopClocks();
+          socket.destroy();
+          init(data);
+        });
+      }
     },
     message: function () {
     },

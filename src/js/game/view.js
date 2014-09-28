@@ -37,11 +37,10 @@ module.exports = function(ctrl) {
   }
 
   function renderBoard(ctrl){
-    return m('div.chessground.wood.merida', [
+    return m('div.chessground.wood.merida.withMoved.withDest', [
       Chessground.view(ctrl.vm.ground)
     ]);
   }
 
   return renderGame(ctrl);
 };
-

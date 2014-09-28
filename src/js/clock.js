@@ -2,8 +2,8 @@
 
 var m = require('mithril');
 
-var controller = function(isRunning, time, selector, initial){
-  this.isRunning = isRunning;
+var controller = function(time, selector, initial){
+  this.isRunning = false;
   this.initialTime = initial * 1000;
   this.time = time * 1000;
   this.interval = undefined;

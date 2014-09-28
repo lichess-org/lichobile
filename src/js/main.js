@@ -7,9 +7,8 @@ var view = require('./view');
 var m = require('mithril');
 
 function main() {
-  var controller = new ctrl();
   m.module(document.querySelector('body'), {
-    controller: function () { return controller; },
+    controller: ctrl,
     view: view
   });
 

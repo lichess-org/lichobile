@@ -2,8 +2,7 @@
 
 var Q = require('q'),
     Qajax = require('qajax'),
-    _ = require('lodash'),
-    alert = require('./alert');
+    _ = require('lodash');
 
 var defaults = {
   headers: {
@@ -15,10 +14,6 @@ var defaults = {
 function errorHandler(xhr) {
   // catch errors globally
   if (xhr.status !== 401) {
-    alert.show(
-      'warning',
-      '<strong>Oops!</strong> we have some connection issues with lichess...'
-    );
   }
 
   // for now just reject the promise

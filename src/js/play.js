@@ -377,26 +377,6 @@ function resync() {
   });
 }
 
-function startAI() {
-
-  alert.hideAll();
-  reset();
-
-  return ajax({ url: '/setup/ai', method: 'POST', data: {
-    variant: settings.game.ai.variant(),
-    clock: settings.game.ai.clock(),
-    time: settings.game.ai.time(),
-    increment: settings.game.ai.increment(),
-    level: settings.game.ai.aiLevel(),
-    color: settings.game.ai.color()
-  }}).then(function(data) {
-    _initGame(data);
-    return game;
-  }, function(err) {
-    console.log('post request to lichess failed', err);
-  });
-}
-
 function resume(game) {
   if (!game && !_.isObject(game)) return;
 

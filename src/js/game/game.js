@@ -1,10 +1,9 @@
 'use strict';
 
 var _ = require('lodash');
-var ajax = require('./ajax');
 
 // Object that holds game data and receives updates from server
-var Game = function(data) {
+module.exports = function(data) {
   var game = {};
   var player = {};
   var opponent = {};
@@ -124,32 +123,3 @@ var Game = function(data) {
   };
 };
 
-module.exports = {
-
-  negate: function(color) {
-    return ( color === "white" ? "black" : "white" );
-  },
-
-  aiGame: function() {
-    return ajax({ url: '/setup/ai', method: 'POST', data: {
-      variant: '1',
-      clock: true,
-      time: 5,
-      increment: 3,
-      level: 1,
-      color: 'white'
-    }}).then(function(data) {
-      return Game(data);
-    }, function(err) {
-      console.log('post request to lichess failed', err);
-    });
-  },
-
-  game: function (id) {
-    return ajax({ url: id, method: 'GET'}).then(function(data) {
-      return Game(data);
-    }, function(err) {
-      console.log('request to lichess failed', err);
-    });
-  }
-};

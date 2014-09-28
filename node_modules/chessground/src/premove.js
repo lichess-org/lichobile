@@ -52,7 +52,7 @@ function rookFilesOf(pieces, color) {
 }
 
 function compute(pieces, key) {
-  var piece = pieces.get(key);
+  var piece = pieces[key];
   var pos = util.key2pos(key);
   var mobility;
   switch (piece.role) {

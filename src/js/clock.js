@@ -2,7 +2,7 @@
 
 var m = require('mithril');
 
-var controller = function(time, selector, initial){
+var controller = function(time, selector, initial) {
   this.isRunning = false;
   this.initialTime = initial * 1000;
   this.time = time * 1000;
@@ -34,7 +34,9 @@ var controller = function(time, selector, initial){
     this.isRunning = false;
   };
 
-  if( this.isRunning ) this.start();
+  this.setTime = function(time) {
+    this.time = time * 1000;
+  };
 };
 
 var view = function(ctrl){

@@ -23,8 +23,7 @@ var strongSocketDefaults = {
     name: "unnamed",
     pingMaxLag: 7000, // time to wait for pong before reseting the connection
     pingDelay: 1000, // time between pong and ping
-    autoReconnectDelay: 1000,
-    lagTag: false // object showing ping lag
+    autoReconnectDelay: 1000
   }
 };
 
@@ -158,9 +157,6 @@ StrongSocket.prototype = {
     self.currentLag = self.now() - self.lastPingTime;
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
-    if (self.options.lagTag) {
-      self.options.lagTag.innerHTML = '<strong>' + self.averageLag.toFixed() + "</strong> ms";
-    }
   },
   pingData: function() {
     return JSON.stringify({
@@ -221,7 +217,6 @@ StrongSocket.prototype = {
   onError: function(e) {
     var self = this;
     self.options.debug = true;
-    self.options.lagTag.innerHTML = '<strong style="color: red;">Not connected</strong>';
     self.debug('error: ' + JSON.stringify(e));
     self.tryAnotherUrl = true;
     clearTimeout(self.pingSchedule);

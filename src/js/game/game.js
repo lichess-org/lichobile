@@ -36,7 +36,7 @@ module.exports = function(data) {
 
   function getPossibleMoves() {
     return _.mapValues(possibleMoves, function(moves) {
-      return moves.match(/.{1,2}/g);
+      return moves.match(/.{2}/g);
     });
   }
 

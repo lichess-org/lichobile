@@ -45,20 +45,12 @@ module.exports.init = function() {
       ground.reconfigure({check: e});
     },
     clock: function(times) {
-      if (times && clocks) {
-        stopClocks();
-        clocks.player.setTime(times[game.player.color]);
-        clocks.opponent.setTime(times[game.opponent.color]);
-        if (game.hasClock() && game.isStarted() && !game.isFinished() &&
-          ((game.currentTurn() - game.startedAtTurn()) > 1)) {
-          clocks[game.currentPlayer() === game.player.color ? 'player' : 'opponent'].start();
-        }
-      }
+      updateClocks(times);
     },
     threefoldRepetition: function() {
     },
     end: function() {
-      stopClocks();
+      updateClocks();
       game.finish();
     },
     state: function(e) {
@@ -79,7 +71,6 @@ module.exports.init = function() {
     resync: function () {
       if (game) {
         server.game(game.url.pov).then(function (data) {
-          stopClocks();
           socket.destroy();
           init(data);
         });
@@ -128,6 +119,7 @@ module.exports.init = function() {
       }
     });
     setClocks();
+    if (game.currentTurn() > 1) updateClocks();
     m.redraw();
   }
 
@@ -139,13 +131,30 @@ module.exports.init = function() {
 
   function setClocks() {
     if (game && game.hasClock()) {
+      stopClocks();
       clocks.player = new clock.controller(game.clock[game.player.color], ".timer.after", game.clock.initial);
       clocks.opponent = new clock.controller(game.clock[game.opponent.color], ".timer.before", game.clock.initial);
     }
   }
 
+  function updateClocks(times) {
+    stopClocks();
+    if (times && clocks) {
+      clocks.player.setTime(times[game.player.color]);
+      clocks.opponent.setTime(times[game.opponent.color]);
+    } else if (game.clock) {
+      clocks.player.setTime(game.clock[game.player.color]);
+      clocks.opponent.setTime(game.clock[game.opponent.color]);
+    }
+
+    if (game.hasClock() && game.isStarted() && !game.isFinished() &&
+    ((game.currentTurn() - game.startedAtTurn()) > 1)) {
+      clocks[game.currentPlayer() === game.player.color ? 'player' : 'opponent'].start();
+    }
+  }
+
   function stopClocks() {
-    if (clocks) {
+    if (clocks && clocks.player) {
       clocks.player.stop();
       clocks.opponent.stop();
     }

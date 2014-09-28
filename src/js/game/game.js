@@ -9,7 +9,7 @@ module.exports = function(data) {
   var opponent = {};
   var possibleMoves = {};
   var url = {};
-  var clock = {};
+  var clock = null;
 
   if (_.isObject(data)) {
     game = data.game;

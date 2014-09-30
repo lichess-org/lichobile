@@ -109,7 +109,7 @@ module.exports.init = function() {
     );
     var lm = game.lastMove();
     ground.reconfigure({
-      fen: game.data.fen ? game.data.fen : 'start',
+      fen: (game.data && game.data.fen) ? game.data.fen : 'start',
       orientation: game.player.color,
       turnColor: game.currentPlayer(),
       lastMove: lm ? [lm.from, lm.to] : null,

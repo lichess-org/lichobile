@@ -1,21 +1,35 @@
 'use strict';
 
-var ajax = require('../ajax');
+var m = require('mithril');
+
+var xhrConfig = function(xhr) {
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
+};
 
 module.exports = {
 
   aiGame: function() {
-    return ajax({ url: '/setup/ai', method: 'POST', data: {
-      variant: '1',
-      clock: true,
-      time: 5,
-      increment: 3,
-      level: 1,
-      color: 'white'
-    }});
+    return m.request({
+      url: '/setup/ai',
+      method: 'POST',
+      config: xhrConfig,
+      data: {
+        variant: 1,
+        clock: true,
+        time: 5,
+        increment: 3,
+        level: 1,
+        color: 'white'
+      }
+    });
   },
 
-  game: function (id) {
-    return ajax({ url: id, method: 'GET'});
+  game: function(id) {
+    return m.request({
+      url: id,
+      method: 'GET',
+      config: xhrConfig
+    });
   }
 };

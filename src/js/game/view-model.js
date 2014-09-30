@@ -147,7 +147,7 @@ module.exports.init = function() {
       clocks.opponent.setTime(game.clock[game.opponent.color]);
     }
 
-    if (game.hasClock() && game.data.started && !game.finished &&
+    if (game.hasClock() && game.data.started && !game.data.finished &&
     ((game.currentTurn() - game.data.startedAtTurn) > 1)) {
       clocks[game.currentPlayer() === game.player.color ? 'player' : 'opponent'].start();
     }

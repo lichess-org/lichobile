@@ -223,7 +223,7 @@ StrongSocket.prototype = {
   onSuccess: function() {
   },
   baseUrl: function() {
-    if (window.socketEndPoint.indexOf(':') === -1) {
+    if (window.socketEndPoint === 'socket.en.lichess.org') {
       var key = 'socket.baseUrl';
       var url = storage.get(key);
       if (!url) {

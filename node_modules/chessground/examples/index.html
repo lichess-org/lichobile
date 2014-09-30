@@ -9,7 +9,7 @@
   <body>
     <script src="../chessground.js"></script>
     <!-- chess.js is NOT required by chessground. We include it for the examples. -->
-    <script src="../libs/chess.min.js"></script>
+    <script src="chess.min.js"></script>
     <script>
       function chessToDests(chess) {
         var dests = {};
@@ -40,38 +40,38 @@
         })();
       </script>
     </section>
-    <!-- <section> -->
-    <!--   <div class="chessground wood small merida coordinates" id="ground2"></div> -->
-    <!--   <p>Free as a birrd</p> -->
-    <!--   <script> -->
-    <!--     (function() { -->
-    <!--       var ground = Chessground(document.getElementById('ground2'), { -->
-    <!--         movable: { -->
-    <!--           free: true, -->
-    <!--         color: 'both', -->
-    <!--         dropOff: 'trash' -->
-    <!--         }, -->
-    <!--       animation: { -->
-    <!--         enabled: true, -->
-    <!--         duration: 800 -->
-    <!--       } -->
-    <!--       }); -->
-    <!--       setInterval(function() { -->
-    <!--         ground.set({ -->
-    <!--           fen:'2r3k1/pp2Qpbp/4b1p1/3p4/3n1PP1/2N4P/Pq6/R2K1B1R w -', -->
-    <!--         orientation:'black' -->
-    <!--         }); -->
-    <!--         //ground.set({fen:'rnbqkbnr/pNpppppp/8/8/8/8/PPPPPPPP/R1BQKBNR b KQkq'}); -->
-    <!--         setTimeout(function() { -->
-    <!--           ground.set({ -->
-    <!--             fen:'start', -->
-    <!--           orientation:'white' -->
-    <!--           }); -->
-    <!--         }, 1000); -->
-    <!--       }, 2000); -->
-    <!--     })(); -->
-    <!--   </script> -->
-    <!-- </section> -->
+    <section>
+      <div class="chessground wood small merida coordinates" id="ground2"></div>
+      <p>Free as a birrd</p>
+      <script>
+        (function() {
+          var ground = Chessground(document.getElementById('ground2'), {
+            movable: {
+              free: true,
+            color: 'both',
+            dropOff: 'trash'
+            },
+          animation: {
+            enabled: true,
+            duration: 800
+          }
+          });
+          setInterval(function() {
+            ground.set({
+              fen:'2r3k1/pp2Qpbp/4b1p1/3p4/3n1PP1/2N4P/Pq6/R2K1B1R w -',
+            orientation:'black'
+            });
+            //ground.set({fen:'rnbqkbnr/pNpppppp/8/8/8/8/PPPPPPPP/R1BQKBNR b KQkq'});
+            setTimeout(function() {
+              ground.set({
+                fen:'start',
+              orientation:'white'
+              });
+            }, 1000);
+          }, 2000);
+        })();
+      </script>
+    </section>
     <!-- <section> -->
     <!--     <div class="chessground wood small merida" id="ground7"></div> -->
     <!--     <p>Play a game on a single board</p> -->

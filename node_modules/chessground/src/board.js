@@ -22,7 +22,7 @@ function setPieces(data, pieces) {
     if (piece) data.pieces[key] = piece;
     else delete data.pieces[key];
   });
-  data.movable.dropped = null;
+  data.movable.dropped = [];
 }
 
 function baseMove(data, orig, dest) {
@@ -35,7 +35,7 @@ function baseMove(data, orig, dest) {
     callUserFunction(data.events.change);
     return true;
   }, data)();
-  if (success) data.movable.dropped = null;
+  if (success) data.movable.dropped = [];
   return success;
 }
 

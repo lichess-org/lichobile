@@ -37,10 +37,6 @@ function opposite(color) {
   return color === 'white' ? 'black' : 'white';
 }
 
-function translate(pos) {
-  return 'translate3d(' + pos[0] + 'px,' + pos[1] + 'px,0)';
-}
-
 function contains2(xs, x) {
   return xs && (xs[0] === x || xs[1] === x);
 }
@@ -61,6 +57,26 @@ function pp(x) {
 function isTouchDevice() {
   return 'ontouchstart' in window || // works on most browsers
     'onmsgesturechange' in window; // works on ie10
+}
+
+// this must be cached because of the access to document.body.style
+var cachedTransformProp;
+
+function transformProp() {
+  if (!cachedTransformProp) cachedTransformProp = computeTransformProp();
+  return cachedTransformProp;
+}
+
+function computeTransformProp() {
+  var style = document.body.style;
+  ['transform', 'webkitTransform', 'mozTransform', 'oTransform'].forEach(function(prop) {
+    if (prop in style) return prop;
+  });
+  return 'transform';
+}
+
+function translate(pos) {
+  return 'translate3d(' + pos[0] + 'px,' + pos[1] + 'px,0)';
 }
 
 function eventPosition(e) {
@@ -88,5 +104,6 @@ module.exports = {
   isTouchDevice: isTouchDevice,
   eventPosition: eventPosition,
   partialApply: partialApply,
+  transformProp: transformProp,
   pp: pp
 };

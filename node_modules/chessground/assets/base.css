@@ -76,3 +76,6 @@
 .cg-piece.ghost {
   opacity: 0.3;
 }
+.cg-piece.fading {
+  z-index: 1;
+}

@@ -2,8 +2,7 @@
 
 var _ = require('lodash'),
     utils = require('./utils'),
-    storage = require('./storage'),
-    Qajax = require('qajax');
+    storage = require('./storage');
 
 var lichessSri = utils.lichessSri;
 
@@ -55,7 +54,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + Qajax.serialize(_.defaults(self.settings.params, {
+    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + utils.serializeQueryParameters(_.defaults(self.settings.params, {
       version: self.version
     }));
     self.debug("connection attempt to " + fullUrl, true);

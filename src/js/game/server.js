@@ -11,7 +11,7 @@ module.exports = {
 
   aiGame: function() {
     return m.request({
-      url: '/setup/ai',
+      url: window.apiEndPoint + '/setup/ai',
       method: 'POST',
       config: xhrConfig,
       data: {
@@ -27,7 +27,7 @@ module.exports = {
 
   game: function(id) {
     return m.request({
-      url: id,
+      url: window.apiEndPoint + id,
       method: 'GET',
       config: xhrConfig
     });

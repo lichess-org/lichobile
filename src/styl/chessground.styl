@@ -68,13 +68,15 @@
     z-index 9
     width 200%
     height 200%
+    top: -22.5px
+    left: -22.5px
 
-#cg-moving-square
-  display none
-  position absolute
-  background-color transparent
-  border 1px solid rgba(255, 255, 255, 0.5)
-  -webkit-transform translate3d(0,0,0)
+#cg-square-target
+  position: absolute
+  background-color: rgba(0, 0, 0, 0.2)
+  border-radius: 50%
+  -webkit-transform: translate3d(0,0,0)
+  z-index: 9
 
 .blue
   & > .cg-board

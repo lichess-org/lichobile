@@ -51,7 +51,7 @@ module.exports.init = function() {
     },
     end: function() {
       updateClocks();
-      game.finish();
+      game.finish = true;
     },
     state: function(e) {
       game.updateState(e);
@@ -109,7 +109,7 @@ module.exports.init = function() {
     );
     var lm = game.lastMove();
     ground.reconfigure({
-      fen: game.getFen() ? game.getFen() : 'start',
+      fen: game.data.fen ? game.data.fen : 'start',
       orientation: game.player.color,
       turnColor: game.currentPlayer(),
       lastMove: lm ? [lm.from, lm.to] : null,
@@ -147,8 +147,8 @@ module.exports.init = function() {
       clocks.opponent.setTime(game.clock[game.opponent.color]);
     }
 
-    if (game.hasClock() && game.isStarted() && !game.isFinished() &&
-    ((game.currentTurn() - game.startedAtTurn()) > 1)) {
+    if (game.hasClock() && game.data.started && !game.finished &&
+    ((game.currentTurn() - game.data.startedAtTurn) > 1)) {
       clocks[game.currentPlayer() === game.player.color ? 'player' : 'opponent'].start();
     }
   }

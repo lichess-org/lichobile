@@ -37,6 +37,6 @@ module.exports.serializeQueryParameters = function(obj) {
       str += "&";
     }
     str += key + "=" + obj[key];
-    return str;
   }
+  return str;
 };

@@ -27,7 +27,6 @@ function renderFooter(){
 module.exports = function(ctrl) {
   return m('div', [
     renderHeader(),
-    renderContent(ctrl),
-    renderFooter()
+    renderContent(ctrl)
   ]);
 };

@@ -78,9 +78,7 @@ module.exports = function(lichessData) {
     player: player,
     opponent: opponent,
     clock: clock,
-    speed: data.speed,
-    perf: data.perf,
-    variant: data.variant,
+    data: data,
 
     // public methods
     updateState: updateState,

@@ -94,6 +94,9 @@ module.exports.init = function() {
     },
     premovable: {
       enabled: true
+    },
+    draggable: {
+      squareTarget: true
     }
   });
 

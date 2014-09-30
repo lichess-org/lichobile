@@ -1,5 +1,0 @@
-{
-	"insert": {
-		"_init": "\t\tif ( this.options.keyBindings ) {\n\t\t\tthis._initKeys();\n\t\t}"
-	}
-}

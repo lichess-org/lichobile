@@ -1,9 +1,0 @@
-{
-    "name" : "qajax",
-    "version" : "0.2.2",
-    "readme" : "README.md",
-    "main" : "./build/qajax.min.js",
-    "dependencies" : {
-        "q" : "~1.0"
-    }
-}

@@ -59,7 +59,7 @@ module.exports.init = function() {
     },
     castling: function(e) {
       var change = {};
-      var pieces = ground.getPieces();
+      var pieces = ground.data.pieces;
       change[e.rook[0]] = null;
       change[e.rook[1]] = pieces[e.rook[0]];
       ground.setPieces(change);

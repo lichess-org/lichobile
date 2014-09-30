@@ -7,7 +7,6 @@ module.exports = function(element, controller, view) {
       m.startComputation();
       var result = computation.apply(null, arguments);
       m.endComputation();
-      // m.render(element, view(controller));
       return result;
     };
   };

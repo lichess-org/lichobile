@@ -3,17 +3,7 @@ www/app.js
 www/index.html
 www/css/compiled
 
-node_modules/gulp/
-node_modules/gulp-jshint/
-node_modules/gulp-preprocess/
-node_modules/yargs/
-node_modules/vinyl-source-stream/
-node_modules/gulp-util/
-node_modules/gulp-uglify/
-node_modules/watchify/
-node_modules/browserify/
-node_modules/stylus/
-node_modules/gulp-stylus/
+node_modules
 
 env/*.json
 !env/prod.json

@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "cordova": "3.5.0-0.2.7",
-    "lodash": "2.4.1",
     "chessground": "git://github.com/ornicar/chessground",
-    "mithril": "0.1.22"
+    "mithril": "0.1.22",
+    "lodash-node": "^2.4.1"
   }
 }

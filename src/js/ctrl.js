@@ -1,7 +1,7 @@
 'use strict';
 
-var game        = require('./game');
+var round        = require('./round');
 
 module.exports = function() {
-  this.game = new game.controller();
+  this.round = new round.controller();
 };

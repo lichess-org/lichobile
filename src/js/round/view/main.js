@@ -2,7 +2,7 @@
 
 var m = require('mithril');
 var Chessground = require('chessground');
-var clock = require('./clock');
+var clock = require('../clock');
 
 module.exports = function(ctrl) {
   function renderGame(ctrl){

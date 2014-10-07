@@ -95,9 +95,15 @@ StrongSocket.prototype = {
     }
     self.scheduleConnect(self.options.pingMaxLag);
   },
-  send: function(t, d) {
+  send: function(t, d, o) {
     var self = this;
-    var data = d || {};
+    var data = d || {},
+    options = o || {};
+    if (options.ackable)
+      self.ackableMessages.push({
+        t: t,
+        d: d
+      });
     var message = JSON.stringify({
       t: t,
       d: data
@@ -110,11 +116,7 @@ StrongSocket.prototype = {
     }
   },
   sendAckable: function(t, d) {
-    this.ackableMessages.push({
-      t: t,
-      d: d
-    });
-    this.send(t, d);
+    this.send(t, d, { ackable: true });
   },
   scheduleConnect: function(delay) {
     var self = this;
@@ -174,14 +176,17 @@ StrongSocket.prototype = {
     switch (m.t || false) {
       case false:
         break;
-      // case 'resync':
-      //   break;
       case 'ack':
         self.ackableMessages = [];
         break;
       default:
-        var h = self.settings.events[m.t];
-        if (_.isFunction(h)) h(m.d || null);
+        if (!self.settings.receive || !self.settings.receive(m.t, m.d)) {
+          var h = self.settings.events[m.t];
+          if (_.isFunction(h)) h(m.d || null);
+          else if (!self.options.ignoreUnknownMessages) {
+            self.debug('Message not supported ' + JSON.stringify(m));
+          }
+        }
     }
   },
   now: function() {

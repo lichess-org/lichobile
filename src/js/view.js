@@ -1,7 +1,7 @@
 'use strict';
 
 var m    = require('mithril');
-var game = require('./game');
+var round = require('./round');
 
 function renderHeader(){
   return m('header', [
@@ -12,7 +12,7 @@ function renderHeader(){
 
 function renderContent(ctrl){
   return m('div.content', [
-    game.view(ctrl.game)
+    round.view(ctrl.round)
   ]);
 }
 

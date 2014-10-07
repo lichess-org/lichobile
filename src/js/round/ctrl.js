@@ -1,17 +1,14 @@
-var m = require('mithril');
 var throttle = require('lodash-node/modern/functions/throttle');
 var chessground = require('chessground');
 var partial = chessground.util.partial;
 var data = require('./data');
 var round = require('./round');
-var status = require('./status');
 var ground = require('./ground');
 var socket = require('./socket');
-var xhr = require('./xhr');
 var promotion = require('./promotion');
 var clockCtrl = require('./clock/ctrl');
 
-module.exports = function(cfg, router, i18n, socketSend) {
+module.exports = function(cfg, router, socketSend) {
 
   this.data = data(cfg);
   console.log(this.data);
@@ -24,7 +21,6 @@ module.exports = function(cfg, router, i18n, socketSend) {
       to: dest,
     };
     if (prom) move.promotion = prom;
-    if (this.clock) move.lag = Math.round(lichess.socket.averageLag);
     this.socket.send('move', move, {
       ackable: true
     });
@@ -58,11 +54,4 @@ module.exports = function(cfg, router, i18n, socketSend) {
 
   this.router = router;
 
-  this.trans = function() {
-    var str = i18n[arguments[0]]
-    Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
-      str = str.replace('%s', arg);
-    });
-    return str;
-  };
 };

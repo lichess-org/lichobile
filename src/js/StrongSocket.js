@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash'),
+var _ = require('lodash-node/underscore'),
     utils = require('./utils'),
     storage = require('./storage');
 
@@ -78,21 +78,17 @@ StrongSocket.prototype = {
         self.pingNow();
         var resend = self.ackableMessages;
         self.ackableMessages = [];
-        _.each(resend, function(x) { self.send(x.t, x.d); });
+        resend.forEach(function(x) { self.send(x.t, x.d); });
       };
       self.ws.onmessage = function(e) {
         var m = JSON.parse(e.data);
-        if (m.t === "n") {
-          self.pong();
-        }
-        else {
-          self.debug(e.data);
-        }
-        if (m.t === "b") {
-          _.each(m.d || [], function(x) { self.handle(x); });
-        } else {
-          self.handle(m);
-        }
+        var mData = m.d || [];
+
+        if (m.t === "n") self.pong();
+        else self.debug(e.data);
+
+        if (m.t === "b") mData.forEach(function(x) { self.handle(x); });
+        else self.handle(m);
       };
     } catch (e) {
       self.onError(e);

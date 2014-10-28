@@ -20,8 +20,6 @@ package org.apache.cordova;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.LOG;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -59,7 +57,6 @@ import android.widget.RelativeLayout;
 public class CordovaChromeClient extends WebChromeClient {
 
     public static final int FILECHOOSER_RESULTCODE = 5173;
-    private static final String LOG_TAG = "CordovaChromeClient";
     private String TAG = "CordovaLog";
     private long MAX_QUOTA = 100 * 1024 * 1024;
     protected CordovaInterface cordova;
@@ -71,31 +68,17 @@ public class CordovaChromeClient extends WebChromeClient {
     // File Chooser
     public ValueCallback<Uri> mUploadMessage;
     
-    /**
-     * Constructor.
-     *
-     * @param cordova
-     */
+    @Deprecated
     public CordovaChromeClient(CordovaInterface cordova) {
         this.cordova = cordova;
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param ctx
-     * @param app
-     */
     public CordovaChromeClient(CordovaInterface ctx, CordovaWebView app) {
         this.cordova = ctx;
         this.appView = app;
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param view
-     */
+    @Deprecated
     public void setWebView(CordovaWebView view) {
         this.appView = view;
     }
@@ -107,6 +90,7 @@ public class CordovaChromeClient extends WebChromeClient {
      * @param url
      * @param message
      * @param result
+     * @see Other implementation in the Dialogs plugin.
      */
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
@@ -150,6 +134,7 @@ public class CordovaChromeClient extends WebChromeClient {
      * @param url
      * @param message
      * @param result
+     * @see Other implementation in the Dialogs plugin.
      */
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
@@ -199,63 +184,16 @@ public class CordovaChromeClient extends WebChromeClient {
      * Since we are hacking prompts for our own purposes, we should not be using them for
      * this purpose, perhaps we should hack console.log to do this instead!
      *
-     * @param view
-     * @param url
-     * @param message
-     * @param defaultValue
-     * @param result
+     * @see Other implementation in the Dialogs plugin.
      */
     @Override
-    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-
-        // Security check to make sure any requests are coming from the page initially
-        // loaded in webview and not another loaded in an iframe.
-        boolean reqOk = false;
-        if (url.startsWith("file://") || Config.isUrlWhiteListed(url)) {
-            reqOk = true;
-        }
-
-        // Calling PluginManager.exec() to call a native service using 
-        // prompt(this.stringify(args), "gap:"+this.stringify([service, action, callbackId, true]));
-        if (reqOk && defaultValue != null && defaultValue.length() > 3 && defaultValue.substring(0, 4).equals("gap:")) {
-            JSONArray array;
-            try {
-                array = new JSONArray(defaultValue.substring(4));
-                String service = array.getString(0);
-                String action = array.getString(1);
-                String callbackId = array.getString(2);
-                String r = this.appView.exposedJsApi.exec(service, action, callbackId, message);
-                result.confirm(r == null ? "" : r);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        // Sets the native->JS bridge mode. 
-        else if (reqOk && defaultValue != null && defaultValue.equals("gap_bridge_mode:")) {
-        	try {
-                this.appView.exposedJsApi.setNativeToJsBridgeMode(Integer.parseInt(message));
-                result.confirm("");
-        	} catch (NumberFormatException e){
-                result.confirm("");
-                e.printStackTrace();
-        	}
-        }
-
-        // Polling for JavaScript messages 
-        else if (reqOk && defaultValue != null && defaultValue.equals("gap_poll:")) {
-            String r = this.appView.exposedJsApi.retrieveJsMessages("1".equals(message));
-            result.confirm(r == null ? "" : r);
-        }
-
-        // Do NO-OP so older code doesn't display dialog
-        else if (defaultValue != null && defaultValue.equals("gap_init:")) {
-            result.confirm("OK");
-        }
-
-        // Show dialog
-        else {
+    public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, JsPromptResult result) {
+        // Unlike the @JavascriptInterface bridge, this method is always called on the UI thread.
+        String handledRet = appView.bridge.promptOnJsPrompt(origin, message, defaultValue);
+        if (handledRet != null) {
+            result.confirm(handledRet);
+        } else {
+            // Returning false would also show a dialog, but the default one shows the origin (ugly).
             final JsPromptResult res = result;
             AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
             dlg.setMessage(message);
@@ -335,10 +273,10 @@ public class CordovaChromeClient extends WebChromeClient {
         this.appView.showCustomView(view, callback);
     }
 
-	@Override
-	public void onHideCustomView() {
-    	this.appView.hideCustomView();
-	}
+    @Override
+    public void onHideCustomView() {
+        this.appView.hideCustomView();
+    }
     
     @Override
     /**
@@ -348,24 +286,24 @@ public class CordovaChromeClient extends WebChromeClient {
      */
     public View getVideoLoadingProgressView() {
 
-	    if (mVideoProgressView == null) {	        
-	    	// Create a new Loading view programmatically.
-	    	
-	    	// create the linear layout
-	    	LinearLayout layout = new LinearLayout(this.appView.getContext());
-	        layout.setOrientation(LinearLayout.VERTICAL);
-	        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-	        layout.setLayoutParams(layoutParams);
-	        // the proress bar
-	        ProgressBar bar = new ProgressBar(this.appView.getContext());
-	        LinearLayout.LayoutParams barLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	        barLayoutParams.gravity = Gravity.CENTER;
-	        bar.setLayoutParams(barLayoutParams);   
-	        layout.addView(bar);
-	        
-	        mVideoProgressView = layout;
-	    }
+        if (mVideoProgressView == null) {            
+            // Create a new Loading view programmatically.
+            
+            // create the linear layout
+            LinearLayout layout = new LinearLayout(this.appView.getContext());
+            layout.setOrientation(LinearLayout.VERTICAL);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            layout.setLayoutParams(layoutParams);
+            // the proress bar
+            ProgressBar bar = new ProgressBar(this.appView.getContext());
+            LinearLayout.LayoutParams barLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            barLayoutParams.gravity = Gravity.CENTER;
+            bar.setLayoutParams(barLayoutParams);   
+            layout.addView(bar);
+            
+            mVideoProgressView = layout;
+        }
     return mVideoProgressView; 
     }
     

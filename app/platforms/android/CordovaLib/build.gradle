@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
        Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
@@ -19,21 +17,38 @@
        under the License.
 */
 
-var build = require('./build'),
-    spawn = require('./spawn'),
-    path  = require('path');
 
-/*
- * Cleans the project using ant
- * Returns a promise.
- */
-module.exports.run = function() {
-    var args = build.getAntArgs('clean');
-    return spawn('ant', args);
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.10.+'
+    }
 }
 
-module.exports.help = function() {
-    console.log('Usage: ' + path.relative(process.cwd(), process.argv[1]));
-    console.log('Cleans the project directory.');
-    process.exit(0);
+apply plugin: 'android-library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.0"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
 }

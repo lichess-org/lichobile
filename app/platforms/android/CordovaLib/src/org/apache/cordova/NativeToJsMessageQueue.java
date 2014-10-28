@@ -35,30 +35,18 @@ import android.webkit.WebView;
 public class NativeToJsMessageQueue {
     private static final String LOG_TAG = "JsMessageQueue";
 
-    // This must match the default value in cordova-js/lib/android/exec.js
-    private static final int DEFAULT_BRIDGE_MODE = 2;
-    
     // Set this to true to force plugin results to be encoding as
     // JS instead of the custom format (useful for benchmarking).
     private static final boolean FORCE_ENCODE_USING_EVAL = false;
 
-    // Disable URL-based exec() bridge by default since it's a bit of a
-    // security concern.
-    static final boolean ENABLE_LOCATION_CHANGE_EXEC_MODE = false;
-        
     // Disable sending back native->JS messages during an exec() when the active
     // exec() is asynchronous. Set this to true when running bridge benchmarks.
     static final boolean DISABLE_EXEC_CHAINING = false;
-    
+
     // Arbitrarily chosen upper limit for how much data to send to JS in one shot.
     // This currently only chops up on message boundaries. It may be useful
     // to allow it to break up messages.
     private static int MAX_PAYLOAD_SIZE = 50 * 1024 * 10240;
-    
-    /**
-     * The index into registeredListeners to treat as active. 
-     */
-    private int activeListenerIndex;
     
     /**
      * When true, the active listener is not fired upon enqueue. When set to false,
@@ -76,6 +64,13 @@ public class NativeToJsMessageQueue {
      */
     private final BridgeMode[] registeredListeners;    
     
+    /**
+     * When null, the bridge is disabled. This occurs during page transitions.
+     * When disabled, all callbacks are dropped since they are assumed to be
+     * relevant to the previous page.
+     */
+    private BridgeMode activeBridgeMode;
+
     private final CordovaInterface cordova;
     private final CordovaWebView webView;
 
@@ -89,22 +84,28 @@ public class NativeToJsMessageQueue {
         registeredListeners[3] = new PrivateApiBridgeMode();
         reset();
     }
-    
+
+    public boolean isBridgeEnabled() {
+        return activeBridgeMode != null;
+    }
+
     /**
      * Changes the bridge mode.
      */
     public void setBridgeMode(int value) {
-        if (value < 0 || value >= registeredListeners.length) {
+        if (value < -1 || value >= registeredListeners.length) {
             Log.d(LOG_TAG, "Invalid NativeToJsBridgeMode: " + value);
         } else {
-            if (value != activeListenerIndex) {
-                Log.d(LOG_TAG, "Set native->JS mode to " + value);
+            BridgeMode newMode = value < 0 ? null : registeredListeners[value];
+            if (newMode != activeBridgeMode) {
+                Log.d(LOG_TAG, "Set native->JS mode to " + (newMode == null ? "null" : newMode.getClass().getSimpleName()));
                 synchronized (this) {
-                    activeListenerIndex = value;
-                    BridgeMode activeListener = registeredListeners[value];
-                    activeListener.reset();
-                    if (!paused && !queue.isEmpty()) {
-                        activeListener.onNativeToJsMessageAvailable();
+                    activeBridgeMode = newMode;
+                    if (newMode != null) {
+                        newMode.reset();
+                        if (!paused && !queue.isEmpty()) {
+                            newMode.onNativeToJsMessageAvailable();
+                        }
                     }
                 }
             }
@@ -117,8 +118,7 @@ public class NativeToJsMessageQueue {
     public void reset() {
         synchronized (this) {
             queue.clear();
-            setBridgeMode(DEFAULT_BRIDGE_MODE);
-            registeredListeners[activeListenerIndex].reset();
+            setBridgeMode(-1);
         }
     }
 
@@ -142,7 +142,10 @@ public class NativeToJsMessageQueue {
      */
     public String popAndEncode(boolean fromOnlineEvent) {
         synchronized (this) {
-            registeredListeners[activeListenerIndex].notifyOfFlush(fromOnlineEvent);
+            if (activeBridgeMode == null) {
+                return null;
+            }
+            activeBridgeMode.notifyOfFlush(fromOnlineEvent);
             if (queue.isEmpty()) {
                 return null;
             }
@@ -247,16 +250,20 @@ public class NativeToJsMessageQueue {
 
         enqueueMessage(message);
     }
-    
+
     private void enqueueMessage(JsMessage message) {
         synchronized (this) {
+            if (activeBridgeMode == null) {
+                Log.d(LOG_TAG, "Dropping Native->JS message due to disabled bridge");
+                return;
+            }
             queue.add(message);
             if (!paused) {
-                registeredListeners[activeListenerIndex].onNativeToJsMessageAvailable();
+                activeBridgeMode.onNativeToJsMessageAvailable();
             }
-        }        
+        }
     }
-    
+
     public void setPaused(boolean value) {
         if (paused && value) {
             // This should never happen. If a use-case for it comes up, we should
@@ -266,15 +273,11 @@ public class NativeToJsMessageQueue {
         paused = value;
         if (!value) {
             synchronized (this) {
-                if (!queue.isEmpty()) {
-                    registeredListeners[activeListenerIndex].onNativeToJsMessageAvailable();
+                if (!queue.isEmpty() && activeBridgeMode != null) {
+                    activeBridgeMode.onNativeToJsMessageAvailable();
                 }
             }   
         }
-    }
-    
-    public boolean getPaused() {
-        return paused;
     }
 
     private abstract class BridgeMode {
@@ -308,23 +311,33 @@ public class NativeToJsMessageQueue {
     /** Uses online/offline events to tell the JS when to poll for messages. */
     private class OnlineEventsBridgeMode extends BridgeMode {
         private boolean online;
-        final Runnable runnable = new Runnable() {
+        private boolean ignoreNextFlush;
+
+        final Runnable toggleNetworkRunnable = new Runnable() {
             public void run() {
                 if (!queue.isEmpty()) {
+                    ignoreNextFlush = false;
                     webView.setNetworkAvailable(online);
                 }
-            }                
+            }
+        };
+        final Runnable resetNetworkRunnable = new Runnable() {
+            public void run() {
+                online = false;
+                // If the following call triggers a notifyOfFlush, then ignore it.
+                ignoreNextFlush = true;
+                webView.setNetworkAvailable(true);
+            }
         };
         @Override void reset() {
-            online = false;
-            webView.setNetworkAvailable(true);
+            cordova.getActivity().runOnUiThread(resetNetworkRunnable);
         }
         @Override void onNativeToJsMessageAvailable() {
-            cordova.getActivity().runOnUiThread(runnable);
+            cordova.getActivity().runOnUiThread(toggleNetworkRunnable);
         }
         // Track when online/offline events are fired so that we don't fire excess events.
         @Override void notifyOfFlush(boolean fromOnlineEvent) {
-            if (fromOnlineEvent) {
+            if (fromOnlineEvent && !ignoreNextFlush) {
                 online = !online;
             }
         }

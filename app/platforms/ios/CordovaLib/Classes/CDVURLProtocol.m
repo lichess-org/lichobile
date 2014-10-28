@@ -27,7 +27,9 @@
 #import "CDVViewController.h"
 
 @interface CDVHTTPURLResponse : NSHTTPURLResponse
-@property (nonatomic) NSInteger statusCode;
+#ifndef __IPHONE_8_0
+                                    @property (nonatomic) NSInteger statusCode;
+#endif
 @end
 
 static CDVWhitelist* gWhitelist = nil;
@@ -166,8 +168,8 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
                 // We have the asset!  Get the data and send it along.
                 ALAssetRepresentation* assetRepresentation = [asset defaultRepresentation];
                 NSString* MIMEType = (__bridge_transfer NSString*)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)[assetRepresentation UTI], kUTTagClassMIMEType);
-                Byte* buffer = (Byte*)malloc([assetRepresentation size]);
-                NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:[assetRepresentation size] error:nil];
+                Byte* buffer = (Byte*)malloc((unsigned long)[assetRepresentation size]);
+                NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                 NSData* data = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
                 [self sendResponseWithResponseCode:200 data:data mimeType:MIMEType];
             } else {
@@ -205,12 +207,21 @@ static CDVViewController *viewControllerForRequest(NSURLRequest* request)
         mimeType = @"text/plain";
     }
     NSString* encodingName = [@"text/plain" isEqualToString : mimeType] ? @"UTF-8" : nil;
-    CDVHTTPURLResponse* response =
-        [[CDVHTTPURLResponse alloc] initWithURL:[[self request] URL]
-                                       MIMEType:mimeType
-                          expectedContentLength:[data length]
-                               textEncodingName:encodingName];
-    response.statusCode = statusCode;
+
+#ifdef __IPHONE_8_0
+        NSHTTPURLResponse* response = [NSHTTPURLResponse alloc];
+#else
+        CDVHTTPURLResponse* response = [CDVHTTPURLResponse alloc];
+#endif
+
+    response = [response initWithURL:[[self request] URL]
+                            MIMEType:mimeType
+               expectedContentLength:[data length]
+                    textEncodingName:encodingName];
+
+#ifndef __IPHONE_8_0
+        response.statusCode = statusCode;
+#endif
 
     [[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
     if (data != nil) {

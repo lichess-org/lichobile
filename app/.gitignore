@@ -1,3 +1,8 @@
+# generated files
+bin/
+gen/
+build/
+
 # ANDROID
 
 # built application files
@@ -7,6 +12,9 @@
 # Java class files
 target
 *.class
+
+# gradle
+.gradle
 
 # generated files - android project subfolder
 platforms/android/bin/
@@ -18,10 +26,6 @@ platforms/android/www/
 platforms/android/CordovaLib/bin/
 platforms/android/CordovaLib/ant-gen/
 platforms/android/CordovaLib/ant-build/
-
-# generated files
-bin/
-gen/
 
 # Local configuration file (sdk path, etc)
 local.properties

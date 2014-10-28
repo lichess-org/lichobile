@@ -9,11 +9,15 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Insomnia\"><param name=\"ios-package\" value=\"Insomnia\" /></feature>",
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "xml": "<feature name=\"LocalNotification\"><param name=\"ios-package\" onload=\"true\" value=\"APPLocalNotification\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Insomnia\"><param name=\"ios-package\" value=\"Insomnia\" /></feature>",
                             "count": 1
                         },
                         {
@@ -25,7 +29,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
                             "count": 1
                         },
                         {
@@ -47,22 +51,12 @@
                         {
                             "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"LocalNotification\"><param name=\"ios-package\" onload=\"true\" value=\"APPLocalNotification\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
                         }
                     ]
                 }
             },
             "framework": {
                 "parents": {
-                    "SystemConfiguration.framework": [
-                        {
-                            "xml": "true",
-                            "count": 1
-                        }
-                    ],
                     "AssetsLibrary.framework": [
                         {
                             "xml": "false",
@@ -72,6 +66,12 @@
                     "MobileCoreServices.framework": [
                         {
                             "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "SystemConfiguration.framework": [
+                        {
+                            "xml": "true",
                             "count": 1
                         }
                     ],
@@ -86,16 +86,22 @@
         }
     },
     "installed_plugins": {
+        "com.ququplay.websocket.WebSocket": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
         "nl.x-services.plugins.insomnia": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
-        "org.apache.cordova.network-information": {
+        "org.apache.cordova.file": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.media": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
-        "org.apache.cordova.device": {
+        "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.splashscreen": {
@@ -103,13 +109,10 @@
         },
         "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "org.lichess.mobile"
-        },
-        "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "org.lichess.mobile"
         }
     },
     "dependent_plugins": {
-        "org.apache.cordova.file": {
+        "org.apache.cordova.device": {
             "PACKAGE_NAME": "org.lichess.mobile"
         }
     }

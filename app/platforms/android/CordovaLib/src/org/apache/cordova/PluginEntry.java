@@ -18,12 +18,9 @@
  */
 package org.apache.cordova;
 
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
+import java.util.List;
 
-//import android.content.Context;
-//import android.webkit.WebView;
+import org.apache.cordova.CordovaPlugin;
 
 /**
  * This class represents a service entry object.
@@ -33,100 +30,60 @@ public class PluginEntry {
     /**
      * The name of the service that this plugin implements
      */
-    public String service = "";
+    public String service;
 
     /**
      * The plugin class name that implements the service.
      */
-    public String pluginClass = "";
+    public String pluginClass;
 
     /**
-     * The plugin object.
-     * Plugin objects are only created when they are called from JavaScript.  (see PluginManager.exec)
-     * The exception is if the onload flag is set, then they are created when PluginManager is initialized.
+     * The pre-instantiated plugin to use for this entry.
      */
-    public CordovaPlugin plugin = null;
+    public CordovaPlugin plugin;
 
     /**
      * Flag that indicates the plugin object should be created when PluginManager is initialized.
      */
-    public boolean onload = false;
+    public boolean onload;
+
+    private List<String> urlFilters;
+
 
     /**
-     * Constructor
-     *
+     * Constructs with a CordovaPlugin already instantiated.
+     */
+    public PluginEntry(String service, CordovaPlugin plugin) {
+        this(service, plugin.getClass().getName(), true, plugin, null);
+    }
+
+    /**
      * @param service               The name of the service
      * @param pluginClass           The plugin class name
      * @param onload                Create plugin object when HTML page is loaded
      */
     public PluginEntry(String service, String pluginClass, boolean onload) {
+        this(service, pluginClass, onload, null, null);
+    }
+    
+    @Deprecated // urlFilters are going away
+    public PluginEntry(String service, String pluginClass, boolean onload, List<String> urlFilters) {
         this.service = service;
         this.pluginClass = pluginClass;
         this.onload = onload;
+        this.urlFilters = urlFilters;
+        plugin = null;
     }
 
-    /**
-     * Alternate constructor
-     *
-     * @param service               The name of the service
-     * @param plugin                The plugin associated with this entry
-     */
-    public PluginEntry(String service, CordovaPlugin plugin) {
+    private PluginEntry(String service, String pluginClass, boolean onload, CordovaPlugin plugin, List<String> urlFilters) {
         this.service = service;
+        this.pluginClass = pluginClass;
+        this.onload = onload;
+        this.urlFilters = urlFilters;
         this.plugin = plugin;
-        this.pluginClass = plugin.getClass().getName();
-        this.onload = false;
     }
 
-    /**
-     * Create plugin object.
-     * If plugin is already created, then just return it.
-     *
-     * @return                      The plugin object
-     */
-    public CordovaPlugin createPlugin(CordovaWebView webView, CordovaInterface ctx) {
-        if (this.plugin != null) {
-            return this.plugin;
-        }
-        try {
-            @SuppressWarnings("rawtypes")
-            Class c = getClassByName(this.pluginClass);
-            if (isCordovaPlugin(c)) {
-                this.plugin = (CordovaPlugin) c.newInstance();
-                this.plugin.initialize(ctx, webView);
-                return plugin;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error adding plugin " + this.pluginClass + ".");
-        }
-        return null;
-    }
-
-    /**
-     * Get the class.
-     *
-     * @param clazz
-     * @return a reference to the named class
-     * @throws ClassNotFoundException
-     */
-    @SuppressWarnings("rawtypes")
-    private Class getClassByName(final String clazz) throws ClassNotFoundException {
-        Class c = null;
-        if ((clazz != null) && !("".equals(clazz))) {
-            c = Class.forName(clazz);
-        }
-        return c;
-    }
-
-    /**
-     * Returns whether the given class extends CordovaPlugin.
-     */
-    @SuppressWarnings("rawtypes")
-    private boolean isCordovaPlugin(Class c) {
-        if (c != null) {
-            return org.apache.cordova.CordovaPlugin.class.isAssignableFrom(c);
-        }
-        return false;
+    public List<String> getUrlFilters() {
+        return urlFilters;
     }
 }

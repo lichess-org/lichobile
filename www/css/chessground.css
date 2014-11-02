@@ -1,0 +1,281 @@
+.cg-board-wrap {
+  width: 100%;
+  height: 100%;
+}
+.cg-board {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 0;
+  background-size: cover;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cg-square {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+}
+.cg-square.move-dest {
+  background: radial-gradient(rgba(20,85,30,0.5) 22%, #208530 0, rgba(0,0,0,0.3) 0, rgba(0,0,0,0) 0);
+}
+.cg-square.premove-dest {
+  background: radial-gradient(rgba(20,30,85,0.5) 22%, #203085 0, rgba(0,0,0,0.3) 0, rgba(0,0,0,0) 0);
+}
+.cg-square.last-move {
+  background-color: rgba(155,199,0,0.41);
+}
+.cg-square.selected {
+  background-color: rgba(20,85,30,0.5);
+}
+.cg-square.check {
+  background: radial-gradient(ellipse at center, #f00 0%, #e70000 25%, rgba(169,0,0,0) 89%, rgba(158,0,0,0) 100%);
+}
+.cg-square.current-premove {
+  background-color: rgba(20,30,85,0.5);
+}
+.cg-square.selected {
+  background: rgba(216,85,0,0.3);
+}
+.cg-square[data-coord-x]::after {
+  position: absolute;
+  left: 1px;
+  bottom: 1px;
+  font-size: 10px;
+  line-height: 10px;
+  content: attr(data-coord-x);
+  color: #fff;
+  opacity: 0.5;
+}
+.cg-square[data-coord-y]::before {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  font-size: 10px;
+  line-height: 10px;
+  content: attr(data-coord-y);
+  color: #fff;
+  opacity: 0.5;
+}
+.cg-piece {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  z-index: 2;
+}
+.cg-piece.dragging {
+  z-index: 9;
+}
+.cg-piece.ghost {
+  opacity: 0.3;
+}
+#cg-square-target {
+  position: absolute;
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 50%;
+  -webkit-transform: translate3d(0, 0, 0);
+  z-index: 9;
+}
+.blue .cg-board {
+  background-image: url("../images/board/blue2.jpg");
+}
+.wood .cg-board {
+  background-image: url("../images/board/wood2.jpg");
+}
+.marble .cg-board {
+  background-image: url("../images/board/marble.jpg");
+}
+.chessground.light-wood-3d .cg-board-wrap {
+  position: relative;
+  background-image: url("../images/board/3d/Light-Wood.png");
+  background-size: cover;
+}
+.chessground.small.light-wood-3d .cg-board-wrap {
+  width: calc(1400px / 4.6666);
+  height: calc(1310px / 4.6666);
+}
+.chessground.large.light-wood-3d .cg-board-wrap {
+  width: calc(1400px / 1);
+  height: calc(1310px / 1);
+}
+.light-wood-3d .cg-board {
+  position: absolute;
+  left: 0;
+  top: 0.6168702%;
+  width: 100%;
+  height: 97.0229%;
+}
+.pirouetti .cg-piece {
+  bottom: 0;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+}
+.pirouetti .cg-piece.pawn.white {
+  background-image: url("../images/pieces/pirouetti/wP.svg");
+}
+.pirouetti .cg-piece.pawn.black {
+  background-image: url("../images/pieces/pirouetti/bP.svg");
+}
+.pirouetti .cg-piece.bishop.white {
+  background-image: url("../images/pieces/pirouetti/wB.svg");
+}
+.pirouetti .cg-piece.bishop.black {
+  background-image: url("../images/pieces/pirouetti/bB.svg");
+}
+.pirouetti .cg-piece.knight.white {
+  background-image: url("../images/pieces/pirouetti/wN.svg");
+}
+.pirouetti .cg-piece.knight.black {
+  background-image: url("../images/pieces/pirouetti/bN.svg");
+}
+.pirouetti .cg-piece.rook.white {
+  background-image: url("../images/pieces/pirouetti/wR.svg");
+}
+.pirouetti .cg-piece.rook.black {
+  background-image: url("../images/pieces/pirouetti/bR.svg");
+}
+.pirouetti .cg-piece.queen.white {
+  background-image: url("../images/pieces/pirouetti/wQ.svg");
+}
+.pirouetti .cg-piece.queen.black {
+  background-image: url("../images/pieces/pirouetti/bQ.svg");
+}
+.pirouetti .cg-piece.king.white {
+  background-image: url("../images/pieces/pirouetti/wK.svg");
+}
+.pirouetti .cg-piece.king.black {
+  background-image: url("../images/pieces/pirouetti/bK.svg");
+}
+.cburnett .cg-piece.pawn.white {
+  background-image: url("../images/pieces/cburnett/wP.svg");
+}
+.cburnett .cg-piece.pawn.black {
+  background-image: url("../images/pieces/cburnett/bP.svg");
+}
+.cburnett .cg-piece.bishop.white {
+  background-image: url("../images/pieces/cburnett/wB.svg");
+}
+.cburnett .cg-piece.bishop.black {
+  background-image: url("../images/pieces/cburnett/bB.svg");
+}
+.cburnett .cg-piece.knight.white {
+  background-image: url("../images/pieces/cburnett/wN.svg");
+}
+.cburnett .cg-piece.knight.black {
+  background-image: url("../images/pieces/cburnett/bN.svg");
+}
+.cburnett .cg-piece.rook.white {
+  background-image: url("../images/pieces/cburnett/wR.svg");
+}
+.cburnett .cg-piece.rook.black {
+  background-image: url("../images/pieces/cburnett/bR.svg");
+}
+.cburnett .cg-piece.queen.white {
+  background-image: url("../images/pieces/cburnett/wQ.svg");
+}
+.cburnett .cg-piece.queen.black {
+  background-image: url("../images/pieces/cburnett/bQ.svg");
+}
+.cburnett .cg-piece.king.white {
+  background-image: url("../images/pieces/cburnett/wK.svg");
+}
+.cburnett .cg-piece.king.black {
+  background-image: url("../images/pieces/cburnett/bK.svg");
+}
+.merida .cg-piece.pawn.white {
+  background-image: url("../images/pieces/merida/wP.svg");
+}
+.merida .cg-piece.pawn.black {
+  background-image: url("../images/pieces/merida/bP.svg");
+}
+.merida .cg-piece.bishop.white {
+  background-image: url("../images/pieces/merida/wB.svg");
+}
+.merida .cg-piece.bishop.black {
+  background-image: url("../images/pieces/merida/bB.svg");
+}
+.merida .cg-piece.knight.white {
+  background-image: url("../images/pieces/merida/wN.svg");
+}
+.merida .cg-piece.knight.black {
+  background-image: url("../images/pieces/merida/bN.svg");
+}
+.merida .cg-piece.rook.white {
+  background-image: url("../images/pieces/merida/wR.svg");
+}
+.merida .cg-piece.rook.black {
+  background-image: url("../images/pieces/merida/bR.svg");
+}
+.merida .cg-piece.queen.white {
+  background-image: url("../images/pieces/merida/wQ.svg");
+}
+.merida .cg-piece.queen.black {
+  background-image: url("../images/pieces/merida/bQ.svg");
+}
+.merida .cg-piece.king.white {
+  background-image: url("../images/pieces/merida/wK.svg");
+}
+.merida .cg-piece.king.black {
+  background-image: url("../images/pieces/merida/bK.svg");
+}
+.staunton div.pawn.white {
+  background-image: url("../images/pieces/staunton/basic/White-Pawn.png");
+}
+.staunton div.pawn.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Pawn.png");
+}
+.staunton div.bishop.white {
+  background-image: url("../images/pieces/staunton/basic/White-Bishop.png");
+}
+.staunton div.bishop.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Bishop.png");
+}
+.staunton div.rook.white {
+  background-image: url("../images/pieces/staunton/basic/White-Rook.png");
+}
+.staunton div.rook.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Rook.png");
+}
+.staunton div.queen.white {
+  background-image: url("../images/pieces/staunton/basic/White-Queen.png");
+}
+.staunton div.queen.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Queen.png");
+}
+.staunton div.king.white {
+  background-image: url("../images/pieces/staunton/basic/White-King.png");
+}
+.staunton div.king.black {
+  background-image: url("../images/pieces/staunton/basic/Black-King.png");
+}
+.staunton div.knight.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Knight.png");
+}
+.staunton div.cg-piece {
+  width: 140.625%;
+  height: 197.92486231313927%;
+  left: -18%;
+  top: -77%;
+}
+.staunton .cg-board.orientation-black div.bishop.white {
+  background-image: url("../images/pieces/staunton/basic/White-Bishop-Flipped.png");
+}
+.staunton .cg-board.orientation-black div.knight.white {
+  background-image: url("../images/pieces/staunton/basic/White-Knight-Flipped.png");
+}
+.staunton .cg-board.orientation-white div.bishop.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Bishop-Flipped.png");
+}
+.staunton .cg-board.orientation-white div.knight.black {
+  background-image: url("../images/pieces/staunton/basic/Black-Knight-Flipped.png");
+}
+.staunton div.knight.white,
+#top div.piece_demo.staunton {
+  background-image: url("../images/pieces/staunton/basic/White-Knight.png");
+}

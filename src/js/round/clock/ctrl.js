@@ -1,3 +1,5 @@
+var m = require('mithril');
+
 module.exports = function(data, onFlag) {
 
   var lastUpdate;
@@ -26,4 +28,4 @@ module.exports = function(data, onFlag) {
     if (this.data[color] === 0) onFlag();
     m.endComputation();
   }.bind(this);
-}
+};

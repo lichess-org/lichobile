@@ -3,8 +3,10 @@
 var m = require('mithril');
 var Chessground = require('chessground');
 var clock = require('../clock');
+var util = require('../util');
 
 module.exports = function(ctrl) {
+
   function renderGame(ctrl){
     return m('div', [
         renderOpponent(ctrl),
@@ -17,21 +19,24 @@ module.exports = function(ctrl) {
   }
 
   function renderPlayer(ctrl){
+    var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
     var children = [
       m('h1', 'player'),
       m('span', '1459')
     ];
-    // if (ctrl.data.clocks.player) children.push(clock.view(ctrl.clocks.player), m('div.timer.after'));
+    if (ctrl.clock)
+      children.push(clock.view(ctrl.clock, ctrl.data.player.color, clockRunningColor));
     return m('div.player', children);
   }
 
   function renderOpponent(ctrl){
-    // var name  = ( "id" in ctrl.game.opponent ? ctrl.game.opponent.id : "AI" );
+    var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
     var children = [
       m('h1', 'ai'),
       m('span', '1459')
     ];
-    // if (ctrl.clocks.opponent) children.push(clock.view(ctrl.clocks.opponent), m('div.timer.before'));
+    if (ctrl.clock)
+      children.push(clock.view(ctrl.clock, util.opponentColor(ctrl.data.player.color), clockRunningColor));
 
     return m('div.opponent', children);
   }

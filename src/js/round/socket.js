@@ -55,14 +55,13 @@ module.exports = function(send, ctrl) {
     },
     enpassant: function(o) {
       var pieces = {};
-      pieces.o = null;
+      pieces[o] = null;
       ctrl.chessground.setPieces(pieces);
     },
     // still used by rematch join
     redirect: function(o) {
       setTimeout(function() {
-        lichess.hasToReload = true;
-        $.redirect(o);
+        // TODO
       }, 400);
     },
     reload: function(o) {
@@ -96,11 +95,11 @@ module.exports = function(send, ctrl) {
   };
 
   this.receive = function(type, data) {
-    if (type != 'n') console.log(type, data);
+    if (type !== 'n') console.log(type, data);
     if (handlers[type]) {
       handlers[type](data);
       return true;
     }
     return false;
   }.bind(this);
-}
+};

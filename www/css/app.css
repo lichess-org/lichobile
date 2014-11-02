@@ -1,0 +1,156 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background-color: #000;
+  color: #fff;
+}
+h1 {
+  margin: 0;
+}
+.lichess {
+  font-family: "lichess";
+}
+header {
+  padding: 5px;
+}
+header span,
+header h1 {
+  display: inline-block;
+}
+header h1 {
+  text-align: center;
+  width: calc(100% - 50px);
+}
+header span {
+  font-size: 25px;
+  color: #c4a86f;
+}
+.player,
+.opponent {
+  position: relative;
+  width: 100%;
+  padding: 5px;
+}
+.player .clock,
+.opponent .clock {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #c4a86f;
+  font-weight: bold;
+  font-size: 30px;
+}
+.opponent {
+  background-color: #fff;
+  color: #000;
+}
+.chessground {
+  width: 100%;
+  height: 360px;
+}
+.timer {
+  height: 5px;
+  background-color: #c4a86f;
+  width: 30%;
+}
+footer {
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #c4a86f;
+  padding: 5px;
+}
+footer span.lichess {
+  font-size: 25px;
+  margin-left: calc(33% - 20px);
+}
+div header {
+  background-color: #000;
+  color: #fff;
+}
+div header ul {
+  overflow: hidden;
+  position: relative;
+  height: 40px;
+}
+div header ul li {
+  display: inline-block;
+}
+div header ul li.title {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  line-height: 40px;
+}
+div header ul li.close {
+  float: right;
+}
+ul.settings li {
+  overflow: hidden;
+}
+ul.settings li span {
+  display: inline-block;
+  margin: 1em 2em;
+}
+ul.settings li label {
+  margin: 0.5em;
+  float: right;
+}
+a[rel=close] {
+  color: transparent;
+  text-indent: -9999px;
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  outline: 0 none;
+  float: right;
+  cursor: pointer;
+  -webkit-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+  -ms-transform: translateZ(1px);
+  -o-transform: translateZ(1px);
+  transform: translateZ(1px);
+  z-index: 2;
+}
+a[rel=close]:before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: 14px;
+  left: -6px;
+  border-width: 0 2px 0 0;
+  border-style: solid;
+  border-color: #fff;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  z-index: 1;
+}
+a[rel=close]:after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: -6px;
+  left: -6px;
+  border-width: 0 2px 0 0;
+  border-style: solid;
+  border-color: #fff;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

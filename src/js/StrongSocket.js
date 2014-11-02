@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash-node/underscore'),
+var _ = require('lodash-node'),
     utils = require('./utils'),
     storage = require('./storage');
 

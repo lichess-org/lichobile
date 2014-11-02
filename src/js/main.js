@@ -12,14 +12,6 @@ function main() {
     view: view
   });
 
-  (function() {
-    var size = (window.innerWidth) + 'px';
-    setTimeout(function() {
-      document.querySelector('.chessground').style.width = size;
-      document.querySelector('.chessground').style.height = size;
-    }, 50);
-  })();
-
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();
   });

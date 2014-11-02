@@ -8,10 +8,9 @@ var socket = require('./socket');
 var promotion = require('./promotion');
 var clockCtrl = require('./clock/ctrl');
 
-module.exports = function(cfg, router, socketSend) {
+module.exports = function(cfg, socketSend) {
 
   this.data = data(cfg);
-  console.log(this.data);
 
   this.socket = new socket(socketSend, this);
 
@@ -51,7 +50,5 @@ module.exports = function(cfg, router, socketSend) {
   }.bind(this);
 
   if (this.clock) setInterval(this.clockTick, 100);
-
-  this.router = router;
 
 };

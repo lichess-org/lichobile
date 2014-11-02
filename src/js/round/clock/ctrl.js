@@ -5,7 +5,6 @@ module.exports = function(data, onFlag) {
   var lastUpdate;
 
   this.data = data;
-  this.data.barTime = Math.max(this.data.initial, 2) + 5 * this.data.increment;
 
   function setLastUpdate() {
     lastUpdate = {

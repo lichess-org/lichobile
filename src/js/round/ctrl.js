@@ -9,7 +9,6 @@ var socket = require('./socket');
 var title = require('./title');
 var promotion = require('./promotion');
 var hold = require('./hold');
-var blur = require('./blur');
 var replayCtrl = require('./replay/ctrl');
 var clockCtrl = require('./clock/ctrl');
 
@@ -40,7 +39,6 @@ module.exports = function(cfg, router, i18n, socketSend) {
       to: dest
     };
     if (prom) move.promotion = prom;
-    if (blur.get()) move.b = 1;
     this.socket.send('move', move, {
       ackable: true
     });

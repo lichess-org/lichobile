@@ -19,7 +19,7 @@ var strongSocketDefaults = {
     mobile: 1
   },
   options: {
-    name: "unnamed",
+    name: 'unnamed',
     pingMaxLag: 7000, // time to wait for pong before reseting the connection
     pingDelay: 1000, // time between pong and ping
     autoReconnectDelay: 1000
@@ -54,13 +54,13 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = "ws://" + self.baseUrl() + self.url + "?" + utils.serializeQueryParameters(_.defaults(self.settings.params, {
+    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(_.defaults(self.settings.params, {
       version: self.version
     }));
-    self.debug("connection attempt to " + fullUrl, true);
+    self.debug('connection attempt to ' + fullUrl, true);
     try {
       if (window.WebSocket) self.ws = new window.WebSocket(fullUrl);
-      else throw "[lila] no websockets available!";
+      else throw '[lila] no websockets available!';
 
       // if (self.options.debug) window.liws = self.ws;
       self.ws.onerror = function(e) {
@@ -73,7 +73,7 @@ StrongSocket.prototype = {
         }
       };
       self.ws.onopen = function() {
-        self.debug("connected to " + fullUrl, true);
+        self.debug('connected to ' + fullUrl, true);
         self.onSuccess();
         self.pingNow();
         var resend = self.ackableMessages;
@@ -84,11 +84,13 @@ StrongSocket.prototype = {
         var m = JSON.parse(e.data);
         var mData = m.d || [];
 
-        if (m.t === "n") self.pong();
-        else self.debug(e.data);
-
-        if (m.t === "b") mData.forEach(function(x) { self.handle(x); });
-        else self.handle(m);
+        if (m.t === 'n')
+          self.pong();
+        else {
+          self.debug(e.data);
+          if (m.t === 'b') mData.forEach(function(x) { self.handle(x); });
+          else self.handle(m);
+        }
       };
     } catch (e) {
       self.onError(e);
@@ -182,7 +184,7 @@ StrongSocket.prototype = {
       default:
         if (!self.settings.receive || !self.settings.receive(m.t, m.d)) {
           var h = self.settings.events[m.t];
-          if (_.isFunction(h)) h(m.d || null);
+          if (h) h(m.d || null);
           else if (!self.options.ignoreUnknownMessages) {
             self.debug('Message not supported ' + JSON.stringify(m));
           }

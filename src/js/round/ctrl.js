@@ -6,7 +6,6 @@ var data = require('./data');
 var round = require('./round');
 var ground = require('./ground');
 var socket = require('./socket');
-var title = require('./title');
 var promotion = require('./promotion');
 var hold = require('./hold');
 var replayCtrl = require('./replay/ctrl');
@@ -30,8 +29,6 @@ module.exports = function(cfg, router, i18n, socketSend) {
       orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color
     });
   }.bind(this);
-
-  this.setTitle = partial(title.set, this);
 
   this.sendMove = function(orig, dest, prom) {
     var move = {

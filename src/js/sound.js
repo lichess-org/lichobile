@@ -22,12 +22,9 @@ function play(file, volume) {
 }
 
 var audio = {
-  move1: [ 'wood_light_hit_1.mp3', 0.6 ],
-  move2: [ 'wood_medium_hit_1.mp3', 0.6 ],
-  move3: [ 'wood_medium_hit_2.mp3', 0.6 ],
-  move4: [ 'wood_sharp_hit_1.mp3', 0.6 ],
-  capture1: [ 'wood_capture_hit_1.mp3', 0.6 ],
-  capture2: [ 'wood_capture_hit_and_roll.mp3', 0.6 ],
+  move: [ 'move.mp3', 1 ],
+  capture: [ 'capture.mp3', 1 ],
+  dong: [ 'dong.mp3', 1 ],
 };
 
 // var canPlay = window.cordova || (!!audio.move1.canPlayType && audio.move1.canPlayType('audio/mpeg'));
@@ -41,10 +38,13 @@ function shouldPlay() {
 module.exports = {
   move: function() {
     if (shouldPlay()) {
-      play.apply(null, audio.move2);
+      play.apply(null, audio.move);
     }
   },
   capture: function() {
-    if (shouldPlay()) play.apply(null, audio.capture1);
+    if (shouldPlay()) play.apply(null, audio.capture);
+  },
+  dong: function() {
+    if (shouldPlay) play.apply(null, audio.dong);
   }
 };

@@ -2,8 +2,6 @@
 
 var utils = {};
 
-var i18n = {};
-
 utils.hasNetwork = function() {
   if (window.cordova) {
     var t = window.navigator.connection.type;
@@ -43,14 +41,6 @@ utils.serializeQueryParameters = function(obj) {
     str += key + "=" + obj[key];
   }
   return str;
-};
-
-utils.trans = function(str) {
-  var t = i18n[str] || str;
-  Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
-    t = t.replace('%s', arg);
-  });
-  return t;
 };
 
 module.exports = utils;

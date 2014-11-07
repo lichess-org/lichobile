@@ -23,10 +23,9 @@ module.exports = function() {
           receive: function(t, d) { return self.round.socket.receive(t, d); }
         }
       );
-      self.round = new round.controller(data, null, null, self.socket.send.bind(self.socket));
+      self.round = new round.controller(data, null, self.socket.send.bind(self.socket));
     });
   };
 
   this.startAIGame();
-
 };

@@ -59,8 +59,7 @@ module.exports = function(send, ctrl) {
       sound.capture();
     },
     reload: function() {
-      console.log('reload');
-      // xhr.reload(ctrl).then(ctrl.reload);
+      xhr.reload(ctrl).then(ctrl.reload);
     },
     redirect: function() {
       ctrl.vm.redirecting = true;

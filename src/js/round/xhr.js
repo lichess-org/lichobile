@@ -5,19 +5,22 @@ var xhrConfig = function(xhr) {
   xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
 };
 
+var baseUrl = window.apiEndPoint;
+
 function reload(ctrl) {
   ctrl.vm.reloading = true;
   m.redraw();
-  // var req = m.request({
-  //   method: 'GET',
-  //   url: ctrl.data.url.round,
-  //   config: xhrConfig
-  // });
-  // req.then(function() {
-  //   ctrl.vm.reloading = false;
-  // }, function(err) {
-  // });
-  // return req;
+  var req = m.request({
+    method: 'GET',
+    url: baseUrl + ctrl.data.url.round,
+    config: xhrConfig
+  });
+  req.then(function() {
+    ctrl.vm.reloading = false;
+  }, function(err) {
+    console.log(err);
+  });
+  return req;
 }
 
 module.exports = {

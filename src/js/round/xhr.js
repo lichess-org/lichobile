@@ -8,16 +8,16 @@ var xhrConfig = function(xhr) {
 function reload(ctrl) {
   ctrl.vm.reloading = true;
   m.redraw();
-  var req = m.request({
-    method: 'GET',
-    url: ctrl.data.url.round,
-    config: xhrConfig
-  });
-  // TODO
+  // var req = m.request({
+  //   method: 'GET',
+  //   url: ctrl.data.url.round,
+  //   config: xhrConfig
+  // });
   // req.then(function() {
+  //   ctrl.vm.reloading = false;
   // }, function(err) {
   // });
-  return req;
+  // return req;
 }
 
 module.exports = {

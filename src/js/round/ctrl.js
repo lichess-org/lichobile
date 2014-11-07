@@ -61,7 +61,6 @@ module.exports = function(cfg, router, i18n, socketSend) {
     this.replay.onReload(cfg);
     this.data = data(this.data, cfg);
     if (!this.replay.active) ground.reload(this.chessground, this.data, cfg.game.fen, this.vm.flip);
-    this.setTitle();
   }.bind(this);
 
   this.clock = this.data.clock ? new clockCtrl(

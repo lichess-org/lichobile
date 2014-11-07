@@ -15,8 +15,12 @@ function isPlayerPlaying(data) {
   return playable(data) && !data.player.spectator;
 }
 
+function isPlayerTurn(data) {
+  return isPlayerPlaying(data) && data.game.player == data.player.color;
+}
+
 function mandatory(data) {
-  return data.tournamentId || data.poolId;
+  return !!data.tournament;
 }
 
 function abortable(data) {
@@ -24,15 +28,23 @@ function abortable(data) {
 }
 
 function takebackable(data) {
-  return playable(data) && data.takebackable && !data.tournamentId && data.game.turns > 1 && !data.player.isProposingTakeback && !data.opponent.isProposingTakeback;
+  return playable(data) && data.takebackable && !data.tournament && data.game.turns > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback;
 }
 
 function drawable(data) {
-  return playable(data) && data.game.turns >= 2 && !data.player.isOfferingDraw && !data.opponent.ai;
+  return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai;
 }
 
 function resignable(data) {
   return playable(data) && !abortable(data);
+}
+
+function moretimeable(data) {
+  return data.clock && isPlayerPlaying(data) && !mandatory(data);
+}
+
+function replayable(data) {
+  return data.source == 'import' || status.finished(data);
 }
 
 function getPlayer(data, color) {
@@ -41,18 +53,38 @@ function getPlayer(data, color) {
   return null;
 }
 
+function setOnGame(data, color, onGame) {
+  var player = getPlayer(data, color);
+  onGame = onGame || player.ai;
+  player.onGame = onGame;
+  if (onGame) setIsGone(data, color, false);
+}
+
+function setIsGone(data, color, isGone) {
+  var player = getPlayer(data, color);
+  isGone = isGone && !player.ai;
+  player.isGone = isGone;
+  if (!isGone && player.user) player.user.online = true;
+}
+
 function nbMoves(data, color) {
-  return data.turns + (color == 'white' ? 1 : 0) / 2;
+  return Math.floor((data.game.turns + (color == 'white' ? 1 : 0)) / 2);
 }
 
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
+  isPlayerTurn: isPlayerTurn,
   playable: playable,
   abortable: abortable,
   takebackable: takebackable,
   drawable: drawable,
   resignable: resignable,
+  moretimeable: moretimeable,
   mandatory: mandatory,
+  replayable: replayable,
   getPlayer: getPlayer,
-  parsePossibleMoves: parsePossibleMoves
+  parsePossibleMoves: parsePossibleMoves,
+  nbMoves: nbMoves,
+  setOnGame: setOnGame,
+  setIsGone: setIsGone
 };

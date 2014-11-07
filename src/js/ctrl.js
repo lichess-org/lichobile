@@ -20,10 +20,10 @@ module.exports = function() {
             name: "game",
             debug: true
           },
-          receive: function(t, d) { self.round.socket.receive(t, d); }
+          receive: function(t, d) { return self.round.socket.receive(t, d); }
         }
       );
-      self.round = new round.controller(data, self.socket.send.bind(self.socket));
+      self.round = new round.controller(data, null, null, self.socket.send.bind(self.socket));
     });
   };
 

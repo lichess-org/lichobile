@@ -2,6 +2,7 @@ var m = require('mithril');
 var round = require('./round');
 var ground = require('./ground');
 var xhr = require('./xhr');
+var sound = require('../sound');
 
 module.exports = function(send, ctrl) {
 
@@ -9,39 +10,37 @@ module.exports = function(send, ctrl) {
 
   var handlers = {
     possibleMoves: function(o) {
-      ctrl.chessground.set({
+      ctrl.data.possibleMoves = o;
+      if (!ctrl.replay.active) ctrl.chessground.set({
         movable: {
           dests: round.parsePossibleMoves(o)
         }
       });
     },
     state: function(o) {
-      ctrl.chessground.set({
+      if (!ctrl.replay.active) ctrl.chessground.set({
         turnColor: o.color
       });
       ctrl.data.game.player = o.color;
       ctrl.data.game.turns = o.turns;
+      m.redraw();
+      ctrl.setTitle();
     },
     move: function(o) {
-      ctrl.chessground.apiMove(o.from, o.to);
-      if (ctrl.data.game.threefold) {
-        console.log('unset threefold');
-        m.startComputation();
-        ctrl.data.game.threefold = false;
-        m.endComputation();
-      }
+      ctrl.apiMove(o);
     },
     premove: function() {
       ctrl.chessground.playPremove();
     },
     castling: function(o) {
+      if (ctrl.replay.active) return;
       var pieces = {};
       pieces[o.king[0]] = null;
+      pieces[o.rook[0]] = null;
       pieces[o.king[1]] = {
         role: 'king',
         color: o.color
       };
-      pieces[o.rook[0]] = null;
       pieces[o.rook[1]] = {
         role: 'rook',
         color: o.color
@@ -49,29 +48,27 @@ module.exports = function(send, ctrl) {
       ctrl.chessground.setPieces(pieces);
     },
     check: function(o) {
-      ctrl.chessground.set({
+      if (!ctrl.replay.active) ctrl.chessground.set({
         check: o
       });
     },
     enpassant: function(o) {
       var pieces = {};
       pieces[o] = null;
-      ctrl.chessground.setPieces(pieces);
+      if (!ctrl.replay.active) ctrl.chessground.setPieces(pieces);
+      sound.capture();
     },
-    // still used by rematch join
-    redirect: function(o) {
-      setTimeout(function() {
-        // TODO
-      }, 400);
+    reload: function() {
+      console.log('reload');
+      // xhr.reload(ctrl).then(ctrl.reload);
     },
-    reload: function(o) {
-      xhr.reload(ctrl.data).then(ctrl.reload);
+    redirect: function() {
+      ctrl.vm.redirecting = true;
+      m.redraw();
     },
     threefoldRepetition: function() {
-      console.log('set threefold');
-      m.startComputation();
       ctrl.data.game.threefold = true;
-      m.endComputation();
+      m.redraw();
     },
     promotion: function(o) {
       ground.promote(ctrl.chessground, o.key, o.pieceClass);
@@ -80,22 +77,25 @@ module.exports = function(send, ctrl) {
       if (ctrl.clock) ctrl.clock.update(o.white, o.black);
     },
     crowd: function(o) {
-      m.startComputation();
       ['white', 'black'].forEach(function(c) {
-        round.getPlayer(ctrl.data, c).statused = true;
-        round.getPlayer(ctrl.data, c).connected = o[c];
+        round.setOnGame(ctrl.data, c, o[c]);
       });
-      ctrl.data.watchers = o.watchers;
-      m.endComputation();
+      m.redraw();
     },
     end: function() {
       ground.end(ctrl.chessground);
-      xhr.reload(ctrl.data).then(ctrl.reload);
-    }
+      xhr.reload(ctrl).then(ctrl.reload);
+      // if (!ctrl.data.player.spectator) sound.dong();
+    },
+    gone: function(isGone) {
+      if (!ctrl.data.opponent.ai) {
+        round.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
+        m.redraw();
+      }
+    },
   };
 
   this.receive = function(type, data) {
-    if (type !== 'n') console.log(type, data);
     if (handlers[type]) {
       handlers[type](data);
       return true;

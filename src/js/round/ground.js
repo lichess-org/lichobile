@@ -1,14 +1,20 @@
 var chessground = require('chessground');
 var round = require('./round');
-var util = require('./util');
+var sound = require('../sound');
+var m = require('mithril');
 
-function makeConfig(data, fen) {
+function str2move(m) {
+  return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
+}
+
+function makeConfig(data, fen, flip) {
   return {
     fen: fen,
-    orientation: data.player.color,
+    orientation: flip ? data.opponent.color : data.player.color,
     turnColor: data.game.player,
-    lastMove: util.str2move(data.game.lastMove),
+    lastMove: str2move(data.game.lastMove),
     check: data.game.check,
+    coordinates: data.pref.coords !== 0,
     highlight: {
       lastMove: data.pref.highlight,
       check: data.pref.highlight,
@@ -26,7 +32,17 @@ function makeConfig(data, fen) {
     },
     premovable: {
       enabled: data.pref.enablePremove,
-      showDests: data.pref.destination
+      showDests: data.pref.destination,
+      events: {
+        set: m.redraw,
+        unset: m.redraw
+      }
+    },
+    draggable: {
+      showGhost: data.pref.highlight
+    },
+    events: {
+      capture: sound.capture
     }
   };
 }
@@ -36,11 +52,12 @@ function make(data, fen, userMove) {
   config.movable.events = {
     after: userMove
   };
+  config.viewOnly = data.player.spectator;
   return new chessground.controller(config);
 }
 
-function reload(ground, data, fen) {
-  ground.set(makeConfig(data, fen));
+function reload(ground, data, fen, flip) {
+  ground.set(makeConfig(data, fen, flip));
 }
 
 function promote(ground, key, role) {

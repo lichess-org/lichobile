@@ -11,10 +11,7 @@ module.exports = function(ctrl) {
     return m('div', [
         renderOpponent(ctrl),
         renderBoard(ctrl),
-        renderPlayer(ctrl),
-        m('button', { config: function(el, isUpdate) {
-          if (!isUpdate) el.addEventListener('touchstart', ctrl.startAiGame);
-        }}, 'Start!')
+        renderPlayer(ctrl)
     ]);
   }
 

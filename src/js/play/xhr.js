@@ -31,16 +31,7 @@ function game (id) {
   });
 }
 
-function reload(data) {
-  return m.request({
-    method: 'GET',
-    url: data.url.round,
-    config: xhrConfig
-  });
-}
-
 module.exports = {
   aiGame: aiGame,
-  game: game,
-  reload: reload
+  game: game
 };

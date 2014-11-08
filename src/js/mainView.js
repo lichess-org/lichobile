@@ -1,7 +1,4 @@
-'use strict';
-
 var m    = require('mithril');
-var round = require('./round');
 
 function renderHeader(){
   return m('header', [
@@ -10,9 +7,9 @@ function renderHeader(){
   ]);
 }
 
-function renderContent(ctrl){
+function renderContent(ctrl, contentF){
   return m('div.content', [
-    round.view(ctrl.round)
+    contentF()
   ]);
 }
 
@@ -23,10 +20,10 @@ function renderFooter(){
   ]);
 }
 
-
-module.exports = function(ctrl) {
+module.exports = function(ctrl, contentF) {
   return m('div', [
     renderHeader(),
-    renderContent(ctrl)
+    renderContent(ctrl, contentF),
+    renderFooter()
   ]);
 };

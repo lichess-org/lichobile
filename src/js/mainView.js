@@ -10,10 +10,6 @@ function renderHeader(){
   ]);
 }
 
-function renderContent(ctrl, contentF){
-  return contentF();
-}
-
 function renderFooter(){
   return m('footer', [
     m('span.lichess', ["h"]),
@@ -24,7 +20,7 @@ function renderFooter(){
 module.exports = function(ctrl, contentF) {
   return m('main', [
     renderHeader(),
-    renderContent(ctrl, contentF),
+    contentF.apply(),
     renderFooter()
   ]);
 };

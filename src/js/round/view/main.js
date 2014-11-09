@@ -38,12 +38,12 @@ function renderBoard(ctrl){
 
 function renderGame(ctrl){
   return m('div', [
-    // renderOpponent(ctrl),
+    renderOpponent(ctrl),
     renderBoard(ctrl),
-    // renderPlayer(ctrl)
+    renderPlayer(ctrl)
   ]);
 }
 
 module.exports = function(ctrl) {
-  return renderBoard(ctrl);
+  return renderGame(ctrl);
 };

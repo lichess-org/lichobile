@@ -47,15 +47,6 @@ function makeConfig(data, fen, flip) {
   };
 }
 
-function make(data, fen, userMove) {
-  var config = makeConfig(data, fen);
-  config.movable.events = {
-    after: userMove
-  };
-  config.viewOnly = data.player.spectator;
-  return new chessground.controller(config);
-}
-
 function reload(ground, data, fen, flip) {
   ground.set(makeConfig(data, fen, flip));
 }
@@ -77,7 +68,7 @@ function end(ground) {
 }
 
 module.exports = {
-  make: make,
+  makeConfig: makeConfig,
   reload: reload,
   promote: promote,
   end: end

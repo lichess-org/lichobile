@@ -11,7 +11,7 @@ var hold = require('./hold');
 var replayCtrl = require('./replay/ctrl');
 var clockCtrl = require('./clock/ctrl');
 
-module.exports = function(cfg, router, socketSend) {
+module.exports = function(cfg, chessground, socketSend) {
 
   this.data = data({}, cfg);
 
@@ -55,7 +55,10 @@ module.exports = function(cfg, router, socketSend) {
     m.redraw();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, cfg.game.fen, this.userMove);
+  this.chessground = chessground;
+
+  this.chessground.set(ground.makeConfig(this.data, cfg.game.fen));
+  this.chessground.set({movable: { events: { after: this.userMove }}});
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
@@ -80,6 +83,4 @@ module.exports = function(cfg, router, socketSend) {
   if (this.clock) setInterval(this.clockTick, 100);
 
   this.replay = new replayCtrl(this);
-
-  this.router = router;
 };

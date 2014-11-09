@@ -2,15 +2,16 @@ var m    = require('mithril');
 
 function renderHeader(){
   return m('header', [
-    m('span.lichess', ["."]),
-    m('h1.title', [ "lichess.org" ])
+    m('nav', [
+      m('a.fa.fa-navicon[href="#"]'),
+      m('h1', 'lichess.org'),
+      m('a.fa.fa-trophy[href="#"]')
+    ])
   ]);
 }
 
 function renderContent(ctrl, contentF){
-  return m('div.content', [
-    contentF()
-  ]);
+  return contentF();
 }
 
 function renderFooter(){
@@ -21,7 +22,7 @@ function renderFooter(){
 }
 
 module.exports = function(ctrl, contentF) {
-  return m('div', [
+  return m('main', [
     renderHeader(),
     renderContent(ctrl, contentF),
     renderFooter()

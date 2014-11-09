@@ -13,6 +13,8 @@ play.controller = function() {
 
   this.started = function () { return this.round; };
 
+  this.chessground = new Chessground.controller({ movable: { color: null}});
+
   this.startAIGame = function() {
     var self = this;
     xhr.aiGame().then(function(data) {
@@ -27,11 +29,10 @@ play.controller = function() {
           receive: function(t, d) { return self.round.socket.receive(t, d); }
         }
       );
-      self.round = new round.controller(data, null, self.socket.send.bind(self.socket));
+      self.round = new round.controller(data, self.chessground, self.socket.send.bind(self.socket));
     });
   }.bind(this);
 
-  this.chessground = new Chessground.controller({viewOnly: true});
 };
 
 play.view = function(ctrl) {

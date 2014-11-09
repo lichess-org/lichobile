@@ -1,0 +1,161 @@
+@font-face {
+  font-family: 'gothammedium';
+  src: url("../fonts/Gotham-Medium.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'gothamlight';
+  src: url("../fonts/Gotham-Light.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'gothambook';
+  src: url("../fonts/Gotham-Book.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'gothambold';
+  src: url("../fonts/Gotham-Bold.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  overflow: hidden;
+}
+aside {
+  background: #353535;
+  min-height: 100vh;
+}
+aside div {
+  padding: 0 15px;
+}
+aside header nav {
+  min-height: 80px;
+  line-height: 80px;
+  background: #2d2d2d;
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3);
+  padding: 0 30px;
+  color: #c4a86f;
+  font-family: gothammedium;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+aside header nav h2 {
+  font-weight: normal;
+}
+aside h3 {
+  font-family: gothambook;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: normal;
+  margin: 40px 0px 30px 0;
+}
+aside input {
+  display: block;
+  width: 90%;
+  margin-top: 10px;
+  height: 50px;
+  background: #2d2d2d;
+  border-radius: 5px;
+  border: none;
+  padding: 0 15px;
+  -moz-box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+  color: #8f8f8f;
+}
+aside form button#login {
+  background: #c4a86f;
+  color: #fff;
+  font-family: gothambold;
+  padding: 15px;
+  font-size: 15px;
+  margin-top: 20px;
+}
+aside form button {
+  border: none;
+  background: none;
+  color: #8c8c8c;
+  font-size: 13px;
+  width: 90%;
+  margin-top: 10px;
+}
+main {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background: #fff;
+  -webkit-transition: transform 200ms ease-out;
+  -moz-transition: transform 200ms ease-out;
+  -o-transition: transform 200ms ease-out;
+  transition: transform 200ms ease-out;
+}
+main.out {
+  -webkit-transform: translate3d(90%, 0, 0);
+  -moz-transform: translate3d(90%, 0, 0);
+  -ms-transform: translate3d(90%, 0, 0);
+  -o-transform: translate3d(90%, 0, 0);
+  transform: translate3d(90%, 0, 0);
+}
+main header {
+  background: url("../images/pattern_black.jpg");
+  color: #fff;
+  padding: 22px 15px 0 15px;
+}
+main header nav {
+  margin-bottom: 20px;
+}
+main header nav a.fa {
+  color: #c4a86f;
+  width: 13%;
+  display: inline-block;
+  font-size: 1.4em;
+}
+main header nav a.fa-trophy {
+  text-align: right;
+  color: #fff;
+}
+main footer {
+  padding: 0 15px;
+}
+h1 {
+  font-size: 1em;
+  font-family: gothambold;
+  text-transform: uppercase;
+  text-align: center;
+  width: 70%;
+  display: inline-block;
+}
+.player,
+.opponent {
+  padding: 20px 0;
+  overflow: auto;
+  position: relative;
+  font-family: gothambold;
+  height: 70px;
+}
+.player .infos,
+.opponent .infos {
+  float: left;
+}
+.player .infos h3,
+.opponent .infos h3 {
+  font-size: 10px;
+  color: #c4a86f;
+  font-family: gothamlight;
+  margin-top: 5px;
+}
+.player .clock,
+.opponent .clock {
+  float: left;
+  position: absolute;
+  right: 0;
+  font-size: 30px;
+}
+.clock.running {
+  color: #c4a86f;
+}
+footer .player {
+  padding-top: 23px;
+}
+.chessground {
+  width: 100%;
+  height: 100vw;
+}

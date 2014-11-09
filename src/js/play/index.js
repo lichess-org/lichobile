@@ -31,8 +31,7 @@ play.controller = function() {
     });
   }.bind(this);
 
-  this.chessground = new Chessground.controller();
-
+  this.chessground = new Chessground.controller({viewOnly: true});
 };
 
 play.view = function(ctrl) {

@@ -18,7 +18,10 @@ module.exports = function(ctrl) {
       renderBoard(),
       m('button', { config: function(el, isUpdate) {
         if (!isUpdate) el.addEventListener('touchstart', ctrl.startAIGame);
-      }}, 'Start!')
+      }}, 'Start AI!'),
+      m('button', { config: function(el, isUpdate) {
+        if (!isUpdate) el.addEventListener('touchstart', ctrl.seekHumanGame);
+      }}, 'Start Human!')
     ]);
   });
 };

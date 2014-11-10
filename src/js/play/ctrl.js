@@ -2,6 +2,8 @@ var xhr = require('./xhr');
 var round = require('../round');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
+var m = require('mithril');
+var storage = require('../storage');
 
 function makeSocket(ctrl, data) {
   return new StrongSocket(
@@ -17,7 +19,12 @@ function makeSocket(ctrl, data) {
   );
 }
 
+function makeRound(ctrl, data) {
+  return new round.controller(data, null, ctrl.strongSocket.send.bind(ctrl.strongSocket));
+}
+
 module.exports = function() {
+  this.id = m.route.param('id');
   this.round = null;
   this.strongSocket = null;
 
@@ -25,12 +32,22 @@ module.exports = function() {
 
   this.chessground = new Chessground.controller({viewOnly: true});
 
+  this.resumeGame = function (id) {
+    var self = this;
+    xhr.game(id).then(function (data) {
+      self.strongSocket = makeSocket(self, data);
+      self.round = makeRound(self, data);
+    });
+  }.bind(this);
+
   this.startAIGame = function() {
     var self = this;
     xhr.aiGame().then(function(data) {
       self.strongSocket = makeSocket(self, data);
-      self.round = new round.controller(data, null, self.strongSocket.send.bind(self.strongSocket));
+      self.round = makeRound(self, data);
+      storage.set('currentGame.round.url', data.url.round);
     });
   }.bind(this);
 
+  if (this.id) this.resumeGame(this.id);
 };

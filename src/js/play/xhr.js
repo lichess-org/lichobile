@@ -25,7 +25,7 @@ function aiGame () {
 
 function game (id) {
   return m.request({
-    url: baseUrl + id,
+    url: baseUrl + '/' + id,
     method: 'GET',
     config: xhrConfig
   });

@@ -1,4 +1,5 @@
 var m = require('mithril');
+var utils = require('../utils');
 
 var xhrConfig = function(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -7,7 +8,7 @@ var xhrConfig = function(xhr) {
 
 var baseUrl = window.apiEndPoint;
 
-function aiGame () {
+function aiGame() {
   return m.request({
     url: baseUrl + '/setup/ai',
     method: 'POST',
@@ -23,7 +24,24 @@ function aiGame () {
   });
 }
 
-function game (id) {
+function seekHuman() {
+  return m.request({
+    url: baseUrl + '/setup/hook/' + utils.lichessSri,
+    method: 'POST',
+    config: xhrConfig,
+    data: {
+      variant: 1,
+      clock: true,
+      time: 5,
+      increment: 3,
+      color: 'white',
+      mode: '0'
+    },
+    deserialize: function(value) { return value; }
+  });
+}
+
+function game(id) {
   return m.request({
     url: baseUrl + '/' + id,
     method: 'GET',
@@ -33,5 +51,6 @@ function game (id) {
 
 module.exports = {
   aiGame: aiGame,
-  game: game
+  game: game,
+  seekHuman: seekHuman
 };

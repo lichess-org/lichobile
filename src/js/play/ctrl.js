@@ -45,9 +45,14 @@ module.exports = function() {
     xhr.aiGame().then(function(data) {
       self.strongSocket = makeSocket(self, data);
       self.round = makeRound(self, data);
-      storage.set('currentGame.round.url', data.url.round);
+      m.route(data.url.round);
     });
   }.bind(this);
+
+  this.onunload = function() {
+    if (this.strongSocket) this.strongSocket.destroy();
+    this.strongSocket = null;
+  };
 
   if (this.id) this.resumeGame(this.id);
 };

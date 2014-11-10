@@ -23,13 +23,13 @@ module.exports = function() {
 
   this.playing = function () { return this.round; };
 
-  this.chessground = new Chessground.controller({ movable: { color: null}});
+  this.chessground = new Chessground.controller({viewOnly: true});
 
   this.startAIGame = function() {
     var self = this;
     xhr.aiGame().then(function(data) {
       self.strongSocket = makeSocket(self, data);
-      self.round = new round.controller(data, self.chessground, self.strongSocket.send.bind(self.strongSocket));
+      self.round = new round.controller(data, null, self.strongSocket.send.bind(self.strongSocket));
     });
   }.bind(this);
 

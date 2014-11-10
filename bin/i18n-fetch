@@ -1,0 +1,14 @@
+#!/bin/sh
+
+dir=www/i18n
+mkdir -p $dir
+
+for lang in en fr ru de tr sr lv bs da es ro it fi uk pt pl nl vi sv cs sk hu ca sl az nn eo tp el fp lt nb et hy af hi ar zh gl hr mk id ja bg th fa he mr mn cy gd ga sq be ka sw ps is kk io gu fo eu bn id la jv ky pi as le ta sa ml kn ko mg kb zu ur; do
+  echo $lang;
+  curl -s -o "$dir/$lang.json" "http://lichess1.org/assets/trans/$lang.all.json"
+done
+
+echo "References"
+curl -s -o "$dir/refs.json" "http://lichess1.org/assets/trans/refs.json"
+
+echo "Done"

@@ -2,18 +2,12 @@
 
 var m = require('mithril');
 var play = require('./play');
-var storage = require('./storage');
 
 function main() {
   m.route(document.body, '/', {
     '/': play,
     '/:id': play,
   });
-
-  var currGameUrl = storage.get('currentGame.round.url');
-  if (currGameUrl) {
-    m.route(currGameUrl);
-  }
 
   document.body.addEventListener('submit', function (e) {
     e.preventDefault();

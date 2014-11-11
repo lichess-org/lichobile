@@ -34,11 +34,6 @@ module.exports = function(ctrl, color, runningColor) {
       'emerg': time < ctrl.data.emerg
     })
   }, [
-    m('div.timer.before', {
-      style: {
-        width: Math.max(0, Math.min(100, (time / ctrl.data.initial) * 100)) + '%'
-      }
-    }),
     m('div.time', m.trust(formatClockTime(ctrl, time * 1000)))
   ]);
 };

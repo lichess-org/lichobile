@@ -1,26 +1,34 @@
 var m    = require('mithril');
 
-function renderHeader(){
-  return m('header', [
+function renderHeader(headerView){
+  var children = [
     m('nav', [
       m('a.fa.fa-navicon[href="#"]'),
       m('h1', 'lichess.org'),
       m('a.fa.fa-trophy[href="#"]')
     ])
-  ]);
+  ];
+
+  return m('header', children.concat(headerView.call()));
 }
 
-function renderFooter(){
-  return m('footer', [
-    m('span.lichess', ["h"]),
-    m('span.lichess', ["G"])
-  ]);
+function renderFooter(footerView){
+  return m('footer', footerView.call());
 }
 
-module.exports = function(ctrl, contentF) {
+/**
+ * Main layout function
+ *
+ * @param {function} headerView A function that returns an array of mithril's
+ * virtual elements
+ * @param {function} contentView A function that returns a mithril virtual el
+ * @param {function} footerView A function that returns an array of mithril's
+ * virtual elements
+ */
+module.exports = function(headerView, contentView, footerView) {
   return m('main', [
-    renderHeader(),
-    contentF.apply(),
-    renderFooter()
+    renderHeader(headerView),
+    contentView.call(),
+    renderFooter(footerView)
   ]);
 };

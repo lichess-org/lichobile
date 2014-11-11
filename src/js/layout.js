@@ -1,4 +1,4 @@
-var m    = require('mithril');
+var m = require('mithril');
 
 function renderHeader(headerView){
   var children = [
@@ -26,9 +26,22 @@ function renderFooter(footerView){
  * virtual elements
  */
 module.exports = function(headerView, contentView, footerView) {
-  return m('main', [
-    renderHeader(headerView),
-    contentView.call(),
-    renderFooter(footerView)
-  ]);
+  return [
+    m('main', [
+      renderHeader(headerView),
+      contentView.call(),
+      renderFooter(footerView)
+    ]),
+    m('aside', [
+      m('header', [m('nav', [m('h2', 'Settings')])]),
+      m('div', [
+        m('form', [
+          m('h3', 'Connection'),
+          m('input#pseudo[type=text][placeholder=Pseudo'),
+          m('input#password[type=password][placeholder=Password]'),
+          m('button#login', 'LOG IN')
+        ]),
+      ])
+    ])
+  ];
 };

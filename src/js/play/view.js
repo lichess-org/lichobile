@@ -1,5 +1,5 @@
 var round = require('../round');
-var mainView = require('../mainView');
+var layout = require('../layout');
 var m = require('mithril');
 var Chessground = require('chessground');
 
@@ -35,5 +35,5 @@ module.exports = function(ctrl) {
       return [m('section.player', [m('div.infos')]), buttons];
   }
 
-  return mainView(header, board, footer);
+  return layout(header, board, footer);
 };

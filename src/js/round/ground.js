@@ -18,7 +18,7 @@ function makeConfig(data, fen, flip) {
     highlight: {
       lastMove: data.pref.highlight,
       check: data.pref.highlight,
-      dragOver: true
+      dragOver: false
     },
     movable: {
       free: false,
@@ -39,7 +39,9 @@ function makeConfig(data, fen, flip) {
       }
     },
     draggable: {
-      showGhost: data.pref.highlight
+      showGhost: data.pref.highlight,
+      distance: 3,
+      squareTarget: true
     },
     events: {
       capture: sound.capture

@@ -16,7 +16,7 @@ function formatClockTime(ctrl, time) {
   var tenths;
   if (ctrl.data.showTenths && time < 10000) {
     tenths = Math.floor(date.getMilliseconds() / 100);
-    return bold(minutes) + ':' + bold(seconds) + '<span>.' + bold(tenths) + '</span>';
+    return bold(seconds) + '<span>.' + bold(tenths) + '</span>';
   } else if (time >= 3600000) {
     var hours = prefixInteger(date.getUTCHours(), 2);
     return bold(hours) + ':' + bold(minutes) + ':' + bold(seconds);

@@ -43,4 +43,9 @@ utils.serializeQueryParameters = function(obj) {
   return str;
 };
 
+utils.xhrConfig = function(xhr) {
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
+};
+
 module.exports = utils;

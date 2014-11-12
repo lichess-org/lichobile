@@ -44,10 +44,6 @@ module.exports = function() {
 
   this.playing = function () { return this.round; };
 
-  this.vm = {
-   isMenuOpen: false
-  };
-
   this.menu = new menu.controller();
 
   this.chessground = new Chessground.controller({viewOnly: true});

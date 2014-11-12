@@ -1,9 +1,5 @@
 var m = require('mithril');
-
-var xhrConfig = function(xhr) {
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
-};
+var utils = require('../utils');
 
 var baseUrl = window.apiEndPoint;
 
@@ -13,7 +9,7 @@ function reload(ctrl) {
   var req = m.request({
     method: 'GET',
     url: baseUrl + ctrl.data.url.round,
-    config: xhrConfig
+    config: utils.xhrConfig
   });
   req.then(function() {
     ctrl.vm.reloading = false;

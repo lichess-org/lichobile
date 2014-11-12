@@ -1,6 +1,12 @@
 var m = require('mithril');
 
-function renderHeader(headerView){
+function HeaderHeight() {
+  var vw = document.documentElement.clientWidth,
+  vh = document.documentElement.clientHeight;
+  return (vh - vw) / 2;
+}
+
+function renderHeader(headerView) {
   var children = [
     m('nav', [
       m('a.fa.fa-navicon[href="#"]'),
@@ -9,11 +15,17 @@ function renderHeader(headerView){
     ])
   ];
 
-  return m('header', children.concat(headerView.call()));
+  return m('header',
+    { style: { height: HeaderHeight() + 'px' }},
+    children.concat(headerView.call())
+  );
 }
 
 function renderFooter(footerView){
-  return m('footer', footerView.call());
+  return m('footer',
+    { style: { height: HeaderHeight() + 'px' }},
+    footerView.call()
+  );
 }
 
 /**

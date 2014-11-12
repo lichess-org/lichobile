@@ -50,7 +50,7 @@ aside h3 {
 }
 aside input {
   display: block;
-  width: 90%;
+  width: 85%;
   margin-top: 10px;
   height: 50px;
   background: #2d2d2d;
@@ -74,7 +74,7 @@ aside form button {
   background: none;
   color: #8c8c8c;
   font-size: 13px;
-  width: 90%;
+  width: 85%;
   margin-top: 10px;
 }
 main {
@@ -88,11 +88,11 @@ main {
   transition: transform 200ms ease-out;
 }
 main.out {
-  -webkit-transform: translate3d(90%, 0, 0);
-  -moz-transform: translate3d(90%, 0, 0);
-  -ms-transform: translate3d(90%, 0, 0);
-  -o-transform: translate3d(90%, 0, 0);
-  transform: translate3d(90%, 0, 0);
+  -webkit-transform: translate3d(85%, 0, 0);
+  -moz-transform: translate3d(85%, 0, 0);
+  -ms-transform: translate3d(85%, 0, 0);
+  -o-transform: translate3d(85%, 0, 0);
+  transform: translate3d(85%, 0, 0);
 }
 main header {
   background: url("../images/pattern_black.jpg");

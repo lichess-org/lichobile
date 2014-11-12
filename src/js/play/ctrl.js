@@ -1,7 +1,8 @@
 var xhr = require('./xhr');
-var round = require('../round');
+var roundCtrl = require('../round/ctrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
+var menu = require('../menu');
 var m = require('mithril');
 
 function makeGameSocket(ctrl, data) {
@@ -32,7 +33,7 @@ function makeLobbySocket(ctrl) {
 }
 
 function makeRound(ctrl, data) {
-  return new round.controller(data, null, ctrl.gameSocket.send.bind(ctrl.gameSocket));
+  return new roundCtrl(data, null, ctrl.gameSocket.send.bind(ctrl.gameSocket));
 }
 
 module.exports = function() {
@@ -42,6 +43,12 @@ module.exports = function() {
   this.lobbySocket = null;
 
   this.playing = function () { return this.round; };
+
+  this.vm = {
+   isMenuOpen: false
+  };
+
+  this.menu = new menu.controller();
 
   this.chessground = new Chessground.controller({viewOnly: true});
 

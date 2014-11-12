@@ -6,10 +6,12 @@ function HeaderHeight() {
   return (vh - vw) / 2;
 }
 
-function renderHeader(headerView) {
+function renderHeader(ctrl, headerView) {
   var children = [
     m('nav', [
-      m('a.fa.fa-navicon[href="#"]'),
+      m('a.fa.fa-navicon', { config: function(el, isUpdate) {
+        if (!isUpdate) el.addEventListener('touchstart', ctrl.menu.toggle);
+      }}),
       m('h1', 'lichess.org'),
       m('a.fa.fa-trophy[href="#"]')
     ])
@@ -17,43 +19,33 @@ function renderHeader(headerView) {
 
   return m('header',
     { style: { height: HeaderHeight() + 'px' }},
-    children.concat(headerView.call())
+    children.concat(headerView())
   );
 }
 
-function renderFooter(footerView){
+function renderFooter(ctrl, footerView){
   return m('footer',
     { style: { height: HeaderHeight() + 'px' }},
-    footerView.call()
+    footerView()
   );
 }
 
 /**
  * Main layout function
  *
- * @param {function} headerView A function that returns an array of mithril's
- * virtual elements
- * @param {function} contentView A function that returns a mithril virtual el
- * @param {function} footerView A function that returns an array of mithril's
- * virtual elements
+ * @param {function} headerView A function that returns an array of m() ie.
+ * mithril's virtual elements
+ * @param {function} contentView A function that returns a m()
+ * @param {function} footerView A function that returns an array of m()
+ * @param {function} menuView A function that returns an array of m()
  */
-module.exports = function(headerView, contentView, footerView) {
+module.exports = function(ctrl, headerView, contentView, footerView, menuView) {
   return [
-    m('main', [
-      renderHeader(headerView),
-      contentView.call(),
-      renderFooter(footerView)
+    m('main', { class: ctrl.menu.isOpen ? 'out' : '' }, [
+      renderHeader(ctrl, headerView),
+      contentView(),
+      renderFooter(ctrl, footerView)
     ]),
-    m('aside', [
-      m('header', [m('nav', [m('h2', 'Settings')])]),
-      m('div', [
-        m('form', [
-          m('h3', 'Connection'),
-          m('input#pseudo[type=text][placeholder=Pseudo'),
-          m('input#password[type=password][placeholder=Password]'),
-          m('button#login', 'LOG IN')
-        ]),
-      ])
-    ])
+    m('aside', menuView())
   ];
 };

@@ -1,19 +1,20 @@
-var round = require('../round');
+var roundView = require('../round/view/main');
 var layout = require('../layout');
+var menu = require('../menu');
 var m = require('mithril');
 var Chessground = require('chessground');
 
 module.exports = function(ctrl) {
   function header() {
     if (ctrl.playing())
-      return round.view.renderOpponent(ctrl.round);
+      return roundView.renderOpponent(ctrl.round);
     else
       return m('section.opponent', [m('div.infos')]);
   }
 
   function board() {
     if (ctrl.playing())
-      return round.view.renderBoard(ctrl.round);
+      return roundView.renderBoard(ctrl.round);
     else
       return m('section#board.grey.merida', [
         Chessground.view(ctrl.chessground)
@@ -30,10 +31,10 @@ module.exports = function(ctrl) {
       }}, 'Start Human!')
     ];
     if (ctrl.playing())
-      return [round.view.renderPlayer(ctrl.round), buttons];
+      return [roundView.renderPlayer(ctrl.round), buttons];
     else
       return [m('section.player', [m('div.infos')]), buttons];
   }
 
-  return layout(header, board, footer);
+  return layout(ctrl, header, board, footer, menu.view);
 };

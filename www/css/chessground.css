@@ -90,6 +90,9 @@
 .marble .cg-board {
   background-image: url("../images/board/marble.jpg");
 }
+.grey .cg-board {
+  background-image: url("../images/board/grey.jpg");
+}
 .chessground.light-wood-3d .cg-board-wrap {
   position: relative;
   background-image: url("../images/board/3d/Light-Wood.png");

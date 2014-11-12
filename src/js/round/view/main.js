@@ -31,19 +31,13 @@ function renderOpponent(ctrl){
 }
 
 function renderBoard(ctrl){
-  return m('section.chessground.wood.merida.withMoved.withDest.playing', [
+  return m('section#board.grey.merida', [
     Chessground.view(ctrl.chessground)
   ]);
 }
 
-function renderGame(ctrl){
-  return m('div', [
-    renderOpponent(ctrl),
-    renderBoard(ctrl),
-    renderPlayer(ctrl)
-  ]);
-}
-
-module.exports = function(ctrl) {
-  return renderGame(ctrl);
+module.exports = {
+  renderBoard: renderBoard,
+  renderPlayer: renderPlayer,
+  renderOpponent: renderOpponent
 };

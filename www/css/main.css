@@ -146,6 +146,8 @@ h1 {
 .opponent .clock {
   float: left;
   position: absolute;
+  text-align: right;
+  min-width: 90px;
   right: 0;
   font-size: 30px;
 }
@@ -155,7 +157,7 @@ h1 {
 footer .player {
   padding-top: 23px;
 }
-.chessground {
+#board {
   width: 100%;
   height: 100vw;
 }

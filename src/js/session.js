@@ -1,58 +1,51 @@
-'use strict';
+var m = require('mithril');
+var utils = require('./utils');
 
-var ajax = require('./ajax'),
-ko = require('knockout'),
-session;
+var session = {};
 
-function isConnected() {
-  return !!session;
-}
+session.controller = function() {
 
-var isConnectedObs = ko.observable(isConnected());
+  this.session = null;
 
-function trash() {
-  session = null;
-  isConnectedObs(isConnected());
-}
+  this.isConnected = function() {
+    return !!this.session;
+  };
 
-function login(username, password) {
-  return ajax({ url: '/login', method: 'POST', data: {
-    username: username,
-    password: password
-  }}).then(function (data) {
-    session = data;
-    isConnectedObs(isConnected());
-    return session;
-  });
-}
+  this.login = function(username, password) {
+    return m.request({
+      url: window.apiEndPoint + '/login',
+      method: 'POST',
+      config: utils.xhrConfig,
+      data: {
+        username: username,
+        password: password
+      }
+    }).then(function(data) {
+      this.session = data;
+    });
+  };
 
-function logout() {
-  return ajax({ url: '/logout', method: 'GET' }, true).then(function () {
-    trash();
-    return null;
-  }, function (error) {
-    throw new Error(error.responseText);
-  });
-}
+  this.logout = function() {
+    return m.request({
+      url: window.apiEndPoint + '/logout',
+      method: 'GET',
+      config: utils.xhrConfig
+    }).then(function() {
+      this.session = null;
+    }, function(error) {
+      throw new Error(error.responseText);
+    });
+  };
 
-function get() {
-  return session;
-}
-
-function refresh() {
-  return ajax({ url: '/account/info', method: 'GET'}).then(function (data) {
-    session = data;
-    isConnectedObs(isConnected());
-    return session;
-  });
-}
-
-module.exports = {
-  isConnected: isConnected,
-  isConnectedObs: isConnectedObs,
-  get: get,
-  trash: trash,
-  login: login,
-  logout: logout,
-  refresh: refresh
+  this.refresh = function() {
+    return m.request({
+      url: window.apiEndPoint + 'account/info',
+      method: 'GET',
+      config: utils.xhrConfig
+    }).then(function(data) {
+      this.session = data;
+    });
+  };
 };
+
+module.exports = session;

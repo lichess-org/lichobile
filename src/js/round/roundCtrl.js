@@ -7,8 +7,8 @@ var ground = require('./ground');
 var socket = require('./socket');
 var promotion = require('./promotion');
 var hold = require('./hold');
-var replayCtrl = require('./replay/ctrl');
-var clockCtrl = require('./clock/ctrl');
+var replayCtrl = require('./replay/replayCtrl');
+var clockCtrl = require('./clock/clockCtrl');
 
 module.exports = function(cfg, router, socketSend) {
 

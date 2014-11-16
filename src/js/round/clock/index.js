@@ -1,5 +1,5 @@
-var ctrl = require('./ctrl');
-var view = require('./view');
+var ctrl = require('./clockCtrl');
+var view = require('./clockView');
 
 module.exports = {
   ctrl: ctrl,

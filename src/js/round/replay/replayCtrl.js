@@ -1,6 +1,6 @@
 var Chess = require('chessli.js').Chess;
 var round = require('../round');
-var xhr = require('../xhr');
+var xhr = require('../roundXhr');
 
 module.exports = function(root) {
 

@@ -1,6 +1,9 @@
 var Chessground = require('chessground');
 var clock = require('../clock');
-var util = require('../util');
+
+function oppositeColor(c) {
+  return c === 'white' ? 'black' : 'white';
+}
 
 function renderPlayer(ctrl){
   var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
@@ -24,7 +27,7 @@ function renderOpponent(ctrl){
     ])
   ];
   if (ctrl.clock)
-    children.push(clock.view(ctrl.clock, util.opponentColor(ctrl.data.player.color), clockRunningColor));
+    children.push(clock.view(ctrl.clock, oppositeColor(ctrl.data.player.color), clockRunningColor));
 
   return m('section.opponent', children);
 }

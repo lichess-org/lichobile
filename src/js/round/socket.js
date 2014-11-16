@@ -1,6 +1,6 @@
 var round = require('./round');
 var ground = require('./ground');
-var xhr = require('./xhr');
+var xhr = require('./roundXhr');
 var sound = require('../sound');
 
 module.exports = function(send, ctrl) {

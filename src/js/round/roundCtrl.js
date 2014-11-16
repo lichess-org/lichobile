@@ -11,6 +11,7 @@ var replayCtrl = require('./replay/replayCtrl');
 var clockCtrl = require('./clock/clockCtrl');
 
 module.exports = function(cfg, router, socketSend) {
+  var clockIntervId;
 
   this.data = data({}, cfg);
 
@@ -76,13 +77,13 @@ module.exports = function(cfg, router, socketSend) {
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }.bind(this);
 
-  if (this.clock) this.timer = setInterval(this.clockTick, 100);
+  if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
 
   this.replay = new replayCtrl(this);
 
   this.router = router;
 
   this.onunload = function() {
-    if (this.timer) clearInterval(this.timer);
+    if (clockIntervId) clearInterval(clockIntervId);
   };
 };

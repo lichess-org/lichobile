@@ -56,10 +56,7 @@ module.exports = function() {
   }.bind(this);
 
   this.startAIGame = function() {
-    var self = this;
     xhr.aiGame().then(function(data) {
-      self.gameSocket = makeGameSocket(self, data);
-      self.round = makeRound(self, data);
       m.route(data.url.round);
     });
   }.bind(this);
@@ -72,8 +69,14 @@ module.exports = function() {
   }.bind(this);
 
   this.onunload = function() {
-    if (this.gameSocket) this.gameSocket.destroy();
-    this.gameSocket = null;
+    if (this.round) {
+      this.round.onunload();
+      this.round = null;
+    }
+    if (this.gameSocket) {
+      this.gameSocket.destroy();
+      this.gameSocket = null;
+    }
   };
 
   if (this.id) this.resumeGame(this.id);

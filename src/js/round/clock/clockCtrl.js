@@ -20,12 +20,6 @@ module.exports = function(data, outOfTime) {
   }
   setLastUpdate();
 
-  function hasDisplayedTimeChanged(color, time) {
-    var oldSeconds = new Date(lastTick[color]).getSeconds();
-    var newSeconds = new Date(time).getSeconds();
-    return (oldSeconds !== newSeconds) || time < 10000;
-  }
-
   this.data = data;
 
   this.update = function(white, black) {
@@ -45,10 +39,13 @@ module.exports = function(data, outOfTime) {
       el = document.getElementById('clock_' + color);
       clockEls[color] = el;
     }
-    if (hasDisplayedTimeChanged(color, time)) {
+
+    var oldSeconds = lastTick[color];
+    var newSeconds = new Date(time).getSeconds();
+    if ((oldSeconds !== newSeconds) || time < 10000) {
       el.innerHTML = formatClockTime(this, time);
     }
-    lastTick[color] = time;
+    lastTick[color] = newSeconds;
 
     if (this.data[color] === 0)
       outOfTime();

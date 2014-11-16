@@ -9,6 +9,8 @@ var promotion = require('./promotion');
 var hold = require('./hold');
 var replayCtrl = require('./replay/replayCtrl');
 var clockCtrl = require('./clock/clockCtrl');
+var i18n = require('../i18n');
+var status = require('./status');
 
 module.exports = function(cfg, router, socketSend) {
   var clockIntervId;
@@ -29,6 +31,18 @@ module.exports = function(cfg, router, socketSend) {
       orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color
     });
   }.bind(this);
+
+  this.setTitle = function() {
+    if (this.data.player.spectator) return;
+    if (status.finished(this.data)) {
+      this.title = i18n('gameOver');
+    } else if (round.isPlayerTurn(this.data)) {
+      this.title = i18n('yourTurn');
+    } else {
+      this.title = i18n('waitingForOpponent');
+    }
+  };
+  this.setTitle();
 
   this.sendMove = function(orig, dest, prom) {
     var move = {

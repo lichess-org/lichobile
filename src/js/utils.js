@@ -48,4 +48,13 @@ utils.xhrConfig = function(xhr) {
   xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
 };
 
+
+function partialApply(fn, args) {
+  return fn.bind.apply(fn, [null].concat(args));
+}
+
+utils.partial = function() {
+  return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
+};
+
 module.exports = utils;

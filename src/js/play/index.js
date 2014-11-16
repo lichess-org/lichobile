@@ -1,5 +1,5 @@
-var ctrl = require('./ctrl');
-var view = require('./view');
+var ctrl = require('./playCtrl');
+var view = require('./playView');
 
 module.exports = {
   controller: ctrl,

@@ -1,5 +1,5 @@
-var xhr = require('./xhr');
-var roundCtrl = require('../round/ctrl');
+var xhr = require('./playXhr');
+var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
 var menu = require('../menu');

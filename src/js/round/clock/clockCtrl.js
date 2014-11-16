@@ -1,4 +1,4 @@
-var formatClockTime = require('./view').formatClockTime;
+var formatClockTime = require('./clockView').formatClockTime;
 
 module.exports = function(data, outOfTime) {
   var lastUpdate;

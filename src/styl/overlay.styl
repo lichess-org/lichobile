@@ -1,0 +1,33 @@
+.overlay
+  position fixed
+  width 100%
+  height 100%
+  top 0
+  left 0
+  background rgba(0,0,0,0.3)
+  .overlay-close
+    width 20px
+    height 20px
+    position absolute
+    right 15px
+    top 22px
+    overflow hidden
+    border none
+    background url(../../images/cross.png) no-repeat center center
+    text-indent 200%
+    color transparent
+    outline none
+    z-index 100
+
+/* Effects */
+.overlay-effect
+  opacity 0
+  visibility hidden
+  -webkit-transition opacity 0.5s, visibility 0s 0.5s
+  transition opacity 0.5s, visibility 0s 0.5s
+
+.overlay-effect.open
+  opacity 1
+  visibility visible
+  -webkit-transition opacity 0.5s
+  transition opacity 0.5s

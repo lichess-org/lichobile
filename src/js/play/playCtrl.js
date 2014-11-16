@@ -3,6 +3,7 @@ var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
 var menu = require('../menu');
+var overlay = require('./overlay');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -37,12 +38,19 @@ function makeRound(ctrl, data) {
 
 module.exports = function() {
   this.id = m.route.param('id');
+
+  this.title = function() {
+    if (this.round) return this.round.title;
+    return 'lichess.org';
+  };
+
   this.round = null;
   this.gameSocket = null;
   this.lobbySocket = null;
 
   this.playing = function () { return this.round; };
 
+  this.overlay = new overlay.controller();
   this.menu = new menu.controller();
 
   this.chessground = new Chessground.controller({viewOnly: true});

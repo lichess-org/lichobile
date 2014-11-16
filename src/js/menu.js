@@ -10,7 +10,7 @@ menu.controller = function() {
   }.bind(this);
 };
 
-menu.view = function(ctrl) {
+menu.view = function() {
   return [
     m('header', [m('nav', [m('h2', 'Settings')])]),
     m('div', [

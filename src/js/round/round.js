@@ -16,7 +16,7 @@ function isPlayerPlaying(data) {
 }
 
 function isPlayerTurn(data) {
-  return isPlayerPlaying(data) && data.game.player == data.player.color;
+  return isPlayerPlaying(data) && data.game.player === data.player.color;
 }
 
 function mandatory(data) {
@@ -44,20 +44,13 @@ function moretimeable(data) {
 }
 
 function replayable(data) {
-  return data.source == 'import' || status.finished(data);
+  return data.source === 'import' || status.finished(data);
 }
 
 function getPlayer(data, color) {
-  if (data.player.color == color) return data.player;
-  if (data.opponent.color == color) return data.opponent;
+  if (data.player.color === color) return data.player;
+  if (data.opponent.color === color) return data.opponent;
   return null;
-}
-
-function setOnGame(data, color, onGame) {
-  var player = getPlayer(data, color);
-  onGame = onGame || player.ai;
-  player.onGame = onGame;
-  if (onGame) setIsGone(data, color, false);
 }
 
 function setIsGone(data, color, isGone) {
@@ -67,8 +60,15 @@ function setIsGone(data, color, isGone) {
   if (!isGone && player.user) player.user.online = true;
 }
 
+function setOnGame(data, color, onGame) {
+  var player = getPlayer(data, color);
+  onGame = onGame || player.ai;
+  player.onGame = onGame;
+  if (onGame) setIsGone(data, color, false);
+}
+
 function nbMoves(data, color) {
-  return Math.floor((data.game.turns + (color == 'white' ? 1 : 0)) / 2);
+  return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
 module.exports = {

@@ -2,7 +2,8 @@
 {
   "globals": {
     "window": true,
-    "document": true
+    "document": true,
+    "m": true
   },
   "indent": 2,
   "node": true,

@@ -1,4 +1,3 @@
-var m = require('mithril');
 
 function HeaderHeight() {
   var vw = document.documentElement.clientWidth,

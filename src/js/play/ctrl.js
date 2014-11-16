@@ -3,7 +3,6 @@ var roundCtrl = require('../round/ctrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
 var menu = require('../menu');
-var m = require('mithril');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(

@@ -1,4 +1,3 @@
-var m = require('mithril');
 var round = require('./round');
 var ground = require('./ground');
 var xhr = require('./xhr');

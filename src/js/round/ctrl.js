@@ -1,4 +1,3 @@
-var m = require('mithril');
 var throttle = require('lodash-node/modern/functions/throttle');
 var chessground = require('chessground');
 var partial = chessground.util.partial;

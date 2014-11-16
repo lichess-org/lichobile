@@ -1,4 +1,3 @@
-var m = require('mithril');
 var utils = require('./utils');
 
 var session = {};

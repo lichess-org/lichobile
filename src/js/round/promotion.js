@@ -1,4 +1,3 @@
-var m = require('mithril');
 var chessground = require('chessground');
 var partial = chessground.util.partial;
 var ground = require('./ground');

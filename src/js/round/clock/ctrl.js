@@ -1,7 +1,6 @@
-var m = require('mithril');
+var formatClockTime = require('./view').formatClockTime;
 
-module.exports = function(data, onFlag) {
-
+module.exports = function(data, outOfTime) {
   var lastUpdate;
 
   this.data = data;
@@ -22,9 +21,11 @@ module.exports = function(data, onFlag) {
   };
 
   this.tick = function(color) {
-    m.startComputation();
     this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
-    if (this.data[color] === 0) onFlag();
-    m.endComputation();
+    // performance hack: we don't want to call m.redraw() on every clock tick
+    document.querySelector('#clock_' + color).innerHTML =
+    formatClockTime(this, this.data[color] * 1000);
+
+    if (this.data[color] === 0) outOfTime();
   }.bind(this);
 };

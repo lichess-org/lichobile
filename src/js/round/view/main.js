@@ -1,4 +1,3 @@
-var m = require('mithril');
 var Chessground = require('chessground');
 var clock = require('../clock');
 var util = require('../util');

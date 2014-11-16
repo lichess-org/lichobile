@@ -1,7 +1,6 @@
 var roundView = require('../round/view/main');
 var layout = require('../layout');
 var menu = require('../menu');
-var m = require('mithril');
 var Chessground = require('chessground');
 
 module.exports = function(ctrl) {

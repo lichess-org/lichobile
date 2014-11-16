@@ -1,6 +1,8 @@
 /* application entry point */
 
-var m = require('mithril');
+// mithril exposes already m function in window
+require('mithril');
+
 var play = require('./play');
 
 function main() {

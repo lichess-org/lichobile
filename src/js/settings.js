@@ -1,6 +1,5 @@
 'use strict';
 
-var m = require('mithril');
 var store = require('./storage');
 
 function localstorageprop(key) {

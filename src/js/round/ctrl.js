@@ -77,9 +77,13 @@ module.exports = function(cfg, router, socketSend) {
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }.bind(this);
 
-  if (this.clock) setInterval(this.clockTick, 100);
+  if (this.clock) this.timer = setInterval(this.clockTick, 100);
 
   this.replay = new replayCtrl(this);
 
   this.router = router;
+
+  this.onunload = function() {
+    if (this.timer) clearInterval(this.timer);
+  };
 };

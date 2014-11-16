@@ -23,7 +23,7 @@ module.exports = function(data, outOfTime) {
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
     // performance hack: we don't want to call m.redraw() on every clock tick
-    document.querySelector('#clock_' + color).innerHTML =
+    document.getElementById('clock_' + color).innerHTML =
     formatClockTime(this, this.data[color] * 1000);
 
     if (this.data[color] === 0) outOfTime();

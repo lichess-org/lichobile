@@ -7,13 +7,14 @@ var watchify = require('watchify');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
+var concat = require('gulp-concat');
 
 var defaults = require('./env.json');
 var env = argv.env ? require('./' + argv.env) : defaults;
 
 var paths = {
   scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js'],
-  styles: ['src/styl/*.styl'],
+  styles: ['src/styl/reset.styl', 'src/styl/*.styl'],
 };
 
 gulp.task('html', function() {
@@ -25,6 +26,7 @@ gulp.task('html', function() {
 gulp.task('styl', function() {
   return gulp.src(paths.styles)
     .pipe(stylus())
+    .pipe(concat('app.css'))
     .pipe(gulp.dest('www/css/compiled/'));
 });
 

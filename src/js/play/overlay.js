@@ -1,3 +1,4 @@
+var utils = require('../utils');
 var overlay = {};
 
 overlay.controller = function() {
@@ -16,11 +17,9 @@ overlay.controller = function() {
 
 overlay.view = function(ctrl, contentF) {
   var children = [
-    m('button[type=button].overlay-close', {
-      config: function(el, isUpdate) {
-        if (!isUpdate) el.addEventListener('touchstart', ctrl.close);
-      }
-    }, 'Close')
+    m('button[type=button].overlay-close',
+      { config: utils.ontouchstart(ctrl.close) },
+    'Close')
   ];
   if (contentF) children.concat(contentF);
   return m('div.overlay.overlay-effect', {

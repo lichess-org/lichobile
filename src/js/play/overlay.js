@@ -21,7 +21,7 @@ overlay.view = function(ctrl, contentF) {
       { config: utils.ontouchstart(ctrl.close) },
     'Close')
   ];
-  if (contentF) children.concat(contentF);
+  if (contentF) children = children.concat(contentF());
   return m('div.overlay.overlay-effect', {
     class: ctrl.isOpen ? 'open' : '',
   }, children);

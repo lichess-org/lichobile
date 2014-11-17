@@ -4,7 +4,7 @@
   height 100%
   top 0
   left 0
-  background rgba(0,0,0,0.3)
+  background rgba(0,0,0,0.7)
   .overlay-close
     width 20px
     height 20px
@@ -19,15 +19,24 @@
     outline none
     z-index 100
 
+.card
+  position absolute
+  width 80%
+  height 70%
+  top 15%
+  left 10%
+  background #353535
+  z-index 9999
+
 /* Effects */
 .overlay-effect
   opacity 0
   visibility hidden
-  -webkit-transition opacity 0.5s, visibility 0s 0.5s
-  transition opacity 0.5s, visibility 0s 0.5s
+  -webkit-transition opacity 200ms, visibility 0s 200ms
+  transition opacity 200ms, visibility 0s 200ms
 
 .overlay-effect.open
   opacity 1
   visibility visible
-  -webkit-transition opacity 0.5s
-  transition opacity 0.5s
+  -webkit-transition opacity 200ms
+  transition opacity 200ms

@@ -46,5 +46,38 @@ module.exports = function(ctrl) {
       return [m('section.player', [m('div.infos')]), buttons];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, utils.partial(overlay.view, ctrl.overlay));
+  function overlayContent() {
+    return [
+      m('div.card.new-game', [
+        m('header', 'New Game'),
+        m('form', [
+          m('fieldset', [
+            m('input[type=radio][name=type][value=human]', 'Human'),
+            m('input[type=radio][name=type][value=computer]', 'Computer')
+          ]),
+          m('fieldset', [
+            m('select[name=color]', [
+              m('option[value=white]', 'White'),
+              m('option[value=black]', 'Black')
+            ]),
+            m('select[name=variant]', [
+              m('option[value=1]', 'Standard'),
+              m('option[value=2]', '960'),
+              m('option[value=3]', 'King of the hill')
+            ])
+          ]),
+          m('fieldset', [
+            m('input[type=checkbox][checked=checked][name=clock]', 'Clock'),
+            m('select[name=time]', [
+              m('option[value="5,0"]', '5|0'),
+              m('option[value="1,0"]', '1|0'),
+              m('option[value="10,0"]', '10|0')
+            ])
+          ])
+        ])
+      ])
+    ];
+  }
+
+  return layout(ctrl, header, board, footer, menu.view, utils.partial(overlay.view, ctrl.overlay, overlayContent));
 };

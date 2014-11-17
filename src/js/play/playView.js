@@ -3,20 +3,16 @@ var layout = require('../layout');
 var menu = require('../menu');
 var overlay = require('./overlay');
 var Chessground = require('chessground');
-var partial = require('../utils').partial;
+var utils = require('../utils');
 
 module.exports = function(ctrl) {
   function header() {
     var children = [
       m('nav', [
-        m('a.fa.fa-navicon', { config: function(el, isUpdate) {
-          if (!isUpdate) el.addEventListener('touchstart', ctrl.menu.toggle);
-        }}),
+        m('a.fa.fa-navicon', { config: utils.ontouchstart(ctrl.menu.toggle) }),
         m('h1', ctrl.title()),
         m('a.fa.fa-trophy', {
-          config: function(el, isUpdate) {
-            if (!isUpdate) el.addEventListener('touchstart', ctrl.overlay.open);
-          },
+          config: utils.ontouchstart(ctrl.overlay.open),
           style: { display: ctrl.overlay.isOpen ? 'none' : 'inline-block' }
         })
       ])
@@ -41,12 +37,8 @@ module.exports = function(ctrl) {
 
   function footer() {
     var buttons = [
-      m('button', { config: function(el, isUpdate) {
-        if (!isUpdate) el.addEventListener('touchstart', ctrl.startAIGame);
-      }}, 'Start AI!'),
-      m('button', { config: function(el, isUpdate) {
-        if (!isUpdate) el.addEventListener('touchstart', ctrl.seekHumanGame);
-      }}, 'Start Human!')
+      m('button', { config: utils.ontouchstart(ctrl.startAIGame) }, 'Start AI!'),
+      m('button', { config: utils.ontouchstart(ctrl.seekHumanGame) }, 'Start Human!')
     ];
     if (ctrl.playing())
       return [roundView.renderPlayer(ctrl.round), buttons];
@@ -54,5 +46,5 @@ module.exports = function(ctrl) {
       return [m('section.player', [m('div.infos')]), buttons];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, partial(overlay.view, ctrl.overlay));
+  return layout(ctrl, header, board, footer, menu.view, utils.partial(overlay.view, ctrl.overlay));
 };

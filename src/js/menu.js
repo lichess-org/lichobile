@@ -6,7 +6,6 @@ menu.controller = function() {
 
   this.toggle = function() {
     this.isOpen = !this.isOpen;
-    m.redraw();
   }.bind(this);
 };
 

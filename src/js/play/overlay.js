@@ -6,12 +6,10 @@ overlay.controller = function() {
 
   this.open = function() {
     this.isOpen = true;
-    m.redraw();
   }.bind(this);
 
   this.close = function() {
     this.isOpen = false;
-    m.redraw();
   }.bind(this);
 };
 

@@ -60,7 +60,11 @@ utils.partial = function() {
 // convenience function to bind an handler on touchstart with mithril
 utils.ontouchstart = function(handler) {
   return function(el, isUpdate, context) {
-    if (!isUpdate) el.addEventListener('touchstart', handler);
+    if (!isUpdate) el.addEventListener('touchstart', function(e) {
+      m.startComputation();
+      handler(e);
+      m.endComputation();
+    });
 
     context.onunload = function() {
       el.removeEventListener('touchstart', handler);

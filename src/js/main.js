@@ -6,9 +6,9 @@ require('mithril');
 var play = require('./play');
 
 function main() {
-  m.route(document.body, '/', {
-    '/': play,
-    '/:id': play,
+  m.route(document.body, '/play', {
+    '/play': play,
+    '/play/:id': play
   });
 
   document.body.addEventListener('submit', function (e) {

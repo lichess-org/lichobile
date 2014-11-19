@@ -25,7 +25,7 @@ function makeLobbySocket(ctrl) {
       events: {
         redirect: function(data) {
           ctrl.lobbySocket.destroy();
-          ctrl.resumeGame(data.id);
+          m.route('/' + data.id);
         }
       }
     }

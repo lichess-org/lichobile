@@ -73,7 +73,8 @@ module.exports = function(ctrl) {
               m('option[value="1,0"]', '1|0'),
               m('option[value="10,0"]', '10|0')
             ])
-          ])
+          ]),
+          m('button', 'Valider')
         ])
       ])
     ];

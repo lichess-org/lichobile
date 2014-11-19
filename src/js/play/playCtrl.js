@@ -25,7 +25,7 @@ function makeLobbySocket(ctrl) {
       events: {
         redirect: function(data) {
           ctrl.lobbySocket.destroy();
-          m.route('/' + data.id);
+          m.route('/play' + data.id);
         }
       }
     }
@@ -55,6 +55,10 @@ module.exports = function() {
 
   this.chessground = new Chessground.controller({viewOnly: true});
 
+  this.newGame = function() {
+    this.overlay.open();
+  }.bind(this);
+
   this.resumeGame = function(id) {
     var self = this;
     xhr.game(id).then(function (data) {
@@ -65,7 +69,7 @@ module.exports = function() {
 
   this.startAIGame = function() {
     xhr.aiGame().then(function(data) {
-      m.route(data.url.round);
+      m.route('/play' + data.url.round);
     });
   }.bind(this);
 

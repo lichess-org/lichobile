@@ -2,7 +2,6 @@ var roundView = require('../round/view/main');
 var layout = require('../layout');
 var menu = require('../menu');
 var overlay = require('./overlay');
-var Chessground = require('chessground');
 var utils = require('../utils');
 
 module.exports = function(ctrl) {
@@ -28,11 +27,9 @@ module.exports = function(ctrl) {
 
   function board() {
     if (ctrl.playing())
-      return roundView.renderBoard(ctrl.round);
+      return roundView.renderBoard(ctrl.round.chessground);
     else
-      return m('section#board.grey.merida', [
-        Chessground.view(ctrl.chessground)
-      ]);
+      return roundView.renderBoard(ctrl.chessground);
   }
 
   function footer() {

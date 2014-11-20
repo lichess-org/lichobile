@@ -32,9 +32,10 @@ function renderOpponent(ctrl){
   return m('section.opponent', children);
 }
 
-function renderBoard(ctrl){
-  return m('section#board.grey.merida', [
-    Chessground.view(ctrl.chessground)
+function renderBoard(chessgroundCtrl){
+  var vw = document.documentElement.clientWidth;
+  return m('section#board.grey.merida', { style: { height: vw + 'px' }}, [
+    Chessground.view(chessgroundCtrl)
   ]);
 }
 

@@ -1,7 +1,8 @@
 
 function headerHeight() {
-  var vw = document.documentElement.clientWidth,
-  vh = document.documentElement.clientHeight;
+  var e = document.documentElement,
+  vw = e.clientWidth,
+  vh = e.clientHeight;
   return (vh - vw) / 2;
 }
 

@@ -11,10 +11,6 @@ function main() {
     '/play/:id': play
   });
 
-  document.body.addEventListener('submit', function (e) {
-    e.preventDefault();
-  });
-
   document.addEventListener('backbutton', function () {
     // todo
     window.navigator.app.exitApp();

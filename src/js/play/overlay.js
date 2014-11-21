@@ -2,7 +2,7 @@ var utils = require('../utils');
 var overlay = {};
 
 overlay.controller = function() {
-  this.isOpen = false;
+  this.isOpen = true;
 
   this.open = function() {
     this.isOpen = true;

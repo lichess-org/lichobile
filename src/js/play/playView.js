@@ -49,8 +49,14 @@ module.exports = function(ctrl) {
         m('header', 'New Game'),
         m('form', [
           m('fieldset', [
-            m('input[type=radio][name=type][value=human]', 'Human'),
-            m('input[type=radio][name=type][value=computer]', 'Computer')
+            m('div.nice-radio', [
+              m('input#gameHuman.radio.human[type=radio][name=type][value=human]'),
+              m('label[for=gameHuman]', 'Human')
+            ]),
+            m('div.nice-radio', [
+              m('input#gameComputer.radio.computer[type=radio][name=type][value=computer][checked=checked]'),
+              m('label[for=gameComputer]', 'Computer')
+            ])
           ]),
           m('fieldset', [
             m('select[name=color]', [

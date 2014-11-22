@@ -7,3 +7,5 @@ node_modules
 
 env/*.json
 !env/prod.json
+
+.DS_Store

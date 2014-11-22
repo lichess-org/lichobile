@@ -15,9 +15,9 @@ overlay.controller = function() {
 
 overlay.view = function(ctrl, contentF) {
   var children = [
-    m('button[type=button].overlay-close',
+    m('div.overlay-close',
       { config: utils.ontouchstart(ctrl.close) },
-    'Close')
+    '+')
   ];
   if (contentF) children = children.concat(contentF());
   return m('div.overlay.overlay-effect', {

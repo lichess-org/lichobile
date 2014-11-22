@@ -16,15 +16,30 @@ function swapCard() {
   newGameCardSwapped = true;
 }
 
+// see game.styl for dimensions
+function boardHeight() {
+  return utils.getViewportDims().vw * 80 / 100;
+}
+
+// see game.styl for dimensions
+function cardHeight() {
+  return boardHeight() + 144;
+}
+
 gameMenu.view = function() {
   var children = [
     m('div.overlay-close',
       { config: utils.ontouchstart(gameMenu.close) },
     '+'),
-    m('div.card.new-game', { class: newGameCardSwapped ? 'back_visible' : '' }, [
+    m('div.card.new-game', {
+      class: newGameCardSwapped ? 'back_visible' : '',
+      style: { height: cardHeight() + 'px' }
+    }, [
       m('div.container_flip', [
         m('div.front',{ config: utils.ontouchstart(swapCard) }, [
-          utils.viewOnlyBoard(),
+          m('div', { style: { height: boardHeight() + 'px' }}, [
+            utils.viewOnlyBoard()
+          ]),
           m('div.infos',[
             m('div.description',[
               m('h2.title', 'New Game'),

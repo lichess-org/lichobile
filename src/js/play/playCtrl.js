@@ -52,6 +52,11 @@ module.exports = function() {
 
   this.overlay = new overlay.controller();
   this.menu = new menu.controller();
+  this.swapped = false ;
+
+  this.swap = function(){
+    this.swapped = true;
+  }.bind(this);
 
   this.chessground = new Chessground.controller({viewOnly: true});
 

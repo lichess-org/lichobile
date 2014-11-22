@@ -46,78 +46,197 @@ footer
     top 17px
 
 .new-game
-  header
-    background #2D2D2D
-    min-height 50px
-    line-height 50px
-    padding 0 20px
-    color white
-    font-family gothambold
-    font-size 17px
-    text-transform uppercase
-    text-align center
-  form
-    padding 20px
-
-  .nice-radio
-    display inline-block
-    clear both
-    width 50%
-
-    label
-      width 100%
-      background #666666
-      color #aaa
-      padding 10px 15px
-
-    /* hide input */
-    input.radio:empty
-      display: none
-
-    /* style label */
-    input.radio:empty ~ label
-      position relative
-      float left
-      line-height 2.5em
-      cursor pointer
-      -webkit-user-select none
-      -moz-user-select none
-      -ms-user-select none
-      user-select none
-
-    input.radio.computer:empty ~ label
-      text-align right
-      border-radius 0 30px 30px 0
-
-    input.radio.human:empty ~ label
-      border-radius 30px 0 0 30px
-
-    input.radio:empty ~ label:before, input.radio:empty ~ label:after
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+  background transparent
+  &.back_visible
+    .container_flip
+      transform rotateY(180deg)
+      -webkit-transform rotateY(180deg)
+      -moz-transform rotateY(180deg)
+      -o-transform rotateY(180deg)
+      -ms-transform rotateY(180deg)
+  .container_flip
+    transform-style: preserve-3d;
+    position relative
+    height 100%
+    -webkit-transition 0.4s
+    -webkit-transform-style preserve-3d
+    -ms-transition 0.4s
+    -moz-transition 0.4s
+    transition 0.4s
+    .front, .back
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+    .front
       position absolute
-      display block
+      background red
       top 0
-      bottom 0
       left 0
-      content ''
-      text-align left
-      width 2.5em
+      width 100%
+      height 100%
+    .back
+      background: #2A2A2A;
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      -webkit-transform rotateY(180deg)
+      -moz-transform rotateY(180deg)
+      -o-transform rotateY(180deg)
+      -ms-transform rotateY(180deg)
+      transform rotateY(180deg)
+      header
+        background #212121
+        min-height 50px
+        line-height 50px
+        padding 0 20px
+        color white
+        font-family gothambold
+        font-size 16px
+        text-transform uppercase
+        text-align center
+      form
+        padding-top 10px
+        fieldset
+          padding 0px 20px
+      button
+        width 100%
+        height 50px
+        position absolute
+        bottom 0
+        border none
+        background #C4A86F
+        color #fff
+        font-size 14px
+        text-transform uppercase
+      .select_form
+        background #333333
+        height 40px
+        line-height 40px
+        color #8A8A8A
+        padding 0 10px
+        font-size 14px
+        position relative
+        margin-top 20px
+      fieldset
+        select
+          background transparent
+          border none
+          width 100%
+          position absolute
+          left 0px
+          -webkit-appearance none
+          padding-left 55px
+          height 40px
+          line-height 40px
+          font-size 13px
+          color #fff
+        label[for=clock]
+          color #fff
+          display block
+          height 40px
+          line-height 40px
+        .check_container
+          position: relative;
+          display: block;
+        &#clock
+          margin-top 20px
+          position relative
+          input[type='checkbox']
+            position absolute
+            display block
+            -webkit-appearance button
+            border none
+            width 70px
+            height 30px
+            border-radius 15px
+            background-color #C4A86F
+            cursor pointer
+            transition background-color 0.5s
+            top 0
+            right 0
+          input[type='checkbox']:after
+            content ''
+            display block
+            position absolute
+            top 5px
+            left 5px
+            width 20px
+            height 20px
+            border-radius 50%
+            background #fff
 
-    input.radio.human:empty ~ label:after
-      left auto
-      right 0
 
-    /* toggle on */
-    input.radio.computer:checked ~ label:before, input.radio.human:checked ~ label:after
-      display inline-block
-      font normal normal normal 14px/1 FontAwesome
-      padding-top 20px
-      font-size inherit
-      text-rendering auto
-      -webkit-font-smoothing antialiased
-      -moz-osx-font-smoothing grayscale
-      content: "\f00c"
-      text-indent .9em
+      .nice-radio
+        display inline-block
+        clear both
+        width 50%
+        margin-top 10px
 
-    input.radio:checked ~ label
-      background-color #C4A86F
-      color #fff
+        label
+          width 100%
+          background #333333
+          color #8E8E8E
+          height 40px
+
+        /* hide input */
+        input.radio:empty
+          display: none
+
+        /* style label */
+        input.radio:empty ~ label
+          position relative
+          float left
+          line-height 40px;
+          padding 0 20px
+          font-size 14px
+          cursor pointer
+          -webkit-user-select none
+          -moz-user-select none
+          -ms-user-select none
+          user-select none
+
+        input.radio.computer:empty ~ label
+          text-align right
+          border-radius 0 25px 25px 0
+
+        input.radio.human:empty ~ label
+          border-radius 30px 0 0 30px
+
+        input.radio:empty ~ label:before, input.radio:empty ~ label:after
+          position absolute
+          display block
+          top 0
+          bottom 0
+          left 0
+          content ''
+          text-align left
+          width 2.5em
+
+        input.radio.human:empty ~ label:after
+          left auto
+          right 0
+
+        /* toggle on */
+        input.radio.computer:checked ~ label:before, input.radio.human:checked ~ label:after
+          display inline-block
+          font normal normal normal 14px/1 FontAwesome
+          padding-top 20px
+          font-size inherit
+          text-rendering auto
+          -webkit-font-smoothing antialiased
+          -moz-osx-font-smoothing grayscale
+          content: "\f00c"
+          text-indent .9em
+
+        input.radio:checked ~ label
+          background-color #C4A86F
+          color #fff
+          
+      

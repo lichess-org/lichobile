@@ -25,7 +25,7 @@ function makeLobbySocket(ctrl) {
       events: {
         redirect: function(data) {
           ctrl.lobbySocket.destroy();
-          m.route('/play' + data.id);
+          m.route('/play' + data.url);
         }
       }
     }

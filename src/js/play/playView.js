@@ -38,5 +38,5 @@ module.exports = function(ctrl) {
       return [m('section.player', [m('div.infos')])];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, gameMenu.view);
+  return layout(ctrl, header, board, footer, menu.view, utils.partial(gameMenu.view, ctrl));
 };

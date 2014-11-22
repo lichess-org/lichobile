@@ -75,16 +75,10 @@ module.exports = function(send, ctrl) {
     clock: function(o) {
       if (ctrl.clock) ctrl.clock.update(o.white, o.black);
     },
-    crowd: function(o) {
-      ['white', 'black'].forEach(function(c) {
-        round.setOnGame(ctrl.data, c, o[c]);
-      });
-      m.redraw();
-    },
     end: function() {
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);
-      // if (!ctrl.data.player.spectator) sound.dong();
+      if (!ctrl.data.player.spectator) sound.dong();
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai) {

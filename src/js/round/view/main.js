@@ -1,5 +1,7 @@
-var Chessground = require('chessground');
+var chessground = require('chessground');
 var clock = require('../clock');
+var renderPromotion = require('../promotion').view;
+var utils = require('../../utils');
 
 function oppositeColor(c) {
   return c === 'white' ? 'black' : 'white';
@@ -32,10 +34,10 @@ function renderOpponent(ctrl){
   return m('section.opponent', children);
 }
 
-function renderBoard(chessgroundCtrl){
-  var vw = document.documentElement.clientWidth;
+function renderBoard(ctrl){
+  var vw = utils.getViewportDims().vw;
   return m('section#board.grey.merida', { style: { height: vw + 'px' }}, [
-    Chessground.view(chessgroundCtrl)
+    chessground.view(ctrl.chessground), renderPromotion(ctrl)
   ]);
 }
 

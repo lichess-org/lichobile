@@ -72,4 +72,12 @@ utils.ontouchstart = function(handler) {
   };
 };
 
+var viewPortDims = null;
+utils.getViewportDims = function() {
+  if (viewPortDims) return viewPortDims;
+  var e = document.documentElement;
+  viewPortDims = { vw: e.clientWidth, vh: e.clientHeight };
+  return viewPortDims;
+};
+
 module.exports = utils;

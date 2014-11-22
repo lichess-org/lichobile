@@ -1,9 +1,8 @@
+var utils = require('./utils');
 
 function headerHeight() {
-  var e = document.documentElement,
-  vw = e.clientWidth,
-  vh = e.clientHeight;
-  return (vh - vw) / 2;
+  var d = utils.getViewportDims();
+  return (d.vh - d.vw) / 2;
 }
 
 /**

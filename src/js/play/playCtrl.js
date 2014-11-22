@@ -48,17 +48,7 @@ module.exports = function() {
 
   this.playing = function () { return this.round; };
 
-  this.swapped = false ;
-
-  this.swap = function(){
-    this.swapped = true;
-  }.bind(this);
-
   this.chessground = new Chessground.controller({viewOnly: true});
-
-  this.newGame = function() {
-    this.overlay.open();
-  }.bind(this);
 
   this.resumeGame = function(id) {
     var self = this;

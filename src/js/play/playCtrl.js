@@ -50,8 +50,8 @@ module.exports = function() {
 
   this.playing = function () { return this.round; };
 
-  this.overlay = new overlay.controller();
   this.menu = new menu.controller();
+
   this.swapped = false ;
 
   this.swap = function(){

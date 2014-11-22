@@ -27,9 +27,9 @@ module.exports = function(ctrl) {
 
   function board() {
     if (ctrl.playing())
-      return roundView.renderBoard(ctrl.round.chessground);
+      return roundView.renderBoard(ctrl.round);
     else
-      return roundView.renderBoard(ctrl.chessground);
+      return roundView.renderBoard(ctrl);
   }
 
   function footer() {

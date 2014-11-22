@@ -24,8 +24,8 @@ function makeLobbySocket(ctrl) {
       options: { name: 'lobby', pingDelay: 2000 },
       events: {
         redirect: function(data) {
-          ctrl.lobbySocket.destroy();
           m.route('/play' + data.url);
+          ctrl.lobbySocket.destroy();
         }
       }
     }

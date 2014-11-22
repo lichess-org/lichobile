@@ -24,7 +24,7 @@ gameMenu.view = function() {
     m('div.card.new-game', { class: newGameCardSwapped ? 'back_visible' : '' }, [
       m('div.container_flip', [
         m('div.front',{ config: utils.ontouchstart(swapCard) }, [
-          m('div.board'),
+          utils.viewOnlyBoard(),
           m('div.infos',[
             m('div.description',[
               m('h2.title', 'New Game'),

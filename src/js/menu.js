@@ -1,12 +1,10 @@
 
 var menu = {};
 
-menu.controller = function() {
-  this.isOpen = false;
+menu.isOpen = false;
 
-  this.toggle = function() {
-    this.isOpen = !this.isOpen;
-  }.bind(this);
+menu.toggle = function() {
+  menu.isOpen = !menu.isOpen;
 };
 
 menu.view = function() {

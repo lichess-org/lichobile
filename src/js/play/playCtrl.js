@@ -2,8 +2,6 @@ var xhr = require('./playXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
-var menu = require('../menu');
-var overlay = require('./overlay');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -49,8 +47,6 @@ module.exports = function() {
   this.lobbySocket = null;
 
   this.playing = function () { return this.round; };
-
-  this.menu = new menu.controller();
 
   this.swapped = false ;
 

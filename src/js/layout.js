@@ -1,4 +1,5 @@
 var utils = require('./utils');
+var menu = require('./menu');
 
 function headerHeight() {
   var d = utils.getViewportDims();
@@ -17,7 +18,7 @@ function headerHeight() {
  */
 module.exports = function(ctrl, headerView, contentView, footerView, menuView, overlayView) {
   return [
-    m('main', { class: ctrl.menu.isOpen ? 'out' : '' }, [
+    m('main', { class: menu.isOpen ? 'out' : '' }, [
       m('header', { style: { height: headerHeight() + 'px' }}, headerView()),
       contentView(),
       m('footer', { style: { height: headerHeight() + 'px' }}, footerView())

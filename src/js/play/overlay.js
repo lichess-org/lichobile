@@ -1,27 +1,25 @@
 var utils = require('../utils');
 var overlay = {};
 
-overlay.controller = function() {
-  this.isOpen = false;
+var isOpen = false;
 
-  this.open = function() {
-    this.isOpen = true;
-  }.bind(this);
-
-  this.close = function() {
-    this.isOpen = false;
-  }.bind(this);
+overlay.open = function() {
+  isOpen = true;
 };
 
-overlay.view = function(ctrl, contentF) {
+overlay.close = function() {
+  isOpen = false;
+};
+
+overlay.view = function(contentF) {
   var children = [
     m('div.overlay-close',
-      { config: utils.ontouchstart(ctrl.close) },
+      { config: utils.ontouchstart(overlay.close) },
     '+')
   ];
   if (contentF) children = children.concat(contentF());
   return m('div.overlay.overlay-effect', {
-    class: ctrl.isOpen ? 'open' : '',
+    class: isOpen ? 'open' : '',
   }, children);
 };
 

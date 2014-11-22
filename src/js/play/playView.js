@@ -11,8 +11,7 @@ module.exports = function(ctrl) {
         m('a.fa.fa-navicon', { config: utils.ontouchstart(ctrl.menu.toggle) }),
         m('h1', ctrl.title()),
         m('a.fa.fa-trophy', {
-          config: utils.ontouchstart(ctrl.overlay.open),
-          style: { display: ctrl.overlay.isOpen ? 'none' : 'inline-block' }
+          config: utils.ontouchstart(overlay.open)
         })
       ])
     ];
@@ -105,5 +104,5 @@ module.exports = function(ctrl) {
     ];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, utils.partial(overlay.view, ctrl.overlay, overlayContent));
+  return layout(ctrl, header, board, footer, menu.view, utils.partial(overlay.view, overlayContent));
 };

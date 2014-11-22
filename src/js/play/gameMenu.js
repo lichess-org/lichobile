@@ -13,7 +13,7 @@ gameMenu.close = function() {
 };
 
 function swapCard() {
-  newGameCardSwapped = true;
+  newGameCardSwapped = !newGameCardSwapped;
 }
 
 // see game.styl for dimensions
@@ -26,7 +26,7 @@ function cardHeight() {
   return boardHeight() + 144;
 }
 
-gameMenu.view = function() {
+gameMenu.view = function(ctrl) {
   var children = [
     m('div.overlay-close',
       { config: utils.ontouchstart(gameMenu.close) },
@@ -50,7 +50,14 @@ gameMenu.view = function() {
         ]),
         m('div.back', [
           m('header', 'New Game'),
-          m('form', [
+          m('form.form', {
+            onsubmit: function(e) {
+              e.preventDefault();
+              gameMenu.close();
+              swapCard();
+              ctrl.startAIGame();
+            }
+          }, [
             m('fieldset', [
               m('div.nice-radio', [
                 m('input#gameHuman.radio.human[type=radio][name=type][value=human]'),

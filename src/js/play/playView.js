@@ -44,6 +44,14 @@ module.exports = function(ctrl) {
       m('div.card.new-game',{class:ctrl.swapped?'back_visible':''}, [
         m('div.container_flip', [
           m('div.front',{config:utils.ontouchstart(ctrl.swap)}, [
+            m('div.board'),
+            m('div.infos',[
+              m('div.description',[
+                m('h2.title', 'New Game'),
+                m('p', 'Lancer une nouvelle partie'),
+                m('button', '+ Nouvelle partie')
+                ])
+              ])
             ]),
           m('div.back', [
             m('header', 'New Game'),
@@ -67,7 +75,7 @@ module.exports = function(ctrl) {
                   ])
                 ]),
                 m('div.select_form',[
-                  m('label[for=variant]', 'Variant'),
+                  m('label[for=variant]', 'Variant :'),
                   m('select[name=variant]', [
                     m('option[value=1]', 'Standard'),
                     m('option[value=2]', '960'),
@@ -80,10 +88,13 @@ module.exports = function(ctrl) {
                   m('label[for=clock]', 'Clock :'),
                   m('input[type=checkbox][checked=checked][name=clock]', 'Clock'),
                 ]),
-                m('select[name=time]', [
-                  m('option[value="5,0"]', '5|0'),
-                  m('option[value="1,0"]', '1|0'),
-                  m('option[value="10,0"]', '10|0')
+                m('div.select_form',[
+                  m('label[for=color]', 'Time | Increment :'),
+                  m('select[name=time]', [
+                    m('option[value="5,0"]', '5|0'),
+                    m('option[value="1,0"]', '1|0'),
+                    m('option[value="10,0"]', '10|0')
+                  ])
                 ])
               ]),
               m('button', 'Valider')

@@ -74,11 +74,38 @@ footer
       -ms-backface-visibility: hidden;
     .front
       position absolute
-      background red
       top 0
       left 0
       width 100%
       height 100%
+      .board
+        width 100%
+        height 60%
+        background #fff
+      .infos
+        text-align center
+        color #fff;
+        background #383838
+        text-transform uppercase
+        h2
+          padding-top 35px
+          font-size 16px
+          font-family gothambold
+        p
+          padding-bottom 30px
+          font-size 11px
+          color #A9A9A9
+          padding-top 5px
+          font-family gothamlight
+        button
+          width 100%
+          background #2A2A2A
+          height 50px
+          border none
+          color #fff
+          font-family gothambold
+          font-size 12px
+          text-transform uppercase
     .back
       background: #2A2A2A;
       position absolute
@@ -103,6 +130,8 @@ footer
         text-align center
       form
         padding-top 10px
+        label
+          font-family gothambook
         fieldset
           padding 0px 20px
       button
@@ -121,7 +150,7 @@ footer
         line-height 40px
         color #8A8A8A
         padding 0 10px
-        font-size 14px
+        font-size 12px
         position relative
         margin-top 20px
       fieldset
@@ -132,14 +161,17 @@ footer
           position absolute
           left 0px
           -webkit-appearance none
-          padding-left 55px
+          padding-left 70px
           height 40px
           line-height 40px
           font-size 13px
           color #fff
+        select[name=time]
+          padding-left 120px
         label[for=clock]
           color #fff
           display block
+          font-family gothamlight
           height 40px
           line-height 40px
         .check_container
@@ -156,11 +188,13 @@ footer
             width 70px
             height 30px
             border-radius 15px
-            background-color #C4A86F
+            background-color #333
             cursor pointer
             transition background-color 0.5s
             top 0
             right 0
+          input[type='checkbox']:checked
+            background #C4A86F
           input[type='checkbox']:after
             content ''
             display block
@@ -171,6 +205,9 @@ footer
             height 20px
             border-radius 50%
             background #fff
+            transition: .5s all;
+          input[type='checkbox']:checked:after
+            left 40px
 
 
       .nice-radio
@@ -195,7 +232,7 @@ footer
           float left
           line-height 40px;
           padding 0 20px
-          font-size 14px
+          font-size 12px
           cursor pointer
           -webkit-user-select none
           -moz-user-select none

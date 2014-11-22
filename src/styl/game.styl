@@ -30,6 +30,10 @@ footer
   width 100%
   // height 100vw
 
+.board
+  width 100%
+  height 100%
+
 #promotion_choice
   border 1px solid black
   background-color rgba(255,255,255, 0.7)
@@ -51,6 +55,7 @@ footer
   -ms-perspective: 1000;
   perspective: 1000;
   background transparent
+  min-height 400px
   &.back_visible
     .container_flip
       transform rotateY(180deg)
@@ -58,6 +63,13 @@ footer
       -moz-transform rotateY(180deg)
       -o-transform rotateY(180deg)
       -ms-transform rotateY(180deg)
+    .cg-board-wrap.view-only
+      .cg-board
+        position inherit
+      .cg-square
+        position inherit
+      .cg-piece
+        display none
   .container_flip
     transform-style: preserve-3d;
     position relative
@@ -78,10 +90,6 @@ footer
       left 0
       width 100%
       height 100%
-      .board
-        width 100%
-        height 60%
-        background #fff
       .infos
         text-align center
         color #fff;
@@ -154,7 +162,7 @@ footer
         padding 0 10px
         font-size 12px
         position relative
-        margin-top 20px
+        margin-top 15px
       fieldset
         select
           background transparent
@@ -180,7 +188,7 @@ footer
           position: relative;
           display: block;
         &#clock
-          margin-top 20px
+          margin-top 15px
           position relative
           input[type='checkbox']
             position absolute

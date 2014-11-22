@@ -8,7 +8,7 @@ module.exports = function(ctrl) {
   function header() {
     var children = [
       m('nav', [
-        m('a.fa.fa-navicon', { config: utils.ontouchstart(ctrl.menu.toggle) }),
+        m('a.fa.fa-navicon', { config: utils.ontouchstart(menu.toggle) }),
         m('h1', ctrl.title()),
         m('a.fa.fa-trophy', {
           config: utils.ontouchstart(overlay.open)

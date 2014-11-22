@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = {};
+var chessground = require('chessground');
 
 utils.hasNetwork = function() {
   if (window.cordova) {
@@ -78,6 +79,13 @@ utils.getViewportDims = function() {
   var e = document.documentElement;
   viewPortDims = { vw: e.clientWidth, vh: e.clientHeight };
   return viewPortDims;
+};
+
+utils.viewOnlyBoard = function(fen) {
+  var ctrl = new chessground.controller({viewOnly: true, coordinates: false});
+  return m('div.board.grey.merida', [
+    chessground.view(ctrl)
+  ]);
 };
 
 module.exports = utils;

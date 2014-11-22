@@ -33,14 +33,10 @@ module.exports = function(ctrl) {
   }
 
   function footer() {
-    var buttons = [
-      m('button', { config: utils.ontouchstart(ctrl.startAIGame) }, 'Start AI!'),
-      m('button', { config: utils.ontouchstart(ctrl.seekHumanGame) }, 'Start Human!')
-    ];
     if (ctrl.playing())
-      return [roundView.renderPlayer(ctrl.round), buttons];
+      return [roundView.renderPlayer(ctrl.round)];
     else
-      return [m('section.player', [m('div.infos')]), buttons];
+      return [m('section.player', [m('div.infos')])];
   }
 
   function overlayContent() {
@@ -78,7 +74,9 @@ module.exports = function(ctrl) {
             ])
           ]),
           m('button', 'Valider')
-        ])
+        ]),
+        m('button', { config: utils.ontouchstart(ctrl.startAIGame) }, 'Start AI!'),
+        m('button', { config: utils.ontouchstart(ctrl.seekHumanGame) }, 'Start Human!')
       ])
     ];
   }

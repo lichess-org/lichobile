@@ -1,58 +1,41 @@
-'use strict';
-
 var store = require('./storage');
 
-function localstorageprop(key) {
-  function getset(value) {
-    if (arguments.length > 0) store.set(key, new String(value));
-    return store.get(key) !== "false";
+function localstorageprop(key, initialValue) {
+  function getset() {
+    if (arguments.length) store.set(key, arguments[0]);
+    var ret = store.get(key);
+    if (ret !== null) return ret;
+    else return initialValue;
   }
-
-  getset.toJSON = function() { return store.get(key) === "false"; }
 
   return getset;
 }
 
-function controller() {
-  this.settings = [
+var settings = {
+  general: [
     { label: "Disable sleep", active: localstorageprop('settings.disableSleep') },
     { label: "Show last move", active: localstorageprop('settings.showLastMove') },
     { label: "Show possible destinations", active: localstorageprop('settings.showDests') },
     { label: "Show coordinates", active: localstorageprop('settings.showCoords') },
     { label: "Threefold auto draw", active: localstorageprop('settings.threeFoldAutoDraw') },
     { label: "Sound", active: localstorageprop('settings.sound') }
-  ];
-}
-
-function topbar(block) {
-  return m('div', [
-    m('header', [
-      m('ul', [
-        m('li.title', 'Settings'),
-        m('li.close', [
-          m('a', { 'rel': 'close' }, 'Close')
-        ])
-      ])
-    ]),
-    block()
-  ]);
-}
-
-function view(ctrl) {
-  return topbar(function() {
-    return m('ul.settings', [
-      ctrl.settings.map(function(setting, index) {
-        return m('li', [
-          m('span', setting.label),
-          m('input[type=checkbox]', { 'class': 'tgl tgl-flat', 'id': ('setting-' + index), checked: setting.active(), onchange: m.withAttr('checked', setting.active) }),
-          m('label', { 'for': ('setting-' + index), 'class': 'tgl-btn' })
-        ])
-      })
-    ]);
-  });
-}
-
-module.exports = {
-  controller: controller,
-  view: view
+  ],
+  newGame: {
+    ai: {
+      color: localstorageprop('settings.game.ai.color', 'random'),
+      variant: localstorageprop('settings.game.ai.variant', '1'),
+      clock: localstorageprop('settings.game.ai.clock', true),
+      time: localstorageprop('settings.game.ai.time', '10'),
+      increment: localstorageprop('settings.game.ai.increment', '0'),
+      aiLevel: localstorageprop('settings.game.ai.aiLevel', '3')
+    },
+    human: {
+      variant: localstorageprop('settings.game.human.variant', '1'),
+      clock: localstorageprop('settings.game.human.clock', true),
+      timePreset: localstorageprop('settings.game.human.timePreset', '5,0'),
+      mode: localstorageprop('settings.game.human.mode', '0')
+    }
+  }
 };
+
+module.exports = settings;

@@ -27,18 +27,19 @@ function cardHeight() {
   return boardHeight() + 144;
 }
 
-function renderOption(label, value, settingsProp) {
-  return m('option[value=' + value + ']' + ((settingsProp() === value) ?  '[selected]' : ''), {
+function renderOption(label, value, storedValue) {
+  return m('option[value=' + value + ']' + (storedValue === value ?  '[selected]' : ''), {
   }, label);
 }
 
 function renderSelect(label, name, options, settingsProp) {
+  var storedValue = settingsProp();
   return [
     m('label[for=' + name + ']', label),
     m('select[name=' + name + ']', {
       onchange: function(e) { settingsProp(e.target.value); }
     }, options.map(function(e) {
-      return renderOption(e[0], e[1], settingsProp); })
+      return renderOption(e[0], e[1], storedValue); })
     )
   ];
 }

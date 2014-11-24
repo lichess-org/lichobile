@@ -3,7 +3,7 @@ www/app.js
 www/index.html
 www/css/compiled
 
-node_modules
+/node_modules
 
 env/*.json
 !env/prod.json

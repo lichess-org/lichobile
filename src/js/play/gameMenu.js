@@ -29,13 +29,17 @@ function cardHeight() {
 
 function renderCheckbox(settingsProp) {
   var isOn = settingsProp();
-  return m('input[type=checkbox][name=clock]' + (isOn ? '[checked]' : ''), {
-    onchange: function() { settingsProp(!isOn); }
+  return m('input[type=checkbox][name=clock]', {
+    checked: isOn ? 'checked' : '',
+    onchange: function() {
+      settingsProp(!isOn);
+    }
   });
 }
 
 function renderOption(label, value, storedValue) {
-  return m('option[value=' + value + ']' + (storedValue === value ?  '[selected]' : ''), {
+  return m('option[value=' + value + ']', {
+    selected: storedValue === value ? 'selected' : ''
   }, label);
 }
 
@@ -43,7 +47,8 @@ function renderSelect(label, name, options, settingsProp, isDisabled) {
   var storedValue = settingsProp();
   return [
     m('label[for=' + name + ']', label),
-    m('select[name=' + name + ']' + (isDisabled ? '[disabled]' : ''), {
+    m('select[name=' + name + ']', {
+      disabled: isDisabled ? 'disabled' : '',
       onchange: function(e) { settingsProp(e.target.value); }
     }, options.map(function(e) {
       return renderOption(e[0], e[1], storedValue); })

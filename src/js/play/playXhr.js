@@ -1,19 +1,21 @@
 var utils = require('../utils');
+var settings = require('../settings');
 
 var baseUrl = window.apiEndPoint;
 
 function aiGame() {
+  var config = settings.newGame.ai;
   return m.request({
     url: baseUrl + '/setup/ai',
     method: 'POST',
     config: utils.xhrConfig,
     data: {
-      variant: 1,
-      clock: true,
-      time: 5,
-      increment: 3,
-      level: 1,
-      color: 'white'
+      variant: config.variant(),
+      clock: config.clock(),
+      time: config.time(),
+      increment: config.increment(),
+      level: config.level(),
+      color: config.color()
     }
   });
 }

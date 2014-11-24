@@ -27,7 +27,7 @@ var settings = {
       clock: localstorageprop('settings.game.ai.clock', true),
       time: localstorageprop('settings.game.ai.time', '10'),
       increment: localstorageprop('settings.game.ai.increment', '0'),
-      aiLevel: localstorageprop('settings.game.ai.aiLevel', '3')
+      level: localstorageprop('settings.game.ai.aiLevel', '3')
     },
     human: {
       variant: localstorageprop('settings.game.human.variant', '1'),

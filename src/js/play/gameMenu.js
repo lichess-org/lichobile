@@ -27,16 +27,23 @@ function cardHeight() {
   return boardHeight() + 144;
 }
 
+function renderCheckbox(settingsProp) {
+  var isOn = settingsProp();
+  return m('input[type=checkbox][name=clock]' + (isOn ? '[checked]' : ''), {
+    onchange: function() { settingsProp(!isOn); }
+  });
+}
+
 function renderOption(label, value, storedValue) {
   return m('option[value=' + value + ']' + (storedValue === value ?  '[selected]' : ''), {
   }, label);
 }
 
-function renderSelect(label, name, options, settingsProp) {
+function renderSelect(label, name, options, settingsProp, isDisabled) {
   var storedValue = settingsProp();
   return [
     m('label[for=' + name + ']', label),
-    m('select[name=' + name + ']', {
+    m('select[name=' + name + ']' + (isDisabled ? '[disabled]' : ''), {
       onchange: function(e) { settingsProp(e.target.value); }
     }, options.map(function(e) {
       return renderOption(e[0], e[1], storedValue); })
@@ -45,6 +52,7 @@ function renderSelect(label, name, options, settingsProp) {
 }
 
 gameMenu.view = function(ctrl) {
+  var isClockOff = !settings.newGame.ai.clock();
   var children = [
     m('div.overlay-close',
       { config: utils.ontouchstart(gameMenu.close) },
@@ -100,18 +108,18 @@ gameMenu.view = function(ctrl) {
             ]),
             m('fieldset#clock', [
               m('div.check_container',[
-                m('label[for=clock]', 'Clock :'),
-                m('input[type=checkbox][checked=checked][name=clock]', 'Clock'),
+                m('label[for=clock]', 'Clock:'),
+                renderCheckbox(settings.newGame.ai.clock),
               ]),
-              m('div.select_form.inline',[
+              m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
                 renderSelect('Time:', 'time', [
                   ['5', '5'], ['10', '10'], ['30', '30']
-                ], settings.newGame.ai.time)
+                ], settings.newGame.ai.time, isClockOff)
               ]),
-              m('div.select_form.inline',[
+              m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
                 renderSelect('Increment:', 'increment', [
                   ['0', '0'], ['1', '1'], ['3', '3']
-                ], settings.newGame.ai.increment)
+                ], settings.newGame.ai.increment, isClockOff)
               ])
             ]),
             m('button', 'Valider')

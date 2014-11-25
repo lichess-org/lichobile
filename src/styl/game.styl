@@ -63,6 +63,8 @@ footer
       -moz-transform rotateY(180deg)
       -o-transform rotateY(180deg)
       -ms-transform rotateY(180deg)
+      .back
+        display block
     .cg-board-wrap.view-only
       .cg-board
         position inherit
@@ -79,6 +81,8 @@ footer
     -ms-transition 0.4s
     -moz-transition 0.4s
     transition 0.4s
+    .back
+      display none
     .front, .back
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
@@ -202,7 +206,7 @@ footer
             border-radius 15px
             background-color #333
             cursor pointer
-            transition background-color 0.3s
+            transition background-color 0.2s
             top 0
             right 0
           input[type='checkbox']:checked

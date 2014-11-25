@@ -21,6 +21,7 @@ var settings = {
     { label: "Sound", active: localstorageprop('settings.sound') }
   ],
   newGame: {
+    selected: localstorageprop('settings.game.selected', 'human'),
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       variant: localstorageprop('settings.game.ai.variant', '1'),

@@ -27,14 +27,35 @@ function cardHeight() {
   return boardHeight() + 144;
 }
 
-function renderCheckbox(settingsProp) {
+function renderRadio(label, name, value, settingsProp) {
+  var isOn = settingsProp() === value;
+  var id = name + value;
+  return [
+    m('input.radio[type=radio]', {
+      name: name,
+      id: id,
+      class: value,
+      value: value,
+      checked: isOn ? 'checked' : '',
+      onchange: function(e) {
+        settingsProp(e.target.value);
+      }
+    }),
+    m('label[for=' + id + ']', label)
+  ];
+}
+
+function renderCheckbox(label, name, settingsProp) {
   var isOn = settingsProp();
-  return m('input[type=checkbox][name=clock]', {
-    checked: isOn ? 'checked' : '',
-    onchange: function() {
-      settingsProp(!isOn);
-    }
-  });
+  return [
+    m('label[for=' + name + ']', label),
+    m('input[type=checkbox][name=' + name + ']', {
+      checked: isOn ? 'checked' : '',
+      onchange: function() {
+        settingsProp(!isOn);
+      }
+    })
+  ];
 }
 
 function renderOption(label, value, storedValue) {
@@ -56,8 +77,58 @@ function renderSelect(label, name, options, settingsProp, isDisabled) {
   ];
 }
 
-gameMenu.view = function(ctrl) {
+function renderAIForm(ctrl) {
   var isClockOff = !settings.newGame.ai.clock();
+  return m('form.form', {
+    onsubmit: function(e) {
+      e.preventDefault();
+      gameMenu.close();
+      swapCard();
+      ctrl.startAIGame();
+    }
+  }, [
+    m('fieldset', [
+      m('div.nice-radio', renderRadio('Human', 'selected', 'human', settings.newGame.selected)),
+      m('div.nice-radio', renderRadio('Computer', 'selected', 'computer', settings.newGame.selected))
+    ]),
+    m('fieldset', [
+      m('div.select_form',[
+        renderSelect('Color:', 'color', [
+          ['White', 'white'], ['Black', 'black'], ['Random', 'random']
+        ], settings.newGame.ai.color),
+      ]),
+      m('div.select_form', [
+        renderSelect('Variant:', 'variant', [
+          ['Standard', '1'], ['Chess 960', '2'], ['King of the hill', '4']
+        ], settings.newGame.ai.variant),
+      ]),
+      m('div.select_form', [
+        renderSelect('Level:', 'ailevel', [
+          ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'],
+          ['6', '6'], ['7','7'], ['8','8']
+        ], settings.newGame.ai.level),
+      ])
+    ]),
+    m('fieldset#clock', [
+      m('div.check_container',[
+        renderCheckbox('Clock:', 'clock', settings.newGame.ai.clock)
+      ]),
+      m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
+        renderSelect('Time:', 'time', [
+          ['5', '5'], ['10', '10'], ['30', '30']
+        ], settings.newGame.ai.time, isClockOff)
+      ]),
+      m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
+        renderSelect('Increment:', 'increment', [
+          ['0', '0'], ['1', '1'], ['3', '3']
+        ], settings.newGame.ai.increment, isClockOff)
+      ])
+    ]),
+    m('button', 'Valider')
+  ]);
+}
+
+gameMenu.view = function(ctrl) {
   var children = [
     m('div.overlay-close',
       { config: utils.ontouchstart(gameMenu.close) },
@@ -67,7 +138,7 @@ gameMenu.view = function(ctrl) {
       style: { height: cardHeight() + 'px' }
     }, [
       m('div.container_flip', [
-        m('div.front',{ config: utils.ontouchstart(swapCard) }, [
+        m('div.front', [
           m('div', { style: { height: boardHeight() + 'px' }}, [
             utils.viewOnlyBoard()
           ]),
@@ -75,60 +146,12 @@ gameMenu.view = function(ctrl) {
             m('div.description',[
               m('h2.title', 'New Game'),
               m('p', 'Lancer une nouvelle partie'),
-              m('button', '+ Nouvelle partie')
+              m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
             ])
           ])
         ]),
         m('div.back', [
-          m('header', 'New Game'),
-          m('form.form', {
-            onsubmit: function(e) {
-              e.preventDefault();
-              gameMenu.close();
-              swapCard();
-              ctrl.startAIGame();
-            }
-          }, [
-            m('fieldset', [
-              m('div.nice-radio', [
-                m('input#gameHuman.radio.human[type=radio][name=type][value=human]'),
-                m('label[for=gameHuman]', 'Human')
-              ]),
-              m('div.nice-radio', [
-                m('input#gameComputer.radio.computer[type=radio][name=type][value=computer][checked=checked]'),
-                m('label[for=gameComputer]', 'Computer')
-              ])
-            ]),
-            m('fieldset', [
-              m('div.select_form',[
-                renderSelect('Color:', 'color', [
-                  ['White', 'white'], ['Black', 'black'], ['Random', 'random']
-                ], settings.newGame.ai.color),
-              ]),
-              m('div.select_form', [
-                renderSelect('Variant:', 'variant', [
-                  ['Standard', '1'], ['Chess 960', '2'], ['King of the hill', '4']
-                ], settings.newGame.ai.variant),
-              ])
-            ]),
-            m('fieldset#clock', [
-              m('div.check_container',[
-                m('label[for=clock]', 'Clock:'),
-                renderCheckbox(settings.newGame.ai.clock),
-              ]),
-              m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
-                renderSelect('Time:', 'time', [
-                  ['5', '5'], ['10', '10'], ['30', '30']
-                ], settings.newGame.ai.time, isClockOff)
-              ]),
-              m('div.select_form.inline' + (isClockOff ? '.disabled' : ''),[
-                renderSelect('Increment:', 'increment', [
-                  ['0', '0'], ['1', '1'], ['3', '3']
-                ], settings.newGame.ai.increment, isClockOff)
-              ])
-            ]),
-            m('button', 'Valider')
-          ])
+          renderAIForm(ctrl)
         ])
       ])
     ])

@@ -34,7 +34,7 @@ var settings = {
       color: localstorageprop('settings.game.human.color', 'random'),
       variant: localstorageprop('settings.game.human.variant', '1'),
       clock: localstorageprop('settings.game.human.clock', true),
-      timePreset: localstorageprop('settings.game.human.timePreset', '5,0'),
+      timePreset: localstorageprop('settings.game.human.timePreset', '5|0'),
       mode: localstorageprop('settings.game.human.mode', '0')
     }
   }

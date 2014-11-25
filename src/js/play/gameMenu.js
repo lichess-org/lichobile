@@ -34,23 +34,23 @@ function renderRadio(label, name, value, settingsProp) {
     m('input.radio[type=radio]', {
       name: name,
       id: id,
-      class: value,
+      'class': value,
       value: value,
-      checked: isOn ? 'checked' : '',
+      checked: isOn,
       onchange: function(e) {
         settingsProp(e.target.value);
       }
     }),
-    m('label[for=' + id + ']', label)
-  ];
+    m('label', { 'for': id }, label) ];
 }
 
 function renderCheckbox(label, name, settingsProp) {
   var isOn = settingsProp();
   return [
-    m('label[for=' + name + ']', label),
-    m('input[type=checkbox][name=' + name + ']', {
-      checked: isOn ? 'checked' : '',
+    m('label', { 'for': name }, label),
+    m('input[type=checkbox]', {
+      name: name,
+      checked: isOn,
       onchange: function() {
         settingsProp(!isOn);
       }
@@ -59,17 +59,19 @@ function renderCheckbox(label, name, settingsProp) {
 }
 
 function renderOption(label, value, storedValue) {
-  return m('option[value=' + value + ']', {
-    selected: storedValue === value ? 'selected' : ''
+  return m('option', {
+    value: value,
+    selected: storedValue === value
   }, label);
 }
 
 function renderSelect(label, name, options, settingsProp, isDisabled) {
   var storedValue = settingsProp();
   return [
-    m('label[for=' + name + ']', label),
-    m('select[name=' + name + ']', {
-      disabled: isDisabled ? 'disabled' : '',
+    m('label', { 'for': name }, label),
+    m('select', {
+      name: name,
+      disabled: isDisabled,
       onchange: function(e) { settingsProp(e.target.value); }
     }, options.map(function(e) {
       return renderOption(e[0], e[1], storedValue); })

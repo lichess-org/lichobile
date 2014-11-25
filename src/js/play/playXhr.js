@@ -21,17 +21,19 @@ function aiGame() {
 }
 
 function seekHuman() {
+  var config = settings.newGame.human;
+  var preset = config.timePreset().split('|');
   return m.request({
     url: baseUrl + '/setup/hook/' + utils.lichessSri,
     method: 'POST',
     config: utils.xhrConfig,
     data: {
-      variant: 1,
-      clock: true,
-      time: 5,
-      increment: 3,
-      color: 'white',
-      mode: '0'
+      variant: config.variant(),
+      clock: config.clock(),
+      time: preset[0],
+      increment: preset[1],
+      color: config.color(),
+      mode: config.mode()
     },
     deserialize: function(value) { return value; }
   });

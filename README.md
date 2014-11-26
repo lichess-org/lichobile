@@ -15,7 +15,7 @@ for API 14 to API 19
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.
 
-**For iOs:**
+**For iOS:**
 
 * you need mac os and Xcode installed.
 
@@ -42,7 +42,7 @@ You're all set! You can now run
     $ bin/android your_env
 
 
-## iOs instructions
+## iOS instructions
 
 Copy `env/mobile.json.example` to `env/your_env.json` and update according to your
 env.

@@ -10,14 +10,14 @@ lichess.org mobile application
 **For Android:**
 
 * the [android SDK](http://developer.android.com/sdk/index.html)
-* [SKD packages](http://developer.android.com/sdk/installing/adding-packages.html)
+* [SDK packages](http://developer.android.com/sdk/installing/adding-packages.html)
 for API 14 to API 19
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.
 
 **For iOS:**
 
-* you need mac os and Xcode installed.
+* you need OS X and Xcode installed.
 
 
 ## Android instructions

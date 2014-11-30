@@ -41,11 +41,6 @@ module.exports = function() {
     isSeekingGame: false
   };
 
-  this.title = function() {
-    if (this.round) return this.round.title;
-    return 'lichess.org';
-  };
-
   this.round = null;
   this.gameSocket = null;
   this.lobbySocket = null;

@@ -9,7 +9,7 @@ module.exports = function(ctrl) {
     var children = [
       m('nav', [
         m('a.fa.fa-navicon', { config: utils.ontouchstart(menu.toggle) }),
-        m('h1', ctrl.title()),
+        ctrl.round ? m('h1.playing', ctrl.round.title) : m('h1', 'lichess.org'),
         m('a.fa.fa-trophy', {
           config: utils.ontouchstart(gameMenu.open)
         })

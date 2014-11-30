@@ -185,8 +185,8 @@ gameMenu.view = function(ctrl) {
         ])
       ])
     ])
-
   ];
+
   return m('div#game_menu.overlay.overlay-effect', {
     class: isOpen ? 'open' : '',
   }, children);

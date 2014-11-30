@@ -81,10 +81,10 @@ module.exports = function(send, ctrl) {
       if (!ctrl.data.player.spectator) sound.dong();
     },
     gone: function(isGone) {
-      if (!ctrl.data.opponent.ai) {
-        round.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        m.redraw();
-      }
+      // if (!ctrl.data.opponent.ai) {
+      //   round.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
+      //   m.redraw();
+      // }
     },
   };
 

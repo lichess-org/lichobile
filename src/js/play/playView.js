@@ -18,8 +18,13 @@ module.exports = function(ctrl) {
 
     if (ctrl.playing())
       children.push(roundView.renderOpponent(ctrl.round));
-    else
-      children.push(m('section.opponent', [m('div.infos')]));
+    else {
+      children.push(
+        m('section.opponent', [
+          m('div.infos', ctrl.vm.isSeekingGame ? [m('h2', 'Waiting for opponent...')] : null)
+        ])
+      );
+    }
 
     return children;
   }

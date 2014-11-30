@@ -37,6 +37,10 @@ function makeRound(ctrl, data) {
 module.exports = function() {
   this.id = m.route.param('id');
 
+  this.vm = {
+    isSeekingGame: false
+  };
+
   this.title = function() {
     if (this.round) return this.round.title;
     return 'lichess.org';
@@ -65,6 +69,7 @@ module.exports = function() {
   }.bind(this);
 
   this.seekHumanGame = function() {
+    this.vm.isSeekingGame = true;
     this.lobbySocket = makeLobbySocket(this);
     xhr.seekHuman().then(function() {
       console.log('hook sent...');

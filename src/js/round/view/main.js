@@ -10,10 +10,7 @@ function oppositeColor(c) {
 function renderPlayer(ctrl){
   var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   var children = [
-    m('div.infos', [
-      m('h2', 'player'),
-      m('h3', '1459')
-    ])
+    m('div.infos')
   ];
   if (ctrl.clock)
     children.push(clock.view(ctrl.clock, ctrl.data.player.color, clockRunningColor));
@@ -21,12 +18,16 @@ function renderPlayer(ctrl){
 }
 
 function renderOpponent(ctrl){
+  function renderOpponentInfo(ctrl) {
+    var opp = ctrl.data.opponent;
+    if (opp.ai) return [ m('h2', 'Stockfish level ' + opp.ai) ];
+    else if (opp.user) return [ m('h2', opp.user.id), m('h3', opp.rating) ];
+    else return [ m('h2', 'Anonymous') ];
+  }
+
   var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   var children = [
-    m('div.infos', [
-      m('h2', 'ai'),
-      m('h3', '1854')
-    ])
+    m('div.infos', renderOpponentInfo(ctrl))
   ];
   if (ctrl.clock)
     children.push(clock.view(ctrl.clock, oppositeColor(ctrl.data.player.color), clockRunningColor));

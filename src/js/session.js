@@ -1,50 +1,60 @@
 var utils = require('./utils');
 
-var session = {};
+var session = null;
 
-session.controller = function() {
+function isConnected() {
+  return !!session;
+}
 
-  this.session = null;
+function get() {
+  return session;
+}
 
-  this.isConnected = function() {
-    return !!this.session;
-  };
+function login(username, password) {
+  return m.request({
+    url: window.apiEndPoint + '/login',
+    method: 'POST',
+    config: utils.xhrConfig,
+    data: {
+      username: username,
+      password: password
+    }
+  }).then(function(data) {
+    session = data;
+  }, function(error) {
+    console.log(error);
+  });
+}
 
-  this.login = function(username, password) {
-    return m.request({
-      url: window.apiEndPoint + '/login',
-      method: 'POST',
-      config: utils.xhrConfig,
-      data: {
-        username: username,
-        password: password
-      }
-    }).then(function(data) {
-      this.session = data;
-    });
-  };
+function logout() {
+  return m.request({
+    url: window.apiEndPoint + '/logout',
+    method: 'GET',
+    config: utils.xhrConfig,
+    deserialize: function(value) { return value; }
+  }).then(function() {
+    session = null;
+  }, function(error) {
+    console.log(error);
+  });
+}
 
-  this.logout = function() {
-    return m.request({
-      url: window.apiEndPoint + '/logout',
-      method: 'GET',
-      config: utils.xhrConfig
-    }).then(function() {
-      this.session = null;
-    }, function(error) {
-      throw new Error(error.responseText);
-    });
-  };
+function refresh() {
+  return m.request({
+    url: window.apiEndPoint + '/account/info',
+    method: 'GET',
+    config: utils.xhrConfig
+  }).then(function(data) {
+    session = data;
+  }, function(error) {
+    console.log(error);
+  });
+}
 
-  this.refresh = function() {
-    return m.request({
-      url: window.apiEndPoint + 'account/info',
-      method: 'GET',
-      config: utils.xhrConfig
-    }).then(function(data) {
-      this.session = data;
-    });
-  };
+module.exports = {
+  isConnected: isConnected,
+  login: login,
+  logout: logout,
+  refresh: refresh,
+  get: get
 };
-
-module.exports = session;

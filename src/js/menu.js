@@ -1,3 +1,5 @@
+var session = require('./session');
+var utils = require('./utils');
 
 var menu = {};
 
@@ -8,14 +10,35 @@ menu.toggle = function() {
 };
 
 menu.view = function() {
+  var userobj = session.get();
+  var nav = userobj ? [
+    m('h2', userobj.username),
+    m('button', {
+      config: utils.ontouchstart(function() {
+        session.logout();
+      })
+    }, 'Log out')
+  ] : [
+    m('h2', 'Not connected')
+  ];
   return [
-    m('header', [m('nav', [m('h2', 'Settings')])]),
+    m('header', [
+      m('nav', nav)
+    ]),
     m('div', [
-      m('form', [
+      userobj ? null :
+      m('form', {
+        onsubmit: function(e) {
+          e.preventDefault();
+          var form = e.target;
+          menu.toggle();
+          session.login(form[0].value, form[1].value);
+        }
+      },[
         m('h3', 'Connection'),
-        m('input#pseudo[type=text][placeholder=Pseudo'),
-          m('input#password[type=password][placeholder=Password]'),
-          m('button#login', 'LOG IN')
+        m('input#pseudo[type=text][placeholder=Pseudo]'),
+        m('input#password[type=password][placeholder=Password]'),
+        m('button#login', 'LOG IN')
       ])
     ])
   ];

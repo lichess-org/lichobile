@@ -1,7 +1,7 @@
 var chessground = require('chessground');
-var clock = require('../clock');
-var renderPromotion = require('../promotion').view;
-var utils = require('../../utils');
+var clock = require('./clock');
+var renderPromotion = require('./promotion').view;
+var utils = require('../utils');
 
 function oppositeColor(c) {
   return c === 'white' ? 'black' : 'white';

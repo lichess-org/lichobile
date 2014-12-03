@@ -1,4 +1,4 @@
-var roundView = require('../round/view/main');
+var roundView = require('../round/roundView');
 var layout = require('../layout');
 var menu = require('../menu');
 var playMenu = require('./playMenu');

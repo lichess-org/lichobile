@@ -9,8 +9,11 @@ function oppositeColor(c) {
 
 function renderPlayer(ctrl){
   var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+  var player = ctrl.data.player;
+  var playerInfos = player.user ? [ m('h2', player.user.username),
+    m('h3', player.rating) ] : null;
   var children = [
-    m('div.infos')
+    m('div.infos', playerInfos)
   ];
   if (ctrl.clock)
     children.push(clock.view(ctrl.clock, ctrl.data.player.color, clockRunningColor));

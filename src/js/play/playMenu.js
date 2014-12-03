@@ -1,15 +1,15 @@
 var utils = require('../utils');
 var settings = require('../settings');
-var gameMenu = {};
+var playMenu = {};
 
 var isOpen = false;
 var newGameCardSwapped = false;
 
-gameMenu.open = function() {
+playMenu.open = function() {
   isOpen = true;
 };
 
-gameMenu.close = function() {
+playMenu.close = function() {
   isOpen = false;
 };
 
@@ -141,7 +141,7 @@ function renderForm(action, settingsObj) {
   return m('form.form', {
     onsubmit: function(e) {
       e.preventDefault();
-      gameMenu.close();
+      playMenu.close();
       swapCard();
       action();
     }
@@ -156,10 +156,10 @@ function renderForm(action, settingsObj) {
   ]);
 }
 
-gameMenu.view = function(ctrl) {
+playMenu.view = function(ctrl) {
   var children = [
     m('div.overlay-close',
-      { config: utils.ontouchstart(gameMenu.close) },
+      { config: utils.ontouchstart(playMenu.close) },
     '+'),
     m('div.card.new-game', {
       class: newGameCardSwapped ? 'back_visible' : '',
@@ -192,4 +192,4 @@ gameMenu.view = function(ctrl) {
   }, children);
 };
 
-module.exports = gameMenu;
+module.exports = playMenu;

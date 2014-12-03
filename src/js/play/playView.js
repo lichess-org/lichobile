@@ -1,7 +1,7 @@
 var roundView = require('../round/view/main');
 var layout = require('../layout');
 var menu = require('../menu');
-var gameMenu = require('./gameMenu');
+var playMenu = require('./playMenu');
 var utils = require('../utils');
 
 module.exports = function(ctrl) {
@@ -11,7 +11,7 @@ module.exports = function(ctrl) {
         m('a.fa.fa-navicon', { config: utils.ontouchstart(menu.toggle) }),
         ctrl.round ? m('h1.playing', ctrl.round.title) : m('h1', 'lichess.org'),
         m('a.fa.fa-trophy', {
-          config: utils.ontouchstart(gameMenu.open)
+          config: utils.ontouchstart(playMenu.open)
         })
       ])
     ];
@@ -43,5 +43,5 @@ module.exports = function(ctrl) {
       return [m('section.player', [m('div.infos')])];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, utils.partial(gameMenu.view, ctrl));
+  return layout(ctrl, header, board, footer, menu.view, utils.partial(playMenu.view, ctrl));
 };

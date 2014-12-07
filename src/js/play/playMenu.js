@@ -65,6 +65,10 @@ function renderSelect(label, name, options, settingsProp, isDisabled) {
   ];
 }
 
+function tupleOf(x) {
+  return [x, x];
+}
+
 function renderForm(action, settingsObj) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
@@ -85,9 +89,8 @@ function renderForm(action, settingsObj) {
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', [
       renderSelect('Level:', 'ailevel', [
-        ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'],
-        ['6', '6'], ['7','7'], ['8','8']
-      ], settingsObj.level)
+        '1', '2', '3', '4', '5', '6', '7', '8'
+      ].map(tupleOf), settingsObj.level)
     ]));
   }
   if (settingsObj.mode) {
@@ -107,32 +110,30 @@ function renderForm(action, settingsObj) {
   ];
   if (settingsObj.time && settingsObj.increment && hasClock) {
     timeFieldset.push(
-      m('div.select_input.inline',[
+      m('div.select_input.inline', [
         renderSelect('Time:', 'time', [
-          ['5', '5'], ['10', '10'], ['30', '30']
-        ], settingsObj.time, false)
+          '5', '10', '30'
+        ].map(tupleOf), settingsObj.time, false)
       ]),
-      m('div.select_input.inline',[
+      m('div.select_input.inline', [
         renderSelect('Increment:', 'increment', [
-          ['0', '0'], ['1', '1'], ['3', '3']
-        ], settingsObj.increment, false)
+          '0', '1', '2', '3'
+        ].map(tupleOf), settingsObj.increment, false)
       ])
     );
   }
   if (settingsObj.timePreset && hasClock) {
-    timeFieldset.push(m('div.select_input',[
+    timeFieldset.push(m('div.select_input', [
       renderSelect('Time|increment:', 'timepreset', [
-        ['3|0', '3|0'], ['3|2', '3|2'], ['5|0', '5|0'], ['5|3', '5|3'],
-        ['10|0', '10|0'], ['30|0']
-      ], settingsObj.timePreset, false)
+        '3|0', '3|2', '5|0', '5|3', '10|0', '30|0'
+      ].map(tupleOf), settingsObj.timePreset, false)
     ]));
   }
   if (hasCorresp) {
-    timeFieldset.push(m('div.select_input',[
+    timeFieldset.push(m('div.select_input', [
       renderSelect('Days per turn:', 'days', [
-        ['1', '1'], ['2', '2'], ['3', '3'], ['5', '5'], ['7', '7'], ['10', '10'],
-        ['14', '14']
-      ], settingsObj.days, false)
+        '1', '2', '3', '5', '7', '10', '14'
+      ].map(tupleOf), settingsObj.days, false)
     ]));
   }
 

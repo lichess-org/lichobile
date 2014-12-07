@@ -4,6 +4,19 @@ var renderPromotion = require('./promotion').view;
 var utils = require('../utils');
 var i18n = require('../i18n');
 
+function ratingDiff(player) {
+  if (typeof player.ratingDiff === 'undefined') return null;
+  if (player.ratingDiff === 0) return m('span.rp.null', 0);
+  if (player.ratingDiff > 0) return m('span.rp.up', '+' + player.ratingDiff);
+  if (player.ratingDiff < 0) return m('span.rp.down', player.ratingDiff);
+}
+
+function renderUser(ctrl, player) {
+  return player.user ? (
+    (player.user.title ? player.user.title + ' ' : '') + player.user.username
+  ) : 'Anonymous';
+}
+
 function renderMaterial(ctrl, color) {
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data)[color];
   var children = [];
@@ -24,9 +37,12 @@ function renderMaterial(ctrl, color) {
 function renderAntagonist(ctrl, player) {
   return m('section.antagonist', [
     m('div.infos', [
-      m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish ', player.ai) : (player.user ? player.user.username : 'Anonymous')),
+      m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish', player.ai) : renderUser(ctrl, player)),
       m('div', [
-        player.user ? m('h3.rating', player.rating) : null,
+        player.user ? m('h3.rating', [
+          player.rating,
+          ratingDiff(player)
+        ]) : null,
         renderMaterial(ctrl, player.color)
       ])
     ]),

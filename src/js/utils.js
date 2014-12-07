@@ -3,19 +3,6 @@
 var utils = {};
 var chessground = require('chessground');
 
-utils.hasNetwork = function() {
-  if (window.cordova) {
-    var t = window.navigator.connection.type;
-    return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
-  }
-
-  return true;
-};
-
-utils.isHidden = function(el) {
-  return (el.offsetParent === null);
-};
-
 // softkeyboard
 var hiddenA = document.createElement('a');
 hiddenA.href = "#";

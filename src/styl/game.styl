@@ -4,10 +4,12 @@
   font-family gothambold
   .infos
     float left
-    h3
+    .rating
       font-size 10px
       color #C4A86F
       font-family gothamlight
+      display inline-block
+      vertical-align top
       margin-top 5px
   .clock
     position absolute
@@ -15,6 +17,29 @@
     min-width 90px
     right 20px
     font-size 30px
+  .material
+    display inline-block
+    .tomb
+      display inline-block
+      margin-left 8px
+      div
+        margin-left -6px
+        width 20px
+        height 20px
+        background-size cover
+        display inline-block
+      .pawn
+        background-image url(../../images/pieces/mono/P.svg)
+      .bishop
+        background-image url(../../images/pieces/mono/B.svg)
+      .knight
+        background-image url(../../images/pieces/mono/N.svg)
+      .rook
+        background-image url(../../images/pieces/mono/R.svg)
+      .queen
+        background-image url(../../images/pieces/mono/Q.svg)
+      .king
+        background-image url(../../images/pieces/mono/K.svg)
 
 .clock
   &.running

@@ -2,6 +2,7 @@ var chessground = require('chessground');
 var clock = require('./clock');
 var renderPromotion = require('./promotion').view;
 var utils = require('../utils');
+var i18n = require('../i18n');
 
 function renderMaterial(ctrl, color) {
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data)[color];
@@ -23,7 +24,7 @@ function renderMaterial(ctrl, color) {
 function renderAntagonist(ctrl, player) {
   return m('section.antagonist', [
     m('div.infos', [
-      m('h2', player.ai ? 'Stockfish level ' + player.ai : (player.user ? player.user.username : 'Anonymous')),
+      m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish ', player.ai) : (player.user ? player.user.username : 'Anonymous')),
       m('div', [
         player.user ? m('h3.rating', player.rating) : null,
         renderMaterial(ctrl, player.color)

@@ -20,41 +20,25 @@ function renderMaterial(ctrl, color) {
   return m('div.material', children);
 }
 
-function renderPlayer(ctrl) {
-  var player = ctrl.data.player;
-  return m('section.player', [
+function renderAntagonist(ctrl, player) {
+  return m('section.antagonist', [
     m('div.infos', [
-      m('h2', player.user ? player.user.username : 'You'),
-      m('div.under', [
+      m('h2', player.ai ? 'Stockfish level ' + player.ai : (player.user ? player.user.username : 'Anonymous')),
+      m('div', [
         player.user ? m('h3.rating', player.rating) : null,
         renderMaterial(ctrl, player.color)
       ])
     ]),
-    ctrl.clock ? clock.view(ctrl.clock, ctrl.data.player.color, ctrl.isClockRunning() ? player : null) : null
+    ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : null
   ]);
 }
 
+function renderPlayer(ctrl) {
+  return renderAntagonist(ctrl, ctrl.data.player);
+}
+
 function renderOpponent(ctrl) {
-
-  var opp = ctrl.data.opponent;
-
-  function renderOpponentInfo() {
-    if (opp.ai) return m('h2', 'Stockfish level ' + opp.ai);
-    else if (opp.user) return m('h2', opp.user.id), m('h3.rating', opp.rating);
-    else return m('h2', 'Anonymous');
-  }
-
-  var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
-  var children = [
-    m('div.infos', [
-      renderOpponentInfo(),
-      renderMaterial(ctrl, opp.color)
-    ])
-  ];
-  if (ctrl.clock)
-    children.push(clock.view(ctrl.clock, opp.color, clockRunningColor));
-
-  return m('section.opponent', children);
+  return renderAntagonist(ctrl, ctrl.data.opponent);
 }
 
 function renderBoard(ctrl) {

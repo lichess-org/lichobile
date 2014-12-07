@@ -44,20 +44,6 @@ function renderRadio(label, name, value, settingsProp) {
     m('label', { 'for': id }, label) ];
 }
 
-function renderCheckbox(label, name, settingsProp) {
-  var isOn = settingsProp();
-  return [
-    m('label', { 'for': name }, label),
-    m('input[type=checkbox]', {
-      name: name,
-      checked: isOn,
-      onchange: function() {
-        settingsProp(!isOn);
-      }
-    })
-  ];
-}
-
 function renderOption(label, value, storedValue) {
   return m('option', {
     value: value,

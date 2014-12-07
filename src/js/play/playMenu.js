@@ -112,12 +112,12 @@ function renderForm(action, settingsObj) {
     timeFieldset.push(
       m('div.select_input.inline', [
         renderSelect('Time:', 'time', [
-          '5', '10', '30'
+          '2', '5', '10', '30', '60'
         ].map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
         renderSelect('Increment:', 'increment', [
-          '0', '1', '2', '3'
+          '0', '1', '2', '3', '5', '10'
         ].map(tupleOf), settingsObj.increment, false)
       ])
     );

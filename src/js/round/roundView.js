@@ -3,10 +3,6 @@ var clock = require('./clock');
 var renderPromotion = require('./promotion').view;
 var utils = require('../utils');
 
-function oppositeColor(c) {
-  return c === 'white' ? 'black' : 'white';
-}
-
 function renderPlayer(ctrl){
   var clockRunningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   var player = ctrl.data.player;
@@ -33,7 +29,7 @@ function renderOpponent(ctrl){
     m('div.infos', renderOpponentInfo(ctrl))
   ];
   if (ctrl.clock)
-    children.push(clock.view(ctrl.clock, oppositeColor(ctrl.data.player.color), clockRunningColor));
+    children.push(clock.view(ctrl.clock, ctrl.data.opponent.color, clockRunningColor));
 
   return m('section.opponent', children);
 }

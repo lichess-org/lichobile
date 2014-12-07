@@ -152,139 +152,18 @@
         text-transform uppercase
         font-family gothambold
         line-height: 50px;
-      .select_form
-        background #333333
-        height 40px
-        line-height 40px
-        color #8A8A8A
-        padding 0 10px
-        font-size 12px
-        position relative
-        margin-top 15px
-        &.inline
-          display inline-block
-          width 48%
-          margin-right 2%
-      fieldset
-        select
-          background transparent
-          border none
-          width 100%
-          position absolute
-          left 0px
-          -webkit-appearance none
-          padding-left 80px
-          height 40px
-          line-height 40px
-          font-size 13px
-          color #fff
-        select[name=timepreset]
-          padding-left 120px
-        label[for=clock]
-          color #fff
-          display block
-          font-family gothamlight
-          height 40px
-          line-height 40px
-        .check_container
-          position: relative;
-          display: block;
-        &#clock
-          margin-top 15px
-          position relative
-          input[type='checkbox']
-            position absolute
-            display block
-            -webkit-appearance button
-            border none
-            width 70px
-            height 30px
-            border-radius 15px
-            background-color #333
-            cursor pointer
-            transition background-color 0.2s
-            top 0
-            right 0
-          input[type='checkbox']:checked
-            background #C4A86F
-          input[type='checkbox']:after
-            content ''
-            display block
-            position absolute
-            top 5px
-            left 5px
-            width 20px
-            height 20px
-            border-radius 50%
-            background #fff
-            transition: .5s all;
-          input[type='checkbox']:checked:after
-            left 40px
-
-
+      select[name=timepreset]
+        padding-left 120px
+      select[name=timeMode]
+        padding-left 95px
+      select[name=days]
+        padding-left 110px
       .nice-radio
-        display inline-block
-        clear both
-        width 50%
-        margin-top 10px
-
-        label
-          width 100%
-          background #333333
-          color #8E8E8E
-          height 40px
-
-        /* hide input */
-        input.radio:empty
-          display: none
-
-        /* style label */
-        input.radio:empty ~ label
-          position relative
-          float left
-          line-height 40px;
-          padding 0 20px
-          font-size 12px
-          cursor pointer
-          -webkit-user-select none
-          -moz-user-select none
-          -ms-user-select none
-          user-select none
-
         input.radio.computer:empty ~ label
           text-align right
           border-radius 0 25px 25px 0
-
         input.radio.human:empty ~ label
           border-radius 30px 0 0 30px
-
-        input.radio:empty ~ label:before, input.radio:empty ~ label:after
-          position absolute
-          display block
-          bottom 15px
-          left 0
-          content ''
-          text-align left
-          width 2.5em
-
         input.radio.human:empty ~ label:after
           left auto
           right 0
-
-        /* toggle on */
-        input.radio.computer:checked ~ label:before, input.radio.human:checked ~ label:after
-          display inline-block
-          font normal normal normal 14px/1 FontAwesome
-          padding-top 20px
-          font-size inherit
-          text-rendering auto
-          -webkit-font-smoothing antialiased
-          -moz-osx-font-smoothing grayscale
-          content: "\f00c"
-          text-indent .9em
-
-        input.radio:checked ~ label
-          background-color #C4A86F
-          color #fff
-          
-      

@@ -25,16 +25,18 @@ var settings = {
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       variant: localstorageprop('settings.game.ai.variant', '1'),
-      clock: localstorageprop('settings.game.ai.clock', true),
+      timeMode: localstorageprop('settings.game.ai.clock', '1'),
       time: localstorageprop('settings.game.ai.time', '10'),
       increment: localstorageprop('settings.game.ai.increment', '0'),
+      days: localstorageprop('settings.game.ai.days', '2'),
       level: localstorageprop('settings.game.ai.aiLevel', '3')
     },
     human: {
       color: localstorageprop('settings.game.human.color', 'random'),
       variant: localstorageprop('settings.game.human.variant', '1'),
-      clock: localstorageprop('settings.game.human.clock', true),
+      timeMode: localstorageprop('settings.game.human.clock', '1'),
       timePreset: localstorageprop('settings.game.human.timePreset', '5|0'),
+      days: localstorageprop('settings.game.human.days', '2'),
       mode: localstorageprop('settings.game.human.mode', '0')
     }
   }

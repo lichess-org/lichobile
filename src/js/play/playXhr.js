@@ -11,7 +11,8 @@ function aiGame() {
     config: utils.xhrConfig,
     data: {
       variant: config.variant(),
-      clock: config.clock(),
+      timeMode: config.timeMode(),
+      days: config.days(),
       time: config.time(),
       increment: config.increment(),
       level: config.level(),
@@ -29,7 +30,8 @@ function seekHuman() {
     config: utils.xhrConfig,
     data: {
       variant: config.variant(),
-      clock: config.clock(),
+      timeMode: config.timeMode(),
+      days: config.days(),
       time: preset[0],
       increment: preset[1],
       color: config.color(),

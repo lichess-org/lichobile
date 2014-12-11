@@ -10,7 +10,7 @@ module.exports = function(ctrl) {
       m('nav', [
         m('a.fa.fa-navicon', { config: utils.ontouchstart(menu.toggle) }),
         ctrl.round ? m('h1.playing', ctrl.round.title) : m('h1', 'lichess.org'),
-        m('a.fa.fa-trophy', {
+        m('a.fa.fa-star', {
           config: utils.ontouchstart(playMenu.open)
         })
       ])

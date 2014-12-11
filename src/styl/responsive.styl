@@ -1,10 +1,24 @@
-// targets iphone 4
+// targets small devices like iphone 4
 @media only screen and (max-device-height 480px)
   main
     header
+      max-height 65px
+      h2
+        font-size 0.8em
       nav
         a
           padding 10px 20px
+      .antagonist
+        .clock
+          font-size 20px
+        .material
+          display none
     footer
+      height 100%
       section
+        &.antagonist
+          height 50px
         padding-top 10px
+
+  #game_actions
+    padding 0

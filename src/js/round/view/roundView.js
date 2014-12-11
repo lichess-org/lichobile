@@ -1,9 +1,9 @@
 var chessground = require('chessground');
-var clock = require('./clock');
-var renderPromotion = require('./promotion').view;
-var utils = require('../utils');
-var i18n = require('../i18n');
-var replayView = require('./replay/replayView');
+var clock = require('../clock');
+var renderPromotion = require('../promotion').view;
+var utils = require('../../utils');
+var i18n = require('../../i18n');
+var replayView = require('../replay/replayView');
 
 function ratingDiff(player) {
   if (typeof player.ratingDiff === 'undefined') return null;
@@ -51,10 +51,14 @@ function renderAntagonist(ctrl, player) {
   ]);
 }
 
+function renderPlayerActions() {
+  return m('button.game_action[data-icon=O]');
+}
+
 function renderGameActions(ctrl) {
   var actions = [
-    m('div.game_action[data-icon=O]'),
-    m('div.game_action[data-icon=c].disabled')
+    renderPlayerActions(ctrl),
+    m('button.game_action[data-icon=c].disabled')
   ];
   actions.push(replayView.renderButtons(ctrl.replay));
 

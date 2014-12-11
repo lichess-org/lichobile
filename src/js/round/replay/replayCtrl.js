@@ -9,16 +9,11 @@ module.exports = function(root) {
   this.broken = false;
   this.ply = 0;
 
-  this.vm = {
-    late: false,
-    hash: ''
-  };
-
   var situationCache = {};
 
   var showFen = function() {
     try {
-      var ply, move, cached, fen, hash, h, lm;
+      var ply, move, cached, fen, lm, h = '', hash = '';
       for (ply = 1; ply <= this.ply; ply++) {
         move = root.data.game.moves[ply - 1];
         h += move;
@@ -30,7 +25,7 @@ module.exports = function(root) {
       if (!cached || ply < this.ply) {
         var chess = new Chess(
           fen || root.data.game.initialFen,
-          root.data.game.variant.key == 'chess960' ? 1 : 0
+          root.data.game.variant.key === 'chess960' ? 1 : 0
         );
         for (ply = ply; ply <= this.ply; ply++) {
           move = root.data.game.moves[ply - 1];
@@ -56,7 +51,6 @@ module.exports = function(root) {
   }.bind(this);
 
   var disable = function() {
-    this.vm.late = false;
     root.chessground.set({
       movable: {
         color: round.isPlayerPlaying(root.data) ? root.data.player.color : null,
@@ -74,23 +68,11 @@ module.exports = function(root) {
 
   this.jump = function(ply) {
     if (this.broken) return;
-    if (this.ply == ply || ply < 1 || ply > root.data.game.moves.length) return;
-    this.active = ply != root.data.game.moves.length;
+    if (this.ply === ply || ply < 1 || ply > root.data.game.moves.length) return;
+    this.active = ply !== root.data.game.moves.length;
     this.ply = ply;
     if (this.active) enable();
     else disable();
     showFen();
   }.bind(this);
-
-  this.onReload = function(cfg) {
-    if (this.active && cfg.game.moves.join() != root.data.game.moves.join()) this.active = false;
-    this.vm.hash = null;
-  }.bind(this);
-
-  this.enabledByPref = function() {
-    var d = root.data;
-    return d.pref.replay === 2 || (
-      d.pref.replay === 1 && (d.game.speed === 'classical' || d.game.speed === 'unlimited')
-    );
-  }.bind(this);
-}
+};

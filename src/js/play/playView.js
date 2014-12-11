@@ -17,7 +17,7 @@ module.exports = function(ctrl) {
     ];
 
     if (ctrl.playing())
-      children.push(roundView.renderOpponent(ctrl.round));
+      children.push(roundView.renderHeader(ctrl.round));
     else {
       children.push(
         m('section.opponent', [
@@ -37,10 +37,8 @@ module.exports = function(ctrl) {
   }
 
   function footer() {
-    if (ctrl.playing())
-      return [roundView.renderPlayer(ctrl.round)];
-    else
-      return [m('section.player', [m('div.infos')])];
+    if (ctrl.playing()) return [roundView.renderFooter(ctrl.round)];
+    else return [m('section.player', [m('div.infos')])];
   }
 
   return layout(ctrl, header, board, footer, menu.view, utils.partial(playMenu.view, ctrl));

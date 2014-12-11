@@ -3,6 +3,7 @@ var clock = require('./clock');
 var renderPromotion = require('./promotion').view;
 var utils = require('../utils');
 var i18n = require('../i18n');
+var replayView = require('./replay/replayView');
 
 function ratingDiff(player) {
   if (typeof player.ratingDiff === 'undefined') return null;
@@ -50,11 +51,26 @@ function renderAntagonist(ctrl, player) {
   ]);
 }
 
-function renderPlayer(ctrl) {
-  return renderAntagonist(ctrl, ctrl.data.player);
+function renderGameActions(ctrl) {
+  var actions = [
+    m('div.game_action[data-icon=O]'),
+    m('div.game_action[data-icon=c].disabled')
+  ];
+  actions.push(replayView.renderButtons(ctrl.replay));
+
+  return m('section#game_actions', [
+    m('div', actions)
+  ]);
 }
 
-function renderOpponent(ctrl) {
+function renderFooter(ctrl) {
+  return [
+    renderAntagonist(ctrl, ctrl.data.player),
+    renderGameActions(ctrl)
+  ];
+}
+
+function renderHeader(ctrl) {
   return renderAntagonist(ctrl, ctrl.data.opponent);
 }
 
@@ -71,6 +87,6 @@ function renderBoard(ctrl) {
 
 module.exports = {
   renderBoard: renderBoard,
-  renderPlayer: renderPlayer,
-  renderOpponent: renderOpponent
+  renderFooter: renderFooter,
+  renderHeader: renderHeader
 };

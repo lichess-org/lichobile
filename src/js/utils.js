@@ -75,4 +75,12 @@ utils.viewOnlyBoard = function(fen) {
   ]);
 };
 
+utils.classSet = function(classes) {
+  var arr = [];
+  for (var i in classes) {
+    if (classes[i]) arr.push(i);
+  }
+  return arr.join(' ');
+};
+
 module.exports = utils;

@@ -69,7 +69,7 @@ utils.getViewportDims = function() {
 };
 
 utils.viewOnlyBoard = function(fen) {
-  var ctrl = new chessground.controller({viewOnly: true, coordinates: false});
+  var ctrl = new chessground.controller({viewOnly: true, minimalDom: true, coordinates: false});
   return m('div.board.grey.merida', [
     chessground.view(ctrl)
   ]);

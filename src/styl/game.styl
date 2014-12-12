@@ -1,9 +1,12 @@
 #all-games
   height 100%
-  width 300%
+  width 272.5vw
+  position relative
+  left 7.5vw
 
-.card
-  background red
+#wrapper-games
+  width 100%
+  height 100%
 
 .antagonist
   overflow auto
@@ -121,29 +124,17 @@
       width 100%
       height 100%
       .infos
-        text-align center
-        color #fff;
         background #383838
-        text-transform uppercase
         h2
-          padding-top 35px
-          font-size 16px
-          font-family gothambold
-        p
-          padding-bottom 30px
-          font-size 11px
-          color #A9A9A9
-          padding-top 5px
-          font-family gothamlight
-        button
-          width 100%
-          background #2A2A2A
-          height 50px
-          border none
           color #fff
-          font-family gothambold
-          font-size 12px
-          text-transform uppercase
+        p
+          color #a9a9a9
+        button
+          background #2A2A2A
+          color #fff
+          border none
+
+      
     .back
       background: #2A2A2A;
       position absolute
@@ -215,3 +206,60 @@
   height 50px
   border-right 1px solid #EBEBEB
   width 25%
+
+.card
+  background white
+  position relative
+  width 80vw
+  height 75%
+  top 13%
+  margin 2.5vw
+  float left
+  z-index 9999
+  .infos
+    text-align center
+    color #fff;
+    text-transform uppercase
+    position relative
+    .icon-game
+      background #EFE1C7
+      border solid 2px #fff
+      display block
+      height 45px
+      width 45px
+      position absolute
+      top -22px
+      left 0
+      right 0
+      margin 0 auto
+      border-radius 50%;
+      -moz-box-shadow:  inset  0px 0px 3px 0px #96762F;
+      -webkit-box-shadow: inset 0px 0px 3px 0px #96762F;
+      box-shadow: inset 0px 0px 3px 0px #96762F;
+      &.standard
+        background-image url(../../images/standard2.gif)
+        background-size cover
+      &.chess960
+        background-image url(../../images/chess960.gif)
+        background-size cover
+    h2
+      padding-top 35px
+      font-size 16px
+      font-family gothambold
+      color #383838
+    p
+      padding-bottom 30px
+      font-size 11px
+      color #C4A86F
+      padding-top 5px
+      font-family gothamlight
+    button
+      width 100%
+      height 50px
+      border none
+      color #C4A86F
+      background #fff
+      font-family gothambold
+      font-size 12px
+      text-transform uppercase
+      border-top solid 1px #EBEBEB

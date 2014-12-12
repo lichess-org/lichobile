@@ -20,7 +20,8 @@ module.exports = function(cfg, router, socketSend) {
   this.vm = {
     flip: false,
     reloading: false,
-    redirecting: false
+    redirecting: false,
+    showingActions: false
   };
 
   this.socket = new socket(socketSend, this);

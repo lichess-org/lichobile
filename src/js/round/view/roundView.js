@@ -3,6 +3,7 @@ var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../utils');
 var i18n = require('../../i18n');
+var buttons = require('./buttons');
 var replayView = require('../replay/replayView');
 
 function ratingDiff(player) {
@@ -51,16 +52,32 @@ function renderAntagonist(ctrl, player) {
   ]);
 }
 
-function renderPlayerActions() {
-  return m('button.game_action[data-icon=O]');
+function renderPlayerActions(ctrl) {
+  return m('div.overlay', {
+    class: utils.classSet({
+      hide: !ctrl.vm.showingActions
+    })
+  }, [
+    m('div.overlay-close',
+      { config: utils.ontouchstart(function() { ctrl.vm.showingActions = false; }) },
+    '+'),
+    m('div#player_controls', [
+      m('button', 'Resign'),
+      m('button', 'Draw'),
+      m('button', 'Takeback')
+    ])
+  ]);
 }
 
 function renderGameActions(ctrl) {
   var actions = [
-    renderPlayerActions(ctrl),
-    m('button.game_action[data-icon=c].disabled')
+    m('button.game_action[data-icon=O]', {
+      config: utils.ontouchstart(function() { ctrl.vm.showingActions = true; })
+    }),
+    m('button.game_action[data-icon=c].disabled'),
+    replayView.renderButtons(ctrl.replay),
+    renderPlayerActions(ctrl)
   ];
-  actions.push(replayView.renderButtons(ctrl.replay));
 
   return m('section#game_actions', [
     m('div', actions)

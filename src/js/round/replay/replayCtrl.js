@@ -66,6 +66,10 @@ module.exports = function(root) {
     xhr.reload(root).then(root.reload);
   }.bind(this);
 
+  this.onReload = function(cfg) {
+    if (this.active && cfg.game.moves.join() !== root.data.game.moves.join()) this.active = false;
+  }.bind(this);
+
   this.jump = function(ply) {
     if (this.broken) return;
     if (this.ply === ply || ply < 1 || ply > root.data.game.moves.length) return;

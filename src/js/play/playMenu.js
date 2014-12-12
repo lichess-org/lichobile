@@ -41,7 +41,7 @@ function renderRadio(label, name, value, settingsProp) {
         settingsProp(e.target.value);
       }
     }),
-    m('label', { 'for': id }, label) ];
+  m('label', { 'for': id }, label) ];
 }
 
 function renderOption(label, value, storedValue) {
@@ -90,7 +90,7 @@ function renderForm(action, settingsObj) {
     generalFieldset.push(m('div.select_input', [
       renderSelect('Level:', 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
-      ].map(tupleOf), settingsObj.level)
+        ].map(tupleOf), settingsObj.level)
     ]));
   }
   if (settingsObj.mode) {
@@ -113,12 +113,12 @@ function renderForm(action, settingsObj) {
       m('div.select_input.inline', [
         renderSelect('Time:', 'time', [
           '2', '5', '10', '30', '60'
-        ].map(tupleOf), settingsObj.time, false)
+          ].map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
         renderSelect('Increment:', 'increment', [
           '0', '1', '2', '3', '5', '10'
-        ].map(tupleOf), settingsObj.increment, false)
+          ].map(tupleOf), settingsObj.increment, false)
       ])
     );
   }
@@ -126,14 +126,14 @@ function renderForm(action, settingsObj) {
     timeFieldset.push(m('div.select_input', [
       renderSelect('Time|increment:', 'timepreset', [
         '3|0', '3|2', '5|0', '5|3', '10|0', '30|0'
-      ].map(tupleOf), settingsObj.timePreset, false)
+        ].map(tupleOf), settingsObj.timePreset, false)
     ]));
   }
   if (hasCorresp) {
     timeFieldset.push(m('div.select_input', [
       renderSelect('Days per turn:', 'days', [
         '1', '2', '3', '5', '7', '10', '14'
-      ].map(tupleOf), settingsObj.days, false)
+        ].map(tupleOf), settingsObj.days, false)
     ]));
   }
 
@@ -160,29 +160,35 @@ playMenu.view = function(ctrl) {
     m('div.overlay-close',
       { config: utils.ontouchstart(playMenu.close) },
     '+'),
-    m('div.card.new-game', {
-      class: newGameCardSwapped ? 'back_visible' : '',
-      style: { height: cardHeight() + 'px' }
-    }, [
-      m('div.container_flip', [
-        m('div.front', [
-          m('div', { style: { height: boardHeight() + 'px' }}, [
-            utils.viewOnlyBoard()
-          ]),
-          m('div.infos',[
-            m('div.description',[
-              m('h2.title', 'New Game'),
-              m('p', 'Lancer une nouvelle partie'),
-              m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+    m('div#all-games', [
+      m('div.card-container', [
+        m('div.card.new-game', {
+          class: newGameCardSwapped ? 'back_visible' : '',
+          style: { height: cardHeight() + 'px' }
+        }, [
+          m('div.container_flip', [
+            m('div.front', [
+              m('div', { style: { height: boardHeight() + 'px' }}, [
+                utils.viewOnlyBoard()
+              ]),
+              m('div.infos',[
+                m('div.description',[
+                  m('h2.title', 'New Game'),
+                  m('p', 'Lancer une nouvelle partie'),
+                  m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+                ])
+              ])
+            ]),
+            m('div.back', [
+              settings.newGame.selected() === 'human' ?
+              renderForm(ctrl.seekHumanGame, settings.newGame.human) :
+              renderForm(ctrl.startAIGame, settings.newGame.ai)
             ])
           ])
-        ]),
-        m('div.back', [
-          settings.newGame.selected() === 'human' ?
-            renderForm(ctrl.seekHumanGame, settings.newGame.human) :
-            renderForm(ctrl.startAIGame, settings.newGame.ai)
         ])
-      ])
+      ]),
+      m('div.card-container', [ m('div.card') ] ),
+      m('div.card-container', [ m('div.card') ] )
     ])
   ];
 

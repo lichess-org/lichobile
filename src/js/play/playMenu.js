@@ -168,7 +168,10 @@ playMenu.view = function(ctrl) {
           scrollY: false,
           momentum: false,
           snap: '.card',
-          snapSpeed: 400
+          snapSpeed: 400,
+          preventDefaultException: {
+            tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+          }
         });
 
         context.onunload = function() {

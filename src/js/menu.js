@@ -14,7 +14,7 @@ menu.view = function() {
   var nav = userobj ? [
     m('h2', userobj.username),
     m('button', {
-      config: utils.ontouchstart(function() {
+      config: utils.ontouchend(function() {
         session.logout();
       })
     }, 'Log out')

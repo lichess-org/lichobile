@@ -59,7 +59,7 @@ function renderPlayerActions(ctrl) {
     })
   }, [
     m('div.overlay-close',
-      { config: utils.ontouchstart(function() { ctrl.vm.showingActions = false; }) },
+      { config: utils.ontouchend(function() { ctrl.vm.showingActions = false; }) },
     '+'),
     m('div#player_controls', [
       m('button', 'Resign'),
@@ -72,7 +72,7 @@ function renderPlayerActions(ctrl) {
 function renderGameActions(ctrl) {
   var actions = [
     m('button.game_action[data-icon=O]', {
-      config: utils.ontouchstart(function() { ctrl.vm.showingActions = true; })
+      config: utils.ontouchend(function() { ctrl.vm.showingActions = true; })
     }),
     m('button.game_action[data-icon=c].disabled'),
     replayView.renderButtons(ctrl.replay),

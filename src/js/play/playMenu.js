@@ -159,18 +159,24 @@ function renderForm(action, settingsObj) {
 playMenu.view = function(ctrl) {
   var children = [
     m('div.overlay-close',
-      { config: utils.ontouchstart(playMenu.close) },
+      { config: utils.ontouchend(playMenu.close) },
     '+'),
     m('div#wrapper-games',{
-      config:function(el) {
-        var myScroll = new iScroll(el, {
+      config:function(el, isUpdate, context) {
+        var scroller = new iScroll(el, {
           scrollX: true,
-          scrollY:false,
-          momentum:false,
-          snap:'.card',
-          snapSpeed:400,
-          keyBindings:true
+          scrollY: false,
+          momentum: false,
+          snap: '.card',
+          snapSpeed: 400
         });
+
+        context.onunload = function() {
+          if (scroller) {
+            scroller.destroy();
+            scroller = null;
+          }
+        };
       }
 
     },[
@@ -188,7 +194,7 @@ playMenu.view = function(ctrl) {
                 m('div.description',[
                   m('h2.title', 'New Game'),
                   m('p', 'Lancer une nouvelle partie'),
-                  m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+                  m('button', { config: utils.ontouchendScroll(swapCard) }, '+ Nouvelle partie')
                 ])
               ])
             ]),
@@ -209,7 +215,7 @@ playMenu.view = function(ctrl) {
               m('div.description',[
                 m('h2.title', 'New Game'),
                 m('p', 'Lancer une nouvelle partie'),
-                m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+                m('button', {}, 'Rejoindre')
               ])
           ])
         ]),
@@ -223,7 +229,7 @@ playMenu.view = function(ctrl) {
               m('div.description',[
                 m('h2.title', 'New Game'),
                 m('p', 'Lancer une nouvelle partie'),
-                m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+                m('button', {}, 'Rejoindre')
               ])
           ])
         ])

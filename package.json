@@ -39,6 +39,7 @@
     "chessground": "1.8.0",
     "chessli.js": "0.2.4",
     "lodash-node": "^2.4.1",
-    "mithril": "0.1.24"
+    "mithril": "0.1.24",
+    "mobile-button": "file:../mobile-button"
   }
 }

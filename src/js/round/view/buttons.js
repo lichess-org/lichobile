@@ -8,7 +8,7 @@ module.exports = {
     return condition(ctrl.data) ? m('button', {
       class: 'button hint--bottom ' + socketMsg,
       'data-hint': ctrl.trans(hint),
-      config: utils.ontouchstart(utils.partial(ctrl.socket.send, socketMsg, null))
+      config: utils.ontouchend(utils.partial(ctrl.socket.send, socketMsg, null))
     }, m('span[data-icon=' + icon + ']')) : null;
   },
   forceResign: function(ctrl) {
@@ -17,10 +17,10 @@ module.exports = {
         ctrl.trans('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
         m('br'),
         m('a.button', {
-          config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'resign-force', null)),
+          config: utils.ontouchend(utils.partial(ctrl.socket.send, 'resign-force', null)),
         }, ctrl.trans('forceResignation')),
         m('a.button', {
-          config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'draw-force', null)),
+          config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-force', null)),
         }, ctrl.trans('forceDraw'))
       ]);
   },
@@ -29,7 +29,7 @@ module.exports = {
       ctrl.trans('threefoldRepetition'),
       m.trust('&nbsp;'),
       m('a.button', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'draw-claim', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-claim', null))
       }, ctrl.trans('claimADraw'))
     ]);
   },
@@ -37,7 +37,7 @@ module.exports = {
     if (ctrl.data.player.offeringDraw) return m('div.negotiation', [
       ctrl.trans('drawOfferSent') + ' ',
       m('a', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'draw-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-no', null))
       }, ctrl.trans('cancel'))
     ]);
   },
@@ -46,11 +46,11 @@ module.exports = {
       ctrl.trans('yourOpponentOffersADraw'),
       m('br'),
       m('a.button[data-icon=E]', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'draw-yes', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-yes', null))
       }, ctrl.trans('accept')),
       m.trust('&nbsp;'),
       m('a.button[data-icon=L]', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'draw-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-no', null))
       }, ctrl.trans('decline')),
     ]);
   },
@@ -58,7 +58,7 @@ module.exports = {
     if (ctrl.data.player.proposingTakeback) return m('div.negotiation', [
       ctrl.trans('takebackPropositionSent') + ' ',
       m('a', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'takeback-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-no', null))
       }, ctrl.trans('cancel'))
     ]);
   },
@@ -67,11 +67,11 @@ module.exports = {
       ctrl.trans('yourOpponentProposesATakeback'),
       m('br'),
       m('a.button[data-icon=E]', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'takeback-yes', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-yes', null))
       }, ctrl.trans('accept')),
       m.trust('&nbsp;'),
       m('a.button[data-icon=L]', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'takeback-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-no', null))
       }, ctrl.trans('decline')),
     ]);
   },
@@ -80,7 +80,7 @@ module.exports = {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('a.button.hint--bottom', {
           'data-hint': ctrl.trans('playWithTheSameOpponentAgain'),
-          config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'rematch-yes', null))
+          config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
         }, ctrl.trans('rematch'));
       } else {
         return m('a.button.disabled', ctrl.trans('rematch'));
@@ -93,10 +93,10 @@ module.exports = {
       ctrl.trans('yourOpponentWantsToPlayANewGameWithYou'),
       m('a.glowing.button.fat.hint--bottom', {
         'data-hint': ctrl.trans('playWithTheSameOpponentAgain'),
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'rematch-yes', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
       }, ctrl.trans('joinTheGame')),
       m('a.declineInvitation.button', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'rematch-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null))
       }, ctrl.trans('declineInvitation'))
     ];
   },
@@ -106,7 +106,7 @@ module.exports = {
       m('br'),
       ctrl.trans('waitingForOpponent'),
       m('a.button', {
-        config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'rematch-no', null))
+        config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null))
       }, ctrl.trans('cancelRematchOffer'))
     ];
   },
@@ -137,12 +137,12 @@ module.exports = {
   moretime: function(ctrl) {
     if (round.moretimeable(ctrl.data)) return m('a.moretime.hint--bottom-left', {
       'data-hint': ctrl.trans('giveNbSeconds', ctrl.data.clock.moretime),
-      config: utils.ontouchstart(throttle(utils.partial(ctrl.socket.send, 'moretime', null), 600))
+      config: utils.ontouchend(throttle(utils.partial(ctrl.socket.send, 'moretime', null), 600))
     }, m('span[data-icon=O]'));
   },
   analysis: function(ctrl) {
     if (round.replayable(ctrl.data)) return m('a.button.replay_and_analyse', {
-      config: utils.ontouchstart(utils.partial(ctrl.socket.send, 'rematch-no', null)),
+      config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null)),
       href: ctrl.router.Round.watcher(ctrl.data.game.id, ctrl.data.player.color).url
     }, ctrl.trans('analysis'));
   }

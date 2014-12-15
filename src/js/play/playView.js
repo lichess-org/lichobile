@@ -8,10 +8,10 @@ module.exports = function(ctrl) {
   function header() {
     var children = [
       m('nav', [
-        m('a.fa.fa-navicon', { config: utils.ontouchstart(menu.toggle) }),
+        m('a.fa.fa-navicon', { config: utils.ontouchend(menu.toggle) }),
         ctrl.round ? m('h1.playing', ctrl.round.title) : m('h1', 'lichess.org'),
         m('a.fa.fa-star', {
-          config: utils.ontouchstart(playMenu.open)
+          config: utils.ontouchend(playMenu.open)
         })
       ])
     ];

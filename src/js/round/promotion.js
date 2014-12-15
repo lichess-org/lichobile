@@ -39,11 +39,11 @@ module.exports = {
 
   view: function(ctrl) {
     return promoting ? m('div.overlay', [m('div#promotion_choice', {
-      config: utils.ontouchstart(partial(cancel, ctrl)),
+      config: utils.ontouchend(partial(cancel, ctrl)),
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchstart(function(e) {
+        config: utils.ontouchend(function(e) {
           e.stopPropagation();
           finish(ctrl, role);
         })

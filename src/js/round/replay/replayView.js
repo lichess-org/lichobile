@@ -4,7 +4,7 @@ function renderBackwardButton(ctrl, curPly) {
   var prevPly = curPly - 1;
   var enabled = curPly !== prevPly && prevPly >= 1;
   return m('button.game_action[data-icon=I]', {
-    config: utils.ontouchstart(function() {
+    config: utils.ontouchend(function() {
       var ply = ctrl.active ? ctrl.ply : ctrl.root.data.game.moves.length;
       ctrl.jump(ply - 1);
     }),
@@ -18,7 +18,7 @@ function renderForwardButton(ctrl, curPly, nbMoves) {
   var nextPly = curPly + 1;
   var enabled = curPly !== nextPly && nextPly <= nbMoves;
   return m('button.game_action[data-icon=H]', {
-    config: utils.ontouchstart(function() {
+    config: utils.ontouchend(function() {
       var ply = ctrl.active ? ctrl.ply : ctrl.root.data.game.moves.length;
       ctrl.jump(ply + 1);
     }),

@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = {};
+var mButton = require('mobile-button');
 var chessground = require('chessground');
 
 // softkeyboard
@@ -45,20 +46,34 @@ utils.partial = function() {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
 };
 
-// convenience function to bind an handler on touchstart with mithril
-utils.ontouchstart = function(handler) {
+// convenience function to bind a button handler with mithril
+utils.mbind = function(scrollable, handler) {
   return function(el, isUpdate, context) {
-    if (!isUpdate) el.addEventListener('touchstart', function(e) {
-      m.startComputation();
-      handler(e);
-      m.endComputation();
-    });
+    if (!isUpdate) {
+      var options = {
+        el: el,
+        f: function(e) {
+          m.startComputation();
+          handler(e);
+          m.endComputation();
+        },
+        monotouchable: true,
+        setActiveCls: false
+      };
+      if (scrollable) options.tolerance = 5;
+      var constr = scrollable ? mButton.ScrollableX.Touchend : mButton.Touchend;
+      var button = new constr(options);
+    }
 
     context.onunload = function() {
-      el.removeEventListener('touchstart', handler);
+      if (button) button.unbind();
     };
   };
 };
+
+utils.ontouchend = utils.partial(utils.mbind, false);
+utils.ontouchendScroll = utils.partial(utils.mbind, true);
+
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

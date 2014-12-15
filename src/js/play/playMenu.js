@@ -1,6 +1,6 @@
 var utils = require('../utils');
 var settings = require('../settings');
-var iScroll = require('iscroll')
+var iScroll = require('iscroll');
 var playMenu = {};
 
 var isOpen = false;
@@ -138,7 +138,7 @@ function renderForm(action, settingsObj) {
     ]));
   }
 
-  return m('form.form', {
+  return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
       playMenu.close();
@@ -162,42 +162,42 @@ playMenu.view = function(ctrl) {
       { config: utils.ontouchstart(playMenu.close) },
     '+'),
     m('div#wrapper-games',{
-        config:function(el,isItitialized){
-          var myScroll = new iScroll(el,{
-            scrollX: true,
-            scrollY:false,
-            momentum:false,
-            snap:'.card',
-            snapSpeed:400,
-            keyBindings:true
-          })
-        }
+      config:function(el) {
+        var myScroll = new iScroll(el, {
+          scrollX: true,
+          scrollY:false,
+          momentum:false,
+          snap:'.card',
+          snapSpeed:400,
+          keyBindings:true
+        });
+      }
 
-      },[
+    },[
       m('div#all-games',[
-          m('div.card.new-game', {
-            class: newGameCardSwapped ? 'back_visible' : '',
-            style: { height: cardHeight() + 'px' }
-          }, [
-            m('div.container_flip', [
-              m('div.front', [
-                m('div', { style: { height: boardHeight() + 'px' }}, [
-                  utils.viewOnlyBoard()
-                ]),
-                m('div.infos',[
-                  m('div.description',[
-                    m('h2.title', 'New Game'),
-                    m('p', 'Lancer une nouvelle partie'),
-                    m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
-                  ])
-                ])
+        m('div.card.new-game', {
+          class: newGameCardSwapped ? 'back_visible' : '',
+          style: { height: cardHeight() + 'px' }
+        }, [
+          m('div.container_flip', [
+            m('div.front', [
+              m('div', { style: { height: boardHeight() + 'px' }}, [
+                utils.viewOnlyBoard()
               ]),
-              m('div.back', [
-                settings.newGame.selected() === 'human' ?
-                renderForm(ctrl.seekHumanGame, settings.newGame.human) :
-                renderForm(ctrl.startAIGame, settings.newGame.ai)
+              m('div.infos',[
+                m('div.description',[
+                  m('h2.title', 'New Game'),
+                  m('p', 'Lancer une nouvelle partie'),
+                  m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
+                ])
               ])
+            ]),
+            m('div.back', [
+              settings.newGame.selected() === 'human' ?
+              renderForm(ctrl.seekHumanGame, settings.newGame.human) :
+              renderForm(ctrl.startAIGame, settings.newGame.ai)
             ])
+          ])
         ]),
         m('div.card.standard',[
           m('div', { style: { height: boardHeight() + 'px' }}, [
@@ -206,7 +206,7 @@ playMenu.view = function(ctrl) {
           m('div.infos',[
             m('div.icon-game.standard',[
               ]),
-            m('div.description',[
+              m('div.description',[
                 m('h2.title', 'New Game'),
                 m('p', 'Lancer une nouvelle partie'),
                 m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')
@@ -220,7 +220,7 @@ playMenu.view = function(ctrl) {
           m('div.infos',[
             m('div.icon-game.chess960',[
               ]),
-            m('div.description',[
+              m('div.description',[
                 m('h2.title', 'New Game'),
                 m('p', 'Lancer une nouvelle partie'),
                 m('button', { config: utils.ontouchstart(swapCard) }, '+ Nouvelle partie')

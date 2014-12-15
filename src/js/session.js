@@ -7,6 +7,7 @@ function isConnected() {
 }
 
 function get() {
+  console.log(session);
   return session;
 }
 

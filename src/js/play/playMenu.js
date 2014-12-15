@@ -1,6 +1,7 @@
 var utils = require('../utils');
 var settings = require('../settings');
 var iScroll = require('iscroll');
+var session = require('../session');
 var playMenu = {};
 
 var isOpen = false;
@@ -19,13 +20,16 @@ function swapCard() {
 }
 
 // see game.styl for dimensions
-function boardHeight() {
-  return utils.getViewportDims().vw * 80 / 100;
-}
-
-// see game.styl for dimensions
-function cardHeight() {
-  return boardHeight() + 144;
+function cardDims() {
+  var vp = utils.getViewportDims();
+  var width = vp.vw * 85 / 100;
+  var padding = vp.vw * 2.5 / 100;
+  return {
+    w: width + padding * 2,
+    h: width + 144,
+    paddingLeft: padding,
+    paddingRight: padding
+  };
 }
 
 function renderRadio(label, name, value, settingsProp) {
@@ -42,7 +46,8 @@ function renderRadio(label, name, value, settingsProp) {
         settingsProp(e.target.value);
       }
     }),
-  m('label', { 'for': id }, label) ];
+    m('label', { 'for': id }, label)
+  ];
 }
 
 function renderOption(label, value, storedValue) {
@@ -156,12 +161,77 @@ function renderForm(action, settingsObj) {
   ]);
 }
 
+function renderAllGames(ctrl) {
+  var nowPlaying = session.isConnected() ? session.get().nowPlaying : [];
+  var cardStyle = {
+    width: cardDims().w + 'px',
+    height: cardDims().h + 'px',
+    paddingLeft: cardDims().paddingLeft + 'px',
+    paddingRight: cardDims().paddingRight + 'px'
+  };
+  var nbCards = nowPlaying.length + 1;
+  var wrapperWidth = ((cardDims().w + cardDims().paddingLeft + cardDims().paddingRight) * nbCards) + cardDims().paddingLeft + cardDims().paddingRight;
+
+  var allGames = nowPlaying.map(function(g) {
+    return m('div.card.standard', {
+      style: cardStyle
+    }, [
+      m('div', { style: { height: cardDims().w + 'px' }}, [
+        utils.viewOnlyBoard()
+      ]),
+      m('div.infos',[
+        m('div.description',[
+          m('h2.title', 'Standard'),
+          m('p', 'Contre ' + g.opponent.username),
+          m('button', {
+            config: utils.ontouchendScroll(utils.partial(ctrl.resumeGame, g.id))
+          }, 'Rejoindre')
+        ])
+      ])
+    ]);
+  });
+
+  var newGame = m('div.card.new-game', {
+    class: newGameCardSwapped ? 'back_visible' : '',
+    style: cardStyle,
+  }, [
+    m('div.container_flip', [
+      m('div.front', [
+        m('div', { style: { height: cardDims().w + 'px' }}, [
+          utils.viewOnlyBoard()
+        ]),
+        m('div.infos',[
+          m('div.description',[
+            m('h2.title', 'New Game'),
+            m('p', 'Lancer une nouvelle partie'),
+            m('button', { config: utils.ontouchendScroll(swapCard) }, '+ Nouvelle partie')
+          ])
+        ])
+      ]),
+      m('div.back', [
+        settings.newGame.selected() === 'human' ?
+        renderForm(ctrl.seekHumanGame, settings.newGame.human) :
+        renderForm(ctrl.startAIGame, settings.newGame.ai)
+      ])
+    ])
+  ]);
+
+  allGames.unshift(newGame);
+
+  return m('div#all_games', {
+    style: {
+      width: wrapperWidth + 'px',
+      marginLeft: cardDims().paddingLeft + 'px'
+    }
+  }, [allGames]);
+}
+
 playMenu.view = function(ctrl) {
   var children = [
     m('div.overlay-close',
       { config: utils.ontouchend(playMenu.close) },
     '+'),
-    m('div#wrapper-games',{
+    m('div#wrapper_games', {
       config:function(el, isUpdate, context) {
         var scroller = new iScroll(el, {
           scrollX: true,
@@ -182,62 +252,7 @@ playMenu.view = function(ctrl) {
         };
       }
 
-    },[
-      m('div#all-games',[
-        m('div.card.new-game', {
-          class: newGameCardSwapped ? 'back_visible' : '',
-          style: { height: cardHeight() + 'px' }
-        }, [
-          m('div.container_flip', [
-            m('div.front', [
-              m('div', { style: { height: boardHeight() + 'px' }}, [
-                utils.viewOnlyBoard()
-              ]),
-              m('div.infos',[
-                m('div.description',[
-                  m('h2.title', 'New Game'),
-                  m('p', 'Lancer une nouvelle partie'),
-                  m('button', { config: utils.ontouchendScroll(swapCard) }, '+ Nouvelle partie')
-                ])
-              ])
-            ]),
-            m('div.back', [
-              settings.newGame.selected() === 'human' ?
-              renderForm(ctrl.seekHumanGame, settings.newGame.human) :
-              renderForm(ctrl.startAIGame, settings.newGame.ai)
-            ])
-          ])
-        ]),
-        m('div.card.standard',[
-          m('div', { style: { height: boardHeight() + 'px' }}, [
-            utils.viewOnlyBoard()
-          ]),
-          m('div.infos',[
-            m('div.icon-game.standard',[
-              ]),
-              m('div.description',[
-                m('h2.title', 'New Game'),
-                m('p', 'Lancer une nouvelle partie'),
-                m('button', {}, 'Rejoindre')
-              ])
-          ])
-        ]),
-        m('div.card.standard',[
-          m('div', { style: { height: boardHeight() + 'px' }}, [
-            utils.viewOnlyBoard()
-          ]),
-          m('div.infos',[
-            m('div.icon-game.chess960',[
-              ]),
-              m('div.description',[
-                m('h2.title', 'New Game'),
-                m('p', 'Lancer une nouvelle partie'),
-                m('button', {}, 'Rejoindre')
-              ])
-          ])
-        ])
-      ])
-    ])
+    }, renderAllGames(ctrl))
   ];
 
   return m('div#game_menu.overlay.overlay-effect', {

@@ -38,6 +38,7 @@
   "dependencies": {
     "chessground": "1.8.0",
     "chessli.js": "0.2.4",
+    "iscroll": "^5.1.3",
     "lodash-node": "^2.4.1",
     "mithril": "0.1.24",
     "mobile-button": "^0.8.0"

@@ -19,19 +19,6 @@ function swapCard() {
   newGameCardSwapped = !newGameCardSwapped;
 }
 
-// see game.styl for dimensions
-function cardDims() {
-  var vp = utils.getViewportDims();
-  var width = vp.vw * 85 / 100;
-  var padding = vp.vw * 2.5 / 100;
-  return {
-    w: width + padding * 2,
-    h: width + 144,
-    paddingLeft: padding,
-    paddingRight: padding
-  };
-}
-
 function renderRadio(label, name, value, settingsProp) {
   var isOn = settingsProp() === value;
   var id = name + value;
@@ -162,30 +149,57 @@ function renderForm(action, settingsObj) {
 }
 
 function renderAllGames(ctrl) {
+
+  function cardDims() {
+    var vp = utils.getViewportDims();
+    var width = vp.vw * 85 / 100;
+    var padding = vp.vw * 2.5 / 100;
+    return {
+      w: width + padding * 2,
+      h: width + 144,
+      innerW: width,
+      padding: padding
+    };
+  }
+
+  function renderViewOnlyBoard(fen) {
+    return m('div', { style: { height: cDim.innerW + 'px' }}, [
+      utils.viewOnlyBoard(fen)
+    ]);
+  }
+
   var nowPlaying = session.isConnected() ? session.get().nowPlaying : [];
+  var cDim = cardDims();
   var cardStyle = {
-    width: cardDims().w + 'px',
-    height: cardDims().h + 'px',
-    paddingLeft: cardDims().paddingLeft + 'px',
-    paddingRight: cardDims().paddingRight + 'px'
+    width: cDim.w + 'px',
+    height: cDim.h + 'px',
+    paddingLeft: cDim.padding + 'px',
+    paddingRight: cDim.padding + 'px'
   };
   var nbCards = nowPlaying.length + 1;
-  var wrapperWidth = ((cardDims().w + cardDims().paddingLeft + cardDims().paddingRight) * nbCards) + cardDims().paddingLeft + cardDims().paddingRight;
+  // scroller wrapper width
+  // calcul is:
+  // ((cardWidth + visible part of adjacent card) * nb of cards) +
+  //   wrapper's marginLeft
+  var wrapperWidth = ((cDim.w + cDim.padding * 2) * nbCards) +
+    (cDim.padding * 2);
 
   var allGames = nowPlaying.map(function(g) {
     return m('div.card.standard', {
       style: cardStyle
     }, [
-      m('div', { style: { height: cardDims().w + 'px' }}, [
-        utils.viewOnlyBoard()
-      ]),
-      m('div.infos',[
-        m('div.description',[
+      renderViewOnlyBoard(),
+      m('div.infos', [
+        m('div.icon-game.standard'),
+        m('div.description', [
           m('h2.title', 'Standard'),
           m('p', 'Contre ' + g.opponent.username),
           m('button', {
-            config: utils.ontouchendScroll(utils.partial(ctrl.resumeGame, g.id))
-          }, 'Rejoindre')
+            config: utils.ontouchendScroll(function() {
+              ctrl.joinGame(g.id);
+              playMenu.close();
+            })
+          }, 'Reprendre la partie')
         ])
       ])
     ]);
@@ -197,9 +211,7 @@ function renderAllGames(ctrl) {
   }, [
     m('div.container_flip', [
       m('div.front', [
-        m('div', { style: { height: cardDims().w + 'px' }}, [
-          utils.viewOnlyBoard()
-        ]),
+        renderViewOnlyBoard(),
         m('div.infos',[
           m('div.description',[
             m('h2.title', 'New Game'),
@@ -221,9 +233,9 @@ function renderAllGames(ctrl) {
   return m('div#all_games', {
     style: {
       width: wrapperWidth + 'px',
-      marginLeft: cardDims().paddingLeft + 'px'
+      marginLeft: (cDim.padding * 2) + 'px'
     }
-  }, [allGames]);
+  }, allGames);
 }
 
 playMenu.view = function(ctrl) {

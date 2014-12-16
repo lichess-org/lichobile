@@ -49,12 +49,16 @@ module.exports = function() {
 
   this.chessground = new Chessground.controller({viewOnly: true});
 
-  this.resumeGame = function(id) {
+  var resumeGame = function(id) {
     var self = this;
     xhr.game(id).then(function (data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
     });
+  }.bind(this);
+
+  this.joinGame = function(id) {
+    m.route('/play/' + id);
   }.bind(this);
 
   this.startAIGame = function() {
@@ -82,5 +86,5 @@ module.exports = function() {
     }
   };
 
-  if (this.id) this.resumeGame(this.id);
+  if (this.id) resumeGame(this.id);
 };

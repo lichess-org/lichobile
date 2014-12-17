@@ -1,7 +1,6 @@
 /* application entry point */
 
-// mithril exposes already m function in window
-require('mithril');
+window.m = require('mithril');
 
 var play = require('./play');
 var session = require('./session');

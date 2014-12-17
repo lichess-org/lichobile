@@ -190,9 +190,9 @@ function renderAllGames(ctrl) {
     }, [
       renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color),
       m('div.infos', [
-        m('div.icon-game.standard'),
+        m('div.icon-game.' + g.variant),
         m('div.description', [
-          m('h2.title', 'Standard'),
+          m('h2.title', g.variant),
           m('p', 'Contre ' + g.opponent.username),
           m('button', {
             config: utils.ontouchendScroll(function() {

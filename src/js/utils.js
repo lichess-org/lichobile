@@ -83,8 +83,15 @@ utils.getViewportDims = function() {
   return viewPortDims;
 };
 
-utils.viewOnlyBoard = function(fen) {
-  var ctrl = new chessground.controller({viewOnly: true, minimalDom: true, coordinates: false});
+utils.viewOnlyBoard = function(fen, lastMove, orientation) {
+  var ctrl = new chessground.controller({
+    viewOnly: true,
+    minimalDom: true,
+    coordinates: false,
+    fen: fen,
+    lastMove: lastMove,
+    orientation: orientation
+  });
   return m('div.board.grey.merida', [
     chessground.view(ctrl)
   ]);

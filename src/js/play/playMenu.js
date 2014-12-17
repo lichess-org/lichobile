@@ -162,9 +162,9 @@ function renderAllGames(ctrl) {
     };
   }
 
-  function renderViewOnlyBoard(fen) {
+  function renderViewOnlyBoard(fen, lastMove, color) {
     return m('div', { style: { height: cDim.innerW + 'px' }}, [
-      utils.viewOnlyBoard(fen)
+      utils.viewOnlyBoard(fen, lastMove, color)
     ]);
   }
 
@@ -188,7 +188,7 @@ function renderAllGames(ctrl) {
     return m('div.card.standard', {
       style: cardStyle
     }, [
-      renderViewOnlyBoard(),
+      renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color),
       m('div.infos', [
         m('div.icon-game.standard'),
         m('div.description', [

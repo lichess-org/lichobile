@@ -168,3 +168,31 @@
       left auto
       right 0
 
+#player_controls
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  button
+    display block
+    background none
+    margin 0 auto
+    border none
+    color #C4A86F
+    font-size 1em
+    font-family 'Montserrat'
+    text-align center
+    text-transform uppercase
+    font-weight normal
+    &:before
+      content attr(data-icon)
+      display block
+      width 60px
+      height 60px
+      color #C4A86F
+      border-radius 50%
+      background #fff
+      margin 20px auto
+      line-height 60px
+      font-size 1.2em

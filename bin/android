@@ -10,7 +10,7 @@ fi
 ROOT=$(cd `dirname $0` && pwd)/..
 
 cd $ROOT
-gulp dev --env=env/$1.json
+gulp --env=env/$1.json
 
 cd $ROOT/app
 cordova run android

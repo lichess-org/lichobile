@@ -3,6 +3,8 @@ bin/
 gen/
 build/
 
+console.log
+
 # ANDROID
 
 # built application files

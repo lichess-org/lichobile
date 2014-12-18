@@ -5,7 +5,7 @@ lichess.org mobile application
 
 ## Requirements
 
-* [node](http://nodejs.org) and [gulp](http://gulpjs.com/) installed.
+* [node](http://nodejs.org) and [gulp](http://gulpjs.com/) version 3.8.x installed.
 
 **For Android:**
 
@@ -18,6 +18,24 @@ for API 14 to API 19
 **For iOS:**
 
 * you need OS X and Xcode installed.
+
+## Build the web application
+
+Make sure you installed all deps:
+
+    $ npm install
+
+To build in dev mode:
+
+    $ gulp
+
+To build in prod mode:
+
+    $ gulp --mode=prod
+
+To build and watch for changes:
+
+    $ gulp watch
 
 
 ## Android instructions

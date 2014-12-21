@@ -2,6 +2,8 @@ var xhr = require('./playXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
+var utils = require('../utils');
+var session = require('../session');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -87,4 +89,8 @@ module.exports = function() {
   };
 
   if (this.id) resumeGame(this.id);
+
+  if (utils.hasNetwork())
+    session.refresh();
+
 };

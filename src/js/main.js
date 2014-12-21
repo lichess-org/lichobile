@@ -3,15 +3,13 @@
 window.m = require('mithril');
 
 var play = require('./play');
-var session = require('./session');
 
 function main() {
+
   m.route(document.body, '/play', {
     '/play': play,
     '/play/:id': play
   });
-
-  session.refresh();
 
   document.addEventListener('backbutton', function () {
     // todo

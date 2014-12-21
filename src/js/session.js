@@ -21,6 +21,7 @@ function login(username, password) {
     }
   }).then(function(data) {
     session = data;
+    return session;
   }, function(error) {
     console.log(error);
   });
@@ -46,6 +47,8 @@ function refresh() {
     config: utils.xhrConfig
   }).then(function(data) {
     session = data;
+    console.log('session refresh', session);
+    return session;
   }, function(error) {
     console.log(error);
   });

@@ -52,7 +52,7 @@
 @synthesize webView, supportedOrientations;
 @synthesize pluginObjects, pluginsMap, whitelist, startupPluginNames;
 @synthesize configParser, settings, loadFromString;
-@synthesize wwwFolderName, startPage, initialized, openURL;
+@synthesize wwwFolderName, startPage, initialized, openURL, baseUserAgent;
 @synthesize commandDelegate = _commandDelegate;
 @synthesize commandQueue = _commandQueue;
 
@@ -72,7 +72,8 @@
                                                      name:UIApplicationWillEnterForegroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppDidEnterBackground:)
                                                      name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURL:) name:CDVPluginHandleOpenURLNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPageDidLoad:)
+                                                     name:CDVPageDidLoadNotification object:nil];
 
         // read from UISupportedInterfaceOrientations (or UISupportedInterfaceOrientations~iPad, if its iPad) from -Info.plist
         self.supportedOrientations = [self parseInterfaceOrientations:
@@ -198,13 +199,9 @@
     self.pluginObjects = [[NSMutableDictionary alloc] initWithCapacity:20];
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
+- (NSURL*)appUrl
 {
-    [super viewDidLoad];
-
     NSURL* appURL = nil;
-    NSString* loadErr = nil;
 
     if ([self.startPage rangeOfString:@"://"].location != NSNotFound) {
         appURL = [NSURL URLWithString:self.startPage];
@@ -216,8 +213,6 @@
         NSString* startFilePath = [self.commandDelegate pathForResource:[startURL path]];
 
         if (startFilePath == nil) {
-            loadErr = [NSString stringWithFormat:@"ERROR: Start Page at '%@/%@' was not found.", self.wwwFolderName, self.startPage];
-            NSLog(@"%@", loadErr);
             self.loadFromString = YES;
             appURL = nil;
         } else {
@@ -231,6 +226,36 @@
             }
         }
     }
+
+    return appURL;
+}
+
+- (NSURL*)errorUrl
+{
+    NSURL* errorURL = nil;
+
+    id setting = [self settingForKey:@"ErrorUrl"];
+
+    if (setting) {
+        NSString* errorUrlString = (NSString*)setting;
+        if ([errorUrlString rangeOfString:@"://"].location != NSNotFound) {
+            errorURL = [NSURL URLWithString:errorUrlString];
+        } else {
+            NSURL* url = [NSURL URLWithString:(NSString*)setting];
+            NSString* errorFilePath = [self.commandDelegate pathForResource:[url path]];
+            if (errorFilePath) {
+                errorURL = [NSURL fileURLWithPath:errorFilePath];
+            }
+        }
+    }
+
+    return errorURL;
+}
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
 
     // // Fix the iOS 5.1 SECURITY_ERR bug (CB-347), this must be before the webView is instantiated ////
 
@@ -314,7 +339,7 @@
     }
 
     NSString* decelerationSetting = [self settingForKey:@"UIWebViewDecelerationSpeed"];
-    if (![@"fast" isEqualToString : decelerationSetting]) {
+    if (![@"fast" isEqualToString:decelerationSetting]) {
         [self.webView.scrollView setDecelerationRate:UIScrollViewDecelerationRateNormal];
     }
 
@@ -436,15 +461,27 @@
     }
 
     // /////////////////
+    NSURL* appURL = [self appUrl];
+
     [CDVUserAgentUtil acquireLock:^(NSInteger lockToken) {
         _userAgentLockToken = lockToken;
         [CDVUserAgentUtil setUserAgent:self.userAgent lockToken:lockToken];
-        if (!loadErr) {
+        if (appURL) {
             NSURLRequest* appReq = [NSURLRequest requestWithURL:appURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20.0];
             [self.webView loadRequest:appReq];
         } else {
-            NSString* html = [NSString stringWithFormat:@"<html><body> %@ </body></html>", loadErr];
-            [self.webView loadHTMLString:html baseURL:nil];
+            NSString* loadErr = [NSString stringWithFormat:@"ERROR: Start Page at '%@/%@' was not found.", self.wwwFolderName, self.startPage];
+            NSLog(@"%@", loadErr);
+
+            NSURL* errorUrl = [self errorUrl];
+            if (errorUrl) {
+                errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [loadErr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:errorUrl];
+                NSLog(@"%@", [errorUrl absoluteString]);
+                [self.webView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
+            } else {
+                NSString* html = [NSString stringWithFormat:@"<html><body> %@ </body></html>", loadErr];
+                [self.webView loadHTMLString:html baseURL:nil];
+            }
         }
     }];
 }
@@ -562,9 +599,14 @@
 - (NSString*)userAgent
 {
     if (_userAgent == nil) {
-        NSString* originalUserAgent = [CDVUserAgentUtil originalUserAgent];
+        NSString* localBaseUserAgent;
+        if (self.baseUserAgent != nil) {
+            localBaseUserAgent = self.baseUserAgent;
+        } else {
+            localBaseUserAgent = [CDVUserAgentUtil originalUserAgent];
+        }
         // Use our address as a unique number to append to the User-Agent.
-        _userAgent = [NSString stringWithFormat:@"%@ (%lld)", originalUserAgent, (long long)self];
+        _userAgent = [NSString stringWithFormat:@"%@ (%lld)", localBaseUserAgent, (long long)self];
     }
     return _userAgent;
 }
@@ -615,6 +657,8 @@
     self.webView.delegate = nil;
     self.webView = nil;
     [CDVUserAgentUtil releaseLock:&_userAgentLockToken];
+
+    [super viewDidUnload];
 }
 
 #pragma mark UIWebViewDelegate
@@ -644,8 +688,6 @@
      */
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
-    [self processOpenUrl];
-
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPageDidLoadNotification object:self.webView]];
 }
 
@@ -653,7 +695,15 @@
 {
     [CDVUserAgentUtil releaseLock:&_userAgentLockToken];
 
-    NSLog(@"Failed to load webpage with error: %@", [error localizedDescription]);
+    NSString* message = [NSString stringWithFormat:@"Failed to load webpage with error: %@", [error localizedDescription]];
+    NSLog(@"%@", message);
+
+    NSURL* errorUrl = [self errorUrl];
+    if (errorUrl) {
+        errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:errorUrl];
+        NSLog(@"%@", [errorUrl absoluteString]);
+        [theWebView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
+    }
 }
 
 - (BOOL)webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
@@ -774,27 +824,10 @@
     [self.commandDelegate evalJs:jsString];
 }
 
-+ (NSString*)resolveImageResource:(NSString*)resource
-{
-    NSString* systemVersion = [[UIDevice currentDevice] systemVersion];
-    BOOL isLessThaniOS4 = ([systemVersion compare:@"4.0" options:NSNumericSearch] == NSOrderedAscending);
-
-    // the iPad image (nor retina) differentiation code was not in 3.x, and we have to explicitly set the path
-    if (isLessThaniOS4) {
-        if (CDV_IsIPad()) {
-            return [NSString stringWithFormat:@"%@~ipad.png", resource];
-        } else {
-            return [NSString stringWithFormat:@"%@.png", resource];
-        }
-    }
-
-    return resource;
-}
-
 + (NSString*)applicationDocumentsDirectory
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    NSString* basePath = (([paths count] > 0) ? ([paths objectAtIndex : 0]) : nil);
 
     return basePath;
 }
@@ -965,19 +998,35 @@
 
 // ///////////////////////
 
-- (void)handleOpenURL:(NSNotification*)notification
-{
-    self.openURL = notification.object;
-}
-
-- (void)processOpenUrl
+- (void)onPageDidLoad:(NSNotification*)notification
 {
     if (self.openURL) {
-        // calls into javascript global function 'handleOpenURL'
-        NSString* jsString = [NSString stringWithFormat:@"handleOpenURL(\"%@\");", [self.openURL description]];
-        [self.webView stringByEvaluatingJavaScriptFromString:jsString];
+        [self processOpenUrl:self.openURL pageLoaded:YES];
         self.openURL = nil;
     }
+}
+
+- (void)processOpenUrl:(NSURL*)url pageLoaded:(BOOL)pageLoaded
+{
+    if (!pageLoaded) {
+        // query the webview for readystate
+        NSString* readyState = [webView stringByEvaluatingJavaScriptFromString:@"document.readyState"];
+        pageLoaded = [readyState isEqualToString:@"loaded"] || [readyState isEqualToString:@"complete"];
+    }
+
+    if (pageLoaded) {
+        // calls into javascript global function 'handleOpenURL'
+        NSString* jsString = [NSString stringWithFormat:@"if (typeof handleOpenURL === 'function') { handleOpenURL(\"%@\");}", url];
+        [self.webView stringByEvaluatingJavaScriptFromString:jsString];
+    } else {
+        // save for when page has loaded
+        self.openURL = url;
+    }
+}
+
+- (void)processOpenUrl:(NSURL*)url
+{
+    [self processOpenUrl:url pageLoaded:NO];
 }
 
 // ///////////////////////

@@ -17,16 +17,10 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-# Valid values for "--target" (case insensitive):
-#     "iPhone (Retina 3.5-inch)" (default)
-#     "iPhone (Retina 4-inch)"
-#     "iPhone"
-#     "iPad"
-#     "iPad (Retina)"
 
 set -e
 
-SIM_RUNNING=$(ps aux | grep -i "[i]Phone Simulator" | wc -l)
+SIM_RUNNING=$(ps aux | grep -i "[i]OS Simulator" | wc -l)
 if [ $SIM_RUNNING == 0 ]; then
     echo "No emulators are running."
     exit 1

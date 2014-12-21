@@ -18,6 +18,24 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
+    <name>lichess</name>
+    <description>
+        lichess.org mobile application
+    </description>
+    <author email="vincent.velociter@gmail.com" href="https://github.com/veloce">
+        Vincent Velociter
+    </author>
+    <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="WebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <access origin="*" />
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
@@ -48,22 +66,4 @@
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="StatusBarStyle" value="lightcontent" />
-    <name>lichess</name>
-    <description>
-        lichess.org mobile application
-    </description>
-    <author email="vincent.velociter@gmail.com" href="https://github.com/veloce">
-        Vincent Velociter
-    </author>
-    <content src="index.html" />
-    <preference name="Orientation" value="portrait" />
-    <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="10000" />
-    <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="EnableViewportScale" value="false" />
-    <preference name="WebViewBounce" value="false" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
-    <access origin="*" />
 </widget>

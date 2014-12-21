@@ -13,4 +13,4 @@ cd $ROOT
 gulp --env=env/$1.json
 
 cd $ROOT/app
-cordova prepare ios
+cordova run ios

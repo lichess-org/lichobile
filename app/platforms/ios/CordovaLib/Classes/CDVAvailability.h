@@ -17,6 +17,8 @@
  under the License.
  */
 
+#import "CDVAvailabilityDeprecated.h"
+
 #define __CORDOVA_IOS__
 
 #define __CORDOVA_0_9_6 906
@@ -51,8 +53,7 @@
 #define __CORDOVA_3_4_1 30401
 #define __CORDOVA_3_5_0 30500
 #define __CORDOVA_3_6_0 30600
-#define __CORDOVA_3_6_1 30601
-#define __CORDOVA_3_6_3 30603
+#define __CORDOVA_3_7_0 30700
 #define __CORDOVA_NA 99999      /* not available */
 
 /*
@@ -63,7 +64,7 @@
  #endif
  */
 #ifndef CORDOVA_VERSION_MIN_REQUIRED
-    #define CORDOVA_VERSION_MIN_REQUIRED __CORDOVA_3_6_3
+    #define CORDOVA_VERSION_MIN_REQUIRED __CORDOVA_3_7_0
 #endif
 
 /*
@@ -75,21 +76,11 @@
  */
 #define IsAtLeastiOSVersion(X) ([[[UIDevice currentDevice] systemVersion] compare:X options:NSNumericSearch] != NSOrderedAscending)
 
-#define CDV_IsIPad() ([[UIDevice currentDevice] respondsToSelector:@selector(userInterfaceIdiom)] && ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad))
-
-#define CDV_IsIPhone5() ([[UIScreen mainScreen] bounds].size.height == 568 && [[UIScreen mainScreen] bounds].size.width == 320)
-
 /* Return the string version of the decimal version */
 #define CDV_VERSION [NSString stringWithFormat:@"%d.%d.%d", \
     (CORDOVA_VERSION_MIN_REQUIRED / 10000),                 \
     (CORDOVA_VERSION_MIN_REQUIRED % 10000) / 100,           \
     (CORDOVA_VERSION_MIN_REQUIRED % 10000) % 100]
-
-#ifdef __clang__
-    #define CDV_DEPRECATED(version, msg) __attribute__((deprecated("Deprecated in Cordova " #version ". " msg)))
-#else
-    #define CDV_DEPRECATED(version, msg) __attribute__((deprecated()))
-#endif
 
 // Enable this to log all exec() calls.
 #define CDV_ENABLE_EXEC_LOGGING 0

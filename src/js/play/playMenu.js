@@ -65,7 +65,7 @@ function tupleOf(x) {
 function renderForm(action, settingsObj) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
-  var hasCorresp = timeMode === '2';
+  // var hasCorresp = timeMode === '2';
 
   var generalFieldset = [
     m('div.select_input',[
@@ -97,7 +97,7 @@ function renderForm(action, settingsObj) {
   var timeFieldset = [
     m('div.select_input', [
       renderSelect('Time mode:', 'timeMode', [
-        ['Unlimited', '0'], ['Clock', '1'], ['Correspondance', '2']
+        ['Unlimited', '0'], ['Clock', '1']
       ], settingsObj.timeMode)
     ])
   ];
@@ -122,13 +122,13 @@ function renderForm(action, settingsObj) {
         ].map(tupleOf), settingsObj.timePreset, false)
     ]));
   }
-  if (hasCorresp) {
-    timeFieldset.push(m('div.select_input', [
-      renderSelect('Days per turn:', 'days', [
-        '1', '2', '3', '5', '7', '10', '14'
-        ].map(tupleOf), settingsObj.days, false)
-    ]));
-  }
+  // if (hasCorresp) {
+  //   timeFieldset.push(m('div.select_input', [
+  //     renderSelect('Days per turn:', 'days', [
+  //       '1', '2', '3', '5', '7', '10', '14'
+  //       ].map(tupleOf), settingsObj.days, false)
+  //   ]));
+  // }
 
   return m('form#new_game_form.form', {
     onsubmit: function(e) {

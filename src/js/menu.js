@@ -36,7 +36,7 @@ menu.view = function() {
         }
       },[
         m('h3', 'Connection'),
-        m('input#pseudo[type=text][placeholder=Pseudo]'),
+        m('input#pseudo[type=text][placeholder=Pseudo][autocomplete=off][autocapitalize=off][autocorrect=off]'),
         m('input#password[type=password][placeholder=Password]'),
         m('button#login', 'LOG IN')
       ])

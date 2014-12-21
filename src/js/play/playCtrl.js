@@ -90,7 +90,5 @@ module.exports = function() {
 
   if (this.id) resumeGame(this.id);
 
-  if (utils.hasNetwork())
-    session.refresh();
-
+  if (utils.hasNetwork()) session.refresh();
 };

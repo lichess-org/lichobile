@@ -56,6 +56,8 @@ module.exports = function() {
     xhr.game(id).then(function (data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
+    }, function(error) {
+      utils.handleXhrError(error);
     });
   }.bind(this);
 
@@ -66,6 +68,8 @@ module.exports = function() {
   this.startAIGame = function() {
     xhr.aiGame().then(function(data) {
       m.route('/play' + data.url.round);
+    }, function(error) {
+      utils.handleXhrError(error);
     });
   }.bind(this);
 
@@ -74,6 +78,8 @@ module.exports = function() {
     this.lobbySocket = makeLobbySocket(this);
     xhr.seekHuman().then(function() {
       console.log('hook sent...');
+    }, function(error) {
+      utils.handleXhrError(error);
     });
   }.bind(this);
 

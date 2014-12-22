@@ -1,3 +1,9 @@
+# plugins
+plugins/*
+!plugins/*.json
+
+
+
 # generated files
 bin/
 gen/

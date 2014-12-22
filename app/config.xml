@@ -16,6 +16,8 @@
     <preference name="EnableViewportScale" value="false"/>
     <preference name="WebViewBounce" value="false"/>
     <preference name="DisallowOverscroll" value="true"/>
-    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="false"/>
+    <preference name="StatusBarBackgroundColor" value="#151A1E"/>
+    <preference name="BackupWebStorage" value="local"/>
     <access origin="*" />
 </widget>

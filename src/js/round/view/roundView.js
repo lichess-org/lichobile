@@ -79,9 +79,7 @@ function renderGameActions(ctrl) {
     renderPlayerActions(ctrl)
   ];
 
-  return m('section#game_actions', [
-    m('div', actions)
-  ]);
+  return m('section#game_actions', actions);
 }
 
 function renderFooter(ctrl) {

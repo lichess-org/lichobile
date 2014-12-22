@@ -9,6 +9,18 @@
                 "parents": {
                     "/*": [
                         {
+                            "xml": "<feature name=\"WebSocket\"><param name=\"android-package\" value=\"com.ququplay.websocket.WebSocket\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Insomnia\"><param name=\"android-package\" value=\"nl.xservices.plugins.Insomnia\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
                             "count": 1
                         },
@@ -30,18 +42,6 @@
                         },
                         {
                             "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Insomnia\"><param name=\"android-package\" value=\"nl.xservices.plugins.Insomnia\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"WebSocket\"><param name=\"android-package\" value=\"com.ququplay.websocket.WebSocket\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -76,6 +76,15 @@
         }
     },
     "installed_plugins": {
+        "com.ququplay.websocket.WebSocket": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "nl.x-services.plugins.insomnia": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
         "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
@@ -92,15 +101,6 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.statusbar": {
-            "PACKAGE_NAME": "org.lichess.mobile"
-        },
-        "nl.x-services.plugins.insomnia": {
-            "PACKAGE_NAME": "org.lichess.mobile"
-        },
-        "com.ququplay.websocket.WebSocket": {
-            "PACKAGE_NAME": "org.lichess.mobile"
-        },
-        "org.apache.cordova.device": {
             "PACKAGE_NAME": "org.lichess.mobile"
         }
     },

@@ -22,7 +22,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="org.apache.cordova.statusbar"
-    version="0.1.7">
+    version="0.1.9">
     <name>StatusBar</name>
     <description>Cordova StatusBar Plugin</description>
     <license>Apache 2.0</license>
@@ -41,7 +41,8 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="StatusBar">
-                <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" onload="true" />
+                <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+                <param name="onload" value="true" />
             </feature>
         </config-file>
     </platform>
@@ -51,10 +52,10 @@
 
         <config-file target="config.xml" parent="/*">
             <feature name="StatusBar">
-                <param name="ios-package" value="CDVStatusBar" onload="true" />
+                <param name="ios-package" value="CDVStatusBar" />
+                <param name="onload" value="true" />
             </feature>
             <preference name="StatusBarOverlaysWebView" value="true" />
-            <preference name="StatusBarBackgroundColor" value="#000000" />
             <preference name="StatusBarStyle" value="lightcontent" />
         </config-file>
 
@@ -83,4 +84,10 @@
         <source-file src="src/wp/StatusBar.cs" />
     </platform>
 
+    <!-- windows -->
+    <platform name="windows">
+        <js-module src="src/windows/StatusBarProxy.js" name="StatusBarProxy">
+            <runs />
+        </js-module>
+    </platform>
 </plugin>

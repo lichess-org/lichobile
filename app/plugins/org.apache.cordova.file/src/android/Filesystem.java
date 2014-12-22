@@ -42,7 +42,7 @@ public abstract class Filesystem {
         JSONObject entry = new JSONObject();
 
         int end = path.endsWith("/") ? 1 : 0;
-        String[] parts = path.substring(0,path.length()-end).split("/");
+        String[] parts = path.substring(0,path.length()-end).split("/+");
         String fileName = parts[parts.length-1];
         entry.put("isFile", !isDir);
         entry.put("isDirectory", isDir);
@@ -82,8 +82,8 @@ public abstract class Filesystem {
 		LocalFilesystemURL newURL = new LocalFilesystemURL(inputURL.URL);
 	
 		if (!("".equals(inputURL.fullPath) || "/".equals(inputURL.fullPath))) {
-			int end = inputURL.fullPath.endsWith("/") ? 1 : 0;
-	        int lastPathStartsAt = inputURL.fullPath.lastIndexOf('/', inputURL.fullPath.length()-end)+1;
+			String dirURL = inputURL.fullPath.replaceAll("/+$", "");
+			int lastPathStartsAt = dirURL.lastIndexOf('/')+1;
 			newURL.fullPath = newURL.fullPath.substring(0,lastPathStartsAt);
 		}
 		return getEntryForLocalURL(newURL);

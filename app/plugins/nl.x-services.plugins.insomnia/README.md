@@ -91,8 +91,10 @@ or to use this exact version:
 <gap:plugin name="nl.x-services.plugins.insomnia" version="4.0.0" />
 ```
 
-The required javascript file is brought in automatically. There is no need to change or add anything in your html.
-
+The plugin's  javascript file is brought in automatically. Make sure though you include a reference to cordova.js in your index.html's head:
+```html
+<script type="text/javascript" src="cordova.js"></script>
+```
 
 ## 3. Usage
 ```html

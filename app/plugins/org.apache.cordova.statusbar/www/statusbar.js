@@ -33,7 +33,7 @@ var namedColors = {
     "cyan": "#00FFFF",
     "yellow": "#FFFF00",
     "magenta": "#FF00FF",
-    "orange": "##FFA500",
+    "orange": "#FFA500",
     "purple": "#800080",
     "brown": "#A52A2A"
 };

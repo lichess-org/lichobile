@@ -168,15 +168,25 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
 - (void) initializeStatusBarBackgroundView
 {
     CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
-    if (UIDeviceOrientationIsLandscape(self.viewController.interfaceOrientation)) {
-        // swap width and height. set origin to zero
-        statusBarFrame = CGRectMake(0, 0, statusBarFrame.size.height, statusBarFrame.size.width);
-    }
+    statusBarFrame = [self invertFrameIfNeeded:statusBarFrame orientation:self.viewController.interfaceOrientation];
 
     _statusBarBackgroundView = [[UIView alloc] initWithFrame:statusBarFrame];
     _statusBarBackgroundView.backgroundColor = _statusBarBackgroundColor;
     _statusBarBackgroundView.autoresizingMask = (UIViewAutoresizingFlexibleWidth  | UIViewAutoresizingFlexibleBottomMargin);
     _statusBarBackgroundView.autoresizesSubviews = YES;
+}
+
+- (CGRect) invertFrameIfNeeded:(CGRect)rect orientation:(UIInterfaceOrientation)orientation {
+    // landscape is where (width > height). On iOS < 8, we need to invert since frames are
+    // always in Portrait context
+    if (UIDeviceOrientationIsLandscape(orientation) && (rect.size.width < rect.size.height) ) {
+        CGFloat temp = rect.size.width;
+        rect.size.width = rect.size.height;
+        rect.size.height = temp;
+        rect.origin = CGPointZero;
+    }
+    
+    return rect;
 }
 
 - (void) setStatusBarOverlaysWebView:(BOOL)statusBarOverlaysWebView
@@ -200,18 +210,13 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
     } else {
 
         CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+        statusBarFrame = [self invertFrameIfNeeded:statusBarFrame orientation:self.viewController.interfaceOrientation];
 
         [self initializeStatusBarBackgroundView];
 
         CGRect frame = self.webView.frame;
-
-        if (UIDeviceOrientationIsLandscape(self.viewController.interfaceOrientation)) {
-            frame.origin.y = statusBarFrame.size.width;
-            frame.size.height -= statusBarFrame.size.width;
-        } else {
-            frame.origin.y = statusBarFrame.size.height;
-            frame.size.height -= statusBarFrame.size.height;
-        }
+        frame.origin.y = statusBarFrame.size.height;
+        frame.size.height -= statusBarFrame.size.height;
 
         self.webView.frame = frame;
         [self.webView.superview addSubview:_statusBarBackgroundView];
@@ -408,6 +413,7 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
             self.viewController.view.frame = [[UIScreen mainScreen] bounds];
 
             CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+            statusBarFrame = [self invertFrameIfNeeded:statusBarFrame orientation:self.viewController.interfaceOrientation];
 
             if (!self.statusBarOverlaysWebView) {
 
@@ -415,16 +421,9 @@ static const void *kStatusBarStyle = &kStatusBarStyle;
                 // from the current one. Therefore we need to expand the statusBarBackgroundView as well to the
                 // statusBar's current size
                 CGRect sbBgFrame = _statusBarBackgroundView.frame;
-
-                if (UIDeviceOrientationIsLandscape(self.viewController.interfaceOrientation)) {
-                    frame.origin.y = statusBarFrame.size.width;
-                    frame.size.height -= statusBarFrame.size.width;
-                    sbBgFrame.size = CGSizeMake(statusBarFrame.size.height, statusBarFrame.size.width);
-                } else {
-                    frame.origin.y = statusBarFrame.size.height;
-                    frame.size.height -= statusBarFrame.size.height;
-                    sbBgFrame.size = statusBarFrame.size;
-                }
+                frame.origin.y = statusBarFrame.size.height;
+                frame.size.height -= statusBarFrame.size.height;
+                sbBgFrame.size = statusBarFrame.size;
 
                 _statusBarBackgroundView.frame = sbBgFrame;
                 [self.webView.superview addSubview:_statusBarBackgroundView];

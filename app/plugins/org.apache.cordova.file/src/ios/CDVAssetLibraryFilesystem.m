@@ -96,6 +96,8 @@ NSString* const kCDVAssetsLibraryScheme = @"assets-library";
                     mimeType = @"audio/mp4";
                 } else if ([[fullPath pathExtension] rangeOfString:@"wav"].location != NSNotFound) {
                     mimeType = @"audio/wav";
+                } else if ([[fullPath pathExtension] rangeOfString:@"css"].location != NSNotFound) {
+                    mimeType = @"text/css";
                 }
             }
             CFRelease(typeId);
@@ -122,37 +124,6 @@ NSString* const kCDVAssetsLibraryScheme = @"assets-library";
 {
     // we don't (yet?) support getting the parent of an asset
     return [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsInt:NOT_READABLE_ERR];
-}
-
-- (void)getMetadataForURL:(CDVFilesystemURL *)url callback:(void (^)(CDVPluginResult *))callback
-{
-    __block CDVPluginResult* result = nil;
-
-    // In this case, we need to use an asynchronous method to retrieve the file.
-    // Because of this, we can't just assign to `result` and send it at the end of the method.
-    // Instead, we return after calling the asynchronous method and send `result` in each of the blocks.
-    ALAssetsLibraryAssetForURLResultBlock resultBlock = ^(ALAsset* asset) {
-        if (asset) {
-            // We have the asset!  Retrieve the metadata and send it off.
-            NSDate* date = [asset valueForProperty:ALAssetPropertyDate];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble:[date timeIntervalSince1970] * 1000];
-            callback(result);
-        } else {
-            // We couldn't find the asset.  Send the appropriate error.
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsInt:NOT_FOUND_ERR];
-            callback(result);
-        }
-    };
-    // TODO(maxw): Consider making this a class variable since it's the same every time.
-    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError* error) {
-        // Retrieving the asset failed for some reason.  Send the appropriate error.
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsString:[error localizedDescription]];
-        callback(result);
-    };
-
-    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
-    [assetsLibrary assetForURL:[self assetLibraryURLForLocalURL:url] resultBlock:resultBlock failureBlock:failureBlock];
-    return;
 }
 
 - (CDVPluginResult*)setMetadataForURL:(CDVFilesystemURL *)localURI withObject:(NSDictionary *)options

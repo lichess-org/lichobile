@@ -144,6 +144,9 @@ FileReader.prototype.readAsText = function(file, encoding) {
                 return;
             }
 
+            // DONE state
+            me._readyState = FileReader.DONE;
+
             // Save result
             me._result = r;
 
@@ -151,9 +154,6 @@ FileReader.prototype.readAsText = function(file, encoding) {
             if (typeof me.onload === "function") {
                 me.onload(new ProgressEvent("load", {target:me}));
             }
-
-            // DONE state
-            me._readyState = FileReader.DONE;
 
             // If onloadend callback
             if (typeof me.onloadend === "function") {

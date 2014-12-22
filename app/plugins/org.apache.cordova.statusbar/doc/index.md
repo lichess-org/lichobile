@@ -16,13 +16,17 @@
     specific language governing permissions and limitations
     under the License.
 -->
-#org.apache.cordova.statusbar
+# org.apache.cordova.statusbar
 
 StatusBar
 ======
 
 > The `StatusBar` object provides some functions to customize the iOS and Android StatusBar.
 
+
+## Installation
+
+    cordova plugin add org.apache.cordova.statusbar
 
 Preferences
 -----------
@@ -57,6 +61,14 @@ Add/edit these two attributes if not present. Set **"Status bar is initially hid
 
 Methods
 -------
+This plugin defines global `StatusBar` object.
+
+Although in the global scope, it is not available until after the `deviceready` event.
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        console.log(StatusBar);
+    }
 
 - StatusBar.overlaysWebView
 - StatusBar.styleDefault
@@ -120,6 +132,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.styleLightContent
 =================
@@ -135,6 +148,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.styleBlackTranslucent
 =================
@@ -150,6 +164,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.styleBlackOpaque
 =================
@@ -165,6 +180,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 
 StatusBar.backgroundColorByName
@@ -185,6 +201,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.backgroundColorByHexString
 =================
@@ -208,6 +225,7 @@ Supported Platforms
 - iOS
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.hide
 =================
@@ -224,6 +242,7 @@ Supported Platforms
 - Android
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 StatusBar.show
 =================
@@ -240,6 +259,7 @@ Supported Platforms
 - Android
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 
 StatusBar.isVisible
@@ -259,5 +279,6 @@ Supported Platforms
 - Android
 - Windows Phone 7
 - Windows Phone 8
+- Windows Phone 8.1
 
 

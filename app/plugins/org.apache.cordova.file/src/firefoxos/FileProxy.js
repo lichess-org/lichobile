@@ -46,13 +46,22 @@ QUIRKS:
 
     var fs_ = null;
 
-    var storageType_ = 'temporary';
     var idb_ = {};
     idb_.db = null;
     var FILE_STORE_ = 'entries';
 
     var DIR_SEPARATOR = '/';
     var DIR_OPEN_BOUND = String.fromCharCode(DIR_SEPARATOR.charCodeAt(0) + 1);
+
+    var pathsPrefix = {
+        // Read-only directory where the application is installed.
+        applicationDirectory: location.origin + "/",
+        // Where to put app-specific data files.
+        dataDirectory: 'file:///persistent/',
+        // Cached files that should survive app restarts.
+        // Apps should not rely on the OS to delete files in here.
+        cacheDirectory: 'file:///temporary/',
+    };
 
 /*** Exported functionality ***/
 
@@ -61,22 +70,23 @@ QUIRKS:
         var size = args[1];
 
         if (type !== LocalFileSystem.TEMPORARY && type !== LocalFileSystem.PERSISTENT) {
-            if (errorCallback) {
-                errorCallback(FileError.INVALID_MODIFICATION_ERR);
-                return;
-            }
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
+            return;
         }
 
-        storageType_ = type == LocalFileSystem.TEMPORARY ? 'Temporary' : 'Persistent';
-        var name = (location.protocol + location.host).replace(/:/g, '_') +
-            ':' + storageType_;
+        var name = type === LocalFileSystem.TEMPORARY ? 'temporary' : 'persistent';
+        var storageName = (location.protocol + location.host).replace(/:/g, '_');
 
         var root = new DirectoryEntry('', DIR_SEPARATOR);
-        var fs_ = new FileSystem(name, root);
+        fs_ = new FileSystem(name, root);
 
-        idb_.open(fs_.name, function() {
+        idb_.open(storageName, function() {
             successCallback(fs_);
         }, errorCallback);
+    };
+
+    require('./fileSystems').getFs = function(name, callback) {
+        callback(new FileSystem(name, fs_.root));
     };
 
     // list a directory's contents (files and folders).
@@ -87,20 +97,22 @@ QUIRKS:
             throw Error('Expected successCallback argument.');
         }
 
-        idb_.getAllEntries(fullPath, function(entries) {
+        var path = resolveToFullPath_(fullPath);
+
+        idb_.getAllEntries(path.fullPath, path.storagePath, function(entries) {
             successCallback(entries);
         }, errorCallback);
     };
 
     exports.getFile = function(successCallback, errorCallback, args) {
-        var fullpath = args[0];
+        var fullPath = args[0];
         var path = args[1];
         var options = args[2] || {};
 
         // Create an absolute path if we were handed a relative one.
-        path = resolveToFullPath_(fullpath, path);
+        path = resolveToFullPath_(fullPath, path);
 
-        idb_.get(path, function(fileEntry) {
+        idb_.get(path.storagePath, function(fileEntry) {
             if (options.create === true && options.exclusive === true && fileEntry) {
                 // If create and exclusive are both true, and the path already exists,
                 // getFile must fail.
@@ -112,19 +124,31 @@ QUIRKS:
                 // If create is true, the path doesn't exist, and no other error occurs,
                 // getFile must create it as a zero-length file and return a corresponding
                 // FileEntry.
-                var name = path.split(DIR_SEPARATOR).pop(); // Just need filename.
-                var newFileEntry = new FileEntry(name, path, fs_);
+                var newFileEntry = new FileEntry(path.fileName, path.fullPath, new FileSystem(path.fsName, fs_.root));
 
                 newFileEntry.file_ = new MyFile({
                     size: 0,
                     name: newFileEntry.name,
-                    lastModifiedDate: new Date()
+                    lastModifiedDate: new Date(),
+                    storagePath: path.storagePath
                 });
 
-                idb_.put(newFileEntry, successCallback, errorCallback);
+                idb_.put(newFileEntry, path.storagePath, successCallback, errorCallback);
             } else if (options.create === true && fileEntry) {
                 if (fileEntry.isFile) {
-                    successCallback(fileEntryFromIdbEntry(fileEntry));
+                    // Overwrite file, delete then create new.
+                    idb_['delete'](path.storagePath, function() {
+                        var newFileEntry = new FileEntry(path.fileName, path.fullPath, new FileSystem(path.fsName, fs_.root));
+
+                        newFileEntry.file_ = new MyFile({
+                            size: 0,
+                            name: newFileEntry.name,
+                            lastModifiedDate: new Date(),
+                            storagePath: path.storagePath
+                        });
+
+                        idb_.put(newFileEntry, path.storagePath, successCallback, errorCallback);
+                    }, errorCallback);
                 } else {
                     if (errorCallback) {
                         errorCallback(FileError.INVALID_MODIFICATION_ERR);
@@ -157,7 +181,7 @@ QUIRKS:
         exports.getFile(function(fileEntry) {
             successCallback(new File(fileEntry.file_.name, fileEntry.fullPath, '', fileEntry.file_.lastModifiedDate,
                 fileEntry.file_.size));
-        }, errorCallback, [null, fullPath]);
+        }, errorCallback, [fullPath, null]);
     };
 
     exports.getMetadata = function(successCallback, errorCallback, args) {
@@ -176,7 +200,7 @@ QUIRKS:
 
         exports.getFile(function (fileEntry) {
               fileEntry.file_.lastModifiedDate = metadataObject.modificationTime;
-        }, errorCallback, [null, fullPath]);
+        }, errorCallback, [fullPath, null]);
     };
 
     exports.write = function(successCallback, errorCallback, args) {
@@ -186,7 +210,7 @@ QUIRKS:
             isBinary = args[3];
 
         if (!data) {
-            errorCallback(FileError.INVALID_MODIFICATION_ERR);
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
 
@@ -218,10 +242,10 @@ QUIRKS:
             fileEntry.file_.name = blob_.name;
             fileEntry.file_.type = blob_.type;
 
-            idb_.put(fileEntry, function() {
+            idb_.put(fileEntry, fileEntry.file_.storagePath, function() {
                 successCallback(data.byteLength);
             }, errorCallback);
-        }, errorCallback, [null, fileName]);
+        }, errorCallback, [fileName, null]);
     };
 
     exports.readAsText = function(successCallback, errorCallback, args) {
@@ -275,7 +299,7 @@ QUIRKS:
         // Create an absolute path if we were handed a relative one.
         path = resolveToFullPath_(fullPath, path);
 
-        idb_.get(path, function(folderEntry) {
+        idb_.get(path.storagePath, function(folderEntry) {
             if (!options) {
                 options = {};
             }
@@ -290,10 +314,9 @@ QUIRKS:
                 // If create is true, the path doesn't exist, and no other error occurs,
                 // getDirectory must create it as a zero-length file and return a corresponding
                 // MyDirectoryEntry.
-                var name = path.split(DIR_SEPARATOR).pop(); // Just need filename.
-                var dirEntry = new DirectoryEntry(name, path, fs_);
+                var dirEntry = new DirectoryEntry(path.fileName, path.fullPath, new FileSystem(path.fsName, fs_.root));
 
-                idb_.put(dirEntry, successCallback, errorCallback);
+                idb_.put(dirEntry, path.storagePath, successCallback, errorCallback);
             } else if (options.create === true && folderEntry) {
 
                 if (folderEntry.isDirectory) {
@@ -306,9 +329,8 @@ QUIRKS:
                 }
             } else if ((!options.create || options.create === false) && !folderEntry) {
                 // Handle root special. It should always exist.
-                if (path == DIR_SEPARATOR) {
-                    folderEntry = new DirectoryEntry('', DIR_SEPARATOR, fs_);
-                    successCallback(folderEntry);
+                if (path.fullPath === DIR_SEPARATOR) {
+                    successCallback(fs_.root);
                     return;
                 }
 
@@ -362,11 +384,11 @@ QUIRKS:
 
                 exports.write(function() {
                     successCallback(dstFileEntry);
-                }, errorCallback, [dstFileEntry.fullPath, srcFileEntry.file_.blob_, 0]);
+                }, errorCallback, [dstFileEntry.file_.storagePath, srcFileEntry.file_.blob_, 0]);
 
             }, errorCallback, [parentFullPath, name, {create: true}]);
 
-        }, errorCallback, [null, srcPath]);
+        }, errorCallback, [srcPath, null]);
     };
 
     exports.moveTo = function(successCallback, errorCallback, args) {
@@ -383,6 +405,78 @@ QUIRKS:
         }, errorCallback, args);
     };
 
+    exports.resolveLocalFileSystemURI = function(successCallback, errorCallback, args) {
+        var path = args[0];
+
+        // Ignore parameters
+        if (path.indexOf('?') !== -1) {
+            path = String(path).split("?")[0];
+        }
+
+        // support for encodeURI
+        if (/\%5/g.test(path)) {
+            path = decodeURI(path);
+        }
+
+        if (path.indexOf(pathsPrefix.dataDirectory) === 0) {
+            path = path.substring(pathsPrefix.dataDirectory.length - 1);
+
+            exports.requestFileSystem(function(fs) {
+                fs.root.getFile(path, {create: false}, successCallback, function() {
+                    fs.root.getDirectory(path, {create: false}, successCallback, errorCallback);
+                });
+            }, errorCallback, [LocalFileSystem.PERSISTENT]);
+        } else if (path.indexOf(pathsPrefix.cacheDirectory) === 0) {
+            path = path.substring(pathsPrefix.cacheDirectory.length - 1);
+
+            exports.requestFileSystem(function(fs) {
+                fs.root.getFile(path, {create: false}, successCallback, function() {
+                    fs.root.getDirectory(path, {create: false}, successCallback, errorCallback);
+                });
+            }, errorCallback, [LocalFileSystem.TEMPORARY]);
+        } else if (path.indexOf(pathsPrefix.applicationDirectory) === 0) {
+            path = path.substring(pathsPrefix.applicationDirectory.length);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", path, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    exports.requestFileSystem(function(fs) {
+                        fs.name = location.hostname;
+                        fs.root.getFile(path, {create: true}, writeFile, errorCallback);
+                    }, errorCallback, [LocalFileSystem.PERSISTENT]);
+                }
+            };
+
+            xhr.onerror = function () {
+                errorCallback && errorCallback(FileError.NOT_READABLE_ERR);
+            };
+
+            xhr.send();
+        } else {
+            errorCallback && errorCallback(FileError.NOT_FOUND_ERR);
+        }
+
+        function writeFile(entry) {
+            entry.createWriter(function (fileWriter) {
+                fileWriter.onwriteend = function (evt) {
+                    if (!evt.target.error) {
+                        entry.filesystemName = location.hostname;
+                        successCallback(entry);
+                    }
+                };
+                fileWriter.onerror = function () {
+                    errorCallback && errorCallback(FileError.NOT_READABLE_ERR);
+                };
+                fileWriter.write(new Blob([xhr.response]));
+            }, errorCallback);
+        }
+    };
+
+    exports.requestAllPaths = function(successCallback) {
+        successCallback(pathsPrefix);
+    };
+
 /*** Helpers ***/
 
     /**
@@ -397,12 +491,13 @@ QUIRKS:
      * @constructor
      */
     function MyFile(opts) {
-        var blob_ = null;
+        var blob_ = new Blob();
 
         this.size = opts.size || 0;
         this.name = opts.name || '';
         this.type = opts.type || '';
         this.lastModifiedDate = opts.lastModifiedDate || null;
+        this.storagePath = opts.storagePath || '';
 
         // Need some black magic to correct the object's size/name/type based on the
         // blob that is saved.
@@ -427,9 +522,17 @@ QUIRKS:
     // end with one (e.g. a directory). Also, resolve '.' and '..' to an absolute
     // one. This method ensures path is legit!
     function resolveToFullPath_(cwdFullPath, path) {
+        path = path || '';
         var fullPath = path;
+        var prefix = '';
 
-        var relativePath = path[0] != DIR_SEPARATOR;
+        cwdFullPath = cwdFullPath || DIR_SEPARATOR;
+        if (cwdFullPath.indexOf(FILESYSTEM_PREFIX) === 0) {
+            prefix = cwdFullPath.substring(0, cwdFullPath.indexOf(DIR_SEPARATOR, FILESYSTEM_PREFIX.length));
+            cwdFullPath = cwdFullPath.substring(cwdFullPath.indexOf(DIR_SEPARATOR, FILESYSTEM_PREFIX.length));
+        }
+
+        var relativePath = path[0] !== DIR_SEPARATOR;
         if (relativePath) {
             fullPath = cwdFullPath;
             if (cwdFullPath != DIR_SEPARATOR) {
@@ -453,7 +556,7 @@ QUIRKS:
         }).join(DIR_SEPARATOR);
 
         // Add back in leading slash.
-        if (fullPath[0] != DIR_SEPARATOR) {
+        if (fullPath[0] !== DIR_SEPARATOR) {
             fullPath = DIR_SEPARATOR + fullPath;
         }
 
@@ -472,7 +575,12 @@ QUIRKS:
             fullPath = fullPath.substring(0, fullPath.length - 1);
         }
 
-        return fullPath;
+        return {
+            storagePath: prefix + fullPath,
+            fullPath: fullPath,
+            fileName: fullPath.split(DIR_SEPARATOR).pop(),
+            fsName: prefix.split(DIR_SEPARATOR).pop()
+        };
     }
 
     function fileEntryFromIdbEntry(fileEntry) {
@@ -509,7 +617,7 @@ QUIRKS:
                     break;
             }
 
-        }, errorCallback, [null, fullPath]);
+        }, errorCallback, [fullPath, null]);
     }
 
 /*** Core logic to handle IDB operations ***/
@@ -552,6 +660,7 @@ QUIRKS:
 
     idb_.get = function(fullPath, successCallback, errorCallback) {
         if (!this.db) {
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
 
@@ -568,41 +677,35 @@ QUIRKS:
         };
     };
 
-    idb_.getAllEntries = function(fullPath, successCallback, errorCallback) {
+    idb_.getAllEntries = function(fullPath, storagePath, successCallback, errorCallback) {
         if (!this.db) {
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
 
         var results = [];
 
-        //var range = IDBKeyRange.lowerBound(fullPath, true);
-        //var range = IDBKeyRange.upperBound(fullPath, true);
-
-        // Treat the root entry special. Querying it returns all entries because
-        // they match '/'.
-        var range = null;
-        if (fullPath != DIR_SEPARATOR) {
-            //console.log(fullPath + '/', fullPath + DIR_OPEN_BOUND)
-            range = IDBKeyRange.bound(
-                    fullPath + DIR_SEPARATOR, fullPath + DIR_OPEN_BOUND, false, true);
+        if (storagePath[storagePath.length - 1] === DIR_SEPARATOR) {
+            storagePath = storagePath.substring(0, storagePath.length - 1);
         }
+
+        range = IDBKeyRange.bound(
+                storagePath + DIR_SEPARATOR, storagePath + DIR_OPEN_BOUND, false, true);
 
         var tx = this.db.transaction([FILE_STORE_], 'readonly');
         tx.onabort = errorCallback || onError;
         tx.oncomplete = function(e) {
-            // TODO: figure out how to do be range queries instead of filtering result
-            // in memory :(
             results = results.filter(function(val) {
                 var valPartsLen = val.fullPath.split(DIR_SEPARATOR).length;
                 var fullPathPartsLen = fullPath.split(DIR_SEPARATOR).length;
 
-                if (fullPath == DIR_SEPARATOR && valPartsLen < fullPathPartsLen + 1) {
+                if (fullPath === DIR_SEPARATOR && valPartsLen < fullPathPartsLen + 1) {
                     // Hack to filter out entries in the root folder. This is inefficient
                     // because reading the entires of fs.root (e.g. '/') returns ALL
                     // results in the database, then filters out the entries not in '/'.
                     return val;
-                } else if (fullPath != DIR_SEPARATOR &&
-                    valPartsLen == fullPathPartsLen + 1) {
+                } else if (fullPath !== DIR_SEPARATOR &&
+                    valPartsLen === fullPathPartsLen + 1) {
                     // If this a subfolder and entry is a direct child, include it in
                     // the results. Otherwise, it's not an entry of this folder.
                     return val;
@@ -627,6 +730,7 @@ QUIRKS:
 
     idb_['delete'] = function(fullPath, successCallback, errorCallback) {
         if (!this.db) {
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
 
@@ -637,11 +741,12 @@ QUIRKS:
         //var request = tx.objectStore(FILE_STORE_).delete(fullPath);
         var range = IDBKeyRange.bound(
             fullPath, fullPath + DIR_OPEN_BOUND, false, true);
-        var request = tx.objectStore(FILE_STORE_)['delete'](range);
+        tx.objectStore(FILE_STORE_)['delete'](range);
     };
 
-    idb_.put = function(entry, successCallback, errorCallback) {
+    idb_.put = function(entry, storagePath, successCallback, errorCallback) {
         if (!this.db) {
+            errorCallback && errorCallback(FileError.INVALID_MODIFICATION_ERR);
             return;
         }
 
@@ -652,7 +757,7 @@ QUIRKS:
             successCallback(entry);
         };
 
-        var request = tx.objectStore(FILE_STORE_).put(entry, entry.fullPath);
+        tx.objectStore(FILE_STORE_).put(entry, storagePath);
     };
 
     // Global error handler. Errors bubble from request, to transaction, to db.

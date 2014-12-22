@@ -56,4 +56,11 @@
     <source-file src="src/android/nl/xservices/plugins/Insomnia.java" target-dir="src/nl/xservices/plugins"/>
   </platform>
 
+  <!-- firefoxos -->
+  <platform name="firefoxos">
+    <js-module src="src/firefoxos/insomnia.js" name="InsomniaProxy">
+      <runs />
+    </js-module>
+  </platform>
+
 </plugin>

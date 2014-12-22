@@ -77,3 +77,24 @@
 * CB-7041 ios: Fix image filename logic when setting the iPad splash screen
 * fixes Splashscreen crash on WP8
 * Remove outdated doc
+
+### 0.3.3 (Sep 17, 2014)
+* CB-7249 cordova-plugin-splashscreen documentation translation
+* Renamed test dir, added nested plugin.xml
+* added documentation for manual tests
+* CB-7196 port splashscreen tests to framework
+
+### 0.3.4 (Oct 03, 2014)
+* Finalized iOS splash screen (image name) tests. 176 tests in all, 44 for each type of device (iPad, iPhone, iPhone5, iPhone6, iPhone 6 Plus).
+* CB-7633 - (Re-fix based on updated unit tests) iPhone 6 Plus support
+* Updated iOS tests for locked orientations
+* Added more iOS splash screen tests.
+* CB-7633 - Add support for iPhone 6/6+
+* Added failing iPhone 6/6 Plus tests.
+* Added 'npm test'
+* CB-7663 - iOS unit tests for splash screen
+* Properly formatted splashscreen preference docs.
+
+### 0.3.5 (Dec 02, 2014)
+* CB-7204 - Race condition when hiding and showing spinner (closes #21)
+* CB-7700 cordova-plugin-splashscreen documentation translation: cordova-plugin-splashscreen

@@ -386,6 +386,12 @@
         var myMedia = new Media("documents://beer.mp3")
         
 
+### Windows 8 の癖
+
+*   完全なパスを指定しない場合、記録は AppData/temp ディレクトリに配置されます。これを介してアクセスすることができます、 `ファイル` API を使用してください。 `LocalFileSystem.TEMPORARY` または ' ms appdata: temp////<filename>' URI。
+
+*   記録時に指定された任意のサブディレクトリに存在する必要があります。
+
 ### Tizen の癖
 
 *   Tizen のデバイスでサポートされていません。
@@ -482,7 +488,7 @@ A `MediaError` オブジェクトに返される、 `mediaError` コールバッ
 
 ### 定数
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

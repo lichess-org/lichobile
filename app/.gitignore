@@ -53,3 +53,8 @@ xcuserdata
 profile
 *.moved-aside
 IOS/www/
+
+
+# BROWSER
+
+platforms/browser/www/

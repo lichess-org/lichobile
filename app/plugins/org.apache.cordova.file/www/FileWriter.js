@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -99,10 +99,11 @@ FileWriter.prototype.write = function(data) {
 
     var that=this;
     var supportsBinary = (typeof window.Blob !== 'undefined' && typeof window.ArrayBuffer !== 'undefined');
+    var isProxySupportBlobNatively = (cordova.platformId === "windows8" || cordova.platformId === "windows");
     var isBinary;
 
     // Check to see if the incoming data is a blob
-    if (data instanceof File || (supportsBinary && data instanceof Blob)) {
+    if (data instanceof File || (!isProxySupportBlobNatively && supportsBinary && data instanceof Blob)) {
         var fileReader = new FileReader();
         fileReader.onload = function() {
             // Call this method again, with the arraybuffer as argument
@@ -118,7 +119,7 @@ FileWriter.prototype.write = function(data) {
 
     // Mark data type for safer transport over the binary bridge
     isBinary = supportsBinary && (data instanceof ArrayBuffer);
-    if (isBinary && ['windowsphone', 'windows8'].indexOf(cordova.platformId) >= 0) {
+    if (isBinary && cordova.platformId === "windowsphone") {
         // create a plain array, using the keys from the Uint8Array view so that we can serialize it
         data = Array.apply(null, new Uint8Array(data));
     }

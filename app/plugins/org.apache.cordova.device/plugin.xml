@@ -22,7 +22,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="org.apache.cordova.device"
-    version="0.2.10">
+    version="0.2.14-dev">
     <name>Device</name>
     <description>Cordova Device Plugin</description>
     <license>Apache 2.0</license>
@@ -142,6 +142,26 @@
     <platform name="windows8">
         <js-module src="src/windows8/DeviceProxy.js" name="DeviceProxy">
             <merges target="" />
+        </js-module>
+    </platform>
+
+    <!-- windows -->
+    <platform name="windows">
+        <js-module src="src/windows/DeviceProxy.js" name="DeviceProxy">
+            <merges target="" />
+        </js-module>
+    </platform>
+
+    <!-- browser -->
+    <platform name="browser">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Device">
+                <param name="browser-package" value="Device" />
+            </feature>
+        </config-file>
+
+        <js-module src="src/browser/DeviceProxy.js" name="DeviceProxy">
+            <runs />
         </js-module>
     </platform>
 

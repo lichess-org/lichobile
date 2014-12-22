@@ -386,9 +386,15 @@ Permet de démarrer l'enregistrement d'un fichier audio.
         var myMedia = new Media("documents://beer.mp3")
         
 
+### Bizarreries de Windows 8
+
+*   Si un chemin d'accès complet n'est pas fourni, l'enregistrement est placé dans le répertoire AppData/temp. Ce qui peut être consulté le `Fichier` À l'aide de l'API `LocalFileSystem.TEMPORARY` ou ' ms-appdata : temp / / / /<filename>' URI.
+
+*   N'importe quel sous-répertoire spécifié au moment de l'enregistrement doit déjà exister.
+
 ### Bizarreries de paciarelli
 
-*   Cette méthode n'est pas prise en charge par les appareils Tizen.
+*   Pas pris en charge sur les appareils paciarelli.
 
 ## media.stop
 
@@ -478,11 +484,11 @@ Un objet `MediaError` est transmis à la fonction callback `mediaError` lorsqu'u
 
 *   **code**: l'un des codes d'erreur prédéfinis énumérés ci-dessous.
 
-*   **message** : un message donnant davantage de détails sur l'erreur en question.
+*   **message**: un message d'erreur décrivant les détails de l'erreur.
 
 ### Constantes
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

@@ -94,7 +94,7 @@ Auf iOS 7 zu der Statusbar wie iOS 6 erscheinen auf False festgelegt. Legen Sie 
 
 *   iOS
 
-## Kleines Beispiel
+## Kurzes Beispiel
 
     StatusBar.overlaysWebView(true);
     StatusBar.overlaysWebView(false);

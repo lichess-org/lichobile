@@ -55,7 +55,11 @@ module.exports = function (success, fail, args) {
         };
     resolve(function (entry) {
         requestAnimationFrame(function () {
-            entry.nativeEntry.file(onSuccess, onFail);
+            if (entry.nativeEntry.file) {
+                entry.nativeEntry.file(onSuccess, onFail);
+            } else {
+                entry.nativeEntry.getMetadata(onSuccess, onFail);
+            }
         });
     }, onFail, [uri]);
 };

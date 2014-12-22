@@ -40,9 +40,9 @@ Dieses Plugin zeigt und verbirgt einen Splash-Screen beim Start der Anwendung.
 *   SplashScreen.Show
 *   SplashScreen.Hide
 
-### Android Macken
+### Android Eigenarten
 
-Sie müssen in der Datei config.xml fügen Sie die folgenden Einstellungen:
+Sie müssen in der config.xml folgende Einstellungen vornehmen:
 
 `<preference name="SplashScreen" value="foo" />` `<preference name="SplashScreenDelay" value="10000" />`
 
@@ -54,15 +54,14 @@ Wo Foo ist der Name der Datei Splashscreen, vorzugsweise eine 9-Patch-Datei. Ste
 
 Schließen Sie den Splash-Screen.
 
-    navigator.splashscreen.hide();
+    Navigator.SplashScreen.Hide();
     
 
-### BlackBerry 10, WP8, iOS Quirk
+### BlackBerry 10, WP8, iOS Eigenarten
 
 Die `config.xml` der Datei `AutoHideSplashScreen` muss `false` . Verstecken des Begrüßungsbildschirms für zwei Sekunden Verzögerung, fügen Sie einen Timer wie die folgende in der `deviceready` -Ereignishandler:
 
-        setTimeout(function() {
-            navigator.splashscreen.hide();
+        setTimeout(function() {navigator.splashscreen.hide();
         }, 2000);
     
 
@@ -70,7 +69,7 @@ Die `config.xml` der Datei `AutoHideSplashScreen` muss `false` . Verstecken des 
 
 Zeigt den Begrüßungsbildschirm.
 
-    navigator.splashscreen.show();
+    Navigator.SplashScreen.Show();
     
 
 Ihre Anwendung kann nicht aufgerufen werden `navigator.splashscreen.show()` bis die app gestartet hat und das `deviceready` -Ereignis ausgelöst hat. Aber da in der Regel der Splash-Screen soll sichtbar sein, bevor die Anwendung gestartet wurde, scheint die Niederlage der Zweck des Begrüßungsbildschirms. Somit einige Konfiguration in `config.xml` wird automatisch `show` den Splash-Screen unmittelbar nach Ihrer app starten und bevor es voll gestartet und hat das `deviceready` Ereignis. Weitere Informationen zu dieser Konfiguration finden Sie unter [Symbole und Splash-Screens][1] . Aus diesem Grund ist es unwahrscheinlich, dass Sie aufrufen müssen `navigator.splashscreen.show()` den Splash-Screen beim Starten der app sichtbar zu machen.

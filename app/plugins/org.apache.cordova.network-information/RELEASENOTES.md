@@ -65,3 +65,27 @@
 
 ### 0.2.10 (Jun 24, 2014)
 * CB-6907: [android] Don't crash on startup if no networks available
+
+### 0.2.11 (Aug 06, 2014)
+* **FFOS** update NetworkProxy.js
+* CB-6127 Updated translations for docs
+* CB-7019 Updated version and RELEASENOTES.md for release 0.2.10
+* Fixed docs for online/offline event being backwards
+
+### 0.2.12 (Sep 17, 2014)
+* CB-7471 cordova-plugin-network-information documentation translation
+* Fix network information type exception on fxos 2
+* Added support for the browser
+* CB-6724 added documentation for manual tests
+* remove reference to test assets, they are optional
+* Renamed test dir and added nested plugin.xml
+* CB-6964 ported manual tests
+* Port network tests to plugin-test-framework
+* Fix naviagtor typo
+
+### 0.2.13 (Oct 03, 2014)
+* CB-7595: Android L changes the type from Mobile to Cellular, I'm pretty sure this isn't documented
+
+### 0.2.14 (Dec 02, 2014)
+* CB-7976 **Android**: Use webView's context rather than Activity's context for intent receiver
+* CB-7700 cordova-plugin-network-information documentation translation: cordova-plugin-network-information

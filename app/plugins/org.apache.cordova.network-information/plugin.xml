@@ -21,7 +21,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="org.apache.cordova.network-information"
-      version="0.2.10">
+      version="0.2.14">
 
     <name>Network Information</name>
     <description>Cordova Network Information Plugin</description>
@@ -153,6 +153,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- tizen -->
     <platform name="tizen">
         <js-module src="src/tizen/NetworkProxy.js" name="NetworkProxy">
+            <runs />
+        </js-module>
+    </platform>
+
+    <!-- browser -->
+    <platform name="browser">
+        <js-module src="src/browser/NetworkProxy.js" name="NetworkProxy">
             <runs />
         </js-module>
     </platform>

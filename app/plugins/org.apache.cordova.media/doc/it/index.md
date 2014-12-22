@@ -386,6 +386,12 @@ Avvia la registrazione di un file audio.
         var myMedia = new Media("documents://beer.mp3")
         
 
+### Stranezze di Windows 8
+
+*   Se non è specificato un percorso completo, la registrazione viene inserita nella directory AppData/temp. Questo si può accedere tramite il `File` Utilizzando API `LocalFileSystem.TEMPORARY` o ' ms-appdata: / / temp /<filename>' URI.
+
+*   Deve esistere alcuna sottodirectory specificate a tempo di record.
+
 ### Tizen stranezze
 
 *   Tizen periferiche non supportano.
@@ -482,7 +488,7 @@ A `MediaError` oggetto viene restituito alla `mediaError` funzione di callback q
 
 ### Costanti
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

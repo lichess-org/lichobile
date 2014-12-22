@@ -32,6 +32,8 @@ var File = function(name, localURL, type, lastModifiedDate, size){
     this.name = name || '';
     this.localURL = localURL || null;
     this.type = type || null;
+    this.lastModified = lastModifiedDate || null;
+    // For backwards compatibility, store the timestamp in lastModifiedDate as well
     this.lastModifiedDate = lastModifiedDate || null;
     this.size = size || 0;
 
@@ -67,7 +69,7 @@ File.prototype.slice = function(start, end) {
         }
     }
 
-    var newFile = new File(this.name, this.localURL, this.type, this.lastModifiedDate, this.size);
+    var newFile = new File(this.name, this.localURL, this.type, this.lastModified, this.size);
     newFile.start = this.start + newStart;
     newFile.end = this.start + newEnd;
     return newFile;

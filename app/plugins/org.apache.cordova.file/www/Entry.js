@@ -65,13 +65,16 @@ function Entry(isFile, isDirectory, name, fullPath, fileSystem, nativeURL) {
 Entry.prototype.getMetadata = function(successCallback, errorCallback) {
     argscheck.checkArgs('FF', 'Entry.getMetadata', arguments);
     var success = successCallback && function(entryMetadata) {
-        var metadata = new Metadata(entryMetadata);
+        var metadata = new Metadata({
+            size: entryMetadata.size,
+            modificationTime: entryMetadata.lastModifiedDate
+        });
         successCallback(metadata);
     };
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-    exec(success, fail, "File", "getMetadata", [this.toInternalURL()]);
+    exec(success, fail, "File", "getFileMetadata", [this.toInternalURL()]);
 };
 
 /**
@@ -106,14 +109,16 @@ Entry.prototype.moveTo = function(parent, newName, successCallback, errorCallbac
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-    var srcURL = this.toInternalURL(),
+    var filesystem = this.filesystem,
+        srcURL = this.toInternalURL(),
         // entry name
         name = newName || this.name,
         success = function(entry) {
             if (entry) {
                 if (successCallback) {
                     // create appropriate Entry object
-                    var fs = entry.filesystemName ? new FileSystem(entry.filesystemName, {name:"", fullPath:"/"}) : this.filesystem;
+                    var newFSName = entry.filesystemName || (entry.filesystem && entry.filesystem.name);
+                    var fs = newFSName ? new FileSystem(newFSName, { name: "", fullPath: "/" }) : new FileSystem(parent.filesystem.name, { name: "", fullPath: "/" });
                     var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath, fs, entry.nativeURL) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath, fs, entry.nativeURL);
                     successCallback(result);
                 }
@@ -145,7 +150,8 @@ Entry.prototype.copyTo = function(parent, newName, successCallback, errorCallbac
     var fail = errorCallback && function(code) {
         errorCallback(new FileError(code));
     };
-    var srcURL = this.toInternalURL(),
+    var filesystem = this.filesystem,
+        srcURL = this.toInternalURL(),
         // entry name
         name = newName || this.name,
         // success callback
@@ -153,7 +159,8 @@ Entry.prototype.copyTo = function(parent, newName, successCallback, errorCallbac
             if (entry) {
                 if (successCallback) {
                     // create appropriate Entry object
-                    var fs = entry.filesystemName ? new FileSystem(entry.filesystemName, {name:"", fullPath:"/"}) : this.filesystem;
+                    var newFSName = entry.filesystemName || (entry.filesystem && entry.filesystem.name);
+                    var fs = newFSName ? new FileSystem(newFSName, { name: "", fullPath: "/" }) : new FileSystem(parent.filesystem.name, { name: "", fullPath: "/" });
                     var result = (entry.isDirectory) ? new (require('./DirectoryEntry'))(entry.name, entry.fullPath, fs, entry.nativeURL) : new (require('org.apache.cordova.file.FileEntry'))(entry.name, entry.fullPath, fs, entry.nativeURL);
                     successCallback(result);
                 }

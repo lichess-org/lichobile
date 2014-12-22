@@ -44,7 +44,7 @@ cordova.exec(
     function () {
         console.error('Unable to determine local storage file path');
     },
-    'org.apache.cordova.file',
+    'File',
     'getHomePath',
     false
 );

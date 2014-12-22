@@ -23,9 +23,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaResourceApi;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +49,25 @@ public class ContentFilesystem extends Filesystem {
 	public ContentFilesystem(String name, CordovaInterface cordova, CordovaWebView webView) {
 		this.name = name;
 		this.cordova = cordova;
-		this.resourceApi = new CordovaResourceApi(webView.getContext(), webView.pluginManager);
+
+		Class webViewClass = webView.getClass();
+		PluginManager pm = null;
+		try {
+			Method gpm = webViewClass.getMethod("getPluginManager");
+			pm = (PluginManager) gpm.invoke(webView);
+		} catch (NoSuchMethodException e) {
+		} catch (IllegalAccessException e) {
+		} catch (InvocationTargetException e) {
+		}
+		if (pm == null) {
+			try {
+				Field pmf = webViewClass.getField("pluginManager");
+				pm = (PluginManager)pmf.get(webView);
+			} catch (NoSuchFieldException e) {
+			} catch (IllegalAccessException e) {
+			}
+		}
+		this.resourceApi = new CordovaResourceApi(webView.getContext(), pm);
 	}
 	
 	@Override

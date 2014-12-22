@@ -13,7 +13,7 @@
     [app setIdleTimerDisabled:true];
   }
   CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  [self writeJavascript:[result toSuccessCallbackString:callbackId]];
+  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 - (void) allowSleepAgain:(CDVInvokedUrlCommand*)command {
@@ -26,7 +26,7 @@
     [app setIdleTimerDisabled:false];
   }
   CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  [self writeJavascript:[result toSuccessCallbackString:callbackId]];
+  [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
 @end

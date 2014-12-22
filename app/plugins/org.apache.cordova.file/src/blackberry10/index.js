@@ -27,5 +27,18 @@ module.exports = {
     getHomePath: function (success, fail, args, env) {
         var homeDir = window.qnx.webplatform.getApplication().getEnv("HOME");
         new PluginResult(args, env).ok(homeDir);
+    },
+
+    requestAllPaths: function (success, fail, args, env) {
+        var homeDir = 'file://' + window.qnx.webplatform.getApplication().getEnv("HOME").replace('/data', ''),
+            paths = {
+                applicationDirectory: homeDir + '/app/native/',
+                applicationStorageDirectory: homeDir + '/',
+                dataDirectory: homeDir + '/data/webviews/webfs/persistent/local__0/',
+                cacheDirectory: homeDir + '/data/webviews/webfs/temporary/local__0/',
+                externalRootDirectory: 'file:///accounts/1000/removable/sdcard/',
+                sharedDirectory: homeDir + '/shared/'
+            };
+        success(paths);
     }
 };

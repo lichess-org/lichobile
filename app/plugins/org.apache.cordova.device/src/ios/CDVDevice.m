@@ -50,20 +50,6 @@
     NSDictionary* deviceProperties = [self deviceProperties];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:deviceProperties];
 
-    /* Settings.plist
-     * Read the optional Settings.plist file and push these user-defined settings down into the web application.
-     * This can be useful for supplying build-time configuration variables down to the app to change its behavior,
-     * such as specifying Full / Lite version, or localization (English vs German, for instance).
-     */
-    // TODO: turn this into an iOS only plugin
-    NSDictionary* temp = [CDVViewController getBundlePlist:@"Settings"];
-
-    if ([temp respondsToSelector:@selector(JSONString)]) {
-        NSLog(@"Deprecation warning: window.Setting will be removed Aug 2013. Refer to https://issues.apache.org/jira/browse/CB-2433");
-        NSString* js = [NSString stringWithFormat:@"window.Settings = %@;", [temp JSONString]];
-        [self.commandDelegate evalJs:js];
-    }
-
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 

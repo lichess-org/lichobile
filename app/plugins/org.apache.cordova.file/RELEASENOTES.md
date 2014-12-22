@@ -19,7 +19,7 @@
 #
 -->
 # Release Notes
-
+ 
 ### 0.2.1 (Sept 5, 2013)
 * [CB-4656] Don't add newlines in data urls within readAsDataUrl.
 * [CB-4514] Making DirectoryCopy Recursive
@@ -171,7 +171,7 @@
 * fixed setMetadata() to use the formatted fullPath
 * corrected typo which leads to a "comma expression"
 * CB-4952: ios: Resolve symlinks in file:// URLs
-* Add docs about the extraFileSystems <preference>
+* Add docs about the extraFileSystems preference
 * CB-6460: Update license headers
 
 ### 1.2.0 (Jun 05, 2014)
@@ -188,8 +188,8 @@
 * Small wording tweaks
 * Fixed toURL() toInternalURL() information in the doku
 * ios: Don't fail a write of zero-length payload.
-* CB-285 Docs for cordova.file.*Directory properties
-* CB-285 Add cordova.file.*Directory properties for iOS & Android
+* CB-285 Docs for cordova.file.\*Directory properties
+* CB-285 Add cordova.file.\*Directory properties for iOS & Android
 * CB-3440 [BlackBerry10] Proxy based implementation
 * Fix typo in docs "app-bundle" -> "bundle"
 * CB-6583 ios: Fix failing to create entry when space in parent path
@@ -203,3 +203,93 @@
 * Add NOTICE file
 * CB-6114 Updated version and RELEASENOTES.md for release 1.0.1
 * CB-5980 Updated version and RELEASENOTES.md for release 1.0.0
+
+### 1.2.1
+* CB-6922 Fix inconsistent handling of lastModifiedDate and modificationTime
+* CB-285: Document filesystem root properties
+
+### 1.3.0 (Aug 06, 2014)
+* **FFOS** Remove unsupported paths from requestAllPaths
+* **FFOS** Support for resolve URI, request all paths and local app directory.
+* CB-4263 set ready state to done before onload
+* CB-7167 [BlackBerry10] copyTo - return wrapped entry rather than native
+* CB-7167 [BlackBerry10] Add directory support to getFileMetadata
+* CB-7167 [BlackBerry10] Fix tests detection of blob support (window.Blob is BlobConstructor object)
+* CB-7161 [BlackBerry10] Add file system directory paths
+* CB-7093 Create separate plugin.xml for new-style tests
+* CB-7057 Docs update: elaborate on what directories are for
+* CB-7093: Undo the effects of an old bad S&R command
+* CB-7093: Remove a bunch of unneeded log messages
+* CB-7093: Add JS module to plugin.xml file for auto-tests
+* CB-7093 Ported automated file tests
+* **WINDOWS** remove extra function closure, not    needed
+* **WINDOWS** remove check for undefined fail(), it is defined by the proxy and always exists
+* **WINDOWS** re-apply readAsBinaryString and readAsArrayBuffer
+* **WINDOWS** Moved similar calls to be the same calls, aliased long namespaced functions
+* CB-6127 Updated translations for docs.
+* CB-6571 Fix getParentForLocalURL to work correctly with directories with trailing '/' (This closes #58)
+* UTTypeCopyPreferredTagWithClass returns nil mimetype for css when there is no network
+* updated spec links in docs ( en only )
+* CB-6571 add trailing space it is missing in DirectoryEnty constructor.
+* CB-6980 Fixing filesystem:null property in Entry
+* Add win8 support for readAsBinaryString and readAsArrayBuffer
+* [FFOS] Update FileProxy.js
+* CB-6940: Fixing up commit from dzeims
+* CB-6940: Android: cleanup try/catch exception handling
+* CB-6940: context.getExternal* methods return null if sdcard isn't in mounted state, causing exceptions that prevent startup from reaching readystate
+* Fix mis-handling of filesystem reference in Entry.moveTo ('this' used in closure).
+* CB-6902: Use File.lastModified rather than .lastModifiedDate
+* CB-6922: Remove unused getMetadata native code
+* CB-6922: Use getFileMetadata consistently to get metadata
+* changed fullPath to self.rootDocsPath
+* CB-6890: Fix pluginManager access for 4.0.x branch
+
+### 1.3.1 (Sep 17, 2014)
+* CB-7471 cordova-plugin-file documentation translation
+* CB-7272 Replace confusing "r/o" abbreviation with just "r"
+* CB-7423 encode path before attempting to resolve
+* CB-7375 Fix the filesystem name in resolveLocalFileSystemUri
+* CB-7445 [BlackBerry10] resolveLocalFileSystemURI - change DEFAULT_SIZE to MAX_SIZE
+* CB-7458 [BlackBerry10] resolveLocalFileSystemURL - add filesystem property
+* CB-7445 [BlackBerry10] Add default file system size to prevent quota exceeded error on initial install
+* CB-7431 Avoid calling done() twice in file.spec.109 test
+* CB-7413 Adds support of 'ms-appdata://' URIs
+* CB-7422 [File Tests] Use proper fileSystem to create fullPath
+* CB-7375 [Entry] get proper filesystem in Entry
+* Amazon related changes.
+* CB-7375 Remove leading slash statement from condition
+* Refactored much of the logic in FileMetadata constructor.  Directory.size will return 0
+* CB-7419 [WP8] Added support to get metada from dir
+* CB-7418 [DirectoryEntry] Added fullPath variable as part of condition
+* CB-7417 [File tests] added proper matcher to compare fullPath property
+* CB-7375 Partial revert to resolve WP8 failures
+* Overwrite existing file on getFile when create is true
+* CB-7375 CB-6148: Ensure that return values from copy and move operations reference the correct filesystem
+* CB-6724 changed style detail on documentation
+* Added new js files to amazon-fireos platform.
+* Adds Windows platform
+* Fixes multiple mobilespec tests errors
+* Removed test/tests.js module from main plugin.xml
+* CB-7094 renamed folder to tests + added nested plugin.xml
+* added documentation for manual tests
+* CB-6923 Adding support to handle relative paths
+* Style improvements on Manual tests
+* CB-7094 Ported File manual tests
+
+### 1.3.2 (Dec 02, 2014)
+* Gets rid of thread block error in File plugin
+* CB-7917 Made tests file.spec.114 - 116 pass for **Windows** platform
+* CB-7977 Mention `deviceready` in plugin docs
+* CB-7602: Fix `isCopyOnItself` logic
+* CB-7700 cordova-plugin-file documentation translation: cordova-plugin-file
+* Use one proxy for both **Windows** and **Windows8** platforms
+* CB-6994 Fixes result, returned by proxy's write method
+* [fxos] update `__format__` to match `pathsPrefix`
+* CB-6994 Improves merged code to be able to write a File
+* Optimize `FileProxy` for **Windows** platforms
+* Synchronize changes with **Windows** platform
+* Fix function write for big files on **Windows 8**
+* Write file in background
+* CB-7487 **Android** Broadcast file write This allows MTP USB shares to show the file immediately without reboot/manual refresh using 3rd party app.
+* CB-7700 cordova-plugin-file documentation translation: cordova-plugin-file
+* CB-7571 Bump version of nested plugin to match parent plugin

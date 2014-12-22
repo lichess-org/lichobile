@@ -386,6 +386,12 @@
         var myMedia = new Media("documents://beer.mp3")
         
 
+### 윈도우 8 단점
+
+*   전체 경로 제공 하지 않으면 녹음 AppData/temp 디렉터리에 배치 됩니다. 이 통해 액세스할 수 있는 `파일` API를 사용 하 여 `LocalFileSystem.TEMPORARY` 또는 ' ms appdata: 온도 / / / /<filename>' URI.
+
+*   기록 시간에 지정 된 하위 디렉터리에 이미 존재 해야 합니다.
+
 ### Tizen 특수
 
 *   Tizen 장치에서 지원 되지 않습니다.
@@ -482,7 +488,7 @@ A `MediaError` 개체에 반환 됩니다는 `mediaError` 콜백 함수 오류�
 
 ### 상수
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

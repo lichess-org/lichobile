@@ -113,7 +113,7 @@ Gibt die aktuelle Position in einer Audiodatei. Aktualisiert auch die `Media` de
 
 *   **Medienfehler**: (Optional) der Rückruf ausgeführt, wenn ein Fehler auftritt.
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Audio player
     //
@@ -144,7 +144,7 @@ Gibt die Dauer einer Audiodatei in Sekunden. Wenn die Dauer unbekannt ist, wird 
     media.getDuration();
     
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Audio player
     //
@@ -172,7 +172,7 @@ Pausen Abspielen einer Audiodatei.
     media.pause();
     
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Play audio
     //
@@ -202,7 +202,7 @@ Startet oder setzt fort, Abspielen einer Audiodatei.
     media.play();
     
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Play audio
     //
@@ -250,7 +250,7 @@ Das zugrunde liegende Betriebssystem audio Ressourcen frei. Dies ist besonders w
     media.release();
     
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Audio player
     //
@@ -272,7 +272,7 @@ Legt die aktuelle Position in einer Audiodatei.
 
 *   **Millisekunden**: die Position die Wiedergabeposition innerhalb des Audiotracks in Millisekunden festgelegt.
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Audio player
     //
@@ -304,7 +304,7 @@ Stellen Sie die Lautstärke für eine audio-Datei.
 *   Android
 *   iOS
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Play audio
     //
@@ -349,7 +349,7 @@ Beginnt mit der Aufnahme einer audio-Datei.
 *   Windows Phone 7 und 8
 *   Windows 8
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Record audio
     //
@@ -371,7 +371,7 @@ Beginnt mit der Aufnahme einer audio-Datei.
     }
     
 
-### Android Macken
+### Android Eigenarten
 
 *   Android-Geräte aufnehmen Audio im Adaptive Sprachcodecs Format. Die angegebene Datei sollte mit einer Endung *.amr* enden.
 
@@ -386,6 +386,12 @@ Beginnt mit der Aufnahme einer audio-Datei.
         var myMedia = new Media("documents://beer.mp3")
         
 
+### Windows 8 Macken
+
+*   Wenn Sie ein vollständiger Pfad nicht angegeben ist, wird die Aufnahme im AppData/Temp-Verzeichnis platziert. Erreichbar über die `Datei` API verwenden `LocalFileSystem.TEMPORARY` oder "ms-Appdata: / / / Temp /<filename>' URI.
+
+*   Allen Unterverzeichnissen in Rekordzeit angegeben muss bereits vorhanden sein.
+
 ### Tizen Macken
 
 *   Tizen Geräten unterstützt nicht.
@@ -397,7 +403,7 @@ Beendet die Wiedergabe einer Audiodatei.
     Media.Stop();
     
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Play audio
     //
@@ -438,7 +444,7 @@ Stoppt die Aufnahme einer audio-Datei.
 *   Windows Phone 7 und 8
 *   Windows 8
 
-### Kleines Beispiel
+### Kurzes Beispiel
 
     // Record audio
     //
@@ -482,7 +488,7 @@ A `MediaError` Objekt wird zurückgegeben, um die `mediaError` Callback-Funktion
 
 ### Konstanten
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

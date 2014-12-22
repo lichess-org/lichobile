@@ -426,7 +426,7 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
     } else {
         NSString* fullPath = @"/";
         // check for avail space for size request
-        NSNumber* pNumAvail = [self checkFreeDiskSpace:fullPath];
+        NSNumber* pNumAvail = [self checkFreeDiskSpace:self.rootDocsPath];
         // NSLog(@"Free space: %@", [NSString stringWithFormat:@"%qu", [ pNumAvail unsignedLongLongValue ]]);
         if (pNumAvail && ([pNumAvail unsignedLongLongValue] < size)) {
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION messageAsInt:QUOTA_EXCEEDED_ERR];
@@ -538,6 +538,8 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
     // arguments
     NSString* localURIstr = [command.arguments objectAtIndex:0];
     CDVPluginResult* result;
+    
+    localURIstr = [self encodePath:localURIstr]; //encode path before resolving
     CDVFilesystemURL* inputURI = [self fileSystemURLforArg:localURIstr];
     
     if (inputURI == nil || inputURI.fileSystemName == nil) {
@@ -551,6 +553,13 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
         }
     }
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+//encode path with percent escapes
+-(NSString *)encodePath:(NSString *)path
+{
+    NSString *decodedPath = [path stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //decode incase it's already encoded to avoid encoding twice
+    return [decodedPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 
@@ -643,21 +652,6 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
     CDVPluginResult* result = [fs getParentForURL:localURI];
 
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-/*
- * get MetaData of entry
- * Currently MetaData only includes modificationTime.
- */
-- (void)getMetadata:(CDVInvokedUrlCommand*)command
-{
-    // arguments
-    CDVFilesystemURL* localURI = [self fileSystemURLforArg:command.arguments[0]];
-    NSObject<CDVFileSystem> *fs = [self filesystemForURL:localURI];
-    [fs getMetadataForURL:localURI callback:^(CDVPluginResult* result) {
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
-
 }
 
 /*
@@ -964,29 +958,30 @@ NSString* const kCDVFilesystemURLPrefix = @"cdvfile";
  */
 - (void)write:(CDVInvokedUrlCommand*)command
 {
-    NSString* callbackId = command.callbackId;
-    NSArray* arguments = command.arguments;
+    [self.commandDelegate runInBackground:^ {
+        NSString* callbackId = command.callbackId;
+        NSArray* arguments = command.arguments;
 
-    // arguments
-    CDVFilesystemURL* localURI = [self fileSystemURLforArg:command.arguments[0]];
-    id argData = [arguments objectAtIndex:1];
-    unsigned long long pos = (unsigned long long)[[arguments objectAtIndex:2] longLongValue];
+        // arguments
+        CDVFilesystemURL* localURI = [self fileSystemURLforArg:command.arguments[0]];
+        id argData = [arguments objectAtIndex:1];
+        unsigned long long pos = (unsigned long long)[[arguments objectAtIndex:2] longLongValue];
 
-    NSObject<CDVFileSystem> *fs = [self filesystemForURL:localURI];
+        NSObject<CDVFileSystem> *fs = [self filesystemForURL:localURI];
 
 
-    [fs truncateFileAtURL:localURI atPosition:pos];
-    CDVPluginResult *result;
-    if ([argData isKindOfClass:[NSString class]]) {
-        NSData *encData = [argData dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-        result = [fs writeToFileAtURL:localURI withData:encData append:YES];
-    } else if ([argData isKindOfClass:[NSData class]]) {
-        result = [fs writeToFileAtURL:localURI withData:argData append:YES];
-    } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid parameter type"];
-    }
-    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-
+        [fs truncateFileAtURL:localURI atPosition:pos];
+        CDVPluginResult *result;
+        if ([argData isKindOfClass:[NSString class]]) {
+            NSData *encData = [argData dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+            result = [fs writeToFileAtURL:localURI withData:encData append:YES];
+        } else if ([argData isKindOfClass:[NSData class]]) {
+            result = [fs writeToFileAtURL:localURI withData:argData append:YES];
+        } else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid parameter type"];
+        }
+        [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    }];
 }
 
 #pragma mark Methods for converting between URLs and paths

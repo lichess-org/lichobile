@@ -21,7 +21,7 @@
 
 Este plugin proporciona la capacidad de grabar y reproducir archivos de audio en un dispositivo.
 
-**Nota**: la implementación actual no se adhiere a una especificación del W3C para la captura de los medios de comunicación y se proporciona únicamente para su comodidad. Una futura implementación se adherirá a la última especificación W3C y puede desaprueban las API actuales.
+**Nota**: la implementación actual no se adhiere a una especificación del W3C para la captura de los medios de comunicación y se proporciona únicamente para su comodidad. Una futura implementación se adherirá a la más reciente especificación W3C y puede desaprueban las API actuales.
 
 ## Instalación
 
@@ -39,7 +39,7 @@ Este plugin proporciona la capacidad de grabar y reproducir archivos de audio en
 
 ## Windows Phone rarezas
 
-*   Archivo sólo multimedia puede reproducir en un momento.
+*   Archivo único multimedia puede reproducir en un momento.
 
 *   Hay restricciones estrictas sobre cómo interactúa la aplicación con otros medios. Consulte la [documentación de Microsoft para obtener más detalles][1].
 
@@ -52,9 +52,9 @@ Este plugin proporciona la capacidad de grabar y reproducir archivos de audio en
 
 ### Parámetros
 
-*   **fuente**: un URI que contiene el contenido de audio. *(DOMString)*
+*   **src**: un URI que contiene el contenido de audio. *(DOMString)*
 
-*   **mediaSuccess**: (opcional) la devolución de llamada que se ejecuta después de un `Media` objeto ha completado el juego actual, registro o acción. *(Función)*
+*   **mediaSuccess**: (opcional) la devolución de llamada que se ejecuta después de que un objeto `Media` ha completado el juego actual, registro o acción. *(Function)*
 
 *   **mediaError**: (opcional) la devolución de llamada que se ejecuta si se produce un error. *(Función)*
 
@@ -62,7 +62,7 @@ Este plugin proporciona la capacidad de grabar y reproducir archivos de audio en
 
 ### Constantes
 
-Las siguientes constantes se presentan como el único parámetro a la `mediaStatus` "callback":
+Las siguientes constantes son reportadas como el único parámetro para la devolución de llamada `mediaStatus`:
 
 *   `Media.MEDIA_NONE` = 0;
 *   `Media.MEDIA_STARTING` = 1;
@@ -72,33 +72,33 @@ Las siguientes constantes se presentan como el único parámetro a la `mediaStat
 
 ### Métodos
 
-*   `media.getCurrentPosition`: Devuelve la posición actual dentro de un archivo de audio.
+*   `media.getCurrentPosition`: devuelve la posición actual dentro de un archivo de audio.
 
-*   `media.getDuration`: Devuelve la duración de un archivo de audio.
+*   `media.getDuration`: devuelve la duración de un archivo de audio.
 
-*   `media.play`: Iniciar o reanudar la reproducción de un archivo de audio.
+*   `media.play`: iniciar o reanudar reproducción de un archivo de audio.
 
-*   `media.pause`: Pausar la reproducción de un archivo de audio.
+*   `media.pause`: pausar la reproducción de un archivo de audio.
 
-*   `media.release`: Libera recursos de audio del sistema operativo subyacente.
+*   `media.release`: libera recursos de audio del sistema operativo subyacente.
 
-*   `media.seekTo`: Mueve la posición dentro del archivo de audio.
+*   `media.seekTo`: mueve la posición dentro del archivo de audio.
 
-*   `media.setVolume`: Ajusta el volumen de reproducción de audio.
+*   `media.setVolume`: ajuste el volumen de reproducción de audio.
 
-*   `media.startRecord`: Iniciar la grabación de un archivo de audio.
+*   `media.startRecord`: iniciar la grabación de un archivo de audio.
 
-*   `media.stopRecord`: Dejar de grabar un archivo de audio.
+*   `media.stopRecord`: dejar de grabar un archivo de audio.
 
-*   `media.stop`: Deja de jugar un archivo de audio.
+*   `media.stop`: deja de jugar a un archivo de audio.
 
-### Parámetros adicionales de sólo lectura
+### Parámetros adicionales ReadOnly
 
 *   **posición**: la posición dentro de la reproducción de audio, en segundos.
     
-    *   No actualizada automáticamente durante la reproducción; llame al `getCurrentPosition` para actualizar.
+    *   No actualizada automáticamente durante la reproducción; Llame a `getCurrentPosition` para actualizar.
 
-*   **duración**: la duración de los medios de comunicación, en segundos.
+*   **duration**: la duración de los medios de comunicación, en segundos.
 
 ## media.getCurrentPosition
 
@@ -111,7 +111,7 @@ Devuelve la posición actual dentro de un archivo de audio. También actualiza e
 
 *   **mediaSuccess**: la devolución de llamada que se pasa a la posición actual en segundos.
 
-*   **mediaError**: (opcional) la devolución de llamada que se ejecutarán si se produce un error.
+*   **mediaError**: (opcional) la devolución de llamada para ejecutar si se produce un error.
 
 ### Ejemplo rápido
 
@@ -167,7 +167,7 @@ Devuelve la duración de un archivo de audio en segundos. Si se desconoce la dur
 
 ## media.pause
 
-Detiene temporalmente la reproducción de un archivo de audio.
+Pausas jugando un archivo de audio.
 
     media.pause();
     
@@ -225,19 +225,19 @@ Inicia o reanuda la reproducción de un archivo de audio.
 
 ### iOS rarezas
 
-*   **numberOfLoops**: esta opción para pasar la `play` método para especificar el número de veces que usted quiere presentar los medios de comunicación para jugar, por ejemplo:
+*   **numberOfLoops**: pasar esta opción al método `play` para especificar el número de veces que desea que los medios de archivo para jugar, por ejemplo:
     
         var myMedia = new Media("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3")
         myMedia.play({ numberOfLoops: 2 })
         
 
-*   **playAudioWhenScreenIsLocked**: pasar en esta opción para el `play` método para especificar si desea permitir la reproducción cuando la pantalla está bloqueada. Si a `true` (el valor predeterminado), se ignora el estado del botón mute hardware, por ejemplo:
+*   **playAudioWhenScreenIsLocked**: pasar en esta opción el método `play` para especificar si desea permitir la reproducción cuando la pantalla está bloqueada. Si se omite establecido en `true` (el valor predeterminado), el estado del botón mute hardware, por ejemplo:
     
         var myMedia = new Media("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3")
         myMedia.play({ playAudioWhenScreenIsLocked : false })
         
 
-*   **orden de búsqueda de archivos**: cuando se proporciona sólo un nombre de archivo o ruta simple, iOS busca en el `www` Directorio para el archivo, luego en de la aplicación `documents/tmp` Directorio:
+*   **orden de búsqueda de archivos**: cuando se proporciona sólo un nombre de archivo o ruta simple, iOS busca en el directorio `www` para el archivo, luego en el directorio de la aplicación `documents/tmp`:
     
         var myMedia = new Media("audio/beer.mp3")
         myMedia.play()  // first looks for file in www/audio/beer.mp3 then in <application>/documents/tmp/audio/beer.mp3
@@ -245,7 +245,7 @@ Inicia o reanuda la reproducción de un archivo de audio.
 
 ## media.release
 
-Libera los recursos de audio del sistema operativo subyacente. Esto es particularmente importante para Android, ya que hay una cantidad finita de instancias de OpenCore para la reproducción multimedia. Las aplicaciones deben llamar el `release` función para cualquier `Media` recurso que ya no es necesario.
+Libera los recursos de audio del sistema operativo subyacente. Esto es particularmente importante para Android, ya que hay una cantidad finita de instancias de OpenCore para la reproducción multimedia. Las aplicaciones deben llamar a la función de `release` para cualquier recurso `Media` que ya no es necesario.
 
     media.release();
     
@@ -270,7 +270,7 @@ Establece la posición actual dentro de un archivo de audio.
 
 ### Parámetros
 
-*   **milisegundos**: la posición para ajustar la posición de reproducción en el audio, en milisegundos.
+*   **milliseconds**: la posición para ajustar la posición de reproducción en el audio, en milisegundos.
 
 ### Ejemplo rápido
 
@@ -290,14 +290,14 @@ Establece la posición actual dentro de un archivo de audio.
 
 ## media.setVolume
 
-Ajuste el volumen para un archivo de audio.
+Ajustar el volumen para un archivo de audio.
 
     media.setVolume(volume);
     
 
 ### Parámetros
 
-*   **volumen**: el volumen para la reproducción. El valor debe estar dentro del rango de 0.0 a 1.0.
+*   **volume**: el volumen para la reproducción. El valor debe estar dentro del rango de 0.0 a 1.0.
 
 ### Plataformas soportadas
 
@@ -373,18 +373,24 @@ Empieza a grabar un archivo de audio.
 
 ### Rarezas Android
 
-*   Dispositivos Android grabación audio en formato Adaptive Multi-Rate. El archivo especificado debe terminar con una extensión de *AMR* .
+*   Dispositivos Android grabación audio en formato Adaptive Multi-rate. El archivo especificado debe terminar con una extensión de *.amr*.
 
 ### iOS rarezas
 
-*   iOS sólo registros a archivos de tipo *.wav* y devuelve un error si el nombre del archivo extensión es no es correcto.
+*   iOS únicos registros a archivos de tipo *.wav* y devuelve un error si el archivo de extensión el nombre es no es correcto.
 
-*   Si no se proporciona una ruta completa, la grabación se coloca en la aplicación `documents/tmp` Directorio. Esto puede accederse a través de la `File` API utilizando `LocalFileSystem.TEMPORARY` . Ya debe existir ningún subdirectorio especificado en un tiempo récord.
+*   Si no se proporciona una ruta completa, la grabación se coloca en el directorio de la aplicación `documents/tmp`. Esto se puede acceder mediante el `File` API utilizando `LocalFileSystem.TEMPORARY`. Ya debe existir cualquier subdirectorio especificado en un tiempo récord.
 
 *   Archivos pueden ser grabados y jugó de nuevo usando los documentos URI:
     
         var myMedia = new Media("documents://beer.mp3")
         
+
+### Rarezas de Windows 8
+
+*   Si no se proporciona una ruta completa, la grabación se coloca en el directorio AppData/temp. Esto puede accederse a través de la `Archivo` Usando API `LocalFileSystem.TEMPORARY` o ' ms-appdata: temporal / / / /<filename>' URI.
+
+*   Ya debe existir cualquier subdirectorio especificado en un tiempo récord.
 
 ### Rarezas Tizen
 
@@ -392,7 +398,7 @@ Empieza a grabar un archivo de audio.
 
 ## media.stop
 
-Deja de reproducir un archivo de audio.
+Deja de jugar a un archivo de audio.
 
     media.stop();
     
@@ -476,13 +482,13 @@ A `MediaError` objeto es devuelto a la `mediaError` función de devolución de l
 
 ### Propiedades
 
-*   **código**: uno de los códigos de error predefinido enumerados a continuación.
+*   **code**: uno de los códigos de error predefinido enumerados a continuación.
 
 *   **mensaje**: un mensaje de error que describe los detalles del error.
 
 ### Constantes
 
-*   `MediaError.MEDIA_ERR_ABORTED`
-*   `MediaError.MEDIA_ERR_NETWORK`
-*   `MediaError.MEDIA_ERR_DECODE`
-*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`
+*   `MediaError.MEDIA_ERR_ABORTED`= 1
+*   `MediaError.MEDIA_ERR_NETWORK`= 2
+*   `MediaError.MEDIA_ERR_DECODE`= 3
+*   `MediaError.MEDIA_ERR_NONE_SUPPORTED`= 4

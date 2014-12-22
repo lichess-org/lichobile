@@ -34,8 +34,16 @@ module.exports = {
 
   getConnectionInfo: function(successCallback, errorCallback) {
     var connection = origConnection || navigator.mozConnection,
-      connectionType = Connection.UNKNOWN,
-      bandwidth = connection.bandwidth,
+        connectionType = Connection.UNKNOWN;
+
+    if (!connection) {
+        setTimeout(function() {
+            successCallback(connectionType);
+        }, 0);
+        return;
+    }
+
+    var bandwidth = connection.bandwidth,
       metered = connection.metered,
       type = connection.type;
 
@@ -86,4 +94,4 @@ module.exports = {
   }
 };
 
-require("cordova/firefoxos/commandProxy").add("NetworkStatus", module.exports);
+require("cordova/exec/proxy").add("NetworkStatus", module.exports);

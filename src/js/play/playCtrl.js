@@ -1,17 +1,26 @@
 var xhr = require('./playXhr');
+var roundXhr = require('../round/roundXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../StrongSocket');
 var Chessground = require('chessground');
 var utils = require('../utils');
+var signals = require('../signals');
 var session = require('../session');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
     data.url.socket,
-    data.player.version,
-    {
+    data.player.version, {
       options: { name: "game", debug: true },
-      receive: function(t, d) { return ctrl.round.socket.receive(t, d); }
+      receive: function(t, d) { return ctrl.round.socket.receive(t, d); },
+      events: {
+        resync: function() {
+          roundXhr.reload(ctrl.round).then(function(data) {
+            ctrl.gameSocket.reset(data.player.version);
+            ctrl.round.reload();
+          });
+        }
+      }
     }
   );
 }
@@ -19,8 +28,7 @@ function makeGameSocket(ctrl, data) {
 function makeLobbySocket(ctrl) {
   return new StrongSocket(
     '/lobby/socket/v1',
-    0,
-    {
+    0, {
       options: { name: 'lobby', pingDelay: 2000 },
       events: {
         redirect: function(data) {
@@ -37,23 +45,39 @@ function makeRound(ctrl, data) {
 }
 
 module.exports = function() {
+
   this.id = m.route.param('id');
-
   this.vm = {
-    isSeekingGame: false
+    isSeekingGame: false,
+    connectedWS: true // is connected to websocket
   };
-
   this.round = null;
   this.gameSocket = null;
   this.lobbySocket = null;
 
-  this.playing = function () { return this.round; };
+  this.playing = function() {
+    return this.round;
+  };
 
-  this.chessground = new Chessground.controller({viewOnly: true});
+  this.chessground = new Chessground.controller({
+    viewOnly: true
+  });
+
+  var onConnected = function () {
+    var wasOff = !this.vm.connectedWS;
+    this.vm.connectedWS = true;
+    if (wasOff) m.redraw();
+  }.bind(this);
+
+  var onDisconnected = function () {
+    var wasOn = this.vm.connectedWS;
+    this.vm.connectedWS = false;
+    if (wasOn) setTimeout(function () { m.redraw(); }, 2000);
+  }.bind(this);
 
   var resumeGame = function(id) {
     var self = this;
-    xhr.game(id).then(function (data) {
+    xhr.game(id).then(function(data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
     }, function(error) {
@@ -92,9 +116,16 @@ module.exports = function() {
       this.gameSocket.destroy();
       this.gameSocket = null;
     }
+    signals.connected.remove(onConnected);
+    signals.disconnected.remove(onDisconnected);
   };
 
   if (this.id) resumeGame(this.id);
 
-  if (utils.hasNetwork()) session.refresh();
+  if (utils.hasNetwork()) setTimeout(function() {
+    session.refresh();
+  });
+
+  signals.connected.add(onConnected);
+  signals.disconnected.add(onDisconnected);
 };

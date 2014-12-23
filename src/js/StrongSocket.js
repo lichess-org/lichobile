@@ -2,6 +2,7 @@
 
 var _ = require('lodash-node'),
     utils = require('./utils'),
+    signals = require('./signals'),
     storage = require('./storage');
 
 var lichessSri = utils.lichessSri;
@@ -67,6 +68,7 @@ StrongSocket.prototype = {
         self.onError(e);
       };
       self.ws.onclose = function() {
+        signals.disconnected.dispatch();
         if (self.autoReconnect) {
           self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);
           self.scheduleConnect(self.options.autoReconnectDelay);
@@ -216,14 +218,21 @@ StrongSocket.prototype = {
       this.ws.close();
     }
   },
+  reset: function(version) {
+    this.version = version;
+    this.destroy();
+    this.connect();
+  },
   onError: function(e) {
     var self = this;
     self.options.debug = true;
     self.debug('error: ' + JSON.stringify(e));
     self.tryAnotherUrl = true;
+    signals.disconnected.dispatch();
     clearTimeout(self.pingSchedule);
   },
   onSuccess: function() {
+    signals.connected.dispatch();
   },
   baseUrl: function() {
     if (window.socketEndPoint === 'socket.en.lichess.org') {

@@ -41,5 +41,18 @@ module.exports = function(ctrl) {
     else return [m('section.player', [m('div.infos')])];
   }
 
-  return layout(ctrl, header, board, footer, menu.view, utils.partial(playMenu.view, ctrl));
+  function overlays() {
+    var els = [
+      playMenu.view(ctrl)
+    ];
+
+    if (!ctrl.vm.connectedWS)
+      els.push(m('div.overlay', [
+        m('div.reconnecting', 'Reconnecting...')
+      ]));
+
+    return els;
+  }
+
+  return layout(ctrl, header, board, footer, menu.view, overlays);
 };

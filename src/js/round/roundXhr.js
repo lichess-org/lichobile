@@ -5,17 +5,16 @@ var baseUrl = window.apiEndPoint;
 function reload(ctrl) {
   ctrl.vm.reloading = true;
   m.redraw();
-  var req = m.request({
+  return m.request({
     method: 'GET',
     url: baseUrl + ctrl.data.url.round,
     config: utils.xhrConfig
-  });
-  req.then(function() {
+  }).then(function(data) {
     ctrl.vm.reloading = false;
+    return data;
   }, function(err) {
     console.log(err);
   });
-  return req;
 }
 
 module.exports = {

@@ -14,16 +14,17 @@ function headerHeight() {
  * @param {function} contentView A function that returns a m()
  * @param {function} footerView A function that returns an array of m()
  * @param {function} menuView A function that returns an array of m()
- * @param {function} overlayView A function that returns an array of m()
+ * @param {function} overlaysView A function that returns an array of m()
  */
-module.exports = function(ctrl, headerView, contentView, footerView, menuView, overlayView) {
-  return [
+module.exports = function(ctrl, headerView, contentView, footerView, menuView, overlaysView) {
+  var layout = [
     m('main', { class: menu.isOpen ? 'out' : '' }, [
       m('header', { style: { height: headerHeight() + 'px' }}, headerView()),
       contentView(),
       m('footer', { style: { height: headerHeight() + 'px' }}, footerView())
     ]),
-    m('aside', menuView()),
-    overlayView()
+    m('aside', menuView())
   ];
+  layout.push(overlaysView());
+  return layout;
 };

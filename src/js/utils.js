@@ -1,5 +1,3 @@
-'use strict';
-
 var utils = {};
 var mButton = require('mobile-button');
 var chessground = require('chessground');
@@ -22,8 +20,9 @@ utils.handleXhrError = function(error) {
     else
       window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
   }
-  else if (typeof error.error === 'string')
+  else if (typeof error.error === 'string') {
     if (window.cordova) window.navigator.notification.alert(error.error);
+  }
 };
 
 // softkeyboard
@@ -69,7 +68,7 @@ utils.partial = function() {
 };
 
 // convenience function to bind a button handler with mithril
-utils.mbind = function(scrollable, handler) {
+function mbind(scrollable, handler) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var options = {
@@ -91,11 +90,10 @@ utils.mbind = function(scrollable, handler) {
       if (button) button.unbind();
     };
   };
-};
+}
 
-utils.ontouchend = utils.partial(utils.mbind, false);
-utils.ontouchendScroll = utils.partial(utils.mbind, true);
-
+utils.ontouchend = utils.partial(mbind, false);
+utils.ontouchendScroll = utils.partial(mbind, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

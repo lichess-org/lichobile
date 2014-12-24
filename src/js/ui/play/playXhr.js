@@ -1,14 +1,11 @@
-var utils = require('../utils');
-var settings = require('../settings');
-
-var baseUrl = window.apiEndPoint;
+var utils = require('../../utils');
+var http = require('../../http');
+var settings = require('../../settings');
 
 function aiGame() {
   var config = settings.newGame.ai;
-  return m.request({
-    url: baseUrl + '/setup/ai',
+  return http.request('/setup/ai', {
     method: 'POST',
-    config: utils.xhrConfig,
     data: {
       variant: config.variant(),
       timeMode: config.timeMode(),
@@ -24,10 +21,8 @@ function aiGame() {
 function seekHuman() {
   var config = settings.newGame.human;
   var preset = config.timePreset().split('|');
-  return m.request({
-    url: baseUrl + '/setup/hook/' + utils.lichessSri,
+  return http.request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
-    config: utils.xhrConfig,
     data: {
       variant: config.variant(),
       timeMode: config.timeMode(),
@@ -42,11 +37,7 @@ function seekHuman() {
 }
 
 function game(id) {
-  return m.request({
-    url: baseUrl + '/' + id,
-    method: 'GET',
-    config: utils.xhrConfig
-  });
+  return http.request('/' + id);
 }
 
 module.exports = {

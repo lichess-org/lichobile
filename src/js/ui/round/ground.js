@@ -1,6 +1,6 @@
 var chessground = require('chessground');
 var round = require('./round');
-var sound = require('../sound');
+var sound = require('../../sound');
 
 function str2move(m) {
   return m ? [m.slice(0, 2), m.slice(2, 4)] : null;

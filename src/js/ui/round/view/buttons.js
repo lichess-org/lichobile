@@ -1,6 +1,6 @@
 var round = require('../round');
 var status = require('../status');
-var utils = require('../../utils');
+var utils = require('../../../utils');
 var throttle = require('lodash-node/modern/functions/throttle');
 
 module.exports = {

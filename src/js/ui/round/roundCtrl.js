@@ -9,13 +9,13 @@ var promotion = require('./promotion');
 var hold = require('./hold');
 var replayCtrl = require('./replay/replayCtrl');
 var clockCtrl = require('./clock/clockCtrl');
-var i18n = require('../i18n');
+var i18n = require('../../i18n');
 var status = require('./status');
 
-module.exports = function(cfg, router, socketSend) {
+module.exports = function(cfg, socketSend) {
   var clockIntervId;
 
-  this.data = data({}, cfg);
+  this.data = data(cfg);
 
   this.vm = {
     flip: false,
@@ -74,7 +74,7 @@ module.exports = function(cfg, router, socketSend) {
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
-    this.data = data(this.data, cfg);
+    this.data = data(cfg);
     if (!this.replay.active) ground.reload(this.chessground, this.data, cfg.game.fen, this.vm.flip);
   }.bind(this);
 
@@ -95,8 +95,6 @@ module.exports = function(cfg, router, socketSend) {
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
 
   this.replay = new replayCtrl(this);
-
-  this.router = router;
 
   this.onunload = function() {
     if (clockIntervId) clearInterval(clockIntervId);

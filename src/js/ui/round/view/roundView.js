@@ -1,8 +1,8 @@
 var chessground = require('chessground');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
-var utils = require('../../utils');
-var i18n = require('../../i18n');
+var utils = require('../../../utils');
+var i18n = require('../../../i18n');
 var buttons = require('./buttons');
 var replayView = require('../replay/replayView');
 
@@ -95,7 +95,7 @@ function renderHeader(ctrl) {
 
 function renderBoard(ctrl) {
   var vw = utils.getViewportDims().vw;
-  return m('section#board.grey.merida', {
+  return m('section#board.board.grey.merida', {
     style: {
       height: vw + 'px'
     }

@@ -2,7 +2,7 @@ var chessground = require('chessground');
 var partial = chessground.util.partial;
 var ground = require('./ground');
 var xhr = require('./roundXhr');
-var utils = require('../utils');
+var utils = require('../../utils');
 
 var promoting = false;
 

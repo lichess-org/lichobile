@@ -1,4 +1,4 @@
-var utils = require('./utils');
+var utils = require('../utils');
 var menu = require('./menu');
 
 function headerHeight() {
@@ -9,14 +9,13 @@ function headerHeight() {
 /**
  * Main layout function
  *
- * @param {Object} ctrl Module's controller instance
  * @param {function} headerView A function that returns an array of m()
  * @param {function} contentView A function that returns a m()
  * @param {function} footerView A function that returns an array of m()
  * @param {function} menuView A function that returns an array of m()
  * @param {function} overlaysView A function that returns an array of m()
  */
-module.exports = function(ctrl, headerView, contentView, footerView, menuView, overlaysView) {
+module.exports = function(headerView, contentView, footerView, menuView, overlaysView) {
   var layout = [
     m('main', { class: menu.isOpen ? 'out' : '' }, [
       m('header', { style: { height: headerHeight() + 'px' }}, headerView()),
@@ -25,6 +24,6 @@ module.exports = function(ctrl, headerView, contentView, footerView, menuView, o
     ]),
     m('aside', menuView())
   ];
-  layout.push(overlaysView());
+  if (overlaysView) layout.push(overlaysView());
   return layout;
 };

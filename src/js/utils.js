@@ -12,16 +12,17 @@ utils.hasNetwork = function() {
 };
 
 utils.handleXhrError = function(error) {
-  // assume lichess unreachable when error is null
-  console.log(error);
-  if (error === null) {
-    if (window.cordova && !utils.hasNetwork())
-      window.navigator.notification.alert('No internet connection', null, 'Connection error');
-    else
-      window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
-  }
-  else if (typeof error.error === 'string') {
-    if (window.cordova) window.navigator.notification.alert(error.error);
+  if (window.cordova) {
+    // assume lichess unreachable when error is null
+    if (error === null) {
+      if (!utils.hasNetwork())
+        window.navigator.notification.alert('No internet connection', null, 'Connection error');
+      else
+        window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
+    }
+    else if (typeof error.error === 'string') {
+      window.navigator.notification.alert(error.error);
+    }
   }
 };
 

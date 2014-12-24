@@ -1,4 +1,4 @@
-var utils = require('../../utils');
+var utils = require('../../../utils');
 
 function renderBackwardButton(ctrl, curPly) {
   var prevPly = curPly - 1;

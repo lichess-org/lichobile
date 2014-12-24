@@ -1,5 +1,5 @@
-var session = require('./session');
-var utils = require('./utils');
+var session = require('../session');
+var utils = require('../utils');
 
 var menu = {};
 

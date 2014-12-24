@@ -1,19 +1,44 @@
 var utils = require('../utils');
+var xhr = require('./play/playXhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
-var playMenu = {};
+var gamesMenu = {};
 
 var isOpen = false;
 var newGameCardSwapped = false;
 
-playMenu.open = function() {
+gamesMenu.open = function() {
   isOpen = true;
 };
 
-playMenu.close = function() {
+gamesMenu.close = function() {
   isOpen = false;
 };
+
+gamesMenu.joinGame = function(id) {
+  m.route('/play/' + id);
+};
+
+gamesMenu.startAIGame = function() {
+  xhr.aiGame().then(function(data) {
+    m.route('/play' + data.url.round);
+  }, function(error) {
+    utils.handleXhrError(error);
+  });
+};
+
+gamesMenu.seekHumanGame = function() {
+  // this.vm.isSeekingGame = true;
+  // if (this.gameSocket) this.gameSocket.destroy();
+  // this.lobbySocket = makeLobbySocket(this);
+  // xhr.seekHuman().then(function() {
+  //   console.log('hook sent...');
+  // }, function(error) {
+  //   utils.handleXhrError(error);
+  // });
+};
+
 
 function swapCard() {
   newGameCardSwapped = !newGameCardSwapped;
@@ -133,7 +158,7 @@ function renderForm(action, settingsObj) {
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
-      playMenu.close();
+      gamesMenu.close();
       swapCard();
       action();
     }
@@ -148,7 +173,7 @@ function renderForm(action, settingsObj) {
   ]);
 }
 
-function renderAllGames(ctrl) {
+function renderAllGames() {
 
   function cardDims() {
     var vp = utils.getViewportDims();
@@ -197,8 +222,8 @@ function renderAllGames(ctrl) {
           m('p', 'Contre ' + g.opponent.username),
           m('button', {
             config: utils.ontouchendScroll(function() {
-              ctrl.joinGame(g.id);
-              playMenu.close();
+              gamesMenu.joinGame(g.id);
+              gamesMenu.close();
             })
           }, 'Reprendre la partie')
         ])
@@ -223,8 +248,8 @@ function renderAllGames(ctrl) {
       ]),
       m('div.back', [
         settings.newGame.selected() === 'human' ?
-        renderForm(ctrl.seekHumanGame, settings.newGame.human) :
-        renderForm(ctrl.startAIGame, settings.newGame.ai)
+        renderForm(gamesMenu.seekHumanGame, settings.newGame.human) :
+        renderForm(gamesMenu.startAIGame, settings.newGame.ai)
       ])
     ])
   ]);
@@ -239,10 +264,10 @@ function renderAllGames(ctrl) {
   }, allGames);
 }
 
-playMenu.view = function(ctrl) {
+gamesMenu.view = function() {
   var children = [
     m('div.overlay-close',
-      { config: utils.ontouchend(playMenu.close) },
+      { config: utils.ontouchend(gamesMenu.close) },
     '+'),
     m('div#wrapper_games', {
       config:function(el, isUpdate, context) {
@@ -265,7 +290,7 @@ playMenu.view = function(ctrl) {
         };
       }
 
-    }, renderAllGames(ctrl))
+    }, renderAllGames())
   ];
 
   return m('div#game_menu.overlay.overlay-effect', {
@@ -273,4 +298,4 @@ playMenu.view = function(ctrl) {
   }, children);
 };
 
-module.exports = playMenu;
+module.exports = gamesMenu;

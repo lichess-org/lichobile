@@ -1,11 +1,10 @@
 var xhr = require('./playXhr');
 var roundXhr = require('../round/roundXhr');
 var roundCtrl = require('../round/roundCtrl');
-var StrongSocket = require('../StrongSocket');
+var StrongSocket = require('../../StrongSocket');
 var Chessground = require('chessground');
-var utils = require('../utils');
-var signals = require('../signals');
-var session = require('../session');
+var utils = require('../../utils');
+var signals = require('../../signals');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -17,7 +16,7 @@ function makeGameSocket(ctrl, data) {
         resync: function() {
           roundXhr.reload(ctrl.round).then(function(data) {
             ctrl.gameSocket.reset(data.player.version);
-            ctrl.round.reload();
+            ctrl.round.reload(data);
           });
         }
       }
@@ -25,39 +24,19 @@ function makeGameSocket(ctrl, data) {
   );
 }
 
-function makeLobbySocket(ctrl) {
-  return new StrongSocket(
-    '/lobby/socket/v1',
-    0, {
-      options: { name: 'lobby', pingDelay: 2000 },
-      events: {
-        redirect: function(data) {
-          m.route('/play' + data.url);
-          ctrl.lobbySocket.destroy();
-        }
-      }
-    }
-  );
-}
-
 function makeRound(ctrl, data) {
-  return new roundCtrl(data, null, ctrl.gameSocket.send.bind(ctrl.gameSocket));
+  return new roundCtrl(data, ctrl.gameSocket.send.bind(ctrl.gameSocket));
 }
 
 module.exports = function() {
 
   this.id = m.route.param('id');
   this.vm = {
-    isSeekingGame: false,
     connectedWS: true // is connected to websocket
   };
   this.round = null;
   this.gameSocket = null;
   this.lobbySocket = null;
-
-  this.playing = function() {
-    return this.round;
-  };
 
   this.chessground = new Chessground.controller({
     viewOnly: true
@@ -91,30 +70,11 @@ module.exports = function() {
       if (window.cordova) window.plugins.insomnia.keepAwake();
     }, function(error) {
       utils.handleXhrError(error);
+      m.route('/');
     });
   }.bind(this);
 
-  this.joinGame = function(id) {
-    m.route('/play/' + id);
-  }.bind(this);
-
-  this.startAIGame = function() {
-    xhr.aiGame().then(function(data) {
-      m.route('/play' + data.url.round);
-    }, function(error) {
-      utils.handleXhrError(error);
-    });
-  }.bind(this);
-
-  this.seekHumanGame = function() {
-    this.vm.isSeekingGame = true;
-    this.lobbySocket = makeLobbySocket(this);
-    xhr.seekHuman().then(function() {
-      console.log('hook sent...');
-    }, function(error) {
-      utils.handleXhrError(error);
-    });
-  }.bind(this);
+  resumeGame(this.id);
 
   this.onunload = function() {
     if (this.round) {
@@ -125,16 +85,16 @@ module.exports = function() {
       this.gameSocket.destroy();
       this.gameSocket = null;
     }
+    if (this.lobbySocket) {
+      this.lobbySocket.destroy();
+      this.lobbySocket = null;
+    }
     signals.connected.remove(onConnected);
     signals.disconnected.remove(onDisconnected);
     document.removeEventListener('pause', onPause, false);
     document.removeEventListener('resume', onResume, false);
     if (window.cordova) window.plugins.insomnia.allowSleepAgain();
   };
-
-  if (this.id) resumeGame(this.id);
-
-  if (utils.hasNetwork()) session.refresh();
 
   signals.connected.add(onConnected);
   signals.disconnected.add(onDisconnected);

@@ -1,7 +1,8 @@
 var round = require('./round');
 var ground = require('./ground');
 var xhr = require('./roundXhr');
-var sound = require('../sound');
+var sound = require('../../sound');
+var session = require('../../session');
 
 module.exports = function(send, ctrl) {
 
@@ -80,6 +81,8 @@ module.exports = function(send, ctrl) {
       xhr.reload(ctrl).then(ctrl.reload);
       if (!ctrl.data.player.spectator) sound.dong();
       if (window.cordova) window.plugins.insomnia.allowSleepAgain();
+      // refresh current games card list
+      session.refresh();
     },
     gone: function(isGone) {
       // if (!ctrl.data.opponent.ai) {

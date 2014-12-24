@@ -55,7 +55,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(_.defaults(self.settings.params, {
+    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(_.assign(self.settings.params, {
       version: self.version
     }));
     self.debug('connection attempt to ' + fullUrl, true);

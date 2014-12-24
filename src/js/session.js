@@ -1,4 +1,4 @@
-var utils = require('./utils');
+var http = require('./http');
 
 var session = null;
 
@@ -11,10 +11,8 @@ function get() {
 }
 
 function login(username, password) {
-  return m.request({
-    url: window.apiEndPoint + '/login',
+  return http.request('/login', {
     method: 'POST',
-    config: utils.xhrConfig,
     data: {
       username: username,
       password: password
@@ -28,26 +26,18 @@ function login(username, password) {
 }
 
 function logout() {
-  return m.request({
-    url: window.apiEndPoint + '/logout',
-    method: 'GET',
-    config: utils.xhrConfig,
-    deserialize: function(value) { return value; }
-  }).then(function() {
+  return http.request('/logout').then(function() {
     session = null;
   }, function(error) {
     console.log(error);
   });
 }
 
-function refresh() {
-  return m.request({
-    url: window.apiEndPoint + '/account/info',
-    method: 'GET',
-    config: utils.xhrConfig
+function refresh(isBackground) {
+  return http.request('/account/info', {
+    background: isBackground
   }).then(function(data) {
     session = data;
-    console.log('session refresh', session);
     return session;
   }, function(error) {
     console.log(error);

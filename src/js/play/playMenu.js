@@ -169,6 +169,7 @@ function renderAllGames(ctrl) {
   }
 
   var nowPlaying = session.isConnected() ? session.get().nowPlaying : [];
+  if (nowPlaying === undefined) nowPlaying = [];
   var cDim = cardDims();
   var cardStyle = {
     width: cDim.w + 'px',

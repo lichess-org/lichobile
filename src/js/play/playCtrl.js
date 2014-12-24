@@ -134,9 +134,7 @@ module.exports = function() {
 
   if (this.id) resumeGame(this.id);
 
-  if (utils.hasNetwork()) setTimeout(function() {
-    session.refresh();
-  });
+  if (utils.hasNetwork()) session.refresh();
 
   signals.connected.add(onConnected);
   signals.disconnected.add(onDisconnected);

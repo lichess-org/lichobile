@@ -79,6 +79,7 @@ module.exports = function(send, ctrl) {
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);
       if (!ctrl.data.player.spectator) sound.dong();
+      if (window.cordova) window.plugins.insomnia.allowSleepAgain();
     },
     gone: function(isGone) {
       // if (!ctrl.data.opponent.ai) {

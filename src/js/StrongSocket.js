@@ -220,7 +220,6 @@ StrongSocket.prototype = {
   },
   reset: function(version) {
     this.version = version;
-    this.destroy();
     this.connect();
   },
   onError: function(e) {

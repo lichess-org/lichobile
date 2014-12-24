@@ -72,7 +72,15 @@ module.exports = function() {
   var onDisconnected = function () {
     var wasOn = this.vm.connectedWS;
     this.vm.connectedWS = false;
-    if (wasOn) setTimeout(function () { m.redraw(); }, 2000);
+    if (wasOn) setTimeout(function () { m.redraw(); }, 1000);
+  }.bind(this);
+
+  var onPause = function() {
+    if (this.gameSocket) this.gameSocket.destroy();
+  }.bind(this);
+
+  var onResume = function() {
+    if (this.gameSocket) this.gameSocket.connect();
   }.bind(this);
 
   var resumeGame = function(id) {
@@ -80,6 +88,7 @@ module.exports = function() {
     xhr.game(id).then(function(data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
+      if (window.cordova) window.plugins.insomnia.keepAwake();
     }, function(error) {
       utils.handleXhrError(error);
     });
@@ -118,6 +127,9 @@ module.exports = function() {
     }
     signals.connected.remove(onConnected);
     signals.disconnected.remove(onDisconnected);
+    document.removeEventListener('pause', onPause, false);
+    document.removeEventListener('resume', onResume, false);
+    if (window.cordova) window.plugins.insomnia.allowSleepAgain();
   };
 
   if (this.id) resumeGame(this.id);
@@ -128,4 +140,6 @@ module.exports = function() {
 
   signals.connected.add(onConnected);
   signals.disconnected.add(onDisconnected);
+  document.addEventListener('pause', onPause, false);
+  document.addEventListener('resume', onResume, false);
 };

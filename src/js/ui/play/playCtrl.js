@@ -10,7 +10,7 @@ function makeGameSocket(ctrl, data) {
   return new StrongSocket(
     data.url.socket,
     data.player.version, {
-      options: { name: "game", debug: true },
+      options: { name: "game", debug: true, ignoreUnknownMessages: true },
       receive: function(t, d) { return ctrl.round.socket.receive(t, d); },
       events: {
         resync: function() {

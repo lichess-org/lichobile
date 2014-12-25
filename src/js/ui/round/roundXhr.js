@@ -6,8 +6,6 @@ function reload(ctrl) {
   return http.request(ctrl.data.url.round).then(function(data) {
     ctrl.vm.reloading = false;
     return data;
-  }, function(err) {
-    console.log(err);
   });
 }
 

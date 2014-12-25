@@ -20,16 +20,12 @@ function login(username, password) {
   }).then(function(data) {
     session = data;
     return session;
-  }, function(error) {
-    console.log(error);
   });
 }
 
 function logout() {
   return http.request('/logout').then(function() {
     session = null;
-  }, function(error) {
-    console.log(error);
   });
 }
 
@@ -39,8 +35,6 @@ function refresh(isBackground) {
   }).then(function(data) {
     session = data;
     return session;
-  }, function(error) {
-    console.log(error);
   });
 }
 

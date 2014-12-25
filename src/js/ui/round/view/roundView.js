@@ -94,10 +94,11 @@ function renderHeader(ctrl) {
 }
 
 function renderBoard(ctrl) {
-  var vw = utils.getViewportDims().vw;
-  return m('section#board.board.grey.merida', {
+  var x = utils.getViewportDims().vw - 2;
+  return m('section.board_wrapper.grey.merida', {
     style: {
-      height: vw + 'px'
+      width: x + 'px',
+      height: x + 'px'
     }
   }, [
     chessground.view(ctrl.chessground), renderPromotion(ctrl)

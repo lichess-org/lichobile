@@ -19,10 +19,11 @@ widgets.header = function () {
 };
 
 widgets.board = function () {
-  var vw = utils.getViewportDims().vw;
-  return m('section', {
+  var x = utils.getViewportDims().vw - 2;
+  return m('section.board_wrapper', {
     style: {
-      height: vw + 'px'
+      width: x + 'px',
+      height: x + 'px'
     }
   }, [utils.viewOnlyBoard()]);
 };

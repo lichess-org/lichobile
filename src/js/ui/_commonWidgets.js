@@ -19,10 +19,9 @@ widgets.header = function () {
 };
 
 widgets.board = function () {
-  var x = utils.getViewportDims().vw - 2;
+  var x = utils.getViewportDims().vw;
   return m('section.board_wrapper', {
     style: {
-      width: x + 'px',
       height: x + 'px'
     }
   }, [utils.viewOnlyBoard()]);

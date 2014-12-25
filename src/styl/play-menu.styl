@@ -30,8 +30,6 @@
     right 0
     margin 0 auto
     border-radius 50%;
-    -moz-box-shadow:  inset  0px 0px 3px 0px #96762F;
-    -webkit-box-shadow: inset 0px 0px 3px 0px #96762F;
     box-shadow: inset 0px 0px 3px 0px #96762F;
     &.standard
       background-image url(../../images/standard2.gif)
@@ -60,19 +58,12 @@
 
 
 .new-game
-  -webkit-perspective: 1000;
-  -moz-perspective: 1000;
-  -ms-perspective: 1000;
   perspective: 1000;
   background transparent
   min-height 400px
   &.back_visible
     .container_flip
       transform rotateY(180deg)
-      -webkit-transform rotateY(180deg)
-      -moz-transform rotateY(180deg)
-      -o-transform rotateY(180deg)
-      -ms-transform rotateY(180deg)
       .back
         display block
     .cg-board-wrap.view-only
@@ -86,10 +77,6 @@
     position relative
     height 100%
     transform-style: preserve-3d;
-    -webkit-transform-style preserve-3d
-    -webkit-transition 0.4s
-    -ms-transition 0.4s
-    -moz-transition 0.4s
     transition 0.4s
   .back
     display none
@@ -100,21 +87,10 @@
     width 100%
     height 100%
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
   .front
     z-index 2
-    -webkit-transform rotateY(0deg)
-    -moz-transform rotateY(0deg)
-    -o-transform rotateY(0deg)
-    -ms-transform rotateY(0deg)
     transform rotateY(0deg)
   .back
-    -webkit-transform rotateY(180deg)
-    -moz-transform rotateY(180deg)
-    -o-transform rotateY(180deg)
-    -ms-transform rotateY(180deg)
     transform rotateY(180deg)
     background: #2A2A2A;
     header
@@ -171,8 +147,6 @@
 #player_controls
   position: relative;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   button
     display block

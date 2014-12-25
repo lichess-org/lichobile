@@ -11,6 +11,7 @@ var stylus = require('gulp-stylus');
 var concat = require('gulp-concat');
 var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
+var autoprefixer = require('gulp-autoprefixer');
 
 // command line options
 var minimistOptions = {
@@ -34,6 +35,7 @@ gulp.task('styl', function() {
   return gulp.src(paths.styles)
     .pipe(stylus())
     .pipe(concat('app.css'))
+    .pipe(autoprefixer())
     .pipe(gulpif(options.mode === 'prod', minifyCss()))
     .pipe(gulp.dest('www/css/compiled/'));
 });

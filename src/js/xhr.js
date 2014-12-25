@@ -1,8 +1,8 @@
-var utils = require('../../utils');
-var http = require('../../http');
-var settings = require('../../settings');
+var utils = require('./utils');
+var http = require('./http');
+var settings = require('./settings');
 
-function aiGame() {
+function newAiGame() {
   var config = settings.newGame.ai;
   return http.request('/setup/ai', {
     method: 'POST',
@@ -18,7 +18,7 @@ function aiGame() {
   });
 }
 
-function seekHuman() {
+function seekGame() {
   var config = settings.newGame.human;
   var preset = config.timePreset().split('|');
   return http.request('/setup/hook/' + utils.lichessSri, {
@@ -41,7 +41,7 @@ function game(id) {
 }
 
 module.exports = {
-  aiGame: aiGame,
-  game: game,
-  seekHuman: seekHuman
+  newAiGame: newAiGame,
+  seekGame: seekGame,
+  game: game
 };

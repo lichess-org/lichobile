@@ -14,9 +14,7 @@ module.exports = function(ctrl) {
           config: utils.ontouchend(gamesMenu.open)
         })
       ]),
-      m('section.opponent', [
-        m('div.infos')
-      ])
+      roundView.renderHeader(ctrl.round)
     ];
   }
 
@@ -35,7 +33,7 @@ module.exports = function(ctrl) {
 
     if (!ctrl.vm.connectedWS)
       els.push(m('div.overlay', [
-        m('div.reconnecting', 'Reconnecting...')
+        m('div.content', 'Reconnecting...')
       ]));
 
     return els;

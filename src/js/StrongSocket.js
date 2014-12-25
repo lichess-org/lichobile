@@ -29,7 +29,7 @@ var strongSocketDefaults = {
 
 var StrongSocket = function(url, version, settings) {
   var self = this;
-  self.settings = strongSocketDefaults;
+  self.settings = _.clone(strongSocketDefaults);
   _.merge(self.settings, settings);
   self.url = url;
   self.version = version;
@@ -86,13 +86,11 @@ StrongSocket.prototype = {
         var m = JSON.parse(e.data);
         var mData = m.d || [];
 
-        if (m.t === 'n')
-          self.pong();
-        else {
-          self.debug(e.data);
-          if (m.t === 'b') mData.forEach(function(x) { self.handle(x); });
-          else self.handle(m);
-        }
+        if (m.t === 'n') self.pong();
+        else self.debug(e.data);
+
+        if (m.t === 'b') mData.forEach(function(x) { self.handle(x); });
+        else self.handle(m);
       };
     } catch (e) {
       self.onError(e);

@@ -1,4 +1,4 @@
-var xhr = require('./playXhr');
+var xhr = require('../../xhr');
 var roundXhr = require('../round/roundXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../../StrongSocket');
@@ -14,10 +14,16 @@ function makeGameSocket(ctrl, data) {
       receive: function(t, d) { return ctrl.round.socket.receive(t, d); },
       events: {
         resync: function() {
-          roundXhr.reload(ctrl.round).then(function(data) {
-            ctrl.gameSocket.reset(data.player.version);
-            ctrl.round.reload(data);
-          });
+          // TODO this is still fired after StrongSocket.destroy()
+          // try to understand why
+          if (ctrl.gameSocket) {
+            roundXhr.reload(ctrl.round).then(function(data) {
+              ctrl.gameSocket.reset(data.player.version);
+              ctrl.round.reload(data);
+            }, function(err) {
+              utils.handleXhrError(err);
+            });
+          }
         }
       }
     }

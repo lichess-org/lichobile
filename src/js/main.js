@@ -2,15 +2,18 @@
 
 window.m = require('mithril');
 
-var home = require('./ui/home');
-var play = require('./ui/play');
 var utils = require('./utils');
 var session = require('./session');
+
+var home = require('./ui/home');
+var play = require('./ui/play');
+var seek = require('./ui/seek');
 
 function main() {
 
   m.route(document.body, '/', {
     '/': home,
+    '/seek': seek,
     '/play/:id': play
   });
 

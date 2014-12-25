@@ -1,5 +1,5 @@
 var utils = require('../utils');
-var xhr = require('./play/playXhr');
+var xhr = require('../xhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
@@ -21,7 +21,7 @@ gamesMenu.joinGame = function(id) {
 };
 
 gamesMenu.startAIGame = function() {
-  xhr.aiGame().then(function(data) {
+  xhr.newAiGame().then(function(data) {
     m.route('/play' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
@@ -29,16 +29,12 @@ gamesMenu.startAIGame = function() {
 };
 
 gamesMenu.seekHumanGame = function() {
-  // this.vm.isSeekingGame = true;
-  // if (this.gameSocket) this.gameSocket.destroy();
-  // this.lobbySocket = makeLobbySocket(this);
-  // xhr.seekHuman().then(function() {
-  //   console.log('hook sent...');
-  // }, function(error) {
-  //   utils.handleXhrError(error);
-  // });
+  xhr.seekGame().then(function() {
+    m.route('/seek');
+  }, function(error) {
+    utils.handleXhrError(error);
+  });
 };
-
 
 function swapCard() {
   newGameCardSwapped = !newGameCardSwapped;

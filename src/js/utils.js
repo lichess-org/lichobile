@@ -11,6 +11,7 @@ utils.hasNetwork = function() {
   return true;
 };
 
+// TODO fix this
 utils.handleXhrError = function(error) {
   if (window.cordova) {
     // assume lichess unreachable when error is null
@@ -53,12 +54,6 @@ utils.serializeQueryParameters = function(obj) {
   }
   return str;
 };
-
-utils.xhrConfig = function(xhr) {
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
-};
-
 
 function partialApply(fn, args) {
   return fn.bind.apply(fn, [null].concat(args));

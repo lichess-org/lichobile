@@ -4,6 +4,7 @@ var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
+var i18n = require('../i18n');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
 
@@ -24,7 +25,7 @@ function makeLobbySocket(lobbyVersion) {
           m.route('/play' + data.url);
         },
         n: function(n) {
-          nbPlaying = n;
+          nbPlaying = n ? n : 0;
           m.redraw();
         },
         resync: function(nothing, socket) {

@@ -139,7 +139,7 @@ function renderForm(action, settingsObj, variants) {
   }
   if (settingsObj.timePreset && hasClock) {
     timeFieldset.push(m('div.select_input', [
-      renderSelect('Time|increment:', 'timepreset', [
+      renderSelect('Time+increment:', 'timepreset', [
         '3+0', '3+2', '5+0', '5+3', '10+0', '30+0'
         ].map(tupleOf), settingsObj.timePreset, false)
     ]));

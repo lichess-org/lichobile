@@ -20,7 +20,7 @@ function newAiGame() {
 
 function seekGame() {
   var config = settings.newGame.human;
-  var preset = config.timePreset().split('|');
+  var preset = config.timePreset().split('+');
   return http.request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
     data: {

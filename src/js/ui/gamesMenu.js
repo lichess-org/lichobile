@@ -295,25 +295,26 @@ gamesMenu.view = function() {
       '+'),
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {
-        var scroller = new iScroll(el, {
-          scrollX: true,
-          scrollY: false,
-          momentum: false,
-          snap: '.card',
-          snapSpeed: 400,
-          preventDefaultException: {
-            tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-          }
-        });
+        if (!isUpdate) {
+          var scroller = new iScroll(el, {
+            scrollX: true,
+            scrollY: false,
+            momentum: false,
+            snap: '.card',
+            snapSpeed: 400,
+            preventDefaultException: {
+              tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+            }
+          });
 
-        context.onunload = function() {
-          if (scroller) {
-            scroller.destroy();
-            scroller = null;
-          }
-        };
+          context.onunload = function() {
+            if (scroller) {
+              scroller.destroy();
+              scroller = null;
+            }
+          };
+        }
       }
-
     }, renderAllGames())
   ];
 

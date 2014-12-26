@@ -6,7 +6,6 @@ var round = require('./round');
 var ground = require('./ground');
 var socket = require('./socket');
 var promotion = require('./promotion');
-var hold = require('./hold');
 var replayCtrl = require('./replay/replayCtrl');
 var clockCtrl = require('./clock/clockCtrl');
 var i18n = require('../../i18n');
@@ -57,7 +56,6 @@ module.exports = function(cfg, socketSend) {
   }.bind(this);
 
   this.userMove = function(orig, dest, meta) {
-    hold.register(this.socket, meta.holdTime);
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
   }.bind(this);
 

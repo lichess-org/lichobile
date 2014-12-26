@@ -36,6 +36,12 @@ function seekGame() {
   });
 }
 
+function lobby() {
+  return http.request('/', {
+    method: 'GET'
+  });
+}
+
 function game(id) {
   return http.request('/' + id);
 }
@@ -43,5 +49,6 @@ function game(id) {
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
+  lobby: lobby,
   game: game
 };

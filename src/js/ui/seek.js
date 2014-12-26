@@ -3,16 +3,18 @@ var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
+var xhr = require('../xhr');
 
 var lobbySocket;
 var nbPlaying = 0;
 
 var seek = {};
 
-function makeLobbySocket() {
+function makeLobbySocket(lobbyVersion) {
+
   return new StrongSocket(
     '/lobby/socket/v1',
-    0, {
+    lobbyVersion, {
       options: { name: 'lobby', pingDelay: 2000 },
       events: {
         redirect: function(data) {
@@ -22,6 +24,11 @@ function makeLobbySocket() {
           var redraw = n !== nbPlaying;
           nbPlaying = n;
           if (redraw) m.redraw();
+        },
+        resync: function(nothing, socket) {
+          xhr.lobby().then(function(data) {
+            socket.reset(data.lobby.version);
+          });
         }
       }
     }
@@ -29,12 +36,17 @@ function makeLobbySocket() {
 }
 
 seek.controller = function () {
-  lobbySocket = makeLobbySocket();
+
+  xhr.lobby().then(function(data) {
+    lobbySocket = makeLobbySocket(data.lobby.version);
+  });
 
   return {
     onunload: function() {
-      lobbySocket.destroy();
-      lobbySocket = null;
+      if (lobbySocket) {
+        lobbySocket.destroy();
+        lobbySocket = null;
+      }
     }
   };
 };

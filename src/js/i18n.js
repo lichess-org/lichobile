@@ -10,7 +10,7 @@ function loadPreferredLanguage(callback) {
       loadFile(language.value.split('-')[0], callback);
     },
     function(error) {
-      loadFile('en', callback);
+      loadFile(defaultCode, callback);
     });
 };
 
@@ -20,7 +20,7 @@ function loadFile(code, callback) {
     url: i18nLoc + '/' + code + '.json',
     method: 'GET'
   }).then(function(data) {
-    var messages = data;
+    messages = data;
     callback();
   }, function(error) {
     if (code == defaultCode) throw error;

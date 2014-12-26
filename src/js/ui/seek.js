@@ -5,6 +5,7 @@ var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
 var xhr = require('../xhr');
+var i18n = require('../i18n');
 
 var nbPlaying = 0;
 
@@ -68,7 +69,7 @@ seek.view = function(ctrl) {
         m('div.content', [
           m('div', i18n('waitingForOpponent')),
           m('br'),
-          m('div', i18n('nbConnectedPlayers', nbPlaying)),
+          m('div', i18n('nbConnectedPlayers', nbPlaying || '?')),
           m('br'),
           m('br'),
           m('a', {

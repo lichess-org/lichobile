@@ -109,7 +109,7 @@ function renderForm(action, settingsObj, variants) {
 
   var generalFieldset = [
     m('div.select_input', [
-      renderSelect('Color:', 'color', [
+      renderSelect(i18n('color'), 'color', [
         [i18n('white'), 'white'],
         [i18n('black'), 'black'],
         [i18n('randomColor'), 'random']

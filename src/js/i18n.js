@@ -8,7 +8,9 @@ var untranslated = {
   notConnected: 'Not connected',
   connectionError: 'Connection error',
   noInternetConnection: 'No internet connection',
-  lichessIsNotReachable: 'lichess.org is unreachable'
+  lichessIsNotReachable: 'lichess.org is unreachable',
+  color: 'Color',
+  clock: 'Clock'
 };
 
 var defaultCode = 'en';

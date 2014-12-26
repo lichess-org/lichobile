@@ -1,6 +1,12 @@
 {
     "prepare_queue": {
-        "installed": [],
+        "installed": [
+            {
+                "plugin": "org.apache.cordova.globalization",
+                "vars": {},
+                "topLevel": true
+            }
+        ],
         "uninstalled": []
     },
     "config_munge": {

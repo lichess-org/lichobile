@@ -21,3 +21,12 @@ window.navigator.notification.beep = noop;
 // splashscreen
 window.navigator.splashscreen = {};
 window.navigator.splashscreen.hide = noop;
+
+// globalization
+window.navigator.globalization = {
+  getPreferredLanguage: function(success, error) {
+    success({
+      value: 'fr-FR'
+    });
+  }
+};

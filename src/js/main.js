@@ -12,6 +12,7 @@ var session = require('./session');
 var home = require('./ui/home');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
+var i18n = require('./i18n');
 
 function main() {
 
@@ -33,4 +34,8 @@ function main() {
   }, 2000);
 }
 
-document.addEventListener(window.cordova ? 'deviceready' : 'DOMContentLoaded', main, false);
+document.addEventListener(
+  window.cordova ? 'deviceready' : 'DOMContentLoaded',
+  // i18n must be loaded before any rendering happens
+  i18n.loadPreferredLanguage(main),
+  false);

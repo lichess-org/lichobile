@@ -40,7 +40,6 @@ module.exports = function() {
   };
   this.round = null;
   this.gameSocket = null;
-  this.lobbySocket = null;
 
   this.chessground = new Chessground.controller({
     viewOnly: true
@@ -88,10 +87,6 @@ module.exports = function() {
     if (this.gameSocket) {
       this.gameSocket.destroy();
       this.gameSocket = null;
-    }
-    if (this.lobbySocket) {
-      this.lobbySocket.destroy();
-      this.lobbySocket = null;
     }
     signals.connected.remove(onConnected);
     signals.disconnected.remove(onDisconnected);

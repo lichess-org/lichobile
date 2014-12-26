@@ -4,7 +4,6 @@ var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
-var i18n = require('../i18n');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
 

@@ -1,5 +1,3 @@
-'use strict';
-
 var settings = require('./settings');
 
 function play(file, volume) {
@@ -26,8 +24,6 @@ var audio = {
   capture: [ 'capture.mp3', 1 ],
   dong: [ 'dong.mp3', 1 ],
 };
-
-// var canPlay = window.cordova || (!!audio.move1.canPlayType && audio.move1.canPlayType('audio/mpeg'));
 
 function shouldPlay() {
   // TODO

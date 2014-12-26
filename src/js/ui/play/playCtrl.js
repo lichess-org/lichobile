@@ -73,7 +73,7 @@ module.exports = function() {
     xhr.game(id).then(function(data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
-      if (window.cordova) window.plugins.insomnia.keepAwake();
+      window.plugins.insomnia.keepAwake();
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');
@@ -99,7 +99,7 @@ module.exports = function() {
     signals.disconnected.remove(onDisconnected);
     document.removeEventListener('pause', onPause, false);
     document.removeEventListener('resume', onResume, false);
-    if (window.cordova) window.plugins.insomnia.allowSleepAgain();
+    window.plugins.insomnia.allowSleepAgain();
   };
 
   signals.connected.add(onConnected);

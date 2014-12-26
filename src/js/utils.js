@@ -3,27 +3,21 @@ var mButton = require('mobile-button');
 var chessground = require('chessground');
 
 utils.hasNetwork = function() {
-  if (window.cordova) {
-    var t = window.navigator.connection.type;
-    return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
-  }
-
-  return true;
+  var t = window.navigator.connection.type;
+  return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
 };
 
 // TODO fix this
 utils.handleXhrError = function(error) {
-  if (window.cordova) {
-    // assume lichess unreachable when error is null
-    if (error === null) {
-      if (!utils.hasNetwork())
-        window.navigator.notification.alert('No internet connection', null, 'Connection error');
-      else
-        window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
-    }
-    else if (typeof error.error === 'string') {
-      window.navigator.notification.alert(error.error);
-    }
+  // assume lichess unreachable when error is null
+  if (error === null) {
+    if (!utils.hasNetwork())
+      window.navigator.notification.alert('No internet connection', null, 'Connection error');
+    else
+      window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
+  }
+  else if (typeof error.error === 'string') {
+    window.navigator.notification.alert(error.error);
   }
 };
 

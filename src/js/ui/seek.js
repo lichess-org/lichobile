@@ -25,7 +25,7 @@ function makeLobbySocket(lobbyVersion) {
           m.route('/play' + data.url);
         },
         n: function(n) {
-          nbPlaying = n ? n : 0;
+          nbPlaying = n;
           m.redraw();
         },
         resync: function(nothing, socket) {

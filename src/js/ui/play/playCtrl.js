@@ -14,10 +14,8 @@ function makeGameSocket(ctrl, data) {
       receive: function(t, d) { return ctrl.round.socket.receive(t, d); },
       events: {
         resync: function(nothing, socket) {
-          // TODO this is still fired after StrongSocket.destroy()
-          // try to understand why
           roundXhr.reload(ctrl.round).then(function(data) {
-            ctrl.socket.reset(data.player.version);
+            socket.reset(data.player.version);
             ctrl.round.reload(data);
           }, function(err) {
             utils.handleXhrError(err);

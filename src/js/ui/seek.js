@@ -56,7 +56,7 @@ seek.controller = function() {
         this.lobbySocket.destroy();
         this.lobbySocket = null;
       }
-    }
+    }.bind(this)
   };
 };
 

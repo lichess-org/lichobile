@@ -66,14 +66,14 @@ seek.view = function(ctrl) {
       gamesMenu.view(),
       m('div.overlay', [
         m('div.content', [
-          m('div', 'Seeking...'),
+          m('div', i18n('waitingForOpponent')),
           m('br'),
-          m('div', 'Online players: ' + nbPlaying),
+          m('div', i18n('nbConnectedPlayers', nbPlaying)),
           m('br'),
           m('br'),
           m('a', {
             config: utils.ontouchend(ctrl.cancel),
-          }, 'Cancel')
+          }, i18n('cancel'))
         ])
       ])
     ];

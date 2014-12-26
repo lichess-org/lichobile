@@ -7,136 +7,136 @@ module.exports = {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button', {
       class: 'button hint--bottom ' + socketMsg,
-      'data-hint': ctrl.trans(hint),
+      'data-hint': i18n(hint),
       config: utils.ontouchend(utils.partial(ctrl.socket.send, socketMsg, null))
     }, m('span[data-icon=' + icon + ']')) : null;
   },
   forceResign: function(ctrl) {
     if (!ctrl.data.opponent.ai && ctrl.data.clock && ctrl.data.opponent.isGone && round.resignable(ctrl.data))
       return m('div.force_resign_zone', [
-        ctrl.trans('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
+        i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
         m('br'),
         m('a.button', {
           config: utils.ontouchend(utils.partial(ctrl.socket.send, 'resign-force', null)),
-        }, ctrl.trans('forceResignation')),
+        }, i18n('forceResignation')),
         m('a.button', {
           config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-force', null)),
-        }, ctrl.trans('forceDraw'))
+        }, i18n('forceDraw'))
       ]);
   },
   threefoldClaimDraw: function(ctrl) {
     if (ctrl.data.game.threefold) return m('div#claim_draw_zone', [
-      ctrl.trans('threefoldRepetition'),
+      i18n('threefoldRepetition'),
       m.trust('&nbsp;'),
       m('a.button', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-claim', null))
-      }, ctrl.trans('claimADraw'))
+      }, i18n('claimADraw'))
     ]);
   },
   cancelDrawOffer: function(ctrl) {
     if (ctrl.data.player.offeringDraw) return m('div.negotiation', [
-      ctrl.trans('drawOfferSent') + ' ',
+      i18n('drawOfferSent') + ' ',
       m('a', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-no', null))
-      }, ctrl.trans('cancel'))
+      }, i18n('cancel'))
     ]);
   },
   answerOpponentDrawOffer: function(ctrl) {
     if (ctrl.data.opponent.offeringDraw) return m('div.negotiation', [
-      ctrl.trans('yourOpponentOffersADraw'),
+      i18n('yourOpponentOffersADraw'),
       m('br'),
       m('a.button[data-icon=E]', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-yes', null))
-      }, ctrl.trans('accept')),
+      }, i18n('accept')),
       m.trust('&nbsp;'),
       m('a.button[data-icon=L]', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'draw-no', null))
-      }, ctrl.trans('decline')),
+      }, i18n('decline')),
     ]);
   },
   cancelTakebackProposition: function(ctrl) {
     if (ctrl.data.player.proposingTakeback) return m('div.negotiation', [
-      ctrl.trans('takebackPropositionSent') + ' ',
+      i18n('takebackPropositionSent') + ' ',
       m('a', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-no', null))
-      }, ctrl.trans('cancel'))
+      }, i18n('cancel'))
     ]);
   },
   answerOpponentTakebackProposition: function(ctrl) {
     if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation', [
-      ctrl.trans('yourOpponentProposesATakeback'),
+      i18n('yourOpponentProposesATakeback'),
       m('br'),
       m('a.button[data-icon=E]', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-yes', null))
-      }, ctrl.trans('accept')),
+      }, i18n('accept')),
       m.trust('&nbsp;'),
       m('a.button[data-icon=L]', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'takeback-no', null))
-      }, ctrl.trans('decline')),
+      }, i18n('decline')),
     ]);
   },
   rematch: function(ctrl) {
     if ((status.finished(ctrl.data) || status.aborted(ctrl.data)) && !ctrl.data.tournament) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('a.button.hint--bottom', {
-          'data-hint': ctrl.trans('playWithTheSameOpponentAgain'),
+          'data-hint': i18n('playWithTheSameOpponentAgain'),
           config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
-        }, ctrl.trans('rematch'));
+        }, i18n('rematch'));
       } else {
-        return m('a.button.disabled', ctrl.trans('rematch'));
+        return m('a.button.disabled', i18n('rematch'));
       }
     }
 
   },
   answerOpponentRematch: function(ctrl) {
     if (ctrl.data.opponent.offeringRematch) return [
-      ctrl.trans('yourOpponentWantsToPlayANewGameWithYou'),
+      i18n('yourOpponentWantsToPlayANewGameWithYou'),
       m('a.glowing.button.fat.hint--bottom', {
-        'data-hint': ctrl.trans('playWithTheSameOpponentAgain'),
+        'data-hint': i18n('playWithTheSameOpponentAgain'),
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
-      }, ctrl.trans('joinTheGame')),
+      }, i18n('joinTheGame')),
       m('a.declineInvitation.button', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null))
-      }, ctrl.trans('declineInvitation'))
+      }, i18n('declineInvitation'))
     ];
   },
   cancelRematch: function(ctrl) {
     if (ctrl.data.player.offeringRematch) return [
-      ctrl.trans('rematchOfferSent'),
+      i18n('rematchOfferSent'),
       m('br'),
-      ctrl.trans('waitingForOpponent'),
+      i18n('waitingForOpponent'),
       m('a.button', {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null))
-      }, ctrl.trans('cancelRematchOffer'))
+      }, i18n('cancelRematchOffer'))
     ];
   },
   viewRematch: function(ctrl) {
     if (ctrl.data.game.rematch) return m('a.viewRematch.button[data-icon=v]', {
       href: ctrl.router.Round.watcher(ctrl.data.game.rematch, ctrl.data.opponent.color).url
-    }, ctrl.trans('viewRematch'));
+    }, i18n('viewRematch'));
   },
   joinRematch: function(ctrl) {
     if (ctrl.data.game.rematch) return [
-      ctrl.trans('rematchOfferAccepted'),
+      i18n('rematchOfferAccepted'),
       m('a.button.fat.hint--bottom', {
-        'data-hint': ctrl.trans('playWithTheSameOpponentAgain'),
+        'data-hint': i18n('playWithTheSameOpponentAgain'),
         href: ctrl.router.Round.watcher(ctrl.data.game.rematch, ctrl.data.opponent.color).url
-      }, ctrl.trans('joinTheGame'))
+      }, i18n('joinTheGame'))
     ];
   },
   backToTournament: function(ctrl) {
     if (ctrl.data.tournament && ctrl.data.tournament.running) return m('a[data-icon=G].button.strong.glowing', {
       href: '/tournament/' + ctrl.data.tournament.id
-    }, ctrl.trans('backToTournament'));
+    }, i18n('backToTournament'));
   },
   viewTournament: function(ctrl) {
     if (ctrl.data.tournament) return m('a.viewTournament.button', {
       href: '/tournament/' + ctrl.data.tournament.id
-    }, ctrl.trans('viewTournament'));
+    }, i18n('viewTournament'));
   },
   moretime: function(ctrl) {
     if (round.moretimeable(ctrl.data)) return m('a.moretime.hint--bottom-left', {
-      'data-hint': ctrl.trans('giveNbSeconds', ctrl.data.clock.moretime),
+      'data-hint': i18n('giveNbSeconds', ctrl.data.clock.moretime),
       config: utils.ontouchend(throttle(utils.partial(ctrl.socket.send, 'moretime', null), 600))
     }, m('span[data-icon=O]'));
   },
@@ -144,6 +144,6 @@ module.exports = {
     if (round.replayable(ctrl.data)) return m('a.button.replay_and_analyse', {
       config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null)),
       href: ctrl.router.Round.watcher(ctrl.data.game.id, ctrl.data.player.color).url
-    }, ctrl.trans('analysis'));
+    }, i18n('analysis'));
   }
 };

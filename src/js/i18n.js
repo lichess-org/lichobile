@@ -2,6 +2,12 @@ var m = require('mithril');
 
 var messages = [];
 
+var untranslated = {
+  human: 'Human',
+  computer: 'Computer',
+  notConnected: 'Not connected'
+};
+
 var defaultCode = 'en';
 
 function loadPreferredLanguage(callback) {
@@ -29,8 +35,8 @@ function loadFile(code, callback) {
   });
 }
 
-module.exports = function(str) {
-  str = messages[arguments[0]];
+module.exports = function(key) {
+  var str = messages[key] || untranslated[key] || key;
   Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
     str = str.replace('%s', arg);
   });

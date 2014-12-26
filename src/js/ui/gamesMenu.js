@@ -3,6 +3,7 @@ var xhr = require('../xhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
+var i18n = require('../i18n');
 var gamesMenu = {};
 
 var isOpen = false;
@@ -54,7 +55,9 @@ function renderRadio(label, name, value, settingsProp) {
         settingsProp(e.target.value);
       }
     }),
-    m('label', { 'for': id }, label)
+    m('label', {
+      'for': id
+    }, label)
   ];
 }
 
@@ -68,14 +71,18 @@ function renderOption(label, value, storedValue) {
 function renderSelect(label, name, options, settingsProp, isDisabled) {
   var storedValue = settingsProp();
   return [
-    m('label', { 'for': name }, label),
+    m('label', {
+      'for': name
+    }, label),
     m('select', {
       name: name,
       disabled: isDisabled,
-      onchange: function(e) { settingsProp(e.target.value); }
+      onchange: function(e) {
+        settingsProp(e.target.value);
+      }
     }, options.map(function(e) {
-      return renderOption(e[0], e[1], storedValue); })
-    )
+      return renderOption(e[0], e[1], storedValue);
+    }))
   ];
 }
 
@@ -83,8 +90,17 @@ function tupleOf(x) {
   return [x, x];
 }
 
-var humanVariants = [['Standard', '1'], ['Chess960', '2'], ['King of the hill', '4'], ['Antichess', '6']];
-var aiVariants = [['Standard', '1'], ['Chess960', '2'], ['King of the hill', '4']];
+var humanVariants = [
+  ['Standard', '1'],
+  ['Chess960', '2'],
+  ['King of the hill', '4'],
+  ['Antichess', '6']
+];
+var aiVariants = [
+  ['Standard', '1'],
+  ['Chess960', '2'],
+  ['King of the hill', '4']
+];
 
 function renderForm(action, settingsObj, variants) {
   var timeMode = settingsObj.timeMode();
@@ -92,56 +108,60 @@ function renderForm(action, settingsObj, variants) {
   // var hasCorresp = timeMode === '2';
 
   var generalFieldset = [
-    m('div.select_input',[
+    m('div.select_input', [
       renderSelect('Color:', 'color', [
-        ['White', 'white'], ['Black', 'black'], ['Random', 'random']
+        [i18n('white'), 'white'],
+        [i18n('black'), 'black'],
+        [i18n('randomColor'), 'random']
       ], settingsObj.color),
     ]),
     m('div.select_input', [
-      renderSelect('Variant:', 'variant', variants, settingsObj.variant),
+      renderSelect(i18n('variant'), 'variant', variants, settingsObj.variant),
     ])
   ];
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', [
-      renderSelect('Level:', 'ailevel', [
+      renderSelect(i18n('level'), 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
-        ].map(tupleOf), settingsObj.level)
+      ].map(tupleOf), settingsObj.level)
     ]));
   }
   if (settingsObj.mode) {
     generalFieldset.push(m('div.select_input', [
-      renderSelect('Mode:', 'mode', [
-        ['Casual', '0'], ['Rated', '1']
+      renderSelect(i18n('mode'), 'mode', [
+        [i18n('casual'), '0'],
+        [i18n('rated'), '1']
       ], settingsObj.mode)
     ]));
   }
 
   var timeFieldset = [
     m('div.select_input', [
-      renderSelect('Time mode:', 'timeMode', [
-        ['Unlimited', '0'], ['Clock', '1']
+      renderSelect(i18n('timeControl'), 'timeMode', [
+        [i18n('unlimited'), '0'],
+        [i18n('realTime'), '1']
       ], settingsObj.timeMode)
     ])
   ];
   if (settingsObj.time && settingsObj.increment && hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', [
-        renderSelect('Time:', 'time', [
+        renderSelect(i18n('time'), 'time', [
           '2', '5', '10', '30', '60'
-          ].map(tupleOf), settingsObj.time, false)
+        ].map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
-        renderSelect('Increment:', 'increment', [
+        renderSelect(i18n('increment'), 'increment', [
           '0', '1', '2', '3', '5', '10'
-          ].map(tupleOf), settingsObj.increment, false)
+        ].map(tupleOf), settingsObj.increment, false)
       ])
     );
   }
   if (settingsObj.timePreset && hasClock) {
     timeFieldset.push(m('div.select_input', [
-      renderSelect('Time+increment:', 'timepreset', [
+      renderSelect(i18n('clock'), 'timepreset', [
         '3+0', '3+2', '5+0', '5+3', '10+0', '30+0'
-        ].map(tupleOf), settingsObj.timePreset, false)
+      ].map(tupleOf), settingsObj.timePreset, false)
     ]));
   }
   // if (hasCorresp) {
@@ -161,12 +181,12 @@ function renderForm(action, settingsObj, variants) {
     }
   }, [
     m('fieldset', [
-      m('div.nice-radio', renderRadio('Human', 'selected', 'human', settings.newGame.selected)),
-      m('div.nice-radio', renderRadio('Computer', 'selected', 'computer', settings.newGame.selected))
+      m('div.nice-radio', renderRadio(i18n('human'), 'selected', 'human', settings.newGame.selected)),
+      m('div.nice-radio', renderRadio(i18n('computer'), 'selected', 'computer', settings.newGame.selected))
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button', 'Valider')
+    m('button', i18n('createAGame'))
   ]);
 }
 
@@ -185,7 +205,11 @@ function renderAllGames() {
   }
 
   function renderViewOnlyBoard(fen, lastMove, color) {
-    return m('div', { style: { height: cDim.innerW + 'px' }}, [
+    return m('div', {
+      style: {
+        height: cDim.innerW + 'px'
+      }
+    }, [
       utils.viewOnlyBoard(fen, lastMove, color)
     ]);
   }
@@ -216,13 +240,13 @@ function renderAllGames() {
         m('div.icon-game.' + g.variant),
         m('div.description', [
           m('h2.title', g.variant),
-          m('p', 'Contre ' + g.opponent.username),
+          m('p', g.opponent.username),
           m('button', {
             config: utils.ontouchendScroll(function() {
               gamesMenu.joinGame(g.id);
               gamesMenu.close();
             })
-          }, 'Reprendre la partie')
+          }, i18n('joinTheGame'))
         ])
       ])
     ]);
@@ -235,11 +259,13 @@ function renderAllGames() {
     m('div.container_flip', [
       m('div.front', [
         renderViewOnlyBoard(),
-        m('div.infos',[
-          m('div.description',[
-            m('h2.title', 'New Game'),
-            m('p', 'Lancer une nouvelle partie'),
-            m('button', { config: utils.ontouchendScroll(swapCard) }, '+ Nouvelle partie')
+        m('div.infos', [
+          m('div.description', [
+            m('h2.title', i18n('createAGame')),
+            m('p', i18n('newOpponent')),
+            m('button', {
+              config: utils.ontouchendScroll(swapCard)
+            }, '+ ' + i18n('createAGame'))
           ])
         ])
       ]),
@@ -263,11 +289,12 @@ function renderAllGames() {
 
 gamesMenu.view = function() {
   var children = [
-    m('div.overlay-close',
-      { config: utils.ontouchend(gamesMenu.close) },
-    '+'),
+    m('div.overlay-close', {
+        config: utils.ontouchend(gamesMenu.close)
+      },
+      '+'),
     m('div#wrapper_games', {
-      config:function(el, isUpdate, context) {
+      config: function(el, isUpdate, context) {
         var scroller = new iScroll(el, {
           scrollX: true,
           scrollY: false,

@@ -62,9 +62,9 @@ function renderPlayerActions(ctrl) {
       { config: utils.ontouchend(function() { ctrl.vm.showingActions = false; }) },
     '+'),
     m('div#player_controls', [
-      m('button.resign[data-icon=b]', 'Resign'),
-      m('button.draw[data-icon=2]', 'Draw'),
-      m('button.takeback[data-icon=i]', 'Takeback')
+      m('button.resign[data-icon=b]', i18n('resign')),
+      m('button.draw[data-icon=2]', i18n('offerDraw')),
+      m('button.takeback[data-icon=i]', i18n('takeback'))
     ])
   ]);
 }

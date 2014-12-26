@@ -1,5 +1,6 @@
 var session = require('../session');
 var utils = require('../utils');
+var i18n = require('../i18n');
 
 var menu = {};
 
@@ -17,15 +18,13 @@ menu.view = function() {
       config: utils.ontouchend(function() {
         session.logout();
       })
-    }, 'Log out')
+    }, i18n('logOut'))
   ] : [
-    m('h2', 'Not connected')
+    m('h2', i18n('notConnected'))
   ];
   return [
-    m('header', [
-      m('nav', nav)
-    ]),
-    m('div', [
+    m('header', m('nav', nav)),
+    m('div',
       userobj ? null :
       m('form', {
         onsubmit: function(e) {
@@ -34,13 +33,13 @@ menu.view = function() {
           menu.toggle();
           session.login(form[0].value, form[1].value);
         }
-      },[
-        m('h3', 'Connection'),
-        m('input#pseudo[type=text][placeholder=Pseudo][autocomplete=off][autocapitalize=off][autocorrect=off]'),
-        m('input#password[type=password][placeholder=Password]'),
-        m('button#login', 'LOG IN')
+      }, [
+        m('h3', i18n('signIn')),
+        m('input#pseudo[type=text][placeholder=' + i18n('username') + '][autocomplete=off][autocapitalize=off][autocorrect=off]'),
+        m('input#password[type=password][placeholder=' + i18n('password') + ']'),
+        m('button#login', i18n('signIn'))
       ])
-    ])
+    )
   ];
 };
 

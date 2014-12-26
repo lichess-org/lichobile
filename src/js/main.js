@@ -17,7 +17,7 @@ function main() {
 
   m.route(document.body, '/', {
     '/': home,
-    '/seek': seek,
+    '/seek/:id': seek,
     '/play/:id': play
   });
 

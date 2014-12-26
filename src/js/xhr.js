@@ -31,15 +31,12 @@ function seekGame() {
       increment: preset[1],
       color: config.color(),
       mode: config.mode()
-    },
-    deserialize: function(value) { return value; }
+    }
   });
 }
 
 function lobby() {
-  return http.request('/', {
-    method: 'GET'
-  });
+  return http.request('/');
 }
 
 function game(id) {

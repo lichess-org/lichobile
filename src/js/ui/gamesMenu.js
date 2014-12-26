@@ -29,8 +29,8 @@ gamesMenu.startAIGame = function() {
 };
 
 gamesMenu.seekHumanGame = function() {
-  xhr.seekGame().then(function() {
-    m.route('/seek');
+  xhr.seekGame().then(function(data) {
+    m.route('/seek/' + data.hook.id);
   }, function(error) {
     utils.handleXhrError(error);
   });

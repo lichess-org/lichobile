@@ -1,12 +1,6 @@
 {
     "prepare_queue": {
-        "installed": [
-            {
-                "plugin": "org.apache.cordova.globalization",
-                "vars": {},
-                "topLevel": true
-            }
-        ],
+        "installed": [],
         "uninstalled": []
     },
     "config_munge": {
@@ -32,6 +26,10 @@
                         },
                         {
                             "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
                             "count": 1
                         },
                         {
@@ -95,6 +93,9 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.file": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.media": {

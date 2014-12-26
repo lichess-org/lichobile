@@ -25,6 +25,10 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"Globalization\"><param name=\"ios-package\" value=\"CDVGlobalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Media\"><param name=\"ios-package\" value=\"CDVSound\" /></feature>",
                             "count": 1
                         },
@@ -101,6 +105,9 @@
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.file": {
+            "PACKAGE_NAME": "org.lichess.mobile"
+        },
+        "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "org.lichess.mobile"
         },
         "org.apache.cordova.media": {

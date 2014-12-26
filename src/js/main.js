@@ -37,5 +37,6 @@ function main() {
 document.addEventListener(
   window.cordova ? 'deviceready' : 'DOMContentLoaded',
   // i18n must be loaded before any rendering happens
-  i18n.loadPreferredLanguage(main),
-  false);
+  utils.partial(i18n.loadPreferredLanguage, main),
+  false
+);

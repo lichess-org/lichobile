@@ -98,7 +98,7 @@ module.exports = function() {
     document.removeEventListener('pause', onPause, false);
     document.removeEventListener('resume', onResume, false);
     window.plugins.insomnia.allowSleepAgain();
-  };
+  }.bind(this);
 
   signals.connected.add(onConnected);
   signals.disconnected.add(onDisconnected);

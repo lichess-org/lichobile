@@ -11,7 +11,6 @@ var nbPlaying = 0;
 var seek = {};
 
 function makeLobbySocket(lobbyVersion) {
-
   return new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
@@ -39,24 +38,25 @@ function makeLobbySocket(lobbyVersion) {
 
 seek.controller = function() {
 
-  this.id = m.route.param('id');
+  var id = m.route.param('id');
+  var lobbySocket;
 
   xhr.lobby().then(function(data) {
-    this.lobbySocket = makeLobbySocket(data.lobby.version);
-  }.bind(this));
+    lobbySocket = makeLobbySocket(data.lobby.version);
+  });
 
   return {
     cancel: function() {
-      if (this.lobbySocket)
-        this.lobbySocket.send('cancel', this.id);
+      if (lobbySocket)
+        lobbySocket.send('cancel', id);
       m.route('/');
-    }.bind(this),
+    },
     onunload: function() {
-      if (this.lobbySocket) {
-        this.lobbySocket.destroy();
-        this.lobbySocket = null;
+      if (lobbySocket) {
+        lobbySocket.destroy();
+        lobbySocket = null;
       }
-    }.bind(this)
+    }
   };
 };
 

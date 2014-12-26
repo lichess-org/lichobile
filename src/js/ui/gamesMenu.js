@@ -83,7 +83,10 @@ function tupleOf(x) {
   return [x, x];
 }
 
-function renderForm(action, settingsObj) {
+var humanVariants = [['Standard', '1'], ['Chess960', '2'], ['King of the hill', '4'], ['Antichess', '6']];
+var aiVariants = [['Standard', '1'], ['Chess960', '2'], ['King of the hill', '4']];
+
+function renderForm(action, settingsObj, variants) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
   // var hasCorresp = timeMode === '2';
@@ -95,9 +98,7 @@ function renderForm(action, settingsObj) {
       ], settingsObj.color),
     ]),
     m('div.select_input', [
-      renderSelect('Variant:', 'variant', [
-        ['Standard', '1'], ['Chess 960', '2'], ['King of the hill', '4']
-      ], settingsObj.variant),
+      renderSelect('Variant:', 'variant', variants, settingsObj.variant),
     ])
   ];
   if (settingsObj.level) {
@@ -244,8 +245,8 @@ function renderAllGames() {
       ]),
       m('div.back', [
         settings.newGame.selected() === 'human' ?
-        renderForm(gamesMenu.seekHumanGame, settings.newGame.human) :
-        renderForm(gamesMenu.startAIGame, settings.newGame.ai)
+        renderForm(gamesMenu.seekHumanGame, settings.newGame.human, humanVariants) :
+        renderForm(gamesMenu.startAIGame, settings.newGame.ai, aiVariants)
       ])
     ])
   ]);

@@ -2,7 +2,6 @@ var xhr = require('../../xhr');
 var roundXhr = require('../round/roundXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../../StrongSocket');
-var Chessground = require('chessground');
 var utils = require('../../utils');
 var signals = require('../../signals');
 
@@ -38,10 +37,6 @@ module.exports = function() {
   };
   this.round = null;
   this.gameSocket = null;
-
-  this.chessground = new Chessground.controller({
-    viewOnly: true
-  });
 
   var onConnected = function () {
     var wasOff = !this.vm.connectedWS;

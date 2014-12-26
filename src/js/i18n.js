@@ -5,7 +5,10 @@ var messages = [];
 var untranslated = {
   human: 'Human',
   computer: 'Computer',
-  notConnected: 'Not connected'
+  notConnected: 'Not connected',
+  connectionError: 'Connection error',
+  noInternetConnection: 'No internet connection',
+  lichessIsNotReachable: 'lichess.org is unreachable'
 };
 
 var defaultCode = 'en';

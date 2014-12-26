@@ -12,9 +12,9 @@ utils.handleXhrError = function(error) {
   // assume lichess unreachable when error is null
   if (error === null) {
     if (!utils.hasNetwork())
-      window.navigator.notification.alert('No internet connection', null, 'Connection error');
+      window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
     else
-      window.navigator.notification.alert('lichess.org is unreachable', null, 'Connection error');
+      window.navigator.notification.alert(i18n('lichessIsNotReachable'), null, i18n('connectionError'));
   }
   else if (typeof error.error === 'string') {
     window.navigator.notification.alert(error.error);

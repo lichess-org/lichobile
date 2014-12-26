@@ -74,11 +74,11 @@ function mbind(scrollable, handler) {
       if (scrollable) options.tolerance = 5;
       var constr = scrollable ? mButton.ScrollableX.Touchend : mButton.Touchend;
       var button = new constr(options);
-    }
 
-    context.onunload = function() {
-      if (button) button.unbind();
-    };
+      context.onunload = function() {
+        if (button) button.unbind();
+      };
+    }
   };
 }
 

@@ -296,7 +296,7 @@ gamesMenu.view = function() {
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {
         if (!isUpdate) {
-          var scroller = new iScroll(el, {
+          context.scroller = new iScroll(el, {
             scrollX: true,
             scrollY: false,
             momentum: false,
@@ -308,12 +308,15 @@ gamesMenu.view = function() {
           });
 
           context.onunload = function() {
-            if (scroller) {
-              scroller.destroy();
-              scroller = null;
+            if (context.scroller) {
+              context.scroller.destroy();
+              context.scroller = null;
             }
           };
         }
+        // see https://github.com/cubiq/iscroll/issues/412
+        context.scroller.options.snap = el.querySelectorAll('.card');
+        context.scroller.refresh();
       }
     }, renderAllGames())
   ];

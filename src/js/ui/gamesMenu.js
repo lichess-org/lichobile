@@ -137,7 +137,7 @@ function renderForm(action, settingsObj, variants) {
 
   var timeFieldset = [
     m('div.select_input', [
-      renderSelect(i18n('timeControl'), 'timeMode', [
+      renderSelect(i18n('clock'), 'timeMode', [
         [i18n('unlimited'), '0'],
         [i18n('realTime'), '1']
       ], settingsObj.timeMode)
@@ -159,7 +159,7 @@ function renderForm(action, settingsObj, variants) {
   }
   if (settingsObj.timePreset && hasClock) {
     timeFieldset.push(m('div.select_input', [
-      renderSelect(i18n('clock'), 'timepreset', [
+      renderSelect(i18n('time'), 'timepreset', [
         '3+0', '3+2', '5+0', '5+3', '10+0', '30+0'
       ].map(tupleOf), settingsObj.timePreset, false)
     ]));

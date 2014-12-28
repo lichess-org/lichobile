@@ -1,6 +1,7 @@
 var utils = {};
 var mButton = require('mobile-button');
 var chessground = require('chessground');
+var i18n = require('./i18n');
 
 utils.hasNetwork = function() {
   var t = window.navigator.connection.type;

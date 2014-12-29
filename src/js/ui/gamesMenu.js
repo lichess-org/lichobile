@@ -4,6 +4,7 @@ var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
+var Spinner = require('spin.js');
 var gamesMenu = {};
 
 var isOpen = false;
@@ -186,7 +187,12 @@ function renderForm(action, settingsObj, variants) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button', i18n('createAGame'))
+    m('button', {
+      config: utils.ontouchend(function(e, el) {
+        el.innerHTML = '';
+        new Spinner({color: '#151a1e'}).spin(el);
+      })
+    }, i18n('createAGame'))
   ]);
 }
 
@@ -241,13 +247,15 @@ function renderAllGames() {
         m('div.description', [
           m('h2.title', g.variant),
           m('p', g.opponent.username),
-          m('button', {
-            config: utils.ontouchendScroll(function() {
-              gamesMenu.joinGame(g.id);
-              gamesMenu.close();
-            })
-          }, i18n('joinTheGame'))
-        ])
+        ]),
+        m('button', {
+          config: utils.ontouchendScroll(function(e, el) {
+            el.innerHTML = '';
+            new Spinner({color: '#151a1e'}).spin(el);
+            gamesMenu.joinGame(g.id);
+            gamesMenu.close();
+          })
+        }, i18n('joinTheGame'))
       ])
     ]);
   });

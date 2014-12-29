@@ -66,7 +66,7 @@ function mbind(scrollable, handler) {
         el: el,
         f: function(e) {
           m.startComputation();
-          handler(e);
+          handler(e, el);
           m.endComputation();
         },
         monotouchable: true,

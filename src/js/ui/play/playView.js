@@ -3,6 +3,7 @@ var layout = require('../layout');
 var menu = require('../menu');
 var gamesMenu = require('../gamesMenu');
 var utils = require('../../utils');
+var i18n = require('../../i18n');
 
 module.exports = function(ctrl) {
   function header() {

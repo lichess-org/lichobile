@@ -2,6 +2,7 @@ var round = require('../round');
 var status = require('../status');
 var utils = require('../../../utils');
 var throttle = require('lodash-node/modern/functions/throttle');
+var i18n = require('../../../i18n');
 
 module.exports = {
   standard: function(ctrl, condition, icon, hint, socketMsg) {

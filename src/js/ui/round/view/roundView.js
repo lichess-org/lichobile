@@ -119,7 +119,6 @@ function renderGameEndedActions(ctrl) {
 function renderPlayerActions(ctrl) {
   return m('div.overlay', {
     class: utils.classSet({
-      overlay2: round.playable(ctrl.data),
       hide: !ctrl.vm.showingActions
     })
   }, [

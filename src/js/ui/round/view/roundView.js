@@ -3,8 +3,19 @@ var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
 var i18n = require('../../../i18n');
-var buttons = require('./buttons');
+var button = require('./button');
+var round = require('../round');
 var replayView = require('../replay/replayView');
+
+function compact(x) {
+  if (Object.prototype.toString.call(x) === '[object Array]') {
+    var elems = x.filter(function(n) {
+      return n !== undefined;
+    });
+    return elems.length > 0 ? elems : null;
+  }
+  return x;
+}
 
 function ratingDiff(player) {
   if (typeof player.ratingDiff === 'undefined') return null;
@@ -38,41 +49,66 @@ function renderMaterial(ctrl, color) {
 
 function renderAntagonist(ctrl, player) {
   return m('section.antagonist', [
-    m('div.infos', [
-      m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish', player.ai) : renderUser(ctrl, player)),
-      m('div', [
-        player.user ? m('h3.rating', [
-          player.rating,
-          ratingDiff(player)
-        ]) : null,
-        renderMaterial(ctrl, player.color)
-      ])
-    ]),
-    ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : null
+    m('div.vertical_align', [
+      m('div.infos', [
+        m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish', player.ai) : renderUser(ctrl, player)),
+        m('div', [
+          player.user ? m('h3.rating', [
+            player.rating,
+            ratingDiff(player)
+          ]) : null,
+          renderMaterial(ctrl, player.color)
+        ])
+      ]),
+      ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : null
+    ])
   ]);
 }
 
 function renderPlayerActions(ctrl) {
-  return m('div.overlay', {
+  var d = ctrl.data;
+  var answerButtons = compact([
+    button.cancelDrawOffer(ctrl),
+    button.answerOpponentDrawOffer(ctrl),
+    button.cancelTakebackProposition(ctrl),
+    button.answerOpponentTakebackProposition(ctrl), (round.mandatory(d) && round.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
+      ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
+    ) : null
+  ]);
+  return m('div.overlay.overlay2', {
     class: utils.classSet({
       hide: !ctrl.vm.showingActions
     })
   }, [
-    m('div.overlay-close',
-      { config: utils.ontouchend(function() { ctrl.vm.showingActions = false; }) },
-    '+'),
-    m('div#player_controls', [
-      m('button.resign[data-icon=b]', i18n('resign')),
-      m('button.draw[data-icon=2]', i18n('offerDraw')),
-      m('button.takeback[data-icon=i]', i18n('takeback'))
+    m('div.overlay-close', {
+        config: utils.ontouchend(function() {
+          ctrl.vm.showingActions = false;
+        })
+      },
+      '+'),
+    m('div#player_controls.overlay-content', [
+      m('div.actions', [
+        button.standard(ctrl, round.abortable, 'L', 'abortGame', 'abort'),
+        button.standard(ctrl, round.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+        button.standard(ctrl, round.drawable, '2', 'offerDraw', 'draw-yes'),
+        button.standard(ctrl, round.resignable, 'b', 'resign', 'resign'),
+        button.forceResign(ctrl),
+        button.threefoldClaimDraw(ctrl)
+      ]),
+      answerButtons ?  m('div.answers', answerButtons) : null
     ])
   ]);
 }
 
 function renderGameActions(ctrl) {
   var actions = [
-    m('button.game_action[data-icon=O]', {
-      config: utils.ontouchend(function() { ctrl.vm.showingActions = true; })
+    m('button#open_player_controls.game_action[data-icon=O]', {
+      class: utils.classSet({
+        'answer_required': ctrl.data.opponent.proposingTakeback || ctrl.data.opponent.offeringDraw
+      }),
+      config: utils.ontouchend(function() {
+        ctrl.vm.showingActions = true;
+      })
     }),
     m('button.game_action[data-icon=c].disabled'),
     replayView.renderButtons(ctrl.replay),

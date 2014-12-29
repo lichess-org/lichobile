@@ -5,6 +5,7 @@ var utils = require('../../../utils');
 var i18n = require('../../../i18n');
 var button = require('./button');
 var round = require('../round');
+var gameStatus = require('../status');
 var replayView = require('../replay/replayView');
 
 function compact(x) {
@@ -65,7 +66,7 @@ function renderAntagonist(ctrl, player) {
   ]);
 }
 
-function renderPlayerActions(ctrl) {
+function renderGameRunningActions(ctrl) {
   var d = ctrl.data;
   var answerButtons = compact([
     button.cancelDrawOffer(ctrl),
@@ -75,8 +76,50 @@ function renderPlayerActions(ctrl) {
       ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : null
   ]);
-  return m('div.overlay.overlay2', {
+  return [
+    m('div.actions', [
+      button.standard(ctrl, round.abortable, 'L', 'abortGame', 'abort'),
+      button.standard(ctrl, round.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+      button.standard(ctrl, round.drawable, '2', 'offerDraw', 'draw-yes'),
+      button.standard(ctrl, round.resignable, 'b', 'resign', 'resign'),
+      button.forceResign(ctrl),
+      button.threefoldClaimDraw(ctrl)
+    ]),
+    answerButtons ? m('div.answers', answerButtons) : null
+  ];
+}
+
+function renderGameEndedActions(ctrl) {
+  var result;
+  if (gameStatus.finished(ctrl.data)) switch (ctrl.data.game.winner) {
+    case 'white':
+      result = '1-0';
+      break;
+    case 'black':
+      result = '0-1';
+      break;
+    default:
+      result = '½-½';
+  }
+  var winner = round.getPlayer(ctrl.data, ctrl.data.game.winner);
+  var status = gameStatus.toLabel(ctrl.data) +
+    (winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null);
+  var buttons = compact(ctrl.vm.redirecting ? null : [
+    button.joinRematch(ctrl),
+    button.answerOpponentRematch(ctrl),
+    button.cancelRematch(ctrl),
+    button.rematch(ctrl)
+  ]);
+  return [
+    m('div.result', [ result, m('br'), m('br'), status ]),
+    buttons ? m('div.control.buttons', buttons) : null,
+  ];
+}
+
+function renderPlayerActions(ctrl) {
+  return m('div.overlay', {
     class: utils.classSet({
+      overlay2: round.playable(ctrl.data),
       hide: !ctrl.vm.showingActions
     })
   }, [
@@ -86,21 +129,14 @@ function renderPlayerActions(ctrl) {
         })
       },
       '+'),
-    m('div#player_controls.overlay-content', [
-      m('div.actions', [
-        button.standard(ctrl, round.abortable, 'L', 'abortGame', 'abort'),
-        button.standard(ctrl, round.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-        button.standard(ctrl, round.drawable, '2', 'offerDraw', 'draw-yes'),
-        button.standard(ctrl, round.resignable, 'b', 'resign', 'resign'),
-        button.forceResign(ctrl),
-        button.threefoldClaimDraw(ctrl)
-      ]),
-      answerButtons ?  m('div.answers', answerButtons) : null
-    ])
+    m('div#player_controls.overlay-content', round.playable(ctrl.data) ?
+      renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
+    )
   ]);
 }
 
-function renderGameActions(ctrl) {
+
+function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action[data-icon=O]', {
       class: utils.classSet({
@@ -121,7 +157,7 @@ function renderGameActions(ctrl) {
 function renderFooter(ctrl) {
   return [
     renderAntagonist(ctrl, ctrl.data.player),
-    renderGameActions(ctrl)
+    renderGameButtons(ctrl)
   ];
 }
 

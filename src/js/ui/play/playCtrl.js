@@ -9,8 +9,16 @@ function makeGameSocket(ctrl, data) {
   return new StrongSocket(
     data.url.socket,
     data.player.version, {
-      options: { name: "game", debug: true, ignoreUnknownMessages: true },
-      receive: function(t, d) { return ctrl.round.socket.receive(t, d); },
+      options: {
+        name: "game",
+        debug: true,
+        ignoreUnknownMessages: true
+      },
+      receive: function(t, d) {
+        // this function is still fired after ctrl has been unloaded
+        // normally socket is destroyed, but check why
+        if (ctrl.round) return ctrl.round.socket.receive(t, d);
+      },
       events: {
         resync: function(nothing, socket) {
           roundXhr.reload(ctrl.round).then(function(data) {
@@ -38,16 +46,18 @@ module.exports = function() {
   this.round = null;
   this.gameSocket = null;
 
-  var onConnected = function () {
+  var onConnected = function() {
     var wasOff = !this.vm.connectedWS;
     this.vm.connectedWS = true;
     if (wasOff) m.redraw();
   }.bind(this);
 
-  var onDisconnected = function () {
+  var onDisconnected = function() {
     var wasOn = this.vm.connectedWS;
     this.vm.connectedWS = false;
-    if (wasOn) setTimeout(function () { m.redraw(); }, 1000);
+    if (wasOn) setTimeout(function() {
+      m.redraw();
+    }, 1000);
   }.bind(this);
 
   var onPause = function() {

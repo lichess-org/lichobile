@@ -1,5 +1,5 @@
 var round = require('../round');
-var status = require('../status');
+var gameStatus = require('../status');
 var utils = require('../../../utils');
 var throttle = require('lodash-node/modern/functions/throttle');
 var i18n = require('../../../i18n');
@@ -76,7 +76,7 @@ module.exports = {
     ]);
   },
   rematch: function(ctrl) {
-    if ((status.finished(ctrl.data) || status.aborted(ctrl.data)) && !ctrl.data.tournament) {
+    if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) && !ctrl.data.tournament) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('button', {
           config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
@@ -85,7 +85,6 @@ module.exports = {
         return m('button.disabled', i18n('rematch'));
       }
     }
-
   },
   answerOpponentRematch: function(ctrl) {
     if (ctrl.data.opponent.offeringRematch) return [
@@ -107,9 +106,6 @@ module.exports = {
         config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-no', null))
       }, i18n('cancelRematchOffer'))
     ];
-  },
-  viewRematch: function(ctrl) {
-    if (ctrl.data.game.rematch) return m('button.viewRematch[data-icon=v]', {}, i18n('viewRematch'));
   },
   joinRematch: function(ctrl) {
     if (ctrl.data.game.rematch) return [

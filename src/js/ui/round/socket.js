@@ -62,9 +62,8 @@ module.exports = function(send, ctrl) {
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
     },
-    redirect: function() {
-      ctrl.vm.redirecting = true;
-      m.redraw();
+    redirect: function(e) {
+      m.route('/play/' + e.id);
     },
     threefoldRepetition: function() {
       ctrl.data.game.threefold = true;
@@ -83,6 +82,10 @@ module.exports = function(send, ctrl) {
       window.plugins.insomnia.allowSleepAgain();
       // refresh current games card list
       session.refresh();
+      setTimeout(function() {
+        ctrl.vm.showingActions = true;
+        m.redraw();
+      }, 1000);
     },
     gone: function(isGone) {
       // if (!ctrl.data.opponent.ai) {

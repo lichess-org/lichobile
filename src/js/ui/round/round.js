@@ -1,5 +1,5 @@
 var mapValues = require('lodash-node/modern/objects/mapValues');
-var status = require('./status');
+var gameStatus = require('./status');
 
 function parsePossibleMoves(possibleMoves) {
   return mapValues(possibleMoves, function(moves) {
@@ -8,7 +8,7 @@ function parsePossibleMoves(possibleMoves) {
 }
 
 function playable(data) {
-  return data.game.status.id < status.ids.aborted;
+  return data.game.status.id < gameStatus.ids.aborted;
 }
 
 function isPlayerPlaying(data) {
@@ -48,7 +48,7 @@ function moretimeable(data) {
 }
 
 function replayable(data) {
-  return data.source === 'import' || status.finished(data);
+  return data.source === 'import' || gameStatus.finished(data);
 }
 
 function getPlayer(data, color) {

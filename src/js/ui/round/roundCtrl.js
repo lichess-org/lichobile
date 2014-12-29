@@ -9,7 +9,7 @@ var promotion = require('./promotion');
 var replayCtrl = require('./replay/replayCtrl');
 var clockCtrl = require('./clock/clockCtrl');
 var i18n = require('../../i18n');
-var status = require('./status');
+var gameStatus = require('./status');
 
 module.exports = function(cfg, socketSend) {
   var clockIntervId;
@@ -20,7 +20,7 @@ module.exports = function(cfg, socketSend) {
     flip: false,
     reloading: false,
     redirecting: false,
-    showingActions: false
+    showingActions: !round.playable(this.data)
   };
 
   this.socket = new socket(socketSend, this);
@@ -34,7 +34,7 @@ module.exports = function(cfg, socketSend) {
 
   this.setTitle = function() {
     if (this.data.player.spectator) return;
-    if (status.finished(this.data)) {
+    if (gameStatus.finished(this.data)) {
       this.title = i18n('gameOver');
     } else if (round.isPlayerTurn(this.data)) {
       this.title = i18n('yourTurn');

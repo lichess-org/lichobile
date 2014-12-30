@@ -103,7 +103,7 @@ function renderGameEndedActions(ctrl) {
   }
   var winner = round.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data) +
-    (winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null);
+    (winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : '');
   var buttons = compact(ctrl.vm.redirecting ? null : [
     button.joinRematch(ctrl),
     button.answerOpponentRematch(ctrl),

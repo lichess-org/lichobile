@@ -22,21 +22,23 @@ gamesMenu.joinGame = function(id) {
   m.route('/play/' + id);
 };
 
-gamesMenu.startAIGame = function() {
-  xhr.newAiGame().then(function(data) {
+function startAIGame() {
+  return xhr.newAiGame().then(function(data) {
     m.route('/play' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
+    throw new Error(error);
   });
-};
+}
 
-gamesMenu.seekHumanGame = function() {
-  xhr.seekGame().then(function(data) {
+function seekHumanGame() {
+  return xhr.seekGame().then(function(data) {
     m.route('/seek/' + data.hook.id);
   }, function(error) {
     utils.handleXhrError(error);
+    throw new Error(error);
   });
-};
+}
 
 function swapCard() {
   newGameCardSwapped = !newGameCardSwapped;
@@ -102,6 +104,20 @@ var aiVariants = [
   ['Chess960', '2'],
   ['King of the hill', '4']
 ];
+
+function renderFeedbackButton(action, label) {
+  return m('button', {
+    config: utils.ontouchend(function(e, el) {
+      var savedLabel = el.innerHTML;
+      el.innerHTML = '';
+      var spinner = new Spinner({color: '#151a1e'}).spin(el);
+      action().then(null, function() {
+        spinner.stop();
+        el.innerHTML = savedLabel;
+      });
+    })
+  }, label);
+}
 
 function renderForm(action, settingsObj, variants) {
   var timeMode = settingsObj.timeMode();
@@ -176,9 +192,6 @@ function renderForm(action, settingsObj, variants) {
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
-      gamesMenu.close();
-      swapCard();
-      action();
     }
   }, [
     m('fieldset', [
@@ -187,11 +200,10 @@ function renderForm(action, settingsObj, variants) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button', {
-      config: utils.ontouchend(function(e, el) {
-        el.innerHTML = '';
-        new Spinner({color: '#151a1e'}).spin(el);
-      })
+    renderFeedbackButton(function() {
+      gamesMenu.close();
+      swapCard();
+      return action();
     }, i18n('createAGame'))
   ]);
 }
@@ -279,8 +291,8 @@ function renderAllGames() {
       ]),
       m('div.back', [
         settings.newGame.selected() === 'human' ?
-        renderForm(gamesMenu.seekHumanGame, settings.newGame.human, humanVariants) :
-        renderForm(gamesMenu.startAIGame, settings.newGame.ai, aiVariants)
+        renderForm(seekHumanGame, settings.newGame.human, humanVariants) :
+        renderForm(startAIGame, settings.newGame.ai, aiVariants)
       ])
     ])
   ]);

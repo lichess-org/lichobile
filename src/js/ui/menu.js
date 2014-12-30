@@ -4,15 +4,26 @@ var i18n = require('../i18n');
 
 var menu = {};
 
-menu.isOpen = false;
+var settingsOpen = false;
+
+function openSettings() {
+  settingsOpen = true;
+}
+
+function closeSettings() {
+  settingsOpen = false;
+}
+
+menu.isOpen = true;
 
 menu.toggle = function() {
   menu.isOpen = !menu.isOpen;
+  closeSettings();
 };
 
 menu.view = function() {
   var userobj = session.get();
-  var nav = userobj ? [
+  var header = userobj ? [
     m('h2', userobj.username),
     m('button', {
       config: utils.ontouchend(function() {
@@ -22,10 +33,17 @@ menu.view = function() {
   ] : [
     m('h2', i18n('notConnected'))
   ];
+  header.unshift(
+    m('div.logo', [
+      m('button.settings[data-icon=%]', {
+        config: utils.ontouchend(openSettings)
+      })
+    ])
+  );
   return [
-    m('header', m('nav', nav)),
-    m('div',
-      userobj ? null :
+    m('header', header),
+    userobj ? null :
+    m('section', [
       m('form', {
         onsubmit: function(e) {
           e.preventDefault();
@@ -39,7 +57,19 @@ menu.view = function() {
         m('input#password[type=password][placeholder=' + i18n('password') + ']'),
         m('button#login', i18n('signIn'))
       ])
-    )
+    ]),
+    m('section#settings', {
+      class: utils.classSet({
+        show: settingsOpen
+      })
+    }, [
+      m('header', [
+        m('button[data-icon=L]', {
+          config: utils.ontouchend(closeSettings)
+        }),
+        m('h2', i18n('settings'))
+      ])
+    ])
   ];
 };
 

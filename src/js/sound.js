@@ -26,9 +26,7 @@ var audio = {
 };
 
 function shouldPlay() {
-  // TODO
-  // return settings.general.sound();
-  return true;
+  return settings.general.sound();
 }
 
 module.exports = {

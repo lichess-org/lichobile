@@ -1,9 +1,12 @@
 var session = require('../session');
 var utils = require('../utils');
 var i18n = require('../i18n');
+var formWidgets = require('./_formWidgets');
+var settings = require('../settings');
 
 var menu = {};
 
+menu.isOpen = false;
 var settingsOpen = false;
 
 function openSettings() {
@@ -13,8 +16,6 @@ function openSettings() {
 function closeSettings() {
   settingsOpen = false;
 }
-
-menu.isOpen = true;
 
 menu.toggle = function() {
   menu.isOpen = !menu.isOpen;
@@ -44,7 +45,7 @@ menu.view = function() {
     m('header', header),
     userobj ? null :
     m('section', [
-      m('form', {
+      m('form#login_form', {
         onsubmit: function(e) {
           e.preventDefault();
           var form = e.target;
@@ -55,10 +56,10 @@ menu.view = function() {
         m('h3', i18n('signIn')),
         m('input#pseudo[type=text][placeholder=' + i18n('username') + '][autocomplete=off][autocapitalize=off][autocorrect=off]'),
         m('input#password[type=password][placeholder=' + i18n('password') + ']'),
-        m('button#login', i18n('signIn'))
+        m('button.login', i18n('signIn'))
       ])
     ]),
-    m('section#settings', {
+    m('div#settings', {
       class: utils.classSet({
         show: settingsOpen
       })
@@ -68,6 +69,11 @@ menu.view = function() {
           config: utils.ontouchend(closeSettings)
         }),
         m('h2', i18n('settings'))
+      ]),
+      m('section', [
+        formWidgets.renderCheckbox(i18n('animations'), 'animations', settings.general.animations),
+        formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound),
+        formWidgets.renderCheckbox(i18n('disableSleepDuringGame'), 'disableSleep', settings.general.disableSleep)
       ])
     ])
   ];

@@ -1,25 +1,28 @@
 // checkbox
 .check_container
-  position: relative;
-  display: block;
+  position relative
+  min-height 40px
+  label
+    display inline-block
 input[type='checkbox']
   position absolute
-  display block
+  display inline-block
   -webkit-appearance button
+  margin 0
   border none
   width 70px
   height 30px
   border-radius 15px
   background-color #333
   cursor pointer
-  transition background-color 0.2s
+  transition background-color 200ms
   top 0
   right 0
 input[type='checkbox']:checked
   background #C4A86F
 input[type='checkbox']:after
   content ''
-  display block
+  display inline-block
   position absolute
   top 5px
   left 5px
@@ -27,7 +30,7 @@ input[type='checkbox']:after
   height 20px
   border-radius 50%
   background #fff
-  transition: .5s all;
+  transition: left 200ms;
 input[type='checkbox']:checked:after
   left 40px
 

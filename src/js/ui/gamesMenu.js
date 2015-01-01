@@ -5,6 +5,8 @@ var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
 var Spinner = require('spin.js');
+var formWidgets = require('./_formWidgets');
+
 var gamesMenu = {};
 
 var isOpen = false;
@@ -44,51 +46,6 @@ function swapCard() {
   newGameCardSwapped = !newGameCardSwapped;
 }
 
-function renderRadio(label, name, value, settingsProp) {
-  var isOn = settingsProp() === value;
-  var id = name + value;
-  return [
-    m('input.radio[type=radio]', {
-      name: name,
-      id: id,
-      'class': value,
-      value: value,
-      checked: isOn,
-      onchange: function(e) {
-        settingsProp(e.target.value);
-      }
-    }),
-    m('label', {
-      'for': id
-    }, label)
-  ];
-}
-
-function renderOption(label, value, storedValue) {
-  return m('option', {
-    value: value,
-    selected: storedValue === value
-  }, label);
-}
-
-function renderSelect(label, name, options, settingsProp, isDisabled) {
-  var storedValue = settingsProp();
-  return [
-    m('label', {
-      'for': name
-    }, label),
-    m('select', {
-      name: name,
-      disabled: isDisabled,
-      onchange: function(e) {
-        settingsProp(e.target.value);
-      }
-    }, options.map(function(e) {
-      return renderOption(e[0], e[1], storedValue);
-    }))
-  ];
-}
-
 function tupleOf(x) {
   return [x, x];
 }
@@ -126,26 +83,26 @@ function renderForm(action, settingsObj, variants) {
 
   var generalFieldset = [
     m('div.select_input', [
-      renderSelect(i18n('color'), 'color', [
+      formWidgets.renderSelect(i18n('color'), 'color', [
         [i18n('white'), 'white'],
         [i18n('black'), 'black'],
         [i18n('randomColor'), 'random']
       ], settingsObj.color),
     ]),
     m('div.select_input', [
-      renderSelect(i18n('variant'), 'variant', variants, settingsObj.variant),
+      formWidgets.renderSelect(i18n('variant'), 'variant', variants, settingsObj.variant),
     ])
   ];
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', [
-      renderSelect(i18n('level'), 'ailevel', [
+      formWidgets.renderSelect(i18n('level'), 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
       ].map(tupleOf), settingsObj.level)
     ]));
   }
   if (settingsObj.mode) {
     generalFieldset.push(m('div.select_input', [
-      renderSelect(i18n('mode'), 'mode', [
+      formWidgets.renderSelect(i18n('mode'), 'mode', [
         [i18n('casual'), '0'],
         [i18n('rated'), '1']
       ], settingsObj.mode)
@@ -154,7 +111,7 @@ function renderForm(action, settingsObj, variants) {
 
   var timeFieldset = [
     m('div.select_input', [
-      renderSelect(i18n('clock'), 'timeMode', [
+      formWidgets.renderSelect(i18n('clock'), 'timeMode', [
         [i18n('unlimited'), '0'],
         [i18n('realTime'), '1']
       ], settingsObj.timeMode)
@@ -163,12 +120,12 @@ function renderForm(action, settingsObj, variants) {
   if (settingsObj.time && settingsObj.increment && hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', [
-        renderSelect(i18n('time'), 'time', [
+        formWidgets.renderSelect(i18n('time'), 'time', [
           '2', '5', '10', '30', '60'
         ].map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
-        renderSelect(i18n('increment'), 'increment', [
+        formWidgets.renderSelect(i18n('increment'), 'increment', [
           '0', '1', '2', '3', '5', '10'
         ].map(tupleOf), settingsObj.increment, false)
       ])
@@ -176,14 +133,14 @@ function renderForm(action, settingsObj, variants) {
   }
   if (settingsObj.timePreset && hasClock) {
     timeFieldset.push(m('div.select_input', [
-      renderSelect(i18n('time'), 'timepreset', [
+      formWidgets.renderSelect(i18n('time'), 'timepreset', [
         '3+0', '3+2', '5+0', '5+3', '10+0', '30+0'
       ].map(tupleOf), settingsObj.timePreset, false)
     ]));
   }
   // if (hasCorresp) {
   //   timeFieldset.push(m('div.select_input', [
-  //     renderSelect('Days per turn:', 'days', [
+  //     formWidgets.renderSelect('Days per turn:', 'days', [
   //       '1', '2', '3', '5', '7', '10', '14'
   //       ].map(tupleOf), settingsObj.days, false)
   //   ]));
@@ -195,8 +152,8 @@ function renderForm(action, settingsObj, variants) {
     }
   }, [
     m('fieldset', [
-      m('div.nice-radio', renderRadio(i18n('human'), 'selected', 'human', settings.newGame.selected)),
-      m('div.nice-radio', renderRadio(i18n('computer'), 'selected', 'computer', settings.newGame.selected))
+      m('div.nice-radio', formWidgets.renderRadio(i18n('human'), 'selected', 'human', settings.newGame.selected)),
+      m('div.nice-radio', formWidgets.renderRadio(i18n('computer'), 'selected', 'computer', settings.newGame.selected))
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),

@@ -4,6 +4,7 @@ var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../../StrongSocket');
 var utils = require('../../utils');
 var signals = require('../../signals');
+var settings = require('../../settings');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -73,7 +74,7 @@ module.exports = function() {
     xhr.game(id).then(function(data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
-      window.plugins.insomnia.keepAwake();
+      if (settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');

@@ -1,25 +1,19 @@
 var store = require('./storage');
 
 function localstorageprop(key, initialValue) {
-  function getset() {
+  return function() {
     if (arguments.length) store.set(key, arguments[0]);
     var ret = store.get(key);
-    if (ret !== null) return ret;
-    else return initialValue;
-  }
-
-  return getset;
+    return (ret !== null) ? ret : initialValue;
+  };
 }
 
-var settings = {
-  general: [
-    { label: "Disable sleep", active: localstorageprop('settings.disableSleep') },
-    { label: "Show last move", active: localstorageprop('settings.showLastMove') },
-    { label: "Show possible destinations", active: localstorageprop('settings.showDests') },
-    { label: "Show coordinates", active: localstorageprop('settings.showCoords') },
-    { label: "Threefold auto draw", active: localstorageprop('settings.threeFoldAutoDraw') },
-    { label: "Sound", active: localstorageprop('settings.sound') }
-  ],
+module.exports = {
+  general: {
+    animations: localstorageprop('settings.gameAnimations', true),
+    disableSleep: localstorageprop('settings.disableSleep', true),
+    sound: localstorageprop('settings.sound', true)
+  },
   newGame: {
     selected: localstorageprop('settings.game.selected', 'human'),
     ai: {
@@ -41,5 +35,3 @@ var settings = {
     }
   }
 };
-
-module.exports = settings;

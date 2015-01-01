@@ -8,7 +8,11 @@ var untranslated = {
   noInternetConnection: 'No internet connection',
   lichessIsNotReachable: 'lichess.org is unreachable',
   color: 'Color',
-  clock: 'Clock'
+  clock: 'Clock',
+  disableSleepDuringGame: 'Disable sleep during game',
+  sound: 'Sound',
+  showCoordinates: 'Show board coordinates',
+  animations: 'Pieces animations'
 };
 
 var defaultCode = 'en';

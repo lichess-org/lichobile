@@ -1,6 +1,7 @@
 var chessground = require('chessground');
 var round = require('./round');
 var sound = require('../../sound');
+var settings = require('../../settings');
 
 function str2move(m) {
   return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
@@ -26,7 +27,7 @@ function makeConfig(data, fen, flip) {
       showDests: data.pref.destination
     },
     animation: {
-      enabled: true,
+      enabled: settings.general.animations,
       duration: data.pref.animationDuration
     },
     premovable: {

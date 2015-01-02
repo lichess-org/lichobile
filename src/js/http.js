@@ -15,7 +15,7 @@ function extract(xhr) {
   var s = xhr.status;
   if (s === 0)
     throw new Error('lichessIsNotReachableError');
-  if (s === 401)
+  else if (s === 401)
     throw new Error('unauthorizedError');
   else if (s === 404)
     throw new Error('resourceNotFoundError');

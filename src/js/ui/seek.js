@@ -72,7 +72,7 @@ seek.view = function(ctrl) {
           m('div', i18n('nbConnectedPlayers', nbPlaying || '?')),
           m('br'),
           m('br'),
-          m('a', {
+          m('button[data-icon=L]', {
             config: utils.ontouchend(ctrl.cancel),
           }, i18n('cancel'))
         ])

@@ -23,6 +23,28 @@
   top 50%
   transform translateY(-50%)
   text-align center
+  button
+    display inline-block
+    background none
+    color #C4A86F
+    text-align center
+    text-transform uppercase
+    font-size 0.9em
+    margin 2em 0
+    &:before
+      content attr(data-icon)
+      display inline-block
+      width 40px
+      height 40px
+      line-height 40px
+      color #C4A86F
+      border-radius 50%
+      background #fff
+      margin-right 10px
+    &:active
+      &:before
+        background #C4A86F
+        color #fff
 
 .overlay-effect
   opacity 0

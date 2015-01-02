@@ -24,12 +24,7 @@ function extract(xhr) {
   else if (s >= 500)
     throw new Error('serverError');
 
-  try {
-    return JSON.stringify(xhr.responseText);
-  } catch (e) {
-    console.log('Could not extract JSON from responseText');
-    throw new Error('serverError');
-  }
+  return xhr.responseText.length === 0 ? null : xhr.responseText;
 }
 
 // convenient wrapper around m.request

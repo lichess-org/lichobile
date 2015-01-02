@@ -18,9 +18,9 @@ function headerHeight() {
 module.exports = function(headerView, contentView, footerView, menuView, overlaysView) {
   var layout = [
     m('main', { class: menu.isOpen ? 'out' : '' }, [
-      m('header', { style: { height: headerHeight() + 'px' }}, headerView()),
+      m('header.main_header', { style: { height: headerHeight() + 'px' }}, headerView()),
       contentView(),
-      m('footer', { style: { height: headerHeight() + 'px' }}, footerView())
+      m('footer.main_footer', { style: { height: headerHeight() + 'px' }}, footerView())
     ]),
     m('aside', menuView())
   ];

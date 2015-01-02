@@ -9,9 +9,9 @@ utils.hasNetwork = function() {
 };
 
 /*
- * Util function to handle xhr errors per request. We may not want to show
- * alerts on every request this is why it's not done in the extract function of
- * mithril request.
+ * Util function to handle xhr errors per request. We don't want to show alerts
+ * for every request, this is why it's not done in the extract function of
+ * m.request.
  *
  * @param {Error} error The error thrown in extract function (see http.js)
  */
@@ -24,7 +24,7 @@ utils.handleXhrError = function(error) {
 
 // softkeyboard
 var hiddenA = document.createElement('a');
-hiddenA.href = "#";
+hiddenA.href = '#';
 document.body.appendChild(hiddenA);
 
 utils.hideKeyboard = function() {
@@ -33,19 +33,13 @@ utils.hideKeyboard = function() {
 
 utils.lichessSri = Math.random().toString(36).substring(2);
 
-utils.userFullNameToId = function(fullName) {
-  var split = fullName.split(' ');
-  var id = split.length === 1 ? split[0] : split[1];
-  return id.toLowerCase();
-};
-
 utils.serializeQueryParameters = function(obj) {
-  var str = "";
+  var str = '';
   for (var key in obj) {
-    if (str !== "") {
-      str += "&";
+    if (str !== '') {
+      str += '&';
     }
-    str += key + "=" + obj[key];
+    str += key + '=' + obj[key];
   }
   return str;
 };
@@ -58,8 +52,8 @@ utils.partial = function() {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
 };
 
-// convenience function to bind a button handler with mithril
-function mbind(scrollable, handler) {
+// convenience function to bind a touchend mobile button handler in mithril
+function bindTouchendButton(scrollable, handler) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var options = {
@@ -83,8 +77,8 @@ function mbind(scrollable, handler) {
   };
 }
 
-utils.ontouchend = utils.partial(mbind, false);
-utils.ontouchendScroll = utils.partial(mbind, true);
+utils.ontouchend = utils.partial(bindTouchendButton, false);
+utils.ontouchendScroll = utils.partial(bindTouchendButton, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

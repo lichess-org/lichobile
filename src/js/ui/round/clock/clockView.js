@@ -1,4 +1,4 @@
-var classSet = require('chessground').util.classSet;
+var classSet = require('../../../utils').classSet;
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);

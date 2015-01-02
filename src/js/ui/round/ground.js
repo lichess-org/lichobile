@@ -1,5 +1,5 @@
 var chessground = require('chessground');
-var round = require('./round');
+var game = require('./game');
 var sound = require('../../sound');
 var settings = require('../../settings');
 
@@ -22,8 +22,8 @@ function makeConfig(data, fen, flip) {
     },
     movable: {
       free: false,
-      color: round.isPlayerPlaying(data) ? data.player.color : null,
-      dests: round.parsePossibleMoves(data.possibleMoves),
+      color: game.isPlayerPlaying(data) ? data.player.color : null,
+      dests: game.parsePossibleMoves(data.possibleMoves),
       showDests: data.pref.destination
     },
     animation: {

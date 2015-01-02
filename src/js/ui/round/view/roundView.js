@@ -4,9 +4,10 @@ var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
 var i18n = require('../../../i18n');
 var button = require('./button');
-var round = require('../round');
+var game = require('../game');
 var gameStatus = require('../status');
 var replayView = require('../replay/replayView');
+var renderChat = require('../chat').view;
 
 function compact(x) {
   if (Object.prototype.toString.call(x) === '[object Array]') {
@@ -72,16 +73,16 @@ function renderGameRunningActions(ctrl) {
     button.cancelDrawOffer(ctrl),
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
-    button.answerOpponentTakebackProposition(ctrl), (round.mandatory(d) && round.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
+    button.answerOpponentTakebackProposition(ctrl), (game.mandatory(d) && game.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
       ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : null
   ]);
   return [
     m('div.actions', [
-      button.standard(ctrl, round.abortable, 'L', 'abortGame', 'abort'),
-      button.standard(ctrl, round.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-      button.standard(ctrl, round.drawable, '2', 'offerDraw', 'draw-yes'),
-      button.standard(ctrl, round.resignable, 'b', 'resign', 'resign'),
+      button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
+      button.standard(ctrl, game.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+      button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
+      button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
       button.forceResign(ctrl),
       button.threefoldClaimDraw(ctrl)
     ]),
@@ -101,9 +102,9 @@ function renderGameEndedActions(ctrl) {
     default:
       result = '½-½';
   }
-  var winner = round.getPlayer(ctrl.data, ctrl.data.game.winner);
+  var winner = game.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data) +
-    (winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : '');
+    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   var buttons = compact(ctrl.vm.redirecting ? null : [
     button.joinRematch(ctrl),
     button.answerOpponentRematch(ctrl),
@@ -128,7 +129,7 @@ function renderPlayerActions(ctrl) {
         })
       },
       '+'),
-    m('div#player_controls.overlay-content', round.playable(ctrl.data) ?
+    m('div#player_controls.overlay-content', game.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
     )
   ]);
@@ -145,7 +146,11 @@ function renderGameButtons(ctrl) {
         ctrl.vm.showingActions = true;
       })
     }),
-    m('button.game_action[data-icon=c].disabled'),
+    m('button.game_action[data-icon=c]', {
+      config: utils.ontouchend(function() {
+        ctrl.vm.showingChatWindow = true;
+      })
+    }),
     replayView.renderButtons(ctrl.replay),
     renderPlayerActions(ctrl)
   ];
@@ -156,7 +161,8 @@ function renderGameButtons(ctrl) {
 function renderFooter(ctrl) {
   return [
     renderAntagonist(ctrl, ctrl.data.player),
-    renderGameButtons(ctrl)
+    renderGameButtons(ctrl),
+    renderChat(ctrl)
   ];
 }
 

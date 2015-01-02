@@ -1,4 +1,4 @@
-var round = require('./round');
+var game = require('./game');
 var ground = require('./ground');
 var xhr = require('./roundXhr');
 var sound = require('../../sound');
@@ -13,7 +13,7 @@ module.exports = function(send, ctrl) {
       ctrl.data.possibleMoves = o;
       if (!ctrl.replay.active) ctrl.chessground.set({
         movable: {
-          dests: round.parsePossibleMoves(o)
+          dests: game.parsePossibleMoves(o)
         }
       });
     },
@@ -89,7 +89,7 @@ module.exports = function(send, ctrl) {
     },
     gone: function(isGone) {
       // if (!ctrl.data.opponent.ai) {
-      //   round.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
+      //   game.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
       //   m.redraw();
       // }
     },

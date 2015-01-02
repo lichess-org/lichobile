@@ -8,11 +8,11 @@ if (!window.cordova) require('./cordovaPolyfills.js');
 
 var utils = require('./utils');
 var session = require('./session');
+var i18n = require('./i18n');
 
 var home = require('./ui/home');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
-var i18n = require('./i18n');
 
 function main() {
 

@@ -2,7 +2,7 @@ var throttle = require('lodash-node/modern/functions/throttle');
 var chessground = require('chessground');
 var partial = chessground.util.partial;
 var data = require('./data');
-var round = require('./round');
+var game = require('./game');
 var ground = require('./ground');
 var socket = require('./socket');
 var promotion = require('./promotion');
@@ -20,7 +20,8 @@ module.exports = function(cfg, socketSend) {
     flip: false,
     reloading: false,
     redirecting: false,
-    showingActions: !round.playable(this.data)
+    showingActions: !game.playable(this.data),
+    showingChatWindow: true
   };
 
   this.socket = new socket(socketSend, this);
@@ -34,13 +35,14 @@ module.exports = function(cfg, socketSend) {
 
   this.setTitle = function() {
     if (this.data.player.spectator) return;
-    if (gameStatus.finished(this.data)) {
+    if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
-    } else if (round.isPlayerTurn(this.data)) {
+    else if (gameStatus.aborted(this.data))
+      this.title = i18n('gameAborted');
+    else if (game.isPlayerTurn(this.data))
       this.title = i18n('yourTurn');
-    } else {
+    else
       this.title = i18n('waitingForOpponent');
-    }
   };
   this.setTitle();
 
@@ -64,7 +66,7 @@ module.exports = function(cfg, socketSend) {
     else this.chessground.apiMove(o.from, o.to);
     if (this.data.game.threefold) this.data.game.threefold = false;
     this.data.game.moves.push(o.san);
-    round.setOnGame(this.data, o.color, true);
+    game.setOnGame(this.data, o.color, true);
     m.redraw();
   }.bind(this);
 
@@ -73,6 +75,7 @@ module.exports = function(cfg, socketSend) {
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
     this.data = data(cfg);
+    this.setTitle();
     if (!this.replay.active) ground.reload(this.chessground, this.data, cfg.game.fen, this.vm.flip);
   }.bind(this);
 
@@ -82,7 +85,7 @@ module.exports = function(cfg, socketSend) {
   ) : false;
 
   this.isClockRunning = function() {
-    return this.data.clock && round.playable(this.data) &&
+    return this.data.clock && game.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }.bind(this);
 

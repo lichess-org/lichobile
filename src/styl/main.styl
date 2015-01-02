@@ -3,32 +3,34 @@ main
   height 100vh
   width 100%
   background #fff
-  transition all 200ms ease-out
+  transition transform 200ms ease-out
   &.out
     transform translate3d(85%, 0, 0)
-  header
-    background url('../../images/pattern_black.jpg')
-    color #fff
-    nav
-      height 50%
-      h1
-        font-size 1em
-        text-transform uppercase
-        text-align center
-        width 70%
+
+.main_header
+  background url('../../images/pattern_black.jpg')
+  color #fff
+  nav
+    height 50%
+    h1
+      font-size 1em
+      text-transform uppercase
+      text-align center
+      width 70%
+      display inline-block
+      &.playing
+        text-transform none
+        color #C4A86F
+    button
+      background transparent
+      padding: 20px
+      &.fa
+        color #C4A86F
+        width 15%
         display inline-block
-        &.playing
-          text-transform none
-          color #C4A86F
-      button
-        background transparent
-        padding: 20px
-        &.fa
-          color #C4A86F
-          width 15%
-          display inline-block
-          font-size 1.4em
-  header, footer
-    section
-      height 50%
-      padding 0 20px
+        font-size 1.4em
+
+.main_header, .main_footer
+  section
+    height 50%
+    padding 0 20px

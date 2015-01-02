@@ -1,4 +1,4 @@
-var round = require('../round');
+var game = require('../game');
 var gameStatus = require('../status');
 var utils = require('../../../utils');
 var throttle = require('lodash-node/modern/functions/throttle');
@@ -12,7 +12,7 @@ module.exports = {
     }, i18n(hint)) : null;
   },
   forceResign: function(ctrl) {
-    return (!ctrl.data.opponent.ai && ctrl.data.clock && ctrl.data.opponent.isGone && round.resignable(ctrl.data)) ?
+    return (!ctrl.data.opponent.ai && ctrl.data.clock && ctrl.data.opponent.isGone && game.resignable(ctrl.data)) ?
       m('div.force_resign_zone', [
         i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
         m('br'),
@@ -114,7 +114,7 @@ module.exports = {
     ];
   },
   moretime: function(ctrl) {
-    if (round.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
+    if (game.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       config: utils.ontouchend(throttle(utils.partial(ctrl.socket.send, 'moretime', null), 600))
     }, m('span[data-icon=O]'));
   }

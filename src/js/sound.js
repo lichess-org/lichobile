@@ -20,9 +20,9 @@ function play(file, volume) {
 }
 
 var audio = {
-  move: [ 'move.mp3', 1 ],
-  capture: [ 'capture.mp3', 1 ],
-  dong: [ 'dong.mp3', 1 ],
+  move: [ 'move.mp3', 0.8 ],
+  capture: [ 'capture.mp3', 0.8 ],
+  dong: [ 'dong.mp3', 0.8 ],
 };
 
 function shouldPlay() {

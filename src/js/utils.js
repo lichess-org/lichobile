@@ -8,18 +8,18 @@ utils.hasNetwork = function() {
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
 };
 
-// TODO fix this
+/*
+ * Util function to handle xhr errors per request. We may not want to show
+ * alerts on every request this is why it's not done in the extract function of
+ * mithril request.
+ *
+ * @param {Error} error The error thrown in extract function (see http.js)
+ */
 utils.handleXhrError = function(error) {
-  // assume lichess unreachable when error is null
-  if (error === null) {
-    if (!utils.hasNetwork())
-      window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
-    else
-      window.navigator.notification.alert(i18n('lichessIsNotReachable'), null, i18n('connectionError'));
-  }
-  else if (typeof error.error === 'string') {
-    window.navigator.notification.alert(error.error);
-  }
+  if (!utils.hasNetwork())
+    window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
+  else
+    window.navigator.notification.alert(i18n(error.message));
 };
 
 // softkeyboard

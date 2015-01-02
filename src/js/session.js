@@ -1,4 +1,5 @@
 var http = require('./http');
+var utils = require('./utils');
 
 var session = null;
 
@@ -20,12 +21,16 @@ function login(username, password) {
   }).then(function(data) {
     session = data;
     return session;
+  }, function(err) {
+    utils.handleXhrError(err);
   });
 }
 
 function logout() {
   return http.request('/logout').then(function() {
     session = null;
+  }, function(err) {
+    utils.handleXhrError(err);
   });
 }
 

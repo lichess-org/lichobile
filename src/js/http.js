@@ -9,12 +9,36 @@ http.xhrConfig = function(xhr) {
 
 var baseUrl = window.apiEndPoint;
 
+// throw an error message that may be given to i18n() function and displayed
+// to the user
+function extract(xhr) {
+  var s = xhr.status;
+  if (s === 0)
+    throw new Error('lichessIsNotReachableError');
+  if (s === 401)
+    throw new Error('unauthorizedError');
+  else if (s === 404)
+    throw new Error('resourceNotFoundError');
+  else if (s === 503)
+    throw new Error('lichessIsUnavailableError');
+  else if (s >= 500)
+    throw new Error('serverError');
+
+  try {
+    return JSON.stringify(xhr.responseText);
+  } catch (e) {
+    console.log('Could not extract JSON from responseText');
+    throw new Error('serverError');
+  }
+}
+
 // convenient wrapper around m.request
 http.request = function(url, opts) {
   var cfg = {
     url: baseUrl + url,
     method: 'GET',
-    config: http.xhrConfig
+    config: http.xhrConfig,
+    extract: extract
   };
   assign(cfg, opts);
   return m.request(cfg);

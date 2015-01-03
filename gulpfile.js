@@ -22,7 +22,7 @@ var options = minimist(process.argv.slice(2), minimistOptions);
 
 var paths = {
   scripts: ['src/js/**/*.js', '!src/js/vendor/**/*.js'],
-  styles: ['src/styl/reset.styl', 'src/styl/*.styl'],
+  styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/*.styl'],
 };
 
 gulp.task('html', function() {

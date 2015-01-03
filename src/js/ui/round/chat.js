@@ -64,7 +64,7 @@ module.exports = {
             ctrl.root.socket.send('talk', msg);
           }
         }, [
-          m('input.chat_input[type=text][placeholder=chat here...]', {
+          m('input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
             style: { height: heights.input + 'px' },
             value: ''
           }),

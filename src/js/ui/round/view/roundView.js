@@ -148,7 +148,7 @@ function renderGameButtons(ctrl) {
     }),
     m('button.game_action[data-icon=c]', {
       config: utils.ontouchend(function() {
-        ctrl.vm.showingChatWindow = true;
+        ctrl.chat.showing = true;
       })
     }),
     replayView.renderButtons(ctrl.replay),
@@ -162,7 +162,7 @@ function renderFooter(ctrl) {
   return [
     renderAntagonist(ctrl, ctrl.data.player),
     renderGameButtons(ctrl),
-    renderChat(ctrl)
+    renderChat(ctrl.chat)
   ];
 }
 

@@ -88,11 +88,14 @@ module.exports = function(send, ctrl) {
       }, 1000);
     },
     gone: function(isGone) {
-      // if (!ctrl.data.opponent.ai) {
-      //   game.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-      //   m.redraw();
-      // }
+      if (!ctrl.data.opponent.ai) {
+        game.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
+        m.redraw();
+      }
     },
+    message: function(m) {
+      ctrl.chat.append(m);
+    }
   };
 
   this.receive = function(type, data) {

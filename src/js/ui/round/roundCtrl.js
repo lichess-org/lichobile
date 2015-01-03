@@ -7,6 +7,7 @@ var ground = require('./ground');
 var socket = require('./socket');
 var promotion = require('./promotion');
 var replayCtrl = require('./replay/replayCtrl');
+var chat = require('./chat');
 var clockCtrl = require('./clock/clockCtrl');
 var i18n = require('../../i18n');
 var gameStatus = require('./status');
@@ -20,8 +21,7 @@ module.exports = function(cfg, socketSend) {
     flip: false,
     reloading: false,
     redirecting: false,
-    showingActions: !game.playable(this.data),
-    showingChatWindow: true
+    showingActions: !game.playable(this.data)
   };
 
   this.socket = new socket(socketSend, this);
@@ -96,6 +96,8 @@ module.exports = function(cfg, socketSend) {
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
 
   this.replay = new replayCtrl(this);
+
+  this.chat = new chat.controller(this.data.chat);
 
   this.onunload = function() {
     if (clockIntervId) clearInterval(clockIntervId);

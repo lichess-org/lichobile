@@ -149,6 +149,9 @@ function renderForm(action, settingsObj, variants) {
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
+      gamesMenu.close();
+      swapCard();
+      action();
     }
   }, [
     m('fieldset', [
@@ -157,11 +160,7 @@ function renderForm(action, settingsObj, variants) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    renderFeedbackButton(function() {
-      gamesMenu.close();
-      swapCard();
-      return action();
-    }, i18n('createAGame'))
+    m('button', i18n('createAGame'))
   ]);
 }
 

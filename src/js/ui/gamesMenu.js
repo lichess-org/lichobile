@@ -4,7 +4,6 @@ var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
-var Spinner = require('spin.js');
 var formWidgets = require('./_formWidgets');
 
 var gamesMenu = {};
@@ -61,20 +60,6 @@ var aiVariants = [
   ['Chess960', '2'],
   ['King of the hill', '4']
 ];
-
-function renderFeedbackButton(action, label) {
-  return m('button', {
-    config: utils.ontouchend(function(e, el) {
-      var savedLabel = el.innerHTML;
-      el.innerHTML = '';
-      var spinner = new Spinner({color: '#151a1e'}).spin(el);
-      action().then(null, function() {
-        spinner.stop();
-        el.innerHTML = savedLabel;
-      });
-    })
-  }, label);
-}
 
 function renderForm(action, settingsObj, variants) {
   var timeMode = settingsObj.timeMode();
@@ -217,9 +202,7 @@ function renderAllGames() {
           m('p', g.opponent.username),
         ]),
         m('button', {
-          config: utils.ontouchendScroll(function(e, el) {
-            el.innerHTML = '';
-            new Spinner({color: '#151a1e'}).spin(el);
+          config: utils.ontouchendScroll(function() {
             gamesMenu.joinGame(g.id);
             gamesMenu.close();
           })

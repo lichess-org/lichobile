@@ -2,31 +2,16 @@ var utils = require('../../utils');
 var i18n = require('../../i18n');
 
 module.exports = {
-  controller: function(messages) {
+  controller: function(root) {
     this.showing = false;
 
-    this.messages = messages || [];
+    this.root = root;
 
-    // this.messages = [
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false },
-    //   { u: 'veloce', t: 'bla bla fhadsdf asasdkfj asdfa;slkdfjasdlkf jasdf a;k', r: false }
-    // ];
+    this.messages = root.data.chat || [];
 
     this.append = function(msg) {
       this.messages.push(msg);
+      m.redraw();
     }.bind(this);
   },
 
@@ -58,16 +43,33 @@ module.exports = {
         style: { height: heights.content + 'px' }
       }, [
         m('div.chat_messages', {
-          style: { height: heights.messages + 'px' }
+          style: { height: heights.messages + 'px' },
+          config: function(el) {
+            el.scrollTop = 999999;
+          }
         }, ctrl.messages.map(function(msg) {
           return m('div.chat_msg', [
             m('span.chat_user', msg.u),
-            msg.t
+            m.trust(msg.t)
           ]);
         })),
-        m('input.chat_input[type=text][placeholder=chat here...]', {
-          style: { height: heights.input + 'px' }
-        })
+        m('form.chat_form', {
+          onsubmit: function(e) {
+            e.preventDefault();
+            var msg = e.target[0].value.trim();
+            if (!msg) return false;
+            if (msg.length > 140) {
+              return false;
+            }
+            ctrl.root.socket.send('talk', msg);
+          }
+        }, [
+          m('input.chat_input[type=text][placeholder=chat here...]', {
+            style: { height: heights.input + 'px' },
+            value: ''
+          }),
+          m('button.chat_send[data-icon=z]')
+        ])
       ])
     ]);
   }

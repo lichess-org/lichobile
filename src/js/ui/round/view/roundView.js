@@ -147,6 +147,9 @@ function renderGameButtons(ctrl) {
       })
     }),
     m('button.game_action[data-icon=c]', {
+      class: utils.classSet({
+        disabled: !ctrl.chat
+      }),
       config: utils.ontouchend(function() {
         ctrl.chat.showing = true;
       })
@@ -159,11 +162,13 @@ function renderGameButtons(ctrl) {
 }
 
 function renderFooter(ctrl) {
-  return [
+  var els = [
     renderAntagonist(ctrl, ctrl.data.player),
-    renderGameButtons(ctrl),
-    renderChat(ctrl.chat)
+    renderGameButtons(ctrl)
   ];
+  if (ctrl.chat) els.push(renderChat(ctrl.chat));
+
+  return els;
 }
 
 function renderHeader(ctrl) {

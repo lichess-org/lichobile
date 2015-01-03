@@ -97,7 +97,7 @@ module.exports = function(cfg, socketSend) {
 
   this.replay = new replayCtrl(this);
 
-  this.chat = new chat.controller(this.data.chat);
+  this.chat = !this.data.opponent.ai ? new chat.controller(this) : false;
 
   this.onunload = function() {
     if (clockIntervId) clearInterval(clockIntervId);

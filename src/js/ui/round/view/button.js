@@ -82,7 +82,7 @@ module.exports = {
           config: utils.ontouchend(utils.partial(ctrl.socket.send, 'rematch-yes', null))
         }, i18n('rematch'));
       } else {
-        return m('button.disabled', i18n('rematch'));
+        return null;
       }
     }
   },

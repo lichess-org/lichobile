@@ -16,33 +16,21 @@ module.exports = {
   },
 
   view: function(ctrl) {
-    var vh = utils.getViewportDims().vh;
-    var heights = {
-      header: 50,
-      input: 50,
-      content: vh - 50,
-      messages: vh - 100
-    };
-    return m('div#chat', {
+    return m('div#chat.modal', {
       class: utils.classSet({
         show: ctrl.showing
       })
     }, [
-      m('header', {
-        style: { height: heights.header + 'px' }
-      }, [
+      m('header', [
+        m('button.modal_close[data-icon=L]', {
+          config: utils.ontouchend(function() {
+            ctrl.showing = false;
+          })
+        }),
         m('h2', i18n('chat'))
       ]),
-      m('button.chat-close[data-icon=L]', {
-        config: utils.ontouchend(function() {
-          ctrl.showing = false;
-        })
-      }),
-      m('div.chat_content', {
-        style: { height: heights.content + 'px' }
-      }, [
+      m('div.chat_content', [
         m('div.chat_messages', {
-          style: { height: heights.messages + 'px' },
           config: function(el) {
             el.scrollTop = 999999;
           }
@@ -65,7 +53,6 @@ module.exports = {
           }
         }, [
           m('input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
-            style: { height: heights.input + 'px' },
             value: ctrl.inputValue,
             config: function(el, isUpdate, context) {
               if (!isUpdate) {

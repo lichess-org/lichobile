@@ -1,0 +1,39 @@
+.modal
+  position: fixed;
+  top: 0;
+  z-index: 11;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  opacity: 0;
+  transform translate3d(0, 100%, 0)
+  transition transform 250ms, opacity 1ms 250ms
+  & > header
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 45px
+    background #353535
+    color #fff
+    box-shadow 0px 1px 2px 0px rgba(0,0,0,0.30)
+    & > h2
+      text-align center
+      padding 10px 0
+      line-height 25px
+
+.modal.show
+  height 100%
+  opacity 1
+  transition transform 250ms
+  transform translate3d(0,0,0)
+
+.modal_close
+  position absolute
+  right 0
+  top 0
+  padding 8px
+  background transparent
+  font-size 24px
+  color #C4A86F

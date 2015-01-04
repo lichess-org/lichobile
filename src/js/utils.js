@@ -110,4 +110,7 @@ utils.classSet = function(classes) {
   return arr.join(' ');
 };
 
+utils.noop = function() {
+};
+
 module.exports = utils;

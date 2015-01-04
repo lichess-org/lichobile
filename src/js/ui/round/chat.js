@@ -8,9 +8,20 @@ module.exports = {
     this.showing = false;
     this.messages = root.data.chat || [];
     this.inputValue = '';
+    this.unread = false;
+
+    this.open = function() {
+      this.showing = true;
+    }.bind(this);
+
+    this.close = function() {
+      this.showing = false;
+      this.unread = false;
+    }.bind(this);
 
     this.append = function(msg) {
       this.messages.push(msg);
+      this.unread = true;
       m.redraw();
     }.bind(this);
   },
@@ -23,9 +34,7 @@ module.exports = {
     }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: utils.ontouchend(function() {
-            ctrl.showing = false;
-          })
+          config: utils.ontouchend(ctrl.close)
         }),
         m('h2', i18n('chat'))
       ]),

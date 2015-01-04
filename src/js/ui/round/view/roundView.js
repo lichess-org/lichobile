@@ -146,13 +146,12 @@ function renderGameButtons(ctrl) {
         ctrl.vm.showingActions = true;
       })
     }),
-    m('button.game_action[data-icon=c]', {
+    m('button#open_chat.game_action[data-icon=c]', {
       class: utils.classSet({
-        disabled: !ctrl.chat
+        disabled: !ctrl.chat,
+        unread: ctrl.chat.unread
       }),
-      config: utils.ontouchend(function() {
-        ctrl.chat.showing = true;
-      })
+      config: utils.ontouchend(ctrl.chat.open || utils.noop)
     }),
     replayView.renderButtons(ctrl.replay),
     renderPlayerActions(ctrl)

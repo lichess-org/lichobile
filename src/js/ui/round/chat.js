@@ -24,7 +24,6 @@ module.exports = {
       messages: vh - 100
     };
     return m('div#chat', {
-      style: { height: vh + 'px' },
       class: utils.classSet({
         show: ctrl.showing
       })

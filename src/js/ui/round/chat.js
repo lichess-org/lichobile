@@ -3,11 +3,11 @@ var i18n = require('../../i18n');
 
 module.exports = {
   controller: function(root) {
-    this.showing = false;
 
     this.root = root;
-
+    this.showing = false;
     this.messages = root.data.chat || [];
+    this.inputValue = '';
 
     this.append = function(msg) {
       this.messages.push(msg);
@@ -60,12 +60,23 @@ module.exports = {
             if (msg.length > 140) {
               return false;
             }
+            ctrl.inputValue = '';
             ctrl.root.socket.send('talk', msg);
           }
         }, [
           m('input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
             style: { height: heights.input + 'px' },
-            value: ''
+            value: ctrl.inputValue,
+            config: function(el, isUpdate, context) {
+              if (!isUpdate) {
+                el.addEventListener('input', function(e) {
+                  ctrl.inputValue = e.target.value;
+                });
+                context.onunload = function() {
+                  el.removeEventListener('input');
+                };
+              }
+            }
           }),
           m('button.chat_send[data-icon=z]')
         ])

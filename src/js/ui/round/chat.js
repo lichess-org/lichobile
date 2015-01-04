@@ -35,8 +35,20 @@ module.exports = {
             el.scrollTop = 999999;
           }
         }, ctrl.messages.map(function(msg) {
-          return m('div.chat_msg', [
-            m('span.chat_user', msg.u),
+          var user;
+          if (msg.c)
+            user = '[' + msg.c + ']';
+          else if (msg.u !== 'lichess')
+            user = msg.u;
+          else
+            user = null;
+
+          return m('div.chat_msg', {
+            class: utils.classSet({
+              system: msg.u === 'lichess'
+            })
+          }, [
+            m('span.chat_user', user),
             m.trust(msg.t)
           ]);
         })),

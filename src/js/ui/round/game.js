@@ -43,6 +43,10 @@ function resignable(data) {
   return playable(data) && !abortable(data);
 }
 
+function forceResignable(data) {
+  return !data.opponent.ai && data.clock && data.opponent.isGone && resignable(data);
+}
+
 function moretimeable(data) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data);
 }
@@ -83,6 +87,7 @@ module.exports = {
   takebackable: takebackable,
   drawable: drawable,
   resignable: resignable,
+  forceResignable: forceResignable,
   moretimeable: moretimeable,
   mandatory: mandatory,
   replayable: replayable,

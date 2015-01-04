@@ -7,12 +7,11 @@ var i18n = require('../../../i18n');
 module.exports = {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button[data-icon=' + icon + ']', {
-      class: socketMsg,
       config: utils.ontouchend(utils.partial(ctrl.socket.send, socketMsg, null))
     }, i18n(hint)) : null;
   },
   forceResign: function(ctrl) {
-    return (!ctrl.data.opponent.ai && ctrl.data.clock && ctrl.data.opponent.isGone && game.resignable(ctrl.data)) ?
+    return game.forceResignable(ctrl.data) ?
       m('div.force_resign_zone', [
         i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
         m('br'),

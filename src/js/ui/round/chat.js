@@ -21,7 +21,8 @@ module.exports = {
 
     this.append = function(msg) {
       this.messages.push(msg);
-      this.unread = true;
+      if (msg.u !== 'lichess')
+        this.unread = true;
       m.redraw();
     }.bind(this);
   },

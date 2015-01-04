@@ -86,7 +86,7 @@ function renderGameRunningActions(ctrl) {
       button.forceResign(ctrl),
       button.threefoldClaimDraw(ctrl)
     ]),
-    answerButtons ? m('div.answers', answerButtons) : null
+    m('div.answers', answerButtons)
   ];
 }
 
@@ -112,8 +112,8 @@ function renderGameEndedActions(ctrl) {
     button.rematch(ctrl)
   ]);
   return [
-    m('div.result', [ result, m('br'), m('br'), status ]),
-    buttons ? m('div.control.buttons', buttons) : null,
+    m('div.result', [result, m('br'), m('br'), status]),
+    m('div.control.buttons', buttons)
   ];
 }
 
@@ -140,7 +140,9 @@ function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action[data-icon=O]', {
       class: utils.classSet({
-        'answer_required': ctrl.data.opponent.proposingTakeback || ctrl.data.opponent.offeringDraw
+        'answer_required': ctrl.data.opponent.proposingTakeback ||
+          ctrl.data.opponent.offeringDraw ||
+          game.forceResignable(ctrl.data)
       }),
       config: utils.ontouchend(function() {
         ctrl.vm.showingActions = true;
@@ -156,7 +158,6 @@ function renderGameButtons(ctrl) {
     replayView.renderButtons(ctrl.replay),
     renderPlayerActions(ctrl)
   ];
-
   return m('section#game_actions', actions);
 }
 

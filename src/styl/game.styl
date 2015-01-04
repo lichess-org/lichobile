@@ -10,7 +10,7 @@
     vertical-align top
     margin 5px 10px 0 0
   .clock
-    font-family 'Cousine', monospace
+    font-family monospace
     font-weight 800
     text-align right
     min-width 90px
@@ -86,7 +86,11 @@
   color: red
 
 #player_controls
-  .answers
+  width 100%
+  padding 0 10px
+  .answers, .force_resign_zone
     margin-top 2em
   .result
     margin-bottom 2em
+  .force_resign_zone > button, .negotiation > button
+    width 49%

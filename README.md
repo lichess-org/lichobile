@@ -17,7 +17,7 @@ for API 14 to API 19
 
 **For iOS:**
 
-* you need OS X and Xcode installed.
+* you need OS X and Xcode (6.x) installed.
 
 ## Build the web application
 
@@ -68,6 +68,3 @@ env.
 Generate assets and compile:
 
     $ bin/ios your_env
-
-Then open the xcode project at `app/platforms/ios/lichess.xcodeproj` and
-run the ios emulator.

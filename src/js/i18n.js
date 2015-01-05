@@ -22,7 +22,8 @@ var untranslated = {
 var defaultCode = 'en';
 
 function loadFile(code, callback) {
-  var i18nLoc = window.cordova ? (window.device.platform === 'Android' ? '/android_asset/www/i18n' : 'i18n') : 'i18n';
+  var i18nLoc = window.cordova ? (window.device.platform === 'Android' ?
+    '/android_asset/www/i18n' : 'i18n') : 'i18n';
   m.request({
     url: i18nLoc + '/' + code + '.json',
     method: 'GET'
@@ -30,9 +31,17 @@ function loadFile(code, callback) {
     messages = data;
     callback();
   }, function(error) {
-    if (code === defaultCode) throw error;
-    console.log(error, 'defaulting to ' + defaultCode);
-    loadFile(defaultCode, callback);
+    // workaround for ios: because xhr for local file has a 0 status it will
+    // reject the promise, but still have the response object
+    // TODO find a better fix (in mithril?)
+    if (typeof error.playWithAFriend === 'string') {
+      messages = error;
+      callback();
+    } else {
+      if (code === defaultCode) throw new Error(error);
+      console.log(error, 'defaulting to ' + defaultCode);
+      loadFile(defaultCode, callback);
+    }
   });
 }
 

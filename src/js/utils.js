@@ -95,7 +95,7 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation) {
     coordinates: false,
     fen: fen,
     lastMove: lastMove,
-    orientation: orientation
+    orientation: orientation || 'white'
   });
   return m('div.board.grey.merida', [
     chessground.view(ctrl)

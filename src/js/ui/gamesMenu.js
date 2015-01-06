@@ -203,7 +203,7 @@ function renderAllGames() {
         ]),
         m('button', {
           config: utils.ontouchendScroll(function() {
-            gamesMenu.joinGame(g.id);
+            gamesMenu.joinGame(g.fullId);
             gamesMenu.close();
           })
         }, i18n('joinTheGame'))

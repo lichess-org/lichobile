@@ -5,6 +5,7 @@ var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
+var moment = require('moment');
 
 var gamesMenu = {};
 
@@ -190,6 +191,14 @@ function renderAllGames() {
   var wrapperWidth = ((cDim.w + cDim.padding * 2) * nbCards) +
     (cDim.padding * 2);
 
+  var timeLeft = function(g) {
+    if (!g.secondsLeft) return;
+    var time = moment().add(g.secondsLeft, 'seconds');
+    return m('time', {
+      datetime: time.format()
+    }, time.fromNow());
+  };
+
   var allGames = nowPlaying.map(function(g) {
     return m('div.card.standard', {
       style: cardStyle
@@ -199,11 +208,14 @@ function renderAllGames() {
         m('div.icon-game.' + g.variant),
         m('div.description', [
           m('h2.title', g.variant),
-          m('p', g.opponent.username),
+          m('p', [
+            g.opponent.username,
+            m('span.time-indication', timeLeft(g))
+          ])
         ]),
         m('button', {
           config: utils.ontouchendScroll(function() {
-            gamesMenu.joinGame(g.id);
+            gamesMenu.joinGame(g.fullId);
             gamesMenu.close();
           })
         }, i18n('joinTheGame'))

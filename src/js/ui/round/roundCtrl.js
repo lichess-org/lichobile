@@ -11,9 +11,9 @@ var chat = require('./chat');
 var clockCtrl = require('./clock/clockCtrl');
 var i18n = require('../../i18n');
 var gameStatus = require('./status');
+var correspondenceClockCtrl = require('./correspondenceClock/correspondenceCtrl');
 
 module.exports = function(cfg, socketSend) {
-  var clockIntervId;
 
   this.data = data(cfg);
 
@@ -75,6 +75,7 @@ module.exports = function(cfg, socketSend) {
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
     this.data = data(cfg);
+    makeCorrespondenceClock();
     this.setTitle();
     if (!this.replay.active) ground.reload(this.chessground, this.data, cfg.game.fen, this.vm.flip);
   }.bind(this);
@@ -93,7 +94,23 @@ module.exports = function(cfg, socketSend) {
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }.bind(this);
 
+  var makeCorrespondenceClock = function() {
+    if (this.data.correspondence && !this.correspondenceClock)
+      this.correspondenceClock = new correspondenceClockCtrl(
+        this.data.correspondence,
+        partial(this.socket.send, 'outoftime')
+      );
+  }.bind(this);
+  makeCorrespondenceClock();
+
+  var correspondenceClockTick = function() {
+    if (this.correspondenceClock && game.playable(this.data))
+      this.correspondenceClock.tick(this.data.game.player);
+  }.bind(this);
+
+  var clockIntervId;
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
+  else clockIntervId = setInterval(correspondenceClockTick, 1000);
 
   this.replay = new replayCtrl(this);
 

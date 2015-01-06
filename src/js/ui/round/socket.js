@@ -75,6 +75,9 @@ module.exports = function(send, ctrl) {
     clock: function(o) {
       if (ctrl.clock) ctrl.clock.update(o.white, o.black);
     },
+    cclock: function(o) {
+      if (ctrl.correspondenceClock) ctrl.correspondenceClock.update(o.white, o.black);
+    },
     end: function() {
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);

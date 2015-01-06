@@ -8,6 +8,7 @@ var game = require('../game');
 var gameStatus = require('../status');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
+var renderCorrespondenceClock = require('../correspondenceClock/correspondenceView');
 
 function compact(x) {
   if (Object.prototype.toString.call(x) === '[object Array]') {
@@ -62,7 +63,11 @@ function renderAntagonist(ctrl, player) {
           renderMaterial(ctrl, player.color)
         ])
       ]),
-      ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : null
+      ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
+        ctrl.data.correspondence ? renderCorrespondenceClock(
+          ctrl.correspondenceClock, i18n, player.color, ctrl.data.game.player
+        ) : null
+      )
     ])
   ]);
 }

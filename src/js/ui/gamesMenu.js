@@ -260,10 +260,9 @@ function renderAllGames() {
 
 gamesMenu.view = function() {
   var children = [
-    m('div.overlay-close', {
-        config: utils.ontouchend(gamesMenu.close)
-      },
-      '+'),
+    m('button.overlay_close.fa.fa-close', {
+      config: utils.ontouchend(gamesMenu.close)
+    }),
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {
         if (!isUpdate) {
@@ -292,7 +291,7 @@ gamesMenu.view = function() {
     }, renderAllGames())
   ];
 
-  return m('div#game_menu.overlay.overlay-effect', {
+  return m('div#game_menu.overlay.overlay_effect', {
     class: isOpen ? 'open' : '',
   }, children);
 };

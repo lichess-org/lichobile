@@ -10,6 +10,28 @@ module.exports = {
     this.inputValue = '';
     this.unread = false;
 
+    // this.messages = [
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' }
+    // ];
+
     this.open = function() {
       this.showing = true;
     }.bind(this);

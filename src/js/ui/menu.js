@@ -49,7 +49,7 @@ menu.view = function() {
         onsubmit: function(e) {
           e.preventDefault();
           var form = e.target;
-          menu.toggle();
+          window.cordova.plugins.Keyboard.close();
           session.login(form[0].value, form[1].value);
         }
       }, [

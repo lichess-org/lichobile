@@ -128,13 +128,12 @@ function renderPlayerActions(ctrl) {
       hide: !ctrl.vm.showingActions
     })
   }, [
-    m('div.overlay-close', {
-        config: utils.ontouchend(function() {
-          ctrl.vm.showingActions = false;
-        })
-      },
-      '+'),
-    m('div#player_controls.overlay-content', game.playable(ctrl.data) ?
+    m('button.overlay_close.fa.fa-close', {
+      config: utils.ontouchend(function() {
+        ctrl.vm.showingActions = false;
+      })
+    }),
+    m('div#player_controls.overlay_content', game.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
     )
   ]);

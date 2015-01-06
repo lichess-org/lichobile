@@ -2,7 +2,7 @@ var settings = require('./settings');
 
 function play(file, volume) {
   var a, soundsLoc;
-  if (window.cordova) {
+  if (window.Media) {
     soundsLoc = (window.device.platform === 'Android') ?
     '/android_asset/www/sounds' : 'sounds';
     a = new window.Media(soundsLoc + '/' + file, function() {

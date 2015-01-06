@@ -31,10 +31,9 @@ function loadFile(code, callback) {
     messages = data;
     callback();
   }, function(error) {
-    // workaround for ios: because xhr for local file has a 0 status it will
+    // workaround for iOS: because xhr for local file has a 0 status it will
     // reject the promise, but still have the response object
-    // TODO find a better fix (in mithril?)
-    if (typeof error.playWithAFriend === 'string') {
+    if (error && error.playWithAFriend) {
       messages = error;
       callback();
     } else {

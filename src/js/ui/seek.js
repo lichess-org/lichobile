@@ -66,7 +66,7 @@ seek.view = function(ctrl) {
     return [
       gamesMenu.view(),
       m('div.overlay', [
-        m('div.overlay-content', [
+        m('div.overlay_content', [
           m('div', i18n('waitingForOpponent')),
           m('br'),
           m('div', i18n('nbConnectedPlayers', nbPlaying || '?')),

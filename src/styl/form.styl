@@ -5,19 +5,26 @@
   label
     display inline-block
 input[type='checkbox']
-  position absolute
   display inline-block
+  position absolute
+  top 0
+  right 0
   -webkit-appearance button
   margin 0
   border none
   width 70px
   height 30px
   border-radius 15px
-  background-color #333
-  cursor pointer
+  background-color #444444
   transition background-color 200ms
-  top 0
-  right 0
+  outline none
+input[type='checkbox']:checked:before
+  position absolute
+  top 8px
+  left 15px
+  font-family "lichess"
+  color #fff
+  content "E"
 input[type='checkbox']:checked
   background #C4A86F
 input[type='checkbox']:after
@@ -30,7 +37,7 @@ input[type='checkbox']:after
   height 20px
   border-radius 50%
   background #fff
-  transition: left 200ms;
+  transition left 200ms
 input[type='checkbox']:checked:after
   left 40px
 

@@ -34,7 +34,7 @@ module.exports = function(ctrl) {
 
     if (!ctrl.vm.connectedWS)
       els.push(m('div.overlay', [
-        m('div.overlay-content', i18n('reconnecting'))
+        m('div.overlay_content', i18n('reconnecting'))
       ]));
 
     return els;

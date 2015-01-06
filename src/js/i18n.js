@@ -22,8 +22,8 @@ var untranslated = {
 var defaultCode = 'en';
 
 function loadFile(code, callback) {
-  var i18nLoc = window.cordova ? (window.device.platform === 'Android' ?
-    '/android_asset/www/i18n' : 'i18n') : 'i18n';
+  var i18nLoc = window.device.platform === 'Android' ?
+    '/android_asset/www/i18n' : 'i18n';
   m.request({
     url: i18nLoc + '/' + code + '.json',
     method: 'GET'

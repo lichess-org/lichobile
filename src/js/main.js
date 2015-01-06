@@ -34,8 +34,7 @@ function main() {
   }, 2000);
 }
 
-document.addEventListener(
-  window.cordova ? 'deviceready' : 'DOMContentLoaded',
+document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
   utils.partial(i18n.loadPreferredLanguage, main),
   false

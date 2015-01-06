@@ -22,15 +22,6 @@ utils.handleXhrError = function(error) {
     window.navigator.notification.alert(i18n(error.message));
 };
 
-// softkeyboard
-var hiddenA = document.createElement('a');
-hiddenA.href = '#';
-document.body.appendChild(hiddenA);
-
-utils.hideKeyboard = function() {
-  hiddenA.focus();
-};
-
 utils.lichessSri = Math.random().toString(36).substring(2);
 
 utils.serializeQueryParameters = function(obj) {

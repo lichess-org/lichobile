@@ -6,20 +6,20 @@
   left 0
   background rgba(0,0,0,0.8)
   color #ffffff
+  z-index 10
 
-.overlay-close
+.overlay_close
   position absolute
-  right 7px
-  top 8px
+  right 0
+  top 0
+  padding 15px 10px 10px
+  width 50px
   background transparent
-  z-index 100
-  font-size 50px
+  font-size 30px
+  z-index 11
   color #C4A86F
-  line-height 50px
-  transform rotate(45deg)
-  transform rotate(45deg)
 
-.overlay-content
+.overlay_content
   position relative
   top 50%
   transform translateY(-50%)
@@ -46,12 +46,12 @@
         background #C4A86F
         color #fff
 
-.overlay-effect
+.overlay_effect
   opacity 0
   visibility hidden
   transition opacity 200ms, visibility 0s 200ms
 
-.overlay-effect.open
+.overlay_effect.open
   opacity 1
   visibility visible
   transition opacity 200ms

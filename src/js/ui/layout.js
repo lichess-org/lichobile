@@ -16,7 +16,7 @@ function headerHeight() {
  * @param {function} overlaysView A function that returns an array of m()
  */
 module.exports = function(headerView, contentView, footerView, menuView, overlaysView) {
-  var layout = [
+  var view = [
     m('main', { class: menu.isOpen ? 'out' : '' }, [
       m('header.main_header', { style: { height: headerHeight() + 'px' }}, headerView()),
       contentView(),
@@ -24,6 +24,6 @@ module.exports = function(headerView, contentView, footerView, menuView, overlay
     ]),
     m('aside', menuView())
   ];
-  if (overlaysView) layout.push(overlaysView());
-  return layout;
+  if (overlaysView) view.push(overlaysView());
+  return m('div.view-container', view);
 };

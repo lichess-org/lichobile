@@ -1,14 +1,14 @@
 function noop() {}
 
-// global objects
 window.cordova = {};
 window.cordova.plugins = {};
 window.plugins = {};
 
+window.cordova.platformId = 'browser';
+
 // events
-var deviceReadyEvent = new window.Event('deviceready');
 document.addEventListener('DOMContentLoaded', function() {
-  document.dispatchEvent(deviceReadyEvent);
+  document.dispatchEvent(new window.Event('deviceready'));
 }, false);
 
 // keyboard
@@ -34,9 +34,19 @@ window.device = {
 };
 
 // network information
-window.Connection = {};
-window.navigator.connection = {};
-window.navigator.connection.type = 1;
+window.Connection = {
+  NONE: "none",
+  UNKNOWN: "unknown",
+  WIFI: "wifi",
+  ETHERNET: "ethernet",
+  CELL_2G: "2g",
+  CELL_3G: "3g",
+  CELL_4G: "4g",
+  CELL: "cellular"
+};
+window.navigator.connection = {
+  type: "wifi"
+};
 
 // notification
 window.navigator.notification = {};

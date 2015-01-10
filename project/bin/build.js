@@ -7,12 +7,14 @@ var fs = require('fs');
 var chokidar = require('chokidar');
 var gulp = require('gulp');
 var buildFile = require('../gulpfile');
+var path = require('path');
 
 var w, // watchify instance
   assetsWatcher, // chokidar assetsWatcher instance
   stylWatcher,
-  srcFolder = 'project/src', // sources folder
-  assetsDest = 'project/www', // public assets destinations
+  srcFolder = path.join(__dirname, '../src'), // sources folder
+  assetsDest = path.join(__dirname, '../www'), // public assets destinations
+  stylesPaths = [srcFolder + '/styl/reset.styl', srcFolder + '/styl/common.styl', srcFolder + '/styl/*.styl'],
   bundledJS = assetsDest + '/app.js';
 
 function log(o) {
@@ -38,7 +40,7 @@ function bundle() {
 
   var ws = fs.createWriteStream(bundledJS);
 
-  b.add(srcFolder + '/javascripts/app.js')
+  b.add(srcFolder + '/js/main.js')
     .bundle(rejectOnError(defer))
     .pipe(ws);
 
@@ -75,10 +77,6 @@ function launchWatchify(f) {
 module.exports.build = function build(platform, settings, configName) {
   var defer = Q.defer();
 
-  var paths = {
-    styles: ['project/src/styl/reset.styl', 'project/src/styl/common.styl', 'project/src/styl/*.styl'],
-  };
-
   configName = configName || 'default';
   var mode = configName === 'prod' ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
@@ -89,11 +87,11 @@ module.exports.build = function build(platform, settings, configName) {
   });
 
   gulp.add('styl', function() {
-    return buildFile.buildStyl(paths.styles, assetsDest, mode);
+    return buildFile.buildStyl(stylesPaths, assetsDest, mode);
   });
 
   gulp.add('scripts', function() {
-    return buildFile.buildScripts('./' + srcFolder, assetsDest, mode);
+    return buildFile.buildScripts(srcFolder, assetsDest, mode);
   });
 
   gulp.start('html', 'styl', 'scripts', function(err) {
@@ -123,7 +121,7 @@ module.exports.watch = function watch(f, settings, platform, config) {
       });
       stylWatcher.on('change', function(p) {
         console.log('styl file ' + p + ' updated');
-        buildFile.buildStyl(srcFolder, assetsDest, mode);
+        buildFile.buildStyl(stylesPaths, assetsDest, mode);
       });
     }, 4000);
   });

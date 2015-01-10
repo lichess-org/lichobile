@@ -84,6 +84,7 @@ function renderGameRunningActions(ctrl) {
   ]);
   return [
     m('div.actions', [
+      button.moretime(ctrl),
       button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
       button.standard(ctrl, game.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
       button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
@@ -142,7 +143,7 @@ function renderPlayerActions(ctrl) {
 
 function renderGameButtons(ctrl) {
   var actions = [
-    m('button#open_player_controls.game_action[data-icon=O]', {
+    m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       class: utils.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||

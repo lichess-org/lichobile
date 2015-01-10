@@ -115,6 +115,6 @@ module.exports = {
   moretime: function(ctrl) {
     if (game.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       config: utils.ontouchend(throttle(utils.partial(ctrl.socket.send, 'moretime', null), 600))
-    }, m('span[data-icon=O]'));
+    }, i18n('giveNbSeconds', 15));
   }
 };

@@ -234,10 +234,10 @@ function renderAllGames() {
           m('div.description', [
             m('h2.title', i18n('createAGame')),
             m('p', i18n('newOpponent')),
-            m('button', {
-              config: utils.ontouchendScroll(swapCard)
-            }, '+ ' + i18n('createAGame'))
-          ])
+          ]),
+          m('button', {
+            config: utils.ontouchendScroll(swapCard)
+          }, '+ ' + i18n('createAGame'))
         ])
       ]),
       m('div.back', [

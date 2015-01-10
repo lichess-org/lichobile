@@ -3,7 +3,7 @@ var utils = require('../utils');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var settings = require('../settings');
-var Velocity = require('velocity-animate');
+var Zanimo = require('zanimo');
 
 var menu = {};
 
@@ -23,10 +23,9 @@ function closeSettings() {
 function routeAction(route) {
   return function() {
     menu.close();
-    Velocity(document.getElementById('page'), { transform: 'translate3d(0,0,0)' }, {
-      complete: function() {
-        m.route(route);
-      }
+    Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
+      '200', 'ease-out').then(function() {
+      m.route(route);
     });
   };
 }

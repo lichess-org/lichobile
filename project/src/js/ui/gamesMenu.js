@@ -98,7 +98,7 @@ function renderForm(action, settingsObj, variants) {
   var timeFieldset = [
     m('div.select_input', [
       formWidgets.renderSelect(i18n('clock'), 'timeMode', [
-        [i18n('unlimited'), '0'],
+        // [i18n('unlimited'), '0'],
         [i18n('realTime'), '1']
       ], settingsObj.timeMode)
     ])

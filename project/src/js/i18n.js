@@ -22,10 +22,8 @@ var untranslated = {
 var defaultCode = 'en';
 
 function loadFile(code, callback) {
-  var i18nLoc = window.device.platform === 'Android' ?
-    '/android_asset/www/i18n' : 'i18n';
   m.request({
-    url: i18nLoc + '/' + code + '.json',
+    url: 'i18n/' + code + '.json',
     method: 'GET'
   }).then(function(data) {
     messages = data;

@@ -3,6 +3,7 @@ var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
 var session = require('../session');
+var utils = require('../utils');
 var i18n = require('../i18n');
 
 module.exports = {
@@ -19,7 +20,11 @@ module.exports = {
             var pass = form[1].value.trim();
             if (!login || !pass) return false;
             window.cordova.plugins.Keyboard.close();
-            session.login(form[0].value.trim(), form[1].value.trim());
+            session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
+              m.route('/');
+            }, function(err) {
+              utils.handleXhrError(err);
+            });
           }
         }, [
           m('h2', i18n('signIn')),

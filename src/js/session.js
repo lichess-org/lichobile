@@ -22,7 +22,7 @@ function login(username, password) {
     session = data;
     return session;
   }, function(err) {
-    utils.handleXhrError(err);
+    throw new Error(err);
   });
 }
 
@@ -31,6 +31,7 @@ function logout() {
     session = null;
   }, function(err) {
     utils.handleXhrError(err);
+    throw new Error(err);
   });
 }
 

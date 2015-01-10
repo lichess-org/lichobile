@@ -49,6 +49,7 @@
     "mobile-button": "^0.8.0",
     "moment": "^2.8.4",
     "signals": "^1.0.0",
-    "spin.js": "^2.0.1"
+    "spin.js": "^2.0.1",
+    "velocity-animate": "^1.2.1"
   }
 }

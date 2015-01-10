@@ -14,7 +14,7 @@ home.view = function() {
     ];
   }
 
-  return layout(widgets.header, widgets.board, widgets.empty, menu.view, overlays);
+  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlays);
 };
 
 module.exports = home;

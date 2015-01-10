@@ -11,6 +11,7 @@ var session = require('./session');
 var i18n = require('./i18n');
 
 var home = require('./ui/home');
+var login = require('./ui/login');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
 
@@ -18,6 +19,7 @@ function main() {
 
   m.route(document.body, '/', {
     '/': home,
+    '/login': login,
     '/seek/:id': seek,
     '/play/:id': play
   });

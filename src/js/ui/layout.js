@@ -6,24 +6,32 @@ function headerHeight() {
   return (d.vh - d.vw) / 2;
 }
 
-/**
- * Main layout function
- *
- * @param {function} headerView A function that returns an array of m()
- * @param {function} contentView A function that returns a m()
- * @param {function} footerView A function that returns an array of m()
- * @param {function} menuView A function that returns an array of m()
- * @param {function} overlaysView A function that returns an array of m()
- */
-module.exports = function(headerView, contentView, footerView, menuView, overlaysView) {
-  var view = [
-    m('main', { class: menu.isOpen ? 'out' : '' }, [
-      m('header.main_header', { style: { height: headerHeight() + 'px' }}, headerView()),
-      contentView(),
-      m('footer.main_footer', { style: { height: headerHeight() + 'px' }}, footerView())
-    ]),
-    m('aside', menuView())
-  ];
-  if (overlaysView) view.push(overlaysView());
-  return m('div.view-container', view);
+module.exports = {
+
+  base: function(header, content, footer, aside, overlay) {
+    var view = [
+      m('main#page', { class: menu.isOpen ? 'out' : '' }, [
+        m('header.main_header', header()),
+        content(),
+        m('footer.main_footer', footer())
+      ]),
+      m('aside#side_menu', aside())
+    ];
+    if (overlay) view.push(overlay());
+    return m('div.view-container', view);
+  },
+
+  board: function(header, content, footer, aside, overlay) {
+    var view = [
+      m('main#page', { class: menu.isOpen ? 'out' : '' }, [
+        m('header.main_header.board', { style: { height: headerHeight() + 'px' }}, header()),
+        content(),
+        m('footer.main_footer.board', { style: { height: headerHeight() + 'px' }}, footer())
+      ]),
+      m('aside#side_menu', aside())
+    ];
+    if (overlay) view.push(overlay());
+    return m('div.view-container', view);
+  }
+
 };

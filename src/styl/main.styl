@@ -10,7 +10,7 @@ main
   height 100%
   width 100%
   z-index 1
-  background #fff
+  background #DDD
   overflow hidden
   transition transform 200ms ease-out
   box-shadow: -4px 0px 5px rgba(0, 0, 0, 0.3)
@@ -18,7 +18,7 @@ main
     transform translate3d(80%, 0, 0)
 
 .main_header
-  background url('../../images/pattern_black.jpg')
+  background #151A1E
   color #fff
   nav
     height 50%
@@ -33,14 +33,50 @@ main
         color #C4A86F
     button
       background transparent
-      padding: 20px 10px
+      padding: 15px 10px
       &.fa
         color #C4A86F
         width 15%
         display inline-block
-        font-size 1.4em
+        font-size 1.2em
+
+.main_footer
+  background #FFF
 
 .main_header, .main_footer
   section
     height 50%
     padding 0 10px
+
+.content
+  padding 0 20px
+  h2
+    font-family 'montserratbold'
+    margin 1em 0 1.5em 0
+
+#login_form
+  input
+    display block
+    width 100%
+    margin-top 10px
+    height 50px
+    background #2A2A2A
+    border-radius 5px
+    border none
+    padding 0 15px
+    box-shadow inset 0px 1px 3px 0px rgba(0,0,0,0.50)
+    color #8F8F8F
+  button.login
+    background #C4A86F
+    color #fff
+    padding 15px
+    font-size 15px
+    margin-top 20px
+  button
+    border none
+    background none
+    color #8C8C8C
+    font-size 13px
+    width 100%
+    margin-top 10px
+

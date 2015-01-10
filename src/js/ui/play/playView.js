@@ -40,5 +40,5 @@ module.exports = function(ctrl) {
     return els;
   }
 
-  return layout(header, board, footer, menu.view, overlays);
+  return layout.board(header, board, footer, menu.view, overlays);
 };

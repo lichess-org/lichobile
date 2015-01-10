@@ -3,6 +3,7 @@ var utils = require('../utils');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var settings = require('../settings');
+var Velocity = require('velocity-animate');
 
 var menu = {};
 
@@ -17,8 +18,25 @@ function closeSettings() {
   settingsOpen = false;
 }
 
+// calling m.route performs a full redraw so we need to transition manually
+// the side menu between pages
+function routeAction(route) {
+  return function() {
+    menu.close();
+    Velocity(document.getElementById('page'), { transform: 'translate3d(0,0,0)' }, {
+      complete: function() {
+        m.route(route);
+      }
+    });
+  };
+}
+
 menu.toggle = function() {
   menu.isOpen = !menu.isOpen;
+};
+
+menu.close = function() {
+  menu.isOpen = false;
   closeSettings();
 };
 
@@ -32,7 +50,10 @@ menu.view = function() {
       })
     }, i18n('logOut'))
   ] : [
-    m('h2', i18n('notConnected'))
+    m('h2', i18n('notConnected')),
+    m('button', {
+      config: utils.ontouchend(routeAction('/login'))
+    }, i18n('login'))
   ];
   header.unshift(
     m('div.logo', [
@@ -43,22 +64,6 @@ menu.view = function() {
   );
   return [
     m('header', header),
-    userobj ? null :
-    m('section', [
-      m('form#login_form', {
-        onsubmit: function(e) {
-          e.preventDefault();
-          var form = e.target;
-          window.cordova.plugins.Keyboard.close();
-          session.login(form[0].value, form[1].value);
-        }
-      }, [
-        m('h3', i18n('signIn')),
-        m('input#pseudo[type=text][placeholder=' + i18n('username') + '][autocomplete=off][autocapitalize=off][autocorrect=off]'),
-        m('input#password[type=password][placeholder=' + i18n('password') + ']'),
-        m('button.login', i18n('signIn'))
-      ])
-    ]),
     m('div#settings', {
       class: utils.classSet({
         show: settingsOpen

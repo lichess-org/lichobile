@@ -1,13 +1,24 @@
 var assign = require('lodash-node/modern/objects/merge');
+var Spinner = require('spin.js');
+var spinner = new Spinner();
 
 var http = {};
 
-http.xhrConfig = function(xhr) {
+var baseUrl = window.apiEndPoint;
+
+function complete(data) {
+  spinner.stop();
+  if (data instanceof Error)
+    throw data;
+  else
+    return data;
+}
+
+function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
-};
-
-var baseUrl = window.apiEndPoint;
+  xhr.timeout = 8000;
+}
 
 // throw an error message that may be given to i18n() function and displayed
 // to the user
@@ -32,15 +43,23 @@ function uncache(url) {
 }
 
 // convenient wrapper around m.request
-http.request = function(url, opts) {
+http.request = function(url, opts, feedback) {
+
   var cfg = {
     url: uncache(baseUrl + url),
     method: 'GET',
-    config: http.xhrConfig,
+    config: xhrConfig,
     extract: extract
   };
   assign(cfg, opts);
-  return m.request(cfg);
+
+  var promise = m.request(cfg);
+
+  if (feedback) {
+    spinner.spin(document.body);
+    return promise.then(complete, complete);
+  } else
+    return promise;
 };
 
 module.exports = http;

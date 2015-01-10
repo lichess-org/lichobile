@@ -18,11 +18,9 @@ function login(username, password) {
       username: username,
       password: password
     }
-  }).then(function(data) {
+  }, true).then(function(data) {
     session = data;
     return session;
-  }, function(err) {
-    throw err;
   });
 }
 

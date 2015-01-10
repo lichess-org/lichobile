@@ -15,7 +15,7 @@ function newAiGame() {
       level: config.level(),
       color: config.color()
     }
-  });
+  }, true);
 }
 
 function seekGame() {
@@ -32,7 +32,7 @@ function seekGame() {
       color: config.color(),
       mode: config.mode()
     }
-  });
+  }, true);
 }
 
 function lobby() {

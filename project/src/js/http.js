@@ -27,10 +27,14 @@ function extract(xhr) {
   return xhr.responseText.length === 0 ? null : xhr.responseText;
 }
 
+function uncache(url) {
+  return url + '?_=' + new Date().getTime();
+}
+
 // convenient wrapper around m.request
 http.request = function(url, opts) {
   var cfg = {
-    url: baseUrl + url,
+    url: uncache(baseUrl + url),
     method: 'GET',
     config: http.xhrConfig,
     extract: extract

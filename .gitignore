@@ -4,8 +4,12 @@ www/index.html
 www/css/compiled
 
 /node_modules
+project/node_modules
 
 env/*.json
 !env/prod.json
+
+private.json
+.tarifa.json
 
 .DS_Store

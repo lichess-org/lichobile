@@ -1,0 +1,88 @@
+{
+  "name": "lichess",
+  "id": "org.lichess.mobileapp",
+  "description": "lichess.org mobile application",
+  "version": "1.0.0",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "configurations": {
+    "ios": {
+      "default": {
+        "id": "org.lichess.mobileapp.dev",
+        "product_name": "lichess",
+        "product_file_name": "lichess"
+      },
+      "prod": {
+        "id": "org.lichess.mobileapp",
+        "product_name": "lichess_prod",
+        "product_file_name": "lichess-prod",
+        "release": true,
+        "API_END_POINT": "http://en.lichess.org",
+        "SOCKET_END_POINT": "socket.en.lichess.org"
+      }
+    },
+    "android": {
+      "default": {
+        "id": "org.lichess.mobileapp.dev",
+        "product_name": "lichess",
+        "product_file_name": "lichess"
+      },
+      "prod": {
+        "id": "org.lichess.mobileapp",
+        "product_name": "lichess_prod",
+        "product_file_name": "lichess-prod",
+        "release": true,
+        "API_END_POINT": "http://en.lichess.org",
+        "SOCKET_END_POINT": "socket.en.lichess.org"
+      }
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "Orientation": "portrait",
+      "DisallowOverscroll": true,
+      "WebViewBounce": false,
+      "EnableViewportScale": false,
+      "KeyboardDisplayRequiresUserAction": false,
+      "ShowSplashScreenSpinner": false,
+      "SplashScreen": "screen",
+      "SplashScreenDelay": 10000,
+      "BackgroundColor": "0xffffffff",
+      "AutoHideSplashScreen": false,
+      "KeepRunning": true,
+      "StatusBarOverlaysWebView": false,
+      "StatusBarBackgroundColor": "#151A1E"
+    },
+    "accessOrigin": [
+      "*",
+      {
+        "origin": "tel:",
+        "external": true
+      }
+    ]
+  },
+  "author": {
+    "name": "Vincent Velociter",
+    "email": "vincent.velociter@gmail.com",
+    "href": "https://github.com/veloce/lichobile"
+  },
+  "check": {
+    "ios": "./project/bin/check_ios.js",
+    "android": "./project/bin/check_android.js"
+  },
+  "plugins": {
+    "org.apache.cordova.splashscreen": "https://github.com/apache/cordova-plugin-splashscreen.git#r0.3.5",
+    "org.apache.cordova.device": "https://github.com/apache/cordova-plugin-device.git#r0.2.13",
+    "org.apache.cordova.dialogs": "https://github.com/apache/cordova-plugin-dialogs.git#r0.2.11",
+    "org.apache.cordova.globalization": "https://github.com/apache/cordova-plugin-globalization.git#r0.3.3",
+    "org.apache.cordova.media": "https://github.com/apache/cordova-plugin-media.git#r0.2.15",
+    "org.apache.cordova.network-information": "https://github.com/apache/cordova-plugin-network-information.git#r0.2.14",
+    "org.apache.cordova.statusbar": "org.apache.cordova.statusbar",
+    "org.apache.cordova.file": "org.apache.cordova.file",
+    "com.ionic.keyboard": "com.ionic.keyboard",
+    "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",
+    "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git"
+  }
+}

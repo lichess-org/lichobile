@@ -1,0 +1,7 @@
+{
+  "PLATFORM": "cordova",
+  "ENV": "dev",
+  "API_END_POINT": "http://192.168.1.18:9663",
+  "SOCKET_END_POINT": "192.168.1.18:9663"
+}
+

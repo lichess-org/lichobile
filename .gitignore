@@ -1,13 +1,12 @@
 npm-debug.log
-www/app.js
-www/index.html
-www/css/compiled
 
 /node_modules
-project/node_modules
 
-env/*.json
-!env/prod.json
+project/www/app.js
+project/www/index.html
+project/www/css/compiled
+project/node_modules
+project/env.json
 
 private.json
 .tarifa.json

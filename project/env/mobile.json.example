@@ -1,5 +1,0 @@
-{
-  "PLATFORM": "cordova",
-  "API_END_POINT": "http://10.0.25.250:9663",
-  "SOCKET_END_POINT": "10.0.25.250:9663"
-}

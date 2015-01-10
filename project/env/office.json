@@ -1,9 +1,0 @@
-{
-  "PLATFORM": "cordova",
-  "ENV": "dev",
-  "API_END_POINT": "http://10.0.25.250:9663",
-  "SOCKET_END_POINT": "10.0.25.250:9663",
-  "WEINRE": false,
-  "WEINRE_HOST": "10.0.25.250",
-  "WEINRE_PORT": 8081
-}

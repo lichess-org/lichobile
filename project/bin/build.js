@@ -11,8 +11,8 @@ var buildFile = require('../gulpfile');
 var w, // watchify instance
   assetsWatcher, // chokidar assetsWatcher instance
   stylWatcher,
-  srcFolder = '../src', // sources folder
-  assetsDest = '../www', // public assets destinations
+  srcFolder = 'project/src', // sources folder
+  assetsDest = 'project/www', // public assets destinations
   bundledJS = assetsDest + '/app.js';
 
 function log(o) {
@@ -76,14 +76,13 @@ module.exports.build = function build(platform, settings, configName) {
   var defer = Q.defer();
 
   var paths = {
-    styles: ['../src/styl/reset.styl', '../src/styl/common.styl', '../src/styl/*.styl'],
+    styles: ['project/src/styl/reset.styl', 'project/src/styl/common.styl', 'project/src/styl/*.styl'],
   };
 
   configName = configName || 'default';
   var mode = configName === 'prod' ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
-  console.log(platform, settings, configName);
-  console.log(context);
+  context.TARIFA = true;
 
   gulp.add('html', function() {
     return buildFile.buildHtml(srcFolder, assetsDest, context);
@@ -94,7 +93,7 @@ module.exports.build = function build(platform, settings, configName) {
   });
 
   gulp.add('scripts', function() {
-    return buildFile.buildScripts('./project/src', assetsDest, mode);
+    return buildFile.buildScripts('./' + srcFolder, assetsDest, mode);
   });
 
   gulp.start('html', 'styl', 'scripts', function(err) {

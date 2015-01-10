@@ -26,9 +26,10 @@ var paths = {
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/*.styl'],
 };
 
-function buildHtml(src, dest, env) {
+function buildHtml(src, dest, context) {
+  console.log(context);
   return gulp.src(path.join(src, 'index.html'))
-    .pipe(preprocess({context: env}))
+    .pipe(preprocess({context: context}))
     .pipe(gulp.dest(dest));
 }
 

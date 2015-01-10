@@ -46,17 +46,22 @@ seek.controller = function() {
     lobbySocket = makeLobbySocket(data.lobby.version);
   });
 
+  function cancel() {
+    if (lobbySocket) lobbySocket.send('cancel', id);
+    window.navigator.app.backHistory();
+  }
+
+  document.addEventListener('backbutton', cancel, false);
+
   return {
-    cancel: function() {
-      if (lobbySocket)
-        lobbySocket.send('cancel', id);
-      m.route('/');
-    },
+    cancel: cancel,
+
     onunload: function() {
       if (lobbySocket) {
         lobbySocket.destroy();
         lobbySocket = null;
       }
+      document.removeEventListener('backbutton', cancel, false);
     }
   };
 };

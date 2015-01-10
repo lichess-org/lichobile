@@ -7,7 +7,23 @@ var utils = require('../utils');
 var i18n = require('../i18n');
 
 module.exports = {
-  controller: function() {},
+  controller: function() {
+    function onBackButton() {
+      if (gamesMenu.isOpen()) {
+        gamesMenu.close();
+        m.redraw();
+      } else
+        window.navigator.app.backHistory();
+    }
+
+    document.addEventListener('backbutton', onBackButton, false);
+
+    return {
+      onunload: function() {
+        document.removeEventListener('backbutton', onBackButton, false);
+      }
+    };
+  },
 
   view: function() {
     function content() {

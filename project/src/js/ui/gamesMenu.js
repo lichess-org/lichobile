@@ -16,6 +16,10 @@ gamesMenu.open = function() {
   isOpen = true;
 };
 
+gamesMenu.isOpen = function() {
+  return isOpen;
+};
+
 gamesMenu.close = function() {
   isOpen = false;
 };

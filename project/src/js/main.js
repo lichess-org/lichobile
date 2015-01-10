@@ -26,11 +26,6 @@ function main() {
 
   if (utils.hasNetwork()) session.refresh(true);
 
-  document.addEventListener('backbutton', function() {
-    // todo
-    window.navigator.app.exitApp();
-  }, false);
-
   // disable scroll in iOS on keyboard show
   window.cordova.plugins.Keyboard.disableScroll(true);
 

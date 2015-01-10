@@ -3,6 +3,7 @@ var roundXhr = require('../round/roundXhr');
 var roundCtrl = require('../round/roundCtrl');
 var StrongSocket = require('../../StrongSocket');
 var utils = require('../../utils');
+var gamesMenu = require('../gamesMenu');
 var signals = require('../../signals');
 var settings = require('../../settings');
 
@@ -47,6 +48,20 @@ module.exports = function() {
   this.round = null;
   this.gameSocket = null;
 
+  var resumeGame = function(id) {
+    var self = this;
+    xhr.game(id).then(function(data) {
+      self.gameSocket = makeGameSocket(self, data);
+      self.round = makeRound(self, data);
+      if (settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
+    }, function(error) {
+      utils.handleXhrError(error);
+      m.route('/');
+    });
+  }.bind(this);
+
+  resumeGame(this.id);
+
   var onConnected = function() {
     var wasOff = !this.vm.connectedWS;
     this.vm.connectedWS = true;
@@ -69,19 +84,16 @@ module.exports = function() {
     if (this.gameSocket) this.gameSocket.connect();
   }.bind(this);
 
-  var resumeGame = function(id) {
-    var self = this;
-    xhr.game(id).then(function(data) {
-      self.gameSocket = makeGameSocket(self, data);
-      self.round = makeRound(self, data);
-      if (settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
-    }, function(error) {
-      utils.handleXhrError(error);
-      m.route('/');
-    });
+  var onBackButton = function() {
+    if (this.round.vm.showingActions) {
+      this.round.hideActions();
+      m.redraw();
+    } else if (gamesMenu.isOpen()) {
+      gamesMenu.close();
+      m.redraw();
+    } else
+      window.navigator.app.backHistory();
   }.bind(this);
-
-  resumeGame(this.id);
 
   this.onunload = function() {
     if (this.round) {
@@ -96,6 +108,7 @@ module.exports = function() {
     signals.disconnected.remove(onDisconnected);
     document.removeEventListener('pause', onPause, false);
     document.removeEventListener('resume', onResume, false);
+    document.removeEventListener('backbutton', onBackButton, false);
     window.plugins.insomnia.allowSleepAgain();
   }.bind(this);
 
@@ -103,4 +116,6 @@ module.exports = function() {
   signals.disconnected.add(onDisconnected);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('resume', onResume, false);
+  document.addEventListener('backbutton', onBackButton, false);
+
 };

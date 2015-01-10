@@ -130,9 +130,7 @@ function renderPlayerActions(ctrl) {
     })
   }, [
     m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(function() {
-        ctrl.vm.showingActions = false;
-      })
+      config: utils.ontouchend(ctrl.hideActions)
     }),
     m('div#player_controls.overlay_content', game.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
@@ -149,9 +147,7 @@ function renderGameButtons(ctrl) {
           ctrl.data.opponent.offeringDraw ||
           game.forceResignable(ctrl.data)
       }),
-      config: utils.ontouchend(function() {
-        ctrl.vm.showingActions = true;
-      })
+      config: utils.ontouchend(ctrl.showActions)
     }),
     m('button#open_chat.game_action[data-icon=c]', {
       class: utils.classSet({

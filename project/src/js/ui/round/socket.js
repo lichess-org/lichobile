@@ -86,7 +86,7 @@ module.exports = function(send, ctrl) {
       // refresh current games card list
       session.refresh();
       setTimeout(function() {
-        ctrl.vm.showingActions = true;
+        ctrl.showActions();
         m.redraw();
       }, 1000);
     },

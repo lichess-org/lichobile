@@ -12,6 +12,7 @@ var clockCtrl = require('./clock/clockCtrl');
 var i18n = require('../../i18n');
 var gameStatus = require('./status');
 var correspondenceClockCtrl = require('./correspondenceClock/correspondenceCtrl');
+var menu = require('../menu');
 
 module.exports = function(cfg, socketSend) {
 
@@ -25,6 +26,15 @@ module.exports = function(cfg, socketSend) {
   };
 
   this.socket = new socket(socketSend, this);
+
+  this.showActions = function() {
+    menu.close();
+    this.vm.showingActions = true;
+  }.bind(this);
+
+  this.hideActions = function() {
+    this.vm.showingActions = false;
+  }.bind(this);
 
   this.flip = function() {
     this.vm.flip = !this.vm.flip;

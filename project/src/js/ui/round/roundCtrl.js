@@ -118,5 +118,6 @@ module.exports = function(cfg, socketSend) {
 
   this.onunload = function() {
     if (clockIntervId) clearInterval(clockIntervId);
+    if (this.chat) this.chat.onunload();
   };
 };

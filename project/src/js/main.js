@@ -31,6 +31,9 @@ function main() {
     window.navigator.app.exitApp();
   }, false);
 
+  // disable scroll in iOS on keyboard show
+  window.cordova.plugins.Keyboard.disableScroll(true);
+
   setTimeout(function() {
     window.navigator.splashscreen.hide();
   }, 2000);

@@ -5,11 +5,11 @@
   height 100%
   padding-top 45px
 
+.chat_scroller
+  overflow hidden
+
 .chat_messages
   padding 10px
-  padding-bottom 55px
-  height 100%
-  overflow auto
 
 .chat_msg
   font-weight normal
@@ -28,11 +28,8 @@
   margin-right 15px
 
 .chat_form
-  position absolute
-  bottom 0
-  height 45px
+  position relative
   width 100%
-  -webkit-transform translate3d(0,0,0) // trick to put scrollbar behind form
 
 .chat_input
   display block

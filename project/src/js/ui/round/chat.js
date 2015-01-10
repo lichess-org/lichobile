@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var i18n = require('../../i18n');
+var iScroll = require('iscroll');
 
 module.exports = {
   controller: function(root) {
@@ -9,31 +10,13 @@ module.exports = {
     this.messages = root.data.chat || [];
     this.inputValue = '';
     this.unread = false;
-
-    // this.messages = [
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'veloce', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' }
-    // ];
+    this.scroller = null;
 
     this.open = function() {
       this.showing = true;
+      setTimeout(function() {
+        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+      }.bind(this), 200);
     }.bind(this);
 
     this.close = function() {
@@ -46,10 +29,49 @@ module.exports = {
       if (msg.u !== 'lichess')
         this.unread = true;
       m.redraw();
+      // hack to prevent scrolling to bottom on every redraw
+      setTimeout(function() {
+        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+      }.bind(this), 100);
     }.bind(this);
+
+    var scrollerHeight;
+    var onKeyboardShow = function(e) {
+      this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+      var chat = document.getElementById('chat_scroller');
+      scrollerHeight = chat.offsetHeight;
+      chat.style.height = (scrollerHeight - e.keyboardHeight) + 'px';
+      setTimeout(function() {
+        this.scroller.refresh();
+        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+      }.bind(this), 100);
+    }.bind(this);
+
+    var onKeyboardHide = function() {
+      // because of iscroll we need to manually blur when user hide
+      // keyboard
+      document.getElementById('chat_input').blur();
+      var chat = document.getElementById('chat_scroller');
+      chat.style.height = scrollerHeight + 'px';
+      setTimeout(function() {
+        this.scroller.refresh();
+      }.bind(this), 100);
+    }.bind(this);
+
+    window.addEventListener('native.keyboardhide', onKeyboardHide);
+    window.addEventListener('native.keyboardshow', onKeyboardShow);
+
+    this.onunload = function() {
+      document.removeEventListener('native.keyboardhide', onKeyboardHide);
+      document.removeEventListener('native.keyboardshow', onKeyboardShow);
+    };
   },
 
   view: function(ctrl) {
+    var vh = utils.getViewportDims().vh,
+      formH = 45,
+      scrollerH = vh - formH - 45; // minus modal header height
+
     return m('div#chat.modal', {
       class: utils.classSet({
         show: ctrl.showing
@@ -62,29 +84,47 @@ module.exports = {
         m('h2', i18n('chat'))
       ]),
       m('div.chat_content', [
-        m('div.chat_messages', {
-          config: function(el) {
-            el.scrollTop = 999999;
+        m('div#chat_scroller.chat_scroller', {
+          style: {
+            height: scrollerH + 'px'
+          },
+          config: function(el, isUpdate, context) {
+            if (!isUpdate) {
+              ctrl.scroller = new iScroll(el);
+              context.onunload = function() {
+                if (ctrl.scroller) {
+                  ctrl.scroller.destroy();
+                  ctrl.scroller = null;
+                }
+              };
+              ctrl.scroller.scrollTo(0, ctrl.scroller.maxScrollY, 0);
+            }
+            ctrl.scroller.refresh();
           }
-        }, ctrl.messages.map(function(msg) {
-          var user;
-          if (msg.c)
-            user = '[' + msg.c + ']';
-          else if (msg.u !== 'lichess')
-            user = msg.u;
-          else
-            user = null;
+        }, [
+          m('ul.chat_messages', ctrl.messages.map(function(msg) {
+            var user;
+            if (msg.c)
+              user = '[' + msg.c + ']';
+            else if (msg.u !== 'lichess')
+              user = msg.u;
+            else
+              user = null;
 
-          return m('div.chat_msg', {
-            class: utils.classSet({
-              system: msg.u === 'lichess'
-            })
-          }, [
-            m('span.chat_user', user),
-            m.trust(msg.t)
-          ]);
-        })),
+            return m('li.chat_msg', {
+              class: utils.classSet({
+                system: msg.u === 'lichess'
+              })
+            }, [
+              m('span.chat_user', user),
+              m.trust(msg.t)
+            ]);
+          })),
+        ]),
         m('form.chat_form', {
+          style: {
+            height: formH + 'px'
+          },
           onsubmit: function(e) {
             e.preventDefault();
             var msg = e.target[0].value.trim();
@@ -96,7 +136,7 @@ module.exports = {
             ctrl.root.socket.send('talk', msg);
           }
         }, [
-          m('input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
+          m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
             value: ctrl.inputValue,
             config: function(el, isUpdate, context) {
               if (!isUpdate) {

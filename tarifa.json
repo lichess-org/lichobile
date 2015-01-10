@@ -11,14 +11,13 @@
     "ios": {
       "default": {
         "id": "org.lichess.mobileapp.dev",
-        "product_name": "lichess",
+        "product_name": "lichess_dev",
         "product_file_name": "lichess"
       },
       "prod": {
         "id": "org.lichess.mobileapp",
-        "product_name": "lichess_prod",
+        "product_name": "lichess",
         "product_file_name": "lichess-prod",
-        "release": true,
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org"
       }
@@ -26,14 +25,13 @@
     "android": {
       "default": {
         "id": "org.lichess.mobileapp.dev",
-        "product_name": "lichess",
+        "product_name": "lichess_dev",
         "product_file_name": "lichess"
       },
       "prod": {
         "id": "org.lichess.mobileapp",
-        "product_name": "lichess_prod",
+        "product_name": "lichess",
         "product_file_name": "lichess-prod",
-        "release": true,
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org"
       }

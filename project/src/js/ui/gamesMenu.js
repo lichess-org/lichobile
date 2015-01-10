@@ -29,7 +29,7 @@ function startAIGame() {
     m.route('/play' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
-    throw new Error(error);
+    throw error;
   });
 }
 
@@ -38,7 +38,7 @@ function seekHumanGame() {
     m.route('/seek/' + data.hook.id);
   }, function(error) {
     utils.handleXhrError(error);
-    throw new Error(error);
+    throw error;
   });
 }
 

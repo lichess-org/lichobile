@@ -19,6 +19,17 @@ window.cordova.plugins.Keyboard = {
   hideKeyboardAccessoryBar: noop
 };
 
+// toast
+window.plugins.toast = {
+  show: noop,
+  showShortTop: noop,
+  showShortCenter: noop,
+  showShortBottom: noop,
+  showLongTop: noop,
+  showLongCenter: noop,
+  showLongBottom: noop
+};
+
 // insomnia
 window.plugins.insomnia = {};
 window.plugins.insomnia.allowSleepAgain = noop;

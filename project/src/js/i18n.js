@@ -16,7 +16,8 @@ var untranslated = {
   disableSleepDuringGame: 'Disable sleep during game',
   sound: 'Sound',
   showCoordinates: 'Show board coordinates',
-  animations: 'Pieces animations'
+  animations: 'Pieces animations',
+  loginSuccessfull: 'Login successful'
 };
 
 var defaultCode = 'en';

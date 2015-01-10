@@ -81,6 +81,7 @@
     "org.apache.cordova.file": "org.apache.cordova.file",
     "com.ionic.keyboard": "com.ionic.keyboard",
     "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",
-    "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git"
+    "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
+    "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git"
   }
 }

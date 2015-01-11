@@ -54,11 +54,7 @@
       "StatusBarBackgroundColor": "#151A1E"
     },
     "accessOrigin": [
-      "*",
-      {
-        "origin": "tel:",
-        "external": true
-      }
+      "*"
     ]
   },
   "author": {

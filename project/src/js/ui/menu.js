@@ -85,7 +85,7 @@ menu.view = function() {
           });
         }
       })
-    }, [i18n('nowPlayingGames'), m('span.highlight', ' (' + nbNowPlaying + ')')]),
+    }, [i18n('playingRightNow'), m('span.highlight', ' (' + nbNowPlaying + ')')]),
     m('li.side_link', {
       config: utils.ontouchend(menuAction('/', function() {
         m.startComputation();
@@ -112,7 +112,7 @@ menu.view = function() {
       ]),
       m('section', [
         formWidgets.renderCheckbox(i18n('animations'), 'animations', settings.general.animations),
-        formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound),
+        formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
         formWidgets.renderCheckbox(i18n('disableSleepDuringGame'), 'disableSleep', settings.general.disableSleep)
       ])
     ])

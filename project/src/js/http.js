@@ -33,7 +33,7 @@ function extract(xhr) {
   else if (s === 503)
     throw new Error('lichessIsUnavailableError');
   else if (s >= 500)
-    throw new Error('serverError');
+    throw new Error('Server error');
 
   return xhr.responseText.length === 0 ? null : xhr.responseText;
 }

@@ -10,15 +10,12 @@ var untranslated = {
   lichessIsNotReachableError: 'lichess.org is unreachable',
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
-  serverError: 'The server encountered an error',
   color: 'Color',
   clock: 'Clock',
   disableSleepDuringGame: 'Disable sleep during game',
-  sound: 'Sound',
   showCoordinates: 'Show board coordinates',
   animations: 'Pieces animations',
   loginSuccessfull: 'Login successful',
-  nowPlayingGames: 'Now playing games',
   resumeGame: 'Resume game',
   dataRefreshSuccessful: 'Successfully refreshed session data'
 };

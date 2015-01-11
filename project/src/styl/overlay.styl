@@ -46,12 +46,24 @@
         background #C4A86F
         color #fff
 
-.overlay_effect
+.overlay_fade
   opacity 0
   visibility hidden
   transition opacity 200ms, visibility 0s 200ms
 
-.overlay_effect.open
+.overlay_fade.open
   opacity 1
   visibility visible
   transition opacity 200ms
+
+.overlay_scale
+  visibility hidden
+  opacity 0
+  transform scale(0.9)
+  transition transform 0.1s, opacity 0.1s, visibility 0s 0.1s
+
+.overlay_scale.open
+  visibility: visible
+  opacity: 1
+  transform: scale(1)
+  transition: transform 0.2s, opacity 0.2s

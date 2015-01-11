@@ -295,7 +295,7 @@ gamesMenu.view = function() {
     }, renderAllGames())
   ];
 
-  return m('div#game_menu.overlay.overlay_effect', {
+  return m('div#games_menu.overlay.overlay_fade', {
     class: isOpen ? 'open' : '',
   }, children);
 };

@@ -124,9 +124,9 @@ function renderGameEndedActions(ctrl) {
 }
 
 function renderPlayerActions(ctrl) {
-  return m('div.overlay', {
+  return m('div.overlay.overlay_scale', {
     class: utils.classSet({
-      hide: !ctrl.vm.showingActions
+      open: ctrl.vm.showingActions
     })
   }, [
     m('button.overlay_close.fa.fa-close', {

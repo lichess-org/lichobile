@@ -5,6 +5,7 @@ var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
+var session = require('../session');
 var moment = require('moment');
 
 // iScroll instance
@@ -191,8 +192,7 @@ function renderAllGames() {
     ]);
   }
 
-  var nowPlaying = session.isConnected() ? session.get().nowPlaying : [];
-  if (nowPlaying === undefined) nowPlaying = [];
+  var nowPlaying = session.nowPlaying();
   var cDim = cardDims();
   var cardStyle = {
     width: cDim.w + 'px',
@@ -224,7 +224,7 @@ function renderAllGames() {
       m('div.infos', [
         m('div.icon-game.' + g.variant),
         m('div.description', [
-          m('h2.title', g.variant),
+          m('h2.title', g.name),
           m('p', [
             g.opponent.username,
             m('span.time-indication', timeLeft(g))

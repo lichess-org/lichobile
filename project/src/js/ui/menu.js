@@ -65,16 +65,14 @@ menu.view = function() {
       })
     ])
   );
-  var nbNowPlaying = userobj && userobj.nowPlaying && userobj.nowPlaying.length || 0;
+  var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
       class: utils.classSet({
-        disabled: nbNowPlaying === 0
+        disabled: nowPlaying.length === 0
       }),
       config: utils.ontouchend(function() {
-        var s = session.get(),
-          go = s && s.nowPlaying && s.nowPlaying.length;
-        if (go) {
+        if (session.nowPlaying().length) {
           menu.close();
           return transitionMenu(function() {
             m.route('/');
@@ -85,7 +83,7 @@ menu.view = function() {
           });
         }
       })
-    }, [i18n('playingRightNow'), m('span.highlight', ' (' + nbNowPlaying + ')')]),
+    }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')]),
     m('li.side_link', {
       config: utils.ontouchend(menuAction('/', function() {
         m.startComputation();

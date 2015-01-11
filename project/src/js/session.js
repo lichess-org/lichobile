@@ -12,6 +12,15 @@ function get() {
   return session;
 }
 
+function nowPlaying() {
+  var supportedVariants = ['standard', 'chess960', 'antichess', 'fromPosition',
+  'kingOfTheHill', 'threeCheck'];
+  var np = session && session.nowPlaying || [];
+  return np.filter(function(e) {
+    return supportedVariants.indexOf(e.variant) !== -1;
+  });
+}
+
 function login(username, password) {
   return http.request('/login', {
     method: 'POST',
@@ -56,5 +65,6 @@ module.exports = {
   login: login,
   logout: logout,
   refresh: refresh,
-  get: get
+  get: get,
+  nowPlaying: nowPlaying
 };

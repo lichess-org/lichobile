@@ -55,7 +55,7 @@ module.exports = function(send, ctrl) {
     },
     enpassant: function(o) {
       var pieces = {};
-      pieces[o] = null;
+      pieces[o.key] = null;
       if (!ctrl.replay.active) ctrl.chessground.setPieces(pieces);
       sound.capture();
     },

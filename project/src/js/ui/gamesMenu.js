@@ -7,6 +7,9 @@ var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var moment = require('moment');
 
+// iScroll instance
+var scroller = null;
+
 var gamesMenu = {};
 
 var isOpen = false;
@@ -14,6 +17,16 @@ var newGameCardSwapped = false;
 
 gamesMenu.open = function() {
   isOpen = true;
+};
+
+gamesMenu.openNewGame = function() {
+  isOpen = true;
+  newGameCardSwapped = true;
+};
+
+gamesMenu.openCurrentGames = function() {
+  isOpen = true;
+  scroller.goToPage(1, 0);
 };
 
 gamesMenu.isOpen = function() {
@@ -270,7 +283,7 @@ gamesMenu.view = function() {
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {
         if (!isUpdate) {
-          context.scroller = new iScroll(el, {
+          scroller = new iScroll(el, {
             scrollX: true,
             scrollY: false,
             momentum: false,
@@ -282,15 +295,15 @@ gamesMenu.view = function() {
           });
 
           context.onunload = function() {
-            if (context.scroller) {
-              context.scroller.destroy();
-              context.scroller = null;
+            if (scroller) {
+              scroller.destroy();
+              scroller = null;
             }
           };
         }
         // see https://github.com/cubiq/iscroll/issues/412
-        context.scroller.options.snap = el.querySelectorAll('.card');
-        context.scroller.refresh();
+        scroller.options.snap = el.querySelectorAll('.card');
+        scroller.refresh();
       }
     }, renderAllGames())
   ];

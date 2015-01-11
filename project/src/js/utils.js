@@ -19,7 +19,7 @@ utils.handleXhrError = function(error) {
   if (!utils.hasNetwork())
     window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
   else
-    window.navigator.notification.alert(i18n(error.message));
+    window.plugins.toast.show(i18n(error.message), 'short', 'center');
 };
 
 utils.lichessSri = Math.random().toString(36).substring(2);

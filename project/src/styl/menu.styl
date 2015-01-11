@@ -4,7 +4,7 @@
   bottom 0
   min-height 100%
   max-height 100%
-  width 80%
+  width 85%
   background #353535
   color #DFDFDF
   min-height 100vh
@@ -18,10 +18,13 @@
     color #C4A86F
     font-size 17px
     text-align center
+  .side_menu_header
+    padding-bottom 1em
     .logo
-      background url(../../images/pieces/mono/N.svg) no-repeat center center
+      background url(../../images/pirouettiKGold.svg) no-repeat center center
+      background-size 40px
       margin 0 auto
-      height 80px
+      height 85px
       width 100%
     h2
       clear both
@@ -29,19 +32,47 @@
       text-transform uppercase
       font-weight normal
       color #FFF
-    button.settings
-      padding 15px
-      background none
-      float left
-      color #c4a86f;
-      width 15%;
-      display inline-block;
-      font-size 1em;
+      margin-bottom 1em
+  button
+    background: #454545;
+    color: #fff;
+    padding: 10px;
+    font-size: 1em;
+  button.login
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    text-transform: uppercase;
+  button.logout, button.refresh
+    display inline-block
+    width 25%
+    margin 0 10px
+  button.settings
+    padding 15px
+    background none
+    float left
+    color #c4a86f;
+    width 15%;
+    display inline-block;
+    font-size 1em;
   h3
     text-transform uppercase
     color #fff
     font-weight normal
     margin 40px 0px 30px 0
+
+#side_links
+  color #AEAEAE
+
+.side_link
+  border-left 3px solid #C4A86F
+  padding 15px
+  margin 5px 0
+  & > .highlight
+    color #C4A86F
+    font-family 'montserratbold'
+  &:active
+    background lighten(#353535, 5%)
 
 #settings
   position absolute
@@ -51,10 +82,10 @@
   height 100%
   background #2A2A2A
   z-index 2
-  visibility hidden
+  display none
   padding 0
   &.show
-    visibility visible
+    display block
   header
     button
       float left

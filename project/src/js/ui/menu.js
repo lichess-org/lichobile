@@ -4,6 +4,7 @@ var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var settings = require('../settings');
 var Zanimo = require('zanimo');
+var gamesMenu = require('./gamesMenu');
 
 var menu = {};
 
@@ -18,15 +19,13 @@ function closeSettings() {
   settingsOpen = false;
 }
 
-// calling m.route performs a full redraw so we need to transition manually
-// the side menu between pages
-function routeAction(route) {
+function menuAction(route, action) {
   return function() {
     menu.close();
     Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
       '200', 'ease-out').then(function() {
-      m.route(route);
-    });
+        m.route(route);
+      }).then(action);
   };
 }
 
@@ -43,15 +42,16 @@ menu.view = function() {
   var userobj = session.get();
   var header = userobj ? [
     m('h2', userobj.username),
-    m('button', {
-      config: utils.ontouchend(function() {
-        session.logout();
-      })
-    }, i18n('logOut'))
+    m('button.refresh[data-icon=P]', {
+      config: utils.ontouchend(session.refresh)
+    }),
+    m('button.logout[data-icon=w]', {
+      config: utils.ontouchend(session.logout)
+    })
   ] : [
     m('h2', i18n('notConnected')),
-    m('button', {
-      config: utils.ontouchend(routeAction('/login'))
+    m('button.login', {
+      config: utils.ontouchend(menuAction('/login'))
     }, i18n('login'))
   ];
   header.unshift(
@@ -61,8 +61,35 @@ menu.view = function() {
       })
     ])
   );
+  var nowPlaying = userobj && userobj.nowPlaying;
+  var links = [
+    m('li.side_link', {
+      config: utils.ontouchend(menuAction('/', function() {
+        m.startComputation();
+        gamesMenu.openNewGame();
+        m.endComputation();
+      }))
+    }, i18n('createAGame'))
+  ];
+  if (nowPlaying) {
+    links.unshift(
+      m('li.side_link', {
+        class: utils.classSet({
+          disabled: !nowPlaying
+        }),
+        config: utils.ontouchend(menuAction('/', function() {
+          m.startComputation();
+          gamesMenu.openCurrentGames();
+          m.endComputation();
+        }))
+      }, [i18n('nowPlayingGames'), m('span.highlight', ' (' + nowPlaying.length + ')')])
+    );
+  }
   return [
-    m('header', header),
+    m('header.side_menu_header', header),
+    m('nav#side_links', [
+      m('ul', links)
+    ]),
     m('div#settings', {
       class: utils.classSet({
         show: settingsOpen

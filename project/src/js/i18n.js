@@ -17,7 +17,9 @@ var untranslated = {
   sound: 'Sound',
   showCoordinates: 'Show board coordinates',
   animations: 'Pieces animations',
-  loginSuccessfull: 'Login successful'
+  loginSuccessfull: 'Login successful',
+  nowPlayingGames: 'Now playing games',
+  resumeGame: 'Resume game'
 };
 
 var defaultCode = 'en';

@@ -84,7 +84,7 @@ module.exports = function(send, ctrl) {
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       // refresh current games card list
-      session.refresh();
+      session.refresh(true);
       setTimeout(function() {
         ctrl.showActions();
         m.redraw();

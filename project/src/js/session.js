@@ -1,5 +1,6 @@
 var http = require('./http');
 var utils = require('./utils');
+var i18n = require('./i18n');
 
 var session = null;
 
@@ -34,12 +35,20 @@ function logout() {
 }
 
 function refresh(isBackground) {
-  return http.request('/account/info', {
+  var p = http.request('/account/info', {
     background: isBackground
-  }).then(function(data) {
+  }, !isBackground).then(function(data) {
     session = data;
     return session;
   });
+  if (!isBackground) p.then(function() {
+    window.plugins.toast.show(i18n('dataRefreshSuccessful'), 'short', 'center');
+  }, function(err) {
+    utils.handleXhrError(err);
+    throw err;
+  });
+
+  return p;
 }
 
 module.exports = {

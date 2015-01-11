@@ -43,10 +43,7 @@ module.exports = {
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchend(function(e) {
-          e.stopPropagation();
-          finish(ctrl, role);
-        })
+        config: utils.ontouchend(utils.partial(finish, ctrl, role))
       });
     }))]) : null;
   }

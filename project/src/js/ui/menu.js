@@ -43,7 +43,7 @@ menu.view = function() {
   var header = userobj ? [
     m('h2', userobj.username),
     m('button.refresh[data-icon=P]', {
-      config: utils.ontouchend(session.refresh)
+      config: utils.ontouchend(utils.partial(session.refresh, false))
     }),
     m('button.logout[data-icon=w]', {
       config: utils.ontouchend(session.logout)

@@ -6,6 +6,7 @@ var utils = require('../../utils');
 var gamesMenu = require('../gamesMenu');
 var signals = require('../../signals');
 var settings = require('../../settings');
+var session = require('../../session');
 
 function makeGameSocket(ctrl, data) {
   return new StrongSocket(
@@ -54,6 +55,7 @@ module.exports = function() {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
       if (settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
+      session.refresh(true);
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');

@@ -19,13 +19,17 @@ function closeSettings() {
   settingsOpen = false;
 }
 
+function transitionMenu(thenAction) {
+  return Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
+    '200', 'ease-out').then(thenAction);
+}
+
 function menuAction(route, action) {
   return function() {
     menu.close();
-    Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
-      '200', 'ease-out').then(function() {
-        m.route(route);
-      }).then(action);
+    return transitionMenu(function() {
+      m.route(route);
+    }).then(action);
   };
 }
 
@@ -61,8 +65,27 @@ menu.view = function() {
       })
     ])
   );
-  var nowPlaying = userobj && userobj.nowPlaying;
+  var nbNowPlaying = userobj && userobj.nowPlaying && userobj.nowPlaying.length || 0;
   var links = [
+    m('li.side_link', {
+      class: utils.classSet({
+        disabled: nbNowPlaying === 0
+      }),
+      config: utils.ontouchend(function() {
+        var s = session.get(),
+          go = s && s.nowPlaying && s.nowPlaying.length;
+        if (go) {
+          menu.close();
+          return transitionMenu(function() {
+            m.route('/');
+          }).then(function() {
+            m.startComputation();
+            gamesMenu.openCurrentGames();
+            m.endComputation();
+          });
+        }
+      })
+    }, [i18n('nowPlayingGames'), m('span.highlight', ' (' + nbNowPlaying + ')')]),
     m('li.side_link', {
       config: utils.ontouchend(menuAction('/', function() {
         m.startComputation();
@@ -71,20 +94,6 @@ menu.view = function() {
       }))
     }, i18n('createAGame'))
   ];
-  if (nowPlaying) {
-    links.unshift(
-      m('li.side_link', {
-        class: utils.classSet({
-          disabled: !nowPlaying
-        }),
-        config: utils.ontouchend(menuAction('/', function() {
-          m.startComputation();
-          gamesMenu.openCurrentGames();
-          m.endComputation();
-        }))
-      }, [i18n('nowPlayingGames'), m('span.highlight', ' (' + nowPlaying.length + ')')])
-    );
-  }
   return [
     m('header.side_menu_header', header),
     m('nav#side_links', [

@@ -1,6 +1,7 @@
 .antagonist
   overflow auto
   position relative
+  clear both
   .infos
     float left
   .rp.up
@@ -16,10 +17,14 @@
   .vertical_align
     min-height 30px
     .clock
+      float right
+      max-width 50%
       font-family CousineBold
       text-align right
       min-width 90px
       font-size 30px
+      &.correspondence
+        font-size 17px
   .material
     display inline-block
     .tomb

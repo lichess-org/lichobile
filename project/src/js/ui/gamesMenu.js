@@ -99,7 +99,7 @@ var aiVariants = [
   ['King of the hill', '4']
 ];
 
-function renderForm(action, settingsObj, variants) {
+function renderForm(action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
   // var hasCorresp = timeMode === '2';
@@ -134,10 +134,7 @@ function renderForm(action, settingsObj, variants) {
 
   var timeFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect(i18n('clock'), 'timeMode', [
-        // [i18n('unlimited'), '0'],
-        [i18n('realTime'), '1']
-      ], settingsObj.timeMode)
+      formWidgets.renderSelect(i18n('clock'), 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ];
   if (settingsObj.time && settingsObj.increment && hasClock) {
@@ -262,6 +259,14 @@ function renderAllGames() {
     ]);
   });
 
+  var humanTimeModes = [
+    [i18n('realTime'), '1']
+  ];
+  var aiTimeModes = [
+    [i18n('unlimited'), '0'],
+    [i18n('realTime'), '1']
+  ];
+
   var newGame = m('div.card.new-game', {
     class: newGameCardSwapped ? 'back_visible' : '',
     style: cardStyle,
@@ -281,8 +286,8 @@ function renderAllGames() {
       ]),
       m('div.back', [
         settings.newGame.selected() === 'human' ?
-        renderForm(seekHumanGame, settings.newGame.human, humanVariants) :
-        renderForm(startAIGame, settings.newGame.ai, aiVariants)
+        renderForm(seekHumanGame, settings.newGame.human, humanVariants, humanTimeModes) :
+        renderForm(startAIGame, settings.newGame.ai, aiVariants, aiTimeModes)
       ])
     ])
   ]);

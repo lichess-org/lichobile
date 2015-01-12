@@ -90,6 +90,7 @@ var humanVariants = [
   ['Standard', '1'],
   ['Chess960', '2'],
   ['King of the hill', '4'],
+  ['Three-check', '5'],
   ['Antichess', '6']
 ];
 var aiVariants = [

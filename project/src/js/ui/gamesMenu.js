@@ -235,7 +235,11 @@ function renderAllGames() {
   var allGames = nowPlaying.map(function(g) {
     var icon = iconFromVariant(g.variant.key, g.perf);
     return m('div.card.standard', {
-      style: cardStyle
+      style: cardStyle,
+      config: utils.ontouchendScroll(function() {
+        gamesMenu.joinGame(g.fullId);
+        gamesMenu.close();
+      })
     }, [
       renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color),
       m('div.infos', [
@@ -249,12 +253,7 @@ function renderAllGames() {
             m('span.time-indication', timeLeft(g))
           ])
         ]),
-        m('button', {
-          config: utils.ontouchendScroll(function() {
-            gamesMenu.joinGame(g.fullId);
-            gamesMenu.close();
-          })
-        }, i18n('joinTheGame'))
+        m('button', i18n('joinTheGame'))
       ])
     ]);
   });
@@ -269,19 +268,19 @@ function renderAllGames() {
 
   var newGame = m('div.card.new-game', {
     class: newGameCardSwapped ? 'back_visible' : '',
-    style: cardStyle,
+    style: cardStyle
   }, [
     m('div.container_flip', [
-      m('div.front', [
+      m('div.front', {
+        config: utils.ontouchendScroll(swapCard)
+      }, [
         renderViewOnlyBoard(),
         m('div.infos', [
           m('div.description', [
             m('h2.title', i18n('createAGame')),
             m('p', i18n('newOpponent')),
           ]),
-          m('button', {
-            config: utils.ontouchendScroll(swapCard)
-          }, '+ ' + i18n('createAGame'))
+          m('button', '+ ' + i18n('createAGame'))
         ])
       ]),
       m('div.back', [

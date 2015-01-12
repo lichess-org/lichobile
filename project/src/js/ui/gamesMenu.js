@@ -236,7 +236,7 @@ function renderAllGames() {
   };
 
   var allGames = nowPlaying.map(function(g) {
-    var icon = iconFromVariant(g.variant, g.perf);
+    var icon = iconFromVariant(g.variant.key, g.perf);
     return m('div.card.standard', {
       style: cardStyle
     }, [

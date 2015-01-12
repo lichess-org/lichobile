@@ -17,7 +17,7 @@ function nowPlaying() {
   'kingOfTheHill', 'threeCheck'];
   var np = session && session.nowPlaying || [];
   return np.filter(function(e) {
-    return supportedVariants.indexOf(e.variant) !== -1;
+    return supportedVariants.indexOf(e.variant.key) !== -1;
   });
 }
 

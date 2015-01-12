@@ -19,17 +19,13 @@ function closeSettings() {
   settingsOpen = false;
 }
 
-function transitionMenu(thenAction) {
-  return Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
-    '200', 'ease-out').then(thenAction);
-}
-
-function menuAction(route, action) {
+// we need to transition manually the menu on route change, because mithril's
+// diff strategy is 'all'
+function menuRouteAction(route) {
   return function() {
     menu.close();
-    return transitionMenu(function() {
-      m.route(route);
-    }).then(action);
+    return Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
+      '200', 'ease-out').then(utils.partial(m.route, route));
   };
 }
 
@@ -55,7 +51,7 @@ menu.view = function() {
   ] : [
     m('h2', i18n('notConnected')),
     m('button.login', {
-      config: utils.ontouchend(menuAction('/login'))
+      config: utils.ontouchend(menuRouteAction('/login'))
     }, i18n('login'))
   ];
   header.unshift(
@@ -68,30 +64,27 @@ menu.view = function() {
   var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
-      class: utils.classSet({
-        disabled: nowPlaying.length === 0
-      }),
       config: utils.ontouchend(function() {
-        if (session.nowPlaying().length) {
-          menu.close();
-          return transitionMenu(function() {
-            m.route('/');
-          }).then(function() {
-            m.startComputation();
-            gamesMenu.openCurrentGames();
-            m.endComputation();
-          });
-        }
-      })
-    }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')]),
-    m('li.side_link', {
-      config: utils.ontouchend(menuAction('/', function() {
-        m.startComputation();
+        menu.close();
         gamesMenu.openNewGame();
-        m.endComputation();
-      }))
+      })
     }, i18n('createAGame'))
   ];
+  if (session.isConnected()) {
+    links.unshift(
+      m('li.side_link', {
+        class: utils.classSet({
+          disabled: nowPlaying.length === 0
+        }),
+        config: utils.ontouchend(function() {
+          if (session.nowPlaying().length) {
+            menu.close();
+            gamesMenu.openCurrentGames();
+          }
+        })
+      }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')])
+    );
+  }
   return [
     m('header.side_menu_header', header),
     m('nav#side_links', [

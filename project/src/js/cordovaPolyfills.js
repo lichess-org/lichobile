@@ -6,6 +6,11 @@ window.plugins = {};
 
 window.cordova.platformId = 'browser';
 
+// analytics
+window.analytics = {
+  startTrackerWithId: noop
+};
+
 // events
 document.addEventListener('DOMContentLoaded', function() {
   document.dispatchEvent(new window.Event('deviceready'));

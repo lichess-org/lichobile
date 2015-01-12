@@ -26,12 +26,13 @@ function main() {
 
   if (utils.hasNetwork()) session.refresh(true);
 
-  // disable scroll in iOS on keyboard show
   window.cordova.plugins.Keyboard.disableScroll(true);
+
+  if (window.gaId) window.analytics.startTrackerWithId(window.gaId);
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();
-  }, 2000);
+  }, 500);
 }
 
 document.addEventListener('deviceready',

@@ -12,6 +12,9 @@
     <script>
       window.apiEndPoint = "<!-- @echo API_END_POINT -->";
       window.socketEndPoint = "<!-- @echo SOCKET_END_POINT -->";
+      <!-- @ifdef GA_ID -->
+      window.gaId = "<!-- @echo GA_ID -->";
+      <!-- @endif -->
     </script>
   </head>
   <body>

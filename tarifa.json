@@ -19,7 +19,8 @@
         "product_name": "lichess",
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org"
+        "SOCKET_END_POINT": "socket.en.lichess.org",
+        "GA_ID": "UA-7935029-3"
       }
     },
     "android": {
@@ -33,7 +34,8 @@
         "product_name": "lichess",
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org"
+        "SOCKET_END_POINT": "socket.en.lichess.org",
+        "GA_ID": "UA-7935029-3"
       }
     }
   },
@@ -78,6 +80,7 @@
     "com.ionic.keyboard": "com.ionic.keyboard",
     "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",
     "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
-    "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git"
+    "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+    "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git"
   }
 }

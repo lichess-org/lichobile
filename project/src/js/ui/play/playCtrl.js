@@ -93,6 +93,9 @@ module.exports = function() {
     } else if (gamesMenu.isOpen()) {
       gamesMenu.close();
       m.redraw();
+    } else if (this.round.chat && this.round.chat.showing) {
+      this.round.chat.close();
+      m.redraw();
     } else
       window.navigator.app.backHistory();
   }.bind(this);

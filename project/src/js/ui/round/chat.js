@@ -15,7 +15,7 @@ module.exports = {
     this.open = function() {
       this.showing = true;
       setTimeout(function() {
-        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+        if (this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
       }.bind(this), 200);
     }.bind(this);
 
@@ -31,7 +31,7 @@ module.exports = {
       m.redraw();
       // hack to prevent scrolling to bottom on every redraw
       setTimeout(function() {
-        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+        if(this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
       }.bind(this), 100);
     }.bind(this);
 

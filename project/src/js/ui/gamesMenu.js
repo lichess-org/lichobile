@@ -42,6 +42,24 @@ gamesMenu.joinGame = function(id) {
   m.route('/play/' + id);
 };
 
+
+var variantIconsMap = {
+  bullet: 'T',
+  blitz: ')',
+  classical: '+',
+  correspondence: ';',
+  chess960: '\'',
+  kingOfTheHill: '(',
+  threeCheck: '.',
+  antichess: '@',
+  atomic: '>'
+};
+
+function iconFromVariant(variant, perf) {
+  var lookup = variant === 'standard' ? perf : variant;
+  return variantIconsMap[lookup];
+}
+
 function startAIGame() {
   return xhr.newAiGame().then(function(data) {
     m.route('/play' + data.url.round);
@@ -217,12 +235,15 @@ function renderAllGames() {
   };
 
   var allGames = nowPlaying.map(function(g) {
+    var icon = iconFromVariant(g.variant, g.perf);
     return m('div.card.standard', {
       style: cardStyle
     }, [
       renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color),
       m('div.infos', [
-        m('div.icon-game.' + g.variant),
+        m('div.icon-game', {
+          'data-icon': icon ? icon : ''
+        }),
         m('div.description', [
           m('h2.title', g.name),
           m('p', [

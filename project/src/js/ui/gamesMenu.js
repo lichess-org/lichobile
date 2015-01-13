@@ -226,7 +226,7 @@ function renderAllGames() {
 
   var timeLeft = function(g) {
     if (!g.isMyTurn) return i18n('waitingForOpponent');
-    if (!g.secondsLeft) return;
+    if (!g.secondsLeft) return i18n('yourTurn');
     var time = moment().add(g.secondsLeft, 'seconds');
     return m('time', {
       datetime: time.format()

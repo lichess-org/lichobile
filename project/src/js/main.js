@@ -15,8 +15,19 @@ var login = require('./ui/login');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
 
+var refreshInterval;
+
+function refresh() {
+  if (utils.hasNetwork() && session.isConnected()) session.refresh(true);
+}
+
 function onResume() {
-  session.refresh(true);
+  refresh();
+  refreshInterval = setInterval(refresh, 6000);
+}
+
+function onPause() {
+  clearInterval(refreshInterval);
 }
 
 function main() {
@@ -28,9 +39,12 @@ function main() {
     '/play/:id': play
   });
 
-  // refresh data once and on app resume
+  // refresh data once (to log in user automatically thanks to cookie)
+  // then, if connected, refresh every min, and on resume
   if (utils.hasNetwork()) session.refresh(true);
+  refreshInterval = setInterval(refresh, 60000);
   document.addEventListener('resume', onResume, false);
+  document.addEventListener('pause', onPause, false);
 
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose

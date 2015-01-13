@@ -18,15 +18,16 @@ var newGameCardSwapped = false;
 
 gamesMenu.open = function() {
   isOpen = true;
+  if (utils.hasNetwork() && session.isConnected()) session.refresh(true);
 };
 
 gamesMenu.openNewGame = function() {
-  isOpen = true;
+  gamesMenu.open();
   newGameCardSwapped = true;
 };
 
 gamesMenu.openCurrentGames = function() {
-  isOpen = true;
+  gamesMenu.open();
   scroller.goToPage(1, 0);
 };
 

@@ -14,6 +14,7 @@ var i18n = require('../../i18n');
 var gameStatus = require('./status');
 var correspondenceClockCtrl = require('./correspondenceClock/correspondenceCtrl');
 var menu = require('../menu');
+var session = require('../../session');
 
 module.exports = function(cfg, socketSend) {
 
@@ -71,6 +72,8 @@ module.exports = function(cfg, socketSend) {
   this.userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
     sound.move();
+    if (this.data.game.speed === 'correspondence' && session.isConnected())
+      session.refresh(true);
   }.bind(this);
 
   this.apiMove = function(o) {

@@ -35,8 +35,8 @@ function seekGame() {
   }, true);
 }
 
-function lobby() {
-  return http.request('/');
+function lobby(feedback) {
+  return http.request('/', null, feedback);
 }
 
 function game(id) {

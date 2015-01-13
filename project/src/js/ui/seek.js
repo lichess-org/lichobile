@@ -52,7 +52,7 @@ seek.controller = function() {
     });
   };
 
-  xhr.lobby().then(function(data) {
+  xhr.lobby(true).then(function(data) {
     lobbySocket = makeLobbySocket(data.lobby.version, createHook);
   });
 

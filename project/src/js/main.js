@@ -36,7 +36,7 @@ function main() {
   m.route(document.body, '/', {
     '/': home,
     '/login': login,
-    '/seek/:id': seek,
+    '/seek': seek,
     '/play/:id': play
   });
 

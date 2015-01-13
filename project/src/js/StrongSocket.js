@@ -76,6 +76,7 @@ StrongSocket.prototype = {
       };
       self.ws.onopen = function() {
         self.debug('connected to ' + fullUrl, true);
+        if (self.options.onOpen) self.options.onOpen();
         self.onSuccess();
         self.pingNow();
         var resend = self.ackableMessages;

@@ -70,12 +70,7 @@ function startAIGame() {
 }
 
 function seekHumanGame() {
-  return xhr.seekGame().then(function(data) {
-    m.route('/seek/' + data.hook.id);
-  }, function(error) {
-    utils.handleXhrError(error);
-    throw error;
-  });
+  m.route('/seek');
 }
 
 function swapCard() {

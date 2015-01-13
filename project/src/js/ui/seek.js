@@ -11,13 +11,14 @@ var nbPlaying = 0;
 
 var seek = {};
 
-function makeLobbySocket(lobbyVersion) {
+function makeLobbySocket(lobbyVersion, onOpen) {
   return new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
       options: {
         name: 'lobby',
-        pingDelay: 2000
+        pingDelay: 2000,
+        onOpen: onOpen
       },
       events: {
         redirect: function(data) {
@@ -39,15 +40,24 @@ function makeLobbySocket(lobbyVersion) {
 
 seek.controller = function() {
 
-  var id = m.route.param('id');
+  var hookId;
   var lobbySocket;
 
+  var createHook = function() {
+    xhr.seekGame().then(function(data) {
+      hookId = data.hook.id;
+    }, function(error) {
+      utils.handleXhrError(error);
+      throw error;
+    });
+  };
+
   xhr.lobby().then(function(data) {
-    lobbySocket = makeLobbySocket(data.lobby.version);
+    lobbySocket = makeLobbySocket(data.lobby.version, createHook);
   });
 
   function cancel() {
-    if (lobbySocket) lobbySocket.send('cancel', id);
+    if (lobbySocket && hookId) lobbySocket.send('cancel', hookId);
     utils.backHistory();
   }
 

@@ -39,7 +39,7 @@ function main() {
     '/play/:id': play
   });
 
-  // refresh data once
+  // refresh data once (to log in user automatically thanks to cookie)
   // then, if connected, refresh every min, and on resume
   if (utils.hasNetwork()) session.refresh(true);
   refreshInterval = setInterval(refresh, 60000);

@@ -51,7 +51,7 @@ function main() {
   // TODO we may want to remove this and call only on purpose
   window.cordova.plugins.Keyboard.disableScroll(true);
 
-  if (window.gaId) window.analytics.startTrackerWithId(window.gaId);
+  if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();

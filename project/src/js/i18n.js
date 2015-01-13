@@ -12,7 +12,6 @@ var untranslated = {
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   color: 'Color',
   clock: 'Clock',
-  disableSleepDuringGame: 'Disable sleep during game',
   showCoordinates: 'Show board coordinates',
   animations: 'Pieces animations',
   loginSuccessfull: 'Login successful',

@@ -78,9 +78,11 @@ module.exports.build = function build(platform, settings, configName) {
   var defer = Q.defer();
 
   configName = configName || 'default';
-  var mode = configName === 'prod' ? 'prod' : 'dev';
+  var mode = ['prod', 'stage'].indexOf(configName) !== -1 ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
   context.TARIFA = true;
+  context.version = 'v' + context.version;
+  if (configName === 'stage') context.version += '-beta';
 
   gulp.add('html', function() {
     return buildFile.buildHtml(srcFolder, assetsDest, context);

@@ -101,8 +101,8 @@ menu.view = function() {
       m('section', [
         formWidgets.renderCheckbox(i18n('animations'), 'animations', settings.general.animations),
         formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
-        formWidgets.renderCheckbox(i18n('disableSleepDuringGame'), 'disableSleep', settings.general.disableSleep)
-      ])
+      ]),
+      m('section.app_version', window.lichess.version)
     ])
   ];
 };

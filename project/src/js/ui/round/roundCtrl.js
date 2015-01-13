@@ -2,6 +2,7 @@ var throttle = require('lodash-node/modern/functions/throttle');
 var chessground = require('chessground');
 var partial = chessground.util.partial;
 var data = require('./data');
+var sound = require('../../sound');
 var game = require('./game');
 var ground = require('./ground');
 var socket = require('./socket');
@@ -69,15 +70,18 @@ module.exports = function(cfg, socketSend) {
 
   this.userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
+    sound.move();
   }.bind(this);
 
   this.apiMove = function(o) {
+    m.startComputation();
     if (this.replay.active) this.replay.vm.late = true;
     else this.chessground.apiMove(o.from, o.to);
     if (this.data.game.threefold) this.data.game.threefold = false;
     this.data.game.moves.push(o.san);
     game.setOnGame(this.data, o.color, true);
-    m.redraw();
+    m.endComputation();
+    if (this.data.player.spectator || o.color !== this.data.player.color) sound.move();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, this.userMove);

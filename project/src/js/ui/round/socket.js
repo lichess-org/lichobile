@@ -28,7 +28,6 @@ module.exports = function(send, ctrl) {
     },
     move: function(o) {
       ctrl.apiMove(o);
-      sound.move();
     },
     premove: function() {
       ctrl.chessground.playPremove();

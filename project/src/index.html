@@ -10,11 +10,16 @@
     <link rel="stylesheet" type="text/css" href="css/fonts.css" />
     <link rel="stylesheet" type="text/css" href="css/compiled/app.css" />
     <script>
-      window.apiEndPoint = "<!-- @echo API_END_POINT -->";
-      window.socketEndPoint = "<!-- @echo SOCKET_END_POINT -->";
-      <!-- @ifdef GA_ID -->
-      window.gaId = "<!-- @echo GA_ID -->";
-      <!-- @endif -->
+      window.lichess = {
+        apiEndPoint: "<!-- @echo API_END_POINT -->",
+        socketEndPoint: "<!-- @echo SOCKET_END_POINT -->",
+        <!-- @ifdef version -->
+        version: "<!-- @echo version -->",
+        <!-- @endif -->
+        <!-- @ifdef GA_ID -->
+        gaId: "<!-- @echo GA_ID -->"
+        <!-- @endif -->
+      };
     </script>
   </head>
   <body>

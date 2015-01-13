@@ -37,6 +37,6 @@ function main() {
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  utils.partial(i18n.loadPreferredLanguage, main),
+  utils.ƒ(i18n.loadPreferredLanguage, main),
   false
 );

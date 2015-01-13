@@ -111,12 +111,12 @@ function renderGameEndedActions(ctrl) {
   var winner = game.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  var buttons = compact(ctrl.vm.redirecting ? null : [
-    button.joinRematch(ctrl),
-    button.answerOpponentRematch(ctrl),
-    button.cancelRematch(ctrl),
+  var buttons = ctrl.vm.redirecting ? null : (
+    button.joinRematch(ctrl) ||
+    button.answerOpponentRematch(ctrl) ||
+    button.cancelRematch(ctrl) ||
     button.rematch(ctrl)
-  ]);
+  );
   return [
     m('div.result', [result, m('br'), m('br'), status]),
     m('div.control.buttons', buttons)

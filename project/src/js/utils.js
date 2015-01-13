@@ -111,4 +111,10 @@ utils.classSet = function(classes) {
 utils.noop = function() {
 };
 
+utils.backHistory = function() {
+  window.history.go(-1);
+  if (window.navigator.app && window.navigator.app.backHistory)
+    window.navigator.app.backHistory();
+};
+
 module.exports = utils;

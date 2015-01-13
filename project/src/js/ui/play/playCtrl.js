@@ -5,7 +5,6 @@ var StrongSocket = require('../../StrongSocket');
 var utils = require('../../utils');
 var gamesMenu = require('../gamesMenu');
 var signals = require('../../signals');
-var settings = require('../../settings');
 var session = require('../../session');
 
 function makeGameSocket(ctrl, data) {
@@ -54,7 +53,7 @@ module.exports = function() {
     xhr.game(id).then(function(data) {
       self.gameSocket = makeGameSocket(self, data);
       self.round = makeRound(self, data);
-      if (settings.general.disableSleep()) window.plugins.insomnia.keepAwake();
+      window.plugins.insomnia.keepAwake();
       session.refresh(true);
     }, function(error) {
       utils.handleXhrError(error);

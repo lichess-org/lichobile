@@ -41,13 +41,7 @@ menu.close = function() {
 menu.view = function() {
   var userobj = session.get();
   var header = userobj ? [
-    m('h2', userobj.username),
-    m('button.refresh[data-icon=P]', {
-      config: utils.ontouchend(utils.ƒ(session.refresh, false))
-    }),
-    m('button.logout[data-icon=w]', {
-      config: utils.ontouchend(session.logout)
-    })
+    m('h2', userobj.username)
   ] : [
     m('h2', i18n('notConnected')),
     m('button.login', {
@@ -68,7 +62,10 @@ menu.view = function() {
         menu.close();
         gamesMenu.openNewGame();
       })
-    }, i18n('createAGame'))
+    }, i18n('createAGame')),
+    m('li.side_link.logout[data-icon=w]', {
+      config: utils.ontouchend(session.logout)
+    }, i18n('logOut'))
   ];
   if (session.isConnected()) {
     links.unshift(

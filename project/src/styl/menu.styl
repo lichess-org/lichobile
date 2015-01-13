@@ -47,10 +47,6 @@
     width: 80%;
     margin: 0 auto;
     text-transform: uppercase;
-  button.logout, button.refresh
-    display inline-block
-    width 25%
-    margin 0 10px
   button.settings
     padding 15px
     background none
@@ -72,6 +68,13 @@
   border-left 3px solid #C4A86F
   padding 15px
   margin 5px 0
+  &.logout
+    font-size 0.8em
+    font-style italic
+    color darken(#AEAEAE, 25%)
+    border-left none
+    &:before
+      margin-right 5px
   & > .highlight
     color #C4A86F
     font-family 'montserratbold'

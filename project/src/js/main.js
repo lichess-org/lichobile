@@ -15,7 +15,8 @@ var login = require('./ui/login');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
 
-var refreshInterval;
+var refreshInterval = 60000;
+var refreshIntervalID;
 
 function refresh() {
   if (utils.hasNetwork() && session.isConnected()) session.refresh(true);
@@ -23,11 +24,11 @@ function refresh() {
 
 function onResume() {
   refresh();
-  refreshInterval = setInterval(refresh, 60000);
+  refreshIntervalID = setInterval(refresh, refreshInterval);
 }
 
 function onPause() {
-  clearInterval(refreshInterval);
+  clearInterval(refreshIntervalID);
 }
 
 function main() {
@@ -42,7 +43,7 @@ function main() {
   // refresh data once (to log in user automatically thanks to cookie)
   // then, if connected, refresh every min, and on resume
   if (utils.hasNetwork()) session.refresh(true);
-  refreshInterval = setInterval(refresh, 60000);
+  refreshIntervalID = setInterval(refresh, refreshInterval);
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
 

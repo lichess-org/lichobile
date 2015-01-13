@@ -236,6 +236,7 @@ function renderAllGames() {
   var allGames = nowPlaying.map(function(g) {
     var icon = iconFromVariant(g.variant.key, g.perf);
     return m('div.card.standard', {
+      key: 'game.' + g.gameId,
       style: cardStyle,
       config: utils.ontouchendScroll(function() {
         gamesMenu.joinGame(g.fullId);
@@ -268,6 +269,7 @@ function renderAllGames() {
   ];
 
   var newGame = m('div.card.new-game', {
+    key: 'new-game',
     class: newGameCardSwapped ? 'back_visible' : '',
     style: cardStyle
   }, [

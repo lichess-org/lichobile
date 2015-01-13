@@ -88,6 +88,7 @@ module.exports = {
   answerOpponentRematch: function(ctrl) {
     if (ctrl.data.opponent.offeringRematch) return [
       i18n('yourOpponentWantsToPlayANewGameWithYou'),
+      m('br'),
       m('button[data-icon=E]', {
         config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'rematch-yes', null))
       }, i18n('joinTheGame')),

@@ -2,6 +2,8 @@ npm-debug.log
 
 /node_modules
 
+bin/*.mobileprovision
+
 project/www/app.js
 project/www/index.html
 project/www/css/compiled

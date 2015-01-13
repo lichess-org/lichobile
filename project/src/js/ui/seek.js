@@ -48,7 +48,7 @@ seek.controller = function() {
 
   function cancel() {
     if (lobbySocket) lobbySocket.send('cancel', id);
-    window.navigator.app.backHistory();
+    utils.backHistory();
   }
 
   document.addEventListener('backbutton', cancel, false);

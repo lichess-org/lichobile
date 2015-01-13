@@ -81,8 +81,8 @@ module.exports.build = function build(platform, settings, configName) {
   var mode = ['prod', 'stage'].indexOf(configName) !== -1 ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
   context.TARIFA = true;
-  context.version = 'v' + context.version;
-  if (configName === 'stage') context.version += '-beta';
+  context.APP_VERSION = 'v' + context.version;
+  if (configName === 'stage') context.APP_VERSION += '-beta';
 
   gulp.add('html', function() {
     return buildFile.buildHtml(srcFolder, assetsDest, context);

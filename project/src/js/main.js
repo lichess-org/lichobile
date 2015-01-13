@@ -23,7 +23,7 @@ function refresh() {
 
 function onResume() {
   refresh();
-  refreshInterval = setInterval(refresh, 6000);
+  refreshInterval = setInterval(refresh, 60000);
 }
 
 function onPause() {

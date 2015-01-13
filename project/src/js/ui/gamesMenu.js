@@ -225,6 +225,7 @@ function renderAllGames() {
     (cDim.padding * 2);
 
   var timeLeft = function(g) {
+    if (!g.isMyTurn) return i18n('waitingForOpponent');
     if (!g.secondsLeft) return;
     var time = moment().add(g.secondsLeft, 'seconds');
     return m('time', {

@@ -1,3 +1,6 @@
 # plugins
 plugins/*
+!plugins/android.json
+
 platforms/
+!platforms/android/AndroidManifest.xml

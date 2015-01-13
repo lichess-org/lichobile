@@ -25,9 +25,7 @@ function menuRouteAction(route) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
-      '200', 'ease-out').then(function() {
-      m.route(route);
-    });
+      '200', 'ease-out').then(utils.ƒ(m.route, route));
   };
 }
 
@@ -45,7 +43,7 @@ menu.view = function() {
   var header = userobj ? [
     m('h2', userobj.username),
     m('button.refresh[data-icon=P]', {
-      config: utils.ontouchend(utils.partial(session.refresh, false))
+      config: utils.ontouchend(utils.ƒ(session.refresh, false))
     }),
     m('button.logout[data-icon=w]', {
       config: utils.ontouchend(session.logout)

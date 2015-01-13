@@ -39,8 +39,15 @@ function partialApply(fn, args) {
   return fn.bind.apply(fn, [null].concat(args));
 }
 
-utils.partial = function() {
+utils.partialƒ = function() {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
+};
+
+utils.ƒ = function() {
+  var args = arguments, fn = arguments[0];
+  return function() {
+    fn.apply(fn, Array.prototype.slice.call(args, 1));
+  };
 };
 
 // convenience function to bind a touchend mobile button handler in mithril
@@ -68,8 +75,8 @@ function bindTouchendButton(scrollable, handler) {
   };
 }
 
-utils.ontouchend = utils.partial(bindTouchendButton, false);
-utils.ontouchendScroll = utils.partial(bindTouchendButton, true);
+utils.ontouchend = utils.partialƒ(bindTouchendButton, false);
+utils.ontouchendScroll = utils.partialƒ(bindTouchendButton, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

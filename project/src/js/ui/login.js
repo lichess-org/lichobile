@@ -37,6 +37,7 @@ module.exports = {
             if (!login || !pass) return false;
             window.cordova.plugins.Keyboard.close();
             session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
+              session.refresh(true);
               m.route('/');
               window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
             }, function(err) {

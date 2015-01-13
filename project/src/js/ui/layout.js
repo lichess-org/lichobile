@@ -21,9 +21,14 @@ module.exports = {
     return m('div.view-container', view);
   },
 
-  board: function(header, content, footer, aside, overlay) {
+  board: function(header, content, footer, aside, overlay, povColor) {
     var view = [
-      m('main#page', { class: menu.isOpen ? 'out' : '' }, [
+      m('main#page', {
+        class: [
+          menu.isOpen ? 'out' : '',
+          povColor || 'white'
+        ].join(' ')
+      }, [
         m('header.main_header.board', { style: { height: headerHeight() + 'px' }}, header()),
         content(),
         m('footer.main_footer.board', { style: { height: headerHeight() + 'px' }}, footer())

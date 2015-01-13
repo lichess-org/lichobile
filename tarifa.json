@@ -23,7 +23,12 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "version": "1.0.1"
+        "version": "1.0.1",
+        "cordova": {
+          "accessOrigin": [
+            "http://en.lichess.org"
+          ]
+        }
       },
       "prod": {
         "id": "org.lichess.mobileapp",
@@ -31,7 +36,12 @@
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
-        "GA_ID": "UA-7935029-3"
+        "GA_ID": "UA-7935029-3",
+        "cordova": {
+          "accessOrigin": [
+            "http://en.lichess.org"
+          ]
+        }
       }
     },
     "android": {
@@ -47,7 +57,12 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "version": "1.0.1"
+        "version": "1.0.1",
+        "cordova": {
+          "accessOrigin": [
+            "http://en.lichess.org"
+          ]
+        }
       },
       "prod": {
         "id": "org.lichess.mobileapp",
@@ -55,7 +70,12 @@
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
-        "GA_ID": "UA-7935029-3"
+        "GA_ID": "UA-7935029-3",
+        "cordova": {
+          "accessOrigin": [
+            "http://en.lichess.org"
+          ]
+        }
       }
     }
   },

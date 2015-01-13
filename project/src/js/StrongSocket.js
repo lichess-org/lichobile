@@ -8,9 +8,9 @@ var _ = require('lodash-node'),
 var lichessSri = utils.lichessSri;
 
 var urlsPool = _.range(9021, 9030).map(function(e) {
-  return window.socketEndPoint + ':' + e;
+  return window.lichess.socketEndPoint + ':' + e;
 });
-urlsPool.unshift(window.socketEndPoint);
+urlsPool.unshift(window.lichess.socketEndPoint);
 
 var strongSocketDefaults = {
   events: {
@@ -232,7 +232,7 @@ StrongSocket.prototype = {
     signals.connected.dispatch();
   },
   baseUrl: function() {
-    if (window.socketEndPoint === 'socket.en.lichess.org') {
+    if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {
       var key = 'socket.baseUrl';
       var url = storage.get(key);
       if (!url) {
@@ -246,7 +246,7 @@ StrongSocket.prototype = {
       return url;
     }
 
-    return window.socketEndPoint;
+    return window.lichess.socketEndPoint;
   },
   pingInterval: function() {
     return this.options.pingDelay + this.averageLag;

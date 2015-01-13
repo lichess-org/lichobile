@@ -4,7 +4,7 @@ var spinner = new Spinner();
 
 var http = {};
 
-var baseUrl = window.apiEndPoint;
+var baseUrl = window.lichess.apiEndPoint;
 
 function complete(data) {
   spinner.stop();

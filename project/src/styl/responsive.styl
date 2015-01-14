@@ -1,9 +1,14 @@
 // targets small devices like iphone 4
 @media only screen and (max-device-height 480px)
+  .playing
+    visibility hidden
   .main_header
     max-height 65px
-    h2
-      font-size 0.6em
+    section
+      position relative
+      top -10px
+      left 15%
+      width 70%
     nav
       h1
         font-size 0.8em
@@ -12,20 +17,13 @@
         &.fa
           font-size 1em
     .antagonist
-      .clock
-        font-size 20px
       .material
         display none
-      .rating
-        font-size 0.5em
     .vertical_align
       top 0
       transform none
   .main_footer
     min-height 95px
-    section
-      &.antagonist
-        height 50px
 
   .card
     top 10%

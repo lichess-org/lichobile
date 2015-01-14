@@ -87,17 +87,20 @@ utils.getViewportDims = function() {
 };
 
 utils.viewOnlyBoard = function(fen, lastMove, orientation) {
-  var ctrl = new chessground.controller({
+  var config = {
     viewOnly: true,
     minimalDom: true,
     coordinates: false,
     fen: fen,
     lastMove: lastMove,
     orientation: orientation || 'white'
+  };
+  return m('div.board.grey.merida', {
+    config: function(el, isUpdate, ctx) {
+      if (ctx.ground) ctx.ground.set(config);
+      else ctx.ground = chessground(el, config);
+    }
   });
-  return m('div.board.grey.merida', [
-    chessground.view(ctrl)
-  ]);
 };
 
 utils.classSet = function(classes) {

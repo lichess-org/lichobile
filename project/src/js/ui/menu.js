@@ -100,6 +100,7 @@ menu.view = function() {
       ]),
       m('section', [
         formWidgets.renderCheckbox(i18n('animations'), 'animations', settings.general.animations),
+        formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', settings.general.pieceDestinations),
         formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
       ]),
       m('section.app_version', window.lichess.version)

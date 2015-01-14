@@ -25,10 +25,10 @@ function makeConfig(data, fen, flip) {
       free: false,
       color: game.isPlayerPlaying(data) ? data.player.color : null,
       dests: game.parsePossibleMoves(data.possibleMoves),
-      showDests: data.pref.destination
+      showDests: settings.general.pieceDestinations()
     },
     animation: {
-      enabled: settings.general.animations,
+      enabled: settings.general.animations(),
       duration: data.pref.animationDuration
     },
     premovable: {

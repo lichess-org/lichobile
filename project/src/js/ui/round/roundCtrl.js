@@ -27,7 +27,7 @@ module.exports = function(cfg, socketSend) {
     showingActions: !game.playable(this.data)
   };
 
-  this.socket = new socket(socketSend, this);
+  this.socket = socket(socketSend, this);
 
   this.showActions = function() {
     menu.close();

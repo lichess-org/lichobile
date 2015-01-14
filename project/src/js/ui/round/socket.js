@@ -6,8 +6,6 @@ var session = require('../../session');
 
 module.exports = function(send, ctrl) {
 
-  this.send = send;
-
   var handlers = {
     possibleMoves: function(o) {
       ctrl.data.possibleMoves = o;
@@ -100,11 +98,14 @@ module.exports = function(send, ctrl) {
     }
   };
 
-  this.receive = function(type, data) {
-    if (handlers[type]) {
-      handlers[type](data);
-      return true;
+  return {
+    send: send,
+    receive: function(type, data) {
+      if (handlers[type]) {
+        handlers[type](data);
+        return true;
+      }
+      return false;
     }
-    return false;
-  }.bind(this);
+  };
 };

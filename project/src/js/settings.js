@@ -11,6 +11,7 @@ function localstorageprop(key, initialValue) {
 module.exports = {
   general: {
     animations: localstorageprop('settings.gameAnimations', true),
+    pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     sound: localstorageprop('settings.sound', true)
   },
   newGame: {

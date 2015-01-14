@@ -16,7 +16,8 @@ var untranslated = {
   animations: 'Pieces animations',
   loginSuccessfull: 'Login successful',
   resumeGame: 'Resume game',
-  dataRefreshSuccessful: 'Successfully refreshed session data'
+  dataRefreshSuccessful: 'Successfully refreshed session data',
+  pieceDestinations: 'Show/hide piece destinations'
 };
 
 var defaultCode = 'en';

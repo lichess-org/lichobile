@@ -250,8 +250,7 @@ function renderAllGames() {
             g.opponent.username,
             m('span.time-indication', timeLeft(g))
           ])
-        ]),
-        m('button', i18n('joinTheGame'))
+        ])
       ])
     ]);
   });
@@ -278,8 +277,7 @@ function renderAllGames() {
           m('div.description', [
             m('h2.title', i18n('createAGame')),
             m('p', i18n('newOpponent')),
-          ]),
-          m('button', '+ ' + i18n('createAGame'))
+          ])
         ])
       ]),
       m('div.back', [

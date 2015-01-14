@@ -12,7 +12,9 @@
       "default": {
         "id": "org.lichess.mobileapp.dev",
         "product_name": "lichess dev",
-        "product_file_name": "lichess"
+        "product_file_name": "lichess",
+        "API_END_POINT": "http://en.lichess.org",
+        "SOCKET_END_POINT": "socket.en.lichess.org"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",

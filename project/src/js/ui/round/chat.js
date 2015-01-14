@@ -81,7 +81,7 @@ module.exports = {
         m('button.modal_close[data-icon=L]', {
           config: utils.ontouchend(ctrl.close)
         }),
-        m('h2', i18n('chat'))
+        m('h2', ctrl.root.data.opponent.user.username)
       ]),
       m('div.chat_content', [
         m('div#chat_scroller.chat_scroller', {
@@ -113,7 +113,8 @@ module.exports = {
 
             return m('li.chat_msg', {
               class: utils.classSet({
-                system: msg.u === 'lichess'
+                system: msg.u === 'lichess',
+                'me_talking': msg.c === ctrl.root.data.player.color
               })
             }, [
               m('span.chat_user', user),

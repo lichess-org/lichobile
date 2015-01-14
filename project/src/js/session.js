@@ -48,6 +48,7 @@ function refresh(isBackground) {
     background: isBackground
   }, !isBackground).then(function(data) {
     session = data;
+    m.redraw();
     return session;
   });
   if (!isBackground) p.then(function() {

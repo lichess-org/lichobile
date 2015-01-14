@@ -14,9 +14,7 @@
         "product_name": "lichess dev",
         "product_file_name": "lichess",
         "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org",
-        "GA_ID": "xxxxxxxxxxx",
-        "version": "1.0.2"
+        "SOCKET_END_POINT": "socket.en.lichess.org"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",

@@ -10,7 +10,7 @@ widgets.header = function() {
       config: utils.ontouchend(menu.toggle)
     }),
     m('h1', 'lichess.org'),
-    m('button.fa.fa-star', {
+    m('button.menuButton', {
       config: utils.ontouchend(gamesMenu.open)
     })
   ]);

@@ -11,7 +11,7 @@ module.exports = function(ctrl) {
       m('nav', [
         m('button.fa.fa-navicon', { config: utils.ontouchend(menu.toggle) }),
         m('h1.playing', ctrl.round.title),
-        m('button.fa.fa-star', {
+        m('button.menuButton', {
           config: utils.ontouchend(gamesMenu.open)
         })
       ]),

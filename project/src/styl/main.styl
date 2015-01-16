@@ -20,25 +20,31 @@ main
     color #fff
     nav
       height 40%
+      overflow hidden
       h1
         font-size 1em
         text-transform uppercase
         text-align center
-        width 70%
-        display inline-block
+        width 100%
+        line-height 55px
         &.playing
           text-transform none
           color #C4A86F
       button
         background transparent
-        padding: 15px 10px
-        &.fa
-          color #C4A86F
-          width 15%
-          display inline-block
-          font-size 1.2em
-        &.menuButton
-          background url('/images/game_icon.svg') no-repeat
+        padding: 17px
+        color #C4A86F
+        font-size 1.2em
+        &.menu
+          float left
+        &.game-menu
+          float right
+          &::before
+            content ''
+            display block
+            width 20px
+            height 20px
+            background url('../../images/game_icon.svg') no-repeat
   .main_footer
     background #FFF
   &.black 

@@ -9,11 +9,11 @@ module.exports = function(ctrl) {
   function header() {
     return [
       m('nav', [
-        m('button.fa.fa-navicon', { config: utils.ontouchend(menu.toggle) }),
-        m('h1.playing', ctrl.round.title),
-        m('button.menuButton', {
+        m('button.fa.fa-navicon.menu', { config: utils.ontouchend(menu.toggle) }),
+        m('button.game-menu', {
           config: utils.ontouchend(gamesMenu.open)
-        })
+        }),
+        m('h1.playing', ctrl.round.title),
       ]),
       roundView.renderHeader(ctrl.round)
     ];

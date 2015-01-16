@@ -6,13 +6,13 @@ var widgets = {};
 
 widgets.header = function() {
   return m('nav', [
-    m('button.fa.fa-navicon', {
+    m('button.fa.fa-navicon.menu', {
       config: utils.ontouchend(menu.toggle)
     }),
-    m('h1', 'lichess.org'),
-    m('button.menuButton', {
+    m('button.game-menu', {
       config: utils.ontouchend(gamesMenu.open)
-    })
+    }),
+    m('h1', 'lichess.org')
   ]);
 };
 

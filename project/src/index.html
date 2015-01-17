@@ -26,6 +26,9 @@
     <!-- @ifdef TARIFA -->
     <script type="text/javascript" src="cordova.js"></script>
     <!-- @endif -->
+    <!-- @ifndef TARIFA -->
+    <script type="text/javascript" src="cordova.polyfills.js"></script>
+    <!-- @endif -->
     <script type="text/javascript" src="app.js"></script>
   </body>
 </html>

@@ -3,9 +3,6 @@
 // require mithril globally for convenience
 window.m = require('mithril');
 
-// cordova plugins polyfills for browser
-if (!window.cordova) require('./cordovaPolyfills.js');
-
 var utils = require('./utils');
 var session = require('./session');
 var i18n = require('./i18n');

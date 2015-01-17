@@ -183,7 +183,7 @@ module.exports = function(ctrl) {
         m('button.game-menu', {
           config: utils.ontouchend(gamesMenu.open)
         }),
-        m('h1.playing', ctrl.round.title),
+        m('h1.playing', ctrl.title),
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent)
     ];

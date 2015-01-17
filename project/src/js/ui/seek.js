@@ -1,42 +1,15 @@
 var utils = require('../utils');
-var StrongSocket = require('../StrongSocket');
 var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./_commonWidgets');
 var gamesMenu = require('./gamesMenu');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
+var socket = require('../socket');
 
 var nbPlaying = 0;
 
 var seek = {};
-
-function makeLobbySocket(lobbyVersion, onOpen) {
-  return new StrongSocket(
-    '/lobby/socket/v1',
-    lobbyVersion, {
-      options: {
-        name: 'lobby',
-        pingDelay: 2000,
-        onOpen: onOpen
-      },
-      events: {
-        redirect: function(data) {
-          m.route('/play' + data.url);
-        },
-        n: function(n) {
-          nbPlaying = n;
-          m.redraw();
-        },
-        resync: function(nothing, socket) {
-          xhr.lobby().then(function(data) {
-            socket.reset(data.lobby.version);
-          });
-        }
-      }
-    }
-  );
-}
 
 seek.controller = function() {
 
@@ -53,7 +26,20 @@ seek.controller = function() {
   };
 
   xhr.lobby(true).then(function(data) {
-    lobbySocket = makeLobbySocket(data.lobby.version, createHook);
+    lobbySocket = socket.connectLobby(data.lobby.version, createHook, {
+      redirect: function(data) {
+        m.route('/play' + data.url);
+      },
+      n: function(n) {
+        nbPlaying = n;
+        m.redraw();
+      },
+      resync: function() {
+        xhr.lobby().then(function(data) {
+          lobbySocket.setVersion(data.lobby.version);
+        });
+      }
+    });
   });
 
   function cancel() {

@@ -7,7 +7,7 @@ var i18n = require('../../../i18n');
 module.exports = {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button[data-icon=' + icon + ']', {
-      config: utils.ontouchend(utils.ƒ(ctrl.socket.send, socketMsg, null))
+      config: utils.ontouchend(utils.ƒ(ctrl.socketSend, socketMsg, null))
     }, i18n(hint)) : null;
   },
   forceResign: function(ctrl) {
@@ -16,10 +16,10 @@ module.exports = {
         i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim'),
         m('br'),
         m('button[data-icon=E]', {
-          config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'resign-force', null)),
+          config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'resign-force', null)),
         }, i18n('forceResignation')),
         m('button[data-icon=E]', {
-          config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'draw-force', null)),
+          config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'draw-force', null)),
         }, i18n('forceDraw'))
       ]) : null;
   },
@@ -28,7 +28,7 @@ module.exports = {
       i18n('threefoldRepetition'),
       m.trust('&nbsp;'),
       m('button[data-icon=E]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'draw-claim', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'draw-claim', null))
       }, i18n('claimADraw'))
     ]) : null;
   },
@@ -36,7 +36,7 @@ module.exports = {
     if (ctrl.data.player.offeringDraw) return m('div.negotiation', [
       i18n('drawOfferSent') + ' ',
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'draw-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'draw-no', null))
       }, i18n('cancel'))
     ]);
   },
@@ -45,11 +45,11 @@ module.exports = {
       i18n('yourOpponentOffersADraw'),
       m('br'),
       m('button[data-icon=E]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'draw-yes', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'draw-yes', null))
       }, i18n('accept')),
       m.trust('&nbsp;'),
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'draw-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'draw-no', null))
       }, i18n('decline')),
     ]);
   },
@@ -57,7 +57,7 @@ module.exports = {
     if (ctrl.data.player.proposingTakeback) return m('div.negotiation', [
       i18n('takebackPropositionSent') + ' ',
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'takeback-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'takeback-no', null))
       }, i18n('cancel'))
     ]);
   },
@@ -66,11 +66,11 @@ module.exports = {
       i18n('yourOpponentProposesATakeback'),
       m('br'),
       m('button[data-icon=E]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'takeback-yes', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'takeback-yes', null))
       }, i18n('accept')),
       m.trust('&nbsp;'),
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'takeback-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'takeback-no', null))
       }, i18n('decline')),
     ]);
   },
@@ -78,7 +78,7 @@ module.exports = {
     if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) && !ctrl.data.tournament) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('button[data-icon=B]', {
-          config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'rematch-yes', null))
+          config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'rematch-yes', null))
         }, i18n('rematch'));
       } else {
         return null;
@@ -90,10 +90,10 @@ module.exports = {
       i18n('yourOpponentWantsToPlayANewGameWithYou'),
       m('br'),
       m('button[data-icon=E]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'rematch-yes', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'rematch-yes', null))
       }, i18n('joinTheGame')),
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'rematch-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'rematch-no', null))
       }, i18n('declineInvitation'))
     ];
   },
@@ -103,7 +103,7 @@ module.exports = {
       m('br'),
       i18n('waitingForOpponent'),
       m('button[data-icon=L]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.socket.send, 'rematch-no', null))
+        config: utils.ontouchend(utils.ƒ(ctrl.socketSend, 'rematch-no', null))
       }, i18n('cancelRematchOffer'))
     ];
   },
@@ -115,7 +115,7 @@ module.exports = {
   },
   moretime: function(ctrl) {
     if (game.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
-      config: utils.ontouchend(throttle(utils.ƒ(ctrl.socket.send, 'moretime', null), 600))
+      config: utils.ontouchend(throttle(utils.ƒ(ctrl.socketSend, 'moretime', null), 600))
     }, i18n('giveNbSeconds', 15));
   }
 };

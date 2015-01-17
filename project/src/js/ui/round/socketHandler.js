@@ -3,8 +3,10 @@ var ground = require('./ground');
 var xhr = require('./roundXhr');
 var sound = require('../../sound');
 var session = require('../../session');
+var utils = require('../../utils');
+var socket = require('../../socket');
 
-module.exports = function(send, ctrl) {
+module.exports = function(ctrl) {
 
   var handlers = {
     possibleMoves: function(o) {
@@ -62,6 +64,14 @@ module.exports = function(send, ctrl) {
     redirect: function(e) {
       m.route('/play/' + e.id);
     },
+    resync: function() {
+      xhr.reload(ctrl).then(function(data) {
+        ctrl.socket.setVersion(data.player.version);
+        ctrl.reload(data);
+      }, function(err) {
+        utils.handleXhrError(err);
+      });
+    },
     threefoldRepetition: function() {
       ctrl.data.game.threefold = true;
       m.redraw();
@@ -98,14 +108,11 @@ module.exports = function(send, ctrl) {
     }
   };
 
-  return {
-    send: send,
-    receive: function(type, data) {
-      if (handlers[type]) {
-        handlers[type](data);
-        return true;
-      }
-      return false;
+  return function(type, data) {
+    if (handlers[type]) {
+      handlers[type](data);
+      return true;
     }
+    return false;
   };
 };

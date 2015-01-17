@@ -134,7 +134,7 @@ module.exports = {
               return false;
             }
             ctrl.inputValue = '';
-            ctrl.root.socket.send('talk', msg);
+            ctrl.root.socketSend('talk', msg);
           }
         }, [
           m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {

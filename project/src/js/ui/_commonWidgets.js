@@ -1,6 +1,7 @@
 var menu = require('./menu');
 var utils = require('../utils');
 var gamesMenu = require('./gamesMenu');
+var layout = require('./layout');
 
 var widgets = {};
 
@@ -27,6 +28,16 @@ widgets.board = function() {
 
 widgets.empty = function() {
   return [];
+};
+
+widgets.startBoardView = function() {
+  function overlay() {
+    return [
+      gamesMenu.view()
+    ];
+  }
+
+  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlay);
 };
 
 module.exports = widgets;

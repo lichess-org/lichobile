@@ -1,13 +1,16 @@
 'use strict';
 
-var _ = require('lodash-node'),
-    utils = require('./utils'),
-    signals = require('./signals'),
-    storage = require('./storage');
+var merge = require('lodash-node/modern/objects/merge'),
+  clone = require('lodash-node/modern/objects/clone'),
+  assign = require('lodash-node/modern/objects/assign'),
+  range = require('lodash-node/modern/arrays/range'),
+  utils = require('./utils'),
+  signals = require('./signals'),
+  storage = require('./storage');
 
 var lichessSri = utils.lichessSri;
 
-var urlsPool = _.range(9021, 9030).map(function(e) {
+var urlsPool = range(9021, 9030).map(function(e) {
   return window.lichess.socketEndPoint + ':' + e;
 });
 urlsPool.unshift(window.lichess.socketEndPoint);
@@ -29,8 +32,8 @@ var strongSocketDefaults = {
 
 var StrongSocket = function(url, version, settings) {
   var self = this;
-  self.settings = _.clone(strongSocketDefaults);
-  _.merge(self.settings, settings);
+  self.settings = clone(strongSocketDefaults, true);
+  merge(self.settings, settings);
   self.url = url;
   self.version = version;
   self.options = self.settings.options;
@@ -55,7 +58,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(_.assign(self.settings.params, {
+    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(assign(self.settings.params, {
       version: self.version
     }));
     self.debug('connection attempt to ' + fullUrl, true);
@@ -97,6 +100,10 @@ StrongSocket.prototype = {
       self.onError(e);
     }
     self.scheduleConnect(self.options.pingMaxLag);
+  },
+  setVersion: function(version) {
+    this.version = version;
+    this.connect();
   },
   send: function(t, d, o) {
     var self = this;
@@ -216,10 +223,6 @@ StrongSocket.prototype = {
       this.ws.onmessage = function() {};
       this.ws.close();
     }
-  },
-  reset: function(version) {
-    this.version = version;
-    this.connect();
   },
   onError: function(e) {
     var self = this;

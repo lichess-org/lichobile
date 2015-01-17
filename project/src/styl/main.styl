@@ -15,39 +15,7 @@ main
   transition transform 200ms ease-out
   &.out
     transform translate3d(85%, 0, 0)
-  .main_header
-    background #151A1E
-    color #fff
-    nav
-      height 40%
-      overflow hidden
-      h1
-        font-size 1em
-        text-transform uppercase
-        text-align center
-        width 100%
-        line-height 55px
-        &.playing
-          text-transform none
-          color #C4A86F
-      button
-        background transparent
-        padding: 17px
-        color #C4A86F
-        font-size 1.2em
-        &.menu
-          float left
-        &.game-menu
-          float right
-          &::before
-            content ''
-            display block
-            width 20px
-            height 20px
-            background url('../../images/game_icon.svg') no-repeat
-  .main_footer
-    background #FFF
-  &.black 
+  &.black
     .main_header
       background #fff
       color #151A1E
@@ -55,9 +23,44 @@ main
       background #151A1E
       color #fff
 
+.main_header
+  background #151A1E
+  color #fff
+  nav
+    max-height 50px
+    overflow hidden
+    h1
+      font-size 1em
+      text-transform uppercase
+      text-align center
+      width 100%
+      line-height 50px
+      &.playing
+        text-transform none
+        color #C4A86F
+    button
+      background transparent
+      padding: 15px
+      color #C4A86F
+      font-size 20px
+      line-height 20px
+      &.menu
+        float left
+      &.game-menu
+        float right
+        &::before
+          content ''
+          display block
+          width 20px
+          height 20px
+          background url('../../images/game_icon.svg') no-repeat
+
+.main_footer
+  background #FFF
+
 .main_header, .main_footer
   section
-    height 60%
+    height 50%
     padding 0 10px
 
 .content

@@ -16,19 +16,18 @@
     vertical-align top
     margin 2px 10px 0 0
     font-family 'montserratlight'
-    
   .vertical_align
     min-height 30px
-    .clock
-      float right
-      max-width 50%
-      font-family CousineBold
-      text-align right
-      min-width 90px
-      font-size 25px
-      padding-top: 3px;
-      &.correspondence
-        font-size 17px
+  .clock
+    float right
+    max-width 50%
+    font-family CousineBold
+    text-align right
+    min-width 90px
+    font-size 25px
+    padding-top: 3px;
+    &.correspondence
+      font-size 17px
   .material
     display inline-block
     .tomb
@@ -79,7 +78,10 @@
 #game_actions
   border-top 1px solid #EBEBEB
   padding 10px 0
-  height 40%
+  max-height 50px
+  position absolute
+  bottom 0
+  width 100%
 
 main.black #game_actions
   border-top-color #2E3033

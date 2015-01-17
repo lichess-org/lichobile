@@ -159,8 +159,7 @@ function renderGameButtons(ctrl) {
       }),
       config: utils.ontouchend(ctrl.chat.open || utils.noop)
     }),
-    replayView.renderButtons(ctrl.replay),
-    renderPlayerActions(ctrl)
+    replayView.renderButtons(ctrl.replay)
   ];
   return m('section#game_actions', actions);
 }
@@ -169,7 +168,8 @@ module.exports = function(ctrl) {
   function footer() {
     var els = [
       renderAntagonist(ctrl, ctrl.data.player),
-      renderGameButtons(ctrl)
+      renderGameButtons(ctrl),
+      renderPlayerActions(ctrl)
     ];
     if (ctrl.chat) els.push(renderChat(ctrl.chat));
 

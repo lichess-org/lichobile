@@ -101,6 +101,10 @@ StrongSocket.prototype = {
     }
     self.scheduleConnect(self.options.pingMaxLag);
   },
+  setVersion: function(version) {
+    this.version = version;
+    this.connect();
+  },
   send: function(t, d, o) {
     var self = this;
     var data = d || {},
@@ -219,10 +223,6 @@ StrongSocket.prototype = {
       this.ws.onmessage = function() {};
       this.ws.close();
     }
-  },
-  reset: function(version) {
-    this.version = version;
-    this.connect();
   },
   onError: function(e) {
     var self = this;

@@ -5,7 +5,6 @@ var data = require('./data');
 var sound = require('../../sound');
 var game = require('./game');
 var ground = require('./ground');
-var socket = require('./socket');
 var promotion = require('./promotion');
 var replayCtrl = require('./replay/replayCtrl');
 var chat = require('./chat');
@@ -15,19 +14,29 @@ var gameStatus = require('./status');
 var correspondenceClockCtrl = require('./correspondenceClock/correspondenceCtrl');
 var menu = require('../menu');
 var session = require('../../session');
+var socket = require('../../socket');
+var socketHandler = require('./socketHandler');
+var signals = require('../../signals');
+var gamesMenu = require('../gamesMenu');
 
-module.exports = function(cfg, socketSend) {
+module.exports = function(cfg) {
 
   this.data = data(cfg);
 
   this.vm = {
+    connectedWS: true,
     flip: false,
     reloading: false,
     redirecting: false,
     showingActions: !game.playable(this.data)
   };
 
-  this.socket = socket(socketSend, this);
+  this.socket = socket.connectGame(
+    this.data.url.socket,
+    this.data.player.version,
+    socketHandler(this)
+  );
+  this.socketSend = this.socket.send.bind(this.socket);
 
   this.showActions = function() {
     menu.close();
@@ -64,7 +73,7 @@ module.exports = function(cfg, socketSend) {
       to: dest
     };
     if (prom) move.promotion = prom;
-    this.socket.send('move', move, {
+    this.socketSend('move', move, {
       ackable: true
     });
   }.bind(this);
@@ -99,7 +108,7 @@ module.exports = function(cfg, socketSend) {
 
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
-    this.data.player.spectator ? function() {} : throttle(partial(this.socket.send, 'outoftime'), 500)
+    this.data.player.spectator ? function() {} : throttle(partial(this.socketSend, 'outoftime'), 500)
   ) : false;
 
   this.isClockRunning = function() {
@@ -115,7 +124,7 @@ module.exports = function(cfg, socketSend) {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
         this.data.correspondence,
-        partial(this.socket.send, 'outoftime')
+        partial(this.socketSend, 'outoftime')
       );
   }.bind(this);
   makeCorrespondenceClock();
@@ -133,8 +142,48 @@ module.exports = function(cfg, socketSend) {
 
   this.chat = !this.data.opponent.ai ? new chat.controller(this) : false;
 
+  window.plugins.insomnia.keepAwake();
+
+  var onConnected = function() {
+    var wasOff = !this.vm.connectedWS;
+    this.vm.connectedWS = true;
+    if (wasOff) m.redraw();
+  }.bind(this);
+
+  var onDisconnected = function() {
+    var wasOn = this.vm.connectedWS;
+    this.vm.connectedWS = false;
+    if (wasOn) setTimeout(function() {
+      m.redraw();
+    }, 1000);
+  }.bind(this);
+
+  var onBackButton = function() {
+    if (this.vm.showingActions) {
+      this.hideActions();
+      m.redraw();
+    } else if (gamesMenu.isOpen()) {
+      gamesMenu.close();
+      m.redraw();
+    } else if (this.chat && this.chat.showing) {
+      this.chat.close();
+      m.redraw();
+    } else
+      window.navigator.app.backHistory();
+  }.bind(this);
+
+  signals.connected.add(onConnected);
+  signals.disconnected.add(onDisconnected);
+  document.addEventListener('backbutton', onBackButton, false);
+
   this.onunload = function() {
+    this.socket.destroy();
+    this.socket = null;
     if (clockIntervId) clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
+    signals.connected.remove(onConnected);
+    signals.disconnected.remove(onDisconnected);
+    document.removeEventListener('backbutton', onBackButton, false);
+    window.plugins.insomnia.allowSleepAgain();
   };
 };

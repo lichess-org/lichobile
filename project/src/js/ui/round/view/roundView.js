@@ -1,4 +1,6 @@
 var chessground = require('chessground');
+var layout = require('../../layout');
+var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
@@ -6,6 +8,7 @@ var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
 var gameStatus = require('../status');
+var gamesMenu = require('../../gamesMenu');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
 var renderCorrespondenceClock = require('../correspondenceClock/correspondenceView');
@@ -162,35 +165,55 @@ function renderGameButtons(ctrl) {
   return m('section#game_actions', actions);
 }
 
-function renderFooter(ctrl) {
-  var els = [
-    renderAntagonist(ctrl, ctrl.data.player),
-    renderGameButtons(ctrl)
-  ];
-  if (ctrl.chat) els.push(renderChat(ctrl.chat));
+module.exports = function(ctrl) {
+  function footer() {
+    var els = [
+      renderAntagonist(ctrl, ctrl.data.player),
+      renderGameButtons(ctrl)
+    ];
+    if (ctrl.chat) els.push(renderChat(ctrl.chat));
 
-  return els;
-}
+    return els;
+  }
 
-function renderHeader(ctrl) {
-  return renderAntagonist(ctrl, ctrl.data.opponent);
-}
+  function header() {
+    return [
+      m('nav', [
+        m('button.fa.fa-navicon', { config: utils.ontouchend(menu.toggle) }),
+        m('h1.playing', ctrl.title),
+        m('button.menuButton', {
+          config: utils.ontouchend(gamesMenu.open)
+        })
+      ]),
+      renderAntagonist(ctrl, ctrl.data.opponent)
+    ];
+  }
 
-function renderBoard(ctrl) {
-  var x = utils.getViewportDims().vw;
-  return m('section.board_wrapper', {
-    style: {
-      height: x + 'px'
-    }
-  }, [
-    m('div.board.grey.merida', [
-      chessground.view(ctrl.chessground), renderPromotion(ctrl)
-    ])
-  ]);
-}
+  function board() {
+    var x = utils.getViewportDims().vw;
+    return m('section.board_wrapper', {
+      style: {
+        height: x + 'px'
+      }
+    }, [
+      m('div.board.grey.merida', [
+        chessground.view(ctrl.chessground), renderPromotion(ctrl)
+      ])
+    ]);
+  }
 
-module.exports = {
-  renderBoard: renderBoard,
-  renderFooter: renderFooter,
-  renderHeader: renderHeader
+  function overlays() {
+    var els = [
+      gamesMenu.view()
+    ];
+
+    if (!ctrl.vm.connectedWS)
+      els.push(m('div.overlay', [
+        m('div.overlay_content', i18n('reconnecting'))
+      ]));
+
+    return els;
+  }
+
+  return layout.board(header, board, footer, menu.view, overlays, ctrl.data.player.color);
 };

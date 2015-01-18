@@ -1,5 +1,7 @@
 # plugins
 plugins/*
+!plugins/android.json
+!plugins/ios.json
 
 platforms/
 !platforms/android/AndroidManifest.xml

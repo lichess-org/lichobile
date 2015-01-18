@@ -3,6 +3,7 @@ var Spinner = require('spin.js');
 var spinner = new Spinner();
 
 var http = {};
+http.apiVersion = 1;
 
 var baseUrl = window.lichess.apiEndPoint;
 
@@ -16,7 +17,7 @@ function complete(data) {
 
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v1+json');
+  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + http.apiVersion + '+json');
   xhr.timeout = 8000;
 }
 

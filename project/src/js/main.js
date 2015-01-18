@@ -6,6 +6,7 @@ window.m = require('mithril');
 var utils = require('./utils');
 var session = require('./session');
 var i18n = require('./i18n');
+var xhr = require('./xhr');
 
 var home = require('./ui/home');
 var login = require('./ui/login');
@@ -52,6 +53,7 @@ function main() {
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();
+    xhr.status();
   }, 500);
 }
 

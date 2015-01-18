@@ -8,6 +8,8 @@ var untranslated = {
   noInternetConnection: 'No internet connection',
   unauthorizedError: 'Access is unauthorized',
   lichessIsNotReachableError: 'lichess.org is unreachable',
+  apiUnsupported: 'You\'re using an unsupported api version. The application may not work at all. Upgrade the application to fix this issue.',
+  apiDeprecated: 'You\'re using a deprecated api version. Support will drop on %s. You should upgrade.',
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   color: 'Color',

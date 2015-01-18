@@ -22,15 +22,14 @@ function newAiGame() {
 
 function seekGame() {
   var config = settings.newGame.human;
-  var preset = config.timePreset().split('+');
   return http.request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
     data: {
       variant: config.variant(),
       timeMode: config.timeMode(),
       days: config.days(),
-      time: preset[0],
-      increment: preset[1],
+      time: config.time(),
+      increment: config.increment(),
       color: config.color(),
       mode: config.mode()
     }

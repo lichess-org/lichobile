@@ -16,9 +16,22 @@ module.exports = {
   },
   newGame: {
     selected: localstorageprop('settings.game.selected', 'human'),
+    availableTimes: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
+    '20', '25', '30', '40', '60', '90', '120', '150', '180'],
+    availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'],
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
+      availableVariants: [
+        ['Standard', '1'],
+        ['Chess960', '2'],
+        ['King of the hill', '4']
+      ],
       variant: localstorageprop('settings.game.ai.variant', '1'),
+      availableTimeModes: [
+        ['unlimited', '0'],
+        ['realTime', '1']
+      ],
       timeMode: localstorageprop('settings.game.ai.clock', '1'),
       time: localstorageprop('settings.game.ai.time', '10'),
       increment: localstorageprop('settings.game.ai.increment', '0'),
@@ -27,9 +40,20 @@ module.exports = {
     },
     human: {
       color: localstorageprop('settings.game.human.color', 'random'),
+      availableVariants: [
+        ['Standard', '1'],
+        ['Chess960', '2'],
+        ['King of the hill', '4'],
+        ['Three-check', '5'],
+        ['Antichess', '6']
+      ],
       variant: localstorageprop('settings.game.human.variant', '1'),
+      availableTimeModes: [
+        ['realTime', '1']
+      ],
       timeMode: localstorageprop('settings.game.human.clock', '1'),
-      timePreset: localstorageprop('settings.game.human.timePreset', '5+0'),
+      time: localstorageprop('settings.game.human.time', '5'),
+      increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
       mode: localstorageprop('settings.game.human.mode', '0')
     }

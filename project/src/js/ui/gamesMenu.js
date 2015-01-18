@@ -43,7 +43,6 @@ gamesMenu.joinGame = function(id) {
   m.route('/play/' + id);
 };
 
-
 var variantIconsMap = {
   bullet: 'T',
   blitz: ')',
@@ -82,19 +81,6 @@ function tupleOf(x) {
   return [x, x];
 }
 
-var humanVariants = [
-  ['Standard', '1'],
-  ['Chess960', '2'],
-  ['King of the hill', '4'],
-  ['Three-check', '5'],
-  ['Antichess', '6']
-];
-var aiVariants = [
-  ['Standard', '1'],
-  ['Chess960', '2'],
-  ['King of the hill', '4']
-];
-
 function renderForm(action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
@@ -102,57 +88,48 @@ function renderForm(action, settingsObj, variants, timeModes) {
 
   var generalFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect(i18n('color'), 'color', [
-        [i18n('white'), 'white'],
-        [i18n('black'), 'black'],
-        [i18n('randomColor'), 'random']
+      formWidgets.renderSelect('color', 'color', [
+        ['white', 'white'],
+        ['black', 'black'],
+        ['randomColor', 'random']
       ], settingsObj.color),
     ]),
     m('div.select_input', [
-      formWidgets.renderSelect(i18n('variant'), 'variant', variants, settingsObj.variant),
+      formWidgets.renderSelect('variant', 'variant', variants, settingsObj.variant),
     ])
   ];
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect(i18n('level'), 'ailevel', [
+      formWidgets.renderSelect('level', 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
       ].map(tupleOf), settingsObj.level)
     ]));
   }
   if (settingsObj.mode) {
     generalFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect(i18n('mode'), 'mode', [
-        [i18n('casual'), '0'],
-        [i18n('rated'), '1']
+      formWidgets.renderSelect('mode', 'mode', [
+        ['casual', '0'],
+        ['rated', '1']
       ], settingsObj.mode)
     ]));
   }
 
   var timeFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect(i18n('clock'), 'timeMode', timeModes, settingsObj.timeMode)
+      formWidgets.renderSelect('clock', 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ];
-  if (settingsObj.time && settingsObj.increment && hasClock) {
+  if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', [
-        formWidgets.renderSelect(i18n('time'), 'time', [
-          '2', '5', '10', '30', '60'
-        ].map(tupleOf), settingsObj.time, false)
+        formWidgets.renderSelect('time', 'time',
+          settings.newGame.availableTimes.map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
-        formWidgets.renderSelect(i18n('increment'), 'increment', [
-          '0', '1', '2', '3', '5', '10'
-        ].map(tupleOf), settingsObj.increment, false)
+        formWidgets.renderSelect('increment', 'increment',
+          settings.newGame.availableIncrements.map(tupleOf), settingsObj.increment, false)
       ])
     );
-  }
-  if (settingsObj.timePreset && hasClock) {
-    timeFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect(i18n('time'), 'timepreset', [
-        '3+0', '3+2', '5+0', '5+3', '10+0', '30+0'
-      ].map(tupleOf), settingsObj.timePreset, false)
-    ]));
   }
   // if (hasCorresp) {
   //   timeFieldset.push(m('div.select_input', [
@@ -171,8 +148,8 @@ function renderForm(action, settingsObj, variants, timeModes) {
     }
   }, [
     m('fieldset', [
-      m('div.nice-radio', formWidgets.renderRadio(i18n('human'), 'selected', 'human', settings.newGame.selected)),
-      m('div.nice-radio', formWidgets.renderRadio(i18n('computer'), 'selected', 'computer', settings.newGame.selected))
+      m('div.nice-radio', formWidgets.renderRadio('human', 'selected', 'human', settings.newGame.selected)),
+      m('div.nice-radio', formWidgets.renderRadio('computer', 'selected', 'computer', settings.newGame.selected))
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
@@ -255,14 +232,6 @@ function renderAllGames() {
     ]);
   });
 
-  var humanTimeModes = [
-    [i18n('realTime'), '1']
-  ];
-  var aiTimeModes = [
-    [i18n('unlimited'), '0'],
-    [i18n('realTime'), '1']
-  ];
-
   var newGame = m('div.card.new-game', {
     key: 'new-game',
     class: newGameCardSwapped ? 'back_visible' : '',
@@ -282,8 +251,18 @@ function renderAllGames() {
       ]),
       m('div.back', [
         settings.newGame.selected() === 'human' ?
-        renderForm(seekHumanGame, settings.newGame.human, humanVariants, humanTimeModes) :
-        renderForm(startAIGame, settings.newGame.ai, aiVariants, aiTimeModes)
+        renderForm(
+          seekHumanGame,
+          settings.newGame.human,
+          settings.newGame.human.availableVariants,
+          settings.newGame.human.availableTimeModes
+        ) :
+        renderForm(
+          startAIGame,
+          settings.newGame.ai,
+          settings.newGame.ai.availableVariants,
+          settings.newGame.ai.availableTimeModes
+        )
       ])
     ])
   ]);

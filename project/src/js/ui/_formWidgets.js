@@ -1,8 +1,10 @@
+var i18n = require('../i18n');
+
 function renderOption(label, value, storedValue) {
   return m('option', {
     value: value,
     selected: storedValue === value
-  }, label);
+  }, i18n(label));
 }
 
 module.exports = {
@@ -23,7 +25,7 @@ module.exports = {
       }),
       m('label', {
         'for': id
-      }, label)
+      }, i18n(label))
     ];
   },
 
@@ -32,7 +34,7 @@ module.exports = {
     return [
       m('label', {
         'for': name
-      }, label),
+      }, i18n(label)),
       m('select', {
         name: name,
         disabled: isDisabled,

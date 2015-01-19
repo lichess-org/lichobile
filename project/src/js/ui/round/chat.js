@@ -114,10 +114,9 @@ module.exports = {
             return m('li.chat_msg', {
               class: utils.classSet({
                 system: msg.u === 'lichess',
-                'me_talking': msg.c === ctrl.root.data.player.color
+                'me_talking': msg.u === ctrl.root.data.player.user.username
               })
             }, [
-              m('span.chat_user', user),
               m.trust(msg.t)
             ]);
           })),

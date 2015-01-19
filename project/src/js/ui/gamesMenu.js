@@ -222,7 +222,7 @@ function renderAllGames() {
           'data-icon': icon ? icon : ''
         }),
         m('div.description', [
-          m('h2.title', g.name),
+          m('h2.title', g.variant.name),
           m('p', [
             g.opponent.username,
             m('span.time-indication', timeLeft(g))

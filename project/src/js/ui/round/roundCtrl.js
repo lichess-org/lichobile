@@ -140,7 +140,8 @@ module.exports = function(cfg) {
 
   this.replay = new replayCtrl(this);
 
-  this.chat = !this.data.opponent.ai ? new chat.controller(this) : false;
+  // this.chat = !this.data.opponent.ai ? new chat.controller(this) : false;
+  this.chat = new chat.controller(this);
 
   window.plugins.insomnia.keepAwake();
 

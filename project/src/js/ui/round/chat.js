@@ -20,6 +20,7 @@ module.exports = {
     }.bind(this);
 
     this.close = function() {
+      window.cordova.plugins.Keyboard.close();
       this.showing = false;
       this.unread = false;
     }.bind(this);
@@ -81,7 +82,8 @@ module.exports = {
         m('button.modal_close[data-icon=L]', {
           config: utils.ontouchend(ctrl.close)
         }),
-        m('h2', ctrl.root.data.opponent.user.username)
+        m('h2', ctrl.root.data.opponent.user ?
+          ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
       m('div.chat_content', [
         m('div#chat_scroller.chat_scroller', {
@@ -114,7 +116,7 @@ module.exports = {
             return m('li.chat_msg', {
               class: utils.classSet({
                 system: msg.u === 'lichess',
-                'me_talking': msg.u === ctrl.root.data.player.user.username
+                'me_talking': msg.c ? msg.c === ctrl.root.data.player.color : msg.u === ctrl.root.data.player.user.username
               })
             }, [
               m.trust(msg.t)

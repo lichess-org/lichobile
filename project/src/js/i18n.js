@@ -61,7 +61,6 @@ function loadPreferredLanguage(callback) {
     },
     function() {
       loadFile(defaultCode, callback);
-      loadMomentLocal(defaultCode);
     });
 }
 

@@ -45,13 +45,23 @@ function loadFile(code, callback) {
   });
 }
 
+function loadMomentLocal(code) {
+  var script = document.createElement('script');
+  script.src = 'moment/locale/' + code + '.js';
+  document.head.appendChild(script);
+  window.moment.locale(code);
+}
+
 function loadPreferredLanguage(callback) {
   window.navigator.globalization.getPreferredLanguage(
     function(language) {
-      loadFile(language.value.split('-')[0], callback);
+      var code = language.value.split('-')[0];
+      loadFile(code, callback);
+      loadMomentLocal(code);
     },
     function() {
       loadFile(defaultCode, callback);
+      loadMomentLocal(defaultCode);
     });
 }
 

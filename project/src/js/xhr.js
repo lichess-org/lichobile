@@ -2,7 +2,7 @@ var utils = require('./utils');
 var http = require('./http');
 var settings = require('./settings');
 var i18n = require('./i18n');
-var moment = require('moment');
+var moment = window.moment;
 
 function newAiGame() {
   var config = settings.newGame.ai;

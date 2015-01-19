@@ -2,6 +2,8 @@
 
 // require mithril globally for convenience
 window.m = require('mithril');
+// for moment a global object makes loading locales easier
+window.moment = require('moment');
 
 var utils = require('./utils');
 var session = require('./session');

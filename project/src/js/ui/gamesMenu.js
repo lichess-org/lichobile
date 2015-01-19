@@ -6,7 +6,7 @@ var session = require('../session');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var session = require('../session');
-var moment = require('moment');
+var moment = window.moment;
 
 // iScroll instance
 var scroller = null;

@@ -36,3 +36,18 @@ button.disabled
   top 50%
   transform translateY(-50%)
 
+.spinner
+  content ''
+  display block
+  height 45px
+  width 45px
+  border solid 2px #bb9b59
+  position absolute
+  left -2px
+  top -2px
+  border-right none
+  border-radius 50%
+  animation anim_loader 2s linear infinite
+  @keyframes anim_loader
+    to
+      transform:rotateZ(360deg)

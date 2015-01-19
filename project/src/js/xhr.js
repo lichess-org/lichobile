@@ -5,7 +5,7 @@ var i18n = require('./i18n');
 var moment = window.moment;
 
 function newAiGame() {
-  var config = settings.newGame.ai;
+  var config = settings.game.ai;
   return http.request('/setup/ai', {
     method: 'POST',
     data: {
@@ -21,7 +21,7 @@ function newAiGame() {
 }
 
 function seekGame() {
-  var config = settings.newGame.human;
+  var config = settings.game.human;
   return http.request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
     data: {

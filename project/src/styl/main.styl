@@ -22,6 +22,9 @@ main
     .main_footer
       background #151A1E
       color #fff
+    .game_menu_button > .nb_playing
+      border-color #fff
+      color #fff
 
 .main_header
   background #151A1E
@@ -44,16 +47,32 @@ main
       color #C4A86F
       font-size 20px
       line-height 20px
-      &.menu
-        float left
-      &.game-menu
-        float right
-        &::before
-          content ''
-          display block
-          width 20px
-          height 20px
-          background url('../../images/game_icon.svg') no-repeat
+  .menu_button
+    float left
+  .game_menu_button
+    position relative
+    float right
+    &::before
+      content ''
+      display block
+      width 20px
+      height 20px
+      background url('../../images/game_icon.svg') no-repeat
+    & > .nb_playing
+      position absolute
+      top 7px
+      left 7px
+      font-size 10px
+      font-family 'montserratbold'
+      line-height 14px
+      letter-spacing -1px
+      color #151A1E
+      background #C4A86F
+      border 2px solid #151A1E
+      border-radius 50%
+      height 17px
+      width 17px
+
 
 .main_footer
   background #FFF

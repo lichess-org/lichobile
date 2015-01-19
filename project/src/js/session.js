@@ -1,6 +1,7 @@
 var http = require('./http');
 var utils = require('./utils');
 var i18n = require('./i18n');
+var settings = require('./settings');
 
 var session = null;
 
@@ -13,11 +14,9 @@ function get() {
 }
 
 function nowPlaying() {
-  var supportedVariants = ['standard', 'chess960', 'antichess', 'fromPosition',
-  'kingOfTheHill', 'threeCheck'];
   var np = session && session.nowPlaying || [];
   return np.filter(function(e) {
-    return supportedVariants.indexOf(e.variant.key) !== -1;
+    return settings.game.supportedVariants.indexOf(e.variant.key) !== -1;
   });
 }
 

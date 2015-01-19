@@ -1,5 +1,6 @@
 var chessground = require('chessground');
 var layout = require('../../layout');
+var widgets = require('../../_commonWidgets');
 var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
@@ -179,10 +180,8 @@ module.exports = function(ctrl) {
   function header() {
     return [
       m('nav', [
-        m('button.fa.fa-navicon.menu', { config: utils.ontouchend(menu.toggle) }),
-        m('button.game-menu', {
-          config: utils.ontouchend(gamesMenu.open)
-        }),
+        widgets.menuButton(),
+        widgets.gameButton(),
         m('h1.playing', ctrl.title),
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent)

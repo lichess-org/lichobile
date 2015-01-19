@@ -123,11 +123,11 @@ function renderForm(action, settingsObj, variants, timeModes) {
     timeFieldset.push(
       m('div.select_input.inline', [
         formWidgets.renderSelect('time', 'time',
-          settings.newGame.availableTimes.map(tupleOf), settingsObj.time, false)
+          settings.game.availableTimes.map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
         formWidgets.renderSelect('increment', 'increment',
-          settings.newGame.availableIncrements.map(tupleOf), settingsObj.increment, false)
+          settings.game.availableIncrements.map(tupleOf), settingsObj.increment, false)
       ])
     );
   }
@@ -148,8 +148,8 @@ function renderForm(action, settingsObj, variants, timeModes) {
     }
   }, [
     m('fieldset', [
-      m('div.nice-radio', formWidgets.renderRadio('human', 'selected', 'human', settings.newGame.selected)),
-      m('div.nice-radio', formWidgets.renderRadio('computer', 'selected', 'computer', settings.newGame.selected))
+      m('div.nice-radio', formWidgets.renderRadio('human', 'selected', 'human', settings.game.selected)),
+      m('div.nice-radio', formWidgets.renderRadio('computer', 'selected', 'computer', settings.game.selected))
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
@@ -232,7 +232,7 @@ function renderAllGames() {
     ]);
   });
 
-  var newGame = m('div.card.new-game', {
+  var game = m('div.card.new-game', {
     key: 'new-game',
     class: newGameCardSwapped ? 'back_visible' : '',
     style: cardStyle
@@ -250,24 +250,24 @@ function renderAllGames() {
         ])
       ]),
       m('div.back', [
-        settings.newGame.selected() === 'human' ?
+        settings.game.selected() === 'human' ?
         renderForm(
           seekHumanGame,
-          settings.newGame.human,
-          settings.newGame.human.availableVariants,
-          settings.newGame.human.availableTimeModes
+          settings.game.human,
+          settings.game.human.availableVariants,
+          settings.game.human.availableTimeModes
         ) :
         renderForm(
           startAIGame,
-          settings.newGame.ai,
-          settings.newGame.ai.availableVariants,
-          settings.newGame.ai.availableTimeModes
+          settings.game.ai,
+          settings.game.ai.availableVariants,
+          settings.game.ai.availableTimeModes
         )
       ])
     ])
   ]);
 
-  allGames.unshift(newGame);
+  allGames.unshift(game);
 
   return m('div#all_games', {
     style: {

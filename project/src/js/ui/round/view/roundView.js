@@ -51,7 +51,7 @@ function renderMaterial(ctrl, color) {
     }
     children.push(m('div.tomb', content));
   }
-  return m('div.material', children);
+  return children;
 }
 
 function renderAntagonist(ctrl, player) {

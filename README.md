@@ -46,4 +46,5 @@ To build and watch for changes:
 
 You need tarifa to build the application, a CLI tool on top of apache cordova.
 
-Please look at [tarifa documentation] for further documentation.
+Please look at [tarifa documentation](http://42loops.gitbooks.io/tarifa/content/)
+for further documentation.

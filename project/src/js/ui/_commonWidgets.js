@@ -41,13 +41,7 @@ widgets.empty = function() {
 };
 
 widgets.startBoardView = function() {
-  function overlay() {
-    return [
-      gamesMenu.view()
-    ];
-  }
-
-  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlay);
+  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

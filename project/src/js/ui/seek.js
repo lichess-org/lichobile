@@ -2,7 +2,6 @@ var utils = require('../utils');
 var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./_commonWidgets');
-var gamesMenu = require('./gamesMenu');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
 var socket = require('../socket');
@@ -65,7 +64,6 @@ seek.controller = function() {
 seek.view = function(ctrl) {
   function overlays() {
     return [
-      gamesMenu.view(),
       m('div.overlay', [
         m('div.overlay_content', [
           m('div', i18n('waitingForOpponent')),

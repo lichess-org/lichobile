@@ -5,6 +5,7 @@ var formWidgets = require('./_formWidgets');
 var settings = require('../settings');
 var Zanimo = require('zanimo');
 var gamesMenu = require('./gamesMenu');
+var loginModal = require('./loginModal');
 
 var menu = {};
 
@@ -45,7 +46,7 @@ menu.view = function() {
   ] : [
     m('h2', i18n('notConnected')),
     m('button.login', {
-      config: utils.ontouchend(menuRouteAction('/login'))
+      config: utils.ontouchend(loginModal.open)
     }, i18n('login'))
   ];
   header.unshift(
@@ -62,10 +63,7 @@ menu.view = function() {
         menu.close();
         gamesMenu.openNewGame();
       })
-    }, i18n('createAGame')),
-    m('li.side_link.logout[data-icon=w]', {
-      config: utils.ontouchend(session.logout)
-    }, i18n('logOut'))
+    }, i18n('createAGame'))
   ];
   if (session.isConnected()) {
     links.unshift(
@@ -80,6 +78,11 @@ menu.view = function() {
           }
         })
       }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')])
+    );
+    links.push(
+      m('li.side_link.logout[data-icon=w]', {
+        config: utils.ontouchend(session.logout)
+      }, i18n('logOut'))
     );
   }
   return [

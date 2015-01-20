@@ -9,7 +9,6 @@ var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
 var gameStatus = require('../status');
-var gamesMenu = require('../../gamesMenu');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
 var renderCorrespondenceClock = require('../correspondenceClock/correspondenceView');
@@ -202,9 +201,7 @@ module.exports = function(ctrl) {
   }
 
   function overlays() {
-    var els = [
-      gamesMenu.view()
-    ];
+    var els = [];
 
     if (!ctrl.vm.connectedWS)
       els.push(m('div.overlay', [

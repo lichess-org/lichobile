@@ -13,10 +13,10 @@ widgets.menuButton = function() {
 };
 
 widgets.gameButton = function() {
-  var np = session.nowPlaying().length;
+  var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
     config: utils.ontouchend(gamesMenu.open)
-  }, np ? m('span.nb_playing', np) : null);
+  }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 
 widgets.header = function() {

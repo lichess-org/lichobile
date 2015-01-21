@@ -6,6 +6,7 @@ lichess.org mobile application
 ## Requirements
 
 * [node](http://nodejs.org) and [gulp](http://gulpjs.com/) version 3.8.x installed.
+* [tarifa](http://tarifa.tools)
 
 **For Android:**
 
@@ -25,6 +26,9 @@ Make sure you installed all deps:
 
     $ npm install
 
+Then copy `project/env.json.example` to `project/env.json` and modify settings
+to link your app to a lichess server.
+
 To build in dev mode:
 
     $ gulp
@@ -38,33 +42,9 @@ To build and watch for changes:
     $ gulp watch
 
 
-## Android instructions
+## Build and run on your device
 
-Minimum version supported is 4.0.
+You need tarifa to build the application, a CLI tool on top of apache cordova.
 
-### Run on your device
-
-Following commands are executed from project root.
-
-First, link your SDK to the project:
-
-    $ android update project --target 19 -p app/ -s
-
-Copy `env/mobile.json.example` to `env/mobile.json` and update according to your
-env.
-
-Then plug your device with USB, check that usb debugging is enabled on it.
-
-You're all set! You can now run
-
-    $ bin/android your_env
-
-
-## iOS instructions
-
-Copy `env/mobile.json.example` to `env/your_env.json` and update according to your
-env.
-
-Generate assets and compile:
-
-    $ bin/ios your_env
+Please look at [tarifa documentation](http://42loops.gitbooks.io/tarifa/content/)
+for further documentation.

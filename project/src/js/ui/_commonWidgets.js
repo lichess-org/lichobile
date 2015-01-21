@@ -13,10 +13,10 @@ widgets.menuButton = function() {
 };
 
 widgets.gameButton = function() {
-  var np = session.nowPlaying().length;
+  var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
     config: utils.ontouchend(gamesMenu.open)
-  }, np ? m('span.nb_playing', np) : null);
+  }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 
 widgets.header = function() {
@@ -41,13 +41,7 @@ widgets.empty = function() {
 };
 
 widgets.startBoardView = function() {
-  function overlay() {
-    return [
-      gamesMenu.view()
-    ];
-  }
-
-  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlay);
+  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

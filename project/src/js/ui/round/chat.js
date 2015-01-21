@@ -85,7 +85,7 @@ module.exports = {
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
-      m('div.chat_content', [
+      m('div.modal_content', [
         m('div#chat_scroller.chat_scroller', {
           style: {
             height: scrollerH + 'px'

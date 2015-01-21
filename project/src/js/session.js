@@ -20,6 +20,12 @@ function nowPlaying() {
   });
 }
 
+function myTurnGames() {
+  return nowPlaying().filter(function(e) {
+    return e.isMyTurn;
+  });
+}
+
 function login(username, password) {
   return http.request('/login', {
     method: 'POST',
@@ -66,5 +72,6 @@ module.exports = {
   logout: logout,
   refresh: refresh,
   get: get,
-  nowPlaying: nowPlaying
+  nowPlaying: nowPlaying,
+  myTurnGames: myTurnGames
 };

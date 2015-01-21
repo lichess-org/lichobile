@@ -11,21 +11,13 @@
   font-weight normal
   padding 20px
   background #fff
-  font-family 'montserratlight'
   margin-top 20px
-  border-radius 8px
-  font-size 0.9em
+  border-top-left-radius: 8px
+  border-top-right-radius: 8px
+  font-size 1em
   line-height 1.2em
   color #767676
   width 90%
-  &.me_talking
-    margin-left 10%
-    background #c4a86f
-    color #fff
-    &:before
-      background #c4a86f
-      left auto
-      right 5px
   &:before
     content ''
     display block
@@ -37,17 +29,45 @@
     -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
     transform: rotate(45deg);
     background #fff
+  &:first-child
+    margin-top 0
+  &:last-child
+    border-bottom-left-radius: 8px
+    border-bottom-right-radius: 8px
+  &.close_balloon
+    border-bottom-left-radius: 8px
+    border-bottom-right-radius: 8px
+  &.player
+    background #c4a86f
+    color #fff
+    margin-left 10%
+    & + .chat_msg.player
+      margin-top -10px
+      padding-top 0
+      border-top-left-radius: 0
+      border-top-right-radius: 0
+      &:before
+        display none
+    &:before
+      background #c4a86f
+      left auto
+      right 5px
+  &.opponent
+    & + .chat_msg.opponent
+      margin-top -10px
+      padding-top 0
+      border-top-left-radius: 0
+      border-top-right-radius: 0
+      &:before
+        display none
   &.system
+    background transparent
+    border 0
+    border-radius 0
+    width 100%
     text-align right
     font-style italic
     font-size 0.8em
-    border-bottom none
-  &:last-child
-    border-bottom none
-
-.chat_user
-  font-family 'montserratbold'
-  margin-right 15px
 
 .chat_form
   position relative

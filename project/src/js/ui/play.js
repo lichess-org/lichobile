@@ -18,8 +18,10 @@ module.exports = {
 
     return {
       onunload: function() {
-        round.onunload();
-        round = null;
+        if (round) {
+          round.onunload();
+          round = null;
+        }
       },
       round: function() {
         return round;

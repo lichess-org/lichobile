@@ -38,25 +38,29 @@ module.exports = {
 
     var scrollerHeight;
     var onKeyboardShow = function(e) {
-      this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+      var self = this;
       var chat = document.getElementById('chat_scroller');
       scrollerHeight = chat.offsetHeight;
-      chat.style.height = (scrollerHeight - e.keyboardHeight) + 'px';
+      // TODO: this is a temporary hack: ionic plugin doesn't return good keyboard
+      // size because it doesn't include statusbar height
+      var statusBarHeight = (window.cordova.platformId === 'android') ? 25 : 0;
+      chat.style.height = (scrollerHeight - (e.keyboardHeight - statusBarHeight)) + 'px';
       setTimeout(function() {
-        this.scroller.refresh();
-        this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
-      }.bind(this), 100);
+        if (self.scroller) self.scroller.refresh();
+        if (self.scroller) self.scroller.scrollTo(0, self.scroller.maxScrollY, 0);
+      }, 200);
     }.bind(this);
 
     var onKeyboardHide = function() {
+      var self = this;
       // because of iscroll we need to manually blur when user hide
       // keyboard
       document.getElementById('chat_input').blur();
       var chat = document.getElementById('chat_scroller');
       chat.style.height = scrollerHeight + 'px';
       setTimeout(function() {
-        this.scroller.refresh();
-      }.bind(this), 100);
+        if (self.scroller) self.scroller.refresh();
+      }, 200);
     }.bind(this);
 
     window.addEventListener('native.keyboardhide', onKeyboardHide);
@@ -104,19 +108,27 @@ module.exports = {
             ctrl.scroller.refresh();
           }
         }, [
-          m('ul.chat_messages', ctrl.messages.map(function(msg) {
-            var user;
-            if (msg.c)
-              user = '[' + msg.c + ']';
-            else if (msg.u !== 'lichess')
-              user = msg.u;
-            else
-              user = null;
+          m('ul.chat_messages', ctrl.messages.map(function(msg, i, all) {
+            console.log(msg);
+            var player = ctrl.root.data.player;
+            var playerTalking = msg.c ? msg.c === player.color :
+              msg.u === player.user.username;
+
+            var closeBalloon = true;
+            var next = all[i+1];
+            var nextTalking;
+            if (next) {
+              nextTalking = next.c ? next.c === player.color :
+                next.u === player.user.username;
+            }
+            if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
             return m('li.chat_msg', {
               class: utils.classSet({
                 system: msg.u === 'lichess',
-                'me_talking': msg.c ? msg.c === ctrl.root.data.player.color : msg.u === ctrl.root.data.player.user.username
+                player: playerTalking,
+                opponent: !playerTalking,
+                'close_balloon': closeBalloon
               })
             }, [
               m.trust(msg.t)

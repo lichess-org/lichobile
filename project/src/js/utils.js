@@ -44,7 +44,8 @@ utils.partialƒ = function() {
 };
 
 utils.ƒ = function() {
-  var args = arguments, fn = arguments[0];
+  var args = arguments,
+    fn = arguments[0];
   return function() {
     fn.apply(fn, Array.prototype.slice.call(args, 1));
   };
@@ -82,7 +83,10 @@ var viewPortDims = null;
 utils.getViewportDims = function() {
   if (viewPortDims) return viewPortDims;
   var e = document.documentElement;
-  viewPortDims = { vw: e.clientWidth, vh: e.clientHeight };
+  viewPortDims = {
+    vw: e.clientWidth,
+    vh: e.clientHeight
+  };
   return viewPortDims;
 };
 
@@ -111,7 +115,18 @@ utils.classSet = function(classes) {
   return arr.join(' ');
 };
 
-utils.noop = function() {
+utils.noop = function() {};
+
+utils.playerName = function(player, withRating) {
+  if (player.username || player.user) {
+    var name = player.username || player.user.username;
+    if (player.user && player.user.title) name = player.user.title + ' ' + name;
+    if (withRating && (player.user || player.rating)) name += ' (' + (player.rating || player.user.rating) + ')';
+    return name;
+  }
+  if (player.ai)
+    return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
+  return 'Anonymous';
 };
 
 utils.backHistory = function() {

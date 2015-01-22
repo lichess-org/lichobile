@@ -30,12 +30,6 @@ function ratingDiff(player) {
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
 }
 
-function renderUser(ctrl, player) {
-  return player.user ? (
-    (player.user.title ? player.user.title + ' ' : '') + player.user.username
-  ) : 'Anonymous';
-}
-
 function renderMaterial(ctrl, color) {
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data)[color];
   var children = [];
@@ -57,7 +51,7 @@ function renderAntagonist(ctrl, player) {
   return m('section.antagonist', [
     m('div.vertical_align', [
       m('div.infos', [
-        m('h2', player.ai ? i18n('aiNameLevelAiLevel', 'Stockfish', player.ai) : renderUser(ctrl, player)),
+        m('h2', utils.playerName(player)),
         m('div', [
           player.user ? m('h3.rating', [
             player.rating,

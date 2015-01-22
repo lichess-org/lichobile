@@ -89,9 +89,9 @@ function renderForm(action, settingsObj, variants, timeModes) {
   var generalFieldset = [
     m('div.select_input', [
       formWidgets.renderSelect('color', 'color', [
+        ['randomColor', 'random'],
         ['white', 'white'],
-        ['black', 'black'],
-        ['randomColor', 'random']
+        ['black', 'black']
       ], settingsObj.color),
     ]),
     m('div.select_input', [

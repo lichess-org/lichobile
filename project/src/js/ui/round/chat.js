@@ -109,7 +109,6 @@ module.exports = {
           }
         }, [
           m('ul.chat_messages', ctrl.messages.map(function(msg, i, all) {
-            console.log(msg);
             var player = ctrl.root.data.player;
             var playerTalking = msg.c ? msg.c === player.color :
               msg.u === player.user.username;

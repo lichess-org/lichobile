@@ -227,9 +227,9 @@ function renderAllGames() {
           'data-icon': icon ? icon : ''
         }),
         m('div.description', [
-          m('h2.title', g.variant.name),
+          m('h2.title', utils.playerName(g.opponent, true)),
           m('p', [
-            g.opponent.username,
+            g.variant.name,
             m('span.time-indication', timeLeft(g))
           ])
         ])

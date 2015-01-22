@@ -40,6 +40,7 @@ module.exports = {
         disabled: isDisabled,
         onchange: function(e) {
           settingsProp(e.target.value);
+          m.redraw(); // because color setting depends on other settings
         }
       }, options.map(function(e) {
         return renderOption(e[0], e[1], storedValue);

@@ -1,3 +1,4 @@
+var compact = require('lodash-node/modern/arrays/compact')
 var utils = require('../utils');
 var xhr = require('../xhr');
 var settings = require('../settings');
@@ -85,14 +86,18 @@ function renderForm(action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
   // var hasCorresp = timeMode === '2';
-
+  var allowWhite = !settingsObj.mode ||
+    settingsObj.mode() === '0' ||
+    ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
+    settings.game.selected() !== 'human';
+  var colors = compact([
+    ['randomColor', 'random'],
+    allowWhite ? ['white', 'white'] : null,
+    ['black', 'black']
+  ]);
   var generalFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect('color', 'color', [
-        ['randomColor', 'random'],
-        ['white', 'white'],
-        ['black', 'black']
-      ], settingsObj.color),
+      formWidgets.renderSelect('color', 'color', colors, settingsObj.color),
     ]),
     m('div.select_input', [
       formWidgets.renderSelect('variant', 'variant', variants, settingsObj.variant),

@@ -1,0 +1,96 @@
+{
+  "name": "lichobile",
+  "version": "0.1.0",
+  "dependencies": {
+    "chessground": {
+      "version": "1.8.11",
+      "from": "chessground@1.8.11",
+      "resolved": "https://registry.npmjs.org/chessground/-/chessground-1.8.11.tgz",
+      "dependencies": {
+        "merge": {
+          "version": "1.2.0",
+          "from": "merge@1.2.0"
+        }
+      }
+    },
+    "chessli.js": {
+      "version": "0.3.0",
+      "from": "chessli.js@0.3.0",
+      "resolved": "https://registry.npmjs.org/chessli.js/-/chessli.js-0.3.0.tgz"
+    },
+    "iscroll": {
+      "version": "5.1.3",
+      "from": "iscroll@*",
+      "resolved": "https://registry.npmjs.org/iscroll/-/iscroll-5.1.3.tgz"
+    },
+    "lodash-node": {
+      "version": "2.4.1",
+      "from": "lodash-node@>=2.4.1 <3.0.0"
+    },
+    "mithril": {
+      "version": "0.1.28",
+      "from": "mithril@0.1.28",
+      "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.1.28.tgz"
+    },
+    "mobile-button": {
+      "version": "0.8.0",
+      "from": "mobile-button@*",
+      "resolved": "https://registry.npmjs.org/mobile-button/-/mobile-button-0.8.0.tgz",
+      "dependencies": {
+        "q": {
+          "version": "1.1.2",
+          "from": "q@>=1.1.2 <1.2.0",
+          "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
+        }
+      }
+    },
+    "moment": {
+      "version": "2.8.4",
+      "from": "moment@>=2.8.4 <3.0.0",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz"
+    },
+    "signals": {
+      "version": "1.0.0",
+      "from": "signals@*",
+      "resolved": "https://registry.npmjs.org/signals/-/signals-1.0.0.tgz"
+    },
+    "spin.js": {
+      "version": "2.0.1",
+      "from": "spin.js@*"
+    },
+    "zanimo": {
+      "version": "1.1.2",
+      "from": "zanimo@*",
+      "dependencies": {
+        "color": {
+          "version": "0.6.0",
+          "from": "color@>=0.6.0 <0.7.0",
+          "dependencies": {
+            "color-convert": {
+              "version": "0.2.1",
+              "from": "color-convert@>=0.2.0 <0.3.0"
+            },
+            "color-string": {
+              "version": "0.1.3",
+              "from": "color-string@>=0.1.0 <0.2.0"
+            }
+          }
+        },
+        "q": {
+          "version": "1.0.1",
+          "from": "q@>=1.0.0 <1.1.0",
+          "resolved": "https://registry.npmjs.org/q/-/q-1.0.1.tgz"
+        },
+        "qanimationframe": {
+          "version": "2.1.3",
+          "from": "qanimationframe@>=2.1.0 <2.2.0",
+          "resolved": "https://registry.npmjs.org/qanimationframe/-/qanimationframe-2.1.3.tgz"
+        },
+        "vendor-prefix": {
+          "version": "0.1.0",
+          "from": "vendor-prefix@>=0.1.0 <0.2.0"
+        }
+      }
+    }
+  }
+}

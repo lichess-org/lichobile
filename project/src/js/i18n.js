@@ -18,8 +18,8 @@ var untranslated = {
   animations: 'Pieces animations',
   loginSuccessfull: 'Login successful',
   resumeGame: 'Resume game',
-  dataRefreshSuccessful: 'Successfully refreshed session data',
-  pieceDestinations: 'Show/hide piece destinations'
+  pieceDestinations: 'Show/hide piece destinations',
+  signedOut: 'You\'ve been signed out'
 };
 
 var defaultCode = 'en';

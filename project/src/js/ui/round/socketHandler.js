@@ -4,7 +4,6 @@ var xhr = require('./roundXhr');
 var sound = require('../../sound');
 var session = require('../../session');
 var utils = require('../../utils');
-var socket = require('../../socket');
 
 module.exports = function(ctrl) {
 
@@ -91,7 +90,7 @@ module.exports = function(ctrl) {
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       // refresh current games card list
-      session.refresh(true);
+      session.refresh();
       setTimeout(function() {
         ctrl.showActions();
         m.redraw();

@@ -82,7 +82,7 @@ module.exports = function(cfg) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
     sound.move();
     if (this.data.game.speed === 'correspondence' && session.isConnected())
-      session.refresh(true);
+      session.refresh();
   }.bind(this);
 
   this.apiMove = function(o) {

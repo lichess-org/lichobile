@@ -19,7 +19,7 @@ var newGameCardSwapped = false;
 
 gamesMenu.open = function() {
   isOpen = true;
-  if (utils.hasNetwork() && session.isConnected()) session.refresh(true);
+  if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
 
 gamesMenu.openNewGame = function() {

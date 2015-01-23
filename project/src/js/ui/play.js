@@ -9,7 +9,7 @@ module.exports = {
   controller: function() {
     var round;
     xhr.game(m.route.param('id')).then(function(data) {
-      if (session.isConnected()) session.refresh(true);
+      if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
     }, function(error) {
       utils.handleXhrError(error);

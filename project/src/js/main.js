@@ -18,7 +18,7 @@ var refreshInterval = 60000;
 var refreshIntervalID;
 
 function refresh() {
-  if (utils.hasNetwork() && session.isConnected()) session.refresh(true);
+  if (utils.hasNetwork() && session.isConnected()) session.refresh();
 }
 
 function onResume() {
@@ -38,9 +38,10 @@ function main() {
     '/play/:id': play
   });
 
-  // refresh data once (to log in user automatically thanks to cookie)
-  // then, if connected, refresh every min, and on resume
-  if (utils.hasNetwork()) session.refresh(true);
+  // pull session data once (to log in user automatically thanks to cookie)
+  if (utils.hasNetwork()) session.rememberLogin();
+
+  // if connected, refresh data every min, and on resume
   refreshIntervalID = setInterval(refresh, refreshInterval);
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);

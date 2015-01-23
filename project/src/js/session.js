@@ -48,27 +48,36 @@ function logout() {
   });
 }
 
-function refresh(isBackground) {
-  var p = http.request('/account/info', {
-    background: isBackground
-  }, !isBackground).then(function(data) {
+function rememberLogin() {
+  return http.request('/account/info', {
+    background: true
+  }).then(function(data) {
+    session = data;
+    m.redraw();
+  });
+}
+
+function refresh() {
+  return http.request('/account/info', {
+    background: true
+  }).then(function(data) {
     session = data;
     m.redraw();
     return session;
-  });
-  if (!isBackground) p.then(function() {
-    window.plugins.toast.show(i18n('dataRefreshSuccessful'), 'short', 'center');
   }, function(err) {
-    utils.handleXhrError(err);
+    if (err.message === 'unauthorizedError') {
+      session = null;
+      m.redraw();
+      window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
+    }
     throw err;
   });
-
-  return p;
 }
 
 module.exports = {
   isConnected: isConnected,
   login: login,
+  rememberLogin: rememberLogin,
   logout: logout,
   refresh: refresh,
   get: get,

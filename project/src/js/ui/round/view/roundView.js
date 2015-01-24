@@ -30,8 +30,7 @@ function ratingDiff(player) {
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
 }
 
-function renderMaterial(ctrl, color) {
-  var material = chessground.board.getMaterialDiff(ctrl.chessground.data)[color];
+function renderMaterial(material) {
   var children = [];
   for (var role in material) {
     var piece = m('div.' + role);
@@ -47,7 +46,7 @@ function renderMaterial(ctrl, color) {
   return children;
 }
 
-function renderAntagonist(ctrl, player) {
+function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
     m('div.vertical_align', [
       m('div.infos', [
@@ -57,7 +56,7 @@ function renderAntagonist(ctrl, player) {
             player.rating,
             ratingDiff(player)
           ]) : null,
-          renderMaterial(ctrl, player.color)
+          renderMaterial(material)
         ])
       ]),
       ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
@@ -159,9 +158,12 @@ function renderGameButtons(ctrl) {
 }
 
 module.exports = function(ctrl) {
+
+  var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+
   function footer() {
     var els = [
-      renderAntagonist(ctrl, ctrl.data.player),
+      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
       renderGameButtons(ctrl),
       renderPlayerActions(ctrl)
     ];
@@ -177,7 +179,7 @@ module.exports = function(ctrl) {
         widgets.gameButton(),
         m('h1.playing', ctrl.title),
       ]),
-      renderAntagonist(ctrl, ctrl.data.opponent)
+      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
     ];
   }
 

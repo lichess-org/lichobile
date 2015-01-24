@@ -34,6 +34,10 @@ menu.toggle = function() {
   menu.isOpen = !menu.isOpen;
 };
 
+menu.open = function() {
+  menu.isOpen = true;
+};
+
 menu.close = function() {
   menu.isOpen = false;
   closeSettings();
@@ -120,11 +124,7 @@ menu.view = function() {
     m('nav#side_links', [
       m('ul', links)
     ]),
-    m('div#settings', {
-      class: utils.classSet({
-        show: settingsOpen
-      })
-    }, [
+    settingsOpen ? m('div#settings', [
       m('header', [
         m('button[data-icon=L]', {
           config: utils.ontouchend(closeSettings)
@@ -137,7 +137,7 @@ menu.view = function() {
         formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
       ]),
       m('section.app_version', window.lichess.version)
-    ])
+    ]) : null
   ];
 };
 

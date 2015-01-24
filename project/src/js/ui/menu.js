@@ -9,7 +9,18 @@ var loginModal = require('./loginModal');
 
 var menu = {};
 
-menu.isOpen = false;
+var displayedPerfs = [
+  'chess960',
+  'blitz',
+  'kingOfTheHill',
+  'threeCheck',
+  'antichess',
+  'bullet',
+  'correspondence',
+  'classical'
+];
+
+menu.isOpen = true;
 var settingsOpen = false;
 
 function openSettings() {
@@ -42,7 +53,14 @@ menu.close = function() {
 menu.view = function() {
   var userobj = session.get();
   var header = userobj ? [
-    m('h2', userobj.username)
+    m('h2', userobj.username),
+    m('section.ratings', Object.keys(userobj.perfs).map(function(k) {
+      if (displayedPerfs.indexOf(k) !== -1) {
+        var perf = userobj.perfs[k];
+        return m('div.perf[data-icon=' + utils.variantIconsMap[k] + ']', perf.rating);
+      }
+      return null;
+    }))
   ] : [
     m('h2', i18n('notConnected')),
     m('button.login', {

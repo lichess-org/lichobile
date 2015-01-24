@@ -135,4 +135,16 @@ utils.backHistory = function() {
     window.navigator.app.backHistory();
 };
 
+utils.variantIconsMap = {
+  bullet: 'T',
+  blitz: ')',
+  classical: '+',
+  correspondence: ';',
+  chess960: '\'',
+  kingOfTheHill: '(',
+  threeCheck: '.',
+  antichess: '@',
+  atomic: '>'
+};
+
 module.exports = utils;

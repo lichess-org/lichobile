@@ -1,4 +1,4 @@
-// targets small devices like iphone 4
+// targets very small devices like iphone 4
 @media only screen and (max-device-height 480px)
   .playing
     visibility hidden
@@ -41,3 +41,14 @@
 
   #game_actions
     padding 0
+
+  .side_menu_header .ratings
+    display none
+
+@media only screen and (max-device-width 340px)
+  .side_menu_header .perf .nb
+    display none
+
+@media only screen and (max-device-width 550px)
+  .side_menu_header .perf::before
+    display none

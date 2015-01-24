@@ -58,6 +58,20 @@ var perfs = [
 
 menu.view = function() {
   if (!menu.isOpen) return;
+  if (settingsOpen) return m('div#settings', [
+    m('header', [
+      m('button[data-icon=L]', {
+        config: utils.ontouchend(closeSettings)
+      }),
+      m('h2', i18n('settings'))
+    ]),
+    m('section', [
+      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', settings.general.animations),
+      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', settings.general.pieceDestinations),
+      formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
+    ]),
+    m('section.app_version', window.lichess.version)
+  ]);
   var user = session.get();
   var header = user ? [
     m('h2', user.username),
@@ -121,23 +135,7 @@ menu.view = function() {
   }
   return [
     m('header.side_menu_header', header),
-    m('nav#side_links', [
-      m('ul', links)
-    ]),
-    settingsOpen ? m('div#settings', [
-      m('header', [
-        m('button[data-icon=L]', {
-          config: utils.ontouchend(closeSettings)
-        }),
-        m('h2', i18n('settings'))
-      ]),
-      m('section', [
-        formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', settings.general.animations),
-        formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', settings.general.pieceDestinations),
-        formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
-      ]),
-      m('section.app_version', window.lichess.version)
-    ]) : null
+    m('nav#side_links', m('ul', links))
   ];
 };
 

@@ -97,6 +97,11 @@ module.exports = {
       }, i18n('declineInvitation'))
     ];
   },
+  backToGame: function(ctrl) {
+    return m('button[data-icon=L]', {
+      config: utils.ontouchend(ctrl.hideActions)
+    }, i18n('backToGame'));
+  },
   cancelRematch: function(ctrl) {
     if (ctrl.data.player.offeringRematch) return [
       i18n('rematchOfferSent'),

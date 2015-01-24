@@ -92,7 +92,8 @@ function renderGameRunningActions(ctrl) {
       button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
       button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
       button.forceResign(ctrl),
-      button.threefoldClaimDraw(ctrl)
+      button.threefoldClaimDraw(ctrl),
+      m('br'), m('br'), button.backToGame(ctrl)
     ]),
     m('div.answers', answerButtons)
   ];
@@ -117,7 +118,7 @@ function renderGameEndedActions(ctrl) {
     button.joinRematch(ctrl) ||
     button.answerOpponentRematch(ctrl) ||
     button.cancelRematch(ctrl) ||
-    button.rematch(ctrl)
+    [button.rematch(ctrl), m('br'), m('br'), button.backToGame(ctrl)]
   );
   return [
     m('div.result', [result, m('br'), m('br'), status]),

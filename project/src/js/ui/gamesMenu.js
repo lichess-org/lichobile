@@ -1,4 +1,4 @@
-var compact = require('lodash-node/modern/arrays/compact')
+var compact = require('lodash-node/modern/arrays/compact');
 var utils = require('../utils');
 var xhr = require('../xhr');
 var settings = require('../settings');
@@ -44,21 +44,9 @@ gamesMenu.joinGame = function(id) {
   m.route('/play/' + id);
 };
 
-var variantIconsMap = {
-  bullet: 'T',
-  blitz: ')',
-  classical: '+',
-  correspondence: ';',
-  chess960: '\'',
-  kingOfTheHill: '(',
-  threeCheck: '.',
-  antichess: '@',
-  atomic: '>'
-};
-
 function iconFromVariant(variant, perf) {
   var lookup = variant === 'standard' ? perf : variant;
-  return variantIconsMap[lookup];
+  return utils.variantIconsMap[lookup];
 }
 
 function startAIGame() {

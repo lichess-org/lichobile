@@ -40,8 +40,13 @@ gamesMenu.close = function() {
   isOpen = false;
 };
 
-gamesMenu.joinGame = function(id) {
-  m.route('/play/' + id);
+gamesMenu.lastJoined = null;
+
+gamesMenu.joinGame = function(g) {
+  gamesMenu.lastJoined = g;
+  gamesMenu.close();
+  m.route('/play/' + g.fullId);
+  m.redraw();
 };
 
 function iconFromVariant(variant, perf) {
@@ -205,11 +210,10 @@ function renderAllGames() {
       key: 'game.' + g.gameId,
       style: cardStyle,
       config: utils.ontouchendScroll(function() {
-        gamesMenu.joinGame(g.fullId);
-        gamesMenu.close();
+        gamesMenu.joinGame(g);
       })
     }, [
-      renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color, g.variant),
+      renderViewOnlyBoard(g.fen, g.lastMove, g.color, g.variant),
       m('div.infos', [
         m('div.icon-game', {
           'data-icon': icon ? icon : ''

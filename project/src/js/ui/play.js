@@ -4,6 +4,8 @@ var xhr = require('../xhr');
 var widgets = require('./_commonWidgets');
 var roundCtrl = require('./round/roundCtrl');
 var roundView = require('./round/view/roundView');
+var gamesMenu = require('./gamesMenu');
+var layout = require('./layout');
 
 module.exports = {
   controller: function() {
@@ -31,6 +33,10 @@ module.exports = {
 
   view: function(ctrl) {
     if (ctrl.round()) return roundView(ctrl.round());
-    else return widgets.startBoardView();
+    var pov = gamesMenu.lastJoined;
+    if (pov) {
+      var board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color, pov.variant.key);
+    } else board = widgets.board;
+    return layout.board(widgets.header, board, widgets.empty, widgets.empty, null, pov ? pov.color : null);
   }
 };

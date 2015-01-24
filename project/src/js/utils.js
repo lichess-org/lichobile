@@ -96,7 +96,7 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
     minimalDom: true,
     coordinates: false,
     fen: fen,
-    lastMove: lastMove,
+    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
     orientation: orientation || 'white'
   };
   return m('div', {

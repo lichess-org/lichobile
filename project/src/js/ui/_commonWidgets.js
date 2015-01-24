@@ -33,7 +33,16 @@ widgets.board = function() {
     style: {
       height: x + 'px'
     }
-  }, [utils.viewOnlyBoard()]);
+  }, utils.viewOnlyBoard());
+};
+
+widgets.boardArgs = function(fen, lastMove, orientation, variant) {
+  var x = utils.getViewportDims().vw;
+  return m('section.board_wrapper', {
+    style: {
+      height: x + 'px'
+    }
+  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant));
 };
 
 widgets.empty = function() {

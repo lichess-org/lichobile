@@ -11,6 +11,12 @@ module.exports = function(root) {
 
   var situationCache = {};
 
+  var gameVariants = {
+    'chess960' : 1,
+    'antichess': 2,
+    'atomic': 3
+  };
+
   var showFen = function() {
     try {
       var ply, move, cached, fen, lm, h = '', hash = '';
@@ -25,7 +31,7 @@ module.exports = function(root) {
       if (!cached || ply < this.ply) {
         var chess = new Chess(
           fen || root.data.game.initialFen,
-          root.data.game.variant.key === 'chess960' ? 1 : 0
+          gameVariants[root.data.game.variant.key] || 0
         );
         for (ply = ply; ply <= this.ply; ply++) {
           move = root.data.game.moves[ply - 1];

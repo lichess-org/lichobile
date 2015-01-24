@@ -17,7 +17,7 @@ module.exports = {
   game: {
     selected: localstorageprop('settings.game.selected', 'human'),
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck'
+      'kingOfTheHill', 'threeCheck', 'atomic'
     ],
     availableTimes: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
     '20', '25', '30', '40', '60', '90', '120', '150', '180'],

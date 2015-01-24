@@ -1,4 +1,6 @@
 var StrongSocket = require('./StrongSocket');
+var session = require('./session');
+var menu = require('./ui/menu');
 
 var socketInstance;
 
@@ -7,7 +9,14 @@ function createGameSocket(url, version, receiveHandler) {
     options: {
       name: "game",
       debug: true,
-      ignoreUnknownMessages: true
+      ignoreUnknownMessages: true,
+      onError: function(e) {
+        // probably opening a user game while logged out
+        if (!session.isConnected()) {
+          m.route('/');
+          menu.open();
+        }
+      }
     },
     receive: receiveHandler
   });

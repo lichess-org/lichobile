@@ -226,6 +226,7 @@ StrongSocket.prototype = {
   },
   onError: function(e) {
     var self = this;
+    if (self.options.onError) self.options.onError(e);
     self.options.debug = true;
     self.debug('error: ' + JSON.stringify(e));
     self.tryAnotherUrl = true;

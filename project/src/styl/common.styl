@@ -51,3 +51,42 @@ button.disabled
 //   @keyframes anim_loader
 //     to
 //       transform:rotateZ(360deg)
+
+.loader_circles {
+  display: inline-block;
+  width:74px;
+  height: 12px;
+  margin-left: 10px;
+}
+
+.loader_circles div {
+  background-color:#C4A86F;
+  opacity: 0;
+  float:left;
+  height:13px;
+  width:13px;
+  margin-left:5px;
+  -webkit-animation-name:bounce_loader_circles;
+  -webkit-animation-duration:2s;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-direction:linear;
+  -webkit-border-radius:50%;
+}
+
+.loader_circles .circle_1 {
+  -webkit-animation-delay: 0.5s;
+}
+
+.loader_circles .circle_2 {
+  -webkit-animation-delay: 1s;
+}
+
+.loader_circles .circle_3 {
+  -webkit-animation-delay: 1.5s;
+}
+
+@-webkit-keyframes bounce_loader_circles {
+  0% { }
+  50% { opacity: 1 }
+  100% { }
+}

@@ -164,6 +164,12 @@ function renderGameButtons(ctrl) {
   return m('section#game_actions', actions);
 }
 
+var loader = m('div.loader_circles',
+  [1, 2, 3].map(function(i) {
+    return m('div.circle_' + i);
+  })
+);
+
 module.exports = function(ctrl) {
 
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
@@ -184,7 +190,10 @@ module.exports = function(ctrl) {
       m('nav', [
         widgets.menuButton(),
         widgets.gameButton(),
-        m('h1.playing', ctrl.title),
+        ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
+          i18n('reconnecting'),
+          loader
+        ])
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
     ];
@@ -203,16 +212,5 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  function overlays() {
-    var els = [];
-
-    if (!ctrl.vm.connectedWS)
-      els.push(m('div.overlay', [
-        m('div.overlay_content', i18n('reconnecting'))
-      ]));
-
-    return els;
-  }
-
-  return layout.board(header, board, footer, menu.view, overlays, ctrl.data.player.color);
+  return layout.board(header, board, footer, menu.view, null, ctrl.data.player.color);
 };

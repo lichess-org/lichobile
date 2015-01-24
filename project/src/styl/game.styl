@@ -113,11 +113,16 @@ main.black #game_actions
 main.black .game_action
   border-color #2E3033
 
-#open_player_controls.answer_required
-  color: red
+@-webkit-keyframes answer_glow {
+  50%   { 
+    color #000
+    background #C4A86F
+  }
+}
 
+#open_player_controls.answer_required,
 #open_chat.unread
-  color: red
+  -webkit-animation answer_glow 5s infinite
 
 #player_controls
   width 100%

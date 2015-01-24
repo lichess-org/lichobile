@@ -18,6 +18,7 @@ var socket = require('../../socket');
 var socketHandler = require('./socketHandler');
 var signals = require('../../signals');
 var gamesMenu = require('../gamesMenu');
+var atomic = require('./atomic');
 
 module.exports = function(cfg) {
 
@@ -78,11 +79,16 @@ module.exports = function(cfg) {
     });
   }.bind(this);
 
-  this.userMove = function(orig, dest, meta) {
+  var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
     sound.move();
     if (this.data.game.speed === 'correspondence' && session.isConnected())
       session.refresh();
+  }.bind(this);
+
+  var onCapture = function(key) {
+    if (this.data.game.variant.key === 'atomic') atomic.capture(this, key);
+    else sound.capture();
   }.bind(this);
 
   this.apiMove = function(o) {
@@ -96,7 +102,7 @@ module.exports = function(cfg) {
     if (this.data.player.spectator || o.color !== this.data.player.color) sound.move();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, cfg.game.fen, this.userMove);
+  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onCapture);
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);

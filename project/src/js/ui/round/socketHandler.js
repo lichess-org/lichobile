@@ -4,6 +4,7 @@ var xhr = require('./roundXhr');
 var sound = require('../../sound');
 var session = require('../../session');
 var utils = require('../../utils');
+var atomic = require('./atomic');
 
 module.exports = function(ctrl) {
 
@@ -52,9 +53,13 @@ module.exports = function(ctrl) {
       });
     },
     enpassant: function(o) {
-      var pieces = {};
-      pieces[o.key] = null;
-      if (!ctrl.replay.active) ctrl.chessground.setPieces(pieces);
+      if (!ctrl.replay.active) {
+        var pieces = {};
+        pieces[o.key] = null;
+        ctrl.chessground.setPieces(pieces);
+        if (ctrl.data.game.variant.key === 'atomic')
+          atomic.enpassant(ctrl, o.key);
+      }
       sound.capture();
     },
     reload: function() {

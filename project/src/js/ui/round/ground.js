@@ -1,6 +1,5 @@
 var chessground = require('chessground');
 var game = require('./game');
-var sound = require('../../sound');
 var settings = require('../../settings');
 
 function str2move(m) {
@@ -43,17 +42,17 @@ function makeConfig(data, fen, flip) {
       showGhost: data.pref.highlight,
       distance: 3,
       squareTarget: true
-    },
-    events: {
-      capture: sound.capture
     }
   };
 }
 
-function make(data, fen, userMove) {
+function make(data, fen, userMove, onCapture) {
   var config = makeConfig(data, fen);
   config.movable.events = {
     after: userMove
+  };
+  config.events = {
+    capture: onCapture
   };
   config.viewOnly = data.player.spectator;
   return new chessground.controller(config);

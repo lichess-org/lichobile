@@ -48,7 +48,8 @@ module.exports = {
         ['Chess960', '2'],
         ['King of the hill', '4'],
         ['Three-check', '5'],
-        ['Antichess', '6']
+        ['Antichess', '6'],
+        ['Atomic', '7']
       ],
       variant: localstorageprop('settings.game.human.variant', '1'),
       availableTimeModes: [

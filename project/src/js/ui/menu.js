@@ -138,7 +138,7 @@ menu.view = function() {
         m('h2', i18n('settings'))
       ]),
       m('section', [
-        formWidgets.renderCheckbox(i18n('animations'), 'animations', settings.general.animations),
+        formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', settings.general.animations),
         formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', settings.general.pieceDestinations),
         formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
       ]),

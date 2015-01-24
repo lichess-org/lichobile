@@ -36,12 +36,25 @@
       font-weight normal
       color #FFF
       margin-bottom 1em
-    .perf
-      display inline-block
-      width 40%
-      &:before
-        margin-right 10px
-        color #C4A86F
+    .ratings
+      text-align left
+      .perf
+        display inline-block
+        text-align left
+        width 45%
+        padding 5px 0
+        &:nth-child(even)
+          margin-left 10%
+        .rating
+          float right
+        .name
+          font-weight normal
+          vertical-align top
+          font-size 0.8em
+          color #C4A86F
+          &:before
+            font-size 1.2em
+            margin-right 3px
   button
     background: #454545;
     color: #fff;

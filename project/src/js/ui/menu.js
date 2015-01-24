@@ -50,16 +50,34 @@ menu.close = function() {
   closeSettings();
 };
 
+var perfs = [
+  ['bullet', 'Bullet'],
+  ['chess960', 'Chess960'],
+  ['blitz', 'Blitz'],
+  ['kingOfTheHill', 'KotH'],
+  ['classical', 'Classical'],
+  ['threeCheck', 'Three-check'],
+  ['correspondence', 'Correspondence'],
+  ['antichess', 'Antichess'],
+  null,
+  ['atomic', 'Atomic']
+];
+
 menu.view = function() {
   var userobj = session.get();
   var header = userobj ? [
     m('h2', userobj.username),
-    m('section.ratings', Object.keys(userobj.perfs).map(function(k) {
-      if (displayedPerfs.indexOf(k) !== -1) {
-        var perf = userobj.perfs[k];
-        return m('div.perf[data-icon=' + utils.variantIconsMap[k] + ']', perf.rating);
-      }
-      return null;
+    m('section.ratings', perfs.map(function(p) {
+      if (!p) return m('div.perf');
+      var k = p[0];
+      var name = p[1];
+      var perf = userobj.perfs[k];
+      return m('div.perf', [
+        m('span.rating', perf.rating),
+        m('span.name', {
+          'data-icon': utils.variantIconsMap[k]
+        }, name)
+      ]);
     }))
   ] : [
     m('h2', i18n('notConnected')),

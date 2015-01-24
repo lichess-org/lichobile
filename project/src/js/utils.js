@@ -108,6 +108,14 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
   });
 };
 
+utils.progress = function(p) {
+  if (p === 0) return null;
+  return m('span', {
+    class: 'progress ' + (p > 0 ? 'positive' : 'negative'),
+    'data-icon': p > 0 ? 'N' : 'M'
+  }, Math.abs(p));
+}
+
 utils.classSet = function(classes) {
   var arr = [];
   for (var i in classes) {

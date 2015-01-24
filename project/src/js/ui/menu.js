@@ -9,17 +9,6 @@ var loginModal = require('./loginModal');
 
 var menu = {};
 
-var displayedPerfs = [
-  'chess960',
-  'blitz',
-  'kingOfTheHill',
-  'threeCheck',
-  'antichess',
-  'bullet',
-  'correspondence',
-  'classical'
-];
-
 menu.isOpen = false;
 var settingsOpen = false;
 
@@ -54,7 +43,7 @@ var perfs = [
   ['bullet', 'Bullet'],
   ['chess960', 'Chess960'],
   ['blitz', 'Blitz'],
-  ['kingOfTheHill', 'KotH'],
+  ['kingOfTheHill', 'King Of The Hill'],
   ['classical', 'Classical'],
   ['threeCheck', 'Three-check'],
   ['correspondence', 'Correspondence'],
@@ -64,19 +53,23 @@ var perfs = [
 ];
 
 menu.view = function() {
-  var userobj = session.get();
-  var header = userobj ? [
-    m('h2', userobj.username),
+  var user = session.get();
+  var header = user ? [
+    m('h2', user.username),
     m('section.ratings', perfs.map(function(p) {
       if (!p) return m('div.perf');
       var k = p[0];
       var name = p[1];
-      var perf = userobj.perfs[k];
-      return m('div.perf', [
-        m('span.rating', perf.rating),
-        m('span.name', {
+      var perf = user.perfs[k];
+      return m('div.perf', {
           'data-icon': utils.variantIconsMap[k]
-        }, name)
+      }, [
+        m('span.name', name),
+        m('span.rating', [
+          perf.rating,
+          utils.progress(perf.prog),
+          m('span.nb', '/ ' + perf.games)
+        ])
       ]);
     }))
   ] : [

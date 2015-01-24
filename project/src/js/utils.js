@@ -90,7 +90,7 @@ utils.getViewportDims = function() {
   return viewPortDims;
 };
 
-utils.viewOnlyBoard = function(fen, lastMove, orientation) {
+utils.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
   var config = {
     viewOnly: true,
     minimalDom: true,
@@ -99,7 +99,8 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation) {
     lastMove: lastMove,
     orientation: orientation || 'white'
   };
-  return m('div.board.grey.merida', {
+  return m('div', {
+    class: 'board grey merida' + (variant ? ' ' + variant.key : ''),
     config: function(el, isUpdate, ctx) {
       if (ctx.ground) ctx.ground.set(config);
       else ctx.ground = chessground(el, config);

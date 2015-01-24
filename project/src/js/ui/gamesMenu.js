@@ -164,13 +164,13 @@ function renderAllGames() {
     };
   }
 
-  function renderViewOnlyBoard(fen, lastMove, color) {
+  function renderViewOnlyBoard(fen, lastMove, color, variant) {
     return m('div', {
       style: {
         height: cDim.innerW + 'px'
       }
     }, [
-      utils.viewOnlyBoard(fen, lastMove, color)
+      utils.viewOnlyBoard(fen, lastMove, color, variant)
     ]);
   }
 
@@ -209,7 +209,7 @@ function renderAllGames() {
         gamesMenu.close();
       })
     }, [
-      renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color),
+      renderViewOnlyBoard(g.fen, g.lastMove.match(/.{2}/g), g.color, g.variant),
       m('div.infos', [
         m('div.icon-game', {
           'data-icon': icon ? icon : ''

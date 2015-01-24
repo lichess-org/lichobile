@@ -190,9 +190,9 @@ module.exports = function(ctrl) {
         height: x + 'px'
       }
     }, [
-      m('div.board.grey.merida', [
-        chessground.view(ctrl.chessground), renderPromotion(ctrl)
-      ])
+      m('div', {
+        class: 'board grey merida ' + ctrl.data.game.variant.key
+      }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
     ]);
   }
 

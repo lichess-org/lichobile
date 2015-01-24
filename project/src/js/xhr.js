@@ -3,6 +3,7 @@ var http = require('./http');
 var settings = require('./settings');
 var i18n = require('./i18n');
 var moment = window.moment;
+var semver = require('semver');
 
 function newAiGame() {
   var config = settings.game.ai;
@@ -48,9 +49,9 @@ function status() {
   return http.request('/api/status', {
     background: true
   }).then(function(data) {
-    if (data.current !== http.apiVersion) {
-      for (var i = 0, len = data.olds.length; i < len; i++) {
-        var o = data.olds[i];
+    if (data.api.current !== http.apiVersion) {
+      for (var i = 0, len = data.api.olds.length; i < len; i++) {
+        var o = data.api.olds[i];
         if (o.version === http.apiVersion) {
           var now = new Date(),
             unsupportedDate = new Date(o.unsupportedAt),
@@ -67,6 +68,10 @@ function status() {
           break;
         }
       }
+    } else if (window.lichess.version && semver.gt(data.app.current, window.lichess.version)) {
+      window.navigator.notification.alert(
+        i18n('appUpgradeAvailable')
+      );
     }
   });
 }

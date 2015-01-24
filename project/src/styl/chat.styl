@@ -9,7 +9,7 @@
 
 .chat_msg
   font-weight normal
-  padding 20px
+  padding 15px
   background #fff
   margin-top 20px
   border-top-left-radius: 8px
@@ -68,6 +68,11 @@
     text-align right
     font-style italic
     font-size 0.8em
+    &:before
+      display none
+    & + .chat_msg.system
+      margin-top -10px
+      padding-top 0
 
 .chat_form
   position relative

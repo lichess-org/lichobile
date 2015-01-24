@@ -12,6 +12,24 @@ module.exports = {
     this.unread = false;
     this.scroller = null;
 
+    // this.messages = [
+    //   { c: 'white', t: 'lorde yaya lorde lorde' },
+    //   { c: 'white', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
+    //   { u: 'lichess', t: 'lichess talking' },
+    //   { u: 'lichess', t: 'lichess talking' },
+    //   { c: 'black', t: 'lorde yaya lorde lorde' },
+    //   { c: 'black', t: 'lorde yaya lorde lorde, yayyayayaya lorde' },
+    //   { c: 'white', t: 'lorde yaya lorde lorde' },
+    //   { c: 'black', t: 'lorde yaya lorde lorde, yayyayayaya' },
+    //   { u: 'lichess', t: 'lichess talking' },
+    //   { c: 'black', t: 'lorde yaya ' },
+    //   { c: 'black', t: 'lorde yaya lorde lorde' },
+    //   { c: 'black', t: 'lorde yaya lorde lorde' },
+    //   { c: 'black', t: 'lorde ' },
+    //   { c: 'white', t: 'lorde yaya ' },
+    //   { c: 'white', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' }
+    // ];
+
     this.open = function() {
       this.showing = true;
       setTimeout(function() {
@@ -110,23 +128,25 @@ module.exports = {
         }, [
           m('ul.chat_messages', ctrl.messages.map(function(msg, i, all) {
             var player = ctrl.root.data.player;
+
+            var lichessTalking = msg.u === 'lichess';
             var playerTalking = msg.c ? msg.c === player.color :
-              msg.u === player.user.username;
+              player.user && msg.u === player.user.username;
 
             var closeBalloon = true;
             var next = all[i+1];
             var nextTalking;
             if (next) {
               nextTalking = next.c ? next.c === player.color :
-                next.u === player.user.username;
+                player.user && next.u === player.user.username;
             }
             if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
             return m('li.chat_msg', {
               class: utils.classSet({
-                system: msg.u === 'lichess',
+                system: lichessTalking,
                 player: playerTalking,
-                opponent: !playerTalking,
+                opponent: !lichessTalking && !playerTalking,
                 'close_balloon': closeBalloon
               })
             }, [

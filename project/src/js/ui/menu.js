@@ -20,7 +20,7 @@ var displayedPerfs = [
   'classical'
 ];
 
-menu.isOpen = true;
+menu.isOpen = false;
 var settingsOpen = false;
 
 function openSettings() {

@@ -53,6 +53,7 @@ var perfs = [
 ];
 
 menu.view = function() {
+  if (!menu.isOpen) return;
   var user = session.get();
   var header = user ? [
     m('h2', user.username),

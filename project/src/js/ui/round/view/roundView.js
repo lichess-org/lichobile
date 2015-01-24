@@ -46,6 +46,11 @@ function renderMaterial(material) {
   return children;
 }
 
+function renderCheckCount(ctrl, color) {
+  var player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
+  if (typeof player.checks !== 'undefined') return m('div.checks', player.checks);
+}
+
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
     m('div.vertical_align', [
@@ -56,6 +61,7 @@ function renderAntagonist(ctrl, player, material) {
             player.rating,
             ratingDiff(player)
           ]) : null,
+          renderCheckCount(ctrl, player.color),
           renderMaterial(material)
         ])
       ]),

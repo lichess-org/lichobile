@@ -62,6 +62,12 @@ module.exports = function(ctrl) {
       }
       sound.capture();
     },
+    checkCount: function(e) {
+      var isWhite = ctrl.data.player.color === 'white';
+      ctrl.data.player.checks = isWhite ? e.white : e.black;
+      ctrl.data.opponent.checks = isWhite ? e.black : e.white;
+      m.redraw();
+    },
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
     },

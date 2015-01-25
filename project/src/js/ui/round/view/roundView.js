@@ -150,13 +150,13 @@ function renderGameButtons(ctrl) {
       }),
       config: utils.ontouchend(ctrl.showActions)
     }),
-    m('button#open_chat.game_action[data-icon=c]', {
+    false ? m('button#open_chat.game_action[data-icon=c]', {
       class: utils.classSet({
         disabled: !ctrl.chat,
         unread: ctrl.chat.unread
       }),
       config: utils.ontouchend(ctrl.chat.open || utils.noop)
-    }),
+    }) : m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
   return m('section#game_actions', actions);

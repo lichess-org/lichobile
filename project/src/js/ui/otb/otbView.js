@@ -60,6 +60,7 @@ function renderGameButtons(ctrl) {
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       config: utils.ontouchend(ctrl.showActions)
     }),
+    m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
   return m('section#game_actions', actions);

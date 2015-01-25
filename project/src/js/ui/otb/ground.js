@@ -6,10 +6,10 @@ function str2move(m) {
   return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
 }
 
-function makeConfig(data, fen, flip) {
+function makeConfig(data, fen) {
   return {
     fen: fen,
-    orientation: flip ? data.opponent.color : data.player.color,
+    orientation: data.player.color,
     turnColor: data.game.player,
     lastMove: str2move(data.game.lastMove),
     check: data.game.check,
@@ -66,8 +66,8 @@ function make(data, fen, userMove, onCapture) {
   return new chessground.controller(config);
 }
 
-function reload(ground, data, fen, flip) {
-  ground.set(makeConfig(data, fen, flip));
+function reload(ground, data, fen) {
+  ground.set(makeConfig(data, fen));
 }
 
 function promote(ground, key, role) {

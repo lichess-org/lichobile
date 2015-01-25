@@ -1,4 +1,5 @@
 var chessground = require('chessground');
+var opposite = chessground.util.opposite;
 var layout = require('../layout');
 var widgets = require('../_commonWidgets');
 var menu = require('../menu');
@@ -36,7 +37,7 @@ function renderGameActions(ctrl) {
   return [
     m('div.actions', [
       m('button[data-icon=U]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.init))
+        config: utils.ontouchend(utils.ƒ(ctrl.initAs, opposite(d.player.color)))
       }, i18n('createAGame')),
       m('br'), m('br'), m('button[data-icon=L]', {
       config: utils.ontouchend(ctrl.hideActions)
@@ -102,5 +103,5 @@ module.exports = function(ctrl) {
     return menu.view(utils.partialƒ(ground.applySettings, ctrl.chessground));
   }
 
-  return layout.board(header, board, footer, renderMenu, null, 'white');
+  return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
 };

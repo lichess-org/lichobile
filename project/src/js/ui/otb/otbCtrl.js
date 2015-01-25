@@ -40,6 +40,10 @@ module.exports = function(cfg) {
     this.replay.apply();
   }.bind(this);
 
+  this.initAs = function(color) {
+    this.init(makeData({color: color}));
+  }.bind(this);
+
   var saved = storage.get(storageKey);
   if (saved) this.init(saved.data, saved.situations, saved.ply);
   else this.init();

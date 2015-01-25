@@ -1,4 +1,9 @@
+var opposite = require('chessground').util.opposite;
+
 module.exports = function(cfg) {
+
+  cfg = cfg || {};
+  cfg.color = cfg.color || 'white';
 
   return {
     "game": {
@@ -11,17 +16,17 @@ module.exports = function(cfg) {
       },
       "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "player": "white",
+      "player": 'white',
       "status": {
         "id": 20,
         "name": "started"
       }
     },
     "player": {
-      "color": "white"
+      "color": cfg.color
     },
     "opponent": {
-      "color": "black"
+      "color": opposite(cfg.color)
     },
     "pref": {
       "highlight": true,

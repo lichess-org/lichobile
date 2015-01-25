@@ -15,8 +15,7 @@ module.exports = function(cfg) {
       "status": {
         "id": 20,
         "name": "started"
-      },
-      "moves": []
+      }
     },
     "player": {
       "color": "white"

@@ -4,7 +4,6 @@ var game = require('../../round/game');
 module.exports = function(root) {
 
   this.root = root;
-  this.ply = 0;
 
   var gameVariants = {
     'chess960': 1,
@@ -13,17 +12,21 @@ module.exports = function(root) {
   };
   var chessVariant = gameVariants[root.data.game.variant.key] || 0;
 
-  var chess = new Chess(root.data.game.initialFen, chessVariant);
-  this.situations = [{
-    fen: root.data.game.initialFen,
-    turnColor: 'white',
-    movable: {
-      color: 'white',
-      dests: chess.dests()
-    },
-    check: false,
-    lastMove: null
-  }];
+  this.init = function() {
+    var chess = new Chess(root.data.game.initialFen, chessVariant);
+    this.situations = [{
+      fen: root.data.game.initialFen,
+      turnColor: 'white',
+      movable: {
+        color: 'white',
+        dests: chess.dests()
+      },
+      check: false,
+      lastMove: null
+    }];
+    this.ply = 0;
+  };
+  this.init();
 
   this.apply = function() {
     root.chessground.set(this.situations[this.ply]);

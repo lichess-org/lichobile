@@ -12,11 +12,6 @@ var replayCtrl = require('./replay/replayCtrl');
 
 module.exports = function(cfg) {
 
-  this.data = data(cfg);
-  this.vm = {
-    showingActions: !game.playable(this.data)
-  };
-
   var userMove = function(orig, dest) {
     promotion.start(this, orig, dest);
     sound.move();
@@ -28,10 +23,28 @@ module.exports = function(cfg) {
     sound.capture();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, this.data.game.fen, userMove, onCapture);
+  this.init = function() {
+    this.data = data(cfg);
+    this.vm = {
+      showingActions: false
+    };
+    if (!this.chessground)
+      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onCapture);
+    else ground.reload(this.chessground, this.data, this.data.game.fen);
+    if (!this.replay) this.replay = new replayCtrl(this);
+    else this.replay.init();
+    this.replay.apply();
+  }.bind(this);
+  this.init();
 
-  this.replay = new replayCtrl(this);
-  this.replay.apply();
+  this.showActions = function() {
+    menu.close();
+    this.vm.showingActions = true;
+  }.bind(this);
+
+  this.hideActions = function() {
+    this.vm.showingActions = false;
+  }.bind(this);
 
   window.plugins.insomnia.keepAwake();
 

@@ -30,10 +30,34 @@ function renderGameEndedActions(ctrl) {
   ];
 }
 
+function renderGameActions(ctrl) {
+  var d = ctrl.data;
+  return [
+    m('div.actions', [
+      m('button[data-icon=U]', {
+        config: utils.ontouchend(utils.ƒ(ctrl.init))
+      }, i18n('createAGame')),
+      m('br'), m('br'), m('button[data-icon=L]', {
+      config: utils.ontouchend(ctrl.hideActions)
+    }, i18n('backToGame'))
+    ])
+  ];
+}
+
+function renderPlayerActions(ctrl) {
+  if (!ctrl.vm.showingActions) return;
+  return m('div.overlay', [
+    m('button.overlay_close.fa.fa-close', {
+      config: utils.ontouchend(ctrl.hideActions)
+    }),
+    m('div#player_controls.overlay_content', renderGameActions(ctrl))
+  ]);
+}
+
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      // config: utils.ontouchend(ctrl.showActions)
+      config: utils.ontouchend(ctrl.showActions)
     }),
     replayView.renderButtons(ctrl.replay)
   ];
@@ -45,7 +69,10 @@ module.exports = function(ctrl) {
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
 
   function footer() {
-    return renderGameButtons(ctrl);
+    return [
+      renderGameButtons(ctrl),
+      renderPlayerActions(ctrl)
+    ];
   }
 
   function header() {

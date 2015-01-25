@@ -8,6 +8,7 @@ var utils = require('../../../utils');
 var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
+var ground = require('../ground');
 var gameStatus = require('../status');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
@@ -127,11 +128,8 @@ function renderGameEndedActions(ctrl) {
 }
 
 function renderPlayerActions(ctrl) {
-  return m('div.overlay.overlay_scale', {
-    class: utils.classSet({
-      open: ctrl.vm.showingActions
-    })
-  }, [
+  if (!ctrl.vm.showingActions) return;
+  return m('div.overlay', [
     m('button.overlay_close.fa.fa-close', {
       config: utils.ontouchend(ctrl.hideActions)
     }),
@@ -212,7 +210,11 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  return layout.board(header, board, footer, menu.view, null, ctrl.data.player.color);
+  function renderMenu() {
+    return menu.view(utils.partialƒ(ground.applySettings, ctrl.chessground));
+  }
+
+  return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
 };
 
 module.exports.renderMaterial = renderMaterial;

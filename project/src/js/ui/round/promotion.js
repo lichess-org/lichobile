@@ -38,13 +38,16 @@ module.exports = {
   start: start,
 
   view: function(ctrl) {
-    return promoting ? m('div.overlay', [m('div#promotion_choice', {
+    if (!promoting) return;
+    var pieces = ['queen', 'knight', 'rook', 'bishop'];
+    if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
+    return m('div.overlay', [m('div#promotion_choice', {
       config: utils.ontouchend(partial(cancel, ctrl)),
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
-    }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
+    }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
         config: utils.ontouchend(utils.ƒ(finish, ctrl, role))
       });
-    }))]) : null;
+    }))]);
   }
 };

@@ -1,9 +1,12 @@
+var Chess = require('chessli.js').Chess;
 var opposite = require('chessground').util.opposite;
 
 module.exports = function(cfg) {
 
   cfg = cfg || {};
   cfg.color = cfg.color || 'white';
+  cfg.fen = cfg.fen || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  var chess = new Chess(cfg.fen);
 
   return {
     "game": {
@@ -14,9 +17,9 @@ module.exports = function(cfg) {
         "short": "STD",
         "title": "Standard rules of chess (FIDE)"
       },
-      "initialFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "player": 'white',
+      "initialFen": cfg.fen,
+      "fen": cfg.fen,
+      "player": chess.turn() === 'w' ? 'white' : 'black',
       "status": {
         "id": 20,
         "name": "started"

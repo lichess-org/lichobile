@@ -16,21 +16,25 @@ function promote(ground, key, role) {
   }
 }
 
-function start(ctrl, orig, dest, isPremove) {
+function start(ctrl, orig, dest, callback) {
   var piece = ctrl.chessground.data.pieces[dest];
   if (piece && piece.role === 'pawn' && (
-    (dest[1] === '8' && ctrl.data.player.color === 'white') ||
-    (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
-    m.startComputation();
-    promoting = [orig, dest];
-    m.endComputation();
+    (dest[1] === '1' && ctrl.chessground.data.turnColor === 'white') ||
+    (dest[1] === '8' && ctrl.chessground.data.turnColor === 'black'))) {
+    promoting = {
+      orig: orig,
+      dest: dest,
+      callback: callback
+    };
+    m.redraw();
     return true;
   }
   return false;
 }
 
 function finish(ground, role) {
-  if (promoting) promote(ground, promoting[1], role);
+  if (promoting) promote(ground, promoting.dest, role);
+  if (promoting.callback) promoting.callback(promoting.orig, promoting.dest, role);
   promoting = false;
 }
 

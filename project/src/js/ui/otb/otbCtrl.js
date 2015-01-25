@@ -15,12 +15,20 @@ module.exports = function(cfg) {
 
   var storageKey = 'otb.current';
 
+  var onPromotion = function(orig, dest, role) {
+      sound.move();
+      this.replay.addMove(orig, dest, role);
+      save();
+      m.redraw();
+  }.bind(this);
+
   var userMove = function(orig, dest) {
-    promotion.start(this, orig, dest);
-    sound.move();
-    this.replay.addMove(orig, dest);
-    save();
-    m.redraw();
+    if (!promotion.start(this, orig, dest, onPromotion)) {
+      sound.move();
+      this.replay.addMove(orig, dest);
+      save();
+      m.redraw();
+    }
   }.bind(this);
 
   var onCapture = function(key) {
@@ -41,7 +49,9 @@ module.exports = function(cfg) {
   }.bind(this);
 
   this.initAs = function(color) {
-    this.init(makeData({color: color}));
+    this.init(makeData({
+      color: color
+    }));
   }.bind(this);
 
   var saved = storage.get(storageKey);

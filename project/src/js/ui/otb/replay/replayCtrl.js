@@ -18,9 +18,9 @@ module.exports = function(root, situations, ply) {
       var chess = new Chess(root.data.game.initialFen, chessVariant);
       this.situations = [{
         fen: root.data.game.initialFen,
-        turnColor: 'white',
+        turnColor: root.data.game.player,
         movable: {
-          color: 'white',
+          color: root.data.game.player,
           dests: chess.dests()
         },
         check: false,
@@ -41,13 +41,17 @@ module.exports = function(root, situations, ply) {
     this.apply();
   }.bind(this);
 
+  var forsyth = function(role) {
+    return role === 'knight' ? 'n' : role[0];
+  };
+
   this.addMove = function(orig, dest, promotion) {
     var situation = this.situations[this.ply];
     var chess = new Chess(situation.fen, chessVariant);
     var move = chess.move({
       from: orig,
       to: dest,
-      promotion: (dest[1] == 1 || dest[1] == 8) ? (promotion || 'q') : null
+      promotion: (dest[1] == 1 || dest[1] == 8) ? (promotion ? forsyth(promotion) : 'q') : null
     });
     this.ply++;
     var turnColor = chess.turn() === 'w' ? 'white' : 'black';

@@ -153,9 +153,8 @@ function renderGameButtons(ctrl) {
       }),
       config: utils.ontouchend(ctrl.showActions)
     }),
-    false ? m('button#open_chat.game_action[data-icon=c]', {
+    ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
       class: utils.classSet({
-        disabled: !ctrl.chat,
         unread: ctrl.chat.unread
       }),
       config: utils.ontouchend(ctrl.chat.open || utils.noop)

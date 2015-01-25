@@ -1,7 +1,7 @@
 var Chess = require('chessli.js').Chess;
 var game = require('../../round/game');
 
-module.exports = function(root) {
+module.exports = function(root, situations, ply) {
 
   this.root = root;
 
@@ -12,21 +12,24 @@ module.exports = function(root) {
   };
   var chessVariant = gameVariants[root.data.game.variant.key] || 0;
 
-  this.init = function() {
-    var chess = new Chess(root.data.game.initialFen, chessVariant);
-    this.situations = [{
-      fen: root.data.game.initialFen,
-      turnColor: 'white',
-      movable: {
-        color: 'white',
-        dests: chess.dests()
-      },
-      check: false,
-      lastMove: null
-    }];
-    this.ply = 0;
+  this.init = function(situations, ply) {
+    if (situations) this.situations = situations;
+    else {
+      var chess = new Chess(root.data.game.initialFen, chessVariant);
+      this.situations = [{
+        fen: root.data.game.initialFen,
+        turnColor: 'white',
+        movable: {
+          color: 'white',
+          dests: chess.dests()
+        },
+        check: false,
+        lastMove: null
+      }];
+    }
+    this.ply = ply || 0;
   };
-  this.init();
+  this.init(situations, ply);
 
   this.apply = function() {
     root.chessground.set(this.situations[this.ply]);

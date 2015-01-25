@@ -14,6 +14,17 @@ module.exports = {
     pieceDestinations: localstorageprop('settings.pieceDestinations', false),
     sound: localstorageprop('settings.sound', true)
   },
+  onChange: function(prop, callback) {
+    if (!callback) return prop;
+    return function() {
+      if (arguments.length) {
+        var res = prop(arguments[0]);
+        if (callback) callback(res);
+        return res;
+      }
+      return prop();
+    };
+  },
   game: {
     selected: localstorageprop('settings.game.selected', 'human'),
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',

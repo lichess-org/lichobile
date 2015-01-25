@@ -8,6 +8,7 @@ var utils = require('../../../utils');
 var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
+var ground = require('../ground');
 var gameStatus = require('../status');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
@@ -209,5 +210,9 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  return layout.board(header, board, footer, menu.view, null, ctrl.data.player.color);
+  function renderMenu() {
+    return menu.view(utils.partialƒ(ground.applySettings, ctrl.chessground));
+  }
+
+  return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
 };

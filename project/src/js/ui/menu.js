@@ -56,7 +56,7 @@ var perfs = [
   ['atomic', 'Atomic']
 ];
 
-menu.view = function() {
+menu.view = function(onSettingChange) {
   if (!menu.isOpen) return;
   if (settingsOpen) return m('div#settings', [
     m('header', [
@@ -66,8 +66,10 @@ menu.view = function() {
       m('h2', i18n('settings'))
     ]),
     m('section', [
-      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', settings.general.animations),
-      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', settings.general.pieceDestinations),
+      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', 
+        settings.onChange(settings.general.animations, onSettingChange)),
+      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', 
+        settings.onChange(settings.general.pieceDestinations, onSettingChange)),
       formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
     ]),
     m('section.app_version', window.lichess.version)

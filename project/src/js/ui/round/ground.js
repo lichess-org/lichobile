@@ -46,6 +46,20 @@ function makeConfig(data, fen, flip) {
   };
 }
 
+function applySettings(ground) {
+  ground.set({
+    movable: {
+      showDests: settings.general.pieceDestinations()
+    },
+    animation: {
+      enabled: settings.general.animations()
+    },
+    premovable: {
+      showDests: settings.general.pieceDestinations()
+    }
+  })
+};
+
 function make(data, fen, userMove, onCapture) {
   var config = makeConfig(data, fen);
   config.movable.events = {
@@ -82,5 +96,6 @@ module.exports = {
   make: make,
   reload: reload,
   promote: promote,
-  end: end
+  end: end,
+  applySettings: applySettings
 };

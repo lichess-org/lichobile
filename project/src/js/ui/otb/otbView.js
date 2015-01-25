@@ -87,7 +87,7 @@ module.exports = function(ctrl) {
     return m('nav', [
       widgets.menuButton(),
       widgets.gameButton(),
-      m('h1.playing', 'OTB')
+      m('h1.playing', i18n('playOnTheBoardOffline'))
     ]);
   }
 

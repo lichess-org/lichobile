@@ -30,8 +30,7 @@ module.exports = function(cfg) {
     },
     "pref": {
       "highlight": true,
-      "destination": true,
-      "animationDuration": 300
+      "destination": true
     }
   };
 };

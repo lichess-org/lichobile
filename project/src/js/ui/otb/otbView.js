@@ -2,6 +2,7 @@ var chessground = require('chessground');
 var layout = require('../layout');
 var widgets = require('../_commonWidgets');
 var menu = require('../menu');
+var ground = require('./ground');
 var renderPromotion = require('./promotion').view;
 var utils = require('../../utils');
 var i18n = require('../../i18n');
@@ -96,5 +97,9 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  return layout.board(header, board, footer, menu.view, null, 'white');
+  function renderMenu() {
+    return menu.view(utils.partialƒ(ground.applySettings, ctrl.chessground));
+  }
+
+  return layout.board(header, board, footer, renderMenu, null, 'white');
 };

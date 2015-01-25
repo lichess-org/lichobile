@@ -86,7 +86,7 @@ module.exports = function(ctrl) {
 
   function board() {
     var x = utils.getViewportDims().vw;
-    return m('section.board_wrapper', {
+    return m('section.board_wrapper.otb', {
       style: {
         height: x + 'px'
       }

@@ -34,10 +34,6 @@ menu.toggle = function() {
   menu.isOpen = !menu.isOpen;
 };
 
-menu.open = function() {
-  menu.isOpen = true;
-};
-
 menu.close = function() {
   menu.isOpen = false;
   closeSettings();
@@ -57,23 +53,6 @@ var perfs = [
 ];
 
 menu.view = function(onSettingChange) {
-  if (!menu.isOpen) return;
-  if (settingsOpen) return m('div#settings', [
-    m('header', [
-      m('button[data-icon=L]', {
-        config: utils.ontouchend(closeSettings)
-      }),
-      m('h2', i18n('settings'))
-    ]),
-    m('section', [
-      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
-        settings.onChange(settings.general.animations, onSettingChange)),
-      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
-        settings.onChange(settings.general.pieceDestinations, onSettingChange)),
-      formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
-    ]),
-    m('section.app_version', window.lichess.version)
-  ]);
   var user = session.get();
   var header = user ? [
     m('h2', user.username),
@@ -140,7 +119,29 @@ menu.view = function(onSettingChange) {
   }
   return [
     m('header.side_menu_header', header),
-    m('nav#side_links', m('ul', links))
+    m('nav#side_links', [
+      m('ul', links)
+    ]),
+    m('div#settings', {
+      class: utils.classSet({
+        show: settingsOpen
+      })
+    }, [
+      m('header', [
+        m('button[data-icon=L]', {
+          config: utils.ontouchend(closeSettings)
+        }),
+        m('h2', i18n('settings'))
+      ]),
+      m('section', [
+        formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
+          settings.onChange(settings.general.animations, onSettingChange)),
+        formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
+          settings.onChange(settings.general.pieceDestinations, onSettingChange)),
+        formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
+      ]),
+      m('section.app_version', window.lichess.version)
+    ])
   ];
 };
 

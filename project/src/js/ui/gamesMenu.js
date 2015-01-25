@@ -29,7 +29,7 @@ gamesMenu.openNewGame = function() {
 
 gamesMenu.openCurrentGames = function() {
   gamesMenu.open();
-  scroller.goToPage(1, 0);
+  if (scroller) scroller.goToPage(1, 0);
 };
 
 gamesMenu.isOpen = function() {

@@ -13,6 +13,7 @@ var xhr = require('./xhr');
 var home = require('./ui/home');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
+var otb = require('./ui/otb/main');
 
 var refreshInterval = 60000;
 var refreshIntervalID;
@@ -35,6 +36,7 @@ function main() {
   m.route(document.body, '/', {
     '/': home,
     '/seek': seek,
+    '/otb': otb,
     '/play/:id': play
   });
 

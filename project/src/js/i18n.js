@@ -17,7 +17,8 @@ var untranslated = {
   clock: 'Clock',
   loginSuccessfull: 'Login successful',
   resumeGame: 'Resume game',
-  signedOut: 'You\'ve been signed out'
+  signedOut: 'You\'ve been signed out',
+  playOnTheBoard: 'Play on the board'
 };
 
 var defaultCode = 'en';

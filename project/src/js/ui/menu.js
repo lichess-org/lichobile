@@ -113,7 +113,13 @@ menu.view = function(onSettingChange) {
         menu.close();
         gamesMenu.openNewGame();
       })
-    }, i18n('createAGame'))
+    }, i18n('createAGame')),
+    m('li.side_link', {
+      config: utils.ontouchend(function() {
+        menu.close();
+        m.route('/otb');
+      })
+    }, i18n('playOnTheBoard'))
   ];
   if (session.isConnected()) {
     links.unshift(

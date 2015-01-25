@@ -216,3 +216,5 @@ module.exports = function(ctrl) {
 
   return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
 };
+
+module.exports.renderMaterial = renderMaterial;

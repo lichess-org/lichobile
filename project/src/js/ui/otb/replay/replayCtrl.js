@@ -10,17 +10,17 @@ module.exports = function(root, situations, ply) {
     'antichess': 2,
     'atomic': 3
   };
-  var chessVariant = gameVariants[root.data.game.variant.key] || 0;
+  var chessVariant = gameVariants[this.root.data.game.variant.key] || 0;
 
   this.init = function(situations, ply) {
     if (situations) this.situations = situations;
     else {
-      var chess = new Chess(root.data.game.initialFen, chessVariant);
+      var chess = new Chess(this.root.data.game.initialFen, chessVariant);
       this.situations = [{
-        fen: root.data.game.initialFen,
-        turnColor: root.data.game.player,
+        fen: this.root.data.game.initialFen,
+        turnColor: this.root.data.game.player,
         movable: {
-          color: root.data.game.player,
+          color: this.root.data.game.player,
           dests: chess.dests()
         },
         check: false,
@@ -28,11 +28,15 @@ module.exports = function(root, situations, ply) {
       }];
     }
     this.ply = ply || 0;
-  };
+  }.bind(this);
   this.init(situations, ply);
 
+  this.situation = function() {
+    return this.situations[this.ply];
+  }.bind(this);
+
   this.apply = function() {
-    root.chessground.set(this.situations[this.ply]);
+    this.root.chessground.set(this.situation());
   }.bind(this);
 
   this.jump = function(ply) {
@@ -46,12 +50,13 @@ module.exports = function(root, situations, ply) {
   };
 
   this.addMove = function(orig, dest, promotion) {
-    var situation = this.situations[this.ply];
+    var situation = this.situation();
     var chess = new Chess(situation.fen, chessVariant);
+    var promotionLetter = (dest[1] == 1 || dest[1] == 8) ? (promotion ? forsyth(promotion) : 'q') : null;
     var move = chess.move({
       from: orig,
       to: dest,
-      promotion: (dest[1] == 1 || dest[1] == 8) ? (promotion ? forsyth(promotion) : 'q') : null
+      promotion: promotionLetter
     });
     this.ply++;
     var turnColor = chess.turn() === 'w' ? 'white' : 'black';
@@ -65,8 +70,26 @@ module.exports = function(root, situations, ply) {
         dests: chess.dests()
       },
       check: chess.in_check(),
-      lastMove: [move.from, move.to]
+      lastMove: [move.from, move.to],
+      promotion: promotionLetter
     });
     this.apply();
   };
+
+  this.pgn = function() {
+    var chess = new Chess(this.root.data.game.initialFen, chessVariant);
+    this.situations.forEach(function(sit) {
+      if (sit.lastMove) chess.move({
+        from: sit.lastMove[0],
+        to: sit.lastMove[1],
+        promotion: sit.promotion
+      });
+    });
+    chess.header('Event', 'Casual game');
+    chess.header('Site', 'http://lichess.org');
+    chess.header('Date', moment().format('YYYY.MM.DD'));
+    // chess.header('Result', game.result(this.root.data));
+    chess.header('Variant', 'Standard');
+    return chess.pgn({ max_width: 30, newline_char: '<br />' });
+  }.bind(this);
 };

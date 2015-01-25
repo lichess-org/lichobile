@@ -38,7 +38,8 @@ module.exports = function(cfg) {
   this.init = function(data, situations, ply) {
     this.data = data || makeData(cfg);
     this.vm = {
-      showingActions: false
+      showingActions: false,
+      showingPgn: false
     };
     if (!this.chessground)
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onCapture);
@@ -73,6 +74,16 @@ module.exports = function(cfg) {
 
   this.hideActions = function() {
     this.vm.showingActions = false;
+  }.bind(this);
+
+  this.showPgn = function() {
+    menu.close();
+    this.hideActions();
+    this.vm.showingPgn = true;
+  }.bind(this);
+
+  this.hidePgn = function() {
+    this.vm.showingPgn = false;
   }.bind(this);
 
   window.plugins.insomnia.keepAwake();

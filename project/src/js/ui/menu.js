@@ -119,7 +119,7 @@ menu.view = function(onSettingChange) {
         menu.close();
         m.route('/otb');
       })
-    }, i18n('playOnTheBoard'))
+    }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {
     links.unshift(

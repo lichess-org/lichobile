@@ -13,17 +13,7 @@ var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
 
 function renderGameEndedActions(ctrl) {
-  var result;
-  if (gameStatus.finished(ctrl.data)) switch (ctrl.data.game.winner) {
-    case 'white':
-      result = '1-0';
-      break;
-    case 'black':
-      result = '0-1';
-      break;
-    default:
-      result = '½-½';
-  }
+  var result = game.result(ctrl.data.game);
   var status = gameStatus.toLabel(ctrl.data) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   return [
@@ -39,6 +29,9 @@ function renderGameActions(ctrl) {
       m('button[data-icon=U]', {
         config: utils.ontouchend(utils.ƒ(ctrl.initAs, opposite(d.player.color)))
       }, i18n('createAGame')),
+      m('button[data-icon=A]', {
+        config: utils.ontouchend(ctrl.showPgn)
+      }, i18n('showPgn')),
       m('br'), m('br'), m('button[data-icon=L]', {
       config: utils.ontouchend(ctrl.hideActions)
     }, i18n('backToGame'))
@@ -53,6 +46,17 @@ function renderPlayerActions(ctrl) {
       config: utils.ontouchend(ctrl.hideActions)
     }),
     m('div#player_controls.overlay_content', renderGameActions(ctrl))
+  ]);
+}
+
+function renderPgn(ctrl) {
+  if (!ctrl.vm.showingPgn) return;
+  var pgn = ctrl.replay.pgn();
+  return m('div.overlay', [
+    m('button.overlay_close.fa.fa-close', {
+      config: utils.ontouchend(ctrl.hidePgn)
+    }),
+    m('div.overlay_content', m.trust(pgn))
   ]);
 }
 
@@ -74,7 +78,8 @@ module.exports = function(ctrl) {
   function footer() {
     return [
       renderGameButtons(ctrl),
-      renderPlayerActions(ctrl)
+      renderPlayerActions(ctrl),
+      renderPgn(ctrl)
     ];
   }
 

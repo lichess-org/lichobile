@@ -79,6 +79,20 @@ function nbMoves(data, color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
+function result(data) {
+  if (gameStatus.finished(data)) switch (data.game.winner) {
+    case 'white':
+      return '1-0';
+      break;
+    case 'black':
+      return '0-1';
+      break;
+    default:
+      return '½-½';
+  }
+  return '*';
+}
+
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
   isPlayerTurn: isPlayerTurn,
@@ -95,5 +109,6 @@ module.exports = {
   parsePossibleMoves: parsePossibleMoves,
   nbMoves: nbMoves,
   setOnGame: setOnGame,
-  setIsGone: setIsGone
+  setIsGone: setIsGone,
+  result: result
 };

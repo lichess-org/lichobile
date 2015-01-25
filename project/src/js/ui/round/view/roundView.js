@@ -128,8 +128,11 @@ function renderGameEndedActions(ctrl) {
 }
 
 function renderPlayerActions(ctrl) {
-  if (!ctrl.vm.showingActions) return;
-  return m('div.overlay', [
+  return m('div.overlay.overlay_scale', {
+    class: utils.classSet({
+      open: ctrl.vm.showingActions
+    })
+  }, [
     m('button.overlay_close.fa.fa-close', {
       config: utils.ontouchend(ctrl.hideActions)
     }),

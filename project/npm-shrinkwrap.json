@@ -944,9 +944,9 @@
       }
     },
     "chessli.js": {
-      "version": "0.4.0",
-      "from": "chessli.js@0.4.0",
-      "resolved": "https://registry.npmjs.org/chessli.js/-/chessli.js-0.4.0.tgz"
+      "version": "1.0.0",
+      "from": "chessli.js@1.0.0",
+      "resolved": "https://registry.npmjs.org/chessli.js/-/chessli.js-1.0.0.tgz"
     },
     "iscroll": {
       "version": "5.1.3",

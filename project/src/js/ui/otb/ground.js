@@ -6,7 +6,7 @@ function str2move(m) {
   return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
 }
 
-function makeConfig(data, situation, flip) {
+function makeConfig(data, fen, flip) {
   return {
     fen: fen,
     orientation: flip ? data.opponent.color : data.player.color,
@@ -22,7 +22,7 @@ function makeConfig(data, situation, flip) {
     },
     movable: {
       free: false,
-      color: data.player.color,
+      color: game.isPlayerPlaying(data) ? data.player.color : null,
       dests: game.parsePossibleMoves(data.possibleMoves),
       showDests: settings.general.pieceDestinations()
     },
@@ -31,12 +31,7 @@ function makeConfig(data, situation, flip) {
       duration: data.pref.animationDuration
     },
     premovable: {
-      enabled: data.pref.enablePremove,
-      showDests: settings.general.pieceDestinations(),
-      events: {
-        set: m.redraw,
-        unset: m.redraw
-      }
+      enabled: false,
     },
     draggable: {
       showGhost: data.pref.highlight,
@@ -46,6 +41,20 @@ function makeConfig(data, situation, flip) {
   };
 }
 
+function applySettings(ground) {
+  ground.set({
+    movable: {
+      showDests: settings.general.pieceDestinations()
+    },
+    animation: {
+      enabled: settings.general.animations()
+    },
+    premovable: {
+      showDests: settings.general.pieceDestinations()
+    }
+  })
+};
+
 function make(data, fen, userMove, onCapture) {
   var config = makeConfig(data, fen);
   config.movable.events = {
@@ -54,7 +63,6 @@ function make(data, fen, userMove, onCapture) {
   config.events = {
     capture: onCapture
   };
-  config.viewOnly = data.player.spectator;
   return new chessground.controller(config);
 }
 
@@ -82,5 +90,6 @@ module.exports = {
   make: make,
   reload: reload,
   promote: promote,
-  end: end
+  end: end,
+  applySettings: applySettings
 };

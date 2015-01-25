@@ -8,6 +8,7 @@ var i18n = require('../../i18n');
 var game = require('../round/game');
 var gameStatus = require('../round/status');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
+var replayView = require('./replay/replayView');
 
 function renderGameEndedActions(ctrl) {
   var result;
@@ -34,7 +35,7 @@ function renderGameButtons(ctrl) {
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       // config: utils.ontouchend(ctrl.showActions)
     }),
-    // replayView.renderButtons(ctrl.replay)
+    replayView.renderButtons(ctrl.replay)
   ];
   return m('section#game_actions', actions);
 }

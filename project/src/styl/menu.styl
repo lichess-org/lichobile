@@ -38,39 +38,40 @@
       margin-bottom 1em
     .ratings
       text-align left
-      .perf
-        display inline-block
-        text-align left
-        width 45%
-        padding 5px 0
+    .perf
+      display inline-block
+      text-align left
+      width 45%
+      padding 5px 0
+      overflow hidden
+      line-height 1.2em
+      &:nth-child(even)
+        margin-left 10%
+      &:before
+        color #C4A86F
+        font-size 2.4em
+        float left
+        margin-right 5px
+      & > .rating
+        display block
+        & > .progress, & > .nb
+          font-size 0.8em
+          margin-left 0.5em
+        & > .progress
+          &.positive
+            color #759900
+          &.negative
+            color #ac524f
+          &::before
+            vertical-align middle
+            margin-right 1px
+        & > .nb
+          opacity 0.4
+      & > .name
+        color #C4A86F
+        white-space nowrap
         overflow hidden
-        line-height 1.2em
-        &:nth-child(even)
-          margin-left 10%
-        &:before
-          color #C4A86F
-          font-size 2.4em
-          float left
-          margin-right 5px
-        .rating
-          display block
-          *
-            font-size 0.8em
-            margin-left 0.5em
-          .progress
-            &.positive
-              color #759900
-            &.negative
-              color #ac524f
-            &::before
-              vertical-align middle
-              margin-right 1px
-          .nb
-            opacity 0.4
-        .name
-          color #C4A86F
-          white-space nowrap
-          overflow hidden
+        text-overflow ellipsis
   button
     background: #454545;
     color: #fff;

@@ -66,9 +66,9 @@ menu.view = function(onSettingChange) {
       m('h2', i18n('settings'))
     ]),
     m('section', [
-      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations', 
+      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.onChange(settings.general.animations, onSettingChange)),
-      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations', 
+      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.onChange(settings.general.pieceDestinations, onSettingChange)),
       formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
     ]),
@@ -86,7 +86,7 @@ menu.view = function(onSettingChange) {
           'data-icon': utils.variantIconsMap[k]
       }, [
         m('span.name', name),
-        m('span.rating', [
+        m('div.rating', [
           perf.rating,
           utils.progress(perf.prog),
           m('span.nb', '/ ' + perf.games)
@@ -115,10 +115,7 @@ menu.view = function(onSettingChange) {
       })
     }, i18n('createAGame')),
     m('li.side_link', {
-      config: utils.ontouchend(function() {
-        menu.close();
-        m.route('/otb');
-      })
+      config: utils.ontouchend(menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {

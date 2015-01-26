@@ -1,10 +1,18 @@
-var mapValues = require('lodash-node/modern/objects/mapValues');
 var gameStatus = require('./status');
 
 function parsePossibleMoves(possibleMoves) {
-  return mapValues(possibleMoves, function(moves) {
-    return moves.match(/.{2}/g);
-  });
+  if (!possibleMoves) return {};
+  var r = {};
+  var keys = Object.keys(possibleMoves);
+  for (var i = 0; i < keys.length; i++) {
+    var m = possibleMoves[keys[i]];
+    var a = [];
+    for (var j = 0; j < m.length; j += 2) {
+      a.push(m.substr(j, 2));
+    }
+    r[keys[i]] = a;
+  }
+  return r;
 }
 
 function playable(data) {

@@ -276,6 +276,7 @@ function renderAllGames() {
 }
 
 gamesMenu.view = function() {
+  if (!isOpen) return;
   var children = [
     m('button.overlay_close.fa.fa-close', {
       config: utils.ontouchend(gamesMenu.close)
@@ -308,9 +309,7 @@ gamesMenu.view = function() {
     }, renderAllGames())
   ];
 
-  return m('div#games_menu.overlay.overlay_fade', {
-    class: isOpen ? 'open' : '',
-  }, children);
+  return m('div#games_menu.overlay', children);
 };
 
 module.exports = gamesMenu;

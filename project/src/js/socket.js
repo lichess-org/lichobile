@@ -1,6 +1,6 @@
 var StrongSocket = require('./StrongSocket');
 var session = require('./session');
-var menu = require('./ui/menu');
+var i18n = require('./i18n');
 
 var socketInstance;
 
@@ -10,11 +10,11 @@ function createGameSocket(url, version, receiveHandler) {
       name: "game",
       debug: true,
       ignoreUnknownMessages: true,
-      onError: function(e) {
+      onError: function() {
         // probably opening a user game while logged out
         if (!session.isConnected()) {
+          window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
           m.route('/');
-          menu.open();
         }
       }
     },

@@ -4,10 +4,10 @@ function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
   var r = {};
   var keys = Object.keys(possibleMoves);
-  for (var i = 0; i < keys.length; i++) {
+  for (var i = 0, ilen = keys.length; i < ilen; i++) {
     var m = possibleMoves[keys[i]];
     var a = [];
-    for (var j = 0; j < m.length; j += 2) {
+    for (var j = 0, jlen = m.length; j < jlen; j += 2) {
       a.push(m.substr(j, 2));
     }
     r[keys[i]] = a;

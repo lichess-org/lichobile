@@ -32,10 +32,13 @@ module.exports = {
   },
 
   view: function(ctrl) {
+    console.log('************* render triggered ***************');
+    console.trace();
     if (ctrl.round()) return roundView(ctrl.round());
     var pov = gamesMenu.lastJoined;
+    var board;
     if (pov) {
-      var board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color, pov.variant.key);
+      board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color, pov.variant.key);
     } else board = widgets.board;
     return layout.board(widgets.header, board, widgets.empty, widgets.empty, null, pov ? pov.color : null);
   }

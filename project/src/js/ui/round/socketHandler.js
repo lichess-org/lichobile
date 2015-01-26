@@ -23,7 +23,6 @@ module.exports = function(ctrl) {
       });
       ctrl.data.game.player = o.color;
       ctrl.data.game.turns = o.turns;
-      m.redraw();
       ctrl.setTitle();
     },
     move: function(o) {

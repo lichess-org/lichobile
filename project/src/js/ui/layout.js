@@ -11,7 +11,6 @@ function headerHeight() {
 module.exports = {
 
   board: function(header, content, footer, aside, overlay, povColor) {
-    console.log('************* render triggered ***************');
     var view = [
       m('main#page', {
         class: [

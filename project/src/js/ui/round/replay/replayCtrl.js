@@ -76,13 +76,23 @@ module.exports = function(root) {
     if (this.active && cfg.game.moves !== root.data.game.moves.join(' ')) this.active = false;
   }.bind(this);
 
-  this.jump = function(ply) {
+  var jump = function(ply) {
     if (this.broken) return;
-    if (this.ply === ply || ply < 1 || ply > root.data.game.moves.length) return;
+    if (ply < 1 || ply > root.data.game.moves.length) return;
     this.active = ply !== root.data.game.moves.length;
     this.ply = ply;
     if (this.active) enable();
     else disable();
     showFen();
+  }.bind(this);
+
+  this.jumpNext = function() {
+    var ply = this.active ? this.ply : root.data.game.moves.length;
+    jump(ply + 1);
+  }.bind(this);
+
+  this.jumpPrev = function() {
+    var ply = this.active ? this.ply : root.data.game.moves.length;
+    jump(ply - 1);
   }.bind(this);
 };

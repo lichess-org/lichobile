@@ -32,11 +32,7 @@ function makeConfig(data, fen, flip) {
     },
     premovable: {
       enabled: data.pref.enablePremove,
-      showDests: settings.general.pieceDestinations(),
-      events: {
-        set: m.redraw,
-        unset: m.redraw
-      }
+      showDests: settings.general.pieceDestinations()
     },
     draggable: {
       showGhost: data.pref.highlight,

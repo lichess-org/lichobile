@@ -26,7 +26,7 @@
   button
     background none
     color #C4A86F
-    text-align center
+    text-align left
     text-transform uppercase
     font-size 0.9em
     margin 1em 0
@@ -35,6 +35,7 @@
       display inline-block
       width 40px
       height 40px
+      text-align center
       line-height 40px
       color #C4A86F
       border-radius 50%
@@ -44,6 +45,8 @@
       &:before
         background #C4A86F
         color #fff
+    &.draw-yes:before
+      transform: translateY(-1px) rotate(-90deg);
   .actions
     text-align left
     button

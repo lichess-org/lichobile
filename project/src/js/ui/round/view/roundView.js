@@ -94,9 +94,9 @@ function renderGameRunningActions(ctrl) {
       button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
       button.forceResign(ctrl),
       button.threefoldClaimDraw(ctrl),
-      m('br'), m('br'), button.backToGame(ctrl)
     ]),
-    m('div.answers', answerButtons)
+    m('div.answers', answerButtons),
+    m('br'), m('br'), button.backToGame(ctrl)
   ];
 }
 

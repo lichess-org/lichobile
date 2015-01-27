@@ -1,4 +1,5 @@
 var session = require('../session');
+var compact = require('lodash-node/modern/arrays/compact');
 var utils = require('../utils');
 var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
@@ -39,7 +40,9 @@ menu.close = function() {
   closeSettings();
 };
 
-var perfs = [
+var perfsOpen = m.prop(false);
+
+var perfTypes = [
   ['bullet', 'Bullet'],
   ['chess960', 'Chess960'],
   ['blitz', 'Blitz'],
@@ -48,30 +51,56 @@ var perfs = [
   ['threeCheck', 'Three-check'],
   ['correspondence', 'Correspondence'],
   ['antichess', 'Antichess'],
-  null,
+  ['puzzle', 'Training'],
   ['atomic', 'Atomic']
 ];
+
+function renderPerf(key, name, perf) {
+  return m('div.perf', {
+    'data-icon': utils.variantIconsMap[key]
+  }, [
+    m('span.name', name),
+    m('div.rating', [
+      perf.rating,
+      utils.progress(perf.prog),
+      m('span.nb', '/ ' + perf.games)
+    ])
+  ]);
+}
+
+function openPerfs(user) {
+  return perfTypes.map(function(p) {
+    return p ? renderPerf(p[0], p[1], user.perfs[p[0]]) : m('div.perf');
+  });
+};
+
+function closedPerfs(user) {
+  var perfs = compact(Object.keys(user.perfs).map(function(key) {
+    var type = perfTypes.filter(function(pt) {
+      return pt[0] === key && 'puzzle' !== key;
+    })[0];
+    if (type) return {
+      key: key,
+      name: type[1],
+      perf: user.perfs[key]
+    };
+  }));
+  return perfs.sort(function(a, b) {
+    return a.games < b.games;
+  }).slice(0, 2).map(function(p) {
+    return renderPerf(p.key, p.name, p.perf);
+  });
+};
 
 menu.view = function(onSettingChange) {
   var user = session.get();
   var header = user ? [
     m('h2', user.username),
-    m('section.ratings', perfs.map(function(p) {
-      if (!p) return m('div.perf');
-      var k = p[0];
-      var name = p[1];
-      var perf = user.perfs[k];
-      return m('div.perf', {
-          'data-icon': utils.variantIconsMap[k]
-      }, [
-        m('span.name', name),
-        m('div.rating', [
-          perf.rating,
-          utils.progress(perf.prog),
-          m('span.nb', '/ ' + perf.games)
-        ])
-      ]);
-    }))
+    m('section.ratings', {
+      config: utils.ontouchend(function() {
+        perfsOpen(!perfsOpen());
+      })
+    }, perfsOpen() ? openPerfs(user) : closedPerfs(user))
   ] : [
     m('h2', i18n('notConnected')),
     m('button.login', {

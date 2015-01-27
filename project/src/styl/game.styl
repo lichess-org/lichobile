@@ -83,15 +83,12 @@
     top 17px
 
 #game_actions
-  border-top 1px solid #EBEBEB
+  border-top 1px solid #2E3033
   padding 0
   max-height 45px
   position absolute
   bottom 0
   width 100%
-
-main.black #game_actions
-  border-top-color #2E3033
 
 .game_action
   display inline-block
@@ -103,7 +100,7 @@ main.black #game_actions
   border none
   color: #C4A86F
   height 100%
-  border-right 1px solid #EBEBEB
+  border-right 1px solid #2E3033
   width 25%
   transition background 0.13s
   &:last-child
@@ -114,11 +111,8 @@ main.black #game_actions
   &.empty::before
     visibility hidden
 
-main.black .game_action
-  border-color #2E3033
-
-@-webkit-keyframes answer_glow {
-  50%   { 
+@keyframes answer_glow {
+  50%   {
     color #000
     background #C4A86F
   }
@@ -126,7 +120,7 @@ main.black .game_action
 
 #open_player_controls.answer_required,
 #open_chat.unread
-  -webkit-animation answer_glow 5s infinite
+  animation answer_glow 5s infinite
 
 #player_controls
   width 100%

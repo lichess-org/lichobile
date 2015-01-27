@@ -83,15 +83,12 @@
     top 17px
 
 #game_actions
-  border-top 1px solid #EBEBEB
+  border-top 1px solid #2E3033
   padding 0
   max-height 45px
   position absolute
   bottom 0
   width 100%
-
-main.black #game_actions
-  border-top-color #2E3033
 
 .game_action
   display inline-block
@@ -103,7 +100,7 @@ main.black #game_actions
   border none
   color: #C4A86F
   height 100%
-  border-right 1px solid #EBEBEB
+  border-right 1px solid #2E3033
   width 25%
   transition background 0.13s
   &:last-child
@@ -113,9 +110,6 @@ main.black #game_actions
     color #fff
   &.empty::before
     visibility hidden
-
-main.black .game_action
-  border-color #2E3033
 
 @keyframes answer_glow {
   50%   {

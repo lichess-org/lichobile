@@ -116,7 +116,7 @@ utils.progress = function(p) {
     class: 'progress ' + (p > 0 ? 'positive' : 'negative'),
     'data-icon': p > 0 ? 'N' : 'M'
   }, Math.abs(p));
-}
+};
 
 utils.classSet = function(classes) {
   var arr = [];

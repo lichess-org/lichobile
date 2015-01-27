@@ -16,8 +16,9 @@ loginModal.close = function() {
 };
 
 loginModal.view = function() {
-  if (!isOpen) return;
-  return m('div#login.modal', [
+  if (!isOpen) return m('div#login.modal');
+
+  return m('div#login.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         config: utils.ontouchend(loginModal.close)

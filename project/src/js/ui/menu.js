@@ -76,7 +76,7 @@ function openPerfs(user) {
   return perfTypes.map(function(p) {
     return p ? renderPerf(p[0], p[1], user.perfs[p[0]]) : m('div.perf');
   });
-};
+}
 
 function closedPerfs(user) {
   var perfs = compact(Object.keys(user.perfs).map(function(key) {
@@ -94,7 +94,7 @@ function closedPerfs(user) {
   }).slice(0, 2).map(function(p) {
     return renderPerf(p.key, p.name, p.perf);
   });
-};
+}
 
 menu.view = function(onSettingChange) {
   if (!menu.isOpen) return;
@@ -126,7 +126,7 @@ menu.view = function(onSettingChange) {
     m('h2', i18n('notConnected')),
     m('button.login', {
       config: utils.ontouchend(loginModal.open)
-    }, i18n('login'))
+    }, i18n('signIn'))
   ];
   header.unshift(
     m('div.logo', [

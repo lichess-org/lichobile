@@ -117,7 +117,8 @@ menu.view = function(onSettingChange) {
   var user = session.get();
   var header = user ? [
     m('h2', user.username),
-    m('section.ratings', {
+    m('section', {
+      class: 'ratings ' + (perfsOpen() ? 'open' : 'closed'),
       config: utils.ontouchend(function() {
         perfsOpen(!perfsOpen());
       })

@@ -117,8 +117,8 @@ main.black #game_actions
 main.black .game_action
   border-color #2E3033
 
-@-webkit-keyframes answer_glow {
-  50%   { 
+@keyframes answer_glow {
+  50%   {
     color #000
     background #C4A86F
   }
@@ -126,7 +126,7 @@ main.black .game_action
 
 #open_player_controls.answer_required,
 #open_chat.unread
-  -webkit-animation answer_glow 5s infinite
+  animation answer_glow 5s infinite
 
 #player_controls
   width 100%

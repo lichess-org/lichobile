@@ -32,8 +32,6 @@ module.exports = {
   },
 
   view: function(ctrl) {
-    console.log('************* render triggered ***************');
-    console.trace();
     if (ctrl.round()) return roundView(ctrl.round());
     var pov = gamesMenu.lastJoined;
     var board;

@@ -90,7 +90,7 @@ function closedPerfs(user) {
     };
   }));
   return perfs.sort(function(a, b) {
-    return a.games < b.games;
+    return a.perf.games < b.perf.games;
   }).slice(0, 2).map(function(p) {
     return renderPerf(p.key, p.name, p.perf);
   });

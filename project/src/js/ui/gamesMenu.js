@@ -50,11 +50,6 @@ gamesMenu.joinGame = function(g) {
   m.redraw();
 };
 
-function iconFromVariant(variant, perf) {
-  var lookup = variant === 'standard' ? perf : variant;
-  return utils.variantIconsMap[lookup];
-}
-
 function startAIGame() {
   return xhr.newAiGame().then(function(data) {
     m.route('/play' + data.url.round);
@@ -206,7 +201,7 @@ function renderAllGames() {
   };
 
   var allGames = nowPlaying.map(function(g) {
-    var icon = iconFromVariant(g.variant.key, g.perf);
+    var icon = utils.gameIcon(g);
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,

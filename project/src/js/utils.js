@@ -155,7 +155,12 @@ utils.variantIconsMap = {
   kingOfTheHill: '(',
   threeCheck: '.',
   antichess: '@',
-  atomic: '>'
+  atomic: '>',
+  puzzle: '-'
+};
+
+utils.gameIcon = function(g) {
+  return g.opponent.ai ? ':' : utils.variantIconsMap[g.perf];
 };
 
 module.exports = utils;

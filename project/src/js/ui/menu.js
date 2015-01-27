@@ -138,9 +138,11 @@ menu.view = function(onSettingChange) {
   var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
-      config: utils.ontouchend(function() {
+      config: utils.ontouchend(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
         menu.close();
-        setTimeout(gamesMenu.openNewGame, 1);
+        gamesMenu.openNewGame();
       })
     }, i18n('createAGame')),
     m('li.side_link', {
@@ -153,10 +155,12 @@ menu.view = function(onSettingChange) {
         class: utils.classSet({
           disabled: nowPlaying.length === 0
         }),
-        config: utils.ontouchend(function() {
+        config: utils.ontouchend(function(e) {
+          e.stopPropagation();
+          e.preventDefault();
           if (session.nowPlaying().length) {
             menu.close();
-            setTimeout(gamesMenu.openCurrentGames, 1);
+            gamesMenu.openCurrentGames();
           }
         })
       }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')])

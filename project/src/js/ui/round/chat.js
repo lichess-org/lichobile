@@ -92,13 +92,13 @@ module.exports = {
 
   view: function(ctrl) {
 
-    if (!ctrl.showing) return;
+    if (!ctrl.showing) return m('div#chat.modal');
 
     var vh = utils.getViewportDims().vh,
       formH = 45,
       scrollerH = vh - formH - 45; // minus modal header height
 
-    return m('div#chat.modal', [
+    return m('div#chat.modal.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
           config: utils.ontouchend(ctrl.close)

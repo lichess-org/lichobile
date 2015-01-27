@@ -138,9 +138,7 @@ menu.view = function(onSettingChange) {
   var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
-      config: utils.ontouchend(function(e) {
-        e.stopPropagation();
-        e.preventDefault();
+      config: utils.ontouchend(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
@@ -155,9 +153,7 @@ menu.view = function(onSettingChange) {
         class: utils.classSet({
           disabled: nowPlaying.length === 0
         }),
-        config: utils.ontouchend(function(e) {
-          e.stopPropagation();
-          e.preventDefault();
+        config: utils.ontouchend(function() {
           if (session.nowPlaying().length) {
             menu.close();
             gamesMenu.openCurrentGames();

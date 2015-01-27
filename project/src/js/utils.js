@@ -58,6 +58,8 @@ function bindTouchendButton(scrollable, handler) {
       var options = {
         el: el,
         f: function(e) {
+          e.stopPropagation();
+          e.preventDefault();
           m.startComputation();
           handler(e, el);
           m.endComputation();

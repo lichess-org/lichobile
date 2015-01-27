@@ -140,7 +140,7 @@ menu.view = function(onSettingChange) {
     m('li.side_link', {
       config: utils.ontouchend(function() {
         menu.close();
-        gamesMenu.openNewGame();
+        setTimeout(gamesMenu.openNewGame, 1);
       })
     }, i18n('createAGame')),
     m('li.side_link', {
@@ -156,7 +156,7 @@ menu.view = function(onSettingChange) {
         config: utils.ontouchend(function() {
           if (session.nowPlaying().length) {
             menu.close();
-            gamesMenu.openCurrentGames();
+            setTimeout(gamesMenu.openCurrentGames, 1);
           }
         })
       }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')])

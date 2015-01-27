@@ -27,10 +27,8 @@ function makeConfig(data, fen) {
       showDests: settings.general.pieceDestinations()
     },
     animation: {
-      // animations don't work with rotated pieces
-      // because animations override the transform: rotate
-      // with transform: translate3d
-      enabled: false
+      enabled: true,
+      duration: 300
     },
     premovable: {
       enabled: false,

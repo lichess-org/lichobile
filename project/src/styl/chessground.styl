@@ -86,33 +86,29 @@
   .cg-piece
     transform none
 
-#page.white .otb .cg-piece.black,
-#page.black .otb .cg-piece.white
-  transform rotate(180deg)
-
 // themes
 .blue .cg-board
   background-image url('../../images/board/blue2.jpg')
 
-.blue.kingOfTheHill .cg-board 
+.blue.kingOfTheHill .cg-board
   background-image url('../../images/board/koth/blue2.jpg')
 
 .wood .cg-board
   background-image url('../../images/board/wood2.jpg')
 
-.wood.kingOfTheHill .cg-board 
+.wood.kingOfTheHill .cg-board
   background-image url('../../images/board/koth/wood2.jpg')
 
 .marble .cg-board
   background-image url('../../images/board/marble.jpg')
 
-.marble.kingOfTheHill .cg-board 
+.marble.kingOfTheHill .cg-board
   background-image url('../../images/board/koth/marble.jpg')
 
 .grey .cg-board
   background-image url('../../images/board/grey.jpg')
 
-.grey.kingOfTheHill .cg-board 
+.grey.kingOfTheHill .cg-board
   background-image url('../../images/board/koth/grey.jpg')
 
 .chessground
@@ -210,38 +206,75 @@
       &.black
         background-image url('../../images/pieces/cburnett/bK.svg')
 
-.merida
-  .cg-piece
-    &.pawn
-      &.white
-        background-image url('../../images/pieces/merida/wP.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bP.svg')
-    &.bishop
-      &.white
-        background-image url('../../images/pieces/merida/wB.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bB.svg')
-    &.knight
-      &.white
-        background-image url('../../images/pieces/merida/wN.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bN.svg')
-    &.rook
-      &.white
-        background-image url('../../images/pieces/merida/wR.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bR.svg')
-    &.queen
-      &.white
-        background-image url('../../images/pieces/merida/wQ.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bQ.svg')
-    &.king
-      &.white
-        background-image url('../../images/pieces/merida/wK.svg')
-      &.black
-        background-image url('../../images/pieces/merida/bK.svg')
+
+// #page.white .otb .cg-piece.black,
+// #page.black .otb .cg-piece.white
+//   transform rotate(180deg)
+
+.merida .cg-piece
+  &.pawn
+    &.white
+      background-image url('../../images/pieces/merida/wP.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bP.svg')
+  &.bishop
+    &.white
+      background-image url('../../images/pieces/merida/wB.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bB.svg')
+  &.knight
+    &.white
+      background-image url('../../images/pieces/merida/wN.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bN.svg')
+  &.rook
+    &.white
+      background-image url('../../images/pieces/merida/wR.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bR.svg')
+  &.queen
+    &.white
+      background-image url('../../images/pieces/merida/wQ.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bQ.svg')
+  &.king
+    &.white
+      background-image url('../../images/pieces/merida/wK.svg')
+    &.black
+      background-image url('../../images/pieces/merida/bK.svg')
+
+#page.white .otb .cg-piece.black,
+#page.black .otb .cg-piece.white
+  &.pawn
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wP.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bP.svg')
+  &.bishop
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wB.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bB.svg')
+  &.knight
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wN.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bN.svg')
+  &.rook
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wR.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bR.svg')
+  &.queen
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wQ.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bQ.svg')
+  &.king
+    &.white
+      background-image url('../../images/pieces/merida/rotated/wK.svg')
+    &.black
+      background-image url('../../images/pieces/merida/rotated/bK.svg')
 
 .staunton
   div

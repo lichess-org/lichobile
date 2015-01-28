@@ -19,7 +19,8 @@ var untranslated = {
   resumeGame: 'Resume game',
   signedOut: 'You\'ve been signed out',
   playOnTheBoardOffline: 'Play on the board, offline',
-  showPgn: 'Show PGN'
+  showPgn: 'Show PGN',
+  reconnectingShort: 'Reconnecting'
 };
 
 var defaultCode = 'en';

@@ -1,4 +1,4 @@
-<manifest android:hardwareAccelerated="true" android:versionCode="10019" android:versionName="1.0.19" package="org.lichess.mobileapp" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest android:hardwareAccelerated="true" android:versionCode="10020" android:versionName="1.0.20" package="org.lichess.mobileapp" xmlns:android="http://schemas.android.com/apk/res/android">
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

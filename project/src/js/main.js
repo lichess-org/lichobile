@@ -31,6 +31,10 @@ function onPause() {
   clearInterval(refreshIntervalID);
 }
 
+function onOnline() {
+  session.rememberLogin();
+}
+
 function main() {
 
   m.route(document.body, '/', {
@@ -41,7 +45,10 @@ function main() {
   });
 
   // pull session data once (to log in user automatically thanks to cookie)
+  // and also listen to online event in case network was disconnected at app
+  // startup
   if (utils.hasNetwork()) session.rememberLogin();
+  document.addEventListener('online', onOnline, false);
 
   // if connected, refresh data every min, and on resume
   refreshIntervalID = setInterval(refresh, refreshInterval);

@@ -160,7 +160,7 @@ module.exports = function(cfg) {
     this.vm.connectedWS = false;
     if (wasOn) setTimeout(function() {
       m.redraw();
-    }, 1000);
+    }, 2000);
   }.bind(this);
 
   var onBackButton = function() {

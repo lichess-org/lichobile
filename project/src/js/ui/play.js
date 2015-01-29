@@ -34,10 +34,14 @@ module.exports = {
   view: function(ctrl) {
     if (ctrl.round()) return roundView(ctrl.round());
     var pov = gamesMenu.lastJoined;
-    var board;
+    var header, board;
     if (pov) {
+      header = widgets.connectingHeader;
       board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color, pov.variant.key);
-    } else board = widgets.board;
-    return layout.board(widgets.header, board, widgets.empty, widgets.empty, null, pov ? pov.color : null);
+    } else {
+      header = widgets.header;
+      board = widgets.board;
+    }
+    return layout.board(header, board, widgets.empty, widgets.empty, null, pov ? pov.color : null);
   }
 };

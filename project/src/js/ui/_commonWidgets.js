@@ -27,6 +27,21 @@ widgets.header = function() {
   ]);
 };
 
+widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
+  return m('div.circle_' + i);
+}));
+
+widgets.connectingHeader = function() {
+  return m('nav', [
+    widgets.menuButton(),
+    widgets.gameButton(),
+    m('h1.reconnecting', [
+      widgets.loader
+    ])
+  ]);
+};
+
+
 widgets.board = function() {
   var x = utils.getViewportDims().vw;
   return m('section.board_wrapper', {

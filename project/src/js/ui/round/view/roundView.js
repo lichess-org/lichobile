@@ -161,12 +161,6 @@ function renderGameButtons(ctrl) {
   return m('section#game_actions', actions);
 }
 
-var loader = m('div.loader_circles',
-  [1, 2, 3].map(function(i) {
-    return m('div.circle_' + i);
-  })
-);
-
 module.exports = function(ctrl) {
 
   var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
@@ -189,7 +183,7 @@ module.exports = function(ctrl) {
         widgets.gameButton(),
         ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
           i18n('reconnectingShort'),
-          loader
+          widgets.loader
         ])
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])

@@ -25,12 +25,13 @@ gamesMenu.open = function() {
 gamesMenu.openNewGame = function() {
   gamesMenu.open();
   newGameCardSwapped = true;
-  if (scroller) scroller.goToPage(0, 0);
 };
 
 gamesMenu.openCurrentGames = function() {
   gamesMenu.open();
-  if (scroller) scroller.goToPage(1, 0);
+  setTimeout(function() {
+    if (scroller) scroller.goToPage(1, 0);
+  }, 200);
 };
 
 gamesMenu.isOpen = function() {

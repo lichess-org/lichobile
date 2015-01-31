@@ -53,7 +53,7 @@ function rememberLogin() {
     background: true
   }).then(function(data) {
     session = data;
-    m.redraw();
+    return data;
   });
 }
 

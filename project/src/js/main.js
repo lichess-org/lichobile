@@ -32,7 +32,20 @@ function onPause() {
 }
 
 function onOnline() {
-  session.rememberLogin();
+  session.rememberLogin().then(function() {
+    var nowPlaying = session.nowPlaying();
+    if (/^\/$/.test(m.route())) {
+      if (nowPlaying.length)
+        m.route('/play/' + nowPlaying[0].fullId);
+      else
+        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
+    }
+  }, function(err) {
+    // means user is anonymous here
+    if (err.message === 'unauthorizedError') {
+      window.plugins.toast.show(i18n('connectedToLichessAnonymous'), 'short', 'center');
+    }
+  });
 }
 
 function main() {
@@ -47,7 +60,11 @@ function main() {
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup
-  if (utils.hasNetwork()) session.rememberLogin();
+  if (utils.hasNetwork())
+    onOnline();
+  else
+    window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
+
   document.addEventListener('online', onOnline, false);
 
   // if connected, refresh data every min, and on resume

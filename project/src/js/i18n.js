@@ -5,7 +5,7 @@ var untranslated = {
   computer: 'Computer',
   notConnected: 'Not connected',
   connectionError: 'Connection error',
-  noInternetConnection: 'No internet connection',
+  noInternetConnection: 'No internet connection. You can still play offline from the menu.',
   unauthorizedError: 'Access is unauthorized',
   lichessIsNotReachableError: 'lichess.org is unreachable',
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
@@ -20,7 +20,9 @@ var untranslated = {
   signedOut: 'You\'ve been signed out',
   playOnTheBoardOffline: 'Play on the board, offline',
   showPgn: 'Show PGN',
-  reconnectingShort: 'Reconnecting'
+  reconnectingShort: 'Reconnecting',
+  connectedToLichess: 'You\'re connected to lichess.org',
+  connectedToLichessAnonymous: 'You\'re connected to lichess.org. You can sign in or start a new game from the menu.',
 };
 
 var defaultCode = 'en';

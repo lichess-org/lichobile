@@ -75,7 +75,7 @@ module.exports = function(ctrl) {
     },
     resync: function() {
       xhr.reload(ctrl).then(function(data) {
-        ctrl.socket.setVersion(data.player.version);
+        if (ctrl.socket) ctrl.socket.setVersion(data.player.version);
         ctrl.reload(data);
       }, function(err) {
         utils.handleXhrError(err);

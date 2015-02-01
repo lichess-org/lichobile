@@ -35,7 +35,7 @@ seek.controller = function() {
       },
       resync: function() {
         xhr.lobby().then(function(data) {
-          lobbySocket.setVersion(data.lobby.version);
+          if (lobbySocket) lobbySocket.setVersion(data.lobby.version);
         });
       }
     });

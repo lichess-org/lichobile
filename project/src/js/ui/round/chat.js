@@ -1,9 +1,12 @@
 var utils = require('../../utils');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
+var storage = require('../../storage');
 
 module.exports = {
   controller: function(root) {
+
+    var storageId = 'games.' + root.data.game.id + '.chat';
 
     this.root = root;
     this.showing = false;
@@ -11,6 +14,14 @@ module.exports = {
     this.inputValue = '';
     this.unread = false;
     this.scroller = null;
+
+    var checkUnreadFromStorage = function() {
+      var nbMessages = storage.get(storageId);
+      if (nbMessages && nbMessages < this.messages.length) this.unread = true;
+    }.bind(this);
+
+    checkUnreadFromStorage();
+    storage.set(storageId, this.messages.length);
 
     // this.messages = [
     //   { c: 'white', t: 'lorde yaya lorde lorde' },
@@ -43,14 +54,20 @@ module.exports = {
       this.unread = false;
     }.bind(this);
 
+    this.onReload = function(messages) {
+      this.messages = messages;
+      checkUnreadFromStorage();
+      storage.set(storageId, this.messages.length);
+    }.bind(this);
+
     this.append = function(msg) {
       this.messages.push(msg);
-      if (msg.u !== 'lichess')
-        this.unread = true;
+      storage.set(storageId, this.messages.length);
+      if (msg.u !== 'lichess') this.unread = true;
       m.redraw();
       // hack to prevent scrolling to bottom on every redraw
       setTimeout(function() {
-        if(this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
+        if (this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
       }.bind(this), 100);
     }.bind(this);
 
@@ -133,7 +150,7 @@ module.exports = {
               player.user && msg.u === player.user.username;
 
             var closeBalloon = true;
-            var next = all[i+1];
+            var next = all[i + 1];
             var nextTalking;
             if (next) {
               nextTalking = next.c ? next.c === player.color :

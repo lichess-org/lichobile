@@ -105,6 +105,7 @@ module.exports = function(cfg) {
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
+    this.chat.onReload(cfg.chat);
     this.data = data(cfg);
     makeCorrespondenceClock();
     this.setTitle();

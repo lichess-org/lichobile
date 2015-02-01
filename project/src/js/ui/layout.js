@@ -12,6 +12,9 @@ module.exports = {
 
   board: function(header, content, footer, aside, overlay, povColor) {
     var view = [
+      menu.isOpen ? m('div.close-overlay', {
+        onclick: menu.close
+      }) : null,
       m('main#page', {
         class: [
           menu.isOpen ? 'out' : '',

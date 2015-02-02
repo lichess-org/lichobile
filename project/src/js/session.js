@@ -40,7 +40,7 @@ function login(username, password) {
 }
 
 function logout() {
-  return http.request('/logout').then(function() {
+  return http.request('/logout', {}, true).then(function() {
     session = null;
   }, function(err) {
     utils.handleXhrError(err);
@@ -51,7 +51,7 @@ function logout() {
 function rememberLogin() {
   return http.request('/account/info', {
     background: true
-  }).then(function(data) {
+  }, true).then(function(data) {
     session = data;
     return data;
   });

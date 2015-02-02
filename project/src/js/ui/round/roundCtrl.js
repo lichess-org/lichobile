@@ -1,6 +1,4 @@
 var throttle = require('lodash-node/modern/functions/throttle');
-var chessground = require('chessground');
-var partial = chessground.util.partial;
 var data = require('./data');
 var sound = require('../../sound');
 var game = require('./game');
@@ -37,7 +35,6 @@ module.exports = function(cfg) {
     this.data.player.version,
     socketHandler(this)
   );
-  this.socketSend = this.socket.send.bind(this.socket);
 
   this.showActions = function() {
     menu.close();
@@ -74,7 +71,7 @@ module.exports = function(cfg) {
       to: dest
     };
     if (prom) move.promotion = prom;
-    this.socketSend('move', move, {
+    this.socket.send('move', move, {
       ackable: true
     });
   }.bind(this);
@@ -105,7 +102,7 @@ module.exports = function(cfg) {
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
-    this.chat.onReload(cfg.chat);
+    if (this.chat) this.chat.onReload(cfg.chat);
     this.data = data(cfg);
     makeCorrespondenceClock();
     this.setTitle();
@@ -114,7 +111,9 @@ module.exports = function(cfg) {
 
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
-    this.data.player.spectator ? function() {} : throttle(partial(this.socketSend, 'outoftime'), 500)
+    this.data.player.spectator ? function() {} : throttle(function() {
+      if (this.socket) this.socket.send('outoftime');
+    }, 500)
   ) : false;
 
   this.isClockRunning = function() {
@@ -130,7 +129,7 @@ module.exports = function(cfg) {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
         this.data.correspondence,
-        partial(this.socketSend, 'outoftime')
+        function() { if (this.socket) this.socket.send('outoftime'); }
       );
   }.bind(this);
   makeCorrespondenceClock();

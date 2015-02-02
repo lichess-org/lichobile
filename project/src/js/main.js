@@ -32,20 +32,20 @@ function onPause() {
 }
 
 function onOnline() {
-  session.rememberLogin().then(function() {
-    var nowPlaying = session.nowPlaying();
-    if (/^\/$/.test(m.route())) {
+  if (/^\/$/.test(m.route())) {
+    session.rememberLogin().then(function() {
+      var nowPlaying = session.nowPlaying();
       if (nowPlaying.length)
         m.route('/play/' + nowPlaying[0].fullId);
       else
-        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
-    }
-  }, function(err) {
-    // means user is anonymous here
-    if (err.message === 'unauthorizedError') {
-      window.plugins.toast.show(i18n('connectedToLichessAnonymous'), 'short', 'center');
-    }
-  });
+        window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
+    }, function(err) {
+      // means user is anonymous here
+      if (err.message === 'unauthorizedError') {
+        window.plugins.toast.show(i18n('connectedToLichessAnonymous'), 'long', 'center');
+      }
+    });
+  }
 }
 
 function main() {

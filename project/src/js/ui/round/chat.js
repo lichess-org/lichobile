@@ -182,7 +182,7 @@ module.exports = {
               return false;
             }
             ctrl.inputValue = '';
-            ctrl.root.socketSend('talk', msg);
+            ctrl.root.socket.send('talk', msg);
           }
         }, [
           m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {

@@ -13,17 +13,24 @@ main
   background #1c2328
   color #fff
   overflow hidden
-  transition transform 200ms ease-out
+  transition transform 250ms ease-out
   &.out
     transform translate3d(85%, 0, 0)
 
-.close-overlay
+.menu-close-overlay
   position absolute
+  top 0
+  left 0
   height 100%
   width 100%
   z-index 2
   background rgba(0,0,0,0.5)
-  transform translate3d(85%, 0, 0)
+  visibility hidden
+  transition visibility 0s 50ms
+
+main.out
+  .menu-close-overlay
+    visibility visible
 
 .main_header
   nav

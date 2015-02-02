@@ -10,20 +10,17 @@ function headerHeight() {
 
 module.exports = {
 
-  board: function(header, content, footer, aside, overlay, povColor) {
+  board: function(header, content, footer, aside, overlay) {
     var view = [
-      menu.isOpen ? m('div.close-overlay', {
-        onclick: menu.close
-      }) : null,
       m('main#page', {
-        class: [
-          menu.isOpen ? 'out' : '',
-          povColor || 'white'
-        ].join(' ')
+        class: menu.isOpen ? 'out' : ''
       }, [
         m('header.main_header.board', { style: { height: headerHeight() + 'px' }}, header()),
         content(),
-        m('footer.main_footer.board', { style: { height: headerHeight() + 'px' }}, footer())
+        m('footer.main_footer.board', { style: { height: headerHeight() + 'px' }}, footer()),
+        m('div.menu-close-overlay', {
+          config: utils.ontouchend(menu.close)
+        })
       ]),
       m('aside#side_menu', aside()),
       gamesMenu.view(),

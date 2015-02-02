@@ -65,12 +65,7 @@ widgets.empty = function() {
 };
 
 widgets.startBoardView = function() {
-  var header;
-  if (utils.hasNetwork() && !session.isConnected())
-    header = widgets.connectingHeader;
-  else
-    header = widgets.header;
-  return layout.board(header, widgets.board, widgets.empty, menu.view);
+  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

@@ -26,10 +26,12 @@ main
   z-index 2
   background rgba(0,0,0,0.5)
   visibility hidden
-  transition visibility 0s 50ms
+  opacity 0
+  transition opacity 250ms, visibility 0s 50ms
 
 main.out
   .menu-close-overlay
+    opacity 1
     visibility visible
 
 .main_header

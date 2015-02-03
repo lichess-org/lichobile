@@ -73,6 +73,8 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
+        "release": true,
+        "sign": "store",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"

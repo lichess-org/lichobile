@@ -1,6 +1,7 @@
 npm-debug.log
 
 bin/*.mobileprovision
+bin/*.keystore
 
 /images
 

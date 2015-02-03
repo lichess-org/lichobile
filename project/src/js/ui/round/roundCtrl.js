@@ -113,7 +113,7 @@ module.exports = function(cfg) {
     this.data.clock,
     this.data.player.spectator ? function() {} : throttle(function() {
       if (this.socket) this.socket.send('outoftime');
-    }, 500)
+    }.bind(this), 500)
   ) : false;
 
   this.isClockRunning = function() {
@@ -129,7 +129,7 @@ module.exports = function(cfg) {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
         this.data.correspondence,
-        function() { if (this.socket) this.socket.send('outoftime'); }
+        function() { if (this.socket) this.socket.send('outoftime'); }.bind(this)
       );
   }.bind(this);
   makeCorrespondenceClock();

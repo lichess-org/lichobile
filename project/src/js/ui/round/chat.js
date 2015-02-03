@@ -14,6 +14,7 @@ module.exports = {
     this.inputValue = '';
     this.unread = false;
     this.scroller = null;
+    this.scrollerHeight = 0;
 
     var checkUnreadFromStorage = function() {
       var nbMessages = storage.get(storageId);
@@ -71,15 +72,14 @@ module.exports = {
       }.bind(this), 100);
     }.bind(this);
 
-    var scrollerHeight;
+
     var onKeyboardShow = function(e) {
       var self = this;
       var chat = document.getElementById('chat_scroller');
-      scrollerHeight = chat.offsetHeight;
       // TODO: this is a temporary hack: ionic plugin doesn't return good keyboard
       // size because it doesn't include statusbar height
       var statusBarHeight = (window.cordova.platformId === 'android') ? 25 : 0;
-      chat.style.height = (scrollerHeight - (e.keyboardHeight - statusBarHeight)) + 'px';
+      chat.style.height = (this.scrollerHeight - (e.keyboardHeight - statusBarHeight)) + 'px';
       setTimeout(function() {
         if (self.scroller) self.scroller.refresh();
         if (self.scroller) self.scroller.scrollTo(0, self.scroller.maxScrollY, 0);
@@ -92,7 +92,7 @@ module.exports = {
       // keyboard
       document.getElementById('chat_input').blur();
       var chat = document.getElementById('chat_scroller');
-      chat.style.height = scrollerHeight + 'px';
+      chat.style.height = this.scrollerHeight + 'px';
       setTimeout(function() {
         if (self.scroller) self.scroller.refresh();
       }, 200);
@@ -138,6 +138,7 @@ module.exports = {
                 }
               };
               ctrl.scroller.scrollTo(0, ctrl.scroller.maxScrollY, 0);
+              ctrl.scrollerHeight = el.offsetHeight;
             }
             ctrl.scroller.refresh();
           }

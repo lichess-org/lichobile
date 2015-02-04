@@ -31,6 +31,7 @@ function rejectOnError(d) {
 function bundle() {
   var defer = Q.defer(),
     b = browserify({
+      debug: true,
       cache: {},
       packageCache: {},
       fullPaths: true

@@ -84,4 +84,6 @@
       });
     }
   };
+
+  window.Media = window.Audio;
 }());

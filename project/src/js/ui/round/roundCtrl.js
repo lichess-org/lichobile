@@ -78,7 +78,6 @@ module.exports = function(cfg) {
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
-    sound.move();
     if (this.data.game.speed === 'correspondence' && session.isConnected())
       session.refresh();
   }.bind(this);
@@ -88,6 +87,10 @@ module.exports = function(cfg) {
     else sound.capture();
   }.bind(this);
 
+  var onMove = function() {
+    sound.move();
+  };
+
   this.apiMove = function(o) {
     m.startComputation();
     if (!this.replay.active) this.chessground.apiMove(o.from, o.to);
@@ -95,10 +98,9 @@ module.exports = function(cfg) {
     this.data.game.moves.push(o.san);
     game.setOnGame(this.data, o.color, true);
     m.endComputation();
-    if (this.data.player.spectator || o.color !== this.data.player.color) sound.move();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onCapture);
+  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove, onCapture);
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);

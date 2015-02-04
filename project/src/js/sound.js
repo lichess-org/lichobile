@@ -1,28 +1,21 @@
 var settings = require('./settings');
 
-function play(file, volume) {
+function play(file) {
   var a, soundsLoc;
-  if (window.Media) {
-    soundsLoc = (window.device.platform === 'Android') ?
+  soundsLoc = (window.device.platform === 'Android') ?
     '/android_asset/www/sounds' : 'sounds';
-    a = new window.Media(soundsLoc + '/' + file, function() {
-      a.release();
-    }, function(err) {
-      console.log(err);
-    });
-    a.setVolume(volume);
-    a.play();
-  } else {
-    a = new window.Audio('sounds/' + file);
-    a.volume = volume;
-    a.play();
-  }
+  a = new window.Media(soundsLoc + '/' + file, function() {
+    a.release();
+  }, function(err) {
+    console.log(err);
+  });
+  a.play();
 }
 
 var audio = {
-  move: [ 'move.mp3', 0.8 ],
-  capture: [ 'capture.mp3', 0.8 ],
-  dong: [ 'dong.mp3', 0.8 ],
+  move: 'move.mp3',
+  capture: 'capture.mp3',
+  dong: 'dong.mp3',
 };
 
 function shouldPlay() {
@@ -31,14 +24,12 @@ function shouldPlay() {
 
 module.exports = {
   move: function() {
-    if (shouldPlay()) {
-      play.apply(null, audio.move);
-    }
+    if (shouldPlay()) play(audio.move);
   },
   capture: function() {
-    if (shouldPlay()) play.apply(null, audio.capture);
+    if (shouldPlay()) play(audio.capture);
   },
   dong: function() {
-    if (shouldPlay) play.apply(null, audio.dong);
+    if (shouldPlay) play(audio.dong);
   }
 };

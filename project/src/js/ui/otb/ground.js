@@ -52,16 +52,17 @@ function applySettings(ground) {
     premovable: {
       showDests: settings.general.pieceDestinations()
     }
-  })
-};
+  });
+}
 
-function make(data, fen, userMove, onCapture) {
+function make(data, fen, userMove, onMove, onCapture) {
   var config = makeConfig(data, fen);
   config.movable.events = {
     after: userMove
   };
   config.events = {
-    capture: onCapture
+    capture: onCapture,
+    move: onMove
   };
   return new chessground.controller(config);
 }

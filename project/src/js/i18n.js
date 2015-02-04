@@ -49,6 +49,7 @@ function loadFile(code, callback) {
 }
 
 function loadMomentLocal(code) {
+  if (code === 'en') return;
   var script = document.createElement('script');
   script.src = 'moment/locale/' + code + '.js';
   document.head.appendChild(script);

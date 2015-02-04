@@ -63,7 +63,6 @@
   width 100%
   height 100%
   background-size cover
-  transform translate3d(0,0,0)
   &.dragging
     z-index 2
   &.ghost
@@ -73,7 +72,6 @@
   position absolute
   background-color rgba(0, 0, 0, 0.2)
   border-radius 50%
-  transform translate3d(0,0,0)
   z-index 1
 
 // view only boards
@@ -81,10 +79,6 @@
   position absolute
   width 12.5%
   height 12.5%
-
-.cg-board-wrap.view-only
-  .cg-piece
-    transform none
 
 // themes
 .blue .cg-board

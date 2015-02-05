@@ -2,6 +2,7 @@ var utils = require('../utils');
 var menu = require('./menu');
 var gamesMenu = require('./gamesMenu');
 var loginModal = require('./loginModal');
+var signupModal = require('./signupModal');
 
 function headerHeight() {
   var d = utils.getViewportDims();
@@ -27,7 +28,8 @@ module.exports = {
       ]),
       m('aside#side_menu', aside()),
       gamesMenu.view(),
-      loginModal.view()
+      loginModal.view(),
+      signupModal.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);

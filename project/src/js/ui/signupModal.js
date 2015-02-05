@@ -1,30 +1,30 @@
 var session = require('../session');
 var utils = require('../utils');
 var i18n = require('../i18n');
-var signupModal = require('./signupModal');
+var loginModal = require('./loginModal');
 
-var loginModal = {};
+var signupModal = {};
 
 var isOpen = false;
 
-loginModal.open = function() {
+signupModal.open = function() {
   isOpen = true;
 };
 
-loginModal.close = function() {
+signupModal.close = function() {
   window.cordova.plugins.Keyboard.close();
   isOpen = false;
 };
 
-loginModal.view = function() {
-  if (!isOpen) return m('div#login.modal');
+signupModal.view = function() {
+  if (!isOpen) return m('div#signup.modal');
 
-  return m('div#login.modal.show', [
+  return m('div#signup.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: utils.ontouchend(loginModal.close)
+        config: utils.ontouchend(signupModal.close)
       }),
-      m('h2', i18n('signIn'))
+      m('h2', i18n('signUp'))
     ]),
     m('div.modal_content', [
       m('form', {
@@ -35,9 +35,16 @@ loginModal.view = function() {
           var pass = form[1].value.trim();
           if (!login || !pass) return false;
           window.cordova.plugins.Keyboard.close();
-          session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
-            loginModal.close();
-            window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+          session.signup(
+            form[0].value.trim(),
+            form[1].value.trim()
+          ).then(function(res) {
+            if (res.error)
+              window.plugins.toast.show(res.error.username[0], 'short', 'center');
+            else {
+              signupModal.close();
+              window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+            }
           }, function(err) {
             utils.handleXhrError(err);
           });
@@ -55,16 +62,16 @@ loginModal.view = function() {
           placeholder: i18n('password'),
           required: true
         }),
-        m('button.fat', i18n('signIn'))
+        m('button.fat', i18n('signUp'))
       ])
     ]),
     m('div.signup', [
-      m('h2', i18n('newToLichess')),
+      m('h2', i18n('haveAnAccount')),
       m('button.fat', {
-        config: utils.ontouchend(signupModal.open)
-      }, i18n('signUp'))
+        config: utils.ontouchend(signupModal.close)
+      }, i18n('signIn'))
     ])
   ]);
 };
 
-module.exports = loginModal;
+module.exports = signupModal;

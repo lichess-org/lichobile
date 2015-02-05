@@ -48,6 +48,19 @@ function logout() {
   });
 }
 
+function signup(username, password) {
+  return http.request('/signup', {
+    method: 'POST',
+    data: {
+      username: username,
+      password: password
+    }
+  }, true).then(function(data) {
+    session = data;
+    return session;
+  });
+}
+
 function rememberLogin() {
   return http.request('/account/info', {
     background: true
@@ -79,6 +92,7 @@ module.exports = {
   login: login,
   rememberLogin: rememberLogin,
   logout: logout,
+  signup: signup,
   refresh: refresh,
   get: get,
   nowPlaying: nowPlaying,

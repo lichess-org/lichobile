@@ -75,6 +75,7 @@
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
         "version": "1.0.0",
+        "version_code": "100001",
         "release": true,
         "sign": "store",
         "cordova": {

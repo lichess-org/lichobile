@@ -834,9 +834,9 @@
       }
     },
     "chessground": {
-      "version": "1.9.0",
-      "from": "chessground@1.9.0",
-      "resolved": "https://registry.npmjs.org/chessground/-/chessground-1.9.0.tgz",
+      "version": "1.9.1",
+      "from": "chessground@1.9.1",
+      "resolved": "https://registry.npmjs.org/chessground/-/chessground-1.9.1.tgz",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
@@ -860,9 +860,9 @@
       "from": "lodash-node@>=2.4.1 <3.0.0"
     },
     "mithril": {
-      "version": "0.1.28",
-      "from": "mithril@0.1.28",
-      "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.1.28.tgz"
+      "version": "0.1.30",
+      "from": "mithril@0.1.30",
+      "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.1.30.tgz"
     },
     "mobile-button": {
       "version": "0.8.0",

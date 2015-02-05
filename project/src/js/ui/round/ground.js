@@ -56,13 +56,12 @@ function applySettings(ground) {
   });
 }
 
-function make(data, fen, userMove, onMove, onCapture) {
+function make(data, fen, userMove, onMove) {
   var config = makeConfig(data, fen);
   config.movable.events = {
     after: userMove
   };
   config.events = {
-    capture: onCapture,
     move: onMove
   };
   config.viewOnly = data.player.spectator;

@@ -82,14 +82,12 @@ module.exports = function(cfg) {
       session.refresh();
   }.bind(this);
 
-  var onCapture = function(key) {
-    if (this.data.game.variant.key === 'atomic') atomic.capture(this, key);
+  var onMove = function(orig, dest, capturedPiece) {
+    if (!capturedPiece)
+      sound.move();
+    else if (this.data.game.variant.key === 'atomic') atomic.capture(this, dest);
     else sound.capture();
   }.bind(this);
-
-  var onMove = function() {
-    sound.move();
-  };
 
   this.apiMove = function(o) {
     m.startComputation();
@@ -100,7 +98,7 @@ module.exports = function(cfg) {
     m.endComputation();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove, onCapture);
+  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
 
   this.reload = function(cfg) {
     this.replay.onReload(cfg);

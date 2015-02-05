@@ -17,21 +17,28 @@ var gamesMenu = {};
 var isOpen = false;
 var newGameCardSwapped = false;
 
-gamesMenu.open = function() {
+var doOpen = function() {
   isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
-};
+}
 
 gamesMenu.openNewGame = function() {
-  gamesMenu.open();
+  doOpen();
   newGameCardSwapped = true;
 };
 
 gamesMenu.openCurrentGames = function() {
-  gamesMenu.open();
+  doOpen();
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
   }, 200);
+};
+
+gamesMenu.open = function() {
+  if (session.nowPlaying().length)
+    gamesMenu.openCurrentGames();
+  else
+    gamesMenu.openNewGame();
 };
 
 gamesMenu.isOpen = function() {

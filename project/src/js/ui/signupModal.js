@@ -1,11 +1,31 @@
 var session = require('../session');
 var utils = require('../utils');
 var i18n = require('../i18n');
-var loginModal = require('./loginModal');
 
 var signupModal = {};
 
 var isOpen = false;
+
+var submit = function(form) {
+  var login = form[0].value.trim();
+  var pass = form[1].value.trim();
+  if (!login || !pass) return false;
+  window.cordova.plugins.Keyboard.close();
+  session.signup(
+    form[0].value.trim(),
+    form[1].value.trim()
+  ).then(function(res) {
+    if (res.error)
+      window.plugins.toast.show(res.error.username[0], 'short', 'center');
+    else {
+      signupModal.close();
+      require('./loginModal').close();
+      window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+    }
+  }, function(err) {
+    utils.handleXhrError(err);
+  });
+};
 
 signupModal.open = function() {
   isOpen = true;
@@ -30,24 +50,7 @@ signupModal.view = function() {
       m('form', {
         onsubmit: function(e) {
           e.preventDefault();
-          var form = e.target;
-          var login = form[0].value.trim();
-          var pass = form[1].value.trim();
-          if (!login || !pass) return false;
-          window.cordova.plugins.Keyboard.close();
-          session.signup(
-            form[0].value.trim(),
-            form[1].value.trim()
-          ).then(function(res) {
-            if (res.error)
-              window.plugins.toast.show(res.error.username[0], 'short', 'center');
-            else {
-              signupModal.close();
-              window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
-            }
-          }, function(err) {
-            utils.handleXhrError(err);
-          });
+          return submit(e.target);
         }
       }, [
         m('input#pseudo[type=text]', {

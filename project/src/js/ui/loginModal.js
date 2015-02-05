@@ -7,6 +7,19 @@ var loginModal = {};
 
 var isOpen = false;
 
+var submit = function(form) {
+  var login = form[0].value.trim();
+  var pass = form[1].value.trim();
+  if (!login || !pass) return false;
+  window.cordova.plugins.Keyboard.close();
+  session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
+    loginModal.close();
+    window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+  }, function(err) {
+    utils.handleXhrError(err);
+  });
+};
+
 loginModal.open = function() {
   isOpen = true;
 };
@@ -31,16 +44,7 @@ loginModal.view = function() {
         onsubmit: function(e) {
           e.preventDefault();
           var form = e.target;
-          var login = form[0].value.trim();
-          var pass = form[1].value.trim();
-          if (!login || !pass) return false;
-          window.cordova.plugins.Keyboard.close();
-          session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
-            loginModal.close();
-            window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
-          }, function(err) {
-            utils.handleXhrError(err);
-          });
+          return submit(e.target);
         }
       }, [
         m('input#pseudo[type=text]', {

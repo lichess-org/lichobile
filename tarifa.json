@@ -39,6 +39,7 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
+        "version": "1.0.0",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"
@@ -73,6 +74,7 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
+        "version": "1.0.0",
         "release": true,
         "sign": "store",
         "cordova": {

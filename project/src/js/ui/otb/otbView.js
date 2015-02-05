@@ -12,6 +12,18 @@ var gameStatus = require('../round/status');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
 
+function renderAntagonist(ctrl, player, material) {
+  return m('section.antagonist', [
+    m('div.vertical_align', [
+      m('div.infos', [
+        m('h2', i18n(player.color)),
+        m('div'),
+        renderMaterial(material)
+      ])
+    ])
+  ]);
+}
+
 function renderGameEndedActions(ctrl) {
   var result = game.result(ctrl.data.game);
   var status = gameStatus.toLabel(ctrl.data) +
@@ -33,8 +45,8 @@ function renderGameActions(ctrl) {
         config: utils.ontouchend(ctrl.showPgn)
       }, i18n('showPgn')),
       m('br'), m('br'), m('button[data-icon=L]', {
-      config: utils.ontouchend(ctrl.hideActions)
-    }, i18n('backToGame'))
+        config: utils.ontouchend(ctrl.hideActions)
+      }, i18n('backToGame'))
     ])
   ];
 }
@@ -77,6 +89,7 @@ module.exports = function(ctrl) {
 
   function footer() {
     return [
+      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
       renderGameButtons(ctrl),
       renderPlayerActions(ctrl),
       renderPgn(ctrl)
@@ -84,11 +97,14 @@ module.exports = function(ctrl) {
   }
 
   function header() {
-    return m('nav', [
-      widgets.menuButton(),
-      widgets.gameButton(),
-      m('h1.playing', i18n('playOnTheBoardOffline'))
-    ]);
+    return [
+      m('nav', [
+        widgets.menuButton(),
+        widgets.gameButton(),
+        m('h1.playing', i18n('playOnTheBoardOffline'))
+      ]),
+      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
+    ];
   }
 
   function board() {

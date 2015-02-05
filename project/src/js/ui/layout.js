@@ -10,10 +10,13 @@ function headerHeight() {
 
 module.exports = {
 
-  board: function(header, content, footer, aside, overlay) {
+  board: function(header, content, footer, aside, overlay, povColor) {
     var view = [
       m('main#page', {
-        class: menu.isOpen ? 'out' : ''
+        class: [
+          menu.isOpen ? 'out' : '',
+          povColor || 'white'
+        ].join(' ')
       }, [
         m('header.main_header.board', { style: { height: headerHeight() + 'px' }}, header()),
         content(),

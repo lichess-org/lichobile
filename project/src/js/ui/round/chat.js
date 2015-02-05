@@ -90,9 +90,10 @@ module.exports = {
       var self = this;
       // because of iscroll we need to manually blur when user hide
       // keyboard
-      document.getElementById('chat_input').blur();
+      var input = document.getElementById('chat_input');
       var chat = document.getElementById('chat_scroller');
-      chat.style.height = this.scrollerHeight + 'px';
+      if (input) input.blur();
+      if (chat) chat.style.height = this.scrollerHeight + 'px';
       setTimeout(function() {
         if (self.scroller) self.scroller.refresh();
       }, 200);

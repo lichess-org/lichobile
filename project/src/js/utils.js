@@ -17,7 +17,7 @@ utils.hasNetwork = function() {
  */
 utils.handleXhrError = function(error) {
   if (!utils.hasNetwork())
-    window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('connectionError'));
+    window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('notConnected'));
   else
     window.plugins.toast.show(i18n(error.message), 'short', 'center');
 };

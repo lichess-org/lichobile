@@ -182,7 +182,7 @@ module.exports = function(ctrl) {
         widgets.menuButton(),
         widgets.gameButton(),
         ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
-          i18n('reconnectingShort'),
+          i18n('reconnecting'),
           widgets.loader
         ])
       ]),

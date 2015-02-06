@@ -60,13 +60,12 @@ loginModal.view = function() {
           required: true
         }),
         m('button.fat', i18n('signIn'))
+      ]),
+      m('div.signup', [
+        m('a', {
+          config: utils.ontouchend(signupModal.open)
+        }, [i18n('newToLichess'), ' ', i18n('signUp')])
       ])
-    ]),
-    m('div.signup', [
-      m('h2', i18n('newToLichess')),
-      m('button.fat', {
-        config: utils.ontouchend(signupModal.open)
-      }, i18n('signUp'))
     ])
   ]);
 };

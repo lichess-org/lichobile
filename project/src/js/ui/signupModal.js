@@ -67,12 +67,6 @@ signupModal.view = function() {
         }),
         m('button.fat', i18n('signUp'))
       ])
-    ]),
-    m('div.signup', [
-      m('h2', i18n('haveAnAccount')),
-      m('button.fat', {
-        config: utils.ontouchend(signupModal.close)
-      }, i18n('signIn'))
     ])
   ]);
 };

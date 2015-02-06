@@ -38,9 +38,19 @@ module.exports = {
       m('select', {
         name: name,
         disabled: isDisabled,
-        onchange: function(e) {
-          settingsProp(e.target.value);
-          m.redraw(); // because color setting depends on other settings
+        config: function(el, isUpdate, context) {
+          if (!isUpdate) {
+            var onChange = function(e) {
+              settingsProp(e.target.value);
+              setTimeout(function() {
+                m.redraw();
+              }, 10);
+            };
+            el.addEventListener('change', onChange, false);
+            context.onunload = function() {
+              el.removeEventListener('change', onChange, false);
+            };
+          }
         }
       }, options.map(function(e) {
         return renderOption(e[0], e[1], storedValue);

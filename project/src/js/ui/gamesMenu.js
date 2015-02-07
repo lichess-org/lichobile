@@ -20,7 +20,7 @@ var newGameCardSwapped = false;
 var doOpen = function() {
   isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
-}
+};
 
 gamesMenu.openNewGame = function() {
   doOpen();
@@ -79,10 +79,9 @@ function tupleOf(x) {
   return [x, x];
 }
 
-function renderForm(action, settingsObj, variants, timeModes) {
+function renderForm(formName, action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
-  // var hasCorresp = timeMode === '2';
   var allowWhite = !settingsObj.mode ||
     settingsObj.mode() === '0' ||
     ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
@@ -94,10 +93,10 @@ function renderForm(action, settingsObj, variants, timeModes) {
   ]);
   var generalFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect('color', 'color', colors, settingsObj.color),
+      formWidgets.renderSelect('color', formName + 'color', colors, settingsObj.color),
     ]),
     m('div.select_input', [
-      formWidgets.renderSelect('variant', 'variant', variants, settingsObj.variant),
+      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
     ])
   ];
   if (settingsObj.level) {
@@ -108,38 +107,34 @@ function renderForm(action, settingsObj, variants, timeModes) {
     ]));
   }
   if (settingsObj.mode) {
+    var modes = session.isConnected() ? [
+      ['casual', '0'],
+      ['rated', '1']
+    ] : [
+      ['casual', '0']
+    ];
     generalFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect('mode', 'mode', [
-        ['casual', '0'],
-        ['rated', '1']
-      ], settingsObj.mode)
+      formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ]));
   }
 
   var timeFieldset = [
     m('div.select_input', [
-      formWidgets.renderSelect('clock', 'timeMode', timeModes, settingsObj.timeMode)
+      formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ];
   if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', [
-        formWidgets.renderSelect('time', 'time',
+        formWidgets.renderSelect('time', formName + 'time',
           settings.game.availableTimes.map(tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', [
-        formWidgets.renderSelect('increment', 'increment',
+        formWidgets.renderSelect('increment', formName + 'increment',
           settings.game.availableIncrements.map(tupleOf), settingsObj.increment, false)
       ])
     );
   }
-  // if (hasCorresp) {
-  //   timeFieldset.push(m('div.select_input', [
-  //     formWidgets.renderSelect('Days per turn:', 'days', [
-  //       '1', '2', '3', '5', '7', '10', '14'
-  //       ].map(tupleOf), settingsObj.days, false)
-  //   ]));
-  // }
 
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
@@ -253,12 +248,14 @@ function renderAllGames() {
       m('div.back', [
         settings.game.selected() === 'human' ?
         renderForm(
+          'human',
           seekHumanGame,
           settings.game.human,
           settings.game.human.availableVariants,
           settings.game.human.availableTimeModes
         ) :
         renderForm(
+          'ai',
           startAIGame,
           settings.game.ai,
           settings.game.ai.availableVariants,

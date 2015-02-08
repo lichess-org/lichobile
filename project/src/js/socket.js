@@ -11,7 +11,8 @@ function createGameSocket(url, version, receiveHandler) {
       debug: true,
       ignoreUnknownMessages: true,
       onError: function() {
-        // probably opening a user game while logged out
+        // TODO find a way to get the real error
+        // for now we assume it comes from opening a user game while logged out
         if (!session.isConnected()) {
           window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
           m.route('/');

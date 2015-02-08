@@ -94,13 +94,13 @@
   display inline-block
   text-align center
   background transparent
-  padding 12px 10px 8px
+  padding 10px 10px 8px
   font-size 1em
   outline none
   border none
   color: #C4A86F
-  height 100%
   border-right 1px solid #2E3033
+  height 100%
   width 25%
   &:last-child
     border-right none
@@ -109,6 +109,8 @@
     color #fff
   &.empty::before
     visibility hidden
+  &:before
+    font-size 22px
 
 @keyframes answer_glow {
   50%   {

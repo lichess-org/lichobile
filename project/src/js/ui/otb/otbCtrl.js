@@ -11,17 +11,23 @@ module.exports = function(cfg) {
 
   var storageKey = 'otb.current';
 
-  var onPromotion = function(orig, dest, role) {
-      this.replay.addMove(orig, dest, role);
-      save();
+  var addMove = function(orig, dest, promotionRole) {
+    this.replay.addMove(orig, dest, promotionRole);
+    save();
+    m.redraw();
+    if (this.replay.situation().checkmate) setTimeout(function() {
+      this.showActions();
       m.redraw();
+    }.bind(this), 1000);
+  }.bind(this);
+
+  var onPromotion = function(orig, dest, role) {
+    addMove(orig, dest, role);
   }.bind(this);
 
   var userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {
-      this.replay.addMove(orig, dest);
-      save();
-      m.redraw();
+      addMove(orig, dest);
     }
   }.bind(this);
 

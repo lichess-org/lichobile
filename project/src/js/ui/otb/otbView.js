@@ -8,7 +8,6 @@ var renderPromotion = require('./promotion').view;
 var utils = require('../../utils');
 var i18n = require('../../i18n');
 var game = require('../round/game');
-var gameStatus = require('../round/status');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
 
@@ -24,17 +23,22 @@ function renderAntagonist(ctrl, player, material) {
   ]);
 }
 
-function renderGameEndedActions(ctrl) {
-  var result = game.result(ctrl.data.game);
-  var status = gameStatus.toLabel(ctrl.data) +
-    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  return [
-    m('div.result', [result, m('br'), m('br'), status]),
-    m('div.control.buttons', button.backToGame(ctrl))
-  ];
+function backToGame(ctrl) {
+  return m('button[data-icon=L]', {
+    config: utils.ontouchend(ctrl.hideActions)
+  }, i18n('backToGame'));
 }
 
-function renderGameActions(ctrl) {
+function renderGameEndedActions(ctrl) {
+  var result, status, sit = ctrl.replay.situation();
+  if (sit.checkmate) {
+    result = sit.turnColor === 'white' ? '0-1' : '1-0';
+    status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
+    return m('div.result', [result, m('br'), m('br'), status]);
+  }
+}
+
+function renderGameRunningActions(ctrl) {
   var d = ctrl.data;
   return [
     m('div.actions', [
@@ -44,9 +48,7 @@ function renderGameActions(ctrl) {
       m('button[data-icon=A]', {
         config: utils.ontouchend(ctrl.showPgn)
       }, i18n('showPgn')),
-      m('br'), m('br'), m('button[data-icon=L]', {
-        config: utils.ontouchend(ctrl.hideActions)
-      }, i18n('backToGame'))
+      m('br'), m('br'), backToGame(ctrl)
     ])
   ];
 }
@@ -57,7 +59,10 @@ function renderPlayerActions(ctrl) {
     m('button.overlay_close.fa.fa-close', {
       config: utils.ontouchend(ctrl.hideActions)
     }),
-    m('div#player_controls.overlay_content', renderGameActions(ctrl))
+    m('div#player_controls.overlay_content',
+      renderGameEndedActions(ctrl),
+      renderGameRunningActions(ctrl)
+    )
   ]);
 }
 

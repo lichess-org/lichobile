@@ -70,6 +70,7 @@ module.exports = function(root, situations, ply) {
         dests: chess.dests()
       },
       check: chess.in_check(),
+      checkmate: chess.in_checkmate(),
       lastMove: [move.from, move.to],
       promotion: promotionLetter
     });
@@ -90,6 +91,9 @@ module.exports = function(root, situations, ply) {
     chess.header('Date', moment().format('YYYY.MM.DD'));
     // chess.header('Result', game.result(this.root.data));
     chess.header('Variant', 'Standard');
-    return chess.pgn({ max_width: 30, newline_char: '<br />' });
+    return chess.pgn({
+      max_width: 30,
+      newline_char: '<br />'
+    });
   }.bind(this);
 };

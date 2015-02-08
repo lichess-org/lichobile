@@ -18,7 +18,7 @@ module.exports = {
 
     var checkUnreadFromStorage = function() {
       var nbMessages = storage.get(storageId);
-      if (nbMessages && nbMessages < this.messages.length) this.unread = true;
+      if (nbMessages < this.messages.length) this.unread = true;
     }.bind(this);
 
     checkUnreadFromStorage();

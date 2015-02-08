@@ -146,7 +146,8 @@ function renderGameButtons(ctrl) {
       class: utils.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||
-          game.forceResignable(ctrl.data)
+          game.forceResignable(ctrl.data) ||
+          ctrl.data.opponent.offeringRematch
       }),
       config: utils.ontouchend(ctrl.showActions)
     }),

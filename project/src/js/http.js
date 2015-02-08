@@ -7,7 +7,7 @@ http.apiVersion = 1;
 
 var baseUrl = window.lichess.apiEndPoint;
 
-function onComplete(data) {
+function onSuccess(data) {
   spinner.stop();
   return data;
 }
@@ -60,7 +60,7 @@ http.request = function(url, opts, feedback) {
 
   if (feedback) {
     spinner.spin(document.body);
-    return promise.then(onComplete, onError);
+    return promise.then(onSuccess, onError);
   } else
     return promise;
 };

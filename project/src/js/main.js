@@ -15,6 +15,8 @@ var play = require('./ui/play');
 var seek = require('./ui/seek');
 var otb = require('./ui/otb/main');
 
+var triedToLogin = false;
+
 var refreshInterval = 60000;
 var refreshIntervalID;
 
@@ -32,20 +34,24 @@ function onPause() {
 }
 
 function onOnline() {
-  if (/^\/$/.test(m.route())) {
-    session.rememberLogin().then(function() {
+  session.rememberLogin().then(function() {
+    if (/^\/$/.test(m.route()) && !triedToLogin) {
+      triedToLogin = true;
       var nowPlaying = session.nowPlaying();
       if (nowPlaying.length)
         m.route('/play/' + nowPlaying[0].fullId);
       else
         window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
-    }, function(err) {
-      // means user is anonymous here
+    }
+  }, function(err) {
+    // means user is anonymous here
+    if (/^\/$/.test(m.route()) && !triedToLogin) {
+      triedToLogin = true;
       if (err.message === 'unauthorizedError') {
         window.plugins.toast.show(i18n('connectedToLichessAnonymous'), 'long', 'center');
       }
-    });
-  }
+    }
+  });
 }
 
 function main() {

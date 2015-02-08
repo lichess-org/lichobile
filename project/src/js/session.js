@@ -64,7 +64,7 @@ function signup(username, password) {
 function rememberLogin() {
   return http.request('/account/info', {
     background: true
-  }, true).then(function(data) {
+  }).then(function(data) {
     session = data;
     return data;
   });

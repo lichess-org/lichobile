@@ -25,7 +25,6 @@ module.exports = function(cfg) {
   this.vm = {
     connectedWS: true,
     flip: false,
-    reloading: false,
     redirecting: false,
     showingActions: !game.playable(this.data)
   };

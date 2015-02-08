@@ -27,7 +27,7 @@
 
   // toast
   window.plugins.toast = {
-    show: window.alert.bind(window),
+    show: noop,
     showShortTop: noop,
     showShortCenter: noop,
     showShortBottom: noop,

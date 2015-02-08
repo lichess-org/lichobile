@@ -139,18 +139,21 @@ menu.view = function(onSettingChange) {
   var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
+      id: 'menu_create_game',
       config: utils.ontouchend(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
     }, i18n('createAGame')),
     m('li.side_link', {
+      id: 'menu_play_otb',
       config: utils.ontouchend(menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {
     links.unshift(
       m('li.side_link', {
+        id: 'menu_current_games',
         class: utils.classSet({
           disabled: nowPlaying.length === 0
         }),

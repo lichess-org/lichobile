@@ -14,16 +14,15 @@ var submit = function(form) {
   session.signup(
     form[0].value.trim(),
     form[1].value.trim()
-  ).then(function(res) {
-    if (res.error)
-      window.plugins.toast.show(res.error.username[0], 'short', 'center');
-    else {
-      signupModal.close();
-      require('./loginModal').close();
-      window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
-    }
-  }, function(err) {
-    utils.handleXhrError(err);
+  ).then(function() {
+    signupModal.close();
+    require('./loginModal').close();
+    window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+  }, function(data) {
+    if (data.error.username)
+      window.plugins.toast.show(data.error.username[0], 'short', 'center');
+    else if (data.error.password)
+      window.plugins.toast.show(data.error.password[0], 'short', 'center');
   });
 };
 

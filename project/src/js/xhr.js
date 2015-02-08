@@ -4,6 +4,7 @@ var settings = require('./settings');
 var i18n = require('./i18n');
 var moment = window.moment;
 var semver = require('semver');
+var session = require('./session');
 
 function newAiGame() {
   var config = settings.game.ai;
@@ -32,7 +33,7 @@ function seekGame() {
       time: config.time(),
       increment: config.increment(),
       color: config.color(),
-      mode: config.mode()
+      mode: session.isConnected() ? config.mode() : '0'
     }
   }, true);
 }

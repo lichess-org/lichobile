@@ -33,10 +33,10 @@ module.exports = {
     var storedValue = settingsProp();
     return [
       m('label', {
-        'for': name
+        'for': 'select_' + name
       }, i18n(label)),
       m('select', {
-        name: name,
+        id: 'select_' + name,
         disabled: isDisabled,
         config: function(el, isUpdate, context) {
           if (!isUpdate) {

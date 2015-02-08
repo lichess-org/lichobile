@@ -20,7 +20,6 @@ seek.controller = function() {
       hookId = data.hook.id;
     }, function(error) {
       utils.handleXhrError(error);
-      throw error;
     });
   };
 

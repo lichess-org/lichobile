@@ -69,7 +69,7 @@ function main() {
   if (utils.hasNetwork())
     onOnline();
   else
-    window.navigator.notification.alert(i18n('noInternetConnection'), null, i18n('notConnected'));
+    window.navigator.notification.alert(i18n('noInternetConnection'));
 
   document.addEventListener('online', onOnline, false);
 

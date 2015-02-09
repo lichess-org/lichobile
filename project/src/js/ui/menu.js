@@ -124,7 +124,7 @@ menu.view = function(onSettingChange) {
       })
     }, perfsOpen() ? openPerfs(user) : closedPerfs(user))
   ] : [
-    m('h2', i18n('notConnected')),
+    m('h2', 'Anonymous'),
     m('button.login', {
       config: utils.ontouchend(loginModal.open)
     }, i18n('signIn'))

@@ -1,28 +1,11 @@
 var messages = [];
 
 var untranslated = {
-  human: 'Human',
-  computer: 'Computer',
-  notConnected: 'Not connected',
-  connectionError: 'Connection error',
-  noInternetConnection: 'No internet connection. You can still play offline from the menu.',
-  unauthorizedError: 'Access is unauthorized',
-  lichessIsNotReachableError: 'lichess.org is unreachable',
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   appUpgradeAvailable: 'A new version of lichess mobile is available!',
   resourceNotFoundError: 'Resource not found',
-  lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
-  color: 'Color',
-  clock: 'Clock',
-  loginSuccessfull: 'Login successful',
-  resumeGame: 'Resume game',
-  signedOut: 'You\'ve been signed out',
-  playOnTheBoardOffline: 'Play on the board, offline',
-  showPgn: 'Show PGN',
-  reconnectingShort: 'Reconnecting',
-  connectedToLichess: 'You\'re connected to lichess.org',
-  connectedToLichessAnonymous: 'You\'re connected to lichess.org. You can sign in or start a new game from the menu.',
+  lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance'
 };
 
 var defaultCode = 'en';

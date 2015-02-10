@@ -2,6 +2,7 @@ var utils = require('../../utils');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
+var game = require('./game');
 
 module.exports = {
   controller: function(root) {
@@ -103,6 +104,7 @@ module.exports = {
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
     this.onunload = function() {
+      if (!game.playable(this.root.data)) storage.remove(storageId);
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     }.bind(this);

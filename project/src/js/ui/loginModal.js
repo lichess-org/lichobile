@@ -21,6 +21,7 @@ var submit = function(form) {
 };
 
 loginModal.open = function() {
+  window.analytics.trackView('Login');
   isOpen = true;
 };
 

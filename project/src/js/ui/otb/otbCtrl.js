@@ -9,6 +9,8 @@ var gamesMenu = require('../gamesMenu');
 
 module.exports = function(cfg) {
 
+  window.analytics.trackView('On The Board');
+
   var storageKey = 'otb.current';
 
   var addMove = function(orig, dest, promotionRole) {

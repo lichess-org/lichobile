@@ -9,7 +9,8 @@
 
   // analytics
   window.analytics = {
-    startTrackerWithId: noop
+    startTrackerWithId: noop,
+    trackView: noop,
   };
 
   // events

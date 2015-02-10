@@ -18,6 +18,7 @@ var isOpen = false;
 var newGameCardSwapped = false;
 
 var doOpen = function() {
+  window.analytics.trackView('Games Menu');
   isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };

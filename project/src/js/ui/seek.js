@@ -15,6 +15,8 @@ seek.controller = function() {
   var hookId;
   var lobbySocket;
 
+  window.analytics.trackView('Seek');
+
   var createHook = function() {
     xhr.seekGame().then(function(data) {
       hookId = data.hook.id;

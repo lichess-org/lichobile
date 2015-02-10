@@ -14,6 +14,7 @@ menu.isOpen = false;
 var settingsOpen = false;
 
 function openSettings() {
+  window.analytics.trackView('Settings');
   settingsOpen = true;
 }
 
@@ -32,10 +33,12 @@ function menuRouteAction(route) {
 }
 
 menu.toggle = function() {
-  menu.isOpen = !menu.isOpen;
+  if (menu.isOpen) menu.isOpen = false;
+  else menu.open();
 };
 
 menu.open = function() {
+  window.analytics.trackView('Main Menu');
   menu.isOpen = true;
 };
 

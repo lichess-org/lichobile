@@ -5,6 +5,8 @@ var home = {};
 
 home.controller = function() {
 
+  window.analytics.trackView('Home');
+
   function onBackButton() {
     if (gamesMenu.isOpen()) {
       gamesMenu.close();

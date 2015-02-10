@@ -22,6 +22,8 @@ module.exports = function(cfg) {
 
   this.data = data(cfg);
 
+  window.analytics.trackView('Round');
+
   this.vm = {
     connectedWS: true,
     flip: false,

@@ -2,11 +2,12 @@ var utils = require('../../utils');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
+var game = require('./game');
 
 module.exports = {
   controller: function(root) {
 
-    var storageId = 'games.' + root.data.game.id + '.chat';
+    var storageId = 'chat.' + root.data.game.id;
 
     this.root = root;
     this.showing = false;
@@ -103,9 +104,10 @@ module.exports = {
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
     this.onunload = function() {
+      if (!game.playable(this.root.data)) storage.remove(storageId);
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
-    };
+    }.bind(this);
   },
 
   view: function(ctrl) {

@@ -26,7 +26,7 @@ module.exports = function(cfg) {
     connectedWS: true,
     flip: false,
     redirecting: false,
-    showingActions: !game.playable(this.data)
+    showingActions: false
   };
 
   this.socket = socket.connectGame(

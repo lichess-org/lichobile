@@ -25,7 +25,6 @@ module.exports = function(cfg) {
   this.vm = {
     connectedWS: true,
     flip: false,
-    redirecting: false,
     showingActions: false
   };
 

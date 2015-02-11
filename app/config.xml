@@ -17,5 +17,5 @@
     <preference name="KeepRunning" value="true"/>
     <preference name="StatusBarOverlaysWebView" value="false"/>
     <preference name="StatusBarBackgroundColor" value="#151A1E"/>
-    <access origin="*"/>
+    <access origin="http://en.lichess.org"/>
 </widget>

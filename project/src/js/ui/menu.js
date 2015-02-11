@@ -114,7 +114,7 @@ menu.view = function(onSettingChange) {
         settings.onChange(settings.general.pieceDestinations, onSettingChange)),
       formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
     ]),
-    m('section.app_version', window.lichess.version)
+    window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ]);
   var user = session.get();
   var header = user ? [

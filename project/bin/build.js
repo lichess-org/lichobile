@@ -82,7 +82,7 @@ module.exports.build = function build(platform, settings, configName) {
   var mode = ['prod'].indexOf(configName) !== -1 ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
   context.TARIFA = true;
-  context.APP_VERSION = 'v' + context.version;
+  context.APP_VERSION = context.version || settings.version;
   if (configName === 'stage') context.APP_VERSION += '-beta';
 
   gulp.add('html', function() {

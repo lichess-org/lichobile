@@ -14,7 +14,7 @@ var submit = function(form) {
   window.cordova.plugins.Keyboard.close();
   session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
     loginModal.close();
-    window.plugins.toast.show(i18n('loginSuccessfull'), 'short', 'center');
+    window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
   }, function(err) {
     utils.handleXhrError(err);
   });

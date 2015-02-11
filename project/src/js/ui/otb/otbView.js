@@ -47,7 +47,7 @@ function renderGameRunningActions(ctrl) {
       }, i18n('createAGame')),
       m('button[data-icon=A]', {
         config: utils.ontouchend(ctrl.showPgn)
-      }, i18n('showPgn')),
+      }, i18n('showPGN')),
       m('br'), m('br'), backToGame(ctrl)
     ])
   ];

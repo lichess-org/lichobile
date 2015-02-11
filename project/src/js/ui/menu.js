@@ -27,8 +27,8 @@ function closeSettings() {
 function menuRouteAction(route) {
   return function() {
     menu.close();
-    return Zanimo(document.getElementById('page'), 'transform', 'translate3d(0,0,0)',
-      '200', 'ease-out').then(utils.ƒ(m.route, route));
+    return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
+      '250', 'ease-out').then(utils.ƒ(m.route, route));
   };
 }
 
@@ -100,7 +100,6 @@ function closedPerfs(user) {
 }
 
 menu.view = function(onSettingChange) {
-  if (!menu.isOpen) return;
   if (settingsOpen) return m('div#settings', [
     m('header', [
       m('button[data-icon=L]', {
@@ -139,7 +138,6 @@ menu.view = function(onSettingChange) {
       })
     ])
   );
-  var nowPlaying = session.nowPlaying();
   var links = [
     m('li.side_link', {
       id: 'menu_create_game',
@@ -154,20 +152,6 @@ menu.view = function(onSettingChange) {
     }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {
-    links.unshift(
-      m('li.side_link', {
-        id: 'menu_current_games',
-        class: utils.classSet({
-          disabled: nowPlaying.length === 0
-        }),
-        config: utils.ontouchend(function() {
-          if (session.nowPlaying().length) {
-            menu.close();
-            gamesMenu.openCurrentGames();
-          }
-        })
-      }, [i18n('playingRightNow'), m('span.highlight', ' (' + nowPlaying.length + ')')])
-    );
     links.push(
       m('li.side_link.logout[data-icon=w]', {
         config: utils.ontouchend(session.logout)

@@ -9,13 +9,9 @@ main
   position absolute
   height 100%
   width 100%
-  z-index 1
   background #1c2328
   color #fff
   overflow hidden
-  transition transform 250ms ease-out
-  &.out
-    transform translate3d(85%, 0, 0)
 
 .menu-close-overlay
   position absolute
@@ -26,13 +22,12 @@ main
   z-index 2
   background rgba(0,0,0,0.5)
   visibility hidden
-  opacity 0
-  transition opacity 250ms, visibility 0s 50ms
 
 main.out
   .menu-close-overlay
-    opacity 1
     visibility visible
+  .game_menu_button
+    display none
 
 .main_header
   nav

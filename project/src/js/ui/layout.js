@@ -15,7 +15,7 @@ module.exports = {
     var view = [
       m('main#page', {
         class: [
-          menu.isOpen ? 'out' : '',
+          menu.isOpen ? 'out' : 'in',
           povColor || 'white'
         ].join(' ')
       }, [
@@ -26,7 +26,9 @@ module.exports = {
           config: utils.ontouchend(menu.close)
         })
       ]),
-      m('aside#side_menu', aside()),
+      m('aside#side_menu', {
+        class: menu.isOpen ? 'in' : 'out'
+      }, aside()),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view()

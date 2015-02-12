@@ -1,51 +1,13 @@
-var session = require('../session');
+var session = require('../../session');
+var loginModal = require('../loginModal');
+var formWidgets = require('../_formWidgets');
+var settings = require('../../settings');
+var gamesMenu = require('../gamesMenu');
+var i18n = require('../../i18n');
+var utils = require('../../utils');
 var compact = require('lodash-node/modern/arrays/compact');
-var utils = require('../utils');
-var i18n = require('../i18n');
-var formWidgets = require('./_formWidgets');
-var settings = require('../settings');
-var Zanimo = require('zanimo');
-var gamesMenu = require('./gamesMenu');
-var loginModal = require('./loginModal');
 
-var menu = {};
-
-menu.isOpen = false;
-var settingsOpen = false;
-
-function openSettings() {
-  window.analytics.trackView('Settings');
-  settingsOpen = true;
-}
-
-function closeSettings() {
-  settingsOpen = false;
-}
-
-// we need to transition manually the menu on route change, because mithril's
-// diff strategy is 'all'
-function menuRouteAction(route) {
-  return function() {
-    menu.close();
-    return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(utils.ƒ(m.route, route));
-  };
-}
-
-menu.toggle = function() {
-  if (menu.isOpen) menu.isOpen = false;
-  else menu.open();
-};
-
-menu.open = function() {
-  window.analytics.trackView('Main Menu');
-  menu.isOpen = true;
-};
-
-menu.close = function() {
-  menu.isOpen = false;
-  closeSettings();
-};
+var menu = require('./menu');
 
 var perfsOpen = m.prop(false);
 
@@ -99,11 +61,11 @@ function closedPerfs(user) {
   });
 }
 
-menu.view = function(onSettingChange) {
-  if (settingsOpen) return m('div#settings', [
+module.exports = function(onSettingChange) {
+  if (menu.settingsOpen) return m('div#settings', [
     m('header', [
       m('button[data-icon=L]', {
-        config: utils.ontouchend(closeSettings)
+        config: utils.ontouchend(menu.closeSettings)
       }),
       m('h2', i18n('settings'))
     ]),
@@ -134,7 +96,7 @@ menu.view = function(onSettingChange) {
   header.unshift(
     m('div.logo', [
       m('button.settings[data-icon=%]', {
-        config: utils.ontouchend(openSettings)
+        config: utils.ontouchend(menu.openSettings)
       })
     ])
   );
@@ -148,7 +110,7 @@ menu.view = function(onSettingChange) {
     }, i18n('createAGame')),
     m('li.side_link', {
       id: 'menu_play_otb',
-      config: utils.ontouchend(menuRouteAction('/otb'))
+      config: utils.ontouchend(menu.menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {
@@ -163,5 +125,3 @@ menu.view = function(onSettingChange) {
     m('nav#side_links', m('ul', links))
   ];
 };
-
-module.exports = menu;

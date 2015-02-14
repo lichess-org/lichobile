@@ -14,6 +14,9 @@ module.exports = {
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     sound: localstorageprop('settings.sound', true)
   },
+  otb: {
+    flipPieces: localstorageprop('settings.otb.flipPieces', true)
+  },
   onChange: function(prop, callback) {
     if (!callback) return prop;
     return function() {

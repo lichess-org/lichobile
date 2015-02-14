@@ -2,6 +2,8 @@ var pgnOverlay = require('./pgn');
 var utils = require('../../utils');
 var i18n = require('../../i18n');
 var opposite = require('chessground').util.opposite;
+var settings = require('../../settings');
+var formWidgets = require('../_formWidgets');
 
 function backToGame(ctrl) {
   return m('button[data-icon=L]', {
@@ -28,6 +30,8 @@ function renderAlways(ctrl) {
       m('button[data-icon=A]', {
         config: utils.ontouchend(ctrl.pgn.open)
       }, i18n('showPGN')),
+      formWidgets.renderCheckbox(i18n('Flip pieces after move'), 'flipPieces',
+        settings.onChange(settings.otb.flipPieces)),
       m('br'), m('br'), backToGame(ctrl)
     ])
   ];

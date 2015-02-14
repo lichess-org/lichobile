@@ -10,6 +10,7 @@ var game = require('../round/game');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
 var actions = require('./actions');
+var settings = require('../../settings');
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
@@ -59,7 +60,16 @@ module.exports = function(ctrl) {
 
   function board() {
     var x = utils.getViewportDims().vw;
-    return m('section.board_wrapper.otb', {
+    var flip = settings.otb.flipPieces();
+    return m('section', {
+      class: utils.classSet({
+        'board_wrapper': true,
+        'otb': true,
+        'mode_flip': flip,
+        'mode_facing': !flip,
+        'turn_white': ctrl.chessground.data.turnColor === 'white',
+        'turn_black': ctrl.chessground.data.turnColor === 'black'
+      }),
       style: {
         height: x + 'px'
       }

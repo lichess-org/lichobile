@@ -237,8 +237,10 @@
     &.black
       background-image url('../../images/pieces/merida/bK.svg')
 
-#page.white .otb .cg-piece.black,
-#page.black .otb .cg-piece.white
+#page.white .otb.mode_facing .cg-piece.black,
+#page.black .otb.mode_facing .cg-piece.white,
+#page.white .otb.mode_flip.turn_black .cg-piece,
+#page.black .otb.mode_flip.turn_white .cg-piece
   &.pawn
     &.white
       background-image url('../../images/pieces/merida/rotated/wP.svg')

@@ -18,7 +18,7 @@ module.exports = function(cfg) {
     save();
     m.redraw();
     if (this.replay.situation().checkmate) setTimeout(function() {
-      actions.open();
+      this.actions.open();
       m.redraw();
     }.bind(this), 1000);
   }.bind(this);
@@ -73,7 +73,7 @@ module.exports = function(cfg) {
   window.plugins.insomnia.keepAwake();
 
   var onBackButton = function() {
-    if (this.actions.visible) {
+    if (this.actions.isOpen()) {
       this.actions.close();
       m.redraw();
     } else if (gamesMenu.isOpen()) {

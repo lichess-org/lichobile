@@ -18,7 +18,7 @@ function renderEnded(ctrl) {
   }
 }
 
-function renderRunning(ctrl) {
+function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
     m('div.actions', [
@@ -31,18 +31,6 @@ function renderRunning(ctrl) {
       m('br'), m('br'), backToGame(ctrl)
     ])
   ];
-}
-
-function render(ctrl) {
-  if (!ctrl.isOpen()) return;
-  return m('div.overlay', [
-    m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(ctrl.close)
-    }),
-    m('div#player_controls.overlay_content',
-      renderEnded(ctrl) || renderRunning(ctrl)
-    )
-  ]);
 }
 
 module.exports = {
@@ -70,10 +58,10 @@ module.exports = {
       m('button.overlay_close.fa.fa-close', {
         config: utils.ontouchend(ctrl.close)
       }),
-      m('div#player_controls.overlay_content',
+      m('div#player_controls.overlay_content', [
         renderEnded(ctrl),
-        renderRunning(ctrl)
-      )
+        renderAlways(ctrl)
+      ])
     ]);
   }
 };

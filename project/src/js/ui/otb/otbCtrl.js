@@ -1,11 +1,11 @@
 var promotion = require('./promotion');
 var ground = require('./ground');
 var makeData = require('./data');
-var menu = require('../menu');
 var sound = require('../../sound');
 var replayCtrl = require('./replay/replayCtrl');
 var storage = require('../../storage');
 var gamesMenu = require('../gamesMenu');
+var actions = require('./actions');
 
 module.exports = function(cfg) {
 
@@ -18,7 +18,7 @@ module.exports = function(cfg) {
     save();
     m.redraw();
     if (this.replay.situation().checkmate) setTimeout(function() {
-      this.showActions();
+      actions.open();
       m.redraw();
     }.bind(this), 1000);
   }.bind(this);
@@ -43,16 +43,13 @@ module.exports = function(cfg) {
 
   this.init = function(data, situations, ply) {
     this.data = data || makeData(cfg);
-    this.vm = {
-      showingActions: false,
-      showingPgn: false
-    };
     if (!this.chessground)
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove, onCapture);
     else ground.reload(this.chessground, this.data, this.data.game.fen);
     if (!this.replay) this.replay = new replayCtrl(this, situations, ply);
     else this.replay.init(situations, ply);
     this.replay.apply();
+    this.actions = new actions.controller(this);
   }.bind(this);
 
   this.initAs = function(color) {
@@ -73,30 +70,11 @@ module.exports = function(cfg) {
     });
   }.bind(this);
 
-  this.showActions = function() {
-    menu.close();
-    this.vm.showingActions = true;
-  }.bind(this);
-
-  this.hideActions = function() {
-    this.vm.showingActions = false;
-  }.bind(this);
-
-  this.showPgn = function() {
-    menu.close();
-    this.hideActions();
-    this.vm.showingPgn = true;
-  }.bind(this);
-
-  this.hidePgn = function() {
-    this.vm.showingPgn = false;
-  }.bind(this);
-
   window.plugins.insomnia.keepAwake();
 
   var onBackButton = function() {
-    if (this.vm.showingActions) {
-      this.hideActions();
+    if (this.actions.visible) {
+      this.actions.close();
       m.redraw();
     } else if (gamesMenu.isOpen()) {
       gamesMenu.close();

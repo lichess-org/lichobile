@@ -1,5 +1,4 @@
 var chessground = require('chessground');
-var opposite = chessground.util.opposite;
 var layout = require('../layout');
 var widgets = require('../_commonWidgets');
 var menu = require('../menu');
@@ -10,6 +9,7 @@ var i18n = require('../../i18n');
 var game = require('../round/game');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
+var actions = require('./actions');
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
@@ -23,64 +23,10 @@ function renderAntagonist(ctrl, player, material) {
   ]);
 }
 
-function backToGame(ctrl) {
-  return m('button[data-icon=L]', {
-    config: utils.ontouchend(ctrl.hideActions)
-  }, i18n('backToGame'));
-}
-
-function renderGameEndedActions(ctrl) {
-  var result, status, sit = ctrl.replay.situation();
-  if (sit.checkmate) {
-    result = sit.turnColor === 'white' ? '0-1' : '1-0';
-    status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
-    return m('div.result', [result, m('br'), m('br'), status]);
-  }
-}
-
-function renderGameRunningActions(ctrl) {
-  var d = ctrl.data;
-  return [
-    m('div.actions', [
-      m('button[data-icon=U]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.initAs, opposite(d.player.color)))
-      }, i18n('createAGame')),
-      m('button[data-icon=A]', {
-        config: utils.ontouchend(ctrl.showPgn)
-      }, i18n('showPGN')),
-      m('br'), m('br'), backToGame(ctrl)
-    ])
-  ];
-}
-
-function renderPlayerActions(ctrl) {
-  if (!ctrl.vm.showingActions) return;
-  return m('div.overlay', [
-    m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(ctrl.hideActions)
-    }),
-    m('div#player_controls.overlay_content',
-      renderGameEndedActions(ctrl),
-      renderGameRunningActions(ctrl)
-    )
-  ]);
-}
-
-function renderPgn(ctrl) {
-  if (!ctrl.vm.showingPgn) return;
-  var pgn = ctrl.replay.pgn();
-  return m('div.overlay', [
-    m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(ctrl.hidePgn)
-    }),
-    m('div.overlay_content', m.trust(pgn))
-  ]);
-}
-
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      config: utils.ontouchend(ctrl.showActions)
+      config: utils.ontouchend(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
@@ -96,8 +42,7 @@ module.exports = function(ctrl) {
     return [
       renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
       renderGameButtons(ctrl),
-      renderPlayerActions(ctrl),
-      renderPgn(ctrl)
+      actions.view(ctrl.actions)
     ];
   }
 

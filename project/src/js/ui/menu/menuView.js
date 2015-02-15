@@ -102,20 +102,21 @@ module.exports = function(onSettingChange) {
   );
   var links = [
     m('li.side_link', {
-      id: 'menu_create_game',
+      key: 'menu_create_game',
       config: utils.ontouchend(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
     }, i18n('createAGame')),
     m('li.side_link', {
-      id: 'menu_play_otb',
+      key: 'menu_play_otb',
       config: utils.ontouchend(menu.menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline'))
   ];
   if (session.isConnected()) {
     links.push(
       m('li.side_link.logout[data-icon=w]', {
+        key: 'menu_logout',
         config: utils.ontouchend(session.logout)
       }, i18n('logOut'))
     );

@@ -30,6 +30,6 @@ module.exports = {
     if (shouldPlay()) play(audio.capture);
   },
   dong: function() {
-    if (shouldPlay) play(audio.dong);
+    if (shouldPlay()) play(audio.dong);
   }
 };

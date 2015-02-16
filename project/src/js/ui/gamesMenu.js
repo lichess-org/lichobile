@@ -28,6 +28,12 @@ gamesMenu.openNewGame = function() {
   newGameCardSwapped = true;
 };
 
+gamesMenu.openNewGameCorrespondence = function() {
+  settings.game.selected('human');
+  settings.game.human.timeMode('2');
+  gamesMenu.openNewGame();
+};
+
 gamesMenu.openCurrentGames = function() {
   doOpen();
   setTimeout(function() {

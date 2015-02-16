@@ -7,6 +7,7 @@ var i18n = require('../i18n');
 var socket = require('../socket');
 var session = require('../session');
 var loginModal = require('./loginModal');
+var gamesMenu = require('./gamesMenu');
 var uniq = require('lodash-node/modern/arrays/uniq');
 
 var seeks = {};
@@ -100,9 +101,12 @@ seeks.view = function(ctrl) {
 
   var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
-    return session.isConnected() ? m('div.seeks',
-      ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))
-    ) : m('div.disconnected',
+    return session.isConnected() ? m('div.seeks', [
+      ctrl.pool().map(utils.partialƒ(renderSeek, ctrl)),
+      m('button.fat', {
+        config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
+      }, i18n('createAGame'))
+    ]) : m('div.disconnected',
       m('button.fat', {
         config: utils.ontouchend(loginModal.open)
       }, i18n('logIn'))

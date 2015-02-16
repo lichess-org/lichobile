@@ -3,6 +3,7 @@ var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
 var game = require('./game');
+var backbutton = require('../../backbutton');
 
 module.exports = {
   controller: function(root) {
@@ -44,14 +45,16 @@ module.exports = {
     // ];
 
     this.open = function() {
+      backbutton.stack.push(this.close);
       this.showing = true;
       setTimeout(function() {
         if (this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
       }.bind(this), 200);
     }.bind(this);
 
-    this.close = function() {
+    this.close = function(fromBB) {
       window.cordova.plugins.Keyboard.close();
+      if(!fromBB && this.showing) backbutton.stack.pop();
       this.showing = false;
       this.unread = false;
     }.bind(this);

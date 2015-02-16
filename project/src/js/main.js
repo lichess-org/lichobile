@@ -9,6 +9,7 @@ var utils = require('./utils');
 var session = require('./session');
 var i18n = require('./i18n');
 var xhr = require('./xhr');
+var backbutton = require('./backbutton');
 
 var home = require('./ui/home');
 var play = require('./ui/play');
@@ -83,6 +84,8 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true);
 
   if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
+
+  document.addEventListener('backbutton', backbutton, false);
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();

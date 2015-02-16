@@ -4,7 +4,6 @@ var makeData = require('./data');
 var sound = require('../../sound');
 var replayCtrl = require('./replay/replayCtrl');
 var storage = require('../../storage');
-var gamesMenu = require('../gamesMenu');
 var actions = require('./actions');
 
 module.exports = function(cfg) {
@@ -72,21 +71,7 @@ module.exports = function(cfg) {
 
   window.plugins.insomnia.keepAwake();
 
-  var onBackButton = function() {
-    if (this.actions.isOpen()) {
-      this.actions.close();
-      m.redraw();
-    } else if (gamesMenu.isOpen()) {
-      gamesMenu.close();
-      m.redraw();
-    } else
-      window.navigator.app.backHistory();
-  }.bind(this);
-
-  document.addEventListener('backbutton', onBackButton, false);
-
   this.onunload = function() {
-    document.removeEventListener('backbutton', onBackButton, false);
     window.plugins.insomnia.allowSleepAgain();
   };
 };

@@ -2,6 +2,7 @@ var session = require('../session');
 var utils = require('../utils');
 var i18n = require('../i18n');
 var signupModal = require('./signupModal');
+var backbutton = require('../backbutton');
 
 var loginModal = {};
 
@@ -22,11 +23,13 @@ var submit = function(form) {
 
 loginModal.open = function() {
   window.analytics.trackView('Login');
+  backbutton.stack.push(loginModal.close);
   isOpen = true;
 };
 
-loginModal.close = function() {
+loginModal.close = function(fromBB) {
   window.cordova.plugins.Keyboard.close();
+  if (!fromBB && isOpen) backbutton.stack.pop();
   isOpen = false;
 };
 

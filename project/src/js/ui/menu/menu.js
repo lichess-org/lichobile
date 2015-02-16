@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var Zanimo = require('zanimo');
+var backbutton = require('../../backbutton');
 
 var menu = {};
 
@@ -10,10 +11,12 @@ menu.settingsOpen = false;
 /* methods */
 menu.openSettings = function() {
   window.analytics.trackView('Settings');
+  backbutton.stack.push(menu.closeSettings);
   menu.settingsOpen = true;
 };
 
-menu.closeSettings = function() {
+menu.closeSettings = function(fromBB) {
+  if (!fromBB && menu.settingsOpen) backbutton.stack.pop();
   menu.settingsOpen = false;
 };
 
@@ -28,18 +31,20 @@ menu.menuRouteAction = function(route) {
 };
 
 menu.toggle = function() {
-  if (menu.isOpen) menu.isOpen = false;
+  if (menu.isOpen) menu.close();
   else menu.open();
 };
 
 menu.open = function() {
   window.analytics.trackView('Main Menu');
+  backbutton.stack.push(menu.close);
   menu.isOpen = true;
 };
 
-menu.close = function() {
+menu.close = function(fromBB) {
+  if (menu.settingsOpen) menu.closeSettings();
+  if (!fromBB && menu.isOpen) backbutton.stack.pop();
   menu.isOpen = false;
-  menu.closeSettings();
 };
 
 module.exports = menu;

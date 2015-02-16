@@ -7,8 +7,24 @@ var i18n = require('../i18n');
 var socket = require('../socket');
 var session = require('../session');
 var loginModal = require('./loginModal');
+var uniq = require('lodash-node/modern/arrays/uniq');
 
 var seeks = {};
+
+function seekUserId(seek) {
+  return seek.username.toLowerCase();
+}
+
+function fixSeeks(ss) {
+  var userId = session.getUserId();
+  if (userId) ss.sort(function(a, b) {
+    if (seekUserId(a) === userId) return -1;
+    if (seekUserId(b) === userId) return 1;
+  });
+  return uniq(ss, function(s) {
+    return s.username + s.mode + s.variant.key + s.days;
+  });
+}
 
 seeks.controller = function() {
 
@@ -33,7 +49,7 @@ seeks.controller = function() {
 
   var reload = function(foreground) {
     xhr.seeks(foreground).then(function(d) {
-      pool = d;
+      pool = fixSeeks(d);
       m.redraw();
     });
   };

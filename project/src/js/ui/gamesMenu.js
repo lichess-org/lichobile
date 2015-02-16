@@ -8,18 +8,20 @@ var i18n = require('../i18n');
 var formWidgets = require('./_formWidgets');
 var session = require('../session');
 var moment = window.moment;
+var backbutton = require('../backbutton');
 
 // iScroll instance
 var scroller = null;
 
 var gamesMenu = {};
 
-var isOpen = false;
+gamesMenu.isOpen = false;
 var newGameCardSwapped = false;
 
 var doOpen = function() {
   window.analytics.trackView('Games Menu');
-  isOpen = true;
+  backbutton.stack.push(gamesMenu.close);
+  gamesMenu.isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
 
@@ -48,12 +50,9 @@ gamesMenu.open = function() {
     gamesMenu.openNewGame();
 };
 
-gamesMenu.isOpen = function() {
-  return isOpen;
-};
-
-gamesMenu.close = function() {
-  isOpen = false;
+gamesMenu.close = function(fromBB) {
+  if (!fromBB) backbutton.stack.pop();
+  gamesMenu.isOpen = false;
 };
 
 gamesMenu.lastJoined = null;
@@ -292,7 +291,7 @@ function renderAllGames() {
 }
 
 gamesMenu.view = function() {
-  if (!isOpen) return m('div#games_menu.overlay.overlay_fade');
+  if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
   var children = [
     m('button.overlay_close.fa.fa-close', {
       config: utils.ontouchend(gamesMenu.close)

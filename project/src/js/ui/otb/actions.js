@@ -4,6 +4,7 @@ var i18n = require('../../i18n');
 var opposite = require('chessground').util.opposite;
 var settings = require('../../settings');
 var formWidgets = require('../_formWidgets');
+var backbutton = require('../../backbutton');
 
 function backToGame(ctrl) {
   return m('button[data-icon=L]', {
@@ -39,16 +40,22 @@ function renderAlways(ctrl) {
 
 module.exports = {
   controller: function(root) {
+    function open() {
+      backbutton.stack.push(close);
+      isOpen = true;
+    }
+
+    function close(fromBB) {
+      pgn.close();
+      if (!fromBB && !isOpen) backbutton.stack.pop();
+      isOpen = false;
+    }
+
     var isOpen = false;
     var pgn = new pgnOverlay.controller(root.replay.pgn);
     return {
-      open: function() {
-        isOpen = true;
-      },
-      close: function() {
-        pgn.close();
-        isOpen = false;
-      },
+      open: open,
+      close: close,
       isOpen: function() {
         return isOpen;
       },

@@ -15,8 +15,8 @@ var session = require('../../session');
 var socket = require('../../socket');
 var socketHandler = require('./socketHandler');
 var signals = require('../../signals');
-var gamesMenu = require('../gamesMenu');
 var atomic = require('./atomic');
+var backbutton = require('../../backbutton');
 
 module.exports = function(cfg) {
 
@@ -38,10 +38,12 @@ module.exports = function(cfg) {
 
   this.showActions = function() {
     menu.close();
+    backbutton.stack.push(this.hideActions);
     this.vm.showingActions = true;
   }.bind(this);
 
-  this.hideActions = function() {
+  this.hideActions = function(fromBB) {
+    if (!fromBB && this.vm.showingActions) backbutton.stack.pop();
     this.vm.showingActions = false;
   }.bind(this);
 
@@ -163,23 +165,8 @@ module.exports = function(cfg) {
     }, 2000);
   }.bind(this);
 
-  var onBackButton = function() {
-    if (this.vm.showingActions) {
-      this.hideActions();
-      m.redraw();
-    } else if (gamesMenu.isOpen()) {
-      gamesMenu.close();
-      m.redraw();
-    } else if (this.chat && this.chat.showing) {
-      this.chat.close();
-      m.redraw();
-    } else
-      window.navigator.app.backHistory();
-  }.bind(this);
-
   signals.connected.add(onConnected);
   signals.disconnected.add(onDisconnected);
-  document.addEventListener('backbutton', onBackButton, false);
 
   this.onunload = function() {
     this.socket.destroy();
@@ -188,7 +175,6 @@ module.exports = function(cfg) {
     if (this.chat) this.chat.onunload();
     signals.connected.remove(onConnected);
     signals.disconnected.remove(onDisconnected);
-    document.removeEventListener('backbutton', onBackButton, false);
     window.plugins.insomnia.allowSleepAgain();
   };
 };

@@ -55,6 +55,7 @@ seeks.controller = function() {
       m.redraw();
     });
   };
+  reload(true);
 
   return {
     pool: function() {

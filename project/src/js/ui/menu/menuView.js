@@ -109,6 +109,10 @@ module.exports = function(onSettingChange) {
       })
     }, i18n('createAGame')),
     m('li.side_link', {
+      key: 'menu_seeks',
+      config: utils.ontouchend(menu.menuRouteAction('/seeks'))
+    }, i18n('Correspondence')),
+    m('li.side_link', {
       key: 'menu_play_otb',
       config: utils.ontouchend(menu.menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline'))

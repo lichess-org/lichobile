@@ -9,6 +9,7 @@ var session = require('../session');
 var loginModal = require('./loginModal');
 var gamesMenu = require('./gamesMenu');
 var uniq = require('lodash-node/modern/arrays/uniq');
+var iScroll = require('iscroll');
 
 var seeks = {};
 
@@ -99,9 +100,23 @@ function renderSeek(ctrl, seek) {
 
 seeks.view = function(ctrl) {
 
+  var scroller;
   var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
-    return session.isConnected() ? m('div.seeks', [
+    return session.isConnected() ? m('div.seeks', {
+      config: function(el, isUpdate, context) {
+        if (!scroller || !isUpdate) {
+          scroller = new iScroll(el);
+          context.onunload = function() {
+            if (scroller) {
+              scroller.destroy();
+              scroller = null;
+            }
+          };
+        }
+        scroller.refresh();
+      }
+    }, [
       ctrl.pool().map(utils.partialƒ(renderSeek, ctrl)),
       m('button.fat', {
         config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)

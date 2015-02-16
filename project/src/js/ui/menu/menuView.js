@@ -111,7 +111,7 @@ module.exports = function(onSettingChange) {
     m('li.side_link', {
       key: 'menu_seeks',
       config: utils.ontouchend(menu.menuRouteAction('/seeks'))
-    }, i18n('Correspondence')),
+    }, i18n('correspondence')),
     m('li.side_link', {
       key: 'menu_play_otb',
       config: utils.ontouchend(menu.menuRouteAction('/otb'))

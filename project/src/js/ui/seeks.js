@@ -16,19 +16,21 @@ seeks.controller = function() {
 
   window.analytics.trackView('Seeks');
 
-  xhr.seeks(true).then(function(d) {
-    pool = d;
-  });
+  var reload = function(foreground) {
+    xhr.seeks(foreground).then(function(d) {
+      pool = d;
+      m.redraw();
+    });
+  };
+  reload(true);
+  var reloadInterval = setInterval(reload, 5000);
 
   return {
     pool: function() {
       return pool;
     },
     onunload: function() {
-      if (lobbySocket) {
-        lobbySocket.destroy();
-        lobbySocket = null;
-      }
+      clearInterval(reloadInterval);
     }
   };
 };
@@ -56,6 +58,7 @@ function renderSeek(ctrl, seek) {
 
 seeks.view = function(ctrl) {
 
+  var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
     return session.isConnected() ? m('div.seeks',
       ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))
@@ -66,7 +69,7 @@ seeks.view = function(ctrl) {
     )
   };
 
-  return layout.board(widgets.header, body, widgets.empty, menu.view, widgets.empty);
+  return layout.free(header, body, widgets.empty, menu.view, widgets.empty);
 };
 
 module.exports = seeks;

@@ -37,6 +37,7 @@ module.exports = {
     '20', '25', '30', '40', '60', '90', '120', '150', '180'],
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'],
+    availableDays: ['1', '2', '3', '5', '7', '10', '14'],
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
@@ -67,7 +68,9 @@ module.exports = {
       ],
       variant: localstorageprop('settings.game.human.variant', '1'),
       availableTimeModes: [
-        ['realTime', '1']
+        ['realTime', '1'],
+        ['correspondence', '2'],
+        ['unlimited', '0']
       ],
       timeMode: localstorageprop('settings.game.human.clock', '1'),
       time: localstorageprop('settings.game.human.time', '5'),

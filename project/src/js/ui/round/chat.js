@@ -54,7 +54,7 @@ module.exports = {
 
     this.close = function(fromBB) {
       window.cordova.plugins.Keyboard.close();
-      if(!fromBB && this.showing) backbutton.stack.pop();
+      if(fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
       this.showing = false;
       this.unread = false;
     }.bind(this);

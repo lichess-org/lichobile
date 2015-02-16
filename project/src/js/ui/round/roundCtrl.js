@@ -43,7 +43,7 @@ module.exports = function(cfg) {
   }.bind(this);
 
   this.hideActions = function(fromBB) {
-    if (!fromBB && this.vm.showingActions) backbutton.stack.pop();
+    if (fromBB !== 'backbutton' && this.vm.showingActions) backbutton.stack.pop();
     this.vm.showingActions = false;
   }.bind(this);
 

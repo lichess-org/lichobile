@@ -45,7 +45,7 @@ gamesMenu.open = function() {
 };
 
 gamesMenu.close = function(fromBB) {
-  if (!fromBB) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && gamesMenu.isOpen) backbutton.stack.pop();
   gamesMenu.isOpen = false;
 };
 

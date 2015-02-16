@@ -16,7 +16,7 @@ menu.openSettings = function() {
 };
 
 menu.closeSettings = function(fromBB) {
-  if (!fromBB && menu.settingsOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && menu.settingsOpen) backbutton.stack.pop();
   menu.settingsOpen = false;
 };
 
@@ -43,7 +43,7 @@ menu.open = function() {
 
 menu.close = function(fromBB) {
   if (menu.settingsOpen) menu.closeSettings();
-  if (!fromBB && menu.isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
   menu.isOpen = false;
 };
 

@@ -12,9 +12,24 @@ var seeks = {};
 
 seeks.controller = function() {
 
+  var lobbySocket;
   var pool = [];
 
   window.analytics.trackView('Seeks');
+
+  xhr.lobby(true).then(function(data) {
+    lobbySocket = socket.connectLobby(data.lobby.version, reload, {
+      redirect: function(data) {
+        m.route('/play' + data.url);
+      },
+      reload_seeks: reload,
+      resync: function() {
+        xhr.lobby().then(function(data) {
+          if (lobbySocket) lobbySocket.setVersion(data.lobby.version);
+        });
+      }
+    });
+  });
 
   var reload = function(foreground) {
     xhr.seeks(foreground).then(function(d) {
@@ -22,24 +37,33 @@ seeks.controller = function() {
       m.redraw();
     });
   };
-  reload(true);
-  var reloadInterval = setInterval(reload, 5000);
 
   return {
     pool: function() {
       return pool;
     },
+    cancel: function(seekId) {
+      lobbySocket.send('cancelSeek', seekId);
+    },
+    join: function(seekId) {
+      lobbySocket.send('joinSeek', seekId);
+    },
     onunload: function() {
-      clearInterval(reloadInterval);
+      if (lobbySocket) {
+        lobbySocket.destroy();
+        lobbySocket = null;
+      }
     }
   };
 };
 
 function renderSeek(ctrl, seek) {
-  return m('div.seek', {
+  var action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
+  return m('div', {
     key: seek.id,
     'data-id': seek.id,
-    class: 'seek ' + (seek.action === 'joinSeek' ? 'join' : 'cancel')
+    class: 'seek ' + action,
+    config: utils.ontouchend(utils.partialƒ(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon

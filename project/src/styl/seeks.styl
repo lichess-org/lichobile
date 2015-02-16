@@ -2,14 +2,16 @@
   .seek
     overflow hidden
     padding 20px 10px
-    border-bottom 1px solid #2E3033
+    border-top 1px solid #2E3033
     line-height 26px
-  .icon::before
-    display block
-    float left
-    font-size 80px
-    padding-right 20px
-    opacity 0.5
+    &.cancel
+      color #C4A86F
+    .icon::before
+      display block
+      float left
+      font-size 80px
+      padding-right 20px
+      opacity 0.5
 
 .disconnected
   button.fat

@@ -18,6 +18,7 @@ seek.controller = function() {
   window.analytics.trackView('Seek');
 
   var createHook = function() {
+    if (hookId) return; // hook already created!
     xhr.seekGame().then(function(data) {
       hookId = data.hook.id;
     }, function(error) {

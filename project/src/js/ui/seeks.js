@@ -24,7 +24,8 @@ function fixSeeks(ss) {
     if (seekUserId(b) === userId) return 1;
   });
   return uniq(ss, function(s) {
-    return s.username + s.mode + s.variant.key + s.days;
+    var username = seekUserId(s) === userId ? Math.random() : s.username;
+    return username + s.mode + s.variant.key + s.days;
   });
 }
 

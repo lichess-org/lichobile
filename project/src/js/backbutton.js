@@ -5,7 +5,7 @@ var stack = [];
 module.exports = function() {
   var b = stack.pop();
   if (isFunction(b)) {
-    b(true);
+    b('backbutton');
     m.redraw();
   } else if (!/^\/$/.test(m.route())) {
     window.navigator.app.backHistory();

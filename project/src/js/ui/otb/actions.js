@@ -47,7 +47,7 @@ module.exports = {
 
     function close(fromBB) {
       pgn.close();
-      if (!fromBB && !isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
       isOpen = false;
     }
 

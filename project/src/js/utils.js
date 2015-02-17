@@ -52,7 +52,7 @@ utils.ƒ = function() {
 };
 
 // convenience function to bind a touchend mobile button handler in mithril
-function bindTouchendButton(scrollable, handler) {
+function bindTouchendButton(scrollableX, scrollableY, handler) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var options = {
@@ -66,8 +66,15 @@ function bindTouchendButton(scrollable, handler) {
         },
         monotouchable: true
       };
-      if (scrollable) options.tolerance = 5;
-      var constr = scrollable ? mButton.ScrollableX.Touchend : mButton.Touchend;
+      if (scrollableX || scrollableY) options.tolerance = 5;
+      var constr;
+      if (scrollableX)
+        constr = mButton.ScrollableX.Touchend;
+      else if (scrollableY)
+        constr = mButton.ScrollableY.Touchend;
+      else
+        constr = mButton.Touchend;
+
       var button = new constr(options);
 
       context.onunload = function() {
@@ -77,8 +84,9 @@ function bindTouchendButton(scrollable, handler) {
   };
 }
 
-utils.ontouchend = utils.partialƒ(bindTouchendButton, false);
-utils.ontouchendScroll = utils.partialƒ(bindTouchendButton, true);
+utils.ontouchend = utils.partialƒ(bindTouchendButton, false, false);
+utils.ontouchendScrollX = utils.partialƒ(bindTouchendButton, true, false);
+utils.ontouchendScrollY = utils.partialƒ(bindTouchendButton, false, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

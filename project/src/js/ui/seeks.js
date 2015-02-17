@@ -42,7 +42,7 @@ seeks.controller = function() {
       redirect: function(data) {
         m.route('/play' + data.url);
       },
-      reload_seeks: reload,
+      'reload_seeks': reload,
       resync: function() {
         xhr.lobby().then(function(data) {
           if (lobbySocket) lobbySocket.setVersion(data.lobby.version);
@@ -115,7 +115,7 @@ seeks.view = function(ctrl) {
 
     return m('div.seeks', {
       config: function(el, isUpdate, context) {
-        if (!scroller || !isUpdate) {
+        if (!isUpdate) {
           scroller = new iScroll(el);
           context.onunload = function() {
             if (scroller) {
@@ -129,7 +129,7 @@ seeks.view = function(ctrl) {
     }, [
       m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
       m('button.fat', {
-        config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
+        config: utils.ontouchendScrollY(gamesMenu.openNewGameCorrespondence)
       }, i18n('createAGame'))
     ]);
   };

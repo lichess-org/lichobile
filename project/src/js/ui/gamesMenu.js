@@ -223,7 +223,7 @@ function renderAllGames() {
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,
-      config: utils.ontouchendScroll(function() {
+      config: utils.ontouchendScrollX(function() {
         gamesMenu.joinGame(g);
       })
     }, [
@@ -250,7 +250,7 @@ function renderAllGames() {
   }, [
     m('div.container_flip', [
       m('div.front', {
-        config: utils.ontouchendScroll(swapCard)
+        config: utils.ontouchendScrollX(swapCard)
       }, [
         renderViewOnlyBoard(),
         m('div.infos', [

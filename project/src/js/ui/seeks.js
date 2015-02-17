@@ -24,8 +24,9 @@ function fixSeeks(ss) {
     if (seekUserId(b) === userId) return 1;
   });
   return uniq(ss, function(s) {
-    var username = seekUserId(s) === userId ? Math.random() : s.username;
-    return username + s.mode + s.variant.key + s.days;
+    var username = seekUserId(s) === userId ? s.id : s.username;
+    var key = username + s.mode + s.variant.key + s.days;
+    return key;
   });
 }
 
@@ -105,7 +106,14 @@ seeks.view = function(ctrl) {
   var scroller;
   var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
-    return session.isConnected() ? m('div.seeks', {
+
+    if (!session.isConnected())
+      return m('div.disconnected',
+        m('button.fat', {
+          config: utils.ontouchend(loginModal.open)
+        }, i18n('logIn')));
+
+    return m('div.seeks', {
       config: function(el, isUpdate, context) {
         if (!scroller || !isUpdate) {
           scroller = new iScroll(el);
@@ -119,15 +127,11 @@ seeks.view = function(ctrl) {
         scroller.refresh();
       }
     }, [
-      ctrl.pool().map(utils.partialƒ(renderSeek, ctrl)),
+      m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
       m('button.fat', {
         config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
       }, i18n('createAGame'))
-    ]) : m('div.disconnected',
-      m('button.fat', {
-        config: utils.ontouchend(loginModal.open)
-      }, i18n('logIn'))
-    )
+    ]);
   };
 
   return layout.free(header, body, widgets.empty, menu.view, widgets.empty);

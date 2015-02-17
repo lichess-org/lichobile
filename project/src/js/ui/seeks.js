@@ -19,7 +19,7 @@ function seekUserId(seek) {
 
 function fixSeeks(ss) {
   var userId = session.getUserId();
-  if (userId) ss.slice(0).sort(function(a, b) {
+  if (userId) ss.sort(function(a, b) {
     if (seekUserId(a) === userId) return -1;
     if (seekUserId(b) === userId) return 1;
   });

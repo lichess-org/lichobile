@@ -834,9 +834,9 @@
       }
     },
     "chessground": {
-      "version": "1.9.1",
-      "from": "chessground@1.9.1",
-      "resolved": "https://registry.npmjs.org/chessground/-/chessground-1.9.1.tgz",
+      "version": "1.9.2",
+      "from": "chessground@1.9.2",
+      "resolved": "https://registry.npmjs.org/chessground/-/chessground-1.9.2.tgz",
       "dependencies": {
         "merge": {
           "version": "1.2.0",

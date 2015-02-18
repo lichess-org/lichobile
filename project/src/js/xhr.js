@@ -73,10 +73,6 @@ function status() {
           break;
         }
       }
-    } else if (window.lichess.version && semver.gt(data.app.current, window.lichess.version)) {
-      window.navigator.notification.alert(
-        i18n('appUpgradeAvailable')
-      );
     }
   });
 }

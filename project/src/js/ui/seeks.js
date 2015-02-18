@@ -84,7 +84,7 @@ function renderSeek(ctrl, seek) {
     key: seek.id,
     'data-id': seek.id,
     class: 'seek ' + action,
-    config: utils.ontouchend(utils.partialƒ(ctrl[action], seek.id))
+    config: utils.ontouchendScrollY(utils.partialƒ(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon
@@ -103,7 +103,6 @@ function renderSeek(ctrl, seek) {
 
 seeks.view = function(ctrl) {
 
-  var scroller;
   var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
 
@@ -113,25 +112,30 @@ seeks.view = function(ctrl) {
           config: utils.ontouchend(loginModal.open)
         }, i18n('logIn')));
 
-    return m('div.seeks', {
-      config: function(el, isUpdate, context) {
-        if (!isUpdate) {
-          scroller = new iScroll(el);
-          context.onunload = function() {
-            if (scroller) {
-              scroller.destroy();
-              scroller = null;
+    return [
+      m('div.seeks', {}, [
+        m('div.seeks_background'),
+        m('div.seeks_scroller', {
+          config: function(el, isUpdate, context) {
+            if (!isUpdate) {
+              context.scroller = new iScroll(el);
+              context.onunload = function() {
+                if (context.scroller) {
+                  context.scroller.destroy();
+                  context.scroller = null;
+                }
+              };
             }
-          };
-        }
-        scroller.refresh();
-      }
-    }, [
-      m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
-      m('button.fat', {
-        config: utils.ontouchendScrollY(gamesMenu.openNewGameCorrespondence)
-      }, i18n('createAGame'))
-    ]);
+            context.scroller.refresh();
+          }
+        }, [
+          m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
+        ]),
+        m('button.fat', {
+          config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
+        }, i18n('createAGame'))
+      ])
+    ];
   };
 
   return layout.free(header, body, widgets.empty, menu.view, widgets.empty);

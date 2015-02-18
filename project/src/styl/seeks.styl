@@ -1,25 +1,43 @@
 .seeks
-  .seek
-    overflow hidden
-    padding 20px 10px
-    border-top 1px solid #2E3033
-    line-height 26px
-    &.cancel
-      color #C4A86F
-    .icon::before
-      display block
-      float left
-      font-size 80px
-      padding-right 20px
-      opacity 0.5
+  height 75%
+  position relative
+
+.seeks_background
+  position absolute
+  height 100%
+  margin 0 5%
+  width 90%
+  opacity 0.4
+  background-image: url(../../images/bN-bg.svg);
+  background-size: 100% 100%;
+
+.seeks_scroller
+  margin-bottom 20px
+  height 100%
+  padding 15px
+  overflow hidden
+
+.seek
+  overflow hidden
+  padding 20px 10px
+  border-top 1px solid #2E3033
+  line-height 26px
+  &.cancel
+    color #C4A86F
+  .icon::before
+    display block
+    float left
+    font-size 80px
+    padding-right 20px
+    opacity 0.5
 
 .seeks, .disconnected
   button.fat
     display block
+    max-height 20%
     width 80%
     background #C4A86F
     color #fff
     padding 15px
     font-size 15px
     margin 0 auto
-    margin-top 20px

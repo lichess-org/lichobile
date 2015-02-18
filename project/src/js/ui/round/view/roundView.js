@@ -89,11 +89,12 @@ function renderGameRunningActions(ctrl) {
     m('div.actions', [
       button.moretime(ctrl),
       button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
-      button.standard(ctrl, game.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-      button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
-      button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
-      button.forceResign(ctrl),
-      button.threefoldClaimDraw(ctrl),
+      button.forceResign(ctrl) || [
+        button.standard(ctrl, game.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+          button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
+          button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
+          button.threefoldClaimDraw(ctrl)
+      ]
     ]),
     m('div.answers', answerButtons),
     m('br'), m('br'), button.backToGame(ctrl)
@@ -118,8 +119,7 @@ function renderGameEndedActions(ctrl) {
   var buttons =
     button.joinRematch(ctrl) ||
     button.answerOpponentRematch(ctrl) ||
-    button.cancelRematch(ctrl) ||
-    [button.rematch(ctrl), m('br'), m('br'), button.backToGame(ctrl)];
+    button.cancelRematch(ctrl) || [button.rematch(ctrl), m('br'), m('br'), button.backToGame(ctrl)];
   return [
     m('div.result', [result, m('br'), m('br'), status]),
     m('div.control.buttons', buttons)

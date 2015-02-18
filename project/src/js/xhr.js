@@ -42,6 +42,10 @@ function lobby(feedback) {
   return http.request('/', null, feedback);
 }
 
+function seeks(feedback) {
+  return http.request('/lobby/seeks', null, feedback);
+}
+
 function game(id) {
   return http.request('/' + id);
 }
@@ -81,6 +85,7 @@ module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
   lobby: lobby,
+  seeks: seeks,
   game: game,
   status: status
 };

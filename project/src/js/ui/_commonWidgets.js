@@ -19,11 +19,11 @@ widgets.gameButton = function() {
   }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 
-widgets.header = function() {
+widgets.header = function(title) {
   return m('nav', [
     widgets.menuButton(),
     widgets.gameButton(),
-    m('h1', 'lichess.org')
+    m('h1', title || 'lichess.org')
   ]);
 };
 

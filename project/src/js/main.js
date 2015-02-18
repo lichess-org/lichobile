@@ -14,6 +14,7 @@ var backbutton = require('./backbutton');
 var home = require('./ui/home');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
+var seeks = require('./ui/seeks');
 var otb = require('./ui/otb/main');
 
 var triedToLogin = false;
@@ -59,6 +60,7 @@ function main() {
 
   m.route(document.body, '/', {
     '/': home,
+    '/seeks': seeks,
     '/seek': seek,
     '/otb': otb,
     '/play/:id': play

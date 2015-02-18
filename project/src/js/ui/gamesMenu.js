@@ -30,6 +30,12 @@ gamesMenu.openNewGame = function() {
   newGameCardSwapped = true;
 };
 
+gamesMenu.openNewGameCorrespondence = function() {
+  settings.game.selected('human');
+  settings.game.human.timeMode('2');
+  gamesMenu.openNewGame();
+};
+
 gamesMenu.openCurrentGames = function() {
   doOpen();
   setTimeout(function() {
@@ -68,7 +74,11 @@ function startAIGame() {
 }
 
 function seekHumanGame() {
-  m.route('/seek');
+  if (settings.game.human.timeMode() === '1') m.route('/seek');
+  else {
+    xhr.seekGame();
+    m.route('/seeks');
+  }
 }
 
 function swapCard() {
@@ -82,14 +92,13 @@ function tupleOf(x) {
 function renderForm(formName, action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
+  var hasDays = timeMode === '2';
   var allowWhite = !settingsObj.mode ||
-    settingsObj.mode() === '0' ||
-    ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
+    settingsObj.mode() === '0' || ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
     settings.game.selected() !== 'human';
   var colors = compact([
     ['randomColor', 'random'],
-    allowWhite ? ['white', 'white'] : null,
-    ['black', 'black']
+    allowWhite ? ['white', 'white'] : null, ['black', 'black']
   ]);
   var generalFieldset = [
     m('div.select_input', [
@@ -107,7 +116,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ]));
   }
   if (settingsObj.mode) {
-    var modes = session.isConnected() ? [
+    var modes = (session.isConnected() && timeMode !== '0') ? [
       ['casual', '0'],
       ['rated', '1']
     ] : [
@@ -135,6 +144,12 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       ])
     );
   }
+  if (hasDays)
+    timeFieldset.push(
+      m('div.select_input.large_label', [
+        formWidgets.renderSelect('daysPerTurn', formName + 'days',
+          settings.game.availableDays.map(tupleOf), settingsObj.days, false)
+      ]));
 
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
@@ -208,7 +223,7 @@ function renderAllGames() {
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,
-      config: utils.ontouchendScroll(function() {
+      config: utils.ontouchendScrollX(function() {
         gamesMenu.joinGame(g);
       })
     }, [
@@ -235,7 +250,7 @@ function renderAllGames() {
   }, [
     m('div.container_flip', [
       m('div.front', {
-        config: utils.ontouchendScroll(swapCard)
+        config: utils.ontouchendScrollX(swapCard)
       }, [
         renderViewOnlyBoard(),
         m('div.infos', [

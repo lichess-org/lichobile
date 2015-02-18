@@ -13,6 +13,10 @@ function get() {
   return session;
 }
 
+function getUserId() {
+  return (session && session.id) ? session.id : null;
+}
+
 function nowPlaying() {
   var np = session && session.nowPlaying || [];
   return np.filter(function(e) {
@@ -95,6 +99,7 @@ module.exports = {
   signup: signup,
   refresh: refresh,
   get: get,
+  getUserId: getUserId,
   nowPlaying: nowPlaying,
   myTurnGames: myTurnGames
 };

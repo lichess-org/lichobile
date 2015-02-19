@@ -26,6 +26,7 @@ module.exports = function(data, outOfTime) {
     this.data.white = white;
     this.data.black = black;
     setLastUpdate();
+    m.redraw();
   };
 
   this.tick = function(color) {

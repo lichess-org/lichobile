@@ -10,6 +10,7 @@ var loginModal = require('./loginModal');
 var gamesMenu = require('./gamesMenu');
 var uniq = require('lodash-node/modern/arrays/uniq');
 var iScroll = require('iscroll');
+var Zanimo = require('zanimo');
 
 var seeks = {};
 
@@ -64,7 +65,9 @@ seeks.controller = function() {
       return pool;
     },
     cancel: function(seekId) {
-      lobbySocket.send('cancelSeek', seekId);
+      return Zanimo(document.getElementById(seekId), 'opacity', '0', '500', 'ease-out').then(function() {
+        lobbySocket.send('cancelSeek', seekId);
+      });
     },
     join: function(seekId) {
       lobbySocket.send('joinSeek', seekId);
@@ -82,7 +85,7 @@ function renderSeek(ctrl, seek) {
   var action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
   return m('div', {
     key: seek.id,
-    'data-id': seek.id,
+    'id': seek.id,
     class: 'seek ' + action,
     config: utils.ontouchendScrollY(utils.partialƒ(ctrl[action], seek.id))
   }, [

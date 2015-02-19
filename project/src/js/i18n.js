@@ -3,7 +3,6 @@ var messages = [];
 var untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
-  appUpgradeAvailable: 'A new version of lichess mobile is available!',
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   mustSignIn: 'You must sign in to see this.'

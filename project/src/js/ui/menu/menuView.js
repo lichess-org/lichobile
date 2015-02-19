@@ -108,10 +108,10 @@ module.exports = function(onSettingChange) {
         gamesMenu.openNewGame();
       })
     }, i18n('createAGame')),
-    m('li.side_link', {
+    user ? m('li.side_link', {
       key: 'menu_seeks',
       config: utils.ontouchend(menu.menuRouteAction('/seeks'))
-    }, i18n('correspondence')),
+    }, i18n('correspondence')) : null,
     m('li.side_link', {
       key: 'menu_play_otb',
       config: utils.ontouchend(menu.menuRouteAction('/otb'))

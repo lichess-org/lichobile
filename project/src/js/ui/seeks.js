@@ -110,10 +110,15 @@ seeks.view = function(ctrl) {
   var body = function() {
 
     if (!session.isConnected())
-      return m('div.disconnected',
+      return m('div.seeks.disconnected', [
+        m('div.seeks_background'),
+        m('div.seeks_scroller', [
+          m('div.vertical_align.must_signin', i18n('mustSignIn'))
+        ]),
         m('button.fat', {
           config: utils.ontouchend(loginModal.open)
-        }, i18n('logIn')));
+        }, i18n('logIn'))
+      ]);
 
     return [
       m('div.seeks', {}, [

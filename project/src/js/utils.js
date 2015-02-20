@@ -64,7 +64,7 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
           handler(e, el);
           m.endComputation();
         },
-        monotouchable: true
+        monotouchable: false
       };
       if (scrollableX || scrollableY) options.tolerance = 5;
       var constr;

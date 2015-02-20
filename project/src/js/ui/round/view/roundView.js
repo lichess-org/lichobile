@@ -178,7 +178,9 @@ module.exports = function(ctrl) {
 
   function header() {
     return [
-      m('nav', [
+      m('nav', {
+        class: ctrl.vm.connectedWS ? '' : 'reconnecting'
+      }, [
         widgets.menuButton(),
         widgets.gameButton(),
         ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [

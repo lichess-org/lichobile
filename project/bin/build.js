@@ -81,6 +81,7 @@ module.exports.build = function build(platform, settings, configName) {
   configName = configName || 'default';
   var mode = ['prod'].indexOf(configName) !== -1 ? 'prod' : 'dev';
   var context = settings.configurations[platform][configName];
+  context.MODE = mode;
   context.TARIFA = true;
   context.APP_VERSION = context.version || settings.version;
   if (context.beta) context.APP_VERSION += '-beta' + context.beta;

@@ -21,6 +21,9 @@ var minimistOptions = {
 };
 var options = minimist(process.argv.slice(2), minimistOptions);
 
+var context = require('./' + options.env);
+context.MODE = options.mode;
+
 var paths = {
   scripts: ['src/js/**/*.js'],
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/*.styl'],
@@ -54,7 +57,7 @@ function buildScripts(src, dest, mode) {
 }
 
 gulp.task('html', function() {
-  return buildHtml('src', 'www', require('./' + options.env));
+  return buildHtml('src', 'www', context);
 });
 
 gulp.task('styl', function() {

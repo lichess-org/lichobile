@@ -40,6 +40,7 @@ module.exports = function(root, situations, ply) {
   }.bind(this);
 
   this.jump = function(ply) {
+    this.root.chessground.cancelMove();
     if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
     this.ply = ply;
     this.apply();

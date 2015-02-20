@@ -5,6 +5,12 @@ window.m = require('mithril');
 // for moment a global object makes loading locales easier
 window.moment = require('moment');
 
+if (window.lichess.mode === 'dev') {
+  var Q = require('q');
+  Q.longStackSupport = true;
+  Q.onerror = function(err) { console.error(err, err.stack); };
+}
+
 var utils = require('./utils');
 var session = require('./session');
 var i18n = require('./i18n');

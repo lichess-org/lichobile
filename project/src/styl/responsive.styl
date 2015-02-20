@@ -6,8 +6,9 @@
     max-height 65px
     .antagonist
       position relative
-      top -25px
-      left 13%
+      height 100%
+      top -30px
+      left 15%
       width 70%
       .clock
         font-size 23px
@@ -32,11 +33,13 @@
       button
         width 40px
         padding 10px
-        &.fa
-          font-size 1em
     .vertical_align
       top 0
       transform none
+
+    nav.reconnecting + .antagonist
+      display none
+
   .main_footer
     min-height 95px
 
@@ -53,6 +56,8 @@
 
   .side_menu_header .ratings
     display none
+
+
 
 @media only screen and (max-device-width 340px)
   .side_menu_header .perf .nb

@@ -64,7 +64,7 @@ function bindTouchendButton(scrollable, handler) {
           handler(e, el);
           m.endComputation();
         },
-        monotouchable: true
+        monotouchable: false
       };
       if (scrollable) options.tolerance = 5;
       var constr = scrollable ? mButton.ScrollableX.Touchend : mButton.Touchend;

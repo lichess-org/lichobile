@@ -45,10 +45,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
@@ -58,6 +54,10 @@
                         },
                         {
                             "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -89,9 +89,6 @@
         "com.ququplay.websocket.WebSocket": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
-        "com.zengularity.acraplugin": {
-            "PACKAGE_NAME": "org.lichess.mobileapp"
-        },
         "nl.x-services.plugins.insomnia": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
@@ -110,9 +107,6 @@
         "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
-        "org.apache.cordova.media": {
-            "PACKAGE_NAME": "org.lichess.mobileapp"
-        },
         "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
@@ -120,6 +114,9 @@
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
         "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "org.lichess.mobileapp"
+        },
+        "org.apache.cordova.media": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         }
     },

@@ -12,9 +12,7 @@
       "default": {
         "id": "org.lichess.mobileapp.dev",
         "product_name": "lichess dev",
-        "product_file_name": "lichess",
-        "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org"
+        "product_file_name": "lichess"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",
@@ -120,7 +118,6 @@
     "org.apache.cordova.device": "https://github.com/apache/cordova-plugin-device.git#r0.2.13",
     "org.apache.cordova.dialogs": "https://github.com/apache/cordova-plugin-dialogs.git#r0.2.11",
     "org.apache.cordova.globalization": "https://github.com/apache/cordova-plugin-globalization.git#r0.3.3",
-    "org.apache.cordova.media": "https://github.com/apache/cordova-plugin-media.git#r0.2.15",
     "org.apache.cordova.network-information": "https://github.com/apache/cordova-plugin-network-information.git#r0.2.14",
     "org.apache.cordova.statusbar": "org.apache.cordova.statusbar",
     "org.apache.cordova.file": "org.apache.cordova.file",
@@ -128,6 +125,7 @@
     "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",
     "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-    "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git"
+    "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git",
+    "org.apache.cordova.media": "https://github.com/veloce/cordova-plugin-media.git"
   }
 }

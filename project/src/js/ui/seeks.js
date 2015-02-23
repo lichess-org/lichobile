@@ -109,16 +109,20 @@ seeks.view = function(ctrl) {
   var header = utils.partialƒ(widgets.header, i18n('correspondence'));
   var body = function() {
 
-    if (!session.isConnected())
-      return m('div.seeks.disconnected', [
-        m('div.seeks_background'),
-        m('div.seeks_scroller', [
-          m('div.vertical_align.must_signin', i18n('mustSignIn'))
-        ]),
-        m('button.fat', {
-          config: utils.ontouchend(loginModal.open)
-        }, i18n('logIn'))
-      ]);
+    if (!session.isConnected()) {
+      return [
+        m('div.seeks.disconnected', [
+          m('div.seeks_background'),
+          m('div.seeks_scroller', [
+            m('div.vertical_align.must_signin', i18n('mustSignIn'))
+          ]),
+          m('button.fat', {
+            key: 'seeks_login',
+            config: utils.ontouchend(loginModal.open)
+          }, i18n('logIn'))
+        ])
+      ];
+    }
 
     return [
       m('div.seeks', {}, [
@@ -140,6 +144,7 @@ seeks.view = function(ctrl) {
           m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
         ]),
         m('button.fat', {
+          key: 'seeks_createagame',
           config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
         }, i18n('createAGame'))
       ])

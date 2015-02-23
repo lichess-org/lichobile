@@ -37,10 +37,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
                             "count": 1
                         },
@@ -57,7 +53,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
+                            "xml": "<feature name=\"LowLatencyAudio\"><param name=\"android-package\" value=\"com.rjfun.cordova.plugin.LowLatencyAudio\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -101,9 +97,6 @@
         "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
-        "org.apache.cordova.file": {
-            "PACKAGE_NAME": "org.lichess.mobileapp"
-        },
         "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
@@ -116,7 +109,7 @@
         "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         },
-        "org.apache.cordova.media": {
+        "com.rjfun.cordova.plugin.lowlatencyaudio": {
             "PACKAGE_NAME": "org.lichess.mobileapp"
         }
     },

@@ -52,8 +52,8 @@ seeks.controller = function() {
     });
   });
 
-  var reload = function(foreground) {
-    xhr.seeks(foreground).then(function(d) {
+  var reload = function(feedback) {
+    xhr.seeks(feedback).then(function(d) {
       pool = fixSeeks(d);
       m.redraw();
     });

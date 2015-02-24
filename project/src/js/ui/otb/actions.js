@@ -6,12 +6,6 @@ var settings = require('../../settings');
 var formWidgets = require('../_formWidgets');
 var backbutton = require('../../backbutton');
 
-function backToGame(ctrl) {
-  return m('button[data-icon=L]', {
-    config: utils.ontouchend(ctrl.close)
-  }, i18n('backToGame'));
-}
-
 function renderEnded(ctrl) {
   var result, status, sit = ctrl.root.replay.situation();
   if (sit.checkmate) {
@@ -32,8 +26,8 @@ function renderAlways(ctrl) {
         config: utils.ontouchend(ctrl.pgn.open)
       }, i18n('showPGN')),
       formWidgets.renderCheckbox(i18n('Flip pieces after move'), 'flipPieces',
-        settings.onChange(settings.otb.flipPieces)),
-      m('br'), m('br'), backToGame(ctrl)
+        settings.onChange(settings.otb.flipPieces)
+      ),
     ])
   ];
 }

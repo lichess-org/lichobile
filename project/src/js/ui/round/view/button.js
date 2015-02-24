@@ -77,7 +77,9 @@ module.exports = {
     ]);
   },
   rematch: function(ctrl) {
-    if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) && !ctrl.data.tournament) {
+    if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) &&
+      !ctrl.data.tournament && !ctrl.data.opponent.offeringRematch &&
+      !ctrl.data.player.offeringRematch) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('button[data-icon=B]', {
           config: utils.ontouchend(function() { ctrl.socket.send('rematch-yes'); })
@@ -99,11 +101,6 @@ module.exports = {
       }, i18n('declineInvitation'))
     ];
   },
-  backToGame: function(ctrl) {
-    return m('button[data-icon=L]', {
-      config: utils.ontouchend(ctrl.hideActions)
-    }, i18n('backToGame'));
-  },
   cancelRematch: function(ctrl) {
     if (ctrl.data.player.offeringRematch) return [
       i18n('rematchOfferSent'),
@@ -112,12 +109,6 @@ module.exports = {
       m('button[data-icon=L]', {
         config: utils.ontouchend(function() { ctrl.socket.send('rematch-no'); })
       }, i18n('cancelRematchOffer'))
-    ];
-  },
-  joinRematch: function(ctrl) {
-    if (ctrl.data.game.rematch) return [
-      i18n('rematchOfferAccepted'),
-      m('button[data-icon=E]', {}, i18n('joinTheGame'))
     ];
   },
   moretime: function(ctrl) {

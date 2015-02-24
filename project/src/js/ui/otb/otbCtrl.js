@@ -48,7 +48,8 @@ module.exports = function(cfg) {
     if (!this.replay) this.replay = new replayCtrl(this, situations, ply);
     else this.replay.init(situations, ply);
     this.replay.apply();
-    this.actions = new actions.controller(this);
+    if (this.actions) this.actions.close();
+    else this.actions = new actions.controller(this);
   }.bind(this);
 
   this.initAs = function(color) {

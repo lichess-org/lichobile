@@ -16,6 +16,8 @@ var session = require('./session');
 var i18n = require('./i18n');
 var xhr = require('./xhr');
 var backbutton = require('./backbutton');
+var menu = require('./ui/menu');
+var storage = require('./storage');
 
 var home = require('./ui/home');
 var play = require('./ui/play');
@@ -52,11 +54,18 @@ function onOnline() {
         window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
     }
   }, function(err) {
-    // means user is anonymous here
     if (/^\/$/.test(m.route()) && !triedToLogin) {
-      triedToLogin = true;
+      // means user is anonymous here
       if (err.message === 'unauthorizedError') {
-        window.plugins.toast.show(i18n('connectedToLichessAnonymous'), 'long', 'center');
+        triedToLogin = true;
+        var lastPlayed = storage.get('lastPlayedGameURL');
+        if (lastPlayed)
+          m.route('/play' + lastPlayed);
+        else {
+          window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
+          menu.open();
+          m.redraw();
+        }
       }
     }
   });

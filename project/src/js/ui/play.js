@@ -6,6 +6,7 @@ var roundCtrl = require('./round/roundCtrl');
 var roundView = require('./round/view/roundView');
 var gamesMenu = require('./gamesMenu');
 var layout = require('./layout');
+var storage = require('../storage');
 
 module.exports = {
   controller: function() {
@@ -13,6 +14,7 @@ module.exports = {
     xhr.game(m.route.param('id')).then(function(data) {
       if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
+      storage.set('lastPlayedGameURL', data.url.round);
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');

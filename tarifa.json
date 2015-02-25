@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "platforms": [
     "ios",
     "android"
@@ -23,7 +23,7 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "beta": "5",
+        "beta": "1",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"
@@ -58,7 +58,7 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "beta": "5",
+        "beta": "1",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"

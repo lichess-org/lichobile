@@ -81,7 +81,7 @@
   window.navigator.globalization = {
     getPreferredLanguage: function(success) {
       success({
-        value: 'fr-FR'
+        value: 'en'
       });
     }
   };

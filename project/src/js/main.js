@@ -24,6 +24,7 @@ var play = require('./ui/play');
 var seek = require('./ui/seek');
 var seeks = require('./ui/seeks');
 var otb = require('./ui/otb/main');
+var ai = require('./ui/ai/main');
 
 var triedToLogin = false;
 
@@ -78,6 +79,7 @@ function main() {
     '/seeks': seeks,
     '/seek': seek,
     '/otb': otb,
+    '/ai': ai,
     '/play/:id': play
   });
 

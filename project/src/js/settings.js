@@ -17,6 +17,19 @@ module.exports = {
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false)
   },
+  ai: {
+    availableOpponents: [
+      ['Tuco Salamanca', '1'],
+      ['Jesse Pinkman', '2'],
+      ['Skyler White', '3'],
+      ['Saul Goodman', '4'],
+      ['Mike Ehrmantraut', '5'],
+      ['Lydia Rodarte-Quayle', '6'],
+      ['Gustavo Fring', '7'],
+      ['Heisenberg', '8']
+    ],
+    opponent: localstorageprop('settings.ai.opponent', 1)
+  },
   onChange: function(prop, callback) {
     if (!callback) return prop;
     return function() {
@@ -34,9 +47,11 @@ module.exports = {
       'kingOfTheHill', 'threeCheck', 'atomic'
     ],
     availableTimes: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
-    '20', '25', '30', '40', '60', '90', '120', '150', '180'],
+      '20', '25', '30', '40', '60', '90', '120', '150', '180'
+    ],
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'],
+      '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'
+    ],
     availableDays: ['1', '2', '3', '5', '7', '10', '14'],
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),

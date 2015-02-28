@@ -10,7 +10,7 @@ module.exports = function(cfg) {
 
   return {
     "game": {
-      "id": "__OTB___",
+      "id": "___AI___",
       "variant": {
         "key": "standard",
         "name": "Standard",

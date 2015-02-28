@@ -115,7 +115,11 @@ module.exports = function(onSettingChange) {
     m('li.side_link', {
       key: 'menu_play_otb',
       config: utils.ontouchend(menu.menuRouteAction('/otb'))
-    }, i18n('playOnTheBoardOffline'))
+    }, i18n('playOnTheBoardOffline')),
+    m('li.side_link', {
+      key: 'menu_play_ai',
+      config: utils.ontouchend(menu.menuRouteAction('/ai'))
+    }, i18n('playTheComputerOffline'))
   ];
   if (session.isConnected()) {
     links.push(

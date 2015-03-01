@@ -836,7 +836,7 @@
     "chessground": {
       "version": "1.9.2",
       "from": "git://github.com/ornicar/chessground#pureAnims",
-      "resolved": "git://github.com/ornicar/chessground#919cd6a92ca0b84f5885723aea8bd09e47674bfc",
+      "resolved": "git://github.com/ornicar/chessground#043503da57aca447cde5ee89c72ae0b74538bd21",
       "dependencies": {
         "merge": {
           "version": "1.2.0",

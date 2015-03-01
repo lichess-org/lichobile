@@ -32,8 +32,9 @@ function seekGame() {
       days: config.days(),
       time: config.time(),
       increment: config.increment(),
-      color: config.color(),
-      mode: session.isConnected() ? config.mode() : '0'
+      color: 'random',
+      mode: session.isConnected() ? config.mode() : '0',
+      ratingRange: config.ratingMin() + '-' + config.ratingMax()
     }
   }, true);
 }

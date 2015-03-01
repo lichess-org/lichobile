@@ -96,18 +96,23 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   var allowWhite = !settingsObj.mode ||
     settingsObj.mode() === '0' || ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
     settings.game.selected() !== 'human';
-  var colors = compact([
-    ['randomColor', 'random'],
-    allowWhite ? ['white', 'white'] : null, ['black', 'black']
-  ]);
   var generalFieldset = [
-    m('div.select_input', [
-      formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
-    ]),
     m('div.select_input', [
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
     ])
   ];
+
+  if (settingsObj.color) {
+    var colors = compact([
+      ['randomColor', 'random'],
+      allowWhite ? ['white', 'white'] : null, ['black', 'black']
+    ]);
+    generalFieldset.unshift(
+      m('div.select_input', [
+        formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
+      ])
+    );
+  }
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', [
       formWidgets.renderSelect('level', 'ailevel', [
@@ -125,6 +130,18 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     generalFieldset.push(m('div.select_input', [
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ]));
+  }
+  if (settingsObj.mode() === '1') {
+    generalFieldset.push(
+      m('div.select_input.inline', [
+        formWidgets.renderSelect('ratingMin', formName + 'rating_min',
+          settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
+      ]),
+      m('div.select_input.inline', [
+        formWidgets.renderSelect('ratingMax', formName + 'rating_max',
+          settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+      ])
+    );
   }
 
   var timeFieldset = [

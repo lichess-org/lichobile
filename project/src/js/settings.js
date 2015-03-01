@@ -1,4 +1,5 @@
 var store = require('./storage');
+var range = require('lodash-node/modern/arrays/range');
 
 function localstorageprop(key, initialValue) {
   return function() {
@@ -6,6 +7,10 @@ function localstorageprop(key, initialValue) {
     var ret = store.get(key);
     return (ret !== null) ? ret : initialValue;
   };
+}
+
+function tupleOf(x) {
+  return [x.toString(), x.toString()];
 }
 
 module.exports = {
@@ -72,7 +77,6 @@ module.exports = {
       level: localstorageprop('settings.game.ai.aiLevel', '3')
     },
     human: {
-      color: localstorageprop('settings.game.human.color', 'random'),
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],
@@ -81,6 +85,12 @@ module.exports = {
         ['Antichess', '6'],
         ['Atomic', '7']
       ],
+      availableRatingRanges: {
+        min: range(800, 2900, 100).map(tupleOf),
+        max: range(900, 3000, 100).map(tupleOf)
+      },
+      ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
+      ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),
       variant: localstorageprop('settings.game.human.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],

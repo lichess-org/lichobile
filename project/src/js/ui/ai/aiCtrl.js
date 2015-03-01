@@ -20,11 +20,13 @@ module.exports = function() {
     this.data.game.fen = engine.getFen();
     save();
     m.redraw();
-    if (this.replay.situation().checkmate) setTimeout(function() {
-      this.actions.open();
-      m.redraw();
-    }.bind(this), 1000);
-    else engineMove();
+    if (this.replay.situation().checkmate) {
+      this.chessground.cancelMove();
+      setTimeout(function() {
+        this.actions.open();
+        m.redraw();
+      }.bind(this), 1000);
+    } else engineMove();
   }.bind(this);
 
   this.getOpponent = function() {
@@ -43,7 +45,7 @@ module.exports = function() {
       engine.search(function(move) {
         addMove(move[0], move[1], move[2]);
       });
-    }.bind(this), 300);
+    }.bind(this), 500);
   }.bind(this);
 
   var onPromotion = function(orig, dest, role) {

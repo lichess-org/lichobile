@@ -1,14 +1,21 @@
 var garbo = require('./garbochess');
 
-var levelMoveTime = {
-  1: 20,
-  2: 50,
-  3: 100,
-  4: 200,
-  5: 500,
-  6: 1000,
-  7: 2000,
-  8: 4000
+// [time, plies]
+var levels = {
+  1: [20, 1],
+  2: [40, 2],
+  3: [70, 3],
+  4: [120, 4],
+  5: [200, 5],
+  6: [400, 6],
+  7: [700, 8],
+  8: [1000, 10]
+};
+
+var level = 1;
+
+var forsyth = function(role) {
+  return role === 'knight' ? 'n' : role[0];
 };
 
 module.exports = {
@@ -16,19 +23,21 @@ module.exports = {
     garbo.reset();
     garbo.setFen(fen);
   },
-  setLevel: function(level) {
-    garbo.setMoveTime(levelMoveTime[level] || 300);
+  setLevel: function(l) {
+    level = l;
+    garbo.setMoveTime(levels[level][0]);
   },
   addMove: function(origKey, destKey, promotionRole) {
-    var move = origKey + destKey + (promotionRole ? promotionRole[0] : '');
+    var move = origKey + destKey + (promotionRole ? forsyth(promotionRole) : '');
     garbo.addMove(garbo.getMoveFromString(move));
   },
   search: function(then) {
     garbo.search(function(bestMove, value, timeTaken, ply) {
+      if (bestMove === 0) return;
       var str = garbo.formatMove(bestMove);
       var move = [str.slice(0, 2), str.slice(2, 4), str[4]];
       then(move);
-    }, 99, null);
+    }, levels[level][1], null);
   },
   getFen: garbo.getFen
 };

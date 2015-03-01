@@ -31,7 +31,7 @@ function makeConfig(data, fen) {
       duration: 300
     },
     premovable: {
-      enabled: false,
+      enabled: true
     },
     draggable: {
       showGhost: data.pref.highlight,

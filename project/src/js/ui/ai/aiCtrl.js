@@ -92,7 +92,7 @@ module.exports = function() {
   } catch (e) {
     console.log(e, 'Fail to load saved game');
     this.init(makeData({}));
-  } else this.init();
+  } else this.init(makeData({}));
 
   var save = function() {
     storage.set(storageKey, {

@@ -2466,20 +2466,6 @@ function BuildPVMessage(bestMove, value, timeTaken, ply) {
     return "Ply:" + ply + " Score:" + value + " Nodes:" + totalNodes + " NPS:" + ((totalNodes / (timeTaken / 1000)) | 0) + " " + PVFromHash(bestMove, 15);
 }
 
-//////////////////////////////////////////////////
-// Test Harness
-//////////////////////////////////////////////////
-function FinishPlyCallback(bestMove, value, timeTaken, ply) {
-    postMessage("pv " + BuildPVMessage(bestMove, value, timeTaken, ply));
-}
-
-function FinishMoveLocalTesting(bestMove, value, timeTaken, ply) {
-    if (bestMove != null) {
-        MakeMove(bestMove);
-        postMessage(FormatMove(bestMove));
-    }
-}
-
 module.exports = {
   reset: ResetGame,
   setFen: InitializeFromFen,

@@ -54,7 +54,7 @@ module.exports = function(ctrl) {
       m('nav', [
         widgets.menuButton(),
         widgets.gameButton(),
-        m('h1.playing', i18n('playTheComputerOffline'))
+        m('h1.playing', i18n('playOfflineComputer'))
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
     ];

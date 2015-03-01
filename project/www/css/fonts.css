@@ -23,30 +23,6 @@
 }
 
 @font-face {
-  font-family: 'montserrathairline';
-  src: url('../fonts/montserrat/montserrat-hairline-webfont.eot');
-  src: url('../fonts/montserrat/montserrat-hairline-webfont.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/montserrat/montserrat-hairline-webfont.woff2') format('woff2'),
-  url('../fonts/montserrat/montserrat-hairline-webfont.woff') format('woff'),
-  url('../fonts/montserrat/montserrat-hairline-webfont.ttf') format('truetype'),
-  url('../fonts/montserrat/montserrat-hairline-webfont.svg#montserrathairline') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'montserratblack';
-  src: url('../fonts/montserrat/montserrat-black-webfont.eot');
-  src: url('../fonts/montserrat/montserrat-black-webfont.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/montserrat/montserrat-black-webfont.woff2') format('woff2'),
-  url('../fonts/montserrat/montserrat-black-webfont.woff') format('woff'),
-  url('../fonts/montserrat/montserrat-black-webfont.ttf') format('truetype'),
-  url('../fonts/montserrat/montserrat-black-webfont.svg#montserratblack') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'montserratbold';
   src: url('../fonts/montserrat/montserrat-bold-webfont.eot');
   src: url('../fonts/montserrat/montserrat-bold-webfont.eot?#iefix') format('embedded-opentype'),
@@ -54,18 +30,6 @@
   url('../fonts/montserrat/montserrat-bold-webfont.woff') format('woff'),
   url('../fonts/montserrat/montserrat-bold-webfont.ttf') format('truetype'),
   url('../fonts/montserrat/montserrat-bold-webfont.svg#montserratbold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Cousine';
-  src: url('../fonts/cousine/cousine-regular-webfont.eot');
-  src: url('../fonts/cousine/cousine-regular-webfont.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/cousine/cousine-regular-webfont.woff2') format('woff2'),
-  url('../fonts/cousine/cousine-regular-webfont.woff') format('woff'),
-  url('../fonts/cousine/cousine-regular-webfont.ttf') format('truetype'),
-  url('../fonts/cousine/cousine-regular-webfont.svg#cousineregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

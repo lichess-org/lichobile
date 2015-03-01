@@ -130,18 +130,18 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     generalFieldset.push(m('div.select_input', [
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ]));
-  }
-  if (settingsObj.mode() === '1') {
-    generalFieldset.push(
-      m('div.select_input.inline', [
-        formWidgets.renderSelect('ratingMin', formName + 'rating_min',
-          settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
-      ]),
-      m('div.select_input.inline', [
-        formWidgets.renderSelect('ratingMax', formName + 'rating_max',
-          settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
-      ])
-    );
+    if (settingsObj.mode() === '1') {
+      generalFieldset.push(
+        m('div.select_input.inline', [
+          formWidgets.renderSelect('ratingMin', formName + 'rating_min',
+            settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
+        ]),
+        m('div.select_input.inline', [
+          formWidgets.renderSelect('ratingMax', formName + 'rating_max',
+            settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+        ])
+      );
+    }
   }
 
   var timeFieldset = [

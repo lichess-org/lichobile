@@ -43,6 +43,7 @@ module.exports = function() {
     if (this.chessground.data.turnColor !== this.data.player.color) setTimeout(function() {
       engine.setLevel(this.getOpponent().level);
       engine.search(function(move) {
+        sound.move();
         addMove(move[0], move[1], move[2]);
       });
     }.bind(this), 500);

@@ -1,8 +1,8 @@
 // https://github.com/glinscott/Garbochess-JS
 //  latest commit 4ff0f9e49a
 //  Gary Linscott glinscott authored on Dec 25, 2012
+//  Modified for lichobile
 
-var g_debug = true;
 var g_timeout = 40;
 
 function GetFen(){
@@ -2477,30 +2477,6 @@ function FinishMoveLocalTesting(bestMove, value, timeTaken, ply) {
     if (bestMove != null) {
         MakeMove(bestMove);
         postMessage(FormatMove(bestMove));
-    }
-}
-
-var needsReset = true;
-self.onmessage = function (e) {
-    if (e.data == "go" || needsReset) {
-        ResetGame();
-        needsReset = false;
-        if (e.data == "go") return;
-    }
-    if (e.data.match("^position") == "position") {
-        ResetGame();
-        var result = InitializeFromFen(e.data.substr(9, e.data.length - 9));
-        if (result.length != 0) {
-            postMessage("message " + result);
-        }
-    } else if (e.data.match("^search") == "search") {
-        g_timeout = parseInt(e.data.substr(7, e.data.length - 7), 10);
-        Search(FinishMoveLocalTesting, 99, FinishPlyCallback);
-    } else if (e.data == "analyze") {
-        g_timeout = 99999999999;
-        Search(null, 99, FinishPlyCallback);
-    } else {
-        MakeMove(GetMoveFromString(e.data));
     }
 }
 

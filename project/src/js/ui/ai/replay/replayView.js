@@ -3,10 +3,10 @@ var utils = require('../../../utils');
 function renderBackwardButton(ctrl) {
   return m('button.game_action[data-icon=I]', {
     config: utils.ontouchend(function() {
-      if (ctrl.ply > 0) ctrl.jump(ctrl.ply - 1);
+      if (ctrl.ply > 1) ctrl.jump(ctrl.ply - 2);
     }),
     class: utils.classSet({
-      disabled: !(ctrl.ply > 0)
+      disabled: !(ctrl.ply > 1)
     })
   });
 }
@@ -14,10 +14,10 @@ function renderBackwardButton(ctrl) {
 function renderForwardButton(ctrl, nbMoves) {
   return m('button.game_action[data-icon=H]', {
     config: utils.ontouchend(function() {
-      if (ctrl.ply < ctrl.situations.length - 1) ctrl.jump(ctrl.ply + 1);
+      if (ctrl.ply < ctrl.situations.length - 2) ctrl.jump(ctrl.ply + 2);
     }),
     class: utils.classSet({
-      disabled: !(ctrl.ply < ctrl.situations.length - 1)
+      disabled: !(ctrl.ply < ctrl.situations.length - 2)
     })
   });
 }

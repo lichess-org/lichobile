@@ -1,5 +1,6 @@
 var Chess = require('chessli.js').Chess;
 var game = require('../../round/game');
+var engine = require('../engine');
 
 module.exports = function(root, situations, ply) {
 
@@ -37,6 +38,7 @@ module.exports = function(root, situations, ply) {
     if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
     this.ply = ply;
     this.apply();
+    engine.init(this.situation().fen);
   }.bind(this);
 
   var forsyth = function(role) {

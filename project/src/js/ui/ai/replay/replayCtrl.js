@@ -14,7 +14,7 @@ module.exports = function(root, situations, ply) {
         fen: this.root.data.game.initialFen,
         turnColor: this.root.data.game.player,
         movable: {
-          color: this.root.data.game.player,
+          color: this.root.data.player.color,
           dests: chess.dests()
         },
         check: false,

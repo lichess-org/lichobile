@@ -8,7 +8,7 @@ var settings = require('../../settings');
 var actions = require('./actions');
 var engine = require('./engine');
 
-module.exports = function(cfg) {
+module.exports = function() {
 
   window.analytics.trackView('Offline AI');
 
@@ -65,7 +65,7 @@ module.exports = function(cfg) {
   };
 
   this.init = function(data, situations, ply) {
-    this.data = data || makeData(cfg);
+    this.data = data;
     if (!this.chessground)
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove, onCapture);
     else ground.reload(this.chessground, this.data, this.data.game.fen);
@@ -89,7 +89,7 @@ module.exports = function(cfg) {
     this.init(saved.data, saved.situations, saved.ply);
   } catch (e) {
     console.log(e, 'Fail to load saved game');
-    this.init();
+    this.init(makeData({}));
   } else this.init();
 
   var save = function() {

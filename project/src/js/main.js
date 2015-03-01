@@ -52,18 +52,18 @@ function onOnline() {
       if (nowPlaying.length)
         m.route('/play/' + nowPlaying[0].fullId);
       else
-        window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
+        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
     }
   }, function(err) {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       // means user is anonymous here
       if (err.message === 'unauthorizedError') {
         triedToLogin = true;
-        var lastPlayed = storage.get('lastPlayedGameURL');
-        if (lastPlayed)
-          m.route('/play' + lastPlayed);
+        var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
+        if (lastPlayedAnon)
+          m.route('/play' + lastPlayedAnon);
         else {
-          window.plugins.toast.show(i18n('connectedToLichess'), 'long', 'center');
+          window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
           menu.open();
           m.redraw();
         }
@@ -88,8 +88,11 @@ function main() {
   // startup
   if (utils.hasNetwork())
     onOnline();
-  else
+  else {
     window.navigator.notification.alert(i18n('noInternetConnection'));
+    menu.open();
+    m.redraw();
+  }
 
   document.addEventListener('online', onOnline, false);
 

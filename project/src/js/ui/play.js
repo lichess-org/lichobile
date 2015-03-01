@@ -14,7 +14,8 @@ module.exports = {
     xhr.game(m.route.param('id')).then(function(data) {
       if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
-      storage.set('lastPlayedGameURL', data.url.round);
+      if (data.player.user === undefined)
+        storage.set('lastPlayedGameURLAsAnon', data.url.round);
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');

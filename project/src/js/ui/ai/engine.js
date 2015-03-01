@@ -1,4 +1,4 @@
-var garbo = require('./garbochess');
+var garbo = require('../../garbochess/garbochess');
 
 // [time, plies]
 var levels = {

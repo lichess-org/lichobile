@@ -5,9 +5,7 @@ var untranslated = {
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
-  mustSignIn: 'You must sign in to see this.',
-  ratingMax: 'Rating max',
-  ratingMin: 'Rating min'
+  mustSignIn: 'You must sign in to see this.'
 };
 
 var defaultCode = 'en';

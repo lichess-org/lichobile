@@ -132,13 +132,16 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ]));
     if (settingsObj.mode() === '1') {
       generalFieldset.push(
-        m('div.select_input.inline', [
-          formWidgets.renderSelect('ratingMin', formName + 'rating_min',
-            settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
-        ]),
-        m('div.select_input.inline', [
-          formWidgets.renderSelect('ratingMax', formName + 'rating_max',
-            settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+        m('div.rating_range', [
+          m('div.title', i18n('ratingRange')),
+          m('div.select_input.inline', [
+            formWidgets.renderSelect('Min', formName + 'rating_min',
+              settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
+          ]),
+          m('div.select_input.inline', [
+            formWidgets.renderSelect('Max', formName + 'rating_max',
+              settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+          ])
         ])
       );
     }

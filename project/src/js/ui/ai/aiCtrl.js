@@ -33,7 +33,7 @@ module.exports = function() {
     var level = settings.ai.opponent();
     return {
       name: settings.ai.availableOpponents.filter(function(o) {
-        return o[1] == level;
+        return o[1] === level;
       })[0][0],
       level: parseInt(level) || 1
     };
@@ -43,9 +43,9 @@ module.exports = function() {
     if (this.chessground.data.turnColor !== this.data.player.color) setTimeout(function() {
       engine.setLevel(this.getOpponent().level);
       engine.search(function(move) {
-        sound.move();
+        this.chessground.apiMove(move[0], move[1]);
         addMove(move[0], move[1], move[2]);
-      });
+      }.bind(this));
     }.bind(this), 500);
   }.bind(this);
 
@@ -59,18 +59,17 @@ module.exports = function() {
     }
   }.bind(this);
 
-  var onCapture = function() {
-    sound.capture();
-  }.bind(this);
-
-  var onMove = function() {
-    sound.move();
+  var onMove = function(orig, dest, capturedPiece) {
+    if (!capturedPiece)
+      sound.move();
+    else
+      sound.capture();
   };
 
   this.init = function(data, situations, ply) {
     this.data = data;
     if (!this.chessground)
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove, onCapture);
+      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
     else ground.reload(this.chessground, this.data, this.data.game.fen);
     if (!this.replay) this.replay = new replayCtrl(this, situations, ply);
     else this.replay.init(situations, ply);

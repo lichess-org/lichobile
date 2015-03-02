@@ -33,7 +33,7 @@ module.exports = {
       ['Gustavo Fring', '7'],
       ['Heisenberg', '8']
     ],
-    opponent: localstorageprop('settings.ai.opponent', 1)
+    opponent: localstorageprop('settings.ai.opponent', '1')
   },
   onChange: function(prop, callback) {
     if (!callback) return prop;

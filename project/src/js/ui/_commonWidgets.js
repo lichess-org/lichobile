@@ -12,9 +12,9 @@ widgets.menuButton = function() {
   });
 };
 
-widgets.backButton = function(title, action) {
+widgets.backButton = function(title) {
   return m('button.fa.fa-arrow-left.back_button', {
-    config: utils.ontouchend(action)
+    config: utils.ontouchend(utils.backHistory)
   }, title);
 };
 

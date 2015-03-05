@@ -24,7 +24,7 @@ module.exports = {
 
   view: function() {
     var header = utils.partialƒ(widgets.header, null,
-      widgets.backButton(i18n('settings'), utils.backHistory)
+      widgets.backButton(i18n('settings'))
     );
     return layout.free(header, renderBody, widgets.empty, menu.view, widgets.empty);
   }

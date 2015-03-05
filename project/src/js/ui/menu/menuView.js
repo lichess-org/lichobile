@@ -3,7 +3,6 @@ var loginModal = require('../loginModal');
 var gamesMenu = require('../gamesMenu');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
-var compact = require('lodash-node/modern/arrays/compact');
 var iScroll = require('iscroll');
 
 var menu = require('./menu');
@@ -19,7 +18,6 @@ var perfTypes = [
   ['threeCheck', 'Three-check'],
   ['correspondence', 'Correspondence'],
   ['antichess', 'Antichess'],
-  ['puzzle', 'Training'],
   ['atomic', 'Atomic']
 ];
 
@@ -36,26 +34,34 @@ function renderPerf(key, name, perf) {
   ]);
 }
 
+function perfs(user) {
+  var res = perfTypes.map(function(p) {
+    var perf = user.perfs[p[0]];
+    if (perf) return {
+      key: p[0],
+      name: p[1],
+      perf: perf
+    };
+  }).sort(function(a, b) {
+    return a.perf.games < b.perf.games;
+  });
+  if (user.perfs.puzzle) res.push({
+    key: 'puzzle',
+    name: 'Training',
+    perf: user.perfs.puzzle
+  });
+
+  return res;
+}
+
 function openPerfs(user) {
-  return perfTypes.map(function(p) {
-    return p ? renderPerf(p[0], p[1], user.perfs[p[0]]) : m('div.perf');
+  return perfs(user).map(function(p) {
+    return renderPerf(p.key, p.name, p.perf);
   });
 }
 
 function closedPerfs(user) {
-  var perfs = compact(Object.keys(user.perfs).map(function(key) {
-    var type = perfTypes.filter(function(pt) {
-      return pt[0] === key && 'puzzle' !== key;
-    })[0];
-    if (type) return {
-      key: key,
-      name: type[1],
-      perf: user.perfs[key]
-    };
-  }));
-  return perfs.sort(function(a, b) {
-    return a.perf.games < b.perf.games;
-  }).slice(0, 2).map(function(p) {
+  return perfs(user).slice(0, 2).map(function(p) {
     return renderPerf(p.key, p.name, p.perf);
   });
 }

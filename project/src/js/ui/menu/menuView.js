@@ -1,7 +1,5 @@
 var session = require('../../session');
 var loginModal = require('../loginModal');
-var formWidgets = require('../_formWidgets');
-var settings = require('../../settings');
 var gamesMenu = require('../gamesMenu');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
@@ -61,24 +59,7 @@ function closedPerfs(user) {
   });
 }
 
-module.exports = function(onSettingChange) {
-  if (menu.settingsOpen) return m('div#settings', [
-    m('header', [
-      m('button[data-icon=L]', {
-        config: utils.ontouchend(menu.closeSettings)
-      }),
-      m('h2', i18n('settings'))
-    ]),
-    m('section', [
-      formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
-        settings.onChange(settings.general.animations, onSettingChange)),
-      formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
-        settings.onChange(settings.general.pieceDestinations, onSettingChange)),
-      formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound),
-    ]),
-    window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
-  ]);
-  var user = session.get();
+function renderHeader(user) {
   var header = user ? [
     m('h2', user.username),
     m('section', {
@@ -94,12 +75,13 @@ module.exports = function(onSettingChange) {
     }, i18n('signIn'))
   ];
   header.unshift(
-    m('div.logo', [
-      m('button.settings[data-icon=%]', {
-        config: utils.ontouchend(menu.openSettings)
-      })
-    ])
+    m('div.logo')
   );
+
+  return header;
+}
+
+function renderLinks(user) {
   var links = [
     m('li.side_link', {
       key: 'menu_create_game',
@@ -119,7 +101,11 @@ module.exports = function(onSettingChange) {
     m('li.side_link', {
       key: 'menu_play_ai',
       config: utils.ontouchend(menu.menuRouteAction('/ai'))
-    }, i18n('playOfflineComputer'))
+    }, i18n('playOfflineComputer')),
+    m('li.side_link', {
+      key: 'menu_settings',
+      config: utils.ontouchend(menu.menuRouteAction('/settings'))
+    }, i18n('settings'))
   ];
   if (session.isConnected()) {
     links.push(
@@ -129,8 +115,14 @@ module.exports = function(onSettingChange) {
       }, i18n('logOut'))
     );
   }
+
+  return links;
+}
+
+module.exports = function() {
+  var user = session.get();
   return [
-    m('header.side_menu_header', header),
-    m('nav#side_links', m('ul', links))
+    m('header.side_menu_header', renderHeader(user)),
+    m('nav#side_links', m('ul', renderLinks(user)))
   ];
 };

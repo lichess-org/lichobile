@@ -12,6 +12,12 @@ widgets.menuButton = function() {
   });
 };
 
+widgets.backButton = function(title, action) {
+  return m('button.fa.fa-arrow-left.back_button', {
+    config: utils.ontouchend(action)
+  }, title);
+};
+
 widgets.gameButton = function() {
   var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
@@ -19,11 +25,11 @@ widgets.gameButton = function() {
   }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 
-widgets.header = function(title) {
+widgets.header = function(title, leftButton) {
   return m('nav', [
-    widgets.menuButton(),
+    leftButton ? leftButton : widgets.menuButton(),
     widgets.gameButton(),
-    m('h1', title || 'lichess.org')
+    title ? m('h1', title) : null
   ]);
 };
 

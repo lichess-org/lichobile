@@ -25,11 +25,56 @@ var seek = require('./ui/seek');
 var seeks = require('./ui/seeks');
 var otb = require('./ui/otb/main');
 var ai = require('./ui/ai/main');
+var settingsUi = require('./ui/settings');
 
 var triedToLogin = false;
 
 var refreshInterval = 60000;
 var refreshIntervalID;
+
+function main() {
+
+  m.route(document.body, '/', {
+    '/': home,
+    '/seeks': seeks,
+    '/seek': seek,
+    '/otb': otb,
+    '/ai': ai,
+    '/play/:id': play,
+    '/settings': settingsUi
+  });
+
+  // pull session data once (to log in user automatically thanks to cookie)
+  // and also listen to online event in case network was disconnected at app
+  // startup
+  if (utils.hasNetwork())
+    onOnline();
+  else {
+    window.navigator.notification.alert(i18n('noInternetConnection'));
+    menu.open();
+    m.redraw();
+  }
+
+  document.addEventListener('online', onOnline, false);
+
+  // if connected, refresh data every min, and on resume
+  refreshIntervalID = setInterval(refresh, refreshInterval);
+  document.addEventListener('resume', onResume, false);
+  document.addEventListener('pause', onPause, false);
+
+  // iOs keyboard hack
+  // TODO we may want to remove this and call only on purpose
+  window.cordova.plugins.Keyboard.disableScroll(true);
+
+  if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
+
+  document.addEventListener('backbutton', backbutton, false);
+
+  setTimeout(function() {
+    window.navigator.splashscreen.hide();
+    xhr.status();
+  }, 500);
+}
 
 function refresh() {
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
@@ -70,49 +115,6 @@ function onOnline() {
       }
     }
   });
-}
-
-function main() {
-
-  m.route(document.body, '/', {
-    '/': home,
-    '/seeks': seeks,
-    '/seek': seek,
-    '/otb': otb,
-    '/ai': ai,
-    '/play/:id': play
-  });
-
-  // pull session data once (to log in user automatically thanks to cookie)
-  // and also listen to online event in case network was disconnected at app
-  // startup
-  if (utils.hasNetwork())
-    onOnline();
-  else {
-    window.navigator.notification.alert(i18n('noInternetConnection'));
-    menu.open();
-    m.redraw();
-  }
-
-  document.addEventListener('online', onOnline, false);
-
-  // if connected, refresh data every min, and on resume
-  refreshIntervalID = setInterval(refresh, refreshInterval);
-  document.addEventListener('resume', onResume, false);
-  document.addEventListener('pause', onPause, false);
-
-  // iOs keyboard hack
-  // TODO we may want to remove this and call only on purpose
-  window.cordova.plugins.Keyboard.disableScroll(true);
-
-  if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
-
-  document.addEventListener('backbutton', backbutton, false);
-
-  setTimeout(function() {
-    window.navigator.splashscreen.hide();
-    xhr.status();
-  }, 500);
 }
 
 document.addEventListener('deviceready',

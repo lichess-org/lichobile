@@ -6,6 +6,7 @@ var roundCtrl = require('./round/roundCtrl');
 var roundView = require('./round/view/roundView');
 var gamesMenu = require('./gamesMenu');
 var layout = require('./layout');
+var menu = require('./menu');
 var storage = require('../storage');
 
 module.exports = {
@@ -45,6 +46,6 @@ module.exports = {
       header = widgets.header;
       board = widgets.board;
     }
-    return layout.board(header, board, widgets.empty, widgets.empty, null, pov ? pov.color : null);
+    return layout.board(header, board, widgets.empty, menu.view, null, pov ? pov.color : null);
   }
 };

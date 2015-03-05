@@ -1,4 +1,5 @@
 var isFunction = require('lodash-node/modern/objects/isFunction');
+var utils = require('./utils');
 
 var stack = [];
 
@@ -8,7 +9,7 @@ module.exports = function() {
     b('backbutton');
     m.redraw();
   } else if (!/^\/$/.test(m.route())) {
-    window.navigator.app.backHistory();
+    utils.backHistory();
   } else {
     window.navigator.app.exitApp();
   }

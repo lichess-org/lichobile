@@ -12,7 +12,7 @@
   "newcap": false,
   "eqeqeq": true,
   "immed": true,
-  "latedef": true,
+  "latedef": "nofunc",
   "undef": true,
   "unused": true,
   "trailing": true,

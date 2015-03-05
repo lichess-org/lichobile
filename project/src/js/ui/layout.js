@@ -26,9 +26,7 @@ module.exports = {
           config: utils.ontouchend(menu.close)
         })
       ]),
-      m('aside#side_menu', {
-        class: menu.isOpen ? 'in' : 'out'
-      }, aside()),
+      aside(),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view()
@@ -49,9 +47,7 @@ module.exports = {
           config: utils.ontouchend(menu.close)
         })
       ]),
-      m('aside#side_menu', {
-        class: menu.isOpen ? 'in' : 'out'
-      }, aside()),
+      aside(),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view()

@@ -85,33 +85,33 @@ function renderLinks(user) {
   var links = [
     m('li.side_link', {
       key: 'menu_create_game',
-      config: utils.ontouchend(function() {
+      config: utils.ontouchendScrollY(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
     }, i18n('createAGame')),
     user ? m('li.side_link', {
       key: 'menu_seeks',
-      config: utils.ontouchend(menu.menuRouteAction('/seeks'))
+      config: utils.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
     m('li.side_link', {
       key: 'menu_play_otb',
-      config: utils.ontouchend(menu.menuRouteAction('/otb'))
+      config: utils.ontouchendScrollY(menu.menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline')),
     m('li.side_link', {
       key: 'menu_play_ai',
-      config: utils.ontouchend(menu.menuRouteAction('/ai'))
+      config: utils.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
     m('li.side_link', {
       key: 'menu_settings',
-      config: utils.ontouchend(menu.menuRouteAction('/settings'))
+      config: utils.ontouchendScrollY(menu.menuRouteAction('/settings'))
     }, i18n('settings'))
   ];
   if (session.isConnected()) {
     links.push(
       m('li.side_link.logout[data-icon=w]', {
         key: 'menu_logout',
-        config: utils.ontouchend(session.logout)
+        config: utils.ontouchendScrollY(session.logout)
       }, i18n('logOut'))
     );
   }
@@ -121,8 +121,10 @@ function renderLinks(user) {
 
 module.exports = function() {
   var user = session.get();
-  return [
+  return m('aside#side_menu', {
+    class: menu.isOpen ? 'in' : 'out'
+  }, [
     m('header.side_menu_header', renderHeader(user)),
     m('nav#side_links', m('ul', renderLinks(user)))
-  ];
+  ]);
 };

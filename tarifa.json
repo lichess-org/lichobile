@@ -31,7 +31,7 @@
         }
       },
       "prod": {
-        "id": "org.lichess.mobileapp",
+        "id": "org.lichess.mobileapp.official",
         "product_name": "lichess",
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",

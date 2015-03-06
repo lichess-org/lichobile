@@ -874,6 +874,11 @@
       "from": "moment@>=2.8.4 <3.0.0",
       "resolved": "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz"
     },
+    "q": {
+      "version": "1.1.2",
+      "from": "q@*",
+      "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
+    },
     "semver": {
       "version": "4.2.0",
       "from": "https://registry.npmjs.org/semver/-/semver-4.2.0.tgz",

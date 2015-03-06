@@ -13,7 +13,9 @@ function renderBody() {
         settings.general.animations)),
       m('li', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.general.pieceDestinations)),
-      m('li', formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound))
+      m('li', formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound)),
+      m('li.nav', { }, i18n('boardThemes')),
+      m('li.nav', { }, i18n('pieceThemes'))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];

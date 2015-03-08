@@ -865,21 +865,19 @@
       "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.1.30.tgz"
     },
     "mobile-button": {
-      "version": "0.8.0",
-      "from": "mobile-button@*",
-      "resolved": "https://registry.npmjs.org/mobile-button/-/mobile-button-0.8.0.tgz",
-      "dependencies": {
-        "q": {
-          "version": "1.1.2",
-          "from": "q@>=1.1.2 <1.2.0",
-          "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
-        }
-      }
+      "version": "0.8.1",
+      "from": "mobile-button@0.8.1",
+      "resolved": "https://registry.npmjs.org/mobile-button/-/mobile-button-0.8.1.tgz"
     },
     "moment": {
       "version": "2.8.4",
       "from": "moment@>=2.8.4 <3.0.0",
       "resolved": "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz"
+    },
+    "q": {
+      "version": "1.1.2",
+      "from": "q@*",
+      "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
     },
     "semver": {
       "version": "4.2.0",

@@ -31,13 +31,13 @@
         }
       },
       "prod": {
-        "id": "org.lichess.mobileapp",
+        "id": "org.lichess.mobileapp.official",
         "product_name": "lichess",
         "product_file_name": "lichess-prod",
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"
@@ -72,8 +72,8 @@
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
         "GA_ID": "UA-7935029-3",
-        "version": "1.0.1",
-        "version_code": "100010",
+        "version": "1.2.0",
+        "version_code": "100200",
         "release": true,
         "sign": "store",
         "cordova": {

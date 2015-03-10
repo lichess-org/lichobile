@@ -1,11 +1,10 @@
-#settings
-  margin-top 1em
-  li
-    line-height 20px
-    padding 15px
-    border-bottom 1px solid #2E3033
-    &.active
-      background lighten(#1c2328, 5%)
+.settings_list
+  margin 15px 0
+  height calc(100% - 80px)
+
+#boardThemes
+  label
+    margin-left 15px
 
 .app_version
   position absolute
@@ -13,3 +12,33 @@
   padding 15px
   font-size 0.8em
   color darken(#DFDFDF, 10%)
+
+.radio
+  -webkit-appearance radio
+
+.board_icon
+  display inline-block
+  position absolute
+  right 15px
+  width: 64px;
+  height: 32px;
+  background-size: 256px;
+  border: 1px solid #AEAEAE
+  &.brown
+    background-image url('../../images/board/brown.png')
+  &.blue
+    background-image url('../../images/board/blue.png')
+  &.green
+    background-image url('../../images/board/green.png')
+  &.purple
+    background-image url('../../images/board/purple.png')
+  &.wood
+    background-image url('../../images/board/wood-512.jpg')
+  &.wood3
+    background-image url('../../images/board/wood3.jpg')
+  &.blue3
+    background-image url('../../images/board/blue3.jpg')
+  &.canvas
+    background-image url('../../images/board/canvas.jpg')
+  &.grey
+    background-image url('../../images/board/grey.jpg')

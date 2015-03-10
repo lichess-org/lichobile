@@ -73,6 +73,22 @@ input
   100% { }
 }
 
+.scroller
+  overflow-y auto
+  -webkit-overflow-scrolling touch
+
+/* lists */
+li.list_item
+  position relative
+  color #AEAEAE
+  line-height 20px
+  padding 15px
+  border-bottom 1px solid #2E3033
+  &:last-child
+    border-bottom none
+  &.active
+    background lighten(#1c2328, 5%)
+
 li.nav:after
   content "\f054"
   display: inline-block;
@@ -82,3 +98,4 @@ li.nav:after
   -webkit-font-smoothing: antialiased;
   position absolute
   right 15px
+  line-height 20px

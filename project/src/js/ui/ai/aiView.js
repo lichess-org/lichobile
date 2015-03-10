@@ -6,7 +6,6 @@ var ground = require('./ground');
 var renderPromotion = require('./promotion').view;
 var utils = require('../../utils');
 var i18n = require('../../i18n');
-var game = require('../round/game');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
 var actions = require('./actions');
@@ -71,8 +70,12 @@ module.exports = function(ctrl) {
         height: x + 'px'
       }
     }, [
-      m('div', {
-        class: 'board grey merida standard',
+      m('div.board', {
+        className: [
+          settings.general.theme.board(),
+          'merida',
+          'standard'
+        ].join(' ')
       }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
     ]);
   }

@@ -99,7 +99,7 @@ utils.getViewportDims = function() {
   return viewPortDims;
 };
 
-utils.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
+utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board) {
   var config = {
     viewOnly: true,
     minimalDom: true,
@@ -108,8 +108,12 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
     lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
     orientation: orientation || 'white'
   };
-  return m('div', {
-    class: 'board grey merida' + (variant ? ' ' + variant.key : ''),
+  return m('div.board', {
+    className: [
+      'merida',
+      variant ? variant.key : '',
+      board ? board : 'grey'
+    ].join(' '),
     config: function(el, isUpdate, ctx) {
       if (ctx.ground) ctx.ground.set(config);
       else ctx.ground = chessground(el, config);
@@ -148,9 +152,10 @@ utils.playerName = function(player, withRating) {
 };
 
 utils.backHistory = function() {
-  window.history.go(-1);
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();
+  else
+    window.history.go(-1);
 };
 
 utils.variantIconsMap = {

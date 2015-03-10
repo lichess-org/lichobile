@@ -16,7 +16,7 @@ module.exports = {
       m('input.radio[type=radio]', {
         name: name,
         id: id,
-        'class': value,
+        className: value,
         value: value,
         checked: isOn,
         onchange: function(e) {

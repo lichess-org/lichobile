@@ -17,7 +17,22 @@ module.exports = {
   general: {
     animations: localstorageprop('settings.gameAnimations', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    sound: localstorageprop('settings.sound', true)
+    sound: localstorageprop('settings.sound', true),
+    theme: {
+      availableBoardThemes: [
+        ['Brown', 'brown'],
+        ['Blue', 'blue'],
+        ['Green', 'green'],
+        ['Grey', 'grey'],
+        ['Purple', 'purple'],
+        ['Wood', 'wood'],
+        ['Wood 2', 'wood3'],
+        ['Blue 2', 'blue3'],
+        ['Canvas', 'canvas']
+      ],
+      board: localstorageprop('settings.theme.board', 'grey'),
+      piece: localstorageprop('settings.theme.piece', 'merida')
+    }
   },
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false)

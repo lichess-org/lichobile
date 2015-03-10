@@ -1,4 +1,5 @@
 var chessground = require('chessground');
+var settings = require('../../../settings');
 var layout = require('../../layout');
 var widgets = require('../../_commonWidgets');
 var menu = require('../../menu');
@@ -198,8 +199,12 @@ module.exports = function(ctrl) {
         height: x + 'px'
       }
     }, [
-      m('div', {
-        class: 'board grey merida ' + ctrl.data.game.variant.key
+      m('div.board', {
+        className: [
+          settings.general.theme.board(),
+          'merida',
+          ctrl.data.game.variant.key
+        ].join(' ')
       }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
     ]);
   }

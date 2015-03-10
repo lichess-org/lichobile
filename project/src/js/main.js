@@ -26,6 +26,8 @@ var seeks = require('./ui/seeks');
 var otb = require('./ui/otb/main');
 var ai = require('./ui/ai/main');
 var settingsUi = require('./ui/settings');
+var boardThemes = require('./ui/settings/boardThemes');
+var pieceThemes = require('./ui/settings/pieceThemes');
 
 var triedToLogin = false;
 
@@ -41,7 +43,9 @@ function main() {
     '/otb': otb,
     '/ai': ai,
     '/play/:id': play,
-    '/settings': settingsUi
+    '/settings': settingsUi,
+    '/settings/themes/board': boardThemes,
+    '/settings/themes/piece': pieceThemes
   });
 
   // pull session data once (to log in user automatically thanks to cookie)

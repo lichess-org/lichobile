@@ -3,6 +3,7 @@ var utils = require('../utils');
 var gamesMenu = require('./gamesMenu');
 var layout = require('./layout');
 var session = require('../session');
+var settings = require('../settings');
 
 var widgets = {};
 
@@ -54,16 +55,16 @@ widgets.board = function() {
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard());
+  }, utils.viewOnlyBoard(null, null, null, null, settings.general.theme.board()));
 };
 
-widgets.boardArgs = function(fen, lastMove, orientation, variant) {
+widgets.boardArgs = function(fen, lastMove, orientation, variant, board) {
   var x = utils.getViewportDims().vw;
   return m('section.board_wrapper', {
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant));
+  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant, board));
 };
 
 widgets.empty = function() {

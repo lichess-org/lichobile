@@ -209,7 +209,9 @@ function renderAllGames() {
         height: cDim.innerW + 'px'
       }
     }, [
-      utils.viewOnlyBoard(fen, lastMove, color, variant, settings.general.theme.board())
+      utils.viewOnlyBoard(fen, lastMove, color, variant,
+        settings.general.theme.board(), settings.general.theme.piece()
+      )
     ]);
   }
 

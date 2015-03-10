@@ -4,12 +4,16 @@ var layout = require('../layout');
 var menu = require('../menu');
 var formWidgets = require('../_formWidgets');
 var i18n = require('../../i18n');
+var settings = require('../../settings');
 
 function renderBody() {
   return [
-    m('ul#pieceThemesSelector', [
-      m('li', 'hello pieces'),
-    ])
+    m('ul#pieceThemes.settings_list.scroller', settings.general.theme.availablePieceThemes.map(function(t) {
+      return m('li.list_item', {}, [
+        formWidgets.renderRadio(t, 'piece_theme', t, settings.general.theme.piece),
+        m('div.piece_icon.vertical_align', { className: t })
+      ]);
+    }))
   ];
 }
 

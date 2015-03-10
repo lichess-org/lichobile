@@ -8,6 +8,7 @@ var gamesMenu = require('./gamesMenu');
 var layout = require('./layout');
 var menu = require('./menu');
 var storage = require('../storage');
+var settings = require('../settings');
 
 module.exports = {
   controller: function() {
@@ -37,11 +38,13 @@ module.exports = {
 
   view: function(ctrl) {
     if (ctrl.round()) return roundView(ctrl.round());
+    var theme = settings.general.theme;
     var pov = gamesMenu.lastJoined;
     var header, board;
     if (pov) {
       header = widgets.connectingHeader;
-      board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color, pov.variant.key);
+      board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
+        pov.variant.key, theme.board(), theme.piece());
     } else {
       header = widgets.header;
       board = widgets.board;

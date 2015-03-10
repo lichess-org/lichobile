@@ -2,9 +2,14 @@
   margin 15px 0
   height calc(100% - 80px)
 
-#boardThemes
+#boardThemes, #pieceThemes
   label
+    text-transform capitalize
     margin-left 15px
+
+#pieceThemes
+  .list_item
+    line-height 60px
 
 .app_version
   position absolute
@@ -42,3 +47,19 @@
     background-image url('../../images/board/canvas.jpg')
   &.grey
     background-image url('../../images/board/grey.jpg')
+
+.piece_icon
+  width 60px
+  height 60px
+  position absolute
+  right 15px
+  background-size cover
+  &.merida
+    background-image url('../../images/pieces/merida/wN.svg')
+  &.cburnett
+    background-image url('../../images/pieces/cburnett/wN.svg')
+  &.pirouetti
+    background-image url('../../images/pieces/pirouetti/wN.svg')
+  &.alpha
+    background-image url('../../images/pieces/alpha/wN.svg')
+

@@ -55,16 +55,18 @@ widgets.board = function() {
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard(null, null, null, null, settings.general.theme.board()));
+  }, utils.viewOnlyBoard(null, null, null, null, settings.general.theme.board(),
+    settings.general.theme.piece())
+  );
 };
 
-widgets.boardArgs = function(fen, lastMove, orientation, variant, board) {
+widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) {
   var x = utils.getViewportDims().vw;
   return m('section.board_wrapper', {
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant, board));
+  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant, board, piece));
 };
 
 widgets.empty = function() {

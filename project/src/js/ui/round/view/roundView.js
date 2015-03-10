@@ -202,7 +202,7 @@ module.exports = function(ctrl) {
       m('div.board', {
         className: [
           settings.general.theme.board(),
-          'merida',
+          settings.general.theme.piece(),
           ctrl.data.game.variant.key
         ].join(' ')
       }, chessground.view(ctrl.chessground), renderPromotion(ctrl))

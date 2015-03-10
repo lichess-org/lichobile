@@ -99,7 +99,7 @@ utils.getViewportDims = function() {
   return viewPortDims;
 };
 
-utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board) {
+utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
   var config = {
     viewOnly: true,
     minimalDom: true,
@@ -110,7 +110,7 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board) {
   };
   return m('div.board', {
     className: [
-      'merida',
+      piece ? piece : 'merida',
       variant ? variant.key : '',
       board ? board : 'grey'
     ].join(' '),

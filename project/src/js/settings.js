@@ -30,6 +30,12 @@ module.exports = {
         ['Blue 2', 'blue3'],
         ['Canvas', 'canvas']
       ],
+      availablePieceThemes: [
+        'cburnett',
+        'merida',
+        'pirouetti',
+        'alpha'
+      ],
       board: localstorageprop('settings.theme.board', 'grey'),
       piece: localstorageprop('settings.theme.piece', 'merida')
     }

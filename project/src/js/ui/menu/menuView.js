@@ -3,7 +3,6 @@ var loginModal = require('../loginModal');
 var gamesMenu = require('../gamesMenu');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
-var iScroll = require('iscroll');
 
 var menu = require('./menu');
 
@@ -129,19 +128,7 @@ function renderLinks(user) {
 module.exports = function() {
   var user = session.get();
   return m('aside#side_menu', {
-    class: menu.isOpen ? 'in' : 'out',
-    config: function(el, isUpdate, context) {
-      if (!isUpdate) {
-        context.scroller = new iScroll(el);
-        context.onunload = function() {
-          if (context.scroller) {
-            context.scroller.destroy();
-            context.scroller = null;
-          }
-        };
-      }
-      context.scroller.refresh();
-    }
+    className: menu.isOpen ? 'in' : 'out',
   }, m('div.scroller', [
     m('header.side_menu_header', renderHeader(user)),
     m('nav#side_links', m('ul', renderLinks(user)))

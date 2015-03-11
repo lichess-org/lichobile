@@ -23,71 +23,6 @@
     color #C4A86F
     font-size 17px
     text-align center
-  .side_menu_header
-    color #fff
-    padding-bottom 1em
-    .logo
-      background-image url(../../images/pirouettiGoldK.svg)
-      background-repeat no-repeat
-      background-position center center
-      background-size 60px
-      margin 0 auto
-      height 85px
-      width 100%
-    h2
-      clear both
-      line-height 1.5em
-      text-transform uppercase
-      font-weight normal
-      color #FFF
-      margin-bottom 1em
-    .ratings
-      text-align left
-      &:after
-        color #C4A86F
-        content 'u'
-        font-family: "lichess" !important;
-        width: 100%;
-        display: block;
-        text-align: center;
-        font-size: 28px;
-        margin-bottom: -16px;
-      &.open:after
-        transform rotate(180deg)
-    .perf
-      display inline-block
-      text-align left
-      width 45%
-      padding 5px 0
-      line-height 1.2em
-      &:nth-child(even)
-        margin-left 10%
-      &:before
-        color #C4A86F
-        font-size 2.4em
-        float left
-        margin-right 5px
-      & > .rating
-        display block
-        & > .progress, & > .nb
-          font-size 0.8em
-          margin-left 0.5em
-        & > .progress
-          &.positive
-            color #759900
-          &.negative
-            color #ac524f
-          &::before
-            vertical-align middle
-            margin-right 1px
-        & > .nb
-          opacity 0.4
-      & > .name
-        display block
-        color #C4A86F
-        white-space nowrap
-        overflow hidden
-        text-overflow ellipsis
   button
     background: #454545;
     color: #fff;
@@ -111,6 +46,77 @@
     color #fff
     font-weight normal
     margin 40px 0px 30px 0
+  .scroller
+    height 100%
+
+.side_menu_header
+  color #fff
+  padding-bottom 1em
+  .logo
+    background-image url(../../images/pirouettiGoldK.svg)
+    background-repeat no-repeat
+    background-position center center
+    background-size 60px
+    margin 0 auto
+    height 85px
+    width 100%
+  h2
+    clear both
+    line-height 1.5em
+    text-transform uppercase
+    font-weight normal
+    color #FFF
+    margin-bottom 1em
+
+.ratings
+  text-align left
+  &:after
+    color #C4A86F
+    content 'u'
+    font-family: "lichess" !important;
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: -16px;
+  &.open:after
+    transform rotate(180deg)
+
+.perf
+  display inline-block
+  text-align left
+  width 45%
+  padding 5px 0
+  line-height 1.2em
+  &:nth-child(even)
+    margin-left 10%
+  &:before
+    color #C4A86F
+    font-size 2.4em
+    float left
+    margin-right 5px
+  > .rating
+    color #fff
+    display block
+    > .progress, & > .nb
+      font-size 0.8em
+      margin-left 0.5em
+    > .progress
+      &.positive
+        color #759900
+      &.negative
+        color #ac524f
+      &::before
+        vertical-align middle
+        margin-right 1px
+    > .nb
+      opacity 0.4
+  > .name
+    display block
+    color #C4A86F
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
 
 #side_links
   color #AEAEAE
@@ -126,7 +132,7 @@
     border-left none
     &:before
       margin-right 5px
-  & > .highlight
+  > .highlight
     color #C4A86F
     font-family 'montserratbold'
   &:active, &.active

@@ -76,7 +76,7 @@ module.exports = function(ctrl) {
       m('div.board', {
         className: [
           settings.general.theme.board(),
-          settings.general.theme.piece(),
+          'merida',
           'standard'
         ].join(' ')
       }, chessground.view(ctrl.chessground), renderPromotion(ctrl))

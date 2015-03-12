@@ -26,9 +26,11 @@ module.exports = {
         ['Grey', 'grey'],
         ['Purple', 'purple'],
         ['Wood', 'wood'],
-        ['Wood 2', 'wood3'],
+        ['Wood 2', 'wood2'],
+        ['Wood 3', 'wood3'],
         ['Blue 2', 'blue3'],
-        ['Canvas', 'canvas']
+        ['Canvas', 'canvas'],
+        ['Metal', 'metal']
       ],
       availablePieceThemes: [
         'cburnett',

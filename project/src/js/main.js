@@ -121,6 +121,13 @@ function onOnline() {
   });
 }
 
+function handleError(event, source, fileno, columnNumber) {
+  var description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
+  window.analytics.trackException(description, true);
+}
+
+window.onerror = handleError;
+
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
   utils.ƒ(i18n.loadPreferredLanguage, main),

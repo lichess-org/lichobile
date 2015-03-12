@@ -10,6 +10,7 @@
   // analytics
   window.analytics = {
     startTrackerWithId: noop,
+    trackException: noop,
     trackView: noop,
   };
 

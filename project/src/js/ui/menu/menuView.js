@@ -94,14 +94,14 @@ function renderHeader(user) {
 
 function renderLinks(user) {
   var links = [
-    m('li.side_link', {
+    utils.hasNetwork() ? m('li.side_link', {
       key: 'menu_create_game',
       config: utils.ontouchendScrollY(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
-    }, i18n('createAGame')),
-    user ? m('li.side_link', {
+    }, i18n('createAGame')) : null,
+    (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: utils.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,

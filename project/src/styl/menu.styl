@@ -24,23 +24,27 @@
     font-size 17px
     text-align center
   button
-    background: #454545;
     color: #fff;
     padding: 10px;
     font-size: 1em;
   button.login
+    background: #454545;
     display: block;
     width: 80%;
     margin: 0 auto;
     text-transform: uppercase;
-  button.settings
+    &.active
+      background lighten(#454545, 5%)
+  button.logout
     padding 15px
     background none
     float left
     color #c4a86f;
-    width 15%;
+    width 50px
     display inline-block;
     font-size 1em;
+    &.active
+      background lighten(#2A2A2A, 5%)
   h3
     text-transform uppercase
     color #fff

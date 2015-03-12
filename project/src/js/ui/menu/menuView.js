@@ -82,7 +82,11 @@ function renderHeader(user) {
     }, i18n('signIn'))
   ];
   header.unshift(
-    m('div.logo')
+    m('div.logo', [
+      user ? m('button.logout[data-icon=w]', {
+        config: utils.ontouchend(session.logout)
+      }) : null
+    ])
   );
 
   return header;
@@ -114,14 +118,6 @@ function renderLinks(user) {
       config: utils.ontouchendScrollY(menu.menuRouteAction('/settings'))
     }, i18n('settings'))
   ];
-  if (session.isConnected()) {
-    links.push(
-      m('li.side_link.logout[data-icon=w]', {
-        key: 'menu_logout',
-        config: utils.ontouchendScrollY(session.logout)
-      }, i18n('logOut'))
-    );
-  }
 
   return links;
 }

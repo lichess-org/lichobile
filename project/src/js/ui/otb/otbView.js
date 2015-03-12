@@ -1,6 +1,6 @@
 var chessground = require('chessground');
 var layout = require('../layout');
-var widgets = require('../_commonWidgets');
+var widgets = require('../widget/common');
 var menu = require('../menu');
 var ground = require('./ground');
 var renderPromotion = require('./promotion').view;

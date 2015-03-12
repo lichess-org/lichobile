@@ -3,7 +3,7 @@ var utils = require('../../utils');
 var i18n = require('../../i18n');
 var opposite = require('chessground').util.opposite;
 var settings = require('../../settings');
-var formWidgets = require('../_formWidgets');
+var formWidgets = require('../widget/form');
 var backbutton = require('../../backbutton');
 
 function renderEnded(ctrl) {

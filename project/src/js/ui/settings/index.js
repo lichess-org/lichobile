@@ -1,8 +1,8 @@
 var utils = require('../../utils');
-var widgets = require('../_commonWidgets');
+var widgets = require('../widget/common');
 var layout = require('../layout');
 var menu = require('../menu');
-var formWidgets = require('../_formWidgets');
+var formWidgets = require('../widget/form');
 var settings = require('../../settings');
 var i18n = require('../../i18n');
 

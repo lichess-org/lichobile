@@ -1,4 +1,4 @@
-var widgets = require('./_commonWidgets');
+var widgets = require('./widget/common');
 
 var home = {};
 

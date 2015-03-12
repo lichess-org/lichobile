@@ -1,9 +1,9 @@
-var menu = require('./menu');
-var utils = require('../utils');
-var gamesMenu = require('./gamesMenu');
-var layout = require('./layout');
-var session = require('../session');
-var settings = require('../settings');
+var menu = require('../menu');
+var utils = require('../../utils');
+var gamesMenu = require('../gamesMenu');
+var layout = require('../layout');
+var session = require('../../session');
+var settings = require('../../settings');
 
 var widgets = {};
 

@@ -5,16 +5,33 @@ var layout = require('../layout');
 var menu = require('../menu');
 var i18n = require('../../i18n');
 var settings = require('../../settings');
+var iScroll = require('iscroll');
 
 
 function renderBody() {
   return [
-    m('ul#boardThemes.settings_list.scroller', settings.general.theme.availableBoardThemes.map(function(t) {
-      return m('li.list_item', {}, [
-        formWidgets.renderRadio(t[0], 'board_theme', t[1], settings.general.theme.board),
-        m('div.board_icon.vertical_align', { className: t[1] })
-      ]);
-    }))
+    m('div.scroller.settings_list', {
+      config: function(el, isUpdate, context) {
+        if (!isUpdate) {
+          context.scroller = new iScroll(el);
+          context.onunload = function() {
+            if (context.scroller) {
+              context.scroller.destroy();
+              context.scroller = null;
+            }
+          };
+        }
+      }
+    }, [
+      m('ul#boardThemes', settings.general.theme.availableBoardThemes.map(function(t) {
+        return m('li.list_item', {}, [
+          formWidgets.renderRadio(t[0], 'board_theme', t[1], settings.general.theme.board),
+          m('div.board_icon.vertical_align', {
+            className: t[1]
+          })
+        ]);
+      }))
+    ])
   ];
 }
 

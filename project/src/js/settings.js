@@ -34,7 +34,9 @@ module.exports = {
         'cburnett',
         'merida',
         'pirouetti',
-        'alpha'
+        'alpha',
+        'spatial',
+        'lightp'
       ],
       board: localstorageprop('settings.theme.board', 'grey'),
       piece: localstorageprop('settings.theme.piece', 'merida')

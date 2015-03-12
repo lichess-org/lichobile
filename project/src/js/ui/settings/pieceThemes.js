@@ -5,15 +5,32 @@ var menu = require('../menu');
 var formWidgets = require('../widget/form');
 var i18n = require('../../i18n');
 var settings = require('../../settings');
+var iScroll = require('iscroll');
 
 function renderBody() {
   return [
-    m('ul#pieceThemes.settings_list.scroller', settings.general.theme.availablePieceThemes.map(function(t) {
-      return m('li.list_item', {}, [
-        formWidgets.renderRadio(t, 'piece_theme', t, settings.general.theme.piece),
-        m('div.piece_icon.vertical_align', { className: t })
-      ]);
-    }))
+    m('div.scroller.settings_list', {
+      config: function(el, isUpdate, context) {
+        if (!isUpdate) {
+          context.scroller = new iScroll(el);
+          context.onunload = function() {
+            if (context.scroller) {
+              context.scroller.destroy();
+              context.scroller = null;
+            }
+          };
+        }
+      }
+    }, [
+      m('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(function(t) {
+        return m('li.list_item', {}, [
+          formWidgets.renderRadio(t, 'piece_theme', t, settings.general.theme.piece),
+          m('div.piece_icon.vertical_align', {
+            className: t
+          })
+        ]);
+      }))
+    ])
   ];
 }
 

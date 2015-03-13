@@ -40,7 +40,7 @@ gamesMenu.openCurrentGames = function() {
   doOpen();
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
-  }, 200);
+  }, 400);
 };
 
 gamesMenu.open = function() {

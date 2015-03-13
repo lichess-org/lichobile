@@ -124,11 +124,15 @@
 #player_controls
   width 100%
   padding 0 10px
-  button:active, button.active
-    &:before
-      background #C4A86F
-      color #fff
+  button
+    &.draw-yes:before
+      transform: translateY(-1px) rotate(-90deg);
   .answers, .force_resign_zone
     margin-top 2em
   .result
     margin-bottom 2em
+  .actions
+    text-align left
+    button
+      display block
+      margin 2em 0

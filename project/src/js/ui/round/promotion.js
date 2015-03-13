@@ -46,7 +46,7 @@ module.exports = {
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchend(utils.ƒ(finish, ctrl, role))
+        config: utils.ontouchend(utils.f(finish, ctrl, role))
       });
     }))]);
   }

@@ -87,7 +87,7 @@ function renderSeek(ctrl, seek) {
     key: seek.id,
     'id': seek.id,
     class: 'seek ' + action,
-    config: utils.ontouchendScrollY(utils.partialƒ(ctrl[action], seek.id))
+    config: utils.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon
@@ -106,7 +106,7 @@ function renderSeek(ctrl, seek) {
 
 seeks.view = function(ctrl) {
 
-  var header = utils.partialƒ(widgets.header, i18n('correspondence'));
+  var header = utils.partialf(widgets.header, i18n('correspondence'));
   var body = function() {
 
     if (!session.isConnected()) {
@@ -141,7 +141,7 @@ seeks.view = function(ctrl) {
             context.scroller.refresh();
           }
         }, [
-          m('div.list', ctrl.pool().map(utils.partialƒ(renderSeek, ctrl))),
+          m('div.list', ctrl.pool().map(utils.partialf(renderSeek, ctrl))),
         ]),
         m('button.fat', {
           key: 'seeks_createagame',

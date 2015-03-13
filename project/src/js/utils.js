@@ -39,11 +39,11 @@ function partialApply(fn, args) {
   return fn.bind.apply(fn, [null].concat(args));
 }
 
-utils.partialƒ = function() {
+utils.partialf = function() {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
 };
 
-utils.ƒ = function() {
+utils.f = function() {
   var args = arguments,
     fn = arguments[0];
   return function() {
@@ -84,9 +84,9 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
   };
 }
 
-utils.ontouchend = utils.partialƒ(bindTouchendButton, false, false);
-utils.ontouchendScrollX = utils.partialƒ(bindTouchendButton, true, false);
-utils.ontouchendScrollY = utils.partialƒ(bindTouchendButton, false, true);
+utils.ontouchend = utils.partialf(bindTouchendButton, false, false);
+utils.ontouchendScrollX = utils.partialf(bindTouchendButton, true, false);
+utils.ontouchendScrollY = utils.partialf(bindTouchendButton, false, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

@@ -20,7 +20,7 @@ function renderAlways(ctrl) {
   return [
     m('div.actions', [
       m('button[data-icon=U]', {
-        config: utils.ontouchend(utils.ƒ(ctrl.root.initAs, opposite(d.player.color)))
+        config: utils.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
       }, i18n('createAGame')),
       m('button[data-icon=A]', {
         config: utils.ontouchend(ctrl.pgn.open)

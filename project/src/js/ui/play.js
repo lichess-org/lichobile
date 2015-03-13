@@ -43,7 +43,7 @@ module.exports = {
     var header, board;
     if (pov) {
       header = widgets.connectingHeader;
-      board = utils.partialƒ(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
+      board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
         pov.variant.key, theme.board(), theme.piece());
     } else {
       header = widgets.header;

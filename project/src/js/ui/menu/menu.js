@@ -26,7 +26,7 @@ menu.menuRouteAction = function(route) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(utils.ƒ(m.route, route));
+      '250', 'ease-out').then(utils.f(m.route, route));
   };
 };
 

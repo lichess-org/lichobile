@@ -74,7 +74,7 @@ widgets.empty = function() {
 };
 
 widgets.startBoardView = function() {
-  return layout.board(utils.partialƒ(widgets.header, 'lichess.org'), widgets.board, widgets.empty, menu.view);
+  return layout.board(utils.partialf(widgets.header, 'lichess.org'), widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

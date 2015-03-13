@@ -81,7 +81,7 @@ module.exports = function(ctrl) {
   }
 
   function renderMenu() {
-    return menu.view(utils.partialƒ(ground.applySettings, ctrl.chessground));
+    return menu.view(utils.partialf(ground.applySettings, ctrl.chessground));
   }
 
   return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);

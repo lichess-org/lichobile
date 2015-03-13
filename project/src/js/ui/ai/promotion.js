@@ -52,7 +52,7 @@ module.exports = {
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchend(utils.ƒ(finish, ctrl.chessground, role))
+        config: utils.ontouchend(utils.f(finish, ctrl.chessground, role))
       });
     }))]) : null;
   }

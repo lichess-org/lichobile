@@ -61,7 +61,7 @@ module.exports = function(ctrl) {
   }
 
   function board() {
-    var x = utils.getViewportDims().vw;
+    var x = helper.viewportDim().vw;
     return m('section', {
       className: helper.classSet({
         'board_wrapper': true,

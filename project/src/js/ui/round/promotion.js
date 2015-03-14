@@ -44,7 +44,7 @@ module.exports = {
     if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
     return m('div.overlay', [m('div#promotion_choice', {
       config: helper.ontouchend(partial(cancel, ctrl)),
-      style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
+      style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
         config: helper.ontouchend(utils.f(finish, ctrl, role))

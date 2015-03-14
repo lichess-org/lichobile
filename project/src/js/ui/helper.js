@@ -106,5 +106,16 @@ helper.classSet = function(classes) {
   return arr.join(' ');
 };
 
+var viewportDim = null;
+helper.viewportDim = function() {
+  if (viewportDim) return viewportDim;
+  var e = document.documentElement;
+  viewportDim = {
+    vw: e.clientWidth,
+    vh: e.clientHeight
+  };
+  return viewportDim;
+};
+
 
 module.exports = helper;

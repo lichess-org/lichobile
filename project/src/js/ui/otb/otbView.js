@@ -59,7 +59,7 @@ module.exports = function(ctrl) {
   }
 
   function board() {
-    var x = utils.getViewportDims().vw;
+    var x = helper.viewportDim().vw;
     var flip = settings.otb.flipPieces();
     return m('section', {
       className: helper.classSet({

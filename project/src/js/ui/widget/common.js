@@ -51,7 +51,7 @@ widgets.connectingHeader = function() {
 
 
 widgets.board = function() {
-  var x = utils.getViewportDims().vw;
+  var x = helper.viewportDim().vw;
   return m('section.board_wrapper', {
     style: {
       height: x + 'px'
@@ -62,7 +62,7 @@ widgets.board = function() {
 };
 
 widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) {
-  var x = utils.getViewportDims().vw;
+  var x = helper.viewportDim().vw;
   return m('section.board_wrapper', {
     style: {
       height: x + 'px'

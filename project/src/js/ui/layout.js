@@ -6,7 +6,7 @@ var signupModal = require('./signupModal');
 var helper = require('./helper');
 
 function headerHeight() {
-  var d = utils.getViewportDims();
+  var d = helper.viewportDim();
   return (d.vh - d.vw) / 2;
 }
 

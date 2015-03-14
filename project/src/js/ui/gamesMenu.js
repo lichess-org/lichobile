@@ -194,7 +194,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 function renderAllGames() {
 
   function cardDims() {
-    var vp = utils.getViewportDims();
+    var vp = helper.viewportDim();
     var width = vp.vw * 85 / 100;
     var padding = vp.vw * 2.5 / 100;
     return {

@@ -118,7 +118,7 @@ module.exports = {
 
     if (!ctrl.showing) return m('div#chat.modal');
 
-    var vh = utils.getViewportDims().vh,
+    var vh = helper.viewportDim().vh,
       formH = 45,
       scrollerH = vh - formH - 45; // minus modal header height
 

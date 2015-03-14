@@ -50,7 +50,7 @@ module.exports = {
   view: function(ctrl) {
     return promoting ? m('div.overlay', [m('div#promotion_choice', {
       config: helper.ontouchend(partial(cancel)),
-      style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
+      style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
         config: helper.ontouchend(utils.f(finish, ctrl.chessground, role))

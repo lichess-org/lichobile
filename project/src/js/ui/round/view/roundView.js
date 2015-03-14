@@ -194,7 +194,7 @@ module.exports = function(ctrl) {
   }
 
   function board() {
-    var x = utils.getViewportDims().vw;
+    var x = helper.viewportDim().vw;
     return m('section.board_wrapper', {
       style: {
         height: x + 'px'

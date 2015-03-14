@@ -49,17 +49,6 @@ utils.f = function() {
   };
 };
 
-var viewPortDims = null;
-utils.getViewportDims = function() {
-  if (viewPortDims) return viewPortDims;
-  var e = document.documentElement;
-  viewPortDims = {
-    vw: e.clientWidth,
-    vh: e.clientHeight
-  };
-  return viewPortDims;
-};
-
 utils.noop = function() {};
 
 utils.playerName = function(player, withRating) {

@@ -20,17 +20,17 @@ module.exports = {
     sound: localstorageprop('settings.sound', true),
     theme: {
       availableBoardThemes: [
-        ['Brown', 'brown'],
-        ['Blue', 'blue'],
-        ['Green', 'green'],
-        ['Grey', 'grey'],
-        ['Purple', 'purple'],
-        ['Wood', 'wood'],
-        ['Wood 2', 'wood2'],
-        ['Wood 3', 'wood3'],
-        ['Blue 2', 'blue3'],
-        ['Canvas', 'canvas'],
-        ['Metal', 'metal']
+        ['boardThemeBrown', 'brown'],
+        ['boardThemeBlue', 'blue'],
+        ['boardThemeGreen', 'green'],
+        ['boardThemeGrey', 'grey'],
+        ['boardThemePurple', 'purple'],
+        ['boardThemeWood', 'wood'],
+        ['boardThemeWood2', 'wood2'],
+        ['boardThemeWood3', 'wood3'],
+        ['boardThemeBlue2', 'blue3'],
+        ['boardThemeCanvas', 'canvas'],
+        ['boardThemeMetal', 'metal']
       ],
       availablePieceThemes: [
         'cburnett',

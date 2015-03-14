@@ -3,6 +3,7 @@ var loginModal = require('../loginModal');
 var gamesMenu = require('../gamesMenu');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
+var helper = require('../helper');
 var iScroll = require('iscroll');
 
 var menu = require('./menu');
@@ -71,20 +72,20 @@ function renderHeader(user) {
     m('h2', user.username),
     m('section', {
       className: 'ratings ' + (perfsOpen() ? 'open' : 'closed'),
-      config: utils.ontouchendScrollY(function() {
+      config: helper.ontouchendScrollY(function() {
         perfsOpen(!perfsOpen());
       })
     }, perfsOpen() ? openPerfs(user) : closedPerfs(user))
   ] : [
     m('h2', 'Anonymous'),
     m('button.login', {
-      config: utils.ontouchendScrollY(loginModal.open)
+      config: helper.ontouchendScrollY(loginModal.open)
     }, i18n('signIn'))
   ];
   header.unshift(
     m('div.logo', [
       user ? m('button.logout[data-icon=w]', {
-        config: utils.ontouchend(session.logout)
+        config: helper.ontouchend(session.logout)
       }) : null
     ])
   );
@@ -96,26 +97,26 @@ function renderLinks(user) {
   var links = [
     utils.hasNetwork() ? m('li.side_link', {
       key: 'menu_create_game',
-      config: utils.ontouchendScrollY(function() {
+      config: helper.ontouchendScrollY(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
     }, i18n('createAGame')) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
-      config: utils.ontouchendScrollY(menu.menuRouteAction('/seeks'))
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
     m('li.side_link', {
       key: 'menu_play_otb',
-      config: utils.ontouchendScrollY(menu.menuRouteAction('/otb'))
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
     }, i18n('playOnTheBoardOffline')),
     m('li.side_link', {
       key: 'menu_play_ai',
-      config: utils.ontouchendScrollY(menu.menuRouteAction('/ai'))
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
     m('li.side_link', {
       key: 'menu_settings',
-      config: utils.ontouchendScrollY(menu.menuRouteAction('/settings'))
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))
     }, i18n('settings'))
   ];
 

@@ -6,6 +6,7 @@ var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
+var helper = require('../../helper');
 var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
@@ -130,7 +131,7 @@ function renderPlayerActions(ctrl) {
   if (!ctrl.vm.showingActions) return m('div.overlay.overlay_scale');
   return m('div.overlay.overlay_scale.open', [
     m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(ctrl.hideActions)
+      config: helper.ontouchend(ctrl.hideActions)
     }),
     m('div#player_controls.overlay_content', game.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
@@ -148,13 +149,13 @@ function renderGameButtons(ctrl) {
           game.forceResignable(ctrl.data) ||
           ctrl.data.opponent.offeringRematch
       }),
-      config: utils.ontouchend(ctrl.showActions)
+      config: helper.ontouchend(ctrl.showActions)
     }),
     ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
       className: utils.classSet({
         unread: ctrl.chat.unread
       }),
-      config: utils.ontouchend(ctrl.chat.open || utils.noop)
+      config: helper.ontouchend(ctrl.chat.open || utils.noop)
     }) : m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];

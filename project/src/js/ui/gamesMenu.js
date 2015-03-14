@@ -1,5 +1,6 @@
 var compact = require('lodash-node/modern/arrays/compact');
 var utils = require('../utils');
+var helper = require('./helper');
 var xhr = require('../xhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
@@ -246,7 +247,7 @@ function renderAllGames() {
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,
-      config: utils.ontouchendScrollX(function() {
+      config: helper.ontouchendScrollX(function() {
         gamesMenu.joinGame(g);
       })
     }, [
@@ -273,7 +274,7 @@ function renderAllGames() {
   }, [
     m('div.container_flip', [
       m('div.front', {
-        config: utils.ontouchendScrollX(swapCard)
+        config: helper.ontouchendScrollX(swapCard)
       }, [
         renderViewOnlyBoard(),
         m('div.infos', [
@@ -317,7 +318,7 @@ gamesMenu.view = function() {
   if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
   var children = [
     m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(gamesMenu.close)
+      config: helper.ontouchend(gamesMenu.close)
     }),
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {

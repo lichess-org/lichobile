@@ -1,4 +1,5 @@
 var utils = require('../../utils');
+var helper = require('../helper');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
@@ -124,7 +125,7 @@ module.exports = {
     return m('div#chat.modal.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: utils.ontouchend(ctrl.close)
+          config: helper.ontouchend(ctrl.close)
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))

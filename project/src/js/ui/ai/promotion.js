@@ -1,6 +1,7 @@
 var chessground = require('chessground');
 var partial = chessground.util.partial;
 var utils = require('../../utils');
+var helper = require('../helper');
 
 var promoting = false;
 
@@ -48,11 +49,11 @@ module.exports = {
 
   view: function(ctrl) {
     return promoting ? m('div.overlay', [m('div#promotion_choice', {
-      config: utils.ontouchend(partial(cancel)),
+      config: helper.ontouchend(partial(cancel)),
       style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchend(utils.f(finish, ctrl.chessground, role))
+        config: helper.ontouchend(utils.f(finish, ctrl.chessground, role))
       });
     }))]) : null;
   }

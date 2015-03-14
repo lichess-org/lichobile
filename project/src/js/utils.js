@@ -1,5 +1,4 @@
 var utils = {};
-var mButton = require('mobile-button');
 var chessground = require('chessground');
 var i18n = require('./i18n');
 
@@ -50,43 +49,6 @@ utils.f = function() {
     fn.apply(fn, Array.prototype.slice.call(args, 1));
   };
 };
-
-// convenience function to bind a touchend mobile button handler in mithril
-function bindTouchendButton(scrollableX, scrollableY, handler) {
-  return function(el, isUpdate, context) {
-    if (!isUpdate) {
-      var options = {
-        el: el,
-        f: function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          m.startComputation();
-          handler(e, el);
-          m.endComputation();
-        },
-        monotouchable: false
-      };
-      if (scrollableX || scrollableY) options.tolerance = 5;
-      var constr;
-      if (scrollableX)
-        constr = mButton.ScrollableX.Touchend;
-      else if (scrollableY)
-        constr = mButton.ScrollableY.Touchend;
-      else
-        constr = mButton.Touchend;
-
-      var button = new constr(options);
-
-      context.onunload = function() {
-        if (button) button.unbind();
-      };
-    }
-  };
-}
-
-utils.ontouchend = utils.partialf(bindTouchendButton, false, false);
-utils.ontouchendScrollX = utils.partialf(bindTouchendButton, true, false);
-utils.ontouchendScrollY = utils.partialf(bindTouchendButton, false, true);
 
 var viewPortDims = null;
 utils.getViewportDims = function() {

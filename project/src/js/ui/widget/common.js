@@ -1,5 +1,6 @@
 var menu = require('../menu');
 var utils = require('../../utils');
+var helper = require('../helper');
 var gamesMenu = require('../gamesMenu');
 var layout = require('../layout');
 var session = require('../../session');
@@ -9,20 +10,20 @@ var widgets = {};
 
 widgets.menuButton = function() {
   return m('button.fa.fa-navicon.menu_button', {
-    config: utils.ontouchend(menu.toggle)
+    config: helper.ontouchend(menu.toggle)
   });
 };
 
 widgets.backButton = function(title) {
   return m('button.fa.fa-arrow-left.back_button', {
-    config: utils.ontouchend(utils.backHistory)
+    config: helper.ontouchend(utils.backHistory)
   }, title);
 };
 
 widgets.gameButton = function() {
   var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
-    config: utils.ontouchend(gamesMenu.open)
+    config: helper.ontouchend(gamesMenu.open)
   }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 

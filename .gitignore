@@ -3,8 +3,6 @@ npm-debug.log
 bin/*.mobileprovision
 bin/*.keystore
 
-/images
-
 project/www/app.js
 project/www/index.html
 project/www/css/compiled

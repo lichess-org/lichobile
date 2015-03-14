@@ -76,7 +76,7 @@ module.exports = {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
       'kingOfTheHill', 'threeCheck', 'atomic'
     ],
-    availableTimes: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
+    availableTimes: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
       '20', '25', '30', '40', '60', '90', '120', '150', '180'
     ],
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -126,7 +126,12 @@ module.exports = {
       time: localstorageprop('settings.game.human.time', '5'),
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
-      mode: localstorageprop('settings.game.human.mode', '0')
+      mode: localstorageprop('settings.game.human.mode', '0'),
+      isValid: function(settings) {
+        return settings.timeMode() !== '1' ||
+            settings.time() !== '0' ||
+            settings.increment() !== '0';
+      }
     }
   }
 };

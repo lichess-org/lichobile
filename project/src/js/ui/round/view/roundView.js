@@ -143,7 +143,7 @@ function renderPlayerActions(ctrl) {
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      className: utils.classSet({
+      className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||
           game.forceResignable(ctrl.data) ||
@@ -152,7 +152,7 @@ function renderGameButtons(ctrl) {
       config: helper.ontouchend(ctrl.showActions)
     }),
     ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
-      className: utils.classSet({
+      className: helper.classSet({
         unread: ctrl.chat.unread
       }),
       config: helper.ontouchend(ctrl.chat.open || utils.noop)

@@ -1,5 +1,4 @@
 var utils = {};
-var chessground = require('chessground');
 var i18n = require('./i18n');
 
 utils.hasNetwork = function() {
@@ -59,44 +58,6 @@ utils.getViewportDims = function() {
     vh: e.clientHeight
   };
   return viewPortDims;
-};
-
-utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
-  var config = {
-    viewOnly: true,
-    minimalDom: true,
-    coordinates: false,
-    fen: fen,
-    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
-    orientation: orientation || 'white'
-  };
-  return m('div.board', {
-    className: [
-      piece ? piece : 'merida',
-      variant ? variant.key : '',
-      board ? board : 'grey'
-    ].join(' '),
-    config: function(el, isUpdate, ctx) {
-      if (ctx.ground) ctx.ground.set(config);
-      else ctx.ground = chessground(el, config);
-    }
-  });
-};
-
-utils.progress = function(p) {
-  if (p === 0) return null;
-  return m('span', {
-    className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
-    'data-icon': p > 0 ? 'N' : 'M'
-  }, Math.abs(p));
-};
-
-utils.classSet = function(classes) {
-  var arr = [];
-  for (var i in classes) {
-    if (classes[i]) arr.push(i);
-  }
-  return arr.join(' ');
 };
 
 utils.noop = function() {};

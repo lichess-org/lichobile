@@ -29,7 +29,7 @@ function renderPerf(key, name, perf) {
     m('span.name', name),
     m('div.rating', [
       perf.rating,
-      utils.progress(perf.prog),
+      helper.progress(perf.prog),
       m('span.nb', '/ ' + perf.games)
     ])
   ]);

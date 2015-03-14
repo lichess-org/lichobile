@@ -56,7 +56,7 @@ widgets.board = function() {
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard(null, null, null, null, settings.general.theme.board(),
+  }, helper.viewOnlyBoard(null, null, null, null, settings.general.theme.board(),
     settings.general.theme.piece())
   );
 };
@@ -67,7 +67,7 @@ widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) 
     style: {
       height: x + 'px'
     }
-  }, utils.viewOnlyBoard(fen, lastMove, orientation, variant, board, piece));
+  }, helper.viewOnlyBoard(fen, lastMove, orientation, variant, board, piece));
 };
 
 widgets.empty = function() {

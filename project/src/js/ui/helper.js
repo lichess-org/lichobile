@@ -1,5 +1,6 @@
 var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
+var chessground = require('chessground');
 var utils = require('../utils');
 
 var helper = {};
@@ -65,6 +66,45 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
 helper.ontouchend = utils.partialf(bindTouchendButton, false, false);
 helper.ontouchendScrollX = utils.partialf(bindTouchendButton, true, false);
 helper.ontouchendScrollY = utils.partialf(bindTouchendButton, false, true);
+
+
+helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
+  var config = {
+    viewOnly: true,
+    minimalDom: true,
+    coordinates: false,
+    fen: fen,
+    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
+    orientation: orientation || 'white'
+  };
+  return m('div.board', {
+    className: [
+      piece ? piece : 'merida',
+      variant ? variant.key : '',
+      board ? board : 'grey'
+    ].join(' '),
+    config: function(el, isUpdate, ctx) {
+      if (ctx.ground) ctx.ground.set(config);
+      else ctx.ground = chessground(el, config);
+    }
+  });
+};
+
+helper.progress = function(p) {
+  if (p === 0) return null;
+  return m('span', {
+    className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
+    'data-icon': p > 0 ? 'N' : 'M'
+  }, Math.abs(p));
+};
+
+helper.classSet = function(classes) {
+  var arr = [];
+  for (var i in classes) {
+    if (classes[i]) arr.push(i);
+  }
+  return arr.join(' ');
+};
 
 
 module.exports = helper;

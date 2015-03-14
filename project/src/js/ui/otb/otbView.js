@@ -62,7 +62,7 @@ module.exports = function(ctrl) {
     var x = utils.getViewportDims().vw;
     var flip = settings.otb.flipPieces();
     return m('section', {
-      className: utils.classSet({
+      className: helper.classSet({
         'board_wrapper': true,
         'otb': true,
         'mode_flip': flip,

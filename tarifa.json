@@ -4,15 +4,17 @@
   "description": "lichess.org mobile application",
   "version": "1.3.0",
   "platforms": [
-    "ios",
-    "android"
+    "ios@3.7.0",
+    "android@3.7.1"
   ],
   "configurations": {
     "ios": {
       "default": {
         "id": "org.lichess.mobileapp.dev",
         "product_name": "lichess dev",
-        "product_file_name": "lichess"
+        "product_file_name": "lichess",
+        "API_END_POINT": "http://en.l.dev",
+        "SOCKET_END_POINT": "socket.en.l.dev"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",
@@ -49,7 +51,9 @@
       "default": {
         "id": "org.lichess.mobileapp.dev",
         "product_name": "lichess_dev",
-        "product_file_name": "lichess"
+        "product_file_name": "lichess",
+        "API_END_POINT": "http://en.l.dev",
+        "SOCKET_END_POINT": "socket.en.l.dev"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",

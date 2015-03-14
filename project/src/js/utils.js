@@ -124,7 +124,7 @@ utils.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece
 utils.progress = function(p) {
   if (p === 0) return null;
   return m('span', {
-    class: 'progress ' + (p > 0 ? 'positive' : 'negative'),
+    className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
     'data-icon': p > 0 ? 'N' : 'M'
   }, Math.abs(p));
 };

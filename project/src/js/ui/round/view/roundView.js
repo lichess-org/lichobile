@@ -142,7 +142,7 @@ function renderPlayerActions(ctrl) {
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      class: utils.classSet({
+      className: utils.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||
           game.forceResignable(ctrl.data) ||
@@ -151,7 +151,7 @@ function renderGameButtons(ctrl) {
       config: utils.ontouchend(ctrl.showActions)
     }),
     ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
-      class: utils.classSet({
+      className: utils.classSet({
         unread: ctrl.chat.unread
       }),
       config: utils.ontouchend(ctrl.chat.open || utils.noop)
@@ -179,7 +179,7 @@ module.exports = function(ctrl) {
   function header() {
     return [
       m('nav', {
-        class: ctrl.vm.connectedWS ? '' : 'reconnecting'
+        className: ctrl.vm.connectedWS ? '' : 'reconnecting'
       }, [
         widgets.menuButton(),
         widgets.gameButton(),

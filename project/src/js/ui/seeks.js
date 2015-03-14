@@ -86,7 +86,7 @@ function renderSeek(ctrl, seek) {
   return m('div', {
     key: seek.id,
     'id': seek.id,
-    class: 'seek ' + action,
+    className: 'seek ' + action,
     config: utils.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {

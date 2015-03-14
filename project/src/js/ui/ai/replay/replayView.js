@@ -5,7 +5,7 @@ function renderBackwardButton(ctrl) {
     config: utils.ontouchend(function() {
       if (ctrl.ply > 1) ctrl.jump(ctrl.ply - 2);
     }),
-    class: utils.classSet({
+    className: utils.classSet({
       disabled: !(ctrl.ply > 1)
     })
   });
@@ -16,7 +16,7 @@ function renderForwardButton(ctrl, nbMoves) {
     config: utils.ontouchend(function() {
       if (ctrl.ply < ctrl.situations.length - 2) ctrl.jump(ctrl.ply + 2);
     }),
-    class: utils.classSet({
+    className: utils.classSet({
       disabled: !(ctrl.ply < ctrl.situations.length - 2)
     })
   });

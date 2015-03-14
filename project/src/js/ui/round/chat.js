@@ -166,7 +166,7 @@ module.exports = {
             if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
             return m('li.chat_msg', {
-              class: utils.classSet({
+              className: utils.classSet({
                 system: lichessTalking,
                 player: playerTalking,
                 opponent: !lichessTalking && !playerTalking,

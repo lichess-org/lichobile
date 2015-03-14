@@ -15,7 +15,7 @@ module.exports = {
   board: function(header, content, footer, aside, overlay, povColor) {
     var view = [
       m('main#page', {
-        class: [
+        className: [
           menu.isOpen ? 'out' : 'in',
           povColor || 'white'
         ].join(' ')
@@ -39,7 +39,7 @@ module.exports = {
   free: function(header, content, footer, aside, overlay) {
     var view = [
       m('main#page', {
-        class: menu.isOpen ? 'out' : 'in'
+        className: menu.isOpen ? 'out' : 'in'
       }, [
         m('header.main_header', header()),
         m('div.content', { config: helper.scale }, content()),

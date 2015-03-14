@@ -268,7 +268,7 @@ function renderAllGames() {
 
   var game = m('div.card.new-game', {
     key: 'new-game',
-    class: newGameCardSwapped ? 'back_visible' : '',
+    className: newGameCardSwapped ? 'back_visible' : '',
     style: cardStyle
   }, [
     m('div.container_flip', [

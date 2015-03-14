@@ -7,7 +7,7 @@ var i18n = require('../../../i18n');
 module.exports = {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button', {
-      class: socketMsg,
+      className: socketMsg,
       'data-icon': icon,
       config: utils.ontouchend(function() { ctrl.socket.send(socketMsg); })
     }, i18n(hint)) : null;

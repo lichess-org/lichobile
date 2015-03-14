@@ -29,7 +29,7 @@ function formatClockTime(trans, time) {
 module.exports = function(ctrl, trans, color, runningColor) {
   var time = ctrl.data[color];
   return m('div', {
-    class: 'correspondence clock ' + classSet({
+    className: 'correspondence clock ' + classSet({
       'outoftime': !time,
       'running': runningColor === color,
       'emerg': time < ctrl.data.emerg

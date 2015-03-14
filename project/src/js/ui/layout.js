@@ -3,6 +3,7 @@ var menu = require('./menu');
 var gamesMenu = require('./gamesMenu');
 var loginModal = require('./loginModal');
 var signupModal = require('./signupModal');
+var helper = require('./helper');
 
 function headerHeight() {
   var d = utils.getViewportDims();
@@ -41,7 +42,7 @@ module.exports = {
         class: menu.isOpen ? 'out' : 'in'
       }, [
         m('header.main_header', header()),
-        content(),
+        m('div.content', { config: helper.scale }, content()),
         m('footer.main_footer', footer()),
         m('div.menu-close-overlay', {
           config: utils.ontouchend(menu.close)

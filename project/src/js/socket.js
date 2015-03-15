@@ -5,8 +5,8 @@ var socketInstance;
 function createGameSocket(url, version, receiveHandler) {
   socketInstance = new StrongSocket(url, version, {
     options: {
-      name: "game",
-      debug: true,
+      name: 'game',
+      debug: window.lichess.mode !== 'prod',
       ignoreUnknownMessages: true
     },
     receive: receiveHandler
@@ -21,6 +21,7 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
     lobbyVersion, {
       options: {
         name: 'lobby',
+        debug: window.lichess.mode !== 'prod',
         pingDelay: 2000,
         onOpen: onOpen
       },

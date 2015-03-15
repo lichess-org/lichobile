@@ -83,6 +83,11 @@ module.exports = {
       '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'
     ],
     availableDays: ['1', '2', '3', '5', '7', '10', '14'],
+    isTimeValid: function(gameSettings) {
+      return gameSettings.timeMode() !== '1' ||
+        gameSettings.time() !== '0' ||
+        gameSettings.increment() !== '0';
+    },
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
@@ -99,8 +104,7 @@ module.exports = {
       time: localstorageprop('settings.game.ai.time', '10'),
       increment: localstorageprop('settings.game.ai.increment', '0'),
       days: localstorageprop('settings.game.ai.days', '2'),
-      level: localstorageprop('settings.game.ai.aiLevel', '3'),
-      isValid: function() { return true; }
+      level: localstorageprop('settings.game.ai.aiLevel', '3')
     },
     human: {
       availableVariants: [
@@ -127,12 +131,7 @@ module.exports = {
       time: localstorageprop('settings.game.human.time', '5'),
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
-      mode: localstorageprop('settings.game.human.mode', '0'),
-      isValid: function(settings) {
-        return settings.timeMode() !== '1' ||
-            settings.time() !== '0' ||
-            settings.increment() !== '0';
-      }
+      mode: localstorageprop('settings.game.human.mode', '0')
     }
   }
 };

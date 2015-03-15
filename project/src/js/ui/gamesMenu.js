@@ -175,7 +175,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
-      if (!settingsObj.isValid(settingsObj)) return;
+      if (!settings.game.isTimeValid(settingsObj)) return;
       gamesMenu.close();
       swapCard();
       action();

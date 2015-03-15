@@ -99,7 +99,8 @@ module.exports = {
       time: localstorageprop('settings.game.ai.time', '10'),
       increment: localstorageprop('settings.game.ai.increment', '0'),
       days: localstorageprop('settings.game.ai.days', '2'),
-      level: localstorageprop('settings.game.ai.aiLevel', '3')
+      level: localstorageprop('settings.game.ai.aiLevel', '3'),
+      isValid: function() { return true; }
     },
     human: {
       availableVariants: [

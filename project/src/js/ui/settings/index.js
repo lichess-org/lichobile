@@ -27,7 +27,9 @@ function renderBody() {
 }
 
 module.exports = {
-  controller: function() {},
+  controller: function() {
+    window.analytics.trackView('Settings');
+  },
 
   view: function() {
     var header = utils.partialf(widgets.header, null,

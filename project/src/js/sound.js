@@ -10,12 +10,14 @@ if (window.cordova.platformId === 'ios')
   media = {
     move: 'sounds/move.aifc',
     capture: 'sounds/capture.aifc',
+    lowtime: 'sounds/lowtime.aifc',
     dong: 'sounds/dong.aifc'
   };
 else
   media = {
     move: 'sounds/move.mp3',
     capture: 'sounds/capture.mp3',
+    lowtime: 'sounds/lowtime.mp3',
     dong: 'sounds/dong.mp3'
   };
 
@@ -35,6 +37,9 @@ document.addEventListener('deviceready', function() {
   lla.preloadFX('capture', media.capture, function() {}, function(err) {
     console.log(err);
   });
+  lla.preloadFX('lowtime', media.lowtime, function() {}, function(err) {
+    console.log(err);
+  });
   lla.preloadFX('dong', media.dong, function() {}, function(err) {
     console.log(err);
   });
@@ -47,6 +52,9 @@ module.exports = {
   },
   capture: function() {
     if (shouldPlay()) lla.play('capture');
+  },
+  lowtime: function() {
+    if (shouldPlay()) lla.play('lowtime');
   },
   dong: function() {
     if (shouldPlay()) lla.play('dong');

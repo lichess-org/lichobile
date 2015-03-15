@@ -115,7 +115,8 @@ module.exports = function(cfg) {
     this.data.clock,
     this.data.player.spectator ? function() {} : throttle(function() {
       if (this.socket) this.socket.send('outoftime');
-    }.bind(this), 500)
+    }.bind(this), 500),
+    this.data.player.spectator ? null : this.data.player.color
   ) : false;
 
   this.isClockRunning = function() {

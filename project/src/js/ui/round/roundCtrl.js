@@ -33,7 +33,8 @@ module.exports = function(cfg) {
   this.socket = socket.connectGame(
     this.data.url.socket,
     this.data.player.version,
-    socketHandler(this)
+    socketHandler(this),
+    this.data.url.round
   );
 
   this.showActions = function() {

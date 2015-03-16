@@ -84,10 +84,10 @@ seeks.controller = function() {
 
 function renderSeek(ctrl, seek) {
   var action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
-  return m('div', {
+  return m('li', {
     key: seek.id,
     'id': seek.id,
-    className: 'seek ' + action,
+    className: 'list_item seek ' + action,
     config: helper.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
@@ -127,7 +127,6 @@ seeks.view = function(ctrl) {
 
     return [
       m('div.seeks', {}, [
-        m('div.seeks_background'),
         m('div.seeks_scroller', {
           config: function(el, isUpdate, context) {
             if (!isUpdate) {
@@ -142,7 +141,7 @@ seeks.view = function(ctrl) {
             context.scroller.refresh();
           }
         }, [
-          m('div.list', ctrl.pool().map(utils.partialf(renderSeek, ctrl))),
+          m('ul', ctrl.pool().map(utils.partialf(renderSeek, ctrl))),
         ]),
         m('button.fat', {
           key: 'seeks_createagame',

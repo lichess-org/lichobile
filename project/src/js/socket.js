@@ -1,13 +1,33 @@
 var StrongSocket = require('./StrongSocket');
+var xhr = require('./xhr');
+var i18n = require('./i18n');
 
 var socketInstance;
 
-function createGameSocket(url, version, receiveHandler) {
+var errorDetected = false;
+
+function createGameSocket(url, version, receiveHandler, gameUrl) {
+  errorDetected = false;
   socketInstance = new StrongSocket(url, version, {
     options: {
       name: 'game',
       debug: window.lichess.mode !== 'prod',
-      ignoreUnknownMessages: true
+      ignoreUnknownMessages: true,
+      onError: function() {
+        // we can't get socket error, so we send an xhr to test whether the
+        // rejection is an authorization issue
+        if (!errorDetected) {
+          // just to be sure that we don't send an xhr every second when the
+          // websocket is trying to reconnect
+          errorDetected = true;
+          xhr.game(gameUrl.substring(1)).then(function() { }, function(err) {
+            if (err.message === 'unauthorizedError') {
+              window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
+              m.route('/');
+            }
+          });
+        }
+      }
     },
     receive: receiveHandler
   });

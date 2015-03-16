@@ -1,5 +1,6 @@
 var session = require('../session');
 var utils = require('../utils');
+var helper = require('./helper');
 var i18n = require('../i18n');
 var signupModal = require('./signupModal');
 var backbutton = require('../backbutton');
@@ -39,7 +40,7 @@ loginModal.view = function() {
   return m('div#login.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: utils.ontouchend(loginModal.close)
+        config: helper.ontouchend(loginModal.close)
       }),
       m('h2', i18n('signIn'))
     ]),
@@ -47,7 +48,6 @@ loginModal.view = function() {
       m('form', {
         onsubmit: function(e) {
           e.preventDefault();
-          var form = e.target;
           return submit(e.target);
         }
       }, [
@@ -67,7 +67,7 @@ loginModal.view = function() {
       ]),
       m('div.signup', [
         m('a', {
-          config: utils.ontouchend(signupModal.open)
+          config: helper.ontouchend(signupModal.open)
         }, [i18n('newToLichess'), ' ', i18n('signUp')])
       ])
     ])

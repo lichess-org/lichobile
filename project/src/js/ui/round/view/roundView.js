@@ -6,6 +6,7 @@ var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
+var helper = require('../../helper');
 var i18n = require('../../../i18n');
 var button = require('./button');
 var game = require('../game');
@@ -130,7 +131,7 @@ function renderPlayerActions(ctrl) {
   if (!ctrl.vm.showingActions) return m('div.overlay.overlay_scale');
   return m('div.overlay.overlay_scale.open', [
     m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(ctrl.hideActions)
+      config: helper.ontouchend(ctrl.hideActions)
     }),
     m('div#player_controls.overlay_content', game.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
@@ -142,19 +143,19 @@ function renderPlayerActions(ctrl) {
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      class: utils.classSet({
+      className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||
           game.forceResignable(ctrl.data) ||
           ctrl.data.opponent.offeringRematch
       }),
-      config: utils.ontouchend(ctrl.showActions)
+      config: helper.ontouchend(ctrl.showActions)
     }),
     ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
-      class: utils.classSet({
+      className: helper.classSet({
         unread: ctrl.chat.unread
       }),
-      config: utils.ontouchend(ctrl.chat.open || utils.noop)
+      config: helper.ontouchend(ctrl.chat.open || utils.noop)
     }) : m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
@@ -179,7 +180,7 @@ module.exports = function(ctrl) {
   function header() {
     return [
       m('nav', {
-        class: ctrl.vm.connectedWS ? '' : 'reconnecting'
+        className: ctrl.vm.connectedWS ? '' : 'reconnecting'
       }, [
         widgets.menuButton(),
         widgets.gameButton(),
@@ -193,7 +194,7 @@ module.exports = function(ctrl) {
   }
 
   function board() {
-    var x = utils.getViewportDims().vw;
+    var x = helper.viewportDim().vw;
     return m('section.board_wrapper', {
       style: {
         height: x + 'px'

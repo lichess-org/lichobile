@@ -3,9 +3,27 @@
   height calc(100% - 80px)
 
 #boardThemes, #pieceThemes
+  .list_item
+    padding 0
+  input.radio:empty
+    display none
+  input.radio:checked + label
+    background-color lighten(#1c2328, 5%)
+  input.radio:checked + label:after
+    display inline-block
+    font normal normal normal 14px/1 FontAwesome
+    font-size inherit
+    text-rendering auto
+    -webkit-font-smoothing antialiased
+    -moz-osx-font-smoothing grayscale
+    content: "\f00c"
+    text-indent .9em
   label
+    display block
+    padding 15px
+    width 100%
+    height 100%
     text-transform capitalize
-    margin-left 15px
 
 #pieceThemes
   .list_item
@@ -17,9 +35,6 @@
   padding 15px
   font-size 0.8em
   color darken(#DFDFDF, 10%)
-
-.radio
-  -webkit-appearance radio
 
 .board_icon
   display inline-block

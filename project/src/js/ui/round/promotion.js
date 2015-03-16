@@ -3,6 +3,7 @@ var partial = chessground.util.partial;
 var ground = require('./ground');
 var xhr = require('./roundXhr');
 var utils = require('../../utils');
+var helper = require('../helper');
 
 var promoting = false;
 
@@ -42,11 +43,11 @@ module.exports = {
     var pieces = ['queen', 'knight', 'rook', 'bishop'];
     if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
     return m('div.overlay', [m('div#promotion_choice', {
-      config: utils.ontouchend(partial(cancel, ctrl)),
-      style: { top: (utils.getViewportDims().vh - 100) / 2 + 'px' }
+      config: helper.ontouchend(partial(cancel, ctrl)),
+      style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: utils.ontouchend(utils.f(finish, ctrl, role))
+        config: helper.ontouchend(utils.f(finish, ctrl, role))
       });
     }))]);
   }

@@ -20,17 +20,17 @@ module.exports = {
     sound: localstorageprop('settings.sound', true),
     theme: {
       availableBoardThemes: [
-        ['Brown', 'brown'],
-        ['Blue', 'blue'],
-        ['Green', 'green'],
-        ['Grey', 'grey'],
-        ['Purple', 'purple'],
-        ['Wood', 'wood'],
-        ['Wood 2', 'wood2'],
-        ['Wood 3', 'wood3'],
-        ['Blue 2', 'blue3'],
-        ['Canvas', 'canvas'],
-        ['Metal', 'metal']
+        ['boardThemeBrown', 'brown'],
+        ['boardThemeBlue', 'blue'],
+        ['boardThemeGreen', 'green'],
+        ['boardThemeGrey', 'grey'],
+        ['boardThemePurple', 'purple'],
+        ['boardThemeWood', 'wood'],
+        ['boardThemeWood2', 'wood2'],
+        ['boardThemeWood3', 'wood3'],
+        ['boardThemeBlue2', 'blue3'],
+        ['boardThemeCanvas', 'canvas'],
+        ['boardThemeMetal', 'metal']
       ],
       availablePieceThemes: [
         'cburnett',
@@ -83,6 +83,11 @@ module.exports = {
       '10', '15', '20', '25', '30', '40', '60', '90', '120', '150', '180'
     ],
     availableDays: ['1', '2', '3', '5', '7', '10', '14'],
+    isTimeValid: function(gameSettings) {
+      return gameSettings.timeMode() !== '1' ||
+        gameSettings.time() !== '0' ||
+        gameSettings.increment() !== '0';
+    },
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
@@ -126,12 +131,7 @@ module.exports = {
       time: localstorageprop('settings.game.human.time', '5'),
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
-      mode: localstorageprop('settings.game.human.mode', '0'),
-      isValid: function(settings) {
-        return settings.timeMode() !== '1' ||
-            settings.time() !== '0' ||
-            settings.increment() !== '0';
-      }
+      mode: localstorageprop('settings.game.human.mode', '0')
     }
   }
 };

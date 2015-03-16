@@ -5,6 +5,7 @@ var opposite = require('chessground').util.opposite;
 var settings = require('../../settings');
 var formWidgets = require('../widget/form');
 var backbutton = require('../../backbutton');
+var helper = require('../helper');
 
 function renderEnded(ctrl) {
   var sit = ctrl.root.replay.situation();
@@ -20,10 +21,10 @@ function renderAlways(ctrl) {
   return [
     m('div.actions', [
       m('button[data-icon=U]', {
-        config: utils.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
+        config: helper.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
       }, i18n('createAGame')),
       m('button[data-icon=A]', {
-        config: utils.ontouchend(ctrl.pgn.open)
+        config: helper.ontouchend(ctrl.pgn.open)
       }, i18n('showPGN')),
       m('div.select_input',
         formWidgets.renderSelect('Opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)
@@ -61,7 +62,7 @@ module.exports = {
     if (ctrl.pgn.isOpen()) return pgnOverlay.view(ctrl.pgn);
     if (ctrl.isOpen()) return m('div.overlay', [
       m('button.overlay_close.fa.fa-close', {
-        config: utils.ontouchend(ctrl.close)
+        config: helper.ontouchend(ctrl.close)
       }),
       m('div#player_controls.overlay_content', [
         renderEnded(ctrl),

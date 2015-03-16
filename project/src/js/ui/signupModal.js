@@ -1,5 +1,5 @@
 var session = require('../session');
-var utils = require('../utils');
+var helper = require('./helper');
 var i18n = require('../i18n');
 var backbutton = require('../backbutton');
 
@@ -45,7 +45,7 @@ signupModal.view = function() {
   return m('div#signup.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: utils.ontouchend(signupModal.close)
+        config: helper.ontouchend(signupModal.close)
       }),
       m('h2', i18n('signUp'))
     ]),

@@ -1,5 +1,6 @@
 var compact = require('lodash-node/modern/arrays/compact');
 var utils = require('../utils');
+var helper = require('./helper');
 var xhr = require('../xhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
@@ -40,7 +41,7 @@ gamesMenu.openCurrentGames = function() {
   doOpen();
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
-  }, 200);
+  }, 400);
 };
 
 gamesMenu.open = function() {
@@ -174,7 +175,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
       e.preventDefault();
-      if (settingsObj.isValid && !settingsObj.isValid(settingsObj)) return;
+      if (!settings.game.isTimeValid(settingsObj)) return;
       gamesMenu.close();
       swapCard();
       action();
@@ -193,7 +194,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 function renderAllGames() {
 
   function cardDims() {
-    var vp = utils.getViewportDims();
+    var vp = helper.viewportDim();
     var width = vp.vw * 85 / 100;
     var padding = vp.vw * 2.5 / 100;
     return {
@@ -210,7 +211,7 @@ function renderAllGames() {
         height: cDim.innerW + 'px'
       }
     }, [
-      utils.viewOnlyBoard(fen, lastMove, color, variant,
+      helper.viewOnlyBoard(fen, lastMove, color, variant,
         settings.general.theme.board(), settings.general.theme.piece()
       )
     ]);
@@ -246,7 +247,7 @@ function renderAllGames() {
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,
-      config: utils.ontouchendScrollX(function() {
+      config: helper.ontouchendScrollX(function() {
         gamesMenu.joinGame(g);
       })
     }, [
@@ -268,12 +269,12 @@ function renderAllGames() {
 
   var game = m('div.card.new-game', {
     key: 'new-game',
-    class: newGameCardSwapped ? 'back_visible' : '',
+    className: newGameCardSwapped ? 'back_visible' : '',
     style: cardStyle
   }, [
     m('div.container_flip', [
       m('div.front', {
-        config: utils.ontouchendScrollX(swapCard)
+        config: helper.ontouchendScrollX(swapCard)
       }, [
         renderViewOnlyBoard(),
         m('div.infos', [
@@ -317,7 +318,7 @@ gamesMenu.view = function() {
   if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
   var children = [
     m('button.overlay_close.fa.fa-close', {
-      config: utils.ontouchend(gamesMenu.close)
+      config: helper.ontouchend(gamesMenu.close)
     }),
     m('div#wrapper_games', {
       config: function(el, isUpdate, context) {

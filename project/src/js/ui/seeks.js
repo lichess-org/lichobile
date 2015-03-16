@@ -1,4 +1,5 @@
 var utils = require('../utils');
+var helper = require('./helper');
 var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./widget/common');
@@ -86,8 +87,8 @@ function renderSeek(ctrl, seek) {
   return m('div', {
     key: seek.id,
     'id': seek.id,
-    class: 'seek ' + action,
-    config: utils.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
+    className: 'seek ' + action,
+    config: helper.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon
@@ -118,7 +119,7 @@ seeks.view = function(ctrl) {
           ]),
           m('button.fat', {
             key: 'seeks_login',
-            config: utils.ontouchend(loginModal.open)
+            config: helper.ontouchend(loginModal.open)
           }, i18n('logIn'))
         ])
       ];
@@ -145,7 +146,7 @@ seeks.view = function(ctrl) {
         ]),
         m('button.fat', {
           key: 'seeks_createagame',
-          config: utils.ontouchend(gamesMenu.openNewGameCorrespondence)
+          config: helper.ontouchend(gamesMenu.openNewGameCorrespondence)
         }, i18n('createAGame'))
       ])
     ];

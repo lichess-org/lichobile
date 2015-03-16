@@ -1,4 +1,5 @@
 var utils = require('../../utils');
+var helper = require('../helper');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
@@ -117,14 +118,14 @@ module.exports = {
 
     if (!ctrl.showing) return m('div#chat.modal');
 
-    var vh = utils.getViewportDims().vh,
+    var vh = helper.viewportDim().vh,
       formH = 45,
       scrollerH = vh - formH - 45; // minus modal header height
 
     return m('div#chat.modal.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: utils.ontouchend(ctrl.close)
+          config: helper.ontouchend(ctrl.close)
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
@@ -166,7 +167,7 @@ module.exports = {
             if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
             return m('li.chat_msg', {
-              class: utils.classSet({
+              className: helper.classSet({
                 system: lichessTalking,
                 player: playerTalking,
                 opponent: !lichessTalking && !playerTalking,

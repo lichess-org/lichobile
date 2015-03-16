@@ -1,4 +1,5 @@
 var utils = require('../../utils');
+var helper = require('../helper');
 var widgets = require('../widget/common');
 var layout = require('../layout');
 var menu = require('../menu');
@@ -15,10 +16,10 @@ function renderBody() {
         settings.general.pieceDestinations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound)),
       m('li.list_item.nav', {
-        config: utils.ontouchendScrollY(utils.f(m.route, '/settings/themes/board'))
+        config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/board'))
       }, i18n('boardThemes')),
       m('li.list_item.nav', {
-        config: utils.ontouchendScrollY(utils.f(m.route, '/settings/themes/piece'))
+        config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/piece'))
       }, i18n('pieceThemes'))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
@@ -26,7 +27,9 @@ function renderBody() {
 }
 
 module.exports = {
-  controller: function() {},
+  controller: function() {
+    window.analytics.trackView('Settings');
+  },
 
   view: function() {
     var header = utils.partialf(widgets.header, null,

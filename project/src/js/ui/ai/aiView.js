@@ -5,6 +5,7 @@ var menu = require('../menu');
 var ground = require('./ground');
 var renderPromotion = require('./promotion').view;
 var utils = require('../../utils');
+var helper = require('../helper');
 var i18n = require('../../i18n');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
 var replayView = require('./replay/replayView');
@@ -28,7 +29,7 @@ function renderAntagonist(ctrl, player, material) {
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      config: utils.ontouchend(ctrl.actions.open)
+      config: helper.ontouchend(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
@@ -60,9 +61,9 @@ module.exports = function(ctrl) {
   }
 
   function board() {
-    var x = utils.getViewportDims().vw;
+    var x = helper.viewportDim().vw;
     return m('section', {
-      class: utils.classSet({
+      className: helper.classSet({
         'board_wrapper': true,
         'ai': true
       }),

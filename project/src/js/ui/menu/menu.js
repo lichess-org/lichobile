@@ -6,19 +6,6 @@ var menu = {};
 
 /* properties */
 menu.isOpen = false;
-menu.settingsOpen = false;
-
-/* methods */
-menu.openSettings = function() {
-  window.analytics.trackView('Settings');
-  backbutton.stack.push(menu.closeSettings);
-  menu.settingsOpen = true;
-};
-
-menu.closeSettings = function(fromBB) {
-  if (fromBB !== 'backbutton' && menu.settingsOpen) backbutton.stack.pop();
-  menu.settingsOpen = false;
-};
 
 // we need to transition manually the menu on route change, because mithril's
 // diff strategy is 'all'
@@ -42,7 +29,6 @@ menu.open = function() {
 };
 
 menu.close = function(fromBB) {
-  if (menu.settingsOpen) menu.closeSettings();
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
   menu.isOpen = false;
 };

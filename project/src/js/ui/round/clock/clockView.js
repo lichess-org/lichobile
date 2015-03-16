@@ -1,4 +1,4 @@
-var classSet = require('../../../utils').classSet;
+var classSet = require('../../helper').classSet;
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
@@ -23,7 +23,7 @@ function formatClockTime(ctrl, time) {
 module.exports = function(ctrl, color, runningColor) {
   var time = ctrl.data[color];
   return m('div', {
-    class: 'clock ' + classSet({
+    className: 'clock ' + classSet({
       'outoftime': !time,
       'running': runningColor === color,
       'emerg': time < ctrl.data.emerg

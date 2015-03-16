@@ -1,4 +1,5 @@
 var utils = require('../utils');
+var helper = require('./helper');
 var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./widget/common');
@@ -74,7 +75,7 @@ seek.view = function(ctrl) {
           m('br'),
           m('br'),
           m('button[data-icon=L]', {
-            config: utils.ontouchend(ctrl.cancel),
+            config: helper.ontouchend(ctrl.cancel),
           }, i18n('cancel'))
         ])
       ])

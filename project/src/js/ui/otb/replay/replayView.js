@@ -1,11 +1,12 @@
 var utils = require('../../../utils');
+var helper = require('../../helper');
 
 function renderBackwardButton(ctrl) {
   return m('button.game_action[data-icon=I]', {
-    config: utils.ontouchend(function() {
+    config: helper.ontouchend(function() {
       if (ctrl.ply > 0) ctrl.jump(ctrl.ply - 1);
     }),
-    class: utils.classSet({
+    className: helper.classSet({
       disabled: !(ctrl.ply > 0)
     })
   });
@@ -13,10 +14,10 @@ function renderBackwardButton(ctrl) {
 
 function renderForwardButton(ctrl, nbMoves) {
   return m('button.game_action[data-icon=H]', {
-    config: utils.ontouchend(function() {
+    config: helper.ontouchend(function() {
       if (ctrl.ply < ctrl.situations.length - 1) ctrl.jump(ctrl.ply + 1);
     }),
-    class: utils.classSet({
+    className: helper.classSet({
       disabled: !(ctrl.ply < ctrl.situations.length - 1)
     })
   });

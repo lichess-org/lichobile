@@ -7,7 +7,18 @@ var untranslated = {
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   mustSignIn: 'You must sign in to see this.',
   boardThemes: 'Board themes',
-  pieceThemes: 'Piece themes'
+  pieceThemes: 'Piece themes',
+  boardThemeBrown: 'Brown',
+  boardThemeBlue: 'Blue',
+  boardThemeGreen: 'Green',
+  boardThemeGrey: 'Grey',
+  boardThemePurple: 'Purple',
+  boardThemeWood: 'Wood',
+  boardThemeWood2: 'Wood 2',
+  boardThemeWood3: 'Wood 3',
+  boardThemeBlue2: 'Blue 2',
+  boardThemeCanvas: 'Canvas',
+  boardThemeMetal: 'Metal'
 };
 
 var defaultCode = 'en';

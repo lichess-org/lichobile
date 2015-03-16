@@ -6,7 +6,7 @@ lichess.org mobile application
 ## Requirements
 
 * [node](http://nodejs.org) and [gulp](http://gulpjs.com/) version 3.8.x installed.
-* [tarifa](http://tarifa.tools)
+* [tarifa](http://tarifa.tools) (version 0.7.1)
 
 **For Android:**
 
@@ -19,6 +19,13 @@ for API 14 to API 19
 **For iOS:**
 
 * you need OS X and Xcode (6.x) installed.
+
+## Init project after checkout
+
+    $ tarifa check --force
+
+This will recreate the cordova folder with android and iOS platforms and also
+install plugins.
 
 ## Build the web application
 
@@ -44,7 +51,12 @@ To build and watch for changes:
 
 ## Build and run on your device
 
-You need tarifa to build the application, a CLI tool on top of apache cordova.
+Connect your device with USB debugging enabled and:
+
+    $ tarifa run [platform]
+
+This will use the default configuration which use a development lichess server
+end point.
 
 Please look at [tarifa documentation](http://42loops.gitbooks.io/tarifa/content/)
 for further documentation.

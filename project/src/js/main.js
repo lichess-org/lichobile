@@ -128,6 +128,12 @@ function handleError(event, source, fileno, columnNumber) {
 
 window.onerror = handleError;
 
+window.handleOpenURL = function(url) {
+  setTimeout(function() {
+    window.alert("received url: " + url);
+  }, 0);
+};
+
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
   utils.f(i18n.loadPreferredLanguage, main),

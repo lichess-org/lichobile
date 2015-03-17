@@ -283,7 +283,7 @@
      id="layer1"
      transform="translate(-241.33333,-336.74313)">
     <g
-       transform="translate(-358.6667,336.74313)"
+       transform="matrix(-1,0,0,-1,1041.3333,536.74313)"
        id="BlackBishop">
       <rect
          y="0"

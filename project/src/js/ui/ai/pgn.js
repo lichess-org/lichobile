@@ -21,7 +21,7 @@ module.exports = {
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),
-      m('div.overlay_content', m.trust(ctrl.getPgn()))
+      m('div.overlay_modal', m.trust(ctrl.getPgn()))
     ]);
   }
 };

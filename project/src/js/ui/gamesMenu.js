@@ -243,7 +243,7 @@ function renderAllGames() {
   };
 
   var allGames = nowPlaying.map(function(g) {
-    var icon = utils.gameIcon(g);
+    var icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,

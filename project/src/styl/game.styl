@@ -122,17 +122,34 @@
   animation answer_glow 5s infinite
 
 #player_controls
-  width 100%
-  padding 0 10px
+  .icon-game
+    margin-left 5px
+    position absolute
+    font-size 33px
+    color #C4A86F
+  .game-title
+    font-size 17px
+    line-height 20px
+    margin-left 50px
   button
+    display block
+    width 100%
+    min-height 40px
+    background #fff
+    border-bottom 1px solid #E1E1E1
+    font-size 15px
+    &:before
+      margin-right 10px
+    &:last-child
+      border-bottom none
+      border-radius 5px
+    &.active
+      background darken(#fff, 10%)
     &.draw-yes:before
       transform: translateY(-1px) rotate(-90deg);
+  .negotiation
+    text-align center
   .answers, .force_resign_zone
     margin-top 2em
   .result
     margin-bottom 2em
-  .actions
-    text-align left
-    button
-      display block
-      margin 2em 0

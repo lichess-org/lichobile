@@ -84,22 +84,23 @@ function renderGameRunningActions(ctrl) {
     button.cancelDrawOffer(ctrl),
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
-    button.answerOpponentTakebackProposition(ctrl), (game.mandatory(d) && game.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
+    button.answerOpponentTakebackProposition(ctrl),
+    (game.mandatory(d) && game.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
       ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
-    ) : null
+    ) : undefined
   ]);
   return [
-    m('div.actions', [
+    m('div.game_controls', [
       button.moretime(ctrl),
       button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
         button.standard(ctrl, game.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-          button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
-          button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
-          button.threefoldClaimDraw(ctrl)
+        button.standard(ctrl, game.drawable, '2', 'offerDraw', 'draw-yes'),
+        button.standard(ctrl, game.resignable, 'b', 'resign', 'resign'),
+        button.threefoldClaimDraw(ctrl)
       ]
     ]),
-    m('div.answers', answerButtons)
+    answerButtons ? m('div.answers', answerButtons) : null
   ];
 }
 
@@ -129,16 +130,29 @@ function renderGameEndedActions(ctrl) {
   ];
 }
 
-function renderPlayerActions(ctrl) {
-  if (!ctrl.vm.showingActions) return m('div.overlay.overlay_scale');
-  return m('div.overlay.overlay_scale.open', [
-    m('button.overlay_close.fa.fa-close', {
-      config: helper.ontouchend(ctrl.hideActions)
+function gameInfos(data) {
+  var time;
+  if (data.clock)
+    time = utils.secondsToMinutes(data.clock.initial).toString() + '+' +
+      data.clock.increment;
+  var mode = data.game.rated ? i18n('rated') : i18n('casual');
+  var icon = utils.gameIcon(data.game.perf);
+  var infos = [time + ' • ' + data.game.perf, m('br'), mode];
+  return [
+    m('div.icon-game', {
+      'data-icon': icon ? icon : ''
     }),
-    m('div#player_controls.overlay_content', game.playable(ctrl.data) ?
-      renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl)
-    )
-  ]);
+    m('div.game-title', infos)
+  ];
+}
+
+function renderPlayerActions(ctrl) {
+  return widgets.overlayPopup(
+    gameInfos(ctrl.data),
+    game.playable(ctrl.data) ?  renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
+    ctrl.vm.showingActions,
+    ctrl.hideActions
+  );
 }
 
 

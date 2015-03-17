@@ -64,7 +64,7 @@ module.exports = {
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),
-      m('div#player_controls.overlay_content', [
+      m('div#player_controls.overlay_modal', [
         renderEnded(ctrl),
         renderAlways(ctrl)
       ])

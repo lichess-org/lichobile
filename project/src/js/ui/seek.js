@@ -68,7 +68,7 @@ seek.view = function(ctrl) {
   function overlays() {
     return [
       m('div.overlay', [
-        m('div.overlay_content', [
+        m('div.overlay_modal', [
           m('div', i18n('waitingForOpponent')),
           m('br'),
           m('div', i18n('nbConnectedPlayers', nbPlaying || '?')),

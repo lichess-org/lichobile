@@ -39,6 +39,21 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
   return m('div.circle_' + i);
 }));
 
+widgets.overlayPopup = function(header, content, isShowing, closef) {
+  if (!isShowing) return null;
+  return m('div.overlay.popup.popup_container', {
+    config: helper.fadesIn
+  }, [
+    m('div.popup_overlay_close', {
+      config: helper.ontouchend(helper.fadesOutPopup(closef))
+    }),
+    m('div#player_controls.overlay_popup', [
+      header ? m('header', header) : null,
+      m('div.popup_content', content)
+    ])
+  ]);
+};
+
 widgets.connectingHeader = function() {
   return m('nav', [
     widgets.menuButton(),
@@ -57,8 +72,7 @@ widgets.board = function() {
       height: x + 'px'
     }
   }, helper.viewOnlyBoard(null, null, null, null, settings.general.theme.board(),
-    settings.general.theme.piece())
-  );
+    settings.general.theme.piece()));
 };
 
 widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) {

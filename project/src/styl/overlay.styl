@@ -18,34 +18,11 @@
   z-index 11
   color #C4A86F
 
-.overlay_content
-  position relative
-  top 50%
-  transform translateY(-50%)
-  text-align center
-  button
-    background none
-    color #C4A86F
-    text-align left
-    text-transform uppercase
-    font-size 0.9em
-    margin 1em 0
-    &:before
-      content attr(data-icon)
-      display inline-block
-      width 40px
-      height 40px
-      text-align center
-      line-height 40px
-      color #C4A86F
-      border-radius 50%
-      background #fff
-      margin-right 10px
-    &.active
-      color #fff
-      &:before
-        background #C4A86F
-        color #fff
+.popup_overlay_close
+  position absolute
+  width 100%
+  height 100%
+  z-index 11
 
 .overlay_fade
   opacity 0

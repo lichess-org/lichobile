@@ -130,7 +130,8 @@ window.onerror = handleError;
 
 window.handleOpenURL = function(url) {
   setTimeout(function() {
-    window.alert("received url: " + url);
+    var gameId = url.match(/^lichess:\/\/(\w+)/)[1];
+    if (gameId) m.route('/play/' + gameId);
   }, 0);
 };
 

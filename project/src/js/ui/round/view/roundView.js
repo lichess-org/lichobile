@@ -77,6 +77,8 @@ function renderAntagonist(ctrl, player, material) {
 }
 
 function renderGameRunningActions(ctrl) {
+  if (ctrl.data.player.spectator) return null;
+
   var d = ctrl.data;
   var answerButtons = compact([
     button.cancelDrawOffer(ctrl),
@@ -123,7 +125,7 @@ function renderGameEndedActions(ctrl) {
   ];
   return [
     m('div.result', [result, m('br'), m('br'), status]),
-    m('div.control.buttons', buttons)
+    ctrl.data.player.spectator ? null : m('div.control.buttons', buttons)
   ];
 }
 

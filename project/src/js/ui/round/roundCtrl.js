@@ -56,8 +56,9 @@ module.exports = function(cfg) {
   }.bind(this);
 
   this.setTitle = function() {
-    if (this.data.player.spectator) return;
-    if (gameStatus.finished(this.data))
+    if (this.data.player.spectator)
+      this.title = 'lichess.org';
+    else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
       this.title = i18n('gameAborted');

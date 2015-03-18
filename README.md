@@ -1,7 +1,7 @@
 lichess mobile
 ==============
 
-![lichess mobile screenshots](https://d27t3nufpewl0w.cloudfront.net/lichess/c48089beeab9051a959c0a1c9018bb642682c5b3_mobile-3-screens.png)
+![lichess mobile screenshots](https://raw.githubusercontent.com/veloce/lichobile/1.4.x/screens/3-screens.png)
 
 ### Official lichess.org mobile application for Android & iOS.
 

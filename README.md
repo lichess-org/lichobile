@@ -1,7 +1,19 @@
-lichobile
-=========
+lichess mobile
+==============
 
-lichess.org mobile application
+![lichess mobile screenshots](https://d27t3nufpewl0w.cloudfront.net/lichess/c48089beeab9051a959c0a1c9018bb642682c5b3_mobile-3-screens.png)
+
+### Official lichess.org mobile application for Android & iOS.
+
+- Challenge thousands of online players
+- Play online or offline artificial intelligence
+- Many chess variants available
+- Play over the board with a friend
+- Translated to 80 languages
+- Customizable and themable
+- 100% free, without ads, and opensource!
+
+Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 
 ## Requirements
 

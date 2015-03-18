@@ -28,7 +28,7 @@ var submit = function(form) {
 };
 
 signupModal.open = function() {
-  window.analytics.trackView('Sign Up');
+  helper.analyticsTrackView('Sign Up');
   backbutton.stack.push(signupModal.close);
   isOpen = true;
 };

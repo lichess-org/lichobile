@@ -7,10 +7,11 @@ var storage = require('../../storage');
 var settings = require('../../settings');
 var actions = require('./actions');
 var engine = require('./engine');
+var helper = require('../helper')
 
 module.exports = function() {
 
-  window.analytics.trackView('Offline AI');
+ helper.analyticsTrackView('Offline AI');
 
   var storageKey = 'ai.current';
 

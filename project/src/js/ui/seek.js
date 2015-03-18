@@ -16,7 +16,7 @@ seek.controller = function() {
   var hookId;
   var lobbySocket;
 
-  window.analytics.trackView('Seek');
+  helper.analyticsTrackView('Seek');
 
   var createHook = function() {
     if (hookId) return; // hook already created!

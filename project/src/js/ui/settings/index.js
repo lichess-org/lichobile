@@ -20,7 +20,8 @@ function renderBody() {
       }, i18n('boardThemes')),
       m('li.list_item.nav', {
         config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/piece'))
-      }, i18n('pieceThemes'))
+      }, i18n('pieceThemes')),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('toggleAnalytics'), 'sound', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];
@@ -28,7 +29,7 @@ function renderBody() {
 
 module.exports = {
   controller: function() {
-    window.analytics.trackView('Settings');
+    helper.analyticsTrackView('Settings');
   },
 
   view: function() {

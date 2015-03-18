@@ -23,7 +23,7 @@ var submit = function(form) {
 };
 
 loginModal.open = function() {
-  window.analytics.trackView('Login');
+  helper.analyticsTrackView('Login');
   backbutton.stack.push(loginModal.close);
   isOpen = true;
 };

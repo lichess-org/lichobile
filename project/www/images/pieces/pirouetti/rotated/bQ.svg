@@ -34,12 +34,17 @@
      id="namedview40"
      showgrid="false"
      inkscape:zoom="1.7481482"
-     inkscape:cx="67.499997"
-     inkscape:cy="67.499997"
+     inkscape:cx="67.499996"
+     inkscape:cy="67.499996"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" /><defs
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true"><sodipodi:guide
+       position="3971.4405,3713.1354"
+       orientation="0,1"
+       id="guide3350" /></sodipodi:namedview><defs
      id="defs4"><style
        type="text/css"
        id="style6"><![CDATA[
@@ -47,10 +52,10 @@
     .fil0 {fill:#383838}
    ]]></style></defs><g
      id="Warstwa_x0020_1"
-     transform="matrix(-1,0,0,-1,3809,3979)"><metadata
+     transform="matrix(-1,0,0,-1,3809,3809.6668)"><metadata
        id="CorelCorpID_0Corel-Layer" /><polygon
        class="fil0"
-       points="2756,3288 1068,3264 1445,1626 2337,1630 "
+       points="2337,1630 2756,3288 1068,3264 1445,1626 "
        id="polygon10"
        style="fill:#383838" /><rect
        class="fil0"
@@ -80,7 +85,7 @@
        inkscape:connector-curvature="0"
        style="fill:#111111" /><polygon
        class="fil1"
-       points="2854,3499 970,3499 970,3436 2854,3436 "
+       points="2854,3436 2854,3499 970,3499 970,3436 "
        id="polygon20"
        style="fill:#111111" /><rect
        class="fil0"
@@ -91,11 +96,11 @@
        id="rect22"
        style="fill:#383838" /><polygon
        class="fil0"
-       points="1446,1058 1406,374 1884,931 1916,1563 1352,1563 949,798 "
+       points="1916,1563 1352,1563 949,798 1446,1058 1406,374 1884,931 "
        id="polygon24"
        style="fill:#383838" /><polygon
        class="fil0"
-       points="2321,1058 2361,375 1883,931 1865,1563 2416,1563 2819,798 "
+       points="1865,1563 2416,1563 2819,798 2321,1058 2361,375 1883,931 "
        id="polygon26"
        style="fill:#383838" /><circle
        class="fil0"
@@ -128,6 +133,6 @@
        inkscape:connector-curvature="0"
        style="fill:#111111" /><polygon
        class="fil1"
-       points="2726,1745 2726,1526 2260,1526 2260,1745 "
+       points="2260,1745 2726,1745 2726,1526 2260,1526 "
        id="polygon38"
        style="fill:#111111" /></g></svg>

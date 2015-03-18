@@ -29,17 +29,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="944"
+     inkscape:window-height="1001"
      id="namedview26"
      showgrid="false"
      inkscape:zoom="1.7481482"
-     inkscape:cx="67.499997"
-     inkscape:cy="67.499997"
-     inkscape:window-x="0"
+     inkscape:cx="67.499996"
+     inkscape:cy="76.080504"
+     inkscape:window-x="2880"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" /><defs
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true"><sodipodi:guide
+       position="-3793.8558,3713.1354"
+       orientation="0,1"
+       id="guide3343" /></sodipodi:namedview><defs
      id="defs4"><style
        type="text/css"
        id="style6"><![CDATA[
@@ -47,14 +52,14 @@
     .fil0 {fill:#383838}
    ]]></style></defs><g
      id="Warstwa_x0020_1"
-     transform="matrix(-1,0,0,-1,3810,4302)"><metadata
+     transform="matrix(-1,0,0,-1,3810,3818.1567)"><metadata
        id="CorelCorpID_0Corel-Layer" /><polygon
        class="fil0"
-       points="2751,3288 1063,3266 1259,1694 2542,1698 "
+       points="1063,3266 1259,1694 2542,1698 2751,3288 "
        id="polygon10"
        style="fill:#383838" /><polygon
        class="fil0"
-       points="3021,596 2497,627 2497,909 2190,909 2190,636 1641,636 1641,909 1321,909 1318,637 797,596 1002,1747 2804,1747 "
+       points="797,596 1002,1747 2804,1747 3021,596 2497,627 2497,909 2190,909 2190,636 1641,636 1641,909 1321,909 1318,637 "
        id="polygon12"
        style="fill:#383838" /><rect
        class="fil0"
@@ -89,6 +94,6 @@
        inkscape:connector-curvature="0"
        style="fill:#111111" /><polygon
        class="fil1"
-       points="2849,3499 964,3499 964,3436 2849,3436 "
+       points="964,3499 964,3436 2849,3436 2849,3499 "
        id="polygon24"
        style="fill:#111111" /></g></svg>

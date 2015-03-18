@@ -34,12 +34,17 @@
      id="namedview24"
      showgrid="false"
      inkscape:zoom="1.7481482"
-     inkscape:cx="67.499997"
-     inkscape:cy="67.499997"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:cx="67.499996"
+     inkscape:cy="76.080504"
+     inkscape:window-x="768"
+     inkscape:window-y="293"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" /><defs
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true"><sodipodi:guide
+       position="2260.1694,3713.1354"
+       orientation="0,1"
+       id="guide3342" /></sodipodi:namedview><defs
      id="defs4"><style
        type="text/css"
        id="style6"><![CDATA[
@@ -47,7 +52,7 @@
     .fil0 {fill:white}
    ]]></style></defs><g
      id="Warstwa_x0020_1"
-     transform="matrix(-1,0,0,-1,3809.3451,4116.7362)"><metadata
+     transform="matrix(-1,0,0,-1,3809.3451,3828.8779)"><metadata
        id="CorelCorpID_0Corel-Layer" /><path
        class="fil0"
        d="m 828,1378 c -183,169 -132,155 -60,286 72,131 195,227 503,77 308,-150 390,-133 517,-103 127,30 159,91 167,157 8,66 -186,227 -400,433 -214,205 -402,243 -373,671 30,428 19,525 -42,592 -61,67 1074,263 1221,196 147,-68 543,-55 465,-460 -78,-406 -208,-900 -10,-1238 198,-338 398,-1042 -527,-1423 -925,-381 -558,35 -648,83 -90,47 -121,57 -175,83 -98,47 -463,485 -639,647 z"
@@ -86,6 +91,6 @@
        inkscape:connector-curvature="0"
        style="fill:#d1d1d1" /><polygon
        class="fil1"
-       points="2945,3506 1060,3506 1060,3443 2945,3443 "
+       points="2945,3443 2945,3506 1060,3506 1060,3443 "
        id="polygon22"
        style="fill:#d1d1d1" /></g></svg>

@@ -34,12 +34,17 @@
      id="namedview34"
      showgrid="false"
      inkscape:zoom="1.7481482"
-     inkscape:cx="67.499997"
-     inkscape:cy="67.499997"
+     inkscape:cx="67.499996"
+     inkscape:cy="67.499996"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" /><defs
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true"><sodipodi:guide
+       position="4181.3134,3713.1354"
+       orientation="0,1"
+       id="guide3347" /></sodipodi:namedview><defs
      id="defs4"><style
        type="text/css"
        id="style6"><![CDATA[
@@ -48,7 +53,7 @@
     .fil0 {fill:#383838}
    ]]></style></defs><g
      id="Warstwa_x0020_1"
-     transform="matrix(-1,0,0,-1,3810,4014)"><metadata
+     transform="matrix(-1,0,0,-1,3810,3827.7257)"><metadata
        id="CorelCorpID_0Corel-Layer" /><path
        class="fil0"
        d="m 1870,482 c 0,0 621,269 458,883 -163,614 -570,260 -570,260 l 113,-1142 0,0 z"
@@ -77,7 +82,7 @@
        id="rect16"
        style="fill:#383838" /><polygon
        class="fil0"
-       points="2679,3257 1124,3257 1580,1553 2178,1553 "
+       points="2178,1553 2679,3257 1124,3257 1580,1553 "
        id="polygon18"
        style="fill:#383838" /><rect
        class="fil0"
@@ -105,7 +110,7 @@
        inkscape:connector-curvature="0"
        style="fill:#111111" /><polygon
        class="fil2"
-       points="2852,3505 967,3505 967,3442 2852,3442 "
+       points="2852,3442 2852,3505 967,3505 967,3442 "
        id="polygon28"
        style="fill:#111111" /><path
        class="fil2"
@@ -114,6 +119,6 @@
        inkscape:connector-curvature="0"
        style="fill:#111111" /><polygon
        class="fil2"
-       points="2675,3238 3016,3238 3016,3442 2852,3442 2852,3505 3012,3505 3012,3709 2531,3709 2531,3505 2531,3442 2447,3238 2135,1809 1541,1663 2210,1663 "
+       points="2135,1809 1541,1663 2210,1663 2675,3238 3016,3238 3016,3442 2852,3442 2852,3505 3012,3505 3012,3709 2531,3709 2531,3505 2531,3442 2447,3238 "
        id="polygon32"
        style="fill:#111111" /></g></svg>

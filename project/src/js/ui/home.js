@@ -1,10 +1,11 @@
 var widgets = require('./widget/common');
+var helper = require('./helper');
 
 var home = {};
 
 home.controller = function() {
 
-  window.analytics.trackView('Home');
+  helper.analyticsTrackView('Home');
 
   return {
   };

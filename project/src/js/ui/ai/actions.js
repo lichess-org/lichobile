@@ -60,7 +60,7 @@ module.exports = {
   },
   view: function(ctrl) {
     if (ctrl.pgn.isOpen()) return pgnOverlay.view(ctrl.pgn);
-    if (ctrl.isOpen()) return m('div.overlay', [
+    if (ctrl.isOpen()) return m('div.overlay.overlay_scale.open', [
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),
@@ -69,5 +69,6 @@ module.exports = {
         renderAlways(ctrl)
       ])
     ]);
+    return m('div.overlay.overlay_scale');
   }
 };

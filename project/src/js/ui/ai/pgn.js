@@ -14,11 +14,10 @@ module.exports = {
       isOpen: function() {
         return isOpen;
       },
-      copy: function() {
+      share: function() {
         var pgn = getPgn();
         var cleanPgn = pgn.replace(/<br\s*[\/]?>/gi, "\r\n");
-        window.cordova.plugins.clipboard.copy(cleanPgn);
-        window.plugins.toast.show(i18n('exportedPgn'), 'short', 'bottom');
+        window.plugins.socialsharing.share(cleanPgn);
       },
       getPgn: getPgn
     };
@@ -28,8 +27,9 @@ module.exports = {
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),
-      m('button.overlay_clipboard.fa.fa-copy', {
-        config: helper.ontouchend(ctrl.copy)
+      m('button.overlay_clipboard.fa.fa-share-alt', {
+        // [fcalise] - TODO - switch in 'fa-share' for the ios version
+        config: helper.ontouchend(ctrl.share)
       }),
       m('div.overlay_content', m.trust(ctrl.getPgn()))
     ]);

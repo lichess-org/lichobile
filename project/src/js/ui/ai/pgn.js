@@ -17,7 +17,7 @@ module.exports = {
     };
   },
   view: function(ctrl) {
-    if (ctrl.isOpen()) return m('div.overlay', [
+    if (ctrl.isOpen()) return m('div.overlay.overlay_scale.open', [
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),

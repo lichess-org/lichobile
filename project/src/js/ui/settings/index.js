@@ -9,12 +9,13 @@ var i18n = require('../../i18n');
 
 function renderBody() {
   return [
-    m('ul.settings_list.scroller', [
+    m('ul.settings_list.general.scroller', [
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.general.animations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.general.pieceDestinations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound)),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics)),
       m('li.list_item.nav', {
         config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/board'))
       }, i18n('boardThemes')),
@@ -28,7 +29,7 @@ function renderBody() {
 
 module.exports = {
   controller: function() {
-    window.analytics.trackView('Settings');
+    helper.analyticsTrackView('Settings');
   },
 
   view: function() {

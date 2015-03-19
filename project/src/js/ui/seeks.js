@@ -37,7 +37,7 @@ seeks.controller = function() {
   var lobbySocket;
   var pool = [];
 
-  window.analytics.trackView('Seeks');
+  helper.analyticsTrackView('Seeks');
 
   xhr.lobby(true).then(function(data) {
     lobbySocket = socket.connectLobby(data.lobby.version, reload, {

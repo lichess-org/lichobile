@@ -5,10 +5,11 @@ var sound = require('../../sound');
 var replayCtrl = require('./replay/replayCtrl');
 var storage = require('../../storage');
 var actions = require('./actions');
+var helper = require('../helper')
 
 module.exports = function(cfg) {
 
-  window.analytics.trackView('On The Board');
+  helper.analyticsTrackView('On The Board');
 
   var storageKey = 'otb.current';
 

@@ -20,7 +20,7 @@ gamesMenu.isOpen = false;
 var newGameCardSwapped = false;
 
 var doOpen = function() {
-  window.analytics.trackView('Games Menu');
+  helper.analyticsTrackView('Games Menu');
   backbutton.stack.push(gamesMenu.close);
   gamesMenu.isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();

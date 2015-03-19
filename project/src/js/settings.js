@@ -42,7 +42,8 @@ module.exports = {
       ],
       board: localstorageprop('settings.theme.board', 'grey'),
       piece: localstorageprop('settings.theme.piece', 'merida')
-    }
+    },
+    analytics: localstorageprop('settings.analytics', true)
   },
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false)

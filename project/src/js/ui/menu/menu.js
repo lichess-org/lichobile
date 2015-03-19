@@ -1,6 +1,7 @@
 var utils = require('../../utils');
 var Zanimo = require('zanimo');
 var backbutton = require('../../backbutton');
+var helper = require('../helper')
 
 var menu = {};
 
@@ -23,7 +24,7 @@ menu.toggle = function() {
 };
 
 menu.open = function() {
-  window.analytics.trackView('Main Menu');
+  helper.analyticsTrackView('Main Menu');
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
 };

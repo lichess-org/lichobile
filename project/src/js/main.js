@@ -128,6 +128,13 @@ function handleError(event, source, fileno, columnNumber) {
 
 window.onerror = handleError;
 
+window.handleOpenURL = function(url) {
+  setTimeout(function() {
+    var gameId = url.match(/^lichess:\/\/(\w+)/)[1];
+    if (gameId) m.route('/play/' + gameId);
+  }, 0);
+};
+
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
   utils.f(i18n.loadPreferredLanguage, main),

@@ -2,6 +2,7 @@ var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
 var chessground = require('chessground');
 var utils = require('../utils');
+var settings = require('../settings');
 
 var helper = {};
 
@@ -137,5 +138,12 @@ helper.viewportDim = function() {
   return viewportDim;
 };
 
+// allow user to opt out of track analytics
+// only log if setting has it enabled
+helper.analyticsTrackView = function(view) {
+  var enabled = settings.general.analytics();
+  if (enabled)
+    window.analytics.trackView(view);
+}
 
 module.exports = helper;

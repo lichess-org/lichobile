@@ -1,4 +1,5 @@
 var helper = require('../helper');
+var i18n = require('../../i18n');
 
 module.exports = {
   controller: function(getPgn) {
@@ -17,7 +18,7 @@ module.exports = {
         var pgn = getPgn();
         var cleanPgn = pgn.replace(/<br\s*[\/]?>/gi, "\r\n");
         window.cordova.plugins.clipboard.copy(cleanPgn);
-        window.plugins.toast.show('PGN copied to clipboard', 'short', 'bottom');
+        window.plugins.toast.show(i18n('exportedPgn'), 'short', 'bottom');
       },
       getPgn: getPgn
     };

@@ -19,7 +19,8 @@ var untranslated = {
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
-  allowAnalytics: 'Allow anonymous statistics'
+  allowAnalytics: 'Allow anonymous statistics',
+  exportedPgn: 'PGN copied to clipboard'
 };
 
 var defaultCode = 'en';

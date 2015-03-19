@@ -9,7 +9,7 @@ var i18n = require('../../i18n');
 
 function renderBody() {
   return [
-    m('ul.settings_list.scroller', [
+    m('ul.settings_list.general.scroller', [
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.general.animations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',

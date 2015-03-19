@@ -12,6 +12,14 @@ module.exports = {
       config: helper.ontouchend(function() { ctrl.socket.send(socketMsg); })
     }, i18n(hint)) : null;
   },
+  shareLink: function(ctrl) {
+    return m('button', {
+      'data-icon': '"',
+      config: helper.ontouchend(function() {
+        window.plugins.socialsharing.share(null, null, null, 'http://lichess.org/' + ctrl.data.game.id);
+      })
+    }, i18n('shareGame'));
+  },
   forceResign: function(ctrl) {
     return game.forceResignable(ctrl.data) ?
       m('div.force_resign_zone', [

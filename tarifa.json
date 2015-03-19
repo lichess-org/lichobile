@@ -129,6 +129,7 @@
     "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git",
-    "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio.git"
+    "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio.git",
+    "com.verso.cordova.clipboard": "https://github.com/VersoSolutions/CordovaClipboard.git"
   }
 }

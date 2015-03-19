@@ -14,8 +14,9 @@ module.exports = {
         return isOpen;
       },
       copy: function() {
-        var text = getPgn();
-        window.cordova.plugins.clipboard.copy(text);
+        var pgn = getPgn();
+        var cleanPgn = pgn.replace(/<br\s*[\/]?>/gi, "\r\n");
+        window.cordova.plugins.clipboard.copy(cleanPgn);
         window.plugins.toast.show('PGN copied to clipboard', 'short', 'bottom');
       },
       getPgn: getPgn

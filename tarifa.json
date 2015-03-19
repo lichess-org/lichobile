@@ -4,17 +4,15 @@
   "description": "lichess.org mobile application",
   "version": "1.3.0",
   "platforms": [
-    "ios@3.7.0",
-    "android@3.7.1"
+    "android@3.7.1",
+    "ios@3.8.0"
   ],
   "configurations": {
     "ios": {
       "default": {
         "id": "org.lichess.mobileapp.dev",
         "product_name": "lichess dev",
-        "product_file_name": "lichess",
-        "API_END_POINT": "http://en.l.dev",
-        "SOCKET_END_POINT": "socket.en.l.dev"
+        "product_file_name": "lichess"
       },
       "stage": {
         "id": "org.lichess.mobileapp.stage",
@@ -130,6 +128,6 @@
     "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git",
     "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio.git",
-    "com.verso.cordova.clipboard": "https://github.com/VersoSolutions/CordovaClipboard.git"
+    "nl.x-services.plugins.socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git"
   }
 }

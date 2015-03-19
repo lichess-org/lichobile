@@ -90,6 +90,7 @@ function renderGameRunningActions(ctrl) {
   ]);
   return [
     m('div.actions', [
+      button.shareLink(ctrl),
       button.moretime(ctrl),
       button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [

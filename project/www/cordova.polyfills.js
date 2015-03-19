@@ -27,6 +27,11 @@
     hideKeyboardAccessoryBar: noop
   };
 
+  // social sharing
+  window.plugins.socialsharing = {
+    share: noop
+  };
+
   // toast
   window.plugins.toast = {
     show: noop,

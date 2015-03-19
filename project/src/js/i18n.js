@@ -18,7 +18,8 @@ var untranslated = {
   boardThemeWood3: 'Wood 3',
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
-  boardThemeMetal: 'Metal'
+  boardThemeMetal: 'Metal',
+  shareGame: 'Share game'
 };
 
 var defaultCode = 'en';

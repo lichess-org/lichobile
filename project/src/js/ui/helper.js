@@ -124,6 +124,6 @@ helper.analyticsTrackView = function(view) {
   var enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
-}
+};
 
 module.exports = helper;

@@ -27,8 +27,7 @@ module.exports = {
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
       }),
-      m('button.overlay_clipboard.fa.fa-share-alt', {
-        // [fcalise] - TODO - switch in 'fa-share' for the ios version
+      m('button.overlay_share.fa.fa-share' + (window.cordova.platformId === 'android' ? '-alt' : ''), {
         config: helper.ontouchend(ctrl.share)
       }),
       m('div.overlay_content', m.trust(ctrl.getPgn()))

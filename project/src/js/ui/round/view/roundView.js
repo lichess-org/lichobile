@@ -150,12 +150,12 @@ function gameInfos(data) {
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];
-  return m('div.header_wrapper', [
+  return [
     m('div.icon-game', {
       'data-icon': icon ? icon : ''
     }),
     m('div.game-title', infos)
-  ]);
+  ];
 }
 
 function renderPlayerActions(ctrl) {

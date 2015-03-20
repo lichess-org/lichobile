@@ -66,20 +66,18 @@ seek.controller = function() {
 
 seek.view = function(ctrl) {
   function overlays() {
-    return [
-      m('div.overlay', [
-        m('div.overlay_modal', [
-          m('div', i18n('waitingForOpponent')),
-          m('br'),
-          m('div', i18n('nbConnectedPlayers', nbPlaying || '?')),
-          m('br'),
-          m('br'),
-          m('button[data-icon=L]', {
-            config: helper.ontouchend(ctrl.cancel),
-          }, i18n('cancel'))
-        ])
-      ])
-    ];
+    return widgets.overlayPopup(
+      m('div', i18n('waitingForOpponent') + '...'),
+      m('div.seek_real_time', [
+        m('div.nb_players', i18n('nbConnectedPlayers', nbPlaying || '?')),
+        m('br'),
+        m('br'),
+        m('button[data-icon=L]', {
+          config: helper.ontouchend(ctrl.cancel),
+        }, i18n('cancel'))
+      ]),
+      true
+    );
   }
 
   return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlays);

@@ -45,7 +45,7 @@ widgets.overlayPopup = function(header, content, isShowing, closef) {
     config: helper.fadesIn
   }, [
     m('div.popup_overlay_close', {
-      config: helper.ontouchend(helper.fadesOutPopup(closef))
+      config: closef ? helper.ontouchend(helper.fadesOutPopup(closef)) : utils.noop
     }),
     m('div#player_controls.overlay_popup', [
       header ? m('header', header) : null,

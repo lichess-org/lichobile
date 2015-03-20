@@ -5,6 +5,7 @@ var i18n = require('../../i18n');
 var opposite = require('chessground').util.opposite;
 var settings = require('../../settings');
 var formWidgets = require('../widget/form');
+var widget = require('../widget/common');
 var backbutton = require('../../backbutton');
 
 function renderEnded(ctrl) {
@@ -19,16 +20,17 @@ function renderEnded(ctrl) {
 function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
-    m('div.actions', [
+    m('div.offline_actions', [
       m('button[data-icon=U]', {
         config: helper.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
       }, i18n('createAGame')),
       m('button[data-icon=A]', {
         config: helper.ontouchend(ctrl.pgn.open)
       }, i18n('showPGN')),
-      formWidgets.renderCheckbox(i18n('Flip pieces after move'), 'flipPieces',
+      m('div.action', formWidgets.renderCheckbox(
+        i18n('Flip pieces after move'), 'flipPieces',
         settings.onChange(settings.otb.flipPieces)
-      ),
+      )),
     ])
   ];
 }
@@ -60,15 +62,15 @@ module.exports = {
   },
   view: function(ctrl) {
     if (ctrl.pgn.isOpen()) return pgnOverlay.view(ctrl.pgn);
-    if (ctrl.isOpen()) return m('div.overlay.overlay_scale.open', [
-      m('button.overlay_close.fa.fa-close', {
-        config: helper.ontouchend(ctrl.close)
-      }),
-      m('div#player_controls.overlay_modal', [
-        renderEnded(ctrl),
-        renderAlways(ctrl)
-      ])
-    ]);
-    return m('div.overlay.overlay_scale');
+    if (ctrl.isOpen())
+      return widget.overlayPopup(
+        null,
+        [
+          renderEnded(ctrl),
+          renderAlways(ctrl)
+        ],
+        ctrl.isOpen(),
+        ctrl.close
+      );
   }
 };

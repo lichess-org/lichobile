@@ -19,6 +19,7 @@ var untranslated = {
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
+  allowAnalytics: 'Allow anonymous statistics',
   shareGame: 'Share game'
 };
 

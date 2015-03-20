@@ -122,15 +122,19 @@
   animation answer_glow 5s infinite
 
 #player_controls
+  .header_wrapper
+    text-align center
   .icon-game
-    margin-left 5px
-    position absolute
+    display inline-block
     font-size 33px
     color #C4A86F
   .game-title
-    font-size 17px
+    display inline-block
+    font-size 16px
     line-height 20px
-    margin-left 50px
+    margin-left 10px
+    text-align left
+    text-transform uppercase
   button
     display block
     width 100%
@@ -143,6 +147,12 @@
     &:last-child
       border-bottom none
       border-radius 5px
+    &.binany_choice
+      display inline-block
+      width 50%
+      border-bottom none
+    &.flipped
+      color #C4A86F
     &.active
       background darken(#fff, 10%)
     &.draw-yes:before
@@ -150,7 +160,12 @@
   .negotiation
     text-align center
   .answers, .force_resign_zone
-    margin-top 2em
+    margin-top 5px
+    color #C4A86F
+  .notice
+    padding 0 10px
+  .status
+    color #C4A86F
   .result
     text-align center
     margin 1em 0 2em

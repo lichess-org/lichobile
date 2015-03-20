@@ -77,7 +77,10 @@ function renderAntagonist(ctrl, player, material) {
 }
 
 function renderGameRunningActions(ctrl) {
-  if (ctrl.data.player.spectator) return null;
+  if (ctrl.data.player.spectator) return m('div.game_controls', [
+    button.shareLink(ctrl),
+    button.flipBoard(ctrl)
+  ]);
 
   var d = ctrl.data;
   var answerButtons = compact([
@@ -92,6 +95,7 @@ function renderGameRunningActions(ctrl) {
   return [
     m('div.game_controls', [
       button.shareLink(ctrl),
+      button.flipBoard(ctrl),
       button.moretime(ctrl),
       button.standard(ctrl, game.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
@@ -120,14 +124,19 @@ function renderGameEndedActions(ctrl) {
   var winner = game.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  var buttons = [
+  var buttons = ctrl.data.player.spectator ? [
+    button.shareLink(ctrl),
+    button.flipBoard(ctrl)
+  ] : [
+    button.shareLink(ctrl),
+    button.flipBoard(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
     button.rematch(ctrl)
   ];
   return [
-    m('div.result', [result, m('br'), m('br'), status]),
-    ctrl.data.player.spectator ? null : m('div.control.buttons', buttons)
+    m('div.result', [result, m('br'), m('br'), m('div.status', status)]),
+    m('div.control.buttons', buttons)
   ];
 }
 
@@ -136,15 +145,17 @@ function gameInfos(data) {
   if (data.clock)
     time = utils.secondsToMinutes(data.clock.initial).toString() + '+' +
       data.clock.increment;
+  else if (data.correspondence)
+    time = data.correspondence.daysPerTurn + ' ' + i18n('days');
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];
-  return [
+  return m('div.header_wrapper', [
     m('div.icon-game', {
       'data-icon': icon ? icon : ''
     }),
     m('div.game-title', infos)
-  ];
+  ]);
 }
 
 function renderPlayerActions(ctrl) {

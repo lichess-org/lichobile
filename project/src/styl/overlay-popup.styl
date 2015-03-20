@@ -6,13 +6,13 @@
   top 20%
   left 10%
   width 80%
-  max-height 60%
+  max-height 70%
   z-index 12
   border-radius 5px
   background-color: #fff
   color #383838
   > header
-    padding 5px
+    padding 10px
     position relative
     min-height 45px
     width 100%
@@ -20,6 +20,13 @@
     > h2
       text-align center
       line-height 45px
+  @media only screen and (min-device-width 700px)
+    width 50%
+    left 25%
+    right 25%
+  @media only screen and (max-device-height 480px)
+    max-height 85%
+    top 10%
 
 .popup_content
-  padding 5px
+  padding-bottom 5px

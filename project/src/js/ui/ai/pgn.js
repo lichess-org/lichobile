@@ -1,4 +1,5 @@
 var helper = require('../helper');
+var i18n = require('../../i18n');
 
 module.exports = {
   controller: function(getPgn) {
@@ -13,6 +14,11 @@ module.exports = {
       isOpen: function() {
         return isOpen;
       },
+      share: function() {
+        var pgn = getPgn();
+        var cleanPgn = pgn.replace(/<br\s*[\/]?>/gi, "\r\n");
+        window.plugins.socialsharing.share(cleanPgn);
+      },
       getPgn: getPgn
     };
   },
@@ -20,6 +26,10 @@ module.exports = {
     if (ctrl.isOpen()) return m('div.overlay.overlay_scale.open', [
       m('button.overlay_close.fa.fa-close', {
         config: helper.ontouchend(ctrl.close)
+      }),
+      m('button.overlay_share.fa', {
+        className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
+        config: helper.ontouchend(ctrl.share)
       }),
       m('div.overlay_content', m.trust(ctrl.getPgn()))
     ]);

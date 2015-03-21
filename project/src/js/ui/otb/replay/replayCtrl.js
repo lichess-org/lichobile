@@ -1,5 +1,4 @@
 var Chess = require('chessli.js').Chess;
-var game = require('../../round/game');
 
 module.exports = function(root, situations, ply) {
 
@@ -53,7 +52,7 @@ module.exports = function(root, situations, ply) {
   this.addMove = function(orig, dest, promotion) {
     var situation = this.situation();
     var chess = new Chess(situation.fen, chessVariant);
-    var promotionLetter = (dest[1] == 1 || dest[1] == 8) ? (promotion ? forsyth(promotion) : 'q') : null;
+    var promotionLetter = (dest[1] === 1 || dest[1] === 8) ? (promotion ? forsyth(promotion) : 'q') : null;
     var move = chess.move({
       from: orig,
       to: dest,
@@ -89,12 +88,11 @@ module.exports = function(root, situations, ply) {
     });
     chess.header('Event', 'Casual game');
     chess.header('Site', 'http://lichess.org');
-    chess.header('Date', moment().format('YYYY.MM.DD'));
+    chess.header('Date', window.moment().format('YYYY.MM.DD'));
     // chess.header('Result', game.result(this.root.data));
     chess.header('Variant', 'Standard');
     return chess.pgn({
-      max_width: 30,
-      newline_char: '<br />'
+      max_width: 30
     });
   }.bind(this);
 };

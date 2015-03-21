@@ -70,7 +70,7 @@ utils.backHistory = function() {
     window.history.go(-1);
 };
 
-utils.variantIconsMap = {
+var perfIconsMap = {
   bullet: 'T',
   blitz: ')',
   classical: '+',
@@ -83,8 +83,12 @@ utils.variantIconsMap = {
   puzzle: '-'
 };
 
-utils.gameIcon = function(g) {
-  return g.opponent.ai ? ':' : utils.variantIconsMap[g.perf];
+utils.gameIcon = function(perf) {
+  return perfIconsMap[perf];
+};
+
+utils.secondsToMinutes = function(sec) {
+  return sec === 0 ? sec : sec / 60;
 };
 
 module.exports = utils;

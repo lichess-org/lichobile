@@ -44,7 +44,7 @@ function takebackable(data) {
 }
 
 function drawable(data) {
-  return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai;
+  return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
 function resignable(data) {

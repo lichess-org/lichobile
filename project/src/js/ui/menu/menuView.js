@@ -24,7 +24,7 @@ var perfTypes = [
 
 function renderPerf(key, name, perf) {
   return m('div.perf', {
-    'data-icon': utils.variantIconsMap[key]
+    'data-icon': utils.gameIcon(key)
   }, [
     m('span.name', name),
     m('div.rating', [

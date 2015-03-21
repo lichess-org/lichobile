@@ -34,7 +34,7 @@ helper.scale = function(element, isInitialized) {
 helper.fadesIn = function(element, isInitialized) {
   if (!isInitialized) {
     element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 200);
+    Zanimo(element, 'opacity', 1, 150);
   }
 };
 

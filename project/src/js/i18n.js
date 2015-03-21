@@ -20,7 +20,8 @@ var untranslated = {
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
   allowAnalytics: 'Allow anonymous statistics',
-  shareGame: 'Share game'
+  shareGame: 'Share game',
+  sharePGN: 'Share PGN'
 };
 
 var defaultCode = 'en';

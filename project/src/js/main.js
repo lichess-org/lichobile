@@ -122,7 +122,7 @@ function onOnline() {
 }
 
 function handleError(event, source, fileno, columnNumber) {
-  var description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
+  var description = '[' + window.lichess.version + ']' + event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
   window.analytics.trackException(description, true);
 }
 

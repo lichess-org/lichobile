@@ -115,6 +115,10 @@ function renderLinks(user) {
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
     m('li.side_link', {
+      key: 'menu_friends',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/friends'))
+    }, i18n('onlineFriends')),
+    m('li.side_link', {
       key: 'menu_settings',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))
     }, i18n('settings'))

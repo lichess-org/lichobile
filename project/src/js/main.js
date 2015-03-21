@@ -28,6 +28,7 @@ var ai = require('./ui/ai/main');
 var settingsUi = require('./ui/settings');
 var boardThemes = require('./ui/settings/boardThemes');
 var pieceThemes = require('./ui/settings/pieceThemes');
+var friendsUi = require('./ui/friends');
 
 var triedToLogin = false;
 
@@ -45,7 +46,8 @@ function main() {
     '/play/:id': play,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
-    '/settings/themes/piece': pieceThemes
+    '/settings/themes/piece': pieceThemes,
+    '/friends': friendsUi
   });
 
   // pull session data once (to log in user automatically thanks to cookie)

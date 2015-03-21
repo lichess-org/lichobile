@@ -157,7 +157,8 @@
     &.active
       background darken(#fff, 10%)
     &.draw-yes:before
-      transform: translateY(-1px) rotate(-90deg);
+      display inline-block
+      transform rotate(-90deg)
   .negotiation
     text-align center
   .answers, .force_resign_zone
@@ -171,7 +172,6 @@
     text-align center
     margin 1em 0 2em
 
-// offline games
 .offline_actions
   > .action
     padding 10px

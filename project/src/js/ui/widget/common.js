@@ -40,12 +40,10 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
 }));
 
 widgets.overlayPopup = function(header, content, isShowing, closef) {
-  if (!isShowing) return null;
-  return m('div.overlay.popup.popup_container', {
-    config: helper.fadesIn
-  }, [
+  if (!isShowing) return m('div.overlay.popup.overlay_fade');
+  return m('div.overlay.popup.overlay_fade.open', [
     m('div.popup_overlay_close', {
-      config: closef ? helper.ontouchend(helper.fadesOutPopup(closef)) : utils.noop
+      config: closef ? helper.ontouchend(closef) : utils.noop
     }),
     m('div#player_controls.overlay_popup', [
       header ? m('header', header) : null,

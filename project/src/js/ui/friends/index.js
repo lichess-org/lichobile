@@ -6,12 +6,17 @@ var menu = require('../menu');
 var i18n = require('../../i18n');
 
 function renderBody() {
-  /*return [
-	m('ul.friends_list.general.scroller', {}, settings.general.theme.availablePieceThemes.map(function(f) {
+  dummyFriends = [
+    'thibault',
+  	'veloce',
+  	'settebello'
+  ];
+
+  return [
+	m('ul.friends_list.general.scroller', {}, dummyFriends.map(function(f) {
 	  return m('li.list_item', {}, f);
     }))
-  ];*/
-  return m('div.result', ['online', m('br'), m('br'), 'friends']);
+  ];
 }
 
 module.exports = {

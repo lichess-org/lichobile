@@ -46,8 +46,10 @@ function seeks(feedback) {
   return http.request('/lobby/seeks', null, feedback);
 }
 
-function game(id) {
-  return http.request('/' + id);
+function game(id, pov) {
+  var url = '/' + id;
+  if (pov) url += ('/' + pov);
+  return http.request(url);
 }
 
 function status() {

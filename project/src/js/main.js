@@ -32,8 +32,13 @@ function main() {
   // open games from external links with url scheme (lichess://gameId)
   window.handleOpenURL = function(url) {
     setTimeout(function() {
-      var gameId = url.match(/^lichess:\/\/(\w+)/)[1];
-      if (gameId) m.route('/play/' + gameId);
+      var parsed = url.match(/^lichess:\/\/(\w+)\/?(black|white)?/);
+      var gameId = parsed[1];
+      var pov = parsed[2];
+      if (!gameId) return;
+      var route = 'play/' + gameId;
+      if (pov) route += ('/' + pov);
+      m.route(route);
     }, 0);
   };
 

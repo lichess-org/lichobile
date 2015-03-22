@@ -16,6 +16,7 @@ module.exports.init = function() {
     '/otb': otb,
     '/ai': ai,
     '/play/:id': play,
+    '/play/:id/:pov': play,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes

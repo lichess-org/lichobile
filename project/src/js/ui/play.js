@@ -13,7 +13,7 @@ var settings = require('../settings');
 module.exports = {
   controller: function() {
     var round;
-    xhr.game(m.route.param('id')).then(function(data) {
+    xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
       if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
       if (data.player.user === undefined)

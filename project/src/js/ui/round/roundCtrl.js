@@ -17,7 +17,7 @@ var socketHandler = require('./socketHandler');
 var signals = require('../../signals');
 var atomic = require('./atomic');
 var backbutton = require('../../backbutton');
-var helper = require('../helper')
+var helper = require('../helper');
 
 module.exports = function(cfg) {
 

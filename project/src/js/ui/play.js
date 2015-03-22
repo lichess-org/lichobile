@@ -1,5 +1,7 @@
 var session = require('../session');
+var i18n = require('../i18n');
 var utils = require('../utils');
+var helper = require('./helper');
 var xhr = require('../xhr');
 var widgets = require('./widget/common');
 var roundCtrl = require('./round/roundCtrl');
@@ -12,12 +14,24 @@ var settings = require('../settings');
 
 module.exports = {
   controller: function() {
+    var id = m.route.param('id');
+    var joinable = false;
+    var gameData;
     var round;
-    xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
+
+    function onJoiningGame(data) {
       if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
       if (data.player.user === undefined)
         storage.set('lastPlayedGameURLAsAnon', data.url.round);
+    }
+
+    xhr.game(id, m.route.param('pov')).then(function(data) {
+      if (data.game.joinable) {
+        gameData = data;
+        joinable = true;
+      } else
+        onJoiningGame(data);
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');
@@ -32,6 +46,15 @@ module.exports = {
       },
       round: function() {
         return round;
+      },
+      joinable: function() {
+        return joinable;
+      },
+      joinUrlChallenge: function(id) {
+        xhr.joinUrlChallenge(id).then(function(data) { onJoiningGame(data); });
+      },
+      data: function() {
+        return gameData;
       }
     };
   },
@@ -40,7 +63,7 @@ module.exports = {
     if (ctrl.round()) return roundView(ctrl.round());
     var theme = settings.general.theme;
     var pov = gamesMenu.lastJoined;
-    var header, board;
+    var header, board, overlay;
     if (pov) {
       header = widgets.connectingHeader;
       board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
@@ -49,6 +72,33 @@ module.exports = {
       header = widgets.header;
       board = widgets.board;
     }
-    return layout.board(header, board, widgets.empty, menu.view, null, pov ? pov.color : null);
+    var data = ctrl.data();
+    var opp = data.opponent.user;
+    var mode = data.game.rated ? i18n('rated') : i18n('casual');
+    var joinDom;
+    if (data.game.rated && !session.isConnected()) {
+      joinDom = [i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin')];
+    } else {
+      joinDom = m('button[data-icon=E]', {
+        config: helper.ontouchend(utils.f(ctrl.joinUrlChallenge, data.game.id))
+      },
+      i18n('join'));
+    }
+    if (ctrl.joinable) {
+      overlay = function() {
+        return widgets.overlayPopup(
+          'join_url_challenge',
+          opp ? opp.username : 'Anonymous',
+          m('div.infos', [
+            m('div.explanation', data.game.variant.name + ', ' + mode),
+            m('div.time', utils.gameTime(data)),
+            m('br'),
+            m('div.join', joinDom)
+          ]),
+          true
+        );
+      };
+    }
+    return layout.board(header, board, widgets.empty, menu.view, overlay, pov ? pov.color : null);
   }
 };

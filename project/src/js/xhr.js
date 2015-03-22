@@ -38,6 +38,10 @@ function seekGame() {
   }, true);
 }
 
+function joinUrlChallenge(id) {
+  return http.request('/' + id + '/join', { method: 'POST' }, true);
+}
+
 function lobby(feedback) {
   return http.request('/', null, feedback);
 }
@@ -82,6 +86,7 @@ function status() {
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
+  joinUrlChallenge: joinUrlChallenge,
   lobby: lobby,
   seeks: seeks,
   game: game,

@@ -141,14 +141,7 @@ function renderGameEndedActions(ctrl) {
 }
 
 function gameInfos(data) {
-  var time;
-  if (data.clock)
-    time = utils.secondsToMinutes(data.clock.initial).toString() + '+' +
-      data.clock.increment;
-  else if (data.correspondence)
-    time = i18n('nbDays', data.correspondence.daysPerTurn);
-  else
-    time = '∞';
+  var time = utils.gameTime(data);
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];

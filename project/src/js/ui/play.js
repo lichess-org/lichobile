@@ -19,19 +19,16 @@ module.exports = {
     var gameData;
     var round;
 
-    function onJoiningGame(data) {
-      if (session.isConnected()) session.refresh();
-      round = new roundCtrl(data);
-      if (data.player.user === undefined)
-        storage.set('lastPlayedGameURLAsAnon', data.url.round);
-    }
-
     xhr.game(id, m.route.param('pov')).then(function(data) {
       if (data.game.joinable) {
         gameData = data;
         joinable = true;
-      } else
-        onJoiningGame(data);
+      } else {
+        if (session.isConnected()) session.refresh();
+        round = new roundCtrl(data);
+        if (data.player.user === undefined)
+          storage.set('lastPlayedGameURLAsAnon', data.url.round);
+      }
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');
@@ -51,7 +48,9 @@ module.exports = {
         return joinable;
       },
       joinUrlChallenge: function(id) {
-        xhr.joinUrlChallenge(id).then(function(data) { onJoiningGame(data); });
+        xhr.joinUrlChallenge(id).then(function(data) {
+          m.route('/play' + data.url.round);
+        });
       },
       data: function() {
         return gameData;

@@ -18,16 +18,7 @@ var xhr = require('./xhr');
 var backbutton = require('./backbutton');
 var menu = require('./ui/menu');
 var storage = require('./storage');
-
-var home = require('./ui/home');
-var play = require('./ui/play');
-var seek = require('./ui/seek');
-var seeks = require('./ui/seeks');
-var otb = require('./ui/otb/main');
-var ai = require('./ui/ai/main');
-var settingsUi = require('./ui/settings');
-var boardThemes = require('./ui/settings/boardThemes');
-var pieceThemes = require('./ui/settings/pieceThemes');
+var routes = require('./routes');
 
 var triedToLogin = false;
 
@@ -36,17 +27,15 @@ var refreshIntervalID;
 
 function main() {
 
-  m.route(document.body, '/', {
-    '/': home,
-    '/seeks': seeks,
-    '/seek': seek,
-    '/otb': otb,
-    '/ai': ai,
-    '/play/:id': play,
-    '/settings': settingsUi,
-    '/settings/themes/board': boardThemes,
-    '/settings/themes/piece': pieceThemes
-  });
+  routes.init();
+
+  // open games from external links with url scheme (lichess://gameId)
+  window.handleOpenURL = function(url) {
+    setTimeout(function() {
+      var gameId = url.match(/^lichess:\/\/(\w+)/)[1];
+      if (gameId) m.route('/play/' + gameId);
+    }, 0);
+  };
 
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
@@ -77,7 +66,7 @@ function main() {
   setTimeout(function() {
     window.navigator.splashscreen.hide();
     xhr.status();
-  }, 500);
+  }, 200);
 }
 
 function refresh() {
@@ -127,13 +116,6 @@ function handleError(event, source, fileno, columnNumber) {
 }
 
 window.onerror = handleError;
-
-window.handleOpenURL = function(url) {
-  setTimeout(function() {
-    var gameId = url.match(/^lichess:\/\/(\w+)/)[1];
-    if (gameId) m.route('/play/' + gameId);
-  }, 0);
-};
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens

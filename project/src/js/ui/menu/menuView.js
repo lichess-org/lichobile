@@ -107,13 +107,13 @@ function renderLinks(user) {
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
     m('li.side_link', {
-      key: 'menu_play_otb',
-      config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
-    }, i18n('playOnTheBoardOffline')),
-    m('li.side_link', {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
+    m('li.side_link', {
+      key: 'menu_play_otb',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
+    }, i18n('playOnTheBoardOffline')),
     m('li.side_link', {
       key: 'menu_settings',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))

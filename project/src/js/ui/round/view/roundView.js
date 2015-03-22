@@ -146,7 +146,9 @@ function gameInfos(data) {
     time = utils.secondsToMinutes(data.clock.initial).toString() + '+' +
       data.clock.increment;
   else if (data.correspondence)
-    time = data.correspondence.daysPerTurn + ' ' + i18n('days');
+    time = i18n('nbDays', data.correspondence.daysPerTurn);
+  else
+    time = '∞';
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];

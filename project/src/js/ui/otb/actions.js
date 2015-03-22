@@ -64,6 +64,7 @@ module.exports = {
     if (ctrl.isOpen())
       return widget.overlayPopup(
         null,
+        null,
         [
           renderEnded(ctrl),
           renderAlways(ctrl)

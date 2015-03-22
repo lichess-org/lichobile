@@ -67,6 +67,7 @@ seek.controller = function() {
 seek.view = function(ctrl) {
   function overlays() {
     return widgets.overlayPopup(
+      null,
       m('div', i18n('waitingForOpponent') + '...'),
       m('div.seek_real_time', [
         m('div.nb_players', i18n('nbConnectedPlayers', nbPlaying || '?')),

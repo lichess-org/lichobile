@@ -162,8 +162,10 @@ function gameInfos(data) {
 
 function renderPlayerActions(ctrl) {
   return widgets.overlayPopup(
+    'player_controls',
     gameInfos(ctrl.data),
-    game.playable(ctrl.data) ?  renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
+    game.playable(ctrl.data) ?
+      renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   );

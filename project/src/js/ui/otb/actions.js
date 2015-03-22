@@ -19,19 +19,17 @@ function renderEnded(ctrl) {
 function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
-    m('div.offline_actions', [
-      m('button[data-icon=U]', {
-        config: helper.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
-      }, i18n('createAGame')),
-      m('button.fa', {
-        className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
-        config: helper.ontouchend(ctrl.sharePGN)
-      }, i18n('sharePGN')),
-      m('div.action', formWidgets.renderCheckbox(
-        i18n('Flip pieces after move'), 'flipPieces',
-        settings.onChange(settings.otb.flipPieces)
-      )),
-    ])
+    m('button[data-icon=U]', {
+      config: helper.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
+    }, i18n('createAGame')),
+    m('button.fa', {
+      className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
+      config: helper.ontouchend(ctrl.sharePGN)
+    }, i18n('sharePGN')),
+    m('div.action', formWidgets.renderCheckbox(
+      i18n('Flip pieces after move'), 'flipPieces',
+      settings.onChange(settings.otb.flipPieces)
+    )),
   ];
 }
 
@@ -63,9 +61,8 @@ module.exports = {
   view: function(ctrl) {
     if (ctrl.isOpen())
       return widget.overlayPopup(
-        null,
-        null,
-        [
+        'offline_actions',
+        null, [
           renderEnded(ctrl),
           renderAlways(ctrl)
         ],

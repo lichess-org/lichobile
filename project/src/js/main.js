@@ -16,7 +16,6 @@ var session = require('./session');
 var i18n = require('./i18n');
 var xhr = require('./xhr');
 var backbutton = require('./backbutton');
-var menu = require('./ui/menu');
 var storage = require('./storage');
 var routes = require('./routes');
 
@@ -49,8 +48,6 @@ function main() {
     onOnline();
   else {
     window.navigator.notification.alert(i18n('noInternetConnection'));
-    menu.open();
-    m.redraw();
   }
 
   document.addEventListener('online', onOnline, false);
@@ -107,8 +104,6 @@ function onOnline() {
           m.route('/play' + lastPlayedAnon);
         else {
           window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
-          menu.open();
-          m.redraw();
         }
       }
     }

@@ -1,4 +1,3 @@
-var home = require('./ui/home');
 var play = require('./ui/play');
 var seek = require('./ui/seek');
 var seeks = require('./ui/seeks');
@@ -10,7 +9,7 @@ var pieceThemes = require('./ui/settings/pieceThemes');
 
 module.exports.init = function() {
   m.route(document.body, '/', {
-    '/': home,
+    '/': ai,
     '/seeks': seeks,
     '/seek': seek,
     '/otb': otb,

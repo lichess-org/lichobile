@@ -42,7 +42,7 @@ seeks.controller = function() {
   xhr.lobby(true).then(function(data) {
     lobbySocket = socket.connectLobby(data.lobby.version, reload, {
       redirect: function(data) {
-        m.route('/play' + data.url);
+        m.route('/game' + data.url);
       },
       'reload_seeks': reload,
       resync: function() {

@@ -49,7 +49,7 @@ module.exports = {
       },
       joinUrlChallenge: function(id) {
         xhr.joinUrlChallenge(id).then(function(data) {
-          m.route('/play' + data.url.round);
+          m.route('/game' + data.url.round);
         });
       },
       data: function() {

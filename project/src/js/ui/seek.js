@@ -30,7 +30,7 @@ seek.controller = function() {
   xhr.lobby(true).then(function(data) {
     lobbySocket = socket.connectLobby(data.lobby.version, createHook, {
       redirect: function(data) {
-        m.route('/play' + data.url);
+        m.route('/game' + data.url);
       },
       n: function(n) {
         nbPlaying = n;

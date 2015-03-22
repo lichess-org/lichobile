@@ -35,7 +35,7 @@ function main() {
       var gameId = parsed[1];
       var pov = parsed[2];
       if (!gameId) return;
-      var route = 'play/' + gameId;
+      var route = 'game/' + gameId;
       if (pov) route += ('/' + pov);
       m.route(route);
     }, 0);
@@ -90,7 +90,7 @@ function onOnline() {
       triedToLogin = true;
       var nowPlaying = session.nowPlaying();
       if (nowPlaying.length)
-        m.route('/play/' + nowPlaying[0].fullId);
+        m.route('/game/' + nowPlaying[0].fullId);
       else
         window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
     }
@@ -101,7 +101,7 @@ function onOnline() {
         triedToLogin = true;
         var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
         if (lastPlayedAnon)
-          m.route('/play' + lastPlayedAnon);
+          m.route('/game' + lastPlayedAnon);
         else {
           window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
         }

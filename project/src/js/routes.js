@@ -1,4 +1,4 @@
-var play = require('./ui/play');
+var game = require('./ui/game');
 var seek = require('./ui/seek');
 var seeks = require('./ui/seeks');
 var otb = require('./ui/otb/main');
@@ -14,8 +14,8 @@ module.exports.init = function() {
     '/seek': seek,
     '/otb': otb,
     '/ai': ai,
-    '/play/:id': play,
-    '/play/:id/:pov': play,
+    '/game/:id': game,
+    '/game/:id/:pov': game,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes

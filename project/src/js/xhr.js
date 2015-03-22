@@ -3,7 +3,6 @@ var http = require('./http');
 var settings = require('./settings');
 var i18n = require('./i18n');
 var moment = window.moment;
-var semver = require('semver');
 var session = require('./session');
 
 function newAiGame() {

@@ -62,7 +62,7 @@ seeks.controller = function() {
   reload(true);
 
   return {
-    pool: function() {
+    getPool: function() {
       return pool;
     },
     cancel: function(seekId) {
@@ -141,7 +141,7 @@ seeks.view = function(ctrl) {
             context.scroller.refresh();
           }
         }, [
-          m('ul', ctrl.pool().map(utils.partialf(renderSeek, ctrl))),
+          m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
         ]),
         m('button.fat', {
           key: 'seeks_createagame',

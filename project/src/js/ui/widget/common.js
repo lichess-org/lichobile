@@ -2,7 +2,6 @@ var menu = require('../menu');
 var utils = require('../../utils');
 var helper = require('../helper');
 var gamesMenu = require('../gamesMenu');
-var layout = require('../layout');
 var session = require('../../session');
 var settings = require('../../settings');
 
@@ -86,10 +85,6 @@ widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) 
 
 widgets.empty = function() {
   return [];
-};
-
-widgets.startBoardView = function() {
-  return layout.board(utils.partialf(widgets.header, 'lichess.org'), widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

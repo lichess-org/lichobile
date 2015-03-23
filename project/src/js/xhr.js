@@ -78,11 +78,21 @@ function status() {
   });
 }
 
+function friends() {
+  return http.request('/friends', {
+    method: POST,
+    data: {
+      t: 'following_onlines'
+    }
+  }, true);
+}
+
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
   lobby: lobby,
   seeks: seeks,
   game: game,
-  status: status
+  status: status,
+  friends: friends
 };

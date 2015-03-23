@@ -5,12 +5,11 @@ var storage = require('../../storage');
 var roundCtrl = require('../round/roundCtrl');
 
 module.exports = function() {
-  var id = m.route.param('id');
   var joinable = false;
   var gameData;
   var round;
 
-  xhr.game(id, m.route.param('pov')).then(function(data) {
+  xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
     if (data.game.joinable) {
       gameData = data;
       joinable = true;

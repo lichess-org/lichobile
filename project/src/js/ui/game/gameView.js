@@ -10,9 +10,9 @@ var widgets = require('../widget/common');
 var i18n = require('../../i18n');
 
 function joinOverlay(ctrl) {
-  if (!ctrl.joinable) return;
+  if (!ctrl.isJoinable()) return;
 
-  var data = ctrl.data();
+  var data = ctrl.getData();
   var opp = data.opponent.user;
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var joinDom;
@@ -41,7 +41,7 @@ function joinOverlay(ctrl) {
 }
 
 module.exports = function(ctrl) {
-  if (ctrl.round()) return roundView(ctrl.round());
+  if (ctrl.getRound()) return roundView(ctrl.getRound());
 
   var theme = settings.general.theme;
   var pov = gamesMenu.lastJoined;

@@ -10,8 +10,8 @@ module.exports = function() {
   var round;
 
   xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
+    gameData = data;
     if (data.game.joinable) {
-      gameData = data;
       joinable = true;
     } else {
       if (session.isConnected()) session.refresh();
@@ -31,10 +31,10 @@ module.exports = function() {
         round = null;
       }
     },
-    round: function() {
+    getRound: function() {
       return round;
     },
-    joinable: function() {
+    isJoinable: function() {
       return joinable;
     },
     joinUrlChallenge: function(id) {
@@ -42,7 +42,7 @@ module.exports = function() {
         m.route('/game' + data.url.round);
       });
     },
-    data: function() {
+    getData: function() {
       return gameData;
     }
   };

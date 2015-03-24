@@ -6,6 +6,7 @@ var untranslated = {
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   mustSignIn: 'You must sign in to see this.',
+  mustSignInToJoin: 'You must sign in to join it.',
   boardThemes: 'Board themes',
   pieceThemes: 'Piece themes',
   boardThemeBrown: 'Brown',
@@ -22,7 +23,8 @@ var untranslated = {
   allowAnalytics: 'Allow anonymous statistics',
   shareGame: 'Share game',
   sharePGN: 'Share PGN',
-  onlineFriends: 'Online friends'
+  onlineFriends: 'Online friends',
+  playOnline: 'Play online'
 };
 
 var defaultCode = 'en';

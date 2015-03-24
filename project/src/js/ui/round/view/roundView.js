@@ -141,12 +141,7 @@ function renderGameEndedActions(ctrl) {
 }
 
 function gameInfos(data) {
-  var time;
-  if (data.clock)
-    time = utils.secondsToMinutes(data.clock.initial).toString() + '+' +
-      data.clock.increment;
-  else if (data.correspondence)
-    time = data.correspondence.daysPerTurn + ' ' + i18n('days');
+  var time = utils.gameTime(data);
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];
@@ -160,8 +155,10 @@ function gameInfos(data) {
 
 function renderPlayerActions(ctrl) {
   return widgets.overlayPopup(
+    'player_controls',
     gameInfos(ctrl.data),
-    game.playable(ctrl.data) ?  renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
+    game.playable(ctrl.data) ?
+      renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   );

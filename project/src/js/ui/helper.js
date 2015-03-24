@@ -31,26 +31,6 @@ helper.scale = function(element, isInitialized) {
   }
 };
 
-helper.fadesIn = function(element, isInitialized) {
-  if (!isInitialized) {
-    element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 200);
-  }
-};
-
-// helper targeted for popups since it acts on target parentElement
-// TODO: refactor later if we need a more generic helper
-helper.fadesOutPopup = function(callback) {
-  return function(e) {
-    m.redraw.strategy('none');
-    Zanimo(e.target.parentElement, 'opacity', 0, 100).then(function() {
-      m.startComputation();
-      callback();
-      m.endComputation();
-    });
-  };
-};
-
 // convenience function to bind a touchend mobile button handler in mithril
 function bindTouchendButton(scrollableX, scrollableY, handler) {
   return function(el, isUpdate, context) {

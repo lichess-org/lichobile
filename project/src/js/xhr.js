@@ -3,7 +3,6 @@ var http = require('./http');
 var settings = require('./settings');
 var i18n = require('./i18n');
 var moment = window.moment;
-var semver = require('semver');
 var session = require('./session');
 
 function newAiGame() {
@@ -39,6 +38,10 @@ function seekGame() {
   }, true);
 }
 
+function joinUrlChallenge(id) {
+  return http.request('/' + id + '/join', { method: 'POST' }, true);
+}
+
 function lobby(feedback) {
   return http.request('/', null, feedback);
 }
@@ -47,8 +50,10 @@ function seeks(feedback) {
   return http.request('/lobby/seeks', null, feedback);
 }
 
-function game(id) {
-  return http.request('/' + id);
+function game(id, pov) {
+  var url = '/' + id;
+  if (pov) url += ('/' + pov);
+  return http.request(url);
 }
 
 function status() {
@@ -85,6 +90,7 @@ function friends() {
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
+  joinUrlChallenge: joinUrlChallenge,
   lobby: lobby,
   seeks: seeks,
   game: game,

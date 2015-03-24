@@ -30,7 +30,7 @@ seek.controller = function() {
   xhr.lobby(true).then(function(data) {
     lobbySocket = socket.connectLobby(data.lobby.version, createHook, {
       redirect: function(data) {
-        m.route('/play' + data.url);
+        m.route('/game' + data.url);
       },
       n: function(n) {
         nbPlaying = n;
@@ -67,6 +67,7 @@ seek.controller = function() {
 seek.view = function(ctrl) {
   function overlays() {
     return widgets.overlayPopup(
+      null,
       m('div', i18n('waitingForOpponent') + '...'),
       m('div.seek_real_time', [
         m('div.nb_players', i18n('nbConnectedPlayers', nbPlaying || '?')),

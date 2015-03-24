@@ -50,7 +50,6 @@
     "mithril": "0.1.30",
     "mobile-button": "0.8.1",
     "moment": "2.8.4",
-    "semver": "4.2.0",
     "signals": "1.0.0",
     "spin.js": "2.0.1",
     "zanimo": "1.1.3"

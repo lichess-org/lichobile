@@ -71,7 +71,7 @@ module.exports = function(ctrl) {
       xhr.reload(ctrl).then(ctrl.reload);
     },
     redirect: function(e) {
-      m.route('/play/' + e.id);
+      m.route('/game/' + e.id);
     },
     resync: function() {
       xhr.reload(ctrl).then(function(data) {

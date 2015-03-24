@@ -2,7 +2,6 @@ var menu = require('../menu');
 var utils = require('../../utils');
 var helper = require('../helper');
 var gamesMenu = require('../gamesMenu');
-var layout = require('../layout');
 var session = require('../../session');
 var settings = require('../../settings');
 
@@ -39,15 +38,15 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
   return m('div.circle_' + i);
 }));
 
-widgets.overlayPopup = function(header, content, isShowing, closef) {
-  if (!isShowing) return null;
-  return m('div.overlay.popup.popup_container', {
-    config: helper.fadesIn
-  }, [
+widgets.overlayPopup = function(className, header, content, isShowing, closef) {
+  if (!isShowing) return m('div.overlay.popup.overlay_fade');
+  return m('div.overlay.popup.overlay_fade.open', [
     m('div.popup_overlay_close', {
-      config: closef ? helper.ontouchend(helper.fadesOutPopup(closef)) : utils.noop
+      config: closef ? helper.ontouchend(closef) : utils.noop
     }),
-    m('div#player_controls.overlay_popup', [
+    m('div.overlay_popup', {
+      className: className ? className : ''
+    }, [
       header ? m('header', header) : null,
       m('div.popup_content', content)
     ])
@@ -86,10 +85,6 @@ widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) 
 
 widgets.empty = function() {
   return [];
-};
-
-widgets.startBoardView = function() {
-  return layout.board(utils.partialf(widgets.header, 'lichess.org'), widgets.board, widgets.empty, menu.view);
 };
 
 module.exports = widgets;

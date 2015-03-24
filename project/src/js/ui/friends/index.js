@@ -5,17 +5,48 @@ var layout = require('../layout');
 var menu = require('../menu');
 var i18n = require('../../i18n');
 var xhr = require('../../xhr');
-var session = require('../../session');
 var socket = require('../../socket');
+var iScroll = require('iscroll');
 
 var onlineFriends = [];
 
+// scroll testing
+// var onlineFriends = [
+//   "friend1",
+//   "friend2",
+//   "friend3",
+//   "friend4",
+//   "friend5",
+//   "friend6",
+//   "friend7",
+//   "friend8",
+//   "friend9",
+//   "friend10",
+//   "friend11",
+//   "friend12",
+//   "friend13",
+//   "friend14",
+//   "friend15",
+//   "friend16",
+// ];
+
 function renderBody() {
-  return [
-    m('ul.friends_list.general.scroller', {}, onlineFriends.map(function(f) {
-      return m('li.list_item', {}, f);
-    }))
-  ];
+  return m('ul.friends_list', {
+    config: function(el, isUpdate, context) {
+      if (!isUpdate) {
+        context.scroller = new iScroll(el);
+        context.onunload = function() {
+          if (context.croller) {
+            context.scroller.destroy();
+            context.scroller = null;
+          }
+        };
+      }
+      context.scroller.refresh();
+    }
+  }, m('div.scroller', {}, onlineFriends.map(function(f) {
+    return m('li.list_item', {}, f);
+  })));
 }
 
 module.exports = {
@@ -23,29 +54,36 @@ module.exports = {
 	  
     var friendsSocket;
 
-    helper.analyticsTrackView('Online Friends');
+    this.scroller = null;
 
-    var toastName = function(name) {
-      window.plugins.toast.show(name, 'short', 'center');
-    }
+    helper.analyticsTrackView('Online Friends');
 
     var requestFriends = function() {
       friendsSocket.send('following_onlines');
     }
 
+    var refreshList = function() {
+      // TODO sort the onlineFriends array
+
+      // update view
+      m.redraw();
+    }
+
     xhr.friends().then(function(data) {
       friendsSocket = socket.connectFriends('v1', requestFriends, {
         following_onlines: function(data) {
-          // TODO - bind this to a scroller so the list updates
           onlineFriends = data;
+          refreshList();
         },
         following_enters: function(name) {
           onlineFriends.push(name);
+          refreshList();
         },
         following_leaves: function(name) {
           var nameIndex = onlineFriends.indexOf(name);
           if (nameIndex !== -1) {
             onlineFriends.splice(nameIndex, 1);
+            refreshList();
           }
         }
       });

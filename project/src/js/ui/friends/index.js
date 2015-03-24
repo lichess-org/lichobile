@@ -36,22 +36,17 @@ module.exports = {
     xhr.friends().then(function(data) {
       friendsSocket = socket.connectFriends('v1', requestFriends, {
         following_onlines: function(data) {
-          console.log('---------------------following onlines received');
-          console.log(JSON.stringify(data));
+          // TODO - bind this to a scroller so the list updates
           onlineFriends = data;
-          renderBody();
-          console.log('---------------------following onlines received');
-          /*data.forEach(function(f) {
-            console.log(f);
-          });*/
         },
         following_enters: function(name) {
-          console.log('follower came online ' + name);
-          toastName(name);
+          onlineFriends.push(name);
         },
         following_leaves: function(name) {
-          console.log('follower left: ' + name);
-          toastName(name);
+          var nameIndex = onlineFriends.indexOf(name);
+          if (nameIndex !== -1) {
+            onlineFriends.splice(nameIndex, 1);
+          }
         }
       });
     });

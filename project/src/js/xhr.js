@@ -79,12 +79,7 @@ function status() {
 }
 
 function friends() {
-  return http.request('/friends', {
-    method: POST,
-    data: {
-      t: 'following_onlines'
-    }
-  }, true);
+  return http.request('/');
 }
 
 module.exports = {

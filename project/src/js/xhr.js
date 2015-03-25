@@ -87,6 +87,11 @@ function friends() {
   return http.request('/');
 }
 
+function user(id) {
+  var url = '/api/user/' + id;
+  return http.request(url);
+}
+
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
@@ -95,5 +100,6 @@ module.exports = {
   seeks: seeks,
   game: game,
   status: status,
-  friends: friends
+  friends: friends,
+  user: user
 };

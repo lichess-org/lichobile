@@ -37,7 +37,7 @@ function renderBody() {
         if (!isUpdate) {
           context.scroller = new iScroll(el);
           context.onunload = function() {
-            if (context.croller) {
+            if (context.scroller) {
               context.scroller.destroy();
               context.scroller = null;
             }
@@ -46,8 +46,12 @@ function renderBody() {
         context.scroller.refresh();
       }
     }, [
-      m('ul#friends', onlineFriends.map(function(f) {
-        return m('li.list_item', {}, f);
+      m('ul#friends', onlineFriends.map(function(name) {
+        return m('li.list_item', {
+          key: name,
+          'id': name,
+          config: helper.ontouchendScrollY(utils.f(m.route, '/user/'+name))
+        }, name);
       }))
     ])
   ];

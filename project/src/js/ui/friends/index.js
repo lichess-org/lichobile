@@ -31,22 +31,26 @@ var onlineFriends = [];
 // ];
 
 function renderBody() {
-  return m('ul.friends_list', {
-    config: function(el, isUpdate, context) {
-      if (!isUpdate) {
-        context.scroller = new iScroll(el);
-        context.onunload = function() {
-          if (context.croller) {
-            context.scroller.destroy();
-            context.scroller = null;
-          }
-        };
+  return [
+    m('div.scroller.friends_list', {
+      config: function(el, isUpdate, context) {
+        if (!isUpdate) {
+          context.scroller = new iScroll(el);
+          context.onunload = function() {
+            if (context.croller) {
+              context.scroller.destroy();
+              context.scroller = null;
+            }
+          };
+        }
+        context.scroller.refresh();
       }
-      context.scroller.refresh();
-    }
-  }, m('div.scroller', {}, onlineFriends.map(function(f) {
-    return m('li.list_item', {}, f);
-  })));
+    }, [
+      m('ul#friends', onlineFriends.map(function(f) {
+        return m('li.list_item', {}, f);
+      }))
+    ])
+  ];
 }
 
 module.exports = {

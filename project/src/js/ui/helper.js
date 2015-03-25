@@ -1,7 +1,6 @@
 var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
 var chessground = require('chessground');
-var utils = require('../utils');
 var settings = require('../settings');
 
 var helper = {};
@@ -64,10 +63,15 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
   };
 }
 
-helper.ontouchend = utils.partialf(bindTouchendButton, false, false);
-helper.ontouchendScrollX = utils.partialf(bindTouchendButton, true, false);
-helper.ontouchendScrollY = utils.partialf(bindTouchendButton, false, true);
-
+helper.ontouchend = function(handler) {
+  return bindTouchendButton(false, false, handler);
+};
+helper.ontouchendScrollX = function(handler) {
+  return bindTouchendButton(true, false, handler);
+};
+helper.ontouchendScrollY = function(handler) {
+  return bindTouchendButton(false, true, handler);
+};
 
 helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
   var config = {

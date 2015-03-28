@@ -137,14 +137,8 @@
     text-align left
     text-transform uppercase
   button
-    &.binany_choice
-      display inline-block
-      width 50%
-      border-bottom none
     &.flipped
       color #C4A86F
-    &.active
-      background darken(#fff, 10%)
     &.draw-yes:before
       display inline-block
       transform rotate(-90deg)
@@ -178,3 +172,18 @@
   .infos
     padding 10px
     text-align center
+  .explanation, .time
+    margin 5px 0
+  .time:before
+    margin-right 5px
+  .go_or_cancel
+    margin-top 10px
+  .error
+    font-size 0.9em
+  button
+    &.binany_choice
+      &[data-icon=E]
+        background #C4A86F
+        color #FFF
+    &.active
+      background lighten(#C4A86F, 10%)

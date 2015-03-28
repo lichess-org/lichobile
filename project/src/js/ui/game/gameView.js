@@ -1,6 +1,7 @@
 var session = require('../../session');
 var roundView = require('../round/view/roundView');
 var gamesMenu = require('../gamesMenu');
+var loginModal = require('../loginModal');
 var layout = require('../layout');
 var menu = require('../menu');
 var settings = require('../../settings');
@@ -17,12 +18,26 @@ function joinOverlay(ctrl) {
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var joinDom;
   if (data.game.rated && !session.isConnected()) {
-    joinDom = [i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin')];
+    joinDom = m('div.error', [
+      i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
+      m('div.go_or_cancel', [
+        m('button.binany_choice[data-icon=E]', {
+          config: helper.ontouchend(loginModal.open)
+        }, i18n('signIn')),
+        m('button.binany_choice[data-icon=L]', {
+          config: helper.ontouchend(utils.backHistory)
+        }, i18n('cancel'))
+      ])
+    ]);
   } else {
-    joinDom = m('button[data-icon=E]', {
-        config: helper.ontouchend(utils.f(ctrl.joinUrlChallenge, data.game.id))
-      },
-      i18n('join'));
+    joinDom = m('div.go_or_cancel', [
+      m('button.binany_choice[data-icon=E]', {
+          config: helper.ontouchend(utils.f(ctrl.joinUrlChallenge, data.game.id))
+      }, i18n('join')),
+      m('button.binany_choice[data-icon=L]', {
+        config: helper.ontouchend(utils.backHistory)
+      }, i18n('cancel'))
+    ]);
   }
 
   return function() {
@@ -30,10 +45,10 @@ function joinOverlay(ctrl) {
       'join_url_challenge',
       opp ? opp.username : 'Anonymous',
       m('div.infos', [
-        m('div.explanation', data.game.variant.name + ', ' + mode),
-        m('div.time', utils.gameTime(data)),
+        m('p.explanation', data.game.variant.name + ', ' + mode),
+        m('p.time[data-icon=p]', utils.gameTime(data)),
         m('br'),
-        m('div.join', joinDom)
+        joinDom
       ]),
       true
     );

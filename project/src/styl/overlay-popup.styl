@@ -36,6 +36,14 @@
     background #fff
     border-bottom 1px solid #E1E1E1
     font-size 15px
+    &.binany_choice
+      display inline-block
+      width 50%
+      border-bottom none
+    &.active
+      background darken(#fff, 10%)
+    &[data-icon=E].active
+      background lighten(#C4A86F, 10%)
     &:before
       margin-right 10px
     &:last-child

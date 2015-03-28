@@ -96,24 +96,24 @@ function renderHeader(user) {
 function renderLinks(user) {
   var links = [
     utils.hasNetwork() ? m('li.side_link', {
-      key: 'menu_create_game',
+      key: 'menu_play_online',
       config: helper.ontouchendScrollY(function() {
         menu.close();
         gamesMenu.openNewGame();
       })
-    }, i18n('createAGame')) : null,
+    }, i18n('playOnline')) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
     m('li.side_link', {
-      key: 'menu_play_otb',
-      config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
-    }, i18n('playOnTheBoardOffline')),
-    m('li.side_link', {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
+    m('li.side_link', {
+      key: 'menu_play_otb',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
+    }, i18n('playOnTheBoardOffline')),
     m('li.side_link', {
       key: 'menu_settings',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))

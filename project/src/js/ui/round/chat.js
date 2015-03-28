@@ -1,4 +1,3 @@
-var utils = require('../../utils');
 var helper = require('../helper');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
@@ -81,6 +80,7 @@ module.exports = {
     var onKeyboardShow = function(e) {
       var self = this;
       var chat = document.getElementById('chat_scroller');
+      if (!chat) return;
       // TODO: this is a temporary hack: ionic plugin doesn't return good keyboard
       // size because it doesn't include statusbar height
       var statusBarHeight = (window.cordova.platformId === 'android') ? 25 : 0;

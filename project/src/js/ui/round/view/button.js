@@ -23,7 +23,7 @@ module.exports = {
     return m('button', {
       'data-icon': '"',
       config: helper.ontouchend(function() {
-        window.plugins.socialsharing.share(null, null, null, 'http://lichess.org/' + ctrl.data.game.id);
+        window.plugins.socialsharing.share(null, null, null, 'http://lichess.org/' + ctrl.data.game.id + '#dev'); // TODO remove dev flag before puttin on prod
       })
     }, i18n('shareGame'));
   },

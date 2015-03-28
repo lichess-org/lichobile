@@ -61,13 +61,13 @@ gamesMenu.lastJoined = null;
 gamesMenu.joinGame = function(g) {
   gamesMenu.lastJoined = g;
   gamesMenu.close();
-  m.route('/play/' + g.fullId);
+  m.route('/game/' + g.fullId);
   m.redraw();
 };
 
 function startAIGame() {
   return xhr.newAiGame().then(function(data) {
-    m.route('/play' + data.url.round);
+    m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
     throw error;

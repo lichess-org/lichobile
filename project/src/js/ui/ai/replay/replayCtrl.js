@@ -48,7 +48,8 @@ module.exports = function(root, situations, ply) {
   this.addMove = function(orig, dest, promotion) {
     var situation = this.situation();
     var chess = new Chess(situation.fen, 0);
-    var promotionLetter = (dest[1] === 1 || dest[1] === 8) ? (promotion ? forsyth(promotion) : 'q') : null;
+    var promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
+      (promotion ? forsyth(promotion) : 'q') : null;
     var move = chess.move({
       from: orig,
       to: dest,

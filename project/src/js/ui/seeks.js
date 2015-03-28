@@ -42,7 +42,7 @@ seeks.controller = function() {
   xhr.lobby(true).then(function(data) {
     lobbySocket = socket.connectLobby(data.lobby.version, reload, {
       redirect: function(data) {
-        m.route('/play' + data.url);
+        m.route('/game' + data.url);
       },
       'reload_seeks': reload,
       resync: function() {
@@ -62,7 +62,7 @@ seeks.controller = function() {
   reload(true);
 
   return {
-    pool: function() {
+    getPool: function() {
       return pool;
     },
     cancel: function(seekId) {
@@ -141,7 +141,7 @@ seeks.view = function(ctrl) {
             context.scroller.refresh();
           }
         }, [
-          m('ul', ctrl.pool().map(utils.partialf(renderSeek, ctrl))),
+          m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
         ]),
         m('button.fat', {
           key: 'seeks_createagame',

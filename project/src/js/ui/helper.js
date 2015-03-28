@@ -1,7 +1,6 @@
 var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
 var chessground = require('chessground');
-var utils = require('../utils');
 var settings = require('../settings');
 
 var helper = {};
@@ -29,26 +28,6 @@ helper.scale = function(element, isInitialized) {
     Zanimo(element, 'visibility', 'visible', 100);
     Zanimo(element, 'transform', 'scale(1)', 200);
   }
-};
-
-helper.fadesIn = function(element, isInitialized) {
-  if (!isInitialized) {
-    element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 200);
-  }
-};
-
-// helper targeted for popups since it acts on target parentElement
-// TODO: refactor later if we need a more generic helper
-helper.fadesOutPopup = function(callback) {
-  return function(e) {
-    m.redraw.strategy('none');
-    Zanimo(e.target.parentElement, 'opacity', 0, 100).then(function() {
-      m.startComputation();
-      callback();
-      m.endComputation();
-    });
-  };
 };
 
 // convenience function to bind a touchend mobile button handler in mithril
@@ -84,10 +63,15 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
   };
 }
 
-helper.ontouchend = utils.partialf(bindTouchendButton, false, false);
-helper.ontouchendScrollX = utils.partialf(bindTouchendButton, true, false);
-helper.ontouchendScrollY = utils.partialf(bindTouchendButton, false, true);
-
+helper.ontouchend = function(handler) {
+  return bindTouchendButton(false, false, handler);
+};
+helper.ontouchendScrollX = function(handler) {
+  return bindTouchendButton(true, false, handler);
+};
+helper.ontouchendScrollY = function(handler) {
+  return bindTouchendButton(false, true, handler);
+};
 
 helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
   var config = {

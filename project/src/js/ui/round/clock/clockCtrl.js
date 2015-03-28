@@ -54,7 +54,7 @@ module.exports = function(data, outOfTime, soundColor) {
     var oldSeconds = lastTick[color];
     var newSeconds = new Date(time).getSeconds();
     if ((oldSeconds !== newSeconds) || time < 10000) {
-      el.innerHTML = formatClockTime(this, time);
+      if (el) el.innerHTML = formatClockTime(this, time);
     }
     lastTick[color] = newSeconds;
 

@@ -17,7 +17,7 @@ var socketHandler = require('./socketHandler');
 var signals = require('../../signals');
 var atomic = require('./atomic');
 var backbutton = require('../../backbutton');
-var helper = require('../helper')
+var helper = require('../helper');
 
 module.exports = function(cfg) {
 
@@ -151,7 +151,8 @@ module.exports = function(cfg) {
 
   this.replay = new replayCtrl(this);
 
-  this.chat = !this.data.opponent.ai ? new chat.controller(this) : false;
+  this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
+    null : new chat.controller(this);
 
   window.plugins.insomnia.keepAwake();
 

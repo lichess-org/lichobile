@@ -121,8 +121,8 @@
 #open_chat.unread
   animation answer_glow 5s infinite
 
-#player_controls
-  header
+.player_controls
+  &.overlay_popup > header
     line-height 1
     padding 10px
   .icon-game
@@ -137,27 +137,11 @@
     text-align left
     text-transform uppercase
   button
-    display block
-    width 100%
-    min-height 40px
-    background #fff
-    border-bottom 1px solid #E1E1E1
-    font-size 15px
-    &:before
-      margin-right 10px
-    &:last-child
-      border-bottom none
-      border-radius 5px
-    &.binany_choice
-      display inline-block
-      width 50%
-      border-bottom none
     &.flipped
       color #C4A86F
-    &.active
-      background darken(#fff, 10%)
     &.draw-yes:before
-      transform: translateY(-1px) rotate(-90deg);
+      display inline-block
+      transform rotate(-90deg)
   .negotiation
     text-align center
   .answers, .force_resign_zone
@@ -168,12 +152,15 @@
   .status
     color #C4A86F
   .result
+    padding 0 10px
     text-align center
-    margin 1em 0 2em
+    margin 1em 0
 
-// offline games
 .offline_actions
-  > .action
+  &.overlay_popup
+    top 30%
+    max-height 60%
+  .action
     padding 10px
   .select_input
     background darken(#fff, 10%)
@@ -181,3 +168,22 @@
     > select
       color #383838
 
+.join_url_challenge
+  .infos
+    padding 10px
+    text-align center
+  .explanation, .time
+    margin 5px 0
+  .time:before
+    margin-right 5px
+  .go_or_cancel
+    margin-top 10px
+  .error
+    font-size 0.9em
+  button
+    &.binany_choice
+      &[data-icon=E]
+        background #C4A86F
+        color #FFF
+    &.active
+      background lighten(#C4A86F, 10%)

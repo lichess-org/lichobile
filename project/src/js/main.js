@@ -29,7 +29,7 @@ function main() {
       var gameId = parsed[1];
       var pov = parsed[2];
       if (!gameId) return;
-      var route = 'game/' + gameId;
+      var route = '/game/' + gameId;
       if (pov) route += ('/' + pov);
       m.route(route);
     }, 0);

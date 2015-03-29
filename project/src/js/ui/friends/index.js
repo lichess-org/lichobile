@@ -49,8 +49,11 @@ function renderBody() {
       m('ul#friends', onlineFriends.map(function(name) {
         return m('li.list_item', {
           key: name,
-          'id': name,
-          config: helper.ontouchendScrollY(utils.f(m.route, '/user/'+name))
+          'id': name
+          // TODO connect user route
+          // Disabling user route for now
+          // Will be branched for separate feature
+          //,config: helper.ontouchendScrollY(utils.f(m.route, '/user/'+name))
         }, name);
       }))
     ])

@@ -22,6 +22,7 @@ widgets.backButton = function(title) {
 widgets.gameButton = function() {
   var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
+    className: settings.general.theme.board(),
     config: helper.ontouchend(gamesMenu.open)
   }, myTurns ? m('span.nb_playing', myTurns) : null);
 };

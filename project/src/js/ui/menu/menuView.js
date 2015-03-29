@@ -106,6 +106,9 @@ function renderLinks(user) {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
+    utils.hasNetwork() ? m('li.side_link', {
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/tv'))
+    }, i18n('watchLichessTV')) : null,
     m('li.side_link', {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))

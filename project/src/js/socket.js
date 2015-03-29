@@ -20,7 +20,7 @@ function createGameSocket(url, version, receiveHandler, gameUrl) {
           // just to be sure that we don't send an xhr every second when the
           // websocket is trying to reconnect
           errorDetected = true;
-          xhr.game(gameUrl.substring(1)).then(function() { }, function(err) {
+          xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
             if (err.message === 'unauthorizedError') {
               window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
               m.route('/');
@@ -52,6 +52,22 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
   return socketInstance;
 }
 
+function createSiteSocket(handlers) {
+  socketInstance = new StrongSocket(
+    '/socket',
+    0, {
+      options: {
+        name: 'site',
+        debug: window.lichess.mode !== 'prod',
+        pingDelay: 2000,
+      },
+      events: handlers
+    }
+  );
+
+  return socketInstance;
+}
+
 
 function onPause() {
   if (socketInstance) socketInstance.destroy();
@@ -66,5 +82,6 @@ document.addEventListener('resume', onResume, false);
 
 module.exports = {
   connectGame: createGameSocket,
-  connectLobby: createLobbySocket
+  connectLobby: createLobbySocket,
+  connectTV: createSiteSocket
 };

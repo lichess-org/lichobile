@@ -110,6 +110,10 @@ function renderLinks(user) {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, i18n('playOfflineComputer')),
+    (utils.hasNetwork() && user) ? m('li.side_link', {
+      key: 'menu_friends',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/friends'))
+    }, i18n('onlineFriends')) : null,
     m('li.side_link', {
       key: 'menu_play_otb',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))

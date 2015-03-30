@@ -22,10 +22,6 @@ var newGameCardSwapped = false;
 var doOpen = function() {
   helper.analyticsTrackView('Games Menu');
   backbutton.stack.push(gamesMenu.close);
-  // be sure to set real time clock if disconnected
-  if (!session.isConnected()) {
-    settings.game.human.timeMode('1');
-  }
   gamesMenu.isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
@@ -103,6 +99,16 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
   var hasDays = timeMode === '2' && session.isConnected();
+
+  // be sure to set real time clock if disconnected
+  if (!session.isConnected()) {
+    settings.game.human.timeMode('1');
+  }
+  if (timeMode === '0') {
+    settings.game.human.mode('0');
+  }
+
+  // both human and AI
   var generalFieldset = [
     m('div.select_input', {
       key: formName + 'variant'
@@ -171,6 +177,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     }
   }
 
+  // both human and AI
   var timeFieldset = [
     m('div.select_input', {
       key: formName + 'timeMode'
@@ -179,6 +186,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ])
   ];
 
+  // both human and AI
   if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', {

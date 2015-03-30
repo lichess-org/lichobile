@@ -98,7 +98,9 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     settingsObj.mode() === '0' || ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
     settings.game.selected() !== 'human';
   var generalFieldset = [
-    m('div.select_input', [
+    m('div.select_input', {
+      key: formName + 'variant'
+    }, [
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
     ])
   ];
@@ -109,13 +111,17 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       allowWhite ? ['white', 'white'] : null, ['black', 'black']
     ]);
     generalFieldset.unshift(
-      m('div.select_input', [
+      m('div.select_input', {
+        key: formName + 'color'
+      }, [
         formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
       ])
     );
   }
   if (settingsObj.level) {
-    generalFieldset.push(m('div.select_input', [
+    generalFieldset.push(m('div.select_input', {
+      key: 'ailevel'
+    }, [
       formWidgets.renderSelect('level', 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
       ].map(tupleOf), settingsObj.level)
@@ -128,12 +134,16 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ] : [
       ['casual', '0']
     ];
-    generalFieldset.push(m('div.select_input', [
+    generalFieldset.push(m('div.select_input', {
+      key: formName + 'mode'
+    }, [
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ]));
     if (settingsObj.mode() === '1') {
       generalFieldset.push(
-        m('div.rating_range', [
+        m('div.rating_range', {
+          key: 'rating_range'
+        }, [
           m('div.title', i18n('ratingRange')),
           m('div.select_input.inline', [
             formWidgets.renderSelect('Min', formName + 'rating_min',
@@ -149,17 +159,23 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   }
 
   var timeFieldset = [
-    m('div.select_input', [
+    m('div.select_input', {
+      key: formName + 'timeMode'
+    }, [
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ];
   if (hasClock) {
     timeFieldset.push(
-      m('div.select_input.inline', [
+      m('div.select_input.inline', {
+        key: formName + 'time'
+      }, [
         formWidgets.renderSelect('time', formName + 'time',
           settings.game.availableTimes.map(tupleOf), settingsObj.time, false)
       ]),
-      m('div.select_input.inline', [
+      m('div.select_input.inline', {
+        key: formName + 'increment'
+      }, [
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.game.availableIncrements.map(tupleOf), settingsObj.increment, false)
       ])
@@ -167,7 +183,9 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   }
   if (hasDays)
     timeFieldset.push(
-      m('div.select_input.large_label', [
+      m('div.select_input.large_label', {
+        key: formName + 'days'
+      }, [
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.game.availableDays.map(tupleOf), settingsObj.days, false)
       ]));

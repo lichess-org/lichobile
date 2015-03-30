@@ -96,12 +96,12 @@ function renderHeader(user) {
 function renderLinks(user) {
   var links = [
     utils.hasNetwork() ? m('li.side_link', {
-      key: 'menu_play_online',
+      key: 'menu_play_real_time',
       config: helper.ontouchendScrollY(function() {
         menu.close();
         gamesMenu.openNewGameRealTime();
       })
-    }, i18n('playInRealTime')) : null,
+    }, i18n('realTime')) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))

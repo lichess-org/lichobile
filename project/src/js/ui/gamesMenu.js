@@ -22,6 +22,10 @@ var newGameCardSwapped = false;
 var doOpen = function() {
   helper.analyticsTrackView('Games Menu');
   backbutton.stack.push(gamesMenu.close);
+  // be sure to set real time clock if disconnected
+  if (!session.isConnected()) {
+    settings.game.human.timeMode('1');
+  }
   gamesMenu.isOpen = true;
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
@@ -29,6 +33,11 @@ var doOpen = function() {
 gamesMenu.openNewGame = function() {
   doOpen();
   newGameCardSwapped = true;
+};
+
+gamesMenu.openNewGameRealTime = function() {
+  settings.game.human.timeMode('1');
+  gamesMenu.openNewGame();
 };
 
 gamesMenu.openNewGameCorrespondence = function() {
@@ -93,10 +102,7 @@ function tupleOf(x) {
 function renderForm(formName, action, settingsObj, variants, timeModes) {
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
-  var hasDays = timeMode === '2';
-  var allowWhite = !settingsObj.mode ||
-    settingsObj.mode() === '0' || ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
-    settings.game.selected() !== 'human';
+  var hasDays = timeMode === '2' && session.isConnected();
   var generalFieldset = [
     m('div.select_input', {
       key: formName + 'variant'
@@ -105,10 +111,12 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ])
   ];
 
+  // AI only
   if (settingsObj.color) {
     var colors = compact([
       ['randomColor', 'random'],
-      allowWhite ? ['white', 'white'] : null, ['black', 'black']
+      ['white', 'white'],
+      ['black', 'black']
     ]);
     generalFieldset.unshift(
       m('div.select_input', {
@@ -118,6 +126,8 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       ])
     );
   }
+
+  // AI only
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', {
       key: 'ailevel'
@@ -127,6 +137,8 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       ].map(tupleOf), settingsObj.level)
     ]));
   }
+
+  // Human only
   if (settingsObj.mode) {
     var modes = (session.isConnected() && timeMode !== '0') ? [
       ['casual', '0'],
@@ -139,7 +151,8 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     }, [
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ]));
-    if (settingsObj.mode() === '1') {
+
+    if (session.isConnected() && settingsObj.mode() === '1') {
       generalFieldset.push(
         m('div.rating_range', {
           key: 'rating_range'
@@ -165,6 +178,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     ])
   ];
+
   if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', {
@@ -181,7 +195,9 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       ])
     );
   }
-  if (hasDays)
+
+  // human only
+  if (hasDays) {
     timeFieldset.push(
       m('div.select_input.large_label', {
         key: formName + 'days'
@@ -189,6 +205,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.game.availableDays.map(tupleOf), settingsObj.days, false)
       ]));
+  }
 
   return m('form#new_game_form.form', {
     onsubmit: function(e) {
@@ -309,7 +326,11 @@ function renderAllGames() {
           seekHumanGame,
           settings.game.human,
           settings.game.human.availableVariants,
-          settings.game.human.availableTimeModes
+          settings.game.human.availableTimeModes.filter(function(e) {
+            // correspondence and unlimited time modes are only available when
+            // connected
+            return e[1] === '1' || session.isConnected();
+          })
         ) :
         renderForm(
           'ai',

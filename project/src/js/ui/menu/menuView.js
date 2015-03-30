@@ -99,9 +99,9 @@ function renderLinks(user) {
       key: 'menu_play_online',
       config: helper.ontouchendScrollY(function() {
         menu.close();
-        gamesMenu.openNewGame();
+        gamesMenu.openNewGameRealTime();
       })
-    }, i18n('playOnline')) : null,
+    }, i18n('playInRealTime')) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))

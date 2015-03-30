@@ -23,7 +23,7 @@ var untranslated = {
   allowAnalytics: 'Allow anonymous statistics',
   shareGame: 'Share game',
   sharePGN: 'Share PGN',
-  playOnline: 'Play online'
+  playInRealTime: 'Play in real time'
 };
 
 var defaultCode = 'en';

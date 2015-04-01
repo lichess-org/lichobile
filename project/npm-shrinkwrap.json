@@ -836,7 +836,7 @@
     "chessground": {
       "version": "1.9.2",
       "from": "git://github.com/ornicar/chessground#pureAnims",
-      "resolved": "git://github.com/ornicar/chessground#043503da57aca447cde5ee89c72ae0b74538bd21",
+      "resolved": "git://github.com/ornicar/chessground#69d7ed034539fa5e84298640cfb43e67d0144873",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
@@ -878,11 +878,6 @@
       "version": "1.1.2",
       "from": "q@*",
       "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
-    },
-    "semver": {
-      "version": "4.2.0",
-      "from": "https://registry.npmjs.org/semver/-/semver-4.2.0.tgz",
-      "resolved": "https://registry.npmjs.org/semver/-/semver-4.2.0.tgz"
     },
     "signals": {
       "version": "1.0.0",

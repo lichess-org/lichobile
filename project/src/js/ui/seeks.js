@@ -8,7 +8,7 @@ var i18n = require('../i18n');
 var socket = require('../socket');
 var session = require('../session');
 var loginModal = require('./loginModal');
-var gamesMenu = require('./gamesMenu');
+var newGameForm = require('./newGameForm');
 var uniq = require('lodash-node/modern/arrays/uniq');
 var iScroll = require('iscroll');
 var Zanimo = require('zanimo');
@@ -96,7 +96,7 @@ function renderSeek(ctrl, seek) {
     m('div.body', [
       m('div.player', seek.username + ' (' + seek.rating + ')'),
       m('div.variant', seek.variant.name),
-      m('div', [
+      m('div.time', [
         seek.days ? i18n(seek.days === 1 ? 'oneDay' : 'nbDays', seek.days) : '∞',
         ', ',
         i18n(seek.mode === 1 ? 'rated' : 'casual')
@@ -126,28 +126,26 @@ seeks.view = function(ctrl) {
     }
 
     return [
-      m('div.seeks', {}, [
-        m('div.seeks_scroller', {
-          config: function(el, isUpdate, context) {
-            if (!isUpdate) {
-              context.scroller = new iScroll(el);
-              context.onunload = function() {
-                if (context.scroller) {
-                  context.scroller.destroy();
-                  context.scroller = null;
-                }
-              };
-            }
-            context.scroller.refresh();
+      m('div.seeks_scroller', {
+        config: function(el, isUpdate, context) {
+          if (!isUpdate) {
+            context.scroller = new iScroll(el);
+            context.onunload = function() {
+              if (context.scroller) {
+                context.scroller.destroy();
+                context.scroller = null;
+              }
+            };
           }
-        }, [
-          m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
-        ]),
-        m('button.fat', {
-          key: 'seeks_createagame',
-          config: helper.ontouchend(gamesMenu.openNewGameCorrespondence)
-        }, i18n('createAGame'))
-      ])
+          context.scroller.refresh();
+        }
+      }, [
+        m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
+      ]),
+      m('button#newGameCorres.fa.fa-plus-circle', {
+        key: 'seeks_createagame',
+        config: helper.ontouchend(newGameForm.openCorrespondence)
+      }, i18n('createAGame'))
     ];
   };
 

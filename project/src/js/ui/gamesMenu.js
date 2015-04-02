@@ -1,15 +1,12 @@
-var compact = require('lodash-node/modern/arrays/compact');
 var utils = require('../utils');
 var helper = require('./helper');
-var xhr = require('../xhr');
 var settings = require('../settings');
 var iScroll = require('iscroll');
 var session = require('../session');
 var i18n = require('../i18n');
-var formWidgets = require('./widget/form');
-var session = require('../session');
 var moment = window.moment;
 var backbutton = require('../backbutton');
+var newGameForm = require('./newGameForm');
 
 // iScroll instance
 var scroller = null;
@@ -17,38 +14,15 @@ var scroller = null;
 var gamesMenu = {};
 
 gamesMenu.isOpen = false;
-var newGameCardSwapped = false;
 
-var doOpen = function() {
+gamesMenu.open = function() {
   helper.analyticsTrackView('Games Menu');
   backbutton.stack.push(gamesMenu.close);
   gamesMenu.isOpen = true;
-  if (utils.hasNetwork() && session.isConnected()) session.refresh();
-};
-
-gamesMenu.openNewGame = function() {
-  doOpen();
-  newGameCardSwapped = true;
-};
-
-gamesMenu.openNewGameCorrespondence = function() {
-  settings.game.selected('human');
-  settings.game.human.timeMode('2');
-  gamesMenu.openNewGame();
-};
-
-gamesMenu.openCurrentGames = function() {
-  doOpen();
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
   }, 400);
-};
-
-gamesMenu.open = function() {
-  if (session.nowPlaying().length)
-    gamesMenu.openCurrentGames();
-  else
-    gamesMenu.openNewGame();
+  if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
 
 gamesMenu.close = function(fromBB) {
@@ -65,133 +39,7 @@ gamesMenu.joinGame = function(g) {
   m.redraw();
 };
 
-function startAIGame() {
-  return xhr.newAiGame().then(function(data) {
-    m.route('/game' + data.url.round);
-  }, function(error) {
-    utils.handleXhrError(error);
-    throw error;
-  });
-}
-
-function seekHumanGame() {
-  if (settings.game.human.timeMode() === '1') m.route('/seek');
-  else {
-    xhr.seekGame();
-    m.route('/seeks');
-  }
-}
-
-function swapCard() {
-  newGameCardSwapped = !newGameCardSwapped;
-}
-
-function tupleOf(x) {
-  return [x, x];
-}
-
-function renderForm(formName, action, settingsObj, variants, timeModes) {
-  var timeMode = settingsObj.timeMode();
-  var hasClock = timeMode === '1';
-  var hasDays = timeMode === '2';
-  var allowWhite = !settingsObj.mode ||
-    settingsObj.mode() === '0' || ['5', '6', '7'].indexOf(settingsObj.variant()) === -1 ||
-    settings.game.selected() !== 'human';
-  var generalFieldset = [
-    m('div.select_input', [
-      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
-    ])
-  ];
-
-  if (settingsObj.color) {
-    var colors = compact([
-      ['randomColor', 'random'],
-      allowWhite ? ['white', 'white'] : null, ['black', 'black']
-    ]);
-    generalFieldset.unshift(
-      m('div.select_input', [
-        formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
-      ])
-    );
-  }
-  if (settingsObj.level) {
-    generalFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect('level', 'ailevel', [
-        '1', '2', '3', '4', '5', '6', '7', '8'
-      ].map(tupleOf), settingsObj.level)
-    ]));
-  }
-  if (settingsObj.mode) {
-    var modes = (session.isConnected() && timeMode !== '0') ? [
-      ['casual', '0'],
-      ['rated', '1']
-    ] : [
-      ['casual', '0']
-    ];
-    generalFieldset.push(m('div.select_input', [
-      formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
-    ]));
-    if (settingsObj.mode() === '1') {
-      generalFieldset.push(
-        m('div.rating_range', [
-          m('div.title', i18n('ratingRange')),
-          m('div.select_input.inline', [
-            formWidgets.renderSelect('Min', formName + 'rating_min',
-              settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
-          ]),
-          m('div.select_input.inline', [
-            formWidgets.renderSelect('Max', formName + 'rating_max',
-              settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
-          ])
-        ])
-      );
-    }
-  }
-
-  var timeFieldset = [
-    m('div.select_input', [
-      formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
-    ])
-  ];
-  if (hasClock) {
-    timeFieldset.push(
-      m('div.select_input.inline', [
-        formWidgets.renderSelect('time', formName + 'time',
-          settings.game.availableTimes.map(tupleOf), settingsObj.time, false)
-      ]),
-      m('div.select_input.inline', [
-        formWidgets.renderSelect('increment', formName + 'increment',
-          settings.game.availableIncrements.map(tupleOf), settingsObj.increment, false)
-      ])
-    );
-  }
-  if (hasDays)
-    timeFieldset.push(
-      m('div.select_input.large_label', [
-        formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.game.availableDays.map(tupleOf), settingsObj.days, false)
-      ]));
-
-  return m('form#new_game_form.form', {
-    onsubmit: function(e) {
-      e.preventDefault();
-      if (!settings.game.isTimeValid(settingsObj)) return;
-      gamesMenu.close();
-      swapCard();
-      action();
-    }
-  }, [
-    m('fieldset', [
-      m('div.nice-radio', formWidgets.renderRadio('human', 'selected', 'human', settings.game.selected)),
-      m('div.nice-radio', formWidgets.renderRadio('computer', 'selected', 'computer', settings.game.selected))
-    ]),
-    m('fieldset', generalFieldset),
-    m('fieldset#clock', timeFieldset),
-    m('button', i18n('createAGame'))
-  ]);
-}
-
-function renderAllGames() {
+function renderAllGames(nowPlaying) {
 
   function cardDims() {
     var vp = helper.viewportDim();
@@ -199,7 +47,6 @@ function renderAllGames() {
     var padding = vp.vw * 2.5 / 100;
     return {
       w: width + padding * 2,
-      h: width + 144,
       innerW: width,
       padding: padding
     };
@@ -217,11 +64,9 @@ function renderAllGames() {
     ]);
   }
 
-  var nowPlaying = session.nowPlaying();
   var cDim = cardDims();
   var cardStyle = {
     width: cDim.w + 'px',
-    height: cDim.h + 'px',
     paddingLeft: cDim.padding + 'px',
     paddingRight: cDim.padding + 'px'
   };
@@ -267,44 +112,24 @@ function renderAllGames() {
     ]);
   });
 
-  var game = m('div.card.new-game', {
-    key: 'new-game',
-    className: newGameCardSwapped ? 'back_visible' : '',
-    style: cardStyle
-  }, [
-    m('div.container_flip', [
-      m('div.front', {
-        config: helper.ontouchendScrollX(swapCard)
-      }, [
-        renderViewOnlyBoard(),
-        m('div.infos', [
-          m('div.description', [
-            m('h2.title', i18n('createAGame')),
-            m('p', i18n('newOpponent')),
-          ])
+  allGames.unshift(
+    m('div.card.standard', {
+      key: 'game.new-game',
+      style: cardStyle,
+      config: helper.ontouchendScrollX(function() {
+        gamesMenu.close();
+        newGameForm.open();
+      })
+    }, [
+      renderViewOnlyBoard(),
+      m('div.infos', [
+        m('div.description', [
+          m('h2.title', i18n('createAGame')),
+          m('p', i18n('newOpponent')),
         ])
-      ]),
-      m('div.back', [
-        settings.game.selected() === 'human' ?
-        renderForm(
-          'human',
-          seekHumanGame,
-          settings.game.human,
-          settings.game.human.availableVariants,
-          settings.game.human.availableTimeModes
-        ) :
-        renderForm(
-          'ai',
-          startAIGame,
-          settings.game.ai,
-          settings.game.ai.availableVariants,
-          settings.game.ai.availableTimeModes
-        )
       ])
     ])
-  ]);
-
-  allGames.unshift(game);
+  );
 
   return m('div#all_games', {
     style: {
@@ -316,6 +141,7 @@ function renderAllGames() {
 
 gamesMenu.view = function() {
   if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
+  var nowPlaying = session.nowPlaying();
   var children = [
     m('button.overlay_close.fa.fa-close', {
       config: helper.ontouchend(gamesMenu.close)
@@ -345,7 +171,7 @@ gamesMenu.view = function() {
         scroller.options.snap = el.querySelectorAll('.card');
         scroller.refresh();
       }
-    }, renderAllGames())
+    }, renderAllGames(nowPlaying))
   ];
 
   return m('div#games_menu.overlay.overlay_fade.open', children);

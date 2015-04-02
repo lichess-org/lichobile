@@ -1,6 +1,6 @@
 var session = require('../../session');
 var loginModal = require('../loginModal');
-var gamesMenu = require('../gamesMenu');
+var newGameForm = require('../newGameForm');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
 var helper = require('../helper');
@@ -96,12 +96,9 @@ function renderHeader(user) {
 function renderLinks(user) {
   var links = [
     utils.hasNetwork() ? m('li.side_link', {
-      key: 'menu_play_online',
-      config: helper.ontouchendScrollY(function() {
-        menu.close();
-        gamesMenu.openNewGame();
-      })
-    }, i18n('playOnline')) : null,
+      key: 'menu_play_real_time',
+      config: helper.ontouchendScrollY(menu.openLink(newGameForm.openRealTime))
+    }, i18n('realTime')) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))

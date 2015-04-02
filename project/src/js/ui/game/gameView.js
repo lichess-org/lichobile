@@ -8,6 +8,7 @@ var settings = require('../../settings');
 var utils = require('../../utils');
 var helper = require('../helper');
 var widgets = require('../widget/common');
+var popupWidget = require('../widget/popup');
 var i18n = require('../../i18n');
 
 function joinOverlay(ctrl) {
@@ -41,7 +42,7 @@ function joinOverlay(ctrl) {
   }
 
   return function() {
-    return widgets.overlayPopup(
+    return popupWidget(
       'join_url_challenge',
       opp ? opp.username : 'Anonymous',
       m('div.infos', [

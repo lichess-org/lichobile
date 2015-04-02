@@ -57,7 +57,7 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
       var button = new constr(options);
 
       context.onunload = function() {
-        if (button) button.unbind();
+        if (button && !button.binded) button.unbind();
       };
     }
   };

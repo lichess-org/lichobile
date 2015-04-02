@@ -3,7 +3,7 @@ var i18n = require('../../i18n');
 var opposite = require('chessground').util.opposite;
 var settings = require('../../settings');
 var formWidgets = require('../widget/form');
-var widget = require('../widget/common');
+var popupWidget = require('../widget/popup');
 var backbutton = require('../../backbutton');
 var helper = require('../helper');
 
@@ -59,7 +59,7 @@ module.exports = {
   },
   view: function(ctrl) {
     if (ctrl.isOpen())
-      return widget.overlayPopup(
+      return popupWidget(
         'offline_actions',
         null, [
           renderEnded(ctrl),

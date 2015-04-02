@@ -21,7 +21,7 @@ gamesMenu.open = function() {
   gamesMenu.isOpen = true;
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
-  }, 50);
+  }, 400);
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
 };
 

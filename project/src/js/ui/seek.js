@@ -3,6 +3,7 @@ var helper = require('./helper');
 var layout = require('./layout');
 var menu = require('./menu');
 var widgets = require('./widget/common');
+var popupWidget = require('./widget/popup');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
 var socket = require('../socket');
@@ -66,7 +67,7 @@ seek.controller = function() {
 
 seek.view = function(ctrl) {
   function overlays() {
-    return widgets.overlayPopup(
+    return popupWidget(
       null,
       m('div', i18n('waitingForOpponent') + '...'),
       m('div.seek_real_time', [

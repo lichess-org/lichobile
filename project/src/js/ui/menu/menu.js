@@ -1,7 +1,7 @@
 var utils = require('../../utils');
 var Zanimo = require('zanimo');
 var backbutton = require('../../backbutton');
-var helper = require('../helper')
+var helper = require('../helper');
 
 var menu = {};
 
@@ -15,6 +15,19 @@ menu.menuRouteAction = function(route) {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
       '250', 'ease-out').then(utils.f(m.route, route));
+  };
+};
+
+menu.openLink = function(action) {
+  return function() {
+    menu.close();
+    return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
+      '250', 'ease-out').then(function(el) {
+        m.startComputation();
+        action();
+        m.endComputation();
+        el.removeAttribute('style');
+      });
   };
 };
 

@@ -2,6 +2,7 @@ var chessground = require('chessground');
 var settings = require('../../../settings');
 var layout = require('../../layout');
 var widgets = require('../../widget/common');
+var popupWidget = require('../../widget/popup');
 var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
@@ -154,7 +155,7 @@ function gameInfos(data) {
 }
 
 function renderPlayerActions(ctrl) {
-  return widgets.overlayPopup(
+  return popupWidget(
     'player_controls',
     gameInfos(ctrl.data),
     game.playable(ctrl.data) ?

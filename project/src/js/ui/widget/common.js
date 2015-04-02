@@ -2,6 +2,7 @@ var menu = require('../menu');
 var utils = require('../../utils');
 var helper = require('../helper');
 var gamesMenu = require('../gamesMenu');
+var newGameForm = require('../newGameForm');
 var session = require('../../session');
 var settings = require('../../settings');
 
@@ -20,10 +21,19 @@ widgets.backButton = function(title) {
 };
 
 widgets.gameButton = function() {
+  var key, action;
+  if (session.nowPlaying().length) {
+    key = 'games-menu';
+    action = gamesMenu.open;
+  } else {
+    key = 'new-game-form';
+    action = newGameForm.open;
+  }
   var myTurns = session.myTurnGames().length;
   return m('button.game_menu_button', {
+    key: key,
     className: settings.general.theme.board(),
-    config: helper.ontouchend(gamesMenu.open)
+    config: helper.ontouchend(action)
   }, myTurns ? m('span.nb_playing', myTurns) : null);
 };
 
@@ -39,29 +49,6 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
   return m('div.circle_' + i);
 }));
 
-widgets.overlayPopup = function(className, header, content, isShowing, closef) {
-  if (!isShowing) return m('div.overlay.popup.overlay_fade');
-  return m('div.overlay.popup.overlay_fade.open', [
-    m('div.popup_overlay_close', {
-      config: closef ? helper.ontouchend(closef) : utils.noop
-    }),
-    m('div.overlay_popup', {
-      className: className ? className : '',
-      config: function(el, isUpdate) {
-        if (!isUpdate) {
-          var vh = helper.viewportDim().vh;
-          var h = el.getBoundingClientRect().height;
-          var top = (vh - h) / 2;
-          el.style.top = top + 'px';
-        }
-      }
-    }, [
-      header ? m('header', header) : null,
-      m('div.popup_content', content)
-    ])
-  ]);
-};
-
 widgets.connectingHeader = function() {
   return m('nav', [
     widgets.menuButton(),
@@ -71,7 +58,6 @@ widgets.connectingHeader = function() {
     ])
   ]);
 };
-
 
 widgets.board = function() {
   var x = helper.viewportDim().vw;

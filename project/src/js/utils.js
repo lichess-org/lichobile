@@ -101,4 +101,8 @@ utils.secondsToMinutes = function(sec) {
   return sec === 0 ? sec : sec / 60;
 };
 
+utils.oppositeColor = function(color) {
+  return color === 'white' ? 'black' : 'white';
+};
+
 module.exports = utils;

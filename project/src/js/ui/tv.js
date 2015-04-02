@@ -1,5 +1,6 @@
 var widgets = require('./widget/common');
 var layout = require('./layout');
+var helper = require('./helper');
 var utils = require('../utils');
 var menu = require('./menu');
 var xhr = require('../xhr');
@@ -10,6 +11,17 @@ var socket = require('../socket');
 module.exports = {
   controller: function() {
     var tvSocket, round;
+
+    helper.analyticsTrackView('TV');
+
+    // get current featured game and display it
+    xhr.featured(m.route.param('flip')).then(function(data) {
+      data.tv = true;
+      round = new roundCtrl(data);
+    }, function(error) {
+      utils.handleXhrError(error);
+      m.route('/');
+    });
 
     xhr.lobby(true).then(function(data) {
       tvSocket = socket.connectLobby(data.lobby.version, utils.noop, {

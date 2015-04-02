@@ -56,8 +56,8 @@ function game(id, pov) {
   return http.request(url);
 }
 
-function featured() {
-  return http.request('/tv');
+function featured(flip) {
+  return http.request('/tv/lichess', flip ? { data: { flip: 1 }} : {});
 }
 
 function status() {

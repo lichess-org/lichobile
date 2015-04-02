@@ -1,5 +1,6 @@
 var throttle = require('lodash-node/modern/functions/throttle');
 var data = require('./data');
+var utils = require('../../utils');
 var sound = require('../../sound');
 var game = require('./game');
 var ground = require('./ground');
@@ -50,6 +51,15 @@ module.exports = function(cfg) {
   }.bind(this);
 
   this.flip = function() {
+    if (this.data.tv) {
+      if (m.route.param('flip')) m.route('/tv');
+      else m.route('/tv?flip=1');
+      return;
+    } else if (this.data.player.spectator) {
+      m.route('/game/' + this.data.game.id + '/' +
+        utils.oppositeColor(this.data.player.color));
+      return;
+    }
     this.vm.flip = !this.vm.flip;
     this.chessground.set({
       orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color
@@ -58,7 +68,7 @@ module.exports = function(cfg) {
 
   this.setTitle = function() {
     if (this.data.tv)
-      this.title = 'lichess TV';
+      this.title = 'Lichess TV';
     else if (this.data.player.spectator)
       this.title = 'lichess.org';
     else if (gameStatus.finished(this.data))

@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "platforms": [
     "android@3.7.1",
     "ios@3.8.0"
@@ -22,7 +22,7 @@
         "release": true,
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
-        "beta": "3",
+        "beta": "1",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"
@@ -58,7 +58,7 @@
         "product_file_name": "lichess-stage",
         "API_END_POINT": "http://en.lichess.org",
         "SOCKET_END_POINT": "socket.en.lichess.org",
-        "beta": "3",
+        "beta": "1",
         "cordova": {
           "accessOrigin": [
             "http://en.lichess.org"

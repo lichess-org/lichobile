@@ -49,11 +49,12 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
   return m('div.circle_' + i);
 }));
 
-widgets.connectingHeader = function() {
+widgets.connectingHeader = function(title) {
   return m('nav', [
     widgets.menuButton(),
     widgets.gameButton(),
     m('h1.reconnecting', [
+      title ? title : null,
       widgets.loader
     ])
   ]);

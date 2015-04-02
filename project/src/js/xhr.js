@@ -56,6 +56,10 @@ function game(id, pov) {
   return http.request(url);
 }
 
+function featured() {
+  return http.request('/tv');
+}
+
 function status() {
   return http.request('/api/status', {
     background: true
@@ -90,5 +94,6 @@ module.exports = {
   lobby: lobby,
   seeks: seeks,
   game: game,
+  featured: featured,
   status: status
 };

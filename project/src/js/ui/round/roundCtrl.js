@@ -58,8 +58,8 @@ module.exports = function(cfg) {
 
   this.setTitle = function() {
     if (this.data.tv)
-      this.title = i18n('Lichess TV');
-    if (this.data.player.spectator)
+      this.title = 'lichess TV';
+    else if (this.data.player.spectator)
       this.title = 'lichess.org';
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');

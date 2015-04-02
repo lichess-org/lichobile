@@ -42,6 +42,7 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
       options: {
         name: 'lobby',
         debug: window.lichess.mode !== 'prod',
+        ignoreUnknownMessages: true,
         pingDelay: 2000,
         onOpen: onOpen
       },
@@ -51,23 +52,6 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
 
   return socketInstance;
 }
-
-function createSiteSocket(handlers) {
-  socketInstance = new StrongSocket(
-    '/socket',
-    0, {
-      options: {
-        name: 'site',
-        debug: window.lichess.mode !== 'prod',
-        pingDelay: 2000,
-      },
-      events: handlers
-    }
-  );
-
-  return socketInstance;
-}
-
 
 function onPause() {
   if (socketInstance) socketInstance.destroy();
@@ -82,6 +66,5 @@ document.addEventListener('resume', onResume, false);
 
 module.exports = {
   connectGame: createGameSocket,
-  connectLobby: createLobbySocket,
-  connectTV: createSiteSocket
+  connectLobby: createLobbySocket
 };

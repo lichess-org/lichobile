@@ -117,7 +117,7 @@ module.exports = function(ctrl) {
       }
     },
     message: function(m) {
-      ctrl.chat.append(m);
+      if (ctrl.chat) ctrl.chat.append(m);
     }
   };
 

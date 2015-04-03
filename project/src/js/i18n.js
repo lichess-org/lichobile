@@ -22,7 +22,9 @@ var untranslated = {
   boardThemeMetal: 'Metal',
   allowAnalytics: 'Allow anonymous statistics',
   shareGame: 'Share game',
-  sharePGN: 'Share PGN'
+  sharePGN: 'Share PGN',
+  onlineFriends: 'Online friends',
+  playOnline: 'Play online'
 };
 
 var defaultCode = 'en';

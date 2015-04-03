@@ -26,7 +26,9 @@ context.MODE = options.mode;
 
 var paths = {
   scripts: ['src/js/**/*.js'],
-  styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/*.styl'],
+  styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/form.styl',
+    'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl'
+  ]
 };
 
 function buildHtml(src, dest, context) {

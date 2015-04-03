@@ -42,12 +42,12 @@ gamesMenu.joinGame = function(g) {
 function cardDims() {
   var vp = helper.viewportDim();
   var width = vp.vw * 85 / 100;
-  var padding = vp.vw * 2.5 / 100;
+  var margin = vp.vw * 2.5 / 100;
   return {
-    w: width + padding * 2,
+    w: width + margin * 2,
     h: width + 100,
     innerW: width,
-    padding: padding
+    margin: margin
   };
 }
 
@@ -65,18 +65,18 @@ function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
 
 function renderAllGames(cDim, nowPlaying) {
   var cardStyle = {
-    width: (cDim.w - cDim.padding * 2) + 'px',
+    width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
-    marginLeft: cDim.padding + 'px',
-    marginRight: cDim.padding + 'px'
+    marginLeft: cDim.margin + 'px',
+    marginRight: cDim.margin + 'px'
   };
   var nbCards = nowPlaying.length + 1;
   // scroller wrapper width
   // calcul is:
   // ((cardWidth + visible part of adjacent card) * nb of cards) +
   //   wrapper's marginLeft
-  var wrapperWidth = ((cDim.w + cDim.padding * 2) * nbCards) +
-    (cDim.padding * 2);
+  var wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
+    (cDim.margin * 2);
 
   var timeLeft = function(g) {
     if (!g.isMyTurn) return i18n('waitingForOpponent');
@@ -134,7 +134,7 @@ function renderAllGames(cDim, nowPlaying) {
   return m('div#all_games', {
     style: {
       width: wrapperWidth + 'px',
-      marginLeft: (cDim.padding * 3) + 'px'
+      marginLeft: (cDim.margin * 3) + 'px'
     }
   }, allGames);
 }

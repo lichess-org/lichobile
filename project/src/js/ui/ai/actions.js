@@ -27,7 +27,7 @@ function renderAlways(ctrl) {
       config: helper.ontouchend(ctrl.sharePGN)
     }, i18n('sharePGN')),
     m('div.action', m('div.select_input',
-      formWidgets.renderSelect('Opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)
+      formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)
     ))
   ];
 }

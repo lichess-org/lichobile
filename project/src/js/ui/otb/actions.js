@@ -27,8 +27,7 @@ function renderAlways(ctrl) {
       config: helper.ontouchend(ctrl.sharePGN)
     }, i18n('sharePGN')),
     m('div.action', formWidgets.renderCheckbox(
-      i18n('Flip pieces after move'), 'flipPieces',
-      settings.onChange(settings.otb.flipPieces)
+      i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
   ];
 }

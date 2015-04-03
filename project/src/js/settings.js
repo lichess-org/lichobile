@@ -1,4 +1,5 @@
 var store = require('./storage');
+var utils = require('./utils');
 var range = require('lodash-node/modern/arrays/range');
 
 function localstorageprop(key, initialValue) {
@@ -7,10 +8,6 @@ function localstorageprop(key, initialValue) {
     var ret = store.get(key);
     return (ret !== null) ? ret : initialValue;
   };
-}
-
-function tupleOf(x) {
-  return [x.toString(), x.toString()];
 }
 
 module.exports = {
@@ -44,9 +41,11 @@ module.exports = {
     },
     analytics: localstorageprop('settings.analytics', true)
   },
+
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false)
   },
+
   ai: {
     availableOpponents: [
       ['Tuco Salamanca', '1'],
@@ -60,17 +59,7 @@ module.exports = {
     ],
     opponent: localstorageprop('settings.ai.opponent', '1')
   },
-  onChange: function(prop, callback) {
-    if (!callback) return prop;
-    return function() {
-      if (arguments.length) {
-        var res = prop(arguments[0]);
-        if (callback) callback(res);
-        return res;
-      }
-      return prop();
-    };
-  },
+
   game: {
     selected: localstorageprop('settings.game.selected', 'human'),
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
@@ -88,6 +77,7 @@ module.exports = {
         gameSettings.time() !== '0' ||
         gameSettings.increment() !== '0';
     },
+
     ai: {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
@@ -106,6 +96,7 @@ module.exports = {
       days: localstorageprop('settings.game.ai.days', '2'),
       level: localstorageprop('settings.game.ai.aiLevel', '3')
     },
+
     human: {
       availableVariants: [
         ['Standard', '1'],
@@ -116,8 +107,8 @@ module.exports = {
         ['Atomic', '7']
       ],
       availableRatingRanges: {
-        min: range(800, 2900, 100).map(tupleOf),
-        max: range(900, 3000, 100).map(tupleOf)
+        min: range(800, 2900, 100).map(utils.tupleOf),
+        max: range(900, 3000, 100).map(utils.tupleOf)
       },
       ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
       ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),
@@ -132,6 +123,30 @@ module.exports = {
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
       mode: localstorageprop('settings.game.human.mode', '0')
+    },
+
+    invite: {
+      availableVariants: [
+        ['Standard', '1'],
+        ['Chess960', '2'],
+        ['From Position', '3'],
+        ['King of the Hill', '4'],
+        ['Three-check', '5'],
+        ['Antichess', '6'],
+        ['Atomic', '7']
+      ],
+      color: localstorageprop('settings.game.invite.color', 'random'),
+      variant: localstorageprop('settings.game.invite.variant', '1'),
+      availableTimeModes: [
+        ['realTime', '1'],
+        ['correspondence', '2'],
+        ['unlimited', '0']
+      ],
+      timeMode: localstorageprop('settings.game.invite.clock', '1'),
+      time: localstorageprop('settings.game.invite.time', '5'),
+      increment: localstorageprop('settings.game.invite.increment', '0'),
+      days: localstorageprop('settings.game.invite.days', '2'),
+      mode: localstorageprop('settings.game.invite.mode', '0')
     }
   }
 };

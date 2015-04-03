@@ -1,6 +1,7 @@
 var session = require('../../session');
 var loginModal = require('../loginModal');
 var newGameForm = require('../newGameForm');
+var inviteForm = require('../inviteForm');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
 var helper = require('../helper');
@@ -103,6 +104,10 @@ function renderLinks(user) {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, i18n('correspondence')) : null,
+    utils.hasNetwork() ? m('li.side_link', {
+      key: 'menu_invite_friend',
+      config: helper.ontouchendScrollY(menu.openLink(inviteForm.open))
+    }, i18n('playWithAFriend')) : null,
     m('li.side_link', {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))

@@ -13,7 +13,7 @@ var newGameForm = {};
 newGameForm.isOpen = false;
 
 newGameForm.open = function() {
-  helper.analyticsTrackView('New Game');
+  helper.analyticsTrackView('New Game Form');
   backbutton.stack.push(newGameForm.close);
   newGameForm.isOpen = true;
 };
@@ -49,10 +49,6 @@ function seekHumanGame() {
     xhr.seekGame();
     m.route('/seeks');
   }
-}
-
-function tupleOf(x) {
-  return [x, x];
 }
 
 function renderForm(formName, action, settingsObj, variants, timeModes) {
@@ -100,7 +96,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     }, [
       formWidgets.renderSelect('level', 'ailevel', [
         '1', '2', '3', '4', '5', '6', '7', '8'
-      ].map(tupleOf), settingsObj.level)
+      ].map(utils.tupleOf), settingsObj.level)
     ]));
   }
 
@@ -153,13 +149,13 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         key: formName + 'time'
       }, [
         formWidgets.renderSelect('time', formName + 'time',
-          settings.game.availableTimes.map(tupleOf), settingsObj.time, false)
+          settings.game.availableTimes.map(utils.tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', {
         key: formName + 'increment'
       }, [
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.game.availableIncrements.map(tupleOf), settingsObj.increment, false)
+          settings.game.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       ])
     );
   }
@@ -171,11 +167,11 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         key: formName + 'days'
       }, [
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.game.availableDays.map(tupleOf), settingsObj.days, false)
+          settings.game.availableDays.map(utils.tupleOf), settingsObj.days, false)
       ]));
   }
 
-  return m('form#new_game_form.form', {
+  return m('form#new_game_form.game_form', {
     onsubmit: function(e) {
       e.preventDefault();
       if (!settings.game.isTimeValid(settingsObj)) return;
@@ -216,7 +212,7 @@ newGameForm.view = function() {
   );
 
   return popupWidget(
-    'new_game_form_popup',
+    'new_game_form_popup game_form_popup',
     null,
     form,
     newGameForm.isOpen,

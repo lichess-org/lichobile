@@ -101,4 +101,8 @@ utils.secondsToMinutes = function(sec) {
   return sec === 0 ? sec : sec / 60;
 };
 
+utils.tupleOf = function(x) {
+  return [x.toString(), x.toString()];
+};
+
 module.exports = utils;

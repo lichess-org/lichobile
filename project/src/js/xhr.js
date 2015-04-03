@@ -38,6 +38,22 @@ function seekGame() {
   }, true);
 }
 
+function inviteFriend() {
+  var config = settings.game.invite;
+  return http.request('/setup/friend', {
+    method: 'POST',
+    data: {
+      variant: config.variant(),
+      timeMode: config.timeMode(),
+      days: config.days(),
+      time: config.time(),
+      increment: config.increment(),
+      color: config.color(),
+      mode: session.isConnected() ? config.mode() : '0',
+    }
+  }, true);
+}
+
 function joinUrlChallenge(id) {
   return http.request('/' + id + '/join', { method: 'POST' }, true);
 }
@@ -86,6 +102,7 @@ function status() {
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
+  inviteFriend: inviteFriend,
   joinUrlChallenge: joinUrlChallenge,
   lobby: lobby,
   seeks: seeks,

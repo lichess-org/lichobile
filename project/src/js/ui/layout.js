@@ -1,6 +1,7 @@
 var menu = require('./menu');
 var gamesMenu = require('./gamesMenu');
 var newGameForm = require('./newGameForm');
+var inviteForm = require('./inviteForm');
 var loginModal = require('./loginModal');
 var signupModal = require('./signupModal');
 var helper = require('./helper');
@@ -31,7 +32,8 @@ module.exports = {
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view(),
-      newGameForm.view()
+      newGameForm.view(),
+      inviteForm.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);
@@ -53,10 +55,10 @@ module.exports = {
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view(),
-      newGameForm.view()
+      newGameForm.view(),
+      inviteForm.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);
   }
-
 };

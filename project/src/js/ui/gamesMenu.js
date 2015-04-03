@@ -39,36 +39,36 @@ gamesMenu.joinGame = function(g) {
   m.redraw();
 };
 
-function renderAllGames(nowPlaying) {
+function cardDims() {
+  var vp = helper.viewportDim();
+  var width = vp.vw * 85 / 100;
+  var padding = vp.vw * 2.5 / 100;
+  return {
+    w: width + padding * 2,
+    h: width + 100,
+    innerW: width,
+    padding: padding
+  };
+}
 
-  function cardDims() {
-    var vp = helper.viewportDim();
-    var width = vp.vw * 85 / 100;
-    var padding = vp.vw * 2.5 / 100;
-    return {
-      w: width + padding * 2,
-      innerW: width,
-      padding: padding
-    };
-  }
+function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
+  return m('div', {
+    style: {
+      height: cDim.innerW + 'px'
+    }
+  }, [
+    helper.viewOnlyBoard(fen, lastMove, color, variant,
+      settings.general.theme.board(), settings.general.theme.piece()
+    )
+  ]);
+}
 
-  function renderViewOnlyBoard(fen, lastMove, color, variant) {
-    return m('div', {
-      style: {
-        height: cDim.innerW + 'px'
-      }
-    }, [
-      helper.viewOnlyBoard(fen, lastMove, color, variant,
-        settings.general.theme.board(), settings.general.theme.piece()
-      )
-    ]);
-  }
-
-  var cDim = cardDims();
+function renderAllGames(cDim, nowPlaying) {
   var cardStyle = {
-    width: cDim.w + 'px',
-    paddingLeft: cDim.padding + 'px',
-    paddingRight: cDim.padding + 'px'
+    width: (cDim.w - cDim.padding * 2) + 'px',
+    height: cDim.h + 'px',
+    marginLeft: cDim.padding + 'px',
+    marginRight: cDim.padding + 'px'
   };
   var nbCards = nowPlaying.length + 1;
   // scroller wrapper width
@@ -96,7 +96,7 @@ function renderAllGames(nowPlaying) {
         gamesMenu.joinGame(g);
       })
     }, [
-      renderViewOnlyBoard(g.fen, g.lastMove, g.color, g.variant),
+      renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
       m('div.infos', [
         m('div.icon-game', {
           'data-icon': icon ? icon : ''
@@ -121,7 +121,7 @@ function renderAllGames(nowPlaying) {
         newGameForm.open();
       })
     }, [
-      renderViewOnlyBoard(),
+      renderViewOnlyBoard(cDim),
       m('div.infos', [
         m('div.description', [
           m('h2.title', i18n('createAGame')),
@@ -134,7 +134,7 @@ function renderAllGames(nowPlaying) {
   return m('div#all_games', {
     style: {
       width: wrapperWidth + 'px',
-      marginLeft: (cDim.padding * 2) + 'px'
+      marginLeft: (cDim.padding * 3) + 'px'
     }
   }, allGames);
 }
@@ -142,11 +142,16 @@ function renderAllGames(nowPlaying) {
 gamesMenu.view = function() {
   if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
   var nowPlaying = session.nowPlaying();
+  var vh = helper.viewportDim().vh;
+  var cDim = cardDims();
   var children = [
     m('button.overlay_close.fa.fa-close', {
       config: helper.ontouchend(gamesMenu.close)
     }),
     m('div#wrapper_games', {
+      style: {
+        top: ((vh - cDim.h) / 2) + 'px'
+      },
       config: function(el, isUpdate, context) {
         if (!isUpdate) {
           scroller = new iScroll(el, {
@@ -171,7 +176,7 @@ gamesMenu.view = function() {
         scroller.options.snap = el.querySelectorAll('.card');
         scroller.refresh();
       }
-    }, renderAllGames(nowPlaying))
+    }, renderAllGames(cDim, nowPlaying))
   ];
 
   return m('div#games_menu.overlay.overlay_fade.open', children);

@@ -75,13 +75,14 @@ module.exports = {
 
     var refreshList = function() {
       // TODO sort the onlineFriends array
+      onlineFriends.sort(utils.caseInsensitiveSort);
 
       // update view
       m.redraw();
     }
 
     xhr.friends().then(function(data) {
-      friendsSocket = socket.connectFriends('v1', requestFriends, {
+      friendsSocket = socket.connectSocket(requestFriends, {
         following_onlines: function(data) {
           onlineFriends = data;
           refreshList();

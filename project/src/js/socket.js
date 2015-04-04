@@ -52,12 +52,12 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
   return socketInstance;
 }
 
-function createFriendsSocket(friendsVersion, onOpen, handlers) {
+function createSocket(onOpen, handlers) {
   socketInstance = new StrongSocket(
     '/socket',
-    friendsVersion, {
+    0, {
       options: {
-        name: 'friends',
+        name: 'socket',
         debug: window.lichess.mode !== 'prod',
         pingDelay: 2000,
         onOpen: onOpen
@@ -84,5 +84,5 @@ document.addEventListener('resume', onResume, false);
 module.exports = {
   connectGame: createGameSocket,
   connectLobby: createLobbySocket,
-  connectFriends: createFriendsSocket
+  connectSocket: createSocket
 };

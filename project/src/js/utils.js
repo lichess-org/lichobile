@@ -101,4 +101,11 @@ utils.secondsToMinutes = function(sec) {
   return sec === 0 ? sec : sec / 60;
 };
 
+utils.caseInsensitiveSort = function(a, b) {
+  var alow = a.toLowerCase();
+  var blow = b.toLowerCase();
+
+  return alow > blow ? 1: (alow < blow ? -1 : 0);
+}
+
 module.exports = utils;

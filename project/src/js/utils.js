@@ -108,4 +108,10 @@ utils.caseInsensitiveSort = function(a, b) {
   return alow > blow ? 1: (alow < blow ? -1 : 0);
 }
 
+utils.userFullNameToId = function(fullName) {
+  var split = fullName.split(' ');
+  var id = split.length == 1 ? split[0] : split[1];
+  return id.toLowerCase();
+}
+
 module.exports = utils;

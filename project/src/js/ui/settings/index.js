@@ -18,10 +18,10 @@ function renderBody() {
       m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics)),
       m('li.list_item.nav', {
         config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/board'))
-      }, i18n('boardThemes')),
+      }, i18n('board')),
       m('li.list_item.nav', {
         config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/piece'))
-      }, i18n('pieceThemes'))
+      }, i18n('pieces'))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];

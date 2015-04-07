@@ -43,7 +43,7 @@ module.exports = {
 
   view: function() {
     var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('pieceThemes'))
+      widgets.backButton(i18n('pieces'))
     );
     return layout.free(header, renderBody, widgets.empty, menu.view, widgets.empty);
   }

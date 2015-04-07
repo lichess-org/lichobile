@@ -22,6 +22,6 @@ module.exports.init = function() {
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes,
     '/friends': friends,
-    '/user/:id': user
+    '/@/:id': user
   });
 };

@@ -47,13 +47,16 @@ function renderBody() {
       }
     }, [
       m('ul#friends', onlineFriends.map(function(name) {
+        // Remove prefix title if any
+        var userId = utils.userFullNameToId(name);
+
         return m('li.list_item', {
-          key: name,
-          'id': name
+          key: userId,
+          'id': userId
           // TODO connect user route
           // Disabling user route for now
           // Will be branched for separate feature
-          //,config: helper.ontouchendScrollY(utils.f(m.route, '/user/'+name))
+          ,config: helper.ontouchendScrollY(utils.f(m.route, '/@/' + userId))
         }, name);
       }))
     ])
@@ -74,14 +77,14 @@ module.exports = {
     }
 
     var refreshList = function() {
-      // TODO sort the onlineFriends array
+      onlineFriends.sort(utils.caseInsensitiveSort);
 
       // update view
       m.redraw();
     }
 
     xhr.friends().then(function(data) {
-      friendsSocket = socket.connectFriends('v1', requestFriends, {
+      friendsSocket = socket.connectSocket(requestFriends, {
         following_onlines: function(data) {
           onlineFriends = data;
           refreshList();

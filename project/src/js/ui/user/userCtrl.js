@@ -8,10 +8,9 @@ module.exports = function() {
 
   xhr.user(m.route.param('id')).then(function(data) {
     userData = data;
-    m.redraw();
   }, function(error) {
     utils.handleXhrError(error);
-    m.route('/friends');
+    utils.backHistory();
   });
 
   return {

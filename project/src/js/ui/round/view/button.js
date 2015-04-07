@@ -21,7 +21,7 @@ module.exports = {
   },
   shareLink: function(ctrl) {
     return m('button', {
-      'data-icon': '"',
+      className: 'fa fa-share-alt',
       config: helper.ontouchend(function() {
         window.plugins.socialsharing.share(null, null, null, 'http://lichess.org/' + ctrl.data.game.id);
       })

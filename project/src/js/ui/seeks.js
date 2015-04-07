@@ -142,10 +142,10 @@ seeks.view = function(ctrl) {
       }, [
         m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
       ]),
-      m('button#newGameCorres.fa.fa-plus-circle', {
+      m('button#newGameCorres', {
         key: 'seeks_createagame',
         config: helper.ontouchend(newGameForm.openCorrespondence)
-      }, i18n('createAGame'))
+      }, [m('span.fa.fa-plus-circle'), i18n('createAGame')])
     ];
   };
 

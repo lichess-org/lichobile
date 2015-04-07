@@ -96,33 +96,36 @@ function renderHeader(user) {
 
 function renderLinks(user) {
   var links = [
+    utils.hasNetwork() ? m('li.sep_link', i18n('playOnline')) : null,
     utils.hasNetwork() ? m('li.side_link', {
       key: 'menu_play_real_time',
       config: helper.ontouchendScrollY(menu.openLink(newGameForm.openRealTime))
-    }, i18n('realTime')) : null,
+    }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'menu_seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
-    }, i18n('correspondence')) : null,
+    }, [m('span.fa.fa-paper-plane'), i18n('correspondence')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
       key: 'menu_invite_friend',
       config: helper.ontouchendScrollY(menu.openLink(inviteForm.open))
-    }, i18n('playWithAFriend')) : null,
+    }, [m('span.fa.fa-share-alt'), i18n('playWithAFriend')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
       config: helper.ontouchendScrollY(menu.menuRouteAction('/tv'))
-    }, i18n('watchLichessTV')) : null,
+    }, [m('span[data-icon=1]'), i18n('watchLichessTV')]) : null,
+    m('li.sep_link', i18n('playOffline')),
     m('li.side_link', {
       key: 'menu_play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
-    }, i18n('playOfflineComputer')),
+    }, [m('span.fa.fa-cogs'), i18n('playOfflineComputer')]),
     m('li.side_link', {
       key: 'menu_play_otb',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
-    }, i18n('playOnTheBoardOffline')),
+    }, [m('span.fa.fa-th'), i18n('playOnTheBoardOffline')]),
+    m('hr'),
     m('li.side_link', {
       key: 'menu_settings',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))
-    }, i18n('settings'))
+    }, [m('span.fa.fa-cog'), i18n('settings')])
   ];
 
   return links;

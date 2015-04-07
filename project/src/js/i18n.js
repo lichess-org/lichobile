@@ -23,7 +23,9 @@ var untranslated = {
   allowAnalytics: 'Allow anonymous statistics',
   shareGame: 'Share game',
   sharePGN: 'Share PGN',
-  increment: 'Increment'
+  increment: 'Increment',
+  playOnline: 'Play online',
+  playOffline: 'Play offline'
 };
 
 var defaultCode = 'en';

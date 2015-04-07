@@ -3,12 +3,7 @@ npm-debug.log
 bin/*.mobileprovision
 bin/*.keystore
 
-app/config.xml
-app/hooks
-app/www
-app/plugins/
-app/platforms/
-!app/platforms/android/AndroidManifest.xml
+/app
 
 project/www/app.js
 project/www/index.html

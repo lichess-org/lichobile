@@ -72,6 +72,10 @@ function game(id, pov) {
   return http.request(url);
 }
 
+function featured(flip) {
+  return http.request('/tv/lichess', flip ? { data: { flip: 1 }} : {});
+}
+
 function status() {
   return http.request('/api/status', {
     background: true
@@ -107,5 +111,6 @@ module.exports = {
   lobby: lobby,
   seeks: seeks,
   game: game,
+  featured: featured,
   status: status
 };

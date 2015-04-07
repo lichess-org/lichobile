@@ -1,4 +1,5 @@
 var game = require('./ui/game');
+var tv = require('./ui/tv');
 var seek = require('./ui/seek');
 var seeks = require('./ui/seeks');
 var otb = require('./ui/otb');
@@ -16,6 +17,7 @@ module.exports.init = function() {
     '/ai': ai,
     '/game/:id': game,
     '/game/:id/:pov': game,
+    '/tv': tv,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes

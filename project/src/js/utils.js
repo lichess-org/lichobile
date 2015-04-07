@@ -105,4 +105,8 @@ utils.tupleOf = function(x) {
   return [x.toString(), x.toString()];
 };
 
+utils.oppositeColor = function(color) {
+  return color === 'white' ? 'black' : 'white';
+};
+
 module.exports = utils;

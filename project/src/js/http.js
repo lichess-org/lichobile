@@ -1,4 +1,4 @@
-var assign = require('lodash-node/modern/objects/merge');
+var merge = require('lodash-node/modern/objects/merge');
 var Spinner = require('spin.js');
 var spinner = new Spinner();
 
@@ -41,20 +41,17 @@ function extract(xhr) {
   return xhr.responseText.length === 0 ? null : xhr.responseText;
 }
 
-function uncache(url) {
-  return url + '?_=' + new Date().getTime();
-}
-
 // convenient wrapper around m.request
 http.request = function(url, opts, feedback) {
 
   var cfg = {
-    url: uncache(baseUrl + url),
+    url: baseUrl + url,
     method: 'GET',
+    data: { '_': Date.now() },
     config: xhrConfig,
     extract: extract
   };
-  assign(cfg, opts);
+  merge(cfg, opts);
 
   var promise = m.request(cfg);
 

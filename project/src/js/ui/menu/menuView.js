@@ -96,34 +96,41 @@ function renderHeader(user) {
 
 function renderLinks(user) {
   var links = [
-    utils.hasNetwork() ? m('li.sep_link', i18n('playOnline')) : null,
+    utils.hasNetwork() ? m('li.sep_link', {
+      key: 'sep_link_online'
+    }, i18n('playOnline')) : null,
     utils.hasNetwork() ? m('li.side_link', {
-      key: 'menu_play_real_time',
+      key: 'play_real_time',
       config: helper.ontouchendScrollY(menu.openLink(newGameForm.openRealTime))
     }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]) : null,
     (utils.hasNetwork() && user) ? m('li.side_link', {
-      key: 'menu_seeks',
+      key: 'seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
     }, [m('span.fa.fa-paper-plane'), i18n('correspondence')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
-      key: 'menu_invite_friend',
+      key: 'invite_friend',
       config: helper.ontouchendScrollY(menu.openLink(inviteForm.open))
     }, [m('span.fa.fa-share-alt'), i18n('playWithAFriend')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
+      key: 'tv',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/tv'))
     }, [m('span[data-icon=1]'), i18n('watchLichessTV')]) : null,
-    m('li.sep_link', i18n('playOffline')),
+    m('li.sep_link', {
+      key: 'sep_link_offline'
+    }, i18n('playOffline')),
     m('li.side_link', {
-      key: 'menu_play_ai',
+      key: 'play_ai',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/ai'))
     }, [m('span.fa.fa-cogs'), i18n('playOfflineComputer')]),
     m('li.side_link', {
-      key: 'menu_play_otb',
+      key: 'play_otb',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
     }, [m('span.fa.fa-th'), i18n('playOnTheBoardOffline')]),
-    m('hr'),
+    m('li.hr', {
+      key: 'sep_link_settings'
+    }),
     m('li.side_link', {
-      key: 'menu_settings',
+      key: 'settings',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/settings'))
     }, [m('span.fa.fa-cog'), i18n('settings')])
   ];

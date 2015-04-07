@@ -11,7 +11,7 @@ module.exports = {
 
   renderRadio: function(label, name, value, settingsProp) {
     var isOn = settingsProp() === value;
-    var id = name + value;
+    var id = name + '_' + value;
     return [
       m('input.radio[type=radio]', {
         name: name,

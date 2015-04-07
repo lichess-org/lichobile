@@ -27,12 +27,9 @@ function renderBody() {
       }
     }, [
       m('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(function(t) {
-        return m('li.list_item', {}, [
-          formWidgets.renderRadio(t, 'piece_theme', t, settings.general.theme.piece),
-          m('div.piece_icon.vertical_align', {
-            className: t
-          })
-        ]);
+        return m('li.list_item.piece_theme', {
+          className: t
+        }, formWidgets.renderRadio(t, 'piece_theme', t, settings.general.theme.piece));
       }))
     ])
   ];

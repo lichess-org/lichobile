@@ -28,10 +28,6 @@
     height 100%
     text-transform capitalize
 
-#pieceThemes
-  .list_item
-    line-height 60px
-
 .app_version
   padding 10px 15px
   font-size 0.75em
@@ -68,20 +64,25 @@
   &.metal
     background-image url('../../images/board/metal.jpg')
 
-.piece_icon
-  width 60px
-  height 60px
-  position absolute
-  right 15px
-  background-size cover
+.list_item.piece_theme
+  line-height 60px
+  > label
+    background-repeat no-repeat
+    background-position right 10px center
+    background-size 60px 60px
   &.merida
-    background-image url('../../images/pieces/merida/wN.svg')
+    > label
+      background-image url('../../images/pieces/merida/wN.svg')
   &.cburnett
-    background-image url('../../images/pieces/cburnett/wN.svg')
+    > label
+      background-image url('../../images/pieces/cburnett/wN.svg')
   &.pirouetti
-    background-image url('../../images/pieces/pirouetti/wN.svg')
+    > label
+      background-image url('../../images/pieces/pirouetti/wN.svg')
   &.alpha
-    background-image url('../../images/pieces/alpha/wN.svg')
+    > label
+      background-image url('../../images/pieces/alpha/wN.svg')
   &.spatial
-    background-image url('../../images/pieces/spatial/wN.svg')
+    > label
+      background-image url('../../images/pieces/spatial/wN.svg')
 

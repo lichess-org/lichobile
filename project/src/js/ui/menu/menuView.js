@@ -125,7 +125,7 @@ function renderLinks(user) {
     m('li.side_link', {
       key: 'play_otb',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
-    }, [m('span.fa.fa-th'), i18n('playOnTheBoardOffline')]),
+    }, [m('span.fa.fa-hand-o-right'), i18n('playOnTheBoardOffline')]),
     m('li.hr', {
       key: 'sep_link_settings'
     }),

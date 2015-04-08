@@ -66,23 +66,23 @@ function renderHeader(user) {
   return header;
 }
 
-function renderProfile(ctrl) {
-  var user = ctrl.getUserData();
-  console.log(JSON.stringify(user));
-
+function renderProfile(user) {
   return function() {
-    m('')
-  };
-
+    return [
+      m('div#user_profile',
+        m('header.user_profile_header', renderHeader(user))
+      )
+    ];  
+  }
 }
   
 module.exports = function(ctrl) {
   var user = ctrl.getUserData();
   var header = utils.partialf(widgets.header, null,
-      widgets.backButton(user.username)
+      widgets.backButton(user.username ? user.username : '')
     );
 
-  var profile = renderProfile(ctrl);
+  var profile = renderProfile(user);
 
   return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
 };

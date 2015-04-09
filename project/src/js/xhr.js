@@ -54,6 +54,10 @@ function inviteFriend() {
   }, true);
 }
 
+function cancelInvite(id) {
+  return http.request('/' + id + '/cancel');
+}
+
 function joinUrlChallenge(id) {
   return http.request('/' + id + '/join', { method: 'POST' }, true);
 }

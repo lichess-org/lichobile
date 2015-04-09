@@ -142,7 +142,7 @@ function renderGameEndedActions(ctrl) {
 }
 
 function gameInfos(data) {
-  var time = utils.gameTime(data);
+  var time = game.time(data);
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];

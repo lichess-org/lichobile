@@ -63,16 +63,6 @@ utils.playerName = function(player, withRating) {
   return 'Anonymous';
 };
 
-utils.gameTime = function(gameData) {
-  if (gameData.clock)
-    return utils.secondsToMinutes(gameData.clock.initial).toString() + '+' +
-      gameData.clock.increment;
-  else if (gameData.correspondence)
-    return i18n('nbDays', gameData.correspondence.daysPerTurn);
-  else
-    return '∞';
-};
-
 utils.backHistory = function() {
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();

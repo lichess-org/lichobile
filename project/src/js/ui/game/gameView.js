@@ -1,5 +1,6 @@
 var session = require('../../session');
 var roundView = require('../round/view/roundView');
+var game = require('../../lichess/game');
 var gamesMenu = require('../gamesMenu');
 var loginModal = require('../loginModal');
 var layout = require('../layout');
@@ -47,7 +48,7 @@ function joinOverlay(ctrl) {
       opp ? opp.username : 'Anonymous',
       m('div.infos', [
         m('p.explanation', data.game.variant.name + ', ' + mode),
-        m('p.time[data-icon=p]', utils.gameTime(data)),
+        m('p.time[data-icon=p]', game.time(data)),
         m('br'),
         joinDom
       ]),

@@ -1,4 +1,6 @@
 var gameStatus = require('./status');
+var utils = require('../utils');
+var i18n = require('../i18n');
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
@@ -101,6 +103,16 @@ function result(data) {
   return '*';
 }
 
+function time(data) {
+  if (data.clock)
+    return utils.secondsToMinutes(data.clock.initial).toString() + '+' +
+      data.clock.increment;
+  else if (data.correspondence)
+    return i18n('nbDays', data.correspondence.daysPerTurn);
+  else
+    return '∞';
+}
+
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
   isPlayerTurn: isPlayerTurn,
@@ -118,5 +130,6 @@ module.exports = {
   nbMoves: nbMoves,
   setOnGame: setOnGame,
   setIsGone: setIsGone,
-  result: result
+  result: result,
+  time: time
 };

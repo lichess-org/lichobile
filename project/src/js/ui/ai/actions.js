@@ -12,7 +12,7 @@ function renderEnded(ctrl) {
   if (sit && sit.checkmate) {
     var result = sit.turnColor === 'white' ? '0-1' : '1-0';
     var status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
-    return m('div.result', [result, m('br'), m('br'), status]);
+    return m('div.result', [result, m('br'), m('br'), m('div.status', status)]);
   }
 }
 

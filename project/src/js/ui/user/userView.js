@@ -56,10 +56,14 @@ function openPerfs(user) {
 }
 
 function renderHeader(user) {
+  var fullname = user.profile.firstName + ' ' + user.profile.lastName;
+
   var header = [
+    m('div.logo'),
     m('h2', user.username),
+    m('h1', fullname),
     m('section', {
-      className: 'ratings open',
+      className: 'ratings',
     }, openPerfs(user))
   ];
   

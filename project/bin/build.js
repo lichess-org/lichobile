@@ -1,6 +1,4 @@
 var Q = require('q');
-var gulp = require('gulp');
-var buildFile = require('../gulpfile');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var fs = require('fs');

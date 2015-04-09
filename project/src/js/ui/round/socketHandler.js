@@ -1,4 +1,4 @@
-var game = require('./game');
+var game = require('../../lichess/game');
 var ground = require('./ground');
 var xhr = require('./roundXhr');
 var sound = require('../../sound');

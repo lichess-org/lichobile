@@ -1,5 +1,5 @@
 var chessground = require('chessground');
-var game = require('./game');
+var game = require('../../lichess/game');
 var settings = require('../../settings');
 
 function str2move(m) {

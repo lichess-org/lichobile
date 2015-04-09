@@ -1,5 +1,5 @@
-var game = require('../game');
-var gameStatus = require('../status');
+var game = require('../../../lichess/game');
+var gameStatus = require('../../../lichess/status');
 var helper = require('../../helper');
 var throttle = require('lodash-node/modern/functions/throttle');
 var i18n = require('../../../i18n');

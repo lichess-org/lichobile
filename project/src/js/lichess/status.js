@@ -1,6 +1,6 @@
 // https://github.com/ornicar/scalachess/blob/master/src/main/scala/Status.scala
 
-var i18n = require('../../i18n');
+var i18n = require('../i18n');
 
 var ids = {
   created: 10,

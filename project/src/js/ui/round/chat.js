@@ -2,7 +2,7 @@ var helper = require('../helper');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
-var game = require('./game');
+var game = require('../../lichess/game');
 var backbutton = require('../../backbutton');
 
 module.exports = {

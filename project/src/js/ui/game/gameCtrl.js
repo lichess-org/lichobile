@@ -3,17 +3,22 @@ var utils = require('../../utils');
 var xhr = require('../../xhr');
 var storage = require('../../storage');
 var roundCtrl = require('../round/roundCtrl');
+var gameStatus = require('../../lichess/status');
 
 module.exports = function() {
+  var awaiting = false;
   var joinable = false;
   var gameData;
   var round;
 
   xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
     gameData = data;
-    if (data.game.joinable) {
+    if (data.game.joinable)
       joinable = true;
-    } else {
+    // status created means waiting for friend to join game invit
+    else if (data.game.status.id === gameStatus.ids.created)
+      awaiting = true;
+    else {
       if (session.isConnected()) session.refresh();
       round = new roundCtrl(data);
       if (data.player.user === undefined)
@@ -36,6 +41,9 @@ module.exports = function() {
     },
     isJoinable: function() {
       return joinable;
+    },
+    isAwaiting: function() {
+      return awaiting;
     },
     joinUrlChallenge: function(id) {
       xhr.joinUrlChallenge(id).then(function(data) {

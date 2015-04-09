@@ -21,7 +21,7 @@ var untranslated = {
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
   allowAnalytics: 'Allow anonymous statistics',
-  shareGame: 'Share game',
+  shareGameURL: 'Share game URL',
   sharePGN: 'Share PGN',
   increment: 'Increment',
   playOnline: 'Play online',

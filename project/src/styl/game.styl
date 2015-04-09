@@ -167,7 +167,7 @@
     text-align center
     margin 1em 0
 
-.join_url_challenge
+.join_url_challenge, .await_url_challenge
   .infos
     padding 10px
     text-align center
@@ -184,5 +184,16 @@
       &[data-icon=E]
         background #C4A86F
         color #FFF
-    &.active
-      background lighten(#C4A86F, 10%)
+        padding 0 5px
+        &.active
+          background lighten(#C4A86F, 10%)
+
+.lichess_game_url
+  margin 10px 0;
+  width: 95%
+  text-align: center;
+  font-size: 0.7em;
+  padding: 10px
+  background: #eee;
+  font-family: Cousine;
+  border: 1px solid #ccc;

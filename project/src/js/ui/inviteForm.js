@@ -25,7 +25,6 @@ inviteForm.close = function(fromBB) {
 
 function invite() {
   return xhr.inviteFriend().then(function(data) {
-    console.log(data);
     m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);

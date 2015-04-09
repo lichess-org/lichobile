@@ -113,6 +113,10 @@ function time(data) {
     return '∞';
 }
 
+function publicUrl(data) {
+  return 'http://lichess.org/' + data.game.id;
+}
+
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
   isPlayerTurn: isPlayerTurn,
@@ -131,5 +135,6 @@ module.exports = {
   setOnGame: setOnGame,
   setIsGone: setIsGone,
   result: result,
-  time: time
+  time: time,
+  publicUrl: publicUrl
 };

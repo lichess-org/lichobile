@@ -13,8 +13,6 @@ var popupWidget = require('../widget/popup');
 var i18n = require('../../i18n');
 
 function joinOverlay(ctrl) {
-  if (!ctrl.isJoinable()) return;
-
   var data = ctrl.getData();
   var opp = data.opponent.user;
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
@@ -57,12 +55,46 @@ function joinOverlay(ctrl) {
   };
 }
 
+function awaitOverlay(ctrl) {
+  var data = ctrl.getData();
+  var mode = data.game.rated ? i18n('rated') : i18n('casual');
+
+  return function() {
+    return popupWidget(
+      'await_url_challenge',
+      null,
+      m('div.infos', [
+        m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
+        m('input.lichess_game_url', {
+          value: game.publicUrl(data),
+          readonly: true
+        }),
+        m('p.explanation', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
+        m('div.go_or_cancel', [
+          m('button.binany_choice[data-icon=E]', {
+            config: helper.ontouchend(function() {
+              window.plugins.socialsharing.share(null, null, null, game.publicUrl(data));
+            })
+          }, i18n('shareGameURL')),
+          m('button.binany_choice[data-icon=L]', {
+            config: helper.ontouchend(utils.backHistory)
+          }, i18n('cancel'))
+        ]),
+        m('br'),
+        m('p.explanation', data.game.variant.name + ', ' + mode),
+        m('p.time[data-icon=p]', game.time(data))
+      ]),
+      true
+    );
+  };
+}
+
 module.exports = function(ctrl) {
   if (ctrl.getRound()) return roundView(ctrl.getRound());
 
   var theme = settings.general.theme;
   var pov = gamesMenu.lastJoined;
-  var header, board;
+  var header, board, overlay;
 
   if (pov) {
     header = widgets.connectingHeader;
@@ -73,7 +105,8 @@ module.exports = function(ctrl) {
     board = widgets.board;
   }
 
-  var overlay = joinOverlay(ctrl);
+  if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
+  else if (ctrl.isAwaiting()) overlay = awaitOverlay(ctrl);
 
   return layout.board(header, board, widgets.empty, menu.view, overlay,
     pov ? pov.color : null);

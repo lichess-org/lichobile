@@ -11,6 +11,7 @@ var helper = require('../helper');
 var widgets = require('../widget/common');
 var popupWidget = require('../widget/popup');
 var i18n = require('../../i18n');
+var xhr = require('../../xhr');
 
 function joinOverlay(ctrl) {
   var data = ctrl.getData();
@@ -77,7 +78,10 @@ function awaitOverlay(ctrl) {
             })
           }, i18n('shareGameURL')),
           m('button.binany_choice[data-icon=L]', {
-            config: helper.ontouchend(utils.backHistory)
+            config: helper.ontouchend(function() {
+              xhr.cancelInvite(data.url.round);
+              utils.backHistory();
+            })
           }, i18n('cancel'))
         ]),
         m('br'),

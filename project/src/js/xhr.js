@@ -54,6 +54,10 @@ function inviteFriend() {
   }, true);
 }
 
+function cancelInvite(url) {
+  return http.request(url + '/cancel');
+}
+
 function joinUrlChallenge(id) {
   return http.request('/' + id + '/join', { method: 'POST' }, true);
 }
@@ -107,6 +111,7 @@ module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
   inviteFriend: inviteFriend,
+  cancelInvite: cancelInvite,
   joinUrlChallenge: joinUrlChallenge,
   lobby: lobby,
   seeks: seeks,

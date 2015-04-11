@@ -142,13 +142,15 @@
     &.draw-yes:before
       display inline-block
       transform rotate(-90deg)
-  .negotiation
+  .negotiation, .force_resign_zone
     text-align center
+    padding 0 10px
+    margin 10px 0
+    color #C4A86F
   .answers, .force_resign_zone
     margin-top 5px
-    color #C4A86F
   .notice
-    padding 0 10px
+    margin 5px 0
 
 .offline_actions
   .action
@@ -180,7 +182,7 @@
   .error
     font-size 0.9em
   button
-    &.binany_choice
+    &.binary_choice
       &[data-icon=E]
         background #C4A86F
         color #FFF

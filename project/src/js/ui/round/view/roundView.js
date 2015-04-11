@@ -111,17 +111,7 @@ function renderGameRunningActions(ctrl) {
 }
 
 function renderGameEndedActions(ctrl) {
-  var result;
-  if (gameStatus.finished(ctrl.data)) switch (ctrl.data.game.winner) {
-    case 'white':
-      result = '1-0';
-      break;
-    case 'black':
-      result = '0-1';
-      break;
-    default:
-      result = '½-½';
-  }
+  var result = game.result(ctrl.data);
   var winner = game.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');

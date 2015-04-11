@@ -29,12 +29,12 @@ module.exports = {
   },
   forceResign: function(ctrl) {
     return game.forceResignable(ctrl.data) ?
-      m('div.force_resign_zone', [
+      m('div.force_resign_zone.clearfix', [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
-        m('button.binany_choice[data-icon=E]', {
+        m('button.binary_choice[data-icon=E]', {
           config: helper.ontouchend(function() { ctrl.socket.send('resign-force'); }),
         }, i18n('forceResignation')),
-        m('button.binany_choice[data-icon=E]', {
+        m('button.binary_choice[data-icon=E]', {
           config: helper.ontouchend(function() { ctrl.socket.send('draw-force'); }),
         }, i18n('forceDraw'))
       ]) : null;
@@ -57,12 +57,12 @@ module.exports = {
     ]);
   },
   answerOpponentDrawOffer: function(ctrl) {
-    if (ctrl.data.opponent.offeringDraw) return m('div.negotiation', [
+    if (ctrl.data.opponent.offeringDraw) return m('div.negotiation.clearfix', [
       m('div.notice', i18n('yourOpponentOffersADraw')),
-      m('button.binany_choice[data-icon=E]', {
+      m('button.binary_choice[data-icon=E]', {
         config: helper.ontouchend(function() { ctrl.socket.send('draw-yes'); })
       }, i18n('accept')),
-      m('button.binany_choice[data-icon=L]', {
+      m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('draw-no'); })
       }, i18n('decline')),
     ]);
@@ -76,12 +76,12 @@ module.exports = {
     ]);
   },
   answerOpponentTakebackProposition: function(ctrl) {
-    if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation', [
+    if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation.clearfix', [
       m('div.notice', i18n('yourOpponentProposesATakeback')),
-      m('button.binany_choice[data-icon=E]', {
+      m('button.binary_choice[data-icon=E]', {
         config: helper.ontouchend(function() { ctrl.socket.send('takeback-yes'); })
       }, i18n('accept')),
-      m('button.binany_choice[data-icon=L]', {
+      m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('takeback-no'); })
       }, i18n('decline')),
     ]);
@@ -100,24 +100,24 @@ module.exports = {
     }
   },
   answerOpponentRematch: function(ctrl) {
-    if (ctrl.data.opponent.offeringRematch) return [
+    if (ctrl.data.opponent.offeringRematch) return m('div.negotiation.clearfix', [
       m('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
-      m('button.binany_choice[data-icon=E]', {
+      m('button.binary_choice[data-icon=E]', {
         config: helper.ontouchend(function() { ctrl.socket.send('rematch-yes'); })
       }, i18n('joinTheGame')),
-      m('button.binany_choice[data-icon=L]', {
+      m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('rematch-no'); })
       }, i18n('declineInvitation'))
-    ];
+    ]);
   },
   cancelRematch: function(ctrl) {
-    if (ctrl.data.player.offeringRematch) return [
+    if (ctrl.data.player.offeringRematch) return m('div.negotiation', [
       m('div.notice', i18n('rematchOfferSent')),
-      i18n('waitingForOpponent'),
+      m('div.notice', i18n('waitingForOpponent')),
       m('button[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('rematch-no'); })
       }, i18n('cancelRematchOffer'))
-    ];
+    ]);
   },
   moretime: function(ctrl) {
     if (game.moretimeable(ctrl.data)) return m('button[data-icon=O]', {

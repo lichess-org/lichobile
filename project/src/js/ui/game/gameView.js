@@ -22,20 +22,20 @@ function joinOverlay(ctrl) {
     joinDom = m('div.error', [
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
       m('div.go_or_cancel', [
-        m('button.binany_choice[data-icon=E]', {
+        m('button.binary_choice[data-icon=E]', {
           config: helper.ontouchend(loginModal.open)
         }, i18n('signIn')),
-        m('button.binany_choice[data-icon=L]', {
+        m('button.binary_choice[data-icon=L]', {
           config: helper.ontouchend(utils.backHistory)
         }, i18n('cancel'))
       ])
     ]);
   } else {
     joinDom = m('div.go_or_cancel', [
-      m('button.binany_choice[data-icon=E]', {
+      m('button.binary_choice[data-icon=E]', {
           config: helper.ontouchend(utils.f(ctrl.joinUrlChallenge, data.game.id))
       }, i18n('join')),
-      m('button.binany_choice[data-icon=L]', {
+      m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(utils.backHistory)
       }, i18n('cancel'))
     ]);
@@ -70,14 +70,14 @@ function awaitOverlay(ctrl) {
           value: game.publicUrl(data),
           readonly: true
         }),
-        m('p.explanation', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
-        m('div.go_or_cancel', [
-          m('button.binany_choice[data-icon=E]', {
+        m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
+        m('div.go_or_cancel.clearfix', [
+          m('button.binary_choice[data-icon=E]', {
             config: helper.ontouchend(function() {
               window.plugins.socialsharing.share(null, null, null, game.publicUrl(data));
             })
           }, i18n('shareGameURL')),
-          m('button.binany_choice[data-icon=L]', {
+          m('button.binary_choice[data-icon=L]', {
             config: helper.ontouchend(function() {
               xhr.cancelInvite(data.url.round);
               utils.backHistory();
@@ -85,8 +85,8 @@ function awaitOverlay(ctrl) {
           }, i18n('cancel'))
         ]),
         m('br'),
-        m('p.explanation', data.game.variant.name + ', ' + mode),
-        m('p.time[data-icon=p]', game.time(data))
+        m('p.explanation.small', data.game.variant.name + ', ' + mode),
+        m('p.time.small[data-icon=p]', game.time(data))
       ]),
       true
     );

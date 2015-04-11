@@ -12,7 +12,14 @@ var w, // watchify instance
   stylWatcher,
   srcFolder = path.join(__dirname, '../src'), // sources folder
   assetsDest = path.join(__dirname, '../www'), // public assets destinations
-  stylesPaths = [srcFolder + '/styl/reset.styl', srcFolder + '/styl/common.styl', srcFolder + '/styl/*.styl'],
+  stylesPaths = [
+    srcFolder + '/styl/reset.styl',
+    srcFolder + '/styl/common.styl',
+    srcFolder + '/styl/form.styl',
+    srcFolder + '/styl/overlay.styl',
+    srcFolder + '/styl/overlay-popup.styl',
+    srcFolder + '/styl/*.styl'
+  ],
   bundledJS = assetsDest + '/app.js';
 
 function log(o) {

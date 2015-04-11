@@ -21,11 +21,10 @@ module.exports = {
   },
   shareLink: function(ctrl) {
     return m('button', {
-      className: 'fa fa-share-alt',
       config: helper.ontouchend(function() {
         window.plugins.socialsharing.share(null, null, null, game.publicUrl(ctrl.data));
       })
-    }, i18n('shareGameURL'));
+    }, [m('span.fa.fa-share-alt'), i18n('shareGameURL')]);
   },
   forceResign: function(ctrl) {
     return game.forceResignable(ctrl.data) ?

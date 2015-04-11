@@ -15,9 +15,9 @@ widgets.menuButton = function() {
 };
 
 widgets.backButton = function(title) {
-  return m('button.fa.fa-arrow-left.back_button', {
+  return m('button.back_button', {
     config: helper.ontouchend(utils.backHistory)
-  }, title);
+  }, [m('span.fa.fa-arrow-left'), title]);
 };
 
 widgets.gameButton = function() {

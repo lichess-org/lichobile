@@ -25,7 +25,8 @@ var untranslated = {
   sharePGN: 'Share PGN',
   increment: 'Increment',
   playOnline: 'Play online',
-  playOffline: 'Play offline'
+  playOffline: 'Play offline',
+  correspondenceGames: 'Correspondence games'
 };
 
 var defaultCode = 'en';

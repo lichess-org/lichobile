@@ -106,7 +106,7 @@ function renderLinks(user) {
     (utils.hasNetwork() && user) ? m('li.side_link', {
       key: 'seeks',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/seeks'))
-    }, [m('span.fa.fa-paper-plane'), i18n('correspondence')]) : null,
+    }, [m('span.fa.fa-paper-plane'), i18n('correspondenceGames')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
       key: 'invite_friend',
       config: helper.ontouchendScrollY(menu.openLink(inviteForm.open))

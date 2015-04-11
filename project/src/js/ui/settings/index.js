@@ -14,7 +14,7 @@ function renderBody() {
         settings.general.animations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
         settings.general.pieceDestinations)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('toggleSound'), 'sound', settings.general.sound)),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics)),
       m('li.list_item.nav', {
         config: helper.ontouchendScrollY(utils.f(m.route, '/settings/themes/board'))

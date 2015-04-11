@@ -20,7 +20,7 @@ var atomic = require('./atomic');
 var backbutton = require('../../backbutton');
 var helper = require('../helper');
 
-module.exports = function(cfg) {
+module.exports = function(cfg, onFeatured) {
 
   this.data = data(cfg);
 
@@ -35,7 +35,7 @@ module.exports = function(cfg) {
   this.socket = socket.connectGame(
     this.data.url.socket,
     this.data.player.version,
-    socketHandler(this),
+    socketHandler(this, onFeatured),
     this.data.url.round
   );
 
@@ -120,6 +120,7 @@ module.exports = function(cfg) {
   this.reload = function(cfg) {
     this.replay.onReload(cfg);
     if (this.chat) this.chat.onReload(cfg.chat);
+    if (this.data.tv) cfg.tv = true;
     this.data = data(cfg);
     makeCorrespondenceClock();
     this.setTitle();

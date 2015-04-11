@@ -6,7 +6,7 @@ var session = require('../../session');
 var utils = require('../../utils');
 var atomic = require('./atomic');
 
-module.exports = function(ctrl) {
+module.exports = function(ctrl, onFeatured) {
 
   var handlers = {
     possibleMoves: function(o) {
@@ -75,7 +75,7 @@ module.exports = function(ctrl) {
       xhr.reload(ctrl).then(ctrl.reload);
     },
     redirect: function(e) {
-      m.route('/game/' + e.id);
+      if (!ctrl.data.tv) m.route('/game/' + e.id);
     },
     resync: function() {
       xhr.reload(ctrl).then(function(data) {
@@ -118,6 +118,9 @@ module.exports = function(ctrl) {
     },
     message: function(m) {
       if (ctrl.chat) ctrl.chat.append(m);
+    },
+    featured: function(o) {
+      if (ctrl.data.tv && onFeatured) onFeatured(o);
     }
   };
 

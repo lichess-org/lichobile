@@ -129,7 +129,6 @@ module.exports = {
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],
-        ['From Position', '3'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],
         ['Antichess', '6'],

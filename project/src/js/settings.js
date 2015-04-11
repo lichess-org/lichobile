@@ -83,7 +83,7 @@ module.exports = {
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],
-        ['King of the hill', '4']
+        ['King of the Hill', '4']
       ],
       variant: localstorageprop('settings.game.ai.variant', '1'),
       availableTimeModes: [
@@ -101,7 +101,7 @@ module.exports = {
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],
-        ['King of the hill', '4'],
+        ['King of the Hill', '4'],
         ['Three-check', '5'],
         ['Antichess', '6'],
         ['Atomic', '7']

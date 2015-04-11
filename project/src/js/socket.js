@@ -2,13 +2,13 @@ var StrongSocket = require('./StrongSocket');
 var xhr = require('./xhr');
 var i18n = require('./i18n');
 
-var socketInstance;
+var gameSocket, lobbySocket;
 
 var errorDetected = false;
 
 function createGameSocket(url, version, receiveHandler, gameUrl) {
   errorDetected = false;
-  socketInstance = new StrongSocket(url, version, {
+  gameSocket = new StrongSocket(url, version, {
     options: {
       name: 'game',
       debug: window.lichess.mode !== 'prod',
@@ -32,14 +32,14 @@ function createGameSocket(url, version, receiveHandler, gameUrl) {
     receive: receiveHandler
   });
 
-  return socketInstance;
+  return gameSocket;
 }
 
 function createAwaitSocket(url, version, handlers) {
-  socketInstance = new StrongSocket(
+  gameSocket = new StrongSocket(
     url, version, {
       options: {
-        name: 'socket',
+        name: 'await',
         debug: window.lichess.mode !== 'prod',
         ignoreUnknownMessages: true,
         pingDelay: 2000
@@ -47,11 +47,11 @@ function createAwaitSocket(url, version, handlers) {
       events: handlers
     }
   );
-  return socketInstance;
+  return gameSocket;
 }
 
 function createLobbySocket(lobbyVersion, onOpen, handlers) {
-  socketInstance = new StrongSocket(
+  lobbySocket = new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
       options: {
@@ -65,15 +65,17 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
     }
   );
 
-  return socketInstance;
+  return lobbySocket;
 }
 
 function onPause() {
-  if (socketInstance) socketInstance.destroy();
+  if (gameSocket) gameSocket.destroy();
+  if (lobbySocket) lobbySocket.destroy();
 }
 
 function onResume() {
-  if (socketInstance) socketInstance.connect();
+  if (gameSocket) gameSocket.connect();
+  if (lobbySocket) lobbySocket.connect();
 }
 
 document.addEventListener('pause', onPause, false);

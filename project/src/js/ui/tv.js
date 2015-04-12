@@ -21,7 +21,6 @@ module.exports = {
         round = new roundCtrl(data, onFeatured);
       }, function(error) {
         utils.handleXhrError(error);
-        m.route('/');
       });
     }
 

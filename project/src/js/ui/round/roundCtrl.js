@@ -100,10 +100,13 @@ module.exports = function(cfg, onFeatured) {
   }.bind(this);
 
   var onMove = function(orig, dest, capturedPiece) {
-    if (!capturedPiece)
-      sound.move();
-    else if (this.data.game.variant.key === 'atomic') atomic.capture(this, dest);
-    else sound.capture();
+    if (capturedPiece) {
+      if (this.data.game.variant.key === 'atomic') {
+        atomic.capture(this, dest);
+        sound.explosion();
+      }
+      else sound.capture();
+    } else sound.move();
   }.bind(this);
 
   this.apiMove = function(o) {

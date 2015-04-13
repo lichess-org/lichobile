@@ -834,9 +834,9 @@
       }
     },
     "chessground": {
-      "version": "1.9.2",
-      "from": "git://github.com/ornicar/chessground#pureAnims",
-      "resolved": "git://github.com/ornicar/chessground#69d7ed034539fa5e84298640cfb43e67d0144873",
+      "version": "2.0.13",
+      "from": "git://github.com/ornicar/chessground#mobile",
+      "resolved": "git://github.com/ornicar/chessground#f19efa676d8f9c5b2831e71f9e04831c08200dd2",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
@@ -846,9 +846,9 @@
       }
     },
     "chessli.js": {
-      "version": "1.0.1",
-      "from": "https://registry.npmjs.org/chessli.js/-/chessli.js-1.0.1.tgz",
-      "resolved": "https://registry.npmjs.org/chessli.js/-/chessli.js-1.0.1.tgz"
+      "version": "1.1.0",
+      "from": "git://github.com/ornicar/chess.js",
+      "resolved": "git://github.com/ornicar/chess.js#ac936ca8f119124bf6259dde36e24e1b493bf5a1"
     },
     "iscroll": {
       "version": "5.1.3",

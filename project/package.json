@@ -41,15 +41,15 @@
     "yargs": "~1.3.1"
   },
   "dependencies": {
-    "q": "1.1.2",
     "browserify": "6.3.4",
-    "chessground": "git://github.com/ornicar/chessground#pureAnims",
-    "chessli.js": "1.0.1",
+    "chessground": "git://github.com/ornicar/chessground#mobile",
+    "chessli.js": "git://github.com/ornicar/chess.js",
     "iscroll": "5.1.3",
     "lodash-node": "2.4.1",
     "mithril": "0.1.30",
     "mobile-button": "0.8.1",
     "moment": "2.8.4",
+    "q": "1.1.2",
     "signals": "1.0.0",
     "spin.js": "2.0.1",
     "zanimo": "1.1.3"

@@ -65,7 +65,7 @@ function renderAntagonist(ctrl, player, material) {
             ratingDiff(player)
           ]) : null,
           renderCheckCount(ctrl, player.color),
-          renderMaterial(material)
+          ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
         ])
       ]),
       ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (

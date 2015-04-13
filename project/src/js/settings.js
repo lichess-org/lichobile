@@ -63,7 +63,7 @@ module.exports = {
   game: {
     selected: localstorageprop('settings.game.selected', 'human'),
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck', 'atomic'
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde'
     ],
     availableTimes: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
       '20', '25', '30', '40', '60', '90', '120', '150', '180'
@@ -104,7 +104,8 @@ module.exports = {
         ['King of the Hill', '4'],
         ['Three-check', '5'],
         ['Antichess', '6'],
-        ['Atomic', '7']
+        ['Atomic', '7'],
+        ['Horde', '8']
       ],
       availableRatingRanges: {
         min: range(800, 2900, 100).map(utils.tupleOf),
@@ -132,7 +133,8 @@ module.exports = {
         ['King of the Hill', '4'],
         ['Three-check', '5'],
         ['Antichess', '6'],
-        ['Atomic', '7']
+        ['Atomic', '7'],
+        ['Horde', '8']
       ],
       color: localstorageprop('settings.game.invite.color', 'random'),
       variant: localstorageprop('settings.game.invite.variant', '1'),

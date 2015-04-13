@@ -80,7 +80,8 @@ var perfIconsMap = {
   threeCheck: '.',
   antichess: '@',
   atomic: '>',
-  puzzle: '-'
+  puzzle: '-',
+  horde: '_'
 };
 
 utils.gameIcon = function(perf) {

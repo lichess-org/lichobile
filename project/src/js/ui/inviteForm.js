@@ -1,4 +1,3 @@
-var compact = require('lodash-node/modern/arrays/compact');
 var helper = require('./helper');
 var utils = require('../utils');
 var xhr = require('../xhr');
@@ -41,11 +40,21 @@ function renderForm() {
   var hasClock = timeMode === '1';
   var hasDays = timeMode === '2';
 
-  var colors = compact([
-    ['randomColor', 'random'],
-    ['white', 'white'],
-    ['black', 'black']
-  ]);
+  // if mode is rated only allow random color for three-check, atomic, antichess
+  // horde variants
+  var colors;
+  if (settingsObj.mode() === '1' &&
+    ['5', '6', '7', '8'].indexOf(settingsObj.variant()) !== -1) {
+    settingsObj.color('random');
+    colors = [
+      ['randomColor', 'random'],
+    ];
+  } else
+    colors = [
+      ['randomColor', 'random'],
+      ['white', 'white'],
+      ['black', 'black']
+    ];
 
   var modes = session.isConnected() ? [
     ['casual', '0'],

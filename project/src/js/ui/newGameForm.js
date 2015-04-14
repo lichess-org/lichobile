@@ -1,4 +1,3 @@
-var compact = require('lodash-node/modern/arrays/compact');
 var helper = require('./helper');
 var utils = require('../utils');
 var xhr = require('../xhr');
@@ -75,11 +74,11 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 
   // AI only
   if (settingsObj.color) {
-    var colors = compact([
+    var colors = [
       ['randomColor', 'random'],
       ['white', 'white'],
       ['black', 'black']
-    ]);
+    ];
     generalFieldset.unshift(
       m('div.select_input', {
         key: formName + 'color'

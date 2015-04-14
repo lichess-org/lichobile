@@ -139,9 +139,10 @@ seeks.view = function(ctrl) {
           }
           context.scroller.refresh();
         }
-      }, [
-        m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))),
-      ]),
+      }, ctrl.getPool().length ?
+        m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))) :
+        m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
+      ),
       m('button#newGameCorres', {
         key: 'seeks_createagame',
         config: helper.ontouchend(newGameForm.openCorrespondence)

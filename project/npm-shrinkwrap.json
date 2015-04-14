@@ -847,8 +847,8 @@
     },
     "chessli.js": {
       "version": "1.1.0",
-      "from": "git://github.com/ornicar/chess.js",
-      "resolved": "git://github.com/ornicar/chess.js#ac936ca8f119124bf6259dde36e24e1b493bf5a1"
+      "from": "chessli.js@1.1.0",
+      "resolved": "https://registry.npmjs.org/chessli.js/-/chessli.js-1.1.0.tgz"
     },
     "iscroll": {
       "version": "5.1.3",

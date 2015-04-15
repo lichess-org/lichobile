@@ -107,6 +107,15 @@ function status() {
   });
 }
 
+function friends() {
+  return http.request('/');
+}
+
+function user(id) {
+  var url = '/api/user/' + id;
+  return http.request(url);
+}
+
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
@@ -117,5 +126,8 @@ module.exports = {
   seeks: seeks,
   game: game,
   featured: featured,
-  status: status
+  status: status,
+  status: status,
+  friends: friends,
+  user: user
 };

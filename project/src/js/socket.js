@@ -68,6 +68,23 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
   return socketInstance;
 }
 
+function createSocket(onOpen, handlers) {
+  socketInstance = new StrongSocket(
+    '/socket',
+    0, {
+      options: {
+        name: 'socket',
+        debug: window.lichess.mode !== 'prod',
+        pingDelay: 2000,
+        onOpen: onOpen
+      },
+      events: handlers
+    }
+  );
+
+  return socketInstance;
+}
+
 function onPause() {
   if (socketInstance) socketInstance.destroy();
 }
@@ -82,5 +99,6 @@ document.addEventListener('resume', onResume, false);
 module.exports = {
   connectGame: createGameSocket,
   connectLobby: createLobbySocket,
-  await: createAwaitSocket
+  await: createAwaitSocket,
+  connectSocket: createSocket
 };

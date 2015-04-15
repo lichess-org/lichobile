@@ -7,6 +7,8 @@ var ai = require('./ui/ai');
 var settingsUi = require('./ui/settings');
 var boardThemes = require('./ui/settings/boardThemes');
 var pieceThemes = require('./ui/settings/pieceThemes');
+var friends = require('./ui/friends');
+var user = require('./ui/user');
 
 module.exports.init = function() {
   m.route(document.body, '/', {
@@ -20,6 +22,8 @@ module.exports.init = function() {
     '/tv': tv,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
-    '/settings/themes/piece': pieceThemes
+    '/settings/themes/piece': pieceThemes,
+    '/friends': friends,
+    '/@/:id': user
   });
 };

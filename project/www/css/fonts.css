@@ -57,3 +57,17 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/NotoSans.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/NotoSans-Bold.ttf) format('truetype');
+}

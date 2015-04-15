@@ -1,8 +1,6 @@
 var utils = require('../../utils');
 var xhr = require('../../xhr');
-var helper = require('../helper')
-
-var userData = null;
+var helper = require('../helper');
 
 module.exports = function() {
 

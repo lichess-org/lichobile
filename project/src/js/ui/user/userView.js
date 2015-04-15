@@ -1,92 +1,44 @@
 var utils = require('../../utils');
 var widgets = require('../widget/common');
+var perf = require('../widget/perf');
 var layout = require('../layout');
 var menu = require('../menu');
-var helper = require('../helper');
-
-var perfTypes = [
-  ['bullet', 'Bullet'],
-  ['chess960', 'Chess960'],
-  ['blitz', 'Blitz'],
-  ['kingOfTheHill', 'King Of The Hill'],
-  ['classical', 'Classical'],
-  ['threeCheck', 'Three-check'],
-  ['correspondence', 'Correspondence'],
-  ['antichess', 'Antichess'],
-  ['atomic', 'Atomic']
-];
-
-function renderPerf(key, name, perf) {
-  return m('div.perf', {
-    'data-icon': utils.gameIcon(key)
-  }, [
-    m('span.name', name),
-    m('div.rating', [
-      perf.rating,
-      helper.progress(perf.prog),
-      m('span.nb', '/ ' + perf.games)
-    ])
-  ]);
-}
-
-function perfs(user) {
-  var res = perfTypes.map(function(p) {
-    var perf = user.perfs[p[0]];
-    if (perf) return {
-      key: p[0],
-      name: p[1],
-      perf: perf
-    };
-  }).sort(function(a, b) {
-    return a.perf.games < b.perf.games;
-  });
-  if (user.perfs.puzzle) res.push({
-    key: 'puzzle',
-    name: 'Training',
-    perf: user.perfs.puzzle
-  });
-
-  return res;
-}
-
-function openPerfs(user) {
-  return perfs(user).map(function(p) {
-    return renderPerf(p.key, p.name, p.perf);
-  });
-}
 
 function renderHeader(user) {
   var fullname = user.profile.firstName + ' ' + user.profile.lastName;
 
   var header = [
-    m('div.logo'),
     m('h2', user.username),
-    m('h1', fullname),
-    m('section', {
-      className: 'ratings',
-    }, openPerfs(user))
+    m('div.profile_bio', [
+      m('h3.fullname', fullname),
+      m('p.bio', m('em', user.profile.bio)),
+      m('p.location', user.profile.location)
+    ])
   ];
-  
+
   return header;
 }
 
-function renderProfile(user) {
-  return function() {
-    return [
-      m('div#user_profile',
-        m('header.user_profile_header', renderHeader(user))
-      )
-    ];  
-  }
+function renderRatings(user) {
+  return utils.userPerfs(user).map(function(p) {
+    return perf(p.key, p.name, p.perf);
+  });
 }
-  
+
 module.exports = function(ctrl) {
   var user = ctrl.getUserData();
   var header = utils.partialf(widgets.header, null,
       widgets.backButton(user.username ? user.username : '')
     );
 
-  var profile = renderProfile(user);
+  var profile = function() {
+    return [
+      m('div#user_profile',
+        m('header.user_profile_header', renderHeader(user)),
+        m('section.ratings.profile', renderRatings(user))
+      )
+    ];
+  };
 
   return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
 };

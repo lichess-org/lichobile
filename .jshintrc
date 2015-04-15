@@ -5,7 +5,6 @@
     "document": true,
     "m": true
   },
-  "indent": 2,
   "node": true,
   "bitwise": true,
   "camelcase": true,

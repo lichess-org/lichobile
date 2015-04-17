@@ -1,25 +1,4 @@
 @font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/Montserrat.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 700;
-  src: url('../fonts/Montserrat-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 100;
-  src: url('../fonts/Montserrat-Light.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Cousine';
   font-style: normal;
   font-weight: 400;

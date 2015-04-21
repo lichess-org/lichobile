@@ -14,7 +14,7 @@ module.exports = {
     helper.analyticsTrackView('TV');
 
     function onFeatured(o) {
-      xhr.game(o.id).then(function(data) {
+      xhr.game(o.id, o.color).then(function(data) {
         m.redraw.strategy('all');
         if (round) round.onunload();
         data.tv = true;

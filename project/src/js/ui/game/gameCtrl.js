@@ -13,7 +13,7 @@ module.exports = function() {
   var round;
   var awaitSocket;
 
-  xhr.game(m.route.param('id'), m.route.param('pov')).then(function(data) {
+  xhr.game(m.route.param('id'), m.route.param('color')).then(function(data) {
     gameData = data;
     if (data.game.joinable)
       joinable = true;

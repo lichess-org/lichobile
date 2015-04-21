@@ -27,10 +27,10 @@ function main() {
     setTimeout(function() {
       var parsed = url.match(/^lichess:\/\/(\w+)\/?(black|white)?/);
       var gameId = parsed[1];
-      var pov = parsed[2];
+      var color = parsed[2];
       if (!gameId) return;
       var route = '/game/' + gameId;
-      if (pov) route += ('/' + pov);
+      if (color) route += ('/' + color);
       m.route(route);
     }, 0);
   };

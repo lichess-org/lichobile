@@ -70,9 +70,9 @@ function seeks(feedback) {
   return http.request('/lobby/seeks', null, feedback);
 }
 
-function game(id, pov) {
+function game(id, color) {
   var url = '/' + id;
-  if (pov) url += ('/' + pov);
+  if (color) url += ('/' + color);
   return http.request(url);
 }
 

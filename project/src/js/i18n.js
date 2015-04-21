@@ -7,8 +7,6 @@ var untranslated = {
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
   mustSignIn: 'You must sign in to see this.',
   mustSignInToJoin: 'You must sign in to join it.',
-  board: 'Board',
-  pieces: 'Pieces',
   boardThemeBrown: 'Brown',
   boardThemeBlue: 'Blue',
   boardThemeGreen: 'Green',
@@ -19,13 +17,7 @@ var untranslated = {
   boardThemeWood3: 'Wood 3',
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
-  boardThemeMetal: 'Metal',
-  allowAnalytics: 'Allow anonymous statistics',
-  shareGameURL: 'Share game URL',
-  sharePGN: 'Share PGN',
-  increment: 'Increment',
-  playOnline: 'Play online',
-  playOffline: 'Play offline'
+  boardThemeMetal: 'Metal'
 };
 
 var defaultCode = 'en';

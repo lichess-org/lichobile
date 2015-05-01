@@ -8,7 +8,7 @@
   "esnext": true,
   "node": true,
   "bitwise": true,
-  "camelcase": true,
+  "camelcase": false,
   "newcap": false,
   "eqeqeq": true,
   "immed": true,

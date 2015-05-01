@@ -5,10 +5,11 @@ var layout = require('../layout');
 var menu = require('../menu');
 
 function renderHeader(user) {
-  var fullname = user.profile.firstName + ' ' + user.profile.lastName;
+  var fullname = (user.profile.firstName || user.profile.lastName) ?
+    user.profile.firstName + ' ' + user.profile.lastName :
+    '';
 
   var header = [
-    m('h2', user.username),
     m('div.profile_bio', [
       m('h3.fullname', fullname),
       m('p.bio', m('em', user.profile.bio)),

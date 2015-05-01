@@ -4,31 +4,10 @@ var widgets = require('../widget/common');
 var layout = require('../layout');
 var menu = require('../menu');
 var i18n = require('../../i18n');
-var xhr = require('../../xhr');
 var socket = require('../../socket');
 var iScroll = require('iscroll');
 
 var onlineFriends = [];
-
-// scroll testing
-// var onlineFriends = [
-//   "friend1",
-//   "friend2",
-//   "friend3",
-//   "friend4",
-//   "friend5",
-//   "friend6",
-//   "friend7",
-//   "friend8",
-//   "friend9",
-//   "friend10",
-//   "friend11",
-//   "friend12",
-//   "friend13",
-//   "friend14",
-//   "friend15",
-//   "friend16",
-// ];
 
 function renderBody() {
   return [
@@ -47,16 +26,12 @@ function renderBody() {
       }
     }, [
       m('ul#friends', onlineFriends.map(function(name) {
-        // Remove prefix title if any
         var userId = utils.userFullNameToId(name);
 
         return m('li.list_item', {
           key: userId,
-          'id': userId
-          // TODO connect user route
-          // Disabling user route for now
-          // Will be branched for separate feature
-          ,config: helper.ontouchendScrollY(utils.f(m.route, '/@/' + userId))
+          'id': userId,
+          config: helper.ontouchendScrollY(utils.f(m.route, '/@/' + userId))
         }, name);
       }))
     ])
@@ -65,50 +40,47 @@ function renderBody() {
 
 module.exports = {
   controller: function() {
-	  
-    var friendsSocket;
 
-    this.scroller = null;
+    var friendsSocket;
 
     helper.analyticsTrackView('Online Friends');
 
-    var requestFriends = function() {
+    function requestFriends() {
       friendsSocket.send('following_onlines');
     }
 
-    var refreshList = function() {
+    function refreshList() {
+      m.startComputation();
       onlineFriends.sort(utils.caseInsensitiveSort);
-
-      // update view
-      m.redraw();
+      m.endComputation();
     }
 
-    xhr.friends().then(function(data) {
-      friendsSocket = socket.connectSocket(requestFriends, {
-        following_onlines: function(data) {
-          onlineFriends = data;
+    friendsSocket = socket.connectSocket(requestFriends, {
+      following_onlines: function(data) {
+        onlineFriends = data;
+        refreshList();
+      },
+      following_enters: function(name) {
+        onlineFriends.push(name);
+        refreshList();
+      },
+      following_leaves: function(name) {
+        var nameIndex = onlineFriends.indexOf(name);
+        if (nameIndex !== -1) {
+          onlineFriends.splice(nameIndex, 1);
           refreshList();
-        },
-        following_enters: function(name) {
-          onlineFriends.push(name);
-          refreshList();
-        },
-        following_leaves: function(name) {
-          var nameIndex = onlineFriends.indexOf(name);
-          if (nameIndex !== -1) {
-            onlineFriends.splice(nameIndex, 1);
-            refreshList();
-          }
         }
-      });
+      }
     });
 
-    this.onunload = function() {
-      if (friendsSocket) {
-        friendsSocket.destroy();
-        friendsSocket = null;
+    return {
+      onunload: function() {
+        if (friendsSocket) {
+          friendsSocket.destroy();
+          friendsSocket = null;
+        }
       }
-    }.bind(this);
+    };
 
   },
 

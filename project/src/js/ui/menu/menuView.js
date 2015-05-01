@@ -81,6 +81,17 @@ function renderLinks(user) {
       key: 'play_otb',
       config: helper.ontouchendScrollY(menu.menuRouteAction('/otb'))
     }, [m('span.fa.fa-beer'), i18n('playOnTheBoardOffline')]),
+    utils.hasNetwork() && user ? m('li.sep_link', {
+      key: 'sep_link_profile'
+    }, user.username) : null,
+    utils.hasNetwork() && user ? m('li.side_link', {
+      key: 'profile',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/@/' + user.id))
+    }, [m('span[data-icon=r]'), i18n('profile')]) : null,
+    utils.hasNetwork() && user ? m('li.side_link', {
+      key: 'online_friends',
+      config: helper.ontouchendScrollY(menu.menuRouteAction('/friends'))
+    }, [m('span[data-icon=f]'), i18n('onlineFriends')]) : null,
     m('li.hr', {
       key: 'sep_link_settings'
     }),

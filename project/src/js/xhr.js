@@ -107,10 +107,6 @@ function status() {
   });
 }
 
-function friends() {
-  return http.request('/');
-}
-
 function user(id) {
   var url = '/api/user/' + id;
   return http.request(url);
@@ -127,6 +123,5 @@ module.exports = {
   game: game,
   featured: featured,
   status: status,
-  friends: friends,
   user: user
 };

@@ -5,6 +5,7 @@
     "document": true,
     "m": true
   },
+  "esnext": true,
   "node": true,
   "bitwise": true,
   "camelcase": true,

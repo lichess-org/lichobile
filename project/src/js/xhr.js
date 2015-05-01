@@ -127,7 +127,6 @@ module.exports = {
   game: game,
   featured: featured,
   status: status,
-  status: status,
   friends: friends,
   user: user
 };

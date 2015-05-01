@@ -9,10 +9,10 @@ var watchify = require('watchify');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
-var concat = require('gulp-concat');
 var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
 var autoprefixer = require('gulp-autoprefixer');
+var rename = require('gulp-rename');
 
 // command line options
 var minimistOptions = {
@@ -25,7 +25,6 @@ var context = require('./' + options.env);
 context.MODE = options.mode;
 
 var paths = {
-  scripts: ['src/js/**/*.js'],
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/form.styl',
     'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl'
   ]
@@ -41,9 +40,9 @@ function buildHtml(src, dest, context) {
 function buildStyl(src, dest, mode) {
   return gulp.src(src)
     .pipe(stylus())
-    .pipe(concat('app.css'))
-    .pipe(autoprefixer())
+    .pipe(streamify(autoprefixer()))
     .pipe(gulpif(mode === 'prod', minifyCss()))
+    .pipe(rename('app.css'))
     .pipe(gulp.dest(dest + '/css/compiled/'));
 }
 
@@ -63,7 +62,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('styl', function() {
-  return buildStyl(paths.styles, 'www', options.mode);
+  return buildStyl('src/styl/index.styl', 'www', options.mode);
 });
 
 gulp.task('scripts', function() {

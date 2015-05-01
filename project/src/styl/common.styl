@@ -1,8 +1,15 @@
+/* COLORS */
+bgdark = #1c2328
+gold = #C4A86F
+textLightGray = #aeaeae
+textDarkGray = #383838
+inputbg = #e6e6e6
+
 body
   overflow hidden
   font-family 'Noto Sans'
   font-size 90%
-  background-color: #1c2328
+  background-color: bgdark
 
 h2
   text-transform uppercase
@@ -53,7 +60,7 @@ span.fa
   height 12px
 
 .loader_circles div {
-  background-color:#C4A86F;
+  background-color:gold;
   opacity: 0;
   float:left;
   height:13px;
@@ -93,7 +100,7 @@ span.fa
   &:last-child
     border-bottom none
   &.active
-    background lighten(#1c2328, 5%)
+    background lighten(bgdark, 5%)
 
 .nav:after
   content "\f054"

@@ -26,7 +26,7 @@ input[type='checkbox']:checked:before
   color #fff
   content "E"
 input[type='checkbox']:checked
-  background #C4A86F
+  background gold
 input[type='checkbox']:after
   content ''
   display inline-block
@@ -43,10 +43,10 @@ input[type='checkbox']:checked:after
 
 // select
 .select_input
-  background #e6e6e6
+  background inputbg
   height 40px
   line-height 40px
-  color #383838
+  color textDarkGray
   padding 0 10px
   font-size 0.9em
   position relative
@@ -68,7 +68,7 @@ input[type='checkbox']:checked:after
     height 40px
     line-height 40px
     font-size 0.95em
-    color #383838
+    color textDarkGray
   &.large_label select
     padding-left 150px
   label
@@ -82,8 +82,8 @@ input[type='checkbox']:checked:after
   width 50%
   label
     width 100%
-    background #e6e6e6
-    color #383838
+    background inputbg
+    color textDarkGray
     height 40px
   input.radio:empty
     display: none
@@ -103,7 +103,7 @@ input[type='checkbox']:checked:after
     text-align left
     width 2.5em
   input.radio:checked + label
-    background-color #C4A86F
+    background-color gold
     color #fff
   input.radio:checked + label:after
     display inline-block

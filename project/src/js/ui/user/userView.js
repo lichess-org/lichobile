@@ -5,6 +5,7 @@ var layout = require('../layout');
 var menu = require('../menu');
 var moment = window.moment;
 var i18n = require('../../i18n');
+var countries = require('./countries');
 
 function renderProfile(user) {
   if (user.profile) {
@@ -12,12 +13,18 @@ function renderProfile(user) {
       user.profile.firstName + ' ' + user.profile.lastName :
       '';
 
+    var country = countries[user.profile.country];
+    var location = user.profile.location;
+    var locationString = '';
+    if (location) locationString += location;
+    if (country) locationString += (location ? ', ' : '') + country;
+
     return m('div.profile', [
       m('h3.fullname', fullname),
       m('br'),
       m('p.bio', m('em', user.profile.bio)),
       m('br'),
-      m('p.location', user.profile.location + ', ' + user.profile.countryName),
+      m('p.location', locationString)
     ]);
   } else
     return null;

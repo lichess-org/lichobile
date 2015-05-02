@@ -113,6 +113,12 @@
     "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git",
     "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio.git",
-    "nl.x-services.plugins.socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git"
+    "nl.x-services.plugins.socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
+    "nl.x-services.plugins.launchmyapp": {
+      "uri": "https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git",
+      "variables": {
+        "URL_SCHEME": "lichess"
+      }
+    }
   }
 }

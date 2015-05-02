@@ -7,80 +7,67 @@
     "android@3.7.1",
     "ios@3.8.0"
   ],
+  "configurations_mixins": {
+    "default": {
+      "id": "org.lichess.mobileapp.dev",
+      "product_name": "lichess dev",
+      "product_file_name": "lichess_dev",
+      "API_END_POINT": "http://en.l.dev",
+      "SOCKET_END_POINT": "socket.en.l.dev"
+    },
+    "stage": {
+      "id": "org.lichess.mobileapp.stage",
+      "product_name": "lichess beta",
+      "product_file_name": "lichess-stage",
+      "API_END_POINT": "http://en.lichess.org",
+      "SOCKET_END_POINT": "socket.en.lichess.org",
+      "cordova": {
+        "accessOrigin": [
+          "http://en.lichess.org"
+        ]
+      }
+    },
+    "prod": {
+      "id": "org.lichess.mobileapp.official",
+      "product_name": "lichess",
+      "product_file_name": "lichess-prod",
+      "API_END_POINT": "http://en.lichess.org",
+      "SOCKET_END_POINT": "socket.en.lichess.org",
+      "GA_ID": "UA-7935029-3",
+      "version": "1.5.1",
+      "cordova": {
+        "accessOrigin": [
+          "http://en.lichess.org"
+        ]
+      }
+    }
+  },
   "configurations": {
     "ios": {
       "default": {
-        "id": "org.lichess.mobileapp.dev",
-        "product_name": "lichess dev",
-        "product_file_name": "lichess"
+        "extend": "default"
       },
       "stage": {
-        "id": "org.lichess.mobileapp.stage",
-        "product_name": "lichess beta",
-        "product_file_name": "lichess-stage",
+        "extend": "stage",
         "sign": "adhoc",
-        "release": true,
-        "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org",
-        "beta": "3",
-        "cordova": {
-          "accessOrigin": [
-            "http://en.lichess.org"
-          ]
-        }
+        "release": true
       },
       "prod": {
-        "id": "org.lichess.mobileapp.official",
-        "product_name": "lichess",
-        "product_file_name": "lichess-prod",
-        "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org",
-        "GA_ID": "UA-7935029-3",
-        "version": "1.5.1",
-        "cordova": {
-          "accessOrigin": [
-            "http://en.lichess.org"
-          ]
-        }
+        "extend": "prod"
       }
     },
     "android": {
       "default": {
-        "id": "org.lichess.mobileapp.dev",
-        "product_name": "lichess_dev",
-        "product_file_name": "lichess",
-        "API_END_POINT": "http://en.l.dev",
-        "SOCKET_END_POINT": "socket.en.l.dev"
+        "extend": "default"
       },
       "stage": {
-        "id": "org.lichess.mobileapp.stage",
-        "product_name": "lichess beta",
-        "product_file_name": "lichess-stage",
-        "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org",
-        "beta": "3",
-        "cordova": {
-          "accessOrigin": [
-            "http://en.lichess.org"
-          ]
-        }
+        "extend": "stage"
       },
       "prod": {
-        "id": "org.lichess.mobileapp",
-        "product_name": "lichess",
-        "product_file_name": "lichess-prod",
-        "API_END_POINT": "http://en.lichess.org",
-        "SOCKET_END_POINT": "socket.en.lichess.org",
-        "GA_ID": "UA-7935029-3",
-        "version": "1.5.1",
+        "extend": "prod",
         "version_code": "100510",
         "release": true,
-        "sign": "store",
-        "cordova": {
-          "accessOrigin": [
-            "http://en.lichess.org"
-          ]
-        }
+        "sign": "store"
       }
     }
   },

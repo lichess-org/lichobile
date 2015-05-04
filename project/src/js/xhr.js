@@ -112,6 +112,16 @@ function user(id) {
   return http.request(url);
 }
 
+function games(username, rated) {
+  return http.request('/api/game', {
+    method: 'GET',
+    data: {
+      username: username,
+      rated: rated
+    }
+  });
+}
+
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
@@ -123,5 +133,6 @@ module.exports = {
   game: game,
   featured: featured,
   status: status,
-  user: user
+  user: user,
+  games: games
 };

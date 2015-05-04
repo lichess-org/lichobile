@@ -29,8 +29,8 @@ function aborted(data) {
   return data.game.status.id === ids.aborted;
 }
 
-function toLabel(data) {
-  switch (data.game.status.name) {
+function toLabel(status, winner, variant) {
+  switch (status) {
     case 'started':
       return i18n('playingRightNow');
     case 'aborted':
@@ -38,11 +38,11 @@ function toLabel(data) {
     case 'mate':
       return i18n('checkmate');
     case 'resign':
-      return i18n(data.game.winner === 'white' ? 'blackResigned' : 'whiteResigned');
+      return i18n(winner === 'white' ? 'blackResigned' : 'whiteResigned');
     case 'stalemate':
       return i18n('stalemate');
     case 'timeout':
-      switch (data.game.winner) {
+      switch (winner) {
         case 'white':
           return i18n('blackLeftTheGame');
         case 'black':
@@ -56,11 +56,11 @@ function toLabel(data) {
     case 'outoftime':
       return i18n('timeOut');
     case 'noStart':
-      return (data.game.winner === 'white' ? 'Black' : 'White') + ' didn\'t move';
+      return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move';
     case 'cheat':
       return 'Cheat detected';
     case 'variantEnd':
-      switch (data.game.variant.key) {
+      switch (variant) {
         case 'kingOfTheHill':
           return 'King in the center';
         case 'threeCheck':
@@ -70,7 +70,7 @@ function toLabel(data) {
       }
       break;
     default:
-      return data.game.status.name;
+      return status;
   }
 }
 

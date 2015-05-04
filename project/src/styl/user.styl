@@ -11,7 +11,42 @@ h3.fullname
   margin 10px 0
   line-height 1.2em
 
-
 .ratings.profile
   &:after
     content none
+
+#userProfileActions
+  text-align center
+
+.profileButton
+  font-size 1.1em
+  font-weight 300
+  padding 0.6em
+  border 1px solid textLightGray
+  border-radius 4px
+  &.active
+    background gold
+    border-color gold
+    color bgdark
+
+.userGame
+  min-height 60px
+  .iconGame
+    position absolute
+    left 15px
+    top 15px
+    &:before
+      font-size 30px
+  .infos
+    padding-left 40px
+  .players
+    text-align center
+    margin-top 1em
+    > div
+      display inline-block
+      vertical-align middle
+    .swords
+      font-size 1.2em
+      margin 0 10px
+
+

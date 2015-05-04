@@ -93,10 +93,8 @@ function result(data) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0';
-      break;
     case 'black':
       return '0-1';
-      break;
     default:
       return '½-½';
   }

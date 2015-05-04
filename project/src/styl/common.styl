@@ -7,7 +7,7 @@ inputbg = #e6e6e6
 
 body
   overflow hidden
-  font-family 'Noto Sans'
+  font-family 'Open Sans'
   font-size 90%
   background-color: bgdark
 
@@ -19,6 +19,7 @@ button
   outline none
   -webkit-tap-highlight-color rgba(0,0,0,0)
   user-select none
+  background-color transparent
   &.disabled
     opacity 1
     &::before
@@ -48,6 +49,11 @@ span.fa
 
 .scroller
   overflow hidden
+
+.native_scroller
+  overflow-y auto
+  -webkit-overflow-scrolling: touch;
+  height calc(100% - 50px) // page height minus header height
 
 .vertical_align
   position relative

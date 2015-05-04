@@ -6,6 +6,7 @@ var menu = require('../menu');
 var moment = window.moment;
 var i18n = require('../../i18n');
 var countries = require('./countries');
+var helper = require('../helper');
 
 function renderProfile(user) {
   if (user.profile) {
@@ -31,7 +32,7 @@ function renderProfile(user) {
 }
 
 function renderHeader(user) {
-  var header = [
+  return [
     m('div.userInfos', [
       renderProfile(user),
       m('p.memberSince', i18n('memberSince') + ' ' + moment(user.createdAt).format('LL')),
@@ -45,29 +46,41 @@ function renderHeader(user) {
       ] : null
     ])
   ];
-
-  return header;
 }
 
 function renderRatings(user) {
-  return utils.userPerfs(user).map(function(p) {
+  return utils.userPerfs(user).map(p => {
     return perf(p.key, p.name, p.perf);
   });
 }
 
+function renderActions(user) {
+  return [
+    m('button.profileButton', {
+      config: helper.ontouchendScrollY(() => {
+        m.route('/@/' + user.username + '/games');
+      })
+    }, 'See ' + user.username + '\'s games')
+  ];
+}
+
 module.exports = function(ctrl) {
   var user = ctrl.getUserData();
+  console.log(user);
   var header = utils.partialf(widgets.header, null,
-    widgets.backButton(user.username ? user.username : '')
+    widgets.backButton(user.username)
   );
 
   var profile = function() {
-    return [
+    return m('div.native_scroller', [
       m('div#user_profile',
         m('header.user_profile_header', renderHeader(user)),
-        m('section.ratings.profile', renderRatings(user))
+        m('section.ratings.profile', renderRatings(user)),
+        m('br'),
+        m('br'),
+        m('section#userProfileActions', renderActions(user))
       )
-    ];
+    ]);
   };
 
   return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);

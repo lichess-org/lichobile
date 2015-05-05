@@ -2,7 +2,7 @@ var throttle = require('lodash-node/modern/functions/throttle');
 var data = require('./data');
 var utils = require('../../utils');
 var sound = require('../../sound');
-var game = require('../../lichess/game');
+var gameLogic = require('../../lichess/game');
 var ground = require('./ground');
 var promotion = require('./promotion');
 var replayCtrl = require('./replay/replayCtrl');
@@ -75,7 +75,7 @@ module.exports = function(cfg, onFeatured) {
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
       this.title = i18n('gameAborted');
-    else if (game.isPlayerTurn(this.data))
+    else if (gameLogic.isPlayerTurn(this.data))
       this.title = i18n('yourTurn');
     else
       this.title = i18n('waitingForOpponent');
@@ -114,20 +114,20 @@ module.exports = function(cfg, onFeatured) {
     if (!this.replay.active) this.chessground.apiMove(o.from, o.to);
     if (this.data.game.threefold) this.data.game.threefold = false;
     this.data.game.moves.push(o.san);
-    game.setOnGame(this.data, o.color, true);
+    gameLogic.setOnGame(this.data, o.color, true);
     m.endComputation();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
 
-  this.reload = function(cfg) {
-    this.replay.onReload(cfg);
-    if (this.chat) this.chat.onReload(cfg.chat);
-    if (this.data.tv) cfg.tv = true;
-    this.data = data(cfg);
+  this.reload = function(rCfg) {
+    this.replay.onReload(rCfg);
+    if (this.chat) this.chat.onReload(rCfg.chat);
+    if (this.data.tv) rCfg.tv = true;
+    this.data = data(rCfg);
     makeCorrespondenceClock();
     this.setTitle();
-    if (!this.replay.active) ground.reload(this.chessground, this.data, cfg.game.fen, this.vm.flip);
+    if (!this.replay.active) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
   }.bind(this);
 
   this.clock = this.data.clock ? new clockCtrl(
@@ -139,7 +139,7 @@ module.exports = function(cfg, onFeatured) {
   ) : false;
 
   this.isClockRunning = function() {
-    return this.data.clock && game.playable(this.data) &&
+    return this.data.clock && gameLogic.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }.bind(this);
 
@@ -157,7 +157,7 @@ module.exports = function(cfg, onFeatured) {
   makeCorrespondenceClock();
 
   var correspondenceClockTick = function() {
-    if (this.correspondenceClock && game.playable(this.data))
+    if (this.correspondenceClock && gameLogic.playable(this.data))
       this.correspondenceClock.tick(this.data.game.player);
   }.bind(this);
 

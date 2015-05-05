@@ -4,14 +4,14 @@ var widgets = require('../widget/common');
 var layout = require('../layout');
 var menu = require('../menu');
 var xhr = require('../../xhr');
-var game = require('../../lichess/game');
+var gameLogic = require('../../lichess/game');
 var i18n = require('../../i18n');
 var getVariant = require('../../lichess/variant');
 var gameStatus = require('../../lichess/status');
 var moment = window.moment;
 
 function renderGame(g) {
-  var time = game.time(g);
+  var time = gameLogic.time(g);
   var mode = g.rated ? i18n('rated') : i18n('casual');
   var title = time + ' • ' + getVariant(g.variant).name + ' • ' + mode;
   var date = moment(g.timestamp).calendar();

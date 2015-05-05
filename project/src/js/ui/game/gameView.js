@@ -1,6 +1,6 @@
 var session = require('../../session');
 var roundView = require('../round/view/roundView');
-var game = require('../../lichess/game');
+var gameLogic = require('../../lichess/game');
 var gamesMenu = require('../gamesMenu');
 var loginModal = require('../loginModal');
 var layout = require('../layout');
@@ -47,7 +47,7 @@ function joinOverlay(ctrl) {
       opp ? opp.username : 'Anonymous',
       m('div.infos', [
         m('p.explanation', data.game.variant.name + ', ' + mode),
-        m('p.time[data-icon=p]', game.time(data)),
+        m('p.time[data-icon=p]', gameLogic.time(data)),
         m('br'),
         joinDom
       ]),
@@ -67,14 +67,14 @@ function awaitOverlay(ctrl) {
       m('div.infos', [
         m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
         m('input.lichess_game_url', {
-          value: game.publicUrl(data),
+          value: gameLogic.publicUrl(data),
           readonly: true
         }),
         m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
         m('div.go_or_cancel.clearfix', [
           m('button.binary_choice[data-icon=E]', {
             config: helper.ontouchend(function() {
-              window.plugins.socialsharing.share(null, null, null, game.publicUrl(data));
+              window.plugins.socialsharing.share(null, null, null, gameLogic.publicUrl(data));
             })
           }, i18n('shareGameURL')),
           m('button.binary_choice[data-icon=L]', {
@@ -86,7 +86,7 @@ function awaitOverlay(ctrl) {
         ]),
         m('br'),
         m('p.explanation.small', data.game.variant.name + ', ' + mode),
-        m('p.time.small[data-icon=p]', game.time(data))
+        m('p.time.small[data-icon=p]', gameLogic.time(data))
       ]),
       true
     );

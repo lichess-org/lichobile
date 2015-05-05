@@ -1,4 +1,4 @@
-var game = require('../../../lichess/game');
+var gameLogic = require('../../../lichess/game');
 var gameStatus = require('../../../lichess/status');
 var helper = require('../../helper');
 var throttle = require('lodash-node/modern/functions/throttle');
@@ -22,19 +22,19 @@ module.exports = {
   shareLink: function(ctrl) {
     return m('button', {
       config: helper.ontouchend(function() {
-        window.plugins.socialsharing.share(null, null, null, game.publicUrl(ctrl.data));
+        window.plugins.socialsharing.share(null, null, null, gameLogic.publicUrl(ctrl.data));
       })
     }, [m('span.fa.fa-share-alt'), i18n('shareGameURL')]);
   },
   forceResign: function(ctrl) {
-    return game.forceResignable(ctrl.data) ?
+    return gameLogic.forceResignable(ctrl.data) ?
       m('div.force_resign_zone.clearfix', [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
         m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouchend(function() { ctrl.socket.send('resign-force'); }),
+          config: helper.ontouchend(function() { ctrl.socket.send('resign-force'); })
         }, i18n('forceResignation')),
         m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouchend(function() { ctrl.socket.send('draw-force'); }),
+          config: helper.ontouchend(function() { ctrl.socket.send('draw-force'); })
         }, i18n('forceDraw'))
       ]) : null;
   },
@@ -63,7 +63,7 @@ module.exports = {
       }, i18n('accept')),
       m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('draw-no'); })
-      }, i18n('decline')),
+      }, i18n('decline'))
     ]);
   },
   cancelTakebackProposition: function(ctrl) {
@@ -82,7 +82,7 @@ module.exports = {
       }, i18n('accept')),
       m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(function() { ctrl.socket.send('takeback-no'); })
-      }, i18n('decline')),
+      }, i18n('decline'))
     ]);
   },
   rematch: function(ctrl) {
@@ -119,7 +119,7 @@ module.exports = {
     ]);
   },
   moretime: function(ctrl) {
-    if (game.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
+    if (gameLogic.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       config: helper.ontouchend(throttle(function() { ctrl.socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
   }

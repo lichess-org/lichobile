@@ -1,5 +1,5 @@
 var chessground = require('chessground');
-var game = require('../../lichess/game');
+var gameLogic = require('../../lichess/game');
 var settings = require('../../settings');
 
 function str2move(m) {
@@ -22,8 +22,8 @@ function makeConfig(data, fen, flip) {
     },
     movable: {
       free: false,
-      color: game.isPlayerPlaying(data) ? data.player.color : null,
-      dests: game.parsePossibleMoves(data.possibleMoves),
+      color: gameLogic.isPlayerPlaying(data) ? data.player.color : null,
+      dests: gameLogic.parsePossibleMoves(data.possibleMoves),
       showDests: settings.general.pieceDestinations()
     },
     animation: {

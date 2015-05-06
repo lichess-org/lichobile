@@ -13,6 +13,7 @@ var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
 var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
+var mithrilify = require('mithrilify');
 
 // command line options
 var minimistOptions = {
@@ -48,9 +49,10 @@ function buildStyl(src, dest, mode) {
 
 function buildScripts(src, dest, mode) {
   var opts = (mode === 'prod') ? {} : { debug: true };
-  var bundleStream = browserify(src + '/js/main.js', opts).bundle();
 
-  return bundleStream
+  return browserify(src + '/js/main.js', opts)
+    .transform(mithrilify, {msx_opts: {precompile: true}})
+    .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))
     .pipe(gulpif(mode === 'prod', streamify(uglify())))
@@ -76,7 +78,9 @@ gulp.task('watch-scripts', function() {
   var bundleStream = watchify(browserify('./src/js/main.js', opts));
 
   function rebundle() {
-    return bundleStream.bundle()
+    return bundleStream
+      .transform(mithrilify, {msx_opts: {precompile: true}})
+      .bundle()
       .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
       .pipe(source('app.js'))
       .pipe(gulp.dest('./www'));

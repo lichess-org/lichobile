@@ -2,7 +2,7 @@ var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
 var chessground = require('chessground');
 var settings = require('../settings');
-var iScroll = require('iScroll');
+var IScroll = require('iscroll');
 
 var helper = {};
 
@@ -133,7 +133,7 @@ helper.analyticsTrackView = function(view) {
 
 helper.scroller = function(el, isUpdate, context) {
   if (!isUpdate) {
-    context.scroller = new iScroll(el, {
+    context.scroller = new IScroll(el, {
       preventDefaultException: {
         tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
       }

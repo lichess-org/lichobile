@@ -9,9 +9,13 @@ import gameLogic from '../../lichess/game';
 import i18n from '../../i18n';
 import getVariant from '../../lichess/variant';
 import gameStatus from '../../lichess/status';
+import IScroll from 'iscroll/build/iscroll-probe';
+import {throttle} from 'lodash/function';
 const moment = window.moment;
 
-function renderGame(g, userId) {
+var scroller;
+
+function renderGame(g, index, userId) {
   const time = gameLogic.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + getVariant(g.variant).name + ' • ' + mode;
@@ -19,9 +23,10 @@ function renderGame(g, userId) {
   const status = gameStatus.toLabel(g.status, g.winner, g.variant) +
     (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
+  const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
 
   return (
-    <li className="list_item userGame">
+    <li className={`list_item userGame ${evenOrOdd}`}>
       <span className="iconGame" data-icon={utils.gameIcon(g.perf)} />
       <div className="infos">
         <div className="title">{title}</div>
@@ -49,10 +54,33 @@ function renderGame(g, userId) {
   );
 }
 
-module.exports = {
+export default {
   controller: function() {
     const userId = m.route.param('id');
     var games = [];
+
+    function onScroll() {
+      console.log(this);
+      if (this.y + this.distY <= this.maxScrollY) {
+        console.log('loading next...');
+        // TODO load next batch of games
+      }
+    }
+
+    function scrollerConfig(el, isUpdate, context) {
+      if (!isUpdate) {
+        scroller = new IScroll(el, {
+          probeType: 2
+        });
+        scroller.on('scroll', throttle(onScroll, 150));
+        context.onunload = () => {
+          if (scroller) {
+            scroller.destroy();
+            scroller = null;
+          }
+        };
+      }
+    }
 
     xhr.games(userId).then(data => {
       games = data.list;
@@ -60,6 +88,7 @@ module.exports = {
 
     return {
       getGames: function() { return games; },
+      scrollerConfig,
       userId
     };
   },
@@ -71,9 +100,9 @@ module.exports = {
 
     function renderAllGames() {
       return (
-        <div className="scroller page" config={helper.scroller}>
+        <div className="scroller page" config={ctrl.scrollerConfig}>
           <ul className="userGames">
-            { ctrl.getGames().map(g => renderGame(g, ctrl.userId)) }
+            { ctrl.getGames().map((g, i) => renderGame(g, i, ctrl.userId)) }
           </ul>
         </div>
       );

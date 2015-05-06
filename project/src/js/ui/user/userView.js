@@ -1,51 +1,62 @@
-var utils = require('../../utils');
-var widgets = require('../widget/common');
-var perf = require('../widget/perf');
-var layout = require('../layout');
-var menu = require('../menu');
-var moment = window.moment;
-var i18n = require('../../i18n');
-var countries = require('./countries');
-var helper = require('../helper');
+/** @jsx m */
+import utils from '../../utils';
+import widgets from '../widget/common';
+import perf from '../widget/perf';
+import layout from '../layout';
+import menu from '../menu';
+import i18n from '../../i18n';
+import countries from './countries';
+import helper from '../helper';
+const moment = window.moment;
 
 function renderProfile(user) {
   if (user.profile) {
-    var fullname = (user.profile.firstName || user.profile.lastName) ?
+    const fullname = (user.profile.firstName || user.profile.lastName) ?
       user.profile.firstName + ' ' + user.profile.lastName :
       '';
-
-    var country = countries[user.profile.country];
-    var location = user.profile.location;
+    const country = countries[user.profile.country];
+    const location = user.profile.location;
     var locationString = '';
     if (location) locationString += location;
     if (country) locationString += (location ? ', ' : '') + country;
 
-    return m('div.profile', [
-      m('h3.fullname', fullname),
-      m('br'),
-      m('p.bio', m('em', user.profile.bio)),
-      m('br'),
-      m('p.location', locationString)
-    ]);
+    return (
+      <div className="profile">
+        <h3 className="fullname">{fullname}</h3>
+        <br/>
+        <p className="bio"><em>{user.profile.bio}</em></p>
+        <br/>
+        <p className="location">{locationString}</p>
+      </div>
+    );
   } else
     return null;
 }
 
 function renderHeader(user) {
-  return [
-    m('div.userInfos', [
-      renderProfile(user),
-      m('p.memberSince', i18n('memberSince') + ' ' + moment(user.createdAt).format('LL')),
-      user.seenAt ?
-        m('p.lastSeen', i18n('lastLogin') + ' ' + moment(user.seenAt).format('LLL')) :
-        null,
-      m('br'),
-      user.playTime ? [
-        m('p.playTime', 'Time spent playing: ' + moment.duration(user.playTime.total, 'seconds').humanize()),
-        user.playTime.tv > 0 ? m('p.onTv', 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize()) : null
-      ] : null
-    ])
-  ];
+  const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
+  const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).format('LLL') : null;
+  const totalPlayTime = user.playTime ? 'Time spent playing: ' + moment.duration(user.playTime.total, 'seconds').humanize() : null;
+  const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize() : null;
+
+  return (
+    <header className="user_profile_header">
+      <div className="userInfos">
+        {renderProfile(user)}
+        <p className="memberSince">{memberSince}</p>
+        {seenAt ?
+        <p className="lastSeen">{seenAt}</p> : null
+        }
+        <br/>
+        {totalPlayTime ?
+        <p className="playTime">{totalPlayTime}</p> : null
+        }
+        {tvTime ?
+        <p className="onTv">{tvTime}</p> : null
+        }
+      </div>
+    </header>
+  );
 }
 
 function renderRatings(user) {
@@ -55,33 +66,37 @@ function renderRatings(user) {
 }
 
 function renderActions(user) {
-  return [
-    m('button.profileButton', {
-      config: helper.ontouchendScrollY(() => {
+  return (
+    <section id="userProfileActions">
+      <button className="profileButton" config={helper.ontouchendScrollY(() => {
         m.route('/@/' + user.username + '/games');
-      })
-    }, 'See ' + user.username + '\'s games')
-  ];
+      })}>
+        { `See ${user.username}'s games`}
+      </button>
+    </section>
+  );
 }
 
-module.exports = function(ctrl) {
-  var user = ctrl.getUserData();
+export default function(ctrl) {
+  const user = ctrl.getUserData();
   console.log(user);
-  var header = utils.partialf(widgets.header, null,
+  const header = utils.partialf(widgets.header, null,
     widgets.backButton(user.username)
   );
 
-  var profile = function() {
-    return m('div.native_scroller', [
-      m('div#user_profile',
-        m('header.user_profile_header', renderHeader(user)),
-        m('section.ratings.profile', renderRatings(user)),
-        m('br'),
-        m('br'),
-        m('section#userProfileActions', renderActions(user))
-      )
-    ]);
-  };
+  function profile() {
+    return (
+      <div className="native_scroller">
+        <div id="user_profile">
+          {renderHeader(user)}
+          <section className="ratings profile">{renderRatings(user)}</section>
+          <br/>
+          <br/>
+          {renderActions(user)}
+        </div>
+      </div>
+    );
+  }
 
   return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
 };

@@ -2,6 +2,7 @@ var Zanimo = require('zanimo');
 var mButton = require('mobile-button');
 var chessground = require('chessground');
 var settings = require('../settings');
+var iScroll = require('iScroll');
 
 var helper = {};
 
@@ -128,6 +129,22 @@ helper.analyticsTrackView = function(view) {
   var enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
+};
+
+helper.scroller = function(el, isUpdate, context) {
+  if (!isUpdate) {
+    context.scroller = new iScroll(el, {
+      preventDefaultException: {
+        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+      }
+    });
+    context.onunload = function() {
+      if (context.scroller) {
+        context.scroller.destroy();
+        context.scroller = null;
+      }
+    };
+  }
 };
 
 module.exports = helper;

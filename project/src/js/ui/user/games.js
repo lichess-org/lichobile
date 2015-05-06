@@ -1,22 +1,25 @@
 /** @jsx m */
-var utils = require('../../utils');
-var widgets = require('../widget/common');
-var layout = require('../layout');
-var menu = require('../menu');
-var xhr = require('../../xhr');
-var gameLogic = require('../../lichess/game');
-var i18n = require('../../i18n');
-var getVariant = require('../../lichess/variant');
-var gameStatus = require('../../lichess/status');
-var moment = window.moment;
+import utils from '../../utils';
+import helper from '../helper';
+import widgets from '../widget/common';
+import layout from '../layout';
+import menu from '../menu';
+import xhr from '../../xhr';
+import gameLogic from '../../lichess/game';
+import i18n from '../../i18n';
+import getVariant from '../../lichess/variant';
+import gameStatus from '../../lichess/status';
+const moment = window.moment;
 
-function renderGame(g) {
-  var time = gameLogic.time(g);
-  var mode = g.rated ? i18n('rated') : i18n('casual');
-  var title = time + ' • ' + getVariant(g.variant).name + ' • ' + mode;
-  var date = moment(g.timestamp).calendar();
-  var status = gameStatus.toLabel(g.status, g.winner, g.variant) +
-    (g.winner ? '. ' + i18n(g.winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+function renderGame(g, userId) {
+  const time = gameLogic.time(g);
+  const mode = g.rated ? i18n('rated') : i18n('casual');
+  const title = time + ' • ' + getVariant(g.variant).name + ' • ' + mode;
+  const date = moment(g.timestamp).calendar();
+  const status = gameStatus.toLabel(g.status, g.winner, g.variant) +
+    (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+  const userColor = g.players.white.userId === userId ? 'white' : 'black';
+
   return (
     <li className="list_item userGame">
       <span className="iconGame" data-icon={utils.gameIcon(g.perf)} />
@@ -36,7 +39,11 @@ function renderGame(g) {
             <small className="playerRating">{g.players.black.rating}</small>
           </div>
         </div>
-        <div className="status">{status}</div>
+        <div className={helper.classSet({
+          status: true,
+          win: userColor === g.winner,
+          loose: g.winner && userColor !== g.winner
+        })}>{status}</div>
       </div>
     </li>
   );
@@ -44,27 +51,32 @@ function renderGame(g) {
 
 module.exports = {
   controller: function() {
-    var username = m.route.param('id');
+    const userId = m.route.param('id');
     var games = [];
 
-    xhr.games(username).then(data => {
+    xhr.games(userId).then(data => {
       games = data.list;
     });
 
     return {
       getGames: function() { return games; },
-      username: username
+      userId
     };
   },
 
   view: function(ctrl) {
-    var header = utils.partialf(widgets.header, null,
+    const header = utils.partialf(widgets.header, null,
       widgets.backButton(m.route.param('id') + ' games')
     );
-    console.log(ctrl.getGames());
 
     function renderAllGames() {
-      return <ul className="userGames">{ ctrl.getGames().map(renderGame) }</ul>;
+      return (
+        <div className="scroller page" config={helper.scroller}>
+          <ul className="userGames">
+            { ctrl.getGames().map(g => renderGame(g, ctrl.userId)) }
+          </ul>
+        </div>
+      );
     }
 
     return layout.free(header, renderAllGames, widgets.empty, menu.view, widgets.empty);

@@ -5,27 +5,11 @@ var menu = require('../menu');
 var formWidgets = require('../widget/form');
 var i18n = require('../../i18n');
 var settings = require('../../settings');
-var iScroll = require('iscroll');
+var helper = require('../helper');
 
 function renderBody() {
   return [
-    m('div.scroller.settings_list', {
-      config: function(el, isUpdate, context) {
-        if (!isUpdate) {
-          context.scroller = new iScroll(el, {
-            preventDefaultException: {
-              tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-            }
-          });
-          context.onunload = function() {
-            if (context.scroller) {
-              context.scroller.destroy();
-              context.scroller = null;
-            }
-          };
-        }
-      }
-    }, [
+    m('div.scroller.settings_list', { config: helper.scroller }, [
       m('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(function(t) {
         return m('li.list_item.piece_theme', {
           className: t

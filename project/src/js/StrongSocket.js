@@ -1,9 +1,9 @@
 'use strict';
 
-var merge = require('lodash-node/modern/objects/merge'),
-  clone = require('lodash-node/modern/objects/clone'),
-  assign = require('lodash-node/modern/objects/assign'),
-  range = require('lodash-node/modern/arrays/range'),
+var merge = require('lodash/object/merge'),
+  clone = require('lodash/lang/clone'),
+  assign = require('lodash/object/assign'),
+  range = require('lodash/utility/range'),
   utils = require('./utils'),
   signals = require('./signals'),
   storage = require('./storage');

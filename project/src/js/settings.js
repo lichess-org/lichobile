@@ -1,6 +1,6 @@
 var store = require('./storage');
 var utils = require('./utils');
-var range = require('lodash-node/modern/arrays/range');
+var range = require('lodash/utility/range');
 
 function localstorageprop(key, initialValue) {
   return function() {

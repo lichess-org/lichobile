@@ -1,4 +1,4 @@
-var merge = require('lodash-node/modern/objects/merge');
+var merge = require('lodash/object/merge');
 var Spinner = require('spin.js');
 var spinner = new Spinner();
 

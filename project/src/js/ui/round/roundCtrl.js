@@ -1,4 +1,4 @@
-var throttle = require('lodash-node/modern/functions/throttle');
+var throttle = require('lodash/function/throttle');
 var data = require('./data');
 var utils = require('../../utils');
 var sound = require('../../sound');

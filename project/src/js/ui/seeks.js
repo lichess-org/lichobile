@@ -9,7 +9,7 @@ var socket = require('../socket');
 var session = require('../session');
 var loginModal = require('./loginModal');
 var newGameForm = require('./newGameForm');
-var uniq = require('lodash-node/modern/arrays/uniq');
+var uniq = require('lodash/array/uniq');
 var iScroll = require('iscroll');
 var Zanimo = require('zanimo');
 

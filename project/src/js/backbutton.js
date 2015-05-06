@@ -1,4 +1,4 @@
-var isFunction = require('lodash-node/modern/objects/isFunction');
+var isFunction = require('lodash/lang/isFunction');
 var utils = require('./utils');
 
 var stack = [];

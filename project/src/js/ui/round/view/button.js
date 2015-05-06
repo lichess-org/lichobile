@@ -1,7 +1,7 @@
 var gameLogic = require('../../../lichess/game');
 var gameStatus = require('../../../lichess/status');
 var helper = require('../../helper');
-var throttle = require('lodash-node/modern/functions/throttle');
+var throttle = require('lodash/function/throttle');
 var i18n = require('../../../i18n');
 
 module.exports = {

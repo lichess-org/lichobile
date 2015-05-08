@@ -7,10 +7,11 @@ var menu = {};
 
 /* properties */
 menu.isOpen = false;
+menu.headerOpen = m.prop(false);
 
 // we need to transition manually the menu on route change, because mithril's
 // diff strategy is 'all'
-menu.menuRouteAction = function(route) {
+menu.route = function(route) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
@@ -18,7 +19,7 @@ menu.menuRouteAction = function(route) {
   };
 };
 
-menu.openLink = function(action) {
+menu.popup = function(action) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
@@ -44,7 +45,12 @@ menu.open = function() {
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
+  menu.headerOpen(false);
   menu.isOpen = false;
+};
+
+menu.toggleHeader = function() {
+  return menu.headerOpen() ? menu.headerOpen(false) : menu.headerOpen(true);
 };
 
 module.exports = menu;

@@ -22,26 +22,15 @@
     box-shadow 0px 1px 2px 0px rgba(0,0,0,0.30)
     color gold
     text-align center
-  button
+  .login
     color: #fff;
-    padding: 10px;
-  button.login
     background: #454545;
-    display: block;
+    padding: 10px;
     width: 80%;
-    margin: 0 auto;
     text-transform: uppercase;
+    margin-bottom 10px
     &.active
       background lighten(#454545, 5%)
-  button.logout
-    padding 15px
-    background none
-    float left
-    color gold;
-    width 50px
-    display inline-block;
-    &.active
-      background lighten(#2A2A2A, 5%)
   h3
     text-transform uppercase
     color #fff
@@ -49,74 +38,31 @@
     margin 40px 0px 30px 0
 
 .side_menu_header
+  position relative
   color #fff
-  padding-bottom 1em
   .logo
     background-image url(../../images/pirouettiGoldK.svg)
     background-repeat no-repeat
-    background-position center center
+    background-position center 10px
     background-size 40px
-    margin 0 auto
-    height 60px
+    height 50px
     width 100%
-  h2
-    clear both
-    line-height 1.5em
+  .username
+    text-align center
+    line-height 40px
+    width 100%
     text-transform uppercase
     color #FFF
-    margin-bottom 10px
-
-.ratings
-  text-align left
-  &:after
+  .open_button
+    position absolute
+    right 10px
+    bottom 0
     color gold
-    content 'u'
-    font-family: "lichess" !important;
-    width: 100%;
-    display: block;
-    text-align: center;
     font-size: 20px;
-    margin-bottom: -16px;
-  &.open:after
-    transform rotate(180deg)
+    &.open
+      transform rotate(180deg)
 
-.perf
-  display inline-block
-  text-align left
-  width 45%
-  padding 5px 0
-  line-height 1.2em
-  &:nth-child(even)
-    margin-left 10%
-  &:before
-    color gold
-    font-size 2.4em
-    float left
-    margin-right 5px
-  > .rating
-    color #fff
-    display block
-    > .progress, & > .nb
-      font-size 0.8em
-      margin-left 0.5em
-    > .progress
-      &.positive
-        color #759900
-      &.negative
-        color #ac524f
-      &::before
-        vertical-align middle
-        margin-right 1px
-    > .nb
-      opacity 0.4
-  > .name
-    display block
-    color gold
-    white-space nowrap
-    overflow hidden
-    text-overflow ellipsis
-
-#side_links
+.side_links
   color textLightGray
   .hr
     margin 10px 0

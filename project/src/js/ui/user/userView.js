@@ -19,6 +19,10 @@ function renderProfile(user) {
     var locationString = '';
     if (location) locationString += location;
     if (country) locationString += (location ? ', ' : '') + country;
+    const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
+    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).format('LLL') : null;
+    const totalPlayTime = user.playTime ? 'Time spent playing: ' + moment.duration(user.playTime.total, 'seconds').humanize() : null;
+    const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize() : null;
 
     return (
       <div className="profile">
@@ -27,22 +31,6 @@ function renderProfile(user) {
         <p className="bio"><em>{user.profile.bio}</em></p>
         <br/>
         <p className="location">{locationString}</p>
-      </div>
-    );
-  } else
-    return null;
-}
-
-function renderHeader(user) {
-  const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
-  const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).format('LLL') : null;
-  const totalPlayTime = user.playTime ? 'Time spent playing: ' + moment.duration(user.playTime.total, 'seconds').humanize() : null;
-  const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize() : null;
-
-  return (
-    <header className="user_profile_header">
-      <div className="userInfos">
-        {renderProfile(user)}
         <p className="memberSince">{memberSince}</p>
         {seenAt ?
         <p className="lastSeen">{seenAt}</p> : null
@@ -55,8 +43,9 @@ function renderHeader(user) {
         <p className="onTv">{tvTime}</p> : null
         }
       </div>
-    </header>
-  );
+    );
+  } else
+    return null;
 }
 
 function renderRatings(user) {
@@ -88,9 +77,9 @@ export default function(ctrl) {
     return (
       <div className="native_scroller">
         <div id="user_profile">
-          {renderHeader(user)}
           <section className="ratings profile">{renderRatings(user)}</section>
           <br/>
+          {renderProfile(user)}
           <br/>
           {renderActions(user)}
         </div>

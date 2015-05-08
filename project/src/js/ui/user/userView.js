@@ -11,6 +11,27 @@ import helper from '../helper';
 import session from '../../session';
 const moment = window.moment;
 
+export default function view(ctrl) {
+  const user = ctrl.user();
+  console.log(user);
+  const header = utils.partialf(widgets.header, null,
+    widgets.backButton(user.username)
+  );
+
+  function profile() {
+    return (
+      <div className="native_scroller">
+        {renderProfile(user)}
+        {renderStats(user)}
+        {renderRatings(user)}
+        {renderActions(ctrl)}
+      </div>
+    );
+  }
+
+  return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
+};
+
 function renderProfile(user) {
   if (user.profile) {
     const fullname = (user.profile.firstName || user.profile.lastName) ?
@@ -32,7 +53,15 @@ function renderProfile(user) {
         <p className="profileBio">{user.profile.bio}</p> : null
         }
         <div className="userInfos">
-          <p className="location">{locationString}</p>
+          <p className="location">
+            {location}
+            {country ?
+            <span className="country">
+              , <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+              {country}
+            </span> : null
+            }
+          </p>
           <p className="memberSince">{memberSince}</p>
           {seenAt ?
           <p className="lastSeen">{seenAt}</p> : null
@@ -106,24 +135,3 @@ function renderActions(ctrl) {
     </section>
   );
 }
-
-export default function view(ctrl) {
-  const user = ctrl.user();
-  console.log(user);
-  const header = utils.partialf(widgets.header, null,
-    widgets.backButton(user.username)
-  );
-
-  function profile() {
-    return (
-      <div className="native_scroller">
-        {renderProfile(user)}
-        {renderStats(user)}
-        {renderRatings(user)}
-        {renderActions(ctrl)}
-      </div>
-    );
-  }
-
-  return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
-};

@@ -1,6 +1,6 @@
 var merge = require('lodash/object/merge');
 var Spinner = require('spin.js');
-var spinner = new Spinner();
+var spinner = new Spinner({ color: '#C4A86F' });
 
 var http = {};
 http.apiVersion = 1;

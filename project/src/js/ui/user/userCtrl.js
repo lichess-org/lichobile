@@ -10,6 +10,10 @@ module.exports = function() {
 
   const user = m.prop();
 
+  function setNewUserState(newData) {
+    assign(user(), newData);
+  }
+
   xhr.user(m.route.param('id')).then(user, error => {
     utils.handleXhrError(error);
     m.route('/');
@@ -19,8 +23,13 @@ module.exports = function() {
     user,
     isMe: () => session.getUserId() === user().id,
     toggleFollowing: () => {
-      if (user().following) xhr.unfollow(user().id).then(data => assign(user(), data));
-      else xhr.follow(user().id).then(data => assign(user(), data));
-    }
+      if (user().following) xhr.unfollow(user().id).then(setNewUserState);
+      else xhr.follow(user().id).then(setNewUserState);
+    },
+    toggleBlocking: () => {
+      if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
+      else xhr.block(user().id).then(setNewUserState);
+    },
+    goToGames: () => m.route(`/@/${user().id}/games`)
   };
 };

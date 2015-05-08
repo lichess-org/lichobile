@@ -8,6 +8,7 @@ import menu from '../menu';
 import i18n from '../../i18n';
 import countries from './countries';
 import helper from '../helper';
+import session from '../../session';
 const moment = window.moment;
 
 function renderProfile(user) {
@@ -71,27 +72,37 @@ function renderActions(ctrl) {
   const user = ctrl.user();
   return (
     <section id="userProfileActions">
+      <div className="list_item nav"
+        config={helper.ontouchendScrollY(ctrl.goToGames)}
+        key="view_all_games"
+      >
+        {i18n('viewAllNbGames', user.count.game)}
+      </div>
+      { session.isConnected() ?
+      <div className="list_item nav" key="challenge_to_play">
+        {i18n('challengeToPlay')}
+      </div> : null
+      }
       {user.followable && !ctrl.isMe() ?
-      <div className="list_item">
+      <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
         <div className="check_container">
-          <label forHtml="following">{i18n('following')}</label>
+          <label htmlFor="user_following">{i18n('follow')}</label>
           <input id="user_following" type="checkbox" checked={user.following}
+            disabled={user.blocking}
             onchange={ctrl.toggleFollowing} />
         </div>
       </div> : null
       }
-      <div
-        className="list_item nav"
-        config={helper.ontouchendScrollY(utils.f(m.route, `/@/${user.id}/games`))}
-      >
-        {i18n('viewAllNbGames', user.count.game)}
-      </div>
-      <div className="list_item">
-        <button className="profileButton">
-          <span data-icon="U" />
-          {i18n('challengeToPlay')}
-        </button>
-      </div>
+      {!ctrl.isMe() ?
+      <div className={['list_item', user.following ? 'disabled' : ''].join(' ')} key="user_blocking">
+        <div className="check_container">
+          <label htmlFor="user_blocking">{i18n('block')}</label>
+          <input id="user_blocking" type="checkbox" checked={user.blocking}
+            disabled={user.following}
+            onchange={ctrl.toggleBlocking} />
+        </div>
+      </div> : null
+      }
     </section>
   );
 }

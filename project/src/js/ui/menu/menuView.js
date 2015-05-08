@@ -1,3 +1,4 @@
+/** @jsx m */
 var session = require('../../session');
 var loginModal = require('../loginModal');
 var newGameForm = require('../newGameForm');

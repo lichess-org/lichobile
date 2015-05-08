@@ -1,32 +1,40 @@
-#user_profile
+.profileScreen
   padding 10px
 
 h3.fullname
   font-weight bold
+  margin-bottom 10px
 
 .user_profile_header
   margin-bottom 15px
 
-.profile_bio
+.profileBio
   margin 10px 0
-  line-height 1.2em
+  font-style italic
 
-.ratings.profile
+.ratings
+  padding 10px
   font-size 0.9em
   &:after
     content none
 
+.profile, .userStats
+  padding 10px 15px
+
+.userInfos, .userStats
+  font-size 0.85em
+
 .perf
   display inline-block
   text-align left
-  width 45%
+  width 48%
   padding 5px 0
   line-height 1.2em
   &:nth-child(even)
-    margin-left 10%
+    margin-left 4%
   &:before
     color gold
-    font-size 2.4em
+    font-size 2em
     float left
     margin-right 5px
   > .rating
@@ -48,19 +56,15 @@ h3.fullname
   > .name
     display block
     color gold
+    text-transform uppercase
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
 
-#userProfileActions
-  text-align center
-
 .profileButton
-  font-size 1.1em
-  font-weight 300
   padding 0.6em
-  border 1px solid textLightGray
-  border-radius 2px
+  > span
+    margin-right 10px
   &.active
     background gold
     border-color gold

@@ -1,23 +1,26 @@
-var utils = require('../../utils');
-var xhr = require('../../xhr');
-var helper = require('../helper');
+import session from '../../session';
+import * as xhr from './userXhr';
+import utils from '../../utils';
+import helper from '../helper';
+import {assign} from 'lodash/object';
 
 module.exports = function() {
 
   helper.analyticsTrackView('User Profile');
 
-  var userData;
+  const user = m.prop();
 
-  xhr.user(m.route.param('id')).then(function(data) {
-    userData = data;
-  }, function(error) {
+  xhr.user(m.route.param('id')).then(user, error => {
     utils.handleXhrError(error);
-    utils.backHistory();
+    m.route('/');
   });
 
   return {
-    getUserData: function() {
-      return userData;
+    user,
+    isMe: () => session.getUserId() === user().id,
+    toggleFollowing: () => {
+      if (user().following) xhr.unfollow(user().id).then(data => assign(user(), data));
+      else xhr.follow(user().id).then(data => assign(user(), data));
     }
   };
 };

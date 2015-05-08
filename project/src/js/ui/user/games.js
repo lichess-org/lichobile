@@ -4,7 +4,7 @@ import helper from '../helper';
 import widgets from '../widget/common';
 import layout from '../layout';
 import menu from '../menu';
-import xhr from '../../xhr';
+import * as xhr from './userXhr';
 import gameLogic from '../../lichess/game';
 import i18n from '../../i18n';
 import getVariant from '../../lichess/variant';

@@ -79,7 +79,6 @@ gulp.task('watch-scripts', function() {
 
   function rebundle() {
     return bundleStream
-      .transform(mithrilify, {msx_opts: {precompile: true}})
       .bundle()
       .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
       .pipe(source('app.js'))

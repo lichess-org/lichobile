@@ -49,7 +49,7 @@ function inviteFriend() {
       time: config.time(),
       increment: config.increment(),
       color: config.color(),
-      mode: session.isConnected() ? config.mode() : '0',
+      mode: session.isConnected() ? config.mode() : '0'
     }
   }, true);
 }
@@ -107,21 +107,6 @@ function status() {
   });
 }
 
-function user(id) {
-  var url = '/api/user/' + id;
-  return http.request(url);
-}
-
-function games(username, rated) {
-  return http.request('/api/game', {
-    method: 'GET',
-    data: {
-      username: username,
-      rated: rated
-    }
-  });
-}
-
 module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
@@ -132,7 +117,5 @@ module.exports = {
   seeks: seeks,
   game: game,
   featured: featured,
-  status: status,
-  user: user,
-  games: games
+  status: status
 };

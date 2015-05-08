@@ -107,8 +107,10 @@ function renderActions(ctrl) {
       >
         {i18n('viewAllNbGames', user.count.game)}
       </div>
-      { session.isConnected() ?
-      <div className="list_item nav" key="challenge_to_play">
+      { session.isConnected() && !ctrl.isMe() ?
+      <div className="list_item nav" key="challenge_to_play"
+        config={helper.ontouchendScrollY(ctrl.challenge)}
+      >
         {i18n('challengeToPlay')}
       </div> : null
       }

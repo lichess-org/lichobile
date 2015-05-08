@@ -20,6 +20,7 @@ module.exports.init = function() {
     '/ai': ai,
     '/game/:id': game,
     '/game/:id/:color': game,
+    '/game/:id/user/:userId': game,
     '/tv': tv,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,

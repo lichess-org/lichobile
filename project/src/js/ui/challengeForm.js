@@ -8,23 +8,37 @@ var popupWidget = require('./widget/popup');
 var i18n = require('../i18n');
 var backbutton = require('../backbutton');
 
-var inviteForm = {};
-inviteForm.isOpen = false;
-
-inviteForm.open = function() {
-  helper.analyticsTrackView('Invite Friend Form');
-  backbutton.stack.push(inviteForm.close);
-  inviteForm.isOpen = true;
+var challengeForm = {
+  actionName: '',
+  userId: null,
+  isOpen: false
 };
 
-inviteForm.close = function(fromBB) {
-  if (fromBB !== 'backbutton' && inviteForm.isOpen) backbutton.stack.pop();
-  inviteForm.isOpen = false;
+challengeForm.open = function(userId) {
+  if (userId) {
+    helper.analyticsTrackView('Challenge Friend popup');
+    challengeForm.userId = userId;
+    challengeForm.actionName = i18n('challengeToPlay');
+  } else {
+    helper.analyticsTrackView('Invite Friend popup');
+    challengeForm.userId = null;
+    challengeForm.actionName = i18n('playWithAFriend');
+  }
+  backbutton.stack.push(challengeForm.close);
+  challengeForm.isOpen = true;
+};
+
+challengeForm.close = function(fromBB) {
+  if (fromBB !== 'backbutton' && challengeForm.isOpen) backbutton.stack.pop();
+  challengeForm.isOpen = false;
 };
 
 function invite() {
-  return xhr.inviteFriend().then(function(data) {
-    m.route('/game' + data.url.round);
+  var userId = challengeForm.userId;
+  return xhr.inviteFriend(userId).then(function(data) {
+    var url = `/game${data.url.round}`;
+    if (userId) url += `/user/${userId}`;
+    m.route(url);
   }, function(error) {
     utils.handleXhrError(error);
     throw error;
@@ -47,7 +61,7 @@ function renderForm() {
     ['5', '6', '7', '8'].indexOf(settingsObj.variant()) !== -1) {
     settingsObj.color('random');
     colors = [
-      ['randomColor', 'random'],
+      ['randomColor', 'random']
     ];
   } else
     colors = [
@@ -67,12 +81,12 @@ function renderForm() {
     m('div.select_input', {
       key: formName + 'color'
     }, [
-      formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
+      formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
     ]),
     m('div.select_input', {
       key: formName + 'variant'
     }, [
-      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
+      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ]),
     m('div.select_input', {
       key: formName + 'mode'
@@ -120,27 +134,26 @@ function renderForm() {
     onsubmit: function(e) {
       e.preventDefault();
       if (!settings.game.isTimeValid(settingsObj)) return;
-      inviteForm.close();
+      challengeForm.close();
       invite();
     }
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
     m('fieldset', [
-      m('button[data-icon=E][type=submit]', i18n('playWithAFriend'))
+      m('button[data-icon=E][type=submit]', challengeForm.actionName)
     ])
   ]);
 }
 
-inviteForm.view = function() {
-
+challengeForm.view = function() {
   return popupWidget(
     'invite_form_popup game_form_popup',
     null,
     renderForm(),
-    inviteForm.isOpen,
-    inviteForm.close
+    challengeForm.isOpen,
+    challengeForm.close
   );
 };
 
-module.exports = inviteForm;
+module.exports = challengeForm;

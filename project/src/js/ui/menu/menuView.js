@@ -2,7 +2,7 @@
 var session = require('../../session');
 var loginModal = require('../loginModal');
 var newGameForm = require('../newGameForm');
-var inviteForm = require('../inviteForm');
+var challengeForm = require('../challengeForm');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
 var helper = require('../helper');
@@ -65,7 +65,7 @@ function renderLinks(user) {
     }, [m('span.fa.fa-paper-plane'), i18n('correspondence')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
       key: 'invite_friend',
-      config: helper.ontouchendScrollY(menu.popup(inviteForm.open))
+      config: helper.ontouchendScrollY(menu.popup(challengeForm.open))
     }, [m('span.fa.fa-share-alt'), i18n('playWithAFriend')]) : null,
     utils.hasNetwork() ? m('li.side_link', {
       key: 'tv',

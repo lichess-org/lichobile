@@ -38,11 +38,12 @@ function seekGame() {
   }, true);
 }
 
-function inviteFriend() {
+function inviteFriend(userId) {
   var config = settings.game.invite;
   return http.request('/setup/friend', {
     method: 'POST',
     data: {
+      user: userId,
       variant: config.variant(),
       timeMode: config.timeMode(),
       days: config.days(),

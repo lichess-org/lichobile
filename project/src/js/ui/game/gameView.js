@@ -56,7 +56,7 @@ function joinOverlay(ctrl) {
   };
 }
 
-function awaitOverlay(ctrl) {
+function awaitInviteOverlay(ctrl) {
   var data = ctrl.getData();
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
 
@@ -93,6 +93,26 @@ function awaitOverlay(ctrl) {
   };
 }
 
+function awaitChallengeOverlay(ctrl) {
+  return function() {
+    return popupWidget(
+      'await_url_challenge',
+      i18n('challengeToPlay'),
+      m('div.infos', [
+        m('div.user', m.route.param('userId')),
+        m('br'),
+        m('div.loader', m('span[data-icon=U]')),
+        m('br'),
+        m('p', i18n('waitingForOpponent')),
+        m('button[data-icon=L]', {
+          config: helper.ontouchend(() => ctrl.cancelChallenge)
+        }, i18n('cancel'))
+      ]),
+      true
+    );
+  };
+}
+
 module.exports = function(ctrl) {
   if (ctrl.getRound()) return roundView(ctrl.getRound());
 
@@ -110,7 +130,8 @@ module.exports = function(ctrl) {
   }
 
   if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
-  else if (ctrl.isAwaiting()) overlay = awaitOverlay(ctrl);
+  else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
+  else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
 
   return layout.board(header, board, widgets.empty, menu.view, overlay,
     pov ? pov.color : null);

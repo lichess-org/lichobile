@@ -1,7 +1,7 @@
 var menu = require('./menu');
 var gamesMenu = require('./gamesMenu');
 var newGameForm = require('./newGameForm');
-var inviteForm = require('./inviteForm');
+var challengeForm = require('./challengeForm');
 var loginModal = require('./loginModal');
 var signupModal = require('./signupModal');
 var helper = require('./helper');
@@ -33,7 +33,7 @@ module.exports = {
       loginModal.view(),
       signupModal.view(),
       newGameForm.view(),
-      inviteForm.view()
+      challengeForm.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);
@@ -56,7 +56,7 @@ module.exports = {
       loginModal.view(),
       signupModal.view(),
       newGameForm.view(),
-      inviteForm.view()
+      challengeForm.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);

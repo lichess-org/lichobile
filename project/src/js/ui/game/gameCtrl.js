@@ -7,8 +7,9 @@ var gameStatus = require('../../lichess/status');
 var socket = require('../../socket');
 
 module.exports = function() {
-  var awaiting = false;
-  var joinable = false;
+  const isAwaitingInvite = m.prop(false);
+  const isAwaitingChallenge = m.prop(false);
+  const isJoinable = m.prop(false);
   var gameData;
   var round;
   var awaitSocket;
@@ -16,10 +17,13 @@ module.exports = function() {
   xhr.game(m.route.param('id'), m.route.param('color')).then(function(data) {
     gameData = data;
     if (data.game.joinable)
-      joinable = true;
-    // status created means waiting for friend to join game invit
+      isJoinable(true);
+    // status created means waiting for friend to join game invit or challenge
     else if (data.game.status.id === gameStatus.ids.created) {
-      awaiting = true;
+      if (m.route.param('userId'))
+        isAwaitingChallenge(true);
+      else
+        isAwaitingInvite(true);
       awaitSocket = socket.await(data.url.socket, data.player.version, {
         redirect: function(e) {
           m.route('/game/' + e.id);
@@ -50,14 +54,11 @@ module.exports = function() {
     getRound: function() {
       return round;
     },
-    isJoinable: function() {
-      return joinable;
-    },
-    isAwaiting: function() {
-      return awaiting;
-    },
-    joinUrlChallenge: function(id) {
-      xhr.joinUrlChallenge(id).then(function(data) {
+    isJoinable,
+    isAwaitingInvite,
+    isAwaitingChallenge,
+    joinUrlChallenge: id => {
+      xhr.joinUrlChallenge(id).then(data => {
         m.route('/game' + data.url.round);
       });
     },

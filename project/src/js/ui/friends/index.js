@@ -28,7 +28,7 @@ function renderBody() {
       m('ul#friends', onlineFriends.map(function(name) {
         var userId = utils.userFullNameToId(name);
 
-        return m('li.list_item', {
+        return m('li.list_item.nav', {
           key: userId,
           'id': userId,
           config: helper.ontouchendScrollY(utils.f(m.route, '/@/' + userId))
@@ -85,9 +85,7 @@ module.exports = {
   },
 
   view: function() {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('onlineFriends'))
-    );
+    var header = utils.partialf(widgets.header, i18n('onlineFriends'));
 
     return layout.free(header, renderBody, widgets.empty, menu.view, widgets.empty);
   }

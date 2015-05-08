@@ -1,5 +1,6 @@
 /** @jsx m */
 import utils from '../../utils';
+import userPerfs from '../../lichess/perfs';
 import widgets from '../widget/common';
 import perf from '../widget/perf';
 import layout from '../layout';
@@ -58,37 +59,6 @@ function renderStats(user) {
   );
 }
 
-const perfTypes = [
-  ['bullet', 'Bullet'],
-  ['chess960', 'Chess960'],
-  ['blitz', 'Blitz'],
-  ['kingOfTheHill', 'King Of The Hill'],
-  ['classical', 'Classical'],
-  ['threeCheck', 'Three-check'],
-  ['correspondence', 'Correspondence'],
-  ['antichess', 'Antichess'],
-  ['atomic', 'Atomic']
-];
-
-function userPerfs(user) {
-  var res = perfTypes.map(function(p) {
-    if (perf) return {
-      key: p[0],
-      name: p[1],
-      perf: user.perfs[p[0]]
-    };
-  }).sort(function(a, b) {
-    return a.perf.games < b.perf.games;
-  });
-  if (user.perfs.puzzle) res.push({
-    key: 'puzzle',
-    name: 'Training',
-    perf: user.perfs.puzzle
-  });
-
-  return res;
-}
-
 function renderRatings(user) {
   return (
     <section className="ratings">
@@ -126,7 +96,7 @@ function renderActions(ctrl) {
   );
 }
 
-export default function(ctrl) {
+export default function view(ctrl) {
   const user = ctrl.user();
   console.log(user);
   const header = utils.partialf(widgets.header, null,

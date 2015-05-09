@@ -7,6 +7,7 @@ window.moment = require('moment');
 
 var utils = require('./utils');
 var session = require('./session');
+var socket = require('./socket');
 var i18n = require('./i18n');
 var xhr = require('./xhr');
 var backbutton = require('./backbutton');
@@ -79,28 +80,25 @@ function onPause() {
 }
 
 function onOnline() {
-  session.rememberLogin().then(function() {
+  session.rememberLogin().then(() => {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       triedToLogin = true;
       var nowPlaying = session.nowPlaying();
-      if (nowPlaying.length)
-        m.route('/game/' + nowPlaying[0].fullId);
-      else
-        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
+      if (nowPlaying.length) m.route('/game/' + nowPlaying[0].fullId);
+      window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
     }
-  }, function(err) {
+  }, err => {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       // means user is anonymous here
       if (err.message === 'unauthorizedError') {
         triedToLogin = true;
         var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
-        if (lastPlayedAnon)
-          m.route('/game' + lastPlayedAnon);
-        else {
-          window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
-        }
+        if (lastPlayedAnon) m.route('/game' + lastPlayedAnon);
+        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
       }
     }
+  }).then(() => {
+    console.log('haha');
   });
 }
 

@@ -1,12 +1,30 @@
-var StrongSocket = require('./StrongSocket');
-var xhr = require('./xhr');
-var i18n = require('./i18n');
+import assign from 'lodash/object/assign';
+import StrongSocket from './StrongSocket';
+import xhr from './xhr';
+import i18n from './i18n';
+import friends from './friends';
 
+var defaultSocketInstance;
 var socketInstance;
-
 var errorDetected = false;
 
-function createGameSocket(url, version, receiveHandler, gameUrl) {
+const defaultHandlers = {
+  following_onlines: data => {
+    friends.set(data);
+    m.redraw();
+  },
+  following_enters: name => {
+    friends.add(name);
+    m.redraw();
+  },
+  following_leaves: name => {
+    friends.remove(name);
+    m.redraw();
+  },
+  challengeReminder: id => console.log(id)
+};
+
+function game(url, version, receiveHandler, gameUrl) {
   errorDetected = false;
   socketInstance = new StrongSocket(url, version, {
     options: {
@@ -29,28 +47,29 @@ function createGameSocket(url, version, receiveHandler, gameUrl) {
         }
       }
     },
+    events: defaultHandlers,
     receive: receiveHandler
   });
 
   return socketInstance;
 }
 
-function createAwaitSocket(url, version, handlers) {
+function await(url, version, handlers) {
   socketInstance = new StrongSocket(
     url, version, {
       options: {
-        name: 'socket',
+        name: 'await',
         debug: window.lichess.mode !== 'prod',
         ignoreUnknownMessages: true,
         pingDelay: 2000
       },
-      events: handlers
+      events: assign({}, defaultHandlers, handlers)
     }
   );
   return socketInstance;
 }
 
-function createLobbySocket(lobbyVersion, onOpen, handlers) {
+function lobby(lobbyVersion, onOpen, handlers) {
   socketInstance = new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
@@ -61,28 +80,25 @@ function createLobbySocket(lobbyVersion, onOpen, handlers) {
         pingDelay: 2000,
         onOpen: onOpen
       },
-      events: handlers
+      events: assign({}, defaultHandlers, handlers)
     }
   );
 
   return socketInstance;
 }
 
-function createSocket(onOpen, handlers) {
-  socketInstance = new StrongSocket(
+function connectDefault() {
+  defaultSocketInstance = new StrongSocket(
     '/socket',
     0, {
       options: {
-        name: 'socket',
+        name: 'persistent',
         debug: window.lichess.mode !== 'prod',
-        pingDelay: 2000,
-        onOpen: onOpen
+        pingDelay: 2000
       },
-      events: handlers
+      events: defaultHandlers
     }
   );
-
-  return socketInstance;
 }
 
 function onPause() {
@@ -96,9 +112,9 @@ function onResume() {
 document.addEventListener('pause', onPause, false);
 document.addEventListener('resume', onResume, false);
 
-module.exports = {
-  connectGame: createGameSocket,
-  connectLobby: createLobbySocket,
-  await: createAwaitSocket,
-  connectSocket: createSocket
+export default {
+  game,
+  lobby,
+  await,
+  connectDefault
 };

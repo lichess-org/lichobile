@@ -28,20 +28,16 @@ seek.controller = function() {
     });
   };
 
-  xhr.lobby(true).then(function(data) {
-    lobbySocket = socket.connectLobby(data.lobby.version, createHook, {
-      redirect: function(data) {
-        m.route('/game' + data.url);
-      },
+  xhr.lobby(true).then(data => {
+    lobbySocket = socket.lobby(data.lobby.version, createHook, {
+      redirect: d => m.route('/game' + d.url),
       n: function(n) {
         nbPlaying = n;
         m.redraw();
       },
-      resync: function() {
-        xhr.lobby().then(function(data) {
-          if (lobbySocket) lobbySocket.setVersion(data.lobby.version);
-        });
-      }
+      resync: () => xhr.lobby().then(d => {
+        if (lobbySocket) lobbySocket.setVersion(d.lobby.version);
+      })
     });
   });
 
@@ -75,7 +71,7 @@ seek.view = function(ctrl) {
         m('br'),
         m('br'),
         m('button[data-icon=L]', {
-          config: helper.ontouchend(ctrl.cancel),
+          config: helper.ontouchend(ctrl.cancel)
         }, i18n('cancel'))
       ]),
       true

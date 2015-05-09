@@ -40,25 +40,21 @@ seeks.controller = function() {
   helper.analyticsTrackView('Seeks');
 
   xhr.lobby(true).then(function(data) {
-    lobbySocket = socket.connectLobby(data.lobby.version, reload, {
-      redirect: function(data) {
-        m.route('/game' + data.url);
-      },
-      'reload_seeks': reload,
-      resync: function() {
-        xhr.lobby().then(function(data) {
-          if (lobbySocket) lobbySocket.setVersion(data.lobby.version);
-        });
-      }
+    lobbySocket = socket.lobby(data.lobby.version, reload, {
+      redirect: d => m.route('/game' + d.url),
+      reload_seeks: reload,
+      resync: () => xhr.lobby().then(d => {
+        if (lobbySocket) lobbySocket.setVersion(d.lobby.version);
+      })
     });
   });
 
-  var reload = function(feedback) {
+  function reload(feedback) {
     xhr.seeks(feedback).then(function(d) {
       pool = fixSeeks(d);
       m.redraw();
     });
-  };
+  }
   reload(true);
 
   return {

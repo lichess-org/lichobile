@@ -32,7 +32,7 @@ module.exports = function(cfg, onFeatured) {
     showingActions: false
   };
 
-  this.socket = socket.connectGame(
+  this.socket = socket.game(
     this.data.url.socket,
     this.data.player.version,
     socketHandler(this, onFeatured),

@@ -6,8 +6,7 @@ var menu = require('../menu');
 var i18n = require('../../i18n');
 var socket = require('../../socket');
 var iScroll = require('iscroll');
-
-var onlineFriends = [];
+var friends = require('../../friends');
 
 function renderBody() {
   return [
@@ -25,7 +24,7 @@ function renderBody() {
         context.scroller.refresh();
       }
     }, [
-      m('ul#friends', onlineFriends.map(function(name) {
+      m('ul#friends', friends.list().map(function(name) {
         var userId = utils.userFullNameToId(name);
 
         return m('li.list_item.nav', {
@@ -40,48 +39,7 @@ function renderBody() {
 
 module.exports = {
   controller: function() {
-
-    var friendsSocket;
-
     helper.analyticsTrackView('Online Friends');
-
-    function requestFriends() {
-      friendsSocket.send('following_onlines');
-    }
-
-    function refreshList() {
-      m.startComputation();
-      onlineFriends.sort(utils.caseInsensitiveSort);
-      m.endComputation();
-    }
-
-    friendsSocket = socket.connectSocket(requestFriends, {
-      following_onlines: function(data) {
-        onlineFriends = data;
-        refreshList();
-      },
-      following_enters: function(name) {
-        onlineFriends.push(name);
-        refreshList();
-      },
-      following_leaves: function(name) {
-        var nameIndex = onlineFriends.indexOf(name);
-        if (nameIndex !== -1) {
-          onlineFriends.splice(nameIndex, 1);
-          refreshList();
-        }
-      }
-    });
-
-    return {
-      onunload: function() {
-        if (friendsSocket) {
-          friendsSocket.destroy();
-          friendsSocket = null;
-        }
-      }
-    };
-
   },
 
   view: function() {

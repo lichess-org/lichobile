@@ -1,3 +1,4 @@
+/** @jsx m */
 var session = require('../../session');
 var roundView = require('../round/view/roundView');
 var gameLogic = require('../../lichess/game');
@@ -12,10 +13,20 @@ var widgets = require('../widget/common');
 var popupWidget = require('../widget/popup');
 var i18n = require('../../i18n');
 
+function gameInfos(gameData) {
+  const mode = gameData.game.rated ? i18n('rated') : i18n('casual');
+  return (
+    <div className="gameInfos">
+      <p className="explanation small">{`${i18n('variant')}: ${gameData.game.variant.name}`}</p>
+      <p className="time small" data-icon="p">{gameLogic.time(gameData)}</p>
+      <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
+    </div>
+  );
+}
+
 function joinOverlay(ctrl) {
   var data = ctrl.getData();
   var opp = data.opponent.user;
-  var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var joinDom;
   if (data.game.rated && !session.isConnected()) {
     joinDom = m('div.error', [
@@ -45,8 +56,7 @@ function joinOverlay(ctrl) {
       'join_url_challenge',
       opp ? opp.username : 'Anonymous',
       m('div.infos', [
-        m('p.explanation', data.game.variant.name + ', ' + mode),
-        m('p.time[data-icon=p]', gameLogic.time(data)),
+        gameInfos(data),
         m('br'),
         joinDom
       ]),
@@ -57,7 +67,6 @@ function joinOverlay(ctrl) {
 
 function awaitInviteOverlay(ctrl) {
   var data = ctrl.getData();
-  var mode = data.game.rated ? i18n('rated') : i18n('casual');
 
   return function() {
     return popupWidget(
@@ -81,8 +90,7 @@ function awaitInviteOverlay(ctrl) {
           }, i18n('cancel'))
         ]),
         m('br'),
-        m('p.explanation.small', data.game.variant.name + ', ' + mode),
-        m('p.time.small[data-icon=p]', gameLogic.time(data))
+        gameInfos(data)
       ]),
       true
     );
@@ -90,22 +98,23 @@ function awaitInviteOverlay(ctrl) {
 }
 
 function awaitChallengeOverlay(ctrl) {
+  const popupContent = (
+    <div className="infos">
+      <div className="user">{m.route.param('userId')}</div>
+      <br />
+      <div className="loader"><span data-icon="U" /></div>
+      <br />
+      <p>{i18n('waitingForOpponent')}</p>
+      <button data-icon="L" config={helper.ontouchend(ctrl.cancelChallenge)}>
+        {i18n('cancel')}
+      </button>
+      <br />
+      {gameInfos(ctrl.getData())}
+    </div>
+  );
+
   return function() {
-    return popupWidget(
-      'await_url_challenge',
-      i18n('challengeToPlay'),
-      m('div.infos', [
-        m('div.user', m.route.param('userId')),
-        m('br'),
-        m('div.loader', m('span[data-icon=U]')),
-        m('br'),
-        m('p', i18n('waitingForOpponent')),
-        m('button[data-icon=L]', {
-          config: helper.ontouchend(ctrl.cancelChallenge)
-        }, i18n('cancel'))
-      ]),
-      true
-    );
+    return popupWidget('await_url_challenge', i18n('challengeToPlay'), popupContent, true);
   };
 }
 

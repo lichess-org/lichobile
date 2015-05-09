@@ -22,8 +22,10 @@ module.exports = function() {
     // status created means waiting for friend to join game invit or challenge
     else if (data.game.status.id === gameStatus.ids.created) {
       awaitSocket = socket.await(data.url.socket, data.player.version, {
-        redirect: function(e) {
-          m.route('/game/' + e.id);
+        redirect: e => m.route('/game/' + e.id),
+        declined: () => {
+          window.plugins.toast.show('Challenge declined', 'short', 'center');
+          utils.backHistory();
         }
       });
       // userId param means it's a challenge, otherwise it's an invitation by url

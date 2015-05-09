@@ -43,7 +43,7 @@ function renderProfile(user) {
     if (location) locationString += location;
     if (country) locationString += (location ? ', ' : '') + country;
     const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
-    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).format('LLL') : null;
+    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).calendar() : null;
     return (
       <div className="profile">
         {fullname ?

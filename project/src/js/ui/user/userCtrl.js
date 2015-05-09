@@ -18,7 +18,7 @@ module.exports = function() {
   xhr.user(m.route.param('id')).then(user, error => {
     utils.handleXhrError(error);
     m.route('/');
-  });
+  }).then(session.refresh);
 
   return {
     user,

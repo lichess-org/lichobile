@@ -55,7 +55,7 @@ function inviteFriend(userId) {
   }, true);
 }
 
-function cancelInvite(url) {
+function cancelChallenge(url) {
   return http.request(url + '/cancel');
 }
 
@@ -112,7 +112,7 @@ module.exports = {
   newAiGame: newAiGame,
   seekGame: seekGame,
   inviteFriend: inviteFriend,
-  cancelInvite: cancelInvite,
+  cancelChallenge: cancelChallenge,
   joinUrlChallenge: joinUrlChallenge,
   lobby: lobby,
   seeks: seeks,

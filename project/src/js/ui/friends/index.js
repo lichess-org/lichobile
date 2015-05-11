@@ -40,6 +40,13 @@ function renderBody() {
 module.exports = {
   controller: function() {
     helper.analyticsTrackView('Online Friends');
+    const defaultSocket = socket.socket();
+
+    return {
+      onunload: () => {
+        if (defaultSocket) defaultSocket.destroy();
+      }
+    };
   },
 
   view: function() {

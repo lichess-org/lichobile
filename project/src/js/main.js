@@ -7,7 +7,6 @@ window.moment = require('moment');
 
 var utils = require('./utils');
 var session = require('./session');
-var socket = require('./socket');
 var i18n = require('./i18n');
 var xhr = require('./xhr');
 var backbutton = require('./backbutton');
@@ -97,8 +96,6 @@ function onOnline() {
         window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
       }
     }
-  }).then(() => {
-    console.log('haha');
   });
 }
 

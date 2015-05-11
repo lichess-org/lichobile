@@ -1,26 +1,17 @@
 import assign from 'lodash/object/assign';
 import StrongSocket from './StrongSocket';
+import utils from './utils';
 import xhr from './xhr';
 import i18n from './i18n';
 import friends from './friends';
 
-var defaultSocketInstance;
 var socketInstance;
 var errorDetected = false;
 
 const defaultHandlers = {
-  following_onlines: data => {
-    friends.set(data);
-    m.redraw();
-  },
-  following_enters: name => {
-    friends.add(name);
-    m.redraw();
-  },
-  following_leaves: name => {
-    friends.remove(name);
-    m.redraw();
-  },
+  following_onlines: data => utils.autoredraw(utils.partialf(friends.set, data)),
+  following_enters: name => utils.autoredraw(utils.partialf(friends.add, name)),
+  following_leaves: name => utils.autoredraw(utils.partialf(friends.remove, name)),
   challengeReminder: id => console.log(id)
 };
 
@@ -87,18 +78,19 @@ function lobby(lobbyVersion, onOpen, handlers) {
   return socketInstance;
 }
 
-function connectDefault() {
-  defaultSocketInstance = new StrongSocket(
-    '/socket',
-    0, {
+function socket() {
+  socketInstance = new StrongSocket(
+    '/socket', 0, {
       options: {
-        name: 'persistent',
+        name: 'default',
         debug: window.lichess.mode !== 'prod',
         pingDelay: 2000
       },
       events: defaultHandlers
     }
   );
+
+  return socketInstance;
 }
 
 function onPause() {
@@ -116,5 +108,5 @@ export default {
   game,
   lobby,
   await,
-  connectDefault
+  socket
 };

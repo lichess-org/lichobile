@@ -1,7 +1,6 @@
 'use strict';
 
 var merge = require('lodash/object/merge'),
-  clone = require('lodash/lang/clone'),
   assign = require('lodash/object/assign'),
   range = require('lodash/utility/range'),
   utils = require('./utils'),
@@ -26,14 +25,14 @@ var strongSocketDefaults = {
     name: 'unnamed',
     pingMaxLag: 7000, // time to wait for pong before reseting the connection
     pingDelay: 1000, // time between pong and ping
-    autoReconnectDelay: 1000
+    autoReconnectDelay: 1000,
+    ignoreUnknownMessages: true
   }
 };
 
 var StrongSocket = function(url, version, settings) {
   var self = this;
-  self.settings = clone(strongSocketDefaults, true);
-  merge(self.settings, settings);
+  self.settings = merge({}, strongSocketDefaults, settings);
   self.url = url;
   self.version = version;
   self.options = self.settings.options;
@@ -71,7 +70,7 @@ StrongSocket.prototype = {
         self.onError(e);
       };
       self.ws.onclose = function() {
-        signals.disconnected.dispatch();
+        signals.socket.disconnected.dispatch();
         if (self.autoReconnect) {
           self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);
           self.scheduleConnect(self.options.autoReconnectDelay);
@@ -230,11 +229,11 @@ StrongSocket.prototype = {
     self.options.debug = true;
     self.debug('error: ' + JSON.stringify(e));
     self.tryAnotherUrl = true;
-    signals.disconnected.dispatch();
+    signals.socket.disconnected.dispatch();
     clearTimeout(self.pingSchedule);
   },
   onSuccess: function() {
-    signals.connected.dispatch();
+    signals.socket.connected.dispatch();
   },
   baseUrl: function() {
     if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {

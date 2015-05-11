@@ -11,6 +11,7 @@ import getVariant from '../../lichess/variant';
 import gameStatus from '../../lichess/status';
 import IScroll from 'iscroll/build/iscroll-probe';
 import {throttle} from 'lodash/function';
+import socket from '../../socket';
 const moment = window.moment;
 
 var scroller;
@@ -56,6 +57,7 @@ function renderGame(g, index, userId) {
 
 export default {
   controller: function() {
+    const defaultSocket = socket.socket();
     const userId = m.route.param('id');
     var games = [];
 
@@ -89,7 +91,10 @@ export default {
     return {
       getGames: function() { return games; },
       scrollerConfig,
-      userId
+      userId,
+      onunload: () => {
+        if (defaultSocket) defaultSocket.destroy();
+      }
     };
   },
 

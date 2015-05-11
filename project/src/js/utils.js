@@ -1,6 +1,12 @@
 var utils = {};
 var i18n = require('./i18n');
 
+utils.autoredraw = function(action) {
+  m.startComputation();
+  action();
+  m.endComputation();
+};
+
 utils.hasNetwork = function() {
   var t = window.navigator.connection.type;
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;

@@ -5,6 +5,7 @@ var newGameForm = require('../newGameForm');
 var challengeForm = require('../challengeForm');
 var i18n = require('../../i18n');
 var utils = require('../../utils');
+var friends = require('../../friends');
 var helper = require('../helper');
 var iScroll = require('iscroll');
 
@@ -38,7 +39,7 @@ function renderProfileActions(user) {
       </li>
       <li className="side_link" config={helper.ontouchend(menu.route('/friends'))}>
         <span data-icon="f" />
-        {i18n('onlineFriends')}
+        {i18n('onlineFriends') + ' (' + friends.count() + ')' }
       </li>
       <li className="side_link" config={helper.ontouchend(() => {
         session.logout();

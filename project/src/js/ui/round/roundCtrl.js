@@ -120,16 +120,6 @@ module.exports = function(cfg, onFeatured) {
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
 
-  this.reload = function(rCfg) {
-    this.replay.onReload(rCfg);
-    if (this.chat) this.chat.onReload(rCfg.chat);
-    if (this.data.tv) rCfg.tv = true;
-    this.data = data(rCfg);
-    makeCorrespondenceClock();
-    this.setTitle();
-    if (!this.replay.active) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
-  }.bind(this);
-
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
     this.data.player.spectator ? function() {} : throttle(function() {
@@ -170,6 +160,16 @@ module.exports = function(cfg, onFeatured) {
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
+  this.reload = function(rCfg) {
+    this.replay.onReload(rCfg);
+    if (this.chat) this.chat.onReload(rCfg.chat);
+    if (this.data.tv) rCfg.tv = true;
+    this.data = data(rCfg);
+    makeCorrespondenceClock();
+    this.setTitle();
+    if (!this.replay.active) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
+  }.bind(this);
+
   window.plugins.insomnia.keepAwake();
 
   var onConnected = function() {
@@ -186,16 +186,16 @@ module.exports = function(cfg, onFeatured) {
     }, 2000);
   }.bind(this);
 
-  signals.connected.add(onConnected);
-  signals.disconnected.add(onDisconnected);
+  signals.socket.connected.add(onConnected);
+  signals.socket.disconnected.add(onDisconnected);
 
   this.onunload = function() {
     this.socket.destroy();
     this.socket = null;
     if (clockIntervId) clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
-    signals.connected.remove(onConnected);
-    signals.disconnected.remove(onDisconnected);
+    signals.socket.connected.remove(onConnected);
+    signals.socket.disconnected.remove(onDisconnected);
     window.plugins.insomnia.allowSleepAgain();
   };
 };

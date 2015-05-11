@@ -4,10 +4,13 @@ import utils from '../../utils';
 import helper from '../helper';
 import {assign} from 'lodash/object';
 import challengeForm from '../challengeForm';
+import socket from '../../socket';
 
 module.exports = function() {
 
   helper.analyticsTrackView('User Profile');
+
+  const defaultSocket = socket.socket();
 
   const user = m.prop();
 
@@ -32,6 +35,9 @@ module.exports = function() {
       else xhr.block(user().id).then(setNewUserState);
     },
     goToGames: () => m.route(`/@/${user().id}/games`),
-    challenge: () => challengeForm.open(user().id)
+    challenge: () => challengeForm.open(user().id),
+    onunload: () => {
+      if (defaultSocket) defaultSocket.destroy();
+    }
   };
 };

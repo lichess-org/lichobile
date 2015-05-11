@@ -1,7 +1,8 @@
-var Signal = require('signals');
+import Signal from 'signals';
 
-module.exports = {
-  // socket events
-  connected: new Signal(),
-  disconnected: new Signal()
+export default {
+  socket: {
+    connected: new Signal(),
+    disconnected: new Signal()
+  }
 };

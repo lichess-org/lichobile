@@ -105,20 +105,39 @@ main.out
       background url('../../images/icons/game_icon_canvas.svg') no-repeat
     &.metal::before
       background url('../../images/icons/game_icon_metal.svg') no-repeat
-    & > .nb_playing
+    & > .chip
       position absolute
-      top 10px
-      left 7px
       font-size 10px
       font-weight bold
       line-height 12px
       letter-spacing 0px
       color bgdark
-      background gold
       border 2px solid bgdark
       border-radius 50%
       height 17px
       width 17px
+    & > .nb_playing
+      top 10px
+      left 7px
+      background gold
+    & > .nb_challenges
+      top 4px
+      right 4px
+      border-color darken(orange, 5%)
+      background orange
+    &.new_challenge:before
+      background transparent
+      font-family: "lichess" !important;
+      content: "U";
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-variant: normal !important;
+      text-transform: none !important;
+      speak: none;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      animation: neon 1.5s ease-in-out infinite alternate
+
 
 .main_header, .main_footer
   section

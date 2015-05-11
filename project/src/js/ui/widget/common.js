@@ -1,3 +1,4 @@
+/** @jsx m */
 var menu = require('../menu');
 var utils = require('../../utils');
 var helper = require('../helper');
@@ -5,6 +6,7 @@ var gamesMenu = require('../gamesMenu');
 var newGameForm = require('../newGameForm');
 var session = require('../../session');
 var settings = require('../../settings');
+import challenges from '../../lichess/challenges';
 
 var widgets = {};
 
@@ -22,19 +24,33 @@ widgets.backButton = function(title) {
 
 widgets.gameButton = function() {
   var key, action;
+  const nbChallenges = challenges.count();
   if (session.nowPlaying().length) {
     key = 'games-menu';
+    action = gamesMenu.open;
+  } else if (nbChallenges) {
+    key = 'games-menu-challenge';
     action = gamesMenu.open;
   } else {
     key = 'new-game-form';
     action = newGameForm.open;
   }
-  var myTurns = session.myTurnGames().length;
-  return m('button.game_menu_button', {
-    key: key,
-    className: settings.general.theme.board(),
-    config: helper.ontouchend(action)
-  }, myTurns ? m('span.nb_playing', myTurns) : null);
+  const myTurns = session.myTurnGames().length;
+  const className = [
+    'game_menu_button',
+    settings.general.theme.board(),
+    nbChallenges ? 'new_challenge' : ''
+  ].join(' ');
+  return (
+    <button key={key} className={className} config={helper.ontouchend(action)}>
+      {!nbChallenges && myTurns ?
+        <span className="chip nb_playing">{myTurns}</span> : null
+      }
+      {nbChallenges ?
+        <span className="chip nb_challenges">{nbChallenges}</span> : null
+      }
+    </button>
+  );
 };
 
 widgets.header = function(title, leftButton) {

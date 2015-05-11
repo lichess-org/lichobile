@@ -8,10 +8,9 @@ var moment = window.moment;
 var backbutton = require('../backbutton');
 var newGameForm = require('./newGameForm');
 
-// iScroll instance
 var scroller = null;
 
-var gamesMenu = {};
+const gamesMenu = {};
 
 gamesMenu.isOpen = false;
 
@@ -32,12 +31,11 @@ gamesMenu.close = function(fromBB) {
 
 gamesMenu.lastJoined = null;
 
-gamesMenu.joinGame = function(g) {
+function joinGame(g) {
   gamesMenu.lastJoined = g;
   gamesMenu.close();
   m.route('/game/' + g.fullId);
-  m.redraw();
-};
+}
 
 function cardDims() {
   var vp = helper.viewportDim();
@@ -92,9 +90,7 @@ function renderAllGames(cDim, nowPlaying) {
     return m('div.card.standard.' + g.color, {
       key: 'game.' + g.gameId,
       style: cardStyle,
-      config: helper.ontouchendScrollX(function() {
-        gamesMenu.joinGame(g);
-      })
+      config: helper.ontouchendScrollX(() => joinGame(g))
     }, [
       renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
       m('div.infos', [
@@ -125,7 +121,7 @@ function renderAllGames(cDim, nowPlaying) {
       m('div.infos', [
         m('div.description', [
           m('h2.title', i18n('createAGame')),
-          m('p', i18n('newOpponent')),
+          m('p', i18n('newOpponent'))
         ])
       ])
     ])

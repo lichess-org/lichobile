@@ -86,3 +86,35 @@
     transform: rotate(360deg);
   }
 }
+
+.glowing
+  animation: 2s ease 0s normal none infinite running glow;
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px 2px #fff, 0 0 10px 3px #e89000, 0 0 20px 3px #d85000;
+  }
+  50% {
+    box-shadow: none;
+  }
+  100% {
+    box-shadow: 0 0 5px 2px #fff, 0 0 10px 3px #e89000, 0 0 20px 3px #d85000;
+  }
+}
+
+@keyframes neon {
+  from {
+    text-shadow: 0 0 12.5px  darken(orange, 25%),
+               0 0 15px darken(orange, 25%),
+               0 0 17.5px orange,
+               0 0 20px orange,
+               0 0 25px orange;
+  }
+  to {
+    text-shadow: 0 0 25px darken(orange, 25%),
+               0 0 30px darken(orange, 25%),
+               0 0 35px orange,
+               0 0 40px orange,
+               0 0 50px orange;
+  }
+}

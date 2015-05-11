@@ -77,6 +77,10 @@ function game(id, color) {
   return http.request(url);
 }
 
+function getChallenge(id) {
+  return http.request('/' + id, { background: true });
+}
+
 function featured(flip) {
   return http.request('/tv/lichess', flip ? { data: { flip: 1 }} : {});
 }
@@ -118,5 +122,6 @@ module.exports = {
   seeks: seeks,
   game: game,
   featured: featured,
-  status: status
+  status: status,
+  getChallenge
 };

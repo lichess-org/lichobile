@@ -3,7 +3,8 @@ import StrongSocket from './StrongSocket';
 import utils from './utils';
 import xhr from './xhr';
 import i18n from './i18n';
-import friends from './friends';
+import friends from './lichess/friends';
+import challenges from './lichess/challenges';
 
 var socketInstance;
 var errorDetected = false;
@@ -12,7 +13,7 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friends.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friends.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friends.remove, name)),
-  challengeReminder: id => console.log(id)
+  challengeReminder: id => xhr.getChallenge(id).then(g => challenges.add(g)).then(m.redraw)
 };
 
 function game(url, version, receiveHandler, gameUrl) {

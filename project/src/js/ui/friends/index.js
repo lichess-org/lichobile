@@ -6,7 +6,7 @@ var menu = require('../menu');
 var i18n = require('../../i18n');
 var socket = require('../../socket');
 var iScroll = require('iscroll');
-var friends = require('../../friends');
+var friends = require('../../lichess/friends');
 
 function renderBody() {
   return [

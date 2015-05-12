@@ -13,7 +13,10 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friends.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friends.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friends.remove, name)),
-  challengeReminder: id => xhr.getChallenge(id).then(g => challenges.add(g)).then(m.redraw)
+  challengeReminder: o => {
+    if (challenges.hasKey(o.id)) challenges.remind(o.id);
+    else xhr.getChallenge(o.id).then(g => challenges.add(o.id, g)).then(m.redraw);
+  }
 };
 
 function game(url, version, receiveHandler, gameUrl) {

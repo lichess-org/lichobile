@@ -1,3 +1,4 @@
+/** @jsx m */
 var utils = require('../utils');
 var helper = require('./helper');
 var settings = require('../settings');
@@ -7,6 +8,8 @@ var i18n = require('../i18n');
 var moment = window.moment;
 var backbutton = require('../backbutton');
 var newGameForm = require('./newGameForm');
+var gameData = require('../lichess/game');
+var challengesData = require('../lichess/challenges');
 
 var scroller = null;
 
@@ -61,52 +64,77 @@ function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
   ]);
 }
 
-function renderAllGames(cDim, nowPlaying) {
-  var cardStyle = {
+function timeLeft(g) {
+  if (!g.isMyTurn) return i18n('waitingForOpponent');
+  if (!g.secondsLeft) return i18n('yourTurn');
+  var time = moment().add(g.secondsLeft, 'seconds');
+  return m('time', {
+    datetime: time.format()
+  }, time.fromNow());
+}
+
+function renderGame(g, cDim, cardStyle) {
+  const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
+  return m('div.card.standard.' + g.color, {
+    key: 'game.' + g.gameId,
+    style: cardStyle,
+    config: helper.ontouchendScrollX(() => joinGame(g))
+  }, [
+    renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
+    m('div.infos', [
+      m('div.icon-game', {
+        'data-icon': icon ? icon : ''
+      }),
+      m('div.description', [
+        m('h2.title', utils.playerName(g.opponent, false)),
+        m('p', [
+          g.variant.name,
+          m('span.time-indication', timeLeft(g))
+        ])
+      ])
+    ])
+  ]);
+}
+
+function renderChallenge(c, cDim, cardStyle) {
+  const icon = utils.gameIcon(c.game.perf);
+  return (
+    <div className="card standard challenge" style={cardStyle}>
+      {renderViewOnlyBoard(cDim, c.game.fen, c.game.lastMove, null, c.game.variant)}
+      <div className="infos">
+        <div className="icon-game" data-icon={icon}></div>
+        <div className="description">
+          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.opponent, false))}</h2>
+          <p className="variant">
+            {i18n('toAGame', c.game.variant.name)}
+            <span className="time-indication">{gameData.time(c)}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function renderAllGames(cDim) {
+  const nowPlaying = session.nowPlaying();
+  const challenges = challengesData.list();
+  const cardStyle = {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
     marginLeft: cDim.margin + 'px',
     marginRight: cDim.margin + 'px'
   };
-  var nbCards = nowPlaying.length + 1;
+  const nbCards = challenges.length + nowPlaying.length + 1;
   // scroller wrapper width
   // calcul is:
   // ((cardWidth + visible part of adjacent card) * nb of cards) +
   //   wrapper's marginLeft
-  var wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
+  const wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
     (cDim.margin * 2);
 
-  var timeLeft = function(g) {
-    if (!g.isMyTurn) return i18n('waitingForOpponent');
-    if (!g.secondsLeft) return i18n('yourTurn');
-    var time = moment().add(g.secondsLeft, 'seconds');
-    return m('time', {
-      datetime: time.format()
-    }, time.fromNow());
-  };
+  const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
 
-  var allGames = nowPlaying.map(function(g) {
-    var icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
-    return m('div.card.standard.' + g.color, {
-      key: 'game.' + g.gameId,
-      style: cardStyle,
-      config: helper.ontouchendScrollX(() => joinGame(g))
-    }, [
-      renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
-      m('div.infos', [
-        m('div.icon-game', {
-          'data-icon': icon ? icon : ''
-        }),
-        m('div.description', [
-          m('h2.title', utils.playerName(g.opponent, false)),
-          m('p', [
-            g.variant.name,
-            m('span.time-indication', timeLeft(g))
-          ])
-        ])
-      ])
-    ]);
-  });
+  const allGames = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
   allGames.unshift(
     m('div.card.standard', {
@@ -137,7 +165,6 @@ function renderAllGames(cDim, nowPlaying) {
 
 gamesMenu.view = function() {
   if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
-  var nowPlaying = session.nowPlaying();
   var vh = helper.viewportDim().vh;
   var cDim = cardDims();
   var children = [
@@ -172,7 +199,7 @@ gamesMenu.view = function() {
         scroller.options.snap = el.querySelectorAll('.card');
         scroller.refresh();
       }
-    }, renderAllGames(cDim, nowPlaying))
+    }, renderAllGames(cDim))
   ];
 
   return m('div#games_menu.overlay.overlay_fade.open', children);

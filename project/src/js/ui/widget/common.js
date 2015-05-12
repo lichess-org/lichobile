@@ -25,11 +25,8 @@ widgets.backButton = function(title) {
 widgets.gameButton = function() {
   var key, action;
   const nbChallenges = challenges.count();
-  if (session.nowPlaying().length) {
+  if (session.nowPlaying().length || nbChallenges) {
     key = 'games-menu';
-    action = gamesMenu.open;
-  } else if (nbChallenges) {
-    key = 'games-menu-challenge';
     action = gamesMenu.open;
   } else {
     key = 'new-game-form';

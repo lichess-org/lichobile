@@ -17,7 +17,9 @@ var untranslated = {
   boardThemeWood3: 'Wood 3',
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
-  boardThemeMetal: 'Metal'
+  boardThemeMetal: 'Metal',
+  playerisInvitingYou: '%s is inviting you',
+  toAGame: 'To a %s game'
 };
 
 var defaultCode = 'en';

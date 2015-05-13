@@ -23,16 +23,6 @@ function xhrConfig(xhr) {
   xhr.timeout = 8000;
 }
 
-function extract(xhr, xhrOptions) {
-  try {
-    xhrOptions.deserialize(xhr.responseText);
-  } catch (e) {
-    throw { response: 'Cannot read data from the server' };
-  }
-
-  return xhr.responseText.length === 0 ? null : xhr.responseText;
-}
-
 // convenient wrapper around m.request
 http.request = function(url, opts, feedback) {
 
@@ -41,10 +31,16 @@ http.request = function(url, opts, feedback) {
     method: 'GET',
     data: { '_': Date.now() },
     config: xhrConfig,
+    deserialize: function(text) {
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw { response: 'Cannot read data from the server' };
+      }
+    },
     unwrapError: function(response, xhr) {
       return { response, status: xhr.status };
-    },
-    extract: extract
+    }
   };
   merge(cfg, opts);
 

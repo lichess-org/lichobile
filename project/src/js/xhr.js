@@ -69,7 +69,8 @@ function getChallenge(id) {
 
 function declineChallenge(id) {
   return http.request('/setup/decline?gameId=' + id, {
-    method: 'POST'
+    method: 'POST',
+    deserialize: v => v
   }, true);
 }
 

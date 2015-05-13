@@ -33,14 +33,17 @@
   };
 
   // toast
+  function mockToast() {
+    console.log('Toast fired with args:', arguments);
+  }
   window.plugins.toast = {
-    show: noop,
-    showShortTop: noop,
-    showShortCenter: noop,
-    showShortBottom: noop,
-    showLongTop: noop,
-    showLongCenter: noop,
-    showLongBottom: noop
+    show: mockToast,
+    showShortTop: mockToast,
+    showShortCenter: mockToast,
+    showShortBottom: mockToast,
+    showLongTop: mockToast,
+    showLongCenter: mockToast,
+    showLongBottom: mockToast
   };
 
   // insomnia

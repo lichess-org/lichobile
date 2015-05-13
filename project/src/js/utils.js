@@ -20,10 +20,26 @@ utils.hasNetwork = function() {
  * @param {Error} error The error thrown in extract function (see http.js)
  */
 utils.handleXhrError = function(error) {
-  if (!utils.hasNetwork())
+  var {response: data, status} = error;
+  if (!utils.hasNetwork()) {
     window.navigator.notification.alert(i18n('noInternetConnection'));
-  else
-    window.plugins.toast.show(i18n(error.message), 'short', 'center');
+  } else {
+    let message;
+    if (status === 0)
+      message = 'noInternetConnection';
+    else if (status === 401)
+      message = 'unauthorizedError';
+    else if (status === 404)
+      message = 'resourceNotFoundError';
+    else if (status === 503)
+      message = 'lichessIsUnavailableError';
+    else if (status >= 500)
+      message = 'Server error';
+
+    if (typeof data.error === 'string') message += `: ${data.error}`;
+
+    window.plugins.toast.show(i18n(message), 'short', 'center');
+  }
 };
 
 utils.lichessSri = Math.random().toString(36).substring(2);

@@ -19,7 +19,8 @@ var submit = function(form) {
     signupModal.close();
     require('./loginModal').close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
-  }, function(data) {
+  }, function(error) {
+    var data = error.response;
     if (data.error.username)
       window.plugins.toast.show(data.error.username[0], 'short', 'center');
     else if (data.error.password)

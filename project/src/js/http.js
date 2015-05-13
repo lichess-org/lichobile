@@ -23,20 +23,12 @@ function xhrConfig(xhr) {
   xhr.timeout = 8000;
 }
 
-// throw an error message that may be given to i18n() function and displayed
-// to the user
-function extract(xhr) {
-  var s = xhr.status;
-  if (s === 0)
-    throw new Error('noInternetConnection');
-  else if (s === 401)
-    throw new Error('unauthorizedError');
-  else if (s === 404)
-    throw new Error('resourceNotFoundError');
-  else if (s === 503)
-    throw new Error('lichessIsUnavailableError');
-  else if (s >= 500)
-    throw new Error('Server error');
+function extract(xhr, xhrOptions) {
+  try {
+    xhrOptions.deserialize(xhr.responseText);
+  } catch (e) {
+    throw new Error('Cannot read data from the server');
+  }
 
   return xhr.responseText.length === 0 ? null : xhr.responseText;
 }
@@ -49,6 +41,9 @@ http.request = function(url, opts, feedback) {
     method: 'GET',
     data: { '_': Date.now() },
     config: xhrConfig,
+    unwrapError: function(response, xhr) {
+      return { response, status: xhr.status };
+    },
     extract: extract
   };
   merge(cfg, opts);

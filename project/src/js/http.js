@@ -27,7 +27,7 @@ function extract(xhr, xhrOptions) {
   try {
     xhrOptions.deserialize(xhr.responseText);
   } catch (e) {
-    throw new Error('Cannot read data from the server');
+    throw { response: 'Cannot read data from the server' };
   }
 
   return xhr.responseText.length === 0 ? null : xhr.responseText;

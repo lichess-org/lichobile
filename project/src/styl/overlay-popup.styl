@@ -6,13 +6,13 @@
 
 .overlay_popup
   position absolute
-  border-radius 2px
+  border-radius 0 0 5px 5px
   top 20%
   left 10%
   width 80%
   max-height 90%
   z-index 12
-  background-color: #fff
+  background-color #fff
   color textDarkGray
   box-shadow 0 0 35px 10px rgba(0,0,0,0.5)
   > header
@@ -46,7 +46,7 @@
       margin-right 10px
     &:last-child
       border-bottom none
-      border-radius 0 0 2px 2px
+      border-radius 0 0 5px 5px
   .loader:before, .loader:after
     background-color #fff
   @media only screen and (min-device-width 700px)

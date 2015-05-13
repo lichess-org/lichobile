@@ -140,9 +140,7 @@ function renderForm() {
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('fieldset', [
-      m('button[data-icon=E][type=submit]', challengeForm.actionName)
-    ])
+    m('button[data-icon=E][type=submit]', challengeForm.actionName)
   ]);
 }
 

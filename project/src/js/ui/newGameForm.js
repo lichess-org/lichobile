@@ -68,7 +68,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     m('div.select_input', {
       key: formName + 'variant'
     }, [
-      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant),
+      formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ])
   ];
 
@@ -83,7 +83,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
       m('div.select_input', {
         key: formName + 'color'
       }, [
-        formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color),
+        formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
       ])
     );
   }
@@ -184,9 +184,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('fieldset', [
-      m('button[data-icon=E][type=submit]', i18n('createAGame'))
-    ])
+    m('button[data-icon=E][type=submit]', i18n('createAGame'))
   ]);
 }
 

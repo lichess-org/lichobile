@@ -19,7 +19,8 @@ var untranslated = {
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
   playerisInvitingYou: '%s is inviting you',
-  toATypeModeGame: 'To a %s game, %s'
+  toATypeModeGame: 'To a %s game, %s',
+  unsupportedVariant: 'Variant %s is not supported in this version'
 };
 
 var defaultCode = 'en';

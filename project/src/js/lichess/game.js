@@ -1,5 +1,6 @@
 var gameStatus = require('./status');
 var utils = require('../utils');
+var settings = require('../settings');
 var i18n = require('../i18n');
 
 function parsePossibleMoves(possibleMoves) {
@@ -115,6 +116,10 @@ function publicUrl(data) {
   return 'http://lichess.org/' + data.game.id;
 }
 
+function isSupportedVariant(data) {
+  return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1;
+}
+
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
   isPlayerTurn: isPlayerTurn,
@@ -134,5 +139,6 @@ module.exports = {
   setIsGone: setIsGone,
   result: result,
   time: time,
-  publicUrl: publicUrl
+  publicUrl: publicUrl,
+  isSupportedVariant
 };

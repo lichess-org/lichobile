@@ -4,7 +4,9 @@ var xhr = require('../../xhr');
 var storage = require('../../storage');
 var roundCtrl = require('../round/roundCtrl');
 var gameStatus = require('../../lichess/status');
+var gameApi = require('../../lichess/game');
 var socket = require('../../socket');
+var i18n = require('../../i18n');
 
 module.exports = function() {
   const isAwaitingInvite = m.prop(false);
@@ -17,7 +19,12 @@ module.exports = function() {
 
   xhr.game(m.route.param('id'), m.route.param('color')).then(function(data) {
     gameData = data;
-    if (data.game.joinable)
+
+    if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
+      window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
+      m.route('/');
+    }
+    else if (data.game.joinable)
       isJoinable(true);
     // status created means waiting for friend to join game invit or challenge
     else if (data.game.status.id === gameStatus.ids.created) {

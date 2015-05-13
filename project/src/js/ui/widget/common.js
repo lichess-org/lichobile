@@ -23,6 +23,7 @@ widgets.backButton = function(title) {
 };
 
 widgets.gameButton = function() {
+  if (!utils.hasNetwork()) return null;
   var key, action;
   const nbChallenges = challenges.count();
   if (session.nowPlaying().length || nbChallenges) {

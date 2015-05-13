@@ -12,22 +12,26 @@ var iScroll = require('iscroll');
 var menu = require('./menu');
 
 function renderHeader(user) {
-  var header = user ? [
-    m('div.logo'),
-    m('h2.username', user.username),
-    m('button.open_button[data-icon=u]', {
-      className: menu.headerOpen() ? 'open' : '',
-      config: helper.ontouchend(menu.toggleHeader)
-    })
-  ] : [
-    m('div.logo'),
-    m('h2.username', 'Anonymous'),
-    m('button.login', {
-      config: helper.ontouchendScrollY(loginModal.open)
-    }, i18n('signIn'))
-  ];
-
-  return header;
+  if (utils.hasNetwork())
+    return user ? [
+      m('div.logo'),
+      m('h2.username', user.username),
+      m('button.open_button[data-icon=u]', {
+        className: menu.headerOpen() ? 'open' : '',
+        config: helper.ontouchend(menu.toggleHeader)
+      })
+    ] : [
+      m('div.logo'),
+      m('h2.username', 'Anonymous'),
+      m('button.login', {
+        config: helper.ontouchendScrollY(loginModal.open)
+      }, i18n('signIn'))
+    ];
+  else
+    return [
+      m('div.logo'),
+      m('h2.username', 'Offline')
+    ];
 }
 
 function renderProfileActions(user) {

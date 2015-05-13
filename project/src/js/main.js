@@ -45,6 +45,7 @@ function main() {
   }
 
   document.addEventListener('online', onOnline, false);
+  document.addEventListener('offline', onOffline, false);
 
   // if connected, refresh data every min, and on resume
   refreshIntervalID = setInterval(refresh, refreshInterval);
@@ -96,7 +97,12 @@ function onOnline() {
         window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
       }
     }
-  });
+  })
+  .then(m.redraw);
+}
+
+function onOffline() {
+  m.redraw();
 }
 
 function handleError(event, source, fileno, columnNumber) {

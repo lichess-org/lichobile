@@ -1,4 +1,4 @@
-var gameLogic = require('../../../lichess/game');
+var gameApi = require('../../../lichess/game');
 var gameStatus = require('../../../lichess/status');
 var helper = require('../../helper');
 var throttle = require('lodash/function/throttle');
@@ -22,12 +22,12 @@ module.exports = {
   shareLink: function(ctrl) {
     return m('button', {
       config: helper.ontouchend(function() {
-        window.plugins.socialsharing.share(null, null, null, gameLogic.publicUrl(ctrl.data));
+        window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data));
       })
     }, [m('span.fa.fa-share-alt'), i18n('shareGameURL')]);
   },
   forceResign: function(ctrl) {
-    return gameLogic.forceResignable(ctrl.data) ?
+    return gameApi.forceResignable(ctrl.data) ?
       m('div.force_resign_zone.clearfix', [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
         m('button.binary_choice[data-icon=E]', {
@@ -119,7 +119,7 @@ module.exports = {
     ]);
   },
   moretime: function(ctrl) {
-    if (gameLogic.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
+    if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       config: helper.ontouchend(throttle(function() { ctrl.socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
   }

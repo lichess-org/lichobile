@@ -1,12 +1,18 @@
-
 #wrapper_games
   position absolute
   top 13%
   width 100%
+  z-index 12
 
 #all_games
   height 100%
   position relative
+
+.wrapper_overlay_close
+  position absolute
+  width 100%
+  height 100%
+  z-index 10
 
 .card
   background textDarkGray
@@ -37,29 +43,23 @@
     z-index 3
   .description
     line-height 1
-    padding 20px 0
+    padding 20px 0 10px
+    height 100px
   h2
-    margin-top 10px
-    font-size 1.2em
+    margin-top 20px
+    font-size 1.4em
     color #fff
+    .rating
+      font-size 0.8em
+      color gold
   p
-    font-size 0.8em
+    font-size 0.9em
     color gold
-    margin-top: 10px
+    margin-top 20px
     font-weight 300
     .time-indication
       display block
       margin-top 5px
-  button
-    position relative
-    width 100%
-    height 50px
-    border none
-    background: bgdark
-    border-top-color #404040
-    font-size 0.85em
-    text-transform uppercase
-    border-top solid 1px #EBEBEB
 
 .card.challenge
   background gold
@@ -68,9 +68,24 @@
     border-color darken(gold, 20%)
     color darken(gold, 40%)
   h2
+    margin-top 10px
     font-size 1em
     font-weight 600
   p
+    margin-top 10px
     text-transform none
     color #fff
+  .actions
+    height 45px
+    background #aa8f58
+    border-radius 0 0 3px 3px
+    button
+      font-size 0.85em
+      text-transform uppercase
+      padding 0
+      line-height 45px
+      display inline-block
+      width 50%
+      &:first-child
+        border-right 1px solid #9b814d
 

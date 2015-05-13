@@ -1,4 +1,4 @@
-var gameLogic = require('../../lichess/game');
+var gameApi = require('../../lichess/game');
 var ground = require('./ground');
 var xhr = require('./roundXhr');
 var sound = require('../../sound');
@@ -13,7 +13,7 @@ module.exports = function(ctrl, onFeatured) {
       ctrl.data.possibleMoves = o;
       if (!ctrl.replay.active) ctrl.chessground.set({
         movable: {
-          dests: gameLogic.parsePossibleMoves(o)
+          dests: gameApi.parsePossibleMoves(o)
         }
       });
     },
@@ -117,7 +117,7 @@ module.exports = function(ctrl, onFeatured) {
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai) {
-        gameLogic.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
+        gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
         m.redraw();
       }
     },

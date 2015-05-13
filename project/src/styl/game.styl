@@ -32,6 +32,10 @@
     min-width 90px
     font-size 25px
     padding-top: 3px;
+    &.running
+      color gold
+      &.emerg
+        color orange
     &.correspondence
       font-family 'Open Sans'
       font-size 17px
@@ -63,9 +67,6 @@
       background-image url(../../images/pieces/mono/Q.svg)
     .king
       background-image url(../../images/pieces/mono/K.svg)
-
-.clock.running
-  color gold
 
 .board
   width 100%
@@ -112,13 +113,6 @@
     visibility hidden
   &:before
     font-size 22px
-
-@keyframes answer_glow {
-  50%   {
-    color #000
-    background gold
-  }
-}
 
 #open_player_controls.answer_required,
 #open_chat.unread

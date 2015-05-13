@@ -7,9 +7,10 @@ var session = require('../session');
 var i18n = require('../i18n');
 var moment = window.moment;
 var backbutton = require('../backbutton');
+var xhr = require('../xhr');
 var newGameForm = require('./newGameForm');
-var gameData = require('../lichess/game');
-var challengesData = require('../lichess/challenges');
+var gameApi = require('../lichess/game');
+var challengesApi = require('../lichess/challenges');
 
 var scroller = null;
 
@@ -40,13 +41,28 @@ function joinGame(g) {
   m.route('/game/' + g.fullId);
 }
 
+function acceptChallenge(id) {
+  return xhr.joinChallenge(id)
+  .then(data =>
+    m.route('/game' + data.url.round)
+  )
+  .then(() => challengesApi.remove(id))
+  .then(gamesMenu.close);
+}
+
+function declineChallenge(id) {
+  return xhr.declineChallenge(id).then(() =>
+    challengesApi.remove(id)
+  ).then(m.redraw);
+}
+
 function cardDims() {
   var vp = helper.viewportDim();
   var width = vp.vw * 85 / 100;
   var margin = vp.vw * 2.5 / 100;
   return {
     w: width + margin * 2,
-    h: width + 100,
+    h: width + 145,
     innerW: width,
     margin: margin
   };
@@ -98,6 +114,7 @@ function renderGame(g, cDim, cardStyle) {
 
 function renderChallenge(c, cDim, cardStyle) {
   const icon = utils.gameIcon(c.game.perf);
+  const mode = c.game.rated ? i18n('rated') : i18n('casual');
   return (
     <div className="card standard challenge" style={cardStyle}>
       {renderViewOnlyBoard(cDim, c.game.fen, c.game.lastMove, null, c.game.variant)}
@@ -106,9 +123,17 @@ function renderChallenge(c, cDim, cardStyle) {
         <div className="description">
           <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.opponent, false))}</h2>
           <p className="variant">
-            {i18n('toAGame', c.game.variant.name)}
-            <span className="time-indication">{gameData.time(c)}</span>
+            {i18n('toATypeModeGame', c.game.variant.name, mode)}
+            <span className="time-indication">{gameApi.time(c)}</span>
           </p>
+        </div>
+        <div className="actions">
+          <button config={helper.ontouchendScrollX(utils.f(acceptChallenge, c.game.id))}>
+            {i18n('accept')}
+          </button>
+          <button config={helper.ontouchendScrollX(utils.f(declineChallenge, c.game.id))}>
+            {i18n('decline')}
+          </button>
         </div>
       </div>
     </div>
@@ -117,7 +142,7 @@ function renderChallenge(c, cDim, cardStyle) {
 
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
-  const challenges = challengesData.list();
+  const challenges = challengesApi.list();
   const cardStyle = {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
@@ -134,9 +159,9 @@ function renderAllGames(cDim) {
 
   const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
 
-  const allGames = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
+  const allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
-  allGames.unshift(
+  allCards.unshift(
     m('div.card.standard', {
       key: 'game.new-game',
       style: cardStyle,
@@ -160,7 +185,7 @@ function renderAllGames(cDim) {
       width: wrapperWidth + 'px',
       marginLeft: (cDim.margin * 3) + 'px'
     }
-  }, allGames);
+  }, allCards);
 }
 
 gamesMenu.view = function() {
@@ -168,7 +193,7 @@ gamesMenu.view = function() {
   var vh = helper.viewportDim().vh;
   var cDim = cardDims();
   var children = [
-    m('button.overlay_close.fa.fa-close', {
+    m('div.wrapper_overlay_close', {
       config: helper.ontouchend(gamesMenu.close)
     }),
     m('div#wrapper_games', {

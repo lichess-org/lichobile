@@ -65,7 +65,7 @@ module.exports = function() {
     isJoinable,
     isAwaitingInvite,
     isAwaitingChallenge,
-    joinUrlChallenge: id => xhr.joinUrlChallenge(id).then(data =>
+    joinChallenge: id => xhr.joinChallenge(id).then(data =>
       m.route('/game' + data.url.round)
     ),
     cancelChallenge: () => {

@@ -3,16 +3,16 @@ import StrongSocket from './StrongSocket';
 import utils from './utils';
 import xhr from './xhr';
 import i18n from './i18n';
-import friends from './lichess/friends';
+import friendsApi from './lichess/friends';
 import challenges from './lichess/challenges';
 
 var socketInstance;
 var errorDetected = false;
 
 const defaultHandlers = {
-  following_onlines: data => utils.autoredraw(utils.partialf(friends.set, data)),
-  following_enters: name => utils.autoredraw(utils.partialf(friends.add, name)),
-  following_leaves: name => utils.autoredraw(utils.partialf(friends.remove, name)),
+  following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
+  following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
+  following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
   challengeReminder: o => {
     if (challenges.hasKey(o.id)) challenges.remind(o.id);
     else xhr.getChallenge(o.id).then(g => challenges.add(o.id, g)).then(m.redraw);
@@ -88,7 +88,8 @@ function socket() {
       options: {
         name: 'default',
         debug: window.lichess.mode !== 'prod',
-        pingDelay: 2000
+        pingDelay: 2000,
+        onOpen: () => socketInstance.send('following_onlines')
       },
       events: defaultHandlers
     }

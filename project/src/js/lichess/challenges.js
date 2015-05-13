@@ -1,6 +1,6 @@
 const challenges = {};
 
-function countdown(key) {
+function timeout(key) {
   return setTimeout(() => {
     delete challenges[key];
     m.redraw();
@@ -16,23 +16,19 @@ export default {
     return Object.keys(challenges).length;
   },
 
-  get(key) {
-    return challenges[key] && challenges[key].val;
-  },
-
   hasKey(key) {
     return challenges.hasOwnProperty(key);
   },
 
   add(key, val) {
-    challenges[key] = { timeoutID: countdown(key), val };
+    challenges[key] = { timeoutID: timeout(key), val };
   },
 
   remind(key) {
     let c = challenges[key];
     if (c) {
       clearTimeout(c.timeoutID);
-      c.timeoutID = countdown(key);
+      c.timeoutID = timeout(key);
     }
   },
 

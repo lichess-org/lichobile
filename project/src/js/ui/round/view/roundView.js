@@ -10,7 +10,7 @@ var utils = require('../../../utils');
 var helper = require('../../helper');
 var i18n = require('../../../i18n');
 var button = require('./button');
-var gameLogic = require('../../../lichess/game');
+var gameApi = require('../../../lichess/game');
 var gameStatus = require('../../../lichess/status');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
@@ -89,7 +89,7 @@ function renderGameRunningActions(ctrl) {
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
     button.answerOpponentTakebackProposition(ctrl),
-    (gameLogic.mandatory(d) && gameLogic.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
+    (gameApi.mandatory(d) && gameApi.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
       ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : undefined
   ]);
@@ -98,11 +98,11 @@ function renderGameRunningActions(ctrl) {
       button.shareLink(ctrl),
       button.flipBoard(ctrl),
       button.moretime(ctrl),
-      button.standard(ctrl, gameLogic.abortable, 'L', 'abortGame', 'abort'),
+      button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
-        button.standard(ctrl, gameLogic.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-        button.standard(ctrl, gameLogic.drawable, '2', 'offerDraw', 'draw-yes'),
-        button.standard(ctrl, gameLogic.resignable, 'b', 'resign', 'resign'),
+        button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+        button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
+        button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
         button.threefoldClaimDraw(ctrl)
       ]
     ]),
@@ -111,11 +111,15 @@ function renderGameRunningActions(ctrl) {
 }
 
 function renderGameEndedActions(ctrl) {
-  var result = gameLogic.result(ctrl.data);
-  var winner = gameLogic.getPlayer(ctrl.data, ctrl.data.game.winner);
+  var result = gameApi.result(ctrl.data);
+  var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   var status = gameStatus.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  var buttons = ctrl.data.player.spectator ? [
+  const resultDom = gameStatus.aborted(ctrl.data) ? [] : [
+    result, m('br'), m('br')
+  ];
+  resultDom.push(m('div.status', status));
+  const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
     button.flipBoard(ctrl)
   ] : [
@@ -126,13 +130,13 @@ function renderGameEndedActions(ctrl) {
     button.rematch(ctrl)
   ];
   return [
-    m('div.result', [result, m('br'), m('br'), m('div.status', status)]),
+    m('div.result', resultDom),
     m('div.control.buttons', buttons)
   ];
 }
 
 function gameInfos(data) {
-  var time = gameLogic.time(data);
+  var time = gameApi.time(data);
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
   var infos = [time + ' • ' + data.game.perf, m('br'), mode];
@@ -148,7 +152,7 @@ function renderPlayerActions(ctrl) {
   return popupWidget(
     'player_controls',
     gameInfos(ctrl.data),
-    gameLogic.playable(ctrl.data) ?
+    gameApi.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
@@ -162,7 +166,7 @@ function renderGameButtons(ctrl) {
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
           ctrl.data.opponent.offeringDraw ||
-          gameLogic.forceResignable(ctrl.data) ||
+          gameApi.forceResignable(ctrl.data) ||
           ctrl.data.opponent.offeringRematch
       }),
       config: helper.ontouchend(ctrl.showActions)

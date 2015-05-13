@@ -2,7 +2,7 @@ var helper = require('../helper');
 var i18n = require('../../i18n');
 var iScroll = require('iscroll');
 var storage = require('../../storage');
-var gameLogic = require('../../lichess/game');
+var gameApi = require('../../lichess/game');
 var backbutton = require('../../backbutton');
 
 module.exports = {
@@ -108,7 +108,7 @@ module.exports = {
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
     this.onunload = function() {
-      if (!gameLogic.playable(this.root.data)) storage.remove(storageId);
+      if (!gameApi.playable(this.root.data)) storage.remove(storageId);
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     }.bind(this);

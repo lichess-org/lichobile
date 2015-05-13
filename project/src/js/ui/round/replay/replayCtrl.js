@@ -1,5 +1,5 @@
 var Chess = require('chessli.js').Chess;
-var gameLogic = require('../../../lichess/game');
+var gameApi = require('../../../lichess/game');
 var xhr = require('../roundXhr');
 
 module.exports = function(root) {
@@ -59,8 +59,8 @@ module.exports = function(root) {
   var disable = function() {
     root.chessground.set({
       movable: {
-        color: gameLogic.isPlayerPlaying(root.data) ? root.data.player.color : null,
-        dests: gameLogic.parsePossibleMoves(root.data.possibleMoves)
+        color: gameApi.isPlayerPlaying(root.data) ? root.data.player.color : null,
+        dests: gameApi.parsePossibleMoves(root.data.possibleMoves)
       }
     });
   };

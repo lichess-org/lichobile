@@ -59,8 +59,18 @@ function cancelChallenge(url) {
   return http.request(url + '/cancel');
 }
 
-function joinUrlChallenge(id) {
+function joinChallenge(id) {
   return http.request('/' + id + '/join', { method: 'POST' }, true);
+}
+
+function getChallenge(id) {
+  return http.request('/' + id, { background: true });
+}
+
+function declineChallenge(id) {
+  return http.request('/setup/decline?gameId=' + id, {
+    method: 'POST'
+  }, true);
 }
 
 function lobby(feedback) {
@@ -75,10 +85,6 @@ function game(id, color) {
   var url = '/' + id;
   if (color) url += ('/' + color);
   return http.request(url);
-}
-
-function getChallenge(id) {
-  return http.request('/' + id, { background: true });
 }
 
 function featured(flip) {
@@ -113,15 +119,16 @@ function status() {
 }
 
 module.exports = {
-  newAiGame: newAiGame,
-  seekGame: seekGame,
-  inviteFriend: inviteFriend,
-  cancelChallenge: cancelChallenge,
-  joinUrlChallenge: joinUrlChallenge,
-  lobby: lobby,
-  seeks: seeks,
-  game: game,
-  featured: featured,
-  status: status,
-  getChallenge
+  newAiGame,
+  seekGame,
+  inviteFriend,
+  getChallenge,
+  joinChallenge,
+  declineChallenge,
+  cancelChallenge,
+  lobby,
+  seeks,
+  game,
+  featured,
+  status
 };

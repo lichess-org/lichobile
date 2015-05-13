@@ -19,7 +19,7 @@ var untranslated = {
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
   playerisInvitingYou: '%s is inviting you',
-  toAGame: 'To a %s game'
+  toATypeModeGame: 'To a %s game, %s'
 };
 
 var defaultCode = 'en';

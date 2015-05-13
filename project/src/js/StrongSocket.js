@@ -1,5 +1,3 @@
-'use strict';
-
 var merge = require('lodash/object/merge'),
   assign = require('lodash/object/assign'),
   range = require('lodash/utility/range'),
@@ -7,14 +5,14 @@ var merge = require('lodash/object/merge'),
   signals = require('./signals'),
   storage = require('./storage');
 
-var lichessSri = utils.lichessSri;
+const lichessSri = utils.lichessSri;
 
-var urlsPool = range(9021, 9030).map(function(e) {
+const urlsPool = range(9021, 9030).map(function(e) {
   return window.lichess.socketEndPoint + ':' + e;
 });
 urlsPool.unshift(window.lichess.socketEndPoint);
 
-var strongSocketDefaults = {
+const strongSocketDefaults = {
   events: {
   },
   params: {
@@ -30,29 +28,31 @@ var strongSocketDefaults = {
   }
 };
 
-var StrongSocket = function(url, version, settings) {
-  var self = this;
-  self.settings = merge({}, strongSocketDefaults, settings);
-  self.url = url;
-  self.version = version;
-  self.options = self.settings.options;
-  self.ws = null;
-  self.pingSchedule = null;
-  self.connectSchedule = null;
-  self.ackableMessages = [];
-  self.lastPingTime = self.now();
-  self.currentLag = 0;
-  self.averageLag = 0;
-  self.autoReconnect = true;
-  self.tryAnotherUrl = false;
-  self.debug('Debug is enabled');
-  self.connect();
+function StrongSocket(url, version, settings) {
+  this.settings = merge({}, strongSocketDefaults, settings);
+  this.url = url;
+  this.version = version;
+  this.options = this.settings.options;
+  this.ws = null;
+  this.pingSchedule = null;
+  this.connectSchedule = null;
+  this.ackableMessages = [];
+  this.lastPingTime = this.now();
+  this.currentLag = 0;
+  this.averageLag = 0;
+  this.autoReconnect = true;
+  this.tryAnotherUrl = false;
+
+  this.debug('Debug is enabled');
+  this.connect();
+
   window.addEventListener('unload', function() {
-    self.destroy();
-  });
-};
+    this.destroy();
+  }.bind(this));
+}
 
 StrongSocket.prototype = {
+
   connect: function() {
     var self = this;
     self.destroy();
@@ -100,10 +100,12 @@ StrongSocket.prototype = {
     }
     self.scheduleConnect(self.options.pingMaxLag);
   },
+
   setVersion: function(version) {
     this.version = version;
     this.connect();
   },
+
   send: function(t, d, o) {
     var self = this;
     var data = d || {},
@@ -124,9 +126,11 @@ StrongSocket.prototype = {
       self.debug(e);
     }
   },
+
   sendAckable: function(t, d) {
     this.send(t, d, { ackable: true });
   },
+
   scheduleConnect: function(delay) {
     var self = this;
     // self.debug('schedule connect ' + delay);
@@ -137,6 +141,7 @@ StrongSocket.prototype = {
       self.connect();
     }, delay);
   },
+
   schedulePing: function(delay) {
     var self = this;
     clearTimeout(self.pingSchedule);
@@ -144,6 +149,7 @@ StrongSocket.prototype = {
       self.pingNow();
     }, delay);
   },
+
   pingNow: function() {
     var self = this;
     clearTimeout(self.pingSchedule);
@@ -156,6 +162,7 @@ StrongSocket.prototype = {
     }
     self.scheduleConnect(self.options.pingMaxLag);
   },
+
   pong: function() {
     var self = this;
     clearTimeout(self.connectSchedule);
@@ -164,12 +171,14 @@ StrongSocket.prototype = {
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
   },
+
   pingData: function() {
     return JSON.stringify({
       t: "p",
       v: this.version
     });
   },
+
   handle: function(m) {
     var self = this;
     if (m.v) {
@@ -198,20 +207,24 @@ StrongSocket.prototype = {
         }
     }
   },
+
   now: function() {
     return new Date().getTime();
   },
+
   debug: function(msg, always) {
     if ((always || this.options.debug) && window.console && console.debug) {
       console.debug("[" + this.options.name + " " + lichessSri + "]", msg);
     }
   },
+
   destroy: function() {
     clearTimeout(this.pingSchedule);
     clearTimeout(this.connectSchedule);
     this.disconnect();
     this.ws = null;
   },
+
   disconnect: function() {
     if (this.ws) {
       this.debug("Disconnect", true);
@@ -223,6 +236,7 @@ StrongSocket.prototype = {
       this.ws.close();
     }
   },
+
   onError: function(e) {
     var self = this;
     if (self.options.onError) self.options.onError(e);
@@ -232,9 +246,11 @@ StrongSocket.prototype = {
     signals.socket.disconnected.dispatch();
     clearTimeout(self.pingSchedule);
   },
+
   onSuccess: function() {
     signals.socket.connected.dispatch();
   },
+
   baseUrl: function() {
     if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {
       var key = 'socket.baseUrl';
@@ -252,6 +268,7 @@ StrongSocket.prototype = {
 
     return window.lichess.socketEndPoint;
   },
+
   pingInterval: function() {
     return this.options.pingDelay + this.averageLag;
   }

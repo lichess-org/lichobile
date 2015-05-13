@@ -5,7 +5,7 @@ import widgets from '../widget/common';
 import layout from '../layout';
 import menu from '../menu';
 import * as xhr from './userXhr';
-import gameLogic from '../../lichess/game';
+import gameApi from '../../lichess/game';
 import i18n from '../../i18n';
 import getVariant from '../../lichess/variant';
 import gameStatus from '../../lichess/status';
@@ -17,7 +17,7 @@ const moment = window.moment;
 var scroller;
 
 function renderGame(g, index, userId) {
-  const time = gameLogic.time(g);
+  const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + getVariant(g.variant).name + ' • ' + mode;
   const date = moment(g.timestamp).calendar();

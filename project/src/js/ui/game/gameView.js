@@ -1,7 +1,7 @@
 /** @jsx m */
 var session = require('../../session');
 var roundView = require('../round/view/roundView');
-var gameLogic = require('../../lichess/game');
+var gameApi = require('../../lichess/game');
 var gamesMenu = require('../gamesMenu');
 var loginModal = require('../loginModal');
 var layout = require('../layout');
@@ -18,7 +18,7 @@ function gameInfos(gameData) {
   return (
     <div className="gameInfos">
       <p className="explanation small">{`${i18n('variant')}: ${gameData.game.variant.name}`}</p>
-      <p className="time small" data-icon="p">{gameLogic.time(gameData)}</p>
+      <p className="time small" data-icon="p">{gameApi.time(gameData)}</p>
       <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
     </div>
   );
@@ -43,7 +43,7 @@ function joinOverlay(ctrl) {
   } else {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouchend(utils.f(ctrl.joinUrlChallenge, data.game.id))
+          config: helper.ontouchend(utils.f(ctrl.joinChallenge, data.game.id))
       }, i18n('join')),
       m('button.binary_choice[data-icon=L]', {
         config: helper.ontouchend(utils.backHistory)
@@ -75,14 +75,14 @@ function awaitInviteOverlay(ctrl) {
       m('div.infos', [
         m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
         m('input.lichess_game_url', {
-          value: gameLogic.publicUrl(data),
+          value: gameApi.publicUrl(data),
           readonly: true
         }),
         m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
         m('div.go_or_cancel.clearfix', [
           m('button.binary_choice[data-icon=E]', {
             config: helper.ontouchend(function() {
-              window.plugins.socialsharing.share(null, null, null, gameLogic.publicUrl(data));
+              window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(data));
             })
           }, i18n('shareGameURL')),
           m('button.binary_choice[data-icon=L]', {

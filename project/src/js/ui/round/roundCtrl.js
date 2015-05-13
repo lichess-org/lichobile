@@ -2,7 +2,7 @@ var throttle = require('lodash/function/throttle');
 var data = require('./data');
 var utils = require('../../utils');
 var sound = require('../../sound');
-var gameLogic = require('../../lichess/game');
+var gameApi = require('../../lichess/game');
 var ground = require('./ground');
 var promotion = require('./promotion');
 var replayCtrl = require('./replay/replayCtrl');
@@ -75,7 +75,7 @@ module.exports = function(cfg, onFeatured) {
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
       this.title = i18n('gameAborted');
-    else if (gameLogic.isPlayerTurn(this.data))
+    else if (gameApi.isPlayerTurn(this.data))
       this.title = i18n('yourTurn');
     else
       this.title = i18n('waitingForOpponent');
@@ -114,7 +114,7 @@ module.exports = function(cfg, onFeatured) {
     if (!this.replay.active) this.chessground.apiMove(o.from, o.to);
     if (this.data.game.threefold) this.data.game.threefold = false;
     this.data.game.moves.push(o.san);
-    gameLogic.setOnGame(this.data, o.color, true);
+    gameApi.setOnGame(this.data, o.color, true);
     m.endComputation();
   }.bind(this);
 
@@ -129,7 +129,7 @@ module.exports = function(cfg, onFeatured) {
   ) : false;
 
   this.isClockRunning = function() {
-    return this.data.clock && gameLogic.playable(this.data) &&
+    return this.data.clock && gameApi.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }.bind(this);
 
@@ -147,7 +147,7 @@ module.exports = function(cfg, onFeatured) {
   makeCorrespondenceClock();
 
   var correspondenceClockTick = function() {
-    if (this.correspondenceClock && gameLogic.playable(this.data))
+    if (this.correspondenceClock && gameApi.playable(this.data))
       this.correspondenceClock.tick(this.data.game.player);
   }.bind(this);
 

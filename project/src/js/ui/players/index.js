@@ -44,17 +44,15 @@ export default {
 
     function body() {
       return (
-        <div className="native_scroller">
-          <ul className="search_results">
-            {ctrl.list().map(u => {
-              return (
-                <li className="list_item nav" key={u} config={h.ontouchY(utils.f(ctrl.goToProfile, u))}>
-                  {u}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ul className="native_scroller search_results">
+          {ctrl.list().map(u => {
+            return (
+              <li className="list_item nav" key={u} config={h.ontouchY(utils.f(ctrl.goToProfile, u))}>
+                {u}
+              </li>
+            );
+          })}
+        </ul>
       );
     }
 

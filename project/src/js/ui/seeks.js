@@ -1,7 +1,6 @@
 var utils = require('../utils');
 var helper = require('./helper');
 var layout = require('./layout');
-var menu = require('./menu');
 var widgets = require('./widget/common');
 var xhr = require('../xhr');
 var i18n = require('../i18n');
@@ -146,7 +145,7 @@ seeks.view = function(ctrl) {
     ];
   };
 
-  return layout.free(header, body, widgets.empty, menu.view, widgets.empty);
+  return layout.free(header, body, widgets.empty, widgets.empty);
 };
 
 module.exports = seeks;

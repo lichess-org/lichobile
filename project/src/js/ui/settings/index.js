@@ -2,7 +2,6 @@ var utils = require('../../utils');
 var helper = require('../helper');
 var widgets = require('../widget/common');
 var layout = require('../layout');
-var menu = require('../menu');
 var formWidgets = require('../widget/form');
 var settings = require('../../settings');
 var i18n = require('../../i18n');
@@ -36,6 +35,6 @@ module.exports = {
     var header = utils.partialf(widgets.header, null,
       widgets.backButton(i18n('settings'))
     );
-    return layout.free(header, renderBody, widgets.empty, menu.view, widgets.empty);
+    return layout.free(header, renderBody, widgets.empty, widgets.empty);
   }
 };

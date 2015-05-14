@@ -4,7 +4,6 @@ import userPerfs from '../../lichess/perfs';
 import widgets from '../widget/common';
 import perf from '../widget/perf';
 import layout from '../layout';
-import menu from '../menu';
 import i18n from '../../i18n';
 import countries from './countries';
 import helper from '../helper';
@@ -29,7 +28,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, profile, widgets.empty, menu.view, widgets.empty);
+  return layout.free(header, profile, widgets.empty, widgets.empty);
 };
 
 function renderProfile(user) {

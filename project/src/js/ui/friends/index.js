@@ -2,7 +2,6 @@ var utils = require('../../utils');
 var helper = require('../helper');
 var widgets = require('../widget/common');
 var layout = require('../layout');
-var menu = require('../menu');
 var i18n = require('../../i18n');
 var socket = require('../../socket');
 var iScroll = require('iscroll');
@@ -52,6 +51,6 @@ module.exports = {
   view: function() {
     var header = utils.partialf(widgets.header, i18n('onlineFriends'));
 
-    return layout.free(header, renderBody, widgets.empty, menu.view, widgets.empty);
+    return layout.free(header, renderBody, widgets.empty, widgets.empty);
   }
 };

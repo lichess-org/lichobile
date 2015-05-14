@@ -1,8 +1,59 @@
+/** @jsx m */
+import utils from '../../utils';
+import h from '../helper';
+import widgets from '../widget/common';
+import layout from '../layout';
+import * as xhr from './playerXhr';
+import socket from '../../socket';
+import throttle from 'lodash/function/throttle';
 
 export default {
-  controller() {},
+  controller() {
+    const defaultSocket = socket.socket();
+    const list = m.prop([]);
+
+    return {
+      list,
+      onInput: throttle(e => {
+        const term = e.target.value.trim();
+        if (term.length > 1)
+          xhr.autocomplete(term).then(data => list(data));
+      }, 250),
+      goToProfile(u) {
+        m.route('/@/' + u);
+      },
+      onunload() {
+        if (defaultSocket) defaultSocket.destroy();
+      }
+    };
+  },
 
   view(ctrl) {
-    return m('hello world');
+    function header() {
+      return (
+        <nav>
+          {widgets.menuButton()}
+          {widgets.gameButton()}
+          <div className="search_input">
+            <span className="fa fa-search icon"/>
+            <input id="searchPlayers" type="search" placeholder="Search players" oninput={ctrl.onInput} />
+          </div>
+        </nav>
+      );
+    }
+
+    function body() {
+      return (
+        <div className="native_scroller">
+          <ul className="search_results">
+            {ctrl.list().map(u =>
+            <li className="list_item nav" config={h.ontouchendScrollY(utils.f(ctrl.goToProfile, u))}>{u}</li>
+            )}
+          </ul>
+        </div>
+      );
+    }
+
+    return layout.free(header, body, widgets.empty, widgets.empty);
   }
 };

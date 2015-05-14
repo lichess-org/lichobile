@@ -3,7 +3,6 @@ import utils from '../../utils';
 import helper from '../helper';
 import widgets from '../widget/common';
 import layout from '../layout';
-import menu from '../menu';
 import * as xhr from './userXhr';
 import gameApi from '../../lichess/game';
 import i18n from '../../i18n';
@@ -15,6 +14,68 @@ import socket from '../../socket';
 const moment = window.moment;
 
 var scroller;
+
+export default {
+  controller: function() {
+    const defaultSocket = socket.socket();
+    const userId = m.route.param('id');
+    var games = [];
+
+    function onScroll() {
+      console.log(this);
+      if (this.y + this.distY <= this.maxScrollY) {
+        console.log('loading next...');
+        // TODO load next batch of games
+      }
+    }
+
+    function scrollerConfig(el, isUpdate, context) {
+      if (!isUpdate) {
+        scroller = new IScroll(el, {
+          probeType: 2
+        });
+        scroller.on('scroll', throttle(onScroll, 150));
+        context.onunload = () => {
+          if (scroller) {
+            scroller.destroy();
+            scroller = null;
+          }
+        };
+      }
+    }
+
+    xhr.games(userId).then(data => {
+      games = data.list;
+    });
+
+    return {
+      getGames() { return games; },
+      scrollerConfig,
+      userId,
+      onunload() {
+        if (defaultSocket) defaultSocket.destroy();
+      }
+    };
+  },
+
+  view: function(ctrl) {
+    const header = utils.partialf(widgets.header, null,
+      widgets.backButton(m.route.param('id') + ' games')
+    );
+
+    function renderAllGames() {
+      return (
+        <div className="scroller page" config={ctrl.scrollerConfig}>
+          <ul className="userGames">
+            { ctrl.getGames().map((g, i) => renderGame(g, i, ctrl.userId)) }
+          </ul>
+        </div>
+      );
+    }
+
+    return layout.free(header, renderAllGames, widgets.empty, widgets.empty);
+  }
+};
 
 function renderGame(g, index, userId) {
   const time = gameApi.time(g);
@@ -54,65 +115,3 @@ function renderGame(g, index, userId) {
     </li>
   );
 }
-
-export default {
-  controller: function() {
-    const defaultSocket = socket.socket();
-    const userId = m.route.param('id');
-    var games = [];
-
-    function onScroll() {
-      console.log(this);
-      if (this.y + this.distY <= this.maxScrollY) {
-        console.log('loading next...');
-        // TODO load next batch of games
-      }
-    }
-
-    function scrollerConfig(el, isUpdate, context) {
-      if (!isUpdate) {
-        scroller = new IScroll(el, {
-          probeType: 2
-        });
-        scroller.on('scroll', throttle(onScroll, 150));
-        context.onunload = () => {
-          if (scroller) {
-            scroller.destroy();
-            scroller = null;
-          }
-        };
-      }
-    }
-
-    xhr.games(userId).then(data => {
-      games = data.list;
-    });
-
-    return {
-      getGames: function() { return games; },
-      scrollerConfig,
-      userId,
-      onunload: () => {
-        if (defaultSocket) defaultSocket.destroy();
-      }
-    };
-  },
-
-  view: function(ctrl) {
-    const header = utils.partialf(widgets.header, null,
-      widgets.backButton(m.route.param('id') + ' games')
-    );
-
-    function renderAllGames() {
-      return (
-        <div className="scroller page" config={ctrl.scrollerConfig}>
-          <ul className="userGames">
-            { ctrl.getGames().map((g, i) => renderGame(g, i, ctrl.userId)) }
-          </ul>
-        </div>
-      );
-    }
-
-    return layout.free(header, renderAllGames, widgets.empty, menu.view, widgets.empty);
-  }
-};

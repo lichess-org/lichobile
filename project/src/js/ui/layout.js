@@ -39,7 +39,7 @@ module.exports = {
     return m('div.view-container', view);
   },
 
-  free: function(header, content, footer, aside, overlay) {
+  free: function(header, content, footer, overlay) {
     var view = [
       m('main#page', {
         className: menu.isOpen ? 'out' : 'in'
@@ -51,7 +51,7 @@ module.exports = {
           config: helper.ontouchend(menu.close)
         })
       ]),
-      aside(),
+      menu.view(),
       gamesMenu.view(),
       loginModal.view(),
       signupModal.view(),

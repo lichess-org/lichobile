@@ -5,7 +5,7 @@ function renderBackwardButton(ctrl, curPly) {
   var prevPly = curPly - 1;
   var enabled = curPly !== prevPly && prevPly >= 1;
   return m('button.game_action[data-icon=I]', {
-    config: helper.ontouchend(ctrl.jumpPrev),
+    config: helper.ontouch(ctrl.jumpPrev),
     className: helper.classSet({
       disabled: ctrl.broken || !enabled
     })
@@ -16,7 +16,7 @@ function renderForwardButton(ctrl, curPly, nbMoves) {
   var nextPly = curPly + 1;
   var enabled = curPly !== nextPly && nextPly <= nbMoves;
   return m('button.game_action[data-icon=H]', {
-    config: helper.ontouchend(ctrl.jumpNext),
+    config: helper.ontouch(ctrl.jumpNext),
     className: helper.classSet({
       disabled: ctrl.broken || !enabled
     })

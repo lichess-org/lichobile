@@ -125,7 +125,7 @@ module.exports = {
     return m('div#chat.modal.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouchend(ctrl.close)
+          config: helper.ontouch(ctrl.close)
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))

@@ -43,11 +43,11 @@ module.exports = {
     var pieces = ['queen', 'knight', 'rook', 'bishop'];
     if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
     return m('div.overlay', [m('div#promotion_choice', {
-      config: helper.ontouchend(partial(cancel, ctrl)),
+      config: helper.ontouch(partial(cancel, ctrl)),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: helper.ontouchend(utils.f(finish, ctrl, role))
+        config: helper.ontouch(utils.f(finish, ctrl, role))
       });
     }))]);
   }

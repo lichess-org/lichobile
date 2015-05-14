@@ -169,13 +169,13 @@ function renderGameButtons(ctrl) {
           gameApi.forceResignable(ctrl.data) ||
           ctrl.data.opponent.offeringRematch
       }),
-      config: helper.ontouchend(ctrl.showActions)
+      config: helper.ontouch(ctrl.showActions)
     }),
     ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
       className: helper.classSet({
         unread: ctrl.chat.unread
       }),
-      config: helper.ontouchend(ctrl.chat.open || utils.noop)
+      config: helper.ontouch(ctrl.chat.open || utils.noop)
     }) : m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];

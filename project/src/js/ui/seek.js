@@ -71,7 +71,7 @@ seek.view = function(ctrl) {
         m('br'),
         m('br'),
         m('button[data-icon=L]', {
-          config: helper.ontouchend(ctrl.cancel)
+          config: helper.ontouch(ctrl.cancel)
         }, i18n('cancel'))
       ]),
       true

@@ -64,13 +64,13 @@ function bindTouchendButton(scrollableX, scrollableY, handler) {
   };
 }
 
-helper.ontouchend = function(handler) {
+helper.ontouch = function(handler) {
   return bindTouchendButton(false, false, handler);
 };
-helper.ontouchendScrollX = function(handler) {
+helper.ontouchX = function(handler) {
   return bindTouchendButton(true, false, handler);
 };
-helper.ontouchendScrollY = function(handler) {
+helper.ontouchY = function(handler) {
   return bindTouchendButton(false, true, handler);
 };
 

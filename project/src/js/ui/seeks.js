@@ -83,7 +83,7 @@ function renderSeek(ctrl, seek) {
     key: seek.id,
     'id': seek.id,
     className: 'list_item seek ' + action,
-    config: helper.ontouchendScrollY(utils.partialf(ctrl[action], seek.id))
+    config: helper.ontouchY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon
@@ -114,7 +114,7 @@ seeks.view = function(ctrl) {
           ]),
           m('button.fat', {
             key: 'seeks_login',
-            config: helper.ontouchend(loginModal.open)
+            config: helper.ontouch(loginModal.open)
           }, i18n('logIn'))
         ])
       ];
@@ -140,7 +140,7 @@ seeks.view = function(ctrl) {
       ),
       m('button#newGameCorres', {
         key: 'seeks_createagame',
-        config: helper.ontouchend(newGameForm.openCorrespondence)
+        config: helper.ontouch(newGameForm.openCorrespondence)
       }, [m('span.fa.fa-plus-circle'), i18n('createAGame')])
     ];
   };

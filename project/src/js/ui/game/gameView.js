@@ -33,20 +33,20 @@ function joinOverlay(ctrl) {
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
       m('div.go_or_cancel', [
         m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouchend(loginModal.open)
+          config: helper.ontouch(loginModal.open)
         }, i18n('signIn')),
         m('button.binary_choice[data-icon=L]', {
-          config: helper.ontouchend(utils.backHistory)
+          config: helper.ontouch(utils.backHistory)
         }, i18n('cancel'))
       ])
     ]);
   } else {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouchend(utils.f(ctrl.joinChallenge, data.game.id))
+          config: helper.ontouch(utils.f(ctrl.joinChallenge, data.game.id))
       }, i18n('join')),
       m('button.binary_choice[data-icon=L]', {
-        config: helper.ontouchend(utils.backHistory)
+        config: helper.ontouch(utils.backHistory)
       }, i18n('cancel'))
     ]);
   }
@@ -81,12 +81,12 @@ function awaitInviteOverlay(ctrl) {
         m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
         m('div.go_or_cancel.clearfix', [
           m('button.binary_choice[data-icon=E]', {
-            config: helper.ontouchend(function() {
+            config: helper.ontouch(function() {
               window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(data));
             })
           }, i18n('shareGameURL')),
           m('button.binary_choice[data-icon=L]', {
-            config: helper.ontouchend(ctrl.cancelChallenge)
+            config: helper.ontouch(ctrl.cancelChallenge)
           }, i18n('cancel'))
         ]),
         m('br'),
@@ -105,7 +105,7 @@ function awaitChallengeOverlay(ctrl) {
       <div className="loader"><span data-icon="U" /></div>
       <br />
       <p>{i18n('waitingForOpponent')}</p>
-      <button data-icon="L" config={helper.ontouchend(ctrl.cancelChallenge)}>
+      <button data-icon="L" config={helper.ontouch(ctrl.cancelChallenge)}>
         {i18n('cancel')}
       </button>
       <br />

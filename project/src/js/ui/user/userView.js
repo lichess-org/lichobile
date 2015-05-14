@@ -100,14 +100,14 @@ function renderActions(ctrl) {
   return (
     <section id="userProfileActions">
       <div className="list_item nav"
-        config={helper.ontouchendScrollY(ctrl.goToGames)}
+        config={helper.ontouchY(ctrl.goToGames)}
         key="view_all_games"
       >
         {i18n('viewAllNbGames', user.count.game)}
       </div>
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item nav" key="challenge_to_play"
-        config={helper.ontouchendScrollY(ctrl.challenge)}
+        config={helper.ontouchY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}
       </div> : null

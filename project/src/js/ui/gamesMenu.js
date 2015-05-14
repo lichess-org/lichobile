@@ -94,7 +94,7 @@ function renderGame(g, cDim, cardStyle) {
   return m('div.card.standard.' + g.color, {
     key: 'game.' + g.gameId,
     style: cardStyle,
-    config: helper.ontouchendScrollX(() => joinGame(g))
+    config: helper.ontouchX(() => joinGame(g))
   }, [
     renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
     m('div.infos', [
@@ -129,10 +129,10 @@ function renderChallenge(c, cDim, cardStyle) {
           </p>
         </div>
         <div className="actions">
-          <button config={helper.ontouchendScrollX(utils.f(acceptChallenge, c.game.id))}>
+          <button config={helper.ontouchX(utils.f(acceptChallenge, c.game.id))}>
             {i18n('accept')}
           </button>
-          <button config={helper.ontouchendScrollX(utils.f(declineChallenge, c.game.id))}>
+          <button config={helper.ontouchX(utils.f(declineChallenge, c.game.id))}>
             {i18n('decline')}
           </button>
         </div>
@@ -166,7 +166,7 @@ function renderAllGames(cDim) {
     m('div.card.standard', {
       key: 'game.new-game',
       style: cardStyle,
-      config: helper.ontouchendScrollX(function() {
+      config: helper.ontouchX(function() {
         gamesMenu.close();
         newGameForm.open();
       })
@@ -195,7 +195,7 @@ gamesMenu.view = function() {
   var cDim = cardDims();
   var children = [
     m('div.wrapper_overlay_close', {
-      config: helper.ontouchend(gamesMenu.close)
+      config: helper.ontouch(gamesMenu.close)
     }),
     m('div#wrapper_games', {
       style: {

@@ -18,13 +18,13 @@ function renderHeader(user) {
       m('h2.username', user.username),
       m('button.open_button[data-icon=u]', {
         className: menu.headerOpen() ? 'open' : '',
-        config: helper.ontouchend(menu.toggleHeader)
+        config: helper.ontouch(menu.toggleHeader)
       })
     ] : [
       m('div.logo'),
       m('h2.username', 'Anonymous'),
       m('button.login', {
-        config: helper.ontouchendScrollY(loginModal.open)
+        config: helper.ontouchY(loginModal.open)
       }, i18n('signIn'))
     ];
   else
@@ -37,15 +37,15 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
-      <li className="side_link" config={helper.ontouchend(menu.route('/@/' + user.id))}>
+      <li className="side_link" config={helper.ontouch(menu.route('/@/' + user.id))}>
         <span data-icon="r" />
         {i18n('profile')}
       </li>
-      <li className="side_link" config={helper.ontouchend(menu.route('/friends'))}>
+      <li className="side_link" config={helper.ontouch(menu.route('/friends'))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ' (' + friends.count() + ')' }
       </li>
-      <li className="side_link" config={helper.ontouchend(() => {
+      <li className="side_link" config={helper.ontouch(() => {
         session.logout();
         menu.headerOpen(false);
       })}>
@@ -63,42 +63,42 @@ function renderLinks(user) {
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li>
       )}
       {helper.cond(utils.hasNetwork(),
-      <li className="side_link" key="play_real_time" config={helper.ontouchendScrollY(menu.popup(newGameForm.openRealTime))}>
+      <li className="side_link" key="play_real_time" config={helper.ontouchY(menu.popup(newGameForm.openRealTime))}>
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li>
       )}
       {helper.cond(utils.hasNetwork() && user,
-      <li className="side_link" key="seeks" config={helper.ontouchendScrollY(menu.route('/seeks'))}>
+      <li className="side_link" key="seeks" config={helper.ontouchY(menu.route('/seeks'))}>
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li>
       )}
       {helper.cond(utils.hasNetwork(),
-      <li className="side_link" key="invite_friend" config={helper.ontouchendScrollY(menu.popup(challengeForm.open))}>
+      <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
       </li>
       )}
       {helper.cond(utils.hasNetwork(),
-      <li className="side_link" key="tv" config={helper.ontouchendScrollY(menu.route('/tv'))}>
+      <li className="side_link" key="tv" config={helper.ontouchY(menu.route('/tv'))}>
         <span data-icon="1"/>{i18n('watchLichessTV')}
       </li>
       )}
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
       </li>
-      <li className="side_link" key="players" config={helper.ontouchendScrollY(menu.route('/players'))}>
+      <li className="side_link" key="players" config={helper.ontouchY(menu.route('/players'))}>
         <span className="fa fa-search"/>{i18n('players')}
       </li>
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
-      <li className="side_link" key="play_ai" config={helper.ontouchendScrollY(menu.route('/ai'))}>
+      <li className="side_link" key="play_ai" config={helper.ontouchY(menu.route('/ai'))}>
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>
-      <li className="side_link" key="play_otb" config={helper.ontouchendScrollY(menu.route('/otb'))}>
+      <li className="side_link" key="play_otb" config={helper.ontouchY(menu.route('/otb'))}>
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
       </li>
       <li className="hr" key="sep_link_settings"></li>
-      <li className="side_link" key="settings" config={helper.ontouchendScrollY(menu.route('/settings'))}>
+      <li className="side_link" key="settings" config={helper.ontouchY(menu.route('/settings'))}>
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
     </ul>

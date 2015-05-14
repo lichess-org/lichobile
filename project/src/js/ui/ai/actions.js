@@ -20,11 +20,11 @@ function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
     m('button[data-icon=U]', {
-      config: helper.ontouchend(utils.f(ctrl.root.initAs, opposite(d.player.color)))
+      config: helper.ontouch(utils.f(ctrl.root.initAs, opposite(d.player.color)))
     }, i18n('createAGame')),
     m('button.fa', {
       className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
-      config: helper.ontouchend(ctrl.sharePGN)
+      config: helper.ontouch(ctrl.sharePGN)
     }, i18n('sharePGN')),
     m('div.action', m('div.select_input',
       formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)

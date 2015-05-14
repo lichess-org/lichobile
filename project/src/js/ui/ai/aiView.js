@@ -29,7 +29,7 @@ function renderAntagonist(ctrl, player, material) {
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
-      config: helper.ontouchend(ctrl.actions.open)
+      config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)

@@ -40,7 +40,7 @@ loginModal.view = function() {
   return m('div#login.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouchend(loginModal.close)
+        config: helper.ontouch(loginModal.close)
       }),
       m('h2', i18n('signIn'))
     ]),
@@ -67,7 +67,7 @@ loginModal.view = function() {
       ]),
       m('div.signup', [
         m('a', {
-          config: helper.ontouchend(signupModal.open)
+          config: helper.ontouch(signupModal.open)
         }, [i18n('newToLichess'), ' ', i18n('signUp')])
       ])
     ])

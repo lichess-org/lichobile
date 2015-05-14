@@ -46,7 +46,7 @@ signupModal.view = function() {
   return m('div#signup.modal.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouchend(signupModal.close)
+        config: helper.ontouch(signupModal.close)
       }),
       m('h2', i18n('signUp'))
     ]),

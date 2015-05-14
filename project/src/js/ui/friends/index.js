@@ -29,7 +29,7 @@ function renderBody() {
         return m('li.list_item.nav', {
           key: userId,
           'id': userId,
-          config: helper.ontouchendScrollY(utils.f(m.route, '/@/' + userId))
+          config: helper.ontouchY(utils.f(m.route, '/@/' + userId))
         }, name);
       }))
     ])

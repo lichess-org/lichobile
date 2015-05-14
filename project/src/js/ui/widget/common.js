@@ -12,13 +12,13 @@ var widgets = {};
 
 widgets.menuButton = function() {
   return m('button.fa.fa-navicon.menu_button', {
-    config: helper.ontouchend(menu.toggle)
+    config: helper.ontouch(menu.toggle)
   });
 };
 
 widgets.backButton = function(title) {
   return m('button.back_button', {
-    config: helper.ontouchend(utils.backHistory)
+    config: helper.ontouch(utils.backHistory)
   }, [m('span.fa.fa-arrow-left'), title]);
 };
 
@@ -40,7 +40,7 @@ widgets.gameButton = function() {
     nbChallenges ? 'new_challenge' : ''
   ].join(' ');
   return (
-    <button key={key} className={className} config={helper.ontouchend(action)}>
+    <button key={key} className={className} config={helper.ontouch(action)}>
       {!nbChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }

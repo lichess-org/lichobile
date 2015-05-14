@@ -25,7 +25,7 @@ module.exports = {
         content(),
         m('footer.main_footer.board', { style: { height: headerHeight() + 'px' }}, footer()),
         m('div.menu-close-overlay', {
-          config: helper.ontouchend(menu.close)
+          config: helper.ontouch(menu.close)
         })
       ]),
       aside(),
@@ -48,7 +48,7 @@ module.exports = {
         m('div.content', { config: helper.scale }, content()),
         m('footer.main_footer', footer()),
         m('div.menu-close-overlay', {
-          config: helper.ontouchend(menu.close)
+          config: helper.ontouch(menu.close)
         })
       ]),
       menu.view(),

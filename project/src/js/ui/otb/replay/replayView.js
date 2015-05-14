@@ -3,7 +3,7 @@ var helper = require('../../helper');
 
 function renderBackwardButton(ctrl) {
   return m('button.game_action[data-icon=I]', {
-    config: helper.ontouchend(function() {
+    config: helper.ontouch(function() {
       if (ctrl.ply > 0) ctrl.jump(ctrl.ply - 1);
     }),
     className: helper.classSet({
@@ -14,7 +14,7 @@ function renderBackwardButton(ctrl) {
 
 function renderForwardButton(ctrl, nbMoves) {
   return m('button.game_action[data-icon=H]', {
-    config: helper.ontouchend(function() {
+    config: helper.ontouch(function() {
       if (ctrl.ply < ctrl.situations.length - 1) ctrl.jump(ctrl.ply + 1);
     }),
     className: helper.classSet({

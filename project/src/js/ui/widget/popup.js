@@ -5,7 +5,7 @@ module.exports = function(className, header, content, isShowing, closef) {
   if (!isShowing) return m('div.overlay.popup.overlay_fade');
   return m('div.overlay.popup.overlay_fade.open', [
     m('div.popup_overlay_close', {
-      config: closef ? helper.ontouchend(closef) : utils.noop
+      config: closef ? helper.ontouch(closef) : utils.noop
     }),
     m('div.overlay_popup', {
       className: className ? className : '',

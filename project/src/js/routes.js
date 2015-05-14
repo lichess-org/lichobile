@@ -1,32 +1,34 @@
-var game = require('./ui/game');
-var tv = require('./ui/tv');
-var seek = require('./ui/seek');
-var seeks = require('./ui/seeks');
-var otb = require('./ui/otb');
-var ai = require('./ui/ai');
-var settingsUi = require('./ui/settings');
-var boardThemes = require('./ui/settings/boardThemes');
-var pieceThemes = require('./ui/settings/pieceThemes');
-var friends = require('./ui/friends');
-var user = require('./ui/user');
-var userGames = require('./ui/user/games');
+import game from'./ui/game';
+import tv from'./ui/tv';
+import seek from'./ui/seek';
+import seeks from'./ui/seeks';
+import otb from'./ui/otb';
+import ai from'./ui/ai';
+import settingsUi from'./ui/settings';
+import boardThemes from'./ui/settings/boardThemes';
+import pieceThemes from'./ui/settings/pieceThemes';
+import friends from'./ui/friends';
+import user from'./ui/user';
+import userGames from'./ui/user/games';
+import players from './ui/players';
 
 module.exports.init = function() {
   m.route(document.body, '/', {
     '/': ai,
-    '/seeks': seeks,
-    '/seek': seek,
     '/otb': otb,
     '/ai': ai,
     '/game/:id': game,
     '/game/:id/:color': game,
     '/game/:id/user/:userId': game,
     '/tv': tv,
-    '/settings': settingsUi,
-    '/settings/themes/board': boardThemes,
-    '/settings/themes/piece': pieceThemes,
+    '/seek': seek,
+    '/seeks': seeks,
     '/friends': friends,
     '/@/:id': user,
-    '/@/:id/games': userGames
+    '/@/:id/games': userGames,
+    '/players': players,
+    '/settings': settingsUi,
+    '/settings/themes/board': boardThemes,
+    '/settings/themes/piece': pieceThemes
   });
 };

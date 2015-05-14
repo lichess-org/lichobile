@@ -147,4 +147,8 @@ helper.scroller = function(el, isUpdate, context) {
   }
 };
 
+helper.cond = function(pred, vdom) {
+  return pred ? vdom : null;
+};
+
 module.exports = helper;

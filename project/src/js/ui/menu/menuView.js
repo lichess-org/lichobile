@@ -57,44 +57,52 @@ function renderProfileActions(user) {
 }
 
 function renderLinks(user) {
-  return m('ul.side_links', [
-    utils.hasNetwork() ? m('li.sep_link', {
-      key: 'sep_link_online'
-    }, i18n('playOnline')) : null,
-    utils.hasNetwork() ? m('li.side_link', {
-      key: 'play_real_time',
-      config: helper.ontouchendScrollY(menu.popup(newGameForm.openRealTime))
-    }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]) : null, (utils.hasNetwork() && user) ? m('li.side_link', {
-      key: 'seeks',
-      config: helper.ontouchendScrollY(menu.route('/seeks'))
-    }, [m('span.fa.fa-paper-plane'), i18n('correspondence')]) : null,
-    utils.hasNetwork() ? m('li.side_link', {
-      key: 'invite_friend',
-      config: helper.ontouchendScrollY(menu.popup(challengeForm.open))
-    }, [m('span.fa.fa-share-alt'), i18n('playWithAFriend')]) : null,
-    utils.hasNetwork() ? m('li.side_link', {
-      key: 'tv',
-      config: helper.ontouchendScrollY(menu.route('/tv'))
-    }, [m('span[data-icon=1]'), i18n('watchLichessTV')]) : null,
-    m('li.sep_link', {
-      key: 'sep_link_offline'
-    }, i18n('playOffline')),
-    m('li.side_link', {
-      key: 'play_ai',
-      config: helper.ontouchendScrollY(menu.route('/ai'))
-    }, [m('span.fa.fa-cogs'), i18n('playOfflineComputer')]),
-    m('li.side_link', {
-      key: 'play_otb',
-      config: helper.ontouchendScrollY(menu.route('/otb'))
-    }, [m('span.fa.fa-beer'), i18n('playOnTheBoardOffline')]),
-    m('li.hr', {
-      key: 'sep_link_settings'
-    }),
-    m('li.side_link', {
-      key: 'settings',
-      config: helper.ontouchendScrollY(menu.route('/settings'))
-    }, [m('span.fa.fa-cog'), i18n('settings')])
-  ]);
+  return (
+    <ul className="side_links">
+      {helper.cond(utils.hasNetwork(),
+      <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li>
+      )}
+      {helper.cond(utils.hasNetwork(),
+      <li className="side_link" key="play_real_time" config={helper.ontouchendScrollY(menu.popup(newGameForm.openRealTime))}>
+        <span className="fa fa-plus-circle"/>{i18n('createAGame')}
+      </li>
+      )}
+      {helper.cond(utils.hasNetwork() && user,
+      <li className="side_link" key="seeks" config={helper.ontouchendScrollY(menu.route('/seeks'))}>
+        <span className="fa fa-paper-plane" />{i18n('correspondence')}
+      </li>
+      )}
+      {helper.cond(utils.hasNetwork(),
+      <li className="side_link" key="invite_friend" config={helper.ontouchendScrollY(menu.popup(challengeForm.open))}>
+        <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
+      </li>
+      )}
+      {helper.cond(utils.hasNetwork(),
+      <li className="side_link" key="tv" config={helper.ontouchendScrollY(menu.route('/tv'))}>
+        <span data-icon="1"/>{i18n('watchLichessTV')}
+      </li>
+      )}
+      <li className="sep_link" key="sep_link_community">
+        {i18n('community')}
+      </li>
+      <li className="side_link" key="players" config={helper.ontouchendScrollY(menu.route('/players'))}>
+        <span className="fa fa-search"/>{i18n('players')}
+      </li>
+      <li className="sep_link" key="sep_link_offline">
+        {i18n('playOffline')}
+      </li>
+      <li className="side_link" key="play_ai" config={helper.ontouchendScrollY(menu.route('/ai'))}>
+        <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
+      </li>
+      <li className="side_link" key="play_otb" config={helper.ontouchendScrollY(menu.route('/otb'))}>
+        <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
+      </li>
+      <li className="hr" key="sep_link_settings"></li>
+      <li className="side_link" key="settings" config={helper.ontouchendScrollY(menu.route('/settings'))}>
+        <span className="fa fa-cog"/>{i18n('settings')}
+      </li>
+    </ul>
+  );
 }
 
 module.exports = function() {

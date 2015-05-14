@@ -12,7 +12,6 @@ const moment = window.moment;
 
 export default function view(ctrl) {
   const user = ctrl.user();
-  console.log(user);
   const header = utils.partialf(widgets.header, null,
     widgets.backButton(user.username)
   );

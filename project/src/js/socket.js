@@ -19,7 +19,7 @@ const defaultHandlers = {
   }
 };
 
-function game(url, version, receiveHandler, gameUrl) {
+function createGame(url, version, receiveHandler, gameUrl) {
   errorDetected = false;
   socketInstance = new StrongSocket(url, version, {
     options: {
@@ -45,11 +45,9 @@ function game(url, version, receiveHandler, gameUrl) {
     events: defaultHandlers,
     receive: receiveHandler
   });
-
-  return socketInstance;
 }
 
-function await(url, version, handlers) {
+function createAwait(url, version, handlers) {
   socketInstance = new StrongSocket(
     url, version, {
       options: {
@@ -61,10 +59,9 @@ function await(url, version, handlers) {
       events: assign({}, defaultHandlers, handlers)
     }
   );
-  return socketInstance;
 }
 
-function lobby(lobbyVersion, onOpen, handlers) {
+function createLobby(lobbyVersion, onOpen, handlers) {
   socketInstance = new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
@@ -78,11 +75,9 @@ function lobby(lobbyVersion, onOpen, handlers) {
       events: assign({}, defaultHandlers, handlers)
     }
   );
-
-  return socketInstance;
 }
 
-function socket() {
+function createDefault() {
   socketInstance = new StrongSocket(
     '/socket', 0, {
       options: {
@@ -94,24 +89,29 @@ function socket() {
       events: defaultHandlers
     }
   );
-
-  return socketInstance;
 }
-
-function onPause() {
-  if (socketInstance) socketInstance.destroy();
-}
-
-function onResume() {
-  if (socketInstance) socketInstance.connect();
-}
-
-document.addEventListener('pause', onPause, false);
-document.addEventListener('resume', onResume, false);
 
 export default {
-  game,
-  lobby,
-  await,
-  socket
+  createGame,
+  createLobby,
+  createAwait,
+  createDefault,
+  setVersion(version) {
+    if (socketInstance) socketInstance.setVersion(version);
+  },
+  send(...args) {
+    if (socketInstance) socketInstance.send(...args);
+  },
+  connect() {
+    if (socketInstance) socketInstance.connect();
+  },
+  disconnect() {
+    if (socketInstance) socketInstance.destroy();
+  },
+  destroy() {
+    if (socketInstance) {
+      socketInstance.destroy();
+      socketInstance = null;
+    }
+  }
 };

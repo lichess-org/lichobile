@@ -32,7 +32,7 @@ module.exports = function(cfg, onFeatured) {
     showingActions: false
   };
 
-  this.socket = socket.game(
+  socket.createGame(
     this.data.url.socket,
     this.data.player.version,
     socketHandler(this, onFeatured),
@@ -88,9 +88,7 @@ module.exports = function(cfg, onFeatured) {
       to: dest
     };
     if (prom) move.promotion = prom;
-    this.socket.send('move', move, {
-      ackable: true
-    });
+    socket.send('move', move, { ackable: true });
   }.bind(this);
 
   var userMove = function(orig, dest, meta) {
@@ -123,8 +121,8 @@ module.exports = function(cfg, onFeatured) {
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
     this.data.player.spectator ? function() {} : throttle(function() {
-      if (this.socket) this.socket.send('outoftime');
-    }.bind(this), 500),
+      socket.send('outoftime');
+    }, 500),
     this.data.player.spectator ? null : this.data.player.color
   ) : false;
 
@@ -141,7 +139,7 @@ module.exports = function(cfg, onFeatured) {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
         this.data.correspondence,
-        function() { if (this.socket) this.socket.send('outoftime'); }.bind(this)
+        () => socket.send('outoftime')
       );
   }.bind(this);
   makeCorrespondenceClock();
@@ -190,8 +188,7 @@ module.exports = function(cfg, onFeatured) {
   signals.socket.disconnected.add(onDisconnected);
 
   this.onunload = function() {
-    this.socket.destroy();
-    this.socket = null;
+    socket.destroy();
     if (clockIntervId) clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
     signals.socket.connected.remove(onConnected);

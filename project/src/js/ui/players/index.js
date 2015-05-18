@@ -9,7 +9,7 @@ import throttle from 'lodash/function/throttle';
 
 export default {
   controller() {
-    const defaultSocket = socket.socket();
+    socket.createDefault();
     const list = m.prop([]);
 
     return {
@@ -22,9 +22,7 @@ export default {
       goToProfile(u) {
         m.route('/@/' + u);
       },
-      onunload() {
-        if (defaultSocket) defaultSocket.destroy();
-      }
+      onunload: socket.destroy
     };
   },
 

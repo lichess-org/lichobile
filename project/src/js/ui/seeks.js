@@ -33,17 +33,16 @@ function fixSeeks(ss) {
 
 seeks.controller = function() {
 
-  var lobbySocket;
   var pool = [];
 
   helper.analyticsTrackView('Seeks');
 
   xhr.lobby(true).then(function(data) {
-    lobbySocket = socket.lobby(data.lobby.version, reload, {
+    socket.createLobby(data.lobby.version, reload, {
       redirect: d => m.route('/game' + d.url),
       reload_seeks: reload,
       resync: () => xhr.lobby().then(d => {
-        if (lobbySocket) lobbySocket.setVersion(d.lobby.version);
+        socket.setVersion(d.lobby.version);
       })
     });
   });
@@ -62,18 +61,13 @@ seeks.controller = function() {
     },
     cancel: function(seekId) {
       return Zanimo(document.getElementById(seekId), 'opacity', '0', '500', 'ease-out').then(function() {
-        lobbySocket.send('cancelSeek', seekId);
+        socket.send('cancelSeek', seekId);
       });
     },
     join: function(seekId) {
-      lobbySocket.send('joinSeek', seekId);
+      socket.send('joinSeek', seekId);
     },
-    onunload: function() {
-      if (lobbySocket) {
-        lobbySocket.destroy();
-        lobbySocket = null;
-      }
-    }
+    onunload: socket.destroy
   };
 };
 

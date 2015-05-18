@@ -17,7 +17,7 @@ var scroller;
 
 export default {
   controller: function() {
-    const defaultSocket = socket.socket();
+    socket.createDefault();
     const userId = m.route.param('id');
     var games = [];
 
@@ -53,7 +53,7 @@ export default {
       scrollerConfig,
       userId,
       onunload() {
-        if (defaultSocket) defaultSocket.destroy();
+        socket.destroy();
       }
     };
   },

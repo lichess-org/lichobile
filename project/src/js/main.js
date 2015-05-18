@@ -12,6 +12,7 @@ var xhr = require('./xhr');
 var backbutton = require('./backbutton');
 var storage = require('./storage');
 var routes = require('./routes');
+import socket from './socket';
 
 var triedToLogin = false;
 
@@ -44,21 +45,19 @@ function main() {
     window.navigator.notification.alert(i18n('noInternetConnection'));
   }
 
+  refreshIntervalID = setInterval(refresh, refreshInterval);
+
   document.addEventListener('online', onOnline, false);
   document.addEventListener('offline', onOffline, false);
-
-  // if connected, refresh data every min, and on resume
-  refreshIntervalID = setInterval(refresh, refreshInterval);
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
+  document.addEventListener('backbutton', backbutton, false);
 
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose
   window.cordova.plugins.Keyboard.disableScroll(true);
 
   if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
-
-  document.addEventListener('backbutton', backbutton, false);
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();
@@ -73,10 +72,12 @@ function refresh() {
 function onResume() {
   refresh();
   refreshIntervalID = setInterval(refresh, refreshInterval);
+  socket.connect();
 }
 
 function onPause() {
   clearInterval(refreshIntervalID);
+  socket.disconnect();
 }
 
 function onOnline() {

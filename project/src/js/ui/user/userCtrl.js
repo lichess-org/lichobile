@@ -10,7 +10,7 @@ module.exports = function() {
 
   helper.analyticsTrackView('User Profile');
 
-  const defaultSocket = socket.socket();
+  socket.createDefault();
 
   const user = m.prop();
 
@@ -37,7 +37,7 @@ module.exports = function() {
     goToGames: () => m.route(`/@/${user().id}/games`),
     challenge: () => challengeForm.open(user().id),
     onunload: () => {
-      if (defaultSocket) defaultSocket.destroy();
+      socket.destroy();
     }
   };
 };

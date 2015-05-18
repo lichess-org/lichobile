@@ -15,7 +15,6 @@ var seek = {};
 seek.controller = function() {
 
   var hookId;
-  var lobbySocket;
 
   helper.analyticsTrackView('Seek');
 
@@ -29,20 +28,20 @@ seek.controller = function() {
   };
 
   xhr.lobby(true).then(data => {
-    lobbySocket = socket.lobby(data.lobby.version, createHook, {
+    socket.createLobby(data.lobby.version, createHook, {
       redirect: d => m.route('/game' + d.url),
       n: function(n) {
         nbPlaying = n;
         m.redraw();
       },
       resync: () => xhr.lobby().then(d => {
-        if (lobbySocket) lobbySocket.setVersion(d.lobby.version);
+        socket.setVersion(d.lobby.version);
       })
     });
   });
 
   function cancel() {
-    if (lobbySocket && hookId) lobbySocket.send('cancel', hookId);
+    if (hookId) socket.send('cancel', hookId);
     utils.backHistory();
   }
 
@@ -52,10 +51,7 @@ seek.controller = function() {
     cancel: cancel,
 
     onunload: function() {
-      if (lobbySocket) {
-        lobbySocket.destroy();
-        lobbySocket = null;
-      }
+      socket.destroy();
       document.removeEventListener('backbutton', cancel, false);
     }
   };

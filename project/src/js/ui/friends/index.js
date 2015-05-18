@@ -39,11 +39,11 @@ function renderBody() {
 module.exports = {
   controller: function() {
     helper.analyticsTrackView('Online Friends');
-    const defaultSocket = socket.socket();
+    socket.createDefault();
 
     return {
       onunload: () => {
-        if (defaultSocket) defaultSocket.destroy();
+        socket.destroy();
       }
     };
   },

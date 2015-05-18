@@ -14,7 +14,6 @@ module.exports = function() {
   const isJoinable = m.prop(false);
   var gameData;
   var round;
-  var awaitSocket;
   var challengeIntervalID;
 
   xhr.game(m.route.param('id'), m.route.param('color')).then(function(data) {
@@ -28,7 +27,7 @@ module.exports = function() {
       isJoinable(true);
     // status created means waiting for friend to join game invit or challenge
     else if (data.game.status.id === gameStatus.ids.created) {
-      awaitSocket = socket.await(data.url.socket, data.player.version, {
+      socket.createAwait(data.url.socket, data.player.version, {
         redirect: e => m.route('/game/' + e.id),
         declined: () => {
           window.plugins.toast.show('Challenge declined', 'short', 'center');
@@ -40,7 +39,7 @@ module.exports = function() {
         isAwaitingChallenge(true);
         // to keep challenge open
         challengeIntervalID = setInterval(() => {
-          if (awaitSocket) awaitSocket.send('challenge', m.route.param('userId'));
+          socket.send('challenge', m.route.param('userId'));
         }, 1500);
       } else isAwaitingInvite(true);
     } else {
@@ -61,10 +60,7 @@ module.exports = function() {
         round = null;
       }
       if (challengeIntervalID) clearInterval(challengeIntervalID);
-      if (awaitSocket) {
-        awaitSocket.destroy();
-        awaitSocket = null;
-      }
+      socket.destroy();
     },
     getRound: function() {
       return round;

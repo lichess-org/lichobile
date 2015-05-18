@@ -4,6 +4,7 @@ var iScroll = require('iscroll');
 var storage = require('../../storage');
 var gameApi = require('../../lichess/game');
 var backbutton = require('../../backbutton');
+var socket = require('../../socket');
 
 module.exports = {
   controller: function(root) {
@@ -190,7 +191,7 @@ module.exports = {
               return false;
             }
             ctrl.inputValue = '';
-            ctrl.root.socket.send('talk', msg);
+            socket.send('talk', msg);
           }
         }, [
           m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {

@@ -11,15 +11,19 @@ import challenges from '../../lichess/challenges';
 var widgets = {};
 
 widgets.menuButton = function() {
-  return m('button.fa.fa-navicon.menu_button', {
-    config: helper.ontouch(menu.toggle)
-  });
+  return (
+    <button className="fa fa-navicon menu_button" config={helper.ontouch(menu.toggle)}>
+    </button>
+  );
 };
 
 widgets.backButton = function(title) {
-  return m('button.back_button', {
-    config: helper.ontouch(utils.backHistory)
-  }, [m('span.fa.fa-arrow-left'), title]);
+  return (
+    <button className="back_button" config={helper.ontouch(utils.backHistory)}>
+      <span className="fa fa-arrow-left"/>
+      <span className="title">{title}</span>
+    </button>
+  );
 };
 
 widgets.gameButton = function() {

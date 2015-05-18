@@ -107,9 +107,9 @@
   width 25%
   &:last-child
     border-right none
-  &:active, &.active
-    background: gold
-    color #fff
+  &.active
+    background lighten(bgdark, 8%)
+    color lighten(gold, 40%)
   &.empty::before
     visibility hidden
   &:before

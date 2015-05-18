@@ -89,7 +89,7 @@ module.exports = function(cfg, onFeatured) {
     };
     if (prom) move.promotion = prom;
     socket.send('move', move, { ackable: true });
-  }.bind(this);
+  };
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);

@@ -82,12 +82,16 @@ function renderLinks(user) {
         <span data-icon="1"/>{i18n('watchLichessTV')}
       </li>
       )}
+      {helper.cond(utils.hasNetwork(),
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
       </li>
+      )}
+      {helper.cond(utils.hasNetwork(),
       <li className="side_link" key="players" config={helper.ontouchY(menu.route('/players'))}>
         <span className="fa fa-search"/>{i18n('players')}
       </li>
+      )}
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>

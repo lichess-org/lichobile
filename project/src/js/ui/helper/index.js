@@ -1,8 +1,9 @@
 var Zanimo = require('zanimo');
-var mButton = require('mobile-button');
 var chessground = require('chessground');
-var settings = require('../settings');
+var settings = require('../../settings');
+var utils = require('../../utils');
 var IScroll = require('iscroll');
+var ButtonHandler = require('./button');
 
 var helper = {};
 
@@ -31,47 +32,28 @@ helper.scale = function(element, isInitialized) {
   }
 };
 
-// convenience function to bind a touchend mobile button handler in mithril
-function bindTouchendButton(scrollableX, scrollableY, handler) {
+helper.ontouch = function(tapHandler, holdHandler, scrollX, scrollY) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
-      var options = {
-        el: el,
-        f: function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          m.startComputation();
-          handler(e, el);
-          m.endComputation();
-        },
-        monotouchable: false
-      };
-      if (scrollableX || scrollableY) options.tolerance = 5;
-      var constr;
-      if (scrollableX)
-        constr = mButton.ScrollableX.Touchend;
-      else if (scrollableY)
-        constr = mButton.ScrollableY.Touchend;
-      else
-        constr = mButton.Touchend;
-
-      var button = new constr(options);
-
+      var unbind = ButtonHandler(el,
+        () => utils.autoredraw(tapHandler),
+        holdHandler ? () => utils.autoredraw(holdHandler) : null,
+        scrollX,
+        scrollY
+      );
       context.onunload = function() {
-        if (button && !button.binded) button.unbind();
+        unbind();
+        unbind = null;
       };
     }
   };
-}
+};
 
-helper.ontouch = function(handler) {
-  return bindTouchendButton(false, false, handler);
+helper.ontouchX = function(tapHandler, holdHandler) {
+  return helper.ontouch(tapHandler, holdHandler, true, false);
 };
-helper.ontouchX = function(handler) {
-  return bindTouchendButton(true, false, handler);
-};
-helper.ontouchY = function(handler) {
-  return bindTouchendButton(false, true, handler);
+helper.ontouchY = function(tapHandler, holdHandler) {
+  return helper.ontouch(tapHandler, holdHandler, false, true);
 };
 
 helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {

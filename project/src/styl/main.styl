@@ -55,25 +55,42 @@ main.out
       width 15%
       max-width 50px
       background transparent
-      padding: 15px 15px
+      padding: 15px
       margin 0
       color gold
       font-size 20px
       line-height 20px
+      &.active
+        background lighten(bgdark, 8%)
   .menu_button, .back_button
     float left
   .back_button
     font-size 1.1em
     max-width none
     width 70%
+    height 50px
     white-space nowrap
+    padding 0
     overflow hidden
     text-overflow ellipsis
     text-align left
+    > span
+      display inline-block
+      height 50px
+      padding 15px 0 15px 15px
     > span.fa
       font-size 18px
+      margin 0
+      width 48px
+      margin-right 10px
+    > span.title
+      padding-left 0
     &:before
       margin-right 10px
+    &.active
+      background inherit
+      > .fa-arrow-left
+        background lighten(bgdark, 8%)
   .game_menu_button
     position relative
     float right

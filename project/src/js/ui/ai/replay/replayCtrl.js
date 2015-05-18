@@ -34,7 +34,9 @@ module.exports = function(root, situations, ply) {
 
   this.jump = function(ply) {
     this.root.chessground.cancelMove();
-    if (this.situation() && this.situation().turnColor !== this.root.data.player.color) ply++;
+    if (this.situation() &&
+      this.situation().turnColor !== this.root.data.player.color &&
+      !this.situation().checkmate) ply++;
     if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
     this.ply = ply;
     this.apply();

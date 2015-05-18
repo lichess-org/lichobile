@@ -95,4 +95,12 @@ module.exports = function(root) {
     var ply = this.active ? this.ply : root.data.game.moves.length;
     jump(ply - 1);
   }.bind(this);
+
+  this.jumpFirst = function() {
+    jump(1);
+  };
+
+  this.jumpLast = function() {
+    jump(root.data.game.moves.length);
+  };
 };

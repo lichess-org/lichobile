@@ -1,11 +1,10 @@
-var utils = require('../../../utils');
 var helper = require('../../helper');
 
 function renderBackwardButton(ctrl, curPly) {
   var prevPly = curPly - 1;
   var enabled = curPly !== prevPly && prevPly >= 1;
   return m('button.game_action[data-icon=I]', {
-    config: helper.ontouch(ctrl.jumpPrev),
+    config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
       disabled: ctrl.broken || !enabled
     })
@@ -16,7 +15,7 @@ function renderForwardButton(ctrl, curPly, nbMoves) {
   var nextPly = curPly + 1;
   var enabled = curPly !== nextPly && nextPly <= nbMoves;
   return m('button.game_action[data-icon=H]', {
-    config: helper.ontouch(ctrl.jumpNext),
+    config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({
       disabled: ctrl.broken || !enabled
     })

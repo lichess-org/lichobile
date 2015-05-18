@@ -5,6 +5,7 @@ var sound = require('../../sound');
 var session = require('../../session');
 var utils = require('../../utils');
 var atomic = require('./atomic');
+var socket = require('../../socket');
 
 module.exports = function(ctrl, onFeatured) {
 

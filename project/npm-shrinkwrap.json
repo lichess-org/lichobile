@@ -950,11 +950,6 @@
       "from": "mithril@0.2.0",
       "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.2.0.tgz"
     },
-    "mobile-button": {
-      "version": "0.8.1",
-      "from": "mobile-button@0.8.1",
-      "resolved": "https://registry.npmjs.org/mobile-button/-/mobile-button-0.8.1.tgz"
-    },
     "moment": {
       "version": "2.8.4",
       "from": "moment@>=2.8.4 <3.0.0",

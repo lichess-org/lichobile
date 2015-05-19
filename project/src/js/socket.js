@@ -19,8 +19,16 @@ const defaultHandlers = {
   }
 };
 
+function destroy() {
+  if (socketInstance) {
+    socketInstance.destroy();
+    socketInstance = null;
+  }
+}
+
 function createGame(url, version, receiveHandler, gameUrl) {
   errorDetected = false;
+  destroy();
   socketInstance = new StrongSocket(url, version, {
     options: {
       name: 'game',
@@ -48,6 +56,7 @@ function createGame(url, version, receiveHandler, gameUrl) {
 }
 
 function createAwait(url, version, handlers) {
+  destroy();
   socketInstance = new StrongSocket(
     url, version, {
       options: {
@@ -62,6 +71,7 @@ function createAwait(url, version, handlers) {
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
+  destroy();
   socketInstance = new StrongSocket(
     '/lobby/socket/v1',
     lobbyVersion, {
@@ -78,6 +88,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
 }
 
 function createDefault() {
+  destroy();
   socketInstance = new StrongSocket(
     '/socket', 0, {
       options: {
@@ -108,10 +119,5 @@ export default {
   disconnect() {
     if (socketInstance) socketInstance.destroy();
   },
-  destroy() {
-    if (socketInstance) {
-      socketInstance.destroy();
-      socketInstance = null;
-    }
-  }
+  destroy
 };

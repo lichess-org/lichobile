@@ -70,8 +70,24 @@ h3.fullname
   .check_container
     line-height 30px
 
+.userGamesWrapper
+  height 100%
+
+.select_games_filter
+  margin 0
+  background-color bgdark
+  select
+    color lighten(labelText, 50%)
+
+.scroller.games
+  background-color bglight
+  height calc(100% - 90px)
+
 .userGame
+  background-color bglight
+  color textDarkGray
   min-height 60px
+  border-bottom-color darken(bglight, 15%)
   .iconGame
     position absolute
     left 15px
@@ -97,5 +113,5 @@ h3.fullname
     &.loose
       color #ac524f
   &.odd
-    background-color lighten(bgdark, 5%)
+    background-color darken(bglight, 8%)
 

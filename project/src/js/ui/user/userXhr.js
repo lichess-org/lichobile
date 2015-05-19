@@ -21,12 +21,11 @@ export function user(id) {
   return http.request(url, {}, true);
 }
 
-export function games(username, rated) {
-  return http.request('/api/game', {
+export function games(userId, filter='all', page=1, feedback=false) {
+  return http.request(`/@/${userId}/${filter}`, {
     method: 'GET',
     data: {
-      username: username,
-      rated: rated
+      page
     }
-  }, true);
+  }, feedback);
 }

@@ -6,7 +6,7 @@ import {assign} from 'lodash/object';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
 
-module.exports = function() {
+export default function controller() {
 
   helper.analyticsTrackView('User Profile');
 

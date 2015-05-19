@@ -26,6 +26,7 @@ module.exports.init = function() {
     '/friends': friends,
     '/@/:id': user,
     '/@/:id/games': userGames,
+    '/@/:id/games/:filter': userGames,
     '/players': players,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,

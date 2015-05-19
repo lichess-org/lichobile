@@ -66,8 +66,8 @@ main.out
     float left
   .back_button
     font-size 1.1em
-    max-width none
-    width 70%
+    width auto
+    max-width 70%
     height 50px
     white-space nowrap
     padding 0
@@ -81,16 +81,14 @@ main.out
     > span.fa
       font-size 18px
       margin 0
-      width 48px
       margin-right 10px
     > span.title
       padding-left 0
+      padding-right 15px
     &:before
       margin-right 10px
     &.active
-      background inherit
-      > .fa-arrow-left
-        background lighten(bgdark, 8%)
+      background lighten(bgdark, 8%)
   .game_menu_button
     position relative
     float right

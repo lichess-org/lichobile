@@ -2,26 +2,57 @@ import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
 import {throttle} from 'lodash/function';
 import socket from '../../../socket';
-import i18n from '../../../i18n';
+import utils from '../../../utils';
 
 var scroller;
 
-const availableFilters = [
-  {key: 'all', label(nb) { return nb + ' ' + i18n('gamesPlayed'); }},
-  {key: 'rated', label(nb) { return nb + ' ' + i18n('rated'); }},
-  {key: 'win', label(nb) { return i18n('nbWins', nb); }},
-  {key: 'loss', label(nb) { return i18n('nbLosses', nb); }},
-  {key: 'draw', label(nb) { return i18n('nbDraws', nb); }}
-];
+const filters = {
+  all: 'gamesPlayed',
+  rated: 'rated',
+  win: 'wins',
+  loss: 'nbLosses',
+  draw: 'nbDraws'
+  // {key: 'bookmark', label: 'nbBookmarks'},
+  // {key: 'import', label: 'nbImportedGames'}
+};
+
+function countToFilter(key) {
+  if (key === 'game') return 'all';
+  else return key;
+}
+
+function filterToCount(key) {
+  if (key === 'all') return 'game';
+  else return key;
+}
 
 export default function controller() {
   const userId = m.route.param('id');
+  const user = m.prop();
+  const availableFilters = m.prop();
   const currentFilter = m.prop(m.route.param('filter') || 'all');
   const games = m.prop([]);
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
 
   socket.createDefault();
+
+  xhr.user(userId).then(user, error => {
+    utils.handleXhrError(error);
+    m.route('/');
+  }).then(() => {
+    let f = Object.keys(user().count)
+      .map(countToFilter)
+      .filter(k => filters.hasOwnProperty(k))
+      .map(k => {
+        return {
+          key: k,
+          label: filters[k],
+          count: user().count[filterToCount(k)]
+        };
+      });
+    availableFilters(f);
+  });
 
   function onScroll() {
     if (this.y + this.distY <= this.maxScrollY) {

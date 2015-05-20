@@ -17,11 +17,13 @@ export default function view(ctrl) {
     return (
       <div className="userGamesWrapper">
         <div className="select_input select_games_filter">
-          <label htmlFor="filterGames">Filter games</label>
+          <label htmlFor="filterGames"></label>
           <select id="filterGames" onchange={ctrl.onFilterChange}>
-            {ctrl.availableFilters.map(f => {
+            {ctrl.availableFilters().map(f => {
               return (
-                <option value={f.key} selected={ctrl.currentFilter() === f.key}>{f.key}</option>
+                <option value={f.key} selected={ctrl.currentFilter() === f.key}>
+                  {i18n(f.label).replace('%s ', '')} ({f.count})
+                </option>
               );
             })}
           </select>

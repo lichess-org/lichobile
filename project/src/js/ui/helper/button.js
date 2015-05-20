@@ -23,7 +23,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     };
     active = true;
     setTimeout(() => {
-      if (active) addActiveClass(el);
+      if (active) el.classList.add(activeClass);
     }, 200);
   }
 
@@ -32,22 +32,22 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (active) {
       var touch = e.changedTouches[0];
       active = isActive(touch);
-      if (!active) removeActiveClass(el);
+      if (!active) el.classList.remove(activeClass);
     }
   }
 
   function onTouchEnd(e) {
     if (active) {
-      addActiveClass(el);
+      el.classList.add(activeClass);
       tapHandler(e);
       active = false;
-      setTimeout(() => removeActiveClass(el), 80);
+      setTimeout(() => el.classList.remove(activeClass), 80);
     }
   }
 
   function onTouchCancel() {
     active = false;
-    removeActiveClass(el);
+    el.classList.remove(activeClass);
   }
 
   function onHold(e) {
@@ -56,7 +56,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (holdHandler) {
       holdHandler();
       active = false;
-      removeActiveClass(el);
+      el.classList.remove(activeClass);
     }
   }
 
@@ -83,14 +83,4 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     el.removeEventListener('touchcancel', onTouchCancel, false);
     el.removeEventListener('contextmenu', onHold, false);
   };
-}
-
-function addActiveClass(el) {
-  if (!el.classList.contains(activeClass))
-    el.classList.add(activeClass);
-}
-
-function removeActiveClass(el) {
-  if (el.classList.contains(activeClass))
-    el.classList.remove(activeClass);
 }

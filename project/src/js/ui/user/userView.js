@@ -122,7 +122,7 @@ function renderActions(ctrl) {
         </div>
       </div> : null
       }
-      {!ctrl.isMe() ?
+      { session.isConnected() && !ctrl.isMe() ?
       <div className={['list_item', user.following ? 'disabled' : ''].join(' ')} key="user_blocking">
         <div className="check_container">
           <label htmlFor="user_blocking">{i18n('block')}</label>

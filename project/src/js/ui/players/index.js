@@ -11,6 +11,28 @@ export default {
   controller() {
     socket.createDefault();
     const list = m.prop([]);
+    let listHeight;
+
+    function onKeyboardShow(e) {
+      if (window.cordova.platformId === 'ios') {
+        let ul = document.getElementById('players_search_results');
+        if (!ul) return;
+        if (!listHeight)
+          listHeight = ul.offsetHeight;
+        ul.style.height = (listHeight - e.keyboardHeight) + 'px';
+      }
+    }
+
+    function onKeyboardHide() {
+      if (window.cordova.platformId === 'ios') {
+        let ul = document.getElementById('players_search_results');
+        if (!ul) return;
+        ul.style.height = listHeight + 'px';
+      }
+    }
+
+    window.addEventListener('native.keyboardshow', onKeyboardShow);
+    window.addEventListener('native.keyboardhide', onKeyboardHide);
 
     return {
       list,
@@ -22,7 +44,11 @@ export default {
       goToProfile(u) {
         m.route('/@/' + u);
       },
-      onunload: socket.destroy
+      onunload: () => {
+        socket.destroy();
+        window.removeEventListener('native.keyboardshow', onKeyboardShow);
+        window.removeEventListener('native.keyboardhide', onKeyboardHide);
+      }
     };
   },
 
@@ -34,7 +60,11 @@ export default {
           {widgets.gameButton()}
           <div className="search_input">
             <span className="fa fa-search icon"/>
-            <input id="searchPlayers" type="search" placeholder="Search players" oninput={ctrl.onInput} />
+            <input id="searchPlayers" type="search"
+              placeholder="Search players" oninput={ctrl.onInput}
+              autocapitalize="off"
+              autocomplete="off"
+            />
           </div>
         </nav>
       );
@@ -42,7 +72,7 @@ export default {
 
     function body() {
       return (
-        <ul className="native_scroller search_results">
+        <ul id="players_search_results" className="native_scroller search_results">
           {ctrl.list().map(u => {
             return (
               <li className="list_item nav" key={u} config={h.ontouchY(utils.f(ctrl.goToProfile, u))}>

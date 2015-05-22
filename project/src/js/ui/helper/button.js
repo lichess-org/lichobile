@@ -37,9 +37,10 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   }
 
   function onTouchEnd(e) {
+    e.preventDefault();
     if (active) {
       el.classList.add(activeClass);
-      tapHandler(e);
+      tapHandler();
       active = false;
       setTimeout(() => el.classList.remove(activeClass), 80);
     }

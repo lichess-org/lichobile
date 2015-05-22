@@ -11,20 +11,10 @@ const filters = {
   rated: 'rated',
   win: 'wins',
   loss: 'nbLosses',
-  draw: 'nbDraws'
-  // {key: 'bookmark', label: 'nbBookmarks'},
-  // {key: 'import', label: 'nbImportedGames'}
+  draw: 'nbDraws',
+  bookmark: 'nbBookmarks',
+  import: 'nbImportedGames'
 };
-
-function countToFilter(key) {
-  if (key === 'game') return 'all';
-  else return key;
-}
-
-function filterToCount(key) {
-  if (key === 'all') return 'game';
-  else return key;
-}
 
 export default function controller() {
   const userId = m.route.param('id');
@@ -56,10 +46,9 @@ export default function controller() {
 
   function onScroll() {
     if (this.y + this.distY <= this.maxScrollY) {
-      console.log('loading next...');
       // lichess doesn't allow for more than 39 pages
       if (!isLoadingNextPage() && paginator().nextPage && paginator().nextPage < 40) {
-        loadNext(paginator().nextPage);
+        loadNextPage(paginator().nextPage);
       }
     }
   }
@@ -80,14 +69,16 @@ export default function controller() {
     scroller.refresh();
   }
 
-  function loadGames() {
+  function loadInitialGames() {
     xhr.games(userId, currentFilter(), 1, true).then(data => {
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
-    }, err => utils.handleXhrError(err));
+    }, err => utils.handleXhrError(err)).then(() => setTimeout(() => {
+      if (scroller) scroller.scrollTo(0, 0, 0);
+    }, 50));
   }
 
-  function loadNext(page) {
+  function loadNextPage(page) {
     isLoadingNextPage(true);
     xhr.games(userId, currentFilter(), page).then(data => {
       isLoadingNextPage(false);
@@ -95,14 +86,15 @@ export default function controller() {
       games(games().concat(data.paginator.currentPageResults));
       m.redraw();
     }, err => utils.handleXhrError(err));
+    m.redraw();
   }
 
   function onFilterChange(e) {
     currentFilter(e.target.value);
-    loadGames(currentFilter(), 1);
+    loadInitialGames();
   }
 
-  loadGames(currentFilter(), 1);
+  loadInitialGames();
 
   return {
     availableFilters,
@@ -116,4 +108,14 @@ export default function controller() {
       socket.destroy();
     }
   };
+}
+
+function countToFilter(key) {
+  if (key === 'game') return 'all';
+  else return key;
+}
+
+function filterToCount(key) {
+  if (key === 'all') return 'game';
+  else return key;
 }

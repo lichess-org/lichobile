@@ -10,14 +10,14 @@
   "configurations_mixins": {
     "default": {
       "id": "org.lichess.mobileapp.dev",
-      "product_name": "lichess dev",
+      "product_name": "lichess_dev",
       "product_file_name": "lichess_dev",
       "API_END_POINT": "http://en.l.dev",
       "SOCKET_END_POINT": "socket.en.l.dev"
     },
     "stage": {
       "id": "org.lichess.mobileapp.stage",
-      "product_name": "lichess beta",
+      "product_name": "lichess_beta",
       "product_file_name": "lichess-stage",
       "API_END_POINT": "http://en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",

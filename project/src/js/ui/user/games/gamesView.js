@@ -42,7 +42,7 @@ function renderAllGames(ctrl) {
       <ul className="userGames">
         { ctrl.games().map((g, i) => renderGame(g, i, ctrl.userId)) }
         {helper.cond(ctrl.isLoadingNextPage(),
-        <li className="loadingNext">loading...</li>
+        <li className="list_item loadingNext">loading...</li>
         )}
       </ul>
     </div>

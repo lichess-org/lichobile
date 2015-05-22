@@ -35,7 +35,7 @@ http.request = function(url, opts, feedback) {
       try {
         return JSON.parse(text);
       } catch (e) {
-        throw { response: 'Cannot read data from the server' };
+        throw { response: { error: 'Cannot read data from the server' }};
       }
     },
     unwrapError: function(response, xhr) {

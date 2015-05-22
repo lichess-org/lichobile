@@ -35,6 +35,8 @@ utils.handleXhrError = function(error) {
       message = 'lichessIsUnavailableError';
     else if (status >= 500)
       message = 'Server error';
+    else
+      message = 'Error';
 
     if (typeof data.error === 'string') message += `: ${data.error}`;
 
@@ -103,7 +105,8 @@ var perfIconsMap = {
   antichess: '@',
   atomic: '>',
   puzzle: '-',
-  horde: '_'
+  horde: '_',
+  fromPosition: '*'
 };
 
 utils.gameIcon = function(perf) {

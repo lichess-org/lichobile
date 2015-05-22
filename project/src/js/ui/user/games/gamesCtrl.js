@@ -29,7 +29,7 @@ function filterToCount(key) {
 export default function controller() {
   const userId = m.route.param('id');
   const user = m.prop();
-  const availableFilters = m.prop();
+  const availableFilters = m.prop([]);
   const currentFilter = m.prop(m.route.param('filter') || 'all');
   const games = m.prop([]);
   const paginator = m.prop(null);
@@ -57,7 +57,8 @@ export default function controller() {
   function onScroll() {
     if (this.y + this.distY <= this.maxScrollY) {
       console.log('loading next...');
-      if (paginator().nextPage) {
+      // lichess doesn't allow for more than 39 pages
+      if (!isLoadingNextPage() && paginator().nextPage && paginator().nextPage < 40) {
         loadNext(paginator().nextPage);
       }
     }
@@ -81,10 +82,9 @@ export default function controller() {
 
   function loadGames() {
     xhr.games(userId, currentFilter(), 1, true).then(data => {
-      console.log(data);
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
-    });
+    }, err => utils.handleXhrError(err));
   }
 
   function loadNext(page) {
@@ -94,7 +94,7 @@ export default function controller() {
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));
       m.redraw();
-    });
+    }, err => utils.handleXhrError(err));
   }
 
   function onFilterChange(e) {
@@ -107,10 +107,9 @@ export default function controller() {
   return {
     availableFilters,
     currentFilter,
-    games,
-    paginator,
-    scrollerConfig,
     isLoadingNextPage,
+    games,
+    scrollerConfig,
     userId,
     onFilterChange,
     onunload() {

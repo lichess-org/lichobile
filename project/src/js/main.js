@@ -73,6 +73,7 @@ function onResume() {
   refresh();
   refreshIntervalID = setInterval(refresh, refreshInterval);
   socket.connect();
+  socket.send('following_onlines');
 }
 
 function onPause() {
@@ -85,7 +86,10 @@ function onOnline() {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       triedToLogin = true;
       var nowPlaying = session.nowPlaying();
-      if (nowPlaying.length) m.route('/game/' + nowPlaying[0].fullId);
+      if (nowPlaying.length)
+        m.route('/game/' + nowPlaying[0].fullId);
+      else
+        socket.createDefault();
       window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
     }
   }, err => {

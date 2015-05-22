@@ -48,7 +48,8 @@ function createGame(url, version, receiveHandler, gameUrl) {
             }
           });
         }
-      }
+      },
+      onOpen: () => socketInstance.send('following_onlines')
     },
     events: defaultHandlers,
     receive: receiveHandler
@@ -63,7 +64,8 @@ function createAwait(url, version, handlers) {
         name: 'await',
         debug: window.lichess.mode !== 'prod',
         ignoreUnknownMessages: true,
-        pingDelay: 2000
+        pingDelay: 2000,
+        onOpen: () => socketInstance.send('following_onlines')
       },
       events: assign({}, defaultHandlers, handlers)
     }

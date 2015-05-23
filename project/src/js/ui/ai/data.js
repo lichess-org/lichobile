@@ -1,4 +1,4 @@
-var Chess = require('chessli.js').Chess;
+var Chess = require('chess.js').Chess;
 var opposite = require('chessground').util.opposite;
 
 module.exports = function(cfg) {

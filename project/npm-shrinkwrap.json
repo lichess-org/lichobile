@@ -913,6 +913,11 @@
         }
       }
     },
+    "chess.js": {
+      "version": "0.9.2",
+      "from": "git://github.com/veloce/chess.js#v0.9.2",
+      "resolved": "git://github.com/veloce/chess.js#1ea95e1d00066a833c2fd96a153808ba50cd6dd1"
+    },
     "chessground": {
       "version": "2.1.0",
       "from": "git://github.com/ornicar/chessground#mithril0.2.0",

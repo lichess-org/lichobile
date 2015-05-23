@@ -15,7 +15,7 @@ function renderForwardButton(ctrl) {
   return m('button.game_action[data-icon=H]', {
     config: helper.ontouch(() => {
       if (ctrl.ply < ctrl.situations.length - 2) ctrl.jump(ctrl.ply + 2);
-    }, () => ctrl.jump(ctrl.situations.length - 2)),
+    }, () => ctrl.jump(ctrl.situations.length - 1)),
     className: helper.classSet({
       disabled: !(ctrl.ply < ctrl.situations.length - 2)
     })

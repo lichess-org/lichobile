@@ -9,9 +9,16 @@ var helper = require('../helper');
 
 function renderEnded(ctrl) {
   var sit = ctrl.root.replay.situation();
-  if (sit && sit.checkmate) {
-    var result = sit.turnColor === 'white' ? '0-1' : '1-0';
-    var status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
+  var result, status;
+  if (sit && sit.finished) {
+    if (sit.checkmate) {
+      result = sit.turnColor === 'white' ? '0-1' : '1-0';
+      status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
+    } else if (sit.stalemate || sit.draw || sit.threefold) {
+      result = '½-½';
+      if (sit.stalemate) status = i18n('stalemate');
+      else status = i18n('draw');
+    }
     return m('div.result', [result, m('br'), m('br'), m('div.status', status)]);
   }
 }

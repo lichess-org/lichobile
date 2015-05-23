@@ -7,7 +7,7 @@ var storage = require('../../storage');
 var settings = require('../../settings');
 var actions = require('./actions');
 var engine = require('./engine');
-var helper = require('../helper')
+var helper = require('../helper');
 
 module.exports = function() {
 
@@ -15,13 +15,21 @@ module.exports = function() {
 
   var storageKey = 'ai.current';
 
+  var save = function() {
+    storage.set(storageKey, {
+      data: this.data,
+      situations: this.replay.situations,
+      ply: this.replay.ply
+    });
+  }.bind(this);
+
   var addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
     engine.addMove(orig, dest, promotionRole);
     this.data.game.fen = engine.getFen();
     save();
     m.redraw();
-    if (this.replay.situation().checkmate) {
+    if (this.replay.situation().finished) {
       this.chessground.cancelMove();
       setTimeout(function() {
         this.actions.open();
@@ -38,7 +46,7 @@ module.exports = function() {
       })[0][0],
       level: parseInt(level) || 1
     };
-  }.bind(this);
+  };
 
   var engineMove = function() {
     if (this.chessground.data.turnColor !== this.data.player.color) setTimeout(function() {
@@ -52,7 +60,7 @@ module.exports = function() {
 
   var onPromotion = function(orig, dest, role) {
     addMove(orig, dest, role);
-  }.bind(this);
+  };
 
   var userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {
@@ -94,14 +102,6 @@ module.exports = function() {
     console.log(e, 'Fail to load saved game');
     this.init(makeData({}));
   } else this.init(makeData({}));
-
-  var save = function() {
-    storage.set(storageKey, {
-      data: this.data,
-      situations: this.replay.situations,
-      ply: this.replay.ply
-    });
-  }.bind(this);
 
   window.plugins.insomnia.keepAwake();
 

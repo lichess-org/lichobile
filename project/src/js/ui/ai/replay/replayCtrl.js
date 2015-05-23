@@ -1,4 +1,4 @@
-var Chess = require('chessli.js').Chess;
+var Chess = require('chess.js').Chess;
 var engine = require('../engine');
 
 module.exports = function(root, situations, ply) {
@@ -36,7 +36,7 @@ module.exports = function(root, situations, ply) {
     this.root.chessground.cancelMove();
     if (this.situation() &&
       this.situation().turnColor !== this.root.data.player.color &&
-      !this.situation().checkmate) ply++;
+      !this.situation().finished) ply++;
     if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
     this.ply = ply;
     this.apply();
@@ -68,7 +68,11 @@ module.exports = function(root, situations, ply) {
         dests: chess.dests()
       },
       check: chess.in_check(),
+      finished: chess.game_over(),
       checkmate: chess.in_checkmate(),
+      stalemate: chess.in_stalemate(),
+      threefold: chess.in_threefold_repetition(),
+      draw: chess.in_draw(),
       lastMove: [move.from, move.to],
       promotion: promotionLetter
     });

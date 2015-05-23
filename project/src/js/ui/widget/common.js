@@ -21,7 +21,7 @@ widgets.backButton = function(title) {
   return (
     <button className="back_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
-      <span className="title">{title}</span>
+      <div className="title">{title}</div>
     </button>
   );
 };

@@ -1,5 +1,4 @@
 /** @jsx m */
-import utils from '../../utils';
 import userPerfs from '../../lichess/perfs';
 import widgets from '../widget/common';
 import perf from '../widget/perf';
@@ -12,13 +11,16 @@ const moment = window.moment;
 
 export default function view(ctrl) {
   const user = ctrl.user();
-  const header = utils.partialf(widgets.header, null,
-    widgets.backButton(user.username)
-  );
+
+  function header() {
+    const title = user.username;
+    return widgets.header(null, widgets.backButton(title));
+  }
 
   function profile() {
     return (
       <div className="native_scroller">
+        {renderStatus(user)}
         {renderProfile(user)}
         {renderStats(user)}
         {renderRatings(user)}
@@ -29,6 +31,16 @@ export default function view(ctrl) {
 
   return layout.free(header, profile, widgets.empty, widgets.empty);
 };
+
+function renderStatus(user) {
+  const status = user.online ? 'online' : 'offline';
+  return (
+    <div className="onlineStatus">
+      <span className={'userStatus ' + status} data-icon="r" />
+      {i18n(status)}
+    </div>
+  );
+}
 
 function renderProfile(user) {
   if (user.profile) {

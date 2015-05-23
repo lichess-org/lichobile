@@ -8,6 +8,16 @@ h3.fullname
 .user_profile_header
   margin-bottom 15px
 
+.userStatus
+  position relative
+  top 3px
+  margin-right 2px
+  font-size 1.2em
+  &.online
+    color green
+  &.offline
+    opacity 0.6
+
 .profileBio
   margin 10px 0
   font-style italic
@@ -23,10 +33,10 @@ h3.fullname
   &:after
     content none
 
-.profile, .userStats
+.onlineStatus, .profile, .userStats
   padding 10px 15px
 
-.userInfos, .userStats
+.profile, .userStats
   font-size 0.85em
 
 .perf
@@ -50,9 +60,9 @@ h3.fullname
       margin-left 0.5em
     > .progress
       &.positive
-        color #759900
+        color green
       &.negative
-        color #ac524f
+        color red
       &::before
         vertical-align middle
         margin-right 1px
@@ -110,9 +120,9 @@ h3.fullname
     margin-top 5px
     font-size 0.9em
     &.win
-      color #759900
+      color green
     &.loose
-      color #ac524f
+      color red
   &.odd
     background-color darken(bglight, 5%)
   &.nav:after

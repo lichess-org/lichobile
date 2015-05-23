@@ -11,7 +11,8 @@ const filters = {
   rated: 'rated',
   win: 'wins',
   loss: 'nbLosses',
-  draw: 'nbDraws'
+  draw: 'nbDraws',
+  bookmark: 'nbBookmarks'
 };
 
 export default function controller() {
@@ -30,17 +31,14 @@ export default function controller() {
     m.route('/');
   }).then(() => {
     let f = Object.keys(user().count)
-      .map(countToFilter)
       .filter(k => filters.hasOwnProperty(k))
       .map(k => {
         return {
           key: k,
           label: filters[k],
-          count: user().count[filterToCount(k)]
+          count: user().count[k]
         };
       });
-      if (user().nbBookmark)
-        f.push({ key: 'bookmark', label: 'nbBookmarks', count: user().nbBookmark });
     availableFilters(f);
   });
 
@@ -108,14 +106,4 @@ export default function controller() {
       socket.destroy();
     }
   };
-}
-
-function countToFilter(key) {
-  if (key === 'game') return 'all';
-  else return key;
-}
-
-function filterToCount(key) {
-  if (key === 'all') return 'game';
-  else return key;
 }

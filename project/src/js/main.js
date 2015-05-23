@@ -73,7 +73,6 @@ function onResume() {
   refresh();
   refreshIntervalID = setInterval(refresh, refreshInterval);
   socket.connect();
-  socket.send('following_onlines');
 }
 
 function onPause() {

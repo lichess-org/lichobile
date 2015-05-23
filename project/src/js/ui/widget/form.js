@@ -9,19 +9,16 @@ function renderOption(label, value, storedValue) {
 
 module.exports = {
 
-  renderRadio: function(label, name, value, settingsProp) {
-    var isOn = settingsProp() === value;
+  renderRadio: function(label, name, value, checked, onchange) {
     var id = name + '_' + value;
     return [
       m('input.radio[type=radio]', {
-        name: name,
-        id: id,
+        name,
+        id,
         className: value,
-        value: value,
-        checked: isOn,
-        onchange: function(e) {
-          settingsProp(e.target.value);
-        }
+        value,
+        checked,
+        onchange
       }),
       m('label', {
         'for': id

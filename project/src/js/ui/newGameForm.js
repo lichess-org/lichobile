@@ -179,8 +179,20 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     }
   }, [
     m('fieldset', [
-      m('div.nice-radio', formWidgets.renderRadio('human', 'selected', 'human', settings.game.selected)),
-      m('div.nice-radio', formWidgets.renderRadio('computer', 'selected', 'computer', settings.game.selected))
+      m('div.nice-radio', formWidgets.renderRadio(
+        'human',
+        'selected',
+        'human',
+        settings.game.selected() === 'human',
+        e => settings.game.selected(e.target.value)
+      )),
+      m('div.nice-radio', formWidgets.renderRadio(
+        'computer',
+        'selected',
+        'computer',
+        settings.game.selected() === 'computer',
+        e => settings.game.selected(e.target.value)
+      ))
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),

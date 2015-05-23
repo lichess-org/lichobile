@@ -9,10 +9,14 @@ var helper = require('../helper');
 
 function renderBody() {
   return [
-    m('div.scroller.settings_list', { config: helper.scroller }, [
+    m('div.scroller.settings_list.radio_list', { config: helper.scroller }, [
       m('ul#boardThemes', settings.general.theme.availableBoardThemes.map(function(t) {
         return m('li.list_item', {}, [
-          formWidgets.renderRadio(t[0], 'board_theme', t[1], settings.general.theme.board),
+          formWidgets.renderRadio(
+            t[0], 'board_theme', t[1],
+            settings.general.theme.board() === t[1],
+            e => settings.general.theme.board(e.target.value)
+          ),
           m('div.board_icon.vertical_align', {
             className: t[1]
           })

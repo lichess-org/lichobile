@@ -5,6 +5,7 @@ import seeks from'./ui/seeks';
 import otb from'./ui/otb';
 import ai from'./ui/ai';
 import settingsUi from'./ui/settings';
+import settingsLang from './ui/settings/lang';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import friends from'./ui/friends';
@@ -30,6 +31,7 @@ module.exports.init = function() {
     '/players': players,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
-    '/settings/themes/piece': pieceThemes
+    '/settings/themes/piece': pieceThemes,
+    '/settings/lang': settingsLang
   });
 };

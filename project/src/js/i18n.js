@@ -1,3 +1,5 @@
+import settings from './settings';
+
 var messages = [];
 
 var untranslated = {
@@ -20,50 +22,75 @@ var untranslated = {
   boardThemeMetal: 'Metal',
   playerisInvitingYou: '%s is inviting you',
   toATypeGame: 'To a %s game',
-  unsupportedVariant: 'Variant %s is not supported in this version'
+  unsupportedVariant: 'Variant %s is not supported in this version',
+  language: 'Language'
 };
 
 var defaultCode = 'en';
 
-function loadFile(code, callback) {
-  m.request({
+function loadFile(code) {
+  return m.request({
     url: 'i18n/' + code + '.json',
-    method: 'GET'
+    method: 'GET',
+    deserialize: function(text) {
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw { error: 'Lang not available' };
+      }
+    }
   }).then(function(data) {
     messages = data;
-    callback();
+    return code;
   }, function(error) {
     // workaround for iOS: because xhr for local file has a 0 status it will
-    // reject the promise, but still have the response object
+    // reject the promise and still have the response object
     if (error && error.playWithAFriend) {
       messages = error;
-      callback();
+      return code;
     } else {
       if (code === defaultCode) throw new Error(error);
-      console.log(error, 'defaulting to ' + defaultCode);
-      loadFile(defaultCode, callback);
+      return loadFile(defaultCode);
     }
   });
 }
 
-function loadMomentLocal(code) {
+function loadMomentLocale(code) {
   if (code === 'en') return;
   var script = document.createElement('script');
   script.src = 'moment/locale/' + code + '.js';
   document.head.appendChild(script);
   window.moment.locale(code);
+  return code;
 }
 
-function loadPreferredLanguage(callback) {
+function loadPreferredLanguage() {
+  if (settings.general.lang())
+    return loadFromSettings();
+
+  var deferred = m.deferred();
   window.navigator.globalization.getPreferredLanguage(
-    function(language) {
-      var code = language.value.split('-')[0];
-      loadFile(code, callback);
-      loadMomentLocal(code);
-    },
-    function() {
-      loadFile(defaultCode, callback);
-    });
+    language => deferred.resolve(language.value.split('-')[0]),
+    () => deferred.resolve(defaultCode)
+  );
+  return deferred.promise
+    .then(code => {
+      settings.general.lang(code);
+      return code;
+    })
+    .then(loadFile)
+    .then(loadMomentLocale);
+}
+
+function getAvailableLanguages() {
+  return m.request({
+    url: 'i18n/refs.json',
+    method: 'GET'
+  });
+}
+
+function loadFromSettings() {
+  return loadFile(settings.general.lang()).then(loadMomentLocale);
 }
 
 module.exports = function(key) {
@@ -74,3 +101,5 @@ module.exports = function(key) {
   return str;
 };
 module.exports.loadPreferredLanguage = loadPreferredLanguage;
+module.exports.getAvailableLanguages = getAvailableLanguages;
+module.exports.loadFromSettings = loadFromSettings;

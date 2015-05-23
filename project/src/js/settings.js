@@ -1,5 +1,4 @@
 var store = require('./storage');
-var utils = require('./utils');
 var range = require('lodash/utility/range');
 
 function localstorageprop(key, initialValue) {
@@ -10,8 +9,13 @@ function localstorageprop(key, initialValue) {
   };
 }
 
+function tupleOf(x) {
+  return [x.toString(), x.toString()];
+}
+
 module.exports = {
   general: {
+    lang: localstorageprop('settings.lang'),
     animations: localstorageprop('settings.gameAnimations', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     sound: localstorageprop('settings.sound', true),
@@ -108,8 +112,8 @@ module.exports = {
         ['Horde', '8']
       ],
       availableRatingRanges: {
-        min: range(800, 2900, 100).map(utils.tupleOf),
-        max: range(900, 3000, 100).map(utils.tupleOf)
+        min: range(800, 2900, 100).map(tupleOf),
+        max: range(900, 3000, 100).map(tupleOf)
       },
       ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
       ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),

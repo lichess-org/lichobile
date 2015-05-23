@@ -20,7 +20,6 @@ var refreshInterval = 60000;
 var refreshIntervalID;
 
 function main() {
-
   routes.init();
 
   // open games from external links with url scheme (lichess://gameId)
@@ -118,6 +117,6 @@ window.onerror = handleError;
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  utils.f(i18n.loadPreferredLanguage, main),
+  () => i18n.loadPreferredLanguage().then(main),
   false
 );

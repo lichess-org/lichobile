@@ -88,9 +88,15 @@ function renderStats(user) {
 }
 
 function renderRatings(user) {
+  function isShowing(p) {
+    return [
+      'blitz', 'bullet', 'classical', 'correspondence'
+    ].indexOf(p.key) !== -1 || p.perf.games > 0;
+  }
+
   return (
     <section className="ratings">
-      {userPerfs(user).map(p => perf(p.key, p.name, p.perf))}
+      {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf))}
     </section>
   );
 }

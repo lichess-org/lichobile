@@ -56,24 +56,24 @@ function renderCheckCount(ctrl, color) {
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
-    m('div.vertical_align', [
-      m('div.infos', [
-        m('h2', utils.playerName(player)),
-        m('div', [
-          player.user ? m('h3.rating', [
-            player.rating,
-            ratingDiff(player)
-          ]) : null,
-          renderCheckCount(ctrl, player.color),
-          ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
-        ])
-      ]),
-      ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
-        ctrl.data.correspondence ? renderCorrespondenceClock(
-          ctrl.correspondenceClock, i18n, player.color, ctrl.data.game.player
-        ) : null
-      )
-    ])
+    m('div.infos', {
+      config: player.user ? helper.ontouch(utils.f(m.route, '/@/' + player.user.id)) : utils.noop
+    }, [
+      m('h2', utils.playerName(player)),
+      m('div', [
+        player.user ? m('h3.rating', [
+          player.rating,
+          ratingDiff(player)
+        ]) : null,
+        renderCheckCount(ctrl, player.color),
+        ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
+      ])
+    ]),
+    ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
+      ctrl.data.correspondence ? renderCorrespondenceClock(
+        ctrl.correspondenceClock, i18n, player.color, ctrl.data.game.player
+      ) : null
+    )
   ]);
 }
 

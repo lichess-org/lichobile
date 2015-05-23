@@ -1,15 +1,16 @@
 .antagonist
+  display flex
+  justify-content space-between
+  align-items center
   color #fff
   overflow auto
-  position relative
-  clear both
   .infos
-    float left
-    width 50%;
     h2
       font-weight bold
       white-space nowrap
       margin-bottom 3px
+    &.active
+      background-color lighten(bgdark, 10%)
   .rp.up
     color green
   .rp.down
@@ -22,10 +23,7 @@
     margin-right 10px
     font-weight 300
     line-height 1
-  .vertical_align
-    min-height 30px
   .clock
-    float right
     max-width 50%
     font-family Cousine
     font-weight bold

@@ -109,7 +109,7 @@ function renderActions(ctrl) {
         config={helper.ontouchY(ctrl.goToGames)}
         key="view_all_games"
       >
-        {i18n('viewAllNbGames', user.count.game)}
+        {i18n('viewAllNbGames', user.count.all)}
       </div>
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item nav" key="challenge_to_play"

@@ -22,7 +22,7 @@ export default function view(ctrl) {
             {ctrl.availableFilters().map(f => {
               return (
                 <option value={f.key} selected={ctrl.currentFilter() === f.key}>
-                  {i18n(f.label).replace('%s ', '')} ({f.count})
+                  {utils.capitalize(i18n(f.label).replace('%s ', ''))} ({f.count})
                 </option>
               );
             })}

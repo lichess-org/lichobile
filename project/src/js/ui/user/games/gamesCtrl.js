@@ -11,9 +11,7 @@ const filters = {
   rated: 'rated',
   win: 'wins',
   loss: 'nbLosses',
-  draw: 'nbDraws',
-  bookmark: 'nbBookmarks',
-  import: 'nbImportedGames'
+  draw: 'nbDraws'
 };
 
 export default function controller() {
@@ -41,6 +39,8 @@ export default function controller() {
           count: user().count[filterToCount(k)]
         };
       });
+      if (user().nbBookmark)
+        f.push({ key: 'bookmark', label: 'nbBookmarks', count: user().nbBookmark });
     availableFilters(f);
   });
 

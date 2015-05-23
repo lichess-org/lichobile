@@ -99,7 +99,6 @@ h3.fullname
   .infos
     padding-left 40px
   .players
-    text-align center
     margin-top 1em
     > div
       display inline-block
@@ -108,12 +107,23 @@ h3.fullname
       font-size 1.2em
       margin 0 10px
   .status
+    margin-top 5px
+    font-size 0.9em
     &.win
       color #759900
     &.loose
       color #ac524f
   &.odd
-    background-color darken(bglight, 8%)
+    background-color darken(bglight, 5%)
+  &.nav:after
+    line-height 1
+    top 50%
+  &.active
+    background-color bglight
+    &.odd
+      background-color darken(bglight, 5%)
+    &:after
+      color gold
 
 #filterGames
   padding-left 15px

@@ -56,27 +56,21 @@ function renderGame(g, index, userId) {
   const date = moment(g.timestamp).calendar();
   const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
     (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+  const icon = utils.gameIcon(g.perf) || '';
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
 
   return (
-    <li className={`list_item userGame ${evenOrOdd}`}>
-      <span className="iconGame" data-icon={utils.gameIcon(g.perf)} />
+    <li className={`list_item userGame ${evenOrOdd} nav`}
+      config={helper.ontouchY(() => m.route('/game/' + g.id))}>
+      <span className="iconGame" data-icon={icon} />
       <div className="infos">
         <div className="title">{title}</div>
         <small className="date">{date}</small>
         <div className="players">
-          <div className="player white">
-            <span className="playerName">{g.players.white.userId}</span>
-            <br/>
-            <small className="playerRating">{g.players.white.rating}</small>
-          </div>
+          {renderPlayer(g.players, 'white')}
           <div className="swords" data-icon="U" />
-          <div className="player black">
-            <span className="playerName">{g.players.black.userId}</span>
-            <br/>
-            <small className="playerRating">{g.players.black.rating}</small>
-          </div>
+          {renderPlayer(g.players, 'black')}
         </div>
         <div className={helper.classSet({
           status: true,
@@ -87,3 +81,21 @@ function renderGame(g, index, userId) {
     </li>
   );
 }
+
+function renderPlayer(players, color) {
+  let player = players[color];
+  let playerName;
+  if (player.userId) playerName = player.userId;
+  else if (player.aiLevel) playerName = utils.aiName(player.aiLevel);
+
+  return (
+    <div className={'player ' + color}>
+      <span className="playerName">{playerName}</span>
+      <br/>
+      {helper.cond(player.rating,
+      <small className="playerRating">{player.rating}</small>
+      )}
+    </div>
+  );
+}
+

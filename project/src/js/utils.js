@@ -83,8 +83,12 @@ utils.playerName = function(player, withRating) {
     return name;
   }
   if (player.ai)
-    return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
+    return utils.aiName(player.ai);
   return 'Anonymous';
+};
+
+utils.aiName = function(level) {
+  return i18n('aiNameLevelAiLevel', 'Stockfish', level);
 };
 
 utils.backHistory = function() {

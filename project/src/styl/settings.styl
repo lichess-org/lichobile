@@ -33,6 +33,15 @@
   font-size 0.75em
   color darken(#DFDFDF, 10%)
 
+@media only screen and (min-width 600px)
+  #boardThemes
+    .list_item
+      height 170px
+      line-height 135px
+      .board_icon
+        width 128px
+        height 128px
+
 .board_icon
   display inline-block
   position absolute
@@ -72,16 +81,31 @@
   &.merida
     > label
       background-image url('../../images/pieces/merida/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/merida/wP.svg'),url('../../images/pieces/merida/wN.svg'),url('../../images/pieces/merida/wB.svg'),url('../../images/pieces/merida/wR.svg'),url('../../images/pieces/merida/wQ.svg'),url('../../images/pieces/merida/wK.svg')
+        background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
   &.cburnett
     > label
       background-image url('../../images/pieces/cburnett/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/cburnett/wP.svg'),url('../../images/pieces/cburnett/wN.svg'),url('../../images/pieces/cburnett/wB.svg'),url('../../images/pieces/cburnett/wR.svg'),url('../../images/pieces/cburnett/wQ.svg'),url('../../images/pieces/cburnett/wK.svg')
+        background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
   &.pirouetti
     > label
       background-image url('../../images/pieces/pirouetti/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/pirouetti/wP.svg'),url('../../images/pieces/pirouetti/wN.svg'),url('../../images/pieces/pirouetti/wB.svg'),url('../../images/pieces/pirouetti/wR.svg'),url('../../images/pieces/pirouetti/wQ.svg'),url('../../images/pieces/pirouetti/wK.svg')
+        background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
   &.alpha
     > label
       background-image url('../../images/pieces/alpha/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/alpha/wP.svg'),url('../../images/pieces/alpha/wN.svg'),url('../../images/pieces/alpha/wB.svg'),url('../../images/pieces/alpha/wR.svg'),url('../../images/pieces/alpha/wQ.svg'),url('../../images/pieces/alpha/wK.svg')
+        background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
   &.spatial
     > label
       background-image url('../../images/pieces/spatial/wN.svg')
+      @media only screen and (min-width 600px)
+        background-image url('../../images/pieces/spatial/wP.svg'),url('../../images/pieces/spatial/wN.svg'),url('../../images/pieces/spatial/wB.svg'),url('../../images/pieces/spatial/wR.svg'),url('../../images/pieces/spatial/wQ.svg'),url('../../images/pieces/spatial/wK.svg')
+        background-position right 10px center, right 70px center, right 130px center, right 190px center, right 250px center, right 310px center;
 

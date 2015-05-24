@@ -92,6 +92,7 @@ function renderPlayer(players, color) {
   let playerName;
   if (player.userId) playerName = player.userId;
   else if (player.aiLevel) playerName = utils.aiName(player.aiLevel);
+  else playerName = 'Anonymous';
 
   return (
     <div className={'player ' + color}>

@@ -123,6 +123,10 @@ h3.fullname
       color green
     &.loose
       color red
+  .opening
+    margin-top 1em
+    font-size 0.8em
+    font-weight bold
   &.odd
     background-color darken(bglight, 5%)
   &.nav:after
@@ -134,6 +138,16 @@ h3.fullname
       background-color darken(bglight, 5%)
     &:after
       color gold
+  @media only screen and (min-width 600px)
+    display flex
+    .board
+      width 200px
+      height 200px
+    .iconGame
+      position relative
+      top 0
+    .infos
+      padding-left 30px
 
 #filterGames
   padding-left 15px

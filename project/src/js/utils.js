@@ -114,7 +114,7 @@ var perfIconsMap = {
 };
 
 utils.gameIcon = function(perf) {
-  return perfIconsMap[perf];
+  return perfIconsMap[perf] || '8';
 };
 
 utils.secondsToMinutes = function(sec) {

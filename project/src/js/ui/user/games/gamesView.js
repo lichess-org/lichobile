@@ -50,6 +50,7 @@ function renderAllGames(ctrl) {
 }
 
 function renderGame(g, index, userId) {
+  const wideScreen = helper.isWideScreen();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + g.variant.name + ' • ' + mode;
@@ -63,6 +64,7 @@ function renderGame(g, index, userId) {
   return (
     <li className={`list_item userGame ${evenOrOdd} nav`}
       config={helper.ontouchY(() => m.route('/game/' + g.id))}>
+      {helper.cond(wideScreen, helper.viewOnlyBoard(g.fen, g.lastMove, userColor))}
       <span className="iconGame" data-icon={icon} />
       <div className="infos">
         <div className="title">{title}</div>
@@ -77,6 +79,9 @@ function renderGame(g, index, userId) {
           win: userColor === g.winner,
           loose: g.winner && userColor !== g.winner
         })}>{status}</div>
+        {g.opening ?
+        <div className="opening">{g.opening.name}</div> : null
+        }
       </div>
     </li>
   );

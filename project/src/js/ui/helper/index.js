@@ -67,9 +67,9 @@ helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piec
   };
   return m('div.board', {
     className: [
-      piece ? piece : 'merida',
+      piece ? piece : settings.general.theme.piece(),
       variant ? variant.key : '',
-      board ? board : 'grey'
+      board ? board : settings.general.theme.board()
     ].join(' '),
     config: function(el, isUpdate, ctx) {
       if (ctx.ground) ctx.ground.set(config);
@@ -103,6 +103,10 @@ helper.viewportDim = function() {
     vh: e.clientHeight
   };
   return viewportDim;
+};
+
+helper.isWideScreen = function() {
+  return helper.viewportDim().vw >= 600;
 };
 
 // allow user to opt out of track analytics

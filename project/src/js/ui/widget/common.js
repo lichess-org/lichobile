@@ -1,12 +1,14 @@
 /** @jsx m */
-var menu = require('../menu');
-var utils = require('../../utils');
-var helper = require('../helper');
-var gamesMenu = require('../gamesMenu');
-var newGameForm = require('../newGameForm');
-var session = require('../../session');
-var settings = require('../../settings');
-import challenges from '../../lichess/challenges';
+import menu from '../menu';
+import utils from '../../utils';
+import helper from '../helper';
+import gamesMenu from '../gamesMenu';
+import newGameForm from '../newGameForm';
+import session from '../../session';
+import settings from '../../settings';
+import challengesApi from '../../lichess/challenges';
+import friendsApi from '../../lichess/friends';
+import i18n from '../../i18n';
 
 var widgets = {};
 
@@ -26,10 +28,35 @@ widgets.backButton = function(title) {
   );
 };
 
-widgets.gameButton = function() {
-  if (!utils.hasNetwork()) return null;
-  var key, action;
-  const nbChallenges = challenges.count();
+function renderFriendsBtn() {
+  const nbFriends = friendsApi.count();
+  const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
+  let key, action;
+  if (nbFriends > 0) {
+    key = 'friendsEnabled';
+    action = () => m.route('/friends');
+  } else {
+    key = 'friendsDisabled';
+    action = utils.noop;
+  }
+  const className = [
+    'friends_button',
+    nbFriends === 0 ? 'disabled' : ''
+  ].join(' ');
+  return (
+    <button className={className} key={key} data-icon="f"
+      config={helper.ontouch(action, longAction)}
+    >
+    {nbFriends > 0 ?
+      <span className="chip nb_friends">{nbFriends}</span> : null
+    }
+    </button>
+  );
+}
+
+function renderGameBtn() {
+  let key, action;
+  const nbChallenges = challengesApi.count();
   if (session.nowPlaying().length || nbChallenges) {
     key = 'games-menu';
     action = gamesMenu.open;
@@ -42,9 +69,11 @@ widgets.gameButton = function() {
     'game_menu_button',
     settings.general.theme.board(),
     nbChallenges ? 'new_challenge' : ''
-  ].join(' ');
+    ].join(' ');
+  const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', myTurns), 'short', 'top');
+
   return (
-    <button key={key} className={className} config={helper.ontouch(action)}>
+    <button key={key} className={className} config={helper.ontouch(action, longAction)}>
       {!nbChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }
@@ -53,13 +82,23 @@ widgets.gameButton = function() {
       }
     </button>
   );
+}
+
+widgets.headerBtns = function() {
+  if (!utils.hasNetwork()) return null;
+  return (
+    <div className="buttons">
+      {renderFriendsBtn()}
+      {renderGameBtn()}
+    </div>
+  );
 };
 
 widgets.header = function(title, leftButton) {
   return m('nav', [
     leftButton ? leftButton : widgets.menuButton(),
-    widgets.gameButton(),
-    title ? m('h1', title) : null
+    title ? m('h1', title) : null,
+    widgets.headerBtns()
   ]);
 };
 
@@ -70,11 +109,11 @@ widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
 widgets.connectingHeader = function(title) {
   return m('nav', [
     widgets.menuButton(),
-    widgets.gameButton(),
     m('h1.reconnecting', [
       title ? title : null,
       widgets.loader
-    ])
+    ]),
+    widgets.headerBtns()
   ]);
 };
 

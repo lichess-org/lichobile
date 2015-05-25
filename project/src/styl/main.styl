@@ -35,13 +35,11 @@ main.out
   &.board
     background inherit
   nav
-    max-height 50px
+    height 50px
     overflow hidden
+    display flex
+    justify-content space-between
     h1
-      font-size 1.1em
-      text-align center
-      width 69%
-      margin 0 auto
       line-height 50px
       color gold
       &.playing
@@ -52,18 +50,14 @@ main.out
         text-align center
         height 50px
     button
-      width 15%
-      max-width 50px
       background transparent
-      padding: 15px
+      padding 15px
       margin 0
       color gold
       font-size 20px
       line-height 20px
       &.active
         background lighten(bgdark, 8%)
-  .menu_button, .back_button
-    float left
   .back_button
     font-size 1.1em
     width auto
@@ -89,9 +83,32 @@ main.out
       margin-right 10px
     &.active
       background lighten(bgdark, 8%)
+  .buttons
+    min-width 85px
+  .friends_button
+    position relative
+    padding-right 10px
+    > .chip
+      position absolute
+      font-size 10px
+      font-weight bold
+      line-height 12px
+      letter-spacing 0px
+      color bgdark
+      border 2px solid bgdark
+      border-radius 50%
+      height 17px
+      width 17px
+      top 10px
+      left 7px
+      background lighten(gold, 60%)
+    + .game_menu_button
+      padding-left 10px
+      padding-right 10px
+      > .nb_playing
+        left 0
   .game_menu_button
     position relative
-    float right
     &::before
       content ''
       display block
@@ -152,7 +169,15 @@ main.out
       line-height: 1;
       -webkit-font-smoothing: antialiased;
       animation: neon 1.5s ease-in-out infinite alternate
-
+  @media only screen and (min-width 600px)
+    .friends_button
+      padding-right 15px
+      margin-right 5px
+      + .game_menu_button
+        padding-left 15px
+        padding-right 15px
+        > .nb_playing
+          left 7px
 
 .main_header, .main_footer
   section

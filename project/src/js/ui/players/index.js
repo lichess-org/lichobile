@@ -57,7 +57,6 @@ export default {
       return (
         <nav>
           {widgets.menuButton()}
-          {widgets.gameButton()}
           <div className="search_input">
             <span className="fa fa-search icon"/>
             <input id="searchPlayers" type="search"
@@ -66,6 +65,7 @@ export default {
               autocomplete="off"
             />
           </div>
+          {widgets.headerBtns()}
         </nav>
       );
     }

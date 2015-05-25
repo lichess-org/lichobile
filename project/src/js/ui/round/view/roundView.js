@@ -203,11 +203,11 @@ module.exports = function(ctrl) {
         className: ctrl.vm.connectedWS ? '' : 'reconnecting'
       }, [
         widgets.menuButton(),
-        widgets.gameButton(),
         ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
           i18n('reconnecting'),
           widgets.loader
-        ])
+        ]),
+        widgets.headerBtns()
       ]),
       renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
     ];

@@ -106,7 +106,7 @@ main.out
     + .game_menu_button
       padding-left 10px
       padding-right 10px
-      > .nb_playing
+      > .nb_playing, > .nb_challenges
         left 2px
   .game_menu_button
     position relative
@@ -149,14 +149,12 @@ main.out
       border-radius 50%
       height 17px
       width 17px
-    & > .nb_playing
       top 10px
-      left 9px
+      left 7px
+    & > .nb_playing
       background lighten(gold, 50%)
     & > .nb_challenges
-      top 4px
-      right 4px
-      border-color darken(orange, 5%)
+      left 7px
       background orange
     &.new_challenge:before
       background transparent
@@ -177,8 +175,6 @@ main.out
       + .game_menu_button
         padding-left 15px
         padding-right 15px
-        > .nb_playing
-          left 7px
 
 .main_header, .main_footer
   section

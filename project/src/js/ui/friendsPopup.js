@@ -43,7 +43,10 @@ friendsPopup.view = function() {
 
 function renderFriend(name) {
   let userId = utils.userFullNameToId(name);
-  let action = () => m.route('/@/' + userId);
+  let action = () => {
+    friendsPopup.close();
+    m.route('/@/' + userId);
+  };
 
   return (
     <li className="list_item nav" key={userId} config={helper.ontouchY(action)}>

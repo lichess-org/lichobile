@@ -29,24 +29,11 @@ widgets.backButton = function(title) {
   );
 };
 
-function renderFriendsBtn() {
-  const nbFriends = friendsApi.count();
+function renderFriendsBtn(nbFriends) {
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
-  let key, action;
-  if (nbFriends > 0) {
-    key = 'friendsEnabled';
-    action = friendsPopup.open;
-  } else {
-    key = 'friendsDisabled';
-    action = utils.noop;
-  }
-  const className = [
-    'friends_button',
-    nbFriends === 0 ? 'disabled' : ''
-  ].join(' ');
   return (
-    <button className={className} key={key} data-icon="f"
-      config={helper.ontouch(action, longAction)}
+    <button className="friends_button" key="friends" data-icon="f"
+      config={helper.ontouch(friendsPopup.open, longAction)}
     >
     {nbFriends > 0 ?
       <span className="chip nb_friends">{nbFriends}</span> : null
@@ -87,10 +74,11 @@ function renderGameBtn() {
 
 widgets.headerBtns = function() {
   if (!utils.hasNetwork()) return null;
-  if (session.isConnected())
+  const nbFriends = friendsApi.count();
+  if (session.isConnected() && nbFriends)
     return (
       <div className="buttons">
-        {renderFriendsBtn()}
+        {renderFriendsBtn(nbFriends)}
         {renderGameBtn()}
       </div>
     );

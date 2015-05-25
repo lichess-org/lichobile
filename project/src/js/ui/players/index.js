@@ -16,18 +16,18 @@ export default {
     function onKeyboardShow(e) {
       if (window.cordova.platformId === 'ios') {
         let ul = document.getElementById('players_search_results');
-        if (!ul) return;
-        if (!listHeight)
-          listHeight = ul.offsetHeight;
-        ul.style.height = (listHeight - e.keyboardHeight) + 'px';
+        if (!listHeight) listHeight = ul.offsetHeight;
+        if (ul) ul.style.height = (listHeight - e.keyboardHeight) + 'px';
+
       }
     }
 
     function onKeyboardHide() {
       if (window.cordova.platformId === 'ios') {
         let ul = document.getElementById('players_search_results');
-        if (!ul) return;
-        ul.style.height = listHeight + 'px';
+        let input = document.getElementById('searchPlayers');
+        if (ul) ul.style.height = listHeight + 'px';
+        if (input) input.blur();
       }
     }
 

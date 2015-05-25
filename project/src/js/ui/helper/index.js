@@ -36,7 +36,11 @@ helper.ontouch = function(tapHandler, holdHandler, scrollX, scrollY) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var unbind = ButtonHandler(el,
-        () => utils.autoredraw(tapHandler),
+        e => {
+          m.startComputation();
+          tapHandler(e);
+          m.endComputation();
+        },
         holdHandler ? () => utils.autoredraw(holdHandler) : null,
         scrollX,
         scrollY

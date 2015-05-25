@@ -95,15 +95,31 @@ h3.fullname
 
 .userGame
   background-color bglight
-  color textDarkGray
+  color textGray
   min-height 60px
+  padding 0
   border-bottom-color darken(bglight, 15%)
+  > .nav
+    padding 15px
+    &:after
+      line-height 1
+      top 50%
   .iconGame
+    color gold
     position absolute
     left 15px
     top 15px
     &:before
       font-size 30px
+  .iconStar
+    position absolute
+    left 15px
+    bottom 15px
+    width 30px
+    text-align center
+    color textGray
+    &:before
+      font-size 25px
   .title
     text-transform uppercase
   .infos
@@ -116,6 +132,8 @@ h3.fullname
     .swords
       font-size 1.2em
       margin 0 10px
+  .playerName
+    font-weight bold
   .status
     margin-top 5px
     font-size 0.9em
@@ -126,28 +144,29 @@ h3.fullname
   .opening
     margin-top 1em
     font-size 0.8em
-    font-weight bold
   &.odd
     background-color darken(bglight, 5%)
-  &.nav:after
-    line-height 1
-    top 50%
-  &.active
-    background-color bglight
-    &.odd
+    > .active
       background-color darken(bglight, 5%)
+  > .active
+    background-color bglight
     &:after
       color gold
   @media only screen and (min-width 600px)
-    display flex
+    > .nav
+      display flex
     .board
       width 200px
       height 200px
+    .iconStar
+      top 15px
+      right 15px
+      left initial
+      bottom initial
     .iconGame
-      position relative
-      top 0
+      left 230px
     .infos
-      padding-left 30px
+      padding-left 50px
 
 #filterGames
   padding-left 15px

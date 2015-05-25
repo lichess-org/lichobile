@@ -88,6 +88,13 @@ function game(id, color) {
   return http.request(url);
 }
 
+function toggleGameBookmark(id) {
+  return http.request('/bookmark/' + id, {
+    method: 'POST',
+    deserialize: v => v
+  });
+}
+
 function featured(flip) {
   return http.request('/tv/lichess', flip ? { data: { flip: 1 }} : {});
 }
@@ -131,5 +138,6 @@ module.exports = {
   seeks,
   game,
   featured,
-  status
+  status,
+  toggleGameBookmark
 };

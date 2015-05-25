@@ -6,6 +6,7 @@ import layout from '../../layout';
 import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
+import xhr from '../../../xhr';
 const moment = window.moment;
 
 export default function view(ctrl) {
@@ -40,7 +41,7 @@ function renderAllGames(ctrl) {
   return (
     <div className="scroller games" config={ctrl.scrollerConfig}>
       <ul className="userGames">
-        { ctrl.games().map((g, i) => renderGame(g, i, ctrl.userId)) }
+        { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
         {helper.cond(ctrl.isLoadingNextPage(),
         <li className="list_item loadingNext">loading...</li>
         )}
@@ -49,7 +50,16 @@ function renderAllGames(ctrl) {
   );
 }
 
-function renderGame(g, index, userId) {
+function bookmarkAction(ctrl, id, index) {
+  const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
+  return helper.ontouchY(() => {
+    xhr.toggleGameBookmark(id).then(() => {
+      ctrl.toggleBookmark(index);
+    }, err => utils.handleXhrError(err));
+  }, longAction);
+}
+
+function renderGame(ctrl, g, index, userId) {
   const wideScreen = helper.isWideScreen();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
@@ -60,28 +70,31 @@ function renderGame(g, index, userId) {
   const icon = utils.gameIcon(g.perf) || '';
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
+  const star = g.bookmarked ? 't' : 's';
 
   return (
-    <li className={`list_item userGame ${evenOrOdd} nav`}
-      config={helper.ontouchY(() => m.route('/game/' + g.id))}>
-      {helper.cond(wideScreen, helper.viewOnlyBoard(g.fen, g.lastMove, userColor))}
-      <span className="iconGame" data-icon={icon} />
-      <div className="infos">
-        <div className="title">{title}</div>
-        <small className="date">{date}</small>
-        <div className="players">
-          {renderPlayer(g.players, 'white')}
-          <div className="swords" data-icon="U" />
-          {renderPlayer(g.players, 'black')}
+    <li className={`list_item userGame ${evenOrOdd}`}>
+      <span className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} />
+      <div className="nav" config={helper.ontouchY(() => m.route('/game/' + g.id))}>
+        <span className="iconGame" data-icon={icon} />
+        {wideScreen ? helper.viewOnlyBoard(g.fen, g.lastMove, userColor) : null}
+        <div className="infos">
+          <div className="title">{title}</div>
+          <small className="date">{date}</small>
+          <div className="players">
+            {renderPlayer(g.players, 'white')}
+            <div className="swords" data-icon="U" />
+            {renderPlayer(g.players, 'black')}
+          </div>
+          <div className={helper.classSet({
+            status: true,
+            win: userColor === g.winner,
+            loose: g.winner && userColor !== g.winner
+          })}>{status}</div>
+          {g.opening ?
+          <div className="opening">{g.opening.name}</div> : null
+          }
         </div>
-        <div className={helper.classSet({
-          status: true,
-          win: userColor === g.winner,
-          loose: g.winner && userColor !== g.winner
-        })}>{status}</div>
-        {g.opening ?
-        <div className="opening">{g.opening.name}</div> : null
-        }
       </div>
     </li>
   );

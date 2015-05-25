@@ -40,7 +40,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     e.preventDefault();
     if (active) {
       el.classList.add(activeClass);
-      tapHandler();
+      tapHandler(e);
       active = false;
       setTimeout(() => el.classList.remove(activeClass), 80);
     }

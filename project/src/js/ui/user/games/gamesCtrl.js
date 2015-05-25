@@ -97,6 +97,10 @@ export default function controller() {
     loadInitialGames();
   }
 
+  function toggleBookmark(index) {
+    games()[index].bookmarked = !games()[index].bookmarked;
+  }
+
   loadInitialGames();
 
   return {
@@ -107,6 +111,7 @@ export default function controller() {
     scrollerConfig,
     userId,
     onFilterChange,
+    toggleBookmark,
     onunload() {
       socket.destroy();
     }

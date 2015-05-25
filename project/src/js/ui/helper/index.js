@@ -23,6 +23,41 @@ helper.transformProp = function() {
   return cachedTransformProp;
 };
 
+function collectionHas(coll, el) {
+  for(var i = 0, len = coll.length; i < len; i++) {
+    if(coll[i] === el) return true;
+  }
+  return false;
+}
+
+function findParentBySelector(el, selector) {
+  var matches = document.querySelectorAll(selector);
+  var cur = el.parentNode;
+  while(cur && !collectionHas(matches, cur)) {
+    cur = cur.parentNode;
+  }
+  return cur;
+}
+
+helper.fadesIn = function(element, isInitialized) {
+  if (!isInitialized) {
+    element.style.opacity = 0;
+    Zanimo(element, 'opacity', 1, 150);
+  }
+};
+
+helper.fadesOut = function(callback, selector) {
+  return function(e) {
+    var el = selector ? findParentBySelector(e.target, selector) : e.target;
+    m.redraw.strategy('none');
+    Zanimo(el, 'opacity', 0, 250).then(function() {
+      m.startComputation();
+      callback();
+      m.endComputation();
+    });
+  };
+};
+
 helper.scale = function(element, isInitialized) {
   if (!isInitialized) {
     element.style[helper.transformProp()] = 'scale(0.97)';

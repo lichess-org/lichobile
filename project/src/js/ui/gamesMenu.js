@@ -53,7 +53,7 @@ function acceptChallenge(id) {
 function declineChallenge(id) {
   return xhr.declineChallenge(id).then(() =>
     challengesApi.remove(id)
-  ).then(m.redraw);
+  );
 }
 
 function cardDims() {
@@ -132,7 +132,9 @@ function renderChallenge(c, cDim, cardStyle) {
           <button config={helper.ontouchX(utils.f(acceptChallenge, c.game.id))}>
             {i18n('accept')}
           </button>
-          <button config={helper.ontouchX(utils.f(declineChallenge, c.game.id))}>
+          <button config={helper.ontouchX(
+            helper.fadesOut(declineChallenge.bind(undefined, c.game.id), '.card')
+          )}>
             {i18n('decline')}
           </button>
         </div>

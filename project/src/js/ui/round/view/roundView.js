@@ -145,7 +145,7 @@ function gameInfos(data) {
       () => {
         var link = variantApi(data.game.variant.key).link;
         if (link)
-          window.cordova.InAppBrowser.open(link, '_blank', 'location=no');
+          window.open(link, '_blank', 'location=no');
       },
       () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
     )
@@ -155,7 +155,7 @@ function gameInfos(data) {
     m('div.icon-game', {
       'data-icon': icon ? icon : ''
     }),
-    m('div.game-title', infos)
+    m('div.game-title.no_select', infos)
   ];
 }
 

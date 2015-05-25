@@ -14,11 +14,6 @@
     trackView: noop
   };
 
-  // in app browser
-  window.cordova.InAppBrowser = {
-    open: window.open.bind(window)
-  };
-
   // events
   document.addEventListener('DOMContentLoaded', function() {
     document.dispatchEvent(new window.Event('deviceready'));

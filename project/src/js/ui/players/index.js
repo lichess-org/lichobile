@@ -72,7 +72,7 @@ export default {
 
     function body() {
       return (
-        <ul id="players_search_results" className="native_scroller search_results">
+        <ul id="players_search_results" className="native_scroller page search_results">
           {ctrl.list().map(u => {
             return (
               <li className="list_item nav" key={u} config={h.ontouchY(utils.f(ctrl.goToProfile, u))}>

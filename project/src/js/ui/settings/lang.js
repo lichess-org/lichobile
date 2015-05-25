@@ -38,7 +38,7 @@ module.exports = {
 
     function renderBody() {
       return (
-        <ul className="native_scroller settings_list radio_list">
+        <ul className="native_scroller page settings_list radio_list">
           {ctrl.langs().map(l => renderLang(l))}
         </ul>
       );

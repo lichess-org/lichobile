@@ -9,6 +9,7 @@ import settings from '../../settings';
 import challengesApi from '../../lichess/challenges';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
+import friendsPopup from '../friendsPopup';
 
 var widgets = {};
 
@@ -34,7 +35,7 @@ function renderFriendsBtn() {
   let key, action;
   if (nbFriends > 0) {
     key = 'friendsEnabled';
-    action = () => m.route('/friends');
+    action = friendsPopup.open;
   } else {
     key = 'friendsDisabled';
     action = utils.noop;

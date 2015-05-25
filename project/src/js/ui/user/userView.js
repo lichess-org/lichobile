@@ -19,7 +19,7 @@ export default function view(ctrl) {
 
   function profile() {
     return (
-      <div className="native_scroller">
+      <div className="native_scroller page">
         {renderStatus(user)}
         {renderProfile(user)}
         {renderStats(user)}

@@ -8,7 +8,6 @@ import settingsUi from'./ui/settings';
 import settingsLang from './ui/settings/lang';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
-import friends from'./ui/friends';
 import user from'./ui/user';
 import userGames from'./ui/user/games';
 import players from './ui/players';
@@ -24,7 +23,6 @@ module.exports.init = function() {
     '/tv': tv,
     '/seek': seek,
     '/seeks': seeks,
-    '/friends': friends,
     '/@/:id': user,
     '/@/:id/games': userGames,
     '/@/:id/games/:filter': userGames,

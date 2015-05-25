@@ -4,6 +4,7 @@ var newGameForm = require('./newGameForm');
 var challengeForm = require('./challengeForm');
 var loginModal = require('./loginModal');
 var signupModal = require('./signupModal');
+var friendsPopup = require('./friendsPopup');
 var helper = require('./helper');
 
 function headerHeight() {
@@ -33,7 +34,8 @@ module.exports = {
       loginModal.view(),
       signupModal.view(),
       newGameForm.view(),
-      challengeForm.view()
+      challengeForm.view(),
+      friendsPopup.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);
@@ -56,7 +58,8 @@ module.exports = {
       loginModal.view(),
       signupModal.view(),
       newGameForm.view(),
-      challengeForm.view()
+      challengeForm.view(),
+      friendsPopup.view()
     ];
     if (overlay) view.push(overlay());
     return m('div.view-container', view);

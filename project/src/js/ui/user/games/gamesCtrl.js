@@ -12,7 +12,8 @@ const filters = {
   win: 'wins',
   loss: 'nbLosses',
   draw: 'nbDraws',
-  bookmark: 'nbBookmarks'
+  bookmark: 'nbBookmarks',
+  me: 'nbGamesWithYou'
 };
 
 export default function controller() {
@@ -26,12 +27,16 @@ export default function controller() {
 
   socket.createDefault();
 
-  xhr.user(userId).then(user, error => {
+  xhr.user(userId).then(data => {
+    user(data);
+    return data;
+  }, error => {
     utils.handleXhrError(error);
     m.route('/');
-  }).then(() => {
-    let f = Object.keys(user().count)
-      .filter(k => filters.hasOwnProperty(k))
+    throw error;
+  }).then(data => {
+    let f = Object.keys(data.count)
+      .filter(k => filters.hasOwnProperty(k) && data.count[k] > 0)
       .map(k => {
         return {
           key: k,

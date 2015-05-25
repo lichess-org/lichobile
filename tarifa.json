@@ -120,6 +120,7 @@
       "variables": {
         "URL_SCHEME": "lichess"
       }
-    }
+    },
+    "org.apache.cordova.inappbrowser": "org.apache.cordova.inappbrowser"
   }
 }

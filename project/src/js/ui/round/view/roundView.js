@@ -15,6 +15,7 @@ var gameStatus = require('../../../lichess/status');
 var replayView = require('../replay/replayView');
 var renderChat = require('../chat').view;
 var renderCorrespondenceClock = require('../correspondenceClock/correspondenceView');
+import variantApi from '../../../lichess/variant';
 
 function compact(x) {
   if (Object.prototype.toString.call(x) === '[object Array]') {
@@ -139,7 +140,17 @@ function gameInfos(data) {
   var time = gameApi.time(data);
   var mode = data.game.rated ? i18n('rated') : i18n('casual');
   var icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
-  var infos = [time + ' • ' + data.game.perf, m('br'), mode];
+  var variant = m('span.variant', {
+    config: helper.ontouch(
+      () => {
+        var link = variantApi(data.game.variant.key).link;
+        if (link)
+          window.cordova.InAppBrowser.open(link, '_blank', 'location=no');
+      },
+      () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
+    )
+  }, data.game.variant.name);
+  var infos = [time + ' • ', variant, m('br'), mode];
   return [
     m('div.icon-game', {
       'data-icon': icon ? icon : ''

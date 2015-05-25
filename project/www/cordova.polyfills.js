@@ -11,7 +11,12 @@
   window.analytics = {
     startTrackerWithId: noop,
     trackException: noop,
-    trackView: noop,
+    trackView: noop
+  };
+
+  // in app browser
+  window.cordova.InAppBrowser = {
+    open: window.open.bind(window)
   };
 
   // events

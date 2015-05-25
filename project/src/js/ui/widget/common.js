@@ -86,12 +86,15 @@ function renderGameBtn() {
 
 widgets.headerBtns = function() {
   if (!utils.hasNetwork()) return null;
-  return (
-    <div className="buttons">
-      {renderFriendsBtn()}
-      {renderGameBtn()}
-    </div>
-  );
+  if (session.isConnected())
+    return (
+      <div className="buttons">
+        {renderFriendsBtn()}
+        {renderGameBtn()}
+      </div>
+    );
+  else
+    return renderGameBtn();
 };
 
 widgets.header = function(title, leftButton) {

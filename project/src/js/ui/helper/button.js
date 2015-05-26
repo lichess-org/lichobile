@@ -1,4 +1,4 @@
-const holdDuration = 800;
+const holdDuration = 600;
 const scrollTolerance = 5;
 const activeClass = 'active';
 

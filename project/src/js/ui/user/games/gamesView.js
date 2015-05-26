@@ -75,7 +75,7 @@ function renderGame(ctrl, g, index, userId) {
   return (
     <li className={`list_item userGame ${evenOrOdd}`}>
       <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} />
-      <div className="nav" config={helper.ontouchY(() => m.route('/game/' + g.id))}>
+      <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
         {wideScreen ? helper.viewOnlyBoard(g.fen, g.lastMove, userColor) : null}
         <div className="infos">

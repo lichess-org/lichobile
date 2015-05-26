@@ -2,7 +2,6 @@ var widgets = require('./widget/common');
 var layout = require('./layout');
 var helper = require('./helper');
 var utils = require('../utils');
-var menu = require('./menu');
 var xhr = require('../xhr');
 var roundCtrl = require('./round/roundCtrl');
 var roundView = require('./round/view/roundView');
@@ -52,6 +51,6 @@ module.exports = {
     header = utils.partialf(widgets.connectingHeader, 'Lichess TV');
     board = widgets.board;
 
-    return layout.board(header, board, widgets.empty, menu.view, widgets.empty);
+    return layout.board(header, board, widgets.empty, widgets.empty);
   }
 };

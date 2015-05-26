@@ -3,7 +3,6 @@ var settings = require('../../../settings');
 var layout = require('../../layout');
 var widgets = require('../../widget/common');
 var popupWidget = require('../../widget/popup');
-var menu = require('../../menu');
 var clock = require('../clock');
 var renderPromotion = require('../promotion').view;
 var utils = require('../../../utils');
@@ -241,7 +240,7 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  return layout.board(header, board, footer, menu.view, null, ctrl.data.player.color);
+  return layout.board(header, board, footer, null, ctrl.data.player.color);
 };
 
 module.exports.renderMaterial = renderMaterial;

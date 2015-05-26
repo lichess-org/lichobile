@@ -5,7 +5,6 @@ var gameApi = require('../../lichess/game');
 var gamesMenu = require('../gamesMenu');
 var loginModal = require('../loginModal');
 var layout = require('../layout');
-var menu = require('../menu');
 var settings = require('../../settings');
 var utils = require('../../utils');
 var helper = require('../helper');
@@ -138,6 +137,5 @@ module.exports = function(ctrl) {
   else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
   else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
 
-  return layout.board(header, board, widgets.empty, menu.view, overlay,
-    pov ? pov.color : null);
+  return layout.board(header, board, widgets.empty, overlay, pov ? pov.color : null);
 };

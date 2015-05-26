@@ -1,10 +1,7 @@
 var chessground = require('chessground');
 var layout = require('../layout');
 var widgets = require('../widget/common');
-var menu = require('../menu');
-var ground = require('./ground');
 var renderPromotion = require('./promotion').view;
-var utils = require('../../utils');
 var helper = require('../helper');
 var i18n = require('../../i18n');
 var renderMaterial = require('../round/view/roundView').renderMaterial;
@@ -25,14 +22,14 @@ function renderAntagonist(ctrl, player, material) {
 }
 
 function renderGameButtons(ctrl) {
-  var actions = [
+  var vdom = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
-  return m('section#game_actions', actions);
+  return m('section#game_actions', vdom);
 }
 
 module.exports = function(ctrl) {
@@ -84,9 +81,5 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  function renderMenu() {
-    return menu.view(utils.partialf(ground.applySettings, ctrl.chessground));
-  }
-
-  return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
+  return layout.board(header, board, footer, null, ctrl.data.player.color);
 };

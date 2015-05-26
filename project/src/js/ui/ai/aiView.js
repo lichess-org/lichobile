@@ -81,9 +81,5 @@ module.exports = function(ctrl) {
     ]);
   }
 
-  function renderMenu() {
-    return menu.view(utils.partialf(ground.applySettings, ctrl.chessground));
-  }
-
-  return layout.board(header, board, footer, renderMenu, null, ctrl.data.player.color);
+  return layout.board(header, board, footer, null, ctrl.data.player.color);
 };

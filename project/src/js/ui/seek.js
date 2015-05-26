@@ -1,7 +1,6 @@
 var utils = require('../utils');
 var helper = require('./helper');
 var layout = require('./layout');
-var menu = require('./menu');
 var widgets = require('./widget/common');
 var popupWidget = require('./widget/popup');
 var xhr = require('../xhr');
@@ -74,7 +73,7 @@ seek.view = function(ctrl) {
     );
   }
 
-  return layout.board(widgets.header, widgets.board, widgets.empty, menu.view, overlays);
+  return layout.board(widgets.header, widgets.board, widgets.empty, overlays);
 };
 
 module.exports = seek;

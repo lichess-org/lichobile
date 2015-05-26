@@ -110,6 +110,8 @@ main.out
         left 2px
   .game_menu_button
     position relative
+    &.invisible
+      visibility hidden
     &::before
       content ''
       display block
@@ -138,7 +140,7 @@ main.out
       background url('../../images/icons/game_icon_canvas.svg') no-repeat
     &.metal::before
       background url('../../images/icons/game_icon_metal.svg') no-repeat
-    & > .chip
+    > .chip
       position absolute
       font-size 10px
       font-weight bold
@@ -151,9 +153,9 @@ main.out
       width 17px
       top 10px
       left 7px
-    & > .nb_playing
+    > .nb_playing
       background lighten(gold, 50%)
-    & > .nb_challenges
+    > .nb_challenges
       left 7px
       background orange
     &.new_challenge:before

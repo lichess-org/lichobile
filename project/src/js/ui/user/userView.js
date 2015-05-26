@@ -13,7 +13,7 @@ export default function view(ctrl) {
   const user = ctrl.user();
 
   function header() {
-    const title = user.username;
+    const title = (user.title ? `${user.title} ` : '') + user.username;
     return widgets.header(null, widgets.backButton(title));
   }
 

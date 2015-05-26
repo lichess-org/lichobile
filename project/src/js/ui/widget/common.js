@@ -56,7 +56,8 @@ function renderGameBtn() {
   const className = [
     'game_menu_button',
     settings.general.theme.board(),
-    nbChallenges ? 'new_challenge' : ''
+    nbChallenges ? 'new_challenge' : '',
+    !utils.hasNetwork() ? 'invisible' : ''
     ].join(' ');
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', myTurns), 'short', 'top');
 
@@ -73,9 +74,8 @@ function renderGameBtn() {
 }
 
 widgets.headerBtns = function() {
-  if (!utils.hasNetwork()) return null;
   const nbFriends = friendsApi.count();
-  if (session.isConnected() && nbFriends)
+  if (utils.hasNetwork() && session.isConnected() && nbFriends)
     return (
       <div className="buttons">
         {renderFriendsBtn(nbFriends)}

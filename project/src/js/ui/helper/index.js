@@ -176,4 +176,8 @@ helper.cond = function(pred, vdom) {
   return pred ? vdom : null;
 };
 
+helper.autofocus = function(el, isUpdate) {
+  if (!isUpdate) el.focus();
+};
+
 module.exports = helper;

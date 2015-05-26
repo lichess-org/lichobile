@@ -4,7 +4,7 @@ import utils from './utils';
 import xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
-import challenges from './lichess/challenges';
+import challengesApi from './lichess/challenges';
 
 var socketInstance;
 var errorDetected = false;
@@ -14,8 +14,8 @@ const defaultHandlers = {
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
   challengeReminder: o => {
-    if (challenges.hasKey(o.id)) challenges.remind(o.id);
-    else xhr.getChallenge(o.id).then(g => challenges.add(o.id, g)).then(m.redraw);
+    if (challengesApi.hasKey(o.id)) challengesApi.remind(o.id);
+    else xhr.getChallenge(o.id).then(g => challengesApi.add(o.id, g)).then(m.redraw);
   }
 };
 

@@ -1,14 +1,13 @@
 /** @jsx m */
-var session = require('../../session');
-var loginModal = require('../loginModal');
-var newGameForm = require('../newGameForm');
-var challengeForm = require('../challengeForm');
-var i18n = require('../../i18n');
-var utils = require('../../utils');
-var helper = require('../helper');
-var iScroll = require('iscroll');
-
-var menu = require('./menu');
+import session from '../../session';
+import loginModal from '../loginModal';
+import newGameForm from '../newGameForm';
+import challengeForm from '../challengeForm';
+import i18n from '../../i18n';
+import utils from '../../utils';
+import helper from '../helper';
+import iScroll from 'iscroll';
+import menu from './menu';
 
 function renderHeader(user) {
   if (utils.hasNetwork())
@@ -54,39 +53,39 @@ function renderProfileActions(user) {
 function renderLinks(user) {
   return (
     <ul className="side_links">
-      {helper.cond(utils.hasNetwork(),
-      <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li>
-      )}
-      {helper.cond(utils.hasNetwork(),
+      {utils.hasNetwork() ?
+      <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
+      }
+      {utils.hasNetwork() ?
       <li className="side_link" key="play_real_time" config={helper.ontouchY(menu.popup(newGameForm.openRealTime))}>
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
-      </li>
-      )}
-      {helper.cond(utils.hasNetwork() && user,
+      </li> : null
+      }
+      {utils.hasNetwork() && user ?
       <li className="side_link" key="seeks" config={helper.ontouchY(menu.route('/seeks'))}>
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
-      </li>
-      )}
-      {helper.cond(utils.hasNetwork(),
+      </li> : null
+      }
+      {utils.hasNetwork() ?
       <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
-      </li>
-      )}
-      {helper.cond(utils.hasNetwork(),
+      </li> : null
+      }
+      {utils.hasNetwork() ?
       <li className="side_link" key="tv" config={helper.ontouchY(menu.route('/tv'))}>
         <span data-icon="1"/>{i18n('watchLichessTV')}
-      </li>
-      )}
-      {helper.cond(utils.hasNetwork(),
+      </li> : null
+      }
+      {utils.hasNetwork() ?
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
-      </li>
-      )}
-      {helper.cond(utils.hasNetwork(),
+      </li> : null
+      }
+      {utils.hasNetwork() ?
       <li className="side_link" key="players" config={helper.ontouchY(menu.route('/players'))}>
         <span className="fa fa-search"/>{i18n('players')}
-      </li>
-      )}
+      </li> : null
+      }
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>

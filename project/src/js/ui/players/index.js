@@ -63,6 +63,7 @@ export default {
               placeholder="Search players" oninput={ctrl.onInput}
               autocapitalize="off"
               autocomplete="off"
+              config={h.autofocus}
             />
           </div>
           {widgets.headerBtns()}

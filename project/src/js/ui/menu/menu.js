@@ -1,7 +1,7 @@
-var utils = require('../../utils');
-var Zanimo = require('zanimo');
-var backbutton = require('../../backbutton');
-var helper = require('../helper');
+import utils from '../../utils';
+import Zanimo from 'zanimo';
+import backbutton from '../../backbutton';
+import helper from '../helper';
 
 var menu = {};
 

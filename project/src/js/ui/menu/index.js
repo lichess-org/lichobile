@@ -1,5 +1,5 @@
-var menu = require('./menu');
-var view = require('./menuView');
+import menu from './menu';
+import view from './menuView';
 
 module.exports = menu;
 module.exports.view = view;

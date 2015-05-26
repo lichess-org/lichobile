@@ -1,8 +1,13 @@
+const holdDuration = 800;
 const scrollTolerance = 5;
 const activeClass = 'active';
 
+function hasContextMenu() {
+  return window.cordova.platformId !== 'ios';
+}
+
 export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scrollY) {
-  var startX, startY, boundaries, active;
+  var startX, startY, boundaries, active, holdTimeoutID;
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!');
@@ -25,6 +30,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     setTimeout(() => {
       if (active) el.classList.add(activeClass);
     }, 200);
+    if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, holdDuration);
   }
 
   function onTouchMove(e) {
@@ -32,13 +38,17 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (active) {
       var touch = e.changedTouches[0];
       active = isActive(touch);
-      if (!active) el.classList.remove(activeClass);
+      if (!active) {
+        clearTimeout(holdTimeoutID);
+        el.classList.remove(activeClass);
+      }
     }
   }
 
   function onTouchEnd(e) {
     e.preventDefault();
     if (active) {
+      clearTimeout(holdTimeoutID);
       el.classList.add(activeClass);
       tapHandler(e);
       active = false;
@@ -47,13 +57,18 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   }
 
   function onTouchCancel() {
+    clearTimeout(holdTimeoutID);
     active = false;
     el.classList.remove(activeClass);
   }
 
-  function onHold(e) {
+  function onContextMenu(e) {
     e.preventDefault();
     e.stopPropagation();
+    if (holdTimeoutID === undefined) onHold();
+  }
+
+  function onHold() {
     if (holdHandler) {
       holdHandler();
       active = false;
@@ -75,13 +90,13 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   el.addEventListener('touchmove', onTouchMove, false);
   el.addEventListener('touchend', onTouchEnd, false);
   el.addEventListener('touchcancel', onTouchCancel, false);
-  el.addEventListener('contextmenu', onHold, false);
+  el.addEventListener('contextmenu', onContextMenu, false);
 
   return function unbind() {
     el.removeEventListener('touchstart', onTouchStart, false);
     el.removeEventListener('touchmove', onTouchMove, false);
     el.removeEventListener('touchend', onTouchEnd, false);
     el.removeEventListener('touchcancel', onTouchCancel, false);
-    el.removeEventListener('contextmenu', onHold, false);
+    el.removeEventListener('contextmenu', onContextMenu, false);
   };
 }

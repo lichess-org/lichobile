@@ -83,13 +83,15 @@ span.fa
   &.active
     background lighten(bgdark, 5%)
 
-.nav:after
-  content "\f054"
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  position absolute
-  right 15px
-  line-height 20px
+.nav
+  user-select none
+  &:after
+    content "\f054"
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    position absolute
+    right 15px
+    line-height 20px

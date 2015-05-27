@@ -5,10 +5,22 @@
   color #fff
   overflow auto
   .infos
-    h2
+    .user
       font-weight bold
       white-space nowrap
       margin-bottom 3px
+      > .status
+        margin-right 5px
+        &.online
+          color green
+        &.offline
+          opacity 0.6
+      > .ongame
+        margin-left 5px
+        &.yes
+          color green
+        &.no
+          color red
     &.active
       background-color lighten(bgdark, 10%)
   .rp.up

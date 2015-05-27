@@ -127,6 +127,12 @@ module.exports = function(ctrl, onFeatured) {
     },
     featured: function(o) {
       if (ctrl.data.tv && onFeatured) onFeatured(o);
+    },
+    crowd: function(o) {
+      ['white', 'black'].forEach(function(c) {
+        gameApi.setOnGame(ctrl.data, c, o[c]);
+      });
+      m.redraw();
     }
   };
 

@@ -1,19 +1,19 @@
-var chessground = require('chessground');
-var settings = require('../../../settings');
-var layout = require('../../layout');
-var widgets = require('../../widget/common');
-var popupWidget = require('../../widget/popup');
-var clock = require('../clock');
-var renderPromotion = require('../promotion').view;
-var utils = require('../../../utils');
-var helper = require('../../helper');
-var i18n = require('../../../i18n');
-var button = require('./button');
-var gameApi = require('../../../lichess/game');
-var gameStatus = require('../../../lichess/status');
-var replayView = require('../replay/replayView');
-var renderChat = require('../chat').view;
-var renderCorrespondenceClock = require('../correspondenceClock/correspondenceView');
+import chessground from 'chessground';
+import settings from '../../../settings';
+import layout from '../../layout';
+import widgets from '../../widget/common';
+import popupWidget from '../../widget/popup';
+import clock from '../clock';
+import { view as renderPromotion } from '../promotion';
+import utils from '../../../utils';
+import helper from '../../helper';
+import i18n from '../../../i18n';
+import button from './button';
+import gameApi from '../../../lichess/game';
+import gameStatusApi from '../../../lichess/status';
+import replayView from '../replay/replayView';
+import { view as renderChat } from '../chat';
+import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 
 function compact(x) {
@@ -55,13 +55,33 @@ function renderCheckCount(ctrl, color) {
 }
 
 function renderAntagonist(ctrl, player, material) {
+  const user = player.user;
+  const playerName = utils.playerName(player);
+
+  function infos() {
+    let title;
+    if (user) {
+      let onlineStatus = user.online ? 'is connected to lichess' : 'is offline';
+      let onGameStatus = player.onGame ? 'and currently on this game' : 'and currently not on this game';
+      title = `${playerName} ${onlineStatus} ${onGameStatus}`;
+    } else
+      title = playerName;
+    window.plugins.toast.show(title, 'short', 'center');
+  }
+
   return m('section.antagonist', [
     m('div.infos', {
-      config: player.user ? helper.ontouch(utils.f(m.route, '/@/' + player.user.id)) : utils.noop
+      config: user ?
+        helper.ontouch(utils.f(m.route, '/@/' + user.id), infos) :
+        utils.noop
     }, [
-      m('h2', utils.playerName(player)),
+      m('h2.user', [
+        m('span.status[data-icon=r]', { className: user && user.online ? 'online' : 'offline' }),
+        playerName,
+        player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
+      ]),
       m('div', [
-        player.user ? m('h3.rating', [
+        user ? m('h3.rating', [
           player.rating,
           ratingDiff(player)
         ]) : null,
@@ -113,9 +133,9 @@ function renderGameRunningActions(ctrl) {
 function renderGameEndedActions(ctrl) {
   var result = gameApi.result(ctrl.data);
   var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
-  var status = gameStatus.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+  var status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  const resultDom = gameStatus.aborted(ctrl.data) ? [] : [
+  const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     result, m('br'), m('br')
   ];
   resultDom.push(m('div.status', status));

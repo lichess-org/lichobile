@@ -76,7 +76,7 @@ module.exports.build = function build(platform, settings, configName) {
   var defer = Q.defer();
 
   configName = configName || 'default';
-  var mode = ['prod'].indexOf(configName) !== -1 ? 'prod' : 'dev';
+  var mode = ['prod', 'stage'].indexOf(configName) !== -1 ? configName : 'dev';
   var context = settings.configurations[platform][configName];
   context.MODE = mode;
   context.TARIFA = true;

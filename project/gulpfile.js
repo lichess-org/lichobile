@@ -48,7 +48,7 @@ function buildStyl(src, dest, mode) {
 }
 
 function buildScripts(src, dest, mode) {
-  var opts = (mode === 'prod') ? {} : { debug: true };
+  var opts = (mode === 'dev') ? { debug: true } : {};
 
   return browserify(src + '/js/main.js', opts)
     .transform(mithrilify, {msx_opts: {precompile: true}})

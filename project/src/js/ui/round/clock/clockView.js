@@ -1,10 +1,10 @@
-var classSet = require('../../helper').classSet;
+import { classSet } from '../../helper';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
 
-function formatClockTime(ctrl, time) {
+export function formatClockTime(ctrl, time) {
   var date = new Date(time);
   var minutes = prefixInteger(date.getUTCMinutes(), 2);
   var seconds = prefixInteger(date.getSeconds(), 2);
@@ -21,7 +21,7 @@ function formatClockTime(ctrl, time) {
   }
 }
 
-module.exports = function(ctrl, color, runningColor) {
+export function view(ctrl, color, runningColor) {
   var time = ctrl.data[color];
   return m('div', {
     className: 'clock ' + classSet({
@@ -32,6 +32,4 @@ module.exports = function(ctrl, color, runningColor) {
   }, [
     m('div.time', { id: 'clock_' + color }, formatClockTime(ctrl, time * 1000))
   ]);
-};
-
-module.exports.formatClockTime = formatClockTime;
+}

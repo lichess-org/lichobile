@@ -83,7 +83,7 @@ function renderLinks(user) {
       }
       {utils.hasNetwork() ?
       <li className="side_link" key="players" config={helper.ontouchY(menu.route('/players'))}>
-        <span className="fa fa-search"/>{i18n('players')}
+        <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
       <li className="sep_link" key="sep_link_offline">

@@ -15,16 +15,16 @@ var widgets = {};
 
 widgets.menuButton = function() {
   return (
-    <button className="fa fa-navicon menu_button" config={helper.ontouch(menu.toggle)}>
+    <button key="main-menu" className="fa fa-navicon menu_button" config={helper.ontouch(menu.toggle)}>
     </button>
   );
 };
 
 widgets.backButton = function(title) {
   return (
-    <button className="back_button" config={helper.ontouch(utils.backHistory)}>
+    <button key="default-history-backbutton" className="back_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
-      <div className="title">{title}</div>
+      {title ? <div className="title">{title}</div> : null }
     </button>
   );
 };

@@ -7,10 +7,7 @@
   overflow: hidden;
   background-color: #fff;
   height 100%
-  opacity 1
-  opacity: 0;
-  transform translate3d(0, 100%, 0)
-  transition transform 250ms, opacity 1ms 250ms
+  visibility hidden
   > header
     position absolute
     z-index 2
@@ -26,10 +23,7 @@
       line-height 45px
       color textDarkGray
   &.show
-    height 100%
-    opacity 1
-    transition transform 250ms
-    transform translate3d(0,0,0)
+    visibility visible
 
 .modal_close
   position absolute
@@ -47,3 +41,13 @@
   height 100%
   padding-top 45px
   overflow-y auto
+
+.modal_slide
+  visibility visible
+  opacity 0
+  transform translate3d(0, 100%, 0)
+  transition transform 250ms, opacity 1ms 250ms
+  &.show
+    opacity 1
+    transition transform 250ms
+    transform translate3d(0,0,0)

@@ -3,7 +3,7 @@ import settings from '../../../settings';
 import layout from '../../layout';
 import widgets from '../../widget/common';
 import popupWidget from '../../widget/popup';
-import clock from '../clock';
+import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
 import utils from '../../../utils';
 import helper from '../../helper';
@@ -89,7 +89,7 @@ function renderAntagonist(ctrl, player, material) {
         ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
       ])
     ]),
-    ctrl.clock ? clock.view(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
+    ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
       ctrl.data.correspondence ? renderCorrespondenceClock(
         ctrl.correspondenceClock, i18n, player.color, ctrl.data.game.player
       ) : null

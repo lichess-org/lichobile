@@ -35,9 +35,9 @@ loginModal.close = function(fromBB) {
 };
 
 loginModal.view = function() {
-  if (!isOpen) return m('div#login.modal');
+  if (!isOpen) return m('div#login.modal.modal_slide');
 
-  return m('div#login.modal.show', [
+  return m('div#login.modal.modal_slide.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         config: helper.ontouch(loginModal.close)

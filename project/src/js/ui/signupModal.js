@@ -41,9 +41,9 @@ signupModal.close = function(fromBB) {
 };
 
 signupModal.view = function() {
-  if (!isOpen) return m('div#signup.modal');
+  if (!isOpen) return m('div#signup.modal.modal_slide');
 
-  return m('div#signup.modal.show', [
+  return m('div#signup.modal.modal_slide.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         config: helper.ontouch(signupModal.close)

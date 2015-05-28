@@ -1,7 +1,7 @@
-var formatClockTime = require('./clockView').formatClockTime;
-var sound = require('../../../sound');
+import { formatClockTime } from './clockView';
+import sound from '../../../sound';
 
-module.exports = function(data, outOfTime, soundColor) {
+export default function(data, outOfTime, soundColor) {
   var lastUpdate;
   var lastTick = {
     white: null,
@@ -71,4 +71,4 @@ module.exports = function(data, outOfTime, soundColor) {
     if (this.data[color] === 0)
       outOfTime();
   }.bind(this);
-};
+}

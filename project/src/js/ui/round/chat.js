@@ -117,13 +117,13 @@ module.exports = {
 
   view: function(ctrl) {
 
-    if (!ctrl.showing) return m('div#chat.modal');
+    if (!ctrl.showing) return m('div#chat.modal.modal_slide');
 
     var vh = helper.viewportDim().vh,
       formH = 45,
       scrollerH = vh - formH - 45; // minus modal header height
 
-    return m('div#chat.modal.show', [
+    return m('div#chat.modal.modal_slide.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
           config: helper.ontouch(ctrl.close)

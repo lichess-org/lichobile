@@ -4,8 +4,12 @@
   align-items center
   color #fff
   overflow auto
-  .infos
-    .user
+  > .infos
+    max-width calc(100% - 100px)
+    overflow hidden
+    > .user
+      overflow hidden
+      text-overflow ellipsis
       font-weight bold
       white-space nowrap
       margin-bottom 3px
@@ -34,14 +38,12 @@
     vertical-align top
     margin-right 10px
     line-height 1
-  .clock
-    max-width 50%
+  > .clock
+    width 90px
     font-family Cousine
     font-weight bold
     text-align right
-    min-width 90px
     font-size 25px
-    padding-top: 3px;
     &.running
       color gold
       &.emerg

@@ -11,6 +11,9 @@ labelText = #969696
 green = #759900
 red = #ac524f
 
+*
+  user-select none
+
 body
   overflow hidden
   font-family 'Open Sans'
@@ -19,9 +22,6 @@ body
 
 h2
   text-transform uppercase
-
-.no_select
-  user-select none
 
 button
   border none
@@ -86,7 +86,6 @@ span.fa
     background lighten(bgdark, 5%)
 
 .nav
-  user-select none
   &:after
     content "\f054"
     display: inline-block;

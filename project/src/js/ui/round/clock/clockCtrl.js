@@ -25,7 +25,7 @@ module.exports = function(data, outOfTime, soundColor) {
     lastUpdate = {
       white: data.white,
       black: data.black,
-      at: new Date()
+      at: Date.now()
     };
   }
   setLastUpdate();
@@ -40,7 +40,7 @@ module.exports = function(data, outOfTime, soundColor) {
   };
 
   this.tick = function(color) {
-    this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
+    this.data[color] = Math.max(0, lastUpdate[color] - (Date.now() - lastUpdate.at) / 1000);
     // performance hack: we don't want to call m.redraw() on every clock tick
     var time = this.data[color] * 1000,
       el;
@@ -59,9 +59,9 @@ module.exports = function(data, outOfTime, soundColor) {
     lastTick[color] = newSeconds;
 
     if (soundColor === color && this.data[soundColor] < this.data.emerg && emergSound.playable[soundColor]) {
-      if (!emergSound.last || (data.increment && new Date() - emergSound.delay > emergSound.last)) {
+      if (!emergSound.last || (data.increment && Date.now() - emergSound.delay > emergSound.last)) {
         sound.lowtime();
-        emergSound.last = new Date();
+        emergSound.last = Date.now();
         emergSound.playable[soundColor] = false;
       }
     } else if (soundColor === color && this.data[soundColor] > 2 * this.data.emerg && !emergSound.playable[soundColor]) {

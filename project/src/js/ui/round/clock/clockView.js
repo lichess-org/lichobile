@@ -13,8 +13,9 @@ function formatClockTime(ctrl, time) {
     tenths = Math.floor(date.getMilliseconds() / 100);
     return seconds + '.' + tenths;
   } else if (time >= 3600000) {
-    var hours = prefixInteger(date.getUTCHours(), 2);
-    return hours + ':' + minutes + ':' + seconds;
+    let hours = prefixInteger(date.getUTCHours(), 1);
+    let pulse = seconds % 2 === 0 ? ':' : ' ';
+    return hours + pulse + minutes;
   } else {
     return minutes + ':' + seconds;
   }

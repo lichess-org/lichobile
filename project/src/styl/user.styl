@@ -1,5 +1,11 @@
-.profileScreen
-  padding 10px
+#userProfile
+  padding 0 10px
+
+.warning
+  font-size 0.9em
+  color orange
+  &:before
+    margin-right 5px
 
 h3.fullname
   font-weight bold
@@ -28,13 +34,13 @@ h3.fullname
   margin-right 2px
 
 .ratings
-  padding 10px
+  padding 10px 0
   font-size 0.9em
   &:after
     content none
 
 .onlineStatus, .profile, .userStats
-  padding 10px 15px
+  padding 10px 0
 
 .profile, .userStats
   font-size 0.85em
@@ -79,6 +85,10 @@ h3.fullname
 #userProfileActions
   .check_container
     line-height 30px
+  > .list_item
+    padding 15px 0
+    &.nav:after
+      right 0
 
 .userGamesWrapper
   height 100%

@@ -1,11 +1,11 @@
 const perfTypes = [
   ['bullet', 'Bullet'],
-  ['chess960', 'Chess960'],
   ['blitz', 'Blitz'],
-  ['kingOfTheHill', 'King Of The Hill'],
   ['classical', 'Classical'],
-  ['threeCheck', 'Three-check'],
   ['correspondence', 'Correspondence'],
+  ['chess960', 'Chess960'],
+  ['kingOfTheHill', 'King Of The Hill'],
+  ['threeCheck', 'Three-check'],
   ['antichess', 'Antichess'],
   ['atomic', 'Atomic']
 ];
@@ -18,9 +18,8 @@ export default function userPerfs(user) {
       name: p[1],
       perf
     };
-  }).sort(function(a, b) {
-    return a.perf.games < b.perf.games;
   });
+
   if (user.perfs.puzzle) res.push({
     key: 'puzzle',
     name: 'Training',

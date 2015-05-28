@@ -19,8 +19,9 @@ export default function view(ctrl) {
 
   function profile() {
     return (
-      <div className="native_scroller page">
+      <div id="userProfile" className="native_scroller page">
         {renderStatus(user)}
+        {renderWarnings(user)}
         {renderProfile(user)}
         {renderStats(user)}
         {renderRatings(user)}
@@ -31,6 +32,20 @@ export default function view(ctrl) {
 
   return layout.free(header, profile, widgets.empty, widgets.empty);
 };
+
+function renderWarnings(user) {
+  if (user.engine || !user.booster) return null;
+  return (
+    <div className="warnings">
+      {user.engine ?
+      <div className="warning" data-icon="j">{i18n('thisPlayerUsesChessComputerAssistance')}</div> : null
+      }
+      {user.booster ?
+      <div className="warning" data-icon="j">{i18n('thisPlayerArtificiallyIncreasesTheirRating')}</div> : null
+      }
+    </div>
+  );
+}
 
 function renderStatus(user) {
   const status = user.online ? 'online' : 'offline';
@@ -44,14 +59,11 @@ function renderStatus(user) {
 
 function renderProfile(user) {
   if (user.profile) {
-    const fullname = (user.profile.firstName || user.profile.lastName) ?
-      user.profile.firstName + ' ' + user.profile.lastName :
-      null;
+    let fullname = '';
+    if (user.profile.firstName) fullname += user.profile.firstName;
+    if (user.profile.lastName) fullname += (user.profile.firstName ? ' ' : '') + user.profile.lastName;
     const country = countries[user.profile.country];
     const location = user.profile.location;
-    var locationString = '';
-    if (location) locationString += location;
-    if (country) locationString += (location ? ', ' : '') + country;
     const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
     const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).calendar() : null;
     return (
@@ -67,7 +79,7 @@ function renderProfile(user) {
             {location}
             {country ?
             <span className="country">
-              , <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+              {location ? ',' : ''} <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
               {country}
             </span> : null
             }
@@ -124,7 +136,7 @@ function renderActions(ctrl) {
         {i18n('viewAllNbGames', user.count.all)}
       </div>
       { session.isConnected() && !ctrl.isMe() ?
-      <div className="list_item nav" key="challenge_to_play"
+      <div className="list_item" key="challenge_to_play" data-icon="U"
         config={helper.ontouchY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}

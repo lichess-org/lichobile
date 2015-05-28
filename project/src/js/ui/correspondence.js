@@ -1,18 +1,18 @@
-var utils = require('../utils');
-var helper = require('./helper');
-var layout = require('./layout');
-var widgets = require('./widget/common');
-var xhr = require('../xhr');
-var i18n = require('../i18n');
-var socket = require('../socket');
-var session = require('../session');
-var loginModal = require('./loginModal');
-var newGameForm = require('./newGameForm');
-var uniq = require('lodash/array/uniq');
-var iScroll = require('iscroll');
-var Zanimo = require('zanimo');
+import utils from '../utils';
+import helper from './helper';
+import layout from './layout';
+import widgets from './widget/common';
+import xhr from '../xhr';
+import i18n from '../i18n';
+import socket from '../socket';
+import session from '../session';
+import loginModal from './loginModal';
+import newGameForm from './newGameForm';
+import uniq from 'lodash/array/uniq';
+import iScroll from 'iscroll';
+import Zanimo from 'zanimo';
 
-var seeks = {};
+var correspondence = {};
 
 function seekUserId(seek) {
   return seek.username.toLowerCase();
@@ -31,11 +31,11 @@ function fixSeeks(ss) {
   });
 }
 
-seeks.controller = function() {
+correspondence.controller = function() {
 
   var pool = [];
 
-  helper.analyticsTrackView('Seeks');
+  helper.analyticsTrackView('Correspondence seeks');
 
   xhr.lobby(true).then(function(data) {
     socket.createLobby(data.lobby.version, reload, {
@@ -94,7 +94,7 @@ function renderSeek(ctrl, seek) {
   ]);
 }
 
-seeks.view = function(ctrl) {
+correspondence.view = function(ctrl) {
 
   var header = utils.partialf(widgets.header, i18n('correspondence'));
   var body = function() {
@@ -142,4 +142,4 @@ seeks.view = function(ctrl) {
   return layout.free(header, body, widgets.empty, widgets.empty);
 };
 
-module.exports = seeks;
+module.exports = correspondence;

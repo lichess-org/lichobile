@@ -46,7 +46,7 @@ function seekHumanGame() {
   if (settings.game.human.timeMode() === '1') m.route('/seek');
   else {
     xhr.seekGame();
-    m.route('/seeks');
+    m.route('/correspondence');
   }
 }
 

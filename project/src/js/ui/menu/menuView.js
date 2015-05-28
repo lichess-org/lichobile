@@ -62,7 +62,7 @@ function renderLinks(user) {
       </li> : null
       }
       {utils.hasNetwork() && user ?
-      <li className="side_link" key="seeks" config={helper.ontouchY(menu.route('/seeks'))}>
+      <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li> : null
       }

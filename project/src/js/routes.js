@@ -1,7 +1,7 @@
 import game from'./ui/game';
 import tv from'./ui/tv';
 import seek from'./ui/seek';
-import seeks from'./ui/seeks';
+import correspondence from'./ui/correspondence';
 import otb from'./ui/otb';
 import ai from'./ui/ai';
 import settingsUi from'./ui/settings';
@@ -22,7 +22,7 @@ module.exports.init = function() {
     '/game/:id/user/:userId': game,
     '/tv': tv,
     '/seek': seek,
-    '/seeks': seeks,
+    '/correspondence': correspondence,
     '/@/:id': user,
     '/@/:id/games': userGames,
     '/@/:id/games/:filter': userGames,

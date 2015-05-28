@@ -11,12 +11,10 @@ var settings = require('../../settings');
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
-    m('div.vertical_align', [
-      m('div.infos', [
-        m('h2', i18n(player.color)),
-        m('div'),
-        renderMaterial(material)
-      ])
+    m('div.infos', [
+      m('h2', i18n(player.color)),
+      m('div'),
+      renderMaterial(material)
     ])
   ]);
 }

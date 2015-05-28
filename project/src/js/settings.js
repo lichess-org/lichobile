@@ -130,7 +130,7 @@ module.exports = {
       mode: localstorageprop('settings.game.human.mode', '0')
     },
 
-    invite: {
+    challenge: {
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],

@@ -122,12 +122,14 @@ module.exports = function(ctrl) {
 
   var theme = settings.general.theme;
   var pov = gamesMenu.lastJoined;
-  var header, board, overlay;
+  var header, board, overlay, color;
 
   if (pov) {
     header = widgets.connectingHeader;
     board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
       pov.variant.key, theme.board(), theme.piece());
+    color = pov.color;
+    gamesMenu.lastJoined = null;
   } else {
     header = utils.partialf(widgets.header, 'lichess.org');
     board = widgets.board;
@@ -137,5 +139,5 @@ module.exports = function(ctrl) {
   else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
   else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
 
-  return layout.board(header, board, widgets.empty, overlay, pov ? pov.color : null);
+  return layout.board(header, board, widgets.empty, overlay, color);
 };

@@ -39,7 +39,7 @@ function seekGame() {
 }
 
 function inviteFriend(userId) {
-  var config = settings.game.invite;
+  var config = settings.game.challenge;
   return http.request('/setup/friend', {
     method: 'POST',
     data: {

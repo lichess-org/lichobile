@@ -14,14 +14,12 @@ var settings = require('../../settings');
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
-    m('div.vertical_align', [
-      m('div.infos', [
-        m('h2', player.color === ctrl.data.player.color ?
-          '' :
-          ctrl.getOpponent().name),
-        m('div'),
-        renderMaterial(material)
-      ])
+    m('div.infos', [
+      m('h2', player.color === ctrl.data.player.color ?
+        '' :
+        ctrl.getOpponent().name),
+      m('div'),
+      renderMaterial(material)
     ])
   ]);
 }

@@ -40,8 +40,8 @@ module.exports = {
         'alpha',
         'spatial'
       ],
-      board: localstorageprop('settings.theme.board', 'grey'),
-      piece: localstorageprop('settings.theme.piece', 'merida')
+      board: localstorageprop('settings.theme.board', 'metal'),
+      piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
     analytics: localstorageprop('settings.analytics', true)
   },

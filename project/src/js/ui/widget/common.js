@@ -59,7 +59,7 @@ function renderGameBtn() {
     nbChallenges ? 'new_challenge' : '',
     !utils.hasNetwork() ? 'invisible' : ''
     ].join(' ');
-  const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', myTurns), 'short', 'top');
+  const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 
   return (
     <button key={key} className={className} config={helper.ontouch(action, longAction)}>

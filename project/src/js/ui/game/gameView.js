@@ -1,16 +1,41 @@
 /** @jsx m */
-var session = require('../../session');
-var roundView = require('../round/view/roundView');
-var gameApi = require('../../lichess/game');
-var gamesMenu = require('../gamesMenu');
-var loginModal = require('../loginModal');
-var layout = require('../layout');
-var settings = require('../../settings');
-var utils = require('../../utils');
-var helper = require('../helper');
-var widgets = require('../widget/common');
-var popupWidget = require('../widget/popup');
-var i18n = require('../../i18n');
+import session from '../../session';
+import roundView from '../round/view/roundView';
+import gameApi from '../../lichess/game';
+import gamesMenu from '../gamesMenu';
+import loginModal from '../loginModal';
+import layout from '../layout';
+import settings from '../../settings';
+import utils from '../../utils';
+import helper from '../helper';
+import widgets from '../widget/common';
+import popupWidget from '../widget/popup';
+import i18n from '../../i18n';
+
+export default function view(ctrl) {
+  if (ctrl.getRound()) return roundView(ctrl.getRound());
+
+  var theme = settings.general.theme;
+  var pov = gamesMenu.lastJoined;
+  var header, board, overlay, color;
+
+  if (pov) {
+    header = widgets.connectingHeader;
+    board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
+      pov.variant.key, theme.board(), theme.piece());
+    color = pov.color;
+    gamesMenu.lastJoined = null;
+  } else {
+    header = utils.partialf(widgets.header, 'lichess.org');
+    board = widgets.board;
+  }
+
+  if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
+  else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
+  else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
+
+  return layout.board(header, board, widgets.empty, overlay, color);
+}
 
 function gameInfos(gameData) {
   const mode = gameData.game.rated ? i18n('rated') : i18n('casual');
@@ -116,28 +141,3 @@ function awaitChallengeOverlay(ctrl) {
     return popupWidget('await_url_challenge', i18n('challengeToPlay'), popupContent, true);
   };
 }
-
-module.exports = function(ctrl) {
-  if (ctrl.getRound()) return roundView(ctrl.getRound());
-
-  var theme = settings.general.theme;
-  var pov = gamesMenu.lastJoined;
-  var header, board, overlay, color;
-
-  if (pov) {
-    header = widgets.connectingHeader;
-    board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
-      pov.variant.key, theme.board(), theme.piece());
-    color = pov.color;
-    gamesMenu.lastJoined = null;
-  } else {
-    header = utils.partialf(widgets.header, 'lichess.org');
-    board = widgets.board;
-  }
-
-  if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
-  else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
-  else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
-
-  return layout.board(header, board, widgets.empty, overlay, color);
-};

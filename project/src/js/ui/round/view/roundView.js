@@ -16,6 +16,73 @@ import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 
+export default function view(ctrl) {
+
+  var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+
+  function footer() {
+    var els = [
+      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
+      renderGameButtons(ctrl),
+      renderPlayerActions(ctrl)
+    ];
+    if (ctrl.chat) els.push(renderChat(ctrl.chat));
+
+    return els;
+  }
+
+  function header() {
+    return [
+      m('nav', {
+        className: ctrl.vm.connectedWS ? '' : 'reconnecting'
+      }, [
+        widgets.menuButton(),
+        ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
+          i18n('reconnecting'),
+          widgets.loader
+        ]),
+        widgets.headerBtns()
+      ]),
+      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
+    ];
+  }
+
+  function board() {
+    var x = helper.viewportDim().vw;
+    return m('section.board_wrapper', {
+      style: {
+        height: x + 'px'
+      }
+    }, [
+      m('div.board', {
+        className: [
+          settings.general.theme.board(),
+          settings.general.theme.piece(),
+          ctrl.data.game.variant.key
+        ].join(' ')
+      }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
+    ]);
+  }
+
+  return layout.board(header, board, footer, null, ctrl.data.player.color);
+}
+
+export function renderMaterial(material) {
+  var children = [];
+  for (var role in material) {
+    var piece = m('div.' + role);
+    var count = material[role];
+    var content;
+    if (count === 1) content = piece;
+    else {
+      content = [];
+      for (var i = 0; i < count; i++) content.push(piece);
+    }
+    children.push(m('div.tomb', content));
+  }
+  return children;
+}
+
 function compact(x) {
   if (Object.prototype.toString.call(x) === '[object Array]') {
     var elems = x.filter(function(n) {
@@ -31,22 +98,6 @@ function ratingDiff(player) {
   if (player.ratingDiff === 0) return m('span.rp.null', 0);
   if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
-}
-
-function renderMaterial(material) {
-  var children = [];
-  for (var role in material) {
-    var piece = m('div.' + role);
-    var count = material[role];
-    var content;
-    if (count === 1) content = piece;
-    else {
-      content = [];
-      for (var i = 0; i < count; i++) content.push(piece);
-    }
-    children.push(m('div.tomb', content));
-  }
-  return children;
 }
 
 function renderCheckCount(ctrl, color) {
@@ -110,7 +161,7 @@ function renderGameRunningActions(ctrl) {
     button.cancelTakebackProposition(ctrl),
     button.answerOpponentTakebackProposition(ctrl),
     (gameApi.mandatory(d) && gameApi.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
-      ctrl.trans('youHaveNbSecondsToMakeYourFirstMove', 30)
+      i18n('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : undefined
   ]);
   return [
@@ -189,7 +240,6 @@ function renderPlayerActions(ctrl) {
   );
 }
 
-
 function renderGameButtons(ctrl) {
   var actions = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
@@ -211,56 +261,3 @@ function renderGameButtons(ctrl) {
   ];
   return m('section#game_actions', actions);
 }
-
-module.exports = function(ctrl) {
-
-  var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-
-  function footer() {
-    var els = [
-      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
-      renderGameButtons(ctrl),
-      renderPlayerActions(ctrl)
-    ];
-    if (ctrl.chat) els.push(renderChat(ctrl.chat));
-
-    return els;
-  }
-
-  function header() {
-    return [
-      m('nav', {
-        className: ctrl.vm.connectedWS ? '' : 'reconnecting'
-      }, [
-        widgets.menuButton(),
-        ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
-          i18n('reconnecting'),
-          widgets.loader
-        ]),
-        widgets.headerBtns()
-      ]),
-      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
-    ];
-  }
-
-  function board() {
-    var x = helper.viewportDim().vw;
-    return m('section.board_wrapper', {
-      style: {
-        height: x + 'px'
-      }
-    }, [
-      m('div.board', {
-        className: [
-          settings.general.theme.board(),
-          settings.general.theme.piece(),
-          ctrl.data.game.variant.key
-        ].join(' ')
-      }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
-    ]);
-  }
-
-  return layout.board(header, board, footer, null, ctrl.data.player.color);
-};
-
-module.exports.renderMaterial = renderMaterial;

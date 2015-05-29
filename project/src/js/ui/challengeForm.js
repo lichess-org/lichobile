@@ -1,4 +1,3 @@
-import helper from './helper';
 import utils from '../utils';
 import xhr from '../xhr';
 import settings from '../settings';
@@ -16,11 +15,9 @@ var challengeForm = {
 
 challengeForm.open = function(userId) {
   if (userId) {
-    helper.analyticsTrackView('Challenge Friend popup');
     challengeForm.userId = userId;
     challengeForm.actionName = i18n('challengeToPlay');
   } else {
-    helper.analyticsTrackView('Invite Friend popup');
     challengeForm.userId = null;
     challengeForm.actionName = i18n('playWithAFriend');
   }

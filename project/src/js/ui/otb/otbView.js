@@ -1,13 +1,13 @@
-var chessground = require('chessground');
-var layout = require('../layout');
-var widgets = require('../widget/common');
-var renderPromotion = require('./promotion').view;
-var helper = require('../helper');
-var i18n = require('../../i18n');
-var renderMaterial = require('../round/view/roundView').renderMaterial;
-var replayView = require('./replay/replayView');
-var actions = require('./actions');
-var settings = require('../../settings');
+import chessground from 'chessground';
+import layout from '../layout';
+import widgets from '../widget/common';
+import { view as renderPromotion } from './promotion';
+import helper from '../helper';
+import i18n from '../../i18n';
+import { renderMaterial } from '../round/view/roundView';
+import replayView from './replay/replayView';
+import actions from './actions';
+import settings from '../../settings';
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [

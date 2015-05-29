@@ -16,7 +16,7 @@ import socket from './socket';
 
 var triedToLogin = false;
 
-var refreshInterval = 60000;
+var refreshInterval = 60000 * 2; // 2 minutes refresh polling
 var refreshIntervalID;
 
 function main() {

@@ -1,26 +1,27 @@
-var throttle = require('lodash/function/throttle');
-var data = require('./data');
-var utils = require('../../utils');
-var sound = require('../../sound');
-var gameApi = require('../../lichess/game');
-var ground = require('./ground');
-var promotion = require('./promotion');
-var replayCtrl = require('./replay/replayCtrl');
-var chat = require('./chat');
-var clockCtrl = require('./clock/clockCtrl');
-var i18n = require('../../i18n');
-var gameStatus = require('../../lichess/status');
-var correspondenceClockCtrl = require('./correspondenceClock/correspondenceCtrl');
-var menu = require('../menu');
-var session = require('../../session');
-var socket = require('../../socket');
-var socketHandler = require('./socketHandler');
-var signals = require('../../signals');
-var atomic = require('./atomic');
-var backbutton = require('../../backbutton');
-var helper = require('../helper');
+import { throttle } from 'lodash/function';
+import data from './data';
+import utils from '../../utils';
+import sound from '../../sound';
+import gameApi from '../../lichess/game';
+import ground from './ground';
+import promotion from './promotion';
+import replayCtrl from './replay/replayCtrl';
+import chat from './chat';
+import clockCtrl from './clock/clockCtrl';
+import i18n from '../../i18n';
+import gameStatus from '../../lichess/status';
+import correspondenceClockCtrl from './correspondenceClock/correspondenceCtrl';
+import menu from '../menu';
+import session from '../../session';
+import socket from '../../socket';
+import socketHandler from './socketHandler';
+import signals from '../../signals';
+import atomic from './atomic';
+import backbutton from '../../backbutton';
+import helper from '../helper';
+import xhr from './roundXhr';
 
-module.exports = function(cfg, onFeatured) {
+export default function controller(cfg, onFeatured) {
 
   this.data = data(cfg);
 
@@ -184,8 +185,13 @@ module.exports = function(cfg, onFeatured) {
     }, 2000);
   }.bind(this);
 
+  var onResume = function() {
+    xhr.reload(this).then(this.reload);
+  }.bind(this);
+
   signals.socket.connected.add(onConnected);
   signals.socket.disconnected.add(onDisconnected);
+  document.addEventListener('resume', onResume);
 
   this.onunload = function() {
     socket.destroy();
@@ -193,6 +199,7 @@ module.exports = function(cfg, onFeatured) {
     if (this.chat) this.chat.onunload();
     signals.socket.connected.remove(onConnected);
     signals.socket.disconnected.remove(onDisconnected);
+    document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
   };
-};
+}

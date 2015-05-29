@@ -1,16 +1,13 @@
-var chessground = require('chessground');
-var layout = require('../layout');
-var widgets = require('../widget/common');
-var menu = require('../menu');
-var ground = require('./ground');
-var renderPromotion = require('./promotion').view;
-var utils = require('../../utils');
-var helper = require('../helper');
-var i18n = require('../../i18n');
-var renderMaterial = require('../round/view/roundView').renderMaterial;
-var replayView = require('./replay/replayView');
-var actions = require('./actions');
-var settings = require('../../settings');
+import chessground from 'chessground';
+import layout from '../layout';
+import widgets from '../widget/common';
+import { view as renderPromotion } from './promotion';
+import helper from '../helper';
+import i18n from '../../i18n';
+import { renderMaterial } from '../round/view/roundView';
+import replayView from './replay/replayView';
+import actions from './actions';
+import settings from '../../settings';
 
 function renderAntagonist(ctrl, player, material) {
   return m('section.antagonist', [
@@ -25,14 +22,14 @@ function renderAntagonist(ctrl, player, material) {
 }
 
 function renderGameButtons(ctrl) {
-  var actions = [
+  let vdom = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
-  return m('section#game_actions', actions);
+  return m('section#game_actions', vdom);
 }
 
 module.exports = function(ctrl) {

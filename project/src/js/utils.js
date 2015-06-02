@@ -22,7 +22,7 @@ utils.hasNetwork = function() {
 utils.handleXhrError = function(error) {
   var {response: data, status} = error;
   if (!utils.hasNetwork()) {
-    window.navigator.notification.alert(i18n('noInternetConnection'));
+    window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
     let message;
     if (status === 0)
@@ -133,7 +133,7 @@ utils.caseInsensitiveSort = function(a, b) {
   var alow = a.toLowerCase();
   var blow = b.toLowerCase();
 
-  return alow > blow ? 1: (alow < blow ? -1 : 0);
+  return alow > blow ? 1 : (alow < blow ? -1 : 0);
 };
 
 utils.userFullNameToId = function(fullName) {

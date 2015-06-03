@@ -1,19 +1,19 @@
 import http from '../../http';
 
 export function follow(userId) {
-  return http.request('/rel/follow/' + userId, { method: 'POST' }, true);
+  return http.request('/rel/follow/' + userId, { method: 'POST' });
 }
 
 export function unfollow(userId) {
-  return http.request('/rel/unfollow/' + userId, { method: 'POST' }, true);
+  return http.request('/rel/unfollow/' + userId, { method: 'POST' });
 }
 
 export function block(userId) {
-  return http.request('/rel/block/' + userId, { method: 'POST' }, true);
+  return http.request('/rel/block/' + userId, { method: 'POST' });
 }
 
 export function unblock(userId) {
-  return http.request('/rel/unblock/' + userId, { method: 'POST' }, true);
+  return http.request('/rel/unblock/' + userId, { method: 'POST' });
 }
 
 export function user(id) {

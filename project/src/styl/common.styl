@@ -14,10 +14,12 @@ red = #ac524f
 *
   user-select none
 
+html
+  font-family 'Open Sans'
+  font-size 100%
+
 body
   overflow hidden
-  font-family 'Open Sans'
-  font-size 95%
   background-color: bgdark
 
 h2
@@ -84,6 +86,10 @@ span.fa
     border-bottom none
   &.active
     background lighten(bgdark, 5%)
+  &.bglight
+    border-bottom-color darken(bglight, 15%)
+    &.active
+      background-color darken(bglight, 5%)
 
 .nav
   &:after

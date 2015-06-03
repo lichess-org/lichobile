@@ -40,10 +40,12 @@ main.out
     display flex
     justify-content space-between
     h1
+      padding-left 10px
+      text-align left
+      font-size 1.1rem
       line-height 50px
       color gold
-      &.playing
-        text-transform none
+      flex 1 1 auto
       &.reconnecting
         white-space nowrap
         overflow hidden
@@ -51,7 +53,7 @@ main.out
         height 50px
     button
       background transparent
-      padding 15px
+      padding 15px 0.9rem
       margin 0
       color gold
       font-size 20px
@@ -60,8 +62,6 @@ main.out
         background lighten(bgdark, 8%)
   .back_button
     font-size 1.1em
-    width auto
-    max-width 70%
     height 50px
     white-space nowrap
     padding 0
@@ -84,11 +84,17 @@ main.out
     &.active
       background lighten(bgdark, 8%)
   .buttons
-    min-width 85px
+    button + button
+      padding-left 10px
+      padding-right 10px
+      > .chip
+        left 2px
   .friends_button
     position relative
     padding-right 10px
-    color rgba(gold, 0.75)
+    color gold
+    &.nofriend
+      color rgba(gold, 0.7)
     > .chip
       position absolute
       font-size 10px
@@ -103,11 +109,6 @@ main.out
       top 10px
       left 7px
       background lighten(gold, 50%)
-    + .game_menu_button
-      padding-left 10px
-      padding-right 10px
-      > .nb_playing, > .nb_challenges
-        left 2px
   .game_menu_button
     position relative
     &.invisible
@@ -117,7 +118,7 @@ main.out
       display block
       width 20px
       height 20px
-      background url('../../images/game_icon.svg') no-repeat
+      background url('../../images/icons/game_icon.svg') no-repeat
     &.brown::before
       background url('../../images/icons/game_icon_brown.svg') no-repeat
     &.blue::before

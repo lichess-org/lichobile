@@ -41,7 +41,7 @@ function main() {
   if (utils.hasNetwork())
     onOnline();
   else {
-    window.navigator.notification.alert(i18n('noInternetConnection'));
+    window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   }
 
   refreshIntervalID = setInterval(refresh, refreshInterval);

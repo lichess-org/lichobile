@@ -110,6 +110,7 @@ export default function controller() {
     games,
     scrollerConfig,
     userId,
+    user,
     onFilterChange,
     toggleBookmark,
     onunload() {

@@ -12,13 +12,6 @@ utils.hasNetwork = function() {
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
 };
 
-/*
- * Util function to handle xhr errors per request. We don't want to show alerts
- * for every request, this is why it's not done in the extract function of
- * m.request.
- *
- * @param {Error} error The error thrown in extract function (see http.js)
- */
 utils.handleXhrError = function(error) {
   var {response: data, status} = error;
   if (!utils.hasNetwork()) {

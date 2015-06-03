@@ -82,7 +82,10 @@ function createLobby(lobbyVersion, onOpen, handlers) {
         debug: window.lichess.mode !== 'prod',
         ignoreUnknownMessages: true,
         pingDelay: 2000,
-        onOpen: onOpen
+        onOpen: () => {
+          onOpen();
+          socketInstance.send('following_onlines');
+        }
       },
       events: assign({}, defaultHandlers, handlers)
     }

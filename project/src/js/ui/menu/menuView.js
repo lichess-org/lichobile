@@ -2,12 +2,15 @@
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
+import gamesMenu from '../gamesMenu';
+import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import utils from '../../utils';
 import helper from '../helper';
 import iScroll from 'iscroll';
 import menu from './menu';
+import friendsApi from '../../lichess/friends';
 
 function renderHeader(user) {
   if (utils.hasNetwork())
@@ -39,6 +42,10 @@ function renderProfileActions(user) {
         <span data-icon="r" />
         {i18n('profile')}
       </li>
+      <li className="side_link" config={helper.ontouch(menu.popup(friendsPopup.open))}>
+        <span data-icon="f" />
+        {i18n('onlineFriends') + ` (${friendsApi.count()})`}
+      </li>
       <li className="side_link" config={helper.ontouch(() => {
         session.logout();
         menu.headerOpen(false);
@@ -55,6 +62,11 @@ function renderLinks(user) {
     <ul className="side_links">
       {utils.hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
+      }
+      {utils.hasNetwork() && session.nowPlaying().length ?
+      <li className="side_link" key="current_games" config={helper.ontouchY(menu.popup(gamesMenu.open))}>
+        <span className="menu_icon_game" />{i18n('nbGamesInPlay', session.nowPlaying().length)}
+      </li> : null
       }
       {utils.hasNetwork() ?
       <li className="side_link" key="play_real_time" config={helper.ontouchY(menu.popup(newGameForm.openRealTime))}>

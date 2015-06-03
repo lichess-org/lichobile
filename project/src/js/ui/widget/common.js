@@ -29,7 +29,8 @@ widgets.backButton = function(title) {
   );
 };
 
-function renderFriendsBtn(nbFriends) {
+widgets.friendsButton = function() {
+  const nbFriends = friendsApi.count();
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
   return (
     <button className="friends_button" key="friends" data-icon="f"
@@ -40,9 +41,9 @@ function renderFriendsBtn(nbFriends) {
     }
     </button>
   );
-}
+};
 
-function renderGameBtn() {
+widgets.gamesButton = function() {
   let key, action;
   const nbChallenges = challengesApi.count();
   if (session.nowPlaying().length || nbChallenges) {
@@ -71,19 +72,18 @@ function renderGameBtn() {
       }
     </button>
   );
-}
+};
 
 widgets.headerBtns = function() {
-  const nbFriends = friendsApi.count();
-  if (utils.hasNetwork() && session.isConnected() && nbFriends)
+  if (utils.hasNetwork() && session.isConnected() && friendsApi.count())
     return (
       <div className="buttons">
-        {renderFriendsBtn(nbFriends)}
-        {renderGameBtn()}
+        {widgets.friendsButton()}
+        {widgets.gamesButton()}
       </div>
     );
   else
-    return renderGameBtn();
+    return widgets.gamesButton();
 };
 
 widgets.header = function(title, leftButton) {

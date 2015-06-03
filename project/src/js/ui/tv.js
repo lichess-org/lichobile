@@ -1,12 +1,12 @@
-var widgets = require('./widget/common');
-var layout = require('./layout');
-var helper = require('./helper');
-var utils = require('../utils');
-var xhr = require('../xhr');
-var roundCtrl = require('./round/roundCtrl');
-var roundView = require('./round/view/roundView');
+import widgets from './widget/common';
+import layout from './layout';
+import helper from './helper';
+import utils from '../utils';
+import xhr from '../xhr';
+import roundCtrl from './round/roundCtrl';
+import roundView from './round/view/roundView';
 
-module.exports = {
+export default {
   controller: function() {
     var round;
 

@@ -22,11 +22,14 @@ friendsPopup.close = function(fromBB) {
 };
 
 friendsPopup.view = function() {
-  const friends = (
+  const friends = friendsApi.list().length ?
+    (
     <ul className="native_scroller">
       {friendsApi.list().map(renderFriend)}
     </ul>
-  );
+    ) : (
+      <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
+    );
 
   const header = (
     <div><span data-icon="f"/>{i18n('onlineFriends')}</div>

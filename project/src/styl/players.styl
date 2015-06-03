@@ -1,6 +1,26 @@
+#searchPlayersModal
+  color textLightGray
+  > header
+    background-color #151a1e
+    border-bottom-style none
+    display flex
+    justify-content space-between
+    > button
+      width 50px
+      background transparent
+      padding 15px
+      margin 0
+      color gold
+      font-size 20px
+      line-height 20px
+      &.active
+        background lighten(bgdark, 8%)
+  > .modal_content
+    background bgdark
+
 .search_input
   position relative
-  width 68%
+  width calc(100% - 70px)
   margin 0 auto
   height 50px
   > input
@@ -12,4 +32,4 @@
     margin 0
     padding 0
     &::placeholder
-      opacity 0.8
+      opacity 0.6

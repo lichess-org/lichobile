@@ -70,16 +70,16 @@ export default function controller(cfg, onFeatured) {
   this.setTitle = function() {
     if (this.data.tv)
       this.title = 'Lichess TV';
-    else if (this.data.player.spectator)
-      this.title = 'lichess.org';
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
       this.title = i18n('gameAborted');
     else if (gameApi.isPlayerTurn(this.data))
       this.title = i18n('yourTurn');
-    else
+    else if (gameApi.isOpponentTurn(this.data))
       this.title = i18n('waitingForOpponent');
+    else
+      this.title = 'lichess.org';
   };
   this.setTitle();
 

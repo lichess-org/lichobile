@@ -30,6 +30,10 @@ function isPlayerTurn(data) {
   return isPlayerPlaying(data) && data.game.player === data.player.color;
 }
 
+function isOpponentTurn(data) {
+  return isPlayerPlaying(data) && data.game.player !== data.player.color;
+}
+
 function mandatory(data) {
   return !!data.tournament;
 }
@@ -123,6 +127,7 @@ function isSupportedVariant(data) {
 module.exports = {
   isPlayerPlaying: isPlayerPlaying,
   isPlayerTurn: isPlayerTurn,
+  isOpponentTurn,
   playable: playable,
   abortable: abortable,
   takebackable: takebackable,

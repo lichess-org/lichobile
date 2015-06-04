@@ -19,7 +19,7 @@ function header(ctrl) {
       {widgets.menuButton()}
       <h1>{i18n('players')}</h1>
       <div className="buttons">
-        <button data-icon="y" config={h.ontouch(ctrl.goSearch)} />
+        <button className="main_header_button" data-icon="y" config={h.ontouch(ctrl.goSearch)} />
         {widgets.friendsButton()}
       </div>
     </nav>

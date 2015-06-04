@@ -34,12 +34,12 @@ main.out
   height 50px
   &.board
     background inherit
-  nav
+  > nav
     height 50px
     overflow hidden
     display flex
     justify-content space-between
-    h1
+    > h1
       padding-left 10px
       text-align left
       font-size 1.1rem
@@ -51,133 +51,140 @@ main.out
         overflow hidden
         text-align center
         height 50px
-    button
-      background transparent
-      padding 15px 0.9rem
-      margin 0
-      color gold
-      font-size 20px
-      line-height 20px
-      &.active
-        background lighten(bgdark, 8%)
-  .back_button
-    font-size 1.1em
-    height 50px
-    white-space nowrap
-    padding 0
-    overflow hidden
-    text-overflow ellipsis
-    text-align left
-    > .title, .fa
-      display inline-block
-      height 50px
-      padding 15px 0 15px 10px
-    > span.fa
-      font-size 18px
-      margin 0
-      margin-right 5px
-    > .title
-      padding-left 0
-      padding-right 15px
-    &:before
-      margin-right 10px
-    &.active
-      background lighten(bgdark, 8%)
-  .buttons
-    button + button
+  > .buttons
+    flex 0 0 auto
+    > button + button
       padding-left 10px
       padding-right 10px
       > .chip
         left 2px
+
+.main_header_button
+  flex 0 0 auto
+  background transparent
+  padding 15px 0.9rem
+  margin 0
+  color gold
+  font-size 20px
+  line-height 20px
+  &.active
+    background lighten(bgdark, 8%)
+
+.back_button
+  font-size 1.1em
+  height 50px
+  white-space nowrap
+  padding 0
+  overflow hidden
+  text-overflow ellipsis
+  text-align left
+  > .title, .fa
+    display inline-block
+    height 50px
+    padding 15px 0 15px 10px
+  > span.fa
+    font-size 18px
+    margin 0
+    margin-right 5px
+  > .title
+    padding-left 0
+    padding-right 15px
+  &:before
+    margin-right 10px
+  &.active
+    background lighten(bgdark, 8%)
+
+.friends_button
+  position relative
+  padding-right 10px
+  color gold
+  &.nofriend
+    color rgba(gold, 0.7)
+  > .chip
+    position absolute
+    font-size 10px
+    font-weight bold
+    line-height 12px
+    letter-spacing 0px
+    color bgdark
+    border 2px solid bgdark
+    border-radius 50%
+    height 17px
+    width 17px
+    top 10px
+    left 7px
+    background lighten(gold, 50%)
+
+.game_menu_button
+  position relative
+  &.invisible
+    visibility hidden
+  &::before
+    content ''
+    display block
+    width 20px
+    height 20px
+    background url('../../images/icons/game_icon.svg') no-repeat
+  &.brown::before
+    background url('../../images/icons/game_icon_brown.svg') no-repeat
+  &.blue::before
+    background url('../../images/icons/game_icon_blue.svg') no-repeat
+  &.green::before
+    background url('../../images/icons/game_icon_green.svg') no-repeat
+  &.grey::before
+    background url('../../images/icons/game_icon_grey.svg') no-repeat
+  &.purple::before
+    background url('../../images/icons/game_icon_purple.svg') no-repeat
+  &.wood::before
+    background url('../../images/icons/game_icon_wood.svg') no-repeat
+  &.wood2::before
+    background url('../../images/icons/game_icon_wood2.svg') no-repeat
+  &.wood3::before
+    background url('../../images/icons/game_icon_wood3.svg') no-repeat
+  &.blue3::before
+    background url('../../images/icons/game_icon_blue3.svg') no-repeat
+  &.canvas::before
+    background url('../../images/icons/game_icon_canvas.svg') no-repeat
+  &.metal::before
+    background url('../../images/icons/game_icon_metal.svg') no-repeat
+  > .chip
+    position absolute
+    font-size 10px
+    font-weight bold
+    line-height 12px
+    letter-spacing 0px
+    color bgdark
+    border 2px solid bgdark
+    border-radius 50%
+    height 17px
+    width 17px
+    top 10px
+    left 7px
+  > .nb_playing
+    background lighten(gold, 50%)
+  > .nb_challenges
+    left 7px
+    background orange
+  &.new_challenge:before
+    background transparent
+    font-family: "lichess" !important;
+    content: "U";
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    animation: neon 1.5s ease-in-out infinite alternate
+
+@media only screen and (min-width 600px)
   .friends_button
-    position relative
-    padding-right 10px
-    color gold
-    &.nofriend
-      color rgba(gold, 0.7)
-    > .chip
-      position absolute
-      font-size 10px
-      font-weight bold
-      line-height 12px
-      letter-spacing 0px
-      color bgdark
-      border 2px solid bgdark
-      border-radius 50%
-      height 17px
-      width 17px
-      top 10px
-      left 7px
-      background lighten(gold, 50%)
-  .game_menu_button
-    position relative
-    &.invisible
-      visibility hidden
-    &::before
-      content ''
-      display block
-      width 20px
-      height 20px
-      background url('../../images/icons/game_icon.svg') no-repeat
-    &.brown::before
-      background url('../../images/icons/game_icon_brown.svg') no-repeat
-    &.blue::before
-      background url('../../images/icons/game_icon_blue.svg') no-repeat
-    &.green::before
-      background url('../../images/icons/game_icon_green.svg') no-repeat
-    &.grey::before
-      background url('../../images/icons/game_icon_grey.svg') no-repeat
-    &.purple::before
-      background url('../../images/icons/game_icon_purple.svg') no-repeat
-    &.wood::before
-      background url('../../images/icons/game_icon_wood.svg') no-repeat
-    &.wood2::before
-      background url('../../images/icons/game_icon_wood2.svg') no-repeat
-    &.wood3::before
-      background url('../../images/icons/game_icon_wood3.svg') no-repeat
-    &.blue3::before
-      background url('../../images/icons/game_icon_blue3.svg') no-repeat
-    &.canvas::before
-      background url('../../images/icons/game_icon_canvas.svg') no-repeat
-    &.metal::before
-      background url('../../images/icons/game_icon_metal.svg') no-repeat
-    > .chip
-      position absolute
-      font-size 10px
-      font-weight bold
-      line-height 12px
-      letter-spacing 0px
-      color bgdark
-      border 2px solid bgdark
-      border-radius 50%
-      height 17px
-      width 17px
-      top 10px
-      left 7px
-    > .nb_playing
-      background lighten(gold, 50%)
-    > .nb_challenges
-      left 7px
-      background orange
-    &.new_challenge:before
-      background transparent
-      font-family: "lichess" !important;
-      content: "U";
-      font-style: normal !important;
-      font-weight: normal !important;
-      font-variant: normal !important;
-      text-transform: none !important;
-      speak: none;
-      line-height: 1;
-      -webkit-font-smoothing: antialiased;
-      animation: neon 1.5s ease-in-out infinite alternate
-  @media only screen and (min-width 600px)
-    .friends_button
+    padding-right 15px
+    margin-right 5px
+    + .game_menu_button
+      padding-left 15px
       padding-right 15px
-      margin-right 5px
-      + .game_menu_button
-        padding-left 15px
-        padding-right 15px
 
 .main_header, .main_footer
   section

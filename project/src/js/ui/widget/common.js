@@ -15,7 +15,7 @@ var widgets = {};
 
 widgets.menuButton = function() {
   return (
-    <button key="main-menu" className="fa fa-navicon menu_button" config={helper.ontouch(menu.toggle)}>
+    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" config={helper.ontouch(menu.toggle)}>
     </button>
   );
 };
@@ -33,7 +33,7 @@ widgets.friendsButton = function() {
   const nbFriends = friendsApi.count();
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
   return (
-    <button className="friends_button" key="friends" data-icon="f"
+    <button className="main_header_button friends_button" key="friends" data-icon="f"
       config={helper.ontouch(friendsPopup.open, longAction)}
     >
     {nbFriends > 0 ?
@@ -55,6 +55,7 @@ widgets.gamesButton = function() {
   }
   const myTurns = session.myTurnGames().length;
   const className = [
+    'main_header_button',
     'game_menu_button',
     settings.general.theme.board(),
     nbChallenges ? 'new_challenge' : '',

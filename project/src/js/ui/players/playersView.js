@@ -85,11 +85,15 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
-      <span className={'userStatus ' + status} data-icon="r" />
-      {user.username} (
-      <span className="rating" data-icon={utils.gameIcon(perf)}/>{user.perfs[perf].rating}
-      )
+    <li className="list_item playerSuggestion nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
+      <div className="user">
+        <span className={'userStatus ' + status} data-icon="r" />
+        {user.username}
+      </div>
+      <div className="rating">
+        <span className="rating" data-icon={utils.gameIcon(perf)}/>
+        {user.perfs[perf].rating}
+      </div>
     </li>
   );
 }

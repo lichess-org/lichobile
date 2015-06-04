@@ -1,14 +1,17 @@
 import socket from '../../socket';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/function/throttle';
+import session from '../../session';
+import utils from '../../utils';
 import * as xhr from './playerXhr';
-
 
 export default function controller() {
   socket.createDefault();
 
   const isSearchOpen = m.prop(false);
   const searchResults = m.prop([]);
+  const players = m.prop([]);
+  const suggestions = m.prop([]);
   let listHeight;
 
   function onKeyboardShow(e) {
@@ -36,7 +39,17 @@ export default function controller() {
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
+  if (session.isConnected())
+    xhr.suggestions(session.get().id).then(
+      data => suggestions(data.suggested),
+      err => utils.handleXhrError(err)
+    );
+  else
+    xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
+
   return {
+    players,
+    suggestions,
     isSearchOpen,
     searchResults,
     onInput: throttle(e => {

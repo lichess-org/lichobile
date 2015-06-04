@@ -5,5 +5,9 @@ export function autocomplete(term) {
 }
 
 export function suggestions(userId) {
-  return http.request(`/@/${userId}/suggestions`);
+  return http.request(`/@/${userId}/suggestions`, {}, true);
+}
+
+export function onlinePlayers() {
+  return http.request('/player/online', {}, true);
 }

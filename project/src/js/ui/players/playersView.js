@@ -57,9 +57,39 @@ function searchModal(ctrl) {
 }
 
 function body(ctrl) {
+  // we show either a list of suggestions or a list of top online players
+  // depending on user is logged or not
+  if (ctrl.suggestions().length) {
+    return (
+      <ul className="playersSuggestion">
+        {ctrl.suggestions().map(s => renderPlayer(s.user))}
+      </ul>
+    );
+  } else {
+    return (
+      <ul className="playersSuggestion">
+        {ctrl.players().map(renderPlayer)}
+      </ul>
+    );
+  }
+}
+
+function renderPlayer(user) {
+  const status = user.online ? 'online' : 'offline';
+  const perf = Object.keys(user.perfs).reduce((prev, curr) => {
+    if (!prev) return curr;
+    if (curr === 'opening' || curr === 'puzzle') return prev;
+    if (user.perfs[prev].rating < user.perfs[curr].rating)
+      return curr;
+    else
+      return prev;
+  });
   return (
-    <ul className="playersSuggestion">
-      <li className="list_item">nothing here for now...</li>
-    </ul>
+    <li className="list_item nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
+      <span className={'userStatus ' + status} data-icon="r" />
+      {user.username} (
+      <span className="rating" data-icon={utils.gameIcon(perf)}/>{user.perfs[perf].rating}
+      )
+    </li>
   );
 }

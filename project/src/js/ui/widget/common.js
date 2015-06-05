@@ -22,7 +22,7 @@ widgets.menuButton = function() {
 
 widgets.backButton = function(title) {
   return (
-    <button key="default-history-backbutton" className="back_button" config={helper.ontouch(utils.backHistory)}>
+    <button key="default-history-backbutton" className="back_button main_header_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
     </button>

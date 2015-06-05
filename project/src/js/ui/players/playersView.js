@@ -80,10 +80,9 @@ function renderPlayer(user) {
         <span className={'userStatus ' + status} data-icon="r" />
         {user.username}
       </div>
-      <div className="rating">
-        <span className="rating" data-icon={utils.gameIcon(perf)}/>
+      <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}
-      </div>
+      </span>
     </li>
   );
 }

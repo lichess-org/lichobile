@@ -57,21 +57,11 @@ function searchModal(ctrl) {
 }
 
 function body(ctrl) {
-  // we show either a list of suggestions or a list of top online players
-  // depending on user is logged or not
-  if (ctrl.suggestions().length) {
-    return (
-      <ul className="playersSuggestion">
-        {ctrl.suggestions().map(s => renderPlayer(s.user))}
-      </ul>
-    );
-  } else {
-    return (
-      <ul className="playersSuggestion">
-        {ctrl.players().map(renderPlayer)}
-      </ul>
-    );
-  }
+  return (
+    <ul className="playersSuggestion native_scroller page">
+      {ctrl.players().map(renderPlayer)}
+    </ul>
+  );
 }
 
 function renderPlayer(user) {

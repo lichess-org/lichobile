@@ -11,7 +11,6 @@ export default function controller() {
   const isSearchOpen = m.prop(false);
   const searchResults = m.prop([]);
   const players = m.prop([]);
-  const suggestions = m.prop([]);
   let listHeight;
 
   function onKeyboardShow(e) {
@@ -41,7 +40,7 @@ export default function controller() {
 
   if (session.isConnected())
     xhr.suggestions(session.get().id).then(
-      data => suggestions(data.suggested),
+      data => players(data.suggested.map(d => d.user)),
       err => utils.handleXhrError(err)
     );
   else
@@ -49,7 +48,6 @@ export default function controller() {
 
   return {
     players,
-    suggestions,
     isSearchOpen,
     searchResults,
     onInput: throttle(e => {

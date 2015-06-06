@@ -23,7 +23,8 @@ var untranslated = {
   playerisInvitingYou: '%s is inviting you',
   toATypeGame: 'To a %s game',
   unsupportedVariant: 'Variant %s is not supported in this version',
-  language: 'Language'
+  language: 'Language',
+  ranking: 'Ranking'
 };
 
 var defaultCode = 'en';

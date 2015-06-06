@@ -1,11 +1,11 @@
-var utils = require('../utils');
-var helper = require('./helper');
-var layout = require('./layout');
-var widgets = require('./widget/common');
-var popupWidget = require('./widget/popup');
-var xhr = require('../xhr');
-var i18n = require('../i18n');
-var socket = require('../socket');
+import utils from '../utils';
+import helper from './helper';
+import layout from './layout';
+import widgets from './widget/common';
+import popupWidget from './widget/popup';
+import xhr from '../xhr';
+import i18n from '../i18n';
+import socket from '../socket';
 
 var nbPlaying = 0;
 

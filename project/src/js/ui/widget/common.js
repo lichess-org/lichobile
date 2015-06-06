@@ -133,4 +133,15 @@ widgets.empty = function() {
   return [];
 };
 
+widgets.userStatus = function(user) {
+  const status = user.online ? 'online' : 'offline';
+  return (
+    <div className="user">
+      <span className={'userStatus ' + status} data-icon="r" />
+      {user.title ? <span className="userTitle">{user.title}&nbsp;</span> : null}
+      {user.username}
+    </div>
+  );
+};
+
 module.exports = widgets;

@@ -11,6 +11,7 @@ import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
 import userGames from'./ui/user/games';
 import players from './ui/players';
+import ranking from './ui/players/ranking';
 
 module.exports.init = function() {
   m.route(document.body, '/', {
@@ -27,6 +28,7 @@ module.exports.init = function() {
     '/@/:id/games': userGames,
     '/@/:id/games/:filter': userGames,
     '/players': players,
+    '/ranking': ranking,
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes,

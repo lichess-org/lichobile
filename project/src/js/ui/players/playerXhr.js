@@ -9,5 +9,9 @@ export function suggestions(userId) {
 }
 
 export function onlinePlayers() {
-  return http.request('/player/online', {}, true);
+  return http.request('/player/online', { data: { nb: 100 }}, true);
+}
+
+export function ranking() {
+  return http.request('/player', {}, true);
 }

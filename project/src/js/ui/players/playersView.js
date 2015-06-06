@@ -65,7 +65,6 @@ function body(ctrl) {
 }
 
 function renderPlayer(user) {
-  const status = user.online ? 'online' : 'offline';
   const perf = Object.keys(user.perfs).reduce((prev, curr) => {
     if (!prev) return curr;
     if (curr === 'opening' || curr === 'puzzle') return prev;
@@ -76,10 +75,7 @@ function renderPlayer(user) {
   });
   return (
     <li className="list_item playerSuggestion nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
-      <div className="user">
-        <span className={'userStatus ' + status} data-icon="r" />
-        {user.username}
-      </div>
+      {widgets.userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}
       </span>

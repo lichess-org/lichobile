@@ -60,12 +60,13 @@ function renderRankingCategory(ctrl, key) {
     'rankingPerfTitle',
     ranking[key].isOpenedOnMobile ? 'open' : ''
   ].join(' ');
+  const toggleDataIcon = ranking[key].isOpenedOnMobile ? 'S' : 'R';
   return (
     <section className={'ranking ' + key}>
       <h3 className={h3Class} config={h.ontouchY(ctrl.toggleRankingCat.bind(undefined, key))}>
         <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
-        {h.isWideScreen() ? null : <span className="toggleIcon" data-icon="u"/>}
+        {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
       { ranking[key].isOpenedOnMobile || h.isWideScreen() ?
       <ul>

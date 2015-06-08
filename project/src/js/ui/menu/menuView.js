@@ -100,7 +100,7 @@ function renderLinks(user) {
       }
       {utils.hasNetwork() ?
       <li className="side_link" key="ranking" config={helper.ontouchY(menu.route('/ranking'))}>
-        <span className="fa fa-trophy"/>{i18n('ranking')}
+        <span className="fa fa-cubes"/>{i18n('ranking')}
       </li> : null
       }
       <li className="sep_link" key="sep_link_offline">

@@ -1,10 +1,12 @@
 /** @jsx m */
 import socket from '../../socket';
 import utils from '../../utils';
+import h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
 import widgets from '../widget/common';
 import i18n from '../../i18n';
+import { perfTitle } from '../../lichess/perfs';
 
 export default {
   controller() {
@@ -12,15 +14,24 @@ export default {
 
     const ranking = m.prop({});
 
-    xhr.ranking().then(ranking, err => {
+    xhr.ranking().then(data => {
+      Object.keys(data).forEach(k => {
+        data[k].isOpenedOnMobile = false;
+      });
+      ranking(data);
+    }, err => {
       utils.handleXhrError(err);
       m.route('/');
     });
 
     return {
       ranking,
-      onunload: () => {
+      onunload() {
         socket.destroy();
+      },
+      toggleRankingCat(key) {
+        let cat = ranking()[key];
+        cat.isOpenedOnMobile = !cat.isOpenedOnMobile;
       }
     };
   },
@@ -45,19 +56,29 @@ function renderBody(ctrl) {
 
 function renderRankingCategory(ctrl, key) {
   const ranking = ctrl.ranking();
+  const h3Class = [
+    'rankingPerfTitle',
+    ranking[key].isOpenedOnMobile ? 'open' : ''
+  ].join(' ');
   return (
     <section className={'ranking ' + key}>
-      <h3 className="rankingPerfTitle" data-icon={utils.gameIcon(key)}>{key}</h3>
+      <h3 className={h3Class} config={h.ontouchY(ctrl.toggleRankingCat.bind(undefined, key))}>
+        <span className="perfIcon" data-icon={utils.gameIcon(key)} />
+        {perfTitle(key)}
+        {h.isWideScreen() ? null : <span className="toggleIcon" data-icon="u"/>}
+      </h3>
+      { ranking[key].isOpenedOnMobile || h.isWideScreen() ?
       <ul>
         {ranking[key].map(p => renderRankingPlayer(p, key))}
-      </ul>
+      </ul> : null
+      }
     </section>
   );
 }
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer list_item">
+    <li className="rankingPlayer" config={h.ontouchY(() => m.route('/@/' + user.id))}>
       {widgets.userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

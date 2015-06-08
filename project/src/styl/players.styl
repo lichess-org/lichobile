@@ -39,16 +39,42 @@
   justify-content space-between
   padding-right 35px
 
+#allRanking
+  display flex
+  flex-flow row wrap
+  justify-content space-around
+
 .ranking
+  width 100%
   padding 15px
+  border-bottom 1px solid #2E3033
+  @media only screen and (min-width 600px)
+    flex 0 1 250px
 
 .rankingPerfTitle
-  color gold
-  font-size 1.1rem
-  &:before
+  font-size 1rem
+  font-weight 600
+  > .perfIcon
+    font-size 1.2rem
+    color gold
     margin-right 10px
+  > .toggleIcon
+    display inline-block
+    text-align center
+    width 24px
+    height 24px
+    margin-left 10px
+  &.open
+    > .toggleIcon
+      transform rotate(180deg)
 
 .rankingPlayer
-  padding 15px 0
+  padding 10px 0
   display flex
   justify-content space-between
+  &.active
+    background lighten(bgdark, 8%)
+  @media only screen and (min-width 600px)
+    font-size 0.9rem
+    border-bottom-style none
+    padding 5px 0

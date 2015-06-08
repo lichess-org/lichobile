@@ -7,7 +7,7 @@ function hasContextMenu() {
 }
 
 export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scrollY) {
-  var startX, startY, boundaries, active, holdTimeoutID;
+  let startX, startY, boundaries, active, holdTimeoutID;
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!');
@@ -36,7 +36,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   function onTouchMove(e) {
     // if going out of bounds, no way to reenable the button
     if (active) {
-      var touch = e.changedTouches[0];
+      let touch = e.changedTouches[0];
       active = isActive(touch);
       if (!active) {
         clearTimeout(holdTimeoutID);
@@ -77,7 +77,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   }
 
   function isActive(touch) {
-    var x = touch.clientX,
+    let x = touch.clientX,
       y = touch.clientY,
       b = boundaries,
       d = 0;

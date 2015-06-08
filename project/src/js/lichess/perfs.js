@@ -7,7 +7,8 @@ const perfTypes = [
   ['kingOfTheHill', 'King Of The Hill'],
   ['threeCheck', 'Three-check'],
   ['antichess', 'Antichess'],
-  ['atomic', 'Atomic']
+  ['atomic', 'Atomic'],
+  ['horde', 'Horde']
 ];
 
 export default function userPerfs(user) {
@@ -27,4 +28,11 @@ export default function userPerfs(user) {
   });
 
   return res;
+}
+
+export function perfTitle(perf) {
+  return perfTypes.reduce((prev, curr) => {
+    if (curr[0] === perf) return curr[1];
+    else return prev;
+  }, '');
 }

@@ -31,29 +31,29 @@ export default function view(ctrl) {
   }
 
   return layout.free(header, profile, widgets.empty, widgets.empty);
-};
+}
 
 function renderWarnings(user) {
   if (user.engine || !user.booster) return null;
   return (
-    <div className="warnings">
+    <section className="warnings">
       {user.engine ?
       <div className="warning" data-icon="j">{i18n('thisPlayerUsesChessComputerAssistance')}</div> : null
       }
       {user.booster ?
       <div className="warning" data-icon="j">{i18n('thisPlayerArtificiallyIncreasesTheirRating')}</div> : null
       }
-    </div>
+    </section>
   );
 }
 
 function renderStatus(user) {
   const status = user.online ? 'online' : 'offline';
   return (
-    <div className="onlineStatus">
+    <section className="onlineStatus">
       <span className={'userStatus ' + status} data-icon="r" />
       {i18n(status)}
-    </div>
+    </section>
   );
 }
 
@@ -67,7 +67,7 @@ function renderProfile(user) {
     const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
     const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).calendar() : null;
     return (
-      <div className="profile">
+      <section className="profile">
         {fullname ?
         <h3 className="fullname">{fullname}</h3> : null
         }
@@ -89,7 +89,7 @@ function renderProfile(user) {
           <p className="lastSeen">{seenAt}</p> : null
           }
         </div>
-      </div>
+      </section>
     );
   } else
     return null;
@@ -100,14 +100,14 @@ function renderStats(user) {
   const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize() : null;
 
   return (
-    <div className="userStats">
+    <section className="userStats">
       {totalPlayTime ?
       <p className="playTime">{totalPlayTime}</p> : null
       }
       {tvTime ?
       <p className="onTv">{tvTime}</p> : null
       }
-    </div>
+    </section>
   );
 }
 
@@ -119,7 +119,7 @@ function renderRatings(user) {
   }
 
   return (
-    <section className="ratings">
+    <section className="perfs">
       {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf))}
     </section>
   );

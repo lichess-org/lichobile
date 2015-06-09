@@ -58,8 +58,9 @@ function main() {
 
   if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
 
+  window.navigator.splashscreen.hide();
+
   setTimeout(function() {
-    window.navigator.splashscreen.hide();
     xhr.status();
   }, 200);
 }

@@ -51,6 +51,15 @@
   @media only screen and (min-width 600px)
     flex 0 1 250px
 
+.rankingList
+  max-height 0
+  overflow hidden
+  transition max-height 0.5s ease-out
+  &.open
+    max-height 1000px
+  @media only screen and (min-width 600px)
+    max-height initial
+
 .rankingPerfTitle
   font-size 1rem
   font-weight 600
@@ -58,8 +67,11 @@
     font-size 1.2rem
     color gold
     margin-right 10px
+    position relative
+    top 3px
   > .toggleIcon
     display inline-block
+    vertical-align middle
     text-align center
     width 24px
     height 24px

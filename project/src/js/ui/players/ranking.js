@@ -56,23 +56,22 @@ function renderBody(ctrl) {
 
 function renderRankingCategory(ctrl, key) {
   const ranking = ctrl.ranking();
-  const h3Class = [
-    'rankingPerfTitle',
+  const rankingListClass = [
+    'rankingList',
     ranking[key].isOpenedOnMobile ? 'open' : ''
   ].join(' ');
   const toggleDataIcon = ranking[key].isOpenedOnMobile ? 'S' : 'R';
+  const toggleFunc = h.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
   return (
     <section className={'ranking ' + key}>
-      <h3 className={h3Class} config={h.ontouchY(ctrl.toggleRankingCat.bind(undefined, key))}>
+      <h3 className="rankingPerfTitle" config={h.ontouchY(toggleFunc)}>
         <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      { ranking[key].isOpenedOnMobile || h.isWideScreen() ?
-      <ul>
+      <ul className={rankingListClass}>
         {ranking[key].map(p => renderRankingPlayer(p, key))}
-      </ul> : null
-      }
+      </ul>
     </section>
   );
 }

@@ -1,5 +1,10 @@
 #userProfile
+  display flex
+  flex-flow row wrap
+  align-content flex-start
   padding 0 10px
+  > section
+    width 100%
 
 .warning
   font-size 0.9em
@@ -37,26 +42,25 @@ h3.fullname
   vertical-align bottom
   margin-right 2px
 
-.ratings
-  padding 10px 0
-  font-size 0.9em
-  &:after
-    content none
-
 .onlineStatus, .profile, .userStats
   padding 10px 0
 
 .profile, .userStats
   font-size 0.85em
 
+.perfs
+  display flex
+  flex-flow row wrap
+  padding 10px 0
+  font-size 0.9em
+  &:after
+    content none
+
 .perf
-  display inline-block
+  width 50%
   text-align left
-  width 48%
   padding 5px 0
   line-height 1.2em
-  &:nth-child(even)
-    margin-left 4%
   &:before
     color gold
     font-size 2em

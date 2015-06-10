@@ -6,10 +6,32 @@
   top 13%
   width 100%
   z-index 12
+  @media only screen and (min-width 600px)
+    width 540px
+    left calc((100% - 540px) / 2)
+    right calc((100% - 540px) / 2)
+    top 15%
+    height 70%
+    > .popup_content
+      overflow hidden
+      height calc(100% - 45px)
+      position relative
+  @media only screen and (min-width 960px)
+    width 720px
+    left calc((100% - 720px) / 2)
+    right calc((100% - 720px) / 2)
 
 #all_games
   height 100%
   position relative
+  @media only screen and (min-width 600px)
+    background #eee
+    height 100%
+    display flex
+    flex-flow row wrap
+    overflow-y auto
+    -webkit-overflow-scrolling: touch;
+    padding-left 5px
 
 .wrapper_overlay_close
   position absolute
@@ -59,10 +81,35 @@
     font-size 0.9em
     color gold
     margin-top 20px
-    font-weight 300
-    .time-indication
+    .timeIndication
       display block
       margin-top 5px
+  @media only screen and (min-width 600px)
+    float none
+    box-shadow none
+    margin 0.5rem
+    border none
+    border-radius 0
+    width 160px
+    height 230px
+    > .boardWrapper
+      width 160px
+      height 160px
+    > .infos
+      height 70px
+    .description
+      padding 10px
+      height initial
+    .icon-game
+      display none
+    h2
+      margin-top 0
+      font-size 1.1em
+    p
+      margin-top 5px
+      text-transform none
+      > .variant
+        display none
 
 .card.challenge
   background gold
@@ -78,6 +125,8 @@
     margin-top 10px
     text-transform none
     color #fff
+  .variantName
+    margin-right 5px
   .actions
     height 45px
     background #aa8f58
@@ -91,4 +140,25 @@
       width 50%
       &:first-child
         border-right 1px solid #9b814d
+  @media only screen and (min-width 600px)
+    width 250px
+    margin 1em calc((100% - 250px) / 2)
+    height initial
+    > .boardWrapper
+      margin 0 auto
+      width 250px
+      height 250px
+    > .infos
+      height initial
+    .description
+      padding 1em
+      > .variant
+        > span
+          display block
+    .actions
+      button
+        border none
+        border-radius 0
+        &:first-child
+          border-right 0
 

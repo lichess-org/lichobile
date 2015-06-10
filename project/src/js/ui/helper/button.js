@@ -1,5 +1,5 @@
 const holdDuration = 600;
-const scrollTolerance = 5;
+const scrollTolerance = 8;
 const activeClass = 'active';
 
 function hasContextMenu() {

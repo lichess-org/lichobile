@@ -69,15 +69,14 @@ function cardDims() {
 }
 
 function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
-  return m('div', {
-    style: {
-      height: cDim.innerW + 'px'
-    }
-  }, [
-    helper.viewOnlyBoard(fen, lastMove, color, variant,
-      settings.general.theme.board(), settings.general.theme.piece()
-    )
-  ]);
+  const style = cDim ? { height: cDim.innerW + 'px' } : {};
+  return (
+    <div className="boardWrapper" style={style}>
+      {helper.viewOnlyBoard(fen, lastMove, color, variant,
+        settings.general.theme.board(), settings.general.theme.piece()
+      )}
+    </div>
+  );
 }
 
 function timeLeft(g) {
@@ -91,25 +90,36 @@ function timeLeft(g) {
 
 function renderGame(g, cDim, cardStyle) {
   const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
-  return m('div.card.standard.' + g.color, {
-    key: 'game.' + g.gameId,
-    style: cardStyle,
-    config: helper.ontouchX(() => joinGame(g))
-  }, [
-    renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant),
-    m('div.infos', [
-      m('div.icon-game', {
-        'data-icon': icon ? icon : ''
-      }),
-      m('div.description', [
-        m('h2.title', utils.playerName(g.opponent, false)),
-        m('p', [
-          g.variant.name,
-          m('span.time-indication', timeLeft(g))
-        ])
-      ])
-    ])
-  ]);
+  const cardClass = [
+    'card',
+    'standard',
+    g.color
+  ].join(' ');
+  const timeClass = [
+    'timeIndication',
+    g.isMyTurn ? 'myTurn' : 'opponentTurn'
+  ].join(' ');
+  const config = helper.isWideScreen() ?
+    helper.ontouchY(() => joinGame(g)) :
+    helper.ontouchX(() => joinGame(g));
+
+  return (
+    <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
+      config={config}
+    >
+      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant)}
+      <div className="infos">
+        <div className="icon-game" data-icon={icon ? icon : ''} />
+        <div className="description">
+          <h2 className="title">{utils.playerName(g.opponent, false)}</h2>
+          <p>
+            <span className="variant">{g.variant.name}</span>
+            <span className={timeClass}>{timeLeft(g)}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function renderChallenge(c, cDim, cardStyle) {
@@ -126,7 +136,7 @@ function renderChallenge(c, cDim, cardStyle) {
         <div className="description">
           <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(user, false))}</h2>
           <p className="variant">
-            {i18n('toATypeGame', c.game.variant.name)}
+            <span className="variantName">{i18n('toATypeGame', c.game.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>
           </p>
         </div>
@@ -148,91 +158,112 @@ function renderChallenge(c, cDim, cardStyle) {
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
   const challenges = challengesApi.list();
-  const cardStyle = {
+  const cardStyle = cDim ? {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
     marginLeft: cDim.margin + 'px',
     marginRight: cDim.margin + 'px'
-  };
+  } : {};
   const nbCards = challenges.length + nowPlaying.length + 1;
-  // scroller wrapper width
-  // calcul is:
-  // ((cardWidth + visible part of adjacent card) * nb of cards) +
-  //   wrapper's marginLeft
-  const wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
-    (cDim.margin * 2);
+  let wrapperStyle, wrapperWidth;
+  if (cDim) {
+    // scroller wrapper width
+    // calcul is:
+    // ((cardWidth + visible part of adjacent card) * nb of cards) +
+    //   wrapper's marginLeft
+    wrapperWidth = ((cDim.w + cDim.margin * 2) * nbCards) +
+      (cDim.margin * 2);
+    wrapperStyle = helper.isWideScreen() ? {} : {
+      width: wrapperWidth + 'px',
+      marginLeft: (cDim.margin * 3) + 'px'
+    };
+  } else {
+    wrapperStyle = {};
+  }
 
   const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
 
   const allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
-  allCards.unshift(
-    m('div.card.standard', {
-      key: 'game.new-game',
-      style: cardStyle,
-      config: helper.ontouchX(function() {
-        gamesMenu.close();
-        newGameForm.open();
-      })
-    }, [
-      renderViewOnlyBoard(cDim),
-      m('div.infos', [
-        m('div.description', [
-          m('h2.title', i18n('createAGame')),
-          m('p', i18n('newOpponent'))
-        ])
-      ])
-    ])
-  );
+  if (!helper.isWideScreen()) {
+    const newGameCard = (
+      <div className="card standard" key="game.new-game" style={cardStyle}
+        config={helper.ontouchX(() => { gamesMenu.close(); newGameForm.open(); })}
+      >
+        {renderViewOnlyBoard(cDim)}
+        <div className="infos">
+          <div className="description">
+            <h2 className="title">{i18n('createAGame')}</h2>
+            <p>{i18n('newOpponent')}</p>
+          </div>
+        </div>
+      </div>
+    );
 
-  return m('div#all_games', {
-    style: {
-      width: wrapperWidth + 'px',
-      marginLeft: (cDim.margin * 3) + 'px'
-    }
-  }, allCards);
+    allCards.unshift(newGameCard);
+  }
+
+  return (
+    <div id="all_games" style={wrapperStyle}>
+      {allCards}
+    </div>
+  );
 }
 
 gamesMenu.view = function() {
-  if (!gamesMenu.isOpen) return m('div#games_menu.overlay.overlay_fade');
-  var vh = helper.viewportDim().vh;
-  var cDim = cardDims();
-  var children = [
-    m('div.wrapper_overlay_close', {
-      config: helper.ontouch(gamesMenu.close)
-    }),
-    m('div#wrapper_games', {
-      style: {
-        top: ((vh - cDim.h) / 2) + 'px'
-      },
-      config: function(el, isUpdate, context) {
-        if (!isUpdate) {
-          scroller = new iScroll(el, {
-            scrollX: true,
-            scrollY: false,
-            momentum: false,
-            snap: '.card',
-            snapSpeed: 400,
-            preventDefaultException: {
-              tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-            }
-          });
+  if (!gamesMenu.isOpen) return (
+    <div id="games_menu" className="overlay overlay_fade" />
+  );
 
-          context.onunload = function() {
-            if (scroller) {
-              scroller.destroy();
-              scroller = null;
-            }
-          };
+  const vh = helper.viewportDim().vh;
+  const cDim = cardDims();
+  const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
+  const wrapperConfig =
+  helper.isWideScreen() ? utils.noop : function(el, isUpdate, context) {
+    if (!isUpdate) {
+      scroller = new iScroll(el, {
+        scrollX: true,
+        scrollY: false,
+        momentum: false,
+        snap: '.card',
+        snapSpeed: 400,
+        preventDefaultException: {
+          tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
         }
-        // see https://github.com/cubiq/iscroll/issues/412
-        scroller.options.snap = el.querySelectorAll('.card');
-        scroller.refresh();
-      }
-    }, renderAllGames(cDim))
-  ];
+      });
 
-  return m('div#games_menu.overlay.overlay_fade.open', children);
+      context.onunload = function() {
+        if (scroller) {
+          scroller.destroy();
+          scroller = null;
+        }
+      };
+    }
+    // see https://github.com/cubiq/iscroll/issues/412
+    scroller.options.snap = el.querySelectorAll('.card');
+    scroller.refresh();
+  };
+  const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
+
+  return (
+    <div id="games_menu" className="overlay overlay_fade open">
+      <div className="wrapper_overlay_close" config={helper.ontouch(gamesMenu.close)} />
+      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle} config={wrapperConfig}>
+        {helper.isWideScreen() ? (
+          <header>
+            {i18n('nbGamesInPlay', session.nowPlaying().length)}
+          </header>
+        ) : null
+        }
+        {helper.isWideScreen() ? (
+          <div className="popup_content">
+            {renderAllGames(null)}
+          </div>
+          ) : renderAllGames(cDim)
+        }
+      </div>
+    </div>
+  );
 };
 
 module.exports = gamesMenu;

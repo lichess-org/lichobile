@@ -1,4 +1,6 @@
 .antagonist
+  height calc((100vh - 100vw) / 2 - 50px)
+  padding 0 10px
   display flex
   justify-content space-between
   align-items center
@@ -87,6 +89,11 @@
 .main_footer
   > .antagonist
     height calc(100% - 45px)
+
+.board_wrapper
+  @media only screen and (min-width 960px)
+    height 75vh
+    width 75vh
 
 .board
   width 100%

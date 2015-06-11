@@ -1,3 +1,4 @@
+/** @jsx m */
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
@@ -18,19 +19,6 @@ import variantApi from '../../../lichess/variant';
 
 export default function view(ctrl) {
 
-  var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-
-  function footer() {
-    var els = [
-      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color]),
-      renderGameButtons(ctrl),
-      renderPlayerActions(ctrl)
-    ];
-    if (ctrl.chat) els.push(renderChat(ctrl.chat));
-
-    return els;
-  }
-
   function header() {
     return [
       m('nav', {
@@ -42,29 +30,39 @@ export default function view(ctrl) {
           widgets.loader
         ]),
         widgets.headerBtns()
-      ]),
-      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])
+      ])
     ];
   }
 
-  function board() {
-    var x = helper.viewportDim().vw;
-    return m('section.board_wrapper', {
-      style: {
-        height: x + 'px'
-      }
-    }, [
-      m('div.board', {
-        className: [
-          settings.general.theme.board(),
-          settings.general.theme.piece(),
-          ctrl.data.game.variant.key
-        ].join(' ')
-      }, chessground.view(ctrl.chessground), renderPromotion(ctrl))
-    ]);
-  }
+  return layout.board(header, renderContent.bind(undefined, ctrl), null);
+}
 
-  return layout.board(header, board, footer, null, ctrl.data.player.color);
+function renderContent(ctrl) {
+  const x = helper.viewportDim().vw;
+  const boardStyle = helper.isWideScreenLand() ? {} : { height: x + 'px' };
+  const boardClass = [
+    'board',
+    settings.general.theme.board(),
+    settings.general.theme.piece(),
+    ctrl.data.game.variant.key
+  ].join(' ');
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+
+  return (
+    <div className="content">
+      {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])}
+      <section className="board_wrapper" style={boardStyle}>
+        <div className={boardClass}>
+          {chessground.view(ctrl.chessground)}
+          {renderPromotion(ctrl)}
+        </div>
+      </section>
+      {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color])}
+      {renderGameButtons(ctrl)}
+      {renderPlayerActions(ctrl)}
+      {ctrl.chat ? renderChat(ctrl.chat) : null}
+    </div>
+  );
 }
 
 export function renderMaterial(material) {
@@ -108,19 +106,23 @@ function renderCheckCount(ctrl, color) {
 function renderAntagonist(ctrl, player, material) {
   const user = player.user;
   const playerName = utils.playerName(player);
+  const {vh, vw} = helper.viewportDim();
+  // must do this here because of the lack of `calc` support
+  // 50 refers to either header height of game actions bar height
+  const height = ((vh - vw) / 2 - 50) + 'px';
 
   function infos() {
     let title;
     if (user) {
-      let onlineStatus = user.online ? 'is connected to lichess' : 'is offline';
-      let onGameStatus = player.onGame ? 'and currently on this game' : 'and currently not on this game';
-      title = `${playerName} ${onlineStatus} ${onGameStatus}`;
+      let onlineStatus = user.online ? 'connected to lichess' : 'offline';
+      let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
+      title = `${playerName}: ${onlineStatus}; ${onGameStatus}`;
     } else
       title = playerName;
     window.plugins.toast.show(title, 'short', 'center');
   }
 
-  return m('section.antagonist', [
+  return m('section.antagonist', { style: { height }}, [
     m('div.infos', {
       config: user ?
         helper.ontouch(utils.f(m.route, '/@/' + user.id), infos) :

@@ -11,11 +11,11 @@ var helper = {};
 var cachedTransformProp;
 
 function computeTransformProp() {
-  return 'transform' in document.body.style?
-    'transform': 'webkitTransform' in document.body.style?
-    'webkitTransform': 'mozTransform' in document.body.style?
-    'mozTransform': 'oTransform' in document.body.style?
-    'oTransform': 'msTransform';
+  return 'transform' in document.body.style ?
+    'transform' : 'webkitTransform' in document.body.style ?
+    'webkitTransform' : 'mozTransform' in document.body.style ?
+    'mozTransform' : 'oTransform' in document.body.style ?
+    'oTransform' : 'msTransform';
 }
 
 helper.transformProp = function() {
@@ -146,6 +146,10 @@ helper.viewportDim = function() {
 
 helper.isWideScreen = function() {
   return helper.viewportDim().vw >= 600;
+};
+
+helper.isWideScreenLand = function() {
+  return helper.viewportDim().vw >= 960;
 };
 
 // allow user to opt out of track analytics

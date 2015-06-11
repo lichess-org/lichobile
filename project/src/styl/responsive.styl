@@ -1,47 +1,15 @@
-// targets very small devices like iphone 4
-@media only screen and (max-device-height 480px)
-  .select_input
-    margin-top 10px
-
-  .playing
-    visibility hidden
-  .main_header
-    max-height 65px
-    .antagonist
-      position: relative;
-      height: 100%;
-      top: -48px;
-      left: 35px;
-      width: 65%;
-      .clock
-        font-size 23px
-      .material
-        display none
-      .infos
-        h2
-          white-space normal
-          overflow hidden
-    .game_menu_button
-      & > .nb_playing
-        top 3px
-        left 3px
-
-    nav
-      position relative
-      top 10px
-      h1
-        line-height 40px
-        &.playing
-          display none
-      button
-        width 40px
-        padding 10px
-
-    nav.reconnecting + .antagonist
+// targets iphone 4
+@media only screen and (device-width 320px) and (device-height 480px) and (orientation portrait)
+  .antagonist
+    font-size 12px
+    .clock
+      font-size 23px
+    .material
       display none
-
-  .main_footer
-    min-height 95px
+    .infos
+      h2
+        white-space normal
+        overflow hidden
 
   #wrapper_games
     max-height 380px
@@ -60,16 +28,3 @@
       margin 0.5em 0
     .force_resign_zone
       margin-top 0
-
-  #game_actions
-    padding 0
-
-
-
-@media only screen and (max-device-width 340px)
-  .side_menu_header .perf .nb
-    display none
-
-@media only screen and (max-device-width 550px)
-  .side_menu_header .perf::before
-    display none

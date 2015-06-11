@@ -51,6 +51,7 @@ function main() {
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
+  window.addEventListener('resize', m.redraw, false);
 
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose

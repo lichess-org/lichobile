@@ -39,7 +39,8 @@ export default function view(ctrl) {
 
 function renderContent(ctrl) {
   const x = helper.viewportDim().vw;
-  const boardStyle = helper.isWideScreenLand() ? {} : { height: x + 'px' };
+  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
+  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
   const boardClass = [
     'board',
     settings.general.theme.board(),
@@ -50,14 +51,14 @@ function renderContent(ctrl) {
 
   return (
     <div className="content">
-      {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color])}
-      <section className="board_wrapper" style={boardStyle}>
+      {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'top')}
+      <section key={boardKey} className="board_wrapper" style={boardStyle}>
         <div className={boardClass}>
           {chessground.view(ctrl.chessground)}
           {renderPromotion(ctrl)}
         </div>
       </section>
-      {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color])}
+      {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'bottom')}
       {renderGameButtons(ctrl)}
       {renderPlayerActions(ctrl)}
       {ctrl.chat ? renderChat(ctrl.chat) : null}
@@ -103,13 +104,14 @@ function renderCheckCount(ctrl, color) {
   if (typeof player.checks !== 'undefined') return m('div.checks', player.checks);
 }
 
-function renderAntagonist(ctrl, player, material) {
+function renderAntagonist(ctrl, player, material, position) {
   const user = player.user;
   const playerName = utils.playerName(player);
   const {vh, vw} = helper.viewportDim();
   // must do this here because of the lack of `calc` support
   // 50 refers to either header height of game actions bar height
-  const height = ((vh - vw) / 2 - 50) + 'px';
+  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - 50) + 'px' };
+  const key = helper.isLandscape() ? position + 'landscape' : position + 'portrait';
 
   function infos() {
     let title;
@@ -122,7 +124,7 @@ function renderAntagonist(ctrl, player, material) {
     window.plugins.toast.show(title, 'short', 'center');
   }
 
-  return m('section.antagonist', { style: { height }}, [
+  return m('section.antagonist', { className: position, key, style }, [
     m('div.infos', {
       config: user ?
         helper.ontouch(utils.f(m.route, '/@/' + user.id), infos) :

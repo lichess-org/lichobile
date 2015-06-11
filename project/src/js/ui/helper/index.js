@@ -133,11 +133,9 @@ helper.classSet = function(classes) {
   return arr.join(' ');
 };
 
-var viewportDim = null;
 helper.viewportDim = function() {
-  if (viewportDim) return viewportDim;
-  var e = document.documentElement;
-  viewportDim = {
+  let e = document.documentElement;
+  let viewportDim = {
     vw: e.clientWidth,
     vh: e.clientHeight
   };
@@ -148,8 +146,8 @@ helper.isWideScreen = function() {
   return helper.viewportDim().vw >= 600;
 };
 
-helper.isWideScreenLand = function() {
-  return helper.viewportDim().vw >= 960;
+helper.isLandscape = function() {
+  return window.matchMedia("(orientation: landscape)").matches;
 };
 
 // allow user to opt out of track analytics

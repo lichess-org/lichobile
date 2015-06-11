@@ -56,10 +56,6 @@ function renderBody(ctrl) {
 
 function renderRankingCategory(ctrl, key) {
   const ranking = ctrl.ranking();
-  const rankingListClass = [
-    'rankingList',
-    ranking[key].isOpenedOnMobile ? 'open' : ''
-  ].join(' ');
   const toggleDataIcon = ranking[key].isOpenedOnMobile ? 'S' : 'R';
   const toggleFunc = h.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
   return (
@@ -69,9 +65,11 @@ function renderRankingCategory(ctrl, key) {
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      <ul className={rankingListClass}>
+      {ranking[key].isOpenedOnMobile ?
+      <ul className="rankingList">
         {ranking[key].map(p => renderRankingPlayer(p, key))}
-      </ul>
+      </ul> : null
+      }
     </section>
   );
 }

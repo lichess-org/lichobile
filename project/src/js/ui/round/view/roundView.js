@@ -18,23 +18,26 @@ import renderCorrespondenceClock from '../correspondenceClock/correspondenceView
 import variantApi from '../../../lichess/variant';
 
 export default function view(ctrl) {
+  return layout.board(
+    renderHeader.bind(undefined, ctrl),
+    renderContent.bind(undefined, ctrl),
+    null
+  );
+}
 
-  function header() {
-    return [
-      m('nav', {
-        className: ctrl.vm.connectedWS ? '' : 'reconnecting'
-      }, [
-        widgets.menuButton(),
-        ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
-          i18n('reconnecting'),
-          widgets.loader
-        ]),
-        widgets.headerBtns()
-      ])
-    ];
-  }
-
-  return layout.board(header, renderContent.bind(undefined, ctrl), null);
+function renderHeader(ctrl) {
+  return [
+    m('nav', {
+      className: ctrl.vm.connectedWS ? '' : 'reconnecting'
+    }, [
+      widgets.menuButton(),
+      ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
+        i18n('reconnecting'),
+        widgets.loader
+      ]),
+      widgets.headerBtns()
+    ])
+  ];
 }
 
 function renderContent(ctrl) {
@@ -49,21 +52,35 @@ function renderContent(ctrl) {
   ].join(' ');
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
 
-  return (
-    <div className="content">
-      {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'top')}
-      <section key={boardKey} className="board_wrapper" style={boardStyle}>
-        <div className={boardClass}>
-          {chessground.view(ctrl.chessground)}
-          {renderPromotion(ctrl)}
-        </div>
-      </section>
-      {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'bottom')}
-      {renderGameButtons(ctrl)}
-      {renderPlayerActions(ctrl)}
-      {ctrl.chat ? renderChat(ctrl.chat) : null}
-    </div>
-  );
+  if (helper.isPortrait())
+    return (
+      <div className="content round">
+        {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
+        <section key={boardKey} className="board_wrapper" style={boardStyle}>
+          <div className={boardClass}>
+            {chessground.view(ctrl.chessground)}
+            {renderPromotion(ctrl)}
+          </div>
+        </section>
+        {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+        {renderGameActionsBar(ctrl)}
+      </div>
+    );
+  else
+    return (
+      <div className="content round">
+        <section key={boardKey} className="board_wrapper" style={boardStyle}>
+          <div className={boardClass}>
+            {chessground.view(ctrl.chessground)}
+            {renderPromotion(ctrl)}
+          </div>
+        </section>
+        <section key="table" className="table">
+          {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
+          {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+        </section>
+      </div>
+    );
 }
 
 export function renderMaterial(material) {
@@ -101,7 +118,7 @@ function ratingDiff(player) {
 
 function renderCheckCount(ctrl, color) {
   var player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
-  if (typeof player.checks !== 'undefined') return m('div.checks', player.checks);
+  if (typeof player.checks !== 'undefined') return m('div.checkCount', player.checks);
 }
 
 function renderAntagonist(ctrl, player, material, position) {
@@ -111,7 +128,7 @@ function renderAntagonist(ctrl, player, material, position) {
   // must do this here because of the lack of `calc` support
   // 50 refers to either header height of game actions bar height
   const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - 50) + 'px' };
-  const key = helper.isLandscape() ? position + 'landscape' : position + 'portrait';
+  const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
   function infos() {
     let title;
@@ -125,12 +142,12 @@ function renderAntagonist(ctrl, player, material, position) {
   }
 
   return m('section.antagonist', { className: position, key, style }, [
-    m('div.infos', {
+    m('div.antagonistInfos', {
       config: user ?
         helper.ontouch(utils.f(m.route, '/@/' + user.id), infos) :
         utils.noop
     }, [
-      m('h2.user', [
+      m('h2.antagonistUser', [
         m('span.status[data-icon=r]', { className: user && user.online ? 'online' : 'offline' }),
         playerName,
         player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
@@ -233,7 +250,7 @@ function gameInfos(data) {
   ];
 }
 
-function renderPlayerActions(ctrl) {
+function renderGamePopup(ctrl) {
   return popupWidget(
     'player_controls',
     gameInfos(ctrl.data),
@@ -244,8 +261,10 @@ function renderPlayerActions(ctrl) {
   );
 }
 
-function renderGameButtons(ctrl) {
-  var actions = [
+function renderGameActionsBar(ctrl) {
+  var children = [
+    renderGamePopup(ctrl),
+    ctrl.chat ? renderChat(ctrl.chat) : null,
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
@@ -263,5 +282,7 @@ function renderGameButtons(ctrl) {
     }) : m('button.game_action.empty[data-icon=c]'),
     replayView.renderButtons(ctrl.replay)
   ];
-  return m('section#game_actions', actions);
+  return m('section#game_actions', {
+    key: 'game-actions-bar'
+  }, children);
 }

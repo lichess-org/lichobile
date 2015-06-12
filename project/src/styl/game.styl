@@ -1,3 +1,17 @@
+.content.round
+  @media only screen and (orientation: landscape)
+    display flex
+
+.board_wrapper
+  @media only screen and (orientation: landscape)
+    height calc(100vh - 50px - 1em)
+    width calc(100vh - 50px - 1em)
+    flex 0 0 calc(100vh - 50px - 1em)
+
+.board
+  width 100%
+  height 100%
+
 .antagonist
   height calc((100vh - 100vw) / 2 - 50px)
   padding 0 10px
@@ -6,29 +20,15 @@
   align-items center
   color #fff
   overflow hidden
-  > .infos
-    max-width calc(100% - 100px)
-    overflow hidden
-    > .user
-      overflow hidden
-      text-overflow ellipsis
-      font-weight bold
-      white-space nowrap
-      margin-bottom 3px
-      > .status
-        margin-right 5px
-        &.online
-          color green
-        &.offline
-          opacity 0.6
-      > .ongame
-        margin-left 5px
-        &.yes
-          color green
-        &.no
-          color red
-    &.active
-      background-color lighten(bgdark, 10%)
+  @media only screen and (orientation: landscape)
+    height initial
+
+.table
+  flex 1 1 auto
+
+.antagonistInfos
+  max-width calc(100% - 100px)
+  overflow hidden
   .rp.up
     color green
   .rp.down
@@ -40,64 +40,70 @@
     vertical-align top
     margin-right 10px
     line-height 1
-  > .clock
-    width 90px
-    font-family Cousine
-    font-weight bold
-    text-align right
-    font-size 25px
-    &.running
-      color gold
-      &.emerg
-        color orange
-    &.correspondence
-      font-family 'Open Sans'
-      font-size 17px
-  .checks
-    font-size 0.6em
+
+.antagonistUser
+  overflow hidden
+  text-overflow ellipsis
+  font-weight bold
+  white-space nowrap
+  margin-bottom 3px
+  > .status
+    margin-right 5px
+    &.online
+      color green
+    &.offline
+      opacity 0.6
+  > .ongame
+    margin-left 5px
+    &.yes
+      color green
+    &.no
+      color red
+  &.active
+    background-color lighten(bgdark, 10%)
+
+.clock
+  width 90px
+  font-family Cousine
+  font-weight bold
+  text-align right
+  font-size 25px
+  &.running
+    color gold
+    &.emerg
+      color orange
+  &.correspondence
+    font-family 'Open Sans'
+    font-size 17px
+
+.checkCount
+  font-size 0.6em
+  display inline-block
+  vertical-align top
+  margin 2px 10px 0 0
+  font-weight bold
+.tomb
+  display inline-block
+  margin-left 8px
+  div
+    margin-left -6px
+    width 18px
+    height 18px
+    margin-top -5px
+    background-size cover
     display inline-block
-    vertical-align top
-    margin 2px 10px 0 0
-    font-weight bold
-  .tomb
-    display inline-block
-    margin-left 8px
-    div
-      margin-left -6px
-      width 18px
-      height 18px
-      margin-top -5px
-      background-size cover
-      display inline-block
-    .pawn
-      background-image url(../../images/pieces/mono/P.svg)
-    .bishop
-      background-image url(../../images/pieces/mono/B.svg)
-    .knight
-      background-image url(../../images/pieces/mono/N.svg)
-    .rook
-      background-image url(../../images/pieces/mono/R.svg)
-    .queen
-      background-image url(../../images/pieces/mono/Q.svg)
-    .king
-      background-image url(../../images/pieces/mono/K.svg)
-
-.main_header
-  > .antagonist
-    height calc(100% - 50px)
-
-.main_footer
-  > .antagonist
-    height calc(100% - 45px)
-
-.board_wrapper
-  @media only screen and (orientation: landscape)
-    height 75vh
-    width 75vh
-
-.board
-  width 100%
-  height 100%
+  .pawn
+    background-image url(../../images/pieces/mono/P.svg)
+  .bishop
+    background-image url(../../images/pieces/mono/B.svg)
+  .knight
+    background-image url(../../images/pieces/mono/N.svg)
+  .rook
+    background-image url(../../images/pieces/mono/R.svg)
+  .queen
+    background-image url(../../images/pieces/mono/Q.svg)
+  .king
+    background-image url(../../images/pieces/mono/K.svg)
 
 #promotion_choice
   border 1px solid black
@@ -120,6 +126,10 @@
   position absolute
   bottom 0
   width 100%
+  @media only screen and (orientation: landscape)
+    order 4
+    position initial
+    width initial
 
 .game_action
   display inline-block

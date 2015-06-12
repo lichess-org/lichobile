@@ -146,6 +146,10 @@ helper.isWideScreen = function() {
   return helper.viewportDim().vw >= 600;
 };
 
+helper.isPortrait = function() {
+  return window.matchMedia("(orientation: portrait)").matches;
+};
+
 helper.isLandscape = function() {
   return window.matchMedia("(orientation: landscape)").matches;
 };

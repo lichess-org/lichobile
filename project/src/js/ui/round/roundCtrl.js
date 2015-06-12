@@ -197,6 +197,7 @@ export default function controller(cfg, onFeatured) {
     socket.destroy();
     if (clockIntervId) clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
+    if (this.clock) this.clock.onunload();
     signals.socket.connected.remove(onConnected);
     signals.socket.disconnected.remove(onDisconnected);
     document.removeEventListener('resume', onResume);

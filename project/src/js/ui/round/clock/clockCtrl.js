@@ -3,14 +3,16 @@ import sound from '../../../sound';
 
 export default function(data, outOfTime, soundColor) {
   var lastUpdate;
-  var lastTick = {
-    white: null,
-    black: null
-  };
+
   var clockEls = {
     white: null,
     black: null
   };
+
+  function onResize() {
+    clockEls = {};
+  }
+  window.addEventListener('resize', onResize, false);
 
   var emergSound = {
     last: null,
@@ -51,12 +53,7 @@ export default function(data, outOfTime, soundColor) {
       clockEls[color] = el;
     }
 
-    var oldSeconds = lastTick[color];
-    var newSeconds = new Date(time).getSeconds();
-    if ((oldSeconds !== newSeconds) || time < 10000) {
-      if (el) el.innerHTML = formatClockTime(this, time);
-    }
-    lastTick[color] = newSeconds;
+    if (el) el.innerHTML = formatClockTime(this, time, true);
 
     if (soundColor === color && this.data[soundColor] < this.data.emerg && emergSound.playable[soundColor]) {
       if (!emergSound.last || (data.increment && Date.now() - emergSound.delay > emergSound.last)) {
@@ -71,4 +68,8 @@ export default function(data, outOfTime, soundColor) {
     if (this.data[color] === 0)
       outOfTime();
   }.bind(this);
+
+  this.onunload = function() {
+    window.removeEventListener('resize', onResize, false);
+  };
 }

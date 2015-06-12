@@ -4,32 +4,35 @@ function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
 
-export function formatClockTime(ctrl, time) {
+export function formatClockTime(ctrl, time, isRunning) {
   var date = new Date(time);
   var minutes = prefixInteger(date.getUTCMinutes(), 2);
   var seconds = prefixInteger(date.getSeconds(), 2);
-  var tenths;
+  var tenths = Math.floor(date.getMilliseconds() / 100);
   if (ctrl.data.showTenths && time < 10000) {
-    tenths = Math.floor(date.getMilliseconds() / 100);
     return seconds + '.' + tenths;
   } else if (time >= 3600000) {
     let hours = prefixInteger(date.getUTCHours(), 1);
-    let pulse = seconds % 2 === 0 ? ':' : ' ';
-    return hours + pulse + minutes;
+    let pulse = (isRunning && tenths > 5) ? ':' : ' ';
+    if (isRunning)
+      return hours + pulse + minutes;
+    else
+      return hours + ':' + minutes;
   } else {
     return minutes + ':' + seconds;
   }
 }
 
 export function view(ctrl, color, runningColor) {
-  var time = ctrl.data[color];
+  const time = ctrl.data[color];
+  const isRunning = runningColor === color;
   return m('div', {
     className: 'clock ' + classSet({
-      'outoftime': !time,
-      'running': runningColor === color,
-      'emerg': time < ctrl.data.emerg
+      outoftime: !time,
+      running: isRunning,
+      emerg: time < ctrl.data.emerg
     })
   }, [
-    m('div.time', { id: 'clock_' + color }, formatClockTime(ctrl, time * 1000))
+    m('div.time', { id: 'clock_' + color }, formatClockTime(ctrl, time * 1000, isRunning))
   ]);
 }

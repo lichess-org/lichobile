@@ -75,7 +75,7 @@
   "cordova": {
     "preferences": {
       "Orientation": "default",
-      "DisallowOverscroll": true,
+      "DisallowOverscroll": false,
       "WebViewBounce": false,
       "EnableViewportScale": false,
       "KeyboardDisplayRequiresUserAction": false,

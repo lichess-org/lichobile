@@ -35,6 +35,11 @@ function main() {
     }, 0);
   };
 
+  // iOs needs this to auto-rotate
+  window.shouldRotateToOrientation = function() {
+    return true;
+  };
+
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup

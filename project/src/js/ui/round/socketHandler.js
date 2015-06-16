@@ -1,13 +1,12 @@
-var gameApi = require('../../lichess/game');
-var ground = require('./ground');
-var xhr = require('./roundXhr');
-var sound = require('../../sound');
-var session = require('../../session');
-var utils = require('../../utils');
-var atomic = require('./atomic');
-var socket = require('../../socket');
+import gameApi from '../../lichess/game';
+import ground from './ground';
+import xhr from './roundXhr';
+import sound from '../../sound';
+import session from '../../session';
+import utils from '../../utils';
+import socket from '../../socket';
 
-module.exports = function(ctrl, onFeatured) {
+export default function(ctrl, onFeatured) {
 
   var handlers = {
     takebackOffers: function(o) {
@@ -81,4 +80,4 @@ module.exports = function(ctrl, onFeatured) {
     }
     return false;
   };
-};
+}

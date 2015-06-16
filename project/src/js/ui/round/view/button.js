@@ -123,5 +123,27 @@ module.exports = {
     if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
+  },
+  backward: function(ctrl) {
+    const prevPly = ctrl.vm.ply - 1;
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    return m('button.game_action[data-icon=I]', {
+      config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
+      className: helper.classSet({
+        disabled: ctrl.broken || !enabled
+      })
+    });
+  },
+  forward: function(ctrl) {
+    const nextPly = ctrl.vm.ply + 1;
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    return m('button.game_action[data-icon=H]', {
+      config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
+      className: helper.classSet({
+        disabled: ctrl.broken || !enabled
+      })
+    });
   }
 };
+
+

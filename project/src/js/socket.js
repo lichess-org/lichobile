@@ -115,6 +115,9 @@ export default {
   setVersion(version) {
     if (socketInstance) socketInstance.setVersion(version);
   },
+  getAverageLag() {
+    if (socketInstance) return socketInstance.averageLag;
+  },
   send(...args) {
     if (socketInstance) socketInstance.send(...args);
   },

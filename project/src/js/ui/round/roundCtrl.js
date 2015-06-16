@@ -5,7 +5,6 @@ import sound from '../../sound';
 import gameApi from '../../lichess/game';
 import ground from './ground';
 import promotion from './promotion';
-import replayCtrl from './replay/replayCtrl';
 import chat from './chat';
 import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
@@ -23,14 +22,27 @@ import xhr from './roundXhr';
 
 export default function controller(cfg, onFeatured) {
 
+  helper.analyticsTrackView('Round');
+
   this.data = data(cfg);
 
-  helper.analyticsTrackView('Round');
+  this.firstPly = function() {
+    return this.data.steps[0].ply;
+  }.bind(this);
+
+  this.lastPly = function() {
+    return this.data.steps[this.data.steps.length - 1].ply;
+  }.bind(this);
+
+  this.plyStep = function(ply) {
+    return this.data.steps[ply - this.firstPly()];
+  }.bind(this);
 
   this.vm = {
     connectedWS: true,
     flip: false,
-    showingActions: false
+    showingActions: false,
+    ply: this.lastPly()
   };
 
   socket.createGame(
@@ -67,6 +79,44 @@ export default function controller(cfg, onFeatured) {
     });
   }.bind(this);
 
+  this.replaying = function() {
+    return this.vm.ply !== this.lastPly();
+  }.bind(this);
+
+  this.jump = function(ply) {
+    if (ply < this.firstPly() || ply > this.lastPly()) return;
+    this.vm.ply = ply;
+    var s = this.plyStep(ply);
+    var config = {
+      fen: s.fen,
+      lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
+      check: s.check,
+      turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
+    };
+    if (this.replaying()) this.chessground.stop();
+    else config.movable = {
+      color: gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null,
+      dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
+    };
+    this.chessground.set(config);
+  }.bind(this);
+
+  this.jumpNext = function() {
+    this.jump(this.vm.ply + 1);
+  }.bind(this);
+
+  this.jumpPrev = function() {
+    this.jump(this.vm.ply - 1);
+  }.bind(this);
+
+  this.jumpFirst = function() {
+    this.jump(this.firstPly());
+  }.bind(this);
+
+  this.jumpLast = function() {
+    this.jump(this.lastPly());
+  }.bind(this);
+
   this.setTitle = function() {
     if (this.data.tv)
       this.title = 'Lichess TV';
@@ -89,6 +139,7 @@ export default function controller(cfg, onFeatured) {
       to: dest
     };
     if (prom) move.promotion = prom;
+    if (this.clock && socket.getAverageLag()) move.lag = Math.round(socket.getAverageLag());
     socket.send('move', move, { ackable: true });
   };
 
@@ -110,29 +161,34 @@ export default function controller(cfg, onFeatured) {
 
   this.apiMove = function(o) {
     m.startComputation();
-    var d = this.data;
+    let d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
-    var playedColor = o.ply % 2 === 0 ? 'black' : 'white';
+    const playedColor = o.ply % 2 === 0 ? 'black' : 'white';
     if (o.status) d.game.status = o.status;
     d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw = o.wDraw;
     d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw = o.bDraw;
     d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
     this.setTitle();
-    if (!this.replay.active) {
-      this.chessground.apiMove(o.from, o.to);
+
+    if (!this.replaying()) {
+      this.vm.ply++;
+      this.chessground.apiMove(o.uci.substr(0, 2), o.uci.substr(2, 2));
+
       if (o.enpassant) {
-        var p = o.enpassant,
-          pieces = {};
+        let p = o.enpassant;
+        let pieces = {};
         pieces[p.key] = null;
         this.chessground.setPieces(pieces);
         if (d.game.variant.key === 'atomic') atomic.enpassant(this, p.key, p.color);
         sound.capture();
       }
+
       if (o.promotion) ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
+
       if (o.castle && !this.chessground.data.autoCastle) {
-        var c = o.castle,
-          pieces = {};
+        let c = o.castle;
+        let pieces = {};
         pieces[c.king[0]] = null;
         pieces[c.rook[0]] = null;
         pieces[c.king[1]] = {
@@ -145,6 +201,7 @@ export default function controller(cfg, onFeatured) {
         };
         this.chessground.setPieces(pieces);
       }
+
       this.chessground.set({
         turnColor: d.game.player,
         movable: {
@@ -152,19 +209,30 @@ export default function controller(cfg, onFeatured) {
         },
         check: o.check
       });
-      // atrocious hack to prevent race condition
-      // with explosions and premoves
-      // https://github.com/ornicar/lila/issues/343
-      if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
-      else this.chessground.playPremove();
+
+      if (playedColor !== d.player.color) {
+        // atrocious hack to prevent race condition
+        // with explosions and premoves
+        // https://github.com/ornicar/lila/issues/343
+        if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
+        else this.chessground.playPremove();
+      }
     }
+
     if (o.clock) {
-      var c = o.clock
+      let c = o.clock;
       if (this.clock) this.clock.update(c.white, c.black);
       else if (this.correspondenceClock) this.correspondenceClock.update(c.white, c.black);
     }
+
     d.game.threefold = !!o.threefold;
-    d.game.moves.push(o.san);
+    d.steps.push({
+      ply: this.lastPly() + 1,
+      fen: o.fen,
+      san: o.san,
+      uci: o.uci,
+      check: o.check
+    });
     gameApi.setOnGame(d, playedColor, true);
     m.endComputation();
   }.bind(this);
@@ -206,19 +274,18 @@ export default function controller(cfg, onFeatured) {
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
   else clockIntervId = setInterval(correspondenceClockTick, 1000);
 
-  this.replay = new replayCtrl(this);
-
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
   this.reload = function(rCfg) {
-    this.replay.onReload(rCfg);
+    if (stepsHash(rCfg.steps) !== stepsHash(this.data.steps))
+      this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
     if (this.data.tv) rCfg.tv = true;
     this.data = data(rCfg);
     makeCorrespondenceClock();
     this.setTitle();
-    if (!this.replay.active) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
+    if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
   }.bind(this);
 
   window.plugins.insomnia.keepAwake();
@@ -255,4 +322,12 @@ export default function controller(cfg, onFeatured) {
     document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
   };
+}
+
+function stepsHash(steps) {
+  var h = '';
+  for (var i in steps) {
+    h += steps[i].san;
+  }
+  return h;
 }

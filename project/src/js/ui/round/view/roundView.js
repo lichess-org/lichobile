@@ -12,7 +12,6 @@ import i18n from '../../../i18n';
 import button from './button';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
-import replayView from '../replay/replayView';
 import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
@@ -280,7 +279,8 @@ function renderGameActionsBar(ctrl) {
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
     }) : m('button.game_action.empty[data-icon=c]'),
-    replayView.renderButtons(ctrl.replay)
+    button.backward(ctrl),
+    button.forward(ctrl)
   ];
   return m('section#game_actions', {
     key: 'game-actions-bar'

@@ -139,7 +139,8 @@ export default function controller(cfg, onFeatured) {
       to: dest
     };
     if (prom) move.promotion = prom;
-    if (this.clock && socket.getAverageLag()) move.lag = Math.round(socket.getAverageLag());
+    if (this.clock && socket.getAverageLag() !== undefined)
+      move.lag = Math.round(socket.getAverageLag());
     socket.send('move', move, { ackable: true });
   };
 

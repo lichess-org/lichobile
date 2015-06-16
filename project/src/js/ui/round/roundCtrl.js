@@ -110,10 +110,62 @@ export default function controller(cfg, onFeatured) {
 
   this.apiMove = function(o) {
     m.startComputation();
-    if (!this.replay.active) this.chessground.apiMove(o.from, o.to);
-    if (this.data.game.threefold) this.data.game.threefold = false;
-    this.data.game.moves.push(o.san);
-    gameApi.setOnGame(this.data, o.color, true);
+    var d = this.data;
+    d.game.turns = o.ply;
+    d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
+    var playedColor = o.ply % 2 === 0 ? 'black' : 'white';
+    if (o.status) d.game.status = o.status;
+    d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw = o.wDraw;
+    d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw = o.bDraw;
+    d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
+    this.setTitle();
+    if (!this.replay.active) {
+      this.chessground.apiMove(o.from, o.to);
+      if (o.enpassant) {
+        var p = o.enpassant,
+          pieces = {};
+        pieces[p.key] = null;
+        this.chessground.setPieces(pieces);
+        if (d.game.variant.key === 'atomic') atomic.enpassant(this, p.key, p.color);
+        sound.capture();
+      }
+      if (o.promotion) ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
+      if (o.castle && !this.chessground.data.autoCastle) {
+        var c = o.castle,
+          pieces = {};
+        pieces[c.king[0]] = null;
+        pieces[c.rook[0]] = null;
+        pieces[c.king[1]] = {
+          role: 'king',
+          color: c.color
+        };
+        pieces[c.rook[1]] = {
+          role: 'rook',
+          color: c.color
+        };
+        this.chessground.setPieces(pieces);
+      }
+      this.chessground.set({
+        turnColor: d.game.player,
+        movable: {
+          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : null
+        },
+        check: o.check
+      });
+      // atrocious hack to prevent race condition
+      // with explosions and premoves
+      // https://github.com/ornicar/lila/issues/343
+      if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
+      else this.chessground.playPremove();
+    }
+    if (o.clock) {
+      var c = o.clock
+      if (this.clock) this.clock.update(c.white, c.black);
+      else if (this.correspondenceClock) this.correspondenceClock.update(c.white, c.black);
+    }
+    d.game.threefold = !!o.threefold;
+    d.game.moves.push(o.san);
+    gameApi.setOnGame(d, playedColor, true);
     m.endComputation();
   }.bind(this);
 

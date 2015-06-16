@@ -23,7 +23,7 @@ function makeConfig(data, fen, flip) {
     movable: {
       free: false,
       color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
-      dests: gameApi.parsePossibleMoves(data.possibleMoves),
+      dests: gameApi.isPlayerPlaying(data) ? gameApi.parsePossibleMoves(data.possibleMoves) : {},
       showDests: settings.general.pieceDestinations()
     },
     animation: {

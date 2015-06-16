@@ -148,7 +148,7 @@ export default function controller(cfg, onFeatured) {
       this.chessground.set({
         turnColor: d.game.player,
         movable: {
-          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : null
+          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
         },
         check: o.check
       });

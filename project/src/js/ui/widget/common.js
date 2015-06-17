@@ -110,23 +110,17 @@ widgets.connectingHeader = function(title) {
   ]);
 };
 
-widgets.board = function() {
-  var x = helper.viewportDim().vw;
-  return m('section.board_wrapper', {
-    style: {
-      height: x + 'px'
-    }
-  }, helper.viewOnlyBoard(null, null, null, null, settings.general.theme.board(),
-    settings.general.theme.piece()));
-};
-
-widgets.boardArgs = function(fen, lastMove, orientation, variant, board, piece) {
-  var x = helper.viewportDim().vw;
-  return m('section.board_wrapper', {
-    style: {
-      height: x + 'px'
-    }
-  }, helper.viewOnlyBoard(fen, lastMove, orientation, variant, board, piece));
+widgets.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
+  const x = helper.viewportDim().vw;
+  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
+  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
+  return (
+    <section key={boardKey} className="board_wrapper" style={boardStyle}>
+      {helper.viewOnlyBoard(fen, lastMove, orientation, variant,
+        settings.general.theme.board(), settings.general.theme.piece()
+      )}
+    </section>
+  );
 };
 
 widgets.empty = function() {

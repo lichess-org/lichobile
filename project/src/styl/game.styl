@@ -3,6 +3,9 @@
     display flex
 
 .board_wrapper
+  @media only screen and (orientation: portrait)
+    height calc(100vw)
+    width calc(100vw)
   @media only screen and (orientation: landscape)
     height calc(100vh - 50px - 1em)
     width calc(100vh - 50px - 1em)

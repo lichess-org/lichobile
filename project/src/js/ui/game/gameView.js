@@ -15,19 +15,18 @@ import i18n from '../../i18n';
 export default function view(ctrl) {
   if (ctrl.getRound()) return roundView(ctrl.getRound());
 
-  var theme = settings.general.theme;
   var pov = gamesMenu.lastJoined;
   var header, board, overlay, color;
 
   if (pov) {
     header = widgets.connectingHeader;
-    board = utils.partialf(widgets.boardArgs, pov.fen, pov.lastMove, pov.color,
-      pov.variant.key, theme.board(), theme.piece());
+    board = utils.partialf(widgets.viewOnlyBoard, pov.fen, pov.lastMove, pov.color,
+      pov.variant.key);
     color = pov.color;
     gamesMenu.lastJoined = null;
   } else {
     header = utils.partialf(widgets.header, 'lichess.org');
-    board = widgets.board;
+    board = widgets.viewOnlyBoard;
   }
 
   if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);

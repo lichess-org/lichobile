@@ -24,6 +24,43 @@ export default function view(ctrl) {
   );
 }
 
+export function renderMaterial(material) {
+  var children = [];
+  for (var role in material) {
+    var piece = m('div.' + role);
+    var count = material[role];
+    var content;
+    if (count === 1) content = piece;
+    else {
+      content = [];
+      for (var i = 0; i < count; i++) content.push(piece);
+    }
+    children.push(m('div.tomb', content));
+  }
+  return children;
+}
+
+export function renderBoard(ctrl, renderPromotionF) {
+  const x = helper.viewportDim().vw;
+  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
+  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
+  const boardClass = [
+    'board',
+    settings.general.theme.board(),
+    settings.general.theme.piece(),
+    ctrl.data.game.variant.key
+  ].join(' ');
+
+  return (
+    <section key={boardKey} className="board_wrapper" style={boardStyle}>
+      <div className={boardClass}>
+        {chessground.view(ctrl.chessground)}
+        {renderPromotionF(ctrl)}
+      </div>
+    </section>
+  );
+}
+
 function renderHeader(ctrl) {
   return [
     m('nav', {
@@ -40,27 +77,13 @@ function renderHeader(ctrl) {
 }
 
 function renderContent(ctrl) {
-  const x = helper.viewportDim().vw;
-  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
-  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
-  const boardClass = [
-    'board',
-    settings.general.theme.board(),
-    settings.general.theme.piece(),
-    ctrl.data.game.variant.key
-  ].join(' ');
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
 
   if (helper.isPortrait())
     return (
       <div className="content round">
         {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-        <section key={boardKey} className="board_wrapper" style={boardStyle}>
-          <div className={boardClass}>
-            {chessground.view(ctrl.chessground)}
-            {renderPromotion(ctrl)}
-          </div>
-        </section>
+        {renderBoard(ctrl, renderPromotion)}
         {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
         {renderGameActionsBar(ctrl)}
       </div>
@@ -68,34 +91,13 @@ function renderContent(ctrl) {
   else
     return (
       <div className="content round">
-        <section key={boardKey} className="board_wrapper" style={boardStyle}>
-          <div className={boardClass}>
-            {chessground.view(ctrl.chessground)}
-            {renderPromotion(ctrl)}
-          </div>
-        </section>
+        {renderBoard(ctrl, renderPromotion)}
         <section key="table" className="table">
           {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
           {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
         </section>
       </div>
     );
-}
-
-export function renderMaterial(material) {
-  var children = [];
-  for (var role in material) {
-    var piece = m('div.' + role);
-    var count = material[role];
-    var content;
-    if (count === 1) content = piece;
-    else {
-      content = [];
-      for (var i = 0; i < count; i++) content.push(piece);
-    }
-    children.push(m('div.tomb', content));
-  }
-  return children;
 }
 
 function compact(x) {

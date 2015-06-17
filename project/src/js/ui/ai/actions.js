@@ -1,11 +1,11 @@
-var utils = require('../../utils');
-var i18n = require('../../i18n');
-var opposite = require('chessground').util.opposite;
-var settings = require('../../settings');
-var formWidgets = require('../widget/form');
-var popupWidget = require('../widget/popup');
-var backbutton = require('../../backbutton');
-var helper = require('../helper');
+import utils from '../../utils';
+import i18n from '../../i18n';
+import { util } from 'chessground';
+import settings from '../../settings';
+import formWidgets from '../widget/form';
+import popupWidget from '../widget/popup';
+import backbutton from '../../backbutton';
+import helper from '../helper';
 
 function renderEnded(ctrl) {
   var sit = ctrl.root.replay.situation();
@@ -27,7 +27,7 @@ function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
     m('button[data-icon=U]', {
-      config: helper.ontouch(utils.f(ctrl.root.initAs, opposite(d.player.color)))
+      config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
     m('button.fa', {
       className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
@@ -41,6 +41,8 @@ function renderAlways(ctrl) {
 
 module.exports = {
   controller: function(root) {
+    let isOpen = false;
+
     function open() {
       backbutton.stack.push(close);
       isOpen = true;
@@ -51,7 +53,6 @@ module.exports = {
       isOpen = false;
     }
 
-    var isOpen = false;
     return {
       open: open,
       close: close,
@@ -64,16 +65,16 @@ module.exports = {
       root: root
     };
   },
+
   view: function(ctrl) {
-    if (ctrl.isOpen())
-      return popupWidget(
-        'offline_actions',
-        null, [
-          renderEnded(ctrl),
-          renderAlways(ctrl)
-        ],
-        ctrl.isOpen(),
-        ctrl.close
-      );
+    return popupWidget(
+      'offline_actions',
+      null, [
+        renderEnded(ctrl),
+        renderAlways(ctrl)
+      ],
+      ctrl.isOpen(),
+      ctrl.close
+    );
   }
 };

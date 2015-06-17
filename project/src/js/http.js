@@ -27,7 +27,7 @@ function xhrConfig(xhr) {
 http.request = function(url, opts, feedback) {
 
   var cfg = {
-    url: baseUrl + url,
+    url: 'http://' + baseUrl + url,
     method: 'GET',
     data: { '_': Date.now() },
     config: xhrConfig,

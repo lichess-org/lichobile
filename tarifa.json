@@ -4,42 +4,58 @@
   "description": "lichess.org mobile application",
   "version": "2.0.0",
   "platforms": [
-    "android@3.7.1",
-    "ios@3.8.0"
+    "ios@3.8.0",
+    "android@4.0.2"
   ],
   "configurations_mixins": {
     "default": {
       "id": "org.lichess.mobileapp.dev",
       "product_name": "lichess_dev",
       "product_file_name": "lichess_dev",
-      "API_END_POINT": "http://en.l.dev",
+      "API_END_POINT": "en.l.dev",
       "SOCKET_END_POINT": "socket.en.l.dev"
     },
     "stage": {
       "id": "org.lichess.mobileapp.stage",
       "product_name": "lichess_beta",
       "product_file_name": "lichess-stage",
-      "API_END_POINT": "http://en.lichess.org",
+      "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "beta": "4",
       "cordova": {
         "accessOrigin": [
           "http://en.lichess.org"
-        ]
+        ],
+        "whitelist": {
+          "shared": [
+            {
+              "type": "access-origin",
+              "origin": [ "http://en.lichess.org" ]
+            }
+          ]
+        }
       }
     },
     "prod": {
       "id": "org.lichess.mobileapp.official",
       "product_name": "lichess",
       "product_file_name": "lichess-prod",
-      "API_END_POINT": "http://en.lichess.org",
+      "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "GA_ID": "UA-7935029-3",
       "version": "1.5.1",
       "cordova": {
         "accessOrigin": [
           "http://en.lichess.org"
-        ]
+        ],
+        "whitelist": {
+          "shared": [
+            {
+              "type": "access-origin",
+              "origin": [ "http://en.lichess.org" ]
+            }
+          ]
+        }
       }
     }
   },
@@ -90,7 +106,23 @@
     },
     "accessOrigin": [
       "*"
-    ]
+    ],
+    "whitelist": {
+      "shared": [
+        {
+          "type": "access-origin",
+          "origin": [ "*" ]
+        },
+        {
+          "type": "allow-intent",
+          "origin": [
+            "*://*.wikipedia.org/*",
+            "http://*.lichess.org/*",
+            "*://www.freechess.org/*"
+          ]
+        }
+      ]
+    }
   },
   "author": {
     "name": "Vincent Velociter",
@@ -121,6 +153,7 @@
         "URL_SCHEME": "lichess"
       }
     },
-    "org.apache.cordova.inappbrowser": "org.apache.cordova.inappbrowser"
+    "org.apache.cordova.inappbrowser": "org.apache.cordova.inappbrowser",
+    "cordova-plugin-whitelist": "cordova-plugin-whitelist"
   }
 }

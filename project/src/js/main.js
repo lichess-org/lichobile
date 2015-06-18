@@ -64,11 +64,11 @@ function main() {
 
   if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
 
-  window.navigator.splashscreen.hide();
-
+  // leave time to the screen to render fully
   setTimeout(function() {
+    window.navigator.splashscreen.hide();
     xhr.status();
-  }, 200);
+  }, 500);
 }
 
 function refresh() {

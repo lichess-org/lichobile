@@ -98,11 +98,11 @@
     "android": "./project/bin/check_android.js"
   },
   "plugins": {
-    "org.apache.cordova.splashscreen": "https://github.com/apache/cordova-plugin-splashscreen.git#r0.3.5",
-    "org.apache.cordova.device": "https://github.com/apache/cordova-plugin-device.git#r0.2.13",
-    "org.apache.cordova.dialogs": "https://github.com/apache/cordova-plugin-dialogs.git#r0.2.11",
-    "org.apache.cordova.globalization": "https://github.com/apache/cordova-plugin-globalization.git#r0.3.3",
-    "org.apache.cordova.network-information": "https://github.com/apache/cordova-plugin-network-information.git#r0.2.14",
+    "org.apache.cordova.splashscreen": "https://github.com/apache/cordova-plugin-splashscreen.git#r2.1.0",
+    "org.apache.cordova.device": "https://github.com/apache/cordova-plugin-device.git#r1.0.1",
+    "org.apache.cordova.dialogs": "https://github.com/apache/cordova-plugin-dialogs.git#r1.1.1",
+    "org.apache.cordova.globalization": "https://github.com/apache/cordova-plugin-globalization.git#r1.0.1",
+    "org.apache.cordova.network-information": "https://github.com/apache/cordova-plugin-network-information.git#r1.0.1",
     "org.apache.cordova.statusbar": "org.apache.cordova.statusbar",
     "com.ionic.keyboard": "com.ionic.keyboard",
     "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",

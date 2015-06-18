@@ -39,7 +39,10 @@ module.exports = {
         'merida',
         'pirouetti',
         'alpha',
-        'spatial'
+        'spatial',
+        'reilly',
+        'fantasy',
+        'shapes'
       ],
       board: localstorageprop('settings.theme.board', 'metal'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')

@@ -1,7 +1,7 @@
-var Chess = require('chess.js').Chess;
-var engine = require('../engine');
+import { Chess } from 'chess.js';
+import engine from '../engine';
 
-module.exports = function(root, rootSituations, rootPly) {
+export default function replayCtrl(root, rootSituations, rootPly) {
 
   this.root = root;
 
@@ -102,4 +102,4 @@ module.exports = function(root, rootSituations, rootPly) {
       max_width: 30
     });
   }.bind(this);
-};
+}

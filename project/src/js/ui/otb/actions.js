@@ -1,26 +1,18 @@
-var utils = require('../../utils');
-var helper = require('../helper');
-var i18n = require('../../i18n');
-var opposite = require('chessground').util.opposite;
-var settings = require('../../settings');
-var formWidgets = require('../widget/form');
-var popupWidget = require('../widget/popup');
-var backbutton = require('../../backbutton');
-
-function renderEnded(ctrl) {
-  var result, status, sit = ctrl.root.replay.situation();
-  if (sit.checkmate) {
-    result = sit.turnColor === 'white' ? '0-1' : '1-0';
-    status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
-    return m('div.result', [result, m('br'), m('br'), m('div.status', status)]);
-  }
-}
+import utils from '../../utils';
+import helper from '../helper';
+import i18n from '../../i18n';
+import { util } from 'chessground';
+import settings from '../../settings';
+import formWidgets from '../widget/form';
+import { renderEndedGameStatus } from '../widget/offlineRound';
+import popupWidget from '../widget/popup';
+import backbutton from '../../backbutton';
 
 function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
     m('button[data-icon=U]', {
-      config: helper.ontouch(utils.f(ctrl.root.initAs, opposite(d.player.color)))
+      config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
     m('button.fa', {
       className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
@@ -28,12 +20,15 @@ function renderAlways(ctrl) {
     }, i18n('sharePGN')),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
-    )),
+    ))
   ];
 }
 
-module.exports = {
+export default {
+
   controller: function(root) {
+    let isOpen = false;
+
     function open() {
       backbutton.stack.push(close);
       isOpen = true;
@@ -44,7 +39,6 @@ module.exports = {
       isOpen = false;
     }
 
-    var isOpen = false;
     return {
       open: open,
       close: close,
@@ -57,12 +51,13 @@ module.exports = {
       root: root
     };
   },
+
   view: function(ctrl) {
     if (ctrl.isOpen())
       return popupWidget(
         'offline_actions',
         null, [
-          renderEnded(ctrl),
+          renderEndedGameStatus(ctrl),
           renderAlways(ctrl)
         ],
         ctrl.isOpen(),

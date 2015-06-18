@@ -1,5 +1,6 @@
 /** @jsx m */
 import helper from '../helper';
+import i18n from '../../i18n';
 import { renderMaterial } from '../round/view/roundView';
 
 export function renderAntagonist(ctrl, playerName, material, position) {
@@ -31,6 +32,29 @@ export function renderGameActionsBar(ctrl, actionsViewF) {
     actionsViewF(ctrl.actions)
   ];
   return m('section#game_actions', vdom);
+}
+
+export function renderEndedGameStatus(ctrl) {
+  let sit = ctrl.root.replay.situation();
+  let result, status;
+  if (sit && sit.finished) {
+    if (sit.checkmate) {
+      result = sit.turnColor === 'white' ? '0-1' : '1-0';
+      status = i18n('checkmate') + '. ' + i18n(sit.color === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
+    } else if (sit.stalemate || sit.draw || sit.threefold) {
+      result = '½-½';
+      if (sit.stalemate) status = i18n('stalemate');
+      else status = i18n('draw');
+    }
+    return (
+      <div className="result">
+        {result}
+        <br />
+        <br />
+        <div className="status">{status}</div>
+      </div>
+    );
+  }
 }
 
 function renderBackwardButton(ctrl) {

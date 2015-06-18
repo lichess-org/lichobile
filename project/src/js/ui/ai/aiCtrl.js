@@ -1,15 +1,15 @@
-var promotion = require('./promotion');
-var ground = require('./ground');
-var makeData = require('./data');
-var sound = require('../../sound');
-var replayCtrl = require('./replay/replayCtrl');
-var storage = require('../../storage');
-var settings = require('../../settings');
-var actions = require('./actions');
-var engine = require('./engine');
-var helper = require('../helper');
+import promotion from './promotion';
+import ground from './ground';
+import makeData from './data';
+import sound from '../../sound';
+import replayCtrl from './replay/replayCtrl';
+import storage from '../../storage';
+import settings from '../../settings';
+import actions from './actions';
+import engine from './engine';
+import helper from '../helper';
 
-module.exports = function() {
+export default function controller() {
 
  helper.analyticsTrackView('Offline AI');
 
@@ -108,4 +108,4 @@ module.exports = function() {
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
   };
-};
+}

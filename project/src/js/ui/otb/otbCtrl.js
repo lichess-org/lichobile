@@ -1,23 +1,31 @@
-var promotion = require('./promotion');
-var ground = require('./ground');
-var makeData = require('./data');
-var sound = require('../../sound');
-var replayCtrl = require('./replay/replayCtrl');
-var storage = require('../../storage');
-var actions = require('./actions');
-var helper = require('../helper')
+import promotion from './promotion';
+import ground from './ground';
+import makeData from './data';
+import sound from '../../sound';
+import replayCtrl from './replay/replayCtrl';
+import storage from '../../storage';
+import actions from './actions';
+import helper from '../helper';
 
-module.exports = function(cfg) {
+const storageKey = 'otb.current';
+
+export default function controller(cfg) {
 
   helper.analyticsTrackView('On The Board');
 
-  var storageKey = 'otb.current';
+  var save = function() {
+    storage.set(storageKey, {
+      data: this.data,
+      situations: this.replay.situations,
+      ply: this.replay.ply
+    });
+  }.bind(this);
 
   var addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
     save();
     m.redraw();
-    if (this.replay.situation().checkmate) setTimeout(function() {
+    if (this.replay.situation().finished) setTimeout(function() {
       this.actions.open();
       m.redraw();
     }.bind(this), 1000);
@@ -25,7 +33,7 @@ module.exports = function(cfg) {
 
   var onPromotion = function(orig, dest, role) {
     addMove(orig, dest, role);
-  }.bind(this);
+  };
 
   var userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {
@@ -35,7 +43,7 @@ module.exports = function(cfg) {
 
   var onCapture = function() {
     sound.capture();
-  }.bind(this);
+  };
 
   var onMove = function() {
     sound.move();
@@ -63,17 +71,9 @@ module.exports = function(cfg) {
   if (saved) this.init(saved.data, saved.situations, saved.ply);
   else this.init();
 
-  var save = function() {
-    storage.set(storageKey, {
-      data: this.data,
-      situations: this.replay.situations,
-      ply: this.replay.ply
-    });
-  }.bind(this);
-
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
   };
-};
+}

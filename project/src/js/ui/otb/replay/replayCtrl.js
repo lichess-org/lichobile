@@ -1,6 +1,6 @@
-var Chess = require('chessli.js').Chess;
+import { Chess } from 'chess.js';
 
-module.exports = function(root, rootSituations, rootPly) {
+export default function replayCtrl(root, rootSituations, rootPly) {
 
   this.root = root;
 
@@ -64,6 +64,7 @@ module.exports = function(root, rootSituations, rootPly) {
     var turnColor = chess.turn() === 'w' ? 'white' : 'black';
     if (this.ply <= this.situations.length)
       this.situations = this.situations.slice(0, this.ply);
+
     this.situations.push({
       fen: chess.fen(),
       turnColor: turnColor,
@@ -72,7 +73,11 @@ module.exports = function(root, rootSituations, rootPly) {
         dests: chess.dests()
       },
       check: chess.in_check(),
+      finished: chess.game_over(),
       checkmate: chess.in_checkmate(),
+      stalemate: chess.in_stalemate(),
+      threefold: chess.in_threefold_repetition(),
+      draw: chess.in_draw(),
       lastMove: [move.from, move.to],
       promotion: promotionLetter
     });
@@ -97,4 +102,4 @@ module.exports = function(root, rootSituations, rootPly) {
       max_width: 30
     });
   }.bind(this);
-};
+}

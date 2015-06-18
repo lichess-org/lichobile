@@ -2,7 +2,6 @@ var Zanimo = require('zanimo');
 var chessground = require('chessground');
 var settings = require('../../settings');
 var utils = require('../../utils');
-var IScroll = require('iscroll');
 var ButtonHandler = require('./button');
 
 var helper = {};
@@ -160,22 +159,6 @@ helper.analyticsTrackView = function(view) {
   var enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
-};
-
-helper.scroller = function(el, isUpdate, context) {
-  if (!isUpdate) {
-    context.scroller = new IScroll(el, {
-      preventDefaultException: {
-        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-      }
-    });
-    context.onunload = function() {
-      if (context.scroller) {
-        context.scroller.destroy();
-        context.scroller = null;
-      }
-    };
-  }
 };
 
 helper.cond = function(pred, vdom) {

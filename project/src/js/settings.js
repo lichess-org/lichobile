@@ -29,6 +29,7 @@ module.exports = {
         ['boardThemeWood', 'wood'],
         ['boardThemeWood2', 'wood2'],
         ['boardThemeWood3', 'wood3'],
+        ['boardThemeMaple', 'maple'],
         ['boardThemeBlue2', 'blue3'],
         ['boardThemeCanvas', 'canvas'],
         ['boardThemeMetal', 'metal']

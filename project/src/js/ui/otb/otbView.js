@@ -13,9 +13,8 @@ import settings from '../../settings';
 
 export default function view(ctrl) {
 
-  var material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-
   function content() {
+    const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
     const flip = settings.otb.flipPieces();
     const wrapperClass = helper.classSet({
       'otb': true,
@@ -47,5 +46,10 @@ export default function view(ctrl) {
       );
   }
 
-  return layout.board(utils.partialf(widgets.header, i18n('playOnTheBoardOffline')), content, null, ctrl.data.player.color);
+  return layout.board(
+    utils.partialf(widgets.header, i18n('playOnTheBoardOffline')),
+    content,
+    null,
+    ctrl.data.player.color
+  );
 }

@@ -110,16 +110,18 @@ widgets.connectingHeader = function(title) {
   ]);
 };
 
-widgets.viewOnlyBoard = function(fen, lastMove, orientation, variant) {
+widgets.viewOnlyBoardContent = function(fen, lastMove, orientation, variant) {
   const x = helper.viewportDim().vw;
   const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
   return (
-    <section key={boardKey} className="board_wrapper" style={boardStyle}>
-      {helper.viewOnlyBoard(fen, lastMove, orientation, variant,
-        settings.general.theme.board(), settings.general.theme.piece()
-      )}
-    </section>
+    <div className="content round onlyBoard">
+      <section key={boardKey} className="board_wrapper" style={boardStyle}>
+        {helper.viewOnlyBoard(fen, lastMove, orientation, variant,
+          settings.general.theme.board(), settings.general.theme.piece()
+        )}
+      </section>
+    </div>
   );
 };
 

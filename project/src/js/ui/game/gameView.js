@@ -5,7 +5,6 @@ import gameApi from '../../lichess/game';
 import gamesMenu from '../gamesMenu';
 import loginModal from '../loginModal';
 import layout from '../layout';
-import settings from '../../settings';
 import utils from '../../utils';
 import helper from '../helper';
 import widgets from '../widget/common';
@@ -16,24 +15,23 @@ export default function view(ctrl) {
   if (ctrl.getRound()) return roundView(ctrl.getRound());
 
   var pov = gamesMenu.lastJoined;
-  var header, board, overlay, color;
+  var header, board, overlay;
 
   if (pov) {
     header = widgets.connectingHeader;
-    board = utils.partialf(widgets.viewOnlyBoard, pov.fen, pov.lastMove, pov.color,
+    board = utils.partialf(widgets.viewOnlyBoardContent, pov.fen, pov.lastMove, pov.color,
       pov.variant.key);
-    color = pov.color;
     gamesMenu.lastJoined = null;
   } else {
     header = utils.partialf(widgets.header, 'lichess.org');
-    board = widgets.viewOnlyBoard;
+    board = widgets.viewOnlyBoardContent;
   }
 
   if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
   else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
   else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
 
-  return layout.board(header, board, widgets.empty, overlay, color);
+  return layout.board(header, board, overlay);
 }
 
 function gameInfos(gameData) {

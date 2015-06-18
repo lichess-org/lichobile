@@ -85,7 +85,7 @@ function seeks(feedback) {
 function game(id, color) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return http.request(url);
+  return http.request(url, { background: true });
 }
 
 function toggleGameBookmark(id) {

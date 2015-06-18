@@ -73,7 +73,7 @@ seek.view = function(ctrl) {
     );
   }
 
-  return layout.board(widgets.header, widgets.viewOnlyBoard, widgets.empty, overlays);
+  return layout.board(widgets.header, widgets.viewOnlyBoardContent, overlays);
 };
 
 module.exports = seek;

@@ -49,8 +49,8 @@ export default {
     var header, board;
 
     header = utils.partialf(widgets.connectingHeader, 'Lichess TV');
-    board = widgets.viewOnlyBoard;
+    board = widgets.viewOnlyBoardContent;
 
-    return layout.board(header, board, widgets.empty, widgets.empty);
+    return layout.board(header, board);
   }
 };

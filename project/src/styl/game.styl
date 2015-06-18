@@ -1,4 +1,9 @@
 .content.round
+  @media only screen and (orientation: portrait)
+    &.onlyBoard
+      height calc(100% - 100px)
+      display flex
+      align-items center
   @media only screen and (orientation: landscape)
     display flex
 

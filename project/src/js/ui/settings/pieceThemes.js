@@ -4,11 +4,10 @@ var layout = require('../layout');
 var formWidgets = require('../widget/form');
 var i18n = require('../../i18n');
 var settings = require('../../settings');
-var helper = require('../helper');
 
 function renderBody() {
   return [
-    m('div.scroller.settings_list.radio_list', { config: helper.scroller }, [
+    m('div.native_scroller.page.settings_list.radio_list', [
       m('ul#pieceThemes', {}, settings.general.theme.availablePieceThemes.map(function(t) {
         return m('li.list_item.piece_theme', {
           className: t

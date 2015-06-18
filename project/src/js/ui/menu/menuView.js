@@ -8,7 +8,6 @@ import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import utils from '../../utils';
 import helper from '../helper';
-import iScroll from 'iscroll';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
 
@@ -120,24 +119,17 @@ function renderLinks(user) {
   );
 }
 
-module.exports = function() {
-  var user = session.get();
-  return m('aside#side_menu', {
-    className: menu.isOpen ? 'in' : 'out',
-    config: function(el, isUpdate, context) {
-      if (!isUpdate) {
-        context.scroller = new iScroll(el);
-        context.onunload = function() {
-          if (context.scroller) {
-            context.scroller.destroy();
-            context.scroller = null;
-          }
-        };
-      }
-      context.scroller.refresh();
-    }
-  }, m('div.scroller', [
-    m('header.side_menu_header', renderHeader(user)),
-    user && menu.headerOpen() ? renderProfileActions(user) : renderLinks(user)
-  ]));
-};
+export default function view() {
+  const user = session.get();
+
+  return (
+    <aside id="side_menu" className={menu.isOpen ? 'in' : 'out'}>
+      <div className="native_scroller">
+        <header className="side_menu_header">
+          {renderHeader(user)}
+        </header>
+        {user && menu.headerOpen() ? renderProfileActions(user) : renderLinks(user)}
+      </div>
+    </aside>
+  );
+}

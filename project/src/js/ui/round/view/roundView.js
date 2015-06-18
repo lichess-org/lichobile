@@ -20,7 +20,7 @@ export default function view(ctrl) {
   return layout.board(
     renderHeader.bind(undefined, ctrl),
     renderContent.bind(undefined, ctrl),
-    null
+    ctrl.chat ? renderChat.bind(undefined, ctrl.chat) : null
   );
 }
 
@@ -271,7 +271,6 @@ function renderGamePopup(ctrl) {
 function renderGameActionsBar(ctrl) {
   var children = [
     renderGamePopup(ctrl),
-    ctrl.chat ? renderChat(ctrl.chat) : null,
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||

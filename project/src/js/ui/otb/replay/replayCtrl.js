@@ -1,20 +1,13 @@
 var Chess = require('chessli.js').Chess;
 
-module.exports = function(root, situations, ply) {
+module.exports = function(root, rootSituations, rootPly) {
 
   this.root = root;
-
-  var gameVariants = {
-    'chess960': 1,
-    'antichess': 2,
-    'atomic': 3
-  };
-  var chessVariant = gameVariants[this.root.data.game.variant.key] || 0;
 
   this.init = function(situations, ply) {
     if (situations) this.situations = situations;
     else {
-      var chess = new Chess(this.root.data.game.initialFen, chessVariant);
+      var chess = new Chess(this.root.data.game.initialFen, 0);
       this.situations = [{
         fen: this.root.data.game.initialFen,
         turnColor: this.root.data.game.player,
@@ -28,7 +21,7 @@ module.exports = function(root, situations, ply) {
     }
     this.ply = ply || 0;
   }.bind(this);
-  this.init(situations, ply);
+  this.init(rootSituations, rootPly);
 
   this.situation = function() {
     return this.situations[this.ply];
@@ -45,13 +38,21 @@ module.exports = function(root, situations, ply) {
     this.apply();
   }.bind(this);
 
+  this.forward = function() {
+    this.jump(this.ply + 1);
+  }.bind(this);
+
+  this.backward = function() {
+    this.jump(this.ply - 1);
+  }.bind(this);
+
   var forsyth = function(role) {
     return role === 'knight' ? 'n' : role[0];
   };
 
   this.addMove = function(orig, dest, promotion) {
     var situation = this.situation();
-    var chess = new Chess(situation.fen, chessVariant);
+    var chess = new Chess(situation.fen, 0);
     var promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
       (promotion ? forsyth(promotion) : 'q') : null;
     var move = chess.move({
@@ -79,7 +80,7 @@ module.exports = function(root, situations, ply) {
   };
 
   this.pgn = function() {
-    var chess = new Chess(this.root.data.game.initialFen, chessVariant);
+    var chess = new Chess(this.root.data.game.initialFen, 0);
     this.situations.forEach(function(sit) {
       if (sit.lastMove) chess.move({
         from: sit.lastMove[0],

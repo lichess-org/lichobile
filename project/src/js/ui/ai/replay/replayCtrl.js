@@ -1,12 +1,12 @@
 var Chess = require('chess.js').Chess;
 var engine = require('../engine');
 
-module.exports = function(root, situations, ply) {
+module.exports = function(root, rootSituations, rootPly) {
 
   this.root = root;
 
-  this.init = function(situations, ply) {
-    if (situations) this.situations = situations;
+  this.init = function(initSituations, initPly) {
+    if (initSituations) this.situations = initSituations;
     else {
       var chess = new Chess(this.root.data.game.initialFen, 0);
       this.situations = [{
@@ -20,9 +20,9 @@ module.exports = function(root, situations, ply) {
         lastMove: null
       }];
     }
-    this.ply = ply || 0;
+    this.ply = initPly || 0;
   }.bind(this);
-  this.init(situations, ply);
+  this.init(rootSituations, rootPly);
 
   this.situation = function() {
     return this.situations[this.ply];
@@ -34,13 +34,18 @@ module.exports = function(root, situations, ply) {
 
   this.jump = function(ply) {
     this.root.chessground.cancelMove();
-    if (this.situation() &&
-      this.situation().turnColor !== this.root.data.player.color &&
-      !this.situation().finished) ply++;
     if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
     this.ply = ply;
     this.apply();
     engine.init(this.situation().fen);
+  }.bind(this);
+
+  this.forward = function() {
+    this.jump(this.ply + 2);
+  }.bind(this);
+
+  this.backward = function() {
+    this.jump(this.ply - 2);
   }.bind(this);
 
   var forsyth = function(role) {

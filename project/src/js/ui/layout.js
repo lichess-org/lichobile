@@ -10,9 +10,10 @@ import helper from './helper';
 
 export default {
 
-  board: function(header, content, overlay) {
+  board: function(header, content, overlay, color='') {
     const mainClass = [
-      menu.isOpen ? 'out' : 'in'
+      menu.isOpen ? 'out' : 'in',
+      color
     ].join(' ');
     return (
       <div className="view-container">

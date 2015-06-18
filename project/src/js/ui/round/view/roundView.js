@@ -40,7 +40,7 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, renderPromotionF) {
+export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
   const x = helper.viewportDim().vw;
   const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
@@ -50,9 +50,15 @@ export function renderBoard(ctrl, renderPromotionF) {
     settings.general.theme.piece(),
     ctrl.data.game.variant.key
   ].join(' ');
+  let wrapperClass = "board_wrapper";
+
+  if (moreWrapperClasses) {
+    wrapperClass += ' ';
+    wrapperClass += moreWrapperClasses;
+  }
 
   return (
-    <section key={boardKey} className="board_wrapper" style={boardStyle}>
+    <section key={boardKey} className={wrapperClass} style={boardStyle}>
       <div className={boardClass}>
         {chessground.view(ctrl.chessground)}
         {renderPromotionF(ctrl)}

@@ -36,3 +36,6 @@ export function perfTitle(perf) {
     else return prev;
   }, '');
 }
+
+// https://github.com/ornicar/lila/blob/master/modules/rating/src/main/Glicko.scala#L31
+export var provisionalDeviation = 110

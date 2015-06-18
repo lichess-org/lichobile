@@ -9,7 +9,6 @@ import session from '../session';
 import loginModal from './loginModal';
 import newGameForm from './newGameForm';
 import uniq from 'lodash/array/uniq';
-import iScroll from 'iscroll';
 import Zanimo from 'zanimo';
 
 var correspondence = {};
@@ -115,20 +114,7 @@ correspondence.view = function(ctrl) {
     }
 
     return [
-      m('div.seeks_scroller', {
-        config: function(el, isUpdate, context) {
-          if (!isUpdate) {
-            context.scroller = new iScroll(el);
-            context.onunload = function() {
-              if (context.scroller) {
-                context.scroller.destroy();
-                context.scroller = null;
-              }
-            };
-          }
-          context.scroller.refresh();
-        }
-      }, ctrl.getPool().length ?
+      m('div.native_scroller.seeks_scroller', ctrl.getPool().length ?
         m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))) :
         m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
       ),

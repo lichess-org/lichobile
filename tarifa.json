@@ -99,17 +99,16 @@
     "android": "./project/bin/check_android.js"
   },
   "plugins": {
-    "org.apache.cordova.splashscreen": "https://github.com/apache/cordova-plugin-splashscreen.git#r2.1.0",
-    "org.apache.cordova.device": "https://github.com/apache/cordova-plugin-device.git#r1.0.1",
-    "org.apache.cordova.dialogs": "https://github.com/apache/cordova-plugin-dialogs.git#r1.1.1",
-    "org.apache.cordova.globalization": "https://github.com/apache/cordova-plugin-globalization.git#r1.0.1",
-    "org.apache.cordova.network-information": "https://github.com/apache/cordova-plugin-network-information.git#r1.0.1",
-    "org.apache.cordova.statusbar": "org.apache.cordova.statusbar",
+    "cordova-plugin-splashscreen": "https://github.com/apache/cordova-plugin-splashscreen.git#r2.1.0",
+    "cordova-plugin-device": "cordova-plugin-device@1.0.0",
+    "cordova-plugin-dialogs": "cordova-plugin-dialogs@1.1.0",
+    "cordova-plugin-globalization": "cordova-plugin-globalization@1.0.0",
+    "cordova-plugin-network-information": "cordova-plugin-network-information@1.0.0",
+    "cordova-plugin-statusbar": "cordova-plugin-statusbar@1.0.0",
     "com.ionic.keyboard": "com.ionic.keyboard",
-    "com.ququplay.websocket.WebSocket": "https://github.com/mkuklis/phonegap-websocket",
     "nl.x-services.plugins.insomnia": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "nl.x-services.plugins.toast": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-    "com.danielcwilson.plugins.googleanalytics": "https://github.com/danwilson/google-analytics-plugin.git",
+    "cordova-plugin-google-analytics": "cordova-plugin-google-analytics@0.7.1",
     "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
     "nl.x-services.plugins.socialsharing": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
     "nl.x-services.plugins.launchmyapp": {
@@ -118,7 +117,8 @@
         "URL_SCHEME": "lichess"
       }
     },
-    "org.apache.cordova.inappbrowser": "org.apache.cordova.inappbrowser",
-    "cordova-plugin-whitelist": "cordova-plugin-whitelist"
+    "cordova-plugin-inappbrowser": "cordova-plugin-inappbrowser@1.0.0",
+    "cordova-plugin-whitelist": "cordova-plugin-whitelist@1.0.0",
+    "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.2.0"
   }
 }

@@ -7,6 +7,7 @@ import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import xhr from '../../../xhr';
+import session from '../../../session';
 const moment = window.moment;
 
 export default function view(ctrl) {
@@ -74,7 +75,9 @@ function renderGame(ctrl, g, index, userId) {
 
   return (
     <li className={`list_item bglight userGame ${evenOrOdd}`}>
-      <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} />
+      { session.isConnected() ?
+        <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
+      }
       <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
         {wideScreen ? helper.viewOnlyBoard(g.fen, g.lastMove, userColor) : null}

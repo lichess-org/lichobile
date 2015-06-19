@@ -17,6 +17,7 @@ var untranslated = {
   boardThemeWood: 'Wood',
   boardThemeWood2: 'Wood 2',
   boardThemeWood3: 'Wood 3',
+  boardThemeMaple: 'Maple',
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',

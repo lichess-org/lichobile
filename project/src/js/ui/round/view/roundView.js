@@ -162,6 +162,7 @@ function renderAntagonist(ctrl, player, material, position) {
       m('div', [
         user ? m('h3.rating', [
           player.rating,
+          player.provisional ? '?' : '',
           ratingDiff(player)
         ]) : null,
         renderCheckCount(ctrl, player.color),

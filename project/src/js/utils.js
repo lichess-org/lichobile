@@ -72,7 +72,11 @@ utils.playerName = function(player, withRating) {
   if (player.username || player.user) {
     var name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
-    if (withRating && (player.user || player.rating)) name += ' (' + (player.rating || player.user.rating) + ')';
+    if (withRating && (player.user || player.rating)) {
+      name += ' (' + (player.rating || player.user.rating);
+      if (player.provisional) name += '?';
+      name += ')';
+    }
     return name;
   }
   if (player.ai)

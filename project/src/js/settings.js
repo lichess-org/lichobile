@@ -29,6 +29,7 @@ module.exports = {
         ['boardThemeWood', 'wood'],
         ['boardThemeWood2', 'wood2'],
         ['boardThemeWood3', 'wood3'],
+        ['boardThemeMaple', 'maple'],
         ['boardThemeBlue2', 'blue3'],
         ['boardThemeCanvas', 'canvas'],
         ['boardThemeMetal', 'metal']
@@ -38,7 +39,10 @@ module.exports = {
         'merida',
         'pirouetti',
         'alpha',
-        'spatial'
+        'spatial',
+        'reilly',
+        'fantasy',
+        'shapes'
       ],
       board: localstorageprop('settings.theme.board', 'metal'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')

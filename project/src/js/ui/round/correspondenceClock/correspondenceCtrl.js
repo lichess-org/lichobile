@@ -1,6 +1,4 @@
-var m = require('mithril');
-
-module.exports = function(data, onFlag) {
+export default function(root, data, onFlag) {
 
   var lastUpdate;
 
@@ -23,9 +21,8 @@ module.exports = function(data, onFlag) {
   }.bind(this);
 
   this.tick = function(color) {
-    m.startComputation();
     this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
     if (this.data[color] === 0) onFlag();
-    m.endComputation();
+    if (!root.chat.showing) m.redraw();
   }.bind(this);
 }

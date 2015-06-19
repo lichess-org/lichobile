@@ -260,6 +260,7 @@ export default function controller(cfg, onFeatured) {
   var makeCorrespondenceClock = function() {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
+        this,
         this.data.correspondence,
         () => socket.send('outoftime')
       );

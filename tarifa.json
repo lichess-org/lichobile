@@ -24,13 +24,13 @@
       "beta": "4"
     },
     "prod": {
-      "id": "org.lichess.mobileapp.official",
+      "id": "org.lichess.mobileapp",
       "product_name": "lichess",
       "product_file_name": "lichess-prod",
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "GA_ID": "UA-7935029-3",
-      "version": "1.5.1"
+      "version": "2.0.0"
     }
   },
   "configurations": {
@@ -44,7 +44,8 @@
         "release": true
       },
       "prod": {
-        "extend": "prod"
+        "extend": "prod",
+        "id": "org.lichess.mobileapp.official"
       }
     },
     "android": {
@@ -56,7 +57,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "100510",
+        "version_code": "200000",
         "release": true,
         "sign": "store"
       }

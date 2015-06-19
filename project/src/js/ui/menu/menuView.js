@@ -105,6 +105,9 @@ function renderLinks(user) {
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
+      <li className="side_link" key="training" config={helper.ontouchY(menu.route('/training'))}>
+        <span data-icon="-"/>{i18n('training')}
+      </li>
       <li className="side_link" key="play_ai" config={helper.ontouchY(menu.route('/ai'))}>
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>

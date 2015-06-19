@@ -12,6 +12,7 @@ import user from'./ui/user';
 import userGames from'./ui/user/games';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
+import training from './ui/training';
 
 module.exports.init = function() {
   m.route(document.body, '/', {
@@ -32,6 +33,7 @@ module.exports.init = function() {
     '/settings': settingsUi,
     '/settings/themes/board': boardThemes,
     '/settings/themes/piece': pieceThemes,
-    '/settings/lang': settingsLang
+    '/settings/lang': settingsLang,
+    '/training': training
   });
 };

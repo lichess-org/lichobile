@@ -23,6 +23,6 @@ export default function(root, data, onFlag) {
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
     if (this.data[color] === 0) onFlag();
-    if (!root.chat.showing) m.redraw();
+    if (!root.chat || !root.chat.showing) m.redraw();
   }.bind(this);
 }

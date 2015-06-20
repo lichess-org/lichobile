@@ -37,4 +37,4 @@ module.exports = function(ctrl, trans, color, runningColor) {
   }, [
     m('div.time', formatClockTime(trans, time * 1000))
   ]);
-}
+};

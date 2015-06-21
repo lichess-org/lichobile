@@ -57,15 +57,28 @@ function declineChallenge(id) {
 }
 
 function cardDims() {
-  var vp = helper.viewportDim();
-  var width = vp.vw * 85 / 100;
-  var margin = vp.vw * 2.5 / 100;
-  return {
-    w: width + margin * 2,
-    h: width + 145,
-    innerW: width,
-    margin: margin
-  };
+  const vp = helper.viewportDim();
+
+  // if we're here it's a phone
+  if (helper.isPortrait()) {
+    let width = vp.vw * 85 / 100;
+    let margin = vp.vw * 2.5 / 100;
+    return {
+      w: width + margin * 2,
+      h: width + 145,
+      innerW: width,
+      margin: margin
+    };
+  } else {
+    let width = 150;
+    let margin = 10;
+    return {
+      w: width + margin * 2,
+      h: vp.vh - 100,
+      innerW: width,
+      margin: margin
+    };
+  }
 }
 
 function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {

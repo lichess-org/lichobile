@@ -35,6 +35,7 @@ export default function view(ctrl) {
           <section key="table" className="table">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
+            {renderGameActionsBar(ctrl, actions.view)}
           </section>
         </div>
       );

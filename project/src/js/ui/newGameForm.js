@@ -223,7 +223,7 @@ newGameForm.view = function() {
   return popupWidget(
     'new_game_form_popup game_form_popup',
     null,
-    form,
+    m('div.native_scroller', form),
     newGameForm.isOpen,
     newGameForm.close
   );

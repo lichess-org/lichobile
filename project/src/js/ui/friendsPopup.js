@@ -24,7 +24,7 @@ friendsPopup.close = function(fromBB) {
 friendsPopup.view = function() {
   const friends = friendsApi.list().length ?
     (
-    <ul className="native_scroller">
+    <ul>
       {friendsApi.list().map(renderFriend)}
     </ul>
     ) : (

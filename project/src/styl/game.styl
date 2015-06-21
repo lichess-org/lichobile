@@ -48,6 +48,8 @@
     vertical-align top
     margin-right 10px
     line-height 1
+  &.active
+    background-color lighten(bgdark, 10%)
 
 .antagonistUser
   overflow hidden
@@ -67,8 +69,6 @@
       color green
     &.no
       color red
-  &.active
-    background-color lighten(bgdark, 10%)
 
 .clock
   width 90px
@@ -163,10 +163,7 @@
 #open_chat.unread
   animation answer_glow 5s infinite
 
-.player_controls
-  &.overlay_popup > header
-    line-height 1
-    padding 10px
+.tableHeader, .player_controls
   .icon-game
     display inline-block
     font-size 33px
@@ -182,6 +179,11 @@
     text-decoration underline
     &.active
       background-color darken(#fff, 5%)
+
+.player_controls
+  &.overlay_popup > header
+    line-height 1
+    padding 10px
   button
     &.flipped
       color gold

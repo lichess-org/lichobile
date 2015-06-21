@@ -99,8 +99,12 @@ function renderContent(ctrl) {
       <div className="content round">
         {renderBoard(ctrl, renderPromotion)}
         <section key="table" className="table">
+          <header className="tableHeader">
+            {gameInfos(ctrl.data)}
+          </header>
           {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
           {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+          {renderGameActionsBar(ctrl)}
         </section>
       </div>
     );
@@ -155,7 +159,7 @@ function renderAntagonist(ctrl, player, material, position) {
         utils.noop
     }, [
       m('h2.antagonistUser', [
-        m('span.status[data-icon=r]', { className: user && user.online ? 'online' : 'offline' }),
+        user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null,
         playerName,
         player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
       ]),

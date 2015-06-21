@@ -102,8 +102,10 @@ function renderContent(ctrl) {
           <header className="tableHeader">
             {gameInfos(ctrl.data)}
           </header>
-          {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-          {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+          <section className="playersAndReplay">
+            {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
+            {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+          </section>
           {renderGameActionsBar(ctrl)}
         </section>
       </div>
@@ -265,7 +267,7 @@ function gameInfos(data) {
 function renderGamePopup(ctrl) {
   return popupWidget(
     'player_controls',
-    gameInfos(ctrl.data),
+    helper.isPortrait() ? gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

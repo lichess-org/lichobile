@@ -12,9 +12,9 @@
     height calc(100vw)
     width calc(100vw)
   @media only screen and (orientation: landscape)
-    height calc(100vh - 50px - 1em)
-    width calc(100vh - 50px - 1em)
-    flex 0 0 calc(100vh - 50px - 1em)
+    height calc(100vh - 50px)
+    width calc(100vh - 50px)
+    flex 0 0 calc(100vh - 50px)
 
 .board
   width 100%
@@ -32,7 +32,34 @@
     height initial
 
 .table
+  height calc(100% - 50px)
   flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  margin-left 10px
+  > header
+    flex 0 0 auto
+  > .playersAndReplay
+    margin 1em 0
+    flex 1 1 auto
+    display flex
+    flex-flow column nowrap
+    justify-content space-between
+  > #game_actions
+    position initial
+    flex 0 0 45px
+  @media only screen and (max-width 600px) and (orientation landscape)
+    font-size 0.8rem
+    > .tableHeader > .icon-game
+      font-size 25px
+      vertical-align bottom
+    > .playersAndReplay
+      margin 10px 0
+    .antagonist
+      padding-left 0
+    .clock
+      width 70px
+      font-size 20px
 
 .antagonistInfos
   max-width calc(100% - 100px)
@@ -135,9 +162,7 @@
   bottom 0
   width 100%
   @media only screen and (orientation: landscape)
-    order 4
-    position initial
-    width initial
+    width calc(100vw - (100vh - 50px) - 10px)
 
 .game_action
   display inline-block

@@ -56,20 +56,20 @@ export default function(ctrl, onFeatured) {
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai) {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        m.redraw();
+        if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
       }
     },
     message: function(m) {
       if (ctrl.chat) ctrl.chat.append(m);
     },
     tvSelect: function(o) {
-      if (ctrl.data.tv && ctrl.data.tv.channel == 'best' & onFeatured) onFeatured(o);
+      if (ctrl.data.tv && ctrl.data.tv.channel === 'best' & onFeatured) onFeatured(o);
     },
     crowd: function(o) {
       ['white', 'black'].forEach(function(c) {
         gameApi.setOnGame(ctrl.data, c, o[c]);
       });
-      m.redraw();
+      if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
     }
   };
 

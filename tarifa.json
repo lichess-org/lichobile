@@ -72,11 +72,10 @@
       "ShowSplashScreenSpinner": false,
       "SplashScreen": "screen",
       "SplashScreenDelay": 10000,
-      "BackgroundColor": "0xffffffff",
-      "AutoHideSplashScreen": false,
       "KeepRunning": true,
       "StatusBarOverlaysWebView": false,
-      "StatusBarBackgroundColor": "#151A1E"
+      "StatusBarBackgroundColor": "#151A1E",
+      "backgroundColor": "#1c2328"
     },
     "whitelist": {
       "shared": [

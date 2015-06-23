@@ -21,7 +21,7 @@
       "product_file_name": "lichess-stage",
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
-      "beta": "4"
+      "beta": "6"
     },
     "prod": {
       "id": "org.lichess.mobileapp",
@@ -53,7 +53,8 @@
         "extend": "default"
       },
       "stage": {
-        "extend": "stage"
+        "extend": "stage",
+        "version_code": "200009"
       },
       "prod": {
         "extend": "prod",

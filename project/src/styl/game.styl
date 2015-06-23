@@ -1,7 +1,7 @@
 .content.round
   @media only screen and (orientation: portrait)
     &.onlyBoard
-      height calc(100% - 100px)
+      height calc(100% - 50px)
       display flex
       align-items center
   @media only screen and (orientation: landscape)
@@ -15,6 +15,11 @@
     height calc(100vh - 50px)
     width calc(100vh - 50px)
     flex 0 0 calc(100vh - 50px)
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height calc(100vh - 50px - 6em)
+    width calc(100vh - 50px - 6em)
+    flex 0 0 auto
+    margin auto 0
 
 .board
   width 100%
@@ -29,17 +34,19 @@
   color #fff
   overflow hidden
   @media only screen and (orientation: landscape)
+    padding 0
+    flex 1 0 auto
     height initial
 
 .table
-  height calc(100% - 50px)
+  height 100%
   flex 1 1 auto
   display flex
   flex-flow column nowrap
-  margin-left 10px
+  margin 0 1rem
   > header
     flex 0 0 auto
-  > .playersAndReplay
+  > .playersTable
     margin 1em 0
     flex 1 1 auto
     display flex
@@ -48,18 +55,76 @@
   > #game_actions
     position initial
     flex 0 0 45px
-  @media only screen and (max-width 600px) and (orientation landscape)
-    font-size 0.8rem
-    > .tableHeader > .icon-game
-      font-size 25px
-      vertical-align bottom
-    > .playersAndReplay
+  @media only screen and (max-height 400px) and (orientation landscape)
+    font-size 0.7rem
+    > .tableHeader
+      > .icon-game
+        font-size 20px
+        vertical-align bottom
+      > .game-title
+        font-size 0.6rem
+        line-height 14px
+    > .playersTable
       margin 10px 0
+      justify-content space-around
     .antagonist
       padding-left 0
     .clock
-      width 70px
-      font-size 20px
+      width 85px
+      font-size 18px
+      &.correspondence
+        font-size 14px
+
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height calc(100vh - 50px - 6em)
+    margin auto 1rem
+
+.replay
+  flex 0 0 auto
+  height 250px
+  padding 1rem 2rem
+  overflow hidden
+  @media only screen and (orientation: landscape) and (max-height 450px)
+    height 100px
+    padding 5px 10px
+  @media only screen and (orientation: landscape) and (min-height 450px)
+    height 150px
+    padding 5px 10px
+  @media only screen and (orientation: landscape) and (min-height 550px)
+    height 200px
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height 300px
+
+.gameMovesList
+  height 100%
+  width 100%
+  background lighten(bgdark, 3%)
+  > .moves
+    border-collapse collapse
+    border-spacing 0px
+    width 100%
+    tr:first-child > td
+      padding-top 5px
+
+.replayMoveIndex, .replayMove
+  height 30px
+  @media only screen and (orientation: landscape) and (max-height 400px)
+    height 20px
+  @media only screen and (orientation: landscape) and (max-height 500px)
+    height 25px
+
+.replayMoveIndex
+  padding 0
+  width: 15%;
+  text-align: center;
+
+.replayMove
+  padding: 2px 5px;
+  transition: background-color 0.13s ease 0s;
+  &.current
+    color orange
+  &.active
+    background-color lighten(bgdark, 8%)
 
 .antagonistInfos
   max-width calc(100% - 100px)
@@ -69,14 +134,16 @@
   .rp.down
     color red
   .rating
-    font-size 0.8em
+    font-size 0.9em
     color gold
     display inline-block
     vertical-align top
     margin-right 10px
-    line-height 1
+    @media only screen and (min-width 960px) and (orientation landscape)
+      display block
+      margin 0.2rem 0 0.5rem
   &.active
-    background-color lighten(bgdark, 10%)
+    background-color lighten(bgdark, 8%)
 
 .antagonistUser
   overflow hidden
@@ -117,6 +184,7 @@
   vertical-align top
   margin 2px 10px 0 0
   font-weight bold
+
 .tomb
   display inline-block
   margin-left 8px
@@ -139,6 +207,10 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
+  @media only screen and (min-width 960px) and (orientation landscape)
+    div
+      width 25px
+      height 25px
 
 #promotion_choice
   border 1px solid black
@@ -163,6 +235,8 @@
   width 100%
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    width calc(100vw - (100vh - 50px - 6em) - 10px)
 
 .game_action
   display inline-block

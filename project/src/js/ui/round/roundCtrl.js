@@ -42,6 +42,7 @@ export default function controller(cfg, onFeatured) {
     connectedWS: true,
     flip: false,
     showingActions: false,
+    replayHash: '',
     ply: this.lastPly()
   };
 
@@ -51,6 +52,14 @@ export default function controller(cfg, onFeatured) {
     socketHandler(this, onFeatured),
     this.data.url.round
   );
+
+  this.stepsHash = function(steps) {
+    var h = '';
+    for (var i in steps) {
+      h += steps[i].san;
+    }
+    return h;
+  };
 
   this.showActions = function() {
     menu.close();
@@ -280,7 +289,7 @@ export default function controller(cfg, onFeatured) {
     null : new chat.controller(this);
 
   this.reload = function(rCfg) {
-    if (stepsHash(rCfg.steps) !== stepsHash(this.data.steps))
+    if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
     if (this.data.tv) rCfg.tv = true;
@@ -326,10 +335,3 @@ export default function controller(cfg, onFeatured) {
   };
 }
 
-function stepsHash(steps) {
-  var h = '';
-  for (var i in steps) {
-    h += steps[i].san;
-  }
-  return h;
-}

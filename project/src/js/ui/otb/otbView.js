@@ -26,25 +26,23 @@ export default function view(ctrl) {
     const playerName = i18n(ctrl.data.player.color);
     const opponentName = i18n(ctrl.data.opponent.color);
     if (helper.isPortrait())
-      return (
-        <div className="content round">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
-          {renderBoard(ctrl, renderPromotion, wrapperClass)}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-          {renderGameActionsBar(ctrl, actions.view)}
-        </div>
-      );
+      return [
+        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
+        renderBoard(ctrl, renderPromotion, wrapperClass),
+        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player'),
+        renderGameActionsBar(ctrl, actions.view)
+      ];
     else
-      return (
-        <div className="content round">
-          {renderBoard(ctrl, renderPromotion, wrapperClass)}
-          <section key="table" className="table">
+      return [
+        renderBoard(ctrl, renderPromotion, wrapperClass),
+        <section key="table" className="table">
+          <section className="playersTable">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-            {renderGameActionsBar(ctrl, actions.view)}
           </section>
-        </div>
-      );
+          {renderGameActionsBar(ctrl, actions.view)}
+        </section>
+      ];
   }
 
   return layout.board(

@@ -15,6 +15,7 @@ import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
+import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {
   return layout.board(
@@ -25,17 +26,17 @@ export default function view(ctrl) {
 }
 
 export function renderMaterial(material) {
-  var children = [];
-  for (var role in material) {
-    var piece = m('div.' + role);
-    var count = material[role];
-    var content;
+  const children = [];
+  for (let role in material) {
+    let piece = <div className={role} />;
+    let count = material[role];
+    let content;
     if (count === 1) content = piece;
     else {
       content = [];
-      for (var i = 0; i < count; i++) content.push(piece);
+      for (let i = 0; i < count; i++) content.push(piece);
     }
-    children.push(m('div.tomb', content));
+    children.push(<div className="tomb">{content}</div>);
   }
   return children;
 }
@@ -84,32 +85,30 @@ function renderHeader(ctrl) {
 
 function renderContent(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+  const replayTable = renderReplayTable(ctrl);
 
   if (helper.isPortrait())
-    return (
-      <div className="content round">
-        {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-        {renderBoard(ctrl, renderPromotion)}
-        {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
-        {renderGameActionsBar(ctrl)}
-      </div>
-    );
+    return [
+      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent'),
+      renderBoard(ctrl, renderPromotion),
+      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player'),
+      renderGameActionsBar(ctrl)
+    ];
   else
-    return (
-      <div className="content round">
-        {renderBoard(ctrl, renderPromotion)}
-        <section key="table" className="table">
-          <header className="tableHeader">
-            {gameInfos(ctrl.data)}
-          </header>
-          <section className="playersAndReplay">
-            {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-            {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
-          </section>
-          {renderGameActionsBar(ctrl)}
+    return [
+      renderBoard(ctrl, renderPromotion),
+      <section key="table" className="table">
+        <header className="tableHeader">
+          {gameInfos(ctrl.data)}
+        </header>
+        <section className="playersTable">
+          {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
+          {replayTable}
+          {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
         </section>
-      </div>
-    );
+        {renderGameActionsBar(ctrl)}
+      </section>
+    ];
 }
 
 function compact(x) {

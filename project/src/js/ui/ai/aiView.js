@@ -20,25 +20,23 @@ export default function view(ctrl) {
     const playerName = '';
 
     if (helper.isPortrait())
-      return (
-        <div className="content round">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
-          {renderBoard(ctrl, renderPromotion)}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-          {renderGameActionsBar(ctrl, actions.view)}
-        </div>
-      );
+      return [
+        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
+        renderBoard(ctrl, renderPromotion),
+        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player'),
+        renderGameActionsBar(ctrl, actions.view)
+      ];
     else
-      return (
-        <div className="content round">
-          {renderBoard(ctrl, renderPromotion)}
-          <section key="table" className="table">
+      return [
+        renderBoard(ctrl, renderPromotion),
+        <section key="table" className="table">
+          <section className="playersTable">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-            {renderGameActionsBar(ctrl, actions.view)}
           </section>
-        </div>
-      );
+          {renderGameActionsBar(ctrl, actions.view)}
+        </section>
+      ];
   }
 
   return layout.board(utils.partialf(widgets.header, i18n('playOfflineComputer')), content, null);

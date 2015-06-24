@@ -223,7 +223,7 @@ function renderGameEndedActions(ctrl) {
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     result, m('br'), m('br')
   ];
-  resultDom.push(m('div.status', status));
+  resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
     button.flipBoard(ctrl)

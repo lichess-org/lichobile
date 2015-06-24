@@ -15,7 +15,7 @@ function renderAlways(ctrl) {
       config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
     m('button.fa', {
-      className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',
+      className: 'fa-share-alt',
       config: helper.ontouch(ctrl.sharePGN)
     }, i18n('sharePGN')),
     m('div.action', formWidgets.renderCheckbox(

@@ -47,7 +47,7 @@
   > header
     flex 0 0 auto
   > .playersTable
-    margin 1em 0
+    margin 0 0 1em
     flex 1 1 auto
     display flex
     flex-flow column nowrap
@@ -103,10 +103,10 @@
     border-collapse collapse
     border-spacing 0px
     width 100%
-    tr:first-child > td
-      padding-top 5px
 
 .replayMoveIndex, .replayMove
+  vertical-align middle
+  padding 0
   height 30px
   @media only screen and (orientation: landscape) and (max-height 400px)
     height 20px
@@ -114,12 +114,10 @@
     height 25px
 
 .replayMoveIndex
-  padding 0
   width: 15%;
   text-align: center;
 
 .replayMove
-  padding: 2px 5px;
   transition: background-color 0.13s ease 0s;
   &.current
     color orange
@@ -309,8 +307,8 @@
     > select
       color textDarkGray
 
-.player_controls, .offline_actions
-  .status
+.player_controls, .offline_actions, .playersTable
+  .resultStatus
     color gold
   .result
     padding 0 10px

@@ -95,6 +95,7 @@ export default function controller() {
     }));
   }.bind(this);
 
+
   var saved = storage.get(storageKey);
   if (saved) try {
     this.init(saved.data, saved.situations, saved.ply);

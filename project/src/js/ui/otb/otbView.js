@@ -3,7 +3,7 @@ import chessground from 'chessground';
 import utils from '../../utils';
 import layout from '../layout';
 import widgets from '../widget/common';
-import { renderAntagonist, renderGameActionsBar } from '../widget/offlineRound';
+import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../widget/offlineRound';
 import { view as renderPromotion } from './promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
@@ -25,6 +25,8 @@ export default function view(ctrl) {
     });
     const playerName = i18n(ctrl.data.player.color);
     const opponentName = i18n(ctrl.data.opponent.color);
+    const replayTable = renderReplayTable(ctrl.replay);
+
     if (helper.isPortrait())
       return [
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
@@ -36,8 +38,9 @@ export default function view(ctrl) {
       return [
         renderBoard(ctrl, renderPromotion, wrapperClass),
         <section key="table" className="table">
-          <section className="playersTable">
+          <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
+            {replayTable}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
           </section>
           {renderGameActionsBar(ctrl, actions.view)}

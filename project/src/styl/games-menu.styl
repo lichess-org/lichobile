@@ -16,6 +16,9 @@
       overflow hidden
       height calc(100% - 45px)
       position relative
+  @media only screen and (max-height 400px)
+    top 10%
+    height 80%
   @media only screen and (min-width 960px)
     width 720px
     left calc((100% - 720px) / 2)
@@ -87,7 +90,6 @@
       margin-top 5px
   &.active
     background lighten(textDarkGray, 10%)
-
   @media only screen and (min-width 600px)
     float none
     box-shadow none
@@ -120,6 +122,7 @@
       display none
     .description
       padding 0
+      height initial
       p
         margin-top 10px
     h2

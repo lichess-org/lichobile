@@ -15,7 +15,7 @@ menu.route = function(route) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(utils.f(m.route, route));
+      '250', 'ease-out').then(utils.f(m.route, route)).done();
   };
 };
 
@@ -28,7 +28,7 @@ menu.popup = function(action) {
         action();
         m.endComputation();
         el.removeAttribute('style');
-      });
+      }).done();
   };
 };
 

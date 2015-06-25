@@ -36,7 +36,7 @@ friendsPopup.view = function() {
   );
 
   return popupWidget(
-    'onlineFriends',
+    {onlineFriends: true, native_scroller: false},
     header,
     friends,
     friendsPopup.isOpen,

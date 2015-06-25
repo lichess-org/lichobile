@@ -74,7 +74,7 @@ function cardDims() {
     let margin = 10;
     return {
       w: width + margin * 2,
-      h: vp.vh - 100,
+      h: width + 70,
       innerW: width,
       margin: margin
     };

@@ -5,7 +5,6 @@
   z-index 11
 
 .overlay_popup
-  overflow hidden
   position absolute
   border-radius 0 0 5px 5px
   top 10%
@@ -64,8 +63,8 @@
     width 50%
     left 25%
     right 25%
-  @media only screen and (max-device-height 480px)
-    height 85%
+  @media only screen and (max-height 400px)
+    max-height 85%
     top 10%
 
 .popup_content

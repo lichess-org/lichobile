@@ -20,10 +20,17 @@ import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {
+  function overlay() {
+    return [
+      ctrl.chat ? renderChat(ctrl.chat) : null,
+      renderGamePopup(ctrl)
+    ];
+  }
+
   return layout.board(
     renderHeader.bind(undefined, ctrl),
     renderContent.bind(undefined, ctrl),
-    ctrl.chat ? renderChat.bind(undefined, ctrl.chat) : null
+    overlay
   );
 }
 
@@ -295,7 +302,6 @@ function renderGamePopup(ctrl) {
 
 function renderGameActionsBar(ctrl) {
   var children = [
-    renderGamePopup(ctrl),
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||

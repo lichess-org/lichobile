@@ -43,7 +43,7 @@ export default function view(ctrl) {
             {replayTable}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
           </section>
-          {renderGameActionsBar(ctrl, actions.view)}
+          {renderGameActionsBar(ctrl)}
         </section>
       ];
   }
@@ -51,7 +51,7 @@ export default function view(ctrl) {
   return layout.board(
     utils.partialf(widgets.header, i18n('playOnTheBoardOffline')),
     content,
-    null,
+    actions.view.bind(undefined, ctrl.actions),
     ctrl.data.player.color
   );
 }

@@ -54,12 +54,16 @@ export default function view(ctrl) {
             {replayTable}
             {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
           </section>
-          {renderGameActionsBar(ctrl, actions.view)}
+          {renderGameActionsBar(ctrl)}
         </section>
       ];
   }
 
-  return layout.board(utils.partialf(widgets.header, i18n('playOfflineComputer')), content, null);
+  return layout.board(
+    utils.partialf(widgets.header, i18n('playOfflineComputer')),
+    content,
+    actions.view.bind(undefined, ctrl.actions)
+  );
 }
 
 function opponentSelector() {

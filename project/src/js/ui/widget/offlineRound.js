@@ -22,15 +22,14 @@ export function renderAntagonist(ctrl, playerName, material, position) {
   ]);
 }
 
-export function renderGameActionsBar(ctrl, actionsViewF) {
+export function renderGameActionsBar(ctrl) {
   var vdom = [
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
     renderBackwardButton(ctrl.replay),
-    renderForwardButton(ctrl.replay),
-    actionsViewF(ctrl.actions)
+    renderForwardButton(ctrl.replay)
   ];
   return m('section#game_actions', vdom);
 }

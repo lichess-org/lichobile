@@ -95,8 +95,8 @@ function toggleGameBookmark(id) {
   });
 }
 
-function featured(flip) {
-  return http.request('/tv', flip ? { data: { flip: 1 }} : {});
+function featured(channel, flip) {
+  return http.request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
 }
 
 function status() {

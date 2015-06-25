@@ -63,7 +63,7 @@ export default function(ctrl, onFeatured) {
       if (ctrl.chat) ctrl.chat.append(m);
     },
     tvSelect: function(o) {
-      if (ctrl.data.tv && o.channel === 'best' & onFeatured) onFeatured(o);
+      if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured(o);
     },
     crowd: function(o) {
       ['white', 'black'].forEach(function(c) {

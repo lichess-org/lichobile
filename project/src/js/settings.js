@@ -157,5 +157,9 @@ module.exports = {
       days: localstorageprop('settings.game.invite.days', '2'),
       mode: localstorageprop('settings.game.invite.mode', '0')
     }
+  },
+
+  tv: {
+    channel: localstorageprop('settings.tv.channel', 'best')
   }
 };

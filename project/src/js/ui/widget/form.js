@@ -26,7 +26,7 @@ module.exports = {
     ];
   },
 
-  renderSelect: function(label, name, options, settingsProp, isDisabled) {
+  renderSelect: function(label, name, options, settingsProp, isDisabled, onChangeCallback) {
     var storedValue = settingsProp();
     return [
       m('label', {
@@ -39,6 +39,8 @@ module.exports = {
           if (!isUpdate) {
             var onChange = function(e) {
               settingsProp(e.target.value);
+              console.log(onChangeCallback);
+              if (onChangeCallback) onChangeCallback(e.target.value);
               setTimeout(function() {
                 m.redraw();
               }, 10);

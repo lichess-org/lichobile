@@ -20,11 +20,13 @@ import backbutton from '../../backbutton';
 import helper from '../helper';
 import xhr from './roundXhr';
 
-export default function controller(cfg, onFeatured) {
+export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   helper.analyticsTrackView('Round');
 
   this.data = data(cfg);
+
+  this.onTVChannelChange = onTVChannelChange;
 
   this.firstPly = function() {
     return this.data.steps[0].ply;
@@ -292,7 +294,7 @@ export default function controller(cfg, onFeatured) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
-    if (this.data.tv) rCfg.tv = true;
+    if (this.data.tv) rCfg.tv = this.data.tv;
     this.data = data(rCfg);
     makeCorrespondenceClock();
     this.setTitle();

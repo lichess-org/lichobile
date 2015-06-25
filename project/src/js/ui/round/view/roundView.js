@@ -4,6 +4,7 @@ import settings from '../../../settings';
 import layout from '../../layout';
 import widgets from '../../widget/common';
 import popupWidget from '../../widget/popup';
+import formWidgets from '../../widget/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
 import utils from '../../../utils';
@@ -11,6 +12,7 @@ import helper from '../../helper';
 import i18n from '../../../i18n';
 import button from './button';
 import gameApi from '../../../lichess/game';
+import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
@@ -182,11 +184,26 @@ function renderAntagonist(ctrl, player, material, position) {
   ]);
 }
 
+function tvChannelSelector(ctrl) {
+  let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
+  channels.unshift(['Top rated', 'best']);
+
+  return m('div.action', m('div.select_input',
+    formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
+      false, ctrl.onTVChannelChange)
+  ));
+}
+
 function renderGameRunningActions(ctrl) {
-  if (ctrl.data.player.spectator) return m('div.game_controls', [
-    button.shareLink(ctrl),
-    button.flipBoard(ctrl)
-  ]);
+  if (ctrl.data.player.spectator) {
+    let controls = [
+      button.shareLink(ctrl),
+      button.flipBoard(ctrl),
+      ctrl.data.tv ? tvChannelSelector(ctrl) : null
+    ];
+
+    return m('div.game_controls', controls);
+  }
 
   var d = ctrl.data;
   var answerButtons = compact([
@@ -198,6 +215,7 @@ function renderGameRunningActions(ctrl) {
       i18n('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : undefined
   ]);
+
   return [
     m('div.game_controls', [
       button.shareLink(ctrl),
@@ -226,7 +244,8 @@ function renderGameEndedActions(ctrl) {
   resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
-    button.flipBoard(ctrl)
+    button.flipBoard(ctrl),
+    ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
     button.shareLink(ctrl),
     button.flipBoard(ctrl),

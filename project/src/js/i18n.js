@@ -58,10 +58,11 @@ function loadFile(code) {
 }
 
 function loadMomentLocale(code) {
-  if (code === 'en') return;
-  var script = document.createElement('script');
-  script.src = 'moment/locale/' + code + '.js';
-  document.head.appendChild(script);
+  if (code !== 'en') {
+    var script = document.createElement('script');
+    script.src = 'moment/locale/' + code + '.js';
+    document.head.appendChild(script);
+  }
   window.moment.locale(code);
   return code;
 }

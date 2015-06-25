@@ -57,6 +57,8 @@
     flex 0 0 45px
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
+    > #game_actions
+      flex 0 0 40px
     > .tableHeader
       > .icon-game
         font-size 20px
@@ -255,6 +257,10 @@
     visibility hidden
   &:before
     font-size 22px
+  @media only screen and (max-height 400px) and (orientation landscape)
+    height 40px
+    &:before
+      font-size 18px
 
 #open_player_controls.answer_required,
 #open_chat.unread

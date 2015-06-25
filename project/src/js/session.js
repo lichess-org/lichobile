@@ -52,12 +52,13 @@ function logout() {
   });
 }
 
-function signup(username, password) {
+function signup(username, email, password) {
   return http.request('/signup', {
     method: 'POST',
     data: {
-      username: username,
-      password: password
+      username,
+      email,
+      password
     }
   }, true).then(function(data) {
     session = data;

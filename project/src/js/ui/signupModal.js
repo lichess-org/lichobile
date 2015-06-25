@@ -9,13 +9,11 @@ var isOpen = false;
 
 var submit = function(form) {
   var login = form[0].value.trim();
-  var pass = form[1].value.trim();
-  if (!login || !pass) return false;
+  var email = form[1].value.trim();
+  var pass = form[2].value.trim();
+  if (!login || !email || !pass) return false;
   window.cordova.plugins.Keyboard.close();
-  session.signup(
-    form[0].value.trim(),
-    form[1].value.trim()
-  ).then(function() {
+  session.signup(login, email, pass).then(function() {
     signupModal.close();
     require('./loginModal').close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
@@ -60,6 +58,13 @@ signupModal.view = function() {
         m('input#pseudo[type=text]', {
           placeholder: i18n('username'),
           autocomplete: 'off',
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          spellcheck: false,
+          required: true
+        }),
+        m('input#email[type=email]', {
+          placeholder: i18n('email'),
           autocapitalize: 'off',
           autocorrect: 'off',
           spellcheck: false,

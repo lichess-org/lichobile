@@ -39,7 +39,6 @@ module.exports = {
           if (!isUpdate) {
             var onChange = function(e) {
               settingsProp(e.target.value);
-              console.log(onChangeCallback);
               if (onChangeCallback) onChangeCallback(e.target.value);
               setTimeout(function() {
                 m.redraw();

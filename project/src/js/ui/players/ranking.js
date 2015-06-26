@@ -65,7 +65,7 @@ function renderRankingCategory(ctrl, key) {
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      {ranking[key].isOpenedOnMobile ?
+      {ranking[key].isOpenedOnMobile || h.isWideScreen() ?
       <ul className="rankingList">
         {ranking[key].map(p => renderRankingPlayer(p, key))}
       </ul> : null

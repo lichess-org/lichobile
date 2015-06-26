@@ -38,7 +38,7 @@ export default {
 
   view(ctrl) {
     return layout.free(
-      () => widgets.header(i18n('ranking')),
+      () => widgets.header(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl),
       widgets.empty,
       widgets.empty

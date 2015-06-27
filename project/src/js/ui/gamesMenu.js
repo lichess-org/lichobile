@@ -139,6 +139,7 @@ function renderChallenge(c, cDim, cardStyle) {
   const icon = utils.gameIcon(c.game.perf);
   const mode = c.game.rated ? i18n('rated') : i18n('casual');
   const timeAndMode = gameApi.time(c) + ', ' + mode;
+  const challenger = c.player.user ? c.player : c.opponent;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
@@ -146,7 +147,7 @@ function renderChallenge(c, cDim, cardStyle) {
       <div className="infos">
         <div className="icon-game" data-icon={icon}></div>
         <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.opponent, true))}</h2>
+          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(challenger, true))}</h2>
           <p className="variant">
             <span className="variantName">{i18n('toATypeGame', c.game.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>

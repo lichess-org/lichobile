@@ -94,7 +94,7 @@ gulp.task('watch-scripts', function() {
 // Watch Files For Changes
 gulp.task('launch-watch', function() {
   gulp.watch(paths.styles, ['styl']);
-  gulp.watch('src/index.html', ['html']);
+  gulp.watch(['src/index.html', 'env.json'], ['html']);
 });
 
 gulp.task('default', ['html', 'styl', 'scripts']);

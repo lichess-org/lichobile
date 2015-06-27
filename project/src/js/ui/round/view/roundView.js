@@ -51,8 +51,17 @@ export function renderMaterial(material) {
 }
 
 export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
-  const x = helper.viewportDim().vw;
-  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
+  const { vh, vw } = helper.viewportDim();
+  // ios 7.1 still doesn't support vh unit in calc
+  // see game.styl section '.board_wrapper' for corresponding calc() rules
+  const landscapeDim = (vh > 700 && vw < 1050) ? vh - 50 - vh * 0.12 : vh - 50;
+  const boardStyle = helper.isLandscape() ? {
+    width: landscapeDim + 'px',
+    height: landscapeDim + 'px'
+  } : {
+    width: vw + 'px',
+    height: vw + 'px'
+  };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
   const boardClass = [
     'board',

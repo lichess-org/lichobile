@@ -14,10 +14,10 @@
   @media only screen and (orientation: landscape)
     height calc(100vh - 50px)
     width calc(100vh - 50px)
-    flex 0 0 calc(100vh - 50px)
+    flex 0 0 auto
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 6em)
-    width calc(100vh - 50px - 6em)
+    height calc(100vh - 50px - 12vh)
+    width calc(100vh - 50px - 12vh)
     flex 0 0 auto
     margin auto 0
 
@@ -67,7 +67,7 @@
       &.correspondence
         font-size 14px
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 6em)
+    height calc(100vh - 50px - 12vh)
     margin auto 1rem
 
 .antagonist
@@ -263,7 +263,7 @@
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    width calc(100vw - (100vh - 50px - 6em) - 10px)
+    width calc(100vw - (100vh - 50px - 12vh) - 10px)
 
 .game_action
   display inline-block

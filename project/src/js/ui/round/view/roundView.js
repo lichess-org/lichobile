@@ -95,12 +95,14 @@ function renderHeader(ctrl) {
 function renderContent(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const replayTable = renderReplayTable(ctrl);
+  const player = renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player');
+  const opponent = renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent');
 
   if (helper.isPortrait())
     return [
-      renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent'),
+      opponent,
       renderBoard(ctrl, renderPromotion),
-      renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player'),
+      player,
       renderGameActionsBar(ctrl)
     ];
   else
@@ -111,9 +113,9 @@ function renderContent(ctrl) {
           {gameInfos(ctrl.data)}
         </header>
         <section className="playersTable">
-          {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
+          {opponent}
           {replayTable}
-          {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+          {player}
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
@@ -144,7 +146,7 @@ function renderCheckCount(ctrl, color) {
 
 function renderAntagonist(ctrl, player, material, position) {
   const user = player.user;
-  const playerName = utils.playerName(player);
+  const playerName = utils.playerName(player, helper.isLandscape());
   const {vh, vw} = helper.viewportDim();
   // must do this here because of the lack of `calc` support
   // 50 refers to either header height of game actions bar height
@@ -173,8 +175,8 @@ function renderAntagonist(ctrl, player, material, position) {
         playerName,
         player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
       ]),
-      m('div', [
-        user ? m('h3.rating', [
+      m('div.ratingAndMaterial', [
+        user && helper.isPortrait() ? m('h3.rating', [
           player.rating,
           player.provisional ? '?' : '',
           ratingDiff(player)

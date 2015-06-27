@@ -15,7 +15,7 @@
     height calc(100vh - 50px)
     width calc(100vh - 50px)
     flex 0 0 calc(100vh - 50px)
-  @media only screen and (orientation: landscape) and (min-height 700px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     height calc(100vh - 50px - 6em)
     width calc(100vh - 50px - 6em)
     flex 0 0 auto
@@ -24,19 +24,6 @@
 .board
   width 100%
   height 100%
-
-.antagonist
-  height calc((100vh - 100vw) / 2 - 50px)
-  padding 0 10px
-  display flex
-  justify-content space-between
-  align-items center
-  color #fff
-  overflow hidden
-  @media only screen and (orientation: landscape)
-    padding 0
-    flex 1 0 auto
-    height initial
 
 .table
   height 100%
@@ -47,14 +34,17 @@
   > header
     flex 0 0 auto
   > .playersTable
-    margin 0 0 1em
+    margin 1em 0
     flex 1 1 auto
     display flex
     flex-flow column nowrap
-    justify-content space-between
+    justify-content space-around
   > #game_actions
     position initial
     flex 0 0 45px
+  @media only screen and (min-height 800px) and (orientation: landscape)
+    > .playersTable
+      margin 2rem 0
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
     > #game_actions
@@ -76,10 +66,32 @@
       font-size 18px
       &.correspondence
         font-size 14px
-
-  @media only screen and (orientation: landscape) and (min-height 700px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     height calc(100vh - 50px - 6em)
     margin auto 1rem
+
+.antagonist
+  height calc((100vh - 100vw) / 2 - 50px)
+  padding 0 10px
+  display flex
+  justify-content space-between
+  align-items center
+  color #fff
+  overflow hidden
+  @media only screen and (orientation: landscape)
+    padding 0
+    flex 1 0 auto
+    height initial
+    &.player
+      > .antagonistInfos
+        align-self flex-end
+      > .clock
+        align-self flex-start
+    &.opponent
+      > .antagonistInfos
+        align-self flex-start
+      > .clock
+        align-self flex-end
 
 .replay
   flex 0 0 auto
@@ -88,14 +100,16 @@
   overflow hidden
   @media only screen and (orientation: landscape) and (max-height 450px)
     height 100px
-    padding 5px 10px
+    padding 5px 0
   @media only screen and (orientation: landscape) and (min-height 450px)
     height 150px
-    padding 5px 10px
+    padding 5px 0
   @media only screen and (orientation: landscape) and (min-height 550px)
     height 200px
   @media only screen and (orientation: landscape) and (min-height 700px)
     height 300px
+  @media only screen and (orientation: landscape) and (min-height 800px)
+    height 400px
 
 .gameMovesList
   height 100%
@@ -139,11 +153,18 @@
     display inline-block
     vertical-align top
     margin-right 10px
-    @media only screen and (min-width 960px) and (orientation landscape)
-      display block
-      margin 0.2rem 0 0.5rem
+  .ratingAndMaterial
+    height 18px
   &.active
     background-color lighten(bgdark, 8%)
+  &.offline
+    max-width 100%
+  @media only screen and (min-width 960px) and (orientation landscape)
+    .ratingAndMaterial
+      height 25px
+    .rating
+      display block
+      margin 0.2rem 0 0.5rem
 
 .antagonistUser
   overflow hidden
@@ -207,6 +228,12 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
+  @media only screen and (orientation landscape)
+    &:first-child
+      margin-left 0
+      div
+        margin-top 0
+        margin-left 0
   @media only screen and (min-width 960px) and (orientation landscape)
     div
       width 25px
@@ -235,7 +262,7 @@
   width 100%
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
-  @media only screen and (orientation: landscape) and (min-height 700px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     width calc(100vw - (100vh - 50px - 6em) - 10px)
 
 .game_action

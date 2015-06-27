@@ -14,10 +14,9 @@ export function renderAntagonist(ctrl, playerName, material, position) {
   return m('section.antagonist', {
     className: position, key, style
   }, [
-    m('div.infos', [
+    m('div.antagonistInfos offline', [
       m('h2', playerName),
-      m('div'),
-      renderMaterial(material)
+      m('div.ratingAndMaterial', renderMaterial(material))
     ])
   ]);
 }

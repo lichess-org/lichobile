@@ -6,9 +6,10 @@ import { renderMaterial } from '../round/view/roundView';
 
 export function renderAntagonist(ctrl, playerName, material, position) {
   const {vh, vw} = helper.viewportDim();
+  const headerHeight = vh > 480 ? 50 : 40;
   // must do this here because of the lack of `calc` support
   // 50 refers to either header height of game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - 50) + 'px' };
+  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - headerHeight) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
   return m('section.antagonist', {

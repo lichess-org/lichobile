@@ -1,5 +1,28 @@
 // targets iphone 4
-@media only screen and (device-width 320px) and (device-height 480px) and (orientation portrait)
+@media only screen and (max-height 480px) and (orientation portrait)
+  .main_header
+    height 40px
+    > nav
+      height 40px
+      > h1
+        font-size 0.9rem
+        line-height 40px
+
+  .main_header_button
+    padding 10px 0.9rem
+    font-size 18px
+    line-height 18px
+
+  .back_button
+    height 40px
+    font-size 0.9em
+    padding 0
+    > .title, .fa
+      height 40px
+
+  .content
+    height calc(100% - 40px)
+
   .antagonist
     font-size 12px
     .clock
@@ -12,6 +35,14 @@
       h2
         white-space normal
         overflow hidden
+
+  #game_actions
+    height 40px
+
+  .game_action
+    height 40px
+    &:before
+      font-size 18px
 
   #wrapper_games
     max-height 380px

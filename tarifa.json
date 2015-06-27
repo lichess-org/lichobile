@@ -53,12 +53,11 @@
         "extend": "default"
       },
       "stage": {
-        "extend": "stage",
-        "version_code": "200009"
+        "extend": "stage"
       },
       "prod": {
         "extend": "prod",
-        "version_code": "200000",
+        "version_code": "200001",
         "release": true,
         "sign": "store"
       }

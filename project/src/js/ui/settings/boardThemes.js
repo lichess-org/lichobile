@@ -1,9 +1,9 @@
-var utils = require('../../utils');
-var widgets = require('../widget/common');
-var formWidgets = require('../widget/form');
-var layout = require('../layout');
-var i18n = require('../../i18n');
-var settings = require('../../settings');
+import * as utils from '../../utils';
+import widgets from '../widget/common';
+import formWidgets from '../widget/form';
+import layout from '../layout';
+import i18n from '../../i18n';
+import settings from '../../settings';
 
 function renderBody() {
   return [

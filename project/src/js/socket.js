@@ -1,7 +1,7 @@
 import assign from 'lodash/object/assign';
 import StrongSocket from './StrongSocket';
-import utils from './utils';
-import xhr from './xhr';
+import * as utils from './utils';
+import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';

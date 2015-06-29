@@ -1,7 +1,7 @@
-var http = require('./http');
-var utils = require('./utils');
-var i18n = require('./i18n');
-var settings = require('./settings');
+import { request } from './http';
+import * as utils from './utils';
+import i18n from './i18n';
+import settings from './settings';
 
 var session = null;
 
@@ -9,7 +9,7 @@ function isConnected() {
   return !!session;
 }
 
-function get() {
+function getSession() {
   return session;
 }
 
@@ -31,7 +31,7 @@ function myTurnGames() {
 }
 
 function login(username, password) {
-  return http.request('/login', {
+  return request('/login', {
     method: 'POST',
     data: {
       username: username,
@@ -44,7 +44,7 @@ function login(username, password) {
 }
 
 function logout() {
-  return http.request('/logout', {}, true).then(function() {
+  return request('/logout', {}, true).then(function() {
     session = null;
   }, function(err) {
     utils.handleXhrError(err);
@@ -53,7 +53,7 @@ function logout() {
 }
 
 function signup(username, email, password) {
-  return http.request('/signup', {
+  return request('/signup', {
     method: 'POST',
     data: {
       username,
@@ -67,7 +67,7 @@ function signup(username, email, password) {
 }
 
 function rememberLogin() {
-  return http.request('/account/info', {
+  return request('/account/info', {
     background: true
   }).then(function(data) {
     session = data;
@@ -76,7 +76,7 @@ function rememberLogin() {
 }
 
 function refresh() {
-  return http.request('/account/info', {
+  return request('/account/info', {
     background: true
   }).then(function(data) {
     session = data;
@@ -92,15 +92,15 @@ function refresh() {
   });
 }
 
-module.exports = {
-  isConnected: isConnected,
-  login: login,
-  rememberLogin: rememberLogin,
-  logout: logout,
-  signup: signup,
-  refresh: refresh,
-  get: get,
-  getUserId: getUserId,
-  nowPlaying: nowPlaying,
-  myTurnGames: myTurnGames
+export default {
+  isConnected,
+  login,
+  rememberLogin,
+  logout,
+  signup,
+  refresh,
+  get: getSession,
+  getUserId,
+  nowPlaying,
+  myTurnGames
 };

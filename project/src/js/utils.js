@@ -1,20 +1,19 @@
-var utils = {};
-var i18n = require('./i18n');
+import i18n from './i18n';
 
-utils.autoredraw = function(action) {
+export function autoredraw(action) {
   m.startComputation();
   action();
   m.endComputation();
-};
+}
 
-utils.hasNetwork = function() {
+export function hasNetwork() {
   var t = window.navigator.connection.type;
   return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
-};
+}
 
-utils.handleXhrError = function(error) {
+export function handleXhrError(error) {
   var {response: data, status} = error;
-  if (!utils.hasNetwork()) {
+  if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
     let message;
@@ -35,11 +34,11 @@ utils.handleXhrError = function(error) {
 
     window.plugins.toast.show(i18n(message), 'short', 'center');
   }
-};
+}
 
-utils.lichessSri = Math.random().toString(36).substring(2);
+export const lichessSri = Math.random().toString(36).substring(2);
 
-utils.serializeQueryParameters = function(obj) {
+export function serializeQueryParameters(obj) {
   var str = '';
   for (var key in obj) {
     if (str !== '') {
@@ -48,27 +47,27 @@ utils.serializeQueryParameters = function(obj) {
     str += key + '=' + obj[key];
   }
   return str;
-};
+}
 
 function partialApply(fn, args) {
   return fn.bind.apply(fn, [null].concat(args));
 }
 
-utils.partialf = function() {
+export function partialf() {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
-};
+}
 
-utils.f = function() {
+export function f() {
   var args = arguments,
     fn = arguments[0];
   return function() {
     fn.apply(fn, Array.prototype.slice.call(args, 1));
   };
-};
+}
 
-utils.noop = function() {};
+export function noop() {}
 
-utils.playerName = function(player, withRating) {
+export function playerName(player, withRating) {
   if (player.username || player.user) {
     var name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
@@ -80,22 +79,22 @@ utils.playerName = function(player, withRating) {
     return name;
   }
   if (player.ai)
-    return utils.aiName(player.ai);
+    return aiName(player.ai);
   return 'Anonymous';
-};
+}
 
-utils.aiName = function(level) {
+export function aiName(level) {
   return i18n('aiNameLevelAiLevel', 'Stockfish', level);
-};
+}
 
-utils.backHistory = function() {
+export function backHistory() {
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();
   else
     window.history.go(-1);
-};
+}
 
-var perfIconsMap = {
+const perfIconsMap = {
   bullet: 'T',
   blitz: ')',
   classical: '+',
@@ -110,37 +109,35 @@ var perfIconsMap = {
   fromPosition: '*'
 };
 
-utils.gameIcon = function(perf) {
+export function gameIcon(perf) {
   return perfIconsMap[perf] || '8';
-};
+}
 
-utils.secondsToMinutes = function(sec) {
+export function secondsToMinutes(sec) {
   return sec === 0 ? sec : sec / 60;
-};
+}
 
-utils.tupleOf = function(x) {
+export function tupleOf(x) {
   return [x.toString(), x.toString()];
-};
+}
 
-utils.oppositeColor = function(color) {
+export function oppositeColor(color) {
   return color === 'white' ? 'black' : 'white';
-};
+}
 
-utils.caseInsensitiveSort = function(a, b) {
+export function caseInsensitiveSort(a, b) {
   var alow = a.toLowerCase();
   var blow = b.toLowerCase();
 
   return alow > blow ? 1 : (alow < blow ? -1 : 0);
-};
+}
 
-utils.userFullNameToId = function(fullName) {
+export function userFullNameToId(fullName) {
   var split = fullName.split(' ');
   var id = split.length === 1 ? split[0] : split[1];
   return id.toLowerCase();
-};
+}
 
-utils.capitalize = function(string) {
+export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-module.exports = utils;
+}

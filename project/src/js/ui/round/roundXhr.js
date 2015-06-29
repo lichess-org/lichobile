@@ -1,11 +1,7 @@
-var http = require('../../http');
+import { request } from '../../http';
 
-function reload(ctrl) {
-  return http.request(ctrl.data.url.round).then(function(data) {
+export function reload(ctrl) {
+  return request(ctrl.data.url.round).then(function(data) {
     return data;
   });
 }
-
-module.exports = {
-  reload: reload
-};

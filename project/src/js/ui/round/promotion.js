@@ -1,9 +1,9 @@
-var chessground = require('chessground');
-var partial = chessground.util.partial;
-var ground = require('./ground');
-var xhr = require('./roundXhr');
-var utils = require('../../utils');
-var helper = require('../helper');
+import chessground from 'chessground';
+import ground from './ground';
+import * as xhr from './roundXhr';
+import helper from '../helper';
+
+const partial = chessground.util.partial;
 
 var promoting = false;
 
@@ -34,7 +34,7 @@ function cancel(ctrl) {
   promoting = false;
 }
 
-module.exports = {
+export default {
 
   start: start,
 
@@ -47,7 +47,7 @@ module.exports = {
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {
-        config: helper.ontouch(utils.f(finish, ctrl, role))
+        config: helper.ontouch(finish.bind(undefined, ctrl, role))
       });
     }))]);
   }

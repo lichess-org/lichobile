@@ -1,25 +1,29 @@
 /* application entry point */
 
 // require mithril globally for convenience
-window.m = require('mithril');
+import m from 'mithril';
+window.m = m;
 // for moment a global object makes loading locales easier
-window.moment = require('moment');
+import moment from 'moment';
+window.moment = moment;
 
-var utils = require('./utils');
-var session = require('./session');
-var i18n = require('./i18n');
-var xhr = require('./xhr');
-var backbutton = require('./backbutton');
-var storage = require('./storage');
-var routes = require('./routes');
+import * as utils from './utils';
+import session from './session';
+import i18n, { loadPreferredLanguage } from './i18n';
+import { status as xhrStatus } from './xhr';
+import backbutton from './backbutton';
+import storage from './storage';
 import socket from './socket';
+
+var routes = require('./routes');
 
 var triedToLogin = false;
 
-var refreshInterval = 60000 * 2; // 2 minutes refresh polling
+const refreshInterval = 60000 * 2; // 2 minutes refresh polling
 var refreshIntervalID;
 
 function main() {
+
   routes.init();
 
   // open games from external links with url scheme (lichess://gameId)
@@ -67,7 +71,7 @@ function main() {
   // leave time to the screen to render fully
   setTimeout(function() {
     window.navigator.splashscreen.hide();
-    xhr.status();
+    xhrStatus();
   }, 500);
 }
 
@@ -124,6 +128,6 @@ window.onerror = handleError;
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  () => i18n.loadPreferredLanguage().then(main),
+  () => loadPreferredLanguage().then(main),
   false
 );

@@ -7,7 +7,7 @@ import popupWidget from '../../widget/popup';
 import formWidgets from '../../widget/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 import helper from '../../helper';
 import i18n from '../../../i18n';
 import button from './button';

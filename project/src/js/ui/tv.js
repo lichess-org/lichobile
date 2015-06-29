@@ -1,8 +1,8 @@
 import widgets from './widget/common';
 import layout from './layout';
 import helper from './helper';
-import utils from '../utils';
-import xhr from '../xhr';
+import * as utils from '../utils';
+import * as xhr from '../xhr';
 import settings from '../settings';
 import roundCtrl from './round/roundCtrl';
 import roundView from './round/view/roundView';

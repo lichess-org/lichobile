@@ -2,7 +2,7 @@ import socket from '../../socket';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/function/throttle';
 import session from '../../session';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 
 export default function controller() {

@@ -1,6 +1,6 @@
 /** @jsx m */
 import socket from '../../socket';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';

@@ -1,11 +1,11 @@
-var gameApi = require('../../../lichess/game');
-var gameStatus = require('../../../lichess/status');
-var helper = require('../../helper');
-var throttle = require('lodash/function/throttle');
-var i18n = require('../../../i18n');
-var socket = require('../../../socket');
+import gameApi from '../../../lichess/game';
+import gameStatus from '../../../lichess/status';
+import helper from '../../helper';
+import throttle from 'lodash/function/throttle';
+import i18n from '../../../i18n';
+import socket from '../../../socket';
 
-module.exports = {
+export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button', {
       className: socketMsg,
@@ -145,5 +145,3 @@ module.exports = {
     });
   }
 };
-
-

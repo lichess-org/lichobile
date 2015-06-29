@@ -1,6 +1,6 @@
 /** @jsx m */
 import chessground from 'chessground';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import layout from '../layout';
 import widgets from '../widget/common';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../widget/offlineRound';

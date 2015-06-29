@@ -1,4 +1,4 @@
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { util } from 'chessground';

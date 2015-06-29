@@ -1,6 +1,6 @@
 /** @jsx m */
 import menu from '../menu';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';

@@ -4,7 +4,7 @@ import popupWidget from './widget/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import friendsApi from '../lichess/friends';
-import utils from '../utils';
+import * as utils from '../utils';
 
 const friendsPopup = {};
 

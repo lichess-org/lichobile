@@ -5,7 +5,7 @@ import gameApi from '../../lichess/game';
 import gamesMenu from '../gamesMenu';
 import loginModal from '../loginModal';
 import layout from '../layout';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import widgets from '../widget/common';
 import popupWidget from '../widget/popup';

@@ -1,5 +1,5 @@
 /** @jsx m */
-import utils from '../../utils';
+import * as utils from '../../utils';
 import h from '../helper';
 import widgets from '../widget/common';
 import layout from '../layout';

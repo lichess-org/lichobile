@@ -1,16 +1,17 @@
 /** @jsx m */
-var utils = require('../utils');
-var helper = require('./helper');
-var settings = require('../settings');
-var iScroll = require('iscroll');
-var session = require('../session');
-var i18n = require('../i18n');
-var moment = window.moment;
-var backbutton = require('../backbutton');
-var xhr = require('../xhr');
-var newGameForm = require('./newGameForm');
-var gameApi = require('../lichess/game');
-var challengesApi = require('../lichess/challenges');
+import * as utils from '../utils';
+import helper from './helper';
+import settings from '../settings';
+import iScroll from 'iscroll';
+import session from '../session';
+import i18n from '../i18n';
+import backbutton from '../backbutton';
+import * as xhr from '../xhr';
+import newGameForm from './newGameForm';
+import gameApi from '../lichess/game';
+import challengesApi from '../lichess/challenges';
+
+const moment = window.moment;
 
 var scroller = null;
 

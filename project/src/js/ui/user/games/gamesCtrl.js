@@ -2,7 +2,7 @@ import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
 import {throttle} from 'lodash/function';
 import socket from '../../../socket';
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 
 var scroller;
 

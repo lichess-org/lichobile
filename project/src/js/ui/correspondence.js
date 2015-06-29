@@ -1,8 +1,8 @@
-import utils from '../utils';
+import * as utils from '../utils';
 import helper from './helper';
 import layout from './layout';
 import widgets from './widget/common';
-import xhr from '../xhr';
+import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
 import session from '../session';

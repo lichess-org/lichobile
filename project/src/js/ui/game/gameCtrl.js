@@ -1,7 +1,7 @@
 import session from '../../session';
 import helper from '../helper';
-import utils from '../../utils';
-import xhr from '../../xhr';
+import * as utils from '../../utils';
+import * as xhr from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
 import gameStatus from '../../lichess/status';

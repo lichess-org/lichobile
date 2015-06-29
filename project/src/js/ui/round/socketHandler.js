@@ -1,9 +1,9 @@
 import gameApi from '../../lichess/game';
 import ground from './ground';
-import xhr from './roundXhr';
+import * as xhr from './roundXhr';
 import sound from '../../sound';
 import session from '../../session';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import socket from '../../socket';
 
 export default function(ctrl, onFeatured) {

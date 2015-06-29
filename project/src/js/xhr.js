@@ -1,13 +1,14 @@
-var utils = require('./utils');
-var http = require('./http');
-var settings = require('./settings');
-var i18n = require('./i18n');
-var moment = window.moment;
-var session = require('./session');
+import * as utils from './utils';
+import { request, apiVersion } from './http';
+import settings from './settings';
+import i18n from './i18n';
+import session from './session';
 
-function newAiGame() {
+const moment = window.moment;
+
+export function newAiGame() {
   var config = settings.game.ai;
-  return http.request('/setup/ai', {
+  return request('/setup/ai', {
     method: 'POST',
     data: {
       variant: config.variant(),
@@ -21,9 +22,9 @@ function newAiGame() {
   }, true);
 }
 
-function seekGame() {
+export function seekGame() {
   var config = settings.game.human;
-  return http.request('/setup/hook/' + utils.lichessSri, {
+  return request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
     data: {
       variant: config.variant(),
@@ -38,9 +39,9 @@ function seekGame() {
   }, true);
 }
 
-function inviteFriend(userId) {
+export function inviteFriend(userId) {
   var config = settings.game.challenge;
-  return http.request('/setup/friend', {
+  return request('/setup/friend', {
     method: 'POST',
     data: {
       user: userId,
@@ -55,58 +56,58 @@ function inviteFriend(userId) {
   }, true);
 }
 
-function cancelChallenge(url) {
-  return http.request(url + '/cancel');
+export function cancelChallenge(url) {
+  return request(url + '/cancel');
 }
 
-function joinChallenge(id) {
-  return http.request('/' + id + '/join', { method: 'POST' }, true);
+export function joinChallenge(id) {
+  return request('/' + id + '/join', { method: 'POST' }, true);
 }
 
-function getChallenge(id) {
-  return http.request('/' + id, { background: true });
+export function getChallenge(id) {
+  return request('/' + id, { background: true });
 }
 
-function declineChallenge(id) {
-  return http.request('/setup/decline?gameId=' + id, {
+export function declineChallenge(id) {
+  return request('/setup/decline?gameId=' + id, {
     method: 'POST',
     deserialize: v => v
   }, true);
 }
 
-function lobby(feedback) {
-  return http.request('/', null, feedback);
+export function lobby(feedback) {
+  return request('/', null, feedback);
 }
 
-function seeks(feedback) {
-  return http.request('/lobby/seeks', null, feedback);
+export function seeks(feedback) {
+  return request('/lobby/seeks', null, feedback);
 }
 
-function game(id, color) {
+export function game(id, color) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return http.request(url, { background: true });
+  return request(url, { background: true });
 }
 
-function toggleGameBookmark(id) {
-  return http.request('/bookmark/' + id, {
+export function toggleGameBookmark(id) {
+  return request('/bookmark/' + id, {
     method: 'POST',
     deserialize: v => v
   });
 }
 
-function featured(channel, flip) {
-  return http.request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
+export function featured(channel, flip) {
+  return request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
 }
 
-function status() {
-  return http.request('/api/status', {
+export function status() {
+  return request('/api/status', {
     background: true
   }).then(function(data) {
-    if (data.api.current !== http.apiVersion) {
+    if (data.api.current !== apiVersion) {
       for (var i = 0, len = data.api.olds.length; i < len; i++) {
         var o = data.api.olds[i];
-        if (o.version === http.apiVersion) {
+        if (o.version === apiVersion) {
           var now = new Date(),
             unsupportedDate = new Date(o.unsupportedAt),
             deprecatedDate = new Date(o.deprecatedAt);
@@ -125,19 +126,3 @@ function status() {
     }
   });
 }
-
-module.exports = {
-  newAiGame,
-  seekGame,
-  inviteFriend,
-  getChallenge,
-  joinChallenge,
-  declineChallenge,
-  cancelChallenge,
-  lobby,
-  seeks,
-  game,
-  featured,
-  status,
-  toggleGameBookmark
-};

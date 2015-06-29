@@ -1,6 +1,6 @@
 /** @jsx m */
 import helper from '../helper';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import i18n from '../../i18n';
 import { renderMaterial } from '../round/view/roundView';
 

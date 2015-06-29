@@ -1,4 +1,4 @@
-var i18n = require('../../i18n');
+import i18n from '../../i18n';
 
 function renderOption(label, value, storedValue) {
   return m('option', {

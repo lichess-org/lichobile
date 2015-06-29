@@ -1,8 +1,8 @@
-var Zanimo = require('zanimo');
-var chessground = require('chessground');
-var settings = require('../../settings');
-var utils = require('../../utils');
-var ButtonHandler = require('./button');
+import Zanimo from 'zanimo';
+import chessground from 'chessground';
+import settings from '../../settings';
+import * as utils from '../../utils';
+import ButtonHandler from './button';
 
 var helper = {};
 
@@ -173,4 +173,4 @@ helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
 
-module.exports = helper;
+export default helper;

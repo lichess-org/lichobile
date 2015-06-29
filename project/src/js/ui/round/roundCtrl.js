@@ -1,6 +1,6 @@
 import { throttle } from 'lodash/function';
 import data from './data';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import sound from '../../sound';
 import gameApi from '../../lichess/game';
 import ground from './ground';
@@ -10,7 +10,6 @@ import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
 import gameStatus from '../../lichess/status';
 import correspondenceClockCtrl from './correspondenceClock/correspondenceCtrl';
-import menu from '../menu';
 import session from '../../session';
 import socket from '../../socket';
 import socketHandler from './socketHandler';
@@ -18,7 +17,7 @@ import signals from '../../signals';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
-import xhr from './roundXhr';
+import * as xhr from './roundXhr';
 
 export default function controller(cfg, onFeatured, onTVChannelChange) {
 
@@ -64,7 +63,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
   };
 
   this.showActions = function() {
-    menu.close();
     backbutton.stack.push(this.hideActions);
     this.vm.showingActions = true;
   }.bind(this);

@@ -1,6 +1,5 @@
 /** @jsx m */
 import chessground from 'chessground';
-import utils from '../../utils';
 import settings from '../../settings';
 import layout from '../layout';
 import widgets from '../widget/common';
@@ -60,7 +59,7 @@ export default function view(ctrl) {
   }
 
   return layout.board(
-    utils.partialf(widgets.header, i18n('playOfflineComputer')),
+    widgets.header.bind(undefined, i18n('playOfflineComputer')),
     content,
     actions.view.bind(undefined, ctrl.actions)
   );

@@ -1,7 +1,7 @@
-var gameStatus = require('./status');
-var utils = require('../utils');
-var settings = require('../settings');
-var i18n = require('../i18n');
+import gameStatus from './status';
+import * as utils from '../utils';
+import settings from '../settings';
+import i18n from '../i18n';
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
@@ -124,26 +124,26 @@ function isSupportedVariant(data) {
   return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1;
 }
 
-module.exports = {
-  isPlayerPlaying: isPlayerPlaying,
-  isPlayerTurn: isPlayerTurn,
+export default {
+  isPlayerPlaying,
+  isPlayerTurn,
   isOpponentTurn,
-  playable: playable,
-  abortable: abortable,
-  takebackable: takebackable,
-  drawable: drawable,
-  resignable: resignable,
-  forceResignable: forceResignable,
-  moretimeable: moretimeable,
-  mandatory: mandatory,
-  replayable: replayable,
-  getPlayer: getPlayer,
-  parsePossibleMoves: parsePossibleMoves,
-  nbMoves: nbMoves,
-  setOnGame: setOnGame,
-  setIsGone: setIsGone,
-  result: result,
-  time: time,
-  publicUrl: publicUrl,
+  playable,
+  abortable,
+  takebackable,
+  drawable,
+  resignable,
+  forceResignable,
+  moretimeable,
+  mandatory,
+  replayable,
+  getPlayer,
+  parsePossibleMoves,
+  nbMoves,
+  setOnGame,
+  setIsGone,
+  result,
+  time,
+  publicUrl,
   isSupportedVariant
 };

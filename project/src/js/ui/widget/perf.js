@@ -1,10 +1,10 @@
-var utils = require('../../utils');
-var provisionalDeviation = require('../../lichess/perfs').provisionalDeviation;
-var helper = require('../helper');
+import { gameIcon } from '../../utils';
+import { provisionalDeviation } from '../../lichess/perfs';
+import helper from '../helper';
 
 module.exports = function(key, name, perf) {
   return m('div.perf', {
-    'data-icon': utils.gameIcon(key)
+    'data-icon': gameIcon(key)
   }, [
     m('span.name', name),
     m('div.rating', [

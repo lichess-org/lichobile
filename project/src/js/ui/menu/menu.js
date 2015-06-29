@@ -1,4 +1,4 @@
-import utils from '../../utils';
+import * as utils from '../../utils';
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
 import helper from '../helper';

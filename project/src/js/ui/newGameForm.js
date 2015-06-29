@@ -1,12 +1,12 @@
-var helper = require('./helper');
-var utils = require('../utils');
-var xhr = require('../xhr');
-var settings = require('../settings');
-var session = require('../session');
-var formWidgets = require('./widget/form');
-var popupWidget = require('./widget/popup');
-var i18n = require('../i18n');
-var backbutton = require('../backbutton');
+import helper from './helper';
+import * as utils from '../utils';
+import * as xhr from '../xhr';
+import settings from '../settings';
+import session from '../session';
+import formWidgets from './widget/form';
+import popupWidget from './widget/popup';
+import i18n from '../i18n';
+import backbutton from '../backbutton';
 
 var newGameForm = {};
 newGameForm.isOpen = false;

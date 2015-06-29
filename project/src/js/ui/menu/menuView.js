@@ -6,7 +6,7 @@ import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';

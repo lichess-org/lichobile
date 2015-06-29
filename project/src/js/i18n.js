@@ -2,7 +2,7 @@ import settings from './settings';
 
 var messages = [];
 
-var untranslated = {
+const untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   resourceNotFoundError: 'Resource not found',
@@ -27,7 +27,50 @@ var untranslated = {
   language: 'Language'
 };
 
-var defaultCode = 'en';
+const defaultCode = 'en';
+
+export default function i18n(key) {
+  var str = messages[key] || untranslated[key] || key;
+  Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
+    str = str.replace('%s', arg);
+  });
+  return str;
+}
+
+export function loadPreferredLanguage() {
+  if (settings.general.lang())
+    return loadFromSettings();
+
+  var deferred = m.deferred();
+  window.navigator.globalization.getPreferredLanguage(
+    language => deferred.resolve(language.value.split('-')[0]),
+    () => deferred.resolve(defaultCode)
+  );
+  return deferred.promise
+    .then(code => {
+      settings.general.lang(code);
+      return code;
+    })
+    .then(loadFile)
+    .then(loadMomentLocale);
+}
+
+export function getAvailableLanguages() {
+  return m.request({
+    url: 'i18n/refs.json',
+    method: 'GET'
+  }).then(data => { return data; }, error => {
+    // same workaround for iOS as above
+    if (error && error[0][0] === 'af')
+      return error;
+    else
+      throw { error: 'Cannot load languages' };
+  });
+}
+
+export function loadFromSettings() {
+  return loadFile(settings.general.lang()).then(loadMomentLocale);
+}
 
 function loadFile(code) {
   return m.request({
@@ -65,49 +108,3 @@ function loadMomentLocale(code) {
   window.moment.locale(code);
   return code;
 }
-
-function loadPreferredLanguage() {
-  if (settings.general.lang())
-    return loadFromSettings();
-
-  var deferred = m.deferred();
-  window.navigator.globalization.getPreferredLanguage(
-    language => deferred.resolve(language.value.split('-')[0]),
-    () => deferred.resolve(defaultCode)
-  );
-  return deferred.promise
-    .then(code => {
-      settings.general.lang(code);
-      return code;
-    })
-    .then(loadFile)
-    .then(loadMomentLocale);
-}
-
-function getAvailableLanguages() {
-  return m.request({
-    url: 'i18n/refs.json',
-    method: 'GET'
-  }).then(data => { return data; }, error => {
-    // same workaround for iOS as above
-    if (error && error[0][0] === 'af')
-      return error;
-    else
-      throw { error: 'Cannot load languages' };
-  });
-}
-
-function loadFromSettings() {
-  return loadFile(settings.general.lang()).then(loadMomentLocale);
-}
-
-module.exports = function(key) {
-  var str = messages[key] || untranslated[key] || key;
-  Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
-    str = str.replace('%s', arg);
-  });
-  return str;
-};
-module.exports.loadPreferredLanguage = loadPreferredLanguage;
-module.exports.getAvailableLanguages = getAvailableLanguages;
-module.exports.loadFromSettings = loadFromSettings;

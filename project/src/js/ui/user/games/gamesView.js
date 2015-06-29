@@ -1,13 +1,14 @@
 /** @jsx m */
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 import helper from '../../helper';
 import widgets from '../../widget/common';
 import layout from '../../layout';
 import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
-import xhr from '../../../xhr';
+import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
+
 const moment = window.moment;
 
 export default function view(ctrl) {
@@ -54,7 +55,7 @@ function renderAllGames(ctrl) {
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontouchY(() => {
-    xhr.toggleGameBookmark(id).then(() => {
+    toggleGameBookmark(id).then(() => {
       ctrl.toggleBookmark(index);
     }, err => utils.handleXhrError(err));
   }, longAction);

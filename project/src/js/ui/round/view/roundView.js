@@ -2,7 +2,7 @@
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
-import widgets from '../../widget/common';
+import { menuButton, loader, headerBtns } from '../../widget/common';
 import popupWidget from '../../widget/popup';
 import formWidgets from '../../widget/form';
 import { view as renderClock } from '../clock/clockView';
@@ -91,12 +91,12 @@ function renderHeader(ctrl) {
     m('nav', {
       className: ctrl.vm.connectedWS ? '' : 'reconnecting'
     }, [
-      widgets.menuButton(),
+      menuButton(),
       ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
         i18n('reconnecting'),
-        widgets.loader
+        loader
       ]),
-      widgets.headerBtns()
+      headerBtns()
     ])
   ];
 }

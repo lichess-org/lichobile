@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import widgets from '../widget/common';
+import { header as headerWidget, backButton, empty } from '../widget/common';
 import layout from '../layout';
 import formWidgets from '../widget/form';
 import i18n from '../../i18n';
@@ -24,9 +24,9 @@ module.exports = {
   controller: function() {},
 
   view: function() {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('pieces'))
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('pieces'))
     );
-    return layout.free(header, renderBody, widgets.empty, widgets.empty);
+    return layout.free(header, renderBody, empty, empty);
   }
 };

@@ -2,7 +2,7 @@
 import chessground from 'chessground';
 import * as utils from '../../utils';
 import layout from '../layout';
-import widgets from '../widget/common';
+import { header } from '../widget/common';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../widget/offlineRound';
 import { view as renderPromotion } from './promotion';
 import helper from '../helper';
@@ -49,7 +49,7 @@ export default function view(ctrl) {
   }
 
   return layout.board(
-    utils.partialf(widgets.header, i18n('playOnTheBoardOffline')),
+    utils.partialf(header, i18n('playOnTheBoardOffline')),
     content,
     actions.view.bind(undefined, ctrl.actions),
     ctrl.data.player.color

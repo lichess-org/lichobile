@@ -1,7 +1,7 @@
 /** @jsx m */
 import * as utils from '../../../utils';
 import helper from '../../helper';
-import widgets from '../../widget/common';
+import { header as headerWidget, backButton, empty } from '../../widget/common';
 import layout from '../../layout';
 import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
@@ -12,8 +12,8 @@ import session from '../../../session';
 const moment = window.moment;
 
 export default function view(ctrl) {
-  const header = utils.partialf(widgets.header, null,
-    widgets.backButton(ctrl.user().username + ' games')
+  const header = utils.partialf(headerWidget, null,
+    backButton(ctrl.user().username + ' games')
   );
 
   function renderBody() {
@@ -36,7 +36,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, renderBody, widgets.empty, widgets.empty);
+  return layout.free(header, renderBody, empty, empty);
 }
 
 function renderAllGames(ctrl) {

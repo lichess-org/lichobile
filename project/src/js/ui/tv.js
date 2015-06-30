@@ -1,4 +1,4 @@
-import widgets from './widget/common';
+import { connectingHeader, viewOnlyBoardContent } from './widget/common';
 import layout from './layout';
 import helper from './helper';
 import * as utils from '../utils';
@@ -51,11 +51,8 @@ export default {
   view: function(ctrl) {
     if (ctrl.getRound()) return roundView(ctrl.getRound());
 
-    var header, board;
+    const header = connectingHeader.bind(undefined, 'Lichess TV');
 
-    header = utils.partialf(widgets.connectingHeader, 'Lichess TV');
-    board = widgets.viewOnlyBoardContent;
-
-    return layout.board(header, board);
+    return layout.board(header, viewOnlyBoardContent);
   }
 };

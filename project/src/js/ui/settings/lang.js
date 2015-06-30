@@ -1,6 +1,6 @@
 /** @jsx m */
 import * as utils from '../../utils';
-import widgets from '../widget/common';
+import { header as headerWidget, backButton, empty } from '../widget/common';
 import formWidgets from '../widget/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
@@ -18,8 +18,8 @@ export default {
   },
 
   view: function(ctrl) {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('language'))
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('language'))
     );
 
     function renderLang(l) {
@@ -44,6 +44,6 @@ export default {
       );
     }
 
-    return layout.free(header, renderBody, widgets.empty, widgets.empty);
+    return layout.free(header, renderBody, empty, empty);
   }
 };

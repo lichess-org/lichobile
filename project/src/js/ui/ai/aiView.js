@@ -2,7 +2,7 @@
 import chessground from 'chessground';
 import settings from '../../settings';
 import layout from '../layout';
-import widgets from '../widget/common';
+import { header } from '../widget/common';
 import formWidgets from '../widget/form';
 import {
   renderAntagonist,
@@ -59,7 +59,7 @@ export default function view(ctrl) {
   }
 
   return layout.board(
-    widgets.header.bind(undefined, i18n('playOfflineComputer')),
+    header.bind(undefined, i18n('playOfflineComputer')),
     content,
     actions.view.bind(undefined, ctrl.actions)
   );

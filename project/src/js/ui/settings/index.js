@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import helper from '../helper';
-import widgets from '../widget/common';
+import { header as headerWidget, backButton, empty } from '../widget/common';
 import layout from '../layout';
 import formWidgets from '../widget/form';
 import settings from '../../settings';
@@ -35,9 +35,9 @@ module.exports = {
   },
 
   view: function() {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('settings'))
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('settings'))
     );
-    return layout.free(header, renderBody, widgets.empty, widgets.empty);
+    return layout.free(header, renderBody, empty, empty);
   }
 };

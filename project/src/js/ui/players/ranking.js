@@ -4,7 +4,7 @@ import * as utils from '../../utils';
 import h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
-import widgets from '../widget/common';
+import { userStatus, header, empty } from '../widget/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
 
@@ -38,10 +38,10 @@ export default {
 
   view(ctrl) {
     return layout.free(
-      () => widgets.header(i18n('leaderboard')),
+      () => header(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl),
-      widgets.empty,
-      widgets.empty
+      empty,
+      empty
     );
   }
 };
@@ -77,7 +77,7 @@ function renderRankingCategory(ctrl, key) {
 function renderRankingPlayer(user, key) {
   return (
     <li className="rankingPlayer" config={h.ontouchY(() => m.route('/@/' + user.id))}>
-      {widgets.userStatus(user)}
+      {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}
       </span>

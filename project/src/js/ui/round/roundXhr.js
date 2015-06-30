@@ -5,3 +5,9 @@ export function reload(ctrl) {
     return data;
   });
 }
+
+export function getPGN(gameId) {
+  return request(`/game/export/${gameId}.pgn`, {
+    deserialize: text => text
+  }, true);
+}

@@ -29,7 +29,10 @@
 
   // social sharing
   window.plugins.socialsharing = {
-    share: noop
+    share: function(message, subject, image, link) {
+      if (message) console.log('Text share widget opened with text: ', message);
+      if (link) console.log('Link share widget opened with link: ', link);
+    }
   };
 
   // toast

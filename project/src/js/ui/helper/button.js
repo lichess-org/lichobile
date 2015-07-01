@@ -46,7 +46,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
   }
 
   function onTouchEnd(e) {
-    if (!e.cancelable) e.preventDefault();
+    if (e.cancelable) e.preventDefault();
     if (active) {
       clearTimeout(holdTimeoutID);
       el.classList.add(activeClass);

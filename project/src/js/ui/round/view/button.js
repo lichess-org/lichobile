@@ -43,6 +43,22 @@ export default {
       </button>
     );
   },
+  submitMove: function(ctrl) {
+    return (
+      <div>
+        <button className="binary_choice" data-icon="E"
+          config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
+        >
+          Submit move
+        </button>
+        <button className="binary_choice" data-icon="L"
+          config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
+        >
+          {i18n('cancel')}
+        </button>
+      </div>
+    );
+  },
   forceResign: function(ctrl) {
     return gameApi.forceResignable(ctrl.data) ?
       m('div.force_resign_zone.clearfix', [

@@ -1,7 +1,6 @@
 import * as utils from '../../utils';
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 
 var menu = {};
 
@@ -38,7 +37,6 @@ menu.toggle = function() {
 };
 
 menu.open = function() {
-  helper.analyticsTrackView('Main Menu');
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
 };

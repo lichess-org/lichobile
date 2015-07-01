@@ -23,7 +23,8 @@ export default function view(ctrl) {
   function overlay() {
     return [
       ctrl.chat ? renderChat(ctrl.chat) : null,
-      renderGamePopup(ctrl)
+      renderGamePopup(ctrl),
+      renderSubmitMovePopup(ctrl)
     ];
   }
 
@@ -151,6 +152,19 @@ function ratingDiff(player) {
 function renderCheckCount(ctrl, color) {
   var player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
   if (typeof player.checks !== 'undefined') return m('div.checkCount', player.checks);
+}
+
+function renderSubmitMovePopup(ctrl) {
+  if (!ctrl.vm.moveToSubmit)
+    return <div className="overlay popup overlay_fade submitMovePopup" />;
+
+  return (
+    <div className="overlay popup overlay_fade open submitMovePopup">
+      <div className="overlay_popup">
+        {button.submitMove(ctrl)}
+      </div>
+    </div>
+  );
 }
 
 function renderAntagonist(ctrl, player, material, position) {

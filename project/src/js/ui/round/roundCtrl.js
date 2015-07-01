@@ -44,7 +44,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
     flip: false,
     showingActions: false,
     replayHash: '',
-    ply: this.lastPly()
+    ply: this.lastPly(),
+    moveToSubmit: null
   };
 
   socket.createGame(
@@ -150,8 +151,25 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
     if (prom) move.promotion = prom;
     if (this.clock && socket.getAverageLag() !== undefined)
       move.lag = Math.round(socket.getAverageLag());
-    socket.send('move', move, { ackable: true });
+
+    if (this.data.pref.submitMove) {
+      this.vm.moveToSubmit = move;
+      m.redraw();
+    } else socket.send('move', move, { ackable: true });
   };
+
+  this.submitMove = function(v) {
+    if (v) {
+      if (this.vm.moveToSubmit)
+        socket.send('move', this.vm.moveToSubmit, {
+          ackable: true
+        });
+        this.vm.moveToSubmit = null;
+    } else {
+      this.vm.moveToSubmit = null;
+      this.jump(this.vm.ply);
+    }
+  }.bind(this);
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);

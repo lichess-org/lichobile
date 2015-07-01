@@ -388,3 +388,24 @@
   background: #eee;
   font-family: Cousine;
   border: 1px solid #ccc;
+
+.submitMovePopup
+  background-color rgba(0,0,0,0.2)
+  > .overlay_popup
+    top calc(100vh - 45px - ((100vh - 100vw) / 2) / 2)
+    @media only screen and (orientation: landscape)
+      top calc(100vh / 2)
+      left initial
+      right 1rem
+      width calc(100vw - 100vh + 50px - 5vw)
+    @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+      left initial
+      right 1rem
+      width calc(100vw - 100vh + 50px + 12vh - 5vw)
+    border-radius 5px
+    button
+      &:first-child
+        border-radius 5px 0 0 5px
+      &:last-child
+        border-radius 0 5px 5px 0
+

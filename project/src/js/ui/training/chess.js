@@ -24,10 +24,9 @@ function lastMove(c) {
   return parseMove(hist[hist.length - 1]);
 }
 
-module.exports = {
+export default {
   make: make,
   move: move,
   parseMove: parseMove,
   lastMove: lastMove
 };
-

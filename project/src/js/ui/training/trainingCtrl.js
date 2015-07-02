@@ -7,6 +7,7 @@ import puzzle from './puzzle';
 import { getCurrent } from './database';
 import sound from '../../sound';
 import actions from './actions';
+import settings from '../../settings';
 
 export default function ctrl() {
 
@@ -123,6 +124,7 @@ export default function ctrl() {
       movable: {
         free: false,
         color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
+        showDests: settings.general.pieceDestinations(),
         events: {
           after: userMove
         }
@@ -136,6 +138,10 @@ export default function ctrl() {
       },
       premovable: {
         enabled: true
+      },
+      draggable: {
+        distance: 3,
+        squareTarget: true
       }
     };
     if (this.chessground) this.chessground.set(chessgroundConf);

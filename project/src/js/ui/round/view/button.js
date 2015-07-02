@@ -7,6 +7,7 @@ import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
 import { handleXhrError } from '../../../utils';
+import m from 'mithril';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {

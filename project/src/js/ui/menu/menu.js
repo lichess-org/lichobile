@@ -1,6 +1,7 @@
 import * as utils from '../../utils';
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
+import m from 'mithril';
 
 var menu = {};
 

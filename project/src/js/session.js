@@ -2,6 +2,7 @@ import { request } from './http';
 import * as utils from './utils';
 import i18n from './i18n';
 import settings from './settings';
+import m from 'mithril';
 
 var session = null;
 

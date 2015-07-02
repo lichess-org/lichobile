@@ -6,6 +6,7 @@ import * as xhr from '../xhr';
 import settings from '../settings';
 import roundCtrl from './round/roundCtrl';
 import roundView from './round/view/roundView';
+import m from 'mithril';
 
 export default {
   controller: function() {

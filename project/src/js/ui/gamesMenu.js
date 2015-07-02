@@ -10,8 +10,7 @@ import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import gameApi from '../lichess/game';
 import challengesApi from '../lichess/challenges';
-
-const moment = window.moment;
+import m from 'mithril';
 
 var scroller = null;
 
@@ -96,7 +95,7 @@ function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
 function timeLeft(g) {
   if (!g.isMyTurn) return i18n('waitingForOpponent');
   if (!g.secondsLeft) return i18n('yourTurn');
-  var time = moment().add(g.secondsLeft, 'seconds');
+  var time = window.moment().add(g.secondsLeft, 'seconds');
   return m('time', {
     datetime: time.format()
   }, time.fromNow());

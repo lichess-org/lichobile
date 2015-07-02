@@ -8,6 +8,7 @@ import { userStatus, header, empty } from '../widget/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
 import helper from '../helper';
+import m from 'mithril';
 
 export default {
   controller() {

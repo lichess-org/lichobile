@@ -10,6 +10,7 @@ import loginModal from './loginModal';
 import newGameForm from './newGameForm';
 import uniq from 'lodash/array/uniq';
 import Zanimo from 'zanimo';
+import m from 'mithril';
 
 var correspondence = {};
 

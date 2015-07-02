@@ -18,6 +18,7 @@ import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
+import m from 'mithril';
 
 export default function view(ctrl) {
   function overlay() {

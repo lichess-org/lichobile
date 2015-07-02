@@ -12,6 +12,7 @@ import user from'./ui/user';
 import userGames from'./ui/user/games';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
+import m from 'mithril';
 
 export default {
   init() {

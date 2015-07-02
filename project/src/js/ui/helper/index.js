@@ -3,6 +3,7 @@ import chessground from 'chessground';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
+import m from 'mithril';
 
 var helper = {};
 

@@ -2,6 +2,7 @@
 import * as utils from '../../utils';
 import helper from '../helper';
 import assign from 'lodash/object/assign';
+import m from 'mithril';
 
 function styleConf(el) {
   const vh = helper.viewportDim().vh;

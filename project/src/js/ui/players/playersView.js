@@ -4,6 +4,7 @@ import h from '../helper';
 import { empty, menuButton, friendsButton, userStatus } from '../widget/common';
 import layout from '../layout';
 import i18n from '../../i18n';
+import m from 'mithril';
 
 export default function view(ctrl) {
   const headerCtrl = header.bind(undefined, ctrl);

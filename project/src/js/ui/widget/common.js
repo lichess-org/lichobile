@@ -10,6 +10,7 @@ import challengesApi from '../../lichess/challenges';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
+import m from 'mithril';
 
 
 export function menuButton() {

@@ -1,5 +1,6 @@
 import merge from 'lodash/object/merge';
 import Spinner from 'spin.js';
+import m from 'mithril';
 
 const spinner = new Spinner({ color: '#C4A86F' });
 

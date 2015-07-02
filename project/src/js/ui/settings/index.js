@@ -5,6 +5,7 @@ import layout from '../layout';
 import formWidgets from '../widget/form';
 import settings from '../../settings';
 import i18n from '../../i18n';
+import m from 'mithril';
 
 function renderBody() {
   return [

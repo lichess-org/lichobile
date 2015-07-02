@@ -2,6 +2,7 @@ import chessground from 'chessground';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';
+import m from 'mithril';
 
 const partial = chessground.util.partial;
 

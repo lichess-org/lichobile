@@ -1,5 +1,6 @@
 import * as utils from '../../utils';
 import helper from '../helper';
+import m from 'mithril';
 
 var promoting = false;
 

@@ -2,6 +2,7 @@ var session = require('../session');
 var helper = require('./helper');
 var i18n = require('../i18n');
 var backbutton = require('../backbutton');
+import m from 'mithril';
 
 var signupModal = {};
 

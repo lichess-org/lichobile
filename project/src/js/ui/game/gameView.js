@@ -10,6 +10,7 @@ import helper from '../helper';
 import { connectingHeader, viewOnlyBoardContent, header as headerWidget } from '../widget/common';
 import popupWidget from '../widget/popup';
 import i18n from '../../i18n';
+import m from 'mithril';
 
 export default function view(ctrl) {
   if (ctrl.getRound()) return roundView(ctrl.getRound());

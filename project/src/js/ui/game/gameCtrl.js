@@ -8,6 +8,7 @@ import gameStatus from '../../lichess/status';
 import gameApi from '../../lichess/game';
 import socket from '../../socket';
 import i18n from '../../i18n';
+import m from 'mithril';
 
 export default function controller() {
   const isAwaitingInvite = m.prop(false);

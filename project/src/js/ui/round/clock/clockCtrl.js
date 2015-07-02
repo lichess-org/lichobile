@@ -1,5 +1,6 @@
 import { formatClockTime } from './clockView';
 import sound from '../../../sound';
+import m from 'mithril';
 
 export default function(data, outOfTime, soundColor) {
   var lastUpdate;

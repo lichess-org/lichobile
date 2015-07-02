@@ -8,8 +8,7 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
-
-const moment = window.moment;
+import m from 'mithril';
 
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, null,
@@ -66,7 +65,7 @@ function renderGame(ctrl, g, index, userId) {
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + g.variant.name + ' • ' + mode;
-  const date = moment(g.timestamp).calendar();
+  const date = window.moment(g.timestamp).calendar();
   const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
     (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const icon = utils.gameIcon(g.perf) || '';

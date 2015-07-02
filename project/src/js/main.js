@@ -1,12 +1,10 @@
 /* application entry point */
 
-// require mithril globally for convenience
-import m from 'mithril';
-window.m = m;
 // for moment a global object makes loading locales easier
 import moment from 'moment';
 window.moment = moment;
 
+import m from 'mithril';
 import * as utils from './utils';
 import session from './session';
 import i18n, { loadPreferredLanguage } from './i18n';
@@ -14,8 +12,7 @@ import { status as xhrStatus } from './xhr';
 import backbutton from './backbutton';
 import storage from './storage';
 import socket from './socket';
-
-var routes = require('./routes');
+import routes from './routes';
 
 var triedToLogin = false;
 

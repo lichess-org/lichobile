@@ -1,4 +1,5 @@
 import settings from './settings';
+import m from 'mithril';
 
 var messages = [];
 

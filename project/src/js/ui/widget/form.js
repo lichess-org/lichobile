@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import m from 'mithril';
 
 function renderOption(label, value, storedValue) {
   return m('option', {

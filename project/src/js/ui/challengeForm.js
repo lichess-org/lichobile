@@ -6,6 +6,7 @@ import formWidgets from './widget/form';
 import popupWidget from './widget/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
+import m from 'mithril';
 
 var challengeForm = {
   actionName: '',

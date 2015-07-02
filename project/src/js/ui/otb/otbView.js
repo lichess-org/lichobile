@@ -10,6 +10,7 @@ import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import settings from '../../settings';
+import m from 'mithril';
 
 export default function view(ctrl) {
 

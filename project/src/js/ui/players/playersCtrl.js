@@ -4,9 +4,12 @@ import throttle from 'lodash/function/throttle';
 import session from '../../session';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
+import helper from '../helper';
 
 export default function controller() {
   socket.createDefault();
+
+  helper.analyticsTrackView('Players');
 
   const isSearchOpen = m.prop(false);
   const searchResults = m.prop([]);
@@ -57,6 +60,7 @@ export default function controller() {
     }, 250),
     closeSearch,
     goSearch() {
+      helper.analyticsTrackView('Player search');
       backbutton.stack.push(closeSearch);
       isSearchOpen(true);
     },

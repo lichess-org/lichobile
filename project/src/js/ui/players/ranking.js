@@ -7,9 +7,13 @@ import layout from '../layout';
 import { userStatus, header, empty } from '../widget/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
+import helper from '../helper';
 
 export default {
   controller() {
+
+    helper.analyticsTrackView('Leaderboard');
+
     socket.createDefault();
 
     const ranking = m.prop({});

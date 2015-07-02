@@ -1,5 +1,5 @@
-var utils = require('../../utils');
-var helper = require('../helper');
+import * as utils from '../../utils';
+import helper from '../helper';
 
 var promoting = false;
 

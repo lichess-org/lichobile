@@ -11,20 +11,17 @@ labelText = #969696
 green = #759900
 red = #ac524f
 
-*
-  user-select none
-
-// to prevent a bug in iOS where typed text does not fill in input field
-input
-  user-select initial
-
 html
   font-family 'Open Sans'
   font-size 100%
 
 body
   overflow hidden
-  background-color: bgdark
+  background-color bgdark
+
+// workaround for ios: the direct parent of an input must have user-select: text
+.allow_select
+  user-select text
 
 h2
   text-transform uppercase
@@ -65,13 +62,13 @@ span.fa
 .scroller
   overflow hidden
   &.page
-    height calc(100% - 50px)
+    height 100%
 
 .native_scroller
   overflow-y auto
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling touch
   &.page
-    height calc(100% - 50px) // page height minus header height
+    height 100%
 
 .vertical_align
   position relative

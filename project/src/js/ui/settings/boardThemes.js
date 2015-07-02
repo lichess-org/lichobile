@@ -1,9 +1,9 @@
-var utils = require('../../utils');
-var widgets = require('../widget/common');
-var formWidgets = require('../widget/form');
-var layout = require('../layout');
-var i18n = require('../../i18n');
-var settings = require('../../settings');
+import * as utils from '../../utils';
+import { header as headerWidget, backButton, empty } from '../widget/common';
+import formWidgets from '../widget/form';
+import layout from '../layout';
+import i18n from '../../i18n';
+import settings from '../../settings';
 
 function renderBody() {
   return [
@@ -28,9 +28,9 @@ module.exports = {
   controller: function() {},
 
   view: function() {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('board'))
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('board'))
     );
-    return layout.free(header, renderBody, widgets.empty, widgets.empty);
+    return layout.free(header, renderBody, empty, empty);
   }
 };

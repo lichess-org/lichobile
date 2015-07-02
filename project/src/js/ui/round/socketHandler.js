@@ -1,9 +1,9 @@
 import gameApi from '../../lichess/game';
 import ground from './ground';
-import xhr from './roundXhr';
+import * as xhr from './roundXhr';
 import sound from '../../sound';
 import session from '../../session';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import socket from '../../socket';
 
 export default function(ctrl, onFeatured) {
@@ -56,20 +56,20 @@ export default function(ctrl, onFeatured) {
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai) {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        m.redraw();
+        if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
       }
     },
     message: function(m) {
       if (ctrl.chat) ctrl.chat.append(m);
     },
-    featured: function(o) {
-      if (ctrl.data.tv && onFeatured) onFeatured(o);
+    tvSelect: function(o) {
+      if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured(o);
     },
     crowd: function(o) {
       ['white', 'black'].forEach(function(c) {
         gameApi.setOnGame(ctrl.data, c, o[c]);
       });
-      m.redraw();
+      if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
     }
   };
 

@@ -1,7 +1,6 @@
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import i18n from '../../i18n';
-import { util } from 'chessground';
 import settings from '../../settings';
 import formWidgets from '../widget/form';
 import popupWidget from '../widget/popup';
@@ -11,7 +10,7 @@ function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
     m('button[data-icon=U]', {
-      config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
+      config: helper.ontouch(utils.f(ctrl.root.initAs, utils.oppositeColor(d.player.color)))
     }, i18n('createAGame')),
     m('button.fa', {
       className: (window.cordova.platformId === 'android') ? 'fa-share-alt' : 'fa-share',

@@ -4,6 +4,9 @@ import engine from '../engine';
 export default function replayCtrl(root, rootSituations, rootPly) {
 
   this.root = root;
+  this.ply = 0;
+  this.situations = [];
+  this.hash = '';
 
   this.init = function(initSituations, initPly) {
     if (initSituations) this.situations = initSituations;
@@ -17,7 +20,9 @@ export default function replayCtrl(root, rootSituations, rootPly) {
           dests: chess.dests()
         },
         check: false,
-        lastMove: null
+        lastMove: null,
+        san: null,
+        ply: 0
       }];
     }
     this.ply = initPly || 0;
@@ -48,22 +53,26 @@ export default function replayCtrl(root, rootSituations, rootPly) {
     this.jump(this.ply - 2);
   }.bind(this);
 
+  this.firstPly = function () {
+    return this.root.data.player.color === 'black' ? 1 : 0;
+  }.bind(this);
+
   var forsyth = function(role) {
     return role === 'knight' ? 'n' : role[0];
   };
 
   this.addMove = function(orig, dest, promotion) {
-    var situation = this.situation();
-    var chess = new Chess(situation.fen, 0);
-    var promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
+    const situation = this.situation();
+    const chess = new Chess(situation.fen, 0);
+    const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
       (promotion ? forsyth(promotion) : 'q') : null;
-    var move = chess.move({
+    const move = chess.move({
       from: orig,
       to: dest,
       promotion: promotionLetter
     });
     this.ply++;
-    var turnColor = chess.turn() === 'w' ? 'white' : 'black';
+    const turnColor = chess.turn() === 'w' ? 'white' : 'black';
     if (this.ply <= this.situations.length)
       this.situations = this.situations.slice(0, this.ply);
     this.situations.push({
@@ -79,9 +88,19 @@ export default function replayCtrl(root, rootSituations, rootPly) {
       threefold: chess.in_threefold_repetition(),
       draw: chess.in_draw(),
       lastMove: [move.from, move.to],
+      san: move.san,
+      ply: this.ply,
       promotion: promotionLetter
     });
     this.apply();
+  };
+
+  this.situationsHash = function(steps) {
+    let h = '';
+    for (let i in steps) {
+      h += steps[i].san;
+    }
+    return h;
   };
 
   this.pgn = function() {

@@ -1,8 +1,8 @@
-var Zanimo = require('zanimo');
-var chessground = require('chessground');
-var settings = require('../../settings');
-var utils = require('../../utils');
-var ButtonHandler = require('./button');
+import Zanimo from 'zanimo';
+import chessground from 'chessground';
+import settings from '../../settings';
+import * as utils from '../../utils';
+import ButtonHandler from './button';
 
 var helper = {};
 
@@ -41,7 +41,7 @@ function findParentBySelector(el, selector) {
 helper.fadesIn = function(element, isInitialized) {
   if (!isInitialized) {
     element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 150);
+    Zanimo(element, 'opacity', 1, 150).done();
   }
 };
 
@@ -53,7 +53,7 @@ helper.fadesOut = function(callback, selector) {
       m.startComputation();
       callback();
       m.endComputation();
-    });
+    }).done();
   };
 };
 
@@ -61,8 +61,8 @@ helper.scale = function(element, isInitialized) {
   if (!isInitialized) {
     element.style[helper.transformProp()] = 'scale(0.97)';
     element.style.visibility = 'hidden';
-    Zanimo(element, 'visibility', 'visible', 100);
-    Zanimo(element, 'transform', 'scale(1)', 200);
+    Zanimo(element, 'visibility', 'visible', 100).done();
+    Zanimo(element, 'transform', 'scale(1)', 200).done();
   }
 };
 
@@ -145,6 +145,10 @@ helper.isWideScreen = function() {
   return helper.viewportDim().vw >= 600;
 };
 
+helper.isVeryWideScreen = function() {
+  return helper.viewportDim().vw >= 960;
+};
+
 helper.isPortrait = function() {
   return window.matchMedia("(orientation: portrait)").matches;
 };
@@ -169,4 +173,4 @@ helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
 
-module.exports = helper;
+export default helper;

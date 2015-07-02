@@ -1,9 +1,16 @@
 /** @jsx m */
 import chessground from 'chessground';
-import utils from '../../utils';
+import settings from '../../settings';
 import layout from '../layout';
-import widgets from '../widget/common';
-import { renderAntagonist, renderGameActionsBar } from '../widget/offlineRound';
+import { header } from '../widget/common';
+import formWidgets from '../widget/form';
+import {
+  renderAntagonist,
+  renderGameActionsBar,
+  renderReplayTable,
+  renderEndedGameStatus,
+  renderGameActionsBarTablet
+} from '../widget/offlineRound';
 import { view as renderPromotion } from './promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
@@ -12,33 +19,56 @@ import actions from './actions';
 
 export default function view(ctrl) {
 
-
   function content() {
 
     const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-    const opponentName = ctrl.getOpponent().name;
-    const playerName = '';
+    const replayTable = renderReplayTable(ctrl.replay);
 
     if (helper.isPortrait())
-      return (
-        <div className="content round">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
-          {renderBoard(ctrl, renderPromotion)}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-          {renderGameActionsBar(ctrl, actions.view)}
-        </div>
-      );
-    else
-      return (
-        <div className="content round">
-          {renderBoard(ctrl, renderPromotion)}
-          <section key="table" className="table">
-            {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
-            {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
+      return [
+        renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent'),
+        renderBoard(ctrl, renderPromotion),
+        renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player'),
+        renderGameActionsBar(ctrl, actions.view)
+      ];
+    else if (helper.isLandscape() && helper.isVeryWideScreen())
+      return [
+        renderBoard(ctrl, renderPromotion),
+        <section key="table" className="table">
+          <section className="playersTable offline">
+            {renderAntagonist(ctrl, opponentSelector(), material[ctrl.data.opponent.color], 'opponent')}
+            {replayTable}
+            {renderEndedGameStatus(ctrl.actions)}
+            {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
           </section>
-        </div>
-      );
+          {renderGameActionsBarTablet(ctrl)}
+        </section>
+      ];
+    else
+      return [
+        renderBoard(ctrl, renderPromotion),
+        <section key="table" className="table">
+          <section className="playersTable offline">
+            {renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent')}
+            {replayTable}
+            {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
+          </section>
+          {renderGameActionsBar(ctrl)}
+        </section>
+      ];
   }
 
-  return layout.board(utils.partialf(widgets.header, i18n('playOfflineComputer')), content, null);
+  return layout.board(
+    header.bind(undefined, i18n('playOfflineComputer')),
+    content,
+    actions.view.bind(undefined, ctrl.actions)
+  );
+}
+
+function opponentSelector() {
+  return (
+    <div className="select_input">
+      {formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)}
+    </div>
+  );
 }

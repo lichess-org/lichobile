@@ -1,9 +1,9 @@
-import utils from '../utils';
+import * as utils from '../utils';
 import helper from './helper';
 import layout from './layout';
-import widgets from './widget/common';
+import { header, viewOnlyBoardContent } from './widget/common';
 import popupWidget from './widget/popup';
-import xhr from '../xhr';
+import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
 
@@ -73,7 +73,7 @@ seek.view = function(ctrl) {
     );
   }
 
-  return layout.board(widgets.header, widgets.viewOnlyBoardContent, overlays);
+  return layout.board(header, viewOnlyBoardContent, overlays);
 };
 
 module.exports = seek;

@@ -4,7 +4,7 @@ import popupWidget from './widget/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import friendsApi from '../lichess/friends';
-import utils from '../utils';
+import * as utils from '../utils';
 
 const friendsPopup = {};
 
@@ -24,7 +24,7 @@ friendsPopup.close = function(fromBB) {
 friendsPopup.view = function() {
   const friends = friendsApi.list().length ?
     (
-    <ul className="native_scroller">
+    <ul>
       {friendsApi.list().map(renderFriend)}
     </ul>
     ) : (
@@ -36,7 +36,7 @@ friendsPopup.view = function() {
   );
 
   return popupWidget(
-    'onlineFriends',
+    {onlineFriends: true, native_scroller: false},
     header,
     friends,
     friendsPopup.isOpen,

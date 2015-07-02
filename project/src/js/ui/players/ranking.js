@@ -1,15 +1,19 @@
 /** @jsx m */
 import socket from '../../socket';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
-import widgets from '../widget/common';
+import { userStatus, header, empty } from '../widget/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
+import helper from '../helper';
 
 export default {
   controller() {
+
+    helper.analyticsTrackView('Leaderboard');
+
     socket.createDefault();
 
     const ranking = m.prop({});
@@ -38,10 +42,10 @@ export default {
 
   view(ctrl) {
     return layout.free(
-      () => widgets.header(i18n('ranking')),
+      () => header(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl),
-      widgets.empty,
-      widgets.empty
+      empty,
+      empty
     );
   }
 };
@@ -65,7 +69,7 @@ function renderRankingCategory(ctrl, key) {
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      {ranking[key].isOpenedOnMobile ?
+      {ranking[key].isOpenedOnMobile || h.isWideScreen() ?
       <ul className="rankingList">
         {ranking[key].map(p => renderRankingPlayer(p, key))}
       </ul> : null
@@ -77,7 +81,7 @@ function renderRankingCategory(ctrl, key) {
 function renderRankingPlayer(user, key) {
   return (
     <li className="rankingPlayer" config={h.ontouchY(() => m.route('/@/' + user.id))}>
-      {widgets.userStatus(user)}
+      {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}
       </span>

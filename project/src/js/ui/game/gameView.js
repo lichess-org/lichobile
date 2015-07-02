@@ -5,9 +5,9 @@ import gameApi from '../../lichess/game';
 import gamesMenu from '../gamesMenu';
 import loginModal from '../loginModal';
 import layout from '../layout';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
-import widgets from '../widget/common';
+import { connectingHeader, viewOnlyBoardContent, header as headerWidget } from '../widget/common';
 import popupWidget from '../widget/popup';
 import i18n from '../../i18n';
 
@@ -18,13 +18,13 @@ export default function view(ctrl) {
   var header, board, overlay;
 
   if (pov) {
-    header = widgets.connectingHeader;
-    board = utils.partialf(widgets.viewOnlyBoardContent, pov.fen, pov.lastMove, pov.color,
+    header = connectingHeader;
+    board = utils.partialf(viewOnlyBoardContent, pov.fen, pov.lastMove, pov.color,
       pov.variant.key);
     gamesMenu.lastJoined = null;
   } else {
-    header = utils.partialf(widgets.header, 'lichess.org');
-    board = widgets.viewOnlyBoardContent;
+    header = utils.partialf(headerWidget, 'lichess.org');
+    board = viewOnlyBoardContent;
   }
 
   if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);

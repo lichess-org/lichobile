@@ -1,4 +1,4 @@
-const perfTypes = [
+export const perfTypes = [
   ['bullet', 'Bullet'],
   ['blitz', 'Blitz'],
   ['classical', 'Classical'],
@@ -38,4 +38,4 @@ export function perfTitle(perf) {
 }
 
 // https://github.com/ornicar/lila/blob/master/modules/rating/src/main/Glicko.scala#L31
-export var provisionalDeviation = 110
+export const provisionalDeviation = 110;

@@ -5,12 +5,14 @@ lichess mobile
 
 ### Official lichess.org mobile application for Android & iOS.
 
+- Find players, follow players and see your online friends
 - Challenge thousands of online players
 - Play online or offline artificial intelligence
 - Many chess variants available
 - Play over the board with a friend
 - Translated to 80 languages
 - Customizable and themable
+- Optimized for mobiles and tablets
 - 100% free, without ads, and opensource!
 
 Get it now from [lichess.org/mobile](http://lichess.org/mobile)
@@ -18,13 +20,13 @@ Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 ## Requirements
 
 * [node](http://nodejs.org) and [gulp](http://gulpjs.com/) version 3.8.x installed.
-* [tarifa](http://tarifa.tools) (version 0.7.1)
+* [tarifa](http://tarifa.tools) (version 0.10.0)
 
 **For Android:**
 
 * the [android SDK](http://developer.android.com/sdk/index.html)
 * [SDK packages](http://developer.android.com/sdk/installing/adding-packages.html)
-for API 14 to API 19
+for API 14 to API 22
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.
 

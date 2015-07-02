@@ -1,4 +1,4 @@
-var settings = require('./settings');
+import settings from './settings';
 
 function shouldPlay() {
   return settings.general.sound();
@@ -51,7 +51,7 @@ document.addEventListener('deviceready', function() {
 }, false);
 
 
-module.exports = {
+export default {
   move: function() {
     if (shouldPlay()) lla.play('move');
   },

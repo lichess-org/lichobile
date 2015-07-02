@@ -1,16 +1,16 @@
 /** @jsx m */
-import utils from '../../utils';
-import widgets from '../widget/common';
+import * as utils from '../../utils';
+import { header as headerWidget, backButton, empty } from '../widget/common';
 import formWidgets from '../widget/form';
 import layout from '../layout';
-import i18n from '../../i18n';
+import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
 
-module.exports = {
+export default {
   controller: function() {
     const langs = m.prop([]);
 
-    i18n.getAvailableLanguages().then(langs);
+    getAvailableLanguages().then(langs);
 
     return {
       langs
@@ -18,8 +18,8 @@ module.exports = {
   },
 
   view: function(ctrl) {
-    var header = utils.partialf(widgets.header, null,
-      widgets.backButton(i18n('language'))
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('language'))
     );
 
     function renderLang(l) {
@@ -29,7 +29,7 @@ module.exports = {
             settings.general.lang() === l[0],
             e => {
               settings.general.lang(e.target.value);
-              i18n.loadFromSettings();
+              loadFromSettings();
             }
           )}
         </li>
@@ -44,6 +44,6 @@ module.exports = {
       );
     }
 
-    return layout.free(header, renderBody, widgets.empty, widgets.empty);
+    return layout.free(header, renderBody, empty, empty);
   }
 };

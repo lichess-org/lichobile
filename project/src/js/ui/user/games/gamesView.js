@@ -1,17 +1,19 @@
 /** @jsx m */
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 import helper from '../../helper';
-import widgets from '../../widget/common';
+import { header as headerWidget, backButton, empty } from '../../widget/common';
 import layout from '../../layout';
 import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
-import xhr from '../../../xhr';
+import { toggleGameBookmark } from '../../../xhr';
+import session from '../../../session';
+
 const moment = window.moment;
 
 export default function view(ctrl) {
-  const header = utils.partialf(widgets.header, null,
-    widgets.backButton(ctrl.user().username + ' games')
+  const header = utils.partialf(headerWidget, null,
+    backButton(ctrl.user().username + ' games')
   );
 
   function renderBody() {
@@ -34,7 +36,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, renderBody, widgets.empty, widgets.empty);
+  return layout.free(header, renderBody, empty, empty);
 }
 
 function renderAllGames(ctrl) {
@@ -53,7 +55,7 @@ function renderAllGames(ctrl) {
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontouchY(() => {
-    xhr.toggleGameBookmark(id).then(() => {
+    toggleGameBookmark(id).then(() => {
       ctrl.toggleBookmark(index);
     }, err => utils.handleXhrError(err));
   }, longAction);
@@ -74,7 +76,9 @@ function renderGame(ctrl, g, index, userId) {
 
   return (
     <li className={`list_item bglight userGame ${evenOrOdd}`}>
-      <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} />
+      { session.isConnected() ?
+        <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
+      }
       <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
         {wideScreen ? helper.viewOnlyBoard(g.fen, g.lastMove, userColor) : null}

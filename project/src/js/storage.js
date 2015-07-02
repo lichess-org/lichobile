@@ -5,7 +5,7 @@ function withStorage(f) {
   } catch (e) {}
 }
 
-module.exports = {
+export default {
   get: function(k) {
     return withStorage(function(s) {
       return JSON.parse(s.getItem(k));

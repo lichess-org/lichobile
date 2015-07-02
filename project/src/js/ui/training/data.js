@@ -1,8 +1,7 @@
-var merge = require('merge');
-var m = require('mithril');
-var chess = require('./chess');
-var puzzle = require('./puzzle');
-var util = require('chessground').util;
+import merge from 'lodash/object/merge';
+import chess from './chess';
+import puzzle from './puzzle';
+import { oppositeColor } from '../../utils';
 
 module.exports = function(cfg) {
 
@@ -16,13 +15,13 @@ module.exports = function(cfg) {
       color: cfg.puzzle.color
     },
     puzzle: {
-      opponentColor: util.opposite(cfg.puzzle.color)
+      opponentColor: oppositeColor(cfg.puzzle.color)
     },
     progress: [],
     chess: chess.make(cfg.puzzle.fen)
   };
 
-  merge.recursive(data, cfg);
+  merge(data, cfg);
 
   data.puzzle.move = puzzle.str2move(data.puzzle.move);
 

@@ -2,11 +2,14 @@ import socket from '../../socket';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/function/throttle';
 import session from '../../session';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import * as xhr from './playerXhr';
+import helper from '../helper';
 
 export default function controller() {
   socket.createDefault();
+
+  helper.analyticsTrackView('Players');
 
   const isSearchOpen = m.prop(false);
   const searchResults = m.prop([]);
@@ -16,7 +19,7 @@ export default function controller() {
   function onKeyboardShow(e) {
     if (window.cordova.platformId === 'ios') {
       let ul = document.getElementById('players_search_results');
-      if (!listHeight) listHeight = ul.offsetHeight;
+      listHeight = ul.offsetHeight;
       if (ul) ul.style.height = (listHeight - e.keyboardHeight) + 'px';
     }
   }
@@ -57,6 +60,7 @@ export default function controller() {
     }, 250),
     closeSearch,
     goSearch() {
+      helper.analyticsTrackView('Player search');
       backbutton.stack.push(closeSearch);
       isSearchOpen(true);
     },

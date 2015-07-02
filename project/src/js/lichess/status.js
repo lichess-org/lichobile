@@ -1,8 +1,8 @@
 // https://github.com/ornicar/scalachess/blob/master/src/main/scala/Status.scala
 
-var i18n = require('../i18n');
+import i18n from '../i18n';
 
-var ids = {
+const ids = {
   created: 10,
   started: 20,
   aborted: 25,
@@ -74,10 +74,10 @@ function toLabel(status, winner, variant) {
   }
 }
 
-module.exports = {
-  ids: ids,
-  started: started,
-  finished: finished,
-  aborted: aborted,
-  toLabel: toLabel
+export default {
+  ids,
+  started,
+  finished,
+  aborted,
+  toLabel
 };

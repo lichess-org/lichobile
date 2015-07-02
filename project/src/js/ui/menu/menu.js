@@ -1,7 +1,6 @@
-import utils from '../../utils';
+import * as utils from '../../utils';
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 
 var menu = {};
 
@@ -15,7 +14,7 @@ menu.route = function(route) {
   return function() {
     menu.close();
     return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(utils.f(m.route, route));
+      '250', 'ease-out').then(utils.f(m.route, route)).done();
   };
 };
 
@@ -28,7 +27,7 @@ menu.popup = function(action) {
         action();
         m.endComputation();
         el.removeAttribute('style');
-      });
+      }).done();
   };
 };
 
@@ -38,7 +37,6 @@ menu.toggle = function() {
 };
 
 menu.open = function() {
-  helper.analyticsTrackView('Main Menu');
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
 };

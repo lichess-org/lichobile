@@ -1,6 +1,6 @@
 import { throttle } from 'lodash/function';
 import data from './data';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import sound from '../../sound';
 import gameApi from '../../lichess/game';
 import ground from './ground';
@@ -10,7 +10,6 @@ import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
 import gameStatus from '../../lichess/status';
 import correspondenceClockCtrl from './correspondenceClock/correspondenceCtrl';
-import menu from '../menu';
 import session from '../../session';
 import socket from '../../socket';
 import socketHandler from './socketHandler';
@@ -18,13 +17,15 @@ import signals from '../../signals';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
-import xhr from './roundXhr';
+import * as xhr from './roundXhr';
 
-export default function controller(cfg, onFeatured) {
+export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   helper.analyticsTrackView('Round');
 
   this.data = data(cfg);
+
+  this.onTVChannelChange = onTVChannelChange;
 
   this.firstPly = function() {
     return this.data.steps[0].ply;
@@ -42,7 +43,9 @@ export default function controller(cfg, onFeatured) {
     connectedWS: true,
     flip: false,
     showingActions: false,
-    ply: this.lastPly()
+    replayHash: '',
+    ply: this.lastPly(),
+    moveToSubmit: null
   };
 
   socket.createGame(
@@ -52,8 +55,15 @@ export default function controller(cfg, onFeatured) {
     this.data.url.round
   );
 
+  this.stepsHash = function(steps) {
+    var h = '';
+    for (var i in steps) {
+      h += steps[i].san;
+    }
+    return h;
+  };
+
   this.showActions = function() {
-    menu.close();
     backbutton.stack.push(this.hideActions);
     this.vm.showingActions = true;
   }.bind(this);
@@ -141,8 +151,31 @@ export default function controller(cfg, onFeatured) {
     if (prom) move.promotion = prom;
     if (this.clock && socket.getAverageLag() !== undefined)
       move.lag = Math.round(socket.getAverageLag());
-    socket.send('move', move, { ackable: true });
+
+    if (this.data.pref.submitMove) {
+      backbutton.stack.push(this.cancelMove);
+      this.vm.moveToSubmit = move;
+      m.redraw();
+    } else socket.send('move', move, { ackable: true });
   };
+
+  this.cancelMove = function(fromBB) {
+    if (fromBB !== 'backbutton') backbutton.stack.pop();
+    this.vm.moveToSubmit = null;
+    this.jump(this.vm.ply);
+  }.bind(this);
+
+  this.submitMove = function(v) {
+    if (v) {
+      if (this.vm.moveToSubmit)
+        socket.send('move', this.vm.moveToSubmit, {
+          ackable: true
+        });
+        this.vm.moveToSubmit = null;
+    } else {
+      this.cancelMove();
+    }
+  }.bind(this);
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
@@ -260,6 +293,7 @@ export default function controller(cfg, onFeatured) {
   var makeCorrespondenceClock = function() {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
+        this,
         this.data.correspondence,
         () => socket.send('outoftime')
       );
@@ -279,10 +313,10 @@ export default function controller(cfg, onFeatured) {
     null : new chat.controller(this);
 
   this.reload = function(rCfg) {
-    if (stepsHash(rCfg.steps) !== stepsHash(this.data.steps))
+    if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
-    if (this.data.tv) rCfg.tv = true;
+    if (this.data.tv) rCfg.tv = this.data.tv;
     this.data = data(rCfg);
     makeCorrespondenceClock();
     this.setTitle();
@@ -325,10 +359,3 @@ export default function controller(cfg, onFeatured) {
   };
 }
 
-function stepsHash(steps) {
-  var h = '';
-  for (var i in steps) {
-    h += steps[i].san;
-  }
-  return h;
-}

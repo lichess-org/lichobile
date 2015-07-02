@@ -1,7 +1,7 @@
 /** @jsx m */
-import utils from '../../utils';
+import * as utils from '../../utils';
 import h from '../helper';
-import widgets from '../widget/common';
+import { empty, menuButton, friendsButton, userStatus } from '../widget/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 
@@ -10,17 +10,17 @@ export default function view(ctrl) {
   const bodyCtrl = body.bind(undefined, ctrl);
   const searchModalCtrl = searchModal.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, widgets.empty, searchModalCtrl);
+  return layout.free(headerCtrl, bodyCtrl, empty, searchModalCtrl);
 }
 
 function header(ctrl) {
   return (
     <nav>
-      {widgets.menuButton()}
+      {menuButton()}
       <h1>{i18n('players')}</h1>
       <div className="buttons">
         <button className="main_header_button" data-icon="y" config={h.ontouch(ctrl.goSearch)} />
-        {widgets.friendsButton()}
+        {friendsButton()}
       </div>
     </nav>
   );
@@ -34,7 +34,7 @@ function searchModal(ctrl) {
     <div id="searchPlayersModal" className="modal show">
       <header>
         <button key="search-players-backbutton" className="fa fa-arrow-left search_back" config={h.ontouch(ctrl.closeSearch)} />
-        <div className="search_input">
+        <div className="search_input allow_select">
           <input id="searchPlayers" type="search"
           placeholder="Search players" oninput={ctrl.onInput}
           autocapitalize="off"
@@ -75,7 +75,7 @@ function renderPlayer(user) {
   });
   return (
     <li className="list_item playerSuggestion nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
-      {widgets.userStatus(user)}
+      {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}
       </span>

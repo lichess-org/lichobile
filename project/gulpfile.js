@@ -22,9 +22,6 @@ var minimistOptions = {
 };
 var options = minimist(process.argv.slice(2), minimistOptions);
 
-var context = require('./' + options.env);
-context.MODE = options.mode;
-
 var paths = {
   styles: ['src/styl/reset.styl', 'src/styl/common.styl', 'src/styl/form.styl',
     'src/styl/overlay.styl', 'src/styl/overlay-popup.styl', 'src/styl/*.styl'
@@ -60,6 +57,9 @@ function buildScripts(src, dest, mode) {
 }
 
 gulp.task('html', function() {
+  var context = require('./' + options.env);
+  context.MODE = options.mode;
+
   return buildHtml('src', 'www', context);
 });
 
@@ -94,7 +94,7 @@ gulp.task('watch-scripts', function() {
 // Watch Files For Changes
 gulp.task('launch-watch', function() {
   gulp.watch(paths.styles, ['styl']);
-  gulp.watch('src/index.html', ['html']);
+  gulp.watch(['src/index.html', 'env.json'], ['html']);
 });
 
 gulp.task('default', ['html', 'styl', 'scripts']);

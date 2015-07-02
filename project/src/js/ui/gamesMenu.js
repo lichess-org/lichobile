@@ -1,16 +1,17 @@
 /** @jsx m */
-var utils = require('../utils');
-var helper = require('./helper');
-var settings = require('../settings');
-var iScroll = require('iscroll');
-var session = require('../session');
-var i18n = require('../i18n');
-var moment = window.moment;
-var backbutton = require('../backbutton');
-var xhr = require('../xhr');
-var newGameForm = require('./newGameForm');
-var gameApi = require('../lichess/game');
-var challengesApi = require('../lichess/challenges');
+import * as utils from '../utils';
+import helper from './helper';
+import settings from '../settings';
+import iScroll from 'iscroll';
+import session from '../session';
+import i18n from '../i18n';
+import backbutton from '../backbutton';
+import * as xhr from '../xhr';
+import newGameForm from './newGameForm';
+import gameApi from '../lichess/game';
+import challengesApi from '../lichess/challenges';
+
+const moment = window.moment;
 
 var scroller = null;
 
@@ -57,15 +58,28 @@ function declineChallenge(id) {
 }
 
 function cardDims() {
-  var vp = helper.viewportDim();
-  var width = vp.vw * 85 / 100;
-  var margin = vp.vw * 2.5 / 100;
-  return {
-    w: width + margin * 2,
-    h: width + 145,
-    innerW: width,
-    margin: margin
-  };
+  const vp = helper.viewportDim();
+
+  // if we're here it's a phone
+  if (helper.isPortrait()) {
+    let width = vp.vw * 85 / 100;
+    let margin = vp.vw * 2.5 / 100;
+    return {
+      w: width + margin * 2,
+      h: width + 145,
+      innerW: width,
+      margin: margin
+    };
+  } else {
+    let width = 150;
+    let margin = 10;
+    return {
+      w: width + margin * 2,
+      h: width + 70,
+      innerW: width,
+      margin: margin
+    };
+  }
 }
 
 function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
@@ -126,6 +140,7 @@ function renderChallenge(c, cDim, cardStyle) {
   const icon = utils.gameIcon(c.game.perf);
   const mode = c.game.rated ? i18n('rated') : i18n('casual');
   const timeAndMode = gameApi.time(c) + ', ' + mode;
+  const challenger = c.player.user ? c.player : c.opponent;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
@@ -133,7 +148,7 @@ function renderChallenge(c, cDim, cardStyle) {
       <div className="infos">
         <div className="icon-game" data-icon={icon}></div>
         <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.opponent, true))}</h2>
+          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(challenger, true))}</h2>
           <p className="variant">
             <span className="variantName">{i18n('toATypeGame', c.game.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>

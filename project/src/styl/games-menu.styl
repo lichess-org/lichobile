@@ -16,6 +16,9 @@
       overflow hidden
       height calc(100% - 45px)
       position relative
+  @media only screen and (max-height 400px)
+    top 10%
+    height 80%
   @media only screen and (min-width 960px)
     width 720px
     left calc((100% - 720px) / 2)
@@ -85,6 +88,8 @@
     .timeIndication
       display block
       margin-top 5px
+  &.active
+    background lighten(textDarkGray, 10%)
   @media only screen and (min-width 600px)
     float none
     box-shadow none
@@ -104,13 +109,25 @@
     .icon-game
       display none
     h2
+      font-size 1rem
       margin-top 0
-      font-size 1.1em
     p
       margin-top 5px
       text-transform none
       > .variant
         display none
+  @media only screen and (max-width 600px) and (orientation landscape)
+    font-size 0.7em
+    .icon-game
+      display none
+    .description
+      padding 0
+      height initial
+      p
+        margin-top 10px
+    h2
+      font-size 1em
+      margin-top 10px
 
 .card.challenge
   background gold

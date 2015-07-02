@@ -2,7 +2,7 @@ import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
 import {throttle} from 'lodash/function';
 import socket from '../../../socket';
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 
 var scroller;
 
@@ -76,7 +76,11 @@ export default function controller() {
     xhr.games(userId, currentFilter(), 1, true).then(data => {
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
-    }, err => utils.handleXhrError(err)).then(() => setTimeout(() => {
+    }, err => {
+      utils.handleXhrError(err);
+      m.route('/');
+    })
+    .then(() => setTimeout(() => {
       if (scroller) scroller.scrollTo(0, 0, 0);
     }, 50));
   }

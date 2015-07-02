@@ -1,5 +1,5 @@
-import utils from '../utils';
-import xhr from '../xhr';
+import * as utils from '../utils';
+import { inviteFriend } from '../xhr';
 import settings from '../settings';
 import session from '../session';
 import formWidgets from './widget/form';
@@ -32,7 +32,7 @@ challengeForm.close = function(fromBB) {
 
 function challenge() {
   var userId = challengeForm.userId;
-  return xhr.inviteFriend(userId).then(function(data) {
+  return inviteFriend(userId).then(function(data) {
     var url = `/game${data.url.round}`;
     if (userId) url += `/user/${userId}`;
     m.route(url);

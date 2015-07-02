@@ -1,5 +1,5 @@
-var store = require('./storage');
-var range = require('lodash/utility/range');
+import store from './storage';
+import range from 'lodash/utility/range';
 
 function localstorageprop(key, initialValue) {
   return function() {
@@ -13,7 +13,7 @@ function tupleOf(x) {
   return [x.toString(), x.toString()];
 }
 
-module.exports = {
+export default {
   general: {
     lang: localstorageprop('settings.lang'),
     animations: localstorageprop('settings.gameAnimations', true),
@@ -157,5 +157,9 @@ module.exports = {
       days: localstorageprop('settings.game.invite.days', '2'),
       mode: localstorageprop('settings.game.invite.mode', '0')
     }
+  },
+
+  tv: {
+    channel: localstorageprop('settings.tv.channel', 'best')
   }
 };

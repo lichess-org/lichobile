@@ -1,9 +1,9 @@
-var session = require('../session');
-var utils = require('../utils');
-var helper = require('./helper');
-var i18n = require('../i18n');
-var signupModal = require('./signupModal');
-var backbutton = require('../backbutton');
+import session from '../session';
+import * as utils from '../utils';
+import helper from './helper';
+import i18n from '../i18n';
+import signupModal from './signupModal';
+import backbutton from '../backbutton';
 
 var loginModal = {};
 

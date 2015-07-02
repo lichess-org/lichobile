@@ -2,47 +2,67 @@
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
-import widgets from '../../widget/common';
+import { menuButton, loader, headerBtns } from '../../widget/common';
 import popupWidget from '../../widget/popup';
+import formWidgets from '../../widget/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
-import utils from '../../../utils';
+import * as utils from '../../../utils';
 import helper from '../../helper';
 import i18n from '../../../i18n';
 import button from './button';
 import gameApi from '../../../lichess/game';
+import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
+import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {
+  function overlay() {
+    return [
+      ctrl.chat ? renderChat(ctrl.chat) : null,
+      renderGamePopup(ctrl),
+      renderSubmitMovePopup(ctrl)
+    ];
+  }
+
   return layout.board(
     renderHeader.bind(undefined, ctrl),
     renderContent.bind(undefined, ctrl),
-    ctrl.chat ? renderChat.bind(undefined, ctrl.chat) : null
+    overlay
   );
 }
 
 export function renderMaterial(material) {
-  var children = [];
-  for (var role in material) {
-    var piece = m('div.' + role);
-    var count = material[role];
-    var content;
+  const children = [];
+  for (let role in material) {
+    let piece = <div className={role} />;
+    let count = material[role];
+    let content;
     if (count === 1) content = piece;
     else {
       content = [];
-      for (var i = 0; i < count; i++) content.push(piece);
+      for (let i = 0; i < count; i++) content.push(piece);
     }
-    children.push(m('div.tomb', content));
+    children.push(<div className="tomb">{content}</div>);
   }
   return children;
 }
 
 export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
-  const x = helper.viewportDim().vw;
-  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
+  const { vh, vw } = helper.viewportDim();
+  // ios 7.1 still doesn't support vh unit in calc
+  // see game.styl section '.board_wrapper' for corresponding calc() rules
+  const landscapeDim = (vh > 700 && vw < 1050) ? vh - 50 - vh * 0.12 : vh - 50;
+  const boardStyle = helper.isLandscape() ? {
+    width: landscapeDim + 'px',
+    height: landscapeDim + 'px'
+  } : {
+    width: vw + 'px',
+    height: vw + 'px'
+  };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
   const boardClass = [
     'board',
@@ -72,38 +92,44 @@ function renderHeader(ctrl) {
     m('nav', {
       className: ctrl.vm.connectedWS ? '' : 'reconnecting'
     }, [
-      widgets.menuButton(),
+      menuButton(),
       ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
         i18n('reconnecting'),
-        widgets.loader
+        loader
       ]),
-      widgets.headerBtns()
+      headerBtns()
     ])
   ];
 }
 
 function renderContent(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+  const replayTable = renderReplayTable(ctrl);
+  const player = renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player');
+  const opponent = renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent');
 
   if (helper.isPortrait())
-    return (
-      <div className="content round">
-        {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-        {renderBoard(ctrl, renderPromotion)}
-        {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
-        {renderGameActionsBar(ctrl)}
-      </div>
-    );
+    return [
+      opponent,
+      renderBoard(ctrl, renderPromotion),
+      player,
+      renderGameActionsBar(ctrl)
+    ];
   else
-    return (
-      <div className="content round">
-        {renderBoard(ctrl, renderPromotion)}
-        <section key="table" className="table">
-          {renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent')}
-          {renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player')}
+    return [
+      renderBoard(ctrl, renderPromotion),
+      <section key="table" className="table">
+        <header className="tableHeader">
+          {gameInfos(ctrl.data)}
+        </header>
+        <section className="playersTable">
+          {opponent}
+          {replayTable}
+          {player}
         </section>
-      </div>
-    );
+        {renderGameActionsBar(ctrl)}
+      </section>
+    ];
 }
 
 function compact(x) {
@@ -118,7 +144,7 @@ function compact(x) {
 
 function ratingDiff(player) {
   if (typeof player.ratingDiff === 'undefined') return null;
-  if (player.ratingDiff === 0) return m('span.rp.null', 0);
+  if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
   if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
 }
@@ -128,13 +154,27 @@ function renderCheckCount(ctrl, color) {
   if (typeof player.checks !== 'undefined') return m('div.checkCount', player.checks);
 }
 
+function renderSubmitMovePopup(ctrl) {
+  if (!ctrl.vm.moveToSubmit)
+    return <div className="overlay popup overlay_fade submitMovePopup" />;
+
+  return (
+    <div className="overlay popup overlay_fade open submitMovePopup">
+      <div className="overlay_popup">
+        {button.submitMove(ctrl)}
+      </div>
+    </div>
+  );
+}
+
 function renderAntagonist(ctrl, player, material, position) {
   const user = player.user;
-  const playerName = utils.playerName(player);
+  const playerName = utils.playerName(player, helper.isLandscape());
   const {vh, vw} = helper.viewportDim();
+  const headerHeight = vh > 480 ? 50 : 40;
   // must do this here because of the lack of `calc` support
   // 50 refers to either header height of game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - 50) + 'px' };
+  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - headerHeight) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
   function infos() {
@@ -155,12 +195,12 @@ function renderAntagonist(ctrl, player, material, position) {
         utils.noop
     }, [
       m('h2.antagonistUser', [
-        m('span.status[data-icon=r]', { className: user && user.online ? 'online' : 'offline' }),
+        user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null,
         playerName,
         player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
       ]),
-      m('div', [
-        user ? m('h3.rating', [
+      m('div.ratingAndMaterial', [
+        user && helper.isPortrait() ? m('h3.rating', [
           player.rating,
           player.provisional ? '?' : '',
           ratingDiff(player)
@@ -177,11 +217,26 @@ function renderAntagonist(ctrl, player, material, position) {
   ]);
 }
 
+function tvChannelSelector(ctrl) {
+  let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
+  channels.unshift(['Top rated', 'best']);
+
+  return m('div.action', m('div.select_input',
+    formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
+      false, ctrl.onTVChannelChange)
+  ));
+}
+
 function renderGameRunningActions(ctrl) {
-  if (ctrl.data.player.spectator) return m('div.game_controls', [
-    button.shareLink(ctrl),
-    button.flipBoard(ctrl)
-  ]);
+  if (ctrl.data.player.spectator) {
+    let controls = [
+      button.shareLink(ctrl),
+      button.flipBoard(ctrl),
+      ctrl.data.tv ? tvChannelSelector(ctrl) : null
+    ];
+
+    return m('div.game_controls', controls);
+  }
 
   var d = ctrl.data;
   var answerButtons = compact([
@@ -193,6 +248,7 @@ function renderGameRunningActions(ctrl) {
       i18n('youHaveNbSecondsToMakeYourFirstMove', 30)
     ) : undefined
   ]);
+
   return [
     m('div.game_controls', [
       button.shareLink(ctrl),
@@ -218,12 +274,15 @@ function renderGameEndedActions(ctrl) {
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     result, m('br'), m('br')
   ];
-  resultDom.push(m('div.status', status));
+  resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
-    button.flipBoard(ctrl)
+    button.sharePGN(ctrl),
+    button.flipBoard(ctrl),
+    ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
     button.shareLink(ctrl),
+    button.sharePGN(ctrl),
     button.flipBoard(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
@@ -261,7 +320,7 @@ function gameInfos(data) {
 function renderGamePopup(ctrl) {
   return popupWidget(
     'player_controls',
-    gameInfos(ctrl.data),
+    helper.isPortrait() ? gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
       renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
@@ -271,7 +330,6 @@ function renderGamePopup(ctrl) {
 
 function renderGameActionsBar(ctrl) {
   var children = [
-    renderGamePopup(ctrl),
     m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||

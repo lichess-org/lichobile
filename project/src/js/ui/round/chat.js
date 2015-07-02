@@ -1,23 +1,22 @@
-var helper = require('../helper');
-var i18n = require('../../i18n');
-var iScroll = require('iscroll');
-var storage = require('../../storage');
-var gameApi = require('../../lichess/game');
-var backbutton = require('../../backbutton');
-var socket = require('../../socket');
+import helper from '../helper';
+import i18n from '../../i18n';
+import storage from '../../storage';
+import gameApi from '../../lichess/game';
+import backbutton from '../../backbutton';
+import socket from '../../socket';
 
-module.exports = {
+export default {
   controller: function(root) {
 
-    var storageId = 'chat.' + root.data.game.id;
+    const storageId = 'chat.' + root.data.game.id;
+
+    let chatHeight;
 
     this.root = root;
     this.showing = false;
     this.messages = root.data.chat || [];
     this.inputValue = '';
     this.unread = false;
-    this.scroller = null;
-    this.scrollerHeight = 0;
 
     var checkUnreadFromStorage = function() {
       var nbMessages = storage.get(storageId);
@@ -48,9 +47,6 @@ module.exports = {
     this.open = function() {
       backbutton.stack.push(this.close);
       this.showing = true;
-      setTimeout(function() {
-        if (this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
-      }.bind(this), 200);
     }.bind(this);
 
     this.close = function(fromBB) {
@@ -64,46 +60,34 @@ module.exports = {
       this.messages = messages;
       checkUnreadFromStorage();
       storage.set(storageId, this.messages.length);
+      m.redraw();
     }.bind(this);
 
     this.append = function(msg) {
+      m.startComputation();
       this.messages.push(msg);
       storage.set(storageId, this.messages.length);
       if (msg.u !== 'lichess') this.unread = true;
-      m.redraw();
-      // hack to prevent scrolling to bottom on every redraw
-      setTimeout(function() {
-        if (this.scroller) this.scroller.scrollTo(0, this.scroller.maxScrollY, 0);
-      }.bind(this), 100);
+      m.endComputation();
     }.bind(this);
 
+    function onKeyboardShow(e) {
+      if (window.cordova.platformId === 'ios') {
+        let chat = document.getElementById('chat_scroller');
+        if (!chat) return;
+        chatHeight = chat.offsetHeight;
+        chat.style.height = (chatHeight - e.keyboardHeight) + 'px';
+      }
+    }
 
-    var onKeyboardShow = function(e) {
-      var self = this;
-      var chat = document.getElementById('chat_scroller');
-      if (!chat) return;
-      // TODO: this is a temporary hack: ionic plugin doesn't return good keyboard
-      // size because it doesn't include statusbar height
-      var statusBarHeight = (window.cordova.platformId === 'android') ? 25 : 0;
-      chat.style.height = (this.scrollerHeight - (e.keyboardHeight - statusBarHeight)) + 'px';
-      setTimeout(function() {
-        if (self.scroller) self.scroller.refresh();
-        if (self.scroller) self.scroller.scrollTo(0, self.scroller.maxScrollY, 0);
-      }, 200);
-    }.bind(this);
-
-    var onKeyboardHide = function() {
-      var self = this;
-      // because of iscroll we need to manually blur when user hide
-      // keyboard
+    function onKeyboardHide() {
+      if (window.cordova.platformId === 'ios') {
+        let chat = document.getElementById('chat_scroller');
+        if (chat) chat.style.height = chatHeight + 'px';
+      }
       var input = document.getElementById('chat_input');
-      var chat = document.getElementById('chat_scroller');
       if (input) input.blur();
-      if (chat) chat.style.height = this.scrollerHeight + 'px';
-      setTimeout(function() {
-        if (self.scroller) self.scroller.refresh();
-      }, 200);
-    }.bind(this);
+    }
 
     window.addEventListener('native.keyboardhide', onKeyboardHide);
     window.addEventListener('native.keyboardshow', onKeyboardShow);
@@ -119,10 +103,6 @@ module.exports = {
 
     if (!ctrl.showing) return m('div#chat.modal.modal_slide');
 
-    var vh = helper.viewportDim().vh,
-      formH = 50,
-      scrollerH = vh - formH - 50; // minus modal header height
-
     return m('div#chat.modal.modal_slide.show', [
       m('header', [
         m('button.modal_close[data-icon=L]', {
@@ -131,25 +111,9 @@ module.exports = {
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
-      m('div.modal_content', [
-        m('div#chat_scroller.chat_scroller', {
-          style: {
-            height: scrollerH + 'px'
-          },
-          config: function(el, isUpdate, context) {
-            if (!isUpdate) {
-              ctrl.scroller = new iScroll(el);
-              context.onunload = function() {
-                if (ctrl.scroller) {
-                  ctrl.scroller.destroy();
-                  ctrl.scroller = null;
-                }
-              };
-              ctrl.scroller.scrollTo(0, ctrl.scroller.maxScrollY, 0);
-              ctrl.scrollerHeight = el.offsetHeight;
-            }
-            ctrl.scroller.refresh();
-          }
+      m('div.modal_content.allow_select', [
+        m('div#chat_scroller.native_scroller', {
+          config: el => el.scrollTop = el.scrollHeight
         }, [
           m('ul.chat_messages', ctrl.messages.map(function(msg, i, all) {
             var player = ctrl.root.data.player;
@@ -180,9 +144,6 @@ module.exports = {
           }))
         ]),
         m('form.chat_form', {
-          style: {
-            height: formH + 'px'
-          },
           onsubmit: function(e) {
             e.preventDefault();
             var msg = e.target[0].value.trim();

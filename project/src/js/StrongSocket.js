@@ -1,9 +1,9 @@
-var merge = require('lodash/object/merge'),
-  assign = require('lodash/object/assign'),
-  range = require('lodash/utility/range'),
-  utils = require('./utils'),
-  signals = require('./signals'),
-  storage = require('./storage');
+import merge from 'lodash/object/merge';
+import assign from 'lodash/object/assign';
+import range from 'lodash/utility/range';
+import * as utils from './utils';
+import signals from './signals';
+import storage from './storage';
 
 const lichessSri = utils.lichessSri;
 
@@ -28,7 +28,7 @@ const strongSocketDefaults = {
   }
 };
 
-function StrongSocket(url, version, settings) {
+export default function StrongSocket(url, version, settings) {
   this.settings = merge({}, strongSocketDefaults, settings);
   this.url = url;
   this.version = version;
@@ -86,14 +86,14 @@ StrongSocket.prototype = {
         resend.forEach(function(x) { self.send(x.t, x.d); });
       };
       self.ws.onmessage = function(e) {
-        var m = JSON.parse(e.data);
-        var mData = m.d || [];
+        var msg = JSON.parse(e.data);
+        var mData = msg.d || [];
 
-        if (m.t === 'n') self.pong();
+        if (msg.t === 'n') self.pong();
         else self.debug(e.data);
 
-        if (m.t === 'b') mData.forEach(function(x) { self.handle(x); });
-        else self.handle(m);
+        if (msg.t === 'b') mData.forEach(function(x) { self.handle(x); });
+        else self.handle(msg);
       };
     } catch (e) {
       self.onError(e);
@@ -179,30 +179,30 @@ StrongSocket.prototype = {
     });
   },
 
-  handle: function(m) {
+  handle: function(msg) {
     var self = this;
-    if (m.v) {
-      if (m.v <= self.version) {
-        self.debug("already has event " + m.v);
+    if (msg.v) {
+      if (msg.v <= self.version) {
+        self.debug("already has event " + msg.v);
         return;
       }
-      if (m.v > self.version + 1) {
-        self.debug("event gap detected from " + self.version + " to " + m.v);
+      if (msg.v > self.version + 1) {
+        self.debug("event gap detected from " + self.version + " to " + msg.v);
       }
-      self.version = m.v;
+      self.version = msg.v;
     }
-    switch (m.t || false) {
+    switch (msg.t || false) {
       case false:
         break;
       case 'ack':
         self.ackableMessages = [];
         break;
       default:
-        if (!self.settings.receive || !self.settings.receive(m.t, m.d)) {
-          var h = self.settings.events[m.t];
-          if (h) h(m.d || null, self);
+        if (!self.settings.receive || !self.settings.receive(msg.t, msg.d)) {
+          var h = self.settings.events[msg.t];
+          if (h) h(msg.d || null, self);
           else if (!self.options.ignoreUnknownMessages) {
-            self.debug('Message not supported ' + JSON.stringify(m));
+            self.debug('Message not supported ' + JSON.stringify(msg));
           }
         }
     }
@@ -273,5 +273,3 @@ StrongSocket.prototype = {
     return this.options.pingDelay + this.averageLag;
   }
 };
-
-module.exports = StrongSocket;

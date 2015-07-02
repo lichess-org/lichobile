@@ -1,10 +1,10 @@
-var compact = require('lodash/array/compact')
-var keys = require('lodash/object/keys')
-var first = require('lodash/array/first')
-var rest = require('lodash/array/rest')
-var pairs = require('lodash/object/pairs')
-var chessground = require('chessground');
-var chess = require('./chess');
+import compact from 'lodash/array/compact'
+import keys from 'lodash/object/keys'
+import first from 'lodash/array/first'
+import rest from 'lodash/array/rest'
+import pairs from 'lodash/object/pairs'
+import chessground from 'chessground';
+import chess from './chess';
 
 function str2move(str) {
   return str ? [str.slice(0, 2), str.slice(2, 4), str[4]] : null;

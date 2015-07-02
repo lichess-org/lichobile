@@ -1,6 +1,6 @@
 /** @jsx m */
 import userPerfs from '../../lichess/perfs';
-import widgets from '../widget/common';
+import { header as headerWidget, backButton, empty } from '../widget/common';
 import perf from '../widget/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -14,7 +14,7 @@ export default function view(ctrl) {
 
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;
-    return widgets.header(null, widgets.backButton(title));
+    return headerWidget(null, backButton(title));
   }
 
   function profile() {
@@ -30,7 +30,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, profile, widgets.empty, widgets.empty);
+  return layout.free(header, profile, empty, empty);
 }
 
 function renderWarnings(user) {

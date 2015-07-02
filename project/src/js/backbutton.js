@@ -1,9 +1,9 @@
-var isFunction = require('lodash/lang/isFunction');
-var utils = require('./utils');
+import isFunction from 'lodash/lang/isFunction';
+import * as utils from './utils';
 
-var stack = [];
+const stack = [];
 
-module.exports = function() {
+export default function backbutton() {
   var b = stack.pop();
   if (isFunction(b)) {
     b('backbutton');
@@ -13,6 +13,6 @@ module.exports = function() {
   } else {
     window.navigator.app.exitApp();
   }
-};
+}
 
-module.exports.stack = stack;
+backbutton.stack = stack;

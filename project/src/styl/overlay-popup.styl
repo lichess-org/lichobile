@@ -8,11 +8,8 @@
   position absolute
   border-radius 0 0 5px 5px
   top 10%
-  left 10%
-  width 80%
-  @media only screen and (min-width 600px)
-    width 55%
-    left 22.5%
+  left 7.5%
+  width 85%
   max-height 80%
   z-index 12
   background-color #fff
@@ -28,6 +25,8 @@
     > h2
       text-align center
       line-height 45px
+    + .popup_content
+      height calc(100% - 45px)
   button
     display block
     width 100%
@@ -54,10 +53,19 @@
     background-color #fff
   .list_item.active
     background-color darken(#fff, 5%)
-  @media only screen and (min-device-width 700px)
+  @media only screen and (min-width 500px)
+    width 60%
+    left 20%
+  @media only screen and (min-width 600px)
+    width 55%
+    left 22.5%
+  @media only screen and (min-width 700px)
     width 50%
     left 25%
     right 25%
-  @media only screen and (max-device-height 480px)
+  @media only screen and (max-height 400px)
     max-height 85%
     top 10%
+
+.popup_content
+  height 100%

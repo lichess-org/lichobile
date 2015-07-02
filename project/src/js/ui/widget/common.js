@@ -1,6 +1,6 @@
 /** @jsx m */
 import menu from '../menu';
-import utils from '../../utils';
+import * as utils from '../../utils';
 import helper from '../helper';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
@@ -11,25 +11,24 @@ import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
 
-var widgets = {};
 
-widgets.menuButton = function() {
+export function menuButton() {
   return (
     <button key="main-menu" className="fa fa-navicon main_header_button menu_button" config={helper.ontouch(menu.toggle)}>
     </button>
   );
-};
+}
 
-widgets.backButton = function(title) {
+export function backButton(title) {
   return (
     <button key="default-history-backbutton" className="back_button main_header_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
     </button>
   );
-};
+}
 
-widgets.friendsButton = function() {
+export function friendsButton() {
   const nbFriends = friendsApi.count();
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
   return (
@@ -41,9 +40,9 @@ widgets.friendsButton = function() {
     }
     </button>
   );
-};
+}
 
-widgets.gamesButton = function() {
+export function gamesButton() {
   let key, action;
   const nbChallenges = challengesApi.count();
   if (session.nowPlaying().length || nbChallenges) {
@@ -73,44 +72,44 @@ widgets.gamesButton = function() {
       }
     </button>
   );
-};
+}
 
-widgets.headerBtns = function() {
+export function headerBtns() {
   if (utils.hasNetwork() && session.isConnected() && friendsApi.count())
     return (
       <div className="buttons">
-        {widgets.friendsButton()}
-        {widgets.gamesButton()}
+        {friendsButton()}
+        {gamesButton()}
       </div>
     );
   else
-    return widgets.gamesButton();
-};
+    return gamesButton();
+}
 
-widgets.header = function(title, leftButton) {
+export function header(title, leftButton) {
   return m('nav', [
-    leftButton ? leftButton : widgets.menuButton(),
+    leftButton ? leftButton : menuButton(),
     title ? m('h1', title) : null,
-    widgets.headerBtns()
+    headerBtns()
   ]);
-};
+}
 
-widgets.loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
+export const loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
   return m('div.circle_' + i);
 }));
 
-widgets.connectingHeader = function(title) {
+export function connectingHeader(title) {
   return m('nav', [
-    widgets.menuButton(),
+    menuButton(),
     m('h1.reconnecting', [
       title ? title : null,
-      widgets.loader
+      loader
     ]),
-    widgets.headerBtns()
+    headerBtns()
   ]);
-};
+}
 
-widgets.viewOnlyBoardContent = function(fen, lastMove, orientation, variant) {
+export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
   const x = helper.viewportDim().vw;
   const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
@@ -123,13 +122,13 @@ widgets.viewOnlyBoardContent = function(fen, lastMove, orientation, variant) {
       </section>
     </div>
   );
-};
+}
 
-widgets.empty = function() {
+export function empty() {
   return [];
-};
+}
 
-widgets.userStatus = function(user) {
+export function userStatus(user) {
   const status = user.online ? 'online' : 'offline';
   return (
     <div className="user">
@@ -138,6 +137,4 @@ widgets.userStatus = function(user) {
       {user.username}
     </div>
   );
-};
-
-module.exports = widgets;
+}

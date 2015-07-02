@@ -32,7 +32,8 @@ function makeConfig(data, fen, flip) {
     },
     premovable: {
       enabled: data.pref.enablePremove,
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.general.pieceDestinations(),
+      castle: data.game.variant.key !== 'antichess'
     },
     draggable: {
       showGhost: data.pref.highlight,

@@ -1,7 +1,7 @@
 .content.round
   @media only screen and (orientation: portrait)
     &.onlyBoard
-      height calc(100% - 100px)
+      height calc(100% - 50px)
       display flex
       align-items center
   @media only screen and (orientation: landscape)
@@ -12,13 +12,63 @@
     height calc(100vw)
     width calc(100vw)
   @media only screen and (orientation: landscape)
-    height calc(100vh - 50px - 1em)
-    width calc(100vh - 50px - 1em)
-    flex 0 0 calc(100vh - 50px - 1em)
+    height calc(100vh - 50px)
+    width calc(100vh - 50px)
+    flex 0 0 auto
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc(100vh - 50px - 12vh)
+    width calc(100vh - 50px - 12vh)
+    flex 0 0 auto
+    margin auto 0
 
 .board
   width 100%
   height 100%
+
+.table
+  height 100%
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  margin 0 1rem
+  > header
+    flex 0 0 auto
+  > .playersTable
+    margin 1em 0
+    flex 1 1 auto
+    display flex
+    flex-flow column nowrap
+    justify-content space-around
+  > #game_actions
+    position initial
+    flex 0 0 45px
+  @media only screen and (min-height 800px) and (orientation: landscape)
+    > .playersTable
+      margin 2rem 0
+  @media only screen and (max-height 400px) and (orientation landscape)
+    font-size 0.7rem
+    > #game_actions
+      flex 0 0 40px
+    > .tableHeader
+      > .icon-game
+        font-size 20px
+        vertical-align bottom
+      > .game-title
+        font-size 0.6rem
+        line-height 14px
+    > .playersTable
+      margin 10px 0
+      justify-content space-around
+    .antagonist
+      padding-left 0
+    .clock
+      width 85px
+      font-size 18px
+      &.correspondence
+        font-size 14px
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc(100vh - 50px - 12vh)
+    margin auto 1rem
 
 .antagonist
   height calc((100vh - 100vw) / 2 - 50px)
@@ -29,25 +79,94 @@
   color #fff
   overflow hidden
   @media only screen and (orientation: landscape)
+    padding 0
+    flex 1 0 auto
     height initial
+    &.player
+      > .antagonistInfos
+        align-self flex-end
+      > .clock
+        align-self flex-start
+    &.opponent
+      > .antagonistInfos
+        align-self flex-start
+      > .clock
+        align-self flex-end
 
-.table
-  flex 1 1 auto
+.replay
+  flex 0 0 auto
+  height 250px
+  padding 1rem 2rem
+  overflow hidden
+  @media only screen and (orientation: landscape) and (max-height 450px)
+    height 100px
+    padding 5px 0
+  @media only screen and (orientation: landscape) and (min-height 450px)
+    height 150px
+    padding 5px 0
+  @media only screen and (orientation: landscape) and (min-height 550px)
+    height 200px
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height 300px
+  @media only screen and (orientation: landscape) and (min-height 800px)
+    height 400px
+
+.gameMovesList
+  height 100%
+  width 100%
+  background lighten(bgdark, 3%)
+  > .moves
+    border-collapse collapse
+    border-spacing 0px
+    width 100%
+
+.replayMoveIndex, .replayMove
+  vertical-align middle
+  padding 0
+  height 30px
+  @media only screen and (orientation: landscape) and (max-height 400px)
+    height 20px
+  @media only screen and (orientation: landscape) and (max-height 500px)
+    height 25px
+
+.replayMoveIndex
+  width: 15%;
+  text-align: center;
+
+.replayMove
+  transition: background-color 0.13s ease 0s;
+  &.current
+    color orange
+  &.active
+    background-color lighten(bgdark, 8%)
 
 .antagonistInfos
   max-width calc(100% - 100px)
   overflow hidden
+  .rp.null
+    color textGray
   .rp.up
     color green
   .rp.down
     color red
   .rating
-    font-size 0.8em
+    font-size 0.9em
     color gold
     display inline-block
     vertical-align top
     margin-right 10px
-    line-height 1
+  .ratingAndMaterial
+    height 18px
+  &.active
+    background-color lighten(bgdark, 8%)
+  &.offline
+    max-width 100%
+  @media only screen and (min-width 960px) and (orientation landscape)
+    .ratingAndMaterial
+      height 25px
+    .rating
+      display block
+      margin 0.2rem 0 0.5rem
 
 .antagonistUser
   overflow hidden
@@ -57,6 +176,8 @@
   margin-bottom 3px
   > .status
     margin-right 5px
+    position relative
+    top 2px
     &.online
       color green
     &.offline
@@ -67,8 +188,6 @@
       color green
     &.no
       color red
-  &.active
-    background-color lighten(bgdark, 10%)
 
 .clock
   width 90px
@@ -90,6 +209,7 @@
   vertical-align top
   margin 2px 10px 0 0
   font-weight bold
+
 .tomb
   display inline-block
   margin-left 8px
@@ -112,6 +232,16 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
+  @media only screen and (orientation landscape)
+    &:first-child
+      margin-left 0
+      div
+        margin-top 0
+        margin-left 0
+  @media only screen and (min-width 960px) and (orientation landscape)
+    div
+      width 25px
+      height 25px
 
 #promotion_choice
   border 1px solid black
@@ -135,9 +265,9 @@
   bottom 0
   width 100%
   @media only screen and (orientation: landscape)
-    order 4
-    position initial
-    width initial
+    width calc(100vw - (100vh - 50px) - 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    width calc(100vw - (100vh - 50px - 12vh) - 10px)
 
 .game_action
   display inline-block
@@ -148,6 +278,7 @@
   border none
   color: gold
   height 45px
+  line-height 35px
   width 25%
   &:last-child
     border-right none
@@ -158,15 +289,19 @@
     visibility hidden
   &:before
     font-size 22px
+    line-height 22px
+  @media only screen and (max-height 400px) and (orientation landscape)
+    height 40px
+    line-height 25px
+    &:before
+      font-size 18px
+      line-height 18px
 
 #open_player_controls.answer_required,
 #open_chat.unread
   animation answer_glow 5s infinite
 
-.player_controls
-  &.overlay_popup > header
-    line-height 1
-    padding 10px
+.tableHeader, .player_controls
   .icon-game
     display inline-block
     font-size 33px
@@ -182,6 +317,11 @@
     text-decoration underline
     &.active
       background-color darken(#fff, 5%)
+
+.player_controls
+  &.overlay_popup > header
+    line-height 1
+    padding 10px
   button
     &.flipped
       color gold
@@ -198,18 +338,18 @@
   .notice
     margin 5px 0
 
-.offline_actions
-  .action
-    padding 10px
+.offline_actions, .player_controls
   .select_input
     background darken(#fff, 10%)
     color textDarkGray
     box-shadow none
     > select
       color textDarkGray
+  .action
+    padding 10px
 
-.player_controls, .offline_actions
-  .status
+.player_controls, .offline_actions, .playersTable
+  .resultStatus
     color gold
   .result
     padding 0 10px
@@ -250,3 +390,24 @@
   background: #eee;
   font-family: Cousine;
   border: 1px solid #ccc;
+
+.submitMovePopup
+  background-color rgba(0,0,0,0.2)
+  > .overlay_popup
+    top calc(100vh - 45px - ((100vh - 100vw) / 2) / 2)
+    @media only screen and (orientation: landscape)
+      top calc(100vh / 2)
+      left initial
+      right 1rem
+      width calc(100vw - 100vh + 50px - 5vw)
+    @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+      left initial
+      right 1rem
+      width calc(100vw - 100vh + 50px + 12vh - 5vw)
+    border-radius 5px
+    button
+      &:first-child
+        border-radius 5px 0 0 5px
+      &:last-child
+        border-radius 0 5px 5px 0
+

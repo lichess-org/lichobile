@@ -1,15 +1,10 @@
-var m = require('mithril');
-var merge = require('merge');
-var last = require('lodash/array/last');
-var chessground = require('chessground');
-var partial = chessground.util.partial;
-var data = require('./data');
-var chess = require('./chess');
-var puzzle = require('./puzzle');
-import {
-  getCurrent, setDone
-}
-from './database';
+import last from 'lodash/array/last';
+import chessground from 'chessground';
+import { partialf } from '../../utils';
+import data from './data';
+import chess from './chess';
+import puzzle from './puzzle';
+import { getCurrent, setDone } from './database';
 import sound from '../../sound';
 import actions from './actions';
 
@@ -24,7 +19,7 @@ module.exports = function() {
     m.startComputation();
     switch (newLines) {
       case 'retry':
-        setTimeout(partial(this.revert, this.data.puzzle.id), 500);
+        setTimeout(partialf(this.revert, this.data.puzzle.id), 500);
         this.data.comment = 'retry';
         break;
       case 'fail':
@@ -39,7 +34,7 @@ module.exports = function() {
         this.userFinalizeMove([orig, dest, promotion], newProgress);
         if (newLines == 'win') {
           this.chessground.stop();
-        } else setTimeout(partial(this.playOpponentNextMove, this.data.puzzle.id), 1000);
+        } else setTimeout(partialf(this.playOpponentNextMove, this.data.puzzle.id), 1000);
         break;
     }
     m.endComputation(); // give feedback ASAP, don't wait for delayed action
@@ -112,7 +107,7 @@ module.exports = function() {
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
     if (this.data.mode !== 'view')
-      setTimeout(partial(this.playInitialMove, this.data.puzzle.id), 1000);
+      setTimeout(partialf(this.playInitialMove, this.data.puzzle.id), 1000);
   }.bind(this);
   this.init();
 

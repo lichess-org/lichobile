@@ -1,11 +1,11 @@
-var merge = require('lodash/object/merge');
-var Spinner = require('spin.js');
-var spinner = new Spinner({ color: '#C4A86F' });
+import merge from 'lodash/object/merge';
+import Spinner from 'spin.js';
 
-var http = {};
-http.apiVersion = 1;
+const spinner = new Spinner({ color: '#C4A86F' });
 
-var baseUrl = window.lichess.apiEndPoint;
+export const apiVersion = 1;
+
+const baseUrl = window.lichess.apiEndPoint;
 
 function onSuccess(data) {
   spinner.stop();
@@ -19,12 +19,12 @@ function onError(data) {
 
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + http.apiVersion + '+json');
+  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + apiVersion + '+json');
   xhr.timeout = 8000;
 }
 
 // convenient wrapper around m.request
-http.request = function(url, opts, feedback) {
+export function request(url, opts, feedback) {
 
   var cfg = {
     url: 'http://' + baseUrl + url,
@@ -51,6 +51,4 @@ http.request = function(url, opts, feedback) {
     return promise.then(onSuccess, onError);
   } else
     return promise;
-};
-
-module.exports = http;
+}

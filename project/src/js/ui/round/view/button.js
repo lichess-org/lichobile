@@ -1,11 +1,14 @@
-var gameApi = require('../../../lichess/game');
-var gameStatus = require('../../../lichess/status');
-var helper = require('../../helper');
-var throttle = require('lodash/function/throttle');
-var i18n = require('../../../i18n');
-var socket = require('../../../socket');
+/** @jsx m */
+import gameApi from '../../../lichess/game';
+import gameStatus from '../../../lichess/status';
+import helper from '../../helper';
+import throttle from 'lodash/function/throttle';
+import i18n from '../../../i18n';
+import socket from '../../../socket';
+import { getPGN } from '../roundXhr';
+import { handleXhrError } from '../../../utils';
 
-module.exports = {
+export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button', {
       className: socketMsg,
@@ -25,7 +28,36 @@ module.exports = {
       config: helper.ontouch(function() {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data));
       })
-    }, [m('span.fa.fa-share-alt'), i18n('shareGameURL')]);
+    }, [m('span.fa.fa-link'), i18n('shareGameURL')]);
+  },
+  sharePGN: function(ctrl) {
+    function handler() {
+      getPGN(ctrl.data.game.id).then(function(PGN) {
+        window.plugins.socialsharing.share(PGN);
+      }, err => handleXhrError(err));
+    }
+    return (
+      <button config={helper.ontouch(handler)}>
+        <span className="fa fa-share-alt" />
+        {i18n('sharePGN')}
+      </button>
+    );
+  },
+  submitMove: function(ctrl) {
+    return (
+      <div>
+        <button className="binary_choice" data-icon="E"
+          config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
+        >
+          Submit move
+        </button>
+        <button className="binary_choice" data-icon="L"
+          config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
+        >
+          {i18n('cancel')}
+        </button>
+      </div>
+    );
   },
   forceResign: function(ctrl) {
     return gameApi.forceResignable(ctrl.data) ?
@@ -145,5 +177,3 @@ module.exports = {
     });
   }
 };
-
-

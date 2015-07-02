@@ -1,4 +1,4 @@
-var Chess = require('chess.js').Chess;
+import { Chess } from 'chess.js';
 
 function make(fen) {
   return new Chess(fen);

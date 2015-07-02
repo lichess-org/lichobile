@@ -1,4 +1,3 @@
-/** @jsx m */
 import helper from '../helper';
 import * as utils from '../../utils';
 import i18n from '../../i18n';

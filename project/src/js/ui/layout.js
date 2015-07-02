@@ -1,4 +1,3 @@
-/** @jsx m */
 import menu from './menu';
 import gamesMenu from './gamesMenu';
 import newGameForm from './newGameForm';
@@ -7,7 +6,6 @@ import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
 import helper from './helper';
-import m from 'mithril';
 
 export default {
 

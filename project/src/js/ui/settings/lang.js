@@ -1,4 +1,3 @@
-/** @jsx m */
 import * as utils from '../../utils';
 import { header as headerWidget, backButton, empty } from '../widget/common';
 import formWidgets from '../widget/form';

@@ -1,4 +1,3 @@
-/** @jsx m */
 import gameApi from '../../../lichess/game';
 import gameStatus from '../../../lichess/status';
 import helper from '../../helper';

@@ -1,4 +1,3 @@
-/** @jsx m */
 import chessground from 'chessground';
 import settings from '../../settings';
 import layout from '../layout';
@@ -16,7 +15,6 @@ import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
-import m from 'mithril';
 
 export default function view(ctrl) {
 

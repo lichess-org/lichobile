@@ -1,4 +1,3 @@
-/** @jsx m */
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';

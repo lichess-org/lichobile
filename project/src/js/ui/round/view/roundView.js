@@ -1,4 +1,3 @@
-/** @jsx m */
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';

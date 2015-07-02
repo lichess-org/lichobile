@@ -1,4 +1,3 @@
-/** @jsx m */
 import helper from './helper';
 import popupWidget from './widget/popup';
 import i18n from '../i18n';

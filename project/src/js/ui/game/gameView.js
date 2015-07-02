@@ -1,4 +1,3 @@
-/** @jsx m */
 import session from '../../session';
 import roundView from '../round/view/roundView';
 import gameApi from '../../lichess/game';

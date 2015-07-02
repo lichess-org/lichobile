@@ -1,6 +1,4 @@
-/** @jsx m */
 import helper from '../../helper';
-import m from 'mithril';
 
 const emptyTd = <td className="move">...</td>;
 

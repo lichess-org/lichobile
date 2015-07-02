@@ -1,4 +1,3 @@
-/** @jsx m */
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton, empty } from '../widget/common';
 import perf from '../widget/perf';

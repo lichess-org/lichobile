@@ -1,4 +1,3 @@
-/** @jsx m */
 import menu from '../menu';
 import * as utils from '../../utils';
 import helper from '../helper';

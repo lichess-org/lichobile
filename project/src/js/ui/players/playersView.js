@@ -1,4 +1,3 @@
-/** @jsx m */
 import * as utils from '../../utils';
 import h from '../helper';
 import { empty, menuButton, friendsButton, userStatus } from '../widget/common';

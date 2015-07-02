@@ -1,4 +1,3 @@
-/** @jsx m */
 import socket from '../../socket';
 import * as utils from '../../utils';
 import h from '../helper';

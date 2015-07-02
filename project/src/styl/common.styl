@@ -11,14 +11,6 @@ labelText = #969696
 green = #759900
 red = #ac524f
 
-*
-  user-select none
-  -webkit-touch-callout none
-
-// to prevent a bug in iOS where typed text does not fill in input field
-input
-  user-select initial
-
 html
   font-family 'Open Sans'
   font-size 100%
@@ -26,6 +18,10 @@ html
 body
   overflow hidden
   background-color bgdark
+
+// workaround for ios: the direct parent of an input must have user-select: text
+.allow_select
+  user-select text
 
 h2
   text-transform uppercase

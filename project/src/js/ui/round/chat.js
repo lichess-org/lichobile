@@ -72,15 +72,12 @@ export default {
     }.bind(this);
 
     function onKeyboardShow(e) {
-      let chat = document.getElementById('chat_scroller');
-      if (!chat) return;
       if (window.cordova.platformId === 'ios') {
+        let chat = document.getElementById('chat_scroller');
+        if (!chat) return;
         chatHeight = chat.offsetHeight;
         chat.style.height = (chatHeight - e.keyboardHeight) + 'px';
       }
-      setTimeout(function() {
-        chat.scrollTop = chat.scrollHeight;
-      }, 200);
     }
 
     function onKeyboardHide() {
@@ -114,7 +111,7 @@ export default {
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
-      m('div.modal_content', [
+      m('div.modal_content.allow_select', [
         m('div#chat_scroller.native_scroller', {
           config: el => el.scrollTop = el.scrollHeight
         }, [

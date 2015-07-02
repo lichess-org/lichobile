@@ -34,7 +34,7 @@ function searchModal(ctrl) {
     <div id="searchPlayersModal" className="modal show">
       <header>
         <button key="search-players-backbutton" className="fa fa-arrow-left search_back" config={h.ontouch(ctrl.closeSearch)} />
-        <div className="search_input">
+        <div className="search_input allow_select">
           <input id="searchPlayers" type="search"
           placeholder="Search players" oninput={ctrl.onInput}
           autocapitalize="off"

@@ -22,15 +22,10 @@
     "url": "https://github.com/veloce/lichobile/issues"
   },
   "homepage": "https://github.com/veloce/lichobile",
-  "browserify": {
-    "transform": [
-        ["babelify", { "blacklist": ["react"] }]
-    ]
-  },
   "devDependencies": {
-    "babelify": "~6.0.2",
+    "babelify": "~6.1.2",
     "chokidar": "~0.12.6",
-    "gulp": "~3.8.8",
+    "gulp": "~3.8.11",
     "gulp-autoprefixer": "~2.0.0",
     "gulp-if": "~1.2.5",
     "gulp-minify-css": "~0.3.11",

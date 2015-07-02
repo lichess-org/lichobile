@@ -7,7 +7,7 @@ function currentId() {
 }
 
 export function getCurrent() {
-  return JSON.parse(atob(db[currentId()]));
+  return JSON.parse(window.atob(db[currentId()]));
 }
 
 export function setDone() {

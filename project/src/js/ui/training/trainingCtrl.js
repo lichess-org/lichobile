@@ -4,11 +4,11 @@ import { partialf } from '../../utils';
 import data from './data';
 import chess from './chess';
 import puzzle from './puzzle';
-import { getCurrent, setDone } from './database';
+import { getCurrent } from './database';
 import sound from '../../sound';
 import actions from './actions';
 
-module.exports = function() {
+export default function ctrl() {
 
   var userMove = function(orig, dest) {
     var res = puzzle.tryMove(this.data, [orig, dest]);
@@ -32,7 +32,7 @@ module.exports = function() {
         break;
       default:
         this.userFinalizeMove([orig, dest, promotion], newProgress);
-        if (newLines == 'win') {
+        if (newLines === 'win') {
           this.chessground.stop();
         } else setTimeout(partialf(this.playOpponentNextMove, this.data.puzzle.id), 1000);
         break;
@@ -43,10 +43,10 @@ module.exports = function() {
   var onMove = function(orig, dest, captured) {
     if (captured) sound.capture();
     else sound.move();
-  }.bind(this);
+  };
 
   this.revert = function(id) {
-    if (id != this.data.puzzle.id) return;
+    if (id !== this.data.puzzle.id) return;
     this.chessground.set({
       fen: this.data.chess.fen(),
       lastMove: chess.lastMove(this.data.chess),
@@ -73,44 +73,6 @@ module.exports = function() {
     if (this.data.chess.in_check()) this.chessground.setCheck();
   }.bind(this);
 
-  this.init = function() {
-    this.data = data({
-      puzzle: getCurrent(),
-      mode: 'play'
-    });
-    if (this.actions) this.actions.close();
-    else this.actions = new actions.controller(this);
-    // chessground.board.reset(this.chessground.data);
-    // chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg);
-    var chessgroundConf = {
-      fen: this.data.puzzle.fen,
-      orientation: this.data.puzzle.color,
-      turnColor: this.data.puzzle.opponentColor,
-      movable: {
-        free: false,
-        color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
-        events: {
-          after: userMove
-        },
-      },
-      events: {
-        move: onMove
-      },
-      animation: {
-        enabled: true,
-        duration: 300
-      },
-      premovable: {
-        enabled: true
-      }
-    };
-    if (this.chessground) this.chessground.set(chessgroundConf);
-    else this.chessground = new chessground.controller(chessgroundConf);
-    if (this.data.mode !== 'view')
-      setTimeout(partialf(this.playInitialMove, this.data.puzzle.id), 1000);
-  }.bind(this);
-  this.init();
-
   this.playOpponentMove = function(move) {
     onMove(move[0], move[1], this.chessground.data.pieces[move[1]]);
     m.startComputation();
@@ -130,18 +92,57 @@ module.exports = function() {
   }.bind(this);
 
   this.playOpponentNextMove = function(id) {
-    if (id != this.data.puzzle.id) return;
+    if (id !== this.data.puzzle.id) return;
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
   }.bind(this);
 
   this.playInitialMove = function(id) {
-    if (id != this.data.puzzle.id) return;
+    if (id !== this.data.puzzle.id) return;
     this.playOpponentMove(this.data.puzzle.move);
   }.bind(this);
 
   this.jump = function(to) {
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
   }.bind(this);
-};
+
+  this.init = function() {
+    this.data = data({
+      puzzle: getCurrent(),
+      mode: 'play'
+    });
+    if (this.actions) this.actions.close();
+    else this.actions = new actions.controller(this);
+    // chessground.board.reset(this.chessground.data);
+    // chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg);
+    var chessgroundConf = {
+      fen: this.data.puzzle.fen,
+      orientation: this.data.puzzle.color,
+      turnColor: this.data.puzzle.opponentColor,
+      movable: {
+        free: false,
+        color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
+        events: {
+          after: userMove
+        }
+      },
+      events: {
+        move: onMove
+      },
+      animation: {
+        enabled: true,
+        duration: 300
+      },
+      premovable: {
+        enabled: true
+      }
+    };
+    if (this.chessground) this.chessground.set(chessgroundConf);
+    else this.chessground = new chessground.controller(chessgroundConf);
+    if (this.data.mode !== 'view')
+      setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
+  }.bind(this);
+
+  this.init();
+}

@@ -1,8 +1,8 @@
-import compact from 'lodash/array/compact'
-import keys from 'lodash/object/keys'
-import first from 'lodash/array/first'
-import rest from 'lodash/array/rest'
-import pairs from 'lodash/object/pairs'
+import compact from 'lodash/array/compact';
+import keys from 'lodash/object/keys';
+import first from 'lodash/array/first';
+import rest from 'lodash/array/rest';
+import pairs from 'lodash/object/pairs';
 import chessground from 'chessground';
 import chess from './chess';
 
@@ -25,13 +25,13 @@ function tryMove(data, move) {
     var newProgress = data.progress.concat([move2str(m)]);
     var newLines = getPath(data.puzzle.lines, newProgress);
     return newLines ? [newProgress, newLines] : false;
-  }
+  };
   var moves = [null, 'q', 'n', 'r', 'b'].map(function(promotion) {
     return move.concat([promotion]);
   });
   var tries = compact(moves.map(tryM));
   var success = first(tries.filter(function(t) {
-    return t[1] != 'retry';
+    return t[1] !== 'retry';
   }));
   if (success) return success;
   if (first(tries)) return first(tries);
@@ -71,7 +71,7 @@ function findBestLine(lines) {
 
 function findBestLineFromProgress(lines, progress) {
   var ahead = getPath(lines, progress);
-  return ahead == 'win' ? progress : progress.concat(findBestLine(ahead));
+  return ahead === 'win' ? progress : progress.concat(findBestLine(ahead));
 }
 
 function makeHistory(data) {
@@ -83,7 +83,7 @@ function makeHistory(data) {
       move: m,
       fen: c.fen(),
       check: c.in_check(),
-      turnColor: c.turn() == 'w' ? 'white' : 'black'
+      turnColor: c.turn() === 'w' ? 'white' : 'black'
     };
   });
 }
@@ -99,16 +99,16 @@ function jump(chessgroundData, data, to) {
   });
 }
 
-function reload(chessgroundData, data, cfg) {
+function reload(chessgroundData, data) {
   chessground.configure(chessgroundData, {
     orientation: data.puzzle.color,
     fen: data.chess.fen(),
     turnColor: data.puzzle.opponentColor,
     movable: {
-      color: data.mode == 'view' ? null : data.puzzle.color
+      color: data.mode === 'view' ? null : data.puzzle.color
     }
   });
-  if (data.mode == 'view') {
+  if (data.mode === 'view') {
     data.replay = {
       step: 0,
       history: makeHistory(data)

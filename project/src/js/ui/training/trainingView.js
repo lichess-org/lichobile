@@ -1,63 +1,32 @@
 /** @jsx m */
-import chessground from 'chessground';
-import utils from '../../utils';
 import layout from '../layout';
-import widgets from '../widget/common';
-import {
-  renderAntagonist, renderGameActionsBar
-}
-from '../widget/offlineRound';
-import {
-  view as renderPromotion
-}
-from '../otb/promotion';
+import { header } from '../widget/common';
+import { view as renderPromotion } from '../otb/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
-import {
-  renderBoard
-}
-from '../round/view/roundView';
-import actions from './actions';
-import settings from '../../settings';
+import { renderBoard } from '../round/view/roundView';
 
-export
-default
-
-function view(ctrl) {
-
-  function content() {
-    const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-    const flip = settings.otb.flipPieces();
-    const wrapperClass = helper.classSet({
-      'otb': true,
-      'mode_flip': flip,
-      'mode_facing': !flip,
-      'turn_white': ctrl.chessground.data.turnColor === 'white',
-      'turn_black': ctrl.chessground.data.turnColor === 'black'
-    });
-    if (helper.isPortrait())
-      return ( <div className = "content round"> {
-        renderBoard(ctrl, renderPromotion, wrapperClass)
-      } {
-        renderGameActionsBar(ctrl, actions.view)
-      } </div>
-      );
-    else
-      return (
-          <div className="content round">
-          {renderBoard(ctrl, renderPromotion, wrapperClass)}
-          <section key="table" className="table">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
-          </section>
-          </div>
-          );
-  }
-
+export default function view(ctrl) {
   return layout.board(
-      utils.partialf(widgets.header, i18n('playOnTheBoardOffline')),
-      content,
-      null,
-      ctrl.data.player.color
-      );
+    header.bind(undefined, i18n('training')),
+    renderContent.bind(undefined, ctrl),
+    null
+  );
+}
+
+function renderContent(ctrl) {
+  if (helper.isPortrait())
+    return (
+      <div className = "content round">
+        {renderBoard(ctrl, renderPromotion)}
+      </div>
+    );
+  else
+    return (
+      <div className="content round">
+        {renderBoard(ctrl, renderPromotion)}
+        <section key="table" className="table">
+        </section>
+      </div>
+    );
 }

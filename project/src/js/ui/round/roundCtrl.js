@@ -153,10 +153,17 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
       move.lag = Math.round(socket.getAverageLag());
 
     if (this.data.pref.submitMove) {
+      backbutton.stack.push(this.cancelMove);
       this.vm.moveToSubmit = move;
       m.redraw();
     } else socket.send('move', move, { ackable: true });
   };
+
+  this.cancelMove = function(fromBB) {
+    if (fromBB !== 'backbutton') backbutton.stack.pop();
+    this.vm.moveToSubmit = null;
+    this.jump(this.vm.ply);
+  }.bind(this);
 
   this.submitMove = function(v) {
     if (v) {
@@ -166,8 +173,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
         });
         this.vm.moveToSubmit = null;
     } else {
-      this.vm.moveToSubmit = null;
-      this.jump(this.vm.ply);
+      this.cancelMove();
     }
   }.bind(this);
 

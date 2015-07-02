@@ -1,10 +1,10 @@
-/** @jsx m */
 import layout from '../layout';
 import { header } from '../widget/common';
 import { view as renderPromotion } from '../otb/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
+import m from 'mithril';
 
 export default function view(ctrl) {
   return layout.board(

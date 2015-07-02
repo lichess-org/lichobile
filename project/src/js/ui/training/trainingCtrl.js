@@ -8,6 +8,7 @@ import { getCurrent } from './database';
 import sound from '../../sound';
 import actions from './actions';
 import settings from '../../settings';
+import m from 'mithril';
 
 export default function ctrl() {
 

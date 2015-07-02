@@ -5,6 +5,7 @@ import settings from '../../settings';
 import formWidgets from '../widget/form';
 import popupWidget from '../widget/popup';
 import backbutton from '../../backbutton';
+import m from 'mithril';
 
 function renderAlways(ctrl) {
   var d = ctrl.root.data;

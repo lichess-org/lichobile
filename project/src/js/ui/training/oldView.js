@@ -4,6 +4,7 @@ var partial = chessground.util.partial;
 var m = require('mithril');
 var puzzle = require('./puzzle');
 import i18n from '../../i18n';
+import m from 'mithril';
 
 // useful in translation arguments
 function strong(txt) {

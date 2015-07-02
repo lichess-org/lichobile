@@ -5,6 +5,7 @@ import rest from 'lodash/array/rest';
 import pairs from 'lodash/object/pairs';
 import chessground from 'chessground';
 import chess from './chess';
+import m from 'mithril';
 
 function str2move(str) {
   return str ? [str.slice(0, 2), str.slice(2, 4), str[4]] : null;

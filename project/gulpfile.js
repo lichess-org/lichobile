@@ -75,7 +75,10 @@ gulp.task('watch-scripts', function() {
   var opts = watchify.args;
   opts.debug = true;
 
-  var bundleStream = watchify(browserify('./src/js/main.js', opts));
+  var bundleStream = watchify(
+    browserify('./src/js/main.js', opts)
+    .transform(mithrilify, {msx_opts: {precompile: true}})
+  );
 
   function rebundle() {
     return bundleStream

@@ -4,9 +4,6 @@
         "browser": true,
         "node": true
     },
-    "globals": {
-        "m": true
-    },
     "settings": {
         "ecmascript": 6,
         "jsx": true

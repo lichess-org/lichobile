@@ -1,6 +1,7 @@
 import { gameIcon } from '../../utils';
 import { provisionalDeviation } from '../../lichess/perfs';
 import helper from '../helper';
+import m from 'mithril';
 
 module.exports = function(key, name, perf) {
   return m('div.perf', {

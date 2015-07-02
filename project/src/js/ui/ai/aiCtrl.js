@@ -8,6 +8,7 @@ import settings from '../../settings';
 import actions from './actions';
 import engine from './engine';
 import helper from '../helper';
+import m from 'mithril';
 
 export default function controller() {
 

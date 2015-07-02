@@ -5,6 +5,7 @@ import sound from '../../sound';
 import session from '../../session';
 import * as utils from '../../utils';
 import socket from '../../socket';
+import m from 'mithril';
 
 export default function(ctrl, onFeatured) {
 

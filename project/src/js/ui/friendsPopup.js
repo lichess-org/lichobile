@@ -1,10 +1,10 @@
-/** @jsx m */
 import helper from './helper';
 import popupWidget from './widget/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import friendsApi from '../lichess/friends';
 import * as utils from '../utils';
+import m from 'mithril';
 
 const friendsPopup = {};
 

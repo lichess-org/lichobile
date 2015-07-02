@@ -1,4 +1,3 @@
-/** @jsx m */
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
@@ -18,6 +17,7 @@ import { view as renderChat } from '../chat';
 import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
+import m from 'mithril';
 
 export default function view(ctrl) {
   function overlay() {

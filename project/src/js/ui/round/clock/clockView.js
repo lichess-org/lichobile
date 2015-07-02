@@ -1,4 +1,5 @@
 import { classSet } from '../../helper';
+import m from 'mithril';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);

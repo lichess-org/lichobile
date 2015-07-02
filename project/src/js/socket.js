@@ -5,6 +5,7 @@ import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
+import m from 'mithril';
 
 var socketInstance;
 var errorDetected = false;

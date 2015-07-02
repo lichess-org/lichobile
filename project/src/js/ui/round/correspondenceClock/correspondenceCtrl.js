@@ -1,3 +1,5 @@
+import m from 'mithril';
+
 export default function(root, data, onFlag) {
 
   var lastUpdate;

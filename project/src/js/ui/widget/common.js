@@ -1,4 +1,3 @@
-/** @jsx m */
 import menu from '../menu';
 import * as utils from '../../utils';
 import helper from '../helper';
@@ -10,6 +9,7 @@ import challengesApi from '../../lichess/challenges';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
+import m from 'mithril';
 
 
 export function menuButton() {

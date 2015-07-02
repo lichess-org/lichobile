@@ -2,6 +2,7 @@ import gameStatus from './status';
 import * as utils from '../utils';
 import settings from '../settings';
 import i18n from '../i18n';
+import m from 'mithril';
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};

@@ -1,4 +1,3 @@
-/** @jsx m */
 import gameApi from '../../../lichess/game';
 import gameStatus from '../../../lichess/status';
 import helper from '../../helper';
@@ -7,6 +6,7 @@ import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
 import { handleXhrError } from '../../../utils';
+import m from 'mithril';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {

@@ -18,6 +18,7 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import * as xhr from './roundXhr';
+import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange) {
 

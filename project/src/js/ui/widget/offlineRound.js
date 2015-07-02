@@ -1,8 +1,8 @@
-/** @jsx m */
 import helper from '../helper';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
 import { renderMaterial } from '../round/view/roundView';
+import m from 'mithril';
 
 export function renderAntagonist(ctrl, playerName, material, position) {
   const {vh, vw} = helper.viewportDim();

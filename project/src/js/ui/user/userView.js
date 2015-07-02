@@ -1,4 +1,3 @@
-/** @jsx m */
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton, empty } from '../widget/common';
 import perf from '../widget/perf';
@@ -7,7 +6,6 @@ import i18n from '../../i18n';
 import countries from './countries';
 import helper from '../helper';
 import session from '../../session';
-const moment = window.moment;
 
 export default function view(ctrl) {
   const user = ctrl.user();
@@ -64,8 +62,8 @@ function renderProfile(user) {
     if (user.profile.lastName) fullname += (user.profile.firstName ? ' ' : '') + user.profile.lastName;
     const country = countries[user.profile.country];
     const location = user.profile.location;
-    const memberSince = i18n('memberSince') + ' ' + moment(user.createdAt).format('LL');
-    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + moment(user.seenAt).calendar() : null;
+    const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL');
+    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + window.moment(user.seenAt).calendar() : null;
     return (
       <section className="profile">
         {fullname ?
@@ -96,8 +94,8 @@ function renderProfile(user) {
 }
 
 function renderStats(user) {
-  const totalPlayTime = user.playTime ? 'Time spent playing: ' + moment.duration(user.playTime.total, 'seconds').humanize() : null;
-  const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + moment.duration(user.playTime.tv, 'seconds').humanize() : null;
+  const totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null;
+  const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null;
 
   return (
     <section className="userStats">

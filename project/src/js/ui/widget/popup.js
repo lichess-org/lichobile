@@ -1,4 +1,3 @@
-/** @jsx m */
 import * as utils from '../../utils';
 import helper from '../helper';
 import assign from 'lodash/object/assign';

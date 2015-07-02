@@ -5,6 +5,7 @@ import session from '../../session';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import helper from '../helper';
+import m from 'mithril';
 
 export default function controller() {
   socket.createDefault();

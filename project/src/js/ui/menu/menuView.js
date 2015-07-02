@@ -1,4 +1,3 @@
-/** @jsx m */
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
@@ -10,6 +9,7 @@ import * as utils from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
+import m from 'mithril';
 
 function renderHeader(user) {
   if (utils.hasNetwork())

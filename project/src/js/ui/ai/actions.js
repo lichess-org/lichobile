@@ -7,6 +7,7 @@ import { renderEndedGameStatus } from '../widget/offlineRound';
 import popupWidget from '../widget/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
+import m from 'mithril';
 
 function renderAlways(ctrl) {
   var d = ctrl.root.data;

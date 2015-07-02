@@ -6,6 +6,7 @@ import popupWidget from './widget/popup';
 import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
+import m from 'mithril';
 
 var nbPlaying = 0;
 

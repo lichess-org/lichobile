@@ -1,5 +1,6 @@
 import isFunction from 'lodash/lang/isFunction';
 import * as utils from './utils';
+import m from 'mithril';
 
 const stack = [];
 

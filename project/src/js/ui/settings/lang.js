@@ -1,10 +1,10 @@
-/** @jsx m */
 import * as utils from '../../utils';
 import { header as headerWidget, backButton, empty } from '../widget/common';
 import formWidgets from '../widget/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
+import m from 'mithril';
 
 export default {
   controller: function() {

@@ -2,8 +2,7 @@
 {
   "globals": {
     "window": true,
-    "document": true,
-    "m": true
+    "document": true
   },
   "esnext": true,
   "node": true,

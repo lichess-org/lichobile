@@ -24,7 +24,7 @@
   "homepage": "https://github.com/veloce/lichobile",
   "browserify": {
     "transform": [
-      "babelify"
+        ["babelify", { "blacklist": ["react"] }]
     ]
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ import storage from '../../storage';
 import gameApi from '../../lichess/game';
 import backbutton from '../../backbutton';
 import socket from '../../socket';
+import m from 'mithril';
 
 export default {
   controller: function(root) {

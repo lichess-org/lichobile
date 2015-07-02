@@ -4,8 +4,6 @@ import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 
-const moment = window.moment;
-
 export function newAiGame() {
   var config = settings.game.ai;
   return request('/setup/ai', {

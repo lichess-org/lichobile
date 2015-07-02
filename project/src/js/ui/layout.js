@@ -1,4 +1,3 @@
-/** @jsx m */
 import menu from './menu';
 import gamesMenu from './gamesMenu';
 import newGameForm from './newGameForm';

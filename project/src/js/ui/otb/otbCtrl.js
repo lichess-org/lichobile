@@ -6,6 +6,7 @@ import replayCtrl from './replay/replayCtrl';
 import storage from '../../storage';
 import actions from './actions';
 import helper from '../helper';
+import m from 'mithril';
 
 const storageKey = 'otb.current';
 

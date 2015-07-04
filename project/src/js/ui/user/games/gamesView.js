@@ -8,6 +8,7 @@ import gameStatus from '../../../lichess/status';
 import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
 import m from 'mithril';
+import ViewOnlyBoard from '../../widget/ViewOnlyBoard';
 
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, null,
@@ -42,9 +43,9 @@ function renderAllGames(ctrl) {
     <div className="scroller games" config={ctrl.scrollerConfig}>
       <ul className="userGames">
         { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
-        {helper.cond(ctrl.isLoadingNextPage(),
-        <li className="list_item loadingNext">loading...</li>
-        )}
+        {ctrl.isLoadingNextPage() ?
+        <li className="list_item loadingNext">loading...</li> : null
+        }
       </ul>
     </div>
   );
@@ -79,7 +80,7 @@ function renderGame(ctrl, g, index, userId) {
       }
       <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
-        {wideScreen ? helper.viewOnlyBoard(g.fen, g.lastMove, userColor) : null}
+        {wideScreen ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">
           <div className="title">{title}</div>
           <small className="date">{date}</small>
@@ -113,10 +114,9 @@ function renderPlayer(players, color) {
     <div className={'player ' + color}>
       <span className="playerName">{playerName}</span>
       <br/>
-      {helper.cond(player.rating,
-      <small className="playerRating">{player.rating}{player.conditional && '?'}</small>
-      )}
+      {player.rating ?
+      <small className="playerRating">{player.rating}{player.conditional && '?'}</small> : null
+      }
     </div>
   );
 }
-

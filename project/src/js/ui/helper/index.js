@@ -1,5 +1,4 @@
 import Zanimo from 'zanimo';
-import chessground from 'chessground';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
@@ -95,28 +94,6 @@ helper.ontouchY = function(tapHandler, holdHandler) {
   return helper.ontouch(tapHandler, holdHandler, false, true);
 };
 
-helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
-  var config = {
-    viewOnly: true,
-    minimalDom: true,
-    coordinates: false,
-    fen: fen,
-    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
-    orientation: orientation || 'white'
-  };
-  return m('div.board', {
-    className: [
-      piece ? piece : settings.general.theme.piece(),
-      variant ? variant.key : '',
-      board ? board : settings.general.theme.board()
-    ].join(' '),
-    config: function(el, isUpdate, ctx) {
-      if (ctx.ground) ctx.ground.set(config);
-      else ctx.ground = chessground(el, config);
-    }
-  });
-};
-
 helper.progress = function(p) {
   if (p === 0) return null;
   return m('span', {
@@ -164,10 +141,6 @@ helper.analyticsTrackView = function(view) {
   var enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
-};
-
-helper.cond = function(pred, vdom) {
-  return pred ? vdom : null;
 };
 
 helper.autofocus = function(el, isUpdate) {

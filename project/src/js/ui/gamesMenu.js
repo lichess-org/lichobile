@@ -80,11 +80,11 @@ function cardDims() {
   }
 }
 
-function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
+function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   return (
     <div className="boardWrapper" style={style}>
-      {m.component(ViewOnlyBoard, { fen, lastMove, color, variant })}
+      {m.component(ViewOnlyBoard, { fen, lastMove, orientation, variant })}
     </div>
   );
 }

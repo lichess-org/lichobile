@@ -1,7 +1,7 @@
 import session from '../../session';
 import helper from '../helper';
-import * as utils from '../../utils';
-import * as xhr from '../../xhr';
+import { handleXhrError, backHistory } from '../../utils';
+import { game as gameXhr, joinChallenge, cancelChallenge } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
 import gameStatus from '../../lichess/status';
@@ -18,7 +18,7 @@ export default function controller() {
   var round;
   var challengeIntervalID;
 
-  xhr.game(m.route.param('id'), m.route.param('color')).then(function(data) {
+  gameXhr(m.route.param('id'), m.route.param('color')).then(function(data) {
     gameData = data;
 
     if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
@@ -38,7 +38,7 @@ export default function controller() {
         redirect: e => m.route('/game/' + e.id),
         declined: () => {
           window.plugins.toast.show('Challenge declined', 'short', 'center');
-          utils.backHistory();
+          backHistory();
         }
       });
       // userId param means it's a challenge, otherwise it's an invitation with url
@@ -62,7 +62,7 @@ export default function controller() {
         storage.set('lastPlayedGameURLAsAnon', data.url.round);
     }
   }, function(error) {
-    utils.handleXhrError(error);
+    handleXhrError(error);
     m.route('/');
   });
 
@@ -81,13 +81,13 @@ export default function controller() {
     isJoinable,
     isAwaitingInvite,
     isAwaitingChallenge,
-    joinChallenge: id => xhr.joinChallenge(id).then(data =>
+    joinChallenge: id => joinChallenge(id).then(data =>
       m.route('/game' + data.url.round)
     ),
     cancelChallenge: () => {
-      xhr.cancelChallenge(gameData.url.round);
+      cancelChallenge(gameData.url.round);
       if (challengeIntervalID) clearInterval(challengeIntervalID);
-      utils.backHistory();
+      backHistory();
     },
     getData: function() {
       return gameData;

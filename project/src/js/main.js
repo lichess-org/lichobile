@@ -9,6 +9,7 @@ import * as utils from './utils';
 import session from './session';
 import i18n, { loadPreferredLanguage } from './i18n';
 import { status as xhrStatus } from './xhr';
+import helper from './ui/helper';
 import backbutton from './backbutton';
 import storage from './storage';
 import socket from './socket';
@@ -57,7 +58,7 @@ function main() {
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
-  window.addEventListener('resize', m.redraw, false);
+  window.addEventListener('resize', onResize, false);
 
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose
@@ -74,6 +75,11 @@ function main() {
 
 function refresh() {
   if (utils.hasNetwork() && session.isConnected()) session.refresh();
+}
+
+function onResize() {
+  helper.cachedViewportDim = null;
+  m.redraw();
 }
 
 function onResume() {

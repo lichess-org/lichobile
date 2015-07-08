@@ -95,7 +95,8 @@
       "KeepRunning": true,
       "StatusBarOverlaysWebView": false,
       "StatusBarBackgroundColor": "#151A1E",
-      "backgroundColor": "#1c2328"
+      "backgroundColor": "#1c2328",
+      "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect"
     },
     "whitelist": {
       "shared": [

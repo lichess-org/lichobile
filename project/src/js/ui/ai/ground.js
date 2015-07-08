@@ -1,11 +1,6 @@
-var chessground = require('chessground');
-var gameApi = require('../../lichess/game');
-var settings = require('../../settings');
-import m from 'mithril';
-
-function str2move(m) {
-  return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
-}
+import chessground from 'chessground';
+import gameApi from '../../lichess/game';
+import settings from '../../settings';
 
 function makeConfig(data, fen) {
   return {

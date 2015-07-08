@@ -110,9 +110,12 @@ helper.classSet = function(classes) {
   return arr.join(' ');
 };
 
+helper.cachedViewportDim = null;
 helper.viewportDim = function() {
+  if (helper.cachedViewportDim) return helper.cachedViewportDim;
+
   let e = document.documentElement;
-  let viewportDim = {
+  let viewportDim = helper.cachedViewportDim = {
     vw: e.clientWidth,
     vh: e.clientHeight
   };

@@ -22,15 +22,15 @@ export default {
           </header>
           <div className="content round">{content()}</div>
           <div className="menu-close-overlay" config={helper.ontouch(menu.close)} />
-          {menu.view()}
-          {gamesMenu.view()}
-          {loginModal.view()}
-          {signupModal.view()}
-          {newGameForm.view()}
-          {challengeForm.view()}
-          {friendsPopup.view()}
-          {overlay ? overlay() : null}
         </main>
+        {menu.view()}
+        {gamesMenu.view()}
+        {loginModal.view()}
+        {signupModal.view()}
+        {newGameForm.view()}
+        {challengeForm.view()}
+        {friendsPopup.view()}
+        {overlay ? overlay() : null}
       </div>
     );
   },
@@ -43,15 +43,15 @@ export default {
           <div className="content" config={helper.scale}>{content()}</div>
           <footer className="main_footer">{footer()}</footer>
           <div className="menu-close-overlay" config={helper.ontouch(menu.close)} />
-          {menu.view()}
-          {gamesMenu.view()}
-          {loginModal.view()}
-          {signupModal.view()}
-          {newGameForm.view()}
-          {challengeForm.view()}
-          {friendsPopup.view()}
-          {overlay ? overlay() : null}
         </main>
+        {menu.view()}
+        {gamesMenu.view()}
+        {loginModal.view()}
+        {signupModal.view()}
+        {newGameForm.view()}
+        {challengeForm.view()}
+        {friendsPopup.view()}
+        {overlay ? overlay() : null}
       </div>
     );
   }

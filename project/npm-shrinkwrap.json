@@ -811,13 +811,13 @@
     },
     "chess.js": {
       "version": "0.9.2",
-      "from": "chess.js@git://github.com/veloce/chess.js#v0.9.2",
-      "resolved": "git://github.com/veloce/chess.js#1ea95e1d00066a833c2fd96a153808ba50cd6dd1"
+      "from": "git://github.com/veloce/chess.js.git#v0.9.2",
+      "resolved": "git://github.com/veloce/chess.js.git#1ea95e1d00066a833c2fd96a153808ba50cd6dd1"
     },
     "chessground": {
       "version": "2.1.0",
-      "from": "chessground@git://github.com/ornicar/chessground#mobile",
-      "resolved": "git://github.com/ornicar/chessground#b071307394135914e375bc004a4a7a1f982d251b",
+      "from": "git://github.com/ornicar/chessground.git#mobile",
+      "resolved": "git://github.com/ornicar/chessground.git#b98b0bcb282aab72ddcc07b4dd14aad104833158",
       "dependencies": {
         "merge": {
           "version": "1.2.0",

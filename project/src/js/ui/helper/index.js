@@ -41,7 +41,7 @@ function findParentBySelector(el, selector) {
 helper.fadesIn = function(element, isInitialized) {
   if (!isInitialized) {
     element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 150).done();
+    Zanimo(element, 'opacity', 1, 150);
   }
 };
 
@@ -53,16 +53,14 @@ helper.fadesOut = function(callback, selector) {
       m.startComputation();
       callback();
       m.endComputation();
-    }).done();
+    }, err => console.log(err));
   };
 };
 
 helper.scale = function(element, isInitialized) {
   if (!isInitialized) {
     element.style[helper.transformProp()] = 'scale(0.97)';
-    element.style.visibility = 'hidden';
-    Zanimo(element, 'visibility', 'visible', 100).done();
-    Zanimo(element, 'transform', 'scale(1)', 200).done();
+    Zanimo(element, 'transform', 'scale(1)', 200);
   }
 };
 

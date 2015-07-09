@@ -138,8 +138,6 @@ h3.fullname
     padding 0
     text-align center
     color textGray
-    &.active
-      background-color darken(bglight, 15%)
     &:before
       font-size 25px
   .title
@@ -168,12 +166,6 @@ h3.fullname
     font-size 0.8em
   &.odd
     background-color darken(bglight, 5%)
-    > .active
-      background-color darken(bglight, 5%)
-  > .active
-    background-color bglight
-    &:after
-      color gold
   @media only screen and (min-width 600px)
     > .nav
       display flex

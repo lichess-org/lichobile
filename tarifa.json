@@ -96,7 +96,7 @@
       "StatusBarOverlaysWebView": false,
       "StatusBarBackgroundColor": "#151A1E",
       "backgroundColor": "#1c2328",
-      "xwalkVersion": "org.xwalk:xwalk_core_library_beta:13+",
+      "xwalkVersion": "org.xwalk:xwalk_core_library_beta:14+",
       "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect"
     },
     "whitelist": {

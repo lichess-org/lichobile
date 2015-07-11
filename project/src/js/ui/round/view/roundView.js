@@ -172,9 +172,10 @@ function renderAntagonist(ctrl, player, material, position) {
   const playerName = utils.playerName(player, helper.isLandscape());
   const {vh, vw} = helper.viewportDim();
   const headerHeight = vh > 480 ? 50 : 40;
+  const contentHeight = vh - headerHeight;
   // must do this here because of the lack of `calc` support
-  // 50 refers to either header height of game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - headerHeight) + 'px' };
+  // 45 refers to game actions bar height
+  const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
   function infos() {

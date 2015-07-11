@@ -8,6 +8,7 @@
     display flex
 
 .board_wrapper
+  transform translateZ(0)
   @media only screen and (orientation: portrait)
     height calc(100vw)
     width calc(100vw)
@@ -71,7 +72,7 @@
     margin auto 1rem
 
 .antagonist
-  height calc((100vh - 100vw) / 2 - 50px)
+  height calc((100% - 100vw - 45px) / 2)
   padding 0 10px
   display flex
   justify-content space-between
@@ -261,8 +262,6 @@
 #game_actions
   padding 0
   height 45px
-  position absolute
-  bottom 0
   width 100%
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
@@ -282,6 +281,10 @@
   width 25%
   &:last-child
     border-right none
+  &.disabled
+    &:before
+      opacity 1
+    color rgba(gold, 0.4)
   &.active
     background lighten(bgdark, 8%)
     color lighten(gold, 40%)

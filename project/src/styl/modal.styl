@@ -43,11 +43,7 @@
   overflow-y auto
 
 .modal_slide
-  visibility visible
-  opacity 0
   transform translate3d(0, 100%, 0)
-  transition transform 250ms, opacity 1ms 250ms
+  transition transform 250ms
   &.show
-    opacity 1
-    transition transform 250ms
     transform translate3d(0,0,0)

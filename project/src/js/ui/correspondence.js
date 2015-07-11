@@ -60,7 +60,9 @@ correspondence.controller = function() {
       return pool;
     },
     cancel: function(seekId) {
-      return Zanimo(document.getElementById(seekId), 'opacity', '0', '500', 'ease-out').then(() => socket.send('cancelSeek', seekId), err => console.log(err));
+      return Zanimo(document.getElementById(seekId), 'opacity', '0', '500', 'ease-out')
+        .then(() => socket.send('cancelSeek', seekId))
+        .catch(console.log.bind(console));
     },
     join: function(seekId) {
       socket.send('joinSeek', seekId);

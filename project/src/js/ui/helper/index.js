@@ -41,7 +41,7 @@ function findParentBySelector(el, selector) {
 helper.fadesIn = function(element, isInitialized) {
   if (!isInitialized) {
     element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 150);
+    Zanimo(element, 'opacity', 1, 150).catch(console.log.bind(console));
   }
 };
 
@@ -49,18 +49,17 @@ helper.fadesOut = function(callback, selector) {
   return function(e) {
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, 250).then(function() {
-      m.startComputation();
-      callback();
-      m.endComputation();
-    }, err => console.log(err));
+    Zanimo(el, 'opacity', 0, 250)
+    .then(utils.autoredraw(callback))
+    .catch(console.log.bind(console));
   };
 };
 
 helper.scale = function(element, isInitialized) {
   if (!isInitialized) {
-    element.style[helper.transformProp()] = 'scale(0.97)';
-    Zanimo(element, 'transform', 'scale(1)', 200);
+    element.style[helper.transformProp()] = 'scale(0.95)';
+    Zanimo(element, 'transform', 'scale(1)', 200)
+    .catch(console.log.bind(console));
   }
 };
 

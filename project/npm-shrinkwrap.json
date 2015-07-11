@@ -846,11 +846,6 @@
       "from": "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz",
       "resolved": "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz"
     },
-    "q": {
-      "version": "1.1.2",
-      "from": "https://registry.npmjs.org/q/-/q-1.1.2.tgz",
-      "resolved": "https://registry.npmjs.org/q/-/q-1.1.2.tgz"
-    },
     "signals": {
       "version": "1.0.0",
       "from": "https://registry.npmjs.org/signals/-/signals-1.0.0.tgz",
@@ -862,42 +857,37 @@
       "resolved": "https://registry.npmjs.org/spin.js/-/spin.js-2.0.1.tgz"
     },
     "zanimo": {
-      "version": "1.1.3",
-      "from": "https://registry.npmjs.org/zanimo/-/zanimo-1.1.3.tgz",
-      "resolved": "https://registry.npmjs.org/zanimo/-/zanimo-1.1.3.tgz",
+      "version": "2.0.0",
+      "from": "git://github.com/veloce/Zanimo.git",
+      "resolved": "git://github.com/veloce/Zanimo.git#b53f0885b704324c7809bc6cce3878750ee4024a",
       "dependencies": {
         "color": {
           "version": "0.7.3",
-          "from": "https://registry.npmjs.org/color/-/color-0.7.3.tgz",
+          "from": "color@>=0.7.0 <0.8.0",
           "resolved": "https://registry.npmjs.org/color/-/color-0.7.3.tgz",
           "dependencies": {
             "color-convert": {
-              "version": "0.5.2",
-              "from": "https://registry.npmjs.org/color-convert/-/color-convert-0.5.2.tgz",
-              "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-0.5.2.tgz"
+              "version": "0.5.3",
+              "from": "color-convert@>=0.5.0 <0.6.0",
+              "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-0.5.3.tgz"
             },
             "color-string": {
               "version": "0.2.4",
-              "from": "https://registry.npmjs.org/color-string/-/color-string-0.2.4.tgz",
+              "from": "color-string@>=0.2.0 <0.3.0",
               "resolved": "https://registry.npmjs.org/color-string/-/color-string-0.2.4.tgz",
               "dependencies": {
                 "color-name": {
                   "version": "1.0.0",
-                  "from": "https://registry.npmjs.org/color-name/-/color-name-1.0.0.tgz",
+                  "from": "color-name@>=1.0.0 <1.1.0",
                   "resolved": "https://registry.npmjs.org/color-name/-/color-name-1.0.0.tgz"
                 }
               }
             }
           }
         },
-        "qanimationframe": {
-          "version": "2.1.4",
-          "from": "https://registry.npmjs.org/qanimationframe/-/qanimationframe-2.1.4.tgz",
-          "resolved": "https://registry.npmjs.org/qanimationframe/-/qanimationframe-2.1.4.tgz"
-        },
         "vendor-prefix": {
           "version": "0.1.0",
-          "from": "https://registry.npmjs.org/vendor-prefix/-/vendor-prefix-0.1.0.tgz",
+          "from": "vendor-prefix@>=0.1.0 <0.2.0",
           "resolved": "https://registry.npmjs.org/vendor-prefix/-/vendor-prefix-0.1.0.tgz"
         }
       }

@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "platforms": [
     "ios@3.8.0",
     "android@4.0.2"
@@ -21,7 +21,7 @@
       "product_file_name": "lichess-stage",
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
-      "beta": "6",
+      "beta": "1",
       "cordova": {
         "whitelist": [
           {

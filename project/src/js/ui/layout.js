@@ -22,15 +22,15 @@ export default {
           </header>
           <div className="content round">{content()}</div>
           <div className="menu-close-overlay" config={helper.ontouch(menu.close)} />
-          {menu.view()}
-          {gamesMenu.view()}
-          {loginModal.view()}
-          {signupModal.view()}
-          {newGameForm.view()}
-          {challengeForm.view()}
-          {friendsPopup.view()}
-          {overlay ? overlay() : null}
         </main>
+        {menu.view()}
+        {gamesMenu.view()}
+        {loginModal.view()}
+        {signupModal.view()}
+        {newGameForm.view()}
+        {challengeForm.view()}
+        {friendsPopup.view()}
+        {overlay ? overlay() : null}
       </div>
     );
   },
@@ -40,18 +40,18 @@ export default {
       <div className="view-container">
         <main id="page" className={menu.isOpen ? 'out' : 'in'}>
           <header className="main_header">{header()}</header>
-          <div className="content" config={helper.scale}>{content()}</div>
+          <div className="content">{content()}</div>
           <footer className="main_footer">{footer()}</footer>
           <div className="menu-close-overlay" config={helper.ontouch(menu.close)} />
-          {menu.view()}
-          {gamesMenu.view()}
-          {loginModal.view()}
-          {signupModal.view()}
-          {newGameForm.view()}
-          {challengeForm.view()}
-          {friendsPopup.view()}
-          {overlay ? overlay() : null}
         </main>
+        {menu.view()}
+        {gamesMenu.view()}
+        {loginModal.view()}
+        {signupModal.view()}
+        {newGameForm.view()}
+        {challengeForm.view()}
+        {friendsPopup.view()}
+        {overlay ? overlay() : null}
       </div>
     );
   }

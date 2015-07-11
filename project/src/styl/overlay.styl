@@ -1,12 +1,15 @@
 .overlay
-  position absolute
   width 100%
   height 100%
-  top 0
-  left 0
   background-color rgba(0,0,0,0.5)
   color #ffffff
   z-index 10
+  display none
+  &.open
+    display block
+    position absolute
+    top 0
+    left 0
 
 .overlay_close
   position absolute
@@ -20,10 +23,7 @@
 
 .overlay_fade
   opacity 0
-  visibility hidden
-  transition opacity 200ms, visibility 0s 200ms
+  transition opacity 200ms
 
 .overlay_fade.open
   opacity 1
-  visibility visible
-  transition opacity 200ms

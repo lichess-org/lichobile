@@ -10,6 +10,7 @@ import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
 import m from 'mithril';
+import ViewOnlyBoard from './ViewOnlyBoard';
 
 
 export function menuButton() {
@@ -116,9 +117,7 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
   return (
     <div className="content round onlyBoard">
       <section key={boardKey} className="board_wrapper" style={boardStyle}>
-        {helper.viewOnlyBoard(fen, lastMove, orientation, variant,
-          settings.general.theme.board(), settings.general.theme.piece()
-        )}
+        {m.component(ViewOnlyBoard, {fen, lastMove, orientation, variant})}
       </section>
     </div>
   );

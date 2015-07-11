@@ -1,5 +1,4 @@
 import Zanimo from 'zanimo';
-import chessground from 'chessground';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
@@ -42,7 +41,7 @@ function findParentBySelector(el, selector) {
 helper.fadesIn = function(element, isInitialized) {
   if (!isInitialized) {
     element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 150).done();
+    Zanimo(element, 'opacity', 1, 150).catch(console.log.bind(console));
   }
 };
 
@@ -50,20 +49,17 @@ helper.fadesOut = function(callback, selector) {
   return function(e) {
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, 250).then(function() {
-      m.startComputation();
-      callback();
-      m.endComputation();
-    }).done();
+    Zanimo(el, 'opacity', 0, 250)
+    .then(utils.autoredraw(callback))
+    .catch(console.log.bind(console));
   };
 };
 
 helper.scale = function(element, isInitialized) {
   if (!isInitialized) {
-    element.style[helper.transformProp()] = 'scale(0.97)';
-    element.style.visibility = 'hidden';
-    Zanimo(element, 'visibility', 'visible', 100).done();
-    Zanimo(element, 'transform', 'scale(1)', 200).done();
+    element.style[helper.transformProp()] = 'scale(0.95)';
+    Zanimo(element, 'transform', 'scale(1)', 200)
+    .catch(console.log.bind(console));
   }
 };
 
@@ -95,28 +91,6 @@ helper.ontouchY = function(tapHandler, holdHandler) {
   return helper.ontouch(tapHandler, holdHandler, false, true);
 };
 
-helper.viewOnlyBoard = function(fen, lastMove, orientation, variant, board, piece) {
-  var config = {
-    viewOnly: true,
-    minimalDom: true,
-    coordinates: false,
-    fen: fen,
-    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
-    orientation: orientation || 'white'
-  };
-  return m('div.board', {
-    className: [
-      piece ? piece : settings.general.theme.piece(),
-      variant ? variant.key : '',
-      board ? board : settings.general.theme.board()
-    ].join(' '),
-    config: function(el, isUpdate, ctx) {
-      if (ctx.ground) ctx.ground.set(config);
-      else ctx.ground = chessground(el, config);
-    }
-  });
-};
-
 helper.progress = function(p) {
   if (p === 0) return null;
   return m('span', {
@@ -133,9 +107,12 @@ helper.classSet = function(classes) {
   return arr.join(' ');
 };
 
+helper.cachedViewportDim = null;
 helper.viewportDim = function() {
+  if (helper.cachedViewportDim) return helper.cachedViewportDim;
+
   let e = document.documentElement;
-  let viewportDim = {
+  let viewportDim = helper.cachedViewportDim = {
     vw: e.clientWidth,
     vh: e.clientHeight
   };
@@ -164,10 +141,6 @@ helper.analyticsTrackView = function(view) {
   var enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
-};
-
-helper.cond = function(pred, vdom) {
-  return pred ? vdom : null;
 };
 
 helper.autofocus = function(el, isUpdate) {

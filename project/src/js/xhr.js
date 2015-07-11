@@ -116,7 +116,7 @@ export function status() {
             );
           else if (now > deprecatedDate)
             window.navigator.notification.alert(
-              i18n('apiDeprecated', moment(unsupportedDate).format('LL'))
+              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL'))
             );
           break;
         }

@@ -1,6 +1,5 @@
 import * as utils from '../utils';
 import helper from './helper';
-import settings from '../settings';
 import iScroll from 'iscroll';
 import session from '../session';
 import i18n from '../i18n';
@@ -10,6 +9,7 @@ import newGameForm from './newGameForm';
 import gameApi from '../lichess/game';
 import challengesApi from '../lichess/challenges';
 import m from 'mithril';
+import ViewOnlyBoard from './widget/ViewOnlyBoard';
 
 var scroller = null;
 
@@ -80,13 +80,11 @@ function cardDims() {
   }
 }
 
-function renderViewOnlyBoard(cDim, fen, lastMove, color, variant) {
+function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   return (
     <div className="boardWrapper" style={style}>
-      {helper.viewOnlyBoard(fen, lastMove, color, variant,
-        settings.general.theme.board(), settings.general.theme.piece()
-      )}
+      {m.component(ViewOnlyBoard, { fen, lastMove, orientation, variant })}
     </div>
   );
 }

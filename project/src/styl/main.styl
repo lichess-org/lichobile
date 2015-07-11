@@ -14,18 +14,18 @@ main
   overflow hidden
 
 .menu-close-overlay
-  position absolute
-  top 0
-  left 0
   height 100%
   width 100%
   z-index 99
   background rgba(0,0,0,0.5)
-  visibility hidden
+  display none
 
 main.out
   .menu-close-overlay
-    visibility visible
+    display block
+    position absolute
+    top 0
+    left 0
   .game_menu_button
     visibility hidden
 

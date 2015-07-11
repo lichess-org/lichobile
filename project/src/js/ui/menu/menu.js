@@ -14,21 +14,24 @@ menu.headerOpen = m.prop(false);
 menu.route = function(route) {
   return function() {
     menu.close();
-    return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(utils.f(m.route, route)).done();
+    return Zanimo(document.getElementById('side_menu'), 'transform',
+      'translate3d(-100%,0,0)', '250', 'ease-out')
+    .then(utils.f(m.route, route))
+    .catch(console.log.bind(console));
   };
 };
 
 menu.popup = function(action) {
   return function() {
-    menu.close();
-    return Zanimo(document.getElementById('side_menu'), 'transform', 'translate3d(-100%,0,0)',
-      '250', 'ease-out').then(function(el) {
+    return Zanimo(document.getElementById('side_menu'), 'transform',
+      'translate3d(-100%,0,0)', '250', 'ease-out').then(function(el) {
         m.startComputation();
         action();
+        menu.close();
         m.endComputation();
         el.removeAttribute('style');
-      }).done();
+      })
+      .catch(console.log.bind(console));
   };
 };
 

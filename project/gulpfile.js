@@ -7,7 +7,6 @@ var gutil = require('gulp-util');
 var preprocess = require('gulp-preprocess');
 var watchify = require('watchify');
 var browserify = require('browserify');
-var uglify = require('gulp-uglify');
 var stylus = require('gulp-stylus');
 var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
@@ -56,7 +55,6 @@ function buildScripts(src, dest, mode) {
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))
-    .pipe(gulpif(mode === 'prod', streamify(uglify())))
     .pipe(gulp.dest(dest));
 }
 

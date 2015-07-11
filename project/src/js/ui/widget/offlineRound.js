@@ -146,28 +146,8 @@ function renderTable(ctrl, curPly) {
   );
 }
 
-// function renderButtons(ctrl, curPly) {
-//   var nbMoves = ctrl.situations.length;
-//   return m('div.buttons', [
-//     ['first', 'W', 1],
-//     ['prev', 'Y', curPly - 1],
-//     ['next', 'X', curPly + 1],
-//     ['last', 'V', nbMoves]
-//   ].map(function(b) {
-//     var enabled = curPly !== b[2] && b[2] >= 1 && b[2] <= nbMoves;
-//     return m('a', {
-//       class: 'button ' + b[0] + ' ' + helper.classSet({
-//         disabled: !enabled,
-//         glowing: ctrl.late && b[0] === 'last'
-//       }),
-//       'data-icon': b[1],
-//       config: enabled ? helper.ontouch(ctrl.jump.bind(undefined, b[2])) : null
-//     });
-//   }));
-// }
-
 function autoScroll(movelist) {
+  if (!movelist) return;
   var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
 }
-

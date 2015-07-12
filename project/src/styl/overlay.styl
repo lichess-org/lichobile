@@ -4,9 +4,9 @@
   background-color rgba(0,0,0,0.5)
   color #ffffff
   z-index 10
-  display none
+  visibility hidden
   &.open
-    display block
+    visibility visible
     position absolute
     top 0
     left 0
@@ -23,7 +23,7 @@
 
 .overlay_fade
   opacity 0
-  transition opacity 200ms
+  transition opacity 200ms, visibility 200ms
 
 .overlay_fade.open
   opacity 1

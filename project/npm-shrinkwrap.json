@@ -817,7 +817,7 @@
     "chessground": {
       "version": "2.1.0",
       "from": "git://github.com/ornicar/chessground.git#mobile",
-      "resolved": "git://github.com/ornicar/chessground.git#2aa96f310cf921135d91fb57d140b4ab56f1e692",
+      "resolved": "git://github.com/ornicar/chessground.git#f836dfd25c85116af38c33e345f221c31e60d2a4",
       "dependencies": {
         "merge": {
           "version": "1.2.0",

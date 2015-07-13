@@ -8,8 +8,8 @@ function prefixInteger(num, length) {
 export function formatClockTime(ctrl, time, isRunning) {
   var date = new Date(time);
   var minutes = prefixInteger(date.getUTCMinutes(), 2);
-  var seconds = prefixInteger(date.getSeconds(), 2);
-  var tenths = Math.floor(date.getMilliseconds() / 100);
+  var seconds = prefixInteger(date.getUTCSeconds(), 2);
+  var tenths = Math.floor(date.getUTCMilliseconds() / 100);
   if (ctrl.data.showTenths && time < 10000) {
     return seconds + '.' + tenths;
   } else if (time >= 3600000) {

@@ -180,8 +180,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
-    if (this.data.game.speed === 'correspondence' && session.isConnected())
-      session.refresh();
   }.bind(this);
 
   var onMove = function(orig, dest, capturedPiece) {
@@ -252,6 +250,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
         if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
         else this.chessground.playPremove();
       }
+      if (this.data.game.speed === 'correspondence' && session.isConnected()) session.refresh();
     }
 
     if (o.clock) {

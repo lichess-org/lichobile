@@ -1,4 +1,4 @@
-var garbo = require('../../garbochess/garbochess');
+import garbo from '../../garbochess/garbochess';
 
 // [time, plies]
 var levels = {
@@ -18,7 +18,7 @@ var forsyth = function(role) {
   return role === 'knight' ? 'n' : role[0];
 };
 
-module.exports = {
+export default {
   init: function(fen) {
     garbo.reset();
     garbo.setFen(fen);
@@ -32,7 +32,7 @@ module.exports = {
     garbo.addMove(garbo.getMoveFromString(move));
   },
   search: function(then) {
-    garbo.search(function(bestMove, value, timeTaken, ply) {
+    garbo.search(function(bestMove) {
       if (bestMove === 0) return;
       var str = garbo.formatMove(bestMove);
       var move = [str.slice(0, 2), str.slice(2, 4), str[4]];

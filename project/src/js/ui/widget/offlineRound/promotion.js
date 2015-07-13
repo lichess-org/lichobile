@@ -1,5 +1,6 @@
-import * as utils from '../../utils';
-import helper from '../helper';
+import * as utils from '../../../utils';
+import helper from '../../helper';
+import settings from '../../../settings';
 import m from 'mithril';
 
 var promoting = false;
@@ -38,17 +39,13 @@ function finish(ground, role) {
   promoting = false;
 }
 
-function cancel() {
-  promoting = false;
-}
+export default {
 
-module.exports = {
-
-  start: start,
+  start,
 
   view: function(ctrl) {
-    return promoting ? m('div.overlay', [m('div#promotion_choice', {
-      config: helper.ontouch(cancel),
+    return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
+      className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {

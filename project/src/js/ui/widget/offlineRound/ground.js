@@ -1,6 +1,6 @@
 import chessground from 'chessground';
-import gameApi from '../../lichess/game';
-import settings from '../../settings';
+import gameApi from '../../../lichess/game';
+import settings from '../../../settings';
 
 function makeConfig(data, fen) {
   return {
@@ -80,10 +80,10 @@ function end(ground) {
   ground.stop();
 }
 
-module.exports = {
-  make: make,
-  reload: reload,
-  promote: promote,
-  end: end,
-  applySettings: applySettings
+export default {
+  make,
+  reload,
+  promote,
+  end,
+  applySettings
 };

@@ -3,7 +3,7 @@ import * as utils from '../../utils';
 import layout from '../layout';
 import { header } from '../widget/common';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../widget/offlineRound';
-import { view as renderPromotion } from './promotion';
+import { view as renderPromotion } from '../widget/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
@@ -29,13 +29,13 @@ export default function view(ctrl) {
     if (helper.isPortrait())
       return [
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
-        renderBoard(ctrl, renderPromotion, wrapperClass),
+        renderBoard(ctrl, wrapperClass),
         renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player'),
         renderGameActionsBar(ctrl, actions.view)
       ];
     else
       return [
-        renderBoard(ctrl, renderPromotion, wrapperClass),
+        renderBoard(ctrl, wrapperClass),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
@@ -47,10 +47,17 @@ export default function view(ctrl) {
       ];
   }
 
+  function overlay() {
+    return [
+      actions.view(ctrl.actions),
+      renderPromotion(ctrl)
+    ];
+  }
+
   return layout.board(
     utils.partialf(header, i18n('playOnTheBoardOffline')),
     content,
-    actions.view.bind(undefined, ctrl.actions),
+    overlay,
     ctrl.data.player.color
   );
 }

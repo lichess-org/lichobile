@@ -2,6 +2,7 @@ import chessground from 'chessground';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';
+import settings from '../../settings';
 import m from 'mithril';
 
 const partial = chessground.util.partial;
@@ -43,8 +44,10 @@ export default {
     if (!promoting) return;
     var pieces = ['queen', 'knight', 'rook', 'bishop'];
     if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
-    return m('div.overlay', [m('div#promotion_choice', {
-      config: helper.ontouch(partial(cancel, ctrl)),
+    return m('div.overlay.open', {
+      config: helper.ontouch(partial(cancel, ctrl))
+    }, [m('div#promotion_choice', {
+      className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('div.cg-piece.' + role + '.' + ctrl.data.player.color, {

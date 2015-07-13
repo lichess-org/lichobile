@@ -10,7 +10,7 @@ import {
   renderEndedGameStatus,
   renderGameActionsBarTablet
 } from '../widget/offlineRound';
-import { view as renderPromotion } from './promotion';
+import { view as renderPromotion } from '../widget/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
@@ -57,10 +57,17 @@ export default function view(ctrl) {
       ];
   }
 
+  function overlay() {
+    return [
+      actions.view(ctrl.actions),
+      renderPromotion(ctrl)
+    ];
+  }
+
   return layout.board(
     header.bind(undefined, i18n('playOfflineComputer')),
     content,
-    actions.view.bind(undefined, ctrl.actions)
+    overlay
   );
 }
 

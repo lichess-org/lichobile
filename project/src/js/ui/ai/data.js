@@ -1,7 +1,7 @@
-var Chess = require('chess.js').Chess;
-var opposite = require('chessground').util.opposite;
+import { Chess } from 'chess.js';
+import { oppositeColor } from '../../utils';
 
-module.exports = function(cfg) {
+export default function data(cfg) {
 
   cfg = cfg || {};
   cfg.color = cfg.color || 'white';
@@ -29,11 +29,11 @@ module.exports = function(cfg) {
       "color": cfg.color
     },
     "opponent": {
-      "color": opposite(cfg.color)
+      "color": oppositeColor(cfg.color)
     },
     "pref": {
       "highlight": true,
       "destination": true
     }
   };
-};
+}

@@ -23,6 +23,7 @@ export default function view(ctrl) {
   function overlay() {
     return [
       ctrl.chat ? renderChat(ctrl.chat) : null,
+      renderPromotion(ctrl),
       renderGamePopup(ctrl),
       renderSubmitMovePopup(ctrl)
     ];
@@ -51,7 +52,7 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
+export function renderBoard(ctrl, moreWrapperClasses) {
   const { vh, vw } = helper.viewportDim();
   // ios 7.1 still doesn't support vh unit in calc
   // see game.styl section '.board_wrapper' for corresponding calc() rules
@@ -81,7 +82,6 @@ export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
     <section key={boardKey} className={wrapperClass} style={boardStyle}>
       <div className={boardClass}>
         {chessground.view(ctrl.chessground)}
-        {renderPromotionF(ctrl)}
       </div>
     </section>
   );
@@ -111,13 +111,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return [
       opponent,
-      renderBoard(ctrl, renderPromotion),
+      renderBoard(ctrl),
       player,
       renderGameActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl, renderPromotion),
+      renderBoard(ctrl),
       <section key="table" className="table">
         <header className="tableHeader">
           {gameInfos(ctrl.data)}

@@ -4,26 +4,16 @@
   background-color rgba(0,0,0,0.5)
   color #ffffff
   z-index 10
-  visibility hidden
+  display none
   &.open
-    visibility visible
+    display block
     position absolute
     top 0
     left 0
 
-.overlay_close
-  position absolute
-  right 0
-  top 0
-  padding 17px
-  background transparent
-  font-size 1.5em
-  z-index 11
-  color gold
-
 .overlay_fade
   opacity 0
-  transition opacity 200ms, visibility 200ms
+  transition opacity 200ms
 
 .overlay_fade.open
   opacity 1

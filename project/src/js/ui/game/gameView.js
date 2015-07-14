@@ -6,8 +6,8 @@ import loginModal from '../loginModal';
 import layout from '../layout';
 import * as utils from '../../utils';
 import helper from '../helper';
-import { connectingHeader, viewOnlyBoardContent, header as headerWidget } from '../widget/common';
-import popupWidget from '../widget/popup';
+import { connectingHeader, viewOnlyBoardContent, header as headerWidget } from '../shared/common';
+import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import m from 'mithril';
 

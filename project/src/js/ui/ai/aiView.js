@@ -1,16 +1,16 @@
 import chessground from 'chessground';
 import settings from '../../settings';
 import layout from '../layout';
-import { header } from '../widget/common';
-import formWidgets from '../widget/form';
+import { header } from '../shared/common';
+import formWidgets from '../shared/form';
 import {
   renderAntagonist,
   renderGameActionsBar,
   renderReplayTable,
   renderEndedGameStatus,
   renderGameActionsBarTablet
-} from '../widget/offlineRound';
-import { view as renderPromotion } from '../widget/offlineRound/promotion';
+} from '../shared/offlineRound';
+import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';

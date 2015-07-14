@@ -1,5 +1,5 @@
-import promotion from '../widget/offlineRound/promotion';
-import ground from '../widget/offlineRound/ground';
+import promotion from '../shared/offlineRound/promotion';
+import ground from '../shared/offlineRound/ground';
 import makeData from './data';
 import sound from '../../sound';
 import replayCtrl from './replay/replayCtrl';

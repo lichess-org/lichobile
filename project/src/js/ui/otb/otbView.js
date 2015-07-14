@@ -1,9 +1,9 @@
 import chessground from 'chessground';
 import * as utils from '../../utils';
 import layout from '../layout';
-import { header } from '../widget/common';
-import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../widget/offlineRound';
-import { view as renderPromotion } from '../widget/offlineRound/promotion';
+import { header } from '../shared/common';
+import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
+import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';

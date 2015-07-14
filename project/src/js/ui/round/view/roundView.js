@@ -1,9 +1,9 @@
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
-import { menuButton, loader, headerBtns } from '../../widget/common';
-import popupWidget from '../../widget/popup';
-import formWidgets from '../../widget/form';
+import { menuButton, loader, headerBtns } from '../../shared/common';
+import popupWidget from '../../shared/popup';
+import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
 import * as utils from '../../../utils';

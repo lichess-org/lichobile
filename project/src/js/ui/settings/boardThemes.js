@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
-import { header as headerWidget, backButton, empty } from '../widget/common';
-import formWidgets from '../widget/form';
+import { header as headerWidget, backButton, empty } from '../shared/common';
+import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import settings from '../../settings';

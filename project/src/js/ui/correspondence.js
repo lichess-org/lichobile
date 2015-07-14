@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import helper from './helper';
 import layout from './layout';
-import { header as headerWidget, empty }from './widget/common';
+import { header as headerWidget, empty }from './shared/common';
 import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';

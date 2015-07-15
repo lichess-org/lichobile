@@ -2,7 +2,7 @@ import { formatClockTime } from './clockView';
 import sound from '../../../sound';
 import m from 'mithril';
 
-export default function(data, outOfTime, soundColor) {
+export default function ctrl(data, outOfTime, soundColor) {
   var lastUpdate;
 
   var clockEls = {
@@ -54,10 +54,17 @@ export default function(data, outOfTime, soundColor) {
       clockEls[color] = el;
     }
 
-    if (el) el.innerHTML = formatClockTime(this, time, true);
+    requestAnimationFrame(() => {
+      if (el) el.innerHTML = formatClockTime(this, time, true);
+    });
 
-    if (soundColor === color && this.data[soundColor] < this.data.emerg && emergSound.playable[soundColor]) {
-      if (!emergSound.last || (data.increment && Date.now() - emergSound.delay > emergSound.last)) {
+    if (soundColor === color &&
+      this.data[soundColor] < this.data.emerg &&
+      emergSound.playable[soundColor]
+    ) {
+      if (!emergSound.last ||
+        (data.increment && Date.now() - emergSound.delay > emergSound.last)
+      ) {
         sound.lowtime();
         emergSound.last = Date.now();
         emergSound.playable[soundColor] = false;
@@ -66,8 +73,8 @@ export default function(data, outOfTime, soundColor) {
       emergSound.playable[soundColor] = true;
     }
 
-    if (this.data[color] === 0)
-      outOfTime();
+    if (this.data[color] === 0) outOfTime();
+
   }.bind(this);
 
   this.onunload = function() {

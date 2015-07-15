@@ -54,9 +54,7 @@ export default function ctrl(data, outOfTime, soundColor) {
       clockEls[color] = el;
     }
 
-    requestAnimationFrame(() => {
-      if (el) el.innerHTML = formatClockTime(this, time, true);
-    });
+    if (el) el.innerHTML = formatClockTime(this, time, true);
 
     if (soundColor === color &&
       this.data[soundColor] < this.data.emerg &&

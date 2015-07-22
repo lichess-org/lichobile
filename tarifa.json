@@ -21,7 +21,7 @@
       "product_file_name": "lichess-stage",
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
-      "beta": "2",
+      "beta": "3",
       "cordova": {
         "whitelist": [
           {

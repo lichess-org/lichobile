@@ -71,7 +71,7 @@ export function renderBoard(ctrl, moreWrapperClasses) {
     settings.general.theme.piece(),
     ctrl.data.game.variant.key
   ].join(' ');
-  let wrapperClass = "board_wrapper";
+  let wrapperClass = 'board_wrapper';
 
   if (moreWrapperClasses) {
     wrapperClass += ' ';

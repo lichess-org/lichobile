@@ -26,13 +26,13 @@ export default function view(ctrl) {
     if (helper.isPortrait())
       return [
         renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent'),
-        renderBoard(ctrl, renderPromotion),
+        renderBoard(ctrl),
         renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player'),
         renderGameActionsBar(ctrl, actions.view)
       ];
     else if (helper.isLandscape() && helper.isVeryWideScreen())
       return [
-        renderBoard(ctrl, renderPromotion),
+        renderBoard(ctrl),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentSelector(), material[ctrl.data.opponent.color], 'opponent')}
@@ -45,7 +45,7 @@ export default function view(ctrl) {
       ];
     else
       return [
-        renderBoard(ctrl, renderPromotion),
+        renderBoard(ctrl),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent')}

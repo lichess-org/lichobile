@@ -21,7 +21,7 @@ function makeConfig(data, fen) {
       showDests: settings.general.pieceDestinations()
     },
     animation: {
-      enabled: true,
+      enabled: settings.general.animations(),
       duration: 300
     },
     premovable: {

@@ -46,6 +46,7 @@ seek.controller = function() {
   }
 
   document.addEventListener('backbutton', cancel, false);
+  window.plugins.insomnia.keepAwake();
 
   return {
     cancel: cancel,
@@ -53,6 +54,7 @@ seek.controller = function() {
     onunload: function() {
       socket.destroy();
       document.removeEventListener('backbutton', cancel, false);
+      window.plugins.insomnia.allowSleepAgain();
     }
   };
 };

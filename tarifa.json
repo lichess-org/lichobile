@@ -40,7 +40,7 @@
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "GA_ID": "UA-7935029-3",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "cordova": {
         "whitelist": [
           {
@@ -77,7 +77,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "200001",
+        "version_code": "200100",
         "release": true,
         "sign": "store"
       }

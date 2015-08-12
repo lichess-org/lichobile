@@ -22,14 +22,6 @@ friendsPopup.close = function(fromBB) {
 };
 
 friendsPopup.view = function() {
-  const friends = friendsApi.list().length ?
-    (
-    <ul>
-      {friendsApi.list().map(renderFriend)}
-    </ul>
-    ) : (
-      <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
-    );
 
   const header = (
     <div><span data-icon="f"/>{i18n('onlineFriends')}</div>
@@ -38,11 +30,22 @@ friendsPopup.view = function() {
   return popupWidget(
     {onlineFriends: true, native_scroller: false},
     header,
-    friends,
+    renderFriends,
     friendsPopup.isOpen,
     friendsPopup.close
   );
 };
+
+function renderFriends() {
+  return friendsApi.list().length ?
+    (
+    <ul>
+      {friendsApi.list().map(renderFriend)}
+    </ul>
+    ) : (
+      <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
+    );
+}
 
 function renderFriend(name) {
   let userId = utils.userFullNameToId(name);

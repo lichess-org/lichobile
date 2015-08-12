@@ -76,11 +76,13 @@ function joinOverlay(ctrl) {
     return popupWidget(
       'join_url_challenge',
       opp ? opp.username : 'Anonymous',
-      m('div.infos', [
-        gameInfos(data),
-        m('br'),
-        joinDom
-      ]),
+      function() {
+        return m('div.infos', [
+          gameInfos(data),
+          m('br'),
+          joinDom
+        ]);
+      },
       true
     );
   };
@@ -93,46 +95,50 @@ function awaitInviteOverlay(ctrl) {
     return popupWidget(
       'await_url_challenge',
       null,
-      m('div.infos', [
-        m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
-        m('input.lichess_game_url', {
-          value: gameApi.publicUrl(data),
-          readonly: true
-        }),
-        m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
-        m('div.go_or_cancel.clearfix', [
-          m('button.binary_choice[data-icon=E]', {
-            config: helper.ontouch(function() {
-              window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(data));
-            })
-          }, i18n('shareGameURL')),
-          m('button.binary_choice[data-icon=L]', {
-            config: helper.ontouch(ctrl.cancelChallenge)
-          }, i18n('cancel'))
-        ]),
-        m('br'),
-        gameInfos(data)
-      ]),
+      function() {
+        return m('div.infos', [
+          m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
+          m('input.lichess_game_url', {
+            value: gameApi.publicUrl(data),
+            readonly: true
+          }),
+          m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
+          m('div.go_or_cancel.clearfix', [
+            m('button.binary_choice[data-icon=E]', {
+              config: helper.ontouch(function() {
+                window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(data));
+              })
+            }, i18n('shareGameURL')),
+            m('button.binary_choice[data-icon=L]', {
+              config: helper.ontouch(ctrl.cancelChallenge)
+            }, i18n('cancel'))
+          ]),
+          m('br'),
+          gameInfos(data)
+        ]);
+      },
       true
     );
   };
 }
 
 function awaitChallengeOverlay(ctrl) {
-  const popupContent = (
-    <div className="infos">
-      <div className="user">{m.route.param('userId')}</div>
-      <br />
-      <div className="loader"><span data-icon="U" /></div>
-      <br />
-      <p>{i18n('waitingForOpponent')}</p>
-      <button data-icon="L" config={helper.ontouch(ctrl.cancelChallenge)}>
-        {i18n('cancel')}
-      </button>
-      <br />
-      {gameInfos(ctrl.getData())}
-    </div>
-  );
+  function popupContent() {
+    return (
+      <div className="infos">
+        <div className="user">{m.route.param('userId')}</div>
+        <br />
+        <div className="loader"><span data-icon="U" /></div>
+        <br />
+        <p>{i18n('waitingForOpponent')}</p>
+        <button data-icon="L" config={helper.ontouch(ctrl.cancelChallenge)}>
+          {i18n('cancel')}
+        </button>
+        <br />
+        {gameInfos(ctrl.getData())}
+      </div>
+    );
+  }
 
   return function() {
     return popupWidget('await_url_challenge', i18n('challengeToPlay'), popupContent, true);

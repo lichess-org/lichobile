@@ -57,10 +57,13 @@ export default {
     if (ctrl.isOpen())
       return popupWidget(
         'offline_actions',
-        null, [
-          renderEndedGameStatus(ctrl),
-          renderAlways(ctrl)
-        ],
+        null,
+        function() {
+          return [
+            renderEndedGameStatus(ctrl),
+            renderAlways(ctrl)
+          ];
+        },
         ctrl.isOpen(),
         ctrl.close
       );

@@ -9,7 +9,7 @@ function styleConf(el) {
   el.style.top = top + 'px';
 }
 
-export default function popup(classes, header, content, isShowing, closef) {
+export default function(classes, header, contentF, isShowing, closef) {
   if (!isShowing)
     return <div className="overlay popup overlay_fade" />;
 
@@ -33,7 +33,7 @@ export default function popup(classes, header, content, isShowing, closef) {
       <div className={className} config={styleConf}>
         {header ? <header>{header}</header> : null}
         <div className="popup_content">
-          {content}
+          {contentF()}
         </div>
       </div>
     </div>

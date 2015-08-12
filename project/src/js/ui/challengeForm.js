@@ -146,7 +146,7 @@ challengeForm.view = function() {
   return popupWidget(
     'invite_form_popup game_form_popup',
     null,
-    renderForm(),
+    renderForm,
     challengeForm.isOpen,
     challengeForm.close
   );

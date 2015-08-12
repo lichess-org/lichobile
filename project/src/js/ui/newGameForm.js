@@ -203,23 +203,25 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 
 newGameForm.view = function() {
 
-  var form = settings.game.selected() === 'human' ? renderForm(
-    'human',
-    seekHumanGame,
-    settings.game.human,
-    settings.game.human.availableVariants,
-    settings.game.human.availableTimeModes.filter(function(e) {
-      // correspondence and unlimited time modes are only available when
-      // connected
-      return e[1] === '1' || session.isConnected();
-    })
-  ) : renderForm(
-    'ai',
-    startAIGame,
-    settings.game.ai,
-    settings.game.ai.availableVariants,
-    settings.game.ai.availableTimeModes
-  );
+  function form() {
+    return settings.game.selected() === 'human' ? renderForm(
+      'human',
+      seekHumanGame,
+      settings.game.human,
+      settings.game.human.availableVariants,
+      settings.game.human.availableTimeModes.filter(function(e) {
+        // correspondence and unlimited time modes are only available when
+        // connected
+        return e[1] === '1' || session.isConnected();
+      })
+    ) : renderForm(
+      'ai',
+      startAIGame,
+      settings.game.ai,
+      settings.game.ai.availableVariants,
+      settings.game.ai.availableTimeModes
+    );
+  }
 
   return popupWidget(
     'new_game_form_popup game_form_popup',

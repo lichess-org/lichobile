@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import work from 'webworkify';
 
 export default function replayCtrl(root, rootSituations, rootPly) {
 
@@ -6,6 +7,13 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.ply = 0;
   this.situations = [];
   this.hash = '';
+
+  var chessWorker = work(require('./chessWorker'));
+  chessWorker.onmessage = function(e) {
+    this.situations.push(e.data);
+    this.apply();
+    root.onReplayAdded();
+  }.bind(this);
 
   this.init = function(situations, ply) {
     if (situations) this.situations = situations;
@@ -53,44 +61,18 @@ export default function replayCtrl(root, rootSituations, rootPly) {
 
   this.firstPly = () => 0;
 
-  var forsyth = function(role) {
-    return role === 'knight' ? 'n' : role[0];
-  };
-
   this.addMove = function(orig, dest, promotion) {
     const situation = this.situation();
-    const chess = new Chess(situation.fen, 0);
-    const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
-      (promotion ? forsyth(promotion) : 'q') : null;
-    const move = chess.move({
-      from: orig,
-      to: dest,
-      promotion: promotionLetter
-    });
     this.ply++;
-    var turnColor = chess.turn() === 'w' ? 'white' : 'black';
+    chessWorker.postMessage({
+      ply: this.ply,
+      fen: situation.fen,
+      promotion,
+      orig,
+      dest
+    });
     if (this.ply <= this.situations.length)
       this.situations = this.situations.slice(0, this.ply);
-
-    this.situations.push({
-      fen: chess.fen(),
-      turnColor: turnColor,
-      movable: {
-        color: turnColor,
-        dests: chess.dests()
-      },
-      check: chess.in_check(),
-      finished: chess.game_over(),
-      checkmate: chess.in_checkmate(),
-      stalemate: chess.in_stalemate(),
-      threefold: chess.in_threefold_repetition(),
-      draw: chess.in_draw(),
-      lastMove: [move.from, move.to],
-      san: move.san,
-      ply: this.ply,
-      promotion: promotionLetter
-    });
-    this.apply();
   };
 
   this.situationsHash = function(steps) {

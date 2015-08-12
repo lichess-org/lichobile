@@ -22,23 +22,13 @@ export default function controller(cfg) {
     });
   }.bind(this);
 
-  var addMove = function(orig, dest, promotionRole) {
-    this.replay.addMove(orig, dest, promotionRole);
-    save();
-    m.redraw();
-    if (this.replay.situation().finished) setTimeout(function() {
-      this.actions.open();
-      m.redraw();
-    }.bind(this), 1000);
-  }.bind(this);
-
   var onPromotion = function(orig, dest, role) {
-    addMove(orig, dest, role);
+    this.replay.addMove(orig, dest, role);
   };
 
   var userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {
-      addMove(orig, dest);
+      this.replay.addMove(orig, dest);
     }
   }.bind(this);
 
@@ -49,6 +39,14 @@ export default function controller(cfg) {
       sound.capture();
   };
 
+  this.onReplayAdded = function() {
+    save();
+    m.redraw();
+    if (this.replay.situation().finished) setTimeout(function() {
+      this.actions.open();
+      m.redraw();
+    }.bind(this), 1000);
+  }.bind(this);
 
   this.init = function(data, situations, ply) {
     this.data = data || makeData(cfg);

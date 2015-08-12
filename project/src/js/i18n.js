@@ -32,9 +32,9 @@ const defaultCode = 'en';
 
 export default function i18n(key) {
   var str = messages[key] || untranslated[key] || key;
-  Array.prototype.slice.call(arguments, 1).forEach(function(arg) {
-    str = str.replace('%s', arg);
-  });
+  for (var i = 1; i < arguments.length; ++i) {
+    str = str.replace('%s', arguments[i]);
+  }
   return str;
 }
 

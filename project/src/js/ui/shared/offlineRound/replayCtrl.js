@@ -34,6 +34,7 @@ export default function replayCtrl(root, rootSituations, rootPly) {
     }
     this.ply = ply || 0;
   }.bind(this);
+
   this.init(rootSituations, rootPly);
 
   this.situation = function() {
@@ -43,23 +44,6 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.apply = function() {
     this.root.chessground.set(this.situation());
   }.bind(this);
-
-  this.jump = function(ply) {
-    this.root.chessground.cancelMove();
-    if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
-    this.ply = ply;
-    this.apply();
-  }.bind(this);
-
-  this.forward = function() {
-    this.jump(this.ply + 1);
-  }.bind(this);
-
-  this.backward = function() {
-    this.jump(this.ply - 1);
-  }.bind(this);
-
-  this.firstPly = () => 0;
 
   this.addMove = function(orig, dest, promotion) {
     const situation = this.situation();

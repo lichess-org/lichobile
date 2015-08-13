@@ -1,5 +1,4 @@
 import { Chess } from 'chess.js';
-import engine from '../engine';
 
 export default function replayCtrl(root, rootSituations, rootPly) {
 
@@ -35,26 +34,6 @@ export default function replayCtrl(root, rootSituations, rootPly) {
 
   this.apply = function() {
     this.root.chessground.set(this.situation());
-  }.bind(this);
-
-  this.jump = function(ply) {
-    this.root.chessground.cancelMove();
-    if (this.ply === ply || ply < 0 || ply >= this.situations.length) return;
-    this.ply = ply;
-    this.apply();
-    engine.init(this.situation().fen);
-  }.bind(this);
-
-  this.forward = function() {
-    this.jump(this.ply + 2);
-  }.bind(this);
-
-  this.backward = function() {
-    this.jump(this.ply - 2);
-  }.bind(this);
-
-  this.firstPly = function () {
-    return this.root.data.player.color === 'black' ? 1 : 0;
   }.bind(this);
 
   var forsyth = function(role) {

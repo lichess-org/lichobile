@@ -1,8 +1,8 @@
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
+import replayCtrl from '../shared/offlineRound/replayCtrl';
 import sound from '../../sound';
-import replayCtrl from './replay/replayCtrl';
 import storage from '../../storage';
 import actions from './actions';
 import helper from '../helper';
@@ -65,6 +65,23 @@ export default function controller(cfg) {
       color: color
     }));
   }.bind(this);
+
+  this.jump = function(ply) {
+    this.chessground.cancelMove();
+    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
+    this.replay.ply = ply;
+    this.replay.apply();
+  }.bind(this);
+
+  this.forward = function() {
+    this.jump(this.replay.ply + 1);
+  }.bind(this);
+
+  this.backward = function() {
+    this.jump(this.replay.ply - 1);
+  }.bind(this);
+
+  this.firstPly = () => 0;
 
   var saved = storage.get(storageKey);
   if (saved) this.init(saved.data, saved.situations, saved.ply);

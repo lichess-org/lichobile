@@ -29,8 +29,8 @@ export function renderGameActionsBar(ctrl) {
       config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.game_action.empty[data-icon=c]'),
-    renderBackwardButton(ctrl.replay),
-    renderForwardButton(ctrl.replay)
+    renderBackwardButton(ctrl),
+    renderForwardButton(ctrl)
   ];
   return m('section#game_actions', vdom);
 }
@@ -45,8 +45,8 @@ export function renderGameActionsBarTablet(ctrl) {
       <button className="fa fa-share-alt game_action"
         config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />
-      {renderBackwardButton(ctrl.replay)}
-      {renderForwardButton(ctrl.replay)}
+      {renderBackwardButton(ctrl)}
+      {renderForwardButton(ctrl)}
     </section>
   );
 }
@@ -104,16 +104,16 @@ function renderBackwardButton(ctrl) {
   return m('button.game_action[data-icon=I]', {
     config: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
     className: helper.classSet({
-      disabled: !(ctrl.ply > ctrl.firstPly())
+      disabled: !(ctrl.replay.ply > ctrl.firstPly())
     })
   });
 }
 
 function renderForwardButton(ctrl) {
   return m('button.game_action[data-icon=H]', {
-    config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.situations.length - 1)),
+    config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
     className: helper.classSet({
-      disabled: !(ctrl.ply < ctrl.situations.length - 1)
+      disabled: !(ctrl.replay.ply < ctrl.replay.situations.length - 1)
     })
   });
 }

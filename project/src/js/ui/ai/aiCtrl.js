@@ -2,7 +2,7 @@ import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import sound from '../../sound';
-import replayCtrl from './replay/replayCtrl';
+import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';
 import settings from '../../settings';
 import actions from './actions';
@@ -27,16 +27,6 @@ export default function controller() {
   var addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
     engine.addMove(orig, dest, promotionRole);
-    this.data.game.fen = engine.getFen();
-    save();
-    m.redraw();
-    if (this.replay.situation().finished) {
-      this.chessground.cancelMove();
-      setTimeout(function() {
-        this.actions.open();
-        m.redraw();
-      }.bind(this), 1000);
-    } else engineMove();
   }.bind(this);
 
   this.getOpponent = function() {
@@ -76,6 +66,18 @@ export default function controller() {
       sound.capture();
   };
 
+  this.onReplayAdded = function() {
+    save();
+    m.redraw();
+    if (this.replay.situation().finished) {
+      this.chessground.cancelMove();
+      setTimeout(function() {
+        this.actions.open();
+        m.redraw();
+      }.bind(this), 1000);
+    } else engineMove();
+  }.bind(this);
+
   this.init = function(data, situations, ply) {
     this.data = data;
     if (!this.chessground)
@@ -96,6 +98,25 @@ export default function controller() {
     }));
   }.bind(this);
 
+  this.jump = function(ply) {
+    this.chessground.cancelMove();
+    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
+    this.replay.ply = ply;
+    this.replay.apply();
+    engine.init(this.replay.situation().fen);
+  }.bind(this);
+
+  this.forward = function() {
+    this.jump(this.replay.ply + 2);
+  }.bind(this);
+
+  this.backward = function() {
+    this.jump(this.replay.ply - 2);
+  }.bind(this);
+
+  this.firstPly = function () {
+    return this.data.player.color === 'black' ? 1 : 0;
+  }.bind(this);
 
   var saved = storage.get(storageKey);
   if (saved) try {

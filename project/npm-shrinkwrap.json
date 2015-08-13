@@ -1516,18 +1516,13 @@
     },
     "chessground": {
       "version": "2.1.0",
-      "from": "git://github.com/ornicar/chessground.git#fee7e6b0ba3bdbb56b6e206ef5e1e7b3352364da",
+      "from": "git://github.com/ornicar/chessground.git#mobile",
       "resolved": "git://github.com/ornicar/chessground.git#fee7e6b0ba3bdbb56b6e206ef5e1e7b3352364da",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
           "from": "merge@1.2.0",
           "resolved": "https://registry.npmjs.org/merge/-/merge-1.2.0.tgz"
-        },
-        "mithril": {
-          "version": "0.2.0",
-          "from": "mithril@0.2.0",
-          "resolved": "https://registry.npmjs.org/mithril/-/mithril-0.2.0.tgz"
         }
       }
     },
@@ -1560,6 +1555,11 @@
       "version": "2.0.1",
       "from": "spin.js@2.0.1",
       "resolved": "https://registry.npmjs.org/spin.js/-/spin.js-2.0.1.tgz"
+    },
+    "webworkify": {
+      "version": "1.0.2",
+      "from": "webworkify@1.0.2",
+      "resolved": "https://registry.npmjs.org/webworkify/-/webworkify-1.0.2.tgz"
     },
     "zanimo": {
       "version": "2.0.0",

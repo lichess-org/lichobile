@@ -23,5 +23,9 @@ export default {
   remove(name) {
     const i = onlineFriends.indexOf(name);
     if (i !== -1) onlineFriends.splice(i, 1);
+  },
+
+  clear() {
+    onlineFriends = [];
   }
 };

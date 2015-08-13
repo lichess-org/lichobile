@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { oppositeColor } from '../../utils';
+import { oppositeColor } from '../../../utils';
 
 export default function data(cfg) {
 
@@ -10,7 +10,6 @@ export default function data(cfg) {
 
   return {
     "game": {
-      "id": "___AI___",
       "variant": {
         "key": "standard",
         "name": "Standard",

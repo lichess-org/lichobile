@@ -1,6 +1,6 @@
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
-import makeData from './data';
+import makeData from '../shared/offlineRound/data';
 import sound from '../../sound';
 import replayCtrl from './replay/replayCtrl';
 import storage from '../../storage';

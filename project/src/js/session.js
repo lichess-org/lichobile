@@ -2,6 +2,7 @@ import { request } from './http';
 import * as utils from './utils';
 import i18n from './i18n';
 import settings from './settings';
+import friendsApi from './lichess/friends';
 import m from 'mithril';
 
 var session = null;
@@ -47,6 +48,7 @@ function login(username, password) {
 function logout() {
   return request('/logout', {}, true).then(function() {
     session = null;
+    friendsApi.clear();
   }, function(err) {
     utils.handleXhrError(err);
     throw err;

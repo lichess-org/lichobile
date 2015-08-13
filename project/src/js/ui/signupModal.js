@@ -1,7 +1,7 @@
-var session = require('../session');
-var helper = require('./helper');
-var i18n = require('../i18n');
-var backbutton = require('../backbutton');
+import session from '../session';
+import helper from './helper';
+import i18n from '../i18n';
+import backbutton from '../backbutton';
 import m from 'mithril';
 
 var signupModal = {};

@@ -27,6 +27,7 @@ export default function controller() {
   var addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
     engine.addMove(orig, dest, promotionRole);
+    this.data.game.fen = engine.getFen();
   }.bind(this);
 
   this.getOpponent = function() {

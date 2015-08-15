@@ -10,6 +10,9 @@ export default function replayCtrl(root, rootSituations, rootPly) {
 
   var chessWorker = work(require('./chessWorker'));
   chessWorker.onmessage = function(e) {
+    this.ply++;
+    if (this.ply <= this.situations.length)
+      this.situations = this.situations.slice(0, this.ply);
     this.situations.push(e.data);
     this.apply();
     root.onReplayAdded();
@@ -46,17 +49,13 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   }.bind(this);
 
   this.addMove = function(orig, dest, promotion) {
-    const situation = this.situation();
-    this.ply++;
     chessWorker.postMessage({
-      ply: this.ply,
-      fen: situation.fen,
+      ply: this.ply + 1,
+      fen: this.situation().fen,
       promotion,
       orig,
       dest
     });
-    if (this.ply <= this.situations.length)
-      this.situations = this.situations.slice(0, this.ply);
   };
 
   this.situationsHash = function(steps) {

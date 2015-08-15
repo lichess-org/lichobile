@@ -43,6 +43,7 @@ export default function controller(cfg) {
     save();
     m.redraw();
     if (this.replay.situation().finished) setTimeout(function() {
+      this.chessground.stop();
       this.actions.open();
       m.redraw();
     }.bind(this), 1000);

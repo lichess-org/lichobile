@@ -72,6 +72,7 @@ export default function controller() {
     m.redraw();
     if (this.replay.situation().finished) {
       this.chessground.cancelMove();
+      this.chessground.stop();
       setTimeout(function() {
         this.actions.open();
         m.redraw();

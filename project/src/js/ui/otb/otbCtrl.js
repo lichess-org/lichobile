@@ -24,7 +24,7 @@ export default function controller(cfg) {
 
   var onPromotion = function(orig, dest, role) {
     this.replay.addMove(orig, dest, role);
-  };
+  }.bind(this);
 
   var userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {

@@ -50,6 +50,18 @@ signupModal.view = function() {
       m('h2', i18n('signUp'))
     ]),
     m('div.modal_content', [
+      m('p.signupWarning.withIcon[data-icon=!]', [
+        i18n('computersAreNotAllowedToPlay')
+      ]),
+      m('p.tosWarning', [
+        'By registering, you agree to be bound by our ',
+        m('a', {
+          config: helper.ontouch(() =>
+          window.open('http://lichess.org/terms-of-service', '_blank', 'location=no')
+          )},
+          'Terms of Service'
+        ), '.'
+      ]),
       m('form', {
         onsubmit: function(e) {
           e.preventDefault();

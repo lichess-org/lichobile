@@ -304,7 +304,7 @@ function gameInfos(data) {
       () => {
         var link = variantApi(data.game.variant.key).link;
         if (link)
-          window.open(link, '_blank', 'location=no');
+          window.open(link, '_blank');
       },
       () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
     )

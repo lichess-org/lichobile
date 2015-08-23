@@ -154,9 +154,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
       move.lag = Math.round(socket.getAverageLag());
 
     if (this.data.pref.submitMove) {
-      backbutton.stack.push(this.cancelMove);
-      this.vm.moveToSubmit = move;
-      m.redraw();
+      setTimeout(function() {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.moveToSubmit = move;
+        m.redraw();
+      }.bind(this), this.data.pref.animationDuration || 0);
     } else socket.send('move', move, { ackable: true });
   };
 

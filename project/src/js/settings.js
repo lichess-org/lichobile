@@ -49,7 +49,8 @@ export default {
       board: localstorageprop('settings.theme.board', 'metal'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
-    analytics: localstorageprop('settings.analytics', true)
+    analytics: localstorageprop('settings.analytics', true),
+    coords: localstorageprop('settings.coords', true)
   },
 
   otb: {

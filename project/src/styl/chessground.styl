@@ -45,8 +45,6 @@
   font-size 10px
   line-height 10px
   content attr(data-coord-x)
-  color #fff
-  opacity 0.5
 
 .cg-square[data-coord-y]::before
   position absolute
@@ -55,8 +53,6 @@
   font-size 10px
   line-height 10px
   content attr(data-coord-y)
-  color #fff
-  opacity 0.5
 
 .cg-piece
   position absolute
@@ -68,6 +64,8 @@
   z-index 2
   transform translate3d(0,0,0)
   &.dragging
+    width 200%
+    height 200%
     z-index 3
   &.ghost
     opacity 0.3
@@ -81,9 +79,6 @@
 // view only boards
 .minimal-dom .cg-piece
   position absolute
+  transform none
   width 12.5%
   height 12.5%
-
-.cg-board-wrap.view-only
-  .cg-piece
-    transform none

@@ -49,6 +49,7 @@ export default function controller() {
         challengeIntervalID = setInterval(() => {
           socket.send('challenge', m.route.param('userId'));
         }, 1500);
+        window.plugins.insomnia.keepAwake();
       } else {
         helper.analyticsTrackView('Waiting for URL invitation acceptance');
         isAwaitingInvite(true);
@@ -74,6 +75,7 @@ export default function controller() {
       }
       if (challengeIntervalID) clearInterval(challengeIntervalID);
       socket.destroy();
+      window.plugins.insomnia.allowSleepAgain();
     },
     getRound: function() {
       return round;

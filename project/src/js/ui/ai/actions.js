@@ -2,9 +2,9 @@ import * as utils from '../../utils';
 import i18n from '../../i18n';
 import { util } from 'chessground';
 import settings from '../../settings';
-import formWidgets from '../widget/form';
-import { renderEndedGameStatus } from '../widget/offlineRound';
-import popupWidget from '../widget/popup';
+import formWidgets from '../shared/form';
+import { renderEndedGameStatus } from '../shared/offlineRound';
+import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import m from 'mithril';
@@ -56,10 +56,13 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'offline_actions',
-      null, [
-        renderEndedGameStatus(ctrl),
-        renderAlways(ctrl)
-      ],
+      null,
+      function() {
+        return [
+          renderEndedGameStatus(ctrl),
+          renderAlways(ctrl)
+        ];
+      },
       ctrl.isOpen(),
       ctrl.close
     );

@@ -1,6 +1,6 @@
 import userPerfs from '../../lichess/perfs';
-import { header as headerWidget, backButton, empty } from '../widget/common';
-import perf from '../widget/perf';
+import { header as headerWidget, backButton, empty } from '../shared/common';
+import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
 import countries from './countries';

@@ -1,9 +1,9 @@
 import chessground from 'chessground';
 import settings from '../../../settings';
 import layout from '../../layout';
-import { menuButton, loader, headerBtns } from '../../widget/common';
-import popupWidget from '../../widget/popup';
-import formWidgets from '../../widget/form';
+import { menuButton, loader, headerBtns } from '../../shared/common';
+import popupWidget from '../../shared/popup';
+import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
 import * as utils from '../../../utils';
@@ -23,6 +23,7 @@ export default function view(ctrl) {
   function overlay() {
     return [
       ctrl.chat ? renderChat(ctrl.chat) : null,
+      renderPromotion(ctrl),
       renderGamePopup(ctrl),
       renderSubmitMovePopup(ctrl)
     ];
@@ -51,7 +52,7 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
+export function renderBoard(ctrl, moreWrapperClasses) {
   const { vh, vw } = helper.viewportDim();
   // ios 7.1 still doesn't support vh unit in calc
   // see game.styl section '.board_wrapper' for corresponding calc() rules
@@ -70,7 +71,7 @@ export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
     settings.general.theme.piece(),
     ctrl.data.game.variant.key
   ].join(' ');
-  let wrapperClass = "board_wrapper";
+  let wrapperClass = 'board_wrapper';
 
   if (moreWrapperClasses) {
     wrapperClass += ' ';
@@ -81,7 +82,6 @@ export function renderBoard(ctrl, renderPromotionF, moreWrapperClasses) {
     <section key={boardKey} className={wrapperClass} style={boardStyle}>
       <div className={boardClass}>
         {chessground.view(ctrl.chessground)}
-        {renderPromotionF(ctrl)}
       </div>
     </section>
   );
@@ -111,13 +111,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return [
       opponent,
-      renderBoard(ctrl, renderPromotion),
+      renderBoard(ctrl),
       player,
       renderGameActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl, renderPromotion),
+      renderBoard(ctrl),
       <section key="table" className="table">
         <header className="tableHeader">
           {gameInfos(ctrl.data)}
@@ -172,9 +172,10 @@ function renderAntagonist(ctrl, player, material, position) {
   const playerName = utils.playerName(player, helper.isLandscape());
   const {vh, vw} = helper.viewportDim();
   const headerHeight = vh > 480 ? 50 : 40;
+  const contentHeight = vh - headerHeight;
   // must do this here because of the lack of `calc` support
-  // 50 refers to either header height of game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((vh - vw) / 2 - headerHeight) + 'px' };
+  // 45 refers to game actions bar height
+  const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
   function infos() {
@@ -303,7 +304,7 @@ function gameInfos(data) {
       () => {
         var link = variantApi(data.game.variant.key).link;
         if (link)
-          window.open(link, '_blank', 'location=no');
+          window.open(link, '_blank');
       },
       () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
     )
@@ -322,7 +323,7 @@ function renderGamePopup(ctrl) {
     'player_controls',
     helper.isPortrait() ? gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
-      renderGameRunningActions(ctrl) : renderGameEndedActions(ctrl),
+      renderGameRunningActions.bind(undefined, ctrl) : renderGameEndedActions.bind(undefined, ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   );

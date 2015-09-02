@@ -8,6 +8,7 @@
     display flex
 
 .board_wrapper
+  transform translateZ(0)
   @media only screen and (orientation: portrait)
     height calc(100vw)
     width calc(100vw)
@@ -71,7 +72,7 @@
     margin auto 1rem
 
 .antagonist
-  height calc((100vh - 100vw) / 2 - 50px)
+  height calc((100% - 100vw - 45px) / 2)
   padding 0 10px
   display flex
   justify-content space-between
@@ -176,8 +177,7 @@
   margin-bottom 3px
   > .status
     margin-right 5px
-    position relative
-    top 2px
+    vertical-align middle
     &.online
       color green
     &.offline
@@ -190,6 +190,7 @@
       color red
 
 .clock
+  transform translateZ(0)
   width 90px
   font-family Cousine
   font-weight bold
@@ -247,6 +248,7 @@
   border 1px solid black
   background-color rgba(255,255,255, 0.7)
   position absolute
+  top calc((100vh - 100px) / 2)
   height 100px
   width 100%
   text-align center
@@ -261,8 +263,6 @@
 #game_actions
   padding 0
   height 45px
-  position absolute
-  bottom 0
   width 100%
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
@@ -282,6 +282,10 @@
   width 25%
   &:last-child
     border-right none
+  &.disabled
+    &:before
+      opacity 1
+    color rgba(gold, 0.4)
   &.active
     background lighten(bgdark, 8%)
     color lighten(gold, 40%)

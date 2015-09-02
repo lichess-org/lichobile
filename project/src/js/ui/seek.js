@@ -1,8 +1,8 @@
 import * as utils from '../utils';
 import helper from './helper';
 import layout from './layout';
-import { header, viewOnlyBoardContent } from './widget/common';
-import popupWidget from './widget/popup';
+import { header, viewOnlyBoardContent } from './shared/common';
+import popupWidget from './shared/popup';
 import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
@@ -46,6 +46,7 @@ seek.controller = function() {
   }
 
   document.addEventListener('backbutton', cancel, false);
+  window.plugins.insomnia.keepAwake();
 
   return {
     cancel: cancel,
@@ -53,6 +54,7 @@ seek.controller = function() {
     onunload: function() {
       socket.destroy();
       document.removeEventListener('backbutton', cancel, false);
+      window.plugins.insomnia.allowSleepAgain();
     }
   };
 };
@@ -62,14 +64,16 @@ seek.view = function(ctrl) {
     return popupWidget(
       null,
       m('div', i18n('waitingForOpponent') + '...'),
-      m('div.seek_real_time', [
-        m('div.nb_players', i18n('nbConnectedPlayers', nbPlaying || '?')),
-        m('br'),
-        m('br'),
-        m('button[data-icon=L]', {
-          config: helper.ontouch(ctrl.cancel)
-        }, i18n('cancel'))
-      ]),
+      function() {
+        return m('div.seek_real_time', [
+          m('div.nb_players', i18n('nbConnectedPlayers', nbPlaying || '?')),
+          m('br'),
+          m('br'),
+          m('button[data-icon=L]', {
+            config: helper.ontouch(ctrl.cancel)
+          }, i18n('cancel'))
+        ]);
+      },
       true
     );
   }

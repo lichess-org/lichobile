@@ -55,13 +55,13 @@ export default function(ctrl, onFeatured) {
       }, 1000);
     },
     gone: function(isGone) {
-      if (!ctrl.data.opponent.ai) {
+      if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
         if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
       }
     },
-    message: function(m) {
-      if (ctrl.chat) ctrl.chat.append(m);
+    message: function(msg) {
+      if (ctrl.chat) ctrl.chat.append(msg);
     },
     tvSelect: function(o) {
       if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured(o);

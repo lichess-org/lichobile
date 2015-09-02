@@ -1,8 +1,8 @@
-import promotion from './promotion';
-import ground from './ground';
-import makeData from './data';
+import promotion from '../shared/offlineRound/promotion';
+import ground from '../shared/offlineRound/ground';
+import makeData from '../shared/offlineRound/data';
+import replayCtrl from '../shared/offlineRound/replayCtrl';
 import sound from '../../sound';
-import replayCtrl from './replay/replayCtrl';
 import storage from '../../storage';
 import actions from './actions';
 import helper from '../helper';
@@ -22,38 +22,37 @@ export default function controller(cfg) {
     });
   }.bind(this);
 
-  var addMove = function(orig, dest, promotionRole) {
-    this.replay.addMove(orig, dest, promotionRole);
+  var onPromotion = function(orig, dest, role) {
+    this.replay.addMove(orig, dest, role);
+  }.bind(this);
+
+  var userMove = function(orig, dest) {
+    if (!promotion.start(this, orig, dest, onPromotion)) {
+      this.replay.addMove(orig, dest);
+    }
+  }.bind(this);
+
+  var onMove = function(orig, dest, capturedPiece) {
+    if (!capturedPiece)
+      sound.move();
+    else
+      sound.capture();
+  };
+
+  this.onReplayAdded = function() {
     save();
     m.redraw();
     if (this.replay.situation().finished) setTimeout(function() {
+      this.chessground.stop();
       this.actions.open();
       m.redraw();
     }.bind(this), 1000);
   }.bind(this);
 
-  var onPromotion = function(orig, dest, role) {
-    addMove(orig, dest, role);
-  };
-
-  var userMove = function(orig, dest) {
-    if (!promotion.start(this, orig, dest, onPromotion)) {
-      addMove(orig, dest);
-    }
-  }.bind(this);
-
-  var onCapture = function() {
-    sound.capture();
-  };
-
-  var onMove = function() {
-    sound.move();
-  };
-
   this.init = function(data, situations, ply) {
     this.data = data || makeData(cfg);
     if (!this.chessground)
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove, onCapture);
+      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
     else ground.reload(this.chessground, this.data, this.data.game.fen);
     if (!this.replay) this.replay = new replayCtrl(this, situations, ply);
     else this.replay.init(situations, ply);
@@ -67,6 +66,23 @@ export default function controller(cfg) {
       color: color
     }));
   }.bind(this);
+
+  this.jump = function(ply) {
+    this.chessground.cancelMove();
+    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
+    this.replay.ply = ply;
+    this.replay.apply();
+  }.bind(this);
+
+  this.forward = function() {
+    this.jump(this.replay.ply + 1);
+  }.bind(this);
+
+  this.backward = function() {
+    this.jump(this.replay.ply - 1);
+  }.bind(this);
+
+  this.firstPly = () => 0;
 
   var saved = storage.get(storageKey);
   if (saved) this.init(saved.data, saved.situations, saved.ply);

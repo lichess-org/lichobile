@@ -2,18 +2,8 @@ import { formatClockTime } from './clockView';
 import sound from '../../../sound';
 import m from 'mithril';
 
-export default function(data, outOfTime, soundColor) {
+export default function ctrl(data, outOfTime, soundColor) {
   var lastUpdate;
-
-  var clockEls = {
-    white: null,
-    black: null
-  };
-
-  function onResize() {
-    clockEls = {};
-  }
-  window.addEventListener('resize', onResize, false);
 
   var emergSound = {
     last: null,
@@ -46,18 +36,17 @@ export default function(data, outOfTime, soundColor) {
     this.data[color] = Math.max(0, lastUpdate[color] - (Date.now() - lastUpdate.at) / 1000);
     // performance hack: we don't want to call m.redraw() on every clock tick
     var time = this.data[color] * 1000,
-      el;
-    if (clockEls[color])
-      el = clockEls[color];
-    else {
       el = document.getElementById('clock_' + color);
-      clockEls[color] = el;
-    }
 
     if (el) el.innerHTML = formatClockTime(this, time, true);
 
-    if (soundColor === color && this.data[soundColor] < this.data.emerg && emergSound.playable[soundColor]) {
-      if (!emergSound.last || (data.increment && Date.now() - emergSound.delay > emergSound.last)) {
+    if (soundColor === color &&
+      this.data[soundColor] < this.data.emerg &&
+      emergSound.playable[soundColor]
+    ) {
+      if (!emergSound.last ||
+        (data.increment && Date.now() - emergSound.delay > emergSound.last)
+      ) {
         sound.lowtime();
         emergSound.last = Date.now();
         emergSound.playable[soundColor] = false;
@@ -66,11 +55,7 @@ export default function(data, outOfTime, soundColor) {
       emergSound.playable[soundColor] = true;
     }
 
-    if (this.data[color] === 0)
-      outOfTime();
-  }.bind(this);
+    if (this.data[color] === 0) outOfTime();
 
-  this.onunload = function() {
-    window.removeEventListener('resize', onResize, false);
-  };
+  }.bind(this);
 }

@@ -154,9 +154,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
       move.lag = Math.round(socket.getAverageLag());
 
     if (this.data.pref.submitMove) {
-      backbutton.stack.push(this.cancelMove);
-      this.vm.moveToSubmit = move;
-      m.redraw();
+      setTimeout(function() {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.moveToSubmit = move;
+        m.redraw();
+      }.bind(this), this.data.pref.animationDuration || 0);
     } else socket.send('move', move, { ackable: true });
   };
 
@@ -180,8 +182,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   var userMove = function(orig, dest, meta) {
     if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
-    if (this.data.game.speed === 'correspondence' && session.isConnected())
-      session.refresh();
   }.bind(this);
 
   var onMove = function(orig, dest, capturedPiece) {
@@ -252,6 +252,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
         if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
         else this.chessground.playPremove();
       }
+      if (this.data.game.speed === 'correspondence' && session.isConnected()) session.refresh();
     }
 
     if (o.clock) {
@@ -352,7 +353,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
     socket.destroy();
     if (clockIntervId) clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
-    if (this.clock) this.clock.onunload();
     signals.socket.connected.remove(onConnected);
     signals.socket.disconnected.remove(onDisconnected);
     document.removeEventListener('resume', onResume);

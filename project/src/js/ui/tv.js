@@ -1,4 +1,4 @@
-import { connectingHeader, viewOnlyBoardContent } from './widget/common';
+import { connectingHeader, viewOnlyBoardContent } from './shared/common';
 import layout from './layout';
 import helper from './helper';
 import * as utils from '../utils';

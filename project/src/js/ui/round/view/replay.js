@@ -24,6 +24,7 @@ function renderTr(ctrl, index, pairs, curPly) {
 }
 
 function autoScroll(movelist) {
+  if (!movelist) return;
   var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
 }

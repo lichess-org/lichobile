@@ -2,8 +2,8 @@ import * as utils from '../../utils';
 import helper from '../helper';
 import i18n from '../../i18n';
 import settings from '../../settings';
-import formWidgets from '../widget/form';
-import popupWidget from '../widget/popup';
+import formWidgets from '../shared/form';
+import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 

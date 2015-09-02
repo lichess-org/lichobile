@@ -1,6 +1,6 @@
 import layout from '../layout';
-import { header } from '../widget/common';
-import { view as renderPromotion } from '../otb/promotion';
+import { header } from '../shared/common';
+import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
@@ -12,6 +12,7 @@ export default function view(ctrl) {
     renderContent.bind(undefined, ctrl),
     null
   );
+
 }
 
 function renderContent(ctrl) {

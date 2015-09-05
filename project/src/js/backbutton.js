@@ -1,5 +1,6 @@
 import isFunction from 'lodash/lang/isFunction';
 import * as utils from './utils';
+import session from './session';
 import m from 'mithril';
 
 const stack = [];
@@ -10,7 +11,16 @@ export default function backbutton() {
     b('backbutton');
     m.redraw();
   } else if (!/^\/$/.test(m.route())) {
-    utils.backHistory();
+    // if playing a game as anon ask for confirmation because there is no way
+    // back!
+    if (/^\/game\/[a-zA-Z0-9]{12}/.test(m.route()) && !session.isConnected()) {
+      navigator.notification.confirm(
+        'Do you really want to leave the game? You can\'t go back to it after.',
+        i => { if (i === 1) utils.backHistory(); }
+      );
+    } else {
+      utils.backHistory();
+    }
   } else {
     window.navigator.app.exitApp();
   }

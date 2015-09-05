@@ -81,10 +81,10 @@ export function seeks(feedback) {
   return request('/lobby/seeks', null, feedback);
 }
 
-export function game(id, color) {
+export function game(id, color, background) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return request(url, { background: true });
+  return request(url, { background });
 }
 
 export function toggleGameBookmark(id) {

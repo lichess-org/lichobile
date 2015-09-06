@@ -7,6 +7,7 @@ import roundCtrl from '../round/roundCtrl';
 import gameStatus from '../../lichess/status';
 import gameApi from '../../lichess/game';
 import socket from '../../socket';
+import gamesMenu from '../gamesMenu';
 import i18n from '../../i18n';
 import m from 'mithril';
 
@@ -18,7 +19,7 @@ export default function controller() {
   var round;
   var challengeIntervalID;
 
-  gameXhr(m.route.param('id'), m.route.param('color')).then(function(data) {
+  gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
     gameData = data;
 
     if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {

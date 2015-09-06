@@ -16,8 +16,8 @@ function renderHeader(user) {
     return user ? [
       m('div.logo'),
       m('h2.username', user.username),
-      m('button.open_button[data-icon=u]', {
-        className: menu.headerOpen() ? 'open' : '',
+      m('button.open_button', {
+        'data-icon': menu.headerOpen() ? 'S' : 'R',
         config: helper.ontouch(menu.toggleHeader)
       })
     ] : [

@@ -10,7 +10,7 @@ export default function view(ctrl) {
   return layout.board(
     header.bind(undefined, i18n('training')),
     renderContent.bind(undefined, ctrl),
-    null
+    () => [renderPromotion(ctrl)]
   );
 
 }
@@ -19,13 +19,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return (
       <div className = "content round">
-        {renderBoard(ctrl, renderPromotion)}
+        {renderBoard(ctrl)}
       </div>
     );
   else
     return (
       <div className="content round">
-        {renderBoard(ctrl, renderPromotion)}
+        {renderBoard(ctrl)}
         <section key="table" className="table">
         </section>
       </div>

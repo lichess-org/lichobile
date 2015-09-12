@@ -103,6 +103,7 @@ export default function ctrl() {
   this.playInitialMove = function(id) {
     if (id !== this.data.puzzle.id) return;
     this.playOpponentMove(this.data.puzzle.move);
+    this.data.startedAt = new Date();
   }.bind(this);
 
   this.jump = function(to) {

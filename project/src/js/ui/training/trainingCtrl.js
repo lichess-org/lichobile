@@ -112,6 +112,18 @@ export default function ctrl() {
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
   }.bind(this);
 
+  this.initiate = function() {
+    if (this.data.mode !== 'view')
+      setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
+  }.bind(this);
+
+  this.reload = function(cfg) {
+    this.data = data(cfg);
+    chessground.board.reset(this.chessground.data);
+    chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg);
+    this.initiate();
+  }.bind(this);
+
   this.init = function(cfg) {
     this.data = data(cfg);
     if (this.actions) this.actions.close();
@@ -145,8 +157,7 @@ export default function ctrl() {
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
-    if (this.data.mode !== 'view')
-      setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
+    this.initiate();
   }.bind(this);
 
   xhr.newPuzzle().then(this.init);

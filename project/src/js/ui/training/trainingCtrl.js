@@ -4,13 +4,15 @@ import { partialf } from '../../utils';
 import data from './data';
 import chess from './chess';
 import puzzle from './puzzle';
-import { getCurrent } from './database';
 import sound from '../../sound';
 import actions from './actions';
 import settings from '../../settings';
+import * as xhr from './xhr';
 import m from 'mithril';
 
 export default function ctrl() {
+
+  this.data = null;
 
   var userMove = function(orig, dest) {
     var res = puzzle.tryMove(this.data, [orig, dest]);
@@ -102,7 +104,7 @@ export default function ctrl() {
 
   this.playInitialMove = function(id) {
     if (id !== this.data.puzzle.id) return;
-    this.playOpponentMove(this.data.puzzle.move);
+    this.playOpponentMove(this.data.puzzle.initialMove);
     this.data.startedAt = new Date();
   }.bind(this);
 
@@ -110,15 +112,10 @@ export default function ctrl() {
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
   }.bind(this);
 
-  this.init = function() {
-    this.data = data({
-      puzzle: getCurrent(),
-      mode: 'play'
-    });
+  this.init = function(cfg) {
+    this.data = data(cfg);
     if (this.actions) this.actions.close();
     else this.actions = new actions.controller(this);
-    // chessground.board.reset(this.chessground.data);
-    // chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg);
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
@@ -152,5 +149,5 @@ export default function ctrl() {
       setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
   }.bind(this);
 
-  this.init();
+  xhr.newPuzzle().then(this.init);
 }

@@ -4,6 +4,7 @@ import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
+import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -16,16 +17,20 @@ export default function view(ctrl) {
 }
 
 function renderContent(ctrl) {
+  const board = ctrl.data ?
+    renderBoard(ctrl) :
+    m.component(ViewOnlyBoard, { fen: '' });
+
   if (helper.isPortrait())
     return (
       <div className = "content round">
-        {renderBoard(ctrl)}
+        {board}
       </div>
     );
   else
     return (
       <div className="content round">
-        {renderBoard(ctrl)}
+        {board}
         <section key="table" className="table">
         </section>
       </div>

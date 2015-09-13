@@ -5,7 +5,7 @@ import { oppositeColor } from '../../utils';
 
 module.exports = function(cfg) {
 
-  var data = {
+  const defaults = {
     game: {
       variant: {
         key: 'standard'
@@ -21,9 +21,7 @@ module.exports = function(cfg) {
     chess: chess.make(cfg.puzzle.fen)
   };
 
-  merge(data, cfg);
+  cfg.puzzle.initialMove = puzzle.str2move(cfg.puzzle.initialMove);
 
-  data.puzzle.move = puzzle.str2move(data.puzzle.move);
-
-  return data;
+  return merge({}, defaults, cfg);
 };

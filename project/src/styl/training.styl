@@ -1,0 +1,40 @@
+.trainingSetup
+  height calc((100% - 100vw - 45px) / 2)
+  padding 0 10px
+  display flex
+  justify-content space-between
+  align-items center
+  color #fff
+  overflow hidden
+  @media only screen and (orientation: landscape)
+    padding 0
+    flex 1 0 auto
+    height initial
+
+.no-square
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+.puzzleComment
+  font-size 0.8em
+  text-align center
+  &.fail
+    color red
+  &.great
+    color green
+
+.trainingPlayer
+  .player
+    position relative
+
+#training_actions
+  padding 0
+  height 45px
+  width 100%
+  @media only screen and (orientation: landscape)
+    width calc(100vw - (100vh - 50px) - 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    width calc(100vw - (100vh - 50px - 12vh) - 10px)

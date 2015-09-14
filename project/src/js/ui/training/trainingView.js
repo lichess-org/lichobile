@@ -1,10 +1,9 @@
 import layout from '../layout';
+import i18n from '../../i18n';
 import { header } from '../shared/common';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
-import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
-import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -17,41 +16,69 @@ export default function view(ctrl) {
 }
 
 function renderContent(ctrl) {
-  const board = ctrl.data ?
-    renderBoard(ctrl) :
-    m.component(ViewOnlyBoard, { fen: '' });
+  if (!ctrl.data) return;
 
   if (helper.isPortrait())
-    return (
-      <div className = "content round">
-        {board}
-      </div>
-    );
+    return [
+      renderExplanation(ctrl),
+      renderBoard(ctrl),
+      renderPlayerTable(ctrl),
+      renderActionsBar(ctrl)
+    ];
   else
-    return (
-      <div className="content round">
-        {board}
-        <section key="table" className="table">
-        </section>
-      </div>
-    );
+    return [
+      renderBoard(ctrl)
+    ];
 }
+
+function renderExplanation(ctrl) {
+  return (
+    <section className="trainingSetup">
+      <p className="findit">
+        {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
+      </p>
+    </section>
+  );
+}
+
+function renderPlayerTable(ctrl) {
+  return (
+    <section className="trainingSetup">
+      <div className="yourTurn">
+        {i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
+      </div>
+      {renderCommentary(ctrl)}
+    </section>
+  );
+}
+
+function renderActionsBar(ctrl) {
+  var vdom = [
+    m('button.game_action.fa.fa-ellipsis-h', {
+    }),
+    m('button.game_action[data-icon=b]', {
+      config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
+    })
+  ];
+  return m('section#training_actions', vdom);
+}
+
 
 function renderCommentary(ctrl) {
   switch (ctrl.data.comment) {
     case 'retry':
-      return m('div.comment.retry', [
-        m('h3', m('strong', i18n('goodMove'))),
+      return m('div.puzzleComment.retry', [
+        m('h3.puzzleState', m('strong', i18n('goodMove'))),
         m('span', i18n('butYouCanDoBetter'))
       ]);
     case 'great':
-      return m('div.comment.great', [
-        m('h3.text[data-icon=E]', m('strong', i18n('bestMove'))),
+      return m('div.puzzleComment.great', [
+        m('h3.puzzleState.withIcon[data-icon=E]', m('strong', i18n('bestMove'))),
         m('span', i18n('keepGoing'))
       ]);
     case 'fail':
-      return m('div.comment.fail', [
-        m('h3.text[data-icon=k]', m('strong', i18n('puzzleFailed'))),
+      return m('div.puzzleComment.fail', [
+        m('h3.puzzleState.withIcon[data-icon=k]', m('strong', i18n('puzzleFailed'))),
         ctrl.data.mode === 'try' ? m('span', i18n('butYouCanKeepTrying')) : null
       ]);
     default:
@@ -96,34 +123,6 @@ function renderResult(ctrl) {
           return renderLoss(ctrl, ctrl.data.attempt);
       }
   }
-}
-
-function renderPlayTable(ctrl) {
-  return m('div.table_wrap',
-    m('div.table',
-      m('div.table_inner', [
-        m('div.current_player',
-          m('div.player.' + ctrl.chessground.data.turnColor, [
-            m('div.no-square', m('div.cg-piece.king.' + ctrl.chessground.data.turnColor)),
-            m('p', i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting'))
-          ])
-        ),
-        m('p.findit', i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
-        m('div.control',
-          m('a.button.giveup', {
-            config: function(el) {
-              setTimeout(function() {
-                el.classList.add('revealed');
-              }, 1000);
-            },
-            onclick: function() {
-              console.log('I give up!');
-            }
-          }, i18n('giveUp'))
-        )
-      ])
-    )
-  );
 }
 
 function renderViewTable(ctrl) {

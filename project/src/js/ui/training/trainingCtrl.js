@@ -108,6 +108,10 @@ export default function ctrl() {
     this.data.startedAt = new Date();
   }.bind(this);
 
+  this.giveUp = function() {
+    xhr.attempt(this, 0);
+  }.bind(this);
+
   this.jump = function(to) {
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
   }.bind(this);

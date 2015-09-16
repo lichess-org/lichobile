@@ -20,8 +20,10 @@ export default function controller() {
   function onKeyboardShow(e) {
     if (window.cordova.platformId === 'ios') {
       let ul = document.getElementById('players_search_results');
-      listHeight = ul.offsetHeight;
-      if (ul) ul.style.height = (listHeight - e.keyboardHeight) + 'px';
+      if (ul) {
+        listHeight = ul.offsetHeight;
+        ul.style.height = (listHeight - e.keyboardHeight) + 'px';
+      }
     }
   }
 

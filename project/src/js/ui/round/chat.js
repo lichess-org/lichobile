@@ -4,6 +4,7 @@ import storage from '../../storage';
 import gameApi from '../../lichess/game';
 import backbutton from '../../backbutton';
 import socket from '../../socket';
+import Autolinker from 'autolinker';
 import m from 'mithril';
 
 export default {
@@ -140,7 +141,7 @@ export default {
                 'close_balloon': closeBalloon
               })
             }, [
-              m.trust(msg.t)
+              m.trust(Autolinker.link(msg.t))
             ]);
           }))
         ]),

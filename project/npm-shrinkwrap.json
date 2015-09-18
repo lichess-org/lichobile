@@ -2,6 +2,11 @@
   "name": "lichobile",
   "version": "0.0.0",
   "dependencies": {
+    "autolinker": {
+      "version": "0.18.1",
+      "from": "autolinker@*",
+      "resolved": "https://registry.npmjs.org/autolinker/-/autolinker-0.18.1.tgz"
+    },
     "babelify": {
       "version": "6.1.3",
       "from": "babelify@6.1.3",
@@ -1527,7 +1532,7 @@
         "mithril": {
           "version": "0.2.1",
           "from": "lhorie/mithril.js#next",
-          "resolved": "git://github.com/lhorie/mithril.js.git#7a5980631e59e5ad19c5cdc50fa47f4a171df9af"
+          "resolved": "git://github.com/lhorie/mithril.js.git#8fa84c33f861b67acc3024edae4c9c839848a44f"
         }
       }
     },
@@ -1544,7 +1549,7 @@
     "mithril": {
       "version": "0.2.1",
       "from": "lhorie/mithril.js#next",
-      "resolved": "git://github.com/lhorie/mithril.js.git#7a5980631e59e5ad19c5cdc50fa47f4a171df9af"
+      "resolved": "git://github.com/lhorie/mithril.js.git#8fa84c33f861b67acc3024edae4c9c839848a44f"
     },
     "moment": {
       "version": "2.8.4",

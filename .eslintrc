@@ -11,6 +11,9 @@
     "browser": true,
     "node": true
   },
+  "plugins": [
+    "react"
+  ],
   "extends": "eslint:recommended",
   "ecmaFeatures": {
     "jsx": true

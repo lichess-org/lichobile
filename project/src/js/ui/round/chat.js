@@ -112,7 +112,7 @@ export default {
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
-      m('div.modal_content.allow_select', [
+      m('div.modal_content', [
         m('div#chat_scroller.native_scroller', {
           config: el => el.scrollTop = el.scrollHeight
         }, [
@@ -132,7 +132,7 @@ export default {
             }
             if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
-            return m('li.chat_msg', {
+            return m('li.chat_msg.allow_select', {
               className: helper.classSet({
                 system: lichessTalking,
                 player: playerTalking,

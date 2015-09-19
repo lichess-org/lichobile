@@ -63,7 +63,7 @@ helper.scale = function(element, isInitialized) {
   }
 };
 
-helper.ontouch = function(tapHandler, holdHandler, scrollX, scrollY) {
+function ontouch(tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var unbind = ButtonHandler(el,
@@ -74,7 +74,8 @@ helper.ontouch = function(tapHandler, holdHandler, scrollX, scrollY) {
         },
         holdHandler ? () => utils.autoredraw(holdHandler) : null,
         scrollX,
-        scrollY
+        scrollY,
+        touchEndFeedback
       );
       context.onunload = function() {
         unbind();
@@ -82,13 +83,17 @@ helper.ontouch = function(tapHandler, holdHandler, scrollX, scrollY) {
       };
     }
   };
+}
+
+helper.ontouch = function(tapHandler, holdHandler, touchEndFeedback = true) {
+  return ontouch(tapHandler, holdHandler, false, false, touchEndFeedback);
 };
 
-helper.ontouchX = function(tapHandler, holdHandler) {
-  return helper.ontouch(tapHandler, holdHandler, true, false);
+helper.ontouchX = function(tapHandler, holdHandler, touchEndFeedback = true) {
+  return ontouch(tapHandler, holdHandler, true, false, touchEndFeedback);
 };
-helper.ontouchY = function(tapHandler, holdHandler) {
-  return helper.ontouch(tapHandler, holdHandler, false, true);
+helper.ontouchY = function(tapHandler, holdHandler, touchEndFeedback = true) {
+  return ontouch(tapHandler, holdHandler, false, true, touchEndFeedback);
 };
 
 helper.progress = function(p) {
@@ -128,11 +133,11 @@ helper.isVeryWideScreen = function() {
 };
 
 helper.isPortrait = function() {
-  return window.matchMedia("(orientation: portrait)").matches;
+  return window.matchMedia('(orientation: portrait)').matches;
 };
 
 helper.isLandscape = function() {
-  return window.matchMedia("(orientation: landscape)").matches;
+  return window.matchMedia('(orientation: landscape)').matches;
 };
 
 // allow user to opt out of track analytics

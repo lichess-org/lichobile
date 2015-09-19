@@ -18,7 +18,7 @@ function renderHeader(user) {
       m('h2.username', user.username),
       m('button.open_button', {
         'data-icon': menu.headerOpen() ? 'S' : 'R',
-        config: helper.ontouch(menu.toggleHeader)
+        config: helper.ontouch(menu.toggleHeader, null, false)
       })
     ] : [
       m('div.logo'),

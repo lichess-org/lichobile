@@ -1,12 +1,12 @@
-const holdDuration = 600;
-const scrollTolerance = 8;
-const activeClass = 'active';
+const HOLD_DURATION = 600;
+const SCROLL_TOLERANCE = 8;
+const ACTIVE_CLASS = 'active';
 
 function hasContextMenu() {
   return window.cordova.platformId !== 'ios';
 }
 
-export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scrollY) {
+export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
   let startX, startY, boundaries, active, holdTimeoutID;
 
   if (typeof tapHandler !== 'function')
@@ -28,9 +28,9 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     };
     active = true;
     setTimeout(() => {
-      if (active) el.classList.add(activeClass);
+      if (active) el.classList.add(ACTIVE_CLASS);
     }, 200);
-    if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, holdDuration);
+    if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
   }
 
   function onTouchMove(e) {
@@ -40,7 +40,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
       active = isActive(touch);
       if (!active) {
         clearTimeout(holdTimeoutID);
-        el.classList.remove(activeClass);
+        el.classList.remove(ACTIVE_CLASS);
       }
     }
   }
@@ -49,17 +49,17 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (e.cancelable) e.preventDefault();
     if (active) {
       clearTimeout(holdTimeoutID);
-      el.classList.add(activeClass);
+      if (touchEndFeedback) el.classList.add(ACTIVE_CLASS);
       tapHandler(e);
       active = false;
-      setTimeout(() => el.classList.remove(activeClass), 80);
+      setTimeout(() => el.classList.remove(ACTIVE_CLASS), 80);
     }
   }
 
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
     active = false;
-    el.classList.remove(activeClass);
+    el.classList.remove(ACTIVE_CLASS);
   }
 
   function onContextMenu(e) {
@@ -72,7 +72,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (holdHandler) {
       holdHandler();
       active = false;
-      el.classList.remove(activeClass);
+      el.classList.remove(ACTIVE_CLASS);
     }
   }
 
@@ -83,7 +83,7 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
       d = 0;
     if (scrollX) d = Math.abs(x - startX);
     if (scrollY) d = Math.abs(y - startY);
-    return x < b.maxX && x > b.minX && y < b.maxY && y > b.minY && d < scrollTolerance;
+    return x < b.maxX && x > b.minX && y < b.maxY && y > b.minY && d < SCROLL_TOLERANCE;
   }
 
   el.addEventListener('touchstart', onTouchStart, false);

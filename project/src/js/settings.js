@@ -20,6 +20,7 @@ export default {
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     sound: localstorageprop('settings.sound', true),
     theme: {
+      background: localstorageprop('settings.bgTheme', 'dark'),
       availableBoardThemes: [
         ['boardThemeBrown', 'brown'],
         ['boardThemeBlue', 'blue'],

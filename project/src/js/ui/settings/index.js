@@ -17,6 +17,24 @@ function renderBody() {
         settings.general.pieceDestinations)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics)),
+      m('li.list_item.bgTheme', [
+        m('label', 'Background'),
+        m('fieldset', [
+          m('div.nice-radio', formWidgets.renderRadio(
+            'Dark',
+            'bgTheme',
+            'dark',
+            settings.general.theme.background() === 'dark',
+            e => settings.general.theme.background(e.target.value)
+          )),
+          m('div.nice-radio', formWidgets.renderRadio(
+            'Light',
+            'bgTheme',
+            'light',
+            settings.general.theme.background() === 'light',
+            e => settings.general.theme.background(e.target.value)
+        ))])
+      ]),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),

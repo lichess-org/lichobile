@@ -28,6 +28,22 @@
     height 100%
     text-transform capitalize
 
+.bgTheme
+  display flex
+  flex-flow row wrap
+  justify-content space-between
+  .nice-radio
+    label
+      height 30px
+    input.radio:empty + label
+      line-height 30px
+      &:after
+        bottom 9px
+    input.radio.light:empty + label
+      border-radius 0 15px 15px 0
+    input.radio.dark:empty + label
+      border-radius 15px 0 0 15px
+
 .app_version
   padding 10px 15px
   font-size 0.75em

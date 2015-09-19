@@ -6,13 +6,15 @@ import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
 import helper from './helper';
+import settings from '../settings';
 
 export default {
 
   board: function(header, content, overlay, color='') {
     const mainClass = [
       menu.isOpen ? 'out' : 'in',
-      color
+      color,
+      settings.general.theme.background()
     ].join(' ');
     return (
       <div className="view-container">
@@ -36,9 +38,13 @@ export default {
   },
 
   free: function(header, content, footer, overlay) {
+    const mainClass = [
+      menu.isOpen ? 'out' : 'in',
+      settings.general.theme.background()
+    ].join(' ');
     return (
       <div className="view-container">
-        <main id="page" className={menu.isOpen ? 'out' : 'in'}>
+        <main id="page" className={mainClass}>
           <header className="main_header">{header()}</header>
           <div className="content">{content()}</div>
           <footer className="main_footer">{footer()}</footer>

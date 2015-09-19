@@ -47,12 +47,12 @@ borderLightGray = darken(bglight, 15%)
     border-bottom-color borderLightGray
 
   .antagonist
-    color textMediumGray
+    color textDarkGray
 
   .clock
-    color textMediumGray
+    color textDarkGray
     &.running
-      color gold
+      color darken(gold, 10%)
       &.emerg
         color red
 
@@ -76,7 +76,7 @@ borderLightGray = darken(bglight, 15%)
         background lighten(gold, 5%)
         border-color themeBgLight
       > nav > h1
-        color gold
+        color darken(gold, 10%)
     &:not(.board)
       .main_header_button
         color mainHeaderColor

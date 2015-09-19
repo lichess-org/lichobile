@@ -2,6 +2,7 @@ import * as utils from '../../utils';
 import h from '../helper';
 import { empty, menuButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
+import settings from '../../settings';
 import i18n from '../../i18n';
 import m from 'mithril';
 
@@ -30,8 +31,14 @@ function searchModal(ctrl) {
   if (!ctrl.isSearchOpen())
     return null;
 
+  const className = [
+    'modal',
+    'show',
+    settings.general.theme.background()
+  ].join(' ');
+
   return (
-    <div id="searchPlayersModal" className="modal show">
+    <div id="searchPlayersModal" className={className}>
       <header>
         <button key="search-players-backbutton" className="fa fa-arrow-left search_back" config={h.ontouch(ctrl.closeSearch)} />
         <div className="search_input allow_select">

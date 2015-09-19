@@ -1,17 +1,18 @@
 mainHeaderBg = darken(gold, 5%)
 mainHeaderColor = lighten(gold, 80%)
+borderLightGray = darken(bglight, 15%)
 
 main.light
   background themeBgLight
   color textMediumGray
 
   .list_item
-    border-bottom-color darken(bglight, 15%)
+    border-bottom-color borderLightGray
     &.active
       background-color darken(bglight, 5%)
 
   .ranking
-    border-bottom-color darken(bglight, 15%)
+    border-bottom-color borderLightGray
 
   .antagonist
     color textMediumGray
@@ -53,6 +54,9 @@ main.light
         &::before
           background url('../../images/icons/game_icon_light.svg') no-repeat
 
+  .main_header_button.active, .game_menu_button.active, .game_action.active
+    background darken(themeBgLight, 8%)
+
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)
@@ -66,4 +70,16 @@ main.light
       color #fff
     label:after
       color #fff
+
+#searchPlayersModal.light
+  > header
+    background-color themeBgLight
+    color textMediumGray
+    border-bottom 1px solid borderLightGray
+  > .modal_content
+    background-color themeBgLight
+  .list_item
+    border-bottom-color borderLightGray
+    &.active
+      background-color darken(bglight, 5%)
 

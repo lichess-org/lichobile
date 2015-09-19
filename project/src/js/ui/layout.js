@@ -13,11 +13,10 @@ export default {
   board: function(header, content, overlay, color='') {
     const mainClass = [
       menu.isOpen ? 'out' : 'in',
-      color,
-      settings.general.theme.background()
+      color
     ].join(' ');
     return (
-      <div className="view-container">
+      <div className={'view-container ' + settings.general.theme.background()}>
         <main id="page" className={mainClass}>
           <header className="main_header board">
             {header()}
@@ -39,11 +38,10 @@ export default {
 
   free: function(header, content, footer, overlay) {
     const mainClass = [
-      menu.isOpen ? 'out' : 'in',
-      settings.general.theme.background()
+      menu.isOpen ? 'out' : 'in'
     ].join(' ');
     return (
-      <div className="view-container">
+      <div className={'view-container ' + settings.general.theme.background()}>
         <main id="page" className={mainClass}>
           <header className="main_header">{header()}</header>
           <div className="content">{content()}</div>

@@ -2,9 +2,41 @@ mainHeaderBg = darken(gold, 5%)
 mainHeaderColor = lighten(gold, 80%)
 borderLightGray = darken(bglight, 15%)
 
-main.light
-  background themeBgLight
-  color textMediumGray
+.view-container.light
+  #page
+    background themeBgLight
+    color textMediumGray
+
+  #side_menu
+    background themeBgLight
+    color textDarkGray
+    box-shadow: 4px 0px 5px rgba(0, 0, 0, 0.3)
+    .side_menu_header
+      background darken(themeBgLight, 5%)
+      .username
+        color textMediumGray
+
+  .side_links
+    color textDarkGray
+    .hr
+      border-bottom-color borderLightGray
+
+  .side_link.active
+    background darken(themeBgLight, 5%)
+
+  #games_menu
+    background rgba(0,0,0,0.6)
+
+  .overlay, .menu-close-overlay
+    background-color rgba(0,0,0,0.6)
+
+  .card
+    background themeBgLight
+    box-shadow 0px 2px 15px 0 rgba(0,0,0,0.5)
+    .icon-game
+      border-color themeBgLight
+    h2
+      color textDarkGray
 
   .list_item
     border-bottom-color borderLightGray
@@ -71,15 +103,15 @@ main.light
     label:after
       color #fff
 
-#searchPlayersModal.light
-  > header
-    background-color themeBgLight
-    color textMediumGray
-    border-bottom 1px solid borderLightGray
-  > .modal_content
-    background-color themeBgLight
-  .list_item
-    border-bottom-color borderLightGray
-    &.active
-      background-color darken(bglight, 5%)
+  #searchPlayersModal
+    > header
+      background-color themeBgLight
+      color textMediumGray
+      border-bottom 1px solid borderLightGray
+    > .modal_content
+      background-color themeBgLight
+    .list_item
+      border-bottom-color borderLightGray
+      &.active
+        background-color darken(bglight, 5%)
 

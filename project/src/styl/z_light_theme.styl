@@ -43,6 +43,10 @@ borderLightGray = darken(bglight, 15%)
       border-color themeBgLight
     h2
       color textDarkGray
+    &.challenge
+      background gold
+      h2
+        color #fff
 
   .list_item
     border-bottom-color borderLightGray
@@ -65,20 +69,10 @@ borderLightGray = darken(bglight, 15%)
       &.emerg
         color red
 
-  #chat
-    > header
-      background gold
-      > h2
-        color #fff
-    .modal_content
-      background themeBgLight
-    .modal_close
-      color #fff
-
-  .chat_msg.player
-    background lighten(gold, 35%)
-    &:before
-      background lighten(gold, 35%)
+  .game_action
+    color textGray
+    &.disabled
+      color rgba(textGray, 0.4)
 
   .chip
     background gold
@@ -95,16 +89,18 @@ borderLightGray = darken(bglight, 15%)
       color themeBgLight
     .chip
       color mainHeaderBg
-      background darken(mainHeaderColor, 5%)
+      background lighten(textGray, 85%)
       border-color mainHeaderBg
     &.board
       background themeBgLight
       .chip
         color themeBgLight
-        background lighten(gold, 5%)
+        background lighten(textGray, 40%)
         border-color themeBgLight
       > nav > h1
-        color darken(gold, 10%)
+        color textGray
+      .main_header_button
+        color textGray
     &:not(.board)
       .main_header_button
         color mainHeaderColor

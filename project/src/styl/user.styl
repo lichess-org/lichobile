@@ -103,19 +103,18 @@ h3.fullname
 
 .select_games_filter
   margin 0
-  background-color lighten(bgdark, 3%)
+  background-color lighten(headerBgDark, 2%)
   label:after
     color labelText
   select
     color lighten(labelText, 50%)
 
 .scroller.games
-  background-color bglight
   height calc(100% - 40px)
 
 .userGame
-  background-color bglight
-  color textGray
+  background-color lighten(headerBgDark, 6%)
+  color textLightGray
   min-height 60px
   padding 0
   > .nav
@@ -165,7 +164,7 @@ h3.fullname
     margin-top 1em
     font-size 0.8em
   &.odd
-    background-color darken(bglight, 5%)
+    background-color lighten(headerBgDark, 8%)
   @media only screen and (min-width 600px)
     > .nav
       display flex

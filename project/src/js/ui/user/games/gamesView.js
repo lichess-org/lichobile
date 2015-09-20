@@ -12,7 +12,7 @@ import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, null,
-    backButton(ctrl.user().username + ' games')
+    backButton(ctrl.user() ? (ctrl.user().username + ' games') : '')
   );
 
   function renderBody() {
@@ -74,7 +74,7 @@ function renderGame(ctrl, g, index, userId) {
   const star = g.bookmarked ? 't' : 's';
 
   return (
-    <li className={`list_item bglight userGame ${evenOrOdd}`}>
+    <li className={`list_item userGame ${evenOrOdd}`}>
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
       }

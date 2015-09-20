@@ -10,11 +10,12 @@ borderLightGray = darken(bglight, 15%)
   #side_menu
     background themeBgLight
     color textDarkGray
-    box-shadow: 4px 0px 5px rgba(0, 0, 0, 0.3)
     .side_menu_header
       background darken(themeBgLight, 5%)
       .username
         color textMediumGray
+    &.in
+      box-shadow: 4px 0px 5px rgba(0, 0, 0, 0.3)
 
   .side_links
     color textDarkGray
@@ -26,6 +27,11 @@ borderLightGray = darken(bglight, 15%)
 
   #games_menu
     background rgba(0,0,0,0.6)
+
+  input[type=checkbox]
+    background #aaa
+    &:checked
+      background gold
 
   .overlay, .menu-close-overlay
     background-color rgba(0,0,0,0.6)
@@ -49,12 +55,30 @@ borderLightGray = darken(bglight, 15%)
   .antagonist
     color textDarkGray
 
+  .antagonistInfos .rating
+    color textMediumGray
+
   .clock
     color textDarkGray
     &.running
       color darken(gold, 10%)
       &.emerg
         color red
+
+  #chat
+    > header
+      background gold
+      > h2
+        color #fff
+    .modal_content
+      background themeBgLight
+    .modal_close
+      color #fff
+
+  .chat_msg.player
+    background lighten(gold, 35%)
+    &:before
+      background lighten(gold, 35%)
 
   .chip
     background gold

@@ -12,6 +12,7 @@ import user from'./ui/user';
 import userGames from'./ui/user/games';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
+import training from './ui/training';
 import m from 'mithril';
 
 export default {
@@ -34,7 +35,8 @@ export default {
       '/settings': settingsUi,
       '/settings/themes/board': boardThemes,
       '/settings/themes/piece': pieceThemes,
-      '/settings/lang': settingsLang
+      '/settings/lang': settingsLang,
+      '/training': training
     });
   }
 };

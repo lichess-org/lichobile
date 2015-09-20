@@ -30,6 +30,9 @@ borderLightGray = darken(bglight, 15%)
   #games_menu
     background rgba(0,0,0,0.6)
 
+  button#newGameCorres
+    color textMediumGray
+
   input[type=checkbox]
     background #aaa
     &:checked
@@ -76,17 +79,13 @@ borderLightGray = darken(bglight, 15%)
     &.disabled
       color rgba(textGray, 0.4)
 
-  .chip
-    background gold
-    color themeBgLight
-    border-color themeBgLight
-
   .gameMovesList
     background darken(themeBgLight, 8%)
     color textMediumGray
 
   .main_header
     background mainHeaderBg
+    box-shadow 0px 1px 1px 0px rgba(0,0,0,0.3)
     > nav > h1
       color themeBgLight
     .chip
@@ -95,6 +94,7 @@ borderLightGray = darken(bglight, 15%)
       border-color mainHeaderBg
     &.board
       background themeBgLight
+      box-shadow none
       .chip
         color themeBgLight
         background gold

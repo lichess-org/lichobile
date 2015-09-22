@@ -1,6 +1,7 @@
 mainHeaderBg = darken(gold, 5%)
 mainHeaderColor = lighten(gold, 80%)
 borderLightGray = darken(bglight, 15%)
+activeBgLight = darken(themeBgLight, 8%)
 
 .view-container.light
   #page
@@ -64,8 +65,15 @@ borderLightGray = darken(bglight, 15%)
   .antagonist
     color textDarkGray
 
-  .antagonistInfos .rating
-    color textMediumGray
+  .antagonistInfos
+    .rating
+      color textMediumGray
+    &.active
+      background-color activeBgLight
+
+  .replayMove
+    &.active
+      background-color darken(themeBgLight, 12%)
 
   .clock
     color textDarkGray
@@ -80,7 +88,7 @@ borderLightGray = darken(bglight, 15%)
       color rgba(textGray, 0.4)
 
   .gameMovesList
-    background darken(themeBgLight, 8%)
+    background activeBgLight
     color textMediumGray
 
   .main_header
@@ -113,7 +121,7 @@ borderLightGray = darken(bglight, 15%)
           background url('../../images/icons/game_icon_light.svg') no-repeat
 
   .main_header_button.active, .game_menu_button.active, .game_action.active
-    background darken(themeBgLight, 8%)
+    background activeBgLight
 
   .radio_list
     input.radio:checked + label
@@ -146,7 +154,6 @@ borderLightGray = darken(bglight, 15%)
     color textMediumGray
     &.odd
       background-color darken(bglight, 5%)
-
 
   .trainingSetup
     color textMediumGray

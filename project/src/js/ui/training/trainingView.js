@@ -48,6 +48,7 @@ function renderPlayerTable(ctrl) {
         {i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
       </div>
       {renderCommentary(ctrl)}
+      {renderResult(ctrl)}
     </section>
   );
 }
@@ -91,8 +92,8 @@ function renderRatingDiff(diff) {
 }
 
 function renderWin(ctrl, attempt) {
-  return m('div.comment.win', [
-    m('h3.text[data-icon=E]', [
+  return m('div.puzzleComment.win', [
+    m('h3.puzzleState.withIcon[data-icon=E]', [
       m('strong', i18n('victory')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ]),
@@ -101,8 +102,8 @@ function renderWin(ctrl, attempt) {
 }
 
 function renderLoss(ctrl, attempt) {
-  return m('div.comment.loss',
-    m('h3.text[data-icon=k]', [
+  return m('div.puzzleComment.loss',
+    m('h3.puzzleState.withIcon[data-icon=k]', [
       m('strong', i18n('puzzleFailed')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ])

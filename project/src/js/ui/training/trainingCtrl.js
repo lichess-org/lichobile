@@ -30,6 +30,7 @@ export default function ctrl() {
         setTimeout(function() {
           if (this.data.mode === 'play') {
             this.chessground.stop();
+            xhr.attempt(this, false);
           } else this.revert(this.data.puzzle.id);
         }.bind(this), 500);
         this.data.comment = 'fail';
@@ -38,6 +39,7 @@ export default function ctrl() {
         this.userFinalizeMove([orig, dest, promotion], newProgress);
         if (newLines === 'win') {
           this.chessground.stop();
+          xhr.attempt(this, true);
         } else setTimeout(partialf(this.playOpponentNextMove, this.data.puzzle.id), 1000);
         break;
     }
@@ -100,6 +102,7 @@ export default function ctrl() {
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
+    if (puzzle.getCurrentLines(this.data) == 'win') xhr.attempt(this, true);
   }.bind(this);
 
   this.playInitialMove = function(id) {
@@ -109,7 +112,7 @@ export default function ctrl() {
   }.bind(this);
 
   this.giveUp = function() {
-    xhr.attempt(this, 0);
+    xhr.attempt(this, false);
   }.bind(this);
 
   this.jump = function(to) {

@@ -20,7 +20,7 @@ function renderContent(ctrl) {
 
   if (helper.isPortrait())
     return [
-      renderExplanation(ctrl),
+      ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
       renderBoard(ctrl),
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
@@ -37,6 +37,18 @@ function renderExplanation(ctrl) {
       <p className="findit">
         {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
       </p>
+    </section>
+  );
+}
+
+function renderProblemDetails(ctrl) {
+  return (
+    <section className="trainingTable">
+      <h3 data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
+      <div>
+        <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
+        <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
+      </div>
     </section>
   );
 }
@@ -115,7 +127,6 @@ function renderViewControls(ctrl) {
   ];
 }
 
-
 function renderCommentary(ctrl) {
   switch (ctrl.data.comment) {
     case 'retry':
@@ -177,27 +188,3 @@ function renderResult(ctrl) {
   }
 }
 
-function renderFooter(ctrl) {
-  if (ctrl.data.mode !== 'view') return null;
-  var fen = ctrl.data.replay.history[ctrl.data.replay.step].fen;
-  return m('div', [
-    renderViewControls(ctrl, fen)
-  ]);
-}
-
-function renderHistory(ctrl) {
-  return m('div.history', {
-    // config: function(el, isUpdate, context) {
-    //   var hash = ctrl.data.user.history.join('');
-    //   if (hash == context.hash) return;
-    //   context.hash = hash;
-    //   $.ajax({
-    //     url: '/training/history',
-    //     cache: false,
-    //     success: function(html) {
-    //       el.innerHTML = html;
-    //     }
-    //   });
-    // }
-  });
-}

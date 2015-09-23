@@ -167,5 +167,9 @@ export default function ctrl() {
     this.initiate();
   }.bind(this);
 
-  xhr.newPuzzle().then(this.init);
+  this.newPuzzle = function() {
+    xhr.newPuzzle().then(this.init);
+  };
+
+  this.newPuzzle();
 }

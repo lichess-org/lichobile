@@ -22,7 +22,7 @@ function renderContent(ctrl) {
     return [
       renderExplanation(ctrl),
       renderBoard(ctrl),
-      renderPlayerTable(ctrl),
+      ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
     ];
   else
@@ -33,7 +33,7 @@ function renderContent(ctrl) {
 
 function renderExplanation(ctrl) {
   return (
-    <section className="trainingSetup">
+    <section className="trainingTable">
       <p className="findit">
         {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
       </p>
@@ -43,7 +43,7 @@ function renderExplanation(ctrl) {
 
 function renderPlayerTable(ctrl) {
   return (
-    <section className="trainingSetup">
+    <section className="trainingTable">
       <div className="yourTurn">
         {i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
       </div>
@@ -53,14 +53,33 @@ function renderPlayerTable(ctrl) {
   );
 }
 
+function renderViewTable(ctrl) {
+  return (
+    <section className="trainingTable">
+    </section>
+  );
+}
+
+
 function renderActionsBar(ctrl) {
   var vdom = [
-    m('button.game_action.fa.fa-ellipsis-h', {
-    }),
-    m('button.game_action[data-icon=b]', {
-      config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
-    })
+    m('button.game_action.fa.fa-ellipsis-h', { })
   ];
+  if (ctrl.data.mode === 'view') {
+    vdom.concat([
+      m('button.game_action[data-icon=G]', {
+        config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
+      }),
+      !(ctrl.data.attempt.win || ctrl.data.win) ? m('button.game_action[data-icon=P]', {
+      }, i18n('retryThisPuzzle')) : null
+    ]);
+  } else {
+    vdom.push(
+      m('button.game_action[data-icon=b]', {
+        config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
+      })
+    );
+  }
   return m('section#training_actions', vdom);
 }
 
@@ -124,17 +143,6 @@ function renderResult(ctrl) {
           return renderLoss(ctrl, ctrl.data.attempt);
       }
   }
-}
-
-function renderViewTable(ctrl) {
-  return [
-    m('div.continue_wrap', [
-      ctrl.data.win === null ? m('button.continue.button.text[data-icon=G]', {
-      }, i18n('continueTraining')) : m('a.continue.button.text[data-icon=G]', {
-      }, i18n('continueTraining')), !(ctrl.data.win === null ? ctrl.data.attempt.win : ctrl.data.win) ? m('a.retry.text[data-icon=P]', {
-      }, i18n('retryThisPuzzle')) : null
-    ])
-  ];
 }
 
 function renderViewControls(ctrl, fen) {

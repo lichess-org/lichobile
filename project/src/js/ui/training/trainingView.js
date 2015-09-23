@@ -56,6 +56,8 @@ function renderPlayerTable(ctrl) {
 function renderViewTable(ctrl) {
   return (
     <section className="trainingTable">
+      <div />
+      {renderResult(ctrl)}
     </section>
   );
 }
@@ -63,24 +65,54 @@ function renderViewTable(ctrl) {
 
 function renderActionsBar(ctrl) {
   var vdom = [
-    m('button.game_action.fa.fa-ellipsis-h', { })
+    m('button.training_action.fa.fa-ellipsis-h', {
+      key: 'puzzleMenu'
+    })
   ];
   if (ctrl.data.mode === 'view') {
-    vdom.concat([
-      m('button.game_action[data-icon=G]', {
-        config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
-      }),
-      !(ctrl.data.attempt.win || ctrl.data.win) ? m('button.game_action[data-icon=P]', {
-      }, i18n('retryThisPuzzle')) : null
-    ]);
+    Array.prototype.push.apply(vdom, renderViewControls(ctrl));
   } else {
     vdom.push(
-      m('button.game_action[data-icon=b]', {
+      m('button.training_action[data-icon=b]', {
+        key: 'giveUpPuzzle',
         config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
     );
   }
   return m('section#training_actions', vdom);
+}
+
+function renderViewControls(ctrl) {
+  var history = ctrl.data.replay.history;
+  var step = ctrl.data.replay.step;
+  return [
+    m('button.training_action[data-icon=G]', {
+      key: 'continueTraining',
+      config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
+    }),
+    !(ctrl.data.attempt && ctrl.data.attempt.win || ctrl.data.win) ? m('button.training_action[data-icon=P]', {
+      key: 'retryPuzzle',
+      config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
+    }) : null,
+    ctrl.data.puzzle.gameId ? m('button.training_action[data-icon=v]', {
+      config: helper.ontouch(
+        () => m.route(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
+        () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
+      )
+    }) : null,
+    m('button.training_action[data-icon=I]', {
+      config: helper.ontouch(ctrl.jumpPrev),
+      className: helper.classSet({
+        disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
+      })
+    }),
+    m('button.training_action[data-icon=H]', {
+      config: helper.ontouch(ctrl.jumpNext),
+      className: helper.classSet({
+        disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
+      })
+    })
+  ];
 }
 
 
@@ -143,35 +175,6 @@ function renderResult(ctrl) {
           return renderLoss(ctrl, ctrl.data.attempt);
       }
   }
-}
-
-function renderViewControls(ctrl, fen) {
-  var history = ctrl.data.replay.history;
-  var step = ctrl.data.replay.step;
-  return m('div.game_control', [
-    ctrl.data.puzzle.gameId ? m('a.button.hint--bottom', {
-      'data-hint': i18n('fromGameLink', ctrl.data.puzzle.gameId),
-      href: ctrl.router.Round.watcher(ctrl.data.puzzle.gameId, ctrl.data.puzzle.color).url + '#' + ctrl.data.puzzle.initialPly
-    }, m('span[data-icon=v]')) : null,
-    m('a.button.hint--bottom', {
-      'data-hint': i18n('boardEditor'),
-      href: ctrl.router.Editor.load(fen).url
-    }, m('span[data-icon=m]')),
-    m('div#GameButtons.hint--bottom', {
-      'data-hint': 'Review puzzle solution'
-    }, [
-      ['first', 'W', 0],
-      ['prev', 'Y', step - 1],
-      ['next', 'X', step + 1],
-      ['last', 'V', history.length - 1]
-    ].map(function(b) {
-      var enabled = step !== b[2] && b[2] >= 0 && b[2] < history.length;
-      return m('a.button.' + b[0] + (enabled ? '' : '.disabled'), {
-        'data-icon': b[1],
-        onclick: enabled ? ctrl.jump.bind(ctrl, b[2]) : null
-      });
-    }))
-  ]);
 }
 
 function renderFooter(ctrl) {

@@ -34,7 +34,40 @@
   padding 0
   height 45px
   width 100%
+  display flex
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     width calc(100vw - (100vh - 50px - 12vh) - 10px)
+
+
+.training_action
+  flex 1 1 25%
+  text-align center
+  background transparent
+  padding 10px 10px 8px
+  outline none
+  border none
+  color: gold
+  height 45px
+  line-height 35px
+  &:last-child
+    border-right none
+  &.disabled
+    &:before
+      opacity 1
+    color rgba(gold, 0.4)
+  &.active
+    background lighten(bgdark, 8%)
+    color lighten(gold, 40%)
+  &.empty::before
+    visibility hidden
+  &:before
+    font-size 22px
+    line-height 22px
+  @media only screen and (max-height 400px) and (orientation landscape)
+    height 40px
+    line-height 25px
+    &:before
+      font-size 18px
+      line-height 18px

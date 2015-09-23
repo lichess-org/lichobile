@@ -14,6 +14,14 @@ export default function ctrl() {
 
   this.data = null;
 
+  var attempt = function(winFlag) {
+    xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
+      .then(function(cfg) {
+        cfg.progress = this.data.progress;
+        this.reload(cfg);
+      }.bind(this));
+  }.bind(this);
+
   var userMove = function(orig, dest) {
     var res = puzzle.tryMove(this.data, [orig, dest]);
     var newProgress = res[0];
@@ -30,7 +38,7 @@ export default function ctrl() {
         setTimeout(function() {
           if (this.data.mode === 'play') {
             this.chessground.stop();
-            xhr.attempt(this, false);
+            attempt(false);
           } else this.revert(this.data.puzzle.id);
         }.bind(this), 500);
         this.data.comment = 'fail';
@@ -39,7 +47,7 @@ export default function ctrl() {
         this.userFinalizeMove([orig, dest, promotion], newProgress);
         if (newLines === 'win') {
           this.chessground.stop();
-          xhr.attempt(this, true);
+          attempt(true);
         } else setTimeout(partialf(this.playOpponentNextMove, this.data.puzzle.id), 1000);
         break;
     }
@@ -102,7 +110,7 @@ export default function ctrl() {
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
-    if (puzzle.getCurrentLines(this.data) == 'win') xhr.attempt(this, true);
+    if (puzzle.getCurrentLines(this.data) == 'win') attempt(true);
   }.bind(this);
 
   this.playInitialMove = function(id) {
@@ -112,11 +120,22 @@ export default function ctrl() {
   }.bind(this);
 
   this.giveUp = function() {
-    xhr.attempt(this, false);
+    attempt(false);
   }.bind(this);
 
   this.jump = function(to) {
+    const history = this.data.replay.history;
+    const step = this.data.replay.step;
+    if (!(step !== to && to >= 0 && to < history.length)) return;
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
+  }.bind(this);
+
+  this.jumpPrev = function() {
+    this.jump(this.data.replay.step - 1);
+  }.bind(this);
+
+  this.jumpNext = function() {
+    this.jump(this.data.replay.step + 1);
   }.bind(this);
 
   this.initiate = function() {
@@ -169,7 +188,11 @@ export default function ctrl() {
 
   this.newPuzzle = function() {
     xhr.newPuzzle().then(this.init);
-  };
+  }.bind(this);
+
+  this.retry = function() {
+    xhr.retry(this.data.puzzle.id).then(this.reload);
+  }.bind(this);
 
   this.newPuzzle();
 }

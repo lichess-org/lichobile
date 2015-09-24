@@ -8,26 +8,6 @@ activeBgLight = darken(themeBgLight, 8%)
     background themeBgLight
     color textMediumGray
 
-  #side_menu
-    background themeBgLight
-    color textDarkGray
-    .side_menu_header
-      background darken(themeBgLight, 5%)
-      .username
-        color textMediumGray
-    .login
-      background darken(themeBgLight, 20%)
-    &.in
-      box-shadow: 4px 0px 5px rgba(0, 0, 0, 0.3)
-
-  .side_links
-    color textDarkGray
-    .hr
-      border-bottom-color borderLightGray
-
-  .side_link.active
-    background darken(themeBgLight, 5%)
-
   #games_menu
     background rgba(0,0,0,0.6)
 
@@ -120,7 +100,7 @@ activeBgLight = darken(themeBgLight, 8%)
         &::before
           background url('../../images/icons/game_icon_light.svg') no-repeat
 
-  .main_header_button.active, .game_menu_button.active, .game_action.active
+  .main_header_button.active, .game_menu_button.active, .game_action.active, .training_action.active
     background activeBgLight
 
   .radio_list

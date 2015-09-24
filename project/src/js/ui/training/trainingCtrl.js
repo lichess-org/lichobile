@@ -7,12 +7,15 @@ import puzzle from './puzzle';
 import sound from '../../sound';
 import actions from './actions';
 import settings from '../../settings';
+import menu from './menu';
 import * as xhr from './xhr';
 import m from 'mithril';
 
 export default function ctrl() {
 
   this.data = null;
+
+  this.menu = menu.controller(this);
 
   var attempt = function(winFlag) {
     xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
@@ -46,8 +49,10 @@ export default function ctrl() {
       default:
         this.userFinalizeMove([orig, dest, promotion], newProgress);
         if (newLines === 'win') {
-          this.chessground.stop();
-          attempt(true);
+          setTimeout(function() {
+            this.chessground.stop();
+            attempt(true);
+          }.bind(this), 300);
         } else setTimeout(partialf(this.playOpponentNextMove, this.data.puzzle.id), 1000);
         break;
     }
@@ -110,7 +115,8 @@ export default function ctrl() {
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
-    if (puzzle.getCurrentLines(this.data) == 'win') attempt(true);
+    if (puzzle.getCurrentLines(this.data) == 'win')
+      setTimeout(() => attempt(true), 300);
   }.bind(this);
 
   this.playInitialMove = function(id) {
@@ -193,6 +199,10 @@ export default function ctrl() {
   this.retry = function() {
     xhr.retry(this.data.puzzle.id).then(this.reload);
   }.bind(this);
+
+  this.setDifficulty = function(id) {
+    xhr.setDifficulty(id);
+  };
 
   this.newPuzzle();
 }

@@ -4,13 +4,17 @@ import { header } from '../shared/common';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import { renderBoard } from '../round/view/roundView';
+import menu from './menu';
 import m from 'mithril';
 
 export default function view(ctrl) {
   return layout.board(
     header.bind(undefined, i18n('training')),
     renderContent.bind(undefined, ctrl),
-    () => [renderPromotion(ctrl)]
+    () => [
+      renderPromotion(ctrl),
+      menu.view(ctrl.menu)
+    ]
   );
 
 }
@@ -44,7 +48,7 @@ function renderExplanation(ctrl) {
 function renderProblemDetails(ctrl) {
   return (
     <section className="trainingTable">
-      <h3 data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
+      <h3 className="withIcon" data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
       <div>
         <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
         <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
@@ -74,24 +78,21 @@ function renderViewTable(ctrl) {
   );
 }
 
-
 function renderActionsBar(ctrl) {
-  var vdom = [
+  const vdom = [
     m('button.training_action.fa.fa-ellipsis-h', {
-      key: 'puzzleMenu'
+      key: 'puzzleMenu',
+      config: helper.ontouch(ctrl.menu.open)
     })
   ];
-  if (ctrl.data.mode === 'view') {
-    Array.prototype.push.apply(vdom, renderViewControls(ctrl));
-  } else {
-    vdom.push(
+  return m('section#training_actions', vdom.concat(
+    ctrl.data.mode === 'view' ?
+      renderViewControls(ctrl) :
       m('button.training_action[data-icon=b]', {
         key: 'giveUpPuzzle',
         config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
-    );
-  }
-  return m('section#training_actions', vdom);
+  ).filter(el => el !== null));
 }
 
 function renderViewControls(ctrl) {
@@ -107,6 +108,7 @@ function renderViewControls(ctrl) {
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
     }) : null,
     ctrl.data.puzzle.gameId ? m('button.training_action[data-icon=v]', {
+      key: 'fromGameView',
       config: helper.ontouch(
         () => m.route(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
         () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
@@ -114,12 +116,14 @@ function renderViewControls(ctrl) {
     }) : null,
     m('button.training_action[data-icon=I]', {
       config: helper.ontouch(ctrl.jumpPrev),
+      key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
     m('button.training_action[data-icon=H]', {
       config: helper.ontouch(ctrl.jumpNext),
+      key: 'historyNext',
       className: helper.classSet({
         disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
       })

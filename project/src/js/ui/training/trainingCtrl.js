@@ -10,8 +10,13 @@ import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
 import m from 'mithril';
+import helper from '../helper';
+import socket from '../../socket';
 
 export default function ctrl() {
+
+  helper.analyticsTrackView('Puzzle');
+  socket.createDefault();
 
   this.data = null;
 
@@ -205,4 +210,12 @@ export default function ctrl() {
   };
 
   this.newPuzzle();
+
+  window.plugins.insomnia.keepAwake();
+
+  this.onunload = function() {
+    socket.destroy();
+    window.plugins.insomnia.allowSleepAgain();
+  };
+
 }

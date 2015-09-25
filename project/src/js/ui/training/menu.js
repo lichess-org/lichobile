@@ -33,7 +33,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'trainingMenu',
-      i18n('training'),
+      m('h2[data-icon=-]', i18n('training')),
       renderTrainingMenu.bind(undefined, ctrl.root),
       ctrl.isOpen(),
       ctrl.close
@@ -52,7 +52,7 @@ function renderTrainingMenu(ctrl) {
   return ctrl.data.user ? renderUserInfos(ctrl) : [
     m('p', i18n('toTrackYourProgress')),
     m('p',
-      m('button.fat.trainingSignin', {
+      m('button.fa.fa-user', {
         config: helper.ontouch(loginModal.open)
       }, i18n('signIn'))
     ),

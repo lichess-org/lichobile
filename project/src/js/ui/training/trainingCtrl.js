@@ -5,7 +5,6 @@ import data from './data';
 import chess from './chess';
 import puzzle from './puzzle';
 import sound from '../../sound';
-import actions from './actions';
 import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
@@ -163,8 +162,6 @@ export default function ctrl() {
 
   this.init = function(cfg) {
     this.data = data(cfg);
-    if (this.actions) this.actions.close();
-    else this.actions = new actions.controller(this);
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,

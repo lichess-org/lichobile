@@ -48,7 +48,6 @@
     "chessground": "git://github.com/veloce/chessground-mobile",
     "iscroll": "5.1.3",
     "lodash": "3.8.0",
-    "merge": "1.2.0",
     "mithril": "lhorie/mithril.js#next",
     "moment": "2.8.4",
     "signals": "1.0.0",

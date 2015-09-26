@@ -4,6 +4,10 @@ import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import m from 'mithril';
+import Chart from 'chart.js';
+import formWidgets from '../shared/form';
+
+Chart.defaults.global.animation = false;
 
 export default {
 
@@ -41,11 +45,42 @@ export default {
   }
 };
 
+function renderDifficulty(ctrl) {
+  const opts = ctrl.data.difficulty.choices.map(c => [c[1], c[0]]);
+  return m('div.select_input.puzzleDifficulty',
+    formWidgets.renderSelect('Difficulty', 'difficulty', opts,
+      () => ctrl.data.difficulty.current, false, ctrl.setDifficulty)
+  );
+}
 
 function renderUserInfos(ctrl) {
   return [
     m('p', i18n('yourPuzzleRatingX', ctrl.data.user.rating)),
     m('br'),
+    ctrl.data.user.history ? m('canvas#puzzleChart', {
+      width: '240px',
+      height: '150px',
+      config: function(el, isUpdate, context) {
+        const hash = ctrl.data.user.history.join('');
+        if (hash == context.hash) return;
+        context.hash = hash;
+        const ctx = document.getElementById('puzzleChart').getContext('2d');
+        ctx.canvas.width = ctx.canvas.parentElement.offsetWidth - 20;
+        new Chart(ctx).Line({
+          labels: ctrl.data.user.history.map(() => ''),
+          datasets: [
+            {
+              data: ctrl.data.user.history,
+              fillColor: 'rgba(204,204,255,0.4)',
+              strokeColor: 'rgba(0,0,255,0.5)'
+            }
+          ]
+        }, {
+          pointDot: false,
+          scaleShowGridLines: false
+        });
+      }
+    }) : null,
     renderDifficulty(ctrl)
   ];
 }
@@ -60,15 +95,4 @@ function renderTrainingMenu(ctrl) {
     ),
     m('p', i18n('trainingSignupExplanation'))
   ];
-}
-
-function renderDifficulty(ctrl) {
-  return m('div', ctrl.data.difficulty.choices.map(function(dif) {
-    const id = dif[0],
-      name = dif[1];
-    return m('button.puzzleDifficulty', {
-      className: id === ctrl.data.difficulty.current ? 'current' : '',
-      config: helper.ontouch(ctrl.setDifficulty.bind(ctrl, id))
-    }, name);
-  }));
 }

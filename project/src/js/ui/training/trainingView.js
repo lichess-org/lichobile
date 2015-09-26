@@ -83,6 +83,10 @@ function renderActionsBar(ctrl) {
     m('button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
       config: helper.ontouch(ctrl.menu.open)
+    }),
+    m('button.training_action[data-icon=G]', {
+      key: 'continueTraining',
+      config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     })
   ];
   return m('section#training_actions', vdom.concat(
@@ -99,10 +103,6 @@ function renderViewControls(ctrl) {
   var history = ctrl.data.replay.history;
   var step = ctrl.data.replay.step;
   return [
-    m('button.training_action[data-icon=G]', {
-      key: 'continueTraining',
-      config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
-    }),
     m('button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))

@@ -43,9 +43,11 @@ export default {
 
 
 function renderUserInfos(ctrl) {
-  return m('div', [
-    m('p', i18n('yourPuzzleRatingX', ctrl.data.user.rating))
-  ]);
+  return [
+    m('p', i18n('yourPuzzleRatingX', ctrl.data.user.rating)),
+    m('br'),
+    renderDifficulty(ctrl)
+  ];
 }
 
 function renderTrainingMenu(ctrl) {
@@ -61,11 +63,11 @@ function renderTrainingMenu(ctrl) {
 }
 
 function renderDifficulty(ctrl) {
-  return m('div.difficulty.buttonset', ctrl.data.difficulty.choices.map(function(dif) {
-    var id = dif[0],
+  return m('div', ctrl.data.difficulty.choices.map(function(dif) {
+    const id = dif[0],
       name = dif[1];
-    return m('a.button' + (id == ctrl.data.difficulty.current ? '.active' : ''), {
-      disabled: id == ctrl.data.difficulty.current,
+    return m('button.puzzleDifficulty', {
+      className: id === ctrl.data.difficulty.current ? 'current' : '',
       config: helper.ontouch(ctrl.setDifficulty.bind(ctrl, id))
     }, name);
   }));

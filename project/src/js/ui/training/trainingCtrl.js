@@ -209,8 +209,10 @@ export default function ctrl() {
   }.bind(this);
 
   this.setDifficulty = function(id) {
-    xhr.setDifficulty(id);
-  };
+    xhr.setDifficulty(id)
+      .then(this.reload)
+      .then(() => window.history.pushState(null, null, '/?/training/' + this.data.puzzle.id));
+  }.bind(this);
 
   if (m.route.param('id'))
     this.loadPuzzle(m.route.param('id'));

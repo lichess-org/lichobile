@@ -71,8 +71,8 @@ function renderUserInfos(ctrl) {
           datasets: [
             {
               data: ctrl.data.user.history,
-              fillColor: 'rgba(204,204,255,0.4)',
-              strokeColor: 'rgba(0,0,255,0.5)'
+              fillColor: 'rgba(196, 168, 111, 0.4)',
+              strokeColor: 'rgba(196, 168, 111, 0.8)'
             }
           ]
         }, {

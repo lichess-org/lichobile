@@ -11,6 +11,8 @@
     padding 0
     flex 1 0 auto
     height initial
+  > .puzzle:before
+    font-size 1.2em
 
 .no-square
   width: 64px;
@@ -25,6 +27,10 @@
     color red
   &.great, &.win
     color green
+
+.puzzleRatingDiff
+  margin-left 10px
+  font-size 1.5em
 
 .trainingPlayer
   .player
@@ -76,6 +82,9 @@
   > .popup_content
     padding 10px
   h2:before
+    font-size 1.3em
+    position relative
+    top 2px
     color gold
     margin-right 10px
   .puzzleDifficulty

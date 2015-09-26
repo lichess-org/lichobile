@@ -48,7 +48,7 @@ function renderExplanation(ctrl) {
 function renderProblemDetails(ctrl) {
   return (
     <section className="trainingTable">
-      <h3 className="withIcon" data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
+      <h3 className="puzzle withIcon" data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
       <div>
         <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
         <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
@@ -154,7 +154,7 @@ function renderCommentary(ctrl) {
 }
 
 function renderRatingDiff(diff) {
-  return m('strong.rating', diff > 0 ? '+' + diff : diff);
+  return m('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff);
 }
 
 function renderWin(ctrl, attempt) {

@@ -19,6 +19,11 @@
     document.dispatchEvent(new window.Event('deviceready'));
   }, false);
 
+  // backbutton emulation
+  window.backbutton = function() {
+    document.dispatchEvent(new window.Event('backbutton'));
+  };
+
   // keyboard
   window.cordova.plugins.Keyboard = {
     show: noop,

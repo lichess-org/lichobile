@@ -195,18 +195,27 @@ export default function ctrl() {
   }.bind(this);
 
   this.newPuzzle = function() {
-    xhr.newPuzzle().then(this.init);
+    xhr.newPuzzle()
+      .then(this.init)
+      .then(() => window.history.pushState(null, null, '/?/training/' + this.data.puzzle.id));
+  }.bind(this);
+
+  this.loadPuzzle = function(id) {
+    xhr.loadPuzzle(id).then(this.init);
   }.bind(this);
 
   this.retry = function() {
-    xhr.retry(this.data.puzzle.id).then(this.reload);
+    xhr.loadPuzzle(this.data.puzzle.id).then(this.reload);
   }.bind(this);
 
   this.setDifficulty = function(id) {
     xhr.setDifficulty(id);
   };
 
-  this.newPuzzle();
+  if (m.route.param('id'))
+    this.loadPuzzle(m.route.param('id'));
+  else
+    this.newPuzzle();
 
   window.plugins.insomnia.keepAwake();
 

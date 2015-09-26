@@ -103,10 +103,10 @@ function renderViewControls(ctrl) {
       key: 'continueTraining',
       config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     }),
-    !(ctrl.data.attempt && ctrl.data.attempt.win || ctrl.data.win) ? m('button.training_action[data-icon=P]', {
+    m('button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
-    }) : null,
+    }),
     ctrl.data.puzzle.gameId ? m('button.training_action[data-icon=v]', {
       key: 'fromGameView',
       config: helper.ontouch(

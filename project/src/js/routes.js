@@ -36,7 +36,8 @@ export default {
       '/settings/themes/board': boardThemes,
       '/settings/themes/piece': pieceThemes,
       '/settings/lang': settingsLang,
-      '/training': training
+      '/training': training,
+      '/training/:id': training
     });
   }
 };

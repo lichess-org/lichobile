@@ -1566,6 +1566,11 @@
       "from": "webworkify@1.0.2",
       "resolved": "https://registry.npmjs.org/webworkify/-/webworkify-1.0.2.tgz"
     },
+    "chart.js": {
+      "version": "1.0.2",
+      "from": "chart.js@*",
+      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-1.0.2.tgz"
+    },
     "zanimo": {
       "version": "2.0.0",
       "from": "git://github.com/veloce/Zanimo.git",

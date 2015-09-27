@@ -115,14 +115,14 @@ function renderViewControls(ctrl) {
       )
     }) : null,
     m('button.training_action[data-icon=I]', {
-      config: helper.ontouch(ctrl.jumpPrev),
+      config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
       key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
     m('button.training_action[data-icon=H]', {
-      config: helper.ontouch(ctrl.jumpNext),
+      config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
       key: 'historyNext',
       className: helper.classSet({
         disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)

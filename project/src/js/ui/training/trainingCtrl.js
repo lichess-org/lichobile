@@ -140,12 +140,18 @@ export default function ctrl() {
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
   }.bind(this);
 
+  this.jumpFirst = this.jump.bind(this, 0);
+
   this.jumpPrev = function() {
     this.jump(this.data.replay.step - 1);
   }.bind(this);
 
   this.jumpNext = function() {
     this.jump(this.data.replay.step + 1);
+  }.bind(this);
+
+  this.jumpLast = function() {
+    this.jump(this.data.replay.history.length - 1);
   }.bind(this);
 
   this.initiate = function() {

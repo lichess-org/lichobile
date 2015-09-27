@@ -1,4 +1,4 @@
-.trainingTable
+.trainingSection
   height calc((100% - 100vw - 45px) / 2)
   padding 0 10px
   display flex
@@ -11,8 +11,16 @@
     padding 0
     flex 1 0 auto
     height initial
+    margin-bottom 10px
   > .puzzle:before
     font-size 1.2em
+
+.table
+  > .trainingTable
+    flex 1 1 auto
+    display flex
+    flex-flow column nowrap
+    justify-content space-between
 
 .no-square
   width: 64px;
@@ -89,4 +97,24 @@
     margin-right 10px
   .puzzleDifficulty
     margin-bottom 10px
+
+.trainingUserInfos.landscape
+  flex 0 0 auto
+  height 250px
+  padding 1rem 2rem
+  overflow hidden
+  @media only screen and (orientation: landscape) and (max-height 450px)
+    height 100px
+    padding 5px 0
+  @media only screen and (orientation: landscape) and (min-height 450px)
+    height 150px
+    padding 5px 0
+  @media only screen and (orientation: landscape) and (min-height 550px)
+    height 200px
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height 300px
+  @media only screen and (orientation: landscape) and (min-height 800px)
+    height 400px
+  .puzzleDifficulty
+    margin-top 0
 

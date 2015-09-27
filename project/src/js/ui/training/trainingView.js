@@ -4,7 +4,7 @@ import { header } from '../shared/common';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import { renderBoard } from '../round/view/roundView';
-import menu from './menu';
+import menu, { renderUserInfos, renderSigninBox } from './menu';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -31,13 +31,23 @@ function renderContent(ctrl) {
     ];
   else
     return [
-      renderBoard(ctrl)
+      renderBoard(ctrl),
+      <section key="table" className="table">
+        <section className="trainingTable">
+          {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}
+          <div className="trainingUserInfos landscape">
+            { ctrl.data.user ? renderUserInfos(ctrl) : renderSigninBox()}
+          </div>
+          {ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl)}
+        </section>
+        {renderActionsBar(ctrl)}
+      </section>
     ];
 }
 
 function renderExplanation(ctrl) {
   return (
-    <section className="trainingTable">
+    <section className="trainingSection">
       <p className="findit">
         {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
       </p>
@@ -47,7 +57,7 @@ function renderExplanation(ctrl) {
 
 function renderProblemDetails(ctrl) {
   return (
-    <section className="trainingTable">
+    <section className="trainingSection">
       <h3 className="puzzle withIcon" data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
       <div>
         <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
@@ -59,7 +69,7 @@ function renderProblemDetails(ctrl) {
 
 function renderPlayerTable(ctrl) {
   return (
-    <section className="trainingTable">
+    <section className="trainingSection">
       <div className="yourTurn">
         {i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
       </div>
@@ -71,7 +81,7 @@ function renderPlayerTable(ctrl) {
 
 function renderViewTable(ctrl) {
   return (
-    <section className="trainingTable">
+    <section className="trainingSection">
       <div />
       {renderResult(ctrl)}
     </section>

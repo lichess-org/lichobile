@@ -53,19 +53,24 @@ function renderDifficulty(ctrl) {
   );
 }
 
-function renderUserInfos(ctrl) {
+export function renderUserInfos(ctrl) {
   return [
-    m('p', i18n('yourPuzzleRatingX', ctrl.data.user.rating)),
-    m('br'),
+    m('p', m.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
+    helper.isPortrait() ? m('br') : null,
     ctrl.data.user.history ? m('canvas#puzzleChart', {
       width: '240px',
       height: '150px',
       config: function(el, isUpdate, context) {
-        const hash = ctrl.data.user.history.join('');
-        if (hash == context.hash) return;
+        const hash = ctrl.data.user.history.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
+        if (hash === context.hash) return;
         context.hash = hash;
         const ctx = document.getElementById('puzzleChart').getContext('2d');
-        ctx.canvas.width = ctx.canvas.parentElement.offsetWidth - 20;
+        if (helper.isPortrait()) {
+          ctx.canvas.width = ctx.canvas.parentElement.offsetWidth - 20;
+        } else {
+          ctx.canvas.width = ctx.canvas.parentElement.offsetWidth;
+          ctx.canvas.height = ctx.canvas.parentElement.offsetHeight - 20;
+        }
         new Chart(ctx).Line({
           labels: ctrl.data.user.history.map(() => ''),
           datasets: [
@@ -80,13 +85,12 @@ function renderUserInfos(ctrl) {
           scaleShowGridLines: false
         });
       }
-    }) : null,
-    renderDifficulty(ctrl)
+    }) : null
   ];
 }
 
-function renderTrainingMenu(ctrl) {
-  return ctrl.data.user ? renderUserInfos(ctrl) : [
+export function renderSigninBox() {
+  return m('div', [
     m('p', i18n('toTrackYourProgress')),
     m('p',
       m('button.fa.fa-user', {
@@ -94,5 +98,16 @@ function renderTrainingMenu(ctrl) {
       }, i18n('signIn'))
     ),
     m('p', i18n('trainingSignupExplanation'))
-  ];
+  ]);
+}
+
+function renderTrainingMenu(ctrl) {
+  if (ctrl.data.user) {
+    if (helper.isPortrait())
+      return renderUserInfos(ctrl).concat(renderDifficulty(ctrl));
+    else
+      return renderDifficulty(ctrl);
+  } else {
+    return renderSigninBox();
+  }
 }

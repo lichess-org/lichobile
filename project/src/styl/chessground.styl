@@ -62,7 +62,6 @@
   height 100%
   background-size cover
   z-index 2
-  will-change transform
   transform translateZ(0)
   &.dragging
     width 200%
@@ -75,13 +74,11 @@
   position absolute
   background-color rgba(0, 0, 0, 0.2)
   border-radius 50%
-  will-change transform
   transform translateZ(0)
 
 // view only boards
 .minimal-dom .cg-piece
   position absolute
   transform none
-  will-change initial
   width 12.5%
   height 12.5%

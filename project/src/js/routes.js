@@ -6,6 +6,7 @@ import otb from'./ui/otb';
 import ai from'./ui/ai';
 import settingsUi from'./ui/settings';
 import settingsLang from './ui/settings/lang';
+import settingsNetwork from './ui/settings/network';
 import settingsGame from './ui/settings/game';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
@@ -36,6 +37,7 @@ export default {
       '/players': players,
       '/ranking': ranking,
       '/settings': settingsUi,
+      '/settings/network': settingsNetwork,
       '/settings/game': settingsGame,
       '/settings/themes/board': boardThemes,
       '/settings/themes/piece': pieceThemes,

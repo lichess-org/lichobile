@@ -14,6 +14,9 @@ function renderBody() {
         config: helper.ontouchY(m.route.bind(undefined, '/settings/game'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/network'))
+      }, i18n('Network')),
+      m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),
       m('li.list_item.nav', {

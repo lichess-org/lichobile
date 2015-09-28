@@ -13,7 +13,7 @@ function makeConfig(data, fen, flip) {
     turnColor: data.game.player,
     lastMove: str2move(data.game.lastMove),
     check: data.game.check,
-    coordinates: settings.general.coords(),
+    coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: data.pref.highlight,
@@ -24,15 +24,15 @@ function makeConfig(data, fen, flip) {
       free: false,
       color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
       dests: gameApi.isPlayerPlaying(data) ? gameApi.parsePossibleMoves(data.possibleMoves) : {},
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     },
     animation: {
-      enabled: settings.general.animations(),
+      enabled: settings.game.animations(),
       duration: data.pref.animationDuration
     },
     premovable: {
       enabled: data.pref.enablePremove,
-      showDests: settings.general.pieceDestinations(),
+      showDests: settings.game.pieceDestinations(),
       castle: data.game.variant.key !== 'antichess'
     },
     draggable: {
@@ -46,13 +46,13 @@ function makeConfig(data, fen, flip) {
 function applySettings(ground) {
   ground.set({
     movable: {
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     },
     animation: {
-      enabled: settings.general.animations()
+      enabled: settings.game.animations()
     },
     premovable: {
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     }
   });
 }

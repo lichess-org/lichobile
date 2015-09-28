@@ -45,9 +45,9 @@ function challenge() {
 
 function renderForm() {
   var formName = 'invite';
-  var settingsObj = settings.game.challenge;
-  var variants = settings.game.challenge.availableVariants;
-  var timeModes = settings.game.challenge.availableTimeModes;
+  var settingsObj = settings.gameSetup.challenge;
+  var variants = settings.gameSetup.challenge.availableVariants;
+  var timeModes = settings.gameSetup.challenge.availableTimeModes;
   var timeMode = settingsObj.timeMode();
   var hasClock = timeMode === '1';
   var hasDays = timeMode === '2';
@@ -107,13 +107,13 @@ function renderForm() {
         key: formName + 'time'
       }, [
         formWidgets.renderSelect('time', formName + 'time',
-          settings.game.availableTimes.map(utils.tupleOf), settingsObj.time, false)
+          settings.gameSetup.availableTimes.map(utils.tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', {
         key: formName + 'increment'
       }, [
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.game.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
+          settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       ])
     );
   }
@@ -124,14 +124,14 @@ function renderForm() {
         key: formName + 'days'
       }, [
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.game.availableDays.map(utils.tupleOf), settingsObj.days, false)
+          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
       ]));
   }
 
   return m('form#invite_form.game_form', {
     onsubmit: function(e) {
       e.preventDefault();
-      if (!settings.game.isTimeValid(settingsObj)) return;
+      if (!settings.gameSetup.isTimeValid(settingsObj)) return;
       challengeForm.close();
       challenge();
     }

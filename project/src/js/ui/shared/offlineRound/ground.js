@@ -7,7 +7,7 @@ function makeConfig(data, fen) {
     fen: fen,
     orientation: data.player.color,
     turnColor: data.game.player,
-    coordinates: settings.general.coords(),
+    coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: data.pref.highlight,
@@ -18,10 +18,10 @@ function makeConfig(data, fen) {
       free: false,
       color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
       dests: gameApi.parsePossibleMoves(data.possibleMoves),
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     },
     animation: {
-      enabled: settings.general.animations(),
+      enabled: settings.game.animations(),
       duration: 300
     },
     premovable: {
@@ -38,13 +38,13 @@ function makeConfig(data, fen) {
 function applySettings(ground) {
   ground.set({
     movable: {
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     },
     animation: {
-      enabled: settings.general.animations()
+      enabled: settings.game.animations()
     },
     premovable: {
-      showDests: settings.general.pieceDestinations()
+      showDests: settings.game.pieceDestinations()
     }
   });
 }

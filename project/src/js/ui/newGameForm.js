@@ -24,13 +24,13 @@ newGameForm.close = function(fromBB) {
 };
 
 newGameForm.openRealTime = function() {
-  settings.game.human.timeMode('1');
+  settings.gameSetup.human.timeMode('1');
   newGameForm.open();
 };
 
 newGameForm.openCorrespondence = function() {
-  settings.game.selected('human');
-  settings.game.human.timeMode('2');
+  settings.gameSetup.selected('human');
+  settings.gameSetup.human.timeMode('2');
   newGameForm.open();
 };
 
@@ -44,7 +44,7 @@ function startAIGame() {
 }
 
 function seekHumanGame() {
-  if (settings.game.human.timeMode() === '1') m.route('/seek');
+  if (settings.gameSetup.human.timeMode() === '1') m.route('/seek');
   else {
     xhr.seekGame();
     m.route('/correspondence');
@@ -58,10 +58,10 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 
   // be sure to set real time clock if disconnected
   if (!session.isConnected()) {
-    settings.game.human.timeMode('1');
+    settings.gameSetup.human.timeMode('1');
   }
   if (formName === 'human' && timeMode === '0') {
-    settings.game.human.mode('0');
+    settings.gameSetup.human.mode('0');
   }
 
   // both human and AI
@@ -122,11 +122,11 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
           m('div.title', i18n('ratingRange')),
           m('div.select_input.inline', [
             formWidgets.renderSelect('Min', formName + 'rating_min',
-              settings.game.human.availableRatingRanges.min, settingsObj.ratingMin, false)
+              settings.gameSetup.human.availableRatingRanges.min, settingsObj.ratingMin, false)
           ]),
           m('div.select_input.inline', [
             formWidgets.renderSelect('Max', formName + 'rating_max',
-              settings.game.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+              settings.gameSetup.human.availableRatingRanges.max, settingsObj.ratingMax, false)
           ])
         ])
       );
@@ -149,13 +149,13 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         key: formName + 'time'
       }, [
         formWidgets.renderSelect('time', formName + 'time',
-          settings.game.availableTimes.map(utils.tupleOf), settingsObj.time, false)
+          settings.gameSetup.availableTimes.map(utils.tupleOf), settingsObj.time, false)
       ]),
       m('div.select_input.inline', {
         key: formName + 'increment'
       }, [
         formWidgets.renderSelect('increment', formName + 'increment',
-          settings.game.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
+          settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       ])
     );
   }
@@ -167,14 +167,14 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         key: formName + 'days'
       }, [
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.game.availableDays.map(utils.tupleOf), settingsObj.days, false)
+          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
       ]));
   }
 
   return m('form#new_game_form.game_form', {
     onsubmit: function(e) {
       e.preventDefault();
-      if (!settings.game.isTimeValid(settingsObj)) return;
+      if (!settings.gameSetup.isTimeValid(settingsObj)) return;
       newGameForm.close();
       action();
     }
@@ -184,15 +184,15 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         'human',
         'selected',
         'human',
-        settings.game.selected() === 'human',
-        e => settings.game.selected(e.target.value)
+        settings.gameSetup.selected() === 'human',
+        e => settings.gameSetup.selected(e.target.value)
       )),
       m('div.nice-radio', formWidgets.renderRadio(
         'computer',
         'selected',
         'computer',
-        settings.game.selected() === 'computer',
-        e => settings.game.selected(e.target.value)
+        settings.gameSetup.selected() === 'computer',
+        e => settings.gameSetup.selected(e.target.value)
       ))
     ]),
     m('fieldset', generalFieldset),
@@ -204,12 +204,12 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 newGameForm.view = function() {
 
   function form() {
-    return settings.game.selected() === 'human' ? renderForm(
+    return settings.gameSetup.selected() === 'human' ? renderForm(
       'human',
       seekHumanGame,
-      settings.game.human,
-      settings.game.human.availableVariants,
-      settings.game.human.availableTimeModes.filter(function(e) {
+      settings.gameSetup.human,
+      settings.gameSetup.human.availableVariants,
+      settings.gameSetup.human.availableTimeModes.filter(function(e) {
         // correspondence and unlimited time modes are only available when
         // connected
         return e[1] === '1' || session.isConnected();
@@ -217,9 +217,9 @@ newGameForm.view = function() {
     ) : renderForm(
       'ai',
       startAIGame,
-      settings.game.ai,
-      settings.game.ai.availableVariants,
-      settings.game.ai.availableTimeModes
+      settings.gameSetup.ai,
+      settings.gameSetup.ai.availableVariants,
+      settings.gameSetup.ai.availableTimeModes
     );
   }
 

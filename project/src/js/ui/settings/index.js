@@ -10,13 +10,18 @@ import m from 'mithril';
 function renderBody() {
   return [
     m('ul.settings_list.general.native_scroller.page', [
-      m('li.list_item', formWidgets.renderCheckbox(i18n('boardCoordinates'), 'coords', settings.general.coords)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
-        settings.general.animations)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
-        settings.general.pieceDestinations)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics)),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(m.route.bind(undefined, '/settings/game'))
+      }, i18n('gameDisplay')),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
+      }, i18n('language')),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/themes/board'))
+      }, i18n('board')),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
+      }, i18n('pieces')),
       m('li.list_item.bgTheme', [
         m('label', 'Background'),
         m('fieldset', [
@@ -35,15 +40,8 @@ function renderBody() {
             e => settings.general.theme.background(e.target.value)
         ))])
       ]),
-      m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
-      }, i18n('language')),
-      m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/themes/board'))
-      }, i18n('board')),
-      m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
-      }, i18n('pieces'))
+      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];

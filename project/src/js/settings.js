@@ -16,8 +16,6 @@ function tupleOf(x) {
 export default {
   general: {
     lang: localstorageprop('settings.lang'),
-    animations: localstorageprop('settings.gameAnimations', true),
-    pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     sound: localstorageprop('settings.sound', true),
     theme: {
       background: localstorageprop('settings.bgTheme', 'dark'),
@@ -50,7 +48,15 @@ export default {
       board: localstorageprop('settings.theme.board', 'metal'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
-    analytics: localstorageprop('settings.analytics', true),
+    analytics: localstorageprop('settings.analytics', true)
+  },
+
+  game: {
+    supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde'
+    ],
+    animations: localstorageprop('settings.gameAnimations', true),
+    pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     coords: localstorageprop('settings.coords', true)
   },
 
@@ -72,11 +78,8 @@ export default {
     opponent: localstorageprop('settings.ai.opponent', '1')
   },
 
-  game: {
+  gameSetup: {
     selected: localstorageprop('settings.game.selected', 'human'),
-    supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck', 'atomic', 'horde'
-    ],
     availableTimes: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '15',
       '20', '25', '30', '40', '60', '90', '120', '150', '180'
     ],

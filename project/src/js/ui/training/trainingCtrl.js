@@ -175,7 +175,7 @@ export default function ctrl() {
       movable: {
         free: false,
         color: this.data.mode !== 'view' ? this.data.puzzle.color : null,
-        showDests: settings.general.pieceDestinations(),
+        showDests: settings.game.pieceDestinations(),
         events: {
           after: userMove
         }

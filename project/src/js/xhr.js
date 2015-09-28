@@ -5,7 +5,7 @@ import i18n from './i18n';
 import session from './session';
 
 export function newAiGame() {
-  var config = settings.game.ai;
+  var config = settings.gameSetup.ai;
   return request('/setup/ai', {
     method: 'POST',
     data: {
@@ -21,7 +21,7 @@ export function newAiGame() {
 }
 
 export function seekGame() {
-  var config = settings.game.human;
+  var config = settings.gameSetup.human;
   return request('/setup/hook/' + utils.lichessSri, {
     method: 'POST',
     data: {
@@ -38,7 +38,7 @@ export function seekGame() {
 }
 
 export function inviteFriend(userId) {
-  var config = settings.game.challenge;
+  var config = settings.gameSetup.challenge;
   return request('/setup/friend', {
     method: 'POST',
     data: {

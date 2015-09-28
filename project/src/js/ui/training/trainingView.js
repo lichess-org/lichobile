@@ -56,9 +56,16 @@ function renderExplanation(ctrl) {
 }
 
 function renderProblemDetails(ctrl) {
+
+  const viewGame = ctrl.data.puzzle.gameId ? helper.ontouch(
+    () => m.route(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
+    () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
+  ) : () => {};
   return (
     <section className="trainingSection">
-      <h3 className="puzzle withIcon" data-icon="-">{i18n('puzzleId', ctrl.data.puzzle.id)}</h3>
+      <h3 className="puzzle withIcon button" data-icon="-" config={viewGame}>
+        {i18n('puzzleId', ctrl.data.puzzle.id)}
+      </h3>
       <div>
         <p>{i18n('ratingX', ctrl.data.puzzle.rating)}</p>
         <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
@@ -117,13 +124,10 @@ function renderViewControls(ctrl) {
       key: 'retryPuzzle',
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
     }),
-    ctrl.data.puzzle.gameId ? m('button.training_action[data-icon=v]', {
-      key: 'fromGameView',
-      config: helper.ontouch(
-        () => m.route(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
-        () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
-      )
-    }) : null,
+    m('button.training_action.fa.fa-share-alt', {
+      key: 'sharePuzzle',
+      config: helper.ontouch(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
+    }),
     m('button.training_action[data-icon=I]', {
       config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
       key: 'historyPrev',

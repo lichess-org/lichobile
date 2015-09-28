@@ -24,17 +24,9 @@ function main() {
 
   routes.init();
 
-  // open games from external links with url scheme (lichess://gameId)
+  // open games from external links with url scheme
   window.handleOpenURL = function(url) {
-    setTimeout(function() {
-      var parsed = url.match(/^lichess:\/\/(\w+)\/?(black|white)?/);
-      var gameId = parsed[1];
-      var color = parsed[2];
-      if (!gameId) return;
-      var route = '/game/' + gameId;
-      if (color) route += ('/' + color);
-      m.route(route);
-    }, 0);
+    setTimeout(onUrlOpen.bind(undefined, url), 0);
   };
 
   // iOs needs this to auto-rotate
@@ -71,6 +63,31 @@ function main() {
     window.navigator.splashscreen.hide();
     xhrStatus();
   }, 500);
+}
+
+function onUrlOpen(url) {
+  const routes = [
+    {
+      reg: /^lichess:\/\/training\/(\d+)/,
+      ctrl: (id) => m.route(`/training/${id}`)
+    },
+    {
+      reg: /^lichess:\/\/(\w+)\/?(black|white)?/,
+      ctrl: (gameId, color) => {
+        let route = '/game/' + gameId;
+        if (color) route += ('/' + color);
+        m.route(route);
+      }
+    }
+  ];
+  for (var i = 0; i <= routes.length; i++) {
+    const r = routes[i];
+    const parsed = r.reg.exec(url);
+    if (parsed !== null) {
+      r.ctrl.apply(null, parsed.slice(1));
+      break;
+    }
+  }
 }
 
 function refresh() {

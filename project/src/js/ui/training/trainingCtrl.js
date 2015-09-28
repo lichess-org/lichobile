@@ -119,7 +119,7 @@ export default function ctrl() {
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
-    if (puzzle.getCurrentLines(this.data) == 'win')
+    if (puzzle.getCurrentLines(this.data) === 'win')
       setTimeout(() => attempt(true), 300);
   }.bind(this);
 
@@ -212,6 +212,10 @@ export default function ctrl() {
 
   this.retry = function() {
     xhr.loadPuzzle(this.data.puzzle.id).then(this.reload);
+  }.bind(this);
+
+  this.share = function() {
+    window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`);
   }.bind(this);
 
   this.setDifficulty = function(id) {

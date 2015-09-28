@@ -1,4 +1,4 @@
-import m from 'mithril';
+import { formatClockTime } from './correspondenceView';
 
 export default function(root, data, onFlag) {
 
@@ -25,6 +25,11 @@ export default function(root, data, onFlag) {
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (new Date() - lastUpdate.at) / 1000);
     if (this.data[color] === 0) onFlag();
-    if (!root.chat || !root.chat.showing) m.redraw();
+
+    const time = this.data[color] * 1000,
+      el = document.getElementById('clock_' + color);
+
+    if (el) el.innerHTML = formatClockTime(time);
+
   }.bind(this);
 }

@@ -14,7 +14,7 @@ import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
-import renderCorrespondenceClock from '../correspondenceClock/correspondenceView';
+import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
 import m from 'mithril';
@@ -215,7 +215,7 @@ function renderAntagonist(ctrl, player, material, position) {
     ]),
     ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
       ctrl.data.correspondence ? renderCorrespondenceClock(
-        ctrl.correspondenceClock, i18n, player.color, ctrl.data.game.player
+        ctrl.correspondenceClock, player.color, ctrl.data.game.player
       ) : null
     )
   ]);

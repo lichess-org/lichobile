@@ -311,7 +311,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   var clockIntervId;
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
-  else clockIntervId = setInterval(correspondenceClockTick, 1000);
+  else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 1000);
 
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
@@ -354,7 +354,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
 
   this.onunload = function() {
     socket.destroy();
-    if (clockIntervId) clearInterval(clockIntervId);
+    clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
     signals.socket.connected.remove(onConnected);
     signals.socket.disconnected.remove(onDisconnected);

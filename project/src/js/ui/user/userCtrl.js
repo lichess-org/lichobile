@@ -36,7 +36,7 @@ export default function controller() {
       else xhr.block(user().id).then(setNewUserState);
     },
     goToGames: () => m.route(`/@/${user().id}/games`),
-    goToUserTV: () => m.route(`@/${user().id}/tv`),
+    goToUserTV: () => m.route(`/@/${user().id}/tv`),
     challenge: () => challengeForm.open(user().id),
     onunload: () => {
       socket.destroy();

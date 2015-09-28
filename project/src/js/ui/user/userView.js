@@ -140,6 +140,12 @@ function renderActions(ctrl) {
         {i18n('challengeToPlay')}
       </div> : null
       }
+      <div className="list_item nav" data-icon="1"
+        config={helper.ontouchY(ctrl.goToUserTV)}
+        key="user_tv"
+      >
+        {i18n('watchGames')}
+      </div>
       {user.followable && !ctrl.isMe() ?
       <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
         <div className="check_container">

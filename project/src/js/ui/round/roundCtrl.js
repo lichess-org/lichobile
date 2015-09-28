@@ -131,6 +131,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
   this.setTitle = function() {
     if (this.data.tv)
       this.title = 'Lichess TV';
+    else if (this.data.userTV)
+      this.title = this.data.userTV;
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
@@ -319,6 +321,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
     if (this.data.tv) rCfg.tv = this.data.tv;
+    if (this.data.userTV) rCfg.userTV = this.data.userTV;
     this.data = data(rCfg);
     makeCorrespondenceClock();
     this.setTitle();

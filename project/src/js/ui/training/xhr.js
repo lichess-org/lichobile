@@ -35,3 +35,7 @@ export function setDifficulty(d) {
 export function newPuzzle() {
   return request('/training/new');
 }
+
+export function history() {
+  return request('/training/history');
+}

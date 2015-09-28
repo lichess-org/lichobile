@@ -30,3 +30,7 @@ export function games(userId, filter='all', page=1, feedback=false) {
     background: !feedback
   }, feedback);
 }
+
+export function tv(userId) {
+  return request(`/@/${userId}/tv`);
+}

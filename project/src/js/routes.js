@@ -10,6 +10,7 @@ import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
 import userGames from'./ui/user/games';
+import userTV from './ui/user/tv';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
 import training from './ui/training';
@@ -30,6 +31,7 @@ export default {
       '/@/:id': user,
       '/@/:id/games': userGames,
       '/@/:id/games/:filter': userGames,
+      '/@/:id/tv': userTV,
       '/players': players,
       '/ranking': ranking,
       '/settings': settingsUi,

@@ -93,7 +93,10 @@ function renderHeader(ctrl) {
       className: ctrl.vm.connectedWS ? '' : 'reconnecting'
     }, [
       menuButton(),
-      ctrl.vm.connectedWS ? m('h1.playing', ctrl.title) : m('h1.reconnecting', [
+      ctrl.vm.connectedWS ? m('h1.playing', [
+        ctrl.data.userTV ? m('span.withIcon[data-icon=1]') : null,
+        ctrl.title
+      ]) : m('h1.reconnecting', [
         i18n('reconnecting'),
         loader
       ]),

@@ -90,6 +90,7 @@
       "EnableViewportScale": false,
       "KeyboardDisplayRequiresUserAction": false,
       "ShowSplashScreenSpinner": false,
+      "AutoHideSplashScreen": false,
       "SplashScreen": "screen",
       "SplashScreenDelay": 10000,
       "KeepRunning": true,

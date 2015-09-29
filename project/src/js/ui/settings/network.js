@@ -7,7 +7,7 @@ import settings from '../../settings';
 import m from 'mithril';
 
 function renderBody() {
-  const exp = 'Persistent data connection. Disable it will save battery but you won\'t be able to get friends/games updates, nor receive challenges. Only useful for screens that don\'t require an opened connection, like training or offline AI.';
+  const exp = 'Persistent data connection. Disable it will save battery but you won\'t get friends/games updates, nor receive challenges. Only useful for screens that don\'t require an opened connection, like training or offline AI.';
 
   return [
     m('ul.native_scroller.page.settings_list.game', [

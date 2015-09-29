@@ -5,6 +5,8 @@ import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
+import session from './session';
+import settings from './settings';
 import m from 'mithril';
 
 var socketInstance;
@@ -94,18 +96,21 @@ function createLobby(lobbyVersion, onOpen, handlers) {
 }
 
 function createDefault() {
-  destroy();
-  socketInstance = new StrongSocket(
-    '/socket', 0, {
-      options: {
-        name: 'default',
-        debug: window.lichess.mode !== 'prod',
-        pingDelay: 2000,
-        onOpen: () => socketInstance.send('following_onlines')
-      },
-      events: defaultHandlers
-    }
-  );
+  // default socket is useless when anon.
+  if (utils.hasNetwork() && session.isConnected() && settings.general.data()) {
+    destroy();
+    socketInstance = new StrongSocket(
+      '/socket', 0, {
+        options: {
+          name: 'default',
+          debug: window.lichess.mode !== 'prod',
+          pingDelay: 2000,
+          onOpen: () => socketInstance.send('following_onlines')
+        },
+        events: defaultHandlers
+      }
+    );
+  }
 }
 
 export default {

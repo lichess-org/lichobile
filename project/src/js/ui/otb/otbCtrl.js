@@ -6,6 +6,7 @@ import sound from '../../sound';
 import storage from '../../storage';
 import actions from './actions';
 import helper from '../helper';
+import socket from '../../socket';
 import m from 'mithril';
 
 const storageKey = 'otb.current';
@@ -13,6 +14,8 @@ const storageKey = 'otb.current';
 export default function controller(cfg) {
 
   helper.analyticsTrackView('On The Board');
+
+  socket.createDefault();
 
   var save = function() {
     storage.set(storageKey, {

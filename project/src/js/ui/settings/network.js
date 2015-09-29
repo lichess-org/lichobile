@@ -7,7 +7,8 @@ import settings from '../../settings';
 import m from 'mithril';
 
 function renderBody() {
-  const exp = 'Persistent data connection. Disable it to save battery (you won\'t get friends or games updates). Does not apply where connection is required, like while seeking or playing a game.';
+  const exp = 'Persistent data connection. Disable it will save battery but you won\'t be able to get friends/games updates, nor receive challenges. Only useful for screens that don\'t require an opened connection, like training or offline AI.';
+
   return [
     m('ul.native_scroller.page.settings_list.game', [
       m('li.list_item', formWidgets.renderCheckbox(exp, 'data', settings.general.data))

@@ -62,7 +62,7 @@ function main() {
 }
 
 function onUrlOpen(url) {
-  const routes = [
+  const uris = [
     {
       reg: /^lichess:\/\/training\/(\d+)/,
       ctrl: (id) => m.route(`/training/${id}`)
@@ -76,8 +76,8 @@ function onUrlOpen(url) {
       }
     }
   ];
-  for (var i = 0; i <= routes.length; i++) {
-    const r = routes[i];
+  for (var i = 0; i <= uris.length; i++) {
+    const r = uris[i];
     const parsed = r.reg.exec(url);
     if (parsed !== null) {
       r.ctrl.apply(null, parsed.slice(1));
@@ -93,6 +93,7 @@ function onResize() {
 
 function onOnline() {
   session.rememberLogin().then(() => {
+    // first time login on app start or just try to reconnect socket
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       triedToLogin = true;
       var nowPlaying = session.nowPlaying();
@@ -101,6 +102,8 @@ function onOnline() {
       else
         socket.createDefault();
       window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
+    } else {
+      socket.connect();
     }
   }, err => {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
@@ -109,7 +112,6 @@ function onOnline() {
         triedToLogin = true;
         var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
         if (lastPlayedAnon) m.route('/game' + lastPlayedAnon);
-        window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
       }
     }
   })
@@ -117,6 +119,7 @@ function onOnline() {
 }
 
 function onOffline() {
+  socket.disconnect();
   m.redraw();
 }
 

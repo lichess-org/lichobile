@@ -7,10 +7,14 @@ import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
 import settings from './settings';
+import signals from './signals';
 import m from 'mithril';
 
 var socketInstance;
 var errorDetected = false;
+var connectedWS = true;
+
+const proxyFailMsg = 'The connection to lichess server has failed. If you see that the problem is persistent it is probably due to a proxy in your network that prevents establishing the connection. In that case, we\'re sorry: lichess won\'t work.';
 
 const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
@@ -112,6 +116,24 @@ function createDefault() {
     );
   }
 }
+
+function onConnected() {
+  connectedWS = true;
+}
+
+function onDisconnected() {
+  var wasOn = connectedWS;
+  connectedWS = false;
+  if (wasOn) setTimeout(function() {
+    // check if disconnection lasts, it could mean a proxy prevents
+    // establishing a tunnel
+    if (utils.hasNetwork() && !connectedWS)
+      window.plugins.toast.show(proxyFailMsg, 'long', 'center');
+  }, 10000);
+}
+
+signals.socket.connected.add(onConnected);
+signals.socket.disconnected.add(onDisconnected);
 
 export default {
   createGame,

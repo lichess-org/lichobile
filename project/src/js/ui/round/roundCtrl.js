@@ -20,7 +20,7 @@ import helper from '../helper';
 import * as xhr from './roundXhr';
 import m from 'mithril';
 
-export default function controller(cfg, onFeatured, onTVChannelChange) {
+export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   helper.analyticsTrackView('Round');
 
@@ -52,8 +52,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange) {
   socket.createGame(
     this.data.url.socket,
     this.data.player.version,
-    socketHandler(this, onFeatured),
-    this.data.url.round
+    socketHandler(this, onFeatured, onUserTVRedirect),
+    this.data.url.round,
+    userTv
   );
 
   this.stepsHash = function(steps) {

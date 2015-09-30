@@ -33,10 +33,10 @@ function destroy() {
   }
 }
 
-function createGame(url, version, receiveHandler, gameUrl) {
+function createGame(url, version, receiveHandler, gameUrl, userTv) {
   errorDetected = false;
   destroy();
-  socketInstance = new StrongSocket(url, version, {
+  const opts = {
     options: {
       name: 'game',
       debug: window.lichess.mode !== 'prod',
@@ -60,7 +60,9 @@ function createGame(url, version, receiveHandler, gameUrl) {
     },
     events: defaultHandlers,
     receive: receiveHandler
-  });
+  };
+  if (userTv) opts.params = { userTv };
+  socketInstance = new StrongSocket(url, version, opts);
 }
 
 function createAwait(url, version, handlers) {

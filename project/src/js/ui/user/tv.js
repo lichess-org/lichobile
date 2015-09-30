@@ -11,11 +11,24 @@ export default {
   controller: function() {
     var round;
 
+    const userId = m.route.param('id');
+
     helper.analyticsTrackView('User TV');
 
-    tv(m.route.param('id')).then(function(data) {
-      data.userTV = m.route.param('id');
-      round = new roundCtrl(data);
+    function onRedirect() {
+      tv(userId).then(function(data) {
+        m.redraw.strategy('all');
+        data.userTV = userId;
+        if (round) round.onunload();
+        round = new roundCtrl(data, null, null, userId, onRedirect);
+      }, function(error) {
+        utils.handleXhrError(error);
+      });
+    }
+
+    tv(userId).then(function(data) {
+      data.userTV = userId;
+      round = new roundCtrl(data, null, null, userId, onRedirect);
     }, function(error) {
       utils.handleXhrError(error);
       m.route('/');

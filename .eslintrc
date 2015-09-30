@@ -6,7 +6,8 @@
     "semi": [ 2, "always" ],
     "no-use-before-define": [1, "nofunc"],
     "no-console": 0,
-    "eqeqeq": 1
+    "eqeqeq": 1,
+    "no-shadow": 1
   },
   "env": {
     "es6": true,

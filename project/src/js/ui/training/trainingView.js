@@ -1,6 +1,6 @@
 import layout from '../layout';
 import i18n from '../../i18n';
-import { header } from '../shared/common';
+import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import { renderBoard } from '../round/view/roundView';
@@ -9,7 +9,9 @@ import m from 'mithril';
 
 export default function view(ctrl) {
   return layout.board(
-    header.bind(undefined, i18n('training')),
+    !ctrl.data || ctrl.vm.loading ?
+      connectingHeader.bind(undefined, i18n('training')) :
+      header.bind(undefined, i18n('training')),
     renderContent.bind(undefined, ctrl),
     () => [
       renderPromotion(ctrl),
@@ -20,7 +22,7 @@ export default function view(ctrl) {
 }
 
 function renderContent(ctrl) {
-  if (!ctrl.data) return;
+  if (!ctrl.data) return viewOnlyBoardContent();
 
   if (helper.isPortrait())
     return [
@@ -118,7 +120,7 @@ function renderViewControls(ctrl) {
   return [
     m('button.training_action[data-icon=G]', {
       key: 'continueTraining',
-      config: helper.ontouch(ctrl.newPuzzle, () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
+      config: helper.ontouch(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     }),
     m('button.training_action[data-icon=P]', {
       key: 'retryPuzzle',

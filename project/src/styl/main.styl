@@ -47,8 +47,12 @@ main.out
       &.reconnecting
         white-space nowrap
         overflow hidden
-        text-align center
         height 50px
+        text-align center
+        &.withTitle
+          text-align left
+          > span
+            margin-right 5px
       @media only screen and (max-width 320px)
         &.playing
           padding-left 0

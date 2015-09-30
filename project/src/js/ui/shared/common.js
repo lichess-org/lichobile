@@ -102,8 +102,10 @@ export const loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
 export function connectingHeader(title) {
   return m('nav', [
     menuButton(),
-    m('h1.reconnecting', [
-      title ? title : null,
+    m('h1.reconnecting', {
+      className: title ? 'withTitle' : ''
+    }, [
+      title ? m('span', title) : null,
       loader
     ]),
     headerBtns()

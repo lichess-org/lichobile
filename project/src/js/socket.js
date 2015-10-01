@@ -109,7 +109,8 @@ function createDefault() {
         options: {
           name: 'default',
           debug: window.lichess.mode !== 'prod',
-          pingDelay: 2000,
+          pingDelay: 6000,
+          pingMaxLag: 12000,
           onOpen: () => socketInstance.send('following_onlines')
         },
         events: defaultHandlers

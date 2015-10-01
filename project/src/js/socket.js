@@ -130,7 +130,7 @@ function onDisconnected() {
     // check if disconnection lasts, it could mean a proxy prevents
     // establishing a tunnel
     if (utils.hasNetwork() && !connectedWS)
-      window.plugins.toast.show(proxyFailMsg, 'long', 'center');
+      window.navigator.notification.alert(proxyFailMsg);
   }, 10000);
 }
 

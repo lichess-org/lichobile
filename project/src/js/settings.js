@@ -17,7 +17,6 @@ export default {
   general: {
     lang: localstorageprop('settings.lang'),
     sound: localstorageprop('settings.sound', true),
-    data: localstorageprop('settings.data', true),
     theme: {
       background: localstorageprop('settings.bgTheme', 'dark'),
       availableBoardThemes: [

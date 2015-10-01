@@ -6,7 +6,6 @@ import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import settings from './settings';
 import signals from './signals';
 import m from 'mithril';
 
@@ -103,7 +102,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
 
 function createDefault() {
   // default socket is useless when anon.
-  if (utils.hasNetwork() && session.isConnected() && settings.general.data()) {
+  if (utils.hasNetwork() && session.isConnected()) {
     destroy();
     socketInstance = new StrongSocket(
       '/socket', 0, {

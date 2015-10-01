@@ -1,5 +1,4 @@
 import socket from './socket';
-import settings from './settings';
 import session from './session';
 import * as utils from './utils';
 
@@ -16,7 +15,7 @@ export default function () {
 }
 
 function refresh() {
-  if (utils.hasNetwork() && session.isConnected() && settings.general.data())
+  if (utils.hasNetwork() && session.isConnected())
     session.refresh();
 }
 

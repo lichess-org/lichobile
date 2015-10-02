@@ -224,6 +224,7 @@ function renderAntagonist(ctrl, player, material, position) {
 function tvChannelSelector(ctrl) {
   let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
   channels.unshift(['Top rated', 'best']);
+  channels.push(['Computer', 'computer']);
 
   return m('div.action', m('div.select_input',
     formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,

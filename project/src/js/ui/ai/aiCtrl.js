@@ -8,14 +8,11 @@ import settings from '../../settings';
 import actions from './actions';
 import engine from './engine';
 import helper from '../helper';
-import socket from '../../socket';
 import m from 'mithril';
 
 export default function controller() {
 
   helper.analyticsTrackView('Offline AI');
-
-  socket.createDefault();
 
   var storageKey = 'ai.current';
 
@@ -134,7 +131,6 @@ export default function controller() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    socket.destroy();
     window.plugins.insomnia.allowSleepAgain();
   };
 }

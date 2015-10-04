@@ -77,7 +77,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "200101",
+        "version_code": "200200",
         "release": true,
         "sign": "store"
       }

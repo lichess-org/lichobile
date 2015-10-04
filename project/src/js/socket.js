@@ -109,8 +109,7 @@ function createDefault() {
         options: {
           name: 'default',
           debug: window.lichess.mode !== 'prod',
-          pingDelay: 4000,
-          pingMaxLag: 12000,
+          pingDelay: 2000,
           onOpen: () => socketInstance.send('following_onlines')
         },
         events: defaultHandlers
@@ -131,7 +130,7 @@ function onDisconnected() {
     // establishing a tunnel
     if (utils.hasNetwork() && !connectedWS)
       window.navigator.notification.alert(proxyFailMsg);
-  }, 10000);
+  }, 15000);
 }
 
 signals.socket.connected.add(onConnected);

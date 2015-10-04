@@ -1509,6 +1509,11 @@
         }
       }
     },
+    "chart.js": {
+      "version": "1.0.2",
+      "from": "https://registry.npmjs.org/chart.js/-/chart.js-1.0.2.tgz",
+      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-1.0.2.tgz"
+    },
     "chess.js": {
       "version": "0.9.2",
       "from": "git://github.com/veloce/chess.js.git#v0.9.2",
@@ -1517,7 +1522,7 @@
     "chessground": {
       "version": "2.1.0",
       "from": "git://github.com/veloce/chessground-mobile.git",
-      "resolved": "git://github.com/veloce/chessground-mobile.git#a7bc0a3241c1937e142315782bfd83ea5698f438",
+      "resolved": "git://github.com/veloce/chessground-mobile.git#82b1ed39e4874ddf7e30944b6c36f41c79511eaf",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
@@ -1527,7 +1532,7 @@
         "mithril": {
           "version": "0.2.1",
           "from": "lhorie/mithril.js#next",
-          "resolved": "git://github.com/lhorie/mithril.js.git#d6e68d0144abbee022dfaa02eea877c55982b586"
+          "resolved": "git://github.com/lhorie/mithril.js.git#80f43c260b710a09bdec875b0e596293c3727801"
         }
       }
     },
@@ -1543,8 +1548,8 @@
     },
     "mithril": {
       "version": "0.2.1",
-      "from": "git://github.com/lhorie/mithril.js.git#8fa84c33f861b67acc3024edae4c9c839848a44f",
-      "resolved": "git://github.com/lhorie/mithril.js.git#8fa84c33f861b67acc3024edae4c9c839848a44f"
+      "from": "lhorie/mithril.js#next",
+      "resolved": "git://github.com/lhorie/mithril.js.git#80f43c260b710a09bdec875b0e596293c3727801"
     },
     "moment": {
       "version": "2.8.4",
@@ -1565,11 +1570,6 @@
       "version": "1.0.2",
       "from": "webworkify@1.0.2",
       "resolved": "https://registry.npmjs.org/webworkify/-/webworkify-1.0.2.tgz"
-    },
-    "chart.js": {
-      "version": "1.0.2",
-      "from": "chart.js@*",
-      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-1.0.2.tgz"
     },
     "zanimo": {
       "version": "2.0.0",

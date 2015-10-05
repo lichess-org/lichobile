@@ -1,4 +1,3 @@
-import helper from './helper';
 import * as utils from '../utils';
 import * as xhr from '../xhr';
 import settings from '../settings';
@@ -13,7 +12,6 @@ var newGameForm = {};
 newGameForm.isOpen = false;
 
 newGameForm.open = function() {
-  helper.analyticsTrackView('New Game Form');
   backbutton.stack.push(newGameForm.close);
   newGameForm.isOpen = true;
 };

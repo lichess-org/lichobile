@@ -18,7 +18,6 @@ const gamesMenu = {};
 gamesMenu.isOpen = false;
 
 gamesMenu.open = function() {
-  helper.analyticsTrackView('Games Menu');
   backbutton.stack.push(gamesMenu.close);
   gamesMenu.isOpen = true;
   setTimeout(function() {

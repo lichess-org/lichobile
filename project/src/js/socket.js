@@ -126,7 +126,7 @@ function onConnected() {
 }
 
 function onDisconnected() {
-  var wasOn = connectedWS;
+  const wasOn = connectedWS;
   connectedWS = false;
   if (wasOn && !alreadyWarned) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
@@ -139,7 +139,7 @@ function onDisconnected() {
 }
 
 document.addEventListener('deviceready', () => {
-  document.addEventListener('offline', () => clearTimeout(proxyFailTimeoutID), false);
+  document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
 }, false);
 
 signals.socket.connected.add(onConnected);

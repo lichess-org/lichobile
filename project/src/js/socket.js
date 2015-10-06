@@ -13,6 +13,8 @@ var socketInstance;
 var errorDetected = false;
 var connectedWS = true;
 
+var alreadyWarned = false;
+var proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If you see that the problem is persistent it is probably due to a proxy in your network that prevents establishing the connection. In that case, we\'re sorry: lichess won\'t work.';
 
 const defaultHandlers = {
@@ -120,18 +122,25 @@ function createDefault() {
 
 function onConnected() {
   connectedWS = true;
+  clearTimeout(proxyFailTimeoutID);
 }
 
 function onDisconnected() {
   var wasOn = connectedWS;
   connectedWS = false;
-  if (wasOn) setTimeout(function() {
+  if (wasOn && !alreadyWarned) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
     // establishing a tunnel
-    if (utils.hasNetwork() && !connectedWS)
+    if (utils.hasNetwork() && !connectedWS) {
+      alreadyWarned = true;
       window.navigator.notification.alert(proxyFailMsg);
+    }
   }, 15000);
 }
+
+document.addEventListener('deviceready', () => {
+  document.addEventListener('offline', () => clearTimeout(proxyFailTimeoutID), false);
+}, false);
 
 signals.socket.connected.add(onConnected);
 signals.socket.disconnected.add(onDisconnected);

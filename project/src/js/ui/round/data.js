@@ -5,8 +5,5 @@ module.exports = function(data) {
     data.clock.showBar = data.pref.clockBar;
   }
 
-  if (data.game.moves) data.game.moves = data.game.moves.split(' ');
-  else data.game.moves = [];
-
   return data;
 };

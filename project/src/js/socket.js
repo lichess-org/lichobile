@@ -16,7 +16,7 @@ var connectedWS = true;
 
 var alreadyWarned = false;
 var proxyFailTimeoutID;
-const proxyFailMsg = 'The connection to lichess server has failed. If you see that the problem is persistent it is probably due to a proxy in your network that prevents establishing the connection. In that case, we\'re sorry: lichess won\'t work.';
+const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
 const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),

@@ -1,4 +1,5 @@
 import assign from 'lodash/object/assign';
+import storage from './storage';
 import StrongSocket from './StrongSocket';
 import * as utils from './utils';
 import * as xhr from './xhr';
@@ -128,12 +129,14 @@ function onConnected() {
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
-  if (wasOn && !alreadyWarned) proxyFailTimeoutID = setTimeout(() => {
+  if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
     // establishing a tunnel
     if (utils.hasNetwork() && !connectedWS) {
       alreadyWarned = true;
-      window.navigator.notification.alert(proxyFailMsg);
+      window.navigator.notification.alert(proxyFailMsg, function() {
+        storage.set('donotshowproxyfailwarning', true);
+      });
     }
   }, 15000);
 }

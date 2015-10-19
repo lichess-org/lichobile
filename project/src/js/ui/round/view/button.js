@@ -11,6 +11,7 @@ import m from 'mithril';
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) ? m('button', {
+      key: socketMsg,
       className: socketMsg,
       'data-icon': icon,
       config: helper.ontouch(function() { socket.send(socketMsg); })
@@ -18,6 +19,7 @@ export default {
   },
   flipBoard: function(ctrl) {
     return m('button', {
+      key: 'flipboard',
       'data-icon': 'B',
       className: ctrl.vm.flip ? 'flipped' : '',
       config: helper.ontouch(ctrl.flip)
@@ -25,6 +27,7 @@ export default {
   },
   shareLink: function(ctrl) {
     return m('button', {
+      key: 'shareGameLink',
       config: helper.ontouch(function() {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data));
       })
@@ -37,7 +40,7 @@ export default {
       }, err => handleXhrError(err));
     }
     return (
-      <button config={helper.ontouch(handler)}>
+      <button key="sharePGN" config={helper.ontouch(handler)}>
         <span className="fa fa-share-alt" />
         {i18n('sharePGN')}
       </button>
@@ -61,7 +64,9 @@ export default {
   },
   forceResign: function(ctrl) {
     return gameApi.forceResignable(ctrl.data) ?
-      m('div.force_resign_zone.clearfix', [
+      m('div.force_resign_zone.clearfix', {
+        key: 'forceResignZone'
+      }, [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
         m('button.binary_choice[data-icon=E]', {
           config: helper.ontouch(function() { socket.send('resign-force'); })
@@ -72,7 +77,9 @@ export default {
       ]) : null;
   },
   threefoldClaimDraw: function(ctrl) {
-    return (ctrl.data.game.threefold) ? m('div.claim_draw_zone', [
+    return (ctrl.data.game.threefold) ? m('div.claim_draw_zone', {
+      key: 'claimDrawZone'
+    }, [
       m('div.notice', i18n('threefoldRepetition')),
       m.trust('&nbsp;'),
       m('button[data-icon=E]', {
@@ -81,7 +88,9 @@ export default {
     ]) : null;
   },
   cancelDrawOffer: function(ctrl) {
-    if (ctrl.data.player.offeringDraw) return m('div.negotiation', [
+    if (ctrl.data.player.offeringDraw) return m('div.negotiation', {
+      key: 'cancelDrawOfferZone'
+    }, [
       m('div.notice', i18n('drawOfferSent')),
       m('button[data-icon=L]', {
         config: helper.ontouch(function() { socket.send('draw-no'); })
@@ -89,7 +98,9 @@ export default {
     ]);
   },
   answerOpponentDrawOffer: function(ctrl) {
-    if (ctrl.data.opponent.offeringDraw) return m('div.negotiation.clearfix', [
+    if (ctrl.data.opponent.offeringDraw) return m('div.negotiation.clearfix', {
+      key: 'answerDrawOfferZone'
+    }, [
       m('div.notice', i18n('yourOpponentOffersADraw')),
       m('button.binary_choice[data-icon=E]', {
         config: helper.ontouch(function() { socket.send('draw-yes'); })
@@ -100,7 +111,9 @@ export default {
     ]);
   },
   cancelTakebackProposition: function(ctrl) {
-    if (ctrl.data.player.proposingTakeback) return m('div.negotiation', [
+    if (ctrl.data.player.proposingTakeback) return m('div.negotiation', {
+      key: 'cancelTakebackPropositionZone'
+    }, [
       m('div.notice', i18n('takebackPropositionSent')),
       m('button[data-icon=L]', {
         config: helper.ontouch(function() { socket.send('takeback-no'); })
@@ -108,7 +121,9 @@ export default {
     ]);
   },
   answerOpponentTakebackProposition: function(ctrl) {
-    if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation.clearfix', [
+    if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation.clearfix', {
+      key: 'answerTakebackPropositionZone'
+    }, [
       m('div.notice', i18n('yourOpponentProposesATakeback')),
       m('button.binary_choice[data-icon=E]', {
         config: helper.ontouch(function() { socket.send('takeback-yes'); })
@@ -124,6 +139,7 @@ export default {
       !ctrl.data.player.offeringRematch) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
         return m('button[data-icon=B]', {
+          key: 'rematch',
           config: helper.ontouch(function() { socket.send('rematch-yes'); })
         }, i18n('rematch'));
       } else {
@@ -132,7 +148,9 @@ export default {
     }
   },
   answerOpponentRematch: function(ctrl) {
-    if (ctrl.data.opponent.offeringRematch) return m('div.negotiation.clearfix', [
+    if (ctrl.data.opponent.offeringRematch) return m('div.negotiation.clearfix', {
+      key: 'answerOpponentRematchZone'
+    }, [
       m('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
       m('button.binary_choice[data-icon=E]', {
         config: helper.ontouch(function() { socket.send('rematch-yes'); })
@@ -143,7 +161,9 @@ export default {
     ]);
   },
   cancelRematch: function(ctrl) {
-    if (ctrl.data.player.offeringRematch) return m('div.negotiation', [
+    if (ctrl.data.player.offeringRematch) return m('div.negotiation', {
+      key: 'cancelRematchZone'
+    }, [
       m('div.notice', i18n('rematchOfferSent')),
       m('div.notice', i18n('waitingForOpponent')),
       m('button[data-icon=L]', {
@@ -153,6 +173,7 @@ export default {
   },
   moretime: function(ctrl) {
     if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
+      key: 'moretime',
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
   },
@@ -160,6 +181,7 @@ export default {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     return m('button.game_action[data-icon=I]', {
+      key: 'backward',
       config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
       className: helper.classSet({
         disabled: ctrl.broken || !enabled
@@ -170,6 +192,7 @@ export default {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     return m('button.game_action[data-icon=H]', {
+      key: 'forward',
       config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
       className: helper.classSet({
         disabled: ctrl.broken || !enabled

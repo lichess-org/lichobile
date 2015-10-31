@@ -43,7 +43,8 @@ export default {
         'fantasy',
         'shapes',
         'chessnut',
-        'chess7'
+        'chess7',
+        'symmetric'
       ],
       board: localstorageprop('settings.theme.board', 'metal'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')

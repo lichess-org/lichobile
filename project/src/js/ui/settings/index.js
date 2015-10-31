@@ -11,7 +11,7 @@ function renderBody() {
   return [
     m('ul.settings_list.general.native_scroller.page', [
       m('li.list_item.nav', {
-        config: helper.ontouchY(m.route.bind(undefined, '/settings/game'))
+        config: helper.ontouchY(utils.f(m.route, '/settings/game'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))

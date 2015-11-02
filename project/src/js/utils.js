@@ -8,8 +8,7 @@ export function autoredraw(action) {
 }
 
 export function hasNetwork() {
-  var t = window.navigator.connection.type;
-  return t !== window.Connection.NONE && t !== window.Connection.UNKNOWN;
+  return window.navigator.connection.type !== window.Connection.NONE;
 }
 
 export function handleXhrError(error) {

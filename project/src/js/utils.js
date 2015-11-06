@@ -141,3 +141,18 @@ export function userFullNameToId(fullName) {
 export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function loadJsonFile(filename) {
+  return m.request({
+    url: filename,
+    method: 'GET',
+    deserialize: function(text) {
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw { error: 'Error when parsing json from: ' + filename };
+      }
+    }
+  });
+}
+

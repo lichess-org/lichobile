@@ -5,14 +5,15 @@ import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
 import menu from './menu';
+import settings from '../../settings';
 import m from 'mithril';
 
 function sparePieces(ctrl, color, orientation, position) {
   return m('div', {
-    className: ['spare', position, 'orientation-' + orientation, color].join(' ')
+    className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
   }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
-    return m('div.no-square', m('piece', {
-      className: color + ' ' + role,
+    return m('div.sparePieceWrapper', m('div', {
+      className: 'cg-piece ' + color + ' ' + role,
       'data-color': color,
       'data-role': role
     }));
@@ -35,6 +36,7 @@ export default function view(ctrl) {
   function content() {
     if (helper.isPortrait())
       return m('div.editor', {
+        className: settings.general.theme.piece(),
         config: editorConfig
       }, [
         sparePieces(ctrl, opposite, color, 'top'),

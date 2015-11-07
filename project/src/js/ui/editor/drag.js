@@ -3,7 +3,8 @@ var util = require('chessground').util;
 var drag = require('chessground').drag;
 
 module.exports = function(ctrl, e) {
-  if (e.button !== 0) return; // only left click
+  if (e.button !== undefined && e.button !== 0) return; // only left click
+  if (e.touches && e.touches.length > 1) return; // support one finger touch only
   var role = e.target.getAttribute('data-role'),
   color = e.target.getAttribute('data-color');
   if (!role || !color) return;
@@ -21,7 +22,7 @@ module.exports = function(ctrl, e) {
   var obj = {};
   obj[key] = piece;
   ctrl.chessground.setPieces(obj);
-  var bounds = ctrl.chessground.data.bounds();
+  var bounds = ctrl.chessground.data.bounds;
   var squareBounds = e.target.parentNode.getBoundingClientRect();
   var rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
@@ -38,4 +39,4 @@ module.exports = function(ctrl, e) {
     started: true
   };
   drag.processDrag(ctrl.chessground.data);
-}
+};

@@ -5,34 +5,37 @@ lichess mobile
 
 ### Official lichess.org mobile application for Android & iOS.
 
+- Play bullet, blitz, classical, and correspondence chess.
+- Play multiple games simultaneously.
 - Find players, follow players and see your online friends
-- Challenge thousands of online players
-- Play online or offline artificial intelligence
-- Many chess variants available
-- Play over the board with a friend
-- Translated to 80 languages
-- Customizable and themable
-- Optimized for mobiles and tablets
+- Challenge players
+- Chat with your opponent.
+- Practice with chess puzzles
+- Over The Board mode to play offline with a friend.
+- Offline AI mode.
+- Available in 80 languages.
+- Designed for both phones and tablets, supporting landscape mode
 - 100% free, without ads, and opensource!
 
 Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 
 ## Requirements
 
-* [node](http://nodejs.org) and [gulp](http://gulpjs.com/) version 3.8.x installed.
-* [tarifa](http://tarifa.tools) (version 0.10.0)
+* [node](http://nodejs.org) v4.2.x
+* [gulp](http://gulpjs.com/) version 3.9.x
+* [tarifa](http://tarifa.tools) version 0.12.x
 
-**For Android:**
+**Android:**
 
 * the [android SDK](http://developer.android.com/sdk/index.html)
-* [SDK packages](http://developer.android.com/sdk/installing/adding-packages.html)
-for API 14 to API 22
+* [SDK packages](http://developer.android.com/sdk/installing/adding-packages.html) API 23
+* last version of Android SDK tools and platform tools
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.
 
-**For iOS:**
+**iOS:**
 
-* you need OS X and Xcode (6.x) installed.
+* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 7.x
 
 ## Init project after checkout
 

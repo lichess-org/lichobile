@@ -75,6 +75,12 @@ function renderActionsBar(ctrl) {
     m('button.training_action.fa.fa-ellipsis-h', {
       key: 'editorMenu',
       config: helper.ontouch(ctrl.menu.open)
+    }),
+    m('button.training_action[data-icon=B]', {
+      config: helper.ontouch(ctrl.chessground.toggleOrientation)
+    }),
+    m('button.training_action[data-icon=U]', {
+      config: helper.ontouch(() => {}, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     })
   ]);
 }

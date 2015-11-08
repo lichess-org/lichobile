@@ -1,5 +1,4 @@
 import i18n from '../../i18n';
-import chessground from 'chessground';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
@@ -112,26 +111,6 @@ function controls(ctrl, fen) {
           castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'), true)
         ])
       ])
-    ]),
-    m('div', [
-      m('a.button.text[data-icon=B]', {
-        config: helper.ontouch(chessground.toggleOrientation)
-      }, i18n('flipBoard')),
-      m('a.button', {
-          config: helper.ontouch(() => {})
-        },
-        m('span.text[data-icon=U]', i18n('continueFromHere')))
-    ]),
-    m('div.continue_with', [
-      m('a.button', {
-        href: '/?fen=' + encodedFen + '#ai',
-        rel: 'nofollow'
-      }, i18n('playWithTheMachine')),
-      m('br'),
-      m('a.button', {
-        href: '/?fen=' + encodedFen + '#friend',
-        rel: 'nofollow'
-      }, i18n('playWithAFriend'))
     ])
   ]);
 }

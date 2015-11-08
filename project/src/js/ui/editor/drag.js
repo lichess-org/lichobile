@@ -24,19 +24,25 @@ module.exports = function(ctrl, e) {
   ctrl.chessground.setPieces(obj);
   var bounds = ctrl.chessground.data.bounds;
   var squareBounds = e.target.parentNode.getBoundingClientRect();
+  var position = util.eventPosition(e);
   var rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
     (8 - coords[1]) * squareBounds.height + bounds.top
   ];
+  // must render synchrously to find piece with querySelector after
+  ctrl.chessground.data.render();
   ctrl.chessground.data.draggable.current = {
     orig: key,
-    piece: piece.color + piece.role,
+    piece: ctrl.chessground.data.pieces[key],
     rel: rel,
-    epos: [e.clientX, e.clientY],
-    pos: [e.clientX - rel[0], e.clientY - rel[1]],
+    epos: position,
+    pos: [position[0] - rel[0], position[1] - rel[1]],
     dec: [-squareBounds.width / 2, -squareBounds.height / 2],
     bounds: bounds,
-    started: true
+    started: true,
+    originTarget: e.target,
+    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > .cg-piece')
   };
+  ctrl.chessground.data.renderRAF();
   drag.processDrag(ctrl.chessground.data);
 };

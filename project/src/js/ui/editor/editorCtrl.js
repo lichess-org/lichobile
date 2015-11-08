@@ -61,6 +61,10 @@ export default function controller() {
       color: 'both',
       dropOff: 'trash'
     },
+    highlight: {
+      lastMove: false,
+      check: false
+    },
     animation: {
       duration: 300
     },

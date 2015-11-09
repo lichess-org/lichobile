@@ -12,6 +12,7 @@ export default function controller() {
   this.fen = m.route.param('fen') || startingFen;
 
   if (!validateFen(this.fen).valid) {
+    console.log(validateFen(this.fen));
     window.plugins.toast.show('Invalid fen string', 'short', 'center');
     m.route('/');
   }
@@ -27,13 +28,12 @@ export default function controller() {
   this.castles = readCastlesFromFen(this.fen);
   this.color = m.prop(readColorFromFen(this.fen));
   this.positions = m.prop([]);
-  this.positionIndex = [];
 
   this.extraPositions = [{
     fen: startingFen,
     name: i18n('startPosition')
   }, {
-    fen: '8/8/8/8/8/8/8/8 w - -',
+    fen: '8/8/8/8/8/8/8/8 w - - 0 1',
     name: i18n('clearBoard')
   }];
 
@@ -47,10 +47,6 @@ export default function controller() {
       return err;
     else
       throw err;
-  }).then(positions => {
-    positions.forEach(function(p, i) {
-      this.positionIndex[p.fen.split(' ')[0]] = i;
-    }.bind(this));
   });
 
   this.chessground = new chessground.controller({

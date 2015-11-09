@@ -1,9 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 import m from 'mithril';
-import formWidgets from '../shared/form';
 
 export default {
 
@@ -42,56 +40,28 @@ export default {
 };
 
 function renderEditorMenu(ctrl) {
-  const fen = ctrl.computeFen();
-  return controls(ctrl, fen);
-}
-
-function castleCheckBox(ctrl, id, label, reversed) {
-  var input = m('input[type=checkbox]', {
-    checked: ctrl.castles[id](),
-    onchange: function() {
-      ctrl.castles[id](this.checked);
-    }
-  });
-  return m('label', reversed ? [input, label] : [label, input]);
-}
-
-function optgroup(name, opts) {
-  return m('optgroup', {
-    label: name
-  }, opts);
-}
-
-function controls(ctrl, fen) {
-  var positionIndex = ctrl.positionIndex[fen.split(' ')[0]];
-  var currentPosition = positionIndex !== -1 ? ctrl.positions()[positionIndex] : null;
-  var encodedFen = fen.replace(/\s/g, '_');
-  var position2option = function(pos) {
+  var position2option = function (pos) {
     return {
       tag: 'option',
       attrs: {
         value: pos.fen,
-        selected: currentPosition && currentPosition.fen === pos.fen
+        selected: ctrl.fen === pos.fen
       },
       children: [pos.name]
     };
   };
-  return m('div.action', [
+  return [
     m('div.select_input', [
       m('label', {
-        'for': 'select_positions'
-      }, ''),
+        'for': 'select_editor_positions'
+      }, 'Position'),
       m('select.positions', {
-        id: 'select_positions',
+        id: 'select_editor_positions',
         onchange: function(e) {
           ctrl.loadNewFen(e.target.value);
         }
       }, [
         optgroup('Set the board', [
-          currentPosition ? null : m('option', {
-            value: fen,
-            selected: true
-          }, '- Position -'),
           ctrl.extraPositions.map(position2option)
         ]),
         optgroup('Popular openings',
@@ -99,9 +69,13 @@ function controls(ctrl, fen) {
         )
       ])
     ]),
-    m('div.metadata.content_box', [
-      m('div.color', [
+    m('div', [
+      m('div.select_input.color', [
+        m('label', {
+          'for': 'select_editor_color'
+        }, 'Color'),
         m('select', {
+          id: 'select_editor_color',
           value: ctrl.color(),
           onchange: m.withAttr('value', ctrl.color)
         }, [
@@ -112,26 +86,35 @@ function controls(ctrl, fen) {
       m('div.castling', [
         m('strong', i18n('castling')),
         m('div', [
-          castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside'), false),
-          castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'), true)
+          castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
+          castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
         ]),
         m('div', [
-          castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside'), false),
-          castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'), true)
+          castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
+          castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
         ])
       ])
     ])
+  ];
+}
+
+function castleCheckBox(ctrl, id, label) {
+  return m('div.check_container', [
+    m('label', {
+      'for': id
+    }, label),
+    m('input[type=checkbox]', {
+      name: id,
+      checked: ctrl.castles[id](),
+      onchange: function() {
+        ctrl.castles[id](this.checked);
+      }
+    })
   ]);
 }
 
-function inputs(ctrl, fen) {
-  return m('div.copyables', [
-    m('p', [
-      m('strong.name', 'FEN'),
-      m('input.copyable[readonly][spellCheck=false]', {
-        value: fen
-      })
-    ])
-  ]);
+function optgroup(name, opts) {
+  return m('optgroup', {
+    label: name
+  }, opts);
 }
-

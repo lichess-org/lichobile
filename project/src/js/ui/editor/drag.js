@@ -37,7 +37,7 @@ module.exports = function(ctrl, e) {
     rel: rel,
     epos: position,
     pos: [position[0] - rel[0], position[1] - rel[1]],
-    dec: [-squareBounds.width / 2, -squareBounds.height / 2],
+    dec: [-squareBounds.width, -squareBounds.height],
     bounds: bounds,
     started: true,
     originTarget: e.target,

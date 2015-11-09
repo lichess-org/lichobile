@@ -81,6 +81,13 @@ function renderActionsBar(ctrl) {
     }),
     m('button.training_action[data-icon=U]', {
       config: helper.ontouch(() => {}, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
+    }),
+    m('button.training_action.fa.fa-share-alt', {
+      key: 'sharePosition',
+      config: helper.ontouch(
+        () => window.plugins.socialsharing.share(ctrl.computeFen()),
+        () => window.plugins.toast.show('Share FEN', 'short', 'bottom')
+      )
     })
   ]);
 }

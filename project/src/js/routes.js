@@ -35,6 +35,7 @@ export default {
       '/@/:id/games/:filter': userGames,
       '/@/:id/tv': userTV,
       '/editor': editor,
+      '/editor/:fen': editor,
       '/players': players,
       '/ranking': ranking,
       '/settings': settingsUi,

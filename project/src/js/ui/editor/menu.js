@@ -33,13 +33,18 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'editorMenu',
-      m('h2[data-icon=-]', i18n('boardEditor')),
+      m('h2[data-icon=*]', i18n('boardEditor')),
       renderEditorMenu.bind(undefined, ctrl.root),
       ctrl.isOpen(),
       ctrl.close
     );
   }
 };
+
+function renderEditorMenu(ctrl) {
+  const fen = ctrl.computeFen();
+  return controls(ctrl, fen);
+}
 
 function castleCheckBox(ctrl, id, label, reversed) {
   var input = m('input[type=checkbox]', {
@@ -71,9 +76,13 @@ function controls(ctrl, fen) {
       children: [pos.name]
     };
   };
-  return m('div#editor-side', [
-    m('div', [
+  return m('div.action', [
+    m('div.select_input', [
+      m('label', {
+        'for': 'select_positions'
+      }, ''),
       m('select.positions', {
+        id: 'select_positions',
         onchange: function(e) {
           ctrl.loadNewFen(e.target.value);
         }
@@ -126,8 +135,3 @@ function inputs(ctrl, fen) {
   ]);
 }
 
-
-function renderEditorMenu(ctrl) {
-  const fen = ctrl.computeFen();
-  return controls(ctrl, fen);
-}

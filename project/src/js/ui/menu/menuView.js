@@ -93,7 +93,7 @@ function renderLinks(user) {
       </li> : null
       }
       <li className="side_link" key="editor" config={helper.ontouchY(menu.route('/editor'))}>
-        <span className="fa fa-pencil-square-o" />{i18n('boardEditor')}
+        <span data-icon="*" />{i18n('boardEditor')}
       </li>
       {utils.hasNetwork() ?
       <li className="sep_link" key="sep_link_community">

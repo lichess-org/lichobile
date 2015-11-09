@@ -5,14 +5,13 @@ import m from 'mithril';
 import { loadJsonFile } from '../../utils';
 import i18n from '../../i18n';
 
-const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export default function controller() {
 
-  this.fen = m.route.param('fen') || startingFen;
+  const startingFen = m.route.param('fen') || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-  if (!validateFen(this.fen).valid) {
-    console.log(validateFen(this.fen));
+  if (!validateFen(startingFen).valid) {
+    console.log(validateFen(startingFen));
     window.plugins.toast.show('Invalid fen string', 'short', 'center');
     m.route('/');
   }
@@ -25,15 +24,16 @@ export default function controller() {
     }
   };
 
-  this.castles = readCastlesFromFen(this.fen);
-  this.color = m.prop(readColorFromFen(this.fen));
+  this.castles = readCastlesFromFen(startingFen);
+  this.color = m.prop(readColorFromFen(startingFen));
+
   this.positions = m.prop([]);
 
   this.extraPositions = [{
     fen: startingFen,
     name: i18n('startPosition')
   }, {
-    fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+    fen: '8/8/8/8/8/8/8/8 w - -',
     name: i18n('clearBoard')
   }];
 
@@ -50,7 +50,7 @@ export default function controller() {
   });
 
   this.chessground = new chessground.controller({
-    fen: this.fen,
+    fen: startingFen,
     orientation: 'white',
     movable: {
       free: true,

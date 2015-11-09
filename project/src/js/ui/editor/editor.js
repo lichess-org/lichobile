@@ -23,7 +23,7 @@ export function computeFen(castles, color, getBaseFen) {
 }
 
 // function taken from chess.js
-// I don't want to instantiate a Chess object just to validate
+// modified for editor: 5th and 6th fields are optional
 export function validateFen(fen) {
   var errors = {
      0: 'No errors.',
@@ -39,19 +39,19 @@ export function validateFen(fen) {
     10: '1st field (piece positions) is invalid [row too large].'
   };
 
-  /* 1st criterion: 6 space-seperated fields? */
+  /* 1st criterion: 6 or 4 space-seperated fields? */
   var tokens = fen.split(/\s+/);
-  if (tokens.length !== 6) {
+  if (!(tokens.length === 6 || tokens.length === 4)) {
     return {valid: false, error_number: 1, error: errors[1]};
   }
 
   /* 2nd criterion: move number field is a integer value > 0? */
-  if (isNaN(tokens[5]) || (parseInt(tokens[5], 10) <= 0)) {
+  if (tokens[5] && (isNaN(tokens[5]) || (parseInt(tokens[5], 10) <= 0))) {
     return {valid: false, error_number: 2, error: errors[2]};
   }
 
   /* 3rd criterion: half move counter is an integer >= 0? */
-  if (isNaN(tokens[4]) || (parseInt(tokens[4], 10) < 0)) {
+  if (tokens[4] && (isNaN(tokens[4]) || (parseInt(tokens[4], 10) < 0))) {
     return {valid: false, error_number: 3, error: errors[3]};
   }
 

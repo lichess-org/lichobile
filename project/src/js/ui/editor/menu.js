@@ -40,16 +40,7 @@ export default {
 };
 
 function renderEditorMenu(ctrl) {
-  var position2option = function (pos) {
-    return {
-      tag: 'option',
-      attrs: {
-        value: pos.fen,
-        selected: ctrl.fen === pos.fen
-      },
-      children: [pos.name]
-    };
-  };
+  const fen = ctrl.computeFen();
   return [
     m('div.select_input', [
       m('label', {
@@ -62,10 +53,14 @@ function renderEditorMenu(ctrl) {
         }
       }, [
         optgroup('Set the board', [
-          ctrl.extraPositions.map(position2option)
+          position2option(fen, {
+            name: '-- Position --',
+            fen: ''
+          }),
+          ctrl.extraPositions.map(position2option.bind(undefined, fen))
         ]),
         optgroup('Popular openings',
-          ctrl.positions().map(position2option)
+          ctrl.positions().map(position2option.bind(undefined, fen))
         )
       ])
     ]),
@@ -111,6 +106,18 @@ function castleCheckBox(ctrl, id, label) {
       }
     })
   ]);
+}
+
+function position2option(fen, pos) {
+  return {
+    tag: 'option',
+    attrs: {
+      value: pos.fen,
+      // don't take into account move fields
+      selected: fen === pos.fen.split(' ').slice(0, 4).join(' ')
+    },
+    children: [pos.name]
+  };
 }
 
 function optgroup(name, opts) {

@@ -1,31 +1,30 @@
-var find = require('lodash/collection/find');
-var util = require('chessground').util;
-var drag = require('chessground').drag;
+import find from 'lodash/collection/find';
+import { util, drag } from 'chessground';
 
-module.exports = function(ctrl, e) {
+export default function(ctrl, e) {
   if (e.button !== undefined && e.button !== 0) return; // only left click
   if (e.touches && e.touches.length > 1) return; // support one finger touch only
-  var role = e.target.getAttribute('data-role'),
+  const role = e.target.getAttribute('data-role'),
   color = e.target.getAttribute('data-color');
   if (!role || !color) return;
   e.stopPropagation();
   e.preventDefault();
-  var key = find(util.allKeys, function(k) {
+  const key = find(util.allKeys, function(k) {
     return !ctrl.chessground.data.pieces[k];
   });
   if (!key) return;
-  var coords = util.key2pos(ctrl.chessground.data.orientation === 'white' ? key : util.invertKey(key));
-  var piece = {
+  const coords = util.key2pos(ctrl.chessground.data.orientation === 'white' ? key : util.invertKey(key));
+  const piece = {
     role: role,
     color: color
   };
-  var obj = {};
+  const obj = {};
   obj[key] = piece;
   ctrl.chessground.setPieces(obj);
-  var bounds = ctrl.chessground.data.bounds;
-  var squareBounds = e.target.parentNode.getBoundingClientRect();
-  var position = util.eventPosition(e);
-  var rel = [
+  const bounds = ctrl.chessground.data.bounds;
+  const squareBounds = e.target.parentNode.getBoundingClientRect();
+  const position = util.eventPosition(e);
+  const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
     (8 - coords[1]) * squareBounds.height + bounds.top
   ];
@@ -45,4 +44,4 @@ module.exports = function(ctrl, e) {
   };
   ctrl.chessground.data.renderRAF();
   drag.processDrag(ctrl.chessground.data);
-};
+}

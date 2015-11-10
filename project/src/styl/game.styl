@@ -40,7 +40,7 @@
     display flex
     flex-flow column nowrap
     justify-content space-around
-  > #game_actions
+  > #game_actions_bar
     position initial
     flex 0 0 45px
   @media only screen and (min-height 800px) and (orientation: landscape)
@@ -48,7 +48,7 @@
       margin 2rem 0
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
-    > #game_actions
+    > #game_actions_bar
       flex 0 0 40px
     > .tableHeader
       > .icon-game
@@ -260,7 +260,7 @@
     margin 0 5px
     top 17px
 
-#game_actions
+#game_actions_bar
   padding 0
   height 45px
   width 100%
@@ -269,7 +269,7 @@
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     width calc(100vw - (100vh - 50px - 12vh) - 10px)
 
-.game_action
+.game_bar_action
   display inline-block
   text-align center
   background transparent
@@ -341,16 +341,6 @@
     margin-top 5px
   .notice
     margin 5px 0
-
-.offline_actions, .player_controls, .trainingMenu, .editorMenu
-  .select_input
-    background darken(#fff, 10%)
-    color textDarkGray
-    box-shadow none
-    > select
-      color textDarkGray
-  .action
-    padding 10px
 
 .player_controls, .offline_actions, .playersTable
   .resultStatus

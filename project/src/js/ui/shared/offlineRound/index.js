@@ -25,24 +25,24 @@ export function renderAntagonist(ctrl, playerName, material, position) {
 
 export function renderGameActionsBar(ctrl) {
   var vdom = [
-    m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
+    m('button#open_player_controls.game_bar_action.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
-    m('button.game_action.empty[data-icon=c]'),
+    m('button.game_bar_action.empty[data-icon=c]'),
     renderBackwardButton(ctrl),
     renderForwardButton(ctrl)
   ];
-  return m('section#game_actions', vdom);
+  return m('section#game_actions_bar', vdom);
 }
 
 export function renderGameActionsBarTablet(ctrl) {
   const d = ctrl.data;
   return (
-    <section id="game_actions">
-      <button className="game_action" data-icon="U"
+    <section id="game_actions_bar">
+      <button className="game_bar_action" data-icon="U"
         config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
-      <button className="fa fa-share-alt game_action"
+      <button className="fa fa-share-alt game_bar_action"
         config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />
       {renderBackwardButton(ctrl)}
@@ -101,7 +101,7 @@ export function renderReplayTable(ctrl) {
 }
 
 function renderBackwardButton(ctrl) {
-  return m('button.game_action[data-icon=I]', {
+  return m('button.game_bar_action[data-icon=I]', {
     config: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
@@ -110,7 +110,7 @@ function renderBackwardButton(ctrl) {
 }
 
 function renderForwardButton(ctrl) {
-  return m('button.game_action[data-icon=H]', {
+  return m('button.game_bar_action[data-icon=H]', {
     config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.replay.situations.length - 1)

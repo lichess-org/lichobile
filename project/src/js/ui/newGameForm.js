@@ -6,6 +6,8 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
+import ViewOnlyBoard from './shared/ViewOnlyBoard';
+import helper from './helper';
 import m from 'mithril';
 
 var newGameForm = {};
@@ -31,6 +33,9 @@ newGameForm.openCorrespondence = function() {
   settings.gameSetup.human.timeMode('2');
   newGameForm.open();
 };
+
+// fen used in fromPosition variant
+newGameForm.fen = null;
 
 function startAIGame() {
   return xhr.newAiGame().then(function(data) {
@@ -88,6 +93,28 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   }
 
   // AI only
+  if (settingsObj.variant() === '3') {
+    generalFieldset.push(m('div.setupPosition', {
+      key: 'position'
+    }, newGameForm.fen ? [
+        m('div.setupMiniBoardWrapper', {
+          config: helper.ontouch(() => {
+            newGameForm.close();
+            m.route(`/editor/${encodeURIComponent(newGameForm.fen)}`);
+          })
+        }, [
+          m.component(ViewOnlyBoard, { fen: newGameForm.fen })
+        ])
+      ] : m('div', m('button.withIcon.fa.fa-pencil', {
+        config: helper.ontouch(() => {
+          newGameForm.close();
+          m.route('/editor');
+        })
+      }, i18n('boardEditor')))
+    ));
+  }
+
+ // AI only
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', {
       key: 'ailevel'

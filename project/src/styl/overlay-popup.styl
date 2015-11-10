@@ -15,6 +15,9 @@
   background-color #fff
   color textDarkGray
   box-shadow 0 0 35px 10px rgba(0,0,0,0.5)
+  button
+    min-height 45px
+    color textDarkGray
   > header
     text-align center
     position relative
@@ -27,6 +30,29 @@
       line-height 45px
     + .popup_content
       height calc(100% - 45px)
+  .loader:before, .loader:after
+    background-color #fff
+  .list_item.active
+    background-color darken(#fff, 5%)
+  @media only screen and (min-width 500px)
+    width 60%
+    left 20%
+  @media only screen and (min-width 600px)
+    width 55%
+    left 22.5%
+  @media only screen and (min-width 700px)
+    width 50%
+    left 25%
+    right 25%
+  @media only screen and (max-height 400px)
+    max-height 85%
+    top 10%
+
+.popup_content
+  height 100%
+
+
+.offline_actions, .player_controls, .trainingMenu, .editorMenu
   button
     display block
     width 100%
@@ -49,23 +75,12 @@
     &:last-child
       border-bottom none
       border-radius 0 0 5px 5px
-  .loader:before, .loader:after
-    background-color #fff
-  .list_item.active
-    background-color darken(#fff, 5%)
-  @media only screen and (min-width 500px)
-    width 60%
-    left 20%
-  @media only screen and (min-width 600px)
-    width 55%
-    left 22.5%
-  @media only screen and (min-width 700px)
-    width 50%
-    left 25%
-    right 25%
-  @media only screen and (max-height 400px)
-    max-height 85%
-    top 10%
+  .select_input
+    background darken(#fff, 10%)
+    color textDarkGray
+    box-shadow none
+    > select
+      color textDarkGray
+  .action
+    padding 10px
 
-.popup_content
-  height 100%

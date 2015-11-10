@@ -1,5 +1,5 @@
 import chessground from 'chessground';
-import { computeFen, castlesAt, validateFen, readColorFromFen, readCastlesFromFen } from './editor';
+import { computeFen, castlesAt, validateFen, readColorFromFen, readCastlesFromFen, readEnPassantFromFen } from './editor';
 import menu from './menu';
 import m from 'mithril';
 import { loadJsonFile } from '../../utils';
@@ -26,6 +26,7 @@ export default function controller() {
 
   this.castles = readCastlesFromFen(startingFen);
   this.color = m.prop(readColorFromFen(startingFen));
+  this.enpassant = m.prop(readEnPassantFromFen(startingFen));
 
   this.positions = m.prop([]);
 
@@ -76,14 +77,18 @@ export default function controller() {
       squareTarget: true
     },
     events: {
-      change: m.redraw
+      change: () => {
+        // we don't support enpassant field when setting position manually
+        this.enpassant('-');
+        m.redraw();
+      }
     },
     disableContextMenu: true
   });
 
-  this.menu = menu.controller(this);
+  this.computeFen = computeFen.bind(undefined, this.castles, this.color, this.enpassant, this.chessground.getFen);
 
-  this.computeFen = computeFen.bind(undefined, this.castles, this.color, this.chessground.getFen);
+  this.menu = menu.controller(this);
 
   this.startPosition = function() {
     this.chessground.set({

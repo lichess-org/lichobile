@@ -4,12 +4,13 @@ import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 
-export function newAiGame() {
+export function newAiGame(fen) {
   var config = settings.gameSetup.ai;
   return request('/setup/ai', {
     method: 'POST',
     data: {
       variant: config.variant(),
+      fen,
       timeMode: config.timeMode(),
       days: config.days(),
       time: config.time(),
@@ -37,13 +38,14 @@ export function seekGame() {
   }, true);
 }
 
-export function inviteFriend(userId) {
+export function inviteFriend(userId, fen) {
   var config = settings.gameSetup.challenge;
   return request('/setup/friend', {
     method: 'POST',
     data: {
       user: userId,
       variant: config.variant(),
+      fen,
       timeMode: config.timeMode(),
       days: config.days(),
       time: config.time(),

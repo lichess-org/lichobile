@@ -10,16 +10,35 @@ export function castlesAt(v) {
   }, m.prop);
 }
 
-export function fenMetadatas(castles, color) {
+export function fenMetadatas(castles, color, enpassant) {
   var castlesStr = '';
   Object.keys(castles).forEach(function(piece) {
     if (castles[piece]()) castlesStr += piece;
   });
-  return color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' -';
+  return color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + enpassant();
 }
 
-export function computeFen(castles, color, getBaseFen) {
-  return getBaseFen() + ' ' + fenMetadatas(castles, color);
+export function computeFen(castles, color, enpassant, getBaseFen) {
+  return getBaseFen() + ' ' + fenMetadatas(castles, color, enpassant);
+}
+
+export function readCastlesFromFen(fen) {
+  const castlesStr = fen.split(' ')[2];
+
+  return {
+    K: m.prop(castlesStr.includes('K')),
+    Q: m.prop(castlesStr.includes('Q')),
+    k: m.prop(castlesStr.includes('k')),
+    q: m.prop(castlesStr.includes('q'))
+  };
+}
+
+export function readColorFromFen(fen) {
+  return fen.split(' ')[1];
+}
+
+export function readEnPassantFromFen(fen) {
+  return fen.split(' ')[3];
 }
 
 // function taken from chess.js
@@ -104,19 +123,4 @@ export function validateFen(fen) {
 
   /* everything's okay! */
   return {valid: true, error_number: 0, error: errors[0]};
-}
-
-export function readCastlesFromFen(fen) {
-  const castlesStr = fen.split(' ')[2];
-
-  return {
-    K: m.prop(castlesStr.includes('K')),
-    Q: m.prop(castlesStr.includes('Q')),
-    k: m.prop(castlesStr.includes('k')),
-    q: m.prop(castlesStr.includes('q'))
-  };
-}
-
-export function readColorFromFen(fen) {
-  return fen.split(' ')[1];
 }

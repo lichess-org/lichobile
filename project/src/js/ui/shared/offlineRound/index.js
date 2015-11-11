@@ -51,6 +51,16 @@ export function renderGameActionsBarTablet(ctrl) {
   );
 }
 
+export function gameResult(replayCtrl) {
+  let sit = replayCtrl.situation();
+  if (sit && sit.finished)
+    return sit.turnColor === 'white' ? '0-1' : '1-0';
+  else if (sit.stalemate || sit.draw || sit.threefold)
+    return '½-½';
+  else
+    return '?';
+}
+
 export function renderEndedGameStatus(ctrl) {
   let sit = ctrl.root.replay.situation();
   let result, status;

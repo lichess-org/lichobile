@@ -5,6 +5,7 @@ import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
 import menu from './menu';
+import continuePopup from './continuePopup';
 import settings from '../../settings';
 import m from 'mithril';
 
@@ -59,7 +60,8 @@ export default function view(ctrl) {
 
   function overlay() {
     return [
-      menu.view(ctrl.menu)
+      menu.view(ctrl.menu),
+      continuePopup.view(ctrl.continuePopup)
     ];
   }
 
@@ -80,7 +82,9 @@ function renderActionsBar(ctrl) {
       config: helper.ontouch(ctrl.chessground.toggleOrientation)
     }),
     m('button.training_action[data-icon=U]', {
-      config: helper.ontouch(() => {}, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
+      config: helper.ontouch(() => {
+        ctrl.continuePopup.open(ctrl.computeFen());
+      }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
     m('button.training_action.fa.fa-share-alt', {
       key: 'sharePosition',

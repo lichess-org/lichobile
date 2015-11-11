@@ -15,6 +15,7 @@ newGameForm.isOpen = false;
 
 newGameForm.open = function() {
   backbutton.stack.push(newGameForm.close);
+  newGameForm.fen = null;
   newGameForm.isOpen = true;
 };
 
@@ -34,11 +35,15 @@ newGameForm.openCorrespondence = function() {
   newGameForm.open();
 };
 
-// fen used in fromPosition variant
-newGameForm.fen = null;
+newGameForm.openAIFromPosition = function(fen) {
+  settings.gameSetup.selected('computer');
+  settings.gameSetup.ai.variant('3');
+  newGameForm.open();
+  newGameForm.fen = fen;
+};
 
 function startAIGame() {
-  return xhr.newAiGame().then(function(data) {
+  return xhr.newAiGame(newGameForm.fen).then(function(data) {
     m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);

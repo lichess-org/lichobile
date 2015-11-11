@@ -30,7 +30,8 @@ export function handleXhrError(error) {
     else
       message = 'Error';
 
-    if (typeof data.error === 'string') message += `: ${data.error}`;
+    if (typeof data === 'string') message += `: ${data}`;
+    else if (typeof data.error === 'string') message += `: ${data.error}`;
 
     window.plugins.toast.show(i18n(message), 'short', 'center');
   }

@@ -3,8 +3,8 @@ import { computeFen, castlesAt, validateFen, readColorFromFen, readCastlesFromFe
 import menu from './menu';
 import m from 'mithril';
 import { loadJsonFile } from '../../utils';
+import continuePopup from './continuePopup';
 import i18n from '../../i18n';
-
 
 export default function controller() {
 
@@ -80,7 +80,6 @@ export default function controller() {
       change: () => {
         // we don't support enpassant field when setting position manually
         this.enpassant('-');
-        m.redraw();
       }
     },
     disableContextMenu: true
@@ -89,6 +88,7 @@ export default function controller() {
   this.computeFen = computeFen.bind(undefined, this.castles, this.color, this.enpassant, this.chessground.getFen);
 
   this.menu = menu.controller(this);
+  this.continuePopup = continuePopup.controller();
 
   this.startPosition = function() {
     this.chessground.set({

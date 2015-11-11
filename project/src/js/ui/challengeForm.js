@@ -6,6 +6,8 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
+import ViewOnlyBoard from './shared/ViewOnlyBoard';
+import helper from './helper';
 import m from 'mithril';
 
 var challengeForm = {
@@ -24,6 +26,15 @@ challengeForm.open = function(userId) {
   }
   backbutton.stack.push(challengeForm.close);
   challengeForm.isOpen = true;
+  challengeForm.fen = null;
+};
+
+challengeForm.openFromPosition = function(fen) {
+  challengeForm.userId = null;
+  settings.gameSetup.challenge.variant('3');
+  settings.gameSetup.challenge.mode('0');
+  challengeForm.open();
+  challengeForm.fen = fen;
 };
 
 challengeForm.close = function(fromBB) {
@@ -33,7 +44,7 @@ challengeForm.close = function(fromBB) {
 
 function challenge() {
   var userId = challengeForm.userId;
-  return inviteFriend(userId).then(function(data) {
+  return inviteFriend(userId, challengeForm.fen).then(function(data) {
     var url = `/game${data.url.round}`;
     if (userId) url += `/user/${userId}`;
     m.route(url);
@@ -86,11 +97,31 @@ function renderForm() {
     }, [
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     ]),
+    settingsObj.variant() === '3' ?
+    m('div.setupPosition', {
+      key: 'position'
+    }, challengeForm.fen ? [
+      m('div.setupMiniBoardWrapper', {
+        config: helper.ontouch(() => {
+          challengeForm.close();
+          m.route(`/editor/${encodeURIComponent(challengeForm.fen)}`);
+        })
+      }, [
+        m.component(ViewOnlyBoard, { fen: challengeForm.fen })
+      ])
+      ] : m('div', m('button.withIcon.fa.fa-pencil', {
+        config: helper.ontouch(() => {
+          challengeForm.close();
+          m.route('/editor');
+        })
+      }, i18n('boardEditor')))
+    ) : null,
+    settingsObj.variant() !== '3' ?
     m('div.select_input', {
       key: formName + 'mode'
     }, [
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
-    ])
+    ]) : null
   ];
 
   var timeFieldset = [

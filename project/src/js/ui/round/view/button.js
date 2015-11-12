@@ -180,7 +180,7 @@ export default {
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
-    return m('button.game_bar_action[data-icon=I]', {
+    return m('button.action_bar_button[data-icon=I]', {
       key: 'backward',
       config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
       className: helper.classSet({
@@ -191,7 +191,7 @@ export default {
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-    return m('button.game_bar_action[data-icon=H]', {
+    return m('button.action_bar_button[data-icon=H]', {
       key: 'forward',
       config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
       className: helper.classSet({

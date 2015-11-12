@@ -39,9 +39,9 @@ export default {
   }
 };
 
-function renderEditorMenu(ctrl) {
+export function renderEditorMenu(ctrl) {
   const fen = ctrl.computeFen();
-  return [
+  return m('div', [
     m('div.select_input', [
       m('label', {
         'for': 'select_editor_positions'
@@ -90,7 +90,7 @@ function renderEditorMenu(ctrl) {
         ])
       ])
     ])
-  ];
+  ]);
 }
 
 function castleCheckBox(ctrl, id, label) {

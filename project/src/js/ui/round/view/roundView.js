@@ -335,7 +335,7 @@ function renderGamePopup(ctrl) {
 
 function renderGameActionsBar(ctrl) {
   var children = [
-    m('button#open_player_controls.game_bar_action.fa.fa-ellipsis-h', {
+    m('button#open_player_controls.action_bar_button.fa.fa-ellipsis-h', {
       key: 'gameMenu',
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
@@ -345,17 +345,17 @@ function renderGameActionsBar(ctrl) {
       }),
       config: helper.ontouch(ctrl.showActions)
     }),
-    ctrl.chat ? m('button#open_chat.game_bar_action[data-icon=c]', {
+    ctrl.chat ? m('button#open_chat.action_bar_button[data-icon=c]', {
       key: 'chat',
       className: helper.classSet({
         unread: ctrl.chat.unread
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
-    }) : m('button.game_bar_action.empty[data-icon=c]'),
+    }) : m('button.action_bar_button.empty[data-icon=c]'),
     button.backward(ctrl),
     button.forward(ctrl)
   ];
-  return m('section#game_actions_bar', {
+  return m('section.actions_bar', {
     key: 'game-actions-bar'
   }, children);
 }

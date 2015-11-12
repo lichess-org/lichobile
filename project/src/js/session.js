@@ -86,7 +86,7 @@ function refresh() {
     m.redraw();
     return session;
   }, function(err) {
-    if (session && err.message === 'unauthorizedError') {
+    if (session && err.status === 401) {
       session = null;
       m.redraw();
       window.plugins.toast.show(i18n('signedOut'), 'short', 'center');

@@ -1,7 +1,10 @@
 .editor
-  height 100%
-  @media only screen and (orientation: landscape)
-    display flex
+  display flex
+  flex-flow column nowrap
+  align-items center
+  .board_wrapper
+    height calc(100% - 100px)
+    width calc(100% - 100px)
 
 .sparePieces
   height calc((100% - 100vw - 45px) / 2)
@@ -13,12 +16,17 @@
   overflow hidden
   background-color #777
   box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
+  @media only screen and (orientation: landscape)
+    height 50px
 
 .sparePieceWrapper
   position relative
   display inline-block
   width calc(100vw / 8)
   height calc(100vw / 8)
+  @media only screen and (orientation: landscape)
+    height 45px
+    width 45px
 
 .editorMenu
   > .popup_content
@@ -33,6 +41,14 @@
     margin-top 10px
   .check_container
     margin-top 10px
+
+
+.table
+  > .editorMenu
+    flex 1 1 auto
+    display flex
+    flex-flow column nowrap
+    justify-content space-around
 
 .continueFromHere
   h2

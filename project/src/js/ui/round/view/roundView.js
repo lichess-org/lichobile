@@ -52,10 +52,10 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, moreWrapperClasses) {
+export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
   const { vh, vw } = helper.viewportDim();
   // ios 7.1 still doesn't support vh unit in calc
-  // see game.styl section '.board_wrapper' for corresponding calc() rules
+  // see board-content.styl section '.board_wrapper' for corresponding calc() rules
   const landscapeDim = (vh > 700 && vw < 1050) ? vh - 50 - vh * 0.12 : vh - 50;
   const boardStyle = helper.isLandscape() ? {
     width: landscapeDim + 'px',
@@ -79,7 +79,7 @@ export function renderBoard(ctrl, moreWrapperClasses) {
   }
 
   return (
-    <section key={boardKey} className={wrapperClass} style={boardStyle}>
+    <section key={boardKey} className={wrapperClass} style={withStyle ? boardStyle : {}}>
       <div className={boardClass}>
         {chessground.view(ctrl.chessground)}
       </div>

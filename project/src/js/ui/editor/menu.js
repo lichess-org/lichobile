@@ -41,30 +41,30 @@ export default {
 
 export function renderEditorMenu(ctrl) {
   const fen = ctrl.computeFen();
-  return m('div', [
-    m('div.select_input', [
-      m('label', {
-        'for': 'select_editor_positions'
-      }, 'Position'),
-      m('select.positions', {
-        id: 'select_editor_positions',
-        onchange: function(e) {
-          ctrl.loadNewFen(e.target.value);
-        }
-      }, [
-        optgroup('Set the board', [
-          position2option(fen, {
-            name: '-- Position --',
-            fen: ''
-          }),
-          ctrl.extraPositions.map(position2option.bind(undefined, fen))
-        ]),
-        optgroup('Popular openings',
-          ctrl.positions().map(position2option.bind(undefined, fen))
-        )
-      ])
-    ]),
-    m('div', [
+  return m('div.editorMenu', [
+    m('div.editorSelectors', [
+      m('div.select_input', [
+        m('label', {
+          'for': 'select_editor_positions'
+        }, 'Position'),
+        m('select.positions', {
+          id: 'select_editor_positions',
+          onchange: function(e) {
+            ctrl.loadNewFen(e.target.value);
+          }
+        }, [
+          optgroup('Set the board', [
+            position2option(fen, {
+              name: '-- Position --',
+              fen: ''
+            }),
+            ctrl.extraPositions.map(position2option.bind(undefined, fen))
+          ]),
+          optgroup('Popular openings',
+            ctrl.positions().map(position2option.bind(undefined, fen))
+          )
+        ])
+      ]),
       m('div.select_input.color', [
         m('label', {
           'for': 'select_editor_color'
@@ -77,17 +77,17 @@ export function renderEditorMenu(ctrl) {
           m('option[value=w]', i18n('whitePlays')),
           m('option[value=b]', i18n('blackPlays'))
         ])
+      ])
+    ]),
+    m('div.castling', [
+      m('strong', i18n('castling')),
+      m('div', [
+        castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
+        castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
       ]),
-      m('div.castling', [
-        m('strong', i18n('castling')),
-        m('div', [
-          castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
-          castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
-        ]),
-        m('div', [
-          castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
-          castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
-        ])
+      m('div', [
+        castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
+        castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
       ])
     ])
   ]);

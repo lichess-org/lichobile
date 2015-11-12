@@ -46,18 +46,20 @@ export default function view(ctrl) {
         renderActionsBar(ctrl)
       ]);
     else
-      return m('div.editor', {
-        className: settings.general.theme.piece(),
-        config: editorConfig
-      }, [
-        renderBoard(ctrl),
-        m('section.table', { key: 'table' }, [
+      return [
+        m('div.editor', {
+          className: settings.general.theme.piece(),
+          config: editorConfig
+        }, [
           sparePieces(ctrl, opposite, color, 'top'),
-          renderEditorMenu(ctrl),
+          renderBoard(ctrl, null, false),
           sparePieces(ctrl, color, color, 'bottom')
         ]),
-        renderActionsBar(ctrl)
-      ]);
+        m('section.table.editorTable', { key: 'table' }, [
+          renderEditorMenu(ctrl),
+          renderActionsBar(ctrl)
+        ])
+      ];
   }
 
   function overlay() {
@@ -76,10 +78,11 @@ export default function view(ctrl) {
 
 function renderActionsBar(ctrl) {
   return m('section.actions_bar', [
+    helper.isPortrait() ?
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
       config: helper.ontouch(ctrl.menu.open)
-    }),
+    }) : null,
     m('button.action_bar_button[data-icon=B]', {
       key: 'toggleOrientation',
       config: helper.ontouch(ctrl.chessground.toggleOrientation)

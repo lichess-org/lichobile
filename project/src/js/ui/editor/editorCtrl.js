@@ -6,18 +6,19 @@ import { loadJsonFile } from '../../utils';
 import continuePopup from './continuePopup';
 import i18n from '../../i18n';
 
+const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
 export default function controller() {
 
-  const startingFen = m.route.param('fen') || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  const initFen = m.route.param('fen') || startingFen;
 
-  if (!validateFen(startingFen).valid) {
-    console.log(validateFen(startingFen));
+  if (!validateFen(initFen).valid) {
     window.plugins.toast.show('Invalid fen string', 'short', 'center');
     m.route('/');
   }
 
   this.data = {
-    editor: readFen(startingFen),
+    editor: readFen(initFen),
     game: {
       variant: {
         key: 'editor'
@@ -48,7 +49,7 @@ export default function controller() {
   });
 
   this.chessground = new chessground.controller({
-    fen: startingFen,
+    fen: initFen,
     orientation: 'white',
     movable: {
       free: true,

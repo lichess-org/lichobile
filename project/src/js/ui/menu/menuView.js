@@ -92,9 +92,6 @@ function renderLinks(user) {
         <span data-icon="-"/>{i18n('training')}
       </li> : null
       }
-      <li className="side_link" key="editor" config={helper.ontouchY(menu.route('/editor'))}>
-        <span className="fa fa-pencil" />{i18n('boardEditor')}
-      </li>
       {utils.hasNetwork() ?
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
@@ -118,6 +115,10 @@ function renderLinks(user) {
       </li>
       <li className="side_link" key="play_otb" config={helper.ontouchY(menu.route('/otb'))}>
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
+      </li>
+      <li className="sep_link" key="sep_link_tools">{i18n('tools')}</li>
+      <li className="side_link" key="editor" config={helper.ontouchY(menu.route('/editor'))}>
+        <span className="fa fa-pencil" />{i18n('boardEditor')}
       </li>
       <li className="hr" key="sep_link_settings"></li>
       <li className="side_link" key="settings" config={helper.ontouchY(menu.route('/settings'))}>

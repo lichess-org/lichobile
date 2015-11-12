@@ -79,9 +79,11 @@ function renderActionsBar(ctrl) {
       config: helper.ontouch(ctrl.menu.open)
     }),
     m('button.training_action[data-icon=B]', {
+      key: 'toggleOrientation',
       config: helper.ontouch(ctrl.chessground.toggleOrientation)
     }),
     m('button.training_action[data-icon=U]', {
+      key: 'continueFromHere',
       config: helper.ontouch(() => {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))

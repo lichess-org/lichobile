@@ -4,6 +4,8 @@ import backbutton from '../../backbutton';
 import helper from '../helper';
 import newGameForm from '../newGameForm';
 import challengeForm from '../challengeForm';
+import storage from '../../storage';
+import { storageFenKey } from '../ai/aiCtrl';
 import m from 'mithril';
 
 export default {
@@ -50,7 +52,14 @@ export default {
               ctrl.close();
               challengeForm.openFromPosition(ctrl.fen());
             })
-          }, i18n('playWithAFriend'))
+          }, i18n('playWithAFriend')),
+          m('button', {
+            config: helper.ontouch(() => {
+              ctrl.close();
+              storage.set(storageFenKey, ctrl.fen());
+              m.route('/ai');
+            })
+          }, i18n('Play with offline AI'))
         ];
       },
       ctrl.isOpen(),

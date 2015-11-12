@@ -10,39 +10,37 @@ export function castlesAt(v) {
   }, m.prop);
 }
 
-export function fenMetadatas(castles, color, enpassant) {
+export function fenMetadatas(data) {
   var castlesStr = '';
-  Object.keys(castles).forEach(function(piece) {
-    if (castles[piece]()) castlesStr += piece;
+  Object.keys(data.castles).forEach(function(piece) {
+    if (data.castles[piece]()) castlesStr += piece;
   });
-  return color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + enpassant();
+  return data.color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + data.enpassant() + ' ' + data.halfmove() + ' ' + data.moves();
 }
 
-export function computeFen(castles, color, enpassant, getBaseFen) {
-  return getBaseFen() + ' ' + fenMetadatas(castles, color, enpassant);
+export function computeFen(data, getBaseFen) {
+  return getBaseFen() + ' ' + fenMetadatas(data);
 }
 
-export function readCastlesFromFen(fen) {
-  const castlesStr = fen.split(' ')[2];
-
+export function readFen(fen) {
+  const parts = fen.split(' ');
   return {
-    K: m.prop(castlesStr.includes('K')),
-    Q: m.prop(castlesStr.includes('Q')),
-    k: m.prop(castlesStr.includes('k')),
-    q: m.prop(castlesStr.includes('q'))
+    color: m.prop(parts[1]),
+    castles: {
+      K: m.prop(parts[2].includes('K')),
+      Q: m.prop(parts[2].includes('Q')),
+      k: m.prop(parts[2].includes('k')),
+      q: m.prop(parts[2].includes('q'))
+    },
+    enpassant: m.prop(parts[3]),
+    halfmove: m.prop(parts[4]),
+    moves: m.prop(parts[5])
   };
 }
 
-export function readColorFromFen(fen) {
-  return fen.split(' ')[1];
-}
-
-export function readEnPassantFromFen(fen) {
-  return fen.split(' ')[3];
-}
-
 // function taken from chess.js
-// modified for editor: 5th and 6th fields are optional
+// modified for editor: 5th and 6th fields are optional since we can't
+// determine moves number from any arbitrary position
 export function validateFen(fen) {
   var errors = {
      0: 'No errors.',

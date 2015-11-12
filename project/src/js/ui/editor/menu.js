@@ -71,8 +71,8 @@ function renderEditorMenu(ctrl) {
         }, 'Color'),
         m('select', {
           id: 'select_editor_color',
-          value: ctrl.color(),
-          onchange: m.withAttr('value', ctrl.color)
+          value: ctrl.data.editor.color(),
+          onchange: m.withAttr('value', ctrl.data.editor.color)
         }, [
           m('option[value=w]', i18n('whitePlays')),
           m('option[value=b]', i18n('blackPlays'))
@@ -100,9 +100,9 @@ function castleCheckBox(ctrl, id, label) {
     }, label),
     m('input[type=checkbox]', {
       name: id,
-      checked: ctrl.castles[id](),
+      checked: ctrl.data.editor.castles[id](),
       onchange: function() {
-        ctrl.castles[id](this.checked);
+        ctrl.data.editor.castles[id](this.checked);
       }
     })
   ]);
@@ -113,8 +113,7 @@ function position2option(fen, pos) {
     tag: 'option',
     attrs: {
       value: pos.fen,
-      // don't take into account move fields
-      selected: fen === pos.fen.split(' ').slice(0, 4).join(' ')
+      selected: fen === pos.fen
     },
     children: [pos.name]
   };

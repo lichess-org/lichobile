@@ -17,7 +17,6 @@ function makeConfig(data, fen) {
     movable: {
       free: false,
       color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
-      dests: gameApi.parsePossibleMoves(data.possibleMoves),
       showDests: settings.game.pieceDestinations()
     },
     animation: {

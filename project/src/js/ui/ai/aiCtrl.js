@@ -10,13 +10,14 @@ import engine from './engine';
 import helper from '../helper';
 import m from 'mithril';
 
+const storageKey = 'ai.current';
+export const storageFenKey = 'ai.setupFen';
+
 export default function controller() {
 
   helper.analyticsTrackView('Offline AI');
 
-  var storageKey = 'ai.current';
-
-  var save = function() {
+  const save = function() {
     storage.set(storageKey, {
       data: this.data,
       situations: this.replay.situations,
@@ -24,14 +25,14 @@ export default function controller() {
     });
   }.bind(this);
 
-  var addMove = function(orig, dest, promotionRole) {
+  const addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
     engine.addMove(orig, dest, promotionRole);
     this.data.game.fen = engine.getFen();
   }.bind(this);
 
   this.getOpponent = function() {
-    var level = settings.ai.opponent();
+    const level = settings.ai.opponent();
     return {
       name: settings.ai.availableOpponents.filter(function(o) {
         return o[1] === level;
@@ -40,7 +41,7 @@ export default function controller() {
     };
   };
 
-  var engineMove = function() {
+  const engineMove = function() {
     if (this.chessground.data.turnColor !== this.data.player.color) setTimeout(function() {
       engine.setLevel(this.getOpponent().level);
       engine.search(function(move) {
@@ -50,17 +51,17 @@ export default function controller() {
     }.bind(this), 500);
   }.bind(this);
 
-  var onPromotion = function(orig, dest, role) {
+  const onPromotion = function(orig, dest, role) {
     addMove(orig, dest, role);
   };
 
-  var userMove = function(orig, dest) {
+  const userMove = function(orig, dest) {
     if (!promotion.start(this, orig, dest, onPromotion)) {
       addMove(orig, dest);
     }
   }.bind(this);
 
-  var onMove = function(orig, dest, capturedPiece) {
+  const onMove = function(orig, dest, capturedPiece) {
     if (!capturedPiece)
       sound.move();
     else
@@ -120,8 +121,12 @@ export default function controller() {
     return this.data.player.color === 'black' ? 1 : 0;
   }.bind(this);
 
-  var saved = storage.get(storageKey);
-  if (saved) try {
+  const saved = storage.get(storageKey);
+  const setupFen = storage.get(storageFenKey);
+  if (setupFen) {
+    this.init(makeData({ fen: setupFen }));
+    storage.remove(storageFenKey);
+  } else if (saved) try {
     this.init(saved.data, saved.situations, saved.ply);
   } catch (e) {
     console.log(e, 'Fail to load saved game');

@@ -1,5 +1,5 @@
 import chessground from 'chessground';
-import { computeFen, castlesAt, validateFen, readColorFromFen, readCastlesFromFen, readEnPassantFromFen } from './editor';
+import { computeFen, castlesAt, validateFen, readFen } from './editor';
 import menu from './menu';
 import m from 'mithril';
 import { loadJsonFile } from '../../utils';
@@ -17,16 +17,13 @@ export default function controller() {
   }
 
   this.data = {
+    editor: readFen(startingFen),
     game: {
       variant: {
         key: 'editor'
       }
     }
   };
-
-  this.castles = readCastlesFromFen(startingFen);
-  this.color = m.prop(readColorFromFen(startingFen));
-  this.enpassant = m.prop(readEnPassantFromFen(startingFen));
 
   this.positions = m.prop([]);
 
@@ -78,14 +75,17 @@ export default function controller() {
     },
     events: {
       change: () => {
-        // we don't support enpassant field when setting position manually
-        this.enpassant('-');
+        // we don't support enpassant, halfmove and moves fields when setting
+        // position manually
+        this.data.editor.enpassant('-');
+        this.data.editor.halfmove('0');
+        this.data.editor.moves('1');
       }
     },
     disableContextMenu: true
   });
 
-  this.computeFen = computeFen.bind(undefined, this.castles, this.color, this.enpassant, this.chessground.getFen);
+  this.computeFen = computeFen.bind(undefined, this.data.editor, this.chessground.getFen);
 
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
@@ -94,15 +94,15 @@ export default function controller() {
     this.chessground.set({
       fen: 'start'
     });
-    this.castles = castlesAt(true);
-    this.color('w');
+    this.data.editor.castles = castlesAt(true);
+    this.data.editor.color('w');
   }.bind(this);
 
   this.clearBoard = function() {
     this.chessground.set({
       fen: '8/8/8/8/8/8/8/8'
     });
-    this.castles = castlesAt(false);
+    this.data.editor.castles = castlesAt(false);
   }.bind(this);
 
   this.loadNewFen = function(newFen) {

@@ -21,7 +21,7 @@ export default function controller() {
     editor: readFen(initFen),
     game: {
       variant: {
-        key: 'editor'
+        key: 'editorVariant'
       }
     }
   };

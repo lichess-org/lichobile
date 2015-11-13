@@ -1,10 +1,22 @@
 .editor
-  display flex
-  flex-flow column nowrap
-  align-items center
-  .board_wrapper
-    height calc(100% - 100px)
-    width calc(100% - 100px)
+  @media only screen and (orientation: portrait)
+    height 100%
+  @media only screen and (orientation: landscape)
+    height calc(100vh - 50px)
+    width calc(100vh - 50px)
+    flex 0 0 auto
+    display flex
+    flex-flow column nowrap
+    align-items center
+    .board_wrapper
+      height calc(100% - 100px)
+      width calc(100% - 100px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc(100vh - 50px - 12vh)
+    width calc(100vh - 50px - 12vh)
+    flex 0 0 auto
+    margin auto 0
+
 
 .sparePieces
   height calc((100% - 100vw - 45px) / 2)

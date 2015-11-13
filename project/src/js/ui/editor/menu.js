@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import helper from '../helper';
 import m from 'mithril';
 
 export default {
@@ -39,56 +40,73 @@ export default {
   }
 };
 
-export function renderEditorMenu(ctrl) {
+function renderEditorMenu(ctrl) {
+  let children;
+  if (helper.isPortrait())
+    children = [
+      renderSelectColorPosition(ctrl),
+      renderCastlingOptions(ctrl)
+    ];
+  else
+    children = [
+      renderCastlingOptions(ctrl),
+      helper.isWideScreen() ? null : renderCastlingOptions(ctrl)
+    ];
+
+  return m('div.editorMenu', children);
+}
+
+export function renderSelectColorPosition(ctrl) {
   const fen = ctrl.computeFen();
-  return m('div.editorMenu', [
-    m('div.editorSelectors', [
-      m('div.select_input', [
-        m('label', {
-          'for': 'select_editor_positions'
-        }, 'Position'),
-        m('select.positions', {
-          id: 'select_editor_positions',
-          onchange: function(e) {
-            ctrl.loadNewFen(e.target.value);
-          }
-        }, [
-          optgroup('Set the board', [
-            position2option(fen, {
-              name: '-- Position --',
-              fen: ''
-            }),
-            ctrl.extraPositions.map(position2option.bind(undefined, fen))
-          ]),
-          optgroup('Popular openings',
-            ctrl.positions().map(position2option.bind(undefined, fen))
-          )
-        ])
-      ]),
-      m('div.select_input.color', [
-        m('label', {
-          'for': 'select_editor_color'
-        }, 'Color'),
-        m('select', {
-          id: 'select_editor_color',
-          value: ctrl.data.editor.color(),
-          onchange: m.withAttr('value', ctrl.data.editor.color)
-        }, [
-          m('option[value=w]', i18n('whitePlays')),
-          m('option[value=b]', i18n('blackPlays'))
-        ])
+  return m('div.editorSelectors', [
+    m('div.select_input', [
+      m('label', {
+        'for': 'select_editor_positions'
+      }, 'Position'),
+      m('select.positions', {
+        id: 'select_editor_positions',
+        onchange: function(e) {
+          ctrl.loadNewFen(e.target.value);
+        }
+      }, [
+        optgroup('Set the board', [
+          position2option(fen, {
+            name: '-- Position --',
+            fen: ''
+          }),
+          ctrl.extraPositions.map(position2option.bind(undefined, fen))
+        ]),
+        optgroup('Popular openings',
+          ctrl.positions().map(position2option.bind(undefined, fen))
+        )
       ])
     ]),
-    m('div.castling', [
-      m('strong', i18n('castling')),
-      m('div', [
-        castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
-        castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
-      ]),
-      m('div', [
-        castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
-        castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
+    m('div.select_input.color', [
+      m('label', {
+        'for': 'select_editor_color'
+      }, 'Color'),
+      m('select', {
+        id: 'select_editor_color',
+        value: ctrl.data.editor.color(),
+        onchange: m.withAttr('value', ctrl.data.editor.color)
+      }, [
+        m('option[value=w]', i18n('whitePlays')),
+        m('option[value=b]', i18n('blackPlays'))
       ])
+    ])
+  ]);
+}
+
+export function renderCastlingOptions(ctrl) {
+  return m('div.castling', [
+    m('strong', i18n('castling')),
+    m('div', [
+      castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
+      castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
+    ]),
+    m('div', [
+      castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
+      castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
     ])
   ]);
 }

@@ -4,7 +4,7 @@ import { renderBoard } from '../round/view/roundView';
 import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
-import menu, { renderEditorMenu } from './menu';
+import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
 import continuePopup from './continuePopup';
 import settings from '../../settings';
 import m from 'mithril';
@@ -56,7 +56,10 @@ export default function view(ctrl) {
           sparePieces(ctrl, color, color, 'bottom')
         ]),
         m('section.table.editorTable', { key: 'table' }, [
-          renderEditorMenu(ctrl),
+          m('div.editorMenu', [
+            renderSelectColorPosition(ctrl),
+            helper.isWideScreen() ? renderCastlingOptions(ctrl) : null
+          ]),
           renderActionsBar(ctrl)
         ])
       ];
@@ -78,7 +81,7 @@ export default function view(ctrl) {
 
 function renderActionsBar(ctrl) {
   return m('section.actions_bar', [
-    helper.isPortrait() ?
+    helper.isPortrait() || (helper.isLandscape() && !helper.isWideScreen()) ?
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
       config: helper.ontouch(ctrl.menu.open)

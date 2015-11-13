@@ -9,14 +9,14 @@
     flex-flow column nowrap
     align-items center
     .board_wrapper
-      height calc(100% - 100px)
-      width calc(100% - 100px)
+      height calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
+      width calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    width calc(100vh - 50px - 12vh)
     flex 0 0 auto
     margin auto 0
-
+    .board_wrapper
+      height calc(100% - ((100vh - 50px - 12vh) / 8) * 2)
+      width calc(100% - ((100vh - 50px - 12vh) / 8) * 2)
 
 .sparePieces
   height calc((100% - 100vw - 45px) / 2)
@@ -29,7 +29,9 @@
   background-color #777
   box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
   @media only screen and (orientation: landscape)
-    height 50px
+    height calc((100vh - 50px - 10vh) / 8)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc((100vh - 150px - 12vh) / 8)
 
 .sparePieceWrapper
   position relative
@@ -37,8 +39,11 @@
   width calc(100vw / 8)
   height calc(100vw / 8)
   @media only screen and (orientation: landscape)
-    height 45px
-    width 45px
+    width calc((100vh - 150px - 10vh) / 8)
+    height calc((100vh - 150px - 10vh) / 8)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc((100vh - 150px - 12vh) / 8)
+    width calc((100vh - 150px - 12vh) / 8)
 
 .editorMenu
   > .popup_content

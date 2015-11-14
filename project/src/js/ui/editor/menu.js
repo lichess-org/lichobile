@@ -49,7 +49,6 @@ function renderEditorMenu(ctrl) {
     ];
   else
     children = [
-      renderCastlingOptions(ctrl),
       helper.isWideScreen() ? null : renderCastlingOptions(ctrl)
     ];
 

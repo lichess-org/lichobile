@@ -56,11 +56,13 @@ export default function view(ctrl) {
           sparePieces(ctrl, color, color, 'bottom')
         ]),
         m('section.table.editorTable', { key: 'table' }, [
-          m('div.editorMenu', [
-            renderSelectColorPosition(ctrl),
-            helper.isWideScreen() ? renderCastlingOptions(ctrl) : null
-          ]),
-          renderActionsBar(ctrl)
+          m('div.editorMenuOuter', [
+            m('div.editorMenuInner', [
+              renderSelectColorPosition(ctrl),
+              helper.isWideScreen() ? renderCastlingOptions(ctrl) : null
+            ]),
+            renderActionsBar(ctrl)
+          ])
         ])
       ];
   }

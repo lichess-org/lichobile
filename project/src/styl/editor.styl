@@ -11,7 +11,7 @@
     .board_wrapper
       height calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
       width calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (min-height 700px)
     flex 0 0 auto
     margin auto 0
     .board_wrapper
@@ -30,7 +30,7 @@
   box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
   @media only screen and (orientation: landscape)
     height calc((100vh - 50px - 10vh) / 8)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (min-height 700px)
     height calc((100vh - 150px - 12vh) / 8)
 
 .sparePieceWrapper
@@ -41,7 +41,7 @@
   @media only screen and (orientation: landscape)
     width calc((100vh - 150px - 10vh) / 8)
     height calc((100vh - 150px - 10vh) / 8)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (min-height 700px)
     height calc((100vh - 150px - 12vh) / 8)
     width calc((100vh - 150px - 12vh) / 8)
 
@@ -60,12 +60,24 @@
     margin-top 10px
 
 
-.table
-  > .editorMenu
+.table.editorTable
+  > .editorMenuOuter
     flex 1 1 auto
     display flex
     flex-flow column nowrap
     justify-content space-around
+    align-items center
+    .check_container
+      margin-top 10px
+    > .editorMenuInner
+      width 100%
+    @media only screen and (orientation: landscape) and (min-height 700px)
+      > .editorMenuInner
+        width 70%
+      margin calc((100vh - 150px - 12vh) / 8) 0
+      .castling
+        margin-top 3em
+
 
 .continueFromHere
   h2

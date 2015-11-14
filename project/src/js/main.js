@@ -1,5 +1,7 @@
 /* application entry point */
 
+import './polyfills';
+
 // for moment a global object makes loading locales easier
 import moment from 'moment';
 window.moment = moment;

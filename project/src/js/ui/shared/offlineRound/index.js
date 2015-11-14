@@ -25,30 +25,40 @@ export function renderAntagonist(ctrl, playerName, material, position) {
 
 export function renderGameActionsBar(ctrl) {
   var vdom = [
-    m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
+    m('button#open_player_controls.action_bar_button.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
-    m('button.game_action.empty[data-icon=c]'),
+    m('button.action_bar_button.empty[data-icon=c]'),
     renderBackwardButton(ctrl),
     renderForwardButton(ctrl)
   ];
-  return m('section#game_actions', vdom);
+  return m('section#game_actions_bar', vdom);
 }
 
 export function renderGameActionsBarTablet(ctrl) {
   const d = ctrl.data;
   return (
-    <section id="game_actions">
-      <button className="game_action" data-icon="U"
+    <section id="game_actions_bar">
+      <button className="action_bar_button" data-icon="U"
         config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
-      <button className="fa fa-share-alt game_action"
+      <button className="fa fa-share-alt action_bar_button"
         config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
     </section>
   );
+}
+
+export function gameResult(replayCtrl) {
+  let sit = replayCtrl.situation();
+  if (sit && sit.finished)
+    return sit.turnColor === 'white' ? '0-1' : '1-0';
+  else if (sit.stalemate || sit.draw || sit.threefold)
+    return '½-½';
+  else
+    return '?';
 }
 
 export function renderEndedGameStatus(ctrl) {
@@ -101,7 +111,7 @@ export function renderReplayTable(ctrl) {
 }
 
 function renderBackwardButton(ctrl) {
-  return m('button.game_action[data-icon=I]', {
+  return m('button.action_bar_button[data-icon=I]', {
     config: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
@@ -110,7 +120,7 @@ function renderBackwardButton(ctrl) {
 }
 
 function renderForwardButton(ctrl) {
-  return m('button.game_action[data-icon=H]', {
+  return m('button.action_bar_button[data-icon=H]', {
     config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.replay.situations.length - 1)

@@ -7,25 +7,6 @@
   @media only screen and (orientation: landscape)
     display flex
 
-.board_wrapper
-  transform translateZ(0)
-  @media only screen and (orientation: portrait)
-    height calc(100vw)
-    width calc(100vw)
-  @media only screen and (orientation: landscape)
-    height calc(100vh - 50px)
-    width calc(100vh - 50px)
-    flex 0 0 auto
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    width calc(100vh - 50px - 12vh)
-    flex 0 0 auto
-    margin auto 0
-
-.board
-  width 100%
-  height 100%
-
 .table
   height 100%
   flex 1 1 auto
@@ -40,15 +21,12 @@
     display flex
     flex-flow column nowrap
     justify-content space-around
-  > #game_actions
+  > #game_actions_bar
     position initial
     flex 0 0 45px
-  @media only screen and (min-height 800px) and (orientation: landscape)
-    > .playersTable
-      margin 2rem 0
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
-    > #game_actions
+    > #game_actions_bar
       flex 0 0 40px
     > .tableHeader
       > .icon-game
@@ -67,6 +45,9 @@
       font-size 18px
       &.correspondence
         font-size 14px
+  @media only screen and (min-height 800px) and (orientation: landscape)
+    > .playersTable
+      margin 2rem 0
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     height calc(100vh - 50px - 12vh)
     margin auto 1rem
@@ -260,47 +241,6 @@
     margin 0 5px
     top 17px
 
-#game_actions
-  padding 0
-  height 45px
-  width 100%
-  @media only screen and (orientation: landscape)
-    width calc(100vw - (100vh - 50px) - 10px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    width calc(100vw - (100vh - 50px - 12vh) - 10px)
-
-.game_action
-  display inline-block
-  text-align center
-  background transparent
-  padding 10px 10px 8px
-  outline none
-  border none
-  color: gold
-  height 45px
-  line-height 35px
-  width 25%
-  &:last-child
-    border-right none
-  &.disabled
-    &:before
-      opacity 1
-    color rgba(gold, 0.4)
-  &.active
-    background lighten(bgdark, 8%)
-    color lighten(gold, 40%)
-  &.empty::before
-    visibility hidden
-  &:before
-    font-size 22px
-    line-height 22px
-  @media only screen and (max-height 400px) and (orientation landscape)
-    height 40px
-    line-height 25px
-    &:before
-      font-size 18px
-      line-height 18px
-
 #open_player_controls.answer_required,
 #open_chat.unread
   animation answer_glow 5s infinite
@@ -341,16 +281,6 @@
     margin-top 5px
   .notice
     margin 5px 0
-
-.offline_actions, .player_controls, .trainingMenu
-  .select_input
-    background darken(#fff, 10%)
-    color textDarkGray
-    box-shadow none
-    > select
-      color textDarkGray
-  .action
-    padding 10px
 
 .player_controls, .offline_actions, .playersTable
   .resultStatus

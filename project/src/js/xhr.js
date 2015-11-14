@@ -4,19 +4,23 @@ import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 
-export function newAiGame() {
-  var config = settings.gameSetup.ai;
+export function newAiGame(fen) {
+  const config = settings.gameSetup.ai;
+  const data = {
+    variant: config.variant(),
+    timeMode: config.timeMode(),
+    days: config.days(),
+    time: config.time(),
+    increment: config.increment(),
+    level: config.level(),
+    color: config.color()
+  };
+
+  if (fen) data.fen = fen;
+
   return request('/setup/ai', {
     method: 'POST',
-    data: {
-      variant: config.variant(),
-      timeMode: config.timeMode(),
-      days: config.days(),
-      time: config.time(),
-      increment: config.increment(),
-      level: config.level(),
-      color: config.color()
-    }
+    data
   }, true);
 }
 
@@ -37,20 +41,24 @@ export function seekGame() {
   }, true);
 }
 
-export function inviteFriend(userId) {
-  var config = settings.gameSetup.challenge;
+export function inviteFriend(userId, fen) {
+  const config = settings.gameSetup.challenge;
+  const data = {
+    user: userId,
+    variant: config.variant(),
+    timeMode: config.timeMode(),
+    days: config.days(),
+    time: config.time(),
+    increment: config.increment(),
+    color: config.color(),
+    mode: session.isConnected() ? config.mode() : '0'
+  };
+
+  if (fen) data.fen = fen;
+
   return request('/setup/friend', {
     method: 'POST',
-    data: {
-      user: userId,
-      variant: config.variant(),
-      timeMode: config.timeMode(),
-      days: config.days(),
-      time: config.time(),
-      increment: config.increment(),
-      color: config.color(),
-      mode: session.isConnected() ? config.mode() : '0'
-    }
+    data
   }, true);
 }
 

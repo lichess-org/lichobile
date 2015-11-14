@@ -30,9 +30,13 @@ export function handleXhrError(error) {
     else
       message = 'Error';
 
-    if (typeof data.error === 'string') message += `: ${data.error}`;
+    message = i18n(message);
 
-    window.plugins.toast.show(i18n(message), 'short', 'center');
+    if (typeof data === 'string') message += ` ${data}`;
+    else if (data.global && data.global.constructor === Array) message += ` ${data.global[0]}`;
+    else if (typeof data.error === 'string') message += ` ${data.error}`;
+
+    window.plugins.toast.show(message, 'short', 'center');
   }
 }
 
@@ -141,3 +145,18 @@ export function userFullNameToId(fullName) {
 export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function loadJsonFile(filename) {
+  return m.request({
+    url: filename,
+    method: 'GET',
+    deserialize: function(text) {
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw { error: 'Error when parsing json from: ' + filename };
+      }
+    }
+  });
+}
+

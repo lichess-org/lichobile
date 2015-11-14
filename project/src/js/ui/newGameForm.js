@@ -6,6 +6,8 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
+import ViewOnlyBoard from './shared/ViewOnlyBoard';
+import helper from './helper';
 import m from 'mithril';
 
 var newGameForm = {};
@@ -13,6 +15,7 @@ newGameForm.isOpen = false;
 
 newGameForm.open = function() {
   backbutton.stack.push(newGameForm.close);
+  newGameForm.fen = null;
   newGameForm.isOpen = true;
 };
 
@@ -32,8 +35,15 @@ newGameForm.openCorrespondence = function() {
   newGameForm.open();
 };
 
+newGameForm.openAIFromPosition = function(fen) {
+  settings.gameSetup.selected('computer');
+  settings.gameSetup.ai.variant('3');
+  newGameForm.open();
+  newGameForm.fen = fen;
+};
+
 function startAIGame() {
-  return xhr.newAiGame().then(function(data) {
+  return xhr.newAiGame(newGameForm.fen).then(function(data) {
     m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
@@ -88,6 +98,28 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
   }
 
   // AI only
+  if (settingsObj.variant() === '3') {
+    generalFieldset.push(m('div.setupPosition', {
+      key: 'position'
+    }, newGameForm.fen ? [
+        m('div.setupMiniBoardWrapper', {
+          config: helper.ontouch(() => {
+            newGameForm.close();
+            m.route(`/editor/${encodeURIComponent(newGameForm.fen)}`);
+          })
+        }, [
+          m.component(ViewOnlyBoard, { fen: newGameForm.fen })
+        ])
+      ] : m('div', m('button.withIcon.fa.fa-pencil', {
+        config: helper.ontouch(() => {
+          newGameForm.close();
+          m.route('/editor');
+        })
+      }, i18n('boardEditor')))
+    ));
+  }
+
+ // AI only
   if (settingsObj.level) {
     generalFieldset.push(m('div.select_input', {
       key: 'ailevel'

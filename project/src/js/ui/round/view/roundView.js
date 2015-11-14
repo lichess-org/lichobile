@@ -52,10 +52,10 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, moreWrapperClasses) {
+export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
   const { vh, vw } = helper.viewportDim();
   // ios 7.1 still doesn't support vh unit in calc
-  // see game.styl section '.board_wrapper' for corresponding calc() rules
+  // see board-content.styl section '.board_wrapper' for corresponding calc() rules
   const landscapeDim = (vh > 700 && vw < 1050) ? vh - 50 - vh * 0.12 : vh - 50;
   const boardStyle = helper.isLandscape() ? {
     width: landscapeDim + 'px',
@@ -79,7 +79,7 @@ export function renderBoard(ctrl, moreWrapperClasses) {
   }
 
   return (
-    <section key={boardKey} className={wrapperClass} style={boardStyle}>
+    <section key={boardKey} className={wrapperClass} style={withStyle ? boardStyle : {}}>
       <div className={boardClass}>
         {chessground.view(ctrl.chessground)}
       </div>
@@ -335,7 +335,7 @@ function renderGamePopup(ctrl) {
 
 function renderGameActionsBar(ctrl) {
   var children = [
-    m('button#open_player_controls.game_action.fa.fa-ellipsis-h', {
+    m('button#open_player_controls.action_bar_button.fa.fa-ellipsis-h', {
       key: 'gameMenu',
       className: helper.classSet({
         'answer_required': ctrl.data.opponent.proposingTakeback ||
@@ -345,17 +345,17 @@ function renderGameActionsBar(ctrl) {
       }),
       config: helper.ontouch(ctrl.showActions)
     }),
-    ctrl.chat ? m('button#open_chat.game_action[data-icon=c]', {
+    ctrl.chat ? m('button#open_chat.action_bar_button[data-icon=c]', {
       key: 'chat',
       className: helper.classSet({
         unread: ctrl.chat.unread
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
-    }) : m('button.game_action.empty[data-icon=c]'),
+    }) : m('button.action_bar_button.empty[data-icon=c]'),
     button.backward(ctrl),
     button.forward(ctrl)
   ];
-  return m('section#game_actions', {
+  return m('section.actions_bar', {
     key: 'game-actions-bar'
   }, children);
 }

@@ -99,7 +99,8 @@ export default {
       availableVariants: [
         ['Standard', '1'],
         ['Chess960', '2'],
-        ['King of the Hill', '4']
+        ['King of the Hill', '4'],
+        ['From Position', '3']
       ],
       variant: localstorageprop('settings.game.ai.variant', '1'),
       availableTimeModes: [
@@ -150,7 +151,8 @@ export default {
         ['Three-check', '5'],
         ['Antichess', '6'],
         ['Atomic', '7'],
-        ['Horde', '8']
+        ['Horde', '8'],
+        ['From Position', '3']
       ],
       color: localstorageprop('settings.game.invite.color', 'random'),
       variant: localstorageprop('settings.game.invite.variant', '1'),

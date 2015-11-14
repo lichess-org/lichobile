@@ -99,15 +99,15 @@ function renderViewTable(ctrl) {
 
 function renderActionsBar(ctrl) {
   const vdom = [
-    m('button.training_action.fa.fa-ellipsis-h', {
+    m('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
       config: helper.ontouch(ctrl.menu.open)
     })
   ];
-  return m('section#training_actions', vdom.concat(
+  return m('section.#training_actions.actions_bar', vdom.concat(
     ctrl.data.mode === 'view' ?
       renderViewControls(ctrl) :
-      m('button.training_action[data-icon=b]', {
+      m('button.action_bar_button.training_action[data-icon=b]', {
         key: 'giveUpPuzzle',
         config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
@@ -118,26 +118,26 @@ function renderViewControls(ctrl) {
   var history = ctrl.data.replay.history;
   var step = ctrl.data.replay.step;
   return [
-    m('button.training_action[data-icon=G]', {
+    m('button.action_bar_button.training_action[data-icon=G]', {
       key: 'continueTraining',
       config: helper.ontouch(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     }),
-    m('button.training_action[data-icon=P]', {
+    m('button.action_bar_button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
     }),
-    m('button.training_action.fa.fa-share-alt', {
+    m('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',
       config: helper.ontouch(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
     }),
-    m('button.training_action[data-icon=I]', {
+    m('button.action_bar_button.training_action[data-icon=I]', {
       config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
       key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
-    m('button.training_action[data-icon=H]', {
+    m('button.action_bar_button.training_action[data-icon=H]', {
       config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
       key: 'historyNext',
       className: helper.classSet({

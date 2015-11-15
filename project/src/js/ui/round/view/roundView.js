@@ -235,8 +235,8 @@ function tvChannelSelector(ctrl) {
 function renderGameRunningActions(ctrl) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      button.shareLink(ctrl),
       button.flipBoard(ctrl),
+      button.shareLink(ctrl),
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 
@@ -281,14 +281,14 @@ function renderGameEndedActions(ctrl) {
   ];
   resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
+    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
-    button.flipBoard(ctrl),
     ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
+    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
-    button.flipBoard(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
     button.rematch(ctrl)

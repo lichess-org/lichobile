@@ -138,7 +138,7 @@ export default {
       !ctrl.data.tournament && !ctrl.data.opponent.offeringRematch &&
       !ctrl.data.player.offeringRematch) {
       if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
-        return m('button[data-icon=B]', {
+        return m('button.fa.fa-refresh', {
           key: 'rematch',
           config: helper.ontouch(function() { socket.send('rematch-yes'); })
         }, i18n('rematch'));

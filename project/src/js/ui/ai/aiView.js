@@ -1,7 +1,7 @@
 import chessground from 'chessground';
 import settings from '../../settings';
 import layout from '../layout';
-import { header } from '../shared/common';
+import { header, viewOnlyBoardContent } from '../shared/common';
 import formWidgets from '../shared/form';
 import {
   renderAntagonist,
@@ -18,57 +18,57 @@ import actions from './actions';
 
 export default function view(ctrl) {
 
-  function content() {
-
-    const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-    const replayTable = renderReplayTable(ctrl.replay);
-
-    if (helper.isPortrait())
-      return [
-        renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent'),
-        renderBoard(ctrl),
-        renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player'),
-        renderGameActionsBar(ctrl, actions.view)
-      ];
-    else if (helper.isLandscape() && helper.isVeryWideScreen())
-      return [
-        renderBoard(ctrl),
-        <section key="table" className="table">
-          <section className="playersTable offline">
-            {renderAntagonist(ctrl, opponentSelector(), material[ctrl.data.opponent.color], 'opponent')}
-            {replayTable}
-            {renderEndedGameStatus(ctrl.actions)}
-            {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
-          </section>
-          {renderGameActionsBarTablet(ctrl)}
-        </section>
-      ];
-    else
-      return [
-        renderBoard(ctrl),
-        <section key="table" className="table">
-          <section className="playersTable offline">
-            {renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent')}
-            {replayTable}
-            {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
-          </section>
-          {renderGameActionsBar(ctrl)}
-        </section>
-      ];
-  }
-
-  function overlay() {
-    return [
-      actions.view(ctrl.actions),
-      renderPromotion(ctrl)
-    ];
-  }
-
   return layout.board(
     header.bind(undefined, i18n('playOfflineComputer')),
-    content,
-    overlay
+    content.bind(undefined, ctrl),
+    overlay.bind(undefined, ctrl)
   );
+}
+
+function content(ctrl) {
+
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+  const replayTable = renderReplayTable(ctrl.replay);
+
+  if (helper.isPortrait())
+    return [
+      renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent'),
+      renderBoard(ctrl),
+      renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player'),
+      renderGameActionsBar(ctrl, actions.view)
+    ];
+  else if (helper.isLandscape() && helper.isVeryWideScreen())
+    return [
+      renderBoard(ctrl),
+      <section key="table" className="table">
+        <section className="playersTable offline">
+          {renderAntagonist(ctrl, opponentSelector(), material[ctrl.data.opponent.color], 'opponent')}
+          {replayTable}
+          {renderEndedGameStatus(ctrl.actions)}
+          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
+        </section>
+        {renderGameActionsBarTablet(ctrl)}
+      </section>
+    ];
+  else
+    return [
+      renderBoard(ctrl),
+      <section key="table" className="table">
+        <section className="playersTable offline">
+          {renderAntagonist(ctrl, ctrl.getOpponent().name, material[ctrl.data.opponent.color], 'opponent')}
+          {replayTable}
+          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player')}
+        </section>
+        {renderGameActionsBar(ctrl)}
+      </section>
+    ];
+}
+
+function overlay(ctrl) {
+  return [
+    actions.view(ctrl.actions),
+    renderPromotion(ctrl)
+  ];
 }
 
 function opponentSelector() {

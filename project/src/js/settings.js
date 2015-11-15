@@ -76,6 +76,7 @@ export default {
       ['Gustavo Fring', '7'],
       ['Heisenberg', '8']
     ],
+    color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1')
   },
 

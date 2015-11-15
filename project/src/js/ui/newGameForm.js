@@ -83,7 +83,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
 
   // AI only
   if (settingsObj.color) {
-    var colors = [
+    const colors = [
       ['randomColor', 'random'],
       ['white', 'white'],
       ['black', 'black']

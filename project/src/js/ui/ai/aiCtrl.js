@@ -8,6 +8,7 @@ import settings from '../../settings';
 import actions from './actions';
 import engine from './engine';
 import helper from '../helper';
+import { getRandomArbitrary } from '../../utils';
 import m from 'mithril';
 
 const storageKey = 'ai.current';
@@ -81,6 +82,8 @@ export default function controller() {
     } else engineMove();
   }.bind(this);
 
+  this.actions = new actions.controller(this);
+
   this.init = function(data, situations, ply) {
     this.data = data;
     if (!this.chessground)
@@ -90,15 +93,15 @@ export default function controller() {
     else this.replay.init(situations, ply);
     this.replay.apply();
     if (this.actions) this.actions.close();
-    else this.actions = new actions.controller(this);
     engine.init(this.data.game.fen);
     engineMove();
   }.bind(this);
 
-  this.initAs = function(color) {
-    this.init(makeData({
-      color: color
-    }));
+  this.startNewGame = function() {
+    const opts = {
+      color: getColorFromSettings()
+    };
+    this.init(makeData(opts));
   }.bind(this);
 
   this.jump = function(ply) {
@@ -124,7 +127,8 @@ export default function controller() {
   const saved = storage.get(storageKey);
   const setupFen = storage.get(storageFenKey);
   if (setupFen) {
-    this.init(makeData({ fen: setupFen }));
+    this.actions.open();
+    this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
     storage.remove(storageFenKey);
   } else if (saved) try {
     this.init(saved.data, saved.situations, saved.ply);
@@ -138,4 +142,16 @@ export default function controller() {
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
   };
+}
+
+function getColorFromSettings() {
+  let color = settings.ai.color();
+  if (color === 'random') {
+    if (getRandomArbitrary(0, 2) > 1)
+      color = 'white';
+    else
+      color = 'black';
+  }
+
+  return color;
 }

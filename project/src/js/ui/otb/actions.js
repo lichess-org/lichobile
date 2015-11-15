@@ -15,10 +15,6 @@ function renderAlways(ctrl) {
     m('button[data-icon=U]', {
       config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
-    m('button.fa', {
-      className: 'fa-share-alt',
-      config: helper.ontouch(ctrl.sharePGN)
-    }, i18n('sharePGN')),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     ))

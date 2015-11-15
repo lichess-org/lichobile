@@ -17,7 +17,7 @@ function renderAlways(ctrl) {
   return [
     m('div.action', [
       m('div.select_input',
-        formWidgets.renderSelect('color', 'color', colors, settings.ai.color)
+        formWidgets.renderSelect('side', 'color', colors, settings.ai.color)
       ),
       m('div.select_input',
         formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)

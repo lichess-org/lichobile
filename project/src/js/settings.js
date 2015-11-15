@@ -46,7 +46,7 @@ export default {
         'chess7',
         'symmetric'
       ],
-      board: localstorageprop('settings.theme.board', 'metal'),
+      board: localstorageprop('settings.theme.board', 'brown'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
     analytics: localstorageprop('settings.analytics', true)

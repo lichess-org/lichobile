@@ -1,5 +1,5 @@
 import chessground from 'chessground';
-import { computeFen, validateFen, readFen } from './editor';
+import { computeFen, readFen } from './editor';
 import menu from './menu';
 import m from 'mithril';
 import { loadJsonFile } from '../../utils';
@@ -11,11 +11,6 @@ const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export default function controller() {
 
   const initFen = m.route.param('fen') || startingFen;
-
-  if (!validateFen(initFen).valid) {
-    window.plugins.toast.show('Invalid fen string', 'short', 'center');
-    m.route('/');
-  }
 
   this.data = {
     editor: readFen(initFen),
@@ -95,16 +90,4 @@ export default function controller() {
     m.redraw.strategy('diff');
     m.route(`/editor/${encodeURIComponent(newFen)}`);
   };
-
-  this.positionLooksLegit = function() {
-    var kings = {
-      white: 0,
-      black: 0
-    };
-    var pieces = this.chessground.data.pieces;
-    for (var pos in pieces) {
-      if (pieces[pos] && pieces[pos].role === 'king') kings[pieces[pos].color]++;
-    }
-    return kings.white === 1 && kings.black === 1;
-  }.bind(this);
 }

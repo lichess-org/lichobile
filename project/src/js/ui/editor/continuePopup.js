@@ -6,6 +6,7 @@ import newGameForm from '../newGameForm';
 import challengeForm from '../challengeForm';
 import storage from '../../storage';
 import { storageFenKey } from '../ai/aiCtrl';
+import { validateFen, positionLooksLegit } from './editor';
 import m from 'mithril';
 
 export default {
@@ -56,8 +57,12 @@ export default {
           m('button', {
             config: helper.ontouch(() => {
               ctrl.close();
-              storage.set(storageFenKey, ctrl.fen());
-              m.route('/ai');
+              if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
+                window.plugins.toast.show('Invalid FEN', 'short', 'center');
+              } else {
+                storage.set(storageFenKey, ctrl.fen());
+                m.route('/ai');
+              }
             })
           }, i18n('Play with offline AI'))
         ];

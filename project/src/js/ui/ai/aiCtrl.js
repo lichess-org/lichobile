@@ -127,7 +127,6 @@ export default function controller() {
   const saved = storage.get(storageKey);
   const setupFen = storage.get(storageFenKey);
   if (setupFen) {
-    this.actions.open();
     this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
     storage.remove(storageFenKey);
   } else if (saved) try {

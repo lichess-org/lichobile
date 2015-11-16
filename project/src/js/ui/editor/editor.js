@@ -120,3 +120,9 @@ export function validateFen(fen) {
   /* everything's okay! */
   return {valid: true, error_number: 0, error: errors[0]};
 }
+
+
+export function positionLooksLegit(fen) {
+  const pieces = fen.split(' ')[0];
+  return (pieces.match(/k/g) || []).length === 1 && (pieces.match(/K/g) || []).length === 1;
+}

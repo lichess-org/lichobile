@@ -1,5 +1,5 @@
 import chessground from 'chessground';
-import { computeFen, castlesAt, validateFen, readFen } from './editor';
+import { computeFen, validateFen, readFen } from './editor';
 import menu from './menu';
 import m from 'mithril';
 import { loadJsonFile } from '../../utils';
@@ -32,7 +32,7 @@ export default function controller() {
     fen: startingFen,
     name: i18n('startPosition')
   }, {
-    fen: '8/8/8/8/8/8/8/8 w - -',
+    fen: '8/8/8/8/8/8/8/8 w - - 0 1',
     name: i18n('clearBoard')
   }];
 
@@ -90,21 +90,6 @@ export default function controller() {
 
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
-
-  this.startPosition = function() {
-    this.chessground.set({
-      fen: 'start'
-    });
-    this.data.editor.castles = castlesAt(true);
-    this.data.editor.color('w');
-  }.bind(this);
-
-  this.clearBoard = function() {
-    this.chessground.set({
-      fen: '8/8/8/8/8/8/8/8'
-    });
-    this.data.editor.castles = castlesAt(false);
-  }.bind(this);
 
   this.loadNewFen = function(newFen) {
     m.redraw.strategy('diff');

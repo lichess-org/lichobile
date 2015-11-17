@@ -4,7 +4,7 @@ import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, playerName, material, position) {
+export function renderAntagonist(ctrl, content, material, position) {
   const {vh, vw} = helper.viewportDim();
   const headerHeight = vh > 480 ? 50 : 40;
   const contentHeight = vh - headerHeight;
@@ -17,7 +17,7 @@ export function renderAntagonist(ctrl, playerName, material, position) {
     className: position, key, style
   }, [
     m('div.antagonistInfos offline', [
-      m('h2', playerName),
+      m('div', content),
       m('div.ratingAndMaterial', renderMaterial(material))
     ])
   ]);

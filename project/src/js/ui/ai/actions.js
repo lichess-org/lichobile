@@ -13,15 +13,27 @@ const colors = [
   ['randomColor', 'random']
 ];
 
+export function opponentSelector() {
+  return (
+    <div className="select_input">
+      {formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)}
+    </div>
+  );
+}
+
+export function sideSelector() {
+  return (
+    <div className="select_input">
+      {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
+    </div>
+  );
+}
+
 function renderAlways(ctrl) {
   return [
     m('div.action', [
-      m('div.select_input',
-        formWidgets.renderSelect('side', 'color', colors, settings.ai.color)
-      ),
-      m('div.select_input',
-        formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)
-      )
+      sideSelector(),
+      opponentSelector()
     ]),
     m('button[data-icon=U]', {
     config: helper.ontouch(ctrl.root.startNewGame)

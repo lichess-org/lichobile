@@ -1,22 +1,28 @@
+pitHeight = (100vh - 50px) / 8
+pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
+
 .editor
   @media only screen and (orientation: portrait)
     height 100%
   @media only screen and (orientation: landscape)
     height calc(100vh - 50px)
-    width calc(100vh - 50px)
+    width "calc(100vh - 50px - (%s * 2))" % pitHeight
     flex 0 0 auto
     display flex
     flex-flow column nowrap
     align-items center
+    justify-content space-around
     .board_wrapper
-      height calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
-      width calc(100% - ((100vh - 50px - 10vh) / 8) * 2)
+      margin 0
+      height "calc(100% - (%s * 2))" % pitHeight
+      width 100%
   @media only screen and (orientation: landscape) and (min-height 700px)
+    width "calc(100vh - 50px - (%s * 2))" % pitHeightBigScreen
     flex 0 0 auto
     margin auto 0
     .board_wrapper
-      height calc(100% - ((100vh - 50px - 12vh) / 8) * 2)
-      width calc(100% - ((100vh - 50px - 12vh) / 8) * 2)
+      height "calc(100% - (%s * 2))" % pitHeightBigScreen
+      width 100%
 
 .sparePieces
   height calc((100% - 100vw - 45px) / 2)
@@ -29,9 +35,9 @@
   background-color #777
   box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
   @media only screen and (orientation: landscape)
-    height calc((100vh - 50px - 10vh) / 8)
+    height "calc(%s)" % pitHeight
   @media only screen and (orientation: landscape) and (min-height 700px)
-    height calc((100vh - 150px - 12vh) / 8)
+    height "calc(%s - 2vh)" % pitHeightBigScreen
 
 .sparePieceWrapper
   position relative
@@ -39,11 +45,11 @@
   width calc(100vw / 8)
   height calc(100vw / 8)
   @media only screen and (orientation: landscape)
-    width calc((100vh - 150px - 10vh) / 8)
-    height calc((100vh - 150px - 10vh) / 8)
+    width "calc(%s - 1vh)" % pitHeight
+    height "calc(%s - 1vh)" % pitHeight
   @media only screen and (orientation: landscape) and (min-height 700px)
-    height calc((100vh - 150px - 12vh) / 8)
-    width calc((100vh - 150px - 12vh) / 8)
+    width "calc(%s - 3vh)" % pitHeightBigScreen
+    height "calc(%s - 3vh)" % pitHeightBigScreen
 
 .editorMenu
   > .popup_content
@@ -60,6 +66,9 @@
     margin-top 10px
 
 .table.editorTable
+  height "calc(100vh - %s * 2)" % pitHeight
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    height "calc(100vh - %s * 2)" % pitHeightBigScreen
   > .editorMenuOuter
     flex 1 1 auto
     display flex
@@ -72,8 +81,7 @@
       width 100%
     @media only screen and (orientation: landscape) and (min-height 700px)
       > .editorMenuInner
-        width 70%
-      margin calc((100vh - 150px - 12vh) / 8) 0
+        width 80%
       .castling
         margin-top 3em
 

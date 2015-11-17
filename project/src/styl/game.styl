@@ -7,51 +7,6 @@
   @media only screen and (orientation: landscape)
     display flex
 
-.table
-  height 100%
-  flex 1 1 auto
-  display flex
-  flex-flow column nowrap
-  margin 0 1rem
-  > header
-    flex 0 0 auto
-  > .playersTable
-    margin 1em 0
-    flex 1 1 auto
-    display flex
-    flex-flow column nowrap
-    justify-content space-around
-  > #game_actions_bar
-    position initial
-    flex 0 0 45px
-  @media only screen and (max-height 400px) and (orientation landscape)
-    font-size 0.7rem
-    > #game_actions_bar
-      flex 0 0 40px
-    > .tableHeader
-      > .icon-game
-        font-size 20px
-        vertical-align bottom
-      > .game-title
-        font-size 0.6rem
-        line-height 14px
-    > .playersTable
-      margin 10px 0
-      justify-content space-around
-    .antagonist
-      padding-left 0
-    .clock
-      width 85px
-      font-size 18px
-      &.correspondence
-        font-size 14px
-  @media only screen and (min-height 800px) and (orientation: landscape)
-    > .playersTable
-      margin 2rem 0
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    margin auto 1rem
-
 .antagonist
   height calc((100% - 100vw - 45px) / 2)
   padding 0 10px

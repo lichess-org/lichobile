@@ -33,12 +33,11 @@ export default function controller() {
 
   loadJsonFile('data/positions.json').then(data => {
     this.positions(data);
-    return data;
   }, err => {
     // workaround for iOS: because xhr for local file has a 0 status it will
     // reject the promise and still have the response object
     if (err && err[0] && err[0].fen)
-      return err;
+      this.positions(err);
     else
       throw err;
   });

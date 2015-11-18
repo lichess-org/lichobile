@@ -51,7 +51,7 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
           // websocket is trying to reconnect
           errorDetected = true;
           xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
-            if (err.message === 'unauthorizedError') {
+            if (err.status === 401) {
               window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
               m.route('/');
             }

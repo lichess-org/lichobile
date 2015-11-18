@@ -110,7 +110,7 @@ function onOnline() {
   }, err => {
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       // means user is anonymous here
-      if (err.message === 'unauthorizedError') {
+      if (err.status === 401) {
         triedToLogin = true;
         var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
         if (lastPlayedAnon) m.route('/game' + lastPlayedAnon);

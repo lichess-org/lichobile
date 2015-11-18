@@ -17,7 +17,7 @@ export function handleXhrError(error) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
     let message;
-    if (status === 0)
+    if (!status || status === 0)
       message = 'noInternetConnection';
     else if (status === 401)
       message = 'unauthorizedError';

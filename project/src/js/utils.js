@@ -40,8 +40,6 @@ export function handleXhrError(error) {
   }
 }
 
-export const lichessSri = Math.random().toString(36).substring(2);
-
 export function serializeQueryParameters(obj) {
   var str = '';
   for (var key in obj) {

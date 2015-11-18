@@ -1,6 +1,6 @@
 import socket from './socket';
 import session from './session';
-import * as utils from './utils';
+import { hasNetwork } from './utils';
 
 const refreshInterval = 60000 * 2; // 2 minutes refresh polling
 var refreshIntervalID;
@@ -15,7 +15,7 @@ export default function () {
 }
 
 function refresh() {
-  if (utils.hasNetwork() && session.isConnected())
+  if (hasNetwork() && session.isConnected())
     session.refresh();
 }
 

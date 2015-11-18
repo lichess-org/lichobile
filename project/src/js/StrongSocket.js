@@ -1,11 +1,10 @@
 import merge from 'lodash/object/merge';
 import assign from 'lodash/object/assign';
 import range from 'lodash/utility/range';
-import * as utils from './utils';
+import { serializeQueryParameters } from './utils';
 import signals from './signals';
 import storage from './storage';
-
-const lichessSri = utils.lichessSri;
+import { lichessSri } from './http';
 
 const urlsPool = range(9021, 9030).map(function(e) {
   return window.lichess.socketEndPoint + ':' + e;
@@ -57,7 +56,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + utils.serializeQueryParameters(assign(self.settings.params, {
+    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
       version: self.version
     }));
     self.debug('connection attempt to ' + fullUrl, true);

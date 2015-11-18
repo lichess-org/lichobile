@@ -1,5 +1,5 @@
 import { request } from './http';
-import * as utils from './utils';
+import { handleXhrError } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
@@ -50,7 +50,7 @@ function logout() {
     session = null;
     friendsApi.clear();
   }, function(err) {
-    utils.handleXhrError(err);
+    handleXhrError(err);
     throw err;
   });
 }

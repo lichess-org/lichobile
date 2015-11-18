@@ -1,4 +1,3 @@
-
 const variantMap = {
   standard: {
     name: 'Standard',

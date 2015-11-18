@@ -1,8 +1,7 @@
 import gameStatus from './status';
-import * as utils from '../utils';
+import { secondsToMinutes } from '../utils';
 import settings from '../settings';
 import i18n from '../i18n';
-import m from 'mithril';
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
@@ -109,7 +108,7 @@ function result(data) {
 
 function time(data) {
   if (data.clock)
-    return utils.secondsToMinutes(data.clock.initial).toString() + '+' +
+    return secondsToMinutes(data.clock.initial).toString() + '+' +
       data.clock.increment;
   else if (data.correspondence)
     return i18n('nbDays', data.correspondence.daysPerTurn);

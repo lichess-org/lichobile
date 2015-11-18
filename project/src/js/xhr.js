@@ -1,5 +1,4 @@
-import * as utils from './utils';
-import { request, apiVersion } from './http';
+import { request, apiVersion, lichessSri } from './http';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
@@ -26,7 +25,7 @@ export function newAiGame(fen) {
 
 export function seekGame() {
   var config = settings.gameSetup.human;
-  return request('/setup/hook/' + utils.lichessSri, {
+  return request('/setup/hook/' + lichessSri, {
     method: 'POST',
     data: {
       variant: config.variant(),

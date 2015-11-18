@@ -1,4 +1,4 @@
-import * as utils from '../utils';
+import { caseInsensitiveSort } from '../utils';
 
 var onlineFriends = [];
 
@@ -17,7 +17,7 @@ export default {
 
   add(name) {
     onlineFriends.push(name);
-    onlineFriends.sort(utils.caseInsensitiveSort);
+    onlineFriends.sort(caseInsensitiveSort);
   },
 
   remove(name) {

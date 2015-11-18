@@ -5,6 +5,7 @@ import m from 'mithril';
 const spinner = new Spinner({ color: '#C4A86F' });
 
 export const apiVersion = 1;
+export const lichessSri = Math.random().toString(36).substring(2);
 
 const baseUrl = window.lichess.apiEndPoint;
 

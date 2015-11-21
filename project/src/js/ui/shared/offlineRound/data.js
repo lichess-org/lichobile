@@ -32,7 +32,8 @@ export default function data(cfg) {
     },
     pref: {
       highlight: true,
-      destination: true
+      destination: true,
+      centerPiece: cfg.pref && cfg.pref.centerPiece || false
     }
   };
 }

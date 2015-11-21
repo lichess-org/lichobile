@@ -10,7 +10,7 @@ import m from 'mithril';
 
 const storageKey = 'otb.current';
 
-export default function controller(cfg) {
+export default function controller() {
 
   helper.analyticsTrackView('On The Board');
 
@@ -50,7 +50,11 @@ export default function controller(cfg) {
   }.bind(this);
 
   this.init = function(data, situations, ply) {
-    this.data = data || makeData(cfg);
+    this.data = data || makeData({
+      pref: {
+        centerPiece: true
+      }
+    });
     if (!this.chessground)
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
     else ground.reload(this.chessground, this.data, this.data.game.fen);

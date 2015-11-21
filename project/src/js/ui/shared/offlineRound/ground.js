@@ -28,6 +28,7 @@ function makeConfig(data, fen) {
     },
     draggable: {
       showGhost: data.pref.highlight,
+      centerPiece: data.pref.centerPiece,
       distance: 3,
       squareTarget: true
     }

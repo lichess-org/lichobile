@@ -67,7 +67,10 @@ export default function controller() {
 
   this.initAs = function(color) {
     this.init(makeData({
-      color: color
+      color: color,
+      pref: {
+        centerPiece: true
+      }
     }));
   }.bind(this);
 

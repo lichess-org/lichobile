@@ -128,7 +128,7 @@
     "cordova-plugin-statusbar": "cordova-plugin-statusbar@1.0.1",
     "cordova-plugin-inappbrowser": "cordova-plugin-inappbrowser@1.0.1",
     "cordova-plugin-whitelist": "cordova-plugin-whitelist@1.0.0",
-    "cordova-plugin-google-analytics": "cordova-plugin-google-analytics@0.7.1",
+    "cordova-plugin-google-analytics": "cordova-plugin-google-analytics@0.8.1",
     "cordova-plugin-socialsharing": "cordova-plugin-socialsharing@4.3.81",
     "cordova-plugin-x-toast": "cordova-plugin-x-toast@2.2.0",
     "cordova-plugin-customurlscheme": {

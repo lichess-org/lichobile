@@ -67,14 +67,14 @@ export default {
 
   ai: {
     availableOpponents: [
-      ['Tuco Salamanca', '1'],
-      ['Jesse Pinkman', '2'],
-      ['Skyler White', '3'],
-      ['Saul Goodman', '4'],
-      ['Mike Ehrmantraut', '5'],
-      ['Lydia Rodarte-Quayle', '6'],
-      ['Gustavo Fring', '7'],
-      ['Heisenberg', '8']
+      ['Stockfish level 1 (1350)', '1'],
+      ['Stockfish level 2 (1420)', '2'],
+      ['Stockfish level 3 (1500)', '3'],
+      ['Stockfish level 4 (1600)', '4'],
+      ['Stockfish level 5 (1700)', '5'],
+      ['Stockfish level 6 (1900)', '6'],
+      ['Stockfish level 7 (2200)', '7'],
+      ['Stockfish level 8 (2500)', '8']
     ],
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1')

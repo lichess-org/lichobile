@@ -16,6 +16,7 @@ import backbutton from './backbutton';
 import storage from './storage';
 import socket from './socket';
 import initDataRefresh from './dataRefresh';
+import push from './push';
 import routes from './routes';
 
 var triedToLogin = false;
@@ -117,7 +118,8 @@ function onOnline() {
       }
     }
   })
-  .then(m.redraw);
+  .then(m.redraw)
+  .then(push.init);
 }
 
 function onOffline() {

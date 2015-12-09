@@ -9,6 +9,7 @@ import helper from '../helper';
 import m from 'mithril';
 
 const storageKey = 'otb.current';
+export const storageFenKey = 'otb.setupFen';
 
 export default function controller() {
 
@@ -91,8 +92,18 @@ export default function controller() {
 
   this.firstPly = () => 0;
 
+  const setupFen = storage.get(storageFenKey);
   var saved = storage.get(storageKey);
-  if (saved) this.init(saved.data, saved.situations, saved.ply);
+  if (setupFen) {
+    this.init(makeData({
+      fen: setupFen,
+      color: 'white',
+      pref: {
+        centerPiece: true
+      }
+    }));
+    storage.remove(storageFenKey);
+  } else if (saved) this.init(saved.data, saved.situations, saved.ply);
   else this.init();
 
   window.plugins.insomnia.keepAwake();

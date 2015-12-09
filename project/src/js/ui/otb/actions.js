@@ -4,7 +4,7 @@ import i18n from '../../i18n';
 import { util } from 'chessground';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderEndedGameStatus } from '../shared/offlineRound';
+import { renderSharePGNButton, renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
@@ -15,6 +15,7 @@ function renderAlways(ctrl) {
     m('button[data-icon=U]', {
       config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
+    renderSharePGNButton(ctrl),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     ))
@@ -56,9 +57,10 @@ export default {
         null,
         function() {
           return [
-            renderEndedGameStatus(ctrl),
+            renderEndedGameStatus(ctrl)
+          ].concat(
             renderAlways(ctrl)
-          ];
+          );
         },
         ctrl.isOpen(),
         ctrl.close

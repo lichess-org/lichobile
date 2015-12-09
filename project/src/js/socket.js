@@ -15,6 +15,7 @@ var errorDetected = false;
 var connectedWS = true;
 
 var alreadyWarned = false;
+var redrawOnDisconnectedTimeoutID;
 var proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
@@ -122,13 +123,19 @@ function createDefault() {
 }
 
 function onConnected() {
+  const wasOff = !connectedWS;
   connectedWS = true;
   clearTimeout(proxyFailTimeoutID);
+  clearTimeout(redrawOnDisconnectedTimeoutID);
+  if (wasOff) m.redraw();
 }
 
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
+  if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(function() {
+    m.redraw();
+  }, 2000);
   if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
     // establishing a tunnel
@@ -138,7 +145,7 @@ function onDisconnected() {
         storage.set('donotshowproxyfailwarning', true);
       });
     }
-  }, 15000);
+  }, 20000);
 }
 
 document.addEventListener('deviceready', () => {
@@ -167,6 +174,9 @@ export default {
   },
   disconnect() {
     if (socketInstance) socketInstance.destroy();
+  },
+  isConnected() {
+    return connectedWS;
   },
   destroy
 };

@@ -17,6 +17,7 @@ import { view as renderChat } from '../chat';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
+import socket from '../../../socket';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -90,10 +91,10 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
 function renderHeader(ctrl) {
   return [
     m('nav', {
-      className: ctrl.vm.connectedWS ? '' : 'reconnecting'
+      className: socket.isConnected() ? '' : 'reconnecting'
     }, [
       menuButton(),
-      ctrl.vm.connectedWS ? m('h1.playing', [
+      socket.isConnected() ? m('h1.playing', [
         ctrl.data.userTV ? m('span.withIcon[data-icon=1]') : null,
         ctrl.title
       ]) : utils.hasNetwork() ? m('h1.reconnecting.withTitle', [

@@ -1,6 +1,5 @@
 import game from'./ui/game';
 import tv from'./ui/tv';
-import seek from'./ui/seek';
 import correspondence from'./ui/correspondence';
 import otb from'./ui/otb';
 import ai from'./ui/ai';
@@ -29,7 +28,6 @@ export default {
       '/game/:id/:color': game,
       '/game/:id/user/:userId': game,
       '/tv': tv,
-      '/seek': seek,
       '/correspondence': correspondence,
       '/@/:id': user,
       '/@/:id/games': userGames,

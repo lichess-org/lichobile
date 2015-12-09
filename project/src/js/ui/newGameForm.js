@@ -8,9 +8,10 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
+import seekPopup from './seekPopup';
 import m from 'mithril';
 
-var newGameForm = {};
+const newGameForm = {};
 newGameForm.isOpen = false;
 
 newGameForm.open = function() {
@@ -52,7 +53,10 @@ function startAIGame() {
 }
 
 function seekHumanGame() {
-  if (settings.gameSetup.human.timeMode() === '1') m.route('/seek');
+  if (settings.gameSetup.human.timeMode() === '1') {
+    newGameForm.close();
+    seekPopup.startSeeking();
+  }
   else {
     xhr.seekGame();
     m.route('/correspondence');
@@ -262,4 +266,4 @@ newGameForm.view = function() {
   );
 };
 
-module.exports = newGameForm;
+export default newGameForm;

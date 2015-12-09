@@ -48,7 +48,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     moveToSubmit: null
   };
 
-  this.connectSocket = function() {
+  var connectSocket = function() {
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -58,10 +58,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     );
   }.bind(this);
 
-  this.connectSocket();
+  connectSocket();
 
   // reconnect game socket after a cancelled seek
-  signals.seekCanceled.add(this.connectSocket);
+  signals.seekCanceled.add(connectSocket);
 
   this.stepsHash = function(steps) {
     var h = '';
@@ -349,6 +349,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.chat) this.chat.onunload();
     document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectSocket);
   };
 }
 

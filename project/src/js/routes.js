@@ -1,12 +1,12 @@
 import game from'./ui/game';
 import tv from'./ui/tv';
-import seek from'./ui/seek';
 import correspondence from'./ui/correspondence';
 import otb from'./ui/otb';
 import ai from'./ui/ai';
 import settingsUi from'./ui/settings';
 import settingsLang from './ui/settings/lang';
-import settingsGame from './ui/settings/game';
+import settingsGameDisplay from './ui/settings/gameDisplay';
+import settingsGameBehavior from './ui/settings/gameBehavior';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
@@ -28,7 +28,6 @@ export default {
       '/game/:id/:color': game,
       '/game/:id/user/:userId': game,
       '/tv': tv,
-      '/seek': seek,
       '/correspondence': correspondence,
       '/@/:id': user,
       '/@/:id/games': userGames,
@@ -39,7 +38,8 @@ export default {
       '/players': players,
       '/ranking': ranking,
       '/settings': settingsUi,
-      '/settings/game': settingsGame,
+      '/settings/gameDisplay': settingsGameDisplay,
+      '/settings/gameBehavior': settingsGameBehavior,
       '/settings/themes/board': boardThemes,
       '/settings/themes/piece': pieceThemes,
       '/settings/lang': settingsLang,

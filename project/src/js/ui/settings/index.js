@@ -11,8 +11,11 @@ function renderBody() {
   return [
     m('ul.settings_list.general.native_scroller.page', [
       m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/game'))
+        config: helper.ontouchY(utils.f(m.route, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/gameBehavior'))
+      }, i18n('gameBehavior')),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),
@@ -22,7 +25,7 @@ function renderBody() {
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
       }, i18n('pieces')),
-      m('li.list_item.bgTheme', [
+      m('li.list_item.settingsChoicesInline', [
         m('label', 'Background'),
         m('fieldset', [
           m('div.nice-radio', formWidgets.renderRadio(

@@ -275,4 +275,4 @@ gamesMenu.view = function() {
   );
 };
 
-module.exports = gamesMenu;
+export default gamesMenu;

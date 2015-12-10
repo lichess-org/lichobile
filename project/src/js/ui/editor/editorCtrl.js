@@ -5,10 +5,16 @@ import m from 'mithril';
 import { loadJsonFile } from '../../utils';
 import continuePopup from './continuePopup';
 import i18n from '../../i18n';
+import socket from '../../socket';
+import helper from '../helper';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export default function controller() {
+
+  socket.createDefault();
+
+  helper.analyticsTrackView('Editor');
 
   const initFen = m.route.param('fen') || startingFen;
 

@@ -73,24 +73,23 @@ export function renderEndedGameStatus(ctrl) {
       if (sit.stalemate) status = i18n('stalemate');
       else status = i18n('draw');
     }
-    const res = [
+    return (
       <div className="result">
         {result}
         <br />
         <br />
         <div className="resultStatus">{status}</div>
       </div>
-    ];
-    res.push(
-      <button className="fa fa-share-alt" config={helper.ontouch(ctrl.sharePGN)}>
-        {i18n('sharePGN')}
-      </button>
     );
-
-    return res;
   }
+}
 
-  return null;
+export function renderSharePGNButton(ctrl) {
+  return (
+    <button className="fa fa-share-alt" config={helper.ontouch(ctrl.sharePGN)}>
+      {i18n('sharePGN')}
+    </button>
+  );
 }
 
 export function renderReplayTable(ctrl) {

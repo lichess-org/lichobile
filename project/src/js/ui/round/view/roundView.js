@@ -17,6 +17,7 @@ import { view as renderChat } from '../chat';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
 import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
+import socket from '../../../socket';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -90,10 +91,10 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
 function renderHeader(ctrl) {
   return [
     m('nav', {
-      className: ctrl.vm.connectedWS ? '' : 'reconnecting'
+      className: socket.isConnected() ? '' : 'reconnecting'
     }, [
       menuButton(),
-      ctrl.vm.connectedWS ? m('h1.playing', [
+      socket.isConnected() ? m('h1.playing', [
         ctrl.data.userTV ? m('span.withIcon[data-icon=1]') : null,
         ctrl.title
       ]) : utils.hasNetwork() ? m('h1.reconnecting.withTitle', [
@@ -235,7 +236,6 @@ function tvChannelSelector(ctrl) {
 function renderGameRunningActions(ctrl) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      button.flipBoard(ctrl),
       button.shareLink(ctrl),
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
@@ -257,7 +257,6 @@ function renderGameRunningActions(ctrl) {
   return [
     m('div.game_controls', [
       button.shareLink(ctrl),
-      button.flipBoard(ctrl),
       button.moretime(ctrl),
       button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
@@ -281,14 +280,13 @@ function renderGameEndedActions(ctrl) {
   ];
   resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
-    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
     ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
-    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
+    button.newOpponent(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
     button.rematch(ctrl)
@@ -352,6 +350,7 @@ function renderGameActionsBar(ctrl) {
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
     }) : m('button.action_bar_button.empty[data-icon=c]'),
+    button.flipBoard(ctrl),
     button.backward(ctrl),
     button.forward(ctrl)
   ];

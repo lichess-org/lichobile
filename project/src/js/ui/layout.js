@@ -5,12 +5,13 @@ import challengeForm from './challengeForm';
 import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
+import lobby from './lobby';
 import helper from './helper';
 import settings from '../settings';
 
 export default {
 
-  board: function(header, content, overlay, color='') {
+  board: function(header, content, overlay, color = '') {
     const mainClass = [
       menu.isOpen ? 'out' : 'in',
       color
@@ -31,6 +32,7 @@ export default {
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
+        {lobby.view()}
         {overlay ? overlay() : null}
       </div>
     );

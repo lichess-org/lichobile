@@ -58,7 +58,8 @@ export default {
     ],
     animations: localstorageprop('settings.gameAnimations', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    coords: localstorageprop('settings.coords', true)
+    coords: localstorageprop('settings.coords', true),
+    moveConfirmation: localstorageprop('settings.game.moveConfirmation', 'correspondence')
   },
 
   otb: {

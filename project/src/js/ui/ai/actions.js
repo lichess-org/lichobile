@@ -1,7 +1,7 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderEndedGameStatus } from '../shared/offlineRound';
+import { renderSharePGNButton, renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
@@ -37,7 +37,8 @@ function renderAlways(ctrl) {
     ]),
     m('button[data-icon=U]', {
     config: helper.ontouch(ctrl.root.startNewGame)
-    }, i18n('createAGame'))
+    }, i18n('createAGame')),
+    renderSharePGNButton(ctrl)
   ];
 }
 
@@ -75,9 +76,10 @@ export default {
       null,
       function() {
         return [
-          renderEndedGameStatus(ctrl),
+          renderEndedGameStatus(ctrl)
+        ].concat(
           renderAlways(ctrl)
-        ];
+        );
       },
       ctrl.isOpen(),
       ctrl.close

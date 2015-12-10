@@ -12,8 +12,8 @@ import gameStatus from '../../lichess/status';
 import correspondenceClockCtrl from './correspondenceClock/correspondenceCtrl';
 import session from '../../session';
 import socket from '../../socket';
-import socketHandler from './socketHandler';
 import signals from '../../signals';
+import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
@@ -41,7 +41,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.vm = {
-    connectedWS: true,
     flip: false,
     showingActions: false,
     replayHash: '',
@@ -49,13 +48,20 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     moveToSubmit: null
   };
 
-  socket.createGame(
-    this.data.url.socket,
-    this.data.player.version,
-    socketHandler(this, onFeatured, onUserTVRedirect),
-    this.data.url.round,
-    userTv
-  );
+  var connectSocket = function() {
+    socket.createGame(
+      this.data.url.socket,
+      this.data.player.version,
+      socketHandler(this, onFeatured, onUserTVRedirect),
+      this.data.url.round,
+      userTv
+    );
+  }.bind(this);
+
+  connectSocket();
+
+  // reconnect game socket after a cancelled seek
+  signals.seekCanceled.add(connectSocket);
 
   this.stepsHash = function(steps) {
     var h = '';
@@ -331,36 +337,19 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   window.plugins.insomnia.keepAwake();
 
-  var onConnected = function() {
-    var wasOff = !this.vm.connectedWS;
-    this.vm.connectedWS = true;
-    if (wasOff) m.redraw();
-  }.bind(this);
-
-  var onDisconnected = function() {
-    var wasOn = this.vm.connectedWS;
-    this.vm.connectedWS = false;
-    if (wasOn) setTimeout(function() {
-      m.redraw();
-    }, 2000);
-  }.bind(this);
-
   var onResume = function() {
     xhr.reload(this).then(this.reload);
   }.bind(this);
 
-  signals.socket.connected.add(onConnected);
-  signals.socket.disconnected.add(onDisconnected);
   document.addEventListener('resume', onResume);
 
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
-    signals.socket.connected.remove(onConnected);
-    signals.socket.disconnected.remove(onDisconnected);
     document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectSocket);
   };
 }
 

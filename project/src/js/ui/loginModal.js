@@ -1,4 +1,5 @@
 import session from '../session';
+import push from '../push';
 import * as utils from '../utils';
 import helper from './helper';
 import i18n from '../i18n';
@@ -18,6 +19,7 @@ var submit = function(form) {
   session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
+    push.init();
   }, function(err) {
     utils.handleXhrError(err);
   });

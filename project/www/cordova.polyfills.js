@@ -14,6 +14,18 @@
     trackView: noop
   };
 
+  // push
+  window.PushNotification = {
+    init: function() {
+      return {
+        on: noop,
+        off: noop,
+        unregister: noop,
+        finish: noop
+      };
+    }
+  };
+
   // events
   document.addEventListener('DOMContentLoaded', function() {
     document.dispatchEvent(new window.Event('deviceready'));

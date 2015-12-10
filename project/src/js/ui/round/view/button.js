@@ -6,6 +6,7 @@ import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
 import { handleXhrError } from '../../../utils';
+import lobby from '../../lobby';
 import m from 'mithril';
 
 export default {
@@ -16,14 +17,6 @@ export default {
       'data-icon': icon,
       config: helper.ontouch(function() { socket.send(socketMsg); })
     }, i18n(hint)) : null;
-  },
-  flipBoard: function(ctrl) {
-    return m('button', {
-      key: 'flipboard',
-      'data-icon': 'B',
-      className: ctrl.vm.flip ? 'flipped' : '',
-      config: helper.ontouch(ctrl.flip)
-    }, i18n('flipBoard'));
   },
   shareLink: function(ctrl) {
     return m('button', {
@@ -188,6 +181,13 @@ export default {
       })
     });
   },
+  flipBoard: function(ctrl) {
+    return m('button.action_bar_button[data-icon=B]', {
+      key: 'flipboard',
+      className: ctrl.vm.flip ? 'flipped' : '',
+      config: helper.ontouch(ctrl.flip)
+    });
+  },
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
@@ -198,5 +198,15 @@ export default {
         disabled: ctrl.broken || !enabled
       })
     });
+  },
+  newOpponent: function(ctrl) {
+    if (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) {
+      return m('button[data-icon=r]', {
+        config: helper.ontouch(() => {
+          ctrl.hideActions();
+          lobby.startSeeking();
+        })
+      }, i18n('newOpponent'));
+    }
   }
 };

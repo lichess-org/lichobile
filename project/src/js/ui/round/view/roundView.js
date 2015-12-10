@@ -236,7 +236,6 @@ function tvChannelSelector(ctrl) {
 function renderGameRunningActions(ctrl) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      button.flipBoard(ctrl),
       button.shareLink(ctrl),
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
@@ -258,7 +257,6 @@ function renderGameRunningActions(ctrl) {
   return [
     m('div.game_controls', [
       button.shareLink(ctrl),
-      button.flipBoard(ctrl),
       button.moretime(ctrl),
       button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
@@ -282,14 +280,13 @@ function renderGameEndedActions(ctrl) {
   ];
   resultDom.push(m('div.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
-    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
     ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
-    button.flipBoard(ctrl),
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
+    button.newOpponent(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
     button.rematch(ctrl)
@@ -353,6 +350,7 @@ function renderGameActionsBar(ctrl) {
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
     }) : m('button.action_bar_button.empty[data-icon=c]'),
+    button.flipBoard(ctrl),
     button.backward(ctrl),
     button.forward(ctrl)
   ];

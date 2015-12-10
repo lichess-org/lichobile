@@ -5,7 +5,7 @@ import challengeForm from './challengeForm';
 import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
-import seekPopup from './seekPopup';
+import lobby from './lobby';
 import helper from './helper';
 import settings from '../settings';
 
@@ -32,7 +32,7 @@ export default {
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
-        {seekPopup.view()}
+        {lobby.view()}
         {overlay ? overlay() : null}
       </div>
     );

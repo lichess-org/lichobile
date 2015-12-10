@@ -12,20 +12,23 @@ import m from 'mithril';
 let nbPlaying = 0;
 let hookId = null;
 
-const seekPopup = {};
-seekPopup.isSeeking = false;
+const lobby = {};
+lobby.isOpen = false;
 
-seekPopup.startSeeking = function() {
-  backbutton.stack.push(seekPopup.stopSeeking);
+lobby.startSeeking = function() {
+  backbutton.stack.push(lobby.cancelSeeking);
 
-  seekPopup.isSeeking = true;
+  lobby.isOpen = true;
   window.plugins.insomnia.keepAwake();
   hookId = null;
 
   xhr.lobby(true).then(data => {
     socket.createLobby(data.lobby.version, createHook, {
-      redirect: d => m.route('/game' + d.url),
-      n: function(n) {
+      redirect: d => {
+        lobby.closePopup();
+        m.route('/game' + d.url);
+      },
+      n: n => {
         nbPlaying = n;
         m.redraw();
       },
@@ -36,14 +39,19 @@ seekPopup.startSeeking = function() {
   });
 };
 
-seekPopup.stopSeeking = function(fromBB) {
-  if (fromBB !== 'backbutton' && seekPopup.isSeeking) backbutton.stack.pop();
+lobby.closePopup = function(fromBB) {
+  if (fromBB !== 'backbutton' && lobby.isOpen) backbutton.stack.pop();
+  lobby.isOpen = false;
+};
+
+lobby.cancelSeeking = function(fromBB) {
+  lobby.closePopup(fromBB);
 
   if (hookId) socket.send('cancel', hookId);
-
-  seekPopup.isSeeking = false;
   hookId = null;
+
   window.plugins.insomnia.allowSleepAgain();
+
   // recreate default socket after a cancelled seek
   // and dispatch an event so I can recreate a game socket
   // not very elegant, but well, it will work...
@@ -51,7 +59,7 @@ seekPopup.stopSeeking = function(fromBB) {
   signals.seekCanceled.dispatch();
 };
 
-seekPopup.view = function() {
+lobby.view = function() {
   function content() {
     return m('div.seek_real_time', [
       m('div.nb_players', socket.isConnected() ?
@@ -61,7 +69,7 @@ seekPopup.view = function() {
       m('br'),
       m('br'),
       m('button[data-icon=L]', {
-        config: helper.ontouch(seekPopup.stopSeeking)
+        config: helper.ontouch(lobby.cancelSeeking)
       }, i18n('cancel'))
     ]);
   }
@@ -70,7 +78,7 @@ seekPopup.view = function() {
     null,
     m('div', i18n('waitingForOpponent') + '...'),
     content,
-    seekPopup.isSeeking
+    lobby.isOpen
   );
 };
 
@@ -83,4 +91,4 @@ function createHook() {
   });
 }
 
-export default seekPopup;
+export default lobby;

@@ -8,7 +8,7 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
-import seekPopup from './seekPopup';
+import lobby from './lobby';
 import m from 'mithril';
 
 const newGameForm = {};
@@ -55,7 +55,7 @@ function startAIGame() {
 function seekHumanGame() {
   if (settings.gameSetup.human.timeMode() === '1') {
     newGameForm.close();
-    seekPopup.startSeeking();
+    lobby.startSeeking();
   }
   else {
     xhr.seekGame();

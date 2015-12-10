@@ -8,6 +8,7 @@ import gameStatus from '../../lichess/status';
 import gameApi from '../../lichess/game';
 import socket from '../../socket';
 import gamesMenu from '../gamesMenu';
+import sound from '../../sound';
 import i18n from '../../i18n';
 import m from 'mithril';
 
@@ -59,6 +60,10 @@ export default function controller() {
     // if not joinable or created, it means the game is started, so let's play!
     else {
       if (session.isConnected()) session.refresh();
+
+      if (gameApi.playable(data) && data.game.turns - data.game.startedAtTurn <= 1)
+        sound.dong();
+
       round = new roundCtrl(data);
       if (data.player.user === undefined)
         storage.set('lastPlayedGameURLAsAnon', data.url.round);

@@ -1,8 +1,10 @@
 import session from './session';
+import { request } from './http';
 import m from 'mithril';
 
 export default {
   init() {
+
     const push = window.PushNotification.init({
       android: {
         senderID: window.lichess.gcmSenderId,
@@ -17,46 +19,25 @@ export default {
 
     push.on('registration', function(data) {
       if (session.isConnected()) {
-        register(
-          window.lichess.aerogearEndPoint,
-          window.lichess.aerogearVariantID,
-          window.lichess.aerogearVariantSecret,
-          data.registrationId,
-          session.get().username
-        );
+        // we won't try to register again on failure for now
+        const deviceId = encodeURIComponent(data.registrationId);
+        request(`/mobile/register/${deviceId}`);
       }
     });
 
     push.on('notification', function(data) {
-      window.plugins.toast.show(data.message, 'short', 'center');
       console.log(data);
+      // if app was foreground we don't want to disturb too much so we'll
+      // just refresh nb of turns in board icon
+      if (data.additionalData.foreground) {
+        session.refresh();
+      }
+      // if background we go to the game
+      else {
+        if (data.additionalData.gameId)
+          m.route(`/game/${data.additionalData.gameId}`);
+      }
     });
   }
 };
 
-function register(endPoint, variantId, variantSecret, registrationId, userName) {
-
-  console.log('registration to: ', endPoint + 'rest/registry/device');
-  console.log(variantId, variantSecret);
-  console.log(registrationId);
-
-  function xhrConfig(xhr) {
-    xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(variantId + ':' + variantSecret));
-  }
-
-  m.request({
-    url: endPoint + 'rest/registry/device',
-    method: 'POST',
-    config: xhrConfig,
-    data: {
-      deviceToken: registrationId,
-      alias: userName,
-      categories: ['move', 'gameEnd']
-    }
-  })
-  .then(succ => {
-    console.log(succ);
-  }, err => {
-    console.log(err);
-  });
-}

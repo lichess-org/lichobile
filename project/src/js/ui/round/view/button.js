@@ -200,7 +200,7 @@ export default {
     });
   },
   newOpponent: function(ctrl) {
-    if (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) {
+    if (!ctrl.data.opponent.ai && (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data))) {
       return m('button[data-icon=r]', {
         config: helper.ontouch(() => {
           ctrl.hideActions();

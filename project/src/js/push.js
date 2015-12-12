@@ -1,15 +1,6 @@
 import session from './session';
 import m from 'mithril';
 
-const variantID = window.lichess.aerogearVariantID;
-const variantSecret = window.lichess.aerogearVariantSecret;
-
-function xhrConfig(xhr) {
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(variantID + ':' + variantSecret));
-}
-
 export default {
   init() {
     console.log('push init');
@@ -27,22 +18,13 @@ export default {
 
     push.on('registration', function(data) {
       if (session.isConnected()) {
-        console.log('registration to: ', window.lichess.aerogearEndPoint + 'rest/registry/device');
-        m.request({
-          url: window.lichess.aerogearEndPoint + 'rest/registry/device',
-          method: 'POST',
-          config: xhrConfig,
-          data: {
-            deviceToken: data.registrationId,
-            alias: session.get().username,
-            categories: ['move', 'gameEnd']
-          }
-        })
-        .then(succ => {
-          console.log(succ);
-        }, err => {
-          console.log(err);
-        });
+        register(
+          window.lichess.aerogearEndPoint,
+          window.lichess.aerogearVariantID,
+          window.lichess.aerogearVariantSecret,
+          data.registrationId,
+          session.get().userName
+        );
       }
     });
 
@@ -52,3 +34,30 @@ export default {
     });
   }
 };
+
+function register(endPoint, variantId, variantSecret, registrationId, userName) {
+
+  console.log('registration to: ', endPoint + 'rest/registry/device');
+  console.log(variantId, variantSecret);
+  console.log(registrationId);
+
+  function xhrConfig(xhr) {
+    xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(variantId + ':' + variantSecret));
+  }
+
+  m.request({
+    url: endPoint + 'rest/registry/device',
+    method: 'POST',
+    config: xhrConfig,
+    data: {
+      deviceToken: registrationId,
+      alias: userName,
+      categories: ['move', 'gameEnd']
+    }
+  })
+  .then(succ => {
+    console.log(succ);
+  }, err => {
+    console.log(err);
+  });
+}

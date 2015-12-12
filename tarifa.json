@@ -28,7 +28,7 @@
             "type": "access-origin",
             "origin": [
               "http://en.lichess.org",
-              "https://testpush-lichessmobile.rhcloud.com"
+              "https://aerogear-lichessmobile.rhcloud.com"
             ]
           }
         ]

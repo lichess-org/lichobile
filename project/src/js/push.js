@@ -3,7 +3,6 @@ import m from 'mithril';
 
 export default {
   init() {
-    console.log('push init');
     const push = window.PushNotification.init({
       android: {
         senderID: window.lichess.gcmSenderId,
@@ -23,7 +22,7 @@ export default {
           window.lichess.aerogearVariantID,
           window.lichess.aerogearVariantSecret,
           data.registrationId,
-          session.get().userName
+          session.get().username
         );
       }
     });

@@ -5,6 +5,7 @@ import layout from '../layout';
 import formWidgets from '../shared/form';
 import settings from '../../settings';
 import i18n from '../../i18n';
+import push from '../../push';
 import m from 'mithril';
 
 function renderBody() {
@@ -19,12 +20,6 @@ function renderBody() {
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),
-      m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/themes/board'))
-      }, i18n('board')),
-      m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
-      }, i18n('pieces')),
       m('li.list_item.settingsChoicesInline', [
         m('label', 'Background'),
         m('fieldset', [
@@ -44,6 +39,10 @@ function renderBody() {
         ))])
       ]),
       m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
+      m('li.list_item', formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
+        if (isOn) push.init();
+        else push.unregister();
+      })),
       m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null

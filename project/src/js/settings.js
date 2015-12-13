@@ -49,7 +49,8 @@ export default {
       board: localstorageprop('settings.theme.board', 'brown'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
-    analytics: localstorageprop('settings.analytics', true)
+    analytics: localstorageprop('settings.analytics', true),
+    notifications: localstorageprop('settings.notifications', true)
   },
 
   game: {

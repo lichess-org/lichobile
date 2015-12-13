@@ -57,7 +57,7 @@ module.exports = {
     ];
   },
 
-  renderCheckbox: function(label, name, settingsProp) {
+  renderCheckbox: function(label, name, settingsProp, callback) {
     var isOn = settingsProp();
     return m('div.check_container', [
       m('label', {
@@ -67,7 +67,9 @@ module.exports = {
         name: name,
         checked: isOn,
         onchange: function() {
-          settingsProp(!isOn);
+          const newVal = !isOn;
+          settingsProp(newVal);
+          callback(newVal);
         }
       })
     ]);

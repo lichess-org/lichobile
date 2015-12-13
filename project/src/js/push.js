@@ -58,10 +58,6 @@ export default {
         }).then(() => push = null);
       }, console.log.bind(console));
     }
-  },
-
-  isRegistered() {
-    return !!push;
   }
 };
 

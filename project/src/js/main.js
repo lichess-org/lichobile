@@ -119,9 +119,7 @@ function onOnline() {
     }
   })
   .then(m.redraw)
-  .then(() => {
-    if (!push.isRegistered()) push.register();
-  });
+  .then(push.register);
 }
 
 function onOffline() {

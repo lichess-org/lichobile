@@ -19,7 +19,7 @@ var submit = function(form) {
   session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
-    push.init();
+    push.register();
   }, function(err) {
     utils.handleXhrError(err);
   });

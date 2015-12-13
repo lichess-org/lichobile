@@ -6,7 +6,7 @@ import m from 'mithril';
 let push;
 
 export default {
-  init() {
+  register() {
 
     if (settings.general.notifications()) {
 
@@ -50,13 +50,18 @@ export default {
   },
 
   unregister() {
-    if (push)
+    if (push) {
       push.unregister(function() {
         request('/mobile/unregister', {
           method: 'POST',
           deserialize: v => v
-        });
+        }).then(() => push = null);
       }, console.log.bind(console));
+    }
+  },
+
+  isRegistered() {
+    return !!push;
   }
 };
 

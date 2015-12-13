@@ -22,7 +22,9 @@ export default {
         // we won't try to register again on failure for now
         const platform = window.cordova.platformId;
         const deviceId = encodeURIComponent(data.registrationId);
-        request(`/mobile/register/${platform}/${deviceId}`);
+        request(`/mobile/register/${platform}/${deviceId}`, {
+          method: 'POST'
+        });
       }
     });
 
@@ -30,15 +32,12 @@ export default {
       console.log(data);
       // if app was foreground we don't want to disturb too much so we'll
       // just refresh nb of turns in board icon
-      if (data.additionalData.foreground) {
+      if (data.additionalData && data.additionalData.foreground) {
         session.refresh();
       }
       // if background we go to the game
-      else {
-        if (data.additionalData && data.additionalData.userData) {
-          // should we have fullId here?
-          m.route(`/game/${data.additionalData.userData.gameId}`);
-        }
+      else if (data.additionalData && data.additionalData.userData) {
+        m.route(`/game/${data.additionalData.userData.fullId}`);
       }
     });
   }

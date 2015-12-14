@@ -92,7 +92,6 @@ export default function replayCtrl(root, rootSituations, rootPly) {
     }
     chess.header('Result', gameResult(this));
     chess.header('Variant', 'Standard');
-    chess.header('Fen', chess.fen());
     return chess.pgn({
       max_width: 30
     });

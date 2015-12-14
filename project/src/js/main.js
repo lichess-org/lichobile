@@ -10,7 +10,8 @@ import m from 'mithril';
 import * as utils from './utils';
 import session from './session';
 import i18n, { loadPreferredLanguage } from './i18n';
-import { status as xhrStatus } from './xhr';
+import settings from './settings';
+import { status as xhrStatus, setServerLang } from './xhr';
 import helper from './ui/helper';
 import backbutton from './backbutton';
 import storage from './storage';
@@ -119,7 +120,8 @@ function onOnline() {
     }
   })
   .then(m.redraw)
-  .then(push.register);
+  .then(push.register)
+  .then(() => setServerLang(settings.general.lang()));
 }
 
 function onOffline() {

@@ -105,6 +105,17 @@ export function featured(channel, flip) {
   return request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
 }
 
+export function setServerLang(lang) {
+  if (session.isConnected()) {
+    return request('/translation/select', {
+      method: 'POST',
+      data: {
+        lang
+      }
+    });
+  }
+}
+
 export function status() {
   return request('/api/status', {
     background: true

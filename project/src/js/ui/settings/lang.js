@@ -4,6 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
+import { setServerLang } from '../../xhr';
 import m from 'mithril';
 
 export default {
@@ -29,6 +30,7 @@ export default {
             settings.general.lang() === l[0],
             e => {
               settings.general.lang(e.target.value);
+              setServerLang(e.target.value);
               loadFromSettings();
             }
           )}

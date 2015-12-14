@@ -179,7 +179,7 @@ function renderWin(ctrl, attempt) {
       m('strong', i18n('victory')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ]),
-    attempt ? m('span', i18n('puzzleSolvedInXSeconds', attempt.seconds)) : null
+    attempt ? m('span.nbSeconds', i18n('puzzleSolvedInXSeconds', attempt.seconds)) : null
   ]);
 }
 

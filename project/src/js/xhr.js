@@ -35,6 +35,7 @@ export function seekGame() {
       increment: config.increment(),
       color: 'random',
       mode: session.isConnected() ? config.mode() : '0',
+      membersOnly: config.membersOnly(),
       ratingRange: config.ratingMin() + '-' + config.ratingMax()
     }
   }, true);

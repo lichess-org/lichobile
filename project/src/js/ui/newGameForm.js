@@ -165,6 +165,12 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
         ])
       );
     }
+
+    if (settingsObj.mode() === '0') {
+      generalFieldset.push(
+        formWidgets.renderCheckbox(i18n('membersOnly'), 'membersOnly', settingsObj.membersOnly)
+      );
+    }
   }
 
   // both human and AI

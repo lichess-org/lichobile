@@ -69,7 +69,7 @@ module.exports = {
         onchange: function() {
           const newVal = !isOn;
           settingsProp(newVal);
-          callback(newVal);
+          if (callback) callback(newVal);
         }
       })
     ]);

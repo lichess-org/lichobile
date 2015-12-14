@@ -143,7 +143,8 @@ export default {
       time: localstorageprop('settings.game.human.time', '5'),
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
-      mode: localstorageprop('settings.game.human.mode', '0')
+      mode: localstorageprop('settings.game.human.mode', '0'),
+      membersOnly: localstorageprop('settings.game.human.membersOnly', false)
     },
 
     challenge: {

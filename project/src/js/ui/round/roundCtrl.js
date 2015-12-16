@@ -44,6 +44,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     flip: false,
     showingActions: false,
     replayHash: '',
+    buttonsHash: '',
     ply: this.lastPly(),
     moveToSubmit: null
   };

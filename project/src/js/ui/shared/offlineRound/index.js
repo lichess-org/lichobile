@@ -25,7 +25,7 @@ export function renderAntagonist(ctrl, content, material, position) {
 
 export function renderGameActionsBar(ctrl) {
   var vdom = [
-    m('button#open_player_controls.action_bar_button.fa.fa-ellipsis-h', {
+    m('button.action_bar_button.fa.fa-ellipsis-h', {
       config: helper.ontouch(ctrl.actions.open)
     }),
     m('button.action_bar_button.empty[data-icon=c]'),

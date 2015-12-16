@@ -51,6 +51,11 @@
     color lighten(gold, 40%)
   &.empty::before
     visibility hidden
+  &.glow
+    animation answer_glow 5s infinite
+  &.highlight
+    color #000
+    background gold
   &:before
     font-size 22px
     line-height 22px

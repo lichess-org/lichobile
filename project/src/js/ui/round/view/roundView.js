@@ -332,21 +332,34 @@ function renderGamePopup(ctrl) {
 }
 
 function renderGameActionsBar(ctrl) {
-  var children = [
-    m('button#open_player_controls.action_bar_button.fa.fa-ellipsis-h', {
+  const answerRequired = ctrl.data.opponent.proposingTakeback ||
+    ctrl.data.opponent.offeringDraw ||
+    gameApi.forceResignable(ctrl.data) ||
+    ctrl.data.opponent.offeringRematch;
+
+  const prevPly = ctrl.vm.ply - 1;
+  const nextPly = ctrl.vm.ply + 1;
+  const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+  const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+  const hash = answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn;
+
+  if (ctrl.vm.buttonsHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.buttonsHash = hash;
+
+  const children = [
+    m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'gameMenu',
       className: helper.classSet({
-        'answer_required': ctrl.data.opponent.proposingTakeback ||
-          ctrl.data.opponent.offeringDraw ||
-          gameApi.forceResignable(ctrl.data) ||
-          ctrl.data.opponent.offeringRematch
+        glow: answerRequired
       }),
       config: helper.ontouch(ctrl.showActions)
     }),
-    ctrl.chat ? m('button#open_chat.action_bar_button[data-icon=c]', {
+    ctrl.chat ? m('button.action_bar_button[data-icon=c]', {
       key: 'chat',
       className: helper.classSet({
-        unread: ctrl.chat.unread
+        glow: ctrl.chat.unread
       }),
       config: helper.ontouch(ctrl.chat.open || utils.noop)
     }) : m('button.action_bar_button.empty[data-icon=c]'),

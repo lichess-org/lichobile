@@ -170,6 +170,13 @@ export default {
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
   },
+  flipBoard: function(ctrl) {
+    return m('button.action_bar_button[data-icon=B]', {
+      key: 'flipboard',
+      className: ctrl.vm.flip ? 'highlight' : '',
+      config: helper.ontouch(ctrl.flip)
+    });
+  },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
@@ -179,13 +186,6 @@ export default {
       className: helper.classSet({
         disabled: ctrl.broken || !enabled
       })
-    });
-  },
-  flipBoard: function(ctrl) {
-    return m('button.action_bar_button[data-icon=B]', {
-      key: 'flipboard',
-      className: ctrl.vm.flip ? 'flipped' : '',
-      config: helper.ontouch(ctrl.flip)
     });
   },
   forward: function(ctrl) {

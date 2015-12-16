@@ -109,8 +109,8 @@ function renderHeader(ctrl) {
 function renderContent(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const replayTable = renderReplayTable(ctrl);
-  const player = renderAntagonist(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player');
-  const opponent = renderAntagonist(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent');
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player');
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent');
 
   if (helper.isPortrait())
     return [
@@ -171,9 +171,44 @@ function renderSubmitMovePopup(ctrl) {
   );
 }
 
-function renderAntagonist(ctrl, player, material, position) {
+function userInfos(user, player, playerName) {
+  let title;
+  if (user) {
+    let onlineStatus = user.online ? 'connected to lichess' : 'offline';
+    let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
+    title = `${playerName}: ${onlineStatus}; ${onGameStatus}`;
+  } else
+    title = playerName;
+  window.plugins.toast.show(title, 'short', 'center');
+}
+
+function renderAntagonistInfo(ctrl, player, material) {
   const user = player.user;
   const playerName = utils.playerName(player, helper.isLandscape());
+
+  return m('div.antagonistInfos', {
+    config: user ?
+      helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
+      utils.noop
+  }, [
+    m('h2.antagonistUser', [
+      user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null,
+      playerName,
+      player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
+    ]),
+    m('div.ratingAndMaterial', [
+      user && helper.isPortrait() ? m('h3.rating', [
+        player.rating,
+        player.provisional ? '?' : '',
+        ratingDiff(player)
+      ]) : null,
+      renderCheckCount(ctrl, player.color),
+      ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
+    ])
+  ]);
+}
+
+function renderPlayTable(ctrl, player, material, position) {
   const {vh, vw} = helper.viewportDim();
   const headerHeight = vh > 480 ? 50 : 40;
   const contentHeight = vh - headerHeight;
@@ -182,38 +217,8 @@ function renderAntagonist(ctrl, player, material, position) {
   const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
-  function infos() {
-    let title;
-    if (user) {
-      let onlineStatus = user.online ? 'connected to lichess' : 'offline';
-      let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
-      title = `${playerName}: ${onlineStatus}; ${onGameStatus}`;
-    } else
-      title = playerName;
-    window.plugins.toast.show(title, 'short', 'center');
-  }
-
-  return m('section.antagonist', { className: position, key, style }, [
-    m('div.antagonistInfos', {
-      config: user ?
-        helper.ontouch(utils.f(m.route, '/@/' + user.id), infos) :
-        utils.noop
-    }, [
-      m('h2.antagonistUser', [
-        user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null,
-        playerName,
-        player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
-      ]),
-      m('div.ratingAndMaterial', [
-        user && helper.isPortrait() ? m('h3.rating', [
-          player.rating,
-          player.provisional ? '?' : '',
-          ratingDiff(player)
-        ]) : null,
-        renderCheckCount(ctrl, player.color),
-        ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
-      ])
-    ]),
+  return m('section.playTable', { className: position, key, style }, [
+    renderAntagonistInfo(ctrl, player, material),
     ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
       ctrl.data.correspondence ? renderCorrespondenceClock(
         ctrl.correspondenceClock, player.color, ctrl.data.game.player

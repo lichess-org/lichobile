@@ -13,7 +13,7 @@ export function renderAntagonist(ctrl, content, material, position) {
   const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
-  return m('section.antagonist', {
+  return m('section.playTable', {
     className: position, key, style
   }, [
     m('div.antagonistInfos offline', [

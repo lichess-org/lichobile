@@ -160,10 +160,10 @@ function renderCheckCount(ctrl, color) {
 
 function renderSubmitMovePopup(ctrl) {
   if (!ctrl.vm.moveToSubmit)
-    return <div className="overlay popup overlay_fade submitMovePopup" />;
+    return <div className="overlay_popup_wrapper submitMovePopup" />;
 
   return (
-    <div className="overlay popup overlay_fade open submitMovePopup">
+    <div className="overlay_popup_wrapper submitMovePopup open">
       <div className="overlay_popup">
         {button.submitMove(ctrl)}
       </div>

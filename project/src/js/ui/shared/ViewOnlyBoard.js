@@ -1,23 +1,8 @@
 import chessground from 'chessground';
 import settings from '../../settings';
-import m from 'mithril';
 
 export default {
-  controller() {
-    return {
-      fen: m.prop('')
-    };
-  },
-
   view(ctrl, args) {
-
-    const fen = args.fen;
-
-    if (ctrl.fen() === fen) {
-      return { subtree: 'retain' };
-    }
-
-    ctrl.fen(fen);
 
     const boardClass = [
       'board',
@@ -26,10 +11,14 @@ export default {
       args.variant ? args.variant.key : ''
     ].join(' ');
 
+    function boardConf(el, isUpdate, context) {
+      const config = makeConfig(args);
+      if (context.ground) context.ground.set(config);
+      else context.ground = chessground(el, config);
+    }
+
     return (
-      <div className={boardClass}>
-        {chessground.view(new chessground.controller(makeConfig(args)))}
-      </div>
+      <div className={boardClass} config={boardConf} />
     );
   }
 };

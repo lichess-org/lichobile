@@ -1,4 +1,4 @@
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import * as utils from '../../utils';
 import layout from '../layout';
 import { header } from '../shared/common';

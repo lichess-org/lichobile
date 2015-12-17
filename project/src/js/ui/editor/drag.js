@@ -1,5 +1,5 @@
 import find from 'lodash/collection/find';
-import { util, drag } from 'chessground';
+import { util, drag } from 'chessground-mobile';
 
 export default function(ctrl, e) {
   if (e.button !== undefined && e.button !== 0) return; // only left click
@@ -39,9 +39,10 @@ export default function(ctrl, e) {
     dec: [-squareBounds.width, -squareBounds.height],
     bounds: bounds,
     started: true,
-    originTarget: e.target,
-    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > .cg-piece')
+    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > .cg-piece'),
+    originTarget: e.target
   };
+  ctrl.chessground.data.draggable.current.draggingPiece.classList.add('dragging');
   ctrl.chessground.data.renderRAF();
   drag.processDrag(ctrl.chessground.data);
 }

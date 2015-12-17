@@ -1,7 +1,7 @@
 import * as utils from '../../utils';
 import helper from '../helper';
 import i18n from '../../i18n';
-import { util } from 'chessground';
+import { util } from 'chessground-mobile';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderSharePGNButton, renderEndedGameStatus } from '../shared/offlineRound';

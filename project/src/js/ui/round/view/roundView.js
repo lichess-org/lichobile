@@ -1,4 +1,4 @@
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import settings from '../../../settings';
 import layout from '../../layout';
 import { menuButton, loader, headerBtns } from '../../shared/common';
@@ -79,11 +79,15 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
     wrapperClass += moreWrapperClasses;
   }
 
+  function boardConfig(el, isUpdate) {
+    if (!isUpdate) {
+      chessground.render(el, ctrl.chessground);
+    }
+  }
+
   return (
     <section key={boardKey} className={wrapperClass} style={withStyle ? boardStyle : {}}>
-      <div className={boardClass}>
-        {chessground.view(ctrl.chessground)}
-      </div>
+      <div className={boardClass} config={boardConfig} />
     </section>
   );
 }

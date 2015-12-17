@@ -1,5 +1,5 @@
 import last from 'lodash/array/last';
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import { handleXhrError } from '../../utils';
 import data from './data';
 import chess from './chess';
@@ -153,7 +153,7 @@ export default function ctrl() {
 
   this.giveUp = function() {
     attempt(false);
-  }.bind(this);
+  };
 
   this.jump = function(to) {
     const history = this.data.replay.history;

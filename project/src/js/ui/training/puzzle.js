@@ -3,7 +3,7 @@ import keys from 'lodash/object/keys';
 import first from 'lodash/array/first';
 import rest from 'lodash/array/rest';
 import pairs from 'lodash/object/pairs';
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import chess from './chess';
 import m from 'mithril';
 

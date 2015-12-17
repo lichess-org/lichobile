@@ -1,4 +1,4 @@
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';

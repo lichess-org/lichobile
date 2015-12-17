@@ -1,4 +1,4 @@
-import chessground from 'chessground';
+import chessground from 'chessground-mobile';
 import { computeFen, readFen } from './editor';
 import menu from './menu';
 import m from 'mithril';

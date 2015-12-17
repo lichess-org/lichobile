@@ -7,6 +7,7 @@ import i18n from '../../i18n';
 import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
 import continuePopup from './continuePopup';
 import settings from '../../settings';
+import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
 
 function sparePieces(ctrl, color, orientation, position) {
@@ -28,9 +29,15 @@ export default function view(ctrl) {
   function editorConfig(el, isUpdate, context) {
     if (isUpdate) return;
     const onstart = drag.bind(undefined, ctrl);
+    const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
+    const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
     document.addEventListener('touchstart', onstart);
+    document.addEventListener('touchmove', onmove);
+    document.addEventListener('touchend', onend);
     context.onunload = function() {
       document.removeEventListener('touchstart', onstart);
+      document.removeEventListener('touchmove', onmove);
+      document.removeEventListener('touchend', onend);
     };
   }
 

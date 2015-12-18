@@ -38,6 +38,7 @@ export default {
         // if app was foreground we don't want to disturb too much so we'll
         // just refresh nb of turns in board icon
         if (data.additionalData && data.additionalData.foreground) {
+          // TODO don't refresh but use payload to modify game data
           session.refresh();
         }
         // if background we go to the game

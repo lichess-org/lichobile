@@ -23,7 +23,7 @@ gamesMenu.open = function() {
   setTimeout(function() {
     if (scroller) scroller.goToPage(1, 0);
   }, 400);
-  if (utils.hasNetwork() && session.isConnected()) session.refresh();
+  session.refresh();
 };
 
 gamesMenu.close = function(fromBB) {

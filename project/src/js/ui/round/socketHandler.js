@@ -51,9 +51,8 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       xhr.reload(ctrl).then(ctrl.reload);
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
-      // refresh current games card list
-      if (session.isConnected()) session.refresh();
       setTimeout(function() {
+        session.refresh();
         ctrl.showActions();
         m.redraw();
       }, 1000);

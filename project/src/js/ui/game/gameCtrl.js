@@ -59,7 +59,7 @@ export default function controller() {
     }
     // if not joinable or created, it means the game is started, so let's play!
     else {
-      if (session.isConnected()) session.refresh();
+      session.refresh();
 
       if (gameApi.playable(data) && data.game.turns - data.game.startedAtTurn <= 1)
         sound.dong();

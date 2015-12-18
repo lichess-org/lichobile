@@ -16,7 +16,6 @@ import helper from './ui/helper';
 import backbutton from './backbutton';
 import storage from './storage';
 import socket from './socket';
-import initDataRefresh from './dataRefresh';
 import push from './push';
 import routes from './routes';
 
@@ -25,8 +24,6 @@ var triedToLogin = false;
 function main() {
 
   routes.init();
-
-  initDataRefresh();
 
   // open games from external links with url scheme
   window.handleOpenURL = function(url) {
@@ -49,6 +46,8 @@ function main() {
 
   document.addEventListener('online', onOnline, false);
   document.addEventListener('offline', onOffline, false);
+  document.addEventListener('resume', onResume, false);
+  document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
   window.addEventListener('resize', onResize, false);
 
@@ -127,6 +126,14 @@ function onOnline() {
 function onOffline() {
   socket.disconnect();
   m.redraw();
+}
+
+function onResume() {
+  socket.connect();
+}
+
+function onPause() {
+  socket.disconnect();
 }
 
 function handleError(event, source, fileno, columnNumber) {

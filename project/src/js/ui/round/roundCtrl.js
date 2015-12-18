@@ -262,7 +262,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
         else this.chessground.playPremove();
       }
-      if (this.data.game.speed === 'correspondence' && session.isConnected()) session.refresh();
+      if (this.data.game.speed === 'correspondence') session.refresh();
     }
 
     if (o.clock) {

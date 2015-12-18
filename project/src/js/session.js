@@ -1,5 +1,5 @@
 import { request } from './http';
-import { handleXhrError } from './utils';
+import { hasNetwork, handleXhrError } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
@@ -79,20 +79,22 @@ function rememberLogin() {
 }
 
 function refresh() {
-  return request('/account/info', {
-    background: true
-  }).then(function(data) {
-    session = data;
-    m.redraw();
-    return session;
-  }, function(err) {
-    if (session && err.status === 401) {
-      session = null;
+  if (hasNetwork() && isConnected()) {
+    return request('/account/info', {
+      background: true
+    }).then(function(data) {
+      session = data;
       m.redraw();
-      window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
-    }
-    throw err;
-  });
+      return session;
+    }, function(err) {
+      if (session && err.status === 401) {
+        session = null;
+        m.redraw();
+        window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
+      }
+      throw err;
+    });
+  }
 }
 
 export default {

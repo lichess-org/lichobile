@@ -197,9 +197,15 @@ function renderAntagonistInfo(ctrl, player, material) {
   return (
     <div className="antagonistInfos" config={vConf}>
       <h2 className="antagonistUser">
-        {user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null}
+        {user ?
+          <span className={'status ' + (user.online ? 'online' : 'offline')} data-icon="r" /> :
+          null
+        }
         {playerName}
-        {player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')}
+        {player.onGame ?
+          <span className="ongame yes" data-icon="3" /> :
+          <span className="ongame no" data-icon="0" />
+        }
       </h2>
       <div className="ratingAndMaterial">
         {user && helper.isPortrait() ?

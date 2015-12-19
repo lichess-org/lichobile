@@ -251,7 +251,7 @@ function renderPlayTable(ctrl, player, material, position) {
       {renderAntagonistInfo(ctrl, player, material, position)}
       {ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor) : (
-        ctrl.data.correspondence ?
+        ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null

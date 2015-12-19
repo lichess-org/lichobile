@@ -35,9 +35,10 @@ export function view(ctrl, color, runningColor) {
     running: isRunning,
     emerg: time < ctrl.data.emerg
   });
+  function cConfig(el) {
+    el.textContent = formatClockTime(ctrl, time * 1000, isRunning);
+  }
   return (
-    <div id={'clock_' + color} className={className}>
-      {formatClockTime(ctrl, time * 1000, isRunning)}
-    </div>
+    <div id={'clock_' + color} className={className} config={cConfig} />
   );
 }

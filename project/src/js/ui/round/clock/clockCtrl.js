@@ -1,11 +1,10 @@
 import { formatClockTime } from './clockView';
 import sound from '../../../sound';
-import m from 'mithril';
 
 export default function ctrl(data, outOfTime, soundColor) {
-  var lastUpdate;
+  const lastUpdate = {};
 
-  var emergSound = {
+  const emergSound = {
     last: null,
     delay: 5000,
     playable: {
@@ -15,11 +14,9 @@ export default function ctrl(data, outOfTime, soundColor) {
   };
 
   function setLastUpdate() {
-    lastUpdate = {
-      white: data.white,
-      black: data.black,
-      at: Date.now()
-    };
+    lastUpdate.white = data.white;
+    lastUpdate.black = data.black;
+    lastUpdate.at = Date.now();
   }
   setLastUpdate();
 
@@ -29,16 +26,14 @@ export default function ctrl(data, outOfTime, soundColor) {
     this.data.white = white;
     this.data.black = black;
     setLastUpdate();
-    m.redraw();
   };
 
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (Date.now() - lastUpdate.at) / 1000);
-    // performance hack: we don't want to call m.redraw() on every clock tick
-    var time = this.data[color] * 1000,
-      el = document.getElementById('clock_' + color);
+    const time = this.data[color] * 1000;
+    const el = document.getElementById('clock_' + color);
 
-    if (el) el.innerHTML = formatClockTime(this, time, true);
+    if (el) el.textContent = formatClockTime(this, time, true);
 
     if (soundColor === color &&
       this.data[soundColor] < this.data.emerg &&

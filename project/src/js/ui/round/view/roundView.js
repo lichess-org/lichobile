@@ -21,20 +21,23 @@ import socket from '../../../socket';
 import m from 'mithril';
 
 export default function view(ctrl) {
-  function overlay() {
-    return [
-      ctrl.chat ? renderChat(ctrl.chat) : null,
-      renderPromotion(ctrl),
-      renderGamePopup(ctrl),
-      renderSubmitMovePopup(ctrl)
-    ];
-  }
+
+  const isPortrait = helper.isPortrait();
 
   return layout.board(
     renderHeader.bind(undefined, ctrl),
-    renderContent.bind(undefined, ctrl),
-    overlay
+    renderContent.bind(undefined, ctrl, isPortrait),
+    overlay.bind(undefined, ctrl, isPortrait)
   );
+}
+
+function overlay(ctrl, isPortrait) {
+  return [
+    ctrl.chat ? renderChat(ctrl.chat) : null,
+    renderPromotion(ctrl),
+    renderGamePopup(ctrl, isPortrait),
+    renderSubmitMovePopup(ctrl)
+  ];
 }
 
 export function renderMaterial(material) {
@@ -101,10 +104,9 @@ function renderHeader(ctrl) {
   );
 }
 
-function renderContent(ctrl) {
+function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const replayTable = renderReplayTable(ctrl);
-  const isPortrait = helper.isPortrait();
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
 
@@ -182,7 +184,7 @@ function userInfos(user, player, playerName) {
 function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const vmKey = position + 'Hash';
   const user = player.user;
-  const playerName = utils.playerName(player, helper.isLandscape());
+  const playerName = utils.playerName(player, !isPortrait);
   const vConf = user ?
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
     utils.noop;
@@ -212,7 +214,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
         }
       </h2>
       <div className="ratingAndMaterial">
-        {user && helper.isPortrait() ?
+        {user && isPortrait ?
           <h3 className="rating">
             {player.rating}
             {player.provisional ? '?' : ''}
@@ -343,10 +345,10 @@ function gameInfos(data) {
   ];
 }
 
-function renderGamePopup(ctrl) {
+function renderGamePopup(ctrl, isPortrait) {
   return popupWidget(
     'player_controls',
-    helper.isPortrait() ? gameInfos(ctrl.data) : null,
+    isPortrait ? gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
       renderGameRunningActions.bind(undefined, ctrl) : renderGameEndedActions.bind(undefined, ctrl),
     ctrl.vm.showingActions,

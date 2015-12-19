@@ -3,7 +3,11 @@ import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
-var menu = {};
+const menu = {};
+
+menu.vm = {
+  hash: ''
+};
 
 /* properties */
 menu.isOpen = false;
@@ -55,4 +59,4 @@ menu.toggleHeader = function() {
   return menu.headerOpen() ? menu.headerOpen(false) : menu.headerOpen(true);
 };
 
-module.exports = menu;
+export default menu;

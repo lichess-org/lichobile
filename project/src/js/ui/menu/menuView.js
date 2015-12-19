@@ -5,14 +5,14 @@ import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
-import * as utils from '../../utils';
+import { hasNetwork } from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
 import m from 'mithril';
 
 function renderHeader(user) {
-  if (utils.hasNetwork())
+  if (hasNetwork())
     return user ? [
       m('div.logo'),
       m('h2.username', user.username),
@@ -59,50 +59,50 @@ function renderProfileActions(user) {
 function renderLinks(user) {
   return (
     <ul className="side_links">
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }
-      {utils.hasNetwork() && session.nowPlaying().length ?
+      {hasNetwork() && session.nowPlaying().length ?
       <li className="side_link" key="current_games" config={helper.ontouchY(menu.popup(gamesMenu.open))}>
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', session.nowPlaying().length)}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="play_real_time" config={helper.ontouchY(menu.popup(newGameForm.openRealTime))}>
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }
-      {utils.hasNetwork() && user ?
+      {hasNetwork() && user ?
       <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="tv" config={helper.ontouchY(menu.route('/tv'))}>
         <span data-icon="1"/>{i18n('watchLichessTV')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="training" config={helper.ontouchY(menu.route('/training'))}>
         <span data-icon="-"/>{i18n('training')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="players" config={helper.ontouchY(menu.route('/players'))}>
         <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
-      {utils.hasNetwork() ?
+      {hasNetwork() ?
       <li className="side_link" key="ranking" config={helper.ontouchY(menu.route('/ranking'))}>
         <span className="fa fa-cubes"/>{i18n('leaderboard')}
       </li> : null
@@ -128,17 +128,32 @@ function renderLinks(user) {
   );
 }
 
-export default function view() {
+function renderMenu() {
   const user = session.get();
+  const username = user && user.username;
+
+  const hash = username + hasNetwork() + menu.headerOpen();
+
+  if (menu.vm.hash === hash) return {
+    subtree: 'retain'
+  };
+
+  menu.vm.hash = hash;
 
   return (
+    <div className="native_scroller">
+      <header className="side_menu_header">
+        {renderHeader(user)}
+      </header>
+      {user && menu.headerOpen() ? renderProfileActions(user) : renderLinks(user)}
+    </div>
+  );
+}
+
+export default function view() {
+  return (
     <aside id="side_menu" className={menu.isOpen ? 'in' : 'out'}>
-      <div className="native_scroller">
-        <header className="side_menu_header">
-          {renderHeader(user)}
-        </header>
-        {user && menu.headerOpen() ? renderProfileActions(user) : renderLinks(user)}
-      </div>
+      {renderMenu()}
     </aside>
   );
 }

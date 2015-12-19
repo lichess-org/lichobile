@@ -41,6 +41,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.vm = {
+    renderedBoard: false,
     flip: false,
     showingActions: false,
     replayHash: '',

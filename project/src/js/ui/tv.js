@@ -20,7 +20,6 @@ export default {
 
     function onFeatured(o) {
       xhr.game(o.id, o.color).then(function(data) {
-        m.redraw.strategy('all');
         if (round) round.onunload();
         data.tv = settings.tv.channel();
         round = new roundCtrl(data, onFeatured, onChannelChange);

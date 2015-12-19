@@ -80,8 +80,9 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
   }
 
   function boardConfig(el, isUpdate) {
-    if (!isUpdate) {
+    if (!isUpdate || !ctrl.vm.renderedBoard) {
       chessground.render(el, ctrl.chessground);
+      ctrl.vm.renderedBoard = true;
     }
   }
 

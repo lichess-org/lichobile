@@ -159,8 +159,9 @@ function ratingDiff(player) {
 }
 
 function renderCheckCount(ctrl, color) {
-  var player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
-  if (typeof player.checks !== 'undefined') return m('div.checkCount', player.checks);
+  const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
+  if (typeof player.checks !== 'undefined')
+    return <div className="checkCount">{player.checks}</div>;
 }
 
 function renderSubmitMovePopup(ctrl) {
@@ -187,18 +188,30 @@ function userInfos(user, player, playerName) {
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl, player, material) {
+function renderAntagonistInfo(ctrl, player, material, position) {
+  const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, helper.isLandscape());
   const vConf = user ?
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
     utils.noop;
 
+  const username = user ? user.username : 'anon';
+  const onlineStatus = user && user.online ? 'online' : 'offline';
+  const diff = ratingDiff(player);
+
+  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + diff + player.checks + Object.keys(material).map(k => k + material[k]);
+
+  if (ctrl.vm[vmKey] === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm[vmKey] = hash;
+
   return (
     <div className="antagonistInfos" config={vConf}>
       <h2 className="antagonistUser">
         {user ?
-          <span className={'status ' + (user.online ? 'online' : 'offline')} data-icon="r" /> :
+          <span className={'status ' + onlineStatus} data-icon="r" /> :
           null
         }
         {playerName}
@@ -212,7 +225,7 @@ function renderAntagonistInfo(ctrl, player, material) {
           <h3 className="rating">
             {player.rating}
             {player.provisional ? '?' : ''}
-            {ratingDiff(player)}
+            {diff}
           </h3> : null
         }
         {renderCheckCount(ctrl, player.color)}
@@ -233,7 +246,7 @@ function renderPlayTable(ctrl, player, material, position) {
 
   return (
     <section className={'playTable ' + position} key={key} style={style}>
-      {renderAntagonistInfo(ctrl, player, material)}
+      {renderAntagonistInfo(ctrl, player, material, position)}
       {ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
         ctrl.data.correspondence ? renderCorrespondenceClock(
           ctrl.correspondenceClock, player.color, ctrl.data.game.player

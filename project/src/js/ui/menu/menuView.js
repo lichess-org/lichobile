@@ -130,7 +130,7 @@ function renderLinks(user) {
 
 function renderMenu() {
   const user = session.get();
-  const username = user && user.username;
+  const username = user ? user.username : 'anon';
 
   const hash = username + hasNetwork() + menu.headerOpen();
 

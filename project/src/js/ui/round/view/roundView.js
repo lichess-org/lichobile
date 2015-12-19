@@ -190,27 +190,30 @@ function userInfos(user, player, playerName) {
 function renderAntagonistInfo(ctrl, player, material) {
   const user = player.user;
   const playerName = utils.playerName(player, helper.isLandscape());
+  const vConf = user ?
+    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
+    utils.noop;
 
-  return m('div.antagonistInfos', {
-    config: user ?
-      helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
-      utils.noop
-  }, [
-    m('h2.antagonistUser', [
-      user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null,
-      playerName,
-      player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')
-    ]),
-    m('div.ratingAndMaterial', [
-      user && helper.isPortrait() ? m('h3.rating', [
-        player.rating,
-        player.provisional ? '?' : '',
-        ratingDiff(player)
-      ]) : null,
-      renderCheckCount(ctrl, player.color),
-      ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)
-    ])
-  ]);
+  return (
+    <div className="antagonistInfos" config={vConf}>
+      <h2 className="antagonistUser">
+        {user ? m('span.status[data-icon=r]', { className: user.online ? 'online' : 'offline' }) : null}
+        {playerName}
+        {player.onGame ? m('span.ongame.yes[data-icon=3]') : m('span.ongame.no[data-icon=0]')}
+      </h2>
+      <div className="ratingAndMaterial">
+        {user && helper.isPortrait() ?
+          <h3 className="rating">
+            {player.rating}
+            {player.provisional ? '?' : ''}
+            {ratingDiff(player)}
+          </h3> : null
+        }
+        {renderCheckCount(ctrl, player.color)}
+        {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
+      </div>
+    </div>
+  );
 }
 
 function renderPlayTable(ctrl, player, material, position) {
@@ -222,14 +225,16 @@ function renderPlayTable(ctrl, player, material, position) {
   const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
-  return m('section.playTable', { className: position, key, style }, [
-    renderAntagonistInfo(ctrl, player, material),
-    ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
-      ctrl.data.correspondence ? renderCorrespondenceClock(
-        ctrl.correspondenceClock, player.color, ctrl.data.game.player
-      ) : null
-    )
-  ]);
+  return (
+    <section className={'playTable ' + position} key={key} style={style}>
+      {renderAntagonistInfo(ctrl, player, material)}
+      {ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
+        ctrl.data.correspondence ? renderCorrespondenceClock(
+          ctrl.correspondenceClock, player.color, ctrl.data.game.player
+        ) : null
+      )}
+    </section>
+  );
 }
 
 function tvChannelSelector(ctrl) {
@@ -250,7 +255,7 @@ function renderGameRunningActions(ctrl) {
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 
-    return m('div.game_controls', controls);
+    return <div className="game_controls">{controls}</div>;
   }
 
   var d = ctrl.data;
@@ -358,26 +363,27 @@ function renderGameActionsBar(ctrl) {
   };
   ctrl.vm.buttonsHash = hash;
 
-  const children = [
-    m('button.action_bar_button.fa.fa-ellipsis-h', {
-      key: 'gameMenu',
-      className: helper.classSet({
-        glow: answerRequired
-      }),
-      config: helper.ontouch(ctrl.showActions)
-    }),
-    ctrl.chat ? m('button.action_bar_button[data-icon=c]', {
-      key: 'chat',
-      className: helper.classSet({
-        glow: ctrl.chat.unread
-      }),
-      config: helper.ontouch(ctrl.chat.open || utils.noop)
-    }) : m('button.action_bar_button.empty[data-icon=c]'),
-    button.flipBoard(ctrl),
-    button.backward(ctrl),
-    button.forward(ctrl)
-  ];
-  return m('section.actions_bar', {
-    key: 'game-actions-bar'
-  }, children);
+  const gmClass = [
+    'action_bar_button',
+    'fa',
+    'fa-ellipsis-h',
+    answerRequired ? 'glow' : ''
+  ].join(' ');
+
+  const chatClass = [
+    'action_bar_button',
+    ctrl.chat && ctrl.chat.unread ? 'glow' : ''
+  ].join(' ');
+
+  return (
+    <section className="actions_bar" key="game-actions-bar">
+      <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />
+      {ctrl.chat ?
+      <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
+      }
+      {button.flipBoard(ctrl)}
+      {button.backward(ctrl)}
+      {button.forward(ctrl)}
+    </section>
+  );
 }

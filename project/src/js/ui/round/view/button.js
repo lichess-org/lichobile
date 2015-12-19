@@ -171,33 +171,38 @@ export default {
     }, i18n('giveNbSeconds', 15));
   },
   flipBoard: function(ctrl) {
-    return m('button.action_bar_button[data-icon=B]', {
-      key: 'flipboard',
-      className: ctrl.vm.flip ? 'highlight' : '',
-      config: helper.ontouch(ctrl.flip)
+    const className = helper.classSet({
+      'action_bar_button': true,
+      highlight: ctrl.vm.flip
     });
+    return (
+      <button className={className} data-icon="B" key="flipboard"
+        config={helper.ontouch(ctrl.flip)} />
+    );
   },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
-    return m('button.action_bar_button[data-icon=I]', {
-      key: 'backward',
-      config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
-      className: helper.classSet({
-        disabled: ctrl.broken || !enabled
-      })
+    const className = helper.classSet({
+      'action_bar_button': true,
+      disabled: ctrl.broken || !enabled
     });
+    return (
+      <button className={className} data-icon="I" key="backward"
+        config={helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst)} />
+    );
   },
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-    return m('button.action_bar_button[data-icon=H]', {
-      key: 'forward',
-      config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
-      className: helper.classSet({
-        disabled: ctrl.broken || !enabled
-      })
+    const className = helper.classSet({
+      'action_bar_button': true,
+      disabled: ctrl.broken || !enabled
     });
+    return (
+      <button className={className} data-icon="H" key="forward"
+        config={helper.ontouch(ctrl.jumpNext, ctrl.jumpLast)} />
+    );
   },
   newOpponent: function(ctrl) {
     if (!ctrl.data.opponent.ai && (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data))) {

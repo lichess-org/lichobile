@@ -53,7 +53,7 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
+export function renderBoard(variant, chessgroundCtrl, moreWrapperClasses, withStyle = true) {
   const { vh, vw } = helper.viewportDim();
   // ios 7.1 still doesn't support vh unit in calc
   // see board-content.styl section '.board_wrapper' for corresponding calc() rules
@@ -70,7 +70,7 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
     'board',
     settings.general.theme.board(),
     settings.general.theme.piece(),
-    ctrl.data.game.variant.key
+    variant
   ].join(' ');
   let wrapperClass = 'board_wrapper';
 
@@ -80,9 +80,9 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
   }
 
   function boardConfig(el, isUpdate) {
-    if (!isUpdate || !ctrl.vm.renderedBoard) {
-      chessground.render(el, ctrl.chessground);
-      ctrl.vm.renderedBoard = true;
+    if (!isUpdate || !chessgroundCtrl.isRendered) {
+      chessground.render(el, chessgroundCtrl);
+      chessgroundCtrl.isRendered = true;
     }
   }
 
@@ -121,13 +121,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return [
       opponent,
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       player,
       renderGameActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       <section key="table" className="table">
         <header className="tableHeader">
           {gameInfos(ctrl.data)}

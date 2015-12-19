@@ -33,13 +33,13 @@ function content(ctrl) {
   if (helper.isPortrait())
     return [
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent'),
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player'),
       renderGameActionsBar(ctrl, actions.view)
     ];
   else if (helper.isLandscape() && helper.isVeryWideScreen())
     return [
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent')}
@@ -52,7 +52,7 @@ function content(ctrl) {
     ];
   else
     return [
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent')}

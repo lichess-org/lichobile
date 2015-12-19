@@ -29,13 +29,13 @@ export default function view(ctrl) {
     if (helper.isPortrait())
       return [
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
-        renderBoard(ctrl, wrapperClass),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, wrapperClass),
         renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player'),
         renderGameActionsBar(ctrl, actions.view)
       ];
     else
       return [
-        renderBoard(ctrl, wrapperClass),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, wrapperClass),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}

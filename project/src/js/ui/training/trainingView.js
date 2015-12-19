@@ -27,13 +27,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return [
       ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       <section key="table" className="table">
         <section className="trainingTable">
           {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}

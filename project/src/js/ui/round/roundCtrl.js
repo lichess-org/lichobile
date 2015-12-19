@@ -141,14 +141,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       this.title = 'Lichess TV';
     else if (this.data.userTV)
       this.title = this.data.userTV;
+    else if (gameStatus.started(this.data))
+      this.title = i18n('gamesBeingPlayedRightNow');
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))
       this.title = i18n('gameAborted');
-    else if (gameApi.isPlayerTurn(this.data))
-      this.title = i18n('yourTurn');
-    else if (gameApi.isOpponentTurn(this.data))
-      this.title = i18n('waitingForOpponent');
     else
       this.title = 'lichess.org';
   };

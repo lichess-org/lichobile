@@ -93,21 +93,22 @@ export function renderBoard(ctrl, moreWrapperClasses, withStyle = true) {
 }
 
 function renderHeader(ctrl) {
-  return [
-    m('nav', {
-      className: socket.isConnected() ? '' : 'reconnecting'
-    }, [
-      menuButton(),
-      socket.isConnected() ? m('h1.playing', [
-        ctrl.data.userTV ? m('span.withIcon[data-icon=1]') : null,
-        ctrl.title
-      ]) : utils.hasNetwork() ? m('h1.reconnecting.withTitle', [
-        i18n('reconnecting'),
-        loader
-      ]) : m('h1', 'Offline'),
-      headerBtns()
-    ])
-  ];
+  return (
+    <nav className={socket.isConnected() ? '' : 'reconnecting'}>
+      {menuButton()}
+      {socket.isConnected() ?
+      <h1 className="playing">
+        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+        {ctrl.title}
+      </h1> : utils.hasNetwork() ?
+      <h1 className="reconnecting withTitle">
+        {i18n('reconnecting')}
+        {loader}
+      </h1> : <h1>Offline</h1>
+      }
+      {headerBtns()}
+    </nav>
+  );
 }
 
 function renderContent(ctrl) {

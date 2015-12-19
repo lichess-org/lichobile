@@ -243,15 +243,19 @@ function renderPlayTable(ctrl, player, material, position) {
   // 45 refers to game actions bar height
   const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
+  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
 
   return (
     <section className={'playTable ' + position} key={key} style={style}>
       {renderAntagonistInfo(ctrl, player, material, position)}
-      {ctrl.clock ? renderClock(ctrl.clock, player.color, ctrl.isClockRunning() ? ctrl.data.game.player : null) : (
-        ctrl.data.correspondence ? renderCorrespondenceClock(
-          ctrl.correspondenceClock, player.color, ctrl.data.game.player
-        ) : null
-      )}
+      {ctrl.clock ?
+        renderClock(ctrl.clock, player.color, runningColor) : (
+        ctrl.data.correspondence ?
+          renderCorrespondenceClock(
+            ctrl.correspondenceClock, player.color, ctrl.data.game.player
+          ) : null
+        )
+      }
     </section>
   );
 }

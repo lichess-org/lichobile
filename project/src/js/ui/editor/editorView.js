@@ -59,7 +59,7 @@ export default function view(ctrl) {
           config: editorConfig
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
-          renderBoard(ctrl.data.game.variant.key, ctrl.chessground, null, false),
+          renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
           sparePieces(ctrl, color, color, 'bottom')
         ]),
         m('section.table.editorTable', { key: 'table' }, [

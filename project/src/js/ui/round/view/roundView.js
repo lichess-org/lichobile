@@ -53,19 +53,7 @@ export function renderMaterial(material) {
   return children;
 }
 
-export function renderBoard(variant, chessgroundCtrl, moreWrapperClasses, withStyle = true) {
-  const { vh, vw } = helper.viewportDim();
-  // ios 7.1 still doesn't support vh unit in calc
-  // see board-content.styl section '.board_wrapper' for corresponding calc() rules
-  const landscapeDim = (vh > 700 && vw < 1050) ? vh - 50 - vh * 0.12 : vh - 50;
-  const boardStyle = helper.isLandscape() ? {
-    width: landscapeDim + 'px',
-    height: landscapeDim + 'px'
-  } : {
-    width: vw + 'px',
-    height: vw + 'px'
-  };
-  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
+export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses) {
   const boardClass = [
     'board',
     settings.general.theme.board(),
@@ -73,6 +61,7 @@ export function renderBoard(variant, chessgroundCtrl, moreWrapperClasses, withSt
     variant
   ].join(' ');
   let wrapperClass = 'board_wrapper';
+  let key = 'board' + (isPortrait ? 'portrait' : 'landscape');
 
   if (moreWrapperClasses) {
     wrapperClass += ' ';
@@ -87,7 +76,7 @@ export function renderBoard(variant, chessgroundCtrl, moreWrapperClasses, withSt
   }
 
   return (
-    <section key={boardKey} className={wrapperClass} style={withStyle ? boardStyle : {}}>
+    <section className={wrapperClass} key={key}>
       <div className={boardClass} config={boardConfig} />
     </section>
   );
@@ -115,19 +104,20 @@ function renderHeader(ctrl) {
 function renderContent(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const replayTable = renderReplayTable(ctrl);
-  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player');
-  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent');
+  const isPortrait = helper.isPortrait();
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
 
-  if (helper.isPortrait())
+  if (isPortrait)
     return [
       opponent,
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
       player,
       renderGameActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
       <section key="table" className="table">
         <header className="tableHeader">
           {gameInfos(ctrl.data)}
@@ -189,7 +179,7 @@ function userInfos(user, player, playerName) {
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl, player, material, position) {
+function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, helper.isLandscape());
@@ -201,7 +191,7 @@ function renderAntagonistInfo(ctrl, player, material, position) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const diff = ratingDiff(player);
 
-  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + diff + player.checks + Object.keys(material).map(k => k + material[k]);
+  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + diff + player.checks + Object.keys(material).map(k => k + material[k]) + isPortrait;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -236,19 +226,13 @@ function renderAntagonistInfo(ctrl, player, material, position) {
   );
 }
 
-function renderPlayTable(ctrl, player, material, position) {
-  const {vh, vw} = helper.viewportDim();
-  const headerHeight = vh > 480 ? 50 : 40;
-  const contentHeight = vh - headerHeight;
-  // must do this here because of the lack of `calc` support
-  // 45 refers to game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
-  const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
+function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+  const key = position + (isPortrait ? 'portrait' : 'landscape');
 
   return (
-    <section className={'playTable ' + position} key={key} style={style}>
-      {renderAntagonistInfo(ctrl, player, material, position)}
+    <section className={'playTable ' + position} key={key}>
+      {renderAntagonistInfo(ctrl, player, material, position, isPortrait)}
       {ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor) : (
         ctrl.correspondenceClock ?

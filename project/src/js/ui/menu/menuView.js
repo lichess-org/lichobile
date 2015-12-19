@@ -132,7 +132,7 @@ function renderMenu() {
   const user = session.get();
   const username = user ? user.username : 'anon';
 
-  const hash = username + hasNetwork() + menu.headerOpen();
+  const hash = username + hasNetwork() + menu.headerOpen() + m.route();
 
   if (menu.vm.hash === hash) return {
     subtree: 'retain'

@@ -4,11 +4,11 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import m from 'mithril';
 
-var signupModal = {};
+const signupModal = {};
 
 var isOpen = false;
 
-var submit = function(form) {
+function submit(form) {
   var login = form[0].value.trim();
   var email = form[1].value.trim();
   var pass = form[2].value.trim();
@@ -25,7 +25,7 @@ var submit = function(form) {
     else if (data.error.password)
       window.plugins.toast.show(data.error.password[0], 'short', 'center');
   });
-};
+}
 
 signupModal.open = function() {
   helper.analyticsTrackView('Sign Up');
@@ -40,9 +40,11 @@ signupModal.close = function(fromBB) {
 };
 
 signupModal.view = function() {
-  if (!isOpen) return m('div#signup.modal.modal_slide');
+  if (!isOpen) return (
+    <div className="modal modal_slide" />
+  );
 
-  return m('div#signup.modal.modal_slide.show', [
+  return m('div.modal.modal_slide.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         config: helper.ontouch(signupModal.close)
@@ -62,7 +64,7 @@ signupModal.view = function() {
           'Terms of Service'
         ), '.'
       ]),
-      m('form', {
+      m('form.login', {
         onsubmit: function(e) {
           e.preventDefault();
           return submit(e.target);
@@ -93,4 +95,4 @@ signupModal.view = function() {
   ]);
 };
 
-module.exports = signupModal;
+export default signupModal;

@@ -7,11 +7,11 @@ import signupModal from './signupModal';
 import backbutton from '../backbutton';
 import m from 'mithril';
 
-var loginModal = {};
+const loginModal = {};
 
 var isOpen = false;
 
-var submit = function(form) {
+function submit(form) {
   var login = form[0].value.trim();
   var pass = form[1].value.trim();
   if (!login || !pass) return false;
@@ -23,7 +23,7 @@ var submit = function(form) {
   }, function(err) {
     utils.handleXhrError(err);
   });
-};
+}
 
 loginModal.open = function() {
   helper.analyticsTrackView('Login');
@@ -38,9 +38,11 @@ loginModal.close = function(fromBB) {
 };
 
 loginModal.view = function() {
-  if (!isOpen) return m('div#login.modal.modal_slide');
+  if (!isOpen) return (
+    <div className="modal modal_slide" />
+  );
 
-  return m('div#login.modal.modal_slide.show', [
+  return m('div.modal.modal_slide.show', [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         config: helper.ontouch(loginModal.close)
@@ -48,7 +50,7 @@ loginModal.view = function() {
       m('h2', i18n('signIn'))
     ]),
     m('div.modal_content', [
-      m('form', {
+      m('form.login', {
         onsubmit: function(e) {
           e.preventDefault();
           return submit(e.target);
@@ -77,4 +79,4 @@ loginModal.view = function() {
   ]);
 };
 
-module.exports = loginModal;
+export default loginModal;

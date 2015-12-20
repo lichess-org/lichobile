@@ -1,6 +1,5 @@
 import helper from '../../helper';
 import i18n from '../../../i18n';
-import m from 'mithril';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
@@ -29,15 +28,16 @@ export function formatClockTime(time) {
 }
 
 export function view(ctrl, color, runningColor) {
-  var time = ctrl.data[color];
-  return m('div', {
-    id: 'clock_' + color,
-    className: 'correspondence clock ' + helper.classSet({
-      'outoftime': !time,
-      'running': runningColor === color,
-      'emerg': time < ctrl.data.emerg
-    })
-  }, [
-    m('div.time', formatClockTime(time * 1000))
-  ]);
+  const time = ctrl.data[color];
+  const className = 'correspondence clock ' + helper.classSet({
+    'outoftime': !time,
+    'running': runningColor === color,
+    'emerg': time < ctrl.data.emerg
+  });
+  function cConfig(el) {
+    el.textContent = formatClockTime(time * 1000);
+  }
+  return (
+    <div id={'clock_' + color} className={className} config={cConfig} />
+  );
 }

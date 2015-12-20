@@ -29,7 +29,7 @@ export default function(root, data, onFlag) {
     const time = this.data[color] * 1000,
       el = document.getElementById('clock_' + color);
 
-    if (el) el.innerHTML = formatClockTime(time);
+    if (el) el.textContent = formatClockTime(time);
 
   }.bind(this);
 }

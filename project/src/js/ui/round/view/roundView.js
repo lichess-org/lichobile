@@ -221,7 +221,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           </h3> : null
         }
         {checksNb !== undefined ?
-          <div className="checkCount">{player.checks}</div> : null
+          <div className="checkCount">{checksNb}</div> : null
         }
         {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
       </div>

@@ -144,17 +144,16 @@ function compact(x) {
   return x;
 }
 
-function ratingDiff(player) {
+function renderRatingDiff(player) {
   if (typeof player.ratingDiff === 'undefined') return null;
   if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
   if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
 }
 
-function renderCheckCount(ctrl, color) {
+function getChecksCount(ctrl, color) {
   const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
-  if (typeof player.checks !== 'undefined')
-    return <div className="checkCount">{player.checks}</div>;
+  return player.checks;
 }
 
 function renderSubmitMovePopup(ctrl) {
@@ -191,9 +190,9 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
 
   const username = user ? user.username : 'anon';
   const onlineStatus = user && user.online ? 'online' : 'offline';
-  const diff = ratingDiff(player);
+  const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + diff + player.checks + Object.keys(material).map(k => k + material[k]) + isPortrait;
+  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]) + isPortrait;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -218,10 +217,12 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           <h3 className="rating">
             {player.rating}
             {player.provisional ? '?' : ''}
-            {diff}
+            {renderRatingDiff(player)}
           </h3> : null
         }
-        {renderCheckCount(ctrl, player.color)}
+        {checksNb !== undefined ?
+          <div className="checkCount">{player.checks}</div> : null
+        }
         {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
       </div>
     </div>

@@ -11,18 +11,20 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
 
   var handlers = {
     takebackOffers: function(o) {
+      m.startComputation();
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
-      m.redraw();
+      m.endComputation();
     },
     move: function(o) {
       ctrl.apiMove(o);
     },
     checkCount: function(e) {
+      m.startComputation();
       var isWhite = ctrl.data.player.color === 'white';
       ctrl.data.player.checks = isWhite ? e.white : e.black;
       ctrl.data.opponent.checks = isWhite ? e.black : e.white;
-      m.redraw();
+      m.endComputation();
     },
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
@@ -52,9 +54,10 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       setTimeout(function() {
+        m.startComputation();
         session.refresh();
         ctrl.showActions();
-        m.redraw();
+        m.endComputation();
       }, 1000);
     },
     gone: function(isGone) {

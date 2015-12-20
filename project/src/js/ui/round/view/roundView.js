@@ -192,7 +192,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = username + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]) + isPortrait;
+  const hash = ctrl.data.game.id + username + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]) + isPortrait;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -367,7 +367,7 @@ function renderGameActionsBar(ctrl) {
   const nextPly = ctrl.vm.ply + 1;
   const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
   const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-  const hash = answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn;
+  const hash = ctrl.data.game.id + answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn;
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'

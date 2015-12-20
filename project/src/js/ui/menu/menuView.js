@@ -134,7 +134,9 @@ function renderMenu() {
 
   const hash = username + hasNetwork() + menu.headerOpen() + m.route();
 
-  if (menu.vm.hash === hash) return {
+  // tv is the only one place that performs strategy all
+  // ideally I'd need to hanle this in a better way
+  if (menu.vm.hash === hash && m.route() !== '/tv') return {
     subtree: 'retain'
   };
 

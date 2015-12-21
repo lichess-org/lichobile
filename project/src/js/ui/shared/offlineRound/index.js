@@ -5,34 +5,29 @@ import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
 export function renderAntagonist(ctrl, content, material, position) {
-  const {vh, vw} = helper.viewportDim();
-  const headerHeight = vh > 480 ? 50 : 40;
-  const contentHeight = vh - headerHeight;
-  // must do this here because of the lack of `calc` support
-  // 45 refers to game actions bar height
-  const style = helper.isLandscape() ? {} : { height: ((contentHeight - vw - 45) / 2) + 'px' };
   const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
 
-  return m('section.playTable', {
-    className: position, key, style
-  }, [
-    m('div.antagonistInfos offline', [
-      m('div', content),
-      m('div.ratingAndMaterial', renderMaterial(material))
-    ])
-  ]);
+  return (
+    <section className={'playTable ' + position} key={key}>
+      <div className="antagonistInfos offline">
+        <div>{content}</div>
+        <div className="ratingAndMaterial">{renderMaterial(material)}</div>
+      </div>
+    </section>
+  );
 }
 
 export function renderGameActionsBar(ctrl) {
-  var vdom = [
-    m('button.action_bar_button.fa.fa-ellipsis-h', {
-      config: helper.ontouch(ctrl.actions.open)
-    }),
-    m('button.action_bar_button.empty[data-icon=c]'),
-    renderBackwardButton(ctrl),
-    renderForwardButton(ctrl)
-  ];
-  return m('section#game_actions_bar', vdom);
+  return (
+    <section id="game_actions_bar">
+      <button className="action_bar_button fa fa-ellipsis-h"
+        config={helper.ontouch(ctrl.actions.open)}
+      />
+      <button className="action_bar_button empty" />
+      {renderBackwardButton(ctrl)}
+      {renderForwardButton(ctrl)}
+    </section>
+  );
 }
 
 export function renderGameActionsBarTablet(ctrl) {

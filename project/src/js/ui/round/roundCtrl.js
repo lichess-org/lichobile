@@ -43,6 +43,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   this.vm = {
     flip: false,
     showingActions: false,
+    headerHash: '',
     replayHash: '',
     buttonsHash: '',
     playerHash: '',

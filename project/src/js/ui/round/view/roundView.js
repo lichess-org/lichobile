@@ -1,24 +1,27 @@
+import m from 'mithril';
+import socket from '../../../socket';
+import session from '../../../session';
+import challengesApi from '../../../lichess/challenges';
+import friendsApi from '../../../lichess/friends';
+import variantApi from '../../../lichess/variant';
 import chessground from 'chessground-mobile';
 import settings from '../../../settings';
+import * as utils from '../../../utils';
+import i18n from '../../../i18n';
 import layout from '../../layout';
 import { menuButton, loader, headerBtns } from '../../shared/common';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
 import { view as renderPromotion } from '../promotion';
-import * as utils from '../../../utils';
 import helper from '../../helper';
-import i18n from '../../../i18n';
 import button from './button';
 import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
-import variantApi from '../../../lichess/variant';
 import { renderTable as renderReplayTable } from './replay';
-import socket from '../../../socket';
-import m from 'mithril';
 
 export default function view(ctrl) {
 
@@ -86,6 +89,15 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
 }
 
 function renderHeader(ctrl) {
+  const hash = '' + utils.hasNetwork() + session.isConnected() +
+    friendsApi.count() + challengesApi.count() + session.nowPlaying().length +
+    session.myTurnGames().length;
+
+  if (ctrl.vm.headerHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.headerHash = hash;
+
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
       {menuButton()}

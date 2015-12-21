@@ -89,7 +89,7 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
 }
 
 function renderHeader(ctrl) {
-  const hash = '' + utils.hasNetwork() + session.isConnected() +
+  const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
     friendsApi.count() + challengesApi.count() + session.nowPlaying().length +
     session.myTurnGames().length;
 

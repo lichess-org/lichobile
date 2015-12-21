@@ -88,28 +88,32 @@ export function headerBtns() {
 }
 
 export function header(title, leftButton) {
-  return m('nav', [
-    leftButton ? leftButton : menuButton(),
-    title ? m('h1', title) : null,
-    headerBtns()
-  ]);
+  return (
+    <nav>
+      {leftButton ? leftButton : menuButton()}
+      {title ? <h1>{title}</h1> : null}
+      {headerBtns()}
+    </nav>
+  );
 }
 
-export const loader = m('div.loader_circles', [1, 2, 3].map(function(i) {
-  return m('div.circle_' + i);
-}));
+export const loader = (
+  <div className="loader_circles">
+    {[1, 2, 3].map(i => <div className={'circle_' + i} />)}
+  </div>
+);
 
 export function connectingHeader(title) {
-  return m('nav', [
-    menuButton(),
-    m('h1.reconnecting', {
-      className: title ? 'withTitle' : ''
-    }, [
-      title ? m('span', title) : null,
-      loader
-    ]),
-    headerBtns()
-  ]);
+  return (
+    <nav>
+      {menuButton()}
+      <h1 className={'reconnecting' + (title ? 'withTitle' : '')}>
+        {title ? <span>{title}</span> : null}
+        {loader}
+      </h1>
+      {headerBtns()}
+    </nav>
+  );
 }
 
 export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {

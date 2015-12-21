@@ -127,7 +127,7 @@ function renderContent(ctrl, isPortrait) {
       opponent,
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
       player,
-      renderGameActionsBar(ctrl)
+      renderGameActionsBar(ctrl, isPortrait)
     ];
   else
     return [
@@ -141,7 +141,7 @@ function renderContent(ctrl, isPortrait) {
           {replayTable}
           {player}
         </section>
-        {renderGameActionsBar(ctrl)}
+        {renderGameActionsBar(ctrl, isPortrait)}
       </section>
     ];
 }
@@ -369,7 +369,7 @@ function renderGamePopup(ctrl, isPortrait) {
   );
 }
 
-function renderGameActionsBar(ctrl) {
+function renderGameActionsBar(ctrl, isPortrait) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||
@@ -379,7 +379,7 @@ function renderGameActionsBar(ctrl) {
   const nextPly = ctrl.vm.ply + 1;
   const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
   const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-  const hash = ctrl.data.game.id + answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn;
+  const hash = ctrl.data.game.id + answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'

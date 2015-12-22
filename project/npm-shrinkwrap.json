@@ -1557,7 +1557,7 @@
     "chessground-mobile": {
       "version": "3.0.0",
       "from": "veloce/chessground-mobile#experiments",
-      "resolved": "git://github.com/veloce/chessground-mobile.git#6a541b7f7c1e8c6ae4b05adf94ceb0dec14962bc",
+      "resolved": "git://github.com/veloce/chessground-mobile.git#cee2e10e97585ffcf29dcb50eca44b716f13a3a7",
       "dependencies": {
         "merge": {
           "version": "1.2.0",
@@ -1565,9 +1565,9 @@
           "resolved": "https://registry.npmjs.org/merge/-/merge-1.2.0.tgz"
         },
         "mithril": {
-          "version": "0.2.1",
+          "version": "0.2.2-rc.1",
           "from": "lhorie/mithril.js#next",
-          "resolved": "git://github.com/lhorie/mithril.js.git#ab54bd4cba0f5d1acb163409bc7e54903ef92271"
+          "resolved": "git://github.com/lhorie/mithril.js.git#5003c0ac23916ac72a8fd5f0f31e7718604fc17d"
         }
       }
     },
@@ -1582,9 +1582,9 @@
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.8.0.tgz"
     },
     "mithril": {
-      "version": "0.2.1",
+      "version": "0.2.2-rc.1",
       "from": "lhorie/mithril.js#next",
-      "resolved": "git://github.com/lhorie/mithril.js.git#ab54bd4cba0f5d1acb163409bc7e54903ef92271"
+      "resolved": "git://github.com/lhorie/mithril.js.git#5003c0ac23916ac72a8fd5f0f31e7718604fc17d"
     },
     "moment": {
       "version": "2.8.4",

@@ -11,7 +11,7 @@ function styleConf(el) {
 
 export default function(classes, header, contentF, isShowing, closef) {
   if (!isShowing)
-    return <div className="overlay_popup_wrapper" />;
+    return null;
 
   const defaultClasses = {
     overlay_popup: true,
@@ -28,8 +28,9 @@ export default function(classes, header, contentF, isShowing, closef) {
     throw new Error('First popup argument must be either a string or an object');
 
   return (
-    <div className="overlay_popup_wrapper open">
-      <div className="popup_overlay_close" config={closef ? helper.ontouch(closef) : utils.noop} />
+    <div className="overlay_popup_wrapper">
+      <div className="popup_overlay_close"
+        config={closef ? helper.ontouch(helper.fadesOut(closef, '.overlay_popup_wrapper')) : utils.noop} />
       <div className={className} config={styleConf}>
         {header ? <header>{header}</header> : null}
         <div className="popup_content">

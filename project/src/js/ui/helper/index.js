@@ -32,35 +32,20 @@ function collectionHas(coll, el) {
 function findParentBySelector(el, selector) {
   var matches = document.querySelectorAll(selector);
   var cur = el.parentNode;
-  while(cur && !collectionHas(matches, cur)) {
+  while (cur && !collectionHas(matches, cur)) {
     cur = cur.parentNode;
   }
   return cur;
 }
 
-helper.fadesIn = function(element, isInitialized) {
-  if (!isInitialized) {
-    element.style.opacity = 0;
-    Zanimo(element, 'opacity', 1, 150).catch(console.log.bind(console));
-  }
-};
-
-helper.fadesOut = function(callback, selector) {
+helper.fadesOut = function(callback, selector, time = 150) {
   return function(e) {
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, 250)
-    .then(utils.autoredraw(callback))
+    Zanimo(el, 'opacity', 0, time)
+    .then(utils.autoredraw.bind(undefined, callback))
     .catch(console.log.bind(console));
   };
-};
-
-helper.scale = function(element, isInitialized) {
-  if (!isInitialized) {
-    element.style[helper.transformProp()] = 'scale(0.95)';
-    Zanimo(element, 'transform', 'scale(1)', 200)
-    .catch(console.log.bind(console));
-  }
 };
 
 function ontouch(tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {

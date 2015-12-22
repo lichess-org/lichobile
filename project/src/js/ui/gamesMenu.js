@@ -154,7 +154,7 @@ function renderChallenge(c, cDim, cardStyle) {
             {i18n('accept')}
           </button>
           <button config={helper.ontouchX(
-            helper.fadesOut(declineChallenge.bind(undefined, c.game.id), '.card')
+            helper.fadesOut(declineChallenge.bind(undefined, c.game.id), '.card', 250)
           )}>
             {i18n('decline')}
           </button>
@@ -220,9 +220,7 @@ function renderAllGames(cDim) {
 }
 
 gamesMenu.view = function() {
-  if (!gamesMenu.isOpen) return (
-    <div id="games_menu" className="overlay overlay_fade" />
-  );
+  if (!gamesMenu.isOpen) return null;
 
   const vh = helper.viewportDim().vh;
   const cDim = cardDims();
@@ -255,8 +253,9 @@ gamesMenu.view = function() {
   const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
 
   return (
-    <div id="games_menu" className="overlay overlay_fade open">
-      <div className="wrapper_overlay_close" config={helper.ontouch(gamesMenu.close)} />
+    <div id="games_menu" className="overlay_popup_wrapper">
+      <div className="wrapper_overlay_close"
+        config={helper.ontouch(helper.fadesOut(gamesMenu.close, '.overlay_popup_wrapper'))} />
       <div id="wrapper_games" className={wrapperClass} style={wrapperStyle} config={wrapperConfig}>
         {helper.isWideScreen() ? (
           <header>

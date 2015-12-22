@@ -169,11 +169,10 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderSubmitMovePopup(ctrl) {
-  if (!ctrl.vm.moveToSubmit)
-    return <div className="overlay_popup_wrapper submitMovePopup" />;
+  if (!ctrl.vm.moveToSubmit) return null;
 
   return (
-    <div className="overlay_popup_wrapper submitMovePopup open">
+    <div className="overlay_popup_wrapper submitMovePopup">
       <div className="overlay_popup">
         {button.submitMove(ctrl)}
       </div>

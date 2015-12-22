@@ -127,6 +127,7 @@
 
 .clock
   transform translateZ(0)
+  max-width 120px
   font-family Cousine
   font-weight bold
   text-align right
@@ -143,7 +144,11 @@
     color #d0d0d0
   &.correspondence
     font-family 'Noto Sans'
-    font-size 17px
+    font-size 16px
+    text-align center
+    &.running
+      background-color darken(#505a60, 20%)
+      color darken(#fff, 15%)
 
 .checkCount
   font-size 0.6em

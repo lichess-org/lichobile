@@ -1,18 +1,4 @@
 @font-face {
-  font-family: 'Cousine';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/Cousine.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Cousine';
-  font-style: normal;
-  font-weight: 700;
-  src: url('../fonts/Cousine-Bold.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 400;

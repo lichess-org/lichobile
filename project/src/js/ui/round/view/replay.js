@@ -31,20 +31,15 @@ function autoScroll(movelist) {
 
 export function renderTable(ctrl) {
   const shouldDisplay = helper.isLandscape();
-  const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
-    ctrl.data.game.status.id + ctrl.data.game.winner + shouldDisplay;
   const steps = ctrl.data.steps;
   const firstPly = ctrl.firstPly();
-  const lastPly = ctrl.lastPly();
+  const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
+    ctrl.data.game.status.id + ctrl.data.game.winner + shouldDisplay;
 
-  if (ctrl.vm.replayHash === h) return {
-    subtree: 'retain'
-  };
+  if (ctrl.vm.replayHash === h) return { subtree: 'retain' };
   ctrl.vm.replayHash = h;
 
   if (!shouldDisplay) return null;
-
-  if (typeof lastPly === 'undefined') return null;
 
   const pairs = [];
   if (firstPly % 2 === 0) {

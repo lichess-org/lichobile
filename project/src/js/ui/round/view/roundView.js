@@ -133,10 +133,10 @@ function renderContent(ctrl, isPortrait) {
     return [
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
       <section key="table" className="table">
-        <header className="tableHeader">
+        <header key="table-header" className="tableHeader">
           {gameInfos(ctrl.data)}
         </header>
-        <section className="playersTable">
+        <section key="players-table" className="playersTable">
           {opponent}
           {replayTable}
           {player}
@@ -242,7 +242,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
 
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
-  const key = position + (isPortrait ? 'portrait' : 'landscape');
+  const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
 
   return (
     <section className={'playTable ' + position} key={key}>

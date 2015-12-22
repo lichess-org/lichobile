@@ -11,16 +11,16 @@ export function formatClockTime(ctrl, time, isRunning) {
   var tenths = Math.floor(date.getUTCMilliseconds() / 100);
 
   if (ctrl.data.showTenths && time < 10000) {
-    return seconds + '.' + tenths;
+    return minutes + ':' + seconds + '.' + tenths;
   }
 
   if (time >= 3600000) {
     let hours = prefixInteger(date.getUTCHours(), 1);
     let pulse = (isRunning && tenths > 5) ? ':' : ' ';
     if (isRunning)
-      return hours + pulse + minutes;
+      return hours + ':' + minutes + pulse + seconds;
     else
-      return hours + ':' + minutes;
+      return hours + ':' + minutes + ':' + seconds;
   }
 
   return minutes + ':' + seconds;

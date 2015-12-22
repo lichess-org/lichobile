@@ -1,5 +1,6 @@
 import { formatClockTime } from './clockView';
 import sound from '../../../sound';
+import m from 'mithril';
 
 export default function ctrl(data, outOfTime, soundColor) {
   const lastUpdate = {};
@@ -20,6 +21,11 @@ export default function ctrl(data, outOfTime, soundColor) {
   }
   setLastUpdate();
 
+  this.emerg = {
+    black: false,
+    white: false
+  };
+
   this.data = data;
 
   this.update = function(white, black) {
@@ -34,6 +40,14 @@ export default function ctrl(data, outOfTime, soundColor) {
     const el = document.getElementById('clock_' + color);
 
     if (el) el.textContent = formatClockTime(this, time, true);
+
+    if (this.data[color] < this.data.emerg && !this.emerg[color]) {
+      this.emerg[color] = true;
+      m.redraw();
+    } else if (this.data[color] >= this.data.emerg && this.emerg[color]) {
+      this.emerg[color] = false;
+      m.redraw();
+    }
 
     if (soundColor === color &&
       this.data[soundColor] < this.data.emerg &&

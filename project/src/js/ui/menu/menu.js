@@ -1,41 +1,26 @@
-import * as utils from '../../utils';
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
 const menu = {};
 
-menu.vm = {
-  hash: ''
-};
-
 /* properties */
 menu.isOpen = false;
 menu.headerOpen = m.prop(false);
 
-// we need to transition manually the menu on route change, because mithril's
-// diff strategy is 'all'
 menu.route = function(route) {
   return function() {
-    menu.close();
-    return Zanimo(document.getElementById('side_menu'), 'transform',
-      'translate3d(-100%,0,0)', '250', 'ease-out')
-    .then(utils.f(m.route, route))
-    .catch(console.log.bind(console));
+    return menu.close().then(m.route.bind(undefined, route));
   };
 };
 
 menu.popup = function(action) {
   return function() {
-    return Zanimo(document.getElementById('side_menu'), 'transform',
-      'translate3d(-100%,0,0)', '250', 'ease-out').then(function(el) {
-        m.startComputation();
-        action();
-        menu.close();
-        m.endComputation();
-        el.removeAttribute('style');
-      })
-      .catch(console.log.bind(console));
+    return menu.close().then(() => {
+      m.startComputation();
+      action();
+      m.endComputation();
+    });
   };
 };
 
@@ -51,8 +36,18 @@ menu.open = function() {
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
-  menu.headerOpen(false);
-  menu.isOpen = false;
+  m.redraw.strategy('none');
+  return Zanimo(
+    document.getElementById('side_menu'),
+    'transform',
+    'translate3d(-100%,0,0)', '250', 'ease-out'
+  ).then(() => {
+    m.startComputation();
+    menu.headerOpen(false);
+    menu.isOpen = false;
+    m.endComputation();
+  })
+  .catch(console.log.bind(console));
 };
 
 menu.toggleHeader = function() {

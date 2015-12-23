@@ -9,7 +9,7 @@ import { hasNetwork } from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
-import m from 'mithril';
+import Zanimo from 'zanimo';
 
 function renderHeader(user) {
   return (
@@ -126,17 +126,6 @@ function renderLinks(user) {
 
 function renderMenu() {
   const user = session.get();
-  const username = user ? user.username : 'anon';
-
-  const hash = username + session.nowPlaying().length + friendsApi.count() + hasNetwork() + menu.headerOpen() + m.route();
-
-  // tv is the only one place that performs strategy all
-  // ideally I'd need to hanle this in a better way
-  if (menu.vm.hash === hash && m.route() !== '/tv') return {
-    subtree: 'retain'
-  };
-
-  menu.vm.hash = hash;
 
   return (
     <div className="native_scroller">
@@ -148,9 +137,20 @@ function renderMenu() {
   );
 }
 
+function slidesIn(el, isUpdate, context) {
+  if (!isUpdate) {
+    el.style.transform = 'translateX(-100%)';
+    // force reflow hack
+    context.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateX(0)', '250', 'ease-out');
+  }
+}
+
 export default function view() {
+  if (!menu.isOpen) return null;
+
   return (
-    <aside id="side_menu" className={menu.isOpen ? 'in' : 'out'}>
+    <aside id="side_menu" config={slidesIn}>
       {renderMenu()}
     </aside>
   );

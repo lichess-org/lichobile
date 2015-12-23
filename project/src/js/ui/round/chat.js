@@ -27,26 +27,8 @@ export default {
     checkUnreadFromStorage();
     storage.set(storageId, this.messages.length);
 
-    // this.messages = [
-    //   { c: 'white', t: 'lorde yaya lorde lorde' },
-    //   { c: 'white', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' },
-    //   { u: 'lichess', t: 'lichess talking' },
-    //   { u: 'lichess', t: 'lichess talking' },
-    //   { c: 'black', t: 'lorde yaya lorde lorde' },
-    //   { c: 'black', t: 'lorde yaya lorde lorde, yayyayayaya lorde' },
-    //   { c: 'white', t: 'lorde yaya lorde lorde' },
-    //   { c: 'black', t: 'lorde yaya lorde lorde, yayyayayaya' },
-    //   { u: 'lichess', t: 'lichess talking' },
-    //   { c: 'black', t: 'lorde yaya ' },
-    //   { c: 'black', t: 'lorde yaya lorde lorde' },
-    //   { c: 'black', t: 'lorde yaya lorde lorde' },
-    //   { c: 'black', t: 'lorde ' },
-    //   { c: 'white', t: 'lorde yaya ' },
-    //   { c: 'white', t: 'lorde yaya lorde lorde, yayyayayaya lorde lorde yayaya!' }
-    // ];
-
     this.open = function() {
-      backbutton.stack.push(this.close);
+      backbutton.stack.push(helper.slidesOut(this.close, 'chat'));
       this.showing = true;
     }.bind(this);
 
@@ -102,12 +84,12 @@ export default {
 
   view: function(ctrl) {
 
-    if (!ctrl.showing) return m('div#chat.modal.modal_slide');
+    if (!ctrl.showing) return null;
 
-    return m('div#chat.modal.modal_slide.show', [
+    return m('div#chat.modal', { config: helper.slidesIn }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(ctrl.close)
+          config: helper.ontouch(helper.slidesOut(ctrl.close, 'chat'))
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))

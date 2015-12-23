@@ -27,7 +27,7 @@ function submit(form) {
 
 loginModal.open = function() {
   helper.analyticsTrackView('Login');
-  backbutton.stack.push(loginModal.close);
+  backbutton.stack.push(helper.slidesOut(loginModal.close, 'loginModal'));
   isOpen = true;
 };
 
@@ -38,14 +38,12 @@ loginModal.close = function(fromBB) {
 };
 
 loginModal.view = function() {
-  if (!isOpen) return (
-    <div className="modal modal_slide" />
-  );
+  if (!isOpen) return null;
 
-  return m('div.modal.modal_slide.show', [
+  return m('div.modal#loginModal', { config: helper.slidesIn }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouch(loginModal.close)
+        config: helper.ontouch(helper.slidesOut(loginModal.close, 'loginModal'))
       }),
       m('h2', i18n('signIn'))
     ]),

@@ -142,7 +142,7 @@ function slidesIn(el, isUpdate, context) {
     el.style.transform = 'translateX(-100%)';
     // force reflow hack
     context.lol = el.offsetHeight;
-    Zanimo(el, 'transform', 'translateX(0)', '250', 'ease-out');
+    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out');
   }
 }
 

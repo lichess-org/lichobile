@@ -40,7 +40,7 @@ menu.close = function(fromBB) {
   return Zanimo(
     document.getElementById('side_menu'),
     'transform',
-    'translate3d(-100%,0,0)', '250', 'ease-out'
+    'translateX(-100%)', 250, 'ease-out'
   ).then(() => {
     m.startComputation();
     menu.headerOpen(false);

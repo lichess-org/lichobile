@@ -38,6 +38,26 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
+helper.slidesIn = function(el, isUpdate, context) {
+  if (!isUpdate) {
+    el.style.transform = 'translateY(100%)';
+    // force reflow hack
+    context.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
+  }
+};
+
+helper.slidesOut = function(callback, elID) {
+  return function() {
+    const el = document.getElementById(elID);
+    m.redraw.strategy('none');
+    Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    .then(utils.autoredraw.bind(undefined, callback))
+    .catch(console.log.bind(console));
+  };
+};
+
 helper.fadesOut = function(callback, selector, time = 150) {
   return function(e) {
     var el = selector ? findParentBySelector(e.target, selector) : e.target;

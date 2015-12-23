@@ -12,26 +12,22 @@ import friendsApi from '../../lichess/friends';
 import m from 'mithril';
 
 function renderHeader(user) {
-  if (hasNetwork())
-    return user ? [
-      m('div.logo'),
-      m('h2.username', user.username),
-      m('button.open_button', {
-        'data-icon': menu.headerOpen() ? 'S' : 'R',
-        config: helper.ontouch(menu.toggleHeader, null, false)
-      })
-    ] : [
-      m('div.logo'),
-      m('h2.username', 'Anonymous'),
-      m('button.login', {
-        config: helper.ontouchY(loginModal.open)
-      }, i18n('signIn'))
-    ];
-  else
-    return [
-      m('div.logo'),
-      m('h2.username', 'Offline')
-    ];
+  return (
+    <header className="side_menu_header">
+      <div className="logo" />
+      <h2 className="username">
+        { hasNetwork() ? user ? user.username : 'Anonymous' : 'Offline' }
+      </h2>
+      { hasNetwork() && user ?
+        <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
+          config={helper.ontouch(menu.toggleHeader, null, false)}
+        /> :
+        <button className="login" config={helper.ontouchY(loginModal.open)}>
+          {i18n('signIn')}
+        </button>
+      }
+    </header>
+  );
 }
 
 function renderProfileActions(user) {
@@ -132,7 +128,7 @@ function renderMenu() {
   const user = session.get();
   const username = user ? user.username : 'anon';
 
-  const hash = username + hasNetwork() + menu.headerOpen() + m.route();
+  const hash = username + session.nowPlaying().length + friendsApi.count() + hasNetwork() + menu.headerOpen() + m.route();
 
   // tv is the only one place that performs strategy all
   // ideally I'd need to hanle this in a better way

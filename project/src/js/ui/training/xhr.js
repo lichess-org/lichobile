@@ -19,10 +19,6 @@ export function vote(id, v) {
   });
 }
 
-export function loadPuzzle(id) {
-  return request(`/training/${id}/load`);
-}
-
 export function setDifficulty(d) {
   return request('/training/difficulty', {
     method: 'POST',
@@ -32,8 +28,12 @@ export function setDifficulty(d) {
   });
 }
 
+export function loadPuzzle(id) {
+  return request(`/training/${id}/load`, { background: true });
+}
+
 export function newPuzzle() {
-  return request('/training/new');
+  return request('/training/new', { background: true });
 }
 
 export function history() {

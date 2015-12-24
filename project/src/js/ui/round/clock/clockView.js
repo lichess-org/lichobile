@@ -33,7 +33,7 @@ export function view(ctrl, color, runningColor) {
     emerg: time < ctrl.data.emerg
   });
   function cConfig(el) {
-    el.textContent = formatClockTime(ctrl, time * 1000, isRunning);
+    requestAnimationFrame(() => el.textContent = formatClockTime(ctrl, time * 1000, isRunning));
   }
   return (
     <div id={'clock_' + color} className={className} config={cConfig} />

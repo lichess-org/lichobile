@@ -39,7 +39,7 @@ export default function ctrl(data, outOfTime, soundColor) {
     const time = this.data[color] * 1000;
     const el = document.getElementById('clock_' + color);
 
-    if (el) el.textContent = formatClockTime(this, time, true);
+    if (el) requestAnimationFrame(() => el.textContent = formatClockTime(this, time, true));
 
     if (this.data[color] < this.data.emerg && !this.emerg[color]) {
       this.emerg[color] = true;

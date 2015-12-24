@@ -5,7 +5,7 @@ export default {
   view(ctrl, args) {
 
     const boardClass = [
-      'board',
+      'display_board',
       settings.general.theme.piece(),
       settings.general.theme.board(),
       args.variant ? args.variant.key : ''

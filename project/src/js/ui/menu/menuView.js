@@ -139,10 +139,10 @@ function renderMenu() {
 
 function slidesIn(el, isUpdate, context) {
   if (!isUpdate) {
-    el.style.transform = 'translateX(-100%)';
+    el.style.transform = 'translate3d(-100%,0,0)';
     // force reflow hack
     context.lol = el.offsetHeight;
-    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out');
+    Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
   }
 }
 

@@ -61,7 +61,7 @@ export function renderMaterial(material) {
 
 export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses) {
   const boardClass = [
-    'board',
+    'display_board',
     settings.general.theme.board(),
     settings.general.theme.piece(),
     variant

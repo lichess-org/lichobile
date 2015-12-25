@@ -177,8 +177,9 @@ export default function ctrl() {
   }.bind(this);
 
   this.initiate = function() {
-    if (this.data.mode !== 'view')
+    if (this.data.mode !== 'view') {
       setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
+    }
   }.bind(this);
 
   this.reload = function(cfg) {
@@ -189,6 +190,7 @@ export default function ctrl() {
   }.bind(this);
 
   this.init = function(cfg) {
+    m.startComputation();
     this.data = data(cfg);
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
@@ -219,7 +221,7 @@ export default function ctrl() {
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
-    this.initiate();
+    m.endComputation();
   }.bind(this);
 
   this.newPuzzle = function(feedback) {
@@ -227,13 +229,15 @@ export default function ctrl() {
     xhr.newPuzzle()
       .then(onXhrSuccess, onXhrError)
       .then(cfg => feedback ? pushState(cfg) : replaceStateForNewPuzzle(cfg))
-      .then(this.init);
+      .then(this.init)
+      .then(this.initiate);
   }.bind(this);
 
   this.loadPuzzle = function(id) {
     xhr.loadPuzzle(id)
       .then(onXhrSuccess, onXhrError)
-      .then(this.init);
+      .then(this.init)
+      .then(this.initiate);
   }.bind(this);
 
   this.retry = function() {

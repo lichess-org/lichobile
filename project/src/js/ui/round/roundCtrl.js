@@ -166,9 +166,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (this.data.pref.submitMove) {
       setTimeout(function() {
+        m.startComputation();
         backbutton.stack.push(this.cancelMove);
         this.vm.moveToSubmit = move;
-        m.redraw();
+        m.endComputation();
       }.bind(this), this.data.pref.animationDuration || 0);
     } else socket.send('move', move, { ackable: true });
   };

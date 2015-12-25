@@ -61,7 +61,7 @@ export default function controller() {
     else {
       session.refresh();
 
-      if (gameApi.playable(data) && data.game.turns - data.game.startedAtTurn <= 1)
+      if (gameApi.isPlayerPlaying(data) && gameApi.nbMoves(data, data.player.color) === 0)
         sound.dong();
 
       round = new roundCtrl(data);

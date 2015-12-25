@@ -107,9 +107,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.jump = function(ply) {
     if (ply < this.firstPly() || ply > this.lastPly()) return;
+    const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
-    var s = this.plyStep(ply);
-    var config = {
+    const s = this.plyStep(ply);
+    const config = {
       fen: s.fen,
       lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
       check: s.check,
@@ -121,6 +122,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
     };
     this.chessground.set(config);
+    if (s.san && isFwd) {
+      if (s.san.indexOf('x') !== -1) sound.capture();
+      else sound.move();
+    }
   }.bind(this);
 
   this.jumpNext = function() {

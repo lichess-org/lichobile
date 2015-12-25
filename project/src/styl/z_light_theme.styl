@@ -95,9 +95,12 @@ activeBgLight = darken(themeBgLight, 8%)
     color textGray
     &.disabled
       color rgba(textGray, 0.4)
+    &.highlight
+      background textLightGray
+      color themeBgLight
 
   .gameMovesList
-    background activeBgLight
+    background darken(themeBgLight, 4%)
     color textMediumGray
 
   .main_header

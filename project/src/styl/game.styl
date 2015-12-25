@@ -19,16 +19,6 @@
     padding 0
     flex 1 0 auto
     height initial
-    &.player
-      > .antagonistInfos
-        align-self flex-end
-      > .clock
-        align-self flex-start
-    &.opponent
-      > .antagonistInfos
-        align-self flex-start
-      > .clock
-        align-self flex-end
 
 .replay
   flex 0 0 auto
@@ -73,7 +63,7 @@
 .replayMove
   transition: background-color 0.13s ease 0s;
   &.current
-    color orange
+    color darken(gold, 20%)
   &.active
     background-color lighten(bgdark, 8%)
 
@@ -229,8 +219,6 @@
     line-height 1
     padding 10px
   button
-    &.flipped
-      color gold
     &.draw-yes:before
       display inline-block
       transform rotate(-90deg)

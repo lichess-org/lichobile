@@ -107,6 +107,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.jump = function(ply) {
     if (ply < this.firstPly() || ply > this.lastPly()) return;
+    m.startComputation();
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
     const s = this.plyStep(ply);
@@ -126,6 +127,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       if (s.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
     }
+    m.endComputation();
   }.bind(this);
 
   this.jumpNext = function() {

@@ -68,7 +68,7 @@ helper.fadesOut = function(callback, selector, time = 150) {
   };
 };
 
-function ontouch(tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
+function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
   return function(el, isUpdate, context) {
     if (!isUpdate) {
       var unbind = ButtonHandler(el,
@@ -78,6 +78,7 @@ function ontouch(tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
           m.endComputation();
         },
         holdHandler ? () => utils.autoredraw(holdHandler) : null,
+        repeatHandler,
         scrollX,
         scrollY,
         touchEndFeedback
@@ -90,15 +91,15 @@ function ontouch(tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
   };
 }
 
-helper.ontouch = function(tapHandler, holdHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, false, false, touchEndFeedback);
+helper.ontouch = function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
+  return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
 };
 
 helper.ontouchX = function(tapHandler, holdHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, true, false, touchEndFeedback);
+  return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
 };
 helper.ontouchY = function(tapHandler, holdHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, false, true, touchEndFeedback);
+  return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
 };
 
 helper.progress = function(p) {

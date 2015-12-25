@@ -20,7 +20,7 @@ function renderHeader(user) {
       </h2>
       { hasNetwork() && user ?
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
-          config={helper.ontouch(menu.toggleHeader, null, false)}
+          config={helper.ontouch(menu.toggleHeader, null, null, false)}
         /> :
         <button className="login" config={helper.ontouchY(loginModal.open)}>
           {i18n('signIn')}

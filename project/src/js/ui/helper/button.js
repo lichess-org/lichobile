@@ -1,4 +1,5 @@
 const HOLD_DURATION = 600;
+const REPEAT_RATE = 50;
 const SCROLL_TOLERANCE = 8;
 const ACTIVE_CLASS = 'active';
 
@@ -6,14 +7,24 @@ function hasContextMenu() {
   return window.cordova.platformId !== 'ios';
 }
 
-export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scrollY, touchEndFeedback) {
-  let startX, startY, boundaries, active, holdTimeoutID;
+export default function ButtonHandler(el,
+  tapHandler,
+  holdHandler,
+  repeatHandler,
+  scrollX,
+  scrollY,
+  touchEndFeedback) {
+
+  let startX, startY, boundaries, active, holdTimeoutID, repeatTimeoutId, repeatIntervalID;
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!');
 
   if (holdHandler && typeof holdHandler !== 'function')
     throw new Error('ButtonHandler 3rd argument must be a function!');
+
+  if (repeatHandler && typeof repeatHandler !== 'function')
+    throw new Error('ButtonHandler 4rd argument must be a function!');
 
   function onTouchStart(e) {
     let touch = e.changedTouches[0];
@@ -31,6 +42,9 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
       if (active) el.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
+    if (repeatHandler) repeatTimeoutId = setTimeout(() => {
+      repeatIntervalID = setInterval(repeatHandler, REPEAT_RATE);
+    }, 150);
   }
 
   function onTouchMove(e) {
@@ -40,6 +54,8 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
       active = isActive(touch);
       if (!active) {
         clearTimeout(holdTimeoutID);
+        clearTimeout(repeatTimeoutId);
+        clearInterval(repeatIntervalID);
         el.classList.remove(ACTIVE_CLASS);
       }
     }
@@ -49,6 +65,8 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
     if (e.cancelable) e.preventDefault();
     if (active) {
       clearTimeout(holdTimeoutID);
+      clearTimeout(repeatTimeoutId);
+      clearInterval(repeatIntervalID);
       if (touchEndFeedback) el.classList.add(ACTIVE_CLASS);
       tapHandler(e);
       active = false;
@@ -58,6 +76,8 @@ export default function ButtonHandler(el, tapHandler, holdHandler, scrollX, scro
 
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
+    clearTimeout(repeatTimeoutId);
+    clearInterval(repeatIntervalID);
     active = false;
     el.classList.remove(ACTIVE_CLASS);
   }

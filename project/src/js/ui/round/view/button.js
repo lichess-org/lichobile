@@ -189,7 +189,7 @@ export default {
     });
     return (
       <button className={className} data-icon="I" key="backward"
-        config={helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst)} />
+        config={helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
     );
   },
   forward: function(ctrl) {
@@ -201,7 +201,7 @@ export default {
     });
     return (
       <button className={className} data-icon="H" key="forward"
-        config={helper.ontouch(ctrl.jumpNext, ctrl.jumpLast)} />
+        config={helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext)} />
     );
   },
   newOpponent: function(ctrl) {

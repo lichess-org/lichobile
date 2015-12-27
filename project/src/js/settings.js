@@ -103,6 +103,7 @@ export default {
         ['Standard', '1'],
         ['Chess960', '2'],
         ['King of the Hill', '4'],
+        ['Three-check', '5'],
         ['From Position', '3']
       ],
       variant: localstorageprop('settings.game.ai.variant', '1'),

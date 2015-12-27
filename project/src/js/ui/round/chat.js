@@ -40,11 +40,10 @@ export default {
     }.bind(this);
 
     this.onReload = function(messages) {
-      m.startComputation();
       this.messages = messages;
       checkUnreadFromStorage();
       storage.set(storageId, this.messages.length);
-      m.endComputation();
+      m.redraw();
     }.bind(this);
 
     this.append = function(msg) {

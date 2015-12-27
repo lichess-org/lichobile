@@ -35,20 +35,25 @@
   &.fading
     z-index 1
 
-.cg-square[data-coord-x]::after
+.cg-square[data-coord-x]:after, .cg-square[data-coord-y]:before
   position absolute
+  font-family Cousine
+  font-weight bold
+  font-size 11px
+  line-height 11px
+  @media (min-width 600px)
+    font-size 15px
+    line-height 15px
+
+
+.cg-square[data-coord-x]:after
   left 1px
-  bottom 1px
-  font-size 10px
-  line-height 10px
+  bottom 0px
   content attr(data-coord-x)
 
-.cg-square[data-coord-y]::before
-  position absolute
+.cg-square[data-coord-y]:before
   right 1px
   top 1px
-  font-size 10px
-  line-height 10px
   content attr(data-coord-y)
 
 .cg-piece

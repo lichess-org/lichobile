@@ -41,8 +41,9 @@ export default function controller() {
   };
 
   this.onReplayAdded = function() {
+    m.startComputation();
     save();
-    m.redraw();
+    m.endComputation();
     if (this.replay.situation().finished) setTimeout(function() {
       this.chessground.stop();
       this.actions.open();

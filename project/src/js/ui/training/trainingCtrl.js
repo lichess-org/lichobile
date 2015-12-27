@@ -92,6 +92,7 @@ export default function ctrl() {
 
   this.revert = function(id) {
     if (id !== this.data.puzzle.id) return;
+    m.startComputation();
     this.chessground.set({
       fen: this.data.chess.fen(),
       lastMove: chess.lastMove(this.data.chess),
@@ -101,8 +102,8 @@ export default function ctrl() {
         dests: this.data.chess.dests()
       }
     });
-    m.redraw();
     if (this.data.chess.in_check()) this.chessground.setCheck();
+    m.endComputation();
   }.bind(this);
 
   this.userFinalizeMove = function(move, newProgress) {

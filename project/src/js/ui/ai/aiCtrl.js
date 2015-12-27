@@ -70,8 +70,9 @@ export default function controller() {
   };
 
   this.onReplayAdded = function() {
+    m.startComputation();
     save();
-    m.redraw();
+    m.endComputation();
     if (this.replay.situation().finished) {
       this.chessground.cancelMove();
       this.chessground.stop();

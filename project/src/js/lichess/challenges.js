@@ -5,8 +5,9 @@ const challenges = {};
 
 function timeout(key) {
   return setTimeout(() => {
+    m.startComputation();
     delete challenges[key];
-    m.redraw();
+    m.endComputation();
   }, 3000);
 }
 

@@ -6,6 +6,7 @@ import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
 import gameStatus from '../../lichess/status';
 import gameApi from '../../lichess/game';
+import variantApi from '../../lichess/variant';
 import socket from '../../socket';
 import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
@@ -61,12 +62,24 @@ export default function controller() {
     else {
       session.refresh();
 
-      if (gameApi.isPlayerPlaying(data) && gameApi.nbMoves(data, data.player.color) === 0)
+      if (gameApi.isPlayerPlaying(data) &&
+        gameApi.nbMoves(data, data.player.color) === 0) {
         sound.dong();
+        const variant = variantApi(data.game.variant.key);
+        const storageKey = variantStorageKey(data.game.variant.key);
+        if ([1, 3].indexOf(variant.id) === -1 &&
+          !storage.get(storageKey)) {
+          window.navigator.notification.alert(variant.alert, function() {
+            storage.set(storageKey, true);
+          });
+        }
+      }
 
       round = new roundCtrl(data);
-      if (data.player.user === undefined)
+
+      if (data.player.user === undefined) {
         storage.set('lastPlayedGameURLAsAnon', data.url.round);
+      }
     }
   }, function(error) {
     handleXhrError(error);
@@ -101,4 +114,8 @@ export default function controller() {
       return gameData;
     }
   };
+}
+
+function variantStorageKey(variant) {
+  return 'game.variant.prompt.' + variant;
 }

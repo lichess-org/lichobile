@@ -138,7 +138,7 @@ function renderForm() {
         key: formName + 'time'
       }, [
         formWidgets.renderSelect('time', formName + 'time',
-          settings.gameSetup.availableTimes.map(utils.tupleOf), settingsObj.time, false)
+          settings.gameSetup.availableTimes, settingsObj.time, false)
       ]),
       m('div.select_input.inline', {
         key: formName + 'increment'

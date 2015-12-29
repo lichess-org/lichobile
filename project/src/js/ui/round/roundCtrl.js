@@ -357,6 +357,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     socket.destroy();
     clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
+    if (this.chessground) this.chessground.onunload();
     document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);

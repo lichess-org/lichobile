@@ -75,9 +75,8 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
   }
 
   function boardConfig(el, isUpdate) {
-    if (!isUpdate || !chessgroundCtrl.isRendered) {
+    if (!isUpdate) {
       chessground.render(el, chessgroundCtrl);
-      chessgroundCtrl.isRendered = true;
     }
   }
 

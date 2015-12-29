@@ -357,7 +357,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     socket.destroy();
     clearInterval(clockIntervId);
     if (this.chat) this.chat.onunload();
-    if (this.chessground) this.chessground.onunload();
+    if (this.chessground) {
+      this.chessground.onunload();
+      // must do this to prevent old chessground to modify the new board
+      // (I still don't know why is it occuring)
+      this.chessground = null;
+    }
     document.removeEventListener('resume', onResume);
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);

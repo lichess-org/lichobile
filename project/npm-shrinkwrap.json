@@ -1557,7 +1557,7 @@
     "chessground-mobile": {
       "version": "3.0.0",
       "from": "veloce/chessground-mobile#experiments",
-      "resolved": "git://github.com/veloce/chessground-mobile.git#69c7a548d5022ed02c1621aad92b828944558b90",
+      "resolved": "git://github.com/veloce/chessground-mobile.git#ce9e01e9b5ebe341e751f214406e425ec3364324",
       "dependencies": {
         "merge": {
           "version": "1.2.0",

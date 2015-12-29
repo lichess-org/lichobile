@@ -111,5 +111,9 @@ export default function controller() {
 
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
+    if (this.chessground) {
+      this.chessground.onunload();
+      this.chessground = null;
+    }
   };
 }

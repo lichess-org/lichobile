@@ -95,4 +95,12 @@ export default function controller() {
     m.redraw.strategy('diff');
     m.route(`/editor/${encodeURIComponent(newFen)}`);
   };
+
+  this.onunload = function() {
+    if (this.chessground) {
+      this.chessground.onunload();
+      this.chessground = null;
+    }
+  };
+
 }

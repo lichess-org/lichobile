@@ -9,10 +9,10 @@ export function formatClockTime(ctrl, time, isRunning) {
   var minutes = prefixInteger(date.getUTCMinutes(), 2);
   var seconds = prefixInteger(date.getUTCSeconds(), 2);
   var tenths = Math.floor(date.getUTCMilliseconds() / 100);
-  let pulse = (isRunning && tenths > 5) ? ':' : isRunning ? ' ' : ':';
+  let pulse = (isRunning && tenths < 5) ? ' ' : ':';
 
   if (ctrl.data.showTenths && time < 10000) {
-    return minutes + pulse + seconds + '.' + tenths;
+    return seconds + '.' + tenths;
   }
 
   if (time >= 3600000) {

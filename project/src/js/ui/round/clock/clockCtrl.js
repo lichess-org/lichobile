@@ -21,6 +21,11 @@ export default function ctrl(data, outOfTime, soundColor) {
   }
   setLastUpdate();
 
+  this.els = {
+    black: null,
+    white: null
+  };
+
   this.emerg = {
     black: false,
     white: false
@@ -37,7 +42,7 @@ export default function ctrl(data, outOfTime, soundColor) {
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (Date.now() - lastUpdate.at) / 1000);
     const time = this.data[color] * 1000;
-    const el = document.getElementById('clock_' + color);
+    const el = this.els[color];
 
     if (el) requestAnimationFrame(() => el.textContent = formatClockTime(this, time, true));
 

@@ -296,9 +296,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
-    this.data.player.spectator ? function() {} : throttle(function() {
-      socket.send('outoftime');
-    }, 500),
+    this.data.player.spectator ? utils.noop :
+      throttle(() => socket.send('outoftime'), 500),
     this.data.player.spectator ? null : this.data.player.color
   ) : false;
 

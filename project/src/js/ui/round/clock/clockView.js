@@ -32,8 +32,11 @@ export function view(ctrl, color, runningColor) {
     running: isRunning,
     emerg: time < ctrl.data.emerg
   });
-  function cConfig(el) {
+  function cConfig(el, isUpdate) {
     requestAnimationFrame(() => el.textContent = formatClockTime(ctrl, time * 1000, isRunning));
+    if (!isUpdate) {
+      ctrl.els[color] = el;
+    }
   }
   return (
     <div id={'clock_' + color} className={className} config={cConfig} />

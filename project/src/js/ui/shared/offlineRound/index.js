@@ -4,8 +4,8 @@ import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position) {
-  const key = helper.isLandscape() ? position + '-landscape' : position + '-portrait';
+export function renderAntagonist(ctrl, content, material, position, isPortrait) {
+  const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
   return (
     <section className={'playTable ' + position} key={key}>

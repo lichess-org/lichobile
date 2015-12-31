@@ -25,22 +25,23 @@ export default function view(ctrl) {
     const playerName = i18n(ctrl.data.player.color);
     const opponentName = i18n(ctrl.data.opponent.color);
     const replayTable = renderReplayTable(ctrl.replay);
+    const isPortrait = helper.isPortrait();
 
-    if (helper.isPortrait())
+    if (isPortrait)
       return [
-        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent'),
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, wrapperClass),
-        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player'),
+        renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass),
+        renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
         renderGameActionsBar(ctrl, actions.view)
       ];
     else
       return [
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, wrapperClass),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass),
         <section key="table" className="table">
           <section className="playersTable offline">
-            {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent')}
+            {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
             {replayTable}
-            {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player')}
+            {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait)}
           </section>
           {renderGameActionsBar(ctrl)}
         </section>

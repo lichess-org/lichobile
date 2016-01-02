@@ -1,4 +1,8 @@
 // base
+.cg-board-wrap
+  width 100%
+  height 100%
+
 .cg-board
   user-select none
   background-size cover
@@ -22,8 +26,6 @@
       background radial-gradient(transparent 0%,transparent 80%,rgba(20,30,85,0.3) 80%)
   &.last-move
     background-color rgba(155, 199, 0, 0.41)
-  &.selected
-    background-color rgba(20, 85, 30, 0.5)
   &.check
     background radial-gradient(ellipse at center, rgba(255, 0, 0, 1) 0%, rgba(231, 0, 0, 1) 25%, rgba(169, 0, 0, 0) 89%, rgba(158, 0, 0, 0) 100%)
   &.current-premove
@@ -69,8 +71,10 @@
     width 200%
     height 200%
     z-index 3
+  &.ghost
+    opacity 0.3
 
-.cg-square-target
+#cg-square-target
   position absolute
   background-color rgba(0, 0, 0, 0.2)
   border-radius 50%

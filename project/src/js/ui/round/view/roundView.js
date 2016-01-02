@@ -74,15 +74,11 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
     wrapperClass += moreWrapperClasses;
   }
 
-  function boardConfig(el, isUpdate) {
-    if (!isUpdate) {
-      chessground.render(el, chessgroundCtrl);
-    }
-  }
-
   return (
     <section className={wrapperClass} key={key}>
-      <div className={boardClass} config={boardConfig} />
+      <div className={boardClass}>
+        {chessground.view(chessgroundCtrl)}
+      </div>
     </section>
   );
 }

@@ -57,7 +57,6 @@ export default function ctrl() {
     var newLines = res[1];
     var lastMove = last(newProgress);
     var promotion = lastMove ? lastMove[4] : undefined;
-    m.startComputation();
     switch (newLines) {
       case 'retry':
         setTimeout(this.revert.bind(this, this.data.puzzle.id), 500);
@@ -82,7 +81,7 @@ export default function ctrl() {
         } else setTimeout(this.playOpponentNextMove.bind(this, this.data.puzzle.id), 1000);
         break;
     }
-    m.endComputation(); // give feedback ASAP, don't wait for delayed action
+    m.redraw();
   }.bind(this);
 
   var onMove = function(orig, dest, captured) {
@@ -120,7 +119,6 @@ export default function ctrl() {
 
   this.playOpponentMove = function(move) {
     onMove(move[0], move[1], this.chessground.data.pieces[move[1]]);
-    m.startComputation();
     chess.move(this.data.chess, move);
     this.chessground.set({
       fen: this.data.chess.fen(),
@@ -133,7 +131,7 @@ export default function ctrl() {
     });
     if (this.data.chess.in_check()) this.chessground.setCheck();
     setTimeout(this.chessground.playPremove, this.chessground.data.animation.duration);
-    m.endComputation();
+    m.redraw();
   }.bind(this);
 
   this.playOpponentNextMove = function(id) {
@@ -190,7 +188,6 @@ export default function ctrl() {
   }.bind(this);
 
   this.init = function(cfg) {
-    m.startComputation();
     this.data = data(cfg);
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
@@ -221,7 +218,7 @@ export default function ctrl() {
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
-    m.endComputation();
+    m.redraw();
   }.bind(this);
 
   this.newPuzzle = function(feedback) {

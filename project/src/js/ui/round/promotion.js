@@ -15,9 +15,8 @@ function start(ctrl, orig, dest, isPremove) {
     (dest[1] === '8' && ctrl.data.player.color === 'white') ||
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
     if (ctrl.data.pref.autoQueen === 3 || (ctrl.data.pref.autoQueen === 2 && isPremove)) return false;
-    m.startComputation();
     promoting = [orig, dest];
-    m.endComputation();
+    m.redraw();
     return true;
   }
   return false;
@@ -41,9 +40,11 @@ export default {
   start: start,
 
   view: function(ctrl) {
-    if (!promoting) return;
-    var pieces = ['queen', 'knight', 'rook', 'bishop'];
-    if (ctrl.data.game.variant.key === "antichess") pieces.push('king');
+    if (!promoting) return null;
+
+    const pieces = ['queen', 'knight', 'rook', 'bishop'];
+    if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
+
     return m('div.overlay.open', {
       config: helper.ontouch(partial(cancel, ctrl))
     }, [m('div#promotion_choice', {

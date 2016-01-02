@@ -17,9 +17,8 @@ menu.route = function(route) {
 menu.popup = function(action) {
   return function() {
     return menu.close().then(() => {
-      m.startComputation();
       action();
-      m.endComputation();
+      m.redraw();
     });
   };
 };
@@ -42,10 +41,9 @@ menu.close = function(fromBB) {
     'transform',
     'translate3d(-100%,0,0)', 250, 'ease-out'
   ).then(() => {
-    m.startComputation();
     menu.headerOpen(false);
     menu.isOpen = false;
-    m.endComputation();
+    m.redraw();
   })
   .catch(console.log.bind(console));
 };

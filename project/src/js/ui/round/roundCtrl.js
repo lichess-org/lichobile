@@ -107,7 +107,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.jump = function(ply) {
     if (ply < this.firstPly() || ply > this.lastPly()) return;
-    m.startComputation();
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
     const s = this.plyStep(ply);
@@ -127,7 +126,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       if (s.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
     }
-    m.endComputation();
   }.bind(this);
 
   this.jumpNext = function() {
@@ -173,10 +171,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (this.data.pref.submitMove) {
       setTimeout(function() {
-        m.startComputation();
         backbutton.stack.push(this.cancelMove);
         this.vm.moveToSubmit = move;
-        m.endComputation();
+        m.redraw();
       }.bind(this), this.data.pref.animationDuration || 0);
     } else socket.send('move', move, { ackable: true });
   };
@@ -214,7 +211,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.apiMove = function(o) {
-    m.startComputation();
     let d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
@@ -289,7 +285,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       check: o.check
     });
     gameApi.setOnGame(d, playedColor, true);
-    m.endComputation();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
@@ -342,6 +337,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     makeCorrespondenceClock();
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
+    m.redraw();
   }.bind(this);
 
   window.plugins.insomnia.keepAwake();

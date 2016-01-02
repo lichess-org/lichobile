@@ -43,15 +43,13 @@ export default {
       this.messages = messages;
       checkUnreadFromStorage();
       storage.set(storageId, this.messages.length);
-      m.redraw();
     }.bind(this);
 
     this.append = function(msg) {
-      m.startComputation();
       this.messages.push(msg);
       storage.set(storageId, this.messages.length);
       if (msg.u !== 'lichess') this.unread = true;
-      m.endComputation();
+      m.redraw();
     }.bind(this);
 
     function onKeyboardShow(e) {

@@ -335,6 +335,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
     this.data = data(rCfg);
     makeCorrespondenceClock();
+    if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
     m.redraw();

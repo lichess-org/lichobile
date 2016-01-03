@@ -33,7 +33,7 @@ export function view(ctrl, color, runningColor) {
     emerg: time < ctrl.data.emerg
   });
   function cConfig(el, isUpdate) {
-    requestAnimationFrame(() => el.textContent = formatClockTime(ctrl, time * 1000, isRunning));
+    el.textContent = formatClockTime(ctrl, time * 1000, isRunning);
     if (!isUpdate) {
       ctrl.els[color] = el;
     }

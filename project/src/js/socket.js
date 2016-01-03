@@ -42,7 +42,7 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
   const opts = {
     options: {
       name: 'game',
-      debug: window.lichess.mode !== 'prod',
+      debug: false,
       ignoreUnknownMessages: true,
       onError: function() {
         // we can't get socket error, so we send an xhr to test whether the
@@ -74,7 +74,7 @@ function createAwait(url, version, handlers) {
     url, version, {
       options: {
         name: 'await',
-        debug: window.lichess.mode !== 'prod',
+        debug: false,
         ignoreUnknownMessages: true,
         pingDelay: 2000,
         onOpen: () => socketInstance.send('following_onlines')
@@ -91,7 +91,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
     lobbyVersion, {
       options: {
         name: 'lobby',
-        debug: window.lichess.mode !== 'prod',
+        debug: false,
         ignoreUnknownMessages: true,
         pingDelay: 2000,
         onOpen: () => {
@@ -112,7 +112,7 @@ function createDefault() {
       '/socket', 0, {
         options: {
           name: 'default',
-          debug: window.lichess.mode !== 'prod',
+          debug: false,
           pingDelay: 2000,
           onOpen: () => socketInstance.send('following_onlines')
         },

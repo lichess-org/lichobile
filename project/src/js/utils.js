@@ -3,8 +3,11 @@ import m from 'mithril';
 
 export function autoredraw(action) {
   m.startComputation();
-  action();
-  m.endComputation();
+  try {
+    return action();
+  } finally {
+    m.endComputation();
+  }
 }
 
 export function hasNetwork() {

@@ -39,6 +39,6 @@ export function view(ctrl, color, runningColor) {
     }
   }
   return (
-    <div id={'clock_' + color} className={className} config={cConfig} />
+    <div className={className} config={cConfig} />
   );
 }

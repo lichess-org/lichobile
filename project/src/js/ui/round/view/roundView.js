@@ -117,7 +117,6 @@ function renderHeader(ctrl) {
 
 function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const replayTable = renderReplayTable(ctrl);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
 
@@ -137,7 +136,7 @@ function renderContent(ctrl, isPortrait) {
         </header>
         <section key="players-table" className="playersTable">
           {opponent}
-          {replayTable}
+          {renderReplayTable(ctrl)}
           {player}
         </section>
         {renderGameActionsBar(ctrl, isPortrait)}
@@ -244,7 +243,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
 
   return (
-    <section className={'playTable ' + position} key={key}>
+    <section className="playTable" key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait)}
       {ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor) : (

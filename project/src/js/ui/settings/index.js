@@ -6,6 +6,7 @@ import formWidgets from '../shared/form';
 import settings from '../../settings';
 import i18n from '../../i18n';
 import push from '../../push';
+import sound from '../../sound';
 import m from 'mithril';
 
 function renderBody() {
@@ -38,7 +39,7 @@ function renderBody() {
             e => settings.general.theme.background(e.target.value)
         ))])
       ]),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound)),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
       m('li.list_item', formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
         if (isOn) push.register();
         else push.unregister();

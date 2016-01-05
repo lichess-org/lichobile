@@ -1,8 +1,6 @@
 import settings from './settings';
 
-function shouldPlay() {
-  return settings.general.sound();
-}
+var shouldPlay;
 
 var lla, media;
 
@@ -26,6 +24,9 @@ else
 
 
 document.addEventListener('deviceready', function() {
+
+  shouldPlay = settings.general.sound();
+
   if (window.hotjs) {
     window.hotjs.Audio.init();
     lla = window.hotjs.Audio;
@@ -53,18 +54,21 @@ document.addEventListener('deviceready', function() {
 
 export default {
   move: function() {
-    if (shouldPlay()) lla.play('move');
+    if (shouldPlay) lla.play('move');
   },
   capture: function() {
-    if (shouldPlay()) lla.play('capture');
+    if (shouldPlay) lla.play('capture');
   },
   explosion: function() {
-    if (shouldPlay()) lla.play('explosion');
+    if (shouldPlay) lla.play('explosion');
   },
   lowtime: function() {
-    if (shouldPlay()) lla.play('lowtime');
+    if (shouldPlay) lla.play('lowtime');
   },
   dong: function() {
-    if (shouldPlay()) lla.play('dong');
+    if (shouldPlay) lla.play('dong');
+  },
+  onSettingChange: function(v) {
+    shouldPlay = v;
   }
 };

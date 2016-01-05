@@ -34,10 +34,13 @@ export function view(ctrl, color, runningColor) {
     'running': runningColor === color,
     'emerg': time < ctrl.data.emerg
   });
-  function cConfig(el) {
+  function cConfig(el, isUpdate) {
     el.textContent = formatClockTime(time * 1000);
+    if (!isUpdate) {
+      ctrl.els[color] = el;
+    }
   }
   return (
-    <div id={'clock_' + color} className={className} config={cConfig} />
+    <div className={className} config={cConfig} />
   );
 }

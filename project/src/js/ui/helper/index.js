@@ -74,8 +74,11 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
       var unbind = ButtonHandler(el,
         e => {
           m.startComputation();
-          tapHandler(e);
-          m.endComputation();
+          try {
+            tapHandler(e);
+          } finally {
+            m.endComputation();
+          }
         },
         holdHandler ? () => utils.autoredraw(holdHandler) : null,
         repeatHandler ? () => utils.autoredraw(repeatHandler) : null,

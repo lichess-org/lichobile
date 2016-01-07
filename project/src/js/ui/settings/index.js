@@ -29,14 +29,20 @@ function renderBody() {
             'bgTheme',
             'dark',
             settings.general.theme.background() === 'dark',
-            e => settings.general.theme.background(e.target.value)
+            e => {
+              settings.general.theme.background(e.target.value);
+              layout.onBackgroundChange(e.target.value);
+            }
           )),
           m('div.nice-radio', formWidgets.renderRadio(
             'Light',
             'bgTheme',
             'light',
             settings.general.theme.background() === 'light',
-            e => settings.general.theme.background(e.target.value)
+            e => {
+              settings.general.theme.background(e.target.value);
+              layout.onBackgroundChange(e.target.value);
+            }
         ))])
       ]),
       m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),

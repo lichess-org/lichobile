@@ -9,11 +9,18 @@ import lobby from './lobby';
 import helper from './helper';
 import settings from '../settings';
 
+var background;
+
 export default {
 
+  onBackgroundChange: function(bg) {
+    background = bg;
+  },
+
   board: function(header, content, overlay, color = '') {
+    background = background || settings.general.theme.background();
     return (
-      <div className={'view-container ' + settings.general.theme.background()}>
+      <div className={'view-container ' + background}>
         <main id="page" className={color}>
           <header className="main_header board">
             {header()}
@@ -35,8 +42,9 @@ export default {
   },
 
   free: function(header, content, footer, overlay) {
+    background = background || settings.general.theme.background();
     return (
-      <div className={'view-container ' + settings.general.theme.background()}>
+      <div className={'view-container ' + background}>
         <main id="page">
           <header className="main_header">{header()}</header>
           <div className="content">{content()}</div>

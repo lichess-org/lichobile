@@ -4,6 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import settings from '../../settings';
+import { onBoardThemeChange } from '../round/view/roundView';
 import m from 'mithril';
 
 function renderBody() {
@@ -14,7 +15,10 @@ function renderBody() {
           formWidgets.renderRadio(
             t[0], 'board_theme', t[1],
             settings.general.theme.board() === t[1],
-            e => settings.general.theme.board(e.target.value)
+            e => {
+              settings.general.theme.board(e.target.value);
+              onBoardThemeChange(e.target.value);
+            }
           ),
           m('div.board_icon.vertical_align', {
             className: t[1]

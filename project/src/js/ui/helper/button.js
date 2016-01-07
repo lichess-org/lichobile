@@ -1,5 +1,5 @@
 const HOLD_DURATION = 600;
-const REPEAT_RATE = 50;
+const REPEAT_RATE = 20;
 const SCROLL_TOLERANCE = 8;
 const ACTIVE_CLASS = 'active';
 

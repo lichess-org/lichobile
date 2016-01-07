@@ -4,6 +4,7 @@ import layout from '../layout';
 import formWidgets from '../shared/form';
 import i18n from '../../i18n';
 import settings from '../../settings';
+import { onPieceThemeChange } from '../round/view/roundView';
 import m from 'mithril';
 
 function renderBody() {
@@ -14,7 +15,10 @@ function renderBody() {
           className: t
         }, formWidgets.renderRadio(t, 'piece_theme', t,
           settings.general.theme.piece() === t,
-          e => settings.general.theme.piece(e.target.value)
+          e => {
+            settings.general.theme.piece(e.target.value);
+            onPieceThemeChange(e.target.value);
+          }
         ));
       }))
     ])

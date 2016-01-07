@@ -28,9 +28,9 @@ export default function view(ctrl) {
   const isPortrait = helper.isPortrait();
 
   return layout.board(
-    renderHeader.bind(undefined, ctrl),
-    renderContent.bind(undefined, ctrl, isPortrait),
-    overlay.bind(undefined, ctrl, isPortrait)
+    () => renderHeader(ctrl),
+    () => renderContent(ctrl, isPortrait),
+    () => overlay(ctrl, isPortrait)
   );
 }
 
@@ -59,11 +59,22 @@ export function renderMaterial(material) {
   return children;
 }
 
+var boardTheme;
+var pieceTheme;
+export function onBoardThemeChange(t) {
+  boardTheme = t;
+}
+export function onPieceThemeChange(t) {
+  pieceTheme = t;
+}
+
 export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses) {
+  boardTheme = boardTheme || settings.general.theme.board();
+  pieceTheme = pieceTheme || settings.general.theme.piece();
   const boardClass = [
     'display_board',
-    settings.general.theme.board(),
-    settings.general.theme.piece(),
+    boardTheme,
+    pieceTheme,
     variant
   ].join(' ');
   let wrapperClass = 'board_wrapper';
@@ -360,7 +371,7 @@ function renderGamePopup(ctrl, isPortrait) {
     'player_controls',
     isPortrait ? gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
-      renderGameRunningActions.bind(undefined, ctrl) : renderGameEndedActions.bind(undefined, ctrl),
+      () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
   );

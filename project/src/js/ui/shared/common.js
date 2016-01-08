@@ -121,7 +121,7 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
   const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
   const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
   return (
-    <div className="content round onlyBoard">
+    <div className="content_round onlyBoard">
       <section key={boardKey} className="board_wrapper" style={boardStyle}>
         {m.component(ViewOnlyBoard, {fen, lastMove, orientation, variant})}
       </section>

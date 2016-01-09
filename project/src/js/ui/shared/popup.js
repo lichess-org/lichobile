@@ -9,7 +9,7 @@ function styleConf(el) {
   el.style.top = top + 'px';
 }
 
-export default function(classes, header, contentF, isShowing, closef) {
+export default function(classes, headerF, contentF, isShowing, closef) {
   if (!isShowing)
     return null;
 
@@ -32,7 +32,7 @@ export default function(classes, header, contentF, isShowing, closef) {
       <div className="popup_overlay_close"
         config={closef ? helper.ontouch(helper.fadesOut(closef, '.overlay_popup_wrapper')) : utils.noop} />
       <div className={className} config={styleConf}>
-        {header ? <header>{header}</header> : null}
+        {headerF ? <header>{headerF()}</header> : null}
         <div className="popup_content">
           {contentF()}
         </div>

@@ -76,7 +76,7 @@ lobby.view = function() {
 
   return popupWidget(
     null,
-    m('div', i18n('waitingForOpponent') + '...'),
+    () => m('div', i18n('waitingForOpponent') + '...'),
     content,
     lobby.isOpen
   );

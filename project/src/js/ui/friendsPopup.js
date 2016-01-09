@@ -23,9 +23,9 @@ friendsPopup.close = function(fromBB) {
 
 friendsPopup.view = function() {
 
-  const header = (
-    <div><span data-icon="f"/>{i18n('onlineFriends')}</div>
-  );
+  function header() {
+    return <div><span data-icon="f"/>{i18n('onlineFriends')}</div>;
+  }
 
   return popupWidget(
     {onlineFriends: true, native_scroller: false},

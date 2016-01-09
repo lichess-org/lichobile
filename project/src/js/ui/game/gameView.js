@@ -75,7 +75,7 @@ function joinOverlay(ctrl) {
   return function() {
     return popupWidget(
       'join_url_challenge',
-      opp ? opp.username : 'Anonymous',
+      () => opp ? opp.username : 'Anonymous',
       function() {
         return m('div.infos', [
           gameInfos(data),
@@ -141,6 +141,6 @@ function awaitChallengeOverlay(ctrl) {
   }
 
   return function() {
-    return popupWidget('await_url_challenge', i18n('challengeToPlay'), popupContent, true);
+    return popupWidget('await_url_challenge', () => i18n('challengeToPlay'), popupContent, true);
   };
 }

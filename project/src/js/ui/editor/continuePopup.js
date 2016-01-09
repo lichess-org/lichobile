@@ -41,7 +41,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'continueFromHere',
-      m('h2.withIcon[data-icon=U]', i18n('continueFromHere')),
+      () => m('h2.withIcon[data-icon=U]', i18n('continueFromHere')),
       () => {
         return [
           hasNetwork() ? m('p.sep', i18n('playOnline')) : null,

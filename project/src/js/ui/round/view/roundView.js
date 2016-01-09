@@ -344,10 +344,10 @@ function renderGameEndedActions(ctrl) {
 }
 
 function gameInfos(data) {
-  var time = gameApi.time(data);
-  var mode = data.game.rated ? i18n('rated') : i18n('casual');
-  var icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
-  var variant = m('span.variant', {
+  const time = gameApi.time(data);
+  const mode = data.game.rated ? i18n('rated') : i18n('casual');
+  const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
+  const variant = m('span.variant', {
     config: helper.ontouch(
       () => {
         var link = variantApi(data.game.variant.key).link;
@@ -357,7 +357,7 @@ function gameInfos(data) {
       () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
     )
   }, data.game.variant.name);
-  var infos = [time + ' • ', variant, m('br'), mode];
+  const infos = [time + ' • ', variant, m('br'), mode];
   return [
     m('div.icon-game', {
       'data-icon': icon ? icon : ''
@@ -369,7 +369,7 @@ function gameInfos(data) {
 function renderGamePopup(ctrl, isPortrait) {
   return popupWidget(
     'player_controls',
-    isPortrait ? gameInfos(ctrl.data) : null,
+    isPortrait ? () => gameInfos(ctrl.data) : null,
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

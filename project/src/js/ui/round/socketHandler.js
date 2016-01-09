@@ -17,7 +17,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
     },
     move: function(o) {
       ctrl.apiMove(o);
-      m.redraw();
+      requestAnimationFrame(m.redraw);
     },
     checkCount: function(e) {
       var isWhite = ctrl.data.player.color === 'white';

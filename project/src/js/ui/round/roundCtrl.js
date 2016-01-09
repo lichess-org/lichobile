@@ -211,7 +211,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.apiMove = function(o) {
-    let d = this.data;
+    const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
     const playedColor = o.ply % 2 === 0 ? 'black' : 'white';
@@ -223,55 +223,65 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (!this.replaying()) {
       this.vm.ply++;
-      this.chessground.apiMove(o.uci.substr(0, 2), o.uci.substr(2, 2));
 
+      const enpassantPieces = {};
       if (o.enpassant) {
-        let p = o.enpassant;
-        let pieces = {};
-        pieces[p.key] = null;
-        this.chessground.setPieces(pieces);
-        if (d.game.variant.key === 'atomic') atomic.enpassant(this, p.key, p.color);
-        sound.capture();
+        const p = o.enpassant;
+        enpassantPieces[p.key] = null;
+        if (d.game.variant.key === 'atomic') {
+          atomic.enpassant(this, p.key, p.color);
+        } else {
+          sound.capture();
+        }
       }
 
-      if (o.promotion) ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
+      var promotePieces;
+      if (o.promotion) {
+        promotePieces = ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
+      }
 
+      const castlePieces = {};
       if (o.castle && !this.chessground.data.autoCastle) {
-        let c = o.castle;
-        let pieces = {};
-        pieces[c.king[0]] = null;
-        pieces[c.rook[0]] = null;
-        pieces[c.king[1]] = {
+        const c = o.castle;
+        castlePieces[c.king[0]] = null;
+        castlePieces[c.rook[0]] = null;
+        castlePieces[c.king[1]] = {
           role: 'king',
           color: c.color
         };
-        pieces[c.rook[1]] = {
+        castlePieces[c.rook[1]] = {
           role: 'rook',
           color: c.color
         };
-        this.chessground.setPieces(pieces);
       }
 
-      this.chessground.set({
-        turnColor: d.game.player,
-        movable: {
-          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
-        },
-        check: o.check
-      });
+      const pieces = Object.assign({}, enpassantPieces, promotePieces, castlePieces);
+      this.chessground.apiMove(
+        o.uci.substr(0, 2),
+        o.uci.substr(2, 2),
+        pieces,
+        {
+          turnColor: d.game.player,
+          movable: {
+            dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
+          },
+          check: o.check
+        }
+      );
 
-      if (playedColor !== d.player.color) {
+      if (playedColor !== d.player.color && this.chessground.data.premovable.current) {
         // atrocious hack to prevent race condition
         // with explosions and premoves
         // https://github.com/ornicar/lila/issues/343
         if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
         else this.chessground.playPremove();
       }
+
       if (this.data.game.speed === 'correspondence') session.refresh();
     }
 
     if (o.clock) {
-      let c = o.clock;
+      const c = o.clock;
       if (this.clock) this.clock.update(c.white, c.black);
       else if (this.correspondenceClock) this.correspondenceClock.update(c.white, c.black);
     }

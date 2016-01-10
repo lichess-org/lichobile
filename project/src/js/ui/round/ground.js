@@ -75,15 +75,14 @@ function reload(ground, data, fen, flip) {
 
 function promote(ground, key, role) {
   const pieces = {};
-  const bkey = key.substr(0, 1) + (key.substr(1, 1) === '1' ? '2' : '7');
-  const piece = ground.data.pieces[bkey];
+  const piece = ground.data.pieces[key];
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
       role: role
     };
+    ground.setPieces(pieces);
   }
-  return pieces;
 }
 
 function end(ground) {

@@ -52,7 +52,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     moveToSubmit: null
   };
 
-  var connectSocket = function() {
+  const connectSocket = function() {
     socket.createGame(
       this.data.url.socket,
       this.data.player.version,
@@ -235,11 +235,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         }
       }
 
-      var promotePieces;
-      if (o.promotion) {
-        promotePieces = ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
-      }
-
       const castlePieces = {};
       if (o.castle && !this.chessground.data.autoCastle) {
         const c = o.castle;
@@ -255,7 +250,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         };
       }
 
-      const pieces = Object.assign({}, enpassantPieces, promotePieces, castlePieces);
+      const pieces = Object.assign({}, enpassantPieces, castlePieces);
       this.chessground.apiMove(
         o.uci.substr(0, 2),
         o.uci.substr(2, 2),
@@ -268,6 +263,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
           check: o.check
         }
       );
+
+      if (o.promotion) {
+        ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
+      }
 
       if (playedColor !== d.player.color && this.chessground.data.premovable.current) {
         // atrocious hack to prevent race condition

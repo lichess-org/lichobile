@@ -9,7 +9,7 @@ import m from 'mithril';
 
 export default function(ctrl, onFeatured, onUserTVRedirect) {
 
-  var handlers = {
+  const handlers = {
     takebackOffers: function(o) {
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
@@ -80,7 +80,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
 
   return function(type, data) {
     if (handlers[type]) {
-      handlers[type](data);
+      setTimeout(() => handlers[type](data), 0);
       return true;
     }
     return false;

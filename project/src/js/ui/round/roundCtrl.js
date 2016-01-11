@@ -272,8 +272,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         // atrocious hack to prevent race condition
         // with explosions and premoves
         // https://github.com/ornicar/lila/issues/343
-        if (d.game.variant.key === 'atomic') setTimeout(this.chessground.playPremove, 100);
-        else this.chessground.playPremove();
+        const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
+        setTimeout(this.chessground.playPremove, premoveDelay);
       }
 
       if (this.data.game.speed === 'correspondence') session.refresh();

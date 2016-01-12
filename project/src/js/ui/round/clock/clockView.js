@@ -4,8 +4,8 @@ function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
 
-const sepHigh = '<seph>:</seph>';
-const sepLow = '<sepl>:</sepl>';
+const sepHigh = <seph>:</seph>;
+const sepLow = <sepl>:</sepl>;
 
 export function formatClockTime(ctrl, time, isRunning) {
   var date = new Date(time);
@@ -15,15 +15,15 @@ export function formatClockTime(ctrl, time, isRunning) {
   let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh;
 
   if (ctrl.data.showTenths && time < 10000) {
-    return seconds + '<tens><seph>.</seph>' + tenths + '</tens>';
+    return [seconds, <tens><seph>.</seph>{tenths}</tens>];
   }
 
   if (time >= 3600000) {
     let hours = prefixInteger(date.getUTCHours(), 1);
-    return hours + sepHigh + minutes + pulse + seconds;
+    return [hours, sepHigh, minutes, pulse, seconds];
   }
 
-  return minutes + pulse + seconds;
+  return [minutes, pulse, seconds];
 }
 
 export function view(ctrl, color, runningColor) {
@@ -35,13 +35,9 @@ export function view(ctrl, color, runningColor) {
     running: isRunning,
     emerg: time < ctrl.data.emerg
   });
-  function cConfig(el, isUpdate) {
-    el.innerHTML = formatClockTime(ctrl, time * 1000, isRunning);
-    if (!isUpdate) {
-      ctrl.els[color] = el;
-    }
-  }
   return (
-    <div className={className} config={cConfig} />
+    <div className={className}>
+      {formatClockTime(ctrl, time * 1000, isRunning)}
+    </div>
   );
 }

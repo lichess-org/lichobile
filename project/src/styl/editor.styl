@@ -2,7 +2,7 @@ pitHeight = (100vh - 50px) / 8
 pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
 
 .editor
-  .board_wrapper
+  .game_board_wrapper
     transform none
   @media only screen and (orientation: portrait)
     height 100%
@@ -14,7 +14,7 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
     flex-flow column nowrap
     align-items center
     justify-content space-around
-    .board_wrapper
+    .game_board_wrapper
       margin 0
       height "calc(100% - (%s * 2))" % pitHeight
       width 100%
@@ -22,7 +22,7 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
     width "calc(100vh - 50px - (%s * 2))" % pitHeightBigScreen
     flex 0 0 auto
     margin auto 0
-    .board_wrapper
+    .game_board_wrapper
       height "calc(100% - (%s * 2))" % pitHeightBigScreen
       width 100%
 

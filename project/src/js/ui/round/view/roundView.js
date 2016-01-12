@@ -77,7 +77,7 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
     pieceTheme,
     variant
   ].join(' ');
-  let wrapperClass = 'board_wrapper';
+  let wrapperClass = 'game_board_wrapper';
   let key = 'board' + (isPortrait ? 'portrait' : 'landscape');
 
   if (moreWrapperClasses) {

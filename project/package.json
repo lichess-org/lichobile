@@ -49,7 +49,7 @@
     "chessground-mobile": "veloce/chessground-mobile#experiments",
     "iscroll": "5.1.3",
     "lodash": "3.8.0",
-    "mithril": "veloce/mithril.js#v8opt",
+    "mithril": "veloce/mithril.js#asyncRedraw",
     "moment": "2.8.4",
     "signals": "1.0.0",
     "spin.js": "2.0.1",

@@ -1,3 +1,4 @@
+import { formatClockTime } from './clockView';
 import sound from '../../../sound';
 import m from 'mithril';
 
@@ -20,20 +21,40 @@ export default function ctrl(data, outOfTime, soundColor) {
   }
   setLastUpdate();
 
+  this.els = {
+    black: null,
+    white: null
+  };
+
+  this.emerg = {
+    black: false,
+    white: false
+  };
+
   this.data = data;
 
   this.update = function(white, black) {
-    m.startComputation();
     this.data.white = white;
     this.data.black = black;
     setLastUpdate();
-    m.endComputation();
   };
 
   this.tick = function(color) {
     this.data[color] = Math.max(0, lastUpdate[color] - (Date.now() - lastUpdate.at) / 1000);
+    const time = this.data[color] * 1000;
+    const el = this.els[color];
 
-    m.redraw();
+    requestAnimationFrame(() => {
+      if (el) el.innerHTML = formatClockTime(this, time, true);
+    });
+
+    if (this.data[color] < this.data.emerg && !this.emerg[color]) {
+      this.emerg[color] = true;
+      m.redraw();
+    } else if (this.data[color] >= this.data.emerg && this.emerg[color]) {
+      this.emerg[color] = false;
+      m.redraw();
+    }
 
     if (soundColor === color &&
       this.data[soundColor] < this.data.emerg &&

@@ -80,7 +80,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
 
   return function(type, data) {
     if (handlers[type]) {
-      handlers[type](data);
+      setTimeout(() => handlers[type](data), 0);
       return true;
     }
     return false;

@@ -95,11 +95,6 @@ export function game(id, color, background) {
   return request(url, { background });
 }
 
-export function getTournaments() {
-  var url = '/tournament';
-  return request(url, null );
-}
-
 export function toggleGameBookmark(id) {
   return request('/bookmark/' + id, {
     method: 'POST',

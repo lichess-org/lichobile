@@ -106,7 +106,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.jump = function(ply) {
-    if (ply < this.firstPly() || ply > this.lastPly()) return;
+    if (ply < this.firstPly() || ply > this.lastPly()) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
     const s = this.plyStep(ply);
@@ -126,22 +126,23 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       if (s.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
     }
+    return true;
   }.bind(this);
 
   this.jumpNext = function() {
-    this.jump(this.vm.ply + 1);
+    return this.jump(this.vm.ply + 1);
   }.bind(this);
 
   this.jumpPrev = function() {
-    this.jump(this.vm.ply - 1);
+    return this.jump(this.vm.ply - 1);
   }.bind(this);
 
   this.jumpFirst = function() {
-    this.jump(this.firstPly());
+    return this.jump(this.firstPly());
   }.bind(this);
 
   this.jumpLast = function() {
-    this.jump(this.lastPly());
+    return this.jump(this.lastPly());
   }.bind(this);
 
   this.setTitle = function() {

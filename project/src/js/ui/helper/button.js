@@ -1,3 +1,5 @@
+import m from 'mithril';
+
 const HOLD_DURATION = 600;
 const REPEAT_RATE = 20;
 const SCROLL_TOLERANCE = 8;
@@ -42,8 +44,13 @@ export default function ButtonHandler(el,
       if (active) el.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
+    clearInterval(repeatIntervalID);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
-      repeatIntervalID = setInterval(repeatHandler, REPEAT_RATE);
+      repeatIntervalID = setInterval(() => {
+        m.startComputation();
+        if (!repeatHandler()) clearInterval(repeatIntervalID);
+        m.endComputation();
+      }, REPEAT_RATE);
     }, 150);
   }
 
@@ -63,10 +70,10 @@ export default function ButtonHandler(el,
 
   function onTouchEnd(e) {
     if (e.cancelable) e.preventDefault();
+    clearTimeout(repeatTimeoutId);
+    clearInterval(repeatIntervalID);
     if (active) {
       clearTimeout(holdTimeoutID);
-      clearTimeout(repeatTimeoutId);
-      clearInterval(repeatIntervalID);
       if (touchEndFeedback) el.classList.add(ACTIVE_CLASS);
       tapHandler(e);
       active = false;
@@ -113,6 +120,9 @@ export default function ButtonHandler(el,
   el.addEventListener('contextmenu', onContextMenu, false);
 
   return function unbind() {
+    clearTimeout(holdTimeoutID);
+    clearTimeout(repeatTimeoutId);
+    clearInterval(repeatIntervalID);
     el.removeEventListener('touchstart', onTouchStart, false);
     el.removeEventListener('touchmove', onTouchMove, false);
     el.removeEventListener('touchend', onTouchEnd, false);

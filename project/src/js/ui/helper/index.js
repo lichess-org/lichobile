@@ -81,11 +81,7 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
           }
         },
         holdHandler ? () => utils.autoredraw(holdHandler) : null,
-        repeatHandler ? () => {
-          m.startComputation();
-          repeatHandler();
-          m.endComputation();
-        } : null,
+        repeatHandler,
         scrollX,
         scrollY,
         touchEndFeedback

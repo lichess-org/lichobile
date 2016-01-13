@@ -18,8 +18,9 @@ export default function(ctrl, e) {
     role: role,
     color: color
   };
-  const obj = {};
-  obj[key] = piece;
+  const obj = {
+    [key]: piece
+  };
   ctrl.chessground.setPieces(obj);
   const bounds = ctrl.chessground.data.bounds;
   const squareBounds = e.target.parentNode.getBoundingClientRect();
@@ -43,6 +44,5 @@ export default function(ctrl, e) {
     originTarget: e.target
   };
   ctrl.chessground.data.draggable.current.draggingPiece.classList.add('dragging');
-  ctrl.chessground.data.renderRAF();
   drag.processDrag(ctrl.chessground.data);
 }

@@ -53,8 +53,7 @@ function renderProfileActions(user) {
 }
 
 function renderLinks(user) {
-  console.log("rendering");
-	return (
+  return (
     <ul className="side_links">
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
@@ -77,11 +76,6 @@ function renderLinks(user) {
       {hasNetwork() ?
       <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
-      </li> : null
-      }
-      {hasNetwork() ?
-      <li className="side_link" key="play_tournament" config={helper.ontouchY(menu.route('/tournaments'))}>
-        <span className="fa fa-arrows-alt"/>{i18n('playATournament')}
       </li> : null
       }
       {hasNetwork() ?

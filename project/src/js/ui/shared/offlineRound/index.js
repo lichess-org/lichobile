@@ -112,7 +112,7 @@ export function renderReplayTable(ctrl) {
 }
 
 function renderBackwardButton(ctrl) {
-  return m('button.action_bar_button[data-icon=I]', {
+  return m('button.action_bar_button.fa.fa-step-backward', {
     config: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
@@ -121,7 +121,7 @@ function renderBackwardButton(ctrl) {
 }
 
 function renderForwardButton(ctrl) {
-  return m('button.action_bar_button[data-icon=H]', {
+  return m('button.action_bar_button.fa.fa-step-forward', {
     config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.replay.situations.length - 1)

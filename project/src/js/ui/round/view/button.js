@@ -180,15 +180,31 @@ export default {
         config={helper.ontouch(ctrl.flip)} />
     );
   },
+  first: function(ctrl) {
+    const prevPly = ctrl.vm.ply - 1;
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    const className = helper.classSet({
+      'action_bar_button': true,
+      'fa': true,
+      'fa-fast-backward': true,
+      disabled: ctrl.broken || !enabled
+    });
+    return (
+      <button className={className} key="fast-backward"
+        config={helper.ontouch(ctrl.jumpFirst)} />
+    );
+  },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     const className = helper.classSet({
       'action_bar_button': true,
+      'fa': true,
+      'fa-backward': true,
       disabled: ctrl.broken || !enabled
     });
     return (
-      <button className={className} data-icon="I" key="backward"
+      <button className={className} key="backward"
         config={helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
     );
   },
@@ -197,11 +213,27 @@ export default {
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     const className = helper.classSet({
       'action_bar_button': true,
+      'fa': true,
+      'fa-forward': true,
       disabled: ctrl.broken || !enabled
     });
     return (
-      <button className={className} data-icon="H" key="forward"
+      <button className={className} key="forward"
         config={helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext)} />
+    );
+  },
+  last: function(ctrl) {
+    const nextPly = ctrl.vm.ply + 1;
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    const className = helper.classSet({
+      'action_bar_button': true,
+      'fa': true,
+      'fa-fast-forward': true,
+      disabled: ctrl.broken || !enabled
+    });
+    return (
+      <button className={className} key="fast-forward"
+        config={helper.ontouch(ctrl.jumpLast)} />
     );
   },
   newOpponent: function(ctrl) {

@@ -130,15 +130,15 @@ function renderViewControls(ctrl) {
       key: 'sharePuzzle',
       config: helper.ontouch(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
     }),
-    m('button.action_bar_button.training_action[data-icon=I]', {
-      config: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
+    m('button.action_bar_button.training_action.fa.fa-backward', {
+      config: helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev),
       key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
-    m('button.action_bar_button.training_action[data-icon=H]', {
-      config: helper.ontouch(ctrl.jumpNext, ctrl.jumpLast),
+    m('button.action_bar_button.training_action.fa.fa-forward', {
+      config: helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext),
       key: 'historyNext',
       className: helper.classSet({
         disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)

@@ -56,7 +56,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         session.refresh();
         ctrl.showActions();
         m.redraw();
-      }, 1000);
+      }, 500);
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {

@@ -118,7 +118,7 @@ function renderRatings(user) {
 
   return (
     <section className="perfs">
-      {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf))}
+      {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf, user))}
     </section>
   );
 }

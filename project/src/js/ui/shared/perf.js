@@ -3,9 +3,10 @@ import { provisionalDeviation } from '../../lichess/perfs';
 import helper from '../helper';
 import m from 'mithril';
 
-module.exports = function(key, name, perf) {
+module.exports = function(key, name, perf, user) {
   return m('div.perf', {
-    'data-icon': gameIcon(key)
+    'data-icon': gameIcon(key),
+    config : helper.ontouchY(goToVariantStats(user, name))
   }, [
     m('span.name', name),
     m('div.rating', [
@@ -17,3 +18,6 @@ module.exports = function(key, name, perf) {
   ]);
 };
 
+function goToVariantStats (user, name) {
+  return (() => m.route(`/@/${user.id}/${name}/stats`));
+}

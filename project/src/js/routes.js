@@ -11,6 +11,7 @@ import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
 import userGames from'./ui/user/games';
+import userVariantStats from'./ui/user/variantstats';
 import userTV from './ui/user/tv';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
@@ -32,6 +33,7 @@ export default {
       '/@/:id': user,
       '/@/:id/games': userGames,
       '/@/:id/games/:filter': userGames,
+      '/@/:id/:variant/stats': userVariantStats,
       '/@/:id/tv': userTV,
       '/editor': editor,
       '/editor/:fen': editor,

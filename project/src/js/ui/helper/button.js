@@ -1,7 +1,7 @@
 import m from 'mithril';
 
 const HOLD_DURATION = 600;
-const REPEAT_RATE = 50;
+const REPEAT_RATE = 30;
 const SCROLL_TOLERANCE = 8;
 const ACTIVE_CLASS = 'active';
 
@@ -28,6 +28,15 @@ export default function ButtonHandler(el,
   if (repeatHandler && typeof repeatHandler !== 'function')
     throw new Error('ButtonHandler 4rd argument must be a function!');
 
+  // http://ejohn.org/blog/how-javascript-timers-work/
+  function onRepeat() {
+    m.startComputation();
+    var res = repeatHandler();
+    repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
+    if (!res) clearTimeout(repeatIntervalID);
+    m.endComputation();
+  }
+
   function onTouchStart(e) {
     let touch = e.changedTouches[0];
     let boundingRect = el.getBoundingClientRect();
@@ -44,13 +53,9 @@ export default function ButtonHandler(el,
       if (active) el.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
-    clearInterval(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
-      repeatIntervalID = setInterval(() => {
-        m.startComputation();
-        if (!repeatHandler()) clearInterval(repeatIntervalID);
-        m.endComputation();
-      }, REPEAT_RATE);
+      repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     }, 150);
   }
 
@@ -62,7 +67,7 @@ export default function ButtonHandler(el,
       if (!active) {
         clearTimeout(holdTimeoutID);
         clearTimeout(repeatTimeoutId);
-        clearInterval(repeatIntervalID);
+        clearTimeout(repeatIntervalID);
         el.classList.remove(ACTIVE_CLASS);
       }
     }
@@ -71,7 +76,7 @@ export default function ButtonHandler(el,
   function onTouchEnd(e) {
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
-    clearInterval(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     if (active) {
       clearTimeout(holdTimeoutID);
       if (touchEndFeedback) el.classList.add(ACTIVE_CLASS);
@@ -84,7 +89,7 @@ export default function ButtonHandler(el,
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
-    clearInterval(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     active = false;
     el.classList.remove(ACTIVE_CLASS);
   }
@@ -120,9 +125,10 @@ export default function ButtonHandler(el,
   el.addEventListener('contextmenu', onContextMenu, false);
 
   return function unbind() {
+    console.log('button unbind');
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
-    clearInterval(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     el.removeEventListener('touchstart', onTouchStart, false);
     el.removeEventListener('touchmove', onTouchMove, false);
     el.removeEventListener('touchend', onTouchEnd, false);

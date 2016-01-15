@@ -116,12 +116,14 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
-    if (this.replaying()) this.chessground.stop();
-    else config.movable = {
-      color: gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null,
-      dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
-    };
+    if (!this.replaying()) {
+      config.movable = {
+        color: gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null,
+        dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
+      };
+    }
     this.chessground.set(config);
+    if (this.replaying()) this.chessground.stop();
     if (s.san && isFwd) {
       if (s.san.indexOf('x') !== -1) sound.capture();
       else sound.move();

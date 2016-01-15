@@ -125,7 +125,6 @@ export default function ButtonHandler(el,
   el.addEventListener('contextmenu', onContextMenu, false);
 
   return function unbind() {
-    console.log('button unbind');
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
     clearTimeout(repeatIntervalID);

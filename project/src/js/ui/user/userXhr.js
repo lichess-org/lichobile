@@ -34,3 +34,7 @@ export function games(userId, filter='all', page=1, feedback=false) {
 export function tv(userId) {
   return request(`/@/${userId}/tv`);
 }
+
+export function variantperf(userId, variant) {
+  return request(`/@/${userId}/perf/${variant}`, {}, true);
+}

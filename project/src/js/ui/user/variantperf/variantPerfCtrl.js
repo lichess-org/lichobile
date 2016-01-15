@@ -12,6 +12,7 @@ export default function controller() {
   const variant = m.route.param('variant');
 
   const user = m.prop();
+  const variantPerfData = m.prop();
 
   socket.createDefault();
 
@@ -24,29 +25,22 @@ export default function controller() {
     throw error;
   });
 
-  function loadVariantStats() {
-    /*
-    xhr.games(userId, currentFilter(), 1, true).then(data => {
-      paginator(data.paginator);
-      games(data.paginator.currentPageResults);
-    }, err => {
-      utils.handleXhrError(err);
-      m.route('/');
-    })
-    .then(() => setTimeout(() => {
-      if (scroller) scroller.scrollTo(0, 0, 0);
-    }, 50));
-    */
-    return [];
-  }
-
-  const variantStats = loadVariantStats();
+  xhr.variantperf(userId, variant).then(data => {
+    variantPerfData(data);
+    console.log(data);
+    console.log(data.user);
+    return data;
+  }, error => {
+    utils.handleXhrError(error);
+    m.route('/');
+    throw error;
+  });
 
   return {
-    variantStats,
     userId,
     variant,
     user,
+    variantPerfData,
     onunload() {
       socket.destroy();
     }

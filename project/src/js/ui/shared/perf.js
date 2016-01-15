@@ -6,7 +6,7 @@ import m from 'mithril';
 module.exports = function(key, name, perf, user) {
   return m('div.perf', {
     'data-icon': gameIcon(key),
-    config : helper.ontouchY(goToVariantStats(user, name))
+    config : helper.ontouchY(goToVariantPerf(user, name.toLowerCase()))
   }, [
     m('span.name', name),
     m('div.rating', [
@@ -18,6 +18,6 @@ module.exports = function(key, name, perf, user) {
   ]);
 };
 
-function goToVariantStats (user, name) {
-  return (() => m.route(`/@/${user.id}/${name}/stats`));
+function goToVariantPerf (user, name) {
+  return (() => m.route(`/@/${user.id}/${name}/perf`));
 }

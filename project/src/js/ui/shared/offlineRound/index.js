@@ -19,7 +19,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait) 
 
 export function renderGameActionsBar(ctrl) {
   return (
-    <section id="game_actions_bar">
+    <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />
@@ -33,7 +33,7 @@ export function renderGameActionsBar(ctrl) {
 export function renderGameActionsBarTablet(ctrl) {
   const d = ctrl.data;
   return (
-    <section id="game_actions_bar">
+    <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
         config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />

@@ -4,8 +4,8 @@ function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
 
-const sepHigh = '<seph>:</seph>';
-const sepLow = '<sepl>:</sepl>';
+const sepHigh = ':';
+const sepLow = ' ';
 
 export function formatClockTime(ctrl, time, isRunning) {
   var date = new Date(time);
@@ -15,7 +15,7 @@ export function formatClockTime(ctrl, time, isRunning) {
   let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh;
 
   if (ctrl.data.showTenths && time < 10000) {
-    return seconds + '<tens><seph>.</seph>' + tenths + '</tens>';
+    return seconds + '.' + tenths;
   }
 
   if (time >= 3600000) {
@@ -36,8 +36,8 @@ export function view(ctrl, color, runningColor) {
     emerg: time < ctrl.data.emerg
   });
   function cConfig(el, isUpdate) {
-    el.innerHTML = formatClockTime(ctrl, time * 1000, isRunning);
     if (!isUpdate) {
+      el.textContent = formatClockTime(ctrl, time * 1000, isRunning);
       ctrl.els[color] = el;
     }
   }

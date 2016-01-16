@@ -51,6 +51,13 @@ const variantMap = {
     id: 8,
     link: 'http://en.wikipedia.org/wiki/Dunsany%27s_chess',
     alert: 'This is a horde chess game!\n\nWhite must take all black pawns to win. Black must checkmate white king.'
+  },
+  racingKings: {
+    name: 'Racing Kings',
+    shortName: 'Racing',
+    id: 9,
+    link: 'http://lichess.org/racing-kings',
+    alert: 'Race to the eighth rank to win.'
   }
 };
 

@@ -97,7 +97,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
     this.vm.flip = !this.vm.flip;
     this.chessground.set({
-      orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color
+      orientation: ground.boardOrientation(this.data, this.vm.flip)
     });
   }.bind(this);
 

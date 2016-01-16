@@ -55,7 +55,7 @@ export default {
 
   game: {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck', 'atomic', 'horde'
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
     ],
     animations: localstorageprop('settings.gameAnimations', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
@@ -125,7 +125,8 @@ export default {
         ['Three-check', '5'],
         ['Antichess', '6'],
         ['Atomic', '7'],
-        ['Horde', '8']
+        ['Horde', '8'],
+        ['Racing Kings', '9']
       ],
       availableRatingRanges: {
         min: range(800, 2900, 100).map(tupleOf),

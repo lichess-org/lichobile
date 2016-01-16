@@ -111,7 +111,8 @@ const perfIconsMap = {
   atomic: '>',
   puzzle: '-',
   horde: '_',
-  fromPosition: '*'
+  fromPosition: '*',
+  racingKings: ''
 };
 
 export function gameIcon(perf) {

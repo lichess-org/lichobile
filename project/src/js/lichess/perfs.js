@@ -8,7 +8,8 @@ export const perfTypes = [
   ['threeCheck', 'Three-check'],
   ['antichess', 'Antichess'],
   ['atomic', 'Atomic'],
-  ['horde', 'Horde']
+  ['horde', 'Horde'],
+  ['racingKings', 'Racing Kings']
 ];
 
 export default function userPerfs(user) {

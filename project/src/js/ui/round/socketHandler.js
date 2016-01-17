@@ -13,17 +13,17 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
     takebackOffers: function(o) {
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
-      m.redraw();
+      m.redraw(false, true);
     },
     move: function(o) {
       ctrl.apiMove(o);
-      m.redraw();
+      m.redraw(false, true);
     },
     checkCount: function(e) {
       var isWhite = ctrl.data.player.color === 'white';
       ctrl.data.player.checks = isWhite ? e.white : e.black;
       ctrl.data.opponent.checks = isWhite ? e.black : e.white;
-      m.redraw();
+      m.redraw(false, true);
     },
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
@@ -55,13 +55,13 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       setTimeout(function() {
         session.refresh();
         ctrl.showActions();
-        m.redraw();
+        m.redraw(false, true);
       }, 500);
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
+        if (!ctrl.chat || !ctrl.chat.showing) m.redraw(false, true);
       }
     },
     message: function(msg) {
@@ -74,7 +74,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ['white', 'black'].forEach(function(c) {
         gameApi.setOnGame(ctrl.data, c, o[c]);
       });
-      if (!ctrl.chat || !ctrl.chat.showing) m.redraw();
+      if (!ctrl.chat || !ctrl.chat.showing) m.redraw(false, true);
     }
   };
 

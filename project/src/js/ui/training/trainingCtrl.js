@@ -156,18 +156,19 @@ export default function ctrl() {
   this.jump = function(to) {
     const history = this.data.replay.history;
     const step = this.data.replay.step;
-    if (!(step !== to && to >= 0 && to < history.length)) return;
+    if (!(step !== to && to >= 0 && to < history.length)) return false;
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
+    return true;
   }.bind(this);
 
   this.jumpFirst = this.jump.bind(this, 0);
 
   this.jumpPrev = function() {
-    this.jump(this.data.replay.step - 1);
+    return this.jump(this.data.replay.step - 1);
   }.bind(this);
 
   this.jumpNext = function() {
-    this.jump(this.data.replay.step + 1);
+    return this.jump(this.data.replay.step + 1);
   }.bind(this);
 
   this.jumpLast = function() {

@@ -4,9 +4,10 @@ import helper from '../helper';
 import m from 'mithril';
 
 module.exports = function(key, name, perf, user) {
-  return m('div.perf', {
+  return m('div', {
+    'class': 'perf',
     'data-icon': gameIcon(key),
-    config : helper.ontouchY(goToVariantPerf(user, name.toLowerCase()))
+    config : helper.ontouchY(goToVariantPerf(user, name))
   }, [
     m('span.name', name),
     m('div.rating', [

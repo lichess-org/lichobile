@@ -46,7 +46,6 @@ export function request(url, opts, feedback) {
   };
   merge(cfg, opts);
 
-  console.log(cfg.url);
   var promise = m.request(cfg);
 
   if (feedback) {

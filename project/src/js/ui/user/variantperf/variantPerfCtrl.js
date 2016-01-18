@@ -28,7 +28,6 @@ export default function controller() {
   xhr.variantperf(userId, variant).then(data => {
     variantPerfData(data);
     console.log(data);
-    console.log(data.user);
     return data;
   }, error => {
     utils.handleXhrError(error);

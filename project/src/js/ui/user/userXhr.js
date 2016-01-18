@@ -36,5 +36,5 @@ export function tv(userId) {
 }
 
 export function variantperf(userId, variant) {
-  return request(`/@/${userId}/perf/${variant}`, {}, true);
+  return request(`/@/${userId}/perf/${variant.toLowerCase()}`, {}, true);
 }

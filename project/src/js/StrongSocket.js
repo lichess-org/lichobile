@@ -1,15 +1,8 @@
 import merge from 'lodash/object/merge';
 import assign from 'lodash/object/assign';
-import range from 'lodash/utility/range';
 import { serializeQueryParameters } from './utils';
 import signals from './signals';
-import storage from './storage';
 import { lichessSri } from './http';
-
-const urlsPool = range(9021, 9030).map(function(e) {
-  return window.lichess.socketEndPoint + ':' + e;
-});
-urlsPool.unshift(window.lichess.socketEndPoint);
 
 const strongSocketDefaults = {
   events: {
@@ -27,8 +20,9 @@ const strongSocketDefaults = {
   }
 };
 
-export default function StrongSocket(url, version, settings) {
+export default function StrongSocket(baseUrl, url, version, settings) {
   this.settings = merge({}, strongSocketDefaults, settings);
+  this.baseUrl = baseUrl;
   this.url = url;
   this.version = version;
   this.options = this.settings.options;
@@ -44,10 +38,6 @@ export default function StrongSocket(url, version, settings) {
 
   this.debug('Debug is enabled');
   this.connect();
-
-  window.addEventListener('unload', function() {
-    this.destroy();
-  }.bind(this));
 }
 
 StrongSocket.prototype = {
@@ -56,15 +46,14 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
+    var fullUrl = 'ws://' + self.baseUrl + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
       version: self.version
     }));
     self.debug('connection attempt to ' + fullUrl, true);
     try {
-      if (window.WebSocket) self.ws = new window.WebSocket(fullUrl);
+      if (WebSocket) self.ws = new WebSocket(fullUrl);
       else throw '[lila] no websockets available!';
 
-      // if (self.options.debug) window.liws = self.ws;
       self.ws.onerror = function(e) {
         self.onError(e);
       };
@@ -197,13 +186,7 @@ StrongSocket.prototype = {
         self.ackableMessages = [];
         break;
       default:
-        if (!self.settings.receive || !self.settings.receive(msg.t, msg.d)) {
-          var h = self.settings.events[msg.t];
-          if (h) h(msg.d || null, self);
-          else if (!self.options.ignoreUnknownMessages) {
-            self.debug('Message not supported ' + JSON.stringify(msg));
-          }
-        }
+        postMessage(msg);
     }
   },
 
@@ -212,7 +195,7 @@ StrongSocket.prototype = {
   },
 
   debug: function(msg, always) {
-    if ((always || this.options.debug) && window.console && console.debug) {
+    if ((always || this.options.debug) && console && console.debug) {
       console.debug('[' + this.options.name + ' ' + lichessSri + ']', msg);
     }
   },
@@ -248,24 +231,6 @@ StrongSocket.prototype = {
 
   onSuccess: function() {
     signals.socket.connected.dispatch();
-  },
-
-  baseUrl: function() {
-    if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {
-      var key = 'socket.baseUrl';
-      var url = storage.get(key);
-      if (!url) {
-        url = urlsPool[0];
-        storage.set(key, url);
-      } else if (this.tryAnotherUrl) {
-        this.tryAnotherUrl = false;
-        url = urlsPool[(urlsPool.indexOf(url) + 1) % urlsPool.length];
-        storage.set(key, url);
-      }
-      return url;
-    }
-
-    return window.lichess.socketEndPoint;
   },
 
   pingInterval: function() {

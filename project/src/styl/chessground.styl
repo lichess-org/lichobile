@@ -8,7 +8,7 @@
   &.minimal-dom
     transform none
 
-.cg-square
+square
   position absolute
   width 12.5%
   height 12.5%
@@ -35,7 +35,7 @@
   &.fading
     z-index 1
 
-.cg-square[data-coord-x]:after, .cg-square[data-coord-y]:before
+square[data-coord-x]:after, square[data-coord-y]:before
   position absolute
   font-family Cousine
   font-weight bold
@@ -46,17 +46,17 @@
     line-height 15px
 
 
-.cg-square[data-coord-x]:after
+square[data-coord-x]:after
   left 1px
   bottom 0px
   content attr(data-coord-x)
 
-.cg-square[data-coord-y]:before
+square[data-coord-y]:before
   right 1px
   top 1px
   content attr(data-coord-y)
 
-.cg-piece
+piece
   position absolute
   bottom 0
   left 0
@@ -77,7 +77,7 @@
   transform translate3d(0,0,0)
 
 // view only boards
-.minimal-dom .cg-piece
+.minimal-dom piece
   position absolute
   transform none
   width 12.5%

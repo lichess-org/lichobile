@@ -368,6 +368,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
+    document.removeEventListener('resume', reloadGameData);
+    window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();
     if (this.chessground) {
       this.chessground.onunload();
@@ -375,9 +378,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       // (I still don't know why is it occuring)
       this.chessground = null;
     }
-    document.removeEventListener('resume', reloadGameData);
-    window.plugins.insomnia.allowSleepAgain();
-    signals.seekCanceled.remove(connectSocket);
   };
 }
 

@@ -143,7 +143,7 @@ function renderContent(ctrl, isPortrait) {
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
       <section key="table" className="table">
         <header key="table-header" className="tableHeader">
-          {gameInfos(ctrl.data)}
+          {gameInfos(ctrl)}
         </header>
         <section key="players-table" className="playersTable">
           {opponent}
@@ -343,7 +343,8 @@ function renderGameEndedActions(ctrl) {
   ];
 }
 
-function gameInfos(data) {
+function gameInfos(ctrl) {
+  const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
@@ -362,14 +363,18 @@ function gameInfos(data) {
     m('div.icon-game', {
       'data-icon': icon ? icon : ''
     }),
-    m('div.game-title.no_select', infos)
+    m('div.game-title.no_select', infos),
+    m('button.star', {
+      config: helper.ontouch(ctrl.toggleBookmark),
+      'data-icon': data.bookmarked ? 't' : 's'
+    })
   ];
 }
 
 function renderGamePopup(ctrl, isPortrait) {
   return popupWidget(
     'player_controls',
-    isPortrait ? () => gameInfos(ctrl.data) : null,
+    isPortrait ? () => gameInfos(ctrl) : null,
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

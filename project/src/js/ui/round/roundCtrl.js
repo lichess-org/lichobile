@@ -18,6 +18,7 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import * as xhr from './roundXhr';
+import { toggleGameBookmark } from '../../xhr';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
@@ -351,6 +352,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
     m.redraw(false, true);
+  }.bind(this);
+
+  this.toggleBookmark = function() {
+    return toggleGameBookmark(this.data.game.id).then(this.reload);
   }.bind(this);
 
   window.plugins.insomnia.keepAwake();

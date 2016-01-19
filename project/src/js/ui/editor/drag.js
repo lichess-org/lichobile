@@ -40,7 +40,7 @@ export default function(ctrl, e) {
     dec: [-squareBounds.width, -squareBounds.height],
     bounds: bounds,
     started: true,
-    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > .cg-piece'),
+    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > piece'),
     originTarget: e.target
   };
   ctrl.chessground.data.draggable.current.draggingPiece.classList.add('dragging');

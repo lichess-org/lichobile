@@ -365,7 +365,10 @@ function gameInfos(ctrl) {
     }),
     m('div.game-title.no_select', infos),
     m('button.star', {
-      config: helper.ontouch(ctrl.toggleBookmark),
+      config: helper.ontouch(
+        ctrl.toggleBookmark,
+        () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
+      ),
       'data-icon': data.bookmarked ? 't' : 's'
     })
   ];

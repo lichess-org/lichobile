@@ -18,6 +18,7 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import * as xhr from './roundXhr';
+import { toggleGameBookmark } from '../../xhr';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
@@ -353,17 +354,23 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     m.redraw(false, true);
   }.bind(this);
 
-  window.plugins.insomnia.keepAwake();
-
-  var onResume = function() {
+  var reloadGameData = function() {
     xhr.reload(this).then(this.reload);
   }.bind(this);
 
-  document.addEventListener('resume', onResume);
+  this.toggleBookmark = function() {
+    return toggleGameBookmark(this.data.game.id).then(reloadGameData);
+  }.bind(this);
+
+  document.addEventListener('resume', reloadGameData);
+  window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
+    document.removeEventListener('resume', reloadGameData);
+    window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();
     if (this.chessground) {
       this.chessground.onunload();
@@ -371,9 +378,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       // (I still don't know why is it occuring)
       this.chessground = null;
     }
-    document.removeEventListener('resume', onResume);
-    window.plugins.insomnia.allowSleepAgain();
-    signals.seekCanceled.remove(connectSocket);
   };
 }
 

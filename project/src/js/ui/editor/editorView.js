@@ -14,8 +14,8 @@ function sparePieces(ctrl, color, orientation, position) {
   return m('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
   }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
-    return m('div.sparePieceWrapper', m('div', {
-      className: 'cg-piece ' + color + ' ' + role,
+    return m('div.sparePieceWrapper', m('piece', {
+      className: color + ' ' + role,
       'data-color': color,
       'data-role': role
     }));

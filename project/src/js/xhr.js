@@ -1,4 +1,5 @@
-import { request, apiVersion, lichessSri } from './http';
+import { request, apiVersion } from './http';
+import { lichessSri } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';

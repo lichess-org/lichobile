@@ -9,7 +9,7 @@ import m from 'mithril';
 
 export default function(ctrl, onFeatured, onUserTVRedirect) {
 
-  const handlers = {
+ return {
     takebackOffers: function(o) {
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
@@ -76,13 +76,5 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       });
       if (!ctrl.chat || !ctrl.chat.showing) m.redraw(false, true);
     }
-  };
-
-  return function(type, data) {
-    if (handlers[type]) {
-      handlers[type](data);
-      return true;
-    }
-    return false;
   };
 }

@@ -1,7 +1,6 @@
 import merge from 'lodash/object/merge';
 import assign from 'lodash/object/assign';
-import { serializeQueryParameters } from './utils';
-import { lichessSri } from './http';
+import { lichessSri, serializeQueryParameters } from './utils';
 
 export default function(worker) {
   var socketInstance;
@@ -17,7 +16,8 @@ export default function(worker) {
       pingDelay: 1000, // time between pong and ping
       autoReconnectDelay: 1000,
       ignoreUnknownMessages: true,
-      sendOnOpen: null // message to send on socket open
+      sendOnOpen: null, // message to send on socket open
+      registeredEvents: []
     }
   };
 
@@ -160,7 +160,6 @@ export default function(worker) {
       self.currentLag = self.now() - self.lastPingTime;
       if (!self.averageLag) self.averageLag = self.currentLag;
       else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
-      postMessage({ topic: 'averageLag', data: self.averageLag });
     },
 
     pingData: function() {
@@ -189,7 +188,9 @@ export default function(worker) {
           self.ackableMessages = [];
           break;
         default:
-          postMessage({ topic: 'handle', data: msg });
+          if (self.options.registeredEvents.indexOf(msg.t) !== -1) {
+            postMessage({ topic: 'handle', payload: msg });
+          }
       }
     },
 
@@ -224,7 +225,7 @@ export default function(worker) {
 
     onError: function(e) {
       var self = this;
-      postMessage({ topic: 'onError', data: e });
+      postMessage({ topic: 'onError', payload: e });
       self.options.debug = true;
       self.debug('error: ' + JSON.stringify(e));
       self.tryAnotherUrl = true;
@@ -242,12 +243,12 @@ export default function(worker) {
   };
 
   worker.addEventListener('message', function(msg) {
-    switch (msg.topic) {
+    switch (msg.data.topic) {
       case 'create':
-        socketInstance = new StrongSocket(msg.data.url, msg.data.version, msg.data.opts);
+        socketInstance = new StrongSocket(msg.data.payload.baseUrl, msg.data.payload.url, msg.data.payload.version, msg.data.payload.opts);
         break;
       case 'send':
-        const [t, d, o] = msg.data;
+        const [t, d, o] = msg.data.payload;
         socketInstance.send(t, d, o);
         break;
       case 'connect':
@@ -264,12 +265,12 @@ export default function(worker) {
         break;
       case 'setVersion':
         if (socketInstance) {
-          socketInstance.setVersion(msg.data);
+          socketInstance.setVersion(msg.data.payload);
         }
         break;
       case 'getAverageLag':
-        if (socketInstance) postMessage({ topic: 'averageLag', data: socketInstance.averageLag });
-        else postMessage({ topic: 'averageLag', data: null });
+        if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
+        else postMessage({ topic: 'averageLag', payload: null });
         break;
       default:
         throw new Error('socker worker message not supported!');

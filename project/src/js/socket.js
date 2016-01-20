@@ -11,6 +11,8 @@ import m from 'mithril';
 
 const socketWorker = work(require('./socketWorker'));
 
+const baseUrl = window.lichess.socketEndPoint;
+
 var socketHandlers;
 var errorDetected = false;
 var connectedWS = true;
@@ -30,8 +32,8 @@ const defaultHandlers = {
   }
 };
 
-socketWorker.onMessage = function(msg) {
-  switch (msg.topic) {
+socketWorker.onmessage = function(msg) {
+  switch (msg.data.topic) {
     case 'onOpen':
       if (socketHandlers.onOpen) socketHandlers.onOpen();
       break;
@@ -43,22 +45,17 @@ socketWorker.onMessage = function(msg) {
       if (socketHandlers.onError) socketHandlers.onError();
       break;
     case 'handle':
-      if (!socketHandlers.receive || !socketHandlers.receive(msg.data.t, msg.data.d)) {
-        var h = self.settings.events[msg.data.t];
-        if (h) h(msg.data.d || null);
-        // else if (!self.options.ignoreUnknownMessages) {
-        //   self.debug('Message not supported ' + JSON.stringify(msg));
-        // }
-      }
+      var h = socketHandlers.events[msg.data.payload.t];
+      if (h) h(msg.data.payload.d || null);
       break;
     case 'averageLag':
       if (socketHandlers.getAverageLagCallback) {
-        socketHandlers.getAverageLagCallback(msg.data);
+        socketHandlers.getAverageLagCallback(msg.data.payload);
         socketHandlers.getAverageLagCallback = null;
       }
       break;
     default:
-      throw new Error('socket topic not supported');
+      console.log('Message not supported ' + JSON.stringify(msg.data.payload));
   }
 };
 
@@ -66,7 +63,7 @@ function destroy() {
   socketWorker.postMessage({ topic: 'destroy' });
 }
 
-function createGame(url, version, receiveHandler, gameUrl, userTv) {
+function createGame(url, version, handlers, gameUrl, userTv) {
   errorDetected = false;
   destroy();
   socketHandlers = {
@@ -85,18 +82,18 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
         });
       }
     },
-    events: defaultHandlers,
-    receive: receiveHandler
+    events: assign({}, defaultHandlers, handlers)
   };
   const opts = {
     options: {
       name: 'game',
       debug: 'false',
-      sendOnOpen: 'following_onlines'
+      sendOnOpen: 'following_onlines',
+      registeredEvents: Object.keys(socketHandlers.events)
     }
   };
   if (userTv) opts.params = { userTv };
-  socketWorker.postMessage({ topic: 'create', data: { url, version, opts }});
+  socketWorker.postMessage({ topic: 'create', payload: { baseUrl, url, version, opts }});
 }
 
 function createAwait(url, version, handlers) {
@@ -112,7 +109,7 @@ function createAwait(url, version, handlers) {
       sendOnOpen: 'following_onlines'
     }
   };
-  socketWorker.postMessage({ topic: 'create', data: { url, version, opts}});
+  socketWorker.postMessage({ topic: 'create', payload: { baseUrl, url, version, opts}});
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -126,10 +123,12 @@ function createLobby(lobbyVersion, onOpen, handlers) {
       name: 'lobby',
       debug: false,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines'
+      sendOnOpen: 'following_onlines',
+      registeredEvents: Object.keys(socketHandlers.events)
     }
   };
-  socketWorker.postMessage({ topic: 'create', data: {
+  socketWorker.postMessage({ topic: 'create', payload: {
+    baseUrl,
     url: '/lobby/socket/v1',
     version: lobbyVersion,
     opts
@@ -148,10 +147,12 @@ function createDefault() {
         name: 'default',
         debug: false,
         pingDelay: 2000,
-        sendOnOpen: 'following_onlines'
+        sendOnOpen: 'following_onlines',
+        registeredEvents: Object.keys(socketHandlers.events)
       }
     };
-    socketWorker.postMessage({ topic: 'create', data: {
+    socketWorker.postMessage({ topic: 'create', payload: {
+      baseUrl,
       url: '/socket',
       version: 0,
       opts
@@ -195,14 +196,14 @@ export default {
   createAwait,
   createDefault,
   setVersion(version) {
-    socketWorker.postMessage({ topic: 'setVersion', data: version });
+    socketWorker.postMessage({ topic: 'setVersion', payload: version });
   },
   getAverageLag(callback) {
     socketHandlers.getAverageLagCallback = callback;
     socketWorker.postMessage({ topic: 'getAverageLag' });
   },
   send(type, data, opts) {
-    socketWorker.postMessage({ topic: 'send', data: [type, data, opts] });
+    socketWorker.postMessage({ topic: 'send', payload: [type, data, opts] });
   },
   connect() {
     socketWorker.postMessage({ topic: 'connect' });

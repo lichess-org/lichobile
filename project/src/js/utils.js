@@ -1,6 +1,8 @@
 import i18n from './i18n';
 import m from 'mithril';
 
+export const lichessSri = Math.random().toString(36).substring(2);
+
 export function autoredraw(action) {
   m.startComputation();
   try {

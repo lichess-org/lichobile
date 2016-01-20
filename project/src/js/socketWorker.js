@@ -7,8 +7,6 @@ export default function(worker) {
   var socketInstance;
 
   const strongSocketDefaults = {
-    events: {
-    },
     params: {
       sri: lichessSri,
       mobile: 1
@@ -18,7 +16,8 @@ export default function(worker) {
       pingMaxLag: 7000, // time to wait for pong before reseting the connection
       pingDelay: 1000, // time between pong and ping
       autoReconnectDelay: 1000,
-      ignoreUnknownMessages: true
+      ignoreUnknownMessages: true,
+      sendOnOpen: null // message to send on socket open
     }
   };
 
@@ -69,6 +68,7 @@ export default function(worker) {
         self.ws.onopen = function() {
           self.debug('connected to ' + fullUrl, true);
           postMessage({ topic: 'onOpen' });
+          if (self.options.sendOnOpen) self.send(self.options.sendOnOpen);
           self.onSuccess();
           self.pingNow();
           var resend = self.ackableMessages;
@@ -261,6 +261,15 @@ export default function(worker) {
           socketInstance.destroy();
           socketInstance = null;
         }
+        break;
+      case 'setVersion':
+        if (socketInstance) {
+          socketInstance.setVersion(msg.data);
+        }
+        break;
+      case 'getAverageLag':
+        if (socketInstance) postMessage({ topic: 'averageLag', data: socketInstance.averageLag });
+        else postMessage({ topic: 'averageLag', data: null });
         break;
       default:
         throw new Error('socker worker message not supported!');

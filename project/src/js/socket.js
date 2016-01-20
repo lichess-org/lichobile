@@ -1,16 +1,17 @@
 import assign from 'lodash/object/assign';
 import storage from './storage';
-import StrongSocket from './StrongSocket';
 import * as utils from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import signals from './signals';
+import work from 'webworkify';
 import m from 'mithril';
 
-var socketInstance;
+const socketWorker = work(require('./socketWorker'));
+
+var socketHandlers;
 var errorDetected = false;
 var connectedWS = true;
 
@@ -29,96 +30,132 @@ const defaultHandlers = {
   }
 };
 
-function destroy() {
-  if (socketInstance) {
-    socketInstance.destroy();
-    socketInstance = null;
+socketWorker.onMessage = function(msg) {
+  switch (msg.topic) {
+    case 'onOpen':
+      if (socketHandlers.onOpen) socketHandlers.onOpen();
+      break;
+    case 'disconnected': onDisconnected();
+      break;
+    case 'connected': onConnected();
+      break;
+    case 'onError':
+      if (socketHandlers.onError) socketHandlers.onError();
+      break;
+    case 'handle':
+      if (!socketHandlers.receive || !socketHandlers.receive(msg.data.t, msg.data.d)) {
+        var h = self.settings.events[msg.data.t];
+        if (h) h(msg.data.d || null);
+        // else if (!self.options.ignoreUnknownMessages) {
+        //   self.debug('Message not supported ' + JSON.stringify(msg));
+        // }
+      }
+      break;
+    case 'averageLag':
+      if (socketHandlers.getAverageLagCallback) {
+        socketHandlers.getAverageLagCallback(msg.data);
+        socketHandlers.getAverageLagCallback = null;
+      }
+      break;
+    default:
+      throw new Error('socket topic not supported');
   }
+};
+
+function destroy() {
+  socketWorker.postMessage({ topic: 'destroy' });
 }
 
 function createGame(url, version, receiveHandler, gameUrl, userTv) {
   errorDetected = false;
   destroy();
-  const opts = {
-    options: {
-      name: 'game',
-      debug: false,
-      ignoreUnknownMessages: true,
-      onError: function() {
-        // we can't get socket error, so we send an xhr to test whether the
-        // rejection is an authorization issue
-        if (!errorDetected) {
-          // just to be sure that we don't send an xhr every second when the
-          // websocket is trying to reconnect
-          errorDetected = true;
-          xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
-            if (err.status === 401) {
-              window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-              m.route('/');
-            }
-          });
-        }
-      },
-      onOpen: () => socketInstance.send('following_onlines')
+  socketHandlers = {
+    onError: function() {
+      // we can't get socket error, so we send an xhr to test whether the
+      // rejection is an authorization issue
+      if (!errorDetected) {
+        // just to be sure that we don't send an xhr every second when the
+        // websocket is trying to reconnect
+        errorDetected = true;
+        xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
+          if (err.status === 401) {
+            window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
+            m.route('/');
+          }
+        });
+      }
     },
     events: defaultHandlers,
     receive: receiveHandler
   };
+  const opts = {
+    options: {
+      name: 'game',
+      debug: 'false',
+      sendOnOpen: 'following_onlines'
+    }
+  };
   if (userTv) opts.params = { userTv };
-  socketInstance = new StrongSocket(url, version, opts);
+  socketWorker.postMessage({ topic: 'create', data: { url, version, opts }});
 }
 
 function createAwait(url, version, handlers) {
   destroy();
-  socketInstance = new StrongSocket(
-    url, version, {
-      options: {
-        name: 'await',
-        debug: false,
-        ignoreUnknownMessages: true,
-        pingDelay: 2000,
-        onOpen: () => socketInstance.send('following_onlines')
-      },
-      events: assign({}, defaultHandlers, handlers)
+  socketHandlers = {
+    events: assign({}, defaultHandlers, handlers)
+  };
+  const opts = {
+    options: {
+      name: 'await',
+      debug: false,
+      pingDelay: 2000,
+      sendOnOpen: 'following_onlines'
     }
-  );
+  };
+  socketWorker.postMessage({ topic: 'create', data: { url, version, opts}});
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
   destroy();
-  socketInstance = new StrongSocket(
-    '/lobby/socket/v1',
-    lobbyVersion, {
-      options: {
-        name: 'lobby',
-        debug: false,
-        ignoreUnknownMessages: true,
-        pingDelay: 2000,
-        onOpen: () => {
-          onOpen();
-          socketInstance.send('following_onlines');
-        }
-      },
-      events: assign({}, defaultHandlers, handlers)
+  socketHandlers = {
+    onOpen,
+    events: assign({}, defaultHandlers, handlers)
+  };
+  const opts = {
+    options: {
+      name: 'lobby',
+      debug: false,
+      pingDelay: 2000,
+      sendOnOpen: 'following_onlines'
     }
-  );
+  };
+  socketWorker.postMessage({ topic: 'create', data: {
+    url: '/lobby/socket/v1',
+    version: lobbyVersion,
+    opts
+  }});
 }
 
 function createDefault() {
   // default socket is useless when anon.
   if (utils.hasNetwork() && session.isConnected()) {
     destroy();
-    socketInstance = new StrongSocket(
-      '/socket', 0, {
-        options: {
-          name: 'default',
-          debug: false,
-          pingDelay: 2000,
-          onOpen: () => socketInstance.send('following_onlines')
-        },
-        events: defaultHandlers
+    socketHandlers = {
+      events: defaultHandlers
+    };
+    const opts = {
+      options: {
+        name: 'default',
+        debug: false,
+        pingDelay: 2000,
+        sendOnOpen: 'following_onlines'
       }
-    );
+    };
+    socketWorker.postMessage({ topic: 'create', data: {
+      url: '/socket',
+      version: 0,
+      opts
+    }});
   }
 }
 
@@ -152,28 +189,26 @@ document.addEventListener('deviceready', () => {
   document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
 }, false);
 
-signals.socket.connected.add(onConnected);
-signals.socket.disconnected.add(onDisconnected);
-
 export default {
   createGame,
   createLobby,
   createAwait,
   createDefault,
   setVersion(version) {
-    if (socketInstance) socketInstance.setVersion(version);
+    socketWorker.postMessage({ topic: 'setVersion', data: version });
   },
-  getAverageLag() {
-    if (socketInstance) return socketInstance.averageLag;
+  getAverageLag(callback) {
+    socketHandlers.getAverageLagCallback = callback;
+    socketWorker.postMessage({ topic: 'getAverageLag' });
   },
-  send(...args) {
-    if (socketInstance) socketInstance.send(...args);
+  send(type, data, opts) {
+    socketWorker.postMessage({ topic: 'send', data: [type, data, opts] });
   },
   connect() {
-    if (socketInstance) socketInstance.connect();
+    socketWorker.postMessage({ topic: 'connect' });
   },
   disconnect() {
-    if (socketInstance) socketInstance.destroy();
+    socketWorker.postMessage({ topic: 'disconnect' });
   },
   isConnected() {
     return connectedWS;

@@ -20,115 +20,93 @@ export default function view(ctrl) {
     const days = Math.floor(data.stat.count.seconds/(60*60*24));
     const hours = Math.floor(data.stat.count.seconds/(60*60)) - days*24;
     const mins = Math.floor(data.stat.count.seconds/(60)) - days*24*60 - hours*60;
-    /*
-    Unclear where to put these or if they are actually useful
-    <tr>
-      <th class="variantPerf"> Disconnects </th>
-      <td class="variantPerf" > {data.stat.count.disconnects} </td>
-      <td class="variantPerf"> {Math.round((data.stat.count.disconnects/data.stat.count.all)*100) + "%"} </td>
-    </tr>
-    <tr>
-      <th class="variantPerf"> Rated </th>
-      <td class="variantPerf"> {data.stat.count.rated} </td>
-      <td class="variantPerf"> {Math.round((data.stat.count.rated/data.stat.count.all)*100) + "%"} </td>
-    </tr>
-    <tr>
-      <th class="variantPerf"> Tournament </th>
-      <td class="variantPerf"> {data.stat.count.tour} </td>
-      <td class="variantPerf"> {Math.round((data.stat.count.tour/data.stat.count.all)*100) + "%"} </td>
-    </tr>
-    */
+
     return (
       <div class="variantPerfBody native_scroller page">
-      <table class="variantPerf">
-        <tbody>
-        <tr>
-          <th class="variantPerfHeading" colspan="3"> Current Rating </th>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Rating </th>
-          <td class="variantPerf"> {Math.round(data.perf.glicko.rating) + (data.perf.glicko.provisional ? "?" : "")} </td>
-          <td> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Last 12 Games Progress </th>
-          <td class="variantPerf"> {helper.progress(data.perf.progress)} </td>
-          <td> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Ranking </th>
-          <td class="variantPerf"> {data.rank === null ? "" : data.rank} </td>
-          <td> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Percentile </th>
-          <td class="variantPerf"> {data.percentile === null ? "" : (data.percentile+ "%")} </td>
-          <td> </td>
-        </tr>
-        <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
-        <tr>
-          <th class="variantPerfHeading" colspan="3"> Other Rating Stats </th>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Avg op rating </th>
-          <td class="variantPerf"> {Math.round(data.stat.count.opAvg)} </td>
-          <td> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Highest rating </th>
-          <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.int} </span> </td>
-          <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.at.substring(0,10)} </span> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Lowest rating </th>
-          <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.int} </span> </td>
-          <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.at.substring(0,10)} </span> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Time playing </th>
-          <td class="variantPerf" colspan="2"> { (days > 0 ? (days+"d, ") : "") + hours + "h, " + mins + "m" } </td>
-          <td> </td>
-        </tr>
-        <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
-        <tr>
-          <th class="variantPerfHeading" colspan="3"> Game Stats </th>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Victories </th>
-          <td class="variantPerf"> <span class="progress positive"> {data.stat.count.win} </span> </td>
-          <td class="variantPerf"> <span class="progress positive"> {Math.round((data.stat.count.win/data.stat.count.all)*100) + "%"} </span> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Draws </th>
-          <td class="variantPerf"> {data.stat.count.draw} </td>
-          <td class="variantPerf"> {Math.round((data.stat.count.draw/data.stat.count.all)*100) + "%"} </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Defeats </th>
-          <td class="variantPerf sumLine"> <span class="progress negative"> {data.stat.count.loss} </span> </td>
-          <td class="variantPerf"> <span class="progress negative"> {Math.round((data.stat.count.loss/data.stat.count.all)*100) + "%"} </span> </td>
-        </tr>
-        <tr>
-          <th class="variantPerf"> Total </th>
-          <td class="variantPerf"> {data.stat.count.all} </td>
-          <td> </td>
-        </tr>
-        <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
-        </tbody>
-      </table>
-      <table class="variantPerf">
-        <tbody>
+        <table class="variantPerf">
+          <tbody>
           <tr>
-            <th class="variantPerfHeading" colspan="2"> Best Victories </th>
+            <th class="variantPerfHeading" colspan="3"> Current Rating </th>
           </tr>
+          <tr>
+            <th class="variantPerf"> Rating </th>
+            <td class="variantPerf"> {Math.round(data.perf.glicko.rating) + (data.perf.glicko.provisional ? "?" : "")} </td>
+            <td> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Last 12 Games Progress </th>
+            <td class="variantPerf"> {helper.progress(data.perf.progress)} </td>
+            <td> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Ranking </th>
+            <td class="variantPerf"> {data.rank === null ? "" : data.rank} </td>
+            <td> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Percentile </th>
+            <td class="variantPerf"> {data.percentile === null ? "" : (data.percentile+ "%")} </td>
+            <td> </td>
+          </tr>
+          <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
+          <tr>
+            <th class="variantPerfHeading" colspan="3"> Other Rating Stats </th>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Avg op rating </th>
+            <td class="variantPerf"> {Math.round(data.stat.count.opAvg)} </td>
+            <td> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Highest rating </th>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.int} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.at.substring(0,10)} </span> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Lowest rating </th>
+            <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.int} </span> </td>
+            <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.at.substring(0,10)} </span> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Time playing </th>
+            <td class="variantPerf" colspan="2"> { (days > 0 ? (days+"d, ") : "") + hours + "h, " + mins + "m" } </td>
+            <td> </td>
+          </tr>
+          <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
+          <tr>
+            <th class="variantPerfHeading" colspan="3"> Game Stats </th>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Victories </th>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.count.win} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {Math.round((data.stat.count.win/data.stat.count.all)*100) + "%"} </span> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Draws </th>
+            <td class="variantPerf"> {data.stat.count.draw} </td>
+            <td class="variantPerf"> {Math.round((data.stat.count.draw/data.stat.count.all)*100) + "%"} </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Defeats </th>
+            <td class="variantPerf sumLine"> <span class="progress negative"> {data.stat.count.loss} </span> </td>
+            <td class="variantPerf"> <span class="progress negative"> {Math.round((data.stat.count.loss/data.stat.count.all)*100) + "%"} </span> </td>
+          </tr>
+          <tr>
+            <th class="variantPerf"> Total </th>
+            <td class="variantPerf"> {data.stat.count.all} </td>
+            <td> </td>
+          </tr>
+          <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
+          </tbody>
+        </table>
+        <div class="variantPerfGames">
+          <div class="variantPerfHeading"> Best Victories </div>
           {data.stat.bestWins.results.map(p => renderGame(p))}
-          <tr> <td class="variantPerfSpacer" colspan="2"> </td> </tr>
-          <tr>
-            <th class="variantPerfHeading" colspan="2"> Worst Defeats </th>
-          </tr>
+        </div>
+        <div class="variantPerfGames">
+          <div class="variantPerfHeading"> Worst Defeats </div>
           {data.stat.worstLosses.results.map(p => renderGame(p))}
-        </tbody>
-      </table>
+        </div>
       </div>
     );
   }
@@ -139,11 +117,11 @@ export default function view(ctrl) {
 function renderGame(game) {
   var opp = (game.opId.title === null ? "" : game.opId.title) + " " + game.opId.name;
   var date = game.at.substring(0,10);
+  var gameId = game.gameId;
+
   return (
-    <tr>
-      <th class="variantPerf"> {opp} </th>
-      <td class="variantPerf"> {date} </td>
-      <td> </td>
-    </tr>
-  )
+    <div class="list_item nav" config={helper.ontouchY(() => m.route('/game/' + gameId))}>
+      {opp} ({date})
+    </div>
+  );
 }

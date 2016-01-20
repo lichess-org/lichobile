@@ -209,9 +209,10 @@ div.variantPerfBody
 table.variantPerf
   width: 100%
 
-th.variantPerfHeading
+.variantPerfHeading
   text-align left
   text-decoration underline
+  font-weight bold
 
 th.variantPerf
   text-align left
@@ -230,3 +231,25 @@ td.variantPerf
 
 td.variantPerfSpacer
   height 20px
+
+.variantPerfGames
+  > .nav
+    padding 10px 10px 10px 0px
+    &:after
+      line-height 10px
+      top 35%
+  > .list_item
+    position relative
+    line-height 10px
+    padding 10px 10px 10px 0px
+    border-bottom 1px solid #2E3033
+    &:before
+      margin-right 5px
+    &:last-child
+      border-bottom none
+    &.active
+      background lighten(bgdark, 5%)
+    &.bglight
+      border-bottom-color darken(bglight, 15%)
+      &.active
+        background-color darken(bglight, 5%)

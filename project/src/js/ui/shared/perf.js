@@ -4,11 +4,13 @@ import helper from '../helper';
 import m from 'mithril';
 
 module.exports = function(key, name, perf, user) {
-  return m('div', {
-    'class': 'perf',
-    'data-icon': gameIcon(key),
-    config : helper.ontouchY(goToVariantPerf(user, name))
-  }, [
+  var options = {'class': 'perf', 'data-icon': gameIcon(key)};
+  if (variantPerfAvailable(key)) {
+    options['class'] += ' nav';
+    options.config = helper.ontouchY(goToVariantPerf(user, name));
+  }
+
+  return m('div', options, [
     m('span.name', name),
     m('div.rating', [
       perf.rating,
@@ -21,4 +23,8 @@ module.exports = function(key, name, perf, user) {
 
 function goToVariantPerf (user, name) {
   return (() => m.route(`/@/${user.id}/${name}/perf`));
+}
+
+function variantPerfAvailable (key) {
+  return (key !== 'puzzle');
 }

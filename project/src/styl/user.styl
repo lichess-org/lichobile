@@ -94,17 +94,18 @@ h3.fullname
     text-overflow ellipsis
     float left
     width 80%
-  &:after
-    content "\f054"
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    position relative
-    float right
-    right 15px
-    line-height 20px
+  &.nav
+    &:after
+      content "\f054"
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      position relative
+      float right
+      right 15px
+      line-height 20px
 
 #userProfileActions
   .check_container
@@ -213,6 +214,7 @@ table.variantPerf
   text-align left
   text-decoration underline
   font-weight bold
+  color gold
 
 th.variantPerf
   text-align left
@@ -230,7 +232,20 @@ td.variantPerf
       color red
 
 td.variantPerfSpacer
-  height 20px
+  height 10px
+
+th.variantPerfMemo
+  text-align left
+  font-weight normal
+  padding-left 10px
+  font-style italic
+
+td.variantPerfMemo
+  text-align right
+  font-style italic
+
+tr.empty
+  display none
 
 .variantPerfGames
   > .nav

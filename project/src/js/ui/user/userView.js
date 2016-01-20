@@ -115,7 +115,7 @@ function renderRatings(user) {
       'blitz', 'bullet', 'classical', 'correspondence'
     ].indexOf(p.key) !== -1 || p.perf.games > 0;
   }
-
+  
   return (
     <section id="userProfileRatings" className="perfs">
       {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf, user))}

@@ -249,7 +249,7 @@ export default function(worker) {
         break;
       case 'send':
         const [t, d, o] = msg.data.payload;
-        socketInstance.send(t, d, o);
+        if (socketInstance) socketInstance.send(t, d, o);
         break;
       case 'connect':
         if (socketInstance) socketInstance.connect();

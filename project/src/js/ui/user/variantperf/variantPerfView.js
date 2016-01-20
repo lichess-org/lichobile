@@ -29,7 +29,7 @@ export default function view(ctrl) {
             <th class="variantPerfHeading" colspan="3"> Current Rating </th>
           </tr>
           <tr>
-            <th class="variantPerf"> Rating </th>
+            <th class="variantPerf"> {i18n("rating")} </th>
             <td class="variantPerf"> {Math.round(data.perf.glicko.rating) + (data.perf.glicko.provisional ? "?" : "")} </td>
             <td> </td>
           </tr>
@@ -39,12 +39,12 @@ export default function view(ctrl) {
             <td> </td>
           </tr>
           <tr>
-            <th class="variantPerf"> Ranking </th>
+            <th class="variantPerf"> {i18n("rank")} </th>
             <td class="variantPerf"> {data.rank === null ? "" : data.rank} </td>
             <td> </td>
           </tr>
           <tr>
-            <th class="variantPerf"> Percentile </th>
+            <th class="variantPerf"> % </th>
             <td class="variantPerf"> {data.percentile === null ? "" : (data.percentile+ "%")} </td>
             <td> </td>
           </tr>

@@ -255,7 +255,7 @@ export default function(worker) {
         if (socketInstance) socketInstance.connect();
         break;
       case 'disconnect':
-        if (socketInstance) socketInstance.disconnect();
+        if (socketInstance) socketInstance.destroy();
         break;
       case 'destroy':
         if (socketInstance) {
@@ -268,7 +268,7 @@ export default function(worker) {
           socketInstance.setVersion(msg.data.payload);
         }
         break;
-      case 'getAverageLag':
+      case 'averageLag':
         if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
         else postMessage({ topic: 'averageLag', payload: null });
         break;

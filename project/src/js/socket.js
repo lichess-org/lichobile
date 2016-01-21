@@ -32,7 +32,7 @@ const defaultHandlers = {
   }
 };
 
-socketWorker.onmessage = function(msg) {
+socketWorker.addEventListener('message', function(msg) {
   switch (msg.data.topic) {
     case 'onOpen':
       if (socketHandlers.onOpen) socketHandlers.onOpen();
@@ -48,16 +48,21 @@ socketWorker.onmessage = function(msg) {
       var h = socketHandlers.events[msg.data.payload.t];
       if (h) h(msg.data.payload.d || null);
       break;
-    case 'averageLag':
-      if (socketHandlers.getAverageLagCallback) {
-        socketHandlers.getAverageLagCallback(msg.data.payload);
-        socketHandlers.getAverageLagCallback = null;
-      }
-      break;
     default:
-      console.log('Message not supported ' + JSON.stringify(msg.data.payload));
+      throw new Error('socket worker message not supported');
   }
-};
+});
+
+function askWorker(msg, callback) {
+  function listen(e) {
+    if (e.data.topic === msg.topic) {
+      socketWorker.removeEventListener('message', listen);
+      callback(e.data.payload);
+    }
+  }
+  socketWorker.addEventListener('message', listen);
+  socketWorker.postMessage(msg);
+}
 
 function destroy() {
   socketWorker.postMessage({ topic: 'destroy' });
@@ -87,7 +92,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   const opts = {
     options: {
       name: 'game',
-      debug: 'false',
+      debug: false,
       sendOnOpen: 'following_onlines',
       registeredEvents: Object.keys(socketHandlers.events)
     }
@@ -199,8 +204,7 @@ export default {
     socketWorker.postMessage({ topic: 'setVersion', payload: version });
   },
   getAverageLag(callback) {
-    socketHandlers.getAverageLagCallback = callback;
-    socketWorker.postMessage({ topic: 'getAverageLag' });
+    askWorker({ topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
     socketWorker.postMessage({ topic: 'send', payload: [type, data, opts] });

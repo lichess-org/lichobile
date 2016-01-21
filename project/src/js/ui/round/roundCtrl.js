@@ -165,21 +165,26 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   this.setTitle();
 
   this.sendMove = function(orig, dest, prom) {
-    var move = {
-      from: orig,
-      to: dest
-    };
-    if (prom) move.promotion = prom;
-    if (this.clock && socket.getAverageLag() !== undefined)
-      move.lag = Math.round(socket.getAverageLag());
+    socket.getAverageLag(function(lag) {
+      const move = {
+        from: orig,
+        to: dest
+      };
+      if (prom) move.promotion = prom;
+      if (this.clock && lag !== undefined) {
+        move.lag = Math.round(lag);
+      }
 
-    if (this.data.pref.submitMove) {
-      setTimeout(function() {
-        backbutton.stack.push(this.cancelMove);
-        this.vm.moveToSubmit = move;
-        m.redraw(false, true);
-      }.bind(this), this.data.pref.animationDuration || 0);
-    } else socket.send('move', move, { ackable: true });
+      if (this.data.pref.submitMove) {
+        setTimeout(function() {
+          backbutton.stack.push(this.cancelMove);
+          this.vm.moveToSubmit = move;
+          m.redraw(false, true);
+        }.bind(this), this.data.pref.animationDuration || 0);
+      } else {
+        socket.send('move', move, { ackable: true });
+      }
+    }.bind(this));
   };
 
   this.cancelMove = function(fromBB) {

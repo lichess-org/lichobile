@@ -57,15 +57,15 @@ export default function view(ctrl) {
             <td class="variantPerf"> {Math.round(data.stat.count.opAvg)} </td>
             <td> </td>
           </tr>
-          <tr>
+          <tr class={isEmpty(data.stat.highest)}>
             <th class="variantPerf"> Highest {i18n("rating").toLowerCase()} </th>
-            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.int} </span> </td>
-            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest.at.substring(0,10)} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest ? data.stat.highest.int : ""} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.highest ? data.stat.highest.at.substring(0,10) : ""} </span> </td>
           </tr>
-          <tr>
+          <tr class={isEmpty(data.stat.lowest)}>
             <th class="variantPerf"> Lowest {i18n("rating").toLowerCase()} </th>
-            <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.int} </span> </td>
-            <td class="variantPerf"> <span class="progress negative"> {data.stat.lowest.at.substring(0,10)} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.lowest ? data.stat.lowest.int : ""} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.lowest ? data.stat.lowest.at.substring(0,10) : ""} </span> </td>
           </tr>
           <tr>
             <th class="variantPerf"> {i18n("tpTimeSpentPlaying", 0).split(':')[0]} </th>
@@ -119,31 +119,27 @@ export default function view(ctrl) {
           <tr>
             <th class="variantPerfHeading" colspan="3"> Streaks </th>
           </tr>
-          <tr>
+          <tr class={isEmpty(data.stat.playStreak)}>
             <th class="variantPerf"> Playing streak </th>
             <td class="variantPerf"> {data.stat.playStreak.nb.max.v} </td>
             <td class="variantPerf"> {data.stat.playStreak.lastDate.substring(0,10)} </td>
           </tr>
-          <tr>
+          <tr class={isEmpty(data.stat.resultStreak.win.max.v)}>
             <th class="variantPerf"> {i18n("winStreak")} </th>
-            <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.v} </span> </td>
-            <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.to.at.substring(0,10)} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.v ? data.stat.resultStreak.win.max.v : ""} </span> </td>
+            <td class="variantPerf"> <span class="progress positive"> {data.stat.resultStreak.win.max.to ? data.stat.resultStreak.win.max.to.at.substring(0,10) : ""} </span> </td>
           </tr>
-          <tr>
+          <tr class={isEmpty(data.stat.resultStreak.loss.max.v)}>
             <th class="variantPerf"> Losing streak </th>
-            <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.v} </span> </td>
-            <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.to.at.substring(0,10)} </span> </td>
+            <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.v ? data.stat.resultStreak.loss.max.v : ""} </span> </td>
+            <td class="variantPerf"> <span class="progress negative"> {data.stat.resultStreak.loss.max.to ? data.stat.resultStreak.loss.max.to.at.substring(0,10) : ""} </span> </td>
           </tr>
           <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
           </tbody>
         </table>
-        <div class="variantPerfGames">
+        <div class={"variantPerfGames " + isEmpty(data.stat.bestWins.results.length)}>
           <div class="variantPerfHeading"> Best Wins </div>
           {data.stat.bestWins.results.map(p => renderGame(p))}
-        </div>
-        <div class="variantPerfGames">
-          <div class="variantPerfHeading"> Worst Losses </div>
-          {data.stat.worstLosses.results.map(p => renderGame(p))}
         </div>
       </div>
     );
@@ -165,7 +161,7 @@ function renderGame(game) {
 }
 
 function isEmpty(element) {
-  if (!element || element === '')
+  if (!element)
     return 'empty';
   else
     return '';

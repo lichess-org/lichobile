@@ -5,7 +5,7 @@ import m from 'mithril';
 
 module.exports = function(key, name, perf, user) {
   var options = {'class': 'perf', 'data-icon': gameIcon(key)};
-  if (variantPerfAvailable(key)) {
+  if (variantPerfAvailable(key, perf)) {
     options['class'] += ' nav';
     options.config = helper.ontouchY(goToVariantPerf(user, name));
   }
@@ -25,6 +25,6 @@ function goToVariantPerf (user, name) {
   return (() => m.route(`/@/${user.id}/${name}/perf`));
 }
 
-function variantPerfAvailable (key) {
-  return (key !== 'puzzle');
+function variantPerfAvailable (key, perf) {
+  return (key !== 'puzzle' && perf.games > 0);
 }

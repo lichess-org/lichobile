@@ -53,7 +53,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       if (ctrl.data.game.speed === 'correspondence') {
-        removeOfflineGameData(ctrl.data);
+        removeOfflineGameData(ctrl.data.url.round.substr(1));
       }
       setTimeout(function() {
         session.refresh();

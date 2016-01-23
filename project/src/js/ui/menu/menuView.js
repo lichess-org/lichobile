@@ -5,7 +5,7 @@ import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
-import { hasNetwork, getOfflineGameData } from '../../utils';
+import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
@@ -53,7 +53,7 @@ function renderProfileActions(user) {
 }
 
 function renderLinks(user) {
-  const offlineGames = getOfflineGameData();
+  const offlineGames = getOfflineGames();
 
   return (
     <ul className="side_links">

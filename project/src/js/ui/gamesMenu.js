@@ -195,7 +195,7 @@ function renderAllGames(cDim) {
   const allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
   if (allCards.length === 0 && !utils.hasNetwork()) {
-    allCards.concat(utils.getOfflineGameData());
+    allCards.concat(utils.getOfflineGames());
   }
 
   if (!helper.isWideScreen()) {
@@ -213,7 +213,7 @@ function renderAllGames(cDim) {
       </div>
     );
 
-    allCards.unshift(newGameCard);
+    if (utils.hasNetwork()) allCards.unshift(newGameCard);
   }
 
   return (

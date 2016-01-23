@@ -309,7 +309,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(this.data);
+      saveOfflineGameData(m.route.param('id'), this.data);
     }
 
   }.bind(this);

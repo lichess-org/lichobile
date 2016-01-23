@@ -263,7 +263,6 @@ export default function ctrl() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    socket.destroy();
     window.plugins.insomnia.allowSleepAgain();
   };
 

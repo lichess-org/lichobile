@@ -117,9 +117,6 @@ export default function controller() {
     userId,
     user,
     onFilterChange,
-    toggleBookmark,
-    onunload() {
-      socket.destroy();
-    }
+    toggleBookmark
   };
 }

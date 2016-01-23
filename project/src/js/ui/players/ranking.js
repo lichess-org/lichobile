@@ -30,9 +30,6 @@ export default {
 
     return {
       ranking,
-      onunload() {
-        socket.destroy();
-      },
       toggleRankingCat(key) {
         let cat = ranking()[key];
         cat.isOpenedOnMobile = !cat.isOpenedOnMobile;

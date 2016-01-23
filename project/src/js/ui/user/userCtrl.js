@@ -37,9 +37,6 @@ export default function controller() {
     },
     goToGames: () => m.route(`/@/${user().id}/games`),
     goToUserTV: () => m.route(`/@/${user().id}/tv`),
-    challenge: () => challengeForm.open(user().id),
-    onunload: () => {
-      socket.destroy();
-    }
+    challenge: () => challengeForm.open(user().id)
   };
 }

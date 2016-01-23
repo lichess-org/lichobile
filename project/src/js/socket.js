@@ -64,13 +64,8 @@ function askWorker(msg, callback) {
   socketWorker.postMessage(msg);
 }
 
-function destroy() {
-  socketWorker.postMessage({ topic: 'destroy' });
-}
-
 function createGame(url, version, handlers, gameUrl, userTv) {
   errorDetected = false;
-  destroy();
   socketHandlers = {
     onError: function() {
       // we can't get socket error, so we send an xhr to test whether the
@@ -102,7 +97,6 @@ function createGame(url, version, handlers, gameUrl, userTv) {
 }
 
 function createAwait(url, version, handlers) {
-  destroy();
   socketHandlers = {
     events: assign({}, defaultHandlers, handlers)
   };
@@ -118,7 +112,6 @@ function createAwait(url, version, handlers) {
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
-  destroy();
   socketHandlers = {
     onOpen,
     events: assign({}, defaultHandlers, handlers)
@@ -143,7 +136,6 @@ function createLobby(lobbyVersion, onOpen, handlers) {
 function createDefault() {
   // default socket is useless when anon.
   if (utils.hasNetwork() && session.isConnected()) {
-    destroy();
     socketHandlers = {
       events: defaultHandlers
     };
@@ -218,5 +210,7 @@ export default {
   isConnected() {
     return connectedWS;
   },
-  destroy
+  destroy() {
+    socketWorker.postMessage({ topic: 'destroy' });
+  }
 };

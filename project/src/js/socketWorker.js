@@ -245,6 +245,10 @@ export default function(worker) {
   worker.addEventListener('message', function(msg) {
     switch (msg.data.topic) {
       case 'create':
+        if (socketInstance) {
+          socketInstance.destroy();
+          socketInstance = null;
+        }
         socketInstance = new StrongSocket(msg.data.payload.baseUrl, msg.data.payload.url, msg.data.payload.version, msg.data.payload.opts);
         break;
       case 'send':

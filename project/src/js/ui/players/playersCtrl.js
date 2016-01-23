@@ -71,7 +71,6 @@ export default function controller() {
       m.route('/@/' + u);
     },
     onunload: () => {
-      socket.destroy();
       window.removeEventListener('native.keyboardshow', onKeyboardShow);
       window.removeEventListener('native.keyboardhide', onKeyboardHide);
     }

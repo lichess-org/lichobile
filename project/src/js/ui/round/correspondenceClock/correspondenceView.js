@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import { hasNetwork } from '../../../utils';
 import i18n from '../../../i18n';
 
 function prefixInteger(num, length) {
@@ -32,7 +33,8 @@ export function view(ctrl, color, runningColor) {
   const className = 'correspondence clock ' + helper.classSet({
     'outoftime': !time,
     'running': runningColor === color,
-    'emerg': time < ctrl.data.emerg
+    'emerg': time < ctrl.data.emerg,
+    'offline': !hasNetwork()
   });
   function cConfig(el, isUpdate) {
     el.textContent = formatClockTime(time * 1000);

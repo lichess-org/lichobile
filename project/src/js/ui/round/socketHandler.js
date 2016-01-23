@@ -3,7 +3,7 @@ import ground from './ground';
 import * as xhr from './roundXhr';
 import sound from '../../sound';
 import session from '../../session';
-import * as utils from '../../utils';
+import { handleXhrError, removeOfflineGameData } from '../../utils';
 import socket from '../../socket';
 import m from 'mithril';
 
@@ -39,7 +39,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
           socket.setVersion(data.player.version);
           ctrl.reload(data);
         }, function(err) {
-          utils.handleXhrError(err);
+          handleXhrError(err);
         });
       }
     },
@@ -52,6 +52,9 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       xhr.reload(ctrl).then(ctrl.reload);
       if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
+      if (ctrl.data.game.speed === 'correspondence') {
+        removeOfflineGameData(ctrl.data);
+      }
       setTimeout(function() {
         session.refresh();
         ctrl.showActions();

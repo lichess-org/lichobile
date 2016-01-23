@@ -1,4 +1,5 @@
 import i18n from './i18n';
+import storage from './storage';
 import m from 'mithril';
 
 export function autoredraw(action) {
@@ -165,4 +166,29 @@ export function loadJsonFile(filename) {
 // Returns a random number between min (inclusive) and max (exclusive)
 export function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+const offlineCorresStorageKey = 'offline.corres.games';
+
+
+export function getOfflineGameData() {
+  const stored = storage.get(offlineCorresStorageKey) || {};
+  let arr = [];
+  for (const i in stored) {
+    arr.push(stored[i]);
+  }
+  return arr;
+}
+
+export function saveOfflineGameData(gameData) {
+  const stored = storage.get(offlineCorresStorageKey) || {};
+  stored[gameData.game.id] = gameData;
+  storage.set(offlineCorresStorageKey, stored);
+}
+
+export function removeOfflineGameData(gameData) {
+  const stored = storage.get(offlineCorresStorageKey);
+  if (stored && stored[gameData.game.id]) {
+    delete stored[gameData.game.id];
+  }
 }

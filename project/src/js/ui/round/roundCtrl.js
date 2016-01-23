@@ -19,6 +19,7 @@ import backbutton from '../../backbutton';
 import helper from '../helper';
 import * as xhr from './roundXhr';
 import { toggleGameBookmark } from '../../xhr';
+import { hasNetwork, saveOfflineGameData } from '../../utils';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
@@ -179,7 +180,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         this.vm.moveToSubmit = move;
         m.redraw(false, true);
       }.bind(this), this.data.pref.animationDuration || 0);
-    } else socket.send('move', move, { ackable: true });
+    } else {
+      socket.send('move', move, { ackable: true });
+      if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
+        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
+      }
+    }
   };
 
   this.cancelMove = function(fromBB) {
@@ -190,11 +196,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.submitMove = function(v) {
     if (v) {
-      if (this.vm.moveToSubmit)
+      if (this.vm.moveToSubmit) {
         socket.send('move', this.vm.moveToSubmit, {
           ackable: true
         });
-        this.vm.moveToSubmit = null;
+        if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
+          window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
+        }
+      }
+      this.vm.moveToSubmit = null;
     } else {
       this.cancelMove();
     }
@@ -279,8 +289,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
         setTimeout(this.chessground.playPremove, premoveDelay);
       }
-
-      if (this.data.game.speed === 'correspondence') session.refresh();
     }
 
     if (o.clock) {
@@ -298,6 +306,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       check: o.check
     });
     gameApi.setOnGame(d, playedColor, true);
+
+    if (this.data.game.speed === 'correspondence') {
+      session.refresh();
+      saveOfflineGameData(this.data);
+    }
+
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
@@ -380,4 +394,3 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
   };
 }
-

@@ -194,6 +194,10 @@ function renderAllGames(cDim) {
 
   const allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
+  if (allCards.length === 0 && !utils.hasNetwork()) {
+    allCards.concat(utils.getOfflineGameData());
+  }
+
   if (!helper.isWideScreen()) {
     const newGameCard = (
       <div className="card standard" key="game.new-game" style={cardStyle}

@@ -7,7 +7,7 @@ module.exports = function(key, name, perf, user) {
   var options = {'class': 'perf', 'data-icon': gameIcon(key)};
   if (variantPerfAvailable(key, perf)) {
     options['class'] += ' nav';
-    options.config = helper.ontouchY(goToVariantPerf(user, name));
+    options.config = helper.ontouchY(goToVariantPerf(user, key));
   }
 
   return m('div', options, [
@@ -21,8 +21,8 @@ module.exports = function(key, name, perf, user) {
   ]);
 };
 
-function goToVariantPerf (user, name) {
-  return (() => m.route(`/@/${user.id}/${name}/perf`));
+function goToVariantPerf (user, key) {
+  return (() => m.route(`/@/${user.id}/${key}/perf`));
 }
 
 function variantPerfAvailable (key, perf) {

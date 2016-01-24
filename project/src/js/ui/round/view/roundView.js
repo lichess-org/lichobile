@@ -364,13 +364,13 @@ function gameInfos(ctrl) {
       'data-icon': icon ? icon : ''
     }),
     m('div.game-title.no_select', infos),
-    m('button.star', {
+    session.isConnected() ? m('button.star', {
       config: helper.ontouch(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
       ),
       'data-icon': data.bookmarked ? 't' : 's'
-    })
+    }) : null
   ];
 }
 

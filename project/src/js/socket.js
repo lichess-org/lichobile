@@ -94,7 +94,13 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     }
   };
   if (userTv) opts.params = { userTv };
-  socketWorker.postMessage({ topic: 'create', payload: { baseUrl: baseUrl(), url, version, opts }});
+  socketWorker.postMessage({ topic: 'create', payload: {
+    clientId: utils.lichessSri,
+    baseUrl: baseUrl(),
+    url,
+    version,
+    opts
+  }});
 }
 
 function createAwait(url, version, handlers) {
@@ -109,7 +115,13 @@ function createAwait(url, version, handlers) {
       sendOnOpen: 'following_onlines'
     }
   };
-  socketWorker.postMessage({ topic: 'create', payload: { baseUrl: baseUrl(), url, version, opts}});
+  socketWorker.postMessage({ topic: 'create', payload: {
+    clientId: utils.lichessSri,
+    baseUrl: baseUrl(),
+    url,
+    version,
+    opts
+  }});
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -127,6 +139,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
     }
   };
   socketWorker.postMessage({ topic: 'create', payload: {
+    clientId: utils.lichessSri,
     baseUrl: baseUrl(),
     url: '/lobby/socket/v1',
     version: lobbyVersion,
@@ -150,6 +163,7 @@ function createDefault() {
       }
     };
     socketWorker.postMessage({ topic: 'create', payload: {
+      clientId: utils.lichessSri,
       baseUrl: baseUrl(),
       url: '/socket',
       version: 0,
@@ -204,8 +218,6 @@ socketWorker.addEventListener('message', function(msg) {
       var h = socketHandlers.events[msg.data.payload.t];
       if (h) h(msg.data.payload.d || null);
       break;
-    default:
-      throw new Error('socket worker message not supported');
   }
 });
 

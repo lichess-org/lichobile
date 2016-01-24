@@ -1,13 +1,13 @@
 import merge from 'lodash/object/merge';
 import assign from 'lodash/object/assign';
-import { lichessSri, serializeQueryParameters } from './utils';
+import { serializeQueryParameters } from './utils';
 
 export default function(worker) {
   var socketInstance;
 
   const strongSocketDefaults = {
     params: {
-      sri: lichessSri,
+      sri: 'overrideMe',
       mobile: 1
     },
     options: {
@@ -21,8 +21,9 @@ export default function(worker) {
     }
   };
 
-  function StrongSocket(baseUrl, url, version, settings) {
+  function StrongSocket(clientId, baseUrl, url, version, settings) {
     this.settings = merge({}, strongSocketDefaults, settings);
+    this.settings.params.sri = clientId;
     this.baseUrl = baseUrl;
     this.url = url;
     this.version = version;
@@ -200,7 +201,7 @@ export default function(worker) {
 
     debug: function(msg, always) {
       if ((always || this.options.debug) && console && console.debug) {
-        console.debug('[' + this.options.name + ' ' + lichessSri + ']', msg);
+        console.debug('[' + this.options.name + ' ' + this.settings.params.sri + ']', msg);
       }
     },
 
@@ -249,7 +250,7 @@ export default function(worker) {
           socketInstance.destroy();
           socketInstance = null;
         }
-        socketInstance = new StrongSocket(msg.data.payload.baseUrl, msg.data.payload.url, msg.data.payload.version, msg.data.payload.opts);
+        socketInstance = new StrongSocket(msg.data.payload.clientId, msg.data.payload.baseUrl, msg.data.payload.url, msg.data.payload.version, msg.data.payload.opts);
         break;
       case 'send':
         const [t, d, o] = msg.data.payload;
@@ -277,7 +278,7 @@ export default function(worker) {
         else postMessage({ topic: 'averageLag', payload: null });
         break;
       default:
-        throw new Error('socker worker message not supported!');
+        throw new Error('socker worker message not supported: ' + msg.data.topic);
 
     }
   });

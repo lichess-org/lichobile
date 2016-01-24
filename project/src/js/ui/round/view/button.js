@@ -5,13 +5,13 @@ import throttle from 'lodash/function/throttle';
 import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
-import { handleXhrError } from '../../../utils';
+import { handleXhrError, hasNetwork } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
-    return condition(ctrl.data) ? m('button', {
+    return condition(ctrl.data) && hasNetwork() ? m('button', {
       key: socketMsg,
       className: socketMsg,
       'data-icon': icon,

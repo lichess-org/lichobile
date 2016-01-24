@@ -170,7 +170,6 @@ export function getRandomArbitrary(min, max) {
 
 const offlineCorresStorageKey = 'offline.corres.games';
 
-
 export function getOfflineGames() {
   const stored = storage.get(offlineCorresStorageKey) || {};
   let arr = [];
@@ -187,7 +186,12 @@ export function getOfflineGameData(id) {
 
 export function saveOfflineGameData(id, gameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  stored[id] = gameData;
+  const toStore = Object.assign({}, gameData);
+  toStore.player.onGame = false;
+  toStore.player.user.online = false;
+  toStore.opponent.onGame = false;
+  toStore.opponent.user.online = false;
+  stored[id] = toStore;
   storage.set(offlineCorresStorageKey, stored);
 }
 

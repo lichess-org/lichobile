@@ -97,6 +97,27 @@ function timeLeft(g) {
   }, time.fromNow());
 }
 
+function savedGameDataToCardData(data) {
+  return {
+    color: data.player.color,
+    fen: data.game.fen,
+    fullId: data.url.round.substr(1),
+    gameId: data.game.id,
+    isMyTurn: gameApi.isPlayerTurn(data),
+    lastMove: data.game.lastMove,
+    opponent: {
+      id: data.opponent.user.id,
+      username: data.opponent.user.username,
+      rating: data.opponent.rating
+    },
+    perf: data.game.perf,
+    rated: data.game.rated,
+    secondsLeft: data.correspondence[data.player.color],
+    speed: data.game.speed,
+    variant: data.game.variant
+  };
+}
+
 function renderGame(g, cDim, cardStyle) {
   const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
   const cardClass = [
@@ -192,10 +213,13 @@ function renderAllGames(cDim) {
 
   const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
 
-  const allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
+  var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
   if (allCards.length === 0 && !utils.hasNetwork()) {
-    allCards.concat(utils.getOfflineGames());
+    allCards = utils.getOfflineGames().map(d => {
+      const g = savedGameDataToCardData(d);
+      return renderGame(g, cDim, cardStyle);
+    });
   }
 
   if (!helper.isWideScreen()) {
@@ -216,11 +240,7 @@ function renderAllGames(cDim) {
     if (utils.hasNetwork()) allCards.unshift(newGameCard);
   }
 
-  return (
-    <div id="all_games" style={wrapperStyle}>
-      {allCards}
-    </div>
-  );
+  return m('div#all_games', { style: wrapperStyle }, allCards);
 }
 
 gamesMenu.view = function() {

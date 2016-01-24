@@ -61,6 +61,8 @@ h3.fullname
   text-align left
   padding 5px 0
   line-height 1.2em
+  &.active
+    background lighten(bgdark, 5%)
   &:before
     color gold
     font-size 2em
@@ -69,6 +71,7 @@ h3.fullname
   > .rating
     color #fff
     display block
+    float left
     > .progress, & > .nb
       font-size 0.8em
       margin-left 0.5em
@@ -89,6 +92,20 @@ h3.fullname
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
+    float left
+    width 80%
+  &.nav
+    &:after
+      content "\f054"
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      position relative
+      float right
+      right 15px
+      line-height 20px
 
 #userProfileActions
   .check_container
@@ -183,3 +200,68 @@ h3.fullname
 
 #filterGames
   padding-left 15px
+
+div.variantPerfBody
+  width: 100%
+  padding-left 10px
+  padding-right 10px
+  font-size 0.85em
+
+table.variantPerf
+  width: 100%
+
+.variantPerfHeading
+  text-align left
+  text-decoration underline
+  font-weight bold
+  color gold
+
+th.variantPerf
+  text-align left
+  font-weight normal
+
+td.variantPerf
+  text-align right
+  > .progress
+    &.positive
+      color green
+    &.negative
+      color red
+
+td.variantPerfSpacer
+  height 10px
+
+th.variantPerfMemo
+  text-align left
+  font-weight normal
+  padding-left 10px
+  font-style italic
+
+td.variantPerfMemo
+  text-align right
+  font-style italic
+
+.empty
+  display none
+
+.variantPerfGames
+  > .nav
+    padding 10px 10px 10px 0px
+    &:after
+      line-height 10px
+      top 35%
+  > .list_item
+    position relative
+    line-height 10px
+    padding 10px 10px 10px 0px
+    border-bottom 1px solid #2E3033
+    &:before
+      margin-right 5px
+    &:last-child
+      border-bottom none
+    &.active
+      background lighten(bgdark, 5%)
+    &.bglight
+      border-bottom-color darken(bglight, 15%)
+      &.active
+        background-color darken(bglight, 5%)

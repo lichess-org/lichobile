@@ -1,4 +1,5 @@
 import assign from 'lodash/object/assign';
+import range from 'lodash/utility/range';
 import storage from './storage';
 import * as utils from './utils';
 import * as xhr from './xhr';
@@ -11,7 +12,10 @@ import m from 'mithril';
 
 const socketWorker = work(require('./socketWorker'));
 
-const baseUrl = window.lichess.socketEndPoint;
+const urlsPool = range(9021, 9030).map(function(e) {
+  return window.lichess.socketEndPoint + ':' + e;
+});
+urlsPool.unshift(window.lichess.socketEndPoint);
 
 var socketHandlers;
 var errorDetected = false;
@@ -32,26 +36,23 @@ const defaultHandlers = {
   }
 };
 
-socketWorker.addEventListener('message', function(msg) {
-  switch (msg.data.topic) {
-    case 'onOpen':
-      if (socketHandlers.onOpen) socketHandlers.onOpen();
-      break;
-    case 'disconnected': onDisconnected();
-      break;
-    case 'connected': onConnected();
-      break;
-    case 'onError':
-      if (socketHandlers.onError) socketHandlers.onError();
-      break;
-    case 'handle':
-      var h = socketHandlers.events[msg.data.payload.t];
-      if (h) h(msg.data.payload.d || null);
-      break;
-    default:
-      throw new Error('socket worker message not supported');
+function baseUrl() {
+  if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {
+    var key = 'socket.baseUrl';
+    var url = storage.get(key);
+    if (!url) {
+      url = urlsPool[0];
+      storage.set(key, url);
+    } else if (this.tryAnotherUrl) {
+      this.tryAnotherUrl = false;
+      url = urlsPool[(urlsPool.indexOf(url) + 1) % urlsPool.length];
+      storage.set(key, url);
+    }
+    return url;
   }
-});
+
+  return window.lichess.socketEndPoint;
+}
 
 function askWorker(msg, callback) {
   function listen(e) {
@@ -93,7 +94,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     }
   };
   if (userTv) opts.params = { userTv };
-  socketWorker.postMessage({ topic: 'create', payload: { baseUrl, url, version, opts }});
+  socketWorker.postMessage({ topic: 'create', payload: { baseUrl: baseUrl(), url, version, opts }});
 }
 
 function createAwait(url, version, handlers) {
@@ -108,7 +109,7 @@ function createAwait(url, version, handlers) {
       sendOnOpen: 'following_onlines'
     }
   };
-  socketWorker.postMessage({ topic: 'create', payload: { baseUrl, url, version, opts}});
+  socketWorker.postMessage({ topic: 'create', payload: { baseUrl: baseUrl(), url, version, opts}});
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -126,7 +127,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
     }
   };
   socketWorker.postMessage({ topic: 'create', payload: {
-    baseUrl,
+    baseUrl: baseUrl(),
     url: '/lobby/socket/v1',
     version: lobbyVersion,
     opts
@@ -149,7 +150,7 @@ function createDefault() {
       }
     };
     socketWorker.postMessage({ topic: 'create', payload: {
-      baseUrl,
+      baseUrl: baseUrl(),
       url: '/socket',
       version: 0,
       opts
@@ -186,6 +187,27 @@ function onDisconnected() {
 document.addEventListener('deviceready', () => {
   document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
 }, false);
+
+socketWorker.addEventListener('message', function(msg) {
+  switch (msg.data.topic) {
+    case 'onOpen':
+      if (socketHandlers.onOpen) socketHandlers.onOpen();
+      break;
+    case 'disconnected': onDisconnected();
+      break;
+    case 'connected': onConnected();
+      break;
+    case 'onError':
+      if (socketHandlers.onError) socketHandlers.onError();
+      break;
+    case 'handle':
+      var h = socketHandlers.events[msg.data.payload.t];
+      if (h) h(msg.data.payload.d || null);
+      break;
+    default:
+      throw new Error('socket worker message not supported');
+  }
+});
 
 export default {
   createGame,

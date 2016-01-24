@@ -1,6 +1,6 @@
 import session from '../../session';
 import helper from '../helper';
-import { hasNetwork, handleXhrError, backHistory, getOfflineGameData } from '../../utils';
+import { hasNetwork, handleXhrError, backHistory, getOfflineGameData, removeOfflineGameData } from '../../utils';
 import { game as gameXhr, joinChallenge, cancelChallenge } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
@@ -90,6 +90,9 @@ export default function controller() {
     const savedData = getOfflineGameData(m.route.param('id'));
     if (savedData) {
       gameData = savedData;
+      if (!gameApi.playable(gameData)) {
+        removeOfflineGameData(m.route.param('id'));
+      }
       round = new roundCtrl(gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');

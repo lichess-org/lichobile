@@ -1,15 +1,15 @@
 export const perfTypes = [
-  ['bullet', 'Bullet'],
-  ['blitz', 'Blitz'],
-  ['classical', 'Classical'],
-  ['correspondence', 'Correspondence'],
-  ['chess960', 'Chess960'],
-  ['kingOfTheHill', 'King Of The Hill'],
-  ['threeCheck', 'Three-check'],
-  ['antichess', 'Antichess'],
-  ['atomic', 'Atomic'],
-  ['horde', 'Horde'],
-  ['racingKings', 'Racing Kings']
+  ['bullet', 'Bullet', 'Bullet'],
+  ['blitz', 'Blitz', 'Blitz'],
+  ['classical', 'Classical', 'Classic'],
+  ['correspondence', 'Correspondence', 'Corresp.'],
+  ['chess960', 'Chess960', '960'],
+  ['kingOfTheHill', 'King Of The Hill', 'KotH'],
+  ['threeCheck', 'Three-check', '3check'],
+  ['antichess', 'Antichess', 'Antichess'],
+  ['atomic', 'Atomic', 'Atomic'],
+  ['horde', 'Horde', 'Horde'],
+  ['racingKings', 'Racing Kings', 'Racing']
 ];
 
 export default function userPerfs(user) {
@@ -34,6 +34,13 @@ export default function userPerfs(user) {
 export function perfTitle(perf) {
   return perfTypes.reduce((prev, curr) => {
     if (curr[0] === perf) return curr[1];
+    else return prev;
+  }, '');
+}
+
+export function shortPerfTitle(perf) {
+  return perfTypes.reduce((prev, curr) => {
+    if (curr[0] === perf) return curr[2];
     else return prev;
   }, '');
 }

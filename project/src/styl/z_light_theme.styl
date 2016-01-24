@@ -87,9 +87,13 @@ activeBgLight = darken(themeBgLight, 8%)
     &.emerg
       background-color #efaaaa
       color textDarkGray
-    &.correspondence.running
-      color darken(gold, 15%)
-      background-color inherit
+    &.correspondence
+      &.running
+        color darken(gold, 15%)
+        background-color inherit
+      &.offline
+        background-color themeBgLight
+        color #707070
 
   .action_bar_button
     color textGray

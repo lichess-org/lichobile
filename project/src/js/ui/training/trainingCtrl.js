@@ -193,6 +193,7 @@ export default function ctrl() {
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
+      coordinates: settings.game.coords(),
       turnColor: this.data.puzzle.opponentColor,
       movable: {
         free: false,

@@ -1,6 +1,6 @@
 import session from '../../session';
 import helper from '../helper';
-import { handleXhrError, backHistory } from '../../utils';
+import { hasNetwork, handleXhrError, backHistory, getOfflineGameData, removeOfflineGameData } from '../../utils';
 import { game as gameXhr, joinChallenge, cancelChallenge } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
@@ -21,70 +21,84 @@ export default function controller() {
   var round;
   var challengeIntervalID;
 
-  gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
-    gameData = data;
+  if (hasNetwork()) {
+    gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
+      gameData = data;
 
-    if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
-      window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
+      if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
+        window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
+        m.route('/');
+      }
+      // joinable means it's a game opened from an url scheme (url invitation from
+      // a friend)
+      else if (data.game.joinable) {
+        helper.analyticsTrackView('Join url invitation');
+        isJoinable(true);
+      }
+      // status created means user has sent an url invitation or challenge, and is
+      // waiting for friend to join
+      else if (data.game.status.id === gameStatus.ids.created) {
+        socket.createAwait(data.url.socket, data.player.version, {
+          redirect: e => m.route('/game/' + e.id),
+          declined: () => {
+            window.plugins.toast.show('Challenge declined', 'short', 'center');
+            backHistory();
+          }
+        });
+        // userId param means it's a challenge, otherwise it's an invitation with url
+        if (m.route.param('userId')) {
+          helper.analyticsTrackView('Waiting for challenge acceptance');
+          isAwaitingChallenge(true);
+          // to keep challenge open
+          challengeIntervalID = setInterval(() => {
+            socket.send('challenge', m.route.param('userId'));
+          }, 1500);
+          window.plugins.insomnia.keepAwake();
+        } else {
+          helper.analyticsTrackView('Waiting for URL invitation acceptance');
+          isAwaitingInvite(true);
+        }
+      }
+      // if not joinable or created, it means the game is started, so let's play!
+      else {
+        session.refresh();
+
+        if (gameApi.isPlayerPlaying(data) &&
+        gameApi.nbMoves(data, data.player.color) === 0) {
+          sound.dong();
+          const variant = variantApi(data.game.variant.key);
+          const storageKey = variantStorageKey(data.game.variant.key);
+          if ([1, 3].indexOf(variant.id) === -1 &&
+          !storage.get(storageKey)) {
+            window.navigator.notification.alert(variant.alert, function() {
+              storage.set(storageKey, true);
+            });
+          }
+        }
+
+        round = new roundCtrl(data);
+
+        if (data.player.user === undefined) {
+          storage.set('lastPlayedGameURLAsAnon', data.url.round);
+        }
+      }
+    }, function(error) {
+      handleXhrError(error);
+      m.route('/');
+    });
+  } else {
+    const savedData = getOfflineGameData(m.route.param('id'));
+    if (savedData) {
+      gameData = savedData;
+      if (!gameApi.playable(gameData)) {
+        removeOfflineGameData(m.route.param('id'));
+      }
+      round = new roundCtrl(gameData);
+    } else {
+      window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
       m.route('/');
     }
-    // joinable means it's a game opened from an url scheme (url invitation from
-    // a friend)
-    else if (data.game.joinable) {
-      helper.analyticsTrackView('Join url invitation');
-      isJoinable(true);
-    }
-    // status created means user has sent an url invitation or challenge, and is
-    // waiting for friend to join
-    else if (data.game.status.id === gameStatus.ids.created) {
-      socket.createAwait(data.url.socket, data.player.version, {
-        redirect: e => m.route('/game/' + e.id),
-        declined: () => {
-          window.plugins.toast.show('Challenge declined', 'short', 'center');
-          backHistory();
-        }
-      });
-      // userId param means it's a challenge, otherwise it's an invitation with url
-      if (m.route.param('userId')) {
-        helper.analyticsTrackView('Waiting for challenge acceptance');
-        isAwaitingChallenge(true);
-        // to keep challenge open
-        challengeIntervalID = setInterval(() => {
-          socket.send('challenge', m.route.param('userId'));
-        }, 1500);
-        window.plugins.insomnia.keepAwake();
-      } else {
-        helper.analyticsTrackView('Waiting for URL invitation acceptance');
-        isAwaitingInvite(true);
-      }
-    }
-    // if not joinable or created, it means the game is started, so let's play!
-    else {
-      session.refresh();
-
-      if (gameApi.isPlayerPlaying(data) &&
-        gameApi.nbMoves(data, data.player.color) === 0) {
-        sound.dong();
-        const variant = variantApi(data.game.variant.key);
-        const storageKey = variantStorageKey(data.game.variant.key);
-        if ([1, 3].indexOf(variant.id) === -1 &&
-          !storage.get(storageKey)) {
-          window.navigator.notification.alert(variant.alert, function() {
-            storage.set(storageKey, true);
-          });
-        }
-      }
-
-      round = new roundCtrl(data);
-
-      if (data.player.user === undefined) {
-        storage.set('lastPlayedGameURLAsAnon', data.url.round);
-      }
-    }
-  }, function(error) {
-    handleXhrError(error);
-    m.route('/');
-  });
+  }
 
   return {
     onunload: function() {

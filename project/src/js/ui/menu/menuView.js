@@ -5,7 +5,7 @@ import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
-import { hasNetwork } from '../../utils';
+import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
 import menu from './menu';
 import friendsApi from '../../lichess/friends';
@@ -53,6 +53,8 @@ function renderProfileActions(user) {
 }
 
 function renderLinks(user) {
+  const offlineGames = getOfflineGames();
+
   return (
     <ul className="side_links">
       {hasNetwork() ?
@@ -61,6 +63,11 @@ function renderLinks(user) {
       {hasNetwork() && session.nowPlaying().length ?
       <li className="side_link" key="current_games" config={helper.ontouchY(menu.popup(gamesMenu.open))}>
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', session.nowPlaying().length)}
+      </li> : null
+      }
+      {!hasNetwork() && offlineGames.length ?
+      <li className="side_link" key="current_games" config={helper.ontouchY(menu.popup(gamesMenu.open))}>
+        <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
       </li> : null
       }
       {hasNetwork() ?

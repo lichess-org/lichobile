@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import { hasNetwork } from '../../../utils';
 import i18n from '../../../i18n';
 
 function prefixInteger(num, length) {
@@ -14,8 +15,8 @@ export function formatClockTime(time) {
     // days : hours
     var days = date.getUTCDate() - 1;
     hours = date.getUTCHours();
-    str += (days === 1 ? i18n('oneDay') : i18n('nbDays', days)) + ' ';
-    if (hours !== 0) str += i18n('nbHours', hours);
+    str += (days === 1 ? i18n('oneDay') : i18n('nbDays', days));
+    if (hours !== 0) str += ' ' + i18n('nbHours', hours);
   } else if (time >= 3600 * 1000) {
     // hours : minutes
     hours = date.getUTCHours();
@@ -24,7 +25,7 @@ export function formatClockTime(time) {
     // minutes : seconds
     str += minutes + ':' + seconds;
   }
-  return str;
+  return str + (hasNetwork() ? '' : '?');
 }
 
 export function view(ctrl, color, runningColor) {
@@ -32,7 +33,8 @@ export function view(ctrl, color, runningColor) {
   const className = 'correspondence clock ' + helper.classSet({
     'outoftime': !time,
     'running': runningColor === color,
-    'emerg': time < ctrl.data.emerg
+    'emerg': time < ctrl.data.emerg,
+    'offline': !hasNetwork()
   });
   function cConfig(el, isUpdate) {
     el.textContent = formatClockTime(time * 1000);

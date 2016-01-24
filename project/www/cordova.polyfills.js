@@ -94,6 +94,10 @@
   window.navigator.connection = {
     type: "wifi"
   };
+  window.setOffline = function() {
+    window.navigator.connection.type = window.Connection.NONE;
+    document.dispatchEvent(new window.Event('offline'));
+  };
 
   // notification
   window.navigator.notification = {};

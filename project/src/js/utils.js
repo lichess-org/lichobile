@@ -1,4 +1,5 @@
 import i18n from './i18n';
+import storage from './storage';
 import m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
@@ -167,4 +168,38 @@ export function loadJsonFile(filename) {
 // Returns a random number between min (inclusive) and max (exclusive)
 export function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+const offlineCorresStorageKey = 'offline.corres.games';
+
+export function getOfflineGames() {
+  const stored = storage.get(offlineCorresStorageKey) || {};
+  let arr = [];
+  for (const i in stored) {
+    arr.push(stored[i]);
+  }
+  return arr;
+}
+
+export function getOfflineGameData(id) {
+  const stored = storage.get(offlineCorresStorageKey) || {};
+  return stored[id];
+}
+
+export function saveOfflineGameData(id, gameData) {
+  const stored = storage.get(offlineCorresStorageKey) || {};
+  const toStore = Object.assign({}, gameData);
+  toStore.player.onGame = false;
+  toStore.player.user.online = false;
+  toStore.opponent.onGame = false;
+  toStore.opponent.user.online = false;
+  stored[id] = toStore;
+  storage.set(offlineCorresStorageKey, stored);
+}
+
+export function removeOfflineGameData(id) {
+  const stored = storage.get(offlineCorresStorageKey);
+  if (stored && stored[id]) {
+    delete stored[id];
+  }
 }

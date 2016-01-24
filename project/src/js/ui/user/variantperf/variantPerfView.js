@@ -9,10 +9,11 @@ import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
 import m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
+import {shortPerfTitle} from '../../../lichess/perfs';
 
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, null,
-    backButton(ctrl.user() ? (ctrl.user().username + ' ' + ctrl.variant + ' Stats') : '')
+    backButton(ctrl.user() ? (ctrl.user().username + ' ' + shortPerfTitle(ctrl.variant).toLowerCase() + ' stats') : '')
   );
 
   function renderBody() {

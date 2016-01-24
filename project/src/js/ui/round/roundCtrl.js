@@ -335,7 +335,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   var clockIntervId;
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
-  else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 1000);
+  else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);

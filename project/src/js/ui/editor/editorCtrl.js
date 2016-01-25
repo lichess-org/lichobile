@@ -72,7 +72,8 @@ export default function controller() {
     draggable: {
       showGhost: false,
       autoDistance: false,
-      squareTarget: true
+      squareTarget: true,
+      preventDefault: false
     },
     events: {
       change: () => {

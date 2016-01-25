@@ -188,9 +188,9 @@ export function saveOfflineGameData(id, gameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
   const toStore = Object.assign({}, gameData);
   toStore.player.onGame = false;
-  toStore.player.user.online = false;
   toStore.opponent.onGame = false;
-  toStore.opponent.user.online = false;
+  if (toStore.player.user) toStore.player.user.online = false;
+  if (toStore.opponent.user) toStore.opponent.user.online = false;
   stored[id] = toStore;
   storage.set(offlineCorresStorageKey, stored);
 }
@@ -200,4 +200,5 @@ export function removeOfflineGameData(id) {
   if (stored && stored[id]) {
     delete stored[id];
   }
+  storage.set(offlineCorresStorageKey, stored);
 }

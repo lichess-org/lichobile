@@ -25,10 +25,6 @@ export default function controller() {
     gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
       gameData = data;
 
-      if (gameData.game.speed === 'correspondence') {
-        saveOfflineGameData(m.route.param('id'), gameData);
-      }
-
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
         window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
         m.route('/');
@@ -85,6 +81,11 @@ export default function controller() {
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
         }
+
+        if (gameData.game.speed === 'correspondence') {
+          saveOfflineGameData(m.route.param('id'), gameData);
+        }
+
       }
     }, function(error) {
       handleXhrError(error);

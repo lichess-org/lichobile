@@ -1,9 +1,13 @@
 import merge from 'lodash/object/merge';
 import assign from 'lodash/object/assign';
+import range from 'lodash/utility/range';
 import { serializeQueryParameters } from './utils';
+
 
 export default function(worker) {
   var socketInstance;
+
+  var currentUrl;
 
   const strongSocketDefaults = {
     params: {
@@ -21,10 +25,10 @@ export default function(worker) {
     }
   };
 
-  function StrongSocket(clientId, baseUrl, url, version, settings) {
+  function StrongSocket(clientId, socketEndPoint, url, version, settings) {
     this.settings = merge({}, strongSocketDefaults, settings);
     this.settings.params.sri = clientId;
-    this.baseUrl = baseUrl;
+    this.socketEndPoint = socketEndPoint;
     this.url = url;
     this.version = version;
     this.options = this.settings.options;
@@ -37,6 +41,9 @@ export default function(worker) {
     this.averageLag = 0;
     this.autoReconnect = true;
     this.tryAnotherUrl = false;
+    this.urlsPool = [this.socketEndPoint].concat(range(9021, 9030).map(
+      e => this.socketEndPoint + ':' + e
+    ));
 
     this.debug('Debug is enabled');
     this.connect();
@@ -48,7 +55,7 @@ export default function(worker) {
       var self = this;
       self.destroy();
       self.autoReconnect = true;
-      var fullUrl = 'ws://' + self.baseUrl + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
+      var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
         version: self.version
       }));
       self.debug('connection attempt to ' + fullUrl, true);
@@ -226,7 +233,7 @@ export default function(worker) {
 
     onError: function(e) {
       var self = this;
-      postMessage({ topic: 'onError', payload: e });
+      postMessage({ topic: 'onError' });
       self.options.debug = true;
       self.debug('error: ' + JSON.stringify(e));
       self.tryAnotherUrl = true;
@@ -240,6 +247,20 @@ export default function(worker) {
 
     pingInterval: function() {
       return this.options.pingDelay + this.averageLag;
+    },
+
+    baseUrl: function() {
+      if (this.socketEndPoint === 'socket.en.lichess.org') {
+        if (!currentUrl) {
+          currentUrl = this.urlsPool[0];
+        } else if (this.tryAnotherUrl) {
+          this.tryAnotherUrl = false;
+          currentUrl = this.urlsPool[(this.urlsPool.indexOf(currentUrl) + 1) % this.urlsPool.length];
+        }
+        return currentUrl;
+      }
+
+      return this.socketEndPoint;
     }
   };
 
@@ -250,7 +271,13 @@ export default function(worker) {
           socketInstance.destroy();
           socketInstance = null;
         }
-        socketInstance = new StrongSocket(msg.data.payload.clientId, msg.data.payload.baseUrl, msg.data.payload.url, msg.data.payload.version, msg.data.payload.opts);
+        socketInstance = new StrongSocket(
+          msg.data.payload.clientId,
+          msg.data.payload.socketEndPoint,
+          msg.data.payload.url,
+          msg.data.payload.version,
+          msg.data.payload.opts
+        );
         break;
       case 'send':
         const [t, d, o] = msg.data.payload;

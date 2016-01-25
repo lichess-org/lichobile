@@ -1,5 +1,4 @@
 import assign from 'lodash/object/assign';
-import range from 'lodash/utility/range';
 import storage from './storage';
 import * as utils from './utils';
 import * as xhr from './xhr';
@@ -11,11 +10,6 @@ import work from 'webworkify';
 import m from 'mithril';
 
 const socketWorker = work(require('./socketWorker'));
-
-const urlsPool = range(9021, 9030).map(function(e) {
-  return window.lichess.socketEndPoint + ':' + e;
-});
-urlsPool.unshift(window.lichess.socketEndPoint);
 
 var socketHandlers;
 var errorDetected = false;
@@ -35,24 +29,6 @@ const defaultHandlers = {
     else xhr.getChallenge(o.id).then(g => challengesApi.add(o.id, g)).then(m.redraw);
   }
 };
-
-function baseUrl() {
-  if (window.lichess.socketEndPoint === 'socket.en.lichess.org') {
-    var key = 'socket.baseUrl';
-    var url = storage.get(key);
-    if (!url) {
-      url = urlsPool[0];
-      storage.set(key, url);
-    } else if (this.tryAnotherUrl) {
-      this.tryAnotherUrl = false;
-      url = urlsPool[(urlsPool.indexOf(url) + 1) % urlsPool.length];
-      storage.set(key, url);
-    }
-    return url;
-  }
-
-  return window.lichess.socketEndPoint;
-}
 
 function askWorker(msg, callback) {
   function listen(e) {
@@ -96,7 +72,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   if (userTv) opts.params = { userTv };
   socketWorker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
-    baseUrl: baseUrl(),
+    socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
@@ -117,7 +93,7 @@ function createAwait(url, version, handlers) {
   };
   socketWorker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
-    baseUrl: baseUrl(),
+    socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
@@ -140,7 +116,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
   };
   socketWorker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
-    baseUrl: baseUrl(),
+    socketEndPoint: window.lichess.socketEndPoint,
     url: '/lobby/socket/v1',
     version: lobbyVersion,
     opts
@@ -164,7 +140,7 @@ function createDefault() {
     };
     socketWorker.postMessage({ topic: 'create', payload: {
       clientId: utils.lichessSri,
-      baseUrl: baseUrl(),
+      socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
       version: 0,
       opts

@@ -215,7 +215,7 @@ function renderAllGames(cDim) {
 
   var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
-  if (allCards.length === 0 && !utils.hasNetwork()) {
+  if (!utils.hasNetwork()) {
     allCards = utils.getOfflineGames().map(d => {
       const g = savedGameDataToCardData(d);
       return renderGame(g, cDim, cardStyle);

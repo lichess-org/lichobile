@@ -1,7 +1,6 @@
 import socket from '../../socket';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/function/throttle';
-import session from '../../session';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import helper from '../helper';
@@ -44,13 +43,7 @@ export default function controller() {
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
-  if (session.isConnected())
-    xhr.suggestions(session.get().id).then(
-      data => players(data.suggested.map(d => d.user)),
-      err => utils.handleXhrError(err)
-    );
-  else
-    xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
+  xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
 
   return {
     players,

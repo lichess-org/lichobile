@@ -2,7 +2,6 @@ import find from 'lodash/collection/find';
 import { util, drag } from 'chessground-mobile';
 
 export default function(ctrl, e) {
-  if (e.button !== undefined && e.button !== 0) return; // only left click
   if (e.touches && e.touches.length > 1) return; // support one finger touch only
   const role = e.target.getAttribute('data-role'),
   color = e.target.getAttribute('data-color');

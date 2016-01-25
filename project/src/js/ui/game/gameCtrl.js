@@ -1,6 +1,6 @@
 import session from '../../session';
 import helper from '../helper';
-import { hasNetwork, handleXhrError, backHistory, getOfflineGameData, removeOfflineGameData } from '../../utils';
+import { hasNetwork, handleXhrError, backHistory, getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils';
 import { game as gameXhr, joinChallenge, cancelChallenge } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
@@ -81,6 +81,11 @@ export default function controller() {
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
         }
+
+        if (gameData.game.speed === 'correspondence') {
+          saveOfflineGameData(m.route.param('id'), gameData);
+        }
+
       }
     }, function(error) {
       handleXhrError(error);

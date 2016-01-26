@@ -183,9 +183,11 @@ socketWorker.addEventListener('message', function(msg) {
     case 'onOpen':
       if (socketHandlers.onOpen) socketHandlers.onOpen();
       break;
-    case 'disconnected': onDisconnected();
+    case 'disconnected':
+      onDisconnected();
       break;
-    case 'connected': onConnected();
+    case 'connected':
+      onConnected();
       break;
     case 'onError':
       if (socketHandlers.onError) socketHandlers.onError();

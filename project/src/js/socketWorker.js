@@ -3,7 +3,6 @@ import assign from 'lodash/object/assign';
 import range from 'lodash/utility/range';
 import { serializeQueryParameters } from './utils';
 
-
 export default function(worker) {
   var socketInstance;
 
@@ -306,7 +305,6 @@ export default function(worker) {
         break;
       default:
         throw new Error('socker worker message not supported: ' + msg.data.topic);
-
     }
   });
 }

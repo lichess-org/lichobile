@@ -28,6 +28,7 @@ function body(ctrl) {
         <th> Name </th>
         <th> Start </th>
         <th> End </th>
+        <th> </th>
       </tr>
       {ctrl.tournaments().created.map(renderTournament)}
     </table>
@@ -36,10 +37,11 @@ function body(ctrl) {
 
 function renderTournament(tournament) {
   return (
-    <tr className="list_item nav" config={h.ontouchY(() => m.route('/tournament' + tournament.id))}>
+    <tr className="tourListRow list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
       <td>{tournament.fullName}</td>
-      <td>{formatTime(tournament.startsAt)}</td>
-      <td>{formatTime(tournament.finishesAt)}</td>
+      <td className="tourListTime">{formatTime(tournament.startsAt)}</td>
+      <td className="tourListTime">{formatTime(tournament.finishesAt)}</td>
+      <td className="fa tourListNav">&#xf054;</td>
     </tr>
   );
 }
@@ -50,7 +52,7 @@ function formatTime(unixTime) {
   if (hours.length < 2)
     hours = '0' + hours;
   let mins = date.getMinutes().toString();
-    if (mins.length < 2)
-      hours = '0' + hours;
+  if (mins.length < 2)
+    mins = '0' + mins;
   return hours + ':' + mins;
 }

@@ -63,6 +63,11 @@ export default {
     moveConfirmation: localstorageprop('settings.game.moveConfirmation', 'correspondence')
   },
 
+  analyse: {
+    showAutoShapes: localstorageprop('settings.analyse.showAutoShapes', true),
+    showGauge: localstorageprop('settings.analyse.showGauge', true)
+  },
+
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false)
   },

@@ -1,15 +1,109 @@
-td.tourName
+th.tournamentHeader
+  text-decoration underline
+
+td.tournamentListName
   padding-left 5px
   text-align: left
   text-overflow: ellipsis
+  white-space: nowrap;
+  overflow hidden
+  max-width 0
+  width 60%
 
-td.tourListTime
+td.tournamentListTime
   padding 10px
-  text-align: right
+  text-align: center
+  max-width 0
+  width 15%
 
-.tourListNav
-  display: inline-block
+td.tournamentListNav
   font: normal normal normal 14px/1 FontAwesome
   font-size: inherit
   text-rendering: auto
   -webkit-font-smoothing: antialiased
+  max-width 0
+  width 10%
+  text-align right
+  padding-right 10px
+
+td.tournamentPoints
+  padding 10px
+  text-align: right
+  width 50px
+
+p.tournamentHeader
+  text-align left
+  text-decoration underline
+  font-weight bold
+  color gold
+  padding-left 5px
+
+table.tournamentList
+  width 100%
+
+table.tournamentStandings
+  width 100%
+
+.tournamentListItem
+  position relative
+  line-height 10px
+  padding 10px
+  border-bottom 1px solid #2E3033
+  &:before
+    margin-right 10px
+  &:last-child
+    border-bottom none
+  &.active
+    background lighten(bgdark, 5%)
+  &.bglight
+    border-bottom-color darken(bglight, 15%)
+    &.active
+      background-color darken(bglight, 5%)
+
+.on-fire
+  line-height 10px
+  &:before
+    content: attr(data-icon)
+    color: #d59120
+
+.off-fire
+  line-height 10px
+  &:before
+    content: ''
+
+td.tournamentPlayer
+  padding 10px
+  padding-left 5px
+  text-align: left
+  text-overflow: ellipsis
+  white-space: nowrap;
+  overflow hidden
+  max-width 0
+  width 80%
+
+td.tournamentPoints
+  padding 5px
+  text-align: right
+  max-width 0
+  width 20%
+
+div.tournamentFeatured
+  &.nav
+    padding 10px 10px 10px 0px
+    &:after
+      line-height 12px
+      top 35%
+  position relative
+  line-height 10px
+  padding 10px 10px 10px 5px
+  border-bottom 1px solid #2E3033
+  &:before
+    margin-right 5px
+  &:last-child
+    border-bottom none
+  &.active
+    background lighten(bgdark, 5%)
+  &.bglight
+    border-bottom-color darken(bglight, 15%)
+    &.active
+      background-color darken(bglight, 5%)

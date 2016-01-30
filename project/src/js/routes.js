@@ -48,7 +48,8 @@ export default {
       '/settings/lang': settingsLang,
       '/training': training,
       '/training/:id': training,
-      '/tournament': tournament
+      '/tournament': tournament,
+      '/tournament/:id': tournament
     });
   }
 };

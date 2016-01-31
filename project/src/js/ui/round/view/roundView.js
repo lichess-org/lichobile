@@ -208,11 +208,10 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
     utils.noop;
 
-  const username = user ? user.username : 'anon';
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = ctrl.data.game.id + username + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]) + isPortrait;
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'

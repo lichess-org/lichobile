@@ -46,7 +46,7 @@ function renderBody() {
         ))])
       ]),
       m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-      m('li.list_item', formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
+      m('li.list_item', formWidgets.renderCheckbox(i18n('allowNotifications'), 'sound', settings.general.notifications, isOn => {
         if (isOn) push.register();
         else push.unregister();
       })),

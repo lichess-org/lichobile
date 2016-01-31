@@ -50,7 +50,7 @@ export function serializeQueryParameters(obj) {
     if (str !== '') {
       str += '&';
     }
-    str += key + '=' + obj[key];
+    str += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]);
   }
   return str;
 }

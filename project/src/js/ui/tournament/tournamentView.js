@@ -100,7 +100,7 @@ function tournamentHomeBody(ctrl) {
       <div className="tournamentGames">
         <p className="tournamentHeader">Featured Game</p>
         <div class="tournamentFeatured nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
-          {data.featured.player1.name} ({data.featured.player1.rating}) vs. {data.featured.player2.name} ({data.featured.player2.rating})
+          {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
         </div>
       </div>
     </div>

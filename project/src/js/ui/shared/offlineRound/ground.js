@@ -10,8 +10,8 @@ function makeConfig(data, fen) {
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
-      lastMove: data.pref.highlight,
-      check: data.pref.highlight,
+      lastMove: settings.game.highlights(),
+      check: settings.game.highlights(),
       dragOver: false
     },
     movable: {

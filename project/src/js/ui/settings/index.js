@@ -4,6 +4,7 @@ import { header as headerWidget, backButton, empty } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
 import settings from '../../settings';
+import session from '../../session';
 import i18n from '../../i18n';
 import push from '../../push';
 import sound from '../../sound';
@@ -12,15 +13,24 @@ import m from 'mithril';
 function renderBody() {
   return [
     m('ul.settings_list.general.native_scroller.page', [
+      utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
+        key: 'preferences',
+        config: helper.ontouchY(utils.f(m.route, '/settings/preferences'))
+      }, i18n('preferences')) : null,
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
+      }, i18n('language')),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/gameBehavior'))
-      }, i18n('gameBehavior')),
+        key: 'boardTheme',
+        config: helper.ontouchY(utils.f(m.route, '/settings/themes/board'))
+      }, `${i18n('theming')} (${i18n('board')})`),
       m('li.list_item.nav', {
-        config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
-      }, i18n('language')),
+        key: 'piecesTheme',
+        config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
+      }, `${i18n('theming')} (${i18n('pieces')})`),
       m('li.list_item.settingsChoicesInline', [
         m('label', 'Background'),
         m('fieldset', [

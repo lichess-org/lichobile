@@ -18,6 +18,9 @@ function renderAlways(ctrl) {
     renderSharePGNButton(ctrl),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
+    )),
+    m('div.action', formWidgets.renderCheckbox(
+      i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, m.redraw
     ))
   ];
 }

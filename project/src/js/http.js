@@ -25,13 +25,13 @@ function xhrConfig(xhr) {
 }
 
 // convenient wrapper around m.request
-export function request(url, opts, feedback) {
+export function request(url, opts, feedback, xhrConf) {
 
   var cfg = {
     url: 'http://' + baseUrl + url,
     method: 'GET',
     data: { '_': Date.now() },
-    config: xhrConfig,
+    config: xhrConf || xhrConfig,
     deserialize: function(text) {
       try {
         return JSON.parse(text);

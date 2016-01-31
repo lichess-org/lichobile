@@ -58,9 +58,9 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
     ],
     animations: localstorageprop('settings.gameAnimations', true),
+    highlights: localstorageprop('settings.boardHighlights', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    coords: localstorageprop('settings.coords', true),
-    moveConfirmation: localstorageprop('settings.game.moveConfirmation', 'correspondence')
+    coords: localstorageprop('settings.coords', true)
   },
 
   otb: {

@@ -3,6 +3,7 @@ import { header as headerWidget, backButton, empty } from '../shared/common';
 import helper from '../helper';
 import layout from '../layout';
 import i18n from '../../i18n';
+import session from '../../session';
 import m from 'mithril';
 
 function renderBody() {
@@ -11,12 +12,12 @@ function renderBody() {
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
-      m('li.list_item.nav', {
+      utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/gameBehavior'))
-      }, i18n('gameBehavior')),
-      m('li.list_item.nav', {
+      }, i18n('gameBehavior')) : null,
+      utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/privacy'))
-      }, i18n('privacy'))
+      }, i18n('privacy')) : null
     ])
   ];
 }

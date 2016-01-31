@@ -14,10 +14,10 @@ function renderBody() {
   console.log(session.get());
   return [
     m('ul.settings_list.general.native_scroller.page', [
-      utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
+      m('li.list_item.nav', {
         key: 'preferences',
         config: helper.ontouchY(utils.f(m.route, '/settings/preferences'))
-      }, i18n('preferences')) : null,
+      }, i18n('preferences')),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),

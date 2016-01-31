@@ -3,33 +3,50 @@ import { header as headerWidget, backButton, empty } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
-import settings from '../../settings';
+import session from '../../session';
+import { swapKeyValue, SubmitMove, Takeback, AutoQueen, AutoThreefold } from '../../lichess/prefs';
 import m from 'mithril';
 
-function renderBody() {
-  const moveConfirmOpts = [
-    ['never', 'never'],
-    ['inCorrespondenceGames', 'correspondence'],
-    ['always', 'always']
-  ];
+function renderBody(ctrl) {
   return [
     m('ul.native_scroller.page.settings_list.game', [
+      m('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),
+        'premove', ctrl.premove)),
+      m('li.list_item', [
+        m('div.label', i18n('takebacksWithOpponentApproval')),
+        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'takeback', swapKeyValue(Takeback.choices), ctrl.takeback))
+      ]),
+      m('li.list_item', [
+        m('div.label', i18n('promoteToQueenAutomatically')),
+        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoQueen', swapKeyValue(AutoQueen.choices), ctrl.autoQueen))
+      ]),
+      m('li.list_item', [
+        m('div.label', i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, '')),
+        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoThreefold', swapKeyValue(AutoThreefold.choices), ctrl.autoThreefold))
+      ]),
       m('li.list_item', [
         m('div.label', i18n('moveConfirmation')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'moveConfirmation', moveConfirmOpts, settings.game.moveConfirmation))
+        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'moveConfirmation', swapKeyValue(SubmitMove.choices), ctrl.submitMove))
       ])
     ])
   ];
 }
 
 module.exports = {
-  controller: function() {},
+  controller: function() {
+    return {
+      premove: session.lichessBackedProp('premove'),
+      takeback: session.lichessBackedProp('takeback'),
+      autoQueen: session.lichessBackedProp('autoQueen'),
+      autoThreefold: session.lichessBackedProp('autoThreefold'),
+      submitMove: session.lichessBackedProp('submitMove')
+    };
+  },
 
-  view: function() {
+  view: function(ctrl) {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('gameBehavior'))
     );
-    return layout.free(header, renderBody, empty, empty);
+    return layout.free(header, renderBody.bind(undefined, ctrl), empty, empty);
   }
 };
-

@@ -64,7 +64,8 @@ export default {
   },
 
   otb: {
-    flipPieces: localstorageprop('settings.otb.flipPieces', false)
+    flipPieces: localstorageprop('settings.otb.flipPieces', false),
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', true)
   },
 
   ai: {

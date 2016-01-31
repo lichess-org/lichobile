@@ -4,14 +4,12 @@ import { header as headerWidget, backButton, empty } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
 import settings from '../../settings';
-import session from '../../session';
 import i18n from '../../i18n';
 import push from '../../push';
 import sound from '../../sound';
 import m from 'mithril';
 
 function renderBody() {
-  console.log(session.get());
   return [
     m('ul.settings_list.general.native_scroller.page', [
       m('li.list_item.nav', {

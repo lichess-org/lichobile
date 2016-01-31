@@ -68,13 +68,13 @@ export function onPieceThemeChange(t) {
   pieceTheme = t;
 }
 
-export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses) {
+export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses, customPieceTheme) {
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();
   const boardClass = [
     'display_board',
     boardTheme,
-    pieceTheme,
+    customPieceTheme || pieceTheme,
     variant
   ].join(' ');
   let wrapperClass = 'game_board_wrapper';

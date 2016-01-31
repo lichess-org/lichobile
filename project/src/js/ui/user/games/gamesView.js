@@ -74,7 +74,7 @@ function renderGame(ctrl, g, index, userId) {
   const star = g.bookmarked ? 't' : 's';
 
   return (
-    <li className={`list_item userGame ${evenOrOdd}`}>
+    <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
       }

@@ -158,6 +158,7 @@ export default {
         ['Antichess', '6'],
         ['Atomic', '7'],
         ['Horde', '8'],
+        ['Racing Kings', '9'],
         ['From Position', '3']
       ],
       color: localstorageprop('settings.game.invite.color', 'random'),

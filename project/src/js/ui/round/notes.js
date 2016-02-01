@@ -43,7 +43,13 @@ export default {
     }
 
     this.syncNotes = debounce(e => {
-      syncNote(this.root.data.game.id, e.target.value);
+      const text = e.target.value;
+      if (this.root.data.note !== text) {
+        syncNote(this.root.data.game.id, text)
+        .then(() => {
+          this.root.data.note = text;
+        });
+      }
     }, 1000);
 
     window.addEventListener('native.keyboardhide', onKeyboardHide);

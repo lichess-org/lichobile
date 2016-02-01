@@ -1,5 +1,5 @@
 import { request } from '../../http';
-import { handleXhrError, serializeQueryParameters } from '../../utils';
+import { noop, handleXhrError, serializeQueryParameters } from '../../utils';
 
 export function reload(ctrl) {
   return request(ctrl.data.url.round, { background: true });
@@ -25,5 +25,8 @@ export function syncNote(gameId, notes) {
     deserialize: t => t,
     data: serializeQueryParameters({ text: notes })
   }, true, xhrConfig)
-  .then(handleXhrError);
+  .then(noop, err => {
+    handleXhrError(err);
+    throw err;
+  });
 }

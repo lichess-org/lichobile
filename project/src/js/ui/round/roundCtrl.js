@@ -6,6 +6,7 @@ import gameApi from '../../lichess/game';
 import ground from './ground';
 import promotion from './promotion';
 import chat from './chat';
+import notes from './notes';
 import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
 import gameStatus from '../../lichess/status';
@@ -353,6 +354,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
+
+  this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
   this.reload = function(rCfg) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))

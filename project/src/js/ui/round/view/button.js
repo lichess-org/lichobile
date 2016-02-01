@@ -245,5 +245,10 @@ export default {
         })
       }, i18n('newOpponent'));
     }
+  },
+  notes: function(ctrl) {
+    return m('button[data-icon=m].action_bar_button', {
+      config: helper.ontouch(ctrl.notes.open)
+    });
   }
 };

@@ -20,6 +20,7 @@ import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
+import { view as renderNotes } from '../notes';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
 import { renderTable as renderReplayTable } from './replay';
 
@@ -37,6 +38,7 @@ export default function view(ctrl) {
 function overlay(ctrl, isPortrait) {
   return [
     ctrl.chat ? renderChat(ctrl.chat) : null,
+    ctrl.notes ? renderNotes(ctrl.notes) : null,
     renderPromotion(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl)
@@ -419,7 +421,9 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
       }
-      {button.flipBoard(ctrl)}
+      {ctrl.data.game.speed === 'correspondence' ?
+        button.notes(ctrl) : button.flipBoard(ctrl)
+      }
       {button.first(ctrl)}
       {button.backward(ctrl)}
       {button.forward(ctrl)}

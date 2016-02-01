@@ -17,8 +17,25 @@
     },
     "stage": {
       "id": "org.lichess.mobileapp.stage",
-      "product_name": "lichess_beta",
+      "product_name": "lichess_stage",
       "product_file_name": "lichess-stage",
+      "API_END_POINT": "en.stage.lichess.org",
+      "SOCKET_END_POINT": "socket.en.stage.lichess.org",
+      "cordova": {
+        "whitelist": [
+          {
+            "type": "access-origin",
+            "origin": [
+              "http://en.stage.lichess.org"
+            ]
+          }
+        ]
+      }
+    },
+    "beta": {
+      "id": "org.lichess.mobileapp.beta",
+      "product_name": "lichess_beta",
+      "product_file_name": "lichess-beta",
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "beta": "1",
@@ -59,7 +76,10 @@
         "extend": "default"
       },
       "stage": {
-        "extend": "stage",
+        "extend": "stage"
+      },
+      "beta": {
+        "extend": "beta",
         "sign": "adhoc",
         "release": true
       },
@@ -74,6 +94,9 @@
       },
       "stage": {
         "extend": "stage"
+      },
+      "beta": {
+        "extend": "beta"
       },
       "prod": {
         "extend": "prod",

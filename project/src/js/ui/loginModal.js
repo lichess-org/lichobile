@@ -20,6 +20,7 @@ function submit(form) {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
     push.register();
+    session.refresh();
   }, function(err) {
     utils.handleXhrError(err);
   });

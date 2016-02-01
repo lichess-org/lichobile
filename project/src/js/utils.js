@@ -1,5 +1,6 @@
 import i18n from './i18n';
 import storage from './storage';
+import { cloneDeep } from 'lodash/lang';
 import m from 'mithril';
 
 export function autoredraw(action) {
@@ -186,7 +187,7 @@ export function getOfflineGameData(id) {
 
 export function saveOfflineGameData(id, gameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  const toStore = Object.assign({}, gameData);
+  const toStore = cloneDeep(gameData);
   toStore.player.onGame = false;
   toStore.opponent.onGame = false;
   if (toStore.player.user) toStore.player.user.online = false;

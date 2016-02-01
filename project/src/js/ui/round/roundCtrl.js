@@ -379,13 +379,19 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     return toggleGameBookmark(this.data.game.id).then(reloadGameData);
   }.bind(this);
 
+  var onResize = function() {
+    this.vm.replayHash = '';
+  }.bind(this);
+
   document.addEventListener('resume', reloadGameData);
+  window.addEventListener('resize', onResize);
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
     document.removeEventListener('resume', reloadGameData);
+    window.removeEventListener('resize', onResize);
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();

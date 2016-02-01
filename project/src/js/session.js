@@ -107,7 +107,9 @@ function login(username, password) {
   }, true).then(function(data) {
     session = data;
     return session;
-  });
+  })
+  // todo get prefs data from /login
+  .then(refresh);
 }
 
 function logout() {

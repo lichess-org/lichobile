@@ -1,5 +1,4 @@
 import merge from 'lodash/object/merge';
-import assign from 'lodash/object/assign';
 import range from 'lodash/utility/range';
 import { serializeQueryParameters } from './utils';
 import signals from './signals';

@@ -305,6 +305,7 @@ function renderGameRunningActions(ctrl) {
     m('div.game_controls', [
       button.shareLink(ctrl),
       button.moretime(ctrl),
+      button.flipBoardInMenu(ctrl),
       button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
         button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),

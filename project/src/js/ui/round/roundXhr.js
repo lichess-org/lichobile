@@ -1,5 +1,6 @@
 import { request } from '../../http';
-import { noop, handleXhrError, serializeQueryParameters } from '../../utils';
+import { noop, serializeQueryParameters } from '../../utils';
+import i18n from '../../i18n';
 
 export function reload(ctrl) {
   return request(ctrl.data.url.round, { background: true });
@@ -16,7 +17,7 @@ export function syncNote(gameId, notes) {
   function xhrConfig(xhr) {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhr.timeout = 8000;
+    xhr.timeout = 10000;
   }
 
   return request(`/${gameId}/note`, {
@@ -24,9 +25,9 @@ export function syncNote(gameId, notes) {
     serialize: t => t,
     deserialize: t => t,
     data: serializeQueryParameters({ text: notes })
-  }, true, xhrConfig)
+  }, false, xhrConfig)
   .then(noop, err => {
-    handleXhrError(err);
+    window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center');
     throw err;
   });
 }

@@ -153,29 +153,27 @@ function renderGame(g, cDim, cardStyle) {
 }
 
 function renderChallenge(c, cDim, cardStyle) {
-  const icon = utils.gameIcon(c.game.perf);
-  const mode = c.game.rated ? i18n('rated') : i18n('casual');
-  const timeAndMode = gameApi.time(c) + ', ' + mode;
-  const challenger = c.player.user ? c.player : c.opponent;
+  const mode = c.rated ? i18n('rated') : i18n('casual');
+  const timeAndMode = challengesApi.time(c) + ', ' + mode;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.game.fen, c.game.lastMove, null, c.game.variant)}
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
       <div className="infos">
-        <div className="icon-game" data-icon={icon}></div>
+        <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(challenger, true))}</h2>
+          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.challenger, true))}</h2>
           <p className="variant">
-            <span className="variantName">{i18n('toATypeGame', c.game.variant.name)}</span>
+            <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>
           </p>
         </div>
         <div className="actions">
-          <button config={helper.ontouchX(utils.f(acceptChallenge, c.game.id))}>
+          <button config={helper.ontouchX(utils.f(acceptChallenge, c.id))}>
             {i18n('accept')}
           </button>
           <button config={helper.ontouchX(
-            helper.fadesOut(declineChallenge.bind(undefined, c.game.id), '.card', 250)
+            helper.fadesOut(declineChallenge.bind(undefined, c.id), '.card', 250)
           )}>
             {i18n('decline')}
           </button>

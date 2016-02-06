@@ -1,5 +1,4 @@
 import session from '../../session';
-import gameApi from '../../lichess/game';
 import loginModal from '../loginModal';
 import layout from '../layout';
 import * as utils from '../../utils';
@@ -7,6 +6,7 @@ import helper from '../helper';
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
+import challengesApi from '../../lichess/challenges';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -14,26 +14,39 @@ export default function view(ctrl) {
 
   const header = utils.partialf(headerWidget, 'lichess.org');
   const board = viewOnlyBoardContent;
+  const user = session.get();
+  const challenge = ctrl.data().challenge;
 
-  if (ctrl.isJoinable()) overlay = joinOverlay(ctrl);
-  else if (ctrl.isAwaitingInvite()) overlay = awaitInviteOverlay(ctrl);
-  else if (ctrl.isAwaitingChallenge()) overlay = awaitChallengeOverlay(ctrl);
+  if (user) {
+    if (challenge.destUser) {
+      overlay = awaitChallengePopup(ctrl);
+    } else {
+      overlay = awaitInvitePopup(ctrl);
+    }
+  } else {
+    // overlay = awaitInvitePopup(ctrl);
+    overlay = joinPopup(ctrl);
+  }
 
   return layout.board(header, board, overlay);
 }
 
-function gameInfos(gameData) {
-  const mode = gameData.game.rated ? i18n('rated') : i18n('casual');
+function publicUrl(challenge) {
+  return 'http://lichess.org/' + challenge.id;
+}
+
+function gameInfos(challenge) {
+  const mode = challenge.rated ? i18n('rated') : i18n('casual');
   return (
     <div className="gameInfos">
-      <p className="explanation small">{`${i18n('variant')}: ${gameData.game.variant.name}`}</p>
-      <p className="time small" data-icon="p">{gameApi.time(gameData)}</p>
+      <p className="explanation small">{`${i18n('variant')}: ${challenge.variant.name}`}</p>
+      <p className="time small" data-icon="p">{challengesApi.time(challenge)}</p>
       <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
     </div>
   );
 }
 
-function joinOverlay(ctrl) {
+function joinPopup(ctrl) {
   var data = ctrl.getData();
   var opp = data.opponent.user;
   var joinDom;
@@ -76,8 +89,8 @@ function joinOverlay(ctrl) {
   };
 }
 
-function awaitInviteOverlay(ctrl) {
-  var data = ctrl.getData();
+function awaitInvitePopup(ctrl) {
+  var challenge = ctrl.data().challenge;
 
   return function() {
     return popupWidget(
@@ -87,14 +100,14 @@ function awaitInviteOverlay(ctrl) {
         return m('div.infos', [
           m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
           m('input.lichess_game_url', {
-            value: gameApi.publicUrl(data),
+            value: publicUrl(challenge),
             readonly: true
           }),
           m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
           m('div.go_or_cancel.clearfix', [
             m('button.binary_choice[data-icon=E]', {
               config: helper.ontouch(function() {
-                window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(data));
+                window.plugins.socialsharing.share(null, null, null, publicUrl(challenge));
               })
             }, i18n('shareGameURL')),
             m('button.binary_choice[data-icon=L]', {
@@ -102,7 +115,7 @@ function awaitInviteOverlay(ctrl) {
             }, i18n('cancel'))
           ]),
           m('br'),
-          gameInfos(data)
+          gameInfos(challenge)
         ]);
       },
       true
@@ -110,7 +123,8 @@ function awaitInviteOverlay(ctrl) {
   };
 }
 
-function awaitChallengeOverlay(ctrl) {
+function awaitChallengePopup(ctrl) {
+
   function popupContent() {
     return (
       <div className="infos">
@@ -123,7 +137,7 @@ function awaitChallengeOverlay(ctrl) {
           {i18n('cancel')}
         </button>
         <br />
-        {gameInfos(ctrl.getData())}
+        {gameInfos(ctrl.data().challenge)}
       </div>
     );
   }

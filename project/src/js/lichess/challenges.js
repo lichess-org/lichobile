@@ -1,6 +1,8 @@
 import settings from '../settings';
+import i18n from '../i18n';
 
-var challenges = {};
+var receiving = [];
+var sending = [];
 
 function isSupported(c) {
   return settings.game.supportedVariants.indexOf(c.variant.key) !== -1;
@@ -8,26 +10,36 @@ function isSupported(c) {
 
 export default {
   receiving() {
-    return challenges.in.filter(isSupported);
+    return receiving.filter(isSupported);
   },
 
   receivingCount() {
-    return challenges.in.filter(isSupported).length;
+    return receiving.filter(isSupported).length;
   },
 
   sending() {
-    return challenges.out;
-  },
-
-  hasKey(key) {
-    return challenges.hasOwnProperty(key);
+    return sending;
   },
 
   set(data) {
-    challenges = data;
+    receiving = data.in;
+    sending = data.out;
   },
 
   remove(key) {
     delete challenges[key];
+  },
+
+  time(challenge) {
+    if (challenge.timeControl.type === 'clock') {
+      return challenge.timeControl.limit + '+' + challenge.timeControl.increment;
+    }
+    else if (challenge.timeControl.type === 'correspondence') {
+      return i18n('nbDays', challenge.timeControl.daysPerTurn);
+    }
+    else {
+      return '∞';
+    }
   }
+
 };

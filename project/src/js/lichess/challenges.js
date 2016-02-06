@@ -1,5 +1,4 @@
 import settings from '../settings';
-import i18n from '../i18n';
 
 var receiving = [];
 var sending = [];
@@ -9,12 +8,12 @@ function isSupported(c) {
 }
 
 export default {
-  receiving() {
-    return receiving.filter(isSupported);
+  all() {
+    return receiving.filter(isSupported).concat(sending);
   },
 
-  receivingCount() {
-    return receiving.filter(isSupported).length;
+  receiving() {
+    return receiving.filter(isSupported);
   },
 
   sending() {
@@ -26,20 +25,8 @@ export default {
     sending = data.out;
   },
 
-  remove(key) {
-    delete challenges[key];
-  },
-
-  time(challenge) {
-    if (challenge.timeControl.type === 'clock') {
-      return challenge.timeControl.limit + '+' + challenge.timeControl.increment;
-    }
-    else if (challenge.timeControl.type === 'correspondence') {
-      return i18n('nbDays', challenge.timeControl.daysPerTurn);
-    }
-    else {
-      return '∞';
-    }
+  remove(id) {
+    receiving = receiving.filter(c => c.id !== id);
+    sending = sending.filter(c => c.id !== id);
   }
-
 };

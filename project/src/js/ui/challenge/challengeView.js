@@ -6,7 +6,6 @@ import helper from '../helper';
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
-import challengesApi from '../../lichess/challenges';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -25,7 +24,7 @@ export default function view(ctrl) {
     }
   } else {
     // overlay = awaitInvitePopup(ctrl);
-    overlay = joinPopup(ctrl);
+    // overlay = joinPopup(ctrl);
   }
 
   return layout.board(header, board, overlay);
@@ -40,17 +39,16 @@ function gameInfos(challenge) {
   return (
     <div className="gameInfos">
       <p className="explanation small">{`${i18n('variant')}: ${challenge.variant.name}`}</p>
-      <p className="time small" data-icon="p">{challengesApi.time(challenge)}</p>
+      <p className="time small" data-icon="p">{challenge.timeControl.show}</p>
       <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
     </div>
   );
 }
 
 function joinPopup(ctrl) {
-  var data = ctrl.getData();
-  var opp = data.opponent.user;
+  const challenge = ctrl.data().challenge;
   var joinDom;
-  if (data.game.rated && !session.isConnected()) {
+  if (challenge.rated && !session.isConnected()) {
     joinDom = m('div.error', [
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
       m('div.go_or_cancel', [
@@ -65,7 +63,7 @@ function joinPopup(ctrl) {
   } else {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E]', {
-          config: helper.ontouch(utils.f(ctrl.joinChallenge, data.game.id))
+          config: helper.ontouch(utils.f(ctrl.joinChallenge, challenge.id))
       }, i18n('join')),
       m('button.binary_choice[data-icon=L]', {
         config: helper.ontouch(utils.backHistory)
@@ -76,10 +74,10 @@ function joinPopup(ctrl) {
   return function() {
     return popupWidget(
       'join_url_challenge',
-      () => opp ? opp.username : 'Anonymous',
+      () => challenge.destUser ? challenge.destUser.username : 'Anonymous',
       function() {
         return m('div.infos', [
-          gameInfos(data),
+          gameInfos(challenge),
           m('br'),
           joinDom
         ]);
@@ -125,10 +123,12 @@ function awaitInvitePopup(ctrl) {
 
 function awaitChallengePopup(ctrl) {
 
+  const challenge = ctrl.data().challenge;
+
   function popupContent() {
     return (
       <div className="infos">
-        <div className="user">{m.route.param('userId')}</div>
+        <div className="user">{challenge.destUser.id}</div>
         <br />
         <div className="loader"><span data-icon="U" /></div>
         <br />
@@ -137,7 +137,7 @@ function awaitChallengePopup(ctrl) {
           {i18n('cancel')}
         </button>
         <br />
-        {gameInfos(ctrl.data().challenge)}
+        {gameInfos(challenge)}
       </div>
     );
   }

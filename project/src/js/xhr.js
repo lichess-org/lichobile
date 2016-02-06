@@ -41,10 +41,11 @@ export function seekGame() {
   }, true);
 }
 
-export function inviteFriend(userId, fen) {
+export function challenge(userId, fen) {
   const config = settings.gameSetup.challenge;
+  const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
+
   const data = {
-    user: userId,
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -56,7 +57,7 @@ export function inviteFriend(userId, fen) {
 
   if (fen) data.fen = fen;
 
-  return request('/setup/friend', {
+  return request(url, {
     method: 'POST',
     data
   }, true);

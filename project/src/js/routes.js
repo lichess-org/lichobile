@@ -30,7 +30,6 @@ export default {
       '/ai': ai,
       '/game/:id': game,
       '/game/:id/:color': game,
-      '/game/:id/user/:userId': game,
       '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,

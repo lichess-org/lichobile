@@ -72,9 +72,7 @@ function createChallenge(id, version, handlers) {
     options: {
       name: 'challenge',
       debug: false,
-      ignoreUnknownMessages: true,
-      pingDelay: 2000,
-      onOpen: () => socketInstance.send('following_onlines')
+      ignoreUnknownMessages: true
     },
     events: assign({}, defaultHandlers, handlers)
   };

@@ -154,7 +154,7 @@ function renderGame(g, cDim, cardStyle) {
 
 function renderChallenge(c, cDim, cardStyle) {
   const mode = c.rated ? i18n('rated') : i18n('casual');
-  const timeAndMode = challengesApi.time(c) + ', ' + mode;
+  const timeAndMode = c.timeControl.show + ', ' + mode;
 
   return (
     <div className="card standard challenge" style={cardStyle}>

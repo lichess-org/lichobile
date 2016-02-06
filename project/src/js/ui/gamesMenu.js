@@ -40,7 +40,7 @@ function joinGame(g) {
 }
 
 function acceptChallenge(id) {
-  return xhr.joinChallenge(id)
+  return xhr.acceptChallenge(id)
   .then(data =>
     m.route('/game' + data.url.round)
   )
@@ -187,7 +187,7 @@ function renderChallenge(c, cDim, cardStyle) {
 
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
-  const challenges = challengesApi.list();
+  const challenges = challengesApi.receiving();
   const cardStyle = cDim ? {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',

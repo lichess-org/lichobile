@@ -45,7 +45,7 @@ export function friendsButton() {
 
 export function gamesButton() {
   let key, action;
-  const nbChallenges = challengesApi.count();
+  const nbChallenges = challengesApi.receivingCount();
   const nbOfflineGames = utils.getOfflineGames().length;
   if (session.nowPlaying().length || nbChallenges || nbOfflineGames) {
     key = 'games-menu';

@@ -1,42 +1,30 @@
 import settings from '../settings';
-import m from 'mithril';
 
-const challenges = {};
-
-function timeout(key) {
-  return setTimeout(() => {
-    delete challenges[key];
-    m.redraw();
-  }, 3000);
-}
+var challenges = {};
 
 function isSupported(c) {
-  return settings.game.supportedVariants.indexOf(c.game.variant.key) !== -1;
+  return settings.game.supportedVariants.indexOf(c.variant.key) !== -1;
 }
 
 export default {
-  list() {
-    return Object.keys(challenges).map(k => challenges[k].val).filter(isSupported);
+  receiving() {
+    return challenges.in.filter(isSupported);
   },
 
-  count() {
-    return Object.keys(challenges).map(k => challenges[k].val).filter(isSupported).length;
+  receivingCount() {
+    return challenges.in.filter(isSupported).length;
+  },
+
+  sending() {
+    return challenges.out;
   },
 
   hasKey(key) {
     return challenges.hasOwnProperty(key);
   },
 
-  add(key, val) {
-    challenges[key] = { timeoutID: timeout(key), val };
-  },
-
-  remind(key) {
-    let c = challenges[key];
-    if (c) {
-      clearTimeout(c.timeoutID);
-      c.timeoutID = timeout(key);
-    }
+  set(data) {
+    challenges = data;
   },
 
   remove(key) {

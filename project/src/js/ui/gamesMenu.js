@@ -114,7 +114,7 @@ function savedGameDataToCardData(data) {
     },
     perf: data.game.perf,
     rated: data.game.rated,
-    secondsLeft: data.correspondence[data.player.color],
+    secondsLeft: data.correspondence && data.correspondence[data.player.color],
     speed: data.game.speed,
     variant: data.game.variant
   };

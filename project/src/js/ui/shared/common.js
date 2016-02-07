@@ -47,8 +47,8 @@ export function gamesButton() {
   let key, action;
   const nbChallenges = challengesApi.all().length;
   const nbIncomingChallenges = challengesApi.incoming().length;
-  const nbOfflineGames = utils.getOfflineGames().length;
-  if (session.nowPlaying().length || nbChallenges || nbOfflineGames) {
+  const withOfflineGames = !utils.hasNetwork() && utils.getOfflineGames().length;
+  if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
     key = 'games-menu';
     action = gamesMenu.open;
   } else {
@@ -61,7 +61,7 @@ export function gamesButton() {
     'game_menu_button',
     settings.general.theme.board(),
     nbIncomingChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && nbOfflineGames === 0 ? 'invisible' : ''
+    !utils.hasNetwork() && utils.getOfflineGames().length === 0 ? 'invisible' : ''
     ].join(' ');
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 

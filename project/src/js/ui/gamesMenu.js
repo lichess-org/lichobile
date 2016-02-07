@@ -157,6 +157,8 @@ function renderGame(g, cDim, cardStyle) {
 function renderIncomingChallenge(c, cDim, cardStyle) {
   const mode = c.rated ? i18n('rated') : i18n('casual');
   const timeAndMode = utils.challengeTime(c) + ', ' + mode;
+  const mark = c.destUser.provisional ? '?' : '';
+  const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
@@ -164,7 +166,7 @@ function renderIncomingChallenge(c, cDim, cardStyle) {
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(c.challenger, true))}</h2>
+          <h2 className="title">{i18n('playerisInvitingYou', playerName)}</h2>
           <p className="variant">
             <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>
@@ -190,7 +192,6 @@ function renderSendingChallenge(c, cDim, cardStyle) {
   const timeAndMode = utils.challengeTime(c) + ', ' + mode;
   const mark = c.destUser.provisional ? '?' : '';
   const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`;
-  console.log(c);
 
   return (
     <div className="card standard challenge sending" style={cardStyle}>

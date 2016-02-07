@@ -21,7 +21,9 @@ gamesMenu.open = function() {
   backbutton.stack.push(gamesMenu.close);
   gamesMenu.isOpen = true;
   setTimeout(function() {
-    if (scroller) scroller.goToPage(1, 0);
+    // go to first incoming challenge or game
+    const nbSending = challengesApi.sending().length;
+    if (scroller) scroller.goToPage(1 + nbSending, 0);
   }, 400);
   session.refresh();
 };

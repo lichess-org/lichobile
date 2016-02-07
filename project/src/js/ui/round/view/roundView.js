@@ -102,7 +102,7 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
 
 function renderHeader(ctrl) {
   const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
-    friendsApi.count() + challengesApi.receiving().length + session.nowPlaying().length +
+    friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
     session.myTurnGames().length;
 
   if (ctrl.vm.headerHash === hash) return {

@@ -1,5 +1,6 @@
 import { handleXhrError, backHistory } from '../../utils';
 import { acceptChallenge, cancelChallenge, getChallenge } from '../../xhr';
+import i18n from '../../i18n';
 import socket from '../../socket';
 import m from 'mithril';
 
@@ -16,7 +17,7 @@ export default function controller() {
           m.route(`/game/${d.challenge.id}`);
           break;
         case 'declined':
-          window.plugins.toast.show('Challenge declined', 'short', 'center');
+          window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
           backHistory();
           break;
       }

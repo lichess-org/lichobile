@@ -1,32 +1,33 @@
 import settings from '../settings';
 
-var receiving = [];
+var incoming = [];
 var sending = [];
 
-function isSupported(c) {
-  return settings.game.supportedVariants.indexOf(c.variant.key) !== -1;
+function supportedAndCreated(c) {
+  return settings.game.supportedVariants.indexOf(c.variant.key) !== -1 &&
+    c.status === 'created';
 }
 
 export default {
   all() {
-    return receiving.filter(isSupported).concat(sending);
+    return incoming.filter(supportedAndCreated).concat(sending.filter(supportedAndCreated));
   },
 
-  receiving() {
-    return receiving.filter(isSupported);
+  incoming() {
+    return incoming.filter(supportedAndCreated);
   },
 
   sending() {
-    return sending;
+    return sending.filter(supportedAndCreated);
   },
 
   set(data) {
-    receiving = data.in;
+    incoming = data.in;
     sending = data.out;
   },
 
   remove(id) {
-    receiving = receiving.filter(c => c.id !== id);
+    incoming = incoming.filter(c => c.id !== id);
     sending = sending.filter(c => c.id !== id);
   }
 };

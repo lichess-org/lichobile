@@ -45,7 +45,12 @@ challengeForm.close = function(fromBB) {
 function challenge() {
   const userId = challengeForm.userId;
   return challengeXhr(userId, challengeForm.fen).then(data => {
-    m.route(`/challenge/${data.challenge.id}`);
+    if (data.timeControl.type === ('correspondence' || 'unlimited')) {
+      console.log(data.timeControl.type);
+      window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
+    } else {
+      m.route(`/challenge/${data.challenge.id}`);
+    }
   }, error => {
     utils.handleXhrError(error);
     throw error;

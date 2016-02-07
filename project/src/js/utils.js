@@ -203,3 +203,13 @@ export function removeOfflineGameData(id) {
   }
   storage.set(offlineCorresStorageKey, stored);
 }
+
+export function challengeTime(c) {
+  if (c.timeControl.type === 'clock') {
+    return c.timeControl.show;
+  } else if (c.timeControl.type === 'correspondence') {
+    return i18n('nbDays', c.timeControl.daysPerTurn);
+  } else {
+    return '∞';
+  }
+}

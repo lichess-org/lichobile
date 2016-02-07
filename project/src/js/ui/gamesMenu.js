@@ -49,9 +49,11 @@ function acceptChallenge(id) {
 }
 
 function declineChallenge(id) {
-  return xhr.declineChallenge(id).then(() =>
-    challengesApi.remove(id)
-  );
+  return xhr.declineChallenge(id).then(() => challengesApi.remove(id));
+}
+
+function cancelChallenge(id) {
+  return xhr.cancelChallenge(id).then(() => challengesApi.remove(id));
 }
 
 function cardDims() {
@@ -152,9 +154,9 @@ function renderGame(g, cDim, cardStyle) {
   );
 }
 
-function renderChallenge(c, cDim, cardStyle) {
+function renderIncomingChallenge(c, cDim, cardStyle) {
   const mode = c.rated ? i18n('rated') : i18n('casual');
-  const timeAndMode = c.timeControl.show + ', ' + mode;
+  const timeAndMode = utils.challengeTime(c) + ', ' + mode;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
@@ -183,9 +185,42 @@ function renderChallenge(c, cDim, cardStyle) {
   );
 }
 
+function renderSendingChallenge(c, cDim, cardStyle) {
+  const mode = c.rated ? i18n('rated') : i18n('casual');
+  const timeAndMode = utils.challengeTime(c) + ', ' + mode;
+  const mark = c.destUser.provisional ? '?' : '';
+  const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`;
+  console.log(c);
+
+  return (
+    <div className="card standard challenge sending" style={cardStyle}>
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
+      <div className="infos">
+        <div className="icon-game" data-icon={c.perf.icon}></div>
+        <div className="description">
+          <h2 className="title">{playerName}</h2>
+          <p className="variant">
+            <span className="variantName">{c.variant.name}</span>
+            <span className="time-indication" data-icon="p">{timeAndMode}</span>
+          </p>
+          <p>{i18n('challengePending') + '... '}</p>
+        </div>
+        <div className="actions">
+          <button config={helper.ontouchX(
+            helper.fadesOut(cancelChallenge.bind(undefined, c.id), '.card', 250)
+          )}>
+            {i18n('cancel')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
-  const challenges = challengesApi.receiving();
+  const user = session.get();
+  const challenges = challengesApi.all();
   const cardStyle = cDim ? {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
@@ -209,7 +244,13 @@ function renderAllGames(cDim) {
     wrapperStyle = {};
   }
 
-  const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
+  const challengesDom = challenges.map(c => {
+    if (user && user.id === c.challenger.id) {
+      return renderSendingChallenge(c, cDim, cardStyle);
+    } else {
+      return renderIncomingChallenge(c, cDim, cardStyle);
+    }
+  });
 
   var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 

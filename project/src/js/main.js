@@ -11,7 +11,8 @@ import * as utils from './utils';
 import session from './session';
 import i18n, { loadPreferredLanguage } from './i18n';
 import settings from './settings';
-import { status as xhrStatus, setServerLang } from './xhr';
+import { status as xhrStatus, setServerLang, getChallenges } from './xhr';
+import challengesApi from './lichess/challenges';
 import helper from './ui/helper';
 import backbutton from './backbutton';
 import storage from './storage';
@@ -96,6 +97,8 @@ function onResize() {
 
 function onOnline() {
   session.rememberLogin().then(() => {
+    // load challenges
+    getChallenges().then(challengesApi.set);
     // first time login on app start or just try to reconnect socket
     if (/^\/$/.test(m.route()) && !triedToLogin) {
       triedToLogin = true;

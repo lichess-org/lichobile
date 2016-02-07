@@ -39,7 +39,7 @@ function gameInfos(challenge) {
   return (
     <div className="gameInfos">
       <p className="explanation small">{`${i18n('variant')}: ${challenge.variant.name}`}</p>
-      <p className="time small" data-icon="p">{challenge.timeControl.show}</p>
+      <p className="time small" data-icon="p">{utils.challengeTime(challenge)}</p>
       <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
     </div>
   );

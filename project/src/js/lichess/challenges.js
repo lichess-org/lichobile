@@ -21,10 +21,6 @@ export default {
     return sending.filter(supportedAndCreated);
   },
 
-  addSending(data) {
-    sending.push(data);
-  },
-
   set(data) {
     incoming = data.in;
     sending = data.out;

@@ -50,7 +50,6 @@ function challenge() {
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
       window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
-      challengeApi.addSending(data.challenge);
     } else {
       m.route(`/challenge/${data.challenge.id}`);
     }

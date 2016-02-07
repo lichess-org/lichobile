@@ -199,12 +199,11 @@ function renderSendingChallenge(c, cDim, cardStyle) {
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
-          <h2 className="title">{playerName}</h2>
+          <h2 className="title">{i18n('youAreChallenging', playerName)}</h2>
           <p className="variant">
-            <span className="variantName">{c.variant.name}</span>
+            <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>
           </p>
-          <p>{i18n('challengePending') + '... '}</p>
         </div>
         <div className="actions">
           <button config={helper.ontouchX(

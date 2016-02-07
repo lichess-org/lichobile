@@ -29,7 +29,7 @@ const untranslated = {
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
   challengeCreated: 'Challenge created',
-  challengePending: 'Pending challenge'
+  youAreChallenging: 'You are challenging %s'
 };
 
 const defaultCode = 'en';

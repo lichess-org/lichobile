@@ -13,7 +13,6 @@ export default function controller() {
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
-          // FIXME need to redirect with full id
           m.route(`/game/${d.challenge.id}`);
           break;
         case 'declined':

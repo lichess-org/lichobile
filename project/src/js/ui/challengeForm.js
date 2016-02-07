@@ -46,8 +46,9 @@ challengeForm.close = function(fromBB) {
 function challenge() {
   const userId = challengeForm.userId;
   return challengeXhr(userId, challengeForm.fen).then(data => {
-    if (data.challenge.timeControl.type === 'correspondence' ||
-      data.challenge.timeControl.type === 'unlimited') {
+    if (session.isConnected() && (
+      data.challenge.timeControl.type === 'correspondence' ||
+      data.challenge.timeControl.type === 'unlimited')) {
       window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
       challengeApi.addSending(data.challenge);
     } else {

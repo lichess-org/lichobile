@@ -56,13 +56,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
 
   const connectSocket = function() {
-    socket.createGame(
-      this.data.url.socket,
-      this.data.player.version,
-      socketHandler(this, onFeatured, onUserTVRedirect),
-      this.data.url.round,
-      userTv
-    );
+    if (utils.hasNetwork()) {
+      socket.createGame(
+        this.data.url.socket,
+        this.data.player.version,
+        socketHandler(this, onFeatured, onUserTVRedirect),
+        this.data.url.round,
+        userTv
+      );
+    }
   }.bind(this);
 
   connectSocket();

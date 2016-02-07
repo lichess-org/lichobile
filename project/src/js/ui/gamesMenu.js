@@ -23,7 +23,7 @@ gamesMenu.open = function() {
   setTimeout(function() {
     // go to first incoming challenge or game
     const nbSending = challengesApi.sending().length;
-    if (scroller) scroller.goToPage(1 + nbSending, 0);
+    if (utils.hasNetwork() && scroller) scroller.goToPage(1 + nbSending, 0);
   }, 400);
   session.refresh();
 };
@@ -229,7 +229,10 @@ function renderAllGames(cDim) {
     marginLeft: cDim.margin + 'px',
     marginRight: cDim.margin + 'px'
   } : {};
-  const nbCards = challenges.length + nowPlaying.length + 1;
+  const nbCards = utils.hasNetwork() ?
+    challenges.length + nowPlaying.length + 1 :
+    utils.getOfflineGames().length;
+
   let wrapperStyle, wrapperWidth;
   if (cDim) {
     // scroller wrapper width

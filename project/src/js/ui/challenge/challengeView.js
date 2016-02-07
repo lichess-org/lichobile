@@ -14,7 +14,7 @@ export default function view(ctrl) {
   const header = utils.partialf(headerWidget, 'lichess.org');
   const board = viewOnlyBoardContent;
   const user = session.get();
-  const challenge = ctrl.data().challenge;
+  const challenge = ctrl.challenge();
 
   if (user) {
     if (challenge.destUser) {
@@ -46,7 +46,7 @@ function gameInfos(challenge) {
 }
 
 function joinPopup(ctrl) {
-  const challenge = ctrl.data().challenge;
+  const challenge = ctrl.challenge();
   var joinDom;
   if (challenge.rated && !session.isConnected()) {
     joinDom = m('div.error', [
@@ -88,7 +88,7 @@ function joinPopup(ctrl) {
 }
 
 function awaitInvitePopup(ctrl) {
-  var challenge = ctrl.data().challenge;
+  var challenge = ctrl.challenge();
 
   return function() {
     return popupWidget(
@@ -123,7 +123,7 @@ function awaitInvitePopup(ctrl) {
 
 function awaitChallengePopup(ctrl) {
 
-  const challenge = ctrl.data().challenge;
+  const challenge = ctrl.challenge();
 
   function popupContent() {
     return (

@@ -4,18 +4,36 @@ import socket from '../../socket';
 import m from 'mithril';
 
 export default function controller() {
-  const data = m.prop();
+  var pingTimeoutId;
+  const challenge = m.prop();
 
   function reloadChallenge() {
-    getChallenge(data().challenge.id).then(data, err => {
+    getChallenge(challenge().id).then(d => {
+      challenge(d.challenge);
+      switch (d.challenge.status) {
+        case 'accepted':
+          // FIXME need to redirect with full id
+          m.route(`/game/${d.challenge.id}`);
+          break;
+        case 'declined':
+          window.plugins.toast.show('Challenge declined', 'short', 'center');
+          backHistory();
+          break;
+      }
+    }, err => {
       handleXhrError(err);
       m.route('/');
     });
   }
 
+  function pingNow() {
+    socket.send('ping');
+    pingTimeoutId = setTimeout(pingNow, 2000);
+  }
+
   getChallenge(m.route.param('id')).then(d => {
-    data(d);
-    socket.createChallenge(d.challenge.id, d.socketVersion, {
+    challenge(d.challenge);
+    socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
     });
   }, err => {
@@ -24,16 +42,17 @@ export default function controller() {
   });
 
   return {
-    data,
+    challenge,
     onunload: function() {
       socket.destroy();
+      clearTimeout(pingTimeoutId);
       window.plugins.insomnia.allowSleepAgain();
     },
     joinChallenge: id => acceptChallenge(id).then(d =>
       m.route('/game' + d.url.round)
     ),
     cancelChallenge: () => {
-      cancelChallenge(data().challenge.id);
+      cancelChallenge(challenge().id);
       backHistory();
     }
   };

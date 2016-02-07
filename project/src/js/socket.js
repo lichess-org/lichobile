@@ -65,34 +65,23 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
   socketInstance = new StrongSocket(url, version, opts);
 }
 
-function createChallenge(id, version, handlers) {
+function createChallenge(id, version, onOpen, handlers) {
   destroy();
   const url = `/challenge/${id}/socket/v${version}`;
   const opts = {
     options: {
       name: 'challenge',
       debug: false,
-      ignoreUnknownMessages: true
+      ignoreUnknownMessages: true,
+      pingDelay: 2000,
+      onOpen: () => {
+        onOpen();
+        socketInstance.send('following_onlines');
+      }
     },
     events: assign({}, defaultHandlers, handlers)
   };
   socketInstance = new StrongSocket(url, version, opts);
-}
-
-function createAwait(url, version, handlers) {
-  destroy();
-  socketInstance = new StrongSocket(
-    url, version, {
-      options: {
-        name: 'await',
-        debug: false,
-        ignoreUnknownMessages: true,
-        pingDelay: 2000,
-        onOpen: () => socketInstance.send('following_onlines')
-      },
-      events: assign({}, defaultHandlers, handlers)
-    }
-  );
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -170,7 +159,6 @@ export default {
   createGame,
   createChallenge,
   createLobby,
-  createAwait,
   createDefault,
   setVersion(version) {
     if (socketInstance) socketInstance.setVersion(version);

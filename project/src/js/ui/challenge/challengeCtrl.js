@@ -59,7 +59,9 @@ export default function controller() {
       .then(backHistory);
     },
     cancelChallenge() {
-      return cancelChallenge(challenge().id).then(backHistory);
+      return cancelChallenge(challenge().id)
+      .then(() => challengesApi.remove(challenge().id))
+      .then(backHistory);
     }
   };
 }

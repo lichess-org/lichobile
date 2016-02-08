@@ -1,5 +1,6 @@
 import { handleXhrError, backHistory } from '../../utils';
-import { acceptChallenge, cancelChallenge, getChallenge } from '../../xhr';
+import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
+import challengesApi from '../../lichess/challenges';
 import i18n from '../../i18n';
 import socket from '../../socket';
 import m from 'mithril';
@@ -43,17 +44,22 @@ export default function controller() {
 
   return {
     challenge,
-    onunload: function() {
+    onunload() {
       socket.destroy();
       clearTimeout(pingTimeoutId);
       window.plugins.insomnia.allowSleepAgain();
     },
-    joinChallenge: id => acceptChallenge(id).then(d =>
-      m.route('/game' + d.url.round)
-    ),
-    cancelChallenge: () => {
-      cancelChallenge(challenge().id);
-      backHistory();
+    joinChallenge() {
+      return acceptChallenge(challenge().id)
+      .then(d => m.route('/game' + d.url.round));
+    },
+    declineChallenge() {
+      return declineChallenge(challenge().id)
+      .then(() => challengesApi.remove(challenge().id))
+      .then(backHistory);
+    },
+    cancelChallenge() {
+      return cancelChallenge(challenge().id).then(backHistory);
     }
   };
 }

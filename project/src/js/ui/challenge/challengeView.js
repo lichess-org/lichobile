@@ -61,19 +61,19 @@ function joinPopup(ctrl) {
   } else {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E].withIcon', {
-          config: helper.ontouch(utils.f(ctrl.joinChallenge, challenge.id))
+          config: helper.ontouch(ctrl.joinChallenge)
       }, i18n('join')),
       m('button.binary_choice[data-icon=L].withIcon', {
-        config: helper.ontouch(utils.backHistory)
-      }, i18n('cancel'))
+        config: helper.ontouch(ctrl.declineChallenge)
+      }, i18n('decline'))
     ]);
   }
 
   return function() {
     return popupWidget(
       'join_url_challenge',
-      () => challenge.destUser ?
-        i18n('playerisInvitingYou', challenge.destUser.id) :
+      () => challenge.challenger ?
+        i18n('playerisInvitingYou', challenge.challenger.id) :
         i18n('playerisInvitingYou', 'Anonymous'),
       function() {
         return m('div.infos', [

@@ -72,7 +72,9 @@ function joinPopup(ctrl) {
   return function() {
     return popupWidget(
       'join_url_challenge',
-      () => challenge.destUser ? challenge.destUser.username : 'Anonymous',
+      () => challenge.destUser ?
+        i18n('playerisInvitingYou', challenge.destUser.id) :
+        i18n('playerisInvitingYou', 'Anonymous'),
       function() {
         return m('div.infos', [
           gameInfos(challenge),

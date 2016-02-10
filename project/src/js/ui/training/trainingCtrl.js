@@ -195,6 +195,11 @@ export default function ctrl() {
       orientation: this.data.puzzle.color,
       coordinates: settings.game.coords(),
       turnColor: this.data.puzzle.opponentColor,
+      highlight: {
+        lastMove: settings.game.highlights(),
+        check: settings.game.highlights(),
+        dragOver: false
+      },
       movable: {
         free: false,
         color: this.data.mode !== 'view' ? this.data.puzzle.color : null,

@@ -39,8 +39,11 @@ button
     &::before
       opacity 0.4
 
-input
+input, textarea
   -webkit-appearance none
+
+textarea
+  resize none
 
 span.fa
   margin-right 10px
@@ -109,6 +112,12 @@ span.fa
     position absolute
     right 15px
     line-height 20px
+
+.noPadding
+  > .list_item
+    padding 15px 0
+    &.nav:after
+      right 0
 
 .userStatus
   position relative

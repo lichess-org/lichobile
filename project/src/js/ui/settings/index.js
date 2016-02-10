@@ -18,9 +18,11 @@ function renderBody() {
         config: helper.ontouchY(utils.f(m.route, '/settings/preferences'))
       }, i18n('preferences')) : null,
       m('li.list_item.nav', {
+        key: 'lang',
         config: helper.ontouchY(utils.f(m.route, '/settings/lang'))
       }, i18n('language')),
       m('li.list_item.nav', {
+        key: 'gameDisplay',
         config: helper.ontouchY(utils.f(m.route, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
@@ -31,7 +33,9 @@ function renderBody() {
         key: 'piecesTheme',
         config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
       }, `${i18n('theming')} (${i18n('pieces')})`),
-      m('li.list_item.settingsChoicesInline', [
+      m('li.list_item.settingsChoicesInline', {
+        key: 'backgroundTheme'
+      }, [
         m('label', 'Background'),
         m('fieldset', [
           m('div.nice-radio', formWidgets.renderRadio(
@@ -55,12 +59,18 @@ function renderBody() {
             }
         ))])
       ]),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-      m('li.list_item', formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
+      m('li.list_item', {
+        key: 'sound'
+      }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
+      m('li.list_item', {
+        key: 'notifications'
+      }, formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
         if (isOn) push.register();
         else push.unregister();
       })),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics))
+      m('li.list_item', {
+        key: 'analytics'
+      }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];

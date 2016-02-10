@@ -1,5 +1,4 @@
 import merge from 'lodash/object/merge';
-import assign from 'lodash/object/assign';
 import range from 'lodash/utility/range';
 import { serializeQueryParameters } from './utils';
 
@@ -54,9 +53,7 @@ export default function(worker) {
       var self = this;
       self.destroy();
       self.autoReconnect = true;
-      var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(assign(self.settings.params, {
-        version: self.version
-      }));
+      var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(self.settings.params);
       self.debug('connection attempt to ' + fullUrl, true);
       try {
         if (WebSocket) self.ws = new WebSocket(fullUrl);

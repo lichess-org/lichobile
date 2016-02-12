@@ -20,9 +20,11 @@ export default function controller() {
       return data;
     }, err => utils.handleXhrError(err));
 
+    const currentTab = m.prop(0);
 
     return {
       tournaments,
+      currentTab,
       onunload: () => {
         socket.destroy();
       }

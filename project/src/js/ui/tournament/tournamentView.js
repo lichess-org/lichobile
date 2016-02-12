@@ -13,6 +13,30 @@ export default function view(ctrl) {
     return tournamentHome(ctrl);
 }
 
+// === Tournament List Section === //
+
+const TABS = [{
+    id: 'started',
+    label: 'In Progress'
+}, {
+    id: 'created',
+    label: 'Upcoming'
+}, {
+    id: 'finished',
+    label: 'Completed'
+}];
+
+const tabNavigation = (currentTabFn) => {
+    return m('.nav-header .tab-header', m.component(tabs, {
+        buttons: TABS,
+        autofit: true,
+        selectedTab: currentTabFn(),
+        activeSelected: true,
+        getState: (state) => {
+            currentTabFn(state.index);
+        }
+    }));
+};
 
 function tournamentList(ctrl) {
   const headerCtrl = tournamentListHeader.bind(undefined, ctrl);
@@ -31,19 +55,22 @@ function tournamentListHeader() {
 }
 
 function tournamentListBody(ctrl) {
+  let arrayName = TABS[ctrl.currentTab()].id;
   return (
-    <div className="allTournamentLists native_scroller page">
-      {renderTournamentList('In Progress', ctrl.tournaments().started)}
-      {renderTournamentList('Starting Soon', ctrl.tournaments().created)}
-      {renderTournamentList('Completed', ctrl.tournaments().finished)}
+    <div>
+      {m('.module-tabs.tabs-routing', [
+          tabNavigation(ctrl.currentTab),
+          m('.tab-content.layout.center-center',
+              m('div', renderTournamentList(ctrl.tournaments()[arrayName]))
+          )
+      ])}
     </div>
   );
 }
 
-function renderTournamentList (title, list) {
+function renderTournamentList (list) {
   return (
     <div className="tournamentList">
-      <p className="tournamentHeader"> {title} </p>
       <table className="tournamentList">
         <tr>
           <th className="tournamentHeader"> Name </th>
@@ -78,6 +105,8 @@ function formatTime(timeInMillis) {
     mins = '0' + mins;
   return hours + ':' + mins;
 }
+
+// === Individual Tournament Section === //
 
 function tournamentHome(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,

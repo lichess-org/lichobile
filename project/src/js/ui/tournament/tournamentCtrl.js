@@ -42,7 +42,7 @@ export default function controller() {
       return data;
     }, err => utils.handleXhrError(err));
 
-    socket.createTournament(1, tournamentId, socketHandler(this));
+    socket.createTournament(tournament().socketVersion, tournamentId, socketHandler(this));
 
     return {
       tournament,
@@ -54,6 +54,8 @@ export default function controller() {
 
   this.reload = function (data) {
     tournament(data);
+    if(data.socketVersion)
+      socket.setVersion(data.socketVersion);
     m.redraw(false, true);
   }.bind(this);
 

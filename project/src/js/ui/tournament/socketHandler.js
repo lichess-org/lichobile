@@ -5,6 +5,9 @@ export default function(ctrl) {
   const handlers = {
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
+    },
+    resync: function() {
+      xhr.reload(ctrl).then(ctrl.reload);
     }
   };
 

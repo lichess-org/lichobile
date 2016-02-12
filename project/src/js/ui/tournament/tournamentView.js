@@ -4,6 +4,7 @@ import { header as headerWidget, backButton, empty, menuButton } from '../shared
 import layout from '../layout';
 import i18n from '../../i18n';
 import m from 'mithril';
+import tabs from 'polythene/tabs/tabs';
 
 export default function view(ctrl) {
   if (ctrl.tournaments)

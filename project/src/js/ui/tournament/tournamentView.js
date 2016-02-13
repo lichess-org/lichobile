@@ -61,16 +61,17 @@ function tournamentListBody(ctrl) {
       {m('.module-tabs.tabs-routing', [
           tabNavigation(ctrl.currentTab),
           m('.tab-content.layout.center-center',
-              m('div', renderTournamentList(ctrl.tournaments()[arrayName]))
+              m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
           )
       ])}
     </div>
   );
 }
 
-function renderTournamentList (list) {
+function renderTournamentList (list, id) {
+  console.log('id: ' + id);
   return (
-    <div className="tournamentList">
+    <div id={id} className="tournamentList">
       <table className="tournamentList">
         <tr>
           <th className="tournamentHeader"> Name </th>
@@ -86,7 +87,7 @@ function renderTournamentList (list) {
 
 function renderTournamentListItem(tournament) {
   return (
-    <tr className="tournamentListItem" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
+    <tr id={tournament.id} className="tournamentListItem" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
       <td className="tournamentListName">{tournament.fullName}</td>
       <td className="tournamentListTime">{formatTime(tournament.startsAt)}</td>
       <td className="tournamentListTime">{formatTime(tournament.finishesAt)}</td>
@@ -119,19 +120,59 @@ function tournamentHome(ctrl) {
 
 function tournamentHomeBody(ctrl) {
   let data = ctrl.tournament();
+  let tournamentBody = '';
+  if (!data.isStarted)
+    tournamentBody = tournamentHomeBodyCreated(data);
+  else if (data.isFinished)
+    tournamentBody = tournamentHomeBodyFinished(data);
+  else
+    tournamentBody = tournamentHomeBodyStarted(data);
+
+  return (tournamentBody);
+}
+
+function tournamentHomeBodyCreated(data) {
   return (
     <div className="tournamentContainer">
-      <div className="tournamentLeaderboard">
-        <p className="tournamentHeader">Leaderboard ({data.nbPlayers} Players)</p>
-        <table className="tournamentStandings">
-          {data.standing.players.map(renderLeaderboardItem)}
-        </table>
-      </div>
-      <div className="tournamentGames">
-        <p className="tournamentHeader">Featured Game</p>
-        <div class="tournamentFeatured nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
-          {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
-        </div>
+      { tournamentLeaderboard(data, false) }
+    </div>
+  );
+}
+
+function tournamentHomeBodyFinished(data) {
+  return (
+    <div className="tournamentContainer">
+      { tournamentLeaderboard(data, true) }
+    </div>
+  );
+}
+
+function tournamentHomeBodyStarted(data) {
+  return (
+    <div className="tournamentContainer">
+      { tournamentLeaderboard(data, false) }
+      { tournamentFeaturedGame(data) }
+    </div>
+  );
+}
+
+function tournamentLeaderboard(data) {
+  return (
+    <div className="tournamentLeaderboard">
+      <p className="tournamentHeader">Leaderboard ({data.nbPlayers} Players)</p>
+      <table className="tournamentStandings">
+        {data.standing.players.map(renderLeaderboardItem)}
+      </table>
+    </div>
+  );
+}
+
+function tournamentFeaturedGame(data) {
+  return (
+    <div className="tournamentGames">
+      <p className="tournamentHeader">Featured Game</p>
+      <div class="tournamentFeatured nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
+        {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
       </div>
     </div>
   );

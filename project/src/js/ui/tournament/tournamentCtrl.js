@@ -21,7 +21,6 @@ export default function controller() {
     }, err => utils.handleXhrError(err));
 
     const currentTab = m.prop(0);
-
     return {
       tournaments,
       currentTab,

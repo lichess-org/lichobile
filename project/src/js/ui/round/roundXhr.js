@@ -17,6 +17,7 @@ export function syncNote(gameId, notes) {
   function xhrConfig(xhr) {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    xhr.withCredentials = true;
     xhr.timeout = 10000;
   }
 

@@ -22,6 +22,7 @@ function onError(data) {
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + apiVersion + '+json');
+  xhr.withCredentials = true;
   xhr.timeout = 8000;
 }
 

@@ -43,5 +43,6 @@ export default function(ctrl, e) {
     originTarget: e.target
   };
   ctrl.chessground.data.draggable.current.draggingPiece.classList.add('dragging');
+  ctrl.chessground.data.draggable.current.draggingPiece.cgDragging = true;
   drag.processDrag(ctrl.chessground.data);
 }

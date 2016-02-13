@@ -55,6 +55,7 @@ function main() {
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose
   window.cordova.plugins.Keyboard.disableScroll(true);
+  window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
   if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
 

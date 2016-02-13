@@ -123,6 +123,11 @@
       "xwalkVersion": "16",
       "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect"
     },
+    "build": {
+      "ios": {
+        "ENABLE_BITCODE": false
+      }
+    },
     "whitelist": {
       "shared": [
         {

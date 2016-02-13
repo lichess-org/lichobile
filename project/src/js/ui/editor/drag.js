@@ -8,41 +8,36 @@ export default function(ctrl, e) {
   if (!role || !color) return;
   e.stopPropagation();
   e.preventDefault();
+  const cgData = ctrl.chessground.data;
   const key = find(util.allKeys, function(k) {
-    return !ctrl.chessground.data.pieces[k];
+    return !cgData.pieces[k];
   });
   if (!key) return;
-  const coords = util.key2pos(ctrl.chessground.data.orientation === 'white' ? key : util.invertKey(key));
+  const coords = util.key2pos(cgData.orientation === 'white' ? key : util.invertKey(key));
   const piece = {
     role: role,
     color: color
   };
-  const obj = {
-    [key]: piece
-  };
-  ctrl.chessground.setPieces(obj);
-  const bounds = ctrl.chessground.data.bounds;
+  const bounds = cgData.bounds;
   const squareBounds = e.target.parentNode.getBoundingClientRect();
   const position = util.eventPosition(e);
   const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
     (8 - coords[1]) * squareBounds.height + bounds.top
   ];
-  // must render synchrously to find piece with querySelector after
-  ctrl.chessground.data.render();
-  ctrl.chessground.data.draggable.current = {
+  const dragOpts = {
     orig: key,
-    piece: ctrl.chessground.data.pieces[key],
     rel: rel,
     epos: position,
     pos: [position[0] - rel[0], position[1] - rel[1]],
     dec: [-squareBounds.width, -squareBounds.height],
     bounds: bounds,
     started: true,
-    draggingPiece: ctrl.chessground.data.element.querySelector('.' + key + ' > piece'),
     originTarget: e.target
   };
-  ctrl.chessground.data.draggable.current.draggingPiece.classList.add('dragging');
-  ctrl.chessground.data.draggable.current.draggingPiece.cgDragging = true;
-  drag.processDrag(ctrl.chessground.data);
+  ctrl.chessground.setDragPiece(key, piece, dragOpts);
+  // must render synchronously to have dragging piece
+  cgData.render();
+  cgData.draggable.current.draggingPiece = cgData.element.querySelector('.' + key + ' > piece');
+  drag.processDrag(cgData);
 }

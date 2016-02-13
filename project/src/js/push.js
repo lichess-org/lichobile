@@ -10,7 +10,7 @@ let push;
 export default {
   register() {
 
-    if (settings.general.notifications()) {
+    if (window.cordova.platformId === 'android' && settings.general.notifications()) {
 
       push = window.PushNotification.init({
         android: {

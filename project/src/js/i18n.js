@@ -28,7 +28,7 @@ const untranslated = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  challengeCreated: 'Challenge created',
+  challengeCreated: 'Challenge created, you can retrieve it in the games menu.',
   youAreChallenging: 'You are challenging %s'
 };
 

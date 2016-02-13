@@ -125,7 +125,7 @@
     },
     "build": {
       "ios": {
-        "ENABLE_BITCODE": false
+        "ENABLE_BITCODE": "NO"
       }
     },
     "whitelist": {

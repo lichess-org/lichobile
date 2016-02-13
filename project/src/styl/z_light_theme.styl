@@ -139,8 +139,10 @@ activeBgLight = darken(themeBgLight, 8%)
         &.active
           background lighten(mainHeaderBg, 8%)
       .game_menu_button
-        &::before
+        &:before
           background url('../../images/icons/game_icon_light.svg') no-repeat
+        &.new_challenge:before
+          background transparent
 
   .main_header_button.active, .game_menu_button.active, .action_bar_button.active, .training_action.active
     background activeBgLight

@@ -79,9 +79,7 @@
         "extend": "stage"
       },
       "beta": {
-        "extend": "beta",
-        "sign": "adhoc",
-        "release": true
+        "extend": "beta"
       },
       "prod": {
         "extend": "prod",

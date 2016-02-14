@@ -57,7 +57,7 @@ function tournamentListHeader() {
 function tournamentListBody(ctrl) {
   let arrayName = TABS[ctrl.currentTab()].id;
   return (
-    <div>
+    <div className="native_scroller page">
       {m('.module-tabs.tabs-routing', [
           tabNavigation(ctrl.currentTab),
           m('.tab-content.layout.center-center',

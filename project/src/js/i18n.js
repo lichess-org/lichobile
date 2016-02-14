@@ -26,7 +26,10 @@ const untranslated = {
   toATypeGame: 'To a %s game',
   unsupportedVariant: 'Variant %s is not supported in this version',
   language: 'Language',
-  notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.'
+  notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
+  challengeDeclined: 'Challenge declined',
+  challengeCreated: 'Challenge created, you can retrieve it in the games menu.',
+  youAreChallenging: 'You are challenging %s'
 };
 
 const defaultCode = 'en';

@@ -24,10 +24,7 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
-  challengeReminder: o => {
-    if (challengesApi.hasKey(o.id)) challengesApi.remind(o.id);
-    else xhr.getChallenge(o.id).then(g => challengesApi.add(o.id, g)).then(m.redraw);
-  }
+  challenges: data => utils.autoredraw(challengesApi.set.bind(undefined, data))
 };
 
 function askWorker(msg, callback) {
@@ -79,17 +76,21 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
-function createAwait(url, version, handlers) {
+function createChallenge(id, version, onOpen, handlers) {
   socketHandlers = {
+    onOpen,
     events: assign({}, defaultHandlers, handlers)
   };
+  const url = `/challenge/${id}/socket/v${version}`;
   const opts = {
     options: {
-      name: 'await',
+      name: 'challenge',
       debug: false,
+      ignoreUnknownMessages: true,
       pingDelay: 2000,
       sendOnOpen: 'following_onlines'
-    }
+    },
+    events: assign({}, defaultHandlers, handlers)
   };
   socketWorker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
@@ -201,8 +202,8 @@ socketWorker.addEventListener('message', function(msg) {
 
 export default {
   createGame,
+  createChallenge,
   createLobby,
-  createAwait,
   createDefault,
   setVersion(version) {
     socketWorker.postMessage({ topic: 'setVersion', payload: version });

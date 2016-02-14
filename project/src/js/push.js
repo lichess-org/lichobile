@@ -1,6 +1,8 @@
 import session from './session';
 import settings from './settings';
 import { request } from './http';
+import { getChallenges } from './xhr';
+import challengesApi from './lichess/challenges';
 import m from 'mithril';
 
 let push;
@@ -8,7 +10,7 @@ let push;
 export default {
   register() {
 
-    if (settings.general.notifications()) {
+    if (window.cordova.platformId === 'android' && settings.general.notifications()) {
 
       push = window.PushNotification.init({
         android: {
@@ -37,13 +39,37 @@ export default {
       push.on('notification', function(data) {
         // if app was foreground we don't want to disturb too much so we'll
         // just refresh nb of turns in board icon
-        if (data.additionalData && data.additionalData.foreground) {
-          // TODO don't refresh but use payload to modify game data
-          session.refresh();
-        }
-        // if background we go to the game
-        else if (data.additionalData && data.additionalData.userData) {
-          m.route(`/game/${data.additionalData.userData.fullId}`);
+        const payload = data.additionalData;
+        if (payload) {
+          if (payload.foreground) {
+            // if foreground just refresh according data
+            if (payload.userData) {
+              switch (payload.userData.type) {
+                case 'challengeCreate':
+                case 'challengeAccept':
+                case 'challengeDecline':
+                  getChallenges().then(challengesApi.set);
+                  break;
+                case 'gameMove':
+                case 'gameFinish':
+                  session.refresh();
+                  break;
+              }
+            }
+          }
+          // if background we go to the game or challenge
+          else if (payload.userData) {
+            switch (payload.userData.type) {
+              case 'challengeCreate':
+              case 'challengeAccept':
+                m.route(`/challenge/${payload.userData.challengeId}`);
+                break;
+              case 'gameMove':
+              case 'gameFinish':
+                m.route(`/game/${payload.userData.fullId}`);
+                break;
+            }
+          }
         }
       });
 

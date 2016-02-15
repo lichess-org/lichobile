@@ -9,6 +9,7 @@ export function tournament(id) {
 }
 
 export function reload(ctrl) {
+  console.log('reload xhr handler');
   return request('/tournament/' + ctrl.tournamentId(), { background: true });
 }
 

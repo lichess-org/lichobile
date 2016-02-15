@@ -1,134 +1,33 @@
 import * as utils from '../../utils';
 import h from '../helper';
-import { header as headerWidget, backButton, empty, menuButton } from '../shared/common';
+import { header as headerWidget, backButton, empty} from '../shared/common';
 import layout from '../layout';
-import i18n from '../../i18n';
 import m from 'mithril';
-import tabs from 'polythene/tabs/tabs';
 
 export default function view(ctrl) {
-  if (ctrl.tournaments)
-    return tournamentList(ctrl);
-  else
-    return tournamentHome(ctrl);
-}
-
-// === Tournament List Section === //
-
-const TABS = [{
-    id: 'started',
-    label: 'In Progress'
-}, {
-    id: 'created',
-    label: 'Upcoming'
-}, {
-    id: 'finished',
-    label: 'Completed'
-}];
-
-const tabNavigation = (currentTabFn) => {
-    return m('.nav-header', m.component(tabs, {
-        buttons: TABS,
-        autofit: true,
-        selectedTab: currentTabFn(),
-        activeSelected: true,
-        getState: (state) => {
-            currentTabFn(state.index);
-        }
-    }));
-};
-
-function tournamentList(ctrl) {
-  const headerCtrl = tournamentListHeader.bind(undefined, ctrl);
-  const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
-
-  return layout.free(headerCtrl, bodyCtrl, empty, empty);
-}
-
-function tournamentListHeader() {
-  return (
-    <nav>
-      {menuButton()}
-      <h1>{i18n('tournaments')}</h1>
-    </nav>
-  );
-}
-
-function tournamentListBody(ctrl) {
-  let arrayName = TABS[ctrl.currentTab()].id;
-  return m('.native_scroller .page',
-      m('.module-tabs.tabs-routing', [
-          tabNavigation(ctrl.currentTab),
-          m('.tab-content.layout.center-center',
-              m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
-          )
-      ])
-  );
-}
-
-function renderTournamentList (list, id) {
-  return (
-    <div key={id} className="tournamentList">
-      <table className="tournamentList">
-        <tr>
-          <th className="tournamentHeader"> Name </th>
-          <th className="tournamentHeader"> Start </th>
-          <th className="tournamentHeader"> End </th>
-          <th> </th>
-        </tr>
-        {list.map(renderTournamentListItem)}
-      </table>
-    </div>
-  );
-}
-
-function renderTournamentListItem(tournament) {
-  return (
-    <tr key={tournament.id} className="tournamentListItem" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
-      <td className="tournamentListName">{tournament.fullName}</td>
-      <td className="tournamentListTime">{formatTime(tournament.startsAt)}</td>
-      <td className="tournamentListTime">{formatTime(tournament.finishesAt)}</td>
-      <td className="tournamentListNav">&#xf054;</td>
-    </tr>
-  );
-}
-
-function formatTime(timeInMillis) {
-  let date = new Date(timeInMillis);
-  let hours = date.getHours().toString();
-  if (hours.length < 2)
-    hours = '0' + hours;
-  let mins = date.getMinutes().toString();
-  if (mins.length < 2)
-    mins = '0' + mins;
-  return hours + ':' + mins;
-}
-
-// === Individual Tournament Section === //
-
-function tournamentHome(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
     backButton(ctrl.tournament().fullName)
   );
-  const bodyCtrl = tournamentHomeBody.bind(undefined, ctrl);
+  const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
   return layout.free(headerCtrl, bodyCtrl, empty, empty);
 }
 
-function tournamentHomeBody(ctrl) {
+function tournamentBody(ctrl) {
   let data = ctrl.tournament();
-  let tournamentBody = '';
-  if (!data.isStarted)
-    tournamentBody = tournamentHomeBodyCreated(data);
-  else if (data.isFinished)
-    tournamentBody = tournamentHomeBodyFinished(data);
-  else
-    tournamentBody = tournamentHomeBodyStarted(data);
+  let body = null;
 
-  return (tournamentBody);
+  if (!data.isStarted)
+    body = tournamentBodyCreated(data);
+  else if (data.isFinished)
+    body = tournamentBodyFinished(data);
+  else
+    body = tournamentBodyStarted(data);
+
+  return (body);
 }
 
-function tournamentHomeBodyCreated(data) {
+function tournamentBodyCreated(data) {
   return (
     <div className="tournamentContainer">
       { tournamentLeaderboard(data, false) }
@@ -136,7 +35,7 @@ function tournamentHomeBodyCreated(data) {
   );
 }
 
-function tournamentHomeBodyFinished(data) {
+function tournamentBodyFinished(data) {
   return (
     <div className="tournamentContainer">
       { tournamentLeaderboard(data, true) }
@@ -144,7 +43,7 @@ function tournamentHomeBodyFinished(data) {
   );
 }
 
-function tournamentHomeBodyStarted(data) {
+function tournamentBodyStarted(data) {
   return (
     <div className="tournamentContainer">
       { tournamentLeaderboard(data, false) }

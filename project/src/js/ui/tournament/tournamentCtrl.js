@@ -7,35 +7,11 @@ import m from 'mithril';
 
 export default function controller() {
 
-  function tournamentList () {
-    socket.createDefault();
-
-    helper.analyticsTrackView('Tournament List');
-
-    const tournaments = m.prop([]);
-
-    xhr.currentTournaments().then(data => {
-      console.log(data);
-      tournaments(data);
-      return data;
-    }, err => utils.handleXhrError(err));
-
-    const currentTab = m.prop(0);
-    return {
-      tournaments,
-      currentTab,
-      onunload: () => {
-        socket.destroy();
-      }
-    };
-  }
-
   const tournament = m.prop([]);
 
-  this.tournamentHome = function (tournamentId) {
-    //socket.createDefault();
+  this.tournament = function (tournamentId) {
 
-    helper.analyticsTrackView('Tournament Home' + tournamentId);
+    helper.analyticsTrackView('Tournament ' + tournamentId);
 
     xhr.tournament(tournamentId).then(data => {
       console.log(data);
@@ -65,8 +41,5 @@ export default function controller() {
   }.bind(this);
 
   let id = m.route.param('id');
-  if (!id)
-    return tournamentList();
-  else
-    return this.tournamentHome(id);
+  return this.tournament(id);
 }

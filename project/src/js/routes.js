@@ -16,6 +16,7 @@ import userTV from './ui/user/tv';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
 import training from './ui/training';
+import tournamentList from'./ui/tournament/list';
 import tournament from'./ui/tournament';
 import editor from './ui/editor';
 import m from 'mithril';
@@ -48,7 +49,7 @@ export default {
       '/settings/lang': settingsLang,
       '/training': training,
       '/training/:id': training,
-      '/tournament': tournament,
+      '/tournament': tournamentList,
       '/tournament/:id': tournament
     });
   }

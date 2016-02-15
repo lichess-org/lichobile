@@ -8,11 +8,9 @@ export default function(ctrl) {
 
   const handlers = {
     reload: function() {
-      console.log('reload handler');
       reload(ctrl);
     },
     resync: function() {
-      console.log('resync handler');
       xhr.resync(ctrl).then(ctrl.reload);
     }
   };

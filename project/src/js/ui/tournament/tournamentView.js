@@ -69,9 +69,8 @@ function tournamentListBody(ctrl) {
 }
 
 function renderTournamentList (list, id) {
-  console.log('id: ' + id);
   return (
-    <div id={id} className="tournamentList">
+    <div key={id} className="tournamentList">
       <table className="tournamentList">
         <tr>
           <th className="tournamentHeader"> Name </th>
@@ -87,7 +86,7 @@ function renderTournamentList (list, id) {
 
 function renderTournamentListItem(tournament) {
   return (
-    <tr id={tournament.id} className="tournamentListItem" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
+    <tr key={tournament.id} className="tournamentListItem" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
       <td className="tournamentListName">{tournament.fullName}</td>
       <td className="tournamentListTime">{formatTime(tournament.startsAt)}</td>
       <td className="tournamentListTime">{formatTime(tournament.finishesAt)}</td>

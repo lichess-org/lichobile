@@ -27,7 +27,7 @@ const TABS = [{
 }];
 
 const tabNavigation = (currentTabFn) => {
-    return m('.nav-header .tab-header', m.component(tabs, {
+    return m('.nav-header', m.component(tabs, {
         buttons: TABS,
         autofit: true,
         selectedTab: currentTabFn(),
@@ -56,15 +56,13 @@ function tournamentListHeader() {
 
 function tournamentListBody(ctrl) {
   let arrayName = TABS[ctrl.currentTab()].id;
-  return (
-    <div className="native_scroller page">
-      {m('.module-tabs.tabs-routing', [
+  return m('.native_scroller .page',
+      m('.module-tabs.tabs-routing', [
           tabNavigation(ctrl.currentTab),
           m('.tab-content.layout.center-center',
               m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
           )
-      ])}
-    </div>
+      ])
   );
 }
 

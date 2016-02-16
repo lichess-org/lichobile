@@ -97,7 +97,7 @@ function renderLinks(user) {
       }
       {hasNetwork() ?
       <li className="side_link" key="tournament" config={helper.ontouchY(menu.route('/tournament'))}>
-        <span className="fa fa-list"/>{i18n('tournament')}
+        <span className="fa fa-trophy"/>{i18n('tournament')}
       </li> : null
       }
       {hasNetwork() ?

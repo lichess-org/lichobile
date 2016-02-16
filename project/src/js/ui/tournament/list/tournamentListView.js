@@ -1,15 +1,14 @@
 import h from '../../helper';
-import { header as headerWidget, empty, menuButton } from '../../shared/common';
+import {header, empty} from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
 import tabs from 'polythene/tabs/tabs';
 
 export default function view(ctrl) {
-  const headerCtrl = tournamentListHeader.bind(undefined, ctrl);
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, empty, empty);
+  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, empty, empty);
 }
 
 const TABS = [{
@@ -34,15 +33,6 @@ const tabNavigation = (currentTabFn) => {
         }
     }));
 };
-
-function tournamentListHeader() {
-  return (
-    <nav>
-      {menuButton()}
-      <h1>{i18n('tournaments')}</h1>
-    </nav>
-  );
-}
 
 function tournamentListBody(ctrl) {
   let arrayName = TABS[ctrl.currentTab()].id;

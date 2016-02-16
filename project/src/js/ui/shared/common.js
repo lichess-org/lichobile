@@ -12,7 +12,6 @@ import friendsPopup from '../friendsPopup';
 import m from 'mithril';
 import ViewOnlyBoard from './ViewOnlyBoard';
 
-
 export function menuButton() {
   return (
     <button key="main-menu" className="fa fa-navicon main_header_button menu_button" config={helper.ontouch(menu.toggle)}>

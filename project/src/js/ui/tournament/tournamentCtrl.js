@@ -33,7 +33,7 @@ export default function controller() {
     tournament(data);
     if(data.socketVersion)
       socket.setVersion(data.socketVersion);
-    m.redraw(false, true);
+    m.redraw();
   }.bind(this);
 
   this.tournamentId = function () {

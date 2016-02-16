@@ -45,22 +45,6 @@ table.tournamentList
 table.tournamentStandings
   width 100%
 
-.tournamentListItem
-  position relative
-  line-height 10px
-  padding 10px
-  border-bottom 1px solid #2E3033
-  &:before
-    margin-right 10px
-  &:last-child
-    border-bottom none
-  &.active
-    background lighten(bgdark, 5%)
-  &.bglight
-    border-bottom-color darken(bglight, 15%)
-    &.active
-      background-color darken(bglight, 5%)
-
 .on-fire
   line-height 10px
   &:before
@@ -87,27 +71,3 @@ td.tournamentPoints
   text-align: right
   max-width 0
   width 20%
-
-div.tournamentFeatured
-  &.nav
-    &:after
-      line-height 12px
-      top 35%
-  position relative
-  line-height 10px
-  padding 10px 10px 10px 5px
-  border-bottom 1px solid #2E3033
-  text-align left
-  text-overflow ellipsis
-  white-space nowrap;
-  overflow hidden
-  &:before
-    margin-right 5px
-  &:last-child
-    border-bottom none
-  &.active
-    background lighten(bgdark, 5%)
-  &.bglight
-    border-bottom-color darken(bglight, 15%)
-    &.active
-      background-color darken(bglight, 5%)

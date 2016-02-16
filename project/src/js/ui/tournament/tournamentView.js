@@ -67,7 +67,7 @@ function tournamentFeaturedGame(data) {
   return (
     <div className="tournamentGames">
       <p className="tournamentHeader">Featured Game</p>
-      <div class="tournamentFeatured nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
+      <div class="list_item nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
         {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
       </div>
     </div>
@@ -76,7 +76,7 @@ function tournamentFeaturedGame(data) {
 
 function renderLeaderboardItem(player) {
   return (
-    <tr className="tournamentListItem">
+    <tr className="list_item">
       <td className="tournamentPlayer">{player.name + '(' + player.rating + ')'}</td>
       <td className="tournamentPoints"><strong className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</strong></td>
     </tr>

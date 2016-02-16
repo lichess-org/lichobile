@@ -35,6 +35,7 @@ const tabNavigation = (currentTabFn) => {
 };
 
 function tournamentListBody(ctrl) {
+  if (!ctrl.tournaments()) return null;
   let arrayName = TABS[ctrl.currentTab()].id;
   return m('.native_scroller .page',
       m('.module-tabs.tabs-routing', [

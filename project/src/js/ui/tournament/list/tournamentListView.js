@@ -51,24 +51,17 @@ function renderTournamentList (list, id) {
   return (
     <div key={id} className="tournamentList">
       <table className="tournamentList">
-        <tr>
-          <th className="tournamentHeader"> Name </th>
-          <th className="tournamentHeader"> Start </th>
-          <th className="tournamentHeader"> End </th>
-          <th> </th>
-        </tr>
         {list.map(renderTournamentListItem)}
       </table>
     </div>
   );
 }
-//→
+
 function renderTournamentListItem(tournament) {
   return (
     <tr key={tournament.id} className="list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
       <td className="tournamentListName">{tournament.fullName}</td>
-      <td className="tournamentListTime">{formatTime(tournament.startsAt)}</td>
-      <td className="tournamentListTime">{formatTime(tournament.finishesAt)}</td>
+      <td className="tournamentListTime">{formatTime(tournament.startsAt)} <strong className='timeArrow'> → </strong> {formatTime(tournament.finishesAt)}</td>
       <td className="tournamentListNav">&#xf054;</td>
     </tr>
   );

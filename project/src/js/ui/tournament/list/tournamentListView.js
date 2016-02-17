@@ -62,7 +62,7 @@ function renderTournamentList (list, id) {
     </div>
   );
 }
-
+//→
 function renderTournamentListItem(tournament) {
   return (
     <tr key={tournament.id} className="list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>

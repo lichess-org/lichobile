@@ -15,16 +15,30 @@ export default function view(ctrl) {
 
 function tournamentBody(ctrl) {
   let data = ctrl.tournament();
-  let body = null;
+  if(!data) return null;
 
-  if (!data.isStarted)
-    body = tournamentBodyCreated(data);
-  else if (data.isFinished)
-    body = tournamentBodyFinished(data);
+  console.log(data);
+
+  let topBody = commonBody(data);
+
+  let specificBody = null;
+  if (data.isFinished)
+    specificBody = tournamentBodyFinished(data);
+  else if (!data.isStarted)
+    specificBody = tournamentBodyCreated(data);
   else
-    body = tournamentBodyStarted(data);
+    specificBody = tournamentBodyStarted(data);
 
-  return (body);
+  return (m('.tournamentContainer', [topBody, specificBody]));
+}
+
+function commonBody(data) {
+  return (
+    <div className='basicTournamentInfo'>
+      <p> {data.variant} </p>
+      <p> { } </p>
+    </div>
+  );
 }
 
 function tournamentBodyCreated(data) {
@@ -52,12 +66,13 @@ function tournamentBodyStarted(data) {
   );
 }
 
-function tournamentLeaderboard(data) {
+function tournamentLeaderboard(data, trophies) {
+  let leaderboardData = data.standing.players.map(renderLeaderboardItem, trophies);
   return (
     <div className="tournamentLeaderboard">
       <p className="tournamentHeader">Leaderboard ({data.nbPlayers} Players)</p>
       <table className="tournamentStandings">
-        {data.standing.players.map(renderLeaderboardItem)}
+        {leaderboardData}
       </table>
     </div>
   );
@@ -74,11 +89,16 @@ function tournamentFeaturedGame(data) {
   );
 }
 
-function renderLeaderboardItem(player) {
+function renderLeaderboardItem(player, podiumRank) {
+  podiumRank = podiumRank + 1;
+  let trophy = '';
+  if (this && podiumRank < 4) {
+    trophy = 'trophy-' + podiumRank;
+  }
   return (
-    <tr className="list_item">
-      <td className="tournamentPlayer">{player.name + '(' + player.rating + ')'}</td>
-      <td className="tournamentPoints"><strong className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</strong></td>
+    <tr key={player.name} className="list_item">
+      <td className='tournamentPlayer'><strong className={trophy}>{player.name + ' (' + player.rating + ')'}</strong></td>
+      <td className='tournamentPoints'><strong className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</strong></td>
     </tr>
   );
 }

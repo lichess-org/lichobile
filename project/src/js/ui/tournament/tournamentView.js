@@ -33,10 +33,13 @@ function tournamentBody(ctrl) {
 }
 
 function commonBody(data) {
+  let variant = data.variant;
+  if(variant === 'standard')
+    variant = data.schedule.speed;
+  variant = variant.charAt(0).toUpperCase() + variant.substring(1);
   return (
     <div className='basicTournamentInfo'>
-      <p> {data.variant} </p>
-      <p> { } </p>
+      <strong> {variant + ' • ' + (data.clock.limit / 60) + '+' + data.clock.increment + ' • ' + data.minutes + 'M' } </strong>
     </div>
   );
 }

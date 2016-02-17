@@ -19,20 +19,46 @@ function tournamentBody(ctrl) {
 
   console.log(data);
 
-  let topBody = commonBody(data);
-
-  let specificBody = null;
+  let body = null;
   if (data.isFinished)
-    specificBody = tournamentBodyFinished(data);
+    body = tournamentContentFinished(data);
   else if (!data.isStarted)
-    specificBody = tournamentBodyCreated(data);
+    body = tournamentContentCreated(data);
   else
-    specificBody = tournamentBodyStarted(data);
+    body = tournamentContentStarted(data);
 
-  return (m('.tournamentContainer', [topBody, specificBody]));
+  return (m('.tournamentContainer', body));
 }
 
-function commonBody(data) {
+function tournamentContentCreated(data) {
+  return (
+    <div>
+      { tournamentHeader(data, data.secondsToStart, 'Starting in:')}
+      { tournamentLeaderboard(data, false) }
+    </div>
+  );
+}
+
+function tournamentContentFinished(data) {
+  return (
+    <div>
+      { tournamentHeader(data, null, null)}
+      { tournamentLeaderboard(data, true) }
+    </div>
+  );
+}
+
+function tournamentContentStarted(data) {
+  return (
+    <div>
+      { tournamentHeader(data, data.secondsToFinish, 'Remaining:')}
+      { tournamentLeaderboard(data, false) }
+      { tournamentFeaturedGame(data) }
+    </div>
+  );
+}
+
+function tournamentHeader(data, time, timeText) {
   let variant = data.variant;
   if(variant === 'standard')
     variant = data.schedule.speed;
@@ -40,33 +66,25 @@ function commonBody(data) {
   return (
     <div className='basicTournamentInfo'>
       <strong> {variant + ' • ' + (data.clock.limit / 60) + '+' + data.clock.increment + ' • ' + data.minutes + 'M' } </strong>
+      <div className='timeInfo'>
+        <strong> {timeInfo(time, timeText)} </strong>
+      </div>
     </div>
   );
 }
 
-function tournamentBodyCreated(data) {
-  return (
-    <div className="tournamentContainer">
-      { tournamentLeaderboard(data, false) }
-    </div>
-  );
+function timeInfo(time, preceedingText) {
+  if (!time) return '';
+
+  let mins = Math.floor(time / 60);
+  let secs = time % 60;
+  return (preceedingText + ' ' + mins + ':' + pad(secs, 2));
 }
 
-function tournamentBodyFinished(data) {
-  return (
-    <div className="tournamentContainer">
-      { tournamentLeaderboard(data, true) }
-    </div>
-  );
-}
-
-function tournamentBodyStarted(data) {
-  return (
-    <div className="tournamentContainer">
-      { tournamentLeaderboard(data, false) }
-      { tournamentFeaturedGame(data) }
-    </div>
-  );
+function pad(num, size) {
+    var s = num + '';
+    while (s.length < size) s = '0' + s;
+    return s;
 }
 
 function tournamentLeaderboard(data, trophies) {
@@ -100,8 +118,8 @@ function renderLeaderboardItem(player, podiumRank) {
   }
   return (
     <tr key={player.name} className="list_item">
-      <td className='tournamentPlayer'><strong className={trophy}>{player.name + ' (' + player.rating + ')'}</strong></td>
-      <td className='tournamentPoints'><strong className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</strong></td>
+      <td className='tournamentPlayer'><span className={trophy}>{player.name + ' (' + player.rating + ')'}</span></td>
+      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
     </tr>
   );
 }

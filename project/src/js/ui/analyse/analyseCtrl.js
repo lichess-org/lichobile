@@ -9,26 +9,25 @@ import socket from './socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { oppositeColor, noop } from '../../utils';
+import { handleXhrError, oppositeColor, noop } from '../../utils';
 import { game as gameXhr } from '../../xhr';
+import data, { defaultData } from './data';
 import m from 'mithril';
 
 export default function controller() {
 
-  this.data = {};
+  this.data = defaultData;
   this.gameId = m.route.param('id');
   this.userId = m.route.param('userId');
-  this.ongoing = !util.synthetic(this.data) && gameApi.playable(this.data);
+  this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
   this.onMyTurn = this.data;
 
   if (this.gameId) {
-    gameXhr(m.route.param('id')).then(function(data) {
-      if (data.game.moves) data.game.moves = data.game.moves.split(' ');
-      else data.game.moves = [];
-
-      if (!data.game.moveTimes) data.game.moveTimes = [];
-
-      this.data = data;
+    gameXhr(m.route.param('id')).then(function(cfg) {
+      this.data = data(cfg);
+    }, err => {
+      handleXhrError(err);
+      m.route('/');
     });
   }
 
@@ -125,7 +124,7 @@ export default function controller() {
     this.chessground.set(config);
     onChange();
     if (!dests) getDests();
-    setAutoShapesFromEval();
+    // setAutoShapesFromEval();
   }.bind(this);
 
 
@@ -267,7 +266,7 @@ export default function controller() {
   }.bind(this);
 
   var allowCeval = (
-    util.synthetic(this.data) || !gameApi.playable(this.data)
+    util.isSynthetic(this.data) || !gameApi.playable(this.data)
   ) && ['standard', 'fromPosition', 'chess960'].indexOf(this.data.game.variant.key) !== -1;
 
   this.ceval = cevalCtrl(allowCeval, function(res) {
@@ -275,7 +274,7 @@ export default function controller() {
       if (step.ceval && step.ceval.depth >= res.oEval.depth) return;
       step.ceval = res.oEval;
       if (treePath.write(res.work.path) === this.vm.pathStr) {
-        setAutoShapesFromEval();
+        // setAutoShapesFromEval();
         m.redraw();
       }
     }.bind(this));
@@ -292,7 +291,7 @@ export default function controller() {
 
   this.toggleCeval = function() {
     this.ceval.toggle();
-    setAutoShapesFromEval();
+    // setAutoShapesFromEval();
     startCeval();
   }.bind(this);
 
@@ -304,9 +303,9 @@ export default function controller() {
     return this.data.analysis || this.ceval.enabled();
   };
 
-  this.toggleAutoShapes = function(v) {
-    if (this.vm.showAutoShapes(v)) setAutoShapesFromEval();
-    else this.chessground.setAutoShapes([]);
+  this.toggleAutoShapes = function() {
+    // if (this.vm.showAutoShapes) setAutoShapesFromEval();
+    // else this.chessground.setAutoShapes([]);
   }.bind(this);
 
   this.toggleGauge = function() {
@@ -314,7 +313,7 @@ export default function controller() {
   }.bind(this);
 
   var setAutoShapesFromEval = function() {
-    if (!this.vm.showAutoShapes()) return;
+    if (!this.vm.showAutoShapes) return;
     var s = this.vm.step,
       shapes = [];
     if (s.oEval && s.oEval.best) shapes.push(makeAutoShapeFromUci(s.oEval.best, 'paleGreen'));

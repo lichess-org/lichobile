@@ -1,15 +1,15 @@
 import m from 'mithril';
-import chessground from 'chessground-mobile';
 import treePath from './path';
 import pgnExport from './pgnExport';
 import cevalView from './ceval/cevalView';
 import gameApi from '../../lichess/game';
 import control from './control';
-import { empty, defined, renderEval, synthetic } from './util';
+import { empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
 import helper from '../helper';
 import { view as renderPromotion } from './promotion';
-import { classSet, partialf } from '../../utils';
+import { renderBoard } from '../round/view/roundView';
+import { partialf } from '../../utils';
 
 function renderEvalTag(e) {
   return {
@@ -49,7 +49,7 @@ function plyToTurn(ply) {
 function renderVariation(ctrl, variation, path, klass) {
   var showMenu = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
   return m('div', {
-    className: klass + ' ' + classSet({
+    className: klass + ' ' + helper.classSet({
       variation: true,
       menu: showMenu
     })
@@ -60,7 +60,7 @@ function renderVariation(ctrl, variation, path, klass) {
       config: helper.ontouch(partialf(ctrl.toggleVariationMenu, path))
     }),
     showMenu ? (function() {
-      var promotable = synthetic(ctrl.data) ||
+      var promotable = isSynthetic(ctrl.data) ||
         !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
       return [
         m('a', {
@@ -285,15 +285,6 @@ function inputs(ctrl) {
   ]);
 }
 
-function visualBoard(ctrl) {
-  return m('div.lichess_board_wrap', [
-    m('div.lichess_board.' + ctrl.data.game.variant.key, { },
-      chessground.view(ctrl.chessground),
-      renderPromotion(ctrl)),
-    cevalView.renderGauge(ctrl)
-  ]);
-}
-
 function buttons(ctrl) {
   return [
     m('div.game_control', [
@@ -306,7 +297,7 @@ function buttons(ctrl) {
         return {
           tag: 'a',
           attrs: {
-            className: 'button ' + b[0] + ' ' + classSet({
+            className: 'button ' + b[0] + ' ' + helper.classSet({
               disabled: ctrl.broken,
               glowed: ctrl.vm.late && b[0] === 'last'
             }),
@@ -322,7 +313,7 @@ function buttons(ctrl) {
 export default function analyseView(ctrl) {
   return [
     m('div', {
-      className: classSet({
+      className: helper.classSet({
         top: true,
         ceval_displayed: ctrl.ceval.allowed(),
         gauge_displayed: ctrl.showEvalGauge()
@@ -333,7 +324,7 @@ export default function analyseView(ctrl) {
           if (isUpdate) return;
         }
       }, [
-        visualBoard(ctrl),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, helper.isPortrait()),
         m('div.lichess_ground', [
           [
             cevalView.renderCeval(ctrl),
@@ -347,7 +338,7 @@ export default function analyseView(ctrl) {
       m('div.center', inputs(ctrl)),
       m('div.right')
     ]),
-    synthetic(ctrl.data) ? null : m('div.analeft', [
+    isSynthetic(ctrl.data) ? null : m('div.analeft', [
       gameApi.playable(ctrl.data) ? m('div.back_to_game',
         m('button', {
           className: 'button text',

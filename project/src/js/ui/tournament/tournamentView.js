@@ -80,14 +80,7 @@ function variantInfo(data) {
       variant = '';
   }
 
-  while(variant.length > 12) {
-    let pieces = variant.split(' ');
-    if(pieces.length === 1)
-      return '';
-    else {
-      return pieces.slice(0, pieces.length - 1);
-    }
-  }
+  variant = variant.split(' ')[0]; // Cut off names to first word
 
   if (variant.length > 0)
     variant = variant.charAt(0).toUpperCase() + variant.substring(1);

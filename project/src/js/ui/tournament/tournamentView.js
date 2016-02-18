@@ -111,29 +111,32 @@ function timeInfo(time, preceedingText) {
   return timeStr;
 }
 
-function tournamentLeaderboard(data, trophies) {
+function tournamentLeaderboard(data, showTrophies) {
   return (
     <div className='tournamentLeaderboard'>
       <p className='tournamentTitle'>Leaderboard ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem, trophies)}
+        {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
       </table>
     </div>
   );
 }
 
-function renderLeaderboardItem(player, podiumRank) {
-  podiumRank++;
-  let trophy = '';
-  if (this && podiumRank < 4) {
-    trophy = 'trophy-' + podiumRank;
+function createLeaderboardItemRenderer(showTrophies) {
+  function renderLeaderboardItem(player, podiumRank) {
+    podiumRank++;
+    let trophy = '';
+    if (showTrophies && podiumRank < 4) {
+      trophy = 'trophy-' + podiumRank;
+    }
+    return (
+      <tr key={player.name} className='list_item'>
+        <td className='tournamentPlayer'><span className={trophy}>{player.name + ' (' + player.rating + ')'}</span></td>
+        <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+      </tr>
+    );
   }
-  return (
-    <tr key={player.name} className='list_item'>
-      <td className='tournamentPlayer'><span className={trophy}>{player.name + ' (' + player.rating + ')'}</span></td>
-      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
-    </tr>
-  );
+  return renderLeaderboardItem;
 }
 
 function tournamentFeaturedGame(data) {

@@ -116,9 +116,9 @@ function pad(num, size) {
 function tournamentLeaderboard(data, trophies) {
   let leaderboardData = data.standing.players.map(renderLeaderboardItem, trophies);
   return (
-    <div className="tournamentLeaderboard">
-      <p className="tournamentHeader">Leaderboard ({data.nbPlayers} Players)</p>
-      <table className="tournamentStandings">
+    <div className='tournamentLeaderboard'>
+      <p className='tournamentHeader'>Leaderboard ({data.nbPlayers} Players)</p>
+      <table className='tournamentStandings'>
         {leaderboardData}
       </table>
     </div>
@@ -127,9 +127,9 @@ function tournamentLeaderboard(data, trophies) {
 
 function tournamentFeaturedGame(data) {
   return (
-    <div className="tournamentGames">
-      <p className="tournamentHeader">Featured Game</p>
-      <div class="featuredGame nav" config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
+    <div className='tournamentGames'>
+      <p className='tournamentHeader'>Featured Game</p>
+      <div class='featuredGame nav' config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
         {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
       </div>
     </div>
@@ -143,7 +143,7 @@ function renderLeaderboardItem(player, podiumRank) {
     trophy = 'trophy-' + podiumRank;
   }
   return (
-    <tr key={player.name} className="list_item">
+    <tr key={player.name} className='list_item'>
       <td className='tournamentPlayer'><span className={trophy}>{player.name + ' (' + player.rating + ')'}</span></td>
       <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
     </tr>

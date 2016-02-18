@@ -112,7 +112,7 @@ function createTournament(tournamentVersion, tournamentId, receiveHandler) {
     tournamentVersion, {
       options: {
         name: 'tournament',
-        debug: true,
+        debug: false,
         ignoreUnknownMessages: true,
         pingDelay: 2000,
         onOpen: () => {

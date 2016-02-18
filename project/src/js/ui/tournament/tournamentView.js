@@ -3,6 +3,7 @@ import h from '../helper';
 import { header as headerWidget, backButton, empty, pad} from '../shared/common';
 import layout from '../layout';
 import m from 'mithril';
+import i18n from '../../i18n';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
@@ -114,7 +115,7 @@ function timeInfo(time, preceedingText) {
 function tournamentLeaderboard(data, showTrophies) {
   return (
     <div className='tournamentLeaderboard'>
-      <p className='tournamentTitle'> i18n('leaderboard') ({data.nbPlayers} Players)</p>
+      <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
       </table>

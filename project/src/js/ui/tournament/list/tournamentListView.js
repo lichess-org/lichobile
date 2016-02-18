@@ -22,7 +22,7 @@ const TABS = [{
     label: 'Completed'
 }];
 
-const tabNavigation = (currentTabFn) => {
+function tabNavigation (currentTabFn) {
     return m('.nav-header', m.component(tabs, {
         buttons: TABS,
         autofit: true,
@@ -32,7 +32,7 @@ const tabNavigation = (currentTabFn) => {
             currentTabFn(state.index);
         }
     }));
-};
+}
 
 function tournamentListBody(ctrl) {
   if (!ctrl.tournaments()) return null;

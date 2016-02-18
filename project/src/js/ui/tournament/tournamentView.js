@@ -112,12 +112,11 @@ function timeInfo(time, preceedingText) {
 }
 
 function tournamentLeaderboard(data, trophies) {
-  let leaderboardData = data.standing.players.map(renderLeaderboardItem, trophies);
   return (
     <div className='tournamentLeaderboard'>
       <p className='tournamentTitle'>Leaderboard ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
-        {leaderboardData}
+        {data.standing.players.map(renderLeaderboardItem, trophies)}
       </table>
     </div>
   );

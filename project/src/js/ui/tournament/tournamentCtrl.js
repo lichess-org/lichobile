@@ -31,12 +31,6 @@ export default function controller() {
   helper.analyticsTrackView('Tournament ' + id);
 
   let clockInterval = null;
-  xhr.tournament(id).then(data => {
-    tournament(data);
-    clockInterval = setInterval(tick, 1000);
-    return data;
-  }, err => utils.handleXhrError(err));
-
   let returnVal = {
     tournament,
     reload,
@@ -47,6 +41,12 @@ export default function controller() {
     }
   };
 
-  socket.createTournament(tournament().socketVersion, id, socketHandler(returnVal));
+  xhr.tournament(id).then(data => {
+    tournament(data);
+    clockInterval = setInterval(tick, 1000);
+    socket.createTournament(tournament().socketVersion, id, socketHandler(returnVal));
+    return data;
+  }, err => utils.handleXhrError(err));
+
   return returnVal;
 }

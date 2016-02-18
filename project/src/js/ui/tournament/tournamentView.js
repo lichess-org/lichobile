@@ -114,7 +114,7 @@ function timeInfo(time, preceedingText) {
 function tournamentLeaderboard(data, showTrophies) {
   return (
     <div className='tournamentLeaderboard'>
-      <p className='tournamentTitle'>Leaderboard ({data.nbPlayers} Players)</p>
+      <p className='tournamentTitle'> i18n('leaderboard') ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
       </table>

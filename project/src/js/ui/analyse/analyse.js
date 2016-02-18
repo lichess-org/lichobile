@@ -65,7 +65,7 @@ export default function(steps) {
     if (!treePath.isRoot(path)) return null;
     var nextPly = path[0].ply + 1;
     var nextStep = this.tree[nextPly - this.firstPly()];
-    return (nextStep && nextStep.eval) ? nextStep.eval.best : null;
+    return (nextStep && nextStep.oEval) ? nextStep.oEval.best : null;
   }.bind(this);
 
   this.addStep = function(step, path) {

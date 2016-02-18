@@ -23,7 +23,7 @@ const emptyMove = m('move.empty', '...');
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
   var pathStr = treePath.write(path);
-  var evaluation = path[1] ? {} : (move.eval || move.ceval || {});
+  var evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
   var attrs = path[1] ? {
     'data-path': pathStr
   } : {};

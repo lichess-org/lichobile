@@ -263,7 +263,7 @@ export default function controller() {
   }.bind(this);
 
   this.currentAnyEval = function() {
-    return this.vm.step ? (this.vm.step.eval || this.vm.step.ceval) : null;
+    return this.vm.step ? (this.vm.step.oEval || this.vm.step.ceval) : null;
   }.bind(this);
 
   var allowCeval = (
@@ -272,8 +272,8 @@ export default function controller() {
 
   this.ceval = cevalCtrl(allowCeval, function(res) {
     this.analyse.updateAtPath(res.work.path, function(step) {
-      if (step.ceval && step.ceval.depth >= res.eval.depth) return;
-      step.ceval = res.eval;
+      if (step.ceval && step.ceval.depth >= res.oEval.depth) return;
+      step.ceval = res.oEval;
       if (treePath.write(res.work.path) === this.vm.pathStr) {
         setAutoShapesFromEval();
         m.redraw();
@@ -282,7 +282,7 @@ export default function controller() {
   }.bind(this));
 
   var canUseCeval = function() {
-    return this.vm.step.dests !== '' && (!this.vm.step.eval || !this.analyse.nextStepEvalBest(this.vm.path));
+    return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
   }.bind(this);
 
   var startCeval = throttle(function() {
@@ -317,7 +317,7 @@ export default function controller() {
     if (!this.vm.showAutoShapes()) return;
     var s = this.vm.step,
       shapes = [];
-    if (s.eval && s.eval.best) shapes.push(makeAutoShapeFromUci(s.eval.best, 'paleGreen'));
+    if (s.oEval && s.oEval.best) shapes.push(makeAutoShapeFromUci(s.oEval.best, 'paleGreen'));
     var nextStepBest = this.analyse.nextStepEvalBest(this.vm.path);
     if (nextStepBest) shapes.push(makeAutoShapeFromUci(nextStepBest, 'paleBlue'));
     else if (this.ceval.enabled() && s.ceval && s.ceval.best) shapes.push(makeAutoShapeFromUci(s.ceval.best, 'paleBlue'));

@@ -6,16 +6,17 @@ import helper from '../helper';
 import m from 'mithril';
 
 export default function controller() {
-
   const tournament = m.prop([]);
 
   this.tournament = function (tournamentId) {
 
     helper.analyticsTrackView('Tournament ' + tournamentId);
 
+    let clockInterval = null;
     xhr.tournament(tournamentId).then(data => {
       console.log(data);
       tournament(data);
+      clockInterval = setInterval(tick, 1000);
       return data;
     }, err => utils.handleXhrError(err));
 
@@ -25,6 +26,8 @@ export default function controller() {
       tournament,
       onunload: () => {
         socket.destroy();
+        if(clockInterval)
+          clearInterval(clockInterval);
       }
     };
   }.bind(this);
@@ -39,6 +42,17 @@ export default function controller() {
   this.tournamentId = function () {
     return tournament().id;
   }.bind(this);
+
+  function tick () {
+    let data = tournament();
+    if(data.secondsToStart && data.secondsToStart > 0)
+      data.secondsToStart--;
+
+    if(data.secondsToFinish && data.secondsToFinish > 0)
+      data.secondsToFinish--;
+
+    m.redraw();
+  }
 
   let id = m.route.param('id');
   return this.tournament(id);

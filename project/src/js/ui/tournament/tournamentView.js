@@ -17,8 +17,6 @@ function tournamentBody(ctrl) {
   let data = ctrl.tournament();
   if(!data) return null;
 
-  console.log(data);
-
   let body = null;
   if (data.isFinished)
     body = tournamentContentFinished(data);
@@ -33,7 +31,7 @@ function tournamentBody(ctrl) {
 function tournamentContentCreated(data) {
   return (
     <div>
-      { tournamentHeader(data, data.secondsToStart, 'Starting in:')}
+      { tournamentHeader(data, data.secondsToStart, 'Starts in:')}
       { tournamentLeaderboard(data, false) }
     </div>
   );
@@ -51,7 +49,7 @@ function tournamentContentFinished(data) {
 function tournamentContentStarted(data) {
   return (
     <div>
-      { tournamentHeader(data, data.secondsToFinish, 'Remaining:')}
+      { tournamentHeader(data, data.secondsToFinish, '')}
       { tournamentLeaderboard(data, false) }
       { tournamentFeaturedGame(data) }
     </div>
@@ -59,10 +57,8 @@ function tournamentContentStarted(data) {
 }
 
 function tournamentHeader(data, time, timeText) {
-  let variant = data.variant;
-  if(variant === 'standard')
-    variant = data.schedule.speed;
-  variant = variant.charAt(0).toUpperCase() + variant.substring(1);
+  let variant = variantInfo(data);
+
   return (
     <div className='basicTournamentInfo'>
       <strong> {variant + ' • ' + (data.clock.limit / 60) + '+' + data.clock.increment + ' • ' + data.minutes + 'M' } </strong>
@@ -73,12 +69,42 @@ function tournamentHeader(data, time, timeText) {
   );
 }
 
+function variantInfo (data) {
+  let variant = data.variant;
+  if(variant === 'standard')
+    if(data.schedule)
+      variant = data.schedule.speed;
+    else if(data.position)
+      variant = data.position.name;
+    else
+      variant = '';
+
+  while(variant.length > 12) {
+    let pieces = variant.split(' ');
+    if(pieces === 1)
+      return '';
+    else {
+      return pieces.slice(0, pieces.length - 1);
+    }
+  }
+
+  if (variant.length > 0)
+    variant = variant.charAt(0).toUpperCase() + variant.substring(1);
+  return variant;
+}
+
 function timeInfo(time, preceedingText) {
   if (!time) return '';
 
-  let mins = Math.floor(time / 60);
+  let timeStr = '';
+  let hours = Math.floor(time / 60 / 60);
+  let mins = Math.floor(time / 60) - (hours * 60);
   let secs = time % 60;
-  return (preceedingText + ' ' + mins + ':' + pad(secs, 2));
+  if (hours > 0)
+    timeStr = preceedingText + ' ' + hours + ':' + pad(mins, 2) + ':' + pad(secs, 2);
+  else
+    timeStr = preceedingText + ' ' + mins + ':' + pad(secs, 2);
+  return timeStr;
 }
 
 function pad(num, size) {

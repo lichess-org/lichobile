@@ -9,9 +9,9 @@ export function tournament(id) {
 }
 
 export function reload(ctrl) {
-  return request('/tournament/' + ctrl.tournamentId(), { background: true });
+  return request('/tournament/' + ctrl.tournament().id, { background: true });
 }
 
 export function resync(ctrl) {
-  return request('/tournament/' + ctrl.tournamentId(), { background: true, data: {socketVersion: 1} });
+  return request('/tournament/' + ctrl.tournament().id, { background: true, data: {socketVersion: 1} });
 }

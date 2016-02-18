@@ -133,6 +133,12 @@ export function empty() {
   return [];
 }
 
+export function pad(num, size) {
+    var s = num + '';
+    while (s.length < size) s = '0' + s;
+    return s;
+}
+
 export function userStatus(user) {
   const status = user.online ? 'online' : 'offline';
   return (

@@ -1,5 +1,5 @@
 import h from '../../helper';
-import {header, empty} from '../../shared/common';
+import {header, empty, pad} from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
@@ -36,6 +36,7 @@ const tabNavigation = (currentTabFn) => {
 
 function tournamentListBody(ctrl) {
   if (!ctrl.tournaments()) return null;
+
   let arrayName = TABS[ctrl.currentTab()].id;
   return m('.native_scroller .page',
       m('.module-tabs.tabs-routing', [
@@ -69,11 +70,7 @@ function renderTournamentListItem(tournament) {
 
 function formatTime(timeInMillis) {
   let date = new Date(timeInMillis);
-  let hours = date.getHours().toString();
-  if (hours.length < 2)
-    hours = '0' + hours;
-  let mins = date.getMinutes().toString();
-  if (mins.length < 2)
-    mins = '0' + mins;
+  let hours = pad(date.getHours().toString(), 2);
+  let mins = pad(date.getMinutes().toString(), 2);
   return hours + ':' + mins;
 }

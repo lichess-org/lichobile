@@ -10,7 +10,6 @@ export default function controller() {
   const tournaments = m.prop([]);
 
   xhr.currentTournaments().then(data => {
-    console.log(data);
     tournaments(data);
     return data;
   }, err => utils.handleXhrError(err));

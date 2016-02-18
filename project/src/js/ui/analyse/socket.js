@@ -1,14 +1,16 @@
-import { synthetic } from './util';
+import { isSynthetic } from './util';
 import socket from '../../socket';
 
 export default function(ctrl) {
+
+  socket.createDefault();
 
   var anaMoveTimeout;
   var anaDestsTimeout;
 
   var anaDestsCache = {};
 
-  if (!synthetic(ctrl.data)) setTimeout(function() {
+  if (!isSynthetic(ctrl.data)) setTimeout(function() {
     socket.send('startWatching', ctrl.data.game.id);
   }, 1000);
 

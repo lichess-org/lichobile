@@ -1,4 +1,3 @@
-import data from './data';
 import analyse from './analyse';
 import treePath from './path';
 import ground from './ground';
@@ -17,9 +16,21 @@ import m from 'mithril';
 export default function controller() {
 
   this.data = {};
+  this.gameId = m.route.param('id');
   this.userId = m.route.param('userId');
   this.ongoing = !util.synthetic(this.data) && gameApi.playable(this.data);
   this.onMyTurn = this.data;
+
+  if (this.gameId) {
+    gameXhr(m.route.param('id')).then(function(data) {
+      if (data.game.moves) data.game.moves = data.game.moves.split(' ');
+      else data.game.moves = [];
+
+      if (!data.game.moveTimes) data.game.moveTimes = [];
+
+      this.data = data;
+    });
+  }
 
   this.analyse = new analyse(this.data.steps);
 
@@ -167,7 +178,7 @@ export default function controller() {
     queen: 'Q'
   };
 
-  var userNewPiece = function(piece, pos) {
+  var userNewPiece = function() {
     this.jump(this.vm.path);
   }.bind(this);
 
@@ -321,7 +332,11 @@ export default function controller() {
     };
   };
 
+  this.onunload = function() {
+    socket.destroy();
+  };
 
   showGround();
   startCeval();
+
 }

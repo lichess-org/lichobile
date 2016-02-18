@@ -31,6 +31,6 @@ export function renderEval(e) {
   return (e > 0 ? '+' : '') + e;
 }
 
-export function synthetic(data) {
+export function isSynthetic(data) {
   return data.game.id === 'synthetic';
 }

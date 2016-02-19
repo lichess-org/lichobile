@@ -35,8 +35,9 @@ export default function controller() {
 
   var initialPath = treePath.default(this.analyse.firstPly());
 
-  if (initialPath[0].ply >= this.data.steps.length)
+  if (initialPath[0].ply >= this.data.steps.length) {
     initialPath = treePath.default(this.data.steps.length - 1);
+  }
 
   this.vm = {
     path: initialPath,
@@ -46,9 +47,7 @@ export default function controller() {
     cgConfig: null,
     comments: true,
     flip: false,
-    showAutoShapes: settings.analyse.showAutoShapes(),
     showGauge: settings.analyse.showGauge(),
-    autoScroll: null,
     variationMenu: null
   };
 
@@ -65,13 +64,13 @@ export default function controller() {
     this.autoplay.toggle(delay);
   }.bind(this);
 
-  var uciToLastMove = function(uci) {
+  function uciToLastMove(uci) {
     if (!uci) return null;
     if (uci[1] === '@') return [uci.substr(2, 2), uci.substr(2, 2)];
     return [uci.substr(0, 2), uci.substr(2, 2)];
-  };
+  }
 
-  var getDests = throttle(function() {
+  const getDests = throttle(function() {
     if (this.vm.step.dests) return;
     this.socket.sendAnaDests({
       variant: this.data.game.variant.key,
@@ -80,13 +79,11 @@ export default function controller() {
     });
   }.bind(this), 800);
 
-  var onChange = noop;
+  const onChange = noop;
 
-  var updateHref = window.history.replaceState ? throttle(function() {
-    window.history.replaceState(null, null, '#' + this.vm.path[0].ply);
-  }.bind(this), 750) : noop;
+  const throttledStartCeval = throttle(startCeval.bind(this), 800);
 
-  var showGround = function() {
+  const showGround = function() {
     var s;
     try {
       s = this.analyse.getStep(this.vm.path);
@@ -120,7 +117,7 @@ export default function controller() {
     this.vm.step = s;
     this.vm.cgConfig = config;
     if (!this.chessground)
-      this.chessground = ground.make(this.data, config, userMove, userNewPiece);
+      this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     this.chessground.set(config);
     onChange();
     if (!dests) getDests();
@@ -141,9 +138,7 @@ export default function controller() {
     }
     if (/\+|\#/.test(this.vm.step.san)) sound.check();
     this.ceval.stop();
-    startCeval();
-    updateHref();
-    if (this.vm.autoScroll) this.vm.autoScroll();
+    throttledStartCeval();
     promotion.cancel(this);
   }.bind(this);
 
@@ -169,36 +164,17 @@ export default function controller() {
     m.redraw();
   }.bind(this);
 
-  var pieceToSan = {
-    pawn: 'P',
-    knight: 'N',
-    bishop: 'B',
-    rook: 'R',
-    queen: 'Q'
-  };
+  // const pieceToSan = {
+  //   pawn: 'P',
+  //   knight: 'N',
+  //   bishop: 'B',
+  //   rook: 'R',
+  //   queen: 'Q'
+  // };
 
-  var userNewPiece = function() {
+  function userNewPiece() {
     this.jump(this.vm.path);
-  }.bind(this);
-
-  var userMove = function(orig, dest, capture) {
-    this.vm.justPlayed = orig + dest;
-    sound[capture ? 'capture' : 'move']();
-    if (!promotion.start(this, orig, dest, sendMove)) sendMove(orig, dest);
-  }.bind(this);
-
-  var sendMove = function(orig, dest, prom) {
-    var move = {
-      orig: orig,
-      dest: dest,
-      variant: this.data.game.variant.key,
-      fen: this.vm.step.fen,
-      path: this.vm.pathStr
-    };
-    if (prom) move.promotion = prom;
-    this.socket.sendAnaMove(move);
-    preparePremoving();
-  }.bind(this);
+  }
 
   var preparePremoving = function() {
     this.chessground.set({
@@ -209,6 +185,24 @@ export default function controller() {
     });
   }.bind(this);
 
+  function sendMove(orig, dest, prom) {
+    var move = {
+      orig: orig,
+      dest: dest,
+      variant: this.data.game.variant.key,
+      fen: this.vm.step.fen,
+      path: this.vm.pathStr
+    };
+    if (prom) move.promotion = prom;
+    this.socket.sendAnaMove(move);
+    preparePremoving();
+  }
+
+  function userMove(orig, dest, capture) {
+    this.vm.justPlayed = orig + dest;
+    sound[capture ? 'capture' : 'move']();
+    if (!promotion.start(this, orig, dest, sendMove.bind(this))) sendMove(orig, dest);
+  }
 
   this.addStep = function(step, path) {
     var newPath = this.analyse.addStep(step, treePath.read(path));
@@ -274,25 +268,24 @@ export default function controller() {
       if (step.ceval && step.ceval.depth >= res.oEval.depth) return;
       step.ceval = res.oEval;
       if (treePath.write(res.work.path) === this.vm.pathStr) {
-        // setAutoShapesFromEval();
         m.redraw();
       }
     }.bind(this));
   }.bind(this));
 
-  var canUseCeval = function() {
+  function canUseCeval() {
     return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
-  }.bind(this);
+  }
 
-  var startCeval = throttle(function() {
+
+  function startCeval() {
     if (this.ceval.enabled() && canUseCeval())
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
-  }.bind(this), 800);
+  }
 
   this.toggleCeval = function() {
     this.ceval.toggle();
-    // setAutoShapesFromEval();
-    startCeval();
+    throttledStartCeval();
   }.bind(this);
 
   this.showEvalGauge = function() {
@@ -303,39 +296,14 @@ export default function controller() {
     return this.data.analysis || this.ceval.enabled();
   };
 
-  this.toggleAutoShapes = function() {
-    // if (this.vm.showAutoShapes) setAutoShapesFromEval();
-    // else this.chessground.setAutoShapes([]);
-  }.bind(this);
-
   this.toggleGauge = function() {
     this.vm.showGauge(!this.vm.showGauge());
   }.bind(this);
-
-  var setAutoShapesFromEval = function() {
-    if (!this.vm.showAutoShapes) return;
-    var s = this.vm.step,
-      shapes = [];
-    if (s.oEval && s.oEval.best) shapes.push(makeAutoShapeFromUci(s.oEval.best, 'paleGreen'));
-    var nextStepBest = this.analyse.nextStepEvalBest(this.vm.path);
-    if (nextStepBest) shapes.push(makeAutoShapeFromUci(nextStepBest, 'paleBlue'));
-    else if (this.ceval.enabled() && s.ceval && s.ceval.best) shapes.push(makeAutoShapeFromUci(s.ceval.best, 'paleBlue'));
-    this.chessground.setAutoShapes(shapes);
-  }.bind(this);
-
-  var makeAutoShapeFromUci = function(uci, brush) {
-    return {
-      orig: uci.slice(0, 2),
-      dest: uci.slice(2, 4),
-      brush: brush
-    };
-  };
 
   this.onunload = function() {
     socket.destroy();
   };
 
   showGround();
-  startCeval();
-
+  // startCeval();
 }

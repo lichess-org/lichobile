@@ -1,4 +1,5 @@
 import m from 'mithril';
+import i18n from '../../i18n';
 import treePath from './path';
 import pgnExport from './pgnExport';
 import cevalView from './ceval/cevalView';
@@ -7,9 +8,61 @@ import control from './control';
 import { empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
 import helper from '../helper';
+import layout from '../layout';
 import { view as renderPromotion } from './promotion';
+import { header } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
 import { partialf } from '../../utils';
+
+export default function analyseView(ctrl) {
+
+  function content() {
+    return [
+      m('div', {
+        className: helper.classSet({
+          top: true,
+          ceval_displayed: ctrl.ceval.allowed(),
+          gauge_displayed: ctrl.showEvalGauge()
+        })
+      }, [
+        m('div.lichess_game', {
+          config: function(el, isUpdate) {
+            if (isUpdate) return;
+          }
+        }, [
+          renderBoard(ctrl.data.game.variant.key, ctrl.chessground, helper.isPortrait()),
+          m('div.lichess_ground', [
+            [
+              cevalView.renderCeval(ctrl),
+              m('div.replay', renderAnalyse(ctrl))
+            ],
+            buttons(ctrl)
+          ])
+        ])
+      ]),
+      m('div.underboard', [
+        m('div.center', inputs(ctrl)),
+        m('div.right')
+      ]),
+      isSynthetic(ctrl.data) ? null : m('div.analeft', [
+        gameApi.playable(ctrl.data) ? m('div.back_to_game',
+          m('button', {
+            className: 'button text',
+            config: helper.ontouch(() => {
+              m.route('/game' + ctrl.data.game.url.round);
+            }),
+            'data-icon': 'i'
+          }, ctrl.trans('backToGame'))
+        ) : null
+      ])
+    ];
+  }
+
+  return layout.board(
+    header.bind(undefined, i18n('analyse')),
+    content
+  );
+}
 
 function renderEvalTag(e) {
   return {
@@ -310,44 +363,3 @@ function buttons(ctrl) {
   ];
 }
 
-export default function analyseView(ctrl) {
-  return [
-    m('div', {
-      className: helper.classSet({
-        top: true,
-        ceval_displayed: ctrl.ceval.allowed(),
-        gauge_displayed: ctrl.showEvalGauge()
-      })
-    }, [
-      m('div.lichess_game', {
-        config: function(el, isUpdate) {
-          if (isUpdate) return;
-        }
-      }, [
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, helper.isPortrait()),
-        m('div.lichess_ground', [
-          [
-            cevalView.renderCeval(ctrl),
-            m('div.replay', renderAnalyse(ctrl))
-          ],
-          buttons(ctrl)
-        ])
-      ])
-    ]),
-    m('div.underboard', [
-      m('div.center', inputs(ctrl)),
-      m('div.right')
-    ]),
-    isSynthetic(ctrl.data) ? null : m('div.analeft', [
-      gameApi.playable(ctrl.data) ? m('div.back_to_game',
-        m('button', {
-          className: 'button text',
-          config: helper.ontouch(() => {
-            m.route('/game' + ctrl.data.game.url.round);
-          }),
-          'data-icon': 'i'
-        }, ctrl.trans('backToGame'))
-      ) : null
-    ])
-  ];
-}

@@ -21,8 +21,8 @@ function makeConfig(data, config, onMove, onNewPiece) {
       enabled: true
     },
     highlight: {
-      lastMove: data.pref.highlight,
-      check: data.pref.highlight
+      lastMove: settings.game.highlights(),
+      check: settings.game.highlights()
     },
     animation: {
       enabled: settings.game.animations(),

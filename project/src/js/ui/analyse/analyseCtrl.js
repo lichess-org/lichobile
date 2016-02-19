@@ -106,12 +106,12 @@ export default function controller() {
       check: s.check,
       lastMove: uciToLastMove(s.uci)
     };
-    if (!dests && !s.check) {
-      // premove while dests are loading from server
-      // can't use when in check because it highlights the wrong king
-      config.turnColor = oppositeColor(color);
-      config.movable.color = color;
-    }
+    // if (!dests && !s.check) {
+    //   // premove while dests are loading from server
+    //   // can't use when in check because it highlights the wrong king
+    //   config.turnColor = oppositeColor(color);
+    //   config.movable.color = color;
+    // }
     this.vm.step = s;
     this.vm.cgConfig = config;
     if (!this.chessground)
@@ -269,13 +269,12 @@ export default function controller() {
     }.bind(this));
   }.bind(this));
 
-  function canUseCeval() {
+  this.canUseCeval = function() {
     return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
-  }
-
+  }.bind(this);
 
   function startCeval() {
-    if (this.ceval.enabled() && canUseCeval())
+    if (this.ceval.enabled() && this.canUseCeval())
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
   }
 

@@ -59,7 +59,7 @@ export default function analyseView(ctrl) {
   }
 
   return layout.board(
-    header.bind(undefined, i18n('analyse')),
+    header.bind(undefined, i18n('analysis')),
     content
   );
 }

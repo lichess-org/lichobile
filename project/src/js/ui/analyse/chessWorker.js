@@ -5,10 +5,29 @@ export default function chessWorker(self) {
     return role === 'knight' ? 'n' : role[0];
   }
 
-  self.onmessage = function (ev) {
-    const { ply, fen, promotion, orig, dest } = ev.data;
+  self.onmessage = function (msg) {
+    switch (msg.data.topic) {
+      case 'getDests':
+        getDests(msg.data);
+        break;
+      case 'addMove':
+        addMove(msg.data);
+        break;
+    }
+  };
+
+  function getDests(data) {
+    const { fen } = data;
+    const chess = new Chess(fen, 0);
+    self.postMessage({
+      dests: chess.dests()
+    });
+  }
+
+  function addMove(data) {
+    const { ply, fen, promotion, orig, dest } = data;
     const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
-      (promotion ? forsyth(promotion) : 'q') : null;
+    (promotion ? forsyth(promotion) : 'q') : null;
     const chess = new Chess(fen, 0);
     const move = chess.move({
       from: orig,
@@ -34,5 +53,5 @@ export default function chessWorker(self) {
       ply: ply,
       promotion: promotionLetter
     });
-  };
+  }
 }

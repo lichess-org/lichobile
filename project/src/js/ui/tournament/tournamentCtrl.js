@@ -8,7 +8,7 @@ import m from 'mithril';
 
 
 export default function controller() {
-  const tournament = m.prop([]);
+  const tournament = m.prop({});
   function reload (data) {
     tournament(data);
     if(data.socketVersion)

@@ -7,7 +7,7 @@ import m from 'mithril';
 export default function controller() {
   socket.createDefault();
   helper.analyticsTrackView('Tournament List');
-  const tournaments = m.prop([]);
+  const tournaments = m.prop({});
 
   xhr.currentTournaments().then(data => {
     tournaments(data);

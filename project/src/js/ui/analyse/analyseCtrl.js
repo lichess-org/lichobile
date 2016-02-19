@@ -9,7 +9,7 @@ import socket from './socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor, noop } from '../../utils';
+import { handleXhrError, oppositeColor } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import data, { defaultData } from './data';
 import m from 'mithril';
@@ -79,8 +79,6 @@ export default function controller() {
     });
   }.bind(this), 800);
 
-  const onChange = noop;
-
   const throttledStartCeval = throttle(startCeval.bind(this), 800);
 
   const showGround = function() {
@@ -95,10 +93,10 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
-    var color = s.ply % 2 === 0 ? 'white' : 'black';
-    var dests = util.readDests(s.dests);
-    var drops = util.readDrops(s.drops);
-    var config = {
+    const color = s.ply % 2 === 0 ? 'white' : 'black';
+    const dests = util.readDests(s.dests);
+    const drops = util.readDrops(s.drops);
+    const config = {
       fen: s.fen,
       turnColor: color,
       movable: {
@@ -119,11 +117,9 @@ export default function controller() {
     if (!this.chessground)
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     this.chessground.set(config);
-    onChange();
     if (!dests) getDests();
     // setAutoShapesFromEval();
   }.bind(this);
-
 
   this.jump = function(path) {
     this.vm.path = path;
@@ -201,7 +197,7 @@ export default function controller() {
   function userMove(orig, dest, capture) {
     this.vm.justPlayed = orig + dest;
     sound[capture ? 'capture' : 'move']();
-    if (!promotion.start(this, orig, dest, sendMove.bind(this))) sendMove(orig, dest);
+    if (!promotion.start(this, orig, dest, sendMove.bind(this))) sendMove(orig, dest).bind(this);
   }
 
   this.addStep = function(step, path) {

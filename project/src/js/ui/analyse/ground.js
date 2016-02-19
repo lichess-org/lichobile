@@ -1,4 +1,5 @@
 import chessground from 'chessground-mobile';
+import settings from '../../settings';
 
 function makeConfig(data, config, onMove, onNewPiece) {
   return {
@@ -6,7 +7,7 @@ function makeConfig(data, config, onMove, onNewPiece) {
     check: config.check,
     lastMove: config.lastMove,
     orientation: data.orientation,
-    coordinates: data.pref.coords !== 0,
+    coordinates: settings.game.coords(),
     movable: {
       free: false,
       color: config.movable.color,
@@ -19,15 +20,12 @@ function makeConfig(data, config, onMove, onNewPiece) {
     premovable: {
       enabled: true
     },
-    drawable: {
-      enabled: true
-    },
     highlight: {
       lastMove: data.pref.highlight,
       check: data.pref.highlight
     },
     animation: {
-      enabled: true,
+      enabled: settings.game.animations(),
       duration: data.pref.animationDuration
     }
   };

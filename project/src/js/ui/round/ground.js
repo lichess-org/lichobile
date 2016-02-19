@@ -44,7 +44,6 @@ function makeConfig(data, fen, flip) {
       castle: data.game.variant.key !== 'antichess'
     },
     draggable: {
-      showGhost: data.pref.highlight,
       distance: 3,
       squareTarget: true
     }

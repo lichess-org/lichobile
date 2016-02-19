@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from './promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { throttle } from 'lodash/function';
+import { debounce, throttle } from 'lodash/function';
 import socket from './socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
@@ -70,14 +70,6 @@ export default function controller() {
     return [uci.substr(0, 2), uci.substr(2, 2)];
   }
 
-  const getDests = throttle(function() {
-    if (this.vm.step.dests) return;
-    this.socket.sendAnaDests({
-      variant: this.data.game.variant.key,
-      fen: this.vm.step.fen,
-      path: this.vm.pathStr
-    });
-  }.bind(this), 800);
 
   const throttledStartCeval = throttle(startCeval.bind(this), 800);
 
@@ -106,18 +98,12 @@ export default function controller() {
       check: s.check,
       lastMove: uciToLastMove(s.uci)
     };
-    // if (!dests && !s.check) {
-    //   // premove while dests are loading from server
-    //   // can't use when in check because it highlights the wrong king
-    //   config.turnColor = oppositeColor(color);
-    //   config.movable.color = color;
-    // }
     this.vm.step = s;
     this.vm.cgConfig = config;
     if (!this.chessground)
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     this.chessground.set(config);
-    if (!dests) getDests();
+    if (!dests) debounce(getDests.bind(this), 100)();
     // setAutoShapesFromEval();
   }.bind(this);
 
@@ -181,8 +167,8 @@ export default function controller() {
     });
   }.bind(this);
 
-  function sendMove(orig, dest, prom) {
-    var move = {
+  const sendMove = function(orig, dest, prom) {
+    const move = {
       orig: orig,
       dest: dest,
       variant: this.data.game.variant.key,
@@ -192,12 +178,12 @@ export default function controller() {
     if (prom) move.promotion = prom;
     this.socket.sendAnaMove(move);
     preparePremoving();
-  }
+  }.bind(this);
 
   function userMove(orig, dest, capture) {
     this.vm.justPlayed = orig + dest;
     sound[capture ? 'capture' : 'move']();
-    if (!promotion.start(this, orig, dest, sendMove.bind(this))) sendMove(orig, dest).bind(this);
+    if (!promotion.start(this, orig, dest, sendMove)) sendMove(orig, dest);
   }
 
   this.addStep = function(step, path) {
@@ -301,4 +287,14 @@ export default function controller() {
 
   showGround();
   // startCeval();
+}
+
+function getDests() {
+  if (!this.vm.step.dests) {
+    this.socket.sendAnaDests({
+      variant: this.data.game.variant.key,
+      fen: this.vm.step.fen,
+      path: this.vm.pathStr
+    });
+  }
 }

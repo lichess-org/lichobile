@@ -3,18 +3,16 @@ import socket from '../../socket';
 
 export default function(ctrl) {
 
-  socket.createDefault();
-
   var anaMoveTimeout;
   var anaDestsTimeout;
 
-  var anaDestsCache = {};
+  const anaDestsCache = {};
 
   if (!isSynthetic(ctrl.data)) setTimeout(function() {
     socket.send('startWatching', ctrl.data.game.id);
   }, 1000);
 
-  var handlers = {
+  const handlers = {
     step: function(data) {
       ctrl.addStep(data.step, data.path);
       clearTimeout(anaMoveTimeout);
@@ -65,6 +63,7 @@ export default function(ctrl) {
     anaDestsTimeout = setTimeout(this.sendAnaDests.bind(this, req), 3000);
   }.bind(this);
 
+  socket.createAnalyse(this.receive.bind(this));
 }
 
 function withoutStandardVariant(obj) {

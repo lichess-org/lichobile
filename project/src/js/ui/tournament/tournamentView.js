@@ -53,7 +53,7 @@ function tournamentContentStarted(data) {
     <div>
       { tournamentHeader(data, data.secondsToFinish, '')}
       { tournamentLeaderboard(data, false) }
-      { tournamentFeaturedGame(data) }
+      { data.featured ? tournamentFeaturedGame(data) : '' }
     </div>
   );
 }

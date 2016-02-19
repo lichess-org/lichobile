@@ -110,10 +110,6 @@ h3.fullname
 #userProfileActions
   .check_container
     line-height 30px
-  > .list_item
-    padding 15px 0
-    &.nav:after
-      right 0
 
 .userGamesWrapper
   height 100%
@@ -203,8 +199,7 @@ h3.fullname
 
 div.variantPerfBody
   width: 100%
-  padding-left 10px
-  padding-right 10px
+  padding 10px 10px 0
   font-size 0.85em
 
 table.variantPerf
@@ -246,22 +241,4 @@ td.variantPerfMemo
 
 .variantPerfGames
   > .nav
-    padding 10px 10px 10px 0px
-    &:after
-      line-height 10px
-      top 35%
-  > .list_item
-    position relative
-    line-height 10px
-    padding 10px 10px 10px 0px
-    border-bottom 1px solid #2E3033
-    &:before
-      margin-right 5px
-    &:last-child
-      border-bottom none
-    &.active
-      background lighten(bgdark, 5%)
-    &.bglight
-      border-bottom-color darken(bglight, 15%)
-      &.active
-        background-color darken(bglight, 5%)
+    padding 15px 0

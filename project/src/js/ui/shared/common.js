@@ -44,9 +44,10 @@ export function friendsButton() {
 
 export function gamesButton() {
   let key, action;
-  const nbChallenges = challengesApi.count();
-  const nbOfflineGames = utils.getOfflineGames().length;
-  if (session.nowPlaying().length || nbChallenges || nbOfflineGames) {
+  const nbChallenges = challengesApi.all().length;
+  const nbIncomingChallenges = challengesApi.incoming().length;
+  const withOfflineGames = !utils.hasNetwork() && utils.getOfflineGames().length;
+  if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
     key = 'games-menu';
     action = gamesMenu.open;
   } else {
@@ -58,17 +59,17 @@ export function gamesButton() {
     'main_header_button',
     'game_menu_button',
     settings.general.theme.board(),
-    nbChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && nbOfflineGames === 0 ? 'invisible' : ''
+    nbIncomingChallenges ? 'new_challenge' : '',
+    !utils.hasNetwork() && utils.getOfflineGames().length === 0 ? 'invisible' : ''
     ].join(' ');
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 
   return (
     <button key={key} className={className} config={helper.ontouch(action, longAction)}>
-      {!nbChallenges && myTurns ?
+      {!nbIncomingChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }
-      {nbChallenges ?
+      {nbIncomingChallenges ?
         <span className="chip nb_challenges">{nbChallenges}</span> : null
       }
     </button>

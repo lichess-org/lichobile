@@ -21,7 +21,9 @@ gamesMenu.open = function() {
   backbutton.stack.push(gamesMenu.close);
   gamesMenu.isOpen = true;
   setTimeout(function() {
-    if (scroller) scroller.goToPage(1, 0);
+    // go to first incoming challenge or game
+    const nbSending = challengesApi.sending().length;
+    if (utils.hasNetwork() && scroller) scroller.goToPage(1 + nbSending, 0);
   }, 400);
   session.refresh();
 };
@@ -40,7 +42,7 @@ function joinGame(g) {
 }
 
 function acceptChallenge(id) {
-  return xhr.joinChallenge(id)
+  return xhr.acceptChallenge(id)
   .then(data =>
     m.route('/game' + data.url.round)
   )
@@ -49,9 +51,11 @@ function acceptChallenge(id) {
 }
 
 function declineChallenge(id) {
-  return xhr.declineChallenge(id).then(() =>
-    challengesApi.remove(id)
-  );
+  return xhr.declineChallenge(id).then(() => challengesApi.remove(id));
+}
+
+function cancelChallenge(id) {
+  return xhr.cancelChallenge(id).then(() => challengesApi.remove(id));
 }
 
 function cardDims() {
@@ -112,7 +116,7 @@ function savedGameDataToCardData(data) {
     },
     perf: data.game.perf,
     rated: data.game.rated,
-    secondsLeft: data.correspondence[data.player.color],
+    secondsLeft: data.correspondence && data.correspondence[data.player.color],
     speed: data.game.speed,
     variant: data.game.variant
   };
@@ -152,30 +156,30 @@ function renderGame(g, cDim, cardStyle) {
   );
 }
 
-function renderChallenge(c, cDim, cardStyle) {
-  const icon = utils.gameIcon(c.game.perf);
-  const mode = c.game.rated ? i18n('rated') : i18n('casual');
-  const timeAndMode = gameApi.time(c) + ', ' + mode;
-  const challenger = c.player.user ? c.player : c.opponent;
+function renderIncomingChallenge(c, cDim, cardStyle) {
+  const mode = c.rated ? i18n('rated') : i18n('casual');
+  const timeAndMode = utils.challengeTime(c) + ', ' + mode;
+  const mark = c.destUser.provisional ? '?' : '';
+  const playerName = `${c.challenger.id} (${c.challenger.rating}${mark})`;
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.game.fen, c.game.lastMove, null, c.game.variant)}
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
       <div className="infos">
-        <div className="icon-game" data-icon={icon}></div>
+        <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
-          <h2 className="title">{i18n('playerisInvitingYou', utils.playerName(challenger, true))}</h2>
+          <h2 className="title">{i18n('playerisInvitingYou', playerName)}</h2>
           <p className="variant">
-            <span className="variantName">{i18n('toATypeGame', c.game.variant.name)}</span>
+            <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
             <span className="time-indication" data-icon="p">{timeAndMode}</span>
           </p>
         </div>
         <div className="actions">
-          <button config={helper.ontouchX(utils.f(acceptChallenge, c.game.id))}>
+          <button config={helper.ontouchX(utils.f(acceptChallenge, c.id))}>
             {i18n('accept')}
           </button>
           <button config={helper.ontouchX(
-            helper.fadesOut(declineChallenge.bind(undefined, c.game.id), '.card', 250)
+            helper.fadesOut(declineChallenge.bind(undefined, c.id), '.card', 250)
           )}>
             {i18n('decline')}
           </button>
@@ -185,16 +189,50 @@ function renderChallenge(c, cDim, cardStyle) {
   );
 }
 
+function renderSendingChallenge(c, cDim, cardStyle) {
+  const mode = c.rated ? i18n('rated') : i18n('casual');
+  const timeAndMode = utils.challengeTime(c) + ', ' + mode;
+  const mark = c.destUser.provisional ? '?' : '';
+  const playerName = `${c.destUser.id} (${c.destUser.rating}${mark})`;
+
+  return (
+    <div className="card standard challenge sending" style={cardStyle}>
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
+      <div className="infos">
+        <div className="icon-game" data-icon={c.perf.icon}></div>
+        <div className="description">
+          <h2 className="title">{i18n('youAreChallenging', playerName)}</h2>
+          <p className="variant">
+            <span className="variantName">{i18n('toATypeGame', c.variant.name)}</span>
+            <span className="time-indication" data-icon="p">{timeAndMode}</span>
+          </p>
+        </div>
+        <div className="actions">
+          <button config={helper.ontouchX(
+            helper.fadesOut(cancelChallenge.bind(undefined, c.id), '.card', 250)
+          )}>
+            {i18n('cancel')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
-  const challenges = challengesApi.list();
+  const user = session.get();
+  const challenges = challengesApi.all();
   const cardStyle = cDim ? {
     width: (cDim.w - cDim.margin * 2) + 'px',
     height: cDim.h + 'px',
     marginLeft: cDim.margin + 'px',
     marginRight: cDim.margin + 'px'
   } : {};
-  const nbCards = challenges.length + nowPlaying.length + 1;
+  const nbCards = utils.hasNetwork() ?
+    challenges.length + nowPlaying.length + 1 :
+    utils.getOfflineGames().length;
+
   let wrapperStyle, wrapperWidth;
   if (cDim) {
     // scroller wrapper width
@@ -211,7 +249,13 @@ function renderAllGames(cDim) {
     wrapperStyle = {};
   }
 
-  const challengesDom = challenges.map(c => renderChallenge(c, cDim, cardStyle));
+  const challengesDom = challenges.map(c => {
+    if (user && user.id === c.challenger.id) {
+      return renderSendingChallenge(c, cDim, cardStyle);
+    } else {
+      return renderIncomingChallenge(c, cDim, cardStyle);
+    }
+  });
 
   var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 

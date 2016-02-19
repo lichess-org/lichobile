@@ -1,5 +1,6 @@
 import i18n from './i18n';
 import storage from './storage';
+import { cloneDeep } from 'lodash/lang';
 import m from 'mithril';
 
 export function autoredraw(action) {
@@ -50,7 +51,7 @@ export function serializeQueryParameters(obj) {
     if (str !== '') {
       str += '&';
     }
-    str += key + '=' + obj[key];
+    str += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]);
   }
   return str;
 }
@@ -186,7 +187,7 @@ export function getOfflineGameData(id) {
 
 export function saveOfflineGameData(id, gameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  const toStore = Object.assign({}, gameData);
+  const toStore = cloneDeep(gameData);
   toStore.player.onGame = false;
   toStore.opponent.onGame = false;
   if (toStore.player.user) toStore.player.user.online = false;
@@ -201,4 +202,14 @@ export function removeOfflineGameData(id) {
     delete stored[id];
   }
   storage.set(offlineCorresStorageKey, stored);
+}
+
+export function challengeTime(c) {
+  if (c.timeControl.type === 'clock') {
+    return c.timeControl.show;
+  } else if (c.timeControl.type === 'correspondence') {
+    return i18n('nbDays', c.timeControl.daysPerTurn);
+  } else {
+    return '∞';
+  }
 }

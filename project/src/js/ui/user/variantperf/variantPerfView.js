@@ -133,7 +133,7 @@ export default function view(ctrl) {
           <tr> <td class="variantPerfSpacer" colspan="3"> </td> </tr>
           </tbody>
         </table>
-        <div class={'variantPerfGames ' + isEmpty(data.stat.bestWins.results.length)}>
+        <div class={'variantPerfGames noPadding ' + isEmpty(data.stat.bestWins.results.length)}>
           <div class="variantPerfHeading"> Best Wins </div>
           {data.stat.bestWins.results.map(p => renderGame(p))}
         </div>

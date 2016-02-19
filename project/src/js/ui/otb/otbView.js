@@ -26,17 +26,18 @@ export default function view(ctrl) {
     const opponentName = i18n(ctrl.data.opponent.color);
     const replayTable = renderReplayTable(ctrl.replay);
     const isPortrait = helper.isPortrait();
+    const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
     if (isPortrait)
       return [
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass, pieceTheme),
         renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
         renderGameActionsBar(ctrl, actions.view)
       ];
     else
       return [
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass, pieceTheme),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}

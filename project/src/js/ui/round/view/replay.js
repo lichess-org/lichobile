@@ -30,16 +30,13 @@ function autoScroll(movelist) {
 }
 
 export function renderTable(ctrl) {
-  const shouldDisplay = helper.isLandscape();
   const steps = ctrl.data.steps;
   const firstPly = ctrl.firstPly();
   const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
-    ctrl.data.game.status.id + ctrl.data.game.winner + shouldDisplay;
+    ctrl.data.game.status.id + ctrl.data.game.winner;
 
   if (ctrl.vm.replayHash === h) return { subtree: 'retain' };
   ctrl.vm.replayHash = h;
-
-  if (!shouldDisplay) return null;
 
   const pairs = [];
   if (firstPly % 2 === 0) {

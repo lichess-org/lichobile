@@ -124,8 +124,8 @@ function tournamentLeaderboard(data, showTrophies) {
 }
 
 function createLeaderboardItemRenderer(showTrophies) {
-  function renderLeaderboardItem(player, podiumRank) {
-    podiumRank++;
+  function renderLeaderboardItem(player, index) {
+    const podiumRank = index + 1;
     let trophy = '';
     if (showTrophies && podiumRank < 4) {
       trophy = 'trophy-' + podiumRank;

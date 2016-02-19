@@ -22,17 +22,18 @@ function onError(data) {
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + apiVersion + '+json');
+  xhr.withCredentials = true;
   xhr.timeout = 8000;
 }
 
 // convenient wrapper around m.request
-export function request(url, opts, feedback) {
+export function request(url, opts, feedback, xhrConf) {
 
   var cfg = {
     url: 'http://' + baseUrl + url,
     method: 'GET',
     data: { '_': Date.now() },
-    config: xhrConfig,
+    config: xhrConf || xhrConfig,
     deserialize: function(text) {
       try {
         return JSON.parse(text);

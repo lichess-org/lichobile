@@ -20,6 +20,7 @@ import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
+import { view as renderNotes } from '../notes';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
 import { renderTable as renderReplayTable } from './replay';
 
@@ -37,6 +38,7 @@ export default function view(ctrl) {
 function overlay(ctrl, isPortrait) {
   return [
     ctrl.chat ? renderChat(ctrl.chat) : null,
+    ctrl.notes ? renderNotes(ctrl.notes) : null,
     renderPromotion(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl)
@@ -68,13 +70,13 @@ export function onPieceThemeChange(t) {
   pieceTheme = t;
 }
 
-export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses) {
+export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses, customPieceTheme) {
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();
   const boardClass = [
     'display_board',
     boardTheme,
-    pieceTheme,
+    customPieceTheme || pieceTheme,
     variant
   ].join(' ');
   let wrapperClass = 'game_board_wrapper';
@@ -100,7 +102,7 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
 
 function renderHeader(ctrl) {
   const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
-    friendsApi.count() + challengesApi.count() + session.nowPlaying().length +
+    friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
     session.myTurnGames().length;
 
   if (ctrl.vm.headerHash === hash) return {
@@ -208,11 +210,10 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
     utils.noop;
 
-  const username = user ? user.username : 'anon';
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = ctrl.data.game.id + username + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]) + isPortrait;
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -304,6 +305,7 @@ function renderGameRunningActions(ctrl) {
     m('div.game_controls', [
       button.shareLink(ctrl),
       button.moretime(ctrl),
+      button.flipBoardInMenu(ctrl),
       button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
       button.forceResign(ctrl) || [
         button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
@@ -420,7 +422,9 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
       }
-      {button.flipBoard(ctrl)}
+      {ctrl.data.game.speed === 'correspondence' ?
+        button.notes(ctrl) : button.flipBoard(ctrl)
+      }
       {button.first(ctrl)}
       {button.backward(ctrl)}
       {button.forward(ctrl)}

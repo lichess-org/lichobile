@@ -58,9 +58,9 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
     ],
     animations: localstorageprop('settings.gameAnimations', true),
+    highlights: localstorageprop('settings.boardHighlights', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    coords: localstorageprop('settings.coords', true),
-    moveConfirmation: localstorageprop('settings.game.moveConfirmation', 'correspondence')
+    coords: localstorageprop('settings.coords', true)
   },
 
   analyse: {
@@ -69,7 +69,8 @@ export default {
   },
 
   otb: {
-    flipPieces: localstorageprop('settings.otb.flipPieces', false)
+    flipPieces: localstorageprop('settings.otb.flipPieces', false),
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', true)
   },
 
   ai: {
@@ -162,6 +163,7 @@ export default {
         ['Antichess', '6'],
         ['Atomic', '7'],
         ['Horde', '8'],
+        ['Racing Kings', '9'],
         ['From Position', '3']
       ],
       color: localstorageprop('settings.game.invite.color', 'random'),

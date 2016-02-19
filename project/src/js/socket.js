@@ -23,10 +23,7 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
-  challengeReminder: o => {
-    if (challengesApi.hasKey(o.id)) challengesApi.remind(o.id);
-    else xhr.getChallenge(o.id).then(g => challengesApi.add(o.id, g)).then(m.redraw);
-  }
+  challenges: data => utils.autoredraw(challengesApi.set.bind(undefined, data))
 };
 
 function destroy() {
@@ -68,20 +65,23 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
   socketInstance = new StrongSocket(url, version, opts);
 }
 
-function createAwait(url, version, handlers) {
+function createChallenge(id, version, onOpen, handlers) {
   destroy();
-  socketInstance = new StrongSocket(
-    url, version, {
-      options: {
-        name: 'await',
-        debug: false,
-        ignoreUnknownMessages: true,
-        pingDelay: 2000,
-        onOpen: () => socketInstance.send('following_onlines')
-      },
-      events: assign({}, defaultHandlers, handlers)
-    }
-  );
+  const url = `/challenge/${id}/socket/v${version}`;
+  const opts = {
+    options: {
+      name: 'challenge',
+      debug: false,
+      ignoreUnknownMessages: true,
+      pingDelay: 2000,
+      onOpen: () => {
+        onOpen();
+        socketInstance.send('following_onlines');
+      }
+    },
+    events: assign({}, defaultHandlers, handlers)
+  };
+  socketInstance = new StrongSocket(url, version, opts);
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -157,8 +157,8 @@ signals.socket.disconnected.add(onDisconnected);
 
 export default {
   createGame,
+  createChallenge,
   createLobby,
-  createAwait,
   createDefault,
   setVersion(version) {
     if (socketInstance) socketInstance.setVersion(version);

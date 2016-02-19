@@ -1,13 +1,16 @@
 import game from'./ui/game';
 import analyse from './ui/analyse';
+import challenge from './ui/challenge';
 import tv from'./ui/tv';
 import correspondence from'./ui/correspondence';
 import otb from'./ui/otb';
 import ai from'./ui/ai';
 import settingsUi from'./ui/settings';
 import settingsLang from './ui/settings/lang';
+import settingsPreferences from './ui/settings/preferences';
 import settingsGameDisplay from './ui/settings/gameDisplay';
 import settingsGameBehavior from './ui/settings/gameBehavior';
+import settingsPrivacy from './ui/settings/privacy';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
@@ -32,6 +35,7 @@ export default {
       '/analyse': analyse,
       '/analyse/:id': analyse,
       '/analyse/:id/user/:userId': analyse,
+      '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,
       '/@/:id': user,
@@ -44,8 +48,10 @@ export default {
       '/players': players,
       '/ranking': ranking,
       '/settings': settingsUi,
+      '/settings/preferences': settingsPreferences,
       '/settings/gameDisplay': settingsGameDisplay,
       '/settings/gameBehavior': settingsGameBehavior,
+      '/settings/privacy': settingsPrivacy,
       '/settings/themes/board': boardThemes,
       '/settings/themes/piece': pieceThemes,
       '/settings/lang': settingsLang,

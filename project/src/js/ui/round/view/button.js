@@ -170,6 +170,19 @@ export default {
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
   },
+  flipBoardInMenu: function(ctrl) {
+    if (ctrl.data.game.speed === 'correspondence') {
+      const className = helper.classSet({
+        on: ctrl.vm.flip
+      });
+      return (
+        <button className={className} data-icon="B" key="flipboard"
+          config={helper.ontouch(ctrl.flip)}>
+          {i18n('flipBoard')}
+        </button>
+      );
+    }
+  },
   flipBoard: function(ctrl) {
     const className = helper.classSet({
       'action_bar_button': true,
@@ -245,5 +258,10 @@ export default {
         })
       }, i18n('newOpponent'));
     }
+  },
+  notes: function(ctrl) {
+    return m('button[data-icon=m].action_bar_button', {
+      config: helper.ontouch(ctrl.notes.open)
+    });
   }
 };

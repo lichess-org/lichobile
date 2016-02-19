@@ -6,6 +6,7 @@ import gameApi from '../../lichess/game';
 import ground from './ground';
 import promotion from './promotion';
 import chat from './chat';
+import notes from './notes';
 import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
 import gameStatus from '../../lichess/status';
@@ -55,13 +56,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
 
   const connectSocket = function() {
-    socket.createGame(
-      this.data.url.socket,
-      this.data.player.version,
-      socketHandler(this, onFeatured, onUserTVRedirect),
-      this.data.url.round,
-      userTv
-    );
+    if (utils.hasNetwork()) {
+      socket.createGame(
+        this.data.url.socket,
+        this.data.player.version,
+        socketHandler(this, onFeatured, onUserTVRedirect),
+        this.data.url.round,
+        userTv
+      );
+    }
   }.bind(this);
 
   connectSocket();
@@ -354,6 +357,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
+  this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+
   this.reload = function(rCfg) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
@@ -376,13 +381,19 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     return toggleGameBookmark(this.data.game.id).then(reloadGameData);
   }.bind(this);
 
+  var onResize = function() {
+    this.vm.replayHash = '';
+  }.bind(this);
+
   document.addEventListener('resume', reloadGameData);
+  window.addEventListener('resize', onResize);
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
     document.removeEventListener('resume', reloadGameData);
+    window.removeEventListener('resize', onResize);
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();

@@ -104,6 +104,27 @@ function createLobby(lobbyVersion, onOpen, handlers) {
   );
 }
 
+function createTournament(tournamentVersion, tournamentId, receiveHandler) {
+  destroy();
+  let url = '/tournament/' + tournamentId + '/socket/v1';
+  socketInstance = new StrongSocket(
+    url,
+    tournamentVersion, {
+      options: {
+        name: 'tournament',
+        debug: false,
+        ignoreUnknownMessages: true,
+        pingDelay: 2000,
+        onOpen: () => {
+          socketInstance.send('following_onlines');
+        }
+      },
+      events: defaultHandlers,
+      receive: receiveHandler
+    }
+  );
+}
+
 function createDefault() {
   // default socket is useless when anon.
   if (utils.hasNetwork() && session.isConnected()) {
@@ -159,6 +180,7 @@ export default {
   createGame,
   createChallenge,
   createLobby,
+  createTournament,
   createDefault,
   setVersion(version) {
     if (socketInstance) socketInstance.setVersion(version);

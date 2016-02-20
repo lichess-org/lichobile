@@ -12,7 +12,6 @@ import friendsPopup from '../friendsPopup';
 import m from 'mithril';
 import ViewOnlyBoard from './ViewOnlyBoard';
 
-
 export function menuButton() {
   return (
     <button key="main-menu" className="fa fa-navicon main_header_button menu_button" config={helper.ontouch(menu.toggle)}>
@@ -133,6 +132,12 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
 
 export function empty() {
   return [];
+}
+
+export function pad(num, size) {
+    var s = num + '';
+    while (s.length < size) s = '0' + s;
+    return s;
 }
 
 export function userStatus(user) {

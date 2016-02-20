@@ -27,7 +27,11 @@ function tournamentBody(ctrl) {
   else
     body = tournamentContentStarted(data);
 
-  return (m('.tournamentContainer', body));
+  return (
+    <div class="tournamentContainer native_scroller page">
+      {body}
+    </div>
+  );
 }
 
 function tournamentContentFinished(data) {

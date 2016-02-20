@@ -39,14 +39,12 @@ function tournamentListBody(ctrl) {
   if (isEmpty(ctrl.tournaments())) return null;
 
   let arrayName = TABS[ctrl.currentTab()].id;
-  return m('.native_scroller .page',
-      m('.module-tabs.tabs-routing', [
-          tabNavigation(ctrl.currentTab),
-          m('.tab-content.layout.center-center',
-              m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
-          )
-      ])
-  );
+  return m('.module-tabs.tabs-routing', [
+    tabNavigation(ctrl.currentTab),
+    m('.tab-content.layout.center-center.native_scroller',
+      m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
+    )
+  ]);
 }
 
 function renderTournamentList (list, id) {

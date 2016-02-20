@@ -9,9 +9,11 @@ import socket from './socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor } from '../../utils';
+import { hasNetwork, handleXhrError, oppositeColor } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import data, { defaultData } from './data';
+import work from 'webworkify';
+import chessWorker from './chessWorker';
 import m from 'mithril';
 
 export default function controller() {
@@ -52,6 +54,15 @@ export default function controller() {
   };
 
   this.socket = new socket(this);
+
+  this.chessWorker = work(chessWorker);
+  this.chessWorker.onmessage = function(msg) {
+    switch (msg.topic) {
+      case 'dests':
+        this.addDests(data.payload.dests, data.payload.path);
+        break;
+    }
+  }.bind(this);
 
   this.flip = function() {
     this.vm.flip = !this.vm.flip;
@@ -176,7 +187,14 @@ export default function controller() {
       path: this.vm.pathStr
     };
     if (prom) move.promotion = prom;
-    this.socket.sendAnaMove(move);
+    if (hasNetwork()) {
+      this.socket.sendAnaMove(move);
+    } else {
+      this.chessWorker.postMessage({
+        topic: 'addMove',
+        payload: move
+      });
+    }
     preparePremoving();
   }.bind(this);
 
@@ -291,10 +309,21 @@ export default function controller() {
 
 function getDests() {
   if (!this.vm.step.dests) {
-    this.socket.sendAnaDests({
-      variant: this.data.game.variant.key,
-      fen: this.vm.step.fen,
-      path: this.vm.pathStr
-    });
+    console.log('saf');
+    if (hasNetwork()) {
+      this.socket.sendAnaDests({
+        variant: this.data.game.variant.key,
+        fen: this.vm.step.fen,
+        path: this.vm.pathStr
+      });
+    } else {
+      this.chessWorker.postMessage({
+        topid: 'getDests',
+        payload: {
+          fen: this.vm.step.fen,
+          path: this.vm.pathStr
+        }
+      });
+    }
   }
 }

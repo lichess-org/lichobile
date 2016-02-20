@@ -8,24 +8,29 @@ export default function chessWorker(self) {
   self.onmessage = function (msg) {
     switch (msg.data.topic) {
       case 'getDests':
-        getDests(msg.data);
+        getDests(msg.data.payload);
         break;
       case 'addMove':
-        addMove(msg.data);
+        addMove(msg.data.payload);
         break;
     }
   };
 
   function getDests(data) {
-    const { fen } = data;
+    const { fen, path } = data;
     const chess = new Chess(fen, 0);
     self.postMessage({
-      dests: chess.dests()
+      topic: 'dests',
+      payload: {
+        dests: chess.dests(),
+        path
+      }
     });
   }
 
   function addMove(data) {
-    const { ply, fen, promotion, orig, dest } = data;
+    console.log(data);
+    const { fen, promotion, orig, dest, path } = data;
     const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
     (promotion ? forsyth(promotion) : 'q') : null;
     const chess = new Chess(fen, 0);
@@ -36,22 +41,22 @@ export default function chessWorker(self) {
     });
     const turnColor = chess.turn() === 'w' ? 'white' : 'black';
     self.postMessage({
-      fen: chess.fen(),
-      turnColor: turnColor,
-      movable: {
-        color: turnColor,
-        dests: chess.dests()
-      },
-      check: chess.in_check(),
-      finished: chess.game_over(),
-      checkmate: chess.in_checkmate(),
-      stalemate: chess.in_stalemate(),
-      threefold: chess.in_threefold_repetition(),
-      draw: chess.in_draw(),
-      lastMove: [move.from, move.to],
-      san: move.san,
-      ply: ply,
-      promotion: promotionLetter
+      topic: 'step',
+      payload: {
+        fen: chess.fen(),
+        turnColor: turnColor,
+        dests: chess.dests(),
+        check: chess.in_check(),
+        finished: chess.game_over(),
+        checkmate: chess.in_checkmate(),
+        stalemate: chess.in_stalemate(),
+        threefold: chess.in_threefold_repetition(),
+        draw: chess.in_draw(),
+        lastMove: [move.from, move.to],
+        san: move.san,
+        promotion: promotionLetter,
+        path
+      }
     });
   }
 }

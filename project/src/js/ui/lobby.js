@@ -26,6 +26,16 @@ lobby.startSeeking = function() {
     socket.createLobby(data.lobby.version, createHook, {
       redirect: d => {
         lobby.closePopup();
+        if (d.cookie) {
+          const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1');
+          const cookie = [
+            encodeURIComponent(d.cookie.name) + '=' + d.cookie.value,
+            '; max-age=' + d.cookie.maxAge,
+            '; path=/',
+            '; domain=' + domain
+          ].join('');
+          document.cookie = cookie;
+        }
         m.route('/game' + d.url);
       },
       n: n => {

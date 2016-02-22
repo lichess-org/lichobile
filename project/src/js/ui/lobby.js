@@ -9,7 +9,8 @@ import socket from '../socket';
 import signals from '../signals';
 import m from 'mithril';
 
-let nbPlaying = 0;
+let nbPlayers = 0;
+let nbGames = 0;
 let hookId = null;
 
 const lobby = {};
@@ -29,7 +30,11 @@ lobby.startSeeking = function() {
         socket.redirectToGame(d);
       },
       n: n => {
-        nbPlaying = n;
+        nbPlayers = n;
+        m.redraw();
+      },
+      nbr: n => {
+        nbGames = n;
         m.redraw();
       },
       resync: () => xhr.lobby().then(d => {
@@ -63,7 +68,11 @@ lobby.view = function() {
   function content() {
     return m('div.seek_real_time', [
       m('div.nb_players', socket.isConnected() ?
-        i18n('nbConnectedPlayers', nbPlaying || '?') :
+        i18n('nbConnectedPlayers', nbPlayers || '?') :
+        m('div', [i18n('reconnecting'), loader])
+      ),
+      m('div.nb_players', socket.isConnected() ?
+        i18n('nbGamesInPlay', nbGames || '?') :
         m('div', [i18n('reconnecting'), loader])
       ),
       m('br'),

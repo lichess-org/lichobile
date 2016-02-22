@@ -1,5 +1,6 @@
 import home from './ui/home';
 import game from './ui/game';
+import analyse from './ui/analyse';
 import challenge from './ui/challenge';
 import tv from'./ui/tv';
 import correspondence from'./ui/correspondence';
@@ -33,6 +34,10 @@ export default {
       '/ai': ai,
       '/game/:id': game,
       '/game/:id/:color': game,
+      '/game/:id/user/:userId': game,
+      '/analyse': analyse,
+      '/analyse/:id': analyse,
+      '/analyse/:id/user/:userId': analyse,
       '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,

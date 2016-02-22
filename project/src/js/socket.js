@@ -65,6 +65,22 @@ function createGame(url, version, receiveHandler, gameUrl, userTv) {
   socketInstance = new StrongSocket(url, version, opts);
 }
 
+function createAnalyse(receiveHandler) {
+  destroy();
+  socketInstance = new StrongSocket(
+    '/socket', 0, {
+      options: {
+        name: 'default',
+        debug: false,
+        pingDelay: 2000,
+        onOpen: () => socketInstance.send('following_onlines')
+      },
+      events: defaultHandlers,
+      receive: receiveHandler
+    }
+  );
+}
+
 function createChallenge(id, version, onOpen, handlers) {
   destroy();
   const url = `/challenge/${id}/socket/v${version}`;
@@ -197,6 +213,7 @@ signals.socket.disconnected.add(onDisconnected);
 
 export default {
   createGame,
+  createAnalyse,
   createChallenge,
   createLobby,
   createTournament,

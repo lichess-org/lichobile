@@ -21,10 +21,12 @@ function renderHeader(user) {
       { hasNetwork() && user ?
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
           config={helper.ontouch(menu.toggleHeader, null, null, false)}
-        /> :
+        /> : null
+      }
+      { hasNetwork() && !user ?
         <button className="login" config={helper.ontouchY(loginModal.open)}>
           {i18n('signIn')}
-        </button>
+        </button> : null
       }
     </header>
   );

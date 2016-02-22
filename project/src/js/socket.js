@@ -143,6 +143,25 @@ function createDefault() {
   }
 }
 
+function redirectToGame(obj) {
+  let url;
+  if (typeof obj === 'string') url = obj;
+  else {
+    url = obj.url;
+    if (obj.cookie) {
+      const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1');
+      const cookie = [
+        encodeURIComponent(obj.cookie.name) + '=' + obj.cookie.value,
+        '; max-age=' + obj.cookie.maxAge,
+        '; path=/',
+        '; domain=' + domain
+        ].join('');
+        document.cookie = cookie;
+    }
+    m.route('/game' + url);
+  }
+}
+
 function onConnected() {
   const wasOff = !connectedWS;
   connectedWS = true;
@@ -182,6 +201,7 @@ export default {
   createLobby,
   createTournament,
   createDefault,
+  redirectToGame,
   setVersion(version) {
     if (socketInstance) socketInstance.setVersion(version);
   },

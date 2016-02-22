@@ -29,7 +29,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       xhr.reload(ctrl).then(ctrl.reload);
     },
     redirect: function(e) {
-      if (!ctrl.data.tv) m.route('/game/' + e.id);
+      socket.redirectToGame(e);
     },
     resync: function() {
       if (onUserTVRedirect) {

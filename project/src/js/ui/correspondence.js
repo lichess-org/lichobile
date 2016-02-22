@@ -39,7 +39,7 @@ correspondence.controller = function() {
 
   xhr.lobby(true).then(function(data) {
     socket.createLobby(data.lobby.version, reload, {
-      redirect: d => m.route('/game' + d.url),
+      redirect: socket.redirectToGame,
       reload_seeks: reload,
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);

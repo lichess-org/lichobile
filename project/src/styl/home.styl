@@ -4,15 +4,15 @@
 
 .mini_board
   @media only screen and (orientation: portrait)
-    width 60vw
+    width 66vw
   @media only screen and (orientation: landscape)
-    width 60vh
+    width 66vh
   > .board_wrapper
     width 100%
     @media only screen and (orientation: portrait)
-      height 60vw
+      height 66vw
     @media only screen and (orientation: landscape)
-      height 60vh
+      height 66vh
   > .vsbloc
     font-size 0.8em
     display flex
@@ -21,6 +21,7 @@
     background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
     border 1px solid #323232
     padding 5px
+    overflow hidden
     > .time
       display flex
       justify-content center

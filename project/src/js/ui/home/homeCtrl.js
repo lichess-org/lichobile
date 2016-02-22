@@ -15,6 +15,14 @@ export default function homeCtrl() {
   const nbConnectedPlayers = m.prop();
   const nbGamesInPlay = m.prop();
 
+  function onFeatured() {
+    return featuredXhr()
+    .then(data => {
+      featured(data);
+      m.redraw();
+    });
+  }
+
   lobbyXhr(true).then(data => {
     socket.createLobby(data.lobby.version, noop, {
       n: n => {
@@ -24,13 +32,13 @@ export default function homeCtrl() {
       nbr: n => {
         nbGamesInPlay(n);
         m.redraw();
-      }
+      },
+      featured: onFeatured
     });
   })
   .then(featuredXhr)
   .then(data => {
     featured(data);
-
     const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
     featuredFeed.onmessage = function(ev) {
       const obj = JSON.parse(ev.data);

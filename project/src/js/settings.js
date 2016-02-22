@@ -63,6 +63,11 @@ export default {
     coords: localstorageprop('settings.coords', true)
   },
 
+  analyse: {
+    showAutoShapes: localstorageprop('settings.analyse.showAutoShapes', true),
+    showGauge: localstorageprop('settings.analyse.showGauge', true)
+  },
+
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', true)

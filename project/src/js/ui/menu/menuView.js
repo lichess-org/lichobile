@@ -100,11 +100,6 @@ function renderLinks(user) {
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="tournament" config={helper.ontouchY(menu.route('/tournament'))}>
-        <span className="fa fa-trophy"/>{i18n('tournament')}
-      </li> : null
-      }
-      {hasNetwork() ?
       <li className="sep_link" key="sep_link_community">
         {i18n('community')}
       </li> : null

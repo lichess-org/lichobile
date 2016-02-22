@@ -1,4 +1,5 @@
-import game from'./ui/game';
+import home from './ui/home';
+import game from './ui/game';
 import challenge from './ui/challenge';
 import tv from'./ui/tv';
 import correspondence from'./ui/correspondence';
@@ -27,7 +28,7 @@ import m from 'mithril';
 export default {
   init() {
     m.route(document.body, '/', {
-      '/': ai,
+      '/': home,
       '/otb': otb,
       '/ai': ai,
       '/game/:id': game,

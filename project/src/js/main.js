@@ -15,7 +15,6 @@ import { status as xhrStatus, setServerLang, getChallenges } from './xhr';
 import challengesApi from './lichess/challenges';
 import helper from './ui/helper';
 import backbutton from './backbutton';
-import storage from './storage';
 import socket from './socket';
 import push from './push';
 import routes from './routes';
@@ -101,24 +100,17 @@ function onOnline() {
     // load challenges
     getChallenges().then(challengesApi.set);
     // first time login on app start or just try to reconnect socket
-    if (/^\/$/.test(m.route()) && !triedToLogin) {
+    if (!triedToLogin) {
       triedToLogin = true;
-      var nowPlaying = session.nowPlaying();
-      if (nowPlaying.length)
-        m.route('/game/' + nowPlaying[0].fullId);
-      else
-        socket.createDefault();
       window.plugins.toast.show(i18n('connectedToLichess'), 'short', 'center');
     } else {
       socket.connect();
     }
   }, err => {
-    if (/^\/$/.test(m.route()) && !triedToLogin) {
+    if (!triedToLogin) {
       // means user is anonymous here
       if (err.status === 401) {
         triedToLogin = true;
-        var lastPlayedAnon = storage.get('lastPlayedGameURLAsAnon');
-        if (lastPlayedAnon) m.route('/game' + lastPlayedAnon);
       }
     }
   })

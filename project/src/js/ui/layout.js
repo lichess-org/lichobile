@@ -1,4 +1,5 @@
 import menu from './menu';
+import menuView from './menu/menuView';
 import gamesMenu from './gamesMenu';
 import newGameForm from './newGameForm';
 import challengeForm from './challengeForm';
@@ -28,7 +29,7 @@ export default {
           <div className="content_round">{content()}</div>
           { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
         </main>
-        {menu.view()}
+        {menuView()}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
@@ -51,7 +52,7 @@ export default {
           <footer className="main_footer">{footer()}</footer>
           { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
         </main>
-        {menu.view()}
+        {menuView()}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}

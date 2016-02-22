@@ -1,3 +1,4 @@
+import menu from '.';
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
@@ -7,9 +8,18 @@ import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
-import menu from './menu';
 import friendsApi from '../../lichess/friends';
 import Zanimo from 'zanimo';
+
+export default function view() {
+  if (!menu.isOpen) return null;
+
+  return (
+    <aside id="side_menu" config={slidesIn}>
+      {renderMenu()}
+    </aside>
+  );
+}
 
 function renderHeader(user) {
   return (
@@ -157,14 +167,4 @@ function slidesIn(el, isUpdate, context) {
     context.lol = el.offsetHeight;
     Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
   }
-}
-
-export default function view() {
-  if (!menu.isOpen) return null;
-
-  return (
-    <aside id="side_menu" config={slidesIn}>
-      {renderMenu()}
-    </aside>
-  );
 }

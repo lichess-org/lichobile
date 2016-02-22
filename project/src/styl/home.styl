@@ -1,2 +1,27 @@
 .home
   padding 10px
+
+
+.mini_board
+  @media only screen and (orientation: portrait)
+    width 60vw
+  @media only screen and (orientation: landscape)
+    width 60vh
+  > .board_wrapper
+    width 100%
+    @media only screen and (orientation: portrait)
+      height 60vw
+    @media only screen and (orientation: landscape)
+      height 60vh
+  > .vsbloc
+    font-size 0.8em
+    display flex
+    flex-flow row nowrap
+    justify-content space-between
+    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+    border 1px solid #323232
+    padding 5px
+    > .time
+      display flex
+      justify-content center
+      align-items center

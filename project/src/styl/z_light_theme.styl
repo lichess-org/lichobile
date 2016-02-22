@@ -32,6 +32,19 @@ activeBgLight = darken(themeBgLight, 8%)
   button#newGameCorres
     color textMediumGray
 
+  .fatButton
+    background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
+    text-shadow: 0 1px 0 #FFF;
+    color: #848484;
+    border-color #e2e2e2
+    &.active
+      background linear-gradient(to bottom,rgba(248,248,248,1) 0%,rgba(243,243,243,1) 100%);
+
+  .mini_board
+    .vsbloc
+      background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
+      border-color #e2e2e2
+
   .button
     &.active
       background activeBgLight

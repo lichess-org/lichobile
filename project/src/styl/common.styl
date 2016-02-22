@@ -1,5 +1,5 @@
 /* COLORS */
-bgdark = #1c2328
+bgdark = #1a1a1a
 themeBgLight = #eeeeee // TODO rename
 bglight = #f5f5f5
 bgpopup = #eeeeee
@@ -155,6 +155,17 @@ span.fa
   color gold
   margin 10px 0 5px
 
-.board_wrapper.mini_board
-  height 200px
-  width 200px
+.fatButton
+  display block
+  width 80%
+  padding 15px
+  margin 20px auto
+  background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+  text-shadow 0 1px 0 #000
+  border 1px solid #323232
+  color #8a8a8a
+  font-weight bold
+  border-radius 2px
+  &.active
+    background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
+

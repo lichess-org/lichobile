@@ -1,21 +1,35 @@
 import socket from '../../socket';
 import { hasNetwork } from '../../utils';
-import * as xhr from './homeXhr';
+import settings from '../../settings';
+import { lobby as lobbyXhr } from '../../xhr';
+import { featured as featuredXhr } from './homeXhr';
+import { noop } from '../../utils';
 import m from 'mithril';
 
 export default function homeCtrl() {
-
   if (!hasNetwork()) {
     m.route('/ai');
   }
 
   const featured = m.prop({});
+  const nbConnectedPlayers = m.prop();
+  const nbGamesInPlay = m.prop();
 
-  socket.createDefault();
-
-  xhr.featured().then(function(data) {
+  lobbyXhr(true).then(data => {
+    socket.createLobby(data.lobby.version, noop, {
+      n: n => {
+        nbConnectedPlayers(n);
+        m.redraw();
+      },
+      nbr: n => {
+        nbGamesInPlay(n);
+        m.redraw();
+      }
+    });
+  })
+  .then(featuredXhr)
+  .then(data => {
     featured(data);
-    console.log(data);
 
     const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
     featuredFeed.onmessage = function(ev) {
@@ -28,8 +42,11 @@ export default function homeCtrl() {
 
   return {
     featured,
+    nbConnectedPlayers,
+    nbGamesInPlay,
     goToFeatured() {
-      m.route('/game' + featured().url.round);
+      settings.tv.channel('best');
+      m.route('/tv');
     }
   };
 }

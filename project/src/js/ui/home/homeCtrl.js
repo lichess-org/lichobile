@@ -7,9 +7,6 @@ import { noop, handleXhrError } from '../../utils';
 import m from 'mithril';
 
 export default function homeCtrl() {
-  if (!hasNetwork()) {
-    m.route('/ai');
-  }
 
   const featured = m.prop({});
 
@@ -17,6 +14,17 @@ export default function homeCtrl() {
   const nbGamesInPlay = m.prop();
   const dailyPuzzle = m.prop();
   const weekTopPlayers = m.prop();
+
+  if (!hasNetwork()) {
+    m.route('/ai');
+    return {
+      featured,
+      nbConnectedPlayers,
+      nbGamesInPlay,
+      dailyPuzzle,
+      weekTopPlayers
+    };
+  }
 
   function onFeatured() {
     return featuredXhr()

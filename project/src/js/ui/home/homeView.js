@@ -25,6 +25,7 @@ export default function homeView(ctrl) {
             <button className="fatButton" config={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
           </section>
           {renderFeatured(ctrl)}
+          {renderDailyPuzzle(ctrl)}
         </div>
       </div>
     );
@@ -59,6 +60,24 @@ function renderFeatured(ctrl) {
             <br/>
             {feat.opponent.rating}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function renderDailyPuzzle(ctrl) {
+  const puzzle = ctrl.dailyPuzzle();
+
+  return (
+    <section id="dailyPuzzle">
+      <h2 className="contentTitle">{i18n('puzzleOfTheDay')}</h2>
+      <div className="mini_board" config={helper.ontouchY(() => m.route('/training/' + puzzle.id))}>
+        <div className="board_wrapper">
+          {m.component(ViewOnlyBoard, {
+            fen: puzzle.fen,
+            orientation: puzzle.color
+          })}
         </div>
       </div>
     </section>

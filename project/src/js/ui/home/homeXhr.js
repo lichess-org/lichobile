@@ -1,7 +1,7 @@
 import { request } from '../../http';
 
-export function featured() {
-  return request('/tv', {}, true);
+export function featured(feedback) {
+  return request('/tv', null, feedback);
 }
 
 export function dailyPuzzle() {

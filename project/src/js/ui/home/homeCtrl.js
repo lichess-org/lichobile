@@ -40,7 +40,7 @@ export default function homeCtrl() {
     });
   }, handleXhrError);
 
-  featuredXhr()
+  featuredXhr(true)
   .then(data => {
     featured(data);
     const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);

@@ -37,6 +37,9 @@ export default function homeView(ctrl) {
 
 function renderFeatured(ctrl) {
   const feat = ctrl.featured();
+
+  if (!feat) return null;
+
   const { fen, lastMove } = ctrl.featured().game;
   const orientation = ctrl.featured().orientation;
 

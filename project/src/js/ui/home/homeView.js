@@ -80,6 +80,8 @@ function renderFeatured(ctrl) {
 function renderDailyPuzzle(ctrl) {
   const puzzle = ctrl.dailyPuzzle();
 
+  if (!puzzle) return null;
+
   return (
     <section id="dailyPuzzle">
       <h2 className="contentTitle">{i18n('puzzleOfTheDay')}</h2>
@@ -97,7 +99,8 @@ function renderDailyPuzzle(ctrl) {
 
 function renderWeekLeaders(ctrl) {
   const players = ctrl.weekTopPlayers();
-  console.log(players);
+
+  if (players.length === 0) return null;
 
   return (
     <section id="weekTopPlayers">

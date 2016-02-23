@@ -13,7 +13,7 @@ export default function homeCtrl() {
   const nbConnectedPlayers = m.prop();
   const nbGamesInPlay = m.prop();
   const dailyPuzzle = m.prop();
-  const weekTopPlayers = m.prop();
+  const weekTopPlayers = m.prop([]);
 
   if (!hasNetwork()) {
     m.route('/ai');

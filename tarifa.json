@@ -112,6 +112,7 @@
       "KeyboardDisplayRequiresUserAction": false,
       "ShowSplashScreenSpinner": false,
       "AutoHideSplashScreen": false,
+      "FadeSplashScreen": false,
       "SplashScreen": "screen",
       "SplashScreenDelay": 10000,
       "KeepRunning": true,

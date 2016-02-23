@@ -5,6 +5,7 @@ import i18n from '../../i18n';
 import helper from '../helper';
 import newGameForm from '../newGameForm';
 import gameApi from '../../lichess/game';
+import settings from '../../settings';
 import { header as headerWidget, userStatus } from '../shared/common';
 import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 
@@ -111,8 +112,15 @@ function renderWeekLeaders(ctrl) {
 function renderPlayer(p) {
   const perfKey = Object.keys(p.perfs)[0];
   const perf = p.perfs[perfKey];
+
+  const supportedPerfs = settings.game.supportedVariants.concat([
+    'blitz', 'bullet', 'classical'
+  ]);
+
+  if (supportedPerfs.indexOf(perfKey) === -1) return null;
+
   return (
-    <li className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating withIcon" data-icon={gameIcon(perfKey)}>

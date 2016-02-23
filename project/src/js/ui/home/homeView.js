@@ -123,7 +123,7 @@ function renderPlayer(p) {
     <li key={perfKey} className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
-        <span className="rating withIcon" data-icon={gameIcon(perfKey)}>
+        <span className="rating" data-icon={gameIcon(perfKey)}>
           {perf.rating}
         </span>
         {helper.progress(perf.progress)}

@@ -191,12 +191,14 @@ function renderSubmitMovePopup(ctrl) {
   );
 }
 
-function userInfos(user, player, playerName) {
+function userInfos(user, player, playerName, position) {
   let title;
   if (user) {
     let onlineStatus = user.online ? 'connected to lichess' : 'offline';
     let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
-    title = `${playerName}: ${onlineStatus}; ${onGameStatus}`;
+    let engine = position === 'opponent' && user.engine ? i18n('thisPlayerUsesChessComputerAssistance') + '; ' : '';
+    let booster = position === 'opponent' && user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') + '; ' : '';
+    title = `${playerName}: ${engine}${booster}${onlineStatus}; ${onGameStatus}`;
   } else
     title = playerName;
   window.plugins.toast.show(title, 'short', 'center');
@@ -207,7 +209,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
   const vConf = user ?
-    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
+    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName, position)) :
     utils.noop;
 
   const onlineStatus = user && user.online ? 'online' : 'offline';
@@ -234,6 +236,9 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
         }
       </h2>
       <div className="ratingAndMaterial">
+        { position === 'opponent' && user && (user.engine || user.booster) ?
+          <span className="warning" data-icon="j"></span> : null
+        }
         {user && isPortrait ?
           <h3 className="rating">
             {player.rating}

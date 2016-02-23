@@ -1,11 +1,11 @@
 import m from 'mithril';
-import { noop } from '../../utils';
+import { noop, gameIcon } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
 import helper from '../helper';
 import newGameForm from '../newGameForm';
 import gameApi from '../../lichess/game';
-import { header as headerWidget } from '../shared/common';
+import { header as headerWidget, userStatus } from '../shared/common';
 import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 
 export default function homeView(ctrl) {
@@ -26,6 +26,7 @@ export default function homeView(ctrl) {
           </section>
           {renderFeatured(ctrl)}
           {renderDailyPuzzle(ctrl)}
+          {renderWeekLeaders(ctrl)}
         </div>
       </div>
     );
@@ -87,5 +88,35 @@ function renderDailyPuzzle(ctrl) {
         </div>
       </div>
     </section>
+  );
+}
+
+function renderWeekLeaders(ctrl) {
+  const players = ctrl.weekTopPlayers();
+  console.log(players);
+
+  return (
+    <section id="weekTopPlayers">
+      <h2 className="contentTitle">Week's leaders</h2>
+      <ul>
+        { players.map(renderPlayer) }
+      </ul>
+    </section>
+  );
+}
+
+function renderPlayer(p) {
+  const perfKey = Object.keys(p.perfs)[0];
+  const perf = p.perfs[perfKey];
+  return (
+    <li className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
+      {userStatus(p)}
+      <div className="playerMiniPerf">
+        <span className="rating" data-icon={gameIcon(perfKey)}>
+          {perf.rating}
+        </span>
+        {helper.progress(perf.progress)}
+      </div>
+    </li>
   );
 }

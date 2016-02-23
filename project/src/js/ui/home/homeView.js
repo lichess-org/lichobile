@@ -47,18 +47,24 @@ function renderFeatured(ctrl) {
           {m.component(ViewOnlyBoard, {fen, lastMove, orientation })}
         </div>
         <div className="vsbloc">
-          <div>
-            {feat.player.user.username}
-            <br/>
-            {feat.player.rating}
+          <div className="antagonists">
+            <div className="player">
+              {feat.player.user.username}
+            </div>
+            <div className="opponent">
+              {feat.opponent.user.username}
+            </div>
           </div>
-          <div className="time" data-icon="p">
-            {gameApi.time(feat)}
-          </div>
-          <div>
-            {feat.opponent.user.username}
-            <br/>
-            {feat.opponent.rating}
+          <div className="ratingAndTime">
+            <div>
+              {feat.player.rating}
+            </div>
+            <div className="time" data-icon="p">
+              {gameApi.time(feat)}
+            </div>
+            <div>
+              {feat.opponent.rating}
+            </div>
           </div>
         </div>
       </div>

@@ -34,7 +34,6 @@ export default {
       '/ai': ai,
       '/game/:id': game,
       '/game/:id/:color': game,
-      '/game/:id/user/:userId': game,
       '/analyse': analyse,
       '/analyse/:id': analyse,
       '/analyse/:id/user/:userId': analyse,

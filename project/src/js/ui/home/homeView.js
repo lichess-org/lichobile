@@ -78,7 +78,7 @@ function renderWeekLeaders(ctrl) {
 
   return (
     <section id="weekTopPlayers">
-      <h2 className="contentTitle">Week's leaders</h2>
+      <h2 className="contentTitle">{i18n('leaderboard')}</h2>
       <ul>
         { players.map(renderPlayer) }
       </ul>

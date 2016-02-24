@@ -10,6 +10,8 @@ import session from '../../session';
 export default function view(ctrl) {
   const user = ctrl.user();
 
+  if (!user) return null;
+
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;
     return headerWidget(null, backButton(title));

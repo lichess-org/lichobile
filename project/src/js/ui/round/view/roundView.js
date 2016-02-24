@@ -9,7 +9,7 @@ import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
-import { menuButton, loader, headerBtns } from '../../shared/common';
+import { backButton, menuButton, loader, headerBtns } from '../../shared/common';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -100,10 +100,38 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
   );
 }
 
+function renderVsButton(ctrl) {
+
+  const text = utils.playerName(ctrl.data.player) + ' vs. ' +
+    utils.playerName(ctrl.data.opponent);
+
+  return backButton(text);
+}
+
+function renderTitle(ctrl) {
+  if (socket.isConnected()) {
+    return (
+      <h1 className="playing">
+        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+        {ctrl.title}
+      </h1>
+    );
+  } else if (utils.hasNetwork()) {
+    return (
+      <h1 className="reconnecting withTitle">
+        {i18n('reconnecting')}
+        {loader}
+      </h1>
+    );
+  } else {
+    return <h1>Offline</h1>;
+  }
+}
+
 function renderHeader(ctrl) {
   const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
     friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
-    session.myTurnGames().length;
+    session.myTurnGames().length + ctrl.data.tv + ctrl.data.player.spectator;
 
   if (ctrl.vm.headerHash === hash) return {
     subtree: 'retain'
@@ -112,17 +140,8 @@ function renderHeader(ctrl) {
 
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      {menuButton()}
-      {socket.isConnected() ?
-      <h1 className="playing">
-        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-        {ctrl.title}
-      </h1> : utils.hasNetwork() ?
-      <h1 className="reconnecting withTitle">
-        {i18n('reconnecting')}
-        {loader}
-      </h1> : <h1>Offline</h1>
-      }
+      { !ctrl.data.tv && ctrl.data.player.spectator ? renderVsButton(ctrl) : menuButton()}
+      { ctrl.data.tv || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>
   );

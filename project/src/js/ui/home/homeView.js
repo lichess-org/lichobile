@@ -41,8 +41,8 @@ function renderFeatured(ctrl) {
 
   if (!feat) return null;
 
-  const { fen, lastMove } = ctrl.featured().game;
-  const orientation = ctrl.featured().orientation;
+  const { fen, lastMove } = feat.game;
+  const orientation = feat.orientation;
 
   return (
     <section id="homeFeatured">

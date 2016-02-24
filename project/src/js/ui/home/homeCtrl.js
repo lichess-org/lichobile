@@ -8,7 +8,7 @@ import m from 'mithril';
 
 export default function homeCtrl() {
 
-  const featured = m.prop({});
+  const featured = m.prop();
 
   const nbConnectedPlayers = m.prop();
   const nbGamesInPlay = m.prop();

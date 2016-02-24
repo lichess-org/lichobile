@@ -14,7 +14,6 @@ export default function(ctrl) {
 
   const handlers = {
     step: function(data) {
-      console.log(data);
       ctrl.addStep(data.step, data.path);
       clearTimeout(anaMoveTimeout);
     },

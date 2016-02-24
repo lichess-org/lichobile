@@ -188,7 +188,7 @@ export default function controller() {
   }
 
   this.addStep = function(step, path) {
-    var newPath = this.analyse.addStep(step, treePath.read(path));
+    const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
     m.redraw();
     this.chessground.playPremove();

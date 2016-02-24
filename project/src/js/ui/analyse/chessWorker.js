@@ -5,6 +5,10 @@ export default function chessWorker(self) {
     return role === 'knight' ? 'n' : role[0];
   }
 
+  function toUci(move) {
+    return move.from + move.to;
+  }
+
   self.onmessage = function (msg) {
     switch (msg.data.topic) {
       case 'dests':
@@ -29,7 +33,6 @@ export default function chessWorker(self) {
   }
 
   function addMove(data) {
-    console.log(data);
     const { fen, promotion, orig, dest, path } = data;
     const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
     (promotion ? forsyth(promotion) : 'q') : null;
@@ -43,10 +46,10 @@ export default function chessWorker(self) {
       topic: 'step',
       payload: {
         step: {
+          ply: parseInt(path, 10) + 1,
           dests: chess.dests(),
           fen: chess.fen(),
-          ply: chess.ply,
-          uci: move.uci,
+          uci: toUci(move),
           san: move.san
         },
         path

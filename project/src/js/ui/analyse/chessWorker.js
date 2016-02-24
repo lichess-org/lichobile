@@ -7,10 +7,10 @@ export default function chessWorker(self) {
 
   self.onmessage = function (msg) {
     switch (msg.data.topic) {
-      case 'getDests':
+      case 'dests':
         getDests(msg.data.payload);
         break;
-      case 'addMove':
+      case 'move':
         addMove(msg.data.payload);
         break;
     }
@@ -39,22 +39,16 @@ export default function chessWorker(self) {
       to: dest,
       promotion: promotionLetter
     });
-    const turnColor = chess.turn() === 'w' ? 'white' : 'black';
     self.postMessage({
       topic: 'step',
       payload: {
-        fen: chess.fen(),
-        turnColor: turnColor,
-        dests: chess.dests(),
-        check: chess.in_check(),
-        finished: chess.game_over(),
-        checkmate: chess.in_checkmate(),
-        stalemate: chess.in_stalemate(),
-        threefold: chess.in_threefold_repetition(),
-        draw: chess.in_draw(),
-        lastMove: [move.from, move.to],
-        san: move.san,
-        promotion: promotionLetter,
+        step: {
+          dests: chess.dests(),
+          fen: chess.fen(),
+          ply: chess.ply,
+          uci: move.uci,
+          san: move.san
+        },
         path
       }
     });

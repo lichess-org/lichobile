@@ -3,8 +3,13 @@ bgdark = #1a1a1a
 themeBgLight = #eeeeee // TODO rename
 bglight = #f5f5f5
 bgpopup = #eeeeee
+
 gold = #C4A86F
 orange = #d85000
+
+textDarkBg = #8a8a8a
+textLightBg = #747474
+
 textLightGray = #aeaeae
 textMediumGray = #707070
 textDarkGray = #383838
@@ -14,7 +19,7 @@ green = #759900
 red = #ac524f
 
 selectBg = #e6e6e6
-headerBgDark = #151a1e
+headerBgDark = darken(bgdark, 15%)
 
 html
   font-family 'Noto Sans', sans-serif
@@ -94,7 +99,7 @@ span.fa
   position relative
   line-height 20px
   padding 15px
-  border-bottom 1px solid #2E3033
+  border-bottom 1px solid lighten(bgdark, 8%)
   > td
     padding 15px 0
     line-height 20px

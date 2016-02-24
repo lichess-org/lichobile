@@ -4,6 +4,9 @@ borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
 .view-container.light
+  main
+    color textLightBg
+
   #page
     background themeBgLight
     color textMediumGray
@@ -164,11 +167,13 @@ activeBgLight = darken(themeBgLight, 8%)
     input.radio:checked + label
       background-color darken(bglight, 10%)
 
-  .perf
+  .profilePerf
     &.active
       background darken(bglight, 5%)
     > .rating
-      color textMediumGray
+      color textDarkGray
+      > .nb
+        color textLightBg
     > .name
       color textDarkGray
 

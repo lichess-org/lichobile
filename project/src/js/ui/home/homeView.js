@@ -4,10 +4,9 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import helper from '../helper';
 import newGameForm from '../newGameForm';
-import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { header as headerWidget, userStatus } from '../shared/common';
-import ViewOnlyBoard from '../shared/ViewOnlyBoard';
+import miniBoard from '../shared/miniBoard';
 
 export default function homeView(ctrl) {
 
@@ -41,38 +40,16 @@ function renderFeatured(ctrl) {
 
   if (!feat) return null;
 
-  const { fen, lastMove } = feat.game;
-  const orientation = feat.orientation;
-
   return (
     <section id="homeFeatured">
       <h2 className="contentTitle">Featured game</h2>
-      <div className="mini_board" config={helper.ontouchY(ctrl.goToFeatured)}>
-        <div className="board_wrapper">
-          {m.component(ViewOnlyBoard, {fen, lastMove, orientation })}
-        </div>
-        <div className="vsbloc">
-          <div className="antagonists">
-            <div className="player">
-              {feat.player.user.username}
-            </div>
-            <div className="opponent">
-              {feat.opponent.user.username}
-            </div>
-          </div>
-          <div className="ratingAndTime">
-            <div>
-              {feat.player.rating}
-            </div>
-            <div className="time" data-icon="p">
-              {gameApi.time(feat)}
-            </div>
-            <div>
-              {feat.opponent.rating}
-            </div>
-          </div>
-        </div>
-      </div>
+      {m.component(miniBoard, {
+        fen: feat.game.fen,
+        lastMove: feat.game.lastMove,
+        orientation: feat.orientation,
+        link: ctrl.goToFeatured,
+        gameObj: feat}
+      )}
     </section>
   );
 }
@@ -85,14 +62,11 @@ function renderDailyPuzzle(ctrl) {
   return (
     <section id="dailyPuzzle">
       <h2 className="contentTitle">{i18n('puzzleOfTheDay')}</h2>
-      <div className="mini_board" config={helper.ontouchY(() => m.route('/training/' + puzzle.id))}>
-        <div className="board_wrapper">
-          {m.component(ViewOnlyBoard, {
-            fen: puzzle.fen,
-            orientation: puzzle.color
-          })}
-        </div>
-      </div>
+        {m.component(miniBoard, {
+          fen: puzzle.fen,
+          orientation: puzzle.color,
+          link: () => m.route('/training/' + puzzle.id)
+        })}
     </section>
   );
 }

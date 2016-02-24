@@ -1,5 +1,35 @@
 import { request } from '../../http';
 
+export function games(userId, filter = 'all', page = 1, feedback = false) {
+  return request(`/@/${userId}/${filter}`, {
+    method: 'GET',
+    data: {
+      page
+    },
+    background: !feedback
+  }, feedback);
+}
+
+export function following(userId, page = 1, feedback = false) {
+  return request(`/@/${userId}/following`, {
+    method: 'GET',
+    data: {
+      page
+    },
+    background: !feedback
+  }, feedback);
+}
+
+export function followers(userId, page = 1, feedback = false) {
+  return request(`/@/${userId}/followers`, {
+    method: 'GET',
+    data: {
+      page
+    },
+    background: !feedback
+  }, feedback);
+}
+
 export function follow(userId) {
   return request('/rel/follow/' + userId, { method: 'POST' });
 }
@@ -19,16 +49,6 @@ export function unblock(userId) {
 export function user(id) {
   var url = '/api/user/' + id;
   return request(url, {}, true);
-}
-
-export function games(userId, filter='all', page=1, feedback=false) {
-  return request(`/@/${userId}/${filter}`, {
-    method: 'GET',
-    data: {
-      page
-    },
-    background: !feedback
-  }, feedback);
 }
 
 export function tv(userId) {

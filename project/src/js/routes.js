@@ -15,6 +15,7 @@ import settingsPrivacy from './ui/settings/privacy';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
+import userFollowing from './ui/user/following';
 import userGames from'./ui/user/games';
 import userVariantPerf from'./ui/user/variantperf';
 import userTV from './ui/user/tv';
@@ -41,6 +42,7 @@ export default {
       '/tv': tv,
       '/correspondence': correspondence,
       '/@/:id': user,
+      '/@/:id/following': userFollowing,
       '/@/:id/games': userGames,
       '/@/:id/games/:filter': userGames,
       '/@/:id/:variant/perf': userVariantPerf,

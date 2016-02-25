@@ -1,7 +1,6 @@
 import m from 'mithril';
 import i18n from '../../i18n';
 import treePath from './path';
-import pgnExport from './pgnExport';
 import cevalView from './ceval/cevalView';
 import gameApi from '../../lichess/game';
 import control from './control';
@@ -16,52 +15,26 @@ import { partialf } from '../../utils';
 
 export default function analyseView(ctrl) {
 
-  function content() {
-    return [
-      m('div', {
-        className: helper.classSet({
-          top: true,
-          ceval_displayed: ctrl.ceval.allowed(),
-          gauge_displayed: ctrl.showEvalGauge()
-        })
-      }, [
-        m('div.lichess_game', {
-          config: function(el, isUpdate) {
-            if (isUpdate) return;
-          }
-        }, [
-          renderBoard(ctrl.data.game.variant.key, ctrl.chessground, helper.isPortrait()),
-          m('div.lichess_ground', [
-            [
-              cevalView.renderCeval(ctrl),
-              m('div.replay', renderAnalyse(ctrl))
-            ],
-            buttons(ctrl)
-          ])
-        ])
-      ]),
-      m('div.underboard', [
-        m('div.center', inputs(ctrl)),
-        m('div.right')
-      ]),
-      isSynthetic(ctrl.data) ? null : m('div.analeft', [
-        gameApi.playable(ctrl.data) ? m('div.back_to_game',
-          m('button', {
-            className: 'button text',
-            config: helper.ontouch(() => {
-              m.route('/game' + ctrl.data.game.url.round);
-            }),
-            'data-icon': 'i'
-          }, ctrl.trans('backToGame'))
-        ) : null
-      ])
-    ];
-  }
+  const isPortrait = helper.isPortrait();
 
   return layout.board(
     header.bind(undefined, i18n('analysis')),
-    content
+    () => renderContent(ctrl, isPortrait),
+    () => overlay(ctrl, isPortrait)
   );
+}
+
+function renderContent(ctrl, isPortrait) {
+  return [
+    renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
+    renderActionsBar(ctrl, isPortrait)
+  ];
+}
+
+function overlay(ctrl) {
+  return [
+    renderPromotion(ctrl)
+  ];
 }
 
 function renderEvalTag(e) {
@@ -71,7 +44,7 @@ function renderEvalTag(e) {
   };
 }
 
-const emptyMove = m('move.empty', '...');
+const emptyMove = <move className="empty">...</move>;
 
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
@@ -322,44 +295,31 @@ function renderAnalyse(ctrl) {
   return m('div.analyse', { }, tree);
 }
 
-function inputs(ctrl) {
-  if (!ctrl.data.userAnalysis) return null;
-  return m('div.copyables', [
-    m('label.name', 'FEN'),
-    m('input.copyable[readonly][spellCheck=false]', {
-      value: ctrl.vm.step.fen
-    }),
-    m('div.pgn', [
-      m('label.name', 'PGN'),
-      m('textarea.copyable[readonly][spellCheck=false]', {
-        value: pgnExport.renderStepsTxt(ctrl.analyse.getSteps(ctrl.vm.path))
-      })
-    ])
-  ]);
-}
-
 function buttons(ctrl) {
   return [
-    m('div.game_control', [
-      m('div.jumps.hint--bottom', [
-        ['first', 'W', control.first ],
-        ['prev', 'Y', control.prev],
-        ['next', 'X', control.next],
-        ['last', 'V', control.last]
-      ].map(function(b) {
-        return {
-          tag: 'a',
-          attrs: {
-            className: 'button ' + b[0] + ' ' + helper.classSet({
-              disabled: ctrl.broken,
-              glowed: ctrl.vm.late && b[0] === 'last'
-            }),
-            'data-icon': b[1],
-            config: helper.ontouch(partialf(b[2], ctrl))
-          }
-        };
-      }))
-    ])
-  ];
+    ['first', 'fast-backward', control.first ],
+    ['prev', 'backward', control.prev],
+    ['next', 'forward', control.next],
+    ['last', 'fast-forward', control.last]
+    ].map(function(b) {
+      const className = [
+        'action_bar_button',
+        'fa',
+        'fa-' + b[1],
+        ctrl.broken ? 'disabled' : '',
+        ctrl.vm.late && b[0] === 'last' ? 'glow' : ''
+        ].join(' ');
+        return (
+          <button className={className} key={b[1]} config={helper.ontouch(() => b[2](ctrl))} />
+        );
+    });
 }
 
+function renderActionsBar(ctrl, isPortrait) {
+  return (
+    <section className="actions_bar">
+      <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu" />
+      {buttons(ctrl)}
+    </section>
+  );
+}

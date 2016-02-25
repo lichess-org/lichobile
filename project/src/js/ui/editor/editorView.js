@@ -10,18 +10,6 @@ import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
 
-function sparePieces(ctrl, color, orientation, position) {
-  return m('div', {
-    className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
-  }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
-    return m('div.sparePieceWrapper', m('piece', {
-      className: color + ' ' + role,
-      'data-color': color,
-      'data-role': role
-    }));
-  }));
-}
-
 export default function view(ctrl) {
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
@@ -86,6 +74,18 @@ export default function view(ctrl) {
     content,
     overlay
   );
+}
+
+function sparePieces(ctrl, color, orientation, position) {
+  return m('div', {
+    className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
+  }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
+    return m('div.sparePieceWrapper', m('piece', {
+      className: color + ' ' + role,
+      'data-color': color,
+      'data-role': role
+    }));
+  }));
 }
 
 function renderActionsBar(ctrl) {

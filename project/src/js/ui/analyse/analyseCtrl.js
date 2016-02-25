@@ -61,16 +61,11 @@ export default function controller() {
     });
   }.bind(this);
 
-  this.togglePlay = function(delay) {
-    this.autoplay.toggle(delay);
-  }.bind(this);
-
   function uciToLastMove(uci) {
     if (!uci) return null;
     if (uci[1] === '@') return [uci.substr(2, 2), uci.substr(2, 2)];
     return [uci.substr(0, 2), uci.substr(2, 2)];
   }
-
 
   const throttledStartCeval = throttle(startCeval.bind(this), 800);
 
@@ -126,7 +121,6 @@ export default function controller() {
   }.bind(this);
 
   this.userJump = function(path) {
-    this.autoplay.stop();
     this.jump(path);
   }.bind(this);
 

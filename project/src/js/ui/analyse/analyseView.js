@@ -27,6 +27,7 @@ export default function analyseView(ctrl) {
 function renderContent(ctrl, isPortrait) {
   return [
     renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
+    renderAnalyse(ctrl),
     renderActionsBar(ctrl, isPortrait)
   ];
 }
@@ -48,24 +49,19 @@ const emptyMove = <move className="empty">...</move>;
 
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
-  var pathStr = treePath.write(path);
-  var evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
-  var attrs = path[1] ? {
-    'data-path': pathStr
-  } : {};
-  var classes = pathStr === ctrl.vm.pathStr ? ['active'] : [];
+  const pathStr = treePath.write(path);
+  const evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
+  const classes = pathStr === ctrl.vm.pathStr ? ['active'] : [];
   if (pathStr === ctrl.vm.initialPathStr) classes.push('current');
-  if (classes.length) attrs.class = classes.join(' ');
-  return {
-    tag: 'move',
-    attrs: attrs,
-    children: [
-      defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
+  const className = classes.join(' ');
+  return (
+    <move className={className} data-path={path[1] ? pathStr : ''}>
+      {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
-      ),
-      move.san[0] === 'P' ? move.san.slice(1) : move.san
-    ]
-  };
+      )}
+      {move.san[0] === 'P' ? move.san.slice(1) : move.san}
+    </move>
+  );
 }
 
 function plyToTurn(ply) {
@@ -106,11 +102,11 @@ function renderVariation(ctrl, variation, path, klass) {
 }
 
 function renderVariationNested(ctrl, variation, path) {
-  return m('span.variation', [
-    '(',
-    renderVariationContent(ctrl, variation, path),
-    ')'
-  ]);
+  return (
+    <span className="variation">
+      {'(' + renderVariationContent(ctrl, variation, path) + ')' }
+    </span>
+  );
 }
 
 function renderVariationContent(ctrl, variation, path) {

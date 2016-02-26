@@ -14,6 +14,7 @@ export function autoredraw(action) {
 
 export function hasNetwork() {
   return window.navigator.connection.type !== window.Connection.NONE;
+  // return false;
 }
 
 export function handleXhrError(error) {

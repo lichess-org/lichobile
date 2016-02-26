@@ -2,7 +2,7 @@ import { piotr2key } from './piotr';
 import { isObject } from 'lodash/lang';
 
 export function defined(v) {
-  return typeof v !== 'undefined';
+  return v !== undefined;
 }
 
 export function readDests(lines) {

@@ -210,7 +210,7 @@ function renderTurnEl(children) {
 }
 
 function renderTurn(ctrl, turn, path) {
-  var index = renderIndex(turn.turn);
+  var index = renderIndex(turn.turn + '.');
   var wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
   var wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
   var wMeta = renderMeta(ctrl, turn.white, wPath);
@@ -279,7 +279,7 @@ function renderAnalyse(ctrl) {
     default:
       result = '½-½';
   }
-  var tree = renderTree(ctrl, ctrl.analyse.tree);
+  const tree = renderTree(ctrl, ctrl.analyse.tree);
   if (result) {
     tree.push(m('div.result', result));
     var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
@@ -288,7 +288,11 @@ function renderAnalyse(ctrl) {
       winner ? ', ' + ctrl.trans(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null
     ]));
   }
-  return m('div.analyse', { }, tree);
+  return (
+    <div className="analyse native_scroller">
+      {tree}
+    </div>
+  );
 }
 
 function buttons(ctrl) {

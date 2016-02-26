@@ -114,7 +114,6 @@ export default function controller() {
       else sound.move();
       this.vm.justPlayed = null;
     }
-    if (/\+|\#/.test(this.vm.step.san)) sound.check();
     this.ceval.stop();
     throttledStartCeval();
     promotion.cancel(this);

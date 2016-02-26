@@ -1,5 +1,5 @@
-mainHeaderBg = darken(gold, 5%)
-mainHeaderColor = lighten(gold, 80%)
+mainHeaderBg = bgdark
+mainHeaderColor = textDarkBg
 borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
@@ -14,9 +14,9 @@ activeBgLight = darken(themeBgLight, 8%)
   #side_menu
     background themeBgLight
     header
-      background lighten(#2A2A2A, 15%)
+      background lighten(#2A2A2A, 8%)
     .login
-      background lighten(#454545, 15%)
+      background lighten(#454545, 8%)
 
   .side_links .hr
     border-color textLightGray
@@ -132,35 +132,25 @@ activeBgLight = darken(themeBgLight, 8%)
   .main_header
     background mainHeaderBg
     box-shadow 0px 1px 1px 0px rgba(0,0,0,0.2)
-    > nav > h1
-      color themeBgLight
-    .chip
-      color mainHeaderBg
-      background lighten(textGray, 95%)
-      border-color mainHeaderBg
     &.board
       background themeBgLight
       box-shadow none
-      .chip
-        color themeBgLight
-        background gold
-        border-color themeBgLight
-      > nav > h1
-        color textGray
       .main_header_button
-        color textGray
-    &:not(.board)
-      .main_header_button
-        color mainHeaderColor
+        color textLightBg
         &.active
-          background lighten(mainHeaderBg, 8%)
+          background darken(themeBgLight, 8%)
+      .chip
+        color #eee
+        background gold
+        border-color #eee
+      h1
+        color textLightBg
+    &:not(.board)
       .game_menu_button
-        &:before
-          background url('../../images/icons/game_icon_light.svg') no-repeat
         &.new_challenge:before
           background transparent
 
-  .main_header_button.active, .game_menu_button.active, .action_bar_button.active, .training_action.active
+  .game_menu_button.active, .action_bar_button.active, .training_action.active
     background activeBgLight
 
   .radio_list

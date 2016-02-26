@@ -10,6 +10,19 @@ import push from '../../push';
 import sound from '../../sound';
 import m from 'mithril';
 
+export default {
+  controller() {
+    helper.analyticsTrackView('Settings');
+  },
+
+  view() {
+    const header = utils.partialf(headerWidget, null,
+      backButton(i18n('settings'))
+    );
+    return layout.free(header, renderBody, empty);
+  }
+};
+
 function renderBody() {
   return [
     m('ul.settings_list.general.native_scroller.page', [
@@ -62,29 +75,17 @@ function renderBody() {
       m('li.list_item', {
         key: 'sound'
       }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-      window.cordova.platformId === 'android' ? m('li.list_item', {
+      window.cordova.platformId !== 'ios' ? m('li.list_item', {
         key: 'notifications'
-      }, formWidgets.renderCheckbox('Allow notifications', 'sound', settings.general.notifications, isOn => {
+      }, formWidgets.renderCheckbox('Allow notifications', 'notifications', settings.general.notifications, isOn => {
         if (isOn) push.register();
         else push.unregister();
       })) : null,
       m('li.list_item', {
         key: 'analytics'
-      }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'sound', settings.general.analytics))
+      }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
   ];
 }
 
-module.exports = {
-  controller: function() {
-    helper.analyticsTrackView('Settings');
-  },
-
-  view: function() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('settings'))
-    );
-    return layout.free(header, renderBody, empty);
-  }
-};

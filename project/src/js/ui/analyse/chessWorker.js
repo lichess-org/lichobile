@@ -33,7 +33,7 @@ export default function chessWorker(self) {
   }
 
   function addMove(data) {
-    const { fen, promotion, orig, dest, path } = data;
+    const { fen, promotion, orig, dest, path, ply } = data;
     const promotionLetter = (dest[1] === '1' || dest[1] === '8') ?
     (promotion ? forsyth(promotion) : 'q') : null;
     const chess = new Chess(fen, 0);
@@ -46,7 +46,7 @@ export default function chessWorker(self) {
       topic: 'step',
       payload: {
         step: {
-          ply: parseInt(path, 10) + 1,
+          ply: ply + 1,
           dests: chess.dests(),
           fen: chess.fen(),
           uci: toUci(move),

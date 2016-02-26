@@ -168,7 +168,8 @@ export default function controller() {
       dest: dest,
       variant: this.data.game.variant.key,
       fen: this.vm.step.fen,
-      path: this.vm.pathStr
+      path: this.vm.pathStr,
+      ply: this.vm.step.ply
     };
     if (prom) move.promotion = prom;
     this.chessLogic.sendMoveRequest(move);

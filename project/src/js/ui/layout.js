@@ -59,6 +59,7 @@ export default {
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
+        {lobby.view()}
         {overlay ? overlay() : null}
       </div>
     );

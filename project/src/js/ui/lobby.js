@@ -65,14 +65,16 @@ lobby.cancelSeeking = function(fromBB) {
 };
 
 lobby.view = function() {
+  const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?');
+  const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?');
   function content() {
     return m('div.seek_real_time', [
       m('div.nb_players', socket.isConnected() ?
-        i18n('nbConnectedPlayers', nbPlayers || '?') :
+        m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
         m('div', [i18n('reconnecting'), loader])
       ),
       m('div.nb_players', socket.isConnected() ?
-        i18n('nbGamesInPlay', nbGames || '?') :
+        m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
         m('div', [i18n('reconnecting'), loader])
       ),
       m('br'),

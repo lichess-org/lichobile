@@ -31,15 +31,17 @@ export default function view(ctrl) {
 
   function content() {
     if (helper.isPortrait())
-      return m('div.editor', {
-        className: settings.general.theme.piece(),
-        config: editorConfig
-      }, [
-        sparePieces(ctrl, opposite, color, 'top'),
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
-        sparePieces(ctrl, color, color, 'bottom'),
-        renderActionsBar(ctrl)
-      ]);
+      return [
+        m('div.editor', {
+          className: settings.general.theme.piece(),
+          config: editorConfig
+        }, [
+          sparePieces(ctrl, opposite, color, 'top'),
+          renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+          sparePieces(ctrl, color, color, 'bottom'),
+          renderActionsBar(ctrl)
+        ])
+      ];
     else
       return [
         m('div.editor', {

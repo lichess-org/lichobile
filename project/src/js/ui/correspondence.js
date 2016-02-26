@@ -126,7 +126,7 @@ correspondence.view = function(ctrl) {
     ];
   };
 
-  return layout.free(header, body, empty, empty);
+  return layout.free(header, body, empty);
 };
 
 module.exports = correspondence;

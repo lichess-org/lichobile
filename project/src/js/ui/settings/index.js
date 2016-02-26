@@ -85,6 +85,6 @@ module.exports = {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('settings'))
     );
-    return layout.free(header, renderBody, empty, empty);
+    return layout.free(header, renderBody, empty);
   }
 };

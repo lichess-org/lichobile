@@ -71,18 +71,18 @@
     background #fff
     color textDarkGray
     border-bottom 1px solid #E1E1E1
-    &[data-icon=E]:before
-      color green
-    &[data-icon=L]:before
-      color red
     &.binary_choice
       float left
       width 50%
       border-bottom none
       &[data-icon=E]
+        &:before
+          color green
         border-radius 3px 0 0 3px
         border-right 1px solid selectBg
       &[data-icon=L]
+        &:before
+          color red
         border-radius 0 3px 3px 0
     &.active
       background darken(#fff, 10%)

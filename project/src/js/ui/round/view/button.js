@@ -126,18 +126,28 @@ export default {
       }, i18n('decline'))
     ]);
   },
+  newOpponent: function(ctrl) {
+    const d = ctrl.data;
+    const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && d.game.source === 'lobby';
+    if (!ctrl.data.opponent.ai && newable) {
+      return m('button[data-icon=r]', {
+        config: helper.ontouch(() => {
+          ctrl.hideActions();
+          lobby.startSeeking();
+        })
+      }, i18n('newOpponent'));
+    }
+  },
   rematch: function(ctrl) {
-    if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) &&
-      !ctrl.data.tournament && !ctrl.data.opponent.offeringRematch &&
-      !ctrl.data.player.offeringRematch) {
-      if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
-        return m('button.fa.fa-refresh', {
-          key: 'rematch',
-          config: helper.ontouch(function() { socket.send('rematch-yes'); })
-        }, i18n('rematch'));
-      } else {
-        return null;
-      }
+    const d = ctrl.data;
+    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.tournament && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
+    if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
+      return m('button.fa.fa-refresh', {
+        key: 'rematch',
+        config: helper.ontouch(function() { socket.send('rematch-yes'); })
+      }, i18n('rematch'));
+    } else {
+      return null;
     }
   },
   answerOpponentRematch: function(ctrl) {
@@ -248,16 +258,6 @@ export default {
       <button className={className} key="fast-forward"
         config={helper.ontouch(ctrl.jumpLast)} />
     );
-  },
-  newOpponent: function(ctrl) {
-    if (!ctrl.data.opponent.ai && (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data))) {
-      return m('button[data-icon=r]', {
-        config: helper.ontouch(() => {
-          ctrl.hideActions();
-          lobby.startSeeking();
-        })
-      }, i18n('newOpponent'));
-    }
   },
   notes: function(ctrl) {
     return m('button[data-icon=m].action_bar_button', {

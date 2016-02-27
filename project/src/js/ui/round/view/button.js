@@ -61,10 +61,10 @@ export default {
         key: 'forceResignZone'
       }, [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
-        m('button.binary_choice[data-icon=E]', {
+        m('button.binary_choice.left', {
           config: helper.ontouch(function() { socket.send('resign-force'); })
         }, i18n('forceResignation')),
-        m('button.binary_choice[data-icon=E]', {
+        m('button.binary_choice.right', {
           config: helper.ontouch(function() { socket.send('draw-force'); })
         }, i18n('forceDraw'))
       ]) : null;

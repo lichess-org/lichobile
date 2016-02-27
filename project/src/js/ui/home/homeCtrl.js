@@ -31,7 +31,7 @@ export default function homeCtrl() {
     .then(data => {
       featured(data);
       m.redraw();
-    }, handleXhrError);
+    });
   }
 
   lobbyXhr(true).then(data => {
@@ -46,11 +46,17 @@ export default function homeCtrl() {
       },
       featured: onFeatured
     });
-  }, handleXhrError);
+  });
 
-  featuredXhr(true)
-  .then(data => {
-    featured(data);
+  Promise.all([
+    featuredXhr(true),
+    dailyPuzzleXhr(),
+    topPlayersOfTheWeekXhr()
+  ]).then(results => {
+    const [featuredData, dailyData, topPlayersData] = results;
+
+    // featured game
+    featured(featuredData);
     const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
     featuredFeed.onmessage = function(ev) {
       const obj = JSON.parse(ev.data);
@@ -58,11 +64,14 @@ export default function homeCtrl() {
       featured().game.lastMove = obj.d.lm;
       m.redraw();
     };
-  }, handleXhrError);
 
-  dailyPuzzleXhr().then(d => dailyPuzzle(d.puzzle), handleXhrError);
+    // daily puzzle
+    dailyPuzzle(dailyData.puzzle);
 
-  topPlayersOfTheWeekXhr().then(weekTopPlayers, handleXhrError);
+    // week top players
+    weekTopPlayers(topPlayersData);
+  })
+  .catch(handleXhrError);
 
   return {
     featured,

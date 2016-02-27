@@ -24,7 +24,7 @@ export function handleXhrError(error) {
   } else {
     let message;
     if (!status || status === 0)
-      message = 'noInternetConnection';
+      message = 'lichessIsUnreachable';
     else if (status === 401)
       message = 'unauthorizedError';
     else if (status === 404)

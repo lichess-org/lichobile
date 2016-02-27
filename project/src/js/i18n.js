@@ -8,6 +8,7 @@ const untranslated = {
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   resourceNotFoundError: 'Resource not found',
   lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
+  lichessIsUnreachable: 'lichess.org is unreachable',
   mustSignIn: 'You must sign in to see this.',
   mustSignInToJoin: 'You must sign in to join it.',
   boardThemeBrown: 'Brown',

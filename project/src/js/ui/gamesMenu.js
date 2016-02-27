@@ -157,6 +157,10 @@ function renderGame(g, cDim, cardStyle) {
 }
 
 function renderIncomingChallenge(c, cDim, cardStyle) {
+  if (!c.challenger) {
+    return null;
+  }
+
   const mode = c.rated ? i18n('rated') : i18n('casual');
   const timeAndMode = utils.challengeTime(c) + ', ' + mode;
   const mark = c.challenger.provisional ? '?' : '';
@@ -190,6 +194,10 @@ function renderIncomingChallenge(c, cDim, cardStyle) {
 }
 
 function renderSendingChallenge(c, cDim, cardStyle) {
+  if (!c.destUser) {
+    return null;
+  }
+
   const mode = c.rated ? i18n('rated') : i18n('casual');
   const timeAndMode = utils.challengeTime(c) + ', ' + mode;
   const mark = c.destUser.provisional ? '?' : '';
@@ -221,7 +229,6 @@ function renderSendingChallenge(c, cDim, cardStyle) {
 
 function renderAllGames(cDim) {
   const nowPlaying = session.nowPlaying();
-  const user = session.get();
   const challenges = challengesApi.all();
   const cardStyle = cDim ? {
     width: (cDim.w - cDim.margin * 2) + 'px',
@@ -250,7 +257,7 @@ function renderAllGames(cDim) {
   }
 
   const challengesDom = challenges.map(c => {
-    if (user && user.id === c.challenger.id) {
+    if (c.direction === 'out') {
       return renderSendingChallenge(c, cDim, cardStyle);
     } else {
       return renderIncomingChallenge(c, cDim, cardStyle);

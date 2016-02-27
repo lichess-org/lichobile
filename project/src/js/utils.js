@@ -32,9 +32,9 @@ export function handleXhrError(error) {
     else if (status === 503)
       message = 'lichessIsUnavailableError';
     else if (status >= 500)
-      message = 'Server error';
+      message = 'Server error.';
     else
-      message = 'Error';
+      message = 'Error.';
 
     message = i18n(message);
 

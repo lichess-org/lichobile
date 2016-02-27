@@ -58,7 +58,7 @@ function seekHumanGame() {
     lobby.startSeeking();
   }
   else {
-    xhr.seekGame().then(utils.handleXhrError);
+    xhr.seekGame().then(utils.noop, utils.handleXhrError);
     m.route('/correspondence');
   }
 }

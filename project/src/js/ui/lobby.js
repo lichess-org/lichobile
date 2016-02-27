@@ -97,9 +97,7 @@ function createHook() {
   if (hookId) return; // hook already created!
   xhr.seekGame().then(function(data) {
     hookId = data.hook.id;
-  }, function(error) {
-    utils.handleXhrError(error);
-  });
+  }, utils.handleXhrError);
 }
 
 export default lobby;

@@ -247,10 +247,13 @@
     &.on
       background-color darken(#fff, 15%)
   .negotiation, .force_resign_zone
+    background-color selectBg
     text-align center
-    padding 0 10px
-    margin 10px 0
-    color gold
+    padding 10px
+    button
+      background-color #fff
+      &:not(.binary_choice):last-child
+        border-radius 3px
   .answers, .force_resign_zone
     margin-top 5px
   .notice
@@ -281,13 +284,6 @@
   button
     color textDarkGray
     border-bottom none
-    &.binary_choice
-      &[data-icon=E]
-        background gold
-        color #FFF
-        padding 0 5px
-        &.active
-          background lighten(gold, 10%)
 
 .lichess_game_url
   margin 10px 0;

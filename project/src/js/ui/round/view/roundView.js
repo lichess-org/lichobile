@@ -314,8 +314,8 @@ function renderGameRunningActions(ctrl) {
     return <div className="game_controls">{controls}</div>;
   }
 
-  var d = ctrl.data;
-  var answerButtons = compact([
+  const d = ctrl.data;
+  const answerButtons = compact([
     button.cancelDrawOffer(ctrl),
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
@@ -325,27 +325,29 @@ function renderGameRunningActions(ctrl) {
     ) : undefined
   ]);
 
-  return [
-    m('div.game_controls', [
-      button.shareLink(ctrl),
-      button.moretime(ctrl),
-      button.flipBoardInMenu(ctrl),
-      button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
-      button.forceResign(ctrl) || [
-        button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-        button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
-        button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
-        button.threefoldClaimDraw(ctrl)
-      ]
-    ]),
-    answerButtons ? m('div.answers', answerButtons) : null
+  const gameControls = button.forceResign(ctrl) || [
+    button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+    button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
+    button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
+    button.threefoldClaimDraw(ctrl)
   ];
+
+  return (
+    <div className="game_controls">
+      {button.shareLink(ctrl)}
+      {button.moretime(ctrl)}
+      {button.flipBoardInMenu(ctrl)}
+      {button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
+      {gameControls}
+      {answerButtons ? <div className="answers">{answerButtons}</div> : null}
+    </div>
+  );
 }
 
 function renderGameEndedActions(ctrl) {
-  var result = gameApi.result(ctrl.data);
-  var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
-  var status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+  const result = gameApi.result(ctrl.data);
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     result, m('br'), m('br')
@@ -363,10 +365,13 @@ function renderGameEndedActions(ctrl) {
     button.cancelRematch(ctrl),
     button.rematch(ctrl)
   ];
-  return [
-    m('div.result', resultDom),
-    m('div.control.buttons', buttons)
-  ];
+
+  return (
+    <div className="game_controls">
+      <div className="result">{resultDom}</div>
+      <div className="control buttons">{buttons}</div>
+    </div>
+  );
 }
 
 function gameInfos(ctrl) {

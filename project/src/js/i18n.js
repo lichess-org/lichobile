@@ -30,7 +30,8 @@ const untranslated = {
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
   challengeCreated: 'Challenge created, you can retrieve it in the games menu.',
-  youAreChallenging: 'You are challenging %s'
+  youAreChallenging: 'You are challenging %s',
+  submitMove: 'Submit move'
 };
 
 const defaultCode = 'en';

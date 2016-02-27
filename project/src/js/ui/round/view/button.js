@@ -45,7 +45,7 @@ export default {
         <button className="binary_choice" data-icon="E"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
         >
-          Submit move
+          {i18n('submitMove')}
         </button>
         <button className="binary_choice" data-icon="L"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}

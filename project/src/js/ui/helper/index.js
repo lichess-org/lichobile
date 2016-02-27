@@ -60,6 +60,7 @@ helper.slidesOut = function(callback, elID) {
 
 helper.fadesOut = function(callback, selector, time = 150) {
   return function(e) {
+    e.stopPropagation();
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
     Zanimo(el, 'opacity', 0, time)

@@ -88,7 +88,10 @@ function joinPopup(ctrl) {
 }
 
 function awaitInvitePopup(ctrl) {
-  var challenge = ctrl.challenge();
+  const challenge = ctrl.challenge();
+
+  const isPersistent = challenge.timeControl.type === 'correspondence' ||
+    challenge.timeControl.type === 'unlimited';
 
   return function() {
     return popupWidget(
@@ -113,7 +116,13 @@ function awaitInvitePopup(ctrl) {
             }, i18n('cancel'))
           ]),
           m('br'),
-          gameInfos(challenge)
+          gameInfos(challenge),
+          isPersistent ? m('div', [
+            m('br'),
+            m('button.fa.fa-home.withIcon', {
+              config: helper.ontouch(() => m.route('/'))
+            }, i18n('returnToHome'))
+          ]) : null
         ]);
       },
       true

@@ -29,9 +29,10 @@ const untranslated = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  challengeCreated: 'Challenge created, you can retrieve it in the games menu.',
+  challengeCreated: 'Persistent challenge created, you can cancel it by going to the top right board menu.',
   youAreChallenging: 'You are challenging %s',
-  submitMove: 'Submit move'
+  submitMove: 'Submit move',
+  returnToHome: 'Return to home'
 };
 
 const defaultCode = 'en';

@@ -1,6 +1,5 @@
 import * as utils from '../utils';
 import { challenge as challengeXhr } from '../xhr';
-import challengeApi from '../lichess/challenges';
 import settings from '../settings';
 import session from '../session';
 import formWidgets from './shared/form';
@@ -50,7 +49,9 @@ function challenge() {
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
       window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
-    } else {
+    }
+    console.log(data.challenge);
+    if (!data.challenge.destUser || data.challenge.timeControl.type === 'realtime') {
       m.route(`/challenge/${data.challenge.id}`);
     }
   }, error => {

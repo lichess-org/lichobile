@@ -42,7 +42,7 @@ function renderFeatured(ctrl) {
 
   return (
     <section id="homeFeatured">
-      <h2 className="contentTitle">Featured game</h2>
+      <h2 className="homeTitle">Featured game</h2>
       {m.component(miniBoard, {
         fen: feat.game.fen,
         lastMove: feat.game.lastMove,
@@ -61,7 +61,7 @@ function renderDailyPuzzle(ctrl) {
 
   return (
     <section id="dailyPuzzle">
-      <h2 className="contentTitle">{i18n('puzzleOfTheDay')}</h2>
+      <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
         {m.component(miniBoard, {
           fen: puzzle.fen,
           orientation: puzzle.color,
@@ -78,7 +78,7 @@ function renderWeekLeaders(ctrl) {
 
   return (
     <section id="weekTopPlayers">
-      <h2 className="contentTitle">{i18n('leaderboard')}</h2>
+      <h2 className="homeTitle">{i18n('leaderboard')}</h2>
       <ul>
         { players.map(renderPlayer) }
       </ul>

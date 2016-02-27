@@ -350,9 +350,9 @@ function renderGameEndedActions(ctrl) {
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
-    result, m('br'), m('br')
+    m('strong', result), m('br')
   ];
-  resultDom.push(m('div.resultStatus', status));
+  resultDom.push(m('em.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
     button.sharePGN(ctrl),

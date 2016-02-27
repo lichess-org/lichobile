@@ -14,7 +14,7 @@ activeBgLight = darken(themeBgLight, 8%)
   #side_menu
     background themeBgLight
     header
-      background lighten(#2A2A2A, 8%)
+      background lighten(mainHeaderBg, 15%)
     .login
       background lighten(#454545, 8%)
 
@@ -150,9 +150,6 @@ activeBgLight = darken(themeBgLight, 8%)
         &.new_challenge:before
           background transparent
 
-  .game_menu_button.active, .action_bar_button.active, .training_action.active
-    background activeBgLight
-
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)
@@ -168,7 +165,7 @@ activeBgLight = darken(themeBgLight, 8%)
       color textDarkGray
 
   .select_games_filter
-    background-color lighten(mainHeaderBg, 30%)
+    background-color mainHeaderBg
     select
       color #fff
     label:after

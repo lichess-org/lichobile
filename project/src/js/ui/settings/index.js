@@ -24,7 +24,9 @@ export default {
 };
 
 function renderBody() {
-  return [
+  return m('div', {
+    style: { width: '100%', height: '100%' }
+  }, [
     m('ul.settings_list.general.native_scroller.page', [
       utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
         key: 'preferences',
@@ -75,7 +77,7 @@ function renderBody() {
       m('li.list_item', {
         key: 'sound'
       }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-      window.cordova.platformId !== 'ios' ? m('li.list_item', {
+      window.cordova.platformId === 'android' ? m('li.list_item', {
         key: 'notifications'
       }, formWidgets.renderCheckbox('Allow notifications', 'notifications', settings.general.notifications, isOn => {
         if (isOn) push.register();
@@ -86,6 +88,6 @@ function renderBody() {
       }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))
     ]),
     window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
-  ];
+  ]);
 }
 

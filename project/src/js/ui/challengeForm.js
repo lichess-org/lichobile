@@ -50,8 +50,7 @@ function challenge() {
       data.challenge.timeControl.type === 'unlimited')) {
       window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
     }
-    console.log(data.challenge);
-    if (!data.challenge.destUser || data.challenge.timeControl.type === 'realtime') {
+    if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       m.route(`/challenge/${data.challenge.id}`);
     }
   }, error => {

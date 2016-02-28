@@ -29,7 +29,7 @@ const untranslated = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  challengeCreated: 'Persistent challenge created, you can cancel it by going to the top right board menu.',
+  challengeCreated: 'Challenge created. It will remain active for two weeks. You can cancel it by going to the top right board menu.',
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
   returnToHome: 'Return to home'

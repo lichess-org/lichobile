@@ -7,8 +7,7 @@ export default {
     }
 
     const spinner = document.createElement('div');
-    spinner.className = 'spinner';
-    spinner.id = 'globalSpinner';
+    spinner.className = 'spinner globalSpinner';
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 40 40');
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -19,13 +18,17 @@ export default {
     svg.appendChild(circle);
     spinner.appendChild(svg);
 
-    timeoutId = setTimeout(() => document.body.appendChild(spinner), 100);
+    timeoutId = setTimeout(() => document.body.appendChild(spinner), 200);
   },
 
   stop() {
     clearTimeout(timeoutId);
     timeoutId = null;
-    const spinner = document.getElementById('globalSpinner');
-    if (spinner) document.body.removeChild(spinner);
+    const spinners = document.getElementsByClassName('globalSpinner');
+    if (spinners.length) {
+      setTimeout(function() {
+        while (spinners[0]) document.body.removeChild(spinners[0]);
+      }, 500);
+    }
   }
 };

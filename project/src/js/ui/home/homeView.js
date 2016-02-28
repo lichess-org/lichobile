@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { gameIcon } from '../../utils';
+import { gameIcon, hasNetwork } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
 import helper from '../helper';
@@ -32,7 +32,9 @@ export default function homeView(ctrl) {
     );
   }
 
-  return layout.free(headerWidget.bind(undefined, 'lichess.org'), body, empty);
+  const header = headerWidget.bind(undefined, hasNetwork() ? 'lichess.org' : 'Offline');
+
+  return layout.free(header, body, empty);
 }
 
 function renderFeatured(ctrl) {

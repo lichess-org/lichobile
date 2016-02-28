@@ -13,6 +13,9 @@ export default function view(ctrl) {
 
   function renderBody() {
     const data = ctrl.variantPerfData();
+
+    if (!data) return null;
+
     const days = Math.floor(data.stat.count.seconds / (60 * 60 * 24));
     const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24;
     const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60;

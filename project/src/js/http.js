@@ -1,8 +1,6 @@
 import merge from 'lodash/object/merge';
-import Spinner from 'spin.js';
+import spinner from './spinner';
 import m from 'mithril';
-
-const spinner = new Spinner({ color: '#C4A86F' });
 
 export const apiVersion = 1;
 export const lichessSri = Math.random().toString(36).substring(2);

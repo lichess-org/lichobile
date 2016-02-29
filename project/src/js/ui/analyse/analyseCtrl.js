@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from './promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { debounce, throttle } from 'lodash/function';
+import { debounce } from 'lodash/function';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
@@ -13,13 +13,13 @@ import { handleXhrError, oppositeColor } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import data, { defaultData } from './data';
 import chessLogic from './chessLogic';
+import menu from './menu';
 import m from 'mithril';
 
 export default function controller() {
 
   this.data = defaultData;
   this.gameId = m.route.param('id');
-  this.userId = m.route.param('userId');
   this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
   this.onMyTurn = this.data;
 
@@ -36,6 +36,8 @@ export default function controller() {
 
   this.analyse = new analyse(this.data.steps);
 
+  this.menu = menu.controller(this);
+
   var initialPath = treePath.default(this.analyse.firstPly());
 
   if (initialPath[0].ply >= this.data.steps.length) {
@@ -50,7 +52,6 @@ export default function controller() {
     cgConfig: null,
     comments: true,
     flip: false,
-    showGauge: settings.analyse.showGauge(),
     variationMenu: null
   };
 
@@ -67,7 +68,12 @@ export default function controller() {
     return [uci.substr(0, 2), uci.substr(2, 2)];
   }
 
-  const throttledStartCeval = throttle(startCeval.bind(this), 800);
+  const startCeval = function() {
+    if (this.ceval.enabled() && this.canUseCeval())
+      this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
+  }.bind(this);
+
+  const debouncedStartCeval = debounce(startCeval, 500);
 
   const showGround = function() {
     var s;
@@ -115,7 +121,7 @@ export default function controller() {
       this.vm.justPlayed = null;
     }
     this.ceval.stop();
-    throttledStartCeval();
+    debouncedStartCeval();
     promotion.cancel(this);
   }.bind(this);
 
@@ -254,18 +260,13 @@ export default function controller() {
     return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
   }.bind(this);
 
-  function startCeval() {
-    if (this.ceval.enabled() && this.canUseCeval())
-      this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
-  }
-
   this.toggleCeval = function() {
     this.ceval.toggle();
-    throttledStartCeval();
+    debouncedStartCeval();
   }.bind(this);
 
   this.showEvalGauge = function() {
-    return this.hasAnyComputerAnalysis() && this.vm.showGauge() && this.vm.step.dests !== '';
+    return this.hasAnyComputerAnalysis() && settings.analyse.showGauge() && this.vm.step.dests !== '';
   }.bind(this);
 
   this.hasAnyComputerAnalysis = function() {
@@ -273,15 +274,15 @@ export default function controller() {
   };
 
   this.toggleGauge = function() {
-    this.vm.showGauge(!this.vm.showGauge());
-  }.bind(this);
+    settings.analyse.showGauge(!settings.analyse.showGauge());
+  };
 
   this.onunload = function() {
     socket.destroy();
   };
 
   showGround();
-  // startCeval();
+  startCeval();
 }
 
 function getDests() {

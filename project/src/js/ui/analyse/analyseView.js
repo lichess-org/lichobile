@@ -27,9 +27,20 @@ export default function analyseView(ctrl) {
 function renderContent(ctrl, isPortrait) {
   return [
     renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
-    renderAnalyse(ctrl),
+    renderTable(ctrl),
     renderActionsBar(ctrl, isPortrait)
   ];
+}
+
+function renderTable(ctrl) {
+  return (
+    <div className="analyseTable">
+      {renderAnalyse(ctrl)}
+      <div className="cevalBox">
+        {cevalView.renderCeval(ctrl)}
+      </div>
+    </div>
+  );
 }
 
 function overlay(ctrl) {

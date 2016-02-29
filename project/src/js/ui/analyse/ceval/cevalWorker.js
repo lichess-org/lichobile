@@ -11,9 +11,9 @@ export default function cevalWorker(opts, name) {
 
   function processOutput(text, work) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
-    var matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*pv (.+)/);
+    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*pv (.+)/);
     if (!matches) return;
-    var depth = parseInt(matches[1]);
+    const depth = parseInt(matches[1]);
     if (switching() && depth > 1) return; // stale info for previous work
     switching(false); // got depth 1, it's now computing the current work
     if (depth < opts.minDepth) return;
@@ -24,7 +24,8 @@ export default function cevalWorker(opts, name) {
       if (matches[2] === 'cp') cp = -cp;
       else mate = -mate;
     }
-    var best = matches[4].split(' ')[0];
+    const best = matches[4].split(' ')[0];
+    console.log(best);
     work.emit({
       work: work,
       ceval: {

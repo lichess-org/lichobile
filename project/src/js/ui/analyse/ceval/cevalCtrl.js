@@ -1,16 +1,15 @@
 import m from 'mithril';
 import makePool from './cevalPool';
-import storage from '../../../storage';
+import settings from '../../../settings';
 
 export default function cevalCtrl(allow, emit) {
 
   const minDepth = 8;
   const maxDepth = 18;
-  const storageKey = 'client-eval-enabled';
   const allowed = m.prop(allow);
-  const enabled = m.prop(allow && storage.get(storageKey) === '1');
+  const enabled = m.prop(allow && settings.analyse.enableCeval());
   const pool = makePool({
-    path: '/assets/vendor/stockfish6.js', // Can't CDN because same-origin policy
+    path: '/vendor/stockfish6.js',
     minDepth: minDepth,
     maxDepth: maxDepth
   }, 3);
@@ -66,7 +65,7 @@ export default function cevalCtrl(allow, emit) {
       if (!allowed()) return;
       stop();
       enabled(!enabled());
-      storage.set(storageKey, enabled() ? '1' : '0');
+      settings.analyse.enableCeval(!settings.analyse.enableCeval());
     }
   };
 }

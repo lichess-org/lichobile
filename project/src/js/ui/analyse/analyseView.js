@@ -45,17 +45,25 @@ function renderEvalTag(e) {
   };
 }
 
+function autoScroll(movelist) {
+  if (!movelist) return;
+  const plyEl = movelist.querySelector('.current');
+  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+}
+
 const emptyMove = <move className="empty">...</move>;
 
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
   const pathStr = treePath.write(path);
   const evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
-  const classes = pathStr === ctrl.vm.pathStr ? ['active'] : [];
-  if (pathStr === ctrl.vm.initialPathStr) classes.push('current');
-  const className = classes.join(' ');
+  const className = [
+    pathStr === ctrl.vm.pathStr ? 'current' : '',
+    pathStr === ctrl.vm.initialPathStr ? 'initial' : ''
+  ].join(' ');
+  const jump = helper.ontouchY(() => ctrl.userJump(path));
   return (
-    <move className={className} data-path={path[1] ? pathStr : ''}>
+    <move className={className} config={jump} data-path={path[1] ? pathStr : ''}>
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
       )}
@@ -110,25 +118,23 @@ function renderVariationNested(ctrl, variation, path) {
 }
 
 function renderVariationContent(ctrl, variation, path) {
-  var turns = [];
+  const turns = [];
   if (variation[0].ply % 2 === 0) {
     variation = variation.slice(0);
-    var move = variation.shift();
+    const move = variation.shift();
     turns.push({
       turn: plyToTurn(move.ply),
       black: move
     });
   }
-  var visiting = treePath.contains(path, ctrl.vm.path);
-  var maxPlies = Math.min(visiting ? 999 : (path[2] ? 2 : 4), variation.length);
+  const visiting = treePath.contains(path, ctrl.vm.path);
+  const maxPlies = Math.min(visiting ? 999 : (path[2] ? 2 : 4), variation.length);
   for (var i = 0; i < maxPlies; i += 2) turns.push({
     turn: plyToTurn(variation[i].ply),
     white: variation[i],
     black: variation[i + 1]
   });
-  return turns.map(function(turn) {
-    return renderVariationTurn(ctrl, turn, path);
-  });
+  return turns.map(turn => renderVariationTurn(ctrl, turn, path));
 }
 
 function renderVariationMeta(ctrl, move, path) {
@@ -139,47 +145,65 @@ function renderVariationMeta(ctrl, move, path) {
 }
 
 function renderVariationTurn(ctrl, turn, path) {
-  var wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  var wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
-  var wMeta = renderVariationMeta(ctrl, turn.white, wPath);
-  var bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  var bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
-  var bMeta = renderVariationMeta(ctrl, turn.black, bPath);
+  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
+  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
+  const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
+  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
+  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
   if (wMove) {
-    if (wMeta) return [
-      renderIndex(turn.turn + '.'),
-      wMove,
-      wMeta,
-      bMove ? [
-        bMove,
-        bMeta
-      ] : null
-    ];
-    return [renderIndex(turn.turn + '.'), wMove, (bMove ? [' ', bMove, bMeta] : '')];
+    if (wMeta) return (
+      <turn className="vTurn">
+        { renderIndex(turn.turn + '.') }
+        { wMove }
+        { wMeta }
+        {bMove ? bMove : null}
+        {bMove ? bMeta : null}
+      </turn>
+    );
+    return (
+      <turn className="vTurn">
+        {renderIndex(turn.turn + '.')}
+        {wMove}
+        {bMeta ? ' ' : null}
+        {bMove ? bMove : null}
+        {bMove ? bMeta : null}
+      </turn>
+    );
   }
-  return [renderIndex(turn.turn + '...'), bMove, bMeta];
+  return (
+    <turn className="vTurn">
+      {renderIndex(turn.turn + '...')}
+      {bMove}
+      {bMeta}
+    </turn>
+  );
 }
 
 function renderOpening(ctrl, opening) {
-  return m('div.comment.opening', opening.code + ': ' + opening.name);
+  return (
+    <div className="comment opening">{ opening.code + ': ' + opening.name }</div>
+  );
 }
 
 function renderMeta(ctrl, move, path) {
   if (!ctrl.vm.comments) return null;
-  var opening = ctrl.data.game.opening;
-  opening = (move && opening && opening.size === move.ply) ? renderOpening(ctrl, opening) : null;
+
+  const opening = (move && opening && opening.size === move.ply) ?
+    renderOpening(ctrl, opening) :
+    null;
+
   if (!move || (!opening && empty(move.comments) && empty(move.variations))) return null;
-  var children = [];
+
+  const children = [];
   if (opening) children.push(opening);
-  var colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
-  var commentClass;
+  const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
+  var commentClass = '';
   if (!empty(move.comments)) move.comments.forEach(function(comment) {
     if (comment.indexOf('Inaccuracy.') === 0) commentClass = 'inaccuracy';
     else if (comment.indexOf('Mistake.') === 0) commentClass = 'mistake';
     else if (comment.indexOf('Blunder.') === 0) commentClass = 'blunder';
-    children.push(m('div', {
-      className: 'comment ' + colorClass + commentClass
-    }, comment));
+    children.push(<div className={'comment ' + colorClass + commentClass}>comment</div>);
   });
   if (!empty(move.variations)) move.variations.forEach(function(variation, i) {
     if (empty(variation)) return null;
@@ -190,9 +214,9 @@ function renderMeta(ctrl, move, path) {
       i === 0 ? colorClass + commentClass : null
     ));
   });
-  return m('div', {
-    className: 'meta'
-  }, children);
+  return (
+    <div className="meta">{children}</div>
+  );
 }
 
 function renderIndex(txt) {
@@ -288,8 +312,13 @@ function renderAnalyse(ctrl) {
       winner ? ', ' + ctrl.trans(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null
     ]));
   }
+  const config = (el, isUpdate) => {
+    autoScroll(el);
+    if (!isUpdate) setTimeout(autoScroll.bind(undefined, el), 100);
+  };
+
   return (
-    <div className="analyse native_scroller">
+    <div className="analyse native_scroller" config={config}>
       {tree}
     </div>
   );

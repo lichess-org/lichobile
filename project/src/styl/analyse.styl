@@ -4,7 +4,7 @@
     height calc(100vh - 100vw - 50px - 45px)
     display flex
     flex-flow row wrap
-    align-items flex-start
+    align-content flex-start
     overflow-x hidden
     turn
       display inline
@@ -17,3 +17,16 @@
     move
       display inline
       margin 0 2px
+      &.current
+        color gold
+        font-weight bold
+      &.active
+        background lighten(bgdark, 10%)
+
+    .meta
+      margin-left 5px
+      width 100%
+      display flex
+      flex-flow row wrap
+      align-content flex-start
+

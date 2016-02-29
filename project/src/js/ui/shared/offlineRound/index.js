@@ -30,22 +30,6 @@ export function renderGameActionsBar(ctrl) {
   );
 }
 
-export function renderGameActionsBarTablet(ctrl) {
-  const d = ctrl.data;
-  return (
-    <section className="actions_bar">
-      <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
-      />
-      <button className="fa fa-share-alt action_bar_button"
-        config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
-      />
-      {renderBackwardButton(ctrl)}
-      {renderForwardButton(ctrl)}
-    </section>
-  );
-}
-
 export function gameResult(replayCtrl) {
   let sit = replayCtrl.situation();
   if (sit && sit.finished)

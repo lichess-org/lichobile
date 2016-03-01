@@ -9,7 +9,7 @@ export default function cevalCtrl(allow, emit) {
   const allowed = m.prop(allow);
   const enabled = m.prop(allow && settings.analyse.enableCeval());
   const pool = makePool({
-    path: '/vendor/stockfish6.js',
+    path: 'vendor/stockfish6.js',
     minDepth: minDepth,
     maxDepth: maxDepth
   }, 3);

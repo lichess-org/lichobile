@@ -11,42 +11,20 @@ import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { handleXhrError, oppositeColor } from '../../utils';
 import { game as gameXhr } from '../../xhr';
-import data, { defaultData } from './data';
+import makeData, { defaultData } from './data';
 import chessLogic from './chessLogic';
 import menu from './menu';
 import m from 'mithril';
 
 export default function controller() {
 
-  this.data = defaultData;
-  this.gameId = m.route.param('id');
-  this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-  this.onMyTurn = this.data;
-
-  if (this.gameId) {
-    gameXhr(m.route.param('id')).then(function(cfg) {
-      this.data = data(cfg);
-    }, err => {
-      handleXhrError(err);
-      m.route('/');
-    });
-  }
-
-  this.chessLogic = new chessLogic(this);
-
-  this.analyse = new analyse(this.data.steps);
+  this.data = null;
 
   this.menu = menu.controller(this);
 
-  var initialPath = treePath.default(this.analyse.firstPly());
-
-  if (initialPath[0].ply >= this.data.steps.length) {
-    initialPath = treePath.default(this.data.steps.length - 1);
-  }
-
   this.vm = {
-    path: initialPath,
-    pathStr: treePath.write(initialPath),
+    path: null,
+    pathStr: '',
     initialPathStr: '',
     step: null,
     cgConfig: null,
@@ -93,6 +71,7 @@ export default function controller() {
     const config = {
       fen: s.fen,
       turnColor: color,
+      orientation: this.data.orientation,
       movable: {
         color: (dests && Object.keys(dests).length > 0) || drops === null || drops.length ? color : null,
         dests: dests || {}
@@ -158,7 +137,7 @@ export default function controller() {
     this.jump(this.vm.path);
   }
 
-  var preparePremoving = function() {
+  const preparePremoving = function() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,
       movable: {
@@ -242,11 +221,13 @@ export default function controller() {
     return this.vm.step ? (this.vm.step.oEval || this.vm.step.ceval) : null;
   }.bind(this);
 
-  var allowCeval = (
-    util.isSynthetic(this.data) || !gameApi.playable(this.data)
-  ) && ['standard', 'fromPosition', 'chess960'].indexOf(this.data.game.variant.key) !== -1;
+  const allowCeval = function() {
+    return (
+      util.isSynthetic(this.data) || !gameApi.playable(this.data)
+    ) && ['standard', 'fromPosition', 'chess960'].indexOf(this.data.game.variant.key) !== -1;
+  }.bind(this);
 
-  this.ceval = cevalCtrl(allowCeval, function(res) {
+  function onCevalMsg(res) {
     this.analyse.updateAtPath(res.work.path, function(step) {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
@@ -254,7 +235,7 @@ export default function controller() {
         m.redraw();
       }
     }.bind(this));
-  }.bind(this));
+  }
 
   this.canUseCeval = function() {
     return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
@@ -278,11 +259,43 @@ export default function controller() {
   };
 
   this.onunload = function() {
+    this.ceval.stop();
     socket.destroy();
-  };
+  }.bind(this);
 
-  showGround();
-  startCeval();
+  const init = function() {
+    this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
+    this.chessLogic = new chessLogic(this);
+    this.analyse = new analyse(this.data.steps);
+    this.ceval = cevalCtrl(allowCeval(), onCevalMsg.bind(this));
+
+    var initialPath = treePath.default(this.analyse.firstPly());
+    if (initialPath[0].ply >= this.data.steps.length) {
+      initialPath = treePath.default(this.data.steps.length - 1);
+    }
+
+    this.vm.path = initialPath;
+    this.vm.pathStr = treePath.write(initialPath);
+
+    showGround();
+    startCeval();
+  }.bind(this);
+
+  if (m.route.param('id')) {
+    gameXhr(m.route.param('id')).then(function(cfg) {
+      this.data = makeData(cfg);
+      console.log(this.data);
+      init();
+      m.redraw();
+    }.bind(this), err => {
+      handleXhrError(err);
+      m.route('/');
+    });
+  } else {
+    this.data = defaultData;
+    init();
+  }
+
 }
 
 function getDests() {

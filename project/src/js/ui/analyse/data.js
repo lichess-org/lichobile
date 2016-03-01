@@ -1,6 +1,6 @@
 export default function(from) {
 
-  var data = from;
+  const data = from;
 
   if (data.game.moves) data.game.moves = data.game.moves.split(' ');
   else data.game.moves = [];

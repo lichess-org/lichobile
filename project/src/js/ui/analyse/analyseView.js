@@ -11,7 +11,7 @@ import layout from '../layout';
 import { view as renderPromotion } from './promotion';
 import { header } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
-import { partialf } from '../../utils';
+import { partialf, playerName } from '../../utils';
 
 export default function analyseView(ctrl) {
 
@@ -25,6 +25,8 @@ export default function analyseView(ctrl) {
 }
 
 function renderContent(ctrl, isPortrait) {
+  if (!ctrl.data) return null;
+
   return [
     renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
     renderTable(ctrl),
@@ -36,7 +38,26 @@ function renderTable(ctrl) {
   return (
     <div className="analyseTable">
       {renderAnalyse(ctrl)}
-      {cevalView.renderCeval(ctrl)}
+      <div className="analyseInfos">
+        {cevalView.renderCeval(ctrl)}
+        {renderOpponents(ctrl)}
+      </div>
+    </div>
+  );
+}
+
+function renderOpponents(ctrl) {
+  const player = ctrl.data.player;
+  const opponent = ctrl.data.opponent;
+  if (!player || !opponent) return null;
+  return (
+    <div className="analyseOpponents">
+      <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
+        {playerName(player, true)}
+      </div>
+      <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
+        {playerName(opponent, true)}
+      </div>
     </div>
   );
 }
@@ -314,12 +335,15 @@ function renderAnalyse(ctrl) {
   }
   const tree = renderTree(ctrl, ctrl.analyse.tree);
   if (result) {
-    tree.push(m('div.result', result));
-    var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
-    tree.push(m('div.status', [
-      gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key),
-      winner ? ', ' + ctrl.trans(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null
-    ]));
+    tree.push(<div className="result">{result}</div>);
+    const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+    tree.push(
+      <div className="status">
+        {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
+
+        {winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null}
+      </div>
+    );
   }
   const config = (el, isUpdate) => {
     autoScroll(el);

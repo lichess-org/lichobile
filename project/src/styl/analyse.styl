@@ -2,14 +2,23 @@
   width 100%
   display flex
 
+.analyseInfos
+  background lighten(bgdark, 5%)
+  width 40%
+
+.analyseOpponents
+  padding 5px
+  font-size 0.8em
+
 .analyse
-  width calc(100% - 60px)
+  width 60%
   @media only screen and (orientation: portrait)
     height calc(100vh - 100vw - 50px - 45px)
     display flex
     flex-flow row wrap
     align-content flex-start
-    overflow-x hidden
+    font-size 0.9em
+    padding 2px
     turn
       display inline
       margin-right 10px
@@ -40,9 +49,22 @@
       font-size 0.8em
       background lighten(bgdark, 5%)
 
+    .result, .status
+      width 100%
+
+    .result
+      margin-top 1em
+      text-align center
+      font-weight bold
+
+    .status
+      font-size 0.9em
+      font-style italic
+      text-align center
+
 
 .cevalBox
-  width 60px
+  width 100%
   display flex
   justify-content center
   align-items center

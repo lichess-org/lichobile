@@ -37,6 +37,7 @@ export default {
       '/game/:id/:color': game,
       '/analyse': analyse,
       '/analyse/:id': analyse,
+      '/analyse/:id/:color': analyse,
       '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,

@@ -2,6 +2,7 @@ import m from 'mithril';
 
 import { defined, renderEval } from '../util';
 import helper from '../../helper';
+import spinner from '../../../spinner';
 
 var gaugeLast = 0;
 var squareSpin = m('span.square-spin');
@@ -71,6 +72,7 @@ export default {
     if (defined(ceval.cp)) pearl = renderEval(ceval.cp);
     else if (defined(ceval.mate)) pearl = '#' + ceval.mate;
     else if (ctrl.vm.step.dests === '') pearl = '-';
+    else pearl = spinner.getVdom('monochrome');
 
     return (
       <div className="cevalBox">

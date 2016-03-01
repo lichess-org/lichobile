@@ -50,7 +50,7 @@ function overlay(ctrl) {
 function renderEvalTag(e) {
   return {
     tag: 'eval',
-    children: [e]
+    children: '(' + e + ')'
   };
 }
 
@@ -73,10 +73,10 @@ function renderMove(ctrl, move, path) {
   const jump = helper.ontouchY(() => ctrl.userJump(path));
   return (
     <move className={className} config={jump} data-path={path[1] ? pathStr : ''}>
+      {move.san[0] === 'P' ? move.san.slice(1) : move.san}
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
       )}
-      {move.san[0] === 'P' ? move.san.slice(1) : move.san}
     </move>
   );
 }

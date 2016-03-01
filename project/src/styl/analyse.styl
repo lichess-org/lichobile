@@ -3,7 +3,7 @@
   display flex
 
 .analyse
-  width calc(100% - 50px)
+  width calc(100% - 60px)
   @media only screen and (orientation: portrait)
     height calc(100vh - 100vw - 50px - 45px)
     display flex
@@ -27,6 +27,9 @@
       &.active
         background lighten(bgdark, 10%)
 
+    eval
+      font-size 0.7em
+
     .meta
       margin-left 5px
       width 100%
@@ -36,5 +39,14 @@
 
 
 .cevalBox
-  width 50px
-  position relative
+  width 60px
+  display flex
+  justify-content center
+  align-items center
+  background lighten(bgdark, 10%)
+  .spinner
+    width 30px
+    height 30px
+  pearl
+    font-size 1.5em
+    font-weight bold

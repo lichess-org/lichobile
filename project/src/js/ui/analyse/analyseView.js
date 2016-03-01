@@ -40,6 +40,7 @@ function renderTable(ctrl) {
       {renderAnalyse(ctrl)}
       <div className="analyseInfos">
         {cevalView.renderCeval(ctrl)}
+        {renderOpeningBox(ctrl)}
         {renderOpponents(ctrl)}
       </div>
     </div>
@@ -210,23 +211,24 @@ function renderVariationTurn(ctrl, turn, path) {
   );
 }
 
-function renderOpening(ctrl, opening) {
-  return (
-    <div className="comment opening">{ opening.code + ': ' + opening.name }</div>
-  );
+function renderOpeningBox(ctrl) {
+  const opening = ctrl.data.game.opening;
+  if (opening) {
+    return (
+      <div className="analyseOpening">
+        <strong>{opening.eco}&nbsp;</strong>
+        <span>{opening.name}</span>
+      </div>
+    );
+  }
 }
 
 function renderMeta(ctrl, move, path) {
   if (!ctrl.vm.comments) return null;
 
-  const opening = (move && opening && opening.size === move.ply) ?
-    renderOpening(ctrl, opening) :
-    null;
-
-  if (!move || (!opening && empty(move.comments) && empty(move.variations))) return null;
+  if (!move || (empty(move.comments) && empty(move.variations))) return null;
 
   const children = [];
-  if (opening) children.push(opening);
   const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
   var commentClass = '';
   if (!empty(move.comments)) move.comments.forEach(function(comment) {

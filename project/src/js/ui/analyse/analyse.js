@@ -61,6 +61,14 @@ export default function(steps) {
     });
   }.bind(this);
 
+  this.getOpening = function(path) {
+    var opening;
+    this.getSteps(path).forEach(function(s) {
+      opening = s.opening || opening;
+    });
+    return opening;
+  }.bind(this);
+
   this.nextStepEvalBest = function(path) {
     if (!treePath.isRoot(path)) return null;
     var nextPly = path[0].ply + 1;

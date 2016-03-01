@@ -36,9 +36,7 @@ function renderTable(ctrl) {
   return (
     <div className="analyseTable">
       {renderAnalyse(ctrl)}
-      <div className="cevalBox">
-        {cevalView.renderCeval(ctrl)}
-      </div>
+      {cevalView.renderCeval(ctrl)}
     </div>
   );
 }

@@ -72,12 +72,12 @@ export default {
     else if (defined(ceval.mate)) pearl = '#' + ceval.mate;
     else if (ctrl.vm.step.dests === '') pearl = '-';
 
-    return m('div',
-      enabled ? m('pearl', pearl) : m('help',
-        'Local computer evaluation',
-        m('br'),
-        'for variation analysis'
-      )
+    return (
+      <div className="cevalBox">
+        {enabled ?
+          <pearl>{pearl}</pearl> : null
+        }
+      </div>
     );
   }
 };

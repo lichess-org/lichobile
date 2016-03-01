@@ -248,8 +248,8 @@ export default function controller() {
 
   this.ceval = cevalCtrl(allowCeval, function(res) {
     this.analyse.updateAtPath(res.work.path, function(step) {
-      if (step.ceval && step.ceval.depth >= res.oEval.depth) return;
-      step.ceval = res.oEval;
+      if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
+      step.ceval = res.ceval;
       if (treePath.write(res.work.path) === this.vm.pathStr) {
         m.redraw();
       }

@@ -25,7 +25,6 @@ export default function cevalWorker(opts, name) {
       else mate = -mate;
     }
     const best = matches[4].split(' ')[0];
-    console.log(best);
     work.emit({
       work: work,
       ceval: {

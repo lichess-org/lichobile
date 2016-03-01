@@ -2,11 +2,8 @@
   width 100%
   display flex
 
-.cevalBox
-  width 20%
-
 .analyse
-  width 80%
+  width calc(100% - 50px)
   @media only screen and (orientation: portrait)
     height calc(100vh - 100vw - 50px - 45px)
     display flex
@@ -37,3 +34,7 @@
       flex-flow row wrap
       align-content flex-start
 
+
+.cevalBox
+  width 50px
+  position relative

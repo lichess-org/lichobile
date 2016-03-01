@@ -9,6 +9,14 @@ import { handleXhrError, hasNetwork } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
 
+function analysisBoardOrientation(data) {
+  if (data.game.variant.key === 'racingKings') {
+    return 'white';
+  } else {
+    return data.player.color;
+  }
+}
+
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) && hasNetwork() ? m('button', {
@@ -125,6 +133,17 @@ export default {
         config: helper.ontouch(function() { socket.send('takeback-no'); })
       }, i18n('decline'))
     ]);
+  },
+  analysisBoard: function(ctrl) {
+    const d = ctrl.data;
+    if (gameApi.replayable(d)) {
+      return m('button.fa.fa-eye-open', {
+        config: helper.ontouch(() => {
+          socket.send('rematch-no');
+          m.route(`/analyse/${d.game.id}/${analysisBoardOrientation(d)}`);
+        })
+      }, i18n('analysis'));
+    }
   },
   newOpponent: function(ctrl) {
     const d = ctrl.data;

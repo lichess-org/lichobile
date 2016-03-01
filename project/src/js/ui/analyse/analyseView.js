@@ -79,7 +79,9 @@ function renderEvalTag(e) {
 function autoScroll(movelist) {
   if (!movelist) return;
   const plyEl = movelist.querySelector('.current');
-  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+  if (plyEl) {
+    movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+  }
 }
 
 const emptyMove = <move className="empty">...</move>;
@@ -373,8 +375,11 @@ function buttons(ctrl) {
         ctrl.broken ? 'disabled' : '',
         ctrl.vm.late && b[0] === 'last' ? 'glow' : ''
         ].join(' ');
+        const action = b[0] === 'prev' || b[0] === 'next' ?
+          helper.ontouch(() => b[2](ctrl), null, () => b[2](ctrl)) :
+          helper.ontouch(() => b[2](ctrl));
         return (
-          <button className={className} key={b[1]} config={helper.ontouch(() => b[2](ctrl))} />
+          <button className={className} key={b[1]} config={action} />
         );
     });
 }

@@ -363,7 +363,8 @@ function renderGameEndedActions(ctrl) {
     button.newOpponent(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
-    button.rematch(ctrl)
+    button.rematch(ctrl),
+    button.analysisBoard(ctrl)
   ];
 
   return (

@@ -282,7 +282,7 @@ export default function controller() {
   }.bind(this);
 
   if (m.route.param('id')) {
-    gameXhr(m.route.param('id')).then(function(cfg) {
+    gameXhr(m.route.param('id'), m.route.param('color'), false).then(function(cfg) {
       this.data = makeData(cfg);
       console.log(this.data);
       init();

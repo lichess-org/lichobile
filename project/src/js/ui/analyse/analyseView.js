@@ -40,8 +40,10 @@ function renderTable(ctrl) {
       {renderAnalyse(ctrl)}
       <div className="analyseInfos">
         {cevalView.renderCeval(ctrl)}
-        {renderOpeningBox(ctrl)}
-        {renderOpponents(ctrl)}
+        <div className="native_scroller">
+          {renderOpeningBox(ctrl)}
+          {renderOpponents(ctrl)}
+        </div>
       </div>
     </div>
   );
@@ -78,9 +80,16 @@ function renderEvalTag(e) {
 
 function autoScroll(movelist) {
   if (!movelist) return;
-  const plyEl = movelist.querySelector('.current');
-  if (plyEl) {
-    movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+  var scheduledAF = false;
+  if (!scheduledAF) {
+    scheduledAF = true;
+    requestAnimationFrame(function() {
+      scheduledAF = false;
+      const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
+      if (plyEl) {
+        movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+      }
+    });
   }
 }
 

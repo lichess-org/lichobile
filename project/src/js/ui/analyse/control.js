@@ -38,17 +38,19 @@ export default {
   canGoForward: canGoForward,
 
   next: function(ctrl) {
-    if (!canGoForward(ctrl)) return;
+    if (!canGoForward(ctrl)) return false;
     var p = ctrl.vm.path;
     p[p.length - 1].ply++;
     ctrl.userJump(p);
+
+    return true;
   },
 
   prev: function(ctrl) {
     var p = ctrl.vm.path;
     var len = p.length;
     if (len === 1) {
-      if (p[0].ply === ctrl.analyse.firstPly()) return;
+      if (p[0].ply === ctrl.analyse.firstPly()) return false;
       p[0].ply--;
     } else {
       if (p[len - 1].ply > p[len - 2].ply) p[len - 1].ply--;
@@ -59,6 +61,8 @@ export default {
       }
     }
     ctrl.userJump(p);
+
+    return true;
   },
 
   last: function(ctrl) {

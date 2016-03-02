@@ -5,6 +5,24 @@
 .analyseInfos
   background lighten(bgdark, 5%)
   width 40%
+  @media only screen and (orientation: portrait)
+    height calc(100vh - 100vw - 50px - 45px)
+    > .native_scroller
+      height calc(100% - 33px)
+
+.cevalBox
+  width 100%
+  height 33px
+  display flex
+  justify-content center
+  align-items center
+  background lighten(bgdark, 10%)
+  .spinner
+    width 30px
+    height 30px
+  pearl
+    font-size 1.5em
+    font-weight bold
 
 .analyseOpponents, .analyseOpening
   padding 5px
@@ -12,6 +30,7 @@
 
 .analyse
   width 60%
+  position relative
   @media only screen and (orientation: portrait)
     height calc(100vh - 100vw - 50px - 45px)
     display flex
@@ -63,15 +82,3 @@
       text-align center
 
 
-.cevalBox
-  width 100%
-  display flex
-  justify-content center
-  align-items center
-  background lighten(bgdark, 10%)
-  .spinner
-    width 30px
-    height 30px
-  pearl
-    font-size 1.5em
-    font-weight bold

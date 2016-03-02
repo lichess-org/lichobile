@@ -1,6 +1,13 @@
 .analyseTable
   width 100%
   display flex
+  &.synthetic
+    > .analyse
+      width 80%
+    > .analyseInfos
+      width 20%
+    .cevalBox
+      height 100%
 
   > .analyse
     width 60%
@@ -59,25 +66,39 @@
   font-size 0.9em
   padding 2px
   turn
-    display inline
-    margin-right 10px
+    display flex
+    width 100%
+    > move
+      flex 1 1 50%
+      padding 2px 7px
+      margin 0
+    > index
+      margin 0
+      flex 0 0 25px
+      text-align center
+      background lighten(bgdark, 5%)
 
   index
-    display inline
     margin-right 5px
 
   move
-    display inline
+    position relative
+    display inline-block
     margin 0 2px
     &.current
       color gold
       font-weight bold
+      eval
+        color rgba(gold, 70%)
     &.active
       background lighten(bgdark, 10%)
 
   eval
-    font-size 0.7em
-    color darken(textDarkBg, 15%)
+    position absolute
+    top 3px
+    right 7px
+    font-size 0.8em
+    color rgba(textDarkBg, 70%)
 
   .meta
     margin-left 5px

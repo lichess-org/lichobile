@@ -36,27 +36,37 @@ function renderContent(ctrl, isPortrait) {
 }
 
 function renderTable(ctrl) {
+  const className = [
+    isSynthetic(ctrl.data) ? 'synthetic' : '',
+    'analyseTable'
+  ].join(' ');
+
   return (
-    <div className="analyseTable">
+    <div className={className}>
       <div className="analyse">
         {renderOpeningBox(ctrl)}
         {renderReplay(ctrl)}
       </div>
       <div className="analyseInfos">
         {cevalView.renderCeval(ctrl)}
-        <div className="native_scroller">
-          {gameInfos(ctrl)}
-          {renderOpponents(ctrl)}
-        </div>
+        { !isSynthetic(ctrl.data) ?
+          <div className="native_scroller">
+            {gameInfos(ctrl)}
+            {renderOpponents(ctrl)}
+          </div> : null
+        }
       </div>
     </div>
   );
 }
 
 function renderOpponents(ctrl) {
+  if (isSynthetic(ctrl.data)) return null;
+
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
+
   return (
     <div className="analyseOpponents">
       <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
@@ -78,7 +88,7 @@ function overlay(ctrl) {
 function renderEvalTag(e) {
   return {
     tag: 'eval',
-    children: '(' + e + ')'
+    children: e
   };
 }
 
@@ -198,32 +208,26 @@ function renderVariationTurn(ctrl, turn, path) {
   const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
   const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
   if (wMove) {
-    if (wMeta) return (
-      <turn className="vTurn">
-        { renderIndex(turn.turn + '.') }
-        { wMove }
-        { wMeta }
-        {bMove ? bMove : null}
-        {bMove ? bMeta : null}
-      </turn>
-    );
-    return (
-      <turn className="vTurn">
-        {renderIndex(turn.turn + '.')}
-        {wMove}
-        {bMeta ? ' ' : null}
-        {bMove ? bMove : null}
-        {bMove ? bMeta : null}
-      </turn>
-    );
+    if (wMeta) return [
+        renderIndex(turn.turn + '.'),
+        wMove,
+        wMeta,
+        bMove ? bMove : null,
+        bMove ? bMeta : null
+    ];
+    return [
+        renderIndex(turn.turn + '.'),
+        wMove,
+        bMeta ? ' ' : null,
+        bMove ? bMove : null,
+        bMove ? bMeta : null
+    ];
   }
-  return (
-    <turn className="vTurn">
-      {renderIndex(turn.turn + '...')}
-      {bMove}
-      {bMeta}
-    </turn>
-  );
+  return [
+      renderIndex(turn.turn + '...'),
+      bMove,
+      bMeta
+  ];
 }
 
 function renderOpeningBox(ctrl) {
@@ -375,6 +379,8 @@ function renderReplay(ctrl) {
 }
 
 function gameInfos(ctrl) {
+  if (isSynthetic(ctrl.data)) return null;
+
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');

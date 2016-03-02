@@ -356,6 +356,7 @@ function renderGameEndedActions(ctrl) {
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
+    button.analysisBoard(ctrl),
     ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
     button.shareLink(ctrl),

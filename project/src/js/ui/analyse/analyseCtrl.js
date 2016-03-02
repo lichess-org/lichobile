@@ -85,7 +85,6 @@ export default function controller() {
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     this.chessground.set(config);
     if (!dests) debounce(getDests.bind(this), 100)();
-    // setAutoShapesFromEval();
   }.bind(this);
 
   this.jump = function(path) {

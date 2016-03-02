@@ -31,6 +31,7 @@
   align-items center
   background lighten(bgdark, 10%)
   .spinner
+    transform translateZ(0)
     width 30px
     height 30px
   pearl
@@ -39,7 +40,7 @@
 
 .analyseOpponents, .analyseOpening, .gameInfos
   padding 5px
-  font-size 0.8em
+  font-size 0.7em
 
 .gameInfos
   position relative
@@ -53,7 +54,10 @@
 
 .analyseOpening
   height 30px
-  background lighten(bgdark, 10%)
+  background lighten(bgdark, 5%)
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
   + .analyseReplay
     height calc(100% - 30px)
 
@@ -97,7 +101,8 @@
     position absolute
     top 3px
     right 7px
-    font-size 0.8em
+    font-size 0.7em
+    font-weight lighter
     color rgba(textDarkBg, 70%)
 
   .meta

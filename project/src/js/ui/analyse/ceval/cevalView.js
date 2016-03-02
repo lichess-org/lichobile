@@ -69,16 +69,14 @@ export default {
     const ceval = ctrl.currentAnyEval() || {};
     let pearl = squareSpin;
 
-    if (defined(ceval.cp)) pearl = renderEval(ceval.cp);
-    else if (defined(ceval.mate)) pearl = '#' + ceval.mate;
-    else if (ctrl.vm.step.dests === '') pearl = '-';
+    if (defined(ceval.cp)) pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
+    else if (defined(ceval.mate)) pearl = <pearl>{'#' + ceval.mate}</pearl>;
+    else if (ctrl.vm.step.dests === '') pearl = <pearl>-</pearl>;
     else pearl = spinner.getVdom('monochrome');
 
     return (
       <div className="cevalBox">
-        {enabled ?
-          <pearl>{pearl}</pearl> : null
-        }
+        {enabled ? pearl : null }
       </div>
     );
   }

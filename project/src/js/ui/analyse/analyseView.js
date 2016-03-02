@@ -285,7 +285,7 @@ function renderTurnEl(children) {
 }
 
 function renderTurn(ctrl, turn, path) {
-  var index = renderIndex(turn.turn + '.');
+  var index = renderIndex(turn.turn);
   var wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
   var wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
   var wMeta = renderMeta(ctrl, turn.white, wPath);

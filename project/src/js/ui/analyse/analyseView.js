@@ -6,12 +6,13 @@ import gameApi from '../../lichess/game';
 import control from './control';
 import { empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
+import variantApi from '../../lichess/variant';
 import helper from '../helper';
 import layout from '../layout';
 import { view as renderPromotion } from './promotion';
 import { header } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
-import { partialf, playerName } from '../../utils';
+import { partialf, playerName, gameIcon } from '../../utils';
 
 export default function analyseView(ctrl) {
 
@@ -37,11 +38,14 @@ function renderContent(ctrl, isPortrait) {
 function renderTable(ctrl) {
   return (
     <div className="analyseTable">
-      {renderAnalyse(ctrl)}
+      <div className="analyse">
+        {renderOpeningBox(ctrl)}
+        {renderReplay(ctrl)}
+      </div>
       <div className="analyseInfos">
         {cevalView.renderCeval(ctrl)}
         <div className="native_scroller">
-          {renderOpeningBox(ctrl)}
+          {gameInfos(ctrl)}
           {renderOpponents(ctrl)}
         </div>
       </div>
@@ -334,7 +338,7 @@ function renderTree(ctrl, tree) {
   return tags;
 }
 
-function renderAnalyse(ctrl) {
+function renderReplay(ctrl) {
   var result;
   if (ctrl.data.game.status.id >= 30) switch (ctrl.data.game.winner) {
     case 'white':
@@ -364,8 +368,32 @@ function renderAnalyse(ctrl) {
   };
 
   return (
-    <div className="analyse native_scroller" config={config}>
+    <div className="analyseReplay native_scroller" config={config}>
       {tree}
+    </div>
+  );
+}
+
+function gameInfos(ctrl) {
+  const data = ctrl.data;
+  const time = gameApi.time(data);
+  const mode = data.game.rated ? i18n('rated') : i18n('casual');
+  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf);
+  const variant = m('span.variant', {
+    config: helper.ontouch(
+      () => {
+        var link = variantApi(data.game.variant.key).link;
+        if (link)
+          window.open(link, '_blank');
+      },
+      () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
+    )
+  }, data.game.variant.name);
+  const infos = [time + ' • ', variant, m('br'), mode];
+
+  return (
+    <div className="gameInfos" data-icon={icon}>
+      {infos}
     </div>
   );
 }

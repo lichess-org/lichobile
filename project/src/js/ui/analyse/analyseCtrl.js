@@ -7,6 +7,7 @@ import sound from '../../sound';
 import { throttle, debounce } from 'lodash/function';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
+import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { backHistory, handleXhrError, oppositeColor } from '../../utils';
@@ -262,6 +263,7 @@ export default function controller() {
   };
 
   this.onunload = function() {
+    window.plugins.insomnia.allowSleepAgain();
     if (this.ceval) this.ceval.stop();
     socket.destroy();
   }.bind(this);
@@ -289,6 +291,7 @@ export default function controller() {
 
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
+      helper.analyticsTrackView('Analysis (game)');
       init(makeData(cfg));
       m.redraw();
     }, err => {
@@ -296,6 +299,7 @@ export default function controller() {
       m.route('/');
     });
   } else if (source === 'offline' && gameId === 'otb') {
+    helper.analyticsTrackView('Analysis (offline)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) backHistory();
     else {
@@ -303,6 +307,7 @@ export default function controller() {
       init(otbData);
     }
   } else if (source === 'offline' && gameId === 'ai') {
+    helper.analyticsTrackView('Analysis (offline)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) backHistory();
     else {
@@ -311,8 +316,11 @@ export default function controller() {
     }
   }
   else {
+    helper.analyticsTrackView('Analysis (empty)');
     init(defaultData);
   }
+
+  window.plugins.insomnia.keepAwake();
 
 }
 

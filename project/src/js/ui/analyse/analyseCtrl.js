@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from './promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { throttle, debounce } from 'lodash/function';
+import { debounce } from 'lodash/function';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import helper from '../helper';
@@ -96,7 +96,7 @@ export default function controller() {
     if (!dests) debouncedDests();
   }.bind(this);
 
-  const throttledScroll = throttle(() => util.autoScroll(document.getElementById('replay')), 300);
+  const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 300);
 
   this.jump = function(path) {
     this.vm.path = path;
@@ -111,7 +111,7 @@ export default function controller() {
     }
     this.ceval.stop();
     debouncedStartCeval();
-    throttledScroll();
+    debouncedScroll();
     promotion.cancel(this);
   }.bind(this);
 

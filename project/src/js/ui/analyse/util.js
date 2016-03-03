@@ -34,3 +34,18 @@ export function renderEval(e) {
 export function isSynthetic(data) {
   return data.game.id === 'synthetic';
 }
+
+export function autoScroll(movelist) {
+  if (!movelist) return;
+  var scheduledAF = false;
+  if (!scheduledAF) {
+    scheduledAF = true;
+    requestAnimationFrame(function() {
+      scheduledAF = false;
+      const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
+      if (plyEl) {
+        movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+      }
+    });
+  }
+}

@@ -66,16 +66,33 @@ export default {
 
     const enabled = ctrl.ceval.enabled();
     const ceval = ctrl.currentAnyEval() || {};
-    let pearl = squareSpin;
+    let pearl = squareSpin, percent;
 
-    if (defined(ceval.cp)) pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
-    else if (defined(ceval.mate)) pearl = <pearl>{'#' + ceval.mate}</pearl>;
-    else if (isEmpty(ctrl.vm.step.dests)) pearl = <pearl>-</pearl>;
-    else pearl = <div className="spinner fa fa-spinner"></div>;
+    if (defined(ceval.cp)) {
+      pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
+      percent = ctrl.ceval.percentComplete();
+    }
+    else if (defined(ceval.mate)) {
+      pearl = <pearl>{'#' + ceval.mate}</pearl>;
+      percent = 100;
+    }
+    else if (isEmpty(ctrl.vm.step.dests)) {
+      pearl = <pearl>-</pearl>;
+      percent = 0;
+    }
+    else {
+      pearl = <div className="spinner fa fa-spinner"></div>;
+      percent = 0;
+    }
 
     return (
       <div className="cevalBox">
         {enabled ? pearl : null }
+        {enabled ?
+          <div className="cevalBar">
+            <span style={{ width: percent + '%' }}></span>
+          </div> : null
+        }
       </div>
     );
   }

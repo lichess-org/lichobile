@@ -14,7 +14,13 @@ export default function cevalCtrl(allow, emit) {
     maxDepth: maxDepth
   }, 3);
 
+  var curDepth = 0;
   var started = false;
+
+  function onEmit(res) {
+    curDepth = res.ceval.depth;
+    emit(res);
+  }
 
   function start(path, steps) {
     if (!enabled()) return;
@@ -29,7 +35,7 @@ export default function cevalCtrl(allow, emit) {
       steps: steps,
       ply: step.ply,
       emit: function(res) {
-        if (enabled()) emit(res);
+        if (enabled()) onEmit(res);
       }
     });
     started = true;
@@ -66,6 +72,9 @@ export default function cevalCtrl(allow, emit) {
       stop();
       enabled(!enabled());
       settings.analyse.enableCeval(!settings.analyse.enableCeval());
+    },
+    percentComplete: function() {
+      return Math.round(100 * curDepth / maxDepth);
     }
   };
 }

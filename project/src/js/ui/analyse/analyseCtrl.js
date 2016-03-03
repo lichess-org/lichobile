@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from './promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { debounce } from 'lodash/function';
+import { throttle, debounce } from 'lodash/function';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
@@ -56,6 +56,7 @@ export default function controller() {
   }.bind(this);
 
   const debouncedStartCeval = debounce(startCeval, 500);
+  const debouncedDests = debounce(getDests.bind(this), 100);
 
   const showGround = function() {
     var s;
@@ -88,8 +89,10 @@ export default function controller() {
     if (!this.chessground)
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     this.chessground.set(config);
-    if (!dests) debounce(getDests.bind(this), 100)();
+    if (!dests) debouncedDests();
   }.bind(this);
+
+  const throttledScroll = throttle(() => util.autoScroll(document.getElementById('replay')), 300);
 
   this.jump = function(path) {
     this.vm.path = path;
@@ -104,6 +107,7 @@ export default function controller() {
     }
     this.ceval.stop();
     debouncedStartCeval();
+    throttledScroll();
     promotion.cancel(this);
   }.bind(this);
 
@@ -236,6 +240,10 @@ export default function controller() {
     return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
   }.bind(this);
 
+  this.nextStepBest = function() {
+    return this.analyse.nextStepEvalBest(this.vm.path);
+  }.bind(this);
+
   this.toggleCeval = function() {
     this.ceval.toggle();
     debouncedStartCeval();
@@ -317,3 +325,4 @@ function getDests() {
     });
   }
 }
+

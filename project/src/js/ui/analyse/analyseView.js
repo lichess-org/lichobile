@@ -4,7 +4,7 @@ import treePath from './path';
 import cevalView from './ceval/cevalView';
 import gameApi from '../../lichess/game';
 import control from './control';
-import { empty, defined, renderEval, isSynthetic } from './util';
+import { autoScroll, empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
 import variantApi from '../../lichess/variant';
 import helper from '../helper';
@@ -90,21 +90,6 @@ function renderEvalTag(e) {
     tag: 'eval',
     children: e
   };
-}
-
-function autoScroll(movelist) {
-  if (!movelist) return;
-  var scheduledAF = false;
-  if (!scheduledAF) {
-    scheduledAF = true;
-    requestAnimationFrame(function() {
-      scheduledAF = false;
-      const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
-      if (plyEl) {
-        movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
-      }
-    });
-  }
 }
 
 const emptyMove = <move className="empty">...</move>;
@@ -367,12 +352,11 @@ function renderReplay(ctrl) {
     );
   }
   const config = (el, isUpdate) => {
-    autoScroll(el);
     if (!isUpdate) setTimeout(autoScroll.bind(undefined, el), 100);
   };
 
   return (
-    <div className="analyseReplay native_scroller" config={config}>
+    <div id="replay" className="analyseReplay native_scroller" config={config}>
       {tree}
     </div>
   );

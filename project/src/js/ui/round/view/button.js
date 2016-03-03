@@ -137,7 +137,7 @@ export default {
   analysisBoard: function(ctrl) {
     const d = ctrl.data;
     if (gameApi.replayable(d)) {
-      return m('button.fa.fa-eye-open', {
+      return m('button.fa.fa-eye', {
         config: helper.ontouch(() => {
           socket.send('rematch-no');
           m.route(`/analyse/online/${d.game.id}/${analysisBoardOrientation(d)}`);

@@ -16,6 +16,9 @@ function renderAlways(ctrl) {
       config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
     }, i18n('createAGame')),
     renderSharePGNButton(ctrl),
+    m('button.fa.fa-eye', {
+      config: helper.ontouch(() => m.route('/analyse/offline/otb'))
+    }, i18n('analysis')),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),

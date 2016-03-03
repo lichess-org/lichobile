@@ -72,8 +72,7 @@ export function renderEndedGameStatus(ctrl) {
       <div className="result">
         {result}
         <br />
-        <br />
-        <div className="resultStatus">{status}</div>
+        <em className="resultStatus">{status}</em>
       </div>
     );
   }

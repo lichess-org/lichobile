@@ -1,5 +1,5 @@
-import i18n from './i18n';
-import storage from './storage';
+import i18n from '../i18n';
+import storage from '../storage';
 import { cloneDeep } from 'lodash/lang';
 import m from 'mithril';
 
@@ -13,7 +13,8 @@ export function autoredraw(action) {
 }
 
 export function hasNetwork() {
-  return window.navigator.connection.type !== window.Connection.NONE;
+  // return window.navigator.connection.type !== window.Connection.NONE;
+  return false;
 }
 
 export function handleXhrError(error) {

@@ -140,7 +140,7 @@ export default {
       return m('button.fa.fa-eye-open', {
         config: helper.ontouch(() => {
           socket.send('rematch-no');
-          m.route(`/analyse/${d.game.id}/${analysisBoardOrientation(d)}`);
+          m.route(`/analyse/online/${d.game.id}/${analysisBoardOrientation(d)}`);
         })
       }, i18n('analysis'));
     }

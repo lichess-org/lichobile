@@ -9,7 +9,8 @@ import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor } from '../../utils';
+import { backHistory, handleXhrError, oppositeColor } from '../../utils';
+import { getCurrentOTBAnalyse } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import makeData, { defaultData } from './data';
 import chessLogic from './chessLogic';
@@ -17,6 +18,9 @@ import menu from './menu';
 import m from 'mithril';
 
 export default function controller() {
+  const source = m.route.param('source');
+  const gameId = m.route.param('id');
+  const orientation = m.route.param('color');
 
   this.data = null;
 
@@ -123,14 +127,6 @@ export default function controller() {
     if (ply) this.jumpToMain(ply);
     m.redraw();
   }.bind(this);
-
-  // const pieceToSan = {
-  //   pawn: 'P',
-  //   knight: 'N',
-  //   bishop: 'B',
-  //   rook: 'R',
-  //   queen: 'Q'
-  // };
 
   function userNewPiece() {
     this.jump(this.vm.path);
@@ -262,7 +258,10 @@ export default function controller() {
     socket.destroy();
   }.bind(this);
 
-  const init = function() {
+  const init = function(data) {
+    this.data = data;
+    if (!data.game.moveTimes) this.data.game.moveTimes = [];
+    console.log(this.data);
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.chessLogic = new chessLogic(this);
     this.analyse = new analyse(this.data.steps);
@@ -280,19 +279,21 @@ export default function controller() {
     startCeval();
   }.bind(this);
 
-  if (m.route.param('id')) {
-    gameXhr(m.route.param('id'), m.route.param('color'), false).then(function(cfg) {
-      this.data = makeData(cfg);
-      console.log(this.data);
-      init();
+  if (source === 'online' && gameId) {
+    gameXhr(gameId, orientation, false).then(function(cfg) {
+      init(makeData(cfg));
       m.redraw();
-    }.bind(this), err => {
+    }, err => {
       handleXhrError(err);
       m.route('/');
     });
-  } else {
-    this.data = defaultData;
-    init();
+  } else if (source === 'offline' && gameId === 'otb') {
+    const otbData = getCurrentOTBAnalyse();
+    if (!otbData) backHistory();
+    else init(otbData);
+  }
+  else {
+    init(defaultData);
   }
 
 }

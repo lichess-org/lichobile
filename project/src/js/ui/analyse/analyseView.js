@@ -1,4 +1,5 @@
 import m from 'mithril';
+import { isEmpty } from 'lodash/lang';
 import i18n from '../../i18n';
 import treePath from './path';
 import cevalView from './ceval/cevalView';
@@ -47,15 +48,33 @@ function renderTable(ctrl) {
         {renderOpeningBox(ctrl)}
         {renderReplay(ctrl)}
       </div>
-      <div className="analyseInfos">
-        {cevalView.renderCeval(ctrl)}
-        { !isSynthetic(ctrl.data) ?
-          <div className="native_scroller">
-            {gameInfos(ctrl)}
-            {renderOpponents(ctrl)}
-          </div> : null
-        }
-      </div>
+      {renderInfos(ctrl)}
+    </div>
+  );
+}
+
+function renderInfos(ctrl) {
+  const cevalAllowed = ctrl.ceval.allowed();
+  const cevalEnabled = ctrl.ceval.enabled();
+  const ceval = ctrl.currentAnyEval() || {};
+
+  const hash = ctrl.data.game.id + cevalAllowed + cevalEnabled + defined(ceval.cp) +
+  defined(ceval.mate) + ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
+
+  if (ctrl.vm.infosHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.infosHash = hash;
+
+  return (
+    <div className="analyseInfos">
+      {cevalView.renderCeval(ctrl)}
+      { !isSynthetic(ctrl.data) ?
+        <div className="native_scroller">
+          {gameInfos(ctrl)}
+          {renderOpponents(ctrl)}
+        </div> : null
+      }
     </div>
   );
 }
@@ -217,6 +236,14 @@ function renderVariationTurn(ctrl, turn, path) {
 
 function renderOpeningBox(ctrl) {
   const opening = ctrl.data.game.opening;
+
+  const hash = '' + opening && opening.eco + opening && opening.name;
+
+  if (ctrl.vm.openingHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.openingHash = hash;
+
   if (opening) {
     return (
       <div className="analyseOpening">
@@ -412,6 +439,14 @@ function buttons(ctrl) {
 }
 
 function renderActionsBar(ctrl, isPortrait) {
+
+  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late + isPortrait;
+
+  if (ctrl.vm.buttonsHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.buttonsHash = hash;
+
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu" />

@@ -35,7 +35,10 @@ export default function controller() {
     cgConfig: null,
     comments: true,
     flip: false,
-    variationMenu: null
+    variationMenu: null,
+    buttonsHash: '',
+    infosHash: '',
+    openingHash: ''
   };
 
   this.flip = function() {

@@ -38,7 +38,10 @@ function renderAlways(ctrl) {
     m('button[data-icon=U]', {
     config: helper.ontouch(ctrl.root.startNewGame)
     }, i18n('createAGame')),
-    renderSharePGNButton(ctrl)
+    renderSharePGNButton(ctrl),
+    m('button.fa.fa-eye', {
+      config: helper.ontouch(() => m.route('/analyse/offline/ai'))
+    }, i18n('analysis'))
   ];
 }
 

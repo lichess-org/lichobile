@@ -1,6 +1,7 @@
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
+import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';
@@ -9,9 +10,9 @@ import actions from './actions';
 import engine from './engine';
 import helper from '../helper';
 import { getRandomArbitrary } from '../../utils';
+import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import m from 'mithril';
 
-const storageKey = 'ai.current';
 export const storageFenKey = 'ai.setupFen';
 
 export default function controller() {
@@ -19,7 +20,7 @@ export default function controller() {
   helper.analyticsTrackView('Offline AI');
 
   const save = function() {
-    storage.set(storageKey, {
+    setCurrentAIGame({
       data: this.data,
       situations: this.replay.situations,
       ply: this.replay.ply
@@ -73,6 +74,7 @@ export default function controller() {
     save();
     m.redraw();
     if (this.replay.situation().finished) {
+      setResult(this);
       this.chessground.cancelMove();
       this.chessground.stop();
       setTimeout(function() {
@@ -124,7 +126,7 @@ export default function controller() {
     return this.data.player.color === 'black' ? 1 : 0;
   }.bind(this);
 
-  const saved = storage.get(storageKey);
+  const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
   if (setupFen) {
     this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));

@@ -1,6 +1,7 @@
 import storage from '../storage';
 
 const otbStorageKey = 'otb.current';
+const aiStorageKey = 'ai.current';
 
 function lastMoveToUci(move) {
   if (move) {
@@ -14,9 +15,7 @@ export function getCurrentOTBGame() {
   return storage.get(otbStorageKey);
 }
 
-export function getCurrentOTBAnalyse() {
-  const data = storage.get(otbStorageKey);
-
+export function getAnalyseData(data) {
   if (!data) return null;
   data.data.steps = data.situations.map(o => {
     return {
@@ -32,4 +31,12 @@ export function getCurrentOTBAnalyse() {
 
 export function setCurrentOTBGame(game) {
   storage.set(otbStorageKey, game);
+}
+
+export function getCurrentAIGame() {
+  return storage.get(aiStorageKey);
+}
+
+export function setCurrentAIGame(game) {
+  storage.set(aiStorageKey, game);
 }

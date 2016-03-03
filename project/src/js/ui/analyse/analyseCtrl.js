@@ -10,7 +10,7 @@ import cevalCtrl from './ceval/cevalCtrl';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { backHistory, handleXhrError, oppositeColor } from '../../utils';
-import { getCurrentOTBAnalyse } from '../../utils/offlineGames';
+import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import makeData, { defaultData } from './data';
 import chessLogic from './chessLogic';
@@ -288,9 +288,13 @@ export default function controller() {
       m.route('/');
     });
   } else if (source === 'offline' && gameId === 'otb') {
-    const otbData = getCurrentOTBAnalyse();
+    const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) backHistory();
     else init(otbData);
+  } else if (source === 'offline' && gameId === 'ai') {
+    const aiData = getAnalyseData(getCurrentAIGame());
+    if (!aiData) backHistory();
+    else init(aiData);
   }
   else {
     init(defaultData);

@@ -36,11 +36,11 @@ function renderAlways(ctrl) {
       opponentSelector()
     ]),
     m('button[data-icon=U]', {
-    config: helper.ontouch(ctrl.root.startNewGame)
+      config: helper.ontouch(ctrl.root.startNewGame)
     }, i18n('createAGame')),
     renderSharePGNButton(ctrl),
     m('button.fa.fa-eye', {
-      config: helper.ontouch(() => m.route('/analyse/offline/ai'))
+      config: helper.ontouch(() => m.route(`/analyse/offline/ai/${ctrl.root.data.player.color}`))
     }, i18n('analysis'))
   ];
 }

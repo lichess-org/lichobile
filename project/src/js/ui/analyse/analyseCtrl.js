@@ -290,11 +290,17 @@ export default function controller() {
   } else if (source === 'offline' && gameId === 'otb') {
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) backHistory();
-    else init(otbData);
+    else {
+      otbData.orientation = orientation;
+      init(otbData);
+    }
   } else if (source === 'offline' && gameId === 'ai') {
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) backHistory();
-    else init(aiData);
+    else {
+      aiData.orientation = orientation;
+      init(aiData);
+    }
   }
   else {
     init(defaultData);

@@ -258,7 +258,7 @@ export default function controller() {
   };
 
   this.onunload = function() {
-    this.ceval.stop();
+    if (this.ceval) this.ceval.stop();
     socket.destroy();
   }.bind(this);
 

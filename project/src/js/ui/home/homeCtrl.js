@@ -15,17 +15,6 @@ export default function homeCtrl() {
   const dailyPuzzle = m.prop();
   const weekTopPlayers = m.prop([]);
 
-  if (!hasNetwork()) {
-    m.route('/ai');
-    return {
-      featured,
-      nbConnectedPlayers,
-      nbGamesInPlay,
-      dailyPuzzle,
-      weekTopPlayers
-    };
-  }
-
   function onFeatured() {
     return featuredXhr()
     .then(data => {

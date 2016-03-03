@@ -14,6 +14,18 @@ export default function homeView(ctrl) {
     const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?');
     const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?');
 
+    if (!hasNetwork()) {
+      return (
+        <div className="page homeOffline">
+          <section id="homeCreate">
+            <h2>{i18n('playOffline')}</h2>
+            <button className="fatButton" config={helper.ontouch(() => m.route('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" config={helper.ontouch(() => m.route('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+          </section>
+        </div>
+      );
+    }
+
     return (
       <div className="native_scroller page">
         <div className="home">
@@ -32,7 +44,7 @@ export default function homeView(ctrl) {
     );
   }
 
-  const header = headerWidget.bind(undefined, hasNetwork() ? 'lichess.org' : 'Offline');
+  const header = headerWidget.bind(undefined, 'lichess.org');
 
   return layout.free(header, body, empty);
 }

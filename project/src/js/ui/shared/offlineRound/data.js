@@ -20,8 +20,7 @@ export default function data(cfg) {
       fen: cfg.fen,
       player: chess.turn() === 'w' ? 'white' : 'black',
       status: {
-        id: 20,
-        name: 'started'
+        id: 20
       }
     },
     player: {
@@ -31,6 +30,7 @@ export default function data(cfg) {
       color: oppositeColor(cfg.color)
     },
     pref: {
+      animationDuration: 300,
       highlight: true,
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false

@@ -2,6 +2,7 @@ import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
+import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
 import storage from '../../storage';
 import actions from './actions';
@@ -43,9 +44,12 @@ export default function controller() {
   this.onReplayAdded = function() {
     save();
     m.redraw();
-    if (this.replay.situation().finished) setTimeout(function() {
+    const sit = this.replay.situation();
+    if (sit.finished) setTimeout(function() {
+      setResult(this);
       this.chessground.stop();
       this.actions.open();
+      save();
       m.redraw();
     }.bind(this), 1000);
   }.bind(this);
@@ -104,7 +108,6 @@ export default function controller() {
     }));
     storage.remove(storageFenKey);
   } else if (saved) {
-    console.log(saved);
     this.init(saved.data, saved.situations, saved.ply);
   }
   else this.init();

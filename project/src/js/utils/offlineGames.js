@@ -2,6 +2,14 @@ import storage from '../storage';
 
 const otbStorageKey = 'otb.current';
 
+function lastMoveToUci(move) {
+  if (move) {
+    return move[0] + move[1];
+  } else {
+    return null;
+  }
+}
+
 export function getCurrentOTBGame() {
   return storage.get(otbStorageKey);
 }
@@ -15,6 +23,7 @@ export function getCurrentOTBAnalyse() {
       fen: o.fen,
       ply: o.ply,
       san: o.san,
+      uci: lastMoveToUci(o.lastMove),
       dests: o.movable.dests
     };
   });

@@ -23,8 +23,8 @@ module.exports = function(self) {
         color: turnColor,
         dests: chess.dests()
       },
-      check: chess.in_check(),
       finished: chess.game_over(),
+      check: chess.in_check(),
       checkmate: chess.in_checkmate(),
       stalemate: chess.in_stalemate(),
       threefold: chess.in_threefold_repetition(),

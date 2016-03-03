@@ -1,4 +1,5 @@
 import m from 'mithril';
+import { isEmpty } from 'lodash/lang';
 import { defined, renderEval } from '../util';
 import helper from '../../helper';
 
@@ -69,7 +70,7 @@ export default {
 
     if (defined(ceval.cp)) pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
     else if (defined(ceval.mate)) pearl = <pearl>{'#' + ceval.mate}</pearl>;
-    else if (ctrl.vm.step.dests === '') pearl = <pearl>-</pearl>;
+    else if (isEmpty(ctrl.vm.step.dests)) pearl = <pearl>-</pearl>;
     else pearl = <div className="spinner fa fa-spinner"></div>;
 
     return (

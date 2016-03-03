@@ -40,7 +40,6 @@ export const defaultData = {
   },
   pref: {
     animationDuration: 300,
-    coords: 2,
     destination: true,
     highlight: true
   },

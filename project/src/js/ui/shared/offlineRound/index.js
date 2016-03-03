@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import statusApi from '../../../lichess/status';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
@@ -54,6 +55,14 @@ export function gameResult(replayCtrl) {
     return '½-½';
   else
     return '?';
+}
+
+export function setResult(ctrl) {
+  const sit = ctrl.replay.situation();
+  ctrl.data.game.status.id = statusApi.offlineSituationToStatus(sit);
+  if (!sit.draw) {
+    ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
+  }
 }
 
 export function renderEndedGameStatus(ctrl) {

@@ -7,7 +7,6 @@ export default function cevalCtrl(allow, emit) {
   const minDepth = 8;
   const maxDepth = 18;
   const allowed = m.prop(allow);
-  const enabled = m.prop(allow && settings.analyse.enableCeval());
   const pool = makePool({
     path: 'vendor/stockfish6.js',
     minDepth: minDepth,
@@ -16,6 +15,10 @@ export default function cevalCtrl(allow, emit) {
 
   var curDepth = 0;
   var started = false;
+
+  function enabled() {
+    return allow && settings.analyse.enableCeval();
+  }
 
   function onEmit(res) {
     curDepth = res.ceval.depth;

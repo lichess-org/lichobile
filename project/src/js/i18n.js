@@ -32,7 +32,9 @@ const untranslated = {
   challengeCreated: 'Challenge created. It will remain active for two weeks. You can cancel it by going to the top right board menu.',
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
-  returnToHome: 'Return to home'
+  returnToHome: 'Return to home',
+  enableLocalComputerEvaluation: 'Enable local computer evaluation.',
+  localEvalCaution: 'Caution: it may be slow on some devices, and it consumes battery.'
 };
 
 const defaultCode = 'en';

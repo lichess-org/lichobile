@@ -10,6 +10,7 @@ import cevalCtrl from './ceval/cevalCtrl';
 import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
+import continuePopup from '../shared/continuePopup';
 import { backHistory, handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
@@ -26,6 +27,7 @@ export default function controller() {
   this.data = null;
 
   this.menu = menu.controller(this);
+  this.continuePopup = continuePopup.controller();
 
   this.vm = {
     path: null,
@@ -54,12 +56,13 @@ export default function controller() {
     return [uci.substr(0, 2), uci.substr(2, 2)];
   }
 
-  const startCeval = function() {
-    if (this.ceval.enabled() && this.canUseCeval())
+  this.startCeval = function() {
+    if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
+    }
   }.bind(this);
 
-  const debouncedStartCeval = debounce(startCeval, 500);
+  const debouncedStartCeval = debounce(this.startCeval, 500);
   const debouncedDests = debounce(getDests.bind(this), 100);
 
   const showGround = function() {
@@ -96,7 +99,7 @@ export default function controller() {
     if (!dests) debouncedDests();
   }.bind(this);
 
-  const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 300);
+  const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   this.jump = function(path) {
     this.vm.path = path;
@@ -289,7 +292,7 @@ export default function controller() {
     this.vm.pathStr = treePath.write(initialPath);
 
     showGround();
-    startCeval();
+    this.startCeval();
   }.bind(this);
 
   if (source === 'online' && gameId) {

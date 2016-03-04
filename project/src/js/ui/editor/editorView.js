@@ -5,7 +5,7 @@ import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
 import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
-import continuePopup from './continuePopup';
+import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';

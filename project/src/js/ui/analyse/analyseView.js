@@ -378,7 +378,7 @@ function renderReplay(ctrl) {
       <div className="status">
         {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
 
-        {winner ? ', ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null}
+        {winner ? i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') : null}
       </div>
     );
   }

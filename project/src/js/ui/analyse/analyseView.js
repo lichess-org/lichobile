@@ -237,7 +237,7 @@ function renderVariationTurn(ctrl, turn, path) {
 function renderOpeningBox(ctrl) {
   const opening = ctrl.data.game.opening;
 
-  const hash = '' + opening && opening.eco + opening && opening.name;
+  const hash = '' + (opening && opening.eco + opening.name);
 
   if (ctrl.vm.openingHash === hash) return {
     subtree: 'retain'

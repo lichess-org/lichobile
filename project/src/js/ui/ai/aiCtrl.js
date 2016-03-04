@@ -77,6 +77,7 @@ export default function controller() {
       setResult(this);
       this.chessground.cancelMove();
       this.chessground.stop();
+      save();
       setTimeout(function() {
         this.actions.open();
         m.redraw();

@@ -105,6 +105,13 @@ function renderActionsBar(ctrl) {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
+    m('button.action_bar_button.fa.fa-eye', {
+      key: 'analyse',
+      config: helper.ontouch(() => {
+        const fen = encodeURIComponent(ctrl.computeFen());
+        m.route(`/analyse/fen/${fen}`);
+      }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
+    }),
     m('button.action_bar_button.fa.fa-share-alt', {
       key: 'sharePosition',
       config: helper.ontouch(

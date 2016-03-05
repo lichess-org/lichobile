@@ -14,7 +14,7 @@ import continuePopup from '../shared/continuePopup';
 import { backHistory, handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
-import makeData, { defaultData } from './data';
+import { makeData, makeDefaultData } from './data';
 import chessLogic from './chessLogic';
 import menu from './menu';
 import m from 'mithril';
@@ -23,6 +23,7 @@ export default function controller() {
   const source = m.route.param('source');
   const gameId = m.route.param('id');
   const orientation = m.route.param('color');
+  const fen = m.route.param('fen');
 
   this.data = null;
 
@@ -323,7 +324,7 @@ export default function controller() {
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    init(defaultData);
+    init(makeDefaultData(fen));
   }
 
   window.plugins.insomnia.keepAwake();
@@ -339,4 +340,3 @@ function getDests() {
     });
   }
 }
-

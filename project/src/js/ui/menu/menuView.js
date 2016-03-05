@@ -73,11 +73,9 @@ function renderLinks(user) {
 
   return (
     <ul className="side_links">
-      {hasNetwork() ?
       <li className="side_link" key="home" config={helper.ontouchY(menu.route('/'))}>
         <span className="fa fa-home" />Home
-      </li> : null
-      }
+      </li>
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }

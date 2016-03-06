@@ -140,37 +140,46 @@ function plyToTurn(ply) {
   return Math.floor((ply - 1) / 2) + 1;
 }
 
-function renderVariation(ctrl, variation, path, klass) {
-  var showMenu = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
-  return m('div', {
-    className: klass + ' ' + helper.classSet({
-      variation: true,
-      menu: showMenu
-    })
-  }, [
-    m('span', {
-      className: 'menu',
-      'data-icon': showMenu ? 'L' : '',
-      config: helper.ontouch(partialf(ctrl.toggleVariationMenu, path))
-    }),
-    showMenu ? (function() {
-      var promotable = isSynthetic(ctrl.data) ||
-        !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
-      return [
-        m('a', {
-          className: 'delete text',
-          'data-icon': 'q',
-          config: helper.ontouch(partialf(ctrl.deleteVariation, path))
-        }, 'Delete variation'),
-        promotable ? m('a', {
-          className: 'promote text',
-          'data-icon': 'E',
-          config: helper.ontouch(partialf(ctrl.promoteVariation, path))
-        }, 'Promote to main line') : null
-      ];
-    })() :
-    renderVariationContent(ctrl, variation, path)
+function renderVariationMenu(ctrl, path) {
+  const showing = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
+
+  if (!showing) return null;
+
+  const promotable = isSynthetic(ctrl.data) ||
+    !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
+
+  const content = m('div.variationMenu', [
+    m('button', {
+      className: 'withIcon',
+      'data-icon': 'q',
+      config: helper.ontouch(partialf(ctrl.deleteVariation, path))
+    }, 'Delete variation'),
+    promotable ? m('button', {
+      className: 'withIcon',
+      'data-icon': 'E',
+      config: helper.ontouch(partialf(ctrl.promoteVariation, path))
+    }, 'Promote to main line') : null
   ]);
+
+  return (
+    <div className="overlay_popup_wrapper variationMenuPopup">
+      <div className="popup_overlay_close"
+        config={helper.ontouch(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
+      <div className="overlay_popup">
+        {content}
+      </div>
+    </div>
+  );
+}
+
+function renderVariation(ctrl, variation, path, klass) {
+  return (
+    <div className={klass + ' variation'}>
+      <span className="menuIcon fa fa-ellipsis-v" config={helper.ontouchY(partialf(ctrl.toggleVariationMenu, path))}></span>
+      {renderVariationContent(ctrl, variation, path)}
+      {renderVariationMenu(ctrl, path)}
+    </div>
+  );
 }
 
 function renderVariationNested(ctrl, variation, path) {
@@ -359,6 +368,7 @@ function renderTree(ctrl, tree) {
 }
 
 function renderReplay(ctrl) {
+
   var result;
   if (ctrl.data.game.status.id >= 30) switch (ctrl.data.game.winner) {
     case 'white':

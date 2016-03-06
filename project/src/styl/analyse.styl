@@ -126,13 +126,24 @@
     color rgba(textDarkBg, 70%)
 
   .meta
-    margin-left 5px
+    position relative
+    margin-left 25px
+    min-height 25px
     width 100%
     display flex
     flex-flow row wrap
     align-content flex-start
     font-size 0.8em
     background lighten(bgdark, 5%)
+    .menuIcon
+      width 25px
+      height 25px
+      position absolute
+      left -25px
+      top 5px
+      font-size 1.5em
+      text-align center
+      margin 0
 
   .result, .status
     width 100%
@@ -147,3 +158,12 @@
     font-style italic
     text-align center
 
+
+.variationMenuPopup
+  position fixed
+  font-size 1rem
+  .overlay_popup
+    height 100px
+    top calc((100% - 100px) / 2)
+    border-radius 5px
+    text-align center

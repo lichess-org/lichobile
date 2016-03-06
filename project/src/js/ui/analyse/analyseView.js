@@ -429,7 +429,7 @@ function gameInfos(ctrl) {
   const infos = [time + ' • ', variant, m('br'), mode];
 
   return (
-    <div className="gameInfos" data-icon={icon}>
+    <div className="analyseGameInfos" data-icon={icon}>
       {infos}
     </div>
   );

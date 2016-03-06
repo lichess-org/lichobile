@@ -41,6 +41,7 @@ export default function controller() {
     comments: true,
     flip: false,
     variationMenu: null,
+    replayHash: '',
     buttonsHash: '',
     infosHash: '',
     openingHash: ''

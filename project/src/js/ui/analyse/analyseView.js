@@ -369,6 +369,15 @@ function renderTree(ctrl, tree) {
 
 function renderReplay(ctrl) {
 
+  const hash = ctrl.vm.variationMenu + JSON.stringify(ctrl.vm.path) +
+    (ctrl.vm.step.ceval && renderEval(ctrl.vm.step.ceval.cp));
+
+  if (ctrl.vm.replayHash === hash) return {
+    subtree: 'retain'
+  };
+
+  ctrl.vm.replayHash = hash;
+
   var result;
   if (ctrl.data.game.status.id >= 30) switch (ctrl.data.game.winner) {
     case 'white':

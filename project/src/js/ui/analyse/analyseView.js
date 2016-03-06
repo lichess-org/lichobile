@@ -58,10 +58,11 @@ function renderTable(ctrl) {
 function renderInfos(ctrl) {
   const cevalAllowed = ctrl.ceval.allowed();
   const cevalEnabled = ctrl.ceval.enabled();
-  const ceval = ctrl.currentAnyEval() || {};
+  const ceval = ctrl.currentAnyEval() || null;
 
-  const hash = ctrl.data.game.id + cevalAllowed + cevalEnabled + defined(ceval.cp) +
-  defined(ceval.mate) + ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
+  const hash = ctrl.data.game.id + cevalAllowed + cevalEnabled +
+    (ceval && renderEval(ceval.cp)) + (ceval && ceval.mate) +
+    ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'

@@ -126,7 +126,6 @@
     color rgba(textDarkBg, 70%)
 
   .meta
-    position relative
     margin-left 25px
     min-height 25px
     width 100%
@@ -135,15 +134,19 @@
     align-content flex-start
     font-size 0.8em
     background lighten(bgdark, 5%)
-    .menuIcon
-      width 25px
-      height 25px
-      position absolute
-      left -25px
-      top 5px
-      font-size 1.5em
-      text-align center
-      margin 0
+    > .variation
+      > .menuIcon
+        width 25px
+        height 25px
+        position relative
+        left -25px
+        top 5px
+        font-size 1.5em
+        text-align center
+        margin 0
+      > index, move
+        position relative
+        left -25px
 
   .result, .status
     width 100%
@@ -167,3 +170,8 @@
     top calc((100% - 100px) / 2)
     border-radius 5px
     text-align center
+    > .variationMenu
+      display flex
+      flex-flow column nowrap
+      justify-content center
+      height 100%

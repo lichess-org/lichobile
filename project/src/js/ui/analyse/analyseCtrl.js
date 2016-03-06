@@ -38,7 +38,6 @@ export default function controller() {
     initialPathStr: '',
     step: null,
     cgConfig: null,
-    comments: true,
     flip: false,
     variationMenu: null,
     replayHash: '',
@@ -105,16 +104,14 @@ export default function controller() {
 
   const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
-  this.jump = function(path) {
+  this.jump = function(path, direction) {
     this.vm.path = path;
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
     showGround();
-    if (!this.vm.step.uci) sound.move(); // initial position
-    else if (this.vm.justPlayed !== this.vm.step.uci) {
+    if (direction === 'forward') {
       if (this.vm.step.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
-      this.vm.justPlayed = null;
     }
     this.ceval.stop();
     debouncedStartCeval();
@@ -122,8 +119,8 @@ export default function controller() {
     promotion.cancel(this);
   }.bind(this);
 
-  this.userJump = function(path) {
-    this.jump(path);
+  this.userJump = function(path, direction) {
+    this.jump(path, direction);
   }.bind(this);
 
   this.jumpToMain = function(ply) {

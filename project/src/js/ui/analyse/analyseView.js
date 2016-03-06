@@ -276,8 +276,6 @@ function renderOpeningBox(ctrl) {
 }
 
 function renderMeta(ctrl, move, path) {
-  if (!ctrl.vm.comments) return null;
-
   if (!move || (empty(move.comments) && empty(move.variations))) return null;
 
   const children = [];

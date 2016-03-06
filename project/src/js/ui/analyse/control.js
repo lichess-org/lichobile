@@ -41,7 +41,7 @@ export default {
     if (!canGoForward(ctrl)) return false;
     var p = ctrl.vm.path;
     p[p.length - 1].ply++;
-    ctrl.userJump(p);
+    ctrl.userJump(p, 'forward');
 
     return true;
   },
@@ -69,7 +69,7 @@ export default {
     ctrl.userJump([{
       ply: ctrl.analyse.tree[ctrl.analyse.tree.length - 1].ply,
       variation: null
-    }]);
+    }], 'forward');
   },
 
   first: function(ctrl) {

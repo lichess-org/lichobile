@@ -1,4 +1,5 @@
 import m from 'mithril';
+import $ from 'jquery';
 import { isEmpty } from 'lodash/lang';
 import i18n from '../../i18n';
 import treePath from './path';
@@ -7,7 +8,7 @@ import gameApi from '../../lichess/game';
 import control from './control';
 import menu from './menu';
 import continuePopup from '../shared/continuePopup';
-import { autoScroll, empty, defined, renderEval, isSynthetic } from './util';
+import { empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
 import variantApi from '../../lichess/variant';
 import helper from '../helper';
@@ -126,9 +127,9 @@ function renderMove(ctrl, move, path) {
     pathStr === ctrl.vm.pathStr ? 'current' : '',
     pathStr === ctrl.vm.initialPathStr ? 'initial' : ''
   ].join(' ');
-  const jump = helper.ontouchY(() => ctrl.userJump(path));
+
   return (
-    <move className={className} config={jump} data-path={path[1] ? pathStr : ''}>
+    <move className={className} data-path={path[1] ? pathStr : ''}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
@@ -310,13 +311,13 @@ function renderTurnEl(children) {
 }
 
 function renderTurn(ctrl, turn, path) {
-  var index = renderIndex(turn.turn);
-  var wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  var wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
-  var wMeta = renderMeta(ctrl, turn.white, wPath);
-  var bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  var bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
-  var bMeta = renderMeta(ctrl, turn.black, bPath);
+  const index = renderIndex(turn.turn);
+  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
+  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
+  const wMeta = renderMeta(ctrl, turn.white, wPath);
+  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
+  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const bMeta = renderMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) return [
       renderTurnEl([index, wMove, emptyMove]),
@@ -392,9 +393,16 @@ function renderReplay(ctrl) {
       </div>
     );
   }
-  const config = (el, isUpdate) => {
-    if (!isUpdate) setTimeout(autoScroll.bind(undefined, el), 100);
-  };
+
+  function jump(e) {
+    const el = e.target.tagName === 'MOVE' ? e.target : e.target.parentNode;
+    if (el.tagName !== 'MOVE' || el.classList.contains('empty')) return;
+    const path = el.getAttribute('data-path') ||
+      '' + (2 * parseInt($(el).siblings('index').text()) - 2 + $(el).index());
+    if (path) ctrl.userJump(treePath.read(path));
+  }
+
+  const config = helper.ontouch(jump);
 
   return (
     <div id="replay" className="analyseReplay native_scroller" config={config}>

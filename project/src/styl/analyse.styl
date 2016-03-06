@@ -104,6 +104,9 @@
     color rgba(textDarkBg, 70%)
     font-weight lighter
     margin-right 5px
+    margin-left 5px
+    &:first-child
+      margin-left 0
 
   move
     position relative
@@ -126,7 +129,6 @@
     color rgba(textDarkBg, 70%)
 
   .meta
-    margin-left 25px
     min-height 25px
     width 100%
     display flex
@@ -134,19 +136,25 @@
     align-content flex-start
     font-size 0.8em
     background lighten(bgdark, 5%)
-    > .variation
+    > .variationWrapper
+      width 100%
+      display flex
+      align-items center
+      > .variation
+        flex 0 1 auto
+        &.nested
+          display inline
+          margin-left 5px
       > .menuIcon
+        flex 0 0 25px
         width 25px
         height 25px
-        position relative
-        left -25px
-        top 5px
         font-size 1.5em
         text-align center
         margin 0
-      > index, move
-        position relative
-        left -25px
+        &:before
+          position relative
+          top 5px
 
   .result, .status
     width 100%

@@ -174,18 +174,22 @@ function renderVariationMenu(ctrl, path) {
 
 function renderVariation(ctrl, variation, path, klass) {
   return (
-    <div className={klass + ' variation'}>
+    <div className="variationWrapper">
       <span className="menuIcon fa fa-ellipsis-v" config={helper.ontouchY(partialf(ctrl.toggleVariationMenu, path))}></span>
-      {renderVariationContent(ctrl, variation, path)}
-      {renderVariationMenu(ctrl, path)}
+      <div className={klass + ' variation'}>
+        {renderVariationContent(ctrl, variation, path)}
+        {renderVariationMenu(ctrl, path)}
+      </div>
     </div>
   );
 }
 
 function renderVariationNested(ctrl, variation, path) {
   return (
-    <span className="variation">
-      {'(' + renderVariationContent(ctrl, variation, path) + ')' }
+    <span className="variation nested">
+      (
+      {renderVariationContent(ctrl, variation, path)}
+      )
     </span>
   );
 }
@@ -274,20 +278,13 @@ function renderMeta(ctrl, move, path) {
 
   const children = [];
   const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
-  var commentClass = '';
-  if (!empty(move.comments)) move.comments.forEach(function(comment) {
-    if (comment.indexOf('Inaccuracy.') === 0) commentClass = 'inaccuracy';
-    else if (comment.indexOf('Mistake.') === 0) commentClass = 'mistake';
-    else if (comment.indexOf('Blunder.') === 0) commentClass = 'blunder';
-    children.push(<div className={'comment ' + colorClass + commentClass}>comment</div>);
-  });
   if (!empty(move.variations)) move.variations.forEach(function(variation, i) {
     if (empty(variation)) return null;
     children.push(renderVariation(
       ctrl,
       variation,
       treePath.withVariation(path, i + 1),
-      i === 0 ? colorClass + commentClass : null
+      i === 0 ? colorClass : null
     ));
   });
   return (

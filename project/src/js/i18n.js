@@ -34,7 +34,7 @@ const untranslated = {
   submitMove: 'Submit move',
   returnToHome: 'Return to home',
   enableLocalComputerEvaluation: 'Enable local computer evaluation.',
-  localEvalCaution: 'Caution: it may be slow on some devices, and it consumes battery.'
+  localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.'
 };
 
 const defaultCode = 'en';

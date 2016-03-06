@@ -25,6 +25,8 @@ export default function controller() {
   const orientation = m.route.param('color');
   const fen = m.route.param('fen');
 
+  socket.createDefault();
+
   this.data = null;
 
   this.menu = menu.controller(this);

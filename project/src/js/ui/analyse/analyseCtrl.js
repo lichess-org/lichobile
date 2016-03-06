@@ -230,8 +230,8 @@ export default function controller() {
 
   const allowCeval = function() {
     return (
-      util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'fromPosition', 'chess960'].indexOf(this.data.game.variant.key) !== -1;
+      source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
+    ) && ['standard', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {

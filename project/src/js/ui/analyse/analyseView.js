@@ -396,7 +396,7 @@ function renderReplay(ctrl) {
 
   function jump(e) {
     const el = e.target.tagName === 'MOVE' ? e.target : e.target.parentNode;
-    if (el.tagName !== 'MOVE' || el.classList.contains('empty')) return;
+    if (el.tagName !== 'MOVE' || el.classList.contains('emptyMove')) return;
     const path = el.getAttribute('data-path') ||
       '' + (2 * parseInt($(el).siblings('index').text()) - 2 + $(el).index());
     if (path) ctrl.userJump(treePath.read(path));

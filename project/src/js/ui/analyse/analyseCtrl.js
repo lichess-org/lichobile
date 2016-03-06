@@ -300,6 +300,10 @@ export default function controller() {
 
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
+      if (cfg.game.variant.key !== 'standard') {
+        window.plugins.toast.show('Analysis board supports only standard chess variant for now', 'short', 'center');
+        m.route('/');
+      }
       helper.analyticsTrackView('Analysis (game)');
       init(makeData(cfg));
       m.redraw();

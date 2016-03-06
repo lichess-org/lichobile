@@ -67,7 +67,7 @@ function moretimeable(data) {
 }
 
 function replayable(data) {
-  return data.source === 'import' || gameStatus.finished(data);
+  return data.game.variant.key === 'standard' && gameStatus.finished(data);
 }
 
 function getPlayer(data, color) {

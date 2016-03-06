@@ -88,7 +88,7 @@
     display flex
     width 100%
     > move
-      flex 1 1 50%
+      flex 0 1 calc((100% - 25px) / 2)
       padding 2px 7px
       margin 0
     > index
@@ -109,7 +109,6 @@
 
   move
     position relative
-    display inline-block
     margin 0 2px
     &.current
       color gold

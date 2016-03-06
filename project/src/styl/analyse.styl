@@ -88,6 +88,7 @@
     display flex
     width 100%
     > move
+      position relative
       flex 0 1 calc((100% - 25px) / 2)
       padding 2px 7px
       margin 0
@@ -108,7 +109,7 @@
       margin-left 0
 
   move
-    position relative
+    display inline-block
     margin 0 2px
     &.current
       color gold
@@ -140,6 +141,10 @@
       align-items center
       > .variation
         flex 0 1 auto
+        width calc(100% - 25px)
+        white-space nowrap
+        &.visiting
+          white-space normal
         &.nested
           display inline
           margin-left 5px

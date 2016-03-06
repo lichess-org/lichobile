@@ -116,7 +116,7 @@ function renderEvalTag(e) {
   };
 }
 
-const emptyMove = <move className="empty">...</move>;
+const emptyMove = <move className="emptyMove">...</move>;
 
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
@@ -174,10 +174,11 @@ function renderVariationMenu(ctrl, path) {
 }
 
 function renderVariation(ctrl, variation, path, klass) {
+  const visiting = treePath.contains(path, ctrl.vm.path);
   return (
     <div className="variationWrapper">
       <span className="menuIcon fa fa-ellipsis-v" config={helper.ontouchY(partialf(ctrl.toggleVariationMenu, path))}></span>
-      <div className={klass + ' variation'}>
+      <div className={klass + ' variation' + (visiting ? 'visiting' : '')}>
         {renderVariationContent(ctrl, variation, path)}
         {renderVariationMenu(ctrl, path)}
       </div>
@@ -367,15 +368,6 @@ function renderTree(ctrl, tree) {
 }
 
 function renderReplay(ctrl) {
-
-  const hash = ctrl.vm.variationMenu + JSON.stringify(ctrl.vm.path) +
-    (ctrl.vm.step.ceval && renderEval(ctrl.vm.step.ceval.cp));
-
-  if (ctrl.vm.replayHash === hash) return {
-    subtree: 'retain'
-  };
-
-  ctrl.vm.replayHash = hash;
 
   var result;
   if (ctrl.data.game.status.id >= 30) switch (ctrl.data.game.winner) {

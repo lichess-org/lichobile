@@ -15,7 +15,7 @@ import layout from '../layout';
 import { view as renderPromotion } from './promotion';
 import { header } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
-import { partialf, playerName, gameIcon } from '../../utils';
+import { noop, partialf, playerName, gameIcon } from '../../utils';
 
 export default function analyseView(ctrl) {
 
@@ -263,8 +263,11 @@ function renderOpeningBox(ctrl) {
   ctrl.vm.openingHash = hash;
 
   if (opening) {
+    const config = helper.ontouch(noop, () =>
+      window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'));
+
     return (
-      <div className="analyseOpening">
+      <div className="analyseOpening" config={config}>
         <strong>{opening.eco}&nbsp;</strong>
         <span>{opening.name}</span>
       </div>

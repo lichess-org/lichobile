@@ -29,13 +29,9 @@ lobby.startSeeking = function() {
         lobby.closePopup();
         socket.redirectToGame(d);
       },
-      n: n => {
-        nbPlayers = n;
-        m.redraw();
-      },
-      nbr: n => {
-        nbGames = n;
-        m.redraw();
+      n: (_, d) => {
+        nbPlayers = d.d;
+        nbGames = d.r;
       },
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);

@@ -1,5 +1,4 @@
 import socket from '../../socket';
-import { hasNetwork } from '../../utils';
 import settings from '../../settings';
 import { lobby as lobbyXhr } from '../../xhr';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
@@ -25,12 +24,9 @@ export default function homeCtrl() {
 
   lobbyXhr(true).then(data => {
     socket.createLobby(data.lobby.version, noop, {
-      n: n => {
-        nbConnectedPlayers(n);
-        m.redraw();
-      },
-      nbr: n => {
-        nbGamesInPlay(n);
+      n: (_, d) => {
+        nbConnectedPlayers(d.d);
+        nbGamesInPlay(d.r);
         m.redraw();
       },
       featured: onFeatured

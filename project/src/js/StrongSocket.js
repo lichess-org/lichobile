@@ -196,7 +196,7 @@ StrongSocket.prototype = {
       default:
         if (!self.settings.receive || !self.settings.receive(msg.t, msg.d)) {
           var h = self.settings.events[msg.t];
-          if (h) h(msg.d || null, self);
+          if (h) h(msg.d || null, msg);
           else if (!self.options.ignoreUnknownMessages) {
             self.debug('Message not supported ' + JSON.stringify(msg));
           }

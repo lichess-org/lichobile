@@ -413,21 +413,23 @@ function gameInfos(ctrl) {
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf);
-  const variant = m('span.variant', {
-    config: helper.ontouch(
-      () => {
-        var link = variantApi(data.game.variant.key).link;
-        if (link)
-          window.open(link, '_blank');
-      },
-      () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
-    )
-  }, data.game.variant.name);
-  const infos = [time + ' • ', variant, m('br'), mode];
+  const variantLink = helper.ontouch(
+    () => {
+      const link = variantApi(data.game.variant.key).link;
+      if (link)
+        window.open(link, '_blank');
+    },
+    () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
+  );
 
   return (
     <div className="analyseGameInfos" data-icon={icon}>
-      {infos}
+      {time + ' • '}
+      <span className="variant" config={variantLink}>
+        {data.game.variant.name}
+      </span>
+      <br/>
+      {mode}
     </div>
   );
 }

@@ -5,8 +5,7 @@ import {
   renderAntagonist,
   renderGameActionsBar,
   renderReplayTable,
-  renderEndedGameStatus,
-  renderGameActionsBarTablet
+  renderEndedGameStatus
 } from '../shared/offlineRound';
 import { sideSelector, opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
@@ -37,19 +36,6 @@ function content(ctrl) {
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, actions.view)
-    ];
-  else if (helper.isLandscape() && helper.isVeryWideScreen())
-    return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
-      <section key="table" className="table">
-        <section className="playersTable offline">
-          {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait)}
-          {replayTable}
-          {renderEndedGameStatus(ctrl.actions)}
-          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
-        </section>
-        {renderGameActionsBarTablet(ctrl)}
-      </section>
     ];
   else
     return [

@@ -278,7 +278,7 @@ function renderOpeningBox(ctrl) {
 }
 
 function renderMeta(ctrl, move, path) {
-  if (!move || (empty(move.comments) && empty(move.variations))) return null;
+  if (!move || empty(move.variations)) return null;
 
   const children = [];
   const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
@@ -292,12 +292,13 @@ function renderMeta(ctrl, move, path) {
     ));
   });
   return (
-    <div className="meta">{children}</div>
+    <div key={move.ply + ':meta'} className="meta">{children}</div>
   );
 }
 
-function turnKey(turn) {
-  return '' + turn.turn + (turn.white && turn.white.san) + (turn.black && turn.black.san);
+function turnKey(turn, meta) {
+  const key = turn.turn.toString() + ':' + (meta ? meta : '');
+  return key;
 }
 
 function renderIndex(txt) {
@@ -307,10 +308,10 @@ function renderIndex(txt) {
   };
 }
 
-function renderTurnEl(children, turn) {
+function renderTurnEl(children, key) {
   return {
     tag: 'turn',
-    attrs: { key: turnKey(turn) },
+    attrs: { key },
     children: children
   };
 }
@@ -324,34 +325,53 @@ function renderTurn(ctrl, turn, path) {
   const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
   const bMeta = renderMeta(ctrl, turn.black, bPath);
   if (wMove) {
-    if (wMeta) return [
-      renderTurnEl([index, wMove, emptyMove], turn),
-      wMeta,
-      bMove ? [
-        renderTurnEl([index, emptyMove, bMove], turn),
+    if (wMeta) {
+      const temp = [
+        renderTurnEl([index, wMove, emptyMove], turnKey(turn, 'emptyBlack')),
+        wMeta
+      ];
+      if (bMove) {
+        if (bMeta) {
+          temp.concat([
+            renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAfterWhiteMetaAndBlackMeta')),
+            bMeta
+          ]);
+        } else {
+          temp.push(
+            renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAfterWhiteMeta'))
+          );
+        }
+      }
+      return temp;
+    } else if (bMeta) {
+      return [
+        renderTurnEl([index, wMove, bMove], turnKey(turn, 'andBlackMeta')),
         bMeta
-      ] : null
-    ];
+      ];
+    } else {
+      return renderTurnEl([index, wMove, bMove], turnKey(turn));
+    }
+  }
+  else if (bMeta) {
     return [
-      renderTurnEl([index, wMove, bMove], turn),
+      renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAndBlackMeta')),
       bMeta
     ];
+  } else {
+    return renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhite'));
   }
-  return [
-    renderTurnEl([index, emptyMove, bMove], turn),
-    bMeta
-  ];
 }
 
 function renderTree(ctrl, tree) {
-  var turns = [];
-  var initPly = ctrl.analyse.firstPly();
-  if (initPly % 2 === 0)
+  const turns = [];
+  const initPly = ctrl.analyse.firstPly();
+  if (initPly % 2 === 0) {
     for (var i = 1, nb = tree.length; i < nb; i += 2) turns.push({
       turn: Math.floor((initPly + i) / 2) + 1,
       white: tree[i],
       black: tree[i + 1]
     });
+  }
   else {
     turns.push({
       turn: Math.floor(initPly / 2) + 1,
@@ -365,10 +385,11 @@ function renderTree(ctrl, tree) {
     });
   }
 
-  var path = treePath.default();
+  const path = treePath.default();
   var tags = [];
-  for (var k = 0, len = turns.length; k < len; k++)
-    tags.push(renderTurn(ctrl, turns[k], path));
+  for (var k = 0, len = turns.length; k < len; k++) {
+    tags = tags.concat(renderTurn(ctrl, turns[k], path));
+  }
 
   return tags;
 }

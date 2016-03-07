@@ -1,5 +1,4 @@
 import m from 'mithril';
-import $ from 'jquery';
 import { isEmpty } from 'lodash/lang';
 import i18n from '../../i18n';
 import treePath from './path';
@@ -128,8 +127,10 @@ function renderMove(ctrl, move, path) {
     pathStr === ctrl.vm.initialPathStr ? 'initial' : ''
   ].join(' ');
 
+  const jump = helper.ontouchY(() => ctrl.jump(treePath.read(pathStr)));
+
   return (
-    <move className={className} data-path={path[1] ? pathStr : ''}>
+    <move className={className} config={jump}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
@@ -179,7 +180,7 @@ function renderVariation(ctrl, variation, path, klass) {
   return (
     <div className="variationWrapper">
       <span className="menuIcon fa fa-ellipsis-v" config={helper.ontouchY(partialf(ctrl.toggleVariationMenu, path))}></span>
-      <div className={klass + ' variation' + (visiting ? 'visiting' : '')}>
+      <div className={klass + ' variation' + (visiting ? ' visiting' : '')}>
         {renderVariationContent(ctrl, variation, path)}
         {renderVariationMenu(ctrl, path)}
       </div>
@@ -296,6 +297,10 @@ function renderMeta(ctrl, move, path) {
   );
 }
 
+function turnKey(turn) {
+  return '' + turn.turn + (turn.white && turn.white.san) + (turn.black && turn.black.san);
+}
+
 function renderIndex(txt) {
   return {
     tag: 'index',
@@ -303,9 +308,10 @@ function renderIndex(txt) {
   };
 }
 
-function renderTurnEl(children) {
+function renderTurnEl(children, turn) {
   return {
     tag: 'turn',
+    attrs: { key: turnKey(turn) },
     children: children
   };
 }
@@ -320,20 +326,20 @@ function renderTurn(ctrl, turn, path) {
   const bMeta = renderMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) return [
-      renderTurnEl([index, wMove, emptyMove]),
+      renderTurnEl([index, wMove, emptyMove], turn),
       wMeta,
       bMove ? [
-        renderTurnEl([index, emptyMove, bMove]),
+        renderTurnEl([index, emptyMove, bMove], turn),
         bMeta
       ] : null
     ];
     return [
-      renderTurnEl([index, wMove, bMove]),
+      renderTurnEl([index, wMove, bMove], turn),
       bMeta
     ];
   }
   return [
-    renderTurnEl([index, emptyMove, bMove]),
+    renderTurnEl([index, emptyMove, bMove], turn),
     bMeta
   ];
 }
@@ -383,10 +389,10 @@ function renderReplay(ctrl) {
   }
   const tree = renderTree(ctrl, ctrl.analyse.tree);
   if (result) {
-    tree.push(<div className="result">{result}</div>);
+    tree.push(<div key="gameResult" className="result">{result}</div>);
     const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
     tree.push(
-      <div className="status">
+      <div key="gameStatus" className="status">
         {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
 
         {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
@@ -394,18 +400,8 @@ function renderReplay(ctrl) {
     );
   }
 
-  function jump(e) {
-    const el = e.target.tagName === 'MOVE' ? e.target : e.target.parentNode;
-    if (el.tagName !== 'MOVE' || el.classList.contains('emptyMove')) return;
-    const path = el.getAttribute('data-path') ||
-      '' + (2 * parseInt($(el).siblings('index').text()) - 2 + $(el).index());
-    if (path) ctrl.userJump(treePath.read(path));
-  }
-
-  const config = helper.ontouch(jump);
-
   return (
-    <div id="replay" className="analyseReplay native_scroller" config={config}>
+    <div id="replay" className="analyseReplay native_scroller">
       {tree}
     </div>
   );

@@ -64,9 +64,7 @@ export default {
   },
 
   analyse: {
-    showAutoShapes: localstorageprop('settings.analyse.showAutoShapes', true),
-    enableCeval: localstorageprop('settings.analyse.enableCeval', true),
-    showGauge: localstorageprop('settings.analyse.showGauge', true)
+    enableCeval: localstorageprop('settings.analyse.enableCeval', false)
   },
 
   otb: {

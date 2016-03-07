@@ -282,15 +282,18 @@ function renderMeta(ctrl, move, path) {
 
   const children = [];
   const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
-  if (!empty(move.variations)) move.variations.forEach(function(variation, i) {
-    if (empty(variation)) return null;
-    children.push(renderVariation(
-      ctrl,
-      variation,
-      treePath.withVariation(path, i + 1),
-      i === 0 ? colorClass : null
-    ));
-  });
+  if (!empty(move.variations)) {
+    for (var i = 0, len = move.variations.length; i < len; i++) {
+      const variation = move.variations[i];
+      if (empty(variation)) return null;
+      children.push(renderVariation(
+        ctrl,
+        variation,
+        treePath.withVariation(path, i + 1),
+        i === 0 ? colorClass : null
+      ));
+    }
+  }
   return (
     <div key={move.ply + ':meta'} className="meta">{children}</div>
   );

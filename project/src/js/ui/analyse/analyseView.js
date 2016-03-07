@@ -71,7 +71,9 @@ function renderInfos(ctrl) {
 
   return (
     <div className="analyseInfos">
-      {cevalView.renderCeval(ctrl)}
+      { cevalAllowed && cevalEnabled ?
+        cevalView.renderCeval(ctrl) : null
+      }
       { !isSynthetic(ctrl.data) ?
         <div className="native_scroller">
           {gameInfos(ctrl)}

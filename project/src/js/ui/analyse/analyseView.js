@@ -123,8 +123,7 @@ function renderMove(ctrl, move, path) {
   const pathStr = treePath.write(path);
   const evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
   const className = [
-    pathStr === ctrl.vm.pathStr ? 'current' : '',
-    pathStr === ctrl.vm.initialPathStr ? 'initial' : ''
+    pathStr === ctrl.vm.pathStr ? 'current' : ''
   ].join(' ');
 
   const jump = helper.ontouchY(() => ctrl.jump(treePath.read(pathStr)));

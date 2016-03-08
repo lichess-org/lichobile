@@ -1,7 +1,7 @@
 import analyse from './analyse';
 import treePath from './path';
 import ground from './ground';
-import promotion from './promotion';
+import promotion from '../shared/offlineRound/promotion';
 import * as util from './util';
 import sound from '../../sound';
 import { debounce } from 'lodash/function';
@@ -116,7 +116,7 @@ export default function controller() {
     this.ceval.stop();
     debouncedStartCeval();
     debouncedScroll();
-    promotion.cancel(this);
+    promotion.cancel(this, this.vm.cgConfig);
   }.bind(this);
 
   this.userJump = function(path, direction) {

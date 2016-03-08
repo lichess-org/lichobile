@@ -85,7 +85,7 @@ export default function controller() {
     const config = {
       fen: s.fen,
       turnColor: color,
-      orientation: this.data.orientation,
+      orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color,
       movable: {
         color: dests && Object.keys(dests).length > 0 ? color : null,
         dests: dests || {}

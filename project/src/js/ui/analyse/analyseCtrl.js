@@ -277,7 +277,6 @@ export default function controller() {
   const init = function(data) {
     this.data = data;
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
-    console.log(this.data);
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.chessLogic = new chessLogic(this);
     this.analyse = new analyse(this.data.steps);

@@ -16,6 +16,7 @@ import layout from '../layout';
 import { header } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
 import { noop, partialf, playerName, gameIcon } from '../../utils';
+import { renderStepsTxt } from './pgnExport';
 
 export default function analyseView(ctrl) {
 
@@ -492,10 +493,18 @@ function renderActionsBar(ctrl, isPortrait) {
   };
   ctrl.vm.buttonsHash = hash;
 
+  const sharePGN = helper.ontouch(
+    () => window.plugins.socialsharing.share(renderStepsTxt(ctrl.analyse.getSteps(ctrl.vm.path))),
+    () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
+  );
+
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         config={helper.ontouch(ctrl.menu.open)}
+      />
+      <button className="action_bar_button fa fa-share-alt" key="sharePGN"
+        config={sharePGN}
       />
       {buttons(ctrl)}
     </section>

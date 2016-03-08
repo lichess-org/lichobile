@@ -45,6 +45,9 @@ export default {
 function renderAnalyseMenu(ctrl) {
 
   return m('div.analyseMenu', [
+    m('button.fa.fa-eye', {
+      config: helper.ontouch(ctrl.startNewAnalysis)
+    }, i18n('startNewAnalysis')),
     m('button[data-icon=B]', {
       config: helper.ontouch(ctrl.flip)
     }, i18n('flipBoard')),

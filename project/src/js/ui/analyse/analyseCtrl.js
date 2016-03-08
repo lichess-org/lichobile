@@ -295,6 +295,10 @@ export default function controller() {
     this.startCeval();
   }.bind(this);
 
+  this.startNewAnalysis = function() {
+    init(makeDefaultData());
+  };
+
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
       if (cfg.game.variant.key !== 'standard') {

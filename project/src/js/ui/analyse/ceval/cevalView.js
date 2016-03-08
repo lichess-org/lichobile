@@ -50,8 +50,8 @@ export default {
 
     return (
       <div className="cevalBox">
-        {enabled ? pearl : null }
-        { enabled && best ?
+        { enabled ? pearl : null }
+        { ctrl.vm.showBestMove && best ?
           <div className="bestMove">
             <small>best</small>
             <br/>

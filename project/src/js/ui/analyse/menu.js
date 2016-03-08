@@ -46,18 +46,24 @@ function renderAnalyseMenu(ctrl) {
 
   return m('div.analyseMenu', [
     m('button.fa.fa-eye', {
+      key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
     }, i18n('startNewAnalysis')),
     m('button[data-icon=B]', {
+      key: 'flipBoard',
       config: helper.ontouch(ctrl.flip)
     }, i18n('flipBoard')),
     m('button.fa.fa-pencil', {
+      key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, i18n('boardEditor')),
     m('button[data-icon=U]', {
+      key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
     }, i18n('continueFromHere')),
-    m('div.action', [
+    m('div.action', {
+      key: 'enableCeval'
+    }, [
       formWidgets.renderCheckbox(
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
@@ -66,7 +72,15 @@ function renderAnalyseMenu(ctrl) {
         }
       ),
       m('small.caution', i18n('localEvalCaution'))
-    ])
+    ]),
+    settings.analyse.enableCeval() ? m('div.action', {
+      key: 'showBestMove'
+    }, [
+      formWidgets.renderCheckbox(
+        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
+        ctrl.toggleBestMove
+      )
+    ]) : null
   ]);
 }
 

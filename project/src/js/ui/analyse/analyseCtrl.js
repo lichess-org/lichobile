@@ -40,6 +40,7 @@ export default function controller() {
     cgConfig: null,
     flip: false,
     variationMenu: null,
+    showBestMove: true,
     replayHash: '',
     buttonsHash: '',
     infosHash: '',
@@ -257,17 +258,14 @@ export default function controller() {
     debouncedStartCeval();
   }.bind(this);
 
-  this.showEvalGauge = function() {
-    return this.hasAnyComputerAnalysis() && settings.analyse.showGauge() && this.vm.step.dests !== '';
-  }.bind(this);
-
   this.hasAnyComputerAnalysis = function() {
     return this.data.analysis || this.ceval.enabled();
   };
 
-  this.toggleGauge = function() {
-    settings.analyse.showGauge(!settings.analyse.showGauge());
-  };
+  this.toggleBestMove = function() {
+    this.vm.showBestMove = !this.vm.showBestMove;
+    settings.analyse.showBestMove(this.vm.showBestMove);
+  }.bind(this);
 
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();

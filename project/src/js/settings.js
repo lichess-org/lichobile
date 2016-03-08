@@ -64,7 +64,8 @@ export default {
   },
 
   analyse: {
-    enableCeval: localstorageprop('settings.analyse.enableCeval', false)
+    enableCeval: localstorageprop('settings.analyse.enableCeval', false),
+    showBestMove: localstorageprop('settings.analyse.showBestMove', true)
   },
 
   otb: {

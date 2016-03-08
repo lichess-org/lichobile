@@ -48,6 +48,7 @@ export default function chessWorker(self) {
         step: {
           ply: ply + 1,
           dests: chess.dests(),
+          check: chess.in_check(),
           fen: chess.fen(),
           uci: toUci(move),
           san: move.san

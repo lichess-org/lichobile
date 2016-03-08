@@ -17,11 +17,6 @@ export function readDests(lines) {
   return dests;
 }
 
-export function readDrops(line) {
-  if (typeof line === 'undefined' || line === null) return null;
-  return line.match(/.{2}/g) || [];
-}
-
 export function empty(a) {
   return !a || a.length === 0;
 }

@@ -82,13 +82,12 @@ export default function controller() {
     }
     const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
-    const drops = util.readDrops(s.drops);
     const config = {
       fen: s.fen,
       turnColor: color,
       orientation: this.data.orientation,
       movable: {
-        color: (dests && Object.keys(dests).length > 0) || drops === null || drops.length ? color : null,
+        color: dests && Object.keys(dests).length > 0 ? color : null,
         dests: dests || {}
       },
       check: s.check,

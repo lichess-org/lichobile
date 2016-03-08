@@ -25,13 +25,22 @@ export function renderGameActionsBar(ctrl, type) {
         config={helper.ontouch(ctrl.actions.open)}
       />
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(ctrl.startNewGame, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        config={helper.ontouch(
+          ctrl.startNewGame,
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+        )}
       />
       <button className="action_bar_button fa fa-eye"
-        config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        config={helper.ontouch(
+          () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
+        )}
       />
       <button className="fa fa-share-alt action_bar_button"
-        config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
+        config={helper.ontouch(
+          ctrl.actions.sharePGN,
+          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+        )}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}

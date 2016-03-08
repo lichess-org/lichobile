@@ -49,10 +49,6 @@ function renderAnalyseMenu(ctrl) {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
     }, i18n('startNewAnalysis')),
-    m('button[data-icon=B]', {
-      key: 'flipBoard',
-      config: helper.ontouch(ctrl.flip)
-    }, i18n('flipBoard')),
     m('button.fa.fa-pencil', {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))

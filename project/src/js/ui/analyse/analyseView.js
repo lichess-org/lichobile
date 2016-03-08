@@ -510,6 +510,9 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-share-alt" key="sharePGN"
         config={sharePGN}
       />
+      <button className="action_bar_button" data-icon="B" key="flipBoard"
+        config={helper.ontouch(ctrl.flip, () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom'))}
+      />
       {buttons(ctrl)}
     </section>
   );

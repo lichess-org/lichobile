@@ -7,6 +7,7 @@ import sound from '../../sound';
 import storage from '../../storage';
 import actions from './actions';
 import helper from '../helper';
+import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import m from 'mithril';
 
@@ -70,9 +71,9 @@ export default function controller() {
     else this.actions = new actions.controller(this);
   }.bind(this);
 
-  this.initAs = function(color) {
+  this.startNewGame = function() {
     this.init(makeData({
-      color: color,
+      color: oppositeColor(this.data.player.color),
       pref: {
         centerPiece: true
       }

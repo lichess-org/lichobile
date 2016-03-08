@@ -2,7 +2,7 @@ import chessground from 'chessground-mobile';
 import * as utils from '../../utils';
 import layout from '../layout';
 import { header } from '../shared/common';
-import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
+import { renderAntagonist, renderGameActionsBar, renderReplayTable, renderGameActionsBarTablet } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
@@ -33,7 +33,7 @@ export default function view(ctrl) {
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
         renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass, pieceTheme),
         renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
-        renderGameActionsBar(ctrl, actions.view)
+        renderGameActionsBar(ctrl, 'otb')
       ];
     else
       return [
@@ -44,7 +44,7 @@ export default function view(ctrl) {
             {replayTable}
             {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait)}
           </section>
-          {renderGameActionsBar(ctrl)}
+          {renderGameActionsBar(ctrl, 'otb')}
         </section>
       ];
   }

@@ -40,7 +40,7 @@ export default function controller() {
     cgConfig: null,
     flip: false,
     variationMenu: null,
-    showBestMove: true,
+    showBestMove: settings.analyse.showBestMove(),
     replayHash: '',
     buttonsHash: '',
     infosHash: '',
@@ -264,7 +264,6 @@ export default function controller() {
 
   this.toggleBestMove = function() {
     this.vm.showBestMove = !this.vm.showBestMove;
-    settings.analyse.showBestMove(this.vm.showBestMove);
   }.bind(this);
 
   this.onunload = function() {

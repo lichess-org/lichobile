@@ -80,7 +80,8 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
-    const color = s.ply % 2 === 0 ? 'white' : 'black';
+    const initialColor = this.data.game.initialColor;
+    const color = s.ply % 2 === 0 ? initialColor : oppositeColor(initialColor);
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,
@@ -317,7 +318,7 @@ export default function controller() {
     if (!otbData) backHistory();
     else {
       otbData.orientation = orientation;
-      init(otbData);
+      init(makeData(otbData));
     }
   } else if (source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline)');
@@ -325,7 +326,7 @@ export default function controller() {
     if (!aiData) backHistory();
     else {
       aiData.orientation = orientation;
-      init(aiData);
+      init(makeData(aiData));
     }
   }
   else {

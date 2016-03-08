@@ -1,3 +1,6 @@
+import { readFen } from '../editor/editor';
+import { oppositeColor } from '../../utils';
+
 export function makeData(from) {
 
   const data = from;
@@ -7,17 +10,21 @@ export function makeData(from) {
 
   if (!data.game.moveTimes) data.game.moveTimes = [];
 
+  if (data.game.player) data.game.initialColor = data.game.player;
+
   return data;
 }
 
 export function makeDefaultData(fen) {
+  const player = playerFromFen(fen);
   return {
     game: {
       fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       id: 'synthetic',
       initialFen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      initialColor: player,
       opening: null,
-      player: 'white',
+      player,
       status: {
         id: 10,
         name: 'created'
@@ -31,12 +38,12 @@ export function makeDefaultData(fen) {
       }
     },
     opponent: {
-      color: 'black'
+      color: oppositeColor(player)
     },
-    orientation: 'white',
+    orientation: player,
     path: 0,
     player: {
-      color: 'white',
+      color: player,
       id: null
     },
     pref: {
@@ -54,4 +61,14 @@ export function makeDefaultData(fen) {
     ],
     userAnalysis: true
   };
+}
+
+function playerFromFen(fen) {
+  if (fen) {
+    const { color } = readFen(fen);
+
+    return color() === 'w' ? 'white' : 'black';
+  }
+
+  return 'white';
 }

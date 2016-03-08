@@ -1,3 +1,8 @@
+.tableWrapper
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc(100vh - 50px - 12vh)
+    margin auto 0
+
 .analyseTable
   width 100%
   display flex
@@ -13,6 +18,10 @@
     width 60%
     @media only screen and (orientation: portrait)
       height calc(100vh - 100vw - 50px - 45px)
+    @media only screen and (orientation: landscape)
+      height calc(100vh - 50px - 45px)
+    @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+      height calc(100vh - 50px - 12vh - 45px)
 
   > .analyseInfos
     background lighten(bgdark, 5%)
@@ -56,10 +65,18 @@
   padding 5px
   font-size 0.7em
 
+.analyseInfos
+  text-align center
+
+.analyseGameInfosWrapper
+  display flex
+  justify-content center
+  border-bottom 1px solid lighten(bgdark, 15%)
+
 .analyseGameInfos
+  text-align left
   position relative
   padding-left 25px
-  border-bottom 1px solid lighten(bgdark, 15%)
   &:before
     font-size 20px
     position absolute

@@ -34,8 +34,10 @@ function renderContent(ctrl, isPortrait) {
 
   return [
     renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
-    renderTable(ctrl),
-    renderActionsBar(ctrl, isPortrait)
+    <div className="tableWrapper">
+      {renderTable(ctrl)}
+      {renderActionsBar(ctrl, isPortrait)}
+    </div>
   ];
 }
 
@@ -450,23 +452,25 @@ function gameInfos(ctrl) {
   );
 
   return (
-    <div className="analyseGameInfos" data-icon={icon}>
-      {time + ' • '}
-      <span className="variant" config={variantLink}>
-        {data.game.variant.name}
-      </span>
-      <br/>
-      {mode}
+    <div className="analyseGameInfosWrapper">
+      <div className="analyseGameInfos" data-icon={icon}>
+        {time + ' • '}
+        <span className="variant" config={variantLink}>
+          {data.game.variant.name}
+        </span>
+        <br/>
+        {mode}
+      </div>
     </div>
   );
 }
 
 function buttons(ctrl) {
   return [
-    ['first', 'fast-backward', control.first ],
-    ['prev', 'backward', control.prev],
-    ['next', 'forward', control.next],
-    ['last', 'fast-forward', control.last]
+      ['first', 'fast-backward', control.first ],
+      ['prev', 'backward', control.prev],
+      ['next', 'forward', control.next],
+      ['last', 'fast-forward', control.last]
     ].map(function(b) {
       const className = [
         'action_bar_button',

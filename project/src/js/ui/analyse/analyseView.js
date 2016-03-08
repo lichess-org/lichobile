@@ -34,7 +34,7 @@ function renderContent(ctrl, isPortrait) {
 
   return [
     renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
-    <div className="tableWrapper">
+    <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}
     </div>

@@ -1,4 +1,10 @@
-.tableWrapper
+.analyseTableWrapper
+  > .actions_bar
+    height 40px
+    > .action_bar_button
+      line-height 30px
+      &:before
+        font-size 18px
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     height calc(100vh - 50px - 12vh)
     margin auto 0
@@ -20,17 +26,17 @@
   > .analyse
     width 60%
     @media only screen and (orientation: portrait)
-      height calc(100vh - 100vw - 50px - 45px)
+      height calc(100vh - 100vw - 50px - 40px)
     @media only screen and (orientation: landscape)
-      height calc(100vh - 50px - 45px)
+      height calc(100vh - 50px - 40px)
     @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-      height calc(100vh - 50px - 12vh - 45px)
+      height calc(100vh - 50px - 12vh - 40px)
 
   > .analyseInfos
     background lighten(bgdark, 5%)
     width 40%
     @media only screen and (orientation: portrait)
-      height calc(100vh - 100vw - 50px - 45px)
+      height calc(100vh - 100vw - 50px - 40px)
       > .native_scroller
         height calc(100% - 33px)
 

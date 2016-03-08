@@ -49,14 +49,14 @@ function renderAnalyseMenu(ctrl) {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
     }, i18n('startNewAnalysis')),
-    m('button.fa.fa-pencil', {
-      key: 'boardEditor',
-      config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
-    }, i18n('boardEditor')),
     m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
     }, i18n('continueFromHere')),
+    m('button.fa.fa-pencil', {
+      key: 'boardEditor',
+      config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
+    }, i18n('boardEditor')),
     m('div.action', {
       key: 'enableCeval'
     }, [

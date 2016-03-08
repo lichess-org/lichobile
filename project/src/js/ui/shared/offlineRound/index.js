@@ -38,6 +38,9 @@ export function renderGameActionsBarTablet(ctrl) {
       <button className="action_bar_button" data-icon="U"
         config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
+      <button className="action_bar_button fa fa-eye"
+        config={helper.ontouch(() => m.route(`/analyse/offline/ai/${ctrl.data.player.color}`))}
+      />
       <button className="fa fa-share-alt action_bar_button"
         config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />

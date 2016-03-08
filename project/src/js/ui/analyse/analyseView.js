@@ -488,9 +488,9 @@ function buttons(ctrl) {
     });
 }
 
-function renderActionsBar(ctrl, isPortrait) {
+function renderActionsBar(ctrl) {
 
-  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late + isPortrait;
+  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late;
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'

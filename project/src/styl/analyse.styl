@@ -13,6 +13,9 @@
       width 20%
     .cevalBox
       height 100%
+      justify-content center
+      .bestMove
+        margin-top 5px
 
   > .analyse
     width 60%
@@ -36,8 +39,10 @@
   width 100%
   height 34px
   display flex
-  justify-content center
+  flex-flow row wrap
+  justify-content space-around
   align-items center
+  align-content center
   background lighten(bgdark, 10%)
   .spinner
     width initial
@@ -60,6 +65,9 @@
   pearl
     font-size 1.5em
     font-weight bold
+  .bestMove
+    font-size 0.7em
+    line-height 1.2
 
 .analyseOpponents, .analyseOpening, .analyseGameInfos
   padding 5px

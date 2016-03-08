@@ -46,9 +46,18 @@ export default {
       percent = 0;
     }
 
+    const best = ceval.best ? ceval.best.slice(0, 2) + ' ' + ceval.best.slice(2, 4) : null;
+
     return (
       <div className="cevalBox">
         {enabled ? pearl : null }
+        { enabled && best ?
+          <div className="bestMove">
+            <small>best</small>
+            <br/>
+            { best }
+          </div> : null
+        }
         {enabled ?
           <div className="cevalBar">
             <span style={{ width: percent + '%' }}></span>

@@ -64,7 +64,7 @@ function renderInfos(ctrl) {
   const ceval = ctrl.currentAnyEval() || null;
 
   const hash = ctrl.data.game.id + cevalAllowed + cevalEnabled +
-    (ceval && renderEval(ceval.cp)) + (ceval && ceval.mate) +
+    (ceval && renderEval(ceval.cp)) + (ceval && ceval.mate) + (ceval && ceval.best) +
     ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
 
   if (ctrl.vm.infosHash === hash) return {

@@ -50,7 +50,7 @@ export default function controller() {
   this.flip = function() {
     this.vm.flip = !this.vm.flip;
     this.chessground.set({
-      orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color
+      orientation: this.vm.flip ? oppositeColor(this.data.orientation) : this.data.orientation
     });
   }.bind(this);
 
@@ -81,13 +81,13 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
-    const initialColor = this.data.game.initialColor;
+    const initialColor = this.data.game.initialColor || 'white';
     const color = s.ply % 2 === 0 ? initialColor : oppositeColor(initialColor);
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,
       turnColor: color,
-      orientation: this.vm.flip ? this.data.opponent.color : this.data.player.color,
+      orientation: this.vm.flip ? oppositeColor(this.data.orientation) : this.data.orientation,
       movable: {
         color: dests && Object.keys(dests).length > 0 ? color : null,
         dests: dests || {}

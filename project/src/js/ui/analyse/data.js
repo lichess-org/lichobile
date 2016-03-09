@@ -10,8 +10,6 @@ export function makeData(from) {
 
   if (!data.game.moveTimes) data.game.moveTimes = [];
 
-  if (data.game.player) data.game.initialColor = data.game.player;
-
   return data;
 }
 

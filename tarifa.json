@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "platforms": [
     "ios@3.9.2",
     "android@4.1.1"
@@ -57,7 +57,7 @@
       "API_END_POINT": "en.lichess.org",
       "SOCKET_END_POINT": "socket.en.lichess.org",
       "GA_ID": "UA-7935029-3",
-      "version": "2.10.1",
+      "version": "2.11.0",
       "cordova": {
         "whitelist": [
           {
@@ -98,7 +98,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "201001",
+        "version_code": "201100",
         "release": true,
         "sign": "store"
       }

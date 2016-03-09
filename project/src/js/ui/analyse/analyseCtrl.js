@@ -166,7 +166,7 @@ export default function controller() {
       ply: this.vm.step.ply
     };
     if (prom) move.promotion = prom;
-    this.chessLogic.sendMoveRequest(move);
+    this.chessLogic.sendStepRequest(move);
     preparePremoving();
   }.bind(this);
 
@@ -241,9 +241,16 @@ export default function controller() {
     this.analyse.updateAtPath(res.work.path, function(step) {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
-      if (treePath.write(res.work.path) === this.vm.pathStr) {
-        m.redraw();
-      }
+      this.chessLogic.getSanMoveFromUci({
+        fen: step.fen,
+        from: res.ceval.best.slice(0, 2),
+        to: res.ceval.best.slice(2, 4)
+      }, san => {
+        step.ceval.bestSan = san;
+        if (treePath.write(res.work.path) === this.vm.pathStr) {
+          m.redraw();
+        }
+      });
     }.bind(this));
   }
 

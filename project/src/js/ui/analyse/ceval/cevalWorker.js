@@ -26,14 +26,14 @@ export default function cevalWorker(opts, name) {
     }
     const best = matches[4].split(' ')[0];
     work.emit({
-      work: work,
+      work,
       ceval: {
-        depth: depth,
-        cp: cp,
-        mate: mate,
-        best: best
+        depth,
+        cp,
+        mate,
+        best
       },
-      name: name
+      name
     });
   }
 

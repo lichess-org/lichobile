@@ -14,8 +14,11 @@ export default function chessWorker(self) {
       case 'dests':
         getDests(msg.data.payload);
         break;
-      case 'move':
+      case 'step':
         addMove(msg.data.payload);
+        break;
+      case 'san':
+        getSan(msg.data.payload);
         break;
     }
   };
@@ -29,6 +32,16 @@ export default function chessWorker(self) {
         dests: chess.dests(),
         path
       }
+    });
+  }
+
+  function getSan(data) {
+    const { from, to, fen } = data;
+    const chess = new Chess(fen, 0);
+    const move = chess.move({ from, to });
+    self.postMessage({
+      topic: 'san',
+      payload: move.san
     });
   }
 

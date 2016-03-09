@@ -29,16 +29,14 @@ export default {
       percent = 0;
     }
 
-    const best = ceval.best ? ceval.best.slice(0, 2) + ' ' + ceval.best.slice(2, 4) : null;
-
     return (
       <div className="cevalBox">
         { enabled ? pearl : null }
-        { ctrl.vm.showBestMove && best ?
+        { ctrl.vm.showBestMove && ceval.bestSan ?
           <div className="bestMove">
             <small>best</small>
             <br/>
-            { best }
+            { ceval.bestSan }
           </div> : null
         }
         {enabled ?

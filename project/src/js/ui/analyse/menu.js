@@ -69,7 +69,7 @@ function renderAnalyseMenu(ctrl) {
       ),
       m('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    settings.analyse.enableCeval() ? m('div.action', {
+    ctrl.ceval.allowed() && settings.analyse.enableCeval() ? m('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(

@@ -451,7 +451,8 @@ function renderGameActionsBar(ctrl, isPortrait) {
     <section className="actions_bar" key="game-actions-bar">
       <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />
       {ctrl.chat ?
-      <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
+      <button className={chatClass} data-icon="c" key="chat"
+        config={helper.ontouch(ctrl.chat.open)} /> : null
       }
       {ctrl.notes ? button.notes(ctrl) : null}
       {button.flipBoard(ctrl)}

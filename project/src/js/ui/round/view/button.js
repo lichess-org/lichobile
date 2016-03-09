@@ -268,7 +268,10 @@ export default {
   notes: function(ctrl) {
     return (
       <button className="action_bar_button" data-icon="m" key="notes"
-        config={helper.ontouch(ctrl.notes.open)} />
+        config={helper.ontouch(
+          ctrl.notes.open,
+          () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')
+        )} />
     );
   }
 };

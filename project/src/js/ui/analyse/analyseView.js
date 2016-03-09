@@ -17,6 +17,8 @@ import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
 import { noop, partialf, playerName, gameIcon } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
+import { view as renderNotes } from '../round/notes';
+import button from '../round/view/button';
 
 export default function analyseView(ctrl) {
 
@@ -30,6 +32,15 @@ export default function analyseView(ctrl) {
     () => renderContent(ctrl, isPortrait),
     () => overlay(ctrl, isPortrait)
   );
+}
+
+function overlay(ctrl) {
+  return [
+    renderPromotion(ctrl),
+    menu.view(ctrl.menu),
+    ctrl.notes ? renderNotes(ctrl.notes) : null,
+    continuePopup.view(ctrl.continuePopup)
+  ];
 }
 
 function renderContent(ctrl, isPortrait) {
@@ -109,14 +120,6 @@ function renderOpponents(ctrl) {
       </div>
     </div>
   );
-}
-
-function overlay(ctrl) {
-  return [
-    renderPromotion(ctrl),
-    menu.view(ctrl.menu),
-    continuePopup.view(ctrl.continuePopup)
-  ];
 }
 
 function renderEvalTag(e) {
@@ -515,8 +518,12 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-share-alt" key="sharePGN"
         config={sharePGN}
       />
+      {ctrl.notes ? button.notes(ctrl) : null}
       <button className="action_bar_button" data-icon="B" key="flipBoard"
-        config={helper.ontouch(ctrl.flip, () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom'))}
+        config={helper.ontouch(
+          ctrl.flip,
+          () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
+        )}
       />
       {buttons(ctrl)}
     </section>

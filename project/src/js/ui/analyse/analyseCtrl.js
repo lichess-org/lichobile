@@ -15,6 +15,7 @@ import { backHistory, handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import { makeData, makeDefaultData } from './data';
+import notes from '../round/notes';
 import chessLogic from './chessLogic';
 import menu from './menu';
 import m from 'mithril';
@@ -280,6 +281,7 @@ export default function controller() {
     this.chessLogic = new chessLogic(this);
     this.analyse = new analyse(this.data.steps);
     this.ceval = cevalCtrl(allowCeval(), onCevalMsg.bind(this));
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     var initialPath = treePath.default(this.analyse.firstPly());
     if (initialPath[0].ply >= this.data.steps.length) {

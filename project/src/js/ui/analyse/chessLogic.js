@@ -22,6 +22,9 @@ export default function chessLogic(ctrl) {
     },
     sendDestsRequest(req) {
       worker.postMessage({ topic: 'dests', payload: req });
+    },
+    onunload() {
+      if (worker) worker.terminate();
     }
   };
 }

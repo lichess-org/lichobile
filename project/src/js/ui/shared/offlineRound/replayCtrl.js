@@ -11,7 +11,7 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.situations = [];
   this.hash = '';
 
-  var chessWorker = work(require('./chessWorker'));
+  const chessWorker = work(require('./chessWorker'));
   chessWorker.onmessage = function(e) {
     this.ply++;
     if (this.ply <= this.situations.length)
@@ -96,4 +96,8 @@ export default function replayCtrl(root, rootSituations, rootPly) {
       max_width: 30
     });
   }.bind(this);
+
+  this.onunload = function() {
+    if (chessWorker) chessWorker.terminate();
+  };
 }

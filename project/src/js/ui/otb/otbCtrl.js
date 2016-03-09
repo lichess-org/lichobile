@@ -120,5 +120,8 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
+    if (this.replay) {
+      this.replay.onunload();
+    }
   };
 }

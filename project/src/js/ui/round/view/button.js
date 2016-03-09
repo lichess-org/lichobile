@@ -266,8 +266,9 @@ export default {
     );
   },
   notes: function(ctrl) {
-    return m('button[data-icon=m].action_bar_button', {
-      config: helper.ontouch(ctrl.notes.open)
-    });
+    return (
+      <button className="action_bar_button" data-icon="m" key="notes"
+        config={helper.ontouch(ctrl.notes.open)} />
+    );
   }
 };

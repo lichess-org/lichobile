@@ -453,7 +453,7 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
       }
-      {button.notes(ctrl)}
+      {ctrl.notes ? button.notes(ctrl) : null}
       {button.flipBoard(ctrl)}
       {button.first(ctrl)}
       {button.backward(ctrl)}

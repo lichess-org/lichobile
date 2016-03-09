@@ -33,6 +33,7 @@ export default function controller() {
   this.continuePopup = continuePopup.controller();
 
   this.vm = {
+    fromGame: source === 'online' || source === 'offline',
     path: null,
     pathStr: '',
     initialPathStr: '',

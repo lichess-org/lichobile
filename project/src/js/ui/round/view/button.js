@@ -136,7 +136,7 @@ export default {
   },
   analysisBoard: function(ctrl) {
     const d = ctrl.data;
-    if (gameApi.replayable(d)) {
+    if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return m('button.fa.fa-eye', {
         config: helper.ontouch(() => {
           socket.send('rematch-no');
@@ -198,19 +198,6 @@ export default {
       key: 'moretime',
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
-  },
-  flipBoardInMenu: function(ctrl) {
-    if (ctrl.data.game.speed === 'correspondence') {
-      const className = helper.classSet({
-        on: ctrl.vm.flip
-      });
-      return (
-        <button className={className} data-icon="B" key="flipboard"
-          config={helper.ontouch(ctrl.flip)}>
-          {i18n('flipBoard')}
-        </button>
-      );
-    }
   },
   flipBoard: function(ctrl) {
     const className = helper.classSet({

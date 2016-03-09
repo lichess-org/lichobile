@@ -70,6 +70,10 @@ function replayable(data) {
   return data.game.variant.key === 'standard' && gameStatus.finished(data);
 }
 
+function userAnalysable(data) {
+  return data.game.variant.key === 'standard' && playable(data) && (!data.clock || !isPlayerPlaying(data));
+}
+
 function getPlayer(data, color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
@@ -141,6 +145,7 @@ export default {
   moretimeable,
   mandatory,
   replayable,
+  userAnalysable,
   getPlayer,
   parsePossibleMoves,
   nbMoves,

@@ -334,9 +334,9 @@ function renderGameRunningActions(ctrl) {
 
   return (
     <div className="game_controls">
+      {button.analysisBoard(ctrl)}
       {button.shareLink(ctrl)}
       {button.moretime(ctrl)}
-      {button.flipBoardInMenu(ctrl)}
       {button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
       {gameControls}
       {answerButtons ? <div className="answers">{answerButtons}</div> : null}
@@ -453,9 +453,8 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
       }
-      {ctrl.data.game.speed === 'correspondence' ?
-        button.notes(ctrl) : button.flipBoard(ctrl)
-      }
+      {button.notes(ctrl)}
+      {button.flipBoard(ctrl)}
       {button.first(ctrl)}
       {button.backward(ctrl)}
       {button.forward(ctrl)}

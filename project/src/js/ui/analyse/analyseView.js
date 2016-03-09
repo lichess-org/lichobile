@@ -95,12 +95,14 @@ function renderOpponents(ctrl) {
   if (!player || !opponent) return null;
 
   return (
-    <div className="analyseOpponents">
-      <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
-        {playerName(player, true)}
-      </div>
-      <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
-        {playerName(opponent, true)}
+    <div className="analyseOpponentsWrapper">
+      <div className="analyseOpponents">
+        <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
+          {playerName(player, true)}
+        </div>
+        <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
+          {playerName(opponent, true)}
+        </div>
       </div>
     </div>
   );

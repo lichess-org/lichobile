@@ -6,9 +6,11 @@ export default function cevalPool(opts, nb) {
   var token = -1;
 
   function getWorker() {
-    if (!workers.length)
-      for (var i = 1; i <= nb; i++)
+    if (!workers.length) {
+      for (var i = 1; i <= nb; i++) {
         workers.push(makeWorker(opts, 'W' + i));
+      }
+    }
     token = (token + 1) % workers.length;
     return workers[token];
   }
@@ -24,6 +26,13 @@ export default function cevalPool(opts, nb) {
       stopAll();
       getWorker().start(work);
     },
-    stop: stopAll
+
+    stop: stopAll,
+
+    destroy() {
+      workers.forEach(function(w) {
+        w.terminate();
+      });
+    }
   };
 }

@@ -11,7 +11,7 @@ export default function cevalCtrl(allow, emit) {
     path: 'vendor/stockfish6.js',
     minDepth: minDepth,
     maxDepth: maxDepth
-  }, 3);
+  }, 2);
 
   var curDepth = 0;
   var started = false;
@@ -50,6 +50,10 @@ export default function cevalCtrl(allow, emit) {
     started = false;
   }
 
+  function destroy() {
+    pool.destroy();
+  }
+
   function fixCastle(uci, san) {
     if (san.indexOf('O-O') !== 0) return uci;
     switch (uci) {
@@ -66,16 +70,11 @@ export default function cevalCtrl(allow, emit) {
   }
 
   return {
-    start: start,
-    stop: stop,
-    allowed: allowed,
-    enabled: enabled,
-    toggle: function() {
-      if (!allowed()) return;
-      stop();
-      enabled(!enabled());
-      settings.analyse.enableCeval(!settings.analyse.enableCeval());
-    },
+    start,
+    stop,
+    destroy,
+    allowed,
+    enabled,
     percentComplete: function() {
       return Math.round(100 * curDepth / maxDepth);
     }

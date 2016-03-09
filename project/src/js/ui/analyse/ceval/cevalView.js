@@ -5,23 +5,6 @@ import { defined, renderEval } from '../util';
 const squareSpin = m('span.square-spin');
 
 export default {
-  renderCevalSwitch(ctrl) {
-    if (!ctrl.ceval.allowed()) return null;
-    const enabled = ctrl.ceval.enabled();
-
-    return m('div.switch', [
-      m('input', {
-        className: 'cmn-toggle cmn-toggle-round',
-        type: 'checkbox',
-        checked: enabled,
-        onchange: ctrl.toggleCeval
-      }),
-      m('label', {
-        'for': 'analyse-toggle-ceval'
-      })
-    ]);
-  },
-
   renderCeval(ctrl) {
     if (!ctrl.ceval.allowed()) return null;
 

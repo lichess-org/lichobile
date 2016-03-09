@@ -255,11 +255,6 @@ export default function controller() {
     return this.analyse.nextStepEvalBest(this.vm.path);
   }.bind(this);
 
-  this.toggleCeval = function() {
-    this.ceval.toggle();
-    debouncedStartCeval();
-  }.bind(this);
-
   this.hasAnyComputerAnalysis = function() {
     return this.data.analysis || this.ceval.enabled();
   };
@@ -270,7 +265,7 @@ export default function controller() {
 
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
-    if (this.ceval) this.ceval.stop();
+    if (this.ceval) this.ceval.destroy();
     socket.destroy();
   }.bind(this);
 

@@ -57,18 +57,18 @@ function renderAnalyseMenu(ctrl) {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, i18n('boardEditor')),
-    m('div.action', {
+    ctrl.ceval.allowed() ? m('div.action', {
       key: 'enableCeval'
     }, [
       formWidgets.renderCheckbox(
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
           if (v) ctrl.startCeval();
-          else ctrl.ceval.stop();
+          else ctrl.ceval.destroy();
         }
       ),
       m('small.caution', i18n('localEvalCaution'))
-    ]),
+    ]) : null,
     settings.analyse.enableCeval() ? m('div.action', {
       key: 'showBestMove'
     }, [

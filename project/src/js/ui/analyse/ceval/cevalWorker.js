@@ -53,6 +53,10 @@ export default function cevalWorker(opts, name) {
     stop() {
       send('stop');
       switching(true);
+    },
+
+    terminate() {
+      if (instance) instance.terminate();
     }
   };
 }

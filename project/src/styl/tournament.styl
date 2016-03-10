@@ -1,0 +1,98 @@
+td.tournamentListName
+  padding-left 10px
+  text-align: left
+  text-overflow: ellipsis
+  white-space: nowrap;
+  overflow hidden
+  max-width 0
+  width 60%
+
+td.tournamentListTime
+  padding 10px
+  text-align: center
+  max-width 0
+  width 35%
+
+td.tournamentListNav
+  font: normal normal normal 14px/1 FontAwesome
+  font-size: inherit
+  text-rendering: auto
+  -webkit-font-smoothing: antialiased
+  max-width 0
+  width 10%
+  text-align right
+  padding-right 10px
+
+p.tournamentTitle
+  text-align left
+  font-weight bold
+  color gold
+  padding-left 10px
+  margin 10px 0 5px
+
+table.tournamentList
+  width 100%
+
+table.tournamentStandings
+  width 100%
+
+.on-fire
+  line-height 10px
+  &:before
+    content: attr(data-icon)
+    color: #d59120
+
+.off-fire
+  line-height 10px
+  &:before
+    content: ''
+
+td.tournamentPlayer
+  padding 10px
+  text-align: left
+  text-overflow: ellipsis
+  white-space: nowrap;
+  overflow hidden
+  max-width 0
+  width 80%
+
+.trophy-1
+  &:after
+    content: url('../../images/trophies/trophy-1.png')
+
+.trophy-2
+  &:after
+    content: url('../../images/trophies/trophy-2.png')
+
+.trophy-3
+  &:after
+    content: url('../../images/trophies/trophy-3.png')
+
+td.tournamentPoints
+  padding 10px
+  text-align: right
+  max-width 0
+  width 20%
+
+.timeArrow
+  font-weight: bold
+
+.basicTournamentInfo
+  padding 10px
+
+.timeInfo
+  float right
+
+.featuredGame
+  width 90%
+  padding 10px
+  text-align left
+  text-overflow ellipsis
+  white-space nowrap;
+  overflow hidden
+  &.active
+    background lighten(bgdark, 5%)
+  &.bglight
+    border-bottom-color darken(bglight, 15%)
+    &.active
+      background-color darken(bglight, 5%)

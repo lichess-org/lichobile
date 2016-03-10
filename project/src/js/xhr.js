@@ -101,7 +101,7 @@ export function seeks(feedback) {
 export function game(id, color, background) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return request(url, { background });
+  return request(url, { background }, true);
 }
 
 export function toggleGameBookmark(id) {

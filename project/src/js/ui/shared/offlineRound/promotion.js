@@ -39,9 +39,19 @@ function finish(ground, role) {
   promoting = false;
 }
 
+function cancel(ctrl, cgConfig) {
+  if (promoting) {
+    promoting = false;
+    ctrl.chessground.set(cgConfig);
+    m.redraw();
+  }
+}
+
 export default {
 
   start,
+
+  cancel,
 
   view: function(ctrl) {
     return promoting ? m('div.overlay.open', [m('div#promotion_choice', {

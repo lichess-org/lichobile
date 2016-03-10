@@ -183,7 +183,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         setTimeout(function() {
           backbutton.stack.push(this.cancelMove);
           this.vm.moveToSubmit = move;
-          m.redraw(false, true);
+          m.redraw();
         }.bind(this), this.data.pref.animationDuration || 0);
       } else {
         socket.send('move', move, { ackable: true });
@@ -373,7 +373,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
-    m.redraw(false, true);
+    m.redraw();
   }.bind(this);
 
   var reloadGameData = function() {

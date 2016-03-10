@@ -36,7 +36,7 @@ function content(ctrl) {
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
-      renderGameActionsBar(ctrl, actions.view)
+      renderGameActionsBar(ctrl, 'ai')
     ];
   else if (helper.isLandscape() && helper.isVeryWideScreen())
     return [
@@ -48,7 +48,7 @@ function content(ctrl) {
           {renderEndedGameStatus(ctrl.actions)}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
-        {renderGameActionsBarTablet(ctrl)}
+        {renderGameActionsBarTablet(ctrl, 'ai')}
       </section>
     ];
   else
@@ -60,7 +60,7 @@ function content(ctrl) {
           {replayTable}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
-        {renderGameActionsBar(ctrl)}
+        {renderGameActionsBar(ctrl, 'ai')}
       </section>
     ];
 }

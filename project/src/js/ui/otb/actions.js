@@ -12,10 +12,6 @@ import m from 'mithril';
 function renderAlways(ctrl) {
   var d = ctrl.root.data;
   return [
-    m('button[data-icon=U]', {
-      config: helper.ontouch(utils.f(ctrl.root.initAs, util.opposite(d.player.color)))
-    }, i18n('createAGame')),
-    renderSharePGNButton(ctrl),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
@@ -57,7 +53,7 @@ export default {
     if (ctrl.isOpen())
       return popupWidget(
         'offline_actions',
-        null,
+        () => <div className="fa fa-beer withIcon">{i18n('playOnTheBoardOffline')}</div>,
         function() {
           return [
             renderEndedGameStatus(ctrl)

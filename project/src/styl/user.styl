@@ -31,6 +31,7 @@ h3.fullname
 
 .userTitle
   color gold
+  font-weight bold
 
 .profileBio
   margin 10px 0
@@ -56,7 +57,7 @@ h3.fullname
   &:after
     content none
 
-.perf
+.profilePerf
   width 50%
   text-align left
   padding 5px 0
@@ -69,10 +70,12 @@ h3.fullname
     float left
     margin-right 5px
   > .rating
-    color #fff
+    color textLightGray
+    font-weight bold
     display block
     float left
     > .progress, & > .nb
+      font-weight normal
       font-size 0.8em
       margin-left 0.5em
     > .progress
@@ -116,7 +119,7 @@ h3.fullname
 
 .select_games_filter
   margin 0
-  background-color lighten(headerBgDark, 2%)
+  background-color headerBgDark
   label:after
     color labelText
   select
@@ -126,10 +129,13 @@ h3.fullname
   height calc(100% - 40px)
 
 .userGame
-  background-color lighten(#2a2a2a, 5%)
+  background-color lighten(bgdark, 10%)
   color textLightGray
   min-height 60px
   padding 0
+  border-color lighten(bgdark, 10%)
+  &.odd
+    background-color lighten(bgdark, 15%)
   > .nav
     padding 15px
     &:after
@@ -176,8 +182,6 @@ h3.fullname
   .opening
     margin-top 1em
     font-size 0.8em
-  &.odd
-    background-color lighten(#353535, 5%)
   @media only screen and (min-width 600px)
     > .nav
       display flex
@@ -207,7 +211,6 @@ table.variantPerf
 
 .variantPerfHeading
   text-align left
-  text-decoration underline
   font-weight bold
   color gold
 

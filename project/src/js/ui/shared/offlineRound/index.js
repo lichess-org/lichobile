@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import statusApi from '../../../lichess/status';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
@@ -17,25 +18,45 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait) 
   );
 }
 
-export function renderGameActionsBar(ctrl) {
+export function renderGameActionsBar(ctrl, type) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />
-      <button className="action_bar_button empty" />
+      <button className="action_bar_button" data-icon="U"
+        config={helper.ontouch(
+          ctrl.startNewGame,
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+        )}
+      />
+      <button className="action_bar_button fa fa-eye"
+        config={helper.ontouch(
+          () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
+        )}
+      />
+      <button className="fa fa-share-alt action_bar_button"
+        config={helper.ontouch(
+          ctrl.actions.sharePGN,
+          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+        )}
+      />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
     </section>
   );
 }
 
-export function renderGameActionsBarTablet(ctrl) {
+export function renderGameActionsBarTablet(ctrl, type) {
   const d = ctrl.data;
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(utils.f(ctrl.initAs, utils.oppositeColor(d.player.color)), () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        config={helper.ontouch(ctrl.startNewGame, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+      />
+      <button className="action_bar_button fa fa-eye"
+        config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"
         config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
@@ -56,6 +77,14 @@ export function gameResult(replayCtrl) {
     return '?';
 }
 
+export function setResult(ctrl) {
+  const sit = ctrl.replay.situation();
+  ctrl.data.game.status.id = statusApi.offlineSituationToStatus(sit);
+  if (!sit.draw) {
+    ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
+  }
+}
+
 export function renderEndedGameStatus(ctrl) {
   let sit = ctrl.root.replay.situation();
   let result, status;
@@ -72,8 +101,7 @@ export function renderEndedGameStatus(ctrl) {
       <div className="result">
         {result}
         <br />
-        <br />
-        <div className="resultStatus">{status}</div>
+        <em className="resultStatus">{status}</em>
       </div>
     );
   }

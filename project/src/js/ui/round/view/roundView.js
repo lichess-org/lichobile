@@ -9,7 +9,7 @@ import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
-import { menuButton, loader, headerBtns } from '../../shared/common';
+import { backButton, menuButton, loader, headerBtns } from '../../shared/common';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -100,10 +100,38 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
   );
 }
 
+function renderVsButton(ctrl) {
+
+  const text = utils.playerName(ctrl.data.player) + ' vs. ' +
+    utils.playerName(ctrl.data.opponent);
+
+  return backButton(text);
+}
+
+function renderTitle(ctrl) {
+  if (socket.isConnected()) {
+    return (
+      <h1 className="playing">
+        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+        {ctrl.title}
+      </h1>
+    );
+  } else if (utils.hasNetwork()) {
+    return (
+      <h1 className="reconnecting withTitle">
+        {i18n('reconnecting')}
+        {loader}
+      </h1>
+    );
+  } else {
+    return <h1>Offline</h1>;
+  }
+}
+
 function renderHeader(ctrl) {
   const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
     friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
-    session.myTurnGames().length;
+    session.myTurnGames().length + ctrl.data.tv + ctrl.data.player.spectator;
 
   if (ctrl.vm.headerHash === hash) return {
     subtree: 'retain'
@@ -112,17 +140,8 @@ function renderHeader(ctrl) {
 
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      {menuButton()}
-      {socket.isConnected() ?
-      <h1 className="playing">
-        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-        {ctrl.title}
-      </h1> : utils.hasNetwork() ?
-      <h1 className="reconnecting withTitle">
-        {i18n('reconnecting')}
-        {loader}
-      </h1> : <h1>Offline</h1>
-      }
+      { !ctrl.data.tv && ctrl.data.player.spectator ? renderVsButton(ctrl) : menuButton()}
+      { ctrl.data.tv || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>
   );
@@ -191,12 +210,14 @@ function renderSubmitMovePopup(ctrl) {
   );
 }
 
-function userInfos(user, player, playerName) {
+function userInfos(user, player, playerName, position) {
   let title;
   if (user) {
     let onlineStatus = user.online ? 'connected to lichess' : 'offline';
     let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
-    title = `${playerName}: ${onlineStatus}; ${onGameStatus}`;
+    let engine = position === 'opponent' && user.engine ? i18n('thisPlayerUsesChessComputerAssistance') + '; ' : '';
+    let booster = position === 'opponent' && user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') + '; ' : '';
+    title = `${playerName}: ${engine}${booster}${onlineStatus}; ${onGameStatus}`;
   } else
     title = playerName;
   window.plugins.toast.show(title, 'short', 'center');
@@ -207,7 +228,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
   const vConf = user ?
-    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName)) :
+    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName, position)) :
     utils.noop;
 
   const onlineStatus = user && user.online ? 'online' : 'offline';
@@ -234,6 +255,9 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
         }
       </h2>
       <div className="ratingAndMaterial">
+        { position === 'opponent' && user && (user.engine || user.booster) ?
+          <span className="warning" data-icon="j"></span> : null
+        }
         {user && isPortrait ?
           <h3 className="rating">
             {player.rating}
@@ -290,8 +314,8 @@ function renderGameRunningActions(ctrl) {
     return <div className="game_controls">{controls}</div>;
   }
 
-  var d = ctrl.data;
-  var answerButtons = compact([
+  const d = ctrl.data;
+  const answerButtons = compact([
     button.cancelDrawOffer(ctrl),
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
@@ -301,35 +325,38 @@ function renderGameRunningActions(ctrl) {
     ) : undefined
   ]);
 
-  return [
-    m('div.game_controls', [
-      button.shareLink(ctrl),
-      button.moretime(ctrl),
-      button.flipBoardInMenu(ctrl),
-      button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort'),
-      button.forceResign(ctrl) || [
-        button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-        button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
-        button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
-        button.threefoldClaimDraw(ctrl)
-      ]
-    ]),
-    answerButtons ? m('div.answers', answerButtons) : null
+  const gameControls = button.forceResign(ctrl) || [
+    button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+    button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
+    button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
+    button.threefoldClaimDraw(ctrl)
   ];
+
+  return (
+    <div className="game_controls">
+      {button.analysisBoard(ctrl)}
+      {button.shareLink(ctrl)}
+      {button.moretime(ctrl)}
+      {button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
+      {gameControls}
+      {answerButtons ? <div className="answers">{answerButtons}</div> : null}
+    </div>
+  );
 }
 
 function renderGameEndedActions(ctrl) {
-  var result = gameApi.result(ctrl.data);
-  var winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
-  var status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+  const result = gameApi.result(ctrl.data);
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+  const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
-    result, m('br'), m('br')
+    m('strong', result), m('br')
   ];
-  resultDom.push(m('div.resultStatus', status));
+  resultDom.push(m('em.resultStatus', status));
   const buttons = ctrl.data.player.spectator ? [
     button.shareLink(ctrl),
     button.sharePGN(ctrl),
+    button.analysisBoard(ctrl),
     ctrl.data.tv ? tvChannelSelector(ctrl) : null
   ] : [
     button.shareLink(ctrl),
@@ -337,12 +364,16 @@ function renderGameEndedActions(ctrl) {
     button.newOpponent(ctrl),
     button.answerOpponentRematch(ctrl),
     button.cancelRematch(ctrl),
-    button.rematch(ctrl)
+    button.rematch(ctrl),
+    button.analysisBoard(ctrl)
   ];
-  return [
-    m('div.result', resultDom),
-    m('div.control.buttons', buttons)
-  ];
+
+  return (
+    <div className="game_controls">
+      <div className="result">{resultDom}</div>
+      <div className="control buttons">{buttons}</div>
+    </div>
+  );
 }
 
 function gameInfos(ctrl) {
@@ -420,11 +451,11 @@ function renderGameActionsBar(ctrl, isPortrait) {
     <section className="actions_bar" key="game-actions-bar">
       <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />
       {ctrl.chat ?
-      <button className={chatClass} data-icon="c" key="chat" config={helper.ontouch(ctrl.chat.open || utils.noop)} /> : <button className="action_bar_button empty" />
+      <button className={chatClass} data-icon="c" key="chat"
+        config={helper.ontouch(ctrl.chat.open)} /> : null
       }
-      {ctrl.data.game.speed === 'correspondence' ?
-        button.notes(ctrl) : button.flipBoard(ctrl)
-      }
+      {ctrl.notes ? button.notes(ctrl) : null}
+      {button.flipBoard(ctrl)}
       {button.first(ctrl)}
       {button.backward(ctrl)}
       {button.forward(ctrl)}

@@ -10,7 +10,7 @@
     display flex
 
 .playTable
-  height calc((100% - 100vw - 45px) / 2)
+  height calc((100% - 100vw - 40px) / 2)
   padding 0 10px
   display flex
   justify-content space-between
@@ -212,8 +212,8 @@
 .tableHeader, .player_controls
   .star
     display inline-block
-    width 30px
-    height 30px
+    width 25px
+    height 25px
     padding 0
     font-size 25px
     margin-left 10px
@@ -247,22 +247,27 @@
     &.on
       background-color darken(#fff, 15%)
   .negotiation, .force_resign_zone
+    background-color selectBg
     text-align center
-    padding 0 10px
-    margin 10px 0
-    color gold
-  .answers, .force_resign_zone
-    margin-top 5px
+    padding 10px
+    button
+      background-color #fff
+      &.active
+        background-color darken(#fff, 3%)
+      &:not(.binary_choice):last-child
+        width 50%
+        margin 0 auto
+        border-radius 3px
   .notice
     margin 5px 0
 
 .player_controls, .offline_actions, .playersTable
-  .resultStatus
-    color gold
   .result
     padding 0 10px
     text-align center
     margin 1em 0
+  .resultStatus
+    font-size 0.9em
 
 .join_url_challenge, .await_url_challenge
   header
@@ -281,13 +286,6 @@
   button
     color textDarkGray
     border-bottom none
-    &.binary_choice
-      &[data-icon=E]
-        background gold
-        color #FFF
-        padding 0 5px
-        &.active
-          background lighten(gold, 10%)
 
 .lichess_game_url
   margin 10px 0;
@@ -302,7 +300,7 @@
 .submitMovePopup
   background-color rgba(0,0,0,0.2)
   > .overlay_popup
-    top calc(100vh - 45px - ((100vh - 100vw) / 2) / 2)
+    top calc(100vh - 40px - ((100vh - 100vw) / 2) / 2)
     @media only screen and (orientation: landscape)
       top calc(100vh / 2)
       left initial
@@ -314,6 +312,10 @@
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
     border-radius 5px
     button
+      &[data-icon=E]:before
+        color green
+      &[data-icon=L]:before
+        color red
       &:first-child
         border-radius 5px 0 0 5px
       &:last-child

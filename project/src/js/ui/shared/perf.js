@@ -4,7 +4,7 @@ import helper from '../helper';
 import m from 'mithril';
 
 module.exports = function(key, name, perf, user) {
-  var options = { className: 'perf', 'data-icon': gameIcon(key)};
+  var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};
   if (variantPerfAvailable(key, perf)) {
     options.className += ' nav';
     options.config = helper.ontouchY(goToVariantPerf(user, key));

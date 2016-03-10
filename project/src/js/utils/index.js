@@ -1,5 +1,5 @@
-import i18n from './i18n';
-import storage from './storage';
+import i18n from '../i18n';
+import storage from '../storage';
 import { cloneDeep } from 'lodash/lang';
 import m from 'mithril';
 
@@ -25,7 +25,7 @@ export function handleXhrError(error) {
   } else {
     let message;
     if (!status || status === 0)
-      message = 'noInternetConnection';
+      message = 'lichessIsUnreachable';
     else if (status === 401)
       message = 'unauthorizedError';
     else if (status === 404)
@@ -33,15 +33,21 @@ export function handleXhrError(error) {
     else if (status === 503)
       message = 'lichessIsUnavailableError';
     else if (status >= 500)
-      message = 'Server error';
+      message = 'Server error.';
     else
-      message = 'Error';
+      message = 'Error.';
 
     message = i18n(message);
 
-    if (typeof data === 'string') message += ` ${data}`;
-    else if (data.global && data.global.constructor === Array) message += ` ${data.global[0]}`;
-    else if (typeof data.error === 'string') message += ` ${data.error}`;
+    if (typeof data === 'string') {
+      message += ` ${data}`;
+    }
+    else if (data.global && data.global.constructor === Array) {
+      message += ` ${data.global[0]}`;
+    }
+    else if (typeof data.error === 'string') {
+      message += ` ${data.error}`;
+    }
 
     window.plugins.toast.show(message, 'short', 'center');
   }
@@ -87,8 +93,11 @@ export function playerName(player, withRating) {
     }
     return name;
   }
-  if (player.ai)
+
+  if (player.ai) {
     return aiName(player.ai);
+  }
+
   return 'Anonymous';
 }
 
@@ -116,7 +125,8 @@ const perfIconsMap = {
   puzzle: '-',
   horde: '_',
   fromPosition: '*',
-  racingKings: ''
+  racingKings: '',
+  crazyhouse: ''
 };
 
 export function gameIcon(perf) {

@@ -34,11 +34,7 @@ function renderAlways(ctrl) {
     m('div.action', [
       sideSelector(),
       opponentSelector()
-    ]),
-    m('button[data-icon=U]', {
-    config: helper.ontouch(ctrl.root.startNewGame)
-    }, i18n('createAGame')),
-    renderSharePGNButton(ctrl)
+    ])
   ];
 }
 
@@ -73,7 +69,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'offline_actions',
-      null,
+      () => <div className="fa fa-cogs withIcon">{i18n('playOfflineComputer')}</div>,
       function() {
         return [
           renderEndedGameStatus(ctrl)

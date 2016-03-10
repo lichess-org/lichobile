@@ -96,4 +96,8 @@ export default function replayCtrl(root, rootSituations, rootPly) {
       max_width: 30
     });
   }.bind(this);
+
+  this.onunload = function() {
+    if (chessWorker) chessWorker.terminate();
+  };
 }

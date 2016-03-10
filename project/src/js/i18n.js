@@ -6,8 +6,9 @@ var messages = [];
 const untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
-  resourceNotFoundError: 'Resource not found',
-  lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance',
+  resourceNotFoundError: 'Resource not found.',
+  lichessIsUnavailableError: 'lichess.org is temporarily down for maintenance.',
+  lichessIsUnreachable: 'lichess.org is unreachable.',
   mustSignIn: 'You must sign in to see this.',
   mustSignInToJoin: 'You must sign in to join it.',
   boardThemeBrown: 'Brown',
@@ -28,8 +29,14 @@ const untranslated = {
   language: 'Language',
   notesSynchronizationHasFailed: 'Notes synchronization with lichess has failed, please try later.',
   challengeDeclined: 'Challenge declined',
-  challengeCreated: 'Challenge created, you can retrieve it in the games menu.',
-  youAreChallenging: 'You are challenging %s'
+  challengeCreated: 'Challenge created. It will remain active for two weeks. You can cancel it by going to the top right board menu.',
+  youAreChallenging: 'You are challenging %s',
+  submitMove: 'Submit move',
+  returnToHome: 'Return to home',
+  enableLocalComputerEvaluation: 'Enable local computer evaluation.',
+  localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.',
+  startNewAnalysis: 'Start new analysis',
+  showBestMove: 'Show computer best move'
 };
 
 const defaultCode = 'en';

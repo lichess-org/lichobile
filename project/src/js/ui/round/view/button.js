@@ -9,6 +9,14 @@ import { handleXhrError, hasNetwork } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
 
+function analysisBoardOrientation(data) {
+  if (data.game.variant.key === 'racingKings') {
+    return 'white';
+  } else {
+    return data.player.color;
+  }
+}
+
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
     return condition(ctrl.data) && hasNetwork() ? m('button', {
@@ -45,7 +53,7 @@ export default {
         <button className="binary_choice" data-icon="E"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
         >
-          Submit move
+          {i18n('submitMove')}
         </button>
         <button className="binary_choice" data-icon="L"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
@@ -61,10 +69,10 @@ export default {
         key: 'forceResignZone'
       }, [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
-        m('button.binary_choice[data-icon=E]', {
+        m('button.binary_choice.left', {
           config: helper.ontouch(function() { socket.send('resign-force'); })
         }, i18n('forceResignation')),
-        m('button.binary_choice[data-icon=E]', {
+        m('button.binary_choice.right', {
           config: helper.ontouch(function() { socket.send('draw-force'); })
         }, i18n('forceDraw'))
       ]) : null;
@@ -126,18 +134,39 @@ export default {
       }, i18n('decline'))
     ]);
   },
+  analysisBoard: function(ctrl) {
+    const d = ctrl.data;
+    if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
+      return m('button.fa.fa-eye', {
+        config: helper.ontouch(() => {
+          socket.send('rematch-no');
+          m.route(`/analyse/online/${d.game.id}/${analysisBoardOrientation(d)}`);
+        })
+      }, i18n('analysis'));
+    }
+  },
+  newOpponent: function(ctrl) {
+    const d = ctrl.data;
+    const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && d.game.source === 'lobby';
+    if (!ctrl.data.opponent.ai && newable) {
+      return m('button[data-icon=r]', {
+        config: helper.ontouch(() => {
+          ctrl.hideActions();
+          lobby.startSeeking();
+        })
+      }, i18n('newOpponent'));
+    }
+  },
   rematch: function(ctrl) {
-    if ((gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data)) &&
-      !ctrl.data.tournament && !ctrl.data.opponent.offeringRematch &&
-      !ctrl.data.player.offeringRematch) {
-      if (ctrl.data.opponent.onGame || ctrl.data.game.perf === 'correspondence') {
-        return m('button.fa.fa-refresh', {
-          key: 'rematch',
-          config: helper.ontouch(function() { socket.send('rematch-yes'); })
-        }, i18n('rematch'));
-      } else {
-        return null;
-      }
+    const d = ctrl.data;
+    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.tournament && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
+    if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
+      return m('button.fa.fa-refresh', {
+        key: 'rematch',
+        config: helper.ontouch(function() { socket.send('rematch-yes'); })
+      }, i18n('rematch'));
+    } else {
+      return null;
     }
   },
   answerOpponentRematch: function(ctrl) {
@@ -169,19 +198,6 @@ export default {
       key: 'moretime',
       config: helper.ontouch(throttle(function() { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
-  },
-  flipBoardInMenu: function(ctrl) {
-    if (ctrl.data.game.speed === 'correspondence') {
-      const className = helper.classSet({
-        on: ctrl.vm.flip
-      });
-      return (
-        <button className={className} data-icon="B" key="flipboard"
-          config={helper.ontouch(ctrl.flip)}>
-          {i18n('flipBoard')}
-        </button>
-      );
-    }
   },
   flipBoard: function(ctrl) {
     const className = helper.classSet({
@@ -249,19 +265,13 @@ export default {
         config={helper.ontouch(ctrl.jumpLast)} />
     );
   },
-  newOpponent: function(ctrl) {
-    if (!ctrl.data.opponent.ai && (gameStatus.finished(ctrl.data) || gameStatus.aborted(ctrl.data))) {
-      return m('button[data-icon=r]', {
-        config: helper.ontouch(() => {
-          ctrl.hideActions();
-          lobby.startSeeking();
-        })
-      }, i18n('newOpponent'));
-    }
-  },
   notes: function(ctrl) {
-    return m('button[data-icon=m].action_bar_button', {
-      config: helper.ontouch(ctrl.notes.open)
-    });
+    return (
+      <button className="action_bar_button" data-icon="m" key="notes"
+        config={helper.ontouch(
+          ctrl.notes.open,
+          () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')
+        )} />
+    );
   }
 };

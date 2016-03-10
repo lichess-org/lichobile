@@ -20,13 +20,14 @@
     > .title, .fa
       height 40px
 
-  .content
+  .content, .content_round
     height calc(100% - 40px)
 
-  .antagonist
+  .playTable
+    height calc((100% - 100vw - 40px) / 2)
     font-size 12px
     .clock
-      font-size 23px
+      font-size 20px
       &.correspondence
         font-size 14px
     .material
@@ -36,7 +37,12 @@
         white-space normal
         overflow hidden
 
-  #game_actions_bar
+  .tomb
+    div
+      width 14px
+      height 14px
+
+  .actions_bar
     height 40px
 
   .action_bar_button

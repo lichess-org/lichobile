@@ -52,23 +52,23 @@ function bundle() {
 
 function launchWatchify(f) {
   return bundle().then(function(b) {
-    var w = watchify(b);
+    var wa = watchify(b);
 
     b.bundle(function() {
-      w.on('log', log);
+      wa.on('log', log);
     });
 
-    w.on('update', function() {
+    wa.on('update', function() {
       var ws = fs.createWriteStream(bundledJS);
 
-      w.bundle(log).pipe(ws);
+      wa.bundle(log).pipe(ws);
 
       ws.on('finish', function() {
         ws.end();
         f(bundledJS);
       });
     });
-    return w;
+    return wa;
   });
 }
 
@@ -76,7 +76,7 @@ module.exports.build = function build(platform, settings, configName) {
   var defer = Q.defer();
 
   configName = configName || 'default';
-  var mode = ['prod', 'stage'].indexOf(configName) !== -1 ? configName : 'dev';
+  var mode = ['prod', 'stage', 'beta'].indexOf(configName) !== -1 ? configName : 'dev';
   var context = settings.configurations[platform][configName];
   context.MODE = mode;
   context.TARIFA = true;

@@ -1,4 +1,6 @@
-import game from'./ui/game';
+import home from './ui/home';
+import game from './ui/game';
+import analyse from './ui/analyse';
 import challenge from './ui/challenge';
 import tv from'./ui/tv';
 import correspondence from'./ui/correspondence';
@@ -13,27 +15,35 @@ import settingsPrivacy from './ui/settings/privacy';
 import boardThemes from'./ui/settings/boardThemes';
 import pieceThemes from'./ui/settings/pieceThemes';
 import user from'./ui/user';
+import userFollowing from './ui/user/following';
 import userGames from'./ui/user/games';
 import userVariantPerf from'./ui/user/variantperf';
 import userTV from './ui/user/tv';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
 import training from './ui/training';
+import tournamentList from'./ui/tournament/list';
+import tournament from'./ui/tournament';
 import editor from './ui/editor';
 import m from 'mithril';
 
 export default {
   init() {
     m.route(document.body, '/', {
-      '/': ai,
+      '/': home,
       '/otb': otb,
       '/ai': ai,
       '/game/:id': game,
       '/game/:id/:color': game,
+      '/analyse': analyse,
+      '/analyse/fen/:fen': analyse,
+      '/analyse/:source/:id': analyse,
+      '/analyse/:source/:id/:color': analyse,
       '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,
       '/@/:id': user,
+      '/@/:id/following': userFollowing,
       '/@/:id/games': userGames,
       '/@/:id/games/:filter': userGames,
       '/@/:id/:variant/perf': userVariantPerf,
@@ -51,7 +61,9 @@ export default {
       '/settings/themes/piece': pieceThemes,
       '/settings/lang': settingsLang,
       '/training': training,
-      '/training/:id': training
+      '/training/:id': training,
+      '/tournament': tournamentList,
+      '/tournament/:id': tournament
     });
   }
 };

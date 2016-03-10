@@ -1,3 +1,4 @@
+import menu from '.';
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
@@ -7,9 +8,18 @@ import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
-import menu from './menu';
 import friendsApi from '../../lichess/friends';
 import Zanimo from 'zanimo';
+
+export default function view() {
+  if (!menu.isOpen) return null;
+
+  return (
+    <aside id="side_menu" config={slidesIn}>
+      {renderMenu()}
+    </aside>
+  );
+}
 
 function renderHeader(user) {
   return (
@@ -21,10 +31,12 @@ function renderHeader(user) {
       { hasNetwork() && user ?
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
           config={helper.ontouch(menu.toggleHeader, null, null, false)}
-        /> :
+        /> : null
+      }
+      { hasNetwork() && !user ?
         <button className="login" config={helper.ontouchY(loginModal.open)}>
           {i18n('signIn')}
-        </button>
+        </button> : null
       }
     </header>
   );
@@ -61,6 +73,9 @@ function renderLinks(user) {
 
   return (
     <ul className="side_links">
+      <li className="side_link" key="home" config={helper.ontouchY(menu.route('/'))}>
+        <span className="fa fa-home" />Home
+      </li>
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }
@@ -124,6 +139,9 @@ function renderLinks(user) {
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
       </li>
       <li className="sep_link" key="sep_link_tools">{i18n('tools')}</li>
+      <li className="side_link" key="analyse" config={helper.ontouchY(menu.route('/analyse'))}>
+        <span className="fa fa-eye" />{i18n('analysis')}
+      </li>
       <li className="side_link" key="editor" config={helper.ontouchY(menu.route('/editor'))}>
         <span className="fa fa-pencil" />{i18n('boardEditor')}
       </li>
@@ -155,14 +173,4 @@ function slidesIn(el, isUpdate, context) {
     context.lol = el.offsetHeight;
     Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
   }
-}
-
-export default function view() {
-  if (!menu.isOpen) return null;
-
-  return (
-    <aside id="side_menu" config={slidesIn}>
-      {renderMenu()}
-    </aside>
-  );
 }

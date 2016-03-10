@@ -63,6 +63,11 @@ export default {
     coords: localstorageprop('settings.coords', true)
   },
 
+  analyse: {
+    enableCeval: localstorageprop('settings.analyse.enableCeval', false),
+    showBestMove: localstorageprop('settings.analyse.showBestMove', true)
+  },
+
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', true)

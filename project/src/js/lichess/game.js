@@ -67,7 +67,11 @@ function moretimeable(data) {
 }
 
 function replayable(data) {
-  return data.source === 'import' || gameStatus.finished(data);
+  return data.game.variant.key === 'standard' && gameStatus.finished(data);
+}
+
+function userAnalysable(data) {
+  return data.game.variant.key === 'standard' && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
 function getPlayer(data, color) {
@@ -141,6 +145,7 @@ export default {
   moretimeable,
   mandatory,
   replayable,
+  userAnalysable,
   getPlayer,
   parsePossibleMoves,
   nbMoves,

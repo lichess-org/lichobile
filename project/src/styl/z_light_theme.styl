@@ -1,9 +1,12 @@
-mainHeaderBg = darken(gold, 5%)
-mainHeaderColor = lighten(gold, 80%)
+mainHeaderBg = bgdark
+mainHeaderColor = textDarkBg
 borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
 .view-container.light
+  main
+    color textLightBg
+
   #page
     background themeBgLight
     color textMediumGray
@@ -11,9 +14,9 @@ activeBgLight = darken(themeBgLight, 8%)
   #side_menu
     background themeBgLight
     header
-      background lighten(#2A2A2A, 15%)
+      background lighten(mainHeaderBg, 15%)
     .login
-      background lighten(#454545, 15%)
+      background lighten(#454545, 8%)
 
   .side_links .hr
     border-color textLightGray
@@ -31,6 +34,19 @@ activeBgLight = darken(themeBgLight, 8%)
 
   button#newGameCorres
     color textMediumGray
+
+  .fatButton
+    background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
+    text-shadow: 0 1px 0 #FFF;
+    color: #848484;
+    border-color #e2e2e2
+    &.active
+      background linear-gradient(to bottom,rgba(248,248,248,1) 0%,rgba(243,243,243,1) 100%);
+
+  .mini_board
+    .vsbloc
+      background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
+      border-color #e2e2e2
 
   .button
     &.active
@@ -108,6 +124,8 @@ activeBgLight = darken(themeBgLight, 8%)
     &.highlight
       background textLightGray
       color themeBgLight
+    &.active
+      background darken(themeBgLight, 8%)
 
   .gameMovesList
     background darken(themeBgLight, 4%)
@@ -116,51 +134,40 @@ activeBgLight = darken(themeBgLight, 8%)
   .main_header
     background mainHeaderBg
     box-shadow 0px 1px 1px 0px rgba(0,0,0,0.2)
-    > nav > h1
-      color themeBgLight
-    .chip
-      color mainHeaderBg
-      background lighten(textGray, 95%)
-      border-color mainHeaderBg
     &.board
       background themeBgLight
       box-shadow none
-      .chip
-        color themeBgLight
-        background gold
-        border-color themeBgLight
-      > nav > h1
-        color textGray
       .main_header_button
-        color textGray
-    &:not(.board)
-      .main_header_button
-        color mainHeaderColor
+        color textLightBg
         &.active
-          background lighten(mainHeaderBg, 8%)
+          background darken(themeBgLight, 8%)
+      .chip
+        color #eee
+        background gold
+        border-color #eee
+      h1
+        color textLightBg
+    &:not(.board)
       .game_menu_button
-        &:before
-          background url('../../images/icons/game_icon_light.svg') no-repeat
         &.new_challenge:before
           background transparent
-
-  .main_header_button.active, .game_menu_button.active, .action_bar_button.active, .training_action.active
-    background activeBgLight
 
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)
 
-  .perf
+  .profilePerf
     &.active
       background darken(bglight, 5%)
     > .rating
-      color textMediumGray
+      color textDarkGray
+      > .nb
+        color textLightBg
     > .name
       color textDarkGray
 
   .select_games_filter
-    background-color lighten(mainHeaderBg, 30%)
+    background-color mainHeaderBg
     select
       color #fff
     label:after
@@ -187,3 +194,17 @@ activeBgLight = darken(themeBgLight, 8%)
 
   .trainingSection
     color textMediumGray
+
+  .rankingPlayer
+    &.active
+      background darken(bglight, 5%)
+
+  .analyseOpening, .cevalBox, move.active
+    background darken(bglight, 10%)
+
+  .analyseReplay > turn > index, .analyseInfos, .meta
+    background darken(bglight, 5%)
+
+  .analyseGameInfosWrapper
+    border-bottom-color darken(bglight, 15%)
+

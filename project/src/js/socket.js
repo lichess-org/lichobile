@@ -76,6 +76,30 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
+function createTournament(tournamentVersion, tournamentId, handlers) {
+  let url = '/tournament/' + tournamentId + '/socket/v1';
+  socketHandlers = {
+    events: assign({}, defaultHandlers, handlers)
+  };
+  const opts = {
+    options: {
+      name: 'tournament',
+      debug: false,
+      ignoreUnknownMessages: true,
+      pingDelay: 2000,
+      sendOnOpen: 'following_onlines',
+      registeredEvents: Object.keys(socketHandlers.events)
+    }
+  };
+  socketWorker.postMessage({ topic: 'create', payload: {
+    clientId: utils.lichessSri,
+    socketEndPoint: window.lichess.socketEndPoint,
+    url,
+    tournamentVersion,
+    opts
+  }});
+}
+
 function createChallenge(id, version, onOpen, handlers) {
   socketHandlers = {
     onOpen,
@@ -149,6 +173,25 @@ function createDefault() {
   }
 }
 
+function redirectToGame(obj) {
+  let url;
+  if (typeof obj === 'string') url = obj;
+  else {
+    url = obj.url;
+    if (obj.cookie) {
+      const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1');
+      const cookie = [
+        encodeURIComponent(obj.cookie.name) + '=' + obj.cookie.value,
+        '; max-age=' + obj.cookie.maxAge,
+        '; path=/',
+        '; domain=' + domain
+        ].join('');
+        document.cookie = cookie;
+    }
+    m.route('/game' + url);
+  }
+}
+
 function onConnected() {
   const wasOff = !connectedWS;
   connectedWS = true;
@@ -195,7 +238,7 @@ socketWorker.addEventListener('message', function(msg) {
       break;
     case 'handle':
       var h = socketHandlers.events[msg.data.payload.t];
-      if (h) h(msg.data.payload.d || null);
+      if (h) h(msg.data.payload.d || null, msg.data.payload);
       break;
   }
 });
@@ -204,7 +247,9 @@ export default {
   createGame,
   createChallenge,
   createLobby,
+  createTournament,
   createDefault,
+  redirectToGame,
   setVersion(version) {
     socketWorker.postMessage({ topic: 'setVersion', payload: version });
   },

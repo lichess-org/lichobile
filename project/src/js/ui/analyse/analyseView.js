@@ -73,12 +73,11 @@ function renderTable(ctrl) {
 }
 
 function renderInfos(ctrl) {
-  const cevalAllowed = ctrl.ceval.allowed();
   const cevalEnabled = ctrl.ceval.enabled();
   const ceval = ctrl.currentAnyEval() || null;
 
-  const hash = ctrl.data.game.id + cevalAllowed + cevalEnabled +
-    (ceval && renderEval(ceval.cp)) + (ceval && ceval.mate) + (ceval && ceval.best) +
+  const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
+    (ceval && ceval.mate) + (ceval && ceval.best) +
     ctrl.vm.showBestMove + ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
 
   if (ctrl.vm.infosHash === hash) return {
@@ -88,7 +87,7 @@ function renderInfos(ctrl) {
 
   return (
     <div className="analyseInfos">
-      { cevalAllowed && cevalEnabled ?
+      { cevalEnabled ?
         cevalView.renderCeval(ctrl) : null
       }
       { !isSynthetic(ctrl.data) ?

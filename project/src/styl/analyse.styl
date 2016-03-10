@@ -19,8 +19,7 @@
       > .bestMove
         margin-top 5px
 
-  > .analyse
-    width 60%
+  > .analyse, > .analyseInfos
     @media only screen and (orientation: portrait)
       height calc(100vh - 100vw - 50px - 40px)
     @media only screen and (orientation: landscape)
@@ -28,13 +27,16 @@
     @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
       height calc(100vh - 50px - 12vh - 40px)
 
+  > .analyse
+    width 60%
+
   > .analyseInfos
-    background lighten(bgdark, 5%)
     width 40%
-    @media only screen and (orientation: portrait)
-      height calc(100vh - 100vw - 50px - 40px)
-      > .native_scroller
-        height calc(100% - 33px)
+    background lighten(bgdark, 5%)
+    > .cevalBox + .native_scroller
+      height calc(100% - 34px)
+    > .native_scroller
+      height 100%
 
 .cevalBox
   position relative

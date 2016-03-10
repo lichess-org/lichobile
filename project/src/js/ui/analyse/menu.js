@@ -63,6 +63,7 @@ function renderAnalyseMenu(ctrl) {
       formWidgets.renderCheckbox(
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
+          ctrl.ceval.toggle();
           if (v) ctrl.startCeval();
           else ctrl.ceval.destroy();
         }

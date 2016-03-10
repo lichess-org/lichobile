@@ -15,9 +15,10 @@ export default function cevalCtrl(allow, emit) {
 
   var curDepth = 0;
   var started = false;
+  var isEnabled = settings.analyse.enableCeval();
 
   function enabled() {
-    return allow && settings.analyse.enableCeval();
+    return allowed() && isEnabled;
   }
 
   function onEmit(res) {
@@ -75,7 +76,10 @@ export default function cevalCtrl(allow, emit) {
     destroy,
     allowed,
     enabled,
-    percentComplete: function() {
+    toggle() {
+      isEnabled = settings.analyse.enableCeval();
+    },
+    percentComplete() {
       return Math.round(100 * curDepth / maxDepth);
     }
   };

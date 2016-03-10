@@ -6,9 +6,8 @@ const squareSpin = m('span.square-spin');
 
 export default {
   renderCeval(ctrl) {
-    if (!ctrl.ceval.allowed()) return null;
+    if (!ctrl.ceval.enabled()) return null;
 
-    const enabled = ctrl.ceval.enabled();
     const ceval = ctrl.currentAnyEval() || {};
     let pearl = squareSpin, percent;
 
@@ -31,7 +30,7 @@ export default {
 
     return (
       <div className="cevalBox">
-        { enabled ? pearl : null }
+        { pearl }
         { ctrl.vm.showBestMove && ceval.bestSan ?
           <div className="bestMove">
             <small>best</small>
@@ -39,11 +38,9 @@ export default {
             { ceval.bestSan }
           </div> : null
         }
-        {enabled ?
-          <div className="cevalBar">
-            <span style={{ width: percent + '%' }}></span>
-          </div> : null
-        }
+        <div className="cevalBar">
+          <span style={{ width: percent + '%' }}></span>
+        </div>
       </div>
     );
   }

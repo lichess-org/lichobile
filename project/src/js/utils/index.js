@@ -120,7 +120,8 @@ const perfIconsMap = {
   puzzle: '-',
   horde: '_',
   fromPosition: '*',
-  racingKings: ''
+  racingKings: '',
+  crazyhouse: ''
 };
 
 export function gameIcon(perf) {

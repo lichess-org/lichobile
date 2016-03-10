@@ -109,24 +109,30 @@ function timeLeft(g) {
 }
 
 function savedGameDataToCardData(data) {
-  return {
+  const obj = {
     color: data.player.color,
     fen: data.game.fen,
     fullId: data.url.round.substr(1),
     gameId: data.game.id,
     isMyTurn: gameApi.isPlayerTurn(data),
     lastMove: data.game.lastMove,
-    opponent: {
-      id: data.opponent.user.id,
-      username: data.opponent.user.username,
-      rating: data.opponent.rating
-    },
     perf: data.game.perf,
+    opponent: {},
     rated: data.game.rated,
     secondsLeft: data.correspondence && data.correspondence[data.player.color],
     speed: data.game.speed,
     variant: data.game.variant
   };
+
+  if (data.opponent.user) {
+    obj.opponent = {
+      id: data.opponent.user.id,
+      username: data.opponent.user.username,
+      rating: data.opponent.rating
+    };
+  }
+
+  return obj;
 }
 
 function renderGame(g, cDim, cardStyle) {

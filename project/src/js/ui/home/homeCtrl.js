@@ -2,7 +2,7 @@ import socket from '../../socket';
 import settings from '../../settings';
 import { lobby as lobbyXhr } from '../../xhr';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
-import { noop, handleXhrError } from '../../utils';
+import { hasNetwork, noop, handleXhrError } from '../../utils';
 import m from 'mithril';
 
 export default function homeCtrl() {
@@ -22,41 +22,51 @@ export default function homeCtrl() {
     });
   }
 
-  lobbyXhr(true).then(data => {
-    socket.createLobby(data.lobby.version, noop, {
-      n: (_, d) => {
-        nbConnectedPlayers(d.d);
-        nbGamesInPlay(d.r);
-        m.redraw();
-      },
-      featured: onFeatured
+  function init() {
+
+    lobbyXhr(true).then(data => {
+      socket.createLobby(data.lobby.version, noop, {
+        n: (_, d) => {
+          nbConnectedPlayers(d.d);
+          nbGamesInPlay(d.r);
+          m.redraw();
+        },
+        featured: onFeatured
+      });
     });
-  });
 
-  Promise.all([
-    featuredXhr(true),
-    dailyPuzzleXhr(),
-    topPlayersOfTheWeekXhr()
-  ]).then(results => {
-    const [featuredData, dailyData, topPlayersData] = results;
+    Promise.all([
+      featuredXhr(true),
+      dailyPuzzleXhr(),
+      topPlayersOfTheWeekXhr()
+    ]).then(results => {
+      const [featuredData, dailyData, topPlayersData] = results;
 
-    // featured game
-    featured(featuredData);
-    const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
-    featuredFeed.onmessage = function(ev) {
-      const obj = JSON.parse(ev.data);
-      featured().game.fen = obj.d.fen;
-      featured().game.lastMove = obj.d.lm;
-      m.redraw();
-    };
+      // featured game
+      featured(featuredData);
+      const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
+        featuredFeed.onmessage = function(ev) {
+          const obj = JSON.parse(ev.data);
+          featured().game.fen = obj.d.fen;
+          featured().game.lastMove = obj.d.lm;
+          m.redraw();
+        };
 
-    // daily puzzle
-    dailyPuzzle(dailyData.puzzle);
+        // daily puzzle
+        dailyPuzzle(dailyData.puzzle);
 
-    // week top players
-    weekTopPlayers(topPlayersData);
-  })
-  .catch(handleXhrError);
+        // week top players
+        weekTopPlayers(topPlayersData);
+    })
+    .catch(handleXhrError);
+
+  }
+
+  if (hasNetwork()) {
+    init();
+  }
+
+  document.addEventListener('online', init);
 
   return {
     featured,
@@ -67,6 +77,9 @@ export default function homeCtrl() {
     goToFeatured() {
       settings.tv.channel('best');
       m.route('/tv');
+    },
+    onunload() {
+      document.removeEventListener('online', init);
     }
   };
 }

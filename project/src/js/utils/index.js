@@ -91,8 +91,11 @@ export function playerName(player, withRating) {
     }
     return name;
   }
-  if (player.ai)
+
+  if (player.ai) {
     return aiName(player.ai);
+  }
+
   return 'Anonymous';
 }
 

@@ -56,6 +56,7 @@ export default function controller() {
   }
 
   xhr.following(userId, 1, true).then(data => {
+    console.log(data);
     paginator(data.paginator);
     following(data.paginator.currentPageResults);
   }, err => {

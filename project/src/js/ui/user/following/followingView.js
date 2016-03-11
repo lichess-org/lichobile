@@ -1,4 +1,6 @@
 import { empty, header } from '../../shared/common';
+import { gameIcon } from '../../../utils';
+import helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 
@@ -15,15 +17,42 @@ export default function view(ctrl) {
 function renderBody(ctrl) {
   return (
     <ul className="playersSuggestion native_scroller page">
-      {ctrl.following().map(renderPlayer)}
+      {ctrl.following().map(p => renderPlayer(ctrl, p))}
     </ul>
   );
 }
 
-function renderPlayer(obj) {
+function renderPlayer(ctrl, obj) {
+  const status = obj.online ? 'online' : 'offline';
+  const perfKey = Object.keys(obj.perfs)[0];
+  const perf = obj.perfs[perfKey];
   return (
-    <li className="list_item playerSuggestion">
-      {obj.user}
+    <li className="list_item followingList">
+      <div className="followingPlayerTitle">
+        <div className="user">
+          <span className={'userStatus ' + status} data-icon="r" />
+          {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
+          {obj.user}
+        </div>
+        <span className="rating" data-icon={gameIcon(perfKey)}>
+          {perf.rating}
+        </span>
+      </div>
+      {obj.followable ?
+        <div className="followingPlayerActions">
+          <div className="check_container">
+            <label htmlFor="user_following">{i18n('follow')}</label>
+            <input id="user_following" type="checkbox" checked={obj.relation}
+              onchange={ctrl.toggleFollowing} />
+          </div>
+        </div> : null
+      }
+      <div className="list_item" key="challenge_to_play" data-icon="U"
+        config={helper.ontouchY(ctrl.challenge)}
+      >
+        {i18n('challengeToPlay')}
+      </div>
     </li>
   );
+
 }

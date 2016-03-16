@@ -4,6 +4,7 @@ import helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
 import {throttle} from 'lodash/function';
 import socket from '../../../socket';
+import challengeForm from '../../challengeForm';
 import m from 'mithril';
 
 var scroller;
@@ -66,9 +67,20 @@ export default function controller() {
     if (scroller) scroller.scrollTo(0, 0, 0);
   }, 50));
 
+  function setNewUserState(obj, newData) {
+    obj.relation = newData.following;
+  }
+
   return {
     following,
     scrollerConfig,
-    isLoadingNextPage
+    isLoadingNextPage,
+    toggleFollowing: obj => {
+      if (obj.relation) xhr.unfollow(obj.user).then(setNewUserState.bind(undefined, obj));
+      else xhr.follow(obj.user).then(setNewUserState.bind(undefined, obj));
+    },
+    challenge(id) {
+      challengeForm.open(id);
+    }
   };
 }

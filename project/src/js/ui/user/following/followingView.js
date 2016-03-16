@@ -15,11 +15,19 @@ export default function view(ctrl) {
 }
 
 function renderBody(ctrl) {
-  return (
-    <ul className="playersSuggestion native_scroller page">
-      {ctrl.following().map(p => renderPlayer(ctrl, p))}
-    </ul>
-  );
+  if (ctrl.following().length) {
+    return (
+      <ul className="native_scroller page">
+        {ctrl.following().map(p => renderPlayer(ctrl, p))}
+      </ul>
+    );
+  } else {
+    return (
+      <div className="followingListEmpty">
+        Oops! Nothing here.
+      </div>
+    );
+  }
 }
 
 function renderPlayer(ctrl, obj) {
@@ -45,12 +53,12 @@ function renderPlayer(ctrl, obj) {
           <div className="check_container">
             <label htmlFor="user_following">{i18n('follow')}</label>
             <input id="user_following" type="checkbox" checked={obj.relation}
-              onchange={ctrl.toggleFollowing} />
+              onchange={() => ctrl.toggleFollowing(obj)} />
           </div>
         </div> : null
       }
       <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
-        config={helper.ontouchY(ctrl.challenge)}
+        config={helper.ontouchY(() => ctrl.challenge(obj.user))}
       >
         {i18n('challengeToPlay')}
       </div>

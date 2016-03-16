@@ -1,4 +1,4 @@
-import { formatClockTime } from './correspondenceView';
+import { formatClockTime } from './corresClockView';
 
 export default function(root, data, onFlag) {
 

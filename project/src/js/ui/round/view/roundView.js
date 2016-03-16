@@ -21,7 +21,7 @@ import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import { view as renderChat } from '../chat';
 import { view as renderNotes } from '../notes';
-import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
+import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {

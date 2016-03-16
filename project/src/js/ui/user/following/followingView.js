@@ -24,8 +24,8 @@ function renderBody(ctrl) {
 
 function renderPlayer(ctrl, obj) {
   const status = obj.online ? 'online' : 'offline';
-  const perfKey = Object.keys(obj.perfs)[0];
-  const perf = obj.perfs[perfKey];
+  const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
+  const perf = obj.perfs && obj.perfs[perfKey];
   return (
     <li className="list_item followingList">
       <div className="followingPlayerTitle">
@@ -34,12 +34,14 @@ function renderPlayer(ctrl, obj) {
           {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
           {obj.user}
         </div>
+        { perfKey ?
         <span className="rating" data-icon={gameIcon(perfKey)}>
           {perf.rating}
-        </span>
+        </span> : null
+        }
       </div>
       {obj.followable ?
-        <div className="followingPlayerActions">
+        <div className="followingPlayerItem">
           <div className="check_container">
             <label htmlFor="user_following">{i18n('follow')}</label>
             <input id="user_following" type="checkbox" checked={obj.relation}
@@ -47,7 +49,7 @@ function renderPlayer(ctrl, obj) {
           </div>
         </div> : null
       }
-      <div className="list_item" key="challenge_to_play" data-icon="U"
+      <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
         config={helper.ontouchY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}

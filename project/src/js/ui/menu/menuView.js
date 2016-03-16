@@ -53,6 +53,9 @@ function renderProfileActions(user) {
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
+      <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
+        {i18n('following')}
+      </li>
       <li className="side_link" config={helper.ontouch(menu.route('/settings/preferences'))}>
         <span data-icon="%" />
         {i18n('preferences')}

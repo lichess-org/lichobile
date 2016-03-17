@@ -36,7 +36,8 @@ const untranslated = {
   enableLocalComputerEvaluation: 'Enable local computer evaluation.',
   localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.',
   startNewAnalysis: 'Start new analysis',
-  showBestMove: 'Show computer best move'
+  showBestMove: 'Show computer best move',
+  followers: 'Followers'
 };
 
 const defaultCode = 'en';

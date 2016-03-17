@@ -30,7 +30,7 @@ function renderBody(ctrl) {
   }
 }
 
-function renderPlayer(ctrl, obj) {
+export function renderPlayer(ctrl, obj) {
   const status = obj.online ? 'online' : 'offline';
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
   const perf = obj.perfs && obj.perfs[perfKey];

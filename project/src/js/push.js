@@ -1,8 +1,9 @@
 import session from './session';
 import settings from './settings';
 import { request } from './http';
-import { getChallenges } from './xhr';
+import { getChallenges, timeline as getTimeline } from './xhr';
 import challengesApi from './lichess/challenges';
+import timeline from './lichess/timeline';
 import m from 'mithril';
 
 let push;
@@ -51,8 +52,11 @@ export default {
                   getChallenges().then(challengesApi.set);
                   break;
                 case 'gameMove':
+                  session.refresh();
+                  break;
                 case 'gameFinish':
                   session.refresh();
+                  getTimeline().then(timeline.set);
                   break;
               }
             }
@@ -65,7 +69,13 @@ export default {
                 m.route(`/challenge/${payload.userData.challengeId}`);
                 break;
               case 'gameMove':
+                m.route(`/game/${payload.userData.fullId}`);
+                break;
               case 'gameFinish':
+                getTimeline().then(t => {
+                  timeline.set(t);
+                  timeline.setLastReadTimestamp();
+                });
                 m.route(`/game/${payload.userData.fullId}`);
                 break;
             }

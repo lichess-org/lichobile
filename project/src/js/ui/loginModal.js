@@ -28,7 +28,7 @@ function submit(form) {
 
 loginModal.open = function() {
   helper.analyticsTrackView('Login');
-  backbutton.stack.push(helper.slidesOut(loginModal.close, 'loginModal'));
+  backbutton.stack.push(helper.slidesOutDown(loginModal.close, 'loginModal'));
   isOpen = true;
 };
 
@@ -41,10 +41,10 @@ loginModal.close = function(fromBB) {
 loginModal.view = function() {
   if (!isOpen) return null;
 
-  return m('div.modal#loginModal', { config: helper.slidesIn }, [
+  return m('div.modal#loginModal', { config: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouch(helper.slidesOut(loginModal.close, 'loginModal'))
+        config: helper.ontouch(helper.slidesOutDown(loginModal.close, 'loginModal'))
       }),
       m('h2', i18n('signIn'))
     ]),

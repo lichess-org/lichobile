@@ -15,7 +15,7 @@ export default function view() {
   if (!menu.isOpen) return null;
 
   return (
-    <aside id="side_menu" config={slidesIn}>
+    <aside id="side_menu" config={slidesInUp}>
       {renderMenu()}
     </aside>
   );
@@ -169,7 +169,7 @@ function renderMenu() {
   );
 }
 
-function slidesIn(el, isUpdate, context) {
+function slidesInUp(el, isUpdate, context) {
   if (!isUpdate) {
     el.style.transform = 'translate3d(-100%,0,0)';
     // force reflow hack

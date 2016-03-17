@@ -29,7 +29,7 @@ function submit(form) {
 
 signupModal.open = function() {
   helper.analyticsTrackView('Sign Up');
-  backbutton.stack.push(helper.slidesOut(signupModal.close, 'signupModal'));
+  backbutton.stack.push(helper.slidesOutDown(signupModal.close, 'signupModal'));
   isOpen = true;
 };
 
@@ -42,10 +42,10 @@ signupModal.close = function(fromBB) {
 signupModal.view = function() {
   if (!isOpen) return null;
 
-  return m('div.modal#signupModal', { config: helper.slidesIn }, [
+  return m('div.modal#signupModal', { config: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouch(helper.slidesOut(signupModal.close, 'signupModal'))
+        config: helper.ontouch(helper.slidesOutDown(signupModal.close, 'signupModal'))
       }),
       m('h2', i18n('signUp'))
     ]),

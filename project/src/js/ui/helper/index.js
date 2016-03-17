@@ -38,7 +38,7 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
-helper.slidesIn = function(el, isUpdate, context) {
+helper.slidesInUp = function(el, isUpdate, context) {
   if (!isUpdate) {
     el.style.transform = 'translateY(100%)';
     // force reflow hack
@@ -48,11 +48,31 @@ helper.slidesIn = function(el, isUpdate, context) {
   }
 };
 
-helper.slidesOut = function(callback, elID) {
+helper.slidesOutDown = function(callback, elID) {
   return function() {
     const el = document.getElementById(elID);
     m.redraw.strategy('none');
-    Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    .then(utils.autoredraw.bind(undefined, callback))
+    .catch(console.log.bind(console));
+  };
+};
+
+helper.slidesInLeft = function(el, isUpdate, context) {
+  if (!isUpdate) {
+    el.style.transform = 'translateX(100%)';
+    // force reflow hack
+    context.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
+  }
+};
+
+helper.slidesOutRight = function(callback, elID) {
+  return function() {
+    const el = document.getElementById(elID);
+    m.redraw.strategy('none');
+    return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
     .then(utils.autoredraw.bind(undefined, callback))
     .catch(console.log.bind(console));
   };
@@ -63,7 +83,7 @@ helper.fadesOut = function(callback, selector, time = 150) {
     e.stopPropagation();
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, time)
+    return Zanimo(el, 'opacity', 0, time)
     .then(utils.autoredraw.bind(undefined, callback))
     .catch(console.log.bind(console));
   };

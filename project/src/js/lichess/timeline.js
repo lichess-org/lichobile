@@ -1,11 +1,23 @@
+import storage from '../storage';
+
+const STORAGEKEY = 'timeline.timestamp';
+
 var timeline = [];
 
 export default {
-  entries() {
+  get() {
     return timeline;
   },
 
   set(t) {
-    timeline = t.filter(o => o.type === 'game-end');
+    timeline = t.entries.filter(o => o.type === 'game-end');
+  },
+
+  setLastReadTimestamp() {
+    if (timeline[0]) storage.set(STORAGEKEY, timeline[0].date);
+  },
+
+  getLastReadTimestamp() {
+    return storage.get(STORAGEKEY);
   }
 };

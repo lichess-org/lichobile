@@ -9,6 +9,7 @@ import challengesApi from '../../lichess/challenges';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
+import timelineModal from '../timelineModal';
 import m from 'mithril';
 import ViewOnlyBoard from './ViewOnlyBoard';
 
@@ -24,6 +25,17 @@ export function backButton(title) {
     <button key="default-history-backbutton" className="back_button main_header_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
+    </button>
+  );
+}
+
+export function timelineButton() {
+  if (!session.isConnected()) return null;
+  const longAction = () => window.plugins.toast.show(i18n('timline'), 'short', 'top');
+  return (
+    <button className="main_header_button timeline_button fa fa-bell" key="timeline"
+      config={helper.ontouch(timelineModal.open, longAction)}
+    >
     </button>
   );
 }
@@ -80,12 +92,18 @@ export function headerBtns() {
   if (utils.hasNetwork() && session.isConnected() && friendsApi.count())
     return (
       <div className="buttons">
+        {timelineButton()}
         {friendsButton()}
         {gamesButton()}
       </div>
     );
   else
-    return gamesButton();
+    return (
+      <div className="buttons">
+        {timelineButton()}
+        {gamesButton()}
+      </div>
+    );
 }
 
 export function header(title, leftButton) {

@@ -74,7 +74,11 @@ export default {
               case 'gameFinish':
                 getTimeline().then(t => {
                   timeline.set(t);
-                  timeline.setLastReadTimestamp();
+                  // if only one unread, assume it's the notif and set it as
+                  // already read
+                  if (timeline.unreadCount() === 1) {
+                    timeline.setLastReadTimestamp();
+                  }
                 });
                 m.route(`/game/${payload.userData.fullId}`);
                 break;

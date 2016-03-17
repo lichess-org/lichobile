@@ -36,6 +36,9 @@ function main() {
     return true;
   };
 
+  // init timeline last read to avoid reading too much localstorage
+  timeline.setLastRead(timeline.getSavedLastRead());
+
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup

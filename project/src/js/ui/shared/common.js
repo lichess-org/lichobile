@@ -31,12 +31,15 @@ export function backButton(title) {
 }
 
 export function timelineButton() {
-  if (!session.isConnected() || !timeline.hasUnread()) return null;
+  if (!session.isConnected()) return null;
+  const unreadCount = timeline.unreadCount();
+  if (!unreadCount) return null;
   const longAction = () => window.plugins.toast.show(i18n('timline'), 'short', 'top');
   return (
     <button className="main_header_button timeline_button fa fa-bell" key="timeline"
       config={helper.ontouch(timelineModal.open, longAction)}
     >
+      <span className="chip">{unreadCount}</span>
     </button>
   );
 }

@@ -44,7 +44,7 @@ timelineModal.view = function() {
 function renderEntry(entry) {
   const icon = gameIcon(entry.data.perf);
   const result = entry.data.win ? 'Victory' : 'Defeat';
-  const calendar = moment(entry.date).calendar();
+  const fromNow = moment(entry.date).fromNow();
 
   return (
     <div className="list_item timelineEntry" key={entry.date} data-icon={icon}
@@ -55,7 +55,7 @@ function renderEntry(entry) {
       })}
     >
       <strong>{result}</strong> vs. <strong>{entry.data.opponent}</strong>
-      <small><em>&nbsp;{calendar}</em></small>
+      <small><em>&nbsp;{fromNow}</em></small>
     </div>
   );
 }

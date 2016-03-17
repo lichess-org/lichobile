@@ -54,10 +54,6 @@ function renderProfileActions(user) {
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
-      <li className="side_link" config={helper.ontouch(menu.popup(timelineModal.open))}>
-        <span className="fa fa-bell" />
-        {i18n('timeline')}
-      </li>
       <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
         <span className="fa fa-arrow-circle-right" />
         {i18n('following')}
@@ -65,6 +61,10 @@ function renderProfileActions(user) {
       <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/followers`))}>
         <span className="fa fa-arrow-circle-left" />
         {i18n('followers')}
+      </li>
+      <li className="side_link" config={helper.ontouch(menu.popup(timelineModal.open))}>
+        <span className="fa fa-bell" />
+        {i18n('timeline')}
       </li>
       <li className="side_link" config={helper.ontouch(menu.route('/settings/preferences'))}>
         <span data-icon="%" />

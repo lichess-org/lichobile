@@ -90,12 +90,7 @@ main
   &.active
     background lighten(bgdark, 8%)
 
-.friends_button
-  position relative
-  padding-right 10px
-  color gold
-  &.nofriend
-    color rgba(gold, 0.7)
+.friends_button, .timeline_button
   > .chip
     position absolute
     font-size 10px
@@ -110,6 +105,14 @@ main
     top 10px
     left 7px
     background lighten(gold, 50%)
+
+
+.friends_button
+  position relative
+  padding-right 10px
+  color gold
+  &.nofriend
+    color rgba(gold, 0.7)
 
 .game_menu_button
   position relative

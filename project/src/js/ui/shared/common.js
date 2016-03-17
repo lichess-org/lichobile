@@ -6,6 +6,7 @@ import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import session from '../../session';
 import challengesApi from '../../lichess/challenges';
+import timeline from '../../lichess/timeline';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import friendsPopup from '../friendsPopup';
@@ -30,7 +31,7 @@ export function backButton(title) {
 }
 
 export function timelineButton() {
-  if (!session.isConnected()) return null;
+  if (!session.isConnected() || !timeline.hasUnread()) return null;
   const longAction = () => window.plugins.toast.show(i18n('timline'), 'short', 'top');
   return (
     <button className="main_header_button timeline_button fa fa-bell" key="timeline"
@@ -42,6 +43,8 @@ export function timelineButton() {
 
 export function friendsButton() {
   const nbFriends = friendsApi.count();
+  if (!nbFriends) return null;
+
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
   return (
     <button className="main_header_button friends_button" key="friends" data-icon="f"
@@ -89,7 +92,7 @@ export function gamesButton() {
 }
 
 export function headerBtns() {
-  if (utils.hasNetwork() && session.isConnected() && friendsApi.count())
+  if (utils.hasNetwork()) {
     return (
       <div className="buttons">
         {timelineButton()}
@@ -97,13 +100,14 @@ export function headerBtns() {
         {gamesButton()}
       </div>
     );
-  else
+  }
+  else {
     return (
       <div className="buttons">
-        {timelineButton()}
         {gamesButton()}
       </div>
     );
+  }
 }
 
 export function header(title, leftButton) {

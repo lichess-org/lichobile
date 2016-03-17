@@ -4,6 +4,7 @@ import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
 import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
+import timelineModal from '../timelineModal';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
@@ -53,7 +54,12 @@ function renderProfileActions(user) {
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
+      <li className="side_link" config={helper.ontouch(menu.popup(timelineModal.open))}>
+        <span className="fa fa-bell" />
+        {i18n('timeline')}
+      </li>
       <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
+        <span className="fa fa-thumbs-up" />
         {i18n('following')}
       </li>
       <li className="side_link" config={helper.ontouch(menu.route('/settings/preferences'))}>

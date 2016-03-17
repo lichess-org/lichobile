@@ -17,7 +17,7 @@ export default {
     if (timeline[0]) storage.set(STORAGEKEY, timeline[0].date);
   },
 
-  getLastReadTimestamp() {
-    return storage.get(STORAGEKEY);
+  hasUnread() {
+    return timeline[0] && storage.get(STORAGEKEY) < timeline[0].date;
   }
 };

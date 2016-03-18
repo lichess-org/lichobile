@@ -1,5 +1,8 @@
 import storage from '../storage';
+import { hasNetwork } from '../utils';
+import session from '../session';
 import { timeline as getTimeline } from '../xhr';
+import { throttle } from 'lodash/function';
 
 const STORAGEKEY = 'timeline.timestamp';
 
@@ -22,7 +25,14 @@ export default {
   },
 
   refresh() {
-    getTimeline().then(set);
+    if (hasNetwork() && session.isConnected()) {
+      return throttle(getTimeline, 1000)().then(v => {
+        set(v);
+        return true;
+      });
+    } else {
+      return Promise.resolve(false);
+    }
   },
 
   set,

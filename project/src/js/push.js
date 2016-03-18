@@ -48,15 +48,20 @@ export default {
               switch (payload.userData.type) {
                 case 'challengeCreate':
                 case 'challengeAccept':
-                case 'challengeDecline':
-                  getChallenges().then(challengesApi.set);
+                  getChallenges().then(challengesApi.set).then(() => m.redraw());
                   break;
                 case 'gameMove':
-                  session.refresh();
+                  session.refresh().then(v => {
+                    if (v) m.redraw();
+                  });
                   break;
                 case 'gameFinish':
-                  session.refresh();
-                  timeline.refresh().then(() => m.redraw());
+                  Promise.all([
+                    session.refresh(),
+                    timeline.refresh()
+                  ])
+                  .then(() => m.redraw())
+                  .catch(() => m.redraw());
                   break;
               }
             }

@@ -161,6 +161,8 @@ function refresh() {
       }
       throw err;
     });
+  } else {
+    return Promise.resolve(false);
   }
 }
 

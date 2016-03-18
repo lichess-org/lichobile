@@ -23,7 +23,10 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
-  challenges: data => utils.autoredraw(challengesApi.set.bind(undefined, data))
+  challenges: data => {
+    challengesApi.set(data);
+    m.redraw();
+  }
 };
 
 function destroy() {

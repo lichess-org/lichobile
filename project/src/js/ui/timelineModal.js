@@ -34,12 +34,11 @@ timelineModal.view = function() {
       m('h2', i18n('timeline'))
     ]),
     m('div.modal_content', {}, [
-      m('div.timelineEntries.native_scroller', timeline.get().map(e => {
-        switch (e.type) {
-          case 'follow':
-            return renderFollow(e);
-          case 'game-end':
-            return renderGameEnd(e);
+      m('ul.timelineEntries.native_scroller', timeline.get().map(e => {
+        if (e.type === 'follow') {
+          return renderFollow(e);
+        } else if (e.type === 'game-end') {
+          return renderGameEnd(e);
         }
       }))
     ])
@@ -50,8 +49,10 @@ timelineModal.view = function() {
 function renderFollow(entry) {
   const fromNow = window.moment(entry.date).fromNow();
   const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2);
+  const key = 'follow' + entry.date;
+
   return (
-    <div className="list_item timelineEntry fa fa-arrow-circle-right" key={entry.date}
+    <li className="list_item timelineEntry fa fa-arrow-circle-right" key={key}
       config={helper.ontouch(() => {
         animateClose().then(() =>
           m.route('/@/' + entry.data.u1)
@@ -60,7 +61,7 @@ function renderFollow(entry) {
     >
       {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
       <small><em>&nbsp;{fromNow}</em></small>
-    </div>
+    </li>
   );
 }
 
@@ -68,18 +69,19 @@ function renderGameEnd(entry) {
   const icon = gameIcon(entry.data.perf);
   const result = entry.data.win ? 'Victory' : 'Defeat';
   const fromNow = window.moment(entry.date).fromNow();
+  const key = 'game-end' + entry.date;
 
   return (
-    <div className="list_item timelineEntry" key={entry.date} data-icon={icon}
+    <li className="list_item timelineEntry" key={key} data-icon={icon}
       config={helper.ontouch(() => {
-        animateClose().then(() =>
+        return animateClose().then(() =>
           m.route('/game/' + entry.data.playerId)
         );
       })}
     >
-      <strong>{result}</strong> vs. <strong>{entry.data.opponent}</strong>
+      <strong>{result}</strong> vs. {entry.data.opponent}
       <small><em>&nbsp;{fromNow}</em></small>
-    </div>
+    </li>
   );
 }
 

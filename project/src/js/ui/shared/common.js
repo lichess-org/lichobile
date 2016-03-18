@@ -39,7 +39,7 @@ export function timelineButton() {
     <button className="main_header_button timeline_button fa fa-bell" key="timeline"
       config={helper.ontouch(timelineModal.open, longAction)}
     >
-      <span className="chip">{unreadCount}</span>
+      <span className="chip nb_timeline">{unreadCount}</span>
     </button>
   );
 }

@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
 import formWidgets from '../shared/form';
@@ -49,14 +50,14 @@ function renderAnalyseMenu(ctrl) {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
     }, i18n('startNewAnalysis')),
-    m('button[data-icon=U]', {
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
-    }, i18n('continueFromHere')),
-    m('button.fa.fa-pencil', {
+    }, i18n('continueFromHere')) : null,
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button.fa.fa-pencil', {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
-    }, i18n('boardEditor')),
+    }, i18n('boardEditor')) : null,
     ctrl.ceval.allowed() ? m('div.action', {
       key: 'enableCeval'
     }, [

@@ -514,9 +514,11 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         config={helper.ontouch(ctrl.menu.open)}
       />
-      <button className="action_bar_button fa fa-share-alt" key="sharePGN"
-        config={sharePGN}
-      />
+      {ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ?
+        <button className="action_bar_button fa fa-share-alt" key="sharePGN"
+          config={sharePGN}
+        /> : null
+      }
       {ctrl.notes ? button.notes(ctrl) : null}
       <button className="action_bar_button" data-icon="B" key="flipBoard"
         config={helper.ontouch(

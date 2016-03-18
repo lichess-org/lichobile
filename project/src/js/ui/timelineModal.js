@@ -3,7 +3,6 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import timeline from '../lichess/timeline';
 import { gameIcon } from '../utils';
-import moment from 'moment';
 import m from 'mithril';
 
 const timelineModal = {};
@@ -35,16 +34,16 @@ timelineModal.view = function() {
       m('h2', i18n('timeline'))
     ]),
     m('div.modal_content', {}, [
-      m('div.timelineEntries.native_scroller', timeline.get().map(renderEntry))
+      m('div.timelineEntries.native_scroller', timeline.get().map(renderGameEnd))
     ])
   ]);
 
 };
 
-function renderEntry(entry) {
+function renderGameEnd(entry) {
   const icon = gameIcon(entry.data.perf);
   const result = entry.data.win ? 'Victory' : 'Defeat';
-  const fromNow = moment(entry.date).fromNow();
+  const fromNow = window.moment(entry.date).fromNow();
 
   return (
     <div className="list_item timelineEntry" key={entry.date} data-icon={icon}

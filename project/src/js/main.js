@@ -129,7 +129,7 @@ function onOffline() {
 
 function onResume() {
   socket.connect();
-  timeline.refresh();
+  timeline.refresh().then(() => m.redraw());
 }
 
 function onPause() {

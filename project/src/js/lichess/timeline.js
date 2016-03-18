@@ -1,5 +1,4 @@
 import storage from '../storage';
-import session from '../session';
 import { timeline as getTimeline } from '../xhr';
 
 const STORAGEKEY = 'timeline.timestamp';
@@ -23,9 +22,7 @@ export default {
   },
 
   refresh() {
-    if (session.isConnected()) {
-      getTimeline().then(set);
-    }
+    getTimeline().then(set);
   },
 
   set,

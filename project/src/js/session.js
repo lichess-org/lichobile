@@ -4,6 +4,7 @@ import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
 import { pick, mapValues } from 'lodash/object';
+import { throttle } from 'lodash/function';
 import m from 'mithril';
 
 var session = null;
@@ -165,15 +166,15 @@ function refresh() {
 
 export default {
   isConnected,
-  login,
-  rememberLogin,
   logout,
   signup,
-  refresh,
+  login: throttle(login, 1000),
+  rememberLogin: throttle(rememberLogin, 1000),
+  refresh: throttle(refresh, 1000),
+  savePreferences: throttle(savePreferences, 1000),
   get: getSession,
   getUserId,
   nowPlaying,
   myTurnGames,
-  savePreferences,
   lichessBackedProp
 };

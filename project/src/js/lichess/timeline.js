@@ -1,8 +1,10 @@
 import storage from '../storage';
+import session from '../session';
+import { timeline as getTimeline } from '../xhr';
 
 const STORAGEKEY = 'timeline.timestamp';
 
-const supportedTypes = ['game-end'];
+const supportedTypes = ['follow', 'game-end'];
 
 var timeline = [];
 var lastRead = null;
@@ -11,14 +13,22 @@ function setLastRead(v) {
   lastRead = v;
 }
 
+function set(t) {
+  timeline = t.entries.filter(o => supportedTypes.indexOf(o.type) !== -1);
+}
+
 export default {
   get() {
     return timeline;
   },
 
-  set(t) {
-    timeline = t.entries.filter(o => supportedTypes.indexOf(o.type) !== -1);
+  refresh() {
+    if (session.isConnected()) {
+      getTimeline().then(set);
+    }
   },
+
+  set,
 
   setLastRead,
 

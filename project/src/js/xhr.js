@@ -126,7 +126,7 @@ export function setServerLang(lang) {
 }
 
 export function timeline() {
-  return request('/timeline', {}, true);
+  return request('/timeline', { background: true }, false);
 }
 
 export function status() {

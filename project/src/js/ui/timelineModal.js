@@ -34,11 +34,35 @@ timelineModal.view = function() {
       m('h2', i18n('timeline'))
     ]),
     m('div.modal_content', {}, [
-      m('div.timelineEntries.native_scroller', timeline.get().map(renderGameEnd))
+      m('div.timelineEntries.native_scroller', timeline.get().map(e => {
+        switch (e.type) {
+          case 'follow':
+            return renderFollow(e);
+          case 'game-end':
+            return renderGameEnd(e);
+        }
+      }))
     ])
   ]);
 
 };
+
+function renderFollow(entry) {
+  const fromNow = window.moment(entry.date).fromNow();
+  const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2);
+  return (
+    <div className="list_item timelineEntry fa fa-arrow-circle-right" key={entry.date}
+      config={helper.ontouch(() => {
+        animateClose().then(() =>
+          m.route('/@/' + entry.data.u1)
+        );
+      })}
+    >
+      {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+      <small><em>&nbsp;{fromNow}</em></small>
+    </div>
+  );
+}
 
 function renderGameEnd(entry) {
   const icon = gameIcon(entry.data.perf);

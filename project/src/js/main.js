@@ -11,7 +11,7 @@ import * as utils from './utils';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
-import { status as xhrStatus, setServerLang, getChallenges, timeline as getTimeline } from './xhr';
+import { status as xhrStatus, setServerLang, getChallenges } from './xhr';
 import challengesApi from './lichess/challenges';
 import timeline from './lichess/timeline';
 import helper from './ui/helper';
@@ -100,7 +100,7 @@ function onResize() {
 function onOnline() {
   session.rememberLogin().then(() => {
     // load timeline
-    getTimeline().then(timeline.set);
+    timeline.refresh();
     // load challenges
     getChallenges().then(challengesApi.set);
     // first time login on app start or just try to reconnect socket
@@ -129,6 +129,7 @@ function onOffline() {
 
 function onResume() {
   socket.connect();
+  timeline.refresh();
 }
 
 function onPause() {

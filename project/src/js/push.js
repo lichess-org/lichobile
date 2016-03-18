@@ -56,7 +56,7 @@ export default {
                   break;
                 case 'gameFinish':
                   session.refresh();
-                  getTimeline().then(timeline.set);
+                  timeline.refresh();
                   break;
               }
             }

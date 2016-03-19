@@ -43,7 +43,6 @@ timelineModal.view = function() {
       }))
     ])
   ]);
-
 };
 
 function renderFollow(entry) {

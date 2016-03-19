@@ -1,4 +1,5 @@
 import settings from '../settings';
+import { getChallenges } from '../xhr';
 
 var incoming = [];
 var sending = [];
@@ -6,6 +7,11 @@ var sending = [];
 function supportedAndCreated(c) {
   return settings.game.supportedVariants.indexOf(c.variant.key) !== -1 &&
     c.status === 'created';
+}
+
+function set(data) {
+  incoming = data.in;
+  sending = data.out;
 }
 
 export default {
@@ -21,9 +27,10 @@ export default {
     return sending.filter(supportedAndCreated);
   },
 
-  set(data) {
-    incoming = data.in;
-    sending = data.out;
+  set,
+
+  refresh() {
+    return getChallenges().then(set);
   },
 
   remove(id) {

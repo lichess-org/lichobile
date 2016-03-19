@@ -1,7 +1,7 @@
 import session from './session';
 import settings from './settings';
 import { request } from './http';
-import { getChallenges, timeline as getTimeline } from './xhr';
+import { timeline as getTimeline } from './xhr';
 import challengesApi from './lichess/challenges';
 import timeline from './lichess/timeline';
 import m from 'mithril';
@@ -47,8 +47,15 @@ export default {
             if (payload.userData) {
               switch (payload.userData.type) {
                 case 'challengeCreate':
+                  challengesApi.refresh().then(() => m.redraw());
+                  break;
                 case 'challengeAccept':
-                  getChallenges().then(challengesApi.set).then(() => m.redraw());
+                  Promise.all([
+                    challengesApi.refresh(),
+                    session.refresh()
+                  ])
+                  .then(() => m.redraw())
+                  .catch(() => m.redraw());
                   break;
                 case 'gameMove':
                   session.refresh().then(v => {

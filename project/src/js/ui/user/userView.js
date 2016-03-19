@@ -1,5 +1,6 @@
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton, empty } from '../shared/common';
+import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -76,6 +77,7 @@ function renderProfile(user) {
         <p className="profileBio">{user.profile.bio}</p> : null
         }
         <div className="userInfos">
+          <p className="language fa fa-comment-o withIcon">{getLanguageNativeName(user.language)}</p>
           <p className="location">
             {location}
             {country ?

@@ -80,6 +80,14 @@ export function f() {
 
 export function noop() {}
 
+export function lightPlayerName(player) {
+  if (player) {
+    return (player.title ? player.title + ' ' + player.name : player.name);
+  } else {
+    return 'Anonymous';
+  }
+}
+
 export function playerName(player, withRating) {
   if (player.username || player.user) {
     var name = player.username || player.user.username;

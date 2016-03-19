@@ -1,4 +1,5 @@
 import settings from '../settings';
+import { throttle } from 'lodash/function';
 import { getChallenges } from '../xhr';
 
 var incoming = [];
@@ -30,7 +31,7 @@ export default {
   set,
 
   refresh() {
-    return getChallenges().then(set);
+    return throttle(getChallenges, 1000)().then(set);
   },
 
   remove(id) {

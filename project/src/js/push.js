@@ -1,5 +1,7 @@
 import session from './session';
 import settings from './settings';
+import i18n from './i18n';
+import { lightPlayerName } from './utils';
 import { request } from './http';
 import { timeline as getTimeline } from './xhr';
 import challengesApi from './lichess/challenges';
@@ -54,8 +56,11 @@ export default {
                     challengesApi.refresh(),
                     session.refresh()
                   ])
-                  .then(() => m.redraw())
-                  .catch(() => m.redraw());
+                  .then(() => {
+                    window.plugins.toast.show(
+                      i18n('userAcceptsYourChallenge', lightPlayerName(payload.userData.joiner)), 'long', 'top');
+                    m.redraw();
+                  });
                   break;
                 case 'gameMove':
                   session.refresh().then(v => {
@@ -67,8 +72,7 @@ export default {
                     session.refresh(),
                     timeline.refresh()
                   ])
-                  .then(() => m.redraw())
-                  .catch(() => m.redraw());
+                  .then(() => m.redraw());
                   break;
               }
             }
@@ -77,8 +81,11 @@ export default {
           else if (payload.userData) {
             switch (payload.userData.type) {
               case 'challengeCreate':
-              case 'challengeAccept':
                 m.route(`/challenge/${payload.userData.challengeId}`);
+                break;
+              case 'challengeAccept':
+                challengesApi.refresh();
+                m.route(`/game/${payload.userData.challengeId}`);
                 break;
               case 'gameMove':
                 m.route(`/game/${payload.userData.fullId}`);

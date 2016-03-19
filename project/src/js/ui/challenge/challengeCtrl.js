@@ -56,6 +56,7 @@ export default function controller() {
     },
     joinChallenge() {
       return acceptChallenge(challenge().id)
+      .then(() => challengesApi.remove(challenge().id))
       .then(d => m.route('/game' + d.url.round));
     },
     declineChallenge() {

@@ -37,7 +37,8 @@ const untranslated = {
   localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.',
   startNewAnalysis: 'Start new analysis',
   showBestMove: 'Show computer best move',
-  followers: 'Followers'
+  followers: 'Followers',
+  userAcceptsYourChallenge: '%s accepts your challenge!'
 };
 
 const defaultCode = 'en';

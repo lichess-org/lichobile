@@ -56,11 +56,11 @@ function renderProfileActions(user) {
       </li>
       <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
         <span className="fa fa-arrow-circle-right" />
-        {i18n('following')}
+        {i18n('nbFollowing', user.nbFollowing)}
       </li>
       <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/followers`))}>
         <span className="fa fa-arrow-circle-left" />
-        {i18n('followers')}
+        {i18n('nbFollowers', user.nbFollowers)}
       </li>
       <li className="side_link" config={helper.ontouch(menu.popup(timelineModal.open))}>
         <span className="fa fa-bell" />

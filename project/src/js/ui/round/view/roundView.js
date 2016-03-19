@@ -229,7 +229,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const playerName = utils.playerName(player, !isPortrait);
   const vConf = user ?
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName, position)) :
-    utils.noop;
+    helper.ontouch(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
 
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);

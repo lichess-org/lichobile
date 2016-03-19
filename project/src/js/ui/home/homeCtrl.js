@@ -1,6 +1,7 @@
 import socket from '../../socket';
 import settings from '../../settings';
 import { lobby as lobbyXhr } from '../../xhr';
+import { throttle } from 'lodash/function';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
 import m from 'mithril';
@@ -15,7 +16,7 @@ export default function homeCtrl() {
   const weekTopPlayers = m.prop([]);
 
   function onFeatured() {
-    return featuredXhr()
+    return throttle(featuredXhr, 1000)()
     .then(data => {
       featured(data);
       m.redraw();

@@ -1,9 +1,12 @@
 import { handleXhrError, backHistory } from '../../utils';
+import { throttle } from 'lodash/function';
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
 import challengesApi from '../../lichess/challenges';
 import i18n from '../../i18n';
 import socket from '../../socket';
 import m from 'mithril';
+
+const throttledPing = throttle(() => socket.send('ping'), 1000);
 
 export default function controller() {
   var pingTimeoutId;
@@ -11,6 +14,7 @@ export default function controller() {
 
   function reloadChallenge() {
     getChallenge(challenge().id).then(d => {
+      clearTimeout(pingTimeoutId);
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
@@ -22,13 +26,14 @@ export default function controller() {
           break;
       }
     }, err => {
+      clearTimeout(pingTimeoutId);
       handleXhrError(err);
       m.route('/');
     });
   }
 
   function pingNow() {
-    socket.send('ping');
+    throttledPing();
     pingTimeoutId = setTimeout(pingNow, 2000);
   }
 

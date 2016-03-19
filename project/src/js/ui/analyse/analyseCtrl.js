@@ -21,7 +21,7 @@ import menu from './menu';
 import m from 'mithril';
 
 export default function controller() {
-  this.source = m.route.param('source');
+  this.source = m.route.param('source') || 'offline';
   const gameId = m.route.param('id');
   const orientation = m.route.param('color');
   const fen = m.route.param('fen');

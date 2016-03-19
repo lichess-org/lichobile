@@ -112,7 +112,7 @@ export default function controller() {
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
     showGround();
-    if (direction === 'forward') {
+    if (this.vm.step && this.vm.step.san && direction === 'forward') {
       if (this.vm.step.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
     }

@@ -121,9 +121,9 @@ function awaitInvitePopup(ctrl) {
           gameInfos(challenge),
           isPersistent ? m('div', [
             m('br'),
-            m('button.fa.fa-home.withIcon', {
+            m('button', {
               config: helper.ontouch(() => m.route('/'))
-            }, i18n('returnToHome'))
+            }, [m('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
         ]);
       },

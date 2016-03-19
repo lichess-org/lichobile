@@ -137,12 +137,12 @@ export default {
   analysisBoard: function(ctrl) {
     const d = ctrl.data;
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
-      return m('button.fa.fa-eye', {
+      return m('button', {
         config: helper.ontouch(() => {
           socket.send('rematch-no');
           m.route(`/analyse/online/${d.game.id}/${analysisBoardOrientation(d)}`);
         })
-      }, i18n('analysis'));
+      }, [m('span.fa.fa-eye'), i18n('analysis')]);
     }
   },
   newOpponent: function(ctrl) {
@@ -161,10 +161,10 @@ export default {
     const d = ctrl.data;
     const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.tournament && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
-      return m('button.fa.fa-refresh', {
+      return m('button', {
         key: 'rematch',
         config: helper.ontouch(function() { socket.send('rematch-yes'); })
-      }, i18n('rematch'));
+      }, [m('span.fa.fa-refresh'), i18n('rematch')]);
     } else {
       return null;
     }

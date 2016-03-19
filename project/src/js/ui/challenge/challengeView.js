@@ -15,13 +15,15 @@ export default function view(ctrl) {
   const board = viewOnlyBoardContent;
   const challenge = ctrl.challenge();
 
-  if (challenge.direction === 'in') {
-    overlay = joinPopup(ctrl);
-  } else if (challenge.direction === 'out') {
-    if (challenge.destUser) {
-      overlay = awaitChallengePopup(ctrl);
-    } else {
-      overlay = awaitInvitePopup(ctrl);
+  if (challenge) {
+    if (challenge.direction === 'in') {
+      overlay = joinPopup(ctrl);
+    } else if (challenge.direction === 'out') {
+      if (challenge.destUser) {
+        overlay = awaitChallengePopup(ctrl);
+      } else {
+        overlay = awaitInvitePopup(ctrl);
+      }
     }
   }
 

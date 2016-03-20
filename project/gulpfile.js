@@ -7,13 +7,12 @@ var gutil = require('gulp-util');
 var preprocess = require('gulp-preprocess');
 var watchify = require('watchify');
 var browserify = require('browserify');
+var babelify = require('babelify');
 var stylus = require('gulp-stylus');
 var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
 var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
-var babelify = require('babelify');
-var mithrilify = require('mithrilify');
 
 // command line options
 var minimistOptions = {
@@ -48,10 +47,7 @@ function buildScripts(src, dest, mode) {
   var opts = (mode === 'dev') ? { debug: true } : {};
 
   return browserify(src + '/js/main.js', opts)
-    .transform(babelify.configure({
-      blacklist: ["react"]
-    }))
-    .transform(mithrilify, {msx_opts: {precompile: true}})
+    .transform(babelify, {presets: ['es2015']})
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))
@@ -79,10 +75,7 @@ gulp.task('watch-scripts', function() {
 
   var bundleStream = watchify(
     browserify('./src/js/main.js', opts)
-    .transform(babelify.configure({
-      blacklist: ["react"]
-    }))
-    .transform(mithrilify, {msx_opts: {precompile: true}})
+    .transform(babelify, {presets: ['es2015']})
   );
 
   function rebundle() {

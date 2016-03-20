@@ -1,6 +1,7 @@
 import helper from '../helper';
 import uniq from 'lodash/array/uniq';
 import session from '../../session';
+import settings from '../../settings';
 import * as xhr from '../../xhr';
 import socket from '../../socket';
 import Zanimo from 'zanimo';
@@ -24,7 +25,7 @@ export default function controller() {
 
   function reload(feedback) {
     xhr.seeks(feedback).then(function(d) {
-      pool = fixSeeks(d);
+      pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
       m.redraw();
     });
   }

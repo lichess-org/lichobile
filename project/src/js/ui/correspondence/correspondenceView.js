@@ -1,11 +1,11 @@
-import * as utils from '../utils';
-import helper from './helper';
-import layout from './layout';
-import { header as headerWidget, empty }from './shared/common';
-import i18n from '../i18n';
-import session from '../session';
-import loginModal from './loginModal';
-import newGameForm from './newGameForm';
+import * as utils from '../../utils';
+import helper from '../helper';
+import layout from '../layout';
+import { header as headerWidget, empty } from '../shared/common';
+import i18n from '../../i18n';
+import session from '../../session';
+import loginModal from '../loginModal';
+import newGameForm from '../newGameForm';
 import m from 'mithril';
 
 export default function view(ctrl) {

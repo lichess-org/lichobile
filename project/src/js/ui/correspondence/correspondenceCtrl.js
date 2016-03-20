@@ -1,8 +1,8 @@
-import helper from './helper';
+import helper from '../helper';
 import uniq from 'lodash/array/uniq';
-import session from '../session';
-import * as xhr from '../xhr';
-import socket from '../socket';
+import session from '../../session';
+import * as xhr from '../../xhr';
+import socket from '../../socket';
 import Zanimo from 'zanimo';
 import m from 'mithril';
 

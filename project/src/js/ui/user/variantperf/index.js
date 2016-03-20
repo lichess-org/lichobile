@@ -1,4 +1,7 @@
+import controller from './variantPerfCtrl';
+import view from './variantPerfView';
+
 export default {
-  controller: require('./variantPerfCtrl'),
-  view: require('./variantPerfView')
+  controller,
+  view
 };

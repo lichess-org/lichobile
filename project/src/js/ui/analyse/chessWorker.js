@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 
-export default function chessWorker(self) {
+module.exports = function(self) {
   function forsyth(role) {
     return role === 'knight' ? 'n' : role[0];
   }
@@ -70,4 +70,4 @@ export default function chessWorker(self) {
       }
     });
   }
-}
+};

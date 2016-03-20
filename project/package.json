@@ -51,7 +51,7 @@
     "lodash": "3.8.0",
     "mithril": "veloce/mithril.js#v8opt",
     "moment": "2.8.4",
-    "polythene": "0.2.13",
+    "polythene": "0.2.19",
     "signals": "1.0.0",
     "webworkify": "1.0.2",
     "zanimo": "git://github.com/veloce/Zanimo"

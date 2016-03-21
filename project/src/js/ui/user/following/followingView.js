@@ -7,7 +7,7 @@ import i18n from '../../../i18n';
 export default function view(ctrl) {
 
   return layout.free(
-    header.bind(undefined, i18n('following')),
+    header.bind(undefined, 'Following'),
     renderBody.bind(undefined, ctrl),
     empty,
     empty

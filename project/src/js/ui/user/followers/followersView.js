@@ -1,12 +1,11 @@
 import { empty, header } from '../../shared/common';
 import { renderPlayer } from '../following/followingView';
 import layout from '../../layout';
-import i18n from '../../../i18n';
 
 export default function view(ctrl) {
 
   return layout.free(
-    header.bind(undefined, i18n('followers')),
+    header.bind(undefined, 'Followers'),
     renderBody.bind(undefined, ctrl),
     empty,
     empty

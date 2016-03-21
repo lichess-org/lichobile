@@ -17,7 +17,7 @@ import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
 import { noop, partialf, playerName, gameIcon } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
-import { view as renderNotes } from '../round/notes';
+import notes from '../round/notes';
 import button from '../round/view/button';
 
 export default function analyseView(ctrl) {
@@ -38,7 +38,7 @@ function overlay(ctrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
-    ctrl.notes ? renderNotes(ctrl.notes) : null,
+    ctrl.notes ? notes.view(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup)
   ];
 }

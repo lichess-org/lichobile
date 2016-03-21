@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
@@ -46,6 +46,6 @@ export default {
       );
     }
 
-    return layout.free(header, renderBody, empty, empty);
+    return layout.free(header, renderBody);
   }
 };

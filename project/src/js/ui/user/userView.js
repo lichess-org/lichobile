@@ -1,5 +1,5 @@
 import userPerfs from '../../lichess/perfs';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
@@ -31,7 +31,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, profile, empty, empty);
+  return layout.free(header, profile);
 }
 
 function renderWarnings(user) {

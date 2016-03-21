@@ -49,9 +49,13 @@ export default {
     return (
       <div className={'view-container ' + background}>
         <main id="page">
-          <header className="main_header">{header()}</header>
-          <div className="content">{content()}</div>
-          <footer className="main_footer">{footer()}</footer>
+          <header className="main_header">
+            {header()}
+          </header>
+          <div className={'content' + (footer ? ' withFooter' : '')}>
+            {content()}
+          </div>
+          { footer ? <footer className="main_footer">{footer()}</footer> : null }
           { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
         </main>
         {menuView()}

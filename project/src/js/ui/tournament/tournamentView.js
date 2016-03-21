@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import h from '../helper';
-import { header as headerWidget, backButton, empty, pad} from '../shared/common';
+import { header as headerWidget, backButton, pad} from '../shared/common';
 import layout from '../layout';
 import m from 'mithril';
 import i18n from '../../i18n';
@@ -12,7 +12,7 @@ export default function view(ctrl) {
   );
   const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, empty, empty);
+  return layout.free(headerCtrl, bodyCtrl);
 }
 
 function tournamentBody(ctrl) {

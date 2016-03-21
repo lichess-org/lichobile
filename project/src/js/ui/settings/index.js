@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import helper from '../helper';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
 import settings from '../../settings';
@@ -19,7 +19,7 @@ export default {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('settings'))
     );
-    return layout.free(header, renderBody, empty);
+    return layout.free(header, renderBody);
   }
 };
 

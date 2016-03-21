@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import h from '../helper';
-import { empty, menuButton, timelineButton, friendsButton, userStatus } from '../shared/common';
+import { menuButton, timelineButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
@@ -11,7 +11,7 @@ export default function view(ctrl) {
   const bodyCtrl = body.bind(undefined, ctrl);
   const searchModalCtrl = searchModal.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, empty, searchModalCtrl);
+  return layout.free(headerCtrl, bodyCtrl, null, searchModalCtrl);
 }
 
 function header(ctrl) {

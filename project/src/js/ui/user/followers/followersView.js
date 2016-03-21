@@ -1,4 +1,4 @@
-import { empty, header } from '../../shared/common';
+import { header } from '../../shared/common';
 import { renderPlayer } from '../following/followingView';
 import layout from '../../layout';
 
@@ -6,9 +6,7 @@ export default function view(ctrl) {
 
   return layout.free(
     header.bind(undefined, 'Followers'),
-    renderBody.bind(undefined, ctrl),
-    empty,
-    empty
+    renderBody.bind(undefined, ctrl)
   );
 }
 

@@ -1,4 +1,4 @@
-import { empty, header } from '../../shared/common';
+import { header } from '../../shared/common';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import layout from '../../layout';
@@ -8,9 +8,7 @@ export default function view(ctrl) {
 
   return layout.free(
     header.bind(undefined, 'Following'),
-    renderBody.bind(undefined, ctrl),
-    empty,
-    empty
+    renderBody.bind(undefined, ctrl)
   );
 }
 

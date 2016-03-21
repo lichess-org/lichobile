@@ -1,5 +1,5 @@
 import h from '../../helper';
-import {header, empty, pad} from '../../shared/common';
+import {header, pad} from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
@@ -9,7 +9,7 @@ import isEmpty from 'lodash/isEmpty';
 export default function view(ctrl) {
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
 
-  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, empty);
+  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl);
 }
 
 const TABS = [{

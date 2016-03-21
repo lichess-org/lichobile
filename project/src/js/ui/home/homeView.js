@@ -5,7 +5,7 @@ import i18n from '../../i18n';
 import helper from '../helper';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
-import { header as headerWidget, userStatus, empty } from '../shared/common';
+import { header as headerWidget, userStatus } from '../shared/common';
 import miniBoard from '../shared/miniBoard';
 
 export default function homeView(ctrl) {
@@ -46,7 +46,7 @@ export default function homeView(ctrl) {
 
   const header = headerWidget.bind(undefined, 'lichess.org');
 
-  return layout.free(header, body, empty);
+  return layout.free(header, body);
 }
 
 function renderFeatured(ctrl) {

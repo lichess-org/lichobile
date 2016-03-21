@@ -1,7 +1,7 @@
 import * as utils from '../../utils';
 import helper from '../helper';
 import layout from '../layout';
-import { header as headerWidget, empty } from '../shared/common';
+import { header as headerWidget } from '../shared/common';
 import i18n from '../../i18n';
 import session from '../../session';
 import loginModal from '../loginModal';
@@ -12,7 +12,7 @@ import m from 'mithril';
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, i18n('correspondence'));
 
-  return layout.free(header, renderBody.bind(undefined, ctrl), empty);
+  return layout.free(header, renderBody.bind(undefined, ctrl), renderFooter);
 }
 
 const tabButtons = [
@@ -54,12 +54,15 @@ function renderBody(ctrl) {
       ctrl.selectedTab() === 'public' ?
         renderPool(ctrl) :
         renderChallenges(ctrl)
-    ),
-    m('button#newGameCorres', {
-      key: 'seeks_createagame',
-      config: helper.ontouch(newGameForm.openCorrespondence)
-    }, [m('span.fa.fa-plus-circle'), i18n('createAGame')])
+    )
   ];
+}
+
+function renderFooter() {
+  return m('div.correpondenceFooter', m('button#newGameCorres', {
+    key: 'seeks_createagame',
+    config: helper.ontouch(newGameForm.openCorrespondence)
+  }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]));
 }
 
 function renderChallenges(ctrl) {

@@ -1,5 +1,6 @@
 import session from '../../session';
 import loginModal from '../loginModal';
+import challengesApi from '../../lichess/challenges';
 import layout from '../layout';
 import * as utils from '../../utils';
 import helper from '../helper';
@@ -92,8 +93,7 @@ function joinPopup(ctrl) {
 function awaitInvitePopup(ctrl) {
   const challenge = ctrl.challenge();
 
-  const isPersistent = challenge.timeControl.type === 'correspondence' ||
-    challenge.timeControl.type === 'unlimited';
+  const isPersistent = challengesApi.isPersistent(challenge);
 
   return function() {
     return popupWidget(

@@ -6,48 +6,102 @@ import i18n from '../../i18n';
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
+import tabs from '../shared/tabs';
 import m from 'mithril';
 
 export default function view(ctrl) {
-
   const header = utils.partialf(headerWidget, i18n('correspondence'));
-  const body = function() {
 
-    if (!session.isConnected()) {
-      return [
-        m('div.seeks.disconnected', [
-          m('div.seeks_background'),
-          m('div.seeks_scroller', [
-            m('div.vertical_align.must_signin', i18n('mustSignIn'))
-          ]),
-          m('button.fat', {
-            key: 'seeks_login',
-            config: helper.ontouch(loginModal.open)
-          }, i18n('logIn'))
-        ])
-      ];
-    }
-
-    return [
-      m('div.native_scroller.seeks_scroller', ctrl.getPool().length ?
-        m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))) :
-        m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
-      ),
-      m('button#newGameCorres', {
-        key: 'seeks_createagame',
-        config: helper.ontouch(newGameForm.openCorrespondence)
-      }, [m('span.fa.fa-plus-circle'), i18n('createAGame')])
-    ];
-  };
-
-  return layout.free(header, body, empty);
+  return layout.free(header, renderBody.bind(undefined, ctrl), empty);
 }
 
+const tabButtons = [
+  {
+    label: 'Public games',
+    key: 'public'
+  },
+  {
+    label: 'Challenges',
+    key: 'challenges'
+  }
+];
+
+function renderBody(ctrl) {
+  if (!session.isConnected()) {
+    return [
+      m('div.seeks.disconnected', [
+        m('div.seeks_background'),
+        m('div.seeks_scroller', [
+          m('div.vertical_align.must_signin', i18n('mustSignIn'))
+        ]),
+        m('button.fat', {
+          key: 'seeks_login',
+          config: helper.ontouch(loginModal.open)
+        }, i18n('logIn'))
+      ])
+    ];
+  }
+
+  const tabsBar = m.component(tabs, {
+    buttons: tabButtons,
+    selectedTab: ctrl.selectedTab(),
+    onTabChange: ctrl.selectedTab
+  });
+
+  return [
+    m('div.nav_header', tabsBar),
+    m('div.tab_content.native_scroller.seeks_scroller',
+      ctrl.selectedTab() === 'public' ?
+        renderPool(ctrl) :
+        renderChallenges(ctrl)
+    ),
+    m('button#newGameCorres', {
+      key: 'seeks_createagame',
+      config: helper.ontouch(newGameForm.openCorrespondence)
+    }, [m('span.fa.fa-plus-circle'), i18n('createAGame')])
+  ];
+}
+
+function renderChallenges(ctrl) {
+  return ctrl.sendingChallenges().length ?
+    m('ul', ctrl.sendingChallenges().map(utils.partialf(renderChallenge, ctrl))) :
+    m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+}
+
+function renderPool(ctrl) {
+  return ctrl.getPool().length ?
+    m('ul', ctrl.getPool().map(utils.partialf(renderSeek, ctrl))) :
+    m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+}
+
+function renderChallenge(ctrl, c) {
+  const playerName = c.destUser && utils.lightPlayerName(c.destUser);
+  return m('li', {
+    key: 'challenge' + c.id,
+    className: 'list_item sendingChallenge',
+    config: helper.ontouchY(
+      helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
+    )
+  }, [
+    m('div.icon', {
+      'data-icon': c.perf.icon
+    }),
+    m('div.body', [
+      m('div.player', playerName ? i18n('youAreChallenging', playerName) : 'Open challenge'),
+      m('div.variant', c.variant.name),
+      m('div.time', [
+        utils.challengeTime(c),
+        ', ',
+        i18n(c.mode === 1 ? 'rated' : 'casual')
+      ])
+    ])
+  ]);
+}
 
 function renderSeek(ctrl, seek) {
   var action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
   return m('li', {
-    key: seek.id,
+    key: 'seek' + seek.id,
     'id': seek.id,
     className: 'list_item seek ' + action,
     config: helper.ontouchY(utils.partialf(ctrl[action], seek.id))

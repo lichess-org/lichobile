@@ -1,4 +1,5 @@
 import helper from '../helper';
+import challengesApi from '../../lichess/challenges';
 import uniqBy from 'lodash/uniqBy';
 import session from '../../session';
 import settings from '../../settings';
@@ -10,6 +11,8 @@ import m from 'mithril';
 export default function controller() {
 
   var pool = [];
+  const selectedTab = m.prop('public');
+  const sendingChallenges = m.prop(getSendingCorres());
 
   helper.analyticsTrackView('Correspondence seeks');
 
@@ -23,6 +26,18 @@ export default function controller() {
     });
   });
 
+  challengesApi.refresh().then(() => {
+    sendingChallenges(getSendingCorres());
+  });
+
+  function getSendingCorres() {
+    return challengesApi.sending().filter(challengesApi.isPersistent);
+  }
+
+  function cancelChallenge(id) {
+    return xhr.cancelChallenge(id).then(() => challengesApi.remove(id));
+  }
+
   function reload(feedback) {
     xhr.seeks(feedback).then(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
@@ -32,11 +47,14 @@ export default function controller() {
   reload(true);
 
   return {
+    selectedTab,
+    sendingChallenges,
+    cancelChallenge,
     getPool: function() {
       return pool;
     },
     cancel: function(seekId) {
-      return Zanimo(document.getElementById(seekId), 'opacity', '0', '500', 'ease-out')
+      return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
         .then(() => socket.send('cancelSeek', seekId))
         .catch(console.log.bind(console));
     },

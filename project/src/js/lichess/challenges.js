@@ -37,5 +37,11 @@ export default {
   remove(id) {
     incoming = incoming.filter(c => c.id !== id);
     sending = sending.filter(c => c.id !== id);
+  },
+
+  isPersistent(c) {
+    return c.timeControl.type === 'correspondence' ||
+      c.timeControl.type === 'unlimited';
   }
+
 };

@@ -80,9 +80,10 @@ export function f() {
 
 export function noop() {}
 
-export function lightPlayerName(player) {
+export function lightPlayerName(player, withRating) {
   if (player) {
-    return (player.title ? player.title + ' ' + player.name : player.name);
+    return (player.title ? player.title + ' ' + player.name : player.name) + (
+      withRating ? ' (' + player.rating + ')' : '');
   } else {
     return 'Anonymous';
   }

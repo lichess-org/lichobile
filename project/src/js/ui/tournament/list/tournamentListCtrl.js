@@ -5,16 +5,18 @@ import helper from '../../helper';
 import m from 'mithril';
 
 export default function controller() {
-  socket.createDefault();
   helper.analyticsTrackView('Tournament List');
+
   const tournaments = m.prop({});
+  const currentTab = m.prop('started');
 
   xhr.currentTournaments().then(data => {
     tournaments(data);
     return data;
   }, err => utils.handleXhrError(err));
 
-  const currentTab = m.prop(0);
+  socket.createDefault();
+
   return {
     tournaments,
     currentTab,

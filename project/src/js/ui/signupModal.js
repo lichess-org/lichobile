@@ -2,6 +2,7 @@ import session from '../session';
 import helper from './helper';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
+import loginModal from './loginModal';
 import m from 'mithril';
 
 const signupModal = {};
@@ -16,7 +17,7 @@ function submit(form) {
   window.cordova.plugins.Keyboard.close();
   session.signup(login, email, pass).then(function() {
     signupModal.close();
-    require('./loginModal').close();
+    loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
   }, function(error) {
     var data = error.response;

@@ -1,8 +1,9 @@
 import work from 'webworkify';
+import chessWorker from './chessWorker';
 
 export default function chessLogic(ctrl) {
 
-  const worker = work(require('./chessWorker'));
+  const worker = work(chessWorker);
 
   function askWorker(msg, callback) {
     function listen(e) {

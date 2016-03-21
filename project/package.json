@@ -46,7 +46,7 @@
     "babelify": "7.2.0",
     "browserify": "13.0.0",
     "watchify": "3.7.0",
-    "webworkify": "1.0.2",
+    "webworkify": "1.1.0",
     "chart.js": "1.0.2",
     "chess.js": "git://github.com/veloce/chess.js#v0.9.2",
     "chessground-mobile": "veloce/chessground-mobile",

@@ -1,5 +1,5 @@
 import helper from '../helper';
-import uniq from 'lodash/array/uniq';
+import uniqBy from 'lodash/uniqBy';
 import session from '../../session';
 import settings from '../../settings';
 import * as xhr from '../../xhr';
@@ -57,7 +57,7 @@ function fixSeeks(ss) {
     if (seekUserId(a) === userId) return -1;
     if (seekUserId(b) === userId) return 1;
   });
-  return uniq(ss, function(s) {
+  return uniqBy(ss, function(s) {
     var username = seekUserId(s) === userId ? s.id : s.username;
     var key = username + s.mode + s.variant.key + s.days;
     return key;

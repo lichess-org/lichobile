@@ -1,4 +1,4 @@
-import isFunction from 'lodash/lang/isFunction';
+import isFunction from 'lodash/isFunction';
 import { backHistory } from './utils';
 import session from './session';
 import m from 'mithril';

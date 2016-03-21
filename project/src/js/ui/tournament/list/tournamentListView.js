@@ -4,7 +4,7 @@ import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
 import tabs from 'polythene/tabs/tabs';
-import isEmpty from 'lodash/lang/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 
 export default function view(ctrl) {
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);

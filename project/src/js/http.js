@@ -1,4 +1,4 @@
-import merge from 'lodash/object/merge';
+import merge from 'lodash/merge';
 import spinner from './spinner';
 import m from 'mithril';
 

@@ -4,7 +4,7 @@ import { header as headerWidget, backButton, empty, pad} from '../shared/common'
 import layout from '../layout';
 import m from 'mithril';
 import i18n from '../../i18n';
-import isEmpty from 'lodash/lang/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,

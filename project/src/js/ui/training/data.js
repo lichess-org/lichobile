@@ -1,4 +1,4 @@
-import merge from 'lodash/object/merge';
+import merge from 'lodash/merge';
 import chess from './chess';
 import puzzle from './puzzle';
 import { oppositeColor } from '../../utils';

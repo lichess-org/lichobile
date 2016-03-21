@@ -1,5 +1,5 @@
 import store from './storage';
-import range from 'lodash/utility/range';
+import range from 'lodash/range';
 
 function localstorageprop(key, initialValue) {
   return function() {

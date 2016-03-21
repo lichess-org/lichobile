@@ -1,4 +1,3 @@
-import assign from 'lodash/object/assign';
 import storage from './storage';
 import StrongSocket from './StrongSocket';
 import * as utils from './utils';
@@ -98,7 +97,7 @@ function createChallenge(id, version, onOpen, handlers) {
         socketInstance.send('following_onlines');
       }
     },
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   socketInstance = new StrongSocket(url, version, opts);
 }
@@ -118,7 +117,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
           socketInstance.send('following_onlines');
         }
       },
-      events: assign({}, defaultHandlers, handlers)
+      events: Object.assign({}, defaultHandlers, handlers)
     }
   );
 }

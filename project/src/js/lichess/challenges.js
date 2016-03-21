@@ -1,5 +1,5 @@
 import settings from '../settings';
-import { throttle } from 'lodash/function';
+import throttle from 'lodash/throttle';
 import { getChallenges } from '../xhr';
 
 var incoming = [];

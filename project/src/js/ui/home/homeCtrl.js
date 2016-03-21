@@ -1,7 +1,7 @@
 import socket from '../../socket';
 import settings from '../../settings';
 import { lobby as lobbyXhr } from '../../xhr';
-import { throttle } from 'lodash/function';
+import throttle from 'lodash/throttle';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
 import m from 'mithril';

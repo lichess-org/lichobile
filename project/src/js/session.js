@@ -3,7 +3,9 @@ import { hasNetwork, handleXhrError, noop, serializeQueryParameters } from './ut
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
-import { pick, mapValues, throttle } from 'lodash';
+import pick from 'lodash/pick';
+import mapValues from 'lodash/mapValues';
+import throttle from 'lodash/throttle';
 import m from 'mithril';
 
 var session = null;

@@ -1,4 +1,4 @@
-import { throttle } from 'lodash/function';
+import throttle from 'lodash/throttle';
 import data from './data';
 import * as utils from '../../utils';
 import sound from '../../sound';

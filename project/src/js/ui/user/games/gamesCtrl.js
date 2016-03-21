@@ -1,6 +1,6 @@
 import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
-import {throttle} from 'lodash/function';
+import throttle from 'lodash/throttle';
 import socket from '../../../socket';
 import * as utils from '../../../utils';
 import m from 'mithril';

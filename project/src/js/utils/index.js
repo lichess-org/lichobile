@@ -1,6 +1,6 @@
 import i18n from '../i18n';
 import storage from '../storage';
-import { cloneDeep } from 'lodash/lang';
+import cloneDeep from 'lodash/cloneDeep';
 import m from 'mithril';
 
 export function autoredraw(action) {

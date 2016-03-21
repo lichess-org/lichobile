@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from '../shared/offlineRound/promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { debounce } from 'lodash/function';
+import debounce from 'lodash/debounce';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import helper from '../helper';

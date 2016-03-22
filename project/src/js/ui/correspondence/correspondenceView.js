@@ -45,7 +45,11 @@ function renderBody(ctrl) {
   const tabsBar = m.component(tabs, {
     buttons: tabButtons,
     selectedTab: ctrl.selectedTab(),
-    onTabChange: ctrl.selectedTab
+    onTabChange: k => {
+      const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+      window.history.replaceState(null, null, loc + '?tab=' + k);
+      ctrl.selectedTab(k);
+    }
   });
 
   return [
@@ -79,26 +83,26 @@ function renderPool(ctrl) {
 
 function renderChallenge(ctrl, c) {
   const playerName = c.destUser && utils.lightPlayerName(c.destUser);
-  return m('li', {
-    key: 'challenge' + c.id,
-    className: 'list_item sendingChallenge',
-    config: helper.ontouchY(
-      helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
-    )
-  }, [
-    m('div.icon', {
-      'data-icon': c.perf.icon
-    }),
-    m('div.body', [
-      m('div.player', playerName ? i18n('youAreChallenging', playerName) : 'Open challenge'),
-      m('div.variant', c.variant.name),
-      m('div.time', [
-        utils.challengeTime(c),
-        ', ',
-        i18n(c.mode === 1 ? 'rated' : 'casual')
-      ])
-    ])
-  ]);
+  return (
+    <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
+      config={helper.ontouchY(
+        helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
+      )}
+    >
+      <div className="icon" data-icon={c.perf.icon} />
+      <div className="body">
+        <div className="player">
+          {playerName ? i18n('youAreChallenging', playerName) : 'Open challenge'}
+        </div>
+        <div className="variant">
+          {c.variant.name}
+        </div>
+        <div className="time">
+          {utils.challengeTime(c)}, {i18n(c.mode === 1 ? 'rated' : 'casual')}
+        </div>
+      </div>
+    </li>
+  );
 }
 
 function renderSeek(ctrl, seek) {

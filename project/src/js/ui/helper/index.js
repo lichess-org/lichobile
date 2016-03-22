@@ -84,7 +84,7 @@ helper.fadesOut = function(callback, selector, time = 150) {
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
     return Zanimo(el, 'opacity', 0, time)
-    .then(utils.autoredraw.bind(undefined, callback))
+    .then(() => utils.autoredraw(callback))
     .catch(console.log.bind(console));
   };
 };

@@ -11,7 +11,7 @@ import m from 'mithril';
 export default function controller() {
 
   var pool = [];
-  const selectedTab = m.prop('public');
+  const selectedTab = m.prop(m.route.param('tab') || 'public');
   const sendingChallenges = m.prop(getSendingCorres());
 
   helper.analyticsTrackView('Correspondence seeks');
@@ -35,7 +35,11 @@ export default function controller() {
   }
 
   function cancelChallenge(id) {
-    return xhr.cancelChallenge(id).then(() => challengesApi.remove(id));
+    return xhr.cancelChallenge(id)
+    .then(() => {
+      challengesApi.remove(id);
+      sendingChallenges(getSendingCorres());
+    });
   }
 
   function reload(feedback) {

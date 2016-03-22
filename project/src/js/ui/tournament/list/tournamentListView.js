@@ -27,7 +27,11 @@ function tabNavigation (currentTabFn) {
     return m('.nav-header', m.component(tabs, {
         buttons: TABS,
         selectedTab: currentTabFn(),
-        onTabChange: currentTabFn
+        onTabChange: k => {
+          const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+          window.history.replaceState(null, null, loc + '?tab=' + k);
+          currentTabFn(k);
+        }
     }));
 }
 

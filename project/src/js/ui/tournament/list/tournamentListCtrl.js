@@ -8,7 +8,7 @@ export default function controller() {
   helper.analyticsTrackView('Tournament List');
 
   const tournaments = m.prop({});
-  const currentTab = m.prop('started');
+  const currentTab = m.prop(m.route.param('tab') || 'started');
 
   xhr.currentTournaments().then(data => {
     tournaments(data);

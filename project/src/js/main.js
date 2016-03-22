@@ -51,6 +51,9 @@ function main() {
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
+  window.addEventListener('unload', function() {
+    socket.destroy();
+  });
   window.addEventListener('resize', onResize, false);
 
   // iOs keyboard hack

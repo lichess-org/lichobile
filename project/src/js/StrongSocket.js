@@ -43,10 +43,6 @@ export default function StrongSocket(url, version, settings) {
 
   this.debug('Debug is enabled');
   this.connect();
-
-  window.addEventListener('unload', function() {
-    this.destroy();
-  }.bind(this));
 }
 
 StrongSocket.prototype = {

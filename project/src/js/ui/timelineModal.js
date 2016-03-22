@@ -51,7 +51,7 @@ function renderFollow(entry) {
   const key = 'follow' + entry.date;
 
   return (
-    <li className="list_item timelineEntry fa fa-arrow-circle-right" key={key}
+    <li className="list_item bglight timelineEntry fa fa-arrow-circle-right" key={key}
       config={helper.ontouch(() => {
         animateClose().then(() =>
           m.route('/@/' + entry.data.u1)

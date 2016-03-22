@@ -46,13 +46,15 @@ challengeForm.close = function(fromBB) {
 function challenge() {
   const userId = challengeForm.userId;
   return challengeXhr(userId, challengeForm.fen).then(data => {
-    if (session.isConnected() &&
-      !storage.get('donotshowpersistentchallengeexplanation') && (
+    if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
-      window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
-        storage.set('donotshowpersistentchallengeexplanation', true);
-      });
+
+      if (!storage.get('donotshowpersistentchallengeexplanation')) {
+        window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
+          storage.set('donotshowpersistentchallengeexplanation', true);
+        });
+      }
       m.route('/correspondence', { tab: 'challenges' });
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {

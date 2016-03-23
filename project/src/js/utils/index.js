@@ -113,10 +113,20 @@ export function aiName(level) {
 }
 
 export function backHistory() {
+  setViewSlideDirection('bwd');
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();
   else
     window.history.go(-1);
+}
+
+// simple way to determine views animation direction
+var viewSlideDirection = 'fwd';
+export function setViewSlideDirection(d) {
+  viewSlideDirection = d;
+}
+export function getViewSlideDirection() {
+  return viewSlideDirection;
 }
 
 const perfIconsMap = {

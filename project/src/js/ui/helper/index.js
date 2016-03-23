@@ -2,9 +2,50 @@ import Zanimo from 'zanimo';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
+import animator from './animator';
 import m from 'mithril';
 
-var helper = {};
+const helper = {};
+export default helper;
+
+// view transition functions
+// they listen to history to determine if animation is going forward or backward
+function viewSlideIn(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+	el.style.transform = `translate3d(${direction},0,0)`;
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = 'translate3d(0%,0,0)';
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    el.removeAttribute('style');
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+function viewSlideOut(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+	el.style.transform = 'translate3d(0%,0,0)';
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = `translate3d(${direction},0,0)`;
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    el.removeAttribute('style');
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+
+helper.slidingPage = animator(viewSlideIn, viewSlideOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
@@ -182,4 +223,3 @@ helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
 
-export default helper;

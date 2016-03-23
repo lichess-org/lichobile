@@ -1,3 +1,4 @@
+import helper from './ui/helper';
 import home from './ui/home';
 import game from './ui/game';
 import analyse from './ui/analyse';
@@ -28,6 +29,8 @@ import tournament from'./ui/tournament';
 import editor from './ui/editor';
 import m from 'mithril';
 
+const slidingPage = helper.slidingPage;
+
 export default {
   init() {
     m.route(document.body, '/', {
@@ -35,33 +38,33 @@ export default {
       '/otb': otb,
       '/ai': ai,
       '/game/:id': game,
-      '/game/:id/:color': game,
+      '/game/:id/:color': slidingPage(game),
       '/analyse': analyse,
       '/analyse/fen/:fen': analyse,
-      '/analyse/:source/:id': analyse,
-      '/analyse/:source/:id/:color': analyse,
+      '/analyse/:source/:id': slidingPage(analyse),
+      '/analyse/:source/:id/:color': slidingPage(analyse),
       '/challenge/:id': challenge,
       '/tv': tv,
       '/correspondence': correspondence,
-      '/@/:id': user,
+      '/@/:id': slidingPage(user),
       '/@/:id/following': userFollowing,
       '/@/:id/followers': userFollowers,
-      '/@/:id/games': userGames,
+      '/@/:id/games': slidingPage(userGames),
       '/@/:id/games/:filter': userGames,
-      '/@/:id/:variant/perf': userVariantPerf,
+      '/@/:id/:variant/perf': slidingPage(userVariantPerf),
       '/@/:id/tv': userTV,
       '/editor': editor,
       '/editor/:fen': editor,
       '/players': players,
       '/ranking': ranking,
-      '/settings': settingsUi,
-      '/settings/preferences': settingsPreferences,
-      '/settings/gameDisplay': settingsGameDisplay,
-      '/settings/gameBehavior': settingsGameBehavior,
-      '/settings/privacy': settingsPrivacy,
-      '/settings/themes/board': boardThemes,
-      '/settings/themes/piece': pieceThemes,
-      '/settings/lang': settingsLang,
+      '/settings': slidingPage(settingsUi),
+      '/settings/preferences': slidingPage(settingsPreferences),
+      '/settings/gameDisplay': slidingPage(settingsGameDisplay),
+      '/settings/gameBehavior': slidingPage(settingsGameBehavior),
+      '/settings/privacy': slidingPage(settingsPrivacy),
+      '/settings/themes/board': slidingPage(boardThemes),
+      '/settings/themes/piece': slidingPage(pieceThemes),
+      '/settings/lang': slidingPage(settingsLang),
       '/training': training,
       '/training/:id': training,
       '/tournament': tournamentList,

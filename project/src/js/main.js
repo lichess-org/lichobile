@@ -53,6 +53,7 @@ function main() {
   document.addEventListener('backbutton', backbutton, false);
   window.addEventListener('unload', function() {
     socket.destroy();
+    socket.terminate();
   });
   window.addEventListener('resize', onResize, false);
 

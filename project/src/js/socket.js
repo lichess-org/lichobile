@@ -272,5 +272,8 @@ export default {
   },
   destroy() {
     socketWorker.postMessage({ topic: 'destroy' });
+  },
+  terminate() {
+    socketWorker.terminate();
   }
 };

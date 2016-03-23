@@ -53,7 +53,7 @@ function viewFadesIn(el, callback) {
   el.style.transition = 'opacity 200ms ease-out';
 
   setTimeout(() => {
-    el.style.opacity = '100';
+    el.style.opacity = '1';
   });
 
   function after() {
@@ -74,7 +74,7 @@ function viewFadesIn(el, callback) {
 function viewFadesOut(el, callback) {
   var tId;
 
-  el.style.opacity = '100';
+  el.style.opacity = '1';
   el.style.transition = 'opacity 200ms ease-out';
 
   setTimeout(() => {

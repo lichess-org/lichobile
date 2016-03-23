@@ -49,7 +49,7 @@ function viewSlideOut(el, callback) {
 function viewFadesIn(el, callback) {
   var tId;
 
-  el.style.opacity = '0';
+  el.style.opacity = '0.3';
   el.style.transition = 'opacity 200ms ease-out';
 
   setTimeout(() => {

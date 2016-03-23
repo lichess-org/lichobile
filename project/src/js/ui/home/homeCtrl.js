@@ -8,6 +8,8 @@ import m from 'mithril';
 
 export default function homeCtrl() {
 
+  var featuredFeed;
+
   const featured = m.prop();
 
   const nbConnectedPlayers = m.prop();
@@ -45,22 +47,27 @@ export default function homeCtrl() {
 
       // featured game
       featured(featuredData);
-      const featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
-        featuredFeed.onmessage = function(ev) {
-          const obj = JSON.parse(ev.data);
-          featured().game.fen = obj.d.fen;
-          featured().game.lastMove = obj.d.lm;
-          m.redraw();
-        };
+      featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
 
-        // daily puzzle
-        dailyPuzzle(dailyData.puzzle);
+      featuredFeed.onmessage = function(ev) {
+        const obj = JSON.parse(ev.data);
+        featured().game.fen = obj.d.fen;
+        featured().game.lastMove = obj.d.lm;
+        m.redraw();
+      };
 
-        // week top players
-        weekTopPlayers(topPlayersData);
+      // daily puzzle
+      dailyPuzzle(dailyData.puzzle);
+
+      // week top players
+      weekTopPlayers(topPlayersData);
     })
     .catch(handleXhrError);
 
+  }
+
+  function onPause() {
+    if (featuredFeed) featuredFeed.close();
   }
 
   if (hasNetwork()) {
@@ -68,6 +75,8 @@ export default function homeCtrl() {
   }
 
   document.addEventListener('online', init);
+  document.addEventListener('pause', onPause, false);
+  document.addEventListener('resume', init, false);
 
   return {
     featured,
@@ -80,7 +89,10 @@ export default function homeCtrl() {
       m.route('/tv');
     },
     onunload() {
+      if (featuredFeed) featuredFeed.close();
       document.removeEventListener('online', init);
+      document.removeEventListener('resume', init);
+      document.removeEventListener('pause', onPause);
     }
   };
 }

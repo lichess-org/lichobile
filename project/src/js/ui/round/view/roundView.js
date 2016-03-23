@@ -13,15 +13,15 @@ import { backButton, menuButton, loader, headerBtns } from '../../shared/common'
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
-import { view as renderPromotion } from '../promotion';
+import promotion from '../promotion';
 import helper from '../../helper';
 import button from './button';
 import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
-import { view as renderChat } from '../chat';
-import { view as renderNotes } from '../notes';
-import { view as renderCorrespondenceClock } from '../correspondenceClock/correspondenceView';
+import chat from '../chat';
+import notes from '../notes';
+import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {
@@ -37,9 +37,9 @@ export default function view(ctrl) {
 
 function overlay(ctrl, isPortrait) {
   return [
-    ctrl.chat ? renderChat(ctrl.chat) : null,
-    ctrl.notes ? renderNotes(ctrl.notes) : null,
-    renderPromotion(ctrl),
+    ctrl.chat ? chat.view(ctrl.chat) : null,
+    ctrl.notes ? notes.view(ctrl.notes) : null,
+    promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl)
   ];
@@ -229,7 +229,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const playerName = utils.playerName(player, !isPortrait);
   const vConf = user ?
     helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName, position)) :
-    utils.noop;
+    helper.ontouch(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
 
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);

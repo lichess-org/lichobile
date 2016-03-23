@@ -1,48 +1,48 @@
 import h from '../../helper';
-import {header, empty, pad} from '../../shared/common';
+import {header, pad} from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
-import tabs from 'polythene/tabs/tabs';
-import isEmpty from 'lodash/lang/isEmpty';
+import tabs from '../../shared/tabs';
+import isEmpty from 'lodash/isEmpty';
 
 export default function view(ctrl) {
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
 
-  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, empty, empty);
+  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl);
 }
 
 const TABS = [{
-    id: 'started',
+    key: 'started',
     label: 'In Progress'
 }, {
-    id: 'created',
+    key: 'created',
     label: 'Upcoming'
 }, {
-    id: 'finished',
+    key: 'finished',
     label: 'Completed'
 }];
 
 function tabNavigation (currentTabFn) {
     return m('.nav-header', m.component(tabs, {
         buttons: TABS,
-        autofit: true,
         selectedTab: currentTabFn(),
-        activeSelected: true,
-        getState: (state) => {
-            currentTabFn(state.index);
+        onTabChange: k => {
+          const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+          window.history.replaceState(null, null, loc + '?tab=' + k);
+          currentTabFn(k);
         }
     }));
 }
 
 function tournamentListBody(ctrl) {
   if (isEmpty(ctrl.tournaments())) return null;
+  const tabContent = ctrl.tournaments()[ctrl.currentTab()];
 
-  let arrayName = TABS[ctrl.currentTab()].id;
   return m('.module-tabs.tabs-routing', [
     tabNavigation(ctrl.currentTab),
     m('.tab-content.layout.center-center.native_scroller',
-      m('div', renderTournamentList(ctrl.tournaments()[arrayName], arrayName))
+      m('div', renderTournamentList(tabContent, ctrl.currentTab()))
     )
   ]);
 }

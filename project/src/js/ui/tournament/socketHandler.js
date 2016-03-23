@@ -1,5 +1,5 @@
 import * as xhr from './tournamentXhr';
-import throttle from 'lodash/function/throttle';
+import throttle from 'lodash/throttle';
 
 export default function(ctrl) {
   let reload = throttle((c) => {

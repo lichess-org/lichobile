@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
 import formWidgets from '../shared/form';
@@ -45,18 +46,18 @@ export default {
 function renderAnalyseMenu(ctrl) {
 
   return m('div.analyseMenu', [
-    m('button.fa.fa-eye', {
+    m('button', {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
-    }, i18n('startNewAnalysis')),
-    m('button[data-icon=U]', {
+    }, [m('span.fa.fa-eye'), i18n('startNewAnalysis')]),
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
-    }, i18n('continueFromHere')),
-    m('button.fa.fa-pencil', {
+    }, i18n('continueFromHere')) : null,
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
-    }, i18n('boardEditor')),
+    }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.ceval.allowed() ? m('div.action', {
       key: 'enableCeval'
     }, [

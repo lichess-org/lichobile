@@ -15,7 +15,7 @@ export default function view() {
   if (!menu.isOpen) return null;
 
   return (
-    <aside id="side_menu" config={slidesIn}>
+    <aside id="side_menu" config={slidesInUp}>
       {renderMenu()}
     </aside>
   );
@@ -52,6 +52,14 @@ function renderProfileActions(user) {
       <li className="side_link" config={helper.ontouch(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
+      </li>
+      <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
+        <span className="fa fa-arrow-circle-right" />
+        {i18n('nbFollowing', user.nbFollowing || 0)}
+      </li>
+      <li className="side_link" config={helper.ontouch(menu.route(`/@/${user.id}/followers`))}>
+        <span className="fa fa-arrow-circle-left" />
+        {i18n('nbFollowers', user.nbFollowers || 0)}
       </li>
       <li className="side_link" config={helper.ontouch(menu.route('/settings/preferences'))}>
         <span data-icon="%" />
@@ -166,7 +174,7 @@ function renderMenu() {
   );
 }
 
-function slidesIn(el, isUpdate, context) {
+function slidesInUp(el, isUpdate, context) {
   if (!isUpdate) {
     el.style.transform = 'translate3d(-100%,0,0)';
     // force reflow hack

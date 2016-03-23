@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { isEmpty } from 'lodash/lang';
+import isEmpty  from 'lodash/isEmpty';
 import i18n from '../../i18n';
 import treePath from './path';
 import cevalView from './ceval/cevalView';
@@ -17,7 +17,7 @@ import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
 import { noop, partialf, playerName, gameIcon } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
-import { view as renderNotes } from '../round/notes';
+import notes from '../round/notes';
 import button from '../round/view/button';
 
 export default function analyseView(ctrl) {
@@ -38,7 +38,7 @@ function overlay(ctrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
-    ctrl.notes ? renderNotes(ctrl.notes) : null,
+    ctrl.notes ? notes.view(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup)
   ];
 }
@@ -514,9 +514,11 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         config={helper.ontouch(ctrl.menu.open)}
       />
-      <button className="action_bar_button fa fa-share-alt" key="sharePGN"
-        config={sharePGN}
-      />
+      {ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ?
+        <button className="action_bar_button fa fa-share-alt" key="sharePGN"
+          config={sharePGN}
+        /> : null
+      }
       {ctrl.notes ? button.notes(ctrl) : null}
       <button className="action_bar_button" data-icon="B" key="flipBoard"
         config={helper.ontouch(

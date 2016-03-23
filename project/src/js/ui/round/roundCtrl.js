@@ -1,4 +1,4 @@
-import { throttle } from 'lodash/function';
+import throttle from 'lodash/throttle';
 import data from './data';
 import * as utils from '../../utils';
 import sound from '../../sound';
@@ -10,7 +10,7 @@ import notes from './notes';
 import clockCtrl from './clock/clockCtrl';
 import i18n from '../../i18n';
 import gameStatus from '../../lichess/status';
-import correspondenceClockCtrl from './correspondenceClock/correspondenceCtrl';
+import correspondenceClockCtrl from './correspondenceClock/corresClockCtrl';
 import session from '../../session';
 import socket from '../../socket';
 import signals from '../../signals';

@@ -1,16 +1,12 @@
-import * as utils from '../../utils';
-import helper from '../helper';
 import i18n from '../../i18n';
-import { util } from 'chessground-mobile';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderSharePGNButton, renderEndedGameStatus } from '../shared/offlineRound';
+import { renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
-function renderAlways(ctrl) {
-  var d = ctrl.root.data;
+function renderAlways() {
   return [
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
@@ -53,7 +49,7 @@ export default {
     if (ctrl.isOpen())
       return popupWidget(
         'offline_actions',
-        () => <div className="fa fa-beer withIcon">{i18n('playOnTheBoardOffline')}</div>,
+        () => <div><span className="fa fa-beer" />{i18n('playOnTheBoardOffline')}</div>,
         function() {
           return [
             renderEndedGameStatus(ctrl)

@@ -1,6 +1,6 @@
 import i18n from '../i18n';
 import storage from '../storage';
-import { cloneDeep } from 'lodash/lang';
+import cloneDeep from 'lodash/cloneDeep';
 import m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
@@ -82,6 +82,15 @@ export function f() {
 
 export function noop() {}
 
+export function lightPlayerName(player, withRating) {
+  if (player) {
+    return (player.title ? player.title + ' ' + player.name : player.name) + (
+      withRating ? ' (' + player.rating + ')' : '');
+  } else {
+    return 'Anonymous';
+  }
+}
+
 export function playerName(player, withRating) {
   if (player.username || player.user) {
     var name = player.username || player.user.username;
@@ -106,10 +115,20 @@ export function aiName(level) {
 }
 
 export function backHistory() {
+  setViewSlideDirection('bwd');
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();
   else
     window.history.go(-1);
+}
+
+// simple way to determine views animation direction
+var viewSlideDirection = 'fwd';
+export function setViewSlideDirection(d) {
+  viewSlideDirection = d;
+}
+export function getViewSlideDirection() {
+  return viewSlideDirection;
 }
 
 const perfIconsMap = {

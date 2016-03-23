@@ -1,5 +1,5 @@
 import work from 'webworkify';
-import chessWorker from './chessWorker';
+import chessWorker from '../../chessWorker';
 
 export default function chessLogic(ctrl) {
 

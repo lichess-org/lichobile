@@ -1,4 +1,4 @@
-mainHeaderBg = bgdark
+mainHeaderBg = lighten(bgdark, 8%)
 mainHeaderColor = textDarkBg
 borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
@@ -152,6 +152,10 @@ activeBgLight = darken(themeBgLight, 8%)
         &.new_challenge:before
           background transparent
 
+  .main_header_button, .friends_button, .timeline_button
+    .chip
+      border-color mainHeaderBg
+
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)
@@ -207,4 +211,21 @@ activeBgLight = darken(themeBgLight, 8%)
 
   .analyseGameInfosWrapper
     border-bottom-color darken(bglight, 15%)
+
+
+  .followingPlayerAction
+    &.active
+      background darken(bglight, 5%)
+
+  .tabs
+    background-color mainHeaderBg
+
+  .tab
+    height 45px
+    &.active
+      background-color lighten(mainHeaderBg, 10%)
+
+  .tabIndicator
+    height 3px
+
 

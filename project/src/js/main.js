@@ -11,8 +11,9 @@ import * as utils from './utils';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
-import { status as xhrStatus, setServerLang, getChallenges } from './xhr';
+import { status as xhrStatus, setServerLang } from './xhr';
 import challengesApi from './lichess/challenges';
+import timeline from './lichess/timeline';
 import helper from './ui/helper';
 import backbutton from './backbutton';
 import socket from './socket';
@@ -35,6 +36,9 @@ function main() {
     return true;
   };
 
+  // init timeline last read to avoid reading too much localstorage
+  timeline.setLastRead(timeline.getSavedLastRead());
+
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup
@@ -47,6 +51,9 @@ function main() {
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
+  window.addEventListener('unload', function() {
+    socket.destroy();
+  });
   window.addEventListener('resize', onResize, false);
 
   // iOs keyboard hack
@@ -95,8 +102,10 @@ function onResize() {
 
 function onOnline() {
   session.rememberLogin().then(() => {
+    // load timeline
+    timeline.refresh();
     // load challenges
-    getChallenges().then(challengesApi.set);
+    challengesApi.refresh();
     // first time login on app start or just try to reconnect socket
     if (!triedToLogin) {
       triedToLogin = true;
@@ -123,6 +132,9 @@ function onOffline() {
 
 function onResume() {
   socket.connect();
+  timeline.refresh().then(v => {
+    if (v) m.redraw();
+  });
 }
 
 function onPause() {

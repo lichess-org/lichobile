@@ -1,4 +1,3 @@
-import assign from 'lodash/object/assign';
 import storage from './storage';
 import * as utils from './utils';
 import * as xhr from './xhr';
@@ -24,7 +23,10 @@ const defaultHandlers = {
   following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
-  challenges: data => utils.autoredraw(challengesApi.set.bind(undefined, data))
+  challenges: data => {
+    challengesApi.set(data);
+    m.redraw();
+  }
 };
 
 function askWorker(msg, callback) {
@@ -56,7 +58,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         });
       }
     },
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts = {
     options: {
@@ -79,7 +81,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
 function createTournament(tournamentVersion, tournamentId, handlers) {
   let url = '/tournament/' + tournamentId + '/socket/v1';
   socketHandlers = {
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts = {
     options: {
@@ -103,7 +105,7 @@ function createTournament(tournamentVersion, tournamentId, handlers) {
 function createChallenge(id, version, onOpen, handlers) {
   socketHandlers = {
     onOpen,
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   const url = `/challenge/${id}/socket/v${version}`;
   const opts = {
@@ -114,7 +116,7 @@ function createChallenge(id, version, onOpen, handlers) {
       pingDelay: 2000,
       sendOnOpen: 'following_onlines'
     },
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   socketWorker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
@@ -128,7 +130,7 @@ function createChallenge(id, version, onOpen, handlers) {
 function createLobby(lobbyVersion, onOpen, handlers) {
   socketHandlers = {
     onOpen,
-    events: assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts = {
     options: {

@@ -1,11 +1,10 @@
-import compact from 'lodash/array/compact';
-import keys from 'lodash/object/keys';
-import first from 'lodash/array/first';
-import rest from 'lodash/array/rest';
-import pairs from 'lodash/object/pairs';
+import compact from 'lodash/compact';
+import keys from 'lodash/keys';
+import head from 'lodash/head';
+import rest from 'lodash/rest';
+import toPairs from 'lodash/toPairs';
 import chessground from 'chessground-mobile';
 import chess from './chess';
-import m from 'mithril';
 
 function str2move(str) {
   return str ? [str.slice(0, 2), str.slice(2, 4), str[4]] : null;
@@ -31,11 +30,11 @@ function tryMove(data, move) {
     return move.concat([promotion]);
   });
   var tries = compact(moves.map(tryM));
-  var success = first(tries.filter(function(t) {
+  var success = head(tries.filter(function(t) {
     return t[1] !== 'retry';
   }));
   if (success) return success;
-  if (first(tries)) return first(tries);
+  if (head(tries)) return head(tries);
   return [data.progress, 'fail'];
 }
 
@@ -44,13 +43,13 @@ function getCurrentLines(data) {
 }
 
 function getOpponentNextMove(data) {
-  return first(first(pairs(getCurrentLines(data))));
+  return head(head(toPairs(getCurrentLines(data))));
 }
 
 function findBestLine(lines) {
   var loop = function(paths) {
     if (paths.length === 0) return [];
-    var path = first(paths);
+    var path = head(paths);
     var siblings = rest(paths);
     var ahead = getPath(lines, path);
     switch (ahead) {

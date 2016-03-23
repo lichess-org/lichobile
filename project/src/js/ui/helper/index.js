@@ -2,9 +2,102 @@ import Zanimo from 'zanimo';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
+import animator from './animator';
 import m from 'mithril';
 
-var helper = {};
+const helper = {};
+export default helper;
+
+// view slide transition functions
+// they listen to history to determine if animation is going forward or backward
+function viewSlideIn(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+	el.style.transform = `translate3d(${direction},0,0)`;
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = 'translate3d(0%,0,0)';
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    el.removeAttribute('style');
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+function viewSlideOut(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+	el.style.transform = 'translate3d(0%,0,0)';
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = `translate3d(${direction},0,0)`;
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    el.removeAttribute('style');
+    el.removeEventListener('transitionend', after, false);
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+
+function viewFadesIn(el, callback) {
+  var tId;
+
+  el.style.opacity = '0.3';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '1';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
+function viewFadesOut(el, callback) {
+  var tId;
+
+  el.style.opacity = '1';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '0';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
+helper.slidingPage = animator(viewSlideIn, viewSlideOut);
+helper.fadesPage = animator(viewFadesIn, viewFadesOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
@@ -38,7 +131,7 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
-helper.slidesIn = function(el, isUpdate, context) {
+helper.slidesInUp = function(el, isUpdate, context) {
   if (!isUpdate) {
     el.style.transform = 'translateY(100%)';
     // force reflow hack
@@ -48,11 +141,31 @@ helper.slidesIn = function(el, isUpdate, context) {
   }
 };
 
-helper.slidesOut = function(callback, elID) {
+helper.slidesOutDown = function(callback, elID) {
   return function() {
     const el = document.getElementById(elID);
     m.redraw.strategy('none');
-    Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    .then(utils.autoredraw.bind(undefined, callback))
+    .catch(console.log.bind(console));
+  };
+};
+
+helper.slidesInLeft = function(el, isUpdate, context) {
+  if (!isUpdate) {
+    el.style.transform = 'translateX(100%)';
+    // force reflow hack
+    context.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
+  }
+};
+
+helper.slidesOutRight = function(callback, elID) {
+  return function() {
+    const el = document.getElementById(elID);
+    m.redraw.strategy('none');
+    return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
     .then(utils.autoredraw.bind(undefined, callback))
     .catch(console.log.bind(console));
   };
@@ -63,8 +176,8 @@ helper.fadesOut = function(callback, selector, time = 150) {
     e.stopPropagation();
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, time)
-    .then(utils.autoredraw.bind(undefined, callback))
+    return Zanimo(el, 'opacity', 0, time)
+    .then(() => utils.autoredraw(callback))
     .catch(console.log.bind(console));
   };
 };
@@ -162,4 +275,3 @@ helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
 
-export default helper;

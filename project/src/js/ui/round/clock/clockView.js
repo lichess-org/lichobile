@@ -1,4 +1,4 @@
-import { classSet } from '../../helper';
+import helper from '../../helper';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
@@ -29,7 +29,7 @@ export function formatClockTime(ctrl, time, isRunning) {
 export function view(ctrl, color, runningColor) {
   const time = ctrl.data[color];
   const isRunning = runningColor === color;
-  const className = classSet({
+  const className = helper.classSet({
     clock: true,
     outoftime: !time,
     running: isRunning,

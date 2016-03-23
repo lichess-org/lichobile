@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
 import helper from '../helper';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -25,6 +25,6 @@ export default {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('preferences'))
     );
-    return layout.free(header, renderBody, empty, empty);
+    return layout.free(header, renderBody);
   }
 };

@@ -49,7 +49,6 @@ export function renderGameActionsBar(ctrl, type) {
 }
 
 export function renderGameActionsBarTablet(ctrl, type) {
-  const d = ctrl.data;
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
@@ -105,14 +104,6 @@ export function renderEndedGameStatus(ctrl) {
       </div>
     );
   }
-}
-
-export function renderSharePGNButton(ctrl) {
-  return (
-    <button className="fa fa-share-alt" config={helper.ontouch(ctrl.sharePGN)}>
-      {i18n('sharePGN')}
-    </button>
-  );
 }
 
 export function renderReplayTable(ctrl) {

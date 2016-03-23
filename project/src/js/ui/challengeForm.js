@@ -5,6 +5,7 @@ import session from '../session';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
+import storage from '../storage';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
@@ -48,7 +49,13 @@ function challenge() {
     if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
-      window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
+
+      if (!storage.get('donotshowpersistentchallengeexplanation')) {
+        window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
+          storage.set('donotshowpersistentchallengeexplanation', true);
+        });
+      }
+      m.route('/correspondence', { tab: 'challenges' });
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       m.route(`/challenge/${data.challenge.id}`);

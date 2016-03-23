@@ -1,10 +1,9 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderSharePGNButton, renderEndedGameStatus } from '../shared/offlineRound';
+import { renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 import m from 'mithril';
 
 const colors = [
@@ -29,7 +28,7 @@ export function sideSelector() {
   );
 }
 
-function renderAlways(ctrl) {
+function renderAlways() {
   return [
     m('div.action', [
       sideSelector(),
@@ -69,7 +68,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'offline_actions',
-      () => <div className="fa fa-cogs withIcon">{i18n('playOfflineComputer')}</div>,
+      () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
       function() {
         return [
           renderEndedGameStatus(ctrl)

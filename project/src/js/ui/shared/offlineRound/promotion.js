@@ -47,20 +47,18 @@ function cancel(ctrl, cgConfig) {
   }
 }
 
+export function view(ctrl) {
+  return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
+    className: settings.general.theme.piece(),
+    style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
+  }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
+    return m('piece.' + role + '.' + ctrl.data.player.color, {
+      config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
+    });
+  }))]) : null;
+}
+
 export default {
-
   start,
-
-  cancel,
-
-  view: function(ctrl) {
-    return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
-      className: settings.general.theme.piece(),
-      style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
-    }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
-      return m('piece.' + role + '.' + ctrl.data.player.color, {
-        config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
-      });
-    }))]) : null;
-  }
+  cancel
 };

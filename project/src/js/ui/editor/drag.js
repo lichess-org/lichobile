@@ -1,4 +1,3 @@
-import find from 'lodash/collection/find';
 import { util, drag } from 'chessground-mobile';
 
 export default function(ctrl, e) {
@@ -9,7 +8,7 @@ export default function(ctrl, e) {
   e.stopPropagation();
   e.preventDefault();
   const cgData = ctrl.chessground.data;
-  const key = find(util.allKeys, function(k) {
+  const key = util.allKeys.find(k => {
     return !cgData.pieces[k];
   });
   if (!key) return;

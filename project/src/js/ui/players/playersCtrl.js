@@ -1,6 +1,6 @@
 import socket from '../../socket';
 import backbutton from '../../backbutton';
-import throttle from 'lodash/function/throttle';
+import throttle from 'lodash/throttle';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import helper from '../helper';

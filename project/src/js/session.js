@@ -3,7 +3,9 @@ import { hasNetwork, handleXhrError, noop, serializeQueryParameters } from './ut
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
-import { pick, mapValues } from 'lodash/object';
+import pick from 'lodash/pick';
+import mapValues from 'lodash/mapValues';
+import throttle from 'lodash/throttle';
 import m from 'mithril';
 
 var session = null;
@@ -160,20 +162,22 @@ function refresh() {
       }
       throw err;
     });
+  } else {
+    return Promise.resolve(false);
   }
 }
 
 export default {
   isConnected,
-  login,
-  rememberLogin,
   logout,
   signup,
-  refresh,
+  login: throttle(login, 1000),
+  rememberLogin: throttle(rememberLogin, 1000),
+  refresh: throttle(refresh, 1000),
+  savePreferences: throttle(savePreferences, 1000),
   get: getSession,
   getUserId,
   nowPlaying,
   myTurnGames,
-  savePreferences,
   lichessBackedProp
 };

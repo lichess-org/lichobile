@@ -3,6 +3,7 @@ import { gameResult } from '.';
 import settings from '../../../settings';
 import session from '../../../session';
 import work from 'webworkify';
+import chessWorker from '../../../chessWorker';
 
 export default function replayCtrl(root, rootSituations, rootPly) {
 
@@ -11,14 +12,16 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.situations = [];
   this.hash = '';
 
-  const chessWorker = work(require('./chessWorker'));
-  chessWorker.onmessage = function(e) {
-    this.ply++;
-    if (this.ply <= this.situations.length)
-      this.situations = this.situations.slice(0, this.ply);
-    this.situations.push(e.data);
-    this.apply();
-    root.onReplayAdded();
+  const worker = work(chessWorker);
+  worker.onmessage = function(msg) {
+    if (msg.data.topic === 'move') {
+      this.ply++;
+      if (this.ply <= this.situations.length)
+        this.situations = this.situations.slice(0, this.ply);
+      this.situations.push(msg.data.payload);
+      this.apply();
+      root.onReplayAdded();
+    }
   }.bind(this);
 
   this.init = function(situations, ply) {
@@ -52,12 +55,15 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   }.bind(this);
 
   this.addMove = function(orig, dest, promotion) {
-    chessWorker.postMessage({
-      ply: this.ply + 1,
-      fen: this.situation().fen,
-      promotion,
-      orig,
-      dest
+    worker.postMessage({
+      topic: 'move',
+      payload: {
+        ply: this.ply + 1,
+        fen: this.situation().fen,
+        promotion,
+        orig,
+        dest
+      }
     });
   };
 
@@ -98,6 +104,6 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   }.bind(this);
 
   this.onunload = function() {
-    if (chessWorker) chessWorker.terminate();
+    if (worker) worker.terminate();
   };
 }

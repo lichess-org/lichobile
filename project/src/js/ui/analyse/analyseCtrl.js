@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from '../shared/offlineRound/promotion';
 import * as util from './util';
 import sound from '../../sound';
-import { debounce } from 'lodash/function';
+import debounce from 'lodash/debounce';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import helper from '../helper';
@@ -21,7 +21,7 @@ import menu from './menu';
 import m from 'mithril';
 
 export default function controller() {
-  const source = m.route.param('source');
+  this.source = m.route.param('source') || 'offline';
   const gameId = m.route.param('id');
   const orientation = m.route.param('color');
   const fen = m.route.param('fen');
@@ -34,7 +34,7 @@ export default function controller() {
   this.continuePopup = continuePopup.controller();
 
   this.vm = {
-    fromGame: source === 'online' || source === 'offline',
+    fromGame: gameId !== undefined,
     path: null,
     pathStr: '',
     initialPathStr: '',
@@ -112,7 +112,7 @@ export default function controller() {
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
     showGround();
-    if (direction === 'forward') {
+    if (this.vm.step && this.vm.step.san && direction === 'forward') {
       if (this.vm.step.san.indexOf('x') !== -1) sound.capture();
       else sound.move();
     }
@@ -233,7 +233,7 @@ export default function controller() {
 
   const allowCeval = function() {
     return (
-      source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
+      this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
     ) && ['standard', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
@@ -302,7 +302,7 @@ export default function controller() {
     init(makeDefaultData());
   };
 
-  if (source === 'online' && gameId) {
+  if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
       if (cfg.game.variant.key !== 'standard') {
         window.plugins.toast.show('Analysis board supports only standard chess variant for now', 'short', 'center');
@@ -315,7 +315,7 @@ export default function controller() {
       handleXhrError(err);
       m.route('/');
     });
-  } else if (source === 'offline' && gameId === 'otb') {
+  } else if (this.source === 'offline' && gameId === 'otb') {
     helper.analyticsTrackView('Analysis (offline)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) backHistory();
@@ -323,7 +323,7 @@ export default function controller() {
       otbData.orientation = orientation;
       init(makeData(otbData));
     }
-  } else if (source === 'offline' && gameId === 'ai') {
+  } else if (this.source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) backHistory();

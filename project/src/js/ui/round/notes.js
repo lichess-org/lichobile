@@ -1,7 +1,7 @@
 import helper from '../helper';
 import i18n from '../../i18n';
 import backbutton from '../../backbutton';
-import { debounce } from 'lodash/function';
+import debounce from 'lodash/debounce';
 import { syncNote } from './roundXhr';
 import m from 'mithril';
 
@@ -15,7 +15,7 @@ export default {
     this.inputValue = '';
 
     this.open = function() {
-      backbutton.stack.push(helper.slidesOut(this.close, 'notes'));
+      backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'));
       this.showing = true;
     }.bind(this);
 
@@ -65,10 +65,10 @@ export default {
 
     if (!ctrl.showing) return null;
 
-    return m('div#notes.modal', { config: helper.slidesIn }, [
+    return m('div#notes.modal', { config: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOut(ctrl.close, 'notes'))
+          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
         }),
         m('h2', i18n('notes'))
       ]),

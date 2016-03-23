@@ -6,6 +6,7 @@ import challengeForm from './challengeForm';
 import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
+import timelineModal from './timelineModal';
 import lobby from './lobby';
 import helper from './helper';
 import settings from '../settings';
@@ -33,6 +34,7 @@ export default {
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
+        {timelineModal.view()}
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
@@ -47,15 +49,20 @@ export default {
     return (
       <div className={'view-container ' + background}>
         <main id="page">
-          <header className="main_header">{header()}</header>
-          <div className="content">{content()}</div>
-          <footer className="main_footer">{footer()}</footer>
+          <header className="main_header">
+            {header()}
+          </header>
+          <div className={'content' + (footer ? ' withFooter' : '')}>
+            {content()}
+          </div>
+          { footer ? <footer className="main_footer">{footer()}</footer> : null }
           { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
         </main>
         {menuView()}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
+        {timelineModal.view()}
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}

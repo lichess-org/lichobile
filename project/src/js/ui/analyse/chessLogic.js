@@ -1,9 +1,6 @@
-import work from 'webworkify';
-import chessWorker from '../../chessWorker';
-
 export default function chessLogic(ctrl) {
 
-  const worker = work(chessWorker);
+  const worker = new Worker('lib/chessWorker.js');
 
   function askWorker(msg, callback) {
     function listen(e) {

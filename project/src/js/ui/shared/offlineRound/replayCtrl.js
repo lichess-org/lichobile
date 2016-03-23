@@ -2,8 +2,6 @@ import { Chess } from 'chess.js';
 import { gameResult } from '.';
 import settings from '../../../settings';
 import session from '../../../session';
-import work from 'webworkify';
-import chessWorker from '../../../chessWorker';
 
 export default function replayCtrl(root, rootSituations, rootPly) {
 
@@ -12,7 +10,7 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.situations = [];
   this.hash = '';
 
-  const worker = work(chessWorker);
+  const worker = new Worker('lib/chessWorker.js');
   worker.onmessage = function(msg) {
     if (msg.data.topic === 'move') {
       this.ply++;

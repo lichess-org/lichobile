@@ -97,7 +97,7 @@ function viewFadesOut(el, callback) {
 }
 
 helper.slidingPage = animator(viewSlideIn, viewSlideOut);
-helper.fadesPage = animator(viewFadesIn, viewFadesOut);
+helper.fadingPage = animator(viewFadesIn, viewFadesOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;

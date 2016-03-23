@@ -30,34 +30,34 @@ import editor from './ui/editor';
 import m from 'mithril';
 
 const slidingPage = helper.slidingPage;
-const fadesPage = helper.fadesPage;
+const fadingPage = helper.fadingPage;
 
 export default {
   init() {
     m.route(document.body, '/', {
-      '/': fadesPage(home),
-      '/otb': fadesPage(otb),
-      '/ai': fadesPage(ai),
-      '/game/:id': fadesPage(game),
+      '/': fadingPage(home),
+      '/otb': fadingPage(otb),
+      '/ai': fadingPage(ai),
+      '/game/:id': fadingPage(game),
       '/game/:id/:color': slidingPage(game),
-      '/analyse': fadesPage(analyse),
-      '/analyse/fen/:fen': fadesPage(analyse),
+      '/analyse': fadingPage(analyse),
+      '/analyse/fen/:fen': fadingPage(analyse),
       '/analyse/:source/:id': slidingPage(analyse),
       '/analyse/:source/:id/:color': slidingPage(analyse),
-      '/challenge/:id': fadesPage(challenge),
-      '/tv': fadesPage(tv),
-      '/correspondence': fadesPage(correspondence),
+      '/challenge/:id': fadingPage(challenge),
+      '/tv': fadingPage(tv),
+      '/correspondence': fadingPage(correspondence),
       '/@/:id': slidingPage(user),
-      '/@/:id/following': fadesPage(userFollowing),
-      '/@/:id/followers': fadesPage(userFollowers),
+      '/@/:id/following': fadingPage(userFollowing),
+      '/@/:id/followers': fadingPage(userFollowers),
       '/@/:id/games': slidingPage(userGames),
-      '/@/:id/games/:filter': fadesPage(userGames),
+      '/@/:id/games/:filter': fadingPage(userGames),
       '/@/:id/:variant/perf': slidingPage(userVariantPerf),
-      '/@/:id/tv': fadesPage(userTV),
-      '/editor': fadesPage(editor),
-      '/editor/:fen': fadesPage(editor),
-      '/players': fadesPage(players),
-      '/ranking': fadesPage(ranking),
+      '/@/:id/tv': fadingPage(userTV),
+      '/editor': fadingPage(editor),
+      '/editor/:fen': fadingPage(editor),
+      '/players': fadingPage(players),
+      '/ranking': fadingPage(ranking),
       '/settings': slidingPage(settingsUi),
       '/settings/preferences': slidingPage(settingsPreferences),
       '/settings/gameDisplay': slidingPage(settingsGameDisplay),
@@ -66,10 +66,10 @@ export default {
       '/settings/themes/board': slidingPage(boardThemes),
       '/settings/themes/piece': slidingPage(pieceThemes),
       '/settings/lang': slidingPage(settingsLang),
-      '/training': fadesPage(training),
-      '/training/:id': fadesPage(training),
-      '/tournament': fadesPage(tournamentList),
-      '/tournament/:id': fadesPage(tournament)
+      '/training': fadingPage(training),
+      '/training/:id': fadingPage(training),
+      '/tournament': fadingPage(tournamentList),
+      '/tournament/:id': fadingPage(tournament)
     });
   }
 };

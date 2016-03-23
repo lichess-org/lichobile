@@ -8,7 +8,7 @@ import m from 'mithril';
 const helper = {};
 export default helper;
 
-// view transition functions
+// view slide transition functions
 // they listen to history to determine if animation is going forward or backward
 function viewSlideIn(el, callback) {
   const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
@@ -39,13 +39,65 @@ function viewSlideOut(el, callback) {
   function after() {
     utils.setViewSlideDirection('fwd');
     el.removeAttribute('style');
+    el.removeEventListener('transitionend', after, false);
     callback();
   }
 
 	el.addEventListener('transitionend', after, false);
 }
 
+function viewFadesIn(el, callback) {
+  var tId;
+
+  el.style.opacity = '0';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '100';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
+function viewFadesOut(el, callback) {
+  var tId;
+
+  el.style.opacity = '100';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '0';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
 helper.slidingPage = animator(viewSlideIn, viewSlideOut);
+helper.fadesPage = animator(viewFadesIn, viewFadesOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;

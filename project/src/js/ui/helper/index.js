@@ -183,9 +183,9 @@ helper.fadesOut = function(callback, selector, time = 150) {
 };
 
 function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
-  return function(el, isUpdate, context) {
+  return function(el, isUpdate) {
     if (!isUpdate) {
-      var unbind = ButtonHandler(el,
+      ButtonHandler(el,
         e => {
           m.startComputation();
           try {
@@ -200,10 +200,6 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
         scrollY,
         touchEndFeedback
       );
-      context.onunload = function() {
-        unbind();
-        unbind = null;
-      };
     }
   };
 }

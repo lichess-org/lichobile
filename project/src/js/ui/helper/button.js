@@ -123,15 +123,4 @@ export default function ButtonHandler(el,
   el.addEventListener('touchend', onTouchEnd, false);
   el.addEventListener('touchcancel', onTouchCancel, false);
   el.addEventListener('contextmenu', onContextMenu, false);
-
-  return function unbind() {
-    clearTimeout(holdTimeoutID);
-    clearTimeout(repeatTimeoutId);
-    clearTimeout(repeatIntervalID);
-    el.removeEventListener('touchstart', onTouchStart, false);
-    el.removeEventListener('touchmove', onTouchMove, false);
-    el.removeEventListener('touchend', onTouchEnd, false);
-    el.removeEventListener('touchcancel', onTouchCancel, false);
-    el.removeEventListener('contextmenu', onContextMenu, false);
-  };
 }

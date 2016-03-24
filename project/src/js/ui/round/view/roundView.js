@@ -5,6 +5,7 @@ import challengesApi from '../../../lichess/challenges';
 import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
 import chessground from 'chessground-mobile';
+import ground from '../ground';
 import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
@@ -70,7 +71,7 @@ export function onPieceThemeChange(t) {
   pieceTheme = t;
 }
 
-export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperClasses, customPieceTheme) {
+export function renderBoard(variant, chessgroundCtrl, bounds, isPortrait, moreWrapperClasses, customPieceTheme) {
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();
   const boardClass = [
@@ -89,6 +90,11 @@ export function renderBoard(variant, chessgroundCtrl, isPortrait, moreWrapperCla
 
   function boardConfig(el, isUpdate) {
     if (!isUpdate) {
+      if (!bounds) {
+        chessgroundCtrl.setBounds(el.getBoundingClientRect());
+      } else {
+        chessgroundCtrl.setBounds(bounds);
+      }
       chessground.render(el, chessgroundCtrl);
     }
   }
@@ -151,17 +157,18 @@ function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
+  const bounds = ground.getBounds(isPortrait);
 
   if (isPortrait)
     return [
       opponent,
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       player,
       renderGameActionsBar(ctrl, isPortrait)
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <header key="table-header" className="tableHeader">
           {gameInfos(ctrl)}

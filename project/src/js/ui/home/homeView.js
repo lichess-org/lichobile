@@ -9,6 +9,7 @@ import { header as headerWidget, userStatus } from '../shared/common';
 import miniBoard from '../shared/miniBoard';
 
 export default function homeView(ctrl) {
+  const isPortrait = helper.isPortrait();
 
   function body() {
     const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?');
@@ -36,8 +37,8 @@ export default function homeView(ctrl) {
           <section id="homeCreate">
             <button className="fatButton" config={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
           </section>
-          {renderFeatured(ctrl)}
-          {renderDailyPuzzle(ctrl)}
+          {renderFeatured(ctrl, isPortrait)}
+          {renderDailyPuzzle(ctrl, isPortrait)}
           {renderWeekLeaders(ctrl)}
         </div>
       </div>
@@ -49,7 +50,17 @@ export default function homeView(ctrl) {
   return layout.free(header, body);
 }
 
-function renderFeatured(ctrl) {
+function miniBoardSize(isPortrait) {
+  const { vh, vw } = helper.viewportDim();
+  const side = isPortrait ? vw * 0.66 : vh * 0.66;
+  const bounds = {
+    height: side,
+    width: side
+  };
+  return bounds;
+}
+
+function renderFeatured(ctrl, isPortrait) {
   const feat = ctrl.featured();
 
   if (!feat) return null;
@@ -58,6 +69,7 @@ function renderFeatured(ctrl) {
     <section id="homeFeatured">
       <h2 className="homeTitle">Featured game</h2>
       {m.component(miniBoard, {
+        bounds: miniBoardSize(isPortrait),
         fen: feat.game.fen,
         lastMove: feat.game.lastMove,
         orientation: feat.orientation,
@@ -68,7 +80,7 @@ function renderFeatured(ctrl) {
   );
 }
 
-function renderDailyPuzzle(ctrl) {
+function renderDailyPuzzle(ctrl, isPortrait) {
   const puzzle = ctrl.dailyPuzzle();
 
   if (!puzzle) return null;
@@ -77,6 +89,7 @@ function renderDailyPuzzle(ctrl) {
     <section id="dailyPuzzle">
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
         {m.component(miniBoard, {
+          bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,
           link: () => m.route('/training/' + puzzle.id)

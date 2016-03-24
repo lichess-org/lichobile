@@ -2,8 +2,9 @@ import chessground from 'chessground-mobile';
 import * as utils from '../../utils';
 import layout from '../layout';
 import { header } from '../shared/common';
-import { renderAntagonist, renderGameActionsBar, renderReplayTable, renderGameActionsBarTablet } from '../shared/offlineRound';
+import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
+import ground from '../round/ground';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
@@ -27,17 +28,18 @@ export default function view(ctrl) {
     const replayTable = renderReplayTable(ctrl.replay);
     const isPortrait = helper.isPortrait();
     const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
+    const bounds = ground.getBounds(isPortrait);
 
     if (isPortrait)
       return [
         renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass, pieceTheme),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
         renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
         renderGameActionsBar(ctrl, 'otb')
       ];
     else
       return [
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait, wrapperClass, pieceTheme),
+        renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
         <section key="table" className="table">
           <section className="playersTable offline">
             {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}

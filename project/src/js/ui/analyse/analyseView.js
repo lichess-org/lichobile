@@ -1,5 +1,5 @@
 import m from 'mithril';
-import isEmpty  from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 import i18n from '../../i18n';
 import treePath from './path';
 import cevalView from './ceval/cevalView';
@@ -15,6 +15,7 @@ import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
+import ground from './ground';
 import { noop, partialf, playerName, gameIcon } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
@@ -46,8 +47,10 @@ function overlay(ctrl) {
 function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
+  const bounds = ground.getBounds(isPortrait);
+
   return [
-    renderBoard(ctrl.data.game.variant.key, ctrl.chessground, isPortrait),
+    renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
     <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}

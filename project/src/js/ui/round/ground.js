@@ -1,6 +1,7 @@
 import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
+import helper from '../helper';
 
 function str2move(m) {
   return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
@@ -13,6 +14,45 @@ function boardOrientation(data, flip) {
     return flip ? data.opponent.color : data.player.color;
   }
 }
+
+function getBounds(isPortrait) {
+  const { vh, vw } = helper.viewportDim();
+  const top = 50;
+
+  if (isPortrait) {
+    const contentHeight = vh - 50;
+    const pTop = 50 + ((contentHeight - vw - 40) / 2);
+    return {
+      top: pTop,
+      right: vw,
+      bottom: pTop + vw,
+      left: 0,
+      width: vw,
+      height: vw
+    };
+  } else if (helper.isVeryWideScreen()) {
+    const wsSide = vh - top - (vh * 0.88);
+    return {
+      top,
+      right: wsSide,
+      bottom: top + wsSide,
+      left: 0,
+      width: wsSide,
+      height: wsSide
+    };
+  } else {
+    const lSide = vh - top;
+    return {
+      top,
+      right: lSide,
+      bottom: top + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
+    };
+  }
+}
+
 
 function makeConfig(data, fen, flip) {
   return {
@@ -102,5 +142,6 @@ module.exports = {
   promote,
   end,
   applySettings,
-  boardOrientation
+  boardOrientation,
+  getBounds
 };

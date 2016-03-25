@@ -6,9 +6,10 @@ import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
 import work from 'webworkify';
+import socketWorker from './socketWorker';
 import m from 'mithril';
 
-const socketWorker = work(require('./socketWorker'));
+const worker = work(socketWorker);
 
 var socketHandlers;
 var errorDetected = false;
@@ -32,12 +33,12 @@ const defaultHandlers = {
 function askWorker(msg, callback) {
   function listen(e) {
     if (e.data.topic === msg.topic) {
-      socketWorker.removeEventListener('message', listen);
+      worker.removeEventListener('message', listen);
       callback(e.data.payload);
     }
   }
-  socketWorker.addEventListener('message', listen);
-  socketWorker.postMessage(msg);
+  worker.addEventListener('message', listen);
+  worker.postMessage(msg);
 }
 
 function createGame(url, version, handlers, gameUrl, userTv) {
@@ -69,7 +70,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     }
   };
   if (userTv) opts.params = { userTv };
-  socketWorker.postMessage({ topic: 'create', payload: {
+  worker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
@@ -93,7 +94,7 @@ function createTournament(tournamentVersion, tournamentId, handlers) {
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
-  socketWorker.postMessage({ topic: 'create', payload: {
+  worker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
@@ -118,7 +119,7 @@ function createChallenge(id, version, onOpen, handlers) {
     },
     events: Object.assign({}, defaultHandlers, handlers)
   };
-  socketWorker.postMessage({ topic: 'create', payload: {
+  worker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
@@ -141,7 +142,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
-  socketWorker.postMessage({ topic: 'create', payload: {
+  worker.postMessage({ topic: 'create', payload: {
     clientId: utils.lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url: '/lobby/socket/v1',
@@ -165,7 +166,7 @@ function createDefault() {
         registeredEvents: Object.keys(socketHandlers.events)
       }
     };
-    socketWorker.postMessage({ topic: 'create', payload: {
+    worker.postMessage({ topic: 'create', payload: {
       clientId: utils.lichessSri,
       socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
@@ -224,7 +225,7 @@ document.addEventListener('deviceready', () => {
   document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
 }, false);
 
-socketWorker.addEventListener('message', function(msg) {
+worker.addEventListener('message', function(msg) {
   switch (msg.data.topic) {
     case 'onOpen':
       if (socketHandlers.onOpen) socketHandlers.onOpen();
@@ -253,27 +254,27 @@ export default {
   createDefault,
   redirectToGame,
   setVersion(version) {
-    socketWorker.postMessage({ topic: 'setVersion', payload: version });
+    worker.postMessage({ topic: 'setVersion', payload: version });
   },
   getAverageLag(callback) {
     askWorker({ topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
-    socketWorker.postMessage({ topic: 'send', payload: [type, data, opts] });
+    worker.postMessage({ topic: 'send', payload: [type, data, opts] });
   },
   connect() {
-    socketWorker.postMessage({ topic: 'connect' });
+    worker.postMessage({ topic: 'connect' });
   },
   disconnect() {
-    socketWorker.postMessage({ topic: 'disconnect' });
+    worker.postMessage({ topic: 'disconnect' });
   },
   isConnected() {
     return connectedWS;
   },
   destroy() {
-    socketWorker.postMessage({ topic: 'destroy' });
+    worker.postMessage({ topic: 'destroy' });
   },
   terminate() {
-    socketWorker.terminate();
+    worker.terminate();
   }
 };

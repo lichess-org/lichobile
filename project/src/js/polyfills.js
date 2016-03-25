@@ -82,3 +82,25 @@ if (!String.prototype.includes) {
     return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
+
+if (!window.Stockfish) {
+  // cordova-stockfish-plugin interface
+  var stockfishWorker;
+  window.Stockfish = {
+    init: function(success) {
+      stockfishWorker = new Worker('vendor/stockfish6.js');
+      if (success) success();
+    },
+    cmd: function(cmd, cb) {
+      stockfishWorker.postMessage(cmd);
+      if (cb) cb();
+    },
+    output: function(callback) {
+      stockfishWorker.addEventListener('message', callback);
+    },
+    exit: function(cb) {
+      stockfishWorker.terminate();
+      if (cb) cb();
+    }
+  };
+}

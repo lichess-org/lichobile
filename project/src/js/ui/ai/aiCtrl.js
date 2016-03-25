@@ -137,6 +137,7 @@ export default function controller() {
 
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
+
   if (setupFen) {
     this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
     storage.remove(storageFenKey);

@@ -123,8 +123,24 @@
     }
   };
 
-}());
+  // stockfish
+  var stockfishWorker;
+  window.Stockfish = {
+    init: function() {
+      stockfishWorker = new Worker('vendor/stockfish6.js');
+    },
+    cmd: function(cmd) {
+      stockfishWorker.postMessage(cmd);
+    },
+    output: function(callback) {
+      stockfishWorker.addEventListener('message', callback);
+    },
+    exit: function() {
+      stockfishWorker.terminate();
+    }
+  };
 
+}());
 
 /**
  * https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio polyfill

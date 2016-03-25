@@ -10,12 +10,13 @@ const levels = {
 };
 
 export default function(ctrl) {
-  const worker = new Worker('vendor/stockfish6.js');
-
   let analysisDuration;
 
+  window.Stockfish.init();
+
   const bestmoveRegExp = /^bestmove (\w{4})/;
-  worker.addEventListener('message', function(msg) {
+
+  window.Stockfish.output(function(msg) {
     const data = msg.data;
     const bestmoveRegExpMatch = data.match(bestmoveRegExp);
     if (bestmoveRegExpMatch) {
@@ -24,17 +25,17 @@ export default function(ctrl) {
   });
 
   return {
-    search: function(fen) {
-      worker.postMessage(`position fen ${fen}`);
-      worker.postMessage(`go movetime ${analysisDuration}`);
+    search(fen) {
+      window.Stockfish.cmd(`position fen ${fen}`);
+      window.Stockfish.cmd(`go movetime ${analysisDuration}`);
     },
 
-    setLevel: function(level) {
+    setLevel(level) {
       analysisDuration = levels[level][0];
     },
 
     terminate() {
-      worker.terminate();
+      window.Stockfish.terminate();
     }
   };
 }

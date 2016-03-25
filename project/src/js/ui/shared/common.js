@@ -31,9 +31,7 @@ export function backButton(title) {
 }
 
 export function timelineButton() {
-  if (!session.isConnected()) return null;
   const unreadCount = timeline.unreadCount();
-  if (!unreadCount) return null;
   const longAction = () => window.plugins.toast.show(i18n('timline'), 'short', 'top');
   return (
     <button className="main_header_button timeline_button fa fa-bell" key="timeline"
@@ -46,9 +44,8 @@ export function timelineButton() {
 
 export function friendsButton() {
   const nbFriends = friendsApi.count();
-  if (!nbFriends) return null;
-
   const longAction = () => window.plugins.toast.show(i18n('onlineFriends'), 'short', 'top');
+
   return (
     <button className="main_header_button friends_button" key="friends" data-icon="f"
       config={helper.ontouch(friendsPopup.open, longAction)}
@@ -95,10 +92,19 @@ export function gamesButton() {
 }
 
 export function headerBtns() {
-  if (utils.hasNetwork()) {
+  if (utils.hasNetwork() && session.isConnected() && friendsApi.count()
+    && timeline.unreadCount()) {
     return (
       <div className="buttons">
         {timelineButton()}
+        {friendsButton()}
+        {gamesButton()}
+      </div>
+    );
+  }
+  else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
+    return (
+      <div className="buttons">
         {friendsButton()}
         {gamesButton()}
       </div>

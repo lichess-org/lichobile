@@ -10,6 +10,7 @@ import {
 } from '../shared/offlineRound';
 import { sideSelector, opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
+import ground from '../round/ground';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
@@ -30,17 +31,18 @@ function content(ctrl) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
+  const bounds = ground.getBounds(isPortrait);
 
   if (isPortrait)
     return [
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
   else if (helper.isLandscape() && helper.isVeryWideScreen())
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait)}
@@ -53,7 +55,7 @@ function content(ctrl) {
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait)}

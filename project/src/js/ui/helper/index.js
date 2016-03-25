@@ -38,8 +38,6 @@ function viewSlideOut(el, callback) {
 
   function after() {
     utils.setViewSlideDirection('fwd');
-    el.removeAttribute('style');
-    el.removeEventListener('transitionend', after, false);
     callback();
   }
 
@@ -49,7 +47,7 @@ function viewSlideOut(el, callback) {
 function viewFadesIn(el, callback) {
   var tId;
 
-  el.style.opacity = '0.3';
+  el.style.opacity = '0.5';
   el.style.transition = 'opacity 200ms ease-out';
 
   setTimeout(() => {
@@ -75,18 +73,15 @@ function viewFadesOut(el, callback) {
   var tId;
 
   el.style.opacity = '1';
-  el.style.transition = 'opacity 200ms ease-out';
+  el.style.transition = 'opacity 200ms ease-out, visibility 0s linear 200ms';
 
   setTimeout(() => {
     el.style.opacity = '0';
+    el.style.visibility = 'hidden';
   });
 
   function after() {
     clearTimeout(tId);
-    if (el) {
-      el.removeAttribute('style');
-      el.removeEventListener('transitionend', after, false);
-    }
     callback();
   }
 
@@ -97,7 +92,7 @@ function viewFadesOut(el, callback) {
 }
 
 helper.slidingPage = animator(viewSlideIn, viewSlideOut);
-helper.fadesPage = animator(viewFadesIn, viewFadesOut);
+helper.fadingPage = animator(viewFadesIn, viewFadesOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
@@ -183,9 +178,9 @@ helper.fadesOut = function(callback, selector, time = 150) {
 };
 
 function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
-  return function(el, isUpdate, context) {
+  return function(el, isUpdate) {
     if (!isUpdate) {
-      var unbind = ButtonHandler(el,
+      ButtonHandler(el,
         e => {
           m.startComputation();
           try {
@@ -200,10 +195,6 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
         scrollY,
         touchEndFeedback
       );
-      context.onunload = function() {
-        unbind();
-        unbind = null;
-      };
     }
   };
 }

@@ -26,6 +26,9 @@ function main() {
 
   routes.init();
 
+  // cache viewport dims
+  helper.viewportDim();
+
   // open games from external links with url scheme
   window.handleOpenURL = function(url) {
     setTimeout(onUrlOpen.bind(undefined, url), 0);

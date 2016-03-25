@@ -14,6 +14,17 @@ export function autoredraw(action) {
   }
 }
 
+export function askWorker(worker, msg, callback) {
+  function listen(e) {
+    if (e.data.topic === msg.topic) {
+      worker.removeEventListener('message', listen);
+      callback(e.data.payload);
+    }
+  }
+  worker.addEventListener('message', listen);
+  worker.postMessage(msg);
+}
+
 export function hasNetwork() {
   return window.navigator.connection.type !== window.Connection.NONE;
 }

@@ -98,6 +98,10 @@
     window.navigator.connection.type = window.Connection.NONE;
     document.dispatchEvent(new window.Event('offline'));
   };
+  window.setOnline = function() {
+    window.navigator.connection.type = window.Connection.WIFI;
+    document.dispatchEvent(new window.Event('online'));
+  };
 
   // notification
   window.navigator.notification = {};

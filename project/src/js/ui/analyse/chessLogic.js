@@ -1,20 +1,8 @@
-import work from 'webworkify';
-import chessWorker from '../../chessWorker';
+import { askWorker } from '../../utils';
 
 export default function chessLogic(ctrl) {
 
-  const worker = work(chessWorker);
-
-  function askWorker(msg, callback) {
-    function listen(e) {
-      if (e.data.topic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        callback(e.data.payload);
-      }
-    }
-    worker.addEventListener('message', listen);
-    worker.postMessage(msg);
-  }
+  const worker = new Worker('lib/chessWorker.js');
 
   worker.addEventListener('message', function(msg) {
     switch (msg.data.topic) {

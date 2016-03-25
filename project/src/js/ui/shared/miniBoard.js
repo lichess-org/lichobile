@@ -6,12 +6,12 @@ import m from 'mithril';
 export default {
   view(ctrl, args) {
 
-    const { fen, lastMove, orientation, link, gameObj } = args;
+    const { bounds, fen, lastMove, orientation, link, gameObj } = args;
 
     return (
       <div className="mini_board" config={helper.ontouchY(link)}>
         <div className="board_wrapper">
-          {m.component(ViewOnlyBoard, {fen, lastMove, orientation })}
+          {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
         </div>
         { gameObj ?
         <div className="vsbloc">

@@ -1,9 +1,8 @@
 import { Chess } from 'chess.js';
 import { gameResult } from '.';
+import { askWorker } from '../../../utils';
 import settings from '../../../settings';
 import session from '../../../session';
-import work from 'webworkify';
-import chessWorker from '../../../chessWorker';
 
 export default function replayCtrl(root, rootSituations, rootPly) {
 
@@ -12,7 +11,7 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.situations = [];
   this.hash = '';
 
-  const worker = work(chessWorker);
+  const worker = new Worker('lib/chessWorker.js');
   worker.onmessage = function(msg) {
     if (msg.data.topic === 'move') {
       this.ply++;
@@ -27,19 +26,25 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.init = function(situations, ply) {
     if (situations) this.situations = situations;
     else {
-      var chess = new Chess(this.root.data.game.initialFen, 0);
-      this.situations = [{
-        fen: this.root.data.game.initialFen,
-        turnColor: this.root.data.game.player,
-        movable: {
-          color: this.root.data.game.player,
-          dests: chess.dests()
-        },
-        check: false,
-        lastMove: null,
-        san: null,
-        ply: 0
-      }];
+      askWorker(worker, {
+        topic: 'dests',
+        payload: {
+          fen: this.root.data.game.initialFen
+        }
+      }, function(data) {
+        this.situations = [{
+          fen: this.root.data.game.initialFen,
+          turnColor: this.root.data.game.player,
+          movable: {
+            color: this.root.data.game.player,
+            dests: data.dests
+          },
+          check: false,
+          lastMove: null,
+          san: null,
+          ply: 0
+        }];
+      });
     }
     this.ply = ply || 0;
   }.bind(this);

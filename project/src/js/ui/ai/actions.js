@@ -13,9 +13,12 @@ const colors = [
 ];
 
 export function opponentSelector() {
+  const opps = settings.ai.availableOpponents.map(o =>
+    ['aiNameLevelAiLevel', o[1], o[0], o[1]]
+  );
   return (
     <div className="select_input">
-      {formWidgets.renderSelect('opponent', 'opponent', settings.ai.availableOpponents, settings.ai.opponent)}
+      {formWidgets.renderSelect('opponent', 'opponent', opps, settings.ai.opponent)}
     </div>
   );
 }

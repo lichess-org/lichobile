@@ -1,11 +1,11 @@
 import i18n from '../../i18n';
 import m from 'mithril';
 
-function renderOption(label, value, storedValue, labelArg) {
+function renderOption(label, value, storedValue, labelArg, labelArg2) {
   return m('option', {
     value: value,
     selected: storedValue === value
-  }, i18n(label, labelArg));
+  }, i18n(label, labelArg, labelArg2));
 }
 
 module.exports = {
@@ -52,7 +52,7 @@ module.exports = {
           }
         }
       }, options.map(function(e) {
-        return renderOption(e[0], e[1], storedValue, e[2]);
+        return renderOption(e[0], e[1], storedValue, e[2], e[3]);
       }))
     ];
   },

@@ -42,6 +42,11 @@ export default function controller() {
     };
   };
 
+  const engineMove = function () {
+    engine.setLevel(this.getOpponent().level);
+    engine.search(this.data.game.fen);
+  }.bind(this);
+
   const isEngineToMove = function() {
     return this.chessground.data.turnColor !== this.data.player.color;
   }.bind(this);
@@ -77,7 +82,7 @@ export default function controller() {
         m.redraw();
       }.bind(this), 1000);
     } else if (isEngineToMove()) {
-      engine.search(this.data.game.fen);
+      engineMove();
     }
   }.bind(this);
 
@@ -100,7 +105,7 @@ export default function controller() {
       this.actions.close();
     }
     if (isEngineToMove()) {
-      engine.search(this.data.game.fen);
+      engineMove();
     }
   }.bind(this);
 

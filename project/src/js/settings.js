@@ -75,14 +75,14 @@ export default {
 
   ai: {
     availableOpponents: [
-      ['Tuco Salamanca', '1'],
-      ['Jesse Pinkman', '2'],
-      ['Skyler White', '3'],
-      ['Saul Goodman', '4'],
-      ['Mike Ehrmantraut', '5'],
-      ['Lydia Rodarte-Quayle', '6'],
-      ['Gustavo Fring', '7'],
-      ['Heisenberg', '8']
+      ['Stockfish', '1', '1'],
+      ['Stockfish', '2', '2'],
+      ['Stockfish', '3', '3'],
+      ['Stockfish', '4', '4'],
+      ['Stockfish', '5', '5'],
+      ['Stockfish', '6', '6'],
+      ['Stockfish', '7', '7'],
+      ['Stockfish', '8', '8']
     ],
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1')

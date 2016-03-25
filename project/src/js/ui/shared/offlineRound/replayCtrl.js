@@ -44,7 +44,8 @@ export default function replayCtrl(root, rootSituations, rootPly) {
           san: null,
           ply: 0
         }];
-      });
+        this.apply();
+      }.bind(this));
     }
     this.ply = ply || 0;
   }.bind(this);

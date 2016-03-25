@@ -30,17 +30,6 @@ const defaultHandlers = {
   }
 };
 
-function askWorker(msg, callback) {
-  function listen(e) {
-    if (e.data.topic === msg.topic) {
-      worker.removeEventListener('message', listen);
-      callback(e.data.payload);
-    }
-  }
-  worker.addEventListener('message', listen);
-  worker.postMessage(msg);
-}
-
 function createGame(url, version, handlers, gameUrl, userTv) {
   errorDetected = false;
   socketHandlers = {
@@ -257,7 +246,7 @@ export default {
     worker.postMessage({ topic: 'setVersion', payload: version });
   },
   getAverageLag(callback) {
-    askWorker({ topic: 'averageLag' }, callback);
+    utils.askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
     worker.postMessage({ topic: 'send', payload: [type, data, opts] });

@@ -33,9 +33,6 @@ export default function controller() {
     userId,
     variant,
     user,
-    variantPerfData,
-    onunload() {
-      socket.destroy();
-    }
+    variantPerfData
   };
 }

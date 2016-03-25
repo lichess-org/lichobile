@@ -1,5 +1,6 @@
 import * as utils from '../../utils';
 import h from '../helper';
+import timeline from '../../lichess/timeline';
 import { menuButton, timelineButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
 import settings from '../../settings';
@@ -20,7 +21,7 @@ function header(ctrl) {
       {menuButton()}
       <h1>{i18n('players')}</h1>
       <div className="buttons">
-        {timelineButton()}
+        {timeline.unreadCount() ? timelineButton() : null}
         {friendsButton()}
         <button className="main_header_button" key="searchPlayers" data-icon="y"
           config={h.ontouch(ctrl.goSearch)}/>

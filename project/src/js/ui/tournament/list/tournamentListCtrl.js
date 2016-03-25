@@ -19,9 +19,6 @@ export default function controller() {
 
   return {
     tournaments,
-    currentTab,
-    onunload: () => {
-      socket.destroy();
-    }
+    currentTab
   };
 }

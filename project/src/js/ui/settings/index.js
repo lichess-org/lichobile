@@ -8,11 +8,13 @@ import session from '../../session';
 import i18n from '../../i18n';
 import push from '../../push';
 import sound from '../../sound';
+import socket from '../../socket';
 import m from 'mithril';
 
 export default {
   controller() {
     helper.analyticsTrackView('Settings');
+    socket.createDefault();
   },
 
   view() {

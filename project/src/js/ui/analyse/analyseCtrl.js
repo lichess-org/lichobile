@@ -274,7 +274,6 @@ export default function controller() {
     window.plugins.insomnia.allowSleepAgain();
     if (this.ceval) this.ceval.destroy();
     if (this.chessLogic) this.chessLogic.onunload();
-    socket.destroy();
   }.bind(this);
 
   const init = function(data) {

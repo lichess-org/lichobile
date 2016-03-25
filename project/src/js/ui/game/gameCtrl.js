@@ -78,7 +78,6 @@ export default function controller() {
         round.onunload();
         round = null;
       }
-      socket.destroy();
     },
     getRound: function() {
       return round;

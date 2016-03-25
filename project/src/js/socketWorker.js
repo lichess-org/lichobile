@@ -260,20 +260,29 @@ export default function(worker) {
     }
   };
 
+  function create(payload) {
+    // don't always recreate default socket on page change
+    if (socketInstance && socketInstance.options.name === 'default') {
+      return;
+    }
+
+    if (socketInstance) {
+      socketInstance.destroy();
+      socketInstance = null;
+    }
+    socketInstance = new StrongSocket(
+      payload.clientId,
+      payload.socketEndPoint,
+      payload.url,
+      payload.version,
+      payload.opts
+    );
+  }
+
   worker.addEventListener('message', function(msg) {
     switch (msg.data.topic) {
       case 'create':
-        if (socketInstance) {
-          socketInstance.destroy();
-          socketInstance = null;
-        }
-        socketInstance = new StrongSocket(
-          msg.data.payload.clientId,
-          msg.data.payload.socketEndPoint,
-          msg.data.payload.url,
-          msg.data.payload.version,
-          msg.data.payload.opts
-        );
+        create(msg.data.payload);
         break;
       case 'send':
         const [t, d, o] = msg.data.payload;

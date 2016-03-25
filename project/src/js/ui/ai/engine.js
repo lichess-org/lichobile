@@ -17,7 +17,6 @@ export default function(ctrl) {
   const bestmoveRegExp = /^bestmove (\w{4})/;
   worker.addEventListener('message', function(msg) {
     const data = msg.data;
-    console.log('data', data);
     const bestmoveRegExpMatch = data.match(bestmoveRegExp);
     if (bestmoveRegExpMatch) {
       ctrl.onEngineSearch(bestmoveRegExpMatch[1]);

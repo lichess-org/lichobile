@@ -1,43 +1,20 @@
-import garbo from '../../garbochess/garbochess';
+export default function(ctrl) {
+  const worker = new Worker('vendor/stockfish6.js');
 
-// [time, plies]
-var levels = {
-  1: [20, 1],
-  2: [40, 2],
-  3: [70, 3],
-  4: [120, 4],
-  5: [300, 6],
-  6: [600, 8],
-  7: [1000, 12],
-  8: [2000, 20]
-};
+  const bestmoveRegExp = /^bestmove (\w{4})/;
+  worker.addEventListener('message', function(msg) {
+    const data = msg.data;
+    console.log('data', data);
+    const bestmoveRegExpMatch = data.match(bestmoveRegExp);
+    if (bestmoveRegExpMatch) {
+      ctrl.onEngineSearch(bestmoveRegExpMatch[1]);
+    }
+  });
 
-var level = 1;
-
-var forsyth = function(role) {
-  return role === 'knight' ? 'n' : role[0];
-};
-
-export default {
-  init: function(fen) {
-    garbo.reset();
-    garbo.setFen(fen);
-  },
-  setLevel: function(l) {
-    level = l;
-    garbo.setMoveTime(levels[level][0]);
-  },
-  addMove: function(origKey, destKey, promotionRole) {
-    var move = origKey + destKey + (promotionRole ? forsyth(promotionRole) : '');
-    garbo.addMove(garbo.getMoveFromString(move));
-  },
-  search: function(then) {
-    garbo.search(function(bestMove) {
-      if (bestMove === 0) return;
-      var str = garbo.formatMove(bestMove);
-      var move = [str.slice(0, 2), str.slice(2, 4), str[4]];
-      then(move);
-    }, levels[level][1], null);
-  },
-  getFen: garbo.getFen
-};
+  return {
+    search: function(fen) {
+      worker.postMessage(`position fen ${fen}`);
+      worker.postMessage('go movetime 500');
+    }
+  };
+}

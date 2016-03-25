@@ -1,17 +1,8 @@
+import { askWorker } from '../../utils';
+
 export default function chessLogic(ctrl) {
 
   const worker = new Worker('lib/chessWorker.js');
-
-  function askWorker(msg, callback) {
-    function listen(e) {
-      if (e.data.topic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        callback(e.data.payload);
-      }
-    }
-    worker.addEventListener('message', listen);
-    worker.postMessage(msg);
-  }
 
   worker.addEventListener('message', function(msg) {
     switch (msg.data.topic) {

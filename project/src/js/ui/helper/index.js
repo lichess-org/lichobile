@@ -38,8 +38,6 @@ function viewSlideOut(el, callback) {
 
   function after() {
     utils.setViewSlideDirection('fwd');
-    el.removeAttribute('style');
-    el.removeEventListener('transitionend', after, false);
     callback();
   }
 
@@ -49,7 +47,7 @@ function viewSlideOut(el, callback) {
 function viewFadesIn(el, callback) {
   var tId;
 
-  el.style.opacity = '0.3';
+  el.style.opacity = '0.5';
   el.style.transition = 'opacity 200ms ease-out';
 
   setTimeout(() => {
@@ -75,18 +73,15 @@ function viewFadesOut(el, callback) {
   var tId;
 
   el.style.opacity = '1';
-  el.style.transition = 'opacity 200ms ease-out';
+  el.style.transition = 'opacity 200ms ease-out, visibility 0s linear 200ms';
 
   setTimeout(() => {
     el.style.opacity = '0';
+    el.style.visibility = 'hidden';
   });
 
   function after() {
     clearTimeout(tId);
-    if (el) {
-      el.removeAttribute('style');
-      el.removeEventListener('transitionend', after, false);
-    }
     callback();
   }
 

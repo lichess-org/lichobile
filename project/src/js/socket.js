@@ -1,4 +1,5 @@
 import storage from './storage';
+import difference from 'lodash/difference';
 import * as utils from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
@@ -21,7 +22,7 @@ var proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
 const defaultHandlers = {
-  following_onlines: data => utils.autoredraw(utils.partialf(friendsApi.set, data)),
+  following_onlines: handleFollowingOnline,
   following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
   following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
   challenges: data => {
@@ -29,6 +30,13 @@ const defaultHandlers = {
     m.redraw();
   }
 };
+
+function handleFollowingOnline(data) {
+  if (difference(data, friendsApi.list()).length > 0) {
+    friendsApi.set(data);
+    m.redraw();
+  }
+}
 
 function createGame(url, version, handlers, gameUrl, userTv) {
   errorDetected = false;

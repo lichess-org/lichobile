@@ -16,9 +16,9 @@ import m from 'mithril';
 export const storageFenKey = 'ai.setupFen';
 
 export default function controller() {
-  const engine = engineCtrl(this);
-
   helper.analyticsTrackView('Offline AI');
+
+  const engine = engineCtrl(this);
 
   const save = function() {
     setCurrentAIGame({
@@ -159,6 +159,7 @@ export default function controller() {
     if (this.replay) {
       this.replay.onunload();
     }
+    engine.terminate();
   };
 }
 

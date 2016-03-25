@@ -15,6 +15,10 @@ export default function(ctrl) {
     search: function(fen) {
       worker.postMessage(`position fen ${fen}`);
       worker.postMessage('go movetime 500');
+    },
+
+    terminate() {
+      worker.terminate();
     }
   };
 }

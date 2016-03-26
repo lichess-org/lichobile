@@ -88,19 +88,27 @@ if (!window.Stockfish) {
   var stockfishWorker;
   window.Stockfish = {
     init: function(success) {
+      if (stockfishWorker) {
+        setTimeout(success);
+        return;
+      }
       stockfishWorker = new Worker('vendor/stockfish6.js');
-      if (success) success();
+      if (success) {
+        setTimeout(success, 50);
+      }
     },
-    cmd: function(cmd, cb) {
+    cmd: function(cmd) {
       stockfishWorker.postMessage(cmd);
-      if (cb) cb();
     },
     output: function(callback) {
-      stockfishWorker.addEventListener('message', callback);
+      stockfishWorker.addEventListener('message', msg => {
+        callback(msg.data);
+      });
     },
     exit: function(cb) {
       stockfishWorker.terminate();
-      if (cb) cb();
+      stockfishWorker = null;
+      if (cb) setTimeout(cb, 1);
     }
   };
 }

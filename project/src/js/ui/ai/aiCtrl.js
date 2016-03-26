@@ -107,6 +107,7 @@ export default function controller() {
     if (isEngineToMove()) {
       engineMove();
     }
+    m.redraw();
   }.bind(this);
 
   this.startNewGame = function() {
@@ -138,15 +139,21 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  if (setupFen) {
-    this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
-    storage.remove(storageFenKey);
-  } else if (saved) try {
-    this.init(saved.data, saved.situations, saved.ply);
-  } catch (e) {
-    console.log(e, 'Fail to load saved game');
-    this.init(makeData({}));
-  } else this.init(makeData({}));
+  engine.init(() => {
+    if (setupFen) {
+      this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
+      storage.remove(storageFenKey);
+    } else if (saved) {
+      try {
+        this.init(saved.data, saved.situations, saved.ply);
+      } catch (e) {
+        console.log(e, 'Fail to load saved game');
+        this.init(makeData({}));
+      }
+    } else {
+      this.init(makeData({}));
+    }
+  });
 
   this.onEngineSearch = function(bestmove) {
     const from = bestmove.slice(0, 2);
@@ -165,7 +172,7 @@ export default function controller() {
     if (this.replay) {
       this.replay.onunload();
     }
-    engine.terminate();
+    engine.exit();
   };
 }
 

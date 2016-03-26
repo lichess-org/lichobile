@@ -11,20 +11,22 @@ const levels = {
 
 export default function(ctrl) {
   let analysisDuration;
-
-  window.Stockfish.init();
-
   const bestmoveRegExp = /^bestmove (\w{4})/;
 
-  window.Stockfish.output(function(msg) {
-    const data = msg.data;
-    const bestmoveRegExpMatch = data.match(bestmoveRegExp);
-    if (bestmoveRegExpMatch) {
-      ctrl.onEngineSearch(bestmoveRegExpMatch[1]);
-    }
-  });
-
   return {
+    init(cb) {
+      window.Stockfish.init(function() {
+        window.Stockfish.output(function(msg) {
+          console.log(msg);
+          const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
+          if (bestmoveRegExpMatch) {
+            ctrl.onEngineSearch(bestmoveRegExpMatch[1]);
+          }
+        });
+        cb();
+      });
+    },
+
     search(fen) {
       window.Stockfish.cmd(`position fen ${fen}`);
       window.Stockfish.cmd(`go movetime ${analysisDuration}`);
@@ -34,8 +36,8 @@ export default function(ctrl) {
       analysisDuration = levels[level][0];
     },
 
-    terminate() {
-      window.Stockfish.terminate();
+    exit() {
+      window.Stockfish.exit();
     }
   };
 }

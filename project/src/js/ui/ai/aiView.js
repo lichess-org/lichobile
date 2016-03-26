@@ -1,6 +1,6 @@
 import chessground from 'chessground-mobile';
 import layout from '../layout';
-import { header } from '../shared/common';
+import { header, viewOnlyBoardContent } from '../shared/common';
 import {
   renderAntagonist,
   renderGameActionsBar,
@@ -18,20 +18,27 @@ import actions from './actions';
 import m from 'mithril';
 
 export default function view(ctrl) {
+  var content;
+
+  if (ctrl.replay) {
+    content = renderContent.bind(undefined, ctrl);
+  } else {
+    content = viewOnlyBoardContent;
+  }
 
   return layout.board(
     header.bind(undefined, i18n('playOfflineComputer')),
-    content.bind(undefined, ctrl),
+    content,
     overlay.bind(undefined, ctrl)
   );
 }
 
-function content(ctrl) {
+function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
   const bounds = ground.getBounds(isPortrait);
+  const replayTable = renderReplayTable(ctrl.replay);
 
   if (isPortrait)
     return [

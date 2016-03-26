@@ -149,13 +149,15 @@ export function connectingHeader(title) {
 }
 
 export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
-  const x = helper.viewportDim().vw;
-  const boardStyle = helper.isLandscape() ? {} : { width: x + 'px', height: x + 'px' };
-  const boardKey = helper.isLandscape() ? 'landscape' : 'portrait';
+  const isPortrait = helper.isPortrait();
+  const { vw, vh } = helper.viewportDim();
+  const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
+  const boardKey = isPortrait ? 'portrait' : 'landscape';
+  const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 };
   return (
     <div className="content_round onlyBoard">
       <section key={boardKey} className="board_wrapper" style={boardStyle}>
-        {m.component(ViewOnlyBoard, {fen, lastMove, orientation, variant})}
+        {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant})}
       </section>
     </div>
   );

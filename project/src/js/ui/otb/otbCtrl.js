@@ -9,6 +9,7 @@ import actions from './actions';
 import helper from '../helper';
 import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame, getCurrentOTBGame } from '../../utils/offlineGames';
+import socket from '../../socket';
 import m from 'mithril';
 
 export const storageFenKey = 'otb.setupFen';
@@ -16,6 +17,7 @@ export const storageFenKey = 'otb.setupFen';
 export default function controller() {
 
   helper.analyticsTrackView('On The Board');
+  socket.createDefault();
 
   const save = function() {
     setCurrentOTBGame({

@@ -11,12 +11,14 @@ import engineCtrl from './engine';
 import helper from '../helper';
 import { getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
+import socket from '../../socket';
 import m from 'mithril';
 
 export const storageFenKey = 'ai.setupFen';
 
 export default function controller() {
   helper.analyticsTrackView('Offline AI');
+  socket.createDefault();
 
   const engine = engineCtrl(this);
 

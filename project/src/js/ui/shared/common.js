@@ -95,7 +95,7 @@ export function headerBtns() {
   if (utils.hasNetwork() && session.isConnected() && friendsApi.count()
     && timeline.unreadCount()) {
     return (
-      <div className="buttons">
+      <div key="buttons" className="buttons">
         {timelineButton()}
         {friendsButton()}
         {gamesButton()}
@@ -104,7 +104,7 @@ export function headerBtns() {
   }
   else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
     return (
-      <div className="buttons">
+      <div key="buttons" className="buttons">
         {friendsButton()}
         {gamesButton()}
       </div>
@@ -112,7 +112,7 @@ export function headerBtns() {
   }
   else {
     return (
-      <div className="buttons">
+      <div key="buttons" className="buttons">
         {gamesButton()}
       </div>
     );
@@ -123,7 +123,7 @@ export function header(title, leftButton) {
   return (
     <nav>
       {leftButton ? leftButton : menuButton()}
-      {title ? <h1>{title}</h1> : null}
+      {title ? <h1 key="title">{title}</h1> : null}
       {headerBtns()}
     </nav>
   );
@@ -139,7 +139,7 @@ export function connectingHeader(title) {
   return (
     <nav>
       {menuButton()}
-      <h1 className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
       </h1>

@@ -138,14 +138,9 @@ export default {
         }, [
           m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
             value: ctrl.inputValue,
-            config: function(el, isUpdate, context) {
+            config: function(el, isUpdate) {
               if (!isUpdate) {
-                el.addEventListener('input', function(e) {
-                  ctrl.inputValue = e.target.value;
-                });
-                context.onunload = function() {
-                  el.removeEventListener('input');
-                };
+                el.addEventListener('input', inputListener.bind(undefined, ctrl));
               }
             }
           }),
@@ -155,3 +150,7 @@ export default {
     ]);
   }
 };
+
+function inputListener(ctrl, e) {
+  ctrl.inputValue = e.target.value;
+}

@@ -51,7 +51,7 @@ export default {
       '/@/:id/following': fadingPage(userFollowing),
       '/@/:id/followers': fadingPage(userFollowers),
       '/@/:id/games': slidingPage(userGames),
-      '/@/:id/games/:filter': fadingPage(userGames),
+      '/@/:id/games/:filter': slidingPage(userGames),
       '/@/:id/:variant/perf': slidingPage(userVariantPerf),
       '/@/:id/tv': fadingPage(userTV),
       '/editor': fadingPage(editor),

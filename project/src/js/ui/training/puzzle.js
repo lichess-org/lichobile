@@ -1,7 +1,7 @@
 import compact from 'lodash/compact';
 import keys from 'lodash/keys';
 import head from 'lodash/head';
-import rest from 'lodash/rest';
+import tail from 'lodash/tail';
 import toPairs from 'lodash/toPairs';
 import chessground from 'chessground-mobile';
 import chess from './chess';
@@ -50,7 +50,7 @@ function findBestLine(lines) {
   var loop = function(paths) {
     if (paths.length === 0) return [];
     var path = head(paths);
-    var siblings = rest(paths);
+    var siblings = tail(paths);
     var ahead = getPath(lines, path);
     switch (ahead) {
       case 'win':

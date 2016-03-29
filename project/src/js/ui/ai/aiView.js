@@ -39,6 +39,7 @@ function renderContent(ctrl) {
   const isPortrait = helper.isPortrait();
   const bounds = ground.getBounds(isPortrait);
   const replayTable = renderReplayTable(ctrl.replay);
+  const isVWS = helper.isVeryWideScreen();
 
   if (isPortrait)
     return [
@@ -47,12 +48,17 @@ function renderContent(ctrl) {
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
-  else if (helper.isLandscape() && helper.isVeryWideScreen())
+  else if (isVWS)
     return [
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait)}
+          {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
+          <div key="spinner" className="engineSpinner">
+          { ctrl.vm.engineSearching ?
+            <div className="fa fa-spinner fa-pulse" /> : null
+          }
+          </div>
           {replayTable}
           {renderEndedGameStatus(ctrl.actions)}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}

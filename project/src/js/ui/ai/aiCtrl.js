@@ -11,6 +11,7 @@ import engineCtrl from './engine';
 import helper from '../helper';
 import { getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
+import i18n from '../../i18n';
 import socket from '../../socket';
 import m from 'mithril';
 
@@ -19,6 +20,10 @@ export const storageFenKey = 'ai.setupFen';
 export default function controller() {
   helper.analyticsTrackView('Offline AI');
   socket.createDefault();
+
+  this.vm = {
+    engineSearching: false
+  };
 
   const engine = engineCtrl(this);
 
@@ -36,17 +41,28 @@ export default function controller() {
 
   this.getOpponent = function() {
     const level = settings.ai.opponent();
+    const name = settings.ai.availableOpponents.find(e => e[1] === level)[0];
     return {
-      name: settings.ai.availableOpponents.filter(function(o) {
-        return o[1] === level;
-      })[0][0],
+      name: i18n('aiNameLevelAiLevel', name, level),
       level: parseInt(level) || 1
     };
   };
 
+  this.onEngineSearch = function(bestmove) {
+    const from = bestmove.slice(0, 2);
+    const to = bestmove.slice(2, 4);
+    this.vm.engineSearching = false;
+    this.chessground.apiMove(from, to);
+    addMove(from, to);
+  };
+
   const engineMove = function () {
-    engine.setLevel(this.getOpponent().level);
-    engine.search(this.data.game.fen);
+    this.vm.engineSearching = true;
+    console.log(this.vm.engineSearching);
+    setTimeout(() => {
+      engine.setLevel(this.getOpponent().level);
+      engine.search(this.data.game.fen);
+    }, 500);
   }.bind(this);
 
   const isEngineToMove = function() {
@@ -85,6 +101,7 @@ export default function controller() {
       }.bind(this), 1000);
     } else if (isEngineToMove()) {
       engineMove();
+      m.redraw();
     }
   }.bind(this);
 
@@ -156,13 +173,6 @@ export default function controller() {
       this.init(makeData({}));
     }
   });
-
-  this.onEngineSearch = function(bestmove) {
-    const from = bestmove.slice(0, 2);
-    const to = bestmove.slice(2, 4);
-    this.chessground.apiMove(from, to);
-    addMove(from, to);
-  };
 
   window.plugins.insomnia.keepAwake();
 

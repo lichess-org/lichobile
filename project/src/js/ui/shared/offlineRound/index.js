@@ -5,15 +5,21 @@ import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position, isPortrait) {
+export function renderAntagonist(ctrl, content, material, position, isPortrait, isVWS) {
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
   return (
     <section className={'playTable ' + position} key={key}>
-      <div className="antagonistInfos offline">
+      <div key="infos" className="antagonistInfos offline">
         <div>{content}</div>
         <div className="ratingAndMaterial">{renderMaterial(material)}</div>
       </div>
+      { !isVWS && position === 'opponent' && ctrl.vm.engineSearching ?
+        <div key="spinner" className="engineSpinner">
+          <div className="fa fa-spinner fa-pulse" />
+        </div> :
+        null
+      }
     </section>
   );
 }

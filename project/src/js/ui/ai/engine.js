@@ -30,12 +30,16 @@ export default function(ctrl) {
         setOption('Ponder', 'false');
 
         cb();
-      });
+      }, console.info.bind(console));
     },
 
     search(fen) {
-      window.Stockfish.cmd(`position fen ${fen}`);
-      window.Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      window.Stockfish.cmd(`position fen ${fen}`, success => {
+        console.info('after position', success);
+      }, console.error.bind(console));
+      window.Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`, success => {
+        console.info('after search', success);
+      }, console.error.bind(console));
     },
 
     setLevel(l) {
@@ -50,7 +54,7 @@ export default function(ctrl) {
 }
 
 function setOption(name, value) {
-  window.Stockfish.cmd(`setoption name ${name} value ${value}`);
+  window.Stockfish.cmd(`setoption name ${name} value ${value}`, console.info.bind(console), console.error.bind(console));
 }
 
 function moveTime(level) {

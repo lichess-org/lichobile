@@ -169,6 +169,7 @@
     "ionic-plugin-keyboard": "ionic-plugin-keyboard@1.0.8",
     "nl.x-services.plugins.insomnia": "cordova-plugin-insomnia@4.2.0",
     "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.5.0",
-    "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11"
+    "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11",
+    "cordova-plugin-stockfish": "../cordova-plugin-stockfish"
   }
 }

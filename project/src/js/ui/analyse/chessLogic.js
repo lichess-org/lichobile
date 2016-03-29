@@ -23,7 +23,7 @@ export default function chessLogic(ctrl) {
       worker.postMessage({ topic: 'dests', payload: req });
     },
     getSanMoveFromUci(req, callback) {
-      askWorker({ topic: 'san', payload: req }, callback);
+      askWorker(worker, { topic: 'san', payload: req }, callback);
     },
     onunload() {
       if (worker) worker.terminate();

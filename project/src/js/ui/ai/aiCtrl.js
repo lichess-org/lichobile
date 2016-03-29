@@ -58,7 +58,6 @@ export default function controller() {
 
   const engineMove = function () {
     this.vm.engineSearching = true;
-    console.log(this.vm.engineSearching);
     setTimeout(() => {
       engine.setLevel(this.getOpponent().level);
       engine.search(this.data.game.fen);

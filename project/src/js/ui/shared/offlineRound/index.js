@@ -14,7 +14,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
         <div>{content}</div>
         <div className="ratingAndMaterial">{renderMaterial(material)}</div>
       </div>
-      { !isVWS && position === 'opponent' && ctrl.vm.engineSearching ?
+      { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
         <div key="spinner" className="engineSpinner">
           <div className="fa fa-spinner fa-pulse" />
         </div> :

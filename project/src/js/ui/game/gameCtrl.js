@@ -5,7 +5,6 @@ import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
 import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
-import socket from '../../socket';
 import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import i18n from '../../i18n';

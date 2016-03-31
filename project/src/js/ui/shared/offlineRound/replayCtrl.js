@@ -40,7 +40,6 @@ export default function replayCtrl(root, rootSituations, rootPly) {
         this.situations = [{
           fen: this.root.data.game.initialFen,
           player: this.root.data.game.player,
-          movable: true,
           dests: data.dests,
           check: false,
           lastMove: null,
@@ -62,15 +61,21 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.apply = function() {
     const sit = this.situation();
     if (sit) {
-      this.root.chessground.set({
-        fen: sit.fen,
-        turnColor: sit.player,
-        movable: {
-          dests: sit.dests,
-          color: sit.player
-        },
-        check: sit.check
-      });
+      // TODO remove this in future version
+      // it's here for BC compat only
+      if (sit.movable) {
+        this.root.chessground.set(sit);
+      } else {
+        this.root.chessground.set({
+          fen: sit.fen,
+          turnColor: sit.player,
+          movable: {
+            dests: sit.dests,
+            color: sit.player
+          },
+          check: sit.check
+        });
+      }
     }
   }.bind(this);
 

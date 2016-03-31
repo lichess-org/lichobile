@@ -48,7 +48,7 @@ export default function controller() {
     save();
     m.redraw();
     const sit = this.replay.situation();
-    if (sit.finished) setTimeout(function() {
+    if (sit.status && sit.status.id >= 30) setTimeout(function() {
       setResult(this);
       this.chessground.stop();
       this.actions.open();

@@ -84,8 +84,8 @@ export function gameResult(replayCtrl) {
 
 export function setResult(ctrl) {
   const sit = ctrl.replay.situation();
-  ctrl.data.game.status.id = statusApi.offlineSituationToStatus(sit);
-  if (!sit.draw) {
+  ctrl.data.game.status = sit.status;
+  if (sit.status.id !== 34) {
     ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
   }
 }

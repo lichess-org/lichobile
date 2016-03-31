@@ -11,9 +11,13 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   this.situations = [];
   this.hash = '';
 
-  const worker = new Worker('lib/chessWorker.js');
+  const worker = new Worker('vendor/scalachessjs.js');
   worker.onmessage = function(msg) {
-    if (msg.data.topic === 'move') {
+    if (msg.data.topic === 'error') {
+      console.error(msg.data);
+    }
+    else if (msg.data.topic === 'move') {
+      console.log(msg.data.payload);
       this.ply++;
       if (this.ply <= this.situations.length)
         this.situations = this.situations.slice(0, this.ply);
@@ -29,16 +33,15 @@ export default function replayCtrl(root, rootSituations, rootPly) {
       askWorker(worker, {
         topic: 'dests',
         payload: {
+          variant: this.root.data.game.variant.key,
           fen: this.root.data.game.initialFen
         }
       }, function(data) {
         this.situations = [{
           fen: this.root.data.game.initialFen,
-          turnColor: this.root.data.game.player,
-          movable: {
-            color: this.root.data.game.player,
-            dests: data.dests
-          },
+          player: this.root.data.game.player,
+          movable: true,
+          dests: data.dests,
           check: false,
           lastMove: null,
           san: null,
@@ -57,21 +60,32 @@ export default function replayCtrl(root, rootSituations, rootPly) {
   }.bind(this);
 
   this.apply = function() {
-    this.root.chessground.set(this.situation());
+    const sit = this.situation();
+    if (sit) {
+      this.root.chessground.set({
+        fen: sit.fen,
+        turnColor: sit.player,
+        movable: {
+          dests: sit.dests,
+          color: sit.player
+        },
+        check: sit.check
+      });
+    }
   }.bind(this);
 
   this.addMove = function(orig, dest, promotion) {
     worker.postMessage({
       topic: 'move',
       payload: {
-        ply: this.ply + 1,
+        variant: this.root.data.game.variant.key,
         fen: this.situation().fen,
         promotion,
         orig,
         dest
       }
     });
-  };
+  }.bind(this);
 
   this.situationsHash = function(steps) {
     let h = '';

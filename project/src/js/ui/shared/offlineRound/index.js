@@ -1,5 +1,4 @@
 import helper from '../../helper';
-import statusApi from '../../../lichess/status';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import { renderMaterial } from '../../round/view/roundView';
@@ -30,12 +29,20 @@ export function renderGameActionsBar(ctrl, type) {
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />
-      <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(
-          ctrl.startNewGame,
-          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
-        )}
-      />
+      { ctrl.newGameMenu ?
+        <button className="action_bar_button" data-icon="U"
+          config={helper.ontouch(
+            ctrl.newGameMenu.open,
+            () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          )}
+        /> :
+        <button className="action_bar_button" data-icon="U"
+          config={helper.ontouch(
+            ctrl.startNewGame,
+            () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+          )}
+        />
+      }
       <button className="action_bar_button fa fa-eye"
         config={helper.ontouch(
           () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
@@ -110,6 +117,8 @@ export function renderEndedGameStatus(ctrl) {
       </div>
     );
   }
+
+  return null;
 }
 
 export function renderReplayTable(ctrl) {

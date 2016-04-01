@@ -4,15 +4,15 @@ import { askWorker } from '../../../utils';
 import settings from '../../../settings';
 import session from '../../../session';
 
-export default function replayCtrl(root, rootSituations, rootPly) {
+export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
 
   this.root = root;
   this.ply = 0;
   this.situations = [];
   this.hash = '';
 
-  const worker = new Worker('vendor/scalachessjs.js');
-  worker.onmessage = function(msg) {
+  const worker = chessWorker || new Worker('vendor/scalachessjs.js');
+  worker.addEventListener('message', function(msg) {
     if (msg.data.topic === 'error') {
       console.error(msg.data);
     }
@@ -25,7 +25,7 @@ export default function replayCtrl(root, rootSituations, rootPly) {
       this.apply();
       root.onReplayAdded();
     }
-  }.bind(this);
+  }.bind(this));
 
   this.init = function(situations, ply) {
     if (situations) this.situations = situations;

@@ -237,7 +237,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit]', i18n('createAGame'))
+    m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
   ]);
 }
 

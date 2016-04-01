@@ -6,8 +6,10 @@ import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
 import storage from '../../storage';
 import actions from './actions';
+import newGameMenu from './newOtbGame';
 import helper from '../helper';
-import { oppositeColor } from '../../utils';
+import settings from '../../settings';
+import { askWorker, oppositeColor } from '../../utils';
 import { setCurrentOTBGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import socket from '../../socket';
 import m from 'mithril';
@@ -18,6 +20,8 @@ export default function controller() {
 
   helper.analyticsTrackView('On The Board');
   socket.createDefault();
+
+  const chessWorker = new Worker('vendor/scalachessjs.js');
 
   const save = function() {
     setCurrentOTBGame({
@@ -57,7 +61,12 @@ export default function controller() {
     }.bind(this), 1000);
   }.bind(this);
 
+  this.actions = new actions.controller(this);
+  this.newGameMenu = new newGameMenu.controller(this);
+
   this.init = function(data, situations, ply) {
+    this.actions.close();
+    this.newGameMenu.close();
     this.data = data || makeData({
       pref: {
         centerPiece: true
@@ -66,20 +75,29 @@ export default function controller() {
     if (!this.chessground)
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
     else ground.reload(this.chessground, this.data, this.data.game.fen);
-    if (!this.replay) this.replay = new replayCtrl(this, situations, ply);
+    if (!this.replay) this.replay = new replayCtrl(this, situations, ply, chessWorker);
     else this.replay.init(situations, ply);
     this.replay.apply();
-    if (this.actions) this.actions.close();
-    else this.actions = new actions.controller(this);
+    m.redraw();
   }.bind(this);
 
   this.startNewGame = function() {
-    this.init(makeData({
-      color: oppositeColor(this.data.player.color),
-      pref: {
-        centerPiece: true
+    askWorker(chessWorker, {
+      topic: 'init',
+      payload: {
+        variant: settings.otb.variant()
       }
-    }));
+    }).then(data => {
+      console.log(data);
+      this.init(makeData({
+        variant: data.variant,
+        fen: data.fen,
+        color: oppositeColor(this.data.player.color),
+        pref: {
+          centerPiece: true
+        }
+      }));
+    });
   }.bind(this);
 
   this.jump = function(ply) {

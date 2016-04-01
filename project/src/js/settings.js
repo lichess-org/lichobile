@@ -70,7 +70,18 @@ export default {
 
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
-    useSymmetric: localstorageprop('settings.otb.useSymmetric', true)
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
+    variant: localstorageprop('settings.otb.variant', 'standard'),
+    availableVariants: [
+      ['Standard', 'standard'],
+      ['Chess960', 'chess960'],
+      ['King of the Hill', 'kingOfTheHill'],
+      ['Three-check', 'threeCheck'],
+      ['Antichess', 'antichess'],
+      ['Atomic', 'atomic'],
+      ['Horde', 'horde'],
+      ['Racing Kings', 'racingKings']
+    ]
   },
 
   ai: {

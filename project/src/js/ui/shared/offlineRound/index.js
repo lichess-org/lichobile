@@ -1,6 +1,8 @@
 import helper from '../../helper';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
+import gameApi from '../../../lichess/game';
+import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
@@ -98,17 +100,12 @@ export function setResult(ctrl) {
 }
 
 export function renderEndedGameStatus(ctrl) {
-  let sit = ctrl.root.replay.situation();
-  let result, status;
-  if (sit && sit.finished) {
-    if (sit.checkmate) {
-      result = sit.turnColor === 'white' ? '0-1' : '1-0';
-      status = i18n('checkmate') + '. ' + i18n(sit.turnColor === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
-    } else if (sit.stalemate || sit.draw || sit.threefold) {
-      result = '½-½';
-      if (sit.stalemate) status = i18n('stalemate');
-      else status = i18n('draw');
-    }
+  const sit = ctrl.replay.situation();
+  if (sit && !sit.playable) {
+    const result = gameApi.result(ctrl.data);
+    const winner = sit.winner;
+    const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+      (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
     return (
       <div className="result">
         {result}

@@ -74,7 +74,7 @@ export default {
       () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
       function() {
         return [
-          renderEndedGameStatus(ctrl)
+          renderEndedGameStatus(ctrl.root)
         ].concat(
           renderAlways(ctrl)
         );

@@ -7,6 +7,7 @@ function makeConfig(data, fen) {
     fen: fen,
     orientation: data.player.color,
     turnColor: data.game.player,
+    lastMove: null,
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {

@@ -4,6 +4,7 @@ import makeData from '../shared/offlineRound/data';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
+import atomic from '../round/atomic';
 import storage from '../../storage';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
@@ -42,11 +43,14 @@ export default function controller() {
   }.bind(this);
 
   const onMove = function(orig, dest, capturedPiece) {
-    if (!capturedPiece)
-      sound.move();
-    else
-      sound.capture();
-  };
+    if (capturedPiece) {
+      if (this.data.game.variant.key === 'atomic') {
+        atomic.capture(this.chessground, dest);
+        sound.explosion();
+      }
+      else sound.capture();
+    } else sound.move();
+  }.bind(this);
 
   this.onReplayAdded = function() {
     save();
@@ -91,7 +95,7 @@ export default function controller() {
       console.log(data);
       this.init(makeData({
         variant: data.variant,
-        fen: data.fen,
+        fen: data.setup.fen,
         color: oppositeColor(this.data.player.color),
         pref: {
           centerPiece: true

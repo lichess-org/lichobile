@@ -1,6 +1,6 @@
 import { util } from 'chessground-mobile';
 
-function capture(ctrl, key) {
+function capture(chessgroundCtrl, key) {
   const exploding = [];
   const diff = {};
   const orig = util.key2pos(key);
@@ -9,21 +9,21 @@ function capture(ctrl, key) {
       const k = util.pos2key([orig[0] + x, orig[1] + y]);
       if (k) {
         exploding.push(k);
-        const explodes = ctrl.chessground.data.pieces[k] && (
-          k === key || ctrl.chessground.data.pieces[k].role !== 'pawn');
+        const explodes = chessgroundCtrl.data.pieces[k] && (
+          k === key || chessgroundCtrl.data.pieces[k].role !== 'pawn');
         if (explodes) diff[k] = null;
       }
     }
   }
-  ctrl.chessground.setPieces(diff);
-  ctrl.chessground.explode(exploding);
+  chessgroundCtrl.setPieces(diff);
+  chessgroundCtrl.explode(exploding);
 }
 
 // needs to explicitly destroy the capturing pawn
-function enpassant(ctrl, key, color) {
+function enpassant(chessgroundCtrl, key, color) {
   const pos = util.key2pos(key);
   const pawnPos = [pos[0], pos[1] + (color === 'white' ? -1 : 1)];
-  capture(ctrl, util.pos2key(pawnPos));
+  capture(chessgroundCtrl, util.pos2key(pawnPos));
 }
 
 export default {

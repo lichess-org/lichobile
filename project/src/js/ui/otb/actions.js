@@ -46,13 +46,13 @@ export default {
   },
 
   view: function(ctrl) {
-    if (ctrl.isOpen())
+    if (ctrl.isOpen()) {
       return popupWidget(
         'offline_actions',
         () => <div><span className="fa fa-beer" />{i18n('playOnTheBoardOffline')}</div>,
         function() {
           return [
-            renderEndedGameStatus(ctrl)
+            renderEndedGameStatus(ctrl.root)
           ].concat(
             renderAlways(ctrl)
           );
@@ -60,5 +60,8 @@ export default {
         ctrl.isOpen(),
         ctrl.close
       );
+    }
+
+    return null;
   }
 };

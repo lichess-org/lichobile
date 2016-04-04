@@ -16,12 +16,12 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
     if (msg.data.topic === 'error') {
       console.error(msg.data);
     }
-    else if (msg.data.topic === 'move') {
+    else if (msg.data.topic === 'pgnMove') {
       console.log(msg.data.payload);
       this.ply++;
       if (this.ply <= this.situations.length)
         this.situations = this.situations.slice(0, this.ply);
-      this.situations.push(msg.data.payload);
+      this.situations.push(msg.data.payload.situation);
       this.apply();
       root.onReplayAdded();
     }
@@ -81,10 +81,11 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
 
   this.addMove = function(orig, dest, promotion) {
     worker.postMessage({
-      topic: 'move',
+      topic: 'pgnMove',
       payload: {
         variant: this.root.data.game.variant.key,
         fen: this.situation().fen,
+        pgnMoves: this.situation().pgnMoves || [],
         promotion,
         orig,
         dest

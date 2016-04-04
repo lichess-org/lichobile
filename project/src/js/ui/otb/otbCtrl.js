@@ -96,6 +96,7 @@ export default function controller() {
     }).then(data => {
       this.init(makeData({
         variant: data.variant,
+        initialFen: data.setup.fen,
         fen: data.setup.fen,
         color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {

@@ -39,7 +39,7 @@ export default {
   view: function(ctrl) {
     if (ctrl.isOpen()) {
       return popupWidget(
-        'new_otb_game',
+        'new_offline_game',
         null,
         function() {
           return (
@@ -47,7 +47,7 @@ export default {
               <div className="action">
                 {sideSelector()}
                 <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', settings.ai.availableVariants, settings.otb.variant)}
+                  {formWidgets.renderSelect('variant', 'variant', settings.ai.availableVariants, settings.ai.variant)}
                 </div>
               </div>
               <button className="newGameButton" data-icon="E"

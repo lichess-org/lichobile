@@ -66,7 +66,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       topic: 'pgnMove',
       payload: {
         variant: this.root.data.game.variant.key,
-        fen: this.situation().fen,
+        initialFen: this.root.data.game.initialFen,
         pgnMoves: this.situation().pgnMoves || [],
         promotion,
         orig,

@@ -63,7 +63,7 @@ export default function controller() {
     this.vm.engineSearching = true;
     setTimeout(() => {
       engine.setLevel(this.getOpponent().level);
-      engine.search(this.data.game.fen);
+      engine.search(this.replay.situation().fen);
     }, 500);
   }.bind(this);
 
@@ -89,18 +89,18 @@ export default function controller() {
   };
 
   this.onReplayAdded = function() {
-    this.data.game.fen = this.replay.situation().fen;
     save();
     m.redraw();
-    if (this.replay.situation().finished) {
-      setResult(this);
-      this.chessground.cancelMove();
-      this.chessground.stop();
-      save();
+    const sit = this.replay.situation();
+    if (sit.status && sit.status.id >= 30) {
       setTimeout(function() {
+        setResult(this);
+        this.chessground.cancelMove();
+        this.chessground.stop();
         this.actions.open();
+        save();
         m.redraw();
-      }.bind(this), 1000);
+      }.bind(this), 300);
     } else if (isEngineToMove()) {
       engineMove();
       m.redraw();
@@ -141,6 +141,7 @@ export default function controller() {
     }).then(data => {
       this.init(makeData({
         variant: data.variant,
+        initialFen: data.setup.fen,
         fen: data.setup.fen,
         color: getColorFromSettings()
       }), [data.setup], 0);

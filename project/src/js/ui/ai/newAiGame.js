@@ -5,6 +5,12 @@ import popupWidget from '../shared/popup';
 import helper from '../helper';
 import backbutton from '../../backbutton';
 
+const colors = [
+  ['white', 'white'],
+  ['black', 'black'],
+  ['randomColor', 'random']
+];
+
 export default {
 
   controller: function(root) {
@@ -39,8 +45,9 @@ export default {
           return (
             <div>
               <div className="action">
+                {sideSelector()}
                 <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', settings.otb.availableVariants, settings.otb.variant)}
+                  {formWidgets.renderSelect('variant', 'variant', settings.ai.availableVariants, settings.otb.variant)}
                 </div>
               </div>
               <button className="newGameButton" data-icon="E"
@@ -59,3 +66,10 @@ export default {
   }
 };
 
+function sideSelector() {
+  return (
+    <div className="select_input">
+      {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
+    </div>
+  );
+}

@@ -96,7 +96,12 @@ export default {
       ['Stockfish', '8']
     ],
     color: localstorageprop('settings.ai.color', 'white'),
-    opponent: localstorageprop('settings.ai.opponent', '1')
+    opponent: localstorageprop('settings.ai.opponent', '1'),
+    variant: localstorageprop('settings.ai.variant', 'standard'),
+    availableVariants: [
+      ['Standard', 'standard'],
+      ['Chess960', 'chess960']
+    ]
   },
 
   gameSetup: {

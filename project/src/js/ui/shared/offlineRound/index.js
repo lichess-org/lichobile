@@ -9,11 +9,18 @@ import m from 'mithril';
 export function renderAntagonist(ctrl, content, material, position, isPortrait, isVWS) {
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
+  const antagonistColor = ctrl.data[position].color;
+
   return (
     <section className={'playTable ' + position} key={key}>
       <div key="infos" className="antagonistInfos offline">
         <div>{content}</div>
-        <div className="ratingAndMaterial">{renderMaterial(material)}</div>
+        <div className="ratingAndMaterial">
+          {renderMaterial(material)}
+          { ctrl.data.game.variant.key === 'threeCheck' ?
+            <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
+          }
+        </div>
       </div>
       { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
         <div key="spinner" className="engineSpinner">
@@ -25,26 +32,23 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
   );
 }
 
+function getChecksCount(ctrl, color) {
+  const sit = ctrl.replay.situation();
+  return sit.checkCount[utils.oppositeColor(color)];
+}
+
 export function renderGameActionsBar(ctrl, type) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />
-      { ctrl.newGameMenu ?
-        <button className="action_bar_button" data-icon="U"
-          config={helper.ontouch(
-            ctrl.newGameMenu.open,
-            () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
-          )}
-        /> :
-        <button className="action_bar_button" data-icon="U"
-          config={helper.ontouch(
-            ctrl.startNewGame,
-            () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
-          )}
-        />
-      }
+      <button className="action_bar_button" data-icon="U"
+        config={helper.ontouch(
+          ctrl.newGameMenu.open,
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+        )}
+      />
       <button className="action_bar_button fa fa-eye"
         config={helper.ontouch(
           () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
@@ -67,7 +71,7 @@ export function renderGameActionsBarTablet(ctrl, type) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(ctrl.startNewGame, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        config={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button className="action_bar_button fa fa-eye"
         config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
@@ -105,7 +109,7 @@ export function renderEndedGameStatus(ctrl) {
     const result = gameApi.result(ctrl.data);
     const winner = sit.winner;
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
-      (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+      (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
     return (
       <div className="result">
         {result}

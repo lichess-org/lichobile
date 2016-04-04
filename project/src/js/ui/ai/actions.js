@@ -6,12 +6,6 @@ import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
-const colors = [
-  ['white', 'white'],
-  ['black', 'black'],
-  ['randomColor', 'random']
-];
-
 export function opponentSelector() {
   const opps = settings.ai.availableOpponents.map(o =>
     ['aiNameLevelAiLevel', o[1], o[0], o[1]]
@@ -23,18 +17,9 @@ export function opponentSelector() {
   );
 }
 
-export function sideSelector() {
-  return (
-    <div className="select_input">
-      {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
-    </div>
-  );
-}
-
 function renderAlways() {
   return [
     m('div.action', [
-      sideSelector(),
       opponentSelector()
     ])
   ];

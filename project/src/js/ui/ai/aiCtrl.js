@@ -9,7 +9,8 @@ import settings from '../../settings';
 import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
-import { getRandomArbitrary } from '../../utils';
+import newGameMenu from './newAiGame';
+import { askWorker, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -20,6 +21,8 @@ export const storageFenKey = 'ai.setupFen';
 export default function controller() {
   helper.analyticsTrackView('Offline AI');
   socket.createDefault();
+
+  const chessWorker = new Worker('vendor/scalachessjs.js');
 
   this.vm = {
     engineSearching: false
@@ -105,8 +108,11 @@ export default function controller() {
   }.bind(this);
 
   this.actions = new actions.controller(this);
+  this.newGameMenu = new newGameMenu.controller(this);
 
   this.init = function(data, situations, ply) {
+    this.newGameMenu.close();
+    this.actions.close();
     this.data = data;
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
@@ -114,25 +120,34 @@ export default function controller() {
       ground.reload(this.chessground, this.data, this.data.game.fen);
     }
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply);
+      this.replay = new replayCtrl(this, situations, ply, chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
     this.replay.apply();
-    if (this.actions) {
-      this.actions.close();
-    }
     if (isEngineToMove()) {
       engineMove();
     }
     m.redraw();
   }.bind(this);
 
-  this.startNewGame = function() {
-    const opts = {
-      color: getColorFromSettings()
-    };
-    this.init(makeData(opts));
+  this.startNewGame = function(setupFen) {
+    askWorker(chessWorker, {
+      topic: 'init',
+      payload: {
+        variant: settings.ai.variant(),
+        fen: setupFen || undefined
+      }
+    }).then(data => {
+      this.init(makeData({
+        variant: data.variant,
+        fen: data.setup.fen,
+        color: getColorFromSettings()
+      }), [data.setup], 0);
+      if (setupFen) {
+        storage.remove(storageFenKey);
+      }
+    });
   }.bind(this);
 
   this.jump = function(ply) {
@@ -158,18 +173,17 @@ export default function controller() {
   const setupFen = storage.get(storageFenKey);
 
   engine.init(() => {
-    if (setupFen) {
-      this.init(makeData({ fen: setupFen, color: getColorFromSettings() }));
-      storage.remove(storageFenKey);
-    } else if (saved) {
+    if (saved) {
       try {
         this.init(saved.data, saved.situations, saved.ply);
       } catch (e) {
         console.log(e, 'Fail to load saved game');
-        this.init(makeData({}));
+        this.startNewGame();
       }
+    } else if (setupFen) {
+      this.startNewGame(setupFen);
     } else {
-      this.init(makeData({}));
+      this.startNewGame();
     }
   });
 
@@ -180,8 +194,8 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
-    if (this.replay) {
-      this.replay.onunload();
+    if (chessWorker) {
+      chessWorker.terminate();
     }
     engine.exit();
   };

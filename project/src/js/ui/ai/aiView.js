@@ -8,13 +8,14 @@ import {
   renderEndedGameStatus,
   renderGameActionsBarTablet
 } from '../shared/offlineRound';
-import { sideSelector, opponentSelector } from './actions';
+import { opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import ground from '../round/ground';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
+import newGameMenu from './newAiGame';
 import m from 'mithril';
 
 export default function view(ctrl) {
@@ -53,7 +54,7 @@ function renderContent(ctrl) {
       renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
+          {renderAntagonist(ctrl, [opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
           <div key="spinner" className="engineSpinner">
           { ctrl.vm.engineSearching ?
             <div className="fa fa-spinner fa-pulse" /> : null
@@ -83,6 +84,7 @@ function renderContent(ctrl) {
 function overlay(ctrl) {
   return [
     actions.view(ctrl.actions),
+    newGameMenu.view(ctrl.newGameMenu),
     renderPromotion(ctrl)
   ];
 }

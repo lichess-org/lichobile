@@ -62,7 +62,7 @@ export default function controller() {
       this.actions.open();
       save();
       m.redraw();
-    }.bind(this), 1000);
+    }.bind(this), 300);
   }.bind(this);
 
   this.actions = new actions.controller(this);
@@ -71,36 +71,40 @@ export default function controller() {
   this.init = function(data, situations, ply) {
     this.actions.close();
     this.newGameMenu.close();
-    this.data = data || makeData({
-      pref: {
-        centerPiece: true
-      }
-    });
-    if (!this.chessground)
+    this.data = data;
+    if (!this.chessground) {
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
-    else ground.reload(this.chessground, this.data, this.data.game.fen);
-    if (!this.replay) this.replay = new replayCtrl(this, situations, ply, chessWorker);
-    else this.replay.init(situations, ply);
+    } else {
+      ground.reload(this.chessground, this.data, this.data.game.fen);
+    }
+    if (!this.replay) {
+      this.replay = new replayCtrl(this, situations, ply, chessWorker);
+    } else {
+      this.replay.init(situations, ply);
+    }
     this.replay.apply();
     m.redraw();
   }.bind(this);
 
-  this.startNewGame = function() {
+  this.startNewGame = function(setupFen) {
     askWorker(chessWorker, {
       topic: 'init',
       payload: {
-        variant: settings.otb.variant()
+        variant: settings.otb.variant(),
+        fen: setupFen || undefined
       }
     }).then(data => {
-      console.log(data);
       this.init(makeData({
         variant: data.variant,
         fen: data.setup.fen,
-        color: oppositeColor(this.data.player.color),
+        color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {
           centerPiece: true
         }
-      }));
+      }), [data.setup], 0);
+      if (setupFen) {
+        storage.remove(storageFenKey);
+      }
     });
   }.bind(this);
 
@@ -123,19 +127,18 @@ export default function controller() {
 
   const setupFen = storage.get(storageFenKey);
   const saved = getCurrentOTBGame();
-  if (setupFen) {
-    this.init(makeData({
-      fen: setupFen,
-      color: 'white',
-      pref: {
-        centerPiece: true
-      }
-    }));
-    storage.remove(storageFenKey);
-  } else if (saved) {
-    this.init(saved.data, saved.situations, saved.ply);
+  if (saved) {
+    try {
+      this.init(saved.data, saved.situations, saved.ply);
+    } catch (e) {
+      console.log(e, 'Fail to load saved game');
+      this.startNewGame();
+    }
+  } else if (setupFen) {
+    this.startNewGame(setupFen);
+  } else {
+    this.startNewGame();
   }
-  else this.init();
 
   window.plugins.insomnia.keepAwake();
 
@@ -144,8 +147,8 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
-    if (this.replay) {
-      this.replay.onunload();
+    if (chessWorker) {
+      chessWorker.terminate();
     }
   };
 }

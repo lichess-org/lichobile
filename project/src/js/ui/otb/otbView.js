@@ -34,7 +34,7 @@ export default function view(ctrl) {
     utils.partialf(header, i18n('playOnTheBoardOffline')),
     content,
     overlay,
-    ctrl.data.player.color
+    ctrl.data && ctrl.data.player.color || 'white'
   );
 }
 

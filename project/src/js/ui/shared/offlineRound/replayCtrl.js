@@ -1,6 +1,5 @@
 import { Chess } from 'chess.js';
 import { gameResult } from '.';
-import { askWorker } from '../../../utils';
 import settings from '../../../settings';
 import session from '../../../session';
 
@@ -11,44 +10,26 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.situations = [];
   this.hash = '';
 
-  const worker = chessWorker || new Worker('vendor/scalachessjs.js');
-  worker.addEventListener('message', function(msg) {
-    if (msg.data.topic === 'error') {
-      console.error(msg.data);
-    }
-    else if (msg.data.topic === 'pgnMove') {
-      console.log(msg.data.payload);
-      this.ply++;
-      if (this.ply <= this.situations.length)
-        this.situations = this.situations.slice(0, this.ply);
-      this.situations.push(msg.data.payload.situation);
-      this.apply();
-      root.onReplayAdded();
+  chessWorker.addEventListener('message', function(msg) {
+    switch (msg.data.topic) {
+      case 'error':
+        console.error(msg.data);
+        break;
+      case 'pgnMove':
+        console.log(msg.data.payload);
+        this.ply++;
+        if (this.ply <= this.situations.length) {
+          this.situations = this.situations.slice(0, this.ply);
+        }
+        this.situations.push(msg.data.payload.situation);
+        this.apply();
+        root.onReplayAdded();
+        break;
     }
   }.bind(this));
 
   this.init = function(situations, ply) {
-    if (situations) this.situations = situations;
-    else {
-      askWorker(worker, {
-        topic: 'dests',
-        payload: {
-          variant: this.root.data.game.variant.key,
-          fen: this.root.data.game.initialFen
-        }
-      }, function(data) {
-        this.situations = [{
-          fen: this.root.data.game.initialFen,
-          player: this.root.data.game.player,
-          dests: data.dests,
-          check: false,
-          lastMove: null,
-          san: null,
-          ply: 0
-        }];
-        this.apply();
-      }.bind(this));
-    }
+    this.situations = situations;
     this.ply = ply || 0;
   }.bind(this);
 
@@ -69,6 +50,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         this.root.chessground.set({
           fen: sit.fen,
           turnColor: sit.player,
+          lastMove: sit.lastMove ? [sit.lastMove.from, sit.lastMove.to] : null,
           movable: {
             dests: sit.dests,
             color: sit.player
@@ -80,7 +62,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   }.bind(this);
 
   this.addMove = function(orig, dest, promotion) {
-    worker.postMessage({
+    chessWorker.postMessage({
       topic: 'pgnMove',
       payload: {
         variant: this.root.data.game.variant.key,
@@ -93,10 +75,10 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
     });
   }.bind(this);
 
-  this.situationsHash = function(steps) {
+  this.situationsHash = function(sits) {
     let h = '';
-    for (let i in steps) {
-      h += steps[i].san;
+    for (let i in sits) {
+      h += sits[i].uci;
     }
     return h;
   };
@@ -128,8 +110,4 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       max_width: 30
     });
   }.bind(this);
-
-  this.onunload = function() {
-    if (worker) worker.terminate();
-  };
 }

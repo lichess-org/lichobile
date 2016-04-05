@@ -105,7 +105,7 @@ export function setResult(ctrl, status) {
 
 export function renderEndedGameStatus(ctrl) {
   const sit = ctrl.replay.situation();
-  if (sit && !sit.playable) {
+  if (gameStatusApi.finished(ctrl.data)) {
     const result = gameApi.result(ctrl.data);
     const winner = sit.winner;
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +

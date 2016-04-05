@@ -29,6 +29,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       case 'threefoldTest':
         if (payload.threefoldRepetition) {
           setResult(root, payload.status);
+          root.save();
           root.onGameEnd();
         } else {
           window.plugins.toast.show('Invalid threefold claim', 'short', 'center');

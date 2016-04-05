@@ -30,7 +30,7 @@ export default function controller() {
 
   const engine = engineCtrl(this);
 
-  const save = function() {
+  this.save = function() {
     setCurrentAIGame({
       data: this.data,
       situations: this.replay.situations,
@@ -97,16 +97,16 @@ export default function controller() {
       engineMove();
       m.redraw();
     }
-    save();
+    this.save();
     m.redraw();
   }.bind(this);
 
   this.onGameEnd = function() {
+    const self = this;
     this.chessground.cancelMove();
     this.chessground.stop();
-    save();
     setTimeout(function() {
-      this.actions.open();
+      self.actions.open();
       m.redraw();
     }, 200);
   }.bind(this);

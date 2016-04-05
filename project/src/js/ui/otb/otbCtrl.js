@@ -24,7 +24,7 @@ export default function controller() {
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
 
-  const save = function() {
+  this.save = function() {
     setCurrentOTBGame({
       data: this.data,
       situations: this.replay.situations,
@@ -58,15 +58,15 @@ export default function controller() {
       setResult(this, sit.status);
       this.onGameEnd();
     }
-    save();
+    this.save();
     m.redraw();
   }.bind(this);
 
   this.onGameEnd = function() {
+    const self = this;
     this.chessground.stop();
-    save();
     setTimeout(function() {
-      this.actions.open();
+      self.actions.open();
       m.redraw();
     }, 200);
   }.bind(this);

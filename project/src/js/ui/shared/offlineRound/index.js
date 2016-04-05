@@ -95,10 +95,10 @@ export function gameResult(replayCtrl) {
     return '?';
 }
 
-export function setResult(ctrl) {
+export function setResult(ctrl, status) {
   const sit = ctrl.replay.situation();
-  ctrl.data.game.status = sit.status;
-  if (sit.status.id !== 34) {
+  ctrl.data.game.status = status;
+  if (ctrl.data.game.status.id !== 34) {
     ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
   }
 }
@@ -111,7 +111,7 @@ export function renderEndedGameStatus(ctrl) {
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
       (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
     return (
-      <div className="result">
+      <div key="result" className="result">
         {result}
         <br />
         <em className="resultStatus">{status}</em>
@@ -121,6 +121,19 @@ export function renderEndedGameStatus(ctrl) {
 
   return null;
 }
+
+export function renderClaimDrawButton(ctrl) {
+  const sit = ctrl.replay.situation();
+  return sit && sit.playable ? m('div.action.claimDraw', {
+    key: 'claimDraw'
+  }, [
+    m('div.notice', i18n('threefoldRepetition')),
+    m('button[data-icon=E]', {
+      config: helper.ontouch(() => ctrl.replay.claimDraw())
+    }, i18n('claimADraw'))
+  ]) : null;
+}
+
 
 export function renderReplayTable(ctrl) {
   const curPly = ctrl.ply;

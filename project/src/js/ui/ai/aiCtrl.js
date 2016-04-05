@@ -89,22 +89,26 @@ export default function controller() {
   };
 
   this.onReplayAdded = function() {
-    save();
-    m.redraw();
     const sit = this.replay.situation();
     if (sit.status && sit.status.id >= 30) {
-      setTimeout(function() {
-        setResult(this);
-        this.chessground.cancelMove();
-        this.chessground.stop();
-        this.actions.open();
-        save();
-        m.redraw();
-      }.bind(this), 300);
+      setResult(this, sit.status);
+      this.onGameEnd();
     } else if (isEngineToMove()) {
       engineMove();
       m.redraw();
     }
+    save();
+    m.redraw();
+  }.bind(this);
+
+  this.onGameEnd = function() {
+    this.chessground.cancelMove();
+    this.chessground.stop();
+    save();
+    setTimeout(function() {
+      this.actions.open();
+      m.redraw();
+    }, 200);
   }.bind(this);
 
   this.actions = new actions.controller(this);

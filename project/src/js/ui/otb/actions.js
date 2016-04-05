@@ -1,7 +1,7 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderEndedGameStatus } from '../shared/offlineRound';
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
@@ -54,7 +54,8 @@ export default {
           return [
             renderEndedGameStatus(ctrl.root)
           ].concat(
-            renderAlways(ctrl)
+            renderClaimDrawButton(ctrl.root),
+            renderAlways()
           );
         },
         ctrl.isOpen(),

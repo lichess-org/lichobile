@@ -33,7 +33,7 @@ export default {
   view: function(ctrl) {
     if (ctrl.isOpen()) {
       return popupWidget(
-        'new_otb_game',
+        'new_offline_game',
         null,
         function() {
           return (

@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { gameResult } from '.';
+import { setResult, gameResult } from '.';
 import settings from '../../../settings';
 import session from '../../../session';
 
@@ -11,19 +11,28 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.hash = '';
 
   chessWorker.addEventListener('message', function(msg) {
+    const payload = msg.data.payload;
     switch (msg.data.topic) {
       case 'error':
         console.error(msg.data);
         break;
-      case 'pgnMove':
-        console.log(msg.data.payload);
+      case 'move':
+        console.log(payload);
         this.ply++;
         if (this.ply <= this.situations.length) {
           this.situations = this.situations.slice(0, this.ply);
         }
-        this.situations.push(msg.data.payload.situation);
+        this.situations.push(payload.situation);
         this.apply();
         root.onReplayAdded();
+        break;
+      case 'threefoldTest':
+        if (payload.threefoldRepetition) {
+          setResult(root, payload.status);
+          root.onGameEnd();
+        } else {
+          window.plugins.toast.show('Invalid threefold claim', 'short', 'center');
+        }
         break;
     }
   }.bind(this));
@@ -62,15 +71,28 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   }.bind(this);
 
   this.addMove = function(orig, dest, promotion) {
+    const sit = this.situation();
     chessWorker.postMessage({
-      topic: 'pgnMove',
+      topic: 'move',
       payload: {
         variant: this.root.data.game.variant.key,
-        initialFen: this.root.data.game.initialFen,
-        pgnMoves: this.situation().pgnMoves || [],
+        fen: sit.fen,
+        pgnMoves: sit.pgnMoves,
         promotion,
         orig,
         dest
+      }
+    });
+  }.bind(this);
+
+  this.claimDraw = function() {
+    const sit = this.situation();
+    chessWorker.postMessage({
+      topic: 'threefoldTest',
+      payload: {
+        variant: this.root.data.game.variant.key,
+        initialFen: this.root.data.game.initialFen,
+        pgnMoves: sit.pgnMoves
       }
     });
   }.bind(this);

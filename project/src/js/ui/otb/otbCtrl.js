@@ -53,16 +53,22 @@ export default function controller() {
   }.bind(this);
 
   this.onReplayAdded = function() {
+    const sit = this.replay.situation();
+    if (sit.status && sit.status.id >= 30) {
+      setResult(this, sit.status);
+      this.onGameEnd();
+    }
     save();
     m.redraw();
-    const sit = this.replay.situation();
-    if (sit.status && sit.status.id >= 30) setTimeout(function() {
-      setResult(this);
-      this.chessground.stop();
+  }.bind(this);
+
+  this.onGameEnd = function() {
+    this.chessground.stop();
+    save();
+    setTimeout(function() {
       this.actions.open();
-      save();
       m.redraw();
-    }.bind(this), 300);
+    }, 200);
   }.bind(this);
 
   this.actions = new actions.controller(this);

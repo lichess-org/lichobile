@@ -9,14 +9,12 @@ export function getCurrentOTBGame() {
 
 export function getAnalyseData(data) {
   if (!data) return null;
-  console.log(data);
   data.data.steps = data.situations.map(o => {
-    console.log(o);
     return {
       fen: o.fen,
       ply: o.ply,
-      san: o.pgnMoves[o.pgnMoves.length - 1],
-      uci: o.lastMove.uci,
+      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
+      uci: o.lastMove ? o.lastMove.uci : null,
       dests: o.dests
     };
   });

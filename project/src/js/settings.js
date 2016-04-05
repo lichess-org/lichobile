@@ -64,6 +64,9 @@ export default {
   },
 
   analyse: {
+    supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
+    ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true)
   },

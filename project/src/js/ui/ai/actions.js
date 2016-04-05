@@ -47,7 +47,7 @@ export default {
         return isOpen;
       },
       sharePGN: function() {
-        window.plugins.socialsharing.share(root.replay.pgn());
+        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
       },
       root: root
     };

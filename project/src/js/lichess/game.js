@@ -71,7 +71,7 @@ function replayable(data) {
 }
 
 function userAnalysable(data) {
-  return data.game.variant.key === 'standard' && playable(data) && (!data.clock || !isPlayerPlaying(data));
+  return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
 function getPlayer(data, color) {

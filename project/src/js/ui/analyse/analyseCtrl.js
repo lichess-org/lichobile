@@ -243,10 +243,10 @@ export default function controller() {
       step.ceval = res.ceval;
       this.chessLogic.getSanMoveFromUci({
         fen: step.fen,
-        from: res.ceval.best.slice(0, 2),
-        to: res.ceval.best.slice(2, 4)
-      }, san => {
-        step.ceval.bestSan = san;
+        orig: res.ceval.best.slice(0, 2),
+        dest: res.ceval.best.slice(2, 4)
+      }, data => {
+        step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           m.redraw();
         }
@@ -278,6 +278,10 @@ export default function controller() {
 
   const init = function(data) {
     this.data = data;
+    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
+      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
+      m.route('/');
+    }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.chessLogic = new chessLogic(this);
@@ -303,10 +307,6 @@ export default function controller() {
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
-      if (cfg.game.variant.key !== 'standard') {
-        window.plugins.toast.show('Analysis board supports only standard chess variant for now', 'short', 'center');
-        m.route('/');
-      }
       helper.analyticsTrackView('Analysis (game)');
       init(makeData(cfg));
       m.redraw();

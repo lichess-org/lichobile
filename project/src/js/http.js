@@ -29,7 +29,7 @@ export function request(url, opts, feedback, xhrConf) {
   var cfg = {
     url: 'http://' + baseUrl + url,
     method: 'GET',
-    data: { '_': Date.now() },
+    data: { },
     config: xhrConf || xhrConfig,
     deserialize: function(text) {
       try {
@@ -43,6 +43,10 @@ export function request(url, opts, feedback, xhrConf) {
     }
   };
   merge(cfg, opts);
+
+  if (cfg.method === 'GET') {
+    cfg.data._ = Date.now();
+  }
 
   var promise = m.request(cfg);
 

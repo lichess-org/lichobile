@@ -45,13 +45,13 @@ function renderContent(ctrl) {
   if (isPortrait)
     return [
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
       renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
   else if (isVWS)
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, [opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
@@ -69,7 +69,7 @@ function renderContent(ctrl) {
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait)}

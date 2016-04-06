@@ -58,13 +58,13 @@ function renderContent(ctrl) {
   if (isPortrait)
     return [
       renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
       renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'otb')
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}

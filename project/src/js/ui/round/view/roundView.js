@@ -71,14 +71,14 @@ export function onPieceThemeChange(t) {
   pieceTheme = t;
 }
 
-export function renderBoard(variant, chessgroundCtrl, bounds, isPortrait, moreWrapperClasses, customPieceTheme) {
+export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapperClasses, customPieceTheme) {
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();
   const boardClass = [
     'display_board',
     boardTheme,
     customPieceTheme || pieceTheme,
-    variant
+    data.game.variant.key
   ].join(' ');
   let wrapperClass = 'game_board_wrapper';
   let key = 'board' + (isPortrait ? 'portrait' : 'landscape');
@@ -102,7 +102,35 @@ export function renderBoard(variant, chessgroundCtrl, bounds, isPortrait, moreWr
   return (
     <section className={wrapperClass} key={key}>
       <div className={boardClass} config={boardConfig} />
+      {renderVariantReminder(data)}
     </section>
+  );
+}
+
+function renderVariantReminder(data) {
+  if (!gameApi.isPlayerPlaying(data))  {
+    return null;
+  }
+
+  if (data.game.variant.key === 'standard') {
+    return null;
+  }
+
+  const icon = utils.gameIcon(data.game.variant.key);
+  if (!icon) return null;
+
+  function config(el, isUpdate) {
+    if (!isUpdate) setTimeout(function() {
+      el.classList.add('gone');
+      setTimeout(function() {
+        el.parentNode.removeChild(el);
+      }, 600);
+    }, 800);
+  }
+
+  return (
+    <div className="variant_reminder" data-icon={icon} config={config}>
+    </div>
   );
 }
 
@@ -162,13 +190,13 @@ function renderContent(ctrl, isPortrait) {
   if (isPortrait)
     return [
       opponent,
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
       player,
       renderGameActionsBar(ctrl, isPortrait)
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
       <section key="table" className="table">
         <header key="table-header" className="tableHeader">
           {gameInfos(ctrl)}
@@ -198,6 +226,8 @@ function renderRatingDiff(player) {
   if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
   if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
+
+  return null;
 }
 
 function getChecksCount(ctrl, color) {

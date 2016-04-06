@@ -118,20 +118,25 @@ export default function controller() {
     this.newGameMenu.close();
     this.actions.close();
     this.data = data;
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
     } else {
       ground.reload(this.chessground, this.data, this.data.game.fen);
     }
+
     if (!this.replay) {
       this.replay = new replayCtrl(this, situations, ply, chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
     this.replay.apply();
+
+    engine.prepare(this.data.game.variant.key);
     if (isEngineToMove()) {
       engineMove();
     }
+
     m.redraw();
   }.bind(this);
 

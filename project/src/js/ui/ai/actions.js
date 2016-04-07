@@ -1,4 +1,6 @@
 import i18n from '../../i18n';
+import gameApi from '../../lichess/game';
+import helper from '../helper';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
@@ -23,6 +25,19 @@ function renderAlways() {
       opponentSelector()
     ])
   ];
+}
+
+function resignButton(ctrl) {
+  return gameApi.playable(ctrl.data) ? m('div.resign', {
+    key: 'resign'
+  }, [
+    m('button[data-icon=b]', {
+      config: helper.ontouch(() => {
+        ctrl.actions.close();
+        ctrl.resign();
+      })
+    }, i18n('resign'))
+  ]) : null;
 }
 
 export default {
@@ -62,6 +77,7 @@ export default {
           renderEndedGameStatus(ctrl.root)
         ].concat(
           renderClaimDrawButton(ctrl.root),
+          resignButton(ctrl.root),
           renderAlways()
         );
       },

@@ -11,7 +11,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -112,7 +112,13 @@ export default function controller() {
     setTimeout(function() {
       self.actions.open();
       m.redraw();
-    }, 200);
+    }, 500);
+  }.bind(this);
+
+  this.resign = function() {
+    setResult(this, { id: 31, name: 'resign' }, oppositeColor(this.data.player.color));
+    this.save();
+    this.onGameEnd();
   }.bind(this);
 
   this.actions = new actions.controller(this);

@@ -11,7 +11,8 @@
   window.analytics = {
     startTrackerWithId: noop,
     trackException: noop,
-    trackView: noop
+    trackView: noop,
+    trackEvent: noop
   };
 
   // push

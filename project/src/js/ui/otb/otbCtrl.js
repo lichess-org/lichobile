@@ -69,7 +69,7 @@ export default function controller() {
     setTimeout(function() {
       self.actions.open();
       m.redraw();
-    }, 200);
+    }, 500);
   }.bind(this);
 
   this.actions = new actions.controller(this);

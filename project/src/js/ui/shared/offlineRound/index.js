@@ -95,14 +95,12 @@ export function gameResult(replayCtrl) {
     return '?';
 }
 
-export function setResult(ctrl, status) {
+export function setResult(ctrl, status, winner) {
   const sit = ctrl.replay.situation();
-  ctrl.data.game.status = status;
-  if (ctrl.data.game.status.id !== 34) {
-    ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
-  } else {
-    ctrl.data.game.winner = undefined;
+  if (status) {
+    ctrl.data.game.status = status;
   }
+  ctrl.data.game.winner = winner || sit.winner;
 }
 
 export function renderEndedGameStatus(ctrl) {
@@ -125,14 +123,12 @@ export function renderEndedGameStatus(ctrl) {
 }
 
 export function renderClaimDrawButton(ctrl) {
-  const sit = ctrl.replay.situation();
-  return sit && sit.playable ? m('div.action.claimDraw', {
+  return gameApi.playable(ctrl.data) ? m('div.claimDraw', {
     key: 'claimDraw'
   }, [
-    m('div.notice', i18n('threefoldRepetition')),
-    m('button[data-icon=E]', {
+    m('button[data-icon=2].draw-yes', {
       config: helper.ontouch(() => ctrl.replay.claimDraw())
-    }, i18n('claimADraw'))
+    }, i18n('threefoldRepetition'))
   ]) : null;
 }
 

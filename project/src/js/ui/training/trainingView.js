@@ -27,13 +27,13 @@ function renderContent(ctrl) {
   if (helper.isPortrait())
     return [
       ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data, ctrl.chessground),
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
     ];
   else
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      renderBoard(ctrl.data, ctrl.chessground),
       <section key="table" className="table">
         <section className="trainingTable">
           {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}
@@ -206,5 +206,6 @@ function renderResult(ctrl) {
           return renderLoss(ctrl, ctrl.data.attempt);
       }
   }
+  return null;
 }
 

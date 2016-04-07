@@ -15,14 +15,21 @@ export function autoredraw(action) {
 }
 
 export function askWorker(worker, msg, callback) {
+  const defer = Promise.defer();
   function listen(e) {
     if (e.data.topic === msg.topic) {
       worker.removeEventListener('message', listen);
-      callback(e.data.payload);
+      if (callback) {
+        callback(e.data.payload);
+      } else {
+        defer.resolve(e.data.payload);
+      }
     }
   }
   worker.addEventListener('message', listen);
   worker.postMessage(msg);
+
+  return defer.promise;
 }
 
 export function hasNetwork() {

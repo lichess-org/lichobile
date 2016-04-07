@@ -11,7 +11,7 @@ import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import continuePopup from '../shared/continuePopup';
-import { backHistory, handleXhrError, oppositeColor } from '../../utils';
+import { handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import { makeData, makeDefaultData } from './data';
@@ -243,10 +243,10 @@ export default function controller() {
       step.ceval = res.ceval;
       this.chessLogic.getSanMoveFromUci({
         fen: step.fen,
-        from: res.ceval.best.slice(0, 2),
-        to: res.ceval.best.slice(2, 4)
-      }, san => {
-        step.ceval.bestSan = san;
+        orig: res.ceval.best.slice(0, 2),
+        dest: res.ceval.best.slice(2, 4)
+      }, data => {
+        step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           m.redraw();
         }
@@ -278,6 +278,10 @@ export default function controller() {
 
   const init = function(data) {
     this.data = data;
+    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
+      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
+      m.route('/');
+    }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.chessLogic = new chessLogic(this);
@@ -303,11 +307,7 @@ export default function controller() {
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
-      if (cfg.game.variant.key !== 'standard') {
-        window.plugins.toast.show('Analysis board supports only standard chess variant for now', 'short', 'center');
-        m.route('/');
-      }
-      helper.analyticsTrackView('Analysis (game)');
+      helper.analyticsTrackView('Analysis (online game)');
       init(makeData(cfg));
       m.redraw();
     }, err => {
@@ -315,18 +315,20 @@ export default function controller() {
       m.route('/');
     });
   } else if (this.source === 'offline' && gameId === 'otb') {
-    helper.analyticsTrackView('Analysis (offline)');
+    helper.analyticsTrackView('Analysis (offline otb)');
     const otbData = getAnalyseData(getCurrentOTBGame());
-    if (!otbData) backHistory();
-    else {
+    if (!otbData) {
+      m.route('/analyse');
+    } else {
       otbData.orientation = orientation;
       init(makeData(otbData));
     }
   } else if (this.source === 'offline' && gameId === 'ai') {
-    helper.analyticsTrackView('Analysis (offline)');
+    helper.analyticsTrackView('Analysis (offline ai)');
     const aiData = getAnalyseData(getCurrentAIGame());
-    if (!aiData) backHistory();
-    else {
+    if (!aiData) {
+      m.route('/analyse');
+    } else {
       aiData.orientation = orientation;
       init(makeData(aiData));
     }

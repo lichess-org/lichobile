@@ -94,7 +94,7 @@ if (!window.Stockfish) {
       }
       stockfishWorker = new Worker('vendor/stockfish6.js');
       if (success) {
-        setTimeout(success, 50);
+        setTimeout(success, 10);
       }
     },
     cmd: function(cmd) {

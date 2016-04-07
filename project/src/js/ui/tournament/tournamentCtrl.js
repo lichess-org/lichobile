@@ -5,30 +5,28 @@ import socketHandler from './socketHandler';
 import helper from '../helper';
 import m from 'mithril';
 
-
-
 export default function controller() {
+  let id = m.route.param('id');
+  helper.analyticsTrackView('Tournament details');
   const tournament = m.prop({});
+
   function reload (data) {
     tournament(data);
-    if(data.socketVersion)
+    if (data.socketVersion)
       socket.setVersion(data.socketVersion);
     m.redraw();
   }
 
   function tick () {
     let data = tournament();
-    if(data.secondsToStart && data.secondsToStart > 0)
+    if (data.secondsToStart && data.secondsToStart > 0)
       data.secondsToStart--;
 
-    if(data.secondsToFinish && data.secondsToFinish > 0)
+    if (data.secondsToFinish && data.secondsToFinish > 0)
       data.secondsToFinish--;
 
     m.redraw();
   }
-
-  let id = m.route.param('id');
-  helper.analyticsTrackView('Tournament ' + id);
 
   let clockInterval = null;
   let returnVal = {
@@ -36,8 +34,9 @@ export default function controller() {
     reload,
     onunload: () => {
       socket.destroy();
-      if(clockInterval)
+      if (clockInterval) {
         clearInterval(clockInterval);
+      }
     }
   };
 

@@ -1,3 +1,4 @@
+const Stockfish = window.Stockfish;
 const maxMoveTime = 8000;
 const maxSkill = 20;
 const levelToDepth = {
@@ -17,9 +18,9 @@ export default function(ctrl) {
 
   return {
     init(cb) {
-      window.Stockfish.init(function() {
+      Stockfish.init(function() {
 
-        window.Stockfish.output(function(msg) {
+        Stockfish.output(function(msg) {
           console.log(msg);
           const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
           if (bestmoveRegExpMatch) {
@@ -34,8 +35,8 @@ export default function(ctrl) {
     },
 
     search(fen) {
-      window.Stockfish.cmd(`position fen ${fen}`);
-      window.Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      Stockfish.cmd(`position fen ${fen}`);
+      Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
     },
 
     setLevel(l) {
@@ -43,14 +44,24 @@ export default function(ctrl) {
       setOption('Skill Level', skill(level));
     },
 
+    prepare(variant) {
+      setOption('UCI_Chess960', variant === 'chess960');
+      // setoption('UCI_House', variant === Crazyhouse);
+      // setoption('UCI_KingOfTheHill', variant === KingOfTheHill);
+      // setoption('UCI_Race', variant === RacingKings);
+      // setoption('UCI_3Check', variant === ThreeCheck);
+      // setoption('UCI_Atomic', variant === Atomic);
+      // setoption('UCI_Horde', variant === Horde);
+    },
+
     exit() {
-      window.Stockfish.exit();
+      Stockfish.exit();
     }
   };
 }
 
 function setOption(name, value) {
-  window.Stockfish.cmd(`setoption name ${name} value ${value}`);
+  Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
 function moveTime(level) {

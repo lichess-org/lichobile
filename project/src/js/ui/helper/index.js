@@ -111,8 +111,8 @@ helper.transformProp = function() {
 };
 
 function collectionHas(coll, el) {
-  for(var i = 0, len = coll.length; i < len; i++) {
-    if(coll[i] === el) return true;
+  for (var i = 0, len = coll.length; i < len; i++) {
+    if (coll[i] === el) return true;
   }
   return false;
 }
@@ -257,9 +257,16 @@ helper.isLandscape = function() {
 // allow user to opt out of track analytics
 // only log if setting has it enabled
 helper.analyticsTrackView = function(view) {
-  var enabled = settings.general.analytics();
+  const enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
+};
+
+helper.analyticsTrackEvent = function(category, action) {
+  const enabled = settings.general.analytics();
+  if (enabled) {
+    window.analytics.trackEvent(category, action);
+  }
 };
 
 helper.autofocus = function(el, isUpdate) {

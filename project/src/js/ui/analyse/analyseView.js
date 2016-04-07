@@ -50,7 +50,7 @@ function renderContent(ctrl, isPortrait) {
   const bounds = ground.getBounds(isPortrait);
 
   return [
-    renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+    renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
     <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}

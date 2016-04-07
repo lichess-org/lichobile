@@ -6,7 +6,7 @@ export default {
 
     const boardClass = [
       'display_board',
-      settings.general.theme.piece(),
+      args.customPieceTheme || settings.general.theme.piece(),
       settings.general.theme.board(),
       args.variant ? args.variant.key : ''
     ].join(' ');

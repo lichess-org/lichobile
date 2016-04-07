@@ -46,6 +46,9 @@ challengeForm.close = function(fromBB) {
 function challenge() {
   const userId = challengeForm.userId;
   return challengeXhr(userId, challengeForm.fen).then(data => {
+
+    helper.analyticsTrackEvent('Challenge', 'Sent');
+
     if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
@@ -181,7 +184,7 @@ function renderForm() {
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit]', challengeForm.actionName)
+    m('button[data-icon=E][type=submit].newGameButton', challengeForm.actionName)
   ]);
 }
 

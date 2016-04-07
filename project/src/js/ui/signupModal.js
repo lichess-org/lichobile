@@ -15,7 +15,7 @@ function submit(form) {
   var pass = form[2].value.trim();
   if (!login || !email || !pass) return false;
   window.cordova.plugins.Keyboard.close();
-  session.signup(login, email, pass).then(function() {
+  return session.signup(login, email, pass).then(function() {
     signupModal.close();
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
@@ -29,7 +29,6 @@ function submit(form) {
 }
 
 signupModal.open = function() {
-  helper.analyticsTrackView('Sign Up');
   backbutton.stack.push(helper.slidesOutDown(signupModal.close, 'signupModal'));
   isOpen = true;
 };

@@ -148,19 +148,31 @@ export function connectingHeader(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
+export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
-  const boardKey = isPortrait ? 'portrait' : 'landscape';
+  const boardKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape');
   const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 };
-  return (
-    <div className="content_round onlyBoard">
-      <section key={boardKey} className="board_wrapper" style={boardStyle}>
-        {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant})}
-      </section>
-    </div>
+  const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
+  const board = (
+    <section key={boardKey} className={className} style={boardStyle}>
+    {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+    </section>
   );
+  if (isPortrait) {
+    return [
+      <section key="viewonlyOpponent" className="playTable">&nbsp;</section>,
+      board,
+      <section key="viewonlyPlayer" className="playTable">&nbsp;</section>,
+      <section key="viewonlyActions" className="actions_bar">&nbsp;</section>
+    ];
+  } else {
+    return [
+      board,
+      <section key="viewonlyTable" className="table" />
+    ];
+  }
 }
 
 export function empty() {

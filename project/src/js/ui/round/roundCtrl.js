@@ -17,15 +17,12 @@ import signals from '../../signals';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 import * as xhr from './roundXhr';
 import { toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
-
-  helper.analyticsTrackView('Round');
 
   this.data = data(cfg);
 
@@ -223,7 +220,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   var onMove = function(orig, dest, capturedPiece) {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
-        atomic.capture(this, dest);
+        atomic.capture(this.chessground, dest);
         sound.explosion();
       }
       else sound.capture();
@@ -249,7 +246,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         const p = o.enpassant;
         enpassantPieces[p.key] = null;
         if (d.game.variant.key === 'atomic') {
-          atomic.enpassant(this, p.key, p.color);
+          atomic.enpassant(this.chessground, p.key, p.color);
         } else {
           sound.capture();
         }

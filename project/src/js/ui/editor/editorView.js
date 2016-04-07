@@ -36,7 +36,7 @@ export default function view(ctrl) {
           config: editorConfig
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
-          renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+          renderBoard(ctrl.data, ctrl.chessground),
           sparePieces(ctrl, color, color, 'bottom'),
           renderActionsBar(ctrl)
         ]);
@@ -47,7 +47,7 @@ export default function view(ctrl) {
           config: editorConfig
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
-          renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+          renderBoard(ctrl.data, ctrl.chessground),
           sparePieces(ctrl, color, color, 'bottom')
         ]),
         m('section.table.editorTable', { key: 'table' }, [

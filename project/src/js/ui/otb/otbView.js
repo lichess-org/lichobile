@@ -15,11 +15,12 @@ import settings from '../../settings';
 export default function view(ctrl) {
 
   var content;
+  const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
   if (ctrl.replay) {
-    content = renderContent.bind(undefined, ctrl);
+    content = renderContent.bind(undefined, ctrl, pieceTheme);
   } else {
-    content = viewOnlyBoardContent;
+    content = viewOnlyBoardContent.bind(undefined, null, null, null, 'standard', null, pieceTheme);
   }
 
   function overlay() {
@@ -38,8 +39,7 @@ export default function view(ctrl) {
   );
 }
 
-function renderContent(ctrl) {
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
+function renderContent(ctrl, pieceTheme) {
   const flip = settings.otb.flipPieces();
   const wrapperClass = helper.classSet({
     'otb': true,
@@ -48,11 +48,11 @@ function renderContent(ctrl) {
     'turn_white': ctrl.chessground.data.turnColor === 'white',
     'turn_black': ctrl.chessground.data.turnColor === 'black'
   });
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const playerName = i18n(ctrl.data.player.color);
   const opponentName = i18n(ctrl.data.opponent.color);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
-  const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
   const bounds = ground.getBounds(isPortrait);
 
   if (isPortrait)

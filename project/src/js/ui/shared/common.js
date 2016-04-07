@@ -148,16 +148,17 @@ export function connectingHeader(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen, lastMove, orientation, variant) {
+export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
   const boardKey = isPortrait ? 'portrait' : 'landscape';
   const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 };
+  const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   return (
     <div className="content_round onlyBoard">
-      <section key={boardKey} className="board_wrapper" style={boardStyle}>
-        {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant})}
+      <section key={boardKey} className={className} style={boardStyle}>
+        {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
       </section>
     </div>
   );

@@ -69,8 +69,9 @@ export default function controller() {
     }, 500);
   }.bind(this);
 
-  const isEngineToMove = function() {
-    return this.chessground.data.turnColor !== this.data.player.color;
+  const canEngineMove = function() {
+    const sit = this.replay.situation();
+    return !sit.end && this.chessground.data.turnColor !== this.data.player.color;
   }.bind(this);
 
   const onPromotion = function(orig, dest, role) {
@@ -95,7 +96,7 @@ export default function controller() {
     if (sit.status && sit.status.id >= 30) {
       setResult(this, sit.status);
       this.onGameEnd();
-    } else if (isEngineToMove()) {
+    } else if (canEngineMove()) {
       engineMove();
       m.redraw();
     }
@@ -135,7 +136,7 @@ export default function controller() {
     this.replay.apply();
 
     engine.prepare(this.data.game.variant.key);
-    if (isEngineToMove()) {
+    if (canEngineMove()) {
       engineMove();
     }
 

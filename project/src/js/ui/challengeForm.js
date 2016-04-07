@@ -184,7 +184,7 @@ function renderForm() {
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit]', challengeForm.actionName)
+    m('button[data-icon=E][type=submit].newGameButton', challengeForm.actionName)
   ]);
 }
 

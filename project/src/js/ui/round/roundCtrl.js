@@ -17,15 +17,12 @@ import signals from '../../signals';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
-import helper from '../helper';
 import * as xhr from './roundXhr';
 import { toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
-
-  helper.analyticsTrackView('Round');
 
   this.data = data(cfg);
 

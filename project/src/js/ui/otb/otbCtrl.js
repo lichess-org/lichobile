@@ -19,7 +19,7 @@ export const storageFenKey = 'otb.setupFen';
 
 export default function controller() {
 
-  helper.analyticsTrackView('On The Board');
+  helper.analyticsTrackView('Offline On The Board');
   socket.createDefault();
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
@@ -93,10 +93,13 @@ export default function controller() {
   }.bind(this);
 
   this.startNewGame = function(setupFen) {
+    const variant = settings.otb.variant();
+    helper.analyticsTrackEvent('Offline Game Variant', variant);
+
     askWorker(chessWorker, {
       topic: 'init',
       payload: {
-        variant: settings.otb.variant(),
+        variant,
         fen: setupFen || undefined
       }
     }).then(data => {

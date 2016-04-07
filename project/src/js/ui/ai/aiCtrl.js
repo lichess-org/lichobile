@@ -19,7 +19,9 @@ import m from 'mithril';
 export const storageFenKey = 'ai.setupFen';
 
 export default function controller() {
+
   helper.analyticsTrackView('Offline AI');
+
   socket.createDefault();
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
@@ -141,10 +143,13 @@ export default function controller() {
   }.bind(this);
 
   this.startNewGame = function(setupFen) {
+    const variant = settings.otb.variant();
+    helper.analyticsTrackEvent('Offline Game Variant', variant);
+
     askWorker(chessWorker, {
       topic: 'init',
       payload: {
-        variant: settings.ai.variant(),
+        variant,
         fen: setupFen || undefined
       }
     }).then(data => {

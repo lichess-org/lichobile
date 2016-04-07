@@ -27,6 +27,7 @@ lobby.startSeeking = function() {
     socket.createLobby(data.lobby.version, createHook, {
       redirect: d => {
         lobby.closePopup();
+        helper.analyticsTrackEvent('Seek', 'Found');
         socket.redirectToGame(d);
       },
       n: (_, d) => {
@@ -58,6 +59,8 @@ lobby.cancelSeeking = function(fromBB) {
   // not very elegant, but well, it will work...
   socket.createDefault();
   signals.seekCanceled.dispatch();
+
+  helper.analyticsTrackEvent('Seek', 'Canceled');
 };
 
 lobby.view = function() {

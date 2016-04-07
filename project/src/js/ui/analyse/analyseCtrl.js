@@ -11,7 +11,7 @@ import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import continuePopup from '../shared/continuePopup';
-import { backHistory, handleXhrError, oppositeColor } from '../../utils';
+import { handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import { makeData, makeDefaultData } from './data';
@@ -317,16 +317,18 @@ export default function controller() {
   } else if (this.source === 'offline' && gameId === 'otb') {
     helper.analyticsTrackView('Analysis (offline)');
     const otbData = getAnalyseData(getCurrentOTBGame());
-    if (!otbData) backHistory();
-    else {
+    if (!otbData) {
+      m.route('/analyse');
+    } else {
       otbData.orientation = orientation;
       init(makeData(otbData));
     }
   } else if (this.source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline)');
     const aiData = getAnalyseData(getCurrentAIGame());
-    if (!aiData) backHistory();
-    else {
+    if (!aiData) {
+      m.route('/analyse');
+    } else {
       aiData.orientation = orientation;
       init(makeData(aiData));
     }

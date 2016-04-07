@@ -45,6 +45,7 @@ newGameForm.openAIFromPosition = function(fen) {
 
 function startAIGame() {
   return xhr.newAiGame(newGameForm.fen).then(function(data) {
+    helper.analyticsTrackEvent('Online AI Variant', data.game.variant.key);
     m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
@@ -55,6 +56,7 @@ function startAIGame() {
 function seekHumanGame() {
   if (settings.gameSetup.human.timeMode() === '1') {
     newGameForm.close();
+    helper.analyticsTrackEvent('Seek', 'Sent');
     lobby.startSeeking();
   }
   else {

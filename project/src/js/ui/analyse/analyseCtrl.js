@@ -307,7 +307,7 @@ export default function controller() {
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
-      helper.analyticsTrackView('Analysis (game)');
+      helper.analyticsTrackView('Analysis (online game)');
       init(makeData(cfg));
       m.redraw();
     }, err => {
@@ -315,7 +315,7 @@ export default function controller() {
       m.route('/');
     });
   } else if (this.source === 'offline' && gameId === 'otb') {
-    helper.analyticsTrackView('Analysis (offline)');
+    helper.analyticsTrackView('Analysis (offline otb)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) {
       m.route('/analyse');
@@ -324,7 +324,7 @@ export default function controller() {
       init(makeData(otbData));
     }
   } else if (this.source === 'offline' && gameId === 'ai') {
-    helper.analyticsTrackView('Analysis (offline)');
+    helper.analyticsTrackView('Analysis (offline ai)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) {
       m.route('/analyse');

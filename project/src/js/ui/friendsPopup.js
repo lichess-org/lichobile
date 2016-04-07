@@ -11,7 +11,6 @@ const friendsPopup = {};
 friendsPopup.isOpen = false;
 
 friendsPopup.open = function() {
-  helper.analyticsTrackView('Online Friends');
   backbutton.stack.push(friendsPopup.close);
   friendsPopup.isOpen = true;
 };

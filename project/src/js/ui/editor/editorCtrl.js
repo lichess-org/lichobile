@@ -14,7 +14,7 @@ export default function controller() {
 
   socket.createDefault();
 
-  helper.analyticsTrackView('Editor');
+  helper.analyticsTrackView('Board Editor');
 
   const initFen = m.route.param('fen') || startingFen;
 

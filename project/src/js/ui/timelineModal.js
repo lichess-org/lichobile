@@ -10,7 +10,6 @@ const timelineModal = {};
 timelineModal.isOpen = false;
 
 timelineModal.open = function() {
-  helper.analyticsTrackView('Online Friends');
   backbutton.stack.push(timelineModal.close);
   timeline.setLastReadTimestamp();
   timelineModal.isOpen = true;
@@ -40,6 +39,7 @@ timelineModal.view = function() {
         } else if (e.type === 'game-end') {
           return renderGameEnd(e);
         }
+        return null;
       }))
     ])
   ]);

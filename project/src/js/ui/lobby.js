@@ -95,6 +95,7 @@ lobby.view = function() {
 function createHook() {
   if (hookId) return; // hook already created!
   xhr.seekGame().then(function(data) {
+    helper.analyticsTrackEvent('Seek', 'Created');
     hookId = data.hook.id;
   }, utils.handleXhrError);
 }

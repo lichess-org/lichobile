@@ -262,7 +262,8 @@ export default function(worker) {
 
   function create(payload) {
     // don't always recreate default socket on page change
-    if (socketInstance && socketInstance.options.name === 'default') {
+    if (socketInstance && payload.opts.options.name === 'default' &&
+      socketInstance.options.name === 'default') {
       return;
     }
 
@@ -285,7 +286,7 @@ export default function(worker) {
         create(msg.data.payload);
         break;
       case 'send':
-        const [t, d, o] = msg.data.payload;
+        var [t, d, o] = msg.data.payload;
         if (socketInstance) socketInstance.send(t, d, o);
         break;
       case 'connect':

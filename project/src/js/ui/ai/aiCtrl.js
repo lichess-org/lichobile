@@ -1,3 +1,4 @@
+import gameStatusApi from '../../lichess/status';
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
@@ -93,8 +94,8 @@ export default function controller() {
 
   this.onReplayAdded = function() {
     const sit = this.replay.situation();
-    if (sit.status && sit.status.id >= 30) {
-      setResult(this, sit.status);
+    setResult(this, sit.status);
+    if (gameStatusApi.finished(this.data)) {
       this.onGameEnd();
     } else if (canEngineMove()) {
       engineMove();

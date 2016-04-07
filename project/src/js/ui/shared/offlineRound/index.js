@@ -100,6 +100,8 @@ export function setResult(ctrl, status) {
   ctrl.data.game.status = status;
   if (ctrl.data.game.status.id !== 34) {
     ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
+  } else {
+    ctrl.data.game.winner = undefined;
   }
 }
 

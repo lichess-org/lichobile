@@ -38,7 +38,8 @@ const untranslated = {
   startNewAnalysis: 'Start new analysis',
   showBestMove: 'Show computer best move',
   followers: 'Followers',
-  userAcceptsYourChallenge: '%s accepts your challenge!'
+  userAcceptsYourChallenge: '%s accepts your challenge!',
+  incorrectThreefoldClaim: 'Incorrect threefold repetition claim.'
 };
 
 const defaultCode = 'en';

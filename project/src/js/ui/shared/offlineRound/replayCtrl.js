@@ -1,3 +1,4 @@
+import i18n from '../../../i18n';
 import { setResult } from '.';
 import { askWorker } from '../../../utils';
 
@@ -29,7 +30,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
           root.save();
           root.onGameEnd();
         } else {
-          window.plugins.toast.show('Invalid threefold claim', 'short', 'center');
+          window.plugins.toast.show(i18n('incorrectThreefoldClaim'), 'short', 'center');
         }
         break;
     }

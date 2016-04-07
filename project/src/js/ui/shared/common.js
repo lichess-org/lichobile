@@ -152,16 +152,17 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrappe
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
-  const boardKey = isPortrait ? 'portrait' : 'landscape';
+  const boardKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape');
   const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 };
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
-  return (
-    <div className="content_round onlyBoard">
-      <section key={boardKey} className={className} style={boardStyle}>
-        {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
-      </section>
-    </div>
-  );
+  return [
+    <section key="viewonlyOpponent" className="playTable">&nbsp;</section>,
+    <section key={boardKey} className={className} style={boardStyle}>
+      {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+    </section>,
+    <section key="viewonlyPlayer" className="playTable">&nbsp;</section>,
+    <section key="viewonlyActions" className="actions_bar">&nbsp;</section>
+  ];
 }
 
 export function empty() {

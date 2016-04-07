@@ -39,7 +39,7 @@ function getChecksCount(ctrl, color) {
 
 export function renderGameActionsBar(ctrl, type) {
   return (
-    <section className="actions_bar">
+    <section key="actionsBar" className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />

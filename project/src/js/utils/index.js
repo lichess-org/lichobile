@@ -15,21 +15,20 @@ export function autoredraw(action) {
 }
 
 export function askWorker(worker, msg, callback) {
-  const defer = Promise.defer();
-  function listen(e) {
-    if (e.data.topic === msg.topic) {
-      worker.removeEventListener('message', listen);
-      if (callback) {
-        callback(e.data.payload);
-      } else {
-        defer.resolve(e.data.payload);
+  return new Promise(function(resolve) {
+    function listen(e) {
+      if (e.data.topic === msg.topic) {
+        worker.removeEventListener('message', listen);
+        if (callback) {
+          callback(e.data.payload);
+        } else {
+          resolve(e.data.payload);
+        }
       }
     }
-  }
-  worker.addEventListener('message', listen);
-  worker.postMessage(msg);
-
-  return defer.promise;
+    worker.addEventListener('message', listen);
+    worker.postMessage(msg);
+  });
 }
 
 export function hasNetwork() {

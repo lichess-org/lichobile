@@ -176,11 +176,15 @@ function renderForwardButton(ctrl) {
 }
 
 function renderTd(step, curPly) {
-  return step ? (
-    <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}>
-      {step.san}
-    </td>
-  ) : null;
+  if (step && step.pgnMoves.length) {
+    const san = step.pgnMoves[step.pgnMoves.length - 1];
+    return (
+      <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}>
+        {san}
+      </td>
+    );
+  }
+  return null;
 }
 
 function renderTable(ctrl, curPly) {

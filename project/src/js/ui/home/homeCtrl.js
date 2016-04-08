@@ -90,6 +90,7 @@ export default function homeCtrl() {
     },
     onunload() {
       if (featuredFeed) featuredFeed.close();
+      socket.destroy();
       document.removeEventListener('online', init);
       document.removeEventListener('resume', init);
       document.removeEventListener('pause', onPause);

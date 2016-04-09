@@ -12,18 +12,17 @@ const loginModal = {};
 var isOpen = false;
 
 function submit(form) {
-  var login = form[0].value.trim();
-  var pass = form[1].value.trim();
+  const login = form[0].value.trim();
+  const pass = form[1].value;
   if (!login || !pass) return false;
   window.cordova.plugins.Keyboard.close();
-  return session.login(form[0].value.trim(), form[1].value.trim()).then(function() {
+  return session.login(login, pass).then(function() {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
     push.register();
     session.refresh();
-  }, function(err) {
-    utils.handleXhrError(err);
-  });
+  })
+  .catch(utils.handleXhrError);
 }
 
 loginModal.open = function() {

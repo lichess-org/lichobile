@@ -108,7 +108,7 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
 }
 
 function renderVariantReminder(data) {
-  if (!data.status || !gameApi.isPlayerPlaying(data))  {
+  if (!data.game.status || !gameApi.isPlayerPlaying(data))  {
     return null;
   }
 

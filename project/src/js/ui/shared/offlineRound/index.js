@@ -16,7 +16,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
       <div key="infos" className="antagonistInfos offline">
         <div>{content}</div>
         <div className="ratingAndMaterial">
-          {renderMaterial(material)}
+          {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
           { ctrl.data.game.variant.key === 'threeCheck' ?
             <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
           }

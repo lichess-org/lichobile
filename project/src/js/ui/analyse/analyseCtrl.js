@@ -320,6 +320,7 @@ export default function controller() {
     if (!otbData) {
       m.route('/analyse');
     } else {
+      otbData.player.spectator = true;
       otbData.orientation = orientation;
       init(makeData(otbData));
     }
@@ -329,6 +330,7 @@ export default function controller() {
     if (!aiData) {
       m.route('/analyse');
     } else {
+      aiData.player.spectator = true;
       aiData.orientation = orientation;
       init(makeData(aiData));
     }

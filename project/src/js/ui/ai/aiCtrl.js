@@ -151,7 +151,7 @@ export default function controller() {
   }.bind(this);
 
   this.startNewGame = function(setupFen) {
-    const variant = settings.otb.variant();
+    const variant = settings.ai.variant();
     helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
 
     askWorker(chessWorker, {

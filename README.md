@@ -12,6 +12,8 @@ lichess mobile
 - Chat with your opponent.
 - Practice with chess puzzles
 - Over The Board mode to play offline with a friend.
+- Play multiple variants, online or offline: Chess 960, King Of The Hill, Three-check, Antichess, Atomic chess, Horde, Racing Kings!
+- Game analysis with local computer evaluation
 - Board editor
 - Offline AI mode.
 - Available in 80 languages.

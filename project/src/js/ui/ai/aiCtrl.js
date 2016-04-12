@@ -64,9 +64,10 @@ export default function controller() {
 
   const engineMove = function () {
     this.vm.engineSearching = true;
+    const sit = this.replay.situation();
     setTimeout(() => {
       engine.setLevel(this.getOpponent().level);
-      engine.search(this.replay.situation().fen);
+      engine.search(this.data.game.initialFen, sit.uciMoves.join(' '));
     }, 500);
   }.bind(this);
 

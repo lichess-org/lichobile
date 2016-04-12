@@ -34,8 +34,8 @@ export default function(ctrl) {
       });
     },
 
-    search(fen) {
-      Stockfish.cmd(`position fen ${fen}`);
+    search(initialFen, moves) {
+      Stockfish.cmd(`position fen ${initialFen} moves ${moves}`);
       Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
     },
 

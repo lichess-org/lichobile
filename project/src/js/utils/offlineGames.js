@@ -14,7 +14,7 @@ export function getAnalyseData(data) {
       fen: o.fen,
       ply: o.ply,
       san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
-      uci: o.lastMove ? o.lastMove.uci : null,
+      uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
       dests: o.dests
     };
   });

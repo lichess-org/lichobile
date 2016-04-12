@@ -55,10 +55,11 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       if (sit.movable) {
         this.root.chessground.set(sit);
       } else {
+        const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
         this.root.chessground.set({
           fen: sit.fen,
           turnColor: sit.player,
-          lastMove: sit.lastMove ? [sit.lastMove.from, sit.lastMove.to] : null,
+          lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
           movable: {
             dests: sit.dests,
             color: sit.player

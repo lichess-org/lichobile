@@ -124,6 +124,11 @@ function time(data) {
   }
 }
 
+function title(data) {
+  const mode = data.game.rated ? i18n('rated') : i18n('casual');
+  return `${time(data)} • ${data.game.variant.name} • ${mode}`;
+}
+
 function publicUrl(data) {
   return 'http://lichess.org/' + data.game.id;
 }
@@ -153,6 +158,7 @@ export default {
   setIsGone,
   result,
   time,
+  title,
   publicUrl,
   isSupportedVariant
 };

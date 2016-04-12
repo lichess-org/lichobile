@@ -134,14 +134,6 @@ function renderVariantReminder(data) {
   );
 }
 
-function renderVsButton(ctrl) {
-
-  const text = utils.playerName(ctrl.data.player) + ' vs. ' +
-    utils.playerName(ctrl.data.opponent);
-
-  return backButton(text);
-}
-
 function renderTitle(ctrl) {
   if (socket.isConnected()) {
     return (
@@ -174,7 +166,7 @@ function renderHeader(ctrl) {
 
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      { !ctrl.data.tv && ctrl.data.player.spectator ? renderVsButton(ctrl) : menuButton()}
+      { !ctrl.data.tv && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
       { ctrl.data.tv || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>

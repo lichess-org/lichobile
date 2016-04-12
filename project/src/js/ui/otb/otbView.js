@@ -1,7 +1,7 @@
+import gameApi from '../../lichess/game';
 import chessground from 'chessground-mobile';
-import * as utils from '../../utils';
 import layout from '../layout';
-import { header, viewOnlyBoardContent } from '../shared/common';
+import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import ground from '../round/ground';
@@ -14,12 +14,14 @@ import settings from '../../settings';
 
 export default function view(ctrl) {
 
-  var content;
+  var content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
   if (ctrl.replay) {
+    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
     content = renderContent.bind(undefined, ctrl, pieceTheme);
   } else {
+    header = renderHeader.bind(undefined, i18n('playOnTheBoardOffline'));
     content = viewOnlyBoardContent.bind(undefined, null, null, null, 'standard', null, pieceTheme);
   }
 
@@ -32,7 +34,7 @@ export default function view(ctrl) {
   }
 
   return layout.board(
-    utils.partialf(header, i18n('playOnTheBoardOffline')),
+    header,
     content,
     overlay,
     ctrl.data && ctrl.data.player.color || 'white'

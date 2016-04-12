@@ -155,7 +155,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     else if (this.data.userTV)
       this.title = this.data.userTV;
     else if (gameStatus.started(this.data))
-      this.title = i18n('gamesBeingPlayedRightNow');
+      this.title = gameApi.title(this.data);
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))

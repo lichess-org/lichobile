@@ -1,6 +1,7 @@
+import gameApi from '../../lichess/game';
 import chessground from 'chessground-mobile';
 import layout from '../layout';
-import { header, viewOnlyBoardContent } from '../shared/common';
+import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import {
   renderAntagonist,
   renderGameActionsBar,
@@ -12,23 +13,25 @@ import { opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import ground from '../round/ground';
 import helper from '../helper';
-import i18n from '../../i18n';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newAiGame';
+import i18n from '../../i18n';
 import m from 'mithril';
 
 export default function view(ctrl) {
-  var content;
+  var content, header;
 
   if (ctrl.replay) {
+    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
     content = renderContent.bind(undefined, ctrl);
   } else {
+    header = renderHeader.bind(undefined, i18n('playOfflineComputer'));
     content = viewOnlyBoardContent;
   }
 
   return layout.board(
-    header.bind(undefined, i18n('playOfflineComputer')),
+    header,
     content,
     overlay.bind(undefined, ctrl)
   );

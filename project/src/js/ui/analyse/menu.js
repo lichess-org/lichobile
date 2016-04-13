@@ -65,7 +65,7 @@ function renderAnalyseMenu(ctrl) {
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
           ctrl.ceval.toggle();
-          if (v) ctrl.startCeval();
+          if (v) ctrl.initCeval();
           else ctrl.ceval.destroy();
         }
       ),

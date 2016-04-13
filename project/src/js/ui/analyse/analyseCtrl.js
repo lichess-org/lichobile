@@ -62,6 +62,16 @@ export default function controller() {
     return [uci.substr(0, 2), uci.substr(2, 2)];
   }
 
+  this.initCeval = function() {
+    if (this.ceval.enabled()) {
+      if (this.ceval.isInit()) {
+        this.startCeval();
+      } else {
+        this.ceval.init(this.data.game.variant.key, this.startCeval);
+      }
+    }
+  }.bind(this);
+
   this.startCeval = function() {
     if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
@@ -234,7 +244,7 @@ export default function controller() {
   const allowCeval = function() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
+    ) && ['standard', 'chess960', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {
@@ -298,7 +308,7 @@ export default function controller() {
     this.vm.pathStr = treePath.write(initialPath);
 
     showGround();
-    this.startCeval();
+    this.initCeval();
   }.bind(this);
 
   this.startNewAnalysis = function() {

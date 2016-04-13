@@ -37,10 +37,12 @@ export default function(ctrl) {
     search(initialFen, moves) {
       Stockfish.cmd(`position fen ${initialFen} moves ${moves}`);
       Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
     },
 
     setLevel(l) {
       level = l;
+      console.info('Skill Level', skill(level));
       setOption('Skill Level', skill(level));
     },
 

@@ -1,17 +1,16 @@
 import m from 'mithril';
-import makePool from './cevalPool';
 import settings from '../../../settings';
+import cevalEngine from './cevalEngine';
 
 export default function cevalCtrl(allow, emit) {
 
+  var initialized = false;
+
   const minDepth = 8;
-  const maxDepth = 18;
+  const maxDepth = 20;
   const allowed = m.prop(allow);
-  const pool = makePool({
-    path: 'vendor/stockfish6.js',
-    minDepth: minDepth,
-    maxDepth: maxDepth
-  }, 2);
+
+  const engine = cevalEngine({ minDepth, maxDepth });
 
   var curDepth = 0;
   var started = false;
@@ -27,10 +26,14 @@ export default function cevalCtrl(allow, emit) {
   }
 
   function start(path, steps) {
-    if (!enabled()) return;
+    if (!enabled()) {
+      return;
+    }
     const step = steps[steps.length - 1];
-    if (step.ceval && step.ceval.depth >= maxDepth) return;
-    pool.start({
+    if (step.ceval && step.ceval.depth >= maxDepth) {
+      return;
+    }
+    engine.start({
       position: steps[0].fen,
       moves: steps.slice(1).map(function(s) {
         return fixCastle(s.uci, s.san);
@@ -47,12 +50,13 @@ export default function cevalCtrl(allow, emit) {
 
   function stop() {
     if (!enabled() || !started) return;
-    pool.stop();
+    engine.stop();
     started = false;
   }
 
   function destroy() {
-    pool.destroy();
+    initialized = false;
+    engine.exit();
   }
 
   function fixCastle(uci, san) {
@@ -71,6 +75,15 @@ export default function cevalCtrl(allow, emit) {
   }
 
   return {
+    init(variant, cb) {
+      engine.init(variant, () => {
+        initialized = true;
+        cb();
+      });
+    },
+    isInit() {
+      return initialized;
+    },
     start,
     stop,
     destroy,

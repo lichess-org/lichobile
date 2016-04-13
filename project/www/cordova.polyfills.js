@@ -126,13 +126,45 @@
 
 }());
 
+if (!window.Stockfish) {
+  // cordova-stockfish-plugin interface
+  var stockfishWorker;
+  window.Stockfish = {
+    init: function(success) {
+      if (stockfishWorker) {
+        setTimeout(success);
+        return;
+      }
+      stockfishWorker = new Worker('vendor/stockfish6.js');
+      if (success) {
+        setTimeout(success, 10);
+      }
+    },
+    cmd: function(cmd) {
+      if (stockfishWorker) stockfishWorker.postMessage(cmd);
+    },
+    output: function(callback) {
+      if (stockfishWorker) {
+        stockfishWorker.addEventListener('message', msg => {
+          callback(msg.data);
+        });
+      }
+    },
+    exit: function(cb) {
+      if (stockfishWorker) {
+        stockfishWorker.terminate();
+        stockfishWorker = null;
+      }
+      if (cb) setTimeout(cb, 1);
+    }
+  };
+}
+
 /**
  * https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio polyfill
  *
  * Created by liming on 14-7-18.
  */
-
-
 (function() {
 
   var hotjs = {};

@@ -1,16 +1,12 @@
 import i18n from '../../i18n';
+import gameApi from '../../lichess/game';
+import helper from '../helper';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderEndedGameStatus } from '../shared/offlineRound';
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import m from 'mithril';
-
-const colors = [
-  ['white', 'white'],
-  ['black', 'black'],
-  ['randomColor', 'random']
-];
 
 export function opponentSelector() {
   const opps = settings.ai.availableOpponents.map(o =>
@@ -23,21 +19,25 @@ export function opponentSelector() {
   );
 }
 
-export function sideSelector() {
-  return (
-    <div className="select_input">
-      {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
-    </div>
-  );
-}
-
 function renderAlways() {
   return [
-    m('div.action', [
-      sideSelector(),
+    m('div.action.opponentSelector', [
       opponentSelector()
     ])
   ];
+}
+
+function resignButton(ctrl) {
+  return gameApi.playable(ctrl.data) ? m('div.resign', {
+    key: 'resign'
+  }, [
+    m('button[data-icon=b]', {
+      config: helper.ontouch(() => {
+        ctrl.actions.close();
+        ctrl.resign();
+      })
+    }, i18n('resign'))
+  ]) : null;
 }
 
 export default {
@@ -62,7 +62,7 @@ export default {
         return isOpen;
       },
       sharePGN: function() {
-        window.plugins.socialsharing.share(root.replay.pgn());
+        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
       },
       root: root
     };
@@ -74,9 +74,11 @@ export default {
       () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
       function() {
         return [
-          renderEndedGameStatus(ctrl)
+          renderEndedGameStatus(ctrl.root)
         ].concat(
-          renderAlways(ctrl)
+          renderClaimDrawButton(ctrl.root),
+          resignButton(ctrl.root),
+          renderAlways()
         );
       },
       ctrl.isOpen(),

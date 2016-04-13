@@ -1,18 +1,26 @@
 import helper from '../../helper';
-import statusApi from '../../../lichess/status';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
+import gameApi from '../../../lichess/game';
+import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
 export function renderAntagonist(ctrl, content, material, position, isPortrait, isVWS) {
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
+  const antagonistColor = ctrl.data[position].color;
+
   return (
     <section className={'playTable ' + position} key={key}>
       <div key="infos" className="antagonistInfos offline">
         <div>{content}</div>
-        <div className="ratingAndMaterial">{renderMaterial(material)}</div>
+        <div className="ratingAndMaterial">
+          {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
+          { ctrl.data.game.variant.key === 'threeCheck' ?
+            <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
+          }
+        </div>
       </div>
       { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
         <div key="spinner" className="engineSpinner">
@@ -24,15 +32,20 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
   );
 }
 
+function getChecksCount(ctrl, color) {
+  const sit = ctrl.replay.situation();
+  return sit.checkCount[utils.oppositeColor(color)];
+}
+
 export function renderGameActionsBar(ctrl, type) {
   return (
-    <section className="actions_bar">
+    <section key="actionsBar" className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
         config={helper.ontouch(ctrl.actions.open)}
       />
       <button className="action_bar_button" data-icon="U"
         config={helper.ontouch(
-          ctrl.startNewGame,
+          ctrl.newGameMenu.open,
           () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
         )}
       />
@@ -58,7 +71,7 @@ export function renderGameActionsBarTablet(ctrl, type) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(ctrl.startNewGame, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        config={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button className="action_bar_button fa fa-eye"
         config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
@@ -82,35 +95,43 @@ export function gameResult(replayCtrl) {
     return '?';
 }
 
-export function setResult(ctrl) {
+export function setResult(ctrl, status, winner) {
   const sit = ctrl.replay.situation();
-  ctrl.data.game.status.id = statusApi.offlineSituationToStatus(sit);
-  if (!sit.draw) {
-    ctrl.data.game.winner = utils.oppositeColor(sit.turnColor);
+  if (status) {
+    ctrl.data.game.status = status;
   }
+  ctrl.data.game.winner = winner || sit.winner;
 }
 
 export function renderEndedGameStatus(ctrl) {
-  let sit = ctrl.root.replay.situation();
-  let result, status;
-  if (sit && sit.finished) {
-    if (sit.checkmate) {
-      result = sit.turnColor === 'white' ? '0-1' : '1-0';
-      status = i18n('checkmate') + '. ' + i18n(sit.turnColor === 'white' ? 'blackIsVictorious' : 'whiteIsVictorious') + '.';
-    } else if (sit.stalemate || sit.draw || sit.threefold) {
-      result = '½-½';
-      if (sit.stalemate) status = i18n('stalemate');
-      else status = i18n('draw');
-    }
+  const sit = ctrl.replay.situation();
+  if (gameStatusApi.finished(ctrl.data)) {
+    const result = gameApi.result(ctrl.data);
+    const winner = sit.winner;
+    const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
+      (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
     return (
-      <div className="result">
+      <div key="result" className="result">
         {result}
         <br />
         <em className="resultStatus">{status}</em>
       </div>
     );
   }
+
+  return null;
 }
+
+export function renderClaimDrawButton(ctrl) {
+  return gameApi.playable(ctrl.data) ? m('div.claimDraw', {
+    key: 'claimDraw'
+  }, [
+    m('button[data-icon=2].draw-yes', {
+      config: helper.ontouch(() => ctrl.replay.claimDraw())
+    }, i18n('threefoldRepetition'))
+  ]) : null;
+}
+
 
 export function renderReplayTable(ctrl) {
   const curPly = ctrl.ply;
@@ -155,11 +176,15 @@ function renderForwardButton(ctrl) {
 }
 
 function renderTd(step, curPly) {
-  return step ? (
-    <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}>
-      {step.san}
-    </td>
-  ) : null;
+  if (step && step.pgnMoves.length) {
+    const san = step.pgnMoves[step.pgnMoves.length - 1];
+    return (
+      <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}>
+        {san}
+      </td>
+    );
+  }
+  return null;
 }
 
 function renderTable(ctrl, curPly) {

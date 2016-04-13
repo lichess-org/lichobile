@@ -15,14 +15,20 @@ export function autoredraw(action) {
 }
 
 export function askWorker(worker, msg, callback) {
-  function listen(e) {
-    if (e.data.topic === msg.topic) {
-      worker.removeEventListener('message', listen);
-      callback(e.data.payload);
+  return new Promise(function(resolve) {
+    function listen(e) {
+      if (e.data.topic === msg.topic) {
+        worker.removeEventListener('message', listen);
+        if (callback) {
+          callback(e.data.payload);
+        } else {
+          resolve(e.data.payload);
+        }
+      }
     }
-  }
-  worker.addEventListener('message', listen);
-  worker.postMessage(msg);
+    worker.addEventListener('message', listen);
+    worker.postMessage(msg);
+  });
 }
 
 export function hasNetwork() {

@@ -3,14 +3,6 @@ import storage from '../storage';
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';
 
-function lastMoveToUci(move) {
-  if (move) {
-    return move[0] + move[1];
-  } else {
-    return null;
-  }
-}
-
 export function getCurrentOTBGame() {
   return storage.get(otbStorageKey);
 }
@@ -21,9 +13,9 @@ export function getAnalyseData(data) {
     return {
       fen: o.fen,
       ply: o.ply,
-      san: o.san,
-      uci: lastMoveToUci(o.lastMove),
-      dests: o.movable.dests
+      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
+      uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
+      dests: o.dests
     };
   });
   return data.data;

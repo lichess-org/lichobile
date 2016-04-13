@@ -64,13 +64,27 @@ export default {
   },
 
   analyse: {
+    supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
+    ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true)
   },
 
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
-    useSymmetric: localstorageprop('settings.otb.useSymmetric', true)
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
+    variant: localstorageprop('settings.otb.variant', 'standard'),
+    availableVariants: [
+      ['Standard', 'standard'],
+      ['Chess960', 'chess960'],
+      ['King of the Hill', 'kingOfTheHill'],
+      ['Three-check', 'threeCheck'],
+      ['Antichess', 'antichess'],
+      ['Atomic', 'atomic'],
+      ['Horde', 'horde'],
+      ['Racing Kings', 'racingKings']
+    ]
   },
 
   ai: {
@@ -85,7 +99,12 @@ export default {
       ['Stockfish', '8']
     ],
     color: localstorageprop('settings.ai.color', 'white'),
-    opponent: localstorageprop('settings.ai.opponent', '1')
+    opponent: localstorageprop('settings.ai.opponent', '1'),
+    variant: localstorageprop('settings.ai.variant', 'standard'),
+    availableVariants: [
+      ['Standard', 'standard'],
+      ['Chess960', 'chess960']
+    ]
   },
 
   gameSetup: {

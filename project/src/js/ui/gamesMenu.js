@@ -41,15 +41,19 @@ function joinGame(g) {
 
 function acceptChallenge(id) {
   return xhr.acceptChallenge(id)
-  .then(data =>
-    m.route('/game' + data.url.round)
-  )
+  .then(data => {
+    helper.analyticsTrackEvent('Challenge', 'Accepted');
+    m.route('/game' + data.url.round);
+  })
   .then(() => challengesApi.remove(id))
   .then(gamesMenu.close);
 }
 
 function declineChallenge(id) {
-  return xhr.declineChallenge(id).then(() => challengesApi.remove(id));
+  return xhr.declineChallenge(id).then(() => {
+    helper.analyticsTrackEvent('Challenge', 'Declined');
+    challengesApi.remove(id);
+  });
 }
 
 function cardDims() {

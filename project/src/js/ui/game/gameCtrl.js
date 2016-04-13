@@ -3,6 +3,7 @@ import { hasNetwork, handleXhrError, getOfflineGameData, saveOfflineGameData, re
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
+import helper from '../helper';
 import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import gamesMenu from '../gamesMenu';
@@ -23,6 +24,12 @@ export default function controller() {
         m.route('/');
       }
       else {
+
+        if (gameData.player.spectator) {
+          helper.analyticsTrackView('Online Game (spectator)');
+        } else {
+          helper.analyticsTrackView('Online Game (player)');
+        }
 
         if (gameApi.isPlayerPlaying(data) &&
         gameApi.nbMoves(data, data.player.color) === 0) {

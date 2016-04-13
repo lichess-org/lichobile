@@ -50,7 +50,7 @@ function renderContent(ctrl, isPortrait) {
   const bounds = ground.getBounds(isPortrait);
 
   return [
-    renderBoard(ctrl.data.game.variant.key, ctrl.chessground, bounds, isPortrait),
+    renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
     <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}
@@ -274,9 +274,11 @@ function renderOpeningBox(ctrl) {
 
   const hash = '' + (opening && opening.eco + opening.name);
 
-  if (ctrl.vm.openingHash === hash) return {
-    subtree: 'retain'
-  };
+  if (ctrl.vm.openingHash === hash) {
+    return {
+      subtree: 'retain'
+    };
+  }
   ctrl.vm.openingHash = hash;
 
   if (opening) {
@@ -290,6 +292,8 @@ function renderOpeningBox(ctrl) {
       </div>
     );
   }
+
+  return null;
 }
 
 function renderMeta(ctrl, move, path) {
@@ -451,7 +455,7 @@ function gameInfos(ctrl) {
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf);
+  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
   const variantLink = helper.ontouch(
     () => {
       const link = variantApi(data.game.variant.key).link;

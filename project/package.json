@@ -7,9 +7,6 @@
     "type": "git",
     "url": "https://github.com/veloce/lichobile.git"
   },
-  "scripts": {
-    "build-workers": "browserify src/workers/chessWorker.js -t [ babelify --presets [ es2015 ] ] -o www/lib/chessWorker.js"
-  },
   "keywords": [
     "lichess",
     "chess",

@@ -14,7 +14,7 @@ export default function controller() {
   const selectedTab = m.prop(m.route.param('tab') || 'public');
   const sendingChallenges = m.prop(getSendingCorres());
 
-  helper.analyticsTrackView('Correspondence seeks');
+  helper.analyticsTrackView('Correspondence');
 
   xhr.lobby(true).then(function(data) {
     socket.createLobby(data.lobby.version, reload, {

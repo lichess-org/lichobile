@@ -26,12 +26,13 @@ export default function controller() {
   socket.createDefault();
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
+  const engine = engineCtrl(this);
+  this.actions = new actions.controller(this);
+  this.newGameMenu = new newGameMenu.controller(this);
 
   this.vm = {
     engineSearching: false
   };
-
-  const engine = engineCtrl(this);
 
   this.save = function() {
     setCurrentAIGame({
@@ -54,7 +55,7 @@ export default function controller() {
     };
   };
 
-  this.onEngineSearch = function(bestmove) {
+  this.onEngineBestMove = function(bestmove) {
     const from = bestmove.slice(0, 2);
     const to = bestmove.slice(2, 4);
     this.vm.engineSearching = false;
@@ -71,9 +72,9 @@ export default function controller() {
     }, 500);
   }.bind(this);
 
-  const canEngineMove = function() {
+  const isEngineToMove = function() {
     const sit = this.replay.situation();
-    return !sit.end && this.chessground.data.turnColor !== this.data.player.color;
+    return !sit.end && sit.player !== this.data.player.color;
   }.bind(this);
 
   const onPromotion = function(orig, dest, role) {
@@ -98,7 +99,7 @@ export default function controller() {
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
       this.onGameEnd();
-    } else if (canEngineMove()) {
+    } else if (isEngineToMove()) {
       engineMove();
       m.redraw();
     }
@@ -122,9 +123,6 @@ export default function controller() {
     this.onGameEnd();
   }.bind(this);
 
-  this.actions = new actions.controller(this);
-  this.newGameMenu = new newGameMenu.controller(this);
-
   this.init = function(data, situations, ply) {
     this.newGameMenu.close();
     this.actions.close();
@@ -144,7 +142,7 @@ export default function controller() {
     this.replay.apply();
 
     engine.prepare(this.data.game.variant.key);
-    if (canEngineMove()) {
+    if (isEngineToMove()) {
       engineMove();
     }
 
@@ -218,9 +216,7 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
-    if (chessWorker) {
-      chessWorker.terminate();
-    }
+    chessWorker.terminate();
     engine.exit();
   };
 }

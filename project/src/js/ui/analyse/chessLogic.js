@@ -19,7 +19,7 @@ export default function chessLogic(ctrl) {
             dests: sit.dests,
             check: sit.check,
             fen: sit.fen,
-            uci: sit.lastMove.uci,
+            uci: sit.uciMoves[0],
             san: sit.pgnMoves[0]
           };
           ctrl.addStep(step, payload.path);

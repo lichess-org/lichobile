@@ -1,5 +1,3 @@
-const Stockfish = window.Stockfish;
-
 export default function cevalEngine(opts) {
 
   function processOutput(text, work) {
@@ -29,7 +27,7 @@ export default function cevalEngine(opts) {
 
   return {
     init(variant, cb) {
-      Stockfish.init(() => {
+      window.Stockfish.init(() => {
         setOption('Ponder', 'false');
         prepare(variant);
         cb();
@@ -39,7 +37,7 @@ export default function cevalEngine(opts) {
     start(work) {
       send(['position', 'fen', work.position, 'moves', work.moves].join(' '));
       send('go depth ' + opts.maxDepth);
-      Stockfish.output(function(msg) {
+      window.Stockfish.output(function(msg) {
         console.log(msg);
         processOutput(msg, work);
       });
@@ -50,17 +48,17 @@ export default function cevalEngine(opts) {
     },
 
     exit() {
-      Stockfish.exit();
+      window.Stockfish.exit();
     }
   };
 }
 
 function send(text) {
-  Stockfish.cmd(text);
+  window.Stockfish.cmd(text);
 }
 
 function setOption(name, value) {
-  Stockfish.cmd(`setoption name ${name} value ${value}`);
+  window.Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
 function prepare(variant) {

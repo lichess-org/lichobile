@@ -61,14 +61,15 @@ export default function controller() {
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
     addMove(from, to);
+    m.redraw();
   };
 
   const engineMove = function () {
     this.vm.engineSearching = true;
     const sit = this.replay.situation();
     setTimeout(() => {
-      engine.setLevel(this.getOpponent().level);
-      engine.search(this.data.game.initialFen, sit.uciMoves.join(' '));
+      engine.setLevel(this.getOpponent().level)
+      .then(() => engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
     }, 500);
   }.bind(this);
 
@@ -101,7 +102,6 @@ export default function controller() {
       this.onGameEnd();
     } else if (isEngineToMove()) {
       engineMove();
-      m.redraw();
     }
     this.save();
     m.redraw();
@@ -141,10 +141,12 @@ export default function controller() {
     }
     this.replay.apply();
 
-    engine.prepare(this.data.game.variant.key);
-    if (isEngineToMove()) {
-      engineMove();
-    }
+    engine.prepare(this.data.game.variant.key)
+    .then(() => {
+      if (isEngineToMove()) {
+        engineMove();
+      }
+    });
 
     m.redraw();
   }.bind(this);
@@ -194,7 +196,9 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  engine.init(() => {
+  engine.init()
+  .then(() => {
+    console.log('init');
     if (saved) {
       try {
         this.init(saved.data, saved.situations, saved.ply);

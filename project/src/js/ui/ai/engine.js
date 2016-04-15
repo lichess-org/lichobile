@@ -1,4 +1,3 @@
-const Stockfish = window.Stockfish;
 const maxMoveTime = 8000;
 const maxSkill = 20;
 const levelToDepth = {
@@ -17,38 +16,39 @@ export default function(ctrl) {
   const bestmoveRegExp = /^bestmove (\w{4})/;
 
   return {
-    init(cb) {
-      Stockfish.init(function() {
+    init() {
+      return window.Stockfish.init()
+      .then(function() {
 
-        Stockfish.output(function(msg) {
+        window.Stockfish.output(function(msg) {
+          console.log(msg);
           const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
           if (bestmoveRegExpMatch) {
-            console.log(msg);
+            console.info(msg);
             ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
           }
         });
 
-        setOption('Ponder', 'false');
-
-        cb();
-      }, console.info.bind(console));
+      })
+      .then(() => setOption('Ponder', 'false'))
+      .catch(console.info.bind(console));
     },
 
     search(initialFen, moves) {
       console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
-      Stockfish.cmd(`position fen ${initialFen} moves ${moves}`);
-      Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
       console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      return cmd(`position fen ${initialFen} moves ${moves}`)
+      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
     },
 
     setLevel(l) {
       level = l;
       console.info('Skill Level', skill(level));
-      setOption('Skill Level', skill(level));
+      return setOption('Skill Level', skill(level));
     },
 
     prepare(variant) {
-      setOption('UCI_Chess960', variant === 'chess960');
+      return setOption('UCI_Chess960', variant === 'chess960');
       // setoption('UCI_House', variant === Crazyhouse);
       // setoption('UCI_KingOfTheHill', variant === KingOfTheHill);
       // setoption('UCI_Race', variant === RacingKings);
@@ -58,13 +58,17 @@ export default function(ctrl) {
     },
 
     exit() {
-      Stockfish.exit();
+      return window.Stockfish.exit();
     }
   };
 }
 
 function setOption(name, value) {
-  Stockfish.cmd(`setoption name ${name} value ${value}`);
+  return window.Stockfish.cmd(`setoption name ${name} value ${value}`);
+}
+
+function cmd(text) {
+  return window.Stockfish.cmd(text);
 }
 
 function moveTime(level) {

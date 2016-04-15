@@ -1,4 +1,3 @@
-const Stockfish = window.Stockfish;
 const maxMoveTime = 8000;
 const maxSkill = 20;
 const levelToDepth = {

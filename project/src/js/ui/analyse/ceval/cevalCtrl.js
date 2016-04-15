@@ -2,15 +2,16 @@ import m from 'mithril';
 import makePool from './cevalPool';
 import settings from '../../../settings';
 
-export default function cevalCtrl(allow, emit) {
+export default function cevalCtrl(variant, allow, emit) {
 
   const minDepth = 8;
   const maxDepth = 18;
   const allowed = m.prop(allow);
   const pool = makePool({
     path: 'vendor/stockfish6.js',
-    minDepth: minDepth,
-    maxDepth: maxDepth
+    minDepth,
+    maxDepth,
+    variant
   }, 2);
 
   var curDepth = 0;

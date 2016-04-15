@@ -234,7 +234,7 @@ export default function controller() {
   const allowCeval = function() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
+    ) && ['standard', 'chess960', 'fromPosition'].indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {
@@ -286,7 +286,7 @@ export default function controller() {
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.chessLogic = new chessLogic(this);
     this.analyse = new analyse(this.data.steps);
-    this.ceval = cevalCtrl(allowCeval(), onCevalMsg.bind(this));
+    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     var initialPath = treePath.default(this.analyse.firstPly());

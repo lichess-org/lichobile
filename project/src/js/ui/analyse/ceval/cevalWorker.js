@@ -9,6 +9,20 @@ export default function cevalWorker(opts, name) {
     instance.postMessage(text);
   }
 
+  function setOption(opt, value) {
+    send(`setoption name ${opt} value ${value}`);
+  }
+
+  function prepare(variant) {
+    setOption('UCI_Chess960', variant === 'chess960');
+    // setoption('UCI_House', variant === Crazyhouse);
+    // setoption('UCI_KingOfTheHill', variant === KingOfTheHill);
+    // setoption('UCI_Race', variant === RacingKings);
+    // setoption('UCI_3Check', variant === ThreeCheck);
+    // setoption('UCI_Atomic', variant === Atomic);
+    // setoption('UCI_Horde', variant === Horde);
+  }
+
   function processOutput(text, work) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*pv (.+)/);
@@ -39,6 +53,7 @@ export default function cevalWorker(opts, name) {
 
   // warmup
   send('uci');
+  prepare('variant');
 
   return {
     start(work) {

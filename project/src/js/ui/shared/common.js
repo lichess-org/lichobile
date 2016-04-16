@@ -9,6 +9,8 @@ import challengesApi from '../../lichess/challenges';
 import timeline from '../../lichess/timeline';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
+import popupWidget from './popup';
+import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
 import timelineModal from '../timelineModal';
 import m from 'mithril';
@@ -193,5 +195,46 @@ export function userStatus(user) {
       {user.title ? <span className="userTitle">{user.title}&nbsp;</span> : null}
       {user.username}
     </div>
+  );
+}
+
+export function userPopup(user, isOpen, close) {
+  const status = user.online ? 'online' : 'offline';
+
+  function content() {
+    return (
+      <div className="miniUser">
+        <div className="title">
+          <div className="username" config={helper.ontouch(() => m.route(`/@/${user.username}`))}>
+            <span className={'userStatus ' + status} data-icon="r" />
+            {i18n(user.username)}
+          </div>
+          {user.language ?
+            <p className="language withIcon">
+              <span className="fa fa-comment-o" />
+              {getLanguageNativeName(user.language)}
+            </p> : null
+          }
+        </div>
+        <div className="perfs">
+          {Object.keys(user.perfs).map(p => {
+            return (
+              <div className="perf">
+                <span data-icon={utils.gameIcon(p)} />
+                {user.perfs[p].rating}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  return popupWidget(
+    'miniUserInfos',
+    null,
+    content,
+    isOpen,
+    close
   );
 }

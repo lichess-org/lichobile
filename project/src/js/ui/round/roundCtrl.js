@@ -25,6 +25,7 @@ import m from 'mithril';
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = data(cfg);
+  console.log(this.data);
 
   this.onTVChannelChange = onTVChannelChange;
 
@@ -42,6 +43,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.vm = {
     flip: false,
+    showingUserPopup: {
+      player: true,
+      opponent: false
+    },
     showingActions: false,
     headerHash: '',
     replayHash: '',
@@ -76,6 +81,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
     return h;
   };
+
+  this.toggleUserPopup = function(position) {
+    this.vm.showingUserPopup[position] = !this.vm.showingUserPopup[position];
+  }.bind(this);
 
   this.showActions = function() {
     backbutton.stack.push(this.hideActions);

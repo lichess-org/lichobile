@@ -77,7 +77,13 @@ function renderProfile(user) {
         <p className="profileBio">{user.profile.bio}</p> : null
         }
         <div className="userInfos">
-          <p className="language fa fa-comment-o withIcon">{getLanguageNativeName(user.language)}</p>
+          {
+            user.language ?
+              <p className="language withIcon">
+                <span className="fa fa-comment-o" />
+                {getLanguageNativeName(user.language)}
+              </p> : null
+          }
           <p className="location">
             {location}
             {country ?

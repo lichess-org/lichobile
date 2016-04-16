@@ -13,12 +13,12 @@ export const perfTypes = [
 ];
 
 export default function userPerfs(user) {
-  var res = perfTypes.map(function(p) {
+  var res = perfTypes.map(p => {
     var perf = user.perfs[p[0]];
-    if (perf) return {
+    return {
       key: p[0],
       name: p[1],
-      perf
+      perf: perf || '-'
     };
   });
 

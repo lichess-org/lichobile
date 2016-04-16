@@ -13,12 +13,14 @@ let push;
 export default {
   register() {
 
-    if (window.cordova.platformId === 'android' && settings.general.notifications()) {
+    if (window.cordova.platformId === 'android' && settings.general.notifications.allow()) {
 
       push = window.PushNotification.init({
         android: {
           senderID: window.lichess.gcmSenderId,
-          sound: true
+          sound: settings.general.notifications.sound(),
+          vibrate: settings.general.notifications.vibrate(),
+          clearNotifications: true
         },
         ios: {
           sound: true,
@@ -115,7 +117,10 @@ export default {
         request('/mobile/unregister', {
           method: 'POST',
           deserialize: v => v
-        }).then(() => push = null);
+        }).then(() => {
+          push = null;
+        });
+
       }, console.log.bind(console));
     }
   }

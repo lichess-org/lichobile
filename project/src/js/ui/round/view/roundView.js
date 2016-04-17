@@ -103,6 +103,11 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
     <section className={wrapperClass} key={key}>
       <div className={boardClass} config={boardConfig} />
       {renderVariantReminder(data)}
+      { chessgroundCtrl.data.premovable.current ?
+        <div className="premove_alert">
+          {i18n('premoveEnabledClickAnywhereToCancel')}
+        </div> : null
+      }
     </section>
   );
 }

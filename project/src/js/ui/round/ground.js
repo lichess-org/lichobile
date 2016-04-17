@@ -2,9 +2,10 @@ import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
+import m from 'mithril';
 
-function str2move(m) {
-  return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
+function str2move(move) {
+  return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
 
 function boardOrientation(data, flip) {
@@ -81,7 +82,11 @@ function makeConfig(data, fen, flip) {
     premovable: {
       enabled: data.pref.enablePremove,
       showDests: settings.game.pieceDestinations(),
-      castle: data.game.variant.key !== 'antichess'
+      castle: data.game.variant.key !== 'antichess',
+      events: {
+        set: () => m.redraw(),
+        unset: m.redraw
+      }
     },
     draggable: {
       distance: 3,

@@ -57,14 +57,17 @@ module.exports = {
     ];
   },
 
-  renderCheckbox: function(label, name, settingsProp, callback) {
+  renderCheckbox: function(label, name, settingsProp, callback, disabled) {
     var isOn = settingsProp();
-    return m('div.check_container', [
+    return m('div.check_container', {
+      className: disabled ? 'disabled' : ''
+    }, [
       m('label', {
         'for': name
       }, label),
       m('input[type=checkbox]', {
         name: name,
+        disabled,
         checked: isOn,
         onchange: function() {
           const newVal = !isOn;

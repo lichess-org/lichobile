@@ -10,7 +10,7 @@ import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
-import { backButton, menuButton, loader, headerBtns, userPopup } from '../../shared/common';
+import { backButton, menuButton, loader, headerBtns, miniUser } from '../../shared/common';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -43,8 +43,8 @@ function overlay(ctrl, isPortrait) {
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),
-    userPopup(ctrl.data.player.user, ctrl.vm.showingUserPopup.player, ctrl.toggleUserPopup.bind(ctrl, 'player')),
-    userPopup(ctrl.data.opponent.user, ctrl.vm.showingUserPopup.opponent, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
+    miniUser(ctrl.data.player.user, ctrl.vm.showingUserPopup.player, ctrl.toggleUserPopup.bind(ctrl, 'player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.showingUserPopup.opponent, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
   ];
 }
 

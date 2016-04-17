@@ -123,7 +123,13 @@ export function setServerLang(lang) {
         lang
       }
     });
+  } else {
+    return Promise.resolve();
   }
+}
+
+export function miniUser(userId) {
+  return request(`/@/${userId}/mini`);
 }
 
 export function timeline() {

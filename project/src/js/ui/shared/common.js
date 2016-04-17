@@ -1,6 +1,7 @@
 import menu from '../menu';
 import * as utils from '../../utils';
 import helper from '../helper';
+import { miniUser as miniUserXhr } from '../../xhr';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
@@ -198,7 +199,7 @@ export function userStatus(user) {
   );
 }
 
-export function userPopup(user, isOpen, close) {
+export function miniUser(user, isOpen, close) {
   const status = user.online ? 'online' : 'offline';
 
   function content() {

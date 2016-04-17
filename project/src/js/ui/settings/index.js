@@ -49,7 +49,7 @@ function renderBody() {
         key: 'piecesTheme',
         config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
       }, `${i18n('theming')} (${i18n('pieces')})`),
-      window.cordova.platformId === 'android' ? m('li.list_item', {
+      window.cordova.platformId === 'android' ? m('li.list_item.nav', {
         key: 'notifications',
         config: helper.ontouchY(utils.f(m.route, '/settings/notifications'))
       }, i18n('notifications')) : null,

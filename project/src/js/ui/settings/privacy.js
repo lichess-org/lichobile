@@ -24,7 +24,7 @@ function renderBody(ctrl) {
   ];
 }
 
-module.exports = {
+export default {
   controller: function() {
     const follow = session.lichessBackedProp('follow');
     const challenge = session.lichessBackedProp('challenge');

@@ -141,7 +141,7 @@ function end(ground) {
   ground.stop();
 }
 
-module.exports = {
+export default {
   make,
   reload,
   promote,

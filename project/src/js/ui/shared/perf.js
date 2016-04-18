@@ -3,7 +3,7 @@ import { provisionalDeviation } from '../../lichess/perfs';
 import helper from '../helper';
 import m from 'mithril';
 
-module.exports = function(key, name, perf, user) {
+export default function(key, name, perf, user) {
   var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};
   if (variantPerfAvailable(key, perf)) {
     options.className += ' nav';

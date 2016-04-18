@@ -117,7 +117,7 @@ function reload(chessgroundData, data) {
   }
 }
 
-module.exports = {
+export default {
   str2move: str2move,
   move2str: move2str,
   tryMove: tryMove,

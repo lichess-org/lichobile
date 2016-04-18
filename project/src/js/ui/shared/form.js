@@ -8,7 +8,7 @@ function renderOption(label, value, storedValue, labelArg, labelArg2) {
   }, i18n(label, labelArg, labelArg2));
 }
 
-module.exports = {
+export default {
 
   renderRadio: function(label, name, value, checked, onchange) {
     var id = name + '_' + value;

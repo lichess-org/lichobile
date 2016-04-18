@@ -28,7 +28,7 @@ function renderBody() {
   ];
 }
 
-module.exports = {
+export default {
   controller: function() {},
 
   view: function() {

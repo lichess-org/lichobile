@@ -32,7 +32,7 @@ function renderBody(ctrl) {
   ];
 }
 
-module.exports = {
+export default {
   controller: function() {
     return {
       premove: session.lichessBackedProp('premove'),

@@ -19,7 +19,7 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import settings from '../../settings';
 import * as xhr from './roundXhr';
-import { toggleGameBookmark } from '../../xhr';
+import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
 import m from 'mithril';
 
@@ -43,6 +43,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.vm = {
     flip: false,
+    miniUser: {
+      player: {
+        showing: false,
+        data: m.prop(null)
+      },
+      opponent: {
+        showing: false,
+        data: m.prop(null)
+      }
+    },
     showingActions: false,
     headerHash: '',
     replayHash: '',
@@ -77,6 +87,13 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
     return h;
   };
+
+  this.toggleUserPopup = function(position, userId) {
+    if (!this.vm.miniUser[position].data()) {
+      this.vm.miniUser[position].data = miniUserXhr(userId);
+    }
+    this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
+  }.bind(this);
 
   this.showActions = function() {
     backbutton.stack.push(this.hideActions);

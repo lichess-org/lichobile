@@ -10,7 +10,7 @@ import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
-import { backButton, menuButton, loader, headerBtns } from '../../shared/common';
+import { backButton, menuButton, loader, headerBtns, miniUser } from '../../shared/common';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -42,7 +42,9 @@ function overlay(ctrl, isPortrait) {
     ctrl.notes ? notes.view(ctrl.notes) : null,
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
-    renderSubmitMovePopup(ctrl)
+    renderSubmitMovePopup(ctrl),
+    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data(), ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data(), ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
   ];
 }
 
@@ -261,8 +263,9 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
+  const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
   const vConf = user ?
-    helper.ontouch(utils.f(m.route, '/@/' + user.id), () => userInfos(user, player, playerName, position)) :
+    helper.ontouch(togglePopup, () => userInfos(user, player, playerName, position)) :
     helper.ontouch(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
 
   const onlineStatus = user && user.online ? 'online' : 'offline';

@@ -9,9 +9,13 @@ import challengesApi from '../../lichess/challenges';
 import timeline from '../../lichess/timeline';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
+import popupWidget from './popup';
+import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
 import timelineModal from '../timelineModal';
 import m from 'mithril';
+import spinner from '../../spinner';
+import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
 
 export function menuButton() {
@@ -193,5 +197,65 @@ export function userStatus(user) {
       {user.title ? <span className="userTitle">{user.title}&nbsp;</span> : null}
       {user.username}
     </div>
+  );
+}
+
+export function miniUser(user, mini, isOpen, close) {
+  if (!user) return null;
+
+  const status = user.online ? 'online' : 'offline';
+
+  function content() {
+    if (!mini) {
+      return (
+        <div className="miniUser">
+          {spinner.getVdom()}
+        </div>
+      );
+    }
+    const sessionUserId = session.get() && session.get().id;
+    return (
+      <div className="miniUser">
+        <div className="title">
+          <div className="username" config={helper.ontouch(() => m.route(`/@/${user.username}`))}>
+            <span className={'userStatus withIcon ' + status} data-icon="r" />
+            {i18n(user.username)}
+          </div>
+          { user.profile && user.profile.country ?
+            <p className="country">
+              <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+              {countries[user.profile.country]}
+            </p> : user.language ?
+              <p className="language">
+                <span className="fa fa-comment-o" />
+                {getLanguageNativeName(user.language)}
+              </p> : null
+          }
+        </div>
+        <div className="perfs">
+          {Object.keys(mini.perfs).map(p => {
+            return (
+              <div className="perf">
+                <span data-icon={utils.gameIcon(p)} />
+                {mini.perfs[p].rating}
+              </div>
+            );
+          })}
+        </div>
+        { mini.crosstable ?
+          <div className="yourScore">
+            Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>
+          </div> : null
+        }
+      </div>
+    );
+  }
+
+  return popupWidget(
+    'miniUserInfos',
+    null,
+    content,
+    isOpen,
+    close
   );
 }

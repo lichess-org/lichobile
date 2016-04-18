@@ -41,9 +41,10 @@ const untranslated = {
   userAcceptsYourChallenge: '%s accepts your challenge!',
   incorrectThreefoldClaim: 'Incorrect threefold repetition claim.',
   notifications: 'Notifications',
-  allowNotifications: 'Allow notifications',
-  enableVibrationOnNotification: 'Enable vibration on notification',
-  enableSoundOnNotification: 'Enable sound on notification'
+  vibrationOnNotification: 'Vibrate on notification',
+  soundOnNotification: 'Play sound on notification',
+  vibrateOnMove: 'Vibrate on move',
+  soundAndNotifications: 'Sound and notifications'
 };
 
 const defaultCode = 'en';

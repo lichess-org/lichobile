@@ -88,10 +88,12 @@ export default function controller() {
   }.bind(this);
 
   const onMove = function(orig, dest, capturedPiece) {
-    if (!capturedPiece)
-      sound.move();
-    else
-      sound.capture();
+    if (!capturedPiece) sound.move();
+    else sound.capture();
+
+    if (settings.general.vibrateOnMove()) {
+      window.navigator.vibrate(200);
+    }
   };
 
   this.onReplayAdded = function() {

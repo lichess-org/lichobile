@@ -8,7 +8,7 @@ import correspondence from './ui/correspondence';
 import otb from './ui/otb';
 import ai from './ui/ai';
 import settingsUi from './ui/settings';
-import settingsNotifications from './ui/settings/notifications';
+import settingsSoundNotifications from './ui/settings/soundNotifications';
 import settingsLang from './ui/settings/lang';
 import settingsPreferences from './ui/settings/preferences';
 import settingsGameDisplay from './ui/settings/gameDisplay';
@@ -63,7 +63,7 @@ export default {
       '/settings/preferences': slidingPage(settingsPreferences),
       '/settings/gameDisplay': slidingPage(settingsGameDisplay),
       '/settings/gameBehavior': slidingPage(settingsGameBehavior),
-      '/settings/notifications': slidingPage(settingsNotifications),
+      '/settings/soundNotifications': slidingPage(settingsSoundNotifications),
       '/settings/privacy': slidingPage(settingsPrivacy),
       '/settings/themes/board': slidingPage(boardThemes),
       '/settings/themes/piece': slidingPage(pieceThemes),

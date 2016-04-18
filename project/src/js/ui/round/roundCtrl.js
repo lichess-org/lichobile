@@ -17,6 +17,7 @@ import signals from '../../signals';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
+import settings from '../../settings';
 import * as xhr from './roundXhr';
 import { toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
@@ -223,8 +224,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
         atomic.capture(this.chessground, dest);
         sound.explosion();
       }
-      else sound.capture();
-    } else sound.move();
+      else {
+        sound.capture();
+      }
+    } else {
+      sound.move();
+    }
+
+    if (settings.general.vibrateOnMove()) {
+      window.navigator.vibrate(200);
+    }
   }.bind(this);
 
   this.apiMove = function(o) {

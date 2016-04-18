@@ -1,7 +1,6 @@
 import menu from '../menu';
 import * as utils from '../../utils';
 import helper from '../helper';
-import { miniUser as miniUserXhr } from '../../xhr';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
@@ -15,6 +14,8 @@ import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
 import timelineModal from '../timelineModal';
 import m from 'mithril';
+import spinner from '../../spinner';
+import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
 
 export function menuButton() {
@@ -199,34 +200,53 @@ export function userStatus(user) {
   );
 }
 
-export function miniUser(user, isOpen, close) {
+export function miniUser(user, mini, isOpen, close) {
+  if (!user) return null;
+
   const status = user.online ? 'online' : 'offline';
 
   function content() {
+    if (!mini) {
+      return (
+        <div className="miniUser">
+          {spinner.getVdom()}
+        </div>
+      );
+    }
+    const sessionUserId = session.get() && session.get().id;
     return (
       <div className="miniUser">
         <div className="title">
           <div className="username" config={helper.ontouch(() => m.route(`/@/${user.username}`))}>
-            <span className={'userStatus ' + status} data-icon="r" />
+            <span className={'userStatus withIcon ' + status} data-icon="r" />
             {i18n(user.username)}
           </div>
-          {user.language ?
-            <p className="language withIcon">
-              <span className="fa fa-comment-o" />
-              {getLanguageNativeName(user.language)}
-            </p> : null
+          { user.profile && user.profile.country ?
+            <p className="country">
+              <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+              {countries[user.profile.country]}
+            </p> : user.language ?
+              <p className="language">
+                <span className="fa fa-comment-o" />
+                {getLanguageNativeName(user.language)}
+              </p> : null
           }
         </div>
         <div className="perfs">
-          {Object.keys(user.perfs).map(p => {
+          {Object.keys(mini.perfs).map(p => {
             return (
               <div className="perf">
                 <span data-icon={utils.gameIcon(p)} />
-                {user.perfs[p].rating}
+                {mini.perfs[p].rating}
               </div>
             );
           })}
         </div>
+        { mini.crosstable ?
+          <div className="yourScore">
+            Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>
+          </div> : null
+        }
       </div>
     );
   }

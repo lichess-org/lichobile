@@ -43,8 +43,8 @@ function overlay(ctrl, isPortrait) {
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.showingUserPopup.player, ctrl.toggleUserPopup.bind(ctrl, 'player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.showingUserPopup.opponent, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
+    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data(), ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data(), ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
   ];
 }
 
@@ -258,7 +258,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
-  const togglePopup = ctrl.toggleUserPopup.bind(ctrl, position);
+  const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
   const vConf = user ?
     helper.ontouch(togglePopup, () => userInfos(user, player, playerName, position)) :
     helper.ontouch(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));

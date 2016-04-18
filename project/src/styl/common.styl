@@ -138,17 +138,13 @@ span.fa
       right 0
 
 .userStatus
-  position relative
-  top 3px
-  margin-right 2px
-  font-size 1.2em
   &.online
     color green
   &.offline
     opacity 0.6
 
 .withIcon
-  &[data-icon]:before, &.fa:before
+  &[data-icon]:before
     margin-right 5px
     position relative
   &[data-icon]:before
@@ -190,7 +186,14 @@ span.fa
     justify-content space-between
   > .perfs
     display flex
+    justify-content space-around
     flex-flow row wrap
     > .perf
       flex 0 1 25%
+      text-align center
+  > .yourScore
+    text-align center
+    font-size 1.1em
+    > .score
+      font-weight bold
 

@@ -4,7 +4,7 @@ import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
-import countries from './countries';
+import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 

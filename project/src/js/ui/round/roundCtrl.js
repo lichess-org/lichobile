@@ -18,14 +18,13 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
-import { toggleGameBookmark } from '../../xhr';
+import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = data(cfg);
-  console.log(this.data);
 
   this.onTVChannelChange = onTVChannelChange;
 
@@ -43,9 +42,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.vm = {
     flip: false,
-    showingUserPopup: {
-      player: true,
-      opponent: false
+    miniUser: {
+      player: {
+        showing: false,
+        data: m.prop(null)
+      },
+      opponent: {
+        showing: false,
+        data: m.prop(null)
+      }
     },
     showingActions: false,
     headerHash: '',
@@ -82,8 +87,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     return h;
   };
 
-  this.toggleUserPopup = function(position) {
-    this.vm.showingUserPopup[position] = !this.vm.showingUserPopup[position];
+  this.toggleUserPopup = function(position, userId) {
+    if (!this.vm.miniUser[position].data()) {
+      this.vm.miniUser[position].data = miniUserXhr(userId);
+    }
+    this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
   }.bind(this);
 
   this.showActions = function() {

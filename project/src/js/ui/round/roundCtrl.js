@@ -54,6 +54,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       }
     },
     showingActions: false,
+    confirmResign: false,
     headerHash: '',
     replayHash: '',
     buttonsHash: '',

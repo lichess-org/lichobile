@@ -365,8 +365,9 @@ function renderGameRunningActions(ctrl) {
   const gameControls = button.forceResign(ctrl) || [
     button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
     button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
-    button.standard(ctrl, gameApi.resignable, 'b', 'resign', 'resign'),
-    button.threefoldClaimDraw(ctrl)
+    button.threefoldClaimDraw(ctrl),
+    button.resign(ctrl),
+    button.resignConfirmation(ctrl)
   ];
 
   return (

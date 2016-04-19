@@ -466,19 +466,28 @@ function renderGameActionsBar(ctrl, isPortrait) {
   const nextPly = ctrl.vm.ply + 1;
   const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
   const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-  const hash = ctrl.data.game.id + answerRequired + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
+  const hash = ctrl.data.game.id + answerRequired + ctrl.data.opponent.proposingTakeback + ctrl.data.opponent.offeringDraw + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'
   };
   ctrl.vm.buttonsHash = hash;
 
-  const gmClass = [
-    'action_bar_button',
+  const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',
-    'fa-ellipsis-h',
+    'fa-mail-reply'
+  ] : [
+    'fa',
+    'fa-ellipsis-h'
+  ]).concat([
+    'action_bar_button',
     answerRequired ? 'glow' : ''
-  ].join(' ');
+  ]).join(' ');
+
+  const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null;
+  const gmButton = gmDataIcon ?
+    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" config={helper.ontouch(ctrl.showActions)} /> :
+    <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />;
 
   const chatClass = [
     'action_bar_button',
@@ -487,7 +496,7 @@ function renderGameActionsBar(ctrl, isPortrait) {
 
   return (
     <section className="actions_bar" key="game-actions-bar">
-      <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />
+      {gmButton}
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat"
         config={helper.ontouch(ctrl.chat.open)} /> : null

@@ -50,7 +50,7 @@ export default {
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
     analytics: localstorageprop('settings.analytics', true),
-    vibrateOnMove: localstorageprop('settings.vibrateOnMove', false),
+    vibrateOnGameEvents: localstorageprop('settings.vibrateOnGameEvents', false),
     notifications: {
       allow: localstorageprop('settings.notifications', true),
       vibrate: localstorageprop('settings.notifications.vibrate', true),

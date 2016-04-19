@@ -4,6 +4,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';
 import settings from '../../settings';
@@ -91,9 +92,7 @@ export default function controller() {
     if (!capturedPiece) sound.move();
     else sound.capture();
 
-    if (settings.general.vibrateOnMove()) {
-      window.navigator.vibrate(200);
-    }
+    vibrate.quick();
   };
 
   this.onReplayAdded = function() {

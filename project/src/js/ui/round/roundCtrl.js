@@ -2,6 +2,7 @@ import throttle from 'lodash/throttle';
 import data from './data';
 import * as utils from '../../utils';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import gameApi from '../../lichess/game';
 import ground from './ground';
 import promotion from './promotion';
@@ -17,7 +18,6 @@ import signals from '../../signals';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import backbutton from '../../backbutton';
-import settings from '../../settings';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData } from '../../utils';
@@ -249,9 +249,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       sound.move();
     }
 
-    if (settings.general.vibrateOnMove()) {
-      window.navigator.vibrate(200);
-    }
+    vibrate.quick();
   }.bind(this);
 
   this.apiMove = function(o) {
@@ -259,9 +257,21 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
     const playedColor = o.ply % 2 === 0 ? 'black' : 'white';
-    if (o.status) d.game.status = o.status;
-    d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw = o.wDraw;
-    d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw = o.bDraw;
+    if (o.status) {
+      d.game.status = o.status;
+    }
+    var wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
+    var bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
+    if (!wDraw && o.wDraw) {
+      sound.dong();
+      vibrate.quick();
+    }
+    if (!bDraw && o.bDraw) {
+      sound.dong();
+      vibrate.quick();
+    }
+    wDraw = o.wDraw;
+    bDraw = o.bDraw;
     d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
     this.setTitle();
 

@@ -43,7 +43,7 @@ const untranslated = {
   notifications: 'Notifications',
   vibrationOnNotification: 'Vibrate on notification',
   soundOnNotification: 'Play sound on notification',
-  vibrateOnMove: 'Vibrate on move',
+  vibrateOnGameEvents: 'Vibrate on game events',
   soundAndNotifications: 'Sound and notifications'
 };
 

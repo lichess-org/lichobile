@@ -6,6 +6,7 @@ import push from '../../push';
 import i18n from '../../i18n';
 import settings from '../../settings';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import m from 'mithril';
 
 function renderBody() {
@@ -17,7 +18,7 @@ function renderBody() {
       }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
       m('li.list_item', {
         key: 'vibrate'
-      }, formWidgets.renderCheckbox(i18n('vibrateOnMove'), 'vibrate', settings.general.vibrateOnMove)),
+      }, formWidgets.renderCheckbox(i18n('vibrateOnGameEvents'), 'vibrate', settings.general.vibrateOnGameEvents, vibrate.onSettingChange)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('notifications'), 'notifications', settings.general.notifications.allow, isOn => {
         if (isOn) push.register();
         else push.unregister();

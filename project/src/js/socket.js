@@ -1,5 +1,5 @@
 import storage from './storage';
-import difference from 'lodash/difference';
+import xor from 'lodash/xor';
 import * as utils from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
@@ -32,8 +32,9 @@ const defaultHandlers = {
 };
 
 function handleFollowingOnline(data) {
-  if (difference(data, friendsApi.list()).length > 0) {
-    friendsApi.set(data);
+  const curList = friendsApi.list();
+  friendsApi.set(data);
+  if (xor(curList, data).length > 0) {
     m.redraw();
   }
 }

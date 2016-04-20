@@ -142,22 +142,20 @@ function renderVariantReminder(data) {
 }
 
 function renderTitle(ctrl) {
-  if (socket.isConnected()) {
+  if (!utils.hasNetwork() || socket.isConnected()) {
     return (
-      <h1 className="playing">
+      <h1 key="playingTitle" className="playing">
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
         {ctrl.title}
       </h1>
     );
-  } else if (utils.hasNetwork()) {
+  } else {
     return (
-      <h1 className="reconnecting withTitle">
+      <h1 key="reconnectingTitle" className="reconnecting withTitle">
         {i18n('reconnecting')}
         {loader}
       </h1>
     );
-  } else {
-    return <h1>Offline</h1>;
   }
 }
 

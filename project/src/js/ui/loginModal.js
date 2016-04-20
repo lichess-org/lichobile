@@ -1,4 +1,5 @@
 import session from '../session';
+import socket from '../socket';
 import push from '../push';
 import * as utils from '../utils';
 import helper from './helper';
@@ -21,6 +22,7 @@ function submit(form) {
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
     push.register();
     session.refresh();
+    socket.connect();
   })
   .catch(utils.handleXhrError);
 }

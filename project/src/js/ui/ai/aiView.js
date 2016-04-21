@@ -51,7 +51,7 @@ function renderContent(ctrl) {
     return [
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
       board,
-      renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
+      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
   else if (isVWS)
@@ -67,7 +67,7 @@ function renderContent(ctrl) {
           </div>
           {replayTable}
           {renderEndedGameStatus(ctrl.actions)}
-          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
+          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
         {renderGameActionsBarTablet(ctrl, 'ai')}
       </section>

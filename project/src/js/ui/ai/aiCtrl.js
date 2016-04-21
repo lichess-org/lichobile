@@ -200,15 +200,15 @@ export default function controller() {
   const setupFen = storage.get(storageFenKey);
 
   engine.init(() => {
-    if (saved) {
+    if (setupFen) {
+      this.startNewGame(setupFen);
+    } else if (saved) {
       try {
         this.init(saved.data, saved.situations, saved.ply);
       } catch (e) {
         console.log(e, 'Fail to load saved game');
         this.startNewGame();
       }
-    } else if (setupFen) {
-      this.startNewGame(setupFen);
     } else {
       this.startNewGame();
     }

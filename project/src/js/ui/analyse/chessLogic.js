@@ -38,6 +38,9 @@ export default function chessLogic(ctrl) {
     getSanMoveFromUci(req, callback) {
       askWorker(worker, { topic: 'move', payload: req }, callback);
     },
+    importPgn(pgn) {
+      return askWorker(worker, { topic: 'pgnRead', payload: { pgn }});
+    },
     onunload() {
       if (worker) worker.terminate();
     }

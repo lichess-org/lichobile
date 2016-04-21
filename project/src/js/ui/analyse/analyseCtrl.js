@@ -11,6 +11,7 @@ import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import continuePopup from '../shared/continuePopup';
+import importPgnPopup from './importPgnPopup.js';
 import { handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
@@ -32,6 +33,7 @@ export default function controller() {
 
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
+  this.importPgnPopup = importPgnPopup.controller(this);
 
   this.vm = {
     fromGame: gameId !== undefined,

@@ -16,7 +16,7 @@ function boardOrientation(data, flip) {
   }
 }
 
-function getBounds(isPortrait) {
+function getBounds(isPortrait, isIpadLike) {
   const { vh, vw } = helper.viewportDim();
   const top = 50;
 
@@ -31,12 +31,13 @@ function getBounds(isPortrait) {
       width: vw,
       height: vw
     };
-  } else if (helper.isVeryWideScreen()) {
-    const wsSide = vh - top - (vh * 0.88);
+  } else if (isIpadLike) {
+    const wsSide = vh - top - (vh * 0.12);
+    const wsTop = top + ((vh - wsSide - top) / 2);
     return {
-      top,
+      top: wsTop,
       right: wsSide,
-      bottom: top + wsSide,
+      bottom: wsTop + wsSide,
       left: 0,
       width: wsSide,
       height: wsSide

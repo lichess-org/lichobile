@@ -55,18 +55,19 @@ function renderContent(ctrl, pieceTheme) {
   const opponentName = i18n(ctrl.data.opponent.color);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
-  const bounds = ground.getBounds(isPortrait);
+  const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
+  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme);
 
   if (isPortrait)
     return [
       renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
+      board,
       renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'otb')
     ];
   else
     return [
-      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme),
+      board,
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}

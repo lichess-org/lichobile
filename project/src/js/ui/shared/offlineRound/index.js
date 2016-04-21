@@ -104,6 +104,8 @@ export function setResult(ctrl, status, winner) {
 }
 
 export function renderEndedGameStatus(ctrl) {
+  if (!ctrl.replay) return null;
+
   const sit = ctrl.replay.situation();
   if (gameStatusApi.finished(ctrl.data)) {
     const result = gameApi.result(ctrl.data);

@@ -59,16 +59,18 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ctrl.data.game.winner = winner;
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);
-      if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       if (ctrl.data.game.speed === 'correspondence') {
         removeOfflineGameData(ctrl.data.url.round.substr(1));
       }
-      setTimeout(function() {
-        session.refresh();
-        ctrl.showActions();
-        m.redraw();
-      }, 500);
+      if (!ctrl.data.player.spectator) {
+        sound.dong();
+        setTimeout(function() {
+          session.refresh();
+          ctrl.showActions();
+          m.redraw();
+        }, 500);
+      }
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {

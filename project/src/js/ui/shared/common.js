@@ -232,7 +232,7 @@ export function miniUser(user, mini, isOpen, close) {
               </p> : null
           }
         </div>
-        <div className="perfs">
+        <div className="mini_perfs">
           {Object.keys(mini.perfs).map(p => {
             const perf = mini.perfs[p];
             return (

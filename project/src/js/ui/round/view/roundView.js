@@ -90,6 +90,11 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
     wrapperClass += moreWrapperClasses;
   }
 
+  const wrapperStyle = bounds ? {
+    height: bounds.height + 'px',
+    width: bounds.width + 'px'
+  } : {};
+
   function boardConfig(el, isUpdate) {
     if (!isUpdate) {
       if (!bounds) {
@@ -102,7 +107,7 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
   }
 
   return (
-    <section className={wrapperClass} key={key}>
+    <section className={wrapperClass} style={wrapperStyle} key={key}>
       <div className={boardClass} config={boardConfig} />
       {renderVariantReminder(data)}
       { chessgroundCtrl.data.premovable.current ?

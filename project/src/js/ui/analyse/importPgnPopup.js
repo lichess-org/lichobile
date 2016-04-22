@@ -1,5 +1,8 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
+import makeData from '../shared/offlineRound/data';
+import spinner from '../../spinner';
+import { getAnalyseData } from '../../utils/offlineGames';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
@@ -22,9 +25,30 @@ export default {
 
     function submit(target) {
       const pgn = target[0].value;
+      spinner.spin(document.body);
       root.chessLogic.importPgn(pgn)
-      .then(console.log.bind(console))
-      .catch(console.error.bind(console));
+      .then(data => {
+        const setup = data.setup;
+        const gameData = makeData({
+          variant: data.variant,
+          initialFen: setup.fen,
+          fen: setup.fen,
+          player: setup.player,
+          color: setup.player
+        });
+        gameData.player.spectator = true;
+        const situations = data.replay;
+        const analyseData = getAnalyseData({ data: gameData, situations });
+        analyseData.orientation = setup.player;
+        root.init(analyseData);
+        spinner.stop();
+        close();
+        m.redraw();
+      })
+      .catch(err => {
+        spinner.stop();
+        console.error(err);
+      });
     }
 
     return {

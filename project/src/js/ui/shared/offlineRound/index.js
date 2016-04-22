@@ -24,7 +24,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
       </div>
       { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
         <div key="spinner" className="engineSpinner">
-          <div className="fa fa-cog fa-spin" />
+          <div className="fa fa-hourglass-half" />
         </div> :
         null
       }

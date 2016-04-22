@@ -1,7 +1,6 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import makeData from '../shared/offlineRound/data';
-import spinner from '../../spinner';
 import { getAnalyseData } from '../../utils/offlineGames';
 import backbutton from '../../backbutton';
 import m from 'mithril';
@@ -11,6 +10,7 @@ export default {
   controller: function(root) {
     let isOpen = false;
     const fen = m.prop();
+    const importing = m.prop(false);
 
     function open(fentoSet) {
       backbutton.stack.push(close);
@@ -25,7 +25,7 @@ export default {
 
     function submit(target) {
       const pgn = target[0].value;
-      spinner.spin(document.body);
+      importing(true);
       root.chessLogic.importPgn(pgn)
       .then(data => {
         const setup = data.setup;
@@ -41,13 +41,14 @@ export default {
         const analyseData = getAnalyseData({ data: gameData, situations });
         analyseData.orientation = setup.player;
         root.init(analyseData);
-        spinner.stop();
+        importing(false);
         close();
         m.redraw();
       })
       .catch(err => {
-        spinner.stop();
         console.error(err);
+        importing(false);
+        m.redraw();
       });
     }
 
@@ -55,6 +56,7 @@ export default {
       open,
       close,
       fen,
+      importing,
       submit,
       isOpen: function() {
         return isOpen;
@@ -74,7 +76,8 @@ export default {
           }
         }, [
           m('textarea.pgnImport'),
-          m('button.newGameButton', i18n('importGame'))
+          m('button.newGameButton', ctrl.importing() ?
+            'Importing...' : i18n('importGame'))
         ]);
       },
       ctrl.isOpen(),

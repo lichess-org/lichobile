@@ -7,6 +7,7 @@ import gameApi from '../../lichess/game';
 import control from './control';
 import menu from './menu';
 import continuePopup from '../shared/continuePopup';
+import importPgnPopup from './importPgnPopup';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import { empty, defined, renderEval, isSynthetic } from './util';
 import gameStatusApi from '../../lichess/status';
@@ -40,7 +41,8 @@ function overlay(ctrl) {
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
     ctrl.notes ? notes.view(ctrl.notes) : null,
-    continuePopup.view(ctrl.continuePopup)
+    continuePopup.view(ctrl.continuePopup),
+    importPgnPopup.view(ctrl.importPgnPopup)
   ];
 }
 

@@ -24,7 +24,7 @@ export default {
       percent = 0;
     }
     else {
-      pearl = <div className="spinner fa fa-cog fa-spin"></div>;
+      pearl = <div className="spinner fa fa-spinner fa-pulse"></div>;
       percent = 0;
     }
 

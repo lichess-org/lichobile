@@ -77,7 +77,7 @@ export default {
         }, [
           m('textarea.pgnImport'),
           m('button.newGameButton', ctrl.importing() ?
-            'Importing...' : i18n('importGame'))
+            m('div.fa.fa-hourglass-half') : i18n('importGame'))
         ]);
       },
       ctrl.isOpen(),

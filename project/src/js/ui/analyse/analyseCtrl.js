@@ -313,7 +313,7 @@ export default function controller() {
       helper.analyticsTrackView('Analysis (online game)');
       this.init(makeData(cfg));
       m.redraw();
-    }, err => {
+    }.bind(this), err => {
       handleXhrError(err);
       m.route('/');
     });

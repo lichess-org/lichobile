@@ -5,17 +5,9 @@ import throttle from 'lodash/throttle';
 import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
-import { handleXhrError, hasNetwork } from '../../../utils';
+import { handleXhrError, hasNetwork, boardOrientation } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
-
-function analysisBoardOrientation(data) {
-  if (data.game.variant.key === 'racingKings') {
-    return 'white';
-  } else {
-    return data.player.color;
-  }
-}
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
@@ -168,7 +160,7 @@ export default {
       return m('button', {
         config: helper.ontouch(() => {
           socket.send('rematch-no');
-          m.route(`/analyse/online/${d.game.id}/${analysisBoardOrientation(d)}`);
+          m.route(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
       }, [m('span.fa.fa-eye'), i18n('analysis')]);
     }

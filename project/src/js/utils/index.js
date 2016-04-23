@@ -261,3 +261,11 @@ export function challengeTime(c) {
     return '∞';
   }
 }
+
+export function boardOrientation(data, flip) {
+  if (data.game.variant.key === 'racingKings') {
+    return flip ? 'black' : 'white';
+  } else {
+    return flip ? data.opponent.color : data.player.color;
+  }
+}

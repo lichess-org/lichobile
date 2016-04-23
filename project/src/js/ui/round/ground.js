@@ -2,18 +2,11 @@ import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
+import { boardOrientation } from '../../utils';
 import m from 'mithril';
 
 function str2move(move) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
-}
-
-function boardOrientation(data, flip) {
-  if (data.game.variant.key === 'racingKings') {
-    return flip ? 'black' : 'white';
-  } else {
-    return flip ? data.opponent.color : data.player.color;
-  }
 }
 
 function getBounds(isPortrait, isIpadLike) {
@@ -148,6 +141,5 @@ export default {
   promote,
   end,
   applySettings,
-  boardOrientation,
   getBounds
 };

@@ -20,7 +20,7 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
-import { hasNetwork, saveOfflineGameData } from '../../utils';
+import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
@@ -118,7 +118,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
     this.vm.flip = !this.vm.flip;
     this.chessground.set({
-      orientation: ground.boardOrientation(this.data, this.vm.flip)
+      orientation: boardOrientation(this.data, this.vm.flip)
     });
   }.bind(this);
 

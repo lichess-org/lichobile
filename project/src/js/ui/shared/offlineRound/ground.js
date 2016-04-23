@@ -1,11 +1,12 @@
 import chessground from 'chessground-mobile';
 import gameApi from '../../../lichess/game';
 import settings from '../../../settings';
+import { boardOrientation } from '../../../utils';
 
 function makeConfig(data, fen) {
   return {
     fen: fen,
-    orientation: data.player.color,
+    orientation: boardOrientation(data),
     turnColor: data.game.player,
     lastMove: null,
     coordinates: settings.game.coords(),

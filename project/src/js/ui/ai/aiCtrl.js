@@ -4,6 +4,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';
 import settings from '../../settings';
@@ -11,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor, capitalize } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -44,6 +45,10 @@ export default function controller() {
 
   const addMove = function(orig, dest, promotionRole) {
     this.replay.addMove(orig, dest, promotionRole);
+  }.bind(this);
+
+  this.playerName = function() {
+    return capitalize(this.data.player.color);
   }.bind(this);
 
   this.getOpponent = function() {
@@ -89,10 +94,10 @@ export default function controller() {
   }.bind(this);
 
   const onMove = function(orig, dest, capturedPiece) {
-    if (!capturedPiece)
-      sound.move();
-    else
-      sound.capture();
+    if (!capturedPiece) sound.move();
+    else sound.capture();
+
+    vibrate.quick();
   };
 
   this.onReplayAdded = function() {
@@ -196,18 +201,16 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  engine.init()
-  .then(() => {
-    console.log('init');
-    if (saved) {
+  engine.init(() => {
+    if (setupFen) {
+      this.startNewGame(setupFen);
+    } else if (saved) {
       try {
         this.init(saved.data, saved.situations, saved.ply);
       } catch (e) {
         console.log(e, 'Fail to load saved game');
         this.startNewGame();
       }
-    } else if (setupFen) {
-      this.startNewGame(setupFen);
     } else {
       this.startNewGame();
     }

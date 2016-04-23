@@ -82,12 +82,12 @@ function onOnline() {
     timeline.refresh();
     // load challenges
     challengesApi.refresh();
-    // first time login on app start or just try to reconnect socket
+    // first time login on app start
     if (!triedToLogin) {
       triedToLogin = true;
-    } else {
-      socket.connect();
     }
+    // try to reconnect socket
+    socket.connect();
   }, err => {
     if (!triedToLogin) {
       // means user is anonymous here

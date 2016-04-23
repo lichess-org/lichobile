@@ -11,6 +11,7 @@ import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import continuePopup from '../shared/continuePopup';
+import importPgnPopup from './importPgnPopup.js';
 import { handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
@@ -30,8 +31,11 @@ export default function controller() {
 
   this.data = null;
 
+  this.chessLogic = chessLogic(this);
+
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
+  this.importPgnPopup = importPgnPopup.controller(this);
 
   this.vm = {
     fromGame: gameId !== undefined,
@@ -67,7 +71,7 @@ export default function controller() {
       if (this.ceval.isInit()) {
         this.startCeval();
       } else {
-        this.ceval.init(this.data.game.variant.key, this.startCeval);
+        this.ceval.init(this.startCeval);
       }
     }
   }.bind(this);
@@ -286,7 +290,7 @@ export default function controller() {
     if (this.chessLogic) this.chessLogic.onunload();
   }.bind(this);
 
-  const init = function(data) {
+  this.init = function(data) {
     this.data = data;
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
@@ -294,9 +298,8 @@ export default function controller() {
     }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-    this.chessLogic = new chessLogic(this);
     this.analyse = new analyse(this.data.steps);
-    this.ceval = cevalCtrl(allowCeval(), onCevalMsg.bind(this));
+    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     var initialPath = treePath.default(this.analyse.firstPly());
@@ -312,15 +315,15 @@ export default function controller() {
   }.bind(this);
 
   this.startNewAnalysis = function() {
-    init(makeDefaultData());
-  };
+    this.init(makeDefaultData());
+  }.bind(this);
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
       helper.analyticsTrackView('Analysis (online game)');
-      init(makeData(cfg));
+      this.init(makeData(cfg));
       m.redraw();
-    }, err => {
+    }.bind(this), err => {
       handleXhrError(err);
       m.route('/');
     });
@@ -332,7 +335,7 @@ export default function controller() {
     } else {
       otbData.player.spectator = true;
       otbData.orientation = orientation;
-      init(makeData(otbData));
+      this.init(makeData(otbData));
     }
   } else if (this.source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline ai)');
@@ -342,12 +345,12 @@ export default function controller() {
     } else {
       aiData.player.spectator = true;
       aiData.orientation = orientation;
-      init(makeData(aiData));
+      this.init(makeData(aiData));
     }
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    init(makeDefaultData(fen));
+    this.init(makeDefaultData(fen));
   }
 
   window.plugins.insomnia.keepAwake();

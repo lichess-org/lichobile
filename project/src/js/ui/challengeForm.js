@@ -198,4 +198,4 @@ challengeForm.view = function() {
   );
 };
 
-module.exports = challengeForm;
+export default challengeForm;

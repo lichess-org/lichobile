@@ -39,7 +39,12 @@ const untranslated = {
   showBestMove: 'Show computer best move',
   followers: 'Followers',
   userAcceptsYourChallenge: '%s accepts your challenge!',
-  incorrectThreefoldClaim: 'Incorrect threefold repetition claim.'
+  incorrectThreefoldClaim: 'Incorrect threefold repetition claim.',
+  notifications: 'Notifications',
+  vibrationOnNotification: 'Vibrate on notification',
+  soundOnNotification: 'Play sound on notification',
+  vibrateOnGameEvents: 'Vibrate on game events',
+  soundAndNotifications: 'Sound and notifications'
 };
 
 const defaultCode = 'en';

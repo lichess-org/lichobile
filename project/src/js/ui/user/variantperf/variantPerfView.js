@@ -29,7 +29,7 @@ export default function view(ctrl) {
           </tr>
           <tr>
             <th class="variantPerf"> {i18n('rating')} </th>
-            <td class="variantPerf"> {Math.round(data.perf.glicko.rating) + (data.perf.glicko.provisional ? '?' : '')} </td>
+            <td class="variantPerf"> {data.perf.glicko.rating + (data.perf.glicko.provisional ? '?' : '')} </td>
             <td> </td>
           </tr>
           <tr class={isEmpty(data.perf.progress)}>
@@ -53,7 +53,7 @@ export default function view(ctrl) {
           </tr>
           <tr>
             <th class="variantPerf"> Avg opponent {i18n('rating').toLowerCase()} </th>
-            <td class="variantPerf"> {Math.round(data.stat.count.opAvg)} </td>
+            <td class="variantPerf"> {data.stat.count.opAvg} </td>
             <td> </td>
           </tr>
           <tr class={isEmpty(data.stat.highest)}>

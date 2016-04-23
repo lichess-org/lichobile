@@ -2,6 +2,7 @@ import gameApi from '../../lichess/game';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import session from '../../session';
 import { handleXhrError, removeOfflineGameData } from '../../utils';
 import socket from '../../socket';
@@ -11,6 +12,14 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
 
  return {
     takebackOffers: function(o) {
+      if (!ctrl.data.player.proposingTakeback && o[ctrl.data.player.color]) {
+        sound.dong();
+        vibrate.quick();
+      }
+      if (!ctrl.data.opponent.proposingTakeback && o[ctrl.data.opponent.color]) {
+        sound.dong();
+        vibrate.quick();
+      }
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
       m.redraw();
@@ -50,16 +59,18 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ctrl.data.game.winner = winner;
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);
-      if (!ctrl.data.player.spectator) sound.dong();
       window.plugins.insomnia.allowSleepAgain();
       if (ctrl.data.game.speed === 'correspondence') {
         removeOfflineGameData(ctrl.data.url.round.substr(1));
       }
-      setTimeout(function() {
-        session.refresh();
-        ctrl.showActions();
-        m.redraw();
-      }, 500);
+      if (!ctrl.data.player.spectator) {
+        sound.dong();
+        setTimeout(function() {
+          session.refresh();
+          ctrl.showActions();
+          m.redraw();
+        }, 500);
+      }
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {

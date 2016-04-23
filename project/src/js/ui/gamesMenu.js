@@ -83,7 +83,7 @@ function cardDims() {
 
 function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
-  const bounds = { width: cDim.innerW, height: cDim.innerW };
+  const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
     <div className="boardWrapper" style={style}>
       {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}

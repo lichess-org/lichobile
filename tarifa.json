@@ -2,10 +2,10 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "2.11.0",
+  "version": "3.0.0",
   "platforms": [
-    "android@4.1.1",
-    "ios@4.1.0"
+    "ios@4.1.0",
+    "android@5.1.1"
   ],
   "configurations_mixins": {
     "default": {
@@ -119,7 +119,7 @@
       "StatusBarOverlaysWebView": false,
       "StatusBarBackgroundColor": "#151A1E",
       "BackgroundColor": "0xFF151A1E",
-      "xwalkVersion": "16",
+      "xwalkVersion": "17",
       "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect"
     },
     "build": {
@@ -148,7 +148,6 @@
     "android": "./project/bin/check_android.js"
   },
   "plugins": {
-    "phonegap-plugin-push": "phonegap-plugin-push@1.5.3",
     "cordova-plugin-splashscreen": "cordova-plugin-splashscreen@3.2.0",
     "cordova-plugin-device": "cordova-plugin-device@1.1.1",
     "cordova-plugin-dialogs": "cordova-plugin-dialogs@1.2.0",
@@ -168,8 +167,13 @@
     "com.rjfun.cordova.plugin.lowlatencyaudio": "https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface",
     "ionic-plugin-keyboard": "ionic-plugin-keyboard@1.0.8",
     "nl.x-services.plugins.insomnia": "cordova-plugin-insomnia@4.2.0",
-    "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.5.0",
     "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11",
-    "cordova-plugin-stockfish": "../cordova-plugin-stockfish"
+    "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.6.1",
+    "phonegap-plugin-push": {
+      "uri": "phonegap-plugin-push@1.6.2",
+      "variables": {
+        "SENDER_ID": "0000000000000"
+      }
+    }
   }
 }

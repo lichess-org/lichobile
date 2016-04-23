@@ -41,20 +41,22 @@ function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
-  const bounds = ground.getBounds(isPortrait);
+  const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
   const replayTable = renderReplayTable(ctrl.replay);
   const isVWS = helper.isVeryWideScreen();
+
+  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
 
   if (isPortrait)
     return [
       renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
-      renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
+      board,
+      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
   else if (isVWS)
     return [
-      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
+      board,
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, [opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
@@ -65,14 +67,14 @@ function renderContent(ctrl) {
           </div>
           {replayTable}
           {renderEndedGameStatus(ctrl.actions)}
-          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
+          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
         {renderGameActionsBarTablet(ctrl, 'ai')}
       </section>
     ];
   else
     return [
-      renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
+      board,
       <section key="table" className="table">
         <section className="playersTable offline">
           {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait)}

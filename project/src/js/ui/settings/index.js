@@ -6,8 +6,6 @@ import formWidgets from '../shared/form';
 import settings from '../../settings';
 import session from '../../session';
 import i18n from '../../i18n';
-import push from '../../push';
-import sound from '../../sound';
 import socket from '../../socket';
 import m from 'mithril';
 
@@ -50,6 +48,10 @@ function renderBody() {
         key: 'piecesTheme',
         config: helper.ontouchY(utils.f(m.route, '/settings/themes/piece'))
       }, `${i18n('theming')} (${i18n('pieces')})`),
+      m('li.list_item.nav', {
+        key: 'soundNotifications',
+        config: helper.ontouchY(utils.f(m.route, '/settings/soundNotifications'))
+      }, i18n('soundAndNotifications')),
       m('li.list_item.settingsChoicesInline', {
         key: 'backgroundTheme'
       }, [
@@ -76,15 +78,6 @@ function renderBody() {
             }
         ))])
       ]),
-      m('li.list_item', {
-        key: 'sound'
-      }, formWidgets.renderCheckbox(i18n('sound'), 'sound', settings.general.sound, sound.onSettingChange)),
-      window.cordova.platformId === 'android' ? m('li.list_item', {
-        key: 'notifications'
-      }, formWidgets.renderCheckbox('Allow notifications', 'notifications', settings.general.notifications, isOn => {
-        if (isOn) push.register();
-        else push.unregister();
-      })) : null,
       m('li.list_item', {
         key: 'analytics'
       }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))

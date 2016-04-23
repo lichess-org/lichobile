@@ -4,7 +4,7 @@ import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
-import countries from './countries';
+import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 
@@ -77,7 +77,13 @@ function renderProfile(user) {
         <p className="profileBio">{user.profile.bio}</p> : null
         }
         <div className="userInfos">
-          <p className="language fa fa-comment-o withIcon">{getLanguageNativeName(user.language)}</p>
+          {
+            user.language ?
+              <p className="language withIcon">
+                <span className="fa fa-comment-o" />
+                {getLanguageNativeName(user.language)}
+              </p> : null
+          }
           <p className="location">
             {location}
             {country ?

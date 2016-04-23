@@ -58,6 +58,13 @@ function renderAnalyseMenu(ctrl) {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
+    m('button', {
+      key: 'importPGN',
+      config: helper.ontouch(() => {
+        ctrl.menu.close();
+        ctrl.importPgnPopup.open();
+      })
+    }, [m('span.fa.fa-upload'), i18n('importGame')]),
     ctrl.ceval.allowed() ? m('div.action', {
       key: 'enableCeval'
     }, [

@@ -30,11 +30,10 @@ export default function ButtonHandler(el,
 
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
-    m.startComputation();
     var res = repeatHandler();
     repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     if (!res) clearTimeout(repeatIntervalID);
-    m.endComputation();
+    m.redraw();
   }
 
   function onTouchStart(e) {

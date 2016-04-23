@@ -2,7 +2,7 @@ import m from 'mithril';
 import settings from '../../../settings';
 import cevalEngine from './cevalEngine';
 
-export default function cevalCtrl(allow, emit) {
+export default function cevalCtrl(variant, allow, emit) {
 
   var initialized = false;
 
@@ -75,7 +75,7 @@ export default function cevalCtrl(allow, emit) {
   }
 
   return {
-    init(variant, cb) {
+    init(cb) {
       engine.init(variant, () => {
         initialized = true;
         cb();

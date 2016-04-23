@@ -24,7 +24,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
       </div>
       { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
         <div key="spinner" className="engineSpinner">
-          <div className="fa fa-spinner fa-pulse" />
+          <div className="fa fa-hourglass-half" />
         </div> :
         null
       }
@@ -104,6 +104,8 @@ export function setResult(ctrl, status, winner) {
 }
 
 export function renderEndedGameStatus(ctrl) {
+  if (!ctrl.replay) return null;
+
   const sit = ctrl.replay.situation();
   if (gameStatusApi.finished(ctrl.data)) {
     const result = gameApi.result(ctrl.data);

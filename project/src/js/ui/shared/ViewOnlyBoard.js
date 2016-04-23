@@ -2,7 +2,7 @@ import chessground from 'chessground-mobile';
 import settings from '../../settings';
 
 export default {
-  view(ctrl, args) {
+  view(_, args) {
 
     const boardClass = [
       'display_board',

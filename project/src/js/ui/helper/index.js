@@ -246,6 +246,11 @@ helper.isVeryWideScreen = function() {
   return helper.viewportDim().vw >= 960;
 };
 
+helper.isIpadLike = function () {
+  const { vh, vw } = helper.viewportDim();
+  return vh >= 700 && vw <= 1050;
+};
+
 helper.isPortrait = function() {
   return window.matchMedia('(orientation: portrait)').matches;
 };

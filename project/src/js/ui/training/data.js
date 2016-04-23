@@ -3,7 +3,7 @@ import chess from './chess';
 import puzzle from './puzzle';
 import { oppositeColor } from '../../utils';
 
-module.exports = function(cfg) {
+export default function(cfg) {
 
   const defaults = {
     game: {

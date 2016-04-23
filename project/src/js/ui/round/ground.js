@@ -2,9 +2,10 @@ import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
+import m from 'mithril';
 
-function str2move(m) {
-  return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
+function str2move(move) {
+  return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
 
 function boardOrientation(data, flip) {
@@ -15,7 +16,7 @@ function boardOrientation(data, flip) {
   }
 }
 
-function getBounds(isPortrait) {
+function getBounds(isPortrait, isIpadLike) {
   const { vh, vw } = helper.viewportDim();
   const top = 50;
 
@@ -30,12 +31,13 @@ function getBounds(isPortrait) {
       width: vw,
       height: vw
     };
-  } else if (helper.isVeryWideScreen()) {
-    const wsSide = vh - top - (vh * 0.88);
+  } else if (isIpadLike) {
+    const wsSide = vh - top - (vh * 0.12);
+    const wsTop = top + ((vh - wsSide - top) / 2);
     return {
-      top,
+      top: wsTop,
       right: wsSide,
-      bottom: top + wsSide,
+      bottom: wsTop + wsSide,
       left: 0,
       width: wsSide,
       height: wsSide
@@ -81,7 +83,11 @@ function makeConfig(data, fen, flip) {
     premovable: {
       enabled: data.pref.enablePremove,
       showDests: settings.game.pieceDestinations(),
-      castle: data.game.variant.key !== 'antichess'
+      castle: data.game.variant.key !== 'antichess',
+      events: {
+        set: () => m.redraw(),
+        unset: m.redraw
+      }
     },
     draggable: {
       distance: 3,
@@ -136,7 +142,7 @@ function end(ground) {
   ground.stop();
 }
 
-module.exports = {
+export default {
   make,
   reload,
   promote,

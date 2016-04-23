@@ -249,7 +249,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       sound.move();
     }
 
-    vibrate.quick();
+    if (!this.data.player.spectator) {
+      vibrate.quick();
+    }
   }.bind(this);
 
   this.apiMove = function(o) {

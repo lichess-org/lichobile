@@ -53,7 +53,7 @@ export default function cevalWorker(opts, name) {
 
   // warmup
   send('uci');
-  prepare('variant');
+  prepare(opts.variant);
 
   return {
     start(work) {

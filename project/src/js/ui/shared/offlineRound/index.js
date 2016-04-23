@@ -6,7 +6,7 @@ import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position, isPortrait, isVWS) {
+export function renderAntagonist(ctrl, content, material, position, isPortrait) {
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
   const antagonistColor = ctrl.data[position].color;
@@ -14,7 +14,9 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
   return (
     <section className={'playTable ' + position} key={key}>
       <div key="infos" className="antagonistInfos offline">
-        <div>{content}</div>
+        <div>
+          {content}
+        </div>
         <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
           { ctrl.data.game.variant.key === 'threeCheck' ?
@@ -22,12 +24,6 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
           }
         </div>
       </div>
-      { !isVWS && position === 'opponent' && ctrl.vm && ctrl.vm.engineSearching ?
-        <div key="spinner" className="engineSpinner">
-          <div className="fa fa-hourglass-half" />
-        </div> :
-        null
-      }
     </section>
   );
 }

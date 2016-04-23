@@ -20,9 +20,9 @@ export default function(ctrl) {
       Stockfish.init(function() {
 
         Stockfish.output(function(msg) {
+          // console.log(msg);
           const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
           if (bestmoveRegExpMatch) {
-            console.log(msg);
             ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
           }
         });
@@ -34,7 +34,7 @@ export default function(ctrl) {
     },
 
     search(initialFen, moves) {
-      console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
+      // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
       Stockfish.cmd(`position fen ${initialFen} moves ${moves}`);
       Stockfish.cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
     },

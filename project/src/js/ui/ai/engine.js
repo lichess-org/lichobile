@@ -11,34 +11,28 @@ const levelToDepth = {
   8: 21
 };
 
+const bestmoveRegExp = /^bestmove (\w{4})/;
+
 export default function(ctrl) {
   let level = 1;
-  const bestmoveRegExp = /^bestmove (\w{4})/;
 
   return {
     init() {
-      return window.Stockfish.init()
-      .then(function() {
-
-        window.Stockfish.output(function(msg) {
-          console.log(msg);
-          const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
-          if (bestmoveRegExpMatch) {
-            console.info(msg);
-            ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
-          }
-        });
-
-      })
-      .then(() => setOption('Ponder', 'false'))
-      .catch(console.info.bind(console));
+      const boundInit = onInit.bind(undefined, ctrl);
+      return Stockfish.init()
+      .then(boundInit)
+      .catch(() => {
+        return Stockfish.exit()
+        .then(Stockfish.init, Stockfish.init)
+        .then(boundInit);
+      });
     },
 
     search(initialFen, moves) {
       console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
-      console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
-      cmd(`position fen ${initialFen} moves ${moves}`);
-      cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      // console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
+      cmd(`position fen ${initialFen} moves ${moves}`)
+      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
     },
 
     setLevel(l) {
@@ -48,23 +42,38 @@ export default function(ctrl) {
     },
 
     prepare(variant) {
-      return setOption('UCI_Chess960', variant === 'chess960');
-      // setoption('UCI_House', variant === Crazyhouse);
-      // setoption('UCI_KingOfTheHill', variant === KingOfTheHill);
-      // setoption('UCI_Race', variant === RacingKings);
-      // setoption('UCI_3Check', variant === ThreeCheck);
-      // setoption('UCI_Atomic', variant === Atomic);
-      // setoption('UCI_Horde', variant === Horde);
+      return Promise.all([
+        setOption('UCI_Chess960', variant === 'chess960'),
+        setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),
+        setOption('UCI_3Check', variant === 'threeCheck')
+        // setOption('UCI_House', variant === Crazyhouse),
+        // setOption('UCI_Atomic', variant === Atomic),
+        // setOption('UCI_Horde', variant === Horde),
+        // setOption('UCI_Race', variant === RacingKings)
+      ]);
     },
 
     exit() {
-      return window.Stockfish.exit();
+      return Stockfish.exit();
     }
   };
 }
 
+function onInit(ctrl) {
+  Stockfish.output(function(msg) {
+    // console.log(msg);
+    const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
+    if (bestmoveRegExpMatch) {
+      ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
+    }
+  });
+
+  return cmd('uci')
+  .then(() => setOption('Ponder', 'false'));
+}
+
 function setOption(name, value) {
-  return window.Stockfish.cmd(`setoption name ${name} value ${value}`);
+  return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
 function cmd(text) {

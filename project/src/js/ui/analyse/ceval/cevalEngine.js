@@ -26,18 +26,18 @@ export default function cevalEngine(opts) {
   }
 
   return {
-    init(variant, cb) {
-      window.Stockfish.init(() => {
-        setOption('Ponder', 'false');
-        prepare(variant);
-        cb();
-      });
+    init(variant) {
+      return Stockfish.init()
+      .then(() => setOption('Ponder', 'false'))
+      .then(() => send('uci'))
+      .then(() => prepare(variant));
     },
 
     start(work) {
-      send(['position', 'fen', work.position, 'moves', work.moves].join(' '));
-      send('go depth ' + opts.maxDepth);
-      window.Stockfish.output(function(msg) {
+      send(['position', 'fen', work.position, 'moves', work.moves].join(' '))
+      .then(() => send('go depth ' + opts.maxDepth));
+
+      Stockfish.output(function(msg) {
         console.log(msg);
         processOutput(msg, work);
       });
@@ -48,25 +48,27 @@ export default function cevalEngine(opts) {
     },
 
     exit() {
-      window.Stockfish.exit();
+      Stockfish.exit();
     }
   };
 }
 
 function send(text) {
-  window.Stockfish.cmd(text);
+  return Stockfish.cmd(text);
 }
 
 function setOption(name, value) {
-  window.Stockfish.cmd(`setoption name ${name} value ${value}`);
+  return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
 function prepare(variant) {
-  setOption('UCI_Chess960', variant === 'chess960');
-  // setoption('UCI_House', variant === Crazyhouse);
-  // setoption('UCI_KingOfTheHill', variant === KingOfTheHill);
-  // setoption('UCI_Race', variant === RacingKings);
-  // setoption('UCI_3Check', variant === ThreeCheck);
-  // setoption('UCI_Atomic', variant === Atomic);
-  // setoption('UCI_Horde', variant === Horde);
+  return Promise.all([
+    setOption('UCI_Chess960', variant === 'chess960'),
+    setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),
+    setOption('UCI_3Check', variant === 'threeCheck')
+    // setOption('UCI_House', variant === Crazyhouse),
+    // setOption('UCI_Atomic', variant === Atomic),
+    // setOption('UCI_Horde', variant === Horde),
+    // setOption('UCI_Race', variant === RacingKings)
+  ]);
 }

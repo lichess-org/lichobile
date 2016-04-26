@@ -75,10 +75,9 @@ export default function cevalCtrl(variant, allow, emit) {
   }
 
   return {
-    init(cb) {
-      engine.init(variant, () => {
+    init() {
+      return engine.init(variant).then(() => {
         initialized = true;
-        cb();
       });
     },
     isInit() {

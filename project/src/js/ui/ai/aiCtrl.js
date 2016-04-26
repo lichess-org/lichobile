@@ -201,7 +201,8 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  engine.init(() => {
+  engine.init()
+  .then(() => {
     if (setupFen) {
       this.startNewGame(setupFen);
     } else if (saved) {

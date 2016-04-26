@@ -37,8 +37,8 @@ export default function(ctrl) {
     search(initialFen, moves) {
       console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
       console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
-      return cmd(`position fen ${initialFen} moves ${moves}`)
-      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
+      cmd(`position fen ${initialFen} moves ${moves}`);
+      cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`);
     },
 
     setLevel(l) {
@@ -68,7 +68,7 @@ function setOption(name, value) {
 }
 
 function cmd(text) {
-  return window.Stockfish.cmd(text);
+  return Stockfish.cmd(text);
 }
 
 function moveTime(level) {

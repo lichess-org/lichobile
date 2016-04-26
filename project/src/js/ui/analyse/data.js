@@ -14,7 +14,8 @@ export function makeData(from) {
 }
 
 export function makeDefaultData(fen) {
-  const player = playerFromFen(fen);
+  const player = 'white';
+  const ply = plyFromFen(fen);
   return {
     game: {
       fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -52,7 +53,7 @@ export function makeDefaultData(fen) {
     steps: [
       {
         fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        ply: 0,
+        ply,
         san: null,
         uci: null
       }
@@ -69,4 +70,13 @@ function playerFromFen(fen) {
   }
 
   return 'white';
+}
+
+function plyFromFen(fen) {
+  if (fen) {
+    const { color, moves } = readFen(fen);
+    return moves() * 2 - (color() === 'w' ? 2 : 1);
+  }
+
+  return 0;
 }

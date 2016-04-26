@@ -12,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor, capitalize } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -48,7 +48,7 @@ export default function controller() {
   }.bind(this);
 
   this.playerName = function() {
-    return capitalize(this.data.player.color);
+    return i18n(this.data.player.color);
   }.bind(this);
 
   this.getOpponent = function() {

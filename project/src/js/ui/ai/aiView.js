@@ -5,11 +5,8 @@ import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import {
   renderAntagonist,
   renderGameActionsBar,
-  renderReplayTable,
-  renderEndedGameStatus,
-  renderGameActionsBarTablet
+  renderReplayTable
 } from '../shared/offlineRound';
-import { opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import ground from '../round/ground';
 import helper from '../helper';
@@ -17,7 +14,6 @@ import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newAiGame';
 import i18n from '../../i18n';
-import m from 'mithril';
 
 export default function view(ctrl) {
   var content, header;
@@ -43,47 +39,39 @@ function renderContent(ctrl) {
   const isPortrait = helper.isPortrait();
   const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
   const replayTable = renderReplayTable(ctrl.replay);
-  const isVWS = helper.isVeryWideScreen();
+
+  const aiName = (
+    <h2>
+      {ctrl.getOpponent().name}
+      { ctrl.vm.engineSearching ?
+        <span className="engineSpinner fa fa-hourglass-half" /> :
+        null
+      }
+    </h2>
+  );
 
   const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
 
-  if (isPortrait)
+  if (isPortrait) {
     return [
-      renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
+      renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ];
-  else if (isVWS)
+  } else {
     return [
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, [opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait, isVWS)}
-          <div key="spinner" className="engineSpinner">
-          { ctrl.vm.engineSearching ?
-            <div className="fa fa-spinner fa-pulse" /> : null
-          }
-          </div>
-          {replayTable}
-          {renderEndedGameStatus(ctrl.actions)}
-          {renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait)}
-        </section>
-        {renderGameActionsBarTablet(ctrl, 'ai')}
-      </section>
-    ];
-  else
-    return [
-      board,
-      <section key="table" className="table">
-        <section className="playersTable offline">
-          {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait)}
+          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
           {replayTable}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
         {renderGameActionsBar(ctrl, 'ai')}
       </section>
     ];
+  }
 }
 
 function overlay(ctrl) {

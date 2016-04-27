@@ -309,3 +309,19 @@ export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
   }
 }
 
+export function variantReminder(el, icon) {
+  const div = document.createElement('div');
+  div.className = 'variant_reminder';
+  div.dataset.icon = icon;
+  el.appendChild(div);
+  setTimeout(function() {
+    const r = el.querySelector('.variant_reminder');
+    if (r) {
+      r.classList.add('gone');
+      setTimeout(function() {
+        if (el && r) el.removeChild(r);
+      }, 600);
+    }
+  }, 800);
+}
+

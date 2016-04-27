@@ -1,6 +1,7 @@
 import gameStatus from './status';
 import { secondsToMinutes } from '../utils';
 import settings from '../settings';
+import getVariant from './variant';
 import i18n from '../i18n';
 
 function parsePossibleMoves(possibleMoves) {
@@ -125,8 +126,11 @@ function time(data) {
 }
 
 function title(data) {
-  const mode = data.game.rated ? i18n('rated') : i18n('casual');
-  return `${time(data)} • ${data.game.variant.name} • ${mode}`;
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
+  const variant = getVariant(data.game.variant.key);
+  const name = variant ? (variant.shortName || variant.name) : '?';
+  return `${time(data)} • ${name} • ${mode}`;
 }
 
 function publicUrl(data) {

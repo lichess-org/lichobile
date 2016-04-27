@@ -456,7 +456,8 @@ function gameInfos(ctrl) {
 
   const data = ctrl.data;
   const time = gameApi.time(data);
-  const mode = data.game.rated ? i18n('rated') : i18n('casual');
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
   const variantLink = helper.ontouch(
     () => {

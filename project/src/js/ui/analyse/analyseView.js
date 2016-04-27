@@ -48,7 +48,7 @@ function overlay(ctrl) {
 function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'analyse');
 
   return [
     renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),

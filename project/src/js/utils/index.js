@@ -270,13 +270,13 @@ export function boardOrientation(data, flip) {
   }
 }
 
-export function getBoardBounds(viewportDim, isPortrait, isIpadLike) {
+export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
   const { vh, vw } = viewportDim;
   const top = 50;
 
   if (isPortrait) {
     const contentHeight = vh - 50;
-    const pTop = 50 + ((contentHeight - vw - 40) / 2);
+    const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 40) / 2) : 0);
     return {
       top: pTop,
       right: vw,

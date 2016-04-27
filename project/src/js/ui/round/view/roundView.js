@@ -186,7 +186,7 @@ function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
-  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
+  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
   const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
 
   if (isPortrait)

@@ -37,7 +37,7 @@ function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
   const replayTable = renderReplayTable(ctrl.replay);
 
   const aiName = (

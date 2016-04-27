@@ -5,7 +5,6 @@ import challengesApi from '../../../lichess/challenges';
 import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
 import chessground from 'chessground-mobile';
-import ground from '../ground';
 import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
@@ -187,7 +186,7 @@ function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
-  const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
+  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
   const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
 
   if (isPortrait)

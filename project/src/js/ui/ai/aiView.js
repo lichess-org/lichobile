@@ -8,8 +8,8 @@ import {
   renderReplayTable
 } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import ground from '../round/ground';
 import helper from '../helper';
+import { getBoardBounds } from '../../utils';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newAiGame';
@@ -37,7 +37,7 @@ function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
-  const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
   const replayTable = renderReplayTable(ctrl.replay);
 
   const aiName = (

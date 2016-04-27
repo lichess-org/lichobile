@@ -4,9 +4,9 @@ import layout from '../layout';
 import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import ground from '../round/ground';
 import helper from '../helper';
 import i18n from '../../i18n';
+import { getBoardBounds } from '../../utils';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
@@ -55,7 +55,7 @@ function renderContent(ctrl, pieceTheme) {
   const opponentName = i18n(ctrl.data.opponent.color);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
-  const bounds = ground.getBounds(isPortrait, helper.isIpadLike());
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
   const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme);
 
   if (isPortrait)

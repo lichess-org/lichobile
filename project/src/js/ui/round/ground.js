@@ -1,53 +1,12 @@
 import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import helper from '../helper';
 import { boardOrientation } from '../../utils';
 import m from 'mithril';
 
 function str2move(move) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
-
-function getBounds(isPortrait, isIpadLike) {
-  const { vh, vw } = helper.viewportDim();
-  const top = 50;
-
-  if (isPortrait) {
-    const contentHeight = vh - 50;
-    const pTop = 50 + ((contentHeight - vw - 40) / 2);
-    return {
-      top: pTop,
-      right: vw,
-      bottom: pTop + vw,
-      left: 0,
-      width: vw,
-      height: vw
-    };
-  } else if (isIpadLike) {
-    const wsSide = vh - top - (vh * 0.12);
-    const wsTop = top + ((vh - wsSide - top) / 2);
-    return {
-      top: wsTop,
-      right: wsSide,
-      bottom: wsTop + wsSide,
-      left: 0,
-      width: wsSide,
-      height: wsSide
-    };
-  } else {
-    const lSide = vh - top;
-    return {
-      top,
-      right: lSide,
-      bottom: top + lSide,
-      left: 0,
-      width: lSide,
-      height: lSide
-    };
-  }
-}
-
 
 function makeConfig(data, fen, flip) {
   return {
@@ -140,6 +99,5 @@ export default {
   reload,
   promote,
   end,
-  applySettings,
-  getBounds
+  applySettings
 };

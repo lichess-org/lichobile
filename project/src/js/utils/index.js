@@ -269,3 +269,43 @@ export function boardOrientation(data, flip) {
     return flip ? data.opponent.color : data.player.color;
   }
 }
+
+export function getBoardBounds(viewportDim, isPortrait, isIpadLike) {
+  const { vh, vw } = viewportDim;
+  const top = 50;
+
+  if (isPortrait) {
+    const contentHeight = vh - 50;
+    const pTop = 50 + ((contentHeight - vw - 40) / 2);
+    return {
+      top: pTop,
+      right: vw,
+      bottom: pTop + vw,
+      left: 0,
+      width: vw,
+      height: vw
+    };
+  } else if (isIpadLike) {
+    const wsSide = vh - top - (vh * 0.12);
+    const wsTop = top + ((vh - wsSide - top) / 2);
+    return {
+      top: wsTop,
+      right: wsSide,
+      bottom: wsTop + wsSide,
+      left: 0,
+      width: wsSide,
+      height: wsSide
+    };
+  } else {
+    const lSide = vh - top;
+    return {
+      top,
+      right: lSide,
+      bottom: top + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
+    };
+  }
+}
+

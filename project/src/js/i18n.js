@@ -44,7 +44,8 @@ const untranslated = {
   vibrationOnNotification: 'Vibrate on notification',
   soundOnNotification: 'Play sound on notification',
   vibrateOnGameEvents: 'Vibrate on game events',
-  soundAndNotifications: 'Sound and notifications'
+  soundAndNotifications: 'Sound and notifications',
+  offline: 'Offline'
 };
 
 const defaultCode = 'en';

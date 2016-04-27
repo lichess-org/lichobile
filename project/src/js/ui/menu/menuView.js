@@ -26,7 +26,7 @@ function renderHeader(user) {
     <header className="side_menu_header">
       <div className="logo" />
       <h2 className="username">
-        { hasNetwork() ? user ? user.username : 'Anonymous' : 'Offline' }
+        { hasNetwork() ? user ? user.username : 'Anonymous' : i18n('offline') }
       </h2>
       { hasNetwork() && user ?
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}

@@ -16,8 +16,7 @@ import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
-import ground from './ground';
-import { noop, partialf, playerName, gameIcon } from '../../utils';
+import { getBoardBounds, noop, partialf, playerName, gameIcon } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
 import button from '../round/view/button';
@@ -49,7 +48,7 @@ function overlay(ctrl) {
 function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
-  const bounds = ground.getBounds(isPortrait);
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike());
 
   return [
     renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
@@ -456,7 +455,8 @@ function gameInfos(ctrl) {
 
   const data = ctrl.data;
   const time = gameApi.time(data);
-  const mode = data.game.rated ? i18n('rated') : i18n('casual');
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
   const variantLink = helper.ontouch(
     () => {

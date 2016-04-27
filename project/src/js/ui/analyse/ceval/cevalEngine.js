@@ -28,9 +28,13 @@ export default function cevalEngine(opts) {
   return {
     init(variant) {
       return Stockfish.init()
-      .then(() => setOption('Ponder', 'false'))
-      .then(() => send('uci'))
-      .then(() => prepare(variant));
+      .then(init.bind(undefined, variant))
+      .catch(() => {
+        return Stockfish.exit()
+        .then(() => Stockfish.init(), () => Stockfish.init())
+        .then(init.bind(undefined, variant));
+      })
+      .catch(console.error.bind(console));
     },
 
     start(work) {
@@ -51,6 +55,12 @@ export default function cevalEngine(opts) {
       Stockfish.exit();
     }
   };
+}
+
+function init(variant) {
+  return send('uci')
+  .then(() => setOption('Ponder', 'false'))
+  .then(() => prepare(variant));
 }
 
 function send(text) {

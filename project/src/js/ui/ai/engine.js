@@ -23,9 +23,10 @@ export default function(ctrl) {
       .then(boundInit)
       .catch(() => {
         return Stockfish.exit()
-        .then(Stockfish.init, Stockfish.init)
+        .then(() => Stockfish.init(), () => Stockfish.init())
         .then(boundInit);
-      });
+      })
+      .catch(console.error.bind(console));
     },
 
     search(initialFen, moves) {

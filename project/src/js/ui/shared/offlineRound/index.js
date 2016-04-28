@@ -95,6 +95,8 @@ export function setResult(ctrl, status, winner) {
   const sit = ctrl.replay.situation();
   if (status) {
     ctrl.data.game.status = status;
+  } else {
+    ctrl.data.game.status = { id: 20 };
   }
   ctrl.data.game.winner = winner || sit.winner;
 }

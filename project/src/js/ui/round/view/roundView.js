@@ -94,6 +94,15 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
     width: bounds.width + 'px'
   } : {};
 
+  function wrapperConfig(el, isUpdate) {
+    if (!isUpdate) {
+      const icon = utils.gameIcon(data.game.variant.key);
+      if (icon && data.game.variant.key !== 'standard' && data.game.status && gameApi.isPlayerPlaying(data)) {
+        utils.variantReminder(el, icon);
+      }
+    }
+  }
+
   function boardConfig(el, isUpdate) {
     if (!isUpdate) {
       if (!bounds) {
@@ -106,42 +115,14 @@ export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapp
   }
 
   return (
-    <section className={wrapperClass} style={wrapperStyle} key={key}>
+    <section className={wrapperClass} config={wrapperConfig} style={wrapperStyle} key={key}>
       <div className={boardClass} config={boardConfig} />
-      {renderVariantReminder(data)}
       { chessgroundCtrl.data.premovable.current ?
         <div className="premove_alert">
           {i18n('premoveEnabledClickAnywhereToCancel')}
         </div> : null
       }
     </section>
-  );
-}
-
-function renderVariantReminder(data) {
-  if (!data.game.status || !gameApi.isPlayerPlaying(data))  {
-    return null;
-  }
-
-  if (data.game.variant.key === 'standard') {
-    return null;
-  }
-
-  const icon = utils.gameIcon(data.game.variant.key);
-  if (!icon) return null;
-
-  function config(el, isUpdate) {
-    if (!isUpdate) setTimeout(function() {
-      el.classList.add('gone');
-      setTimeout(function() {
-        el.parentNode.removeChild(el);
-      }, 600);
-    }, 800);
-  }
-
-  return (
-    <div className="variant_reminder" data-icon={icon} config={config}>
-    </div>
   );
 }
 

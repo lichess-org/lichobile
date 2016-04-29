@@ -187,11 +187,19 @@ export default function controller() {
   }.bind(this);
 
   this.forward = function() {
-    this.jump(this.replay.ply + 2);
+    const ply = this.replay.ply;
+    this.jump(ply + (ply + 2 >= this.replay.situations.length ? 1 : 2));
   }.bind(this);
 
   this.backward = function() {
-    this.jump(this.replay.ply - 2);
+    const ply = this.replay.ply;
+    if (this.data.player.color === 'black') {
+      const offset = ply % 2 === 0 ? 1 : 2;
+      this.jump(ply - offset);
+    } else {
+      const offset = ply % 2 === 0 ? 2 : 1;
+      this.jump(ply - offset);
+    }
   }.bind(this);
 
   this.firstPly = function () {

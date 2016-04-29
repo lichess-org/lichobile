@@ -19,8 +19,7 @@ function makeConfig(data, fen, flip) {
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: settings.game.highlights(),
-      check: settings.game.highlights(),
-      dragOver: false
+      check: settings.game.highlights()
     },
     movable: {
       free: false,

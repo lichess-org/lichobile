@@ -77,7 +77,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
-function createTournament(tournamentVersion, tournamentId, handlers) {
+function createTournament(tournamentId, tournamentVersion, handlers) {
   let url = '/tournament/' + tournamentId + '/socket/v1';
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)

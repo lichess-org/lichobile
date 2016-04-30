@@ -4,7 +4,6 @@ import { header as headerWidget, backButton, pad} from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import isEmpty from 'lodash/isEmpty';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
@@ -16,8 +15,9 @@ export default function view(ctrl) {
 }
 
 function tournamentBody(ctrl) {
-  let data = ctrl.tournament();
-  if (isEmpty(data)) return null;
+  const data = ctrl.tournament();
+
+  if (!data) return null;
 
   let body = null;
   if (data.isFinished)

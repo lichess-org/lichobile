@@ -37,11 +37,10 @@ export default function controller() {
     tournament(data);
     clockInterval = setInterval(tick, 1000);
     socket.createTournament(id, tournament().socketVersion, {
-      reload: () => xhr.reload(id).then(reload),
-      resync: () => xhr.resync(id).then(reload, data.socketVersion)
+      reload: () => xhr.reload(id).then(reload)
     });
-    return data;
-  }, err => utils.handleXhrError(err));
+  })
+  .catch(utils.handleXhrError);
 
   return {
     tournament,

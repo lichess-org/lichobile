@@ -86,7 +86,6 @@ function createTournament(tournamentId, tournamentVersion, handlers) {
     options: {
       name: 'tournament',
       debug: false,
-      ignoreUnknownMessages: true,
       pingDelay: 2000,
       sendOnOpen: 'following_onlines',
       registeredEvents: Object.keys(socketHandlers.events)

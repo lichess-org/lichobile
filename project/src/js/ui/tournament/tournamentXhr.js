@@ -11,7 +11,3 @@ export function tournament(id) {
 export function reload(id) {
   return request(`/tournament/${id}`, { background: true });
 }
-
-export function resync(id, socketVersion) {
-  return request(`/tournament/${id}`, { background: true, data: {socketVersion} });
-}

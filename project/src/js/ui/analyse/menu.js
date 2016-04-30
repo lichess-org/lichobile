@@ -49,7 +49,7 @@ function renderAnalyseMenu(ctrl) {
     m('button', {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
-    }, [m('span.fa.fa-eye'), i18n('startNewAnalysis')]),
+    }, [m('span[data-icon=A]'), i18n('startNewAnalysis')]),
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))

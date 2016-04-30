@@ -148,7 +148,7 @@ function renderLinks(user) {
       </li>
       <li className="sep_link" key="sep_link_tools">{i18n('tools')}</li>
       <li className="side_link" key="analyse" config={helper.ontouchY(menu.route('/analyse'))}>
-        <span className="fa fa-eye" />{i18n('analysis')}
+        <span data-icon="A" />{i18n('analysis')}
       </li>
       <li className="side_link" key="editor" config={helper.ontouchY(menu.route('/editor'))}>
         <span className="fa fa-pencil" />{i18n('boardEditor')}

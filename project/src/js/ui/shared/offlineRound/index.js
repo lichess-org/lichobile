@@ -45,7 +45,7 @@ export function renderGameActionsBar(ctrl, type) {
           () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
         )}
       />
-      <button className="action_bar_button fa fa-eye"
+      <button data-icon="A" className="action_bar_button"
         config={helper.ontouch(
           () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
@@ -69,7 +69,7 @@ export function renderGameActionsBarTablet(ctrl, type) {
       <button className="action_bar_button" data-icon="U"
         config={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
-      <button className="action_bar_button fa fa-eye"
+      <button data-icon="A" className="action_bar_button"
         config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"

@@ -13,8 +13,9 @@ export default function controller() {
 
   function reload(data) {
     tournament(data);
-    if (data.socketVersion)
+    if (data.socketVersion) {
       socket.setVersion(data.socketVersion);
+    }
     m.redraw();
   }
 

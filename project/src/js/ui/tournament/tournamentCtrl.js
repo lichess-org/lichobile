@@ -1,51 +1,24 @@
 import socket from '../../socket';
 import * as utils from '../../utils';
 import * as xhr from './tournamentXhr';
-import socketHandler from './socketHandler';
 import helper from '../helper';
 import m from 'mithril';
 
 export default function controller() {
-  let id = m.route.param('id');
-  helper.analyticsTrackView('Tournament details');
-  const tournament = m.prop({});
+  helper.analyticsTrackView('Tournament List');
 
-  function reload (data) {
-    tournament(data);
-    if (data.socketVersion)
-      socket.setVersion(data.socketVersion);
-    m.redraw();
-  }
+  socket.createDefault();
 
-  function tick () {
-    let data = tournament();
-    if (data.secondsToStart && data.secondsToStart > 0)
-      data.secondsToStart--;
+  const tournaments = m.prop();
+  const currentTab = m.prop(m.route.param('tab') || 'started');
 
-    if (data.secondsToFinish && data.secondsToFinish > 0)
-      data.secondsToFinish--;
-
-    m.redraw();
-  }
-
-  let clockInterval = null;
-  let returnVal = {
-    tournament,
-    reload,
-    onunload: () => {
-      socket.destroy();
-      if (clockInterval) {
-        clearInterval(clockInterval);
-      }
-    }
-  };
-
-  xhr.tournament(id).then(data => {
-    tournament(data);
-    clockInterval = setInterval(tick, 1000);
-    socket.createTournament(tournament().socketVersion, id, socketHandler(returnVal));
+  xhr.currentTournaments().then(data => {
+    tournaments(data);
     return data;
   }, err => utils.handleXhrError(err));
 
-  return returnVal;
+  return {
+    tournaments,
+    currentTab
+  };
 }

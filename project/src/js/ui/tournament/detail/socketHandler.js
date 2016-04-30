@@ -1,4 +1,4 @@
-import * as xhr from './tournamentXhr';
+import * as xhr from '../tournamentXhr';
 import throttle from 'lodash/throttle';
 
 export default function(ctrl) {

@@ -11,7 +11,8 @@ function makeConfig(data, config, onMove, onNewPiece) {
     movable: {
       free: false,
       color: config.movable.color,
-      dests: config.movable.dests
+      dests: config.movable.dests,
+      showDests: settings.game.pieceDestinations()
     },
     events: {
       move: onMove,

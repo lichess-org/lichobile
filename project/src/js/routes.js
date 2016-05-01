@@ -25,7 +25,7 @@ import userTV from './ui/user/tv';
 import players from './ui/players';
 import ranking from './ui/players/ranking';
 import training from './ui/training';
-import tournamentList from './ui/tournament/list';
+import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
 import m from 'mithril';
@@ -70,8 +70,8 @@ export default {
       '/settings/lang': slidingPage(settingsLang),
       '/training': fadingPage(training),
       '/training/:id': fadingPage(training),
-      '/tournament': fadingPage(tournamentList),
-      '/tournament/:id': fadingPage(tournament)
+      '/tournament': fadingPage(tournament),
+      '/tournament/:id': fadingPage(tournamentDetail)
     });
   }
 };

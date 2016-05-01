@@ -77,7 +77,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
-function createTournament(tournamentVersion, tournamentId, handlers) {
+function createTournament(tournamentId, version, handlers) {
   let url = '/tournament/' + tournamentId + '/socket/v1';
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
@@ -86,7 +86,6 @@ function createTournament(tournamentVersion, tournamentId, handlers) {
     options: {
       name: 'tournament',
       debug: false,
-      ignoreUnknownMessages: true,
       pingDelay: 2000,
       sendOnOpen: 'following_onlines',
       registeredEvents: Object.keys(socketHandlers.events)
@@ -96,7 +95,7 @@ function createTournament(tournamentVersion, tournamentId, handlers) {
     clientId: utils.lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
-    tournamentVersion,
+    version,
     opts
   }});
 }

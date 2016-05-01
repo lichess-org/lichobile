@@ -162,7 +162,7 @@ export default {
           socket.send('rematch-no');
           m.route(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
-      }, [m('span.fa.fa-eye'), i18n('analysis')]);
+      }, [m('span[data-icon=A].withIcon'), i18n('analysis')]);
     }
     return null;
   },

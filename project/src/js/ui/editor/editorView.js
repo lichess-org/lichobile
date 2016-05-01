@@ -105,7 +105,7 @@ function renderActionsBar(ctrl) {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
-    m('button.action_bar_button.fa.fa-eye', {
+    m('button.action_bar_button[data-icon=A]', {
       key: 'analyse',
       config: helper.ontouch(() => {
         const fen = encodeURIComponent(ctrl.computeFen());

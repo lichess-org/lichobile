@@ -2,14 +2,9 @@
 
 @font-face {
   font-family: "lichess";
-  src:url("../fonts/lichess.eot");
-  src:url("../fonts/lichess.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/lichess.woff") format("woff"),
-    url("../fonts/lichess.ttf") format("truetype"),
-    url("../fonts/lichess.svg#lichess") format("svg");
+  src: url("../fonts/lichess.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-
 }
 
 [data-icon]:before {

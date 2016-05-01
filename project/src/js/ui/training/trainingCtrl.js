@@ -1,4 +1,4 @@
-import last from 'lodash/array/last';
+import last from 'lodash/last';
 import chessground from 'chessground-mobile';
 import { handleXhrError } from '../../utils';
 import data from './data';
@@ -269,7 +269,6 @@ export default function ctrl() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    socket.destroy();
     window.plugins.insomnia.allowSleepAgain();
   };
 

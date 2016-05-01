@@ -1,73 +1,83 @@
+import gameApi from '../../lichess/game';
 import chessground from 'chessground-mobile';
 import layout from '../layout';
-import { header } from '../shared/common';
+import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import {
   renderAntagonist,
   renderGameActionsBar,
-  renderReplayTable,
-  renderEndedGameStatus,
-  renderGameActionsBarTablet
+  renderReplayTable
 } from '../shared/offlineRound';
-import { sideSelector, opponentSelector } from './actions';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
-import i18n from '../../i18n';
+import { getBoardBounds } from '../../utils';
 import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
-import m from 'mithril';
+import newGameMenu from './newAiGame';
+import i18n from '../../i18n';
 
 export default function view(ctrl) {
+  var content, header;
+
+  if (ctrl.replay) {
+    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
+    content = renderContent.bind(undefined, ctrl);
+  } else {
+    header = renderHeader.bind(undefined, i18n('playOfflineComputer'));
+    content = viewOnlyBoardContent;
+  }
 
   return layout.board(
-    header.bind(undefined, i18n('playOfflineComputer')),
-    content.bind(undefined, ctrl),
+    header,
+    content,
     overlay.bind(undefined, ctrl)
   );
 }
 
-function content(ctrl) {
+function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
+  const replayTable = renderReplayTable(ctrl.replay);
 
-  if (isPortrait)
+  const aiName = (
+    <h2>
+      {ctrl.getOpponent().name}
+      { ctrl.vm.engineSearching ?
+        <span className="engineSpinner fa fa-hourglass-half" /> :
+        null
+      }
+    </h2>
+  );
+
+  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
+
+  if (isPortrait) {
     return [
-      renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait),
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
-      renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait),
-      renderGameActionsBar(ctrl, actions.view)
+      renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
+      board,
+      renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
+      renderGameActionsBar(ctrl, 'ai')
     ];
-  else if (helper.isLandscape() && helper.isVeryWideScreen())
+  } else {
     return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+      board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, [sideSelector(), opponentSelector()], material[ctrl.data.opponent.color], 'opponent', isPortrait)}
-          {replayTable}
-          {renderEndedGameStatus(ctrl.actions)}
-          {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
-        </section>
-        {renderGameActionsBarTablet(ctrl)}
-      </section>
-    ];
-  else
-    return [
-      renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
-      <section key="table" className="table">
-        <section className="playersTable offline">
-          {renderAntagonist(ctrl, m('h2', ctrl.getOpponent().name), material[ctrl.data.opponent.color], 'opponent', isPortrait)}
+          {renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
           {replayTable}
           {renderAntagonist(ctrl, '', material[ctrl.data.player.color], 'player', isPortrait)}
         </section>
-        {renderGameActionsBar(ctrl)}
+        {renderGameActionsBar(ctrl, 'ai')}
       </section>
     ];
+  }
 }
 
 function overlay(ctrl) {
   return [
     actions.view(ctrl.actions),
+    newGameMenu.view(ctrl.newGameMenu),
     renderPromotion(ctrl)
   ];
 }

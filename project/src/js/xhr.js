@@ -1,4 +1,5 @@
-import { request, apiVersion, lichessSri } from './http';
+import { request, apiVersion } from './http';
+import { lichessSri } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
@@ -100,7 +101,7 @@ export function seeks(feedback) {
 export function game(id, color, background) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return request(url, { background });
+  return request(url, { background }, true);
 }
 
 export function toggleGameBookmark(id) {
@@ -122,7 +123,17 @@ export function setServerLang(lang) {
         lang
       }
     });
+  } else {
+    return Promise.resolve();
   }
+}
+
+export function miniUser(userId) {
+  return request(`/@/${userId}/mini`);
+}
+
+export function timeline() {
+  return request('/timeline', { background: true }, false);
 }
 
 export function status() {

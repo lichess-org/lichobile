@@ -1,6 +1,5 @@
 import * as utils from '../../utils';
 import helper from '../helper';
-import assign from 'lodash/object/assign';
 
 function styleConf(el) {
   const vh = helper.viewportDim().vh;
@@ -21,7 +20,7 @@ export default function(classes, headerF, contentF, isShowing, closef) {
   let className;
 
   if (typeof classes === 'object')
-    className = helper.classSet(assign({}, defaultClasses, classes));
+    className = helper.classSet(Object.assign({}, defaultClasses, classes));
   else if (typeof classes === 'string')
     className = helper.classSet(defaultClasses) + ' ' + classes;
   else

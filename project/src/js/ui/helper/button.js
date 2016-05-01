@@ -30,11 +30,10 @@ export default function ButtonHandler(el,
 
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
-    m.startComputation();
     var res = repeatHandler();
     repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     if (!res) clearTimeout(repeatIntervalID);
-    m.endComputation();
+    m.redraw();
   }
 
   function onTouchStart(e) {
@@ -123,15 +122,4 @@ export default function ButtonHandler(el,
   el.addEventListener('touchend', onTouchEnd, false);
   el.addEventListener('touchcancel', onTouchCancel, false);
   el.addEventListener('contextmenu', onContextMenu, false);
-
-  return function unbind() {
-    clearTimeout(holdTimeoutID);
-    clearTimeout(repeatTimeoutId);
-    clearTimeout(repeatIntervalID);
-    el.removeEventListener('touchstart', onTouchStart, false);
-    el.removeEventListener('touchmove', onTouchMove, false);
-    el.removeEventListener('touchend', onTouchEnd, false);
-    el.removeEventListener('touchcancel', onTouchCancel, false);
-    el.removeEventListener('contextmenu', onContextMenu, false);
-  };
 }

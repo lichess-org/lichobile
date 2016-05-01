@@ -1,6 +1,7 @@
 import gameStatus from './status';
 import { secondsToMinutes } from '../utils';
 import settings from '../settings';
+import getVariant from './variant';
 import i18n from '../i18n';
 
 function parsePossibleMoves(possibleMoves) {
@@ -67,7 +68,11 @@ function moretimeable(data) {
 }
 
 function replayable(data) {
-  return data.source === 'import' || gameStatus.finished(data);
+  return data.game.variant.key === 'standard' && gameStatus.finished(data);
+}
+
+function userAnalysable(data) {
+  return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
 function getPlayer(data, color) {
@@ -120,6 +125,14 @@ function time(data) {
   }
 }
 
+function title(data) {
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
+  const variant = getVariant(data.game.variant.key);
+  const name = variant ? (variant.shortName || variant.name) : '?';
+  return `${time(data)} • ${name} • ${mode}`;
+}
+
 function publicUrl(data) {
   return 'http://lichess.org/' + data.game.id;
 }
@@ -141,6 +154,7 @@ export default {
   moretimeable,
   mandatory,
   replayable,
+  userAnalysable,
   getPlayer,
   parsePossibleMoves,
   nbMoves,
@@ -148,6 +162,7 @@ export default {
   setIsGone,
   result,
   time,
+  title,
   publicUrl,
   isSupportedVariant
 };

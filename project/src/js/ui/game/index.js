@@ -1,4 +1,7 @@
-module.exports = {
-  controller: require('./gameCtrl'),
-  view: require('./gameView')
+import controller from './gameCtrl';
+import view from './gameView';
+
+export default {
+  controller,
+  view
 };

@@ -74,10 +74,24 @@ function toLabel(status, winner, variant) {
   }
 }
 
+function offlineSituationToStatus(sit) {
+  if (sit.finished) {
+    if (sit.checkmate) return ids.mate;
+    else if (sit.stalemate) return ids.stalemate;
+    else if (sit.threefold) return ids.draw;
+    else if (sit.draw) return ids.draw;
+    else return ids.resign;
+  }
+  else {
+    return ids.started;
+  }
+}
+
 export default {
   ids,
   started,
   finished,
   aborted,
-  toLabel
+  toLabel,
+  offlineSituationToStatus
 };

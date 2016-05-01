@@ -32,8 +32,6 @@ square
     background-color rgba(255, 0, 0, 0.5)
   &.selected
     background-color rgba(216, 85, 0, 0.3)
-  &.fading
-    z-index 1
 
 square[data-coord-x]:after, square[data-coord-y]:before
   position absolute
@@ -65,6 +63,8 @@ piece
   background-size cover
   z-index 2
   transform translate3d(0,0,0)
+  &.fading
+    z-index 1
   &.dragging
     width 200%
     height 200%

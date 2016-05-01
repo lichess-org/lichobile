@@ -1,5 +1,5 @@
 #searchPlayersModal
-  color textLightGray
+  color textDarkBg
   > header
     background-color headerBgDark
     border-bottom-style none
@@ -16,7 +16,7 @@
       &.active
         background lighten(bgdark, 8%)
   > .modal_content
-    color textLightGray
+    color textDarkBg
     background bgdark
 
 .search_input
@@ -48,7 +48,7 @@
 .ranking
   width 100%
   padding 15px
-  border-bottom 1px solid #2E3033
+  border-bottom 1px solid lighten(bgdark, 8%)
   @media only screen and (min-width 600px)
     flex 0 1 250px
 
@@ -79,3 +79,15 @@
     font-size 0.9rem
     border-bottom-style none
     padding 5px 0
+
+.playerMiniPerf
+  span
+    padding 0 5px
+  > .progress
+    &.positive
+      color green
+      &:before
+        position relative
+        top 2px
+    &.negative
+      color red

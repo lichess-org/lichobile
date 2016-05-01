@@ -28,7 +28,7 @@ export default {
     storage.set(storageId, this.messages.length);
 
     this.open = function() {
-      backbutton.stack.push(helper.slidesOut(this.close, 'chat'));
+      backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'));
       this.showing = true;
     }.bind(this);
 
@@ -84,10 +84,10 @@ export default {
 
     if (!ctrl.showing) return null;
 
-    return m('div#chat.modal', { config: helper.slidesIn }, [
+    return m('div#chat.modal', { config: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOut(ctrl.close, 'chat'))
+          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
@@ -138,14 +138,9 @@ export default {
         }, [
           m('input#chat_input.chat_input[type=text][placeholder=' + i18n('talkInChat') + ']', {
             value: ctrl.inputValue,
-            config: function(el, isUpdate, context) {
+            config: function(el, isUpdate) {
               if (!isUpdate) {
-                el.addEventListener('input', function(e) {
-                  ctrl.inputValue = e.target.value;
-                });
-                context.onunload = function() {
-                  el.removeEventListener('input');
-                };
+                el.addEventListener('input', inputListener.bind(undefined, ctrl));
               }
             }
           }),
@@ -155,3 +150,7 @@ export default {
     ]);
   }
 };
+
+function inputListener(ctrl, e) {
+  ctrl.inputValue = e.target.value;
+}

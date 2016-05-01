@@ -45,6 +45,7 @@ newGameForm.openAIFromPosition = function(fen) {
 
 function startAIGame() {
   return xhr.newAiGame(newGameForm.fen).then(function(data) {
+    helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
     m.route('/game' + data.url.round);
   }, function(error) {
     utils.handleXhrError(error);
@@ -58,7 +59,7 @@ function seekHumanGame() {
     lobby.startSeeking();
   }
   else {
-    xhr.seekGame();
+    xhr.seekGame().then(utils.noop, utils.handleXhrError);
     m.route('/correspondence');
   }
 }
@@ -237,7 +238,7 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ]),
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit]', i18n('createAGame'))
+    m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
   ]);
 }
 

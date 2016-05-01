@@ -2,9 +2,97 @@ import Zanimo from 'zanimo';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
+import animator from './animator';
 import m from 'mithril';
 
-var helper = {};
+const helper = {};
+export default helper;
+
+// view slide transition functions
+// they listen to history to determine if animation is going forward or backward
+function viewSlideIn(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+	el.style.transform = `translate3d(${direction},0,0)`;
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = 'translate3d(0%,0,0)';
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    el.removeAttribute('style');
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+function viewSlideOut(el, callback) {
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+	el.style.transform = 'translate3d(0%,0,0)';
+	el.style.transition = 'transform 200ms ease-out';
+
+	setTimeout(() => {
+		el.style.transform = `translate3d(${direction},0,0)`;
+	});
+
+  function after() {
+    utils.setViewSlideDirection('fwd');
+    callback();
+  }
+
+	el.addEventListener('transitionend', after, false);
+}
+
+function viewFadesIn(el, callback) {
+  var tId;
+
+  el.style.opacity = '0.5';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '1';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
+function viewFadesOut(el, callback) {
+  var tId;
+
+  el.style.opacity = '1';
+  el.style.transition = 'opacity 200ms ease-out, visibility 0s linear 200ms';
+
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.visibility = 'hidden';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    callback();
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  // TODO find a way to avoid it
+  tId = setTimeout(after, 250);
+}
+
+helper.slidingPage = animator(viewSlideIn, viewSlideOut);
+helper.fadingPage = animator(viewFadesIn, viewFadesOut);
 
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
@@ -23,8 +111,8 @@ helper.transformProp = function() {
 };
 
 function collectionHas(coll, el) {
-  for(var i = 0, len = coll.length; i < len; i++) {
-    if(coll[i] === el) return true;
+  for (var i = 0, len = coll.length; i < len; i++) {
+    if (coll[i] === el) return true;
   }
   return false;
 }
@@ -38,7 +126,7 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
-helper.slidesIn = function(el, isUpdate, context) {
+helper.slidesInUp = function(el, isUpdate, context) {
   if (!isUpdate) {
     el.style.transform = 'translateY(100%)';
     // force reflow hack
@@ -48,11 +136,31 @@ helper.slidesIn = function(el, isUpdate, context) {
   }
 };
 
-helper.slidesOut = function(callback, elID) {
+helper.slidesOutDown = function(callback, elID) {
   return function() {
     const el = document.getElementById(elID);
     m.redraw.strategy('none');
-    Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+    .then(utils.autoredraw.bind(undefined, callback))
+    .catch(console.log.bind(console));
+  };
+};
+
+helper.slidesInLeft = function(el, isUpdate, context) {
+  if (!isUpdate) {
+    el.style.transform = 'translateX(100%)';
+    // force reflow hack
+    context.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
+  }
+};
+
+helper.slidesOutRight = function(callback, elID) {
+  return function() {
+    const el = document.getElementById(elID);
+    m.redraw.strategy('none');
+    return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
     .then(utils.autoredraw.bind(undefined, callback))
     .catch(console.log.bind(console));
   };
@@ -60,18 +168,19 @@ helper.slidesOut = function(callback, elID) {
 
 helper.fadesOut = function(callback, selector, time = 150) {
   return function(e) {
+    e.stopPropagation();
     var el = selector ? findParentBySelector(e.target, selector) : e.target;
     m.redraw.strategy('none');
-    Zanimo(el, 'opacity', 0, time)
-    .then(utils.autoredraw.bind(undefined, callback))
+    return Zanimo(el, 'opacity', 0, time)
+    .then(() => utils.autoredraw(callback))
     .catch(console.log.bind(console));
   };
 };
 
 function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
-  return function(el, isUpdate, context) {
+  return function(el, isUpdate) {
     if (!isUpdate) {
-      var unbind = ButtonHandler(el,
+      ButtonHandler(el,
         e => {
           m.startComputation();
           try {
@@ -86,10 +195,6 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
         scrollY,
         touchEndFeedback
       );
-      context.onunload = function() {
-        unbind();
-        unbind = null;
-      };
     }
   };
 }
@@ -141,6 +246,11 @@ helper.isVeryWideScreen = function() {
   return helper.viewportDim().vw >= 960;
 };
 
+helper.isIpadLike = function () {
+  const { vh, vw } = helper.viewportDim();
+  return vh >= 700 && vw <= 1050;
+};
+
 helper.isPortrait = function() {
   return window.matchMedia('(orientation: portrait)').matches;
 };
@@ -152,13 +262,19 @@ helper.isLandscape = function() {
 // allow user to opt out of track analytics
 // only log if setting has it enabled
 helper.analyticsTrackView = function(view) {
-  var enabled = settings.general.analytics();
+  const enabled = settings.general.analytics();
   if (enabled)
     window.analytics.trackView(view);
+};
+
+helper.analyticsTrackEvent = function(category, action) {
+  const enabled = settings.general.analytics();
+  if (enabled) {
+    window.analytics.trackEvent(category, action);
+  }
 };
 
 helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
 
-export default helper;

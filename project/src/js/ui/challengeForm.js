@@ -1,11 +1,11 @@
 import * as utils from '../utils';
 import { challenge as challengeXhr } from '../xhr';
-import challengeApi from '../lichess/challenges';
 import settings from '../settings';
 import session from '../session';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
+import storage from '../storage';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
@@ -46,11 +46,21 @@ challengeForm.close = function(fromBB) {
 function challenge() {
   const userId = challengeForm.userId;
   return challengeXhr(userId, challengeForm.fen).then(data => {
+
+    helper.analyticsTrackEvent('Challenge', 'Sent');
+
     if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {
-      window.plugins.toast.show(i18n('challengeCreated'), 'short', 'center');
-    } else {
+
+      if (!storage.get('donotshowpersistentchallengeexplanation')) {
+        window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
+          storage.set('donotshowpersistentchallengeexplanation', true);
+        });
+      }
+      m.route('/correspondence', { tab: 'challenges' });
+    }
+    if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       m.route(`/challenge/${data.challenge.id}`);
     }
   }, error => {
@@ -174,7 +184,7 @@ function renderForm() {
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit]', challengeForm.actionName)
+    m('button[data-icon=E][type=submit].newGameButton', challengeForm.actionName)
   ]);
 }
 
@@ -188,4 +198,4 @@ challengeForm.view = function() {
   );
 };
 
-module.exports = challengeForm;
+export default challengeForm;

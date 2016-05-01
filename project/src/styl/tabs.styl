@@ -1,0 +1,28 @@
+.tabs
+  display flex
+  flex-flow row nowrap
+  height 48px
+  position relative
+  background-color headerBgDark
+
+.tab
+  flex 0 1 auto
+  text-transform uppercase
+  text-align center
+  padding 0 10px
+  font-size 14px
+  overflow hidden
+  height 46px
+  &.active,&:active
+    background-color lighten(bgdark, 10%)
+  &.selected
+    color gold
+
+.tabIndicator
+  position absolute
+  bottom 0
+  left 0
+  height 2px
+  background-color gold
+  transition transform ease-out 200ms
+  z-index 3

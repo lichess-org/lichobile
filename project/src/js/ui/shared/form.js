@@ -1,14 +1,14 @@
 import i18n from '../../i18n';
 import m from 'mithril';
 
-function renderOption(label, value, storedValue, labelArg) {
+function renderOption(label, value, storedValue, labelArg, labelArg2) {
   return m('option', {
     value: value,
     selected: storedValue === value
-  }, i18n(label, labelArg));
+  }, i18n(label, labelArg, labelArg2));
 }
 
-module.exports = {
+export default {
 
   renderRadio: function(label, name, value, checked, onchange) {
     var id = name + '_' + value;
@@ -52,19 +52,22 @@ module.exports = {
           }
         }
       }, options.map(function(e) {
-        return renderOption(e[0], e[1], storedValue, e[2]);
+        return renderOption(e[0], e[1], storedValue, e[2], e[3]);
       }))
     ];
   },
 
-  renderCheckbox: function(label, name, settingsProp, callback) {
+  renderCheckbox: function(label, name, settingsProp, callback, disabled) {
     var isOn = settingsProp();
-    return m('div.check_container', [
+    return m('div.check_container', {
+      className: disabled ? 'disabled' : ''
+    }, [
       m('label', {
         'for': name
       }, label),
       m('input[type=checkbox]', {
         name: name,
+        disabled,
         checked: isOn,
         onchange: function() {
           const newVal = !isOn;

@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -24,7 +24,7 @@ function renderBody(ctrl) {
   ];
 }
 
-module.exports = {
+export default {
   controller: function() {
     const follow = session.lichessBackedProp('follow');
     const challenge = session.lichessBackedProp('challenge');
@@ -41,7 +41,7 @@ module.exports = {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('privacy'))
     );
-    return layout.free(header, renderBody.bind(undefined, ctrl), empty, empty);
+    return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };
 

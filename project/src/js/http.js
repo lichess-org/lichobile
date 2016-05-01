@@ -1,11 +1,8 @@
-import merge from 'lodash/object/merge';
-import Spinner from 'spin.js';
+import merge from 'lodash/merge';
+import spinner from './spinner';
 import m from 'mithril';
 
-const spinner = new Spinner({ color: '#C4A86F' });
-
 export const apiVersion = 1;
-export const lichessSri = Math.random().toString(36).substring(2);
 
 const baseUrl = window.lichess.apiEndPoint;
 
@@ -32,7 +29,7 @@ export function request(url, opts, feedback, xhrConf) {
   var cfg = {
     url: 'http://' + baseUrl + url,
     method: 'GET',
-    data: { '_': Date.now() },
+    data: { },
     config: xhrConf || xhrConfig,
     deserialize: function(text) {
       try {
@@ -46,6 +43,10 @@ export function request(url, opts, feedback, xhrConf) {
     }
   };
   merge(cfg, opts);
+
+  if (cfg.method === 'GET') {
+    cfg.data._ = Date.now();
+  }
 
   var promise = m.request(cfg);
 

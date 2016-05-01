@@ -10,7 +10,7 @@ main
   height 100%
   width 100%
   background bgdark
-  color textLightGray
+  color textDarkBg
   overflow hidden
 
 .main_header
@@ -24,15 +24,16 @@ main
     display flex
     justify-content space-between
     > h1
-      padding-left 10px
+      padding-left 5px
       text-align left
       font-size 1.1rem
       line-height 50px
       color gold
       flex 1 1 auto
+      overflow hidden
+      text-overflow ellipsis
       &.reconnecting
         white-space nowrap
-        overflow hidden
         height 50px
         text-align center
         &.withTitle
@@ -45,7 +46,7 @@ main
           font-size 1rem
     > .buttons
       flex 0 0 auto
-      > .main_header_button + .main_header_button
+      > .main_header_button
         padding-left 10px
         padding-right 10px
         > .chip
@@ -59,6 +60,9 @@ main
   color gold
   font-size 20px
   line-height 20px
+  &.fa-bell
+    position relative
+    top -2px
   &.active
     background lighten(bgdark, 8%)
 
@@ -87,17 +91,12 @@ main
   &.active
     background lighten(bgdark, 8%)
 
-.friends_button
-  position relative
-  padding-right 10px
-  color gold
-  &.nofriend
-    color rgba(gold, 0.7)
+.friends_button, .timeline_button
   > .chip
     position absolute
     font-size 10px
     font-weight bold
-    line-height 12px
+    line-height 13px
     letter-spacing 0px
     color bgdark
     border 2px solid bgdark
@@ -107,6 +106,14 @@ main
     top 10px
     left 7px
     background lighten(gold, 50%)
+
+
+.friends_button
+  position relative
+  padding-right 10px
+  color gold
+  &.nofriend
+    color rgba(gold, 0.7)
 
 .game_menu_button
   position relative
@@ -184,3 +191,8 @@ main
 .content
   width 100%
   height calc(100% - 50px)
+  &.withFooter
+    height calc(100% - 50px - 45px)
+
+.main_footer
+  height 45px

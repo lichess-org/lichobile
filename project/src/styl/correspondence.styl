@@ -1,6 +1,5 @@
 .seeks_scroller
-  margin-bottom 20px
-  height calc(100% - 70px)
+  height calc(100% - 60px)
   .must_signin
     text-align center
 
@@ -9,7 +8,7 @@
   margin 0 auto
   text-align center
 
-.seek
+.seek, .sendingChallenge
   overflow hidden
   &.cancel
     color gold
@@ -22,15 +21,17 @@
     line-height 22px
     margin-left 60px
 
+.correpondenceFooter
+  display flex
+  padding 0 15px
+  justify-content flex-end
+
 button#newGameCorres
-  position absolute
-  bottom 10px
-  right 15px
   background inherit
-  color textLightGray
-  line-height 50px
-  max-height 50px
-  font-size 17px
-  margin 0 auto
+  line-height 45px
+  max-height 45px
+  font-size 16px
   .fa
     margin-right 10px
+  &.active
+    color gold

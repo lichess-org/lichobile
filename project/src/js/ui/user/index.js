@@ -1,4 +1,7 @@
-module.exports = {
-  controller: require('./userCtrl'),
-  view: require('./userView')
+import controller from './userCtrl';
+import view from './userView';
+
+export default {
+  controller,
+  view
 };

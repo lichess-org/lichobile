@@ -1,17 +1,11 @@
 import chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
+import { boardOrientation } from '../../utils';
+import m from 'mithril';
 
-function str2move(m) {
-  return m ? [m.slice(0, 2), m.slice(2, 4)] : null;
-}
-
-function boardOrientation(data, flip) {
-  if (data.game.variant.key === 'racingKings') {
-    return flip ? 'black' : 'white';
-  } else {
-    return flip ? data.opponent.color : data.player.color;
-  }
+function str2move(move) {
+  return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
 
 function makeConfig(data, fen, flip) {
@@ -25,8 +19,7 @@ function makeConfig(data, fen, flip) {
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: settings.game.highlights(),
-      check: settings.game.highlights(),
-      dragOver: false
+      check: settings.game.highlights()
     },
     movable: {
       free: false,
@@ -41,10 +34,13 @@ function makeConfig(data, fen, flip) {
     premovable: {
       enabled: data.pref.enablePremove,
       showDests: settings.game.pieceDestinations(),
-      castle: data.game.variant.key !== 'antichess'
+      castle: data.game.variant.key !== 'antichess',
+      events: {
+        set: () => m.redraw(),
+        unset: m.redraw
+      }
     },
     draggable: {
-      showGhost: data.pref.highlight,
       distance: 3,
       squareTarget: true
     }
@@ -97,11 +93,10 @@ function end(ground) {
   ground.stop();
 }
 
-module.exports = {
+export default {
   make,
   reload,
   promote,
   end,
-  applySettings,
-  boardOrientation
+  applySettings
 };

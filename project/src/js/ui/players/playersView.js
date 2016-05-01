@@ -1,6 +1,7 @@
 import * as utils from '../../utils';
 import h from '../helper';
-import { empty, menuButton, friendsButton, userStatus } from '../shared/common';
+import timeline from '../../lichess/timeline';
+import { menuButton, timelineButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
@@ -11,7 +12,7 @@ export default function view(ctrl) {
   const bodyCtrl = body.bind(undefined, ctrl);
   const searchModalCtrl = searchModal.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, empty, searchModalCtrl);
+  return layout.free(headerCtrl, bodyCtrl, null, searchModalCtrl);
 }
 
 function header(ctrl) {
@@ -20,8 +21,10 @@ function header(ctrl) {
       {menuButton()}
       <h1>{i18n('players')}</h1>
       <div className="buttons">
-        <button className="main_header_button" data-icon="y" config={h.ontouch(ctrl.goSearch)} />
+        {timeline.unreadCount() ? timelineButton() : null}
         {friendsButton()}
+        <button className="main_header_button" key="searchPlayers" data-icon="y"
+          config={h.ontouch(ctrl.goSearch)}/>
       </div>
     </nav>
   );

@@ -39,18 +39,26 @@ function finish(ground, role) {
   promoting = false;
 }
 
-export default {
-
-  start,
-
-  view: function(ctrl) {
-    return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
-      className: settings.general.theme.piece(),
-      style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
-    }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
-      return m('piece.' + role + '.' + ctrl.data.player.color, {
-        config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
-      });
-    }))]) : null;
+function cancel(ctrl, cgConfig) {
+  if (promoting) {
+    promoting = false;
+    ctrl.chessground.set(cgConfig);
+    m.redraw();
   }
+}
+
+export function view(ctrl) {
+  return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
+    className: settings.general.theme.piece(),
+    style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
+  }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
+    return m('piece.' + role + '.' + ctrl.data.player.color, {
+      config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
+    });
+  }))]) : null;
+}
+
+export default {
+  start,
+  cancel
 };

@@ -5,22 +5,10 @@ import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
 import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
-import continuePopup from './continuePopup';
+import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
-
-function sparePieces(ctrl, color, orientation, position) {
-  return m('div', {
-    className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
-  }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
-    return m('div.sparePieceWrapper', m('piece', {
-      className: color + ' ' + role,
-      'data-color': color,
-      'data-role': role
-    }));
-  }));
-}
 
 export default function view(ctrl) {
   const color = ctrl.chessground.data.orientation;
@@ -44,14 +32,14 @@ export default function view(ctrl) {
   function content() {
     if (helper.isPortrait())
       return m('div.editor', {
-        className: settings.general.theme.piece(),
-        config: editorConfig
-      }, [
-        sparePieces(ctrl, opposite, color, 'top'),
-        renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
-        sparePieces(ctrl, color, color, 'bottom'),
-        renderActionsBar(ctrl)
-      ]);
+          className: settings.general.theme.piece(),
+          config: editorConfig
+        }, [
+          sparePieces(ctrl, opposite, color, 'top'),
+          renderBoard(ctrl.data, ctrl.chessground),
+          sparePieces(ctrl, color, color, 'bottom'),
+          renderActionsBar(ctrl)
+        ]);
     else
       return [
         m('div.editor', {
@@ -59,7 +47,7 @@ export default function view(ctrl) {
           config: editorConfig
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
-          renderBoard(ctrl.data.game.variant.key, ctrl.chessground),
+          renderBoard(ctrl.data, ctrl.chessground),
           sparePieces(ctrl, color, color, 'bottom')
         ]),
         m('section.table.editorTable', { key: 'table' }, [
@@ -88,6 +76,18 @@ export default function view(ctrl) {
   );
 }
 
+function sparePieces(ctrl, color, orientation, position) {
+  return m('div', {
+    className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
+  }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
+    return m('div.sparePieceWrapper', m('piece', {
+      className: color + ' ' + role,
+      'data-color': color,
+      'data-role': role
+    }));
+  }));
+}
+
 function renderActionsBar(ctrl) {
   return m('section.actions_bar', [
     helper.isPortrait() || (helper.isLandscape() && !helper.isWideScreen()) ?
@@ -104,6 +104,13 @@ function renderActionsBar(ctrl) {
       config: helper.ontouch(() => {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
+    }),
+    m('button.action_bar_button[data-icon=A]', {
+      key: 'analyse',
+      config: helper.ontouch(() => {
+        const fen = encodeURIComponent(ctrl.computeFen());
+        m.route(`/analyse/fen/${fen}`);
+      }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     m('button.action_bar_button.fa.fa-share-alt', {
       key: 'sharePosition',

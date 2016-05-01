@@ -93,9 +93,9 @@ export function renderSigninBox() {
   return m('div', [
     m('p', i18n('toTrackYourProgress')),
     m('p',
-      m('button.fa.fa-user', {
+      m('button', {
         config: helper.ontouch(loginModal.open)
-      }, i18n('signIn'))
+      }, [m('span.fa.fa-user'), i18n('signIn')])
     ),
     m('p', i18n('trainingSignupExplanation'))
   ]);

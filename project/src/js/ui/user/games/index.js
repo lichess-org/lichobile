@@ -1,4 +1,7 @@
+import controller from './gamesCtrl';
+import view from './gamesView';
+
 export default {
-  controller: require('./gamesCtrl'),
-  view: require('./gamesView')
+  controller,
+  view
 };

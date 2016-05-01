@@ -9,7 +9,8 @@ import socket from '../socket';
 import signals from '../signals';
 import m from 'mithril';
 
-let nbPlaying = 0;
+let nbPlayers = 0;
+let nbGames = 0;
 let hookId = null;
 
 const lobby = {};
@@ -26,11 +27,12 @@ lobby.startSeeking = function() {
     socket.createLobby(data.lobby.version, createHook, {
       redirect: d => {
         lobby.closePopup();
-        m.route('/game' + d.url);
+        helper.analyticsTrackEvent('Seek', 'Found');
+        socket.redirectToGame(d);
       },
-      n: n => {
-        nbPlaying = n;
-        m.redraw();
+      n: (_, d) => {
+        nbPlayers = d.d;
+        nbGames = d.r;
       },
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);
@@ -57,13 +59,21 @@ lobby.cancelSeeking = function(fromBB) {
   // not very elegant, but well, it will work...
   socket.createDefault();
   signals.seekCanceled.dispatch();
+
+  helper.analyticsTrackEvent('Seek', 'Canceled');
 };
 
 lobby.view = function() {
+  const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?');
+  const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?');
   function content() {
     return m('div.seek_real_time', [
       m('div.nb_players', socket.isConnected() ?
-        i18n('nbConnectedPlayers', nbPlaying || '?') :
+        m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
+        m('div', [i18n('reconnecting'), loader])
+      ),
+      m('div.nb_players', socket.isConnected() ?
+        m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
         m('div', [i18n('reconnecting'), loader])
       ),
       m('br'),
@@ -85,10 +95,9 @@ lobby.view = function() {
 function createHook() {
   if (hookId) return; // hook already created!
   xhr.seekGame().then(function(data) {
+    helper.analyticsTrackEvent('Seek', 'Created');
     hookId = data.hook.id;
-  }, function(error) {
-    utils.handleXhrError(error);
-  });
+  }, utils.handleXhrError);
 }
 
 export default lobby;

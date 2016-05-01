@@ -3,9 +3,9 @@ import { hasNetwork, handleXhrError, getOfflineGameData, saveOfflineGameData, re
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';
+import helper from '../helper';
 import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
-import socket from '../../socket';
 import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import i18n from '../../i18n';
@@ -24,6 +24,16 @@ export default function controller() {
         m.route('/');
       }
       else {
+
+        if (gameData.player.spectator) {
+          helper.analyticsTrackView('Online Game (spectator)');
+        } else {
+          helper.analyticsTrackView('Online Game (player)');
+          if (gameApi.isPlayerPlaying(data)) {
+            helper.analyticsTrackEvent('Online Game', `Variant ${data.game.variant.key}`);
+            helper.analyticsTrackEvent('Online Game', `Speed ${data.game.speed}`);
+          }
+        }
 
         if (gameApi.isPlayerPlaying(data) &&
         gameApi.nbMoves(data, data.player.color) === 0) {
@@ -78,7 +88,6 @@ export default function controller() {
         round.onunload();
         round = null;
       }
-      socket.destroy();
     },
     getRound: function() {
       return round;

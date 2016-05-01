@@ -2,7 +2,6 @@ import session from '../../session';
 import * as xhr from './userXhr';
 import * as utils from '../../utils';
 import helper from '../helper';
-import {assign} from 'lodash/object';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import m from 'mithril';
@@ -16,7 +15,7 @@ export default function controller() {
   const user = m.prop();
 
   function setNewUserState(newData) {
-    assign(user(), newData);
+    Object.assign(user(), newData);
   }
 
   xhr.user(m.route.param('id')).then(user, error => {
@@ -37,9 +36,6 @@ export default function controller() {
     },
     goToGames: () => m.route(`/@/${user().id}/games`),
     goToUserTV: () => m.route(`/@/${user().id}/tv`),
-    challenge: () => challengeForm.open(user().id),
-    onunload: () => {
-      socket.destroy();
-    }
+    challenge: () => challengeForm.open(user().id)
   };
 }

@@ -1,14 +1,17 @@
 import userPerfs from '../../lichess/perfs';
-import { header as headerWidget, backButton, empty } from '../shared/common';
+import { header as headerWidget, backButton } from '../shared/common';
+import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
-import countries from './countries';
+import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 
 export default function view(ctrl) {
   const user = ctrl.user();
+
+  if (!user) return null;
 
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;
@@ -28,11 +31,12 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, profile, empty, empty);
+  return layout.free(header, profile);
 }
 
 function renderWarnings(user) {
-  if (user.engine || !user.booster) return null;
+  if (!user.engine && !user.booster) return null;
+
   return (
     <section className="warnings">
       {user.engine ?
@@ -73,6 +77,13 @@ function renderProfile(user) {
         <p className="profileBio">{user.profile.bio}</p> : null
         }
         <div className="userInfos">
+          {
+            user.language ?
+              <p className="language withIcon">
+                <span className="fa fa-comment-o" />
+                {getLanguageNativeName(user.language)}
+              </p> : null
+          }
           <p className="location">
             {location}
             {country ?

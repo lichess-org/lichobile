@@ -1,0 +1,65 @@
+.home
+  padding 10px
+
+.homeTitle
+  font-weight bold
+  margin 15px 0 5px
+
+.homeOffline
+  height 100%
+  display flex
+  flex-flow column wrap
+  justify-content center
+  h2
+    width 80%
+    margin 0 auto
+    font-size 1.5em
+    font-weight bold
+    opacity 0.6
+
+#homeFeatured, #dailyPuzzle
+  display flex
+  flex-flow column wrap
+  justify-content flex-start
+  align-items center
+
+#weekTopPlayers
+  .list_item
+    padding 15px 0
+    padding-right 15px
+  .nav:after
+    right 0
+
+.mini_board
+  @media only screen and (orientation: portrait)
+    width 66vw
+  @media only screen and (orientation: landscape)
+    width 66vh
+  > .board_wrapper
+    width 100%
+    @media only screen and (orientation: portrait)
+      height 66vw
+    @media only screen and (orientation: landscape)
+      height 66vh
+  > .vsbloc
+    font-size 0.8em
+    background: linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+    border 1px solid #323232
+    padding 5px
+    overflow hidden
+    > .antagonists
+      display flex
+      flex-flow row nowrap
+      justify-content space-between
+      > .player, > .opponent
+        max-width 49%
+        overflow hidden
+        text-overflow ellipsis
+    > .ratingAndTime
+      display flex
+      flex-flow row nowrap
+      justify-content space-between
+      > .time
+        display flex
+        justify-content center
+        align-items center

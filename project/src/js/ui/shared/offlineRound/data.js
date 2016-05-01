@@ -1,27 +1,30 @@
-import { Chess } from 'chess.js';
 import { oppositeColor } from '../../../utils';
+
+
+const standardVariant = {
+  key: 'standard',
+  name: 'Standard',
+  shortName: 'STD',
+  title: 'Standard rules of chess (FIDE)'
+};
 
 export default function data(cfg) {
 
   cfg = cfg || {};
+  cfg.variant = cfg.variant || standardVariant;
   cfg.color = cfg.color || 'white';
   cfg.fen = cfg.fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  const chess = new Chess(cfg.fen);
+  cfg.player = cfg.player || 'white';
 
   return {
     game: {
-      variant: {
-        key: 'standard',
-        name: 'Standard',
-        'short': 'STD',
-        title: 'Standard rules of chess (FIDE)'
-      },
+      offline: true,
+      variant: cfg.variant,
       initialFen: cfg.fen,
       fen: cfg.fen,
-      player: chess.turn() === 'w' ? 'white' : 'black',
+      player: cfg.player,
       status: {
-        id: 20,
-        name: 'started'
+        id: 20
       }
     },
     player: {
@@ -31,6 +34,7 @@ export default function data(cfg) {
       color: oppositeColor(cfg.color)
     },
     pref: {
+      animationDuration: 300,
       highlight: true,
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false

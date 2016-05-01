@@ -1,5 +1,6 @@
 import session from '../../session';
 import loginModal from '../loginModal';
+import challengesApi from '../../lichess/challenges';
 import layout from '../layout';
 import * as utils from '../../utils';
 import helper from '../helper';
@@ -15,13 +16,15 @@ export default function view(ctrl) {
   const board = viewOnlyBoardContent;
   const challenge = ctrl.challenge();
 
-  if (challenge.direction === 'in') {
-    overlay = joinPopup(ctrl);
-  } else if (challenge.direction === 'out') {
-    if (challenge.destUser) {
-      overlay = awaitChallengePopup(ctrl);
-    } else {
-      overlay = awaitInvitePopup(ctrl);
+  if (challenge) {
+    if (challenge.direction === 'in') {
+      overlay = joinPopup(ctrl);
+    } else if (challenge.direction === 'out') {
+      if (challenge.destUser) {
+        overlay = awaitChallengePopup(ctrl);
+      } else {
+        overlay = awaitInvitePopup(ctrl);
+      }
     }
   }
 
@@ -88,7 +91,9 @@ function joinPopup(ctrl) {
 }
 
 function awaitInvitePopup(ctrl) {
-  var challenge = ctrl.challenge();
+  const challenge = ctrl.challenge();
+
+  const isPersistent = challengesApi.isPersistent(challenge);
 
   return function() {
     return popupWidget(
@@ -113,7 +118,13 @@ function awaitInvitePopup(ctrl) {
             }, i18n('cancel'))
           ]),
           m('br'),
-          gameInfos(challenge)
+          gameInfos(challenge),
+          isPersistent ? m('div', [
+            m('br'),
+            m('button', {
+              config: helper.ontouch(() => m.route('/'))
+            }, [m('span.fa.fa-home'), i18n('returnToHome')])
+          ]) : null
         ]);
       },
       true

@@ -11,7 +11,8 @@
   window.analytics = {
     startTrackerWithId: noop,
     trackException: noop,
-    trackView: noop
+    trackView: noop,
+    trackEvent: noop
   };
 
   // push
@@ -98,6 +99,10 @@
     window.navigator.connection.type = window.Connection.NONE;
     document.dispatchEvent(new window.Event('offline'));
   };
+  window.setOnline = function() {
+    window.navigator.connection.type = window.Connection.WIFI;
+    document.dispatchEvent(new window.Event('online'));
+  };
 
   // notification
   window.navigator.notification = {};
@@ -120,7 +125,6 @@
   };
 
 }());
-
 
 /**
  * https://github.com/floatinghotpot/cordova-plugin-lowlatencyaudio polyfill

@@ -1,4 +1,4 @@
-import mapValues from 'lodash/object/mapValues';
+import mapValues from 'lodash/mapValues';
 import m from 'mithril';
 
 export function castlesAt(v) {

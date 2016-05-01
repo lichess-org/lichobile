@@ -1,6 +1,6 @@
 import * as utils from '../../../utils';
 import helper from '../../helper';
-import { header as headerWidget, backButton, empty } from '../../shared/common';
+import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
@@ -13,6 +13,9 @@ export default function view(ctrl) {
 
   function renderBody() {
     const data = ctrl.variantPerfData();
+
+    if (!data) return null;
+
     const days = Math.floor(data.stat.count.seconds / (60 * 60 * 24));
     const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24;
     const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60;
@@ -26,7 +29,7 @@ export default function view(ctrl) {
           </tr>
           <tr>
             <th class="variantPerf"> {i18n('rating')} </th>
-            <td class="variantPerf"> {Math.round(data.perf.glicko.rating) + (data.perf.glicko.provisional ? '?' : '')} </td>
+            <td class="variantPerf"> {data.perf.glicko.rating + (data.perf.glicko.provisional ? '?' : '')} </td>
             <td> </td>
           </tr>
           <tr class={isEmpty(data.perf.progress)}>
@@ -50,7 +53,7 @@ export default function view(ctrl) {
           </tr>
           <tr>
             <th class="variantPerf"> Avg opponent {i18n('rating').toLowerCase()} </th>
-            <td class="variantPerf"> {Math.round(data.stat.count.opAvg)} </td>
+            <td class="variantPerf"> {data.stat.count.opAvg} </td>
             <td> </td>
           </tr>
           <tr class={isEmpty(data.stat.highest)}>
@@ -141,7 +144,7 @@ export default function view(ctrl) {
     );
   }
 
-  return layout.free(header, renderBody, empty, empty);
+  return layout.free(header, renderBody);
 }
 
 function renderGame(game) {

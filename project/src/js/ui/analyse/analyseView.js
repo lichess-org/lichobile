@@ -16,7 +16,7 @@ import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
 import { renderBoard } from '../round/view/roundView';
-import { getBoardBounds, noop, partialf, playerName, gameIcon } from '../../utils';
+import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
 import button from '../round/view/button';
@@ -76,6 +76,11 @@ function renderTable(ctrl) {
   );
 }
 
+function getChecksCount(ctrl, color) {
+  const step = ctrl.vm.step;
+  return step.checkCount[oppositeColor(color)];
+}
+
 function renderInfos(ctrl) {
   const cevalEnabled = ctrl.ceval.enabled();
   const ceval = ctrl.currentAnyEval() || null;
@@ -116,9 +121,15 @@ function renderOpponents(ctrl) {
       <div className="analyseOpponents">
         <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
           {playerName(player, true)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' (' + getChecksCount(ctrl, player.color) + ')' : null
+          }
         </div>
         <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
           {playerName(opponent, true)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
+          }
         </div>
       </div>
     </div>

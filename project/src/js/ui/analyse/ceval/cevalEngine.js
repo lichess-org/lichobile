@@ -42,7 +42,7 @@ export default function cevalEngine(opts) {
       .then(() => send('go depth ' + opts.maxDepth));
 
       Stockfish.output(function(msg) {
-        console.log(msg);
+        // console.log(msg);
         processOutput(msg, work);
       });
     },

@@ -12,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor, aiName } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -73,7 +73,9 @@ export default function controller() {
     this.vm.engineSearching = true;
     const sit = this.replay.situation();
     setTimeout(() => {
-      engine.setLevel(this.getOpponent().level)
+      const l = this.getOpponent().level;
+      this.data.opponent.username = aiName(l);
+      engine.setLevel(l)
       .then(() => engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
     }, 500);
   }.bind(this);

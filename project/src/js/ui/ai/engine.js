@@ -30,7 +30,7 @@ export default function(ctrl) {
     },
 
     search(initialFen, moves) {
-      console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
+      // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
       // console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
       cmd(`position fen ${initialFen} moves ${moves}`)
       .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
@@ -38,7 +38,7 @@ export default function(ctrl) {
 
     setLevel(l) {
       level = l;
-      console.info('Skill Level', skill(level));
+      // console.info('Skill Level', skill(level));
       return setOption('Skill Level', skill(level));
     },
 

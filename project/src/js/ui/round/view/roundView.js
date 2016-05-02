@@ -382,7 +382,7 @@ function renderGameEndedActions(ctrl) {
       button.returnToTournament(ctrl)
     ];
   }
-  else if(ctrl.data.player.spectator) {
+  else if (ctrl.data.player.spectator) {
     buttons = [
       button.shareLink(ctrl),
       button.sharePGN(ctrl),

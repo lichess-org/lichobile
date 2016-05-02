@@ -94,7 +94,7 @@ function tournamentHeader(data, time, timeText) {
 }
 
 function tournamentJoinWithdraw(ctrl) {
-  let buttonLabel = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  let label = buttonLabel(ctrl);
 
   function buttonAction () {
     if (ctrl.hasJoined())
@@ -109,7 +109,7 @@ function tournamentJoinWithdraw(ctrl) {
   return (m('.pe-dark-theme .joinButton',
     m.component(button,
         {
-          label: buttonLabel,
+          label: label,
           raised: true,
           borders: true,
           url: {
@@ -119,6 +119,15 @@ function tournamentJoinWithdraw(ctrl) {
     );
 }
 
+function buttonLabel (ctrl) {
+  let label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  let icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
+  return (
+    <span>
+      <span className={icon}> {label} </span>
+    </span>
+  );
+}
 function variantDisplay(data) {
   let variant = variantKey(data);
 

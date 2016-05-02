@@ -375,20 +375,30 @@ function renderGameEndedActions(ctrl) {
     m('strong', result), m('br')
   ];
   resultDom.push(m('em.resultStatus', status));
-  const buttons = ctrl.data.player.spectator ? [
-    button.shareLink(ctrl),
-    button.sharePGN(ctrl),
-    button.analysisBoard(ctrl),
-    ctrl.data.tv ? tvChannelSelector(ctrl) : null
-  ] : [
-    button.shareLink(ctrl),
-    button.sharePGN(ctrl),
-    button.newOpponent(ctrl),
-    button.answerOpponentRematch(ctrl),
-    button.cancelRematch(ctrl),
-    button.rematch(ctrl),
-    button.analysisBoard(ctrl)
-  ];
+  let buttons = null;
+  if (ctrl.data.tournament) {
+    buttons = [
+      button.withdrawFromTournament(ctrl),
+      button.returnToTournament(ctrl)
+    ];
+  }
+  else if(ctrl.data.player.spectator) {
+    buttons = [
+      button.shareLink(ctrl),
+      button.sharePGN(ctrl),
+      ctrl.data.tv ? tvChannelSelector(ctrl) : null
+    ];
+  }
+  else {
+    buttons = [
+      button.shareLink(ctrl),
+      button.sharePGN(ctrl),
+      button.newOpponent(ctrl),
+      button.answerOpponentRematch(ctrl),
+      button.cancelRematch(ctrl),
+      button.rematch(ctrl)
+    ];
+  }
 
   return (
     <div className="game_controls">

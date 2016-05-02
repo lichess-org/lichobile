@@ -48,6 +48,8 @@ export default function controller() {
           }
         }
 
+        data.tournament = m.route.param('tournamentId');
+
         round = new roundCtrl(data);
 
         if (data.player.user === undefined) {

@@ -56,6 +56,12 @@ td.tournamentPlayer
   max-width 0
   width 80%
 
+.progress
+  &.positive
+    color green
+  &.negative
+    color red
+
 .trophy-1
   &:after
     content: url('../../images/trophies/trophy-1.png')
@@ -77,8 +83,12 @@ td.tournamentPoints
 .timeArrow
   font-weight: bold
 
-.basicTournamentInfo
+.tournamentInfoTime
   padding 10px
+
+.tournamentInfo
+  &:before
+    content: attr(data-icon)
 
 .timeInfo
   float right
@@ -96,3 +106,9 @@ td.tournamentPoints
     border-bottom-color darken(bglight, 15%)
     &.active
       background-color darken(bglight, 5%)
+
+.joinButton
+  float: right
+
+.content .pe-dark-theme .pe-button--raised.pe-button .pe-button__content
+  background-color gold

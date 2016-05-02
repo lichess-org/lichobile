@@ -298,5 +298,29 @@ export default {
           () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')
         )} />
     );
+  },
+  returnToTournament: function(ctrl) {
+    function handler() {
+      ctrl.hideActions();
+      m.route('/tournament/' + ctrl.data.tournament);
+    }
+    return (
+      <button key="returnToTournament" config={helper.ontouch(handler)}>
+        <span className="fa fa-trophy" />
+        Return to Tournament
+      </button>
+    );
+  },
+  withdrawFromTournament: function(ctrl) {
+    function handler() {
+      ctrl.hideActions();
+      m.route('/tournament/' + ctrl.data.tournament + '/withdraw');
+    }
+    return (
+      <button key="withdrawFromTournament" config={helper.ontouch(handler)}>
+        <span className="fa fa-flag" />
+        Withdraw from Tournament
+      </button>
+    );
   }
 };

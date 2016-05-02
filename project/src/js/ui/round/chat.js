@@ -21,7 +21,7 @@ export default {
 
     var checkUnreadFromStorage = function() {
       var nbMessages = storage.get(storageId);
-      if (nbMessages < this.messages.length) this.unread = true;
+      if (this.messages && nbMessages < this.messages.length) this.unread = true;
     }.bind(this);
 
     checkUnreadFromStorage();
@@ -40,6 +40,8 @@ export default {
     }.bind(this);
 
     this.onReload = function(messages) {
+      if(!messages)
+        return;
       this.messages = messages;
       checkUnreadFromStorage();
       storage.set(storageId, this.messages.length);

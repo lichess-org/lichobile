@@ -187,7 +187,7 @@ function createLeaderboardItemRenderer(showTrophies) {
     }
     return (
       <tr key={player.name} className='list_item'>
-        <td className='tournamentPlayer'><span className={trophy}>{player.rank + '. ' + player.name + ' (' + player.rating + ')'}</span></td>
+        <td className='tournamentPlayer'><span className={trophy}>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
         <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
       </tr>
     );

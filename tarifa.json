@@ -175,6 +175,7 @@
         "SENDER_ID": "0000000000000"
       }
     },
-    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish"
+    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish",
+    "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1"
   }
 }

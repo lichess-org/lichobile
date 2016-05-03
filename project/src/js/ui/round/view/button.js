@@ -307,7 +307,7 @@ export default {
     return (
       <button key="returnToTournament" config={helper.ontouch(handler)}>
         <span className="fa fa-trophy" />
-        Return to Tournament
+        {i18n('backToTournament')}
       </button>
     );
   },
@@ -319,7 +319,7 @@ export default {
     return (
       <button key="withdrawFromTournament" config={helper.ontouch(handler)}>
         <span className="fa fa-flag" />
-        Withdraw from Tournament
+        {i18n('withdraw')}
       </button>
     );
   }

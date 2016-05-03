@@ -142,7 +142,7 @@ function variantDisplay(data) {
 function variantKey(data) {
   let variant = data.variant;
   if (variant === 'standard') {
-    let estimatedTime = data.clock.limit + data.clock.increment * 30;
+    let estimatedTime = data.clock.limit + data.clock.increment * 40;
     if (estimatedTime < (3 * 60)) // Below 3 mins is bullet
       variant = 'bullet';
     else if (estimatedTime < (8 * 60)) // Below 8 mins is blitz

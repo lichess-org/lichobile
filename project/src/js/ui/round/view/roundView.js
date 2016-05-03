@@ -10,6 +10,7 @@ import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
 import { backButton, menuButton, loader, headerBtns, miniUser } from '../../shared/common';
+import Board from '../../shared/Board';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -63,69 +64,6 @@ export function renderMaterial(material) {
   return children;
 }
 
-var boardTheme;
-var pieceTheme;
-export function onBoardThemeChange(t) {
-  boardTheme = t;
-}
-export function onPieceThemeChange(t) {
-  pieceTheme = t;
-}
-
-export function renderBoard(data, chessgroundCtrl, bounds, isPortrait, moreWrapperClasses, customPieceTheme) {
-  boardTheme = boardTheme || settings.general.theme.board();
-  pieceTheme = pieceTheme || settings.general.theme.piece();
-  const boardClass = [
-    'display_board',
-    boardTheme,
-    customPieceTheme || pieceTheme,
-    data.game.variant.key
-  ].join(' ');
-  let wrapperClass = 'game_board_wrapper';
-  let key = 'board' + (isPortrait ? 'portrait' : 'landscape');
-
-  if (moreWrapperClasses) {
-    wrapperClass += ' ';
-    wrapperClass += moreWrapperClasses;
-  }
-
-  const wrapperStyle = bounds ? {
-    height: bounds.height + 'px',
-    width: bounds.width + 'px'
-  } : {};
-
-  function wrapperConfig(el, isUpdate) {
-    if (!isUpdate) {
-      const icon = utils.gameIcon(data.game.variant.key);
-      if (icon && data.game.variant.key !== 'standard' && data.game.status && gameApi.isPlayerPlaying(data)) {
-        utils.variantReminder(el, icon);
-      }
-    }
-  }
-
-  function boardConfig(el, isUpdate) {
-    if (!isUpdate) {
-      if (!bounds) {
-        chessgroundCtrl.setBounds(el.getBoundingClientRect());
-      } else {
-        chessgroundCtrl.setBounds(bounds);
-      }
-      chessground.render(el, chessgroundCtrl);
-    }
-  }
-
-  return (
-    <section className={wrapperClass} config={wrapperConfig} style={wrapperStyle} key={key}>
-      <div className={boardClass} config={boardConfig} />
-      { chessgroundCtrl.data.premovable.current ?
-        <div className="premove_alert">
-          {i18n('premoveEnabledClickAnywhereToCancel')}
-        </div> : null
-      }
-    </section>
-  );
-}
-
 function renderTitle(ctrl) {
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
@@ -168,7 +106,12 @@ function renderContent(ctrl, isPortrait) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
-  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
+  const board = m.component(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait
+  });
 
   if (isPortrait)
     return [

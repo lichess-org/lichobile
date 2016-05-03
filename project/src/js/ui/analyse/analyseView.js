@@ -15,7 +15,7 @@ import variantApi from '../../lichess/variant';
 import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
-import { renderBoard } from '../round/view/roundView';
+import Board from '../shared/Board';
 import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
@@ -49,9 +49,23 @@ function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'analyse');
+  const ceval = ctrl.currentAnyEval();
+  const bestMove =  ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
+    brush: 'paleBlue',
+    orig: ceval.best.slice(0, 2),
+    dest: ceval.best.slice(2, 4)
+  } : null;
+
+  const board = m.component(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait,
+    shapes: bestMove ? [bestMove] : null
+  });
 
   return [
-    renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
+    board,
     <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}
@@ -83,7 +97,7 @@ function getChecksCount(ctrl, color) {
 
 function renderInfos(ctrl) {
   const cevalEnabled = ctrl.ceval.enabled();
-  const ceval = ctrl.currentAnyEval() || null;
+  const ceval = ctrl.currentAnyEval();
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
     (ceval && ceval.mate) + (ceval && ceval.best) +

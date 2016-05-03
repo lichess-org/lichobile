@@ -2,15 +2,16 @@ import gameApi from '../../lichess/game';
 import chessground from 'chessground-mobile';
 import layout from '../layout';
 import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import Board from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import i18n from '../../i18n';
 import { getBoardBounds } from '../../utils';
-import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
+import m from 'mithril';
 
 export default function view(ctrl) {
 
@@ -43,7 +44,7 @@ export default function view(ctrl) {
 
 function renderContent(ctrl, pieceTheme) {
   const flip = settings.otb.flipPieces();
-  const wrapperClass = helper.classSet({
+  const wrapperClasses = helper.classSet({
     'otb': true,
     'mode_flip': flip,
     'mode_facing': !flip,
@@ -56,7 +57,14 @@ function renderContent(ctrl, pieceTheme) {
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
-  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait, wrapperClass, pieceTheme);
+  const board = m.component(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait,
+    wrapperClasses,
+    customPieceTheme: pieceTheme
+  });
 
   if (isPortrait)
     return [

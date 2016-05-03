@@ -2,6 +2,7 @@ import gameApi from '../../lichess/game';
 import chessground from 'chessground-mobile';
 import layout from '../layout';
 import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import Board from '../shared/Board';
 import {
   renderAntagonist,
   renderGameActionsBar,
@@ -10,10 +11,10 @@ import {
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import { getBoardBounds } from '../../utils';
-import { renderBoard } from '../round/view/roundView';
 import actions from './actions';
 import newGameMenu from './newAiGame';
 import i18n from '../../i18n';
+import m from 'mithril';
 
 export default function view(ctrl) {
   var content, header;
@@ -50,7 +51,12 @@ function renderContent(ctrl) {
     </h2>
   );
 
-  const board = renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait);
+  const board = m.component(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait
+  });
 
   if (isPortrait) {
     return [

@@ -321,6 +321,7 @@ export default function controller() {
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
       helper.analyticsTrackView('Analysis (online game)');
+      cfg.orientation = orientation;
       this.init(makeData(cfg));
       m.redraw();
     }.bind(this), err => {

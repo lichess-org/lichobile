@@ -101,7 +101,8 @@ function renderInfos(ctrl) {
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
     (ceval && ceval.mate) + (ceval && ceval.best) +
-    ctrl.vm.showBestMove + ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
+    ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
+    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'

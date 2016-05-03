@@ -19,14 +19,14 @@
       "id": "org.lichess.mobileapp.stage",
       "product_name": "lichess_stage",
       "product_file_name": "lichess-stage",
-      "API_END_POINT": "en.lichess.org",
-      "SOCKET_END_POINT": "socket.en.lichess.org",
+      "API_END_POINT": "en.stage.lichess.org",
+      "SOCKET_END_POINT": "socket.en.stage.lichess.org",
       "cordova": {
         "whitelist": [
           {
             "type": "access-origin",
             "origin": [
-              "http://en.lichess.org"
+              "http://en.stage.lichess.org"
             ]
           }
         ]

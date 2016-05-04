@@ -234,7 +234,7 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
-    chessWorker.terminate();
+    if (chessWorker) chessWorker.terminate();
     engine.exit();
   };
 }

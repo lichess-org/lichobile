@@ -272,6 +272,6 @@ export default {
     worker.postMessage({ topic: 'destroy' });
   },
   terminate() {
-    worker.terminate();
+    if (worker) worker.terminate();
   }
 };

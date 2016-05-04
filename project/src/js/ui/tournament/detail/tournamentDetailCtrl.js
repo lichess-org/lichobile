@@ -26,43 +26,43 @@ export default function controller() {
 		if (data.secondsToStart && data.secondsToStart > 0) {
 			data.secondsToStart--;
 		}
-
 		if (data.secondsToFinish && data.secondsToFinish > 0) {
 			data.secondsToFinish--;
 		}
-
 		m.redraw();
 	}
 
-  function join(id) {
-		if (!id)
-      id = tournament().id;
+	function join(id) {
+		if (!id) {
+			id = tournament().id;
+		}
 		xhr.join(id).then(() => {
-      hasJoined(true);
+			hasJoined(true);
 			m.redraw();
 		}, err => utils.handleXhrError(err));
-  }
+	}
 
-  function withdraw(id) {
-		if (!id)
-      id = tournament().id;
-    xhr.withdraw(id).then(() => {
-      hasJoined(false);
-      m.redraw();
-    }, err => utils.handleXhrError(err));
-  }
+	function withdraw(id) {
+		if (!id) {
+			id = tournament().id;
+		}
+		xhr.withdraw(id).then(() => {
+			hasJoined(false);
+			m.redraw();
+		}, err => utils.handleXhrError(err));
+	}
 
 	let id = m.route.param('id');
 	let action = m.route.param('action');
-	if (action && action === 'withdraw')
+	if (action && action === 'withdraw') {
 		withdraw(id);
-
+	}
 	let clockInterval = null;
 
 	const handlers = {
 		reload: throttle(() => {
-				xhr.reload(tournament().id).then(reload);
-			}, 1000),
+			xhr.reload(tournament().id).then(reload);
+		}, 1000),
 		redirect: function(gameId) {
 			m.route('/tournament/' + tournament().id + '/game/' + gameId);
 		}
@@ -85,7 +85,7 @@ export default function controller() {
 		onunload: () => {
 			socket.destroy();
 			if (clockInterval)
-				clearInterval(clockInterval);
+			clearInterval(clockInterval);
 		}
 	};
 }

@@ -4,7 +4,6 @@ import { header as headerWidget, pad} from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import button from 'polythene/button/button';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import settings from '../../../settings';
@@ -49,41 +48,39 @@ function tournamentBody(ctrl) {
 }
 
 function tournamentContentFinished(ctrl) {
-  let data = ctrl.tournament();
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, null, null)}
-      { tournamentLeaderboard(data, true) }
+      { tournamentLeaderboard(ctrl, true) }
     </div>
   );
 }
 
 function tournamentContentCreated(ctrl) {
-  let data = ctrl.tournament();
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, data.secondsToStart, 'Starts in:')}
-      { tournamentJoinWithdraw(ctrl) }
-      { tournamentLeaderboard(data, false) }
+      { tournamentLeaderboard(ctrl, false) }
     </div>
   );
 }
 
 function tournamentContentStarted(ctrl) {
-  let data = ctrl.tournament();
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, data.secondsToFinish, '')}
-      { tournamentJoinWithdraw(ctrl) }
-      { tournamentLeaderboard(data, false) }
+      { tournamentLeaderboard(ctrl, false) }
       { data.featured ? tournamentFeaturedGame(data) : '' }
     </div>
   );
 }
 
 function tournamentHeader(data, time, timeText) {
-  let variant = variantDisplay(data);
-  let control = timeControl(data);
+  const variant = variantDisplay(data);
+  const control = timeControl(data);
   return (
     <div className='tournamentInfoTime'>
      <strong className='tournamentInfo' data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
@@ -95,7 +92,7 @@ function tournamentHeader(data, time, timeText) {
 }
 
 function tournamentJoinWithdraw(ctrl) {
-  let label = buttonLabel(ctrl);
+  const label = buttonLabel(ctrl);
 
   function buttonAction () {
     if (ctrl.hasJoined())
@@ -104,32 +101,27 @@ function tournamentJoinWithdraw(ctrl) {
       ctrl.join();
   }
 
-  if (settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+  if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
     return null;
   }
 
-  return (m('.pe-dark-theme .joinButton',
-    m.component(button,
-        {
-          label: label,
-          raised: true,
-          borders: true,
-          url: {
-              config: h.ontouch(buttonAction)
-          }
-        }))
-    );
+  return (
+    <button type="button" className="joinWithdrawButton" config={h.ontouch(buttonAction)}>
+      {label}
+    </button>
+  );
 }
 
 function buttonLabel (ctrl) {
-  let label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
-  let icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
+  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
   return (
     <span>
       <span className={icon}> {label} </span>
     </span>
   );
 }
+
 function variantDisplay(data) {
   let variant = variantKey(data);
 
@@ -179,9 +171,11 @@ function timeInfo(time, preceedingText) {
   return timeStr;
 }
 
-function tournamentLeaderboard(data, showTrophies) {
+function tournamentLeaderboard(ctrl, showTrophies) {
+  const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
+      {tournamentJoinWithdraw (ctrl)}
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}

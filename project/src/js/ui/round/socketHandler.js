@@ -63,7 +63,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       if (ctrl.data.game.speed === 'correspondence') {
         removeOfflineGameData(ctrl.data.url.round.substr(1));
       }
-      if (!ctrl.data.player.spectator) {
+      if (ctrl.data.tournament || !ctrl.data.player.spectator) {
         sound.dong();
         setTimeout(function() {
           session.refresh();

@@ -377,29 +377,41 @@ function renderGameEndedActions(ctrl) {
   resultDom.push(m('em.resultStatus', status));
   let buttons = null;
   if (ctrl.data.tournament) {
-    buttons = [
-      button.withdrawFromTournament(ctrl),
-      button.returnToTournament(ctrl)
-    ];
-  }
-  else if (ctrl.data.player.spectator) {
-    buttons = [
-      button.shareLink(ctrl),
-      button.sharePGN(ctrl),
-      ctrl.data.tv ? tvChannelSelector(ctrl) : null
-    ];
+    if (ctrl.data.player.spectator) {
+      buttons = [
+        button.returnToTournament(ctrl),
+        button.shareLink(ctrl),
+        button.sharePGN(ctrl)
+      ];
+    }
+    else {
+      buttons = [
+        button.returnToTournament(ctrl),
+        button.withdrawFromTournament(ctrl),
+        button.shareLink(ctrl),
+        button.sharePGN(ctrl)
+      ];
+    }
   }
   else {
-    buttons = [
-      button.shareLink(ctrl),
-      button.sharePGN(ctrl),
-      button.newOpponent(ctrl),
-      button.answerOpponentRematch(ctrl),
-      button.cancelRematch(ctrl),
-      button.rematch(ctrl)
-    ];
+    if (ctrl.data.player.spectator) {
+      buttons = [
+        button.shareLink(ctrl),
+        button.sharePGN(ctrl),
+        ctrl.data.tv ? tvChannelSelector(ctrl) : null
+      ];
+    }
+    else {
+      buttons = [
+        button.shareLink(ctrl),
+        button.sharePGN(ctrl),
+        button.newOpponent(ctrl),
+        button.answerOpponentRematch(ctrl),
+        button.cancelRematch(ctrl),
+        button.rematch(ctrl)
+      ];
+    }
   }
-
   return (
     <div className="game_controls">
       <div className="result">{resultDom}</div>

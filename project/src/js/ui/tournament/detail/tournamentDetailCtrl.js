@@ -1,5 +1,5 @@
 import socket from '../../../socket';
-import socketHandler from './socketHandler';
+import throttle from 'lodash/function/throttle';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';
@@ -58,7 +58,25 @@ export default function controller() {
 		withdraw(id);
 
 	let clockInterval = null;
-	let returnVal = {
+
+	const handlers = {
+		reload: throttle(() => {
+				xhr.reload(tournament().id).then(reload);
+			}, 1000),
+		redirect: function(gameId) {
+			m.route('/tournament/' + tournament().id + '/game/' + gameId);
+		}
+	};
+
+	xhr.tournament(id).then(data => {
+		tournament(data);
+		hasJoined(data.me && !data.me.withdraw);
+		clockInterval = setInterval(tick, 1000);
+		socket.createTournament(id, tournament().socketVersion, handlers);
+	})
+	.catch(utils.handleXhrError);
+
+	return {
 		tournament,
 		hasJoined,
 		join,
@@ -70,14 +88,4 @@ export default function controller() {
 				clearInterval(clockInterval);
 		}
 	};
-
-	xhr.tournament(id).then(data => {
-		tournament(data);
-		hasJoined(data.me && !data.me.withdraw);
-		clockInterval = setInterval(tick, 1000);
-		socket.createTournament(id, tournament().socketVersion, socketHandler(returnVal));
-	})
-	.catch(utils.handleXhrError);
-
-	return returnVal;
 }

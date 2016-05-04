@@ -6,86 +6,86 @@ import helper from '../../helper';
 import m from 'mithril';
 
 export default function controller() {
-	helper.analyticsTrackView('Tournament details');
+  helper.analyticsTrackView('Tournament details');
 
-	const tournament = m.prop();
-	const hasJoined = m.prop(false);
+  const tournament = m.prop();
+  const hasJoined = m.prop(false);
 
-	function reload(data) {
-		tournament(data);
-		hasJoined(data.me && !data.me.withdraw);
+  function reload(data) {
+    tournament(data);
+    hasJoined(data.me && !data.me.withdraw);
 
-		if (data.socketVersion) {
-			socket.setVersion(data.socketVersion);
-		}
-		m.redraw();
-	}
+    if (data.socketVersion) {
+      socket.setVersion(data.socketVersion);
+    }
+    m.redraw();
+  }
 
-	function tick() {
-		let data = tournament();
-		if (data.secondsToStart && data.secondsToStart > 0) {
-			data.secondsToStart--;
-		}
-		if (data.secondsToFinish && data.secondsToFinish > 0) {
-			data.secondsToFinish--;
-		}
-		m.redraw();
-	}
+  function tick() {
+    let data = tournament();
+    if (data.secondsToStart && data.secondsToStart > 0) {
+      data.secondsToStart--;
+    }
+    if (data.secondsToFinish && data.secondsToFinish > 0) {
+      data.secondsToFinish--;
+    }
+    m.redraw();
+  }
 
-	function join(id) {
-		if (!id) {
-			id = tournament().id;
-		}
-		xhr.join(id).then(() => {
-			hasJoined(true);
-			m.redraw();
-		}, err => utils.handleXhrError(err));
-	}
+  function join(id) {
+    if (!id) {
+      id = tournament().id;
+    }
+    xhr.join(id).then(() => {
+      hasJoined(true);
+      m.redraw();
+    }, err => utils.handleXhrError(err));
+  }
 
-	function withdraw(id) {
-		if (!id) {
-			id = tournament().id;
-		}
-		xhr.withdraw(id).then(() => {
-			hasJoined(false);
-			m.redraw();
-		}, err => utils.handleXhrError(err));
-	}
+  function withdraw(id) {
+    if (!id) {
+      id = tournament().id;
+    }
+    xhr.withdraw(id).then(() => {
+      hasJoined(false);
+      m.redraw();
+    }, err => utils.handleXhrError(err));
+  }
 
-	let id = m.route.param('id');
-	let action = m.route.param('action');
-	if (action && action === 'withdraw') {
-		withdraw(id);
-	}
-	let clockInterval = null;
+  let id = m.route.param('id');
+  let action = m.route.param('action');
+  if (action && action === 'withdraw') {
+    withdraw(id);
+  }
+  let clockInterval = null;
 
-	const handlers = {
-		reload: throttle(() => {
-			xhr.reload(tournament().id).then(reload);
-		}, 1000),
-		redirect: function(gameId) {
-			m.route('/tournament/' + tournament().id + '/game/' + gameId);
-		}
-	};
+  const handlers = {
+    reload: throttle(() => {
+      xhr.reload(tournament().id).then(reload);
+    }, 1000),
+    redirect: function(gameId) {
+      m.route('/tournament/' + tournament().id + '/game/' + gameId);
+    }
+  };
 
-	xhr.tournament(id).then(data => {
-		tournament(data);
-		hasJoined(data.me && !data.me.withdraw);
-		clockInterval = setInterval(tick, 1000);
-		socket.createTournament(id, tournament().socketVersion, handlers);
-	})
-	.catch(utils.handleXhrError);
+  xhr.tournament(id).then(data => {
+    tournament(data);
+    hasJoined(data.me && !data.me.withdraw);
+    clockInterval = setInterval(tick, 1000);
+    socket.createTournament(id, tournament().socketVersion, handlers);
+  })
+  .catch(utils.handleXhrError);
 
-	return {
-		tournament,
-		hasJoined,
-		join,
-		withdraw,
-		reload,
-		onunload: () => {
-			socket.destroy();
-			if (clockInterval)
-			clearInterval(clockInterval);
-		}
-	};
+  return {
+    tournament,
+    hasJoined,
+    join,
+    withdraw,
+    reload,
+    onunload: () => {
+      socket.destroy();
+      if (clockInterval)
+      clearInterval(clockInterval);
+    }
+  };
 }

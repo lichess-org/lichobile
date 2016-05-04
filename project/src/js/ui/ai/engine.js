@@ -18,18 +18,25 @@ export default function(ctrl) {
 
   return {
     init() {
-      const boundInit = onInit.bind(undefined, ctrl);
       return Stockfish.init()
-      .then(boundInit)
+      .then(onInit)
       .catch(() => {
         return Stockfish.exit()
         .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(boundInit);
+        .then(onInit);
       })
       .catch(console.error.bind(console));
     },
 
     search(initialFen, moves) {
+      Stockfish.output(function(msg) {
+        // console.log(msg);
+        const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
+        if (bestmoveRegExpMatch) {
+          ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
+        }
+      });
+
       // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
       // console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
       cmd(`position fen ${initialFen} moves ${moves}`)
@@ -60,15 +67,7 @@ export default function(ctrl) {
   };
 }
 
-function onInit(ctrl) {
-  Stockfish.output(function(msg) {
-    // console.log(msg);
-    const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
-    if (bestmoveRegExpMatch) {
-      ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
-    }
-  });
-
+function onInit() {
   return cmd('uci')
   .then(() => setOption('Ponder', 'false'));
 }

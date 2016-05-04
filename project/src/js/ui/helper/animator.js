@@ -35,6 +35,8 @@ export default function animator(incoming, outgoing, alwaysAnimate, dontClone) {
     }
 
     function bindConfigTo( node ){
+      if (!node) return null;
+
       config = node.attrs.config;
 
       node.attrs.config = animationConfig;
@@ -52,8 +54,8 @@ export default function animator(incoming, outgoing, alwaysAnimate, dontClone) {
         onunload = context.onunload;
       }
 
-      if( !init ){
-        if(incoming && alwaysAnimate || animating) {
+      if ( !init ){
+        if (incoming && alwaysAnimate || animating) {
           incoming(el, noop, context);
         }
 
@@ -72,7 +74,7 @@ export default function animator(incoming, outgoing, alwaysAnimate, dontClone) {
         var insertion = dontClone ? el : el.cloneNode( true );
         var reference = null;
 
-        if( next && parent && next.parentNode === parent ){
+        if ( next && parent && next.parentNode === parent ){
           reference = next;
         }
 
@@ -85,7 +87,7 @@ export default function animator(incoming, outgoing, alwaysAnimate, dontClone) {
         parent.insertBefore( insertion, reference );
 
         outgoing( insertion, function destroy(){
-          if( parent.contains( insertion ) ){
+          if ( parent.contains( insertion ) ){
             parent.removeChild( insertion );
           }
         }, context );

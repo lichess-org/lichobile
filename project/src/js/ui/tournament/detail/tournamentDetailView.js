@@ -7,6 +7,7 @@ import i18n from '../../../i18n';
 import button from 'polythene/button/button';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
+import settings from '../../../settings';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
@@ -103,8 +104,9 @@ function tournamentJoinWithdraw(ctrl) {
       ctrl.join();
   }
 
-  if (ctrl.tournament().variant === 'crazyhouse')
-    return ('');
+  if (settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+    return null;
+  }
 
   return (m('.pe-dark-theme .joinButton',
     m.component(button,

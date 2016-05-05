@@ -8,6 +8,7 @@ import { getPGN } from '../roundXhr';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
+import tournamentXhr from '../../tournament/tournamentXhr';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
@@ -314,7 +315,8 @@ export default {
   withdrawFromTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      m.route('/tournament/' + ctrl.data.tournament + '/withdraw');
+      tournamentXhr.withdraw(ctrl.data.tournament);
+      m.route('/tournament/' + ctrl.data.tournament);
     }
     return (
       <button key="withdrawFromTournament" config={helper.ontouch(handler)}>

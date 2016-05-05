@@ -72,7 +72,6 @@ export default {
       '/training/:id': fadingPage(training),
       '/tournament': fadingPage(tournament),
       '/tournament/:id': fadingPage(tournamentDetail),
-      '/tournament/:id/:action': fadingPage(tournamentDetail),
       '/tournament/:tournamentId/game/:id': fadingPage(game)
     });
   }

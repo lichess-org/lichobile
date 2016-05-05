@@ -33,9 +33,6 @@ export default function controller() {
   }
 
   function join_unthrottled(id) {
-    if (!id) {
-      id = tournament().id;
-    }
     xhr.join(id).then(() => {
       hasJoined(true);
       m.redraw();
@@ -45,9 +42,6 @@ export default function controller() {
   let join = throttle(join_unthrottled, 1000);
 
   function withdraw_unthrottled(id) {
-    if (!id) {
-      id = tournament().id;
-    }
     xhr.withdraw(id).then(() => {
       hasJoined(false);
       m.redraw();

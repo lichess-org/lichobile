@@ -96,9 +96,9 @@ function tournamentJoinWithdraw(ctrl) {
 
   function buttonAction () {
     if (ctrl.hasJoined())
-      ctrl.withdraw();
+      ctrl.withdraw(ctrl.tournament().id);
     else
-      ctrl.join();
+      ctrl.join(ctrl.tournament().id);
   }
 
   if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {

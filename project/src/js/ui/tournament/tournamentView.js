@@ -68,8 +68,8 @@ function renderTournamentListItem(tournament) {
 }
 
 function formatTime(timeInMillis) {
-  let date = new Date(timeInMillis);
-  let hours = pad(date.getHours().toString(), 2);
-  let mins = pad(date.getMinutes().toString(), 2);
+  const date = new Date(timeInMillis);
+  const hours = pad(date.getHours().toString(), 2);
+  const mins = pad(date.getMinutes().toString(), 2);
   return hours + ':' + mins;
 }

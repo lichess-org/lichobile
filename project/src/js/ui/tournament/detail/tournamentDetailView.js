@@ -156,9 +156,9 @@ function timeInfo(time, preceedingText) {
   if (!time) return '';
 
   let timeStr = '';
-  let hours = Math.floor(time / 60 / 60);
-  let mins = Math.floor(time / 60) - (hours * 60);
-  let secs = time % 60;
+  const hours = Math.floor(time / 60 / 60);
+  const mins = Math.floor(time / 60) - (hours * 60);
+  const secs = time % 60;
   if (hours > 0)
     timeStr = preceedingText + ' ' + hours + ':' + pad(mins, 2) + ':' + pad(secs, 2);
   else

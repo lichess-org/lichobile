@@ -42,6 +42,8 @@ export default function controller() {
     }, err => utils.handleXhrError(err));
   }
 
+  let join = throttle(join_unthrottled, 1000);
+
   function withdraw_unthrottled(id) {
     if (!id) {
       id = tournament().id;
@@ -52,10 +54,12 @@ export default function controller() {
     }, err => utils.handleXhrError(err));
   }
 
+  let withdraw = throttle(withdraw_unthrottled, 1000);
+
   let id = m.route.param('id');
   let action = m.route.param('action');
   if (action && action === 'withdraw') {
-    withdraw(id);
+    this.withdraw(id);
   }
   let clockInterval = null;
 
@@ -79,8 +83,8 @@ export default function controller() {
   return {
     tournament,
     hasJoined,
-    join: throttle(join_unthrottled, 1000),
-    withdraw: throttle(withdraw_unthrottled, 1000),
+    join,
+    withdraw,
     reload,
     onunload: () => {
       socket.destroy();

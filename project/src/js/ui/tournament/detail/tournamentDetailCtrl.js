@@ -32,7 +32,7 @@ export default function controller() {
     m.redraw();
   }
 
-  function join(id) {
+  function join_unthrottled(id) {
     if (!id) {
       id = tournament().id;
     }
@@ -42,7 +42,7 @@ export default function controller() {
     }, err => utils.handleXhrError(err));
   }
 
-  function withdraw(id) {
+  function withdraw_unthrottled(id) {
     if (!id) {
       id = tournament().id;
     }
@@ -79,8 +79,8 @@ export default function controller() {
   return {
     tournament,
     hasJoined,
-    join,
-    withdraw,
+    join: throttle(join_unthrottled, 1000),
+    withdraw: throttle(withdraw_unthrottled, 1000),
     reload,
     onunload: () => {
       socket.destroy();

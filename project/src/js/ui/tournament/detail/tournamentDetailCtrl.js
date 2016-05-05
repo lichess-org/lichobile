@@ -1,5 +1,5 @@
 import socket from '../../../socket';
-import throttle from 'lodash/function/throttle';
+import throttle from 'lodash/throttle';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';

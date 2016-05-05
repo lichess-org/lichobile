@@ -12,7 +12,6 @@
     },
     "rules": {
       "quotes": [ 2, "single" ],
-      "linebreak-style": [ 2, "unix" ],
       "no-console": 0,
       "no-alert": 0,
       "no-use-before-define": [1, "nofunc"],

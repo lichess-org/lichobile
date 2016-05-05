@@ -127,24 +127,19 @@ function variantDisplay(data) {
 
   variant = variant.split(' ')[0]; // Cut off names to first word
 
-  if (variant.length > 0)
+  if (variant.length > 0) {
     variant = variant.charAt(0).toUpperCase() + variant.substring(1);
+  }
 
   return variant;
 }
 
 function variantKey(data) {
+  console.log(data);
   let variant = data.variant;
   if (variant === 'standard') {
-    let estimatedTime = data.clock.limit + data.clock.increment * 40;
-    if (estimatedTime < (3 * 60)) // Below 3 mins is bullet
-      variant = 'bullet';
-    else if (estimatedTime < (8 * 60)) // Below 8 mins is blitz
-      variant = 'blitz';
-    else
-        variant = 'classical';
+    variant = data.perf;
   }
-
   return variant;
 }
 

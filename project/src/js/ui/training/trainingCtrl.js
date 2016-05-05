@@ -44,27 +44,27 @@ export default function ctrl() {
     if (this.data.progress.length === 0) {
       return;
     }
-    const history = puzzle.makeHistory(this.data);
+    const history = this.data.playHistory;
     this.data.progress = this.data.progress.slice(0, this.data.progress.length - 1);
     const lastTurnColor = history[history.length - 1].turnColor;
     const nbMovesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
-    const lastSit = history[history.length - (1 + nbMovesToRevert)];
+    const sitToRevertTo = history[history.length - (1 + nbMovesToRevert)];
     setTimeout(() => {
       this.chessground.set({
-        fen: lastSit.fen,
-        lastMove: lastSit.move,
-        turnColor: lastSit.turnColor,
-        check: lastSit.check,
+        fen: sitToRevertTo.fen,
+        lastMove: sitToRevertTo.move,
+        turnColor: sitToRevertTo.turnColor,
+        check: sitToRevertTo.check,
         movable: {
           color: 'both',
-          dests: lastSit.dests
+          dests: sitToRevertTo.dests
         }
       });
       m.redraw();
     }, 1000);
   }.bind(this);
 
-  const attempt = function(winFlag) {
+  const attempt = function(winFlag, giveUpFlag) {
     showLoading();
     xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
     .then(cfg => {
@@ -73,7 +73,7 @@ export default function ctrl() {
       onXhrSuccess();
     })
     .catch(err => {
-      if (winFlag) {
+      if (!giveUpFlag) {
         revertLastMove();
       }
       handleXhrError(err);
@@ -140,6 +140,13 @@ export default function ctrl() {
     chess.move(this.data.chess, move);
     this.data.comment = 'great';
     this.data.progress = newProgress;
+    this.data.playHistory.push({
+      move,
+      fen: this.data.chess.fen(),
+      dests: this.data.chess.dests(),
+      check: this.data.chess.in_check(),
+      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
+    });
     this.chessground.set({
       fen: this.data.chess.fen(),
       lastMove: move,
@@ -152,6 +159,13 @@ export default function ctrl() {
   this.playOpponentMove = function(move) {
     onMove(move[0], move[1], this.chessground.data.pieces[move[1]]);
     chess.move(this.data.chess, move);
+    this.data.playHistory.push({
+      move,
+      fen: this.data.chess.fen(),
+      dests: this.data.chess.dests(),
+      check: this.data.chess.in_check(),
+      turnColor: this.data.chess.turn() === 'w' ? 'white' : 'black'
+    });
     this.chessground.set({
       fen: this.data.chess.fen(),
       lastMove: move,
@@ -184,7 +198,7 @@ export default function ctrl() {
   }.bind(this);
 
   this.giveUp = function() {
-    attempt(false);
+    attempt(false, true);
   };
 
   this.jump = function(to) {

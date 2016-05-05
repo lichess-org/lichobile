@@ -1,7 +1,7 @@
 import last from 'lodash/last';
 import chessground from 'chessground-mobile';
 import { handleXhrError } from '../../utils';
-import data from './data';
+import makeData from './data';
 import chess from './chess';
 import puzzle from './puzzle';
 import sound from '../../sound';
@@ -11,6 +11,7 @@ import * as xhr from './xhr';
 import m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
+import i18n from '../../i18n';
 
 export default function ctrl() {
 
@@ -25,66 +26,91 @@ export default function ctrl() {
     loading: false
   };
 
-  var showLoading = function() {
+  const showLoading = function() {
     this.vm.loading = true;
     m.redraw();
   }.bind(this);
 
-  var onXhrSuccess = function(res) {
+  const onXhrSuccess = function(res) {
     this.vm.loading = false;
     return res;
   }.bind(this);
 
-  var onXhrError = function(res) {
+  const onXhrError = function(res) {
     this.vm.loading = false;
     handleXhrError(res);
-    throw res;
   }.bind(this);
 
-  var attempt = function(winFlag) {
+  const revertLastMove = function() {
+    const history = puzzle.makeHistory(this.data);
+    this.data.progress = this.data.progress.slice(0, this.data.progress.length - 1);
+    const lastSit = history[history.length - 2];
+    setTimeout(() => {
+      this.chessground.set({
+        fen: lastSit.fen,
+        lastMove: lastSit.move,
+        turnColor: lastSit.turnColor,
+        check: lastSit.check,
+        movable: {
+          color: 'both',
+          dests: lastSit.dests
+        }
+      });
+      m.redraw();
+    }, 1000);
+  }.bind(this);
+
+  const attempt = function(winFlag) {
     showLoading();
     xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
-    .then(onXhrSuccess, onXhrError)
     .then(cfg => {
       cfg.progress = this.data.progress;
       this.reload(cfg);
+      onXhrSuccess();
+    })
+    .catch(() => {
+      revertLastMove();
+      this.vm.loading = false;
+      window.plugins.toast.show(i18n('yourMoveCouldNotReachTheServer'), 'long', 'center');
     });
   }.bind(this);
 
-  var userMove = function(orig, dest) {
-    var res = puzzle.tryMove(this.data, [orig, dest]);
-    var newProgress = res[0];
-    var newLines = res[1];
-    var lastMove = last(newProgress);
-    var promotion = lastMove ? lastMove[4] : undefined;
+  const userMove = function(orig, dest) {
+    const res = puzzle.tryMove(this.data, [orig, dest]);
+    const newProgress = res[0];
+    const newLines = res[1];
+    const lastMove = last(newProgress);
+    const promotion = lastMove ? lastMove[4] : undefined;
     switch (newLines) {
       case 'retry':
         setTimeout(this.revert.bind(this, this.data.puzzle.id), 500);
         this.data.comment = 'retry';
         break;
       case 'fail':
-        setTimeout(function() {
+        setTimeout(() => {
           if (this.data.mode === 'play') {
             this.chessground.stop();
             attempt(false);
-          } else this.revert(this.data.puzzle.id);
-        }.bind(this), 500);
+          } else {
+            this.revert(this.data.puzzle.id);
+          }
+        }, 500);
         this.data.comment = 'fail';
         break;
       default:
         this.userFinalizeMove([orig, dest, promotion], newProgress);
         if (newLines === 'win') {
-          setTimeout(function() {
-            this.chessground.stop();
-            attempt(true);
-          }.bind(this), 300);
-        } else setTimeout(this.playOpponentNextMove.bind(this, this.data.puzzle.id), 1000);
+          this.chessground.stop();
+          attempt(true);
+        } else {
+          setTimeout(this.playOpponentNextMove.bind(this, this.data.puzzle.id), 1000);
+        }
         break;
     }
     m.redraw();
   }.bind(this);
 
-  var onMove = function(orig, dest, captured) {
+  const onMove = function(orig, dest, captured) {
     if (captured) sound.capture();
     else sound.move();
   };
@@ -143,10 +169,11 @@ export default function ctrl() {
       setTimeout(() => attempt(true), 300);
   }.bind(this);
 
-  this.playInitialMove = function(id) {
-    if (id !== this.data.puzzle.id) return;
-    this.playOpponentMove(this.data.puzzle.initialMove);
-    this.data.startedAt = new Date();
+  this.playInitialMove = function() {
+    if (this.data.mode !== 'view') {
+      this.playOpponentMove(this.data.puzzle.initialMove);
+      this.data.startedAt = new Date();
+    }
   }.bind(this);
 
   this.giveUp = function() {
@@ -175,21 +202,15 @@ export default function ctrl() {
     this.jump(this.data.replay.history.length - 1);
   }.bind(this);
 
-  this.initiate = function() {
-    if (this.data.mode !== 'view') {
-      setTimeout(this.playInitialMove.bind(this, this.data.puzzle.id), 1000);
-    }
-  }.bind(this);
-
   this.reload = function(cfg) {
-    this.data = data(cfg);
+    this.data = makeData(cfg);
     chessground.board.reset(this.chessground.data);
     chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg);
-    this.initiate();
+    setTimeout(this.playInitialMove, 1000);
   }.bind(this);
 
   this.init = function(cfg) {
-    this.data = data(cfg);
+    this.data = makeData(cfg);
     var chessgroundConf = {
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
@@ -231,24 +252,32 @@ export default function ctrl() {
   this.newPuzzle = function(feedback) {
     if (feedback) showLoading();
     xhr.newPuzzle()
-      .then(onXhrSuccess, onXhrError)
-      .then(cfg => feedback ? pushState(cfg) : replaceStateForNewPuzzle(cfg))
-      .then(this.init)
-      .then(this.initiate);
+    .then(cfg => {
+      if (feedback) pushState(cfg);
+      else replaceStateForNewPuzzle(cfg);
+      this.init(cfg);
+      setTimeout(this.playInitialMove, 1000);
+    })
+    .then(onXhrSuccess)
+    .catch(onXhrError);
   }.bind(this);
 
   this.loadPuzzle = function(id) {
     xhr.loadPuzzle(id)
-      .then(onXhrSuccess, onXhrError)
-      .then(this.init)
-      .then(this.initiate);
+      .then(cfg => {
+        this.init(cfg);
+        setTimeout(this.playInitialMove, 1000);
+      })
+      .then(onXhrSuccess)
+      .catch(onXhrError);
   }.bind(this);
 
   this.retry = function() {
     showLoading();
     xhr.loadPuzzle(this.data.puzzle.id)
-      .then(onXhrSuccess, onXhrError)
-      .then(this.reload);
+      .then(this.reload)
+      .then(onXhrSuccess)
+      .catch(onXhrError);
   }.bind(this);
 
   this.share = function() {
@@ -256,22 +285,22 @@ export default function ctrl() {
   }.bind(this);
 
   this.setDifficulty = function(id) {
-    xhr.setDifficulty(id)
+    return xhr.setDifficulty(id)
       .then(pushState)
       .then(this.reload);
   }.bind(this);
 
-  if (m.route.param('id'))
+  if (m.route.param('id')) {
     this.loadPuzzle(m.route.param('id'));
-  else
+  } else {
     this.newPuzzle(false);
+  }
 
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
     window.plugins.insomnia.allowSleepAgain();
   };
-
 }
 
 function pushState(cfg) {

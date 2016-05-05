@@ -82,6 +82,7 @@ function makeHistory(data) {
     return {
       move: m,
       fen: c.fen(),
+      dests: c.dests(),
       check: c.in_check(),
       turnColor: c.turn() === 'w' ? 'white' : 'black'
     };

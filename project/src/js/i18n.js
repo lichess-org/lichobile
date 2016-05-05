@@ -45,7 +45,8 @@ const untranslated = {
   soundOnNotification: 'Play sound on notification',
   vibrateOnGameEvents: 'Vibrate on game events',
   soundAndNotifications: 'Sound and notifications',
-  offline: 'Offline'
+  offline: 'Offline',
+  yourMoveCouldNotReachTheServer: 'Your move could not reach the server. Please retry.'
 };
 
 const defaultCode = 'en';

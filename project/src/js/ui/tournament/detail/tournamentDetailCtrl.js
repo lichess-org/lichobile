@@ -82,8 +82,9 @@ export default function controller() {
     reload,
     onunload: () => {
       socket.destroy();
-      if (clockInterval)
-      clearInterval(clockInterval);
+      if (clockInterval) {
+        clearInterval(clockInterval);
+      }
     }
   };
 }

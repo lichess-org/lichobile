@@ -33,10 +33,12 @@ function tournamentBody(ctrl) {
   if (!data) return null;
 
   let body = null;
-  if (data.isFinished)
+  if (data.isFinished) {
     body = tournamentContentFinished(ctrl);
-  else if (!data.isStarted)
+  }
+  else if (!data.isStarted) {
     body = tournamentContentCreated(ctrl);
+  }
   else
     body = tournamentContentStarted(ctrl);
 
@@ -95,10 +97,12 @@ function tournamentJoinWithdraw(ctrl) {
   const label = buttonLabel(ctrl);
 
   function buttonAction () {
-    if (ctrl.hasJoined())
+    if (ctrl.hasJoined()) {
       ctrl.withdraw(ctrl.tournament().id);
-    else
+    }
+    else {
       ctrl.join(ctrl.tournament().id);
+    }
   }
 
   if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {

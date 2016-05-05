@@ -39,7 +39,7 @@ export default function controller() {
     xhr.join(id).then(() => {
       hasJoined(true);
       m.redraw();
-    }, err => utils.handleXhrError(err));
+    }).catch(utils.handleXhrError);
   }
 
   let join = throttle(join_unthrottled, 1000);
@@ -51,7 +51,7 @@ export default function controller() {
     xhr.withdraw(id).then(() => {
       hasJoined(false);
       m.redraw();
-    }, err => utils.handleXhrError(err));
+    }).catch(utils.handleXhrError);
   }
 
   let withdraw = throttle(withdraw_unthrottled, 1000);

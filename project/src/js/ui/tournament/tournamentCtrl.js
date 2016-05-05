@@ -15,7 +15,7 @@ export default function controller() {
   xhr.currentTournaments().then(data => {
     tournaments(data);
     return data;
-  }, err => utils.handleXhrError(err));
+  }).catch(utils.handleXhrError);
 
   return {
     tournaments,

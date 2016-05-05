@@ -11,7 +11,6 @@ import * as xhr from './xhr';
 import m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
-import i18n from '../../i18n';
 
 export default function ctrl() {
 
@@ -42,9 +41,14 @@ export default function ctrl() {
   }.bind(this);
 
   const revertLastMove = function() {
+    if (this.data.progress.length === 0) {
+      return;
+    }
     const history = puzzle.makeHistory(this.data);
     this.data.progress = this.data.progress.slice(0, this.data.progress.length - 1);
-    const lastSit = history[history.length - 2];
+    const lastTurnColor = history[history.length - 1].turnColor;
+    const nbMovesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
+    const lastSit = history[history.length - (1 + nbMovesToRevert)];
     setTimeout(() => {
       this.chessground.set({
         fen: lastSit.fen,
@@ -68,10 +72,12 @@ export default function ctrl() {
       this.reload(cfg);
       onXhrSuccess();
     })
-    .catch(() => {
-      revertLastMove();
+    .catch(err => {
+      if (winFlag) {
+        revertLastMove();
+      }
+      handleXhrError(err);
       this.vm.loading = false;
-      window.plugins.toast.show(i18n('yourMoveCouldNotReachTheServer'), 'long', 'center');
     });
   }.bind(this);
 
@@ -165,8 +171,9 @@ export default function ctrl() {
     var move = puzzle.getOpponentNextMove(this.data);
     this.playOpponentMove(puzzle.str2move(move));
     this.data.progress.push(move);
-    if (puzzle.getCurrentLines(this.data) === 'win')
+    if (puzzle.getCurrentLines(this.data) === 'win') {
       setTimeout(() => attempt(true), 300);
+    }
   }.bind(this);
 
   this.playInitialMove = function() {

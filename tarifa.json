@@ -169,13 +169,13 @@
     "nl.x-services.plugins.insomnia": "cordova-plugin-insomnia@4.2.0",
     "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11",
     "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.6.1",
+    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish",
+    "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1",
     "phonegap-plugin-push": {
-      "uri": "phonegap-plugin-push@1.6.2",
+      "uri": "phonegap-plugin-push@1.6.3",
       "variables": {
         "SENDER_ID": "0000000000000"
       }
-    },
-    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish",
-    "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1"
+    }
   }
 }

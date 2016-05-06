@@ -61,6 +61,9 @@ export default function controller() {
     reload: throttle(() => {
       xhr.reload(tournament().id).then(reload);
     }, 1000),
+    resync: throttle(() => {
+      xhr.reload(tournament().id).then(reload);
+    }, 1000),
     redirect: function(gameId) {
       m.route('/tournament/' + tournament().id + '/game/' + gameId);
     }

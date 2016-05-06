@@ -8,7 +8,7 @@ import { getPGN } from '../roundXhr';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../utils';
 import lobby from '../../lobby';
 import m from 'mithril';
-import tournamentXhr from '../../tournament/tournamentXhr';
+import * as tournamentXhr from '../../tournament/tournamentXhr';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {

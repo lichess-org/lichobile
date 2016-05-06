@@ -139,7 +139,6 @@ function variantDisplay(data) {
 }
 
 function variantKey(data) {
-  console.log(data);
   let variant = data.variant;
   if (variant === 'standard') {
     if (data.perf) {

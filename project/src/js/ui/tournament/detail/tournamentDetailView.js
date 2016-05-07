@@ -141,18 +141,7 @@ function variantDisplay(data) {
 function variantKey(data) {
   let variant = data.variant;
   if (variant === 'standard') {
-    if (data.perf) {
-      variant = data.perf;
-    }
-    else {
-      const estimatedTime = data.clock.limit + data.clock.increment * 40;
-      if (estimatedTime < (3 * 60)) // Below 3 mins is bullet
-        variant = 'bullet';
-      else if (estimatedTime < (8 * 60)) // Below 8 mins is blitz
-        variant = 'blitz';
-      else
-        variant = 'classical';
-    }
+    variant = data.perf.name.toLowerCase();
   }
   return variant;
 }

@@ -4,7 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import session from '../../session';
-import { swapKeyValue, Challenge, Message } from '../../lichess/prefs';
+import { swapKeyValue, Challenge } from '../../lichess/prefs';
 import m from 'mithril';
 
 function renderBody(ctrl) {
@@ -15,10 +15,6 @@ function renderBody(ctrl) {
       m('li.list_item', [
         m('div.label', i18n('letOtherPlayersChallengeYou')),
         m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'challenge', swapKeyValue(Challenge.choices), ctrl.challenge))
-      ]),
-      m('li.list_item', [
-        m('div.label', i18n('Let other players message you')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'message', swapKeyValue(Message.choices), ctrl.message))
       ])
     ])
   ];
@@ -28,12 +24,10 @@ export default {
   controller: function() {
     const follow = session.lichessBackedProp('follow');
     const challenge = session.lichessBackedProp('challenge');
-    const message = session.lichessBackedProp('message');
 
     return {
       follow,
-      challenge,
-      message
+      challenge
     };
   },
 
@@ -44,4 +38,3 @@ export default {
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };
-

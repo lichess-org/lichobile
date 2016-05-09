@@ -13,7 +13,10 @@ function renderBody() {
       }, i18n('gameBehavior')),
       m('li.list_item.nav', {
         config: helper.ontouchY(utils.f(m.route, '/settings/privacy'))
-      }, i18n('privacy'))
+      }, i18n('privacy')),
+      m('li.list_item.nav', {
+        config: helper.ontouchY(utils.f(m.route, '/settings/kidMode'))
+      }, 'Kid mode')
     ])
   ];
 }

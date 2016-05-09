@@ -35,11 +35,11 @@ function renderBody(ctrl) {
 export default {
   controller: function() {
     return {
-      premove: session.lichessBackedProp('premove'),
-      takeback: session.lichessBackedProp('takeback'),
-      autoQueen: session.lichessBackedProp('autoQueen'),
-      autoThreefold: session.lichessBackedProp('autoThreefold'),
-      submitMove: session.lichessBackedProp('submitMove')
+      premove: session.lichessBackedProp('prefs.premove', session.savePreferences),
+      takeback: session.lichessBackedProp('prefs.takeback', session.savePreferences),
+      autoQueen: session.lichessBackedProp('prefs.autoQueen', session.savePreferences),
+      autoThreefold: session.lichessBackedProp('prefs.autoThreefold', session.savePreferences),
+      submitMove: session.lichessBackedProp('prefs.submitMove', session.savePreferences)
     };
   },
 

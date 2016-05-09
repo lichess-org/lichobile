@@ -63,7 +63,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     options: {
       name: 'game',
       debug: false,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -87,7 +87,7 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
       name: 'tournament',
       debug: true,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGame}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -98,7 +98,6 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
     version,
     opts
   }});
-  worker.send('startWatching', featuredGame);
 }
 
 function createChallenge(id, version, onOpen, handlers) {
@@ -113,7 +112,7 @@ function createChallenge(id, version, onOpen, handlers) {
       debug: false,
       ignoreUnknownMessages: true,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines'
+      sendOnOpen: [{t: 'following_onlines'}]
     },
     events: Object.assign({}, defaultHandlers, handlers)
   };
@@ -136,7 +135,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
       name: 'lobby',
       debug: false,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -160,7 +159,7 @@ function createDefault() {
         name: 'default',
         debug: false,
         pingDelay: 2000,
-        sendOnOpen: 'following_onlines',
+        sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)
       }
     };
@@ -258,6 +257,7 @@ export default {
     utils.askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
+    console.log('send message' + type + ' ' + data);
     worker.postMessage({ topic: 'send', payload: [type, data, opts] });
   },
   connect() {

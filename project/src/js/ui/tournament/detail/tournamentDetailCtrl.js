@@ -12,6 +12,10 @@ export default function controller() {
   const hasJoined = m.prop(false);
 
   function reload(data) {
+    const oldData = tournament();
+    if (data.featured && (data.featured !== oldData.featured)) {
+      socket.send('startWatching', data.featured.id);
+    }
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
 
@@ -57,6 +61,15 @@ export default function controller() {
     resync: throttled_reload,
     redirect: function(gameId) {
       m.route('/tournament/' + tournament().id + '/game/' + gameId);
+    },
+    fen: function(d) {
+      const featured = tournament().featured;
+      if (!featured) return;
+      if (featured.id !== d.id) return;
+
+      featured.fen = d.fen;
+      featured.lastMove = d.lm;
+      m.redraw();
     }
   };
 

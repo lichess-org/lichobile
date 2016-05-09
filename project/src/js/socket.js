@@ -257,7 +257,6 @@ export default {
     utils.askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
-    console.log('send message' + type + ' ' + data);
     worker.postMessage({ topic: 'send', payload: [type, data, opts] });
   },
   connect() {

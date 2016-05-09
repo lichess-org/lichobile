@@ -29,47 +29,51 @@ export default {
 
     boardTheme = boardTheme || settings.general.theme.board();
     pieceTheme = pieceTheme || settings.general.theme.piece();
+
     const boardClass = [
       'display_board',
       boardTheme,
       customPieceTheme || pieceTheme,
       data.game.variant.key
-      ].join(' ');
-      let wrapperClass = 'game_board_wrapper';
-      let key = 'board' + (isPortrait ? 'portrait' : 'landscape');
+    ].join(' ');
+    const key = 'board' + (isPortrait ? 'portrait' : 'landscape');
+    let wrapperClass = 'game_board_wrapper';
 
-      if (wrapperClasses) {
-        wrapperClass += ' ';
-        wrapperClass += wrapperClasses;
-      }
+    if (wrapperClasses) {
+      wrapperClass += ' ';
+      wrapperClass += wrapperClasses;
+    }
 
-      const wrapperStyle = bounds ? {
-        height: bounds.height + 'px',
-        width: bounds.width + 'px'
-      } : {};
+    const wrapperStyle = bounds ? {
+      height: bounds.height + 'px',
+      width: bounds.width + 'px'
+    } : {};
 
-      function wrapperConfig(el, isUpdate) {
-        if (!isUpdate) {
-          const icon = gameIcon(data.game.variant.key);
-          if (icon && data.game.variant.key !== 'standard' && data.game.status && gameApi.isPlayerPlaying(data)) {
-            variantReminder(el, icon);
-          }
+    function wrapperConfig(el, isUpdate) {
+      if (!isUpdate) {
+        const icon = gameIcon(data.game.variant.key);
+        if (icon && data.game.variant.key !== 'standard' && data.game.status &&
+        gameApi.isPlayerPlaying(data)) {
+          variantReminder(el, icon);
         }
       }
+    }
 
-      function boardConfig(el, isUpdate) {
-        if (!isUpdate) {
-          if (!bounds) {
-            chessgroundCtrl.setBounds(el.getBoundingClientRect());
-          } else {
-            chessgroundCtrl.setBounds(bounds);
-          }
-          chessground.render(el, chessgroundCtrl);
+    function boardConfig(el, isUpdate) {
+      if (!isUpdate) {
+        if (!bounds) {
+          chessgroundCtrl.setBounds(el.getBoundingClientRect());
+        } else {
+          chessgroundCtrl.setBounds(bounds);
         }
+        chessground.render(el, chessgroundCtrl);
       }
+    }
 
-      return (
-        <section className={wrapperClass} config={wrapperConfig} style={wrapperStyle} key={key}>
+    return (
+      <section className={wrapperClass} config={wrapperConfig}
+        style={wrapperStyle} key={key}
+      >
         <div className={boardClass} config={boardConfig} />
         { chessgroundCtrl.data.premovable.current ?
           <div className="premove_alert">
@@ -84,7 +88,7 @@ export default {
             shapes
           }) : null
         }
-        </section>
-      );
+      </section>
+    );
   }
 };

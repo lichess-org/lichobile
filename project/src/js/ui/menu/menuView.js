@@ -24,7 +24,7 @@ export default function view() {
 function renderHeader(user) {
   return (
     <header className="side_menu_header">
-      <div className="logo" />
+      { user && user.kid ? <div className="kiddo">😊</div> : <div className="logo" /> }
       <h2 className="username">
         { hasNetwork() ? user ? user.username : 'Anonymous' : i18n('offline') }
       </h2>

@@ -1,6 +1,6 @@
 import { get, set } from 'lodash/object';
 import { request } from './http';
-import { hasNetwork, handleXhrError, noop, serializeQueryParameters } from './utils';
+import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
@@ -28,6 +28,10 @@ function nowPlaying() {
   return np.filter(function(e) {
     return settings.game.supportedVariants.indexOf(e.variant.key) !== -1;
   });
+}
+
+function isKidMode() {
+  return session && session.kid;
 }
 
 function myTurnGames() {
@@ -90,12 +94,12 @@ function savePreferences() {
 function lichessBackedProp(path, prefRequest) {
   return function() {
     if (arguments.length) {
+      var oldPref;
       if (session) {
-        var oldPref = get(session, path);
+        oldPref = get(session, path);
         set(session, path, arguments[0]);
       }
       prefRequest()
-      .then(noop)
       .catch(err => {
         if (session) set(session, path, oldPref);
         handleXhrError(err);
@@ -179,6 +183,7 @@ function refresh() {
 
 export default {
   isConnected,
+  isKidMode,
   logout,
   signup,
   login: throttle(login, 1000),

@@ -68,6 +68,7 @@ function renderTitle(ctrl) {
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
       <h1 key="playingTitle" className="playing">
+        { session.isKidMode() ? <span className="kiddo">😊</span> : null }
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
         {ctrl.title}
       </h1>

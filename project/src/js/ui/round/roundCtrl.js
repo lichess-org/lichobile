@@ -393,7 +393,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
-  this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
+  this.chat = (session.isKidMode() || this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
   this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;

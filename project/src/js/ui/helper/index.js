@@ -8,16 +8,18 @@ import m from 'mithril';
 const helper = {};
 export default helper;
 
+// store temporarily last route to disable animations on same route
+// TODO find a better way cause this is ugly
+var lastRoute;
+
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
 function viewSlideIn(el, callback) {
-  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
-	el.style.transform = `translate3d(${direction},0,0)`;
-	el.style.transition = 'transform 200ms ease-out';
-
-	setTimeout(() => {
-		el.style.transform = 'translate3d(0%,0,0)';
-	});
+  if (m.route() === lastRoute) {
+    callback();
+    return;
+  }
+  lastRoute = m.route();
 
   function after() {
     utils.setViewSlideDirection('fwd');
@@ -25,23 +27,37 @@ function viewSlideIn(el, callback) {
     callback();
   }
 
-	el.addEventListener('transitionend', after, false);
-}
-function viewSlideOut(el, callback) {
-  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-	el.style.transform = 'translate3d(0%,0,0)';
-	el.style.transition = 'transform 200ms ease-out';
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+  el.style.transform = `translate3d(${direction},0,0)`;
+  el.style.transition = 'transform 200ms ease-out';
 
-	setTimeout(() => {
-		el.style.transform = `translate3d(${direction},0,0)`;
-	});
+  setTimeout(() => {
+    el.style.transform = 'translate3d(0%,0,0)';
+  });
+
+  el.addEventListener('transitionend', after, false);
+}
+
+function viewSlideOut(el, callback) {
+  if (m.route() === lastRoute) {
+    callback();
+    return;
+  }
 
   function after() {
     utils.setViewSlideDirection('fwd');
     callback();
   }
 
-	el.addEventListener('transitionend', after, false);
+  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+  el.style.transform = 'translate3d(0%,0,0)';
+  el.style.transition = 'transform 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.transform = `translate3d(${direction},0,0)`;
+  });
+
+  el.addEventListener('transitionend', after, false);
 }
 
 function viewFadesIn(el, callback) {

@@ -31,15 +31,17 @@ function tournamentBody(ctrl) {
 
   if (!data) return null;
 
-  let body = null;
+  let body;
+
   if (data.isFinished) {
     body = tournamentContentFinished(ctrl);
   }
   else if (!data.isStarted) {
     body = tournamentContentCreated(ctrl);
   }
-  else
+  else {
     body = tournamentContentStarted(ctrl);
+  }
 
   return (
     <div class="tournamentContainer native_scroller page">

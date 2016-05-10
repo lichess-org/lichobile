@@ -195,7 +195,7 @@ main
   width 100%
   height calc(100% - 50px)
   &.withFooter
-    height calc(100% - 50px - 45px)
+    height "calc(100% - 50px - %s)" % footerHeight
 
 .main_footer
-  height 45px
+  height footerHeight

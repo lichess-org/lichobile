@@ -13,7 +13,7 @@ export default function view(ctrl) {
 
   const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl);
+  return layout.free(headerCtrl, bodyCtrl, renderFooter.bind(undefined, ctrl));
 }
 
 function tournamentBody(ctrl) {
@@ -34,7 +34,7 @@ function tournamentBody(ctrl) {
   }
 
   return (
-    <div class="tournamentContainer native_scroller page">
+    <div class="tournamentContainer native_scroller page withFooter">
       {body}
     </div>
   );
@@ -85,7 +85,8 @@ function tournamentHeader(data, time, timeText) {
 }
 
 function tournamentJoinWithdraw(ctrl) {
-  const label = buttonLabel(ctrl);
+  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
 
   function buttonAction () {
     if (ctrl.hasJoined()) {
@@ -101,19 +102,10 @@ function tournamentJoinWithdraw(ctrl) {
   }
 
   return (
-    <button type="button" className="joinWithdrawButton" config={helper.ontouch(buttonAction)}>
+    <button className="action_bar_button" config={helper.ontouch(buttonAction)}>
+      <span className={icon} />
       {label}
     </button>
-  );
-}
-
-function buttonLabel (ctrl) {
-  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
-  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
-  return (
-    <span>
-      <span className={icon}> {label} </span>
-    </span>
   );
 }
 
@@ -164,7 +156,6 @@ function tournamentLeaderboard(ctrl, showTrophies) {
   const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
-      {tournamentJoinWithdraw (ctrl)}
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
@@ -199,3 +190,12 @@ function tournamentFeaturedGame(data) {
     </div>
   );
 }
+
+function renderFooter(ctrl) {
+  return (
+    <div className="actions_bar">
+      {tournamentJoinWithdraw(ctrl)}
+    </div>
+  );
+}
+

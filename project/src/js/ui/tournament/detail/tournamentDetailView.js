@@ -1,5 +1,4 @@
-import * as utils from '../../../utils';
-import { header as headerWidget, pad} from '../../shared/common';
+import { header as headerWidget, pad, backButton } from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
@@ -8,22 +7,13 @@ import helper from '../../helper';
 import settings from '../../../settings';
 
 export default function view(ctrl) {
-  const headerCtrl = utils.partialf(headerWidget, null,
-    ctrl.tournament() ? backToTournaments(ctrl.tournament().fullName) : null
+  const headerCtrl = headerWidget.bind(undefined, null,
+    backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );
 
   const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
   return layout.free(headerCtrl, bodyCtrl);
-}
-
-function backToTournaments(title) {
-  return (
-    <button key="back-to-tournaments" className="back_button main_header_button" config={ helper.ontouch(() => m.route('/tournament')) }>
-      <span className="fa fa-arrow-left"/>
-      {title ? <div className="title">{title}</div> : null }
-    </button>
-  );
 }
 
 function tournamentBody(ctrl) {

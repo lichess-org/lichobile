@@ -259,16 +259,6 @@ helper.isLandscape = function() {
   return window.matchMedia('(orientation: landscape)').matches;
 };
 
-helper.miniBoardSize = function(isPortrait) {
-  const { vh, vw } = helper.viewportDim();
-  const side = isPortrait ? vw * 0.66 : vh * 0.66;
-  const bounds = {
-    height: side,
-    width: side
-  };
-  return bounds;
-};
-
 // allow user to opt out of track analytics
 // only log if setting has it enabled
 helper.analyticsTrackView = function(view) {
@@ -287,3 +277,4 @@ helper.analyticsTrackEvent = function(category, action) {
 helper.autofocus = function(el, isUpdate) {
   if (!isUpdate) el.focus();
 };
+

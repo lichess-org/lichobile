@@ -65,8 +65,7 @@ export default function controller() {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);
-    const featuredGame = data.featured ? data.featured.id : null;
-    socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
+    socket.createTournament(id, tournament().socketVersion, handlers);
   })
   .catch(utils.handleXhrError);
 

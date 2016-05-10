@@ -9,5 +9,13 @@ export function tournament(id) {
 }
 
 export function reload(id) {
-  return request(`/tournament/${id}`, { background: true });
+  return request('/tournament/' + id, { background: true });
+}
+
+export function join(id) {
+  return request('/tournament/' + id + '/join', {method: 'POST'});
+}
+
+export function withdraw(id) {
+  return request('/tournament/' + id + '/withdraw', {method: 'POST'});
 }

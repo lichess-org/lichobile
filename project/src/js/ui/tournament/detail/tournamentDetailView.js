@@ -1,17 +1,29 @@
 import * as utils from '../../../utils';
-import h from '../../helper';
-import { header as headerWidget, backButton, pad} from '../../shared/common';
+import { header as headerWidget, pad} from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
+import { gameIcon } from '../../../utils';
+import helper from '../../helper';
+import settings from '../../../settings';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
-    backButton(ctrl.tournament().fullName)
+    ctrl.tournament() ? backToTournaments(ctrl.tournament().fullName) : null
   );
+
   const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
   return layout.free(headerCtrl, bodyCtrl);
+}
+
+function backToTournaments(title) {
+  return (
+    <button key="back-to-tournaments" className="back_button main_header_button" config={ helper.ontouch(() => m.route('/tournament')) }>
+      <span className="fa fa-arrow-left"/>
+      {title ? <div className="title">{title}</div> : null }
+    </button>
+  );
 }
 
 function tournamentBody(ctrl) {
@@ -20,12 +32,14 @@ function tournamentBody(ctrl) {
   if (!data) return null;
 
   let body = null;
-  if (data.isFinished)
-    body = tournamentContentFinished(data);
-  else if (!data.isStarted)
-    body = tournamentContentCreated(data);
+  if (data.isFinished) {
+    body = tournamentContentFinished(ctrl);
+  }
+  else if (!data.isStarted) {
+    body = tournamentContentCreated(ctrl);
+  }
   else
-    body = tournamentContentStarted(data);
+    body = tournamentContentStarted(ctrl);
 
   return (
     <div class="tournamentContainer native_scroller page">
@@ -34,63 +48,100 @@ function tournamentBody(ctrl) {
   );
 }
 
-function tournamentContentFinished(data) {
+function tournamentContentFinished(ctrl) {
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, null, null)}
-      { tournamentLeaderboard(data, true) }
+      { tournamentLeaderboard(ctrl, true) }
     </div>
   );
 }
 
-function tournamentContentCreated(data) {
+function tournamentContentCreated(ctrl) {
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, data.secondsToStart, 'Starts in:')}
-      { tournamentLeaderboard(data, false) }
+      { tournamentLeaderboard(ctrl, false) }
     </div>
   );
 }
 
-function tournamentContentStarted(data) {
+function tournamentContentStarted(ctrl) {
+  const data = ctrl.tournament();
   return (
     <div>
       { tournamentHeader(data, data.secondsToFinish, '')}
-      { tournamentLeaderboard(data, false) }
+      { tournamentLeaderboard(ctrl, false) }
       { data.featured ? tournamentFeaturedGame(data) : '' }
     </div>
   );
 }
 
 function tournamentHeader(data, time, timeText) {
-  let variant = variantInfo(data);
-  let control = timeControl(data);
+  const variant = variantDisplay(data);
+  const control = timeControl(data);
   return (
-    <div className='basicTournamentInfo'>
-      <strong> {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
-      <div className='timeInfo'>
-        <strong> {timeInfo(time, timeText)} </strong>
-      </div>
-    </div>
+    <div className='tournamentInfoTime'>
+     <strong className='tournamentInfo' data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
+     <div className='timeInfo'>
+       <strong> {timeInfo(time, timeText)} </strong>
+     </div>
+   </div>
   );
 }
 
-function variantInfo(data) {
-  let variant = data.variant;
-  if (variant === 'standard') {
-    if (data.schedule)
-      variant = data.schedule.speed;
-    else if (data.position)
-      variant = data.position.name;
-    else
-      variant = '';
+function tournamentJoinWithdraw(ctrl) {
+  const label = buttonLabel(ctrl);
+
+  function buttonAction () {
+    if (ctrl.hasJoined()) {
+      ctrl.withdraw(ctrl.tournament().id);
+    }
+    else {
+      ctrl.join(ctrl.tournament().id);
+    }
   }
+
+  if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+    return null;
+  }
+
+  return (
+    <button type="button" className="joinWithdrawButton" config={helper.ontouch(buttonAction)}>
+      {label}
+    </button>
+  );
+}
+
+function buttonLabel (ctrl) {
+  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
+  return (
+    <span>
+      <span className={icon}> {label} </span>
+    </span>
+  );
+}
+
+function variantDisplay(data) {
+  let variant = variantKey(data);
 
   variant = variant.split(' ')[0]; // Cut off names to first word
 
-  if (variant.length > 0)
+  if (variant.length > 0) {
     variant = variant.charAt(0).toUpperCase() + variant.substring(1);
+  }
 
+  return variant;
+}
+
+function variantKey(data) {
+  let variant = data.variant;
+  if (variant === 'standard') {
+    variant = data.perf.name.toLowerCase();
+  }
   return variant;
 }
 
@@ -107,9 +158,9 @@ function timeInfo(time, preceedingText) {
   if (!time) return '';
 
   let timeStr = '';
-  let hours = Math.floor(time / 60 / 60);
-  let mins = Math.floor(time / 60) - (hours * 60);
-  let secs = time % 60;
+  const hours = Math.floor(time / 60 / 60);
+  const mins = Math.floor(time / 60) - (hours * 60);
+  const secs = time % 60;
   if (hours > 0)
     timeStr = preceedingText + ' ' + hours + ':' + pad(mins, 2) + ':' + pad(secs, 2);
   else
@@ -117,9 +168,11 @@ function timeInfo(time, preceedingText) {
   return timeStr;
 }
 
-function tournamentLeaderboard(data, showTrophies) {
+function tournamentLeaderboard(ctrl, showTrophies) {
+  const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
+      {tournamentJoinWithdraw (ctrl)}
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
@@ -129,15 +182,14 @@ function tournamentLeaderboard(data, showTrophies) {
 }
 
 function createLeaderboardItemRenderer(showTrophies) {
-  function renderLeaderboardItem(player, index) {
-    const podiumRank = index + 1;
+  function renderLeaderboardItem(player) {
     let trophy = '';
-    if (showTrophies && podiumRank < 4) {
-      trophy = 'trophy-' + podiumRank;
+    if (showTrophies && player.rank < 4) {
+      trophy = 'trophy-' + player.rank;
     }
     return (
       <tr key={player.name} className='list_item'>
-        <td className='tournamentPlayer'><span className={trophy}>{player.name + ' (' + player.rating + ')'}</span></td>
+        <td className='tournamentPlayer'><span className={trophy}>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
         <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
       </tr>
     );
@@ -149,7 +201,7 @@ function tournamentFeaturedGame(data) {
   return (
     <div className='tournamentGames'>
       <p className='tournamentTitle'>Featured Game</p>
-      <div class='featuredGame nav' config={h.ontouchY(() => m.route('/game/' + data.featured.id))}>
+      <div class='featuredGame nav' config={helper.ontouchY(() => m.route('/tournament/' + data.id + '/game/' + data.featured.id))}>
           {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
       </div>
     </div>

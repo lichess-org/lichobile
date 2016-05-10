@@ -404,7 +404,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.chat) this.chat.onReload(rCfg.chat);
     if (this.data.tv) rCfg.tv = this.data.tv;
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
+    if (this.data.tournament) rCfg.tournament = this.data.tournament;
+
     this.data = data(rCfg);
+
     makeCorrespondenceClock();
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();

@@ -202,7 +202,7 @@ function tournamentFeaturedGame(data) {
   return (
     <div className='tournamentGames'>
       <p className='tournamentTitle'>Featured Game</p>
-      <div class='featuredGame nav' config={h.ontouchY(() => m.route('/tournament/' + data.id + '/game/' + data.featured.id))}>
+      <div class='featuredGame nav' config={helper.ontouchY(() => m.route('/tournament/' + data.id + '/game/' + data.featured.id))}>
           {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
       </div>
     </div>

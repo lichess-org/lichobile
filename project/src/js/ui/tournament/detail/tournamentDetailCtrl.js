@@ -54,13 +54,13 @@ export default function controller() {
 
   const id = m.route.param('id');
 
-  const throttled_reload = throttle(() => {
+  const throttledReload = throttle(() => {
     xhr.reload(tournament().id).then(reload);
   }, 1000);
 
   const handlers = {
-    reload: throttled_reload,
-    resync: throttled_reload,
+    reload: throttledReload,
+    resync: throttledReload,
     redirect: function(gameId) {
       m.route('/tournament/' + tournament().id + '/game/' + gameId);
     },

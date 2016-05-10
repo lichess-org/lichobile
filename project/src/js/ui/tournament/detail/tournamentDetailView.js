@@ -141,8 +141,7 @@ function variantDisplay(data) {
 function variantKey(data) {
   let variant = data.variant;
   if (variant === 'standard') {
-    variant = 'bullet';
-    // variant = data.perf.name.toLowerCase();
+    variant = data.perf.name.toLowerCase();
   }
   return variant;
 }

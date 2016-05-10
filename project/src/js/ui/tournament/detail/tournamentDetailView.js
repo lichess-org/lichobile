@@ -1,5 +1,4 @@
 import * as utils from '../../../utils';
-import h from '../../helper';
 import { header as headerWidget, pad} from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
@@ -110,7 +109,7 @@ function tournamentJoinWithdraw(ctrl) {
   }
 
   return (
-    <button type="button" className="joinWithdrawButton" config={h.ontouch(buttonAction)}>
+    <button type="button" className="joinWithdrawButton" config={helper.ontouch(buttonAction)}>
       {label}
     </button>
   );

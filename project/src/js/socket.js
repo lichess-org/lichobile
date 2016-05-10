@@ -77,7 +77,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
-function createTournament(tournamentId, version, handlers, featuredGame) {
+function createTournament(tournamentId, version, handlers) {
   let url = '/tournament/' + tournamentId + '/socket/v1';
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
@@ -85,7 +85,7 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
   const opts = {
     options: {
       name: 'tournament',
-      debug: true,
+      debug: false,
       pingDelay: 2000,
       sendOnOpen: 'following_onlines',
       registeredEvents: Object.keys(socketHandlers.events)
@@ -98,7 +98,6 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
     version,
     opts
   }});
-  worker.send('startWatching', featuredGame);
 }
 
 function createChallenge(id, version, onOpen, handlers) {

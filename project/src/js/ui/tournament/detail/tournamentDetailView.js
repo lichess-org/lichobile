@@ -200,35 +200,30 @@ function createLeaderboardItemRenderer(showTrophies) {
 }
 
 function tournamentFeaturedGame(ctrl) {
-  const isPortrait = helper.isPortrait();
   const data = ctrl.tournament();
+  const featured = data.featured;
+  if (!featured) return null;
+
+  const isPortrait = helper.isPortrait();
   console.log(data);
 
-  if (!data.featured) return null;
-
-  //Rearrange information the way miniBoard expects it
-  data.featured.player = {};
-  data.featured.player.rating = data.featured.white.rating;
-  data.featured.player.user = {};
-  data.featured.player.user.username = data.featured.white.username;
-
-  data.featured.opponent = {};
-  data.featured.opponent.rating = data.featured.black.rating;
-  data.featured.opponent.user = {};
-  data.featured.opponent.user.username = data.featured.black.username;
+  featured.player = {user: {username: featured.white.name}, rating: featured.white.rating};
+  featured.opponent = {user: {username: featured.black.name}, rating: featured.black.rating};
+  featured.clock = {initial: data.clock.limit, increment: data.clock.increment};
 
   return (
-    <section id="homeFeatured">
-      <h2 className="homeTitle">Featured game</h2>
-      {m.component(miniBoard, {
-        bounds: helper.miniBoardSize(isPortrait),
-        fen: data.featured.fen,
-        lastMove: data.featured.lastMove,
-        orientation: 'white',
-        link: () => m.route('/tournament/' + data.id + '/game/' + data.featured.id),
-        gameObj: data.featured,
-        showTime: false}
-      )}
-    </section>
+    <div className='tournamentGames'>
+      <p className='tournamentTitle'>Featured Game</p>
+      <div className='tournamentMiniBoard'>
+        {m.component(miniBoard, {
+          bounds: helper.miniBoardSize(isPortrait),
+          fen: featured.fen,
+          lastMove: featured.lastMove,
+          orientation: 'white',
+          link: () => m.route('/tournament/' + data.id + '/game/' + featured.id),
+          gameObj: featured}
+        )}
+      </div>
+    </div>
   );
 }

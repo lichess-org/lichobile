@@ -206,6 +206,7 @@ function tournamentFeaturedGame(ctrl) {
   if (!featured) return null;
 
   const isPortrait = helper.isPortrait();
+  console.log(data);
 
   featured.player = {user: {username: featured.white.name}, rating: featured.white.rating};
   featured.opponent = {user: {username: featured.black.name}, rating: featured.black.rating};

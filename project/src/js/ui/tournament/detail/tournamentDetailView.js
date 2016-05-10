@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import h from '../../helper';
 import { header as headerWidget, pad} from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
@@ -6,7 +7,6 @@ import i18n from '../../../i18n';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import settings from '../../../settings';
-import miniBoard from '../../shared/miniBoard';
 
 export default function view(ctrl) {
   const headerCtrl = utils.partialf(headerWidget, null,
@@ -71,12 +71,11 @@ function tournamentContentCreated(ctrl) {
 
 function tournamentContentStarted(ctrl) {
   const data = ctrl.tournament();
-
   return (
     <div>
       { tournamentHeader(data, data.secondsToFinish, '')}
       { tournamentLeaderboard(ctrl, false) }
-      { data.featured ? tournamentFeaturedGame(ctrl) : '' }
+      { data.featured ? tournamentFeaturedGame(data) : '' }
     </div>
   );
 }
@@ -111,7 +110,7 @@ function tournamentJoinWithdraw(ctrl) {
   }
 
   return (
-    <button type="button" className="joinWithdrawButton" config={helper.ontouch(buttonAction)}>
+    <button type="button" className="joinWithdrawButton" config={h.ontouch(buttonAction)}>
       {label}
     </button>
   );
@@ -200,36 +199,13 @@ function createLeaderboardItemRenderer(showTrophies) {
   return renderLeaderboardItem;
 }
 
-function tournamentFeaturedGame(ctrl) {
-  const isPortrait = helper.isPortrait();
-  const data = ctrl.tournament();
-  console.log(data);
-
-  if (!data.featured) return null;
-
-  //Rearrange information the way miniBoard expects it
-  data.featured.player = {};
-  data.featured.player.rating = data.featured.white.rating;
-  data.featured.player.user = {};
-  data.featured.player.user.username = data.featured.white.username;
-
-  data.featured.opponent = {};
-  data.featured.opponent.rating = data.featured.black.rating;
-  data.featured.opponent.user = {};
-  data.featured.opponent.user.username = data.featured.black.username;
-
+function tournamentFeaturedGame(data) {
   return (
-    <section id="homeFeatured">
-      <h2 className="homeTitle">Featured game</h2>
-      {m.component(miniBoard, {
-        bounds: helper.miniBoardSize(isPortrait),
-        fen: data.featured.fen,
-        lastMove: data.featured.lastMove,
-        orientation: 'white',
-        link: () => m.route('/tournament/' + data.id + '/game/' + data.featured.id),
-        gameObj: data.featured,
-        showTime: false}
-      )}
-    </section>
+    <div className='tournamentGames'>
+      <p className='tournamentTitle'>Featured Game</p>
+      <div class='featuredGame nav' config={h.ontouchY(() => m.route('/tournament/' + data.id + '/game/' + data.featured.id))}>
+          {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
+      </div>
+    </div>
   );
 }

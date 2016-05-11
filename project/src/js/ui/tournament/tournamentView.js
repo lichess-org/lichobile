@@ -49,7 +49,7 @@ function tournamentListBody(ctrl) {
 
 function renderTournamentList (list, id) {
   return (
-    <div key={id} className='tournamentList'>
+    <div key={id}>
       <table className='tournamentList'>
         {list.map(renderTournamentListItem)}
       </table>

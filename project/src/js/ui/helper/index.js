@@ -5,9 +5,6 @@ import ButtonHandler from './button';
 import animator from './animator';
 import m from 'mithril';
 
-const helper = {};
-export default helper;
-
 // store temporarily last route to disable animations on same route
 // TODO find a better way cause this is ugly
 var lastRoute;
@@ -107,9 +104,6 @@ function viewFadesOut(el, callback) {
   tId = setTimeout(after, 250);
 }
 
-helper.slidingPage = animator(viewSlideIn, viewSlideOut);
-helper.fadingPage = animator(viewFadesIn, viewFadesOut);
-
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
 
@@ -120,11 +114,6 @@ function computeTransformProp() {
     'mozTransform' : 'oTransform' in document.body.style ?
     'oTransform' : 'msTransform';
 }
-
-helper.transformProp = function() {
-  if (!cachedTransformProp) cachedTransformProp = computeTransformProp();
-  return cachedTransformProp;
-};
 
 function collectionHas(coll, el) {
   for (var i = 0, len = coll.length; i < len; i++) {
@@ -141,57 +130,6 @@ function findParentBySelector(el, selector) {
   }
   return cur;
 }
-
-helper.slidesInUp = function(el, isUpdate, context) {
-  if (!isUpdate) {
-    el.style.transform = 'translateY(100%)';
-    // force reflow hack
-    context.lol = el.offsetHeight;
-    Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
-    .catch(console.log.bind(console));
-  }
-};
-
-helper.slidesOutDown = function(callback, elID) {
-  return function() {
-    const el = document.getElementById(elID);
-    m.redraw.strategy('none');
-    return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
-    .catch(console.log.bind(console));
-  };
-};
-
-helper.slidesInLeft = function(el, isUpdate, context) {
-  if (!isUpdate) {
-    el.style.transform = 'translateX(100%)';
-    // force reflow hack
-    context.lol = el.offsetHeight;
-    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
-    .catch(console.log.bind(console));
-  }
-};
-
-helper.slidesOutRight = function(callback, elID) {
-  return function() {
-    const el = document.getElementById(elID);
-    m.redraw.strategy('none');
-    return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
-    .then(utils.autoredraw.bind(undefined, callback))
-    .catch(console.log.bind(console));
-  };
-};
-
-helper.fadesOut = function(callback, selector, time = 150) {
-  return function(e) {
-    e.stopPropagation();
-    var el = selector ? findParentBySelector(e.target, selector) : e.target;
-    m.redraw.strategy('none');
-    return Zanimo(el, 'opacity', 0, time)
-    .then(() => utils.autoredraw(callback))
-    .catch(console.log.bind(console));
-  };
-};
 
 function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
   return function(el, isUpdate) {
@@ -215,82 +153,150 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
   };
 }
 
-helper.ontouch = function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
-};
+var cachedViewportDim = null;
 
-helper.ontouchX = function(tapHandler, holdHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
-};
-helper.ontouchY = function(tapHandler, holdHandler, touchEndFeedback = true) {
-  return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
-};
-
-helper.progress = function(p) {
-  if (p === 0) return null;
-  return m('span', {
-    className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
-    'data-icon': p > 0 ? 'N' : 'M'
-  }, Math.abs(p));
-};
-
-helper.classSet = function(classes) {
-  var arr = [];
-  for (var i in classes) {
-    if (classes[i]) arr.push(i);
-  }
-  return arr.join(' ');
-};
-
-helper.cachedViewportDim = null;
-helper.viewportDim = function() {
-  if (helper.cachedViewportDim) return helper.cachedViewportDim;
+function viewportDim() {
+  if (cachedViewportDim) return cachedViewportDim;
 
   let e = document.documentElement;
-  let viewportDim = helper.cachedViewportDim = {
+  let vpd = cachedViewportDim = {
     vw: e.clientWidth,
     vh: e.clientHeight
   };
-  return viewportDim;
-};
+  return vpd;
+}
 
-helper.isWideScreen = function() {
-  return helper.viewportDim().vw >= 600;
-};
+export default {
+  slidingPage: animator(viewSlideIn, viewSlideOut),
+  fadingPage: animator(viewFadesIn, viewFadesOut),
 
-helper.isVeryWideScreen = function() {
-  return helper.viewportDim().vw >= 960;
-};
+  viewportDim,
 
-helper.isIpadLike = function () {
-  const { vh, vw } = helper.viewportDim();
-  return vh >= 700 && vw <= 1050;
-};
+  transformProp: function() {
+    if (!cachedTransformProp) cachedTransformProp = computeTransformProp();
+    return cachedTransformProp;
+  },
 
-helper.isPortrait = function() {
-  return window.matchMedia('(orientation: portrait)').matches;
-};
+  clearCachedViewportDim() {
+    cachedViewportDim = null;
+  },
 
-helper.isLandscape = function() {
-  return window.matchMedia('(orientation: landscape)').matches;
-};
+  slidesInUp: function(el, isUpdate, context) {
+    if (!isUpdate) {
+      el.style.transform = 'translateY(100%)';
+      // force reflow hack
+      context.lol = el.offsetHeight;
+      Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
+      .catch(console.log.bind(console));
+    }
+  },
 
-// allow user to opt out of track analytics
-// only log if setting has it enabled
-helper.analyticsTrackView = function(view) {
-  const enabled = settings.general.analytics();
-  if (enabled)
-    window.analytics.trackView(view);
-};
+  slidesOutDown: function(callback, elID) {
+    return function() {
+      const el = document.getElementById(elID);
+      m.redraw.strategy('none');
+      return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
+      .then(utils.autoredraw.bind(undefined, callback))
+     .catch(console.log.bind(console));
+    };
+  },
 
-helper.analyticsTrackEvent = function(category, action) {
-  const enabled = settings.general.analytics();
-  if (enabled) {
-    window.analytics.trackEvent(category, action);
+  slidesInLeft: function(el, isUpdate, context) {
+    if (!isUpdate) {
+      el.style.transform = 'translateX(100%)';
+      // force reflow hack
+      context.lol = el.offsetHeight;
+      Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+      .catch(console.log.bind(console));
+    }
+  },
+
+  slidesOutRight: function(callback, elID) {
+    return function() {
+      const el = document.getElementById(elID);
+      m.redraw.strategy('none');
+      return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
+      .then(utils.autoredraw.bind(undefined, callback))
+      .catch(console.log.bind(console));
+    };
+  },
+
+  fadesOut: function(callback, selector, time = 150) {
+    return function(e) {
+      e.stopPropagation();
+      var el = selector ? findParentBySelector(e.target, selector) : e.target;
+      m.redraw.strategy('none');
+      return Zanimo(el, 'opacity', 0, time)
+      .then(() => utils.autoredraw(callback))
+      .catch(console.log.bind(console));
+    };
+  },
+
+  ontouch: function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
+    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
+  },
+
+  ontouchX: function(tapHandler, holdHandler, touchEndFeedback = true) {
+    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
+  },
+  ontouchY: function(tapHandler, holdHandler, touchEndFeedback = true) {
+    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
+  },
+
+  progress: function(p) {
+    if (p === 0) return null;
+    return m('span', {
+      className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
+      'data-icon': p > 0 ? 'N' : 'M'
+    }, Math.abs(p));
+  },
+
+  classSet: function(classes) {
+    var arr = [];
+    for (var i in classes) {
+      if (classes[i]) arr.push(i);
+    }
+    return arr.join(' ');
+  },
+
+
+  isWideScreen: function() {
+    return viewportDim().vw >= 600;
+  },
+
+  isVeryWideScreen: function() {
+    return viewportDim().vw >= 960;
+  },
+
+  isIpadLike: function () {
+    const { vh, vw } = viewportDim();
+    return vh >= 700 && vw <= 1050;
+  },
+
+  isPortrait: function() {
+    return window.matchMedia('(orientation: portrait)').matches;
+  },
+
+  isLandscape: function() {
+    return window.matchMedia('(orientation: landscape)').matches;
+  },
+
+  // allow user to opt out of track analytics
+  // only log if setting has it enabled
+  analyticsTrackView: function(view) {
+    const enabled = settings.general.analytics();
+    if (enabled)
+      window.analytics.trackView(view);
+  },
+
+  analyticsTrackEvent: function(category, action) {
+    const enabled = settings.general.analytics();
+    if (enabled) {
+      window.analytics.trackEvent(category, action);
+    }
+  },
+
+  autofocus: function(el, isUpdate) {
+    if (!isUpdate) el.focus();
   }
 };
-
-helper.autofocus = function(el, isUpdate) {
-  if (!isUpdate) el.focus();
-};
-

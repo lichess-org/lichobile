@@ -50,7 +50,6 @@ function toLabel(status, winner, variant) {
         default:
           return i18n('draw');
       }
-      break;
     case 'draw':
       return i18n('draw');
     case 'outoftime':
@@ -68,7 +67,6 @@ function toLabel(status, winner, variant) {
         default:
           return 'Variant ending';
       }
-      break;
     default:
       return status;
   }

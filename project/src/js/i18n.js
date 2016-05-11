@@ -50,10 +50,10 @@ const untranslated = {
 
 const defaultCode = 'en';
 
-export default function i18n(key) {
+export default function i18n(key, ...args) {
   var str = messages[key] || untranslated[key] || key;
-  for (var i = 1; i < arguments.length; ++i) {
-    str = str.replace('%s', arguments[i]);
+  for (let a in args) {
+    str = str.replace('%s', a);
   }
   return str;
 }

@@ -8,6 +8,7 @@ var preprocess = require('gulp-preprocess');
 var watchify = require('watchify');
 var browserify = require('browserify');
 var babelify = require('babelify');
+var tsify = require('tsify');
 var stylus = require('gulp-stylus');
 var minifyCss = require('gulp-minify-css');
 var streamify = require('gulp-streamify');
@@ -46,8 +47,9 @@ function buildStyl(src, dest, mode) {
 function buildScripts(src, dest, mode) {
   var opts = (mode === 'dev') ? { debug: true } : {};
 
-  return browserify(src + '/js/main.js', opts)
-    .transform(babelify, {presets: ['es2015']})
+  return browserify(src + '/js/main.ts', opts)
+    .plugin(tsify)
+    .transform(babelify, {presets: ['es2015'], extensions: ['.js', '.ts']})
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))
@@ -74,7 +76,8 @@ gulp.task('watch-scripts', function() {
   opts.debug = true;
 
   var bundleStream = watchify(
-    browserify('./src/js/main.js', opts)
+    browserify('./src/js/main.ts', opts)
+    .plugin(tsify)
     .transform(babelify, {presets: ['es2015']})
   );
 

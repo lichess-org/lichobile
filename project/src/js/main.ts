@@ -1,4 +1,9 @@
-/* application entry point */
+/// <reference path="../dts/cordova/cordova.d.ts" />
+/// <reference path="../dts/cordova-ionic/cordova-ionic.d.ts" />
+/// <reference path="../dts/mithril.d.ts" />
+/// <reference path="../dts/lichess.d.ts" />
+
+'use strict';
 
 import './polyfills';
 
@@ -62,7 +67,9 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true);
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
-  if (window.lichess.gaId) window.analytics.startTrackerWithId(window.lichess.gaId);
+  if (window.lichess.gaId) {
+    window.analytics.startTrackerWithId(window.lichess.gaId, utils.noop, utils.noop);
+  }
 
   // leave time to the screen to render fully
   setTimeout(function() {
@@ -72,7 +79,7 @@ function main() {
 }
 
 function onResize() {
-  helper.cachedViewportDim = null;
+  helper.clearCachedViewportDim();
   m.redraw();
 }
 
@@ -88,7 +95,7 @@ function onOnline() {
     }
     // try to reconnect socket
     socket.connect();
-  }, err => {
+  }, (err: any) => {
     if (!triedToLogin) {
       // means user is anonymous here
       if (err.status === 401) {
@@ -119,7 +126,7 @@ function onPause() {
 
 function handleError(event, source, fileno, columnNumber) {
   var description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.analytics.trackException(description, true);
+  window.analytics.trackException(description, true, utils.noop, utils.noop);
 }
 
 window.onerror = handleError;

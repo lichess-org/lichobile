@@ -1,5 +1,4 @@
-import * as utils from '../../../utils';
-import { header as headerWidget, pad} from '../../shared/common';
+import { header as headerWidget, pad, backButton } from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
@@ -9,22 +8,13 @@ import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
 
 export default function view(ctrl) {
-  const headerCtrl = utils.partialf(headerWidget, null,
-    ctrl.tournament() ? backToTournaments(ctrl.tournament().fullName) : null
+  const headerCtrl = headerWidget.bind(undefined, null,
+    backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );
 
   const bodyCtrl = tournamentBody.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl);
-}
-
-function backToTournaments(title) {
-  return (
-    <button key="back-to-tournaments" className="back_button main_header_button" config={ helper.ontouch(() => m.route('/tournament')) }>
-      <span className="fa fa-arrow-left"/>
-      {title ? <div className="title">{title}</div> : null }
-    </button>
-  );
+  return layout.free(headerCtrl, bodyCtrl, renderFooter.bind(undefined, ctrl));
 }
 
 function tournamentBody(ctrl) {
@@ -32,18 +22,20 @@ function tournamentBody(ctrl) {
 
   if (!data) return null;
 
-  let body = null;
+  let body;
+
   if (data.isFinished) {
     body = tournamentContentFinished(ctrl);
   }
   else if (!data.isStarted) {
     body = tournamentContentCreated(ctrl);
   }
-  else
+  else {
     body = tournamentContentStarted(ctrl);
+  }
 
   return (
-    <div class="tournamentContainer native_scroller page">
+    <div class="tournamentContainer native_scroller page withFooter">
       {body}
     </div>
   );
@@ -95,7 +87,8 @@ function tournamentHeader(data, time, timeText) {
 }
 
 function tournamentJoinWithdraw(ctrl) {
-  const label = buttonLabel(ctrl);
+  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
+  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
 
   function buttonAction () {
     if (ctrl.hasJoined()) {
@@ -111,19 +104,10 @@ function tournamentJoinWithdraw(ctrl) {
   }
 
   return (
-    <button type="button" className="joinWithdrawButton" config={helper.ontouch(buttonAction)}>
+    <button className="action_bar_button" config={helper.ontouch(buttonAction)}>
+      <span className={icon} />
       {label}
     </button>
-  );
-}
-
-function buttonLabel (ctrl) {
-  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
-  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
-  return (
-    <span>
-      <span className={icon}> {label} </span>
-    </span>
   );
 }
 
@@ -174,7 +158,6 @@ function tournamentLeaderboard(ctrl, showTrophies) {
   const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
-      {tournamentJoinWithdraw (ctrl)}
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
@@ -226,3 +209,12 @@ function tournamentFeaturedGame(ctrl) {
     </div>
   );
 }
+
+function renderFooter(ctrl) {
+  return (
+    <div className="actions_bar">
+      {tournamentJoinWithdraw(ctrl)}
+    </div>
+  );
+}
+

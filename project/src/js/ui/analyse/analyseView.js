@@ -15,8 +15,8 @@ import variantApi from '../../lichess/variant';
 import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
-import { renderBoard } from '../round/view/roundView';
-import { getBoardBounds, noop, partialf, playerName, gameIcon } from '../../utils';
+import Board from '../shared/Board';
+import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
 import button from '../round/view/button';
@@ -49,9 +49,23 @@ function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'analyse');
+  const ceval = ctrl.currentAnyEval();
+  const bestMove =  ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
+    brush: 'paleBlue',
+    orig: ceval.best.slice(0, 2),
+    dest: ceval.best.slice(2, 4)
+  } : null;
+
+  const board = m.component(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait,
+    shapes: bestMove ? [bestMove] : null
+  });
 
   return [
-    renderBoard(ctrl.data, ctrl.chessground, bounds, isPortrait),
+    board,
     <div className="analyseTableWrapper">
       {renderTable(ctrl)}
       {renderActionsBar(ctrl, isPortrait)}
@@ -76,13 +90,19 @@ function renderTable(ctrl) {
   );
 }
 
+function getChecksCount(ctrl, color) {
+  const step = ctrl.vm.step;
+  return step.checkCount[oppositeColor(color)];
+}
+
 function renderInfos(ctrl) {
   const cevalEnabled = ctrl.ceval.enabled();
-  const ceval = ctrl.currentAnyEval() || null;
+  const ceval = ctrl.currentAnyEval();
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
     (ceval && ceval.mate) + (ceval && ceval.best) +
-    ctrl.vm.showBestMove + ctrl.ceval.percentComplete() + isEmpty(ctrl.vm.step.dests);
+    ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
+    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'
@@ -116,9 +136,15 @@ function renderOpponents(ctrl) {
       <div className="analyseOpponents">
         <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
           {playerName(player, true)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' (' + getChecksCount(ctrl, player.color) + ')' : null
+          }
         </div>
         <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
           {playerName(opponent, true)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
+          }
         </div>
       </div>
     </div>

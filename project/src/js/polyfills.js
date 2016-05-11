@@ -82,33 +82,3 @@ if (!String.prototype.includes) {
     return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
-
-if (!window.Stockfish) {
-  // cordova-stockfish-plugin interface
-  var stockfishWorker;
-  window.Stockfish = {
-    init: function(success) {
-      if (stockfishWorker) {
-        setTimeout(success);
-        return;
-      }
-      stockfishWorker = new Worker('vendor/stockfish6.js');
-      if (success) {
-        setTimeout(success);
-      }
-    },
-    cmd: function(cmd) {
-      stockfishWorker.postMessage(cmd);
-    },
-    output: function(callback) {
-      stockfishWorker.addEventListener('message', msg => {
-        callback(msg.data);
-      });
-    },
-    exit: function(cb) {
-      stockfishWorker.terminate();
-      stockfishWorker = null;
-      if (cb) setTimeout(cb, 1);
-    }
-  };
-}

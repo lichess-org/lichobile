@@ -67,8 +67,12 @@ function moretimeable(data) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data);
 }
 
+function imported(data) {
+  return data.game.source === 'import';
+}
+
 function replayable(data) {
-  return data.game.variant.key === 'standard' && gameStatus.finished(data);
+  return imported(data) || gameStatus.finished(data);
 }
 
 function userAnalysable(data) {

@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import data from './data';
+import makeData from './data';
 import * as utils from '../../utils';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
@@ -25,7 +25,7 @@ import m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
-  this.data = data(cfg);
+  this.data = makeData(cfg);
 
   this.onTVChannelChange = onTVChannelChange;
 
@@ -393,7 +393,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
-  this.chat = (this.data.opponent.ai || this.data.player.spectator) ?
+  this.chat = (session.isKidMode() || this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
   this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
@@ -406,7 +406,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
     if (this.data.tournament) rCfg.tournament = this.data.tournament;
 
-    this.data = data(rCfg);
+    this.data = makeData(rCfg);
 
     makeCorrespondenceClock();
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);

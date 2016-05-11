@@ -49,7 +49,7 @@ function renderAnalyseMenu(ctrl) {
     m('button', {
       key: 'startNewAnalysis',
       config: helper.ontouch(ctrl.startNewAnalysis)
-    }, [m('span[data-icon=A]'), i18n('startNewAnalysis')]),
+    }, [m('span[data-icon=A].withIcon'), i18n('startNewAnalysis')]),
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
@@ -72,7 +72,7 @@ function renderAnalyseMenu(ctrl) {
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
           ctrl.ceval.toggle();
-          if (v) ctrl.startCeval();
+          if (v) ctrl.initCeval();
           else ctrl.ceval.destroy();
         }
       ),

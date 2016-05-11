@@ -13,11 +13,12 @@ export default function chessLogic(ctrl) {
         break;
       case 'move':
         if (payload.path) {
-          var sit = payload.situation;
-          var step = {
+          const sit = payload.situation;
+          const step = {
             ply: sit.ply,
             dests: sit.dests,
             check: sit.check,
+            checkCount: sit.checkCount,
             fen: sit.fen,
             uci: sit.uciMoves[0],
             san: sit.pgnMoves[0]

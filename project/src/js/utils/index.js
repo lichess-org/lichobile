@@ -324,4 +324,3 @@ export function variantReminder(el, icon) {
     }
   }, 800);
 }
-

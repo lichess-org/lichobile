@@ -27,7 +27,7 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
       width 100%
 
 .sparePieces
-  height calc((100% - 100vw - 40px) / 2)
+  height "calc((100% - 100vw - %s) / 2)" % footerHeight
   display flex
   justify-content center
   align-items center

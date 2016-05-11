@@ -12,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor, aiName } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -66,14 +66,17 @@ export default function controller() {
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
     addMove(from, to);
+    m.redraw();
   };
 
   const engineMove = function () {
     this.vm.engineSearching = true;
     const sit = this.replay.situation();
     setTimeout(() => {
-      engine.setLevel(this.getOpponent().level);
-      engine.search(this.data.game.initialFen, sit.uciMoves.join(' '));
+      const l = this.getOpponent().level;
+      this.data.opponent.username = aiName(l);
+      engine.setLevel(l)
+      .then(() => engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
     }, 500);
   }.bind(this);
 
@@ -106,7 +109,6 @@ export default function controller() {
       this.onGameEnd();
     } else if (isEngineToMove()) {
       engineMove();
-      m.redraw();
     }
     this.save();
     m.redraw();
@@ -146,10 +148,12 @@ export default function controller() {
     }
     this.replay.apply();
 
-    engine.prepare(this.data.game.variant.key);
-    if (isEngineToMove()) {
-      engineMove();
-    }
+    engine.prepare(this.data.game.variant.key)
+    .then(() => {
+      if (isEngineToMove()) {
+        engineMove();
+      }
+    });
 
     m.redraw();
   }.bind(this);
@@ -207,7 +211,8 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  engine.init(() => {
+  engine.init()
+  .then(() => {
     if (setupFen) {
       this.startNewGame(setupFen);
     } else if (saved) {
@@ -229,7 +234,7 @@ export default function controller() {
     if (this.chessground) {
       this.chessground.onunload();
     }
-    chessWorker.terminate();
+    if (chessWorker) chessWorker.terminate();
     engine.exit();
   };
 }

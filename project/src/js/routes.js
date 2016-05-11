@@ -10,6 +10,7 @@ import ai from './ui/ai';
 import settingsUi from './ui/settings';
 import settingsSoundNotifications from './ui/settings/soundNotifications';
 import settingsLang from './ui/settings/lang';
+import settingsKidMode from './ui/settings/kid';
 import settingsPreferences from './ui/settings/preferences';
 import settingsGameDisplay from './ui/settings/gameDisplay';
 import settingsGameBehavior from './ui/settings/gameBehavior';
@@ -68,6 +69,7 @@ export default {
       '/settings/themes/board': slidingPage(boardThemes),
       '/settings/themes/piece': slidingPage(pieceThemes),
       '/settings/lang': slidingPage(settingsLang),
+      '/settings/kidMode': slidingPage(settingsKidMode),
       '/training': fadingPage(training),
       '/training/:id': fadingPage(training),
       '/tournament': fadingPage(tournament),

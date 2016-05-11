@@ -108,7 +108,9 @@ export default {
     variant: localstorageprop('settings.ai.variant', 'standard'),
     availableVariants: [
       ['Standard', 'standard'],
-      ['Chess960', 'chess960']
+      ['Chess960', 'chess960'],
+      ['King of the Hill', 'kingOfTheHill'],
+      ['Three-check', 'threeCheck']
     ]
   },
 

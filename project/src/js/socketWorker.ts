@@ -2,7 +2,7 @@ import merge from 'lodash/merge';
 import range from 'lodash/range';
 import { serializeQueryParameters } from './utils';
 
-export default function(worker) {
+export default function(worker: Worker) {
   var socketInstance;
 
   var currentUrl;
@@ -63,7 +63,7 @@ export default function(worker) {
           self.onError(e);
         };
         self.ws.onclose = function() {
-          postMessage({ topic: 'disconnected' });
+          worker.postMessage({ topic: 'disconnected' });
           if (self.autoReconnect) {
             self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);
             self.scheduleConnect(self.options.autoReconnectDelay);
@@ -71,7 +71,7 @@ export default function(worker) {
         };
         self.ws.onopen = function() {
           self.debug('connected to ' + fullUrl, true);
-          postMessage({ topic: 'onOpen' });
+          worker.postMessage({ topic: 'onOpen' });
           if (self.options.sendOnOpen) self.send(self.options.sendOnOpen);
           self.onSuccess();
           self.pingNow();
@@ -193,7 +193,7 @@ export default function(worker) {
           break;
         default:
           if (self.options.registeredEvents.indexOf(msg.t) !== -1) {
-            postMessage({ topic: 'handle', payload: msg });
+            worker.postMessage({ topic: 'handle', payload: msg });
           }
       }
     },
@@ -229,16 +229,16 @@ export default function(worker) {
 
     onError: function(e) {
       var self = this;
-      postMessage({ topic: 'onError' });
+      worker.postMessage({ topic: 'onError' });
       self.options.debug = true;
       self.debug('error: ' + JSON.stringify(e));
       self.tryAnotherUrl = true;
-      postMessage({ topic: 'disconnected' });
+      worker.postMessage({ topic: 'disconnected' });
       clearTimeout(self.pingSchedule);
     },
 
     onSuccess: function() {
-      postMessage({ topic: 'connected' });
+      worker.postMessage({ topic: 'connected' });
     },
 
     pingInterval: function() {
@@ -280,7 +280,7 @@ export default function(worker) {
     );
   }
 
-  worker.addEventListener('message', function(msg) {
+  worker.addEventListener('message', function(msg: MessageEvent) {
     switch (msg.data.topic) {
       case 'create':
         create(msg.data.payload);
@@ -307,8 +307,8 @@ export default function(worker) {
         }
         break;
       case 'averageLag':
-        if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
-        else postMessage({ topic: 'averageLag', payload: null });
+        if (socketInstance) worker.postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
+        else worker.postMessage({ topic: 'averageLag', payload: null });
         break;
       default:
         throw new Error('socker worker message not supported: ' + msg.data.topic);

@@ -18,7 +18,7 @@ interface GameSetup {
   level?: string;
 }
 
-export function newAiGame(fen) {
+export function newAiGame(fen: string) {
   const config = settings.gameSetup.ai;
   const data: GameSetup = {
     variant: config.variant(),
@@ -56,7 +56,7 @@ export function seekGame() {
   }, true);
 }
 
-export function challenge(userId, fen) {
+export function challenge(userId: string, fen: string) {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 
@@ -82,33 +82,33 @@ export function getChallenges() {
   return request('/challenge', {}, true);
 }
 
-export function getChallenge(id) {
+export function getChallenge(id: string) {
   return request(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id) {
+export function cancelChallenge(id: string) {
   return request(`/challenge/${id}/cancel`, {
     method: 'POST',
     deserialize: v => v
   }, true);
 }
 
-export function declineChallenge(id) {
+export function declineChallenge(id: string) {
   return request(`/challenge/${id}/decline`, {
     method: 'POST',
     deserialize: v => v
   }, true);
 }
 
-export function acceptChallenge(id) {
+export function acceptChallenge(id: string) {
   return request(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
-export function lobby(feedback) {
+export function lobby(feedback: boolean) {
   return request('/', null, feedback);
 }
 
-export function seeks(feedback) {
+export function seeks(feedback: boolean) {
   return request('/lobby/seeks', null, feedback);
 }
 
@@ -118,18 +118,18 @@ export function game(id: string, color?: string, background?: boolean) {
   return request(url, { background }, true);
 }
 
-export function toggleGameBookmark(id) {
+export function toggleGameBookmark(id: string) {
   return request('/bookmark/' + id, {
     method: 'POST',
     deserialize: v => v
   });
 }
 
-export function featured(channel, flip) {
+export function featured(channel: string, flip?: boolean) {
   return request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
 }
 
-export function setServerLang(lang) {
+export function setServerLang(lang: string) {
   if (session.isConnected()) {
     return request('/translation/select', {
       method: 'POST',
@@ -142,7 +142,7 @@ export function setServerLang(lang) {
   }
 }
 
-export function miniUser(userId) {
+export function miniUser(userId: string) {
   return request(`/@/${userId}/mini`);
 }
 

@@ -12,19 +12,32 @@ import m from 'mithril';
 
 const worker = work(socketWorker);
 
-var socketHandlers;
-var errorDetected = false;
-var connectedWS = true;
+interface Options {
+  name: string;
+  debug?: boolean;
+  pingDelay?: number;
+  sendOnOpen?: string;
+  registeredEvents: string[];
+}
 
-var alreadyWarned = false;
-var redrawOnDisconnectedTimeoutID;
-var proxyFailTimeoutID;
+interface SocketConfig {
+  options: Options;
+  params?: Object;
+}
+
+let socketHandlers;
+let errorDetected = false;
+let connectedWS = true;
+
+let alreadyWarned = false;
+let redrawOnDisconnectedTimeoutID;
+let proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
 const defaultHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
-  following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
+  following_enters: name => utils.autoredraw(friendsApi.add.bind(undefined, name)),
+  following_leaves: name => utils.autoredraw(friendsApi.remove.bind(undefined, name)),
   challenges: data => {
     challengesApi.set(data);
     m.redraw();
@@ -49,7 +62,9 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         // just to be sure that we don't send an xhr every second when the
         // websocket is trying to reconnect
         errorDetected = true;
-        xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
+        xhr.game(gameUrl.substring(1))
+        .then(utils.noop)
+        .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
             m.route('/');
@@ -59,7 +74,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     },
     events: Object.assign({}, defaultHandlers, handlers)
   };
-  const opts = {
+  const opts: SocketConfig = {
     options: {
       name: 'game',
       debug: false,
@@ -250,7 +265,7 @@ export default {
   createTournament,
   createDefault,
   redirectToGame,
-  setVersion(version) {
+  setVersion(version: number) {
     worker.postMessage({ topic: 'setVersion', payload: version });
   },
   getAverageLag(callback) {

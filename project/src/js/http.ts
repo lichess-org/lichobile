@@ -24,12 +24,14 @@ function xhrConfig(xhr) {
 }
 
 // convenient wrapper around m.request
-export function request(url, opts, feedback, xhrConf) {
+export function request(url, opts = {}, feedback = false, xhrConf = null): Promise<any> {
 
-  var cfg = {
+  const cfg = {
     url: 'http://' + baseUrl + url,
     method: 'GET',
-    data: { },
+    data: { 
+      _: undefined
+    },
     config: xhrConf || xhrConfig,
     deserialize: function(text) {
       try {
@@ -48,10 +50,10 @@ export function request(url, opts, feedback, xhrConf) {
     cfg.data._ = Date.now();
   }
 
-  var promise = m.request(cfg);
+  const promise = m.request(cfg);
 
   if (feedback) {
-    spinner.spin(document.body);
+    spinner.spin();
     return promise.then(onSuccess, onError);
   } else
     return promise;

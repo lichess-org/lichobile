@@ -305,18 +305,7 @@ declare namespace Mithril {
 		*
 		* @see XHROptions for the available options.
 		*/
-		request(options: XHROptions): Promise<any>
-
-		/**
-		* Send a JSONP request to a server. Note that the `url` option is
-		* required.
-		*
-		* @param options The options to use
-		* @return A promise to the returned data.
-		*
-		* @see JSONPOptions for the available options.
-		*/
-		request(options: JSONPOptions): Promise<any>;
+		request(options: XHROptions): Promise<any>;
 
 		deferred: {
 			/**
@@ -663,39 +652,6 @@ declare namespace Mithril {
 	}
 
 	/**
-	* This represents a Mithril promise object.
-	*/
-	interface Promise<T> extends Thennable<T>, Property<T | Promise<T>> {
-		/**
-		* Chain this promise with a simple success callback, propogating
-		* rejections.
-		*
-		* @param success The callback to call when the promise is resolved.
-		* @return The chained promise.
-		*/
-		then<U>(success: SuccessCallback<T, U>): Promise<U>;
-
-		/**
-		* Chain this promise with a success callback and error callback, without
-		* propogating rejections.
-		*
-		* @param success The callback to call when the promise is resolved.
-		* @param error The callback to call when the promise is rejected.
-		* @return The chained promise.
-		*/
-		then<U, V>(success: SuccessCallback<T, U>, error: ErrorCallback<V>): Promise<U | V>;
-
-		/**
-		* Chain this promise with a single error callback, without propogating
-		* rejections.
-		*
-		* @param error The callback to call when the promise is rejected.
-		* @return The chained promise.
-		*/
-		catch<U>(error: ErrorCallback<U>): Promise<T | U>;
-	}
-
-	/**
 	 * These are the common options shared across normal and JSONP requests.
 	 *
 	 * @see m.request
@@ -736,7 +692,7 @@ declare namespace Mithril {
 		* @param data The data to unwrap.
 		* @return The unwrapped result.
 		*/
-		unwrapError?(data: any): any;
+		unwrapError?(data: any, xhr: XMLHttpRequest): any;
 
 		/**
 		* An optional function to serialize the data. This defaults to
@@ -783,34 +739,6 @@ declare namespace Mithril {
 	}
 
 	/**
-	* This represents the available options for configuring m.request for JSONP
-	* requests.
-	*
-	* @see m.request
-	*/
-	interface JSONPOptions extends RequestOptions {
-		/**
-		* For JSONP requests, this must be the string "jsonp". Otherwise, it's
-		* ignored.
-		*/
-		dataType: "jsonp";
-
-		/**
-		* The querystring key for the JSONP request callback. This is useful for
-		* APIs that don't use common conventions, such as
-		* `www.example.com/?jsonpCallback=doSomething`. It defaults to
-		* `callback`.
-		*/
-		callbackKey?: string;
-
-		/**
-		 * The data to send with the request. This is automatically serialized
-		 * to a querystring.
-		 */
-		data?: Object;
-	}
-
-	/**
 	* This represents the available options for configuring m.request for
 	* standard AJAX requests.
 	*
@@ -820,7 +748,7 @@ declare namespace Mithril {
 		/**
 		* This represents the HTTP method used, defaulting to "GET".
 		*/
-		method: "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
+		method: string;
 
 		/**
 		* The username for HTTP authentication.

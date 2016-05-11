@@ -1,12 +1,26 @@
 import { request, apiVersion } from './http';
-import { lichessSri } from './utils';
+import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 
+interface GameSetup {
+  variant: string;
+  timeMode: string;
+  days: string;
+  time: string;
+  increment: string;
+  color: string;
+  mode?: string;
+  membersOnly?: boolean;
+  ratingRange?: string;
+  fen?: string;
+  level?: string;
+}
+
 export function newAiGame(fen) {
   const config = settings.gameSetup.ai;
-  const data = {
+  const data: GameSetup = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -46,7 +60,7 @@ export function challenge(userId, fen) {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 
-  const data = {
+  const data: GameSetup = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -98,7 +112,7 @@ export function seeks(feedback) {
   return request('/lobby/seeks', null, feedback);
 }
 
-export function game(id, color, background) {
+export function game(id: string, color?: string, background?: boolean) {
   var url = '/' + id;
   if (color) url += ('/' + color);
   return request(url, { background }, true);
@@ -150,11 +164,13 @@ export function status() {
 
           if (now > unsupportedDate)
             window.navigator.notification.alert(
-              i18n('apiUnsupported')
+              i18n('apiUnsupported'),
+              noop
             );
           else if (now > deprecatedDate)
             window.navigator.notification.alert(
-              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL'))
+              i18n('apiDeprecated', window.moment(unsupportedDate).format('LL')),
+              noop
             );
           break;
         }

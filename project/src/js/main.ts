@@ -1,6 +1,9 @@
 /// <reference path="../dts/cordova/cordova.d.ts" />
 /// <reference path="../dts/cordova-ionic/cordova-ionic.d.ts" />
 /// <reference path="../dts/mithril.d.ts" />
+/// <reference path="../dts/lodash.d.ts" />
+/// <reference path="../dts/webworkify.d.ts" />
+/// <reference path="../dts/cordova-plugin-toast.d.ts" />
 /// <reference path="../dts/lichess.d.ts" />
 
 'use strict';
@@ -103,7 +106,7 @@ function onOnline() {
       }
     }
   })
-  .then(m.redraw)
+  .then(() => m.redraw())
   .then(push.register)
   .then(() => setServerLang(settings.general.lang()));
 }

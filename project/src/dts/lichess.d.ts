@@ -16,6 +16,11 @@ declare type Analytics = {
   trackTiming(category: string, interval: number, name: string, label: string, success: () => void, error: (e: string) => void): void;
 }
 
+interface Message {
+  topic: string
+  payload?: string
+}
+
 interface Window {
   lichess: lichess;
   moment: any;

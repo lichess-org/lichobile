@@ -1,6 +1,6 @@
 import Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const menu = {};
 

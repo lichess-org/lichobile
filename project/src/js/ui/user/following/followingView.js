@@ -3,7 +3,7 @@ import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
 

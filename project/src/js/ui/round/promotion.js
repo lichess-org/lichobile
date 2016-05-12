@@ -1,11 +1,8 @@
-import chessground from 'chessground-mobile';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';
 import settings from '../../settings';
-import m from 'mithril';
-
-const partial = chessground.util.partial;
+import * as m from 'mithril';
 
 var promoting = false;
 
@@ -46,7 +43,7 @@ export default {
     if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
 
     return m('div.overlay.open', {
-      config: helper.ontouch(partial(cancel, ctrl))
+      config: helper.ontouch(cancel.bind(undefined, ctrl))
     }, [m('div#promotion_choice', {
       className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }

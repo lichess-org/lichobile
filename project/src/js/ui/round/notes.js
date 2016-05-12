@@ -1,9 +1,9 @@
 import helper from '../helper';
 import i18n from '../../i18n';
 import backbutton from '../../backbutton';
-import debounce from 'lodash/debounce';
+import { debounce }  from 'lodash/function';
 import { syncNote } from './roundXhr';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
   controller(root) {

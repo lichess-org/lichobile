@@ -2,7 +2,7 @@ import h from '../helper';
 import {header, pad} from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import m from 'mithril';
+import * as m from 'mithril';
 import tabs from '../shared/tabs';
 
 export default function view(ctrl) {

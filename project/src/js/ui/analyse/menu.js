@@ -5,7 +5,7 @@ import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import helper from '../helper';
 import formWidgets from '../shared/form';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
 

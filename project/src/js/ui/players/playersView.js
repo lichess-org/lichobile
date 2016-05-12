@@ -5,7 +5,7 @@ import { menuButton, timelineButton, friendsButton, userStatus } from '../shared
 import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
   const headerCtrl = header.bind(undefined, ctrl);

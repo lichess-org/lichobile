@@ -2,7 +2,7 @@ import socket from '../../socket';
 import * as utils from '../../utils';
 import * as xhr from './tournamentXhr';
 import helper from '../helper';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
   helper.analyticsTrackView('Tournament List');

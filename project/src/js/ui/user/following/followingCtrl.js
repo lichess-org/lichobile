@@ -2,10 +2,10 @@ import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
 import helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import socket from '../../../socket';
 import challengeForm from '../../challengeForm';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var scroller;
 

@@ -7,7 +7,7 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
-import m from 'mithril';
+import * as m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
 export default function view(ctrl) {

@@ -7,7 +7,7 @@ import helper from '../helper';
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
   var overlay;

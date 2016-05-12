@@ -1,13 +1,13 @@
 import gameApi from '../../../lichess/game';
 import gameStatus from '../../../lichess/status';
 import helper from '../../helper';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import i18n from '../../../i18n';
 import socket from '../../../socket';
 import { getPGN } from '../roundXhr';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../utils';
 import lobby from '../../lobby';
-import m from 'mithril';
+import * as m from 'mithril';
 import * as tournamentXhr from '../../tournament/tournamentXhr';
 
 export default {

@@ -1,7 +1,7 @@
 import * as utils from '../../../utils';
 import helper from '../../helper';
 import settings from '../../../settings';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var promoting = false;
 

@@ -5,7 +5,7 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import session from '../../session';
 import { swapKeyValue, Challenge } from '../../lichess/prefs';
-import m from 'mithril';
+import * as m from 'mithril';
 
 function renderBody(ctrl) {
   return [

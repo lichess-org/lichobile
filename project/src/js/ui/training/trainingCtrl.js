@@ -1,5 +1,5 @@
-import last from 'lodash/last';
-import chessground from 'chessground-mobile';
+import { last } from 'lodash/array';
+import * as chessground from 'chessground-mobile';
 import { handleXhrError } from '../../utils';
 import makeData from './data';
 import chess from './chess';
@@ -8,7 +8,7 @@ import sound from '../../sound';
 import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
-import m from 'mithril';
+import * as m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
 

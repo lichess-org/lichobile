@@ -4,7 +4,7 @@ import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export function renderAntagonist(ctrl, content, material, position, isPortrait) {
   const key = isPortrait ? position + '-portrait' : position + '-landscape';

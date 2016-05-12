@@ -9,7 +9,7 @@ import variantApi from '../../lichess/variant';
 import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import i18n from '../../i18n';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
   var gameData;

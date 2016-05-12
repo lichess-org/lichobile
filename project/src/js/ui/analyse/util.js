@@ -1,5 +1,5 @@
 import { piotr2key } from './piotr';
-import isObject from 'lodash/isObject';
+import { isObject } from 'lodash/lang';
 
 export function defined(v) {
   return v !== undefined;

@@ -1,7 +1,7 @@
 import { gameIcon } from '../../utils';
 import { provisionalDeviation } from '../../lichess/perfs';
 import helper from '../helper';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function(key, name, perf, user) {
   var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};

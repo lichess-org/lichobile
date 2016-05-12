@@ -1,10 +1,10 @@
 import { handleXhrError, backHistory } from '../../utils';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
 import challengesApi from '../../lichess/challenges';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 

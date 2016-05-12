@@ -1,5 +1,5 @@
 import settings from './settings';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var messages = [];
 

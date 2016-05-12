@@ -8,7 +8,7 @@ import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import gameApi from '../lichess/game';
 import challengesApi from '../lichess/challenges';
-import m from 'mithril';
+import * as m from 'mithril';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 
 var scroller = null;

@@ -1,6 +1,6 @@
 import { header as headerWidget, pad, backButton } from '../../shared/common';
 import layout from '../../layout';
-import m from 'mithril';
+import * as m from 'mithril';
 import i18n from '../../../i18n';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';

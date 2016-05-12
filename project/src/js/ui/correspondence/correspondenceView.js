@@ -7,7 +7,7 @@ import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
 import tabs from '../shared/tabs';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
   const header = utils.partialf(headerWidget, i18n('correspondence'));

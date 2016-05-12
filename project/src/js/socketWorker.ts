@@ -1,5 +1,5 @@
-import merge from 'lodash/merge';
-import range from 'lodash/range';
+import { merge } from 'lodash';
+import { range } from 'lodash';
 import { serializeQueryParameters } from './utils';
 
 export default function(worker: Worker) {

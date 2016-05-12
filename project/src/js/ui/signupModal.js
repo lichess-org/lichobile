@@ -3,7 +3,7 @@ import helper from './helper';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import loginModal from './loginModal';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const signupModal = {};
 

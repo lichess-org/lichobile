@@ -16,7 +16,7 @@ import { askWorker, getRandomArbitrary, oppositeColor, aiName } from '../../util
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export const storageFenKey = 'ai.setupFen';
 

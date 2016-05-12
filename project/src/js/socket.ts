@@ -1,14 +1,14 @@
 import storage from './storage';
-import xor from 'lodash/xor';
+import { xor } from 'lodash';
 import * as utils from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import work from 'webworkify';
+import * as work from 'webworkify';
 import socketWorker from './socketWorker';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const worker = work(socketWorker);
 

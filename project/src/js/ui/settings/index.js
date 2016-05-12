@@ -7,7 +7,7 @@ import settings from '../../settings';
 import session from '../../session';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
   controller() {

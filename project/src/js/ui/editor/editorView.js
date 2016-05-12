@@ -8,7 +8,7 @@ import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
 import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
   const color = ctrl.chessground.data.orientation;

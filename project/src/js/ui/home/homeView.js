@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import { gameIcon, hasNetwork } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';

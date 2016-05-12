@@ -9,7 +9,7 @@ import storage from '../storage';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var challengeForm = {
   actionName: '',

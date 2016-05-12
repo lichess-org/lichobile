@@ -4,7 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import settings from '../../settings';
-import m from 'mithril';
+import * as m from 'mithril';
 
 function renderBody() {
   return [

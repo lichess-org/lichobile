@@ -11,10 +11,10 @@
 import './polyfills';
 
 // for moment a global object makes loading locales easier
-import moment from 'moment';
+import * as moment from 'moment';
 window.moment = moment;
 
-import m from 'mithril';
+import * as m from 'mithril';
 import * as utils from './utils';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';

@@ -6,7 +6,7 @@ import { request } from './http';
 import { timeline as getTimeline } from './xhr';
 import challengesApi from './lichess/challenges';
 import timeline from './lichess/timeline';
-import m from 'mithril';
+import * as m from 'mithril';
 
 let push;
 

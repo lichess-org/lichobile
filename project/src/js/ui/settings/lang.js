@@ -5,7 +5,7 @@ import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
 import { setServerLang } from '../../xhr';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
   controller: function() {

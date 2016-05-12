@@ -6,7 +6,7 @@ import helper from './helper';
 import i18n from '../i18n';
 import signupModal from './signupModal';
 import backbutton from '../backbutton';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const loginModal = {};
 

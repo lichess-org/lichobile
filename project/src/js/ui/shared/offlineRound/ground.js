@@ -1,4 +1,4 @@
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';

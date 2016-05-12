@@ -14,7 +14,7 @@ import settings from '../../settings';
 import { askWorker, oppositeColor } from '../../utils';
 import { setCurrentOTBGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export const storageFenKey = 'otb.setupFen';
 

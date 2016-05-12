@@ -1,7 +1,7 @@
 import * as xhr from '../userXhr';
 import socket from '../../../socket';
 import * as utils from '../../../utils';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
   const userId = m.route.param('id');

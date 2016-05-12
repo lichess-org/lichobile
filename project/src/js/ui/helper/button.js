@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 
 const HOLD_DURATION = 600;
 const REPEAT_RATE = 30;

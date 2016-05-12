@@ -3,7 +3,7 @@ import popupWidget from '../shared/popup';
 import makeData from '../shared/offlineRound/data';
 import { getAnalyseData } from '../../utils/offlineGames';
 import backbutton from '../../backbutton';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
 

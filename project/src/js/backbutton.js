@@ -1,7 +1,7 @@
-import isFunction from 'lodash/isFunction';
+import { isFunction } from 'lodash/lang';
 import { backHistory } from './utils';
 import session from './session';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const stack = [];
 

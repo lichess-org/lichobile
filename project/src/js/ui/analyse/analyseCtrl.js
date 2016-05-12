@@ -4,7 +4,7 @@ import ground from './ground';
 import promotion from '../shared/offlineRound/promotion';
 import * as util from './util';
 import sound from '../../sound';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash/function';
 import socket from '../../socket';
 import cevalCtrl from './ceval/cevalCtrl';
 import helper from '../helper';
@@ -19,7 +19,7 @@ import { makeData, makeDefaultData } from './data';
 import notes from '../round/notes';
 import chessLogic from './chessLogic';
 import menu from './menu';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
   this.source = m.route.param('source') || 'offline';

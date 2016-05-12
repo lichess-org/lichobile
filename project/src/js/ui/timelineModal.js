@@ -3,7 +3,7 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import timeline from '../lichess/timeline';
 import { gameIcon } from '../utils';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const timelineModal = {};
 

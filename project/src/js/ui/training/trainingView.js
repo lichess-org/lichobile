@@ -5,7 +5,7 @@ import Board from '../shared/Board';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
 import menu, { renderUserInfos, renderSigninBox } from './menu';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
   return layout.board(

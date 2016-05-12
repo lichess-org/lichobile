@@ -1,5 +1,5 @@
 import gameApi from '../../lichess/game';
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import layout from '../layout';
 import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
@@ -11,7 +11,7 @@ import { getBoardBounds } from '../../utils';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function view(ctrl) {
 

@@ -2,7 +2,7 @@ import storage from '../storage';
 import { hasNetwork } from '../utils';
 import session from '../session';
 import { timeline as getTimeline } from '../xhr';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 
 const STORAGEKEY = 'timeline.timestamp';
 

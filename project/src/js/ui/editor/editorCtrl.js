@@ -1,7 +1,7 @@
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import { computeFen, readFen } from './editor';
 import menu from './menu';
-import m from 'mithril';
+import * as m from 'mithril';
 import { loadJsonFile } from '../../utils';
 import continuePopup from '../shared/continuePopup';
 import i18n from '../../i18n';

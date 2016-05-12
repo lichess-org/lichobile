@@ -5,7 +5,7 @@ import * as utils from '../../utils';
 import { tv } from './userXhr';
 import roundCtrl from '../round/roundCtrl';
 import roundView from '../round/view/roundView';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
   controller: function() {

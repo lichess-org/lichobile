@@ -1,5 +1,5 @@
-import m from 'mithril';
-import isEmpty from 'lodash/isEmpty';
+import * as m from 'mithril';
+import { isEmpty } from 'lodash/lang';
 import i18n from '../../i18n';
 import treePath from './path';
 import cevalView from './ceval/cevalView';

@@ -29,7 +29,7 @@ import training from './ui/training';
 import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const slidingPage = helper.slidingPage;
 const fadingPage = helper.fadingPage;

@@ -1,5 +1,5 @@
-import m from 'mithril';
-import isEmpty from 'lodash/isEmpty';
+import * as m from 'mithril';
+import { isEmpty } from 'lodash/lang';
 import { defined, renderEval } from '../util';
 
 const squareSpin = m('span.square-spin');

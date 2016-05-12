@@ -1,4 +1,4 @@
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import makeData from './data';
 import * as utils from '../../utils';
 import sound from '../../sound';
@@ -21,7 +21,7 @@ import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 

@@ -1,10 +1,10 @@
 import socket from '../../socket';
 import backbutton from '../../backbutton';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import helper from '../helper';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
   socket.createDefault();

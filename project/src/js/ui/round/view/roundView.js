@@ -1,10 +1,10 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import socket from '../../../socket';
 import session from '../../../session';
 import challengesApi from '../../../lichess/challenges';
 import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';

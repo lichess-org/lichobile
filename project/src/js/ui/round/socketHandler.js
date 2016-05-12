@@ -6,7 +6,7 @@ import vibrate from '../../vibrate';
 import session from '../../session';
 import { handleXhrError, removeOfflineGameData } from '../../utils';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function(ctrl, onFeatured, onUserTVRedirect) {
 

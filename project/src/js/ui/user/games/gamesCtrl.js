@@ -1,9 +1,9 @@
 import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash/function';
 import socket from '../../../socket';
 import * as utils from '../../../utils';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var scroller;
 

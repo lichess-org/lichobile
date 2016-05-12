@@ -4,7 +4,7 @@ import * as utils from '../../utils';
 import helper from '../helper';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
 

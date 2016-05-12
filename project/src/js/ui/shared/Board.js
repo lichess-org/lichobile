@@ -1,10 +1,10 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
 import { gameIcon, variantReminder } from '../../utils';
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import gameApi from '../../lichess/game';
 import BoardBrush from './BoardBrush';
-import m from 'mithril';
+import * as m from 'mithril';
 
 var boardTheme;
 var pieceTheme;

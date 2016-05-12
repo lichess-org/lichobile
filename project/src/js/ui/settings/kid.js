@@ -3,7 +3,7 @@ import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import session from '../../session';
-import m from 'mithril';
+import * as m from 'mithril';
 
 function renderBody(ctrl) {
   return [

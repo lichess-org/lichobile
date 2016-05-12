@@ -13,7 +13,7 @@ import popupWidget from './popup';
 import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
 import timelineModal from '../timelineModal';
-import m from 'mithril';
+import * as m from 'mithril';
 import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';

@@ -7,7 +7,7 @@ import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
 import signals from '../signals';
-import m from 'mithril';
+import * as m from 'mithril';
 
 let nbPlayers = 0;
 let nbGames = 0;

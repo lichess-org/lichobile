@@ -9,7 +9,7 @@ import { storageFenKey as aiStorageFenKey } from '../ai/aiCtrl';
 import { storageFenKey as otbStorageFenKey } from '../otb/otbCtrl';
 import { validateFen, positionLooksLegit } from '../editor/editor';
 import { hasNetwork } from '../../utils';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
 

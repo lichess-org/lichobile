@@ -9,7 +9,7 @@ import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
 import lobby from './lobby';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const newGameForm = {};
 newGameForm.isOpen = false;

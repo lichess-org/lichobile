@@ -7,7 +7,7 @@ import i18n from '../../i18n';
 import settings from '../../settings';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
-import m from 'mithril';
+import * as m from 'mithril';
 
 function renderBody() {
   const allowed = settings.general.notifications.allow();

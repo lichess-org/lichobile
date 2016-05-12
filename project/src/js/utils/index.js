@@ -1,7 +1,7 @@
 import i18n from '../i18n';
 import storage from '../storage';
-import cloneDeep from 'lodash/cloneDeep';
-import m from 'mithril';
+import { cloneDeep } from 'lodash/lang';
+import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 

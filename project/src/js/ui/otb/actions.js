@@ -4,7 +4,7 @@ import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import m from 'mithril';
+import * as m from 'mithril';
 
 function renderAlways() {
   return [

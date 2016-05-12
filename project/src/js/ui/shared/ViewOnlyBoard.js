@@ -1,4 +1,4 @@
-import chessground from 'chessground-mobile';
+import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
 export default {

@@ -1,12 +1,12 @@
 import helper from '../helper';
 import challengesApi from '../../lichess/challenges';
-import uniqBy from 'lodash/uniqBy';
+import { uniqBy } from 'lodash/array';
 import session from '../../session';
 import settings from '../../settings';
 import * as xhr from '../../xhr';
 import socket from '../../socket';
 import Zanimo from 'zanimo';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default function controller() {
 

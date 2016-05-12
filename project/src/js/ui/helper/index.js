@@ -3,7 +3,7 @@ import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
 import animator from './animator';
-import m from 'mithril';
+import * as m from 'mithril';
 
 // store temporarily last route to disable animations on same route
 // TODO find a better way cause this is ugly

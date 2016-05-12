@@ -46,7 +46,8 @@ function tournamentContentFinished(ctrl) {
   return (
     <div>
       { tournamentHeader(data, null, null)}
-      { tournamentLeaderboard(ctrl, true) }
+      { tournamentPodium (data.podium) }
+      { tournamentLeaderboard(ctrl) }
     </div>
   );
 }
@@ -56,7 +57,7 @@ function tournamentContentCreated(ctrl) {
   return (
     <div>
       { tournamentHeader(data, data.secondsToStart, 'Starts in:')}
-      { tournamentLeaderboard(ctrl, false) }
+      { tournamentLeaderboard(ctrl) }
     </div>
   );
 }
@@ -67,7 +68,7 @@ function tournamentContentStarted(ctrl) {
   return (
     <div>
       { tournamentHeader(data, data.secondsToFinish, '')}
-      { tournamentLeaderboard(ctrl, false) }
+      { tournamentLeaderboard(ctrl) }
       { data.featured ? tournamentFeaturedGame(ctrl) : '' }
     </div>
   );
@@ -154,32 +155,25 @@ function timeInfo(time, preceedingText) {
   return timeStr;
 }
 
-function tournamentLeaderboard(ctrl, showTrophies) {
+function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
-        {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
+        {data.standing.players.map(renderLeaderboardItem)}
       </table>
     </div>
   );
 }
 
-function createLeaderboardItemRenderer(showTrophies) {
-  function renderLeaderboardItem(player) {
-    let trophy = '';
-    if (showTrophies && player.rank < 4) {
-      trophy = 'trophy-' + player.rank;
-    }
-    return (
-      <tr key={player.name} className='list_item'>
-        <td className='tournamentPlayer'><span className={trophy}>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
-        <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
-      </tr>
-    );
-  }
-  return renderLeaderboardItem;
+function renderLeaderboardItem(player) {
+  return (
+    <tr key={player.name} className='list_item'>
+      <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
+      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+    </tr>
+  );
 }
 
 function tournamentFeaturedGame(ctrl) {
@@ -218,3 +212,64 @@ function renderFooter(ctrl) {
   );
 }
 
+function tournamentPodium(podium) {
+  return (
+    <div className="podium">
+      { renderPlace(podium[1]) }
+      { renderPlace(podium[0]) }
+      { renderPlace(podium[2]) }
+    </div>
+  );
+}
+
+function renderPlace(data) {
+  const rank = data.rank;
+
+  return (
+    <div className={'place'+rank}>
+      <div className="trophy"> </div>
+      <div className="username" config={helper.ontouch(() => m.route('/@/' + data.name))}>
+        {data.naem}
+      </div>
+      <div className="rating"> {data.rating}
+        <div className={'progress' + (data.ratingDiff >= 0 ? 'positive' : 'negative')}>
+          {data.ratingDiff}
+        </div>
+      </div>
+      <table className="stats">
+        <tr>
+          <td>
+            Games Played
+          </td>
+          <td>
+            {data.nb.game}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Win Rate
+          </td>
+          <td>
+            {(data.nb.win/data.nb.game).toFixed(0) + '%'}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Berserk Rate
+          </td>
+          <td>
+            {(data.nb.berserk/data.nb.game).toFixed(0) + '%'}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Performance
+          </td>
+          <td>
+            {data.nb.performance}
+          </td>
+        </tr>
+      </table>
+    </div>
+  );
+}

@@ -79,6 +79,7 @@ export default function controller() {
 
   let clockInterval = null;
   xhr.tournament(id).then(data => {
+    console.log(data);
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);

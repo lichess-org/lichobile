@@ -229,7 +229,7 @@ function renderPlace(data) {
     <div className={'place'+rank}>
       <div className="trophy"> </div>
       <div className="username" config={helper.ontouch(() => m.route('/@/' + data.name))}>
-        {data.naem}
+        {data.name}
       </div>
       <div className="rating"> {data.rating}
         <div className={'progress' + (data.ratingDiff >= 0 ? 'positive' : 'negative')}>
@@ -266,7 +266,7 @@ function renderPlace(data) {
             Performance
           </td>
           <td>
-            {data.nb.performance}
+            {data.performance}
           </td>
         </tr>
       </table>

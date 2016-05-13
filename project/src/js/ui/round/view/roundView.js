@@ -114,14 +114,14 @@ function renderContent(ctrl, isPortrait) {
     isPortrait
   });
 
-  if (isPortrait)
+  if (isPortrait) {
     return [
       opponent,
       board,
       player,
       renderGameActionsBar(ctrl, isPortrait)
     ];
-  else
+  } else {
     return [
       board,
       <section key="table" className="table">
@@ -136,6 +136,7 @@ function renderContent(ctrl, isPortrait) {
         {renderGameActionsBar(ctrl, isPortrait)}
       </section>
     ];
+  }
 }
 
 function compact(x) {

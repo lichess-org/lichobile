@@ -56,13 +56,15 @@ function renderContent(ctrl, isPortrait) {
     dest: ceval.best.slice(2, 4)
   } : null;
 
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
     bounds,
     isPortrait,
-    shapes: bestMove ? [bestMove] : null
-  });
+    null,
+    null,
+    bestMove ? [bestMove] : null
+  );
 
   return [
     board,

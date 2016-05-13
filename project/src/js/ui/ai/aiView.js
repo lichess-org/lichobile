@@ -14,7 +14,6 @@ import { getBoardBounds } from '../../utils';
 import actions from './actions';
 import newGameMenu from './newAiGame';
 import i18n from '../../i18n';
-import m from 'mithril';
 
 export default function view(ctrl) {
   var content, header;
@@ -51,12 +50,12 @@ function renderContent(ctrl) {
     </h2>
   );
 
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
     bounds,
     isPortrait
-  });
+  );
 
   if (isPortrait) {
     return [

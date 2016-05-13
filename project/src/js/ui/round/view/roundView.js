@@ -325,7 +325,8 @@ function renderGameEndedActions(ctrl) {
       buttons = [
         button.returnToTournament(ctrl),
         button.shareLink(ctrl),
-        button.sharePGN(ctrl)
+        button.sharePGN(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
     else {
@@ -333,7 +334,8 @@ function renderGameEndedActions(ctrl) {
         button.returnToTournament(ctrl),
         button.withdrawFromTournament(ctrl),
         button.shareLink(ctrl),
-        button.sharePGN(ctrl)
+        button.sharePGN(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
   }
@@ -342,6 +344,7 @@ function renderGameEndedActions(ctrl) {
       buttons = [
         button.shareLink(ctrl),
         button.sharePGN(ctrl),
+        button.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null
       ];
     }
@@ -352,7 +355,8 @@ function renderGameEndedActions(ctrl) {
         button.newOpponent(ctrl),
         button.answerOpponentRematch(ctrl),
         button.cancelRematch(ctrl),
-        button.rematch(ctrl)
+        button.rematch(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
   }

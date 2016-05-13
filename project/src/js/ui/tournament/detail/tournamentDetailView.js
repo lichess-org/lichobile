@@ -44,45 +44,45 @@ function tournamentBody(ctrl) {
 function tournamentContentFinished(ctrl) {
   const data = ctrl.tournament();
   return (
-    <div>
-      { tournamentHeader(data, null, null)}
-      { tournamentPodium (data.podium) }
-      { tournamentLeaderboard(ctrl) }
-    </div>
+      [ tournamentHeader(data, null, null),
+      tournamentPodium (data.podium),
+      tournamentLeaderboard(ctrl) ]
   );
 }
 
 function tournamentContentCreated(ctrl) {
   const data = ctrl.tournament();
-  return (
-    <div>
-      { tournamentHeader(data, data.secondsToStart, 'Starts in:')}
-      { tournamentLeaderboard(ctrl) }
-    </div>
-  );
+  return [
+    tournamentHeader(data, data.secondsToStart, 'Starts in:'),
+    tournamentLeaderboard(ctrl)
+  ];
 }
 
 function tournamentContentStarted(ctrl) {
   const data = ctrl.tournament();
-
-  return (
-    <div>
-      { tournamentHeader(data, data.secondsToFinish, '')}
-      { tournamentLeaderboard(ctrl) }
-      { data.featured ? tournamentFeaturedGame(ctrl) : '' }
-    </div>
-  );
+  return [
+      tournamentHeader(data, data.secondsToFinish, ''),
+      tournamentLeaderboard(ctrl),
+      data.featured ? tournamentFeaturedGame(data) : ''
+  ];
 }
 
 function tournamentHeader(data, time, timeText) {
   const variant = variantDisplay(data);
   const control = timeControl(data);
   return (
-    <div className='tournamentInfoTime'>
-     <strong className='tournamentInfo' data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
-     <div className='timeInfo'>
-       <strong> {timeInfo(time, timeText)} </strong>
-     </div>
+    <div className="tournamentHeader">
+      <div className="tournamentInfoTime">
+        <strong className="tournamentInfo" data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
+        <div className="timeInfo">
+          <strong> {timeInfo(time, timeText)} </strong>
+        </div>
+      </div>
+      <div className="tournamentCreatorInfo">
+        { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
+        &nbsp;•&nbsp;
+        { window.moment(data.startsAt).calendar() }
+      </div>
    </div>
   );
 }

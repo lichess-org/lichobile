@@ -69,6 +69,12 @@ To build and watch for changes:
 
     $ gulp watch
 
+To run in a browser it needs to have
+web security disabled for loading files and make requests to lichess.
+For mouse interaction you need to use
+[device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/)
+
+    $ chromium --user-data-dir=$HOME/.config/chromium_dev --disable-web-security ~/code/lichobile/project/www/index.html
 
 ## Build and run on your device
 

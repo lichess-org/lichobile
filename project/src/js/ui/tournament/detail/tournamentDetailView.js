@@ -247,7 +247,7 @@ function renderPlace(data) {
             Win Rate
           </td>
           <td className="statData">
-            {(data.nb.win/data.nb.game).toFixed(0) + '%'}
+            {((data.nb.win/data.nb.game)*100).toFixed(0) + '%'}
           </td>
         </tr>
         <tr>
@@ -255,7 +255,7 @@ function renderPlace(data) {
             Berserk Rate
           </td>
           <td className="statData">
-            {(data.nb.berserk/data.nb.game).toFixed(0) + '%'}
+            {((data.nb.berserk/data.nb.game)*100).toFixed(0) + '%'}
           </td>
         </tr>
         <tr>

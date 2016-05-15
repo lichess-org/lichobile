@@ -29,11 +29,11 @@ export default function view(ctrl) {
     };
   }
 
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
-    isPortrait: helper.isPortrait()
-  });
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
+    helper.isPortrait()
+  );
 
   function content() {
     if (helper.isPortrait())

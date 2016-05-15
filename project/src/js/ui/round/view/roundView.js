@@ -107,21 +107,21 @@ function renderContent(ctrl, isPortrait) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
     bounds,
     isPortrait
-  });
+  );
 
-  if (isPortrait)
+  if (isPortrait) {
     return [
       opponent,
       board,
       player,
       renderGameActionsBar(ctrl, isPortrait)
     ];
-  else
+  } else {
     return [
       board,
       <section key="table" className="table">
@@ -136,6 +136,7 @@ function renderContent(ctrl, isPortrait) {
         {renderGameActionsBar(ctrl, isPortrait)}
       </section>
     ];
+  }
 }
 
 function compact(x) {

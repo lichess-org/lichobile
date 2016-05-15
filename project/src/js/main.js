@@ -72,7 +72,7 @@ function main() {
 }
 
 function onResize() {
-  helper.cachedViewportDim = null;
+  helper.clearCachedViewportDim();
   m.redraw();
 }
 

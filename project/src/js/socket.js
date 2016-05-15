@@ -85,7 +85,7 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
   const opts = {
     options: {
       name: 'tournament',
-      debug: true,
+      debug: false,
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGame}],
       registeredEvents: Object.keys(socketHandlers.events)

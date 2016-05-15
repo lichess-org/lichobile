@@ -63,7 +63,7 @@ function tournamentContentStarted(ctrl) {
   return [
       tournamentHeader(data, data.secondsToFinish, ''),
       tournamentLeaderboard(ctrl),
-      data.featured ? tournamentFeaturedGame(data) : ''
+      data.featured ? tournamentFeaturedGame(ctrl) : ''
   ];
 }
 
@@ -224,48 +224,45 @@ function tournamentPodium(podium) {
 
 function renderPlace(data) {
   const rank = data.rank;
-
+  //const imgSrc = ['../../images/trophies/trophy-1.png', '../../images/trophies/trophy-2.svg', '../../images/trophies/trophy-3.svg'];
+//<img src= {imgSrc[rank-1]}/>
   return (
     <div className={'place'+rank}>
       <div className="trophy"> </div>
       <div className="username" config={helper.ontouch(() => m.route('/@/' + data.name))}>
         {data.name}
       </div>
-      <div className="rating"> {data.rating}
-        <div className={'progress' + (data.ratingDiff >= 0 ? 'positive' : 'negative')}>
-          {data.ratingDiff}
-        </div>
-      </div>
+      <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>
       <table className="stats">
         <tr>
-          <td>
+          <td className="statName">
             Games Played
           </td>
-          <td>
+          <td className="statData">
             {data.nb.game}
           </td>
         </tr>
         <tr>
-          <td>
+          <td className="statName">
             Win Rate
           </td>
-          <td>
+          <td className="statData">
             {(data.nb.win/data.nb.game).toFixed(0) + '%'}
           </td>
         </tr>
         <tr>
-          <td>
+          <td className="statName">
             Berserk Rate
           </td>
-          <td>
+          <td className="statData">
             {(data.nb.berserk/data.nb.game).toFixed(0) + '%'}
           </td>
         </tr>
         <tr>
-          <td>
+          <td className="statName">
             Performance
           </td>
-          <td>
+          <td className="statData">
             {data.performance}
           </td>
         </tr>

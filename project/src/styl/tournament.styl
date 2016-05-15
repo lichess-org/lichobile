@@ -62,18 +62,6 @@ td.tournamentPlayer
   &.negative
     color red
 
-.trophy-1
-  &:after
-    content: url('../../images/trophies/trophy-1.png')
-
-.trophy-2
-  &:after
-    content: url('../../images/trophies/trophy-2.png')
-
-.trophy-3
-  &:after
-    content: url('../../images/trophies/trophy-3.png')
-
 td.tournamentPoints
   padding 10px
   text-align: right
@@ -105,3 +93,39 @@ td.tournamentPoints
   flex-flow column wrap
   justify-content flex-start
   align-items center
+
+.podium
+  display flex
+  flex-direction row
+  >div
+    font-size 0.8em
+    >div
+      margin 0 auto
+      text-align center
+    >.trophy
+      width 50%
+
+.place1
+  flex 4 400%
+  .trophy
+    content: url('../../images/trophies/trophy-1.png')
+
+.place2
+  flex 3 300%
+  .trophy
+    content: url('../../images/trophies/trophy-2.svg')
+
+.place3
+  flex 2 200%
+  .trophy
+    content: url('../../images/trophies/trophy-3.svg')
+
+.stats
+  font-size .8em
+  margin 0 auto
+
+.statName
+  text-align left
+
+.statData
+  text-align right

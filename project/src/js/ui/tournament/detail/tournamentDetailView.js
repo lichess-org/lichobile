@@ -245,7 +245,7 @@ function renderPlace(data) {
       <table className="stats">
         <tr>
           <td className="statName">
-            Games Played
+            {i18n('gamesPlayed')}
           </td>
           <td className="statData">
             {data.nb.game}

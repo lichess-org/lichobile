@@ -12,7 +12,6 @@ export default function controller() {
   const hasJoined = m.prop(false);
 
   function reload(data) {
-    console.log(data);
     const oldData = tournament();
     if (data.featured && (data.featured.id !== oldData.featured.id)) {
       socket.send('startWatching', data.featured.id);
@@ -70,7 +69,6 @@ export default function controller() {
       const featured = tournament().featured;
       if (!featured) return;
       if (featured.id !== d.id) return;
-      console.log('fen last move ' + d.lm);
       featured.fen = d.fen;
       featured.lastMove = d.lm;
       m.redraw();

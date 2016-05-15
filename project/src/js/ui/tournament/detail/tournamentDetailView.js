@@ -235,8 +235,6 @@ function tournamentPodium(podium) {
 
 function renderPlace(data) {
   const rank = data.rank;
-  //const imgSrc = ['../../images/trophies/trophy-1.png', '../../images/trophies/trophy-2.svg', '../../images/trophies/trophy-3.svg'];
-//<img src= {imgSrc[rank-1]}/>
   return (
     <div className={'place'+rank}>
       <div className="trophy"> </div>

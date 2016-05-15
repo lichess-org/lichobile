@@ -192,7 +192,7 @@ function tournamentFeaturedGame(ctrl) {
       <p className='tournamentTitle'>Featured Game</p>
       <div className='tournamentMiniBoard'>
         {m.component(miniBoard, {
-          bounds: helper.miniBoardSize(isPortrait),
+          bounds: miniBoardSize(isPortrait),
           fen: featured.fen,
           lastMove: featured.lastMove,
           orientation: 'white',
@@ -202,6 +202,17 @@ function tournamentFeaturedGame(ctrl) {
       </div>
     </div>
   );
+}
+
+
+function miniBoardSize(isPortrait) {
+  const { vh, vw } = helper.viewportDim();
+  const side = isPortrait ? vw * 0.66 : vh * 0.66;
+  const bounds = {
+    height: side,
+    width: side
+  };
+  return bounds;
 }
 
 function renderFooter(ctrl) {

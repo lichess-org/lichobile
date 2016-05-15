@@ -50,6 +50,16 @@ export default function homeView(ctrl) {
   return layout.free(header, body);
 }
 
+function miniBoardSize(isPortrait) {
+  const { vh, vw } = helper.viewportDim();
+  const side = isPortrait ? vw * 0.66 : vh * 0.66;
+  const bounds = {
+    height: side,
+    width: side
+  };
+  return bounds;
+}
+
 function renderFeatured(ctrl, isPortrait) {
   const feat = ctrl.featured();
 
@@ -59,7 +69,7 @@ function renderFeatured(ctrl, isPortrait) {
     <section id="homeFeatured">
       <h2 className="homeTitle">Featured game</h2>
       {m.component(miniBoard, {
-        bounds: helper.miniBoardSize(isPortrait),
+        bounds: miniBoardSize(isPortrait),
         fen: feat.game.fen,
         lastMove: feat.game.lastMove,
         orientation: feat.orientation,
@@ -79,7 +89,7 @@ function renderDailyPuzzle(ctrl, isPortrait) {
     <section id="dailyPuzzle">
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
         {m.component(miniBoard, {
-          bounds: helper.miniBoardSize(isPortrait),
+          bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,
           link: () => m.route('/training/' + puzzle.id)

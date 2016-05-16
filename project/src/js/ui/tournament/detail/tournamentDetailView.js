@@ -41,6 +41,18 @@ function tournamentBody(ctrl) {
   );
 }
 
+function renderFooter(ctrl) {
+  if (!ctrl.tournament()) {
+    return null;
+  }
+
+  return (
+    <div className="actions_bar">
+      {tournamentJoinWithdraw(ctrl)}
+    </div>
+  );
+}
+
 function tournamentContentFinished(ctrl) {
   const data = ctrl.tournament();
   return (
@@ -213,14 +225,6 @@ function miniBoardSize(isPortrait) {
     width: side
   };
   return bounds;
-}
-
-function renderFooter(ctrl) {
-  return (
-    <div className="actions_bar">
-      {tournamentJoinWithdraw(ctrl)}
-    </div>
-  );
 }
 
 function tournamentPodium(podium) {

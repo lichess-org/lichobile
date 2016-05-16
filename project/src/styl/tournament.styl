@@ -62,18 +62,6 @@ td.tournamentPlayer
   &.negative
     color red
 
-.trophy-1
-  &:after
-    content: url('../../images/trophies/trophy-1.png')
-
-.trophy-2
-  &:after
-    content: url('../../images/trophies/trophy-2.png')
-
-.trophy-3
-  &:after
-    content: url('../../images/trophies/trophy-3.png')
-
 td.tournamentPoints
   padding 10px
   text-align: right
@@ -101,16 +89,48 @@ td.tournamentPoints
 .timeInfo
   float right
 
-.featuredGame
-  width 90%
-  padding 10px
+.tournamentMiniBoard
+  display flex
+  flex-flow column wrap
+  justify-content flex-start
+  align-items center
+
+.podium
+  display flex
+  flex-direction row
+  padding-right 10px
+  >div
+    font-size 0.8em
+    display flex
+    flex-direction column
+    justify-content flex-end
+    >div
+      margin 0 auto
+      text-align center
+    >.trophy
+      width 50%
+
+.place1
+  flex 4 400%
+  .trophy
+    content: url('../../images/trophies/trophy-1.png')
+
+.place2
+  flex 3 300%
+  .trophy
+    content: url('../../images/trophies/trophy-2.svg')
+
+.place3
+  flex 2.5 250%
+  .trophy
+    content: url('../../images/trophies/trophy-3.svg')
+
+.stats
+  font-size .7em
+  margin 0 auto
+
+.statName
   text-align left
-  text-overflow ellipsis
-  white-space nowrap;
-  overflow hidden
-  &.active
-    background lighten(bgdark, 5%)
-  &.bglight
-    border-bottom-color darken(bglight, 15%)
-    &.active
-      background-color darken(bglight, 5%)
+
+.statData
+  text-align right

@@ -72,7 +72,7 @@ export default function(worker) {
         self.ws.onopen = function() {
           self.debug('connected to ' + fullUrl, true);
           postMessage({ topic: 'onOpen' });
-          if (self.options.sendOnOpen) self.send(self.options.sendOnOpen);
+          if (self.options.sendOnOpen) self.options.sendOnOpen.forEach(function(x) { self.send(x.t, x.d, x.o); });
           self.onSuccess();
           self.pingNow();
           var resend = self.ackableMessages;

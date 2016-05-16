@@ -63,7 +63,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     options: {
       name: 'game',
       debug: false,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -77,7 +77,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   }});
 }
 
-function createTournament(tournamentId, version, handlers) {
+function createTournament(tournamentId, version, handlers, featuredGame) {
   let url = '/tournament/' + tournamentId + '/socket/v1';
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
@@ -87,7 +87,7 @@ function createTournament(tournamentId, version, handlers) {
       name: 'tournament',
       debug: false,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGame}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -112,7 +112,7 @@ function createChallenge(id, version, onOpen, handlers) {
       debug: false,
       ignoreUnknownMessages: true,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines'
+      sendOnOpen: [{t: 'following_onlines'}]
     },
     events: Object.assign({}, defaultHandlers, handlers)
   };
@@ -135,7 +135,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
       name: 'lobby',
       debug: false,
       pingDelay: 2000,
-      sendOnOpen: 'following_onlines',
+      sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -159,7 +159,7 @@ function createDefault() {
         name: 'default',
         debug: false,
         pingDelay: 2000,
-        sendOnOpen: 'following_onlines',
+        sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)
       }
     };

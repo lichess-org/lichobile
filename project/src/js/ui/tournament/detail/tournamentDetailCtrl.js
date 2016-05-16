@@ -12,6 +12,13 @@ export default function controller() {
   const hasJoined = m.prop(false);
 
   function reload(data) {
+    const oldData = tournament();
+    if (data.featured && (data.featured.id !== oldData.featured.id)) {
+      socket.send('startWatching', data.featured.id);
+    }
+    else if (data.featured && (data.featured.id === oldData.featured.id)) {
+      data.featured = oldData.featured;
+    }
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
 
@@ -57,6 +64,14 @@ export default function controller() {
     resync: throttledReload,
     redirect: function(gameId) {
       m.route('/tournament/' + tournament().id + '/game/' + gameId);
+    },
+    fen: function(d) {
+      const featured = tournament().featured;
+      if (!featured) return;
+      if (featured.id !== d.id) return;
+      featured.fen = d.fen;
+      featured.lastMove = d.lm;
+      m.redraw();
     }
   };
 
@@ -66,7 +81,8 @@ export default function controller() {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);
-    socket.createTournament(id, tournament().socketVersion, handlers);
+    const featuredGame = data.featured ? data.featured.id : null;
+    socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
   })
   .catch(utils.handleXhrError);
 

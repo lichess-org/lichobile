@@ -5,6 +5,7 @@ import i18n from '../../../i18n';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import settings from '../../../settings';
+import miniBoard from '../../shared/miniBoard';
 
 export default function view(ctrl) {
   const headerCtrl = headerWidget.bind(undefined, null,
@@ -42,17 +43,18 @@ function tournamentBody(ctrl) {
 
 function tournamentContentFinished(ctrl) {
   const data = ctrl.tournament();
-  return [
-    tournamentHeader(data, null, null),
-    tournamentLeaderboard(ctrl, true)
-  ];
+  return (
+      [ tournamentHeader(data, null, null),
+      tournamentPodium (data.podium),
+      tournamentLeaderboard(ctrl) ]
+  );
 }
 
 function tournamentContentCreated(ctrl) {
   const data = ctrl.tournament();
   return [
     tournamentHeader(data, data.secondsToStart, 'Starts in:'),
-    tournamentLeaderboard(ctrl, false)
+    tournamentLeaderboard(ctrl)
   ];
 }
 
@@ -60,8 +62,8 @@ function tournamentContentStarted(ctrl) {
   const data = ctrl.tournament();
   return [
       tournamentHeader(data, data.secondsToFinish, ''),
-      tournamentLeaderboard(ctrl, false),
-      data.featured ? tournamentFeaturedGame(data) : ''
+      tournamentLeaderboard(ctrl),
+      data.featured ? tournamentFeaturedGame(ctrl) : ''
   ];
 }
 
@@ -153,43 +155,64 @@ function timeInfo(time, preceedingText) {
   return timeStr;
 }
 
-function tournamentLeaderboard(ctrl, showTrophies) {
+function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
   return (
     <div className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
-        {data.standing.players.map(createLeaderboardItemRenderer(showTrophies))}
+        {data.standing.players.map(renderLeaderboardItem)}
       </table>
     </div>
   );
 }
 
-function createLeaderboardItemRenderer(showTrophies) {
-  function renderLeaderboardItem(player) {
-    let trophy = '';
-    if (showTrophies && player.rank < 4) {
-      trophy = 'trophy-' + player.rank;
-    }
-    return (
-      <tr key={player.name} className='list_item'>
-        <td className='tournamentPlayer'><span className={trophy}>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
-        <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
-      </tr>
-    );
-  }
-  return renderLeaderboardItem;
+function renderLeaderboardItem(player) {
+  return (
+    <tr key={player.name} className='list_item'>
+      <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
+      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+    </tr>
+  );
 }
 
-function tournamentFeaturedGame(data) {
+function tournamentFeaturedGame(ctrl) {
+  const data = ctrl.tournament();
+  const featured = data.featured;
+  if (!featured) return null;
+
+  const isPortrait = helper.isPortrait();
+
+  featured.player = {user: {username: featured.white.name}, rating: featured.white.rating};
+  featured.opponent = {user: {username: featured.black.name}, rating: featured.black.rating};
+  featured.clock = {initial: data.clock.limit, increment: data.clock.increment};
+
   return (
     <div className='tournamentGames'>
       <p className='tournamentTitle'>Featured Game</p>
-      <div class='featuredGame nav' config={helper.ontouchY(() => m.route('/tournament/' + data.id + '/game/' + data.featured.id))}>
-          {data.featured.white.name} ({data.featured.white.rating}) vs. {data.featured.black.name} ({data.featured.black.rating})
+      <div className='tournamentMiniBoard'>
+        {m.component(miniBoard, {
+          bounds: miniBoardSize(isPortrait),
+          fen: featured.fen,
+          lastMove: featured.lastMove,
+          orientation: 'white',
+          link: () => m.route('/tournament/' + data.id + '/game/' + featured.id),
+          gameObj: featured}
+        )}
       </div>
     </div>
   );
+}
+
+
+function miniBoardSize(isPortrait) {
+  const { vh, vw } = helper.viewportDim();
+  const side = isPortrait ? vw * 0.66 : vh * 0.66;
+  const bounds = {
+    height: side,
+    width: side
+  };
+  return bounds;
 }
 
 function renderFooter(ctrl) {
@@ -200,3 +223,59 @@ function renderFooter(ctrl) {
   );
 }
 
+function tournamentPodium(podium) {
+  return (
+    <div className="podium">
+      { renderPlace(podium[1]) }
+      { renderPlace(podium[0]) }
+      { renderPlace(podium[2]) }
+    </div>
+  );
+}
+
+function renderPlace(data) {
+  const rank = data.rank;
+  return (
+    <div className={'place'+rank}>
+      <div className="trophy"> </div>
+      <div className="username" config={helper.ontouch(() => m.route('/@/' + data.name))}>
+        {data.name}
+      </div>
+      <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>
+      <table className="stats">
+        <tr>
+          <td className="statName">
+            {i18n('gamesPlayed')}
+          </td>
+          <td className="statData">
+            {data.nb.game}
+          </td>
+        </tr>
+        <tr>
+          <td className="statName">
+            Win Rate
+          </td>
+          <td className="statData">
+            {((data.nb.win/data.nb.game)*100).toFixed(0) + '%'}
+          </td>
+        </tr>
+        <tr>
+          <td className="statName">
+            Berserk Rate
+          </td>
+          <td className="statData">
+            {((data.nb.berserk/data.nb.game)*100).toFixed(0) + '%'}
+          </td>
+        </tr>
+        <tr>
+          <td className="statName">
+            Performance
+          </td>
+          <td className="statData">
+            {data.performance}
+          </td>
+        </tr>
+      </table>
+    </div>
+  );
+}

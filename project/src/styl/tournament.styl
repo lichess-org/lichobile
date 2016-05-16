@@ -97,32 +97,38 @@ td.tournamentPoints
 
 .podium
   display flex
-  flex-direction row
-  padding-right 10px
-  >div
-    font-size 0.8em
+  flex-flow row nowrap
+  font-size 0.75em
+  margin 0 10px
+  > div
+    overflow hidden
+    text-overflow ellipsis
     display flex
-    flex-direction column
+    flex-flow column wrap
     justify-content flex-end
-    >div
+    > div
       margin 0 auto
       text-align center
-    >.trophy
-      width 50%
 
 .place1
-  flex 4 400%
-  .trophy
+  width 44%
+  font-size 1.25em
+  > .trophy
+    width 75%
     content: url('../../images/trophies/trophy-1.png')
 
 .place2
-  flex 3 300%
-  .trophy
+  width 31%
+  font-size 1.1em
+  > .trophy
+    width 55%
     content: url('../../images/trophies/trophy-2.svg')
 
 .place3
-  flex 2.5 250%
-  .trophy
+  width 25%
+  font-size 1em
+  > .trophy
+    width 50%
     content: url('../../images/trophies/trophy-3.svg')
 
 .stats

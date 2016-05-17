@@ -202,7 +202,7 @@ function tournamentFeaturedGame(ctrl) {
   return (
     <div className='tournamentGames'>
       <p className='tournamentTitle'>Featured Game</p>
-      <div className='tournamentMiniBoard'>
+      <div key={featured.id} className='tournamentMiniBoard'>
         {m.component(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: featured.fen,

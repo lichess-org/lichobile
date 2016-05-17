@@ -1,7 +1,7 @@
 const variantMap = {
   standard: {
     name: 'Standard',
-    tinyName: 'STD',
+    tinyName: 'Std',
     id: 1,
     link: 'https://en.wikipedia.org/wiki/Chess'
   },
@@ -14,8 +14,8 @@ const variantMap = {
   },
   fromPosition: {
     name: 'From position',
-    shortName: 'FEN',
-    tinyName: 'FEN',
+    shortName: 'Fen',
+    tinyName: 'Fen',
     id: 3
   },
   kingOfTheHill: {
@@ -65,7 +65,7 @@ const variantMap = {
   },
   crazyhouse: {
     name: 'Crazyhouse',
-    tinyName: 'crazy',
+    tinyName: 'Crazy',
     id: 10,
     link: 'http://lichess.org/crazyhouse',
     alert: 'This is a crazyhouse game!\n\nEvery time a piece is captured the capturing player gets a piece of the same type and of their color in their pocket.'

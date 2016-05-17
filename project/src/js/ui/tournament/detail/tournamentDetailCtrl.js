@@ -3,6 +3,7 @@ import throttle from 'lodash/throttle';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';
+import faq from '../faq';
 import m from 'mithril';
 
 export default function controller() {
@@ -10,6 +11,7 @@ export default function controller() {
 
   const tournament = m.prop();
   const hasJoined = m.prop(false);
+  const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
     const oldData = tournament();
@@ -89,6 +91,7 @@ export default function controller() {
   return {
     tournament,
     hasJoined,
+    faqCtrl,
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
     reload,

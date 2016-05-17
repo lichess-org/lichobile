@@ -133,7 +133,7 @@ function title(data) {
   const mode = data.game.offline ? i18n('offline') :
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
-  const name = variant ? (variant.shortName || variant.name) : '?';
+  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
   return `${time(data)} • ${name} • ${mode}`;
 }
 

@@ -3,6 +3,7 @@ import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
 import { gameIcon } from '../../../utils';
+import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
@@ -12,9 +13,17 @@ export default function view(ctrl) {
     backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );
 
-  const bodyCtrl = tournamentBody.bind(undefined, ctrl);
+  const body = tournamentBody.bind(undefined, ctrl);
+  const footer = renderFooter.bind(undefined, ctrl);
+  const overlay = renderOverlay.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, renderFooter.bind(undefined, ctrl));
+  return layout.free(headerCtrl, body, footer, overlay);
+}
+
+function renderOverlay(ctrl) {
+  return [
+    faq.view(ctrl.faqCtrl)
+  ];
 }
 
 function tournamentBody(ctrl) {
@@ -48,6 +57,10 @@ function renderFooter(ctrl) {
 
   return (
     <div className="actions_bar">
+      <button className="action_bar_button" config={helper.ontouch(ctrl.faqCtrl.open)}>
+        <span className="fa fa-question-circle" />
+        FAQ
+      </button>
       {tournamentJoinWithdraw(ctrl)}
     </div>
   );
@@ -55,11 +68,11 @@ function renderFooter(ctrl) {
 
 function tournamentContentFinished(ctrl) {
   const data = ctrl.tournament();
-  return (
-      [ tournamentHeader(data, null, null),
-      tournamentPodium (data.podium),
-      tournamentLeaderboard(ctrl) ]
-  );
+  return [
+    tournamentHeader(data, null, null),
+    data.podium ? tournamentPodium(data.podium) : null,
+    tournamentLeaderboard(ctrl)
+  ];
 }
 
 function tournamentContentCreated(ctrl) {
@@ -83,7 +96,7 @@ function tournamentHeader(data, time, timeText) {
   const variant = variantDisplay(data);
   const control = timeControl(data);
   return (
-    <div className="tournamentHeader">
+    <div key="header" className="tournamentHeader">
       <div className="tournamentInfoTime">
         <strong className="tournamentInfo" data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
         <div className="timeInfo">
@@ -170,7 +183,7 @@ function timeInfo(time, preceedingText) {
 function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
   return (
-    <div className='tournamentLeaderboard'>
+    <div key="leaderboard" className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
       <table className='tournamentStandings'>
         {data.standing.players.map(renderLeaderboardItem)}
@@ -229,7 +242,7 @@ function miniBoardSize(isPortrait) {
 
 function tournamentPodium(podium) {
   return (
-    <div className="podium">
+    <div key="podium" className="podium">
       { renderPlace(podium[1]) }
       { renderPlace(podium[0]) }
       { renderPlace(podium[2]) }

@@ -142,3 +142,23 @@ td.tournamentPoints
 
 .statData
   text-align right
+
+.navigationButtons
+  display flex
+  flex-flow row wrap
+  align-items flex-start
+  align-self center
+
+.navigationButton
+  border-color #323232
+  border solid
+  &:before
+    font-family "lichess" !important
+    font-size 1.2em
+    content attr(data-icon)
+  &.invisible
+    display none
+
+.tournamentLeaderboard
+  display flex
+  flex-flow column nowrap

@@ -169,12 +169,28 @@ function timeInfo(time, preceedingText) {
 
 function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
+  const players = data.standing.players;
+  const start = players[0].rank;
+  const end = players[players.length-1].rank;
+
   return (
     <div className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
+
       <table className='tournamentStandings'>
         {data.standing.players.map(renderLeaderboardItem)}
       </table>
+
+      <div className="navigationButtons">
+        <button className="navigationButton" data-icon='W'/>
+        <button className="navigationButton" data-icon='Y'/>
+        <span class='page'> {start + '-' + end + ' / ' + data.nbPlayers} </span>
+        <button className="navigationButton" data-icon='X'/>
+        <button className="navigationButton" data-icon='V'/>
+        <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7'>
+          Me
+        </button>
+      </div>
     </div>
   );
 }

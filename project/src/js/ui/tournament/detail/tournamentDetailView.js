@@ -185,6 +185,9 @@ function tournamentLeaderboard(ctrl) {
   const players = data.standing.players;
   const start = players[0].rank;
   const end = players[players.length-1].rank;
+  const page = data.standing.page;
+  const back = page > 1;
+  const forward = page < data.nbPlayers/10;
 
   return (
     <div key="leaderboard" className='tournamentLeaderboard'>
@@ -195,11 +198,11 @@ function tournamentLeaderboard(ctrl) {
       </table>
 
       <div className="navigationButtons">
-        <button className="navigationButton" data-icon='W'/>
-        <button className="navigationButton" data-icon='Y'/>
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='W' config={helper.ontouch(null)} />
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='Y' config={helper.ontouch(null)} />
         <span class='page'> {start + '-' + end + ' / ' + data.nbPlayers} </span>
-        <button className="navigationButton" data-icon='X'/>
-        <button className="navigationButton" data-icon='V'/>
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='X' config={helper.ontouch(null)} />
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='V' config={helper.ontouch(null)} />
         <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7'>
           Me
         </button>

@@ -48,7 +48,6 @@ timelineModal.view = function() {
 };
 
 function renderTourJoin(entry) {
-  console.log(entry);
   const fromNow = window.moment(entry.date).fromNow();
   const entryText = i18n('xCompetesInY', entry.data.userId, entry.data.tourName);
   const key = 'tour' + entry.date;

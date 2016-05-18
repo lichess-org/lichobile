@@ -1,16 +1,25 @@
 td.tournamentListName
-  padding-left 10px
   text-align: left
   text-overflow: ellipsis
   white-space: nowrap;
   overflow hidden
   max-width 0
   width 60%
+  position relative
+  &:first-child
+    padding-left 45px
+  &:before
+    position absolute
+    left 10px
+    top 17px
+    font-size 25px
   > .fullName
     overflow hidden
     text-overflow ellipsis
 
 td.tournamentListTime
+  > .time
+    letter-spacing 0px
   padding 10px
   text-align right
   max-width 0

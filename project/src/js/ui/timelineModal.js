@@ -60,7 +60,7 @@ function renderTourJoin(entry) {
         );
       })}
     >
-      <span className="fa fa-arrow-circle-right" />
+      <span className="fa fa-trophy" />
       {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
       <small><em>&nbsp;{fromNow}</em></small>
     </li>

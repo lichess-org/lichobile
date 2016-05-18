@@ -63,16 +63,16 @@ function renderTournamentListItem(tournament) {
   const mode = tournament.rated ? i18n('rated') : i18n('casual');
 
   return (
-    <tr key={tournament.id} className='list_item' config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
-      <td className='tournamentListName'>
+    <tr key={tournament.id} className="list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
+      <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>
         <small className="infos">{time} {mode}</small>
       </td>
-      <td className='tournamentListTime'>
-        <div>{formatTime(tournament.startsAt)} <strong className='timeArrow'>-</strong> {formatTime(tournament.finishesAt)}</div>
+      <td className="tournamentListTime">
+        <div className="time">{formatTime(tournament.startsAt)} <strong className="timeArrow">-</strong> {formatTime(tournament.finishesAt)}</div>
         <small className="nbUsers withIcon" data-icon="r">{tournament.nbPlayers}</small>
       </td>
-      <td className='tournamentListNav'>
+      <td className="tournamentListNav">
         &#xf054;
       </td>
     </tr>

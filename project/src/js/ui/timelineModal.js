@@ -38,6 +38,8 @@ timelineModal.view = function() {
           return renderFollow(e);
         } else if (e.type === 'game-end') {
           return renderGameEnd(e);
+        } else if (e.type === 'tour-join') {
+          return renderTourJoin(e);
         }
         return null;
       }))
@@ -45,19 +47,40 @@ timelineModal.view = function() {
   ]);
 };
 
+function renderTourJoin(entry) {
+  const fromNow = window.moment(entry.date).fromNow();
+  const entryText = i18n('xCompetesInY', entry.data.userId, entry.data.tourName);
+  const key = 'tour' + entry.date;
+
+  return (
+    <li className="list_item bglight timelineEntry" key={key}
+      config={helper.ontouch(() => {
+        animateClose().then(() =>
+          m.route('/tournament/' + entry.data.tourId)
+        );
+      })}
+    >
+      <span className="fa fa-trophy" />
+      {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+      <small><em>&nbsp;{fromNow}</em></small>
+    </li>
+  );
+}
+
 function renderFollow(entry) {
   const fromNow = window.moment(entry.date).fromNow();
   const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2);
   const key = 'follow' + entry.date;
 
   return (
-    <li className="list_item bglight timelineEntry fa fa-arrow-circle-right" key={key}
+    <li className="list_item bglight timelineEntry" key={key}
       config={helper.ontouch(() => {
         animateClose().then(() =>
           m.route('/@/' + entry.data.u1)
         );
       })}
     >
+      <span className="fa fa-arrow-circle-right" />
       {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
       <small><em>&nbsp;{fromNow}</em></small>
     </li>
@@ -71,7 +94,7 @@ function renderGameEnd(entry) {
   const key = 'game-end' + entry.date;
 
   return (
-    <li className="list_item timelineEntry" key={key} data-icon={icon}
+    <li className="list_item bglight timelineEntry" key={key} data-icon={icon}
       config={helper.ontouch(() => {
         return animateClose().then(() =>
           m.route('/game/' + entry.data.playerId)

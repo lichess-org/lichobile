@@ -42,27 +42,39 @@ function tournamentListBody(ctrl) {
   return m('.module-tabs.tabs-routing', [
     tabNavigation(ctrl.currentTab),
     m('.tab-content.layout.center-center.native_scroller',
-      m('div', renderTournamentList(tabContent, ctrl.currentTab()))
+      renderTournamentList(tabContent, ctrl.currentTab())
     )
   ]);
 }
 
 function renderTournamentList (list, id) {
   return (
-    <div key={id}>
-      <table className='tournamentList'>
-        {list.map(renderTournamentListItem)}
-      </table>
-    </div>
+    <table key={id} className='tournamentList'>
+      {list.map(renderTournamentListItem)}
+    </table>
   );
 }
 
 function renderTournamentListItem(tournament) {
+  const time = tournament.clock ?
+    (tournament.clock.limit / 60).toString() + '+' + tournament.clock.increment.toString()
+    : '∞';
+
+  const mode = tournament.rated ? i18n('rated') : i18n('casual');
+
   return (
-    <tr key={tournament.id} className='list_item' config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
-      <td className='tournamentListName'>{tournament.fullName}</td>
-      <td className='tournamentListTime'>{formatTime(tournament.startsAt)} <strong className='timeArrow'> → </strong> {formatTime(tournament.finishesAt)}</td>
-      <td className='tournamentListNav'>&#xf054;</td>
+    <tr key={tournament.id} className="list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
+      <td className="tournamentListName" data-icon={tournament.perf.icon}>
+        <div className="fullName">{tournament.fullName}</div>
+        <small className="infos">{time} {mode}</small>
+      </td>
+      <td className="tournamentListTime">
+        <div className="time">{formatTime(tournament.startsAt)} <strong className="timeArrow">-</strong> {formatTime(tournament.finishesAt)}</div>
+        <small className="nbUsers withIcon" data-icon="r">{tournament.nbPlayers}</small>
+      </td>
+      <td className="tournamentListNav">
+        &#xf054;
+      </td>
     </tr>
   );
 }

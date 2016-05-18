@@ -105,8 +105,14 @@ export function headerBtns() {
         {gamesButton()}
       </div>
     );
-  }
-  else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
+  } else if (utils.hasNetwork() && session.isConnected() && timeline.unreadCount()) {
+    return (
+      <div key="buttons" className="buttons">
+        {timelineButton()}
+        {gamesButton()}
+      </div>
+    );
+  } else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
     return (
       <div key="buttons" className="buttons">
         {friendsButton()}

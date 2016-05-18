@@ -6,10 +6,10 @@ import throttle from 'lodash/throttle';
 
 const STORAGEKEY = 'timeline.timestamp';
 
-const supportedTypes = ['follow', 'game-end'];
+const supportedTypes = ['follow', 'game-end', 'tour-join'];
 
-var timeline = [];
-var lastRead = null;
+let timeline = [];
+let lastRead = null;
 
 function setLastRead(v) {
   lastRead = v;
@@ -52,8 +52,8 @@ export default {
   },
 
   unreadCount() {
-    var count = 0;
-    if (!lastRead) return 0;
+    let count = 0;
+    if (lastRead === null) return timeline.length;
 
     for (var i = 0, len = timeline.length; i < len; i++) {
       if (timeline[i].date > lastRead) {

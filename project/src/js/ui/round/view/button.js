@@ -303,7 +303,7 @@ export default {
   returnToTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      m.route('/tournament/' + ctrl.data.tournament);
+      m.route('/tournament/' + ctrl.data.tournament, null, true);
     }
     return (
       <button key="returnToTournament" config={helper.ontouch(handler)}>

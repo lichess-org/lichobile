@@ -70,6 +70,7 @@ function renderTitle(ctrl) {
       <h1 key="playingTitle" className="playing">
         { session.isKidMode() ? <span className="kiddo">😊</span> : null }
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+        {ctrl.data.tournament ? <span className="fa fa-trophy withIcon" /> : null}
         {ctrl.title}
       </h1>
     );

@@ -94,7 +94,7 @@ export default function controller() {
     faqCtrl,
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
-    reload,
+    reload: throttledReload,
     onunload: () => {
       socket.destroy();
       if (clockInterval) {

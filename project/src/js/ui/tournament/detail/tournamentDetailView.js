@@ -139,7 +139,6 @@ function tournamentJoinWithdraw(ctrl) {
 
 function variantDisplay(data) {
   let variant = variantKey(data);
-
   variant = variant.split(' ')[0]; // Cut off names to first word
 
   if (variant.length > 0) {
@@ -198,12 +197,12 @@ function tournamentLeaderboard(ctrl) {
       </table>
 
       <div className="navigationButtons">
-        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='W' config={helper.ontouch(null)} />
-        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='Y' config={helper.ontouch(null)} />
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='W' config={helper.ontouch(back ? ctrl.reload(data.id, 1) : null)} />
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='Y' config={helper.ontouch(back ? ctrl.reload(data.id, page - 1) : null)} />
         <span class='page'> {start + '-' + end + ' / ' + data.nbPlayers} </span>
-        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='X' config={helper.ontouch(null)} />
-        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='V' config={helper.ontouch(null)} />
-        <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7'>
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='X' config={helper.ontouch(forward ? ctrl.reload(data.id, page + 1) : null)} />
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='V' config={helper.ontouch(forward ? ctrl.reload(data.id, Math.ceil(end/10)) : null)} />
+        <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7' config={helper.ontouch(ctrl.hasJoined() ? ctrl.reload(data.id, Math.ceil(data.userRank/10)) : null)}>
           Me
         </button>
       </div>

@@ -197,12 +197,12 @@ function tournamentLeaderboard(ctrl) {
       </table>
 
       <div className="navigationButtons">
-        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='W' config={helper.ontouch(back ? ctrl.reload(data.id, 1) : null)} />
-        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='Y' config={helper.ontouch(back ? ctrl.reload(data.id, page - 1) : null)} />
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='W' config={back ? helper.ontouch(() => ctrl.reload(data.id, 1)) : null} />
+        <button className={'navigationButton' + (back ? '' : 'disabled')} data-icon='Y' config={back ? helper.ontouch(() => ctrl.reload(data.id, page-1)) : null} />
         <span class='page'> {start + '-' + end + ' / ' + data.nbPlayers} </span>
-        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='X' config={helper.ontouch(forward ? ctrl.reload(data.id, page + 1) : null)} />
-        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='V' config={helper.ontouch(forward ? ctrl.reload(data.id, Math.ceil(end/10)) : null)} />
-        <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7' config={helper.ontouch(ctrl.hasJoined() ? ctrl.reload(data.id, Math.ceil(data.userRank/10)) : null)}>
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='X' config={forward ? helper.ontouch(() => ctrl.reload(data.id, page+1)) : null} />
+        <button className={'navigationButton' + (forward ? '' : 'disabled')} data-icon='V' config={forward ? helper.ontouch(() => ctrl.reload(data.id, end/10)) : null} />
+        <button className={'navigationButton ' + (ctrl.hasJoined() ? '' : 'invisible')} data-icon='7' config={ctrl.hasJoined() ? helper.ontouch(() => ctrl.reload(data.id, data.me.rank/10)) : null}>
           Me
         </button>
       </div>

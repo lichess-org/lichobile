@@ -14,6 +14,7 @@ export default function controller() {
   const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
+    console.log(data);
     const oldData = tournament();
     if (data.featured && (data.featured.id !== oldData.featured.id)) {
       socket.send('startWatching', data.featured.id);

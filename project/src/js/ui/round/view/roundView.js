@@ -70,7 +70,7 @@ function renderTitle(ctrl) {
       <h1 key="playingTitle" className="playing">
         { session.isKidMode() ? <span className="kiddo">😊</span> : null }
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-        {ctrl.data.tournament ? <span className="fa fa-trophy withIcon" /> : null}
+        {ctrl.data.game.tournamentId ? <span className="fa fa-trophy withIcon" /> : null}
         {ctrl.title}
       </h1>
     );
@@ -322,7 +322,7 @@ function renderGameEndedActions(ctrl) {
   ];
   resultDom.push(m('em.resultStatus', status));
   let buttons = null;
-  if (ctrl.data.tournament) {
+  if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
         button.returnToTournament(ctrl),

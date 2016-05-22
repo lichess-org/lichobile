@@ -182,7 +182,7 @@ export default {
   },
   rematch: function(ctrl) {
     const d = ctrl.data;
-    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.tournament && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
+    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
       return m('button', {
         key: 'rematch',
@@ -303,7 +303,7 @@ export default {
   returnToTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      m.route('/tournament/' + ctrl.data.tournament, null, true);
+      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
     }
     return (
       <button key="returnToTournament" config={helper.ontouch(handler)}>
@@ -315,8 +315,8 @@ export default {
   withdrawFromTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      tournamentXhr.withdraw(ctrl.data.tournament);
-      m.route('/tournament/' + ctrl.data.tournament);
+      tournamentXhr.withdraw(ctrl.data.game.tournamentId);
+      m.route('/tournament/' + ctrl.data.game.tournamentId);
     }
     return (
       <button key="withdrawFromTournament" config={helper.ontouch(handler)}>

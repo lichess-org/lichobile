@@ -251,6 +251,9 @@ function tournamentPodium(podium) {
 }
 
 function renderPlace(data) {
+  // tournament can exist with only 2 players
+  if (!data) return null;
+
   const rank = data.rank;
   return (
     <div className={'place'+rank}>

@@ -9,12 +9,10 @@ export function tournament(id) {
 }
 
 export function reload(id, page) {
-  console.log('page:' + page);
-  const data = page ? { page: page } : {};
   return request('/tournament/' + id,
   {
     method: 'GET',
-    data: data,
+    data: page ? { page: page } : {},
     background: true
   });
 }

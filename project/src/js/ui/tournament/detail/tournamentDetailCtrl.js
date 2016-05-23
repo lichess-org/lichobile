@@ -15,7 +15,6 @@ export default function controller() {
   const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
-    console.log(data);
     const oldData = tournament();
     if (data.featured && (data.featured.id !== oldData.featured.id)) {
       socket.send('startWatching', data.featured.id);
@@ -85,7 +84,6 @@ export default function controller() {
 
   let clockInterval = null;
   xhr.tournament(id).then(data => {
-    console.log(data);
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);

@@ -162,6 +162,9 @@ td.tournamentPoints
   flex-flow row wrap
   align-items center
   align-self center
+  margin-bottom 5px
+  &.invisible
+    display none
 
 .navigationButton
   border-radius 4px
@@ -171,7 +174,6 @@ td.tournamentPoints
   border-width 1px
   padding 0px 2px 4px 2px
   width 40px
-  vertical-align middle
   &:before
     font-family "lichess" !important
     font-size 1.2em
@@ -183,15 +185,15 @@ td.tournamentPoints
     width 60px
     &:before
       margin-right 5px
+    &.activated
+      color #ccc!important
+      text-shadow 0 1px 0 #000!important
+      background #444!important
+      border-color #404040!important
+      box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
 
-.activated
-  color #ccc!important
-  text-shadow 0 1px 0 #000!important
-  background #444!important
-  border-color #404040!important
-  box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
 
-.page
+.pageInfo
   margin 0px 5px 0px 5px
 
 .tournamentLeaderboard

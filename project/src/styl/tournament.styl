@@ -160,23 +160,39 @@ td.tournamentPoints
 .navigationButtons
   display flex
   flex-flow row wrap
-  align-items flex-start
+  align-items center
   align-self center
 
 .navigationButton
-  border-radius 4px;
-  padding 3px 0px 5px 10px;
-  text-align center;
-  text-decoration none;
-  margin-right 10px
-  &.disabled
-    font-color yellow
+  border-radius 4px
+  text-align center
+  border-style solid
+  border-color #323232
+  border-width 1px
+  padding 0px 2px 4px 2px
+  width 40px
+  vertical-align middle
   &:before
     font-family "lichess" !important
     font-size 1.2em
     content attr(data-icon)
+    vertical-align middle
   &.invisible
     display none
+  &.me
+    width 60px
+    &:before
+      margin-right 5px
+
+.activated
+  color #ccc!important
+  text-shadow 0 1px 0 #000!important
+  background #444!important
+  border-color #404040!important
+  box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
+
+.page
+  margin 0px 5px 0px 5px
 
 .tournamentLeaderboard
   display flex

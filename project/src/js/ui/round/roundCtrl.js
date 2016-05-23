@@ -393,7 +393,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
-  this.chat = (session.isKidMode() || this.data.opponent.ai || this.data.player.spectator) ?
+  this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
     null : new chat.controller(this);
 
   this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
@@ -404,7 +404,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.chat) this.chat.onReload(rCfg.chat);
     if (this.data.tv) rCfg.tv = this.data.tv;
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
-    if (this.data.tournament) rCfg.tournament = this.data.tournament;
 
     this.data = makeData(rCfg);
 

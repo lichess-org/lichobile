@@ -1,8 +1,8 @@
-import { header as headerWidget, pad, backButton } from '../../shared/common';
+import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import { gameIcon } from '../../../utils';
+import { gameIcon, formatTournamentCountdown } from '../../../utils';
 import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
@@ -169,15 +169,7 @@ function timeControl(data) {
 function timeInfo(time, preceedingText) {
   if (!time) return '';
 
-  let timeStr = '';
-  const hours = Math.floor(time / 60 / 60);
-  const mins = Math.floor(time / 60) - (hours * 60);
-  const secs = time % 60;
-  if (hours > 0)
-    timeStr = preceedingText + ' ' + hours + ':' + pad(mins, 2) + ':' + pad(secs, 2);
-  else
-    timeStr = preceedingText + ' ' + mins + ':' + pad(secs, 2);
-  return timeStr;
+  return preceedingText + ' ' + formatTournamentCountdown(time);
 }
 
 function tournamentLeaderboard(ctrl) {

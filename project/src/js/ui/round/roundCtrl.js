@@ -61,8 +61,23 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     playerHash: '',
     opponentHash: '',
     ply: this.lastPly(),
-    moveToSubmit: null
+    moveToSubmit: null,
+    tClockEl: null
   };
+
+  const tournamentTick = function() {
+    this.data.tournament.secondsToFinish--;
+    if (this.vm.tClockEl) {
+      this.vm.tClockEl.textContent =
+        utils.formatTournamentCountdown(this.data.tournament.secondsToFinish) +
+      ' • ';
+    }
+  }.bind(this);
+
+  let tournamentCountInterval;
+  if (this.data.tournament) {
+    tournamentCountInterval = setInterval(tournamentTick, 1000);
+  }
 
   const connectSocket = function() {
     if (utils.hasNetwork()) {
@@ -433,6 +448,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   this.onunload = function() {
     socket.destroy();
     clearInterval(clockIntervId);
+    clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
     window.removeEventListener('resize', onResize);
     window.plugins.insomnia.allowSleepAgain();

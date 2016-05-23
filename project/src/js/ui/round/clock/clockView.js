@@ -20,10 +20,10 @@ export function formatClockTime(ctrl, time, isRunning) {
 
   if (time >= 3600000) {
     let hours = prefixInteger(date.getUTCHours(), 1);
-    return hours + sepHigh + minutes + pulse + seconds;
+    return hours + pulse + minutes;
   }
 
-  return minutes + pulse + seconds;
+  return minutes + sepHigh + seconds;
 }
 
 export function view(ctrl, color, runningColor) {

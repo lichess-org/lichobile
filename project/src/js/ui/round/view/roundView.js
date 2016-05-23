@@ -65,12 +65,30 @@ export function renderMaterial(material) {
 }
 
 function renderTitle(ctrl) {
+  function tcConfig(el, isUpdate) {
+    if (!isUpdate) {
+      el.textContent =
+        utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+        ' • ';
+      ctrl.vm.tClockEl = el;
+    }
+  }
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
       <h1 key="playingTitle" className="playing">
         { session.isKidMode() ? <span className="kiddo">😊</span> : null }
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-        {ctrl.data.game.tournamentId ? <span className="fa fa-trophy withIcon" /> : null}
+        {ctrl.data.tournament ?
+          <span className="fa fa-trophy" /> : null
+        }
+        {ctrl.data.tournament ?
+          <span config={tcConfig}>
+          {
+            utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+            ' • '
+          }
+          </span> : null
+        }
         {ctrl.title}
       </h1>
     );
@@ -201,7 +219,10 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait;
+  const tournamentRank = ctrl.data.tournament ?
+    '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
+
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -215,6 +236,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           <span className={'status ' + onlineStatus} data-icon="r" /> :
           null
         }
+        {tournamentRank}
         {playerName}
         {player.onGame ?
           <span className="ongame yes" data-icon="3" /> :

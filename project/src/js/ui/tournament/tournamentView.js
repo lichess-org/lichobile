@@ -1,5 +1,6 @@
 import h from '../helper';
-import {header, pad} from '../shared/common';
+import {header } from '../shared/common';
+import { pad } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
 import m from 'mithril';

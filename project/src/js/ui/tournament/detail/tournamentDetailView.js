@@ -7,6 +7,7 @@ import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
+import session from '../../../session';
 
 export default function view(ctrl) {
   const headerCtrl = headerWidget.bind(undefined, null,
@@ -188,13 +189,15 @@ function tournamentLeaderboard(ctrl) {
   const backEnabled = page > 1;
   const forwardEnabled = page < data.nbPlayers/10;
   const isUserPage = data.me && (page === Math.ceil(data.me.rank/10));
+  const user = session.get();
+  const userName = user ? user.username : '';
 
   return (
     <div key="leaderboard" className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
       <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem)}
+        {data.standing.players.map(createLeaderboardItemRenderer(userName))}
       </table>
 
       <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
@@ -211,13 +214,16 @@ function tournamentLeaderboard(ctrl) {
   );
 }
 
-function renderLeaderboardItem(player) {
-  return (
-    <tr key={player.name} className='list_item'>
-      <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
-      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
-    </tr>
-  );
+function createLeaderboardItemRenderer (userName) {
+  return function (player) {
+    const isMe = player.name === userName;
+    return (
+      <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')}>
+        <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
+        <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+      </tr>
+    );
+  };
 }
 
 function tournamentFeaturedGame(ctrl) {

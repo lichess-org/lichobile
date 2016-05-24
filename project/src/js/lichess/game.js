@@ -55,6 +55,13 @@ function drawable(data) {
   return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
+function berserkableBy(data) {
+  return data.tournament &&
+    data.tournament.berserkable &&
+    isPlayerPlaying(data) &&
+    playedTurns(data) < 2;
+}
+
 function resignable(data) {
   return playable(data) && !abortable(data);
 }
@@ -153,6 +160,7 @@ export default {
   abortable,
   takebackable,
   drawable,
+  berserkableBy,
   resignable,
   forceResignable,
   moretimeable,

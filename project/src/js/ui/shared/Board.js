@@ -15,7 +15,15 @@ export function onPieceThemeChange(t) {
   pieceTheme = t;
 }
 
-export default function(data, chessgroundCtrl, bounds, isPortrait, wrapperClasses, customPieceTheme, shapes) {
+export default function(
+  data,
+  chessgroundCtrl,
+  bounds,
+  isPortrait,
+  wrapperClasses,
+  customPieceTheme,
+  shapes,
+  alert) {
 
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();
@@ -63,12 +71,15 @@ export default function(data, chessgroundCtrl, bounds, isPortrait, wrapperClasse
 
   return (
     <section className={wrapperClass} config={wrapperConfig}
-    style={wrapperStyle} key={key}
+      style={wrapperStyle} key={key}
     >
     <div className={boardClass} config={boardConfig} />
     { chessgroundCtrl.data.premovable.current ?
-      <div className="premove_alert">
-      {i18n('premoveEnabledClickAnywhereToCancel')}
+      <div className="board_alert">
+        {i18n('premoveEnabledClickAnywhereToCancel')}
+      </div> : alert ?
+      <div className="board_alert">
+        {alert}
       </div> : null
     }
     {

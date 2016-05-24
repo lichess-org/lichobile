@@ -132,6 +132,9 @@
     opacity 0.15
   > tens
     font-size 0.8em
+  &.berserk
+    border-width 2px
+    border-color #dc322f
   &.running
     background-color #505a60
     color #fff
@@ -319,24 +322,13 @@
         border-radius 0 5px 5px 0
 
 
+.player_controls
+  button.berserk
+    margin-bottom 10px
+
 #notesTextarea
   width 100%
   height 100%
   border none
   padding 15px
 
-.premove_alert
-  position: absolute;
-  bottom: -28px;
-  left: 0;
-  height: 28px;
-  width: 100%;
-  text-align: center;
-  padding: 5px 0;
-  font-weight: bold;
-  font-size 0.8em
-  color: #fff;
-  overflow hidden
-  text-overflow ellipsis
-  background: rgba(orange, 0.8)
-  z-index: 50;

@@ -34,6 +34,9 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ctrl.data.opponent.checks = isWhite ? e.black : e.white;
       m.redraw();
     },
+    berserk: function(color) {
+      ctrl.setBerserk(color);
+    },
     reload: function() {
       xhr.reload(ctrl).then(ctrl.reload);
     },

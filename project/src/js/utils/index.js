@@ -344,3 +344,19 @@ export function formatTournamentCountdown(seconds) {
 
   return timeStr;
 }
+
+export function formatTournamentDuration(timeInMin) {
+  const hours = Math.floor(timeInMin / 60);
+  const minutes = Math.floor(timeInMin - hours * 60);
+  return (hours ? hours + 'H ' : '') + (minutes ? minutes + 'M' : '');
+}
+
+export function formatTournamentTimeControl(clock) {
+  if (clock) {
+    const min = secondsToMinutes(clock.limit);
+    const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();
+    return t + '+' + clock.increment;
+  } else {
+    return '∞';
+  }
+}

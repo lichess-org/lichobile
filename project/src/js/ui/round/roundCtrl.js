@@ -55,6 +55,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     },
     showingActions: false,
     confirmResign: false,
+    goneBerserk: {},
     headerHash: '',
     replayHash: '',
     buttonsHash: '',
@@ -64,17 +65,23 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     moveToSubmit: null,
     tClockEl: null
   };
+  this.vm.goneBerserk[this.data.player.color] = this.data.player.berserk;
+  this.vm.goneBerserk[this.data.opponent.color] = this.data.opponent.berserk;
 
+  let tournamentCountInterval;
   const tournamentTick = function() {
-    this.data.tournament.secondsToFinish--;
-    if (this.vm.tClockEl) {
-      this.vm.tClockEl.textContent =
-        utils.formatTournamentCountdown(this.data.tournament.secondsToFinish) +
-      ' • ';
+    if (this.data.tournament.secondsToFinish > 0) {
+      this.data.tournament.secondsToFinish--;
+      if (this.vm.tClockEl) {
+        this.vm.tClockEl.textContent =
+          utils.formatTournamentCountdown(this.data.tournament.secondsToFinish) +
+        ' • ';
+      }
+    } else {
+      clearInterval(tournamentCountInterval);
     }
   }.bind(this);
 
-  let tournamentCountInterval;
   if (this.data.tournament) {
     tournamentCountInterval = setInterval(tournamentTick, 1000);
   }
@@ -369,6 +376,19 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       saveOfflineGameData(m.route.param('id'), this.data);
     }
 
+  }.bind(this);
+
+  const throttledBerserk = throttle(() => socket.send('berserk'), 500);
+  this.goBerserk = function() {
+    throttledBerserk();
+    sound.berserk();
+  };
+
+  this.setBerserk = function(color) {
+    if (this.vm.goneBerserk[color]) return;
+    this.vm.goneBerserk[color] = true;
+    if (color !== this.data.player.color) sound.berserk();
+    m.redraw();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);

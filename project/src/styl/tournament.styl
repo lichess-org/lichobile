@@ -1,3 +1,10 @@
+.tournament_item
+  opacity 0.9
+  &.official
+    opacity 1
+    > .tournamentListName:before
+      color gold
+
 td.tournamentListName
   text-align: left
   text-overflow: ellipsis
@@ -10,9 +17,9 @@ td.tournamentListName
     padding-left 45px
   &:before
     position absolute
-    left 10px
-    top 17px
-    font-size 25px
+    left 8px
+    top 21px
+    font-size 28px
   > .fullName
     overflow hidden
     text-overflow ellipsis
@@ -162,5 +169,11 @@ td.tournamentPoints
   h2
     font-weight bold
     font-size 1.1em
+    margin-bottom 5px
     &:not(:first-child)
       margin-top 15px
+  .double
+    color: #d59120;
+  .streak
+    color: #759900;
+

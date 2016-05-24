@@ -94,7 +94,8 @@
         "extend": "stage"
       },
       "beta": {
-        "extend": "beta"
+        "extend": "beta",
+        "hockeyapp_id": "4e38b7c4dc87418da76b705bec405530"
       },
       "prod": {
         "extend": "prod",

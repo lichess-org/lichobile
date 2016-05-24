@@ -26,14 +26,15 @@ export function formatClockTime(ctrl, time, isRunning) {
   return minutes + sepHigh + seconds;
 }
 
-export function view(ctrl, color, runningColor) {
+export function view(ctrl, color, runningColor, isBerserk) {
   const time = ctrl.data[color];
   const isRunning = runningColor === color;
   const className = helper.classSet({
     clock: true,
     outoftime: !time,
     running: isRunning,
-    emerg: time < ctrl.data.emerg
+    emerg: time < ctrl.data.emerg,
+    berserk: isBerserk
   });
   function cConfig(el, isUpdate) {
     if (!isUpdate) {

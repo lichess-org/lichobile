@@ -13,6 +13,8 @@ export default function controller() {
   const currentTab = m.prop(m.route.param('tab') || 'started');
 
   xhr.currentTournaments().then(data => {
+    data.started.sort(sortByLichessAndDate);
+    data.finished.sort(sortByEndDate);
     tournaments(data);
     return data;
   }).catch(utils.handleXhrError);
@@ -21,4 +23,18 @@ export default function controller() {
     tournaments,
     currentTab
   };
+}
+
+function sortByLichessAndDate(a, b) {
+  if (a.createdBy === 'lichess' && b.createdBy === 'lichess') {
+    return a.startsAt - b.startsAt;
+  } else if (a.createdBy === 'lichess') {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortByEndDate(a, b) {
+  return b.finishesAt - a.finishesAt;
 }

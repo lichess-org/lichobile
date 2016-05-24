@@ -55,10 +55,10 @@ export default {
               <div>
                 A win has a base score of 2 points, a draw: 1 point, and a loss is worth no points.
                 If you win two games consecutively you will start a double point streak, known as a
-                <streak>Streak Starter</streak>.
-                The following games will continue to be worth <double>Double Points</double> until you fail to win
-                a game. That is, a win will be worth 4 points, a draw: 2 points, and a loss will remain
-                worth no points.
+                <strong className="streak"> Streak Starter</strong>.
+                The following games will continue to be worth <strong className="double">Double Points</strong> until you fail to win
+                a game. That is, a win will be worth 4 points, a draw 2 points, and a loss will remain
+                worth no point.
                 <br />
                 For example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)
 

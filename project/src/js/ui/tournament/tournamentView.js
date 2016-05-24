@@ -1,6 +1,6 @@
 import h from '../helper';
 import {header } from '../shared/common';
-import { pad } from '../../utils';
+import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
 import m from 'mithril';
@@ -57,17 +57,20 @@ function renderTournamentList (list, id) {
 }
 
 function renderTournamentListItem(tournament) {
-  const time = tournament.clock ?
-    (tournament.clock.limit / 60).toString() + '+' + tournament.clock.increment.toString()
-    : '∞';
-
+  const time = formatTournamentTimeControl(tournament.clock);
   const mode = tournament.rated ? i18n('rated') : i18n('casual');
+  const duration = formatTournamentDuration(tournament.minutes);
+  const variant = tournament.variant.key !== 'standard' ?
+    capitalize(tournament.variant.short) : '';
 
   return (
-    <tr key={tournament.id} className="list_item" config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}>
+    <tr key={tournament.id}
+      className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
+      config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}
+    >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>
-        <small className="infos">{time} {mode}</small>
+        <small className="infos">{time} {variant} {mode} • {duration}</small>
       </td>
       <td className="tournamentListTime">
         <div className="time">{formatTime(tournament.startsAt)} <strong className="timeArrow">-</strong> {formatTime(tournament.finishesAt)}</div>

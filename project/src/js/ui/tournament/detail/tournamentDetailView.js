@@ -1,8 +1,9 @@
 import { header as headerWidget, backButton } from '../../shared/common';
+import session from '../../../session';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import { gameIcon, formatTournamentCountdown } from '../../../utils';
+import { gameIcon, formatTournamentCountdown, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
@@ -57,11 +58,11 @@ function renderFooter(ctrl) {
 
   return (
     <div className="actions_bar">
-      <button className="action_bar_button" config={helper.ontouch(ctrl.faqCtrl.open)}>
+      <button key="faq" className="action_bar_button" config={helper.ontouch(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
       </button>
-      {tournamentJoinWithdraw(ctrl)}
+      { ctrl.hasJoined() ? withdrawButton(ctrl) : joinButton(ctrl) }
     </div>
   );
 }
@@ -94,11 +95,13 @@ function tournamentContentStarted(ctrl) {
 
 function tournamentHeader(data, time, timeText) {
   const variant = variantDisplay(data);
-  const control = timeControl(data);
+  const control = formatTournamentTimeControl(data.clock);
   return (
     <div key="header" className="tournamentHeader">
       <div className="tournamentInfoTime">
-        <strong className="tournamentInfo" data-icon={gameIcon(variantKey(data))} > {variant + ' • ' + control + ' • ' + data.minutes + 'M' } </strong>
+        <strong className="tournamentInfo" data-icon={gameIcon(variantKey(data))}>
+          {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
+        </strong>
         <div className="timeInfo">
           <strong> {timeInfo(time, timeText)} </strong>
         </div>
@@ -112,27 +115,27 @@ function tournamentHeader(data, time, timeText) {
   );
 }
 
-function tournamentJoinWithdraw(ctrl) {
-  const label = ctrl.hasJoined() ? i18n('withdraw') : i18n('join');
-  const icon = 'fa ' + (ctrl.hasJoined() ? 'fa-flag' : 'fa-play');
-
-  function buttonAction () {
-    if (ctrl.hasJoined()) {
-      ctrl.withdraw(ctrl.tournament().id);
-    }
-    else {
-      ctrl.join(ctrl.tournament().id);
-    }
-  }
-
-  if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+function joinButton(ctrl) {
+  if (!session.isConnected() || ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
     return null;
   }
 
   return (
-    <button className="action_bar_button" config={helper.ontouch(buttonAction)}>
-      <span className={icon} />
-      {label}
+    <button key="join" className="action_bar_button" config={helper.ontouch(() => ctrl.join(ctrl.tournament().id))}>
+      <span className="fa fa-play" />
+      {i18n('join')}
+    </button>
+  );
+}
+
+function withdrawButton(ctrl) {
+  if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+    return null;
+  }
+  return (
+    <button key="withdraw" className="action_bar_button" config={helper.ontouch(() => ctrl.withdraw(ctrl.tournament().id))}>
+      <span className="fa fa-flag" />
+      {i18n('withdraw')}
     </button>
   );
 }
@@ -155,15 +158,6 @@ function variantKey(data) {
     variant = data.perf.name.toLowerCase();
   }
   return variant;
-}
-
-function timeControl(data) {
-  let limit = (data.clock.limit / 60);
-  if (data.clock.limit === 30)
-    limit = '½';
-  else if (data.clock.limit === 45)
-    limit = '¾';
-  return limit + '+' + data.clock.increment;
 }
 
 function timeInfo(time, preceedingText) {

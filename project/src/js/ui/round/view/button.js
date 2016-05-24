@@ -324,5 +324,15 @@ export default {
         {i18n('withdraw')}
       </button>
     );
+  },
+  goBerserk: function(ctrl) {
+    if (!gameApi.berserkableBy(ctrl.data)) return null;
+    if (ctrl.vm.goneBerserk[ctrl.data.player.color]) return null;
+    return (
+      <button className="berserk" key="goBerserk" config={helper.ontouch(ctrl.goBerserk)}>
+        <span data-icon="`" /> GO BERSERK!<br/>
+        <small>Half the time, bonus point</small>
+      </button>
+    );
   }
 };

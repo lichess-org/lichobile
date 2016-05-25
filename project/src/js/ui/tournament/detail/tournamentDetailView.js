@@ -3,7 +3,7 @@ import session from '../../../session';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import { gameIcon, formatTournamentCountdown, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
+import { noop, gameIcon, formatTournamentCountdown, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
@@ -186,16 +186,26 @@ function tournamentLeaderboard(ctrl) {
       </table>
 
       <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
-        <button className={'navigationButton' + (backEnabled ? '' : ' disabled')} data-icon='W' config={backEnabled ? helper.ontouch(() => ctrl.reload(data.id, 1)) : null} />
-        <button className={'navigationButton' + (backEnabled ? '' : ' disabled')} data-icon='Y' config={backEnabled ? helper.ontouch(() => ctrl.reload(data.id, page-1)) : null} />
+        {renderNavButton('W', backEnabled, () => ctrl.reload(data.id, 1))}
+        {renderNavButton('Y', backEnabled, () => ctrl.reload(data.id, page - 1))}
         <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
-        <button className={'navigationButton' + (forwardEnabled ? '' : ' disabled')} data-icon='X' config={forwardEnabled ? helper.ontouch(() => ctrl.reload(data.id, page+1)) : null} />
-        <button className={'navigationButton' + (forwardEnabled ? '' : ' disabled')} data-icon='V' config={forwardEnabled ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10))) : null} />
-        <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')} data-icon='7' config={data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : null}>
+        {renderNavButton('X', forwardEnabled, () => ctrl.reload(data.id, page + 1))}
+        {renderNavButton('V', forwardEnabled, () => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10)))}
+        <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
+          data-icon='7'
+          config={data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : null}
+        >
           <span>Me</span>
         </button>
       </div>
     </div>
+  );
+}
+
+function renderNavButton(icon, isEnabled, action) {
+  return (
+    <button className={'navigationButton' + (isEnabled ? '' : ' disabled')}
+      data-icon={icon} config={isEnabled ? helper.ontouch(action) : noop} />
   );
 }
 

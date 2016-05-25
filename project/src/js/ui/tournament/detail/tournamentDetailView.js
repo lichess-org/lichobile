@@ -8,7 +8,6 @@ import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
-import session from '../../../session';
 
 export default function view(ctrl) {
   const headerCtrl = headerWidget.bind(undefined, null,

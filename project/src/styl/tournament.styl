@@ -75,6 +75,11 @@ td.tournamentPlayer
   max-width 0
   width 80%
 
+.list_item.me
+  >td.tournamentPlayer
+    border-left 10px solid #d59120
+    padding-left 5px
+
 .progress
   &.positive
     color green
@@ -163,6 +168,48 @@ td.tournamentPoints
 
 .statData
   text-align right
+
+.navigationButtons
+  display flex
+  flex-flow row wrap
+  align-items center
+  align-self center
+  margin-bottom 5px
+  &.invisible
+    display none
+
+.navigationButton
+  border-radius 4px
+  text-align center
+  border-style solid
+  border-color #323232
+  border-width 1px
+  padding 0px 2px 4px 2px
+  width 40px
+  &:before
+    font-family "lichess" !important
+    font-size 1.2em
+    content attr(data-icon)
+    vertical-align middle
+  &.invisible
+    display none
+  &.me
+    width 60px
+    &:before
+      margin-right 5px
+    &.activated
+      color #ccc!important
+      text-shadow 0 1px 0 #000!important
+      background #444!important
+      border-color #404040!important
+      box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
+
+.pageInfo
+  margin 0px 5px 0px 5px
+
+.tournamentLeaderboard
+  display flex
+  flex-flow column nowrap
 
 .tournamentFaq
   padding 10px

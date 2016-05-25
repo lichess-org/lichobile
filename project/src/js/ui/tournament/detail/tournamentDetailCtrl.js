@@ -11,6 +11,7 @@ export default function controller() {
 
   const tournament = m.prop();
   const hasJoined = m.prop(false);
+  const page = m.prop(null);
   const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
@@ -44,6 +45,7 @@ export default function controller() {
   function join(id) {
     xhr.join(id).then(() => {
       hasJoined(true);
+      page(null); // Reset the page so next reload goes to player position
       m.redraw();
     }).catch(utils.handleXhrError);
   }
@@ -57,13 +59,16 @@ export default function controller() {
 
   const id = m.route.param('id');
 
-  const throttledReload = throttle(() => {
-    xhr.reload(tournament().id).then(reload);
+  const throttledReload = throttle((t, p) => {
+    if (p) {
+      page(p);
+    }
+    xhr.reload(t, page()).then(reload);
   }, 1000);
 
   const handlers = {
-    reload: throttledReload,
-    resync: throttledReload,
+    reload: () => throttledReload (id),
+    resync: () => throttledReload (id),
     redirect: function(gameId) {
       m.route('/tournament/' + tournament().id + '/game/' + gameId, null, true);
     },
@@ -79,7 +84,6 @@ export default function controller() {
 
   let clockInterval = null;
   xhr.tournament(id).then(data => {
-    console.log(data);
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);
@@ -94,7 +98,7 @@ export default function controller() {
     faqCtrl,
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
-    reload,
+    reload: throttledReload,
     onunload: () => {
       socket.destroy();
       if (clockInterval) {

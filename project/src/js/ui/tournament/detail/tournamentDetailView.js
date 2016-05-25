@@ -8,6 +8,7 @@ import faq from '../faq';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
+import session from '../../../session';
 
 export default function view(ctrl) {
   const headerCtrl = headerWidget.bind(undefined, null,
@@ -142,7 +143,6 @@ function withdrawButton(ctrl) {
 
 function variantDisplay(data) {
   let variant = variantKey(data);
-
   variant = variant.split(' ')[0]; // Cut off names to first word
 
   if (variant.length > 0) {
@@ -168,19 +168,42 @@ function timeInfo(time, preceedingText) {
 
 function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
+  const players = data.standing.players;
+  const page = data.standing.page;
+  const firstPlayer = (players.length > 0) ? players[0].rank : 0;
+  const lastPlayer = (players.length > 0) ? players[players.length-1].rank : 0;
+  const backEnabled = page > 1;
+  const forwardEnabled = page < data.nbPlayers/10;
+  const isUserPage = data.me && (page === Math.ceil(data.me.rank/10));
+  const user = session.get();
+  const userName = user ? user.username : '';
+
   return (
     <div key="leaderboard" className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
+
       <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem)}
+        {data.standing.players.map(renderLeaderboardItem.bind(undefined, userName))}
       </table>
+
+      <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
+        <button className={'navigationButton' + (backEnabled ? '' : ' disabled')} data-icon='W' config={backEnabled ? helper.ontouch(() => ctrl.reload(data.id, 1)) : null} />
+        <button className={'navigationButton' + (backEnabled ? '' : ' disabled')} data-icon='Y' config={backEnabled ? helper.ontouch(() => ctrl.reload(data.id, page-1)) : null} />
+        <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
+        <button className={'navigationButton' + (forwardEnabled ? '' : ' disabled')} data-icon='X' config={forwardEnabled ? helper.ontouch(() => ctrl.reload(data.id, page+1)) : null} />
+        <button className={'navigationButton' + (forwardEnabled ? '' : ' disabled')} data-icon='V' config={forwardEnabled ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10))) : null} />
+        <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')} data-icon='7' config={data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : null}>
+          <span>Me</span>
+        </button>
+      </div>
     </div>
   );
 }
 
-function renderLeaderboardItem(player) {
+function renderLeaderboardItem (userName, player) {
+  const isMe = player.name === userName;
   return (
-    <tr key={player.name} className='list_item'>
+    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')}>
       <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
       <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
     </tr>

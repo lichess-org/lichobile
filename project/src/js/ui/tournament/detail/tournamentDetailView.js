@@ -186,14 +186,14 @@ function tournamentLeaderboard(ctrl) {
       </table>
 
       <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
-        {renderNavButton('W', backEnabled, () => ctrl.reload(data.id, 1))}
-        {renderNavButton('Y', backEnabled, () => ctrl.reload(data.id, page - 1))}
+        {renderNavButton('W', !ctrl.isLoading() && backEnabled, () => ctrl.reload(data.id, 1))}
+        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, () => ctrl.reload(data.id, page - 1))}
         <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
-        {renderNavButton('X', forwardEnabled, () => ctrl.reload(data.id, page + 1))}
-        {renderNavButton('V', forwardEnabled, () => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10)))}
+        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, () => ctrl.reload(data.id, page + 1))}
+        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, () => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10)))}
         <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon='7'
-          config={data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : null}
+          config={!ctrl.isLoading() && data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : noop}
         >
           <span>Me</span>
         </button>

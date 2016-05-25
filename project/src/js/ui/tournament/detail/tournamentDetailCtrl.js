@@ -12,9 +12,11 @@ export default function controller() {
   const tournament = m.prop();
   const hasJoined = m.prop(false);
   const page = m.prop(null);
+  const isLoading = m.prop(false);
   const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
+    isLoading(false);
     const oldData = tournament();
     if (data.featured && (data.featured.id !== oldData.featured.id)) {
       socket.send('startWatching', data.featured.id);
@@ -63,7 +65,10 @@ export default function controller() {
     if (p) {
       page(p);
     }
-    xhr.reload(t, page()).then(reload);
+    isLoading(true);
+    xhr.reload(t, page())
+    .then(reload)
+    .catch(() => isLoading(false));
   }, 1000);
 
   const handlers = {
@@ -99,6 +104,7 @@ export default function controller() {
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
     reload: throttledReload,
+    isLoading,
     onunload: () => {
       socket.destroy();
       if (clockInterval) {

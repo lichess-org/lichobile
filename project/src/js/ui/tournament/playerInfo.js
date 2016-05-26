@@ -41,10 +41,10 @@ export default {
     if (!player) return null;
 
     return (
-      <div className="modal" id="tournamentPlayerInfoModal" config={helper.slidesInUp}>
+      <div className="modal" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
         <header>
           <button className="modal_close" data-icon="L"
-            config={helper.ontouch(helper.slidesOutDown(ctrl.close, 'tournamentPlayerInfoModal'))}
+            config={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           />
           <h2>{player.name}</h2>
         </header>

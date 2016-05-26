@@ -190,7 +190,7 @@ function tournamentLeaderboard(ctrl) {
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
       <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem.bind(undefined, userName))}
+        {data.standing.players.map(renderLeaderboardItem.bind(undefined, ctrl.playerInfoCtrl, userName))}
       </table>
 
       <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
@@ -217,10 +217,10 @@ function renderNavButton(icon, isEnabled, action) {
   );
 }
 
-function renderLeaderboardItem (userName, player) {
+function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')}>
+    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} config={helper.ontouchY(playerInfoCtrl.open.bind(undefined, player))}>
       <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
       <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
     </tr>

@@ -27,16 +27,18 @@ export default {
 
   view: function(ctrl) {
     if (!ctrl.isOpen()) return null;
+
     const tournament = ctrl.tournament();
 
     if (!tournament) return null;
+
     return (
-      <div className="modal" id="tournamentFaqModal" config={helper.slidesInUp}>
+      <div className="modal" id="tournamentUserInfoModal" config={helper.slidesInUp}>
         <header>
           <button className="modal_close" data-icon="L"
             config={helper.ontouch(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
           />
-          <h2>Tournament FAQ</h2>
+          <h2>Player Info</h2>
         </header>
         <div className="modal_content">
           <div className="tournamentFaq">

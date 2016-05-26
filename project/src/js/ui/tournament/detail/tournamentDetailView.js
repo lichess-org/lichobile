@@ -5,6 +5,7 @@ import m from 'mithril';
 import i18n from '../../../i18n';
 import { noop, gameIcon, formatTournamentCountdown, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
+import playerInfo from '../playerInfo';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
@@ -16,14 +17,21 @@ export default function view(ctrl) {
 
   const body = tournamentBody.bind(undefined, ctrl);
   const footer = renderFooter.bind(undefined, ctrl);
-  const overlay = renderOverlay.bind(undefined, ctrl);
+  const faqOverlay = renderFAQOverlay.bind(undefined, ctrl);
+  const playreInfoOverlay = renderPlayerInfoOverlay.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, body, footer, overlay);
+  return layout.free(headerCtrl, body, footer, [faqOverlay, playreInfoOverlay]);
 }
 
-function renderOverlay(ctrl) {
+function renderFAQOverlay(ctrl) {
   return [
     faq.view(ctrl.faqCtrl)
+  ];
+}
+
+function renderPlayerInfoOverlay(ctrl) {
+  return [
+    playerInfo.view(ctrl.playerInfoCtrl)
   ];
 }
 

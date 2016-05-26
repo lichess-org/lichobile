@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
 import spinner from './spinner';
-import * as m from 'mithril';
+import m from 'mithril';
 
 export const apiVersion = 1;
 

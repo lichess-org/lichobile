@@ -14,7 +14,7 @@ import './polyfills';
 import * as moment from 'moment';
 window.moment = moment;
 
-import * as m from 'mithril';
+import m from 'mithril';
 import * as utils from './utils';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';

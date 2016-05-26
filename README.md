@@ -63,10 +63,6 @@ To build in dev mode:
 
     $ gulp
 
-To build in prod mode:
-
-    $ gulp --mode=prod
-
 To build and watch for changes:
 
     $ gulp watch
@@ -76,7 +72,14 @@ web security disabled for loading files and make requests to lichess.
 For mouse interaction you need to use
 [device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/)
 
-    $ chromium --user-data-dir=$HOME/.config/chromium_dev --disable-web-security ~/code/lichobile/project/www/index.html
+Launch chrome with disabled security under linux
+
+    $ chromium --user-data-dir=$HOME/.chromium_dev_dir --disable-web-security
+
+Launch chrome with disabled security under OSX
+
+    $ open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/Users/myUser/.chrome_dev_dir
+
 
 ## Build stockfish
 

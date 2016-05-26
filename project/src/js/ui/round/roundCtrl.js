@@ -125,6 +125,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.hideActions = function(fromBB) {
     if (fromBB !== 'backbutton' && this.vm.showingActions) backbutton.stack.pop();
+    console.log('actions hidden');
     this.vm.showingActions = false;
   }.bind(this);
 

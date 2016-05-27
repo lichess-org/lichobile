@@ -32,9 +32,12 @@ main
       flex 1 1 auto
       overflow hidden
       text-overflow ellipsis
+      white-space nowrap
       > .kiddo
         margin-right 5px
         font-size 20px
+      > .fa-trophy
+        margin-right 2px
       &.reconnecting
         white-space nowrap
         height 50px
@@ -109,6 +112,10 @@ main
     top 10px
     left 7px
     background lighten(gold, 50%)
+
+.timeline_button
+  > .chip
+    font-family 'Noto Sans', sans-serif
 
 
 .friends_button
@@ -195,7 +202,7 @@ main
   width 100%
   height calc(100% - 50px)
   &.withFooter
-    height calc(100% - 50px - 45px)
+    height "calc(100% - 50px - %s)" % footerHeight
 
 .main_footer
-  height 45px
+  height footerHeight

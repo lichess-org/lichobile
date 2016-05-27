@@ -28,8 +28,8 @@ export default function controller() {
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
   const engine = engineCtrl(this);
-  this.actions = new actions.controller(this);
-  this.newGameMenu = new newGameMenu.controller(this);
+  this.actions = actions.controller(this);
+  this.newGameMenu = newGameMenu.controller(this);
 
   this.vm = {
     engineSearching: false

@@ -42,6 +42,16 @@ export default function chessLogic(ctrl) {
     importPgn(pgn) {
       return askWorker(worker, { topic: 'pgnRead', payload: { pgn }});
     },
+    exportPgn(variant, initialFen, pgnMoves) {
+      return askWorker(worker, {
+        topic: 'pgnDump',
+        payload: {
+          variant,
+          initialFen,
+          pgnMoves
+        }
+      });
+    },
     onunload() {
       if (worker) worker.terminate();
     }

@@ -55,6 +55,13 @@ function drawable(data) {
   return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
+function berserkableBy(data) {
+  return data.tournament &&
+    data.tournament.berserkable &&
+    isPlayerPlaying(data) &&
+    playedTurns(data) < 2;
+}
+
 function resignable(data) {
   return playable(data) && !abortable(data);
 }
@@ -133,7 +140,7 @@ function title(data) {
   const mode = data.game.offline ? i18n('offline') :
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
-  const name = variant ? (variant.shortName || variant.name) : '?';
+  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
   return `${time(data)} • ${name} • ${mode}`;
 }
 
@@ -153,6 +160,7 @@ export default {
   abortable,
   takebackable,
   drawable,
+  berserkableBy,
   resignable,
   forceResignable,
   moretimeable,

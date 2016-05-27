@@ -53,8 +53,9 @@
 .actions_bar
   display flex
   padding 0
-  height 40px
+  height footerHeight
   width 100%
+  overflow hidden
   @media only screen and (orientation: landscape)
     width calc(100vw - (100vh - 50px) - 10px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
@@ -68,7 +69,7 @@
   outline none
   border none
   color: gold
-  height 40px
+  height footerHeight
   line-height 30px
   width 25%
   &:last-child
@@ -94,9 +95,7 @@
     padding 7px 10px 10px
   &[data-icon='2']
     transform rotate(-90deg)
-
   @media only screen and (max-height 400px) and (orientation landscape)
-    height 40px
     line-height 25px
     &:before
       font-size 18px
@@ -151,3 +150,18 @@
     height calc(100vh - 50px - 12vh)
     margin auto 1rem
 
+.board_alert
+  position: absolute;
+  bottom: -28px;
+  left: 0;
+  height: 28px;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  font-weight: bold;
+  font-size 0.8em
+  color: #fff;
+  overflow hidden
+  text-overflow ellipsis
+  background: rgba(orange, 0.8)
+  z-index: 50;

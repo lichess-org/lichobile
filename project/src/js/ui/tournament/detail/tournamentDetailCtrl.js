@@ -4,14 +4,26 @@ import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';
 import * as m from 'mithril';
+import faq from '../faq';
 
 export default function controller() {
   helper.analyticsTrackView('Tournament details');
 
   const tournament = m.prop();
   const hasJoined = m.prop(false);
+  const page = m.prop(null);
+  const isLoading = m.prop(false);
+  const faqCtrl = faq.controller(tournament);
 
   function reload(data) {
+    isLoading(false);
+    const oldData = tournament();
+    if (data.featured && (data.featured.id !== oldData.featured.id)) {
+      socket.send('startWatching', data.featured.id);
+    }
+    else if (data.featured && (data.featured.id === oldData.featured.id)) {
+      data.featured = oldData.featured;
+    }
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
 
@@ -35,6 +47,7 @@ export default function controller() {
   function join(id) {
     xhr.join(id).then(() => {
       hasJoined(true);
+      page(null); // Reset the page so next reload goes to player position
       m.redraw();
     }).catch(utils.handleXhrError);
   }
@@ -48,15 +61,29 @@ export default function controller() {
 
   const id = m.route.param('id');
 
-  const throttledReload = throttle(() => {
-    xhr.reload(tournament().id).then(reload);
+  const throttledReload = throttle((t, p) => {
+    if (p) {
+      page(p);
+    }
+    isLoading(true);
+    xhr.reload(t, page())
+    .then(reload)
+    .catch(() => isLoading(false));
   }, 1000);
 
   const handlers = {
-    reload: throttledReload,
-    resync: throttledReload,
+    reload: () => throttledReload (id),
+    resync: () => throttledReload (id),
     redirect: function(gameId) {
-      m.route('/tournament/' + tournament().id + '/game/' + gameId);
+      m.route('/tournament/' + tournament().id + '/game/' + gameId, null, true);
+    },
+    fen: function(d) {
+      const featured = tournament().featured;
+      if (!featured) return;
+      if (featured.id !== d.id) return;
+      featured.fen = d.fen;
+      featured.lastMove = d.lm;
+      m.redraw();
     }
   };
 
@@ -65,16 +92,19 @@ export default function controller() {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);
-    socket.createTournament(id, tournament().socketVersion, handlers);
+    const featuredGame = data.featured ? data.featured.id : null;
+    socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
   })
   .catch(utils.handleXhrError);
 
   return {
     tournament,
     hasJoined,
+    faqCtrl,
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
-    reload,
+    reload: throttledReload,
+    isLoading,
     onunload: () => {
       socket.destroy();
       if (clockInterval) {

@@ -324,3 +324,39 @@ export function variantReminder(el, icon) {
     }
   }, 800);
 }
+
+export function pad(num, size) {
+    var s = num + '';
+    while (s.length < size) s = '0' + s;
+    return s;
+}
+
+export function formatTournamentCountdown(seconds) {
+  let timeStr = '';
+  const hours = Math.floor(seconds / 60 / 60);
+  const mins = Math.floor(seconds / 60) - (hours * 60);
+  const secs = seconds % 60;
+  if (hours > 0) {
+    timeStr = hours + ':' + pad(mins, 2) + ':' + pad(secs, 2);
+  } else {
+    timeStr = mins + ':' + pad(secs, 2);
+  }
+
+  return timeStr;
+}
+
+export function formatTournamentDuration(timeInMin) {
+  const hours = Math.floor(timeInMin / 60);
+  const minutes = Math.floor(timeInMin - hours * 60);
+  return (hours ? hours + 'H ' : '') + (minutes ? minutes + 'M' : '');
+}
+
+export function formatTournamentTimeControl(clock) {
+  if (clock) {
+    const min = secondsToMinutes(clock.limit);
+    const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();
+    return t + '+' + clock.increment;
+  } else {
+    return '∞';
+  }
+}

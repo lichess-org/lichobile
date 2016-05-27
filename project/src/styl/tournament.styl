@@ -1,15 +1,34 @@
+.tournament_item
+  opacity 0.9
+  &.official
+    opacity 1
+    > .tournamentListName:before
+      color gold
+
 td.tournamentListName
-  padding-left 10px
   text-align: left
   text-overflow: ellipsis
   white-space: nowrap;
   overflow hidden
   max-width 0
   width 60%
+  position relative
+  &:first-child
+    padding-left 45px
+  &:before
+    position absolute
+    left 8px
+    top 21px
+    font-size 28px
+  > .fullName
+    overflow hidden
+    text-overflow ellipsis
 
 td.tournamentListTime
+  > .time
+    letter-spacing 0px
   padding 10px
-  text-align: center
+  text-align right
   max-width 0
   width 35%
 
@@ -56,23 +75,16 @@ td.tournamentPlayer
   max-width 0
   width 80%
 
+.list_item.me
+  >td.tournamentPlayer
+    border-left 10px solid #d59120
+    padding-left 5px
+
 .progress
   &.positive
     color green
   &.negative
     color red
-
-.trophy-1
-  &:after
-    content: url('../../images/trophies/trophy-1.png')
-
-.trophy-2
-  &:after
-    content: url('../../images/trophies/trophy-2.png')
-
-.trophy-3
-  &:after
-    content: url('../../images/trophies/trophy-3.png')
 
 td.tournamentPoints
   padding 10px
@@ -83,8 +95,16 @@ td.tournamentPoints
 .timeArrow
   font-weight: bold
 
+.tournamentHeader
+  padding 10px
+
 .tournamentInfoTime
-  padding 10px 10px 5px 10px
+  padding-bottom 5px
+  border-bottom 1px solid borderColor
+
+.tournamentCreatorInfo
+  font-size 0.85em
+  padding-top 5px
 
 .tournamentInfo
   &:before
@@ -93,27 +113,126 @@ td.tournamentPoints
 .timeInfo
   float right
 
-.featuredGame
-  width 90%
-  padding 10px
-  text-align left
-  text-overflow ellipsis
-  white-space nowrap;
-  overflow hidden
-  &.active
-    background lighten(bgdark, 5%)
-  &.bglight
-    border-bottom-color darken(bglight, 15%)
-    &.active
-      background-color darken(bglight, 5%)
+.tournamentMiniBoard
+  display flex
+  flex-flow column wrap
+  justify-content flex-start
+  align-items center
 
-.joinWithdrawButton
-  float right
-  background-color gold
-  height 28px
-  border-radius 4px;
-  color white;
-  padding 3px 0px 5px 10px;
-  text-align center;
-  text-decoration none;
-  margin-right 10px
+.podium
+  display flex
+  flex-flow row nowrap
+  font-size 0.75em
+  margin 0 10px
+  align-items flex-end
+  > div
+    overflow hidden
+    text-overflow ellipsis
+    display flex
+    flex-flow column wrap
+    justify-content flex-end
+    > div
+      margin 0 auto
+      text-align center
+    > .trophy
+      min-height 0 // chrome 48 bug workaround
+      margin-bottom 5px
+
+.place1
+  width 44%
+  font-size 1.25em
+  > .trophy
+    width 75%
+    content: url('../../images/trophies/trophy-1.png')
+
+.place2
+  width 31%
+  font-size 1.1em
+  > .trophy
+    width 55%
+    content: url('../../images/trophies/trophy-2.svg')
+
+.place3
+  width 25%
+  font-size 1em
+  > .trophy
+    width 50%
+    content: url('../../images/trophies/trophy-3.svg')
+
+.stats
+  font-size .7em
+  margin 0 auto
+
+.statName
+  text-align left
+
+.statData
+  text-align right
+
+.navigationButtons
+  display flex
+  flex-flow row wrap
+  align-items center
+  align-self center
+  margin 10px 0
+  height 30px
+  &.invisible
+    display none
+
+.navigationButton
+  border-radius 4px
+  text-align center
+  border-style solid
+  border-color #323232
+  border-width 1px
+  height 30px
+  line-height 20px
+  margin 0 5px
+  width 40px
+  &:before
+    font-family "lichess" !important
+    font-size 1.2em
+    content attr(data-icon)
+    vertical-align middle
+  &.invisible
+    display none
+  &.me
+    line-height 25px
+    width 60px
+    &:before
+      margin-right 5px
+    &.activated
+      color #ccc!important
+      text-shadow 0 1px 0 #000!important
+      background #444!important
+      border-color #404040!important
+      box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
+  @media only screen and (max-width 380px)
+    margin 0 1px
+    width 35px
+    line-height 16px
+    &:before
+      font-size 1em
+
+.pageInfo
+  margin 0px 5px 0px 5px
+  @media only screen and (max-width 380px)
+    letter-spacing -1px
+
+.tournamentLeaderboard
+  display flex
+  flex-flow column nowrap
+
+.tournamentFaq
+  padding 10px
+  h2
+    font-weight bold
+    font-size 1.1em
+    margin-bottom 5px
+    &:not(:first-child)
+      margin-top 15px
+  .double
+    color: #d59120;
+  .streak
+    color: #759900;
+

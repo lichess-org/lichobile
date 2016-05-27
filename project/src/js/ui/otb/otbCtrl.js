@@ -24,6 +24,8 @@ export default function controller() {
   socket.createDefault();
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
+  this.actions = actions.controller(this);
+  this.newGameMenu = newGameMenu.controller(this);
 
   this.save = function() {
     setCurrentOTBGame({
@@ -71,9 +73,6 @@ export default function controller() {
       m.redraw();
     }, 500);
   }.bind(this);
-
-  this.actions = new actions.controller(this);
-  this.newGameMenu = new newGameMenu.controller(this);
 
   this.init = function(data, situations, ply) {
     this.actions.close();

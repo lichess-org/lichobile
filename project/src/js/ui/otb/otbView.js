@@ -11,7 +11,6 @@ import { getBoardBounds } from '../../utils';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
-import * as m from 'mithril';
 
 export default function view(ctrl) {
 
@@ -57,14 +56,14 @@ function renderContent(ctrl, pieceTheme) {
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
     bounds,
     isPortrait,
     wrapperClasses,
-    customPieceTheme: pieceTheme
-  });
+    pieceTheme
+  );
 
   if (isPortrait)
     return [

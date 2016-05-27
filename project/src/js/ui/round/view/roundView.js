@@ -65,11 +65,30 @@ export function renderMaterial(material) {
 }
 
 function renderTitle(ctrl) {
+  function tcConfig(el, isUpdate) {
+    if (!isUpdate) {
+      el.textContent =
+        utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+        ' • ';
+      ctrl.vm.tClockEl = el;
+    }
+  }
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
       <h1 key="playingTitle" className="playing">
         { session.isKidMode() ? <span className="kiddo">😊</span> : null }
         {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+        {ctrl.data.tournament ?
+          <span className="fa fa-trophy" /> : null
+        }
+        {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
+          <span config={tcConfig}>
+          {
+            utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+            ' • '
+          }
+          </span> : null
+        }
         {ctrl.title}
       </h1>
     );
@@ -107,21 +126,26 @@ function renderContent(ctrl, isPortrait) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground,
     bounds,
-    isPortrait
-  });
+    isPortrait,
+    null,
+    null,
+    null,
+    gameApi.mandatory(ctrl.data) && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+      i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : null
+  );
 
-  if (isPortrait)
+  if (isPortrait) {
     return [
       opponent,
       board,
       player,
       renderGameActionsBar(ctrl, isPortrait)
     ];
-  else
+  } else {
     return [
       board,
       <section key="table" className="table">
@@ -136,16 +160,7 @@ function renderContent(ctrl, isPortrait) {
         {renderGameActionsBar(ctrl, isPortrait)}
       </section>
     ];
-}
-
-function compact(x) {
-  if (Object.prototype.toString.call(x) === '[object Array]') {
-    var elems = x.filter(function(n) {
-      return n !== undefined;
-    });
-    return elems.length > 0 ? elems : null;
   }
-  return x;
 }
 
 function renderRatingDiff(player) {
@@ -199,7 +214,10 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait;
+  const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
+    '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
+
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -213,6 +231,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           <span className={'status ' + onlineStatus} data-icon="r" /> :
           null
         }
+        {tournamentRank}
         {playerName}
         {player.onGame ?
           <span className="ongame yes" data-icon="3" /> :
@@ -239,6 +258,12 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   );
 }
 
+function showBerserk(ctrl, color) {
+  return ctrl.vm.goneBerserk[color] &&
+    ctrl.data.game.turns <= 1 &&
+    gameApi.playable(ctrl.data);
+}
+
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
@@ -247,7 +272,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
     <section className="playTable" key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait)}
       {ctrl.clock ?
-        renderClock(ctrl.clock, player.color, runningColor) : (
+        renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
         ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -279,23 +304,20 @@ function renderGameRunningActions(ctrl) {
     return <div className="game_controls">{controls}</div>;
   }
 
-  const d = ctrl.data;
-  const answerButtons = compact([
+  const answerButtons = [
     button.cancelDrawOffer(ctrl),
     button.answerOpponentDrawOffer(ctrl),
     button.cancelTakebackProposition(ctrl),
-    button.answerOpponentTakebackProposition(ctrl),
-    (gameApi.mandatory(d) && gameApi.nbMoves(d, d.player.color) === 0) ? m('div.text[data-icon=j]',
-      i18n('youHaveNbSecondsToMakeYourFirstMove', 30)
-    ) : undefined
-  ]);
+    button.answerOpponentTakebackProposition(ctrl)
+  ];
 
   const gameControls = button.forceResign(ctrl) || [
     button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
     button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
     button.threefoldClaimDraw(ctrl),
     button.resign(ctrl),
-    button.resignConfirmation(ctrl)
+    button.resignConfirmation(ctrl),
+    button.goBerserk(ctrl)
   ];
 
   return (
@@ -320,12 +342,13 @@ function renderGameEndedActions(ctrl) {
   ];
   resultDom.push(m('em.resultStatus', status));
   let buttons = null;
-  if (ctrl.data.tournament) {
+  if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
         button.returnToTournament(ctrl),
         button.shareLink(ctrl),
-        button.sharePGN(ctrl)
+        button.sharePGN(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
     else {
@@ -333,7 +356,8 @@ function renderGameEndedActions(ctrl) {
         button.returnToTournament(ctrl),
         button.withdrawFromTournament(ctrl),
         button.shareLink(ctrl),
-        button.sharePGN(ctrl)
+        button.sharePGN(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
   }
@@ -342,6 +366,7 @@ function renderGameEndedActions(ctrl) {
       buttons = [
         button.shareLink(ctrl),
         button.sharePGN(ctrl),
+        button.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null
       ];
     }
@@ -352,7 +377,8 @@ function renderGameEndedActions(ctrl) {
         button.newOpponent(ctrl),
         button.answerOpponentRematch(ctrl),
         button.cancelRematch(ctrl),
-        button.rematch(ctrl)
+        button.rematch(ctrl),
+        button.analysisBoard(ctrl)
       ];
     }
   }

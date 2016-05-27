@@ -105,8 +105,14 @@ export function headerBtns() {
         {gamesButton()}
       </div>
     );
-  }
-  else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
+  } else if (utils.hasNetwork() && session.isConnected() && timeline.unreadCount()) {
+    return (
+      <div key="buttons" className="buttons">
+        {timelineButton()}
+        {gamesButton()}
+      </div>
+    );
+  } else if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
     return (
       <div key="buttons" className="buttons">
         {friendsButton()}
@@ -181,12 +187,6 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrappe
 
 export function empty() {
   return [];
-}
-
-export function pad(num, size) {
-    var s = num + '';
-    while (s.length < size) s = '0' + s;
-    return s;
 }
 
 export function userStatus(user) {

@@ -7,7 +7,11 @@ import * as m from 'mithril';
 
 // store temporarily last route to disable animations on same route
 // TODO find a better way cause this is ugly
-var lastRoute;
+let lastRoute;
+
+// this must be cached because of the access to document.body.style
+let cachedTransformProp;
+let cachedViewportDim = null;
 
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
@@ -104,9 +108,12 @@ function viewFadesOut(el, callback) {
   tId = setTimeout(after, 250);
 }
 
+<<<<<<< HEAD
 // this must be cached because of the access to document.body.style
 var cachedTransformProp;
 
+=======
+>>>>>>> master
 function computeTransformProp() {
   return 'transform' in document.body.style ?
     'transform' : 'webkitTransform' in document.body.style ?
@@ -153,8 +160,11 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
   };
 }
 
+<<<<<<< HEAD
 var cachedViewportDim = null;
 
+=======
+>>>>>>> master
 function viewportDim() {
   if (cachedViewportDim) return cachedViewportDim;
 

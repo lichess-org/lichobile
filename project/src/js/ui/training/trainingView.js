@@ -24,20 +24,19 @@ export default function view(ctrl) {
 function renderContent(ctrl) {
   if (!ctrl.data) return viewOnlyBoardContent();
 
-  const board = m.component(Board, {
-    data: ctrl.data,
-    chessgroundCtrl: ctrl.chessground,
-    isPortrait: helper.isPortrait()
-  });
+  const board = Board(
+    ctrl.data,
+    ctrl.chessground
+  );
 
-  if (helper.isPortrait())
+  if (helper.isPortrait()) {
     return [
       ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
       board,
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
     ];
-  else
+  } else {
     return [
       board,
       <section key="table" className="table">
@@ -51,6 +50,7 @@ function renderContent(ctrl) {
         {renderActionsBar(ctrl)}
       </section>
     ];
+  }
 }
 
 function renderExplanation(ctrl) {

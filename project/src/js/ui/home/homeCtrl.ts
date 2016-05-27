@@ -1,24 +1,33 @@
 import socket from '../../socket';
 import settings from '../../settings';
 import { lobby as lobbyXhr } from '../../xhr';
-import { throttle } from 'lodash/function';
+import { throttle } from 'lodash';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
 import * as m from 'mithril';
 
-export default function homeCtrl() {
+export interface HomeCtrl extends Mithril.Controller {
+  featured: Mithril.Property<any>;
+  nbConnectedPlayers: Mithril.Property<number>;
+  nbGamesInPlay: Mithril.Property<number>;
+  dailyPuzzle: Mithril.Property<any>;
+  weekTopPlayers: Mithril.Property<Array<any>>;
+  goToFeatured: () => void;
+}
+
+export default function homeCtrl(): HomeCtrl {
 
   var featuredFeed;
 
-  const featured = m.prop();
+  const featured = m.prop<any>();
 
-  const nbConnectedPlayers = m.prop();
-  const nbGamesInPlay = m.prop();
-  const dailyPuzzle = m.prop();
-  const weekTopPlayers = m.prop([]);
+  const nbConnectedPlayers = m.prop<number>();
+  const nbGamesInPlay = m.prop<number>();
+  const dailyPuzzle = m.prop<any>();
+  const weekTopPlayers = m.prop<Array<any>>([]);
 
   function onFeatured() {
-    return throttle(featuredXhr, 1000)()
+    return throttle<any>(featuredXhr, 1000)()
     .then(data => {
       featured(data);
       m.redraw();

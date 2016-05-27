@@ -1,7 +1,7 @@
 import store from './storage';
-import { range } from 'lodash/util';
+import { range } from 'lodash';
 
-function localstorageprop(key, initialValue) {
+function localstorageprop<T>(key: string, initialValue?: T): Mithril.Property<T> {
   return function() {
     if (arguments.length) store.set(key, arguments[0]);
     var ret = store.get(key);
@@ -15,7 +15,7 @@ function tupleOf(x) {
 
 export default {
   general: {
-    lang: localstorageprop('settings.lang'),
+    lang: localstorageprop<string>('settings.lang'),
     sound: localstorageprop('settings.sound', true),
     theme: {
       background: localstorageprop('settings.bgTheme', 'dark'),

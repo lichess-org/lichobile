@@ -66,7 +66,7 @@ export function loadPreferredLanguage(): Promise<string> {
     () => deferred.resolve(defaultCode)
   );
   return deferred.promise
-    .then(code => {
+    .then((code: string) => {
       settings.general.lang(code);
       return code;
     })

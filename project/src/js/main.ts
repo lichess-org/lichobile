@@ -4,6 +4,7 @@
 /// <reference path="../dts/lodash.d.ts" />
 /// <reference path="../dts/webworkify.d.ts" />
 /// <reference path="../dts/cordova-plugin-toast.d.ts" />
+/// <reference path="../dts/sse.d.ts" />
 /// <reference path="../dts/lichess.d.ts" />
 
 'use strict';

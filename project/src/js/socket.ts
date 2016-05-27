@@ -16,7 +16,7 @@ interface Options {
   name: string;
   debug?: boolean;
   pingDelay?: number;
-  sendOnOpen?: string;
+  sendOnOpen?: Array<LichessMessage>;
   registeredEvents: string[];
 }
 

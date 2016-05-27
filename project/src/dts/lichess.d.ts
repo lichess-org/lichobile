@@ -1,4 +1,4 @@
-declare type lichess = {
+declare type LichessOptions = {
   apiEndPoint: string;
   socketEndPoint: string;
   mode: string;
@@ -17,8 +17,13 @@ declare type Analytics = {
 }
 
 interface Window {
-  lichess: lichess;
+  lichess: LichessOptions;
   moment: any;
   analytics: Analytics;
   shouldRotateToOrientation: () => boolean;
+}
+
+declare type LichessMessage = {
+  t: string;
+  d?: string;
 }

@@ -1,7 +1,7 @@
 import settings from './settings';
 import * as m from 'mithril';
 
-var messages = [];
+let messages: { [key: string]: string } = {};
 
 const untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
@@ -50,15 +50,13 @@ const untranslated = {
 
 const defaultCode = 'en';
 
-export default function i18n(key, ...args) {
-  var str = messages[key] || untranslated[key] || key;
-  for (let a in args) {
-    str = str.replace('%s', a);
-  }
+export default function i18n(key: string, ...args: Array<string | number>): string {
+  let str = messages[key] || untranslated[key] || key;
+  args.forEach(a => { str = str.replace('%s', a); })
   return str;
 }
 
-export function loadPreferredLanguage() {
+export function loadPreferredLanguage(): Promise<string> {
   if (settings.general.lang())
     return loadFromSettings();
 
@@ -76,11 +74,12 @@ export function loadPreferredLanguage() {
     .then(loadMomentLocale);
 }
 
-export function getAvailableLanguages() {
+export function getAvailableLanguages(): Promise<Array<[string, string]>> {
   return m.request({
     url: 'i18n/refs.json',
     method: 'GET'
-  }).then(data => { return data; }, error => {
+  })
+  .catch(error => {
     // same workaround for iOS as above
     if (error && error[0][0] === 'af')
       return error;
@@ -89,11 +88,11 @@ export function getAvailableLanguages() {
   });
 }
 
-export function loadFromSettings() {
+export function loadFromSettings(): Promise<string> {
   return loadFile(settings.general.lang()).then(loadMomentLocale);
 }
 
-function loadFile(code) {
+function loadFile(code): Promise<string> {
   return m.request({
     url: 'i18n/' + code + '.json',
     method: 'GET',
@@ -120,7 +119,7 @@ function loadFile(code) {
   });
 }
 
-function loadMomentLocale(code) {
+function loadMomentLocale(code): string {
   if (code !== 'en') {
     var script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';

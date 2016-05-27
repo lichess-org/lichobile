@@ -465,6 +465,7 @@ function renderGameActionsBar(ctrl, isPortrait) {
     <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" config={helper.ontouch(ctrl.showActions)} /> :
     <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />;
 
+  console.log('button', gmButton)
   const chatClass = [
     'action_bar_button',
     ctrl.chat && ctrl.chat.unread ? 'glow' : ''

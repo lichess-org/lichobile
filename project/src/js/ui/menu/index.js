@@ -1,4 +1,4 @@
-import Zanimo from 'zanimo';
+import * as Zanimo from 'zanimo';
 import backbutton from '../../backbutton';
 import * as m from 'mithril';
 

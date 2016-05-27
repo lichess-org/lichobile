@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "target": "es2015",
+    "module": "commonjs",
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true
   },

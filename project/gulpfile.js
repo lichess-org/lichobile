@@ -49,7 +49,7 @@ function buildScripts(src, dest, mode) {
 
   return browserify(src + '/js/main.ts', opts)
     .plugin(tsify)
-    .transform(babelify, {presets: ['es2015'], extensions: ['.js', '.ts']})
+    .transform(babelify)
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))

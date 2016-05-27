@@ -1,4 +1,4 @@
-import Zanimo from 'zanimo';
+import * as Zanimo from 'zanimo';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';

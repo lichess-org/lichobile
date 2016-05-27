@@ -8,7 +8,7 @@ import challengesApi from './lichess/challenges';
 import session from './session';
 import * as work from 'webworkify';
 import socketWorker from './socketWorker';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const worker = work(socketWorker);
 

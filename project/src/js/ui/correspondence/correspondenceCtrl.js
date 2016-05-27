@@ -5,7 +5,7 @@ import session from '../../session';
 import settings from '../../settings';
 import * as xhr from '../../xhr';
 import socket from '../../socket';
-import Zanimo from 'zanimo';
+import * as Zanimo from 'zanimo';
 import * as m from 'mithril';
 
 export default function controller() {

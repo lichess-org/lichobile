@@ -148,9 +148,9 @@ if (!window.Stockfish) {
     },
     output: function(callback) {
       if (stockfishWorker) {
-        stockfishWorker.addEventListener('message', msg => {
+        stockfishWorker.onmessage = msg => {
           callback(msg.data);
-        });
+        };
       }
     },
     exit: function() {

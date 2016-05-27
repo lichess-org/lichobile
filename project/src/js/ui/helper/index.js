@@ -108,12 +108,6 @@ function viewFadesOut(el, callback) {
   tId = setTimeout(after, 250);
 }
 
-<<<<<<< HEAD
-// this must be cached because of the access to document.body.style
-var cachedTransformProp;
-
-=======
->>>>>>> master
 function computeTransformProp() {
   return 'transform' in document.body.style ?
     'transform' : 'webkitTransform' in document.body.style ?
@@ -160,11 +154,6 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
   };
 }
 
-<<<<<<< HEAD
-var cachedViewportDim = null;
-
-=======
->>>>>>> master
 function viewportDim() {
   if (cachedViewportDim) return cachedViewportDim;
 

@@ -329,7 +329,7 @@ export default function controller() {
       getPGN(this.data.game.id)
       .then(pgn => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
-    } else if (this.source === 'offline') {
+    } else if (this.source === 'offline' && gameId !== undefined) {
       this.chessLogic.exportPgn(
         this.data.game.variant.key,
         this.data.game.initialFen,

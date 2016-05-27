@@ -782,5 +782,5 @@ declare namespace Mithril {
 declare const m: Mithril.Static;
 
 declare module "mithril" {
-    export default m;
+  export = m;
 }

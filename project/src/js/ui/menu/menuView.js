@@ -10,7 +10,7 @@ import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
 import friendsApi from '../../lichess/friends';
-import Zanimo from 'zanimo';
+import * as Zanimo from 'zanimo';
 
 export default function view() {
   if (!menu.isOpen) return null;

@@ -1,3 +1,4 @@
 declare module "webworkify" {
-  export default function(fn: (self: any) => void): Worker;
+  const work: (fn: (self: any) => void) => Worker;
+  export = work;
 }

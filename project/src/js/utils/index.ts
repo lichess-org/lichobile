@@ -1,11 +1,11 @@
 import i18n from '../i18n';
 import storage from '../storage';
-import { cloneDeep } from 'lodash/lang';
+import { cloneDeep } from 'lodash';
 import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
-export function autoredraw(action) {
+export function autoredraw(action: Function): void {
   m.startComputation();
   try {
     return action();
@@ -14,7 +14,7 @@ export function autoredraw(action) {
   }
 }
 
-export function askWorker(worker, msg, callback) {
+export function askWorker(worker: Worker, msg: WorkerMessage, callback?: (payload: any) => void): Promise<any> {
   return new Promise(function(resolve) {
     function listen(e) {
       if (e.data.topic === msg.topic) {
@@ -31,11 +31,11 @@ export function askWorker(worker, msg, callback) {
   });
 }
 
-export function hasNetwork() {
-  return window.navigator.connection.type !== window.Connection.NONE;
+export function hasNetwork(): boolean {
+  return window.navigator.connection.type !== Connection.NONE;
 }
 
-export function handleXhrError(error) {
+export function handleXhrError(error: XMLHttpRequest): void {
   var {response: data, status} = error;
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
@@ -70,7 +70,7 @@ export function handleXhrError(error) {
   }
 }
 
-export function serializeQueryParameters(obj) {
+export function serializeQueryParameters(obj: any): string {
   var str = '';
   for (var key in obj) {
     if (str !== '') {
@@ -81,25 +81,23 @@ export function serializeQueryParameters(obj) {
   return str;
 }
 
-function partialApply(fn, args) {
+function partialApply(fn: Function, args: Array<any>): Function {
   return fn.bind.apply(fn, [null].concat(args));
 }
 
-export function partialf() {
+export function partialf(): Function {
   return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
 }
 
-export function f() {
-  var args = arguments,
-    fn = arguments[0];
+export function f(fn: Function, ...args: Array<any>) {
   return function() {
-    fn.apply(fn, Array.prototype.slice.call(args, 1));
+    fn.apply(fn, args);
   };
 }
 
 export function noop() {}
 
-export function lightPlayerName(player, withRating) {
+export function lightPlayerName(player?: any, withRating?: boolean) {
   if (player) {
     return (player.title ? player.title + ' ' + player.name : player.name) + (
       withRating ? ' (' + player.rating + ')' : '');
@@ -108,7 +106,7 @@ export function lightPlayerName(player, withRating) {
   }
 }
 
-export function playerName(player, withRating) {
+export function playerName(player: Player, withRating): string {
   if (player.username || player.user) {
     var name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
@@ -127,11 +125,11 @@ export function playerName(player, withRating) {
   return 'Anonymous';
 }
 
-export function aiName(level) {
+export function aiName(level: number): string {
   return i18n('aiNameLevelAiLevel', 'Stockfish', level);
 }
 
-export function backHistory() {
+export function backHistory(): void {
   setViewSlideDirection('bwd');
   if (window.navigator.app && window.navigator.app.backHistory)
     window.navigator.app.backHistory();
@@ -140,11 +138,11 @@ export function backHistory() {
 }
 
 // simple way to determine views animation direction
-var viewSlideDirection = 'fwd';
-export function setViewSlideDirection(d) {
+let viewSlideDirection = 'fwd';
+export function setViewSlideDirection(d): void {
   viewSlideDirection = d;
 }
-export function getViewSlideDirection() {
+export function getViewSlideDirection(): string {
   return viewSlideDirection;
 }
 
@@ -165,40 +163,40 @@ const perfIconsMap = {
   crazyhouse: ''
 };
 
-export function gameIcon(perf) {
+export function gameIcon(perf: string): string {
   return perfIconsMap[perf] || '8';
 }
 
-export function secondsToMinutes(sec) {
+export function secondsToMinutes(sec: number): number {
   return sec === 0 ? sec : sec / 60;
 }
 
-export function tupleOf(x) {
+export function tupleOf(x: number): [string, string] {
   return [x.toString(), x.toString()];
 }
 
-export function oppositeColor(color) {
+export function oppositeColor(color: 'white' | 'black'): 'white' | 'black' {
   return color === 'white' ? 'black' : 'white';
 }
 
-export function caseInsensitiveSort(a, b) {
+export function caseInsensitiveSort(a: string, b: string): number {
   var alow = a.toLowerCase();
   var blow = b.toLowerCase();
 
   return alow > blow ? 1 : (alow < blow ? -1 : 0);
 }
 
-export function userFullNameToId(fullName) {
+export function userFullNameToId(fullName: string): string {
   var split = fullName.split(' ');
   var id = split.length === 1 ? split[0] : split[1];
   return id.toLowerCase();
 }
 
-export function capitalize(string) {
+export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function loadJsonFile(filename) {
+export function loadJsonFile<T>(filename: string): Promise<T> {
   return m.request({
     url: filename,
     method: 'GET',
@@ -213,13 +211,13 @@ export function loadJsonFile(filename) {
 }
 
 // Returns a random number between min (inclusive) and max (exclusive)
-export function getRandomArbitrary(min, max) {
+export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
 const offlineCorresStorageKey = 'offline.corres.games';
 
-export function getOfflineGames() {
+export function getOfflineGames(): Array<GameData> {
   const stored = storage.get(offlineCorresStorageKey) || {};
   let arr = [];
   for (const i in stored) {
@@ -228,14 +226,14 @@ export function getOfflineGames() {
   return arr;
 }
 
-export function getOfflineGameData(id) {
+export function getOfflineGameData(id: string): GameData {
   const stored = storage.get(offlineCorresStorageKey) || {};
   return stored[id];
 }
 
-export function saveOfflineGameData(id, gameData) {
+export function saveOfflineGameData(id: string, gameData: GameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  const toStore = cloneDeep(gameData);
+  const toStore: GameData = cloneDeep(gameData);
   toStore.player.onGame = false;
   toStore.opponent.onGame = false;
   if (toStore.player.user) toStore.player.user.online = false;
@@ -244,7 +242,7 @@ export function saveOfflineGameData(id, gameData) {
   storage.set(offlineCorresStorageKey, stored);
 }
 
-export function removeOfflineGameData(id) {
+export function removeOfflineGameData(id: string): void {
   const stored = storage.get(offlineCorresStorageKey);
   if (stored && stored[id]) {
     delete stored[id];
@@ -252,7 +250,7 @@ export function removeOfflineGameData(id) {
   storage.set(offlineCorresStorageKey, stored);
 }
 
-export function challengeTime(c) {
+export function challengeTime(c: ChallengeClock): string {
   if (c.timeControl.type === 'clock') {
     return c.timeControl.show;
   } else if (c.timeControl.type === 'correspondence') {
@@ -262,7 +260,7 @@ export function challengeTime(c) {
   }
 }
 
-export function boardOrientation(data, flip) {
+export function boardOrientation(data: GameData, flip: boolean): 'black' | 'white' {
   if (data.game.variant.key === 'racingKings') {
     return flip ? 'black' : 'white';
   } else {
@@ -270,7 +268,7 @@ export function boardOrientation(data, flip) {
   }
 }
 
-export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
+export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, mode: string): Dimensions  {
   const { vh, vw } = viewportDim;
   const top = 50;
 
@@ -309,10 +307,10 @@ export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
   }
 }
 
-export function variantReminder(el, icon) {
+export function variantReminder(el: HTMLElement, icon: string): void {
   const div = document.createElement('div');
   div.className = 'variant_reminder';
-  div.dataset.icon = icon;
+  div.dataset['icon'] = icon;
   el.appendChild(div);
   setTimeout(function() {
     const r = el.querySelector('.variant_reminder');
@@ -325,13 +323,13 @@ export function variantReminder(el, icon) {
   }, 800);
 }
 
-export function pad(num, size) {
+export function pad(num: number, size: number): string {
     var s = num + '';
     while (s.length < size) s = '0' + s;
     return s;
 }
 
-export function formatTournamentCountdown(seconds) {
+export function formatTournamentCountdown(seconds: number): string {
   let timeStr = '';
   const hours = Math.floor(seconds / 60 / 60);
   const mins = Math.floor(seconds / 60) - (hours * 60);
@@ -345,13 +343,13 @@ export function formatTournamentCountdown(seconds) {
   return timeStr;
 }
 
-export function formatTournamentDuration(timeInMin) {
+export function formatTournamentDuration(timeInMin: number): string {
   const hours = Math.floor(timeInMin / 60);
   const minutes = Math.floor(timeInMin - hours * 60);
   return (hours ? hours + 'H ' : '') + (minutes ? minutes + 'M' : '');
 }
 
-export function formatTournamentTimeControl(clock) {
+export function formatTournamentTimeControl(clock: TournamentClock): string {
   if (clock) {
     const min = secondsToMinutes(clock.limit);
     const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();

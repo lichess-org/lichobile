@@ -16,7 +16,7 @@ import formWidgets from '../../shared/form';
 import { view as renderClock } from '../clock/clockView';
 import promotion from '../promotion';
 import helper from '../../helper';
-import button from './button';
+import gameButton from './button';
 import gameApi from '../../../lichess/game';
 import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
@@ -183,7 +183,7 @@ function renderSubmitMovePopup(ctrl) {
   return (
     <div className="overlay_popup_wrapper submitMovePopup">
       <div className="overlay_popup">
-        {button.submitMove(ctrl)}
+        {gamegameButton.submitMove(ctrl)}
       </div>
     </div>
   );
@@ -297,7 +297,7 @@ function tvChannelSelector(ctrl) {
 function renderGameRunningActions(ctrl) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      button.shareLink(ctrl),
+      gamegameButton.shareLink(ctrl),
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 
@@ -305,27 +305,27 @@ function renderGameRunningActions(ctrl) {
   }
 
   const answerButtons = [
-    button.cancelDrawOffer(ctrl),
-    button.answerOpponentDrawOffer(ctrl),
-    button.cancelTakebackProposition(ctrl),
-    button.answerOpponentTakebackProposition(ctrl)
+    gameButton.cancelDrawOffer(ctrl),
+    gameButton.answerOpponentDrawOffer(ctrl),
+    gameButton.cancelTakebackProposition(ctrl),
+    gameButton.answerOpponentTakebackProposition(ctrl)
   ];
 
-  const gameControls = button.forceResign(ctrl) || [
-    button.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
-    button.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
-    button.threefoldClaimDraw(ctrl),
-    button.resign(ctrl),
-    button.resignConfirmation(ctrl),
-    button.goBerserk(ctrl)
+  const gameControls = gameButton.forceResign(ctrl) || [
+    gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
+    gameButton.standard(ctrl, gameApi.drawable, '2', 'offerDraw', 'draw-yes'),
+    gameButton.threefoldClaimDraw(ctrl),
+    gameButton.resign(ctrl),
+    gameButton.resignConfirmation(ctrl),
+    gameButton.goBerserk(ctrl)
   ];
 
   return (
     <div className="game_controls">
-      {button.analysisBoard(ctrl)}
-      {button.shareLink(ctrl)}
-      {button.moretime(ctrl)}
-      {button.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
+      {gameButton.analysisBoard(ctrl)}
+      {gameButton.shareLink(ctrl)}
+      {gameButton.moretime(ctrl)}
+      {gameButton.standard(ctrl, gameApi.abortable, 'L', 'abortGame', 'abort')}
       {gameControls}
       {answerButtons ? <div className="answers">{answerButtons}</div> : null}
     </div>
@@ -345,40 +345,40 @@ function renderGameEndedActions(ctrl) {
   if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
-        button.returnToTournament(ctrl),
-        button.shareLink(ctrl),
-        button.sharePGN(ctrl),
-        button.analysisBoard(ctrl)
+        gameButton.returnToTournament(ctrl),
+        gameButton.shareLink(ctrl),
+        gameButton.sharePGN(ctrl),
+        gameButton.analysisBoard(ctrl)
       ];
     }
     else {
       buttons = [
-        button.returnToTournament(ctrl),
-        button.withdrawFromTournament(ctrl),
-        button.shareLink(ctrl),
-        button.sharePGN(ctrl),
-        button.analysisBoard(ctrl)
+        gameButton.returnToTournament(ctrl),
+        gameButton.withdrawFromTournament(ctrl),
+        gameButton.shareLink(ctrl),
+        gameButton.sharePGN(ctrl),
+        gameButton.analysisBoard(ctrl)
       ];
     }
   }
   else {
     if (ctrl.data.player.spectator) {
       buttons = [
-        button.shareLink(ctrl),
-        button.sharePGN(ctrl),
-        button.analysisBoard(ctrl),
+        gameButton.shareLink(ctrl),
+        gameButton.sharePGN(ctrl),
+        gameButton.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null
       ];
     }
     else {
       buttons = [
-        button.shareLink(ctrl),
-        button.sharePGN(ctrl),
-        button.newOpponent(ctrl),
-        button.answerOpponentRematch(ctrl),
-        button.cancelRematch(ctrl),
-        button.rematch(ctrl),
-        button.analysisBoard(ctrl)
+        gameButton.shareLink(ctrl),
+        gameButton.sharePGN(ctrl),
+        gameButton.newOpponent(ctrl),
+        gameButton.answerOpponentRematch(ctrl),
+        gameButton.cancelRematch(ctrl),
+        gameButton.rematch(ctrl),
+        gameButton.analysisBoard(ctrl)
       ];
     }
   }
@@ -411,7 +411,7 @@ function gameInfos(ctrl) {
       'data-icon': icon ? icon : ''
     }),
     m('div.game-title.no_select', infos),
-    session.isConnected() ? m('button.star', {
+    session.isConnected() ? m('gameButton.star', {
       config: helper.ontouch(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
@@ -465,7 +465,6 @@ function renderGameActionsBar(ctrl, isPortrait) {
     <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" config={helper.ontouch(ctrl.showActions)} /> :
     <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />;
 
-  console.log('button', gmButton)
   const chatClass = [
     'action_bar_button',
     ctrl.chat && ctrl.chat.unread ? 'glow' : ''
@@ -478,12 +477,12 @@ function renderGameActionsBar(ctrl, isPortrait) {
       <button className={chatClass} data-icon="c" key="chat"
         config={helper.ontouch(ctrl.chat.open)} /> : null
       }
-      {ctrl.notes ? button.notes(ctrl) : null}
-      {button.flipBoard(ctrl)}
-      {button.first(ctrl)}
-      {button.backward(ctrl)}
-      {button.forward(ctrl)}
-      {button.last(ctrl)}
+      {ctrl.notes ? gameButton.notes(ctrl) : null}
+      {gameButton.flipBoard(ctrl)}
+      {gameButton.first(ctrl)}
+      {gameButton.backward(ctrl)}
+      {gameButton.forward(ctrl)}
+      {gameButton.last(ctrl)}
     </section>
   );
 }

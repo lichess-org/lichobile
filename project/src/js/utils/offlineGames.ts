@@ -23,7 +23,7 @@ export function getAnalyseData(data) {
   return data.data;
 }
 
-export function setCurrentOTBGame(game) {
+export function setCurrentOTBGame(game): void {
   storage.set(otbStorageKey, game);
 }
 
@@ -31,6 +31,6 @@ export function getCurrentAIGame() {
   return storage.get(aiStorageKey);
 }
 
-export function setCurrentAIGame(game) {
+export function setCurrentAIGame(game): void {
   storage.set(aiStorageKey, game);
 }

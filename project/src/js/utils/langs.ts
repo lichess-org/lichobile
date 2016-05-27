@@ -733,7 +733,7 @@ const isoLangs = {
     }
 };
 
-export function getLanguageNativeName(code) {
+export function getLanguageNativeName(code: string): string {
   const lang = isoLangs[code];
   return lang ? lang.nativeName : code;
 }

@@ -93,6 +93,14 @@ interface UrlUtil {
     makeAbsolute(url: string): string
 }
 
+interface Navigator {
+    app: CordovaApp
+}
+
+interface CordovaApp {
+    backHistory(): void;
+}
+
 /** Apache Cordova instance */
 declare var cordova: Cordova;
 

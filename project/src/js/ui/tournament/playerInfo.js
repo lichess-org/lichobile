@@ -40,19 +40,21 @@ export default {
     const tournament = ctrl.tournament();
     if (!tournament) return null;
 
-    const playerData = ctrl.player();
+    const playerData = ctrl.playerData();
     if (!playerData) return null;
+
+    console.log(playerData);
 
     const player = playerData.player;
     const pairings = playerData.pairings;
-    const avgOpRating = pairings.reduce((prev, x) => prev + x) / pairings.length;
+    const avgOpRating = (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0);
 
 
-    function renderPlayerGame (game, index) {
+    function renderPlayerGame (game, index, gameArray) {
       const outcome = game.status <= 20 ? '*' : (game.win ? '1' : '0');
       return (
         <tr className='list_item' key={game.id}>
-          <td> {index} </td>
+          <td> {gameArray.length - index} </td>
           <td> {game.op.name} </td>
           <td> {game.op.rating} </td>
           <td className={'color-icon ' + game.color}> </td>
@@ -62,12 +64,12 @@ export default {
     }
 
     return (
-      <div className="modal" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
+      <div className="modal dark" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
         <header>
           <button className="modal_close" data-icon="L"
             config={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           />
-          <h2>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}</h2>
+          <h2 className="playerModalHeader">{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}</h2>
         </header>
         <div className="modal_content">
           <div className="tournamentPlayerInfo">
@@ -85,7 +87,7 @@ export default {
                   Win Rate
                 </td>
                 <td className="statData">
-                  {}((player.nb.win/player.nb.game)*100).toFixed(0) + '%'}
+                  {((player.nb.win/player.nb.game)*100).toFixed(0) + '%'}
                 </td>
               </tr>
               <tr>
@@ -102,6 +104,14 @@ export default {
                 </td>
                 <td className="statData">
                   {avgOpRating}
+                </td>
+              </tr>
+              <tr className={player.performance ? '' : 'invisible'}>
+                <td className="statName">
+                  Performance
+                </td>
+                <td className="statData">
+                  {player.performance}
                 </td>
               </tr>
             </table>

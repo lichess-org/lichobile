@@ -237,8 +237,15 @@ td.tournamentPoints
     color: #759900;
 
 .playerStats
-  font-size 1.2em
+  font-size 1em
   margin 0 auto
+  border-spacing 10px 0px
+  border-collapse separate
+  > .invisible
+    display none
+
+.playerGames
+  width 100%
 
 .color-icon
   &:before
@@ -253,3 +260,16 @@ td.tournamentPoints
   .black
     &:before
       content: "K"
+
+.playerModalHeader
+  font-size 1.2em
+
+.modal.dark
+  background-color #1a1a1a
+  color #aeaeae
+  >header
+    background-color #1a1a1a
+    color #aeaeae
+  >div
+    background-color #1a1a1a
+    color #aeaeae

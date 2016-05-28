@@ -288,7 +288,7 @@ function renderPlace(data) {
         {data.name}
       </div>
       <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>
-      <table className="playerStats">
+      <table className="stats">
         <tr>
           <td className="statName">
             {i18n('gamesPlayed')}

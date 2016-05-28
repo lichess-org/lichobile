@@ -190,7 +190,7 @@ td.tournamentPoints
   margin 0 5px
   width 40px
   &:before
-    font-family "lichess" !important
+    font-family "lichess"!important
     font-size 1.2em
     content attr(data-icon)
     vertical-align middle
@@ -236,3 +236,20 @@ td.tournamentPoints
   .streak
     color: #759900;
 
+.playerStats
+  font-size 1.2em
+  margin 0 auto
+
+.color-icon
+  &:before
+    font-family "lichess"!important
+    font-style  normal!important
+    font-weight  normal!important
+    font-size 1.2em
+    vertical-align middle
+  .white
+    &:before
+      content: "J"
+  .black
+    &:before
+      content: "K"

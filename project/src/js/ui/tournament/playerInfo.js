@@ -1,22 +1,25 @@
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import m from 'mithril';
+import * as xhr from './tournamentXhr';
+import * as utils from '../../utils';
+import i18n from '../../i18n';
 
 export default {
   controller: function(tournament) {
     let isOpen = false;
-    const player = m.prop();
+    const playerData = m.prop();
 
     function open(p) {
-      player(p);
-      backbutton.stack.push(close);
-      isOpen = true;
+      xhr.playerInfo(tournament().id, p.name).then((data) => {
+        playerData(data);
+        backbutton.stack.push(close);
+        isOpen = true;
+      }).catch(utils.handleXhrError);
     }
 
     function close(fromBB) {
-      console.log('close');
       if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
-      console.log('closed');
       isOpen = false;
     }
 
@@ -27,7 +30,7 @@ export default {
         return isOpen;
       },
       tournament,
-      player
+      playerData
     };
   },
 
@@ -37,8 +40,26 @@ export default {
     const tournament = ctrl.tournament();
     if (!tournament) return null;
 
-    const player = ctrl.player();
-    if (!player) return null;
+    const playerData = ctrl.player();
+    if (!playerData) return null;
+
+    const player = playerData.player;
+    const pairings = playerData.pairings;
+    const avgOpRating = pairings.reduce((prev, x) => prev + x) / pairings.length;
+
+
+    function renderPlayerGame (game, index) {
+      const outcome = game.status <= 20 ? '*' : (game.win ? '1' : '0');
+      return (
+        <tr className='list_item' key={game.id}>
+          <td> {index} </td>
+          <td> {game.op.name} </td>
+          <td> {game.op.rating} </td>
+          <td className={'color-icon ' + game.color}> </td>
+          <td className={(outcome === '1') ? 'win' : (outcome === '0' ? 'loss' : '')}> {outcome} </td>
+        </tr>
+      );
+    }
 
     return (
       <div className="modal" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
@@ -46,11 +67,49 @@ export default {
           <button className="modal_close" data-icon="L"
             config={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           />
-          <h2>{player.name}</h2>
+          <h2>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}</h2>
         </header>
         <div className="modal_content">
           <div className="tournamentPlayerInfo">
-            Player Info
+            <table className="playerStats">
+              <tr>
+                <td className="statName">
+                  {i18n('gamesPlayed')}
+                </td>
+                <td className="statData">
+                  {player.nb.game}
+                </td>
+              </tr>
+              <tr>
+                <td className="statName">
+                  Win Rate
+                </td>
+                <td className="statData">
+                  {}((player.nb.win/player.nb.game)*100).toFixed(0) + '%'}
+                </td>
+              </tr>
+              <tr>
+                <td className="statName">
+                  Berserk Rate
+                </td>
+                <td className="statData">
+                  {((player.nb.berserk/player.nb.game)*100).toFixed(0) + '%'}
+                </td>
+              </tr>
+              <tr>
+                <td className="statName">
+                  Average Opponent
+                </td>
+                <td className="statData">
+                  {avgOpRating}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div className="tournamentPlayerGames">
+            <table className="playerGames">
+              {pairings.map(renderPlayerGame)}
+            </table>
           </div>
         </div>
       </div>

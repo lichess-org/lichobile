@@ -63,6 +63,11 @@ export default {
       );
     }
 
+    function fixNaN (a) {
+      console.log('hello ' + a);
+      return a ? a : 0;
+    }
+
     return (
       <div className="modal dark" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
         <header>
@@ -87,7 +92,7 @@ export default {
                   Win Rate
                 </td>
                 <td className="statData">
-                  {((player.nb.win/player.nb.game)*100).toFixed(0) + '%'}
+                  {fixNaN(((player.nb.win/player.nb.game)*100).toFixed(0)) + '%'}
                 </td>
               </tr>
               <tr>
@@ -95,7 +100,7 @@ export default {
                   Berserk Rate
                 </td>
                 <td className="statData">
-                  {((player.nb.berserk/player.nb.game)*100).toFixed(0) + '%'}
+                  {fixNaN(((player.nb.berserk/player.nb.game)*100).toFixed(0)) + '%'}
                 </td>
               </tr>
               <tr>
@@ -103,7 +108,7 @@ export default {
                   Average Opponent
                 </td>
                 <td className="statData">
-                  {avgOpRating}
+                  {fixNaN(avgOpRating)}
                 </td>
               </tr>
               <tr className={player.performance ? '' : 'invisible'}>

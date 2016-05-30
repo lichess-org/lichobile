@@ -47,25 +47,34 @@ export default {
 
     const player = playerData.player;
     const pairings = playerData.pairings;
-    const avgOpRating = (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0);
+    const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0';
 
 
     function renderPlayerGame (game, index, gameArray) {
-      const outcome = game.status <= 20 ? '*' : (game.win ? '1' : '0');
+      let outcome = null;
+      let outcomeClass = '';
+      if (game.status <= 20) {
+        outcome = '*';
+      }
+      else if (Array.isArray(game.score)) {
+        outcome = game.score[0];
+        if (game.score[1] === 2)
+          outcomeClass = 'streak';
+        else if (game.score[1] === 3)
+          outcomeClass = 'double';
+      }
+      else {
+        outcome = game.score;
+      }
       return (
         <tr className='list_item' key={game.id}>
           <td> {gameArray.length - index} </td>
           <td> {game.op.name} </td>
           <td> {game.op.rating} </td>
           <td className={'color-icon ' + game.color}> </td>
-          <td className={(outcome === '1') ? 'win' : (outcome === '0' ? 'loss' : '')}> {outcome} </td>
+          <td className={outcomeClass}> {outcome} </td>
         </tr>
       );
-    }
-
-    function fixNaN (a) {
-      console.log('hello ' + a);
-      return a ? a : 0;
     }
 
     return (
@@ -92,7 +101,7 @@ export default {
                   Win Rate
                 </td>
                 <td className="statData">
-                  {fixNaN(((player.nb.win/player.nb.game)*100).toFixed(0)) + '%'}
+                  {player.nb.game ? ((player.nb.win/player.nb.game)*100).toFixed(0) + '%' : '0%'}
                 </td>
               </tr>
               <tr>
@@ -100,7 +109,7 @@ export default {
                   Berserk Rate
                 </td>
                 <td className="statData">
-                  {fixNaN(((player.nb.berserk/player.nb.game)*100).toFixed(0)) + '%'}
+                  {player.nb.game ? ((player.nb.berserk/player.nb.game)*100).toFixed(0) + '%' : '0%'}
                 </td>
               </tr>
               <tr>
@@ -108,7 +117,7 @@ export default {
                   Average Opponent
                 </td>
                 <td className="statData">
-                  {fixNaN(avgOpRating)}
+                  {avgOpRating}
                 </td>
               </tr>
               <tr className={player.performance ? '' : 'invisible'}>

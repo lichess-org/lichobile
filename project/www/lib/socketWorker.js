@@ -335,7 +335,10 @@ self.onmessage = function(msg) {
       create(msg.data.payload);
       break;
     case 'send':
-      var [t, d, o] = msg.data.payload;
+      var t = msg.data.payload[0];
+      var d = msg.data.payload[1];
+      var o = msg.data.payload[2];
+
       if (socketInstance) socketInstance.send(t, d, o);
       break;
     case 'connect':

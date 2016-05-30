@@ -311,7 +311,6 @@ StrongSocket.prototype = {
 
 function create(payload) {
   // don't always recreate default socket on page change
-  console.log('create socket');
   if (socketInstance && payload.opts.options.name === 'default' &&
   socketInstance.options.name === 'default') {
     return;
@@ -331,7 +330,6 @@ function create(payload) {
 }
 
 self.onmessage = function(msg) {
-  console.log(msg);
   switch (msg.data.topic) {
     case 'create':
       create(msg.data.payload);

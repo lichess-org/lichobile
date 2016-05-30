@@ -1,16 +1,14 @@
 import storage from './storage';
 import xor from 'lodash/xor';
-import * as utils from './utils';
+import { lichessSri, autoredraw, askWorker, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import work from 'webworkify';
-import socketWorker from './socketWorker';
 import m from 'mithril';
 
-const worker = work(socketWorker);
+const worker = new Worker('lib/socketWorker.js');
 
 var socketHandlers;
 var errorDetected = false;
@@ -23,8 +21,8 @@ const proxyFailMsg = 'The connection to lichess server has failed. If the proble
 
 const defaultHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: name => utils.autoredraw(utils.partialf(friendsApi.add, name)),
-  following_leaves: name => utils.autoredraw(utils.partialf(friendsApi.remove, name)),
+  following_enters: name => autoredraw(friendsApi.add.bind(undefined, name)),
+  following_leaves: name => autoredraw(friendsApi.remove.bind(undefined, name)),
   challenges: data => {
     challengesApi.set(data);
     m.redraw();
@@ -68,13 +66,13 @@ function createGame(url, version, handlers, gameUrl, userTv) {
     }
   };
   if (userTv) opts.params = { userTv };
-  worker.postMessage({ topic: 'create', payload: {
-    clientId: utils.lichessSri,
+  tellWorker(worker, 'create', {
+    clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
-  }});
+  });
 }
 
 function createTournament(tournamentId, version, handlers, featuredGame) {
@@ -91,13 +89,13 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
-  worker.postMessage({ topic: 'create', payload: {
-    clientId: utils.lichessSri,
+  tellWorker(worker, 'create', {
+    clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
-  }});
+  });
 }
 
 function createChallenge(id, version, onOpen, handlers) {
@@ -112,17 +110,17 @@ function createChallenge(id, version, onOpen, handlers) {
       debug: false,
       ignoreUnknownMessages: true,
       pingDelay: 2000,
-      sendOnOpen: [{t: 'following_onlines'}]
-    },
-    events: Object.assign({}, defaultHandlers, handlers)
+      sendOnOpen: [{t: 'following_onlines'}],
+      registeredEvents: Object.keys(socketHandlers.events)
+    }
   };
-  worker.postMessage({ topic: 'create', payload: {
-    clientId: utils.lichessSri,
+  tellWorker(worker, 'create', {
+    clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
-  }});
+  });
 }
 
 function createLobby(lobbyVersion, onOpen, handlers) {
@@ -139,18 +137,18 @@ function createLobby(lobbyVersion, onOpen, handlers) {
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
-  worker.postMessage({ topic: 'create', payload: {
-    clientId: utils.lichessSri,
+  tellWorker(worker, 'create', {
+    clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url: '/lobby/socket/v1',
     version: lobbyVersion,
     opts
-  }});
+  });
 }
 
 function createDefault() {
   // default socket is useless when anon.
-  if (utils.hasNetwork() && session.isConnected()) {
+  if (hasNetwork() && session.isConnected()) {
     socketHandlers = {
       events: defaultHandlers
     };
@@ -163,13 +161,13 @@ function createDefault() {
         registeredEvents: Object.keys(socketHandlers.events)
       }
     };
-    worker.postMessage({ topic: 'create', payload: {
-      clientId: utils.lichessSri,
+    tellWorker(worker, 'create', {
+      clientId: lichessSri,
       socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
       version: 0,
       opts
-    }});
+    });
   }
 }
 
@@ -209,7 +207,7 @@ function onDisconnected() {
   if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
     // establishing a tunnel
-    if (utils.hasNetwork() && !connectedWS) {
+    if (hasNetwork() && !connectedWS) {
       alreadyWarned = true;
       window.navigator.notification.alert(proxyFailMsg, function() {
         storage.set('donotshowproxyfailwarning', true);
@@ -251,25 +249,25 @@ export default {
   createDefault,
   redirectToGame,
   setVersion(version) {
-    worker.postMessage({ topic: 'setVersion', payload: version });
+    tellWorker(worker, 'setVersion', version);
   },
   getAverageLag(callback) {
-    utils.askWorker(worker, { topic: 'averageLag' }, callback);
+    askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
-    worker.postMessage({ topic: 'send', payload: [type, data, opts] });
+    tellWorker(worker, 'send', [type, data, opts]);
   },
   connect() {
-    worker.postMessage({ topic: 'connect' });
+    tellWorker(worker, 'connect');
   },
   disconnect() {
-    worker.postMessage({ topic: 'disconnect' });
+    tellWorker(worker, 'disconnect');
   },
   isConnected() {
     return connectedWS;
   },
   destroy() {
-    worker.postMessage({ topic: 'destroy' });
+    tellWorker(worker, 'destroy');
   },
   terminate() {
     if (worker) worker.terminate();

@@ -72,11 +72,12 @@ export default function ctrl() {
       this.reload(cfg);
       onXhrSuccess();
     })
-    .catch(err => {
+    .catch(() => {
       if (!giveUpFlag) {
         revertLastMove();
       }
-      handleXhrError(err);
+      const msg = 'Your move has failed to reach lichess server. Please retry to move when the network is back.';
+      window.plugins.toast.show(msg, 'long', 'center');
       this.vm.loading = false;
     });
   }.bind(this);

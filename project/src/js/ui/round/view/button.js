@@ -328,8 +328,12 @@ export default {
   goBerserk: function(ctrl) {
     if (!gameApi.berserkableBy(ctrl.data)) return null;
     if (ctrl.vm.goneBerserk[ctrl.data.player.color]) return null;
+    function handler() {
+      ctrl.hideActions();
+      ctrl.goBerserk();
+    }
     return (
-      <button className="berserk" key="goBerserk" config={helper.ontouch(ctrl.goBerserk)}>
+      <button className="berserk" key="goBerserk" config={helper.ontouch(handler)}>
         <span data-icon="`" /> GO BERSERK!<br/>
         <small>Half the time, bonus point</small>
       </button>

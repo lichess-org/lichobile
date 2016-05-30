@@ -19,6 +19,7 @@ export function getAnalyseData(data) {
       dests: o.dests
     };
   });
+  data.data.endSituation = data.situations[data.situations.length - 1];
   return data.data;
 }
 

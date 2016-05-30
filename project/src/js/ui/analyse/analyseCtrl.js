@@ -18,6 +18,8 @@ import { game as gameXhr } from '../../xhr';
 import { makeData, makeDefaultData } from './data';
 import notes from '../round/notes';
 import chessLogic from './chessLogic';
+import { renderStepsTxt } from './pgnExport';
+import { getPGN } from '../round/roundXhr';
 import menu from './menu';
 import m from 'mithril';
 
@@ -315,7 +317,29 @@ export default function controller() {
   }.bind(this);
 
   this.startNewAnalysis = function() {
-    this.init(makeDefaultData());
+    if (m.route() === '/analyse') {
+      m.route('/analyse', null, true);
+    } else {
+      m.route('/analyse');
+    }
+  };
+
+  this.sharePGN = function() {
+    if (this.source === 'online') {
+      getPGN(this.data.game.id)
+      .then(pgn => window.plugins.socialsharing.share(pgn))
+      .catch(handleXhrError);
+    } else if (this.source === 'offline' && gameId !== undefined) {
+      this.chessLogic.exportPgn(
+        this.data.game.variant.key,
+        this.data.game.initialFen,
+        this.data.endSituation.pgnMoves
+      )
+      .then(res => window.plugins.socialsharing.share(res.pgn))
+      .catch(console.error.bind(console));
+    } else {
+      window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
+    }
   }.bind(this);
 
   if (this.source === 'online' && gameId) {

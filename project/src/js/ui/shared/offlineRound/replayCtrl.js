@@ -17,7 +17,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         break;
       case 'move':
         this.ply++;
-        if (this.ply <= this.situations.length) {
+        if (this.ply < this.situations.length) {
           this.situations = this.situations.slice(0, this.ply);
         }
         this.situations.push(payload.situation);

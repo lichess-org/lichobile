@@ -44,11 +44,11 @@ export default function ctrl() {
     if (this.data.progress.length === 0) {
       return;
     }
-    const history = this.data.playHistory;
-    this.data.progress = this.data.progress.slice(0, this.data.progress.length - 1);
-    const lastTurnColor = history[history.length - 1].turnColor;
-    const nbMovesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
-    const sitToRevertTo = history[history.length - (1 + nbMovesToRevert)];
+    const lastTurnColor = this.data.playHistory[this.data.playHistory.length - 1].turnColor;
+    const nbPliesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
+    this.data.progress = this.data.progress.slice(0, this.data.progress.length - nbPliesToRevert);
+    this.data.playHistory = this.data.playHistory.slice(0, this.data.playHistory.length - nbPliesToRevert);
+    const sitToRevertTo = this.data.playHistory[this.data.playHistory.length - 1];
     setTimeout(() => {
       this.chessground.set({
         fen: sitToRevertTo.fen,
@@ -72,11 +72,12 @@ export default function ctrl() {
       this.reload(cfg);
       onXhrSuccess();
     })
-    .catch(err => {
+    .catch(() => {
       if (!giveUpFlag) {
         revertLastMove();
       }
-      handleXhrError(err);
+      const msg = 'Your move has failed to reach lichess server. Please retry to move when the network is back.';
+      window.plugins.toast.show(msg, 'long', 'center');
       this.vm.loading = false;
     });
   }.bind(this);
@@ -325,14 +326,14 @@ export default function ctrl() {
 }
 
 function pushState(cfg) {
-  window.history.pushState(null, null, '/?/training/' + cfg.puzzle.id);
+  window.history.pushState(null, null, '?/training/' + cfg.puzzle.id);
   return cfg;
 }
 
 function replaceStateForNewPuzzle(cfg) {
   // ugly hack to bypass mithril's postRedraw hook
   setTimeout(function() {
-    window.history.replaceState(null, null, '/?/training/' + cfg.puzzle.id);
+    window.history.replaceState(null, null, '?/training/' + cfg.puzzle.id);
   }, 100);
   return cfg;
 }

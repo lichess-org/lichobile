@@ -17,7 +17,6 @@ import layout from '../layout';
 import { header, backButton as renderBackbutton } from '../shared/common';
 import Board from '../shared/Board';
 import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
-import { renderStepsTxt } from './pgnExport';
 import notes from '../round/notes';
 import button from '../round/view/button';
 
@@ -542,7 +541,7 @@ function renderActionsBar(ctrl) {
   ctrl.vm.buttonsHash = hash;
 
   const sharePGN = helper.ontouch(
-    () => window.plugins.socialsharing.share(renderStepsTxt(ctrl.analyse.getSteps(ctrl.vm.path))),
+    ctrl.sharePGN,
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   );
 

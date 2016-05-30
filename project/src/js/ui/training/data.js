@@ -20,7 +20,12 @@ export default function(cfg) {
       opponentColor: oppositeColor(cfg.puzzle.color)
     },
     progress: [],
-    playHistory: [sit],
+    playHistory: [{
+      fen: sit.fen(),
+      dests: sit.dests(),
+      check: sit.in_check(),
+      turnColor: sit.turn() === 'w' ? 'white' : 'black'
+    }],
     chess: sit
   };
 

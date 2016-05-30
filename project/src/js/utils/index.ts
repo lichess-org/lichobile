@@ -14,6 +14,14 @@ export function autoredraw(action: Function): void {
   }
 }
 
+export function tellWorker(worker: Worker, topic: string, payload: any) {
+  if (payload !== undefined) {
+    worker.postMessage({ topic, payload });
+  } else {
+    worker.postMessage({ topic });
+  }
+}
+
 export function askWorker(worker: Worker, msg: WorkerMessage, callback?: (payload: any) => void): Promise<any> {
   return new Promise(function(resolve) {
     function listen(e) {

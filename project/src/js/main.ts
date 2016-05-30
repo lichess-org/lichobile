@@ -74,7 +74,10 @@ function main() {
     window.analytics.startTrackerWithId(window.lichess.gaId, utils.noop, utils.noop);
   }
 
-  // leave time to the screen to render fully
+  if (cordova.platformId === 'android') {
+      window.StatusBar.backgroundColorByHexString('#151A1E');
+  }
+
   setTimeout(function() {
     window.navigator.splashscreen.hide();
     xhrStatus();

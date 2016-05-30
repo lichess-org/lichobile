@@ -44,11 +44,11 @@ export default function ctrl() {
     if (this.data.progress.length === 0) {
       return;
     }
-    const history = this.data.playHistory;
-    this.data.progress = this.data.progress.slice(0, this.data.progress.length - 1);
-    const lastTurnColor = history[history.length - 1].turnColor;
-    const nbMovesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
-    const sitToRevertTo = history[history.length - (1 + nbMovesToRevert)];
+    const lastTurnColor = this.data.playHistory[this.data.playHistory.length - 1].turnColor;
+    const nbPliesToRevert = lastTurnColor === this.data.player.color ? 2 : 1;
+    this.data.progress = this.data.progress.slice(0, this.data.progress.length - nbPliesToRevert);
+    this.data.playHistory = this.data.playHistory.slice(0, this.data.playHistory.length - nbPliesToRevert);
+    const sitToRevertTo = this.data.playHistory[this.data.playHistory.length - 1];
     setTimeout(() => {
       this.chessground.set({
         fen: sitToRevertTo.fen,

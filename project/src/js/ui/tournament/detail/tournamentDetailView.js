@@ -221,8 +221,15 @@ function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
     <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} config={helper.ontouchY(playerInfoCtrl.open.bind(undefined, player))}>
-      <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
-      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+      <td className='tournamentPlayer'>
+        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
+        <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>
+      </td>
+      <td className='tournamentPoints'>
+        <span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>
+          {player.score}
+        </span>
+      </td>
     </tr>
   );
 }

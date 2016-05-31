@@ -43,8 +43,6 @@ export default {
     const playerData = ctrl.playerData();
     if (!playerData) return null;
 
-    console.log(playerData);
-
     const player = playerData.player;
     const pairings = playerData.pairings;
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0';

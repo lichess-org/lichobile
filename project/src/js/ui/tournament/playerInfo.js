@@ -53,7 +53,7 @@ export default {
     function renderPlayerGame (game, index, gameArray) {
       let outcome = null;
       let outcomeClass = '';
-      if (game.status <= 20) {
+      if (game.score === undefined) {
         outcome = '*';
       }
       else if (Array.isArray(game.score)) {
@@ -67,11 +67,11 @@ export default {
         outcome = game.score;
       }
       return (
-        <tr className='list_item' key={game.id}>
+        <tr className='list_item' key={game.id} config={helper.ontouch(() => m.route('/game/' + game.id + '/' + game.color))}>
           <td> {gameArray.length - index} </td>
           <td> {game.op.name} </td>
           <td> {game.op.rating} </td>
-          <td className={'color-icon ' + game.color}> </td>
+          <td> <span className={'color-icon ' + game.color}> </span> </td>
           <td className={outcomeClass}> {outcome} </td>
         </tr>
       );
@@ -83,11 +83,21 @@ export default {
           <button className="modal_close" data-icon="L"
             config={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           />
-          <h2 className="playerModalHeader">{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}</h2>
+          <h2 className="playerModalHeader">
+            {player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}
+          </h2>
         </header>
         <div className="modal_content">
           <div className="tournamentPlayerInfo">
             <table className="playerStats">
+              <tr>
+                <td className="statName">
+                  Score
+                </td>
+                <td className="statData">
+                  <span className={player.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span>
+                </td>
+              </tr>
               <tr>
                 <td className="statName">
                   {i18n('gamesPlayed')}

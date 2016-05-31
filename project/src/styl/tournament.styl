@@ -246,18 +246,19 @@ td.tournamentPoints
 
 .playerGames
   width 100%
+  >.list_item
+    >td
+      vertical-align  middle
 
 .color-icon
   &:before
     font-family "lichess"!important
-    font-style  normal!important
-    font-weight  normal!important
     font-size 1.2em
     vertical-align middle
-  .white
+  &.white
     &:before
       content: "J"
-  .black
+  &.black
     &:before
       content: "K"
 

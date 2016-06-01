@@ -4,11 +4,12 @@ import { lobby as lobbyXhr } from '../../xhr';
 import throttle from 'lodash/throttle';
 import { featured as featuredXhr, dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
+import { isForeground, setForeground } from '../../utils/appMode';
 import m from 'mithril';
 
 export default function homeCtrl() {
 
-  var featuredFeed;
+  let featuredFeed;
 
   const featured = m.prop();
 
@@ -26,48 +27,58 @@ export default function homeCtrl() {
   }
 
   function init() {
-
-    lobbyXhr(true).then(data => {
-      socket.createLobby(data.lobby.version, noop, {
-        n: (_, d) => {
-          nbConnectedPlayers(d.d);
-          nbGamesInPlay(d.r);
-          m.redraw();
-        },
-        featured: onFeatured
+    if (isForeground()) {
+      lobbyXhr(true).then(data => {
+        socket.createLobby(data.lobby.version, noop, {
+          n: (_, d) => {
+            nbConnectedPlayers(d.d);
+            nbGamesInPlay(d.r);
+            m.redraw();
+          },
+          featured: onFeatured
+        });
       });
-    });
 
-    Promise.all([
-      featuredXhr(true),
-      dailyPuzzleXhr(),
-      topPlayersOfTheWeekXhr()
-    ]).then(results => {
-      const [featuredData, dailyData, topPlayersData] = results;
+      Promise.all([
+        featuredXhr(true),
+        dailyPuzzleXhr(),
+        topPlayersOfTheWeekXhr()
+      ]).then(results => {
+        const [featuredData, dailyData, topPlayersData] = results;
 
-      // featured game
-      featured(featuredData);
-      featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
+        // featured game
+        featured(featuredData);
+        featuredFeed = new EventSource(`http://${window.lichess.apiEndPoint}/tv/feed`);
 
-      featuredFeed.onmessage = function(ev) {
-        const obj = JSON.parse(ev.data);
-        featured().game.fen = obj.d.fen;
-        featured().game.lastMove = obj.d.lm;
-        m.redraw();
-      };
+          featuredFeed.onmessage = function(ev) {
+            const obj = JSON.parse(ev.data);
+            featured().game.fen = obj.d.fen;
+            featured().game.lastMove = obj.d.lm;
+            m.redraw();
+          };
 
-      // daily puzzle
-      dailyPuzzle(dailyData.puzzle);
+          // daily puzzle
+          dailyPuzzle(dailyData.puzzle);
 
-      // week top players
-      weekTopPlayers(topPlayersData);
-    })
-    .catch(handleXhrError);
-
+          // week top players
+          weekTopPlayers(topPlayersData);
+      })
+      .catch(handleXhrError);
+    }
   }
 
   function onPause() {
-    if (featuredFeed) featuredFeed.close();
+    if (featuredFeed) {
+      // it appears there is a bug that prevents close() work when on background
+      // maybe https://bugs.chromium.org/p/chromium/issues/detail?id=225654 is related
+      featuredFeed.onmessage = function() {};
+      featuredFeed.close();
+    }
+  }
+
+  function onResume() {
+    setForeground();
+    init();
   }
 
   if (hasNetwork()) {
@@ -75,8 +86,8 @@ export default function homeCtrl() {
   }
 
   document.addEventListener('online', init);
-  document.addEventListener('pause', onPause, false);
-  document.addEventListener('resume', init, false);
+  document.addEventListener('pause', onPause);
+  document.addEventListener('resume', onResume);
 
   return {
     featured,
@@ -92,8 +103,8 @@ export default function homeCtrl() {
       if (featuredFeed) featuredFeed.close();
       socket.destroy();
       document.removeEventListener('online', init);
-      document.removeEventListener('resume', init);
       document.removeEventListener('pause', onPause);
+      document.removeEventListener('resume', onResume);
     }
   };
 }

@@ -10,13 +10,13 @@ import m from 'mithril';
 
 const worker = new Worker('lib/socketWorker.js');
 
-var socketHandlers;
-var errorDetected = false;
-var connectedWS = true;
+let socketHandlers;
+let errorDetected = false;
+let connectedWS = true;
 
-var alreadyWarned = false;
-var redrawOnDisconnectedTimeoutID;
-var proxyFailTimeoutID;
+let alreadyWarned = false;
+let redrawOnDisconnectedTimeoutID;
+let proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
 const defaultHandlers = {

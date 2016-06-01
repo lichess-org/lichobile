@@ -20,8 +20,7 @@ import socket from './socket';
 import push from './push';
 import routes from './routes';
 import deepLinks from './deepLinks';
-
-var triedToLogin = false;
+import { isForeground, setForeground, setBackground } from './utils/appMode';
 
 function main() {
 
@@ -80,36 +79,27 @@ function onResize() {
 }
 
 function onOnline() {
-  session.rememberLogin().then(() => {
-    // load timeline
-    timeline.refresh();
-    // load challenges
-    challengesApi.refresh();
-    // first time login on app start
-    if (!triedToLogin) {
-      triedToLogin = true;
-    }
-    // try to reconnect socket
-    socket.connect();
-  }, err => {
-    if (!triedToLogin) {
-      // means user is anonymous here
-      if (err.status === 401) {
-        triedToLogin = true;
-      }
-    }
-  })
-  .then(m.redraw)
-  .then(push.register)
-  .then(() => setServerLang(settings.general.lang()));
+  if (isForeground()) {
+    session.rememberLogin()
+    .then(() => {
+      push.register();
+      timeline.refresh();
+      challengesApi.refresh();
+      m.redraw();
+    })
+    .then(() => setServerLang(settings.general.lang()));
+  }
 }
 
 function onOffline() {
-  socket.disconnect();
-  m.redraw();
+  if (isForeground()) {
+    socket.disconnect();
+    m.redraw();
+  }
 }
 
 function onResume() {
+  setForeground();
   socket.connect();
   timeline.refresh().then(v => {
     if (v) m.redraw();
@@ -117,6 +107,7 @@ function onResume() {
 }
 
 function onPause() {
+  setBackground();
   socket.disconnect();
 }
 

@@ -1,5 +1,3 @@
-mainHeaderBg = lighten(bgdark, 8%)
-mainHeaderColor = textDarkBg
 borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
@@ -13,10 +11,16 @@ activeBgLight = darken(themeBgLight, 8%)
 
   #side_menu
     background themeBgLight
-    header
-      background lighten(mainHeaderBg, 15%)
     .login
-      background lighten(#454545, 8%)
+      color textLightBg
+      background borderLightGray
+      &.active
+        background lighten(borderLightGray, 10%)
+
+  .side_menu_header
+    background #fff
+    > .username
+      color textLightBg
 
   .side_links .hr
     border-color textLightGray
@@ -134,7 +138,6 @@ activeBgLight = darken(themeBgLight, 8%)
     color textMediumGray
 
   .main_header
-    background mainHeaderBg
     box-shadow 0px 1px 1px 0px rgba(0,0,0,0.2)
     &.board
       background themeBgLight
@@ -154,10 +157,6 @@ activeBgLight = darken(themeBgLight, 8%)
         &.new_challenge:before
           background transparent
 
-  .main_header_button, .friends_button, .timeline_button
-    .chip
-      border-color mainHeaderBg
-
   .radio_list
     input.radio:checked + label
       background-color darken(bglight, 10%)
@@ -173,15 +172,10 @@ activeBgLight = darken(themeBgLight, 8%)
       color textDarkGray
 
   .select_games_filter
-    background-color mainHeaderBg
-    select
-      color #fff
-    label:after
-      color #fff
+    margin-top -1px
 
   #searchPlayersModal
     > header
-      background-color themeBgLight
       color textMediumGray
       border-bottom 1px solid borderLightGray
     > .modal_content
@@ -220,12 +214,11 @@ activeBgLight = darken(themeBgLight, 8%)
       background darken(bglight, 5%)
 
   .tabs
-    background-color mainHeaderBg
+    background-color headerBgDark
+    margin-top -1px
 
   .tab
     height 45px
-    &.active
-      background-color lighten(mainHeaderBg, 10%)
 
   .tabIndicator
     height 3px

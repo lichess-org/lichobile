@@ -27,11 +27,9 @@ export default {
 
   view: function(ctrl) {
     if (!ctrl.isOpen()) return null;
-
     const tournament = ctrl.tournament();
 
     if (!tournament) return null;
-
     return (
       <div className="modal" id="tournamentFaqModal" config={helper.slidesInUp}>
         <header>

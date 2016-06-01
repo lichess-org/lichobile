@@ -11,11 +11,13 @@ export default {
     const playerData = m.prop();
 
     function open(p) {
-      xhr.playerInfo(tournament().id, p.name).then((data) => {
+      xhr.playerInfo(tournament().id, p.name)
+      .then(data => {
         playerData(data);
         backbutton.stack.push(close);
         isOpen = true;
-      }).catch(utils.handleXhrError);
+      })
+      .catch(utils.handleXhrError);
     }
 
     function close(fromBB) {

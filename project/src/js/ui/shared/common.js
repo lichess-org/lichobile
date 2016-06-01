@@ -6,13 +6,11 @@ import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import session from '../../session';
 import challengesApi from '../../lichess/challenges';
-import timeline from '../../lichess/timeline';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
 import popupWidget from './popup';
 import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
-import timelineModal from '../timelineModal';
 import m from 'mithril';
 import spinner from '../../spinner';
 import countries from '../../utils/countries';
@@ -30,18 +28,6 @@ export function backButton(title) {
     <button key="default-history-backbutton" className="back_button main_header_button" config={helper.ontouch(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
-    </button>
-  );
-}
-
-export function timelineButton() {
-  const unreadCount = timeline.unreadCount();
-  const longAction = () => window.plugins.toast.show(i18n('timline'), 'short', 'top');
-  return (
-    <button className="main_header_button timeline_button fa fa-bell" key="timeline"
-      config={helper.ontouch(timelineModal.open, longAction)}
-    >
-      <span className="chip nb_timeline">{unreadCount}</span>
     </button>
   );
 }
@@ -96,19 +82,16 @@ export function gamesButton() {
 }
 
 export function headerBtns() {
-  if (utils.hasNetwork() && session.isConnected() && friendsApi.count()
-    && timeline.unreadCount()) {
+  if (utils.hasNetwork() && session.isConnected() && friendsApi.count()) {
     return (
       <div key="buttons" className="buttons">
-        {timelineButton()}
         {friendsButton()}
         {gamesButton()}
       </div>
     );
-  } else if (utils.hasNetwork() && session.isConnected() && timeline.unreadCount()) {
+  } else if (utils.hasNetwork() && session.isConnected()) {
     return (
       <div key="buttons" className="buttons">
-        {timelineButton()}
         {gamesButton()}
       </div>
     );

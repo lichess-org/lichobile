@@ -6,6 +6,7 @@ import helper from '../helper';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import { header as headerWidget, userStatus } from '../shared/common';
+import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
 import miniBoard from '../shared/miniBoard';
 
 export default function homeView(ctrl) {
@@ -37,8 +38,8 @@ export default function homeView(ctrl) {
           <section id="homeCreate">
             <button className="fatButton" config={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
           </section>
-          {renderFeatured(ctrl, isPortrait)}
           {renderDailyPuzzle(ctrl, isPortrait)}
+          {renderTimeline(ctrl)}
           {renderWeekLeaders(ctrl)}
         </div>
       </div>
@@ -60,26 +61,6 @@ function miniBoardSize(isPortrait) {
   return bounds;
 }
 
-function renderFeatured(ctrl, isPortrait) {
-  const feat = ctrl.featured();
-
-  if (!feat) return null;
-
-  return (
-    <section id="homeFeatured">
-      <h2 className="homeTitle">Featured game</h2>
-      {m.component(miniBoard, {
-        bounds: miniBoardSize(isPortrait),
-        fen: feat.game.fen,
-        lastMove: feat.game.lastMove,
-        orientation: feat.orientation,
-        link: ctrl.goToFeatured,
-        gameObj: feat}
-      )}
-    </section>
-  );
-}
-
 function renderDailyPuzzle(ctrl, isPortrait) {
   const puzzle = ctrl.dailyPuzzle();
 
@@ -98,6 +79,34 @@ function renderDailyPuzzle(ctrl, isPortrait) {
   );
 }
 
+function renderTimeline(ctrl) {
+  const timeline = ctrl.timeline();
+  if (timeline.length === 0) return null;
+
+  return (
+    <section id="timeline">
+      <h2 className="homeTitle">{i18n('timeline')}</h2>
+      <ul>
+        { timeline.map(e => {
+          if (e.type === 'follow') {
+            return renderFollow(e);
+          } else if (e.type === 'game-end') {
+            return renderGameEnd(e);
+          } else if (e.type === 'tour-join') {
+            return renderTourJoin(e);
+          }
+          return null;
+        })}
+      </ul>
+      <div className="homeMoreButton">
+        <button config={helper.ontouch(() => m.route('/timeline'))}>
+          {i18n('more')}
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function renderWeekLeaders(ctrl) {
   const players = ctrl.weekTopPlayers();
 
@@ -109,6 +118,11 @@ function renderWeekLeaders(ctrl) {
       <ul>
         { players.map(renderPlayer) }
       </ul>
+      <div className="homeMoreButton">
+        <button config={helper.ontouch(() => m.route('/players'))}>
+          {i18n('more')}
+        </button>
+      </div>
     </section>
   );
 }

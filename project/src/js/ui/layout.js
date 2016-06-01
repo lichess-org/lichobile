@@ -6,7 +6,6 @@ import challengeForm from './challengeForm';
 import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
-import timelineModal from './timelineModal';
 import lobby from './lobby';
 import helper from './helper';
 import settings from '../settings';
@@ -34,7 +33,6 @@ export default {
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
-        {timelineModal.view()}
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
@@ -62,7 +60,6 @@ export default {
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
-        {timelineModal.view()}
         {newGameForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}

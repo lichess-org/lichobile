@@ -13,7 +13,6 @@ import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
 import { status as xhrStatus, setServerLang } from './xhr';
 import challengesApi from './lichess/challenges';
-import timeline from './lichess/timeline';
 import helper from './ui/helper';
 import backbutton from './backbutton';
 import socket from './socket';
@@ -34,9 +33,6 @@ function main() {
   window.shouldRotateToOrientation = function() {
     return true;
   };
-
-  // init timeline last read to avoid reading too much localstorage
-  timeline.setLastRead(timeline.getSavedLastRead());
 
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
@@ -83,7 +79,6 @@ function onOnline() {
     session.rememberLogin()
     .then(() => {
       push.register();
-      timeline.refresh();
       challengesApi.refresh();
       m.redraw();
     })
@@ -101,9 +96,6 @@ function onOffline() {
 function onResume() {
   setForeground();
   socket.connect();
-  timeline.refresh().then(v => {
-    if (v) m.redraw();
-  });
 }
 
 function onPause() {

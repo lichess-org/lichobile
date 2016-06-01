@@ -3,9 +3,7 @@ import settings from './settings';
 import i18n from './i18n';
 import { lightPlayerName } from './utils';
 import { request } from './http';
-import { timeline as getTimeline } from './xhr';
 import challengesApi from './lichess/challenges';
-import timeline from './lichess/timeline';
 import m from 'mithril';
 
 let push;
@@ -70,10 +68,7 @@ export default {
                   });
                   break;
                 case 'gameFinish':
-                  Promise.all([
-                    session.refresh(),
-                    timeline.refresh()
-                  ])
+                  session.refresh()
                   .then(() => m.redraw());
                   break;
               }
@@ -93,14 +88,6 @@ export default {
                 m.route(`/game/${payload.userData.fullId}`);
                 break;
               case 'gameFinish':
-                getTimeline().then(t => {
-                  timeline.set(t);
-                  // if only one unread, assume it's the notif and set it as
-                  // already read
-                  if (timeline.unreadCount() === 1) {
-                    timeline.setLastReadTimestamp();
-                  }
-                });
                 m.route(`/game/${payload.userData.fullId}`);
                 break;
             }

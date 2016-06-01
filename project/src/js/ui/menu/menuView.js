@@ -4,7 +4,6 @@ import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
 import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
-import timelineModal from '../timelineModal';
 import challengeForm from '../challengeForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
@@ -49,10 +48,6 @@ function renderProfileActions(user) {
       <li className="side_link" config={helper.ontouch(menu.route('/@/' + user.id))}>
         <span data-icon="r" />
         {i18n('profile')}
-      </li>
-      <li className="side_link" config={helper.ontouch(menu.popup(timelineModal.open))}>
-        <span className="fa fa-bell" />
-        {i18n('timeline')}
       </li>
       <li className="side_link" config={helper.ontouch(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />

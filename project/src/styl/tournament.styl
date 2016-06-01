@@ -270,21 +270,30 @@ td.tournamentPoints
     &:before
       content: "K"
 
-.playerModalHeader
-  font-size 1.2em
-
 #tournamentPlayerInfoModal
   > .modal_content
     color textDarkBg
     background bgdark
   > header
-    color textDarkBg
-    background bgdark
+    background headerBgDark
+    border-bottom-color borderColor
+    box-sizing content-box
     > .playerModalHeader
       color textDarkBg
-      background bgdark
-      padding-right 30px
+      padding 0 40px
+      overflow hidden
+      white-space nowrap
       text-overflow ellipsis
+  .playerGames
+    td
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+  .oppName
+    max-width 160px
+
+.tournamentPlayerInfo
+  padding 5px
 
 .streak
   color #759900

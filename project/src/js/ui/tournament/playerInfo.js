@@ -52,26 +52,26 @@ export default {
 
     function renderPlayerGame (game, index, gameArray) {
       let outcome = null;
-      let outcomeClass = '';
+      let outcomeClass = 'oppOutcome';
       if (game.score === undefined) {
         outcome = '*';
       }
       else if (Array.isArray(game.score)) {
         outcome = game.score[0];
         if (game.score[1] === 2)
-          outcomeClass = 'streak';
+          outcomeClass += ' streak';
         else if (game.score[1] === 3)
-          outcomeClass = 'double';
+          outcomeClass += ' double';
       }
       else {
         outcome = game.score;
       }
       return (
         <tr className='list_item' key={game.id} config={helper.ontouch(() => m.route('/game/' + game.id + '/' + game.color))}>
-          <td> {gameArray.length - index} </td>
-          <td> {game.op.name} </td>
-          <td> {game.op.rating} </td>
-          <td> <span className={'color-icon ' + game.color}> </span> </td>
+          <td className="oppRank"> {gameArray.length - index} </td>
+          <td className="oppName"> {game.op.name} </td>
+          <td className="oppRating"> {game.op.rating} </td>
+          <td className="oppColor"> <span className={'color-icon ' + game.color}> </span> </td>
           <td className={outcomeClass}> {outcome} </td>
         </tr>
       );

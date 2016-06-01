@@ -4,6 +4,7 @@ import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';
 import faq from '../faq';
+import playerInfo from '../playerInfo';
 import m from 'mithril';
 
 export default function controller() {
@@ -14,6 +15,7 @@ export default function controller() {
   const page = m.prop(null);
   const isLoading = m.prop(false);
   const faqCtrl = faq.controller(tournament);
+  const playerInfoCtrl = playerInfo.controller(tournament);
 
   function reload(data) {
     isLoading(false);
@@ -101,6 +103,7 @@ export default function controller() {
     tournament,
     hasJoined,
     faqCtrl,
+    playerInfoCtrl,
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
     reload: throttledReload,

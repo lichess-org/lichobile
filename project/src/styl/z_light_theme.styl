@@ -245,3 +245,22 @@ activeBgLight = darken(themeBgLight, 8%)
       &.active
         background darken(bglight, 2%)
 
+  #tournamentPlayerInfoModal
+    >header
+      background-color themeBgLight
+      color textMediumGray
+      border-bottom 1px solid borderLightGray
+      > .playerModalHeader
+        color textMediumGray
+        background-color themeBgLight
+    > .modal_content
+      color textMediumGray
+      background-color themeBgLight
+
+  .color-icon
+    &.white
+      &:before
+        content: "K"
+    &.black
+      &:before
+        content: "J"

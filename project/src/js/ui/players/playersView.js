@@ -12,7 +12,7 @@ export default function view(ctrl) {
   const bodyCtrl = body.bind(undefined, ctrl);
   const searchModalCtrl = searchModal.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl, null, [searchModalCtrl]);
+  return layout.free(headerCtrl, bodyCtrl, null, searchModalCtrl);
 }
 
 function header(ctrl) {

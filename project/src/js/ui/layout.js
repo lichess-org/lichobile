@@ -67,7 +67,7 @@ export default {
         {challengeForm.view()}
         {friendsPopup.view()}
         {lobby.view()}
-        {overlay ? overlay.map((t) => t()) : null}
+        {overlay ? overlay() : null}
       </div>
     );
   }

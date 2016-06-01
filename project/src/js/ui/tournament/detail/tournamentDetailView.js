@@ -19,8 +19,9 @@ export default function view(ctrl) {
   const footer = renderFooter.bind(undefined, ctrl);
   const faqOverlay = renderFAQOverlay.bind(undefined, ctrl);
   const playreInfoOverlay = renderPlayerInfoOverlay.bind(undefined, ctrl);
+  const overlay = () => [faqOverlay(), playreInfoOverlay()];
 
-  return layout.free(headerCtrl, body, footer, [faqOverlay, playreInfoOverlay]);
+  return layout.free(headerCtrl, body, footer, overlay);
 }
 
 function renderFAQOverlay(ctrl) {

@@ -125,13 +125,13 @@ h3.fullname
   height calc(100% - 40px)
 
 .userGame
-  background-color lighten(bgdark, 10%)
+  background-color lighten(bgdark, 5%)
   color textLightGray
   min-height 60px
   padding 0
-  border-color lighten(bgdark, 10%)
+  border-color lighten(bgdark, 5%)
   &.odd
-    background-color lighten(bgdark, 15%)
+    background-color lighten(bgdark, 10%)
   > .nav
     padding 15px
     &:after
@@ -141,7 +141,7 @@ h3.fullname
     color gold
     position absolute
     left 15px
-    top 15px
+    top 20px
     &:before
       font-size 30px
   .iconStar
@@ -159,7 +159,9 @@ h3.fullname
   .infos
     padding-left 40px
   .players
+    text-align center
     margin-top 1em
+    padding-right 20px
     > div
       display inline-block
       vertical-align middle
@@ -169,6 +171,8 @@ h3.fullname
   .playerName
     font-weight bold
   .status
+    text-align center
+    padding-right 20px
     margin-top 5px
     font-size 0.9em
     &.win

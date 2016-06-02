@@ -1,6 +1,6 @@
 import session from '../session';
-import socket from '../socket';
 import push from '../push';
+import challengesApi from '../lichess/challenges';
 import * as utils from '../utils';
 import helper from './helper';
 import i18n from '../i18n';
@@ -21,8 +21,13 @@ function submit(form) {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
     push.register();
-    session.refresh();
-    socket.connect();
+    challengesApi.refresh();
+    session.refresh()
+    .catch(err => {
+      if (err.status === 401) {
+        window.navigator.notification.alert('Lichess authentication cannot work without cookies enabled. Please make sure cookies are authorized.');
+      }
+    });
   })
   .catch(utils.handleXhrError);
 }

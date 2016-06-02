@@ -24,3 +24,7 @@ export function join(id) {
 export function withdraw(id) {
   return request('/tournament/' + id + '/withdraw', {method: 'POST'});
 }
+
+export function playerInfo(tournamentId, playerId) {
+  return request('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
+}

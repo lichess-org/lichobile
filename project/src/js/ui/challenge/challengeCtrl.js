@@ -45,7 +45,8 @@ export default function controller() {
   }, err => {
     handleXhrError(err);
     m.route('/');
-  });
+  })
+  .catch(console.error.bind(console));
 
   return {
     challenge,

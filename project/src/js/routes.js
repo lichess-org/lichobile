@@ -1,5 +1,6 @@
 import helper from './ui/helper';
 import home from './ui/home';
+import timeline from './ui/timeline';
 import game from './ui/game';
 import analyse from './ui/analyse';
 import challenge from './ui/challenge';
@@ -38,6 +39,7 @@ export default {
   init() {
     m.route(document.body, '/', {
       '/': fadingPage(home),
+      '/timeline': slidingPage(timeline),
       '/otb': otb,
       '/ai': ai,
       '/game/:id': game,

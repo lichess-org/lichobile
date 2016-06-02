@@ -54,7 +54,6 @@
     "moment": "2.13.0",
     "signals": "1.0.0",
     "watchify": "3.7.0",
-    "webworkify": "veloce/webworkify",
     "zanimo": "git://github.com/veloce/Zanimo"
   }
 }

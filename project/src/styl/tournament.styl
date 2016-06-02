@@ -190,7 +190,7 @@ td.tournamentPoints
   margin 0 5px
   width 40px
   &:before
-    font-family "lichess" !important
+    font-family "lichess"!important
     font-size 1.2em
     content attr(data-icon)
     vertical-align middle
@@ -223,6 +223,14 @@ td.tournamentPoints
   display flex
   flex-flow column nowrap
 
+
+.flagRank
+  &:before
+    font-size 1.2em
+    vertical-align  middle
+    font-family "lichess" !important
+    content attr(data-icon)
+
 .tournamentFaq
   padding 10px
   h2
@@ -236,3 +244,59 @@ td.tournamentPoints
   .streak
     color: #759900;
 
+.playerStats
+  font-size 1em
+  margin 0 auto
+  border-spacing 10px 0px
+  border-collapse separate
+  > .invisible
+    display none
+
+.playerGames
+  width 100%
+  >.list_item
+    >td
+      vertical-align  middle
+
+.color-icon
+  &:before
+    font-family "lichess"!important
+    font-size 1.2em
+    vertical-align middle
+  &.white
+    &:before
+      content: "J"
+  &.black
+    &:before
+      content: "K"
+
+#tournamentPlayerInfoModal
+  > .modal_content
+    color textDarkBg
+    background bgdark
+  > header
+    background headerBgDark
+    border-bottom-color borderColor
+    box-sizing content-box
+    > .playerModalHeader
+      color textDarkBg
+      padding 0 40px
+      overflow hidden
+      white-space nowrap
+      text-overflow ellipsis
+  .playerGames
+    td
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+  .oppName
+    max-width 160px
+
+.tournamentPlayerInfo
+  padding 5px
+
+.streak
+  color #759900
+
+.double
+  color #d59120

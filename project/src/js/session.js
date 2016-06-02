@@ -162,11 +162,12 @@ function refresh() {
   if (hasNetwork() && isConnected()) {
     return request('/account/info', {
       background: true
-    }).then(function(data) {
+    })
+    .then(data => {
       session = data;
       m.redraw();
       return session;
-    }, function(err) {
+    }, err => {
       if (session && err.status === 401) {
         session = null;
         m.redraw();

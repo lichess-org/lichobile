@@ -3,7 +3,7 @@
 
 .homeTitle
   font-weight bold
-  margin 15px 0 5px
+  margin 25px 0 5px
 
 .homeOffline
   height 100%
@@ -17,18 +17,41 @@
     font-weight bold
     opacity 0.6
 
+.homeMoreButton
+  font-size 0.9em
+  > button
+    width 100%
+    text-align center
+    padding 10px 0
+    background lighten(bgdark, 3%)
+    &.active
+      background lighten(bgdark, 8%)
+
 #homeFeatured, #dailyPuzzle
   display flex
   flex-flow column wrap
   justify-content flex-start
   align-items center
 
-#weekTopPlayers
+#dailyPuzzle
+  .homeTitle
+    margin-top 15px
+  padding-bottom 15px
+
+#weekTopPlayers, #timeline
   .list_item
     padding 15px 0
     padding-right 15px
   .nav:after
     right 0
+
+#timeline
+  .timelineEntry
+    font-size 0.9em
+
+#weekTopPlayers
+  .playerSuggestion
+    font-size 0.9em
 
 .mini_board
   @media only screen and (orientation: portrait)

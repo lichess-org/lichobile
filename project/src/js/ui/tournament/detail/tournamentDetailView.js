@@ -5,6 +5,7 @@ import * as m from 'mithril';
 import i18n from '../../../i18n';
 import { noop, gameIcon, formatTournamentCountdown, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
+import playerInfo from '../playerInfo';
 import helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
@@ -16,14 +17,22 @@ export default function view(ctrl) {
 
   const body = tournamentBody.bind(undefined, ctrl);
   const footer = renderFooter.bind(undefined, ctrl);
-  const overlay = renderOverlay.bind(undefined, ctrl);
+  const faqOverlay = renderFAQOverlay.bind(undefined, ctrl);
+  const playreInfoOverlay = renderPlayerInfoOverlay.bind(undefined, ctrl);
+  const overlay = () => [faqOverlay(), playreInfoOverlay()];
 
   return layout.free(headerCtrl, body, footer, overlay);
 }
 
-function renderOverlay(ctrl) {
+function renderFAQOverlay(ctrl) {
   return [
     faq.view(ctrl.faqCtrl)
+  ];
+}
+
+function renderPlayerInfoOverlay(ctrl) {
+  return [
+    playerInfo.view(ctrl.playerInfoCtrl)
   ];
 }
 
@@ -182,7 +191,7 @@ function tournamentLeaderboard(ctrl) {
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
       <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem.bind(undefined, userName))}
+        {data.standing.players.map(renderLeaderboardItem.bind(undefined, ctrl.playerInfoCtrl, userName))}
       </table>
 
       <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
@@ -209,12 +218,19 @@ function renderNavButton(icon, isEnabled, action) {
   );
 }
 
-function renderLeaderboardItem (userName, player) {
+function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')}>
-      <td className='tournamentPlayer'><span>{player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span></td>
-      <td className='tournamentPoints'><span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>{player.score}</span></td>
+    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} config={helper.ontouchY(playerInfoCtrl.open.bind(undefined, player))}>
+      <td className='tournamentPlayer'>
+        <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
+        <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>
+      </td>
+      <td className='tournamentPoints'>
+        <span className={player.sheet.fire ? 'on-fire' : 'off-fire'} data-icon='Q'>
+          {player.score}
+        </span>
+      </td>
     </tr>
   );
 }

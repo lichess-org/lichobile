@@ -70,7 +70,7 @@ main
     position relative
     top -2px
   &.active
-    background lighten(bgdark, 8%)
+    background lighten(headerBgDark, 5%)
 
 .back_button
   flex 0 1 auto
@@ -95,9 +95,9 @@ main
   &:before
     margin-right 10px
   &.active
-    background lighten(bgdark, 8%)
+    background lighten(headerBgDark, 5%)
 
-.friends_button, .timeline_button
+.friends_button, .timeline_button, .game_menu_button
   > .chip
     position absolute
     font-size 10px
@@ -159,21 +159,6 @@ main
     background url('../../images/icons/game_icon_canvas.svg') no-repeat
   &.metal::before
     background url('../../images/icons/game_icon_metal.svg') no-repeat
-  > .chip
-    position absolute
-    font-size 10px
-    font-weight bold
-    line-height 12px
-    letter-spacing 0px
-    color bgdark
-    border 2px solid bgdark
-    border-radius 50%
-    height 17px
-    width 17px
-    top 10px
-    left 7px
-  > .nb_playing
-    background lighten(gold, 50%)
   > .nb_challenges
     left 7px
     background orange

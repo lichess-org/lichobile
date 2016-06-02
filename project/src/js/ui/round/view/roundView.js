@@ -183,7 +183,7 @@ function renderSubmitMovePopup(ctrl) {
   return (
     <div className="overlay_popup_wrapper submitMovePopup">
       <div className="overlay_popup">
-        {gamegameButton.submitMove(ctrl)}
+        {gameButton.submitMove(ctrl)}
       </div>
     </div>
   );
@@ -258,12 +258,6 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   );
 }
 
-function showBerserk(ctrl, color) {
-  return ctrl.vm.goneBerserk[color] &&
-    ctrl.data.game.turns <= 1 &&
-    gameApi.playable(ctrl.data);
-}
-
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
@@ -297,7 +291,7 @@ function tvChannelSelector(ctrl) {
 function renderGameRunningActions(ctrl) {
   if (ctrl.data.player.spectator) {
     let controls = [
-      gamegameButton.shareLink(ctrl),
+      gameButton.shareLink(ctrl),
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 

@@ -14,7 +14,7 @@ export function autoredraw(action: Function): void {
   }
 }
 
-export function tellWorker(worker: Worker, topic: string, payload: any) {
+export function tellWorker(worker: Worker, topic: string, payload?: any) {
   if (payload !== undefined) {
     worker.postMessage({ topic, payload });
   } else {

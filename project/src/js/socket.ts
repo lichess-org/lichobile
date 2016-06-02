@@ -1,6 +1,6 @@
 import storage from './storage';
 import { xor } from 'lodash';
-import { lichessSri, autoredraw, askWorker, tellWorker, hasNetwork } from './utils';
+import { lichessSri, autoredraw, askWorker, tellWorker, hasNetwork, noop } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
@@ -61,7 +61,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         // websocket is trying to reconnect
         errorDetected = true;
         xhr.game(gameUrl.substring(1))
-        .then(utils.noop)
+        .then(noop)
         .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');

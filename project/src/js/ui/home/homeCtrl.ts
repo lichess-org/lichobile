@@ -7,12 +7,11 @@ import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import * as m from 'mithril';
 
 export interface HomeCtrl extends Mithril.Controller {
-  featured: Mithril.Property<any>;
   nbConnectedPlayers: Mithril.Property<number>;
   nbGamesInPlay: Mithril.Property<number>;
   dailyPuzzle: Mithril.Property<any>;
   weekTopPlayers: Mithril.Property<Array<any>>;
-  goToFeatured: () => void;
+  timeline: Mithril.Property<Array<any>>;
 }
 
 export default function homeCtrl(): HomeCtrl {

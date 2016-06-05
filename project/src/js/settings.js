@@ -76,22 +76,6 @@ export default {
     showBestMove: localstorageprop('settings.analyse.showBestMove', true)
   },
 
-  otb: {
-    flipPieces: localstorageprop('settings.otb.flipPieces', false),
-    useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
-    variant: localstorageprop('settings.otb.variant', 'standard'),
-    availableVariants: [
-      ['Standard', 'standard'],
-      ['Chess960', 'chess960'],
-      ['King of the Hill', 'kingOfTheHill'],
-      ['Three-check', 'threeCheck'],
-      ['Antichess', 'antichess'],
-      ['Atomic', 'atomic'],
-      ['Horde', 'horde'],
-      ['Racing Kings', 'racingKings']
-    ]
-  },
-
   ai: {
     availableOpponents: [
       ['Stockfish', '1'],
@@ -112,6 +96,46 @@ export default {
       ['King of the Hill', 'kingOfTheHill'],
       ['Three-check', 'threeCheck']
     ]
+  },
+
+  otb: {
+    flipPieces: localstorageprop('settings.otb.flipPieces', false),
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
+    variant: localstorageprop('settings.otb.variant', 'standard'),
+    availableVariants: [
+      ['Standard', 'standard'],
+      ['Chess960', 'chess960'],
+      ['King of the Hill', 'kingOfTheHill'],
+      ['Three-check', 'threeCheck'],
+      ['Antichess', 'antichess'],
+      ['Atomic', 'atomic'],
+      ['Horde', 'horde'],
+      ['Racing Kings', 'racingKings']
+    ]
+  },
+
+  clock: {
+    availableClocks: [
+      ['No Increment', 'simple'],
+      ['Increment', 'increment'],
+      ['Delay', 'delay']
+    ],
+
+    clockType: localstorageprop('settings.clock.clockType', 'simple'),
+
+    simple: {
+      time: localstorageprop('settings.clock.simple.time', 300)
+    },
+
+    increment: {
+      time: localstorageprop('settings.clock.increment.time', 180),
+      increment: localstorageprop('settings.clock.increment.increment', 2)
+    },
+
+    delay: {
+      time: localstorageprop('settings.clock.delay.time', 180),
+      increment: localstorageprop('settings.clock.delay.increment', 2)
+    }
   },
 
   gameSetup: {

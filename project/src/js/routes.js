@@ -30,6 +30,7 @@ import training from './ui/training';
 import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
+import clock from './ui/clock';
 import m from 'mithril';
 
 const slidingPage = helper.slidingPage;
@@ -58,6 +59,7 @@ export default {
       '/@/:id/games/:filter': slidingPage(userGames),
       '/@/:id/:variant/perf': slidingPage(userVariantPerf),
       '/@/:id/tv': fadingPage(userTV),
+      '/clock': fadingPage(clock),
       '/editor': fadingPage(editor),
       '/editor/:fen': fadingPage(editor),
       '/players': fadingPage(players),

@@ -151,6 +151,9 @@ function renderLinks(user) {
       <li className="side_link" key="play_otb" config={helper.ontouchY(menu.route('/otb'))}>
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
       </li>
+      <li className="side_link" key="standalone_clock" config={helper.ontouchY(menu.route('/clock'))}>
+        <span className="fa fa-clock-o"/>{i18n('clock')}
+      </li>
       <li className="sep_link" key="sep_link_tools">{i18n('tools')}</li>
       <li className="side_link" key="analyse" config={helper.ontouchY(menu.route('/analyse'))}>
         <span data-icon="A" />{i18n('analysis')}

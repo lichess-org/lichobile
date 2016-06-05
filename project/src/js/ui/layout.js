@@ -67,5 +67,20 @@ export default {
         {overlay ? overlay() : null}
       </div>
     );
+  },
+
+  clock: function(content, overlay) {
+    background = background || settings.general.theme.background();
+    return (
+      <div className={'view-container ' + background}>
+        <main id="page">
+          <div className="content fullScreen">
+            {content()}
+          </div>
+          { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
+        </main>
+        {overlay ? overlay() : null}
+      </div>
+    );
   }
 };

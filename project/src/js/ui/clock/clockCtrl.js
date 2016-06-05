@@ -35,75 +35,85 @@ export default function controller() {
     isRunning(!isRunning());
   }
 
+  window.plugins.insomnia.keepAwake();
 
   return {
     isRunning,
     startStop,
     clcokSettingsCtrl,
     clockObj,
-    reload
+    reload,
+    clockTap,
+    onunload: () => {
+      window.plugins.insomnia.allowSleepAgain();
+      window.StatusBar.show();
+      if (clockInterval) {
+        clearInterval(clockInterval);
+      }
+    }
   };
+}
 
-  function simpleClock(time) {
-    let topTime = time;
-    let bottomTime = time;
-    let activeSide = null;
 
-    function tick () {
-      if (activeSide === 'top') {
-        topTime--;
-      }
-      else if (activeSide === 'bottom') {
-        bottomTime--;
+function simpleClock(time) {
+  let topTime = time;
+  let bottomTime = time;
+  let activeSide = null;
+
+  function tick () {
+    if (activeSide === 'top') {
+      topTime--;
+    }
+    else if (activeSide === 'bottom') {
+      bottomTime--;
+    }
+  }
+
+  function isFlagged () {
+    if (topTime <= 0) {
+      return 'top';
+    }
+    else if (bottomTime <= 0) {
+      return 'bottom';
+    }
+    return null;
+  }
+
+  function clockHit (side) {
+    if (activeSide === 'top') {
+      if (side === activeSide) {
+        activeSide = 'bottom';
       }
     }
-
-    function isFlagged () {
-      if (topTime <= 0) {
-        return 'top';
+    else if (activeSide === 'bottom') {
+      if (side === activeSide) {
+        activeSide = 'top';
       }
-      else if (bottomTime <= 0) {
-        return 'bottom';
-      }
-      return null;
     }
-
-    function clockHit (side) {
-      if (activeSide === 'top') {
-        if (side === activeSide) {
-          activeSide = 'bottom';
-        }
-      }
-      else if (activeSide === 'bottom') {
-        if (side === activeSide) {
-          activeSide = 'top';
-        }
+    else {
+      if (side === 'top') {
+        activeSide = 'bottom';
       }
       else {
-        if (side === 'top') {
-          activeSide = 'bottom';
-        }
-        else {
-          activeSide = 'top';
-        }
+        activeSide = 'top';
       }
     }
-
-    return {
-      topTime: topTime,
-      bottomTime: bottomTime,
-      activeSide: activeSide,
-      tick: tick,
-      isFlagged: isFlagged,
-      clockHit: clockHit
-    };
   }
 
-  function incrementClock() {
+  return {
+    topTime: topTime,
+    bottomTime: bottomTime,
+    activeSide: activeSide,
+    tick: tick,
+    isFlagged: isFlagged,
+    clockHit: clockHit
+  };
+}
 
-  }
+function incrementClock() {
 
-  function delayClock() {
+}
 
-  }
+function delayClock() {
+
 }

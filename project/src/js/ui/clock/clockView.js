@@ -6,6 +6,7 @@ import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
 
 export default function view(ctrl) {
+  window.StatusBar.hide(); // Put this hear instead of ctrl so it is reapplied after a phone lock
   const body = clockBody.bind(undefined, ctrl);
 
   return layout.clock(body);
@@ -15,11 +16,10 @@ function clockBody(ctrl) {
   const clock = ctrl.clockObj();
   const topActive = clock.activeSide === 'top';
   const bottomActive = clock.activeSide === 'bottom';
-  console.log(clock.topTime);
 
   return (
     <div className="clockContainer">
-      <div className={'clockTapArea' + (topActive ? ' active' : '')} config={h.ontouch(() => (topActive ? onClockTap(ctrl) : null))}>
+      <div className={'clockTapArea' + (topActive ? ' active' : '')} config={h.ontouch(() => (!bottomActive ? onClockTap(ctrl) : null))}>
         <span className="clockTime">
           { formatTimeinSecs(clock.topTime) }
         </span>
@@ -29,7 +29,7 @@ function clockBody(ctrl) {
         <span className="fa fa-refresh" config={h.ontouch(() => ctrl.reload())} />
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettings.open())} />
       </div>
-      <div className={'clockTapArea' + (bottomActive ? ' active' : '')} config={h.ontouch(() => (bottomActive ? onClockTap(ctrl) : null))}>
+      <div className={'clockTapArea' + (bottomActive ? ' active' : '')} config={h.ontouch(() => (!topActive ? onClockTap(ctrl) : null))}>
         <span className="clockTime">
           { formatTimeinSecs(clock.bottomTime) }
         </span>
@@ -39,6 +39,6 @@ function clockBody(ctrl) {
 }
 
 function onClockTap(ctrl) {
-  window.navigator.vibrate(100);
-  ctrl.clockHit();
+  navigator.vibrate(100);
+  ctrl.clockTap();
 }

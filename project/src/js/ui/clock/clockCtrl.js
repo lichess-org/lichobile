@@ -17,7 +17,6 @@ export default function controller() {
       'delay': delayClock.bind(undefined, settings.clock.delay.time(), settings.clock.delay.increment())
     };
     isRunning(false);
-    console.log('reload ' + clockMap[settings.clock.clockType()]());
     clockObj(clockMap[settings.clock.clockType()]());
   }
 
@@ -27,9 +26,10 @@ export default function controller() {
 
   function clockTap (side) {
     isRunning(true);
-    console.log('isRunning');
     clockObj().clockHit(side);
-    console.log('clockhit');
+    if (clockInterval) {
+      clearInterval(clockInterval);
+    }
     clockInterval = setInterval(clockObj().tick, 1000);
   }
 
@@ -58,52 +58,47 @@ export default function controller() {
 
 
 function simpleClock(time) {
-  let topTime = time;
-  let bottomTime = time;
-  let activeSide = null;
-  console.log('setup');
+  const topTime = m.prop(time);
+  const bottomTime = m.prop(time);
+  const activeSide = m.prop(null);
 
   function tick () {
-    console.log('tick');
-    console.log(activeSide);
-    if (activeSide === 'top') {
-      topTime--;
+    if (activeSide() === 'top') {
+      topTime(topTime()-1);
     }
-    else if (activeSide === 'bottom') {
-      bottomTime--;
+    else if (activeSide() === 'bottom') {
+      bottomTime(bottomTime()-1);
     }
-    console.log('top ' + topTime);
-    console.log('bottom ' + bottomTime);
     m.redraw();
   }
 
   function isFlagged () {
-    if (topTime <= 0) {
+    if (topTime() <= 0) {
       return 'top';
     }
-    else if (bottomTime <= 0) {
+    else if (bottomTime() <= 0) {
       return 'bottom';
     }
     return null;
   }
 
   function clockHit (side) {
-    if (activeSide === 'top') {
-      if (side === activeSide) {
-        activeSide = 'bottom';
+    if (activeSide() === 'top') {
+      if (side === activeSide()) {
+        activeSide('bottom');
       }
     }
-    else if (activeSide === 'bottom') {
-      if (side === activeSide) {
-        activeSide = 'top';
+    else if (activeSide() === 'bottom') {
+      if (side === activeSide()) {
+        activeSide('top');
       }
     }
     else {
       if (side === 'top') {
-        activeSide = 'bottom';
+        activeSide('bottom');
       }
       else {
-        activeSide = 'top';
+        activeSide('top');
       }
     }
   }

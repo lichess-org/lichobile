@@ -14,16 +14,14 @@ export default function view(ctrl) {
 
 function clockBody(ctrl) {
   const clock = ctrl.clockObj();
-  const topActive = clock.activeSide === 'top';
-  const bottomActive = clock.activeSide === 'bottom';
-  console.log(clock.topTime);
-  console.log(clock.bottomTime);
+  const topActive = clock.activeSide() === 'top';
+  const bottomActive = clock.activeSide() === 'bottom';
 
   return (
     <div className="clockContainer">
       <div className={'clockTapArea' + (topActive ? ' active' : '')} config={h.ontouch(() => (!bottomActive ? onClockTap(ctrl, 'top') : null))}>
         <span className="clockTime">
-          { formatTimeinSecs(clock.topTime) }
+          { formatTimeinSecs(clock.topTime()) }
         </span>
       </div>
       <div className="clockControls">
@@ -33,7 +31,7 @@ function clockBody(ctrl) {
       </div>
       <div className={'clockTapArea' + (bottomActive ? ' active' : '')} config={h.ontouch(() => (!topActive ? onClockTap(ctrl, 'bottom') : null))}>
         <span className="clockTime">
-          { formatTimeinSecs(clock.bottomTime) }
+          { formatTimeinSecs(clock.bottomTime()) }
         </span>
       </div>
     </div>

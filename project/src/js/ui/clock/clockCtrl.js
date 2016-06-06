@@ -17,7 +17,7 @@ export default function controller() {
       'delay': delayClock.bind(undefined, settings.clock.delay.time(), settings.clock.delay.increment())
     };
     isRunning(false);
-    console.log(clockMap[settings.clock.clockType()]());
+    console.log('reload ' + clockMap[settings.clock.clockType()]());
     clockObj(clockMap[settings.clock.clockType()]());
   }
 
@@ -31,7 +31,6 @@ export default function controller() {
     clockObj().clockHit(side);
     console.log('clockhit');
     clockInterval = setInterval(clockObj().tick, 1000);
-    console.log('set interval');
   }
 
   function startStop () {

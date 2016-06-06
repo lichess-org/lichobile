@@ -6,7 +6,7 @@ import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
 
 export default function view(ctrl) {
-  window.StatusBar.hide(); // Put this here instead of ctrl so it is reapplied after a phone lock
+  window.StatusBar.hide(); // Put this here instead of ctrl so it is reapplied after a phone lock and unlock
   const body = clockBody.bind(undefined, ctrl);
 
   return layout.clock(body);

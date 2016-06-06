@@ -7,7 +7,7 @@ import clockSettings from './clockSettings';
 export default function controller() {
   let clockInterval = null;
   let clockMap = null;
-  const isRunning = m.prop();
+  const isRunning = m.prop(false);
   const clockObj = m.prop();
 
   function reload() {
@@ -25,7 +25,6 @@ export default function controller() {
   const clcokSettingsCtrl = clockSettings.controller();
 
   function clockTap (side) {
-    isRunning(true);
     clockObj().clockHit(side);
     if (clockInterval) {
       clearInterval(clockInterval);
@@ -34,7 +33,14 @@ export default function controller() {
   }
 
   function startStop () {
-    isRunning(!isRunning());
+    if (isRunning()) {
+      isRunning(false);
+      clearInterval(clockInterval);
+    }
+    else {
+      isRunning(true);
+      clockInterval = setInterval(clockObj().tick, 1000);
+    }
   }
 
   window.plugins.insomnia.keepAwake();
@@ -64,10 +70,10 @@ function simpleClock(time) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(topTime()-1);
+      topTime(Math.max(topTime()-1, 0));
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(bottomTime()-1);
+      bottomTime(Math.max(bottomTime()-1, 0));
     }
     m.redraw();
   }

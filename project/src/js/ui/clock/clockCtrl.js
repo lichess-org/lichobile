@@ -27,8 +27,11 @@ export default function controller() {
 
   function clockTap (side) {
     isRunning(true);
+    console.log('isRunning');
     clockObj().clockHit(side);
+    console.log('clockhit');
     clockInterval = setInterval(clockObj().tick, 1000);
+    console.log('set interval');
   }
 
   function startStop () {
@@ -59,14 +62,20 @@ function simpleClock(time) {
   let topTime = time;
   let bottomTime = time;
   let activeSide = null;
+  console.log('setup');
 
   function tick () {
+    console.log('tick');
+    console.log(activeSide);
     if (activeSide === 'top') {
       topTime--;
     }
     else if (activeSide === 'bottom') {
       bottomTime--;
     }
+    console.log('top ' + topTime);
+    console.log('bottom ' + bottomTime);
+    m.redraw();
   }
 
   function isFlagged () {

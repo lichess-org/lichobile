@@ -27,20 +27,23 @@ export default function homeCtrl() {
       });
 
       Promise.all([
-        timelineXhr(),
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
       ]).then(results => {
-        const [timelineData, dailyData, topPlayersData] = results;
-        timeline(
-          timelineData.entries
-          .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)
-          .slice(0, 10)
-        );
+        const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
       })
       .catch(handleXhrError);
+
+      timelineXhr()
+      .then(data => {
+        timeline(
+          data.entries
+          .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)
+          .slice(0, 10)
+        );
+      });
     }
   }
 

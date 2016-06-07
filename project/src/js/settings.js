@@ -124,17 +124,17 @@ export default {
     clockType: localstorageprop('settings.clock.clockType', 'simple'),
 
     simple: {
-      time: localstorageprop('settings.clock.simple.time', 300)
+      time: localstorageprop('settings.clock.simple.time', '5')
     },
 
     increment: {
-      time: localstorageprop('settings.clock.increment.time', 180),
-      increment: localstorageprop('settings.clock.increment.increment', 2)
+      time: localstorageprop('settings.clock.increment.time', '3'),
+      increment: localstorageprop('settings.clock.increment.increment', '2')
     },
 
     delay: {
-      time: localstorageprop('settings.clock.delay.time', 180),
-      increment: localstorageprop('settings.clock.delay.increment', 2)
+      time: localstorageprop('settings.clock.delay.time', '3'),
+      increment: localstorageprop('settings.clock.delay.increment', '2')
     }
   },
 

@@ -30,6 +30,7 @@ export default function controller() {
       clearInterval(clockInterval);
     }
     clockInterval = setInterval(clockObj().tick, 1000);
+    isRunning(true);
   }
 
   function startStop () {
@@ -64,6 +65,10 @@ export default function controller() {
 
 
 function simpleClock(time) {
+  return incrementClock(time, 0);
+}
+
+function incrementClock(time, increment) {
   const topTime = m.prop(time);
   const bottomTime = m.prop(time);
   const activeSide = m.prop(null);
@@ -92,11 +97,13 @@ function simpleClock(time) {
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
+        topTime(topTime() + increment);
       }
     }
     else if (activeSide() === 'bottom') {
       if (side === activeSide()) {
         activeSide('top');
+        bottomTime(bottomTime() + increment);
       }
     }
     else {
@@ -117,10 +124,6 @@ function simpleClock(time) {
     isFlagged: isFlagged,
     clockHit: clockHit
   };
-}
-
-function incrementClock() {
-
 }
 
 function delayClock() {

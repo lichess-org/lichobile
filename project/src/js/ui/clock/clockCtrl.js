@@ -12,11 +12,10 @@ export default function controller() {
 
   function reload() {
     clockMap = {
-      'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
-      'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment())),
-      'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment()))
+      'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60, m.redraw),
+      'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment()), m.redraw),
+      'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment()), m.redraw)
     };
-    isRunning(false);
     clockObj(clockMap[settings.clock.clockType()]());
   }
 
@@ -26,23 +25,10 @@ export default function controller() {
 
   function clockTap (side) {
     clockObj().clockHit(side);
-    if (clockInterval) {
-      clearInterval(clockInterval);
-    }
-    clockInterval = setInterval(clockObj().tick, 1000);
-    isRunning(true);
-    m.redraw();
   }
 
   function startStop () {
-    if (isRunning()) {
-      isRunning(false);
-      clearInterval(clockInterval);
-    }
-    else {
-      isRunning(true);
-      clockInterval = setInterval(clockObj().tick, 1000);
-    }
+    clockObj().startStop();
   }
 
   window.plugins.insomnia.keepAwake();
@@ -69,29 +55,28 @@ function simpleClock(time) {
   return incrementClock(time, 0);
 }
 
-function incrementClock(time, increment) {
+function incrementClock(time, increment, draw) {
   const topTime = m.prop(time);
   const bottomTime = m.prop(time);
   const activeSide = m.prop(null);
+  const flagged = m.prop(null);
+  const isRunning = m.prop(false);
+  let clockInterval = null;
 
   function tick () {
     if (activeSide() === 'top') {
       topTime(Math.max(topTime()-1, 0));
+      if (topTime() <= 0) {
+        flagged('top');
+      }
     }
     else if (activeSide() === 'bottom') {
       bottomTime(Math.max(bottomTime()-1, 0));
+      if (bottomTime() <= 0) {
+        flagged('bottom');
+      }
     }
-    m.redraw();
-  }
-
-  function flagged () {
-    if (topTime() <= 0) {
-      return 'top';
-    }
-    else if (bottomTime() <= 0) {
-      return 'bottom';
-    }
-    return null;
+    draw();
   }
 
   function clockHit (side) {
@@ -115,41 +100,64 @@ function incrementClock(time, increment) {
         activeSide('top');
       }
     }
+    if (clockInterval) {
+      clearInterval(clockInterval);
+    }
+    clockInterval = setInterval(tick, 1000);
+    isRunning(true);
+    draw();
+  }
+
+  function startStop () {
+    if (isRunning()) {
+      isRunning(false);
+      clearInterval(clockInterval);
+    }
+    else {
+      isRunning(true);
+      clockInterval = setInterval(tick, 1000);
+    }
   }
 
   return {
     topTime,
     bottomTime,
     activeSide,
-    tick,
     flagged,
-    clockHit
+    isRunning,
+    tick,
+    clockHit,
+    startStop
   };
 }
 
-function delayClock(time, increment) {
+function delayClock(time, increment, draw) {
   const topTime = m.prop(time);
   const bottomTime = m.prop(time);
+  const topDelay = m.prop(increment);
+  const bottomDelay = m.prop(increment);
   const activeSide = m.prop(null);
+  const flagged = m.prop(null);
+  const isRunning = m.prop(false);
+  let clockInterval = null;
 
   function tick () {
     if (activeSide() === 'top') {
+      if (topDelay() > 0) {
+        topDelay(topDelay() - 1);
+      }
       topTime(Math.max(topTime()-1, 0));
+      if (topTime() <= 0) {
+        flagged('top');
+      }
     }
     else if (activeSide() === 'bottom') {
       bottomTime(Math.max(bottomTime()-1, 0));
+      if (bottomTime() <= 0) {
+        flagged('bottom');
+      }
     }
-    m.redraw();
-  }
-
-  function flagged () {
-    if (topTime() <= 0) {
-      return 'top';
-    }
-    else if (bottomTime() <= 0) {
-      return 'bottom';
-    }
-    return null;
+    draw();
   }
 
   function clockHit (side) {
@@ -173,14 +181,33 @@ function delayClock(time, increment) {
         activeSide('top');
       }
     }
+    if (clockInterval) {
+      clearInterval(clockInterval);
+    }
+    clockInterval = setInterval(tick, 1000);
+    isRunning(true);
+    draw();
+  }
+
+  function startStop () {
+    if (isRunning()) {
+      isRunning(false);
+      clearInterval(clockInterval);
+    }
+    else {
+      isRunning(true);
+      clockInterval = setInterval(tick, 1000);
+    }
   }
 
   return {
     topTime,
     bottomTime,
     activeSide,
-    tick,
     flagged,
-    clockHit
+    isRunning,
+    tick,
+    clockHit,
+    startStop
   };
 }

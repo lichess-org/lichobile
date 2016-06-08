@@ -34,7 +34,7 @@ function clockBody(ctrl) {
         </span>
       </div>
       <div className="clockControls">
-        <span className={'fa' + (ctrl.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
+        <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
         <span className="fa fa-refresh" config={h.ontouch(() => ctrl.reload())} />
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettingsCtrl.open())} />
       </div>
@@ -48,6 +48,6 @@ function clockBody(ctrl) {
 }
 
 function onClockTap(ctrl, side) {
-  navigator.vibrate(100);
+  navigator.vibrate(200);
   ctrl.clockTap(side);
 }

@@ -87,6 +87,15 @@ export default {
             </div>
           </div>
         );
+      },
+      stage: function () {
+        return (
+          <div key="stageSettings" className="clockSettingParameters">
+            <div className="select_input">
+              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
+            </div>
+          </div>
+        );
       }
     };
 

@@ -120,7 +120,8 @@ export default {
       ['Increment', 'increment'],
       ['Simple Delay', 'delay'],
       ['Bronstein Delay', 'bronstein'],
-      ['Hourglass', 'hourglass']
+      ['Hourglass', 'hourglass'],
+      ['Stage', 'stage']
     ],
 
     clockType: localstorageprop('settings.clock.clockType', 'simple'),
@@ -146,6 +147,11 @@ export default {
 
     hourglass: {
       time: localstorageprop('settings.clock.hourglass.time', '5')
+    },
+
+    stage: {
+      stages: localstorageprop('settings.clock.stage.stages', [{time: '120', moves: '40'}, {time: '60', moves: null}]),
+      increment: localstorageprop('settings.clock.stage.increment', '30')
     }
   },
 

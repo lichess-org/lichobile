@@ -15,7 +15,8 @@ export default function controller() {
       'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment()), m.redraw),
       'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment()), m.redraw),
       'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment()), m.redraw),
-      'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60, m.redraw)
+      'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60, m.redraw),
+      'stage': stageClock.bind(undefined, Number(settings.clock.stage.stages()) * 60, Number(settings.clock.stage.increment()), m.redraw)
     };
     clockObj(clockMap[settings.clock.clockType()]());
   }
@@ -349,6 +350,98 @@ function hourglassClock(time, draw) {
     }
     else if (activeSide() === 'bottom') {
       if (side === activeSide()) {
+        activeSide('top');
+      }
+    }
+    else {
+      if (side === 'top') {
+        activeSide('bottom');
+      }
+      else {
+        activeSide('top');
+      }
+    }
+    if (clockInterval) {
+      clearInterval(clockInterval);
+    }
+    clockInterval = setInterval(tick, 1000);
+    isRunning(true);
+    draw();
+  }
+
+  function startStop () {
+    if (isRunning()) {
+      isRunning(false);
+      clearInterval(clockInterval);
+    }
+    else {
+      isRunning(true);
+      clockInterval = setInterval(tick, 1000);
+      if (!activeSide()) {
+        activeSide('top');
+      }
+    }
+  }
+
+  return {
+    topTime,
+    bottomTime,
+    activeSide,
+    flagged,
+    isRunning,
+    tick,
+    clockHit,
+    startStop
+  };
+}
+function stageClock(stages, increment, draw) {
+  const topTime = m.prop(stages[0].time);
+  const bottomTime = m.prop(stages[0].time);
+  const topMoves = m.prop(stages[0].moves);
+  const bottomMoves = m.prop(stages[0].moves);
+  const topStage = m.prop(0);
+  const bottomStage = m.prop(0);
+  const activeSide = m.prop(null);
+  const flagged = m.prop(null);
+  const isRunning = m.prop(false);
+  let clockInterval = null;
+
+  function tick () {
+    if (activeSide() === 'top') {
+      topTime(Math.max(topTime()-1, 0));
+      if (topTime() <= 0) {
+        flagged('top');
+      }
+    }
+    else if (activeSide() === 'bottom') {
+      bottomTime(Math.max(bottomTime()-1, 0));
+      if (bottomTime() <= 0) {
+        flagged('bottom');
+      }
+    }
+    draw();
+  }
+
+  function clockHit (side) {
+    if (activeSide() === 'top') {
+      if (side === activeSide()) {
+        topMoves(topMoves() + 1);
+        topTime(topTime() + increment);
+        if (topMoves() === stages[topStage].moves) {
+          topStage(topStage + 1);
+          topTime(topTime() + stages[topStage].time);
+        }
+        activeSide('bottom');
+      }
+    }
+    else if (activeSide() === 'bottom') {
+      if (side === activeSide()) {
+        bottomMoves(bottomMoves() + 1);
+        bottomTime(bottomTime() + increment);
+        if (bottomMoves() === stages[bottomStage].moves) {
+          bottomStage(bottomStage + 1);
+          bottomTime(bottomTime() + stages[bottomStage].time);
+        }
         activeSide('top');
       }
     }

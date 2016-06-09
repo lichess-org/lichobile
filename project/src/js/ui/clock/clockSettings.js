@@ -66,6 +66,18 @@ export default {
             </div>
           </div>
         );
+      },
+      bronstein: function () {
+        return (
+          <div key="bronsteinSettings" className="clockSettingParameters">
+            <div className="select_input">
+              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.bronstein.time, false, () => m.redraw())}
+            </div>
+            <div className="select_input">
+              {formWidgets.renderSelect('Increment', 'increment', settings.gameSetup.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, () => m.redraw())}
+            </div>
+          </div>
+        );
       }
     };
 

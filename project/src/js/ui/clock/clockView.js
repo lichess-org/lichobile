@@ -28,7 +28,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' active' : '') + (topFlagged ? ' flagged' : '')} config={!bottomActive ? h.ontouch(() => onClockTap(ctrl, 'top')) : null}>
+      <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' active' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
         <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
           { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
         </span>
@@ -38,7 +38,7 @@ function clockBody(ctrl) {
         <span className="fa fa-refresh" config={h.ontouch(() => ctrl.reload())} />
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettingsCtrl.open())} />
       </div>
-      <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' active' : '')  + (bottomFlagged ? ' flagged' : '')} config={!topActive ? h.ontouch(() => onClockTap(ctrl, 'bottom')) : null}>
+      <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' active' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <span className={'clockTime' + (bottomFlagged ? ' flagged' : '')}>
           { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
         </span>
@@ -48,6 +48,8 @@ function clockBody(ctrl) {
 }
 
 function onClockTap(ctrl, side) {
-  navigator.vibrate(200);
-  ctrl.clockTap(side);
+  if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
+    navigator.vibrate(200);
+    ctrl.clockTap(side);
+  }
 }

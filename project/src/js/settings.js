@@ -116,9 +116,10 @@ export default {
 
   clock: {
     availableClocks: [
-      ['No Increment', 'simple'],
+      ['Sudden Death', 'simple'],
       ['Increment', 'increment'],
-      ['Delay', 'delay']
+      ['Simple Delay', 'delay'],
+      ['Bronstein Delay', 'bronstein']
     ],
 
     clockType: localstorageprop('settings.clock.clockType', 'simple'),
@@ -135,6 +136,11 @@ export default {
     delay: {
       time: localstorageprop('settings.clock.delay.time', '3'),
       increment: localstorageprop('settings.clock.delay.increment', '2')
+    },
+
+    bronstein: {
+      time: localstorageprop('settings.clock.bronstein.time', '3'),
+      increment: localstorageprop('settings.clock.bronstein.increment', '2')
     }
   },
 

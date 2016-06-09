@@ -117,6 +117,9 @@ function incrementClock(time, increment, draw) {
     else {
       isRunning(true);
       clockInterval = setInterval(tick, 1000);
+      if (!activeSide()) {
+        activeSide('top');
+      }
     }
   }
 
@@ -205,6 +208,9 @@ function delayClock(time, increment, draw) {
     else {
       isRunning(true);
       clockInterval = setInterval(tick, 1000);
+      if (!activeSide()) {
+        activeSide('top');
+      }
     }
   }
 
@@ -290,6 +296,9 @@ function bronsteinClock(time, increment, draw) {
     else {
       isRunning(true);
       clockInterval = setInterval(tick, 1000);
+      if (!activeSide()) {
+        activeSide('top');
+      }
     }
   }
 
@@ -367,6 +376,9 @@ function hourglassClock(time, draw) {
     else {
       isRunning(true);
       clockInterval = setInterval(tick, 1000);
+      if (!activeSide()) {
+        activeSide('top');
+      }
     }
   }
 

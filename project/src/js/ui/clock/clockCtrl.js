@@ -82,6 +82,8 @@ function incrementClock(time, increment, draw) {
   }
 
   function clockHit (side) {
+    if (flagged())
+      return;
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -173,6 +175,8 @@ function delayClock(time, increment, draw) {
   }
 
   function clockHit (side) {
+    if (flagged())
+      return;
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -257,6 +261,8 @@ function bronsteinClock(time, increment, draw) {
   }
 
   function clockHit (side) {
+    if (flagged())
+      return;
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -343,6 +349,8 @@ function hourglassClock(time, draw) {
   }
 
   function clockHit (side) {
+    if (flagged())
+      return;
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -423,6 +431,8 @@ function stageClock(stages, increment, draw) {
   }
 
   function clockHit (side) {
+    if (flagged())
+      return;
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         topMoves(topMoves() + 1);

@@ -78,6 +78,15 @@ export default {
             </div>
           </div>
         );
+      },
+      hourglass: function () {
+        return (
+          <div key="hourglassSettings" className="clockSettingParameters">
+            <div className="select_input">
+              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
+            </div>
+          </div>
+        );
       }
     };
 

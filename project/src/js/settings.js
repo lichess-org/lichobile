@@ -119,7 +119,8 @@ export default {
       ['Sudden Death', 'simple'],
       ['Increment', 'increment'],
       ['Simple Delay', 'delay'],
-      ['Bronstein Delay', 'bronstein']
+      ['Bronstein Delay', 'bronstein'],
+      ['Hourglass', 'hourglass']
     ],
 
     clockType: localstorageprop('settings.clock.clockType', 'simple'),
@@ -141,6 +142,10 @@ export default {
     bronstein: {
       time: localstorageprop('settings.clock.bronstein.time', '3'),
       increment: localstorageprop('settings.clock.bronstein.increment', '2')
+    },
+
+    hourglass: {
+      time: localstorageprop('settings.clock.hourglass.time', '5')
     }
   },
 

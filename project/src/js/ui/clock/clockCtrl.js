@@ -5,7 +5,6 @@ import m from 'mithril';
 import clockSettings from './clockSettings';
 
 export default function controller() {
-  let clockInterval = null;
   let clockMap = null;
   const isRunning = m.prop(false);
   const clockObj = m.prop();
@@ -43,16 +42,16 @@ export default function controller() {
     onunload: () => {
       window.plugins.insomnia.allowSleepAgain();
       window.StatusBar.show();
-      if (clockInterval) {
-        clearInterval(clockInterval);
+      if (clockObj().clockInterval) {
+        clearInterval(clockObj().clockInterval);
       }
     }
   };
 }
 
 
-function simpleClock(time) {
-  return incrementClock(time, 0);
+function simpleClock(time, draw) {
+  return incrementClock(time, 0, draw);
 }
 
 function incrementClock(time, increment, draw) {
@@ -146,31 +145,38 @@ function delayClock(time, increment, draw) {
       if (topDelay() > 0) {
         topDelay(topDelay() - 1);
       }
-      topTime(Math.max(topTime()-1, 0));
-      if (topTime() <= 0) {
-        flagged('top');
+      else {
+        topTime(Math.max(topTime()-1, 0));
+        if (topTime() <= 0) {
+          flagged('top');
+        }
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()-1, 0));
-      if (bottomTime() <= 0) {
-        flagged('bottom');
+      if (bottomDelay() > 0) {
+        bottomDelay(bottomDelay() - 1);
+      }
+      else {
+        bottomTime(Math.max(bottomTime()-1, 0));
+        if (bottomTime() <= 0) {
+          flagged('bottom');
+        }
       }
     }
     draw();
   }
 
   function clockHit (side) {
+    topDelay(increment);
+    bottomDelay(increment);
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
-        topTime(topTime() + increment);
       }
     }
     else if (activeSide() === 'bottom') {
       if (side === activeSide()) {
         activeSide('top');
-        bottomTime(bottomTime() + increment);
       }
     }
     else {

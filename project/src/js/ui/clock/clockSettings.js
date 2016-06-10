@@ -38,7 +38,7 @@ export default {
         return (
           <div key="simpleSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.simple.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.simple.time, false, () => m.redraw())}
             </div>
           </div>
         );
@@ -47,10 +47,10 @@ export default {
         return (
           <div key="incrementSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.increment.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.increment.time, false, () => m.redraw())}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.gameSetup.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, () => m.redraw())}
             </div>
           </div>
         );
@@ -59,10 +59,10 @@ export default {
         return (
           <div key="delaySettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.delay.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.delay.time, false, () => m.redraw())}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.gameSetup.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, () => m.redraw())}
             </div>
           </div>
         );
@@ -71,10 +71,10 @@ export default {
         return (
           <div key="bronsteinSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.bronstein.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.bronstein.time, false, () => m.redraw())}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.gameSetup.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, () => m.redraw())}
             </div>
           </div>
         );
@@ -83,17 +83,19 @@ export default {
         return (
           <div key="hourglassSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
             </div>
           </div>
         );
       },
       stage: function () {
+        console.log('stage');
         return (
-          <div key="stageSettings" className="clockSettingParameters">
+          <div key="hourglassSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.gameSetup.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, () => m.redraw())}
             </div>
+            { settings.clock.stage.stages().map(renderStage) }
           </div>
         );
       }
@@ -129,3 +131,35 @@ export default {
     return null;
   }
 };
+
+function renderStage (stage, index) {
+  console.log('renderStage');
+  const time = updateTime.bind(undefined, index);
+  const moves = updateMoves.bind(undefined, index);
+  return (
+    <div className="stageRow">
+      <span> Stage {index + 1}</span>
+      <div className="select_input">
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, () => m.redraw())}
+      </div>
+      <div className={'select_input' + ((index === settings.clock.stage.stages().length) ? 'lastStage' : '')}>
+        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
+      </div>
+    </div>
+  );
+}
+
+function updateTime (index, time) {
+  let stages = settings.clock.stage.stages();
+  if (time) {
+    stages[index].time = time;
+    settings.clock.stage.stages(stages);
+  }
+  return stages[index].time;
+}
+
+function updateMoves (index, moves) {
+  let stages = settings.clock.stage.stages();
+  stages[index].moves = moves;
+  settings.clock.stage.stages(stages);
+}

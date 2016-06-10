@@ -16,7 +16,7 @@ export default function controller() {
       'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment()), m.redraw),
       'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment()), m.redraw),
       'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60, m.redraw),
-      'stage': stageClock.bind(undefined, Number(settings.clock.stage.stages()) * 60, Number(settings.clock.stage.increment()), m.redraw)
+      'stage': stageClock.bind(undefined, settings.clock.stage.stages(), Number(settings.clock.stage.increment()), m.redraw)
     };
     clockObj(clockMap[settings.clock.clockType()]());
   }
@@ -403,8 +403,10 @@ function hourglassClock(time, draw) {
   };
 }
 function stageClock(stages, increment, draw) {
-  const topTime = m.prop(stages[0].time);
-  const bottomTime = m.prop(stages[0].time);
+  console.log('stageClock');
+  console.log(stages);
+  const topTime = m.prop(Number(stages[0].time) * 60);
+  const bottomTime = m.prop(Number(stages[0].time) * 60);
   const topMoves = m.prop(stages[0].moves);
   const bottomMoves = m.prop(stages[0].moves);
   const topStage = m.prop(0);
@@ -437,9 +439,9 @@ function stageClock(stages, increment, draw) {
       if (side === activeSide()) {
         topMoves(topMoves() + 1);
         topTime(topTime() + increment);
-        if (topMoves() === stages[topStage].moves) {
+        if (topMoves() === stages[topStage()].moves) {
           topStage(topStage + 1);
-          topTime(topTime() + stages[topStage].time);
+          topTime(topTime() + stages[topStage()].time);
         }
         activeSide('bottom');
       }
@@ -448,9 +450,9 @@ function stageClock(stages, increment, draw) {
       if (side === activeSide()) {
         bottomMoves(bottomMoves() + 1);
         bottomTime(bottomTime() + increment);
-        if (bottomMoves() === stages[bottomStage].moves) {
+        if (bottomMoves() === stages[bottomStage()].moves) {
           bottomStage(bottomStage + 1);
-          bottomTime(bottomTime() + stages[bottomStage].time);
+          bottomTime(bottomTime() + stages[bottomStage()].time);
         }
         activeSide('top');
       }

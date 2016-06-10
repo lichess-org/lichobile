@@ -25,7 +25,6 @@ function clockBody(ctrl) {
   const bottomActive = clock.activeSide() === 'bottom';
   const topFlagged = clock.flagged() === 'top';
   const bottomFlagged = clock.flagged() === 'bottom';
-
   return (
     <div className="clockContainer">
       <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' active' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>

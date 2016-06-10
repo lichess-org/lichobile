@@ -407,8 +407,8 @@ function stageClock(stages, increment, draw) {
   console.log(stages);
   const topTime = m.prop(Number(stages[0].time) * 60);
   const bottomTime = m.prop(Number(stages[0].time) * 60);
-  const topMoves = m.prop(stages[0].moves);
-  const bottomMoves = m.prop(stages[0].moves);
+  const topMoves = m.prop(0);
+  const bottomMoves = m.prop(0);
   const topStage = m.prop(0);
   const bottomStage = m.prop(0);
   const activeSide = m.prop(null);
@@ -439,9 +439,10 @@ function stageClock(stages, increment, draw) {
       if (side === activeSide()) {
         topMoves(topMoves() + 1);
         topTime(topTime() + increment);
-        if (topMoves() === stages[topStage()].moves) {
-          topStage(topStage + 1);
-          topTime(topTime() + stages[topStage()].time);
+        if (topMoves() === Number(stages[topStage()].moves)) {
+          topStage(topStage() + 1);
+          topTime(topTime() + Number(stages[topStage()].time) * 60);
+          topMoves(0);
         }
         activeSide('bottom');
       }
@@ -450,9 +451,10 @@ function stageClock(stages, increment, draw) {
       if (side === activeSide()) {
         bottomMoves(bottomMoves() + 1);
         bottomTime(bottomTime() + increment);
-        if (bottomMoves() === stages[bottomStage()].moves) {
-          bottomStage(bottomStage + 1);
-          bottomTime(bottomTime() + stages[bottomStage()].time);
+        if (bottomMoves() === Number(stages[bottomStage()].moves)) {
+          bottomStage(bottomStage() + 1);
+          bottomTime(bottomTime() + Number(stages[bottomStage()].time) * 60);
+          bottomMoves(0);
         }
         activeSide('top');
       }

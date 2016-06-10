@@ -138,11 +138,11 @@ function renderStage (stage, index) {
   const moves = updateMoves.bind(undefined, index);
   return (
     <div className="stageRow">
-      <span> Stage {index + 1}</span>
-      <div className="select_input">
+      <div className="stageRowTitle"> Stage {index + 1}</div>
+      <div className="select_input inline stage stageRowMember">
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, () => m.redraw())}
       </div>
-      <div className={'select_input' + ((index === settings.clock.stage.stages().length) ? 'lastStage' : '')}>
+      <div className={'select_input inline stage stageRowMember ' + ((index === settings.clock.stage.stages().length-1 ) ? 'lastStage' : '')}>
         {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
       </div>
     </div>
@@ -151,6 +151,7 @@ function renderStage (stage, index) {
 
 function updateTime (index, time) {
   let stages = settings.clock.stage.stages();
+
   if (time) {
     stages[index].time = time;
     settings.clock.stage.stages(stages);
@@ -160,6 +161,10 @@ function updateTime (index, time) {
 
 function updateMoves (index, moves) {
   let stages = settings.clock.stage.stages();
-  stages[index].moves = moves;
-  settings.clock.stage.stages(stages);
+  if (moves) {
+    stages[index].moves = moves;
+    settings.clock.stage.stages(stages);
+  }
+
+  return stages[index].moves;
 }

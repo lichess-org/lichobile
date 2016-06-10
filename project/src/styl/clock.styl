@@ -35,8 +35,17 @@
     font-size 8em
 
 .lastStage
-  display none
+  visibility hidden
 
 .stageRow
   display flex
   flex-flow row nowrap
+  align-items center
+  margin-top 15px
+  >.stageRowTitle
+    flex: 2 20%
+  >.select_input
+    &.stage
+      margin-top 0px
+      margin-left 5px
+      flex: 4 40%

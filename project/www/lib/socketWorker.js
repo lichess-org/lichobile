@@ -34,7 +34,7 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.autoReconnect = true;
   this.tryAnotherUrl = false;
   this.urlsPool = [this.socketEndPoint].concat(
-  [9021, 9022, 9023, 9024, 9025, 9026, 9027, 9028, 9029].map(
+  [9025, 9026, 9027, 9028, 9029].map(
     function(e) { return this.socketEndPoint + ':' + e; }.bind(this)
   ));
 
@@ -48,7 +48,7 @@ StrongSocket.prototype = {
     var self = this;
     self.destroy();
     self.autoReconnect = true;
-    var fullUrl = 'ws://' + self.baseUrl() + self.url + '?' + serializeQueryParameters(self.settings.params);
+    var fullUrl = self.baseUrl() + self.url + '?' + serializeQueryParameters(self.settings.params);
     self.debug('connection attempt to ' + fullUrl, true);
     try {
       if (WebSocket) self.ws = new WebSocket(fullUrl);
@@ -241,7 +241,7 @@ StrongSocket.prototype = {
   },
 
   baseUrl: function() {
-    if (this.socketEndPoint === 'socket.en.lichess.org') {
+    if (this.socketEndPoint === 'wss://socket.lichess.org') {
       if (!currentUrl) {
         currentUrl = this.urlsPool[0];
       } else if (this.tryAnotherUrl) {

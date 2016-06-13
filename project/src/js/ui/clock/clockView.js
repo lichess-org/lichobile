@@ -3,6 +3,7 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
+import sound from '../../sound';
 
 export default function view(ctrl) {
   window.StatusBar.hide(); // Put this here instead of ctrl so it is reapplied after a phone lock and unlock
@@ -48,7 +49,7 @@ function clockBody(ctrl) {
 
 function onClockTap(ctrl, side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
-    navigator.vibrate(200);
+    sound.clock();
     ctrl.clockTap(side);
   }
 }

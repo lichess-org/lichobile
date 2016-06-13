@@ -33,7 +33,7 @@ Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 * the [android SDK](http://developer.android.com/sdk/index.html)
 * [SDK packages](http://developer.android.com/sdk/installing/adding-packages.html) API 23
 * last version of Android SDK tools and platform tools
-* [android nkd](http://developer.android.com/tools/sdk/ndk/index.html) for
+* [android ndk](http://developer.android.com/tools/sdk/ndk/index.html) for
   stockfish compilation
 * make sure the `sdk/tools/` directory is in your path, so you can use `android`
   command everywhere.

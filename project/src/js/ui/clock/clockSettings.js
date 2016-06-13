@@ -145,6 +145,9 @@ function renderStage (stage, index) {
       <div className={'select_input inline stage stageRowMember ' + ((index === settings.clock.stage.stages().length-1 ) ? 'lastStage' : '')}>
         {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
       </div>
+      <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? 'lastStage' : '')}>
+        <span className="fa fa-plus-square-o" /> <span className="fa fa-minus-square-o" />
+      </div>
     </div>
   );
 }

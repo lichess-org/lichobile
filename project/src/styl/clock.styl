@@ -34,9 +34,6 @@
     font-family "lichess"!important
     font-size 8em
 
-.lastStage
-  visibility hidden
-
 .stageRow
   display flex
   flex-flow row nowrap
@@ -44,8 +41,15 @@
   margin-top 15px
   >.stageRowTitle
     flex: 2 20%
-  >.select_input
-    &.stage
-      margin-top 0px
-      margin-left 5px
-      flex: 4 40%
+  >.stageRowMember
+    flex: 4 40%
+    margin-top 0px
+    margin-left 5px
+    &.select_input
+      &.lastStage
+        display none
+    &.addSubtractStage
+      display none
+      &.lastStage
+        display block
+        margin-right 2%

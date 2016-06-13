@@ -154,6 +154,7 @@ export default {
 function renderStage (ctrl, stage, index) {
   const time = updateTime.bind(undefined, index);
   const moves = updateMoves.bind(undefined, index);
+  const hidePlus = settings.clock.stage.stages().length >= 5;
   const hideMinus = settings.clock.stage.stages().length <= 2;
   console.log(settings.clock.stage.stages().length);
   return (
@@ -166,7 +167,7 @@ function renderStage (ctrl, stage, index) {
         {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
       </div>
       <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
-        <span className="fa fa-plus-square-o" config={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' twoStageClock' : '')} config={helper.ontouch(() => ctrl.removeStage())}/>
+        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.removeStage())}/>
       </div>
     </div>
   );

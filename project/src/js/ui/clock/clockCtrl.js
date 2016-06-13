@@ -52,7 +52,6 @@ export default function controller() {
   };
 }
 
-
 function simpleClock(time, draw) {
   return incrementClock(time, 0, draw);
 }

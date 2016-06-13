@@ -22,13 +22,32 @@ export default {
       isOpen = false;
     }
 
+    function addStage () {
+      let stages = settings.clock.stage.stages();
+      stages[stages.length-1].moves = stages[stages.length-2].moves;
+      stages.push({time: stages[stages.length-1].time});
+      settings.clock.stage.stages(stages);
+      m.redraw();
+    }
+
+    function removeStage () {
+      let stages = settings.clock.stage.stages();
+      if (stages.length <= 2)
+        return;
+      stages.pop();
+      settings.clock.stage.stages(stages);
+      m.redraw();
+    }
+
     return {
       open,
       close,
       isOpen: function() {
         return isOpen;
       },
-      reload
+      reload,
+      addStage,
+      removeStage
     };
   },
 
@@ -95,7 +114,7 @@ export default {
             <div className="select_input">
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, () => m.redraw())}
             </div>
-            { settings.clock.stage.stages().map(renderStage) }
+            { settings.clock.stage.stages().map(renderStage.bind(undefined, ctrl)) }
           </div>
         );
       }
@@ -132,21 +151,22 @@ export default {
   }
 };
 
-function renderStage (stage, index) {
-  console.log('renderStage');
+function renderStage (ctrl, stage, index) {
   const time = updateTime.bind(undefined, index);
   const moves = updateMoves.bind(undefined, index);
+  const hideMinus = settings.clock.stage.stages().length <= 2;
+  console.log(settings.clock.stage.stages().length);
   return (
     <div className="stageRow">
       <div className="stageRowTitle"> Stage {index + 1}</div>
       <div className="select_input inline stage stageRowMember">
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, () => m.redraw())}
       </div>
-      <div className={'select_input inline stage stageRowMember ' + ((index === settings.clock.stage.stages().length-1 ) ? 'lastStage' : '')}>
+      <div className={'select_input inline stage stageRowMember' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
         {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
       </div>
-      <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? 'lastStage' : '')}>
-        <span className="fa fa-plus-square-o" /> <span className="fa fa-minus-square-o" />
+      <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
+        <span className="fa fa-plus-square-o" config={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' twoStageClock' : '')} config={helper.ontouch(() => ctrl.removeStage())}/>
       </div>
     </div>
   );

@@ -55,8 +55,8 @@ function simpleClock(time, draw) {
 }
 
 function incrementClock(time, increment, draw) {
-  const topTime = m.prop(time);
-  const bottomTime = m.prop(time);
+  const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
+  const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const activeSide = m.prop(null);
   const flagged = m.prop(null);
   const isRunning = m.prop(false);
@@ -136,8 +136,8 @@ function incrementClock(time, increment, draw) {
 }
 
 function delayClock(time, increment, draw) {
-  const topTime = m.prop(time);
-  const bottomTime = m.prop(time);
+  const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
+  const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const topDelay = m.prop(increment);
   const bottomDelay = m.prop(increment);
   const activeSide = m.prop(null);
@@ -230,8 +230,8 @@ function delayClock(time, increment, draw) {
 }
 
 function bronsteinClock(time, increment, draw) {
-  const topTime = m.prop(time);
-  const bottomTime = m.prop(time);
+  const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
+  const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const topDelay = m.prop(increment);
   const bottomDelay = m.prop(increment);
   const activeSide = m.prop(null);

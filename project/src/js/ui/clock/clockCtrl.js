@@ -64,13 +64,13 @@ function incrementClock(time, increment, draw) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime()-1, 0));
+      topTime(Math.max(topTime() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()-1, 0));
+      bottomTime(Math.max(bottomTime() - 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
       }
@@ -151,7 +151,7 @@ function delayClock(time, increment, draw) {
         topDelay(topDelay() - 1);
       }
       else {
-        topTime(Math.max(topTime()-1, 0));
+        topTime(Math.max(topTime() - 1, 0));
         if (topTime() <= 0) {
           flagged('top');
         }
@@ -162,7 +162,7 @@ function delayClock(time, increment, draw) {
         bottomDelay(bottomDelay() - 1);
       }
       else {
-        bottomTime(Math.max(bottomTime()-1, 0));
+        bottomTime(Math.max(bottomTime() - 1, 0));
         if (bottomTime() <= 0) {
           flagged('bottom');
         }
@@ -241,15 +241,15 @@ function bronsteinClock(time, increment, draw) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime()-1, 0));
-      topDelay(Math.max(topDelay()-1, 0));
+      topTime(Math.max(topTime() - 1, 0));
+      topDelay(Math.max(topDelay() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()-1, 0));
-      bottomDelay(Math.max(bottomDelay()-1, 0));
+      bottomTime(Math.max(bottomTime() - 1, 0));
+      bottomDelay(Math.max(bottomDelay() - 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
       }
@@ -327,14 +327,14 @@ function hourglassClock(time, draw) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime()-1, 0));
+      topTime(Math.max(topTime() - 1, 0));
       bottomTime(time - topTime());
       if (topTime() <= 0) {
         flagged('top');
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()-1, 0));
+      bottomTime(Math.max(bottomTime() - 1, 0));
       topTime(time - bottomTime());
       if (bottomTime() <= 0) {
         flagged('bottom');
@@ -397,6 +397,7 @@ function hourglassClock(time, draw) {
     startStop
   };
 }
+
 function stageClock(stages, increment, draw) {
   const topTime = m.prop(Number(stages[0].time) * 60);
   const bottomTime = m.prop(Number(stages[0].time) * 60);
@@ -411,13 +412,13 @@ function stageClock(stages, increment, draw) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime()-1, 0));
+      topTime(Math.max(topTime() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()-1, 0));
+      bottomTime(Math.max(bottomTime()- 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
       }

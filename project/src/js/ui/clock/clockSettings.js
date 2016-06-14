@@ -157,7 +157,7 @@ function renderStage (ctrl, stage, index) {
   const hideMinus = settings.clock.stage.stages().length <= 2;
   return (
     <div className="stageRow">
-      <div className="stageRowTitle"> Stage {index + 1}</div>
+      <div className="stageRowTitle">{index + 1}</div>
       <div className="select_input inline stage stageRowMember">
         {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, () => m.redraw())}
       </div>

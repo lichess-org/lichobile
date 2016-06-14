@@ -1,5 +1,3 @@
-import * as utils from '../../utils';
-import helper from '../helper';
 import settings from '../../settings';
 import m from 'mithril';
 import clockSettings from './clockSettings';
@@ -265,7 +263,6 @@ function bronsteinClock(time, increment, draw) {
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
-        console.log(topDelay());
         topTime(topTime() + (increment - topDelay()));
         topDelay(increment);
       }
@@ -273,7 +270,6 @@ function bronsteinClock(time, increment, draw) {
     else if (activeSide() === 'bottom') {
       if (side === activeSide()) {
         activeSide('top');
-        console.log(bottomDelay());
         bottomTime(bottomTime() + (increment - bottomDelay()));
         bottomDelay(increment);
       }
@@ -402,8 +398,6 @@ function hourglassClock(time, draw) {
   };
 }
 function stageClock(stages, increment, draw) {
-  console.log('stageClock');
-  console.log(stages);
   const topTime = m.prop(Number(stages[0].time) * 60);
   const bottomTime = m.prop(Number(stages[0].time) * 60);
   const topMoves = m.prop(0);
@@ -488,6 +482,24 @@ function stageClock(stages, increment, draw) {
     }
   }
 
+  function topRemainingMoves() {
+    if (stages[topStage()].moves) {
+      return Number(stages[topStage()].moves) - topMoves();
+    }
+    else {
+      return null;
+    }
+  }
+
+  function bottomRemainingMoves() {
+    if (stages[bottomStage()].moves) {
+      return Number(stages[bottomStage()].moves) - bottomMoves();
+    }
+    else {
+      return null;
+    }
+  }
+
   return {
     topTime,
     bottomTime,
@@ -496,6 +508,10 @@ function stageClock(stages, increment, draw) {
     isRunning,
     tick,
     clockHit,
-    startStop
+    startStop,
+    topMoves,
+    bottomMoves,
+    topRemainingMoves,
+    bottomRemainingMoves
   };
 }

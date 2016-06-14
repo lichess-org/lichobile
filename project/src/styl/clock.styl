@@ -12,13 +12,25 @@
   width 93%
   height 40%
   display flex
-  flex-flow row nowrap
+  flex-flow column nowrap
   align-items center
   justify-content space-around
   &.active
     background gold
   &.flagged
     background red
+  >.clockTapAreaContent
+    flex: 1 33%
+    &.top
+      display flex
+      flex-flow row nowrap
+      align-items flex-start
+    &.bottom
+      display flex
+      flex-flow row nowrap
+      align-items flex-end
+    >.movesHidden
+      display none
 
 .clockControls
   width 70%

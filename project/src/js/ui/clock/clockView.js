@@ -26,12 +26,19 @@ function clockBody(ctrl) {
   const bottomActive = clock.activeSide() === 'bottom';
   const topFlagged = clock.flagged() === 'top';
   const bottomFlagged = clock.flagged() === 'bottom';
+
   return (
     <div className="clockContainer">
       <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' active' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
-        <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
-          { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
-        </span>
+        <div className="clockTapAreaContent top">
+          <span className={clock.topRemainingMoves ? '' : 'movesHidden'}>Moves to Time Control: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
+        </div>
+        <div className="clockTapAreaContent">
+          <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
+            { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
+          </span>
+        </div>
+        <div className="clockTapAreaContent"/>
       </div>
       <div className="clockControls">
         <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
@@ -39,9 +46,15 @@ function clockBody(ctrl) {
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettingsCtrl.open())} />
       </div>
       <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' active' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
-        <span className={'clockTime' + (bottomFlagged ? ' flagged' : '')}>
-          { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
-        </span>
+        <div className="clockTapAreaContent"/>
+        <div className="clockTapAreaContent">
+          <span className={'clockTime' + (bottomFlagged ? ' flagged' : '')}>
+            { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
+          </span>
+        </div>
+        <div className="clockTapAreaContent bottom">
+          <span className={clock.bottomRemainingMoves ? '' : 'movesHidden'}>Moves to Time Control: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
+        </div>
       </div>
     </div>
   );

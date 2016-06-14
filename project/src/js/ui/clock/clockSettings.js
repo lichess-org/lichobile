@@ -108,13 +108,12 @@ export default {
         );
       },
       stage: function () {
-        console.log('stage');
         return (
           <div key="hourglassSettings" className="clockSettingParameters">
+            { settings.clock.stage.stages().map(renderStage.bind(undefined, ctrl)) }
             <div className="select_input">
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, () => m.redraw())}
             </div>
-            { settings.clock.stage.stages().map(renderStage.bind(undefined, ctrl)) }
           </div>
         );
       }
@@ -156,7 +155,6 @@ function renderStage (ctrl, stage, index) {
   const moves = updateMoves.bind(undefined, index);
   const hidePlus = settings.clock.stage.stages().length >= 5;
   const hideMinus = settings.clock.stage.stages().length <= 2;
-  console.log(settings.clock.stage.stages().length);
   return (
     <div className="stageRow">
       <div className="stageRowTitle"> Stage {index + 1}</div>

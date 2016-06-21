@@ -29,7 +29,7 @@ function clockBody(ctrl) {
     <div className="clockContainer">
       <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' active' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
         <div className="clockTapAreaContent top">
-          <span className={clock.topRemainingMoves ? '' : 'movesHidden'}>Moves to Time Control: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
+          <span className={clock.topRemainingMoves ? '' : 'movesHidden'}>Moves Remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
         </div>
         <div className="clockTapAreaContent">
           <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
@@ -51,7 +51,7 @@ function clockBody(ctrl) {
           </span>
         </div>
         <div className="clockTapAreaContent bottom">
-          <span className={clock.bottomRemainingMoves ? '' : 'movesHidden'}>Moves to Time Control: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
+          <span className={clock.bottomRemainingMoves ? '' : 'movesHidden'}>Moves Remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
         </div>
       </div>
     </div>

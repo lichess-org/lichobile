@@ -72,6 +72,11 @@
   window.plugins.insomnia.allowSleepAgain = noop;
   window.plugins.insomnia.keepAwake = noop;
 
+  // status bar
+  window.StatusBar = {};
+  window.StatusBar.show = noop;
+  window.StatusBar.hide = noop;
+
   // device
   window.device = {
     cordova: 'browser',

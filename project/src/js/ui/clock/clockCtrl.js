@@ -31,7 +31,12 @@ export default function controller() {
     clockObj().startStop();
   }
 
+  function onResume () {
+    window.StatusBar.hide();
+  }
+
   window.plugins.insomnia.keepAwake();
+  document.addEventListener('resume', onResume);
 
   return {
     isRunning,
@@ -42,6 +47,7 @@ export default function controller() {
     clockTap,
     onunload: () => {
       window.plugins.insomnia.allowSleepAgain();
+      document.removeEventListener('resume', onResume);
       window.StatusBar.show();
       if (clockObj().clockInterval) {
         clearInterval(clockObj().clockInterval);

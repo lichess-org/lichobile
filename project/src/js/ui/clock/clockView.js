@@ -1,12 +1,10 @@
 import h from '../helper';
 import layout from '../layout';
-import i18n from '../../i18n';
 import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
 import sound from '../../sound';
 
 export default function view(ctrl) {
-  window.StatusBar.hide(); // Put this here instead of ctrl so it is reapplied after a phone lock and unlock
   const body = clockBody.bind(undefined, ctrl);
   const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl);
 

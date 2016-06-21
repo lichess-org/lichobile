@@ -9,12 +9,12 @@ export default function controller() {
 
   function reload() {
     clockMap = {
-      'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60, m.redraw),
-      'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment()), m.redraw),
-      'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment()), m.redraw),
-      'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment()), m.redraw),
-      'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60, m.redraw),
-      'stage': stageClock.bind(undefined, settings.clock.stage.stages(), Number(settings.clock.stage.increment()), m.redraw)
+      'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
+      'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment())),
+      'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment())),
+      'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment())),
+      'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60),
+      'stage': stageClock.bind(undefined, settings.clock.stage.stages(), Number(settings.clock.stage.increment()))
     };
     clockObj(clockMap[settings.clock.clockType()]());
   }
@@ -56,11 +56,11 @@ export default function controller() {
   };
 }
 
-function simpleClock(time, draw) {
-  return incrementClock(time, 0, draw);
+function simpleClock(time) {
+  return incrementClock(time, 0);
 }
 
-function incrementClock(time, increment, draw) {
+function incrementClock(time, increment) {
   const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const activeSide = m.prop(null);
@@ -81,7 +81,7 @@ function incrementClock(time, increment, draw) {
         flagged('bottom');
       }
     }
-    draw();
+    m.redraw();
   }
 
   function clockHit (side) {
@@ -112,7 +112,7 @@ function incrementClock(time, increment, draw) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    draw();
+    m.redraw();
   }
 
   function startStop () {
@@ -141,7 +141,7 @@ function incrementClock(time, increment, draw) {
   };
 }
 
-function delayClock(time, increment, draw) {
+function delayClock(time, increment) {
   const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const topDelay = m.prop(increment);
@@ -174,7 +174,7 @@ function delayClock(time, increment, draw) {
         }
       }
     }
-    draw();
+    m.redraw();
   }
 
   function clockHit (side) {
@@ -205,7 +205,7 @@ function delayClock(time, increment, draw) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    draw();
+    m.redraw();
   }
 
   function startStop () {
@@ -235,7 +235,7 @@ function delayClock(time, increment, draw) {
   };
 }
 
-function bronsteinClock(time, increment, draw) {
+function bronsteinClock(time, increment) {
   const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
   const topDelay = m.prop(increment);
@@ -260,7 +260,7 @@ function bronsteinClock(time, increment, draw) {
         flagged('bottom');
       }
     }
-    draw();
+    m.redraw();
   }
 
   function clockHit (side) {
@@ -293,7 +293,7 @@ function bronsteinClock(time, increment, draw) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    draw();
+    m.redraw();
   }
 
   function startStop () {
@@ -323,7 +323,7 @@ function bronsteinClock(time, increment, draw) {
   };
 }
 
-function hourglassClock(time, draw) {
+function hourglassClock(time) {
   const topTime = m.prop(time/2);
   const bottomTime = m.prop(time/2);
   const activeSide = m.prop(null);
@@ -346,7 +346,7 @@ function hourglassClock(time, draw) {
         flagged('bottom');
       }
     }
-    draw();
+    m.redraw();
   }
 
   function clockHit (side) {
@@ -375,7 +375,7 @@ function hourglassClock(time, draw) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    draw();
+    m.redraw();
   }
 
   function startStop () {
@@ -404,7 +404,7 @@ function hourglassClock(time, draw) {
   };
 }
 
-function stageClock(stages, increment, draw) {
+function stageClock(stages, increment) {
   const topTime = m.prop(Number(stages[0].time) * 60);
   const bottomTime = m.prop(Number(stages[0].time) * 60);
   const topMoves = m.prop(0);
@@ -429,7 +429,7 @@ function stageClock(stages, increment, draw) {
         flagged('bottom');
       }
     }
-    draw();
+    m.redraw();
   }
 
   function clockHit (side) {
@@ -472,7 +472,7 @@ function stageClock(stages, increment, draw) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    draw();
+    m.redraw();
   }
 
   function startStop () {

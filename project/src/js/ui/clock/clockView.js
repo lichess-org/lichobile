@@ -1,4 +1,5 @@
 import h from '../helper';
+import m from 'mithril';
 import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
@@ -42,6 +43,7 @@ function clockBody(ctrl) {
         <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
         <span className="fa fa-refresh" config={h.ontouch(() => ctrl.reload())} />
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettingsCtrl.open())} />
+        <span className="fa fa-home" config={h.ontouch(() => m.route('/'))} />
       </div>
       <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' active' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent"/>

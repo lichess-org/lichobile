@@ -35,6 +35,7 @@ export default function controller() {
     window.StatusBar.hide();
   }
 
+  window.StatusBar.hide();
   window.plugins.insomnia.keepAwake();
   document.addEventListener('resume', onResume);
 

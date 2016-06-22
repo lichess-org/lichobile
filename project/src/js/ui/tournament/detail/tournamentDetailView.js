@@ -108,13 +108,24 @@ function tournamentHeader(data, time, timeText) {
   return (
     <div key="header" className="tournamentHeader">
       <div className="tournamentInfoTime">
-        <strong className="tournamentInfo" data-icon={gameIcon(variantKey(data))}>
+        <strong className="tournamentInfo withIcon" data-icon={gameIcon(variantKey(data))}>
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
         <div className="timeInfo">
           <strong> {timeInfo(time, timeText)} </strong>
         </div>
       </div>
+      { data.verdicts.list.length > 0 ?
+        <div className={'tournamentConditions ' + (data.verdicts.accepted ? 'accepted' : 'rejected') } data-icon="7">
+          { data.verdicts.list.map(o => {
+            return (
+              <p className={'condition' + (o.accepted ? 'accepted' : 'rejected')}>
+                { o.condition }
+              </p>
+            );
+          })}
+        </div> : null
+      }
       <div className="tournamentCreatorInfo">
         { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
         &nbsp;•&nbsp;
@@ -125,7 +136,10 @@ function tournamentHeader(data, time, timeText) {
 }
 
 function joinButton(ctrl) {
-  if (!session.isConnected() || ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+  if (!session.isConnected() ||
+    ctrl.tournament().isFinished ||
+    settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0 ||
+    !ctrl.tournament().verdicts.accepted) {
     return null;
   }
 

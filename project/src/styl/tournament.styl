@@ -98,9 +98,29 @@ td.tournamentPoints
 .tournamentHeader
   padding 10px
 
-.tournamentInfoTime
+.tournamentInfoTime, .tournamentConditions
   padding-bottom 5px
   border-bottom 1px solid borderColor
+
+.tournamentConditions
+  font-size 0.8em
+  position relative
+  padding-left 23px
+  &.accepted
+    color green
+  &.rejected
+    color red
+  > .condition
+    &.accepted
+      color green
+    &.rejected
+      color red
+  &:before
+    font-size 18px
+    position absolute
+    top 10px
+    left 0
+    opacity 0.7
 
 .tournamentCreatorInfo
   font-size 0.85em

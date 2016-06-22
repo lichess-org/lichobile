@@ -47,6 +47,7 @@ export default {
       })
       .catch(err => {
         console.error(err);
+        window.plugins.toast.show('Import failed. Please make sure the PGN you entered is valid', 'short', 'center');
         importing(false);
         m.redraw();
       });

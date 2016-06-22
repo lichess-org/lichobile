@@ -23,7 +23,7 @@ export function tellWorker(worker, topic, payload) {
 }
 
 export function askWorker(worker, msg, callback) {
-  return new Promise(function(resolve) {
+  return new Promise(function(resolve, reject) {
     function listen(e) {
       if (e.data.topic === msg.topic) {
         worker.removeEventListener('message', listen);
@@ -31,6 +31,13 @@ export function askWorker(worker, msg, callback) {
           callback(e.data.payload);
         } else {
           resolve(e.data.payload);
+        }
+      } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
+        worker.removeEventListener('message', listen);
+        if (callback) {
+          throw e.data.payload.error
+        } else {
+          reject(e.data.payload.error);
         }
       }
     }

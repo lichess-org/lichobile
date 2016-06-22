@@ -1,5 +1,4 @@
 import m from 'mithril';
-import i18n from '../../i18n';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
@@ -57,7 +56,7 @@ export default {
         return (
           <div key="simpleSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.simple.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.simple.time, false, onChange)}
             </div>
           </div>
         );
@@ -66,10 +65,10 @@ export default {
         return (
           <div key="incrementSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.increment.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.increment.time, false, onChange)}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, onChange)}
             </div>
           </div>
         );
@@ -78,10 +77,10 @@ export default {
         return (
           <div key="delaySettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.delay.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.delay.time, false, onChange)}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, onChange)}
             </div>
           </div>
         );
@@ -90,10 +89,10 @@ export default {
         return (
           <div key="bronsteinSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.bronstein.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.bronstein.time, false, onChange)}
             </div>
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, onChange)}
             </div>
           </div>
         );
@@ -102,7 +101,7 @@ export default {
         return (
           <div key="hourglassSettings" className="clockSettingParameters">
             <div className="select_input">
-              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.hourglass.time, false, () => m.redraw())}
+              {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.hourglass.time, false, onChange)}
             </div>
           </div>
         );
@@ -112,7 +111,7 @@ export default {
           <div key="hourglassSettings" className="clockSettingParameters">
             { settings.clock.stage.stages().map(renderStage.bind(undefined, ctrl)) }
             <div className="select_input">
-              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, () => m.redraw())}
+              {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, onChange)}
             </div>
           </div>
         );
@@ -128,7 +127,7 @@ export default {
             <div>
               <div className="action">
                 <div className="select_input">
-                  {formWidgets.renderSelect('Clock', 'clock', settings.clock.availableClocks, settings.clock.clockType, false, () => m.redraw())}
+                  {formWidgets.renderSelect('Clock', 'clock', settings.clock.availableClocks, settings.clock.clockType, false, onChange)}
                 </div>
                 {clockSettingsView[settings.clock.clockType()]()}
               </div>
@@ -159,10 +158,10 @@ function renderStage (ctrl, stage, index) {
     <div className="stageRow">
       <div className="stageRowTitle">{index + 1}</div>
       <div className="select_input inline stage stageRowMember">
-        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, () => m.redraw())}
+        {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, time, false, onChange)}
       </div>
       <div className={'select_input inline stage stageRowMember' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
-        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, () => m.redraw())}
+        {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, onChange)}
       </div>
       <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
         <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.removeStage())}/>
@@ -189,4 +188,9 @@ function updateMoves (index, moves) {
   }
 
   return stages[index].moves;
+}
+
+function onChange () {
+  window.StatusBar.hide();
+  m.redraw();
 }

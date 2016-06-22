@@ -1,4 +1,5 @@
 import settings from '../../settings';
+import sound from '../../sound';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
@@ -74,12 +75,16 @@ function incrementClock(time, increment) {
       topTime(Math.max(topTime() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     else if (activeSide() === 'bottom') {
       bottomTime(Math.max(bottomTime() - 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     m.redraw();
@@ -161,6 +166,8 @@ function delayClock(time, increment) {
         topTime(Math.max(topTime() - 1, 0));
         if (topTime() <= 0) {
           flagged('top');
+          sound.dong();
+          clearInterval(clockInterval);
         }
       }
     }
@@ -172,6 +179,8 @@ function delayClock(time, increment) {
         bottomTime(Math.max(bottomTime() - 1, 0));
         if (bottomTime() <= 0) {
           flagged('bottom');
+          sound.dong();
+          clearInterval(clockInterval);
         }
       }
     }
@@ -252,6 +261,8 @@ function bronsteinClock(time, increment) {
       topDelay(Math.max(topDelay() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     else if (activeSide() === 'bottom') {
@@ -259,6 +270,8 @@ function bronsteinClock(time, increment) {
       bottomDelay(Math.max(bottomDelay() - 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     m.redraw();
@@ -338,6 +351,8 @@ function hourglassClock(time) {
       bottomTime(time - topTime());
       if (topTime() <= 0) {
         flagged('top');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     else if (activeSide() === 'bottom') {
@@ -345,6 +360,8 @@ function hourglassClock(time) {
       topTime(time - bottomTime());
       if (bottomTime() <= 0) {
         flagged('bottom');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     m.redraw();
@@ -422,12 +439,16 @@ function stageClock(stages, increment) {
       topTime(Math.max(topTime() - 1, 0));
       if (topTime() <= 0) {
         flagged('top');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     else if (activeSide() === 'bottom') {
       bottomTime(Math.max(bottomTime()- 1, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
+        sound.dong();
+        clearInterval(clockInterval);
       }
     }
     m.redraw();

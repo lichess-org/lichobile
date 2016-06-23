@@ -12,6 +12,8 @@ function renderBody() {
       m('li.list_item', formWidgets.renderCheckbox(i18n('boardCoordinates'), 'coords', settings.game.coords)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceAnimation'), 'animations',
         settings.game.animations)),
+      m('li.list_item', formWidgets.renderCheckbox('Magnified dragged piece', 'magnified',
+        settings.game.magnified)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('boardHighlights'), 'highlights',
         settings.game.highlights)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',

@@ -42,7 +42,8 @@ function makeConfig(data, fen, flip) {
     },
     draggable: {
       distance: 3,
-      squareTarget: true
+      squareTarget: true,
+      magnified: settings.game.magnified()
     }
   };
 }

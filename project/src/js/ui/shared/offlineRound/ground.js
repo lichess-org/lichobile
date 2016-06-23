@@ -29,10 +29,10 @@ function makeConfig(data, fen) {
       enabled: false
     },
     draggable: {
-      showGhost: data.pref.highlight,
       centerPiece: data.pref.centerPiece,
       distance: 3,
-      squareTarget: true
+      squareTarget: true,
+      magnified: settings.game.magnified()
     }
   };
 }

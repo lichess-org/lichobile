@@ -65,7 +65,8 @@ export default {
     animations: localstorageprop('settings.gameAnimations', true),
     highlights: localstorageprop('settings.boardHighlights', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
-    coords: localstorageprop('settings.coords', true)
+    coords: localstorageprop('settings.coords', true),
+    magnified: localstorageprop('settings.pieceMagnified', true)
   },
 
   analyse: {

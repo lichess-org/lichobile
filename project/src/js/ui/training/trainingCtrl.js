@@ -259,11 +259,12 @@ export default function ctrl() {
         duration: 300
       },
       premovable: {
-        enabled: true
+        enabled: false
       },
       draggable: {
         distance: 3,
-        squareTarget: true
+        squareTarget: true,
+        magnified: settings.game.magnified()
       }
     };
     if (this.chessground) this.chessground.set(chessgroundConf);

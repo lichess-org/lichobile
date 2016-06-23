@@ -135,13 +135,15 @@ function renderOpponents(ctrl) {
   return (
     <div className="analyseOpponentsWrapper">
       <div className="analyseOpponents">
-        <div className="opponent withIcon" data-icon={player.color === 'white' ? 'J' : 'K'}>
+        <div className="opponent withIcon">
+          <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
           { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
             ' (' + getChecksCount(ctrl, player.color) + ')' : null
           }
         </div>
-        <div className="opponent withIcon" data-icon={opponent.color === 'white' ? 'J' : 'K'}>
+        <div className="opponent withIcon">
+          <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}
           { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
             ' (' + getChecksCount(ctrl, opponent.color) + ')' : null

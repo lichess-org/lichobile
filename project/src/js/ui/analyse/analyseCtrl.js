@@ -99,7 +99,7 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
-    const color = this.data.game.player;
+    const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,

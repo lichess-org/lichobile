@@ -110,7 +110,7 @@ function renderActionsBar(ctrl) {
       config: helper.ontouch(ctrl.menu.open)
     })
   ];
-  return m('section.#training_actions.actions_bar', vdom.concat(
+  return m('section#training_actions.actions_bar', vdom.concat(
     ctrl.data.mode === 'view' ?
       renderViewControls(ctrl) :
       m('button.action_bar_button.training_action[data-icon=b]', {
@@ -121,8 +121,8 @@ function renderActionsBar(ctrl) {
 }
 
 function renderViewControls(ctrl) {
-  var history = ctrl.data.replay.history;
-  var step = ctrl.data.replay.step;
+  const history = ctrl.data.replay.history;
+  const step = ctrl.data.replay.step;
   return [
     m('button.action_bar_button.training_action[data-icon=G]', {
       key: 'continueTraining',
@@ -131,6 +131,10 @@ function renderViewControls(ctrl) {
     m('button.action_bar_button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
       config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
+    }),
+    m('button.action_bar_button.training_action[data-icon=A]', {
+      key: 'analysePuzzle',
+      config: helper.ontouch(() => m.route(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',

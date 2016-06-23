@@ -306,6 +306,10 @@ export default function ctrl() {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`);
   }.bind(this);
 
+  this.getFen = function() {
+    return this.data.replay.history[this.data.replay.step].fen;
+  }.bind(this);
+
   this.setDifficulty = function(id) {
     return xhr.setDifficulty(id)
       .then(pushState)

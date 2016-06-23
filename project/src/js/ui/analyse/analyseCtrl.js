@@ -40,7 +40,7 @@ export default function controller() {
   this.importPgnPopup = importPgnPopup.controller(this);
 
   this.vm = {
-    fromGame: gameId !== undefined,
+    shouldGoBack: gameId !== undefined || fen !== undefined,
     path: null,
     pathStr: '',
     initialPathStr: '',
@@ -99,8 +99,7 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
-    const initialColor = this.data.game.initialColor || 'white';
-    const color = s.ply % 2 === 0 ? initialColor : oppositeColor(initialColor);
+    const color = this.data.game.player;
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,
@@ -375,7 +374,7 @@ export default function controller() {
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    this.init(makeDefaultData(fen));
+    this.init(makeDefaultData(fen, orientation));
   }
 
   window.plugins.insomnia.keepAwake();

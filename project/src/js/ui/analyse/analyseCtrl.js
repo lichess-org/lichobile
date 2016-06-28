@@ -249,7 +249,8 @@ export default function controller() {
   const allowCeval = function() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'chess960', 'fromPosition', 'kingOfTheHill'].indexOf(this.data.game.variant.key) !== -1;
+    ) && ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck']
+    .indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {
@@ -270,7 +271,8 @@ export default function controller() {
   }
 
   this.canUseCeval = function() {
-    return this.vm.step.dests !== '' && (!this.vm.step.oEval || !this.analyse.nextStepEvalBest(this.vm.path));
+    return this.vm.step.dests !== '' && (!this.vm.step.oEval ||
+      !this.analyse.nextStepEvalBest(this.vm.path));
   }.bind(this);
 
   this.nextStepBest = function() {

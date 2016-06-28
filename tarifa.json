@@ -177,6 +177,7 @@
       "variables": {
         "SENDER_ID": "0000000000000"
       }
-    }
+    },
+    "cordova-plugin-fullscreen": "cordova-plugin-fullscreen"
   }
 }

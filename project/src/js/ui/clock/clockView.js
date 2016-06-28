@@ -3,7 +3,6 @@ import m from 'mithril';
 import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeinSecs } from '../../utils';
-import sound from '../../sound';
 
 export default function view(ctrl) {
   const body = clockBody.bind(undefined, ctrl);
@@ -76,7 +75,6 @@ function clockBody(ctrl) {
 
 function onClockTap(ctrl, side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
-    sound.clock();
     ctrl.clockTap(side);
   }
 }

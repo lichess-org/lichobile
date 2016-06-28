@@ -26,6 +26,18 @@ function clockBody(ctrl) {
   const topFlagged = clock.flagged() === 'top';
   const bottomFlagged = clock.flagged() === 'bottom';
 
+  const topClockTimeClass = [
+    'clockTime',
+    topFlagged ? 'flagged' : '',
+    clock.topTime() >= 3600 ? 'long' : ''
+  ].join(' ');
+
+  const bottomClockTimeClass = [
+    'clockTime',
+    bottomFlagged ? 'flagged' : '',
+    clock.bottomTime() >= 3600 ? 'long' : ''
+  ].join(' ');
+
   return (
     <div className="clockContainer">
       <div key="topClockTapArea" className={'clockTapArea top' + (topActive ? ' running' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
@@ -35,7 +47,7 @@ function clockBody(ctrl) {
         </div> : null
         }
         <div className="clockTapAreaContent">
-          <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
+          <span className={topClockTimeClass}>
             { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
           </span>
         </div>
@@ -54,7 +66,7 @@ function clockBody(ctrl) {
         <div className="clockTapAreaContent"/> : null
         }
         <div className="clockTapAreaContent">
-          <span className={'clockTime' + (bottomFlagged ? ' flagged' : '')}>
+          <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
           </span>
         </div>

@@ -112,7 +112,7 @@ function tournamentHeader(data, time, timeText) {
   ].join(' ');
   return (
     <div key="header" className="tournamentHeader">
-      <div className="tournamentInfoTime">
+      <div className="tournamentInfoTime clearfix">
         <strong className="tournamentInfo withIcon" data-icon={gameIcon(variantKey(data))}>
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>

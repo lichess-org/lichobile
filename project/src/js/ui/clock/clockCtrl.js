@@ -37,7 +37,10 @@ export default function controller() {
   }
 
   window.StatusBar.hide();
-  window.AndroidFullScreen.immersiveMode();
+
+  if (window.cordova.platformId === 'android') {
+    window.AndroidFullScreen.immersiveMode();
+  }
   window.plugins.insomnia.keepAwake();
   document.addEventListener('resume', hideStatusBar);
   window.addEventListener('resize', hideStatusBar);
@@ -54,7 +57,9 @@ export default function controller() {
       document.removeEventListener('resume', hideStatusBar);
       window.removeEventListener('resize', hideStatusBar);
       window.StatusBar.show();
-      window.AndroidFullScreen.showSystemUI();
+      if (window.cordova.platformId === 'android') {
+        window.AndroidFullScreen.showSystemUI();
+      }
       if (clockObj().clockInterval) {
         clearInterval(clockObj().clockInterval);
       }

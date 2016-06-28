@@ -51,9 +51,6 @@ function clockBody(ctrl) {
             { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
           </span>
         </div>
-        { clock.topRemainingMoves ?
-        <div /> : null
-        }
       </div>
       <div className="clockControls">
         <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
@@ -62,9 +59,6 @@ function clockBody(ctrl) {
         <span className="fa fa-home" config={h.ontouch(() => m.route('/'))} />
       </div>
       <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' running' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
-        { clock.bottomRemainingMoves ?
-        <div /> : null
-        }
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }

@@ -105,6 +105,11 @@ function tournamentContentStarted(ctrl) {
 function tournamentHeader(data, time, timeText) {
   const variant = variantDisplay(data);
   const control = formatTournamentTimeControl(data.clock);
+  const conditionsClass = [
+    'tournamentConditions',
+    session.isConnected() ? '' : 'anonymous',
+    data.verdicts.accepted ? 'accepted' : 'rejected'
+  ].join(' ');
   return (
     <div key="header" className="tournamentHeader">
       <div className="tournamentInfoTime">
@@ -116,7 +121,7 @@ function tournamentHeader(data, time, timeText) {
         </div>
       </div>
       { data.verdicts.list.length > 0 ?
-        <div className={'tournamentConditions ' + (data.verdicts.accepted ? 'accepted' : 'rejected') } data-icon="7">
+        <div className={conditionsClass} data-icon="7">
           { data.verdicts.list.map(o => {
             return (
               <p className={'condition' + (o.accepted ? 'accepted' : 'rejected')}>

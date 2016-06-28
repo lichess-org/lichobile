@@ -28,16 +28,20 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={'clockTapArea' + (topActive ? ' running' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
-        <div className="clockTapAreaContent top">
-          <span className={clock.topRemainingMoves ? '' : 'movesHidden'}>Moves Remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
-        </div>
+      <div key="topClockTapArea" className={'clockTapArea top' + (topActive ? ' running' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
+        { clock.topRemainingMoves ?
+        <div className="clockTapAreaContent">
+          <span>Moves Remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
+        </div> : null
+        }
         <div className="clockTapAreaContent">
           <span className={'clockTime' + (topFlagged ? ' flagged' : '')}>
             { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
           </span>
         </div>
-        <div className="clockTapAreaContent"/>
+        { clock.topRemainingMoves ?
+        <div className="clockTapAreaContent"/> : null
+        }
       </div>
       <div className="clockControls">
         <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
@@ -46,15 +50,19 @@ function clockBody(ctrl) {
         <span className="fa fa-home" config={h.ontouch(() => m.route('/'))} />
       </div>
       <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' running' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
-        <div className="clockTapAreaContent"/>
+        { clock.bottomRemainingMoves ?
+        <div className="clockTapAreaContent"/> : null
+        }
         <div className="clockTapAreaContent">
           <span className={'clockTime' + (bottomFlagged ? ' flagged' : '')}>
             { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
           </span>
         </div>
-        <div className="clockTapAreaContent bottom">
-          <span className={clock.bottomRemainingMoves ? '' : 'movesHidden'}>Moves Remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
-        </div>
+        { clock.bottomRemainingMoves ?
+        <div className="clockTapAreaContent">
+          <span>Moves Remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
+        </div> : null
+        }
       </div>
     </div>
   );

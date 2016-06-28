@@ -25,6 +25,20 @@ function clockBody(ctrl) {
   const topFlagged = clock.flagged() === 'top';
   const bottomFlagged = clock.flagged() === 'bottom';
 
+  const topClockClass = [
+    'clockTapArea',
+    'top',
+    topActive && clock.isRunning() ? 'running' : '',
+    topFlagged ? 'flagged' : ''
+  ].join(' ');
+
+  const bottomClockClass = [
+    'clockTapArea',
+    'bottom',
+    bottomActive && clock.isRunning() ? 'running' : '',
+    bottomFlagged ? 'flagged' : ''
+  ].join(' ');
+
   const topClockTimeClass = [
     'clockTime',
     topFlagged ? 'flagged' : '',
@@ -39,7 +53,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={'clockTapArea top' + (topActive ? ' running' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
+      <div key="topClockTapArea" className={topClockClass} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
         { clock.topRemainingMoves ?
         <div className="clockStageInfo">
           <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
@@ -57,7 +71,7 @@ function clockBody(ctrl) {
         <span className="fa fa-cog" config={h.ontouch(() => ctrl.clockSettingsCtrl.open())} />
         <span className="fa fa-home" config={h.ontouch(() => m.route('/'))} />
       </div>
-      <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' running' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
+      <div key="bottomClockTapArea" className={bottomClockClass} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }

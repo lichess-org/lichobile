@@ -42,8 +42,8 @@ function clockBody(ctrl) {
     <div className="clockContainer">
       <div key="topClockTapArea" className={'clockTapArea top' + (topActive ? ' running' : '') + (topFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
         { clock.topRemainingMoves ?
-        <div className="clockTapAreaContent">
-          <span>Moves Remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
+        <div className="clockStageInfo">
+          <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
         </div> : null
         }
         <div className="clockTapAreaContent">
@@ -52,7 +52,7 @@ function clockBody(ctrl) {
           </span>
         </div>
         { clock.topRemainingMoves ?
-        <div className="clockTapAreaContent"/> : null
+        <div /> : null
         }
       </div>
       <div className="clockControls">
@@ -63,7 +63,7 @@ function clockBody(ctrl) {
       </div>
       <div key="bottomClockTapArea" className={'clockTapArea' + (bottomActive ? ' running' : '')  + (bottomFlagged ? ' flagged' : '')} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         { clock.bottomRemainingMoves ?
-        <div className="clockTapAreaContent"/> : null
+        <div /> : null
         }
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
@@ -71,8 +71,8 @@ function clockBody(ctrl) {
           </span>
         </div>
         { clock.bottomRemainingMoves ?
-        <div className="clockTapAreaContent">
-          <span>Moves Remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
+        <div className="clockStageInfo">
+          <span>Moves remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
         </div> : null
         }
       </div>

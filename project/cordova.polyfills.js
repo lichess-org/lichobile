@@ -77,6 +77,11 @@
   window.StatusBar.show = noop;
   window.StatusBar.hide = noop;
 
+  // fullscreen
+  window.AndroidFullScreen = {};
+  window.AndroidFullScreen.showSystemUI = noop;
+  window.AndroidFullScreen.immersiveMode = noop;
+
   // device
   window.device = {
     cordova: 'browser',

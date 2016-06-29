@@ -102,6 +102,10 @@
       font-size 20px
       text-align left
       margin-top 5px
+  @media only screen and (orientation: landscape)
+    &.crazy
+      width calc((100vh - 50px) / 8 * 3)
+      max-width calc((100vh - 50px) / 8 * 3)
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -358,6 +362,10 @@
   display flex
   flex-flow row nowrap
   align-items center
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8 * 5)
+    height calc((100vh - 50px) / 8 + 10px)
+    max-height 55px
 
 .pocket > piece
   width calc(100vw / 8)
@@ -366,16 +374,19 @@
   max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   background-position center
   position relative
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8)
+    height calc((100vh - 50px) / 8)
+    max-width 50px
+    max-height 50px
 
 .pocket > piece:first-child
   border-radius: 3px 0 0 3px;
 
 .pocket.usable > piece
-  cursor: pointer;
   transition: background-color 0.13s;
 
 .pocket > piece[data-nb='0']
-  cursor: auto;
   opacity: 0.1;
 
 .pocket > piece::after

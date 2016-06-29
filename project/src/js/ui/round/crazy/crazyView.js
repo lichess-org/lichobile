@@ -3,7 +3,6 @@ import settings from '../../../settings';
 import crazyDrag from './crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import gameApi from '../../../lichess/game';
-import m from 'mithril';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
@@ -21,34 +20,35 @@ export default {
       usable ? 'usable' : ''
     ].join(' ');
 
-    return m('div', {
-        className,
-        config: function(el, isUpdate, ctx) {
-          if (!isUpdate) {
-            const onstart = crazyDrag.bind(undefined, ctrl);
-            const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-            const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
-            el.addEventListener('touchstart', onstart);
-            document.addEventListener('touchmove', onmove);
-            document.addEventListener('touchend', onend);
-            ctx.onunload = function() {
-              el.removeEventListener('touchstart', onstart);
-              document.removeEventListener('touchmove', onmove);
-              document.removeEventListener('touchend', onend);
-            };
-          }
-          if (ctx.flip === ctrl.vm.flip || !usablePos) return;
-          ctx.flip = ctrl.vm.flip;
-        }
-      },
-      pieceRoles.map(role => {
-        return m('piece', {
-          'data-role': role,
-          'data-color': color,
-          'data-nb': pocket[role] || 0,
-          className: role + ' ' + color
-        });
-      })
+    function pocketConfig(el, isUpdate, ctx) {
+      if (!isUpdate) {
+        const onstart = crazyDrag.bind(undefined, ctrl);
+        const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
+        const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+        el.addEventListener('touchstart', onstart);
+        document.addEventListener('touchmove', onmove);
+        document.addEventListener('touchend', onend);
+        ctx.onunload = function() {
+          el.removeEventListener('touchstart', onstart);
+          document.removeEventListener('touchmove', onmove);
+          document.removeEventListener('touchend', onend);
+        };
+      }
+      if (ctx.flip === ctrl.vm.flip || !usablePos) return;
+      ctx.flip = ctrl.vm.flip;
+    }
+
+    return (
+      <div className={className} config={pocketConfig}>
+        {pieceRoles.map(role =>
+          <piece
+            data-role={role}
+            data-color={color}
+            data-nb={pocket[role] || 0}
+            className={role + ' ' + color}
+          />
+        )}
+      </div>
     );
   }
 };

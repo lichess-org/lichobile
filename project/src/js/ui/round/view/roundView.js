@@ -265,7 +265,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
       }
       {isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
-        ctrl.correspondenceClock ?
+        isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
@@ -287,7 +287,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
       {crazyView.pocket(ctrl, player.color, position)}
       {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
-        ctrl.correspondenceClock ?
+        !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null

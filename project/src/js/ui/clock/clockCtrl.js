@@ -1,9 +1,13 @@
 import settings from '../../settings';
 import sound from '../../sound';
+import helper from '../helper';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
 export default function controller() {
+
+  helper.analyticsTrackView('Clock');
+
   let clockMap = null;
   const isRunning = m.prop(false);
   const clockObj = m.prop();

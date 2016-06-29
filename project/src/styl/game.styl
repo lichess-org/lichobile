@@ -351,6 +351,7 @@
   box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
   width calc(100vw / 8 * 5)
   height calc(100vw / 8 + 10px)
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   background #888;
   white-space nowrap
   overflow hidden
@@ -361,6 +362,8 @@
 .pocket > piece
   width calc(100vw / 8)
   height calc(100vw / 8)
+  max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   background-position center
   position relative
 

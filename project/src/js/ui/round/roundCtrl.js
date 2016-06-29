@@ -300,9 +300,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
 
   const playPredrop = function() {
-    return this.chessground.playPredrop(function(drop) {
+    return this.chessground.playPredrop(drop => {
       return crazyValid.drop(this.chessground, this.data, drop.role, drop.key);
-    }.bind(this));
+    });
   }.bind(this);
 
   this.apiMove = function(o) {
@@ -391,17 +391,6 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       if (o.promotion) {
         ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
       }
-
-      if (!this.replaying() && playedColor !== d.player.color && this.chessground.data.premovable.current) {
-        // atrocious hack to prevent race condition
-        // with explosions and premoves
-        // https://github.com/ornicar/lila/issues/343
-        const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
-        setTimeout(() => {
-          this.chessground.playPremove();
-          playPredrop();
-        }, premoveDelay);
-      }
     }
 
     if (o.clock) {
@@ -420,6 +409,18 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       crazy: o.crazyhouse
     });
     gameApi.setOnGame(d, playedColor, true);
+
+    if (!this.replaying() && playedColor !== d.player.color &&
+      (this.chessground.data.premovable.current || this.chessground.data.predroppable.current.key)) {
+      // atrocious hack to prevent race condition
+      // with explosions and premoves
+      // https://github.com/ornicar/lila/issues/343
+      const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
+      setTimeout(() => {
+        this.chessground.playPremove();
+        playPredrop();
+      }, premoveDelay);
+    }
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();

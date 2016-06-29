@@ -1,5 +1,6 @@
 import gameApi from '../../../lichess/game';
 import gameStatus from '../../../lichess/status';
+import round from '../round';
 import helper from '../../helper';
 import throttle from 'lodash/throttle';
 import i18n from '../../../i18n';
@@ -237,7 +238,7 @@ export default {
   },
   first: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -251,7 +252,7 @@ export default {
   },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -265,7 +266,7 @@ export default {
   },
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -279,7 +280,7 @@ export default {
   },
   last: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,

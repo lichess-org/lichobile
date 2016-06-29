@@ -40,10 +40,18 @@ function makeConfig(data, fen, flip) {
         unset: m.redraw
       }
     },
+    predroppable: {
+      enabled: data.pref.enablePremove && data.game.variant.key === 'crazyhouse',
+      events: {
+        set: () => m.redraw(),
+        unset: m.redraw
+      }
+    },
     draggable: {
       distance: 3,
       squareTarget: true,
-      magnified: settings.game.magnified()
+      magnified: settings.game.magnified(),
+      preventDefault: data.game.variant.key !== 'crazyhouse'
     }
   };
 }
@@ -62,13 +70,15 @@ function applySettings(ground) {
   });
 }
 
-function make(data, fen, userMove, onMove) {
+function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   var config = makeConfig(data, fen);
   config.movable.events = {
-    after: userMove
+    after: userMove,
+    afterNewPiece: userNewPiece
   };
   config.events = {
-    move: onMove
+    move: onMove,
+    dropNewPiece: onNewPiece
   };
   config.viewOnly = data.player.spectator;
   return new chessground.controller(config);

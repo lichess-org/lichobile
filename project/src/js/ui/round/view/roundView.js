@@ -5,6 +5,7 @@ import challengesApi from '../../../lichess/challenges';
 import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
 import chessground from 'chessground-mobile';
+import round from '../round';
 import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
@@ -22,6 +23,7 @@ import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import chat from '../chat';
 import notes from '../notes';
+import crazyView from '../crazy/crazyView';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
@@ -202,7 +204,7 @@ function userInfos(user, player, playerName, position) {
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
+function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy) {
   const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
@@ -214,10 +216,12 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
+  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank;
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -225,7 +229,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   ctrl.vm[vmKey] = hash;
 
   return (
-    <div className="antagonistInfos" config={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} config={vConf}>
       <h2 className="antagonistUser">
         {user ?
           <span className={'status ' + onlineStatus} data-icon="r" /> :
@@ -252,26 +256,31 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
         {checksNb !== undefined ?
           <div className="checkCount">{checksNb}</div> : null
         }
-        {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
+        {isCrazy || ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
+        {isCrazy && ctrl.clock ?
+          renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
+          ctrl.correspondenceClock ?
+            renderCorrespondenceClock(
+              ctrl.correspondenceClock, player.color, ctrl.data.game.player
+            ) : null
+          )
+        }
       </div>
     </div>
   );
 }
 
-function showBerserk(ctrl, color) {
-  return ctrl.vm.goneBerserk[color] &&
-    ctrl.data.game.turns <= 1 &&
-    gameApi.playable(ctrl.data);
-}
-
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
+  const step = round.plyStep(ctrl.data, ctrl.vm.ply);
+  const isCrazy = !!step.crazy;
 
   return (
-    <section className="playTable" key={key}>
-      {renderAntagonistInfo(ctrl, player, material, position, isPortrait)}
-      {ctrl.clock ?
+    <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
+      {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
+      {crazyView.pocket(ctrl, player.color, position)}
+      {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
         ctrl.correspondenceClock ?
           renderCorrespondenceClock(
@@ -440,8 +449,8 @@ function renderGameActionsBar(ctrl, isPortrait) {
 
   const prevPly = ctrl.vm.ply - 1;
   const nextPly = ctrl.vm.ply + 1;
-  const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
-  const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+  const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
+  const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
   const hash = ctrl.data.game.id + answerRequired + ctrl.data.opponent.proposingTakeback + ctrl.data.opponent.offeringDraw + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
 
   if (ctrl.vm.buttonsHash === hash) return {

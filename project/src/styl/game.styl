@@ -12,6 +12,8 @@
   align-items center
   color #fff
   overflow hidden
+  &.crazy
+    padding 0
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto
@@ -87,6 +89,18 @@
     background-color lighten(bgdark, 8%)
   &.offline
     max-width 100%
+  &.crazy
+    width calc(100vw / 8 * 3)
+    max-width calc(100vw / 8 * 3)
+    padding 0 5px
+    > .antagonistUser
+      font-size 0.9em
+    > .ratingAndMaterial
+      > .clock
+        width 60%
+        max-width 60%
+        padding 2px
+        font-size 18px
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -332,3 +346,48 @@
   border none
   padding 15px
 
+.pocket
+  border-radius 3px
+  box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
+  width calc(100vw / 8 * 5)
+  height calc(100vw / 8 + 10px)
+  background #888;
+  white-space nowrap
+  overflow hidden
+  display flex
+  flex-flow row nowrap
+  align-items center
+
+.pocket > piece
+  width calc(100vw / 8)
+  height calc(100vw / 8)
+  background-position center
+  position relative
+
+.pocket > piece:first-child
+  border-radius: 3px 0 0 3px;
+
+.pocket.usable > piece
+  cursor: pointer;
+  transition: background-color 0.13s;
+
+.pocket.usable > piece:hover
+  background-color: #999;
+
+.pocket > piece[data-nb='0']
+  cursor: auto;
+  opacity: 0.1;
+
+.pocket > piece::after
+  content: attr(data-nb);
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  line-height: 14px;
+  padding: 3px 5px 4px 5px;
+  font-weight: bold;
+  border-radius: 2px;
+  font-size: 18px;
+
+.pocket > piece[data-nb='0']::after
+  content: none;

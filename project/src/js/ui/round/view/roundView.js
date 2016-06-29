@@ -241,7 +241,11 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
           <span className="ongame yes" data-icon="3" /> :
           <span className="ongame no" data-icon="0" />
         }
+        { isCrazy && position === 'opponent' && user && (user.engine || user.booster) ?
+          <span className="warning" data-icon="j"></span> : null
+        }
       </h2>
+      { !isCrazy ?
       <div className="ratingAndMaterial">
         { position === 'opponent' && user && (user.engine || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
@@ -256,16 +260,17 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
         {checksNb !== undefined ?
           <div className="checkCount">{checksNb}</div> : null
         }
-        {isCrazy || ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
-        {isCrazy && ctrl.clock ?
-          renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
-          ctrl.correspondenceClock ?
-            renderCorrespondenceClock(
-              ctrl.correspondenceClock, player.color, ctrl.data.game.player
-            ) : null
-          )
-        }
-      </div>
+        {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
+      </div> : null
+      }
+      {isCrazy && ctrl.clock ?
+        renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
+        ctrl.correspondenceClock ?
+          renderCorrespondenceClock(
+            ctrl.correspondenceClock, player.color, ctrl.data.game.player
+          ) : null
+        )
+      }
     </div>
   );
 }

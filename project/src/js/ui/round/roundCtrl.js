@@ -64,7 +64,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
         this.vm.tClockEl.textContent =
-          utils.formatTournamentCountdown(this.data.tournament.secondsToFinish) +
+          utils.formatTimeInSecs(this.data.tournament.secondsToFinish) +
         ' • ';
       }
     } else {

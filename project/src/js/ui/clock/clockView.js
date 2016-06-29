@@ -2,7 +2,7 @@ import h from '../helper';
 import m from 'mithril';
 import layout from '../layout';
 import clockSettings from './clockSettings';
-import { formatTimeinSecs } from '../../utils';
+import { formatTimeInSecs } from '../../utils';
 
 export default function view(ctrl) {
   const body = clockBody.bind(undefined, ctrl);
@@ -61,7 +61,7 @@ function clockBody(ctrl) {
         }
         <div className="clockTapAreaContent">
           <span className={topClockTimeClass}>
-            { topFlagged ? 'b' : formatTimeinSecs(clock.topTime()) }
+            { topFlagged ? 'b' : formatTimeInSecs(clock.topTime()) }
           </span>
         </div>
       </div>
@@ -74,7 +74,7 @@ function clockBody(ctrl) {
       <div key="bottomClockTapArea" className={bottomClockClass} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
-            { bottomFlagged ? 'b' : formatTimeinSecs(clock.bottomTime()) }
+            { bottomFlagged ? 'b' : formatTimeInSecs(clock.bottomTime()) }
           </span>
         </div>
         { clock.bottomRemainingMoves ?

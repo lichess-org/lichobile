@@ -70,7 +70,7 @@ function renderTitle(ctrl) {
   function tcConfig(el, isUpdate) {
     if (!isUpdate) {
       el.textContent =
-        utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+        utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
         ' • ';
       ctrl.vm.tClockEl = el;
     }
@@ -86,7 +86,7 @@ function renderTitle(ctrl) {
         {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
           <span config={tcConfig}>
           {
-            utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+            utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
             ' • '
           }
           </span> : null

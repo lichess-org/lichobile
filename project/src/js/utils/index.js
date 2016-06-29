@@ -346,7 +346,7 @@ export function pad(num, size) {
     return s;
 }
 
-export function formatTimeinSecs(seconds) {
+export function formatTimeInSecs(seconds) {
   let timeStr = '';
   const hours = Math.floor(seconds / 60 / 60);
   const mins = Math.floor(seconds / 60) - (hours * 60);

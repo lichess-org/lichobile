@@ -3,7 +3,7 @@ import session from '../../../session';
 import layout from '../../layout';
 import m from 'mithril';
 import i18n from '../../../i18n';
-import { noop, gameIcon, formatTimeinSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
+import { noop, gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
 import helper from '../../helper';
@@ -190,7 +190,7 @@ function variantKey(data) {
 function timeInfo(time, preceedingText) {
   if (!time) return '';
 
-  return preceedingText + ' ' + formatTimeinSecs(time);
+  return preceedingText + ' ' + formatTimeInSecs(time);
 }
 
 function tournamentLeaderboard(ctrl) {

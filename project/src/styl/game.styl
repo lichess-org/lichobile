@@ -93,14 +93,16 @@
     width calc(100vw / 8 * 3)
     max-width calc(100vw / 8 * 3)
     padding 0 5px
+    .ratingAndMaterial
+      height inherit
     > .antagonistUser
       font-size 0.9em
     > .ratingAndMaterial
       > .clock
-        width 60%
         max-width 60%
-        padding 2px
-        font-size 18px
+        font-size 20px
+        text-align left
+        margin-top 5px
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -371,9 +373,6 @@
   cursor: pointer;
   transition: background-color 0.13s;
 
-.pocket.usable > piece:hover
-  background-color: #999;
-
 .pocket > piece[data-nb='0']
   cursor: auto;
   opacity: 0.1;
@@ -388,6 +387,11 @@
   font-weight: bold;
   border-radius: 2px;
   font-size: 18px;
+  color: #fff
+  text-shadow: 0 1px 0 #000
+  background orange
+  border-color: #b84400
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
 
 .pocket > piece[data-nb='0']::after
   content: none;

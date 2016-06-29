@@ -2,7 +2,6 @@ import { util, drag } from 'chessground-mobile';
 import gameApi from '../../../lichess/game';
 
 export default function(ctrl, e) {
-  console.log(e);
   if (e.button !== undefined && e.button !== 0) return; // only touch or left click
   if (ctrl.replaying() || !gameApi.isPlayerPlaying(ctrl.data)) return;
   const cgData = ctrl.chessground.data;
@@ -14,13 +13,13 @@ export default function(ctrl, e) {
   e.preventDefault();
   var key;
   for (var i in util.allKeys) {
-    if (!ctrl.chessground.data.pieces[util.allKeys[i]]) {
+    if (!cgData.pieces[util.allKeys[i]]) {
       key = util.allKeys[i];
       break;
     }
   }
   if (!key) return;
-  const coords = util.key2pos(ctrl.chessground.data.orientation === 'white' ? key : util.invertKey(key));
+  const coords = util.key2pos(cgData.orientation === 'white' ? key : util.invertKey(key));
   const piece = {
     role: role,
     color: color
@@ -28,7 +27,7 @@ export default function(ctrl, e) {
   const obj = {};
   obj[key] = piece;
   ctrl.chessground.setPieces(obj);
-  const bounds = ctrl.chessground.data.bounds;
+  const bounds = cgData.bounds;
   const position = util.eventPosition(e);
   const squareBounds = util.computeSquareBounds(cgData.orientation, cgData.bounds, key);
   const rel = [
@@ -48,7 +47,12 @@ export default function(ctrl, e) {
   };
   ctrl.chessground.setDragPiece(key, piece, dragOpts);
   // must render synchronously to have dragging piece
-  ctrl.chessground.data.render();
-  ctrl.chessground.data.draggable.current.draggingPiece = ctrl.chessground.data.element.querySelector('.' + key + ' > piece');
-  drag.processDrag(ctrl.chessground.data);
+  cgData.render();
+  cgData.draggable.current.draggingPiece = cgData.element.querySelector('.' + key + ' > piece');
+  cgData.draggable.current.draggingPiece.classList.add('dragging');
+  if (cgData.draggable.magnified) {
+    cgData.draggable.current.draggingPiece.classList.add('magnified');
+  }
+  cgData.draggable.current.draggingPiece.cgDragging = true;
+  drag.processDrag(cgData);
 }

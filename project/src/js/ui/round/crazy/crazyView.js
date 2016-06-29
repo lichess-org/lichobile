@@ -41,7 +41,7 @@ export default {
           ctx.flip = ctrl.vm.flip;
         }
       },
-      pieceRoles.map(function(role) {
+      pieceRoles.map(role => {
         return m('piece', {
           'data-role': role,
           'data-color': color,

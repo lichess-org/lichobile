@@ -313,6 +313,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (o.status) {
       d.game.status = o.status;
     }
+    if (o.winner) {
+      d.game.winner = o.winner;
+    }
     var wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
     var bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
     if (!wDraw && o.wDraw) {
@@ -360,18 +363,30 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       }
 
       const pieces = Object.assign({}, enpassantPieces, castlePieces);
-      this.chessground.apiMove(
-        o.uci.substr(0, 2),
-        o.uci.substr(2, 2),
-        pieces,
-        {
-          turnColor: d.game.player,
-          movable: {
-            dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
+      const newConf = {
+        turnColor: d.game.player,
+        movable: {
+          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
+        },
+        check: o.check
+      };
+      if (o.isMove) {
+        this.chessground.apiMove(
+          o.uci.substr(0, 2),
+          o.uci.substr(2, 2),
+          pieces,
+          newConf
+        );
+      } else {
+        this.chessground.apiNewPiece(
+          {
+            role: o.role,
+            color: playedColor
           },
-          check: o.check
-        }
-      );
+          o.uci.substr(2, 2),
+          newConf
+        );
+      }
 
       if (o.promotion) {
         ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);

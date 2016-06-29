@@ -18,7 +18,7 @@ export default function controller() {
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
-          m.route(`/game/${d.challenge.id}`);
+          m.route(`/game/${d.challenge.id}`, null, true);
           break;
         case 'declined':
           window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
@@ -58,7 +58,7 @@ export default function controller() {
     joinChallenge() {
       return acceptChallenge(challenge().id)
       .then(() => challengesApi.remove(challenge().id))
-      .then(d => m.route('/game' + d.url.round));
+      .then(d => m.route('/game' + d.url.round, null, true));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)

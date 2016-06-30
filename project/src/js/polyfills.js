@@ -98,42 +98,44 @@ function semverCompare(a, b) {
   return 0;
 }
 
-// temporary workaround for android versions where stockfish plugin does not work
-if (window.device.platform === 'Android' && semverCompare(window.device.version, '4.4') === -1) {
-  // cordova-stockfish-plugin interface
-  var stockfishWorker;
-  window.Stockfish = {
-    init: function() {
-      return new Promise(function(resolve) {
+document.addEventListener('deviceready', () => {
+  // temporary workaround for android versions where stockfish plugin does not work
+  if (window.device.platform === 'Android' && semverCompare(window.device.version, '4.4') === -1) {
+    // cordova-stockfish-plugin interface
+    var stockfishWorker;
+    window.Stockfish = {
+      init: function() {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) {
+            setTimeout(resolve);
+          } else {
+            stockfishWorker = new Worker('vendor/stockfish7.js');
+            setTimeout(resolve, 10);
+          }
+        });
+      },
+      cmd: function(cmd) {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) stockfishWorker.postMessage(cmd);
+          setTimeout(resolve, 1);
+        });
+      },
+      output: function(callback) {
         if (stockfishWorker) {
-          setTimeout(resolve);
-        } else {
-          stockfishWorker = new Worker('vendor/stockfish7.js');
-          setTimeout(resolve, 10);
+          stockfishWorker.onmessage = msg => {
+            callback(msg.data);
+          };
         }
-      });
-    },
-    cmd: function(cmd) {
-      return new Promise(function(resolve) {
-        if (stockfishWorker) stockfishWorker.postMessage(cmd);
-        setTimeout(resolve, 1);
-      });
-    },
-    output: function(callback) {
-      if (stockfishWorker) {
-        stockfishWorker.onmessage = msg => {
-          callback(msg.data);
-        };
+      },
+      exit: function() {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) {
+            stockfishWorker.terminate();
+            stockfishWorker = null;
+          }
+          setTimeout(resolve, 1);
+        });
       }
-    },
-    exit: function() {
-      return new Promise(function(resolve) {
-        if (stockfishWorker) {
-          stockfishWorker.terminate();
-          stockfishWorker = null;
-        }
-        setTimeout(resolve, 1);
-      });
-    }
-  };
-}
+    };
+  }
+});

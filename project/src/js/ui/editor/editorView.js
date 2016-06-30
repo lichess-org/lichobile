@@ -32,6 +32,7 @@ export default function view(ctrl) {
   const board = Board(
     ctrl.data,
     ctrl.chessground,
+    null,
     helper.isPortrait()
   );
 

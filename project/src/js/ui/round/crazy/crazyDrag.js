@@ -29,7 +29,7 @@ export default function(ctrl, e) {
   ctrl.chessground.setPieces(obj);
   const bounds = cgData.bounds;
   const position = util.eventPosition(e);
-  const squareBounds = util.computeSquareBounds(cgData.orientation, cgData.bounds, key);
+  const squareBounds = util.computeSquareBounds(cgData.orientation, bounds, key);
   const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
     (8 - coords[1]) * squareBounds.height + bounds.top

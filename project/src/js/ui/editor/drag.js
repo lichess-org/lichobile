@@ -18,7 +18,7 @@ export default function(ctrl, e) {
     color: color
   };
   const bounds = cgData.bounds;
-  const squareBounds = e.target.parentNode.getBoundingClientRect();
+  const squareBounds = util.computeSquareBounds(cgData.orientation, bounds, key);
   const position = util.eventPosition(e);
   const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,

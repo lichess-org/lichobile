@@ -120,12 +120,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.flip = function() {
     if (this.data.tv) {
-      if (m.route.param('flip')) m.route('/tv');
-      else m.route('/tv?flip=1');
+      if (m.route.param('flip')) m.route('/tv', null, true);
+      else m.route('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
       m.route('/game/' + this.data.game.id + '/' +
-        utils.oppositeColor(this.data.player.color));
+        utils.oppositeColor(this.data.player.color), null, true);
       return;
     }
     this.vm.flip = !this.vm.flip;

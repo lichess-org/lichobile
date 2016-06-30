@@ -304,7 +304,12 @@ export default {
   returnToTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
+      const url = `/tournament/${ctrl.data.game.tournamentId}`;
+      if (ctrl.data.tv) {
+        m.route(url);
+      } else {
+        m.route(url, null, true);
+      }
     }
     return (
       <button key="returnToTournament" config={helper.ontouch(handler)}>
@@ -317,7 +322,7 @@ export default {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      m.route('/tournament/' + ctrl.data.game.tournamentId);
+      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
     }
     return (
       <button key="withdrawFromTournament" config={helper.ontouch(handler)}>

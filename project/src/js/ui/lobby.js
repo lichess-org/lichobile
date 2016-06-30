@@ -33,6 +33,7 @@ lobby.startSeeking = function() {
       n: (_, d) => {
         nbPlayers = d.d;
         nbGames = d.r;
+        m.redraw();
       },
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);

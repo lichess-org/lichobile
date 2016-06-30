@@ -1,6 +1,6 @@
 import storage from './storage';
 import xor from 'lodash/xor';
-import { lichessSri, autoredraw, askWorker, tellWorker, hasNetwork } from './utils';
+import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
@@ -260,9 +260,6 @@ export default {
   serverMoveTime,
   setVersion(version) {
     tellWorker(worker, 'setVersion', version);
-  },
-  getAverageLag(callback) {
-    askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
     tellWorker(worker, 'send', [type, data, opts]);

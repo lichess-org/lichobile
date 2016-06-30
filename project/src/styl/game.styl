@@ -12,6 +12,8 @@
   align-items center
   color #fff
   overflow hidden
+  &.crazy
+    padding 0
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto
@@ -87,6 +89,25 @@
     background-color lighten(bgdark, 8%)
   &.offline
     max-width 100%
+  &.crazy
+    width calc(100vw / 8 * 3)
+    max-width calc(100vw / 8 * 3)
+    padding 0 10px
+    .ratingAndMaterial
+      height inherit
+    > .antagonistUser
+      font-size 0.8em
+    > .clock
+      display inline-block
+      font-size 20px
+      text-align left
+      margin-top 2px
+      &.correspondence
+        font-size 13px
+  @media only screen and (orientation: landscape)
+    &.crazy
+      width calc((100vh - 50px) / 8 * 3)
+      max-width calc((100vh - 50px) / 8 * 3)
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -97,7 +118,6 @@
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-weight bold
   font-size 1.1em
   white-space nowrap
   > .status
@@ -332,3 +352,60 @@
   border none
   padding 15px
 
+.pocket
+  border-radius 3px
+  box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
+  width calc(100vw / 8 * 5)
+  height calc(100vw / 8 + 10px)
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  background #888;
+  white-space nowrap
+  overflow hidden
+  display flex
+  flex-flow row nowrap
+  align-items center
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8 * 5)
+    height calc((100vh - 50px) / 8 + 10px)
+    max-height 55px
+
+.pocket > piece
+  width calc(100vw / 8)
+  height calc(100vw / 8)
+  max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  background-position center
+  position relative
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8)
+    height calc((100vh - 50px) / 8)
+    max-width 50px
+    max-height 50px
+
+.pocket > piece:first-child
+  border-radius: 3px 0 0 3px;
+
+.pocket.usable > piece
+  transition: background-color 0.13s;
+
+.pocket > piece[data-nb='0']
+  opacity: 0.1;
+
+.pocket > piece::after
+  content: attr(data-nb);
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  line-height: 14px;
+  padding: 3px 5px 4px 5px;
+  font-weight: bold;
+  border-radius: 2px;
+  font-size: 18px;
+  color: #fff
+  text-shadow: 0 1px 0 #000
+  background orange
+  border-color: #b84400
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
+
+.pocket > piece[data-nb='0']::after
+  content: none;

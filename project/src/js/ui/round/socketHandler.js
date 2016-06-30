@@ -25,6 +25,12 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       m.redraw();
     },
     move: function(o) {
+      o.isMove = true;
+      ctrl.apiMove(o);
+      m.redraw(false, true);
+    },
+    drop: function(o) {
+      o.isDrop = true;
       ctrl.apiMove(o);
       m.redraw(false, true);
     },

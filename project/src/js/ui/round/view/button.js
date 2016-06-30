@@ -1,5 +1,6 @@
 import gameApi from '../../../lichess/game';
 import gameStatus from '../../../lichess/status';
+import round from '../round';
 import helper from '../../helper';
 import throttle from 'lodash/throttle';
 import i18n from '../../../i18n';
@@ -237,7 +238,7 @@ export default {
   },
   first: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -251,7 +252,7 @@ export default {
   },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -265,7 +266,7 @@ export default {
   },
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -279,7 +280,7 @@ export default {
   },
   last: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -303,7 +304,12 @@ export default {
   returnToTournament: function(ctrl) {
     function handler() {
       ctrl.hideActions();
-      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
+      const url = `/tournament/${ctrl.data.game.tournamentId}`;
+      if (ctrl.data.tv) {
+        m.route(url);
+      } else {
+        m.route(url, null, true);
+      }
     }
     return (
       <button key="returnToTournament" config={helper.ontouch(handler)}>
@@ -316,7 +322,7 @@ export default {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      m.route('/tournament/' + ctrl.data.game.tournamentId);
+      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
     }
     return (
       <button key="withdrawFromTournament" config={helper.ontouch(handler)}>

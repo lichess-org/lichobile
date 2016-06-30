@@ -1,9 +1,13 @@
 import settings from '../../settings';
 import sound from '../../sound';
+import helper from '../helper';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
 export default function controller() {
+
+  helper.analyticsTrackView('Clock');
+
   let clockMap = null;
   const isRunning = m.prop(false);
   const clockObj = m.prop();
@@ -32,13 +36,18 @@ export default function controller() {
     clockObj().startStop();
   }
 
-  function onResume () {
+  function hideStatusBar() {
     window.StatusBar.hide();
   }
 
   window.StatusBar.hide();
+
+  if (window.cordova.platformId === 'android') {
+    window.AndroidFullScreen.immersiveMode();
+  }
   window.plugins.insomnia.keepAwake();
-  document.addEventListener('resume', onResume);
+  document.addEventListener('resume', hideStatusBar);
+  window.addEventListener('resize', hideStatusBar);
 
   return {
     isRunning,
@@ -49,8 +58,12 @@ export default function controller() {
     clockTap,
     onunload: () => {
       window.plugins.insomnia.allowSleepAgain();
-      document.removeEventListener('resume', onResume);
+      document.removeEventListener('resume', hideStatusBar);
+      window.removeEventListener('resize', hideStatusBar);
       window.StatusBar.show();
+      if (window.cordova.platformId === 'android') {
+        window.AndroidFullScreen.showSystemUI();
+      }
       if (clockObj().clockInterval) {
         clearInterval(clockObj().clockInterval);
       }
@@ -91,8 +104,11 @@ function incrementClock(time, increment) {
   }
 
   function clockHit (side) {
-    if (flagged())
+    if (flagged()) {
       return;
+    }
+    sound.clock();
+
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -188,8 +204,11 @@ function delayClock(time, increment) {
   }
 
   function clockHit (side) {
-    if (flagged())
+    if (flagged()) {
       return;
+    }
+    sound.clock();
+
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -278,8 +297,11 @@ function bronsteinClock(time, increment) {
   }
 
   function clockHit (side) {
-    if (flagged())
+    if (flagged()) {
       return;
+    }
+    sound.clock();
+
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -368,8 +390,11 @@ function hourglassClock(time) {
   }
 
   function clockHit (side) {
-    if (flagged())
+    if (flagged()) {
       return;
+    }
+    sound.clock();
+
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
@@ -455,8 +480,11 @@ function stageClock(stages, increment) {
   }
 
   function clockHit (side) {
-    if (flagged())
+    if (flagged()) {
       return;
+    }
+    sound.clock();
+
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         topMoves(topMoves() + 1);

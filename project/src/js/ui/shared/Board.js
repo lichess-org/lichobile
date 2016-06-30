@@ -74,7 +74,7 @@ export default function(
       style={wrapperStyle} key={key}
     >
     <div className={boardClass} config={boardConfig} />
-    { chessgroundCtrl.data.premovable.current ?
+    { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current.key ?
       <div className="board_alert">
         {i18n('premoveEnabledClickAnywhereToCancel')}
       </div> : alert ?

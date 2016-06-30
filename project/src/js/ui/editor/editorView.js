@@ -19,25 +19,27 @@ export default function view(ctrl) {
     const onstart = drag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
-    document.addEventListener('touchstart', onstart);
-    document.addEventListener('touchmove', onmove);
-    document.addEventListener('touchend', onend);
+    const editorNode = document.getElementById('boardEditor');
+    editorNode.addEventListener('touchstart', onstart);
+    editorNode.addEventListener('touchmove', onmove);
+    editorNode.addEventListener('touchend', onend);
     context.onunload = function() {
-      document.removeEventListener('touchstart', onstart);
-      document.removeEventListener('touchmove', onmove);
-      document.removeEventListener('touchend', onend);
+      editorNode.removeEventListener('touchstart', onstart);
+      editorNode.removeEventListener('touchmove', onmove);
+      editorNode.removeEventListener('touchend', onend);
     };
   }
 
   const board = Board(
     ctrl.data,
     ctrl.chessground,
+    null,
     helper.isPortrait()
   );
 
   function content() {
     if (helper.isPortrait())
-      return m('div.editor', {
+      return m('div#boardEditor.editor', {
           className: settings.general.theme.piece(),
           config: editorConfig
         }, [

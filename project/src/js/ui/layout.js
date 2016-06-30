@@ -26,7 +26,7 @@ export default {
           <header className="main_header board">
             {header()}
           </header>
-          <div className="content_round">{content()}</div>
+          <div id="content_round" className="content_round">{content()}</div>
           { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
         </main>
         {menuView()}

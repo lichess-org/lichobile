@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "4.0.1",
+  "version": "4.2.0",
   "platforms": [
     "ios@4.1.0",
     "android@5.1.1"
@@ -57,7 +57,7 @@
       "API_END_POINT": "https://en.lichess.org",
       "SOCKET_END_POINT": "wss://socket.lichess.org",
       "GA_ID": "UA-7935029-3",
-      "version": "4.0.1",
+      "version": "4.2.0",
       "cordova": {
         "whitelist": [
           {
@@ -99,7 +99,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "400001",
+        "version_code": "400200",
         "release": true,
         "sign": "store"
       }
@@ -170,13 +170,14 @@
     "nl.x-services.plugins.insomnia": "cordova-plugin-insomnia@4.2.0",
     "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11",
     "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.7.0",
-    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish",
     "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1",
     "phonegap-plugin-push": {
       "uri": "phonegap-plugin-push@1.6.3",
       "variables": {
         "SENDER_ID": "0000000000000"
       }
-    }
+    },
+    "cordova-plugin-fullscreen": "cordova-plugin-fullscreen",
+    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#33324e9"
   }
 }

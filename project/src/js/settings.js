@@ -60,7 +60,7 @@ export default {
 
   game: {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     animations: localstorageprop('settings.gameAnimations', true),
     highlights: localstorageprop('settings.boardHighlights', true),
@@ -71,7 +71,7 @@ export default {
 
   analyse: {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
-      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'
+      'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true)
@@ -204,6 +204,7 @@ export default {
     human: {
       availableVariants: [
         ['Standard', '1'],
+        ['Crazyhouse', '10'],
         ['Chess960', '2'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],
@@ -235,6 +236,7 @@ export default {
     challenge: {
       availableVariants: [
         ['Standard', '1'],
+        ['Crazyhouse', '10'],
         ['Chess960', '2'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],

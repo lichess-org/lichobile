@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import round from '../round';
 
 const emptyTd = <td className="move">...</td>;
 
@@ -31,7 +32,7 @@ function autoScroll(movelist) {
 
 export function renderTable(ctrl) {
   const steps = ctrl.data.steps;
-  const firstPly = ctrl.firstPly();
+  const firstPly = round.firstPly(ctrl.data);
   const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
     ctrl.data.game.status.id + ctrl.data.game.winner;
 

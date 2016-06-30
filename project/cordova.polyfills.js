@@ -77,6 +77,11 @@
   window.StatusBar.show = noop;
   window.StatusBar.hide = noop;
 
+  // fullscreen
+  window.AndroidFullScreen = {};
+  window.AndroidFullScreen.showSystemUI = noop;
+  window.AndroidFullScreen.immersiveMode = noop;
+
   // device
   window.device = {
     cordova: 'browser',
@@ -140,7 +145,7 @@ if (!window.Stockfish) {
         if (stockfishWorker) {
           setTimeout(resolve);
         } else {
-          stockfishWorker = new Worker('../stockfish7.js');
+          stockfishWorker = new Worker('vendor/stockfish7.js');
           setTimeout(resolve, 10);
         }
       });

@@ -73,7 +73,6 @@ export default function controller() {
     draggable: {
       autoDistance: false,
       squareTarget: true,
-      preventDefault: false,
       magnified: settings.game.magnified()
     },
     events: {

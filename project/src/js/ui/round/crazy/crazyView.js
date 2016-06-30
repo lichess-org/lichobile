@@ -25,13 +25,14 @@ export default {
         const onstart = crazyDrag.bind(undefined, ctrl);
         const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
         const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+        const contentNode = document.getElementById('content_round');
         el.addEventListener('touchstart', onstart);
-        document.addEventListener('touchmove', onmove);
-        document.addEventListener('touchend', onend);
+        contentNode.addEventListener('touchmove', onmove);
+        contentNode.addEventListener('touchend', onend);
         ctx.onunload = function() {
           el.removeEventListener('touchstart', onstart);
-          document.removeEventListener('touchmove', onmove);
-          document.removeEventListener('touchend', onend);
+          contentNode.removeEventListener('touchmove', onmove);
+          contentNode.removeEventListener('touchend', onend);
         };
       }
       if (ctx.flip === ctrl.vm.flip || !usablePos) return;

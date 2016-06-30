@@ -36,8 +36,8 @@ export default function chessLogic(ctrl) {
     sendDestsRequest(req) {
       worker.postMessage({ topic: 'dests', payload: req });
     },
-    getSanMoveFromUci(req, callback) {
-      askWorker(worker, { topic: 'move', payload: req }, callback);
+    getSanMoveFromUci(req) {
+      return askWorker(worker, { topic: 'move', payload: req });
     },
     importPgn(pgn) {
       return askWorker(worker, { topic: 'pgnRead', payload: { pgn }});

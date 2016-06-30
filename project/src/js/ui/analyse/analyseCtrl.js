@@ -254,20 +254,21 @@ export default function controller() {
   }.bind(this);
 
   function onCevalMsg(res) {
-    this.analyse.updateAtPath(res.work.path, function(step) {
+    this.analyse.updateAtPath(res.work.path, step => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
       this.chessLogic.getSanMoveFromUci({
         fen: step.fen,
         orig: res.ceval.best.slice(0, 2),
         dest: res.ceval.best.slice(2, 4)
-      }, data => {
+      }).then(data => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           m.redraw();
         }
-      });
-    }.bind(this));
+      })
+      .catch(console.error.bind(console));
+    });
   }
 
   this.canUseCeval = function() {

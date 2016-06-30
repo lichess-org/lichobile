@@ -22,23 +22,15 @@ export function tellWorker(worker, topic, payload) {
   }
 }
 
-export function askWorker(worker, msg, callback) {
+export function askWorker(worker, msg) {
   return new Promise(function(resolve, reject) {
     function listen(e) {
       if (e.data.topic === msg.topic) {
         worker.removeEventListener('message', listen);
-        if (callback) {
-          callback(e.data.payload);
-        } else {
-          resolve(e.data.payload);
-        }
+        resolve(e.data.payload);
       } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
         worker.removeEventListener('message', listen);
-        if (callback) {
-          throw e.data.payload.error;
-        } else {
-          reject(e.data.payload.error);
-        }
+        reject(e.data.payload.error);
       }
     }
     worker.addEventListener('message', listen);

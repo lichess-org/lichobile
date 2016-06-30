@@ -35,7 +35,7 @@ export function askWorker(worker, msg, callback) {
       } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
         worker.removeEventListener('message', listen);
         if (callback) {
-          throw e.data.payload.error
+          throw e.data.payload.error;
         } else {
           reject(e.data.payload.error);
         }
@@ -375,3 +375,4 @@ export function formatTournamentTimeControl(clock) {
     return '∞';
   }
 }
+

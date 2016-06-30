@@ -145,7 +145,7 @@ if (!window.Stockfish) {
         if (stockfishWorker) {
           setTimeout(resolve);
         } else {
-          stockfishWorker = new Worker('../stockfish7.js');
+          stockfishWorker = new Worker('vendor/stockfish7.js');
           setTimeout(resolve, 10);
         }
       });

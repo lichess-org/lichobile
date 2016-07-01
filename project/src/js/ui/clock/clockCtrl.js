@@ -9,10 +9,11 @@ export default function controller() {
   helper.analyticsTrackView('Clock');
 
   let clockMap = null;
-  const isRunning = m.prop(false);
   const clockObj = m.prop();
 
   function reload() {
+    if (clockObj() && clockObj().isRunning()) return;
+
     clockMap = {
       'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
       'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment())),
@@ -26,7 +27,7 @@ export default function controller() {
 
   reload();
 
-  const clockSettingsCtrl = clockSettings.controller(reload);
+  const clockSettingsCtrl = clockSettings.controller(reload, clockObj);
 
   function clockTap (side) {
     clockObj().clockHit(side);
@@ -34,6 +35,12 @@ export default function controller() {
 
   function startStop () {
     clockObj().startStop();
+  }
+
+  function goHome() {
+    if (!clockObj().isRunning()) {
+      m.route('/');
+    }
   }
 
   function hideStatusBar() {
@@ -50,11 +57,11 @@ export default function controller() {
   window.addEventListener('resize', hideStatusBar);
 
   return {
-    isRunning,
     startStop,
     clockSettingsCtrl,
     clockObj,
     reload,
+    goHome,
     clockTap,
     onunload: () => {
       window.plugins.insomnia.allowSleepAgain();

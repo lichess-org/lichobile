@@ -1,6 +1,12 @@
 import { util, drag } from 'chessground-mobile';
 import gameApi from '../../../lichess/game';
 
+function isDraggable(data, color) {
+  return data.movable.color === color && (
+    data.turnColor === color || data.predroppable.enabled
+  );
+}
+
 export default function(ctrl, e) {
   if (e.button !== undefined && e.button !== 0) return; // only touch or left click
   if (ctrl.replaying() || !gameApi.isPlayerPlaying(ctrl.data)) return;
@@ -9,6 +15,7 @@ export default function(ctrl, e) {
     color = e.target.getAttribute('data-color'),
     number = e.target.getAttribute('data-nb');
   if (!role || !color || number === '0') return;
+  if (!isDraggable(ctrl.chessground.data, color)) return;
   e.stopPropagation();
   e.preventDefault();
   var key;

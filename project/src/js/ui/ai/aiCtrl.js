@@ -12,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor, aiName } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor, aiName, noop } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -136,7 +136,7 @@ export default function controller() {
     this.data = data;
 
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
+      this.chessground = ground.make(this.data, this.data.game.fen, userMove, noop, onMove, noop);
     } else {
       ground.reload(this.chessground, this.data, this.data.game.fen);
     }

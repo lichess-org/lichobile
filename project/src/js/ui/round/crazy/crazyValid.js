@@ -3,7 +3,7 @@ import gameApi from '../../../lichess/game';
 export default {
   drop: function(chessground, data, role, key, possibleDrops) {
 
-    if (!gameApi.isPlayerTurn(data)) return false;
+    if (!data.game.offline && !gameApi.isPlayerTurn(data)) return false;
 
     if (role === 'pawn' && (key[1] === '1' || key[1] === '8')) return false;
 

@@ -77,6 +77,12 @@ if (!Array.prototype.findIndex) {
   };
 }
 
+if(!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
+  };
+}
+
 if (!String.prototype.includes) {
   String.prototype.includes = function() {'use strict';
     return String.prototype.indexOf.apply(this, arguments) !== -1;

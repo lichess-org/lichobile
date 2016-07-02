@@ -61,7 +61,8 @@ export default function controller() {
   }.bind(this);
 
   const onUserNewPiece = function(role, key, meta) {
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key)) {
+    const sit = this.replay.situation();
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, sit.possibleDrops)) {
       this.replay.addDrop(role, key, meta.predrop);
     } else {
       this.jump(this.replay.ply);
@@ -137,7 +138,7 @@ export default function controller() {
 
   this.jump = function(ply) {
     this.chessground.cancelMove();
-    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
+    if (ply < 0 || ply >= this.replay.situations.length) return;
     this.replay.ply = ply;
     this.replay.apply();
   }.bind(this);

@@ -270,7 +270,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   const onUserNewPiece = function(role, key, meta) {
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key)) {
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {
       this.jump(this.vm.ply);
@@ -301,7 +301,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   const playPredrop = function() {
     return this.chessground.playPredrop(drop => {
-      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key);
+      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
     });
   }.bind(this);
 

@@ -105,6 +105,7 @@ export default {
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: [
       ['Standard', 'standard'],
+      ['Crazyhouse', 'crazyhouse'],
       ['Chess960', 'chess960'],
       ['King of the Hill', 'kingOfTheHill'],
       ['Three-check', 'threeCheck'],

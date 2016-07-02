@@ -284,7 +284,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {crazyView.pocket(ctrl, player.color, position)}
+      {crazyView.pocket(ctrl, step.crazy, player.color, position)}
       {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
         !isCrazy && ctrl.correspondenceClock ?

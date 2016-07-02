@@ -6,6 +6,7 @@ import replayCtrl from '../shared/offlineRound/replayCtrl';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
 import atomic from '../round/atomic';
+import crazyValid from '../round/crazy/crazyValid';
 import storage from '../../storage';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
@@ -26,6 +27,10 @@ export default function controller() {
   const chessWorker = new Worker('vendor/scalachessjs.js');
   this.actions = actions.controller(this);
   this.newGameMenu = newGameMenu.controller(this);
+
+  this.vm = {
+    flip: false
+  };
 
   this.save = function() {
     setCurrentOTBGame({
@@ -55,6 +60,18 @@ export default function controller() {
     } else sound.move();
   }.bind(this);
 
+  const onUserNewPiece = function(role, key, meta) {
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key)) {
+      this.replay.addDrop(role, key, meta.predrop);
+    } else {
+      this.jump(this.replay.ply);
+    }
+  }.bind(this);
+
+  const onNewPiece = function() {
+    sound.move();
+  };
+
   this.onReplayAdded = function() {
     const sit = this.replay.situation();
     setResult(this, sit.status);
@@ -79,7 +96,7 @@ export default function controller() {
     this.newGameMenu.close();
     this.data = data;
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
+      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
     } else {
       ground.reload(this.chessground, this.data, this.data.game.fen);
     }
@@ -134,6 +151,11 @@ export default function controller() {
   }.bind(this);
 
   this.firstPly = () => 0;
+  this.lastPly = () => this.replay.situations[this.replay.situations.length - 1].ply;
+
+  this.replaying = function() {
+    return this.replay.ply !== this.lastPly();
+  }.bind(this);
 
   const setupFen = storage.get(storageFenKey);
   const saved = getCurrentOTBGame();

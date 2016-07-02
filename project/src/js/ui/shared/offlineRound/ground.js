@@ -51,13 +51,15 @@ function applySettings(ground) {
   });
 }
 
-function make(data, fen, userMove, onMove) {
+function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   var config = makeConfig(data, fen);
   config.movable.events = {
-    after: userMove
+    after: userMove,
+    afterNewPiece: userNewPiece
   };
   config.events = {
-    move: onMove
+    move: onMove,
+    dropNewPiece: onNewPiece
   };
   return new chessground.controller(config);
 }

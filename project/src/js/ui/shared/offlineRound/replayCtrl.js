@@ -16,6 +16,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         console.error(msg.data);
         break;
       case 'move':
+      case 'drop':
         this.ply++;
         if (this.ply < this.situations.length) {
           this.situations = this.situations.slice(0, this.ply);
@@ -82,6 +83,21 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         promotion,
         orig,
         dest
+      }
+    });
+  }.bind(this);
+
+  this.addDrop = function(role, key) {
+    const sit = this.situation();
+    chessWorker.postMessage({
+      topic: 'drop',
+      payload: {
+        variant: this.root.data.game.variant.key,
+        fen: sit.fen,
+        pgnMoves: sit.pgnMoves,
+        uciMoves: sit.uciMoves,
+        role,
+        pos: key
       }
     });
   }.bind(this);

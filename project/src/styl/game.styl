@@ -18,6 +18,11 @@
     padding 0
     flex 0 0 auto
     height initial
+    &.crazy
+      > .antagonistInfos
+        order 2
+      > .pocket
+        order 1
 
 .replay
   flex 0 0 auto
@@ -364,6 +369,7 @@
   display flex
   flex-flow row nowrap
   align-items center
+  justify-content space-around
   &.opponent.offline
     transform rotate(180deg)
   @media only screen and (orientation: landscape)

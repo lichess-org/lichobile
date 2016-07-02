@@ -34,7 +34,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait) 
         </div> : null
         }
       </div>
-      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position)}
+      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position, true)}
     </section>
   );
 }

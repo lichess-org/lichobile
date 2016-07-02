@@ -6,7 +6,7 @@ import gameApi from '../../../lichess/game';
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export default {
-  pocket: function(ctrl, crazyData, color, position) {
+  pocket: function(ctrl, crazyData, color, position, isOTB) {
     if (!crazyData) return null;
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
     const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
@@ -15,7 +15,8 @@ export default {
       settings.general.theme.piece(),
       'pocket',
       position,
-      usable ? 'usable' : ''
+      usable ? 'usable' : '',
+      isOTB ? 'offline' : ''
     ].join(' ');
 
     function pocketConfig(el, isUpdate, ctx) {

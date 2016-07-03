@@ -20,6 +20,7 @@ import notes from '../round/notes';
 import chessLogic from './chessLogic';
 import { renderStepsTxt } from './pgnExport';
 import { getPGN } from '../round/roundXhr';
+import crazyValid from './crazy/crazyValid';
 import menu from './menu';
 import m from 'mithril';
 
@@ -158,10 +159,6 @@ export default function controller() {
     m.redraw();
   }.bind(this);
 
-  function userNewPiece() {
-    this.jump(this.vm.path);
-  }
-
   const preparePremoving = function() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,
@@ -181,14 +178,45 @@ export default function controller() {
       ply: this.vm.step.ply
     };
     if (prom) move.promotion = prom;
-    this.chessLogic.sendStepRequest(move);
+    this.chessLogic.sendMoveRequest(move);
     preparePremoving();
   }.bind(this);
+
+  const roleToSan = {
+    pawn: 'P',
+    knight: 'N',
+    bishop: 'B',
+    rook: 'R',
+    queen: 'Q'
+  };
+  // const sanToRole = {
+  //   P: 'pawn',
+  //   N: 'knight',
+  //   B: 'bishop',
+  //   R: 'rook',
+  //   Q: 'queen'
+  // };
 
   function userMove(orig, dest, capture) {
     this.vm.justPlayed = orig + dest;
     sound[capture ? 'capture' : 'move']();
     if (!promotion.start(this, orig, dest, sendMove)) sendMove(orig, dest);
+  }
+
+  function userNewPiece (piece, pos) {
+    if (crazyValid.drop(this.chessground, piece, pos, this.vm.step.drops)) {
+      this.vm.justPlayed = roleToSan[piece.role] + '@' + pos;
+      sound.move();
+      const drop = {
+        role: piece.role,
+        pos: pos,
+        variant: this.data.game.variant.key,
+        fen: this.vm.step.fen,
+        path: this.vm.pathStr
+      };
+      this.chessLogic.sendDropRequest(drop);
+      preparePremoving();
+    } else this.jump(this.vm.path);
   }
 
   this.addStep = function(step, path) {

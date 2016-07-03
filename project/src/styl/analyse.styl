@@ -73,7 +73,7 @@
     font-size 0.7em
     line-height 1.2
 
-.analyseOpponents, .analyseOpening, .analyseGameInfos
+.analyseOpponentsWrapper, .analyseOpening, .analyseGameInfos
   padding 5px
   font-size 0.7em
 
@@ -82,7 +82,6 @@
 
 .analyseGameInfosWrapper
   display flex
-  justify-content center
   border-bottom 1px solid lighten(bgdark, 15%)
 
 .analyseGameInfos
@@ -95,13 +94,27 @@
     left 2px
     top 10px
 
-
 .analyseOpponentsWrapper
   display flex
-  justify-content center
+  flex-flow column wrap
+  justify-content flex-start
 
-.analyseOpponents
+.analyseOpponent
   text-align left
+  width 100%
+  > .pocket
+    width 100%
+    height calc(40vw / 6 + 10px)
+    > piece
+      width calc(40vw / 6)
+      height calc(40vw / 6)
+      &:after
+        padding: 3px 5px 4px 5px;
+        font-weight: bold;
+        border-radius: 1px;
+        font-size: 10px;
+        line-height: 10px;
+        padding: 1px 2px 2px 2px;
 
 .analyseOpening
   height 34px

@@ -19,6 +19,7 @@ import Board from '../shared/Board';
 import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import notes from '../round/notes';
 import button from '../round/view/button';
+import crazyView from './crazy/crazyView';
 
 export default function analyseView(ctrl) {
 
@@ -103,7 +104,7 @@ function renderInfos(ctrl) {
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
     (ceval && ceval.mate) + (ceval && ceval.best) +
     ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
-    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount);
+    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount) + JSON.stringify(ctrl.vm.step.crazy);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'
@@ -134,21 +135,21 @@ function renderOpponents(ctrl) {
 
   return (
     <div className="analyseOpponentsWrapper">
-      <div className="analyseOpponents">
-        <div className="opponent withIcon">
-          <span className={'color-icon ' + player.color} />
-          {playerName(player, true)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-            ' (' + getChecksCount(ctrl, player.color) + ')' : null
-          }
-        </div>
-        <div className="opponent withIcon">
-          <span className={'color-icon ' + opponent.color} />
-          {playerName(opponent, true)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-            ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
-          }
-        </div>
+      <div className="analyseOpponent">
+        <span className={'color-icon ' + player.color} />
+        {playerName(player, true)}
+        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          ' (' + getChecksCount(ctrl, player.color) + ')' : null
+        }
+        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
+      </div>
+      <div className="analyseOpponent">
+        <span className={'color-icon ' + opponent.color} />
+        {playerName(opponent, true)}
+        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
+        }
+        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
     </div>
   );

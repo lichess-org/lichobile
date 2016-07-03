@@ -115,6 +115,18 @@
         font-size: 10px;
         line-height: 10px;
         padding: 1px 2px 2px 2px;
+  @media only screen and (orientation: landscape)
+    > .pocket
+      height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+      > piece
+        width calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+        height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    > .pocket
+      height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
+      > piece
+        width calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
+        height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
 
 .analyseOpening
   height 34px

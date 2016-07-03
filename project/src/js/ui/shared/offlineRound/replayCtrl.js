@@ -51,23 +51,17 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.apply = function() {
     const sit = this.situation();
     if (sit) {
-      // TODO remove this in future version
-      // it's here for BC compat only
-      if (sit.movable) {
-        this.root.chessground.set(sit);
-      } else {
-        const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
-        this.root.chessground.set({
-          fen: sit.fen,
-          turnColor: sit.player,
-          lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
-          movable: {
-            dests: sit.dests,
-            color: sit.player
-          },
-          check: sit.check
-        });
-      }
+      const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
+      this.root.chessground.set({
+        fen: sit.fen,
+        turnColor: sit.player,
+        lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
+        movable: {
+          dests: sit.dests,
+          color: sit.player
+        },
+        check: sit.check
+      });
     }
   }.bind(this);
 

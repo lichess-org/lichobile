@@ -96,17 +96,16 @@ export default function controller() {
     this.actions.close();
     this.newGameMenu.close();
     this.data = data;
-    if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
-    } else {
-      ground.reload(this.chessground, this.data, this.data.game.fen);
-    }
     if (!this.replay) {
       this.replay = new replayCtrl(this, situations, ply, chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
-    this.replay.apply();
+    if (!this.chessground) {
+      this.chessground = ground.make(this.data, this.replay.situation(), userMove, onUserNewPiece, onMove, onNewPiece);
+    } else {
+      ground.reload(this.chessground, this.data, this.replay.situation());
+    }
     m.redraw();
   }.bind(this);
 

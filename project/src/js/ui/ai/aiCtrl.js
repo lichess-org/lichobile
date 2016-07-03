@@ -135,18 +135,17 @@ export default function controller() {
     this.actions.close();
     this.data = data;
 
-    if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, noop, onMove, noop);
-    } else {
-      ground.reload(this.chessground, this.data, this.data.game.fen);
-    }
-
     if (!this.replay) {
       this.replay = new replayCtrl(this, situations, ply, chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
-    this.replay.apply();
+
+    if (!this.chessground) {
+      this.chessground = ground.make(this.data, this.replay.situation(), userMove, noop, onMove, noop);
+    } else {
+      ground.reload(this.chessground, this.data, this.replay.situation());
+    }
 
     engine.prepare(this.data.game.variant.key)
     .then(() => {

@@ -115,8 +115,9 @@ export default function controller() {
     };
     this.vm.step = s;
     this.vm.cgConfig = config;
-    if (!this.chessground)
+    if (!this.chessground) {
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
+    }
     this.chessground.set(config);
     if (!dests) debouncedDests();
   }.bind(this);
@@ -316,12 +317,6 @@ export default function controller() {
     this.vm.showBestMove = !this.vm.showBestMove;
   }.bind(this);
 
-  this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
-    if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
-  }.bind(this);
-
   this.init = function(data) {
     this.data = data;
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
@@ -410,6 +405,14 @@ export default function controller() {
 
   window.plugins.insomnia.keepAwake();
 
+  this.onunload = function() {
+    window.plugins.insomnia.allowSleepAgain();
+    if (this.ceval) this.ceval.destroy();
+    if (this.chessLogic) this.chessLogic.onunload();
+    if (this.chessground) {
+      this.chessground.onunload();
+    }
+  }.bind(this);
 }
 
 function getDests() {

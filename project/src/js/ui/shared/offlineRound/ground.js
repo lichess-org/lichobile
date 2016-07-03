@@ -3,12 +3,14 @@ import gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
 
-function makeConfig(data, fen) {
+function makeConfig(data, sit) {
+  const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
   return {
-    fen: fen,
+    fen: sit.fen,
     orientation: boardOrientation(data),
-    turnColor: data.game.player,
-    lastMove: null,
+    turnColor: sit.player,
+    lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
+    check: sit.check,
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
@@ -18,8 +20,9 @@ function makeConfig(data, fen) {
     },
     movable: {
       free: false,
-      color: gameApi.isPlayerPlaying(data) ? data.player.color : null,
-      showDests: settings.game.pieceDestinations()
+      color: gameApi.isPlayerPlaying(data) ? sit.player : null,
+      showDests: settings.game.pieceDestinations(),
+      dests: sit.dests
     },
     animation: {
       enabled: settings.game.animations(),
@@ -64,8 +67,8 @@ function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   return new chessground.controller(config);
 }
 
-function reload(ground, data, fen) {
-  ground.set(makeConfig(data, fen));
+function reload(ground, data, sit) {
+  ground.set(makeConfig(data, sit));
 }
 
 function promote(ground, key, role) {

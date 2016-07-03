@@ -126,6 +126,15 @@ function renderInfos(ctrl) {
   );
 }
 
+function renderRatingDiff(player) {
+  if (typeof player.ratingDiff === 'undefined') return null;
+  if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
+  if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
+  if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
+
+  return null;
+}
+
 function renderOpponents(ctrl) {
   if (isSynthetic(ctrl.data)) return null;
 
@@ -138,6 +147,7 @@ function renderOpponents(ctrl) {
       <div className="analyseOpponent">
         <span className={'color-icon ' + player.color} />
         {playerName(player, true)}
+        {renderRatingDiff(player)}
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, player.color) + ')' : null
         }
@@ -146,6 +156,7 @@ function renderOpponents(ctrl) {
       <div className="analyseOpponent">
         <span className={'color-icon ' + opponent.color} />
         {playerName(opponent, true)}
+        {renderRatingDiff(opponent)}
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
         }

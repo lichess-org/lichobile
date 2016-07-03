@@ -86,8 +86,8 @@ function renderForm(formName, action, settingsObj, variants, timeModes) {
     ])
   ];
 
-  // AI only
-  if (settingsObj.color) {
+  // both human and AI
+  if (settingsObj.color && (settingsObj.variant() === '1' || settingsObj.level)) {
     const colors = [
       ['randomColor', 'random'],
       ['white', 'white'],

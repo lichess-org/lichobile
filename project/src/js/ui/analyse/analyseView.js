@@ -25,7 +25,7 @@ export default function analyseView(ctrl) {
 
   const isPortrait = helper.isPortrait();
 
-  const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(i18n('analysis')) : null;
+  const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
   const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
   return layout.board(
@@ -482,6 +482,7 @@ function renderReplay(ctrl) {
 
 function gameInfos(ctrl) {
   if (isSynthetic(ctrl.data)) return null;
+  if (ctrl.vm.step.crazy) return null;
 
   const data = ctrl.data;
   const time = gameApi.time(data);

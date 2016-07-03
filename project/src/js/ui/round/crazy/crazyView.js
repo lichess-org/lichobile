@@ -6,13 +6,13 @@ import gameApi from '../../../lichess/game';
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export default {
-  pocket: function(ctrl, crazyData, color, position, isOTB) {
+  pocket: function(ctrl, crazyData, color, position, isOTB, customPieceTheme) {
     if (!crazyData) return null;
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
     const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
     const usable = usablePos && !ctrl.replaying() && gameApi.isPlayerPlaying(ctrl.data);
     const className = [
-      settings.general.theme.piece(),
+      customPieceTheme || settings.general.theme.piece(),
       'pocket',
       position,
       usable ? 'usable' : '',

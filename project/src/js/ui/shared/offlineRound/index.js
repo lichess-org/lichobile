@@ -7,7 +7,7 @@ import { renderMaterial } from '../../round/view/roundView';
 import crazyView from '../../round/crazy/crazyView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip) {
+export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip, customPieceTheme) {
   const sit = ctrl.replay.situation();
   const isCrazy = !!sit.crazyhouse;
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
@@ -36,7 +36,7 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
         </div> : null
         }
       </div>
-      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position, true)}
+      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position, true, customPieceTheme)}
     </section>
   );
 }

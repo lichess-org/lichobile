@@ -67,9 +67,9 @@ function renderContent(ctrl, pieceTheme) {
 
   if (isPortrait)
     return [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
       renderGameActionsBar(ctrl, 'otb')
     ];
   else
@@ -77,9 +77,9 @@ function renderContent(ctrl, pieceTheme) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme)}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme)}
         </section>
         {renderGameActionsBar(ctrl, 'otb')}
       </section>

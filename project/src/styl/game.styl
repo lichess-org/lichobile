@@ -370,12 +370,19 @@
   flex-flow row nowrap
   align-items center
   justify-content space-around
-  &.opponent.offline
-    transform rotate(180deg)
   @media only screen and (orientation: landscape)
     width calc((100vh - 50px) / 8 * 5)
     height calc((100vh - 50px) / 8 + 10px)
     max-height 55px
+
+.playTable.opponent.mode_facing
+  > .pocket
+    transform rotate(180deg)
+
+#page.white .playTable.mode_flip.turn_black,
+#page.black .playTable.mode_flip.turn_white
+  > .pocket
+    transform rotate(180deg)
 
 .pocket > piece
   width calc(100vw / 8)

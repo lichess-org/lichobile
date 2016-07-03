@@ -7,7 +7,7 @@ import { renderMaterial } from '../../round/view/roundView';
 import crazyView from '../../round/crazy/crazyView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position, isPortrait) {
+export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip) {
   const sit = ctrl.replay.situation();
   const isCrazy = !!sit.crazyhouse;
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
@@ -17,7 +17,9 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait) 
   const className = [
     'playTable',
     position,
-    isCrazy ? 'crazy' : ''
+    isCrazy ? 'crazy' : '',
+    otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
+    ctrl.chessground.data.turnColor === 'white' ? 'turn_white' : 'turn_black'
   ].join(' ');
 
   return (

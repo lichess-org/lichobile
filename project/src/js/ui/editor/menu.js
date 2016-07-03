@@ -32,7 +32,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'editorMenu',
-      () => m('h2.withIcon.fa.fa-pencil', i18n('boardEditor')),
+      null,
       renderEditorMenu.bind(undefined, ctrl.root),
       ctrl.isOpen(),
       ctrl.close

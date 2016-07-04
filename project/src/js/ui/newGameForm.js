@@ -186,7 +186,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
       ]));
   }
 
-  return m('form#new_game_form.game_form', {
+  return m('form.game_form', {
     onsubmit: function(e) {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
@@ -195,7 +195,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
     }
   }, [
     m('fieldset', generalFieldset),
-    m('fieldset#clock', timeFieldset),
+    m('fieldset', timeFieldset),
     m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
   ]);
 }

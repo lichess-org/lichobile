@@ -142,21 +142,27 @@ function renderOpponents(ctrl) {
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
 
+  const isCrazy = !!ctrl.vm.step.crazy;
+
   return (
     <div className="analyseOpponentsWrapper">
       <div className="analyseOpponent">
-        <span className={'color-icon ' + player.color} />
-        {playerName(player, true)}
-        {renderRatingDiff(player)}
+        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
+          <span className={'color-icon ' + player.color} />
+          {playerName(player, true)}
+          {renderRatingDiff(player)}
+        </div>
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, player.color) + ')' : null
         }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
       </div>
       <div className="analyseOpponent">
-        <span className={'color-icon ' + opponent.color} />
-        {playerName(opponent, true)}
-        {renderRatingDiff(opponent)}
+        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
+          <span className={'color-icon ' + opponent.color} />
+          {playerName(opponent, true)}
+          {renderRatingDiff(opponent)}
+        </div>
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
         }

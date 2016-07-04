@@ -5,6 +5,7 @@ import newGameForm from '../newGameForm';
 import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
+import playMachineForm from '../playMachineForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
@@ -102,14 +103,19 @@ function renderLinks(user) {
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }
-      {hasNetwork() && user ?
-      <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
-        <span className="fa fa-paper-plane" />{i18n('correspondence')}
-      </li> : null
-      }
       {hasNetwork() ?
       <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
+      </li> : null
+      }
+      {hasNetwork() ?
+      <li className="side_link" key="play_online_ai" config={helper.ontouchY(menu.popup(playMachineForm.open))}>
+        <span className="fa fa-cogs"/>{i18n('playWithTheMachine')}
+      </li> : null
+      }
+      {hasNetwork() && user ?
+      <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
+        <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li> : null
       }
       {hasNetwork() ?

@@ -168,7 +168,6 @@ export default {
   },
 
   gameSetup: {
-    selected: localstorageprop('settings.game.selected', 'human'),
     availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
     ],
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -220,6 +219,7 @@ export default {
       },
       ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
       ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),
+      color: localstorageprop('settings.game.human.color', 'random'),
       variant: localstorageprop('settings.game.human.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],

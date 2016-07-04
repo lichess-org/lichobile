@@ -59,7 +59,8 @@ export default function(
   }
 
   function boardConfig(el, isUpdate) {
-    if (!isUpdate) {
+    // fix nasty race condition bug when going from analysis to otb
+    if (!isUpdate && chessgroundCtrl) {
       if (!bounds) {
         chessgroundCtrl.setBounds(el.getBoundingClientRect());
       } else {
@@ -68,6 +69,9 @@ export default function(
       chessground.render(el, chessgroundCtrl);
     }
   }
+
+  // fix nasty race condition bug when going from analysis to otb
+  if (!chessgroundCtrl) return null;
 
   return (
     <section className={wrapperClass} config={wrapperConfig}

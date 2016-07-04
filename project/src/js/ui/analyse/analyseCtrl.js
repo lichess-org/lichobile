@@ -411,6 +411,7 @@ export default function controller() {
     if (this.chessLogic) this.chessLogic.onunload();
     if (this.chessground) {
       this.chessground.onunload();
+      this.chessground = null;
     }
   }.bind(this);
 }

@@ -17,12 +17,12 @@ export default function view(ctrl) {
   var content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
-  if (ctrl.replay && ctrl.chessground) {
-    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
-    content = renderContent.bind(undefined, ctrl, pieceTheme);
+  if (ctrl.data && ctrl.chessground) {
+    header = () => renderHeader(gameApi.title(ctrl.data));
+    content = () => renderContent(ctrl, pieceTheme);
   } else {
-    header = renderHeader.bind(undefined, i18n('playOnTheBoardOffline'));
-    content = viewOnlyBoardContent.bind(undefined, null, null, null, 'standard', null, pieceTheme);
+    header = () => renderHeader(i18n('playOnTheBoardOffline'));
+    content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
   }
 
   function overlay() {

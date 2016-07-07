@@ -14,7 +14,7 @@ import gameStatusApi from '../../lichess/status';
 import variantApi from '../../lichess/variant';
 import helper from '../helper';
 import layout from '../layout';
-import { header, backButton as renderBackbutton } from '../shared/common';
+import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
 import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import notes from '../round/notes';
@@ -28,11 +28,19 @@ export default function analyseView(ctrl) {
   const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
   const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
-  return layout.board(
-    header.bind(undefined, title, backButton),
-    () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl, isPortrait)
-  );
+  if (ctrl.data) {
+    return layout.board(
+      () => header(title, backButton),
+      () => renderContent(ctrl, isPortrait),
+      () => overlay(ctrl, isPortrait)
+    );
+  } else {
+    return layout.board(
+      () => header(i18n('analysis')),
+      viewOnlyBoardContent
+    );
+  }
+
 }
 
 function overlay(ctrl) {

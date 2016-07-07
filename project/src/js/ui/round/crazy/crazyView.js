@@ -26,12 +26,16 @@ export default {
         const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
         const contentNode = document.getElementById('content_round');
         el.addEventListener('touchstart', onstart);
-        contentNode.addEventListener('touchmove', onmove);
-        contentNode.addEventListener('touchend', onend);
+        if (contentNode) {
+          contentNode.addEventListener('touchmove', onmove);
+          contentNode.addEventListener('touchend', onend);
+        }
         ctx.onunload = function() {
           el.removeEventListener('touchstart', onstart);
-          contentNode.removeEventListener('touchmove', onmove);
-          contentNode.removeEventListener('touchend', onend);
+          if (contentNode) {
+            contentNode.removeEventListener('touchmove', onmove);
+            contentNode.removeEventListener('touchend', onend);
+          }
         };
       }
       if (ctx.flip === ctrl.vm.flip || !usablePos) return;

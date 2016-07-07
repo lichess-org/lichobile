@@ -17,7 +17,7 @@ export default function view(ctrl) {
   var content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
-  if (ctrl.replay) {
+  if (ctrl.replay && ctrl.chessground) {
     header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
     content = renderContent.bind(undefined, ctrl, pieceTheme);
   } else {

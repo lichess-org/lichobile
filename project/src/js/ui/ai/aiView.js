@@ -18,7 +18,7 @@ import i18n from '../../i18n';
 export default function view(ctrl) {
   var content, header;
 
-  if (ctrl.replay) {
+  if (ctrl.replay && ctrl.chessground) {
     header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
     content = renderContent.bind(undefined, ctrl);
   } else {

@@ -46,10 +46,6 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
-      <li className="side_link" config={helper.ontouch(menu.route('/@/' + user.id))}>
-        <span data-icon="r" />
-        {i18n('profile')}
-      </li>
       <li className="side_link" config={helper.ontouch(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
@@ -85,6 +81,11 @@ function renderLinks(user) {
       <li className="side_link" key="home" config={helper.ontouchY(menu.route('/'))}>
         <span className="fa fa-home" />Home
       </li>
+      {hasNetwork() && user ?
+      <li className="side_link" key="profile" config={helper.ontouch(menu.route('/@/' + user.id))}>
+        <span className="fa fa-user" />{i18n('profile')}
+      </li> : null
+      }
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }

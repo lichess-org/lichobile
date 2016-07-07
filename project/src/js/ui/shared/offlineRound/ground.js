@@ -54,8 +54,8 @@ function applySettings(ground) {
   });
 }
 
-function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
-  var config = makeConfig(data, fen);
+function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
+  var config = makeConfig(data, sit);
   config.movable.events = {
     after: userMove,
     afterNewPiece: userNewPiece

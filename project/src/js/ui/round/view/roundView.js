@@ -221,7 +221,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor;
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor + ctrl.data.game.player;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'

@@ -15,7 +15,8 @@ export default function ButtonHandler(el,
   repeatHandler,
   scrollX,
   scrollY,
-  touchEndFeedback) {
+  touchEndFeedback,
+  shouldPreventDefault) {
 
   let startX, startY, boundaries, active, holdTimeoutID, repeatTimeoutId, repeatIntervalID;
 
@@ -37,6 +38,7 @@ export default function ButtonHandler(el,
   }
 
   function onTouchStart(e) {
+    if (e.cancelable && shouldPreventDefault) e.preventDefault();
     let touch = e.changedTouches[0];
     let boundingRect = el.getBoundingClientRect();
     startX = touch.clientX;
@@ -59,6 +61,7 @@ export default function ButtonHandler(el,
   }
 
   function onTouchMove(e) {
+    if (e.cancelable && shouldPreventDefault) e.preventDefault();
     // if going out of bounds, no way to reenable the button
     if (active) {
       let touch = e.changedTouches[0];

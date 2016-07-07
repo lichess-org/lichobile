@@ -100,7 +100,6 @@ export default function controller() {
   this.onunload = function() {
     if (this.chessground) {
       this.chessground.onunload();
-      this.chessground = null;
     }
   };
 

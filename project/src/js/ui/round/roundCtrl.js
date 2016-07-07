@@ -517,6 +517,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
+    if (this.chessground) {
+      this.chessground.onunload();
+    }
     socket.destroy();
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
@@ -525,8 +528,5 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
   };
 }

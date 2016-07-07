@@ -406,13 +406,13 @@ export default function controller() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
-    if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
     if (this.chessground) {
       this.chessground.onunload();
       this.chessground = null;
     }
+    if (this.ceval) this.ceval.destroy();
+    if (this.chessLogic) this.chessLogic.onunload();
+    window.plugins.insomnia.allowSleepAgain();
   }.bind(this);
 }
 

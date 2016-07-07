@@ -175,12 +175,12 @@ export default function controller() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
     if (this.chessground) {
       this.chessground.onunload();
     }
     if (chessWorker) {
       chessWorker.terminate();
     }
+    window.plugins.insomnia.allowSleepAgain();
   };
 }

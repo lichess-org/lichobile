@@ -1,5 +1,6 @@
 import m from 'mithril';
 import helper from '../../helper';
+import spinner from '../../../spinner';
 import { view as renderConfig } from './explorerConfig';
 
 function resultBar(move) {
@@ -229,7 +230,7 @@ export default function(ctrl) {
   return m('div', {
     className: helper.classSet({
       explorerTable: true,
-      loading: loading,
+      loading,
       config: configOpened
     }),
     key: 'explorer',
@@ -239,10 +240,11 @@ export default function(ctrl) {
       el.scrollTop = 0;
     }
   }, [
+    m('div.spinner_overlay', m.trust(spinner.getHtml())),
     content,
     (!content || ctrl.explorer.failing()) ? null : m('span.toconf', {
       'data-icon': configOpened ? 'L' : '%',
-      onclick: config.toggleOpen
+      config: helper.ontouch(config.toggleOpen)
     })
   ]);
 }

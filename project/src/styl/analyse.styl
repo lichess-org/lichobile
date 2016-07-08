@@ -264,59 +264,73 @@
 .explorerTable
   overflow-x: hidden;
   white-space: nowrap;
+  .empty
+    text-align: center;
+  .spinner
+    margin-top: 88px;
+  tbody
+    transition: opacity 0.13s;
+  th
+    text-transform: capitalize;
+    padding-left: 7px;
+  th, .title
+    font-size: 11px;
+    line-height: 22px;
+    background: #3b93da;
+    color: #fff;
+    text-align: left;
+    padding-left: 10px;
+  tr
+    transition: background-color 0.13s;
+    &:nth-child(even)
+      background: #fafafa;
+  td
+    padding-left: 7px;
+  .white
+    background: #fff;
+    box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
+  .draws, .black
+    color: #fff;
+    box-shadow: 0 5px 7px rgba(255,255,255,0.2) inset;
+  .draws
+    background: #a0a0a0;
+  .black
+    background: #555;
+    color: #ddd;
+  .games
+    width: 100%;
+  .games td
+    padding: 5px 0 5px 7px;
+    max-width: 110px;
+  .games td span
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  .games result
+    display: block;
+    text-align: center;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+  &.loading
+    tbody
+      opacity: 0.4;
 
-.explorerTable tbody
-  transition: opacity 0.13s;
+.explorerMove
+  &:first-child
+    font-size: 14px;
+    line-height: 30px;
+    padding-left: 7px;
+  &:nth-child(2)
+    font-size: 10px;
+    opacity: 0.8;
+    text-align: right;
+  &:last-child
+    width: 100%;
+    padding-right: 7px;
 
-.explorerTable.loading tbody
-  opacity: 0.4;
-
-.explorerTable .empty
-  text-align: center;
-
-.explorerTable .spinner
-  margin-top: 88px;
-
-.explorerTable thead th
-  text-transform: capitalize;
-  padding-left: 7px;
-
-.explorerTable thead th,
-.explorerTable .title
-  font-size: 11px;
-  line-height: 22px;
-  background: #3b93da;
-  color: #fff;
-  text-align: left;
-  padding-left: 10px;
-
-.explorerTable tr:nth-child(even)
-  background: #fafafa;
-
-.explorerTable tbody tr
-  transition: background-color 0.13s;
-
-.explorerTable tbody tr:hover
-  background: rgba(191, 231, 255, 0.7);
-
-.explorerTable td
-  padding-left: 7px;
-
-.explorerMove:first-child
-  font-size: 14px;
-  line-height: 30px;
-  padding-left: 7px;
-
-.explorerMove:nth-child(2)
-  font-size: 10px;
-  opacity: 0.8;
-  text-align: right;
-
-.explorerMove:last-child
-  width: 100%;
-  padding-right: 7px;
-
-.explorerTable .bar span
+.explorerBar
   text-align: center;
   display: inline-block;
   overflow: hidden;
@@ -327,68 +341,28 @@
   height: 16px;
   line-height: 16px;
   font-size: 11px;
+  &:first-child
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-width: 1px;
 
-.explorerTable .white
-  background: #fff;
-  box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
+  &:last-child
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right-width: 1px;
 
-.explorerTable .draws,
-.explorerTable .black
-  color: #fff;
-  box-shadow: 0 5px 7px rgba(255,255,255,0.2) inset;
-
-.explorerTable .draws
-  background: #a0a0a0;
-
-.explorerTable .black
-  background: #555;
-  color: #ddd;
-
-.explorerTable .bar span:first-child
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-left-width: 1px;
-
-.explorerTable .bar span:last-child
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-right-width: 1px;
-
-.explorerTable .games
+.explorerTablebase
   width: 100%;
-
-.explorerTable .games td
-  padding: 5px 0 5px 7px;
-  max-width: 110px;
-
-.explorerTable .games td span
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-.explorerTable .games result
-  display: block;
-  text-align: center;
-  padding: 3px 5px;
-  border-radius: 3px;
-  font-family: monospace;
-  font-size: 0.9em;
-
-.explorerTable .tablebase
-  width: 100%;
-
-.explorerTable .tablebase td:first-child
-  font-family: 'ChessSansPiratf', sans-serif;
-  font-size: 14px;
-  line-height: 30px;
-  padding-left: 7px;
-
-.explorerTable .tablebase td:last-child
-  padding-right: 7px;
-  text-align: right;
-
-.explorerTable .tablebase result
-  padding: 3px 5px;
-  margin-left: 5px;
-  border-radius: 3px;
-  font-size: 0.9em;
+  td:first-child
+    font-family: 'ChessSansPiratf', sans-serif;
+    font-size: 14px;
+    line-height: 30px;
+    padding-left: 7px;
+  td:last-child
+    padding-right: 7px;
+    text-align: right;
+  result
+    padding: 3px 5px;
+    margin-left: 5px;
+    border-radius: 3px;
+    font-size: 0.9em;

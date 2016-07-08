@@ -4,16 +4,16 @@ import { view as renderConfig } from './explorerConfig';
 
 function resultBar(move) {
   var sum = move.white + move.draws + move.black;
-  var section = function(key) {
+  function section(key) {
     var percent = move[key] * 100 / sum;
-    return percent === 0 ? null : m('span', {
+    return percent === 0 ? null : m('span.explorerBar', {
       className: key,
       style: {
         width: (Math.round(move[key] * 1000 / sum) / 10) + '%'
       }
     }, percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null);
-  };
-  return m('div.bar', ['white', 'draws', 'black'].map(section));
+  }
+  return ['white', 'draws', 'black'].map(section);
 }
 
 var lastShow = null;
@@ -93,7 +93,7 @@ function showTablebase(ctrl, title, moves, fen) {
   if (!moves.length) return null;
   return [
     m('div.title', title),
-    m('table.tablebase', [
+    m('table.explorerTablebase', [
       m('tbody', moveTableAttributes(ctrl, fen), moves.map(function(move) {
         return m('tr', {
           key: move.uci,

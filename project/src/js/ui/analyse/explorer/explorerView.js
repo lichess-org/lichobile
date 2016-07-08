@@ -47,9 +47,9 @@ function showMoveTable(ctrl, moves, fen) {
         'data-uci': move.uci,
         title: 'Average rating: ' + move.averageRating
       }, [
-        m('td', move.san[0] === 'P' ? move.san.slice(1) : move.san),
-        m('td', move.white + move.draws + move.black),
-        m('td', resultBar(move))
+        m('td.explorerMove', move.san[0] === 'P' ? move.san.slice(1) : move.san),
+        m('td.explorerMove', move.white + move.draws + move.black),
+        m('td.explorerMove', resultBar(move))
       ]);
     }))
   ]);
@@ -140,7 +140,7 @@ function showDtz(stm, move) {
 }
 
 function showEmpty(ctrl) {
-  return m('div.data.empty', [
+  return m('div.data.empty.scrollerWrapper', [
     m('div.title', showTitle(ctrl)),
     m('div.message', [
       m('i[data-icon=]'),
@@ -158,7 +158,7 @@ function showEmpty(ctrl) {
 }
 
 function showGameEnd(ctrl, title) {
-  return m('div.data.empty', [
+  return m('div.data.empty.scrollerWrapper', [
     m('div.title', 'Game over'),
     m('div.message', [
       m('i[data-icon=]'),
@@ -171,16 +171,16 @@ function showGameEnd(ctrl, title) {
 }
 
 function show(ctrl) {
-  var data = ctrl.explorer.current();
+  const data = ctrl.explorer.current();
   if (data && data.opening) {
-    var moveTable = showMoveTable(ctrl, data.moves, data.fen);
-    var recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
-    var topTable = showGameTable(ctrl, 'top', data.topGames || []);
-    if (moveTable || recentTable || topTable) lastShow = m('div.data', [moveTable, topTable, recentTable]);
+    const moveTable = showMoveTable(ctrl, data.moves, data.fen);
+    const recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
+    const topTable = showGameTable(ctrl, 'top', data.topGames || []);
+    if (moveTable || recentTable || topTable) lastShow = m('div.data.scrollerWrapper', [moveTable, topTable, recentTable]);
     else lastShow = showEmpty(ctrl);
   } else if (data && data.tablebase) {
     var moves = data.moves;
-    if (moves.length) lastShow = m('div.data', [
+    if (moves.length) lastShow = m('div.data.scrollerWrapper', [
       showTablebase(ctrl, 'Winning', moves.filter(function(move) { return move.real_wdl === -2; }), data.fen),
       showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter(function(move) { return move.real_wdl === -1; }), data.fen),
       showTablebase(ctrl, 'Drawn', moves.filter(function(move) { return move.real_wdl === 0; }), data.fen),
@@ -228,10 +228,11 @@ export default function(ctrl) {
   const content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
   return m('div', {
     className: helper.classSet({
-      explorer_box: true,
+      explorerTable: true,
       loading: loading,
       config: configOpened
     }),
+    key: 'explorer',
     config: function(el, isUpdate, ctx) {
       if (!isUpdate || !data || ctx.lastFen === data.fen) return;
       ctx.lastFen = data.fen;

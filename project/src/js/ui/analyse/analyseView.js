@@ -93,8 +93,8 @@ function renderAnalyseTable(ctrl) {
   ].join(' ');
 
   return (
-    <div className={className}>
-      <div className="analyse">
+    <div className={className} key="analyse">
+      <div className="analyse scrollerWrapper">
         {renderOpeningBox(ctrl)}
         {renderReplay(ctrl)}
       </div>
@@ -123,7 +123,7 @@ function renderInfos(ctrl) {
   ctrl.vm.infosHash = hash;
 
   return (
-    <div className="analyseInfos">
+    <div className="analyseInfos scrollerWrapper">
       { cevalEnabled ?
         cevalView.renderCeval(ctrl) : null
       }
@@ -565,7 +565,7 @@ function buttons(ctrl) {
 
 function renderActionsBar(ctrl) {
 
-  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late;
+  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late + ctrl.explorer.enabled();
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'
@@ -576,6 +576,13 @@ function renderActionsBar(ctrl) {
     ctrl.sharePGN,
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   );
+
+  const explorerBtnClass = [
+    'action_bar_button',
+    'fa',
+    'fa-book',
+    ctrl.explorer.enabled() ? 'highlight' : ''
+  ].join(' ');
 
   return (
     <section className="actions_bar">
@@ -589,7 +596,7 @@ function renderActionsBar(ctrl) {
       }
       {ctrl.notes ? button.notes(ctrl) : null}
       {hasNetwork() ?
-        <button className="action_bar_button fa fa-book" key="explorer"
+        <button className={explorerBtnClass} key="explorer"
           config={helper.ontouch(
             ctrl.explorer.toggle,
             () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')

@@ -74,7 +74,15 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
-    showBestMove: localstorageprop('settings.analyse.showBestMove', true)
+    showBestMove: localstorageprop('settings.analyse.showBestMove', true),
+    explorer: {
+      enable: localstorageprop('settings.analyse.enableExplorer', true),
+      db: localstorageprop('settings.analyse.explorer.db', 'lichess'),
+      availableRatings: [1600, 1800, 2000, 2200, 2500],
+      rating: localstorageprop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
+      availableSpeeds: ['bullet', 'blitz', 'classical'],
+      speed: localstorageprop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'classical'])
+    }
   },
 
   ai: {

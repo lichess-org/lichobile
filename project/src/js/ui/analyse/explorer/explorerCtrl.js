@@ -94,6 +94,8 @@ export default function(root, allow) {
       return cache[root.vm.step.fen];
     },
     toggle() {
+      root.vm.infosHash = '';
+      root.vm.openingHash = '';
       enabled(!enabled());
       setStep();
     },

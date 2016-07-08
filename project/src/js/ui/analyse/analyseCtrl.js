@@ -51,7 +51,6 @@ export default function controller() {
     flip: false,
     variationMenu: null,
     showBestMove: settings.analyse.showBestMove(),
-    replayHash: '',
     buttonsHash: '',
     infosHash: '',
     openingHash: ''

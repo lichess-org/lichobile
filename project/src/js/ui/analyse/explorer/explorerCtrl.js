@@ -1,9 +1,8 @@
 import m from 'mithril';
 import throttle from 'lodash/throttle';
-import { controller as configCtrl } from './explorerConfig';
+import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
-import settings from '../../../settings';
 import gameApi from '../../../lichess/game';
 
 function tablebaseRelevant(fen) {
@@ -16,21 +15,20 @@ function tablebaseRelevant(fen) {
 export default function(root, allow) {
 
   const allowed = m.prop(allow);
-  const enabled = settings.analyse.enableExplorer();
+  const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
-  const hoveringUci = m.prop(null);
 
   var cache = {};
-  const onConfigClose = function() {
+  function onConfigClose() {
     m.redraw();
     cache = {};
     setNode();
-  };
+  }
   const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.opponent.ai;
   const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
-  const config = configCtrl(root.data.game.variant, onConfigClose);
+  const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
 
   const handleFetchError = function() {
     loading(false);
@@ -90,7 +88,6 @@ export default function(root, allow) {
     setNode,
     loading,
     failing,
-    hoveringUci,
     config,
     withGames,
     current() {
@@ -99,12 +96,10 @@ export default function(root, allow) {
     toggle() {
       enabled(!enabled());
       setNode();
-      root.autoScroll();
     },
     disable() {
       if (enabled()) {
         enabled(false);
-        root.autoScroll();
       }
     }
   };

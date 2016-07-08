@@ -9,7 +9,7 @@ export default {
       available.push('masters');
     }
 
-    var data = {
+    const data = {
       open: m.prop(false),
       db: {
         available: available,
@@ -27,12 +27,12 @@ export default {
       }
     };
 
-    var toggleMany = function(c, value) {
+    function toggleMany(c, value) {
       if (c().indexOf(value) === -1) c(c().concat([value]));
       else if (c().length > 1) c(c().filter(function(v) {
         return v !== value;
       }));
-    };
+    }
 
     return {
       data: data,

@@ -40,7 +40,6 @@ export default function analyseView(ctrl) {
       viewOnlyBoardContent
     );
   }
-
 }
 
 function overlay(ctrl) {

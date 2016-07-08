@@ -21,6 +21,7 @@ import chessLogic from './chessLogic';
 import { renderStepsTxt } from './pgnExport';
 import { getPGN } from '../round/roundXhr';
 import crazyValid from './crazy/crazyValid';
+import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
 import m from 'mithril';
 
@@ -134,6 +135,7 @@ export default function controller() {
       else sound.move();
     }
     this.ceval.stop();
+    this.explorer.setNode();
     debouncedStartCeval();
     debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
@@ -190,13 +192,13 @@ export default function controller() {
     rook: 'R',
     queen: 'Q'
   };
-  // const sanToRole = {
-  //   P: 'pawn',
-  //   N: 'knight',
-  //   B: 'bishop',
-  //   R: 'rook',
-  //   Q: 'queen'
-  // };
+  const sanToRole = {
+    P: 'pawn',
+    N: 'knight',
+    B: 'bishop',
+    R: 'rook',
+    Q: 'queen'
+  };
 
   function userMove(orig, dest, capture) {
     this.vm.justPlayed = orig + dest;
@@ -220,6 +222,22 @@ export default function controller() {
     } else this.jump(this.vm.path);
   }
 
+  this.explorerMove = function(uci) {
+    const move = util.decomposeUci(uci);
+    if (uci[1] === '@') {
+      this.chessground.apiNewPiece({
+        color: this.chessground.data.movable.color,
+        role: sanToRole[uci[0]]
+      }, move[1]);
+    } else if (!move[2]) {
+      sendMove(move[0], move[1]);
+    }
+    else {
+      sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()]);
+    }
+    this.explorer.loading(true);
+  }.bind(this);
+
   this.addStep = function(step, path) {
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
@@ -238,8 +256,9 @@ export default function controller() {
   }.bind(this);
 
   this.toggleVariationMenu = function(path) {
-    if (!path) this.vm.variationMenu = null;
-    else {
+    if (!path) {
+      this.vm.variationMenu = null;
+    } else {
       var key = treePath.write(path.slice(0, 1));
       this.vm.variationMenu = this.vm.variationMenu === key ? null : key;
     }
@@ -265,10 +284,6 @@ export default function controller() {
   this.reset = function() {
     this.chessground.set(this.vm.situation);
     m.redraw();
-  }.bind(this);
-
-  this.encodeStepFen = function() {
-    return this.vm.step.fen.replace(/\s/g, '_');
   }.bind(this);
 
   this.currentAnyEval = function() {
@@ -317,38 +332,6 @@ export default function controller() {
     this.vm.showBestMove = !this.vm.showBestMove;
   }.bind(this);
 
-  this.init = function(data) {
-    this.data = data;
-    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
-      m.route('/');
-    }
-    if (!data.game.moveTimes) this.data.game.moveTimes = [];
-    this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-    this.analyse = new analyse(this.data.steps);
-    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
-
-    var initialPath = treePath.default(this.analyse.firstPly());
-    if (initialPath[0].ply >= this.data.steps.length) {
-      initialPath = treePath.default(this.data.steps.length - 1);
-    }
-
-    this.vm.path = initialPath;
-    this.vm.pathStr = treePath.write(initialPath);
-
-    showGround();
-    this.initCeval();
-  }.bind(this);
-
-  this.startNewAnalysis = function() {
-    if (m.route() === '/analyse') {
-      m.route('/analyse', null, true);
-    } else {
-      m.route('/analyse');
-    }
-  };
-
   this.sharePGN = function() {
     if (this.source === 'online') {
       getPGN(this.data.game.id)
@@ -366,6 +349,40 @@ export default function controller() {
       window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
     }
   }.bind(this);
+
+  this.init = function(data) {
+    this.data = data;
+    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
+      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
+      m.route('/');
+    }
+    if (!data.game.moveTimes) this.data.game.moveTimes = [];
+    this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
+    this.analyse = new analyse(this.data.steps);
+    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
+    this.explorer = explorerCtrl(this, true);
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+
+    var initialPath = treePath.default(this.analyse.firstPly());
+    if (initialPath[0].ply >= this.data.steps.length) {
+      initialPath = treePath.default(this.data.steps.length - 1);
+    }
+
+    this.vm.path = initialPath;
+    this.vm.pathStr = treePath.write(initialPath);
+
+    showGround();
+    this.initCeval();
+    this.explorer.setNode();
+  }.bind(this);
+
+  this.startNewAnalysis = function() {
+    if (m.route() === '/analyse') {
+      m.route('/analyse', null, true);
+    } else {
+      m.route('/analyse');
+    }
+  };
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {

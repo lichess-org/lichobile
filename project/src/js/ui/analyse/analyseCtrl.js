@@ -135,7 +135,7 @@ export default function controller() {
       else sound.move();
     }
     this.ceval.stop();
-    this.explorer.setNode();
+    this.explorer.setStep();
     debouncedStartCeval();
     debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
@@ -373,7 +373,7 @@ export default function controller() {
 
     showGround();
     this.initCeval();
-    this.explorer.setNode();
+    this.explorer.setStep();
   }.bind(this);
 
   this.startNewAnalysis = function() {

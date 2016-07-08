@@ -166,6 +166,7 @@ function viewportDim() {
 }
 
 export default {
+  findParentBySelector,
   slidingPage: animator(viewSlideIn, viewSlideOut),
   fadingPage: animator(viewFadesIn, viewFadesOut),
 

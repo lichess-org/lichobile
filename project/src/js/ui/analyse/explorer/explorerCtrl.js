@@ -23,7 +23,7 @@ export default function(root, allow) {
   function onConfigClose() {
     m.redraw();
     cache = {};
-    setNode();
+    setStep();
   }
   const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.opponent.ai;
   const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
@@ -48,7 +48,7 @@ export default function(root, allow) {
   }, 2000);
 
   const fetchTablebase = throttle(fen => {
-    tablebaseXhr(root.vm.node.fen).then(res => {
+    tablebaseXhr(root.vm.step.fen).then(res => {
       res.tablebase = true;
       res.fen = fen;
       cache[fen] = res;
@@ -69,13 +69,13 @@ export default function(root, allow) {
     moves: {}
   };
 
-  function setNode() {
+  function setStep() {
     if (!enabled()) return;
-    const node = root.vm.node;
-    if (node.ply > 50 && !tablebaseRelevant(node.fen)) cache[node.fen] = empty;
-    if (!cache[node.fen]) {
+    const step = root.vm.step;
+    if (step.ply > 50 && !tablebaseRelevant(step.fen)) cache[step.fen] = empty;
+    if (!cache[step.fen]) {
       loading(true);
-      fetch(node.fen);
+      fetch(step.fen);
     } else {
       loading(false);
       failing(false);
@@ -85,17 +85,17 @@ export default function(root, allow) {
   return {
     allowed,
     enabled,
-    setNode,
+    setStep,
     loading,
     failing,
     config,
     withGames,
     current() {
-      return cache[root.vm.node.fen];
+      return cache[root.vm.step.fen];
     },
     toggle() {
       enabled(!enabled());
-      setNode();
+      setStep();
     },
     disable() {
       if (enabled()) {

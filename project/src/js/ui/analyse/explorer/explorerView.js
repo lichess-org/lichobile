@@ -1,5 +1,4 @@
 import m from 'mithril';
-import { classSet } from '../../../utils';
 import helper from '../../helper';
 import { view as renderConfig } from './explorerConfig';
 
@@ -220,31 +219,29 @@ function failing() {
   ]);
 }
 
-export default {
-  renderExplorer(ctrl) {
-    if (!ctrl.explorer.enabled()) return null;
-    var data = ctrl.explorer.current();
-    var config = ctrl.explorer.config;
-    var configOpened = config.data.open();
-    var loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
-    var content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
-    return m('div', {
-      className: classSet({
-        explorer_box: true,
-        loading: loading,
-        config: configOpened
-      }),
-      config: function(el, isUpdate, ctx) {
-        if (!isUpdate || !data || ctx.lastFen === data.fen) return;
-        ctx.lastFen = data.fen;
-        el.scrollTop = 0;
-      }
-    }, [
-      content,
-      (!content || ctrl.explorer.failing()) ? null : m('span.toconf', {
-        'data-icon': configOpened ? 'L' : '%',
-        onclick: config.toggleOpen
-      })
-    ]);
-  }
-};
+export default function(ctrl) {
+  if (!ctrl.explorer.enabled()) return null;
+  const data = ctrl.explorer.current();
+  const config = ctrl.explorer.config;
+  const configOpened = config.data.open();
+  const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
+  const content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
+  return m('div', {
+    className: helper.classSet({
+      explorer_box: true,
+      loading: loading,
+      config: configOpened
+    }),
+    config: function(el, isUpdate, ctx) {
+      if (!isUpdate || !data || ctx.lastFen === data.fen) return;
+      ctx.lastFen = data.fen;
+      el.scrollTop = 0;
+    }
+  }, [
+    content,
+    (!content || ctrl.explorer.failing()) ? null : m('span.toconf', {
+      'data-icon': configOpened ? 'L' : '%',
+      onclick: config.toggleOpen
+    })
+  ]);
+}

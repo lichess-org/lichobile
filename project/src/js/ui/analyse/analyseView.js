@@ -16,10 +16,11 @@ import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
-import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
+import { hasNetwork, getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import notes from '../round/notes';
 import button from '../round/view/button';
 import crazyView from './crazy/crazyView';
+import explorerView from './explorer/explorerView';
 
 export default function analyseView(ctrl) {
 
@@ -76,13 +77,16 @@ function renderContent(ctrl, isPortrait) {
   return [
     board,
     <div className="analyseTableWrapper">
-      {renderTable(ctrl)}
+      {ctrl.explorer.enabled() ?
+        explorerView(ctrl) :
+        renderAnalyseTable(ctrl)
+      }
       {renderActionsBar(ctrl, isPortrait)}
     </div>
   ];
 }
 
-function renderTable(ctrl) {
+function renderAnalyseTable(ctrl) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
@@ -584,6 +588,14 @@ function renderActionsBar(ctrl) {
         /> : null
       }
       {ctrl.notes ? button.notes(ctrl) : null}
+      {hasNetwork() ?
+        <button className="action_bar_button fa fa-book" key="explorer"
+          config={helper.ontouch(
+            ctrl.explorer.toggle,
+            () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
+          )}
+        /> : null
+      }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
         config={helper.ontouch(
           ctrl.flip,

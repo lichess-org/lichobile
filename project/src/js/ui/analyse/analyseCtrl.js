@@ -45,7 +45,6 @@ export default function controller() {
     shouldGoBack: gameId !== undefined || fen !== undefined,
     path: null,
     pathStr: '',
-    initialPathStr: '',
     step: null,
     cgConfig: null,
     flip: false,
@@ -124,6 +123,10 @@ export default function controller() {
 
   const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
+  const updateHref = debounce(() => {
+    window.history.replaceState(null, null, '#' + this.vm.step.ply);
+  }, 750);
+
   this.jump = function(path, direction) {
     this.vm.path = path;
     this.vm.pathStr = treePath.write(path);
@@ -135,6 +138,7 @@ export default function controller() {
     }
     this.ceval.stop();
     this.explorer.setStep();
+    updateHref();
     debouncedStartCeval();
     debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
@@ -362,7 +366,10 @@ export default function controller() {
     this.explorer = explorerCtrl(this, true);
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
-    var initialPath = treePath.default(this.analyse.firstPly());
+    let initialPath = location.hash ?
+      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
+      treePath.default(this.analyse.firstPly());
+
     if (initialPath[0].ply >= this.data.steps.length) {
       initialPath = treePath.default(this.data.steps.length - 1);
     }

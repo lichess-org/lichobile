@@ -192,7 +192,7 @@ function showTitle(ctrl) {
 }
 
 function showConfig(ctrl) {
-  return m('div.scrollerWrapper', [
+  return m('div.scrollerWrapper.explorerConfig', [
     m('div.title', showTitle(ctrl)),
     explorerConfig.view(ctrl.explorer.config)
   ]);
@@ -218,8 +218,7 @@ export default function(ctrl) {
   return m('div', {
     className: helper.classSet({
       explorerTable: true,
-      loading,
-      config: configOpened
+      loading
     }),
     key: 'explorer',
     config: function(el, isUpdate, ctx) {

@@ -283,16 +283,15 @@
     text-transform: capitalize;
     padding-left: 7px;
   th, .title
-    font-size: 11px;
+    font-size: 12px;
     line-height: 22px;
-    background: #215279;
-    color: #ccc;
+    background lighten(bgdark, 10%)
     text-align: left;
     padding-left: 10px;
   tr
     transition: background-color 0.13s;
     &:nth-child(even)
-      background: #262626;
+      background: lighten(bgdark, 5%)
   td
     padding-left: 7px;
   .white
@@ -330,9 +329,10 @@
     top: 0;
     right: 0;
     display: block;
-    color: #fff;
     font-size: 20px;
     line-height: 20px;
+    width 30px
+    height 30px
     text-align: center;
     opacity: 0.7;
   .message
@@ -356,8 +356,11 @@
     tbody
       opacity: 0.4;
 
+
 .view-container.light
   .explorerTable
+    th, .title
+      background darken(bglight, 13%)
     tr
       &:nth-child(even)
         background #fafafa
@@ -371,6 +374,48 @@
       color: #ddd;
   .explorerBar
     border-color #ccc
+  .explorerConfig
+    span
+      border-color #ccc
+
+.explorerConfig
+  section
+    padding: 8px 10px 0 10px;
+    &.db
+      padding-top: 5px;
+    &.save
+      text-align: center;
+      padding: 15px 0 10px 0;
+    label
+      font-weight: bold;
+      display: block;
+      line-height: 2em;
+      max-width 300px
+      margin 0 auto
+    .choices
+      display: flex;
+      max-width 300px
+      margin 0 auto
+      span
+        flex-grow: 1;
+        padding: 5px 0;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.13s;
+        border: 1px solid #3d3d3d;
+        border-width: 1px 0 1px 1px;
+        text-transform: capitalize;
+        &:first-child
+          border-radius: 3px 0 0 3px;
+        &:last-child
+          border-radius: 0 3px 3px 0;
+          border-right-width: 1px;
+        &.selected
+          background: #3893E8;
+          color: #fff;
+          text-shadow: 1px 0 0 rgba(0,0,0,0.5);
+          font-weight: bold;
+          box-shadow: 0 3px 5px rgba(0,0,0,0.2) inset;
 
 .explorerMove
   &:first-child

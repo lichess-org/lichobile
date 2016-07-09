@@ -19,37 +19,24 @@ function resultBar(move) {
 
 var lastShow = null;
 
-function $trUci($tr) {
-  return $tr[0] ? $tr[0].getAttribute('data-uci') : null;
-}
-
-function moveTableAttributes(ctrl) {
-  return {
-    config: helper.ontouchY(e => {
-      const $tr = helper.findParentBySelector(e.target, 'tr');
-      if ($tr.length) ctrl.explorerMove($trUci($tr));
-    })
-  };
-}
-
-function showMoveTable(ctrl, moves, fen) {
+function showMoveTable(ctrl, moves) {
   if (!moves.length) return null;
   return m('table.moves', [
     m('thead', [
       m('tr', [
         m('th', 'Move'),
         m('th', 'Games'),
+        m('th', 'Av. rating'),
         m('th', 'White / Draw / Black')
       ])
     ]),
-    m('tbody', moveTableAttributes(ctrl, fen), moves.map(function(move) {
+    m('tbody', moves.map(move => {
       return m('tr', {
-        key: move.uci,
-        'data-uci': move.uci,
-        title: 'Average rating: ' + move.averageRating
+        key: move.uci
       }, [
         m('td.explorerMove', move.san[0] === 'P' ? move.san.slice(1) : move.san),
         m('td.explorerMove', move.white + move.draws + move.black),
+        m('td.explorerMove', move.averageRating),
         m('td.explorerMove', resultBar(move))
       ]);
     }))
@@ -95,10 +82,9 @@ function showTablebase(ctrl, title, moves, fen) {
   return [
     m('div.title', title),
     m('table.explorerTablebase', [
-      m('tbody', moveTableAttributes(ctrl, fen), moves.map(function(move) {
+      m('tbody', moves.map(move => {
         return m('tr', {
-          key: move.uci,
-          'data-uci': move.uci
+          key: move.uci
         }, [
           m('td', move.san),
           m('td', [showDtz(stm, move), showDtm(stm, move)])

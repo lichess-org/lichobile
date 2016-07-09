@@ -7,6 +7,7 @@
   width 100%
   display flex
   > .scrollerWrapper
+    width 100%
     @media only screen and (orientation: portrait)
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
     @media only screen and (orientation: landscape)
@@ -328,15 +329,27 @@
     position: absolute;
     top: 0;
     right: 0;
-    cursor: pointer;
     display: block;
-    font-size: 15px;
     color: #fff;
-    width: 22px;
-    height: 22px;
+    font-size: 20px;
     line-height: 20px;
     text-align: center;
     opacity: 0.7;
+  .message
+    text-align: center;
+    font-style: italic;
+    i
+      font-size: 28px;
+      display: inline-block;
+      margin: 10px 0 0;
+      opacity: 0.7;
+    h3
+      font-weight: bold;
+    p
+      white-space: normal;
+      padding: 0 10px;
+    &.failing
+      font-size: 70px;
   &.loading
     .spinner_overlay
       visibility visible
@@ -348,9 +361,6 @@
     tr
       &:nth-child(even)
         background #fafafa
-    th
-      background: blue
-      color: #fff;
     .white
       background: #fff;
       box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;

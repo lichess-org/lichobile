@@ -1,7 +1,7 @@
 import m from 'mithril';
 import helper from '../../helper';
 import spinner from '../../../spinner';
-import { view as renderConfig } from './explorerConfig';
+import explorerConfig from './explorerConfig';
 
 function resultBar(move) {
   var sum = move.white + move.draws + move.black;
@@ -141,11 +141,7 @@ function showEmpty(ctrl) {
       m('p',
         ctrl.explorer.config.fullHouse() ?
         'Already searching through all available games.' :
-        'Maybe include more games from the preferences menu?'),
-      m('br'),
-      m('button.button.text[data-icon=L]', {
-        onclick: ctrl.explorer.toggle
-      }, 'Close')
+        'Maybe include more games from the preferences menu?')
     ])
   ]);
 }
@@ -196,9 +192,9 @@ function showTitle(ctrl) {
 }
 
 function showConfig(ctrl) {
-  return m('div.config', [
+  return m('div.scrollerWrapper', [
     m('div.title', showTitle(ctrl)),
-    renderConfig(ctrl.explorer.config)
+    explorerConfig.view(ctrl.explorer.config)
   ]);
 }
 

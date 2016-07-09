@@ -284,27 +284,29 @@
   th, .title
     font-size: 11px;
     line-height: 22px;
-    background: blue
-    color: #fff;
+    background: #215279;
+    color: #ccc;
     text-align: left;
     padding-left: 10px;
   tr
     transition: background-color 0.13s;
     &:nth-child(even)
-      background: #fafafa;
+      background: #262626;
   td
     padding-left: 7px;
   .white
-    background: #fff;
-    box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
+    background: #bbb;
+    color: #222;
+    box-shadow: 0 -5px 7px rgba(0,0,0,0.25) inset;
   .draws, .black
     color: #fff;
     box-shadow: 0 5px 7px rgba(255,255,255,0.2) inset;
   .draws
-    background: #a0a0a0;
-  .black
-    background: #555;
+    background: #666;
     color: #ddd;
+  .black
+    background: #333;
+    box-shadow: 0 5px 7px rgba(255,255,255,0.1) inset;
   .games
     font-size 0.8em
     width: 100%;
@@ -341,6 +343,25 @@
     tbody
       opacity: 0.4;
 
+.view-container.light
+  .explorerTable
+    tr
+      &:nth-child(even)
+        background #fafafa
+    th
+      background: blue
+      color: #fff;
+    .white
+      background: #fff;
+      box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
+    .draws
+      background: #a0a0a0;
+    .black
+      background: #555;
+      color: #ddd;
+  .explorerBar
+    border-color #ccc
+
 .explorerMove
   &:first-child
     font-size: 14px;
@@ -359,7 +380,7 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: middle;
-  border: 0px solid #ccc;
+  border: 0px solid #555;
   border-width: 1px 0;
   box-sizing: border-box;
   height: 16px;

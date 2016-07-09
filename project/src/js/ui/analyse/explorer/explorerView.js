@@ -32,7 +32,8 @@ function showMoveTable(ctrl, moves) {
     ]),
     m('tbody', moves.map(move => {
       return m('tr', {
-        key: move.uci
+        key: move.uci,
+        config: helper.ontouchY(() => ctrl.explorerMove(move.uci))
       }, [
         m('td.explorerMove', move.san[0] === 'P' ? move.san.slice(1) : move.san),
         m('td.explorerMove', move.white + move.draws + move.black),
@@ -43,9 +44,9 @@ function showMoveTable(ctrl, moves) {
   ]);
 }
 
-function showResult() {
-  if (winner === 'white') return m('result.white', '1-0');
-  if (winner === 'black') return m('result.black', '0-1');
+function showResult(w) {
+  if (w === 'white') return m('result.white', '1-0');
+  if (w === 'black') return m('result.black', '0-1');
   return m('result.draws', '½-½');
 }
 
@@ -61,7 +62,12 @@ function showGameTable(ctrl, type, games) {
     }, games.map(function(game) {
       return m('tr', {
         key: game.id,
-        'data-id': game.id
+        config: helper.ontouchY(() => {
+          const orientation = ctrl.chessground.data.orientation;
+          if (ctrl.explorer.config.data.db.selected() === 'lichess') {
+            m.route(`/analyse/online/${game.id}/${orientation}`);
+          }
+        })
       }, [
         m('td', [game.white, game.black].map(function(p) {
           return m('span', p.rating);

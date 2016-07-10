@@ -1,5 +1,6 @@
 import m from 'mithril';
 import helper from '../../helper';
+import backbutton from '../../../backbutton';
 import settings from '../../../settings';
 
 export default {
@@ -9,8 +10,21 @@ export default {
       available.push('masters');
     }
 
+    const open = m.prop(false);
+
+    function doOpen() {
+      backbutton.stack.push(doClose);
+      open(true);
+    }
+
+    function doClose(fromBB) {
+      if (fromBB !== 'backbutton' && open()) backbutton.stack.pop();
+      open(false);
+      onClose();
+    }
+
     const data = {
-      open: m.prop(false),
+      open,
       db: {
         available: available,
         selected: available.length > 1 ? settings.analyse.explorer.db : function() {
@@ -37,8 +51,8 @@ export default {
     return {
       data: data,
       toggleOpen: function() {
-        data.open(!data.open());
-        if (!data.open()) onClose();
+        if (open()) doClose();
+        else doOpen();
       },
       toggleDb: function(db) {
         data.db.selected(db);

@@ -16,7 +16,7 @@ function resultBar(move) {
   return ['white', 'draws', 'black'].map(section);
 }
 
-var lastShow = null;
+var lastShow = <div className="scrollerWrapper" />;
 
 function showMoveTable(ctrl, moves) {
   if (!moves.length) return null;

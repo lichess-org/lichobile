@@ -4,15 +4,15 @@ import spinner from '../../../spinner';
 import explorerConfig from './explorerConfig';
 
 function resultBar(move) {
-  var sum = move.white + move.draws + move.black;
+  const sum = move.white + move.draws + move.black;
   function section(key) {
-    var percent = move[key] * 100 / sum;
-    return percent === 0 ? null : m('span.explorerBar', {
-      className: key,
-      style: {
-        width: (Math.round(move[key] * 1000 / sum) / 10) + '%'
-      }
-    }, percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null);
+    const percent = move[key] * 100 / sum;
+    const width = (Math.round(move[key] * 1000 / sum) / 10) + '%';
+    return percent === 0 ? null : (
+      <span className={'explorerBar ' + key} style={{width}}>
+        {percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null}
+      </span>
+    );
   }
   return ['white', 'draws', 'black'].map(section);
 }
@@ -21,82 +21,107 @@ var lastShow = null;
 
 function showMoveTable(ctrl, moves) {
   if (!moves.length) return null;
-  return m('table.moves', [
-    m('thead', [
-      m('tr', [
-        m('th', 'Move'),
-        m('th', 'Games'),
-        m('th', 'Av. rating'),
-        m('th', 'White / Draw / Black')
-      ])
-    ]),
-    m('tbody', moves.map(move => {
-      return m('tr', {
-        key: move.uci,
-        config: helper.ontouchY(() => ctrl.explorerMove(move.uci))
-      }, [
-        m('td.explorerMove', move.san[0] === 'P' ? move.san.slice(1) : move.san),
-        m('td.explorerMove', move.white + move.draws + move.black),
-        m('td.explorerMove', move.averageRating),
-        m('td.explorerMove', resultBar(move))
-      ]);
-    }))
-  ]);
+  return (
+    <table className="moves">
+      <thead>
+        <tr>
+          <th>Move</th>
+          <th>Games</th>
+          <th>Av. rating</th>
+          <th>White / Draw / Black</th>
+        </tr>
+      </thead>
+      <tbody>
+        { moves.map(move => {
+          return (
+            <tr key={move.uci} config={helper.ontouchY(() => ctrl.explorerMove(move.uci))}>
+              <td className="explorerMove">
+                {move.san[0] === 'P' ? move.san.slice(1) : move.san}
+              </td>
+              <td className="explorerMove">
+                {move.white + move.draws + move.black}
+              </td>
+              <td className="explorerMove">
+                {move.averageRating}
+              </td>
+              <td className="explorerMove">
+                {resultBar(move)}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
 }
 
 function showResult(w) {
-  if (w === 'white') return m('result.white', '1-0');
-  if (w === 'black') return m('result.black', '0-1');
-  return m('result.draws', '½-½');
+  if (w === 'white') return <result className="white">1-0</result>;
+  if (w === 'black') return <result className="black">0-1</result>;
+  return <result className="draws">½-½</result>;
 }
 
 function showGameTable(ctrl, type, games) {
   if (!ctrl.explorer.withGames || !games.length) return null;
-  return m('table.games', [
-    m('thead', [
-      m('tr', [
-        m('th[colspan=4]', type + ' games')
-      ])
-    ]),
-    m('tbody', {
-    }, games.map(function(game) {
-      return m('tr', {
-        key: game.id,
-        config: helper.ontouchY(() => {
-          const orientation = ctrl.chessground.data.orientation;
-          if (ctrl.explorer.config.data.db.selected() === 'lichess') {
-            m.route(`/analyse/online/${game.id}/${orientation}`);
-          }
-        })
-      }, [
-        m('td', [game.white, game.black].map(function(p) {
-          return m('span', p.rating);
-        })),
-        m('td', [game.white, game.black].map(function(p) {
-          return m('span', p.name);
-        })),
-        m('td', showResult(game.winner)),
-        m('td', game.year)
-      ]);
-    }))
-  ]);
+  function link(game) {
+    const orientation = ctrl.chessground.data.orientation;
+    if (ctrl.explorer.config.data.db.selected() === 'lichess') {
+      m.route(`/analyse/online/${game.id}/${orientation}`);
+    }
+  }
+  return (
+    <table className="games">
+      <thead>
+        <tr>
+          <th colspan="4">{type + ' games'}</th>
+        </tr>
+      </thead>
+      <tbody>
+      { games.map(game => {
+        return (
+          <tr key={game.id} config={helper.ontouchY(() => link(game))}>
+            <td>
+              {[game.white, game.black].map(p =>
+                <span>{p.rating}</span>
+              )}
+            </td>
+            <td>
+              {[game.white, game.black].map(p =>
+                <span>{p.name}</span>
+              )}
+            </td>
+            <td>
+              {showResult(game.winner)}
+            </td>
+            <td>
+              {game.year}
+            </td>
+          </tr>
+        );
+      })}
+      </tbody>
+    </table>
+  );
 }
 
 function showTablebase(ctrl, title, moves, fen) {
   var stm = fen.split(/\s/)[1];
   if (!moves.length) return null;
   return [
-    m('div.title', title),
-    m('table.explorerTablebase', [
-      m('tbody', moves.map(move => {
-        return m('tr', {
-          key: move.uci
-        }, [
-          m('td', move.san),
-          m('td', [showDtz(stm, move), showDtm(stm, move)])
-        ]);
-      }))
-    ])
+    <div className="title">{title}</div>,
+    <table className="explorerTablebase">
+      <tbody>
+      {moves.map(move => {
+        return <tr key={move.uci}>
+          <td>{move.san}</td>
+          <td>
+            {showDtz(stm, move)}
+            {showDtm(stm, move)}
+          </td>
+        </tr>;
+      })}
+      </tbody>
+    </table>
   ];
 }
 
@@ -133,17 +158,20 @@ function showDtz(stm, move) {
 }
 
 function showEmpty(ctrl) {
-  return m('div.data.empty.scrollerWrapper', [
-    m('div.title', showTitle(ctrl)),
-    m('div.message', [
-      m('i[data-icon=]'),
-      m('h3', 'No game found'),
-      m('p',
-        ctrl.explorer.config.fullHouse() ?
-        'Already searching through all available games.' :
-        'Maybe include more games from the preferences menu?')
-    ])
-  ]);
+  return (
+    <div className="data empty scrollerWrapper">
+      <div className="title">{showTitle(ctrl)}</div>
+      <div className="message">
+        <i data-icon="" />
+        <h3>No game found</h3>
+        <p>{
+          ctrl.explorer.config.fullHouse() ?
+          'Already searching through all available games.' :
+          'Maybe include more games from the preferences menu?'
+        }</p>
+      </div>
+    </div>
+  );
 }
 
 function showGameEnd(ctrl, title) {
@@ -153,7 +181,7 @@ function showGameEnd(ctrl, title) {
       m('i[data-icon=]'),
       m('h3', title),
       m('button.button.text[data-icon=L]', {
-        onclick: ctrl.explorer.toggle
+        config: helper.ontouchY(ctrl.explorer.toggle)
       }, 'Close')
     ])
   ]);
@@ -165,17 +193,32 @@ function show(ctrl) {
     const moveTable = showMoveTable(ctrl, data.moves, data.fen);
     const recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
     const topTable = showGameTable(ctrl, 'top', data.topGames || []);
-    if (moveTable || recentTable || topTable) lastShow = m('div.data.scrollerWrapper', [moveTable, topTable, recentTable]);
-    else lastShow = showEmpty(ctrl);
-  } else if (data && data.tablebase) {
-    var moves = data.moves;
-    if (moves.length) lastShow = m('div.data.scrollerWrapper', [
-      showTablebase(ctrl, 'Winning', moves.filter(function(move) { return move.real_wdl === -2; }), data.fen),
-      showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter(function(move) { return move.real_wdl === -1; }), data.fen),
-      showTablebase(ctrl, 'Drawn', moves.filter(function(move) { return move.real_wdl === 0; }), data.fen),
-      showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter(function(move) { return move.real_wdl === 1; }), data.fen),
-      showTablebase(ctrl, 'Losing', moves.filter(function(move) { return move.real_wdl === 2; }), data.fen)
-    ]);
+
+    if (moveTable || recentTable || topTable) {
+      lastShow = (
+        <div className="data scrollerWrapper">
+          {moveTable}
+          {topTable}
+          {recentTable}
+        </div>
+      );
+    } else {
+      lastShow = showEmpty(ctrl);
+    }
+  }
+  else if (data && data.tablebase) {
+    const moves = data.moves;
+    if (moves.length) {
+      lastShow = (
+        <div className="data scrollerWrapper">
+          {showTablebase(ctrl, 'Winning', moves.filter(move => move.real_wdl === -2), data.fen)}
+          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter(move => move.real_wdl === -1), data.fen)}
+          {showTablebase(ctrl, 'Drawn', moves.filter(move => move.real_wdl === 0), data.fen)}
+          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter(move => move.real_wdl === 1), data.fen)}
+          {showTablebase(ctrl, 'Losing', moves.filter(move => move.real_wdl === 2), data.fen)}
+        </div>
+      );
+    }
     else if (data.checkmate) lastShow = showGameEnd(ctrl, 'Checkmate');
     else if (data.stalemate) lastShow = showGameEnd(ctrl, 'Stalemate');
     else lastShow = showEmpty(ctrl);
@@ -215,23 +258,23 @@ export default function(ctrl) {
   const configOpened = config.data.open();
   const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
   const content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
-  return m('div', {
-    className: helper.classSet({
-      explorerTable: true,
-      loading
-    }),
-    key: 'explorer',
-    config: function(el, isUpdate, ctx) {
-      if (!isUpdate || !data || ctx.lastFen === data.fen) return;
-      ctx.lastFen = data.fen;
-      el.scrollTop = 0;
-    }
-  }, [
-    m('div.spinner_overlay', m.trust(spinner.getHtml())),
-    content,
-    (!content || ctrl.explorer.failing()) ? null : m('span.toconf', {
-      'data-icon': configOpened ? 'L' : '%',
-      config: helper.ontouch(config.toggleOpen)
-    })
-  ]);
+  const className = helper.classSet({
+    explorerTable: true,
+    loading
+  });
+  function explConf(el, isUpdate, ctx) {
+    if (!isUpdate || !data || ctx.lastFen === data.fen) return;
+    ctx.lastFen = data.fen;
+    el.scrollTop = 0;
+  }
+  return (
+    <div className={className} key="explorer" config={explConf}>
+      <div className="spinner_overlay">{m.trust(spinner.getHtml())}</div>
+      {content}
+      {(!content || ctrl.explorer.failing()) ? null :
+        <span className="toconf" data-icon={configOpened ? 'L' : '%'}
+          config={helper.ontouch(config.toggleOpen)} />
+      }
+    </div>
+  );
 }

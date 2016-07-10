@@ -6,9 +6,9 @@ import { isSynthetic } from '../util';
 import gameApi from '../../../lichess/game';
 
 function tablebaseRelevant(fen) {
-  var parts = fen.split(/\s/);
-  var pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
-  var castling = parts[2];
+  const parts = fen.split(/\s/);
+  const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
+  const castling = parts[2];
   return pieceCount <= 6 && castling === '-';
 }
 
@@ -30,32 +30,36 @@ export default function(root, allow) {
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
 
-  const handleFetchError = function() {
+  function handleFetchError() {
     loading(false);
     failing(true);
     m.redraw();
-  };
+  }
 
   const fetchOpening = throttle(fen => {
-    openingXhr(effectiveVariant, fen, config.data, withGames).then(res => {
+    openingXhr(effectiveVariant, fen, config.data, withGames)
+    .then(res => {
       res.opening = true;
       res.fen = fen;
       cache[fen] = res;
       loading(false);
       failing(false);
       m.redraw();
-    }, handleFetchError);
+    })
+    .catch(handleFetchError);
   }, 2000);
 
   const fetchTablebase = throttle(fen => {
-    tablebaseXhr(root.vm.step.fen).then(res => {
+    tablebaseXhr(root.vm.step.fen)
+    .then(res => {
       res.tablebase = true;
       res.fen = fen;
       cache[fen] = res;
       loading(false);
       failing(false);
       m.redraw();
-    }, handleFetchError);
+    })
+    .catch(handleFetchError);
   }, 500);
 
   const fetch = function(fen) {

@@ -243,7 +243,7 @@ function showConfig(ctrl) {
 
 
 function failing() {
-  return m('div.failing.message', [
+  return m('div.failing.message.scrollerWrapper', [
     m('i[data-icon=,]'),
     m('h3', 'Oops, sorry!'),
     m('p', 'The explorer is temporarily'),

@@ -1,5 +1,6 @@
 import m from 'mithril';
 import throttle from 'lodash/throttle';
+import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
@@ -18,6 +19,16 @@ export default function(root, allow) {
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
+
+  function open() {
+    backbutton.stack.push(close);
+    enabled(true);
+  }
+
+  function close(fromBB) {
+    if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
+    enabled(false);
+  }
 
   var cache = {};
   function onConfigClose() {
@@ -100,13 +111,9 @@ export default function(root, allow) {
     toggle() {
       root.vm.infosHash = '';
       root.vm.openingHash = '';
-      enabled(!enabled());
+      if (enabled()) close();
+      else open();
       setStep();
-    },
-    disable() {
-      if (enabled()) {
-        enabled(false);
-      }
     }
   };
 }

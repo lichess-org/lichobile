@@ -1,5 +1,5 @@
 import m from 'mithril';
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
@@ -40,6 +40,9 @@ export default function(root, allow) {
   const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
+  const debouncedScroll = debounce(() => {
+    document.getElementById('explorerTable').scrollTop = 0;
+  }, 200);
 
   function handleFetchError() {
     loading(false);
@@ -47,8 +50,8 @@ export default function(root, allow) {
     m.redraw();
   }
 
-  const fetchOpening = throttle(fen => {
-    openingXhr(effectiveVariant, fen, config.data, withGames)
+  const fetchOpening = debounce(fen => {
+    return openingXhr(effectiveVariant, fen, config.data, withGames)
     .then(res => {
       res.opening = true;
       res.fen = fen;
@@ -58,10 +61,10 @@ export default function(root, allow) {
       m.redraw();
     })
     .catch(handleFetchError);
-  }, 2000);
+  }, 1000);
 
-  const fetchTablebase = throttle(fen => {
-    tablebaseXhr(root.vm.step.fen)
+  const fetchTablebase = debounce(fen => {
+    return tablebaseXhr(root.vm.step.fen)
     .then(res => {
       res.tablebase = true;
       res.fen = fen;
@@ -75,8 +78,8 @@ export default function(root, allow) {
 
   const fetch = function(fen) {
     const hasTablebase = effectiveVariant === 'standard' || effectiveVariant === 'chess960';
-    if (hasTablebase && withGames && tablebaseRelevant(fen)) fetchTablebase(fen);
-    else fetchOpening(fen);
+    if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
+    else return fetchOpening(fen);
   };
 
   const empty = {
@@ -95,6 +98,7 @@ export default function(root, allow) {
       loading(false);
       failing(false);
     }
+    debouncedScroll();
   }
 
   return {

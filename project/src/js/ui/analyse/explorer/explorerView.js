@@ -261,13 +261,8 @@ export default function(ctrl) {
     explorerTable: true,
     loading
   });
-  function explConf(el, isUpdate, ctx) {
-    if (!isUpdate || !data || ctx.lastFen === data.fen) return;
-    ctx.lastFen = data.fen;
-    el.scrollTop = 0;
-  }
   return (
-    <div className={className} key="explorer" config={explConf}>
+    <div id="explorerTable" className={className} key="explorer">
       <div className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div>

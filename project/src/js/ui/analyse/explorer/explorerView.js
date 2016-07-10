@@ -26,7 +26,7 @@ function showMoveTable(ctrl, moves) {
         <tr>
           <th>Move</th>
           <th>Games</th>
-          <th>Av. rating</th>
+          <th>Rating</th>
           <th>White / Draw / Black</th>
         </tr>
       </thead>

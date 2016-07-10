@@ -1,6 +1,5 @@
 import m from 'mithril';
 import helper from '../../helper';
-import spinner from '../../../spinner';
 import explorerConfig from './explorerConfig';
 
 function resultBar(move) {
@@ -269,7 +268,9 @@ export default function(ctrl) {
   }
   return (
     <div className={className} key="explorer" config={explConf}>
-      <div className="spinner_overlay">{m.trust(spinner.getHtml())}</div>
+      <div className="spinner_overlay">
+        <div className="spinner fa fa-hourglass-half" />
+      </div>
       {content}
       {(!content || ctrl.explorer.failing()) ? null :
         <span className="toconf" data-icon={configOpened ? 'L' : '%'}

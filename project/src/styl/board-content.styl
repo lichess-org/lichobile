@@ -65,12 +65,11 @@
   flex 1 1 25%
   text-align center
   background transparent
-  padding 10px 10px 8px
+  padding 0
   outline none
   border none
   color: gold
   height footerHeight
-  line-height 30px
   width 25%
   &:last-child
     border-right none
@@ -90,22 +89,18 @@
     background gold
   &:before
     font-size 18px
-    line-height 18px
-  &.fa
-    padding 7px 10px 10px
+    line-height 45px
   &[data-icon='2']
     transform rotate(-90deg)
   @media only screen and (max-height 400px) and (orientation landscape)
-    line-height 25px
     &:before
-      font-size 18px
-      line-height 18px
+      font-size 16px
 
 .table
   height 100%
   display flex
   flex-flow column nowrap
-  margin 0 1rem
+  margin 0 10px
   > header
     flex 0 0 auto
   > .playersTable
@@ -115,7 +110,7 @@
     flex-flow column nowrap
     justify-content space-around
   @media only screen and (orientation landscape)
-    width calc(100vw - 100vh + 50px - 2rem)
+    width calc(100vw - 100vh + 50px - 20px)
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
     > .tableHeader
@@ -135,10 +130,10 @@
       &.correspondence
         font-size 15px
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    width calc(100vw - 100vh + 50px + 12vh - 2rem)
+    width calc(100vw - 100vh + 50px + 12vh - 20px)
   @media only screen and (min-height 800px) and (orientation: landscape)
     > .playersTable
-      margin 2rem 0
+      margin 20px 0
   @media only screen and (orientation: landscape) and (min-height 700px)
     margin auto 1rem
     .clock

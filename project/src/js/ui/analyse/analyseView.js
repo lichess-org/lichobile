@@ -123,7 +123,7 @@ function renderInfos(ctrl) {
   ctrl.vm.infosHash = hash;
 
   return (
-    <div className="analyseInfos scrollerWrapper">
+    <div id="analyseInfos" className="analyseInfos scrollerWrapper">
       { cevalEnabled ?
         cevalView.renderCeval(ctrl) : null
       }

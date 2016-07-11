@@ -281,6 +281,36 @@
   .notice
     margin 5px 0
 
+.negotiationIcons
+  background-color selectBg
+  height 70px
+  display flex
+  padding 0 10px
+  align-items center
+  border-radius 5px
+  > p
+    flex: 1 1 auto;
+    margin-right: 10px;
+  > button
+    flex: 0 0 50px;
+    height: 50px;
+    line-height: 44px;
+    font-size: 25px;
+    background: #fff;
+    &.accept
+      color: green
+      margin-right 10px
+      border-radius: 3px 0 0 3px;
+      &.active
+        background green
+        color #fff
+    &.decline
+      color: red
+      border-radius: 0 3px 3px 0;
+      &.active
+        background red
+        color #fff
+
 .player_controls, .offline_actions, .playersTable
   .result
     padding 0 10px
@@ -318,11 +348,11 @@
   border: 1px solid #ccc;
 
 .submitMovePopup
-  background-color rgba(0,0,0,0.2)
+  background-color rgba(0,0,0,0.4)
   > .overlay_popup
     top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % footerHeight
     @media only screen and (orientation: landscape)
-      top calc(100vh / 2)
+      top calc((100vh - 70px) / 2)
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px - 5vw)

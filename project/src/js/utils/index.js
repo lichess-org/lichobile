@@ -307,7 +307,7 @@ export function getBoardBounds(viewportDim, isPortrait, isIpadLike, isLandscapeS
     const smallTop = 45;
     const lSide = vh - smallTop;
     return {
-      smallTop,
+      top: smallTop,
       right: lSide,
       bottom: smallTop + lSide,
       left: 0,

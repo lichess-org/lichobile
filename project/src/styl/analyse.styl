@@ -12,6 +12,8 @@
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
+    @media only screen and (max-height 450px) and (orientation landscape)
+      height "calc(100vh - 45px - %s)" % footerHeight
     @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
       height "calc(100vh - 50px - 12vh - %s)" % footerHeight
 
@@ -123,6 +125,12 @@
       > piece
         width calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
         height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+  @media only screen and (max-height 450px) and (orientation landscape)
+    > .pocket
+      height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
+      > piece
+        width calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
+        height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     > .pocket
       height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)

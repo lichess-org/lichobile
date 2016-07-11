@@ -180,15 +180,17 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderSubmitMovePopup(ctrl) {
-  if (!ctrl.vm.moveToSubmit) return null;
-
-  return (
-    <div className="overlay_popup_wrapper submitMovePopup">
+  if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit) {
+    return (
+      <div className="overlay_popup_wrapper submitMovePopup">
       <div className="overlay_popup">
-        {button.submitMove(ctrl)}
+      {button.submitMove(ctrl)}
       </div>
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return null;
 }
 
 function userInfos(user, player, playerName, position) {

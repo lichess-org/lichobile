@@ -4,26 +4,39 @@ import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
+import crazyView from '../../round/crazy/crazyView';
 import m from 'mithril';
 
-export function renderAntagonist(ctrl, content, material, position, isPortrait) {
+export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip, customPieceTheme) {
+  const sit = ctrl.replay.situation();
+  const isCrazy = !!sit.crazyhouse;
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
 
   const antagonistColor = ctrl.data[position].color;
 
+  const className = [
+    'playTable',
+    position,
+    isCrazy ? 'crazy' : '',
+    otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
+    ctrl.chessground.data.turnColor === 'white' ? 'turn_white' : 'turn_black'
+  ].join(' ');
+
   return (
-    <section className={'playTable ' + position} key={key}>
-      <div key="infos" className="antagonistInfos offline">
+    <section className={className} key={key}>
+      <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
         <div>
           {content}
         </div>
-        <div className="ratingAndMaterial">
+        { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
           { ctrl.data.game.variant.key === 'threeCheck' ?
             <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
           }
-        </div>
+        </div> : null
+        }
       </div>
+      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position, true, customPieceTheme)}
     </section>
   );
 }

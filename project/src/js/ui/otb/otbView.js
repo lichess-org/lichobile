@@ -17,12 +17,12 @@ export default function view(ctrl) {
   var content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
-  if (ctrl.replay) {
-    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
-    content = renderContent.bind(undefined, ctrl, pieceTheme);
+  if (ctrl.data && ctrl.chessground) {
+    header = () => renderHeader(gameApi.title(ctrl.data));
+    content = () => renderContent(ctrl, pieceTheme);
   } else {
-    header = renderHeader.bind(undefined, i18n('playOnTheBoardOffline'));
-    content = viewOnlyBoardContent.bind(undefined, null, null, null, 'standard', null, pieceTheme);
+    header = () => renderHeader(i18n('playOnTheBoardOffline'));
+    content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
   }
 
   function overlay() {
@@ -67,9 +67,9 @@ function renderContent(ctrl, pieceTheme) {
 
   if (isPortrait)
     return [
-      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
+      renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
       board,
-      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait),
+      renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
       renderGameActionsBar(ctrl, 'otb')
     ];
   else
@@ -77,9 +77,9 @@ function renderContent(ctrl, pieceTheme) {
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
-          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait)}
+          {renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme)}
           {replayTable}
-          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait)}
+          {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme)}
         </section>
         {renderGameActionsBar(ctrl, 'otb')}
       </section>

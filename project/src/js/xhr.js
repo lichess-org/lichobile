@@ -34,7 +34,7 @@ export function seekGame() {
       days: config.days(),
       time: config.time(),
       increment: config.increment(),
-      color: 'random',
+      color: config.color(),
       mode: session.isConnected() ? config.mode() : '0',
       membersOnly: config.membersOnly(),
       ratingRange: config.ratingMin() + '-' + config.ratingMax()

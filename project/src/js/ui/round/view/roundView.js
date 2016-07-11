@@ -166,7 +166,7 @@ function renderContent(ctrl, isPortrait) {
 }
 
 function renderRatingDiff(player) {
-  if (typeof player.ratingDiff === 'undefined') return null;
+  if (player.ratingDiff === undefined) return null;
   if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
   if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
   if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
@@ -221,7 +221,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor;
+  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor + ctrl.data.game.player;
 
   if (ctrl.vm[vmKey] === hash) return {
     subtree: 'retain'
@@ -284,7 +284,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {crazyView.pocket(ctrl, player.color, position)}
+      {crazyView.pocket(ctrl, step.crazy, player.color, position)}
       {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
         !isCrazy && ctrl.correspondenceClock ?

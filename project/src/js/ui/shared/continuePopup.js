@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
-import newGameForm from '../newGameForm';
+import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
 import storage from '../../storage';
 import { storageFenKey as aiStorageFenKey } from '../ai/aiCtrl';
@@ -48,7 +48,7 @@ export default {
           hasNetwork() ? m('button', {
             config: helper.ontouch(() => {
               ctrl.close();
-              newGameForm.openAIFromPosition(ctrl.fen());
+              playMachineForm.openAIFromPosition(ctrl.fen());
             })
           }, i18n('playWithTheMachine')) : null,
           hasNetwork() ? m('button', {

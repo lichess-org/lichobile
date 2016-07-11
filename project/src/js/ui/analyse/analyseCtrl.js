@@ -20,6 +20,8 @@ import notes from '../round/notes';
 import chessLogic from './chessLogic';
 import { renderStepsTxt } from './pgnExport';
 import { getPGN } from '../round/roundXhr';
+import crazyValid from './crazy/crazyValid';
+import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
 import m from 'mithril';
 
@@ -43,13 +45,11 @@ export default function controller() {
     shouldGoBack: gameId !== undefined || fen !== undefined,
     path: null,
     pathStr: '',
-    initialPathStr: '',
     step: null,
     cgConfig: null,
     flip: false,
     variationMenu: null,
     showBestMove: settings.analyse.showBestMove(),
-    replayHash: '',
     buttonsHash: '',
     infosHash: '',
     openingHash: ''
@@ -114,13 +114,18 @@ export default function controller() {
     };
     this.vm.step = s;
     this.vm.cgConfig = config;
-    if (!this.chessground)
+    if (!this.chessground) {
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
+    }
     this.chessground.set(config);
     if (!dests) debouncedDests();
   }.bind(this);
 
   const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
+
+  const updateHref = debounce(() => {
+    window.history.replaceState(null, null, '#' + this.vm.step.ply);
+  }, 750);
 
   this.jump = function(path, direction) {
     this.vm.path = path;
@@ -132,6 +137,8 @@ export default function controller() {
       else sound.move();
     }
     this.ceval.stop();
+    this.explorer.setStep();
+    updateHref();
     debouncedStartCeval();
     debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
@@ -158,10 +165,6 @@ export default function controller() {
     m.redraw();
   }.bind(this);
 
-  function userNewPiece() {
-    this.jump(this.vm.path);
-  }
-
   const preparePremoving = function() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,
@@ -181,15 +184,62 @@ export default function controller() {
       ply: this.vm.step.ply
     };
     if (prom) move.promotion = prom;
-    this.chessLogic.sendStepRequest(move);
+    this.chessLogic.sendMoveRequest(move);
     preparePremoving();
   }.bind(this);
+
+  const roleToSan = {
+    pawn: 'P',
+    knight: 'N',
+    bishop: 'B',
+    rook: 'R',
+    queen: 'Q'
+  };
+  const sanToRole = {
+    P: 'pawn',
+    N: 'knight',
+    B: 'bishop',
+    R: 'rook',
+    Q: 'queen'
+  };
 
   function userMove(orig, dest, capture) {
     this.vm.justPlayed = orig + dest;
     sound[capture ? 'capture' : 'move']();
     if (!promotion.start(this, orig, dest, sendMove)) sendMove(orig, dest);
   }
+
+  function userNewPiece (piece, pos) {
+    if (crazyValid.drop(this.chessground, piece, pos, this.vm.step.drops)) {
+      this.vm.justPlayed = roleToSan[piece.role] + '@' + pos;
+      sound.move();
+      const drop = {
+        role: piece.role,
+        pos: pos,
+        variant: this.data.game.variant.key,
+        fen: this.vm.step.fen,
+        path: this.vm.pathStr
+      };
+      this.chessLogic.sendDropRequest(drop);
+      preparePremoving();
+    } else this.jump(this.vm.path);
+  }
+
+  this.explorerMove = function(uci) {
+    const move = util.decomposeUci(uci);
+    if (uci[1] === '@') {
+      this.chessground.apiNewPiece({
+        color: this.chessground.data.movable.color,
+        role: sanToRole[uci[0]]
+      }, move[1]);
+    } else if (!move[2]) {
+      sendMove(move[0], move[1]);
+    }
+    else {
+      sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()]);
+    }
+    this.explorer.loading(true);
+  }.bind(this);
 
   this.addStep = function(step, path) {
     const newPath = this.analyse.addStep(step, treePath.read(path));
@@ -209,8 +259,9 @@ export default function controller() {
   }.bind(this);
 
   this.toggleVariationMenu = function(path) {
-    if (!path) this.vm.variationMenu = null;
-    else {
+    if (!path) {
+      this.vm.variationMenu = null;
+    } else {
       var key = treePath.write(path.slice(0, 1));
       this.vm.variationMenu = this.vm.variationMenu === key ? null : key;
     }
@@ -236,10 +287,6 @@ export default function controller() {
   this.reset = function() {
     this.chessground.set(this.vm.situation);
     m.redraw();
-  }.bind(this);
-
-  this.encodeStepFen = function() {
-    return this.vm.step.fen.replace(/\s/g, '_');
   }.bind(this);
 
   this.currentAnyEval = function() {
@@ -288,44 +335,6 @@ export default function controller() {
     this.vm.showBestMove = !this.vm.showBestMove;
   }.bind(this);
 
-  this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
-    if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
-  }.bind(this);
-
-  this.init = function(data) {
-    this.data = data;
-    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
-      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
-      m.route('/');
-    }
-    if (!data.game.moveTimes) this.data.game.moveTimes = [];
-    this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-    this.analyse = new analyse(this.data.steps);
-    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
-
-    var initialPath = treePath.default(this.analyse.firstPly());
-    if (initialPath[0].ply >= this.data.steps.length) {
-      initialPath = treePath.default(this.data.steps.length - 1);
-    }
-
-    this.vm.path = initialPath;
-    this.vm.pathStr = treePath.write(initialPath);
-
-    showGround();
-    this.initCeval();
-  }.bind(this);
-
-  this.startNewAnalysis = function() {
-    if (m.route() === '/analyse') {
-      m.route('/analyse', null, true);
-    } else {
-      m.route('/analyse');
-    }
-  };
-
   this.sharePGN = function() {
     if (this.source === 'online') {
       getPGN(this.data.game.id)
@@ -343,6 +352,43 @@ export default function controller() {
       window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
     }
   }.bind(this);
+
+  this.init = function(data) {
+    this.data = data;
+    if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
+      window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
+      m.route('/');
+    }
+    if (!data.game.moveTimes) this.data.game.moveTimes = [];
+    this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
+    this.analyse = new analyse(this.data.steps);
+    this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
+    this.explorer = explorerCtrl(this, true);
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+
+    let initialPath = location.hash ?
+      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
+      treePath.default(this.analyse.firstPly());
+
+    if (initialPath[0].ply >= this.data.steps.length) {
+      initialPath = treePath.default(this.data.steps.length - 1);
+    }
+
+    this.vm.path = initialPath;
+    this.vm.pathStr = treePath.write(initialPath);
+
+    showGround();
+    this.initCeval();
+    this.explorer.setStep();
+  }.bind(this);
+
+  this.startNewAnalysis = function() {
+    if (m.route() === '/analyse') {
+      m.route('/analyse', null, true);
+    } else {
+      m.route('/analyse');
+    }
+  };
 
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(function(cfg) {
@@ -382,6 +428,15 @@ export default function controller() {
 
   window.plugins.insomnia.keepAwake();
 
+  this.onunload = function() {
+    if (this.chessground) {
+      this.chessground.onunload();
+      this.chessground = null;
+    }
+    if (this.ceval) this.ceval.destroy();
+    if (this.chessLogic) this.chessLogic.onunload();
+    window.plugins.insomnia.allowSleepAgain();
+  }.bind(this);
 }
 
 function getDests() {

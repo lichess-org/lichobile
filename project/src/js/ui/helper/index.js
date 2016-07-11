@@ -166,6 +166,7 @@ function viewportDim() {
 }
 
 export default {
+  findParentBySelector,
   slidingPage: animator(viewSlideIn, viewSlideOut),
   fadingPage: animator(viewFadesIn, viewFadesOut),
 
@@ -232,14 +233,14 @@ export default {
   },
 
   ontouch: function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
+    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback, true);
   },
 
   ontouchX: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
+    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback, false);
   },
   ontouchY: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
+    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback, false);
   },
 
   progress: function(p) {

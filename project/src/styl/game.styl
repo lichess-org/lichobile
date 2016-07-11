@@ -18,6 +18,11 @@
     padding 0
     flex 0 0 auto
     height initial
+    &.crazy
+      > .antagonistInfos
+        order 2
+      > .pocket
+        order 1
 
 .replay
   flex 0 0 auto
@@ -68,15 +73,16 @@
   &.active
     background-color lighten(bgdark, 8%)
 
+.rp.null
+  color textGray
+.rp.up
+  color green
+.rp.down
+  color red
+
 .antagonistInfos
   max-width calc(100% - 120px)
   overflow hidden
-  .rp.null
-    color textGray
-  .rp.up
-    color green
-  .rp.down
-    color red
   .rating
     font-size 0.9em
     color gold
@@ -364,10 +370,20 @@
   display flex
   flex-flow row nowrap
   align-items center
+  justify-content space-around
   @media only screen and (orientation: landscape)
     width calc((100vh - 50px) / 8 * 5)
     height calc((100vh - 50px) / 8 + 10px)
     max-height 55px
+
+.playTable.opponent.mode_facing
+  > .pocket
+    transform rotate(180deg)
+
+#page.white .playTable.mode_flip.turn_black,
+#page.black .playTable.mode_flip.turn_white
+  > .pocket
+    transform rotate(180deg)
 
 .pocket > piece
   width calc(100vw / 8)
@@ -396,11 +412,11 @@
   bottom: 0;
   right: 0;
   position: absolute;
-  line-height: 14px;
+  line-height: 0.9em
   padding: 3px 5px 4px 5px;
   font-weight: bold;
   border-radius: 2px;
-  font-size: 18px;
+  font-size: 0.9em
   color: #fff
   text-shadow: 0 1px 0 #000
   background orange

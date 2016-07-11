@@ -14,24 +14,33 @@ import gameStatusApi from '../../lichess/status';
 import variantApi from '../../lichess/variant';
 import helper from '../helper';
 import layout from '../layout';
-import { header, backButton as renderBackbutton } from '../shared/common';
+import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
-import { getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
+import { hasNetwork, getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
 import notes from '../round/notes';
 import button from '../round/view/button';
+import crazyView from './crazy/crazyView';
+import explorerView from './explorer/explorerView';
 
 export default function analyseView(ctrl) {
 
   const isPortrait = helper.isPortrait();
 
-  const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(i18n('analysis')) : null;
+  const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
   const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
-  return layout.board(
-    header.bind(undefined, title, backButton),
-    () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl, isPortrait)
-  );
+  if (ctrl.data) {
+    return layout.board(
+      () => header(title, backButton),
+      () => renderContent(ctrl, isPortrait),
+      () => overlay(ctrl, isPortrait)
+    );
+  } else {
+    return layout.board(
+      () => header(i18n('analysis')),
+      viewOnlyBoardContent
+    );
+  }
 }
 
 function overlay(ctrl) {
@@ -68,21 +77,24 @@ function renderContent(ctrl, isPortrait) {
   return [
     board,
     <div className="analyseTableWrapper">
-      {renderTable(ctrl)}
+      {ctrl.explorer.enabled() ?
+        explorerView(ctrl) :
+        renderAnalyseTable(ctrl)
+      }
       {renderActionsBar(ctrl, isPortrait)}
     </div>
   ];
 }
 
-function renderTable(ctrl) {
+function renderAnalyseTable(ctrl) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
   ].join(' ');
 
   return (
-    <div className={className}>
-      <div className="analyse">
+    <div className={className} key="analyse">
+      <div className="analyse scrollerWrapper">
         {renderOpeningBox(ctrl)}
         {renderReplay(ctrl)}
       </div>
@@ -103,7 +115,7 @@ function renderInfos(ctrl) {
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
     (ceval && ceval.mate) + (ceval && ceval.best) +
     ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
-    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount);
+    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount) + JSON.stringify(ctrl.vm.step.crazy);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'
@@ -111,7 +123,7 @@ function renderInfos(ctrl) {
   ctrl.vm.infosHash = hash;
 
   return (
-    <div className="analyseInfos">
+    <div className="analyseInfos scrollerWrapper">
       { cevalEnabled ?
         cevalView.renderCeval(ctrl) : null
       }
@@ -125,6 +137,15 @@ function renderInfos(ctrl) {
   );
 }
 
+function renderRatingDiff(player) {
+  if (typeof player.ratingDiff === 'undefined') return null;
+  if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
+  if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
+  if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
+
+  return null;
+}
+
 function renderOpponents(ctrl) {
   if (isSynthetic(ctrl.data)) return null;
 
@@ -132,23 +153,31 @@ function renderOpponents(ctrl) {
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
 
+  const isCrazy = !!ctrl.vm.step.crazy;
+
   return (
     <div className="analyseOpponentsWrapper">
-      <div className="analyseOpponents">
-        <div className="opponent withIcon">
+      <div className="analyseOpponent">
+        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-            ' (' + getChecksCount(ctrl, player.color) + ')' : null
-          }
+          {renderRatingDiff(player)}
         </div>
-        <div className="opponent withIcon">
+        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          ' (' + getChecksCount(ctrl, player.color) + ')' : null
+        }
+        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
+      </div>
+      <div className="analyseOpponent">
+        <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-            ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
-          }
+          {renderRatingDiff(opponent)}
         </div>
+        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
+        }
+        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
     </div>
   );
@@ -481,6 +510,7 @@ function renderReplay(ctrl) {
 
 function gameInfos(ctrl) {
   if (isSynthetic(ctrl.data)) return null;
+  if (ctrl.vm.step.crazy) return null;
 
   const data = ctrl.data;
   const time = gameApi.time(data);
@@ -535,7 +565,7 @@ function buttons(ctrl) {
 
 function renderActionsBar(ctrl) {
 
-  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late;
+  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late + ctrl.explorer.enabled();
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'
@@ -546,6 +576,13 @@ function renderActionsBar(ctrl) {
     ctrl.sharePGN,
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   );
+
+  const explorerBtnClass = [
+    'action_bar_button',
+    'fa',
+    'fa-book',
+    ctrl.explorer.enabled() ? 'highlight' : ''
+  ].join(' ');
 
   return (
     <section className="actions_bar">
@@ -558,6 +595,14 @@ function renderActionsBar(ctrl) {
         /> : null
       }
       {ctrl.notes ? button.notes(ctrl) : null}
+      {hasNetwork() ?
+        <button className={explorerBtnClass} key="explorer"
+          config={helper.ontouch(
+            ctrl.explorer.toggle,
+            () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
+          )}
+        /> : null
+      }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
         config={helper.ontouch(
           ctrl.flip,

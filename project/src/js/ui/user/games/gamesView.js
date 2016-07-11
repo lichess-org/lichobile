@@ -78,7 +78,7 @@ function renderGame(ctrl, g, index, userId) {
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
+      <div className="nav" config={helper.ontouchY(() => m.route(`/analyse/online/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
         {wideScreen ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">

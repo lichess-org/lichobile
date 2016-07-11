@@ -40,7 +40,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        null,
+        () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
         function() {
           return (
             <div>
@@ -52,7 +52,7 @@ export default {
               </div>
               <button className="newGameButton" data-icon="E"
                 config={helper.ontouch(() => ctrl.root.startNewGame())}>
-                {i18n('createAGame')}
+                {i18n('play')}
               </button>
             </div>
           );

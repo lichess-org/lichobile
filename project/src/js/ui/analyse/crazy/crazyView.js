@@ -1,22 +1,17 @@
 import settings from '../../../settings';
-import crazyDrag from './crazyDrag';
+import crazyDrag from '../../round/crazy/crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
-import gameApi from '../../../lichess/game';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export default {
-  pocket: function(ctrl, crazyData, color, position, isOTB, customPieceTheme) {
+  pocket: function(ctrl, crazyData, color, position) {
     if (!crazyData) return null;
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
-    const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
-    const usable = usablePos && !ctrl.replaying() && gameApi.isPlayerPlaying(ctrl.data);
     const className = [
-      customPieceTheme || settings.general.theme.piece(),
+      settings.general.theme.piece(),
       'pocket',
-      position,
-      usable ? 'usable' : '',
-      isOTB ? 'offline' : ''
+      position
     ].join(' ');
 
     function pocketConfig(el, isUpdate, ctx) {
@@ -38,7 +33,7 @@ export default {
           }
         };
       }
-      if (ctx.flip === ctrl.vm.flip || !usablePos) return;
+      if (ctx.flip === ctrl.vm.flip) return;
       ctx.flip = ctrl.vm.flip;
     }
 

@@ -30,6 +30,7 @@ export default function(steps) {
       }
     }
   };
+
   this.getStepAtPly = function(ply) {
     return this.getStep(treePath.default(ply));
   }.bind(this);
@@ -157,7 +158,7 @@ export default function(steps) {
     var len = this.tree.length;
     for (var i = 1; i < len; i++) {
       var ply = (fromPly + i) % len;
-      if(this.tree[ply].nag === nag && (ply % 2 === (color === 'white' ? 1 : 0))) return ply;
+      if (this.tree[ply].nag === nag && (ply % 2 === (color === 'white' ? 1 : 0))) return ply;
     }
   }.bind(this);
 }

@@ -8,10 +8,12 @@ import * as utils from '../../utils';
 
 export default {
 
-  controller: function(reload) {
+  controller: function(reload, clockObj) {
     let isOpen = false;
 
     function open() {
+      if (clockObj().isRunning()) return;
+
       backbutton.stack.push(close);
       isOpen = true;
     }

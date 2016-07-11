@@ -56,7 +56,7 @@ function overlay(ctrl) {
 function renderContent(ctrl, isPortrait) {
   if (!ctrl.data) return null;
 
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'analyse');
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
   const ceval = ctrl.currentAnyEval();
   const bestMove =  ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
     brush: 'paleBlue',

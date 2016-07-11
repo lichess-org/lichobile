@@ -282,6 +282,11 @@ export default {
     return window.matchMedia('(orientation: landscape)').matches;
   },
 
+  isLandscapeSmall: function () {
+    const { vh } = viewportDim();
+    return vh <= 450;
+  },
+
   // allow user to opt out of track analytics
   // only log if setting has it enabled
   analyticsTrackView: function(view) {

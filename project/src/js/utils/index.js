@@ -277,7 +277,7 @@ export function boardOrientation(data, flip) {
   }
 }
 
-export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
+export function getBoardBounds(viewportDim, isPortrait, isIpadLike, isLandscapeSmall, mode) {
   const { vh, vw } = viewportDim;
   const top = 50;
 
@@ -302,6 +302,17 @@ export function getBoardBounds(viewportDim, isPortrait, isIpadLike, mode) {
       left: 0,
       width: wsSide,
       height: wsSide
+    };
+  } else if (isLandscapeSmall) {
+    const smallTop = 45;
+    const lSide = vh - smallTop;
+    return {
+      smallTop,
+      right: lSide,
+      bottom: smallTop + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
     };
   } else {
     const lSide = vh - top;

@@ -58,10 +58,17 @@ function renderContent(ctrl, isPortrait) {
 
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
   const ceval = ctrl.currentAnyEval();
-  const bestMove =  ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
+  const bestMove = !ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
     brush: 'paleBlue',
     orig: ceval.best.slice(0, 2),
     dest: ceval.best.slice(2, 4)
+  } : null;
+
+  const nextStep = ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
+  const nextMove = ctrl.explorer.enabled() && nextStep ? {
+    brush: 'paleGreen',
+    orig: nextStep.uci.slice(0, 2),
+    dest: nextStep.uci.slice(2, 4)
   } : null;
 
   const board = Board(
@@ -71,7 +78,7 @@ function renderContent(ctrl, isPortrait) {
     isPortrait,
     null,
     null,
-    bestMove ? [bestMove] : null
+    bestMove ? [bestMove] : nextMove ? [nextMove] : null
   );
 
   return [

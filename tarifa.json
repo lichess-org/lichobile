@@ -110,7 +110,7 @@
   },
   "cordova": {
     "preferences": {
-      "Orientation": "default",
+      "Orientation": "all",
       "DisallowOverscroll": false,
       "EnableViewportScale": false,
       "KeyboardDisplayRequiresUserAction": false,

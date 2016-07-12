@@ -1,4 +1,5 @@
 import storage from './storage';
+import { apiVersion } from './http';
 import xor from 'lodash/xor';
 import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
@@ -76,7 +77,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
 }
 
 function createTournament(tournamentId, version, handlers, featuredGame) {
-  let url = '/tournament/' + tournamentId + '/socket/v1';
+  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
   };
@@ -140,7 +141,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
   tellWorker(worker, 'create', {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
-    url: '/lobby/socket/v1',
+    url: `/lobby/socket/v${apiVersion}`,
     version: lobbyVersion,
     opts
   });

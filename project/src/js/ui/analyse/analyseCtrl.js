@@ -328,6 +328,10 @@ export default function controller() {
     this.vm.showBestMove = !this.vm.showBestMove;
   }.bind(this);
 
+  this.toggleComments = function() {
+    this.vm.showComments = !this.vm.showComments;
+  }.bind(this);
+
   this.sharePGN = function() {
     if (this.source === 'online') {
       getPGN(this.data.game.id)

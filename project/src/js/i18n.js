@@ -37,6 +37,7 @@ const untranslated = {
   localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.',
   startNewAnalysis: 'Start new analysis',
   showBestMove: 'Show computer best move',
+  showComments: 'Show evaluation comments',
   followers: 'Followers',
   userAcceptsYourChallenge: '%s accepts your challenge!',
   incorrectThreefoldClaim: 'Incorrect threefold repetition claim.',

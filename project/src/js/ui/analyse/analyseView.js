@@ -71,7 +71,7 @@ function renderContent(ctrl, isPortrait) {
       dest: ceval.best.slice(2, 4)
     } : null;
   }
-  if (ctrl.vm.showBestMove) {
+  if (ctrl.vm.showComments) {
     pastBest = rEval && rEval.best ? {
       brush: 'paleGreen',
       orig: rEval.best.slice(0, 2),
@@ -384,7 +384,7 @@ function renderOpeningBox(ctrl) {
 function renderMeta(ctrl, step, path) {
   const judgment = step.rEval && step.rEval.judgment;
 
-  if (!step || (empty(step.variations) && empty(judgment))) return null;
+  if (!step || (empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments))) return null;
 
   const children = [];
   const colorClass = step.ply % 2 === 0 ? 'black ' : 'white ';

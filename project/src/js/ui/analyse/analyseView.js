@@ -64,8 +64,11 @@ function renderContent(ctrl, isPortrait) {
     dest: ceval.best.slice(2, 4)
   } : null;
 
-  const nextStep = ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
-  const nextMove = ctrl.explorer.enabled() && nextStep ? {
+  const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
+  const nextMove = nextStep ? nextStep.uci.includes('@') ? {
+    brush: 'paleGreen',
+    orig: nextStep.uci.slice(2, 4)
+  } : {
     brush: 'paleGreen',
     orig: nextStep.uci.slice(0, 2),
     dest: nextStep.uci.slice(2, 4)

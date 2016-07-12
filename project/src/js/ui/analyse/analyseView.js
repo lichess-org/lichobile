@@ -136,11 +136,12 @@ function getChecksCount(ctrl, color) {
 function renderInfos(ctrl) {
   const cevalEnabled = ctrl.ceval.enabled();
   const ceval = ctrl.currentAnyEval();
+  const step = ctrl.vm.step;
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    (ceval && ceval.mate) + (ceval && ceval.best) + defined(ctrl.vm.step.ceval) +
-    ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
-    isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount) + JSON.stringify(ctrl.vm.step.crazy);
+    (cevalEnabled && ctrl.nextStepBest()) +
+    (ceval && ceval.mate) + defined(step.ceval) + ctrl.ceval.percentComplete() +
+    isEmpty(step.dests) + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'

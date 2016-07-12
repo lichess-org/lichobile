@@ -305,15 +305,6 @@ export default function controller() {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
       if (treePath.write(res.work.path) === this.vm.pathStr) {
-        this.chessLogic.getSanMoveFromUci({
-          fen: step.fen,
-          orig: res.ceval.best.slice(0, 2),
-          dest: res.ceval.best.slice(2, 4)
-        }).then(data => {
-          step.ceval.bestSan = data.situation.pgnMoves[0];
-          m.redraw();
-        })
-        .catch(console.error.bind(console));
         m.redraw();
       }
     });

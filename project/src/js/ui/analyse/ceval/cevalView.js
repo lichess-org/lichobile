@@ -11,7 +11,7 @@ export default {
     const ceval = ctrl.currentAnyEval() || {};
     let pearl = squareSpin, percent;
 
-    if (defined(ceval.cp) && ctrl.vm.step.rEval && ctrl.vm.step.rEval.best) {
+    if (defined(ceval.cp) && ctrl.nextStepBest()) {
       pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
       percent = 100;
     }
@@ -35,13 +35,6 @@ export default {
     return (
       <div className="cevalBox">
         { pearl }
-        { ctrl.vm.showBestMove && ceval.bestSan ?
-          <div className="bestMove">
-            <small>best</small>
-            <br/>
-            { ceval.bestSan }
-          </div> : null
-        }
         <div className="cevalBar">
           <span style={{ width: percent + '%' }}></span>
         </div>

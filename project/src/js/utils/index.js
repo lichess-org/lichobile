@@ -379,3 +379,6 @@ export function formatTournamentTimeControl(clock) {
   }
 }
 
+export function noNull(v) {
+  return v !== undefined && v !== null;
+}

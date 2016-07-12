@@ -11,7 +11,11 @@ export default {
     const ceval = ctrl.currentAnyEval() || {};
     let pearl = squareSpin, percent;
 
-    if (defined(ceval.cp)) {
+    if (defined(ceval.cp) && ctrl.vm.step.rEval && ctrl.vm.step.rEval.best) {
+      pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
+      percent = 100;
+    }
+    else if (defined(ceval.cp)) {
       pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
       percent = ctrl.ceval.percentComplete();
     }

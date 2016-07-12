@@ -71,8 +71,8 @@ export default function(data) {
 
   this.nextStepEvalBest = function(path) {
     if (!treePath.isRoot(path)) return null;
-    var nextPly = path[0].ply + 1;
-    var nextStep = this.tree[nextPly - this.firstPly()];
+    const nextPly = path[0].ply + 1;
+    const nextStep = this.tree[nextPly - this.firstPly()];
     return (nextStep && nextStep.rEval) ? nextStep.rEval.best : null;
   }.bind(this);
 
@@ -168,15 +168,17 @@ function configureSteps(data) {
   for (var i = 0, len = steps.length; i < len; i++) {
     const s = steps[i];
     s.fixed = true;
-    if (analysis && i - 1 >= 0) {
-      const move = analysis.moves[i - 1];
-      s.rEval = {
-        cp: move.eval,
-        best: move.best,
-        mate: move.mate,
-        variation: move.variation,
-        comment: move.comment
-      };
+    if (analysis) {
+      const move = i - 1 >= 0 ? analysis.moves[i - 1] : null;
+      if (move) {
+        s.rEval = {
+          cp: move.eval,
+          best: move.best,
+          mate: move.mate,
+          variation: move.variation,
+          judgment: move.judgment
+        };
+      }
     }
   }
 }

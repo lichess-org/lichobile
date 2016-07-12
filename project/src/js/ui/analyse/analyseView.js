@@ -16,7 +16,7 @@ import helper from '../helper';
 import layout from '../layout';
 import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
-import { hasNetwork, getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor } from '../../utils';
+import { hasNetwork, getBoardBounds, noop, partialf, playerName, gameIcon, oppositeColor, noNull } from '../../utils';
 import notes from '../round/notes';
 import button from '../round/view/button';
 import crazyView from './crazy/crazyView';
@@ -55,22 +55,36 @@ function overlay(ctrl) {
 }
 
 function renderContent(ctrl, isPortrait) {
-  if (!ctrl.data) return null;
-
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
-  const ceval = ctrl.currentAnyEval();
-  const bestMove = !ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove && ceval && ceval.best ? {
-    brush: 'paleBlue',
-    orig: ceval.best.slice(0, 2),
-    dest: ceval.best.slice(2, 4)
-  } : null;
+  const ceval = ctrl.vm.step.ceval;
+  const rEval = ctrl.vm.step.rEval;
+  let nextBest, curBestMove, pastBest;
+  if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
+    nextBest = ctrl.nextStepBest();
+    curBestMove = nextBest ? {
+      brush: 'paleBlue',
+      orig: nextBest.slice(0, 2),
+      dest: nextBest.slice(2, 4)
+    } : ceval && ceval.best ? {
+      brush: 'paleBlue',
+      orig: ceval.best.slice(0, 2),
+      dest: ceval.best.slice(2, 4)
+    } : null;
+  }
+  if (ctrl.vm.showBestMove) {
+    pastBest = rEval && rEval.best ? {
+      brush: 'paleGreen',
+      orig: rEval.best.slice(0, 2),
+      dest: rEval.best.slice(2, 4)
+    } : null;
+  }
 
   const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
   const nextMove = nextStep ? nextStep.uci.includes('@') ? {
-    brush: 'paleGreen',
+    brush: 'paleYellow',
     orig: nextStep.uci.slice(2, 4)
   } : {
-    brush: 'paleGreen',
+    brush: 'paleYellow',
     orig: nextStep.uci.slice(0, 2),
     dest: nextStep.uci.slice(2, 4)
   } : null;
@@ -82,7 +96,7 @@ function renderContent(ctrl, isPortrait) {
     isPortrait,
     null,
     null,
-    bestMove ? [bestMove] : nextMove ? [nextMove] : null
+    nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
   );
 
   return [
@@ -124,7 +138,7 @@ function renderInfos(ctrl) {
   const ceval = ctrl.currentAnyEval();
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    (ceval && ceval.mate) + (ceval && ceval.best) +
+    (ceval && ceval.mate) + (ceval && ceval.best) + defined(ctrl.vm.step.ceval) +
     ctrl.vm.showBestMove + ctrl.ceval.percentComplete() +
     isEmpty(ctrl.vm.step.dests) + JSON.stringify(ctrl.vm.step.checkCount) + JSON.stringify(ctrl.vm.step.crazy);
 

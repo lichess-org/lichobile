@@ -304,23 +304,24 @@ export default function controller() {
     this.analyse.updateAtPath(res.work.path, step => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
-      this.chessLogic.getSanMoveFromUci({
-        fen: step.fen,
-        orig: res.ceval.best.slice(0, 2),
-        dest: res.ceval.best.slice(2, 4)
-      }).then(data => {
-        step.ceval.bestSan = data.situation.pgnMoves[0];
-        if (treePath.write(res.work.path) === this.vm.pathStr) {
+      if (treePath.write(res.work.path) === this.vm.pathStr) {
+        this.chessLogic.getSanMoveFromUci({
+          fen: step.fen,
+          orig: res.ceval.best.slice(0, 2),
+          dest: res.ceval.best.slice(2, 4)
+        }).then(data => {
+          step.ceval.bestSan = data.situation.pgnMoves[0];
           m.redraw();
-        }
-      })
-      .catch(console.error.bind(console));
+        })
+        .catch(console.error.bind(console));
+        m.redraw();
+      }
     });
   }
 
   this.canUseCeval = function() {
     return this.vm.step.dests !== '' && (!this.vm.step.rEval ||
-      !this.analyse.nextStepEvalBest(this.vm.path));
+      !this.nextStepBest());
   }.bind(this);
 
   this.nextStepBest = function() {
@@ -359,7 +360,6 @@ export default function controller() {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
       m.route('/');
     }
-    console.log(this.data);
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
     this.analyse = new analyse(this.data);

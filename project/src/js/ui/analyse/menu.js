@@ -78,14 +78,14 @@ function renderAnalyseMenu(ctrl) {
       ),
       m('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    ctrl.ceval.allowed() && settings.analyse.enableCeval() ? m('div.action', {
+    m('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(
         i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
         ctrl.toggleBestMove
       )
-    ]) : null
+    ])
   ]);
 }
 

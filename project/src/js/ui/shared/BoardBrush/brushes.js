@@ -40,5 +40,12 @@ export const brushes = {
     opacity: 0.35,
     lineWidth: 15,
     circleMargin: 0
+  },
+  paleYellow: {
+    key: 'py',
+    color: '#e68f00',
+    opacity: 0.40,
+    lineWidth: 15,
+    circleMargin: 0
   }
 };

@@ -30,7 +30,7 @@ export default function cevalCtrl(variant, allow, emit) {
       return;
     }
     const step = steps[steps.length - 1];
-    if (step.rEval || step.ceval && step.ceval.depth >= maxDepth) {
+    if (step.ceval && step.ceval.depth >= maxDepth) {
       return;
     }
     engine.start({

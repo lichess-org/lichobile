@@ -206,7 +206,7 @@ const emptyMove = <move className="emptyMove">...</move>;
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
   const pathStr = treePath.write(path);
-  const evaluation = path[1] ? {} : (move.oEval || move.ceval || {});
+  const evaluation = path[1] ? {} : (move.rEval || move.ceval || {});
   const className = [
     pathStr === ctrl.vm.pathStr ? 'current' : ''
   ].join(' ');

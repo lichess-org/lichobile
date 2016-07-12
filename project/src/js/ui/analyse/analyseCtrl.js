@@ -290,7 +290,7 @@ export default function controller() {
   }.bind(this);
 
   this.currentAnyEval = function() {
-    return this.vm.step ? (this.vm.step.oEval || this.vm.step.ceval) : null;
+    return this.vm.step ? (this.vm.step.rEval || this.vm.step.ceval) : null;
   }.bind(this);
 
   const allowCeval = function() {
@@ -319,7 +319,7 @@ export default function controller() {
   }
 
   this.canUseCeval = function() {
-    return this.vm.step.dests !== '' && (!this.vm.step.oEval ||
+    return this.vm.step.dests !== '' && (!this.vm.step.rEval ||
       !this.analyse.nextStepEvalBest(this.vm.path));
   }.bind(this);
 
@@ -359,9 +359,10 @@ export default function controller() {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
       m.route('/');
     }
+    console.log(this.data);
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-    this.analyse = new analyse(this.data.steps);
+    this.analyse = new analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;

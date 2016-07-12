@@ -41,10 +41,10 @@ export const brushes = {
     lineWidth: 15,
     circleMargin: 0
   },
-  paleYellow: {
-    key: 'py',
-    color: '#e68f00',
-    opacity: 0.65,
+  palePurple: {
+    key: 'pp',
+    color: '#4b0082',
+    opacity: 0.4,
     lineWidth: 15,
     circleMargin: 0
   }

@@ -81,10 +81,10 @@ function renderContent(ctrl, isPortrait) {
 
   const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
   const nextMove = nextStep ? nextStep.uci.includes('@') ? {
-    brush: 'paleYellow',
+    brush: 'palePurple',
     orig: nextStep.uci.slice(2, 4)
   } : {
-    brush: 'paleYellow',
+    brush: 'palePurple',
     orig: nextStep.uci.slice(0, 2),
     dest: nextStep.uci.slice(2, 4)
   } : null;

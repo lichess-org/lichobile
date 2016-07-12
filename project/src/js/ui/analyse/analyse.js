@@ -169,8 +169,13 @@ function configureSteps(data) {
     const s = steps[i];
     s.fixed = true;
     if (analysis && i - 1 >= 0) {
+      const move = analysis.moves[i - 1];
       s.rEval = {
-        cp: analysis.moves[i - 1].eval
+        cp: move.eval,
+        best: move.best,
+        mate: move.mate,
+        variation: move.variation,
+        comment: move.comment
       };
     }
   }

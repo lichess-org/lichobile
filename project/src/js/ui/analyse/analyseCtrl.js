@@ -368,7 +368,9 @@ export default function controller() {
 
     let initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
-      treePath.default(this.analyse.firstPly());
+        this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+          treePath.default(this.analyse.lastPly()) :
+          treePath.default(this.analyse.firstPly());
 
     if (initialPath[0].ply >= this.data.steps.length) {
       initialPath = treePath.default(this.data.steps.length - 1);
@@ -395,7 +397,8 @@ export default function controller() {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
-      m.redraw();
+      m.redraw(true);
+      debouncedScroll();
     }.bind(this), err => {
       handleXhrError(err);
       m.route('/');

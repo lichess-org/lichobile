@@ -26,10 +26,11 @@ export default function analyseView(ctrl) {
 
   const isPortrait = helper.isPortrait();
 
-  const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
-  const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
-
   if (ctrl.data) {
+
+    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
+    const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
+
     return layout.board(
       () => header(title, backButton),
       () => renderContent(ctrl, isPortrait),

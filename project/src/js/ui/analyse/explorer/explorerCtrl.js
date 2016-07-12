@@ -28,6 +28,7 @@ export default function(root, allow) {
   function close(fromBB) {
     if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
     enabled(false);
+    setTimeout(() => root && root.debouncedScroll(), 200);
   }
 
   var cache = {};

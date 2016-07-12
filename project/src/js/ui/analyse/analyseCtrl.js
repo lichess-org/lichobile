@@ -121,7 +121,7 @@ export default function controller() {
     if (!dests) debouncedDests();
   }.bind(this);
 
-  const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
+  this.debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   const updateHref = debounce(() => {
     window.history.replaceState(null, null, '#' + this.vm.step.ply);
@@ -140,7 +140,7 @@ export default function controller() {
     this.explorer.setStep();
     updateHref();
     debouncedStartCeval();
-    debouncedScroll();
+    this.debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
   }.bind(this);
 
@@ -398,7 +398,7 @@ export default function controller() {
       cfg.orientation = orientation;
       this.init(makeData(cfg));
       m.redraw();
-      setTimeout(debouncedScroll, 250);
+      setTimeout(this.debouncedScroll, 250);
     }.bind(this), err => {
       handleXhrError(err);
       m.route('/');

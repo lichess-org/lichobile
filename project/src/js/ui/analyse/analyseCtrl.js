@@ -397,8 +397,8 @@ export default function controller() {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
-      m.redraw(true);
-      debouncedScroll();
+      m.redraw();
+      setTimeout(debouncedScroll, 250);
     }.bind(this), err => {
       handleXhrError(err);
       m.route('/');

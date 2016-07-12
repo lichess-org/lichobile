@@ -212,6 +212,23 @@
     align-content flex-start
     font-size 0.8em
     background lighten(bgdark, 5%)
+    > .comment
+      font-size 0.9em
+      width 100%
+      display flex
+      padding: 0 5px
+      align-items center
+      word-wrap: break-word;
+      border-left 2px solid #ccc
+      &.Inaccuracy {
+        border-color: #56B4E9;
+      }
+      &.Mistake {
+        border-color: #E69F00;
+      }
+      &.Blunder {
+        border-color: #DF5353;
+      }
     > .variationWrapper
       width 100%
       display flex

@@ -50,6 +50,7 @@ export default function controller() {
     flip: false,
     variationMenu: null,
     showBestMove: settings.analyse.showBestMove(),
+    showComments: settings.analyse.showComments(),
     buttonsHash: '',
     infosHash: '',
     openingHash: ''

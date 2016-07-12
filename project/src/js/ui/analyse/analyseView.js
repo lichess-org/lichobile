@@ -381,14 +381,19 @@ function renderOpeningBox(ctrl) {
   return null;
 }
 
-function renderMeta(ctrl, move, path) {
-  if (!move || empty(move.variations)) return null;
+function renderMeta(ctrl, step, path) {
+  const judgment = step.rEval && step.rEval.judgment;
+
+  if (!step || (empty(step.variations) && empty(judgment))) return null;
 
   const children = [];
-  const colorClass = move.ply % 2 === 0 ? 'black ' : 'white ';
-  if (!empty(move.variations)) {
-    for (var i = 0, len = move.variations.length; i < len; i++) {
-      const variation = move.variations[i];
+  const colorClass = step.ply % 2 === 0 ? 'black ' : 'white ';
+  if (ctrl.vm.showComments && !empty(judgment)) {
+    children.push(renderComment(judgment.comment, colorClass, judgment.name));
+  }
+  if (!empty(step.variations)) {
+    for (var i = 0, len = step.variations.length; i < len; i++) {
+      const variation = step.variations[i];
       if (empty(variation)) return null;
       children.push(renderVariation(
         ctrl,
@@ -399,7 +404,20 @@ function renderMeta(ctrl, move, path) {
     }
   }
   return (
-    <div key={move.ply + ':meta'} className="meta">{children}</div>
+    <div key={step.ply + ':meta'} className="meta">{children}</div>
+  );
+}
+
+function truncateComment(text) {
+  if (text.length <= 140) return text;
+  return text.slice(0, 125) + ' [...]';
+}
+
+function renderComment(comment, colorClass, commentClass) {
+  return comment && (
+    <div className={'comment ' + colorClass + commentClass}>
+      {truncateComment(comment)}
+    </div>
   );
 }
 

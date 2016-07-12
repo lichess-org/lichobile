@@ -2,7 +2,7 @@ import merge from 'lodash/merge';
 import spinner from './spinner';
 import m from 'mithril';
 
-export const apiVersion = 1;
+export const apiVersion = 2;
 
 const baseUrl = window.lichess.apiEndPoint;
 

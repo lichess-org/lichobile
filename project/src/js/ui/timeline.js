@@ -54,7 +54,7 @@ export function renderTourJoin(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      config={helper.ontouch(() => {
+      config={helper.ontouchY(() => {
         m.route('/tournament/' + entry.data.tourId);
       })}
     >
@@ -72,7 +72,7 @@ export function renderFollow(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      config={helper.ontouch(() => {
+      config={helper.ontouchY(() => {
         m.route('/@/' + entry.data.u1);
       })}
     >
@@ -91,7 +91,7 @@ export function renderGameEnd(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key} data-icon={icon}
-      config={helper.ontouch(() => {
+      config={helper.ontouchY(() => {
         m.route('/game/' + entry.data.playerId);
       })}
     >

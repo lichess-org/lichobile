@@ -244,7 +244,7 @@ function renderOpponents(ctrl) {
         }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
-      {renderStatus(ctrl)}
+      {!isCrazy ? renderStatus(ctrl) : null}
     </div>
   );
 }

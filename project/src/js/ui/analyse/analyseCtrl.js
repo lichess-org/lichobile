@@ -1,29 +1,30 @@
-import analyse from './analyse';
-import treePath from './path';
-import ground from './ground';
-import promotion from '../shared/offlineRound/promotion';
-import * as util from './util';
-import sound from '../../sound';
+import m from 'mithril';
 import debounce from 'lodash/debounce';
+import sound from '../../sound';
 import socket from '../../socket';
-import cevalCtrl from './ceval/cevalCtrl';
-import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import continuePopup from '../shared/continuePopup';
-import importPgnPopup from './importPgnPopup.js';
 import { handleXhrError, oppositeColor } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
-import { makeData, makeDefaultData } from './data';
+import promotion from '../shared/offlineRound/promotion';
+import continuePopup from '../shared/continuePopup';
+import helper from '../helper';
 import notes from '../round/notes';
-import chessLogic from './chessLogic';
-import { renderStepsTxt } from './pgnExport';
 import { getPGN } from '../round/roundXhr';
+import importPgnPopup from './importPgnPopup.js';
+import { makeData, makeDefaultData } from './data';
+import chessLogic from './chessLogic';
+import * as util from './util';
+import { renderStepsTxt } from './pgnExport';
+import cevalCtrl from './ceval/cevalCtrl';
 import crazyValid from './crazy/crazyValid';
 import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
-import m from 'mithril';
+import analyseSettings from './analyseSettings';
+import analyse from './analyse';
+import treePath from './path';
+import ground from './ground';
 
 export default function controller() {
   this.source = m.route.param('source') || 'offline';
@@ -37,6 +38,7 @@ export default function controller() {
 
   this.chessLogic = chessLogic(this);
 
+  this.settings = analyseSettings.controller(this);
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
   this.importPgnPopup = importPgnPopup.controller(this);

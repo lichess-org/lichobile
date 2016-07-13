@@ -2,9 +2,7 @@ import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import gameApi from '../../lichess/game';
-import settings from '../../settings';
 import helper from '../helper';
-import formWidgets from '../shared/form';
 import m from 'mithril';
 
 export default {
@@ -45,6 +43,11 @@ export default {
 
 function renderAnalyseMenu(ctrl) {
 
+  const sharePGN = helper.ontouch(
+    ctrl.sharePGN,
+    () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
+  );
+
   return m('div.analyseMenu', [
     m('button', {
       key: 'startNewAnalysis',
@@ -58,42 +61,17 @@ function renderAnalyseMenu(ctrl) {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
+      key: 'sharePGN',
+      config: sharePGN
+    }, [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
     m('button', {
       key: 'importPGN',
       config: helper.ontouch(() => {
         ctrl.menu.close();
         ctrl.importPgnPopup.open();
       })
-    }, [m('span.fa.fa-upload'), i18n('importGame')]),
-    ctrl.ceval.allowed() ? m('div.action', {
-      key: 'enableCeval'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
-        v => {
-          ctrl.ceval.toggle();
-          if (v) ctrl.initCeval();
-          else ctrl.ceval.destroy();
-        }
-      ),
-      m('small.caution', i18n('localEvalCaution'))
-    ]) : null,
-    ctrl.ceval.allowed() && settings.analyse.enableCeval() ? m('div.action', {
-      key: 'showBestMove'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
-        ctrl.toggleBestMove
-      )
-    ]) : null,
-    m('div.action', {
-      key: 'showComments'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('showComments'), 'showComments', settings.analyse.showComments,
-        ctrl.toggleComments
-      )
-    ])
+    }, [m('span.fa.fa-upload'), i18n('importGame')])
   ]);
 }
 

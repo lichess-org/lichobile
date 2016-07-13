@@ -16,6 +16,7 @@ import importPgnPopup from '../importPgnPopup';
 import cevalView from '../ceval/cevalView';
 import control from '../control';
 import menu from '../menu';
+import analyseSettings from '../analyseSettings';
 import { defined, renderEval, isSynthetic } from '../util';
 import crazyView from '../crazy/crazyView';
 import explorerView from '../explorer/explorerView';
@@ -47,6 +48,7 @@ function overlay(ctrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
+    analyseSettings.view(ctrl.settings),
     ctrl.notes ? notes.view(ctrl.notes) : null,
     continuePopup.view(ctrl.continuePopup),
     importPgnPopup.view(ctrl.importPgnPopup)
@@ -332,11 +334,6 @@ function renderActionsBar(ctrl) {
   };
   ctrl.vm.buttonsHash = hash;
 
-  const sharePGN = helper.ontouch(
-    ctrl.sharePGN,
-    () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
-  );
-
   const explorerBtnClass = [
     'action_bar_button',
     'fa',
@@ -349,11 +346,9 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         config={helper.ontouch(ctrl.menu.open)}
       />
-      {ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ?
-        <button className="action_bar_button fa fa-share-alt" key="sharePGN"
-          config={sharePGN}
-        /> : null
-      }
+      <button className="action_bar_button fa fa-gear" key="analyseSettings"
+        config={helper.ontouch(ctrl.settings.open)}
+      />
       {ctrl.notes ? button.notes(ctrl) : null}
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"

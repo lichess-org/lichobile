@@ -42,12 +42,17 @@ function renderEvalTag(e) {
   };
 }
 
+function renderGlyph(glyph) {
+  return <glyph>{glyph.symbol}</glyph>;
+}
+
 const emptyMove = <move className="emptyMove">...</move>;
 
 function renderMove(ctrl, move, path) {
   if (!move) return emptyMove;
   const pathStr = treePath.write(path);
   const evaluation = path[1] ? {} : (move.rEval || move.ceval || {});
+  const judgment = move.rEval && move.rEval.judgment;
   const className = [
     pathStr === ctrl.vm.pathStr ? 'current' : ''
   ].join(' ');
@@ -60,6 +65,7 @@ function renderMove(ctrl, move, path) {
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
       )}
+      {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
     </move>
   );
 }

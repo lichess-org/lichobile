@@ -21,6 +21,7 @@ import cevalCtrl from './ceval/cevalCtrl';
 import crazyValid from './crazy/crazyValid';
 import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
+import evalSummary from './evalSummaryPopup';
 import analyseSettings from './analyseSettings';
 import analyse from './analyse';
 import treePath from './path';
@@ -376,6 +377,7 @@ export default function controller() {
     this.analyse = new analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
+    this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     let initialPath = location.hash ?

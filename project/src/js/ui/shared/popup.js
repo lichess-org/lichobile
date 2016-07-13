@@ -9,8 +9,9 @@ function styleConf(el) {
 }
 
 export default function(classes, headerF, contentF, isShowing, closef) {
-  if (!isShowing)
+  if (!isShowing) {
     return null;
+  }
 
   const defaultClasses = {
     overlay_popup: true,

@@ -165,15 +165,6 @@ function renderContent(ctrl, isPortrait) {
   }
 }
 
-function renderRatingDiff(player) {
-  if (player.ratingDiff === undefined) return null;
-  if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
-  if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
-  if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
-
-  return null;
-}
-
 function getChecksCount(ctrl, color) {
   const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
   return player.checks;
@@ -256,7 +247,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
           <h3 className="rating">
             {player.rating}
             {player.provisional ? '?' : ''}
-            {renderRatingDiff(player)}
+            {helper.renderRatingDiff(player)}
           </h3> : null
         }
         {checksNb !== undefined ?

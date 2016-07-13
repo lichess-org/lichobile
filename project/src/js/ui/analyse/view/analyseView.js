@@ -13,13 +13,13 @@ import layout from '../../layout';
 import notes from '../../round/notes';
 import button from '../../round/view/button';
 import importPgnPopup from '../importPgnPopup';
-import cevalView from '../ceval/cevalView';
 import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
 import { defined, renderEval, isSynthetic } from '../util';
 import crazyView from '../crazy/crazyView';
 import explorerView from '../explorer/explorerView';
+import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
 
 export default function analyseView(ctrl) {
@@ -50,6 +50,7 @@ function overlay(ctrl) {
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notes.view(ctrl.notes) : null,
+    ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
     continuePopup.view(ctrl.continuePopup),
     importPgnPopup.view(ctrl.importPgnPopup)
   ];
@@ -134,6 +135,52 @@ function getChecksCount(ctrl, color) {
   return step.checkCount[oppositeColor(color)];
 }
 
+function renderEvalBox(ctrl) {
+  if (!ctrl.ceval.enabled() && !ctrl.data.analysis) return null;
+
+  const ceval = ctrl.currentAnyEval() || {};
+  let pearl, percent;
+
+  if (defined(ceval.cp) && ctrl.nextStepBest()) {
+    pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
+    percent = ctrl.ceval.enabled() ? 100 : 0;
+  }
+  else if (defined(ceval.cp)) {
+    pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
+    percent = ctrl.ceval.enabled() ? ctrl.ceval.percentComplete() : 0;
+  }
+  else if (defined(ceval.mate)) {
+    pearl = <pearl>{'#' + ceval.mate}</pearl>;
+    percent = ctrl.ceval.enabled() ? 100 : 0;
+  }
+  else if (ctrl.ceval.enabled() && isEmpty(ctrl.vm.step.dests)) {
+    pearl = <pearl>-</pearl>;
+    percent = 0;
+  }
+  else if (ctrl.ceval.enabled()) {
+    pearl = <div className="spinner fa fa-hourglass-half"></div>;
+    percent = 0;
+  }
+  else {
+    pearl = <pearl>-</pearl>;
+    percent = 0;
+  }
+
+  return (
+    <div className="cevalBox">
+      { pearl }
+      <div className="cevalBar">
+        <span style={{ width: percent + '%' }}></span>
+      </div>
+      { ctrl.data.analysis ?
+        <div className="openSummary" config={helper.ontouch(ctrl.evalSummary.open)}>
+          <span className="fa fa-question-circle"/>
+        </div> : null
+      }
+    </div>
+  );
+}
+
 function renderInfos(ctrl) {
   const cevalEnabled = ctrl.ceval.enabled();
   const ceval = ctrl.currentAnyEval();
@@ -151,8 +198,8 @@ function renderInfos(ctrl) {
 
   return (
     <div id="analyseInfos" className="analyseInfos scrollerWrapper">
-      { cevalEnabled ?
-        cevalView.renderCeval(ctrl) : null
+      { cevalEnabled || ctrl.data.analysis ?
+        renderEvalBox(ctrl) : null
       }
       { !isSynthetic(ctrl.data) ?
         <div className="native_scroller">
@@ -162,15 +209,6 @@ function renderInfos(ctrl) {
       }
     </div>
   );
-}
-
-function renderRatingDiff(player) {
-  if (typeof player.ratingDiff === 'undefined') return null;
-  if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;
-  if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>;
-  if (player.ratingDiff < 0) return <span className="rp down"> {player.ratingDiff}</span>;
-
-  return null;
 }
 
 function renderOpponents(ctrl) {
@@ -188,7 +226,7 @@ function renderOpponents(ctrl) {
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
-          {renderRatingDiff(player)}
+          {helper.renderRatingDiff(player)}
         </div>
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, player.color) + ')' : null
@@ -199,13 +237,14 @@ function renderOpponents(ctrl) {
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}
-          {renderRatingDiff(opponent)}
+          {helper.renderRatingDiff(opponent)}
         </div>
         { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
           ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
         }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
+      {renderStatus(ctrl)}
     </div>
   );
 }
@@ -237,6 +276,17 @@ function renderOpeningBox(ctrl, isPortrait) {
   return null;
 }
 
+function renderStatus(ctrl) {
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+  return (
+    <div key="gameStatus" className="status">
+      {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
+
+      {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
+    </div>
+  );
+}
+
 function renderReplay(ctrl) {
 
   var result;
@@ -253,14 +303,7 @@ function renderReplay(ctrl) {
   const tree = renderTree(ctrl, ctrl.analyse.tree);
   if (result) {
     tree.push(<div key="gameResult" className="result">{result}</div>);
-    const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
-    tree.push(
-      <div key="gameStatus" className="status">
-        {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
-
-        {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
-      </div>
-    );
+    tree.push(renderStatus(ctrl));
   }
 
   return (

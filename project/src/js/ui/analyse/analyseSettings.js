@@ -43,7 +43,7 @@ export default {
 
 function renderAnalyseSettings(ctrl) {
 
-  return m('div.analyseMenu', [
+  return m('div.analyseSettings', [
     ctrl.ceval.allowed() ? m('div.action', {
       key: 'enableCeval'
     }, [

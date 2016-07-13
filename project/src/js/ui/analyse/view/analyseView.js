@@ -103,14 +103,14 @@ function renderContent(ctrl, isPortrait) {
     <div className="analyseTableWrapper">
       {ctrl.explorer.enabled() ?
         explorerView(ctrl) :
-        renderAnalyseTable(ctrl)
+        renderAnalyseTable(ctrl, isPortrait)
       }
       {renderActionsBar(ctrl, isPortrait)}
     </div>
   ];
 }
 
-function renderAnalyseTable(ctrl) {
+function renderAnalyseTable(ctrl, isPortrait) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
@@ -119,7 +119,7 @@ function renderAnalyseTable(ctrl) {
   return (
     <div className={className} key="analyse">
       <div className="analyse scrollerWrapper">
-        {renderOpeningBox(ctrl)}
+        {renderOpeningBox(ctrl, isPortrait)}
         {renderReplay(ctrl)}
       </div>
       {renderInfos(ctrl)}
@@ -208,10 +208,10 @@ function renderOpponents(ctrl) {
   );
 }
 
-function renderOpeningBox(ctrl) {
+function renderOpeningBox(ctrl, isPortrait) {
   const opening = ctrl.data.game.opening;
 
-  const hash = '' + (opening && opening.eco + opening.name);
+  const hash = '' + (opening && opening.eco + opening.name) + isPortrait;
 
   if (ctrl.vm.openingHash === hash) {
     return {
@@ -220,7 +220,7 @@ function renderOpeningBox(ctrl) {
   }
   ctrl.vm.openingHash = hash;
 
-  if (opening) {
+  if (!isPortrait && opening) {
     const config = helper.ontouch(noop, () =>
       window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'));
 

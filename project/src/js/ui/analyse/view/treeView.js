@@ -180,13 +180,25 @@ function renderVariationTurn(ctrl, turn, path) {
   ];
 }
 
+function renderCommentOpening(opening) {
+  return (
+    <div className="comment opening">
+      {truncateComment(opening.eco + ' ' + opening.name)}
+    </div>
+  );
+}
 
 function renderMeta(ctrl, step, path) {
   const judgment = step.rEval && step.rEval.judgment;
+  const opening = ctrl.data.game.opening;
+  const moveOpening = (step && opening && opening.ply === step.ply) ? renderCommentOpening(opening) : null;
 
-  if (!step || (empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments))) return null;
+  if (!step || (!moveOpening && empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments))) return null;
 
   const children = [];
+  if (moveOpening) {
+    children.push(moveOpening);
+  }
   const colorClass = step.ply % 2 === 0 ? 'black ' : 'white ';
   if (ctrl.vm.showComments && !empty(judgment)) {
     children.push(renderComment(judgment.comment, colorClass, judgment.name));

@@ -251,13 +251,13 @@ function renderTurn(ctrl, turn, path) {
   const bMeta = renderMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) {
-      const temp = [
+      let temp = [
         renderTurnEl([index, wMove, emptyMove], turnKey(turn, 'emptyBlack')),
         wMeta
       ];
       if (bMove) {
         if (bMeta) {
-          temp.concat([
+          temp = temp.concat([
             renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAfterWhiteMetaAndBlackMeta')),
             bMeta
           ]);

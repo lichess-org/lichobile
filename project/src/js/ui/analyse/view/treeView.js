@@ -189,7 +189,7 @@ function renderCommentOpening(opening) {
 }
 
 function renderMeta(ctrl, step, path) {
-  const judgment = step.rEval && step.rEval.judgment;
+  const judgment = step && step.rEval && step.rEval.judgment;
   const opening = ctrl.data.game.opening;
   const moveOpening = (step && opening && opening.ply === step.ply) ? renderCommentOpening(opening) : null;
 

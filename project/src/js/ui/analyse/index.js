@@ -1,5 +1,5 @@
 import controller from './analyseCtrl';
-import view from './analyseView';
+import view from './view/analyseView';
 
 export default {
   controller,

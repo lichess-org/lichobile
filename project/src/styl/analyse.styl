@@ -219,16 +219,17 @@
       padding: 0 5px
       align-items center
       word-wrap: break-word;
-      border-left 2px solid #ccc
-      &.Inaccuracy {
+      &.white
+        border-left 2px solid #ccc
+      &.black
+        border-right 2px solid #ccc
+        justify-content flex-end
+      &.Inaccuracy
         border-color: #56B4E9;
-      }
-      &.Mistake {
+      &.Mistake
         border-color: #E69F00;
-      }
-      &.Blunder {
+      &.Blunder
         border-color: #DF5353;
-      }
     > .variationWrapper
       width 100%
       display flex

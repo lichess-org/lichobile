@@ -4,7 +4,7 @@ import sound from '../../sound';
 import socket from '../../socket';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor } from '../../utils';
+import { handleXhrError, oppositeColor, noop } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import promotion from '../shared/offlineRound/promotion';
@@ -307,9 +307,22 @@ export default function controller() {
     this.analyse.updateAtPath(res.work.path, step => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
-      if (treePath.write(res.work.path) === this.vm.pathStr) {
-        m.redraw();
-      }
+      // even if we don't need the san move this ensure correct arrows are
+      // displayed
+      this.chessLogic.getSanMoveFromUci({
+        fen: step.fen,
+        orig: res.ceval.best.slice(0, 2),
+        dest: res.ceval.best.slice(2, 4)
+      }).then(data => {
+        step.ceval.bestSan = data.situation.pgnMoves[0];
+        if (treePath.write(res.work.path) === this.vm.pathStr) {
+          m.redraw();
+        }
+      })
+      // we just ignore errors here
+      // TODO should try to find a way to stop ceval msg after the position
+      // has been changed
+      .catch(noop);
     });
   }
 

@@ -57,8 +57,8 @@ function overlay(ctrl) {
 
 function renderContent(ctrl, isPortrait) {
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
-  const ceval = ctrl.vm.step.ceval;
-  const rEval = ctrl.vm.step.rEval;
+  const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
+  const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
   let nextBest, curBestMove, pastBest;
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextStepBest();

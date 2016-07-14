@@ -57,7 +57,7 @@ function renderAnalyseSettings(ctrl) {
       ),
       m('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    ctrl.ceval.allowed() && settings.analyse.enableCeval() ? m('div.action', {
+    ctrl.ceval.allowed() ? m('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(
@@ -69,7 +69,7 @@ function renderAnalyseSettings(ctrl) {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(
-        i18n('showComments'), 'showComments', settings.analyse.showComments,
+        i18n('keyShowOrHideComments'), 'showComments', settings.analyse.showComments,
         ctrl.toggleComments
       )
     ]) : null

@@ -135,8 +135,6 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderEvalBox(ctrl) {
-  if (!ctrl.ceval.enabled() && !ctrl.data.analysis) return null;
-
   const ceval = ctrl.currentAnyEval() || {};
   let pearl, percent;
 
@@ -186,9 +184,9 @@ function renderInfos(ctrl) {
   const step = ctrl.vm.step;
 
   const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    (cevalEnabled && ctrl.nextStepBest()) +
-    (ceval && ceval.mate) + defined(step.ceval) + ctrl.ceval.percentComplete() +
-    isEmpty(step.dests) + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
+    ctrl.nextStepBest() + (ceval && ceval.mate) + defined(step.ceval) +
+    ctrl.ceval.percentComplete() + isEmpty(step.dests) +
+    JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
 
   if (ctrl.vm.infosHash === hash) return {
     subtree: 'retain'

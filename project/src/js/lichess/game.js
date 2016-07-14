@@ -4,6 +4,8 @@ import settings from '../settings';
 import getVariant from './variant';
 import i18n from '../i18n';
 
+const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck'];
+
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
   var r = {};
@@ -86,6 +88,10 @@ function userAnalysable(data) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
+function analysable(data) {
+  return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
+}
+
 function getPlayer(data, color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
@@ -153,6 +159,7 @@ function isSupportedVariant(data) {
 }
 
 export default {
+  analysableVariants,
   isPlayerPlaying,
   isPlayerTurn,
   isOpponentTurn,
@@ -167,6 +174,7 @@ export default {
   mandatory,
   replayable,
   userAnalysable,
+  analysable,
   getPlayer,
   parsePossibleMoves,
   nbMoves,

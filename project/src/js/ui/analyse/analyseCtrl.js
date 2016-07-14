@@ -1,10 +1,12 @@
 import m from 'mithril';
 import debounce from 'lodash/debounce';
+import session from '../../session';
 import sound from '../../sound';
+import signals from '../../signals';
 import socket from '../../socket';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor, noop } from '../../utils';
+import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import promotion from '../shared/offlineRound/promotion';
@@ -26,6 +28,7 @@ import analyseSettings from './analyseSettings';
 import analyse from './analyse';
 import treePath from './path';
 import ground from './ground';
+import socketHandler from './analyseSocketHandler';
 
 export default function controller() {
   this.source = m.route.param('source') || 'offline';
@@ -38,7 +41,6 @@ export default function controller() {
   this.data = null;
 
   this.chessLogic = chessLogic(this);
-
   this.settings = analyseSettings.controller(this);
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
@@ -50,14 +52,26 @@ export default function controller() {
     pathStr: '',
     step: null,
     cgConfig: null,
-    flip: false,
     variationMenu: null,
+    flip: false,
+    analysisProgress: false,
     showBestMove: settings.analyse.showBestMove(),
     showComments: settings.analyse.showComments(),
     buttonsHash: '',
     infosHash: '',
     openingHash: ''
   };
+
+  const connectGameSocket = function() {
+    if (hasNetwork()) {
+      socket.createGame(
+        this.data.url.socket,
+        this.data.player.version,
+        socketHandler(this, gameId, orientation),
+        this.data.url.round
+      );
+    }
+  }.bind(this);
 
   this.flip = function() {
     this.vm.flip = !this.vm.flip;
@@ -300,8 +314,7 @@ export default function controller() {
   const allowCeval = function() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck']
-    .indexOf(this.data.game.variant.key) !== -1;
+    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {
@@ -398,6 +411,11 @@ export default function controller() {
     this.explorer.setStep();
   }.bind(this);
 
+  this.isRemoteAnalysable = function() {
+    return !this.data.analysis && !this.vm.analysisProgress &&
+      session.isConnected() && gameApi.analysable(this.data);
+  }.bind(this);
+
   this.startNewAnalysis = function() {
     if (m.route() === '/analyse') {
       m.route('/analyse', null, true);
@@ -407,13 +425,20 @@ export default function controller() {
   };
 
   if (this.source === 'online' && gameId) {
-    gameXhr(gameId, orientation, false).then(function(cfg) {
+    gameXhr(gameId, orientation, false).then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
+      // we must connect round socket in case the user wants to request a
+      // computer analysis
+      if (this.isRemoteAnalysable()) {
+        connectGameSocket();
+        // reconnect game socket after a cancelled seek
+        signals.seekCanceled.add(connectGameSocket);
+      }
       m.redraw();
       setTimeout(this.debouncedScroll, 250);
-    }.bind(this), err => {
+    }, err => {
       handleXhrError(err);
       m.route('/');
     });
@@ -453,6 +478,7 @@ export default function controller() {
     if (this.ceval) this.ceval.destroy();
     if (this.chessLogic) this.chessLogic.onunload();
     window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectGameSocket);
   }.bind(this);
 }
 

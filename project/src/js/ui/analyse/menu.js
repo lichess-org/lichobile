@@ -1,7 +1,10 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import spinner from '../../spinner';
 import gameApi from '../../lichess/game';
+import { handleXhrError } from '../../utils';
+import { requestComputerAnalysis } from './analyseXhr';
 import helper from '../helper';
 import m from 'mithril';
 
@@ -78,7 +81,21 @@ function renderAnalyseMenu(ctrl) {
         ctrl.menu.close();
         ctrl.notes.open();
       })
-    }, [m('span.fa.fa-pencil'), i18n('notes')]) : null
+    }, [m('span.fa.fa-pencil'), i18n('notes')]) : null,
+    ctrl.isRemoteAnalysable() ? m('button', {
+      key: 'requestAComputerAnalysis',
+      config: helper.ontouch(() => {
+        return requestComputerAnalysis(ctrl.data.game.id)
+        .then(() => {
+          ctrl.vm.analysisProgress = true;
+        })
+        .catch(handleXhrError);
+      })
+    }, [m('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
+    ctrl.vm.analysisProgress ? m('div.analysisProgress', [
+      m('span', 'Analysis in progress'),
+      spinner.getVdom()
+    ]) : null
   ]);
 }
 

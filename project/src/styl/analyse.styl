@@ -1,5 +1,8 @@
 .analyseSettings
   padding 10px 0
+  label[for='showComments']
+    text-transform capitalize
+
 
 .analyseTableWrapper
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
@@ -274,6 +277,7 @@
           top 5px
 
   .result, .status
+    font-size 0.8em
     width 100%
 
   .result
@@ -282,7 +286,6 @@
     font-weight bold
 
   .status
-    font-size 0.9em
     font-style italic
     text-align center
 
@@ -534,3 +537,8 @@
     text-align: center;
     > span:before
       margin 0
+
+.analysisProgress
+  background-color selectBg
+  text-align center
+  padding 10px

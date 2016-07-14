@@ -59,8 +59,18 @@ export default function controller() {
     showComments: settings.analyse.showComments(),
     buttonsHash: '',
     infosHash: '',
-    openingHash: ''
+    evalBoxHash: '',
+    gameInfosHash: '',
+    opponentsHash: ''
   };
+
+  this.resetHashes = function() {
+    this.vm.buttonsHash = '';
+    this.vm.infosHash = '';
+    this.vm.evalBoxHash = '';
+    this.vm.gameInfosHash = '';
+    this.vm.opponentsHash = '';
+  }.bind(this);
 
   const connectGameSocket = function() {
     if (hasNetwork()) {

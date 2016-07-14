@@ -1,5 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-import { hasNetwork, getBoardBounds, noop, playerName, gameIcon, oppositeColor, noNull } from '../../../utils';
+import { hasNetwork, getBoardBounds, playerName, gameIcon, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
@@ -112,7 +112,7 @@ function renderContent(ctrl, isPortrait) {
   ];
 }
 
-function renderAnalyseTable(ctrl, isPortrait) {
+function renderAnalyseTable(ctrl) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
@@ -121,7 +121,6 @@ function renderAnalyseTable(ctrl, isPortrait) {
   return (
     <div className={className} key="analyse">
       <div className="analyse scrollerWrapper">
-        {renderOpeningBox(ctrl, isPortrait)}
         {renderReplay(ctrl)}
       </div>
       {renderInfos(ctrl)}
@@ -135,8 +134,19 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderEvalBox(ctrl) {
+  const cevalEnabled = ctrl.ceval.enabled();
+  const step = ctrl.vm.step;
   const ceval = ctrl.currentAnyEval() || {};
   let pearl, percent;
+
+  const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
+    ctrl.nextStepBest() + (ceval && ceval.mate) + defined(step.ceval) +
+    ctrl.ceval.percentComplete() + isEmpty(step.dests);
+
+  if (ctrl.vm.evalBoxHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.evalBoxHash = hash;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
     pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
@@ -208,8 +218,55 @@ function renderInfos(ctrl) {
   );
 }
 
+function gameInfos(ctrl) {
+  if (isSynthetic(ctrl.data)) return null;
+  if (ctrl.vm.step.crazy) return null;
+
+  const hash = 'rendered';
+
+  if (ctrl.vm.gameInfosHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.gameInfosHash = hash;
+
+  const data = ctrl.data;
+  const time = gameApi.time(data);
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
+  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
+  const variantLink = helper.ontouch(
+    () => {
+      const link = variantApi(data.game.variant.key).link;
+      if (link)
+        window.open(link, '_blank');
+    },
+    () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
+  );
+
+  return (
+    <div className="analyseGameInfosWrapper">
+      <div className="analyseGameInfos" data-icon={icon}>
+        {time + ' • '}
+        <span className="variant" config={variantLink}>
+          {data.game.variant.name}
+        </span>
+        <br/>
+        {mode}
+      </div>
+    </div>
+  );
+}
+
 function renderOpponents(ctrl) {
   if (isSynthetic(ctrl.data)) return null;
+
+  const step = ctrl.vm.step;
+  const hash = '' + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
+
+  if (ctrl.vm.opponentsHash === hash) return {
+    subtree: 'retain'
+  };
+  ctrl.vm.opponentsHash = hash;
 
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
@@ -246,33 +303,6 @@ function renderOpponents(ctrl) {
   );
 }
 
-function renderOpeningBox(ctrl, isPortrait) {
-  const opening = ctrl.data.game.opening;
-
-  const hash = '' + (opening && opening.eco + opening.name) + isPortrait;
-
-  if (ctrl.vm.openingHash === hash) {
-    return {
-      subtree: 'retain'
-    };
-  }
-  ctrl.vm.openingHash = hash;
-
-  if (!isPortrait && opening) {
-    const config = helper.ontouch(noop, () =>
-      window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'));
-
-    return (
-      <div className="analyseOpening" config={config}>
-        <strong>{opening.eco}&nbsp;</strong>
-        <span>{opening.name}</span>
-      </div>
-    );
-  }
-
-  return null;
-}
-
 function renderStatus(ctrl) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   return (
@@ -306,38 +336,6 @@ function renderReplay(ctrl) {
   return (
     <div id="replay" className="analyseReplay native_scroller">
       {tree}
-    </div>
-  );
-}
-
-function gameInfos(ctrl) {
-  if (isSynthetic(ctrl.data)) return null;
-  if (ctrl.vm.step.crazy) return null;
-
-  const data = ctrl.data;
-  const time = gameApi.time(data);
-  const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
-  const variantLink = helper.ontouch(
-    () => {
-      const link = variantApi(data.game.variant.key).link;
-      if (link)
-        window.open(link, '_blank');
-    },
-    () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
-  );
-
-  return (
-    <div className="analyseGameInfosWrapper">
-      <div className="analyseGameInfos" data-icon={icon}>
-        {time + ' • '}
-        <span className="variant" config={variantLink}>
-          {data.game.variant.name}
-        </span>
-        <br/>
-        {mode}
-      </div>
     </div>
   );
 }

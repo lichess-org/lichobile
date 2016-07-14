@@ -61,7 +61,7 @@ function bookmarkAction(ctrl, id, index) {
 }
 
 function renderGame(ctrl, g, index, userId) {
-  const wideScreen = helper.isWideScreen();
+  const wideScreenOrLandscape = helper.isWideScreen() || helper.isLandscape();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + g.variant.name + ' • ' + mode;
@@ -80,7 +80,7 @@ function renderGame(ctrl, g, index, userId) {
       }
       <div className="nav" config={helper.ontouchY(() => m.route(`/analyse/online/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
-        {wideScreen ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
+        {wideScreenOrLandscape ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">
           <div className="title">{title}</div>
           <small className="date">{date}</small>

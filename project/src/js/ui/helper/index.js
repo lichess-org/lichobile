@@ -234,14 +234,14 @@ export default {
   },
 
   ontouch: function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback, true);
+    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },
 
   ontouchX: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback, false);
+    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
   },
   ontouchY: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback, false);
+    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
   },
 
   progress: function(p) {

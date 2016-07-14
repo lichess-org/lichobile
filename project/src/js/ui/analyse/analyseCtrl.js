@@ -116,20 +116,8 @@ export default function controller() {
   const debouncedDests = debounce(getDests.bind(this), 100);
 
   const showGround = function() {
-    var s;
-    try {
-      s = this.analyse.getStep(this.vm.path);
-    } catch (e) {
-      console.log(e);
-    }
-    if (!s) {
-      this.vm.path = treePath.default(this.analyse.firstPly());
-      this.vm.pathStr = treePath.write(this.vm.path);
-      s = this.analyse.getStep(this.vm.path);
-    }
-    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
-      s.checkCount = util.readCheckCount(s.fen);
-    }
+    const s = this.analyse.getStep(this.vm.path);
+
     const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {
@@ -143,8 +131,14 @@ export default function controller() {
       check: s.check,
       lastMove: uciToLastMove(s.uci)
     };
+
+    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
+      s.checkCount = util.readCheckCount(s.fen);
+    }
+
     this.vm.step = s;
     this.vm.cgConfig = config;
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     }

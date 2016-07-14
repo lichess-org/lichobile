@@ -95,7 +95,13 @@ function renderGame(ctrl, g, index, userId) {
             loose: g.winner && userColor !== g.winner
           })}>{status}</div>
           {g.opening ?
-          <div className="opening">{g.opening.name}</div> : null
+          <p className="opening">{g.opening.name}</p> : null
+          }
+          {g.metadata && g.metadata.analysed ?
+          <p className="analysed">
+            <span className="fa fa-bar-chart" />
+            Computer analysis available
+          </p> : null
           }
         </div>
       </div>

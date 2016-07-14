@@ -6,6 +6,18 @@
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
 
+.table, .analyseTableWrapper
+  flex 1 1 auto
+  @media only screen and (orientation landscape)
+    width calc(100vw - 100vh + 50px)
+    height 100%
+  @media only screen and (orientation landscape) and (max-height 450px)
+    width calc(100vw - 100vh + 45px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    margin auto 0
+    width calc(100vw - 100vh + 50px + 12vh)
+    height calc(100vh - 50px - 12vh)
+
 .game_board_wrapper, .board_wrapper
   @media only screen and (orientation: portrait)
     height 100vw
@@ -104,7 +116,6 @@
       font-size 16px
 
 .table
-  height 100%
   display flex
   flex-flow column nowrap
   > header
@@ -143,16 +154,6 @@
       max-width 160px
     .antagonistInfos
       max-width calc(100% - 160px)
-
-.table, .analyseTableWrapper
-  @media only screen and (orientation landscape)
-    width calc(100vw - 100vh + 50px)
-  @media only screen and (orientation landscape) and (max-height 450px)
-    width calc(100vw - 100vh + 45px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    margin auto 0
-    width calc(100vw - 100vh + 50px + 12vh)
-    height calc(100vh - 50px - 12vh)
 
 .board_alert
   position: absolute;

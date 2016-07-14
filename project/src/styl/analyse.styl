@@ -2,11 +2,6 @@
   label[for='showComments']
     text-transform capitalize
 
-.analyseTableWrapper
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    margin auto 0
-
 .analyseTable, .explorerTable
   width 100%
   display flex
@@ -140,10 +135,11 @@
   @media only screen and (orientation: landscape)
     > .pocket
       height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+      max-width initial
       > piece
         width calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
         height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
-  @media only screen and (max-height 450px) and (orientation landscape)
+  @media only screen and (orientation: landscape) and (max-height 450px)
     > .pocket
       height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
       > piece

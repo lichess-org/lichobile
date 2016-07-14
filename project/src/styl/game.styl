@@ -231,6 +231,7 @@
   display flex
   justify-content flex-start
   align-items center
+  padding 0 10px
 
 .tableHeader, .player_controls
   .star
@@ -398,9 +399,13 @@
   align-items center
   justify-content space-around
   @media only screen and (orientation: landscape)
-    width calc((100vh - 50px) / 8 * 5)
     height calc((100vh - 50px) / 8 + 10px)
+    max-width 60%
     max-height 55px
+  @media only screen and (max-height 450px) and (orientation landscape)
+    height calc((100vh - 45px) / 8 + 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc((100vh - 50px - 12vh) / 8 + 10px)
 
 .playTable.opponent.mode_facing
   > .pocket

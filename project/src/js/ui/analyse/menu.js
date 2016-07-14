@@ -71,7 +71,14 @@ function renderAnalyseMenu(ctrl) {
         ctrl.menu.close();
         ctrl.importPgnPopup.open();
       })
-    }, [m('span.fa.fa-upload'), i18n('importGame')])
+    }, [m('span.fa.fa-upload'), i18n('importGame')]),
+    ctrl.notes ? m('button', {
+      key: 'notes',
+      config: helper.ontouch(() => {
+        ctrl.menu.close();
+        ctrl.notes.open();
+      })
+    }, [m('span.fa.fa-pencil'), i18n('notes')]) : null
   ]);
 }
 

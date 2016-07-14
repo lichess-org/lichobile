@@ -11,7 +11,6 @@ import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
 import notes from '../../round/notes';
-import button from '../../round/view/button';
 import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
@@ -392,7 +391,6 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-gear" key="analyseSettings"
         config={helper.ontouch(ctrl.settings.open)}
       />
-      {ctrl.notes ? button.notes(ctrl) : null}
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
           config={helper.ontouch(

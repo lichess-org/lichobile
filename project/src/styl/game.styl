@@ -227,9 +227,13 @@
     margin 0 5px
     top 17px
 
+.tableHeader
+  display flex
+  justify-content flex-start
+  align-items center
+
 .tableHeader, .player_controls
   .star
-    display inline-block
     width 25px
     height 25px
     padding 0
@@ -239,11 +243,9 @@
     &:before
       margin-right 0
   .icon-game
-    display inline-block
     font-size 33px
     color gold
   .game-title
-    display inline-block
     line-height 20px
     margin-left 10px
     text-align left
@@ -259,6 +261,9 @@
     line-height 1
     padding 10px
     white-space normal
+    display flex
+    justify-content center
+    align-items center
   button
     &.draw-yes:before
       display inline-block

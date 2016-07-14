@@ -52,10 +52,6 @@ function renderAnalyseMenu(ctrl) {
   );
 
   return m('div.analyseMenu', [
-    m('button', {
-      key: 'startNewAnalysis',
-      config: helper.ontouch(ctrl.startNewAnalysis)
-    }, [m('span[data-icon=A].withIcon'), i18n('startNewAnalysis')]),
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))

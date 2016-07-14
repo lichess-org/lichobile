@@ -416,14 +416,6 @@ export default function controller() {
       session.isConnected() && gameApi.analysable(this.data);
   }.bind(this);
 
-  this.startNewAnalysis = function() {
-    if (m.route() === '/analyse') {
-      m.route('/analyse', null, true);
-    } else {
-      m.route('/analyse');
-    }
-  };
-
   if (this.source === 'online' && gameId) {
     gameXhr(gameId, orientation, false).then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');

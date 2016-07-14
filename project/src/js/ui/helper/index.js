@@ -132,7 +132,7 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
-function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback, shouldPreventDefault) {
+function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
   return function(el, isUpdate) {
     if (!isUpdate) {
       ButtonHandler(el,
@@ -148,8 +148,7 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
         repeatHandler,
         scrollX,
         scrollY,
-        touchEndFeedback,
-        shouldPreventDefault
+        touchEndFeedback
       );
     }
   };

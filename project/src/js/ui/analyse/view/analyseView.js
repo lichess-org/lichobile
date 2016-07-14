@@ -281,10 +281,10 @@ function renderOpponents(ctrl) {
           <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
           {helper.renderRatingDiff(player)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' +' + getChecksCount(ctrl, player.color) : null
+          }
         </div>
-        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-          ' (' + getChecksCount(ctrl, player.color) + ')' : null
-        }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
       </div>
       <div className="analyseOpponent">
@@ -292,10 +292,10 @@ function renderOpponents(ctrl) {
           <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}
           {helper.renderRatingDiff(opponent)}
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+            ' +' + getChecksCount(ctrl, opponent.color) : null
+          }
         </div>
-        { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
-          ' (' + getChecksCount(ctrl, opponent.color) + ')' : null
-        }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
       {!isCrazy ? renderStatus(ctrl) : null}

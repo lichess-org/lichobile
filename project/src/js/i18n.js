@@ -33,7 +33,7 @@ const untranslated = {
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
   returnToHome: 'Return to home',
-  enableLocalComputerEvaluation: 'Enable local computer evaluation.',
+  enableLocalComputerEvaluation: 'Enable local computer evaluation',
   localEvalCaution: 'Caution: it may be slow, and an intensive usage may drain more battery.',
   showBestMove: 'Show computer best move',
   followers: 'Followers',

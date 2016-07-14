@@ -127,6 +127,9 @@ export default function controller() {
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
+    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
+      s.checkCount = util.readCheckCount(s.fen);
+    }
     const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {

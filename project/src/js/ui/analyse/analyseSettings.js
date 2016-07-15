@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import m from 'mithril';
@@ -65,7 +66,7 @@ function renderAnalyseSettings(ctrl) {
         ctrl.toggleBestMove
       )
     ]) : null,
-    ctrl.source === 'online' ? m('div.action', {
+    ctrl.source === 'online' && gameApi.analysable(ctrl.data) ? m('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(

@@ -333,30 +333,30 @@ function renderReplay(ctrl) {
 
 function buttons(ctrl) {
   return [
-      ['first', 'fast-backward', control.first ],
-      ['prev', 'backward', control.prev],
-      ['next', 'forward', control.next],
-      ['last', 'fast-forward', control.last]
-    ].map(function(b) {
-      const className = [
-        'action_bar_button',
-        'fa',
-        'fa-' + b[1],
-        ctrl.broken ? 'disabled' : '',
-        ctrl.vm.late && b[0] === 'last' ? 'glow' : ''
-        ].join(' ');
-        const action = b[0] === 'prev' || b[0] === 'next' ?
-          helper.ontouch(() => b[2](ctrl), null, () => b[2](ctrl)) :
-          helper.ontouch(() => b[2](ctrl));
-        return (
-          <button className={className} key={b[1]} config={action} />
-        );
-    });
+    ['first', 'fast-backward', control.first ],
+    ['prev', 'backward', control.prev],
+    ['next', 'forward', control.next],
+    ['last', 'fast-forward', control.last]
+  ].map(b => {
+    const className = [
+      'action_bar_button',
+      'fa',
+      'fa-' + b[1]
+    ].join(' ');
+
+    const action = b[0] === 'prev' || b[0] === 'next' ?
+      helper.ontouch(() => b[2](ctrl), null, () => b[2](ctrl)) :
+      helper.ontouch(() => b[2](ctrl));
+
+    return (
+      <button className={className} key={b[1]} config={action} />
+    );
+  });
 }
 
 function renderActionsBar(ctrl) {
 
-  const hash = ctrl.data.game.id + ctrl.broken + ctrl.vm.late + ctrl.explorer.enabled();
+  const hash = ctrl.data.game.id + hasNetwork() + ctrl.explorer.enabled();
 
   if (ctrl.vm.buttonsHash === hash) return {
     subtree: 'retain'
@@ -375,9 +375,11 @@ function renderActionsBar(ctrl) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         config={helper.ontouch(ctrl.menu.open)}
       />
-      <button className="action_bar_button fa fa-gear" key="analyseSettings"
-        config={helper.ontouch(ctrl.settings.open)}
-      />
+      {ctrl.ceval.allowed() ?
+        <button className="action_bar_button fa fa-gear" key="analyseSettings"
+          config={helper.ontouch(ctrl.settings.open)}
+        /> : null
+      }
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
           config={helper.ontouch(

@@ -34,7 +34,7 @@ export default function controller() {
   this.source = m.route.param('source') || 'offline';
   const gameId = m.route.param('id');
   const orientation = m.route.param('color');
-  const fen = m.route.param('fen');
+  const fenArg = m.route.param('fen');
 
   socket.createDefault();
 
@@ -47,7 +47,7 @@ export default function controller() {
   this.importPgnPopup = importPgnPopup.controller(this);
 
   this.vm = {
-    shouldGoBack: gameId !== undefined || fen !== undefined,
+    shouldGoBack: gameId !== undefined || fenArg !== undefined,
     path: null,
     pathStr: '',
     step: null,
@@ -114,7 +114,14 @@ export default function controller() {
   const debouncedDests = debounce(getDests.bind(this), 100);
 
   const showGround = function() {
-    const s = this.analyse.getStep(this.vm.path);
+    let s = this.analyse.getStep(this.vm.path);
+    // might happen to have no step, for exemple with a bad step number in location
+    // hash
+    if (!s) {
+      this.vm.path = treePath.default(this.analyse.firstPly());
+      this.vm.pathStr = treePath.write(this.vm.path);
+      s = this.analyse.getStep(this.vm.path);
+    }
 
     const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
@@ -404,10 +411,6 @@ export default function controller() {
           treePath.default(this.analyse.lastPly()) :
           treePath.default(this.analyse.firstPly());
 
-    if (initialPath[0].ply >= this.data.steps.length) {
-      initialPath = treePath.default(this.data.steps.length - 1);
-    }
-
     this.vm.path = initialPath;
     this.vm.pathStr = treePath.write(initialPath);
 
@@ -462,7 +465,7 @@ export default function controller() {
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    this.init(makeDefaultData(fen, orientation));
+    this.init(makeDefaultData(fenArg, orientation));
   }
 
   window.plugins.insomnia.keepAwake();

@@ -112,7 +112,7 @@ function renderContent(ctrl, isPortrait) {
   ];
 }
 
-function renderAnalyseTable(ctrl) {
+function renderAnalyseTable(ctrl, isPortrait) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
@@ -123,7 +123,25 @@ function renderAnalyseTable(ctrl) {
       <div className="analyse scrollerWrapper">
         {renderReplay(ctrl)}
       </div>
-      {renderInfos(ctrl)}
+      {renderInfos(ctrl, isPortrait)}
+    </div>
+  );
+}
+
+function renderInfos(ctrl, isPortrait) {
+  const cevalEnabled = ctrl.ceval.enabled();
+
+  return (
+    <div id="analyseInfos" className="analyseInfos scrollerWrapper">
+      { cevalEnabled || ctrl.data.analysis ?
+        renderEvalBox(ctrl) : null
+      }
+      { !isSynthetic(ctrl.data) ?
+        <div className="native_scroller">
+          {gameInfos(ctrl, isPortrait)}
+          {renderOpponents(ctrl)}
+        </div> : null
+      }
     </div>
   );
 }
@@ -188,46 +206,19 @@ function renderEvalBox(ctrl) {
   );
 }
 
-function renderInfos(ctrl) {
-  const cevalEnabled = ctrl.ceval.enabled();
-  const ceval = ctrl.currentAnyEval();
-  const step = ctrl.vm.step;
 
-  const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    ctrl.nextStepBest() + (ceval && ceval.mate) + defined(step.ceval) +
-    ctrl.ceval.percentComplete() + isEmpty(step.dests) +
-    JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
-
-  if (ctrl.vm.infosHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.infosHash = hash;
-
-  return (
-    <div id="analyseInfos" className="analyseInfos scrollerWrapper">
-      { cevalEnabled || ctrl.data.analysis ?
-        renderEvalBox(ctrl) : null
-      }
-      { !isSynthetic(ctrl.data) ?
-        <div className="native_scroller">
-          {gameInfos(ctrl)}
-          {renderOpponents(ctrl)}
-        </div> : null
-      }
-    </div>
-  );
-}
-
-function gameInfos(ctrl) {
+function gameInfos(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
-  if (ctrl.vm.step.crazy) return null;
 
-  const hash = 'rendered';
+  const isCrazy = !!ctrl.vm.step.crazy;
+  const hash = '' + isPortrait + isCrazy;
 
   if (ctrl.vm.gameInfosHash === hash) return {
     subtree: 'retain'
   };
   ctrl.vm.gameInfosHash = hash;
+
+  if (isCrazy && isPortrait) return null;
 
   const data = ctrl.data;
   const time = gameApi.time(data);

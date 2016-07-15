@@ -58,7 +58,6 @@ export default function controller() {
     showBestMove: settings.analyse.showBestMove(),
     showComments: settings.analyse.showComments(),
     buttonsHash: '',
-    infosHash: '',
     evalBoxHash: '',
     gameInfosHash: '',
     opponentsHash: ''
@@ -66,7 +65,6 @@ export default function controller() {
 
   this.resetHashes = function() {
     this.vm.buttonsHash = '';
-    this.vm.infosHash = '';
     this.vm.evalBoxHash = '';
     this.vm.gameInfosHash = '';
     this.vm.opponentsHash = '';

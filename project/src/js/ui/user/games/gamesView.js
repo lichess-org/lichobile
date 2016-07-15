@@ -97,7 +97,7 @@ function renderGame(ctrl, g, index, userId) {
           {g.opening ?
           <p className="opening">{g.opening.name}</p> : null
           }
-          {g.metadata && g.metadata.analysed ?
+          {g.analysed ?
           <p className="analysed">
             <span className="fa fa-bar-chart" />
             Computer analysis available

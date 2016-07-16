@@ -11,6 +11,7 @@ import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
 import notes from '../../round/notes';
+import { formatClockTime } from '../../round/clock/clockView';
 import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
@@ -139,7 +140,7 @@ function renderInfos(ctrl, isPortrait) {
       { !isSynthetic(ctrl.data) ?
         <div className="native_scroller">
           {gameInfos(ctrl, isPortrait)}
-          {renderOpponents(ctrl)}
+          {renderOpponents(ctrl, isPortrait)}
         </div> : null
       }
     </div>
@@ -248,11 +249,11 @@ function gameInfos(ctrl, isPortrait) {
   );
 }
 
-function renderOpponents(ctrl) {
+function renderOpponents(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
 
   const step = ctrl.vm.step;
-  const hash = '' + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
+  const hash = '' + isPortrait + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
 
   if (ctrl.vm.opponentsHash === hash) return {
     subtree: 'retain'
@@ -276,6 +277,12 @@ function renderOpponents(ctrl) {
             ' +' + getChecksCount(ctrl, player.color) : null
           }
         </div>
+        {ctrl.data.clock && !isCrazy || !isPortrait ?
+          <div className="analyseClock">
+            {formatClockTime(ctrl.data.clock[player.color] * 1000, false)}
+            <span className="fa fa-clock-o" />
+          </div> : null
+        }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
       </div>
       <div className="analyseOpponent">
@@ -287,9 +294,15 @@ function renderOpponents(ctrl) {
             ' +' + getChecksCount(ctrl, opponent.color) : null
           }
         </div>
+        {ctrl.data.clock && !isCrazy || !isPortrait ?
+          <div className="analyseClock">
+            {formatClockTime(ctrl.data.clock[opponent.color] * 1000, false)}
+            <span className="fa fa-clock-o" />
+          </div> : null
+        }
         {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
       </div>
-      {!isCrazy ? renderStatus(ctrl) : null}
+      {!isCrazy || !isPortrait ? renderStatus(ctrl) : null}
     </div>
   );
 }

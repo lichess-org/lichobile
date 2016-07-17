@@ -35,12 +35,12 @@ menu.open = function() {
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
-  m.redraw.strategy('none');
   return Zanimo(
     document.getElementById('side_menu'),
     'transform',
     'translate3d(-100%,0,0)', 250, 'ease-out'
-  ).then(() => {
+  )
+  .then(() => {
     menu.headerOpen(false);
     menu.isOpen = false;
     m.redraw();

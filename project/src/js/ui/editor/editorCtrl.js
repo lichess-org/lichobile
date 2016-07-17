@@ -93,7 +93,7 @@ export default function controller() {
   this.continuePopup = continuePopup.controller();
 
   this.loadNewFen = function(newFen) {
-    m.redraw.strategy('diff');
+    // m.redraw.strategy('diff');
     m.route(`/editor/${encodeURIComponent(newFen)}`);
   };
 

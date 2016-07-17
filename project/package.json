@@ -24,6 +24,7 @@
   "homepage": "https://github.com/veloce/lichobile",
   "devDependencies": {
     "babel-plugin-transform-react-jsx": "6.8.0",
+    "babel-plugin-transform-react-require": "1.0.1",
     "chokidar": "~0.12.6",
     "gulp": "~3.9.0",
     "gulp-autoprefixer": "~2.0.0",

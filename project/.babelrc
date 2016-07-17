@@ -1,7 +1,12 @@
 {
-     "plugins": [
-        ["transform-react-jsx", {
-            "pragma": "m"
-        }]
-     ]
+  "plugins": [
+    ["transform-react-jsx", {
+      "pragma": "m"
+    }],
+
+    ["transform-react-require", {
+      "identifier": "m",
+      "moduleName": "mithril"
+    }]
+  ]
 }

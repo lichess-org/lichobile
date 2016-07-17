@@ -1,4 +1,3 @@
-import m from 'mithril';
 import menu from './menu';
 import menuView from './menu/menuView';
 import gamesMenu from './gamesMenu';

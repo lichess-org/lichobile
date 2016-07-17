@@ -1,4 +1,3 @@
-import m from 'mithril';
 import menu from '.';
 import session from '../../session';
 import loginModal from '../loginModal';

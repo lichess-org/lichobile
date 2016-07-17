@@ -28,14 +28,9 @@ export default function controller() {
 
   socket.createDefault();
 
-  xhr.user(userId).then(data => {
+  xhr.user(userId)
+  .run(data => {
     user(data);
-    return data;
-  }, error => {
-    utils.handleXhrError(error);
-    m.route('/');
-    throw error;
-  }).then(data => {
     let f = Object.keys(data.count)
       .filter(k => filters.hasOwnProperty(k) && data.count[k] > 0)
       .map(k => {
@@ -46,6 +41,11 @@ export default function controller() {
         };
       });
     availableFilters(f);
+  })
+  .catch(error => {
+    utils.handleXhrError(error);
+    m.route('/');
+    throw error;
   });
 
   function onScroll() {
@@ -74,26 +74,30 @@ export default function controller() {
   }
 
   function loadInitialGames() {
-    xhr.games(userId, currentFilter(), 1, true).then(data => {
+    xhr.games(userId, currentFilter(), 1, true)
+    .run(data => {
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
-    }, err => {
+      setTimeout(() => {
+        if (scroller) scroller.scrollTo(0, 0, 0);
+      }, 50);
+    })
+    .catch(err => {
       utils.handleXhrError(err);
       m.route('/');
     })
-    .then(() => setTimeout(() => {
-      if (scroller) scroller.scrollTo(0, 0, 0);
-    }, 50));
   }
 
   function loadNextPage(page) {
     isLoadingNextPage(true);
-    xhr.games(userId, currentFilter(), page).then(data => {
+    xhr.games(userId, currentFilter(), page)
+    .run(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));
       m.redraw();
-    }, err => utils.handleXhrError(err));
+    })
+    .catch(utils.handleXhrError);
     m.redraw();
   }
 

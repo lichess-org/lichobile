@@ -139,7 +139,8 @@ export function timeline() {
 export function status() {
   return request('/api/status', {
     background: true
-  }).then(function(data) {
+  })
+  .run(function(data) {
     if (data.api.current !== apiVersion) {
       for (var i = 0, len = data.api.olds.length; i < len; i++) {
         var o = data.api.olds[i];

@@ -18,21 +18,24 @@ export default function controller() {
     Object.assign(user(), newData);
   }
 
-  xhr.user(m.route.param('id')).then(user, error => {
+  xhr.user(m.route.param('id'))
+  .run(user)
+  .run(session.refresh)
+  .catch(error => {
     utils.handleXhrError(error);
     m.route('/');
-  }).then(session.refresh);
+  });
 
   return {
     user,
     isMe: () => session.getUserId() === user().id,
     toggleFollowing: () => {
-      if (user().following) xhr.unfollow(user().id).then(setNewUserState);
-      else xhr.follow(user().id).then(setNewUserState);
+      if (user().following) xhr.unfollow(user().id).run(setNewUserState);
+      else xhr.follow(user().id).run(setNewUserState);
     },
     toggleBlocking: () => {
-      if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
-      else xhr.block(user().id).then(setNewUserState);
+      if (user().blocking) xhr.unblock(user().id).run(setNewUserState);
+      else xhr.block(user().id).run(setNewUserState);
     },
     goToGames: () => m.route(`/@/${user().id}/games`),
     goToUserTV: () => m.route(`/@/${user().id}/tv`),

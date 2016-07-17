@@ -167,7 +167,8 @@ export default function controller() {
         variant,
         fen: setupFen || undefined
       }
-    }).then(data => {
+    })
+    .then(data => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,

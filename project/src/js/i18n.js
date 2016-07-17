@@ -61,25 +61,27 @@ export function loadPreferredLanguage() {
   if (settings.general.lang())
     return loadFromSettings();
 
-  var deferred = m.deferred();
-  window.navigator.globalization.getPreferredLanguage(
-    language => deferred.resolve(language.value.split('-')[0]),
-    () => deferred.resolve(defaultCode)
-  );
-  return deferred.promise
-    .then(code => {
-      settings.general.lang(code);
-      return code;
-    })
-    .then(loadFile)
-    .then(loadMomentLocale);
+  return new Promise(function(resolve) {
+    window.navigator.globalization.getPreferredLanguage(
+      l => resolve(l.value.split('-')[0]),
+      () => resolve(defaultCode)
+    );
+  })
+  .then(code => {
+    settings.general.lang(code);
+    return code;
+  })
+  .then(loadFile)
+  .then(loadMomentLocale);
 }
 
 export function getAvailableLanguages() {
   return m.request({
     url: 'i18n/refs.json',
     method: 'GET'
-  }).then(data => { return data; }, error => {
+  })
+  .run(data => { return data; })
+  .catch(error => {
     // same workaround for iOS as above
     if (error && error[0][0] === 'af')
       return error;
@@ -89,7 +91,8 @@ export function getAvailableLanguages() {
 }
 
 export function loadFromSettings() {
-  return loadFile(settings.general.lang()).then(loadMomentLocale);
+  return loadFile(settings.general.lang())
+  .run(loadMomentLocale);
 }
 
 function loadFile(code) {
@@ -103,10 +106,12 @@ function loadFile(code) {
         throw { error: 'Lang not available' };
       }
     }
-  }).then(function(data) {
+  })
+  .run(data => {
     messages = data;
     return code;
-  }, function(error) {
+  })
+  .catch(error => {
     // workaround for iOS: because xhr for local file has a 0 status it will
     // reject the promise and still have the response object
     if (error && error.playWithAFriend) {

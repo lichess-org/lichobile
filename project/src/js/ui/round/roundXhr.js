@@ -27,7 +27,8 @@ export function syncNote(gameId, notes) {
     deserialize: t => t,
     data: serializeQueryParameters({ text: notes })
   }, false, xhrConfig)
-  .then(noop, err => {
+  .run(noop)
+  .catch(err => {
     window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center');
     throw err;
   });

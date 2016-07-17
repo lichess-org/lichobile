@@ -13,7 +13,7 @@ export default {
     const timeline = m.prop([]);
 
     timelineXhr()
-    .then(data => {
+    .run(data => {
       timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1));
       m.redraw();
     })

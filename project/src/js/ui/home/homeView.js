@@ -9,7 +9,8 @@ import { header as headerWidget, userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
 import miniBoard from '../shared/miniBoard';
 
-export default function homeView(ctrl) {
+export default function homeView() {
+  const ctrl = this;
   const isPortrait = helper.isPortrait();
 
   function body() {
@@ -21,8 +22,8 @@ export default function homeView(ctrl) {
         <div className="page homeOffline">
           <section id="homeCreate">
             <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" config={helper.ontouchY(() => m.route('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" config={helper.ontouchY(() => m.route('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+            <button className="fatButton" config={helper.ontouchY(() => m.route.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" config={helper.ontouchY(() => m.route.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
           </section>
         </div>
       );
@@ -73,7 +74,7 @@ function renderDailyPuzzle(ctrl, isPortrait) {
           bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,
-          link: () => m.route('/training/' + puzzle.id)
+          link: () => m.route.set('/training/' + puzzle.id)
         })}
     </section>
   );
@@ -99,7 +100,7 @@ function renderTimeline(ctrl) {
         })}
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouchY(() => m.route('/timeline'))}>
+        <button config={helper.ontouchY(() => m.route.set('/timeline'))}>
           {i18n('more')}
         </button>
       </div>
@@ -119,7 +120,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouchY(() => m.route('/players'))}>
+        <button config={helper.ontouchY(() => m.route.set('/players'))}>
           {i18n('more')}
         </button>
       </div>
@@ -138,7 +139,7 @@ function renderPlayer(p) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

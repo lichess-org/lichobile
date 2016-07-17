@@ -49,7 +49,7 @@
     "chessground-mobile": "veloce/chessground-mobile#5729aa6",
     "iscroll": "5.1.3",
     "lodash": "4.6.1",
-    "mithril": "veloce/mithril.js#v8opt",
+    "mithril": "lhorie/mithril.js#rewrite",
     "moment": "2.8.4",
     "signals": "1.0.0",
     "watchify": "3.7.0",

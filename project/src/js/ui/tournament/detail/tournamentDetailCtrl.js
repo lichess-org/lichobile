@@ -47,18 +47,22 @@ export default function controller() {
   }
 
   function join(id) {
-    xhr.join(id).then(() => {
+    xhr.join(id)
+    .run(() => {
       hasJoined(true);
       page(null); // Reset the page so next reload goes to player position
       m.redraw();
-    }).catch(utils.handleXhrError);
+    })
+    .catch(utils.handleXhrError);
   }
 
   function withdraw(id) {
-    xhr.withdraw(id).then(() => {
+    xhr.withdraw(id)
+    .run(() => {
       hasJoined(false);
       m.redraw();
-    }).catch(utils.handleXhrError);
+    })
+    .catch(utils.handleXhrError);
   }
 
   const id = m.route.param('id');
@@ -69,7 +73,7 @@ export default function controller() {
     }
     isLoading(true);
     xhr.reload(t, page())
-    .then(reload)
+    .run(reload)
     .catch(() => isLoading(false));
   }, 1000);
 
@@ -90,7 +94,8 @@ export default function controller() {
   };
 
   let clockInterval = null;
-  xhr.tournament(id).then(data => {
+  xhr.tournament(id)
+  .run(data => {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval = setInterval(tick, 1000);

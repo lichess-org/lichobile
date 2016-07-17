@@ -43,7 +43,7 @@ export default function controller() {
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
-  xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
+  xhr.onlinePlayers().run(players, err => utils.handleXhrError(err));
 
   return {
     players,
@@ -52,7 +52,7 @@ export default function controller() {
     onInput: throttle(e => {
       const term = e.target.value.trim();
       if (term.length > 1)
-        xhr.autocomplete(term).then(data => searchResults(data));
+        xhr.autocomplete(term).run(data => searchResults(data));
     }, 250),
     closeSearch,
     goSearch() {

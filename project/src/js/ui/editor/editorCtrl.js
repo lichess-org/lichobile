@@ -38,7 +38,7 @@ export default function controller() {
     name: i18n('clearBoard')
   }];
 
-  loadJsonFile('data/positions.json').then(data => {
+  loadJsonFile('data/positions.json').run(data => {
     this.positions(data);
   }, err => {
     // workaround for iOS: because xhr for local file has a 0 status it will

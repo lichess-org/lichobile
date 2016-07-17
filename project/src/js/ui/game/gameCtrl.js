@@ -17,7 +17,8 @@ export default function controller() {
   var round;
 
   if (hasNetwork()) {
-    gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
+    gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined)
+    .run(function(data) {
       gameData = data;
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {

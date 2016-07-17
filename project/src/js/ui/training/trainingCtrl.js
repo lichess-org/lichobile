@@ -67,7 +67,7 @@ export default function ctrl() {
   const attempt = function(winFlag, giveUpFlag) {
     showLoading();
     xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
-    .then(cfg => {
+    .run(cfg => {
       cfg.progress = this.data.progress;
       this.reload(cfg);
       onXhrSuccess();
@@ -275,31 +275,31 @@ export default function ctrl() {
   this.newPuzzle = function(feedback) {
     if (feedback) showLoading();
     xhr.newPuzzle()
-    .then(cfg => {
+    .run(cfg => {
       if (feedback) pushState(cfg);
       else replaceStateForNewPuzzle(cfg);
       this.init(cfg);
       setTimeout(this.playInitialMove, 1000);
     })
-    .then(onXhrSuccess)
+    .run(onXhrSuccess)
     .catch(onXhrError);
   }.bind(this);
 
   this.loadPuzzle = function(id) {
     xhr.loadPuzzle(id)
-      .then(cfg => {
+      .run(cfg => {
         this.init(cfg);
         setTimeout(this.playInitialMove, 1000);
       })
-      .then(onXhrSuccess)
+      .run(onXhrSuccess)
       .catch(onXhrError);
   }.bind(this);
 
   this.retry = function() {
     showLoading();
     xhr.loadPuzzle(this.data.puzzle.id)
-      .then(this.reload)
-      .then(onXhrSuccess)
+      .run(this.reload)
+      .run(onXhrSuccess)
       .catch(onXhrError);
   }.bind(this);
 
@@ -313,8 +313,8 @@ export default function ctrl() {
 
   this.setDifficulty = function(id) {
     return xhr.setDifficulty(id)
-      .then(pushState)
-      .then(this.reload);
+      .run(pushState)
+      .run(this.reload);
   }.bind(this);
 
   if (m.route.param('id')) {

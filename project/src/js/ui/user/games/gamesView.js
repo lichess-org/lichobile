@@ -54,9 +54,11 @@ function renderAllGames(ctrl) {
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontouchY(() => {
-    toggleGameBookmark(id).then(() => {
+    toggleGameBookmark(id)
+    .run(() => {
       ctrl.toggleBookmark(index);
-    }, err => utils.handleXhrError(err));
+    })
+    .catch(utils.handleXhrError);
   }, longAction);
 }
 

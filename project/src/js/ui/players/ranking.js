@@ -18,12 +18,14 @@ export default {
 
     const ranking = m.prop({});
 
-    xhr.ranking().then(data => {
+    xhr.ranking()
+    .run(data => {
       Object.keys(data).forEach(k => {
         data[k].isOpenedOnMobile = false;
       });
       ranking(data);
-    }, err => {
+    })
+    .catch(err => {
       utils.handleXhrError(err);
       m.route('/');
     });

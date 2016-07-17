@@ -13,7 +13,7 @@ export default function controller() {
   const challenge = m.prop();
 
   function reloadChallenge() {
-    getChallenge(challenge().id).then(d => {
+    getChallenge(challenge().id).run(d => {
       clearTimeout(pingTimeoutId);
       challenge(d.challenge);
       switch (d.challenge.status) {
@@ -37,7 +37,7 @@ export default function controller() {
     pingTimeoutId = setTimeout(pingNow, 2000);
   }
 
-  getChallenge(m.route.param('id')).then(d => {
+  getChallenge(m.route.param('id')).run(d => {
     challenge(d.challenge);
     socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
@@ -57,18 +57,18 @@ export default function controller() {
     },
     joinChallenge() {
       return acceptChallenge(challenge().id)
-      .then(() => challengesApi.remove(challenge().id))
-      .then(d => m.route('/game' + d.url.round, null, true));
+      .run(() => challengesApi.remove(challenge().id))
+      .run(d => m.route('/game' + d.url.round, null, true));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)
-      .then(() => challengesApi.remove(challenge().id))
-      .then(backHistory);
+      .run(() => challengesApi.remove(challenge().id))
+      .run(backHistory);
     },
     cancelChallenge() {
       return cancelChallenge(challenge().id)
-      .then(() => challengesApi.remove(challenge().id))
-      .then(backHistory);
+      .run(() => challengesApi.remove(challenge().id))
+      .run(backHistory);
     }
   };
 }

@@ -6,7 +6,7 @@ import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import m from 'mithril';
 
-export default function homeCtrl() {
+export default function homeCtrl(vnode) {
 
   const nbConnectedPlayers = m.prop();
   const nbGamesInPlay = m.prop();
@@ -16,7 +16,7 @@ export default function homeCtrl() {
 
   function init() {
     if (isForeground()) {
-      lobbyXhr(true).then(data => {
+      lobbyXhr(true).run(data => {
         socket.createLobby(data.lobby.version, noop, {
           n: (_, d) => {
             nbConnectedPlayers(d.d);
@@ -29,7 +29,8 @@ export default function homeCtrl() {
       Promise.all([
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
-      ]).then(results => {
+      ])
+      .then(results => {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
@@ -37,7 +38,7 @@ export default function homeCtrl() {
       .catch(handleXhrError);
 
       timelineXhr()
-      .then(data => {
+      .run(data => {
         timeline(
           data.entries
           .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)
@@ -52,14 +53,14 @@ export default function homeCtrl() {
     init();
   }
 
-  if (hasNetwork()) {
-    init();
-  }
+  // if (hasNetwork()) {
+  //   init();
+  // }
 
   document.addEventListener('online', init);
   document.addEventListener('resume', onResume);
 
-  return {
+  vnode.state = {
     nbConnectedPlayers,
     nbGamesInPlay,
     dailyPuzzle,

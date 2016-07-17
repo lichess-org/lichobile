@@ -47,25 +47,29 @@ export default function controller() {
 
   function loadNextPage(page) {
     isLoadingNextPage(true);
-    xhr.following(userId, page).then(data => {
+    xhr.following(userId, page)
+    .run(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       following(following().concat(data.paginator.currentPageResults));
       m.redraw();
-    }, handleXhrError);
+    })
+    .catch(handleXhrError);
     m.redraw();
   }
 
-  xhr.following(userId, 1, true).then(data => {
+  xhr.following(userId, 1, true)
+  .run(data => {
     paginator(data.paginator);
     following(data.paginator.currentPageResults);
-  }, err => {
+  })
+  .run(() => setTimeout(() => {
+    if (scroller) scroller.scrollTo(0, 0, 0);
+  }, 50))
+  .catch(err => {
     handleXhrError(err);
     m.route('/');
-  })
-  .then(() => setTimeout(() => {
-    if (scroller) scroller.scrollTo(0, 0, 0);
-  }, 50));
+  });
 
   function setNewUserState(obj, newData) {
     obj.relation = newData.following;
@@ -76,8 +80,8 @@ export default function controller() {
     scrollerConfig,
     isLoadingNextPage,
     toggleFollowing: obj => {
-      if (obj.relation) xhr.unfollow(obj.user).then(setNewUserState.bind(undefined, obj));
-      else xhr.follow(obj.user).then(setNewUserState.bind(undefined, obj));
+      if (obj.relation) xhr.unfollow(obj.user).run(setNewUserState.bind(undefined, obj));
+      else xhr.follow(obj.user).run(setNewUserState.bind(undefined, obj));
     },
     challenge(id) {
       challengeForm.open(id);

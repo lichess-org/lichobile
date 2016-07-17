@@ -41,16 +41,17 @@ function joinGame(g) {
 
 function acceptChallenge(id) {
   return xhr.acceptChallenge(id)
-  .then(data => {
+  .run(data => {
     helper.analyticsTrackEvent('Challenge', 'Accepted');
     m.route('/game' + data.url.round);
   })
-  .then(() => challengesApi.remove(id))
-  .then(gamesMenu.close);
+  .run(() => challengesApi.remove(id))
+  .run(gamesMenu.close);
 }
 
 function declineChallenge(id) {
-  return xhr.declineChallenge(id).then(() => {
+  return xhr.declineChallenge(id)
+  .run(() => {
     helper.analyticsTrackEvent('Challenge', 'Declined');
     challengesApi.remove(id);
   });

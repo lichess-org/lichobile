@@ -56,10 +56,12 @@ function close(fromBB) {
 }
 
 function startAIGame() {
-  return xhr.newAiGame(fromPositionFen).then(function(data) {
+  return xhr.newAiGame(fromPositionFen)
+  .run(function(data) {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
     m.route('/game' + data.url.round);
-  }, function(error) {
+  })
+  .catch(function(error) {
     utils.handleXhrError(error);
     throw error;
   });

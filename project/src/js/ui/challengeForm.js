@@ -45,7 +45,7 @@ challengeForm.close = function(fromBB) {
 
 function challenge() {
   const userId = challengeForm.userId;
-  return challengeXhr(userId, challengeForm.fen).then(data => {
+  return challengeXhr(userId, challengeForm.fen).run(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
 

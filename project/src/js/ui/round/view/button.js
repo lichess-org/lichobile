@@ -30,9 +30,11 @@ export default {
   },
   sharePGN: function(ctrl) {
     function handler() {
-      getPGN(ctrl.data.game.id).then(function(PGN) {
+      getPGN(ctrl.data.game.id)
+      .run(function(PGN) {
         window.plugins.socialsharing.share(PGN);
-      }, err => handleXhrError(err));
+      })
+      .catch(handleXhrError);
     }
     return (
       <button key="sharePGN" config={helper.ontouch(handler)}>

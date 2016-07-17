@@ -77,12 +77,12 @@ function onResize() {
 function onOnline() {
   if (isForeground()) {
     session.rememberLogin()
-    .then(() => {
+    .run(() => {
       push.register();
       challengesApi.refresh();
       m.redraw();
     })
-    .then(() => setServerLang(settings.general.lang()));
+    .run(() => setServerLang(settings.general.lang()));
   }
 }
 
@@ -112,6 +112,6 @@ window.onerror = handleError;
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  () => loadPreferredLanguage().then(main),
+  () => loadPreferredLanguage().run(main),
   false
 );

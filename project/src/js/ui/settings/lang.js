@@ -11,7 +11,7 @@ export default {
   controller: function() {
     const langs = m.prop([]);
 
-    getAvailableLanguages().then(langs);
+    getAvailableLanguages().run(langs);
 
     return {
       langs

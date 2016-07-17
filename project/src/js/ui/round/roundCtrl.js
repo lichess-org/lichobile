@@ -504,11 +504,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   var reloadGameData = function() {
-    xhr.reload(this).then(this.reload);
+    xhr.reload(this).run(this.reload);
   }.bind(this);
 
   this.toggleBookmark = function() {
-    return toggleGameBookmark(this.data.game.id).then(reloadGameData);
+    return toggleGameBookmark(this.data.game.id).run(reloadGameData);
   }.bind(this);
 
   var onResize = function() {

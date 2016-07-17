@@ -13,7 +13,8 @@ export default function controller() {
   const tournaments = m.prop();
   const currentTab = m.prop(m.route.param('tab') || 'started');
 
-  xhr.currentTournaments().then(data => {
+  xhr.currentTournaments()
+  .run(data => {
     data.started = data.started.filter(supported);
     data.created = data.created.filter(supported);
     data.finished = data.finished.filter(supported);
@@ -21,7 +22,8 @@ export default function controller() {
     data.finished.sort(sortByEndDate);
     tournaments(data);
     return data;
-  }).catch(utils.handleXhrError);
+  })
+  .catch(utils.handleXhrError);
 
   return {
     tournaments,

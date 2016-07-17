@@ -12,7 +12,7 @@ export default {
 
     function open(p) {
       xhr.playerInfo(tournament().id, p.name)
-      .then(data => {
+      .run(data => {
         playerData(data);
         backbutton.stack.push(close);
         isOpen = true;

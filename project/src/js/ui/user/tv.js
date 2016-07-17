@@ -16,20 +16,22 @@ export default {
     helper.analyticsTrackView('User TV');
 
     function onRedirect() {
-      tv(userId).then(function(data) {
+      tv(userId)
+      .run(function(data) {
         m.redraw.strategy('all');
         data.userTV = userId;
         if (round) round.onunload();
         round = new roundCtrl(data, null, null, userId, onRedirect);
-      }, function(error) {
-        utils.handleXhrError(error);
-      });
+      })
+      .catch(utils.handleXhrError);
     }
 
-    tv(userId).then(function(data) {
+    tv(userId)
+    .run(function(data) {
       data.userTV = userId;
       round = new roundCtrl(data, null, null, userId, onRedirect);
-    }, function(error) {
+    })
+    .catch(function(error) {
       utils.handleXhrError(error);
       m.route('/');
     });

@@ -11,19 +11,23 @@ export default function controller() {
 
   socket.createDefault();
 
-  xhr.user(userId).then(data => {
+  xhr.user(userId)
+  .run(data => {
     user(data);
     return data;
-  }, error => {
+  })
+  .catch(error => {
     utils.handleXhrError(error);
     m.route('/');
     throw error;
   });
 
-  xhr.variantperf(userId, variant).then(data => {
+  xhr.variantperf(userId, variant)
+  .run(data => {
     variantPerfData(data);
     return data;
-  }, error => {
+  })
+  .catch(error => {
     utils.handleXhrError(error);
     m.route('/');
     throw error;

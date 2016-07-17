@@ -15,11 +15,12 @@ function submit(form) {
   var pass = form[2].value.trim();
   if (!login || !email || !pass) return false;
   window.cordova.plugins.Keyboard.close();
-  return session.signup(login, email, pass).then(function() {
+  return session.signup(login, email, pass).run(function() {
     signupModal.close();
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
-  }, function(error) {
+  })
+  .catch(error => {
     var data = error.response;
     if (data.error.username)
       window.plugins.toast.show(data.error.username[0], 'short', 'center');

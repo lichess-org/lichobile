@@ -67,7 +67,9 @@ function seekHumanGame() {
     lobby.startSeeking();
   }
   else {
-    xhr.seekGame().then(utils.noop, utils.handleXhrError);
+    xhr.seekGame()
+    .run(utils.noop)
+    .catch(utils.handleXhrError);
     m.route('/correspondence');
   }
 }

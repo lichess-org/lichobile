@@ -16,17 +16,17 @@ export default function controller() {
 
   helper.analyticsTrackView('Correspondence');
 
-  xhr.lobby(true).then(function(data) {
+  xhr.lobby(true).run(function(data) {
     socket.createLobby(data.lobby.version, reload, {
       redirect: socket.redirectToGame,
       reload_seeks: reload,
-      resync: () => xhr.lobby().then(d => {
+      resync: () => xhr.lobby().run(d => {
         socket.setVersion(d.lobby.version);
       })
     });
   });
 
-  challengesApi.refresh().then(() => {
+  challengesApi.refresh().run(() => {
     sendingChallenges(getSendingCorres());
   });
 
@@ -36,14 +36,14 @@ export default function controller() {
 
   function cancelChallenge(id) {
     return xhr.cancelChallenge(id)
-    .then(() => {
+    .run(() => {
       challengesApi.remove(id);
       sendingChallenges(getSendingCorres());
     });
   }
 
   function reload(feedback) {
-    xhr.seeks(feedback).then(function(d) {
+    xhr.seeks(feedback).run(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
       m.redraw();
     });

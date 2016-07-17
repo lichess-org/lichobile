@@ -48,11 +48,13 @@ export function request(url, opts, feedback, xhrConf) {
     cfg.data._ = Date.now();
   }
 
-  var promise = m.request(cfg);
+  const promise = m.request(cfg);
 
   if (feedback) {
     spinner.spin(document.body);
-    return promise.then(onSuccess, onError);
+    return promise
+    .run(onSuccess)
+    .catch(onError);
   } else
     return promise;
 }

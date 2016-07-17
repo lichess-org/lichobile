@@ -121,17 +121,20 @@ function login(username, password) {
       username: username,
       password: password
     }
-  }, true).then(function(data) {
+  }, true)
+  .run(function(data) {
     session = data;
     return session;
   });
 }
 
 function logout() {
-  return request('/logout', {}, true).then(function() {
+  return request('/logout', {}, true)
+  .run(function() {
     session = null;
     friendsApi.clear();
-  }, function(err) {
+  })
+  .catch(err => {
     handleXhrError(err);
     throw err;
   });
@@ -145,7 +148,8 @@ function signup(username, email, password) {
       email,
       password
     }
-  }, true).then(function(data) {
+  }, true)
+  .run(function(data) {
     session = data;
     return session;
   });
@@ -154,7 +158,7 @@ function signup(username, email, password) {
 function rememberLogin() {
   return request('/account/info', {
     background: true
-  }).then(function(data) {
+  }).run(function(data) {
     session = data;
     return data;
   });
@@ -165,11 +169,12 @@ function refresh() {
     return request('/account/info', {
       background: true
     })
-    .then(data => {
+    .run(data => {
       session = data;
       m.redraw();
       return session;
-    }, err => {
+    })
+    .catch(err => {
       if (session && err.status === 401) {
         session = null;
         m.redraw();

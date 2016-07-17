@@ -19,20 +19,22 @@ export default {
     }
 
     function onFeatured(o) {
-      xhr.game(o.id, o.color).then(function(data) {
+      xhr.game(o.id, o.color)
+      .run(function(data) {
         m.redraw.strategy('all');
         if (round) round.onunload();
         data.tv = settings.tv.channel();
         round = new roundCtrl(data, onFeatured, onChannelChange);
-      }, function(error) {
-        utils.handleXhrError(error);
-      });
+      })
+      .catch(utils.handleXhrError);
     }
 
-    xhr.featured(settings.tv.channel(), m.route.param('flip')).then(function(data) {
+    xhr.featured(settings.tv.channel(), m.route.param('flip'))
+    .run(function(data) {
       data.tv = settings.tv.channel();
       round = new roundCtrl(data, onFeatured, onChannelChange);
-    }, function(error) {
+    })
+    .catch(error => {
       utils.handleXhrError(error);
       m.route('/');
     });

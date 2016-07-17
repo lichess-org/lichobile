@@ -39,7 +39,7 @@ const fadingPage = helper.fadingPage;
 export default {
   init() {
     m.route(document.body, '/', {
-      '/': fadingPage(home),
+      '/': home,
       '/timeline': slidingPage(timeline),
       '/otb': otb,
       '/ai': ai,

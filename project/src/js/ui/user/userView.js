@@ -8,7 +8,8 @@ import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   const user = ctrl.user();
 
   if (!user) return null;

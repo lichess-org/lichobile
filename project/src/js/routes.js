@@ -52,7 +52,7 @@ export default {
       '/challenge/:id': fadingPage(challenge),
       '/tv': fadingPage(tv),
       '/correspondence': fadingPage(correspondence),
-      '/@/:id': slidingPage(user),
+      '/@/:id': user,
       '/@/:id/following': fadingPage(userFollowing),
       '/@/:id/followers': fadingPage(userFollowers),
       '/@/:id/games': slidingPage(userGames),

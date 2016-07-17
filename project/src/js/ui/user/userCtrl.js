@@ -6,7 +6,9 @@ import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import m from 'mithril';
 
-export default function controller() {
+export default function controller(vnode) {
+
+  const userId = vnode.attrs.id;
 
   helper.analyticsTrackView('User Profile');
 
@@ -18,7 +20,7 @@ export default function controller() {
     Object.assign(user(), newData);
   }
 
-  xhr.user(m.route.param('id'))
+  xhr.user(userId)
   .run(user)
   .run(session.refresh)
   .catch(error => {
@@ -26,7 +28,7 @@ export default function controller() {
     m.route('/');
   });
 
-  return {
+  vnode.state = {
     user,
     isMe: () => session.getUserId() === user().id,
     toggleFollowing: () => {

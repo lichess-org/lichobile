@@ -53,9 +53,9 @@ export default function homeCtrl(vnode) {
     init();
   }
 
-  // if (hasNetwork()) {
-  //   init();
-  // }
+  if (hasNetwork()) {
+    init();
+  }
 
   document.addEventListener('online', init);
   document.addEventListener('resume', onResume);

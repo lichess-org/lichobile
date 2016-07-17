@@ -33,8 +33,8 @@ export default function homeView() {
       <div className="native_scroller page">
         <div className="home">
           <section>
-            <div>{m.trust(nbPlayers.replace(/(\d+)/, '<strong>$1</strong>'))}</div>
-            <div>{m.trust(nbGames.replace(/(\d+)/, '<strong>$1</strong>'))}</div>
+            <div>{nbPlayers}</div>
+            <div>{nbGames}</div>
           </section>
           <section id="homeCreate">
             <button className="fatButton" oncreate={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>

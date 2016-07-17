@@ -148,12 +148,12 @@ export default function view(ctrl) {
 }
 
 function renderGame(game) {
-  var opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
-  var date = game.at.substring(0, 10);
-  var gameId = game.gameId;
+  const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
+  const date = game.at.substring(0, 10);
+  const gameId = game.gameId;
 
   return (
-    <div class="list_item nav" config={helper.ontouchY(() => m.route('/game/' + gameId))}>
+    <div class="list_item nav" config={helper.ontouchY(() => m.route('/analyse/online/' + gameId))}>
       {opp} ({date})
     </div>
   );

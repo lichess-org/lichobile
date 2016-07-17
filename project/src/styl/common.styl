@@ -17,6 +17,7 @@ textGray = #656565
 labelText = #969696
 green = #759900
 red = #ac524f
+blue = #3b93da
 
 selectBg = #e6e6e6
 headerBgDark = darken(bgdark, 30%)
@@ -54,7 +55,7 @@ textarea
   resize none
 
 span.fa
-  margin-right 10px
+  margin-right 5px
 
 .disabled
   opacity 0.5
@@ -213,4 +214,11 @@ span.fa
   &.black
     &:before
       content: "K"
+  &.light
+    &.white
+      &:before
+        content: "K"
+    &.black
+      &:before
+        content: "J"
 

@@ -74,7 +74,15 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
-    showBestMove: localstorageprop('settings.analyse.showBestMove', true)
+    showBestMove: localstorageprop('settings.analyse.showBestMove', true),
+    showComments: localstorageprop('settings.analyse.showComments', true),
+    explorer: {
+      db: localstorageprop('settings.analyse.explorer.db', 'lichess'),
+      availableRatings: [1600, 1800, 2000, 2200, 2500],
+      rating: localstorageprop('settings.analyse.explorer.rating', [1600, 1800, 2000, 2200, 2500]),
+      availableSpeeds: ['bullet', 'blitz', 'classical'],
+      speed: localstorageprop('settings.analyse.explorer.speed', ['bullet', 'blitz', 'classical'])
+    }
   },
 
   ai: {
@@ -105,6 +113,7 @@ export default {
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: [
       ['Standard', 'standard'],
+      ['Crazyhouse', 'crazyhouse'],
       ['Chess960', 'chess960'],
       ['King of the Hill', 'kingOfTheHill'],
       ['Three-check', 'threeCheck'],
@@ -167,7 +176,6 @@ export default {
   },
 
   gameSetup: {
-    selected: localstorageprop('settings.game.selected', 'human'),
     availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'], ['8', '8'], ['9', '9'], ['10', '10'], ['15', '15'], ['20', '20'], ['25', '25'], ['30', '30'], ['45', '45'], ['60', '60'], ['90', '90'], ['120', '120'], ['150', '150'], ['180', '180']
     ],
     availableIncrements: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -219,6 +227,7 @@ export default {
       },
       ratingMin: localstorageprop('settings.game.human.rating.min', '800'),
       ratingMax: localstorageprop('settings.game.human.rating.max', '2900'),
+      color: localstorageprop('settings.game.human.color', 'random'),
       variant: localstorageprop('settings.game.human.variant', '1'),
       availableTimeModes: [
         ['realTime', '1'],

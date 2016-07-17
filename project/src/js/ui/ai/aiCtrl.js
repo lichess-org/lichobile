@@ -12,7 +12,7 @@ import actions from './actions';
 import engineCtrl from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
-import { askWorker, getRandomArbitrary, oppositeColor, aiName } from '../../utils';
+import { askWorker, getRandomArbitrary, oppositeColor, aiName, noop } from '../../utils';
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -135,18 +135,17 @@ export default function controller() {
     this.actions.close();
     this.data = data;
 
-    if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.data.game.fen, userMove, onMove);
-    } else {
-      ground.reload(this.chessground, this.data, this.data.game.fen);
-    }
-
     if (!this.replay) {
       this.replay = new replayCtrl(this, situations, ply, chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
-    this.replay.apply();
+
+    if (!this.chessground) {
+      this.chessground = ground.make(this.data, this.replay.situation(), userMove, noop, onMove, noop);
+    } else {
+      ground.reload(this.chessground, this.data, this.replay.situation());
+    }
 
     engine.prepare(this.data.game.variant.key)
     .then(() => {
@@ -230,12 +229,12 @@ export default function controller() {
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
     if (this.chessground) {
       this.chessground.onunload();
     }
     if (chessWorker) chessWorker.terminate();
     engine.exit();
+    window.plugins.insomnia.allowSleepAgain();
   };
 }
 

@@ -20,13 +20,17 @@ export default function view(ctrl) {
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
     const editorNode = document.getElementById('boardEditor');
-    editorNode.addEventListener('touchstart', onstart);
-    editorNode.addEventListener('touchmove', onmove);
-    editorNode.addEventListener('touchend', onend);
+    if (editorNode) {
+      editorNode.addEventListener('touchstart', onstart);
+      editorNode.addEventListener('touchmove', onmove);
+      editorNode.addEventListener('touchend', onend);
+    }
     context.onunload = function() {
-      editorNode.removeEventListener('touchstart', onstart);
-      editorNode.removeEventListener('touchmove', onmove);
-      editorNode.removeEventListener('touchend', onend);
+      if (editorNode) {
+        editorNode.removeEventListener('touchstart', onstart);
+        editorNode.removeEventListener('touchmove', onmove);
+        editorNode.removeEventListener('touchend', onend);
+      }
     };
   }
 

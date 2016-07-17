@@ -227,13 +227,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       pos: key
     };
     if (this.data.pref.submitMove && !isPredrop) {
-      this.vm.dropToSubmit = drop;
-      m.redraw();
+      setTimeout(() => {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.dropToSubmit = drop;
+        m.redraw();
+      }, this.data.pref.animationDuration || 0);
     } else socket.send('drop', drop, {
       ackable: true,
       withLag: !!this.clock
     });
-  }.bind(this);
+  };
 
   this.cancelMove = function(fromBB) {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
@@ -249,7 +252,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
           ackable: true
         });
       } else if (this.vm.dropToSubmit) {
-        this.socket.send('drop', this.vm.dropToSubmit, {
+        socket.send('drop', this.vm.dropToSubmit, {
           ackable: true
         });
       }
@@ -270,7 +273,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   const onUserNewPiece = function(role, key, meta) {
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key)) {
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {
       this.jump(this.vm.ply);
@@ -301,7 +304,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   const playPredrop = function() {
     return this.chessground.playPredrop(drop => {
-      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key);
+      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
     });
   }.bind(this);
 
@@ -517,6 +520,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
+    if (this.chessground) {
+      this.chessground.onunload();
+    }
     socket.destroy();
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
@@ -525,8 +531,5 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
   };
 }

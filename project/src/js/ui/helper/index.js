@@ -166,6 +166,7 @@ function viewportDim() {
 }
 
 export default {
+  findParentBySelector,
   slidingPage: animator(viewSlideIn, viewSlideOut),
   fadingPage: animator(viewFadesIn, viewFadesOut),
 
@@ -258,7 +259,6 @@ export default {
     return arr.join(' ');
   },
 
-
   isWideScreen: function() {
     return viewportDim().vw >= 600;
   },
@@ -280,6 +280,11 @@ export default {
     return window.matchMedia('(orientation: landscape)').matches;
   },
 
+  isLandscapeSmall: function () {
+    const { vh } = viewportDim();
+    return vh <= 450;
+  },
+
   // allow user to opt out of track analytics
   // only log if setting has it enabled
   analyticsTrackView: function(view) {
@@ -297,5 +302,14 @@ export default {
 
   autofocus: function(el, isUpdate) {
     if (!isUpdate) el.focus();
+  },
+
+  renderRatingDiff(player) {
+    if (player.ratingDiff === undefined) return null;
+    if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;
+    if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>;
+    if (player.ratingDiff < 0) return <span className="rp down"> {player.ratingDiff}</span>;
+
+    return null;
   }
 };

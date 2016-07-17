@@ -2,6 +2,7 @@ import menu from './menu';
 import menuView from './menu/menuView';
 import gamesMenu from './gamesMenu';
 import newGameForm from './newGameForm';
+import playMachineForm from './playMachineForm';
 import challengeForm from './challengeForm';
 import loginModal from './loginModal';
 import signupModal from './signupModal';
@@ -34,6 +35,7 @@ export default {
         {loginModal.view()}
         {signupModal.view()}
         {newGameForm.view()}
+        {playMachineForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
         {lobby.view()}
@@ -61,6 +63,7 @@ export default {
         {loginModal.view()}
         {signupModal.view()}
         {newGameForm.view()}
+        {playMachineForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
         {lobby.view()}

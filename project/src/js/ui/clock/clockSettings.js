@@ -8,10 +8,12 @@ import * as utils from '../../utils';
 
 export default {
 
-  controller: function(reload) {
+  controller: function(reload, clockObj) {
     let isOpen = false;
 
     function open() {
+      if (clockObj().isRunning()) return;
+
       backbutton.stack.push(close);
       isOpen = true;
     }
@@ -120,7 +122,7 @@ export default {
 
     if (ctrl.isOpen()) {
       return popupWidget(
-        'new_offline_game',
+        'new_offline_game clock_settings',
         null,
         function() {
           return (

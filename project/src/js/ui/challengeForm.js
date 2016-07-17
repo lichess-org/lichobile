@@ -82,17 +82,18 @@ function renderForm() {
   // horde variants
   var colors;
   if (settingsObj.mode() === '1' &&
-    ['5', '6', '7', '8'].indexOf(settingsObj.variant()) !== -1) {
+    ['5', '6', '7', '8', '9'].indexOf(settingsObj.variant()) !== -1) {
     settingsObj.color('random');
     colors = [
       ['randomColor', 'random']
     ];
-  } else
+  } else {
     colors = [
       ['randomColor', 'random'],
       ['white', 'white'],
       ['black', 'black']
     ];
+  }
 
   var modes = session.isConnected() ? [
     ['casual', '0'],

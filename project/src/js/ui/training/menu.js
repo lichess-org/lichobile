@@ -37,7 +37,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'trainingMenu',
-      () => m('h2[data-icon=-]', i18n('training')),
+      null,
       renderTrainingMenu.bind(undefined, ctrl.root),
       ctrl.isOpen(),
       ctrl.close

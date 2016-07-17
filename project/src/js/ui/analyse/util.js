@@ -17,6 +17,14 @@ export function readDests(lines) {
   return dests;
 }
 
+export function readCheckCount(fen) {
+  const counts = fen.substr(fen.length - 4);
+  return {
+    white: parseInt(counts[3], 10),
+    black: parseInt(counts[1], 10)
+  };
+}
+
 export function empty(a) {
   return !a || a.length === 0;
 }
@@ -43,4 +51,8 @@ export function autoScroll(movelist) {
       }
     });
   }
+}
+
+export function decomposeUci(uci) {
+  return [uci.slice(0, 2), uci.slice(2, 4), uci.slice(4, 5)];
 }

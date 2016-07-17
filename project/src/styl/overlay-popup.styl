@@ -31,11 +31,19 @@
   > header
     text-align center
     position relative
-    min-height 45px
+    padding 0 10px
     line-height 45px
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
     width 100%
     border-bottom solid 1px #E1E1E1
+    > div
+      overflow hidden
+      text-overflow ellipsis
     > h2
+      overflow hidden
+      text-overflow ellipsis
       text-align center
       line-height 45px
     + .popup_content
@@ -61,12 +69,12 @@
 .popup_content
   height 100%
 
-.offline_actions, .player_controls, .trainingMenu, .editorMenu, .continueFromHere, .submitMovePopup, .go_or_cancel, .analyse_menu, .new_offline_game
+.offline_actions, .player_controls, .trainingMenu, .editorMenu, .continueFromHere, .go_or_cancel, .analyse_menu, .new_offline_game
   button
     display block
     width 100%
     margin 0
-    padding 0
+    padding 10px
     min-height 45px
     background #fff
     color textDarkGray
@@ -87,7 +95,7 @@
     &.active
       background darken(#fff, 10%)
     &:before
-      margin-right 10px
+      margin-right 5px
     &:last-child
       border-bottom none
       border-radius 0 0 5px 5px

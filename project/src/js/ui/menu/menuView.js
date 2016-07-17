@@ -5,6 +5,7 @@ import newGameForm from '../newGameForm';
 import gamesMenu from '../gamesMenu';
 import friendsPopup from '../friendsPopup';
 import challengeForm from '../challengeForm';
+import playMachineForm from '../playMachineForm';
 import i18n from '../../i18n';
 import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
@@ -45,10 +46,6 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
-      <li className="side_link" config={helper.ontouch(menu.route('/@/' + user.id))}>
-        <span data-icon="r" />
-        {i18n('profile')}
-      </li>
       <li className="side_link" config={helper.ontouch(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
@@ -84,6 +81,11 @@ function renderLinks(user) {
       <li className="side_link" key="home" config={helper.ontouchY(menu.route('/'))}>
         <span className="fa fa-home" />Home
       </li>
+      {hasNetwork() && user ?
+      <li className="side_link" key="profile" config={helper.ontouch(menu.route('/@/' + user.id))}>
+        <span className="fa fa-user" />{i18n('profile')}
+      </li> : null
+      }
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }
@@ -102,14 +104,19 @@ function renderLinks(user) {
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }
-      {hasNetwork() && user ?
-      <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
-        <span className="fa fa-paper-plane" />{i18n('correspondence')}
-      </li> : null
-      }
       {hasNetwork() ?
       <li className="side_link" key="invite_friend" config={helper.ontouchY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
+      </li> : null
+      }
+      {hasNetwork() ?
+      <li className="side_link" key="play_online_ai" config={helper.ontouchY(menu.popup(playMachineForm.open))}>
+        <span className="fa fa-cogs"/>{i18n('playWithTheMachine')}
+      </li> : null
+      }
+      {hasNetwork() && user ?
+      <li className="side_link" key="correspondence" config={helper.ontouchY(menu.route('/correspondence'))}>
+        <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li> : null
       }
       {hasNetwork() ?

@@ -3,7 +3,7 @@ var timeoutId;
 export default {
   spin() {
     if (timeoutId || document.getElementById('globalSpinner')) {
-      return false;
+      return;
     }
 
     const spinner = document.createElement('div');
@@ -34,12 +34,16 @@ export default {
 
   getVdom(classes) {
     return (
-      <div class={'spinner ' + classes}>
+      <div class={'spinner ' + (classes ? classes : '')}>
         <svg viewBox="0 0 40 40">
           <circle cx="20" cy="20" r="18" fill="none"></circle>
         </svg>
       </div>
     );
+  },
+
+  getHtml() {
+    return '<div class="spinner monochrome"><svg viewBox="0 0 40 40"><circle cx=20 cy=20 r=18 fill="none"></circle></svg></div>';
   }
 
 };

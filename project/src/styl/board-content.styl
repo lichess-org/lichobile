@@ -1,3 +1,23 @@
+.content_round
+  width 100%
+  height calc(100% - 50px)
+  @media only screen and (orientation: landscape)
+    display flex
+  @media only screen and (max-height 450px) and (orientation landscape)
+    height calc(100vh - 45px)
+
+.table, .analyseTableWrapper
+  flex 1 1 auto
+  @media only screen and (orientation landscape)
+    width calc(100vw - 100vh + 50px)
+    height 100%
+  @media only screen and (orientation landscape) and (max-height 450px)
+    width calc(100vw - 100vh + 45px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    margin auto 0
+    width calc(100vw - 100vh + 50px + 12vh)
+    height calc(100vh - 50px - 12vh)
+
 .game_board_wrapper, .board_wrapper
   @media only screen and (orientation: portrait)
     height 100vw
@@ -6,6 +26,9 @@
     height calc(100vh - 50px)
     width calc(100vh - 50px)
     flex 0 0 auto
+  @media only screen and (max-height 450px) and (orientation landscape)
+    height calc(100vh - 45px)
+    width calc(100vh - 45px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     height calc(100vh - 50px - 12vh)
     width calc(100vh - 50px - 12vh)
@@ -56,21 +79,16 @@
   height footerHeight
   width 100%
   overflow hidden
-  @media only screen and (orientation: landscape)
-    width calc(100vw - (100vh - 50px) - 10px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    width calc(100vw - (100vh - 50px - 12vh) - 10px)
 
 .action_bar_button
   flex 1 1 25%
   text-align center
   background transparent
-  padding 10px 10px 8px
+  padding 0
   outline none
   border none
   color: gold
   height footerHeight
-  line-height 30px
   width 25%
   &:last-child
     border-right none
@@ -90,32 +108,25 @@
     background gold
   &:before
     font-size 18px
-    line-height 18px
-  &.fa
-    padding 7px 10px 10px
+    line-height 45px
   &[data-icon='2']
     transform rotate(-90deg)
   @media only screen and (max-height 400px) and (orientation landscape)
-    line-height 25px
     &:before
-      font-size 18px
-      line-height 18px
+      font-size 16px
 
 .table
-  height 100%
   display flex
   flex-flow column nowrap
-  margin 0 1rem
   > header
     flex 0 0 auto
   > .playersTable
+    padding 0 10px
     margin 1em 0
     flex 1 1 auto
     display flex
     flex-flow column nowrap
     justify-content space-around
-  @media only screen and (orientation landscape)
-    width calc(100vw - 100vh + 50px - 2rem)
   @media only screen and (max-height 400px) and (orientation landscape)
     font-size 0.7rem
     > .tableHeader
@@ -134,21 +145,15 @@
       font-size 20px
       &.correspondence
         font-size 15px
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    width calc(100vw - 100vh + 50px + 12vh - 2rem)
   @media only screen and (min-height 800px) and (orientation: landscape)
     > .playersTable
-      margin 2rem 0
+      margin 20px 0
   @media only screen and (orientation: landscape) and (min-height 700px)
-    margin auto 1rem
     .clock
       font-size 30px
       max-width 160px
     .antagonistInfos
       max-width calc(100% - 160px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    margin auto 1rem
 
 .board_alert
   position: absolute;

@@ -18,18 +18,18 @@ import i18n from '../../i18n';
 export default function view(ctrl) {
   var content, header;
 
-  if (ctrl.replay) {
-    header = renderHeader.bind(undefined, gameApi.title(ctrl.data));
-    content = renderContent.bind(undefined, ctrl);
+  if (ctrl.data && ctrl.chessground) {
+    header = () => renderHeader(gameApi.title(ctrl.data));
+    content = () => renderContent(ctrl);
   } else {
-    header = renderHeader.bind(undefined, i18n('playOfflineComputer'));
+    header = () => renderHeader(i18n('playOfflineComputer'));
     content = viewOnlyBoardContent;
   }
 
   return layout.board(
     header,
     content,
-    overlay.bind(undefined, ctrl)
+    () => overlay(ctrl)
   );
 }
 
@@ -37,7 +37,7 @@ function renderContent(ctrl) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
   const replayTable = renderReplayTable(ctrl.replay);
 
   const aiName = (

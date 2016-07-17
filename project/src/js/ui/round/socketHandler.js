@@ -74,6 +74,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       }
       if (!ctrl.data.player.spectator) {
         sound.dong();
+        vibrate.quick();
         setTimeout(function() {
           session.refresh();
           ctrl.showActions();

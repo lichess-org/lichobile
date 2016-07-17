@@ -29,7 +29,7 @@ export default {
             {header()}
           </header>
           <div id="content_round" className="content_round">{content()}</div>
-          { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
+          { menu.isOpen ? <div className="menu-close-overlay" oncreate={helper.ontouch(menu.close)} /> : null }
         </main>
         {menuView()}
         {gamesMenu.view()}
@@ -57,7 +57,7 @@ export default {
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }
-          { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
+          { menu.isOpen ? <div className="menu-close-overlay" oncreate={helper.ontouch(menu.close)} /> : null }
         </main>
         {menuView()}
         {gamesMenu.view()}
@@ -81,7 +81,7 @@ export default {
           <div className="content fullScreen">
             {content()}
           </div>
-          { menu.isOpen ? <div className="menu-close-overlay" config={helper.ontouch(menu.close)} /> : null }
+          { menu.isOpen ? <div className="menu-close-overlay" oncreate={helper.ontouch(menu.close)} /> : null }
         </main>
         {overlay ? overlay() : null}
       </div>

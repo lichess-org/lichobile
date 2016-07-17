@@ -54,7 +54,7 @@ function renderFriend(name) {
   };
 
   return (
-    <li className="list_item nav" key={userId} config={helper.ontouchY(action)}>
+    <li className="list_item nav" key={userId} oncreate={helper.ontouchY(action)}>
       {name}
     </li>
   );

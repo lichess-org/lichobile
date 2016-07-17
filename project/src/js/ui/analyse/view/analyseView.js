@@ -199,7 +199,7 @@ function renderEvalBox(ctrl) {
         <span style={{ width: percent + '%' }}></span>
       </div>
       { ctrl.data.analysis ?
-        <div className="openSummary" config={helper.ontouch(ctrl.evalSummary.open)}>
+        <div className="openSummary" oncreate={helper.ontouch(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>
         </div> : null
       }
@@ -239,7 +239,7 @@ function gameInfos(ctrl, isPortrait) {
     <div className="analyseGameInfosWrapper">
       <div className="analyseGameInfos" data-icon={icon}>
         {time + ' • '}
-        <span className="variant" config={variantLink}>
+        <span className="variant" oncreate={variantLink}>
           {data.game.variant.name}
         </span>
         <br/>
@@ -362,7 +362,7 @@ function buttons(ctrl) {
       helper.ontouch(() => b[2](ctrl));
 
     return (
-      <button className={className} key={b[1]} config={action} />
+      <button className={className} key={b[1]} oncreate={action} />
     );
   });
 }
@@ -386,23 +386,23 @@ function renderActionsBar(ctrl) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
-        config={helper.ontouch(ctrl.menu.open)}
+        oncreate={helper.ontouch(ctrl.menu.open)}
       />
       {ctrl.ceval.allowed() ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
-          config={helper.ontouch(ctrl.settings.open)}
+          oncreate={helper.ontouch(ctrl.settings.open)}
         /> : null
       }
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
-          config={helper.ontouch(
+          oncreate={helper.ontouch(
             ctrl.explorer.toggle,
             () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
           )}
         /> : null
       }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
-        config={helper.ontouch(
+        oncreate={helper.ontouch(
           ctrl.flip,
           () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
         )}

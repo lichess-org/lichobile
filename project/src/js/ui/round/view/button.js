@@ -17,13 +17,13 @@ export default {
       key: socketMsg,
       className: socketMsg,
       'data-icon': icon,
-      config: helper.ontouch(() => { socket.send(socketMsg); })
+      oncreate: helper.ontouch(() => { socket.send(socketMsg); })
     }, i18n(hint)) : null;
   },
   shareLink: function(ctrl) {
     return m('button', {
       key: 'shareGameLink',
-      config: helper.ontouch(() => {
+      oncreate: helper.ontouch(() => {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data));
       })
     }, [m('span.fa.fa-link'), i18n('shareGameURL')]);
@@ -37,7 +37,7 @@ export default {
       .catch(handleXhrError);
     }
     return (
-      <button key="sharePGN" config={helper.ontouch(handler)}>
+      <button key="sharePGN" oncreate={helper.ontouch(handler)}>
         <span className="fa fa-share-alt" />
         {i18n('sharePGN')}
       </button>
@@ -48,10 +48,10 @@ export default {
       <div className="negotiationIcons">
         <p>{i18n('moveConfirmation')}</p>
         <button className="accept" data-icon="E"
-          config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
+          oncreate={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
         />
         <button className="decline" data-icon="L"
-          config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
+          oncreate={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
         />
       </div>
     );
@@ -61,19 +61,19 @@ export default {
       key: 'resign',
       className: 'resign',
       'data-icon': 'b',
-      config: helper.ontouch(() => { ctrl.vm.confirmResign = true; })
+      oncreate: helper.ontouch(() => { ctrl.vm.confirmResign = true; })
     }, i18n('resign')) : null;
   },
   resignConfirmation: function(ctrl) {
     return gameApi.resignable(ctrl.data) && ctrl.vm.confirmResign ? (
       <div key="resignConfirm">
         <button className="binary_choice" data-icon="E"
-          config={helper.ontouch(() => { socket.send('resign'); })}
+          oncreate={helper.ontouch(() => { socket.send('resign'); })}
         >
           {i18n('resign')}
         </button>
         <button className="binary_choice" data-icon="L"
-          config={helper.ontouch(() => { ctrl.vm.confirmResign = false; })}
+          oncreate={helper.ontouch(() => { ctrl.vm.confirmResign = false; })}
         >
           {i18n('cancel')}
         </button>
@@ -87,10 +87,10 @@ export default {
       }, [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
         m('button.binary_choice.left', {
-          config: helper.ontouch(() => { socket.send('resign-force'); })
+          oncreate: helper.ontouch(() => { socket.send('resign-force'); })
         }, i18n('forceResignation')),
         m('button.binary_choice.right', {
-          config: helper.ontouch(() => { socket.send('draw-force'); })
+          oncreate: helper.ontouch(() => { socket.send('draw-force'); })
         }, i18n('forceDraw'))
       ]) : null;
   },
@@ -101,7 +101,7 @@ export default {
       m('div.notice', i18n('threefoldRepetition')),
       m.trust('&nbsp;'),
       m('button[data-icon=E]', {
-        config: helper.ontouch(() => { socket.send('draw-claim'); })
+        oncreate: helper.ontouch(() => { socket.send('draw-claim'); })
       }, i18n('claimADraw'))
     ]) : null;
   },
@@ -111,7 +111,7 @@ export default {
     }, [
       m('div.notice', i18n('drawOfferSent')),
       m('button[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('draw-no'); })
+        oncreate: helper.ontouch(() => { socket.send('draw-no'); })
       }, i18n('cancel'))
     ]);
     return null;
@@ -122,10 +122,10 @@ export default {
     }, [
       m('div.notice', i18n('yourOpponentOffersADraw')),
       m('button.binary_choice[data-icon=E]', {
-        config: helper.ontouch(() => { socket.send('draw-yes'); })
+        oncreate: helper.ontouch(() => { socket.send('draw-yes'); })
       }, i18n('accept')),
       m('button.binary_choice[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('draw-no'); })
+        oncreate: helper.ontouch(() => { socket.send('draw-no'); })
       }, i18n('decline'))
     ]);
     return null;
@@ -136,7 +136,7 @@ export default {
     }, [
       m('div.notice', i18n('takebackPropositionSent')),
       m('button[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('takeback-no'); })
+        oncreate: helper.ontouch(() => { socket.send('takeback-no'); })
       }, i18n('cancel'))
     ]);
     return null;
@@ -147,10 +147,10 @@ export default {
     }, [
       m('div.notice', i18n('yourOpponentProposesATakeback')),
       m('button.binary_choice[data-icon=E]', {
-        config: helper.ontouch(() => { socket.send('takeback-yes'); })
+        oncreate: helper.ontouch(() => { socket.send('takeback-yes'); })
       }, i18n('accept')),
       m('button.binary_choice[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('takeback-no'); })
+        oncreate: helper.ontouch(() => { socket.send('takeback-no'); })
       }, i18n('decline'))
     ]);
     return null;
@@ -159,7 +159,7 @@ export default {
     const d = ctrl.data;
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return m('button', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           socket.send('rematch-no');
           m.route(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
@@ -172,7 +172,7 @@ export default {
     const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && d.game.source === 'lobby';
     if (!ctrl.data.opponent.ai && newable) {
       return m('button[data-icon=r]', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           ctrl.hideActions();
           lobby.startSeeking();
         })
@@ -186,7 +186,7 @@ export default {
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
       return m('button', {
         key: 'rematch',
-        config: helper.ontouch(() => { socket.send('rematch-yes'); })
+        oncreate: helper.ontouch(() => { socket.send('rematch-yes'); })
       }, [m('span.fa.fa-refresh'), i18n('rematch')]);
     } else {
       return null;
@@ -198,10 +198,10 @@ export default {
     }, [
       m('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
       m('button.binary_choice[data-icon=E]', {
-        config: helper.ontouch(() => { socket.send('rematch-yes'); })
+        oncreate: helper.ontouch(() => { socket.send('rematch-yes'); })
       }, i18n('joinTheGame')),
       m('button.binary_choice[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('rematch-no'); })
+        oncreate: helper.ontouch(() => { socket.send('rematch-no'); })
       }, i18n('declineInvitation'))
     ]);
     return null;
@@ -213,7 +213,7 @@ export default {
       m('div.notice', i18n('rematchOfferSent')),
       m('div.notice', i18n('waitingForOpponent')),
       m('button[data-icon=L]', {
-        config: helper.ontouch(() => { socket.send('rematch-no'); })
+        oncreate: helper.ontouch(() => { socket.send('rematch-no'); })
       }, i18n('cancelRematchOffer'))
     ]);
     return null;
@@ -221,7 +221,7 @@ export default {
   moretime: function(ctrl) {
     if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       key: 'moretime',
-      config: helper.ontouch(throttle(() => { socket.send('moretime'); }, 600))
+      oncreate: helper.ontouch(throttle(() => { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
     return null;
   },
@@ -232,7 +232,7 @@ export default {
     });
     return (
       <button className={className} data-icon="B" key="flipboard"
-        config={helper.ontouch(ctrl.flip)} />
+        oncreate={helper.ontouch(ctrl.flip)} />
     );
   },
   first: function(ctrl) {
@@ -246,7 +246,7 @@ export default {
     });
     return (
       <button className={className} key="fast-backward"
-        config={helper.ontouch(ctrl.jumpFirst)} />
+        oncreate={helper.ontouch(ctrl.jumpFirst)} />
     );
   },
   backward: function(ctrl) {
@@ -260,7 +260,7 @@ export default {
     });
     return (
       <button className={className} key="backward"
-        config={helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
+        oncreate={helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
     );
   },
   forward: function(ctrl) {
@@ -274,7 +274,7 @@ export default {
     });
     return (
       <button className={className} key="forward"
-        config={helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext)} />
+        oncreate={helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext)} />
     );
   },
   last: function(ctrl) {
@@ -288,13 +288,13 @@ export default {
     });
     return (
       <button className={className} key="fast-forward"
-        config={helper.ontouch(ctrl.jumpLast)} />
+        oncreate={helper.ontouch(ctrl.jumpLast)} />
     );
   },
   notes: function(ctrl) {
     return (
       <button className="action_bar_button" data-icon="m" key="notes"
-        config={helper.ontouch(
+        oncreate={helper.ontouch(
           ctrl.notes.open,
           () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')
         )} />
@@ -311,7 +311,7 @@ export default {
       }
     }
     return (
-      <button key="returnToTournament" config={helper.ontouch(handler)}>
+      <button key="returnToTournament" oncreate={helper.ontouch(handler)}>
         <span className="fa fa-trophy" />
         {i18n('backToTournament')}
       </button>
@@ -324,7 +324,7 @@ export default {
       m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
     }
     return (
-      <button key="withdrawFromTournament" config={helper.ontouch(handler)}>
+      <button key="withdrawFromTournament" oncreate={helper.ontouch(handler)}>
         <span className="fa fa-flag" />
         {i18n('withdraw')}
       </button>
@@ -338,7 +338,7 @@ export default {
       ctrl.goBerserk();
     }
     return (
-      <button className="berserk" key="goBerserk" config={helper.ontouch(handler)}>
+      <button className="berserk" key="goBerserk" oncreate={helper.ontouch(handler)}>
         <span data-icon="`" /> GO BERSERK!<br/>
         <small>Half the time, bonus point</small>
       </button>

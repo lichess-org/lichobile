@@ -9,7 +9,7 @@ export default {
     const { bounds, fen, lastMove, orientation, link, gameObj } = args;
 
     return (
-      <div className="mini_board" config={helper.ontouchY(link)}>
+      <div className="mini_board" oncreate={helper.ontouchY(link)}>
         <div className="board_wrapper">
           {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
         </div>

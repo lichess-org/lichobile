@@ -67,7 +67,7 @@ export default {
         outcome = game.score;
       }
       return (
-        <tr className='list_item' key={game.id} config={helper.ontouch(() => m.route('/game/' + game.id + '/' + game.color))}>
+        <tr className='list_item' key={game.id} oncreate={helper.ontouch(() => m.route('/game/' + game.id + '/' + game.color))}>
           <td className="oppRank"> {gameArray.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>
@@ -78,10 +78,10 @@ export default {
     }
 
     return (
-      <div className="modal dark" id="tournamentPlayerInfoModal" config={helper.slidesInLeft}>
+      <div className="modal dark" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
         <header>
           <button className="modal_close" data-icon="L"
-            config={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
+            oncreate={helper.ontouch(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
           />
           <h2 className="playerModalHeader">
             {player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}

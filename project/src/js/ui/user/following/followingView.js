@@ -36,7 +36,7 @@ export function renderPlayer(ctrl, obj) {
   const userLink = helper.ontouchY(() => m.route(`/@/${obj.user}`));
   return (
     <li className="list_item followingList">
-      <div className="followingPlayerTitle" config={userLink}>
+      <div className="followingPlayerTitle" oncreate={userLink}>
         <div className="user">
           <span className={'userStatus ' + status} data-icon="r" />
           {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
@@ -58,7 +58,7 @@ export function renderPlayer(ctrl, obj) {
         </div> : null
       }
       <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
-        config={helper.ontouchY(() => ctrl.challenge(obj.user))}
+        oncreate={helper.ontouchY(() => ctrl.challenge(obj.user))}
       >
         {i18n('challengeToPlay')}
       </div>

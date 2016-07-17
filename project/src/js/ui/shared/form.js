@@ -36,7 +36,7 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        config: function(el, isUpdate, context) {
+        oncreate: function(el, isUpdate, context) {
           if (!isUpdate) {
             var onChange = function(e) {
               settingsProp(e.target.value);

@@ -57,19 +57,22 @@ export default function controller() {
     }
   }
 
-  function scrollerConfig(el, isUpdate, context) {
-    if (!isUpdate) {
-      scroller = new IScroll(el, {
-        probeType: 2
-      });
-      scroller.on('scroll', throttle(onScroll, 150));
-      context.onunload = () => {
-        if (scroller) {
-          scroller.destroy();
-          scroller = null;
-        }
-      };
+  function scrollerOnCreate(vnode) {
+    const el = vnode.dom;
+    scroller = new IScroll(el, {
+      probeType: 2
+    });
+    scroller.on('scroll', throttle(onScroll, 150));
+  }
+
+  function scrollerOnRemove() {
+    if (scroller) {
+      scroller.destroy();
+      scroller = null;
     }
+  }
+
+  function scrollerOnUpdate() {
     scroller.refresh();
   }
 
@@ -85,7 +88,7 @@ export default function controller() {
     .catch(err => {
       utils.handleXhrError(err);
       m.route('/');
-    })
+    });
   }
 
   function loadNextPage(page) {
@@ -117,7 +120,9 @@ export default function controller() {
     currentFilter,
     isLoadingNextPage,
     games,
-    scrollerConfig,
+    scrollerOnCreate,
+    scrollerOnRemove,
+    scrollerOnUpdate,
     userId,
     user,
     onFilterChange,

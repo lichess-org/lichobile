@@ -87,17 +87,17 @@ export default {
 
     if (!ctrl.showing) return null;
 
-    return m('div#chat.modal', { config: helper.slidesInUp }, [
+    return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
+          oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
       m('div.modal_content', [
         m('div#chat_scroller.native_scroller', {
-          config: el => {
+          oncreate: el => {
             el.scrollTop = el.scrollHeight;
           }
         }, [
@@ -143,7 +143,7 @@ export default {
             placeholder: i18n('talkInChat'),
             autocomplete: 'off',
             value: ctrl.inputValue,
-            config: function(el, isUpdate) {
+            oncreate: function(el, isUpdate) {
               if (!isUpdate) {
                 el.addEventListener('input', inputListener.bind(undefined, ctrl));
               }

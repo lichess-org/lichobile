@@ -40,7 +40,9 @@ export default function view(ctrl) {
 
 function renderAllGames(ctrl) {
   return (
-    <div className="scroller games" config={ctrl.scrollerConfig}>
+    <div className="scroller games" oncreate={ctrl.scrollerOnCreate}
+      onupdate={ctrl.scrollerOnUpdate} onremove={ctrl.scrollerOnRemove}
+    >
       <ul className="userGames">
         { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
         {ctrl.isLoadingNextPage() ?
@@ -78,9 +80,9 @@ function renderGame(ctrl, g, index, userId) {
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>
       { session.isConnected() ?
-        <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
+        <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" config={helper.ontouchY(() => m.route(`/analyse/online/${g.id}/${userColor}`))}>
+      <div className="nav" oncreate={helper.ontouchY(() => m.route(`/analyse/online/${g.id}/${userColor}`))}>
         <span className="iconGame" data-icon={icon} />
         {wideScreenOrLandscape ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">

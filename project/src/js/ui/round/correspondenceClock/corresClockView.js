@@ -43,6 +43,6 @@ export function view(ctrl, color, runningColor) {
     }
   }
   return (
-    <div className={className} config={cConfig} />
+    <div className={className} oncreate={concreate} />
   );
 }

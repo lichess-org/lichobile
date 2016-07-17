@@ -133,24 +133,22 @@ function findParentBySelector(el, selector) {
 }
 
 function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
-  return function(el, isUpdate) {
-    if (!isUpdate) {
-      ButtonHandler(el,
-        e => {
-          m.startComputation();
-          try {
-            tapHandler(e);
-          } finally {
-            m.endComputation();
-          }
-        },
-        holdHandler ? () => utils.autoredraw(holdHandler) : null,
-        repeatHandler,
-        scrollX,
-        scrollY,
-        touchEndFeedback
-      );
-    }
+  return function(vnode) {
+    ButtonHandler(vnode.dom,
+      e => {
+        m.startComputation();
+        try {
+          tapHandler(e);
+        } finally {
+          m.endComputation();
+        }
+      },
+      holdHandler ? () => utils.autoredraw(holdHandler) : null,
+      repeatHandler,
+      scrollX,
+      scrollY,
+      touchEndFeedback
+    );
   };
 }
 

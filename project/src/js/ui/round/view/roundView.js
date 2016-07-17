@@ -67,13 +67,12 @@ export function renderMaterial(material) {
 }
 
 function renderTitle(ctrl) {
-  function tcConfig(el, isUpdate) {
-    if (!isUpdate) {
-      el.textContent =
-        utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
-        ' • ';
-      ctrl.vm.tClockEl = el;
-    }
+  function tcConfig(vnode) {
+    const el = vnode.dom;
+    el.textContent =
+      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
+      ' • ';
+    ctrl.vm.tClockEl = el;
   }
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
@@ -84,7 +83,7 @@ function renderTitle(ctrl) {
           <span className="fa fa-trophy" /> : null
         }
         {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span config={tcConfig}>
+          <span oncreate={tcConfig}>
           {
             utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
             ' • '
@@ -222,7 +221,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
   ctrl.vm[vmKey] = hash;
 
   return (
-    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} config={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         {user ?
           <span className={'status ' + onlineStatus} data-icon="r" /> :
@@ -403,7 +402,7 @@ function gameInfos(ctrl) {
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
   const variant = m('span.variant', {
-    config: helper.ontouch(
+    oncreate: helper.ontouch(
       () => {
         var link = variantApi(data.game.variant.key).link;
         if (link)
@@ -419,7 +418,7 @@ function gameInfos(ctrl) {
     }),
     m('div.game-title.no_select', infos),
     session.isConnected() ? m('button.star', {
-      config: helper.ontouch(
+      oncreate: helper.ontouch(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
       ),
@@ -469,8 +468,8 @@ function renderGameActionsBar(ctrl, isPortrait) {
 
   const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null;
   const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" config={helper.ontouch(ctrl.showActions)} /> :
-    <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />;
+    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} /> :
+    <button className={gmClass} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} />;
 
   const chatClass = [
     'action_bar_button',
@@ -482,7 +481,7 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {gmButton}
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat"
-        config={helper.ontouch(ctrl.chat.open)} /> : null
+        oncreate={helper.ontouch(ctrl.chat.open)} /> : null
       }
       {ctrl.notes ? button.notes(ctrl) : null}
       {button.flipBoard(ctrl)}

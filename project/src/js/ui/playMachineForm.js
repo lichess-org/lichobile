@@ -97,7 +97,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
       key: 'position'
     }, fromPositionFen ? [
         m('div.setupMiniBoardWrapper', {
-          config: helper.ontouch(() => {
+          oncreate: helper.ontouch(() => {
             close();
             m.route(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
@@ -105,7 +105,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
           m.component(ViewOnlyBoard, { fen: fromPositionFen })
         ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           close();
           m.route('/editor');
         })

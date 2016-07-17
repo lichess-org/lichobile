@@ -139,13 +139,13 @@ function renderGame(g, cDim, cardStyle) {
     'timeIndication',
     g.isMyTurn ? 'myTurn' : 'opponentTurn'
   ].join(' ');
-  const config = helper.isWideScreen() ?
+  const oncreate = helper.isWideScreen() ?
     helper.ontouchY(() => joinGame(g)) :
     helper.ontouchX(() => joinGame(g));
 
   return (
     <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
-      config={config}
+      oncreate={oncreate}
     >
       {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant)}
       <div className="infos">
@@ -185,10 +185,10 @@ function renderIncomingChallenge(c, cDim, cardStyle) {
           </p>
         </div>
         <div className="actions">
-          <button config={helper.ontouchX(utils.f(acceptChallenge, c.id))}>
+          <button oncreate={helper.ontouchX(utils.f(acceptChallenge, c.id))}>
             {i18n('accept')}
           </button>
-          <button config={helper.ontouchX(
+          <button oncreate={helper.ontouchX(
             helper.fadesOut(declineChallenge.bind(undefined, c.id), '.card', 250)
           )}>
             {i18n('decline')}
@@ -244,7 +244,7 @@ function renderAllGames(cDim) {
   if (!helper.isWideScreen()) {
     const newGameCard = (
       <div className="card standard" key="game.new-game" style={cardStyle}
-        config={helper.ontouchX(() => { gamesMenu.close(); newGameForm.open(); })}
+        oncreate={helper.ontouchX(() => { gamesMenu.close(); newGameForm.open(); })}
       >
         {renderViewOnlyBoard(cDim)}
         <div className="infos">
@@ -268,38 +268,42 @@ gamesMenu.view = function() {
   const vh = helper.viewportDim().vh;
   const cDim = cardDims();
   const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
-  const wrapperConfig =
-  helper.isWideScreen() ? utils.noop : function(el, isUpdate, context) {
-    if (!isUpdate) {
-      scroller = new iScroll(el, {
-        scrollX: true,
-        scrollY: false,
-        momentum: false,
-        snap: '.card',
-        snapSpeed: 400,
-        preventDefaultException: {
-          tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-        }
-      });
+  function wrapperOnCreate(vnode) {
+    const el = vnode.dom;
+    scroller = new iScroll(el, {
+      scrollX: true,
+      scrollY: false,
+      momentum: false,
+      snap: '.card',
+      snapSpeed: 400,
+      preventDefaultException: {
+        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+      }
+    });
+  }
 
-      context.onunload = function() {
-        if (scroller) {
-          scroller.destroy();
-          scroller = null;
-        }
-      };
+  function wrapperOnRemove() {
+    if (scroller) {
+      scroller.destroy();
+      scroller = null;
     }
+  }
+
+  function wrapperOnUpdate(vnode) {
     // see https://github.com/cubiq/iscroll/issues/412
+    const el = vnode.dom;
     scroller.options.snap = el.querySelectorAll('.card');
     scroller.refresh();
-  };
+  }
+
   const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
 
   return (
     <div id="games_menu" className="overlay_popup_wrapper">
       <div className="wrapper_overlay_close"
-        config={helper.ontouch(helper.fadesOut(gamesMenu.close, '.overlay_popup_wrapper'))} />
-      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle} config={wrapperConfig}>
+        oncreate={helper.ontouch(helper.fadesOut(gamesMenu.close, '.overlay_popup_wrapper'))} />
+      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
+        oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
         {helper.isWideScreen() ? (
           <header>
             {i18n('nbGamesInPlay', session.nowPlaying().length)}

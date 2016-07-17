@@ -65,10 +65,10 @@ export default {
 
     if (!ctrl.showing) return null;
 
-    return m('div#notes.modal', { config: helper.slidesInUp }, [
+    return m('div#notes.modal', { oncreate: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
+          oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
         }),
         m('h2', i18n('notes'))
       ]),

@@ -71,7 +71,7 @@ function renderProblemDetails(ctrl) {
   ) : () => {};
   return (
     <section className="trainingSection">
-      <h3 className="puzzle withIcon button" data-icon="-" config={viewGame}>
+      <h3 className="puzzle withIcon button" data-icon="-" oncreate={viewGame}>
         {i18n('puzzleId', ctrl.data.puzzle.id)}
       </h3>
       <div>
@@ -107,7 +107,7 @@ function renderActionsBar(ctrl) {
   const vdom = [
     m('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
-      config: helper.ontouch(ctrl.menu.open)
+      oncreate: helper.ontouch(ctrl.menu.open)
     })
   ];
   return m('section#training_actions.actions_bar', vdom.concat(
@@ -115,7 +115,7 @@ function renderActionsBar(ctrl) {
       renderViewControls(ctrl) :
       m('button.action_bar_button.training_action[data-icon=b]', {
         key: 'giveUpPuzzle',
-        config: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
+        oncreate: helper.ontouch(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
   ).filter(el => el !== null));
 }
@@ -126,29 +126,29 @@ function renderViewControls(ctrl) {
   return [
     m('button.action_bar_button.training_action[data-icon=G]', {
       key: 'continueTraining',
-      config: helper.ontouch(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
+      oncreate: helper.ontouch(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
-      config: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
+      oncreate: helper.ontouch(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action[data-icon=A]', {
       key: 'analysePuzzle',
-      config: helper.ontouch(() => m.route(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
+      oncreate: helper.ontouch(() => m.route(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',
-      config: helper.ontouch(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
+      oncreate: helper.ontouch(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action.fa.fa-backward', {
-      config: helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev),
+      oncreate: helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev),
       key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
     m('button.action_bar_button.training_action.fa.fa-forward', {
-      config: helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext),
+      oncreate: helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext),
       key: 'historyNext',
       className: helper.classSet({
         disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)

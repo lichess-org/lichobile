@@ -22,7 +22,7 @@ function header(ctrl) {
       <div className="buttons">
         {friendsButton()}
         <button className="main_header_button" key="searchPlayers" data-icon="y"
-          config={h.ontouch(ctrl.goSearch)}/>
+          oncreate={h.ontouch(ctrl.goSearch)}/>
       </div>
     </nav>
   );
@@ -41,20 +41,20 @@ function searchModal(ctrl) {
   return (
     <div id="searchPlayersModal" className={className}>
       <header>
-        <button key="search-players-backbutton" className="fa fa-arrow-left search_back" config={h.ontouch(ctrl.closeSearch)} />
+        <button key="search-players-backbutton" className="fa fa-arrow-left search_back" oncreate={h.ontouch(ctrl.closeSearch)} />
         <div className="search_input allow_select">
           <input id="searchPlayers" type="search"
           placeholder="Search players" oninput={ctrl.onInput}
           autocapitalize="off"
           autocomplete="off"
-          config={h.autofocus}
+          oncreate={h.autofocus}
           />
         </div>
       </header>
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} config={h.ontouchY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={h.ontouchY(utils.f(ctrl.goToProfile, u))}>
           {u}
           </li>
         );
@@ -82,7 +82,7 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item playerSuggestion nav" config={h.ontouchY(() => m.route('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" oncreate={h.ontouchY(() => m.route('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

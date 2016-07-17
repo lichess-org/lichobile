@@ -118,7 +118,7 @@ function renderForm() {
       key: 'position'
     }, challengeForm.fen ? [
       m('div.setupMiniBoardWrapper', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           challengeForm.close();
           m.route(`/editor/${encodeURIComponent(challengeForm.fen)}`);
         })
@@ -126,7 +126,7 @@ function renderForm() {
         m.component(ViewOnlyBoard, { fen: challengeForm.fen })
       ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           challengeForm.close();
           m.route('/editor');
         })

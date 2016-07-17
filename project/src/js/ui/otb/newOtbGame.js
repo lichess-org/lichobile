@@ -44,7 +44,7 @@ export default {
                 </div>
               </div>
               <button className="newGameButton" data-icon="E"
-                config={helper.ontouch(() => ctrl.root.startNewGame())}>
+                oncreate={helper.ontouch(() => ctrl.root.startNewGame())}>
                 {i18n('play')}
               </button>
             </div>

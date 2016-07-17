@@ -153,7 +153,7 @@ function renderGame(game) {
   const gameId = game.gameId;
 
   return (
-    <div class="list_item nav" config={helper.ontouchY(() => m.route('/analyse/online/' + gameId))}>
+    <div class="list_item nav" oncreate={helper.ontouchY(() => m.route('/analyse/online/' + gameId))}>
       {opp} ({date})
     </div>
   );

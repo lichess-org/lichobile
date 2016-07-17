@@ -80,7 +80,7 @@ lobby.view = function() {
       m('br'),
       m('br'),
       m('button[data-icon=L]', {
-        config: helper.ontouch(lobby.cancelSeeking)
+        oncreate: helper.ontouch(lobby.cancelSeeking)
       }, i18n('cancel'))
     ]);
   }

@@ -60,7 +60,7 @@ export function renderUserInfos(ctrl) {
     ctrl.data.user.history ? m('canvas#puzzleChart', {
       width: '240px',
       height: '150px',
-      config: function(el, isUpdate, context) {
+      oncreate: function(el, isUpdate, context) {
         const hash = ctrl.data.user.history.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
         if (hash === context.hash) return;
         context.hash = hash;
@@ -94,7 +94,7 @@ export function renderSigninBox() {
     m('p', i18n('toTrackYourProgress')),
     m('p',
       m('button', {
-        config: helper.ontouch(loginModal.open)
+        oncreate: helper.ontouch(loginModal.open)
       }, [m('span.fa.fa-user'), i18n('signIn')])
     ),
     m('p', i18n('trainingSignupExplanation'))

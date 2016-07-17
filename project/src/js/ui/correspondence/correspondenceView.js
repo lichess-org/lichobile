@@ -36,7 +36,7 @@ function renderBody(ctrl) {
         ]),
         m('button.fat', {
           key: 'seeks_login',
-          config: helper.ontouch(loginModal.open)
+          oncreate: helper.ontouch(loginModal.open)
         }, i18n('logIn'))
       ])
     ];
@@ -65,7 +65,7 @@ function renderBody(ctrl) {
 function renderFooter() {
   return m('div.correpondenceFooter', m('button#newGameCorres', {
     key: 'seeks_createagame',
-    config: helper.ontouch(newGameForm.openCorrespondence)
+    oncreate: helper.ontouch(newGameForm.openCorrespondence)
   }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]));
 }
 
@@ -85,7 +85,7 @@ function renderChallenge(ctrl, c) {
   const playerName = c.destUser && utils.lightPlayerName(c.destUser);
   return (
     <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
-      config={helper.ontouchY(
+      oncreate={helper.ontouchY(
         helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
       )}
     >
@@ -111,7 +111,7 @@ function renderSeek(ctrl, seek) {
     key: 'seek' + seek.id,
     'id': seek.id,
     className: 'list_item seek ' + action,
-    config: helper.ontouchY(utils.partialf(ctrl[action], seek.id))
+    oncreate: helper.ontouchY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon

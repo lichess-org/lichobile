@@ -27,9 +27,9 @@ export default {
         'tab',
         selectedTab === b.key ? 'selected' : ''
       ].join(' ');
-      const config = helper.ontouch(onTabChange.bind(undefined, b.key));
+      const oncreate = helper.ontouch(onTabChange.bind(undefined, b.key));
       return (
-        <button className={className} config={config} style={buttonStyle}>
+        <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}
         </button>
       );

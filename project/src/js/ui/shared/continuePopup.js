@@ -46,20 +46,20 @@ export default {
         return [
           hasNetwork() ? m('p.sep', i18n('playOnline')) : null,
           hasNetwork() ? m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               playMachineForm.openAIFromPosition(ctrl.fen());
             })
           }, i18n('playWithTheMachine')) : null,
           hasNetwork() ? m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               challengeForm.openFromPosition(ctrl.fen());
             })
           }, i18n('playWithAFriend')) : null,
           m('p.sep', i18n('playOffline')),
           m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
@@ -70,7 +70,7 @@ export default {
             })
           }, i18n('playOfflineComputer')),
           m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');

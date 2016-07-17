@@ -1,3 +1,7 @@
 {
-     "plugins": ["mjsx"]
+     "plugins": [
+        ["transform-react-jsx", {
+            "pragma": "m"
+        }]
+     ]
 }

@@ -1,5 +1,6 @@
 import helper from '../../helper';
 import round from '../round';
+import m from 'mithril';
 
 const emptyTd = <td className="move">...</td>;
 

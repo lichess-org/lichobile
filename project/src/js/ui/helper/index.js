@@ -136,12 +136,8 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
   return function(vnode) {
     ButtonHandler(vnode.dom,
       e => {
-        m.startComputation();
-        try {
-          tapHandler(e);
-        } finally {
-          m.endComputation();
-        }
+        tapHandler(e);
+        m.redraw();
       },
       holdHandler ? () => utils.autoredraw(holdHandler) : null,
       repeatHandler,

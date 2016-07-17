@@ -6,12 +6,9 @@ import m from 'mithril';
 export const lichessSri = Math.random().toString(36).substring(2);
 
 export function autoredraw(action) {
-  m.startComputation();
-  try {
-    return action();
-  } finally {
-    m.endComputation();
-  }
+  const res = action();
+  m.redraw();
+  return res;
 }
 
 export function tellWorker(worker, topic, payload) {

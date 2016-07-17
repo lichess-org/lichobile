@@ -11,7 +11,7 @@ export default {
     return (
       <div className="mini_board" oncreate={helper.ontouchY(link)}>
         <div className="board_wrapper">
-          {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
+          {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
         </div>
         { gameObj ?
         <div className="vsbloc">

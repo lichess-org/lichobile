@@ -88,7 +88,7 @@ export default function(
     }
     {
       shapes && shapes.length ?
-      m.component(BoardBrush, {
+      m(BoardBrush, {
         bounds,
         orientation: chessgroundCtrl.data.orientation,
         shapes

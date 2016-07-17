@@ -150,7 +150,7 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrappe
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   const board = (
     <section key={boardKey} className={className} style={boardStyle}>
-    {m.component(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+    {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   );
   if (isPortrait) {

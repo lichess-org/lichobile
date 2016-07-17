@@ -70,7 +70,7 @@ function renderDailyPuzzle(ctrl, isPortrait) {
   return (
     <section id="dailyPuzzle">
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
-        {m.component(miniBoard, {
+        {m(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,

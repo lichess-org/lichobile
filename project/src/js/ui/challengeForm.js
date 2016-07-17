@@ -123,7 +123,7 @@ function renderForm() {
           m.route(`/editor/${encodeURIComponent(challengeForm.fen)}`);
         })
       }, [
-        m.component(ViewOnlyBoard, { fen: challengeForm.fen })
+        m(ViewOnlyBoard, { fen: challengeForm.fen })
       ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {

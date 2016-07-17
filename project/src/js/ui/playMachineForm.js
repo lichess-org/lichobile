@@ -102,7 +102,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
             m.route(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
-          m.component(ViewOnlyBoard, { fen: fromPositionFen })
+          m(ViewOnlyBoard, { fen: fromPositionFen })
         ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {

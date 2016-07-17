@@ -24,7 +24,7 @@ const TABS = [{
 }];
 
 function tabNavigation (currentTabFn) {
-    return m('.nav-header', m.component(tabs, {
+    return m('.nav-header', m(tabs, {
         buttons: TABS,
         selectedTab: currentTabFn(),
         onTabChange: k => {

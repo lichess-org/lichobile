@@ -87,7 +87,7 @@ function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
     <div className="boardWrapper" style={style}>
-      {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
+      {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
     </div>
   );
 }

@@ -1,8 +1,11 @@
+import m from 'mithril';
 import chessground from 'chessground-mobile';
 import settings from '../../settings';
 
 export default {
-  view(_, args) {
+  view(rootVnode) {
+
+    const args = rootVnode.attrs;
 
     const boardClass = [
       'display_board',

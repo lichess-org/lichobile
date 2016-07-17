@@ -42,7 +42,7 @@ function renderBody(ctrl) {
     ];
   }
 
-  const tabsBar = m.component(tabs, {
+  const tabsBar = m(tabs, {
     buttons: tabButtons,
     selectedTab: ctrl.selectedTab(),
     onTabChange: k => {

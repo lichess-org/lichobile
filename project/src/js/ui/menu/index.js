@@ -8,7 +8,6 @@ const menu = {};
 /* properties */
 menu.isOpen = false;
 menu.headerOpen = m.prop(false);
-menu.sendPingsInterval = null;
 
 menu.route = function(route) {
   return function() {
@@ -34,8 +33,8 @@ menu.open = function() {
   console.log('open');
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
-  sendPings();
-  menu.sendPingsInterval = setInterval(sendPings, 1000);
+  getServerLag();
+  menu.sendPingsInterval = setInterval(getServerLag, 1000);
 };
 
 menu.close = function(fromBB) {
@@ -58,15 +57,9 @@ menu.toggleHeader = function() {
   return menu.headerOpen() ? menu.headerOpen(false) : menu.headerOpen(true);
 };
 
-function sendPings() {
-  console.log('sent pings');
-  socket.getAverageLag(function(lag) {
-    socket.userPing(lag);
-    console.log('lag: ' + lag);
-    m.redraw();
-  });
+function getServerLag() {
   socket.send('moveLat', true);
-  console.log('sent mlat');
+  m.redraw();
 }
 
 export default menu;

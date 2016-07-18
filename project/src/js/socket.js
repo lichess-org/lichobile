@@ -20,7 +20,6 @@ let redrawOnDisconnectedTimeoutID;
 let proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
-const userPingSentTime = m.prop();
 const userPing = m.prop();
 const serverMoveTime = m.prop();
 
@@ -34,7 +33,11 @@ const defaultHandlers = {
   },
   mlat: mlat => {
     serverMoveTime(mlat);
-    console.log('mlat: ' + mlat);
+    m.redraw();
+  },
+  pingTime: ping => {
+    userPing(ping);
+    m.redraw();
   }
 };
 

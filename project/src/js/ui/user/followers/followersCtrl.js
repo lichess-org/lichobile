@@ -29,19 +29,15 @@ export default function controller() {
     }
   }
 
-  function scrollerConfig(el, isUpdate, context) {
-    if (!isUpdate) {
-      scroller = new IScroll(el, {
-        probeType: 2
-      });
-      scroller.on('scroll', throttle(onScroll, 150));
-      context.onunload = () => {
-        if (scroller) {
-          scroller.destroy();
-          scroller = null;
-        }
-      };
-    }
+  function scrollerConfig(vnode) {
+    const el = vnode.dom;
+    scroller = new IScroll(el, {
+      probeType: 2
+    });
+    scroller.on('scroll', throttle(onScroll, 150));
+  }
+
+  function scrollerOnUpdate() {
     scroller.refresh();
   }
 
@@ -78,6 +74,7 @@ export default function controller() {
   return {
     followers,
     scrollerConfig,
+    scrollerOnUpdate,
     isLoadingNextPage,
     toggleFollowing: obj => {
       if (obj.relation) xhr.unfollow(obj.user).run(setNewUserState.bind(undefined, obj));

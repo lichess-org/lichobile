@@ -175,14 +175,13 @@ export default {
     cachedViewportDim = null;
   },
 
-  slidesInUp: function(el, isUpdate, context) {
-    if (!isUpdate) {
-      el.style.transform = 'translateY(100%)';
-      // force reflow hack
-      context.lol = el.offsetHeight;
-      Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
-      .catch(console.log.bind(console));
-    }
+  slidesInUp: function(vnode) {
+    const el = vnode.dom;
+    el.style.transform = 'translateY(100%)';
+    // force reflow hack
+    vnode.state.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
   },
 
   slidesOutDown: function(callback, elID) {
@@ -195,14 +194,13 @@ export default {
     };
   },
 
-  slidesInLeft: function(el, isUpdate, context) {
-    if (!isUpdate) {
-      el.style.transform = 'translateX(100%)';
-      // force reflow hack
-      context.lol = el.offsetHeight;
-      Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
-      .catch(console.log.bind(console));
-    }
+  slidesInLeft: function(vnode) {
+    const el = vnode.dom;
+    el.style.transform = 'translateX(100%)';
+    // force reflow hack
+    vnode.state.lol = el.offsetHeight;
+    Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+    .catch(console.log.bind(console));
   },
 
   slidesOutRight: function(callback, elID) {
@@ -294,8 +292,8 @@ export default {
     }
   },
 
-  autofocus: function(el, isUpdate) {
-    if (!isUpdate) el.focus();
+  autofocus: function(vnode) {
+    vnode.dom.focus();
   },
 
   renderRatingDiff(player) {

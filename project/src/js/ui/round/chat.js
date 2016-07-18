@@ -143,10 +143,8 @@ export default {
             placeholder: i18n('talkInChat'),
             autocomplete: 'off',
             value: ctrl.inputValue,
-            oncreate: function(el, isUpdate) {
-              if (!isUpdate) {
-                el.addEventListener('input', inputListener.bind(undefined, ctrl));
-              }
+            oncreate: function(vnode) {
+              vnode.dom.addEventListener('input', inputListener.bind(undefined, ctrl));
             }
           }),
           m('button.chat_send[data-icon=z]')

@@ -60,10 +60,10 @@ export function renderUserInfos(ctrl) {
     ctrl.data.user.history ? m('canvas#puzzleChart', {
       width: '240px',
       height: '150px',
-      oncreate: function(el, isUpdate, context) {
+      oncreate: function(vnode) {
         const hash = ctrl.data.user.history.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
-        if (hash === context.hash) return;
-        context.hash = hash;
+        if (hash === vnode.state.hash) return;
+        vnode.state.hash = hash;
         const ctx = document.getElementById('puzzleChart').getContext('2d');
         if (helper.isPortrait()) {
           ctx.canvas.width = ctx.canvas.parentElement.offsetWidth - 20;

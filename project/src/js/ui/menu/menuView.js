@@ -42,9 +42,11 @@ function renderHeader(user) {
         /> : null
       }
       { hasNetwork() ?
-        <div class="pingServer">
-          <div class="ping"> PING {ping ? ping : '?'} ms</div>
-          <div class="server"> SERVER {server ? server : '?'} ms</div>
+        <div class="pingServerLed">
+          <div class="pingServer">
+            <div class="ping"> PING {ping ? ping : '?'} ms</div>
+            <div class="server"> SERVER {server ? server : '?'} ms</div>
+          </div>
           <div class='ledContainer'>
             <div class='led' style={'background: ' + color}/>
           </div>

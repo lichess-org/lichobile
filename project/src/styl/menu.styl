@@ -117,18 +117,18 @@
   color #8a8a8a
   padding 15px 15px 10px
 
-.pingServer
-  display: flex
-  flex-direction: row nowrap
+.pingServerLed
+  display flex
+  flex-flow row nowrap
   justify-content center
   align-items center
-  align center
-  >.ping
-    flex: 3 33%
-  >.server
-    flex: 3 33%
+  >.pingServer
+    display flex
+    flex-flow column nowrap
+    justify-content center
+    align-items center
+    align center
   >.ledContainer
-    flex: 3 33%
     >.led
       font-size: 2em
       opacity: 0.8

@@ -55,7 +55,7 @@ function renderContent(ctrl, pieceTheme) {
   const opponentName = i18n(ctrl.data.opponent.color);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
   const board = Board(
     ctrl.data,
     ctrl.chessground,

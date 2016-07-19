@@ -233,14 +233,14 @@ export default {
   },
 
   ontouch: function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback, true);
+    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },
 
   ontouchX: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback, false);
+    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
   },
   ontouchY: function(tapHandler, holdHandler, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback, false);
+    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
   },
 
   progress: function(p) {
@@ -258,7 +258,6 @@ export default {
     }
     return arr.join(' ');
   },
-
 
   isWideScreen: function() {
     return viewportDim().vw >= 600;
@@ -281,6 +280,11 @@ export default {
     return window.matchMedia('(orientation: landscape)').matches;
   },
 
+  isLandscapeSmall: function () {
+    const { vh } = viewportDim();
+    return vh <= 450;
+  },
+
   // allow user to opt out of track analytics
   // only log if setting has it enabled
   analyticsTrackView: function(view) {
@@ -298,5 +302,14 @@ export default {
 
   autofocus: function(el, isUpdate) {
     if (!isUpdate) el.focus();
+  },
+
+  renderRatingDiff(player) {
+    if (player.ratingDiff === undefined) return null;
+    if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;
+    if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>;
+    if (player.ratingDiff < 0) return <span className="rp down"> {player.ratingDiff}</span>;
+
+    return null;
   }
 };

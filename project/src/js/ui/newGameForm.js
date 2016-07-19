@@ -22,7 +22,6 @@ export default {
   },
 
   openCorrespondence() {
-    settings.gameSetup.selected('human');
     settings.gameSetup.human.timeMode('2');
     open();
   },

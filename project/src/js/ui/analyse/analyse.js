@@ -1,11 +1,10 @@
 import treePath from './path';
 
-export default function(steps) {
+export default function(data) {
 
-  steps.forEach(function(s) {
-    s.fixed = true;
-  });
-  this.tree = steps;
+  configureSteps(data);
+
+  this.tree = data.steps;
 
   this.firstPly = function() {
     return this.tree[0].ply;
@@ -72,9 +71,9 @@ export default function(steps) {
 
   this.nextStepEvalBest = function(path) {
     if (!treePath.isRoot(path)) return null;
-    var nextPly = path[0].ply + 1;
-    var nextStep = this.tree[nextPly - this.firstPly()];
-    return (nextStep && nextStep.oEval) ? nextStep.oEval.best : null;
+    const nextPly = path[0].ply + 1;
+    const nextStep = this.tree[nextPly - this.firstPly()];
+    return (nextStep && nextStep.rEval) ? nextStep.rEval.best : null;
   }.bind(this);
 
   this.addStep = function(step, path) {
@@ -161,4 +160,25 @@ export default function(steps) {
       if (this.tree[ply].nag === nag && (ply % 2 === (color === 'white' ? 1 : 0))) return ply;
     }
   }.bind(this);
+}
+
+function configureSteps(data) {
+  const steps = data.steps;
+  const analysis = data.analysis;
+  for (var i = 0, len = steps.length; i < len; i++) {
+    const s = steps[i];
+    s.fixed = true;
+    if (analysis) {
+      const move = i - 1 >= 0 ? analysis.moves[i - 1] : null;
+      if (move) {
+        s.rEval = {
+          cp: move.eval,
+          best: move.best,
+          mate: move.mate,
+          variation: move.variation,
+          judgment: move.judgment
+        };
+      }
+    }
+  }
 }

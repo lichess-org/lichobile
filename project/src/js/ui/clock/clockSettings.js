@@ -122,7 +122,7 @@ export default {
 
     if (ctrl.isOpen()) {
       return popupWidget(
-        'new_offline_game',
+        'new_offline_game clock_settings',
         null,
         function() {
           return (

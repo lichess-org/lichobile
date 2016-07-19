@@ -124,9 +124,7 @@ export default {
                 opponent: !lichessTalking && !playerTalking,
                 'close_balloon': closeBalloon
               })
-            }, [
-              m.trust(msg.t)
-            ]);
+            }, msg.t);
           }))
         ]),
         m('form.chat_form', {

@@ -28,6 +28,7 @@ export default function(root, allow) {
   function close(fromBB) {
     if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
     enabled(false);
+    setTimeout(() => root && root.debouncedScroll(), 200);
   }
 
   var cache = {};
@@ -113,8 +114,7 @@ export default function(root, allow) {
       return cache[root.vm.step.fen];
     },
     toggle() {
-      root.vm.infosHash = '';
-      root.vm.openingHash = '';
+      root.resetHashes();
       if (enabled()) close();
       else open();
       setStep();

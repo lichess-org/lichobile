@@ -7,14 +7,14 @@ function prefixInteger(num, length) {
 const sepHigh = ':';
 const sepLow = ' ';
 
-export function formatClockTime(ctrl, time, isRunning) {
+export function formatClockTime(time, isRunning) {
   var date = new Date(time);
   var minutes = prefixInteger(date.getUTCMinutes(), 2);
   var seconds = prefixInteger(date.getUTCSeconds(), 2);
   var tenths = Math.floor(date.getUTCMilliseconds() / 100);
   let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh;
 
-  if (ctrl.data.showTenths && time < 10000) {
+  if (time < 10000) {
     return seconds + '.' + tenths;
   }
 
@@ -38,7 +38,7 @@ export function view(ctrl, color, runningColor, isBerserk) {
   });
   function cConfig(el, isUpdate) {
     if (!isUpdate) {
-      el.textContent = formatClockTime(ctrl, time * 1000, isRunning);
+      el.textContent = formatClockTime(time * 1000, isRunning);
       ctrl.els[color] = el;
     }
   }

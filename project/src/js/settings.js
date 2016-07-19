@@ -75,6 +75,7 @@ export default {
     ],
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true),
+    showComments: localstorageprop('settings.analyse.showComments', true),
     explorer: {
       db: localstorageprop('settings.analyse.explorer.db', 'lichess'),
       availableRatings: [1600, 1800, 2000, 2200, 2500],

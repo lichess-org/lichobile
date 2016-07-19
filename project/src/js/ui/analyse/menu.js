@@ -1,10 +1,11 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
+import spinner from '../../spinner';
 import gameApi from '../../lichess/game';
-import settings from '../../settings';
+import { handleXhrError } from '../../utils';
+import { requestComputerAnalysis } from './analyseXhr';
 import helper from '../helper';
-import formWidgets from '../shared/form';
 import m from 'mithril';
 
 export default {
@@ -45,11 +46,12 @@ export default {
 
 function renderAnalyseMenu(ctrl) {
 
+  const sharePGN = helper.ontouch(
+    ctrl.sharePGN,
+    () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
+  );
+
   return m('div.analyseMenu', [
-    m('button', {
-      key: 'startNewAnalysis',
-      config: helper.ontouch(ctrl.startNewAnalysis)
-    }, [m('span[data-icon=A].withIcon'), i18n('startNewAnalysis')]),
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
       config: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
@@ -58,6 +60,10 @@ function renderAnalyseMenu(ctrl) {
       key: 'boardEditor',
       config: helper.ontouch(() => m.route(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
+      key: 'sharePGN',
+      config: sharePGN
+    }, [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
     m('button', {
       key: 'importPGN',
       config: helper.ontouch(() => {
@@ -65,26 +71,26 @@ function renderAnalyseMenu(ctrl) {
         ctrl.importPgnPopup.open();
       })
     }, [m('span.fa.fa-upload'), i18n('importGame')]),
-    ctrl.ceval.allowed() ? m('div.action', {
-      key: 'enableCeval'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
-        v => {
-          ctrl.ceval.toggle();
-          if (v) ctrl.initCeval();
-          else ctrl.ceval.destroy();
-        }
-      ),
-      m('small.caution', i18n('localEvalCaution'))
-    ]) : null,
-    ctrl.ceval.allowed() && settings.analyse.enableCeval() ? m('div.action', {
-      key: 'showBestMove'
-    }, [
-      formWidgets.renderCheckbox(
-        i18n('showBestMove'), 'showBestMove', settings.analyse.showBestMove,
-        ctrl.toggleBestMove
-      )
+    ctrl.notes ? m('button', {
+      key: 'notes',
+      config: helper.ontouch(() => {
+        ctrl.menu.close();
+        ctrl.notes.open();
+      })
+    }, [m('span.fa.fa-pencil'), i18n('notes')]) : null,
+    ctrl.isRemoteAnalysable() ? m('button', {
+      key: 'requestAComputerAnalysis',
+      config: helper.ontouch(() => {
+        return requestComputerAnalysis(ctrl.data.game.id)
+        .then(() => {
+          ctrl.vm.analysisProgress = true;
+        })
+        .catch(handleXhrError);
+      })
+    }, [m('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
+    ctrl.vm.analysisProgress ? m('div.analysisProgress', [
+      m('span', 'Analysis in progress'),
+      spinner.getVdom()
     ]) : null
   ]);
 }

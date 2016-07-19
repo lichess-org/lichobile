@@ -227,13 +227,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       pos: key
     };
     if (this.data.pref.submitMove && !isPredrop) {
-      this.vm.dropToSubmit = drop;
-      m.redraw();
+      setTimeout(() => {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.dropToSubmit = drop;
+        m.redraw();
+      }, this.data.pref.animationDuration || 0);
     } else socket.send('drop', drop, {
       ackable: true,
       withLag: !!this.clock
     });
-  }.bind(this);
+  };
 
   this.cancelMove = function(fromBB) {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
@@ -249,7 +252,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
           ackable: true
         });
       } else if (this.vm.dropToSubmit) {
-        this.socket.send('drop', this.vm.dropToSubmit, {
+        socket.send('drop', this.vm.dropToSubmit, {
           ackable: true
         });
       }

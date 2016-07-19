@@ -11,6 +11,7 @@ import { hasNetwork, getOfflineGames } from '../../utils';
 import helper from '../helper';
 import friendsApi from '../../lichess/friends';
 import Zanimo from 'zanimo';
+import socket from '../../socket';
 
 export default function view() {
   if (!menu.isOpen) return null;
@@ -23,6 +24,12 @@ export default function view() {
 }
 
 function renderHeader(user) {
+  let ping = socket.userPing();
+  let server = socket.serverMoveTime();
+  let l = (ping || 0) + server - 100;
+  let ratio = Math.max(Math.min(l / 1200, 1), 0);
+  let hue = (Math.round((1 - ratio) * 120)).toString(10);
+  let color = ['hsl(', hue, ',100%,40%)'].join('');
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div className="kiddo">😊</div> : <div className="logo" /> }
@@ -33,6 +40,15 @@ function renderHeader(user) {
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
           config={helper.ontouch(menu.toggleHeader, null, null, false)}
         /> : null
+      }
+      { hasNetwork() ?
+        <div class="pingServer">
+          <div class="ping"> PING {ping ? ping : '?'} ms</div>
+          <div class="server"> SERVER {server ? server : '?'} ms</div>
+          <div class='ledContainer'>
+            <div class='led' style={'background: ' + color}/>
+          </div>
+        </div> : null
       }
       { hasNetwork() && !user ?
         <button className="login" config={helper.ontouchY(loginModal.open)}>

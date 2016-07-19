@@ -1,4 +1,5 @@
 import storage from './storage';
+import { apiVersion } from './http';
 import xor from 'lodash/xor';
 import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
@@ -19,21 +20,24 @@ let redrawOnDisconnectedTimeoutID;
 let proxyFailTimeoutID;
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
-const userPingSentTime = m.prop();
 const userPing = m.prop();
 const serverMoveTime = m.prop();
 
 const defaultHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: name => autoredraw(friendsApi.add.bind(undefined, name)),
-  following_leaves: name => autoredraw(friendsApi.remove.bind(undefined, name)),
+  following_enters: name => autoredraw(() => friendsApi.add(name)),
+  following_leaves: name => autoredraw(() => friendsApi.remove(name)),
   challenges: data => {
     challengesApi.set(data);
     m.redraw();
   },
   mlat: mlat => {
     serverMoveTime(mlat);
-    console.log('mlat: ' + mlat);
+    m.redraw();
+  },
+  pingTime: ping => {
+    userPing(ping);
+    m.redraw();
   }
 };
 
@@ -84,7 +88,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
 }
 
 function createTournament(tournamentId, version, handlers, featuredGame) {
-  let url = '/tournament/' + tournamentId + '/socket/v1';
+  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
   };
@@ -148,7 +152,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
   tellWorker(worker, 'create', {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
-    url: '/lobby/socket/v1',
+    url: `/lobby/socket/v${apiVersion}`,
     version: lobbyVersion,
     opts
   });

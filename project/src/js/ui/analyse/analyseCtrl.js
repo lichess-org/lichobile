@@ -1,59 +1,85 @@
-import analyse from './analyse';
-import treePath from './path';
-import ground from './ground';
-import promotion from '../shared/offlineRound/promotion';
-import * as util from './util';
-import sound from '../../sound';
+import m from 'mithril';
 import debounce from 'lodash/debounce';
+import session from '../../session';
+import sound from '../../sound';
+import signals from '../../signals';
 import socket from '../../socket';
-import cevalCtrl from './ceval/cevalCtrl';
-import helper from '../helper';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
-import continuePopup from '../shared/continuePopup';
-import importPgnPopup from './importPgnPopup.js';
-import { handleXhrError, oppositeColor } from '../../utils';
+import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
-import { makeData, makeDefaultData } from './data';
+import promotion from '../shared/offlineRound/promotion';
+import continuePopup from '../shared/continuePopup';
+import helper from '../helper';
 import notes from '../round/notes';
-import chessLogic from './chessLogic';
-import { renderStepsTxt } from './pgnExport';
 import { getPGN } from '../round/roundXhr';
+import importPgnPopup from './importPgnPopup.js';
+import { makeData, makeDefaultData } from './data';
+import chessLogic from './chessLogic';
+import * as util from './util';
+import { renderStepsTxt } from './pgnExport';
+import cevalCtrl from './ceval/cevalCtrl';
 import crazyValid from './crazy/crazyValid';
 import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
-import m from 'mithril';
+import evalSummary from './evalSummaryPopup';
+import analyseSettings from './analyseSettings';
+import analyse from './analyse';
+import treePath from './path';
+import ground from './ground';
+import socketHandler from './analyseSocketHandler';
 
 export default function controller() {
   this.source = m.route.param('source') || 'offline';
   const gameId = m.route.param('id');
   const orientation = m.route.param('color');
-  const fen = m.route.param('fen');
+  const fenArg = m.route.param('fen');
 
   socket.createDefault();
 
   this.data = null;
 
   this.chessLogic = chessLogic(this);
-
+  this.settings = analyseSettings.controller(this);
   this.menu = menu.controller(this);
   this.continuePopup = continuePopup.controller();
   this.importPgnPopup = importPgnPopup.controller(this);
 
   this.vm = {
-    shouldGoBack: gameId !== undefined || fen !== undefined,
+    shouldGoBack: gameId !== undefined || fenArg !== undefined,
     path: null,
     pathStr: '',
     step: null,
     cgConfig: null,
-    flip: false,
     variationMenu: null,
+    flip: false,
+    analysisProgress: false,
     showBestMove: settings.analyse.showBestMove(),
+    showComments: settings.analyse.showComments(),
     buttonsHash: '',
-    infosHash: '',
-    openingHash: ''
+    evalBoxHash: '',
+    gameInfosHash: '',
+    opponentsHash: ''
   };
+
+  this.resetHashes = function() {
+    this.vm.buttonsHash = '';
+    this.vm.evalBoxHash = '';
+    this.vm.gameInfosHash = '';
+    this.vm.opponentsHash = '';
+  }.bind(this);
+
+  const connectGameSocket = function() {
+    if (hasNetwork()) {
+      socket.createGame(
+        this.data.url.socket,
+        this.data.player.version,
+        socketHandler(this, gameId, orientation),
+        this.data.url.round
+      );
+    }
+  }.bind(this);
 
   this.flip = function() {
     this.vm.flip = !this.vm.flip;
@@ -88,17 +114,15 @@ export default function controller() {
   const debouncedDests = debounce(getDests.bind(this), 100);
 
   const showGround = function() {
-    var s;
-    try {
-      s = this.analyse.getStep(this.vm.path);
-    } catch (e) {
-      console.log(e);
-    }
+    let s = this.analyse.getStep(this.vm.path);
+    // might happen to have no step, for exemple with a bad step number in location
+    // hash
     if (!s) {
       this.vm.path = treePath.default(this.analyse.firstPly());
       this.vm.pathStr = treePath.write(this.vm.path);
       s = this.analyse.getStep(this.vm.path);
     }
+
     const color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {
@@ -112,8 +136,14 @@ export default function controller() {
       check: s.check,
       lastMove: uciToLastMove(s.uci)
     };
+
+    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
+      s.checkCount = util.readCheckCount(s.fen);
+    }
+
     this.vm.step = s;
     this.vm.cgConfig = config;
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
     }
@@ -121,7 +151,7 @@ export default function controller() {
     if (!dests) debouncedDests();
   }.bind(this);
 
-  const debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
+  this.debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   const updateHref = debounce(() => {
     window.history.replaceState(null, null, '#' + this.vm.step.ply);
@@ -140,7 +170,7 @@ export default function controller() {
     this.explorer.setStep();
     updateHref();
     debouncedStartCeval();
-    debouncedScroll();
+    this.debouncedScroll();
     promotion.cancel(this, this.vm.cgConfig);
   }.bind(this);
 
@@ -290,20 +320,21 @@ export default function controller() {
   }.bind(this);
 
   this.currentAnyEval = function() {
-    return this.vm.step ? (this.vm.step.oEval || this.vm.step.ceval) : null;
+    return this.vm.step ? (this.vm.step.rEval || this.vm.step.ceval) : null;
   }.bind(this);
 
   const allowCeval = function() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck']
-    .indexOf(this.data.game.variant.key) !== -1;
+    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
   }.bind(this);
 
   function onCevalMsg(res) {
     this.analyse.updateAtPath(res.work.path, step => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
+      // even if we don't need the san move this ensure correct arrows are
+      // displayed
       this.chessLogic.getSanMoveFromUci({
         fen: step.fen,
         orig: res.ceval.best.slice(0, 2),
@@ -314,13 +345,16 @@ export default function controller() {
           m.redraw();
         }
       })
-      .catch(console.error.bind(console));
+      // we just ignore errors here
+      // TODO should try to find a way to stop ceval msg after the position
+      // has been changed
+      .catch(noop);
     });
   }
 
   this.canUseCeval = function() {
-    return this.vm.step.dests !== '' && (!this.vm.step.oEval ||
-      !this.analyse.nextStepEvalBest(this.vm.path));
+    return this.vm.step.dests !== '' && (!this.vm.step.rEval ||
+      !this.nextStepBest());
   }.bind(this);
 
   this.nextStepBest = function() {
@@ -333,6 +367,10 @@ export default function controller() {
 
   this.toggleBestMove = function() {
     this.vm.showBestMove = !this.vm.showBestMove;
+  }.bind(this);
+
+  this.toggleComments = function() {
+    this.vm.showComments = !this.vm.showComments;
   }.bind(this);
 
   this.sharePGN = function() {
@@ -361,18 +399,17 @@ export default function controller() {
     }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
-    this.analyse = new analyse(this.data.steps);
+    this.analyse = new analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
+    this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
     this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     let initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
-      treePath.default(this.analyse.firstPly());
-
-    if (initialPath[0].ply >= this.data.steps.length) {
-      initialPath = treePath.default(this.data.steps.length - 1);
-    }
+        this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+          treePath.default(this.analyse.lastPly()) :
+          treePath.default(this.analyse.firstPly());
 
     this.vm.path = initialPath;
     this.vm.pathStr = treePath.write(initialPath);
@@ -382,21 +419,26 @@ export default function controller() {
     this.explorer.setStep();
   }.bind(this);
 
-  this.startNewAnalysis = function() {
-    if (m.route() === '/analyse') {
-      m.route('/analyse', null, true);
-    } else {
-      m.route('/analyse');
-    }
-  };
+  this.isRemoteAnalysable = function() {
+    return !this.data.analysis && !this.vm.analysisProgress &&
+      session.isConnected() && gameApi.analysable(this.data);
+  }.bind(this);
 
   if (this.source === 'online' && gameId) {
-    gameXhr(gameId, orientation, false).then(function(cfg) {
+    gameXhr(gameId, orientation, false).then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
+      // we must connect round socket in case the user wants to request a
+      // computer analysis
+      if (this.isRemoteAnalysable()) {
+        connectGameSocket();
+        // reconnect game socket after a cancelled seek
+        signals.seekCanceled.add(connectGameSocket);
+      }
       m.redraw();
-    }.bind(this), err => {
+      setTimeout(this.debouncedScroll, 250);
+    }, err => {
       handleXhrError(err);
       m.route('/');
     });
@@ -423,7 +465,7 @@ export default function controller() {
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    this.init(makeDefaultData(fen, orientation));
+    this.init(makeDefaultData(fenArg, orientation));
   }
 
   window.plugins.insomnia.keepAwake();
@@ -436,6 +478,7 @@ export default function controller() {
     if (this.ceval) this.ceval.destroy();
     if (this.chessLogic) this.chessLogic.onunload();
     window.plugins.insomnia.allowSleepAgain();
+    signals.seekCanceled.remove(connectGameSocket);
   }.bind(this);
 }
 

@@ -37,8 +37,8 @@ export default function ctrl(data, outOfTime, soundColor) {
     this.data.white = white;
     this.data.black = black;
     setLastUpdate();
-    if (this.els.white) this.els.white.textContent = formatClockTime(this, this.data.white * 1000);
-    if (this.els.black) this.els.black.textContent = formatClockTime(this, this.data.black * 1000);
+    if (this.els.white) this.els.white.textContent = formatClockTime(this.data.white * 1000);
+    if (this.els.black) this.els.black.textContent = formatClockTime(this.data.black * 1000);
   };
 
   this.tick = function(color) {
@@ -46,7 +46,7 @@ export default function ctrl(data, outOfTime, soundColor) {
     const time = this.data[color] * 1000;
     const el = this.els[color];
 
-    if (el) el.textContent = formatClockTime(this, time, true);
+    if (el) el.textContent = formatClockTime(time, true);
 
     if (this.data[color] < this.data.emerg && !this.emerg[color]) {
       this.emerg[color] = true;

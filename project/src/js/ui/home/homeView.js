@@ -21,8 +21,8 @@ export default function homeView(ctrl) {
         <div className="page homeOffline">
           <section id="homeCreate">
             <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" config={helper.ontouch(() => m.route('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" config={helper.ontouch(() => m.route('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+            <button className="fatButton" config={helper.ontouchY(() => m.route('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" config={helper.ontouchY(() => m.route('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
           </section>
         </div>
       );
@@ -99,7 +99,7 @@ function renderTimeline(ctrl) {
         })}
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouch(() => m.route('/timeline'))}>
+        <button config={helper.ontouchY(() => m.route('/timeline'))}>
           {i18n('more')}
         </button>
       </div>
@@ -119,7 +119,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouch(() => m.route('/players'))}>
+        <button config={helper.ontouchY(() => m.route('/players'))}>
           {i18n('more')}
         </button>
       </div>

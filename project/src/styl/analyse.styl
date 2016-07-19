@@ -1,7 +1,6 @@
-.analyseTableWrapper
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
-    height calc(100vh - 50px - 12vh)
-    margin auto 0
+.analyseSettings
+  label[for='showComments']
+    text-transform capitalize
 
 .analyseTable, .explorerTable
   width 100%
@@ -12,6 +11,8 @@
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
+    @media only screen and (max-height 450px) and (orientation landscape)
+      height "calc(100vh - 45px - %s)" % footerHeight
     @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
       height "calc(100vh - 50px - 12vh - %s)" % footerHeight
 
@@ -36,14 +37,14 @@
     width 40%
     background lighten(bgdark, 5%)
     > .cevalBox + .native_scroller
-      height calc(100% - 34px)
+      height calc(100% - 28px)
     > .native_scroller
       height 100%
 
 .cevalBox
   position relative
   width 100%
-  height 34px
+  height 28px
   display flex
   flex-flow row wrap
   justify-content space-around
@@ -60,17 +61,31 @@
   > .cevalBar
     position absolute
     width 100%
-    height 4px
+    height 3px
     top 0
     left 0
     span
       display block
       background green
       transition width linear 1s
-      height 4px
+      height 3px
   > pearl
-    font-size 1.5em
+    font-size 20px
     font-weight bold
+  > .openSummary
+    position absolute
+    right 0
+    top 0
+    height 100%
+    width 28px
+    font-size 0.9em
+    margin-right 0
+    opacity 0.7
+    display flex
+    align-items center
+    justify-content center
+    > span
+      margin 0
   > .bestMove
     font-size 0.7em
     line-height 1.2
@@ -78,9 +93,6 @@
 .analyseOpponentsWrapper, .analyseOpening, .analyseGameInfos
   padding 5px
   font-size 0.7em
-
-.analyseInfos
-  text-align center
 
 .analyseGameInfosWrapper
   display flex
@@ -95,11 +107,16 @@
     position absolute
     left 2px
     top 10px
+  > .variant
+    text-decoration underline
 
 .analyseOpponentsWrapper
   display flex
   flex-flow column wrap
   justify-content flex-start
+  > .status
+    margin-top 5px
+    opacity 0.8
 
 .analyseOpponent
   text-align left
@@ -118,11 +135,20 @@
         line-height: 10px;
         padding: 1px 2px 2px 2px;
   @media only screen and (orientation: landscape)
+    + .analyseOpponent
+      margin-top 10px
     > .pocket
       height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+      max-width initial
       > piece
         width calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
         height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+  @media only screen and (orientation: landscape) and (max-height 450px)
+    > .pocket
+      height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
+      > piece
+        width calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
+        height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
   @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
     > .pocket
       height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
@@ -130,20 +156,25 @@
         width calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
         height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
 
+.analyseClock
+  font-family Cousine
+  font-size 0.9em
+  > span
+    margin-left 5px
+
 .analysePlayerName.crazy
   white-space nowrap
   overflow hidden
   text-overflow ellipsis
 
 .analyseOpening
-  height 34px
-  line-height 25px
+  height 25px
   background lighten(bgdark, 5%)
   overflow hidden
   text-overflow ellipsis
   white-space nowrap
   + .analyseReplay
-    height calc(100% - 34px)
+    height calc(100% - 25px)
 
 .analyseReplay
   height 100%
@@ -188,6 +219,9 @@
     &.active
       background lighten(bgdark, 10%)
 
+  glyph
+    margin-left 2px
+
   eval
     position absolute
     top 3px
@@ -204,6 +238,24 @@
     align-content flex-start
     font-size 0.8em
     background lighten(bgdark, 5%)
+    > .comment
+      font-size 0.9em
+      width 100%
+      display flex
+      padding: 0 5px
+      align-items center
+      word-wrap: break-word;
+      &.white
+        border-left 2px solid #ccc
+      &.black
+        border-right 2px solid #ccc
+        justify-content flex-end
+      &.Inaccuracy
+        border-color: #56B4E9;
+      &.Mistake
+        border-color: #E69F00;
+      &.Blunder
+        border-color: #DF5353;
     > .variationWrapper
       width 100%
       display flex
@@ -229,6 +281,7 @@
           top 5px
 
   .result, .status
+    font-size 0.8em
     width 100%
 
   .result
@@ -237,7 +290,6 @@
     font-weight bold
 
   .status
-    font-size 0.9em
     font-style italic
     text-align center
 
@@ -283,7 +335,7 @@
       width initial
       height initial
       font-size 25px
-  tbody
+  tbody, > .message
     transition: opacity 0.13s;
   th
     text-transform: capitalize;
@@ -359,7 +411,7 @@
   &.loading
     .spinner_overlay
       visibility visible
-    tbody
+    tbody, .message
       opacity: 0.4;
 
 
@@ -472,3 +524,26 @@
     margin-left: 5px;
     border-radius: 3px;
     font-size: 0.9em;
+
+.evalSummary
+  display flex
+  flex-flow row wrap
+  justify-content center
+  padding 10px
+  > table
+    width 100%
+    &:first-child
+      margin-bottom 10px
+    > tbody
+      font-size 0.9em
+  th
+    width 20%
+    padding: 2px 8px;
+    text-align: center;
+    > span:before
+      margin 0
+
+.analysisProgress
+  background-color selectBg
+  text-align center
+  padding 10px

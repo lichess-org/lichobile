@@ -43,17 +43,14 @@ export default {
   },
   submitMove: function(ctrl) {
     return (
-      <div>
-        <button className="binary_choice" data-icon="E"
+      <div className="negotiationIcons">
+        <p>{i18n('moveConfirmation')}</p>
+        <button className="accept" data-icon="E"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, true))}
-        >
-          {i18n('submitMove')}
-        </button>
-        <button className="binary_choice" data-icon="L"
+        />
+        <button className="decline" data-icon="L"
           config={helper.ontouch(ctrl.submitMove.bind(undefined, false))}
-        >
-          {i18n('cancel')}
-        </button>
+        />
       </div>
     );
   },

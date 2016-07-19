@@ -70,6 +70,7 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
     margin-top 10px
 
 .table.editorTable
+  padding 0 10px
   height "calc(100vh - %s * 2)" % pitHeight
   @media only screen and (orientation: landscape) and (min-height 700px)
     height "calc(100vh - %s * 2)" % pitHeightBigScreen
@@ -83,6 +84,9 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
       margin-top 10px
     > .editorMenuInner
       width 100%
+    @media only screen and (orientation: landscape) and (max-height 450px)
+      > .editorMenuInner
+        width 70%
     @media only screen and (orientation: landscape) and (min-height 700px)
       > .editorMenuInner
         width 80%

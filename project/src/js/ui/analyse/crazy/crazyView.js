@@ -19,7 +19,7 @@ export default {
         const onstart = crazyDrag.bind(undefined, ctrl);
         const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
         const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
-        const contentNode = document.getElementById('content_round');
+        const contentNode = document.getElementById('analyseInfos');
         el.addEventListener('touchstart', onstart);
         if (contentNode) {
           contentNode.addEventListener('touchmove', onmove);

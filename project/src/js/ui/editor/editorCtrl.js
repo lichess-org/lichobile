@@ -93,7 +93,6 @@ export default function oninit(vnode) {
   this.continuePopup = continuePopup.oninit();
 
   this.loadNewFen = function(newFen) {
-    // m.redraw.strategy('diff');
     m.route.set(`/editor/${encodeURIComponent(newFen)}`);
   };
 

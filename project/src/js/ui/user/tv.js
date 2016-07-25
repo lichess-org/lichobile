@@ -15,14 +15,7 @@ export default {
     helper.analyticsTrackView('User TV');
 
     function onRedirect() {
-      tv(userId)
-      .run(data => {
-        // m.redraw.strategy('all');
-        data.userTV = userId;
-        if (ctrl.round) ctrl.round.onunload();
-        ctrl.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
-      })
-      .catch(utils.handleXhrError);
+      m.route.set(`/@/${userId}/tv`, null, { replace: true });
     }
 
     tv(userId)

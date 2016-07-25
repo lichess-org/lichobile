@@ -18,15 +18,8 @@ export default {
       m.route.set('/tv');
     }
 
-    function onFeatured(o) {
-      xhr.game(o.id, o.color)
-      .run(data => {
-        // m.redraw.strategy('all');
-        if (ctrl.round) ctrl.round.onunload();
-        data.tv = settings.tv.channel();
-        ctrl.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
-      })
-      .catch(handleXhrError);
+    function onFeatured() {
+      m.route.set('/tv', null, { replace: true });
     }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)

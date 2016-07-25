@@ -27,9 +27,7 @@ import crazyView from '../crazy/crazyView';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
-export default function view() {
-  const ctrl = this;
-
+export default function view(ctrl) {
   const isPortrait = helper.isPortrait();
 
   return layout.board(

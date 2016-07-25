@@ -43,14 +43,15 @@ export default function oninit(vnode) {
   }
 
   function reload(feedback) {
-    xhr.seeks(feedback).run(function(d) {
+    xhr.seeks(feedback)
+    .run(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
       m.redraw();
     });
   }
   reload(true);
 
-  return {
+  vnode.state = {
     selectedTab,
     sendingChallenges,
     cancelChallenge,

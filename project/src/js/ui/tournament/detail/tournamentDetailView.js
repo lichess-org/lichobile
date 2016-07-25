@@ -12,6 +12,7 @@ import miniBoard from '../../shared/miniBoard';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
+
   const headerCtrl = headerWidget.bind(undefined, null,
     backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );

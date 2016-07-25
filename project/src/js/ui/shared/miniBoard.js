@@ -4,9 +4,9 @@ import gameApi from '../../lichess/game';
 import m from 'mithril';
 
 export default {
-  view(_, args) {
+  view(vnode) {
 
-    const { bounds, fen, lastMove, orientation, link, gameObj } = args;
+    const { bounds, fen, lastMove, orientation, link, gameObj } = vnode.attrs;
 
     return (
       <div className="mini_board" oncreate={helper.ontouchY(link)}>

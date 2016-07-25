@@ -23,6 +23,8 @@ import { isForeground, setForeground, setBackground } from './utils/appMode';
 
 function main() {
 
+  m.route.prefix('?');
+
   routes.init();
   deepLinks.init();
 

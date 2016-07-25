@@ -1,13 +1,13 @@
 import helper from '../helper';
 
 export default {
-  view(_, args) {
+  view(vnode) {
 
     const {
       buttons,
       selectedTab,
       onTabChange
-    } = args;
+    } = vnode.attrs;
 
     const iWidth = 100 / buttons.length;
     const index = buttons.findIndex(e => e.key === selectedTab);

@@ -9,7 +9,8 @@ import newGameForm from '../newGameForm';
 import tabs from '../shared/tabs';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const header = utils.partialf(headerWidget, i18n('correspondence'));
 
   return layout.free(header, renderBody.bind(undefined, ctrl), renderFooter);

@@ -18,7 +18,7 @@ export default function oninit(vnode) {
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
-          m.route.set(`/game/${d.challenge.id}`, null, true);
+          m.route.set(`/game/${d.challenge.id}`, null, { replace: true});
           break;
         case 'declined':
           window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
@@ -54,7 +54,7 @@ export default function oninit(vnode) {
     joinChallenge() {
       return acceptChallenge(challenge().id)
       .run(() => challengesApi.remove(challenge().id))
-      .run(d => m.route.set('/game' + d.url.round, null, true));
+      .run(d => m.route.set('/game' + d.url.round, null, { replace: true }));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)

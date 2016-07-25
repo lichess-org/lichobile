@@ -81,7 +81,7 @@ export default function oninit(vnode) {
     reload: () => throttledReload (id),
     resync: () => throttledReload (id),
     redirect: function(gameId) {
-      m.route.set('/tournament/' + tournament().id + '/game/' + gameId, null, true);
+      m.route.set('/tournament/' + tournament().id + '/game/' + gameId, null, {replace: true});
     },
     fen: function(d) {
       const featured = tournament().featured;

@@ -33,7 +33,7 @@ export function renderPlayer(ctrl, obj) {
   const status = obj.online ? 'online' : 'offline';
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
   const perf = obj.perfs && obj.perfs[perfKey];
-  const userLink = helper.ontouchY(() => m.route(`/@/${obj.user}`));
+  const userLink = helper.ontouchY(() => m.route.set(`/@/${obj.user}`));
   return (
     <li className="list_item followingList">
       <div className="followingPlayerTitle" oncreate={userLink}>

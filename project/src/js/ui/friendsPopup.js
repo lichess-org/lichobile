@@ -50,7 +50,7 @@ function renderFriend(name) {
   let userId = utils.userFullNameToId(name);
   let action = () => {
     friendsPopup.close();
-    m.route('/@/' + userId);
+    m.route.set('/@/' + userId);
   };
 
   return (

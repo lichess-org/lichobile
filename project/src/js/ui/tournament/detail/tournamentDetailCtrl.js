@@ -65,7 +65,7 @@ export default function controller() {
     .catch(utils.handleXhrError);
   }
 
-  const id = m.route.param('id');
+  const id = vnode.attrs.id;
 
   const throttledReload = throttle((t, p) => {
     if (p) {
@@ -81,7 +81,7 @@ export default function controller() {
     reload: () => throttledReload (id),
     resync: () => throttledReload (id),
     redirect: function(gameId) {
-      m.route('/tournament/' + tournament().id + '/game/' + gameId, null, true);
+      m.route.set('/tournament/' + tournament().id + '/game/' + gameId, null, true);
     },
     fen: function(d) {
       const featured = tournament().featured;

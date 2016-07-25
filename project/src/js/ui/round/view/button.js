@@ -161,7 +161,7 @@ export default {
       return m('button', {
         oncreate: helper.ontouch(() => {
           socket.send('rematch-no');
-          m.route(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
+          m.route.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
       }, [m('span[data-icon=A].withIcon'), i18n('analysis')]);
     }
@@ -305,9 +305,9 @@ export default {
       ctrl.hideActions();
       const url = `/tournament/${ctrl.data.game.tournamentId}`;
       if (ctrl.data.tv) {
-        m.route(url);
+        m.route.set(url);
       } else {
-        m.route(url, null, true);
+        m.route.set(url, null, true);
       }
     }
     return (
@@ -321,7 +321,7 @@ export default {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      m.route('/tournament/' + ctrl.data.game.tournamentId, null, true);
+      m.route.set('/tournament/' + ctrl.data.game.tournamentId, null, true);
     }
     return (
       <button key="withdrawFromTournament" oncreate={helper.ontouch(handler)}>

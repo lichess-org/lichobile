@@ -9,13 +9,13 @@ import roundView from './round/view/roundView';
 import m from 'mithril';
 
 export default {
-  controller: function() {
+  controller: function(vnode) {
     var round;
 
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
-      m.route('/tv');
+      m.route.set('/tv');
     }
 
     function onFeatured(o) {
@@ -29,14 +29,14 @@ export default {
       .catch(utils.handleXhrError);
     }
 
-    xhr.featured(settings.tv.channel(), m.route.param('flip'))
+    xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .run(function(data) {
       data.tv = settings.tv.channel();
       round = new roundCtrl(data, onFeatured, onChannelChange);
     })
     .catch(error => {
       utils.handleXhrError(error);
-      m.route('/');
+      m.route.set('/');
     });
 
     return {

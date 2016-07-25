@@ -125,7 +125,7 @@ function renderActionsBar(ctrl) {
       key: 'analyse',
       oncreate: helper.ontouch(() => {
         const fen = encodeURIComponent(ctrl.computeFen());
-        m.route(`/analyse/fen/${fen}`);
+        m.route.set(`/analyse/fen/${fen}`);
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     m('button.action_bar_button.fa.fa-share-alt', {

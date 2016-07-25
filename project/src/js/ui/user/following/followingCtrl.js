@@ -9,13 +9,13 @@ import m from 'mithril';
 
 var scroller;
 
-export default function controller() {
+export default function controller(vnode) {
 
   helper.analyticsTrackView('User following');
 
   socket.createDefault();
 
-  const userId = m.route.param('id');
+  const userId = vnode.attrs.id;
   const following = m.prop([]);
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
@@ -64,7 +64,7 @@ export default function controller() {
   }, 50))
   .catch(err => {
     handleXhrError(err);
-    m.route('/');
+    m.route.set('/');
   });
 
   function setNewUserState(obj, newData) {

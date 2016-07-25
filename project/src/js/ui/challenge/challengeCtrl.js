@@ -8,7 +8,7 @@ import m from 'mithril';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 
-export default function controller() {
+export default function controller(vnode) {
   var pingTimeoutId;
   const challenge = m.prop();
 
@@ -18,7 +18,7 @@ export default function controller() {
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
-          m.route(`/game/${d.challenge.id}`, null, true);
+          m.route.set(`/game/${d.challenge.id}`, null, true);
           break;
         case 'declined':
           window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
@@ -28,7 +28,7 @@ export default function controller() {
     }, err => {
       clearTimeout(pingTimeoutId);
       handleXhrError(err);
-      m.route('/');
+      m.route.set('/');
     });
   }
 
@@ -37,14 +37,14 @@ export default function controller() {
     pingTimeoutId = setTimeout(pingNow, 2000);
   }
 
-  getChallenge(m.route.param('id')).run(d => {
+  getChallenge(vnode.attrs.id).run(d => {
     challenge(d.challenge);
     socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
     });
   }, err => {
     handleXhrError(err);
-    m.route('/');
+    m.route.set('/');
   })
   .catch(console.error.bind(console));
 
@@ -58,7 +58,7 @@ export default function controller() {
     joinChallenge() {
       return acceptChallenge(challenge().id)
       .run(() => challengesApi.remove(challenge().id))
-      .run(d => m.route('/game' + d.url.round, null, true));
+      .run(d => m.route.set('/game' + d.url.round, null, true));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)

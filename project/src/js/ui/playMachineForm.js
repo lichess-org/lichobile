@@ -59,7 +59,7 @@ function startAIGame() {
   return xhr.newAiGame(fromPositionFen)
   .run(function(data) {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
-    m.route('/game' + data.url.round);
+    m.route.set('/game' + data.url.round);
   })
   .catch(function(error) {
     utils.handleXhrError(error);
@@ -99,7 +99,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
         m('div.setupMiniBoardWrapper', {
           oncreate: helper.ontouch(() => {
             close();
-            m.route(`/editor/${encodeURIComponent(fromPositionFen)}`);
+            m.route.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
           m(ViewOnlyBoard, { fen: fromPositionFen })
@@ -107,7 +107,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {
           close();
-          m.route('/editor');
+          m.route.set('/editor');
         })
       }, i18n('boardEditor')))
     ));

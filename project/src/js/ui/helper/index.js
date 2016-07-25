@@ -16,11 +16,11 @@ let cachedViewportDim = null;
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
 function viewSlideIn(el, callback) {
-  if (m.route() === lastRoute) {
+  if (m.route.get() === lastRoute) {
     callback();
     return;
   }
-  lastRoute = m.route();
+  lastRoute = m.route.get();
 
   function after() {
     utils.setViewSlideDirection('fwd');
@@ -40,7 +40,7 @@ function viewSlideIn(el, callback) {
 }
 
 function viewSlideOut(el, callback) {
-  if (m.route() === lastRoute) {
+  if (m.route.get() === lastRoute) {
     callback();
     return;
   }
@@ -161,8 +161,8 @@ function viewportDim() {
 
 export default {
   findParentBySelector,
-  slidingPage: animator(viewSlideIn, viewSlideOut),
-  fadingPage: animator(viewFadesIn, viewFadesOut),
+  slidingPage: c => c,
+  fadingPage: c => c,
 
   viewportDim,
 

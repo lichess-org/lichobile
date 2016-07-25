@@ -58,10 +58,10 @@ function challenge() {
           storage.set('donotshowpersistentchallengeexplanation', true);
         });
       }
-      m.route('/correspondence', { tab: 'challenges' });
+      m.route.set('/correspondence', { tab: 'challenges' });
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      m.route(`/challenge/${data.challenge.id}`);
+      m.route.set(`/challenge/${data.challenge.id}`);
     }
   }, error => {
     utils.handleXhrError(error);
@@ -120,7 +120,7 @@ function renderForm() {
       m('div.setupMiniBoardWrapper', {
         oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route(`/editor/${encodeURIComponent(challengeForm.fen)}`);
+          m.route.set(`/editor/${encodeURIComponent(challengeForm.fen)}`);
         })
       }, [
         m(ViewOnlyBoard, { fen: challengeForm.fen })
@@ -128,7 +128,7 @@ function renderForm() {
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route('/editor');
+          m.route.set('/editor');
         })
       }, i18n('boardEditor')))
     ) : null,

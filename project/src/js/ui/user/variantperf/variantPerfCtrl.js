@@ -4,8 +4,8 @@ import * as utils from '../../../utils';
 import m from 'mithril';
 
 export default function controller() {
-  const userId = m.route.param('id');
-  const variant = m.route.param('variant');
+  const userId = vnode.attrs.id;
+  const variant = vnode.attrs.variant;
   const user = m.prop();
   const variantPerfData = m.prop();
 
@@ -18,7 +18,7 @@ export default function controller() {
   })
   .catch(error => {
     utils.handleXhrError(error);
-    m.route('/');
+    m.route.set('/');
     throw error;
   });
 
@@ -29,7 +29,7 @@ export default function controller() {
   })
   .catch(error => {
     utils.handleXhrError(error);
-    m.route('/');
+    m.route.set('/');
     throw error;
   });
 

@@ -120,11 +120,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.flip = function() {
     if (this.data.tv) {
-      if (m.route.param('flip')) m.route('/tv', null, true);
-      else m.route('/tv?flip=1', null, true);
+      if (vnode.attrs.flip) m.route.set('/tv', null, true);
+      else m.route.set('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
-      m.route('/game/' + this.data.game.id + '/' +
+      m.route.set('/game/' + this.data.game.id + '/' +
         utils.oppositeColor(this.data.player.color), null, true);
       return;
     }
@@ -427,7 +427,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(m.route.param('id'), this.data);
+      saveOfflineGameData(vnode.attrs.id, this.data);
     }
 
   }.bind(this);

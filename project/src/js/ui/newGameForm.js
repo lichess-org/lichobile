@@ -70,7 +70,7 @@ function seekHumanGame() {
     xhr.seekGame()
     .run(utils.noop)
     .catch(utils.handleXhrError);
-    m.route('/correspondence');
+    m.route.set('/correspondence');
   }
 }
 

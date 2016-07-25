@@ -8,10 +8,10 @@ import roundView from '../round/view/roundView';
 import m from 'mithril';
 
 export default {
-  controller: function() {
+  oninit: function(vnode) {
     var round;
 
-    const userId = m.route.param('id');
+    const userId = vnode.attrs.id;
 
     helper.analyticsTrackView('User TV');
 
@@ -33,10 +33,10 @@ export default {
     })
     .catch(function(error) {
       utils.handleXhrError(error);
-      m.route('/');
+      m.route.set('/');
     });
 
-    return {
+    vnode.state = {
       getRound: function() { return round; },
 
       onunload: function() {
@@ -48,10 +48,11 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(vnode) {
+    const ctrl = vnode.state;
     if (ctrl.getRound()) return roundView(ctrl.getRound());
 
-    const header = connectingHeader.bind(undefined, m.route.param('id') + ' TV');
+    const header = connectingHeader.bind(undefined, vnode.attrs.id + ' TV');
 
     return layout.board(header, viewOnlyBoardContent);
   }

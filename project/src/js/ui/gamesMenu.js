@@ -36,14 +36,14 @@ gamesMenu.lastJoined = null;
 function joinGame(g) {
   gamesMenu.lastJoined = g;
   gamesMenu.close();
-  m.route('/game/' + g.fullId);
+  m.route.set('/game/' + g.fullId);
 }
 
 function acceptChallenge(id) {
   return xhr.acceptChallenge(id)
   .run(data => {
     helper.analyticsTrackEvent('Challenge', 'Accepted');
-    m.route('/game' + data.url.round);
+    m.route.set('/game' + data.url.round);
   })
   .run(() => challengesApi.remove(id))
   .run(gamesMenu.close);

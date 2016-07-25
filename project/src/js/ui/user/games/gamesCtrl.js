@@ -17,11 +17,11 @@ const filters = {
   me: 'nbGamesWithYou'
 };
 
-export default function controller() {
-  const userId = m.route.param('id');
+export default function controller(vnode) {
+  const userId = vnode.attrs.id;
   const user = m.prop();
   const availableFilters = m.prop([]);
-  const currentFilter = m.prop(m.route.param('filter') || 'all');
+  const currentFilter = m.prop(vnode.attrs.filter || 'all');
   const games = m.prop([]);
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
@@ -44,7 +44,7 @@ export default function controller() {
   })
   .catch(error => {
     utils.handleXhrError(error);
-    m.route('/');
+    m.route.set('/');
     throw error;
   });
 
@@ -87,7 +87,7 @@ export default function controller() {
     })
     .catch(err => {
       utils.handleXhrError(err);
-      m.route('/');
+      m.route.set('/');
     });
   }
 

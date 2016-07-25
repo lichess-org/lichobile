@@ -27,7 +27,7 @@ export default {
     })
     .catch(err => {
       utils.handleXhrError(err);
-      m.route('/');
+      m.route.set('/');
     });
 
     return {
@@ -80,7 +80,7 @@ function renderRankingCategory(ctrl, key) {
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer" oncreate={h.ontouchY(() => m.route('/@/' + user.id))}>
+    <li className="rankingPlayer" oncreate={h.ontouchY(() => m.route.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

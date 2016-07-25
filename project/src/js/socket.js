@@ -53,7 +53,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-            m.route('/');
+            m.route.set('/');
           }
         });
       }
@@ -189,7 +189,7 @@ function redirectToGame(obj) {
         ].join('');
         document.cookie = cookie;
     }
-    m.route('/game' + url);
+    m.route.set('/game' + url);
   }
 }
 

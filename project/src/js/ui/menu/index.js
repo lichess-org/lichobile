@@ -10,7 +10,7 @@ menu.headerOpen = m.prop(false);
 
 menu.route = function(route) {
   return function() {
-    return menu.close().then(m.route.bind(undefined, route));
+    return menu.close().then(m.route.set.bind(undefined, route));
   };
 };
 

@@ -11,7 +11,7 @@ export default function controller() {
   socket.createDefault();
 
   const tournaments = m.prop();
-  const currentTab = m.prop(m.route.param('tab') || 'started');
+  const currentTab = m.prop(vnode.attrs.tab || 'started');
 
   xhr.currentTournaments()
   .run(data => {

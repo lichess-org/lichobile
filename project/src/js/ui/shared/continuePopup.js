@@ -65,7 +65,7 @@ export default {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(aiStorageFenKey, ctrl.fen());
-                m.route('/ai');
+                m.route.set('/ai');
               }
             })
           }, i18n('playOfflineComputer')),
@@ -76,7 +76,7 @@ export default {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(otbStorageFenKey, ctrl.fen());
-                m.route('/otb');
+                m.route.set('/otb');
               }
             })
           }, i18n('playOnTheBoardOffline'))

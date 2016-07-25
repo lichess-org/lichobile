@@ -39,7 +39,7 @@ export default function controller() {
 
   function goHome() {
     if (!clockObj().isRunning()) {
-      m.route('/');
+      m.route.set('/');
     }
   }
 

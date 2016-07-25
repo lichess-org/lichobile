@@ -12,18 +12,18 @@ import vibrate from '../../vibrate';
 import i18n from '../../i18n';
 import m from 'mithril';
 
-export default function controller() {
+export default function controller(vnode) {
   var gameData;
   var round;
 
   if (hasNetwork()) {
-    gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined)
+    gameXhr(vnode.attrs.id, vnode.attrs.color, !!gamesMenu.lastJoined)
     .run(function(data) {
       gameData = data;
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
         window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
-        m.route('/');
+        m.route.set('/');
       }
       else {
 
@@ -60,28 +60,28 @@ export default function controller() {
         if (gameData.game.speed === 'correspondence') {
           session.refresh();
           if (!gameApi.playable(gameData)) {
-            removeOfflineGameData(m.route.param('id'));
+            removeOfflineGameData(vnode.attrs.id);
           } else {
-            saveOfflineGameData(m.route.param('id'), gameData);
+            saveOfflineGameData(vnode.attrs.id, gameData);
           }
         }
 
       }
     }, function(error) {
       handleXhrError(error);
-      m.route('/');
+      m.route.set('/');
     });
   } else {
-    const savedData = getOfflineGameData(m.route.param('id'));
+    const savedData = getOfflineGameData(vnode.attrs.id);
     if (savedData) {
       gameData = savedData;
       if (!gameApi.playable(gameData)) {
-        removeOfflineGameData(m.route.param('id'));
+        removeOfflineGameData(vnode.attrs.id);
       }
       round = new roundCtrl(gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
-      m.route('/');
+      m.route.set('/');
     }
   }
 

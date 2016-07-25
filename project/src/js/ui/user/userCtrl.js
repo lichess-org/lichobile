@@ -25,7 +25,7 @@ export default function controller(vnode) {
   .run(session.refresh)
   .catch(error => {
     utils.handleXhrError(error);
-    m.route('/');
+    m.route.set('/');
   });
 
   vnode.state = {
@@ -39,8 +39,8 @@ export default function controller(vnode) {
       if (user().blocking) xhr.unblock(user().id).run(setNewUserState);
       else xhr.block(user().id).run(setNewUserState);
     },
-    goToGames: () => m.route(`/@/${user().id}/games`),
-    goToUserTV: () => m.route(`/@/${user().id}/tv`),
+    goToGames: () => m.route.set(`/@/${user().id}/games`),
+    goToUserTV: () => m.route.set(`/@/${user().id}/tv`),
     challenge: () => challengeForm.open(user().id)
   };
 }

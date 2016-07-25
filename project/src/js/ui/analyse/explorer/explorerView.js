@@ -65,7 +65,7 @@ function showGameTable(ctrl, type, games) {
   function link(game) {
     const orientation = ctrl.chessground.data.orientation;
     if (ctrl.explorer.config.data.db.selected() === 'lichess') {
-      m.route(`/analyse/online/${game.id}/${orientation}`);
+      m.route.set(`/analyse/online/${game.id}/${orientation}`);
     }
   }
   return (

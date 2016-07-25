@@ -11,13 +11,13 @@ import helper from '../helper';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export default function controller() {
+export default function controller(vnode) {
 
   socket.createDefault();
 
   helper.analyticsTrackView('Board Editor');
 
-  const initFen = m.route.param('fen') || startingFen;
+  const initFen = vnode.attrs.fen || startingFen;
 
   this.data = {
     editor: readFen(initFen),
@@ -94,7 +94,7 @@ export default function controller() {
 
   this.loadNewFen = function(newFen) {
     // m.redraw.strategy('diff');
-    m.route(`/editor/${encodeURIComponent(newFen)}`);
+    m.route.set(`/editor/${encodeURIComponent(newFen)}`);
   };
 
   this.onunload = function() {

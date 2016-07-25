@@ -78,17 +78,17 @@ export default {
           else if (payload.userData) {
             switch (payload.userData.type) {
               case 'challengeCreate':
-                m.route(`/challenge/${payload.userData.challengeId}`);
+                m.route.set(`/challenge/${payload.userData.challengeId}`);
                 break;
               case 'challengeAccept':
                 challengesApi.refresh();
-                m.route(`/game/${payload.userData.challengeId}`);
+                m.route.set(`/game/${payload.userData.challengeId}`);
                 break;
               case 'gameMove':
-                m.route(`/game/${payload.userData.fullId}`);
+                m.route.set(`/game/${payload.userData.fullId}`);
                 break;
               case 'gameFinish':
-                m.route(`/game/${payload.userData.fullId}`);
+                m.route.set(`/game/${payload.userData.fullId}`);
                 break;
             }
           }

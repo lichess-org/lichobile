@@ -12,7 +12,7 @@ import m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
 
-export default function ctrl() {
+export default function ctrl(vnode) {
 
   helper.analyticsTrackView('Puzzle');
   socket.createDefault();
@@ -317,8 +317,8 @@ export default function ctrl() {
       .run(this.reload);
   }.bind(this);
 
-  if (m.route.param('id')) {
-    this.loadPuzzle(m.route.param('id'));
+  if (vnode.attrs.id) {
+    this.loadPuzzle(vnode.attrs.id);
   } else {
     this.newPuzzle(false);
   }

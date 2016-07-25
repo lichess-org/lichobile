@@ -8,10 +8,10 @@ import socket from '../../socket';
 import Zanimo from 'zanimo';
 import m from 'mithril';
 
-export default function controller() {
+export default function controller(vnode) {
 
   var pool = [];
-  const selectedTab = m.prop(m.route.param('tab') || 'public');
+  const selectedTab = m.prop(vnode.attrs.tab || 'public');
   const sendingChallenges = m.prop(getSendingCorres());
 
   helper.analyticsTrackView('Correspondence');

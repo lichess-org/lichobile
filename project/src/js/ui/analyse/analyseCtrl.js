@@ -30,11 +30,11 @@ import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
 
-export default function controller() {
-  this.source = m.route.param('source') || 'offline';
-  const gameId = m.route.param('id');
-  const orientation = m.route.param('color');
-  const fenArg = m.route.param('fen');
+export default function controller(vnode) {
+  this.source = vnode.attrs.source || 'offline';
+  const gameId = vnode.attrs.id;
+  const orientation = vnode.attrs.color;
+  const fenArg = vnode.attrs.fen;
 
   socket.createDefault();
 
@@ -395,7 +395,7 @@ export default function controller() {
     this.data = data;
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
-      m.route('/');
+      m.route.set('/');
     }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
@@ -440,13 +440,13 @@ export default function controller() {
       setTimeout(this.debouncedScroll, 250);
     }, err => {
       handleXhrError(err);
-      m.route('/');
+      m.route.set('/');
     });
   } else if (this.source === 'offline' && gameId === 'otb') {
     helper.analyticsTrackView('Analysis (offline otb)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) {
-      m.route('/analyse');
+      m.route.set('/analyse');
     } else {
       otbData.player.spectator = true;
       otbData.orientation = orientation;
@@ -456,7 +456,7 @@ export default function controller() {
     helper.analyticsTrackView('Analysis (offline ai)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) {
-      m.route('/analyse');
+      m.route.set('/analyse');
     } else {
       aiData.player.spectator = true;
       aiData.orientation = orientation;

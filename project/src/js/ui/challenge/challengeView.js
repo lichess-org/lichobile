@@ -122,7 +122,7 @@ function awaitInvitePopup(ctrl) {
           isPersistent ? m('div', [
             m('br'),
             m('button', {
-              oncreate: helper.ontouch(() => m.route('/'))
+              oncreate: helper.ontouch(() => m.route.set('/'))
             }, [m('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
         ]);

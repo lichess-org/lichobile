@@ -22,7 +22,7 @@ export default function(key, name, perf, user) {
 };
 
 function goToVariantPerf (user, key) {
-  return () => m.route(`/@/${user.id}/${key}/perf`);
+  return () => m.route.set(`/@/${user.id}/${key}/perf`);
 }
 
 function variantPerfAvailable (key, perf) {

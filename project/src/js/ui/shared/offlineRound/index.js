@@ -60,7 +60,7 @@ export function renderGameActionsBar(ctrl, type) {
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontouch(
-          () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+          () => m.route.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
@@ -83,7 +83,7 @@ export function renderGameActionsBarTablet(ctrl, type) {
         oncreate={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        oncreate={helper.ontouch(() => m.route.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}

@@ -9,6 +9,7 @@ import m from 'mithril';
 
 export default {
   oninit: function(vnode) {
+    const ctrl = this;
     const userId = vnode.attrs.id;
 
     helper.analyticsTrackView('User TV');
@@ -16,10 +17,10 @@ export default {
     function onRedirect() {
       tv(userId)
       .run(data => {
-        m.redraw.strategy('all');
+        // m.redraw.strategy('all');
         data.userTV = userId;
-        if (this.round) this.round.onunload();
-        this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
+        if (ctrl.round) ctrl.round.onunload();
+        ctrl.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
       })
       .catch(utils.handleXhrError);
     }
@@ -27,7 +28,7 @@ export default {
     tv(userId)
     .run(data => {
       data.userTV = userId;
-      this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
+      ctrl.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
     })
     .catch(error => {
       utils.handleXhrError(error);

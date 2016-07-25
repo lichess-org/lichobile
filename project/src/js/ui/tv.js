@@ -10,6 +10,8 @@ import m from 'mithril';
 
 export default {
   oninit(vnode) {
+    const ctrl = this;
+
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
@@ -20,9 +22,9 @@ export default {
       xhr.game(o.id, o.color)
       .run(data => {
         // m.redraw.strategy('all');
-        if (this.round) this.round.onunload();
+        if (ctrl.round) ctrl.round.onunload();
         data.tv = settings.tv.channel();
-        this.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
+        ctrl.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
       })
       .catch(handleXhrError);
     }
@@ -30,12 +32,19 @@ export default {
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .run(data => {
       data.tv = settings.tv.channel();
-      this.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
+      ctrl.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
     })
     .catch(error => {
       handleXhrError(error);
       m.route.set('/');
     });
+  },
+
+  onremove() {
+    if (this.round) {
+      this.round.onunload();
+      this.round = null;
+    }
   },
 
   view() {

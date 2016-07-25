@@ -268,7 +268,7 @@ export default function ctrl(vnode) {
       }
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
-    else this.chessground = new chessground.oninit(chessgroundConf);
+    else this.chessground = new chessground.controller(chessgroundConf);
     m.redraw();
   }.bind(this);
 

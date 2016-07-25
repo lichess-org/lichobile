@@ -49,7 +49,7 @@ export default function oninit(vnode) {
       throw err;
   });
 
-  this.chessground = new chessground.oninit({
+  this.chessground = new chessground.controller({
     fen: initFen,
     orientation: 'white',
     movable: {

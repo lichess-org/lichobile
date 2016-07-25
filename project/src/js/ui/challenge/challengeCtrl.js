@@ -9,12 +9,12 @@ import m from 'mithril';
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 
 export default function oninit(vnode) {
-  var pingTimeoutId;
+  const pingTimeoutId = m.prop();
   const challenge = m.prop();
 
   function reloadChallenge() {
     getChallenge(challenge().id).run(d => {
-      clearTimeout(pingTimeoutId);
+      clearTimeout(pingTimeoutId());
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
@@ -26,7 +26,7 @@ export default function oninit(vnode) {
           break;
       }
     }, err => {
-      clearTimeout(pingTimeoutId);
+      clearTimeout(pingTimeoutId());
       handleXhrError(err);
       m.route.set('/');
     });
@@ -34,7 +34,7 @@ export default function oninit(vnode) {
 
   function pingNow() {
     throttledPing();
-    pingTimeoutId = setTimeout(pingNow, 2000);
+    pingTimeoutId(setTimeout(pingNow, 2000));
   }
 
   getChallenge(vnode.attrs.id).run(d => {
@@ -49,12 +49,8 @@ export default function oninit(vnode) {
   .catch(console.error.bind(console));
 
   vnode.state = {
+    pingTimeoutId,
     challenge,
-    onunload() {
-      socket.destroy();
-      clearTimeout(pingTimeoutId);
-      window.plugins.insomnia.allowSleepAgain();
-    },
     joinChallenge() {
       return acceptChallenge(challenge().id)
       .run(() => challengesApi.remove(challenge().id))

@@ -93,12 +93,12 @@ export default function oninit(vnode) {
     }
   };
 
-  let clockInterval = null;
+  const clockInterval = m.prop();
   xhr.tournament(id)
   .run(data => {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
-    clockInterval = setInterval(tick, 1000);
+    clockInterval(setInterval(tick, 1000));
     const featuredGame = data.featured ? data.featured.id : null;
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
   })
@@ -113,11 +113,6 @@ export default function oninit(vnode) {
     withdraw: throttle(withdraw, 1000),
     reload: throttledReload,
     isLoading,
-    onunload: () => {
-      socket.destroy();
-      if (clockInterval) {
-        clearInterval(clockInterval);
-      }
-    }
+    clockInterval
   };
 }

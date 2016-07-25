@@ -24,7 +24,7 @@ import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import crazyValid from './crazy/crazyValid';
 import m from 'mithril';
 
-export default function oninit(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = round.merge({}, cfg).data;
 

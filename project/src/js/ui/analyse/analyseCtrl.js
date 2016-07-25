@@ -70,7 +70,7 @@ export default function oninit(vnode) {
     this.vm.opponentsHash = '';
   }.bind(this);
 
-  const connectGameSocket = function() {
+  this.connectGameSocket = function() {
     if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
@@ -433,9 +433,9 @@ export default function oninit(vnode) {
       // we must connect round socket in case the user wants to request a
       // computer analysis
       if (this.isRemoteAnalysable()) {
-        connectGameSocket();
+        this.connectGameSocket();
         // reconnect game socket after a cancelled seek
-        signals.seekCanceled.add(connectGameSocket);
+        signals.seekCanceled.add(this.connectGameSocket);
       }
       m.redraw();
       setTimeout(this.debouncedScroll, 250);
@@ -471,17 +471,6 @@ export default function oninit(vnode) {
   }
 
   window.plugins.insomnia.keepAwake();
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-      this.chessground = null;
-    }
-    if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
-    window.plugins.insomnia.allowSleepAgain();
-    signals.seekCanceled.remove(connectGameSocket);
-  }.bind(this);
 }
 
 function getDests() {

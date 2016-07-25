@@ -66,10 +66,7 @@ export default function homeCtrl(vnode) {
     dailyPuzzle,
     timeline,
     weekTopPlayers,
-    onunload() {
-      socket.destroy();
-      document.removeEventListener('online', init);
-      document.removeEventListener('resume', onResume);
-    }
+    init,
+    onResume
   };
 }

@@ -64,8 +64,7 @@ export default function oninit(vnode) {
     },
     join: function(seekId) {
       socket.send('joinSeek', seekId);
-    },
-    onunload: socket.destroy
+    }
   };
 }
 
@@ -75,11 +74,12 @@ function seekUserId(seek) {
 
 function fixSeeks(ss) {
   var userId = session.getUserId();
-  if (userId) ss.sort(function(a, b) {
+  if (userId) ss.sort((a, b) => {
     if (seekUserId(a) === userId) return -1;
     if (seekUserId(b) === userId) return 1;
+    return 0;
   });
-  return uniqBy(ss, function(s) {
+  return uniqBy(ss, s => {
     var username = seekUserId(s) === userId ? s.id : s.username;
     var key = username + s.mode + s.variant.key + s.days;
     return key;

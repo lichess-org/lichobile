@@ -13,12 +13,11 @@ import i18n from '../../i18n';
 import m from 'mithril';
 
 export default function oninit(vnode) {
-  var gameData;
-  var round;
+  let gameData;
 
   if (hasNetwork()) {
     gameXhr(vnode.attrs.id, vnode.attrs.color, !!gamesMenu.lastJoined)
-    .run(function(data) {
+    .run(data => {
       gameData = data;
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
@@ -51,7 +50,7 @@ export default function oninit(vnode) {
           }
         }
 
-        round = new roundCtrl(data);
+        this.round = new roundCtrl(vnode, data);
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
@@ -67,7 +66,8 @@ export default function oninit(vnode) {
         }
 
       }
-    }, function(error) {
+    })
+    .catch(error => {
       handleXhrError(error);
       m.route.set('/');
     });
@@ -78,27 +78,12 @@ export default function oninit(vnode) {
       if (!gameApi.playable(gameData)) {
         removeOfflineGameData(vnode.attrs.id);
       }
-      round = new roundCtrl(gameData);
+      this.round = new roundCtrl(vnode, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
       m.route.set('/');
     }
   }
-
-  vnode.state = {
-    onunload: function() {
-      if (round) {
-        round.onunload();
-        round = null;
-      }
-    },
-    getRound: function() {
-      return round;
-    },
-    getData: function() {
-      return gameData;
-    }
-  };
 }
 
 function variantStorageKey(variant) {

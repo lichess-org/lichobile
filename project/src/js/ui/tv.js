@@ -9,9 +9,7 @@ import roundView from './round/view/roundView';
 import m from 'mithril';
 
 export default {
-  oninit: function(vnode) {
-    var round;
-
+  oninit(vnode) {
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
@@ -20,41 +18,29 @@ export default {
 
     function onFeatured(o) {
       xhr.game(o.id, o.color)
-      .run(function(data) {
-        m.redraw.strategy('all');
-        if (round) round.onunload();
+      .run(data => {
+        // m.redraw.strategy('all');
+        if (this.round) this.round.onunload();
         data.tv = settings.tv.channel();
-        round = new roundCtrl(data, onFeatured, onChannelChange);
+        this.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
       })
       .catch(handleXhrError);
     }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
-    .run(function(data) {
+    .run(data => {
       data.tv = settings.tv.channel();
-      round = new roundCtrl(data, onFeatured, onChannelChange);
+      this.round = new roundCtrl(vnode, data, onFeatured, onChannelChange);
     })
     .catch(error => {
       handleXhrError(error);
       m.route.set('/');
     });
-
-    vnode.state = {
-      getRound: function() { return round; },
-
-      onunload: function() {
-        if (round) {
-          round.onunload();
-          round = null;
-        }
-      }
-    };
   },
 
-  view: function(vnode) {
-    const ctrl = vnode.state;
+  view() {
 
-    if (ctrl.getRound()) return roundView(ctrl.getRound());
+    if (this.round) return roundView(this.round);
 
     const header = connectingHeader.bind(undefined, 'Lichess TV');
 

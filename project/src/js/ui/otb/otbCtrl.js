@@ -24,7 +24,7 @@ export default function oninit() {
   helper.analyticsTrackView('Offline On The Board');
   socket.createDefault();
 
-  const chessWorker = new Worker('vendor/scalachessjs.js');
+  this.chessWorker = new Worker('vendor/scalachessjs.js');
   this.actions = actions.oninit(this);
   this.newGameMenu = newGameMenu.oninit(this);
 
@@ -97,7 +97,7 @@ export default function oninit() {
     this.newGameMenu.close();
     this.data = data;
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply, chessWorker);
+      this.replay = new replayCtrl(this, situations, ply, this.chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
@@ -113,7 +113,7 @@ export default function oninit() {
     const variant = settings.otb.variant();
     helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
 
-    askWorker(chessWorker, {
+    askWorker(this.chessWorker, {
       topic: 'init',
       payload: {
         variant,
@@ -173,14 +173,4 @@ export default function oninit() {
   }
 
   window.plugins.insomnia.keepAwake();
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    if (chessWorker) {
-      chessWorker.terminate();
-    }
-    window.plugins.insomnia.allowSleepAgain();
-  };
 }

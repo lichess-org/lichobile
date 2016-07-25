@@ -9,48 +9,42 @@ import m from 'mithril';
 
 export default {
   oninit: function(vnode) {
-    var round;
-
     const userId = vnode.attrs.id;
 
     helper.analyticsTrackView('User TV');
 
     function onRedirect() {
       tv(userId)
-      .run(function(data) {
+      .run(data => {
         m.redraw.strategy('all');
         data.userTV = userId;
-        if (round) round.onunload();
-        round = new roundCtrl(data, null, null, userId, onRedirect);
+        if (this.round) this.round.onunload();
+        this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
       })
       .catch(utils.handleXhrError);
     }
 
     tv(userId)
-    .run(function(data) {
+    .run(data => {
       data.userTV = userId;
-      round = new roundCtrl(data, null, null, userId, onRedirect);
+      this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
     })
-    .catch(function(error) {
+    .catch(error => {
       utils.handleXhrError(error);
       m.route.set('/');
     });
 
-    vnode.state = {
-      getRound: function() { return round; },
+  },
 
-      onunload: function() {
-        if (round) {
-          round.onunload();
-          round = null;
-        }
-      }
-    };
+  onremove() {
+    if (this.round) {
+      this.round.onunload();
+      this.round = null;
+    }
   },
 
   view: function(vnode) {
-    const ctrl = vnode.state;
-    if (ctrl.getRound()) return roundView(ctrl.getRound());
+    if (this.round) return roundView(this.round);
 
     const header = connectingHeader.bind(undefined, vnode.attrs.id + ' TV');
 

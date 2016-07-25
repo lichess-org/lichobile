@@ -97,10 +97,4 @@ export default function oninit(vnode) {
     m.route.set(`/editor/${encodeURIComponent(newFen)}`);
   };
 
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-  };
-
 }

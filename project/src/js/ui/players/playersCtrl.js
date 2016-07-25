@@ -63,9 +63,7 @@ export default function oninit(vnode) {
     goToProfile(u) {
       m.route.set('/@/' + u);
     },
-    onunload: () => {
-      window.removeEventListener('native.keyboardshow', onKeyboardShow);
-      window.removeEventListener('native.keyboardhide', onKeyboardHide);
-    }
+    onKeyboardShow,
+    onKeyboardHide
   };
 }

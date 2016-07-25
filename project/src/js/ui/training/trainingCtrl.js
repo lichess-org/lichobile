@@ -325,12 +325,6 @@ export default function ctrl(vnode) {
 
   window.plugins.insomnia.keepAwake();
 
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    window.plugins.insomnia.allowSleepAgain();
-  };
 }
 
 function pushState(cfg) {

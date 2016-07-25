@@ -425,7 +425,8 @@ export default function oninit(vnode) {
   }.bind(this);
 
   if (this.source === 'online' && gameId) {
-    gameXhr(gameId, orientation, false).then(cfg => {
+    gameXhr(gameId, orientation, false)
+    .run(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
@@ -438,7 +439,8 @@ export default function oninit(vnode) {
       }
       m.redraw();
       setTimeout(this.debouncedScroll, 250);
-    }, err => {
+    })
+    .catch(err => {
       handleXhrError(err);
       m.route.set('/');
     });

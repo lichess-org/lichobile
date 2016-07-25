@@ -154,19 +154,8 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderEvalBox(ctrl) {
-  const cevalEnabled = ctrl.ceval.enabled();
-  const step = ctrl.vm.step;
   const ceval = ctrl.currentAnyEval() || {};
   let pearl, percent;
-
-  const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    ctrl.nextStepBest() + (ceval && ceval.mate) + defined(step.ceval) +
-    ctrl.ceval.percentComplete() + isEmpty(step.dests);
-
-  if (ctrl.vm.evalBoxHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.evalBoxHash = hash;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
     pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
@@ -213,12 +202,6 @@ function gameInfos(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
 
   const isCrazy = !!ctrl.vm.step.crazy;
-  const hash = '' + isPortrait + isCrazy;
-
-  if (ctrl.vm.gameInfosHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.gameInfosHash = hash;
 
   if (isCrazy && isPortrait) return null;
 
@@ -252,14 +235,6 @@ function gameInfos(ctrl, isPortrait) {
 
 function renderOpponents(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
-
-  const step = ctrl.vm.step;
-  const hash = '' + isPortrait + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
-
-  if (ctrl.vm.opponentsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.opponentsHash = hash;
 
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
@@ -369,13 +344,6 @@ function buttons(ctrl) {
 }
 
 function renderActionsBar(ctrl) {
-
-  const hash = ctrl.data.game.id + hasNetwork() + ctrl.explorer.enabled();
-
-  if (ctrl.vm.buttonsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.buttonsHash = hash;
 
   const explorerBtnClass = [
     'action_bar_button',

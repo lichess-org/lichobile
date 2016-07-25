@@ -1,8 +1,6 @@
 import m from 'mithril';
 import socket from '../../../socket';
 import session from '../../../session';
-import challengesApi from '../../../lichess/challenges';
-import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
 import chessground from 'chessground-mobile';
 import round from '../round';
@@ -103,15 +101,6 @@ function renderTitle(ctrl) {
 }
 
 function renderHeader(ctrl) {
-  const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
-    friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
-    session.myTurnGames().length + ctrl.data.tv + ctrl.data.player.spectator;
-
-  if (ctrl.vm.headerHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.headerHash = hash;
-
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
       { !ctrl.data.tv && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
@@ -196,7 +185,6 @@ function userInfos(user, player, playerName, position) {
 }
 
 function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy) {
-  const vmKey = position + 'Hash';
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
   const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
@@ -211,13 +199,6 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
 
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
-
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank + runningColor + ctrl.data.game.player;
-
-  if (ctrl.vm[vmKey] === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm[vmKey] = hash;
 
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
@@ -437,22 +418,11 @@ function renderGamePopup(ctrl, isPortrait) {
   );
 }
 
-function renderGameActionsBar(ctrl, isPortrait) {
+function renderGameActionsBar(ctrl) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||
     ctrl.data.opponent.offeringRematch;
-
-  const prevPly = ctrl.vm.ply - 1;
-  const nextPly = ctrl.vm.ply + 1;
-  const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
-  const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
-  const hash = ctrl.data.game.id + answerRequired + ctrl.data.opponent.proposingTakeback + ctrl.data.opponent.offeringDraw + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
-
-  if (ctrl.vm.buttonsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.buttonsHash = hash;
 
   const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',

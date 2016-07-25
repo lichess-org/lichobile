@@ -1,6 +1,5 @@
 import helper from '../../helper';
 import round from '../round';
-import m from 'mithril';
 
 const emptyTd = <td className="move">...</td>;
 
@@ -34,11 +33,6 @@ function autoScroll(movelist) {
 export function renderTable(ctrl) {
   const steps = ctrl.data.steps;
   const firstPly = round.firstPly(ctrl.data);
-  const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
-    ctrl.data.game.status.id + ctrl.data.game.winner;
-
-  if (ctrl.vm.replayHash === h) return { subtree: 'retain' };
-  ctrl.vm.replayHash = h;
 
   const pairs = [];
   if (firstPly % 2 === 0) {

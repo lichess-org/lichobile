@@ -149,10 +149,6 @@ export function renderClaimDrawButton(ctrl) {
 export function renderReplayTable(ctrl) {
   const curPly = ctrl.ply;
   const shouldDisplay = helper.isLandscape();
-  const hash = curPly + ctrl.situationsHash(ctrl.situations) + shouldDisplay;
-
-  if (ctrl.hash === hash) return {subtree: 'retain'};
-  ctrl.hash = hash;
 
   if (!shouldDisplay) return null;
 

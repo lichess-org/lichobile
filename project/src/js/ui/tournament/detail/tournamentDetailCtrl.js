@@ -7,15 +7,15 @@ import faq from '../faq';
 import playerInfo from '../playerInfo';
 import m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament details');
 
   const tournament = m.prop();
   const hasJoined = m.prop(false);
   const page = m.prop(null);
   const isLoading = m.prop(false);
-  const faqCtrl = faq.controller(tournament);
-  const playerInfoCtrl = playerInfo.controller(tournament);
+  const faqCtrl = faq.oninit(tournament);
+  const playerInfoCtrl = playerInfo.oninit(tournament);
 
   function reload(data) {
     isLoading(false);
@@ -104,7 +104,7 @@ export default function controller() {
   })
   .catch(utils.handleXhrError);
 
-  return {
+  vnode.state = {
     tournament,
     hasJoined,
     faqCtrl,

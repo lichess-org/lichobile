@@ -9,7 +9,7 @@ import m from 'mithril';
 
 var scroller;
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
 
   helper.analyticsTrackView('User following');
 
@@ -29,8 +29,8 @@ export default function controller(vnode) {
     }
   }
 
-  function scrollerConfig(vnode) {
-    const el = vnode.dom;
+  function scrollerConfig(vn) {
+    const el = vn.dom;
     scroller = new IScroll(el, {
       probeType: 2
     });
@@ -71,7 +71,7 @@ export default function controller(vnode) {
     obj.relation = newData.following;
   }
 
-  return {
+  vnode.state = {
     following,
     scrollerConfig,
     scrollerOnUpdate,

@@ -1,7 +1,7 @@
-import controller from './otbCtrl';
+import oninit from './otbCtrl';
 import view from './otbView';
 
 export default {
-  controller,
+  oninit,
   view
 };

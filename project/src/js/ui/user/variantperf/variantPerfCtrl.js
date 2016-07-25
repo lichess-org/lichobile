@@ -1,9 +1,9 @@
 import * as xhr from '../userXhr';
 import socket from '../../../socket';
-import * as utils from '../../../utils';
+import { handleXhrError } from '../../../utils';
 import m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
   const userId = vnode.attrs.id;
   const variant = vnode.attrs.variant;
   const user = m.prop();
@@ -17,7 +17,7 @@ export default function controller() {
     return data;
   })
   .catch(error => {
-    utils.handleXhrError(error);
+    handleXhrError(error);
     m.route.set('/');
     throw error;
   });
@@ -28,12 +28,12 @@ export default function controller() {
     return data;
   })
   .catch(error => {
-    utils.handleXhrError(error);
+    handleXhrError(error);
     m.route.set('/');
     throw error;
   });
 
-  return {
+  vnode.state = {
     userId,
     variant,
     user,

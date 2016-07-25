@@ -24,7 +24,7 @@ import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import crazyValid from './crazy/crazyValid';
 import m from 'mithril';
 
-export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function oninit(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = round.merge({}, cfg).data;
 
@@ -483,9 +483,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
   this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-    null : new chat.controller(this);
+    null : new chat.oninit(this);
 
-  this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+  this.notes = this.data.game.speed === 'correspondence' ? new notes.oninit(this) : null;
 
   this.reload = function(rCfg) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))

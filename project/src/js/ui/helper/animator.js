@@ -27,7 +27,7 @@ export default function animator(incoming, outgoing, alwaysAnimate, dontClone) {
     // When applied to a Mithril module / component
     else if ( x.view ) {
       return {
-        controller: x.controller || noop,
+        oninit: x.oninit || noop,
         view: function animatedView(ctrl){
           return bindConfigTo(x.view(ctrl));
         }

@@ -10,15 +10,17 @@ import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
 
-  function editorOnCreate(vnode) {
-    if (!vnode.dom) return;
-    const onstart = drag.bind(undefined, ctrl);
-    const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-    const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+  const onstart = drag.bind(undefined, ctrl);
+  const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
+  const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+
+  function editorOnCreate(vn) {
+    if (!vn.dom) return;
     const editorNode = document.getElementById('boardEditor');
     if (editorNode) {
       editorNode.addEventListener('touchstart', onstart);
@@ -27,7 +29,7 @@ export default function view(ctrl) {
     }
   }
 
-  function editorOnRemove(vnode) {
+  function editorOnRemove() {
     const editorNode = document.getElementById('boardEditor');
     if (editorNode) {
       editorNode.removeEventListener('touchstart', onstart);

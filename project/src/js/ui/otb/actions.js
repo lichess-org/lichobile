@@ -19,7 +19,7 @@ function renderAlways() {
 
 export default {
 
-  controller: function(root) {
+  oninit: function(root) {
     let isOpen = false;
 
     function open() {

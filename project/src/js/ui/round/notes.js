@@ -6,7 +6,7 @@ import { syncNote } from './roundXhr';
 import m from 'mithril';
 
 export default {
-  controller(root) {
+  oninit(root) {
 
     let notesHeight;
 

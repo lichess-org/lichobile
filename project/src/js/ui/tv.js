@@ -1,7 +1,7 @@
 import { connectingHeader, viewOnlyBoardContent } from './shared/common';
 import layout from './layout';
 import helper from './helper';
-import * as utils from '../utils';
+import { handleXhrError } from '../utils';
 import * as xhr from '../xhr';
 import settings from '../settings';
 import roundCtrl from './round/roundCtrl';
@@ -9,7 +9,7 @@ import roundView from './round/view/roundView';
 import m from 'mithril';
 
 export default {
-  controller: function(vnode) {
+  oninit: function(vnode) {
     var round;
 
     helper.analyticsTrackView('TV');
@@ -26,7 +26,7 @@ export default {
         data.tv = settings.tv.channel();
         round = new roundCtrl(data, onFeatured, onChannelChange);
       })
-      .catch(utils.handleXhrError);
+      .catch(handleXhrError);
     }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
@@ -35,11 +35,11 @@ export default {
       round = new roundCtrl(data, onFeatured, onChannelChange);
     })
     .catch(error => {
-      utils.handleXhrError(error);
+      handleXhrError(error);
       m.route.set('/');
     });
 
-    return {
+    vnode.state = {
       getRound: function() { return round; },
 
       onunload: function() {
@@ -51,7 +51,9 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(vnode) {
+    const ctrl = vnode.state;
+
     if (ctrl.getRound()) return roundView(ctrl.getRound());
 
     const header = connectingHeader.bind(undefined, 'Lichess TV');

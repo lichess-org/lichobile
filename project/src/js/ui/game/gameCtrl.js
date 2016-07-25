@@ -12,7 +12,7 @@ import vibrate from '../../vibrate';
 import i18n from '../../i18n';
 import m from 'mithril';
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
   var gameData;
   var round;
 
@@ -85,7 +85,7 @@ export default function controller(vnode) {
     }
   }
 
-  return {
+  vnode.state = {
     onunload: function() {
       if (round) {
         round.onunload();

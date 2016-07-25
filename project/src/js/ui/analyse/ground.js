@@ -37,7 +37,7 @@ function makeConfig(data, config, onMove, onNewPiece) {
 
 export default {
   make(data, config, onMove, onNewPiece) {
-    return new chessground.controller(makeConfig(data, config, onMove, onNewPiece));
+    return new chessground.oninit(makeConfig(data, config, onMove, onNewPiece));
   },
 
   promote(ground, key, role) {

@@ -1,7 +1,7 @@
-import controller from './challengeCtrl';
+import oninit from './challengeCtrl';
 import view from './challengeView';
 
 export default {
-  controller,
+  oninit,
   view
 };

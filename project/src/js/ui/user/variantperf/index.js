@@ -1,7 +1,7 @@
-import controller from './variantPerfCtrl';
+import oninit from './variantPerfCtrl';
 import view from './variantPerfView';
 
 export default {
-  controller,
+  oninit,
   view
 };

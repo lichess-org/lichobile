@@ -1,7 +1,7 @@
-import controller from './gamesCtrl';
+import oninit from './gamesCtrl';
 import view from './gamesView';
 
 export default {
-  controller,
+  oninit,
   view
 };

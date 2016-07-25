@@ -26,7 +26,7 @@ function renderBody() {
 }
 
 export default {
-  controller: function() {},
+  oninit: function() {},
 
   view: function() {
     const header = utils.partialf(headerWidget, null,

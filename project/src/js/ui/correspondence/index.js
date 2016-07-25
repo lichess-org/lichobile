@@ -1,7 +1,7 @@
-import controller from './correspondenceCtrl';
+import oninit from './correspondenceCtrl';
 import view from './correspondenceView';
 
 export default {
-  controller,
+  oninit,
   view
 };

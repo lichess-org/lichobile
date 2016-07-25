@@ -1,8 +1,8 @@
-import controller from './followingCtrl';
+import oninit from './followingCtrl';
 import view from './followingView';
 
 export default {
-  controller,
+  oninit,
   view
 };
 

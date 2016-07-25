@@ -10,7 +10,8 @@ import session from '../../../session';
 import m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const header = utils.partialf(headerWidget, null,
     backButton(ctrl.user() ? (ctrl.user().username + ' games') : '')
   );

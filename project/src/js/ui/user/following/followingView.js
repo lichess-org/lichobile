@@ -5,7 +5,8 @@ import layout from '../../layout';
 import i18n from '../../../i18n';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
 
   return layout.free(
     header.bind(undefined, 'Following'),

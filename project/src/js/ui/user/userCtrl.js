@@ -6,7 +6,7 @@ import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import m from 'mithril';
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
 
   const userId = vnode.attrs.id;
 

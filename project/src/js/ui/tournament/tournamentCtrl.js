@@ -1,11 +1,11 @@
 import socket from '../../socket';
-import * as utils from '../../utils';
+import { handleXhrError } from '../../utils';
 import * as xhr from './tournamentXhr';
 import helper from '../helper';
 import settings from '../../settings';
 import m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();
@@ -23,9 +23,9 @@ export default function controller() {
     tournaments(data);
     return data;
   })
-  .catch(utils.handleXhrError);
+  .catch(handleXhrError);
 
-  return {
+  vnode.state = {
     tournaments,
     currentTab
   };

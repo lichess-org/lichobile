@@ -10,7 +10,7 @@ import helper from '../helper';
 import m from 'mithril';
 
 export default {
-  controller() {
+  oninit(vnode) {
 
     helper.analyticsTrackView('Leaderboard');
 
@@ -30,7 +30,7 @@ export default {
       m.route.set('/');
     });
 
-    return {
+    vnode.state = {
       ranking,
       toggleRankingCat(key) {
         let cat = ranking()[key];
@@ -39,7 +39,9 @@ export default {
     };
   },
 
-  view(ctrl) {
+  view(vnode) {
+    const ctrl = vnode.state;
+
     return layout.free(
       () => header(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl)

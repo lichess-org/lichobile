@@ -12,7 +12,8 @@ import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
 
   var content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;

@@ -6,7 +6,7 @@ import * as xhr from './playerXhr';
 import helper from '../helper';
 import m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
   socket.createDefault();
 
   helper.analyticsTrackView('Players');
@@ -45,7 +45,7 @@ export default function controller() {
 
   xhr.onlinePlayers().run(players, err => utils.handleXhrError(err));
 
-  return {
+  vnode.state = {
     players,
     isSearchOpen,
     searchResults,

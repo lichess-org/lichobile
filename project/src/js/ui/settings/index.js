@@ -10,7 +10,7 @@ import socket from '../../socket';
 import m from 'mithril';
 
 export default {
-  controller() {
+  oninit() {
     helper.analyticsTrackView('Settings');
     socket.createDefault();
   },

@@ -6,7 +6,7 @@ import * as utils from '../../utils';
 import i18n from '../../i18n';
 
 export default {
-  controller: function(tournament) {
+  oninit: function(tournament) {
     let isOpen = false;
     const playerData = m.prop();
 

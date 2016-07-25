@@ -1,7 +1,7 @@
-import controller from './aiCtrl';
+import oninit from './aiCtrl';
 import view from './aiView';
 
 export default {
-  controller,
+  oninit,
   view
 };

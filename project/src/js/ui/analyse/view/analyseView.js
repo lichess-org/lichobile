@@ -22,7 +22,8 @@ import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
 
-export default function analyseView(ctrl) {
+export default function analyseView() {
+  const ctrl = this;
 
   const isPortrait = helper.isPortrait();
 

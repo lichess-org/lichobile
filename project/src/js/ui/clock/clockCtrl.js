@@ -4,7 +4,7 @@ import helper from '../helper';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
-export default function controller() {
+export default function oninit() {
 
   helper.analyticsTrackView('Clock');
 
@@ -27,7 +27,7 @@ export default function controller() {
 
   reload();
 
-  const clockSettingsCtrl = clockSettings.controller(reload, clockObj);
+  const clockSettingsCtrl = clockSettings.oninit(reload, clockObj);
 
   function clockTap (side) {
     clockObj().clockHit(side);

@@ -40,7 +40,7 @@ export default function(root, allow) {
   const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.opponent.ai;
   const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
-  const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
+  const config = explorerConfig.oninit(root.data.game.variant, onConfigClose);
   const debouncedScroll = debounce(() => {
     document.getElementById('explorerTable').scrollTop = 0;
   }, 200);

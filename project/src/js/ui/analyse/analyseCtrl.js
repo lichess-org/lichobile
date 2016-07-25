@@ -30,7 +30,7 @@ import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
   this.source = vnode.attrs.source || 'offline';
   const gameId = vnode.attrs.id;
   const orientation = vnode.attrs.color;
@@ -41,10 +41,10 @@ export default function controller(vnode) {
   this.data = null;
 
   this.chessLogic = chessLogic(this);
-  this.settings = analyseSettings.controller(this);
-  this.menu = menu.controller(this);
-  this.continuePopup = continuePopup.controller();
-  this.importPgnPopup = importPgnPopup.controller(this);
+  this.settings = analyseSettings.oninit(this);
+  this.menu = menu.oninit(this);
+  this.continuePopup = continuePopup.oninit();
+  this.importPgnPopup = importPgnPopup.oninit(this);
 
   this.vm = {
     shouldGoBack: gameId !== undefined || fenArg !== undefined,
@@ -402,8 +402,8 @@ export default function controller(vnode) {
     this.analyse = new analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
-    this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+    this.evalSummary = this.data.analysis ? evalSummary.oninit(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.oninit(this) : null;
 
     let initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :

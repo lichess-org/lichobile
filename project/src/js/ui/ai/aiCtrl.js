@@ -20,7 +20,7 @@ import m from 'mithril';
 
 export const storageFenKey = 'ai.setupFen';
 
-export default function controller() {
+export default function oninit() {
 
   helper.analyticsTrackView('Offline AI');
 
@@ -28,8 +28,8 @@ export default function controller() {
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
   const engine = engineCtrl(this);
-  this.actions = actions.controller(this);
-  this.newGameMenu = newGameMenu.controller(this);
+  this.actions = actions.oninit(this);
+  this.newGameMenu = newGameMenu.oninit(this);
 
   this.vm = {
     engineSearching: false

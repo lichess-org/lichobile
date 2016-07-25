@@ -1,4 +1,3 @@
-import * as utils from '../../utils';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -8,20 +7,19 @@ import { setServerLang } from '../../xhr';
 import m from 'mithril';
 
 export default {
-  controller: function() {
+  oninit: function(vnode) {
     const langs = m.prop([]);
 
     getAvailableLanguages().run(langs);
 
-    return {
+    vnode.state = {
       langs
     };
   },
 
-  view: function(ctrl) {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('language'))
-    );
+  view: function(vnode) {
+    const ctrl = vnode.state;
+    const header = headerWidget.bind(undefined, backButton(i18n('language')));
 
     function renderLang(l) {
       return (

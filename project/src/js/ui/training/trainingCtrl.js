@@ -19,7 +19,7 @@ export default function ctrl(vnode) {
 
   this.data = null;
 
-  this.menu = menu.controller(this);
+  this.menu = menu.oninit(this);
 
   this.vm = {
     loading: false
@@ -268,7 +268,7 @@ export default function ctrl(vnode) {
       }
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
-    else this.chessground = new chessground.controller(chessgroundConf);
+    else this.chessground = new chessground.oninit(chessgroundConf);
     m.redraw();
   }.bind(this);
 

@@ -11,7 +11,7 @@ import helper from '../helper';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
 
   socket.createDefault();
 
@@ -49,7 +49,7 @@ export default function controller(vnode) {
       throw err;
   });
 
-  this.chessground = new chessground.controller({
+  this.chessground = new chessground.oninit({
     fen: initFen,
     orientation: 'white',
     movable: {
@@ -89,8 +89,8 @@ export default function controller(vnode) {
 
   this.computeFen = computeFen.bind(undefined, this.data.editor, this.chessground.getFen);
 
-  this.menu = menu.controller(this);
-  this.continuePopup = continuePopup.controller();
+  this.menu = menu.oninit(this);
+  this.continuePopup = continuePopup.oninit();
 
   this.loadNewFen = function(newFen) {
     // m.redraw.strategy('diff');

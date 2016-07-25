@@ -19,14 +19,14 @@ import m from 'mithril';
 
 export const storageFenKey = 'otb.setupFen';
 
-export default function controller() {
+export default function oninit() {
 
   helper.analyticsTrackView('Offline On The Board');
   socket.createDefault();
 
   const chessWorker = new Worker('vendor/scalachessjs.js');
-  this.actions = actions.controller(this);
-  this.newGameMenu = newGameMenu.controller(this);
+  this.actions = actions.oninit(this);
+  this.newGameMenu = newGameMenu.oninit(this);
 
   this.vm = {
     flip: false

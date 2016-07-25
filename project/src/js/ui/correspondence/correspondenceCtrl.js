@@ -8,7 +8,7 @@ import socket from '../../socket';
 import Zanimo from 'zanimo';
 import m from 'mithril';
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
 
   var pool = [];
   const selectedTab = m.prop(vnode.attrs.tab || 'public');

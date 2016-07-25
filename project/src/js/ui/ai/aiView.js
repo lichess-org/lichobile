@@ -15,7 +15,8 @@ import actions from './actions';
 import newGameMenu from './newAiGame';
 import i18n from '../../i18n';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   var content, header;
 
   if (ctrl.data && ctrl.chessground) {

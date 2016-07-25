@@ -2,7 +2,7 @@ import * as xhr from '../userXhr';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
 import socket from '../../../socket';
-import * as utils from '../../../utils';
+import { handleXhrError } from '../../../utils';
 import m from 'mithril';
 
 var scroller;
@@ -17,7 +17,7 @@ const filters = {
   me: 'nbGamesWithYou'
 };
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
   const userId = vnode.attrs.id;
   const user = m.prop();
   const availableFilters = m.prop([]);
@@ -43,7 +43,7 @@ export default function controller(vnode) {
     availableFilters(f);
   })
   .catch(error => {
-    utils.handleXhrError(error);
+    handleXhrError(error);
     m.route.set('/');
     throw error;
   });
@@ -57,8 +57,8 @@ export default function controller(vnode) {
     }
   }
 
-  function scrollerOnCreate(vnode) {
-    const el = vnode.dom;
+  function scrollerOnCreate(vn) {
+    const el = vn.dom;
     scroller = new IScroll(el, {
       probeType: 2
     });
@@ -86,7 +86,7 @@ export default function controller(vnode) {
       }, 50);
     })
     .catch(err => {
-      utils.handleXhrError(err);
+      handleXhrError(err);
       m.route.set('/');
     });
   }
@@ -100,7 +100,7 @@ export default function controller(vnode) {
       games(games().concat(data.paginator.currentPageResults));
       m.redraw();
     })
-    .catch(utils.handleXhrError);
+    .catch(handleXhrError);
     m.redraw();
   }
 
@@ -115,7 +115,7 @@ export default function controller(vnode) {
 
   loadInitialGames();
 
-  return {
+  vnode.state = {
     availableFilters,
     currentFilter,
     isLoadingNextPage,

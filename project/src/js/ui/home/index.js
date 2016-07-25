@@ -1,7 +1,7 @@
-import controller from './homeCtrl';
+import oninit from './homeCtrl';
 import view from './homeView';
 
 export default {
-  oninit: controller,
+  oninit: oninit,
   view
 };

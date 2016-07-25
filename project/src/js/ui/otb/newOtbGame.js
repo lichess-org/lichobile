@@ -7,7 +7,7 @@ import backbutton from '../../backbutton';
 
 export default {
 
-  controller: function(root) {
+  oninit: function(root) {
     let isOpen = false;
 
     function open() {

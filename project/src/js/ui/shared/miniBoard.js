@@ -4,7 +4,7 @@ import gameApi from '../../lichess/game';
 import m from 'mithril';
 
 export default {
-  view(ctrl, args) {
+  view(_, args) {
 
     const { bounds, fen, lastMove, orientation, link, gameObj } = args;
 

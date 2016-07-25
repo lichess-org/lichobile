@@ -7,7 +7,7 @@ import socket from '../../socket';
 import m from 'mithril';
 
 export default {
-  controller: function(root) {
+  oninit: function(root) {
 
     const storageId = 'chat.' + root.data.game.id;
 

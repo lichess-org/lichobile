@@ -1,7 +1,7 @@
-import controller from './analyseCtrl';
+import oninit from './analyseCtrl';
 import view from './view/analyseView';
 
 export default {
-  controller,
+  oninit,
   view
 };

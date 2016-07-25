@@ -1,7 +1,7 @@
-import controller from './userCtrl';
+import oninit from './userCtrl';
 import view from './userView';
 
 export default {
-  oninit: controller,
+  oninit: oninit,
   view
 };

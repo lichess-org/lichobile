@@ -9,7 +9,7 @@ import m from 'mithril';
 export const supportedTypes = ['follow', 'game-end', 'tour-join'];
 
 export default {
-  controller() {
+  oninit(vnode) {
     const timeline = m.prop([]);
 
     timelineXhr()
@@ -19,12 +19,13 @@ export default {
     })
     .catch(handleXhrError);
 
-    return {
+    vnode.state = {
       timeline
     };
   },
 
-  view(ctrl) {
+  view(vnode) {
+    const ctrl = vnode.state;
     const header = headerWidget.bind(undefined, null, backButton(i18n('timeline')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }

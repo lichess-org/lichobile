@@ -81,7 +81,7 @@ function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
     dropNewPiece: onNewPiece
   };
   config.viewOnly = data.player.spectator;
-  return new chessground.controller(config);
+  return new chessground.oninit(config);
 }
 
 function reload(ground, data, fen, flip) {

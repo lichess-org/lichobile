@@ -2,7 +2,7 @@ import backbutton from '../../backbutton';
 import helper from '../helper';
 
 export default {
-  controller: function(tournament) {
+  oninit: function(tournament) {
     let isOpen = false;
 
     function open() {

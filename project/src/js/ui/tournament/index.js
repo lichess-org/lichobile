@@ -1,7 +1,7 @@
-import controller from './tournamentCtrl';
+import oninit from './tournamentCtrl';
 import view from './tournamentView';
 
 export default {
-  controller,
+  oninit,
   view
 };

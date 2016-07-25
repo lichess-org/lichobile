@@ -13,7 +13,7 @@ import m from 'mithril';
 
 export default {
 
-  controller: function() {
+  oninit: function() {
     let isOpen = false;
     const fen = m.prop();
 

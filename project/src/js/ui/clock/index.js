@@ -1,7 +1,7 @@
-import controller from './clockCtrl';
+import oninit from './clockCtrl';
 import view from './clockView';
 
 export default {
-  controller,
+  oninit,
   view
 };

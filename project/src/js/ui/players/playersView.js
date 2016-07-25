@@ -1,12 +1,13 @@
 import * as utils from '../../utils';
 import h from '../helper';
-import { menuButton, timelineButton, friendsButton, userStatus } from '../shared/common';
+import { menuButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const headerCtrl = header.bind(undefined, ctrl);
   const bodyCtrl = body.bind(undefined, ctrl);
   const searchModalCtrl = searchModal.bind(undefined, ctrl);

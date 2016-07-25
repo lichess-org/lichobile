@@ -64,7 +64,7 @@ function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
     move: onMove,
     dropNewPiece: onNewPiece
   };
-  return new chessground.controller(config);
+  return new chessground.oninit(config);
 }
 
 function reload(ground, data, sit) {

@@ -1,4 +1,3 @@
-import * as utils from '../../utils';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -33,8 +32,8 @@ function renderBody(ctrl) {
 }
 
 export default {
-  controller: function() {
-    return {
+  oninit: function(vnode) {
+    vnode.state = {
       premove: session.lichessBackedProp('prefs.premove', session.savePreferences),
       takeback: session.lichessBackedProp('prefs.takeback', session.savePreferences),
       autoQueen: session.lichessBackedProp('prefs.autoQueen', session.savePreferences),
@@ -43,10 +42,9 @@ export default {
     };
   },
 
-  view: function(ctrl) {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('gameBehavior'))
-    );
+  view: function(vnode) {
+    const ctrl = vnode.state;
+    const header = headerWidget.bind(undefined, backButton(i18n('gameBehavior')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

@@ -8,7 +8,7 @@ import m from 'mithril';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 
-export default function controller(vnode) {
+export default function oninit(vnode) {
   var pingTimeoutId;
   const challenge = m.prop();
 
@@ -48,7 +48,7 @@ export default function controller(vnode) {
   })
   .catch(console.error.bind(console));
 
-  return {
+  vnode.state = {
     challenge,
     onunload() {
       socket.destroy();

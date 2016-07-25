@@ -9,7 +9,8 @@ import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   var overlay;
 
   const header = utils.partialf(headerWidget, 'lichess.org');

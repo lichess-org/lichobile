@@ -7,7 +7,9 @@ import helper from '../helper';
 import menu, { renderUserInfos, renderSigninBox } from './menu';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
+
   return layout.board(
     !ctrl.data || ctrl.vm.loading ?
       connectingHeader.bind(undefined, i18n('training')) :

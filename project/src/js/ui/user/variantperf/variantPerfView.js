@@ -6,7 +6,8 @@ import i18n from '../../../i18n';
 import m from 'mithril';
 import {shortPerfTitle} from '../../../lichess/perfs';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const header = utils.partialf(headerWidget, null,
     backButton(ctrl.user() ? (ctrl.user().username + ' ' + shortPerfTitle(ctrl.variant) + ' stats') : '')
   );

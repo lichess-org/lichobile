@@ -126,14 +126,7 @@ function castleCheckBox(ctrl, id, label) {
 }
 
 function position2option(fen, pos) {
-  return {
-    tag: 'option',
-    attrs: {
-      value: pos.fen,
-      selected: fen === pos.fen
-    },
-    children: pos.name
-  };
+  return <option value={pos.fen} selected={fen === pos.fen}>{pos.name}</option>;
 }
 
 function optgroup(name, opts) {

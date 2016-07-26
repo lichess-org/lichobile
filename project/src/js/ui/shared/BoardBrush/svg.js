@@ -27,19 +27,18 @@ export function circle(brush, pos, current, bounds) {
   var o = pos2px(pos, bounds);
   var width = circleWidth(current, bounds);
   var radius = bounds.width / 16;
-  return {
-    tag: 'circle',
-    attrs: {
-      key: current ? 'current' : pos + brush.key,
-      stroke: brush.color,
-      'stroke-width': width,
-      fill: 'none',
-      opacity: opacity(brush, current),
-      cx: o[0],
-      cy: o[1],
-      r: radius - width / 2 - brush.circleMargin * width * 1.5
-    }
-  };
+  return (
+    <circle
+      key={current ? 'current' : pos + brush.key}
+      stroke={brush.color}
+      stroke-width={width}
+      fill="none"
+      opacity={opacity(brush, current)}
+      cx={o[0]}
+      cy={o[1]}
+      r={radius - width / 2 - brush.circleMargin * width * 1.5}
+    />
+  );
 }
 
 export function arrow(brush, orig, dest, current, bounds) {
@@ -51,50 +50,42 @@ export function arrow(brush, orig, dest, current, bounds) {
     angle = Math.atan2(dy, dx);
   var xo = Math.cos(angle) * m,
     yo = Math.sin(angle) * m;
-  return {
-    tag: 'line',
-    attrs: {
-      key: current ? 'current' : orig + dest + brush.key,
-      stroke: brush.color,
-      'stroke-width': lineWidth(brush, current, bounds),
-      'stroke-linecap': 'round',
-      'marker-end': 'url(#arrowhead-' + brush.key + ')',
-      opacity: opacity(brush, current),
-      x1: a[0],
-      y1: a[1],
-      x2: b[0] - xo,
-      y2: b[1] - yo
-    }
-  };
+  return (
+    <line
+      key={current ? 'current' : orig + dest + brush.key}
+      stroke={brush.color}
+      stroke-width={lineWidth(brush, current, bounds)}
+      stroke-linecap="round"
+      marker-end={'url(#arrowhead-' + brush.key + ')'}
+      opacity={opacity(brush, current)}
+      x1={a[0]}
+      y1={a[1]}
+      x2={b[0] - xo}
+      y2={b[1] - yo}
+    />
+  );
 }
 
 export function defs(brushes) {
-  return {
-    tag: 'defs',
-    children: [
-      brushes.map(function(brush) {
-        return {
-          key: brush.key,
-          tag: 'marker',
-          attrs: {
-            id: 'arrowhead-' + brush.key,
-            orient: 'auto',
-            markerWidth: 4,
-            markerHeight: 8,
-            refX: 2.05,
-            refY: 2.01
-          },
-          children: [{
-            tag: 'path',
-            attrs: {
-              d: 'M0,0 V4 L3,2 Z',
-              fill: brush.color
-            }
-          }]
-        };
-      })
-    ]
-  };
+  return (
+    <defs>
+      {brushes.map(brush => {
+        return (
+          <marker
+            key={brush.key}
+            id={'arrowhead-' + brush.key}
+            orient={'auto'}
+            markerWidth={4}
+            markerHeight={8}
+            refX={2.05}
+            refY={2.01}
+          >
+            <path d="M0,0 V4 L3,2 Z" fill={brush.color} />
+          </marker>
+        );
+      })}
+    </defs>
+  );
 }
 
 function orient(pos, color) {

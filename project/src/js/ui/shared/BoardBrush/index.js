@@ -15,12 +15,11 @@ export default {
       shapes.filter(s => s.dest && s.brush === name).length
     ).map(name => brushes[name]);
 
-    return {
-      tag: 'svg',
-      children: [
-        defs(usedBrushes),
-        shapes.map(renderShape(orientation, false, brushes, bounds))
-      ]
-    };
+    return (
+      <svg>
+        {defs(usedBrushes)}
+        {shapes.map(renderShape(orientation, false, brushes, bounds))}
+      </svg>
+    );
   }
 };

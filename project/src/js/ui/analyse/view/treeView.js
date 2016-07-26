@@ -36,10 +36,7 @@ export function renderTree(ctrl, tree) {
 }
 
 function renderEvalTag(e) {
-  return {
-    tag: 'eval',
-    children: e
-  };
+  return <eval>{e}</eval>;
 }
 
 function renderGlyph(glyph) {
@@ -245,18 +242,11 @@ function turnKey(turn, meta) {
 }
 
 function renderIndex(txt) {
-  return {
-    tag: 'index',
-    children: [txt]
-  };
+  return <index>{txt}</index>;
 }
 
 function renderTurnEl(children, key) {
-  return {
-    tag: 'turn',
-    attrs: { key },
-    children: children
-  };
+  return <turn key={key}>{children}</turn>;
 }
 
 function renderTurn(ctrl, turn, path) {

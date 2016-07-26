@@ -3,7 +3,8 @@ import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeInSecs } from '../../utils';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   const body = clockBody.bind(undefined, ctrl);
   const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl);
 

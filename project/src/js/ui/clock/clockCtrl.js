@@ -4,7 +4,7 @@ import helper from '../helper';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
-export default function oninit() {
+export default function oninit(vnode) {
 
   helper.analyticsTrackView('Clock');
 
@@ -56,7 +56,7 @@ export default function oninit() {
   document.addEventListener('resume', hideStatusBar);
   window.addEventListener('resize', hideStatusBar);
 
-  return {
+  vnode.state = {
     startStop,
     clockSettingsCtrl,
     clockObj,

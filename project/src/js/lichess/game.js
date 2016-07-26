@@ -8,13 +8,13 @@ const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHi
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
-  var r = {};
-  var keys = Object.keys(possibleMoves);
+  const r = {};
+  const keys = Object.keys(possibleMoves);
   for (var i = 0, ilen = keys.length; i < ilen; i++) {
-    var m = possibleMoves[keys[i]];
-    var a = [];
-    for (var j = 0, jlen = m.length; j < jlen; j += 2) {
-      a.push(m.substr(j, 2));
+    const mvs = possibleMoves[keys[i]];
+    const a = [];
+    for (var j = 0, jlen = mvs.length; j < jlen; j += 2) {
+      a.push(mvs.substr(j, 2));
     }
     r[keys[i]] = a;
   }

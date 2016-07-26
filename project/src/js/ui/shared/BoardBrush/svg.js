@@ -24,9 +24,9 @@ function pos2px(pos, bounds) {
 }
 
 export function circle(brush, pos, current, bounds) {
-  var o = pos2px(pos, bounds);
-  var width = circleWidth(current, bounds);
-  var radius = bounds.width / 16;
+  const o = pos2px(pos, bounds);
+  const width = circleWidth(current, bounds);
+  const radius = bounds.width / 16;
   return (
     <circle
       key={current ? 'current' : pos + brush.key}
@@ -42,14 +42,14 @@ export function circle(brush, pos, current, bounds) {
 }
 
 export function arrow(brush, orig, dest, current, bounds) {
-  var m = arrowMargin(current, bounds);
-  var a = pos2px(orig, bounds);
-  var b = pos2px(dest, bounds);
-  var dx = b[0] - a[0],
+  const margin = arrowMargin(current, bounds);
+  const a = pos2px(orig, bounds);
+  const b = pos2px(dest, bounds);
+  const dx = b[0] - a[0],
     dy = b[1] - a[1],
     angle = Math.atan2(dy, dx);
-  var xo = Math.cos(angle) * m,
-    yo = Math.sin(angle) * m;
+  const xo = Math.cos(angle) * margin,
+    yo = Math.sin(angle) * margin;
   return (
     <line
       key={current ? 'current' : orig + dest + brush.key}

@@ -52,7 +52,7 @@ export default {
                   challengesApi.refresh().run(() => m.redraw());
                   break;
                 case 'challengeAccept':
-                  Promise.all([
+                  m.prop.merge([
                     challengesApi.refresh(),
                     session.refresh()
                   ])

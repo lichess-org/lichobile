@@ -26,11 +26,11 @@ export default function homeCtrl(vnode) {
         });
       });
 
-      Promise.all([
+      m.prop.merge([
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
       ])
-      .then(results => {
+      .run(results => {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);

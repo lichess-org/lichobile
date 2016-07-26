@@ -32,7 +32,7 @@ export default {
 
   view: function(vnode) {
     const ctrl = vnode.state;
-    const header = headerWidget.bind(undefined, backButton(i18n('privacy')));
+    const header = headerWidget.bind(undefined, null, backButton(i18n('privacy')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

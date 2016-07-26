@@ -29,7 +29,7 @@ export default {
 
   view: function(vnode) {
     const ctrl = vnode.state;
-    const header = headerWidget.bind(undefined, backButton('Kid mode'));
+    const header = headerWidget.bind(undefined, null, backButton('Kid mode'));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

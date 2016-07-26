@@ -44,7 +44,7 @@ export default {
 
   view: function(vnode) {
     const ctrl = vnode.state;
-    const header = headerWidget.bind(undefined, backButton(i18n('gameBehavior')));
+    const header = headerWidget.bind(undefined, null, backButton(i18n('gameBehavior')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

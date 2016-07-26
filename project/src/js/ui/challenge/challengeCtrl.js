@@ -13,7 +13,8 @@ export default function oninit(vnode) {
   const challenge = m.prop();
 
   function reloadChallenge() {
-    getChallenge(challenge().id).run(d => {
+    getChallenge(challenge().id)
+    .run(d => {
       clearTimeout(pingTimeoutId());
       challenge(d.challenge);
       switch (d.challenge.status) {
@@ -25,7 +26,8 @@ export default function oninit(vnode) {
           backHistory();
           break;
       }
-    }, err => {
+    })
+    .catch(err => {
       clearTimeout(pingTimeoutId());
       handleXhrError(err);
       m.route.set('/');
@@ -42,11 +44,11 @@ export default function oninit(vnode) {
     socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
     });
-  }, err => {
+  })
+  .catch(err => {
     handleXhrError(err);
     m.route.set('/');
-  })
-  .catch(console.error.bind(console));
+  });
 
   vnode.state = {
     pingTimeoutId,

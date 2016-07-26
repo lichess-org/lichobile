@@ -45,7 +45,8 @@ challengeForm.close = function(fromBB) {
 
 function challenge() {
   const userId = challengeForm.userId;
-  return challengeXhr(userId, challengeForm.fen).run(data => {
+  return challengeXhr(userId, challengeForm.fen)
+  .run(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
 
@@ -63,10 +64,8 @@ function challenge() {
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       m.route.set(`/challenge/${data.challenge.id}`);
     }
-  }, error => {
-    utils.handleXhrError(error);
-    throw error;
-  });
+  })
+  .catch(utils.handleXhrError);
 }
 
 function renderForm() {

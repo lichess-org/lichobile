@@ -38,15 +38,15 @@ export default function oninit(vnode) {
     name: i18n('clearBoard')
   }];
 
-  loadJsonFile('data/positions.json').run(data => {
+  loadJsonFile('data/positions.json')
+  .run(data => {
     this.positions(data);
-  }, err => {
+  })
+  .catch(err => {
     // workaround for iOS: because xhr for local file has a 0 status it will
     // reject the promise and still have the response object
     if (err && err[0] && err[0].fen)
       this.positions(err);
-    else
-      throw err;
   });
 
   this.chessground = new chessground.controller({

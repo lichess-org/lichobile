@@ -40,7 +40,7 @@ export function hasNetwork() {
 }
 
 export function handleXhrError(error) {
-  var {response: data, status} = error;
+  const {response: data, status} = error;
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {

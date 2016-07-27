@@ -103,9 +103,6 @@ function lichessBackedProp(path, prefRequest) {
       .catch(err => {
         if (session) set(session, path, oldPref);
         handleXhrError(err);
-        // need to do this to force mithril to correctly render checkbox state
-        // TODO need to find another way now it animates where it should not
-        m.redraw();
       });
     }
 

@@ -15,7 +15,7 @@ export default {
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
-      m.route.set('/tv');
+      m.route.set('/tv', null, { replace: true });
     }
 
     function onFeatured() {

@@ -301,7 +301,7 @@ gamesMenu.view = function() {
   return (
     <div id="games_menu" className="overlay_popup_wrapper"
       onbeforeremove={(vnode, done) => {
-        vnode.dom.classList.add('fading');
+        vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);
       }}
     >

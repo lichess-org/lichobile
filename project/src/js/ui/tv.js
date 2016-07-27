@@ -15,11 +15,11 @@ export default {
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
-      m.route.set('/tv', null, { replace: true });
+      m.route.set('/tv');
     }
 
     function onFeatured() {
-      m.route.set('/tv', null, { replace: true });
+      m.route.set('/tv');
     }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)

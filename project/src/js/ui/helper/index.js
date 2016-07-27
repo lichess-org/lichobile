@@ -2,7 +2,6 @@ import Zanimo from 'zanimo';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
-import animator from './animator';
 import m from 'mithril';
 
 // store temporarily last route to disable animations on same route
@@ -15,17 +14,20 @@ let cachedViewportDim = null;
 
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
-function viewSlideIn(el, callback) {
+function viewSlideIn(el) {
   if (m.route.get() === lastRoute) {
-    callback();
     return;
   }
+  var tId;
   lastRoute = m.route.get();
 
   function after() {
+    clearTimeout(tId);
     utils.setViewSlideDirection('fwd');
-    el.removeAttribute('style');
-    callback();
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
   }
 
   const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
@@ -37,17 +39,19 @@ function viewSlideIn(el, callback) {
   });
 
   el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  tId = setTimeout(after, 210);
 }
 
-function viewSlideOut(el, callback) {
+function viewSlideOut(el) {
   if (m.route.get() === lastRoute) {
-    callback();
     return;
   }
+  var tId;
 
   function after() {
+    clearTimeout(tId);
     utils.setViewSlideDirection('fwd');
-    callback();
   }
 
   const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
@@ -59,9 +63,11 @@ function viewSlideOut(el, callback) {
   });
 
   el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  tId = setTimeout(after, 210);
 }
 
-function viewFadesIn(el, callback) {
+function viewFadesIn(el) {
   var tId;
 
   el.style.opacity = '0.5';
@@ -77,16 +83,14 @@ function viewFadesIn(el, callback) {
       el.removeAttribute('style');
       el.removeEventListener('transitionend', after, false);
     }
-    callback();
   }
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
-  // TODO find a way to avoid it
-  tId = setTimeout(after, 250);
+  tId = setTimeout(after, 210);
 }
 
-function viewFadesOut(el, callback) {
+function viewFadesOut(el) {
   var tId;
 
   el.style.opacity = '1';
@@ -99,13 +103,11 @@ function viewFadesOut(el, callback) {
 
   function after() {
     clearTimeout(tId);
-    callback();
   }
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
-  // TODO find a way to avoid it
-  tId = setTimeout(after, 250);
+  tId = setTimeout(after, 210);
 }
 
 function computeTransformProp() {
@@ -161,8 +163,16 @@ function viewportDim() {
 
 export default {
   findParentBySelector,
-  slidingPage: c => c,
-  fadingPage: c => c,
+  slidingPage: c => {
+    c.oncreate = vnode => viewSlideIn(vnode.dom);
+    c.onremove = vnode => viewSlideOut(vnode.dom);
+    return c;
+  },
+  fadingPage: c => {
+    c.oncreate = vnode => viewFadesIn(vnode.dom);
+    c.onremove = vnode => viewFadesOut(vnode.dom);
+    return c;
+  },
 
   viewportDim,
 

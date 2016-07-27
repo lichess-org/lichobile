@@ -58,8 +58,9 @@ export default function i18n(key) {
 }
 
 export function loadPreferredLanguage() {
-  if (settings.general.lang())
+  if (settings.general.lang()) {
     return loadFromSettings();
+  }
 
   return new Promise(function(resolve) {
     window.navigator.globalization.getPreferredLanguage(
@@ -72,7 +73,7 @@ export function loadPreferredLanguage() {
     return code;
   })
   .then(loadFile)
-  .then(loadMomentLocale);
+  .run(loadMomentLocale);
 }
 
 export function getAvailableLanguages() {

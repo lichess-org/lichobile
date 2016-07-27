@@ -46,11 +46,6 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     showingActions: false,
     confirmResign: false,
     goneBerserk: {},
-    headerHash: '',
-    replayHash: '',
-    buttonsHash: '',
-    playerHash: '',
-    opponentHash: '',
     moveToSubmit: null,
     dropToSubmit: null,
     tClockEl: null
@@ -511,12 +506,7 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     return toggleGameBookmark(this.data.game.id).run(reloadGameData);
   }.bind(this);
 
-  var onResize = function() {
-    this.vm.replayHash = '';
-  }.bind(this);
-
   document.addEventListener('resume', reloadGameData);
-  window.addEventListener('resize', onResize);
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
@@ -527,7 +517,6 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
-    window.removeEventListener('resize', onResize);
     window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();

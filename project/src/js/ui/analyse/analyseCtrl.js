@@ -56,19 +56,8 @@ export default function oninit(vnode) {
     flip: false,
     analysisProgress: false,
     showBestMove: settings.analyse.showBestMove(),
-    showComments: settings.analyse.showComments(),
-    buttonsHash: '',
-    evalBoxHash: '',
-    gameInfosHash: '',
-    opponentsHash: ''
+    showComments: settings.analyse.showComments()
   };
-
-  this.resetHashes = function() {
-    this.vm.buttonsHash = '';
-    this.vm.evalBoxHash = '';
-    this.vm.gameInfosHash = '';
-    this.vm.opponentsHash = '';
-  }.bind(this);
 
   this.connectGameSocket = function() {
     if (hasNetwork()) {

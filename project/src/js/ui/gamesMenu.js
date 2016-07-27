@@ -299,9 +299,14 @@ gamesMenu.view = function() {
   const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
 
   return (
-    <div id="games_menu" className="overlay_popup_wrapper">
+    <div id="games_menu" className="overlay_popup_wrapper"
+      onbeforeremove={(vnode, done) => {
+        vnode.dom.classList.add('fading');
+        setTimeout(done, 500);
+      }}
+    >
       <div className="wrapper_overlay_close"
-        oncreate={helper.ontouch(helper.fadesOut(gamesMenu.close, '.overlay_popup_wrapper'))} />
+        oncreate={helper.ontouch(gamesMenu.close)} />
       <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
         oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
         {helper.isWideScreen() ? (

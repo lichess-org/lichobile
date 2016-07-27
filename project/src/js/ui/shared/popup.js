@@ -34,9 +34,15 @@ export default function(classes, headerF, contentF, isShowing, closef) {
   });
 
   return (
-    <div className="overlay_popup_wrapper">
+    <div className="overlay_popup_wrapper"
+      onbeforeremove={(vnode, done) => {
+        vnode.dom.classList.add('fading');
+        setTimeout(done, 500);
+      }}
+    >
       <div className="popup_overlay_close"
-        oncreate={closef ? helper.ontouch(helper.fadesOut(closef, '.overlay_popup_wrapper')) : utils.noop} />
+        oncreate={closef ? helper.ontouch(closef) : utils.noop}
+      />
       <div className={className} oncreate={styleConf}>
         {headerF ? <header>{headerF()}</header> : null}
         <div className={contentClass}>

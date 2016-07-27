@@ -6,15 +6,6 @@ export const apiVersion = 2;
 
 const baseUrl = window.lichess.apiEndPoint;
 
-function onSuccess(data) {
-  spinner.stop();
-  return data;
-}
-
-function onError(data) {
-  spinner.stop();
-  throw data;
-}
 
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -25,21 +16,32 @@ function xhrConfig(xhr) {
 
 // convenient wrapper around m.request
 export function request(url, opts, feedback, xhrConf) {
+  let curXhr;
 
-  var cfg = {
+  function onSuccess(data) {
+    spinner.stop();
+    return data;
+  }
+
+  function onError(data) {
+    throw { response: data, status: curXhr.status };
+  }
+
+  const cfg = {
     url: baseUrl + url,
     method: 'GET',
     data: { },
-    config: xhrConf || xhrConfig,
+    config: xhr => {
+      curXhr = xhr;
+      if (xhrConf) xhrConf(xhr);
+      else xhrConfig(xhr);
+    },
     deserialize: function(text) {
       try {
         return JSON.parse(text);
       } catch (e) {
         throw { response: { error: 'Cannot read data from the server' }};
       }
-    },
-    unwrapError: function(response, xhr) {
-      return { response, status: xhr.status };
     }
   };
   merge(cfg, opts);
@@ -54,8 +56,12 @@ export function request(url, opts, feedback, xhrConf) {
     spinner.spin(document.body);
     return stream
     .run(onSuccess)
-    .catch(onError);
+    .catch(data => {
+      spinner.stop();
+      onError(data);
+    });
   } else {
-    return stream;
+    return stream
+    .catch(onError);
   }
 }

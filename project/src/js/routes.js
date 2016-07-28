@@ -43,7 +43,7 @@ export default {
       '/timeline': slidingPage(timeline),
       '/otb': otb,
       '/ai': ai,
-      '/game/:id': game,
+      '/game/:id': fadingPage(game),
       '/game/:id/:color': slidingPage(game),
       '/analyse/:source/:id/:color': slidingPage(analyse),
       '/analyse/:source/:id': slidingPage(analyse),

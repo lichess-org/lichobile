@@ -12,7 +12,7 @@ export default function view() {
   const ctrl = this;
   const user = ctrl.user();
 
-  if (!user) return null;
+  if (!user) return layout.empty();
 
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;

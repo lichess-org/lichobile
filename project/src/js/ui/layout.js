@@ -19,7 +19,17 @@ export default {
     background = bg;
   },
 
-  board: function(header, content, overlay, color = '') {
+  empty() {
+    background = background || settings.general.theme.background();
+    return (
+      <div className={'view-container ' + background}>
+        <main id="page">
+        </main>
+      </div>
+    );
+  },
+
+  board(header, content, overlay, color = '') {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>
@@ -44,7 +54,7 @@ export default {
     );
   },
 
-  free: function(header, content, footer, overlay) {
+  free(header, content, footer, overlay) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>
@@ -72,7 +82,7 @@ export default {
     );
   },
 
-  clock: function(content, overlay) {
+  clock(content, overlay) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>

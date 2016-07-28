@@ -1,7 +1,7 @@
 import settings from './settings';
-import m from 'mithril';
+import { loadLocalFile } from './utils';
 
-var messages = [];
+let messages = [];
 
 const untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
@@ -77,18 +77,7 @@ export function loadPreferredLanguage() {
 }
 
 export function getAvailableLanguages() {
-  return m.request({
-    url: 'i18n/refs.json',
-    method: 'GET'
-  })
-  .run(data => { return data; })
-  .catch(error => {
-    // same workaround for iOS as above
-    if (error && error[0][0] === 'af')
-      return error;
-    else
-      throw { error: 'Cannot load languages' };
-  });
+  return loadLocalFile('i18n/refs.json');
 }
 
 export function loadFromSettings() {
@@ -97,40 +86,22 @@ export function loadFromSettings() {
 }
 
 function loadFile(code) {
-  return m.request({
-    url: 'i18n/' + code + '.json',
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Lang not available' };
-      }
-    }
-  })
-  .run(data => {
-    messages = data;
+  return loadLocalFile(`i18n/${code}.json`)
+  .run(d => {
+    messages = d;
     return code;
   })
   .catch(error => {
-    // workaround for iOS: because xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (error && error.playWithAFriend) {
-      messages = error;
-      return code;
-    } else {
-      if (code === defaultCode) throw new Error(error);
-      return loadFile(defaultCode);
-    }
+    if (code === defaultCode) throw new Error(error);
+    return loadFile(defaultCode);
   });
 }
 
 function loadMomentLocale(code) {
   if (code !== 'en') {
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';
     document.head.appendChild(script);
   }
-  window.moment.locale(code);
   return code;
 }

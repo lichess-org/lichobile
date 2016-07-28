@@ -7,19 +7,17 @@ import { setServerLang } from '../../xhr';
 import m from 'mithril';
 
 export default {
-  oninit: function(vnode) {
+  oninit: function() {
     const langs = m.prop([]);
 
     getAvailableLanguages().run(langs);
 
-    vnode.state = {
-      langs
-    };
+    this.langs = langs;
   },
 
-  view: function(vnode) {
-    const ctrl = vnode.state;
-    const header = headerWidget.bind(undefined, backButton(i18n('language')));
+  view: function() {
+    const ctrl = this;
+    const header = headerWidget.bind(undefined, null, backButton(i18n('language')));
 
     function renderLang(l) {
       return (

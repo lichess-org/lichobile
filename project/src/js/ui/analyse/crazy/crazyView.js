@@ -30,6 +30,7 @@ export default {
 
     function pocketOnRemove(vnode) {
       const el = vnode.dom;
+      const contentNode = document.getElementById('analyseInfos');
       el.removeEventListener('touchstart', onstart);
       if (contentNode) {
         contentNode.removeEventListener('touchmove', onmove);

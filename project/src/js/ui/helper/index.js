@@ -43,30 +43,6 @@ function viewSlideIn(el) {
   tId = setTimeout(after, 210);
 }
 
-function viewSlideOut(el) {
-  if (m.route.get() === lastRoute) {
-    return;
-  }
-  var tId;
-
-  function after() {
-    clearTimeout(tId);
-    utils.setViewSlideDirection('fwd');
-  }
-
-  const direction = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-  el.style.transform = 'translate3d(0%,0,0)';
-  el.style.transition = 'transform 200ms ease-out';
-
-  setTimeout(() => {
-    el.style.transform = `translate3d(${direction},0,0)`;
-  });
-
-  el.addEventListener('transitionend', after, false);
-  // in case transitionend does not fire
-  tId = setTimeout(after, 210);
-}
-
 function viewFadesIn(el) {
   var tId;
 
@@ -83,26 +59,6 @@ function viewFadesIn(el) {
       el.removeAttribute('style');
       el.removeEventListener('transitionend', after, false);
     }
-  }
-
-  el.addEventListener('transitionend', after, false);
-  // in case transitionend does not fire
-  tId = setTimeout(after, 210);
-}
-
-function viewFadesOut(el) {
-  var tId;
-
-  el.style.opacity = '1';
-  el.style.transition = 'opacity 200ms ease-out, visibility 0s linear 200ms';
-
-  setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.visibility = 'hidden';
-  });
-
-  function after() {
-    clearTimeout(tId);
   }
 
   el.addEventListener('transitionend', after, false);
@@ -165,12 +121,25 @@ export default {
   findParentBySelector,
   slidingPage: c => {
     c.oncreate = vnode => viewSlideIn(vnode.dom);
-    c.onremove = vnode => viewSlideOut(vnode.dom);
+    c.onbeforeremove = ({ dom }, done) => {
+      function after() {
+        done();
+        utils.setViewSlideDirection('fwd');
+      }
+      const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+      Zanimo(dom, 'transform', `translateX(${x})`, 250, 'ease-out')
+      .then(after)
+      .catch(after);
+    };
     return c;
   },
   fadingPage: c => {
     c.oncreate = vnode => viewFadesIn(vnode.dom);
-    c.onremove = vnode => viewFadesOut(vnode.dom);
+    c.onbeforeremove = ({ dom }, done) => {
+      Zanimo(dom, 'opacity', 0, 250, 'ease-out')
+      .then(done)
+      .catch(done);
+    };
     return c;
   },
 

@@ -29,7 +29,6 @@ const TV = {
 
   onremove() {
     this.round.onunload();
-    this.round = null;
   },
 
   view() {

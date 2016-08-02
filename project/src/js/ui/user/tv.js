@@ -33,7 +33,6 @@ export default {
   onremove() {
     if (this.round) {
       this.round.onunload();
-      this.round = null;
     }
   },
 

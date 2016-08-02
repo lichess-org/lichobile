@@ -6,7 +6,7 @@ export default {
   oninit,
   onremove() {
     if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
+    this.chessLogic.onunload();
     signals.seekCanceled.remove(this.connectGameSocket);
   },
   view

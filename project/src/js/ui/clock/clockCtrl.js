@@ -66,7 +66,6 @@ export default function oninit(vnode) {
     goHome,
     clockTap,
     onunload: () => {
-      window.plugins.insomnia.allowSleepAgain();
       document.removeEventListener('resume', hideStatusBar);
       window.removeEventListener('resize', hideStatusBar);
       window.StatusBar.show();

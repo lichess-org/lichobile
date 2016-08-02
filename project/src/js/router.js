@@ -43,8 +43,12 @@ function processQuerystring() {
 
 
 export default {
-  set(path) {
-    window.history.pushState(null, null, '?=' + path);
+  set(path, replace) {
+    if (replace) {
+      window.history.replaceState(null, null, '?=' + path);
+    } else {
+      window.history.pushState(null, null, '?=' + path);
+    }
     const matched = router.run(path);
     if (!matched) router.run('/');
   },

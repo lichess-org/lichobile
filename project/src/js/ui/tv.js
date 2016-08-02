@@ -40,8 +40,8 @@ const TV = {
 export default function({ params }) {
   helper.analyticsTrackView('TV');
 
-  params.onChannelChange = () => router.set('/tv');
-  params.onFeatured = () => router.set('/tv');
+  params.onChannelChange = () => router.set('/tv', true);
+  params.onFeatured = () => router.set('/tv', true);
 
   function redraw() {
     // need to change key to effectively reload screen on game change

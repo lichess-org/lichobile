@@ -117,12 +117,12 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
 
   this.flip = function() {
     if (this.data.tv) {
-      if (vnode.attrs.flip) router.set('/tv', null, {replace: true});
+      if (vnode.attrs.flip) router.set('/tv', true);
       else router.set('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
       router.set('/game/' + this.data.game.id + '/' +
-        utils.oppositeColor(this.data.player.color), null, {replace: true});
+        utils.oppositeColor(this.data.player.color), true);
       return;
     }
     this.vm.flip = !this.vm.flip;

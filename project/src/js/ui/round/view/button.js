@@ -308,7 +308,7 @@ export default {
       if (ctrl.data.tv) {
         router.set(url);
       } else {
-        router.set(url, null, {replace: true});
+        router.set(url, true);
       }
     }
     return (
@@ -322,7 +322,7 @@ export default {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      router.set('/tournament/' + ctrl.data.game.tournamentId, null, {replace: true});
+      router.set('/tournament/' + ctrl.data.game.tournamentId, true);
     }
     return (
       <button key="withdrawFromTournament" oncreate={helper.ontouch(handler)}>

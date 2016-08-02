@@ -6,7 +6,6 @@ import * as utils from '../../utils';
 import { tv } from './userXhr';
 import roundCtrl from '../round/roundCtrl';
 import roundView from '../round/view/roundView';
-import m from 'mithril';
 
 export default {
   oninit: function(vnode) {
@@ -16,7 +15,7 @@ export default {
     helper.analyticsTrackView('User TV');
 
     function onRedirect() {
-      router.set(`/@/${userId}/tv`, null, { replace: true });
+      router.set(`/@/${userId}/tv`, true);
     }
 
     tv(userId)

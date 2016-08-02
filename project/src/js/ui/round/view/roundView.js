@@ -103,8 +103,8 @@ function renderTitle(ctrl) {
 function renderHeader(ctrl) {
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      { !ctrl.data.tv && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
-      { ctrl.data.tv || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
+      { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
+      { ctrl.data.tv || ctrl.data.userTV || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>
   );

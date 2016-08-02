@@ -8,9 +8,13 @@ const router = new Rlite();
 export function defineRoutes(mountPoint, routes) {
   for (let route in routes) {
     const component = routes[route];
-    router.add(route, function({ params }) {
+    router.add(route, function({ url, params }) {
       function redraw() {
-        m.render(mountPoint, Node(component, null, params, undefined, undefined, undefined));
+        // the url key on root component is useful to force mithril to rebuild
+        // the component in case of route change with same arg. Otherwise same
+        // component is loaded and oninit is not executed.
+        // this is a temp (?) workaround to help the migration from mithril v0.2
+        m.render(mountPoint, Node(component, url, params, undefined, undefined, undefined));
       }
       signals.redraw.removeAll();
       signals.redraw.add(redraw);

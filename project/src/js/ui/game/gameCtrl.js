@@ -11,7 +11,6 @@ import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';
-import m from 'mithril';
 
 export default function oninit(vnode) {
   let gameData;

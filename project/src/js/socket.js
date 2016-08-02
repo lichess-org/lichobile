@@ -9,7 +9,6 @@ import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import m from 'mithril';
 
 const worker = new Worker('lib/socketWorker.js');
 

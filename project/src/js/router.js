@@ -13,15 +13,22 @@ export function defineRoutes(mountPoint, routes) {
         // the url key on root component is useful to force mithril to rebuild
         // the component in case of route change with same arg. Otherwise same
         // component is loaded and oninit is not executed.
-        // this is a temp (?) workaround to help the migration from mithril v0.2
+        // this is a temp (?) workaround to help the migration
         m.render(mountPoint, Node(component, url, params, undefined, undefined, undefined));
       }
-      // just allow sleep by default
-      // TODO should be in a router exit handler
-      window.plugins.insomnia.allowSleepAgain();
-      signals.redraw.removeAll();
-      signals.redraw.add(redraw);
-      redraw();
+      // allow to have a lower level router handler for tv routes where we can't
+      // pass component directly
+      // FIXME this is a temporary behavior to help migration
+      if (typeof component === 'function') {
+        component({ url, params });
+      } else {
+        // just allow sleep by default
+        // TODO should be in a router exit handler
+        window.plugins.insomnia.allowSleepAgain();
+        signals.redraw.removeAll();
+        signals.redraw.add(redraw);
+        redraw();
+      }
     });
   }
   window.addEventListener('popstate', processQuerystring);

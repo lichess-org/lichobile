@@ -512,14 +512,9 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
   window.plugins.insomnia.keepAwake();
 
   this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    socket.destroy();
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
-    window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
     if (this.chat) this.chat.onunload();
   };

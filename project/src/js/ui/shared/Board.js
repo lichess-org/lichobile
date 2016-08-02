@@ -70,6 +70,10 @@ export default function(
     }
   }
 
+  function boardOnRemove() {
+    if (chessgroundCtrl) chessgroundCtrl.onunload();
+  }
+
   // fix nasty race condition bug when going from analysis to otb
   if (!chessgroundCtrl) return null;
 
@@ -77,7 +81,10 @@ export default function(
     <section className={wrapperClass} oncreate={wrapperOnCreate}
       style={wrapperStyle} key={key}
     >
-    <div className={boardClass} oncreate={boardOnCreate} />
+    <div className={boardClass}
+      oncreate={boardOnCreate}
+      onremove={boardOnRemove}
+    />
     { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current.key ?
       <div className="board_alert">
         {i18n('premoveEnabledClickAnywhereToCancel')}

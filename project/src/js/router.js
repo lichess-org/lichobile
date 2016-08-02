@@ -16,6 +16,9 @@ export function defineRoutes(mountPoint, routes) {
         // this is a temp (?) workaround to help the migration from mithril v0.2
         m.render(mountPoint, Node(component, url, params, undefined, undefined, undefined));
       }
+      // just allow sleep by default
+      // TODO should be in a router exit handler
+      window.plugins.insomnia.allowSleepAgain();
       signals.redraw.removeAll();
       signals.redraw.add(redraw);
       redraw();

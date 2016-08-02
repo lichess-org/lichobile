@@ -1,4 +1,5 @@
 import { connectingHeader, viewOnlyBoardContent } from './shared/common';
+import router from '../router';
 import layout from './layout';
 import helper from './helper';
 import { handleXhrError } from '../utils';
@@ -15,11 +16,11 @@ export default {
     helper.analyticsTrackView('TV');
 
     function onChannelChange() {
-      m.route.set('/tv');
+      router.set('/tv');
     }
 
     function onFeatured() {
-      m.route.set('/tv');
+      router.set('/tv');
     }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
@@ -29,7 +30,7 @@ export default {
     })
     .catch(error => {
       handleXhrError(error);
-      m.route.set('/');
+      router.set('/');
     });
   },
 

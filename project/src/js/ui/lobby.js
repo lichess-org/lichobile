@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import redraw from '../utils/redraw';
 import helper from './helper';
 import backbutton from '../backbutton';
 import { loader } from './shared/common';
@@ -33,7 +34,7 @@ lobby.startSeeking = function() {
       n: (_, d) => {
         nbPlayers = d.d;
         nbGames = d.r;
-        m.redraw();
+        redraw();
       },
       resync: () => xhr.lobby().run(d => {
         socket.setVersion(d.lobby.version);

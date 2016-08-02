@@ -1,3 +1,4 @@
+import router from '../../../router';
 import m from 'mithril';
 import helper from '../../helper';
 import explorerConfig from './explorerConfig';
@@ -65,7 +66,7 @@ function showGameTable(ctrl, type, games) {
   function link(game) {
     const orientation = ctrl.chessground.data.orientation;
     if (ctrl.explorer.config.data.db.selected() === 'lichess') {
-      m.route.set(`/analyse/online/${game.id}/${orientation}`);
+      router.set(`/analyse/online/${game.id}/${orientation}`);
     }
   }
   return (

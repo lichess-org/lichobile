@@ -276,7 +276,7 @@ function tournamentFeaturedGame(ctrl) {
           fen: featured.fen,
           lastMove: featured.lastMove,
           orientation: 'white',
-          link: () => m.route.set('/tournament/' + data.id + '/game/' + featured.id),
+          link: () => router.set('/tournament/' + data.id + '/game/' + featured.id),
           gameObj: featured}
         )}
       </div>
@@ -313,7 +313,7 @@ function renderPlace(data) {
   return (
     <div className={'place'+rank}>
       <div className="trophy"> </div>
-      <div className="username" oncreate={helper.ontouch(() => m.route.set('/@/' + data.name))}>
+      <div className="username" oncreate={helper.ontouch(() => router.set('/@/' + data.name))}>
         {data.name}
       </div>
       <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>

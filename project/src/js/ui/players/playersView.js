@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import router from '../../router';
 import h from '../helper';
 import { menuButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
@@ -83,7 +84,7 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item playerSuggestion nav" oncreate={h.ontouchY(() => m.route.set('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" oncreate={h.ontouchY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

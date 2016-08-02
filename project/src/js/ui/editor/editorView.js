@@ -1,4 +1,5 @@
 import layout from '../layout';
+import router from '../../router';
 import { header } from '../shared/common';
 import Board from '../shared/Board';
 import drag from './drag';
@@ -127,7 +128,7 @@ function renderActionsBar(ctrl) {
       key: 'analyse',
       oncreate: helper.ontouch(() => {
         const fen = encodeURIComponent(ctrl.computeFen());
-        m.route.set(`/analyse/fen/${fen}`);
+        router.set(`/analyse/fen/${fen}`);
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     m('button.action_bar_button.fa.fa-share-alt', {

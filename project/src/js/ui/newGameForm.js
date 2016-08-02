@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import * as xhr from '../xhr';
 import settings from '../settings';
 import session from '../session';
@@ -70,7 +71,7 @@ function seekHumanGame() {
     xhr.seekGame()
     .run(utils.noop)
     .catch(utils.handleXhrError);
-    m.route.set('/correspondence');
+    router.set('/correspondence');
   }
 }
 

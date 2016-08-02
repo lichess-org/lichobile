@@ -1,4 +1,5 @@
 import helper from '../helper';
+import redraw from '../../utils/redraw';
 import challengesApi from '../../lichess/challenges';
 import uniqBy from 'lodash/uniqBy';
 import session from '../../session';
@@ -46,7 +47,7 @@ export default function oninit(vnode) {
     xhr.seeks(feedback)
     .run(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
-      m.redraw();
+      redraw();
     });
   }
   reload(true);

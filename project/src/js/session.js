@@ -1,4 +1,5 @@
 import { get, set } from 'lodash/object';
+import redraw from './utils/redraw';
 import { request } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
@@ -167,13 +168,13 @@ function refresh() {
     })
     .run(data => {
       session = data;
-      m.redraw();
+      redraw();
       return session;
     })
     .catch(err => {
       if (session && err.status === 401) {
         session = null;
-        m.redraw();
+        redraw();
         window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
       }
       throw err;

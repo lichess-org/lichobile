@@ -1,4 +1,6 @@
 import * as xhr from '../userXhr';
+import router from '../../../router';
+import redraw from '../../../utils/redraw';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
 import socket from '../../../socket';
@@ -44,7 +46,7 @@ export default function oninit(vnode) {
   })
   .catch(error => {
     handleXhrError(error);
-    m.route.set('/');
+    router.set('/');
     throw error;
   });
 
@@ -87,7 +89,7 @@ export default function oninit(vnode) {
     })
     .catch(err => {
       handleXhrError(err);
-      m.route.set('/');
+      router.set('/');
     });
   }
 
@@ -98,10 +100,10 @@ export default function oninit(vnode) {
       isLoadingNextPage(false);
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));
-      m.redraw();
+      redraw();
     })
     .catch(handleXhrError);
-    m.redraw();
+    redraw();
   }
 
   function onFilterChange(e) {

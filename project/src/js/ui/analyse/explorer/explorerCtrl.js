@@ -1,4 +1,5 @@
 import m from 'mithril';
+import redraw from '../../../utils/redraw';
 import debounce from 'lodash/debounce';
 import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
@@ -33,7 +34,7 @@ export default function(root, allow) {
 
   var cache = {};
   function onConfigClose() {
-    m.redraw();
+    redraw();
     cache = {};
     setStep();
   }
@@ -48,7 +49,7 @@ export default function(root, allow) {
   function handleFetchError() {
     loading(false);
     failing(true);
-    m.redraw();
+    redraw();
   }
 
   const fetchOpening = debounce(fen => {
@@ -59,7 +60,7 @@ export default function(root, allow) {
       cache[fen] = res;
       loading(false);
       failing(false);
-      m.redraw();
+      redraw();
     })
     .catch(handleFetchError);
   }, 1000);
@@ -72,7 +73,7 @@ export default function(root, allow) {
       cache[fen] = res;
       loading(false);
       failing(false);
-      m.redraw();
+      redraw();
     })
     .catch(handleFetchError);
   }, 500);

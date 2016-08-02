@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import { challenge as challengeXhr } from '../xhr';
 import settings from '../settings';
 import session from '../session';
@@ -59,10 +60,10 @@ function challenge() {
           storage.set('donotshowpersistentchallengeexplanation', true);
         });
       }
-      m.route.set('/correspondence', { tab: 'challenges' });
+      router.set('/correspondence', { tab: 'challenges' });
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      m.route.set(`/challenge/${data.challenge.id}`);
+      router.set(`/challenge/${data.challenge.id}`);
     }
   })
   .catch(utils.handleXhrError);
@@ -119,7 +120,7 @@ function renderForm() {
       m('div.setupMiniBoardWrapper', {
         oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route.set(`/editor/${encodeURIComponent(challengeForm.fen)}`);
+          router.set(`/editor/${encodeURIComponent(challengeForm.fen)}`);
         })
       }, [
         m(ViewOnlyBoard, { fen: challengeForm.fen })
@@ -127,7 +128,7 @@ function renderForm() {
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route.set('/editor');
+          router.set('/editor');
         })
       }, i18n('boardEditor')))
     ) : null,

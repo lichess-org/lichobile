@@ -1,3 +1,5 @@
+import router from './router';
+import redraw from './utils/redraw';
 import storage from './storage';
 import { apiVersion } from './http';
 import xor from 'lodash/xor';
@@ -26,7 +28,7 @@ const defaultHandlers = {
   following_leaves: name => autoredraw(() => friendsApi.remove(name)),
   challenges: data => {
     challengesApi.set(data);
-    m.redraw();
+    redraw();
   }
 };
 
@@ -34,7 +36,7 @@ function handleFollowingOnline(data) {
   const curList = friendsApi.list();
   friendsApi.set(data);
   if (xor(curList, data).length > 0) {
-    m.redraw();
+    redraw();
   }
 }
 
@@ -53,7 +55,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-            m.route.set('/');
+            router.set('/');
           }
         });
       }
@@ -189,7 +191,7 @@ function redirectToGame(obj) {
         ].join('');
         document.cookie = cookie;
     }
-    m.route.set('/game' + url);
+    router.set('/game' + url);
   }
 }
 
@@ -198,14 +200,14 @@ function onConnected() {
   connectedWS = true;
   clearTimeout(proxyFailTimeoutID);
   clearTimeout(redrawOnDisconnectedTimeoutID);
-  if (wasOff) m.redraw();
+  if (wasOff) redraw();
 }
 
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
   if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(function() {
-    m.redraw();
+    redraw();
   }, 2000);
   if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents

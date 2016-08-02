@@ -52,6 +52,7 @@
     "lodash": "4.6.1",
     "mithril": "lhorie/mithril.js#rewrite",
     "moment": "2.14.1",
+    "rlite-router": "1.1.3",
     "signals": "1.0.0",
     "watchify": "3.7.0",
     "zanimo": "git://github.com/veloce/Zanimo"

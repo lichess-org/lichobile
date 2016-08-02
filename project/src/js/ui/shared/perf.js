@@ -1,4 +1,5 @@
 import { gameIcon } from '../../utils';
+import router from '../../router';
 import { provisionalDeviation } from '../../lichess/perfs';
 import helper from '../helper';
 import m from 'mithril';
@@ -7,7 +8,7 @@ export default function(key, name, perf, user) {
   var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};
   if (variantPerfAvailable(key, perf)) {
     options.className += ' nav';
-    options.oncreate = helper.ontouchY(() => m.route.set(`/@/${user.id}/${key}/perf`));
+    options.oncreate = helper.ontouchY(() => router.set(`/@/${user.id}/${key}/perf`));
   }
 
   return m('div', options, [

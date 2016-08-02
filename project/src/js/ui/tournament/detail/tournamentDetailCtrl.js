@@ -1,4 +1,6 @@
 import socket from '../../../socket';
+import redraw from '../../../utils/redraw';
+import router from '../../../router';
 import throttle from 'lodash/throttle';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
@@ -32,7 +34,7 @@ export default function oninit(vnode) {
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion);
     }
-    m.redraw();
+    redraw();
   }
 
   function tick() {
@@ -43,7 +45,7 @@ export default function oninit(vnode) {
     if (data.secondsToFinish && data.secondsToFinish > 0) {
       data.secondsToFinish--;
     }
-    m.redraw();
+    redraw();
   }
 
   function join(id) {
@@ -51,7 +53,7 @@ export default function oninit(vnode) {
     .run(() => {
       hasJoined(true);
       page(null); // Reset the page so next reload goes to player position
-      m.redraw();
+      redraw();
     })
     .catch(utils.handleXhrError);
   }
@@ -60,7 +62,7 @@ export default function oninit(vnode) {
     xhr.withdraw(id)
     .run(() => {
       hasJoined(false);
-      m.redraw();
+      redraw();
     })
     .catch(utils.handleXhrError);
   }
@@ -81,7 +83,7 @@ export default function oninit(vnode) {
     reload: () => throttledReload (id),
     resync: () => throttledReload (id),
     redirect: function(gameId) {
-      m.route.set('/tournament/' + tournament().id + '/game/' + gameId, null, {replace: true});
+      router.set('/tournament/' + tournament().id + '/game/' + gameId, null, {replace: true});
     },
     fen: function(d) {
       const featured = tournament().featured;
@@ -89,7 +91,7 @@ export default function oninit(vnode) {
       if (featured.id !== d.id) return;
       featured.fen = d.fen;
       featured.lastMove = d.lm;
-      m.redraw();
+      redraw();
     }
   };
 

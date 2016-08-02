@@ -1,4 +1,5 @@
 import h from '../helper';
+import router from '../../router';
 import {header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
@@ -67,7 +68,7 @@ function renderTournamentListItem(tournament) {
   return (
     <tr key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
-      oncreate={h.ontouchY(() => m.route.set('/tournament/' + tournament.id))}
+      oncreate={h.ontouchY(() => router.set('/tournament/' + tournament.id))}
     >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>

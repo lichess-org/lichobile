@@ -1,4 +1,6 @@
 import Zanimo from 'zanimo';
+import redraw from '../../utils/redraw';
+import router from '../../router';
 import backbutton from '../../backbutton';
 import m from 'mithril';
 
@@ -10,7 +12,7 @@ menu.headerOpen = m.prop(false);
 
 menu.route = function(route) {
   return function() {
-    return menu.close().then(m.route.set.bind(undefined, route));
+    return menu.close().then(router.set.bind(undefined, route));
   };
 };
 
@@ -18,7 +20,7 @@ menu.popup = function(action) {
   return function() {
     return menu.close().then(() => {
       action();
-      m.redraw();
+      redraw();
     });
   };
 };
@@ -43,7 +45,7 @@ menu.close = function(fromBB) {
   .then(() => {
     menu.headerOpen(false);
     menu.isOpen = false;
-    m.redraw();
+    redraw();
   })
   .catch(console.log.bind(console));
 };

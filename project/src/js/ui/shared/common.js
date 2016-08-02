@@ -1,4 +1,5 @@
 import menu from '../menu';
+import router from '../../router';
 import * as utils from '../../utils';
 import helper from '../helper';
 import gamesMenu from '../gamesMenu';
@@ -200,7 +201,7 @@ export function miniUser(user, mini, isOpen, close) {
     return (
       <div className="miniUser">
         <div className="title">
-          <div className="username" oncreate={helper.ontouch(() => m.route.set(`/@/${user.username}`))}>
+          <div className="username" oncreate={helper.ontouch(() => router.set(`/@/${user.username}`))}>
             <span className={'userStatus withIcon ' + status} data-icon="r" />
             {i18n(user.username)}
           </div>

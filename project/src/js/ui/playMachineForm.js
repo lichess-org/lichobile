@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import * as xhr from '../xhr';
 import settings from '../settings';
 import formWidgets from './shared/form';
@@ -59,7 +60,7 @@ function startAIGame() {
   return xhr.newAiGame(fromPositionFen)
   .run(function(data) {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
-    m.route.set('/game' + data.url.round);
+    router.set('/game' + data.url.round);
   })
   .catch(function(error) {
     utils.handleXhrError(error);
@@ -99,7 +100,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
         m('div.setupMiniBoardWrapper', {
           oncreate: helper.ontouch(() => {
             close();
-            m.route.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
+            router.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
           m(ViewOnlyBoard, { fen: fromPositionFen })
@@ -107,7 +108,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontouch(() => {
           close();
-          m.route.set('/editor');
+          router.set('/editor');
         })
       }, i18n('boardEditor')))
     ));

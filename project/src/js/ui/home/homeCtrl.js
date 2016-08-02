@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
 import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
@@ -21,7 +22,7 @@ export default function homeCtrl(vnode) {
           n: (_, d) => {
             nbConnectedPlayers(d.d);
             nbGamesInPlay(d.r);
-            m.redraw();
+            redraw();
           }
         });
       });

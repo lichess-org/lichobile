@@ -31,54 +31,54 @@ import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
 import clock from './ui/clock';
-import m from 'mithril';
+import { defineRoutes } from './router';
 
 const slidingPage = helper.slidingPage;
 const fadingPage = helper.fadingPage;
 
 export default {
   init() {
-    m.route(document.body, '/', {
-      '/': fadingPage(home),
-      '/timeline': slidingPage(timeline),
-      '/otb': otb,
-      '/ai': ai,
-      '/game/:id': fadingPage(game),
-      '/game/:id/:color': slidingPage(game),
-      '/analyse/:source/:id/:color': slidingPage(analyse),
-      '/analyse/:source/:id': slidingPage(analyse),
-      '/analyse/fen/:fen': analyse,
-      '/analyse': analyse,
-      '/challenge/:id': fadingPage(challenge),
-      '/tv': fadingPage(tv),
-      '/correspondence': fadingPage(correspondence),
-      '/@/:id': fadingPage(user),
-      '/@/:id/following': fadingPage(userFollowing),
-      '/@/:id/followers': fadingPage(userFollowers),
-      '/@/:id/games': slidingPage(userGames),
-      '/@/:id/games/:filter': slidingPage(userGames),
-      '/@/:id/:variant/perf': slidingPage(userVariantPerf),
-      '/@/:id/tv': fadingPage(userTV),
-      '/clock': fadingPage(clock),
-      '/editor': fadingPage(editor),
-      '/editor/:fen': fadingPage(editor),
-      '/players': fadingPage(players),
-      '/ranking': fadingPage(ranking),
-      '/settings': slidingPage(settingsUi),
-      '/settings/preferences': slidingPage(settingsPreferences),
-      '/settings/gameDisplay': slidingPage(settingsGameDisplay),
-      '/settings/gameBehavior': slidingPage(settingsGameBehavior),
-      '/settings/soundNotifications': slidingPage(settingsSoundNotifications),
-      '/settings/privacy': slidingPage(settingsPrivacy),
-      '/settings/themes/board': slidingPage(boardThemes),
-      '/settings/themes/piece': slidingPage(pieceThemes),
-      '/settings/lang': slidingPage(settingsLang),
-      '/settings/kidMode': slidingPage(settingsKidMode),
-      '/training': fadingPage(training),
-      '/training/:id': fadingPage(training),
-      '/tournament': fadingPage(tournament),
-      '/tournament/:id': fadingPage(tournamentDetail),
-      '/tournament/:tournamentId/game/:id': fadingPage(game)
+    defineRoutes(document.body, {
+      '': fadingPage(home),
+      'timeline': slidingPage(timeline),
+      'otb': otb,
+      'ai': ai,
+      'game/:id': fadingPage(game),
+      'game/:id/:color': slidingPage(game),
+      'analyse/:source/:id/:color': slidingPage(analyse),
+      'analyse/:source/:id': slidingPage(analyse),
+      'analyse/fen/:fen': analyse,
+      'analyse': analyse,
+      'challenge/:id': fadingPage(challenge),
+      'tv': fadingPage(tv),
+      'correspondence': fadingPage(correspondence),
+      '@/:id': fadingPage(user),
+      '@/:id/following': fadingPage(userFollowing),
+      '@/:id/followers': fadingPage(userFollowers),
+      '@/:id/games': slidingPage(userGames),
+      '@/:id/games/:filter': slidingPage(userGames),
+      '@/:id/:variant/perf': slidingPage(userVariantPerf),
+      '@/:id/tv': fadingPage(userTV),
+      'clock': fadingPage(clock),
+      'editor': fadingPage(editor),
+      'editor/:fen': fadingPage(editor),
+      'players': fadingPage(players),
+      'ranking': fadingPage(ranking),
+      'settings': slidingPage(settingsUi),
+      'settings/preferences': slidingPage(settingsPreferences),
+      'settings/gameDisplay': slidingPage(settingsGameDisplay),
+      'settings/gameBehavior': slidingPage(settingsGameBehavior),
+      'settings/soundNotifications': slidingPage(settingsSoundNotifications),
+      'settings/privacy': slidingPage(settingsPrivacy),
+      'settings/themes/board': slidingPage(boardThemes),
+      'settings/themes/piece': slidingPage(pieceThemes),
+      'settings/lang': slidingPage(settingsLang),
+      'settings/kidMode': slidingPage(settingsKidMode),
+      'training': fadingPage(training),
+      'training/:id': fadingPage(training),
+      'tournament': fadingPage(tournament),
+      'tournament/:id': fadingPage(tournamentDetail),
+      'tournament/:tournamentId/game/:id': fadingPage(game)
     });
   }
 };

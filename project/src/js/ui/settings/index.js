@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import router from '../../router';
 import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import layout from '../layout';
@@ -30,27 +31,27 @@ function renderBody() {
     m('ul.settings_list.general.native_scroller.page', [
       utils.hasNetwork() && session.isConnected() ? m('li.list_item.nav', {
         key: 'preferences',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/preferences'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/preferences'))
       }, i18n('preferences')) : null,
       m('li.list_item.nav', {
         key: 'lang',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/lang'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/lang'))
       }, i18n('language')),
       m('li.list_item.nav', {
         key: 'gameDisplay',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/gameDisplay'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
         key: 'boardTheme',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/themes/board'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/themes/board'))
       }, `${i18n('theming')} (${i18n('board')})`),
       m('li.list_item.nav', {
         key: 'piecesTheme',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/themes/piece'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/themes/piece'))
       }, `${i18n('theming')} (${i18n('pieces')})`),
       m('li.list_item.nav', {
         key: 'soundNotifications',
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/soundNotifications'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/soundNotifications'))
       }, i18n('soundAndNotifications')),
       m('li.list_item.settingsChoicesInline', {
         key: 'backgroundTheme'

@@ -1,4 +1,5 @@
 import i18n from '../i18n';
+import redraw from './redraw';
 import storage from '../storage';
 import cloneDeep from 'lodash/cloneDeep';
 import m from 'mithril';
@@ -31,7 +32,7 @@ export function loadLocalFile(url) {
 
 export function autoredraw(action) {
   const res = action();
-  m.redraw();
+  redraw();
   return res;
 }
 

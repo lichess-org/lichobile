@@ -1,4 +1,6 @@
 import Zanimo from 'zanimo';
+import redraw from '../../utils/redraw';
+import router from '../../router';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
@@ -15,11 +17,11 @@ let cachedViewportDim = null;
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
 function viewSlideIn(el) {
-  if (m.route.get() === lastRoute) {
+  if (router.get() === lastRoute) {
     return;
   }
   var tId;
-  lastRoute = m.route.get();
+  lastRoute = router.get();
 
   function after() {
     clearTimeout(tId);
@@ -95,7 +97,7 @@ function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touch
     ButtonHandler(vnode.dom,
       e => {
         tapHandler(e);
-        m.redraw();
+        redraw();
       },
       holdHandler ? () => utils.autoredraw(holdHandler) : null,
       repeatHandler,

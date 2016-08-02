@@ -8,6 +8,7 @@ window.moment = moment;
 
 import m from 'mithril';
 import * as utils from './utils';
+import redraw from './utils/redraw';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
@@ -22,8 +23,6 @@ import deepLinks from './deepLinks';
 import { isForeground, setForeground, setBackground } from './utils/appMode';
 
 function main() {
-
-  m.route.prefix('?');
 
   routes.init();
   deepLinks.init();
@@ -73,7 +72,7 @@ function main() {
 
 function onResize() {
   helper.clearCachedViewportDim();
-  m.redraw();
+  redraw();
 }
 
 function onOnline() {
@@ -82,7 +81,7 @@ function onOnline() {
     .run(() => {
       push.register();
       challengesApi.refresh();
-      m.redraw();
+      redraw();
     })
     .run(() => setServerLang(settings.general.lang()));
   }
@@ -91,7 +90,7 @@ function onOnline() {
 function onOffline() {
   if (isForeground()) {
     socket.disconnect();
-    m.redraw();
+    redraw();
   }
 }
 

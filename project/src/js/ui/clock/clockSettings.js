@@ -1,4 +1,5 @@
 import m from 'mithril';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
@@ -28,7 +29,7 @@ export default {
       stages[stages.length-1].moves = stages[stages.length-2].moves;
       stages.push({time: stages[stages.length-1].time});
       settings.clock.stage.stages(stages);
-      m.redraw();
+      redraw();
     }
 
     function removeStage () {
@@ -37,7 +38,7 @@ export default {
         return;
       stages.pop();
       settings.clock.stage.stages(stages);
-      m.redraw();
+      redraw();
     }
 
     return {
@@ -194,5 +195,5 @@ function updateMoves (index, moves) {
 
 function onChange () {
   window.StatusBar.hide();
-  m.redraw();
+  redraw();
 }

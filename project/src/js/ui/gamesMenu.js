@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import helper from './helper';
 import iScroll from 'iscroll';
 import session from '../session';
@@ -36,14 +37,14 @@ gamesMenu.lastJoined = null;
 function joinGame(g) {
   gamesMenu.lastJoined = g;
   gamesMenu.close();
-  m.route.set('/game/' + g.fullId);
+  router.set('/game/' + g.fullId);
 }
 
 function acceptChallenge(id) {
   return xhr.acceptChallenge(id)
   .run(data => {
     helper.analyticsTrackEvent('Challenge', 'Accepted');
-    m.route.set('/game' + data.url.round);
+    router.set('/game' + data.url.round);
   })
   .run(() => challengesApi.remove(id))
   .run(gamesMenu.close);

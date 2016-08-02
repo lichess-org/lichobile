@@ -1,3 +1,4 @@
+import router from '../../router';
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
@@ -58,7 +59,7 @@ function renderAnalyseMenu(ctrl) {
     }, i18n('continueFromHere')) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'boardEditor',
-      oncreate: helper.ontouch(() => m.route.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
+      oncreate: helper.ontouch(() => router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'sharePGN',

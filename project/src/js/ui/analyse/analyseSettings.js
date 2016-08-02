@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import redraw from '../../utils/redraw';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import gameApi from '../../lichess/game';

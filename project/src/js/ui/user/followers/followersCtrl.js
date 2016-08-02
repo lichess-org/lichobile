@@ -1,5 +1,7 @@
 import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
+import redraw from '../../../utils/redraw';
+import router from '../../../router';
 import helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
@@ -48,10 +50,10 @@ export default function oninit(vnode) {
       isLoadingNextPage(false);
       paginator(data.paginator);
       followers(followers().concat(data.paginator.currentPageResults));
-      m.redraw();
+      redraw();
     })
     .catch(handleXhrError);
-    m.redraw();
+    redraw();
   }
 
   xhr.followers(userId, 1, true)
@@ -64,7 +66,7 @@ export default function oninit(vnode) {
   }, 50))
   .catch(err => {
     handleXhrError(err);
-    m.route.set('/');
+    router.set('/');
   });
 
   function setNewUserState(obj, newData) {

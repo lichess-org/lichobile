@@ -1,4 +1,5 @@
 import chessground from 'chessground-mobile';
+import redraw from '../../utils/redraw';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';
@@ -16,7 +17,7 @@ function start(ctrl, orig, dest, isPremove) {
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
     if (ctrl.data.pref.autoQueen === 3 || (ctrl.data.pref.autoQueen === 2 && isPremove)) return false;
     promoting = [orig, dest];
-    m.redraw();
+    redraw();
     return true;
   }
   return false;

@@ -1,5 +1,6 @@
 import session from '../../session';
 import * as xhr from './userXhr';
+import router from '../../router';
 import * as utils from '../../utils';
 import helper from '../helper';
 import challengeForm from '../challengeForm';
@@ -25,7 +26,7 @@ export default function oninit(vnode) {
   .run(session.refresh)
   .catch(error => {
     utils.handleXhrError(error);
-    m.route.set('/');
+    router.set('/');
   });
 
   vnode.state = {
@@ -39,8 +40,8 @@ export default function oninit(vnode) {
       if (user().blocking) xhr.unblock(user().id).run(setNewUserState);
       else xhr.block(user().id).run(setNewUserState);
     },
-    goToGames: () => m.route.set(`/@/${user().id}/games`),
-    goToUserTV: () => m.route.set(`/@/${user().id}/tv`),
+    goToGames: () => router.set(`/@/${user().id}/games`),
+    goToUserTV: () => router.set(`/@/${user().id}/tv`),
     challenge: () => challengeForm.open(user().id)
   };
 }

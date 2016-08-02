@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import router from '../../router';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
@@ -65,7 +66,7 @@ export default {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(aiStorageFenKey, ctrl.fen());
-                m.route.set('/ai');
+                router.set('/ai');
               }
             })
           }, i18n('playOfflineComputer')),
@@ -76,7 +77,7 @@ export default {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(otbStorageFenKey, ctrl.fen());
-                m.route.set('/otb');
+                router.set('/otb');
               }
             })
           }, i18n('playOnTheBoardOffline'))

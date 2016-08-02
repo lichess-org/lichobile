@@ -1,3 +1,5 @@
+import router from '../../router';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import sound from '../../sound';
 import helper from '../helper';
@@ -39,7 +41,7 @@ export default function oninit(vnode) {
 
   function goHome() {
     if (!clockObj().isRunning()) {
-      m.route.set('/');
+      router.set('/');
     }
   }
 
@@ -107,7 +109,7 @@ function incrementClock(time, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -141,7 +143,7 @@ function incrementClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -207,7 +209,7 @@ function delayClock(time, increment) {
         }
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -241,7 +243,7 @@ function delayClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -300,7 +302,7 @@ function bronsteinClock(time, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -336,7 +338,7 @@ function bronsteinClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -393,7 +395,7 @@ function hourglassClock(time) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -425,7 +427,7 @@ function hourglassClock(time) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -483,7 +485,7 @@ function stageClock(stages, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -529,7 +531,7 @@ function stageClock(stages, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {

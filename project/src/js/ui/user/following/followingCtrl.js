@@ -48,10 +48,10 @@ export default function oninit(vnode) {
       isLoadingNextPage(false);
       paginator(data.paginator);
       following(following().concat(data.paginator.currentPageResults));
-      m.redraw();
+      redraw();
     })
     .catch(handleXhrError);
-    m.redraw();
+    redraw();
   }
 
   xhr.following(userId, 1, true)
@@ -64,7 +64,7 @@ export default function oninit(vnode) {
   }, 50))
   .catch(err => {
     handleXhrError(err);
-    m.route.set('/');
+    router.set('/');
   });
 
   function setNewUserState(obj, newData) {

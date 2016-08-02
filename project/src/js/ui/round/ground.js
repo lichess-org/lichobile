@@ -1,4 +1,5 @@
 import chessground from 'chessground-mobile';
+import redraw from '../../utils/redraw';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { boardOrientation } from '../../utils';
@@ -36,15 +37,15 @@ function makeConfig(data, fen, flip) {
       showDests: settings.game.pieceDestinations(),
       castle: data.game.variant.key !== 'antichess',
       events: {
-        set: () => m.redraw(),
-        unset: m.redraw
+        set: () => redraw(),
+        unset: redraw
       }
     },
     predroppable: {
       enabled: data.pref.enablePremove && data.game.variant.key === 'crazyhouse',
       events: {
-        set: () => m.redraw(),
-        unset: m.redraw
+        set: () => redraw(),
+        unset: redraw
       }
     },
     draggable: {

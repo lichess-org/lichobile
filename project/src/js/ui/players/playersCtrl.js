@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import router from '../../router';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/throttle';
 import * as utils from '../../utils';
@@ -61,7 +62,7 @@ export default function oninit(vnode) {
       isSearchOpen(true);
     },
     goToProfile(u) {
-      m.route.set('/@/' + u);
+      router.set('/@/' + u);
     },
     onKeyboardShow,
     onKeyboardHide

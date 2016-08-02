@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import router from '../../router';
 import * as utils from '../../utils';
 import h from '../helper';
 import * as xhr from './playerXhr';
@@ -27,7 +28,7 @@ export default {
     })
     .catch(err => {
       utils.handleXhrError(err);
-      m.route.set('/');
+      router.set('/');
     });
 
     vnode.state = {
@@ -82,7 +83,7 @@ function renderRankingCategory(ctrl, key) {
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer" oncreate={h.ontouchY(() => m.route.set('/@/' + user.id))}>
+    <li className="rankingPlayer" oncreate={h.ontouchY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

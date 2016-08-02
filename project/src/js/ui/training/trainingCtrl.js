@@ -1,4 +1,5 @@
 import last from 'lodash/last';
+import redraw from '../../utils/redraw';
 import chessground from 'chessground-mobile';
 import { handleXhrError } from '../../utils';
 import makeData from './data';
@@ -27,7 +28,7 @@ export default function ctrl(vnode) {
 
   const showLoading = function() {
     this.vm.loading = true;
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const onXhrSuccess = function(res) {
@@ -60,7 +61,7 @@ export default function ctrl(vnode) {
           dests: sitToRevertTo.dests
         }
       });
-      m.redraw();
+      redraw();
     }, 1000);
   }.bind(this);
 
@@ -114,7 +115,7 @@ export default function ctrl(vnode) {
         }
         break;
     }
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const onMove = function(orig, dest, captured) {
@@ -133,7 +134,7 @@ export default function ctrl(vnode) {
         dests: this.data.chess.dests()
       }
     });
-    m.redraw();
+    redraw();
     if (this.data.chess.in_check()) this.chessground.setCheck();
   }.bind(this);
 
@@ -178,7 +179,7 @@ export default function ctrl(vnode) {
     });
     if (this.data.chess.in_check()) this.chessground.setCheck();
     setTimeout(this.chessground.playPremove, this.chessground.data.animation.duration);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.playOpponentNextMove = function(id) {
@@ -269,7 +270,7 @@ export default function ctrl(vnode) {
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.newPuzzle = function(feedback) {

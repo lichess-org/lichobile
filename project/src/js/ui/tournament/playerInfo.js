@@ -1,4 +1,5 @@
 import backbutton from '../../backbutton';
+import router from '../../router';
 import helper from '../helper';
 import m from 'mithril';
 import * as xhr from './tournamentXhr';
@@ -67,7 +68,7 @@ export default {
         outcome = game.score;
       }
       return (
-        <tr className='list_item' key={game.id} oncreate={helper.ontouch(() => m.route.set('/game/' + game.id + '/' + game.color))}>
+        <tr className='list_item' key={game.id} oncreate={helper.ontouch(() => router.set('/game/' + game.id + '/' + game.color))}>
           <td className="oppRank"> {gameArray.length - index} </td>
           <td className="oppName"> {game.op.name} </td>
           <td className="oppRating"> {game.op.rating} </td>

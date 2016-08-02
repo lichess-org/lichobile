@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import router from '../../router';
 import { header as headerWidget, backButton } from '../shared/common';
 import helper from '../helper';
 import layout from '../layout';
@@ -9,13 +10,13 @@ function renderBody() {
   return [
     m('ul.native_scroller.page.settings_list.game', [
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/gameBehavior'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/gameBehavior'))
       }, i18n('gameBehavior')),
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/privacy'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/privacy'))
       }, i18n('privacy')),
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(m.route.set, '/settings/kidMode'))
+        oncreate: helper.ontouchY(utils.f(router.set, '/settings/kidMode'))
       }, 'Kid mode')
     ])
   ];

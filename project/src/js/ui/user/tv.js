@@ -1,4 +1,5 @@
 import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
+import router from '../../router';
 import layout from '../layout';
 import helper from '../helper';
 import * as utils from '../../utils';
@@ -15,7 +16,7 @@ export default {
     helper.analyticsTrackView('User TV');
 
     function onRedirect() {
-      m.route.set(`/@/${userId}/tv`, null, { replace: true });
+      router.set(`/@/${userId}/tv`, null, { replace: true });
     }
 
     tv(userId)
@@ -25,7 +26,7 @@ export default {
     })
     .catch(error => {
       utils.handleXhrError(error);
-      m.route.set('/');
+      router.set('/');
     });
 
   },

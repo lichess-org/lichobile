@@ -1,4 +1,5 @@
 import helper from './helper';
+import router from '../router';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
@@ -50,7 +51,7 @@ function renderFriend(name) {
   let userId = utils.userFullNameToId(name);
   let action = () => {
     friendsPopup.close();
-    m.route.set('/@/' + userId);
+    router.set('/@/' + userId);
   };
 
   return (

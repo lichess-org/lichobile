@@ -1,3 +1,5 @@
+import router from '../../router';
+import redraw from '../../utils/redraw';
 import m from 'mithril';
 import debounce from 'lodash/debounce';
 import session from '../../session';
@@ -181,7 +183,7 @@ export default function oninit(vnode) {
   this.jumpToNag = function(color, nag) {
     var ply = this.analyse.plyOfNextNag(color, nag, this.vm.step.ply);
     if (ply) this.jumpToMain(ply);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const preparePremoving = function() {
@@ -263,7 +265,7 @@ export default function oninit(vnode) {
   this.addStep = function(step, path) {
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
-    m.redraw();
+    redraw();
     this.chessground.playPremove();
   }.bind(this);
 
@@ -271,7 +273,7 @@ export default function oninit(vnode) {
     this.analyse.addDests(dests, treePath.read(path));
     if (path === this.vm.pathStr) {
       showGround();
-      m.redraw();
+      redraw();
       if (dests === '') this.ceval.stop();
     }
     this.chessground.playPremove();
@@ -305,7 +307,7 @@ export default function oninit(vnode) {
 
   this.reset = function() {
     this.chessground.set(this.vm.situation);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.currentAnyEval = function() {
@@ -331,7 +333,7 @@ export default function oninit(vnode) {
       }).then(data => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
-          m.redraw();
+          redraw();
         }
       })
       // we just ignore errors here
@@ -384,7 +386,7 @@ export default function oninit(vnode) {
     this.data = data;
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
-      m.route.set('/');
+      router.set('/');
     }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
@@ -426,18 +428,18 @@ export default function oninit(vnode) {
         // reconnect game socket after a cancelled seek
         signals.seekCanceled.add(this.connectGameSocket);
       }
-      m.redraw();
+      redraw();
       setTimeout(this.debouncedScroll, 250);
     })
     .catch(err => {
       handleXhrError(err);
-      m.route.set('/');
+      router.set('/');
     });
   } else if (this.source === 'offline' && gameId === 'otb') {
     helper.analyticsTrackView('Analysis (offline otb)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) {
-      m.route.set('/analyse');
+      router.set('/analyse');
     } else {
       otbData.player.spectator = true;
       otbData.orientation = orientation;
@@ -447,7 +449,7 @@ export default function oninit(vnode) {
     helper.analyticsTrackView('Analysis (offline ai)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) {
-      m.route.set('/analyse');
+      router.set('/analyse');
     } else {
       aiData.player.spectator = true;
       aiData.orientation = orientation;

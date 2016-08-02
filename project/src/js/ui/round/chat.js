@@ -1,4 +1,5 @@
 import helper from '../helper';
+import redraw from '../../utils/redraw';
 import i18n from '../../i18n';
 import storage from '../../storage';
 import gameApi from '../../lichess/game';
@@ -52,7 +53,7 @@ export default {
       this.messages.push(msg);
       storage.set(storageId, this.messages.length);
       if (msg.u !== 'lichess') this.unread = true;
-      m.redraw();
+      redraw();
     }.bind(this);
 
     function onKeyboardShow(e) {

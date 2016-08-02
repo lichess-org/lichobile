@@ -1,4 +1,5 @@
 import chessground from 'chessground-mobile';
+import router from '../../router';
 import settings from '../../settings';
 import { computeFen, readFen } from './editor';
 import menu from './menu';
@@ -93,7 +94,7 @@ export default function oninit(vnode) {
   this.continuePopup = continuePopup.oninit();
 
   this.loadNewFen = function(newFen) {
-    m.route.set(`/editor/${encodeURIComponent(newFen)}`);
+    router.set(`/editor/${encodeURIComponent(newFen)}`);
   };
 
 }

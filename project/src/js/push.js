@@ -1,3 +1,5 @@
+import router from './router';
+import redraw from './utils/redraw';
 import session from './session';
 import settings from './settings';
 import i18n from './i18n';
@@ -49,7 +51,7 @@ export default {
             if (payload.userData) {
               switch (payload.userData.type) {
                 case 'challengeCreate':
-                  challengesApi.refresh().run(() => m.redraw());
+                  challengesApi.refresh().run(() => redraw());
                   break;
                 case 'challengeAccept':
                   m.prop.merge([
@@ -59,17 +61,17 @@ export default {
                   .run(() => {
                     window.plugins.toast.show(
                       i18n('userAcceptsYourChallenge', lightPlayerName(payload.userData.joiner)), 'long', 'top');
-                    m.redraw();
+                    redraw();
                   });
                   break;
                 case 'gameMove':
                   session.refresh().run(v => {
-                    if (v) m.redraw();
+                    if (v) redraw();
                   });
                   break;
                 case 'gameFinish':
                   session.refresh()
-                  .run(() => m.redraw());
+                  .run(() => redraw());
                   break;
               }
             }
@@ -78,17 +80,17 @@ export default {
           else if (payload.userData) {
             switch (payload.userData.type) {
               case 'challengeCreate':
-                m.route.set(`/challenge/${payload.userData.challengeId}`);
+                router.set(`/challenge/${payload.userData.challengeId}`);
                 break;
               case 'challengeAccept':
                 challengesApi.refresh();
-                m.route.set(`/game/${payload.userData.challengeId}`);
+                router.set(`/game/${payload.userData.challengeId}`);
                 break;
               case 'gameMove':
-                m.route.set(`/game/${payload.userData.fullId}`);
+                router.set(`/game/${payload.userData.fullId}`);
                 break;
               case 'gameFinish':
-                m.route.set(`/game/${payload.userData.fullId}`);
+                router.set(`/game/${payload.userData.fullId}`);
                 break;
             }
           }

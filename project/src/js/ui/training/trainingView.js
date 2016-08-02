@@ -1,4 +1,5 @@
 import layout from '../layout';
+import router from '../../router';
 import i18n from '../../i18n';
 import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
@@ -68,7 +69,7 @@ function renderExplanation(ctrl) {
 function renderProblemDetails(ctrl) {
 
   const viewGame = ctrl.data.puzzle.gameId ? helper.ontouch(
-    () => m.route.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
+    () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
     () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
   ) : () => {};
   return (
@@ -136,7 +137,7 @@ function renderViewControls(ctrl) {
     }),
     m('button.action_bar_button.training_action[data-icon=A]', {
       key: 'analysePuzzle',
-      oncreate: helper.ontouch(() => m.route.set(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
+      oncreate: helper.ontouch(() => router.set(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',

@@ -1,4 +1,5 @@
 import gameStatusApi from '../../lichess/status';
+import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
@@ -66,7 +67,7 @@ export default function oninit() {
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
     addMove(from, to);
-    m.redraw();
+    redraw();
   };
 
   const engineMove = function () {
@@ -111,7 +112,7 @@ export default function oninit() {
       engineMove();
     }
     this.save();
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.onGameEnd = function() {
@@ -120,7 +121,7 @@ export default function oninit() {
     this.chessground.stop();
     setTimeout(function() {
       self.actions.open();
-      m.redraw();
+      redraw();
     }, 500);
   }.bind(this);
 
@@ -154,7 +155,7 @@ export default function oninit() {
       }
     });
 
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.startNewGame = function(setupFen) {

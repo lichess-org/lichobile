@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import router from '../../../router';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
@@ -60,7 +61,7 @@ export function renderGameActionsBar(ctrl, type) {
       />
       <button data-icon="A" className="action_bar_button"
         oncreate={helper.ontouch(
-          () => m.route.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+          () => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
@@ -83,7 +84,7 @@ export function renderGameActionsBarTablet(ctrl, type) {
         oncreate={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontouch(() => m.route.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        oncreate={helper.ontouch(() => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}

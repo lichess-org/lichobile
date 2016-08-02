@@ -1,4 +1,5 @@
 import { formatClockTime } from './clockView';
+import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import m from 'mithril';
 
@@ -50,10 +51,10 @@ export default function ctrl(data, outOfTime, soundColor) {
 
     if (this.data[color] < this.data.emerg && !this.emerg[color]) {
       this.emerg[color] = true;
-      m.redraw();
+      redraw();
     } else if (this.data[color] >= this.data.emerg && this.emerg[color]) {
       this.emerg[color] = false;
-      m.redraw();
+      redraw();
     }
 
     if (soundColor === color &&

@@ -1,4 +1,5 @@
 import * as xhr from '../userXhr';
+import router from '../../../router';
 import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
 import m from 'mithril';
@@ -18,7 +19,7 @@ export default function oninit(vnode) {
   })
   .catch(error => {
     handleXhrError(error);
-    m.route.set('/');
+    router.set('/');
     throw error;
   });
 
@@ -29,7 +30,7 @@ export default function oninit(vnode) {
   })
   .catch(error => {
     handleXhrError(error);
-    m.route.set('/');
+    router.set('/');
     throw error;
   });
 

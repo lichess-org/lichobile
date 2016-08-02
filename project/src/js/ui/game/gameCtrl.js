@@ -1,4 +1,5 @@
 import session from '../../session';
+import router from '../../router';
 import { hasNetwork, handleXhrError, getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
@@ -22,7 +23,7 @@ export default function oninit(vnode) {
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
         window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
-        m.route.set('/');
+        router.set('/');
       }
       else {
 
@@ -69,7 +70,7 @@ export default function oninit(vnode) {
     })
     .catch(error => {
       handleXhrError(error);
-      m.route.set('/');
+      router.set('/');
     });
   } else {
     const savedData = getOfflineGameData(vnode.attrs.id);
@@ -81,7 +82,7 @@ export default function oninit(vnode) {
       this.round = new roundCtrl(vnode, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
-      m.route.set('/');
+      router.set('/');
     }
   }
 }

@@ -1,3 +1,5 @@
+import router from '../router';
+import redraw from '../utils/redraw';
 import { timeline as timelineXhr } from '../xhr';
 import { gameIcon, handleXhrError } from '../utils';
 import { header as headerWidget, backButton } from './shared/common';
@@ -15,7 +17,7 @@ export default {
     timelineXhr()
     .run(data => {
       timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1));
-      m.redraw();
+      redraw();
     })
     .catch(handleXhrError);
 
@@ -56,7 +58,7 @@ export function renderTourJoin(entry) {
   return (
     <li className="list_item timelineEntry" key={key}
       oncreate={helper.ontouchY(() => {
-        m.route.set('/tournament/' + entry.data.tourId);
+        router.set('/tournament/' + entry.data.tourId);
       })}
     >
       <span className="fa fa-trophy" />
@@ -74,7 +76,7 @@ export function renderFollow(entry) {
   return (
     <li className="list_item timelineEntry" key={key}
       oncreate={helper.ontouchY(() => {
-        m.route.set('/@/' + entry.data.u1);
+        router.set('/@/' + entry.data.u1);
       })}
     >
       <span className="fa fa-arrow-circle-right" />
@@ -93,7 +95,7 @@ export function renderGameEnd(entry) {
   return (
     <li className="list_item timelineEntry" key={key} data-icon={icon}
       oncreate={helper.ontouchY(() => {
-        m.route.set('/game/' + entry.data.playerId);
+        router.set('/game/' + entry.data.playerId);
       })}
     >
       <strong>{result}</strong> vs. {entry.data.opponent}

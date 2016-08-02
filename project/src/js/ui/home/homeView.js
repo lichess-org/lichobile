@@ -1,4 +1,5 @@
 import m from 'mithril';
+import router from '../../router';
 import { gameIcon, hasNetwork } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -22,8 +23,8 @@ export default function homeView() {
         <div className="page homeOffline">
           <section id="homeCreate">
             <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" oncreate={helper.ontouchY(() => m.route.set('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" oncreate={helper.ontouchY(() => m.route.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
           </section>
         </div>
       );
@@ -74,7 +75,7 @@ function renderDailyPuzzle(ctrl, isPortrait) {
           bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,
-          link: () => m.route.set('/training/' + puzzle.id)
+          link: () => router.set('/training/' + puzzle.id)
         })}
     </section>
   );
@@ -100,7 +101,7 @@ function renderTimeline(ctrl) {
         })}
       </ul>
       <div className="homeMoreButton">
-        <button oncreate={helper.ontouchY(() => m.route.set('/timeline'))}>
+        <button oncreate={helper.ontouchY(() => router.set('/timeline'))}>
           {i18n('more')}
         </button>
       </div>
@@ -120,7 +121,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button oncreate={helper.ontouchY(() => m.route.set('/players'))}>
+        <button oncreate={helper.ontouchY(() => router.set('/players'))}>
           {i18n('more')}
         </button>
       </div>
@@ -139,7 +140,7 @@ function renderPlayer(p) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontouchY(() => m.route.set('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontouchY(() => router.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

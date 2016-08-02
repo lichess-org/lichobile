@@ -1,3 +1,4 @@
+import router from '../../router';
 import session from '../../session';
 import loginModal from '../loginModal';
 import challengesApi from '../../lichess/challenges';
@@ -123,7 +124,7 @@ function awaitInvitePopup(ctrl) {
           isPersistent ? m('div', [
             m('br'),
             m('button', {
-              oncreate: helper.ontouch(() => m.route.set('/'))
+              oncreate: helper.ontouch(() => router.set('/'))
             }, [m('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
         ]);

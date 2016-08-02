@@ -1,11 +1,11 @@
 import merge from 'lodash/merge';
 import spinner from './spinner';
+import redraw from './utils/redraw';
 import m from 'mithril';
 
 export const apiVersion = 2;
 
 const baseUrl = window.lichess.apiEndPoint;
-
 
 function xhrConfig(xhr) {
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -19,11 +19,14 @@ export function request(url, opts, feedback, xhrConf) {
   let curXhr;
 
   function onSuccess(data) {
-    spinner.stop();
+    if (feedback) spinner.stop();
+    redraw();
     return data;
   }
 
   function onError(data) {
+    if (feedback) spinner.stop();
+    redraw();
     throw { response: data, status: curXhr.status };
   }
 
@@ -54,14 +57,9 @@ export function request(url, opts, feedback, xhrConf) {
 
   if (feedback) {
     spinner.spin(document.body);
-    return stream
-    .run(onSuccess)
-    .catch(data => {
-      spinner.stop();
-      onError(data);
-    });
-  } else {
-    return stream
-    .catch(onError);
   }
+
+  return stream
+    .run(onSuccess)
+    .catch(onError);
 }

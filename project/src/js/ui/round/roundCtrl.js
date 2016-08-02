@@ -1,4 +1,6 @@
 import throttle from 'lodash/throttle';
+import redraw from '../../utils/redraw';
+import router from '../../router';
 import round from './round';
 import * as utils from '../../utils';
 import sound from '../../sound';
@@ -115,11 +117,11 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
 
   this.flip = function() {
     if (this.data.tv) {
-      if (vnode.attrs.flip) m.route.set('/tv', null, {replace: true});
-      else m.route.set('/tv?flip=1', null, true);
+      if (vnode.attrs.flip) router.set('/tv', null, {replace: true});
+      else router.set('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
-      m.route.set('/game/' + this.data.game.id + '/' +
+      router.set('/game/' + this.data.game.id + '/' +
         utils.oppositeColor(this.data.player.color), null, {replace: true});
       return;
     }
@@ -203,7 +205,7 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
       setTimeout(() => {
         backbutton.stack.push(this.cancelMove);
         this.vm.moveToSubmit = move;
-        m.redraw();
+        redraw();
       }, this.data.pref.animationDuration || 0);
     } else {
       socket.send('move', move, {
@@ -225,7 +227,7 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
       setTimeout(() => {
         backbutton.stack.push(this.cancelMove);
         this.vm.dropToSubmit = drop;
-        m.redraw();
+        redraw();
       }, this.data.pref.animationDuration || 0);
     } else socket.send('drop', drop, {
       ackable: true,
@@ -437,7 +439,7 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     if (this.vm.goneBerserk[color]) return;
     this.vm.goneBerserk[color] = true;
     if (color !== this.data.player.color) sound.berserk();
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
@@ -495,7 +497,7 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   var reloadGameData = function() {

@@ -1,4 +1,5 @@
 import gameApi from '../../../lichess/game';
+import router from '../../../router';
 import gameStatus from '../../../lichess/status';
 import round from '../round';
 import helper from '../../helper';
@@ -161,7 +162,7 @@ export default {
       return m('button', {
         oncreate: helper.ontouch(() => {
           socket.send('rematch-no');
-          m.route.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
+          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
       }, [m('span[data-icon=A].withIcon'), i18n('analysis')]);
     }
@@ -305,9 +306,9 @@ export default {
       ctrl.hideActions();
       const url = `/tournament/${ctrl.data.game.tournamentId}`;
       if (ctrl.data.tv) {
-        m.route.set(url);
+        router.set(url);
       } else {
-        m.route.set(url, null, {replace: true});
+        router.set(url, null, {replace: true});
       }
     }
     return (
@@ -321,7 +322,7 @@ export default {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      m.route.set('/tournament/' + ctrl.data.game.tournamentId, null, {replace: true});
+      router.set('/tournament/' + ctrl.data.game.tournamentId, null, {replace: true});
     }
     return (
       <button key="withdrawFromTournament" oncreate={helper.ontouch(handler)}>

@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import redraw from '../../../utils/redraw';
 import helper from '../../helper';
 import settings from '../../../settings';
 import m from 'mithril';
@@ -27,7 +28,7 @@ function start(ctrl, orig, dest, callback) {
       dest: dest,
       callback: callback
     };
-    m.redraw();
+    redraw();
     return true;
   }
   return false;
@@ -43,7 +44,7 @@ function cancel(ctrl, cgConfig) {
   if (promoting) {
     promoting = false;
     ctrl.chessground.set(cgConfig);
-    m.redraw();
+    redraw();
   }
 }
 

@@ -153,9 +153,8 @@ function signup(username, email, password) {
 }
 
 function rememberLogin() {
-  return request('/account/info', {
-    background: true
-  }).run(function(data) {
+  return request('/account/info')
+  .run(function(data) {
     session = data;
     return data;
   });
@@ -163,9 +162,7 @@ function rememberLogin() {
 
 function refresh() {
   if (hasNetwork() && isConnected()) {
-    return request('/account/info', {
-      background: true
-    })
+    return request('/account/info')
     .run(data => {
       session = data;
       redraw();

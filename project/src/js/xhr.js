@@ -98,10 +98,10 @@ export function seeks(feedback) {
   return request('/lobby/seeks', null, feedback);
 }
 
-export function game(id, color, background) {
+export function game(id, color) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return request(url, { background }, true);
+  return request(url, null, true);
 }
 
 export function toggleGameBookmark(id) {
@@ -133,13 +133,11 @@ export function miniUser(userId) {
 }
 
 export function timeline() {
-  return request('/timeline', { background: true }, false);
+  return request('/timeline', null, false);
 }
 
 export function status() {
-  return request('/api/status', {
-    background: true
-  })
+  return request('/api/status')
   .run(function(data) {
     if (data.api.current !== apiVersion) {
       for (var i = 0, len = data.api.olds.length; i < len; i++) {

@@ -5,8 +5,7 @@ export function games(userId, filter = 'all', page = 1, feedback = false) {
     method: 'GET',
     data: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 
@@ -15,8 +14,7 @@ export function following(userId, page = 1, feedback = false) {
     method: 'GET',
     data: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 
@@ -25,8 +23,7 @@ export function followers(userId, page = 1, feedback = false) {
     method: 'GET',
     data: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 

@@ -29,11 +29,11 @@ export function setDifficulty(d) {
 }
 
 export function loadPuzzle(id) {
-  return request(`/training/${id}/load`, { background: true });
+  return request(`/training/${id}/load`);
 }
 
 export function newPuzzle() {
-  return request('/training/new', { background: true });
+  return request('/training/new');
 }
 
 export function history() {

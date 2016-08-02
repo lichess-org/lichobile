@@ -20,7 +20,6 @@ export function openingXhr(variant, fen, config, withGames) {
     params['ratings[]'] = config.rating.selected();
   }
   return m.request({
-    background: true,
     method: 'GET',
     url: endpoint + url,
     data: params
@@ -29,7 +28,6 @@ export function openingXhr(variant, fen, config, withGames) {
 
 export function tablebaseXhr(fen) {
   return m.request({
-    background: true,
     method: 'GET',
     url: endpoint + '/tablebase',
     data: {

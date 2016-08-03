@@ -8,6 +8,7 @@ import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
+import vibrate from '../../vibrate';
 import i18n from '../../i18n';
 import m from 'mithril';
 
@@ -38,6 +39,7 @@ export default function controller() {
         if (gameApi.isPlayerPlaying(data) &&
         gameApi.nbMoves(data, data.player.color) === 0) {
           sound.dong();
+          vibrate.quick();
           const variant = variantApi(data.game.variant.key);
           const storageKey = variantStorageKey(data.game.variant.key);
           if ([1, 3].indexOf(variant.id) === -1 &&

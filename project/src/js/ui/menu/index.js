@@ -30,7 +30,6 @@ menu.toggle = function() {
 };
 
 menu.open = function() {
-  console.log('open');
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
   getServerLag();
@@ -59,7 +58,6 @@ menu.toggleHeader = function() {
 
 function getServerLag() {
   socket.send('moveLat', true);
-  m.redraw();
 }
 
 export default menu;

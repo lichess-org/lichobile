@@ -22,7 +22,6 @@ export default function homeCtrl() {
             nbConnectedPlayers(d.d);
             nbGamesInPlay(d.r);
             m.redraw();
-            console.log(d);
           }
         });
       });

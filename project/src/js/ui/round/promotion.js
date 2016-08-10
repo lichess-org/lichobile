@@ -43,7 +43,6 @@ export default {
     if (!promoting) return null;
 
     const pieces = ['queen', 'knight', 'rook', 'bishop'];
-
     if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
 
     return m('div.overlay.open', {

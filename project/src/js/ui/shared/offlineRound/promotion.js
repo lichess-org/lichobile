@@ -48,10 +48,13 @@ function cancel(ctrl, cgConfig) {
 }
 
 export function view(ctrl) {
+  const pieces = ['queen', 'knight', 'rook', 'bishop'];
+  if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
+
   return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
     className: settings.general.theme.piece(),
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
-  }, ['queen', 'knight', 'rook', 'bishop'].map(function(role) {
+  }, pieces.map(function(role) {
     return m('piece.' + role + '.' + ctrl.data.player.color, {
       config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
     });

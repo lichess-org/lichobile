@@ -124,6 +124,8 @@ export default {
   slidingPage: c => {
     c.oncreate = vnode => viewSlideIn(vnode.dom);
     c.onbeforeremove = ({ dom }, done) => {
+      // by convention I use cleanup on root component to perform global cleanup
+      if (c.cleanup) c.cleanup();
       function after() {
         done();
         utils.setViewSlideDirection('fwd');
@@ -138,6 +140,8 @@ export default {
   fadingPage: c => {
     c.oncreate = vnode => viewFadesIn(vnode.dom);
     c.onbeforeremove = ({ dom }, done) => {
+      // by convention I use cleanup on root component to perform global cleanup
+      if (c.cleanup) c.cleanup();
       Zanimo(dom, 'opacity', 0, 250, 'ease-out')
       .then(done)
       .catch(done);

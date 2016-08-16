@@ -4,6 +4,9 @@ import signals from '../../signals';
 
 export default {
   oninit,
+  cleanup() {
+    window.plugins.insomnia.allowSleepAgain();
+  },
   onremove() {
     if (this.ceval) this.ceval.destroy();
     this.chessLogic.onunload();

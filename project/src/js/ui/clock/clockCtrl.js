@@ -12,7 +12,7 @@ export default function controller() {
   const clockObj = m.prop();
 
   function reload() {
-    if (clockObj() && clockObj().isRunning()) return;
+    if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return;
 
     clockMap = {
       'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
@@ -38,7 +38,7 @@ export default function controller() {
   }
 
   function goHome() {
-    if (!clockObj().isRunning()) {
+    if (!clockObj().isRunning() || clockObj().flagged()) {
       m.route('/');
     }
   }

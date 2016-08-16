@@ -12,7 +12,7 @@ export default {
     let isOpen = false;
 
     function open() {
-      if (clockObj().isRunning()) return;
+      if (clockObj().isRunning() && !clockObj().flagged()) return;
 
       backbutton.stack.push(close);
       isOpen = true;

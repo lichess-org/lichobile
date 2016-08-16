@@ -77,13 +77,14 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
+  const link = g.winner ? () => m.route(`/analyse/online/${g.id}/${userColor}`) : () => m.route(`/game/${g.id}/${userColor}`);
 
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" oncreate={helper.ontouchY(() => router.set(`/analyse/online/${g.id}/${userColor}`))}>
+      <div className="nav" oncreate={helper.ontouchY(link)}>
         <span className="iconGame" data-icon={icon} />
         {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">

@@ -24,6 +24,7 @@ function clockBody(ctrl) {
   const bottomActive = clock.activeSide() === 'bottom';
   const topFlagged = clock.flagged() === 'top';
   const bottomFlagged = clock.flagged() === 'bottom';
+  const flagged = topFlagged || bottomFlagged;
 
   const topClockClass = [
     'clockTapArea',
@@ -67,9 +68,9 @@ function clockBody(ctrl) {
       </div>
       <div className="clockControls">
         <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontouch(() => ctrl.startStop())} />
-        <span className={'fa fa-refresh' + (clock.isRunning() ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
-        <span className={'fa fa-cog' + (clock.isRunning() ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
-        <span className={'fa fa-home' + (clock.isRunning() ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
+        <span className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
+        <span className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
+        <span className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
       </div>
       <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">

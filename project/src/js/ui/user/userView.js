@@ -69,7 +69,7 @@ function renderProfile(user) {
     const country = countries[user.profile.country];
     const location = user.profile.location;
     const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL');
-    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + window.moment(user.seenAt).calendar() : null;
+    const seenAt = user.seenAt ? 'Last login ' + window.moment(user.seenAt).calendar() : null;
     return (
       <section className="profile">
         {fullname ?

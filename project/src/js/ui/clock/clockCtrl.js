@@ -14,7 +14,7 @@ export default function oninit(vnode) {
   const clockObj = m.prop();
 
   function reload() {
-    if (clockObj() && clockObj().isRunning()) return;
+    if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return;
 
     clockMap = {
       'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
@@ -40,7 +40,7 @@ export default function oninit(vnode) {
   }
 
   function goHome() {
-    if (!clockObj().isRunning()) {
+    if (!clockObj().isRunning() || clockObj().flagged()) {
       router.set('/');
     }
   }

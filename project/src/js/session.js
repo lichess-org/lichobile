@@ -76,7 +76,8 @@ function savePreferences() {
     'follow',
     'challenge',
     'message',
-    'insightShare'
+    'insightShare',
+    'keyboardMove'
   ]), v => {
     if (v === true) return 1;
     else if (v === false) return 0;

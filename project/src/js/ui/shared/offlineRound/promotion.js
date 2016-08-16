@@ -50,7 +50,9 @@ function cancel(ctrl, cgConfig) {
 
 export function view(ctrl) {
   const pieces = ['queen', 'knight', 'rook', 'bishop'];
-  if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
+  if (ctrl.data && ctrl.data.game.variant.key === 'antichess') {
+    pieces.push('king');
+  }
 
   return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
     className: settings.general.theme.piece(),

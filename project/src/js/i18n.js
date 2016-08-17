@@ -1,3 +1,4 @@
+import m from 'mithril';
 import settings from './settings';
 import { loadLocalFile } from './utils';
 
@@ -62,17 +63,19 @@ export function loadPreferredLanguage() {
     return loadFromSettings();
   }
 
-  return new Promise(function(resolve) {
-    window.navigator.globalization.getPreferredLanguage(
-      l => resolve(l.value.split('-')[0]),
-      () => resolve(defaultCode)
-    );
-  })
-  .then(code => {
+  const stream = m.prop();
+
+  window.navigator.globalization.getPreferredLanguage(
+    l => stream(l.value.split('-')[0]),
+    () => stream(defaultCode)
+  );
+
+  return stream
+  .run(code => {
     settings.general.lang(code);
     return code;
   })
-  .then(loadFile)
+  .run(loadFile)
   .run(loadMomentLocale);
 }
 
@@ -98,7 +101,7 @@ function loadFile(code) {
 }
 
 function loadMomentLocale(code) {
-  if (code !== 'en') {
+  if (code && code !== 'en') {
     const script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';
     document.head.appendChild(script);

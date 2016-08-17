@@ -8,7 +8,7 @@ export default {
     if (vnode.attrs.color) {
       helper.pageSlideIn(vnode.dom);
     } else {
-      helper.pageFadeIn(vnode.dom);
+      helper.elFadeIn(vnode.dom);
     }
   },
   onbeforeremove(vnode, done) {

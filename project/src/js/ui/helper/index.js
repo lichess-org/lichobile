@@ -18,6 +18,9 @@ function onPageEnter(anim) {
   return ({ dom }) => anim(dom);
 }
 
+// because mithril will call 'onremove' asynchronously when the component has
+// an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
+// thus this helper
 function onPageLeave(anim, cleanup = null) {
   return function({ dom }, done) {
     if (cleanup) cleanup();
@@ -27,7 +30,32 @@ function onPageLeave(anim, cleanup = null) {
   };
 }
 
-// view slide transition functions
+// el fade in transition, can be applied to any element
+function elFadeIn(el) {
+  var tId;
+
+  el.style.opacity = '0.5';
+  el.style.transition = 'opacity 200ms ease-out';
+
+  setTimeout(() => {
+    el.style.opacity = '1';
+  });
+
+  function after() {
+    clearTimeout(tId);
+    if (el) {
+      el.removeAttribute('style');
+      el.removeEventListener('transitionend', after, false);
+    }
+  }
+
+  el.addEventListener('transitionend', after, false);
+  // in case transitionend does not fire
+  tId = setTimeout(after, 210);
+}
+
+// page slide transition
+// apply only to page change transitions
 // they listen to history to determine if animation is going forward or backward
 function pageSlideIn(el) {
   if (router.get() === lastRoute) {
@@ -52,30 +80,6 @@ function pageSlideIn(el) {
   setTimeout(() => {
     el.style.transform = 'translate3d(0%,0,0)';
   });
-
-  el.addEventListener('transitionend', after, false);
-  // in case transitionend does not fire
-  tId = setTimeout(after, 210);
-}
-
-
-function pageFadeIn(el) {
-  var tId;
-
-  el.style.opacity = '0.5';
-  el.style.transition = 'opacity 200ms ease-out';
-
-  setTimeout(() => {
-    el.style.opacity = '1';
-  });
-
-  function after() {
-    clearTimeout(tId);
-    if (el) {
-      el.removeAttribute('style');
-      el.removeEventListener('transitionend', after, false);
-    }
-  }
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
@@ -151,12 +155,12 @@ export default {
   elFadeOut,
   elSlideOut,
   pageSlideIn,
-  pageFadeIn,
+  elFadeIn,
   onPageEnter,
   onPageLeave,
 
   viewSlideIn: onPageEnter(pageSlideIn),
-  viewFadeIn: onPageEnter(pageFadeIn),
+  viewFadeIn: onPageEnter(elFadeIn),
   viewSlideOut: onPageLeave(elSlideOut),
   viewFadeOut: onPageLeave(elFadeOut),
 

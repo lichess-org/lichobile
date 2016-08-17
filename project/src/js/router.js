@@ -1,6 +1,6 @@
 import Rlite from 'rlite-router';
 import m from 'mithril';
-import Node from 'mithril/render/node';
+import Vnode from 'mithril/render/vnode';
 import signals from './signals';
 
 const router = new Rlite();
@@ -14,7 +14,7 @@ export function defineRoutes(mountPoint, routes) {
     const component = routes[route];
     router.add(route, function({ url, params }) {
       function redraw() {
-        m.render(mountPoint, Node(component, routeCounter, params, undefined, undefined, undefined));
+        m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
       }
       // allow to have a lower level router handler for tv routes where we can't
       // pass component directly

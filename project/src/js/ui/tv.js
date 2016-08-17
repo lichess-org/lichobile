@@ -1,5 +1,5 @@
 import m from 'mithril';
-import Node from 'mithril/render/node';
+import Vnode from 'mithril/render/vnode';
 import signals from '../signals';
 import { connectingHeader, viewOnlyBoardContent } from './shared/common';
 import router from '../router';
@@ -44,7 +44,7 @@ export default function({ params }) {
 
   function redraw() {
     // need to change key to effectively reload screen on game change
-    m.render(document.body, Node(
+    m.render(document.body, Vnode(
       params.data ? TV : LoadingBoard,
       params.data ? params.data.game.id : 'loading',
       params,

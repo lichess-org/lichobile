@@ -6,6 +6,8 @@ import * as utils from '../../utils';
 import ButtonHandler from './button';
 import m from 'mithril';
 
+const animDuration = 250;
+
 // store temporarily last route to disable animations on same route
 // TODO find a better way cause this is ugly
 let lastRoute;
@@ -75,7 +77,7 @@ function pageSlideIn(el) {
 
   const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
   el.style.transform = `translate3d(${direction},0,0)`;
-  el.style.transition = 'transform 200ms ease-out';
+  el.style.transition = `transform ${animDuration}ms ease-out`;
 
   setTimeout(() => {
     el.style.transform = 'translate3d(0%,0,0)';
@@ -83,12 +85,12 @@ function pageSlideIn(el) {
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
-  tId = setTimeout(after, 210);
+  tId = setTimeout(after, 2100);
 }
 
 function elSlideOut(el) {
   const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-  return Zanimo(el, 'transform', `translateX(${x})`, 250, 'ease-out')
+  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in')
   .catch(err => {
     utils.setViewSlideDirection('fwd');
     throw err;

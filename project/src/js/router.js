@@ -5,12 +5,18 @@ import signals from './signals';
 
 const router = new Rlite();
 
+// this counter is passed to the root component as key to force mithril to
+// trash current view and re-render on every route change (even same path)
+let routeCounter = 0;
+
 export function defineRoutes(mountPoint, routes) {
   for (let route in routes) {
     const component = routes[route];
     router.add(route, function({ url, params }) {
+      routeCounter++;
+
       function redraw() {
-        m.render(mountPoint, Vnode(component, url, params, undefined, undefined, undefined));
+        m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
       }
       // allow to have a lower level router handler
       if (typeof component === 'function') {
@@ -21,6 +27,7 @@ export function defineRoutes(mountPoint, routes) {
         signals.redraw.add(redraw);
         redraw();
       }
+
     });
   }
   window.addEventListener('popstate', processQuerystring);

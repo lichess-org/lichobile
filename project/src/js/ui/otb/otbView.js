@@ -43,6 +43,7 @@ export default function view(ctrl) {
 
 function renderContent(ctrl, pieceTheme) {
   const flip = settings.otb.flipPieces();
+  ctrl.chessground.data.symmetricCoordinates = settings.otb.seeSymmetricCoordinates();
   const wrapperClasses = helper.classSet({
     'otb': true,
     'mode_flip': flip,
@@ -85,4 +86,3 @@ function renderContent(ctrl, pieceTheme) {
       </section>
     ];
 }
-

@@ -26,6 +26,9 @@ export default {
     };
   },
 
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
+
   view(vnode) {
     const ctrl = vnode.state;
     const header = headerWidget.bind(undefined, null, backButton(i18n('timeline')));

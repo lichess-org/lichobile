@@ -23,6 +23,9 @@ function renderBody() {
 }
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function() {},
 
   view: function() {

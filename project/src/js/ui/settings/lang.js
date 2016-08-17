@@ -1,4 +1,5 @@
 import { header as headerWidget, backButton } from '../shared/common';
+import helper from '../helper';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
@@ -7,6 +8,9 @@ import { setServerLang } from '../../xhr';
 import m from 'mithril';
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function() {
     const langs = m.prop([]);
 

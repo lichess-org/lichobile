@@ -14,9 +14,22 @@ let lastRoute;
 let cachedTransformProp;
 let cachedViewportDim = null;
 
+function onPageEnter(anim) {
+  return ({ dom }) => anim(dom);
+}
+
+function onPageLeave(anim, cleanup = null) {
+  return function({ dom }, done) {
+    if (cleanup) cleanup();
+    return anim(dom)
+    .then(done)
+    .catch(done);
+  };
+}
+
 // view slide transition functions
 // they listen to history to determine if animation is going forward or backward
-function viewSlideIn(el) {
+function pageSlideIn(el) {
   if (router.get() === lastRoute) {
     return;
   }
@@ -45,7 +58,8 @@ function viewSlideIn(el) {
   tId = setTimeout(after, 210);
 }
 
-function viewFadesIn(el) {
+
+function pageFadeIn(el) {
   var tId;
 
   el.style.opacity = '0.5';
@@ -66,6 +80,19 @@ function viewFadesIn(el) {
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
   tId = setTimeout(after, 210);
+}
+
+function elSlideOut(el) {
+  const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+  return Zanimo(el, 'transform', `translateX(${x})`, 250, 'ease-out')
+  .catch(err => {
+    utils.setViewSlideDirection('fwd');
+    throw err;
+  });
+}
+
+function elFadeOut(el) {
+  return Zanimo(el, 'opacity', 0, 250, 'ease-out');
 }
 
 function computeTransformProp() {
@@ -121,33 +148,17 @@ function viewportDim() {
 
 export default {
   findParentBySelector,
-  slidingPage: c => {
-    c.oncreate = vnode => viewSlideIn(vnode.dom);
-    c.onbeforeremove = ({ dom }, done) => {
-      // by convention I use cleanup on root component to perform global cleanup
-      if (c.cleanup) c.cleanup();
-      function after() {
-        done();
-        utils.setViewSlideDirection('fwd');
-      }
-      const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-      Zanimo(dom, 'transform', `translateX(${x})`, 250, 'ease-out')
-      .then(after)
-      .catch(after);
-    };
-    return c;
-  },
-  fadingPage: c => {
-    c.oncreate = vnode => viewFadesIn(vnode.dom);
-    c.onbeforeremove = ({ dom }, done) => {
-      // by convention I use cleanup on root component to perform global cleanup
-      if (c.cleanup) c.cleanup();
-      Zanimo(dom, 'opacity', 0, 250, 'ease-out')
-      .then(done)
-      .catch(done);
-    };
-    return c;
-  },
+  elFadeOut,
+  elSlideOut,
+  pageSlideIn,
+  pageFadeIn,
+  onPageEnter,
+  onPageLeave,
+
+  viewSlideIn: onPageEnter(pageSlideIn),
+  viewFadeIn: onPageEnter(pageFadeIn),
+  viewSlideOut: onPageLeave(elSlideOut),
+  viewFadeOut: onPageLeave(elFadeOut),
 
   viewportDim,
 

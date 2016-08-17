@@ -2,6 +2,7 @@ import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
+import helper from '../helper';
 import session from '../../session';
 import { swapKeyValue, SubmitMove, Takeback, AutoQueen, AutoThreefold } from '../../lichess/prefs';
 import m from 'mithril';
@@ -32,6 +33,9 @@ function renderBody(ctrl) {
 }
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function(vnode) {
     vnode.state = {
       premove: session.lichessBackedProp('prefs.premove', session.savePreferences),

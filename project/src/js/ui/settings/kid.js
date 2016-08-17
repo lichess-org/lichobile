@@ -1,3 +1,4 @@
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -19,6 +20,9 @@ function renderBody(ctrl) {
 }
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function(vnode) {
     const kidMode = session.lichessBackedProp('kid', session.toggleKidMode);
 

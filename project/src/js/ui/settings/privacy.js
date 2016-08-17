@@ -1,3 +1,4 @@
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -20,6 +21,9 @@ function renderBody(ctrl) {
 }
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function(vnode) {
     const follow = session.lichessBackedProp('prefs.follow', session.savePreferences);
     const challenge = session.lichessBackedProp('prefs.challenge', session.savePreferences);

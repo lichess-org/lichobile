@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
@@ -26,6 +27,9 @@ function renderBody() {
 }
 
 export default {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
   oninit: function() {},
 
   view: function() {

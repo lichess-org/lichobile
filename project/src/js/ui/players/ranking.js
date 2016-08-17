@@ -11,6 +11,9 @@ import helper from '../helper';
 import m from 'mithril';
 
 export default {
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
+
   oninit(vnode) {
 
     helper.analyticsTrackView('Leaderboard');

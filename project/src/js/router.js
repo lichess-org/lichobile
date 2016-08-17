@@ -6,7 +6,7 @@ import signals from './signals';
 const router = new Rlite();
 
 // this counter is passed to the root component as key to force mithril to
-// trash current view and re-render on route change
+// trash current view and re-render on every route change (even same path)
 let routeCounter = 0;
 
 export function defineRoutes(mountPoint, routes) {
@@ -16,13 +16,11 @@ export function defineRoutes(mountPoint, routes) {
       function redraw() {
         m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
       }
-      // allow to have a lower level router handler for tv routes where we can't
-      // pass component directly
+      // allow to have a lower level router handler
       if (typeof component === 'function') {
         component({ url, params });
       } else {
-        // just allow sleep by default
-        // TODO should be in a router exit handler
+        // TODO it works but would be better in a router exit hook
         signals.redraw.removeAll();
         signals.redraw.add(redraw);
         redraw();

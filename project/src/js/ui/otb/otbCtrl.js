@@ -109,8 +109,6 @@ export default function controller() {
     m.redraw();
   }.bind(this);
 
-  const seeSymmetricCoordinates = settings.otb.seeSymmetricCoordinates;
-
   this.startNewGame = function(setupFen) {
     const variant = settings.otb.variant();
     helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);

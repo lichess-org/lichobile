@@ -38,13 +38,14 @@ function request(url, opts, feedback) {
   const cfg = {
     method: 'GET',
     credentials: 'include',
-    headers: new Headers({
+    headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'Accept': 'application/vnd.lichess.v' + apiVersion + '+json',
       'Content-Type': 'application/json; charset=UTF-8'
-    })
+    }
   };
   merge(cfg, opts);
+  cfg.headers = new Headers(cfg.headers);
 
   // if (cfg.method === 'GET') {
   //   cfg.data._ = Date.now();

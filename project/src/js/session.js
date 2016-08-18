@@ -1,7 +1,7 @@
 import { get, set } from 'lodash/object';
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
-import { hasNetwork, handleXhrError } from './utils';
+import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
@@ -48,13 +48,6 @@ function toggleKidMode() {
 
 function savePreferences() {
 
-  function xhrConfig(xhr) {
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhr.withCredentials = true;
-    xhr.timeout = 8000;
-  }
-
   const prefs = mapValues(pick(session && session.prefs || {}, [
     'animation',
     'captured',
@@ -84,8 +77,11 @@ function savePreferences() {
 
   return fetchText('/account/preferences', {
     method: 'POST',
-    body: new FormData(prefs)
-  }, true, xhrConfig);
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    body: serializeQueryParameters(prefs)
+  }, true);
 }
 
 function lichessBackedProp(path, prefRequest) {

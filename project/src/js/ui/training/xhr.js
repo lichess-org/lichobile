@@ -1,7 +1,7 @@
-import { request } from '../../http';
+import { fetchJSON } from '../../http';
 
 export function attempt(id, startedAt, win) {
-  return request(`/training/${id}/attempt`, {
+  return fetchJSON(`/training/${id}/attempt`, {
     method: 'POST',
     body: JSON.stringify({
       win: win ? 1 : 0,
@@ -11,7 +11,7 @@ export function attempt(id, startedAt, win) {
 }
 
 export function vote(id, v) {
-  return request(`/training/${id}/vote`, {
+  return fetchJSON(`/training/${id}/vote`, {
     method: 'POST',
     body: JSON.stringify({
       vote: v
@@ -20,7 +20,7 @@ export function vote(id, v) {
 }
 
 export function setDifficulty(d) {
-  return request('/training/difficulty', {
+  return fetchJSON('/training/difficulty', {
     method: 'POST',
     body: JSON.stringify({
       difficulty: d
@@ -29,13 +29,13 @@ export function setDifficulty(d) {
 }
 
 export function loadPuzzle(id) {
-  return request(`/training/${id}/load`);
+  return fetchJSON(`/training/${id}/load`);
 }
 
 export function newPuzzle() {
-  return request('/training/new');
+  return fetchJSON('/training/new');
 }
 
 export function history() {
-  return request('/training/history');
+  return fetchJSON('/training/history');
 }

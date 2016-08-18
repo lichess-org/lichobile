@@ -6,7 +6,7 @@ import m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
-export function loadLocalFile(url) {
+export function loadLocalJsonFile(url) {
   let curXhr;
   return new Promise((resolve, reject) => {
     m.request({
@@ -64,12 +64,12 @@ export function askWorker(worker, msg) {
 }
 
 export function hasNetwork() {
-  // return window.navigator.connection.type !== window.Connection.NONE;
-  return false;
+  return window.navigator.connection.type !== window.Connection.NONE;
 }
 
 export function handleXhrError(error) {
-  const {response: data, status} = error;
+  const status = error.status;
+
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
@@ -88,6 +88,13 @@ export function handleXhrError(error) {
       message = 'Error.';
 
     message = i18n(message);
+
+    let data;
+    try {
+      data = error.response.json();
+    } catch (e) {
+      data = error.response.text();
+    }
 
     if (typeof data === 'string') {
       message += ` ${data}`;
@@ -231,19 +238,6 @@ export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function loadJsonFile(filename) {
-  return m.request({
-    url: filename,
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Error when parsing json from: ' + filename };
-      }
-    }
-  });
-}
 
 // Returns a random number between min (inclusive) and max (exclusive)
 export function getRandomArbitrary(min, max) {

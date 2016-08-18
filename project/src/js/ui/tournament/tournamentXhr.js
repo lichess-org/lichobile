@@ -1,15 +1,15 @@
-import { request } from '../../http';
+import { fetchJSON } from '../../http';
 
 export function currentTournaments() {
-  return request('/tournament', {}, true);
+  return fetchJSON('/tournament', {}, true);
 }
 
 export function tournament(id) {
-  return request('/tournament/' + id, {data: {socketVersion: 1}}, true);
+  return fetchJSON('/tournament/' + id, {data: {socketVersion: 1}}, true);
 }
 
 export function reload(id, page) {
-  return request('/tournament/' + id,
+  return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
     data: page ? { page: page } : {}
@@ -17,13 +17,13 @@ export function reload(id, page) {
 }
 
 export function join(id) {
-  return request('/tournament/' + id + '/join', {method: 'POST'});
+  return fetchJSON('/tournament/' + id + '/join', {method: 'POST'});
 }
 
 export function withdraw(id) {
-  return request('/tournament/' + id + '/withdraw', {method: 'POST'});
+  return fetchJSON('/tournament/' + id + '/withdraw', {method: 'POST'});
 }
 
 export function playerInfo(tournamentId, playerId) {
-  return request('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
+  return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
 }

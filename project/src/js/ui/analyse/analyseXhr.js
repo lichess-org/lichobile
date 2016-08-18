@@ -1,8 +1,7 @@
-import { request } from '../../http';
+import { fetchText } from '../../http';
 
 export function requestComputerAnalysis(gameId) {
-  return request(`/${gameId}/request-analysis`, {
-    method: 'POST',
-    deserialize: t => t
+  return fetchText(`/${gameId}/request-analysis`, {
+    method: 'POST'
   }, null, true);
 }

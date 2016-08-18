@@ -1,15 +1,13 @@
-import { request } from '../../http';
+import { fetchJSON, fetchText } from '../../http';
 import { noop } from '../../utils';
 import i18n from '../../i18n';
 
 export function reload(ctrl) {
-  return request(ctrl.data.url.round);
+  return fetchJSON(ctrl.data.url.round);
 }
 
 export function getPGN(gameId) {
-  return request(`/game/export/${gameId}.pgn`, {
-    deserialize: text => text
-  }, true);
+  return fetchText(`/game/export/${gameId}.pgn`, null, true);
 }
 
 export function syncNote(gameId, notes) {
@@ -21,10 +19,8 @@ export function syncNote(gameId, notes) {
     xhr.timeout = 10000;
   }
 
-  return request(`/${gameId}/note`, {
+  return fetchText(`/${gameId}/note`, {
     method: 'POST',
-    serialize: t => t,
-    deserialize: t => t,
     body: JSON.stringify({ text: notes })
   }, false, xhrConfig)
   .then(noop)

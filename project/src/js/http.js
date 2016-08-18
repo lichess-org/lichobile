@@ -21,7 +21,7 @@ export function parseJSON(response) {
 }
 
 // convenient wrapper around m.request
-export function request(url, opts, feedback) {
+function request(url, opts, feedback) {
 
   function onSuccess(data) {
     if (feedback) spinner.stop();
@@ -32,16 +32,17 @@ export function request(url, opts, feedback) {
   function onError(error) {
     if (feedback) spinner.stop();
     redraw();
-    throw { response: error, status: error.status };
+    throw error;
   }
 
   const cfg = {
     method: 'GET',
-    credentials: 'same-origin',
-    headers: {
+    credentials: 'include',
+    headers: new Headers({
       'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
-    }
+      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json',
+      'Content-Type': 'application/json; charset=UTF-8'
+    })
   };
   merge(cfg, opts);
 
@@ -57,7 +58,16 @@ export function request(url, opts, feedback) {
 
   return promise
     .then(checkStatus)
-    .then(parseJSON)
     .then(onSuccess)
     .catch(onError);
+}
+
+export function fetchJSON(url, opts, feedback) {
+  return request(url, opts, feedback)
+  .then(parseJSON);
+}
+
+export function fetchText(url, opts, feedback) {
+  return request(url, opts, feedback)
+  .then(r => r.text());
 }

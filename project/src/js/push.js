@@ -4,7 +4,7 @@ import session from './session';
 import settings from './settings';
 import i18n from './i18n';
 import { lightPlayerName } from './utils';
-import { request } from './http';
+import { fetchText } from './http';
 import challengesApi from './lichess/challenges';
 import m from 'mithril';
 
@@ -34,9 +34,8 @@ export default {
           // we won't try to register again on failure for now
           const platform = window.cordova.platformId;
           const deviceId = encodeURIComponent(data.registrationId);
-          request(`/mobile/register/${platform}/${deviceId}`, {
-            method: 'POST',
-            deserialize: v => v
+          fetchText(`/mobile/register/${platform}/${deviceId}`, {
+            method: 'POST'
           });
         }
       });
@@ -103,9 +102,8 @@ export default {
   unregister() {
     if (push) {
       push.unregister(function() {
-        request('/mobile/unregister', {
-          method: 'POST',
-          deserialize: v => v
+        fetchText('/mobile/unregister', {
+          method: 'POST'
         }).then(() => {
           push = null;
         });

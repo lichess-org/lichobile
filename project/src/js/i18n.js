@@ -1,5 +1,5 @@
 import settings from './settings';
-import { loadLocalFile } from './utils';
+import { loadLocalJsonFile } from './utils';
 
 let messages = [];
 
@@ -77,7 +77,7 @@ export function loadPreferredLanguage() {
 }
 
 export function getAvailableLanguages() {
-  return loadLocalFile('i18n/refs.json');
+  return loadLocalJsonFile('i18n/refs.json');
 }
 
 export function loadFromSettings() {
@@ -86,7 +86,7 @@ export function loadFromSettings() {
 }
 
 function loadFile(code) {
-  return loadLocalFile('i18n/' + code + '.json')
+  return loadLocalJsonFile('i18n/' + code + '.json')
   .then(data => {
     messages = data;
     return code;

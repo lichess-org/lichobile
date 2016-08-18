@@ -1,14 +1,13 @@
 import { get, set } from 'lodash/object';
 import redraw from './utils/redraw';
-import { request } from './http';
-import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
+import { fetchJSON, fetchText } from './http';
+import { hasNetwork, handleXhrError } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import throttle from 'lodash/throttle';
-import m from 'mithril';
 
 var session = null;
 
@@ -42,9 +41,8 @@ function myTurnGames() {
 }
 
 function toggleKidMode() {
-  return request('/account/kidConfirm', {
-    method: 'POST',
-    deserialize: v => v
+  return fetchText('/account/kidConfirm', {
+    method: 'POST'
   });
 }
 
@@ -84,11 +82,9 @@ function savePreferences() {
     else return v;
   });
 
-  return request('/account/preferences', {
+  return fetchText('/account/preferences', {
     method: 'POST',
-    body: new FormData(prefs),
-    serialize: v => v,
-    deserialize: v => v
+    body: new FormData(prefs)
   }, true, xhrConfig);
 }
 
@@ -112,11 +108,11 @@ function lichessBackedProp(path, prefRequest) {
 }
 
 function login(username, password) {
-  return request('/login', {
+  return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
-      username: username,
-      password: password
+      username,
+      password
     })
   }, true)
   .then(function(data) {
@@ -126,7 +122,7 @@ function login(username, password) {
 }
 
 function logout() {
-  return request('/logout', {}, true)
+  return fetchJSON('/logout', {}, true)
   .then(function() {
     session = null;
     friendsApi.clear();
@@ -138,7 +134,7 @@ function logout() {
 }
 
 function signup(username, email, password) {
-  return request('/signup', {
+  return fetchJSON('/signup', {
     method: 'POST',
     body: JSON.stringify({
       username,
@@ -153,8 +149,8 @@ function signup(username, email, password) {
 }
 
 function rememberLogin() {
-  return request('/account/info')
-  .then(function(data) {
+  return fetchJSON('/account/info')
+  .then(data => {
     session = data;
     return data;
   });
@@ -162,7 +158,7 @@ function rememberLogin() {
 
 function refresh() {
   if (hasNetwork() && isConnected()) {
-    return request('/account/info')
+    return fetchJSON('/account/info')
     .then(data => {
       session = data;
       redraw();

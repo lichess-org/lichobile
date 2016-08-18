@@ -85,7 +85,8 @@ function onOnline() {
       challengesApi.refresh();
       redraw();
     })
-    .then(() => setServerLang(settings.general.lang()));
+    .then(() => setServerLang(settings.general.lang()))
+    .catch(() => console.log('connected as anonymous'));
   }
 }
 

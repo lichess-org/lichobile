@@ -27,7 +27,7 @@ export default function homeCtrl(vnode) {
         });
       });
 
-      m.prop.merge([
+      Promise.all([
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
       ])

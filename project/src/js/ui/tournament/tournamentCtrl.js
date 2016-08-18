@@ -14,7 +14,7 @@ export default function oninit(vnode) {
   const currentTab = m.prop(vnode.attrs.tab || 'started');
 
   xhr.currentTournaments()
-  .run(data => {
+  .then(data => {
     data.started = data.started.filter(supported);
     data.created = data.created.filter(supported);
     data.finished = data.finished.filter(supported);

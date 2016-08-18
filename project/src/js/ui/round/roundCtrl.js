@@ -501,11 +501,11 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
   }.bind(this);
 
   var reloadGameData = function() {
-    xhr.reload(this).run(this.reload);
+    xhr.reload(this).then(this.reload);
   }.bind(this);
 
   this.toggleBookmark = function() {
-    return toggleGameBookmark(this.data.game.id).run(reloadGameData);
+    return toggleGameBookmark(this.data.game.id).then(reloadGameData);
   }.bind(this);
 
   document.addEventListener('resume', reloadGameData);

@@ -58,7 +58,7 @@ function close(fromBB) {
 
 function startAIGame() {
   return xhr.newAiGame(fromPositionFen)
-  .run(function(data) {
+  .then(function(data) {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
     router.set('/game' + data.url.round);
   })

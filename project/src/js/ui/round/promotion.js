@@ -32,7 +32,7 @@ function finish(ctrl, role) {
 }
 
 function cancel(ctrl) {
-  if (promoting) xhr.reload(ctrl).run(ctrl.reload);
+  if (promoting) xhr.reload(ctrl).then(ctrl.reload);
   promoting = false;
 }
 

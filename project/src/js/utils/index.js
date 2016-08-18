@@ -8,25 +8,28 @@ export const lichessSri = Math.random().toString(36).substring(2);
 
 export function loadLocalFile(url) {
   let curXhr;
-  return m.request({
-    url,
-    method: 'GET',
-    config(xhr) {
-      curXhr = xhr;
-    }
-  })
-  .catch(error => {
-    // workaround when xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (curXhr.status === 0) {
-      try {
-        return JSON.parse(curXhr.responseText);
-      } catch (e) {
-        throw e;
+  return new Promise((resolve, reject) => {
+    m.request({
+      url,
+      method: 'GET',
+      config(xhr) {
+        curXhr = xhr;
       }
-    } else {
-      throw error;
-    }
+    })
+    .run(data => resolve(data))
+    .catch(error => {
+      // workaround when xhr for local file has a 0 status it will
+      // reject the promise and still have the response object
+      if (curXhr.status === 0) {
+        try {
+          resolve(JSON.parse(curXhr.responseText));
+        } catch (e) {
+          reject(e);
+        }
+      } else {
+        reject(error);
+      }
+    });
   });
 }
 
@@ -61,7 +64,8 @@ export function askWorker(worker, msg) {
 }
 
 export function hasNetwork() {
-  return window.navigator.connection.type !== window.Connection.NONE;
+  // return window.navigator.connection.type !== window.Connection.NONE;
+  return false;
 }
 
 export function handleXhrError(error) {

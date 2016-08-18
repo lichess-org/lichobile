@@ -1,12 +1,12 @@
 /* application entry point */
 
 import './polyfills';
+import 'whatwg-fetch';
 
 // for moment a global object makes loading locales easier
 import moment from 'moment';
 window.moment = moment;
 
-import m from 'mithril';
 import * as utils from './utils';
 import redraw from './utils/redraw';
 import session from './session';
@@ -66,7 +66,6 @@ function main() {
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();
-    xhrStatus();
   }, 500);
 }
 
@@ -77,13 +76,16 @@ function onResize() {
 
 function onOnline() {
   if (isForeground()) {
+
+    xhrStatus();
+
     session.rememberLogin()
-    .run(() => {
+    .then(() => {
       push.register();
       challengesApi.refresh();
       redraw();
     })
-    .run(() => setServerLang(settings.general.lang()));
+    .then(() => setServerLang(settings.general.lang()));
   }
 }
 
@@ -113,6 +115,6 @@ window.onerror = handleError;
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
-  () => loadPreferredLanguage().run(main),
+  () => loadPreferredLanguage().then(main),
   false
 );

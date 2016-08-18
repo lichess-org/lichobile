@@ -46,7 +46,7 @@ export default function oninit(vnode) {
   function loadNextPage(page) {
     isLoadingNextPage(true);
     xhr.followers(userId, page)
-    .run(data => {
+    .then(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       followers(followers().concat(data.paginator.currentPageResults));
@@ -57,11 +57,11 @@ export default function oninit(vnode) {
   }
 
   xhr.followers(userId, 1, true)
-  .run(data => {
+  .then(data => {
     paginator(data.paginator);
     followers(data.paginator.currentPageResults);
   })
-  .run(() => setTimeout(() => {
+  .then(() => setTimeout(() => {
     if (scroller) scroller.scrollTo(0, 0, 0);
   }, 50))
   .catch(err => {
@@ -79,8 +79,8 @@ export default function oninit(vnode) {
     scrollerOnUpdate,
     isLoadingNextPage,
     toggleFollowing: obj => {
-      if (obj.relation) xhr.unfollow(obj.user).run(setNewUserState.bind(undefined, obj));
-      else xhr.follow(obj.user).run(setNewUserState.bind(undefined, obj));
+      if (obj.relation) xhr.unfollow(obj.user).then(setNewUserState.bind(undefined, obj));
+      else xhr.follow(obj.user).then(setNewUserState.bind(undefined, obj));
     },
     challenge(id) {
       challengeForm.open(id);

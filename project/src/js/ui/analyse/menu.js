@@ -83,7 +83,7 @@ function renderAnalyseMenu(ctrl) {
       key: 'requestAComputerAnalysis',
       oncreate: helper.ontouch(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
-        .run(() => {
+        .then(() => {
           ctrl.vm.analysisProgress = true;
         })
         .catch(handleXhrError);

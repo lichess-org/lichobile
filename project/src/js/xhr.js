@@ -6,7 +6,7 @@ import session from './session';
 
 export function newAiGame(fen) {
   const config = settings.gameSetup.ai;
-  const data = {
+  const body = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -16,11 +16,11 @@ export function newAiGame(fen) {
     color: config.color()
   };
 
-  if (fen) data.fen = fen;
+  if (fen) body.fen = fen;
 
   return request('/setup/ai', {
     method: 'POST',
-    data
+    body: JSON.stringify(body)
   }, true);
 }
 
@@ -28,7 +28,7 @@ export function seekGame() {
   var config = settings.gameSetup.human;
   return request('/setup/hook/' + lichessSri, {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       variant: config.variant(),
       timeMode: config.timeMode(),
       days: config.days(),
@@ -38,7 +38,7 @@ export function seekGame() {
       mode: session.isConnected() ? config.mode() : '0',
       membersOnly: config.membersOnly(),
       ratingRange: config.ratingMin() + '-' + config.ratingMax()
-    }
+    })
   }, true);
 }
 
@@ -46,7 +46,7 @@ export function challenge(userId, fen) {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 
-  const data = {
+  const body = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -56,11 +56,11 @@ export function challenge(userId, fen) {
     mode: session.isConnected() ? config.mode() : '0'
   };
 
-  if (fen) data.fen = fen;
+  if (fen) body.fen = fen;
 
   return request(url, {
     method: 'POST',
-    data
+    body: JSON.stringify(body)
   }, true);
 }
 
@@ -119,9 +119,9 @@ export function setServerLang(lang) {
   if (session.isConnected()) {
     return request('/translation/select', {
       method: 'POST',
-      data: {
+      body: JSON.stringify({
         lang
-      }
+      })
     });
   } else {
     return Promise.resolve();
@@ -138,7 +138,7 @@ export function timeline() {
 
 export function status() {
   return request('/api/status')
-  .run(function(data) {
+  .then(function(data) {
     if (data.api.current !== apiVersion) {
       for (var i = 0, len = data.api.olds.length; i < len; i++) {
         var o = data.api.olds[i];

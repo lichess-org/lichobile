@@ -55,7 +55,7 @@ export default function({ params }) {
   }
 
   xhr.featured(settings.tv.channel(), params.flip)
-  .run(data => {
+  .then(data => {
     params.data = data;
   })
   .catch(error => {

@@ -40,7 +40,6 @@ function processQuerystring() {
   if (!matched) router.run('/');
 }
 
-
 export default {
   set(path, replace) {
     if (replace) {

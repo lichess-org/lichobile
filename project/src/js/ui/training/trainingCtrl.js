@@ -68,7 +68,7 @@ export default function ctrl(vnode) {
   const attempt = function(winFlag, giveUpFlag) {
     showLoading();
     xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
-    .run(cfg => {
+    .then(cfg => {
       cfg.progress = this.data.progress;
       this.reload(cfg);
       onXhrSuccess();
@@ -276,31 +276,31 @@ export default function ctrl(vnode) {
   this.newPuzzle = function(feedback) {
     if (feedback) showLoading();
     xhr.newPuzzle()
-    .run(cfg => {
+    .then(cfg => {
       if (feedback) pushState(cfg);
       else replaceStateForNewPuzzle(cfg);
       this.init(cfg);
       setTimeout(this.playInitialMove, 1000);
     })
-    .run(onXhrSuccess)
+    .then(onXhrSuccess)
     .catch(onXhrError);
   }.bind(this);
 
   this.loadPuzzle = function(id) {
     xhr.loadPuzzle(id)
-      .run(cfg => {
+      .then(cfg => {
         this.init(cfg);
         setTimeout(this.playInitialMove, 1000);
       })
-      .run(onXhrSuccess)
+      .then(onXhrSuccess)
       .catch(onXhrError);
   }.bind(this);
 
   this.retry = function() {
     showLoading();
     xhr.loadPuzzle(this.data.puzzle.id)
-      .run(this.reload)
-      .run(onXhrSuccess)
+      .then(this.reload)
+      .then(onXhrSuccess)
       .catch(onXhrError);
   }.bind(this);
 
@@ -314,8 +314,8 @@ export default function ctrl(vnode) {
 
   this.setDifficulty = function(id) {
     return xhr.setDifficulty(id)
-      .run(pushState)
-      .run(this.reload);
+      .then(pushState)
+      .then(this.reload);
   }.bind(this);
 
   if (vnode.attrs.id) {

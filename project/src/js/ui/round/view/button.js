@@ -32,7 +32,7 @@ export default {
   sharePGN: function(ctrl) {
     function handler() {
       getPGN(ctrl.data.game.id)
-      .run(function(PGN) {
+      .then(function(PGN) {
         window.plugins.socialsharing.share(PGN);
       })
       .catch(handleXhrError);

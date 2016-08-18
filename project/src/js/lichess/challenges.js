@@ -31,7 +31,7 @@ export default {
   set,
 
   refresh() {
-    return throttle(getChallenges, 1000)().run(set);
+    return throttle(getChallenges, 1000)().then(set);
   },
 
   remove(id) {

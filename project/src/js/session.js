@@ -86,7 +86,7 @@ function savePreferences() {
 
   return request('/account/preferences', {
     method: 'POST',
-    data: serializeQueryParameters(prefs),
+    body: new FormData(prefs),
     serialize: v => v,
     deserialize: v => v
   }, true, xhrConfig);
@@ -114,12 +114,12 @@ function lichessBackedProp(path, prefRequest) {
 function login(username, password) {
   return request('/login', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       username: username,
       password: password
-    }
+    })
   }, true)
-  .run(function(data) {
+  .then(function(data) {
     session = data;
     return session;
   });
@@ -127,7 +127,7 @@ function login(username, password) {
 
 function logout() {
   return request('/logout', {}, true)
-  .run(function() {
+  .then(function() {
     session = null;
     friendsApi.clear();
   })
@@ -140,13 +140,13 @@ function logout() {
 function signup(username, email, password) {
   return request('/signup', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       username,
       email,
       password
-    }
+    })
   }, true)
-  .run(function(data) {
+  .then(function(data) {
     session = data;
     return session;
   });
@@ -154,7 +154,7 @@ function signup(username, email, password) {
 
 function rememberLogin() {
   return request('/account/info')
-  .run(function(data) {
+  .then(function(data) {
     session = data;
     return data;
   });
@@ -163,7 +163,7 @@ function rememberLogin() {
 function refresh() {
   if (hasNetwork() && isConnected()) {
     return request('/account/info')
-    .run(data => {
+    .then(data => {
       session = data;
       redraw();
       return session;

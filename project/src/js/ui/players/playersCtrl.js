@@ -44,7 +44,7 @@ export default function oninit(vnode) {
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
-  xhr.onlinePlayers().run(players, err => utils.handleXhrError(err));
+  xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
 
   vnode.state = {
     players,
@@ -53,7 +53,7 @@ export default function oninit(vnode) {
     onInput: throttle(e => {
       const term = e.target.value.trim();
       if (term.length > 1)
-        xhr.autocomplete(term).run(data => searchResults(data));
+        xhr.autocomplete(term).then(data => searchResults(data));
     }, 250),
     closeSearch,
     goSearch() {

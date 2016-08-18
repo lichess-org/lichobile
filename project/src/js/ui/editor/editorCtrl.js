@@ -40,7 +40,7 @@ export default function oninit(vnode) {
   }];
 
   loadJsonFile('data/positions.json')
-  .run(data => {
+  .then(data => {
     this.positions(data);
   })
   .catch(err => {

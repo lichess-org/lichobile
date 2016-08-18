@@ -17,7 +17,7 @@ export default function homeCtrl(vnode) {
 
   function init() {
     if (isForeground()) {
-      lobbyXhr(true).run(data => {
+      lobbyXhr(true).then(data => {
         socket.createLobby(data.lobby.version, noop, {
           n: (_, d) => {
             nbConnectedPlayers(d.d);
@@ -31,7 +31,7 @@ export default function homeCtrl(vnode) {
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
       ])
-      .run(results => {
+      .then(results => {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
@@ -39,7 +39,7 @@ export default function homeCtrl(vnode) {
       .catch(handleXhrError);
 
       timelineXhr()
-      .run(data => {
+      .then(data => {
         timeline(
           data.entries
           .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)

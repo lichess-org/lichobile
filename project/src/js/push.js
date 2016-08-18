@@ -51,27 +51,27 @@ export default {
             if (payload.userData) {
               switch (payload.userData.type) {
                 case 'challengeCreate':
-                  challengesApi.refresh().run(() => redraw());
+                  challengesApi.refresh().then(() => redraw());
                   break;
                 case 'challengeAccept':
                   m.prop.merge([
                     challengesApi.refresh(),
                     session.refresh()
                   ])
-                  .run(() => {
+                  .then(() => {
                     window.plugins.toast.show(
                       i18n('userAcceptsYourChallenge', lightPlayerName(payload.userData.joiner)), 'long', 'top');
                     redraw();
                   });
                   break;
                 case 'gameMove':
-                  session.refresh().run(v => {
+                  session.refresh().then(v => {
                     if (v) redraw();
                   });
                   break;
                 case 'gameFinish':
                   session.refresh()
-                  .run(() => redraw());
+                  .then(() => redraw());
                   break;
               }
             }
@@ -106,7 +106,7 @@ export default {
         request('/mobile/unregister', {
           method: 'POST',
           deserialize: v => v
-        }).run(() => {
+        }).then(() => {
           push = null;
         });
 

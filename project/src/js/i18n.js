@@ -1,4 +1,3 @@
-import m from 'mithril';
 import settings from './settings';
 import { loadLocalFile } from './utils';
 
@@ -63,20 +62,18 @@ export function loadPreferredLanguage() {
     return loadFromSettings();
   }
 
-  const stream = m.prop();
-
-  window.navigator.globalization.getPreferredLanguage(
-    l => stream(l.value.split('-')[0]),
-    () => stream(defaultCode)
-  );
-
-  return stream
-  .run(code => {
+  return new Promise(resolve => {
+    window.navigator.globalization.getPreferredLanguage(
+      l => resolve(l.value.split('-')[0]),
+      () => resolve(defaultCode)
+    );
+  })
+  .then(code => {
     settings.general.lang(code);
     return code;
   })
-  .run(loadFile)
-  .run(loadMomentLocale);
+  .then(loadFile)
+  .then(loadMomentLocale);
 }
 
 export function getAvailableLanguages() {
@@ -85,13 +82,13 @@ export function getAvailableLanguages() {
 
 export function loadFromSettings() {
   return loadFile(settings.general.lang())
-  .run(loadMomentLocale);
+  .then(loadMomentLocale);
 }
 
 function loadFile(code) {
-  return loadLocalFile(`i18n/${code}.json`)
-  .run(d => {
-    messages = d;
+  return loadLocalFile('i18n/' + code + '.json')
+  .then(data => {
+    messages = data;
     return code;
   })
   .catch(error => {
@@ -101,10 +98,12 @@ function loadFile(code) {
 }
 
 function loadMomentLocale(code) {
-  if (code && code !== 'en') {
-    const script = document.createElement('script');
+  if (code !== 'en') {
+    var script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';
     document.head.appendChild(script);
   }
+  window.moment.locale(code);
   return code;
 }
+

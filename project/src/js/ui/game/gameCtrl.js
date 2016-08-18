@@ -17,7 +17,7 @@ export default function oninit(vnode) {
 
   if (hasNetwork()) {
     gameXhr(vnode.attrs.id, vnode.attrs.color, !!gamesMenu.lastJoined)
-    .run(data => {
+    .then(data => {
       gameData = data;
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {

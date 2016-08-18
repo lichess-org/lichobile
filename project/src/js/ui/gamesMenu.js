@@ -42,17 +42,17 @@ function joinGame(g) {
 
 function acceptChallenge(id) {
   return xhr.acceptChallenge(id)
-  .run(data => {
+  .then(data => {
     helper.analyticsTrackEvent('Challenge', 'Accepted');
     router.set('/game' + data.url.round);
   })
-  .run(() => challengesApi.remove(id))
-  .run(gamesMenu.close);
+  .then(() => challengesApi.remove(id))
+  .then(gamesMenu.close);
 }
 
 function declineChallenge(id) {
   return xhr.declineChallenge(id)
-  .run(() => {
+  .then(() => {
     helper.analyticsTrackEvent('Challenge', 'Declined');
     challengesApi.remove(id);
   });

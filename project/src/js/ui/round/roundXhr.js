@@ -1,5 +1,5 @@
 import { request } from '../../http';
-import { noop, serializeQueryParameters } from '../../utils';
+import { noop } from '../../utils';
 import i18n from '../../i18n';
 
 export function reload(ctrl) {
@@ -25,9 +25,9 @@ export function syncNote(gameId, notes) {
     method: 'POST',
     serialize: t => t,
     deserialize: t => t,
-    data: serializeQueryParameters({ text: notes })
+    body: JSON.stringify({ text: notes })
   }, false, xhrConfig)
-  .run(noop)
+  .then(noop)
   .catch(err => {
     window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center');
     throw err;

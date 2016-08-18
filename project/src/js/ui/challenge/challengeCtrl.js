@@ -15,7 +15,7 @@ export default function oninit(vnode) {
 
   function reloadChallenge() {
     getChallenge(challenge().id)
-    .run(d => {
+    .then(d => {
       clearTimeout(pingTimeoutId());
       challenge(d.challenge);
       switch (d.challenge.status) {
@@ -40,7 +40,7 @@ export default function oninit(vnode) {
     pingTimeoutId(setTimeout(pingNow, 2000));
   }
 
-  getChallenge(vnode.attrs.id).run(d => {
+  getChallenge(vnode.attrs.id).then(d => {
     challenge(d.challenge);
     socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
@@ -56,18 +56,18 @@ export default function oninit(vnode) {
     challenge,
     joinChallenge() {
       return acceptChallenge(challenge().id)
-      .run(() => challengesApi.remove(challenge().id))
-      .run(d => router.set('/game' + d.url.round, true));
+      .then(() => challengesApi.remove(challenge().id))
+      .then(d => router.set('/game' + d.url.round, true));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)
-      .run(() => challengesApi.remove(challenge().id))
-      .run(backHistory);
+      .then(() => challengesApi.remove(challenge().id))
+      .then(backHistory);
     },
     cancelChallenge() {
       return cancelChallenge(challenge().id)
-      .run(() => challengesApi.remove(challenge().id))
-      .run(backHistory);
+      .then(() => challengesApi.remove(challenge().id))
+      .then(backHistory);
     }
   };
 }

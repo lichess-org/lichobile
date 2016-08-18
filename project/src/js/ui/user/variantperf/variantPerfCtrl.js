@@ -13,7 +13,7 @@ export default function oninit(vnode) {
   socket.createDefault();
 
   xhr.user(userId)
-  .run(data => {
+  .then(data => {
     user(data);
     return data;
   })
@@ -24,7 +24,7 @@ export default function oninit(vnode) {
   });
 
   xhr.variantperf(userId, variant)
-  .run(data => {
+  .then(data => {
     variantPerfData(data);
     return data;
   })

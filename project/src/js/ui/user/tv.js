@@ -53,7 +53,7 @@ export default function({ params }) {
   }
 
   tv(params.id)
-  .run(data => {
+  .then(data => {
     params.data = data;
   })
   .catch(error => {

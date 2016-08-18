@@ -22,8 +22,8 @@ export default function oninit(vnode) {
   }
 
   xhr.user(userId)
-  .run(user)
-  .run(session.refresh)
+  .then(user)
+  .then(session.refresh)
   .catch(error => {
     utils.handleXhrError(error);
     router.set('/');
@@ -33,12 +33,12 @@ export default function oninit(vnode) {
     user,
     isMe: () => session.getUserId() === user().id,
     toggleFollowing: () => {
-      if (user().following) xhr.unfollow(user().id).run(setNewUserState);
-      else xhr.follow(user().id).run(setNewUserState);
+      if (user().following) xhr.unfollow(user().id).then(setNewUserState);
+      else xhr.follow(user().id).then(setNewUserState);
     },
     toggleBlocking: () => {
-      if (user().blocking) xhr.unblock(user().id).run(setNewUserState);
-      else xhr.block(user().id).run(setNewUserState);
+      if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
+      else xhr.block(user().id).then(setNewUserState);
     },
     goToGames: () => router.set(`/@/${user().id}/games`),
     goToUserTV: () => router.set(`/@/${user().id}/tv`),

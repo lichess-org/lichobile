@@ -23,7 +23,7 @@ export default {
     const ranking = m.prop({});
 
     xhr.ranking()
-    .run(data => {
+    .then(data => {
       Object.keys(data).forEach(k => {
         data[k].isOpenedOnMobile = false;
       });

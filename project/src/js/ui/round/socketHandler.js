@@ -45,7 +45,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ctrl.setBerserk(color);
     },
     reload: function() {
-      xhr.reload(ctrl).run(ctrl.reload);
+      xhr.reload(ctrl).then(ctrl.reload);
     },
     redirect: function(e) {
       socket.redirectToGame(e);
@@ -55,7 +55,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         onUserTVRedirect();
       } else {
         xhr.reload(ctrl)
-        .run(function(data) {
+        .then(function(data) {
           socket.setVersion(data.player.version);
           ctrl.reload(data);
         })
@@ -68,7 +68,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
     end: function(winner) {
       ctrl.data.game.winner = winner;
       ground.end(ctrl.chessground);
-      xhr.reload(ctrl).run(ctrl.reload);
+      xhr.reload(ctrl).then(ctrl.reload);
       window.plugins.insomnia.allowSleepAgain();
       if (ctrl.data.game.speed === 'correspondence') {
         removeOfflineGameData(ctrl.data.url.round.substr(1));

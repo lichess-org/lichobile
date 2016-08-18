@@ -1,22 +1,27 @@
 import merge from 'lodash/merge';
 import spinner from './spinner';
 import redraw from './utils/redraw';
-import m from 'mithril';
 
 export const apiVersion = 2;
 
 const baseUrl = window.lichess.apiEndPoint;
 
-function xhrConfig(xhr) {
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  xhr.setRequestHeader('Accept', 'application/vnd.lichess.v' + apiVersion + '+json');
-  xhr.withCredentials = true;
-  xhr.timeout = 8000;
+export function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    const error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
+}
+
+export function parseJSON(response) {
+  return response.json();
 }
 
 // convenient wrapper around m.request
-export function request(url, opts, feedback, xhrConf) {
-  let curXhr;
+export function request(url, opts, feedback) {
 
   function onSuccess(data) {
     if (feedback) spinner.stop();
@@ -24,42 +29,35 @@ export function request(url, opts, feedback, xhrConf) {
     return data;
   }
 
-  function onError(data) {
+  function onError(error) {
     if (feedback) spinner.stop();
     redraw();
-    throw { response: data, status: curXhr.status };
+    throw { response: error, status: error.status };
   }
 
   const cfg = {
-    url: baseUrl + url,
     method: 'GET',
-    data: { },
-    config: xhr => {
-      curXhr = xhr;
-      if (xhrConf) xhrConf(xhr);
-      else xhrConfig(xhr);
-    },
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { response: { error: 'Cannot read data from the server' }};
-      }
+    credentials: 'same-origin',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
     }
   };
   merge(cfg, opts);
 
-  if (cfg.method === 'GET') {
-    cfg.data._ = Date.now();
-  }
+  // if (cfg.method === 'GET') {
+  //   cfg.data._ = Date.now();
+  // }
 
-  const stream = m.request(cfg);
+  const promise = fetch(baseUrl + url, cfg);
 
   if (feedback) {
     spinner.spin(document.body);
   }
 
-  return stream
-    .run(onSuccess)
+  return promise
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(onSuccess)
     .catch(onError);
 }

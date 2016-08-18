@@ -54,7 +54,7 @@ export default function(root, allow) {
 
   const fetchOpening = debounce(fen => {
     return openingXhr(effectiveVariant, fen, config.data, withGames)
-    .run(res => {
+    .then(res => {
       res.opening = true;
       res.fen = fen;
       cache[fen] = res;
@@ -67,7 +67,7 @@ export default function(root, allow) {
 
   const fetchTablebase = debounce(fen => {
     return tablebaseXhr(root.vm.step.fen)
-    .run(res => {
+    .then(res => {
       res.tablebase = true;
       res.fen = fen;
       cache[fen] = res;

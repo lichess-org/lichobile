@@ -17,17 +17,17 @@ export default function oninit(vnode) {
 
   helper.analyticsTrackView('Correspondence');
 
-  xhr.lobby(true).run(function(data) {
+  xhr.lobby(true).then(function(data) {
     socket.createLobby(data.lobby.version, reload, {
       redirect: socket.redirectToGame,
       reload_seeks: reload,
-      resync: () => xhr.lobby().run(d => {
+      resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);
       })
     });
   });
 
-  challengesApi.refresh().run(() => {
+  challengesApi.refresh().then(() => {
     sendingChallenges(getSendingCorres());
   });
 
@@ -37,7 +37,7 @@ export default function oninit(vnode) {
 
   function cancelChallenge(id) {
     return xhr.cancelChallenge(id)
-    .run(() => {
+    .then(() => {
       challengesApi.remove(id);
       sendingChallenges(getSendingCorres());
     });
@@ -45,7 +45,7 @@ export default function oninit(vnode) {
 
   function reload(feedback) {
     xhr.seeks(feedback)
-    .run(function(d) {
+    .then(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
       redraw();
     });

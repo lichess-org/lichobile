@@ -1,4 +1,5 @@
 import { header as headerWidget, backButton } from '../shared/common';
+import redraw from '../../utils/redraw';
 import helper from '../helper';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -12,11 +13,12 @@ export default {
   onbeforeremove: helper.viewSlideOut,
 
   oninit: function() {
-    const langs = m.prop([]);
+    this.langs = m.prop([]);
 
-    getAvailableLanguages().run(langs);
-
-    this.langs = langs;
+    getAvailableLanguages().then(data => {
+      this.langs(data);
+      redraw();
+    });
   },
 
   view: function() {

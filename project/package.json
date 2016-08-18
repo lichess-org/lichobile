@@ -55,6 +55,7 @@
     "rlite-router": "1.1.3",
     "signals": "1.0.0",
     "watchify": "3.7.0",
+    "whatwg-fetch": "1.0.0",
     "zanimo": "git://github.com/veloce/Zanimo"
   }
 }

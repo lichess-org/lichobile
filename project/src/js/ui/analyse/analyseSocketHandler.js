@@ -16,7 +16,7 @@ export default function(ctrl, gameId, orientation) {
       }
       if (data.tree.eval) {
         ctrl.vm.analysisProgress = false;
-        gameXhr(gameId, orientation, true).run(cfg => {
+        gameXhr(gameId, orientation, true).then(cfg => {
           cfg.orientation = orientation;
           ctrl.data = cfg;
           ctrl.analyse = new analyse(ctrl.data);

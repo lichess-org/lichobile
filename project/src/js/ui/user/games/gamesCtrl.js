@@ -31,7 +31,7 @@ export default function oninit(vnode) {
   socket.createDefault();
 
   xhr.user(userId)
-  .run(data => {
+  .then(data => {
     user(data);
     let f = Object.keys(data.count)
       .filter(k => filters.hasOwnProperty(k) && data.count[k] > 0)
@@ -80,7 +80,7 @@ export default function oninit(vnode) {
 
   function loadInitialGames() {
     xhr.games(userId, currentFilter(), 1, true)
-    .run(data => {
+    .then(data => {
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
       setTimeout(() => {
@@ -96,7 +96,7 @@ export default function oninit(vnode) {
   function loadNextPage(page) {
     isLoadingNextPage(true);
     xhr.games(userId, currentFilter(), page)
-    .run(data => {
+    .then(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));

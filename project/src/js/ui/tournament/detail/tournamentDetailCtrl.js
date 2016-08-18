@@ -50,7 +50,7 @@ export default function oninit(vnode) {
 
   function join(id) {
     xhr.join(id)
-    .run(() => {
+    .then(() => {
       hasJoined(true);
       page(null); // Reset the page so next reload goes to player position
       redraw();
@@ -60,7 +60,7 @@ export default function oninit(vnode) {
 
   function withdraw(id) {
     xhr.withdraw(id)
-    .run(() => {
+    .then(() => {
       hasJoined(false);
       redraw();
     })
@@ -75,7 +75,7 @@ export default function oninit(vnode) {
     }
     isLoading(true);
     xhr.reload(t, page())
-    .run(reload)
+    .then(reload)
     .catch(() => isLoading(false));
   }, 1000);
 
@@ -97,7 +97,7 @@ export default function oninit(vnode) {
 
   const clockInterval = m.prop();
   xhr.tournament(id)
-  .run(data => {
+  .then(data => {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
     clockInterval(setInterval(tick, 1000));

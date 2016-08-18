@@ -46,7 +46,7 @@ export default {
       const text = e.target.value;
       if (this.root.data.note !== text) {
         syncNote(this.root.data.game.id, text)
-        .run(() => {
+        .then(() => {
           this.root.data.note = text;
         });
       }

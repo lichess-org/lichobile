@@ -24,7 +24,7 @@ lobby.startSeeking = function() {
   window.plugins.insomnia.keepAwake();
   hookId = null;
 
-  xhr.lobby(true).run(data => {
+  xhr.lobby(true).then(data => {
     socket.createLobby(data.lobby.version, createHook, {
       redirect: d => {
         lobby.closePopup();
@@ -36,7 +36,7 @@ lobby.startSeeking = function() {
         nbGames = d.r;
         redraw();
       },
-      resync: () => xhr.lobby().run(d => {
+      resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);
       })
     });
@@ -96,7 +96,7 @@ lobby.view = function() {
 
 function createHook() {
   if (hookId) return; // hook already created!
-  xhr.seekGame().run(function(data) {
+  xhr.seekGame().then(function(data) {
     helper.analyticsTrackEvent('Seek', 'Created');
     hookId = data.hook.id;
   })

@@ -66,20 +66,20 @@ function renderBody() {
             'bgTheme',
             'dark',
             settings.general.theme.background() === 'dark',
-            e => {
+            e => utils.autoredraw(() => {
               settings.general.theme.background(e.target.value);
               layout.onBackgroundChange(e.target.value);
-            }
+            })
           )),
           m('div.nice-radio', formWidgets.renderRadio(
             'Light',
             'bgTheme',
             'light',
             settings.general.theme.background() === 'light',
-            e => {
+            e => utils.autoredraw(() => {
               settings.general.theme.background(e.target.value);
               layout.onBackgroundChange(e.target.value);
-            }
+            })
         ))])
       ]),
       m('li.list_item', {

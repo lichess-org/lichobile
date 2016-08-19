@@ -1,5 +1,5 @@
 import { header } from '../../shared/common';
-import { gameIcon } from '../../../utils';
+import { autoredraw, gameIcon } from '../../../utils';
 import helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
@@ -54,7 +54,7 @@ export function renderPlayer(ctrl, obj) {
           <div className="check_container">
             <label htmlFor="user_following">{i18n('follow')}</label>
             <input id="user_following" type="checkbox" checked={obj.relation}
-              onchange={() => ctrl.toggleFollowing(obj)} />
+              onchange={() => autoredraw(ctrl.toggleFollowing.bind(undefined, obj))} />
           </div>
         </div> : null
       }

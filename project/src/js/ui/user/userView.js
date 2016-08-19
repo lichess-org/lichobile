@@ -1,6 +1,7 @@
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
+import { autoredraw } from '../../utils';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -165,7 +166,7 @@ function renderActions(ctrl) {
           <label htmlFor="user_following">{i18n('follow')}</label>
           <input id="user_following" type="checkbox" checked={user.following}
             disabled={user.blocking}
-            onchange={ctrl.toggleFollowing} />
+            onchange={() => autoredraw(ctrl.toggleFollowing)} />
         </div>
       </div> : null
       }
@@ -175,7 +176,7 @@ function renderActions(ctrl) {
           <label htmlFor="user_blocking">{i18n('block')}</label>
           <input id="user_blocking" type="checkbox" checked={user.blocking}
             disabled={user.following}
-            onchange={ctrl.toggleBlocking} />
+            onchange={() => autoredraw(ctrl.toggleBlocking)} />
         </div>
       </div> : null
       }

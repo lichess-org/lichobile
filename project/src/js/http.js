@@ -21,7 +21,7 @@ export function parseJSON(response) {
 }
 
 // convenient wrapper around m.request
-function request(url, opts, feedback) {
+function request(url, opts, feedback, uncache) {
 
   function onSuccess(data) {
     if (feedback) spinner.stop();
@@ -47,9 +47,9 @@ function request(url, opts, feedback) {
   merge(cfg, opts);
   cfg.headers = new Headers(cfg.headers);
 
-  // if (cfg.method === 'GET') {
-  //   cfg.data._ = Date.now();
-  // }
+  if (uncache) {
+    url += `?_=${Date.now()}`;
+  }
 
   const promise = fetch(baseUrl + url, cfg);
 

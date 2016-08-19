@@ -60,4 +60,12 @@ function getServerLag() {
   socket.send('moveLat', true);
 }
 
+menu.pingUpdate = function () {
+  if (menu.isOpen) m.redraw();
+};
+
+menu.lagUpdate = function () {
+  if (menu.isOpen) m.redraw();
+};
+
 export default menu;

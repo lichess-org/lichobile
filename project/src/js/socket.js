@@ -7,6 +7,7 @@ import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
+import menu from './ui/menu';
 import m from 'mithril';
 
 const worker = new Worker('lib/socketWorker.js');
@@ -33,11 +34,11 @@ const defaultHandlers = {
   },
   mlat: mlat => {
     serverMoveTime(mlat);
-    m.redraw();
+    menu.lagUpdate();
   },
   pingTime: ping => {
     userPing(ping);
-    m.redraw();
+    menu.pingUpdate();
   }
 };
 

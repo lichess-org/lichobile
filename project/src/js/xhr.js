@@ -109,7 +109,7 @@ export function toggleGameBookmark(id) {
 }
 
 export function featured(channel, flip) {
-  return fetchJSON('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
+  return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
 export function setServerLang(lang) {

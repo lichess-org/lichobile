@@ -3,7 +3,7 @@ import { fetchJSON } from '../../http';
 export function games(userId, filter = 'all', page = 1, feedback = false) {
   return fetchJSON(`/@/${userId}/${filter}`, {
     method: 'GET',
-    data: {
+    query: {
       page
     }
   }, feedback);
@@ -12,7 +12,7 @@ export function games(userId, filter = 'all', page = 1, feedback = false) {
 export function following(userId, page = 1, feedback = false) {
   return fetchJSON(`/@/${userId}/following`, {
     method: 'GET',
-    data: {
+    query: {
       page
     }
   }, feedback);
@@ -21,7 +21,7 @@ export function following(userId, page = 1, feedback = false) {
 export function followers(userId, page = 1, feedback = false) {
   return fetchJSON(`/@/${userId}/followers`, {
     method: 'GET',
-    data: {
+    query: {
       page
     }
   }, feedback);

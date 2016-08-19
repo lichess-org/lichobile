@@ -5,7 +5,7 @@ export function currentTournaments() {
 }
 
 export function tournament(id) {
-  return fetchJSON('/tournament/' + id, {data: {socketVersion: 1}}, true);
+  return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true);
 }
 
 export function reload(id, page) {

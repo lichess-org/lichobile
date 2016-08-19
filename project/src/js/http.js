@@ -20,6 +20,16 @@ export function parseJSON(response) {
   return response.json();
 }
 
+export function buildQS(obj) {
+  const parts = [];
+  for (var i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
+    }
+  }
+  return parts.join('&');
+}
+
 // convenient wrapper around m.request
 function request(url, opts, feedback, uncache) {
 
@@ -51,6 +61,14 @@ function request(url, opts, feedback, uncache) {
     url += `?_=${Date.now()}`;
   }
 
+  if (opts && opts.query) {
+    const query = buildQS(opts.query);
+    if (query !== '') {
+      const prefix = url.indexOf('?') < 0 ? '?' : '&';
+      url += prefix + query;
+    }
+  }
+
   const promise = fetch(baseUrl + url, cfg);
 
   if (feedback) {
@@ -63,12 +81,12 @@ function request(url, opts, feedback, uncache) {
     .catch(onError);
 }
 
-export function fetchJSON(url, opts, feedback) {
-  return request(url, opts, feedback)
+export function fetchJSON(url, opts, feedback, uncache) {
+  return request(url, opts, feedback, uncache)
   .then(parseJSON);
 }
 
-export function fetchText(url, opts, feedback) {
-  return request(url, opts, feedback)
+export function fetchText(url, opts, feedback, uncache) {
+  return request(url, opts, feedback, uncache)
   .then(r => r.text());
 }

@@ -40,21 +40,20 @@ function tabNavigation (currentTabFn) {
 function tournamentListBody(ctrl) {
   if (!ctrl.tournaments()) return null;
 
-  const tabContent = ctrl.tournaments()[ctrl.currentTab()];
+  const id = ctrl.currentTab();
+  const tabContent = ctrl.tournaments()[id];
 
-  return m('.module-tabs.tabs-routing', [
-    tabNavigation(ctrl.currentTab),
-    m('.tab-content.layout.center-center.native_scroller',
-      renderTournamentList(tabContent, ctrl.currentTab())
-    )
-  ]);
-}
-
-function renderTournamentList (list, id) {
   return (
-    <table key={id} className='tournamentList'>
-      {list.map(renderTournamentListItem)}
-    </table>
+    <div className="tournamentTabsWrapper">
+      {tabNavigation(ctrl.currentTab)}
+      <div className="native_scroller tournamentList">
+        <table>
+          <tbody>
+            {tabContent.map(renderTournamentListItem)}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 

@@ -1,6 +1,5 @@
 import router from '../../router';
 import redraw from '../../utils/redraw';
-import m from 'mithril';
 import debounce from 'lodash/debounce';
 import session from '../../session';
 import sound from '../../sound';

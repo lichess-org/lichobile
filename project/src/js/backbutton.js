@@ -3,12 +3,11 @@ import redraw from './utils/redraw';
 import isFunction from 'lodash/isFunction';
 import { backHistory } from './utils';
 import session from './session';
-import m from 'mithril';
 
 const stack = [];
 
 export default function backbutton() {
-  var b = stack.pop();
+  const b = stack.pop();
   if (isFunction(b)) {
     b('backbutton');
     redraw();

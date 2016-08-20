@@ -58,7 +58,7 @@ export function renderMaterial(material) {
       content = [];
       for (let i = 0; i < count; i++) content.push(piece);
     }
-    children.push(<div className="tomb">{content}</div>);
+    children.push(<div className="tomb" key={role}>{content}</div>);
   }
   return children;
 }

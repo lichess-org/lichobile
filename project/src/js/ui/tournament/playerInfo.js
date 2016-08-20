@@ -7,7 +7,7 @@ import * as utils from '../../utils';
 import i18n from '../../i18n';
 
 export default {
-  oninit: function(tournament) {
+  controller: function(tournament) {
     let isOpen = false;
     const playerData = m.prop();
 
@@ -15,7 +15,7 @@ export default {
       xhr.playerInfo(tournament().id, p.name)
       .then(data => {
         playerData(data);
-        backbutton.stack.push(close);
+        backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'));
         isOpen = true;
       })
       .catch(utils.handleXhrError);

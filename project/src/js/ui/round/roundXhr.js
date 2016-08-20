@@ -10,6 +10,10 @@ export function getPGN(gameId) {
   return fetchText(`/game/export/${gameId}.pgn`, null, true);
 }
 
+export function readNote(gameId) {
+  return fetchText(`/${gameId}/note`);
+}
+
 export function syncNote(gameId, notes) {
 
   return fetchText(`/${gameId}/note`, {

@@ -1,12 +1,25 @@
 import helper from '../helper';
+import spinner from '../../spinner';
 import i18n from '../../i18n';
 import backbutton from '../../backbutton';
 import debounce from 'lodash/debounce';
-import { syncNote } from './roundXhr';
+import { readNote, syncNote } from './roundXhr';
 import m from 'mithril';
 
 export default {
   oninit(root) {
+
+    this.syncing = true;
+
+    readNote(root.data.game.id)
+    .then(note => {
+      root.data.note = note;
+      this.syncing = false;
+    })
+    .catch(() => {
+      this.syncing = false;
+      window.plugins.toast.show('Could not read notes from server.', 'short', 'center');
+    });
 
     let notesHeight;
 
@@ -21,7 +34,7 @@ export default {
 
     this.close = function(fromBB) {
       window.cordova.plugins.Keyboard.close();
-      if(fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
       this.showing = false;
     }.bind(this);
 
@@ -73,6 +86,8 @@ export default {
         m('h2', i18n('notes'))
       ]),
       m('div.modal_content', [
+        ctrl.syncing ?
+        m('div.notesTextarea.loading', spinner.getVdom()) :
         m('textarea#notesTextarea.native_scroller', {
           placeholder: i18n('typePrivateNotesHere'),
           oninput: ctrl.syncNotes

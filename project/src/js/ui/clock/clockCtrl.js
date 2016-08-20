@@ -59,23 +59,13 @@ export default function oninit(vnode) {
   window.addEventListener('resize', hideStatusBar);
 
   vnode.state = {
+    hideStatusBar,
     startStop,
     clockSettingsCtrl,
     clockObj,
     reload,
     goHome,
-    clockTap,
-    onunload: () => {
-      document.removeEventListener('resume', hideStatusBar);
-      window.removeEventListener('resize', hideStatusBar);
-      window.StatusBar.show();
-      if (window.cordova.platformId === 'android') {
-        window.AndroidFullScreen.showSystemUI();
-      }
-      if (clockObj().clockInterval) {
-        clearInterval(clockObj().clockInterval);
-      }
-    }
+    clockTap
   };
 }
 

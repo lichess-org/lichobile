@@ -253,7 +253,7 @@ function renderOpponents(ctrl, isPortrait) {
             ' +' + getChecksCount(ctrl, player.color) : null
           }
         </div>
-        {ctrl.data.clock && !isCrazy || !isPortrait ?
+        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
           <div className="analyseClock">
             {formatClockTime(ctrl.data.clock[player.color] * 1000, false)}
             <span className="fa fa-clock-o" />
@@ -270,7 +270,7 @@ function renderOpponents(ctrl, isPortrait) {
             ' +' + getChecksCount(ctrl, opponent.color) : null
           }
         </div>
-        {ctrl.data.clock && !isCrazy || !isPortrait ?
+        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
           <div className="analyseClock">
             {formatClockTime(ctrl.data.clock[opponent.color] * 1000, false)}
             <span className="fa fa-clock-o" />

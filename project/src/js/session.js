@@ -78,7 +78,8 @@ function savePreferences() {
   return fetchText('/account/preferences', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': 'application/json, text/*'
     },
     body: serializeQueryParameters(prefs)
   }, true);

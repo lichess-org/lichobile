@@ -1,5 +1,5 @@
 import { fetchJSON, fetchText } from '../../http';
-import { noop } from '../../utils';
+import { noop, serializeQueryParameters } from '../../utils';
 import i18n from '../../i18n';
 
 export function reload(ctrl) {
@@ -12,17 +12,14 @@ export function getPGN(gameId) {
 
 export function syncNote(gameId, notes) {
 
-  function xhrConfig(xhr) {
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhr.withCredentials = true;
-    xhr.timeout = 10000;
-  }
-
   return fetchText(`/${gameId}/note`, {
     method: 'POST',
-    body: JSON.stringify({ text: notes })
-  }, false, xhrConfig)
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': 'application/json, text/*'
+    },
+    body: serializeQueryParameters({ text: notes })
+  }, false)
   .then(noop)
   .catch(err => {
     window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center');

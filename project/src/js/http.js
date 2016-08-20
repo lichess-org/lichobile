@@ -57,11 +57,18 @@ function request(url, opts, feedback, uncache) {
     credentials: 'include',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json',
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
     }
   };
+
   merge(cfg, opts);
+
+  // by default POST and PUT send json except if defined otherwise in caller
+  if ((cfg.method === 'POST' || cfg.method === 'PUT') &&
+    cfg.headers['Content-Type'] === undefined
+  ) {
+    cfg.headers['Content-Type'] = 'application/json; charset=UTF-8';
+  }
 
   if (uncache) {
     url = addQuerystring(url, `_=${Date.now()}`);
@@ -74,7 +81,12 @@ function request(url, opts, feedback, uncache) {
     }
   }
 
-  const promise = fetch(baseUrl + url, cfg);
+  const promise = Promise.race([
+    fetch(baseUrl + url, cfg),
+    new Promise((resolve, reject) =>
+      setTimeout(() => reject(new Error('Request timeout.')), 8000)
+    )
+  ]);
 
   if (feedback) {
     spinner.spin(document.body);

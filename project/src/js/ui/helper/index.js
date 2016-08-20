@@ -187,9 +187,8 @@ export default {
   },
 
   slidesOutDown: function(callback, elID) {
-    return function(e) {
+    return function() {
       const el = document.getElementById(elID);
-      e.redraw = false;
       return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
       .then(utils.autoredraw.bind(undefined, callback))
      .catch(console.log.bind(console));
@@ -206,9 +205,8 @@ export default {
   },
 
   slidesOutRight: function(callback, elID) {
-    return function(e) {
+    return function() {
       const el = document.getElementById(elID);
-      e.redraw = false;
       return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
       .then(utils.autoredraw.bind(undefined, callback))
       .catch(console.log.bind(console));
@@ -218,7 +216,6 @@ export default {
   fadesOut: function(callback, selector, time = 150) {
     return function(e) {
       e.stopPropagation();
-      e.redraw = false;
       var el = selector ? findParentBySelector(e.target, selector) : e.target;
       return Zanimo(el, 'opacity', 0, time)
       .then(() => utils.autoredraw(callback))

@@ -14,22 +14,17 @@ let routeCounter = 0;
 export function defineRoutes(mountPoint, routes) {
   for (let route in routes) {
     const component = routes[route];
-    router.add(route, function onRouteMatch({ url, params }) {
+    router.add(route, function onRouteMatch({ params }) {
       routeCounter++;
 
       function redraw() {
         m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
       }
-      // allow to have a lower level router handler
-      if (typeof component === 'function') {
-        component({ url, params });
-      } else {
-        // TODO it works but would be better in a router exit hook
-        signals.redraw.removeAll();
-        signals.redraw.add(redraw);
-        redraw();
-      }
 
+      // TODO it works but would be better in a router exit hook
+      signals.redraw.removeAll();
+      signals.redraw.add(redraw);
+      redraw();
     });
   }
   window.addEventListener('popstate', processQuerystring);

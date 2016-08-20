@@ -36,7 +36,6 @@ function request(url, opts, feedback, uncache) {
   }
 
   function onError(error) {
-    console.error(error);
     if (feedback) spinner.stop();
     redraw();
     throw error;

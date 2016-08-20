@@ -4,7 +4,8 @@ import backbutton from '../../../backbutton';
 import settings from '../../../settings';
 
 export default {
-  oninit(variant, onClose) {
+
+  controller(variant, onClose) {
     const available = ['lichess'];
     if (variant.key === 'standard' || variant.key === 'fromPosition') {
       available.push('masters');

@@ -6,7 +6,7 @@ import m from 'mithril';
 
 export default {
 
-  oninit: function(root) {
+  controller: function(root) {
     let isOpen = false;
 
     function open() {

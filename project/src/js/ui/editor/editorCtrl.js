@@ -84,8 +84,8 @@ export default function oninit(vnode) {
 
   this.computeFen = computeFen.bind(undefined, this.data.editor, this.chessground.getFen);
 
-  this.menu = menu.oninit(this);
-  this.continuePopup = continuePopup.oninit();
+  this.menu = menu.controller(this);
+  this.continuePopup = continuePopup.controller();
 
   this.loadNewFen = function(newFen) {
     router.set(`/editor/${encodeURIComponent(newFen)}`);

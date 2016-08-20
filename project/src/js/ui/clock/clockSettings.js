@@ -9,7 +9,7 @@ import * as utils from '../../utils';
 
 export default {
 
-  oninit: function(reload, clockObj) {
+  controller: function(reload, clockObj) {
     let isOpen = false;
 
     function open() {

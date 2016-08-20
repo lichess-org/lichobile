@@ -8,7 +8,7 @@ import m from 'mithril';
 
 export default {
 
-  oninit: function(root) {
+  controller: function(root) {
     let isOpen = false;
     const fen = m.prop();
     const importing = m.prop(false);

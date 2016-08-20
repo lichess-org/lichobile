@@ -30,8 +30,6 @@ export default {
   oncreate: helper.viewSlideIn,
   onbeforeremove: helper.viewSlideOut,
 
-  oninit: function() {},
-
   view: function() {
     const header = utils.partialf(headerWidget, null,
       backButton(i18n('pieces'))

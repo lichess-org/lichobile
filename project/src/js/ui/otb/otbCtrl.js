@@ -26,8 +26,8 @@ export default function oninit() {
   socket.createDefault();
 
   this.chessWorker = new Worker('vendor/scalachessjs.js');
-  this.actions = actions.oninit(this);
-  this.newGameMenu = newGameMenu.oninit(this);
+  this.actions = actions.controller(this);
+  this.newGameMenu = newGameMenu.controller(this);
 
   this.vm = {
     flip: false

@@ -20,7 +20,7 @@ export default function ctrl(vnode) {
 
   this.data = null;
 
-  this.menu = menu.oninit(this);
+  this.menu = menu.controller(this);
 
   this.vm = {
     loading: false

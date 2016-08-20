@@ -29,7 +29,7 @@ export default function oninit(vnode) {
 
   reload();
 
-  const clockSettingsCtrl = clockSettings.oninit(reload, clockObj);
+  const clockSettingsCtrl = clockSettings.controller(reload, clockObj);
 
   function clockTap (side) {
     clockObj().clockHit(side);

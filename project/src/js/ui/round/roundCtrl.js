@@ -25,7 +25,7 @@ import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import crazyValid from './crazy/crazyValid';
 
-export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = round.merge({}, cfg).data;
 

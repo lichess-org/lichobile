@@ -16,7 +16,7 @@ export default function oninit(vnode) {
   const hasJoined = m.prop(false);
   const page = m.prop(null);
   const isLoading = m.prop(false);
-  const faqCtrl = faq.oninit(tournament);
+  const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
 
   function reload(data) {

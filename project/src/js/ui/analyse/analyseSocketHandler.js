@@ -20,7 +20,7 @@ export default function(ctrl, gameId, orientation) {
           cfg.orientation = orientation;
           ctrl.data = cfg;
           ctrl.analyse = new analyse(ctrl.data);
-          ctrl.evalSummary = ctrl.data.analysis ? evalSummary.oninit(ctrl) : null;
+          ctrl.evalSummary = ctrl.data.analysis ? evalSummary.controller(ctrl) : null;
           sound.dong();
           vibrate.quick();
           ctrl.jump(ctrl.vm.path);

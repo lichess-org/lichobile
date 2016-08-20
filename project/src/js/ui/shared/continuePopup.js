@@ -14,7 +14,7 @@ import m from 'mithril';
 
 export default {
 
-  oninit: function() {
+  controller: function() {
     let isOpen = false;
     const fen = m.prop();
 

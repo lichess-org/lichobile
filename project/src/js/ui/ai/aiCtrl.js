@@ -17,7 +17,6 @@ import { askWorker, getRandomArbitrary, oppositeColor, aiName, noop } from '../.
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import m from 'mithril';
 
 export const storageFenKey = 'ai.setupFen';
 
@@ -29,8 +28,8 @@ export default function oninit() {
 
   this.engine = engineCtrl(this);
   this.chessWorker = new Worker('vendor/scalachessjs.js');
-  this.actions = actions.oninit(this);
-  this.newGameMenu = newGameMenu.oninit(this);
+  this.actions = actions.controller(this);
+  this.newGameMenu = newGameMenu.controller(this);
 
   this.vm = {
     engineSearching: false

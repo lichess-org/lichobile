@@ -1,5 +1,5 @@
 import gameStatus from './status';
-import { secondsToMinutes } from '../utils';
+import { secondsToMinutes, gameIcon } from '../utils';
 import settings from '../settings';
 import getVariant from './variant';
 import i18n from '../i18n';
@@ -147,7 +147,12 @@ function title(data) {
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
   const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
-  return `${time(data)} • ${name} • ${mode}`;
+  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
+  const text = `${time(data)} • ${name} • ${mode}`;
+  return [
+    <span className="withIcon" data-icon={icon} />,
+    <span>{text}</span>
+  ];
 }
 
 function publicUrl(data) {

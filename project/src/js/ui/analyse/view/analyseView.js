@@ -1,9 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
-import { hasNetwork, getBoardBounds, playerName, gameIcon, oppositeColor, noNull } from '../../../utils';
+import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
-import variantApi from '../../../lichess/variant';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
 import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
@@ -29,7 +28,7 @@ export default function analyseView() {
 
   if (ctrl.data) {
 
-    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data) + ` • ${i18n('analysis')}`) : null;
+    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data)) : null;
     const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
     return layout.board(
@@ -140,7 +139,6 @@ function renderInfos(ctrl, isPortrait) {
       }
       { !isSynthetic(ctrl.data) ?
         <div className="native_scroller">
-          {gameInfos(ctrl, isPortrait)}
           {renderOpponents(ctrl, isPortrait)}
         </div> : null
       }
@@ -193,42 +191,6 @@ function renderEvalBox(ctrl) {
           <span className="fa fa-question-circle"/>
         </div> : null
       }
-    </div>
-  );
-}
-
-
-function gameInfos(ctrl, isPortrait) {
-  if (isSynthetic(ctrl.data)) return null;
-
-  const isCrazy = !!ctrl.vm.step.crazy;
-
-  if (isCrazy && isPortrait) return null;
-
-  const data = ctrl.data;
-  const time = gameApi.time(data);
-  const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
-  const variantLink = helper.ontouch(
-    () => {
-      const link = variantApi(data.game.variant.key).link;
-      if (link)
-        window.open(link, '_blank');
-    },
-    () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
-  );
-
-  return (
-    <div className="analyseGameInfosWrapper">
-      <div className="analyseGameInfos" data-icon={icon}>
-        {time + ' • '}
-        <span className="variant" oncreate={variantLink}>
-          {data.game.variant.name}
-        </span>
-        <br/>
-        {mode}
-      </div>
     </div>
   );
 }

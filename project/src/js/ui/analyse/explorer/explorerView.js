@@ -270,7 +270,7 @@ export default function(ctrl) {
       {content}
       {(!content || ctrl.explorer.failing()) ? null :
         <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontouch(oncreate.toggleOpen)} />
+          oncreate={helper.ontouch(config.toggleOpen)} />
       }
     </div>
   );

@@ -41,7 +41,6 @@ export default {
         const situations = data.replay;
         const analyseData = getAnalyseData({ data: gameData, situations });
         analyseData.orientation = setup.player;
-        root.resetHashes();
         root.init(analyseData);
         importing(false);
         close();

@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import router from '../../../router';
 import helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
@@ -77,7 +78,7 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
-  const link = g.winner ? () => m.route(`/analyse/online/${g.id}/${userColor}`) : () => m.route(`/game/${g.id}/${userColor}`);
+  const link = g.winner ? () => router.set(`/analyse/online/${g.id}/${userColor}`) : () => router.set(`/game/${g.id}/${userColor}`);
 
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>

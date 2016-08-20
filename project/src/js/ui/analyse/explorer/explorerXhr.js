@@ -1,3 +1,4 @@
+import { fetchJSON } from '../../../http';
 import m from 'mithril';
 
 const endpoint = 'https://expl.lichess.org';
@@ -19,18 +20,20 @@ export function openingXhr(variant, fen, config, withGames) {
     params['speeds[]'] = config.speed.selected();
     params['ratings[]'] = config.rating.selected();
   }
-  return m.request({
-    method: 'GET',
-    url: endpoint + url,
-    data: params
+  return fetchJSON(endpoint + url, {
+    headers: {
+      'Accept': 'application/json, text/*'
+    },
+    query: params
   });
 }
 
 export function tablebaseXhr(fen) {
-  return m.request({
-    method: 'GET',
-    url: endpoint + '/tablebase',
-    data: {
+  return m.request(endpoint + '/tablebase', {
+    headers: {
+      'Accept': 'application/json, text/*'
+    },
+    query: {
       fen: fen
     }
   });

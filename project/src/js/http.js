@@ -1,3 +1,4 @@
+import { encode as buildQueryString } from 'querystring';
 import merge from 'lodash/merge';
 import spinner from './spinner';
 import redraw from './utils/redraw';
@@ -20,23 +21,12 @@ export function parseJSON(response) {
   return response.json();
 }
 
-export function buildQS(obj) {
-  const parts = [];
-  for (var i in obj) {
-    if (obj.hasOwnProperty(i)) {
-      parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
-    }
-  }
-  return parts.join('&');
-}
-
 function addQuerystring(url, querystring) {
   const prefix = url.indexOf('?') < 0 ? '?' : '&';
   let res = url + prefix + querystring;
   return res;
 }
 
-// convenient wrapper around m.request
 function request(url, opts, feedback, uncache) {
 
   function onSuccess(data) {
@@ -75,14 +65,16 @@ function request(url, opts, feedback, uncache) {
   }
 
   if (opts && opts.query) {
-    const query = buildQS(opts.query);
+    const query = buildQueryString(opts.query);
     if (query !== '') {
       url = addQuerystring(url, query);
     }
   }
 
+  const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url;
+
   const promise = Promise.race([
-    fetch(baseUrl + url, cfg),
+    fetch(fullUrl, cfg),
     new Promise((resolve, reject) =>
       setTimeout(() => reject(new Error('Request timeout.')), 8000)
     )

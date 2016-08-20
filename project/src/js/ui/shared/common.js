@@ -1,6 +1,7 @@
 import menu from '../menu';
 import router from '../../router';
 import * as utils from '../../utils';
+import layout from '../layout';
 import helper from '../helper';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
@@ -16,6 +17,15 @@ import m from 'mithril';
 import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
+
+export const LoadingBoard = {
+  view() {
+    return layout.board(
+      connectingHeader,
+      viewOnlyBoardContent
+    );
+  }
+};
 
 export function menuButton() {
   return (

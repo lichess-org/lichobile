@@ -393,7 +393,7 @@ export default function oninit(vnode) {
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
     this.evalSummary = this.data.analysis ? evalSummary.oninit(this) : null;
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.oninit(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
     let initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :

@@ -7,7 +7,7 @@ import { readNote, syncNote } from './roundXhr';
 import m from 'mithril';
 
 export default {
-  oninit(root) {
+  controller(root) {
 
     this.syncing = true;
 
@@ -68,13 +68,13 @@ export default {
     window.addEventListener('native.keyboardhide', onKeyboardHide);
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
-    this.onunload = function() {
+    this.unload = function() {
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     };
   },
 
-  view: function(ctrl) {
+  view(ctrl) {
 
     if (!ctrl.showing) return null;
 

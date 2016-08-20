@@ -8,7 +8,7 @@ import socket from '../../socket';
 import m from 'mithril';
 
 export default {
-  oninit: function(root) {
+  controller(root) {
 
     const storageId = 'chat.' + root.data.game.id;
 
@@ -77,14 +77,14 @@ export default {
     window.addEventListener('native.keyboardhide', onKeyboardHide);
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
-    this.onunload = function() {
+    this.unload = function() {
       if (!gameApi.playable(this.root.data)) storage.remove(storageId);
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     }.bind(this);
   },
 
-  view: function(ctrl) {
+  view(ctrl) {
 
     if (!ctrl.showing) return null;
 

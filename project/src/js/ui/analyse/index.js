@@ -21,7 +21,7 @@ export default {
   },
   onremove() {
     if (this.ceval) this.ceval.destroy();
-    this.chessLogic.onunload();
+    this.chessLogic.terminate();
     signals.seekCanceled.remove(this.connectGameSocket);
   },
   view

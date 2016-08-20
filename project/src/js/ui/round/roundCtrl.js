@@ -481,9 +481,9 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
   this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-    null : new chat.oninit(this);
+    null : new chat.controller(this);
 
-  this.notes = this.data.game.speed === 'correspondence' ? new notes.oninit(this) : null;
+  this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
   this.reload = function(rCfg) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
@@ -512,11 +512,12 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
   document.addEventListener('resume', reloadGameData);
   window.plugins.insomnia.keepAwake();
 
-  this.onunload = function() {
+  this.unload = function() {
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
     signals.seekCanceled.remove(connectSocket);
-    if (this.chat) this.chat.onunload();
+    if (this.chat) this.chat.unload();
+    if (this.notes) this.notes.unload();
   };
 }

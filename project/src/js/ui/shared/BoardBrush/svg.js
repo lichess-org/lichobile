@@ -50,9 +50,9 @@ export function arrow(brush, orig, dest, current, bounds) {
     angle = Math.atan2(dy, dx);
   const xo = Math.cos(angle) * margin,
     yo = Math.sin(angle) * margin;
+
   return (
     <line
-      key={current ? 'current' : orig + dest + brush.key}
       stroke={brush.color}
       stroke-width={lineWidth(brush, current, bounds)}
       stroke-linecap="round"

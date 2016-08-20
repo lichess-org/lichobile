@@ -30,6 +30,12 @@ export function buildQS(obj) {
   return parts.join('&');
 }
 
+function addQuerystring(url, querystring) {
+  const prefix = url.indexOf('?') < 0 ? '?' : '&';
+  let res = url + prefix + querystring;
+  return res;
+}
+
 // convenient wrapper around m.request
 function request(url, opts, feedback, uncache) {
 
@@ -40,6 +46,7 @@ function request(url, opts, feedback, uncache) {
   }
 
   function onError(error) {
+    console.error(error);
     if (feedback) spinner.stop();
     redraw();
     throw error;
@@ -55,17 +62,15 @@ function request(url, opts, feedback, uncache) {
     }
   };
   merge(cfg, opts);
-  cfg.headers = new Headers(cfg.headers);
 
   if (uncache) {
-    url += `?_=${Date.now()}`;
+    url = addQuerystring(url, `_=${Date.now()}`);
   }
 
   if (opts && opts.query) {
     const query = buildQS(opts.query);
     if (query !== '') {
-      const prefix = url.indexOf('?') < 0 ? '?' : '&';
-      url += prefix + query;
+      url = addQuerystring(url, query);
     }
   }
 

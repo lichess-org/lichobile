@@ -24,7 +24,6 @@ import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import crazyValid from './crazy/crazyValid';
-import m from 'mithril';
 
 export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
@@ -38,11 +37,11 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
     miniUser: {
       player: {
         showing: false,
-        data: m.prop(null)
+        data: null
       },
       opponent: {
         showing: false,
-        data: m.prop(null)
+        data: null
       }
     },
     showingActions: false,
@@ -99,8 +98,10 @@ export default function oninit(vnode, cfg, onFeatured, onTVChannelChange, userTv
   };
 
   this.toggleUserPopup = function(position, userId) {
-    if (!this.vm.miniUser[position].data()) {
-      this.vm.miniUser[position].data = miniUserXhr(userId);
+    if (!this.vm.miniUser[position].data) {
+      miniUserXhr(userId).then(data => {
+        this.vm.miniUser[position].data = data;
+      });
     }
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
   }.bind(this);

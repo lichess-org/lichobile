@@ -42,8 +42,8 @@ function overlay(ctrl, isPortrait) {
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data(), ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data(), ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
+    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
   ];
 }
 

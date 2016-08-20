@@ -1,9 +1,9 @@
+import router from '../../../router';
 import { header } from '../../shared/common';
-import { autoredraw, gameIcon } from '../../../utils';
+import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
-import m from 'mithril';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -54,7 +54,7 @@ export function renderPlayer(ctrl, obj) {
           <div className="check_container">
             <label htmlFor="user_following">{i18n('follow')}</label>
             <input id="user_following" type="checkbox" checked={obj.relation}
-              onchange={() => autoredraw(ctrl.toggleFollowing.bind(undefined, obj))} />
+              onchange={() => ctrl.toggleFollowing(obj)} />
           </div>
         </div> : null
       }

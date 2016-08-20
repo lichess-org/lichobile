@@ -3,8 +3,8 @@ import gamesMenu from '../gamesMenu';
 import layout from '../layout';
 import { connectingHeader, viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 
-export default function view(ctrl) {
-  if (ctrl.getRound()) return roundView(ctrl.getRound());
+export default function view() {
+  if (this.round) return roundView(this.round);
 
   const pov = gamesMenu.lastJoined;
   var header, board;

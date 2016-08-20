@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import * as xhr from '../xhr';
 import settings from '../settings';
 import formWidgets from './shared/form';
@@ -56,10 +57,12 @@ function close(fromBB) {
 }
 
 function startAIGame() {
-  return xhr.newAiGame(fromPositionFen).then(function(data) {
+  return xhr.newAiGame(fromPositionFen)
+  .then(function(data) {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
-    m.route('/game' + data.url.round);
-  }, function(error) {
+    router.set('/game' + data.url.round);
+  })
+  .catch(function(error) {
     utils.handleXhrError(error);
     throw error;
   });
@@ -95,17 +98,17 @@ function renderForm(formName, settingsObj, variants, timeModes) {
       key: 'position'
     }, fromPositionFen ? [
         m('div.setupMiniBoardWrapper', {
-          config: helper.ontouch(() => {
+          oncreate: helper.ontouch(() => {
             close();
-            m.route(`/editor/${encodeURIComponent(fromPositionFen)}`);
+            router.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
-          m.component(ViewOnlyBoard, { fen: fromPositionFen })
+          m(ViewOnlyBoard, { fen: fromPositionFen })
         ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           close();
-          m.route('/editor');
+          router.set('/editor');
         })
       }, i18n('boardEditor')))
     ));

@@ -36,13 +36,12 @@ export function view(ctrl, color, runningColor, isBerserk) {
     emerg: time < ctrl.data.emerg,
     berserk: isBerserk
   });
-  function cConfig(el, isUpdate) {
-    if (!isUpdate) {
-      el.textContent = formatClockTime(time * 1000, isRunning);
-      ctrl.els[color] = el;
-    }
+  function cOnCreate(vnode) {
+    const el = vnode.dom;
+    el.textContent = formatClockTime(time * 1000, isRunning);
+    ctrl.els[color] = el;
   }
   return (
-    <div className={className} config={cConfig} />
+    <div className={className} oncreate={cOnCreate} />
   );
 }

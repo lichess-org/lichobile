@@ -4,6 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import settings from '../../settings';
+import helper from '../helper';
 import { onBoardThemeChange } from '../shared/Board';
 import m from 'mithril';
 
@@ -30,7 +31,8 @@ function renderBody() {
 }
 
 export default {
-  controller: function() {},
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
 
   view: function() {
     const header = utils.partialf(headerWidget, null,

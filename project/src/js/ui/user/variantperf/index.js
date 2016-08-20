@@ -1,7 +1,10 @@
-import controller from './variantPerfCtrl';
+import helper from '../../helper';
+import oninit from './variantPerfCtrl';
 import view from './variantPerfView';
 
 export default {
-  controller,
+  oninit,
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
   view
 };

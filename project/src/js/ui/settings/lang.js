@@ -1,5 +1,6 @@
-import * as utils from '../../utils';
 import { header as headerWidget, backButton } from '../shared/common';
+import redraw from '../../utils/redraw';
+import helper from '../helper';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
@@ -8,20 +9,21 @@ import { setServerLang } from '../../xhr';
 import m from 'mithril';
 
 export default {
-  controller: function() {
-    const langs = m.prop([]);
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
 
-    getAvailableLanguages().then(langs);
+  oninit: function() {
+    this.langs = m.prop([]);
 
-    return {
-      langs
-    };
+    getAvailableLanguages().then(data => {
+      this.langs(data);
+      redraw();
+    });
   },
 
-  view: function(ctrl) {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('language'))
-    );
+  view: function() {
+    const ctrl = this;
+    const header = headerWidget.bind(undefined, null, backButton(i18n('language')));
 
     function renderLang(l) {
       return (

@@ -1,4 +1,5 @@
 import h from '../helper';
+import router from '../../router';
 import {header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
@@ -6,7 +7,8 @@ import i18n from '../../i18n';
 import m from 'mithril';
 import tabs from '../shared/tabs';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
 
   return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl);
@@ -24,7 +26,7 @@ const TABS = [{
 }];
 
 function tabNavigation (currentTabFn) {
-    return m('.nav-header', m.component(tabs, {
+    return m('.nav-header', m(tabs, {
         buttons: TABS,
         selectedTab: currentTabFn(),
         onTabChange: k => {
@@ -38,21 +40,20 @@ function tabNavigation (currentTabFn) {
 function tournamentListBody(ctrl) {
   if (!ctrl.tournaments()) return null;
 
-  const tabContent = ctrl.tournaments()[ctrl.currentTab()];
+  const id = ctrl.currentTab();
+  const tabContent = ctrl.tournaments()[id];
 
-  return m('.module-tabs.tabs-routing', [
-    tabNavigation(ctrl.currentTab),
-    m('.tab-content.layout.center-center.native_scroller',
-      renderTournamentList(tabContent, ctrl.currentTab())
-    )
-  ]);
-}
-
-function renderTournamentList (list, id) {
   return (
-    <table key={id} className='tournamentList'>
-      {list.map(renderTournamentListItem)}
-    </table>
+    <div className="tournamentTabsWrapper">
+      {tabNavigation(ctrl.currentTab)}
+      <div className="native_scroller tournamentList">
+        <table>
+          <tbody>
+            {tabContent.map(renderTournamentListItem)}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
@@ -66,7 +67,7 @@ function renderTournamentListItem(tournament) {
   return (
     <tr key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
-      config={h.ontouchY(() => m.route('/tournament/' + tournament.id))}
+      oncreate={h.ontouchY(() => router.set('/tournament/' + tournament.id))}
     >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>

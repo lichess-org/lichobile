@@ -36,10 +36,7 @@ export function renderTree(ctrl, tree) {
 }
 
 function renderEvalTag(e) {
-  return {
-    tag: 'eval',
-    children: e
-  };
+  return <eval>{e}</eval>;
 }
 
 function renderGlyph(glyph) {
@@ -60,7 +57,7 @@ function renderMove(ctrl, move, path) {
   const jump = helper.ontouchY(() => ctrl.jump(treePath.read(pathStr)));
 
   return (
-    <move className={className} config={jump}>
+    <move className={className} oncreate={jump}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
@@ -86,19 +83,19 @@ function renderVariationMenu(ctrl, path) {
     m('button', {
       className: 'withIcon',
       'data-icon': 'q',
-      config: helper.ontouch(ctrl.deleteVariation.bind(undefined, path))
+      oncreate: helper.ontouch(ctrl.deleteVariation.bind(undefined, path))
     }, 'Delete variation'),
     promotable ? m('button', {
       className: 'withIcon',
       'data-icon': 'E',
-      config: helper.ontouch(ctrl.promoteVariation.bind(undefined, path))
+      oncreate: helper.ontouch(ctrl.promoteVariation.bind(undefined, path))
     }, 'Promote to main line') : null
   ]);
 
   return (
     <div className="overlay_popup_wrapper variationMenuPopup">
       <div className="popup_overlay_close"
-        config={helper.ontouch(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
+        oncreate={helper.ontouch(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
       <div className="overlay_popup">
         {content}
       </div>
@@ -110,7 +107,7 @@ function renderVariation(ctrl, variation, path, klass) {
   const visiting = treePath.contains(path, ctrl.vm.path);
   return (
     <div className="variationWrapper">
-      <span className="menuIcon fa fa-ellipsis-v" config={helper.ontouchY(ctrl.toggleVariationMenu.bind(undefined, path))}></span>
+      <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontouchY(ctrl.toggleVariationMenu.bind(undefined, path))}></span>
       <div className={klass + ' variation' + (visiting ? ' visiting' : '')}>
         {renderVariationContent(ctrl, variation, path)}
         {renderVariationMenu(ctrl, path)}
@@ -245,18 +242,11 @@ function turnKey(turn, meta) {
 }
 
 function renderIndex(txt) {
-  return {
-    tag: 'index',
-    children: [txt]
-  };
+  return <index>{txt}</index>;
 }
 
 function renderTurnEl(children, key) {
-  return {
-    tag: 'turn',
-    attrs: { key },
-    children: children
-  };
+  return <turn key={key}>{children}</turn>;
 }
 
 function renderTurn(ctrl, turn, path) {

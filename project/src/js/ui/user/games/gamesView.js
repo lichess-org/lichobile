@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import router from '../../../router';
 import helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
@@ -10,7 +11,8 @@ import session from '../../../session';
 import m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const header = utils.partialf(headerWidget, null,
     backButton(ctrl.user() ? (ctrl.user().username + ' games') : '')
   );
@@ -40,7 +42,9 @@ export default function view(ctrl) {
 
 function renderAllGames(ctrl) {
   return (
-    <div className="scroller games" config={ctrl.scrollerConfig}>
+    <div className="scroller games" oncreate={ctrl.scrollerOnCreate}
+      onupdate={ctrl.scrollerOnUpdate} onremove={ctrl.scrollerOnRemove}
+    >
       <ul className="userGames">
         { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
         {ctrl.isLoadingNextPage() ?
@@ -54,9 +58,11 @@ function renderAllGames(ctrl) {
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontouchY(() => {
-    toggleGameBookmark(id).then(() => {
+    toggleGameBookmark(id)
+    .then(() => {
       ctrl.toggleBookmark(index);
-    }, err => utils.handleXhrError(err));
+    })
+    .catch(utils.handleXhrError);
   }, longAction);
 }
 
@@ -72,16 +78,16 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
-  const link = g.winner ? () => m.route(`/analyse/online/${g.id}/${userColor}`) : () => m.route(`/game/${g.id}/${userColor}`);
+  const link = g.winner ? () => router.set(`/analyse/online/${g.id}/${userColor}`) : () => router.set(`/game/${g.id}/${userColor}`);
 
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>
       { session.isConnected() ?
-        <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
+        <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" config={helper.ontouchY(link)}>
+      <div className="nav" oncreate={helper.ontouchY(link)}>
         <span className="iconGame" data-icon={icon} />
-        {wideScreenOrLandscape ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
+        {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">
           <div className="title">{title}</div>
           <small className="date">{date}</small>

@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
 import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop, handleXhrError } from '../../utils';
@@ -6,7 +7,7 @@ import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import m from 'mithril';
 
-export default function homeCtrl() {
+export default function homeCtrl(vnode) {
 
   const nbConnectedPlayers = m.prop();
   const nbGamesInPlay = m.prop();
@@ -21,7 +22,7 @@ export default function homeCtrl() {
           n: (_, d) => {
             nbConnectedPlayers(d.d);
             nbGamesInPlay(d.r);
-            m.redraw();
+            redraw();
           }
         });
       });
@@ -29,7 +30,8 @@ export default function homeCtrl() {
       Promise.all([
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
-      ]).then(results => {
+      ])
+      .then(results => {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
@@ -59,16 +61,13 @@ export default function homeCtrl() {
   document.addEventListener('online', init);
   document.addEventListener('resume', onResume);
 
-  return {
+  vnode.state = {
     nbConnectedPlayers,
     nbGamesInPlay,
     dailyPuzzle,
     timeline,
     weekTopPlayers,
-    onunload() {
-      socket.destroy();
-      document.removeEventListener('online', init);
-      document.removeEventListener('resume', onResume);
-    }
+    init,
+    onResume
   };
 }

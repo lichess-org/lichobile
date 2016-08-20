@@ -1,4 +1,5 @@
 import chessground from 'chessground-mobile';
+import redraw from '../../utils/redraw';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import helper from '../helper';
@@ -16,7 +17,7 @@ function start(ctrl, orig, dest, isPremove) {
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
     if (ctrl.data.pref.autoQueen === 3 || (ctrl.data.pref.autoQueen === 2 && isPremove)) return false;
     promoting = [orig, dest];
-    m.redraw();
+    redraw();
     return true;
   }
   return false;
@@ -46,13 +47,13 @@ export default {
     if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
 
     return m('div.overlay.open', {
-      config: helper.ontouch(partial(cancel, ctrl))
+      oncreate: helper.ontouch(partial(cancel, ctrl))
     }, [m('div#promotion_choice', {
       className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
       return m('piece.' + role + '.' + ctrl.data.player.color, {
-        config: helper.ontouch(finish.bind(undefined, ctrl, role))
+        oncreate: helper.ontouch(finish.bind(undefined, ctrl, role))
       });
     }))]);
   }

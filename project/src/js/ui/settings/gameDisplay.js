@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -23,7 +24,8 @@ function renderBody() {
 }
 
 export default {
-  controller: function() {},
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
 
   view: function() {
     const header = utils.partialf(headerWidget, null,

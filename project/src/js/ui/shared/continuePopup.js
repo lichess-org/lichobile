@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import router from '../../router';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
@@ -46,37 +47,37 @@ export default {
         return [
           hasNetwork() ? m('p.sep', i18n('playOnline')) : null,
           hasNetwork() ? m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               playMachineForm.openAIFromPosition(ctrl.fen());
             })
           }, i18n('playWithTheMachine')) : null,
           hasNetwork() ? m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               challengeForm.openFromPosition(ctrl.fen());
             })
           }, i18n('playWithAFriend')) : null,
           m('p.sep', i18n('playOffline')),
           m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(aiStorageFenKey, ctrl.fen());
-                m.route('/ai');
+                router.set('/ai');
               }
             })
           }, i18n('playOfflineComputer')),
           m('button', {
-            config: helper.ontouch(() => {
+            oncreate: helper.ontouch(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
                 storage.set(otbStorageFenKey, ctrl.fen());
-                m.route('/otb');
+                router.set('/otb');
               }
             })
           }, i18n('playOnTheBoardOffline'))

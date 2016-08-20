@@ -1,4 +1,5 @@
 import m from 'mithril';
+import router from '../../router';
 import { gameIcon, hasNetwork } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -9,7 +10,8 @@ import { header as headerWidget, userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
 import miniBoard from '../shared/miniBoard';
 
-export default function homeView(ctrl) {
+export default function homeView() {
+  const ctrl = this;
   const isPortrait = helper.isPortrait();
 
   function body() {
@@ -21,8 +23,8 @@ export default function homeView(ctrl) {
         <div className="page homeOffline">
           <section id="homeCreate">
             <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" config={helper.ontouchY(() => m.route('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" config={helper.ontouchY(() => m.route('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
           </section>
         </div>
       );
@@ -32,11 +34,11 @@ export default function homeView(ctrl) {
       <div className="native_scroller page">
         <div className="home">
           <section>
-            <div>{m.trust(nbPlayers.replace(/(\d+)/, '<strong>$1</strong>'))}</div>
-            <div>{m.trust(nbGames.replace(/(\d+)/, '<strong>$1</strong>'))}</div>
+            <div>{nbPlayers}</div>
+            <div>{nbGames}</div>
           </section>
           <section id="homeCreate">
-            <button className="fatButton" config={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
+            <button className="fatButton" oncreate={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
           </section>
           {renderDailyPuzzle(ctrl, isPortrait)}
           {renderTimeline(ctrl)}
@@ -69,11 +71,11 @@ function renderDailyPuzzle(ctrl, isPortrait) {
   return (
     <section id="dailyPuzzle">
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
-        {m.component(miniBoard, {
+        {m(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,
-          link: () => m.route('/training/' + puzzle.id)
+          link: () => router.set('/training/' + puzzle.id)
         })}
     </section>
   );
@@ -99,7 +101,7 @@ function renderTimeline(ctrl) {
         })}
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouchY(() => m.route('/timeline'))}>
+        <button oncreate={helper.ontouchY(() => router.set('/timeline'))}>
           {i18n('more')}
         </button>
       </div>
@@ -119,7 +121,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button config={helper.ontouchY(() => m.route('/players'))}>
+        <button oncreate={helper.ontouchY(() => router.set('/players'))}>
           {i18n('more')}
         </button>
       </div>
@@ -138,7 +140,7 @@ function renderPlayer(p) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" config={helper.ontouchY(() => m.route('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontouchY(() => router.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

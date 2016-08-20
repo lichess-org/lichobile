@@ -58,7 +58,7 @@ export default function chessLogic(ctrl) {
         }
       });
     },
-    onunload() {
+    terminate() {
       if (worker) worker.terminate();
     }
   };

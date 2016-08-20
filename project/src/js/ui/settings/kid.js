@@ -1,4 +1,4 @@
-import * as utils from '../../utils';
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -20,18 +20,20 @@ function renderBody(ctrl) {
 }
 
 export default {
-  controller: function() {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
+  oninit: function(vnode) {
     const kidMode = session.lichessBackedProp('kid', session.toggleKidMode);
 
-    return {
+    vnode.state = {
       kidMode
     };
   },
 
-  view: function(ctrl) {
-    const header = utils.partialf(headerWidget, null,
-      backButton('Kid mode')
-    );
+  view: function(vnode) {
+    const ctrl = vnode.state;
+    const header = headerWidget.bind(undefined, null, backButton('Kid mode'));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

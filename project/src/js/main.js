@@ -1,13 +1,14 @@
 /* application entry point */
 
 import './polyfills';
+import 'whatwg-fetch';
 
 // for moment a global object makes loading locales easier
 import moment from 'moment';
 window.moment = moment;
 
-import m from 'mithril';
 import * as utils from './utils';
+import redraw from './utils/redraw';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
@@ -65,31 +66,34 @@ function main() {
 
   setTimeout(function() {
     window.navigator.splashscreen.hide();
-    xhrStatus();
   }, 500);
 }
 
 function onResize() {
   helper.clearCachedViewportDim();
-  m.redraw();
+  redraw();
 }
 
 function onOnline() {
   if (isForeground()) {
+
+    xhrStatus();
+
     session.rememberLogin()
     .then(() => {
       push.register();
       challengesApi.refresh();
-      m.redraw();
+      redraw();
     })
-    .then(() => setServerLang(settings.general.lang()));
+    .then(() => setServerLang(settings.general.lang()))
+    .catch(() => console.log('connected as anonymous'));
   }
 }
 
 function onOffline() {
   if (isForeground()) {
     socket.disconnect();
-    m.redraw();
+    redraw();
   }
 }
 

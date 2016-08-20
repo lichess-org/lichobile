@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import redraw from '../../utils/redraw';
 import m from 'mithril';
 
 function renderOption(label, value, storedValue, labelArg, labelArg2) {
@@ -29,6 +30,13 @@ export default {
 
   renderSelect: function(label, name, options, settingsProp, isDisabled, onChangeCallback) {
     var storedValue = settingsProp();
+    const onChange = function(e) {
+      settingsProp(e.target.value);
+      if (onChangeCallback) onChangeCallback(e.target.value);
+      setTimeout(function() {
+        redraw();
+      }, 10);
+    };
     return [
       m('label', {
         'for': 'select_' + name
@@ -36,20 +44,11 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        config: function(el, isUpdate, context) {
-          if (!isUpdate) {
-            var onChange = function(e) {
-              settingsProp(e.target.value);
-              if (onChangeCallback) onChangeCallback(e.target.value);
-              setTimeout(function() {
-                m.redraw();
-              }, 10);
-            };
-            el.addEventListener('change', onChange, false);
-            context.onunload = function() {
-              el.removeEventListener('change', onChange, false);
-            };
-          }
+        oncreate: function(vnode) {
+          vnode.dom.addEventListener('change', onChange, false);
+        },
+        onremove: function(vnode) {
+          vnode.dom.removeEventListener('change', onChange, false);
         }
       }, options.map(function(e) {
         return renderOption(e[0], e[1], storedValue, e[2], e[3]);

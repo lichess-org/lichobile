@@ -3,7 +3,8 @@ import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeInSecs } from '../../utils';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   const body = clockBody.bind(undefined, ctrl);
   const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl);
 
@@ -53,7 +54,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={topClockClass} config={h.ontouch(() => onClockTap(ctrl, 'top'))}>
+      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'top'))}>
         { clock.topRemainingMoves ?
         <div className="clockStageInfo">
           <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
@@ -66,12 +67,12 @@ function clockBody(ctrl) {
         </div>
       </div>
       <div className="clockControls">
-        <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} config={h.ontouch(() => ctrl.startStop())} />
-        <span className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} config={h.ontouch(ctrl.reload)} />
-        <span className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} config={h.ontouch(ctrl.clockSettingsCtrl.open)} />
-        <span className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} config={h.ontouch(ctrl.goHome)} />
+        <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontouch(() => ctrl.startStop())} />
+        <span className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
+        <span className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
+        <span className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
       </div>
-      <div key="bottomClockTapArea" className={bottomClockClass} config={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
+      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeInSecs(clock.bottomTime()) }

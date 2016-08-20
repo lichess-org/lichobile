@@ -1,17 +1,17 @@
-import { request } from '../../http';
+import { fetchJSON } from '../../http';
 
 export function autocomplete(term) {
-  return request('/player/autocomplete', { data: { term }});
+  return fetchJSON('/player/autocomplete', { query: { term }});
 }
 
 export function suggestions(userId) {
-  return request(`/@/${userId}/suggestions`, {}, true);
+  return fetchJSON(`/@/${userId}/suggestions`, {}, true);
 }
 
 export function onlinePlayers() {
-  return request('/player/online', { data: { nb: 100 }}, true);
+  return fetchJSON('/player/online', { query: { nb: 100 }}, true);
 }
 
 export function ranking() {
-  return request('/player', {}, true);
+  return fetchJSON('/player', {}, true);
 }

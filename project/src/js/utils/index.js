@@ -1,17 +1,42 @@
 import i18n from '../i18n';
+import redraw from './redraw';
 import storage from '../storage';
 import cloneDeep from 'lodash/cloneDeep';
 import m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
+export function loadLocalJsonFile(url) {
+  let curXhr;
+  return new Promise((resolve, reject) => {
+    m.request({
+      url,
+      method: 'GET',
+      config(xhr) {
+        curXhr = xhr;
+      }
+    })
+    .run(data => resolve(data))
+    .catch(error => {
+      // workaround when xhr for local file has a 0 status it will
+      // reject the promise and still have the response object
+      if (curXhr.status === 0) {
+        try {
+          resolve(JSON.parse(curXhr.responseText));
+        } catch (e) {
+          reject(e);
+        }
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
 export function autoredraw(action) {
-  m.startComputation();
-  try {
-    return action();
-  } finally {
-    m.endComputation();
-  }
+  const res = action();
+  redraw();
+  return res;
 }
 
 export function tellWorker(worker, topic, payload) {
@@ -43,7 +68,8 @@ export function hasNetwork() {
 }
 
 export function handleXhrError(error) {
-  var {response: data, status} = error;
+  const status = error.status;
+
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
@@ -63,14 +89,23 @@ export function handleXhrError(error) {
 
     message = i18n(message);
 
-    if (typeof data === 'string') {
-      message += ` ${data}`;
-    }
-    else if (data.global && data.global.constructor === Array) {
-      message += ` ${data.global[0]}`;
-    }
-    else if (typeof data.error === 'string') {
-      message += ` ${data.error}`;
+    if (error.response) {
+      let data;
+      try {
+        data = error.response.json();
+      } catch (e) {
+        data = error.response.text();
+      }
+
+      if (typeof data === 'string') {
+        message += ` ${data}`;
+      }
+      else if (data.global && data.global.constructor === Array) {
+        message += ` ${data.global[0]}`;
+      }
+      else if (typeof data.error === 'string') {
+        message += ` ${data.error}`;
+      }
     }
 
     window.plugins.toast.show(message, 'short', 'center');
@@ -205,19 +240,6 @@ export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function loadJsonFile(filename) {
-  return m.request({
-    url: filename,
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Error when parsing json from: ' + filename };
-      }
-    }
-  });
-}
 
 // Returns a random number between min (inclusive) and max (exclusive)
 export function getRandomArbitrary(min, max) {
@@ -382,3 +404,4 @@ export function formatTournamentTimeControl(clock) {
 export function noNull(v) {
   return v !== undefined && v !== null;
 }
+

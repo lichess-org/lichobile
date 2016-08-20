@@ -22,7 +22,8 @@ import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
 
-export default function analyseView(ctrl) {
+export default function analyseView() {
+  const ctrl = this;
 
   const isPortrait = helper.isPortrait();
 
@@ -153,19 +154,8 @@ function getChecksCount(ctrl, color) {
 }
 
 function renderEvalBox(ctrl) {
-  const cevalEnabled = ctrl.ceval.enabled();
-  const step = ctrl.vm.step;
   const ceval = ctrl.currentAnyEval() || {};
   let pearl, percent;
-
-  const hash = '' + cevalEnabled + (ceval && renderEval(ceval.cp)) +
-    ctrl.nextStepBest() + (ceval && ceval.mate) + defined(step.ceval) +
-    ctrl.ceval.percentComplete() + isEmpty(step.dests);
-
-  if (ctrl.vm.evalBoxHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.evalBoxHash = hash;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
     pearl = <pearl>{renderEval(ceval.cp)}</pearl>;
@@ -199,7 +189,7 @@ function renderEvalBox(ctrl) {
         <span style={{ width: percent + '%' }}></span>
       </div>
       { ctrl.data.analysis ?
-        <div className="openSummary" config={helper.ontouch(ctrl.evalSummary.open)}>
+        <div className="openSummary" oncreate={helper.ontouch(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>
         </div> : null
       }
@@ -212,12 +202,6 @@ function gameInfos(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
 
   const isCrazy = !!ctrl.vm.step.crazy;
-  const hash = '' + isPortrait + isCrazy;
-
-  if (ctrl.vm.gameInfosHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.gameInfosHash = hash;
 
   if (isCrazy && isPortrait) return null;
 
@@ -239,7 +223,7 @@ function gameInfos(ctrl, isPortrait) {
     <div className="analyseGameInfosWrapper">
       <div className="analyseGameInfos" data-icon={icon}>
         {time + ' • '}
-        <span className="variant" config={variantLink}>
+        <span className="variant" oncreate={variantLink}>
           {data.game.variant.name}
         </span>
         <br/>
@@ -251,14 +235,6 @@ function gameInfos(ctrl, isPortrait) {
 
 function renderOpponents(ctrl, isPortrait) {
   if (isSynthetic(ctrl.data)) return null;
-
-  const step = ctrl.vm.step;
-  const hash = '' + isPortrait + JSON.stringify(step.checkCount) + JSON.stringify(step.crazy);
-
-  if (ctrl.vm.opponentsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.opponentsHash = hash;
 
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
@@ -277,7 +253,7 @@ function renderOpponents(ctrl, isPortrait) {
             ' +' + getChecksCount(ctrl, player.color) : null
           }
         </div>
-        {ctrl.data.clock && !isCrazy || !isPortrait ?
+        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
           <div className="analyseClock">
             {formatClockTime(ctrl.data.clock[player.color] * 1000, false)}
             <span className="fa fa-clock-o" />
@@ -294,7 +270,7 @@ function renderOpponents(ctrl, isPortrait) {
             ' +' + getChecksCount(ctrl, opponent.color) : null
           }
         </div>
-        {ctrl.data.clock && !isCrazy || !isPortrait ?
+        {ctrl.data.clock && (!isCrazy || !isPortrait) ?
           <div className="analyseClock">
             {formatClockTime(ctrl.data.clock[opponent.color] * 1000, false)}
             <span className="fa fa-clock-o" />
@@ -362,19 +338,12 @@ function buttons(ctrl) {
       helper.ontouch(() => b[2](ctrl));
 
     return (
-      <button className={className} key={b[1]} config={action} />
+      <button className={className} key={b[1]} oncreate={action} />
     );
   });
 }
 
 function renderActionsBar(ctrl) {
-
-  const hash = ctrl.data.game.id + hasNetwork() + ctrl.explorer.enabled();
-
-  if (ctrl.vm.buttonsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.buttonsHash = hash;
 
   const explorerBtnClass = [
     'action_bar_button',
@@ -386,23 +355,23 @@ function renderActionsBar(ctrl) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
-        config={helper.ontouch(ctrl.menu.open)}
+        oncreate={helper.ontouch(ctrl.menu.open)}
       />
       {ctrl.ceval.allowed() ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
-          config={helper.ontouch(ctrl.settings.open)}
+          oncreate={helper.ontouch(ctrl.settings.open)}
         /> : null
       }
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
-          config={helper.ontouch(
+          oncreate={helper.ontouch(
             ctrl.explorer.toggle,
             () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
           )}
         /> : null
       }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
-        config={helper.ontouch(
+        oncreate={helper.ontouch(
           ctrl.flip,
           () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
         )}

@@ -8,10 +8,11 @@ import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   const user = ctrl.user();
 
-  if (!user) return null;
+  if (!user) return layout.empty();
 
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;
@@ -140,20 +141,20 @@ function renderActions(ctrl) {
   return (
     <section id="userProfileActions" class="noPadding">
       <div className="list_item nav"
-        config={helper.ontouchY(ctrl.goToGames)}
+        oncreate={helper.ontouchY(ctrl.goToGames)}
         key="view_all_games"
       >
         {i18n('viewAllNbGames', user.count.all)}
       </div>
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item" key="challenge_to_play" data-icon="U"
-        config={helper.ontouchY(ctrl.challenge)}
+        oncreate={helper.ontouchY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}
       </div> : null
       }
       <div className="list_item nav" data-icon="1"
-        config={helper.ontouchY(ctrl.goToUserTV)}
+        oncreate={helper.ontouchY(ctrl.goToUserTV)}
         key="user_tv"
       >
         {i18n('watchGames')}

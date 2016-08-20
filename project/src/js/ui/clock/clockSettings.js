@@ -1,4 +1,5 @@
 import m from 'mithril';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
@@ -28,7 +29,7 @@ export default {
       stages[stages.length-1].moves = stages[stages.length-2].moves;
       stages.push({time: stages[stages.length-1].time});
       settings.clock.stage.stages(stages);
-      m.redraw();
+      redraw();
     }
 
     function removeStage () {
@@ -37,7 +38,7 @@ export default {
         return;
       stages.pop();
       settings.clock.stage.stages(stages);
-      m.redraw();
+      redraw();
     }
 
     return {
@@ -133,7 +134,7 @@ export default {
                 </div>
                 {clockSettingsView[settings.clock.clockType()]()}
               </div>
-              <button className="newClockButton" data-icon="E" config={helper.ontouch(function () {
+              <button className="newClockButton" data-icon="E" oncreate={helper.ontouch(function () {
                   ctrl.reload();
                   ctrl.close();
                 })}>
@@ -166,7 +167,7 @@ function renderStage (ctrl, stage, index) {
         {formWidgets.renderSelect('Moves', 'moves', settings.clock.availableMoves.map(utils.tupleOf), moves, false, onChange)}
       </div>
       <div className={'stageRowMember addSubtractStage' + ((index === settings.clock.stage.stages().length-1 ) ? ' lastStage' : '')}>
-        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} config={helper.ontouch(() => ctrl.removeStage())}/>
+        <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontouch(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontouch(() => ctrl.removeStage())}/>
       </div>
     </div>
   );
@@ -194,5 +195,5 @@ function updateMoves (index, moves) {
 
 function onChange () {
   window.StatusBar.hide();
-  m.redraw();
+  redraw();
 }

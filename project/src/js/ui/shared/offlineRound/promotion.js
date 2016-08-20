@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import redraw from '../../../utils/redraw';
 import helper from '../../helper';
 import settings from '../../../settings';
 import m from 'mithril';
@@ -27,7 +28,7 @@ function start(ctrl, orig, dest, callback) {
       dest: dest,
       callback: callback
     };
-    m.redraw();
+    redraw();
     return true;
   }
   return false;
@@ -43,20 +44,22 @@ function cancel(ctrl, cgConfig) {
   if (promoting) {
     promoting = false;
     ctrl.chessground.set(cgConfig);
-    m.redraw();
+    redraw();
   }
 }
 
 export function view(ctrl) {
   const pieces = ['queen', 'knight', 'rook', 'bishop'];
-  if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
+  if (ctrl.data && ctrl.data.game.variant.key === 'antichess') {
+    pieces.push('king');
+  }
 
   return promoting ? m('div.overlay.open', [m('div#promotion_choice', {
     className: settings.general.theme.piece(),
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
   }, pieces.map(function(role) {
     return m('piece.' + role + '.' + ctrl.data.player.color, {
-      config: helper.ontouch(utils.f(finish, ctrl.chessground, role))
+      oncreate: helper.ontouch(utils.f(finish, ctrl.chessground, role))
     });
   }))]) : null;
 }

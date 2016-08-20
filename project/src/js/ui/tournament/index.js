@@ -1,7 +1,10 @@
-import controller from './tournamentCtrl';
+import helper from '../helper';
+import oninit from './tournamentCtrl';
 import view from './tournamentView';
 
 export default {
-  controller,
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
+  oninit,
   view
 };

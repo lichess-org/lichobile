@@ -1,8 +1,10 @@
 import * as xhr from '../userXhr';
+import router from '../../../router';
+import redraw from '../../../utils/redraw';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
 import socket from '../../../socket';
-import * as utils from '../../../utils';
+import { handleXhrError } from '../../../utils';
 import m from 'mithril';
 
 var scroller;
@@ -17,25 +19,20 @@ const filters = {
   me: 'nbGamesWithYou'
 };
 
-export default function controller() {
-  const userId = m.route.param('id');
+export default function oninit(vnode) {
+  const userId = vnode.attrs.id;
   const user = m.prop();
   const availableFilters = m.prop([]);
-  const currentFilter = m.prop(m.route.param('filter') || 'all');
+  const currentFilter = m.prop(vnode.attrs.filter || 'all');
   const games = m.prop([]);
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
 
   socket.createDefault();
 
-  xhr.user(userId).then(data => {
+  xhr.user(userId)
+  .then(data => {
     user(data);
-    return data;
-  }, error => {
-    utils.handleXhrError(error);
-    m.route('/');
-    throw error;
-  }).then(data => {
     let f = Object.keys(data.count)
       .filter(k => filters.hasOwnProperty(k) && data.count[k] > 0)
       .map(k => {
@@ -46,6 +43,11 @@ export default function controller() {
         };
       });
     availableFilters(f);
+  })
+  .catch(error => {
+    handleXhrError(error);
+    router.set('/');
+    throw error;
   });
 
   function onScroll() {
@@ -57,44 +59,51 @@ export default function controller() {
     }
   }
 
-  function scrollerConfig(el, isUpdate, context) {
-    if (!isUpdate) {
-      scroller = new IScroll(el, {
-        probeType: 2
-      });
-      scroller.on('scroll', throttle(onScroll, 150));
-      context.onunload = () => {
-        if (scroller) {
-          scroller.destroy();
-          scroller = null;
-        }
-      };
+  function scrollerOnCreate(vn) {
+    const el = vn.dom;
+    scroller = new IScroll(el, {
+      probeType: 2
+    });
+    scroller.on('scroll', throttle(onScroll, 150));
+  }
+
+  function scrollerOnRemove() {
+    if (scroller) {
+      scroller.destroy();
+      scroller = null;
     }
+  }
+
+  function scrollerOnUpdate() {
     scroller.refresh();
   }
 
   function loadInitialGames() {
-    xhr.games(userId, currentFilter(), 1, true).then(data => {
+    xhr.games(userId, currentFilter(), 1, true)
+    .then(data => {
       paginator(data.paginator);
       games(data.paginator.currentPageResults);
-    }, err => {
-      utils.handleXhrError(err);
-      m.route('/');
+      setTimeout(() => {
+        if (scroller) scroller.scrollTo(0, 0, 0);
+      }, 50);
     })
-    .then(() => setTimeout(() => {
-      if (scroller) scroller.scrollTo(0, 0, 0);
-    }, 50));
+    .catch(err => {
+      handleXhrError(err);
+      router.set('/');
+    });
   }
 
   function loadNextPage(page) {
     isLoadingNextPage(true);
-    xhr.games(userId, currentFilter(), page).then(data => {
+    xhr.games(userId, currentFilter(), page)
+    .then(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));
-      m.redraw();
-    }, err => utils.handleXhrError(err));
-    m.redraw();
+      redraw();
+    })
+    .catch(handleXhrError);
+    redraw();
   }
 
   function onFilterChange(e) {
@@ -108,12 +117,14 @@ export default function controller() {
 
   loadInitialGames();
 
-  return {
+  vnode.state = {
     availableFilters,
     currentFilter,
     isLoadingNextPage,
     games,
-    scrollerConfig,
+    scrollerOnCreate,
+    scrollerOnRemove,
+    scrollerOnUpdate,
     userId,
     user,
     onFilterChange,

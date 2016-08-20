@@ -1,4 +1,5 @@
 import session from '../../session';
+import router from '../../router';
 import { hasNetwork, handleXhrError, getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
@@ -10,19 +11,18 @@ import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';
-import m from 'mithril';
 
-export default function controller() {
-  var gameData;
-  var round;
+export default function oninit(vnode) {
+  let gameData;
 
   if (hasNetwork()) {
-    gameXhr(m.route.param('id'), m.route.param('color'), !!gamesMenu.lastJoined).then(function(data) {
+    gameXhr(vnode.attrs.id, vnode.attrs.color, !!gamesMenu.lastJoined)
+    .then(data => {
       gameData = data;
 
       if (!data.player.spectator && !gameApi.isSupportedVariant(data)) {
         window.plugins.toast.show(i18n('unsupportedVariant', data.game.variant.name), 'short', 'center');
-        m.route('/');
+        router.set('/');
       }
       else {
 
@@ -50,7 +50,7 @@ export default function controller() {
           }
         }
 
-        round = new roundCtrl(data);
+        this.round = new roundCtrl(vnode, data);
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
@@ -59,45 +59,31 @@ export default function controller() {
         if (gameData.game.speed === 'correspondence') {
           session.refresh();
           if (!gameApi.playable(gameData)) {
-            removeOfflineGameData(m.route.param('id'));
+            removeOfflineGameData(vnode.attrs.id);
           } else {
-            saveOfflineGameData(m.route.param('id'), gameData);
+            saveOfflineGameData(vnode.attrs.id, gameData);
           }
         }
 
       }
-    }, function(error) {
+    })
+    .catch(error => {
       handleXhrError(error);
-      m.route('/');
+      router.set('/');
     });
   } else {
-    const savedData = getOfflineGameData(m.route.param('id'));
+    const savedData = getOfflineGameData(vnode.attrs.id);
     if (savedData) {
       gameData = savedData;
       if (!gameApi.playable(gameData)) {
-        removeOfflineGameData(m.route.param('id'));
+        removeOfflineGameData(vnode.attrs.id);
       }
-      round = new roundCtrl(gameData);
+      this.round = new roundCtrl(vnode, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
-      m.route('/');
+      router.set('/');
     }
   }
-
-  return {
-    onunload: function() {
-      if (round) {
-        round.onunload();
-        round = null;
-      }
-    },
-    getRound: function() {
-      return round;
-    },
-    getData: function() {
-      return gameData;
-    }
-  };
 }
 
 function variantStorageKey(variant) {

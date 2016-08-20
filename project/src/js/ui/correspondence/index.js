@@ -1,7 +1,10 @@
-import controller from './correspondenceCtrl';
+import helper from '../helper';
+import oninit from './correspondenceCtrl';
 import view from './correspondenceView';
 
 export default {
-  controller,
+  oninit,
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
   view
 };

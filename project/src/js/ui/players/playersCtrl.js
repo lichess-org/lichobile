@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import router from '../../router';
 import backbutton from '../../backbutton';
 import throttle from 'lodash/throttle';
 import * as utils from '../../utils';
@@ -6,7 +7,7 @@ import * as xhr from './playerXhr';
 import helper from '../helper';
 import m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
   socket.createDefault();
 
   helper.analyticsTrackView('Players');
@@ -45,7 +46,7 @@ export default function controller() {
 
   xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
 
-  return {
+  vnode.state = {
     players,
     isSearchOpen,
     searchResults,
@@ -61,11 +62,9 @@ export default function controller() {
       isSearchOpen(true);
     },
     goToProfile(u) {
-      m.route('/@/' + u);
+      router.set('/@/' + u);
     },
-    onunload: () => {
-      window.removeEventListener('native.keyboardshow', onKeyboardShow);
-      window.removeEventListener('native.keyboardhide', onKeyboardHide);
-    }
+    onKeyboardShow,
+    onKeyboardHide
   };
 }

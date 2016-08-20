@@ -1,56 +1,55 @@
-import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
-import layout from '../layout';
+import m from 'mithril';
+import router from '../../router';
 import helper from '../helper';
-import * as utils from '../../utils';
-import { tv } from './userXhr';
+import { handleXhrError } from '../../utils';
+import * as xhr from '../../xhr';
+import { LoadingBoard } from '../shared/common';
+import settings from '../../settings';
 import roundCtrl from '../round/roundCtrl';
 import roundView from '../round/view/roundView';
-import m from 'mithril';
+import { tv } from './userXhr';
 
 export default {
-  controller: function() {
-    var round;
+  oninit(vnode) {
+    helper.analyticsTrackView('TV');
 
-    const userId = m.route.param('id');
+    const userId = vnode.attrs.id;
+    const onRedirect = () => router.set(`/@/${userId}/tv`, true);
 
-    helper.analyticsTrackView('User TV');
-
-    function onRedirect() {
-      tv(userId).then(function(data) {
-        m.redraw.strategy('all');
-        data.userTV = userId;
-        if (round) round.onunload();
-        round = new roundCtrl(data, null, null, userId, onRedirect);
-      }, function(error) {
-        utils.handleXhrError(error);
-      });
-    }
-
-    tv(userId).then(function(data) {
+    tv(userId)
+    .then(data => {
       data.userTV = userId;
-      round = new roundCtrl(data, null, null, userId, onRedirect);
-    }, function(error) {
-      utils.handleXhrError(error);
-      m.route('/');
+      this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
+    })
+    .catch(error => {
+      handleXhrError(error);
+      router.set('/');
     });
 
-    return {
-      getRound: function() { return round; },
 
-      onunload: function() {
-        if (round) {
-          round.onunload();
-          round = null;
-        }
-      }
-    };
+    xhr.featured(settings.tv.channel(), vnode.attrs.flip)
+    .then(d => {
+      d.tv = settings.tv.channel();
+    })
+    .catch(error => {
+      handleXhrError(error);
+      router.set('/');
+    });
+
   },
 
-  view: function(ctrl) {
-    if (ctrl.getRound()) return roundView(ctrl.getRound());
+  oncreate: helper.viewFadeIn,
 
-    const header = connectingHeader.bind(undefined, m.route.param('id') + ' TV');
+  onremove() {
+    window.plugins.insomnia.allowSleepAgain();
+    this.round.unload();
+  },
 
-    return layout.board(header, viewOnlyBoardContent);
+  view() {
+    if (this.round) {
+      return roundView(this.round);
+    } else {
+      return m(LoadingBoard);
+    }
   }
 };

@@ -7,7 +7,6 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.root = root;
   this.ply = 0;
   this.situations = [];
-  this.hash = '';
 
   chessWorker.addEventListener('message', function(msg) {
     const payload = msg.data.payload;
@@ -107,14 +106,6 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       }
     });
   }.bind(this);
-
-  this.situationsHash = function(sits) {
-    let h = '';
-    for (let i in sits) {
-      h += sits[i].uci;
-    }
-    return h;
-  };
 
   this.pgn = function() {
     const sit = this.situation();

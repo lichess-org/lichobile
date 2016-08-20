@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
@@ -12,7 +13,7 @@ function renderAlways() {
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
     m('div.action', formWidgets.renderCheckbox(
-      i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, m.redraw
+      i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
     ))
   ];
 }

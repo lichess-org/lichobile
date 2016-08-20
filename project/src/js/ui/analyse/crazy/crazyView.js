@@ -14,31 +14,32 @@ export default {
       position
     ].join(' ');
 
-    function pocketConfig(el, isUpdate, ctx) {
-      if (!isUpdate) {
-        const onstart = crazyDrag.bind(undefined, ctrl);
-        const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-        const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
-        const contentNode = document.getElementById('analyseInfos');
-        el.addEventListener('touchstart', onstart);
-        if (contentNode) {
-          contentNode.addEventListener('touchmove', onmove);
-          contentNode.addEventListener('touchend', onend);
-        }
-        ctx.onunload = function() {
-          el.removeEventListener('touchstart', onstart);
-          if (contentNode) {
-            contentNode.removeEventListener('touchmove', onmove);
-            contentNode.removeEventListener('touchend', onend);
-          }
-        };
+    const onstart = crazyDrag.bind(undefined, ctrl);
+    const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
+    const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+
+    function pocketOnCreate(vnode) {
+      const el = vnode.dom;
+      const contentNode = document.getElementById('analyseInfos');
+      el.addEventListener('touchstart', onstart);
+      if (contentNode) {
+        contentNode.addEventListener('touchmove', onmove);
+        contentNode.addEventListener('touchend', onend);
       }
-      if (ctx.flip === ctrl.vm.flip) return;
-      ctx.flip = ctrl.vm.flip;
+    }
+
+    function pocketOnRemove(vnode) {
+      const el = vnode.dom;
+      const contentNode = document.getElementById('analyseInfos');
+      el.removeEventListener('touchstart', onstart);
+      if (contentNode) {
+        contentNode.removeEventListener('touchmove', onmove);
+        contentNode.removeEventListener('touchend', onend);
+      }
     }
 
     return (
-      <div className={className} config={pocketConfig}>
+      <div className={className} oncreate={pocketOnCreate} onremove={pocketOnRemove}>
         {pieceRoles.map(role =>
           <piece
             data-role={role}

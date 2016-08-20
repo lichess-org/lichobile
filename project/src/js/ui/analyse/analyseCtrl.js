@@ -1,4 +1,5 @@
-import m from 'mithril';
+import router from '../../router';
+import redraw from '../../utils/redraw';
 import debounce from 'lodash/debounce';
 import session from '../../session';
 import sound from '../../sound';
@@ -30,11 +31,11 @@ import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
 
-export default function controller() {
-  this.source = m.route.param('source') || 'offline';
-  const gameId = m.route.param('id');
-  const orientation = m.route.param('color');
-  const fenArg = m.route.param('fen');
+export default function oninit(vnode) {
+  this.source = vnode.attrs.source || 'offline';
+  const gameId = vnode.attrs.id;
+  const orientation = vnode.attrs.color;
+  const fenArg = vnode.attrs.fen;
 
   socket.createDefault();
 
@@ -56,21 +57,10 @@ export default function controller() {
     flip: false,
     analysisProgress: false,
     showBestMove: settings.analyse.showBestMove(),
-    showComments: settings.analyse.showComments(),
-    buttonsHash: '',
-    evalBoxHash: '',
-    gameInfosHash: '',
-    opponentsHash: ''
+    showComments: settings.analyse.showComments()
   };
 
-  this.resetHashes = function() {
-    this.vm.buttonsHash = '';
-    this.vm.evalBoxHash = '';
-    this.vm.gameInfosHash = '';
-    this.vm.opponentsHash = '';
-  }.bind(this);
-
-  const connectGameSocket = function() {
+  this.connectGameSocket = function() {
     if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
@@ -192,7 +182,7 @@ export default function controller() {
   this.jumpToNag = function(color, nag) {
     var ply = this.analyse.plyOfNextNag(color, nag, this.vm.step.ply);
     if (ply) this.jumpToMain(ply);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const preparePremoving = function() {
@@ -274,7 +264,7 @@ export default function controller() {
   this.addStep = function(step, path) {
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
-    m.redraw();
+    redraw();
     this.chessground.playPremove();
   }.bind(this);
 
@@ -282,7 +272,7 @@ export default function controller() {
     this.analyse.addDests(dests, treePath.read(path));
     if (path === this.vm.pathStr) {
       showGround();
-      m.redraw();
+      redraw();
       if (dests === '') this.ceval.stop();
     }
     this.chessground.playPremove();
@@ -316,7 +306,7 @@ export default function controller() {
 
   this.reset = function() {
     this.chessground.set(this.vm.situation);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.currentAnyEval = function() {
@@ -342,7 +332,7 @@ export default function controller() {
       }).then(data => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
-          m.redraw();
+          redraw();
         }
       })
       // we just ignore errors here
@@ -395,7 +385,7 @@ export default function controller() {
     this.data = data;
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
       window.plugins.toast.show(`Analysis board does not support ${this.data.game.variant.name} variant.`, 'short', 'center');
-      m.route('/');
+      router.set('/');
     }
     if (!data.game.moveTimes) this.data.game.moveTimes = [];
     this.ongoing = !util.isSynthetic(this.data) && gameApi.playable(this.data);
@@ -425,28 +415,30 @@ export default function controller() {
   }.bind(this);
 
   if (this.source === 'online' && gameId) {
-    gameXhr(gameId, orientation, false).then(cfg => {
+    gameXhr(gameId, orientation, false)
+    .then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
       this.init(makeData(cfg));
       // we must connect round socket in case the user wants to request a
       // computer analysis
       if (this.isRemoteAnalysable()) {
-        connectGameSocket();
+        this.connectGameSocket();
         // reconnect game socket after a cancelled seek
-        signals.seekCanceled.add(connectGameSocket);
+        signals.seekCanceled.add(this.connectGameSocket);
       }
-      m.redraw();
+      redraw();
       setTimeout(this.debouncedScroll, 250);
-    }, err => {
+    })
+    .catch(err => {
       handleXhrError(err);
-      m.route('/');
+      router.set('/');
     });
   } else if (this.source === 'offline' && gameId === 'otb') {
     helper.analyticsTrackView('Analysis (offline otb)');
     const otbData = getAnalyseData(getCurrentOTBGame());
     if (!otbData) {
-      m.route('/analyse');
+      router.set('/analyse');
     } else {
       otbData.player.spectator = true;
       otbData.orientation = orientation;
@@ -456,7 +448,7 @@ export default function controller() {
     helper.analyticsTrackView('Analysis (offline ai)');
     const aiData = getAnalyseData(getCurrentAIGame());
     if (!aiData) {
-      m.route('/analyse');
+      router.set('/analyse');
     } else {
       aiData.player.spectator = true;
       aiData.orientation = orientation;
@@ -469,17 +461,6 @@ export default function controller() {
   }
 
   window.plugins.insomnia.keepAwake();
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-      this.chessground = null;
-    }
-    if (this.ceval) this.ceval.destroy();
-    if (this.chessLogic) this.chessLogic.onunload();
-    window.plugins.insomnia.allowSleepAgain();
-    signals.seekCanceled.remove(connectGameSocket);
-  }.bind(this);
 }
 
 function getDests() {

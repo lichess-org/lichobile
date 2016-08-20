@@ -1,4 +1,6 @@
 import throttle from 'lodash/throttle';
+import redraw from '../../utils/redraw';
+import router from '../../router';
 import round from './round';
 import * as utils from '../../utils';
 import sound from '../../sound';
@@ -22,9 +24,8 @@ import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
 import crazyValid from './crazy/crazyValid';
-import m from 'mithril';
 
-export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = round.merge({}, cfg).data;
 
@@ -36,21 +37,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     miniUser: {
       player: {
         showing: false,
-        data: m.prop(null)
+        data: null
       },
       opponent: {
         showing: false,
-        data: m.prop(null)
+        data: null
       }
     },
     showingActions: false,
     confirmResign: false,
     goneBerserk: {},
-    headerHash: '',
-    replayHash: '',
-    buttonsHash: '',
-    playerHash: '',
-    opponentHash: '',
     moveToSubmit: null,
     dropToSubmit: null,
     tClockEl: null
@@ -102,8 +98,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
 
   this.toggleUserPopup = function(position, userId) {
-    if (!this.vm.miniUser[position].data()) {
-      this.vm.miniUser[position].data = miniUserXhr(userId);
+    if (!this.vm.miniUser[position].data) {
+      miniUserXhr(userId).then(data => {
+        this.vm.miniUser[position].data = data;
+      });
     }
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
   }.bind(this);
@@ -120,12 +118,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.flip = function() {
     if (this.data.tv) {
-      if (m.route.param('flip')) m.route('/tv', null, true);
-      else m.route('/tv?flip=1', null, true);
+      if (vnode.attrs.flip) router.set('/tv', true);
+      else router.set('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
-      m.route('/game/' + this.data.game.id + '/' +
-        utils.oppositeColor(this.data.player.color), null, true);
+      router.set('/game/' + this.data.game.id + '/' +
+        utils.oppositeColor(this.data.player.color), true);
       return;
     }
     this.vm.flip = !this.vm.flip;
@@ -208,7 +206,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       setTimeout(() => {
         backbutton.stack.push(this.cancelMove);
         this.vm.moveToSubmit = move;
-        m.redraw();
+        redraw();
       }, this.data.pref.animationDuration || 0);
     } else {
       socket.send('move', move, {
@@ -230,7 +228,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       setTimeout(() => {
         backbutton.stack.push(this.cancelMove);
         this.vm.dropToSubmit = drop;
-        m.redraw();
+        redraw();
       }, this.data.pref.animationDuration || 0);
     } else socket.send('drop', drop, {
       ackable: true,
@@ -427,7 +425,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(m.route.param('id'), this.data);
+      saveOfflineGameData(vnode.attrs.id, this.data);
     }
 
   }.bind(this);
@@ -442,7 +440,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.vm.goneBerserk[color]) return;
     this.vm.goneBerserk[color] = true;
     if (color !== this.data.player.color) sound.berserk();
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.chessground = ground.make(this.data, cfg.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
@@ -500,7 +498,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   var reloadGameData = function() {
@@ -511,25 +509,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     return toggleGameBookmark(this.data.game.id).then(reloadGameData);
   }.bind(this);
 
-  var onResize = function() {
-    this.vm.replayHash = '';
-  }.bind(this);
-
   document.addEventListener('resume', reloadGameData);
-  window.addEventListener('resize', onResize);
   window.plugins.insomnia.keepAwake();
 
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    socket.destroy();
+  this.unload = function() {
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
-    window.removeEventListener('resize', onResize);
-    window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
-    if (this.chat) this.chat.onunload();
+    if (this.chat) this.chat.unload();
+    if (this.notes) this.notes.unload();
   };
 }

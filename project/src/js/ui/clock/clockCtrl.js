@@ -1,10 +1,12 @@
+import router from '../../router';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import sound from '../../sound';
 import helper from '../helper';
 import m from 'mithril';
 import clockSettings from './clockSettings';
 
-export default function controller() {
+export default function oninit(vnode) {
 
   helper.analyticsTrackView('Clock');
 
@@ -39,7 +41,7 @@ export default function controller() {
 
   function goHome() {
     if (!clockObj().isRunning() || clockObj().flagged()) {
-      m.route('/');
+      router.set('/');
     }
   }
 
@@ -56,25 +58,14 @@ export default function controller() {
   document.addEventListener('resume', hideStatusBar);
   window.addEventListener('resize', hideStatusBar);
 
-  return {
+  vnode.state = {
+    hideStatusBar,
     startStop,
     clockSettingsCtrl,
     clockObj,
     reload,
     goHome,
-    clockTap,
-    onunload: () => {
-      window.plugins.insomnia.allowSleepAgain();
-      document.removeEventListener('resume', hideStatusBar);
-      window.removeEventListener('resize', hideStatusBar);
-      window.StatusBar.show();
-      if (window.cordova.platformId === 'android') {
-        window.AndroidFullScreen.showSystemUI();
-      }
-      if (clockObj().clockInterval) {
-        clearInterval(clockObj().clockInterval);
-      }
-    }
+    clockTap
   };
 }
 
@@ -107,7 +98,7 @@ function incrementClock(time, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -141,7 +132,7 @@ function incrementClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -207,7 +198,7 @@ function delayClock(time, increment) {
         }
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -241,7 +232,7 @@ function delayClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -300,7 +291,7 @@ function bronsteinClock(time, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -336,7 +327,7 @@ function bronsteinClock(time, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -393,7 +384,7 @@ function hourglassClock(time) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -425,7 +416,7 @@ function hourglassClock(time) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {
@@ -483,7 +474,7 @@ function stageClock(stages, increment) {
         clearInterval(clockInterval);
       }
     }
-    m.redraw();
+    redraw();
   }
 
   function clockHit (side) {
@@ -529,7 +520,7 @@ function stageClock(stages, increment) {
     }
     clockInterval = setInterval(tick, 1000);
     isRunning(true);
-    m.redraw();
+    redraw();
   }
 
   function startStop () {

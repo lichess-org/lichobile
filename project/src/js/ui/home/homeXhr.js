@@ -1,13 +1,13 @@
-import { request } from '../../http';
+import { fetchJSON } from '../../http';
 
 export function featured(feedback) {
-  return request('/tv', null, feedback);
+  return fetchJSON('/tv', null, feedback);
 }
 
 export function dailyPuzzle() {
-  return request('/training/daily', null, true);
+  return fetchJSON('/training/daily', null, true);
 }
 
 export function topPlayersOfTheWeek() {
-  return request('/player/top/week', null, true);
+  return fetchJSON('/player/top/week', null, true);
 }

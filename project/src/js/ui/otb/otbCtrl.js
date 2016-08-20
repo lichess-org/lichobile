@@ -1,4 +1,5 @@
 import gameStatusApi from '../../lichess/status';
+import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
@@ -19,12 +20,12 @@ import m from 'mithril';
 
 export const storageFenKey = 'otb.setupFen';
 
-export default function controller() {
+export default function oninit() {
 
   helper.analyticsTrackView('Offline On The Board');
   socket.createDefault();
 
-  const chessWorker = new Worker('vendor/scalachessjs.js');
+  this.chessWorker = new Worker('vendor/scalachessjs.js');
   this.actions = actions.controller(this);
   this.newGameMenu = newGameMenu.controller(this);
 
@@ -80,7 +81,7 @@ export default function controller() {
       this.onGameEnd();
     }
     this.save();
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.onGameEnd = function() {
@@ -88,7 +89,7 @@ export default function controller() {
     this.chessground.stop();
     setTimeout(function() {
       self.actions.open();
-      m.redraw();
+      redraw();
     }, 500);
   }.bind(this);
 
@@ -97,7 +98,7 @@ export default function controller() {
     this.newGameMenu.close();
     this.data = data;
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply, chessWorker);
+      this.replay = new replayCtrl(this, situations, ply, this.chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
@@ -106,14 +107,14 @@ export default function controller() {
     } else {
       ground.reload(this.chessground, this.data, this.replay.situation());
     }
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.startNewGame = function(setupFen) {
     const variant = settings.otb.variant();
     helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
 
-    askWorker(chessWorker, {
+    askWorker(this.chessWorker, {
       topic: 'init',
       payload: {
         variant,
@@ -173,14 +174,4 @@ export default function controller() {
   }
 
   window.plugins.insomnia.keepAwake();
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    if (chessWorker) {
-      chessWorker.terminate();
-    }
-    window.plugins.insomnia.allowSleepAgain();
-  };
 }

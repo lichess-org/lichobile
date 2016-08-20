@@ -1,4 +1,5 @@
 import gameApi from '../../lichess/game';
+import redraw from '../../utils/redraw';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import sound from '../../sound';
@@ -22,23 +23,23 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       }
       ctrl.data.player.proposingTakeback = o[ctrl.data.player.color];
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
-      m.redraw();
+      redraw();
     },
     move: function(o) {
       o.isMove = true;
       ctrl.apiMove(o);
-      m.redraw(false, true);
+      redraw(false, true);
     },
     drop: function(o) {
       o.isDrop = true;
       ctrl.apiMove(o);
-      m.redraw(false, true);
+      redraw(false, true);
     },
     checkCount: function(e) {
       var isWhite = ctrl.data.player.color === 'white';
       ctrl.data.player.checks = isWhite ? e.white : e.black;
       ctrl.data.opponent.checks = isWhite ? e.black : e.white;
-      m.redraw();
+      redraw();
     },
     berserk: function(color) {
       ctrl.setBerserk(color);
@@ -53,12 +54,12 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       if (onUserTVRedirect) {
         onUserTVRedirect();
       } else {
-        xhr.reload(ctrl).then(function(data) {
+        xhr.reload(ctrl)
+        .then(function(data) {
           socket.setVersion(data.player.version);
           ctrl.reload(data);
-        }, function(err) {
-          handleXhrError(err);
-        });
+        })
+        .catch(handleXhrError);
       }
     },
     clock: function(o) {
@@ -78,14 +79,14 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         setTimeout(function() {
           session.refresh();
           ctrl.showActions();
-          m.redraw();
+          redraw();
         }, 500);
       }
     },
     gone: function(isGone) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        if (!ctrl.chat || !ctrl.chat.showing) m.redraw(false, true);
+        if (!ctrl.chat || !ctrl.chat.showing) redraw(false, true);
       }
     },
     message: function(msg) {
@@ -98,7 +99,7 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ['white', 'black'].forEach(function(c) {
         gameApi.setOnGame(ctrl.data, c, o[c]);
       });
-      if (!ctrl.chat || !ctrl.chat.showing) m.redraw(false, true);
+      if (!ctrl.chat || !ctrl.chat.showing) redraw(false, true);
     }
   };
 }

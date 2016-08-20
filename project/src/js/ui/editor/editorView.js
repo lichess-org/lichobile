@@ -1,4 +1,5 @@
 import layout from '../layout';
+import router from '../../router';
 import { header } from '../shared/common';
 import Board from '../shared/Board';
 import drag from './drag';
@@ -10,28 +11,32 @@ import settings from '../../settings';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
 
-  function editorConfig(el, isUpdate, context) {
-    if (isUpdate) return;
-    const onstart = drag.bind(undefined, ctrl);
-    const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-    const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+  const onstart = drag.bind(undefined, ctrl);
+  const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
+  const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+
+  function editorOnCreate(vn) {
+    if (!vn.dom) return;
     const editorNode = document.getElementById('boardEditor');
     if (editorNode) {
       editorNode.addEventListener('touchstart', onstart);
       editorNode.addEventListener('touchmove', onmove);
       editorNode.addEventListener('touchend', onend);
     }
-    context.onunload = function() {
-      if (editorNode) {
-        editorNode.removeEventListener('touchstart', onstart);
-        editorNode.removeEventListener('touchmove', onmove);
-        editorNode.removeEventListener('touchend', onend);
-      }
-    };
+  }
+
+  function editorOnRemove() {
+    const editorNode = document.getElementById('boardEditor');
+    if (editorNode) {
+      editorNode.removeEventListener('touchstart', onstart);
+      editorNode.removeEventListener('touchmove', onmove);
+      editorNode.removeEventListener('touchend', onend);
+    }
   }
 
   const board = Board(
@@ -45,7 +50,8 @@ export default function view(ctrl) {
     if (helper.isPortrait())
       return m('div#boardEditor.editor', {
           className: settings.general.theme.piece(),
-          config: editorConfig
+          oncreate: editorOnCreate,
+          onremove: editorOnRemove
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
           board,
@@ -56,7 +62,8 @@ export default function view(ctrl) {
       return [
         m('div.editor', {
           className: settings.general.theme.piece(),
-          config: editorConfig
+          oncreate: editorOnCreate,
+          onremove: editorOnRemove
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
           board,
@@ -105,28 +112,28 @@ function renderActionsBar(ctrl) {
     helper.isPortrait() || (helper.isLandscape() && !helper.isWideScreen()) ?
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
-      config: helper.ontouch(ctrl.menu.open)
+      oncreate: helper.ontouch(ctrl.menu.open)
     }) : null,
     m('button.action_bar_button[data-icon=B]', {
       key: 'toggleOrientation',
-      config: helper.ontouch(ctrl.chessground.toggleOrientation)
+      oncreate: helper.ontouch(ctrl.chessground.toggleOrientation)
     }),
     m('button.action_bar_button[data-icon=U]', {
       key: 'continueFromHere',
-      config: helper.ontouch(() => {
+      oncreate: helper.ontouch(() => {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
     m('button.action_bar_button[data-icon=A]', {
       key: 'analyse',
-      config: helper.ontouch(() => {
+      oncreate: helper.ontouch(() => {
         const fen = encodeURIComponent(ctrl.computeFen());
-        m.route(`/analyse/fen/${fen}`);
+        router.set(`/analyse/fen/${fen}`);
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     m('button.action_bar_button.fa.fa-share-alt', {
       key: 'sharePosition',
-      config: helper.ontouch(
+      oncreate: helper.ontouch(
         () => window.plugins.socialsharing.share(ctrl.computeFen()),
         () => window.plugins.toast.show('Share FEN', 'short', 'bottom')
       )

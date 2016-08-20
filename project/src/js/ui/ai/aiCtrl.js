@@ -1,4 +1,5 @@
 import gameStatusApi from '../../lichess/status';
+import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
@@ -16,18 +17,17 @@ import { askWorker, getRandomArbitrary, oppositeColor, aiName, noop } from '../.
 import { setCurrentAIGame, getCurrentAIGame } from '../../utils/offlineGames';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import m from 'mithril';
 
 export const storageFenKey = 'ai.setupFen';
 
-export default function controller() {
+export default function oninit() {
 
   helper.analyticsTrackView('Offline AI');
 
   socket.createDefault();
 
-  const chessWorker = new Worker('vendor/scalachessjs.js');
-  const engine = engineCtrl(this);
+  this.engine = engineCtrl(this);
+  this.chessWorker = new Worker('vendor/scalachessjs.js');
   this.actions = actions.controller(this);
   this.newGameMenu = newGameMenu.controller(this);
 
@@ -66,7 +66,7 @@ export default function controller() {
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
     addMove(from, to);
-    m.redraw();
+    redraw();
   };
 
   const engineMove = function () {
@@ -75,8 +75,8 @@ export default function controller() {
     setTimeout(() => {
       const l = this.getOpponent().level;
       this.data.opponent.username = aiName(l);
-      engine.setLevel(l)
-      .then(() => engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
+      this.engine.setLevel(l)
+      .then(() => this.engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
     }, 500);
   }.bind(this);
 
@@ -111,7 +111,7 @@ export default function controller() {
       engineMove();
     }
     this.save();
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.onGameEnd = function() {
@@ -120,7 +120,7 @@ export default function controller() {
     this.chessground.stop();
     setTimeout(function() {
       self.actions.open();
-      m.redraw();
+      redraw();
     }, 500);
   }.bind(this);
 
@@ -136,7 +136,7 @@ export default function controller() {
     this.data = data;
 
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply, chessWorker);
+      this.replay = new replayCtrl(this, situations, ply, this.chessWorker);
     } else {
       this.replay.init(situations, ply);
     }
@@ -147,27 +147,28 @@ export default function controller() {
       ground.reload(this.chessground, this.data, this.replay.situation());
     }
 
-    engine.prepare(this.data.game.variant.key)
+    this.engine.prepare(this.data.game.variant.key)
     .then(() => {
       if (isEngineToMove()) {
         engineMove();
       }
     });
 
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.startNewGame = function(setupFen) {
     const variant = settings.ai.variant();
     helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
 
-    askWorker(chessWorker, {
+    askWorker(this.chessWorker, {
       topic: 'init',
       payload: {
         variant,
         fen: setupFen || undefined
       }
-    }).then(data => {
+    })
+    .then(data => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,
@@ -210,7 +211,7 @@ export default function controller() {
   const saved = getCurrentAIGame();
   const setupFen = storage.get(storageFenKey);
 
-  engine.init()
+  this.engine.init()
   .then(() => {
     if (setupFen) {
       this.startNewGame(setupFen);
@@ -227,15 +228,6 @@ export default function controller() {
   });
 
   window.plugins.insomnia.keepAwake();
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
-    if (chessWorker) chessWorker.terminate();
-    engine.exit();
-    window.plugins.insomnia.allowSleepAgain();
-  };
 }
 
 function getColorFromSettings() {

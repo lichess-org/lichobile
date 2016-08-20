@@ -1,5 +1,7 @@
 import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
+import redraw from '../../../utils/redraw';
+import router from '../../../router';
 import helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
@@ -9,13 +11,13 @@ import m from 'mithril';
 
 var scroller;
 
-export default function controller() {
+export default function oninit(vnode) {
 
   helper.analyticsTrackView('User followers');
 
   socket.createDefault();
 
-  const userId = m.route.param('id');
+  const userId = vnode.attrs.id;
   const followers = m.prop([]);
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
@@ -29,51 +31,52 @@ export default function controller() {
     }
   }
 
-  function scrollerConfig(el, isUpdate, context) {
-    if (!isUpdate) {
-      scroller = new IScroll(el, {
-        probeType: 2
-      });
-      scroller.on('scroll', throttle(onScroll, 150));
-      context.onunload = () => {
-        if (scroller) {
-          scroller.destroy();
-          scroller = null;
-        }
-      };
-    }
+  function scrollerConfig(vn) {
+    const el = vn.dom;
+    scroller = new IScroll(el, {
+      probeType: 2
+    });
+    scroller.on('scroll', throttle(onScroll, 150));
+  }
+
+  function scrollerOnUpdate() {
     scroller.refresh();
   }
 
   function loadNextPage(page) {
     isLoadingNextPage(true);
-    xhr.followers(userId, page).then(data => {
+    xhr.followers(userId, page)
+    .then(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
       followers(followers().concat(data.paginator.currentPageResults));
-      m.redraw();
-    }, handleXhrError);
-    m.redraw();
+      redraw();
+    })
+    .catch(handleXhrError);
+    redraw();
   }
 
-  xhr.followers(userId, 1, true).then(data => {
+  xhr.followers(userId, 1, true)
+  .then(data => {
     paginator(data.paginator);
     followers(data.paginator.currentPageResults);
-  }, err => {
-    handleXhrError(err);
-    m.route('/');
   })
   .then(() => setTimeout(() => {
     if (scroller) scroller.scrollTo(0, 0, 0);
-  }, 50));
+  }, 50))
+  .catch(err => {
+    handleXhrError(err);
+    router.set('/');
+  });
 
   function setNewUserState(obj, newData) {
     obj.relation = newData.followers;
   }
 
-  return {
+  vnode.state = {
     followers,
     scrollerConfig,
+    scrollerOnUpdate,
     isLoadingNextPage,
     toggleFollowing: obj => {
       if (obj.relation) xhr.unfollow(obj.user).then(setNewUserState.bind(undefined, obj));

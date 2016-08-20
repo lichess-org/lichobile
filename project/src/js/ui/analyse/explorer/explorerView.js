@@ -1,3 +1,4 @@
+import router from '../../../router';
 import m from 'mithril';
 import helper from '../../helper';
 import explorerConfig from './explorerConfig';
@@ -33,7 +34,7 @@ function showMoveTable(ctrl, moves) {
       <tbody>
         { moves.map(move => {
           return (
-            <tr key={move.uci} config={helper.ontouchY(() => ctrl.explorerMove(move.uci))}>
+            <tr key={move.uci} oncreate={helper.ontouchY(() => ctrl.explorerMove(move.uci))}>
               <td className="explorerMove">
                 {move.san[0] === 'P' ? move.san.slice(1) : move.san}
               </td>
@@ -65,7 +66,7 @@ function showGameTable(ctrl, type, games) {
   function link(game) {
     const orientation = ctrl.chessground.data.orientation;
     if (ctrl.explorer.config.data.db.selected() === 'lichess') {
-      m.route(`/analyse/online/${game.id}/${orientation}`);
+      router.set(`/analyse/online/${game.id}/${orientation}`);
     }
   }
   return (
@@ -78,7 +79,7 @@ function showGameTable(ctrl, type, games) {
       <tbody>
       { games.map(game => {
         return (
-          <tr key={game.id} config={helper.ontouchY(() => link(game))}>
+          <tr key={game.id} oncreate={helper.ontouchY(() => link(game))}>
             <td>
               {[game.white, game.black].map(p =>
                 <span>{p.rating}</span>
@@ -180,7 +181,7 @@ function showGameEnd(ctrl, title) {
       m('i[data-icon=]'),
       m('h3', title),
       m('button.button.text[data-icon=L]', {
-        config: helper.ontouchY(ctrl.explorer.toggle)
+        oncreate: helper.ontouchY(ctrl.explorer.toggle)
       }, 'Close')
     ])
   ]);
@@ -269,7 +270,7 @@ export default function(ctrl) {
       {content}
       {(!content || ctrl.explorer.failing()) ? null :
         <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          config={helper.ontouch(config.toggleOpen)} />
+          oncreate={helper.ontouch(config.toggleOpen)} />
       }
     </div>
   );

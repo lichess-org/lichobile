@@ -1,4 +1,5 @@
 import m from 'mithril';
+import redraw from '../../utils/redraw';
 
 const HOLD_DURATION = 600;
 const REPEAT_RATE = 30;
@@ -33,7 +34,7 @@ export default function ButtonHandler(el,
     var res = repeatHandler();
     repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     if (!res) clearTimeout(repeatIntervalID);
-    m.redraw();
+    redraw();
   }
 
   function onTouchStart(e) {

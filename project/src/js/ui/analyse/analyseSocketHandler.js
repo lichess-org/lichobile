@@ -1,4 +1,5 @@
 import m from 'mithril';
+import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import evalSummary from './evalSummaryPopup';
@@ -11,7 +12,7 @@ export default function(ctrl, gameId, orientation) {
     analysisProgress: data => {
       if (!ctrl.vm.analysisProgress) {
         ctrl.vm.analysisProgress = true;
-        m.redraw();
+        redraw();
       }
       if (data.tree.eval) {
         ctrl.vm.analysisProgress = false;
@@ -23,11 +24,11 @@ export default function(ctrl, gameId, orientation) {
           sound.dong();
           vibrate.quick();
           ctrl.jump(ctrl.vm.path);
-          m.redraw();
+          redraw();
         })
         .catch(err => {
           handleXhrError(err);
-          m.redraw();
+          redraw();
         });
       }
     }

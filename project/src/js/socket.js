@@ -1,13 +1,14 @@
+import router from './router';
+import redraw from './utils/redraw';
 import storage from './storage';
 import { apiVersion } from './http';
 import xor from 'lodash/xor';
-import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
+import { lichessSri, autoredraw, tellWorker, hasNetwork, noop } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import m from 'mithril';
 
 const worker = new Worker('lib/socketWorker.js');
 
@@ -26,7 +27,7 @@ const defaultHandlers = {
   following_leaves: name => autoredraw(() => friendsApi.remove(name)),
   challenges: data => {
     challengesApi.set(data);
-    m.redraw();
+    redraw();
   }
 };
 
@@ -34,7 +35,7 @@ function handleFollowingOnline(data) {
   const curList = friendsApi.list();
   friendsApi.set(data);
   if (xor(curList, data).length > 0) {
-    m.redraw();
+    redraw();
   }
 }
 
@@ -48,10 +49,12 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         // just to be sure that we don't send an xhr every second when the
         // websocket is trying to reconnect
         errorDetected = true;
-        xhr.game(gameUrl.substring(1)).then(function() {}, function(err) {
+        xhr.game(gameUrl.substring(1))
+        .then(noop)
+        .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-            m.route('/');
+            router.set('/');
           }
         });
       }
@@ -187,7 +190,7 @@ function redirectToGame(obj) {
         ].join('');
         document.cookie = cookie;
     }
-    m.route('/game' + url);
+    router.set('/game' + url);
   }
 }
 
@@ -196,14 +199,14 @@ function onConnected() {
   connectedWS = true;
   clearTimeout(proxyFailTimeoutID);
   clearTimeout(redrawOnDisconnectedTimeoutID);
-  if (wasOff) m.redraw();
+  if (wasOff) redraw();
 }
 
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
   if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(function() {
-    m.redraw();
+    redraw();
   }, 2000);
   if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents

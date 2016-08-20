@@ -1,7 +1,13 @@
-import controller from './trainingCtrl';
+import helper from '../helper';
+import oninit from './trainingCtrl';
 import view from './trainingView';
 
 export default {
-  controller,
+  oninit,
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.onPageLeave(
+    helper.viewFadeOut,
+    () => window.plugins.insomnia.allowSleepAgain()
+  ),
   view
 };

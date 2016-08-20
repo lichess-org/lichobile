@@ -381,11 +381,14 @@
   button.berserk
     margin-bottom 10px
 
-#notesTextarea
+.notesTextarea, #notesTextarea
   width 100%
   height 100%
   border none
   padding 15px
+  &.loading
+    display flex
+    align-items center
 
 .pocket
   border-radius 3px

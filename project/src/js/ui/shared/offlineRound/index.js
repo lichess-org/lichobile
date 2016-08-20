@@ -1,4 +1,5 @@
 import helper from '../../helper';
+import router from '../../../router';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
@@ -50,22 +51,22 @@ export function renderGameActionsBar(ctrl, type) {
   return (
     <section key="actionsBar" className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
-        config={helper.ontouch(ctrl.actions.open)}
+        oncreate={helper.ontouch(ctrl.actions.open)}
       />
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(
+        oncreate={helper.ontouch(
           ctrl.newGameMenu.open,
           () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
         )}
       />
       <button data-icon="A" className="action_bar_button"
-        config={helper.ontouch(
-          () => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`),
+        oncreate={helper.ontouch(
+          () => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
-        config={helper.ontouch(
+        oncreate={helper.ontouch(
           ctrl.actions.sharePGN,
           () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
@@ -80,13 +81,13 @@ export function renderGameActionsBarTablet(ctrl, type) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        config={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        oncreate={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button data-icon="A" className="action_bar_button"
-        config={helper.ontouch(() => m.route(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        oncreate={helper.ontouch(() => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"
-        config={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
+        oncreate={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
@@ -140,7 +141,7 @@ export function renderClaimDrawButton(ctrl) {
     key: 'claimDraw'
   }, [
     m('button[data-icon=2].draw-yes', {
-      config: helper.ontouch(() => ctrl.replay.claimDraw())
+      oncreate: helper.ontouch(() => ctrl.replay.claimDraw())
     }, i18n('threefoldRepetition'))
   ]) : null;
 }
@@ -149,20 +150,14 @@ export function renderClaimDrawButton(ctrl) {
 export function renderReplayTable(ctrl) {
   const curPly = ctrl.ply;
   const shouldDisplay = helper.isLandscape();
-  const hash = curPly + ctrl.situationsHash(ctrl.situations) + shouldDisplay;
-
-  if (ctrl.hash === hash) return {subtree: 'retain'};
-  ctrl.hash = hash;
 
   if (!shouldDisplay) return null;
 
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        config={(el, isUpdate) => {
-          autoScroll(el);
-          if (!isUpdate) setTimeout(autoScroll.bind(undefined, el), 100);
-        }}
+        oncreate={(vnode) => { autoScroll(vnode.dom); }}
+        onupdate={(vnode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
       >
         {renderTable(ctrl, curPly)}
       </div>
@@ -172,7 +167,7 @@ export function renderReplayTable(ctrl) {
 
 function renderBackwardButton(ctrl) {
   return m('button.action_bar_button.fa.fa-step-backward', {
-    config: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
+    oncreate: helper.ontouch(ctrl.backward, () => ctrl.jump(ctrl.firstPly())),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
     })
@@ -181,7 +176,7 @@ function renderBackwardButton(ctrl) {
 
 function renderForwardButton(ctrl) {
   return m('button.action_bar_button.fa.fa-step-forward', {
-    config: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
+    oncreate: helper.ontouch(ctrl.forward, () => ctrl.jump(ctrl.replay.situations.length - 1)),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.replay.situations.length - 1)
     })

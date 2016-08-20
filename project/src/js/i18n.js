@@ -1,7 +1,7 @@
 import settings from './settings';
-import m from 'mithril';
+import { loadLocalJsonFile } from './utils';
 
-var messages = [];
+let messages = [];
 
 const untranslated = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
@@ -58,64 +58,42 @@ export default function i18n(key) {
 }
 
 export function loadPreferredLanguage() {
-  if (settings.general.lang())
+  if (settings.general.lang()) {
     return loadFromSettings();
+  }
 
-  var deferred = m.deferred();
-  window.navigator.globalization.getPreferredLanguage(
-    language => deferred.resolve(language.value.split('-')[0]),
-    () => deferred.resolve(defaultCode)
-  );
-  return deferred.promise
-    .then(code => {
-      settings.general.lang(code);
-      return code;
-    })
-    .then(loadFile)
-    .then(loadMomentLocale);
+  return new Promise(resolve => {
+    window.navigator.globalization.getPreferredLanguage(
+      l => resolve(l.value.split('-')[0]),
+      () => resolve(defaultCode)
+    );
+  })
+  .then(code => {
+    settings.general.lang(code);
+    return code;
+  })
+  .then(loadFile)
+  .then(loadMomentLocale);
 }
 
 export function getAvailableLanguages() {
-  return m.request({
-    url: 'i18n/refs.json',
-    method: 'GET'
-  }).then(data => { return data; }, error => {
-    // same workaround for iOS as above
-    if (error && error[0][0] === 'af')
-      return error;
-    else
-      throw { error: 'Cannot load languages' };
-  });
+  return loadLocalJsonFile('i18n/refs.json');
 }
 
 export function loadFromSettings() {
-  return loadFile(settings.general.lang()).then(loadMomentLocale);
+  return loadFile(settings.general.lang())
+  .then(loadMomentLocale);
 }
 
 function loadFile(code) {
-  return m.request({
-    url: 'i18n/' + code + '.json',
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Lang not available' };
-      }
-    }
-  }).then(function(data) {
+  return loadLocalJsonFile('i18n/' + code + '.json')
+  .then(data => {
     messages = data;
     return code;
-  }, function(error) {
-    // workaround for iOS: because xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (error && error.playWithAFriend) {
-      messages = error;
-      return code;
-    } else {
-      if (code === defaultCode) throw new Error(error);
-      return loadFile(defaultCode);
-    }
+  })
+  .catch(error => {
+    if (code === defaultCode) throw new Error(error);
+    return loadFile(defaultCode);
   });
 }
 
@@ -128,3 +106,4 @@ function loadMomentLocale(code) {
   window.moment.locale(code);
   return code;
 }
+

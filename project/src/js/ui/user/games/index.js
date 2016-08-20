@@ -1,7 +1,10 @@
-import controller from './gamesCtrl';
+import helper from '../../helper';
+import oninit from './gamesCtrl';
 import view from './gamesView';
 
 export default {
-  controller,
+  oninit,
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
   view
 };

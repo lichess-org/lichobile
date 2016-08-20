@@ -4,6 +4,7 @@ import backbutton from '../../../backbutton';
 import settings from '../../../settings';
 
 export default {
+
   controller(variant, onClose) {
     const available = ['lichess'];
     if (variant.key === 'standard' || variant.key === 'fromPosition') {
@@ -76,7 +77,7 @@ export default {
         m('div.choices', d.db.available.map(s => {
           return m('span', {
             className: d.db.selected() === s ? 'selected' : '',
-            config: helper.ontouchY(ctrl.toggleDb.bind(undefined, s))
+            oncreate: helper.ontouchY(ctrl.toggleDb.bind(undefined, s))
           }, s);
         }))
       ]),
@@ -92,7 +93,7 @@ export default {
             d.rating.available.map(r => {
               return m('span', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
-                config: helper.ontouchY(ctrl.toggleRating.bind(undefined, r))
+                oncreate: helper.ontouchY(ctrl.toggleRating.bind(undefined, r))
               }, r);
             })
           )
@@ -103,7 +104,7 @@ export default {
             d.speed.available.map(s => {
               return m('span', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',
-                config: helper.ontouchY(ctrl.toggleSpeed.bind(undefined, s))
+                oncreate: helper.ontouchY(ctrl.toggleSpeed.bind(undefined, s))
               }, s);
             })
           )
@@ -111,7 +112,7 @@ export default {
       ]),
       m('section.save',
         m('button.button.text[data-icon=E]', {
-          config: helper.ontouchY(ctrl.toggleOpen)
+          oncreate: helper.ontouchY(ctrl.toggleOpen)
         }, 'All set!')
       )
     ];

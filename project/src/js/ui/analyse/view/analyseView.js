@@ -204,6 +204,11 @@ function renderOpponents(ctrl, isPortrait) {
 
   const isCrazy = !!ctrl.vm.step.crazy;
 
+  // TODO get that from server
+  if (opponent.ai) {
+    opponent.engineName = isCrazy ? 'Sunsetter' : 'Stockfish';
+  }
+
   return (
     <div className="analyseOpponentsWrapper">
       <div className="analyseOpponent">

@@ -28,6 +28,7 @@ import crazyValid from './crazy/crazyValid';
 export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
   this.data = round.merge({}, cfg).data;
+  console.log(this.data);
 
   this.onTVChannelChange = onTVChannelChange;
 

@@ -163,14 +163,14 @@ export function playerName(player, withRating) {
   }
 
   if (player.ai) {
-    return aiName(player.ai);
+    return aiName(player);
   }
 
   return 'Anonymous';
 }
 
-export function aiName(level) {
-  return i18n('aiNameLevelAiLevel', 'Stockfish', level);
+export function aiName(player) {
+  return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 
 export function backHistory() {

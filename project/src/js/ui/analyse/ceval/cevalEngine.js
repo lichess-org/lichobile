@@ -75,10 +75,10 @@ function prepare(variant) {
   return Promise.all([
     setOption('UCI_Chess960', variant === 'chess960'),
     setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),
-    setOption('UCI_3Check', variant === 'threeCheck')
-    // setOption('UCI_House', variant === Crazyhouse),
-    // setOption('UCI_Atomic', variant === Atomic),
-    // setOption('UCI_Horde', variant === Horde),
-    // setOption('UCI_Race', variant === RacingKings)
+    setOption('UCI_3Check', variant === 'threeCheck'),
+    setOption('UCI_Atomic', variant === 'atomic'),
+    setOption('UCI_Horde', variant === 'horde'),
+    setOption('UCI_Race', variant === 'racingKings')
+    // setOption('UCI_House', variant === Crazyhouse)
   ]);
 }

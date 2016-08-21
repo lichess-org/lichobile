@@ -115,7 +115,7 @@ document.addEventListener('deviceready', () => {
           if (stockfishWorker) {
             setTimeout(resolve);
           } else {
-            stockfishWorker = new Worker('vendor/stockfish7.js');
+            stockfishWorker = new Worker('vendor/stockfish.js');
             setTimeout(resolve, 10);
           }
         });

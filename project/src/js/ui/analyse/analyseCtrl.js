@@ -314,9 +314,11 @@ export default function oninit(vnode) {
   }.bind(this);
 
   const allowCeval = function() {
+    // TODO add crazyhouse local engine
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
+    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1 &&
+      this.data.game.variant.key !== 'crazyhouse';
   }.bind(this);
 
   function onCevalMsg(res) {

@@ -5,6 +5,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
+import atomic from '../round/atomic';
 import vibrate from '../../vibrate';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';
@@ -96,11 +97,17 @@ export default function oninit() {
   }.bind(this);
 
   const onMove = function(orig, dest, capturedPiece) {
-    if (!capturedPiece) sound.move();
-    else sound.capture();
-
+    if (capturedPiece) {
+      if (this.data.game.variant.key === 'atomic') {
+        atomic.capture(this.chessground, dest);
+        sound.explosion();
+      }
+      else sound.capture();
+    } else {
+      sound.move();
+    }
     vibrate.quick();
-  };
+  }.bind(this);
 
   this.onReplayAdded = function() {
     const sit = this.replay.situation();

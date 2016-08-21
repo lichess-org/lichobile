@@ -16,7 +16,6 @@ import settings from '../../settings';
 import { askWorker, oppositeColor } from '../../utils';
 import { setCurrentOTBGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import socket from '../../socket';
-import m from 'mithril';
 
 export const storageFenKey = 'otb.setupFen';
 
@@ -63,7 +62,7 @@ export default function oninit() {
 
   const onUserNewPiece = function(role, key, meta) {
     const sit = this.replay.situation();
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, sit.possibleDrops)) {
+    if (crazyValid.drop(this.chessground, this.data, role, key, sit.possibleDrops)) {
       this.replay.addDrop(role, key, meta.predrop);
     } else {
       this.jump(this.replay.ply);

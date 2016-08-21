@@ -10,7 +10,7 @@ export default {
     if (!crazyData) return null;
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
     const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
-    const usable = usablePos && !ctrl.replaying() && gameApi.isPlayerPlaying(ctrl.data);
+    const usable = (usablePos || isOTB) && (!ctrl.replaying() || isOTB) && gameApi.isPlayerPlaying(ctrl.data);
     const className = [
       customPieceTheme || settings.general.theme.piece(),
       'pocket',
@@ -19,7 +19,7 @@ export default {
       isOTB ? 'offline' : ''
     ].join(' ');
 
-    const onstart = crazyDrag.bind(undefined, ctrl);
+    const onstart = crazyDrag.bind(undefined, ctrl, usable);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 

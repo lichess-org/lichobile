@@ -1,5 +1,4 @@
 import { util, drag } from 'chessground-mobile';
-import gameApi from '../../../lichess/game';
 
 function isDraggable(data, color) {
   return data.movable.color === color && (
@@ -7,9 +6,9 @@ function isDraggable(data, color) {
   );
 }
 
-export default function(ctrl, e) {
+export default function(ctrl, usable, e) {
   if (e.button !== undefined && e.button !== 0) return; // only touch or left click
-  if (ctrl.replaying !== undefined && (ctrl.replaying() || !gameApi.isPlayerPlaying(ctrl.data))) return;
+  if (!usable) return;
   const cgData = ctrl.chessground.data;
   const role = e.target.getAttribute('data-role'),
     color = e.target.getAttribute('data-color'),

@@ -5,7 +5,7 @@ import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import { header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
+import { connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
 import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
@@ -38,7 +38,7 @@ export default function analyseView() {
     );
   } else {
     return layout.board(
-      () => header(i18n('analysis')),
+      connectingHeader,
       viewOnlyBoardContent
     );
   }

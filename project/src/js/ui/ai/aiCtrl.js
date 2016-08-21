@@ -75,7 +75,10 @@ export default function oninit() {
     const sit = this.replay.situation();
     setTimeout(() => {
       const l = this.getOpponent().level;
-      this.data.opponent.username = aiName(l);
+      this.data.opponent.username = aiName({
+        engineName: 'Stockfish',
+        ai: l
+      });
       this.engine.setLevel(l)
       .then(() => this.engine.search(this.data.game.initialFen, sit.uciMoves.join(' ')));
     }, 500);

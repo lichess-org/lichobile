@@ -60,7 +60,7 @@ function request(url, opts, feedback, uncache) {
   }
 
   if (uncache) {
-    url = addQuerystring(url, `_=${Date.now()}`);
+    cfg.cache = 'no-cache';
   }
 
   if (opts && opts.query) {

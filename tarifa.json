@@ -97,8 +97,7 @@
         "extend": "stage"
       },
       "beta": {
-        "extend": "beta",
-        "hockeyapp_id": "4e38b7c4dc87418da76b705bec405530"
+        "extend": "beta"
       },
       "prod": {
         "extend": "prod",
@@ -181,6 +180,6 @@
       }
     },
     "cordova-plugin-fullscreen": "cordova-plugin-fullscreen",
-    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#33324e9"
+    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#377a285"
   }
 }

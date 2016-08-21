@@ -196,6 +196,9 @@ export default {
         ['Chess960', '2'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],
+        ['Atomic', '7'],
+        ['Horde', '8'],
+        ['Racing Kings', '9'],
         ['From Position', '3']
       ],
       variant: localstorageprop('settings.game.ai.variant', '1'),

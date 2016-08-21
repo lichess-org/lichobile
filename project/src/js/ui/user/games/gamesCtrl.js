@@ -1,5 +1,5 @@
 import * as xhr from '../userXhr';
-import router from '../../../router';
+import helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
@@ -28,27 +28,34 @@ export default function oninit(vnode) {
   const paginator = m.prop(null);
   const isLoadingNextPage = m.prop(false);
 
+  helper.analyticsTrackView('User games list');
+
   socket.createDefault();
 
-  xhr.user(userId)
-  .then(data => {
-    user(data);
-    let f = Object.keys(data.count)
-      .filter(k => filters.hasOwnProperty(k) && data.count[k] > 0)
-      .map(k => {
-        return {
-          key: k,
-          label: filters[k],
-          count: user().count[k]
-        };
-      });
-    availableFilters(f);
+  Promise.all([
+    xhr.games(userId, currentFilter(), 1, true),
+    xhr.user(userId)
+  ])
+  .then(results => {
+    const [gamesData, userData] = results;
+    loadInitialGames(gamesData);
+    loadUserAndFilters(userData);
   })
-  .catch(error => {
-    handleXhrError(error);
-    router.set('/');
-    throw error;
-  });
+  .catch(handleXhrError);
+
+  function loadUserAndFilters(userData) {
+    user(userData);
+    let f = Object.keys(userData.count)
+    .filter(k => filters.hasOwnProperty(k) && userData.count[k] > 0)
+    .map(k => {
+      return {
+        key: k,
+        label: filters[k],
+        count: user().count[k]
+      };
+    });
+    availableFilters(f);
+  }
 
   function onScroll() {
     if (this.y + this.distY <= this.maxScrollY) {
@@ -78,20 +85,13 @@ export default function oninit(vnode) {
     scroller.refresh();
   }
 
-  function loadInitialGames() {
-    xhr.games(userId, currentFilter(), 1, true)
-    .then(data => {
-      paginator(data.paginator);
-      games(data.paginator.currentPageResults);
-      setTimeout(() => {
-        if (scroller) scroller.scrollTo(0, 0, 0);
-      }, 50);
-      redraw();
-    })
-    .catch(err => {
-      handleXhrError(err);
-      router.set('/');
-    });
+  function loadInitialGames(data) {
+    paginator(data.paginator);
+    games(data.paginator.currentPageResults);
+    setTimeout(() => {
+      if (scroller) scroller.scrollTo(0, 0, 0);
+    }, 50);
+    redraw();
   }
 
   function loadNextPage(page) {
@@ -102,21 +102,19 @@ export default function oninit(vnode) {
       paginator(data.paginator);
       games(games().concat(data.paginator.currentPageResults));
       redraw();
-    })
-    .catch(handleXhrError);
+    });
     redraw();
   }
 
   function onFilterChange(e) {
     currentFilter(e.target.value);
-    loadInitialGames();
+    xhr.games(userId, currentFilter(), 1, true)
+    .then(loadInitialGames);
   }
 
   function toggleBookmark(index) {
     games()[index].bookmarked = !games()[index].bookmarked;
   }
-
-  loadInitialGames();
 
   vnode.state = {
     availableFilters,

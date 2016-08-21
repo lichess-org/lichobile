@@ -111,7 +111,6 @@
   "cordova": {
     "preferences": {
       "Orientation": "all",
-      "DisallowOverscroll": false,
       "EnableViewportScale": false,
       "KeyboardDisplayRequiresUserAction": false,
       "ShowSplashScreenSpinner": false,
@@ -123,8 +122,9 @@
       "StatusBarOverlaysWebView": false,
       "StatusBarBackgroundColor": "#151A1E",
       "BackgroundColor": "0xFF151A1E",
-      "xwalkVersion": "19",
-      "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect"
+      "xwalkVersion": "20",
+      "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect",
+      "android-minSdkVersion": 16
     },
     "build": {
       "ios": {

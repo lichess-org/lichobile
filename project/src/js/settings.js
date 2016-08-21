@@ -103,7 +103,10 @@ export default {
       ['Standard', 'standard'],
       ['Chess960', 'chess960'],
       ['King of the Hill', 'kingOfTheHill'],
-      ['Three-check', 'threeCheck']
+      ['Three-check', 'threeCheck'],
+      ['Atomic', 'atomic'],
+      ['Horde', 'horde'],
+      ['Racing Kings', 'racingKings']
     ]
   },
 

@@ -86,6 +86,7 @@ export default function oninit(vnode) {
       setTimeout(() => {
         if (scroller) scroller.scrollTo(0, 0, 0);
       }, 50);
+      redraw();
     })
     .catch(err => {
       handleXhrError(err);

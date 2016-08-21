@@ -147,7 +147,7 @@ function title(data) {
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
   const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
-  const icon = data.opponent.ai ? ':' : gameIcon(data.game.perf || data.game.variant.key);
+  const icon = gameIcon(data.game.perf || data.game.variant.key);
   const text = `${time(data)} • ${name} • ${mode}`;
   return [
     <span className="withIcon" data-icon={icon} />,

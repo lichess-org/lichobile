@@ -71,7 +71,7 @@ export default function(
   }
 
   function boardOnRemove() {
-    if (chessgroundCtrl) chessgroundCtrl.onunload();
+    if (chessgroundCtrl) chessgroundCtrl.unload();
   }
 
   // fix nasty race condition bug when going from analysis to otb

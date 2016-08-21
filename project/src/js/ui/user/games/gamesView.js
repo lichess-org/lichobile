@@ -92,9 +92,9 @@ function renderGame(ctrl, g, index, userId) {
           <div className="title">{title}</div>
           <small className="date">{date}</small>
           <div className="players">
-            {renderPlayer(g.players, 'white')}
+            {renderPlayer(g.players, 'white', g.variant.key)}
             <div className="swords" data-icon="U" />
-            {renderPlayer(g.players, 'black')}
+            {renderPlayer(g.players, 'black', g.variant.key)}
           </div>
           <div className={helper.classSet({
             status: true,
@@ -116,11 +116,15 @@ function renderGame(ctrl, g, index, userId) {
   );
 }
 
-function renderPlayer(players, color) {
+function renderPlayer(players, color, variant) {
   let player = players[color];
   let playerName;
   if (player.userId) playerName = player.userId;
-  else if (player.aiLevel) playerName = utils.aiName(player.aiLevel);
+  else if (player.aiLevel) {
+    player.ai = player.aiLevel;
+    player.engineName = variant === 'crazyhouse' ? 'Sunsetter' : 'Stockfish';
+    playerName = utils.aiName(player);
+  }
   else playerName = 'Anonymous';
 
   return (

@@ -152,6 +152,19 @@ export function connectingHeader(title) {
   );
 }
 
+export function loadingBackbutton(title) {
+  return (
+    <nav>
+      {backButton()}
+      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+        {title ? <span>{title}</span> : null}
+        {loader}
+      </h1>
+      {headerBtns()}
+    </nav>
+  );
+}
+
 export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();

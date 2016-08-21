@@ -41,8 +41,7 @@ export function unblock(userId) {
 }
 
 export function user(id) {
-  var url = '/api/user/' + id;
-  return fetchJSON(url, {}, true);
+  return fetchJSON(`/api/user/${id}`, null, true);
 }
 
 export function tv(userId) {

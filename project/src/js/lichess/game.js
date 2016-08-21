@@ -4,7 +4,7 @@ import settings from '../settings';
 import getVariant from './variant';
 import i18n from '../i18n';
 
-const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck'];
+const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'crazyhouse'];
 
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};

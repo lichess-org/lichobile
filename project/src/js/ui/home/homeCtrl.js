@@ -2,7 +2,7 @@ import socket from '../../socket';
 import redraw from '../../utils/redraw';
 import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
 import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
-import { hasNetwork, noop, handleXhrError } from '../../utils';
+import { hasNetwork, noop } from '../../utils';
 import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import m from 'mithril';
@@ -35,8 +35,7 @@ export default function homeCtrl(vnode) {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
-      })
-      .catch(handleXhrError);
+      });
 
       timelineXhr()
       .then(data => {

@@ -27,11 +27,6 @@ export default function oninit(vnode) {
           backHistory();
           break;
       }
-    })
-    .catch(err => {
-      clearTimeout(pingTimeoutId());
-      handleXhrError(err);
-      router.set('/');
     });
   }
 

@@ -69,7 +69,6 @@ function seekHumanGame() {
   }
   else {
     xhr.seekGame()
-    .then(utils.noop)
     .catch(utils.handleXhrError);
     router.set('/correspondence');
   }

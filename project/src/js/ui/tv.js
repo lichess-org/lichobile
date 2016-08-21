@@ -20,11 +20,7 @@ export default {
       d.tv = settings.tv.channel();
       this.round = new roundCtrl(vnode, d, onFeatured, onChannelChange);
     })
-    .catch(error => {
-      handleXhrError(error);
-      router.set('/');
-    });
-
+    .catch(handleXhrError);
   },
 
   oncreate: helper.viewFadeIn,

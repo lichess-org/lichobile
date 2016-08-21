@@ -5,9 +5,8 @@ import * as xhr from './roundXhr';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import session from '../../session';
-import { handleXhrError, removeOfflineGameData } from '../../utils';
+import { removeOfflineGameData } from '../../utils';
 import socket from '../../socket';
-import m from 'mithril';
 
 export default function(ctrl, onFeatured, onUserTVRedirect) {
 
@@ -55,11 +54,10 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         onUserTVRedirect();
       } else {
         xhr.reload(ctrl)
-        .then(function(data) {
+        .then(data => {
           socket.setVersion(data.player.version);
           ctrl.reload(data);
-        })
-        .catch(handleXhrError);
+        });
       }
     },
     clock: function(o) {

@@ -62,10 +62,7 @@ function startAIGame() {
     helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`);
     router.set('/game' + data.url.round);
   })
-  .catch(function(error) {
-    utils.handleXhrError(error);
-    throw error;
-  });
+  .catch(utils.handleXhrError);
 }
 
 function renderForm(formName, settingsObj, variants, timeModes) {

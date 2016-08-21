@@ -1,7 +1,6 @@
 import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
 import redraw from '../../../utils/redraw';
-import router from '../../../router';
 import helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
 import throttle from 'lodash/throttle';
@@ -64,10 +63,7 @@ export default function oninit(vnode) {
   .then(() => setTimeout(() => {
     if (scroller) scroller.scrollTo(0, 0, 0);
   }, 50))
-  .catch(err => {
-    handleXhrError(err);
-    router.set('/');
-  });
+  .catch(handleXhrError);
 
   function setNewUserState(obj, newData) {
     obj.relation = newData.followers;

@@ -1,3 +1,4 @@
+import redraw from '../../../utils/redraw';
 import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
 import helper from '../../helper';
@@ -62,10 +63,7 @@ export default function oninit(vnode) {
   .then(() => setTimeout(() => {
     if (scroller) scroller.scrollTo(0, 0, 0);
   }, 50))
-  .catch(err => {
-    handleXhrError(err);
-    router.set('/');
-  });
+  .catch(handleXhrError);
 
   function setNewUserState(obj, newData) {
     obj.relation = newData.following;

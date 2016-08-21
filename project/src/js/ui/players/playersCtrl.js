@@ -44,7 +44,9 @@ export default function oninit(vnode) {
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
-  xhr.onlinePlayers().then(players, err => utils.handleXhrError(err));
+  xhr.onlinePlayers()
+  .then(players)
+  .catch(utils.handleXhrError);
 
   vnode.state = {
     players,

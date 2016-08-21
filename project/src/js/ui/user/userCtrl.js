@@ -24,10 +24,7 @@ export default function oninit(vnode) {
   xhr.user(userId)
   .then(user)
   .then(session.refresh)
-  .catch(error => {
-    utils.handleXhrError(error);
-    router.set('/');
-  });
+  .catch(utils.handleXhrError);
 
   vnode.state = {
     user,

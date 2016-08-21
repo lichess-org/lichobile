@@ -119,14 +119,10 @@ function login(username, password) {
 }
 
 function logout() {
-  return fetchJSON('/logout', {}, true)
+  return fetchJSON('/logout', null, true)
   .then(function() {
     session = null;
     friendsApi.clear();
-  })
-  .catch(err => {
-    handleXhrError(err);
-    throw err;
   });
 }
 

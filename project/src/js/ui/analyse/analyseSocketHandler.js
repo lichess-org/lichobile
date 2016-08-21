@@ -1,6 +1,4 @@
-import m from 'mithril';
 import redraw from '../../utils/redraw';
-import { handleXhrError } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import evalSummary from './evalSummaryPopup';
 import sound from '../../sound';
@@ -26,8 +24,7 @@ export default function(ctrl, gameId, orientation) {
           ctrl.jump(ctrl.vm.path);
           redraw();
         })
-        .catch(err => {
-          handleXhrError(err);
+        .catch(() => {
           redraw();
         });
       }

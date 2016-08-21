@@ -1,5 +1,4 @@
 import * as xhr from '../userXhr';
-import router from '../../../router';
 import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
 import m from 'mithril';
@@ -12,27 +11,16 @@ export default function oninit(vnode) {
 
   socket.createDefault();
 
-  xhr.user(userId)
-  .then(data => {
-    user(data);
-    return data;
+  Promise.all([
+    xhr.user(userId),
+    xhr.variantperf(userId, variant)
+  ])
+  .then(results => {
+    const [userData, variantData] = results;
+    user(userData);
+    variantPerfData(variantData);
   })
-  .catch(error => {
-    handleXhrError(error);
-    router.set('/');
-    throw error;
-  });
-
-  xhr.variantperf(userId, variant)
-  .then(data => {
-    variantPerfData(data);
-    return data;
-  })
-  .catch(error => {
-    handleXhrError(error);
-    router.set('/');
-    throw error;
-  });
+  .catch(handleXhrError);
 
   vnode.state = {
     userId,

@@ -85,12 +85,12 @@ function request(url, opts, feedback) {
     .catch(onError);
 }
 
-export function fetchJSON(url, opts, feedback, uncache) {
-  return request(url, opts, feedback, uncache)
+export function fetchJSON(url, opts, feedback) {
+  return request(url, opts, feedback)
   .then(parseJSON);
 }
 
-export function fetchText(url, opts, feedback, uncache) {
-  return request(url, opts, feedback, uncache)
+export function fetchText(url, opts, feedback) {
+  return request(url, opts, feedback)
   .then(r => r.text());
 }

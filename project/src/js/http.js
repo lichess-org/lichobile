@@ -75,7 +75,7 @@ function request(url, opts, feedback, uncache) {
   const promise = Promise.race([
     fetch(fullUrl, cfg),
     new Promise((resolve, reject) =>
-      setTimeout(() => reject(new Error('Request timeout.')), 8000)
+      setTimeout(() => reject('Request timeout.'), 8000)
     )
   ]);
 

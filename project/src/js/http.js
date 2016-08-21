@@ -27,7 +27,7 @@ function addQuerystring(url, querystring) {
   return res;
 }
 
-function request(url, opts, feedback, uncache) {
+function request(url, opts, feedback) {
 
   function onSuccess(data) {
     if (feedback) spinner.stop();
@@ -57,10 +57,6 @@ function request(url, opts, feedback, uncache) {
     cfg.headers['Content-Type'] === undefined
   ) {
     cfg.headers['Content-Type'] = 'application/json; charset=UTF-8';
-  }
-
-  if (uncache) {
-    cfg.cache = 'no-cache';
   }
 
   if (opts && opts.query) {

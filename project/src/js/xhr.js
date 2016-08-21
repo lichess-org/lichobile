@@ -99,7 +99,9 @@ export function seeks(feedback) {
 export function game(id, color) {
   var url = '/' + id;
   if (color) url += ('/' + color);
-  return fetchJSON(url, null, true);
+  return fetchJSON(url, {
+    cache: 'reload'
+  }, true);
 }
 
 export function toggleGameBookmark(id) {

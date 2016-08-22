@@ -7,7 +7,6 @@ import roundCtrl from '../round/roundCtrl';
 import helper from '../helper';
 import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
-import gamesMenu from '../gamesMenu';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';
@@ -16,7 +15,7 @@ export default function oninit(vnode) {
   let gameData;
 
   if (hasNetwork()) {
-    gameXhr(vnode.attrs.id, vnode.attrs.color, !!gamesMenu.lastJoined)
+    gameXhr(vnode.attrs.id, vnode.attrs.color)
     .then(data => {
       gameData = data;
 

@@ -417,7 +417,7 @@ export default function oninit(vnode) {
   }.bind(this);
 
   if (this.source === 'online' && gameId) {
-    gameXhr(gameId, orientation, false)
+    gameXhr(gameId, orientation)
     .then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;

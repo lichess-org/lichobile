@@ -1,7 +1,7 @@
 import * as utils from '../../../utils';
 import router from '../../../router';
 import helper from '../../helper';
-import { header as headerWidget, backButton, loadingBackbutton } from '../../shared/common';
+import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
@@ -11,14 +11,13 @@ import session from '../../../session';
 import m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
-export default function view() {
+export default function view(vnode) {
   const ctrl = this;
+  const username = vnode.attrs.id;
 
-  const header = ctrl.user() ?
-  headerWidget.bind(undefined, null,
-    backButton(ctrl.user().username + ' games')
-  ) :
-  loadingBackbutton;
+  const header = headerWidget.bind(undefined, null,
+    backButton(username + ' games')
+  );
 
   function renderBody() {
     return (

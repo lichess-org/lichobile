@@ -131,10 +131,11 @@ function renderAnalyseTable(ctrl, isPortrait) {
 
 function renderInfos(ctrl, isPortrait) {
   const cevalEnabled = ctrl.ceval.enabled();
+  const isCrazy = !!ctrl.vm.step.crazy;
 
   return (
     <div id="analyseInfos" className="analyseInfos scrollerWrapper">
-      { cevalEnabled || ctrl.data.analysis ?
+      { (!isCrazy || !isPortrait) && (cevalEnabled || ctrl.data.analysis) ?
         renderEvalBox(ctrl) : null
       }
       { !isSynthetic(ctrl.data) ?

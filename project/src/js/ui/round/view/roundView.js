@@ -385,7 +385,7 @@ function gameInfos(ctrl) {
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
+  const icon = utils.gameIcon(data.game.perf);
   const variant = m('span.variant', {
     oncreate: helper.ontouch(
       () => {

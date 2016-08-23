@@ -22,7 +22,8 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
-import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
+import { hasNetwork, boardOrientation } from '../../utils';
+import { saveOfflineGameData } from '../../utils/offlineGames';
 import crazyValid from './crazy/crazyValid';
 
 export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {

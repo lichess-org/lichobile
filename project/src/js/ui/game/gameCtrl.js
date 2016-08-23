@@ -1,6 +1,7 @@
 import session from '../../session';
 import router from '../../router';
-import { hasNetwork, handleXhrError, getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils';
+import { hasNetwork, handleXhrError } from '../../utils';
+import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import roundCtrl from '../round/roundCtrl';

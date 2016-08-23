@@ -1,6 +1,7 @@
 import menu from '../menu';
 import router from '../../router';
 import * as utils from '../../utils';
+import { getOfflineGames } from '../../utils/offlineGames';
 import layout from '../layout';
 import helper from '../helper';
 import gamesMenu from '../gamesMenu';
@@ -62,7 +63,7 @@ export function gamesButton() {
   let key, action;
   const nbChallenges = challengesApi.all().length;
   const nbIncomingChallenges = challengesApi.incoming().length;
-  const withOfflineGames = !utils.hasNetwork() && utils.getOfflineGames().length;
+  const withOfflineGames = !utils.hasNetwork() && getOfflineGames().length;
   if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
     key = 'games-menu';
     action = gamesMenu.open;
@@ -76,7 +77,7 @@ export function gamesButton() {
     'game_menu_button',
     settings.general.theme.board(),
     nbIncomingChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && utils.getOfflineGames().length === 0 ? 'invisible' : ''
+    !utils.hasNetwork() && getOfflineGames().length === 0 ? 'invisible' : ''
     ].join(' ');
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 

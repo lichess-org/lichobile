@@ -40,7 +40,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
+        null,
         function() {
           return (
             <div>

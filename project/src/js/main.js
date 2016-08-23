@@ -8,6 +8,7 @@ import moment from 'moment';
 window.moment = moment;
 
 import * as utils from './utils';
+import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
@@ -85,6 +86,8 @@ function onOnline() {
       challengesApi.refresh();
       redraw();
     })
+    .then(session.nowPlaying)
+    .then(syncWithNowPlayingGames)
     .then(() => setServerLang(settings.general.lang()))
     .catch(() => console.log('connected as anonymous'));
   }

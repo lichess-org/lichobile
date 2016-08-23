@@ -34,7 +34,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        () => <div><span className="fa fa-beer" />{i18n('playOnTheBoardOffline')}</div>,
+        null,
         function() {
           return (
             <div>

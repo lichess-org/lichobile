@@ -9,8 +9,7 @@ export default {
   pocket: function(ctrl, crazyData, color, position, isOTB, customPieceTheme) {
     if (!crazyData) return null;
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
-    const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
-    const usable = (usablePos || isOTB) && (!ctrl.replaying() || isOTB) && gameApi.isPlayerPlaying(ctrl.data);
+    const usable = (!ctrl.replaying() || isOTB) && gameApi.isPlayerPlaying(ctrl.data);
     const className = [
       customPieceTheme || settings.general.theme.piece(),
       'pocket',

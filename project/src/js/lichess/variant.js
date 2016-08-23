@@ -3,7 +3,7 @@ const variantMap = {
     name: 'Standard',
     tinyName: 'Std',
     id: 1,
-    link: 'https://en.wikipedia.org/wiki/Chess'
+    link: 'https://en.wikipedia.org/wiki/Rules_of_chess'
   },
   chess960: {
     name: 'Chess960',

@@ -29,13 +29,17 @@ function addQuerystring(url, querystring) {
 
 function request(url, opts, feedback) {
 
+  let timeoutId;
+
   function onSuccess(data) {
+    clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     redraw();
     return data;
   }
 
   function onError(error) {
+    clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     redraw();
     throw error;
@@ -70,9 +74,9 @@ function request(url, opts, feedback) {
 
   const promise = Promise.race([
     fetch(fullUrl, cfg),
-    new Promise((resolve, reject) =>
-      setTimeout(() => reject('Request timeout.'), 8000)
-    )
+    new Promise((_, reject) => {
+      timeoutId = setTimeout(() => reject('Request timeout.'), 8000);
+    })
   ]);
 
   if (feedback) {

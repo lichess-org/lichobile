@@ -137,6 +137,10 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     return this.vm.ply !== round.lastPly(this.data);
   }.bind(this);
 
+  this.canDrop = function() {
+    return !this.replaying() && gameApi.isPlayerPlaying(this.data);
+  }.bind(this);
+
   this.jump = function(ply) {
     if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
     const isFwd = ply > this.vm.ply;

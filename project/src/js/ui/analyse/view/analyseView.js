@@ -1,3 +1,4 @@
+import m from 'mithril';
 import isEmpty from 'lodash/isEmpty';
 import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
@@ -16,7 +17,7 @@ import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
 import { defined, renderEval, isSynthetic } from '../util';
-import crazyView from '../crazy/crazyView';
+import CrazyPocket from '../../round/crazy/crazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
@@ -227,7 +228,12 @@ function renderOpponents(ctrl, isPortrait) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, player.color, 'top')}
+        {m(CrazyPocket, {
+          ctrl,
+          crazyData: ctrl.vm.step.crazy,
+          color: player.color,
+          position: 'top'
+        })}
       </div>
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
@@ -244,7 +250,12 @@ function renderOpponents(ctrl, isPortrait) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {crazyView.pocket(ctrl, ctrl.vm.step.crazy, opponent.color, 'bottom')}
+        {m(CrazyPocket, {
+          ctrl,
+          crazyData: ctrl.vm.step.crazy,
+          color: opponent.color,
+          position: 'bottom'
+        })}
       </div>
       {!isCrazy || !isPortrait ? renderStatus(ctrl) : null}
     </div>

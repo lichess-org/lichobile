@@ -5,7 +5,7 @@ import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../round/view/roundView';
-import crazyView from '../../round/crazy/crazyView';
+import CrazyPocket from '../../round/crazy/crazyPocket';
 import m from 'mithril';
 
 export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip, customPieceTheme) {
@@ -37,7 +37,13 @@ export function renderAntagonist(ctrl, content, material, position, isPortrait, 
         </div> : null
         }
       </div>
-      {crazyView.pocket(ctrl, sit.crazyhouse, antagonistColor, position, true, customPieceTheme)}
+      {m(CrazyPocket, {
+        ctrl,
+        crazyData: sit.crazyhouse,
+        color: antagonistColor,
+        position,
+        customPieceTheme
+      })}
     </section>
   );
 }

@@ -185,6 +185,10 @@ export default function oninit(vnode) {
     redraw();
   }.bind(this);
 
+  this.canDrop = function() {
+    return true;
+  };
+
   const preparePremoving = function() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,

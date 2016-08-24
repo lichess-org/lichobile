@@ -9,6 +9,7 @@ import continuePopup from '../shared/continuePopup';
 import i18n from '../../i18n';
 import socket from '../../socket';
 import helper from '../helper';
+import drag from './drag';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -81,6 +82,29 @@ export default function oninit(vnode) {
     },
     disableContextMenu: true
   });
+
+  const onstart = drag.bind(undefined, this);
+  const onmove = chessground.drag.move.bind(undefined, this.chessground.data);
+  const onend = chessground.drag.end.bind(undefined, this.chessground.data);
+
+  this.editorOnCreate = function(vn) {
+    if (!vn.dom) return;
+    const editorNode = document.getElementById('boardEditor');
+    if (editorNode) {
+      editorNode.addEventListener('touchstart', onstart);
+      editorNode.addEventListener('touchmove', onmove);
+      editorNode.addEventListener('touchend', onend);
+    }
+  };
+
+  this.editorOnRemove = function() {
+    const editorNode = document.getElementById('boardEditor');
+    if (editorNode) {
+      editorNode.removeEventListener('touchstart', onstart);
+      editorNode.removeEventListener('touchmove', onmove);
+      editorNode.removeEventListener('touchend', onend);
+    }
+  };
 
   this.computeFen = computeFen.bind(undefined, this.data.editor, this.chessground.getFen);
 

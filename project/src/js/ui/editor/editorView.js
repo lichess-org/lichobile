@@ -2,42 +2,17 @@ import layout from '../layout';
 import router from '../../router';
 import { header } from '../shared/common';
 import Board from '../shared/Board';
-import drag from './drag';
 import helper from '../helper';
 import i18n from '../../i18n';
 import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
 import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
-import { drag as chessgroundDrag } from 'chessground-mobile';
 import m from 'mithril';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
-
-  const onstart = drag.bind(undefined, ctrl);
-  const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-  const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
-
-  function editorOnCreate(vn) {
-    if (!vn.dom) return;
-    const editorNode = document.getElementById('boardEditor');
-    if (editorNode) {
-      editorNode.addEventListener('touchstart', onstart);
-      editorNode.addEventListener('touchmove', onmove);
-      editorNode.addEventListener('touchend', onend);
-    }
-  }
-
-  function editorOnRemove() {
-    const editorNode = document.getElementById('boardEditor');
-    if (editorNode) {
-      editorNode.removeEventListener('touchstart', onstart);
-      editorNode.removeEventListener('touchmove', onmove);
-      editorNode.removeEventListener('touchend', onend);
-    }
-  }
 
   const board = Board(
     ctrl.data,
@@ -50,8 +25,8 @@ export default function view(vnode) {
     if (helper.isPortrait())
       return m('div#boardEditor.editor', {
           className: settings.general.theme.piece(),
-          oncreate: editorOnCreate,
-          onremove: editorOnRemove
+          oncreate: ctrl.editorOnCreate,
+          onremove: ctrl.editorOnRemove
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
           board,
@@ -62,8 +37,8 @@ export default function view(vnode) {
       return [
         m('div.editor', {
           className: settings.general.theme.piece(),
-          oncreate: editorOnCreate,
-          onremove: editorOnRemove
+          oncreate: ctrl.editorOnCreate,
+          onremove: ctrl.editorOnRemove
         }, [
           sparePieces(ctrl, opposite, color, 'top'),
           board,

@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import router from '../router';
 import { challenge as challengeXhr } from '../xhr';
 import settings from '../settings';
 import session from '../session';
@@ -45,7 +46,8 @@ challengeForm.close = function(fromBB) {
 
 function challenge() {
   const userId = challengeForm.userId;
-  return challengeXhr(userId, challengeForm.fen).then(data => {
+  return challengeXhr(userId, challengeForm.fen)
+  .then(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
 
@@ -58,15 +60,13 @@ function challenge() {
           storage.set('donotshowpersistentchallengeexplanation', true);
         });
       }
-      m.route('/correspondence', { tab: 'challenges' });
+      router.set('/correspondence', { tab: 'challenges' });
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      m.route(`/challenge/${data.challenge.id}`);
+      router.set(`/challenge/${data.challenge.id}`);
     }
-  }, error => {
-    utils.handleXhrError(error);
-    throw error;
-  });
+  })
+  .catch(utils.handleXhrError);
 }
 
 function renderForm() {
@@ -82,17 +82,18 @@ function renderForm() {
   // horde variants
   var colors;
   if (settingsObj.mode() === '1' &&
-    ['5', '6', '7', '8'].indexOf(settingsObj.variant()) !== -1) {
+    ['5', '6', '7', '8', '9'].indexOf(settingsObj.variant()) !== -1) {
     settingsObj.color('random');
     colors = [
       ['randomColor', 'random']
     ];
-  } else
+  } else {
     colors = [
       ['randomColor', 'random'],
       ['white', 'white'],
       ['black', 'black']
     ];
+  }
 
   var modes = session.isConnected() ? [
     ['casual', '0'],
@@ -117,17 +118,17 @@ function renderForm() {
       key: 'position'
     }, challengeForm.fen ? [
       m('div.setupMiniBoardWrapper', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route(`/editor/${encodeURIComponent(challengeForm.fen)}`);
+          router.set(`/editor/${encodeURIComponent(challengeForm.fen)}`);
         })
       }, [
-        m.component(ViewOnlyBoard, { fen: challengeForm.fen })
+        m(ViewOnlyBoard, { fen: challengeForm.fen })
       ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
-        config: helper.ontouch(() => {
+        oncreate: helper.ontouch(() => {
           challengeForm.close();
-          m.route('/editor');
+          router.set('/editor');
         })
       }, i18n('boardEditor')))
     ) : null,

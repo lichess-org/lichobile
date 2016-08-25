@@ -7,7 +7,6 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.root = root;
   this.ply = 0;
   this.situations = [];
-  this.hash = '';
 
   chessWorker.addEventListener('message', function(msg) {
     const payload = msg.data.payload;
@@ -16,6 +15,7 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         console.error(msg.data);
         break;
       case 'move':
+      case 'drop':
         this.ply++;
         if (this.ply < this.situations.length) {
           this.situations = this.situations.slice(0, this.ply);
@@ -50,23 +50,17 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
   this.apply = function() {
     const sit = this.situation();
     if (sit) {
-      // TODO remove this in future version
-      // it's here for BC compat only
-      if (sit.movable) {
-        this.root.chessground.set(sit);
-      } else {
-        const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
-        this.root.chessground.set({
-          fen: sit.fen,
-          turnColor: sit.player,
-          lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
-          movable: {
-            dests: sit.dests,
-            color: sit.player
-          },
-          check: sit.check
-        });
-      }
+      const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
+      this.root.chessground.set({
+        fen: sit.fen,
+        turnColor: sit.player,
+        lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
+        movable: {
+          dests: sit.dests,
+          color: sit.player
+        },
+        check: sit.check
+      });
     }
   }.bind(this);
 
@@ -86,6 +80,21 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
     });
   }.bind(this);
 
+  this.addDrop = function(role, key) {
+    const sit = this.situation();
+    chessWorker.postMessage({
+      topic: 'drop',
+      payload: {
+        variant: this.root.data.game.variant.key,
+        fen: sit.fen,
+        pgnMoves: sit.pgnMoves,
+        uciMoves: sit.uciMoves,
+        role,
+        pos: key
+      }
+    });
+  }.bind(this);
+
   this.claimDraw = function() {
     const sit = this.situation();
     chessWorker.postMessage({
@@ -97,14 +106,6 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
       }
     });
   }.bind(this);
-
-  this.situationsHash = function(sits) {
-    let h = '';
-    for (let i in sits) {
-      h += sits[i].uci;
-    }
-    return h;
-  };
 
   this.pgn = function() {
     const sit = this.situation();

@@ -40,5 +40,12 @@ export const brushes = {
     opacity: 0.35,
     lineWidth: 15,
     circleMargin: 0
+  },
+  palePurple: {
+    key: 'pp',
+    color: '#4b0082',
+    opacity: 0.4,
+    lineWidth: 15,
+    circleMargin: 0
   }
 };

@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import router from '../../router';
 import * as utils from '../../utils';
 import h from '../helper';
 import * as xhr from './playerXhr';
@@ -10,7 +11,10 @@ import helper from '../helper';
 import * as m from 'mithril';
 
 export default {
-  controller() {
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
+
+  oninit(vnode) {
 
     helper.analyticsTrackView('Leaderboard');
 
@@ -18,17 +22,19 @@ export default {
 
     const ranking = m.prop({});
 
-    xhr.ranking().then(data => {
+    xhr.ranking()
+    .then(data => {
       Object.keys(data).forEach(k => {
         data[k].isOpenedOnMobile = false;
       });
       ranking(data);
-    }, err => {
+    })
+    .catch(err => {
       utils.handleXhrError(err);
-      m.route('/');
+      router.set('/');
     });
 
-    return {
+    vnode.state = {
       ranking,
       toggleRankingCat(key) {
         let cat = ranking()[key];
@@ -37,7 +43,9 @@ export default {
     };
   },
 
-  view(ctrl) {
+  view(vnode) {
+    const ctrl = vnode.state;
+
     return layout.free(
       () => header(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl)
@@ -62,7 +70,7 @@ function renderRankingCategory(ctrl, key) {
   const toggleFunc = h.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
   return (
     <section className={'ranking ' + key}>
-      <h3 className="rankingPerfTitle" config={h.ontouchY(toggleFunc)}>
+      <h3 className="rankingPerfTitle" oncreate={h.ontouchY(toggleFunc)}>
         <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
@@ -78,7 +86,7 @@ function renderRankingCategory(ctrl, key) {
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer" config={h.ontouchY(() => m.route('/@/' + user.id))}>
+    <li className="rankingPlayer" oncreate={h.ontouchY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

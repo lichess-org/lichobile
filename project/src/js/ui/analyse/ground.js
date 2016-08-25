@@ -14,6 +14,9 @@ function makeConfig(data, config, onMove, onNewPiece) {
       dests: config.movable.dests,
       showDests: settings.game.pieceDestinations()
     },
+    draggable: {
+      magnified: settings.game.magnified()
+    },
     events: {
       move: onMove,
       dropNewPiece: onNewPiece

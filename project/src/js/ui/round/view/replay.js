@@ -1,11 +1,12 @@
 import helper from '../../helper';
+import round from '../round';
 
 const emptyTd = <td className="move">...</td>;
 
 function renderTd(ctrl, step, curPly, orEmpty) {
   return step ? (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}
-      config={helper.ontouchY(() => ctrl.jump(step.ply))}
+      oncreate={helper.ontouchY(() => ctrl.jump(step.ply))}
       data-ply={step.ply}
     >
       {step.san}
@@ -31,12 +32,7 @@ function autoScroll(movelist) {
 
 export function renderTable(ctrl) {
   const steps = ctrl.data.steps;
-  const firstPly = ctrl.firstPly();
-  const h = ctrl.vm.ply + ctrl.stepsHash(ctrl.data.steps) +
-    ctrl.data.game.status.id + ctrl.data.game.winner;
-
-  if (ctrl.vm.replayHash === h) return { subtree: 'retain' };
-  ctrl.vm.replayHash = h;
+  const firstPly = round.firstPly(ctrl.data);
 
   const pairs = [];
   if (firstPly % 2 === 0) {
@@ -55,10 +51,10 @@ export function renderTable(ctrl) {
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        config={(el, isUpdate) => {
-          autoScroll(el);
-          if (!isUpdate) setTimeout(autoScroll.bind(undefined, el), 100);
+        oncreate={(vnode) => {
+          setTimeout(autoScroll.bind(undefined, vnode.dom), 100);
         }}
+        onupdate={(vnode) => { autoScroll(vnode.dom); }}
       >
         <table className="moves">
           <tbody>

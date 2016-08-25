@@ -3,6 +3,7 @@ export const perfTypes = [
   ['blitz', 'Blitz', 'Blitz'],
   ['classical', 'Classical', 'Classic'],
   ['correspondence', 'Correspondence', 'Corresp.'],
+  ['crazyhouse', 'Crazyhouse', 'Crazy'],
   ['chess960', 'Chess960', '960'],
   ['kingOfTheHill', 'King Of The Hill', 'KotH'],
   ['threeCheck', 'Three-check', '3check'],

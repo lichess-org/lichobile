@@ -1,3 +1,4 @@
+import router from '../../router';
 import { handleXhrError, backHistory } from '../../utils';
 import { throttle } from 'lodash/function';
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
@@ -8,57 +9,50 @@ import * as m from 'mithril';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 
-export default function controller() {
-  var pingTimeoutId;
+export default function oninit(vnode) {
+  const pingTimeoutId = m.prop();
   const challenge = m.prop();
 
   function reloadChallenge() {
-    getChallenge(challenge().id).then(d => {
-      clearTimeout(pingTimeoutId);
+    getChallenge(challenge().id)
+    .then(d => {
+      clearTimeout(pingTimeoutId());
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
-          m.route(`/game/${d.challenge.id}`);
+          router.set(`/game/${d.challenge.id}`, true);
           break;
         case 'declined':
           window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
           backHistory();
           break;
       }
-    }, err => {
-      clearTimeout(pingTimeoutId);
-      handleXhrError(err);
-      m.route('/');
     });
   }
 
   function pingNow() {
     throttledPing();
-    pingTimeoutId = setTimeout(pingNow, 2000);
+    pingTimeoutId(setTimeout(pingNow, 2000));
   }
 
-  getChallenge(m.route.param('id')).then(d => {
+  getChallenge(vnode.attrs.id).then(d => {
     challenge(d.challenge);
     socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
       reload: reloadChallenge
     });
-  }, err => {
-    handleXhrError(err);
-    m.route('/');
   })
-  .catch(console.error.bind(console));
+  .catch(err => {
+    handleXhrError(err);
+    router.set('/');
+  });
 
-  return {
+  vnode.state = {
+    pingTimeoutId,
     challenge,
-    onunload() {
-      socket.destroy();
-      clearTimeout(pingTimeoutId);
-      window.plugins.insomnia.allowSleepAgain();
-    },
     joinChallenge() {
       return acceptChallenge(challenge().id)
       .then(() => challengesApi.remove(challenge().id))
-      .then(d => m.route('/game' + d.url.round));
+      .then(d => router.set('/game' + d.url.round, true));
     },
     declineChallenge() {
       return declineChallenge(challenge().id)

@@ -1,5 +1,6 @@
 import { last } from 'lodash/array';
 import * as chessground from 'chessground-mobile';
+import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import makeData from './data';
 import chess from './chess';
@@ -8,11 +9,10 @@ import sound from '../../sound';
 import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
-import * as m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
 
-export default function ctrl() {
+export default function ctrl(vnode) {
 
   helper.analyticsTrackView('Puzzle');
   socket.createDefault();
@@ -27,7 +27,7 @@ export default function ctrl() {
 
   const showLoading = function() {
     this.vm.loading = true;
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const onXhrSuccess = function(res) {
@@ -60,7 +60,7 @@ export default function ctrl() {
           dests: sitToRevertTo.dests
         }
       });
-      m.redraw();
+      redraw();
     }, 1000);
   }.bind(this);
 
@@ -114,7 +114,7 @@ export default function ctrl() {
         }
         break;
     }
-    m.redraw();
+    redraw();
   }.bind(this);
 
   const onMove = function(orig, dest, captured) {
@@ -133,7 +133,7 @@ export default function ctrl() {
         dests: this.data.chess.dests()
       }
     });
-    m.redraw();
+    redraw();
     if (this.data.chess.in_check()) this.chessground.setCheck();
   }.bind(this);
 
@@ -178,7 +178,7 @@ export default function ctrl() {
     });
     if (this.data.chess.in_check()) this.chessground.setCheck();
     setTimeout(this.chessground.playPremove, this.chessground.data.animation.duration);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.playOpponentNextMove = function(id) {
@@ -259,16 +259,17 @@ export default function ctrl() {
         duration: 300
       },
       premovable: {
-        enabled: true
+        enabled: false
       },
       draggable: {
         distance: 3,
-        squareTarget: true
+        squareTarget: true,
+        magnified: settings.game.magnified()
       }
     };
     if (this.chessground) this.chessground.set(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   this.newPuzzle = function(feedback) {
@@ -306,23 +307,24 @@ export default function ctrl() {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`);
   }.bind(this);
 
+  this.getFen = function() {
+    return this.data.replay.history[this.data.replay.step].fen;
+  }.bind(this);
+
   this.setDifficulty = function(id) {
     return xhr.setDifficulty(id)
       .then(pushState)
       .then(this.reload);
   }.bind(this);
 
-  if (m.route.param('id')) {
-    this.loadPuzzle(m.route.param('id'));
+  if (vnode.attrs.id) {
+    this.loadPuzzle(vnode.attrs.id);
   } else {
     this.newPuzzle(false);
   }
 
   window.plugins.insomnia.keepAwake();
 
-  this.onunload = function() {
-    window.plugins.insomnia.allowSleepAgain();
-  };
 }
 
 function pushState(cfg) {

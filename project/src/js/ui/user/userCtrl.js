@@ -1,12 +1,15 @@
 import session from '../../session';
 import * as xhr from './userXhr';
+import router from '../../router';
 import * as utils from '../../utils';
 import helper from '../helper';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import * as m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
+
+  const userId = vnode.attrs.id;
 
   helper.analyticsTrackView('User Profile');
 
@@ -18,12 +21,12 @@ export default function controller() {
     Object.assign(user(), newData);
   }
 
-  xhr.user(m.route.param('id')).then(user, error => {
-    utils.handleXhrError(error);
-    m.route('/');
-  }).then(session.refresh);
+  xhr.user(userId)
+  .then(user)
+  .then(session.refresh)
+  .catch(utils.handleXhrError);
 
-  return {
+  vnode.state = {
     user,
     isMe: () => session.getUserId() === user().id,
     toggleFollowing: () => {
@@ -34,8 +37,8 @@ export default function controller() {
       if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
       else xhr.block(user().id).then(setNewUserState);
     },
-    goToGames: () => m.route(`/@/${user().id}/games`),
-    goToUserTV: () => m.route(`/@/${user().id}/tv`),
+    goToGames: () => router.set(`/@/${user().id}/games`),
+    goToUserTV: () => router.set(`/@/${user().id}/tv`),
     challenge: () => challengeForm.open(user().id)
   };
 }

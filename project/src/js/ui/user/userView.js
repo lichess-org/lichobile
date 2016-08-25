@@ -1,5 +1,5 @@
 import userPerfs from '../../lichess/perfs';
-import { header as headerWidget, backButton } from '../shared/common';
+import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
 import perf from '../shared/perf';
 import layout from '../layout';
@@ -8,14 +8,16 @@ import countries from '../../utils/countries';
 import helper from '../helper';
 import session from '../../session';
 
-export default function view(ctrl) {
+export default function view() {
+  const ctrl = this;
   const user = ctrl.user();
 
-  if (!user) return null;
+  if (!user) return layout.empty();
 
   function header() {
     const title = (user.title ? `${user.title} ` : '') + user.username;
-    return headerWidget(null, backButton(title));
+    const backButton = !ctrl.isMe() ? renderBackbutton(title) : null;
+    return headerWidget(backButton ? null : title, backButton);
   }
 
   function profile() {
@@ -67,7 +69,7 @@ function renderProfile(user) {
     const country = countries[user.profile.country];
     const location = user.profile.location;
     const memberSince = i18n('memberSince') + ' ' + window.moment(user.createdAt).format('LL');
-    const seenAt = user.seenAt ? i18n('lastLogin') + ' ' + window.moment(user.seenAt).calendar() : null;
+    const seenAt = user.seenAt ? 'Last login ' + window.moment(user.seenAt).calendar() : null;
     return (
       <section className="profile">
         {fullname ?
@@ -139,20 +141,20 @@ function renderActions(ctrl) {
   return (
     <section id="userProfileActions" class="noPadding">
       <div className="list_item nav"
-        config={helper.ontouchY(ctrl.goToGames)}
+        oncreate={helper.ontouchY(ctrl.goToGames)}
         key="view_all_games"
       >
         {i18n('viewAllNbGames', user.count.all)}
       </div>
       { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item" key="challenge_to_play" data-icon="U"
-        config={helper.ontouchY(ctrl.challenge)}
+        oncreate={helper.ontouchY(ctrl.challenge)}
       >
         {i18n('challengeToPlay')}
       </div> : null
       }
       <div className="list_item nav" data-icon="1"
-        config={helper.ontouchY(ctrl.goToUserTV)}
+        oncreate={helper.ontouchY(ctrl.goToUserTV)}
         key="user_tv"
       >
         {i18n('watchGames')}

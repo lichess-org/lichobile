@@ -2,7 +2,8 @@ import { header } from '../../shared/common';
 import { renderPlayer } from '../following/followingView';
 import layout from '../../layout';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
 
   return layout.free(
     header.bind(undefined, 'Followers'),

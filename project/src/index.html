@@ -5,7 +5,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, width=device-width" />
     <!-- @if MODE!='dev' -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; connect-src 'self' http://<!-- @echo API_END_POINT --> ws://<!-- @echo SOCKET_END_POINT -->:*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; child-src 'self' blob: filesystem:; style-src 'self' 'unsafe-inline'; media-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; connect-src 'self' https://expl.lichess.org <!-- @echo API_END_POINT --> <!-- @echo SOCKET_END_POINT -->:*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; child-src 'self' blob: filesystem:; style-src 'self' 'unsafe-inline'; media-src 'self'">
     <!-- @endif -->
     <title>lichess.org</title>
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />

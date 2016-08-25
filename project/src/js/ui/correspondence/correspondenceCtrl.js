@@ -1,4 +1,5 @@
 import helper from '../helper';
+import redraw from '../../utils/redraw';
 import challengesApi from '../../lichess/challenges';
 import { uniqBy } from 'lodash/array';
 import session from '../../session';
@@ -8,10 +9,10 @@ import socket from '../../socket';
 import * as Zanimo from 'zanimo';
 import * as m from 'mithril';
 
-export default function controller() {
+export default function oninit(vnode) {
 
   var pool = [];
-  const selectedTab = m.prop(m.route.param('tab') || 'public');
+  const selectedTab = m.prop(vnode.attrs.tab || 'public');
   const sendingChallenges = m.prop(getSendingCorres());
 
   helper.analyticsTrackView('Correspondence');
@@ -43,14 +44,15 @@ export default function controller() {
   }
 
   function reload(feedback) {
-    xhr.seeks(feedback).then(function(d) {
+    xhr.seeks(feedback)
+    .then(function(d) {
       pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
-      m.redraw();
+      redraw();
     });
   }
   reload(true);
 
-  return {
+  vnode.state = {
     selectedTab,
     sendingChallenges,
     cancelChallenge,
@@ -64,8 +66,7 @@ export default function controller() {
     },
     join: function(seekId) {
       socket.send('joinSeek', seekId);
-    },
-    onunload: socket.destroy
+    }
   };
 }
 
@@ -75,11 +76,12 @@ function seekUserId(seek) {
 
 function fixSeeks(ss) {
   var userId = session.getUserId();
-  if (userId) ss.sort(function(a, b) {
+  if (userId) ss.sort((a, b) => {
     if (seekUserId(a) === userId) return -1;
     if (seekUserId(b) === userId) return 1;
+    return 0;
   });
-  return uniqBy(ss, function(s) {
+  return uniqBy(ss, s => {
     var username = seekUserId(s) === userId ? s.id : s.username;
     var key = username + s.mode + s.variant.key + s.days;
     return key;

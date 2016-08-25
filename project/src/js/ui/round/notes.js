@@ -1,12 +1,25 @@
 import helper from '../helper';
+import spinner from '../../spinner';
 import i18n from '../../i18n';
 import backbutton from '../../backbutton';
 import { debounce }  from 'lodash/function';
-import { syncNote } from './roundXhr';
+import { readNote, syncNote } from './roundXhr';
 import * as m from 'mithril';
 
 export default {
   controller(root) {
+
+    this.syncing = true;
+
+    readNote(root.data.game.id)
+    .then(note => {
+      root.data.note = note;
+      this.syncing = false;
+    })
+    .catch(() => {
+      this.syncing = false;
+      window.plugins.toast.show('Could not read notes from server.', 'short', 'center');
+    });
 
     let notesHeight;
 
@@ -21,7 +34,7 @@ export default {
 
     this.close = function(fromBB) {
       window.cordova.plugins.Keyboard.close();
-      if(fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
       this.showing = false;
     }.bind(this);
 
@@ -55,24 +68,26 @@ export default {
     window.addEventListener('native.keyboardhide', onKeyboardHide);
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
-    this.onunload = function() {
+    this.unload = function() {
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     };
   },
 
-  view: function(ctrl) {
+  view(ctrl) {
 
     if (!ctrl.showing) return null;
 
-    return m('div#notes.modal', { config: helper.slidesInUp }, [
+    return m('div#notes.modal', { oncreate: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
+          oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
         }),
         m('h2', i18n('notes'))
       ]),
       m('div.modal_content', [
+        ctrl.syncing ?
+        m('div.notesTextarea.loading', spinner.getVdom()) :
         m('textarea#notesTextarea.native_scroller', {
           placeholder: i18n('typePrivateNotesHere'),
           oninput: ctrl.syncNotes

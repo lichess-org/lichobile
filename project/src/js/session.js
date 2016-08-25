@@ -1,11 +1,13 @@
-import { get, set, pick, mapValues } from 'lodash/object';
-import { throttle } from 'lodash/function';
-import { request } from './http';
+import { get, set } from 'lodash/object';
+import redraw from './utils/redraw';
+import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
-import * as m from 'mithril';
+import pick from 'lodash/pick';
+import mapValues from 'lodash/mapValues';
+import throttle from 'lodash/throttle';
 
 var session = null;
 
@@ -39,20 +41,12 @@ function myTurnGames() {
 }
 
 function toggleKidMode() {
-  return request('/account/kidConfirm', {
-    method: 'POST',
-    deserialize: v => v
+  return fetchText('/account/kidConfirm', {
+    method: 'POST'
   });
 }
 
 function savePreferences() {
-
-  function xhrConfig(xhr) {
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhr.withCredentials = true;
-    xhr.timeout = 8000;
-  }
 
   const prefs = mapValues(pick(session && session.prefs || {}, [
     'animation',
@@ -81,12 +75,14 @@ function savePreferences() {
     else return v;
   });
 
-  return request('/account/preferences', {
+  return fetchText('/account/preferences', {
     method: 'POST',
-    data: serializeQueryParameters(prefs),
-    serialize: v => v,
-    deserialize: v => v
-  }, true, xhrConfig);
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': 'application/json, text/*'
+    },
+    body: serializeQueryParameters(prefs)
+  }, true);
 }
 
 function lichessBackedProp(path, prefRequest) {
@@ -101,10 +97,6 @@ function lichessBackedProp(path, prefRequest) {
       .catch(err => {
         if (session) set(session, path, oldPref);
         handleXhrError(err);
-        // need to do this to force mithril to correctly render checkbox state
-        // TODO need to find another way now it animates where it should not
-        m.redraw.strategy('all');
-        m.redraw();
       });
     }
 
@@ -113,46 +105,45 @@ function lichessBackedProp(path, prefRequest) {
 }
 
 function login(username, password) {
-  return request('/login', {
+  return fetchJSON('/login', {
     method: 'POST',
-    data: {
-      username: username,
-      password: password
-    }
-  }, true).then(function(data) {
+    body: JSON.stringify({
+      username,
+      password
+    })
+  }, true)
+  .then(function(data) {
     session = data;
     return session;
   });
 }
 
 function logout() {
-  return request('/logout', {}, true).then(function() {
+  return fetchJSON('/logout', null, true)
+  .then(function() {
     session = null;
     friendsApi.clear();
-  }, function(err) {
-    handleXhrError(err);
-    throw err;
   });
 }
 
 function signup(username, email, password) {
-  return request('/signup', {
+  return fetchJSON('/signup', {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       username,
       email,
       password
-    }
-  }, true).then(function(data) {
+    })
+  }, true)
+  .then(function(data) {
     session = data;
     return session;
   });
 }
 
 function rememberLogin() {
-  return request('/account/info', {
-    background: true
-  }).then(function(data) {
+  return fetchJSON('/account/info')
+  .then(data => {
     session = data;
     return data;
   });
@@ -160,17 +151,16 @@ function rememberLogin() {
 
 function refresh() {
   if (hasNetwork() && isConnected()) {
-    return request('/account/info', {
-      background: true
-    })
+    return fetchJSON('/account/info')
     .then(data => {
       session = data;
-      m.redraw();
+      redraw();
       return session;
-    }, err => {
+    })
+    .catch(err => {
       if (session && err.status === 401) {
         session = null;
-        m.redraw();
+        redraw();
         window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
       }
       throw err;

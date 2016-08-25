@@ -1,12 +1,13 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
 import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
-import { hasNetwork, noop, handleXhrError } from '../../utils';
+import { hasNetwork, noop } from '../../utils';
 import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import * as m from 'mithril';
 
-export interface HomeCtrl extends Mithril.Controller {
+export interface HomeCtrl {
   nbConnectedPlayers: Mithril.Property<number>;
   nbGamesInPlay: Mithril.Property<number>;
   dailyPuzzle: Mithril.Property<any>;
@@ -14,7 +15,7 @@ export interface HomeCtrl extends Mithril.Controller {
   timeline: Mithril.Property<Array<any>>;
 }
 
-export default function homeCtrl(): HomeCtrl {
+export default function homeCtrl(vnode): HomeCtrl {
 
   const nbConnectedPlayers = m.prop<number>();
   const nbGamesInPlay = m.prop<number>();
@@ -29,26 +30,29 @@ export default function homeCtrl(): HomeCtrl {
           n: (_, d) => {
             nbConnectedPlayers(d.d);
             nbGamesInPlay(d.r);
-            m.redraw();
+            redraw();
           }
         });
       });
 
       Promise.all([
-        timelineXhr(),
         dailyPuzzleXhr(),
         topPlayersOfTheWeekXhr()
-      ]).then(results => {
-        const [timelineData, dailyData, topPlayersData] = results;
+      ])
+      .then(results => {
+        const [dailyData, topPlayersData] = results;
+        dailyPuzzle(dailyData.puzzle);
+        weekTopPlayers(topPlayersData);
+      });
+
+      timelineXhr()
+      .then(data => {
         timeline(
-          timelineData.entries
+          data.entries
           .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
         );
-        dailyPuzzle(dailyData.puzzle);
-        weekTopPlayers(topPlayersData);
-      })
-      .catch(handleXhrError);
+      });
     }
   }
 
@@ -64,16 +68,13 @@ export default function homeCtrl(): HomeCtrl {
   document.addEventListener('online', init);
   document.addEventListener('resume', onResume);
 
-  return {
+  vnode.state = {
     nbConnectedPlayers,
     nbGamesInPlay,
     dailyPuzzle,
     timeline,
     weekTopPlayers,
-    onunload() {
-      socket.destroy();
-      document.removeEventListener('online', init);
-      document.removeEventListener('resume', onResume);
-    }
+    init,
+    onResume
   };
 }

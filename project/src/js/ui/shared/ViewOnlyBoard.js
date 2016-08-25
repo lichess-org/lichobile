@@ -2,7 +2,9 @@ import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
 export default {
-  view(_, args) {
+  view(rootVnode) {
+
+    const args = rootVnode.attrs;
 
     const boardClass = [
       'display_board',
@@ -11,21 +13,25 @@ export default {
       args.variant ? args.variant.key : ''
     ].join(' ');
 
-    function boardConf(el, isUpdate, context) {
+    function boardConf(vnode) {
+      const el = vnode.dom;
       const config = makeConfig(args);
-      if (context.ground) {
-        context.ground.set(config);
-      } else {
-        // TODO try to avoid that
-        if (!config.bounds) {
-          config.bounds = el.getBoundingClientRect();
-        }
-        context.ground = chessground(el, config);
+      if (!config.bounds) {
+        config.bounds = el.getBoundingClientRect();
+      }
+      vnode.state.ground = chessground(el, config);
+
+    }
+
+    function boardOnUpdate(vnode) {
+      if (vnode.state.ground) {
+        const config = makeConfig(args);
+        vnode.state.ground.set(config);
       }
     }
 
     return (
-      <div className={boardClass} config={boardConf} />
+      <div className={boardClass} oncreate={boardConf} onupdate={boardOnUpdate} />
     );
   }
 };

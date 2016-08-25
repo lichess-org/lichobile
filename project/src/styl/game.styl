@@ -1,9 +1,3 @@
-.content_round
-  width 100%
-  height calc(100% - 50px)
-  @media only screen and (orientation: landscape)
-    display flex
-
 .playTable
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
@@ -12,10 +6,17 @@
   align-items center
   color #fff
   overflow hidden
+  &.crazy
+    padding 0
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto
     height initial
+    &.crazy
+      > .antagonistInfos
+        order 2
+      > .pocket
+        order 1
 
 .replay
   flex 0 0 auto
@@ -66,15 +67,16 @@
   &.active
     background-color lighten(bgdark, 8%)
 
+.rp.null
+  color textGray
+.rp.up
+  color green
+.rp.down
+  color red
+
 .antagonistInfos
   max-width calc(100% - 120px)
   overflow hidden
-  .rp.null
-    color textGray
-  .rp.up
-    color green
-  .rp.down
-    color red
   .rating
     font-size 0.9em
     color gold
@@ -87,6 +89,25 @@
     background-color lighten(bgdark, 8%)
   &.offline
     max-width 100%
+  &.crazy
+    width calc(100vw / 8 * 3)
+    max-width calc(100vw / 8 * 3)
+    padding 0 10px
+    .ratingAndMaterial
+      height inherit
+    > .antagonistUser
+      font-size 0.8em
+    > .clock
+      display inline-block
+      font-size 20px
+      text-align left
+      margin-top 2px
+      &.correspondence
+        font-size 13px
+  @media only screen and (orientation: landscape)
+    &.crazy
+      width calc((100vh - 50px) / 8 * 3)
+      max-width calc((100vh - 50px) / 8 * 3)
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -97,7 +118,6 @@
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-weight bold
   font-size 1.1em
   white-space nowrap
   > .status
@@ -207,9 +227,14 @@
     margin 0 5px
     top 17px
 
+.tableHeader
+  display flex
+  justify-content flex-start
+  align-items center
+  padding 0 10px
+
 .tableHeader, .player_controls
   .star
-    display inline-block
     width 25px
     height 25px
     padding 0
@@ -219,11 +244,11 @@
     &:before
       margin-right 0
   .icon-game
-    display inline-block
+    flex 0 0 auto
     font-size 33px
     color gold
   .game-title
-    display inline-block
+    flex 0 0 auto
     line-height 20px
     margin-left 10px
     text-align left
@@ -238,6 +263,10 @@
   &.overlay_popup > header
     line-height 1
     padding 10px
+    white-space normal
+    display flex
+    justify-content center
+    align-items center
   button
     &.draw-yes:before
       display inline-block
@@ -260,6 +289,36 @@
         border-radius 3px
   .notice
     margin 5px 0
+
+.negotiationIcons
+  background-color selectBg
+  height 70px
+  display flex
+  padding 0 10px
+  align-items center
+  border-radius 5px
+  > p
+    flex: 1 1 auto;
+    margin-right: 10px;
+  > button
+    flex: 0 0 50px;
+    height: 50px;
+    line-height: 44px;
+    font-size: 25px;
+    background: #fff;
+    &.accept
+      color: green
+      margin-right 10px
+      border-radius: 3px 0 0 3px;
+      &.active
+        background green
+        color #fff
+    &.decline
+      color: red
+      border-radius: 0 3px 3px 0;
+      &.active
+        background red
+        color #fff
 
 .player_controls, .offline_actions, .playersTable
   .result
@@ -298,11 +357,11 @@
   border: 1px solid #ccc;
 
 .submitMovePopup
-  background-color rgba(0,0,0,0.2)
+  background-color rgba(0,0,0,0.4)
   > .overlay_popup
     top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % footerHeight
     @media only screen and (orientation: landscape)
-      top calc(100vh / 2)
+      top calc((100vh - 70px) / 2)
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px - 5vw)
@@ -312,10 +371,6 @@
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
     border-radius 5px
     button
-      &[data-icon=E]:before
-        color green
-      &[data-icon=L]:before
-        color red
       &:first-child
         border-radius 5px 0 0 5px
       &:last-child
@@ -326,9 +381,83 @@
   button.berserk
     margin-bottom 10px
 
-#notesTextarea
+.notesTextarea, #notesTextarea
   width 100%
   height 100%
   border none
   padding 15px
+  &.loading
+    display flex
+    align-items center
 
+.pocket
+  border-radius 3px
+  box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
+  width calc(100vw / 8 * 5)
+  height calc(100vw / 8 + 10px)
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  background #888;
+  white-space nowrap
+  overflow hidden
+  display flex
+  flex-flow row nowrap
+  align-items center
+  justify-content space-around
+  @media only screen and (orientation: landscape)
+    height calc((100vh - 50px) / 8 + 10px)
+    max-width 60%
+    max-height 55px
+  @media only screen and (max-height 450px) and (orientation landscape)
+    height calc((100vh - 45px) / 8 + 10px)
+  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    height calc((100vh - 50px - 12vh) / 8 + 10px)
+
+.playTable.opponent.mode_facing
+  > .pocket
+    transform rotate(180deg)
+
+#page.white .playTable.mode_flip.turn_black,
+#page.black .playTable.mode_flip.turn_white
+  > .pocket
+    transform rotate(180deg)
+
+.pocket > piece
+  width calc(100vw / 8)
+  height calc(100vw / 8)
+  max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  background-position center
+  position relative
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8)
+    height calc((100vh - 50px) / 8)
+    max-width 50px
+    max-height 50px
+
+.pocket > piece:first-child
+  border-radius: 3px 0 0 3px;
+
+.pocket.usable > piece
+  transition: background-color 0.13s;
+
+.pocket > piece[data-nb='0']
+  opacity: 0.1;
+
+.pocket > piece::after
+  content: attr(data-nb);
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  line-height: 0.9em
+  padding: 3px 5px 4px 5px;
+  font-weight: bold;
+  border-radius: 2px;
+  font-size: 0.9em
+  color: #fff
+  text-shadow: 0 1px 0 #000
+  background orange
+  border-color: #b84400
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
+
+.pocket > piece[data-nb='0']::after
+  content: none;

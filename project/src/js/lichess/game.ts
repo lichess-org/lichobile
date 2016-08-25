@@ -1,18 +1,20 @@
 import gameStatus from './status';
-import { secondsToMinutes } from '../utils';
+import { secondsToMinutes, gameIcon } from '../utils';
 import settings from '../settings';
 import getVariant from './variant';
 import i18n from '../i18n';
 
+const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'crazyhouse', 'atomic', 'horde', 'racingKings'];
+
 function parsePossibleMoves(possibleMoves) {
   if (!possibleMoves) return {};
-  var r = {};
-  var keys = Object.keys(possibleMoves);
+  const r = {};
+  const keys = Object.keys(possibleMoves);
   for (var i = 0, ilen = keys.length; i < ilen; i++) {
-    var m = possibleMoves[keys[i]];
-    var a = [];
-    for (var j = 0, jlen = m.length; j < jlen; j += 2) {
-      a.push(m.substr(j, 2));
+    const mvs = possibleMoves[keys[i]];
+    const a = [];
+    for (var j = 0, jlen = mvs.length; j < jlen; j += 2) {
+      a.push(mvs.substr(j, 2));
     }
     r[keys[i]] = a;
   }
@@ -86,6 +88,10 @@ function userAnalysable(data) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
+function analysable(data) {
+  return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
+}
+
 function getPlayer(data, color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
@@ -141,7 +147,12 @@ function title(data) {
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
   const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
-  return `${time(data)} • ${name} • ${mode}`;
+  const icon = gameIcon(data.game.perf || data.game.variant.key);
+  const text = `${time(data)} • ${name} • ${mode}`;
+  return [
+    <span className="withIcon" data-icon={icon} />,
+    <span>{text}</span>
+  ];
 }
 
 function publicUrl(data) {
@@ -153,6 +164,7 @@ function isSupportedVariant(data) {
 }
 
 export default {
+  analysableVariants,
   isPlayerPlaying,
   isPlayerTurn,
   isOpponentTurn,
@@ -167,6 +179,7 @@ export default {
   mandatory,
   replayable,
   userAnalysable,
+  analysable,
   getPlayer,
   parsePossibleMoves,
   nbMoves,

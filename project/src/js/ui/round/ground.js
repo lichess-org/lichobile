@@ -1,8 +1,8 @@
 import * as chessground from 'chessground-mobile';
+import redraw from '../../utils/redraw';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { boardOrientation } from '../../utils';
-import * as m from 'mithril';
 
 function str2move(move) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
@@ -36,13 +36,22 @@ function makeConfig(data, fen, flip) {
       showDests: settings.game.pieceDestinations(),
       castle: data.game.variant.key !== 'antichess',
       events: {
-        set: () => m.redraw(),
-        unset: m.redraw
+        set: () => redraw(),
+        unset: redraw
+      }
+    },
+    predroppable: {
+      enabled: data.pref.enablePremove && data.game.variant.key === 'crazyhouse',
+      events: {
+        set: () => redraw(),
+        unset: redraw
       }
     },
     draggable: {
       distance: 3,
-      squareTarget: true
+      squareTarget: true,
+      magnified: settings.game.magnified(),
+      preventDefault: data.game.variant.key !== 'crazyhouse'
     }
   };
 }
@@ -61,13 +70,15 @@ function applySettings(ground) {
   });
 }
 
-function make(data, fen, userMove, onMove) {
+function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   var config = makeConfig(data, fen);
   config.movable.events = {
-    after: userMove
+    after: userMove,
+    afterNewPiece: userNewPiece
   };
   config.events = {
-    move: onMove
+    move: onMove,
+    dropNewPiece: onNewPiece
   };
   config.viewOnly = data.player.spectator;
   return new chessground.controller(config);

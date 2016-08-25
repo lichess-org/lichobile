@@ -49,8 +49,13 @@ p.tournamentTitle
   padding-left 10px
   margin 10px 0 5px
 
-table.tournamentList
-  width 100%
+.tournamentTabsWrapper
+  height 100%;
+
+.tournamentList
+  height calc(100% - 50px)
+  table
+    width 100%
 
 table.tournamentStandings
   width 100%
@@ -98,9 +103,31 @@ td.tournamentPoints
 .tournamentHeader
   padding 10px
 
-.tournamentInfoTime
+.tournamentInfoTime, .tournamentConditions
   padding-bottom 5px
   border-bottom 1px solid borderColor
+
+.tournamentConditions
+  font-size 0.8em
+  position relative
+  padding-left 23px
+  &.accepted
+    color green
+  &.rejected
+    color red
+  > .condition
+    &.accepted
+      color green
+    &.rejected
+      color red
+  &.anonymous
+    color inherit
+  &:before
+    font-size 18px
+    position absolute
+    top 10px
+    left 0
+    opacity 0.7
 
 .tournamentCreatorInfo
   font-size 0.85em
@@ -188,6 +215,7 @@ td.tournamentPoints
   height 30px
   line-height 20px
   margin 0 5px
+  padding 0
   width 40px
   &:before
     font-family "lichess"!important
@@ -257,18 +285,6 @@ td.tournamentPoints
   >.list_item
     >td
       vertical-align  middle
-
-.color-icon
-  &:before
-    font-family "lichess"!important
-    font-size 1.2em
-    vertical-align middle
-  &.white
-    &:before
-      content: "J"
-  &.black
-    &:before
-      content: "K"
 
 #tournamentPlayerInfoModal
   > .modal_content

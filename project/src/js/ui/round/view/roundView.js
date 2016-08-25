@@ -1,10 +1,9 @@
 import * as m from 'mithril';
 import socket from '../../../socket';
 import session from '../../../session';
-import challengesApi from '../../../lichess/challenges';
-import friendsApi from '../../../lichess/friends';
 import variantApi from '../../../lichess/variant';
 import * as chessground from 'chessground-mobile';
+import round from '../round';
 import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
@@ -22,11 +21,11 @@ import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import chat from '../chat';
 import notes from '../notes';
+import crazyView from '../crazy/crazyView';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
 export default function view(ctrl) {
-
   const isPortrait = helper.isPortrait();
 
   return layout.board(
@@ -43,8 +42,8 @@ function overlay(ctrl, isPortrait) {
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data(), ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data(), ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
+    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
   ];
 }
 
@@ -59,19 +58,18 @@ export function renderMaterial(material) {
       content = [];
       for (let i = 0; i < count; i++) content.push(piece);
     }
-    children.push(<div className="tomb">{content}</div>);
+    children.push(<div className="tomb" key={role}>{content}</div>);
   }
   return children;
 }
 
 function renderTitle(ctrl) {
-  function tcConfig(el, isUpdate) {
-    if (!isUpdate) {
-      el.textContent =
-        utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
-        ' • ';
-      ctrl.vm.tClockEl = el;
-    }
+  function tcConfig(vnode) {
+    const el = vnode.dom;
+    el.textContent =
+      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
+      ' • ';
+    ctrl.vm.tClockEl = el;
   }
   if (!utils.hasNetwork() || socket.isConnected()) {
     return (
@@ -82,9 +80,9 @@ function renderTitle(ctrl) {
           <span className="fa fa-trophy" /> : null
         }
         {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span config={tcConfig}>
+          <span oncreate={tcConfig}>
           {
-            utils.formatTournamentCountdown(ctrl.data.tournament.secondsToFinish) +
+            utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
             ' • '
           }
           </span> : null
@@ -103,19 +101,10 @@ function renderTitle(ctrl) {
 }
 
 function renderHeader(ctrl) {
-  const hash = '' + utils.hasNetwork() + session.isConnected() + socket.isConnected() +
-    friendsApi.count() + challengesApi.incoming().length + session.nowPlaying().length +
-    session.myTurnGames().length + ctrl.data.tv + ctrl.data.player.spectator;
-
-  if (ctrl.vm.headerHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.headerHash = hash;
-
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      { !ctrl.data.tv && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
-      { ctrl.data.tv || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
+      { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
+      { ctrl.data.tv || ctrl.data.userTV || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>
   );
@@ -125,7 +114,7 @@ function renderContent(ctrl, isPortrait) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
-  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), 'game');
+  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
   const board = Board(
     ctrl.data,
     ctrl.chessground,
@@ -163,30 +152,23 @@ function renderContent(ctrl, isPortrait) {
   }
 }
 
-function renderRatingDiff(player) {
-  if (typeof player.ratingDiff === 'undefined') return null;
-  if (player.ratingDiff === 0) return m('span.rp.null', ' +0');
-  if (player.ratingDiff > 0) return m('span.rp.up', ' +' + player.ratingDiff);
-  if (player.ratingDiff < 0) return m('span.rp.down', ' ' + player.ratingDiff);
-
-  return null;
-}
-
 function getChecksCount(ctrl, color) {
   const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
   return player.checks;
 }
 
 function renderSubmitMovePopup(ctrl) {
-  if (!ctrl.vm.moveToSubmit) return null;
-
-  return (
-    <div className="overlay_popup_wrapper submitMovePopup">
+  if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit) {
+    return (
+      <div className="overlay_popup_wrapper submitMovePopup">
       <div className="overlay_popup">
-        {gameButton.submitMove(ctrl)}
+      {gameButton.submitMove(ctrl)}
       </div>
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return null;
 }
 
 function userInfos(user, player, playerName, position) {
@@ -202,9 +184,13 @@ function userInfos(user, player, playerName, position) {
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
-  const vmKey = position + 'Hash';
+function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy) {
   const user = player.user;
+  // TODO get that from server
+  if (player.ai) {
+    player.engineName = ctrl.data.game.variant.key === 'crazyhouse' ?
+      'Sunsetter' : 'Stockfish';
+  }
   const playerName = utils.playerName(player, !isPortrait);
   const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
   const vConf = user ?
@@ -214,18 +200,13 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
+  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
 
-  const hash = ctrl.data.game.id + playerName + onlineStatus + player.onGame + player.rating + player.provisional + player.ratingDiff + checksNb + Object.keys(material).map(k => k + material[k]).join('') + isPortrait + tournamentRank;
-
-  if (ctrl.vm[vmKey] === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm[vmKey] = hash;
-
   return (
-    <div className="antagonistInfos" config={vConf}>
+    <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         {user ?
           <span className={'status ' + onlineStatus} data-icon="r" /> :
@@ -237,7 +218,11 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           <span className="ongame yes" data-icon="3" /> :
           <span className="ongame no" data-icon="0" />
         }
+        { isCrazy && position === 'opponent' && user && (user.engine || user.booster) ?
+          <span className="warning" data-icon="j"></span> : null
+        }
       </h2>
+      { !isCrazy ?
       <div className="ratingAndMaterial">
         { position === 'opponent' && user && (user.engine || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
@@ -246,14 +231,23 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
           <h3 className="rating">
             {player.rating}
             {player.provisional ? '?' : ''}
-            {renderRatingDiff(player)}
+            {helper.renderRatingDiff(player)}
           </h3> : null
         }
         {checksNb !== undefined ?
           <div className="checkCount">{checksNb}</div> : null
         }
         {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
-      </div>
+      </div> : null
+      }
+      {isCrazy && ctrl.clock ?
+        renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
+        isCrazy && ctrl.correspondenceClock ?
+          renderCorrespondenceClock(
+            ctrl.correspondenceClock, player.color, ctrl.data.game.player
+          ) : null
+        )
+      }
     </div>
   );
 }
@@ -261,13 +255,16 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait) {
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
+  const step = round.plyStep(ctrl.data, ctrl.vm.ply);
+  const isCrazy = !!step.crazy;
 
   return (
-    <section className="playTable" key={key}>
-      {renderAntagonistInfo(ctrl, player, material, position, isPortrait)}
-      {ctrl.clock ?
+    <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
+      {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
+      {crazyView.pocket(ctrl, step.crazy, player.color, position)}
+      {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
-        ctrl.correspondenceClock ?
+        !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
@@ -390,7 +387,7 @@ function gameInfos(ctrl) {
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
   const variant = m('span.variant', {
-    config: helper.ontouch(
+    oncreate: helper.ontouch(
       () => {
         var link = variantApi(data.game.variant.key).link;
         if (link)
@@ -405,8 +402,8 @@ function gameInfos(ctrl) {
       'data-icon': icon ? icon : ''
     }),
     m('div.game-title.no_select', infos),
-    session.isConnected() ? m('gameButton.star', {
-      config: helper.ontouch(
+    session.isConnected() ? m('button.star', {
+      oncreate: helper.ontouch(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
       ),
@@ -426,22 +423,11 @@ function renderGamePopup(ctrl, isPortrait) {
   );
 }
 
-function renderGameActionsBar(ctrl, isPortrait) {
+function renderGameActionsBar(ctrl) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||
     ctrl.data.opponent.offeringRematch;
-
-  const prevPly = ctrl.vm.ply - 1;
-  const nextPly = ctrl.vm.ply + 1;
-  const bwdOn = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
-  const fwdOn = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
-  const hash = ctrl.data.game.id + answerRequired + ctrl.data.opponent.proposingTakeback + ctrl.data.opponent.offeringDraw + (!ctrl.chat || ctrl.chat.unread) + ctrl.vm.flip + bwdOn + fwdOn + isPortrait;
-
-  if (ctrl.vm.buttonsHash === hash) return {
-    subtree: 'retain'
-  };
-  ctrl.vm.buttonsHash = hash;
 
   const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',
@@ -456,8 +442,8 @@ function renderGameActionsBar(ctrl, isPortrait) {
 
   const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null;
   const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" config={helper.ontouch(ctrl.showActions)} /> :
-    <button className={gmClass} key="gameMenu" config={helper.ontouch(ctrl.showActions)} />;
+    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} /> :
+    <button className={gmClass} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} />;
 
   const chatClass = [
     'action_bar_button',
@@ -469,7 +455,7 @@ function renderGameActionsBar(ctrl, isPortrait) {
       {gmButton}
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat"
-        config={helper.ontouch(ctrl.chat.open)} /> : null
+        oncreate={helper.ontouch(ctrl.chat.open)} /> : null
       }
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}

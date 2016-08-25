@@ -1,3 +1,4 @@
+import router from '../../router';
 import session from '../../session';
 import loginModal from '../loginModal';
 import challengesApi from '../../lichess/challenges';
@@ -9,7 +10,8 @@ import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import * as m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   var overlay;
 
   const header = utils.partialf(headerWidget, 'lichess.org');
@@ -54,20 +56,20 @@ function joinPopup(ctrl) {
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
       m('div.go_or_cancel', [
         m('button.binary_choice[data-icon=E].withIcon', {
-          config: helper.ontouch(loginModal.open)
+          oncreate: helper.ontouch(loginModal.open)
         }, i18n('signIn')),
         m('button.binary_choice[data-icon=L].withIcon', {
-          config: helper.ontouch(utils.backHistory)
+          oncreate: helper.ontouch(utils.backHistory)
         }, i18n('cancel'))
       ])
     ]);
   } else {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E].withIcon', {
-          config: helper.ontouch(ctrl.joinChallenge)
+          oncreate: helper.ontouch(ctrl.joinChallenge)
       }, i18n('join')),
       m('button.binary_choice[data-icon=L].withIcon', {
-        config: helper.ontouch(ctrl.declineChallenge)
+        oncreate: helper.ontouch(ctrl.declineChallenge)
       }, i18n('decline'))
     ]);
   }
@@ -109,12 +111,12 @@ function awaitInvitePopup(ctrl) {
           m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
           m('div.go_or_cancel.clearfix', [
             m('button.binary_choice[data-icon=E].withIcon', {
-              config: helper.ontouch(function() {
+              oncreate: helper.ontouch(function() {
                 window.plugins.socialsharing.share(null, null, null, publicUrl(challenge));
               })
             }, i18n('shareGameURL')),
             m('button.binary_choice[data-icon=L].withIcon', {
-              config: helper.ontouch(ctrl.cancelChallenge)
+              oncreate: helper.ontouch(ctrl.cancelChallenge)
             }, i18n('cancel'))
           ]),
           m('br'),
@@ -122,7 +124,7 @@ function awaitInvitePopup(ctrl) {
           isPersistent ? m('div', [
             m('br'),
             m('button', {
-              config: helper.ontouch(() => m.route('/'))
+              oncreate: helper.ontouch(() => router.set('/'))
             }, [m('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
         ]);
@@ -144,7 +146,7 @@ function awaitChallengePopup(ctrl) {
         <div className="loader"><span data-icon="U" /></div>
         <br />
         <p>{i18n('waitingForOpponent')}</p>
-        <button className="withIcon" data-icon="L" config={helper.ontouch(ctrl.cancelChallenge)}>
+        <button className="withIcon" data-icon="L" oncreate={helper.ontouch(ctrl.cancelChallenge)}>
           {i18n('cancel')}
         </button>
         <br />

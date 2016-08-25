@@ -147,7 +147,7 @@ h3.fullname
   .iconStar
     position absolute
     left 15px
-    bottom 15px
+    bottom 13px
     width 30px
     padding 0
     text-align center
@@ -179,32 +179,46 @@ h3.fullname
       color green
     &.loose
       color red
-  .opening
+  .opening, .analysed
     margin-top 1em
     font-size 0.8em
-  @media only screen and (min-width 600px)
+  @media only screen and (orientation: landscape), only screen and (orientation portrait) and (min-width 600px)
     > .nav
       display flex
     .display_board
-      width 200px
-      height 200px
+      width 125px
+      height 125px
     .iconStar
       top 15px
       right 15px
       left initial
       bottom initial
     .iconGame
-      left 230px
+      left 155px
     .infos
       padding-left 50px
+  @media only screen and (orientation landscape) and (min-height 450px)
+    .display_board
+      width 150px
+      height 150px
+    .iconGame
+      left 180px
+  @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
+    .display_board
+      width 200px
+      height 200px
+    .iconGame
+      left 230px
 
 #filterGames
   padding-left 15px
 
-div.variantPerfBody
+.variantPerfBody
   width: 100%
   padding 10px 10px 0
   font-size 0.85em
+  .empty
+    display none
 
 table.variantPerf
   width: 100%
@@ -238,9 +252,6 @@ th.variantPerfMemo
 td.variantPerfMemo
   text-align right
   font-style italic
-
-.empty
-  display none
 
 .variantPerfGames
   > .nav

@@ -48,18 +48,19 @@ export default function(
     width: bounds.width + 'px'
   } : {};
 
-  function wrapperConfig(el, isUpdate) {
-    if (!isUpdate) {
-      const icon = gameIcon(data.game.variant.key);
-      if (icon && data.game.variant.key !== 'standard' && data.game.status &&
-        gameApi.isPlayerPlaying(data)) {
-          variantReminder(el, icon);
-        }
-    }
+  function wrapperOnCreate(vnode) {
+    const el = vnode.dom;
+    const icon = gameIcon(data.game.variant.key);
+    if (icon && data.game.variant.key !== 'standard' && data.game.status &&
+      gameApi.isPlayerPlaying(data)) {
+        variantReminder(el, icon);
+      }
   }
 
-  function boardConfig(el, isUpdate) {
-    if (!isUpdate) {
+  function boardOnCreate(vnode) {
+    // fix nasty race condition bug when going from analysis to otb
+    const el = vnode.dom;
+    if (chessgroundCtrl) {
       if (!bounds) {
         chessgroundCtrl.setBounds(el.getBoundingClientRect());
       } else {
@@ -69,12 +70,22 @@ export default function(
     }
   }
 
+  function boardOnRemove() {
+    if (chessgroundCtrl) chessgroundCtrl.unload();
+  }
+
+  // fix nasty race condition bug when going from analysis to otb
+  if (!chessgroundCtrl) return null;
+
   return (
-    <section className={wrapperClass} config={wrapperConfig}
+    <section className={wrapperClass} oncreate={wrapperOnCreate}
       style={wrapperStyle} key={key}
     >
-    <div className={boardClass} config={boardConfig} />
-    { chessgroundCtrl.data.premovable.current ?
+    <div className={boardClass}
+      oncreate={boardOnCreate}
+      onremove={boardOnRemove}
+    />
+    { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current.key ?
       <div className="board_alert">
         {i18n('premoveEnabledClickAnywhereToCancel')}
       </div> : alert ?
@@ -84,7 +95,7 @@ export default function(
     }
     {
       shapes && shapes.length ?
-      m.component(BoardBrush, {
+      m(BoardBrush, {
         bounds,
         orientation: chessgroundCtrl.data.orientation,
         shapes

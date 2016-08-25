@@ -1,5 +1,5 @@
-import { request, apiVersion } from './http';
-import { lichessSri, noop } from './utils';
+import { fetchJSON, fetchText, apiVersion } from './http';
+import { lichessSri } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
@@ -20,7 +20,7 @@ interface GameSetup {
 
 export function newAiGame(fen: string) {
   const config = settings.gameSetup.ai;
-  const data: GameSetup = {
+  const body: GameSetup = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -30,29 +30,29 @@ export function newAiGame(fen: string) {
     color: config.color()
   };
 
-  if (fen) data.fen = fen;
+  if (fen) body.fen = fen;
 
-  return request('/setup/ai', {
+  return fetchJSON('/setup/ai', {
     method: 'POST',
-    data
+    body: JSON.stringify(body)
   }, true);
 }
 
 export function seekGame() {
-  var config = settings.gameSetup.human;
-  return request('/setup/hook/' + lichessSri, {
+  const config = settings.gameSetup.human;
+  return fetchJSON('/setup/hook/' + lichessSri, {
     method: 'POST',
-    data: {
+    body: JSON.stringify({
       variant: config.variant(),
       timeMode: config.timeMode(),
       days: config.days(),
       time: config.time(),
       increment: config.increment(),
-      color: 'random',
+      color: config.color(),
       mode: session.isConnected() ? config.mode() : '0',
       membersOnly: config.membersOnly(),
       ratingRange: config.ratingMin() + '-' + config.ratingMax()
-    }
+    })
   }, true);
 }
 
@@ -60,7 +60,7 @@ export function challenge(userId: string, fen: string) {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 
-  const data: GameSetup = {
+  const body: GameSetup = {
     variant: config.variant(),
     timeMode: config.timeMode(),
     days: config.days(),
@@ -70,72 +70,69 @@ export function challenge(userId: string, fen: string) {
     mode: session.isConnected() ? config.mode() : '0'
   };
 
-  if (fen) data.fen = fen;
+  if (fen) body.fen = fen;
 
-  return request(url, {
+  return fetchJSON(url, {
     method: 'POST',
-    data
+    body: JSON.stringify(body)
   }, true);
 }
 
 export function getChallenges() {
-  return request('/challenge', {}, true);
+  return fetchJSON('/challenge', {}, true);
 }
 
-export function getChallenge(id: string) {
-  return request(`/challenge/${id}`, {}, true);
+export function getChallenge(id) {
+  return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id: string) {
-  return request(`/challenge/${id}/cancel`, {
-    method: 'POST',
-    deserialize: v => v
+export function cancelChallenge(id) {
+  return fetchText(`/challenge/${id}/cancel`, {
+    method: 'POST'
   }, true);
 }
 
-export function declineChallenge(id: string) {
-  return request(`/challenge/${id}/decline`, {
-    method: 'POST',
-    deserialize: v => v
+export function declineChallenge(id) {
+  return fetchText(`/challenge/${id}/decline`, {
+    method: 'POST'
   }, true);
 }
 
-export function acceptChallenge(id: string) {
-  return request(`/challenge/${id}/accept`, { method: 'POST'}, true);
+export function acceptChallenge(id) {
+  return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
-export function lobby(feedback: boolean) {
-  return request('/', null, feedback);
+export function lobby(feedback) {
+  return fetchJSON('/', null, feedback);
 }
 
-export function seeks(feedback: boolean) {
-  return request('/lobby/seeks', null, feedback);
+export function seeks(feedback) {
+  return fetchJSON('/lobby/seeks', null, feedback);
 }
 
-export function game(id: string, color?: string, background?: boolean) {
-  var url = '/' + id;
+export function game(id, color) {
+  const url = '/' + id;
   if (color) url += ('/' + color);
-  return request(url, { background }, true);
+  return fetchJSON(url, null);
 }
 
-export function toggleGameBookmark(id: string) {
-  return request('/bookmark/' + id, {
-    method: 'POST',
-    deserialize: v => v
+export function toggleGameBookmark(id) {
+  return fetchText('/bookmark/' + id, {
+    method: 'POST'
   });
 }
 
-export function featured(channel: string, flip?: boolean) {
-  return request('/tv/' + channel, flip ? { data: { flip: 1 }} : {});
+export function featured(channel, flip) {
+  return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
 export function setServerLang(lang: string) {
   if (session.isConnected()) {
-    return request('/translation/select', {
+    return fetchJSON('/translation/select', {
       method: 'POST',
-      data: {
+      body: JSON.stringify({
         lang
-      }
+      })
     });
   } else {
     return Promise.resolve();
@@ -143,22 +140,21 @@ export function setServerLang(lang: string) {
 }
 
 export function miniUser(userId: string) {
-  return request(`/@/${userId}/mini`);
+  return fetchJSON(`/@/${userId}/mini`);
 }
 
 export function timeline() {
-  return request('/timeline', { background: true }, false);
+  return fetchJSON('/timeline', null, false);
 }
 
 export function status() {
-  return request('/api/status', {
-    background: true
-  }).then(function(data) {
+  return fetchJSON('/api/status')
+  .then(function(data) {
     if (data.api.current !== apiVersion) {
-      for (var i = 0, len = data.api.olds.length; i < len; i++) {
-        var o = data.api.olds[i];
+      for (let i = 0, len = data.api.olds.length; i < len; i++) {
+        const o = data.api.olds[i];
         if (o.version === apiVersion) {
-          var now = new Date(),
+          const now = new Date(),
             unsupportedDate = new Date(o.unsupportedAt),
             deprecatedDate = new Date(o.deprecatedAt);
 

@@ -1,59 +1,40 @@
-import { connectingHeader, viewOnlyBoardContent } from './shared/common';
-import layout from './layout';
+import m from 'mithril';
+import router from '../router';
 import helper from './helper';
-import * as utils from '../utils';
+import { handleXhrError } from '../utils';
 import * as xhr from '../xhr';
+import { LoadingBoard } from './shared/common';
 import settings from '../settings';
 import roundCtrl from './round/roundCtrl';
 import roundView from './round/view/roundView';
-import * as m from 'mithril';
 
 export default {
-  controller: function() {
-    var round;
-
+  oninit(vnode) {
     helper.analyticsTrackView('TV');
 
-    function onChannelChange() {
-      m.route('/tv');
-    }
+    const onChannelChange = () => router.set('/tv', true);
+    const onFeatured = () => router.set('/tv', true);
 
-    function onFeatured(o) {
-      xhr.game(o.id, o.color).then(function(data) {
-        m.redraw.strategy('all');
-        if (round) round.onunload();
-        data.tv = settings.tv.channel();
-        round = new roundCtrl(data, onFeatured, onChannelChange);
-      }, function(error) {
-        utils.handleXhrError(error);
-      });
-    }
-
-    xhr.featured(settings.tv.channel(), m.route.param('flip')).then(function(data) {
-      data.tv = settings.tv.channel();
-      round = new roundCtrl(data, onFeatured, onChannelChange);
-    }, function(error) {
-      utils.handleXhrError(error);
-      m.route('/');
-    });
-
-    return {
-      getRound: function() { return round; },
-
-      onunload: function() {
-        if (round) {
-          round.onunload();
-          round = null;
-        }
-      }
-    };
+    xhr.featured(settings.tv.channel(), vnode.attrs.flip)
+    .then(d => {
+      d.tv = settings.tv.channel();
+      this.round = new roundCtrl(vnode, d, onFeatured, onChannelChange);
+    })
+    .catch(handleXhrError);
   },
 
-  view: function(ctrl) {
-    if (ctrl.getRound()) return roundView(ctrl.getRound());
+  oncreate: helper.viewFadeIn,
 
-    const header = connectingHeader.bind(undefined, 'Lichess TV');
+  onremove() {
+    window.plugins.insomnia.allowSleepAgain();
+    this.round.unload();
+  },
 
-    return layout.board(header, viewOnlyBoardContent);
+  view() {
+    if (this.round) {
+      return roundView(this.round);
+    } else {
+      return m(LoadingBoard);
+    }
   }
 };

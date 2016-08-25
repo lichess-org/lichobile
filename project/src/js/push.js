@@ -1,8 +1,10 @@
+import router from './router';
+import redraw from './utils/redraw';
 import session from './session';
 import settings from './settings';
 import i18n from './i18n';
 import { lightPlayerName } from './utils';
-import { request } from './http';
+import { fetchText } from './http';
 import challengesApi from './lichess/challenges';
 import * as m from 'mithril';
 
@@ -32,9 +34,8 @@ export default {
           // we won't try to register again on failure for now
           const platform = window.cordova.platformId;
           const deviceId = encodeURIComponent(data.registrationId);
-          request(`/mobile/register/${platform}/${deviceId}`, {
-            method: 'POST',
-            deserialize: v => v
+          fetchText(`/mobile/register/${platform}/${deviceId}`, {
+            method: 'POST'
           });
         }
       });
@@ -49,27 +50,27 @@ export default {
             if (payload.userData) {
               switch (payload.userData.type) {
                 case 'challengeCreate':
-                  challengesApi.refresh().then(() => m.redraw());
+                  challengesApi.refresh().then(() => redraw());
                   break;
                 case 'challengeAccept':
-                  Promise.all([
+                  m.prop.merge([
                     challengesApi.refresh(),
                     session.refresh()
                   ])
                   .then(() => {
                     window.plugins.toast.show(
                       i18n('userAcceptsYourChallenge', lightPlayerName(payload.userData.joiner)), 'long', 'top');
-                    m.redraw();
+                    redraw();
                   });
                   break;
                 case 'gameMove':
                   session.refresh().then(v => {
-                    if (v) m.redraw();
+                    if (v) redraw();
                   });
                   break;
                 case 'gameFinish':
                   session.refresh()
-                  .then(() => m.redraw());
+                  .then(() => redraw());
                   break;
               }
             }
@@ -78,17 +79,17 @@ export default {
           else if (payload.userData) {
             switch (payload.userData.type) {
               case 'challengeCreate':
-                m.route(`/challenge/${payload.userData.challengeId}`);
+                router.set(`/challenge/${payload.userData.challengeId}`);
                 break;
               case 'challengeAccept':
                 challengesApi.refresh();
-                m.route(`/game/${payload.userData.challengeId}`);
+                router.set(`/game/${payload.userData.challengeId}`);
                 break;
               case 'gameMove':
-                m.route(`/game/${payload.userData.fullId}`);
+                router.set(`/game/${payload.userData.fullId}`);
                 break;
               case 'gameFinish':
-                m.route(`/game/${payload.userData.fullId}`);
+                router.set(`/game/${payload.userData.fullId}`);
                 break;
             }
           }
@@ -101,9 +102,8 @@ export default {
   unregister() {
     if (push) {
       push.unregister(function() {
-        request('/mobile/unregister', {
-          method: 'POST',
-          deserialize: v => v
+        fetchText('/mobile/unregister', {
+          method: 'POST'
         }).then(() => {
           push = null;
         });

@@ -1,0 +1,110 @@
+.clockContainer
+  background bgdark
+  display flex
+  flex-flow column nowrap
+  align-items center
+  justify-content space-around
+  width 100%
+  height 100%
+  @media only screen and (orientation: landscape)
+    flex-flow row wrap
+
+.clockTapArea
+  background linear-gradient(to bottom, #e4e4e4 0%, #c2c2c2 100%)
+  box-shadow inset 0 -1px 3px rgba(0,0,0,0.8), inset 0 1px 3px rgba(255,255,255,0.6)
+  border-radius 10px
+  color bgdark
+  width 93%
+  height 40%
+  display flex
+  flex-flow column nowrap
+  align-items center
+  justify-content space-around
+  opacity 0.8
+  &.top
+    transform rotate(180deg)
+  &.running
+    opacity 1
+    background linear-gradient(to bottom, #bfa163 0%, #aa8945 100%)
+    .clockTime
+      color white
+  &.flagged
+    opacity 1
+    color white
+    background linear-gradient(to bottom, #b86765 0%, #89413f 100%)
+  @media only screen and (orientation: landscape)
+    width 45%
+    height 50%
+    order 3
+    &.top
+      transform none
+      order 2
+      .clockStageInfo
+        order 2
+
+.clockControls
+  width 85%
+  height 10%
+  display flex
+  flex-flow row nowrap
+  align-items center
+  justify-content space-around
+  font-size 3em
+  opacity 0.7
+  > span
+    width 25%
+    text-align center
+    margin-right 0
+  @media only screen and (orientation: landscape)
+    order 1
+
+.clockTime
+  font-size 100px
+  &.long
+    font-size 70px
+  &.flagged
+    font-family "lichess"!important
+    font-size 8em
+  @media only screen and (orientation portrait) and (min-width 360px)
+    font-size 120px
+    &.long
+      font-size 90px
+  @media only screen and (orientation portrait) and (min-width 410px)
+    font-size 130px
+    &.long
+      font-size 100px
+  @media only screen and (orientation landscape) and (min-width 568px)
+    font-size 90px
+    &.long
+      font-size 70px
+
+.clockStageInfo
+  font-size 1.2em
+  color rgba(bgdark, 0.7)
+
+.stageRow
+  display flex
+  flex-flow row nowrap
+  align-items center
+  margin-top 15px
+  >.stageRowTitle
+    flex: 1 5%
+  >.stageRowMember
+    flex: 9.5 47.5%
+    margin-top 0px
+    margin-left 5px
+    &.select_input
+      &.lastStage
+        display none
+    &.addSubtractStage
+      display none
+      &.lastStage
+        display block
+        margin-right 2%
+        text-align center
+        font-size 2em
+        >.hiddenButton
+          display none
+
+.clock_settings > .popup_content
+  padding 0

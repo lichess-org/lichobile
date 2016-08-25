@@ -6,7 +6,8 @@ import i18n from '../../../i18n';
 import * as m from 'mithril';
 import {shortPerfTitle} from '../../../lichess/perfs';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
   const header = utils.partialf(headerWidget, null,
     backButton(ctrl.user() ? (ctrl.user().username + ' ' + shortPerfTitle(ctrl.variant) + ' stats') : '')
   );
@@ -148,12 +149,12 @@ export default function view(ctrl) {
 }
 
 function renderGame(game) {
-  var opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
-  var date = game.at.substring(0, 10);
-  var gameId = game.gameId;
+  const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
+  const date = game.at.substring(0, 10);
+  const gameId = game.gameId;
 
   return (
-    <div class="list_item nav" config={helper.ontouchY(() => m.route('/game/' + gameId))}>
+    <div class="list_item nav" oncreate={helper.ontouchY(() => router.set('/analyse/online/' + gameId))}>
       {opp} ({date})
     </div>
   );

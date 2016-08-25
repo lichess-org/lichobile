@@ -72,6 +72,16 @@
   window.plugins.insomnia.allowSleepAgain = noop;
   window.plugins.insomnia.keepAwake = noop;
 
+  // status bar
+  window.StatusBar = {};
+  window.StatusBar.show = noop;
+  window.StatusBar.hide = noop;
+
+  // fullscreen
+  window.AndroidFullScreen = {};
+  window.AndroidFullScreen.showSystemUI = noop;
+  window.AndroidFullScreen.immersiveMode = noop;
+
   // device
   window.device = {
     cordova: 'browser',
@@ -135,7 +145,7 @@ if (!window.Stockfish) {
         if (stockfishWorker) {
           setTimeout(resolve);
         } else {
-          stockfishWorker = new Worker('../stockfish6.js');
+          stockfishWorker = new Worker('vendor/stockfish.js');
           setTimeout(resolve, 10);
         }
       });

@@ -1,4 +1,5 @@
 import helper from '../helper';
+import redraw from '../../utils/redraw';
 import i18n from '../../i18n';
 import storage from '../../storage';
 import gameApi from '../../lichess/game';
@@ -7,7 +8,7 @@ import socket from '../../socket';
 import * as m from 'mithril';
 
 export default {
-  controller: function(root) {
+  controller(root) {
 
     const storageId = 'chat.' + root.data.game.id;
 
@@ -52,7 +53,7 @@ export default {
       this.messages.push(msg);
       storage.set(storageId, this.messages.length);
       if (msg.u !== 'lichess') this.unread = true;
-      m.redraw();
+      redraw();
     }.bind(this);
 
     function onKeyboardShow(e) {
@@ -76,28 +77,28 @@ export default {
     window.addEventListener('native.keyboardhide', onKeyboardHide);
     window.addEventListener('native.keyboardshow', onKeyboardShow);
 
-    this.onunload = function() {
+    this.unload = function() {
       if (!gameApi.playable(this.root.data)) storage.remove(storageId);
       document.removeEventListener('native.keyboardhide', onKeyboardHide);
       document.removeEventListener('native.keyboardshow', onKeyboardShow);
     }.bind(this);
   },
 
-  view: function(ctrl) {
+  view(ctrl) {
 
     if (!ctrl.showing) return null;
 
-    return m('div#chat.modal', { config: helper.slidesInUp }, [
+    return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
       m('header', [
         m('button.modal_close[data-icon=L]', {
-          config: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
+          oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
         }),
         m('h2', ctrl.root.data.opponent.user ?
           ctrl.root.data.opponent.user.username : i18n('chat'))
       ]),
       m('div.modal_content', [
         m('div#chat_scroller.native_scroller', {
-          config: el => {
+          oncreate: el => {
             el.scrollTop = el.scrollHeight;
           }
         }, [
@@ -124,9 +125,7 @@ export default {
                 opponent: !lichessTalking && !playerTalking,
                 'close_balloon': closeBalloon
               })
-            }, [
-              m.trust(msg.t)
-            ]);
+            }, msg.t);
           }))
         ]),
         m('form.chat_form', {
@@ -145,10 +144,8 @@ export default {
             placeholder: i18n('talkInChat'),
             autocomplete: 'off',
             value: ctrl.inputValue,
-            config: function(el, isUpdate) {
-              if (!isUpdate) {
-                el.addEventListener('input', inputListener.bind(undefined, ctrl));
-              }
+            oncreate: function(vnode) {
+              vnode.dom.addEventListener('input', inputListener.bind(undefined, ctrl));
             }
           }),
           m('button.chat_send[data-icon=z]')

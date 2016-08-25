@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import redraw from '../utils/redraw';
 import helper from './helper';
 import backbutton from '../backbutton';
 import { loader } from './shared/common';
@@ -33,6 +34,7 @@ lobby.startSeeking = function() {
       n: (_, d) => {
         nbPlayers = d.d;
         nbGames = d.r;
+        redraw();
       },
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);
@@ -79,7 +81,7 @@ lobby.view = function() {
       m('br'),
       m('br'),
       m('button[data-icon=L]', {
-        config: helper.ontouch(lobby.cancelSeeking)
+        oncreate: helper.ontouch(lobby.cancelSeeking)
       }, i18n('cancel'))
     ]);
   }
@@ -94,10 +96,12 @@ lobby.view = function() {
 
 function createHook() {
   if (hookId) return; // hook already created!
-  xhr.seekGame().then(function(data) {
+  xhr.seekGame()
+  .then(data => {
     helper.analyticsTrackEvent('Seek', 'Created');
     hookId = data.hook.id;
-  }, utils.handleXhrError);
+  })
+  .catch(utils.handleXhrError);
 }
 
 export default lobby;

@@ -34,7 +34,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        null,
+        () => <div><span className="fa fa-beer" />{i18n('playOnTheBoardOffline')}</div>,
         function() {
           return (
             <div>
@@ -44,8 +44,8 @@ export default {
                 </div>
               </div>
               <button className="newGameButton" data-icon="E"
-                config={helper.ontouch(() => ctrl.root.startNewGame())}>
-                {i18n('createAGame')}
+                oncreate={helper.ontouch(() => ctrl.root.startNewGame())}>
+                {i18n('play')}
               </button>
             </div>
           );

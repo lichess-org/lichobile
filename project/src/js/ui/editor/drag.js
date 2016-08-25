@@ -18,7 +18,7 @@ export default function(ctrl, e) {
     color: color
   };
   const bounds = cgData.bounds;
-  const squareBounds = e.target.parentNode.getBoundingClientRect();
+  const squareBounds = util.computeSquareBounds(cgData.orientation, bounds, key);
   const position = util.eventPosition(e);
   const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
@@ -38,5 +38,10 @@ export default function(ctrl, e) {
   // must render synchronously to have dragging piece
   cgData.render();
   cgData.draggable.current.draggingPiece = cgData.element.querySelector('.' + key + ' > piece');
+  cgData.draggable.current.draggingPiece.classList.add('dragging');
+  if (cgData.draggable.magnified) {
+    cgData.draggable.current.draggingPiece.classList.add('magnified');
+  }
+  cgData.draggable.current.draggingPiece.cgDragging = true;
   drag.processDrag(cgData);
 }

@@ -1,35 +1,28 @@
 import * as xhr from '../userXhr';
 import socket from '../../../socket';
-import * as utils from '../../../utils';
 import * as m from 'mithril';
+import { handleXhrError } from '../../../utils';
 
-export default function controller() {
-  const userId = m.route.param('id');
-  const variant = m.route.param('variant');
+export default function oninit(vnode) {
+  const userId = vnode.attrs.id;
+  const variant = vnode.attrs.variant;
   const user = m.prop();
   const variantPerfData = m.prop();
 
   socket.createDefault();
 
-  xhr.user(userId).then(data => {
-    user(data);
-    return data;
-  }, error => {
-    utils.handleXhrError(error);
-    m.route('/');
-    throw error;
-  });
+  Promise.all([
+    xhr.user(userId),
+    xhr.variantperf(userId, variant)
+  ])
+  .then(results => {
+    const [userData, variantData] = results;
+    user(userData);
+    variantPerfData(variantData);
+  })
+  .catch(handleXhrError);
 
-  xhr.variantperf(userId, variant).then(data => {
-    variantPerfData(data);
-    return data;
-  }, error => {
-    utils.handleXhrError(error);
-    m.route('/');
-    throw error;
-  });
-
-  return {
+  vnode.state = {
     userId,
     variant,
     user,

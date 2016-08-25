@@ -1,11 +1,12 @@
+import router from '../../../router';
 import { header } from '../../shared/common';
 import { gameIcon } from '../../../utils';
 import helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
-import * as m from 'mithril';
 
-export default function view(ctrl) {
+export default function view(vnode) {
+  const ctrl = vnode.state;
 
   return layout.free(
     header.bind(undefined, 'Following'),
@@ -33,10 +34,10 @@ export function renderPlayer(ctrl, obj) {
   const status = obj.online ? 'online' : 'offline';
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
   const perf = obj.perfs && obj.perfs[perfKey];
-  const userLink = helper.ontouchY(() => m.route(`/@/${obj.user}`));
+  const userLink = helper.ontouchY(() => router.set(`/@/${obj.user}`));
   return (
     <li className="list_item followingList">
-      <div className="followingPlayerTitle" config={userLink}>
+      <div className="followingPlayerTitle" oncreate={userLink}>
         <div className="user">
           <span className={'userStatus ' + status} data-icon="r" />
           {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
@@ -58,7 +59,7 @@ export function renderPlayer(ctrl, obj) {
         </div> : null
       }
       <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
-        config={helper.ontouchY(() => ctrl.challenge(obj.user))}
+        oncreate={helper.ontouchY(() => ctrl.challenge(obj.user))}
       >
         {i18n('challengeToPlay')}
       </div>

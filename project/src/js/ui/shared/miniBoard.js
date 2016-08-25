@@ -4,14 +4,14 @@ import gameApi from '../../lichess/game';
 import * as m from 'mithril';
 
 export default {
-  view(ctrl, args) {
+  view(vnode) {
 
-    const { bounds, fen, lastMove, orientation, link, gameObj } = args;
+    const { bounds, fen, lastMove, orientation, link, gameObj } = vnode.attrs;
 
     return (
-      <div className="mini_board" config={helper.ontouchY(link)}>
+      <div className="mini_board" oncreate={helper.ontouchY(link)}>
         <div className="board_wrapper">
-          {m.component(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
+          {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
         </div>
         { gameObj ?
         <div className="vsbloc">

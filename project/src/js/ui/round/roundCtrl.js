@@ -1,5 +1,7 @@
 import { throttle } from 'lodash/function';
-import makeData from './data';
+import redraw from '../../utils/redraw';
+import router from '../../router';
+import round from './round';
 import * as utils from '../../utils';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
@@ -21,48 +23,32 @@ import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
 import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
-import * as m from 'mithril';
+import crazyValid from './crazy/crazyValid';
 
-export default function controller(cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
 
-  this.data = makeData(cfg);
+  this.data = round.merge({}, cfg).data;
 
   this.onTVChannelChange = onTVChannelChange;
 
-  this.firstPly = function() {
-    return this.data.steps[0].ply;
-  }.bind(this);
-
-  this.lastPly = function() {
-    return this.data.steps[this.data.steps.length - 1].ply;
-  }.bind(this);
-
-  this.plyStep = function(ply) {
-    return this.data.steps[ply - this.firstPly()];
-  }.bind(this);
-
   this.vm = {
+    ply: round.lastPly(this.data),
     flip: false,
     miniUser: {
       player: {
         showing: false,
-        data: m.prop(null)
+        data: null
       },
       opponent: {
         showing: false,
-        data: m.prop(null)
+        data: null
       }
     },
     showingActions: false,
     confirmResign: false,
     goneBerserk: {},
-    headerHash: '',
-    replayHash: '',
-    buttonsHash: '',
-    playerHash: '',
-    opponentHash: '',
-    ply: this.lastPly(),
     moveToSubmit: null,
+    dropToSubmit: null,
     tClockEl: null
   };
   this.vm.goneBerserk[this.data.player.color] = this.data.player.berserk;
@@ -74,7 +60,7 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
         this.vm.tClockEl.textContent =
-          utils.formatTournamentCountdown(this.data.tournament.secondsToFinish) +
+          utils.formatTimeInSecs(this.data.tournament.secondsToFinish) +
         ' • ';
       }
     } else {
@@ -112,8 +98,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
 
   this.toggleUserPopup = function(position, userId) {
-    if (!this.vm.miniUser[position].data()) {
-      this.vm.miniUser[position].data = miniUserXhr(userId);
+    if (!this.vm.miniUser[position].data) {
+      miniUserXhr(userId).then(data => {
+        this.vm.miniUser[position].data = data;
+      });
     }
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
   }.bind(this);
@@ -130,12 +118,12 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
   this.flip = function() {
     if (this.data.tv) {
-      if (m.route.param('flip')) m.route('/tv');
-      else m.route('/tv?flip=1');
+      if (vnode.attrs.flip) router.set('/tv', true);
+      else router.set('/tv?flip=1', null, true);
       return;
     } else if (this.data.player.spectator) {
-      m.route('/game/' + this.data.game.id + '/' +
-        utils.oppositeColor(this.data.player.color));
+      router.set('/game/' + this.data.game.id + '/' +
+        utils.oppositeColor(this.data.player.color), true);
       return;
     }
     this.vm.flip = !this.vm.flip;
@@ -145,14 +133,14 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.replaying = function() {
-    return this.vm.ply !== this.lastPly();
+    return this.vm.ply !== round.lastPly(this.data);
   }.bind(this);
 
   this.jump = function(ply) {
-    if (ply < this.firstPly() || ply > this.lastPly()) return false;
+    if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
-    const s = this.plyStep(ply);
+    const s = round.plyStep(this.data, ply);
     const config = {
       fen: s.fen,
       lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
@@ -183,11 +171,11 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   }.bind(this);
 
   this.jumpFirst = function() {
-    return this.jump(this.firstPly());
+    return this.jump(round.firstPly(this.data));
   }.bind(this);
 
   this.jumpLast = function() {
-    return this.jump(this.lastPly());
+    return this.jump(round.lastPly(this.data));
   }.bind(this);
 
   this.setTitle = function() {
@@ -206,59 +194,91 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
   };
   this.setTitle();
 
-  this.sendMove = function(orig, dest, prom) {
-    socket.getAverageLag(function(lag) {
-      const move = {
-        from: orig,
-        to: dest
-      };
-      if (prom) move.promotion = prom;
-      if (this.clock && lag !== undefined) {
-        move.lag = Math.round(lag);
-      }
+  this.sendMove = function(orig, dest, prom, isPremove) {
+    const move = {
+      u: orig + dest
+    };
+    if (prom) {
+      move.u += (prom === 'knight' ? 'n' : prom[0]);
+    }
 
-      if (this.data.pref.submitMove) {
-        setTimeout(function() {
-          backbutton.stack.push(this.cancelMove);
-          this.vm.moveToSubmit = move;
-          m.redraw();
-        }.bind(this), this.data.pref.animationDuration || 0);
-      } else {
-        socket.send('move', move, { ackable: true });
-        if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-          window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
-        }
+    if (this.data.pref.submitMove && !isPremove) {
+      setTimeout(() => {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.moveToSubmit = move;
+        redraw();
+      }, this.data.pref.animationDuration || 0);
+    } else {
+      socket.send('move', move, {
+        ackable: true,
+        withLag: !!this.clock
+      });
+      if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
+        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
       }
-    }.bind(this));
+    }
+  };
+
+  this.sendNewPiece = function(role, key, isPredrop) {
+    const drop = {
+      role: role,
+      pos: key
+    };
+    if (this.data.pref.submitMove && !isPredrop) {
+      setTimeout(() => {
+        backbutton.stack.push(this.cancelMove);
+        this.vm.dropToSubmit = drop;
+        redraw();
+      }, this.data.pref.animationDuration || 0);
+    } else socket.send('drop', drop, {
+      ackable: true,
+      withLag: !!this.clock
+    });
   };
 
   this.cancelMove = function(fromBB) {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
     this.vm.moveToSubmit = null;
+    this.vm.dropToSubmit = null;
     this.jump(this.vm.ply);
   }.bind(this);
 
   this.submitMove = function(v) {
-    if (v) {
+    if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
       if (this.vm.moveToSubmit) {
         socket.send('move', this.vm.moveToSubmit, {
           ackable: true
         });
-        if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
-          window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
-        }
+      } else if (this.vm.dropToSubmit) {
+        socket.send('drop', this.vm.dropToSubmit, {
+          ackable: true
+        });
+      }
+      if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
+        window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
       }
       this.vm.moveToSubmit = null;
+      this.vm.dropToSubmit = null;
     } else {
       this.cancelMove();
     }
   }.bind(this);
 
-  var userMove = function(orig, dest, meta) {
-    if (!promotion.start(this, orig, dest, meta.premove)) this.sendMove(orig, dest);
+  const userMove = function(orig, dest, meta) {
+    if (!promotion.start(this, orig, dest, meta.premove)) {
+      this.sendMove(orig, dest, false, meta.premove);
+    }
   }.bind(this);
 
-  var onMove = function(orig, dest, capturedPiece) {
+  const onUserNewPiece = function(role, key, meta) {
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
+      this.sendNewPiece(role, key, meta.predrop);
+    } else {
+      this.jump(this.vm.ply);
+    }
+  }.bind(this);
+
+  const onMove = function(orig, dest, capturedPiece) {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest);
@@ -276,6 +296,16 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     }
   }.bind(this);
 
+  const onNewPiece = function() {
+    sound.move();
+  };
+
+  const playPredrop = function() {
+    return this.chessground.playPredrop(drop => {
+      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
+    });
+  }.bind(this);
+
   this.apiMove = function(o) {
     const d = this.data;
     d.game.turns = o.ply;
@@ -283,6 +313,9 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     const playedColor = o.ply % 2 === 0 ? 'black' : 'white';
     if (o.status) {
       d.game.status = o.status;
+    }
+    if (o.winner) {
+      d.game.winner = o.winner;
     }
     var wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
     var bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
@@ -297,6 +330,8 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     wDraw = o.wDraw;
     bDraw = o.bDraw;
     d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
+    d.possibleDrops = d.player.color === d.game.player ? o.drops : null;
+    d.crazyhouse = o.crazyhouse;
     this.setTitle();
 
     if (!this.replaying()) {
@@ -329,29 +364,33 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
       }
 
       const pieces = Object.assign({}, enpassantPieces, castlePieces);
-      this.chessground.apiMove(
-        o.uci.substr(0, 2),
-        o.uci.substr(2, 2),
-        pieces,
-        {
-          turnColor: d.game.player,
-          movable: {
-            dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
+      const newConf = {
+        turnColor: d.game.player,
+        movable: {
+          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
+        },
+        check: o.check
+      };
+      if (o.isMove) {
+        this.chessground.apiMove(
+          o.uci.substr(0, 2),
+          o.uci.substr(2, 2),
+          pieces,
+          newConf
+        );
+      } else {
+        this.chessground.apiNewPiece(
+          {
+            role: o.role,
+            color: playedColor
           },
-          check: o.check
-        }
-      );
+          o.uci.substr(2, 2),
+          newConf
+        );
+      }
 
       if (o.promotion) {
         ground.promote(this.chessground, o.promotion.key, o.promotion.pieceClass);
-      }
-
-      if (playedColor !== d.player.color && this.chessground.data.premovable.current) {
-        // atrocious hack to prevent race condition
-        // with explosions and premoves
-        // https://github.com/ornicar/lila/issues/343
-        const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
-        setTimeout(this.chessground.playPremove, premoveDelay);
       }
     }
 
@@ -363,17 +402,30 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
 
     d.game.threefold = !!o.threefold;
     d.steps.push({
-      ply: this.lastPly() + 1,
+      ply: round.lastPly(this.data) + 1,
       fen: o.fen,
       san: o.san,
       uci: o.uci,
-      check: o.check
+      check: o.check,
+      crazy: o.crazyhouse
     });
     gameApi.setOnGame(d, playedColor, true);
 
+    if (!this.replaying() && playedColor !== d.player.color &&
+      (this.chessground.data.premovable.current || this.chessground.data.predroppable.current.key)) {
+      // atrocious hack to prevent race condition
+      // with explosions and premoves
+      // https://github.com/ornicar/lila/issues/343
+      const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
+      setTimeout(() => {
+        this.chessground.playPremove();
+        playPredrop();
+      }, premoveDelay);
+    }
+
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(m.route.param('id'), this.data);
+      saveOfflineGameData(vnode.attrs.id, this.data);
     }
 
   }.bind(this);
@@ -388,10 +440,10 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.vm.goneBerserk[color]) return;
     this.vm.goneBerserk[color] = true;
     if (color !== this.data.player.color) sound.berserk();
-    m.redraw();
+    redraw();
   }.bind(this);
 
-  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onMove);
+  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
 
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
@@ -440,13 +492,13 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     if (this.data.tv) rCfg.tv = this.data.tv;
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
 
-    this.data = makeData(rCfg);
+    this.data = round.merge(this.data, rCfg).data;
 
     makeCorrespondenceClock();
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
-    m.redraw();
+    redraw();
   }.bind(this);
 
   var reloadGameData = function() {
@@ -457,25 +509,15 @@ export default function controller(cfg, onFeatured, onTVChannelChange, userTv, o
     return toggleGameBookmark(this.data.game.id).then(reloadGameData);
   }.bind(this);
 
-  var onResize = function() {
-    this.vm.replayHash = '';
-  }.bind(this);
-
   document.addEventListener('resume', reloadGameData);
-  window.addEventListener('resize', onResize);
   window.plugins.insomnia.keepAwake();
 
-  this.onunload = function() {
-    socket.destroy();
+  this.unload = function() {
     clearInterval(clockIntervId);
     clearInterval(tournamentCountInterval);
     document.removeEventListener('resume', reloadGameData);
-    window.removeEventListener('resize', onResize);
-    window.plugins.insomnia.allowSleepAgain();
     signals.seekCanceled.remove(connectSocket);
-    if (this.chat) this.chat.onunload();
-    if (this.chessground) {
-      this.chessground.onunload();
-    }
+    if (this.chat) this.chat.unload();
+    if (this.notes) this.notes.unload();
   };
 }

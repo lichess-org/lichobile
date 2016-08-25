@@ -1,7 +1,8 @@
 import * as utils from '../../utils';
 import helper from '../helper';
 
-function styleConf(el) {
+function styleConf(vnode) {
+  const el = vnode.dom;
   const vh = helper.viewportDim().vh;
   const h = el.getBoundingClientRect().height;
   const top = (vh - h) / 2;
@@ -9,8 +10,9 @@ function styleConf(el) {
 }
 
 export default function(classes, headerF, contentF, isShowing, closef) {
-  if (!isShowing)
+  if (!isShowing) {
     return null;
+  }
 
   const defaultClasses = {
     overlay_popup: true,
@@ -26,13 +28,24 @@ export default function(classes, headerF, contentF, isShowing, closef) {
   else
     throw new Error('First popup argument must be either a string or an object');
 
+  const contentClass = helper.classSet({
+    'popup_content': true,
+    'noheader': !headerF
+  });
+
   return (
-    <div className="overlay_popup_wrapper">
+    <div className="overlay_popup_wrapper"
+      onbeforeremove={(vnode, done) => {
+        vnode.dom.classList.add('fading_out');
+        setTimeout(done, 500);
+      }}
+    >
       <div className="popup_overlay_close"
-        config={closef ? helper.ontouch(helper.fadesOut(closef, '.overlay_popup_wrapper')) : utils.noop} />
-      <div className={className} config={styleConf}>
+        oncreate={closef ? helper.ontouch(closef) : utils.noop}
+      />
+      <div className={className} oncreate={styleConf}>
         {headerF ? <header>{headerF()}</header> : null}
-        <div className="popup_content">
+        <div className={contentClass}>
           {contentF()}
         </div>
       </div>

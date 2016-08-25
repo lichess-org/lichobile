@@ -1,56 +1,39 @@
-import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
-import layout from '../layout';
+import * as m from 'mithril';
+import router from '../../router';
 import helper from '../helper';
-import * as utils from '../../utils';
-import { tv } from './userXhr';
+import { handleXhrError } from '../../utils';
+import { LoadingBoard } from '../shared/common';
 import roundCtrl from '../round/roundCtrl';
 import roundView from '../round/view/roundView';
-import * as m from 'mithril';
+import { tv } from './userXhr';
 
 export default {
-  controller: function() {
-    var round;
+  oninit(vnode) {
+    helper.analyticsTrackView('TV');
 
-    const userId = m.route.param('id');
+    const userId = vnode.attrs.id;
+    const onRedirect = () => router.set(`/@/${userId}/tv`, true);
 
-    helper.analyticsTrackView('User TV');
-
-    function onRedirect() {
-      tv(userId).then(function(data) {
-        m.redraw.strategy('all');
-        data.userTV = userId;
-        if (round) round.onunload();
-        round = new roundCtrl(data, null, null, userId, onRedirect);
-      }, function(error) {
-        utils.handleXhrError(error);
-      });
-    }
-
-    tv(userId).then(function(data) {
+    tv(userId)
+    .then(data => {
       data.userTV = userId;
-      round = new roundCtrl(data, null, null, userId, onRedirect);
-    }, function(error) {
-      utils.handleXhrError(error);
-      m.route('/');
-    });
-
-    return {
-      getRound: function() { return round; },
-
-      onunload: function() {
-        if (round) {
-          round.onunload();
-          round = null;
-        }
-      }
-    };
+      this.round = new roundCtrl(vnode, data, null, null, userId, onRedirect);
+    })
+    .catch(handleXhrError);
   },
 
-  view: function(ctrl) {
-    if (ctrl.getRound()) return roundView(ctrl.getRound());
+  oncreate: helper.viewFadeIn,
 
-    const header = connectingHeader.bind(undefined, m.route.param('id') + ' TV');
+  onremove() {
+    window.plugins.insomnia.allowSleepAgain();
+    this.round.unload();
+  },
 
-    return layout.board(header, viewOnlyBoardContent);
+  view() {
+    if (this.round) {
+      return roundView(this.round);
+    } else {
+      return m(LoadingBoard);
+    }
   }
 };

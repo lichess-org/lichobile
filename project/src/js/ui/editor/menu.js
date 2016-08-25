@@ -32,7 +32,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'editorMenu',
-      () => m('h2.withIcon.fa.fa-pencil', i18n('boardEditor')),
+      null,
       renderEditorMenu.bind(undefined, ctrl.root),
       ctrl.isOpen(),
       ctrl.close
@@ -126,14 +126,7 @@ function castleCheckBox(ctrl, id, label) {
 }
 
 function position2option(fen, pos) {
-  return {
-    tag: 'option',
-    attrs: {
-      value: pos.fen,
-      selected: fen === pos.fen
-    },
-    children: pos.name
-  };
+  return <option value={pos.fen} selected={fen === pos.fen}>{pos.name}</option>;
 }
 
 function optgroup(name, opts) {

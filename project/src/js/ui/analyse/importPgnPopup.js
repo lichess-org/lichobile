@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import redraw from '../../utils/redraw';
 import popupWidget from '../shared/popup';
 import makeData from '../shared/offlineRound/data';
 import { getAnalyseData } from '../../utils/offlineGames';
@@ -43,12 +44,13 @@ export default {
         root.init(analyseData);
         importing(false);
         close();
-        m.redraw();
+        redraw();
       })
       .catch(err => {
         console.error(err);
+        window.plugins.toast.show('Import failed. Please make sure the PGN you entered is valid', 'short', 'center');
         importing(false);
-        m.redraw();
+        redraw();
       });
     }
 

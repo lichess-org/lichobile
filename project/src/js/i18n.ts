@@ -1,5 +1,5 @@
 import settings from './settings';
-import * as m from 'mithril';
+import { loadLocalJsonFile } from './utils';
 
 let messages: { [key: string]: string } = {};
 
@@ -33,9 +33,8 @@ const untranslated = {
   youAreChallenging: 'You are challenging %s',
   submitMove: 'Submit move',
   returnToHome: 'Return to home',
-  enableLocalComputerEvaluation: 'Enable local computer evaluation.',
-  localEvalCaution: 'Caution: it may be slow on some devices, and it consumes more battery.',
-  startNewAnalysis: 'Start new analysis',
+  enableLocalComputerEvaluation: 'Enable local computer evaluation',
+  localEvalCaution: 'Caution: it may be slow, and intensive usage will drain more battery.',
   showBestMove: 'Show computer best move',
   followers: 'Followers',
   userAcceptsYourChallenge: '%s accepts your challenge!',
@@ -59,69 +58,46 @@ export default function i18n(key: string, ...args: Array<string | number>): stri
 export function loadPreferredLanguage(): Promise<string> {
   if (settings.general.lang())
     return loadFromSettings();
+  }
 
-  var deferred = m.deferred();
-  window.navigator.globalization.getPreferredLanguage(
-    language => deferred.resolve(language.value.split('-')[0]),
-    () => deferred.resolve(defaultCode)
-  );
-  return deferred.promise
-    .then((code: string) => {
-      settings.general.lang(code);
-      return code;
-    })
-    .then(loadFile)
-    .then(loadMomentLocale);
+  return new Promise(resolve => {
+    window.navigator.globalization.getPreferredLanguage(
+      l => resolve(l.value.split('-')[0]),
+      () => resolve(defaultCode)
+    );
+  })
+  .then(code => {
+    settings.general.lang(code);
+    return code;
+  })
+  .then(loadFile)
+  .then(loadMomentLocale);
 }
 
-export function getAvailableLanguages(): Promise<Array<[string, string]>> {
-  return m.request({
-    url: 'i18n/refs.json',
-    method: 'GET'
-  })
-  .catch(error => {
-    // same workaround for iOS as above
-    if (error && error[0][0] === 'af')
-      return error;
-    else
-      throw { error: 'Cannot load languages' };
-  });
+export function getAvailableLanguages(): Promise<string> {
+  return loadLocalJsonFile('i18n/refs.json');
 }
 
 export function loadFromSettings(): Promise<string> {
-  return loadFile(settings.general.lang()).then(loadMomentLocale);
+  return loadFile(settings.general.lang())
+  .then(loadMomentLocale);
 }
 
 function loadFile(code): Promise<string> {
-  return m.request({
-    url: 'i18n/' + code + '.json',
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Lang not available' };
-      }
-    }
-  }).then(function(data) {
+  return loadLocalJsonFile('i18n/' + code + '.json')
+  .then(data => {
     messages = data;
     return code;
-  }, function(error) {
-    // workaround for iOS: because xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (error && error.playWithAFriend) {
-      messages = error;
-      return code;
-    } else {
-      if (code === defaultCode) throw new Error(error);
-      return loadFile(defaultCode);
-    }
+  })
+  .catch(error => {
+    if (code === defaultCode) throw new Error(error);
+    return loadFile(defaultCode);
   });
 }
 
 function loadMomentLocale(code): string {
   if (code !== 'en') {
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';
     document.head.appendChild(script);
   }

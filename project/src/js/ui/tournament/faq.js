@@ -31,10 +31,10 @@ export default {
 
     if (!tournament) return null;
     return (
-      <div className="modal" id="tournamentFaqModal" config={helper.slidesInUp}>
+      <div className="modal" id="tournamentFaqModal" oncreate={helper.slidesInUp}>
         <header>
           <button className="modal_close" data-icon="L"
-            config={helper.ontouch(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
+            oncreate={helper.ontouch(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
           />
           <h2>Tournament FAQ</h2>
         </header>

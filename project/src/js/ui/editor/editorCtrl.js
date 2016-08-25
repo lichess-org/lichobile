@@ -1,8 +1,10 @@
 import * as chessground from 'chessground-mobile';
+import router from '../../router';
+import settings from '../../settings';
 import { computeFen, readFen } from './editor';
 import menu from './menu';
 import * as m from 'mithril';
-import { loadJsonFile } from '../../utils';
+import { loadLocalJsonFile } from '../../utils';
 import continuePopup from '../shared/continuePopup';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -10,13 +12,13 @@ import helper from '../helper';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export default function controller() {
+export default function oninit(vnode) {
 
   socket.createDefault();
 
   helper.analyticsTrackView('Board Editor');
 
-  const initFen = m.route.param('fen') || startingFen;
+  const initFen = vnode.attrs.fen || startingFen;
 
   this.data = {
     editor: readFen(initFen),
@@ -37,15 +39,9 @@ export default function controller() {
     name: i18n('clearBoard')
   }];
 
-  loadJsonFile('data/positions.json').then(data => {
+  loadLocalJsonFile('data/positions.json')
+  .then(data => {
     this.positions(data);
-  }, err => {
-    // workaround for iOS: because xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (err && err[0] && err[0].fen)
-      this.positions(err);
-    else
-      throw err;
   });
 
   this.chessground = new chessground.controller({
@@ -70,10 +66,9 @@ export default function controller() {
       enabled: false
     },
     draggable: {
-      showGhost: false,
       autoDistance: false,
       squareTarget: true,
-      preventDefault: false
+      magnified: settings.game.magnified()
     },
     events: {
       change: () => {
@@ -93,15 +88,7 @@ export default function controller() {
   this.continuePopup = continuePopup.controller();
 
   this.loadNewFen = function(newFen) {
-    m.redraw.strategy('diff');
-    m.route(`/editor/${encodeURIComponent(newFen)}`);
-  };
-
-  this.onunload = function() {
-    if (this.chessground) {
-      this.chessground.onunload();
-      this.chessground = null;
-    }
+    router.set(`/editor/${encodeURIComponent(newFen)}`);
   };
 
 }

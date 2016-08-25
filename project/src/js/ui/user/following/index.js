@@ -1,8 +1,11 @@
-import controller from './followingCtrl';
+import helper from '../../helper';
+import oninit from './followingCtrl';
 import view from './followingView';
 
 export default {
-  controller,
+  oninit,
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
   view
 };
 

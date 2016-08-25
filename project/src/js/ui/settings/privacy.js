@@ -1,4 +1,4 @@
-import * as utils from '../../utils';
+import helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -21,20 +21,22 @@ function renderBody(ctrl) {
 }
 
 export default {
-  controller: function() {
+  oncreate: helper.viewSlideIn,
+  onbeforeremove: helper.viewSlideOut,
+
+  oninit: function(vnode) {
     const follow = session.lichessBackedProp('prefs.follow', session.savePreferences);
     const challenge = session.lichessBackedProp('prefs.challenge', session.savePreferences);
 
-    return {
+    vnode.state = {
       follow,
       challenge
     };
   },
 
-  view: function(ctrl) {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('privacy'))
-    );
+  view: function(vnode) {
+    const ctrl = vnode.state;
+    const header = headerWidget.bind(undefined, null, backButton(i18n('privacy')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
 };

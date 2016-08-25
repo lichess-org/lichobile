@@ -1,3 +1,5 @@
+import router from '../router';
+import redraw from '../utils/redraw';
 import { timeline as timelineXhr } from '../xhr';
 import { gameIcon, handleXhrError } from '../utils';
 import { header as headerWidget, backButton } from './shared/common';
@@ -9,22 +11,26 @@ import * as m from 'mithril';
 export const supportedTypes = ['follow', 'game-end', 'tour-join'];
 
 export default {
-  controller() {
+  oninit(vnode) {
     const timeline = m.prop([]);
 
     timelineXhr()
     .then(data => {
       timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1));
-      m.redraw();
+      redraw();
     })
     .catch(handleXhrError);
 
-    return {
+    vnode.state = {
       timeline
     };
   },
 
-  view(ctrl) {
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
+
+  view(vnode) {
+    const ctrl = vnode.state;
     const header = headerWidget.bind(undefined, null, backButton(i18n('timeline')));
     return layout.free(header, renderBody.bind(undefined, ctrl));
   }
@@ -54,8 +60,8 @@ export function renderTourJoin(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      config={helper.ontouch(() => {
-        m.route('/tournament/' + entry.data.tourId);
+      oncreate={helper.ontouchY(() => {
+        router.set('/tournament/' + entry.data.tourId);
       })}
     >
       <span className="fa fa-trophy" />
@@ -72,8 +78,8 @@ export function renderFollow(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      config={helper.ontouch(() => {
-        m.route('/@/' + entry.data.u1);
+      oncreate={helper.ontouchY(() => {
+        router.set('/@/' + entry.data.u1);
       })}
     >
       <span className="fa fa-arrow-circle-right" />
@@ -91,8 +97,8 @@ export function renderGameEnd(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key} data-icon={icon}
-      config={helper.ontouch(() => {
-        m.route('/game/' + entry.data.playerId);
+      oncreate={helper.ontouchY(() => {
+        router.set('/game/' + entry.data.playerId);
       })}
     >
       <strong>{result}</strong> vs. {entry.data.opponent}

@@ -1,4 +1,5 @@
 import * as utils from '../../../utils';
+import router from '../../../router';
 import helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
@@ -10,9 +11,12 @@ import session from '../../../session';
 import * as m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
-export default function view(ctrl) {
-  const header = utils.partialf(headerWidget, null,
-    backButton(ctrl.user() ? (ctrl.user().username + ' games') : '')
+export default function view(vnode) {
+  const ctrl = this;
+  const username = vnode.attrs.id;
+
+  const header = headerWidget.bind(undefined, null,
+    backButton(username + ' games')
   );
 
   function renderBody() {
@@ -40,7 +44,9 @@ export default function view(ctrl) {
 
 function renderAllGames(ctrl) {
   return (
-    <div className="scroller games" config={ctrl.scrollerConfig}>
+    <div className="scroller games" oncreate={ctrl.scrollerOnCreate}
+      onupdate={ctrl.scrollerOnUpdate} onremove={ctrl.scrollerOnRemove}
+    >
       <ul className="userGames">
         { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
         {ctrl.isLoadingNextPage() ?
@@ -54,14 +60,16 @@ function renderAllGames(ctrl) {
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontouchY(() => {
-    toggleGameBookmark(id).then(() => {
+    toggleGameBookmark(id)
+    .then(() => {
       ctrl.toggleBookmark(index);
-    }, err => utils.handleXhrError(err));
+    })
+    .catch(utils.handleXhrError);
   }, longAction);
 }
 
 function renderGame(ctrl, g, index, userId) {
-  const wideScreen = helper.isWideScreen();
+  const wideScreenOrLandscape = helper.isWideScreen() || helper.isLandscape();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = time + ' • ' + g.variant.name + ' • ' + mode;
@@ -72,22 +80,23 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
+  const link = g.winner ? () => router.set(`/analyse/online/${g.id}/${userColor}`) : () => router.set(`/game/${g.id}/${userColor}`);
 
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>
       { session.isConnected() ?
-        <button className="iconStar" data-icon={star} config={bookmarkAction(ctrl, g.id, index)} /> : null
+        <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" config={helper.ontouchY(() => m.route(`/game/${g.id}/${userColor}`))}>
+      <div className="nav" oncreate={helper.ontouchY(link)}>
         <span className="iconGame" data-icon={icon} />
-        {wideScreen ? m.component(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
+        {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">
           <div className="title">{title}</div>
           <small className="date">{date}</small>
           <div className="players">
-            {renderPlayer(g.players, 'white')}
+            {renderPlayer(g.players, 'white', g.variant.key)}
             <div className="swords" data-icon="U" />
-            {renderPlayer(g.players, 'black')}
+            {renderPlayer(g.players, 'black', g.variant.key)}
           </div>
           <div className={helper.classSet({
             status: true,
@@ -95,7 +104,13 @@ function renderGame(ctrl, g, index, userId) {
             loose: g.winner && userColor !== g.winner
           })}>{status}</div>
           {g.opening ?
-          <div className="opening">{g.opening.name}</div> : null
+          <p className="opening">{g.opening.name}</p> : null
+          }
+          {g.analysed ?
+          <p className="analysed">
+            <span className="fa fa-bar-chart" />
+            Computer analysis available
+          </p> : null
           }
         </div>
       </div>
@@ -103,11 +118,15 @@ function renderGame(ctrl, g, index, userId) {
   );
 }
 
-function renderPlayer(players, color) {
+function renderPlayer(players, color, variant) {
   let player = players[color];
   let playerName;
   if (player.userId) playerName = player.userId;
-  else if (player.aiLevel) playerName = utils.aiName(player.aiLevel);
+  else if (player.aiLevel) {
+    player.ai = player.aiLevel;
+    player.engineName = variant === 'crazyhouse' ? 'Sunsetter' : 'Stockfish';
+    playerName = utils.aiName(player);
+  }
   else playerName = 'Anonymous';
 
   return (

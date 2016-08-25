@@ -1,12 +1,14 @@
+import router from './router';
+import redraw from './utils/redraw';
 import storage from './storage';
+import { apiVersion } from './http';
 import { xor } from 'lodash';
-import { lichessSri, autoredraw, askWorker, tellWorker, hasNetwork, noop } from './utils';
+import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 import session from './session';
-import * as m from 'mithril';
 
 const worker = new Worker('lib/socketWorker.js');
 
@@ -34,11 +36,11 @@ const proxyFailMsg = 'The connection to lichess server has failed. If the proble
 
 const defaultHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: name => autoredraw(friendsApi.add.bind(undefined, name)),
-  following_leaves: name => autoredraw(friendsApi.remove.bind(undefined, name)),
+  following_enters: name => autoredraw(() => friendsApi.add(name)),
+  following_leaves: name => autoredraw(() => friendsApi.remove(name)),
   challenges: data => {
     challengesApi.set(data);
-    m.redraw();
+    redraw();
   }
 };
 
@@ -46,7 +48,7 @@ function handleFollowingOnline(data) {
   const curList = friendsApi.list();
   friendsApi.set(data);
   if (xor(curList, data).length > 0) {
-    m.redraw();
+    redraw();
   }
 }
 
@@ -61,11 +63,14 @@ function createGame(url, version, handlers, gameUrl, userTv) {
         // websocket is trying to reconnect
         errorDetected = true;
         xhr.game(gameUrl.substring(1))
+<<<<<<< HEAD:project/src/js/socket.ts
         .then(noop)
+=======
+>>>>>>> master:project/src/js/socket.js
         .catch(err => {
           if (err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-            m.route('/');
+            router.set('/');
           }
         });
       }
@@ -91,7 +96,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
 }
 
 function createTournament(tournamentId, version, handlers, featuredGame) {
-  let url = '/tournament/' + tournamentId + '/socket/v1';
+  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
   };
@@ -155,7 +160,7 @@ function createLobby(lobbyVersion, onOpen, handlers) {
   tellWorker(worker, 'create', {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
-    url: '/lobby/socket/v1',
+    url: `/lobby/socket/v${apiVersion}`,
     version: lobbyVersion,
     opts
   });
@@ -201,7 +206,7 @@ function redirectToGame(obj) {
         ].join('');
         document.cookie = cookie;
     }
-    m.route('/game' + url);
+    router.set('/game' + url);
   }
 }
 
@@ -210,14 +215,14 @@ function onConnected() {
   connectedWS = true;
   clearTimeout(proxyFailTimeoutID);
   clearTimeout(redrawOnDisconnectedTimeoutID);
-  if (wasOff) m.redraw();
+  if (wasOff) redraw();
 }
 
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
   if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(function() {
-    m.redraw();
+    redraw();
   }, 2000);
   if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
     // check if disconnection lasts, it could mean a proxy prevents
@@ -250,7 +255,7 @@ worker.addEventListener('message', function(msg) {
       if (socketHandlers.onError) socketHandlers.onError();
       break;
     case 'handle':
-      var h = socketHandlers.events[msg.data.payload.t];
+      let h = socketHandlers.events[msg.data.payload.t];
       if (h) h(msg.data.payload.d || null, msg.data.payload);
       break;
   }
@@ -265,9 +270,6 @@ export default {
   redirectToGame,
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version);
-  },
-  getAverageLag(callback) {
-    askWorker(worker, { topic: 'averageLag' }, callback);
   },
   send(type, data, opts) {
     tellWorker(worker, 'send', [type, data, opts]);

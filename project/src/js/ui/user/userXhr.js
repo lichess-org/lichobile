@@ -1,60 +1,53 @@
-import { request } from '../../http';
+import { fetchJSON } from '../../http';
 
 export function games(userId, filter = 'all', page = 1, feedback = false) {
-  return request(`/@/${userId}/${filter}`, {
-    method: 'GET',
-    data: {
+  return fetchJSON(`/@/${userId}/${filter}`, {
+    query: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 
 export function following(userId, page = 1, feedback = false) {
-  return request(`/@/${userId}/following`, {
-    method: 'GET',
-    data: {
+  return fetchJSON(`/@/${userId}/following`, {
+    query: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 
 export function followers(userId, page = 1, feedback = false) {
-  return request(`/@/${userId}/followers`, {
-    method: 'GET',
-    data: {
+  return fetchJSON(`/@/${userId}/followers`, {
+    query: {
       page
-    },
-    background: !feedback
+    }
   }, feedback);
 }
 
 export function follow(userId) {
-  return request('/rel/follow/' + userId, { method: 'POST' });
+  return fetchJSON('/rel/follow/' + userId, { method: 'POST' });
 }
 
 export function unfollow(userId) {
-  return request('/rel/unfollow/' + userId, { method: 'POST' });
+  return fetchJSON('/rel/unfollow/' + userId, { method: 'POST' });
 }
 
 export function block(userId) {
-  return request('/rel/block/' + userId, { method: 'POST' });
+  return fetchJSON('/rel/block/' + userId, { method: 'POST' });
 }
 
 export function unblock(userId) {
-  return request('/rel/unblock/' + userId, { method: 'POST' });
+  return fetchJSON('/rel/unblock/' + userId, { method: 'POST' });
 }
 
 export function user(id) {
-  var url = '/api/user/' + id;
-  return request(url, {}, true);
+  return fetchJSON(`/api/user/${id}`, null, true);
 }
 
 export function tv(userId) {
-  return request(`/@/${userId}/tv`);
+  return fetchJSON(`/@/${userId}/tv`);
 }
 
 export function variantperf(userId, variantKey) {
-  return request(`/@/${userId}/perf/${variantKey}`, {}, true);
+  return fetchJSON(`/@/${userId}/perf/${variantKey}`, {}, true);
 }

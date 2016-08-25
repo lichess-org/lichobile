@@ -13,15 +13,14 @@ export function makeData(from) {
   return data;
 }
 
-export function makeDefaultData(fen) {
-  const player = 'white';
+export function makeDefaultData(fen, orientation) {
+  const player = playerFromFen(fen);
   const ply = plyFromFen(fen);
   return {
     game: {
       fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       id: 'synthetic',
       initialFen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      initialColor: player,
       opening: null,
       player,
       status: {
@@ -39,7 +38,7 @@ export function makeDefaultData(fen) {
     opponent: {
       color: oppositeColor(player)
     },
-    orientation: player,
+    orientation: orientation || 'white',
     path: 0,
     player: {
       color: player,

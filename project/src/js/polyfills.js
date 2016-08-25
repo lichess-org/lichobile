@@ -77,8 +77,71 @@ if (!Array.prototype.findIndex) {
   };
 }
 
+if(!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
+  };
+}
+
 if (!String.prototype.includes) {
   String.prototype.includes = function() {'use strict';
     return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
+
+// taken from https://github.com/substack/semver-compare
+function semverCompare(a, b) {
+  var pa = a.split('.');
+  var pb = b.split('.');
+  for (var i = 0; i < 3; i++) {
+    var na = Number(pa[i]);
+    var nb = Number(pb[i]);
+    if (na > nb) return 1;
+    if (nb > na) return -1;
+    if (!isNaN(na) && isNaN(nb)) return 1;
+    if (isNaN(na) && !isNaN(nb)) return -1;
+  }
+  return 0;
+}
+
+document.addEventListener('deviceready', () => {
+  // temporary workaround for android versions where stockfish plugin does not work
+  if (window.device.platform === 'Android' && semverCompare(window.device.version, '4.4') === -1) {
+    // cordova-stockfish-plugin interface
+    var stockfishWorker;
+    window.Stockfish = {
+      init: function() {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) {
+            setTimeout(resolve);
+          } else {
+            stockfishWorker = new Worker('vendor/stockfish.js');
+            setTimeout(resolve, 10);
+          }
+        });
+      },
+      cmd: function(cmd) {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) stockfishWorker.postMessage(cmd);
+          setTimeout(resolve, 1);
+        });
+      },
+      output: function(callback) {
+        if (stockfishWorker) {
+          stockfishWorker.onmessage = msg => {
+            callback(msg.data);
+          };
+        }
+      },
+      exit: function() {
+        return new Promise(function(resolve) {
+          if (stockfishWorker) {
+            stockfishWorker.terminate();
+            stockfishWorker = null;
+          }
+          setTimeout(resolve, 1);
+        });
+      }
+    };
+  }
+});

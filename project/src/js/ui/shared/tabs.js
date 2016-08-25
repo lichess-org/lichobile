@@ -1,13 +1,13 @@
 import helper from '../helper';
 
 export default {
-  view(_, args) {
+  view(vnode) {
 
     const {
       buttons,
       selectedTab,
       onTabChange
-    } = args;
+    } = vnode.attrs;
 
     const iWidth = 100 / buttons.length;
     const index = buttons.findIndex(e => e.key === selectedTab);
@@ -27,9 +27,9 @@ export default {
         'tab',
         selectedTab === b.key ? 'selected' : ''
       ].join(' ');
-      const config = helper.ontouch(onTabChange.bind(undefined, b.key));
+      const oncreate = helper.ontouch(onTabChange.bind(undefined, b.key));
       return (
-        <button className={className} config={config} style={buttonStyle}>
+        <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}
         </button>
       );

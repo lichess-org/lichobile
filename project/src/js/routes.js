@@ -1,4 +1,3 @@
-import helper from './ui/helper';
 import home from './ui/home';
 import timeline from './ui/timeline';
 import game from './ui/game';
@@ -30,53 +29,52 @@ import training from './ui/training';
 import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
-import * as m from 'mithril';
-
-const slidingPage = helper.slidingPage;
-const fadingPage = helper.fadingPage;
+import clock from './ui/clock';
+import { defineRoutes } from './router';
 
 export default {
   init() {
-    m.route(document.body, '/', {
-      '/': fadingPage(home),
-      '/timeline': slidingPage(timeline),
-      '/otb': otb,
-      '/ai': ai,
-      '/game/:id': game,
-      '/game/:id/:color': slidingPage(game),
-      '/analyse': analyse,
-      '/analyse/fen/:fen': analyse,
-      '/analyse/:source/:id': slidingPage(analyse),
-      '/analyse/:source/:id/:color': slidingPage(analyse),
-      '/challenge/:id': fadingPage(challenge),
-      '/tv': fadingPage(tv),
-      '/correspondence': fadingPage(correspondence),
-      '/@/:id': slidingPage(user),
-      '/@/:id/following': fadingPage(userFollowing),
-      '/@/:id/followers': fadingPage(userFollowers),
-      '/@/:id/games': slidingPage(userGames),
-      '/@/:id/games/:filter': slidingPage(userGames),
-      '/@/:id/:variant/perf': slidingPage(userVariantPerf),
-      '/@/:id/tv': fadingPage(userTV),
-      '/editor': fadingPage(editor),
-      '/editor/:fen': fadingPage(editor),
-      '/players': fadingPage(players),
-      '/ranking': fadingPage(ranking),
-      '/settings': slidingPage(settingsUi),
-      '/settings/preferences': slidingPage(settingsPreferences),
-      '/settings/gameDisplay': slidingPage(settingsGameDisplay),
-      '/settings/gameBehavior': slidingPage(settingsGameBehavior),
-      '/settings/soundNotifications': slidingPage(settingsSoundNotifications),
-      '/settings/privacy': slidingPage(settingsPrivacy),
-      '/settings/themes/board': slidingPage(boardThemes),
-      '/settings/themes/piece': slidingPage(pieceThemes),
-      '/settings/lang': slidingPage(settingsLang),
-      '/settings/kidMode': slidingPage(settingsKidMode),
-      '/training': fadingPage(training),
-      '/training/:id': fadingPage(training),
-      '/tournament': fadingPage(tournament),
-      '/tournament/:id': fadingPage(tournamentDetail),
-      '/tournament/:tournamentId/game/:id': fadingPage(game)
+    defineRoutes(document.body, {
+      '': home,
+      'timeline': timeline,
+      'otb': otb,
+      'ai': ai,
+      'game/:id': game,
+      'game/:id/:color': game,
+      'tournament/:tournamentId/game/:id': game,
+      'analyse/:source/:id/:color': analyse,
+      'analyse/:source/:id': analyse,
+      'analyse/fen/:fen': analyse,
+      'analyse': analyse,
+      'challenge/:id': challenge,
+      'tv': tv,
+      'correspondence': correspondence,
+      '@/:id': user,
+      '@/:id/following': userFollowing,
+      '@/:id/followers': userFollowers,
+      '@/:id/games': userGames,
+      '@/:id/games/:filter': userGames,
+      '@/:id/:variant/perf': userVariantPerf,
+      '@/:id/tv': userTV,
+      'clock': clock,
+      'editor': editor,
+      'editor/:fen': editor,
+      'players': players,
+      'ranking': ranking,
+      'settings': settingsUi,
+      'settings/preferences': settingsPreferences,
+      'settings/gameDisplay': settingsGameDisplay,
+      'settings/gameBehavior': settingsGameBehavior,
+      'settings/soundNotifications': settingsSoundNotifications,
+      'settings/privacy': settingsPrivacy,
+      'settings/themes/board': boardThemes,
+      'settings/themes/piece': pieceThemes,
+      'settings/lang': settingsLang,
+      'settings/kidMode': settingsKidMode,
+      'training': training,
+      'training/:id': training,
+      'tournament': tournament,
+      'tournament/:id': tournamentDetail
     });
   }
 };

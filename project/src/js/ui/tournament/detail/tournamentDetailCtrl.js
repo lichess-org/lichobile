@@ -1,5 +1,7 @@
 import socket from '../../../socket';
 import { throttle } from 'lodash/function';
+import redraw from '../../../utils/redraw';
+import router from '../../../router';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import helper from '../../helper';
@@ -7,7 +9,7 @@ import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
 
-export default function controller() {
+export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament details');
 
   const tournament = m.prop();
@@ -32,7 +34,7 @@ export default function controller() {
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion);
     }
-    m.redraw();
+    redraw();
   }
 
   function tick() {
@@ -43,25 +45,29 @@ export default function controller() {
     if (data.secondsToFinish && data.secondsToFinish > 0) {
       data.secondsToFinish--;
     }
-    m.redraw();
+    redraw();
   }
 
   function join(id) {
-    xhr.join(id).then(() => {
+    xhr.join(id)
+    .then(() => {
       hasJoined(true);
       page(null); // Reset the page so next reload goes to player position
-      m.redraw();
-    }).catch(utils.handleXhrError);
+      redraw();
+    })
+    .catch(utils.handleXhrError);
   }
 
   function withdraw(id) {
-    xhr.withdraw(id).then(() => {
+    xhr.withdraw(id)
+    .then(() => {
       hasJoined(false);
-      m.redraw();
-    }).catch(utils.handleXhrError);
+      redraw();
+    })
+    .catch(utils.handleXhrError);
   }
 
-  const id = m.route.param('id');
+  const id = vnode.attrs.id;
 
   const throttledReload = throttle((t, p) => {
     if (p) {
@@ -77,7 +83,7 @@ export default function controller() {
     reload: () => throttledReload (id),
     resync: () => throttledReload (id),
     redirect: function(gameId) {
-      m.route('/tournament/' + tournament().id + '/game/' + gameId, null, true);
+      router.set('/tournament/' + tournament().id + '/game/' + gameId, true);
     },
     fen: function(d) {
       const featured = tournament().featured;
@@ -85,21 +91,22 @@ export default function controller() {
       if (featured.id !== d.id) return;
       featured.fen = d.fen;
       featured.lastMove = d.lm;
-      m.redraw();
+      redraw();
     }
   };
 
-  let clockInterval = null;
-  xhr.tournament(id).then(data => {
+  const clockInterval = m.prop();
+  xhr.tournament(id)
+  .then(data => {
     tournament(data);
     hasJoined(data.me && !data.me.withdraw);
-    clockInterval = setInterval(tick, 1000);
+    clockInterval(setInterval(tick, 1000));
     const featuredGame = data.featured ? data.featured.id : null;
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
   })
   .catch(utils.handleXhrError);
 
-  return {
+  vnode.state = {
     tournament,
     hasJoined,
     faqCtrl,
@@ -108,11 +115,6 @@ export default function controller() {
     withdraw: throttle(withdraw, 1000),
     reload: throttledReload,
     isLoading,
-    onunload: () => {
-      socket.destroy();
-      if (clockInterval) {
-        clearInterval(clockInterval);
-      }
-    }
+    clockInterval
   };
 }

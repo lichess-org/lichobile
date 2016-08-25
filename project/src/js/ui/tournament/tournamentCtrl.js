@@ -1,19 +1,20 @@
 import socket from '../../socket';
-import * as utils from '../../utils';
+import { handleXhrError } from '../../utils';
 import * as xhr from './tournamentXhr';
 import helper from '../helper';
 import * as m from 'mithril';
 import settings from '../../settings';
 
-export default function controller() {
+export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();
 
   const tournaments = m.prop();
-  const currentTab = m.prop(m.route.param('tab') || 'started');
+  const currentTab = m.prop(vnode.attrs.tab || 'started');
 
-  xhr.currentTournaments().then(data => {
+  xhr.currentTournaments()
+  .then(data => {
     data.started = data.started.filter(supported);
     data.created = data.created.filter(supported);
     data.finished = data.finished.filter(supported);
@@ -21,9 +22,10 @@ export default function controller() {
     data.finished.sort(sortByEndDate);
     tournaments(data);
     return data;
-  }).catch(utils.handleXhrError);
+  })
+  .catch(handleXhrError);
 
-  return {
+  vnode.state = {
     tournaments,
     currentTab
   };

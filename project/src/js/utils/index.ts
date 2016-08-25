@@ -1,17 +1,42 @@
 import i18n from '../i18n';
+import redraw from './redraw';
 import storage from '../storage';
 import { cloneDeep } from 'lodash';
 import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
+export function loadLocalJsonFile(url) {
+  let curXhr;
+  return new Promise((resolve, reject) => {
+    m.request({
+      url,
+      method: 'GET',
+      config(xhr) {
+        curXhr = xhr;
+      }
+    })
+    .run(data => resolve(data))
+    .catch(error => {
+      // workaround when xhr for local file has a 0 status it will
+      // reject the promise and still have the response object
+      if (curXhr.status === 0) {
+        try {
+          resolve(JSON.parse(curXhr.responseText));
+        } catch (e) {
+          reject(e);
+        }
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
 export function autoredraw(action: Function): void {
-  m.startComputation();
-  try {
-    return action();
-  } finally {
-    m.endComputation();
-  }
+  const res = action();
+  redraw();
+  return res;
 }
 
 export function tellWorker(worker: Worker, topic: string, payload?: any) {
@@ -22,16 +47,15 @@ export function tellWorker(worker: Worker, topic: string, payload?: any) {
   }
 }
 
-export function askWorker(worker: Worker, msg: WorkerMessage, callback?: (payload: any) => void): Promise<any> {
-  return new Promise(function(resolve) {
+export function askWorker(worker: Worker, msg: WorkerMessage): Promise<any> {
+  return new Promise(function(resolve, reject) {
     function listen(e) {
       if (e.data.topic === msg.topic) {
         worker.removeEventListener('message', listen);
-        if (callback) {
-          callback(e.data.payload);
-        } else {
-          resolve(e.data.payload);
-        }
+        resolve(e.data.payload);
+      } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
+        worker.removeEventListener('message', listen);
+        reject(e.data.payload.error);
       }
     }
     worker.addEventListener('message', listen);
@@ -44,7 +68,6 @@ export function hasNetwork(): boolean {
 }
 
 export function handleXhrError(error: XMLHttpRequest): void {
-  var {response: data, status} = error;
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
@@ -64,14 +87,23 @@ export function handleXhrError(error: XMLHttpRequest): void {
 
     message = i18n(message);
 
-    if (typeof data === 'string') {
-      message += ` ${data}`;
-    }
-    else if (data.global && data.global.constructor === Array) {
-      message += ` ${data.global[0]}`;
-    }
-    else if (typeof data.error === 'string') {
-      message += ` ${data.error}`;
+    if (error.response) {
+      let data;
+      try {
+        data = error.response.json();
+      } catch (e) {
+        data = error.response.text();
+      }
+
+      if (typeof data === 'string') {
+        message += ` ${data}`;
+      }
+      else if (data.global && data.global.constructor === Array) {
+        message += ` ${data.global[0]}`;
+      }
+      else if (typeof data.error === 'string') {
+        message += ` ${data.error}`;
+      }
     }
 
     window.plugins.toast.show(message, 'short', 'center');
@@ -79,8 +111,8 @@ export function handleXhrError(error: XMLHttpRequest): void {
 }
 
 export function serializeQueryParameters(obj: any): string {
-  var str = '';
-  for (var key in obj) {
+  let str = '';
+  for (const key in obj) {
     if (str !== '') {
       str += '&';
     }
@@ -116,7 +148,7 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
 
 export function playerName(player: Player, withRating): string {
   if (player.username || player.user) {
-    var name = player.username || player.user.username;
+    const name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
     if (withRating && (player.user || player.rating)) {
       name += ' (' + (player.rating || player.user.rating);
@@ -127,14 +159,14 @@ export function playerName(player: Player, withRating): string {
   }
 
   if (player.ai) {
-    return aiName(player.ai);
+    return aiName(player);
   }
 
   return 'Anonymous';
 }
 
-export function aiName(level: number): string {
-  return i18n('aiNameLevelAiLevel', 'Stockfish', level);
+export function aiName(player) {
+  return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 
 export function backHistory(): void {
@@ -188,34 +220,20 @@ export function oppositeColor(color: 'white' | 'black'): 'white' | 'black' {
 }
 
 export function caseInsensitiveSort(a: string, b: string): number {
-  var alow = a.toLowerCase();
-  var blow = b.toLowerCase();
+  const alow = a.toLowerCase();
+  const blow = b.toLowerCase();
 
   return alow > blow ? 1 : (alow < blow ? -1 : 0);
 }
 
 export function userFullNameToId(fullName: string): string {
-  var split = fullName.split(' ');
-  var id = split.length === 1 ? split[0] : split[1];
+  const split = fullName.split(' ');
+  const id = split.length === 1 ? split[0] : split[1];
   return id.toLowerCase();
 }
 
-export function capitalize(string: string): string {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-export function loadJsonFile<T>(filename: string): Promise<T> {
-  return m.request({
-    url: filename,
-    method: 'GET',
-    deserialize: function(text) {
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        throw { error: 'Error when parsing json from: ' + filename };
-      }
-    }
-  });
+export function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 // Returns a random number between min (inclusive) and max (exclusive)
@@ -302,6 +320,17 @@ export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait
       width: wsSide,
       height: wsSide
     };
+  } else if (isLandscapeSmall) {
+    const smallTop = 45;
+    const lSide = vh - smallTop;
+    return {
+      top: smallTop,
+      right: lSide,
+      bottom: smallTop + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
+    };
   } else {
     const lSide = vh - top;
     return {
@@ -332,12 +361,12 @@ export function variantReminder(el: HTMLElement, icon: string): void {
 }
 
 export function pad(num: number, size: number): string {
-    var s = num + '';
+    let s = num + '';
     while (s.length < size) s = '0' + s;
     return s;
 }
 
-export function formatTournamentCountdown(seconds: number): string {
+export function formatTimeInSecs(seconds: number): string {
   let timeStr = '';
   const hours = Math.floor(seconds / 60 / 60);
   const mins = Math.floor(seconds / 60) - (hours * 60);
@@ -366,3 +395,8 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
     return '∞';
   }
 }
+
+export function noNull(v) {
+  return v !== undefined && v !== null;
+}
+

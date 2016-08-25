@@ -46,10 +46,10 @@ loginModal.close = function(fromBB) {
 loginModal.view = function() {
   if (!isOpen) return null;
 
-  return m('div.modal#loginModal', { config: helper.slidesInUp }, [
+  return m('div.modal#loginModal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        config: helper.ontouch(helper.slidesOutDown(loginModal.close, 'loginModal'))
+        oncreate: helper.ontouch(helper.slidesOutDown(loginModal.close, 'loginModal'))
       }),
       m('h2', i18n('signIn'))
     ]),
@@ -76,7 +76,7 @@ loginModal.view = function() {
       ]),
       m('div.signup', [
         m('a', {
-          config: helper.ontouch(signupModal.open)
+          oncreate: helper.ontouch(signupModal.open)
         }, [i18n('newToLichess'), ' ', i18n('signUp')])
       ])
     ])

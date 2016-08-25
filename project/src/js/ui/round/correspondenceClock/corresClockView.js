@@ -36,13 +36,12 @@ export function view(ctrl, color, runningColor) {
     'emerg': time < ctrl.data.emerg,
     'offline': !hasNetwork()
   });
-  function cConfig(el, isUpdate) {
+  function cOnCreate(vnode) {
+    const el = vnode.dom;
     el.textContent = formatClockTime(time * 1000);
-    if (!isUpdate) {
-      ctrl.els[color] = el;
-    }
+    ctrl.els[color] = el;
   }
   return (
-    <div className={className} config={cConfig} />
+    <div className={className} oncreate={cOnCreate} />
   );
 }

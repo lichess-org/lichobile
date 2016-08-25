@@ -1,7 +1,10 @@
-import controller from './userCtrl';
+import helper from '../helper';
+import oninit from './userCtrl';
 import view from './userView';
 
 export default {
-  controller,
+  oninit: oninit,
+  oncreate: helper.viewFadeIn,
+  onbeforeremove: helper.viewFadeOut,
   view
 };

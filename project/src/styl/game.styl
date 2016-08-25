@@ -433,31 +433,25 @@
     height calc((100vh - 50px) / 8)
     max-width 50px
     max-height 50px
-
-.pocket > piece:first-child
-  border-radius: 3px 0 0 3px;
-
-.pocket.usable > piece
-  transition: background-color 0.13s;
+  &:after
+    content: attr(data-nb);
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    line-height: 0.9em
+    padding: 3px 5px 4px 5px;
+    font-weight: bold;
+    border-radius: 2px;
+    font-size: 0.9em
+    color: #fff
+    text-shadow: 0 1px 0 #000
+    background orange
+    border-color: #b84400
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
+  &:first-child
+    border-radius: 3px 0 0 3px;
 
 .pocket > piece[data-nb='0']
   opacity: 0.1;
-
-.pocket > piece::after
-  content: attr(data-nb);
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  line-height: 0.9em
-  padding: 3px 5px 4px 5px;
-  font-weight: bold;
-  border-radius: 2px;
-  font-size: 0.9em
-  color: #fff
-  text-shadow: 0 1px 0 #000
-  background orange
-  border-color: #b84400
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
-
-.pocket > piece[data-nb='0']::after
-  content: none;
+  &:after
+    content none

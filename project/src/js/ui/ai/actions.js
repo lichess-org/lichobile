@@ -71,7 +71,7 @@ export default {
   view: function(ctrl) {
     return popupWidget(
       'offline_actions',
-      () => <div><span className="fa fa-cogs" />{i18n('playOfflineComputer')}</div>,
+      null,
       function() {
         return [
           renderEndedGameStatus(ctrl.root)

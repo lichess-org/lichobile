@@ -6,7 +6,6 @@ import i18n from './i18n';
 import { lightPlayerName } from './utils';
 import { fetchText } from './http';
 import challengesApi from './lichess/challenges';
-import * as m from 'mithril';
 
 let push;
 
@@ -53,7 +52,7 @@ export default {
                   challengesApi.refresh().then(() => redraw());
                   break;
                 case 'challengeAccept':
-                  m.prop.merge([
+                  Promise.all([
                     challengesApi.refresh(),
                     session.refresh()
                   ])

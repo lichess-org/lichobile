@@ -1,4 +1,5 @@
 import * as utils from '../utils';
+import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames';
 import router from '../router';
 import helper from './helper';
 import iScroll from 'iscroll';
@@ -24,7 +25,12 @@ gamesMenu.open = function() {
   setTimeout(function() {
     if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
   }, 400);
-  session.refresh();
+  session.refresh()
+  .then(v => {
+    if (v) return session.nowPlaying();
+    else return undefined;
+  })
+  .then(syncWithNowPlayingGames);
 };
 
 gamesMenu.close = function(fromBB) {
@@ -211,7 +217,7 @@ function renderAllGames(cDim) {
   } : {};
   const nbCards = utils.hasNetwork() ?
     challenges.length + nowPlaying.length + 1 :
-    utils.getOfflineGames().length;
+    getOfflineGames().length;
 
   let wrapperStyle, wrapperWidth;
   if (cDim) {
@@ -236,7 +242,7 @@ function renderAllGames(cDim) {
   var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
   if (!utils.hasNetwork()) {
-    allCards = utils.getOfflineGames().map(d => {
+    allCards = getOfflineGames().map(d => {
       const g = savedGameDataToCardData(d);
       return renderGame(g, cDim, cardStyle);
     });

@@ -1,3 +1,4 @@
+import gameApi from '../../lichess/game';
 import gameStatusApi from '../../lichess/status';
 import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';
@@ -155,6 +156,10 @@ export default function oninit() {
 
   this.replaying = function() {
     return this.replay.ply !== this.lastPly();
+  }.bind(this);
+
+  this.canDrop = function() {
+    return gameApi.isPlayerPlaying(this.data);
   }.bind(this);
 
   const setupFen = storage.get(storageFenKey);

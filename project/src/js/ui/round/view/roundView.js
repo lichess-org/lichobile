@@ -21,7 +21,7 @@ import { perfTypes } from '../../../lichess/perfs';
 import gameStatusApi from '../../../lichess/status';
 import chat from '../chat';
 import notes from '../notes';
-import crazyView from '../crazy/crazyView';
+import CrazyPocket from '../crazy/crazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 
@@ -261,7 +261,12 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {crazyView.pocket(ctrl, step.crazy, player.color, position)}
+      {m(CrazyPocket, {
+        ctrl,
+        crazyData: step.crazy,
+        color: player.color,
+        position
+      })}
       {!isCrazy && ctrl.clock ?
         renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
         !isCrazy && ctrl.correspondenceClock ?
@@ -385,7 +390,7 @@ function gameInfos(ctrl) {
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = data.opponent.ai ? ':' : utils.gameIcon(data.game.perf);
+  const icon = utils.gameIcon(data.game.perf);
   const variant = m('span.variant', {
     oncreate: helper.ontouch(
       () => {

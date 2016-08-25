@@ -22,7 +22,8 @@ import atomic from './atomic';
 import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
-import { hasNetwork, saveOfflineGameData, boardOrientation } from '../../utils';
+import { hasNetwork, boardOrientation } from '../../utils';
+import { saveOfflineGameData } from '../../utils/offlineGames';
 import crazyValid from './crazy/crazyValid';
 
 export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
@@ -136,6 +137,10 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     return this.vm.ply !== round.lastPly(this.data);
   }.bind(this);
 
+  this.canDrop = function() {
+    return !this.replaying() && gameApi.isPlayerPlaying(this.data);
+  }.bind(this);
+
   this.jump = function(ply) {
     if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
     const isFwd = ply > this.vm.ply;
@@ -148,10 +153,8 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
     if (!this.replaying()) {
-      config.movable = {
-        color: gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null,
-        dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
-      };
+      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null;
+      config.dests = gameApi.parsePossibleMoves(this.data.possibleMoves);
     }
     this.chessground.set(config);
     if (this.replaying()) this.chessground.stop();

@@ -1,7 +1,5 @@
 import i18n from '../i18n';
 import redraw from './redraw';
-import storage from '../storage';
-import { cloneDeep } from 'lodash';
 import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
@@ -241,6 +239,7 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
+<<<<<<< HEAD:project/src/js/utils/index.ts
 const offlineCorresStorageKey = 'offline.corres.games';
 
 export function getOfflineGames(): Array<GameData> {
@@ -277,6 +276,9 @@ export function removeOfflineGameData(id: string): void {
 }
 
 export function challengeTime(c: ChallengeClock): string {
+=======
+export function challengeTime(c) {
+>>>>>>> origin/master:project/src/js/utils/index.js
   if (c.timeControl.type === 'clock') {
     return c.timeControl.show;
   } else if (c.timeControl.type === 'correspondence') {
@@ -399,4 +401,3 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
 export function noNull(v) {
   return v !== undefined && v !== null;
 }
-

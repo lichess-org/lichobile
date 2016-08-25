@@ -10,8 +10,8 @@ function makeConfig(data, config, onMove, onNewPiece) {
     coordinates: settings.game.coords(),
     movable: {
       free: false,
-      color: config.movable.color,
-      dests: config.movable.dests,
+      color: config.movableColor,
+      dests: config.dests,
       showDests: settings.game.pieceDestinations()
     },
     draggable: {

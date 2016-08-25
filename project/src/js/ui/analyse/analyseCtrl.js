@@ -119,10 +119,8 @@ export default function oninit(vnode) {
       fen: s.fen,
       turnColor: color,
       orientation: this.vm.flip ? oppositeColor(this.data.orientation) : this.data.orientation,
-      movable: {
-        color: dests && Object.keys(dests).length > 0 ? color : null,
-        dests: dests || {}
-      },
+      movableColor: dests && Object.keys(dests).length > 0 ? color : null,
+      dests: dests || {},
       check: s.check,
       lastMove: uciToLastMove(s.uci)
     };
@@ -185,12 +183,14 @@ export default function oninit(vnode) {
     redraw();
   }.bind(this);
 
+  this.canDrop = function() {
+    return true;
+  };
+
   const preparePremoving = function() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,
-      movable: {
-        color: oppositeColor(this.chessground.data.movable.color)
-      }
+      movableColor: oppositeColor(this.chessground.data.movable.color)
     });
   }.bind(this);
 
@@ -302,11 +302,6 @@ export default function oninit(vnode) {
     if (treePath.contains(path, this.vm.path))
       this.jump(this.vm.path.splice(1));
     this.toggleVariationMenu(null);
-  }.bind(this);
-
-  this.reset = function() {
-    this.chessground.set(this.vm.situation);
-    redraw();
   }.bind(this);
 
   this.currentAnyEval = function() {

@@ -1,50 +1,48 @@
 import settings from '../../../settings';
 import crazyDrag from './crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
-import gameApi from '../../../lichess/game';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export default {
-  pocket: function(ctrl, crazyData, color, position, isOTB, customPieceTheme) {
-    if (!crazyData) return null;
-    const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
-    const usablePos = position === (ctrl.vm.flip ? 'top' : 'bottom');
-    const usable = (usablePos || isOTB) && (!ctrl.replaying() || isOTB) && gameApi.isPlayerPlaying(ctrl.data);
-    const className = [
-      customPieceTheme || settings.general.theme.piece(),
-      'pocket',
-      position,
-      usable ? 'usable' : '',
-      isOTB ? 'offline' : ''
-    ].join(' ');
-
-    const onstart = crazyDrag.bind(undefined, ctrl, usable);
+  oninit(vnode) {
+    const { ctrl } = vnode.attrs;
+    const onstart = crazyDrag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 
-    function pocketOnCreate(vnode) {
-      const el = vnode.dom;
+    this.pocketOnCreate = function({ dom }) {
       const contentNode = document.getElementById('content_round');
-      el.addEventListener('touchstart', onstart);
+      dom.addEventListener('touchstart', onstart);
       if (contentNode) {
         contentNode.addEventListener('touchmove', onmove);
         contentNode.addEventListener('touchend', onend);
       }
-    }
+    };
 
-    function pocketOnRemove(vnode) {
-      const el = vnode.dom;
+    this.pocketOnRemove = function({ dom }) {
       const contentNode = document.getElementById('content_round');
-      el.removeEventListener('touchstart', onstart);
+      dom.removeEventListener('touchstart', onstart);
       if (contentNode) {
         contentNode.removeEventListener('touchmove', onmove);
         contentNode.removeEventListener('touchend', onend);
       }
-    }
+    };
+  },
+
+  view(vnode) {
+    const { crazyData, position, color, customPieceTheme } = vnode.attrs;
+
+    if (!crazyData) return null;
+    const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
+    const className = [
+      customPieceTheme || settings.general.theme.piece(),
+      'pocket',
+      position
+    ].join(' ');
 
     return (
-      <div className={className} oncreate={pocketOnCreate} onremove={pocketOnRemove}>
+      <div className={className} oncreate={this.pocketOnCreate} onremove={this.pocketOnRemove}>
         {pieceRoles.map(role =>
           <piece
             data-role={role}

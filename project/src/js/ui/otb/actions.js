@@ -50,7 +50,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'offline_actions',
-        () => <div><span className="fa fa-beer" />{i18n('playOnTheBoardOffline')}</div>,
+        null,
         function() {
           return [
             renderEndedGameStatus(ctrl.root)

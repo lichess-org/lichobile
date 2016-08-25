@@ -40,20 +40,6 @@ function makeConfig(data, sit) {
   };
 }
 
-function applySettings(ground) {
-  ground.set({
-    movable: {
-      showDests: settings.game.pieceDestinations()
-    },
-    animation: {
-      enabled: settings.game.animations()
-    },
-    premovable: {
-      showDests: settings.game.pieceDestinations()
-    }
-  });
-}
-
 function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
   var config = makeConfig(data, sit);
   config.movable.events = {
@@ -68,7 +54,7 @@ function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
 }
 
 function reload(ground, data, sit) {
-  ground.set(makeConfig(data, sit));
+  ground.reconfigure(makeConfig(data, sit));
 }
 
 function promote(ground, key, role) {
@@ -91,6 +77,5 @@ export default {
   make,
   reload,
   promote,
-  end,
-  applySettings
+  end
 };

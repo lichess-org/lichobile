@@ -6,9 +6,9 @@ function isDraggable(data, color) {
   );
 }
 
-export default function(ctrl, usable, e) {
+export default function(ctrl, e) {
   if (e.button !== undefined && e.button !== 0) return; // only touch or left click
-  if (!usable) return;
+  if (!ctrl.canDrop()) return;
   const cgData = ctrl.chessground.data;
   const role = e.target.getAttribute('data-role'),
     color = e.target.getAttribute('data-color'),

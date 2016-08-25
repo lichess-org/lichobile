@@ -153,10 +153,8 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
     if (!this.replaying()) {
-      config.movable = {
-        color: gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null,
-        dests: gameApi.parsePossibleMoves(this.data.possibleMoves)
-      };
+      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null;
+      config.dests = gameApi.parsePossibleMoves(this.data.possibleMoves);
     }
     this.chessground.set(config);
     if (this.replaying()) this.chessground.stop();

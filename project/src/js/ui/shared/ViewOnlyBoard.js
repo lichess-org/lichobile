@@ -1,4 +1,3 @@
-import m from 'mithril';
 import chessground from 'chessground-mobile';
 import settings from '../../settings';
 

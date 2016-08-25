@@ -55,10 +55,8 @@ export default function replayCtrl(root, rootSituations, rootPly, chessWorker) {
         fen: sit.fen,
         turnColor: sit.player,
         lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
-        movable: {
-          dests: sit.dests,
-          color: sit.player
-        },
+        dests: sit.dests,
+        movableColor: sit.player,
         check: sit.check
       });
     }

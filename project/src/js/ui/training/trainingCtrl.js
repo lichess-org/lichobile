@@ -9,7 +9,6 @@ import sound from '../../sound';
 import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
-import m from 'mithril';
 import helper from '../helper';
 import socket from '../../socket';
 
@@ -56,10 +55,8 @@ export default function ctrl(vnode) {
         lastMove: sitToRevertTo.move,
         turnColor: sitToRevertTo.turnColor,
         check: sitToRevertTo.check,
-        movable: {
-          color: 'both',
-          dests: sitToRevertTo.dests
-        }
+        movableColor: 'both',
+        dests: sitToRevertTo.dests
       });
       redraw();
     }, 1000);
@@ -130,9 +127,7 @@ export default function ctrl(vnode) {
       lastMove: chess.lastMove(this.data.chess),
       turnColor: this.data.puzzle.color,
       check: null,
-      movable: {
-        dests: this.data.chess.dests()
-      }
+      dests: this.data.chess.dests()
     });
     redraw();
     if (this.data.chess.in_check()) this.chessground.setCheck();
@@ -171,9 +166,7 @@ export default function ctrl(vnode) {
     this.chessground.set({
       fen: this.data.chess.fen(),
       lastMove: move,
-      movable: {
-        dests: this.data.chess.dests()
-      },
+      dests: this.data.chess.dests(),
       turnColor: this.data.puzzle.color,
       check: null
     });
@@ -234,7 +227,7 @@ export default function ctrl(vnode) {
 
   this.init = function(cfg) {
     this.data = makeData(cfg);
-    var chessgroundConf = {
+    const chessgroundConf = {
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
       coordinates: settings.game.coords(),
@@ -268,7 +261,7 @@ export default function ctrl(vnode) {
         magnified: settings.game.magnified()
       }
     };
-    if (this.chessground) this.chessground.set(chessgroundConf);
+    if (this.chessground) this.chessground.reconfigure(chessgroundConf);
     else this.chessground = new chessground.controller(chessgroundConf);
     redraw();
   }.bind(this);

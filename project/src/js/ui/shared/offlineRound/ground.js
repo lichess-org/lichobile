@@ -41,7 +41,7 @@ function makeConfig(data, sit) {
 }
 
 function applySettings(ground) {
-  ground.set({
+  ground.reconfigure({
     movable: {
       showDests: settings.game.pieceDestinations()
     },
@@ -68,7 +68,7 @@ function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
 }
 
 function reload(ground, data, sit) {
-  ground.set(makeConfig(data, sit));
+  ground.reconfigure(makeConfig(data, sit));
 }
 
 function promote(ground, key, role) {

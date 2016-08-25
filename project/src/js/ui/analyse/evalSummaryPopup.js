@@ -3,7 +3,7 @@ import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
 import gameApi from '../../lichess/game';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
 

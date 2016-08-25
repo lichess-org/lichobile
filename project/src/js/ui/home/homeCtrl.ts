@@ -15,7 +15,7 @@ export interface HomeCtrl {
   timeline: Mithril.Property<Array<any>>;
 }
 
-export default function homeCtrl(vnode): HomeCtrl {
+export default function homeCtrl(vnode): void {
 
   const nbConnectedPlayers = m.prop<number>();
   const nbGamesInPlay = m.prop<number>();

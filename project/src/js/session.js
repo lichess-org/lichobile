@@ -1,13 +1,11 @@
 import { get, set } from 'lodash/object';
+import { pick, mapValues, throttle } from 'lodash';
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
-import pick from 'lodash/pick';
-import mapValues from 'lodash/mapValues';
-import throttle from 'lodash/throttle';
 
 var session = null;
 

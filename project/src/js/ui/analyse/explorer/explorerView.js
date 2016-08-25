@@ -1,5 +1,5 @@
 import router from '../../../router';
-import m from 'mithril';
+import * as m from 'mithril';
 import helper from '../../helper';
 import explorerConfig from './explorerConfig';
 

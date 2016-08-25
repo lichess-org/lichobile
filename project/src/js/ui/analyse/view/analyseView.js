@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import isEmpty from 'lodash/isEmpty';
 import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
@@ -6,7 +6,7 @@ import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import { connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
+import { gameTitle, connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
 import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
@@ -29,7 +29,7 @@ export default function analyseView() {
 
   if (ctrl.data) {
 
-    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameApi.title(ctrl.data)) : null;
+    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(ctrl.data)) : null;
     const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
     return layout.board(

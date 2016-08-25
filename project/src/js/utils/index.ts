@@ -1,10 +1,11 @@
 import i18n from '../i18n';
+import { ResponseError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
-export function loadLocalJsonFile(url) {
+export function loadLocalJsonFile(url): Promise<any> {
   let curXhr;
   return new Promise((resolve, reject) => {
     m.request({
@@ -37,7 +38,7 @@ export function autoredraw(action: Function): void {
   return res;
 }
 
-export function tellWorker(worker: Worker, topic: string, payload?: any) {
+export function tellWorker(worker: Worker, topic: string, payload?: any): void {
   if (payload !== undefined) {
     worker.postMessage({ topic, payload });
   } else {
@@ -65,7 +66,9 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-export function handleXhrError(error: XMLHttpRequest): void {
+export function handleXhrError(error: ResponseError): void {
+  const status = error.response && error.response.status;
+
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
@@ -146,7 +149,7 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
 
 export function playerName(player: Player, withRating): string {
   if (player.username || player.user) {
-    const name = player.username || player.user.username;
+    let name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
     if (withRating && (player.user || player.rating)) {
       name += ' (' + (player.rating || player.user.rating);
@@ -239,46 +242,7 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-<<<<<<< HEAD:project/src/js/utils/index.ts
-const offlineCorresStorageKey = 'offline.corres.games';
-
-export function getOfflineGames(): Array<GameData> {
-  const stored = storage.get(offlineCorresStorageKey) || {};
-  let arr = [];
-  for (const i in stored) {
-    arr.push(stored[i]);
-  }
-  return arr;
-}
-
-export function getOfflineGameData(id: string): GameData {
-  const stored = storage.get(offlineCorresStorageKey) || {};
-  return stored[id];
-}
-
-export function saveOfflineGameData(id: string, gameData: GameData) {
-  const stored = storage.get(offlineCorresStorageKey) || {};
-  const toStore: GameData = cloneDeep(gameData);
-  toStore.player.onGame = false;
-  toStore.opponent.onGame = false;
-  if (toStore.player.user) toStore.player.user.online = false;
-  if (toStore.opponent.user) toStore.opponent.user.online = false;
-  stored[id] = toStore;
-  storage.set(offlineCorresStorageKey, stored);
-}
-
-export function removeOfflineGameData(id: string): void {
-  const stored = storage.get(offlineCorresStorageKey);
-  if (stored && stored[id]) {
-    delete stored[id];
-  }
-  storage.set(offlineCorresStorageKey, stored);
-}
-
 export function challengeTime(c: ChallengeClock): string {
-=======
-export function challengeTime(c) {
->>>>>>> origin/master:project/src/js/utils/index.js
   if (c.timeControl.type === 'clock') {
     return c.timeControl.show;
   } else if (c.timeControl.type === 'correspondence') {
@@ -296,7 +260,7 @@ export function boardOrientation(data: GameData, flip: boolean): 'black' | 'whit
   }
 }
 
-export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, mode: string): Dimensions  {
+export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, isLandscapeSmall: boolean, mode: string): Dimensions  {
   const { vh, vw } = viewportDim;
   const top = 50;
 

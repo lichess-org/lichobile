@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
 import debounce from 'lodash/debounce';
 import backbutton from '../../../backbutton';

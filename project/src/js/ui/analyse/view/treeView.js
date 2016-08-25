@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import helper from '../../helper';
 import treePath from '../path';
 import { empty, defined, renderEval, isSynthetic } from '../util';

@@ -56,7 +56,7 @@ export default function i18n(key: string, ...args: Array<string | number>): stri
 }
 
 export function loadPreferredLanguage(): Promise<string> {
-  if (settings.general.lang())
+  if (settings.general.lang()) {
     return loadFromSettings();
   }
 
@@ -66,7 +66,7 @@ export function loadPreferredLanguage(): Promise<string> {
       () => resolve(defaultCode)
     );
   })
-  .then(code => {
+  .then((code: string) => {
     settings.general.lang(code);
     return code;
   })

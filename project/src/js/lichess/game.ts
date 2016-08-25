@@ -1,7 +1,6 @@
 import gameStatus from './status';
-import { secondsToMinutes, gameIcon } from '../utils';
+import { secondsToMinutes } from '../utils';
 import settings from '../settings';
-import getVariant from './variant';
 import i18n from '../i18n';
 
 const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'crazyhouse', 'atomic', 'horde', 'racingKings'];
@@ -142,19 +141,6 @@ function time(data) {
   }
 }
 
-function title(data) {
-  const mode = data.game.offline ? i18n('offline') :
-    data.game.rated ? i18n('rated') : i18n('casual');
-  const variant = getVariant(data.game.variant.key);
-  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
-  const icon = gameIcon(data.game.perf || data.game.variant.key);
-  const text = `${time(data)} • ${name} • ${mode}`;
-  return [
-    <span className="withIcon" data-icon={icon} />,
-    <span>{text}</span>
-  ];
-}
-
 function publicUrl(data) {
   return 'http://lichess.org/' + data.game.id;
 }
@@ -187,7 +173,6 @@ export default {
   setIsGone,
   result,
   time,
-  title,
   publicUrl,
   isSupportedVariant
 };

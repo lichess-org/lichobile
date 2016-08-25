@@ -8,7 +8,7 @@ import i18n from '../i18n';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import helper from './helper';
-import m from 'mithril';
+import * as m from 'mithril';
 
 let isOpen = false;
 let fromPositionFen = null;

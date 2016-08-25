@@ -1,7 +1,7 @@
-import { encode as buildQueryString } from 'querystring';
 import { merge } from 'lodash';
 import spinner from './spinner';
 import redraw from './utils/redraw';
+import { buildQueryString } from './utils/querystring';
 
 export const apiVersion = 2;
 
@@ -12,8 +12,10 @@ export function checkStatus(response) {
     return response;
   } else {
     const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
+    throw {
+      error,
+      response
+    };
   }
 }
 
@@ -27,7 +29,16 @@ function addQuerystring(url, querystring) {
   return res;
 }
 
-function request(url, opts, feedback = false): Promise<any> {
+export interface RequestOpts extends RequestInit {
+  query?: Object;
+}
+
+export interface ResponseError {
+  error: Error;
+  response?: Response;
+}
+
+function request(url: string, opts?: RequestOpts, feedback = false): Promise<any> {
 
   let timeoutId;
 
@@ -45,10 +56,10 @@ function request(url, opts, feedback = false): Promise<any> {
     throw error;
   }
 
-  const cfg = {
+  const cfg: RequestInit = {
     method: 'GET',
     credentials: 'include',
-    headers: {
+    headers: <{[index: string]: string }> {
       'X-Requested-With': 'XMLHttpRequest',
       'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
     }
@@ -68,6 +79,7 @@ function request(url, opts, feedback = false): Promise<any> {
     if (query !== '') {
       url = addQuerystring(url, query);
     }
+    delete opts.query;
   }
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url;
@@ -80,7 +92,7 @@ function request(url, opts, feedback = false): Promise<any> {
   ]);
 
   if (feedback) {
-    spinner.spin(document.body);
+    spinner.spin();
   }
 
   return promise
@@ -89,12 +101,12 @@ function request(url, opts, feedback = false): Promise<any> {
     .catch(onError);
 }
 
-export function fetchJSON(url, opts, feedback) {
+export function fetchJSON(url: string, opts?: RequestOpts, feedback = false) {
   return request(url, opts, feedback)
   .then(parseJSON);
 }
 
-export function fetchText(url, opts, feedback) {
+export function fetchText(url: string, opts?: RequestOpts, feedback = false) {
   return request(url, opts, feedback)
   .then(r => r.text());
 }

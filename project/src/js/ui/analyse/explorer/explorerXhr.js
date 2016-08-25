@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../../http';
-import m from 'mithril';
+import * as m from 'mithril';
 
 const endpoint = 'https://expl.lichess.org';
 

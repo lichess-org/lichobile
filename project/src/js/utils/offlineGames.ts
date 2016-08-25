@@ -1,6 +1,5 @@
 import storage from '../storage';
-import cloneDeep from 'lodash/cloneDeep';
-import difference from 'lodash/difference';
+import { cloneDeep, difference } from 'lodash';
 
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';

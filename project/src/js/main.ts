@@ -2,10 +2,11 @@
 /// <reference path="../dts/cordova-ionic/cordova-ionic.d.ts" />
 /// <reference path="../dts/mithril.d.ts" />
 /// <reference path="../dts/lodash.d.ts" />
-/// <reference path="../dts/webworkify.d.ts" />
 /// <reference path="../dts/cordova-plugin-toast.d.ts" />
 /// <reference path="../dts/sse.d.ts" />
 /// <reference path="../dts/lichess.d.ts" />
+/// <reference path="../dts/whatwg-fetch.d.ts" />
+/// <reference path="../dts/rlite.d.ts" />
 
 'use strict';
 

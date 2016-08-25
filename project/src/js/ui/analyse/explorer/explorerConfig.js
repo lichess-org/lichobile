@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import helper from '../../helper';
 import backbutton from '../../../backbutton';
 import settings from '../../../settings';

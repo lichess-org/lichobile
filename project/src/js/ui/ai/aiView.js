@@ -1,7 +1,6 @@
-import gameApi from '../../lichess/game';
 import * as chessground from 'chessground-mobile';
 import layout from '../layout';
-import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
 import {
   renderAntagonist,
@@ -20,7 +19,7 @@ export default function view() {
   var content, header;
 
   if (ctrl.data && ctrl.chessground) {
-    header = () => renderHeader(gameApi.title(ctrl.data));
+    header = () => renderHeader(gameTitle(ctrl.data));
     content = () => renderContent(ctrl);
   } else {
     header = () => renderHeader(i18n('playOfflineComputer'));

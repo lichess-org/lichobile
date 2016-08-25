@@ -305,7 +305,7 @@ declare namespace Mithril {
 		*
 		* @see XHROptions for the available options.
 		*/
-		request(options: XHROptions): Promise<any>;
+		request(options: XHROptions): any;
 
 		deferred: {
 			/**
@@ -783,4 +783,9 @@ declare const m: Mithril.Static;
 
 declare module "mithril" {
   export = m;
+}
+
+declare module "mithril/render/vnode" {
+  var x: any;
+  export = x;
 }

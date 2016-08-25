@@ -8,7 +8,7 @@ import settings from '../../../settings';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import layout from '../../layout';
-import { backButton, menuButton, loader, headerBtns, miniUser } from '../../shared/common';
+import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../shared/common';
 import Board from '../../shared/Board';
 import popupWidget from '../../shared/popup';
 import formWidgets from '../../shared/form';
@@ -103,7 +103,7 @@ function renderTitle(ctrl) {
 function renderHeader(ctrl) {
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameApi.title(ctrl.data)) : menuButton()}
+      { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameTitle(ctrl.data)) : menuButton()}
       { ctrl.data.tv || ctrl.data.userTV || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
       {headerBtns()}
     </nav>

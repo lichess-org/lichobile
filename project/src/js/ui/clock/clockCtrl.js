@@ -3,7 +3,7 @@ import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import sound from '../../sound';
 import helper from '../helper';
-import m from 'mithril';
+import * as m from 'mithril';
 import clockSettings from './clockSettings';
 
 export default function oninit(vnode) {

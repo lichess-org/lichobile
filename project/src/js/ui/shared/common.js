@@ -1,4 +1,5 @@
 import menu from '../menu';
+import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
 import { getOfflineGames } from '../../utils/offlineGames';
@@ -8,6 +9,7 @@ import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import session from '../../session';
+import gameApi from '../../lichess/game';
 import challengesApi from '../../lichess/challenges';
 import friendsApi from '../../lichess/friends';
 import i18n from '../../i18n';
@@ -207,6 +209,20 @@ export function userStatus(user) {
     </div>
   );
 }
+
+export function gameTitle(data) {
+  const mode = data.game.offline ? i18n('offline') :
+    data.game.rated ? i18n('rated') : i18n('casual');
+  const variant = getVariant(data.game.variant.key);
+  const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
+  const icon = utils.gameIcon(data.game.perf || data.game.variant.key);
+  const text = `${gameApi.time(data)} • ${name} • ${mode}`;
+  return [
+    <span className="withIcon" data-icon={icon} />,
+    <span>{text}</span>
+  ];
+}
+
 
 export function miniUser(user, mini, isOpen, close) {
   if (!user) return null;

@@ -5,7 +5,7 @@ import backbutton from '../../backbutton';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import m from 'mithril';
+import * as m from 'mithril';
 
 export default {
 

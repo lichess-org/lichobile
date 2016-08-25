@@ -1,6 +1,6 @@
-import Rlite from 'rlite-router';
-import m from 'mithril';
-import Vnode from 'mithril/render/vnode';
+import * as Rlite from 'rlite-router';
+import * as m from 'mithril';
+import * as Vnode from 'mithril/render/vnode';
 import signals from './signals';
 
 const router = new Rlite();
@@ -38,7 +38,7 @@ function processQuerystring() {
 }
 
 export default {
-  set(path, replace) {
+  set(path: string, replace = false) {
     if (replace) {
       window.history.replaceState(null, null, '?=' + path);
     } else {
@@ -47,7 +47,7 @@ export default {
     const matched = router.run(path);
     if (!matched) router.run('/');
   },
-  get() {
+  get(): string {
     return window.location.search || '?=';
   }
 };

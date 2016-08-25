@@ -1,5 +1,5 @@
 import { fetchJSON, fetchText, apiVersion } from './http';
-import { lichessSri } from './utils';
+import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
@@ -110,8 +110,8 @@ export function seeks(feedback) {
   return fetchJSON('/lobby/seeks', null, feedback);
 }
 
-export function game(id, color) {
-  const url = '/' + id;
+export function game(id: string, color?: string) {
+  let url = '/' + id;
   if (color) url += ('/' + color);
   return fetchJSON(url, null);
 }

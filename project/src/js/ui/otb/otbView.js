@@ -1,7 +1,7 @@
 import gameApi from '../../lichess/game';
 import * as chessground from 'chessground-mobile';
 import layout from '../layout';
-import { header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
@@ -19,7 +19,7 @@ export default function view(vnode) {
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
   if (ctrl.data && ctrl.chessground) {
-    header = () => renderHeader(gameApi.title(ctrl.data));
+    header = () => renderHeader(gameTitle(ctrl.data));
     content = () => renderContent(ctrl, pieceTheme);
   } else {
     header = () => renderHeader(i18n('playOnTheBoardOffline'));

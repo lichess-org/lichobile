@@ -1,7 +1,6 @@
 import router from './router';
 import redraw from './utils/redraw';
 import { isFunction } from 'lodash/lang';
-import isFunction from 'lodash/isFunction';
 import { backHistory } from './utils';
 import session from './session';
 

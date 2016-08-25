@@ -6,6 +6,7 @@ import * as utils from '../../utils';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import gameApi from '../../lichess/game';
+import { gameTitle } from '../shared/common';
 import ground from './ground';
 import promotion from './promotion';
 import chat from './chat';
@@ -187,7 +188,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     else if (this.data.userTV)
       this.title = this.data.userTV;
     else if (gameStatus.started(this.data))
-      this.title = gameApi.title(this.data);
+      this.title = gameTitle(this.data);
     else if (gameStatus.finished(this.data))
       this.title = i18n('gameOver');
     else if (gameStatus.aborted(this.data))

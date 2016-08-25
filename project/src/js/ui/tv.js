@@ -1,4 +1,4 @@
-import m from 'mithril';
+import * as m from 'mithril';
 import router from '../router';
 import helper from './helper';
 import { handleXhrError } from '../utils';

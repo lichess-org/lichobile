@@ -3,7 +3,6 @@ import redraw from '../../utils/redraw';
 import gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { boardOrientation } from '../../utils';
-import m from 'mithril';
 
 function str2move(move) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
@@ -57,20 +56,6 @@ function makeConfig(data, fen, flip) {
   };
 }
 
-function applySettings(ground) {
-  ground.reconfigure({
-    movable: {
-      showDests: settings.game.pieceDestinations()
-    },
-    animation: {
-      enabled: settings.game.animations()
-    },
-    premovable: {
-      showDests: settings.game.pieceDestinations()
-    }
-  });
-}
-
 function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   var config = makeConfig(data, fen);
   config.movable.events = {
@@ -109,6 +94,5 @@ export default {
   make,
   reload,
   promote,
-  end,
-  applySettings
+  end
 };

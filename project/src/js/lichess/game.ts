@@ -5,14 +5,14 @@ import i18n from '../i18n';
 
 const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'crazyhouse', 'atomic', 'horde', 'racingKings'];
 
-function parsePossibleMoves(possibleMoves) {
+function parsePossibleMoves(possibleMoves: {[index: string]: string}) {
   if (!possibleMoves) return {};
-  const r = {};
+  const r: {[index: string]: Array<string>} = {};
   const keys = Object.keys(possibleMoves);
-  for (var i = 0, ilen = keys.length; i < ilen; i++) {
+  for (let i = 0, ilen = keys.length; i < ilen; i++) {
     const mvs = possibleMoves[keys[i]];
-    const a = [];
-    for (var j = 0, jlen = mvs.length; j < jlen; j += 2) {
+    const a: Array<string> = [];
+    for (let j = 0, jlen = mvs.length; j < jlen; j += 2) {
       a.push(mvs.substr(j, 2));
     }
     r[keys[i]] = a;
@@ -20,102 +20,102 @@ function parsePossibleMoves(possibleMoves) {
   return r;
 }
 
-function playable(data) {
+function playable(data: GameData) {
   return data.game.status.id < gameStatus.ids.aborted;
 }
 
-function isPlayerPlaying(data) {
+function isPlayerPlaying(data: GameData) {
   return playable(data) && !data.player.spectator;
 }
 
-function isPlayerTurn(data) {
+function isPlayerTurn(data: GameData) {
   return isPlayerPlaying(data) && data.game.player === data.player.color;
 }
 
-function isOpponentTurn(data) {
+function isOpponentTurn(data: GameData) {
   return isPlayerPlaying(data) && data.game.player !== data.player.color;
 }
 
-function mandatory(data) {
+function mandatory(data: GameData) {
   return !!data.tournament;
 }
 
-function playedTurns(data) {
+function playedTurns(data: GameData) {
   return data.game.turns - data.game.startedAtTurn;
 }
 
-function abortable(data) {
+function abortable(data: GameData) {
   return playable(data) && playedTurns(data) < 2 && !mandatory(data);
 }
 
-function takebackable(data) {
+function takebackable(data: GameData) {
   return playable(data) && data.takebackable && !data.tournament && playedTurns(data) > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback;
 }
 
-function drawable(data) {
+function drawable(data: GameData) {
   return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
-function berserkableBy(data) {
+function berserkableBy(data: GameData) {
   return data.tournament &&
     data.tournament.berserkable &&
     isPlayerPlaying(data) &&
     playedTurns(data) < 2;
 }
 
-function resignable(data) {
+function resignable(data: GameData) {
   return playable(data) && !abortable(data);
 }
 
-function forceResignable(data) {
+function forceResignable(data: GameData) {
   return !data.opponent.ai && data.clock && data.opponent.isGone && resignable(data);
 }
 
-function moretimeable(data) {
+function moretimeable(data: GameData) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data);
 }
 
-function imported(data) {
+function imported(data: GameData) {
   return data.game.source === 'import';
 }
 
-function replayable(data) {
+function replayable(data: GameData) {
   return imported(data) || gameStatus.finished(data);
 }
 
-function userAnalysable(data) {
+function userAnalysable(data: GameData) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
-function analysable(data) {
+function analysable(data: GameData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
 }
 
-function getPlayer(data, color) {
+function getPlayer(data: GameData, color: Color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
   return null;
 }
 
-function setIsGone(data, color, isGone) {
-  var player = getPlayer(data, color);
+function setIsGone(data: GameData, color: Color, isGone: boolean) {
+  const player = getPlayer(data, color);
   isGone = isGone && !player.ai;
   player.isGone = isGone;
   if (!isGone && player.user) player.user.online = true;
 }
 
-function setOnGame(data, color, onGame) {
-  var player = getPlayer(data, color);
-  onGame = onGame || player.ai;
+function setOnGame(data: GameData, color: Color, onGame: boolean) {
+  const player = getPlayer(data, color);
+  onGame = onGame || !!player.ai;
   player.onGame = onGame;
   if (onGame) setIsGone(data, color, false);
 }
 
-function nbMoves(data, color) {
+function nbMoves(data: GameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
-function result(data) {
+function result(data: GameData) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0';
@@ -127,7 +127,7 @@ function result(data) {
   return '*';
 }
 
-function time(data) {
+function time(data: GameData) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial);
     const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();
@@ -141,11 +141,11 @@ function time(data) {
   }
 }
 
-function publicUrl(data) {
+function publicUrl(data: GameData) {
   return 'http://lichess.org/' + data.game.id;
 }
 
-function isSupportedVariant(data) {
+function isSupportedVariant(data: GameData) {
   return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1;
 }
 

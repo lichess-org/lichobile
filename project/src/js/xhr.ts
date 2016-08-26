@@ -82,31 +82,31 @@ export function getChallenges() {
   return fetchJSON('/challenge', {}, true);
 }
 
-export function getChallenge(id) {
+export function getChallenge(id: string) {
   return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id) {
+export function cancelChallenge(id: string) {
   return fetchText(`/challenge/${id}/cancel`, {
     method: 'POST'
   }, true);
 }
 
-export function declineChallenge(id) {
+export function declineChallenge(id: string) {
   return fetchText(`/challenge/${id}/decline`, {
     method: 'POST'
   }, true);
 }
 
-export function acceptChallenge(id) {
+export function acceptChallenge(id: string) {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
-export function lobby(feedback) {
+export function lobby(feedback: boolean) {
   return fetchJSON('/', null, feedback);
 }
 
-export function seeks(feedback) {
+export function seeks(feedback: boolean) {
   return fetchJSON('/lobby/seeks', null, feedback);
 }
 
@@ -116,13 +116,13 @@ export function game(id: string, color?: string) {
   return fetchJSON(url, null);
 }
 
-export function toggleGameBookmark(id) {
+export function toggleGameBookmark(id: string) {
   return fetchText('/bookmark/' + id, {
     method: 'POST'
   });
 }
 
-export function featured(channel, flip) {
+export function featured(channel: string, flip: boolean) {
   return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 

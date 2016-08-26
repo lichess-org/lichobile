@@ -11,7 +11,7 @@ const router = new Rlite();
 // smooth migration
 let routeCounter = 0;
 
-export function defineRoutes(mountPoint, routes) {
+export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}) {
   for (let route in routes) {
     const component = routes[route];
     router.add(route, function onRouteMatch({ params }) {

@@ -1,16 +1,22 @@
 import store from './storage';
 import { range } from 'lodash';
 
-function localstorageprop<T>(key: string, initialValue?: T): Mithril.Property<T> {
+function localstorageprop<T>(key: string, initialValue?: T): Prop<T> {
   return function() {
     if (arguments.length) store.set(key, arguments[0]);
-    var ret = store.get(key);
+    const ret = store.get(key);
     return (ret !== null) ? ret : initialValue;
   };
 }
 
-function tupleOf(x) {
+function tupleOf(x: number) {
   return [x.toString(), x.toString()];
+}
+
+interface GameSettings {
+  time: Prop<string>;
+  timeMode: Prop<string>;
+  increment: Prop<string>;
 }
 
 export default {
@@ -185,7 +191,7 @@ export default {
       '10', '15', '20', '25', '30', '45', '60', '90', '120', '150', '180'
     ],
     availableDays: ['1', '2', '3', '5', '7', '10', '14'],
-    isTimeValid: function(gameSettings) {
+    isTimeValid: function(gameSettings: GameSettings) {
       return gameSettings.timeMode() !== '1' ||
         gameSettings.time() !== '0' ||
         gameSettings.increment() !== '0';

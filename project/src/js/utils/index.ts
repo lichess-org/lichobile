@@ -5,8 +5,8 @@ import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
-export function loadLocalJsonFile(url): Promise<any> {
-  let curXhr;
+export function loadLocalJsonFile(url: string): Promise<any> {
+  let curXhr: XMLHttpRequest;
   return new Promise((resolve, reject) => {
     m.request({
       url,
@@ -15,8 +15,8 @@ export function loadLocalJsonFile(url): Promise<any> {
         curXhr = xhr;
       }
     })
-    .run(data => resolve(data))
-    .catch(error => {
+    .run((data: any) => resolve(data))
+    .catch((error: Error) => {
       // workaround when xhr for local file has a 0 status it will
       // reject the promise and still have the response object
       if (curXhr.status === 0) {
@@ -48,7 +48,7 @@ export function tellWorker(worker: Worker, topic: string, payload?: any): void {
 
 export function askWorker(worker: Worker, msg: WorkerMessage): Promise<any> {
   return new Promise(function(resolve, reject) {
-    function listen(e) {
+    function listen(e: MessageEvent) {
       if (e.data.topic === msg.topic) {
         worker.removeEventListener('message', listen);
         resolve(e.data.payload);
@@ -72,7 +72,7 @@ export function handleXhrError(error: ResponseError): void {
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
-    let message;
+    let message: string;
     if (!status || status === 0)
       message = 'lichessIsUnreachable';
     else if (status === 401)
@@ -89,7 +89,7 @@ export function handleXhrError(error: ResponseError): void {
     message = i18n(message);
 
     if (error.response) {
-      let data;
+      let data: any;
       try {
         data = error.response.json();
       } catch (e) {
@@ -147,7 +147,7 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
   }
 }
 
-export function playerName(player: Player, withRating): string {
+export function playerName(player: Player, withRating: boolean = false): string {
   if (player.username || player.user) {
     let name = player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
@@ -166,7 +166,7 @@ export function playerName(player: Player, withRating): string {
   return 'Anonymous';
 }
 
-export function aiName(player) {
+export function aiName(player: any) {
   return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 
@@ -180,14 +180,14 @@ export function backHistory(): void {
 
 // simple way to determine views animation direction
 let viewSlideDirection = 'fwd';
-export function setViewSlideDirection(d): void {
+export function setViewSlideDirection(d: string): void {
   viewSlideDirection = d;
 }
 export function getViewSlideDirection(): string {
   return viewSlideDirection;
 }
 
-const perfIconsMap = {
+const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
   blitz: ')',
   classical: '+',
@@ -362,6 +362,6 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
   }
 }
 
-export function noNull(v) {
+export function noNull(v: any) {
   return v !== undefined && v !== null;
 }

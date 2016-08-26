@@ -1,8 +1,13 @@
+interface Lang {
+  name: string
+  nativeName: string
+}
+
 /**
  * @author Phil Teare
  * using wikipedia data
  */
-const isoLangs = {
+const isoLangs: {[index: string]: Lang} = {
     'ab': {
         'name': 'Abkhaz',
         'nativeName': 'аҧсуа'

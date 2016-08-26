@@ -366,10 +366,11 @@ export default function oninit(vnode) {
       .then(pgn => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
     } else if (this.source === 'offline' && gameId !== undefined) {
+      const endSituation = this.data.situations[this.data.situations.length - 1];
       this.chessLogic.exportPgn(
         this.data.game.variant.key,
         this.data.game.initialFen,
-        this.data.endSituation.pgnMoves
+        endSituation.pgnMoves
       )
       .then(res => window.plugins.socialsharing.share(res.pgn))
       .catch(console.error.bind(console));

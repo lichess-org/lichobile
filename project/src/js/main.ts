@@ -122,7 +122,7 @@ function onPause() {
   socket.disconnect();
 }
 
-function handleError(event, source, fileno, columnNumber) {
+function handleError(event: string, source: string, fileno: number, columnNumber: number) {
   const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
   window.analytics.trackException(description, true, utils.noop, utils.noop);
 }

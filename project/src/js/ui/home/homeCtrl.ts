@@ -7,6 +7,12 @@ import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import * as m from 'mithril';
 
+interface TimelineEntry {
+  data: any;
+  date: number;
+  type: string;
+}
+
 export interface HomeCtrl {
   nbConnectedPlayers: Mithril.Property<number>;
   nbGamesInPlay: Mithril.Property<number>;
@@ -15,7 +21,7 @@ export interface HomeCtrl {
   timeline: Mithril.Property<Array<any>>;
 }
 
-export default function homeCtrl(vnode): void {
+export default function homeCtrl(vnode: Mithril.Vnode): void {
 
   const nbConnectedPlayers = m.prop<number>();
   const nbGamesInPlay = m.prop<number>();
@@ -27,7 +33,7 @@ export default function homeCtrl(vnode): void {
     if (isForeground()) {
       lobbyXhr(true).then(data => {
         socket.createLobby(data.lobby.version, noop, {
-          n: (_, d) => {
+          n: (_: any, d: PongMessage) => {
             nbConnectedPlayers(d.d);
             nbGamesInPlay(d.r);
             redraw();
@@ -49,7 +55,7 @@ export default function homeCtrl(vnode): void {
       .then(data => {
         timeline(
           data.entries
-          .filter(o => supportedTimelineTypes.indexOf(o.type) !== -1)
+          .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
         );
       });

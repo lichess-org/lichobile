@@ -3,7 +3,7 @@ import { loadLocalJsonFile } from './utils';
 
 let messages: { [key: string]: string } = {};
 
-const untranslated = {
+const untranslated: {[key: string]: string} = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   resourceNotFoundError: 'Resource not found.',
@@ -50,8 +50,8 @@ const untranslated = {
 const defaultCode = 'en';
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
-  let str = messages[key] || untranslated[key] || key;
-  args.forEach(a => { str = str.replace('%s', a); })
+  let str: string = messages[key] || untranslated[key] || key;
+  args.forEach(a => { str = str.replace('%s', String(a)); })
   return str;
 }
 
@@ -83,7 +83,7 @@ export function loadFromSettings(): Promise<string> {
   .then(loadMomentLocale);
 }
 
-function loadFile(code): Promise<string> {
+function loadFile(code: string): Promise<string> {
   return loadLocalJsonFile('i18n/' + code + '.json')
   .then(data => {
     messages = data;
@@ -95,7 +95,7 @@ function loadFile(code): Promise<string> {
   });
 }
 
-function loadMomentLocale(code): string {
+function loadMomentLocale(code: string): string {
   if (code !== 'en') {
     const script = document.createElement('script');
     script.src = 'moment/locale/' + code + '.js';

@@ -25,26 +25,33 @@ interface SocketConfig {
   params?: Object;
 }
 
-let socketHandlers;
+interface SocketHandlers {
+  onOpen?: () => void;
+  onError?: () => void;
+  events: {[index: string]: (...args: any[]) => void};
+}
+
+let socketHandlers: SocketHandlers;
 let errorDetected = false;
 let connectedWS = true;
 
 let alreadyWarned = false;
-let redrawOnDisconnectedTimeoutID;
-let proxyFailTimeoutID;
+let redrawOnDisconnectedTimeoutID: number;
+let proxyFailTimeoutID: number;
+
 const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
-const defaultHandlers = {
+const defaultHandlers: {[index: string]: (...args: any[]) => void} = {
   following_onlines: handleFollowingOnline,
-  following_enters: name => autoredraw(() => friendsApi.add(name)),
-  following_leaves: name => autoredraw(() => friendsApi.remove(name)),
-  challenges: data => {
+  following_enters: (name: string) => autoredraw(() => friendsApi.add(name)),
+  following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
+  challenges: (data: any) => {
     challengesApi.set(data);
     redraw();
   }
 };
 
-function handleFollowingOnline(data) {
+function handleFollowingOnline(data: Array<string>) {
   const curList = friendsApi.list();
   friendsApi.set(data);
   if (xor(curList, data).length > 0) {
@@ -187,8 +194,8 @@ function createDefault() {
   }
 }
 
-function redirectToGame(obj) {
-  let url;
+function redirectToGame(obj: any) {
+  let url: string;
   if (typeof obj === 'string') url = obj;
   else {
     url = obj.url;
@@ -267,7 +274,7 @@ export default {
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version);
   },
-  send(type, data, opts) {
+  send(type: string, data: any, opts: any) {
     tellWorker(worker, 'send', [type, data, opts]);
   },
   connect() {

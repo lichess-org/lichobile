@@ -3,6 +3,7 @@
     "allowJs": true,
     "target": "es2015",
     "module": "commonjs",
+    "noImplicitAny": true,
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true
   },

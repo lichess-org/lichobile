@@ -8,9 +8,9 @@ export function getCurrentOTBGame() {
   return storage.get(otbStorageKey);
 }
 
-export function getAnalyseData(data) {
+export function getAnalyseData(data: StoredOfflineGame) {
   if (!data) return null;
-  data.data.steps = data.situations.map(o => {
+  data.data.steps = data.situations.map((o: GameSituation) => {
     return {
       fen: o.fen,
       ply: o.ply,
@@ -21,11 +21,10 @@ export function getAnalyseData(data) {
       crazy: o.crazyhouse
     };
   });
-  data.data.endSituation = data.situations[data.situations.length - 1];
   return data.data;
 }
 
-export function setCurrentOTBGame(game): void {
+export function setCurrentOTBGame(game: StoredOfflineGame): void {
   storage.set(otbStorageKey, game);
 }
 
@@ -33,27 +32,27 @@ export function getCurrentAIGame() {
   return storage.get(aiStorageKey);
 }
 
-export function setCurrentAIGame(game): void {
+export function setCurrentAIGame(game: StoredOfflineGame): void {
   storage.set(aiStorageKey, game);
 }
 
 const offlineCorresStorageKey = 'offline.corres.games';
 
-export function getOfflineGames() {
+export function getOfflineGames(): StoredOfflineGame[] {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  let arr = [];
+  let arr: StoredOfflineGame[] = [];
   for (const i in stored) {
     arr.push(stored[i]);
   }
   return arr;
 }
 
-export function getOfflineGameData(id) {
+export function getOfflineGameData(id: string) {
   const stored = storage.get(offlineCorresStorageKey) || {};
   return stored[id];
 }
 
-export function saveOfflineGameData(id, gameData) {
+export function saveOfflineGameData(id: string, gameData: GameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
   const toStore = cloneDeep(gameData);
   toStore.player.onGame = false;
@@ -64,7 +63,7 @@ export function saveOfflineGameData(id, gameData) {
   storage.set(offlineCorresStorageKey, stored);
 }
 
-export function removeOfflineGameData(id) {
+export function removeOfflineGameData(id: string) {
   const stored = storage.get(offlineCorresStorageKey);
   if (stored && stored[id]) {
     delete stored[id];
@@ -72,12 +71,13 @@ export function removeOfflineGameData(id) {
   storage.set(offlineCorresStorageKey, stored);
 }
 
-export function syncWithNowPlayingGames(nowPlaying) {
+export function syncWithNowPlayingGames(nowPlaying: any) {
   if (nowPlaying === undefined) return;
 
   const stored = storage.get(offlineCorresStorageKey);
   const storedIds = Object.keys(stored);
-  const toRemove = difference(storedIds, nowPlaying.map(g => g.fullId));
+  // TODO make now playing game type
+  const toRemove = difference(storedIds, nowPlaying.map((g: any) => g.fullId));
 
   if (toRemove.length > 0) {
     toRemove.forEach(id => {

@@ -22,6 +22,7 @@ export default function data(cfg) {
       offline: true,
       variant: cfg.variant,
       initialFen: cfg.fen,
+      source: 'offline',
       fen: cfg.fen,
       player: cfg.player,
       status: {

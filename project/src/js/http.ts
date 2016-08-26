@@ -7,7 +7,16 @@ export const apiVersion = 2;
 
 const baseUrl = window.lichess.apiEndPoint;
 
-export function checkStatus(response) {
+export interface RequestOpts extends RequestInit {
+  query?: Object;
+}
+
+export interface ResponseError {
+  error: Error;
+  response?: Response;
+}
+
+export function checkStatus(response: Response): Response {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {
@@ -19,37 +28,28 @@ export function checkStatus(response) {
   }
 }
 
-export function parseJSON(response) {
+export function parseJSON(response: Response): Promise<any> {
   return response.json();
 }
 
-function addQuerystring(url, querystring) {
+function addQuerystring(url: string, querystring: string): string {
   const prefix = url.indexOf('?') < 0 ? '?' : '&';
   let res = url + prefix + querystring;
   return res;
 }
 
-export interface RequestOpts extends RequestInit {
-  query?: Object;
-}
-
-export interface ResponseError {
-  error: Error;
-  response?: Response;
-}
-
 function request(url: string, opts?: RequestOpts, feedback = false): Promise<any> {
 
-  let timeoutId;
+  let timeoutId: number;
 
-  function onSuccess(data) {
+  function onSuccess(data: Response): Response {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     redraw();
     return data;
   }
 
-  function onError(error) {
+  function onError(error: Response): Response {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     redraw();
@@ -59,7 +59,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   const cfg: RequestInit = {
     method: 'GET',
     credentials: 'include',
-    headers: <{[index: string]: string }> {
+    headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
     }
@@ -69,9 +69,9 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
 
   // by default POST and PUT send json except if defined otherwise in caller
   if ((cfg.method === 'POST' || cfg.method === 'PUT') &&
-    cfg.headers['Content-Type'] === undefined
+    !(<StringMap>cfg.headers)['Content-Type']
   ) {
-    cfg.headers['Content-Type'] = 'application/json; charset=UTF-8';
+    (<StringMap>cfg.headers)['Content-Type'] = 'application/json; charset=UTF-8';
   }
 
   if (opts && opts.query) {
@@ -84,11 +84,15 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
 
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url;
 
-  const promise = Promise.race([
-    fetch(fullUrl, cfg),
-    new Promise((_, reject) => {
-      timeoutId = setTimeout(() => reject('Request timeout.'), 8000);
-    })
+  const timeoutPromise: PromiseLike<Response> = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject('Request timeout.'), 8000);
+  });
+
+  const reqPromise: PromiseLike<Response> = fetch(fullUrl, cfg);
+
+  const promise: Promise<Response> = Promise.race([
+    reqPromise,
+    timeoutPromise
   ]);
 
   if (feedback) {

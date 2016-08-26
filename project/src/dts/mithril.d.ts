@@ -6,19 +6,19 @@
 declare namespace Mithril {
   interface ChildArray extends Array<Children> {}
   type Children = Child | ChildArray;
-  type Child = string | VirtualElement | Component;
+  type Child = string | Vnode | Component;
 
   interface Static {
     (
       selector: string,
       ...children: Children[]
-    ): VirtualElement;
+    ): Vnode;
 
     (
       selector: string,
       attributes: Attributes,
       ...children: Children[]
-    ): VirtualElement;
+    ): Vnode;
 
     prop<T>(promise: Thennable<T>): Promise<T>;
 
@@ -36,7 +36,7 @@ declare namespace Mithril {
 
     render(
       rootElement: Element,
-      children: VirtualElement|VirtualElement[]
+      children: Vnode|Vnode[]
     ): void;
 
     /**
@@ -91,27 +91,19 @@ declare namespace Mithril {
     $trusted: boolean;
   }
 
-  /**
-  * The interface for a virtual element. It's best to consider this immutable
-  * for most use cases.
-  *
-  * @see m
-  */
-  interface VirtualElement {
-    /**
-    * The tag name of this element.
-    */
+  interface Vnode {
     tag: string;
-
-    /**
-    * The attributes of this element.
-    */
-    attrs: Attributes;
-
-    /**
-    * The children of this element.
-    */
+    key?: string | number;
+    attrs?: Attributes;
     children: Children[];
+    text: string | number | boolean;
+    dom?: Element;
+    domSize?: number;
+    state: any;
+  }
+
+  interface VnodeFactory {
+    (tag: string | Component, key: string | number, attrs: Attributes, children: Array<Vnode>, text: string, dom: Element): Vnode
   }
 
   /**
@@ -162,7 +154,7 @@ declare namespace Mithril {
     *
     * @see m.component
     */
-    view(...args: any[]): VirtualElement;
+    view(...args: any[]): Vnode;
   }
 
   /**
@@ -378,12 +370,12 @@ declare namespace Mithril {
 }
 
 declare const m: Mithril.Static;
+declare const Vnode: Mithril.VnodeFactory;
 
 declare module 'mithril' {
   export = m;
 }
 
 declare module 'mithril/render/vnode' {
-  const x: any;
-  export = x;
+  export = Vnode;
 }

@@ -52,7 +52,7 @@ function handleFollowingOnline(data) {
   }
 }
 
-function createGame(url, version, handlers, gameUrl, userTv) {
+function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv: string) {
   errorDetected = false;
   socketHandlers = {
     onError: function() {
@@ -91,7 +91,7 @@ function createGame(url, version, handlers, gameUrl, userTv) {
   });
 }
 
-function createTournament(tournamentId, version, handlers, featuredGame) {
+function createTournament(tournamentId: string, version: number, handlers: Object, featuredGameId: string) {
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers)
@@ -101,7 +101,7 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
       name: 'tournament',
       debug: false,
       pingDelay: 2000,
-      sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGame}],
+      sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGameId}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };
@@ -114,7 +114,7 @@ function createTournament(tournamentId, version, handlers, featuredGame) {
   });
 }
 
-function createChallenge(id, version, onOpen, handlers) {
+function createChallenge(id: string, version: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
     onOpen,
     events: Object.assign({}, defaultHandlers, handlers)
@@ -139,7 +139,7 @@ function createChallenge(id, version, onOpen, handlers) {
   });
 }
 
-function createLobby(lobbyVersion, onOpen, handlers) {
+function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
     onOpen,
     events: Object.assign({}, defaultHandlers, handlers)

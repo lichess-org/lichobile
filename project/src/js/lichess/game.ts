@@ -5,15 +5,15 @@ import i18n from '../i18n';
 
 const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'crazyhouse', 'atomic', 'horde', 'racingKings'];
 
-function parsePossibleMoves(possibleMoves: {[index: string]: string}) {
+function parsePossibleMoves(possibleMoves: StringMap): {[index: string]: Array<Pos>} {
   if (!possibleMoves) return {};
-  const r: {[index: string]: Array<string>} = {};
+  const r: {[index: string]: Array<Pos>} = {};
   const keys = Object.keys(possibleMoves);
   for (let i = 0, ilen = keys.length; i < ilen; i++) {
     const mvs = possibleMoves[keys[i]];
-    const a: Array<string> = [];
+    const a: Array<Pos> = [];
     for (let j = 0, jlen = mvs.length; j < jlen; j += 2) {
-      a.push(mvs.substr(j, 2));
+      a.push(<Pos>mvs.substr(j, 2));
     }
     r[keys[i]] = a;
   }

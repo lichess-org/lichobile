@@ -274,8 +274,8 @@ export default {
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version);
   },
-  send(type: string, data: any, opts: any) {
-    tellWorker(worker, 'send', [type, data, opts]);
+  send(t: string, data?: any, opts?: any) {
+    tellWorker(worker, 'send', [t, data, opts]);
   },
   connect() {
     tellWorker(worker, 'connect');

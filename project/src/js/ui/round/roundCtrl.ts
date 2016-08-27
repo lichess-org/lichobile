@@ -1,4 +1,4 @@
-import { throttle } from 'lodash/function';
+import { throttle } from 'lodash';
 import redraw from '../../utils/redraw';
 import router from '../../router';
 import round from './round';
@@ -27,10 +27,9 @@ import { hasNetwork, boardOrientation } from '../../utils';
 import { saveOfflineGameData } from '../../utils/offlineGames';
 import crazyValid from './crazy/crazyValid';
 
-export default function controller(vnode, cfg, onFeatured, onTVChannelChange, userTv, onUserTVRedirect) {
+export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => void, onTVChannelChange: () => void, userTv: string, onUserTVRedirect: () => void) {
 
   this.data = round.merge({}, cfg).data;
-  console.log(this.data);
 
   this.onTVChannelChange = onTVChannelChange;
 
@@ -57,7 +56,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
   this.vm.goneBerserk[this.data.player.color] = this.data.player.berserk;
   this.vm.goneBerserk[this.data.opponent.color] = this.data.opponent.berserk;
 
-  let tournamentCountInterval;
+  let tournamentCountInterval: number;
   const tournamentTick = function() {
     if (this.data.tournament.secondsToFinish > 0) {
       this.data.tournament.secondsToFinish--;
@@ -92,15 +91,16 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
   // reconnect game socket after a cancelled seek
   signals.seekCanceled.add(connectSocket);
 
-  this.stepsHash = function(steps) {
-    var h = '';
-    for (var i in steps) {
+  // TODO type steps
+  this.stepsHash = function(steps: any) {
+    let h = '';
+    for (let i in steps) {
       h += steps[i].san;
     }
     return h;
   };
 
-  this.toggleUserPopup = function(position, userId) {
+  this.toggleUserPopup = function(position: string, userId: string) {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
@@ -114,15 +114,15 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     this.vm.showingActions = true;
   }.bind(this);
 
-  this.hideActions = function(fromBB) {
+  this.hideActions = function(fromBB?: string) {
     if (fromBB !== 'backbutton' && this.vm.showingActions) backbutton.stack.pop();
     this.vm.showingActions = false;
   }.bind(this);
 
   this.flip = function() {
     if (this.data.tv) {
-      if (vnode.attrs.flip) router.set('/tv', true);
-      else router.set('/tv?flip=1', null, true);
+      if (vnode.attrs.flip) router.set('/tv?flip=1', true);
+      else router.set('/tv', true);
       return;
     } else if (this.data.player.spectator) {
       router.set('/game/' + this.data.game.id + '/' +
@@ -143,12 +143,12 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     return !this.replaying() && gameApi.isPlayerPlaying(this.data);
   }.bind(this);
 
-  this.jump = function(ply) {
+  this.jump = function(ply: number) {
     if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
     const s = round.plyStep(this.data, ply);
-    const config = {
+    const config: CgSetConfig = {
       fen: s.fen,
       lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
       check: s.check,
@@ -199,7 +199,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
   };
   this.setTitle();
 
-  this.sendMove = function(orig, dest, prom, isPremove) {
+  this.sendMove = function(orig: Pos, dest: Pos, prom: string, isPremove: boolean) {
     const move = {
       u: orig + dest
     };
@@ -224,7 +224,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     }
   };
 
-  this.sendNewPiece = function(role, key, isPredrop) {
+  this.sendNewPiece = function(role: Role, key: Pos, isPredrop: boolean) {
     const drop = {
       role: role,
       pos: key
@@ -241,14 +241,14 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     });
   };
 
-  this.cancelMove = function(fromBB) {
+  this.cancelMove = function(fromBB?: string) {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
     this.vm.moveToSubmit = null;
     this.vm.dropToSubmit = null;
     this.jump(this.vm.ply);
   }.bind(this);
 
-  this.submitMove = function(v) {
+  this.submitMove = function(v: boolean) {
     if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
       if (this.vm.moveToSubmit) {
         socket.send('move', this.vm.moveToSubmit, {
@@ -269,13 +269,13 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     }
   }.bind(this);
 
-  const userMove = function(orig, dest, meta) {
+  const userMove = function(orig: Pos, dest: Pos, meta: any) {
     if (!promotion.start(this, orig, dest, meta.premove)) {
       this.sendMove(orig, dest, false, meta.premove);
     }
   }.bind(this);
 
-  const onUserNewPiece = function(role, key, meta) {
+  const onUserNewPiece = function(role: Role, key: Pos, meta: any) {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {
@@ -283,7 +283,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     }
   }.bind(this);
 
-  const onMove = function(orig, dest, capturedPiece) {
+  const onMove = function(orig: Pos, dest: Pos, capturedPiece: Piece) {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest);
@@ -306,24 +306,24 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
   };
 
   const playPredrop = function() {
-    return this.chessground.playPredrop(drop => {
+    return this.chessground.playPredrop((drop: Drop) => {
       return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
     });
   }.bind(this);
 
-  this.apiMove = function(o) {
+  this.apiMove = function(o: any) {
     const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
-    const playedColor = o.ply % 2 === 0 ? 'black' : 'white';
+    const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white';
     if (o.status) {
       d.game.status = o.status;
     }
     if (o.winner) {
       d.game.winner = o.winner;
     }
-    var wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
-    var bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
+    let wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
+    let bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
     if (!wDraw && o.wDraw) {
       sound.dong();
       vibrate.quick();
@@ -342,7 +342,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     if (!this.replaying()) {
       this.vm.ply++;
 
-      const enpassantPieces = {};
+      const enpassantPieces: {[index:string]: Piece} = {};
       if (o.enpassant) {
         const p = o.enpassant;
         enpassantPieces[p.key] = null;
@@ -353,7 +353,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
         }
       }
 
-      const castlePieces = {};
+      const castlePieces: {[index:string]: Piece} = {};
       if (o.castle && !this.chessground.data.autoCastle) {
         const c = o.castle;
         castlePieces[c.king[0]] = null;
@@ -441,7 +441,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     sound.berserk();
   };
 
-  this.setBerserk = function(color) {
+  this.setBerserk = function(color: Color) {
     if (this.vm.goneBerserk[color]) return;
     this.vm.goneBerserk[color] = true;
     if (color !== this.data.player.color) sound.berserk();
@@ -457,7 +457,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     this.data.player.spectator ? null : this.data.player.color
   ) : false;
 
-  this.isClockRunning = function() {
+  this.isClockRunning = function(): boolean {
     return this.data.clock && gameApi.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }.bind(this);
@@ -466,7 +466,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }.bind(this);
 
-  var makeCorrespondenceClock = function() {
+  const makeCorrespondenceClock = function() {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new correspondenceClockCtrl(
         this,
@@ -476,12 +476,12 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
   }.bind(this);
   makeCorrespondenceClock();
 
-  var correspondenceClockTick = function() {
+  const correspondenceClockTick = function() {
     if (this.correspondenceClock && gameApi.playable(this.data))
       this.correspondenceClock.tick(this.data.game.player);
   }.bind(this);
 
-  var clockIntervId;
+  let clockIntervId: number;
   if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
@@ -490,7 +490,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
 
   this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
 
-  this.reload = function(rCfg) {
+  this.reload = function(rCfg: GameData) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
@@ -506,7 +506,7 @@ export default function controller(vnode, cfg, onFeatured, onTVChannelChange, us
     redraw();
   }.bind(this);
 
-  var reloadGameData = function() {
+  const reloadGameData = function() {
     xhr.reload(this).then(this.reload);
   }.bind(this);
 

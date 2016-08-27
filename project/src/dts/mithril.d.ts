@@ -117,36 +117,14 @@ declare namespace Mithril {
     preventDefault(): void;
   }
 
-  /**
-  * This represents the attributes available for configuring virtual elements,
-  * beyond the applicable DOM attributes.
-  *
-  * @see m
-  */
   interface Attributes {
-    /**
-    * The class name(s) for this virtual element, as a space-separated list.
-    */
     className?: string;
 
-    /**
-    * A key to optionally associate with this element.
-    */
     key?: string | number;
 
-    /**
-    * Any other virtual element properties, including attributes and event
-    * handlers.
-    */
     [property: string]: any;
   }
 
-  /**
-  * This represents a Mithril component.
-  *
-  * @see m
-  * @see m.component
-  */
   interface Component {
 
     /**
@@ -157,11 +135,6 @@ declare namespace Mithril {
     view(...args: any[]): Vnode;
   }
 
-  /**
-  * This is the base interface for property getter-setters
-  *
-  * @see m.prop
-  */
   interface Property<T> {
     /**
     * Gets the contained value.

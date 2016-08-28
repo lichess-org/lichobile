@@ -362,8 +362,8 @@ export default class Round {
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
     const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white';
-    const white: Player = d[d.player.color === 'white' ? 'player' : 'opponent'];
-    const black: Player = d[d.player.color === 'black' ? 'player' : 'opponent'];
+    const white: Player = d.player.color === 'white' ?  d.player : d.opponent;
+    const black: Player = d.player.color === 'black' ? d.player : d.opponent;
 
     if (o.status) {
       d.game.status = o.status;

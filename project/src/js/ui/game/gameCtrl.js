@@ -4,7 +4,7 @@ import { hasNetwork, handleXhrError } from '../../utils';
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
-import roundCtrl from '../round/roundCtrl';
+import roundCtrl from '../shared/round/roundCtrl';
 import helper from '../helper';
 import gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';

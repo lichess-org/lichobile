@@ -1,12 +1,12 @@
-import gameApi from '../../lichess/game';
-import redraw from '../../utils/redraw';
+import gameApi from '../../../lichess/game';
+import redraw from '../../../utils/redraw';
 import ground from './ground';
 import * as xhr from './roundXhr';
-import sound from '../../sound';
-import vibrate from '../../vibrate';
-import session from '../../session';
-import { removeOfflineGameData } from '../../utils/offlineGames';
-import socket from '../../socket';
+import sound from '../../../sound';
+import vibrate from '../../../vibrate';
+import session from '../../../session';
+import { removeOfflineGameData } from '../../../utils/offlineGames';
+import socket from '../../../socket';
 
 export default function(ctrl, onFeatured, onUserTVRedirect) {
 

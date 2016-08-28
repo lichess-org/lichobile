@@ -10,14 +10,14 @@ import { gameTitle, connectingHeader, header, backButton as renderBackbutton, vi
 import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
-import notes from '../../round/notes';
-import { formatClockTime } from '../../round/clock/clockView';
+import notes from '../../shared/round/notes';
+import { formatClockTime } from '../../shared/round/clock/clockView';
 import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
 import { defined, renderEval, isSynthetic } from '../util';
-import CrazyPocket from '../../round/crazy/crazyPocket';
+import CrazyPocket from '../../shared/round/crazy/crazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';

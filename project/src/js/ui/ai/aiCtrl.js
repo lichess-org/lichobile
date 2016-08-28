@@ -5,7 +5,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
-import atomic from '../round/atomic';
+import atomic from '../shared/round/atomic';
 import vibrate from '../../vibrate';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 import storage from '../../storage';

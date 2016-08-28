@@ -3,8 +3,8 @@ import router from '../../router';
 import helper from '../helper';
 import { handleXhrError } from '../../utils';
 import { LoadingBoard } from '../shared/common';
-import roundCtrl from '../round/roundCtrl';
-import roundView from '../round/view/roundView';
+import roundCtrl from '../shared/round/roundCtrl';
+import roundView from '../shared/round/view/roundView';
 import { tv } from './userXhr';
 
 export default {

@@ -1,4 +1,4 @@
-import roundView from '../round/view/roundView';
+import roundView from '../shared/round/view/roundView';
 import gamesMenu from '../gamesMenu';
 import layout from '../layout';
 import { connectingHeader, viewOnlyBoardContent } from '../shared/common';

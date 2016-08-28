@@ -1,6 +1,6 @@
-import helper from '../../helper';
-import { hasNetwork } from '../../../utils';
-import i18n from '../../../i18n';
+import helper from '../../../helper';
+import { hasNetwork } from '../../../../utils';
+import i18n from '../../../../i18n';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);

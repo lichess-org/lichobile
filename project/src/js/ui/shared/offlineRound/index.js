@@ -4,9 +4,9 @@ import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
-import { renderMaterial } from '../../round/view/roundView';
+import { renderMaterial } from '../../shared/round/view/roundView';
 import * as m from 'mithril';
-import CrazyPocket from '../../round/crazy/crazyPocket';
+import CrazyPocket from '../../shared/round/crazy/crazyPocket';
 
 export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip, customPieceTheme) {
   const sit = ctrl.replay.situation();

@@ -1,6 +1,6 @@
-import { fetchJSON, fetchText } from '../../http';
-import { noop, serializeQueryParameters } from '../../utils';
-import i18n from '../../i18n';
+import { fetchJSON, fetchText } from '../../../http';
+import { noop, serializeQueryParameters } from '../../../utils';
+import i18n from '../../../i18n';
 
 export function reload(ctrl) {
   return fetchJSON(ctrl.data.url.round);

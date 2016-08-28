@@ -1,4 +1,4 @@
-import settings from '../../../settings';
+import settings from '../../../../settings';
 import crazyDrag from './crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
 

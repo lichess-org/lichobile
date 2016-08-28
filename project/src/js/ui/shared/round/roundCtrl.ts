@@ -1,30 +1,30 @@
 import { throttle } from 'lodash';
-import redraw from '../../utils/redraw';
-import router from '../../router';
+import redraw from '../../../utils/redraw';
+import { saveOfflineGameData } from '../../../utils/offlineGames';
+import { hasNetwork, boardOrientation, formatTimeInSecs, oppositeColor, noop } from '../../../utils';
+import i18n from '../../../i18n';
+import gameStatus from '../../../lichess/status';
+import session from '../../../session';
+import socket from '../../../socket';
+import signals from '../../../signals';
+import router from '../../../router';
+import sound from '../../../sound';
+import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
+import vibrate from '../../../vibrate';
+import gameApi from '../../../lichess/game';
+import backbutton from '../../../backbutton';
+import { gameTitle } from '../../shared/common';
+
 import round from './round';
-import * as utils from '../../utils';
-import sound from '../../sound';
-import vibrate from '../../vibrate';
-import gameApi from '../../lichess/game';
-import { gameTitle } from '../shared/common';
 import ground from './ground';
 import promotion from './promotion';
 import chat from './chat';
 import notes from './notes';
 import clockCtrl from './clock/clockCtrl';
-import i18n from '../../i18n';
-import gameStatus from '../../lichess/status';
 import correspondenceClockCtrl from './correspondenceClock/corresClockCtrl';
-import session from '../../session';
-import socket from '../../socket';
-import signals from '../../signals';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
-import backbutton from '../../backbutton';
 import * as xhr from './roundXhr';
-import { miniUser as miniUserXhr, toggleGameBookmark } from '../../xhr';
-import { hasNetwork, boardOrientation } from '../../utils';
-import { saveOfflineGameData } from '../../utils/offlineGames';
 import crazyValid from './crazy/crazyValid';
 
 export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => void, onTVChannelChange: () => void, userTv: string, onUserTVRedirect: () => void) {
@@ -62,7 +62,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
         this.vm.tClockEl.textContent =
-          utils.formatTimeInSecs(this.data.tournament.secondsToFinish) +
+          formatTimeInSecs(this.data.tournament.secondsToFinish) +
         ' • ';
       }
     } else {
@@ -75,7 +75,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
   }
 
   const connectSocket = function() {
-    if (utils.hasNetwork()) {
+    if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
         this.data.player.version,
@@ -126,7 +126,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       return;
     } else if (this.data.player.spectator) {
       router.set('/game/' + this.data.game.id + '/' +
-        utils.oppositeColor(this.data.player.color), true);
+        oppositeColor(this.data.player.color), true);
       return;
     }
     this.vm.flip = !this.vm.flip;
@@ -452,7 +452,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
 
   this.clock = this.data.clock ? new clockCtrl(
     this.data.clock,
-    this.data.player.spectator ? utils.noop :
+    this.data.player.spectator ? noop :
       throttle(() => socket.send('outoftime'), 500),
     this.data.player.spectator ? null : this.data.player.color
   ) : false;

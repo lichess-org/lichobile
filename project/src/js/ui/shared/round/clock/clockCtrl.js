@@ -1,7 +1,6 @@
 import { formatClockTime } from './clockView';
-import redraw from '../../../utils/redraw';
-import sound from '../../../sound';
-import * as m from 'mithril';
+import redraw from '../../../../utils/redraw';
+import sound from '../../../../sound';
 
 export default function ctrl(data, outOfTime, soundColor) {
   const lastUpdate = {};

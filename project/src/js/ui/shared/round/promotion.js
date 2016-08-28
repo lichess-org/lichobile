@@ -1,8 +1,8 @@
-import redraw from '../../utils/redraw';
+import redraw from '../../../utils/redraw';
 import ground from './ground';
 import * as xhr from './roundXhr';
-import helper from '../helper';
-import settings from '../../settings';
+import helper from '../../helper';
+import settings from '../../../settings';
 import * as m from 'mithril';
 
 var promoting = false;

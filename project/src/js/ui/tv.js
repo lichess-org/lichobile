@@ -5,8 +5,8 @@ import { handleXhrError } from '../utils';
 import * as xhr from '../xhr';
 import { LoadingBoard } from './shared/common';
 import settings from '../settings';
-import roundCtrl from './round/roundCtrl';
-import roundView from './round/view/roundView';
+import roundCtrl from './shared/round/roundCtrl';
+import roundView from './shared/round/view/roundView';
 
 export default {
   oninit(vnode) {

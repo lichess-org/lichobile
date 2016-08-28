@@ -1,8 +1,8 @@
 import * as chessground from 'chessground-mobile';
-import redraw from '../../utils/redraw';
-import gameApi from '../../lichess/game';
-import settings from '../../settings';
-import { boardOrientation } from '../../utils';
+import redraw from '../../../utils/redraw';
+import gameApi from '../../../lichess/game';
+import settings from '../../../settings';
+import { boardOrientation } from '../../../utils';
 
 function str2move(move) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;

@@ -1,7 +1,7 @@
-import helper from '../helper';
-import spinner from '../../spinner';
-import i18n from '../../i18n';
-import backbutton from '../../backbutton';
+import helper from '../../helper';
+import spinner from '../../../spinner';
+import i18n from '../../../i18n';
+import backbutton from '../../../backbutton';
 import { debounce }  from 'lodash/function';
 import { readNote, syncNote } from './roundXhr';
 import * as m from 'mithril';

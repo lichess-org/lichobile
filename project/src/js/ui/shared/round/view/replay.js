@@ -1,4 +1,4 @@
-import helper from '../../helper';
+import helper from '../../../helper';
 import round from '../round';
 
 const emptyTd = <td className="move">...</td>;

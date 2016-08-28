@@ -1,16 +1,16 @@
-import gameApi from '../../../lichess/game';
-import router from '../../../router';
-import gameStatus from '../../../lichess/status';
-import round from '../round';
-import helper from '../../helper';
-import { throttle } from 'lodash/function';
-import i18n from '../../../i18n';
-import socket from '../../../socket';
-import { getPGN } from '../roundXhr';
-import { handleXhrError, hasNetwork, boardOrientation } from '../../../utils';
-import lobby from '../../lobby';
 import * as m from 'mithril';
-import * as tournamentXhr from '../../tournament/tournamentXhr';
+import { throttle } from 'lodash/function';
+import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils';
+import gameApi from '../../../../lichess/game';
+import router from '../../../../router';
+import gameStatus from '../../../../lichess/status';
+import i18n from '../../../../i18n';
+import socket from '../../../../socket';
+import helper from '../../../helper';
+import * as tournamentXhr from '../../../tournament/tournamentXhr';
+import { getPGN } from '../roundXhr';
+import lobby from '../../../lobby';
+import round from '../round';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {

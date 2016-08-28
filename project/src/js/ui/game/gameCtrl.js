@@ -78,7 +78,7 @@ export default function oninit(vnode) {
       if (!gameApi.playable(gameData)) {
         removeOfflineGameData(vnode.attrs.id);
       }
-      this.round = new roundCtrl(vnode, gameData);
+      this.round = roundCtrl(vnode, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
       router.set('/');

@@ -27,37 +27,112 @@ import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 
-export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => void, onTVChannelChange: () => void, userTv: string, onUserTVRedirect: () => void) {
+export default class Round {
+  public vnode: Mithril.Vnode;
+  public data: GameData;
+  public chessground: Chessground.Controller;
+  public clock: any;
+  public correspondenceClock: any;
+  public chat: any;
+  public notes: any;
+  public onFeatured: () => void;
+  public onTVChannelChange: () => void;
+  public onUserTVRedirect: () => void;
+  public vm: any;
+  public title: any;
+  public tv: string;
 
-  this.data = round.merge({}, cfg).data;
+  private tournamentCountInterval: number;
+  private clockIntervId: number;
 
-  this.onTVChannelChange = onTVChannelChange;
+  public constructor(
+    vnode: Mithril.Vnode,
+    cfg: GameData,
+    onFeatured: () => void,
+    onTVChannelChange: () => void,
+    userTv: string,
+    onUserTVRedirect: () => void
+  ) {
+    this.vnode = vnode;
+    this.data = round.merge({}, cfg).data;
+    this.onTVChannelChange = onTVChannelChange;
+    this.onFeatured = onFeatured;
+    this.data.userTV = userTv;
+    this.onUserTVRedirect = onUserTVRedirect;
 
-  this.vm = {
-    ply: round.lastPly(this.data),
-    flip: false,
-    miniUser: {
-      player: {
-        showing: false,
-        data: null
+    this.vm = {
+      ply: round.lastPly(this.data),
+      flip: false,
+      miniUser: {
+        player: {
+          showing: false,
+          data: null
+        },
+        opponent: {
+          showing: false,
+          data: null
+        }
       },
-      opponent: {
-        showing: false,
-        data: null
-      }
-    },
-    showingActions: false,
-    confirmResign: false,
-    goneBerserk: {},
-    moveToSubmit: null,
-    dropToSubmit: null,
-    tClockEl: null
-  };
-  this.vm.goneBerserk[this.data.player.color] = this.data.player.berserk;
-  this.vm.goneBerserk[this.data.opponent.color] = this.data.opponent.berserk;
+      showingActions: false,
+      confirmResign: false,
+      goneBerserk: {
+        [this.data.player.color]: this.data.player.berserk,
+        [this.data.opponent.color]: this.data.opponent.berserk
+      },
+      moveToSubmit: null,
+      dropToSubmit: null,
+      tClockEl: null
+    };
 
-  let tournamentCountInterval: number;
-  const tournamentTick = function() {
+    this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
+      null : new chat.controller(this);
+
+    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+
+    this.chessground = ground.make(
+      this.data,
+      cfg.game.fen,
+      this.userMove.bind(this),
+      this.onUserNewPiece.bind(this),
+      this.onMove.bind(this),
+      this.onNewPiece.bind(this)
+    );
+
+    this.clock = this.data.clock ? new clockCtrl(
+      this.data.clock,
+      this.data.player.spectator ? noop :
+        throttle(() => socket.send('outoftime'), 500),
+      this.data.player.spectator ? null : this.data.player.color
+    ) : false;
+
+    this.showActions = this.showActions.bind(this);
+    this.hideActions = this.hideActions.bind(this);
+    this.jump = this.jump.bind(this);
+    this.jumpNext = this.jumpNext.bind(this);
+    this.jumpPrev = this.jumpPrev.bind(this);
+    this.jumpFirst = this.jumpFirst.bind(this);
+    this.jumpLast = this.jumpLast.bind(this);
+
+    this.makeCorrespondenceClock();
+
+    if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100);
+    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick.bind(this), 6000);
+
+    if (this.data.tournament) {
+      this.tournamentCountInterval = setInterval(this.tournamentTick.bind(this), 1000);
+    }
+
+    this.connectSocket();
+    this.setTitle();
+
+    // reconnect game socket after a cancelled seek
+    signals.seekCanceled.add(this.connectSocket.bind(this));
+
+    document.addEventListener('resume', this.reloadGameData.bind(this));
+    window.plugins.insomnia.keepAwake();
+  }
+
+  private tournamentTick() {
     if (this.data.tournament.secondsToFinish > 0) {
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
@@ -66,62 +141,53 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
         ' • ';
       }
     } else {
-      clearInterval(tournamentCountInterval);
+      clearInterval(this.tournamentCountInterval);
     }
-  }.bind(this);
-
-  if (this.data.tournament) {
-    tournamentCountInterval = setInterval(tournamentTick, 1000);
   }
 
-  const connectSocket = function() {
+  private connectSocket() {
     if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
         this.data.player.version,
-        socketHandler(this, onFeatured, onUserTVRedirect),
+        socketHandler(this, this.onFeatured, this.onUserTVRedirect),
         this.data.url.round,
-        userTv
+        this.data.userTV
       );
     }
-  }.bind(this);
-
-  connectSocket();
-
-  // reconnect game socket after a cancelled seek
-  signals.seekCanceled.add(connectSocket);
+  }
 
   // TODO type steps
-  this.stepsHash = function(steps: any) {
+  public stepsHash(steps: any) {
     let h = '';
     for (let i in steps) {
       h += steps[i].san;
     }
     return h;
-  };
+  }
 
-  this.toggleUserPopup = function(position: string, userId: string) {
+  public toggleUserPopup(position: string, userId: string) {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
       });
     }
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
-  }.bind(this);
+  }
 
-  this.showActions = function() {
+  public showActions() {
     backbutton.stack.push(this.hideActions);
     this.vm.showingActions = true;
-  }.bind(this);
+  }
 
-  this.hideActions = function(fromBB?: string) {
+  public hideActions(fromBB?: string) {
     if (fromBB !== 'backbutton' && this.vm.showingActions) backbutton.stack.pop();
     this.vm.showingActions = false;
-  }.bind(this);
+  }
 
-  this.flip = function() {
+  public flip() {
     if (this.data.tv) {
-      if (vnode.attrs.flip) router.set('/tv?flip=1', true);
+      if (this.vnode.attrs.flip) router.set('/tv?flip=1', true);
       else router.set('/tv', true);
       return;
     } else if (this.data.player.spectator) {
@@ -133,17 +199,17 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
     this.chessground.set({
       orientation: boardOrientation(this.data, this.vm.flip)
     });
-  }.bind(this);
+  }
 
-  this.replaying = function() {
+  public replaying() {
     return this.vm.ply !== round.lastPly(this.data);
-  }.bind(this);
+  }
 
-  this.canDrop = function() {
+  public canDrop() {
     return !this.replaying() && gameApi.isPlayerPlaying(this.data);
-  }.bind(this);
+  }
 
-  this.jump = function(ply: number) {
+  public jump(ply: number) {
     if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
@@ -165,25 +231,25 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       else sound.move();
     }
     return true;
-  }.bind(this);
+  }
 
-  this.jumpNext = function() {
+  public jumpNext() {
     return this.jump(this.vm.ply + 1);
-  }.bind(this);
+  }
 
-  this.jumpPrev = function() {
+  public jumpPrev() {
     return this.jump(this.vm.ply - 1);
-  }.bind(this);
+  }
 
-  this.jumpFirst = function() {
+  public jumpFirst() {
     return this.jump(round.firstPly(this.data));
-  }.bind(this);
+  }
 
-  this.jumpLast = function() {
+  public jumpLast() {
     return this.jump(round.lastPly(this.data));
-  }.bind(this);
+  }
 
-  this.setTitle = function() {
+  public setTitle() {
     if (this.data.tv)
       this.title = 'Lichess TV';
     else if (this.data.userTV)
@@ -196,10 +262,32 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       this.title = i18n('gameAborted');
     else
       this.title = 'lichess.org';
-  };
-  this.setTitle();
+  }
 
-  this.sendMove = function(orig: Pos, dest: Pos, prom: string, isPremove: boolean) {
+  public isClockRunning(): boolean {
+    return this.data.clock && gameApi.playable(this.data) &&
+      ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
+  }
+
+  private clockTick() {
+    if (this.isClockRunning()) this.clock.tick(this.data.game.player);
+  }
+
+  private makeCorrespondenceClock() {
+    if (this.data.correspondence && !this.correspondenceClock)
+      this.correspondenceClock = new correspondenceClockCtrl(
+        this,
+        this.data.correspondence,
+        () => socket.send('outoftime')
+      );
+  }
+
+  private correspondenceClockTick() {
+    if (this.correspondenceClock && gameApi.playable(this.data))
+      this.correspondenceClock.tick(this.data.game.player);
+  }
+
+  public sendMove(orig: Pos, dest: Pos, prom: string, isPremove: boolean) {
     const move = {
       u: orig + dest
     };
@@ -222,9 +310,9 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center');
       }
     }
-  };
+  }
 
-  this.sendNewPiece = function(role: Role, key: Pos, isPredrop: boolean) {
+  public sendNewPiece(role: Role, key: Pos, isPredrop: boolean) {
     const drop = {
       role: role,
       pos: key
@@ -239,16 +327,16 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       ackable: true,
       withLag: !!this.clock
     });
-  };
+  }
 
-  this.cancelMove = function(fromBB?: string) {
+  public cancelMove(fromBB?: string) {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
     this.vm.moveToSubmit = null;
     this.vm.dropToSubmit = null;
     this.jump(this.vm.ply);
-  }.bind(this);
+  }
 
-  this.submitMove = function(v: boolean) {
+  public submitMove(v: boolean) {
     if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
       if (this.vm.moveToSubmit) {
         socket.send('move', this.vm.moveToSubmit, {
@@ -267,63 +355,26 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
     } else {
       this.cancelMove();
     }
-  }.bind(this);
+  }
 
-  const userMove = function(orig: Pos, dest: Pos, meta: any) {
-    if (!promotion.start(this, orig, dest, meta.premove)) {
-      this.sendMove(orig, dest, false, meta.premove);
-    }
-  }.bind(this);
-
-  const onUserNewPiece = function(role: Role, key: Pos, meta: any) {
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
-      this.sendNewPiece(role, key, meta.predrop);
-    } else {
-      this.jump(this.vm.ply);
-    }
-  }.bind(this);
-
-  const onMove = function(orig: Pos, dest: Pos, capturedPiece: Piece) {
-    if (capturedPiece) {
-      if (this.data.game.variant.key === 'atomic') {
-        atomic.capture(this.chessground, dest);
-        sound.explosion();
-      }
-      else {
-        sound.capture();
-      }
-    } else {
-      sound.move();
-    }
-
-    if (!this.data.player.spectator) {
-      vibrate.quick();
-    }
-  }.bind(this);
-
-  const onNewPiece = function() {
-    sound.move();
-  };
-
-  const playPredrop = function() {
-    return this.chessground.playPredrop((drop: Drop) => {
-      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
-    });
-  }.bind(this);
-
-  this.apiMove = function(o: any) {
+  public apiMove(o: any) {
     const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
     const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white';
+    const white: Player = d[d.player.color === 'white' ? 'player' : 'opponent'];
+    const black: Player = d[d.player.color === 'black' ? 'player' : 'opponent'];
+
     if (o.status) {
       d.game.status = o.status;
     }
+
     if (o.winner) {
       d.game.winner = o.winner;
     }
-    let wDraw = d[d.player.color === 'white' ? 'player' : 'opponent'].offeringDraw;
-    let bDraw = d[d.player.color === 'black' ? 'player' : 'opponent'].offeringDraw;
+
+    let wDraw = white.offeringDraw;
+    let bDraw = black.offeringDraw;
     if (!wDraw && o.wDraw) {
       sound.dong();
       vibrate.quick();
@@ -332,11 +383,12 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       sound.dong();
       vibrate.quick();
     }
-    wDraw = o.wDraw;
-    bDraw = o.bDraw;
+    white.offeringDraw = o.wDraw;
+    black.offeringDraw = o.bDraw;
+
     d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
     d.possibleDrops = d.player.color === d.game.player ? o.drops : null;
-    d.crazyhouse = o.crazyhouse;
+
     this.setTitle();
 
     if (!this.replaying()) {
@@ -412,7 +464,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       san: o.san,
       uci: o.uci,
       check: o.check,
-      crazy: o.crazyhouse
+      crazyhouse: o.crazyhouse
     });
     gameApi.setOnGame(d, playedColor, true);
 
@@ -424,73 +476,18 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
       const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10;
       setTimeout(() => {
         this.chessground.playPremove();
-        playPredrop();
+        this.playPredrop();
       }, premoveDelay);
     }
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(vnode.attrs.id, this.data);
+      saveOfflineGameData(this.vnode.attrs.id, this.data);
     }
 
-  }.bind(this);
+  }
 
-  const throttledBerserk = throttle(() => socket.send('berserk'), 500);
-  this.goBerserk = function() {
-    throttledBerserk();
-    sound.berserk();
-  };
-
-  this.setBerserk = function(color: Color) {
-    if (this.vm.goneBerserk[color]) return;
-    this.vm.goneBerserk[color] = true;
-    if (color !== this.data.player.color) sound.berserk();
-    redraw();
-  }.bind(this);
-
-  this.chessground = ground.make(this.data, cfg.game.fen, userMove, onUserNewPiece, onMove, onNewPiece);
-
-  this.clock = this.data.clock ? new clockCtrl(
-    this.data.clock,
-    this.data.player.spectator ? noop :
-      throttle(() => socket.send('outoftime'), 500),
-    this.data.player.spectator ? null : this.data.player.color
-  ) : false;
-
-  this.isClockRunning = function(): boolean {
-    return this.data.clock && gameApi.playable(this.data) &&
-      ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
-  }.bind(this);
-
-  this.clockTick = function() {
-    if (this.isClockRunning()) this.clock.tick(this.data.game.player);
-  }.bind(this);
-
-  const makeCorrespondenceClock = function() {
-    if (this.data.correspondence && !this.correspondenceClock)
-      this.correspondenceClock = new correspondenceClockCtrl(
-        this,
-        this.data.correspondence,
-        () => socket.send('outoftime')
-      );
-  }.bind(this);
-  makeCorrespondenceClock();
-
-  const correspondenceClockTick = function() {
-    if (this.correspondenceClock && gameApi.playable(this.data))
-      this.correspondenceClock.tick(this.data.game.player);
-  }.bind(this);
-
-  let clockIntervId: number;
-  if (this.clock) clockIntervId = setInterval(this.clockTick, 100);
-  else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
-
-  this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-    null : chat.controller(this);
-
-  this.notes = this.data.game.speed === 'correspondence' ? notes.controller(this) : null;
-
-  this.reload = function(rCfg: GameData) {
+  public reload(rCfg: GameData) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
@@ -499,30 +496,82 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
 
     this.data = round.merge(this.data, rCfg).data;
 
-    makeCorrespondenceClock();
+    this.makeCorrespondenceClock();
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
     redraw();
-  }.bind(this);
+  }
 
-  const reloadGameData = function() {
-    xhr.reload(this).then(this.reload);
-  }.bind(this);
+  public goBerserk() {
+    throttle(() => socket.send('berserk'), 500)();
+    sound.berserk();
+  }
 
-  this.toggleBookmark = function() {
-    return toggleGameBookmark(this.data.game.id).then(reloadGameData);
-  }.bind(this);
+  public setBerserk(color: Color) {
+    if (this.vm.goneBerserk[color]) return;
+    this.vm.goneBerserk[color] = true;
+    if (color !== this.data.player.color) sound.berserk();
+    redraw();
+  }
 
-  document.addEventListener('resume', reloadGameData);
-  window.plugins.insomnia.keepAwake();
+  public toggleBookmark() {
+    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData.bind(this));
+  }
 
-  this.unload = function() {
-    clearInterval(clockIntervId);
-    clearInterval(tournamentCountInterval);
-    document.removeEventListener('resume', reloadGameData);
-    signals.seekCanceled.remove(connectSocket);
+  public unload() {
+    clearInterval(this.clockIntervId);
+    clearInterval(this.tournamentCountInterval);
+    document.removeEventListener('resume', this.reloadGameData.bind(this));
+    signals.seekCanceled.remove(this.connectSocket.bind(this));
     if (this.chat) this.chat.unload();
     if (this.notes) this.notes.unload();
+  }
+
+  private userMove(orig: Pos, dest: Pos, meta: any) {
+    if (!promotion.start(this, orig, dest, meta.premove)) {
+      this.sendMove(orig, dest, undefined, meta.premove);
+    }
+  }
+
+  private onUserNewPiece(role: Role, key: Pos, meta: any) {
+    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
+      this.sendNewPiece(role, key, meta.predrop);
+    } else {
+      this.jump(this.vm.ply);
+    }
+  }
+
+  private onMove(orig: Pos, dest: Pos, capturedPiece: Piece) {
+    if (capturedPiece) {
+      if (this.data.game.variant.key === 'atomic') {
+        atomic.capture(this.chessground, dest);
+        sound.explosion();
+      }
+      else {
+        sound.capture();
+      }
+    } else {
+      sound.move();
+    }
+
+    if (!this.data.player.spectator) {
+      vibrate.quick();
+    }
+  }
+
+  private onNewPiece() {
+    sound.move();
   };
+
+  private playPredrop() {
+    return this.chessground.playPredrop((drop: Drop) => {
+      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops);
+    });
+  }
+
+  private reloadGameData() {
+    xhr.reload(this).then(this.reload);
+  }
+
 }

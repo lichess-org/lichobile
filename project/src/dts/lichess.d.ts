@@ -101,6 +101,8 @@ declare type Player = {
   offeringDraw?: boolean;
   proposingTakeback?: boolean;
   spectator?: boolean;
+  berserk?: boolean;
+  version?: number;
 }
 
 declare type TournamentClock = {
@@ -139,6 +141,7 @@ declare type CorrespondenceClock = {
 declare type Tournament = {
   id: string;
   berserkable: boolean;
+  secondsToFinish: number;
 }
 
 declare type GameData = {
@@ -147,15 +150,20 @@ declare type GameData = {
   opponent: Player;
   correspondence?: CorrespondenceClock;
   clock?: Clock;
-  steps?: Array<GameSituation>;
+  steps?: Array<GameStep>;
   tournament?: Tournament;
   takebackable: boolean;
   note?: string;
   chat?: Array<string>;
   possibleMoves?: StringMap;
+  possibleDrops?: StringMap;
   userTV?: string;
   tv?: string;
   pref?: any;
+  url?: {
+    round: string;
+    socket: string;
+  }
 }
 
 declare type Game = {
@@ -174,6 +182,8 @@ declare type Game = {
   winner?: Color;
   status: GameStatus;
   turns: number;
+  threefold?: boolean;
+  tournamentId?: string;
 }
 
 declare type StoredOfflineGame = {
@@ -197,6 +207,15 @@ declare type GameStatus = {
 interface CheckCount {
   white: number;
   black: number;
+}
+
+declare type GameStep = {
+  ply: number
+  fen: string
+  san: string
+  uci: string
+  check: boolean
+  crazyhouse: any
 }
 
 declare type GameSituation = {

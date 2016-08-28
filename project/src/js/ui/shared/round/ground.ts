@@ -63,7 +63,7 @@ function make(
   userNewPiece: (role: Role, key: Pos, meta: any) => void,
   onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
   onNewPiece: () => void
-) {
+): Chessground.Controller {
   const config = makeConfig(data, fen);
   config.movable.events = {
     after: userMove,

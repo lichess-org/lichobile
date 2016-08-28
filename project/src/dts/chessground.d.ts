@@ -25,7 +25,6 @@ declare namespace Chessground {
   }
 
   interface Controller {
-    new(cfg: any): void;
     data: any;
     getFen(): string;
     set(cfg: SetConfig): void;
@@ -37,7 +36,7 @@ declare namespace Chessground {
     apiMove(orig: Pos, dest: Pos, pieces: Pieces, config: SetConfig): void;
     apiNewPiece(piece: Piece, key: Pos, config: SetConfig): void;
     playPremove(): void;
-    playPredrop(): void;
+    playPredrop(validate: (drop: Drop) => boolean): void;
     cancelPremove(): void;
     cancelPredrop(): void;
     setCheck(color: Color): void;
@@ -46,6 +45,10 @@ declare namespace Chessground {
     explode(keys: Array<Pos>): void;
     setBounds(bounds: Bounds): void;
     unload(): void;
+  }
+
+  interface ControllerFactory {
+    new(cfg: any): Controller;
   }
 
   interface Fen {
@@ -60,7 +63,7 @@ declare namespace Chessground {
       controller: Controller
     ): void;
 
-    controller: Controller;
+    controller: ControllerFactory;
 
     fen: Fen;
 

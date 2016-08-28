@@ -148,7 +148,7 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
     const s = round.plyStep(this.data, ply);
-    const config: CgSetConfig = {
+    const config: Chessground.SetConfig = {
       fen: s.fen,
       lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
       check: s.check,

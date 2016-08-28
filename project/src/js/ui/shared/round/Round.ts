@@ -122,13 +122,18 @@ export default class Round {
     document.addEventListener('resume', this.reloadGameData.bind(this));
     window.plugins.insomnia.keepAwake();
 
+    this.toggleUserPopup = this.toggleUserPopup.bind(this);
     this.showActions = this.showActions.bind(this);
     this.hideActions = this.hideActions.bind(this);
+    this.replaying = this.replaying.bind(this);
+    this.flip = this.flip.bind(this);
+    this.canDrop = this.canDrop.bind(this);
     this.jump = this.jump.bind(this);
     this.jumpNext = this.jumpNext.bind(this);
     this.jumpPrev = this.jumpPrev.bind(this);
     this.jumpFirst = this.jumpFirst.bind(this);
     this.jumpLast = this.jumpLast.bind(this);
+    this.cancelMove = this.cancelMove.bind(this);
   }
 
   public static lastMoveFromUci(uci: string): [Pos, Pos] {
@@ -586,7 +591,7 @@ export default class Round {
   }
 
   private reloadGameData() {
-    xhr.reload(this).then(this.reload);
+    xhr.reload(this).then(this.reload.bind(this));
   }
 
 }

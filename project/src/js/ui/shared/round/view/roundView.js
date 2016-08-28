@@ -18,8 +18,8 @@ import formWidgets from '../../../shared/form';
 import { view as renderClock } from '../clock/clockView';
 import promotion from '../promotion';
 import gameButton from './button';
-import chat from '../chat';
-import notes from '../notes';
+import { chatView } from '../chat';
+import { notesView } from '../notes';
 import CrazyPocket from '../crazy/crazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
@@ -36,8 +36,8 @@ export default function view(ctrl) {
 
 function overlay(ctrl, isPortrait) {
   return [
-    ctrl.chat ? chat.view(ctrl.chat) : null,
-    ctrl.notes ? notes.view(ctrl.notes) : null,
+    ctrl.chat ? chatView(ctrl.chat) : null,
+    ctrl.notes ? notesView(ctrl.notes) : null,
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),

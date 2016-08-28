@@ -17,8 +17,8 @@ import { gameTitle } from '../../shared/common';
 
 import ground from './ground';
 import promotion from './promotion';
-import chat from './chat';
-import notes from './notes';
+import { chatCtrl } from './chat';
+import { notesCtrl } from './notes';
 import clockCtrl from './clock/clockCtrl';
 import correspondenceClockCtrl from './correspondenceClock/corresClockCtrl';
 import socketHandler from './socketHandler';
@@ -84,9 +84,9 @@ export default class Round {
     };
 
     this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-      null : new chat.controller(this);
+      null : new chatCtrl(this);
 
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
 
     this.chessground = ground.make(
       this.data,

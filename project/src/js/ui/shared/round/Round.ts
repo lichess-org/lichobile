@@ -15,7 +15,6 @@ import gameApi from '../../../lichess/game';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';
 
-import round from './round';
 import ground from './ground';
 import promotion from './promotion';
 import chat from './chat';
@@ -54,14 +53,14 @@ export default class Round {
     onUserTVRedirect: () => void
   ) {
     this.vnode = vnode;
-    this.data = data;
+    this.data = cfg;
     this.onTVChannelChange = onTVChannelChange;
     this.onFeatured = onFeatured;
     this.data.userTV = userTv;
     this.onUserTVRedirect = onUserTVRedirect;
 
     this.vm = {
-      ply: this.round.lastPly(),
+      ply: this.lastPly(),
       flip: false,
       miniUser: {
         player: {
@@ -130,6 +129,10 @@ export default class Round {
     this.jumpPrev = this.jumpPrev.bind(this);
     this.jumpFirst = this.jumpFirst.bind(this);
     this.jumpLast = this.jumpLast.bind(this);
+  }
+
+  public static lastMoveFromUci(uci: string): [Pos, Pos] {
+    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
   }
 
   private tournamentTick() {
@@ -202,7 +205,7 @@ export default class Round {
   }
 
   public replaying() {
-    return this.vm.ply !== this.round.lastPly();
+    return this.vm.ply !== this.lastPly();
   }
 
   public canDrop() {
@@ -214,7 +217,7 @@ export default class Round {
   }
 
   public lastPly() {
-    return this.data.steps[d.steps.length - 1].ply;
+    return this.data.steps[this.data.steps.length - 1].ply;
   }
 
   public plyStep(ply: number) {
@@ -222,13 +225,13 @@ export default class Round {
   }
 
   public jump(ply: number) {
-    if (ply < this.round.firstPly() || ply > this.round.lastPly()) return false;
+    if (ply < this.firstPly() || ply > this.lastPly()) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
-    const s = this.round.plyStep(ply);
+    const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
+      lastMove: s.uci ? Round.lastMoveFromUci(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
@@ -254,11 +257,11 @@ export default class Round {
   }
 
   public jumpFirst() {
-    return this.jump(round.firstPly(this.data));
+    return this.jump(this.firstPly());
   }
 
   public jumpLast() {
-    return this.jump(round.lastPly(this.data));
+    return this.jump(this.lastPly());
   }
 
   public setTitle() {
@@ -471,7 +474,7 @@ export default class Round {
 
     d.game.threefold = !!o.threefold;
     d.steps.push({
-      ply: this.round.lastPly() + 1,
+      ply: this.lastPly() + 1,
       fen: o.fen,
       san: o.san,
       uci: o.uci,

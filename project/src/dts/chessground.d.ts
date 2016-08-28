@@ -17,7 +17,7 @@ declare namespace Chessground {
   interface SetConfig {
     orientation?: Color;
     fen?: string;
-    lastMove?: Array<Pos>;
+    lastMove?: [Pos, Pos];
     check?: boolean;
     turnColor?: Color;
     movableColor?: Color;

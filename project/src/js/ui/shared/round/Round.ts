@@ -106,7 +106,7 @@ export default class Round {
 
     this.makeCorrespondenceClock();
 
-    if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100);
+    if (this.clock) this.clockIntervId = setInterval(this.clockTick.bind(this), 100);
     else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick.bind(this), 6000);
 
     if (this.data.tournament) {

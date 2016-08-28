@@ -30,7 +30,6 @@ import crazyValid from './crazy/crazyValid';
 export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => void, onTVChannelChange: () => void, userTv: string, onUserTVRedirect: () => void) {
 
   this.data = round.merge({}, cfg).data;
-  console.log(this.data);
 
   this.onTVChannelChange = onTVChannelChange;
 

@@ -121,19 +121,6 @@ export default class Round {
 
     document.addEventListener('resume', this.reloadGameData.bind(this));
     window.plugins.insomnia.keepAwake();
-
-    this.toggleUserPopup = this.toggleUserPopup.bind(this);
-    this.showActions = this.showActions.bind(this);
-    this.hideActions = this.hideActions.bind(this);
-    this.replaying = this.replaying.bind(this);
-    this.flip = this.flip.bind(this);
-    this.canDrop = this.canDrop.bind(this);
-    this.jump = this.jump.bind(this);
-    this.jumpNext = this.jumpNext.bind(this);
-    this.jumpPrev = this.jumpPrev.bind(this);
-    this.jumpFirst = this.jumpFirst.bind(this);
-    this.jumpLast = this.jumpLast.bind(this);
-    this.cancelMove = this.cancelMove.bind(this);
   }
 
   public static lastMoveFromUci(uci: string): [Pos, Pos] {
@@ -174,7 +161,7 @@ export default class Round {
     return h;
   }
 
-  public toggleUserPopup(position: string, userId: string) {
+  public toggleUserPopup = (position: string, userId: string) => {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
@@ -183,17 +170,17 @@ export default class Round {
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
   }
 
-  public showActions() {
+  public showActions = () => {
     backbutton.stack.push(this.hideActions);
     this.vm.showingActions = true;
   }
 
-  public hideActions(fromBB?: string) {
+  public hideActions = (fromBB?: string) => {
     if (fromBB !== 'backbutton' && this.vm.showingActions) backbutton.stack.pop();
     this.vm.showingActions = false;
   }
 
-  public flip() {
+  public flip = () => {
     if (this.data.tv) {
       if (this.vnode.attrs.flip) router.set('/tv?flip=1', true);
       else router.set('/tv', true);
@@ -213,7 +200,7 @@ export default class Round {
     return this.vm.ply !== this.lastPly();
   }
 
-  public canDrop() {
+  public canDrop = () => {
     return !this.replaying() && gameApi.isPlayerPlaying(this.data);
   }
 
@@ -229,7 +216,7 @@ export default class Round {
     return this.data.steps[ply - this.firstPly()];
   }
 
-  public jump(ply: number) {
+  public jump = (ply: number) => {
     if (ply < this.firstPly() || ply > this.lastPly()) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
@@ -253,19 +240,19 @@ export default class Round {
     return true;
   }
 
-  public jumpNext() {
+  public jumpNext = () => {
     return this.jump(this.vm.ply + 1);
   }
 
-  public jumpPrev() {
+  public jumpPrev = () => {
     return this.jump(this.vm.ply - 1);
   }
 
-  public jumpFirst() {
+  public jumpFirst = () => {
     return this.jump(this.firstPly());
   }
 
-  public jumpLast() {
+  public jumpLast = () => {
     return this.jump(this.lastPly());
   }
 
@@ -349,7 +336,7 @@ export default class Round {
     });
   }
 
-  public cancelMove(fromBB?: string) {
+  public cancelMove = (fromBB?: string) => {
     if (fromBB !== 'backbutton') backbutton.stack.pop();
     this.vm.moveToSubmit = null;
     this.vm.dropToSubmit = null;

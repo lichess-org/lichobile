@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash';
 import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
 import gameApi from '../../../lichess/game';

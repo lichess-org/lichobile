@@ -494,7 +494,7 @@ export default class Round {
 
   }
 
-  public reload(rCfg: GameData) {
+  public reload = (rCfg: GameData) => {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);
@@ -578,7 +578,7 @@ export default class Round {
   }
 
   private reloadGameData() {
-    xhr.reload(this).then(this.reload.bind(this));
+    xhr.reload(this).then(this.reload);
   }
 
 }

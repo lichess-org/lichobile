@@ -105,14 +105,6 @@ export default class Round {
       this.data.player.spectator ? null : this.data.player.color
     ) : false;
 
-    this.showActions = this.showActions.bind(this);
-    this.hideActions = this.hideActions.bind(this);
-    this.jump = this.jump.bind(this);
-    this.jumpNext = this.jumpNext.bind(this);
-    this.jumpPrev = this.jumpPrev.bind(this);
-    this.jumpFirst = this.jumpFirst.bind(this);
-    this.jumpLast = this.jumpLast.bind(this);
-
     this.makeCorrespondenceClock();
 
     if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100);
@@ -130,6 +122,14 @@ export default class Round {
 
     document.addEventListener('resume', this.reloadGameData.bind(this));
     window.plugins.insomnia.keepAwake();
+
+    this.showActions = this.showActions.bind(this);
+    this.hideActions = this.hideActions.bind(this);
+    this.jump = this.jump.bind(this);
+    this.jumpNext = this.jumpNext.bind(this);
+    this.jumpPrev = this.jumpPrev.bind(this);
+    this.jumpFirst = this.jumpFirst.bind(this);
+    this.jumpLast = this.jumpLast.bind(this);
   }
 
   private tournamentTick() {

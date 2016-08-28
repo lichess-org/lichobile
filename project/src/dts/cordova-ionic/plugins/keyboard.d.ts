@@ -38,4 +38,8 @@ declare namespace Ionic {
      */
     isVisible: boolean;
   }
+
+  interface KeyboardEvent extends Event {
+    keyboardHeight: number
+  }
 }

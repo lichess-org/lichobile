@@ -486,9 +486,9 @@ export default function (vnode: Mithril.Vnode, cfg: GameData, onFeatured: () => 
   else if (this.correspondenceClock) clockIntervId = setInterval(correspondenceClockTick, 6000);
 
   this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-    null : new chat.controller(this);
+    null : chat.controller(this);
 
-  this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+  this.notes = this.data.game.speed === 'correspondence' ? notes.controller(this) : null;
 
   this.reload = function(rCfg: GameData) {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))

@@ -7,6 +7,8 @@ declare namespace Mithril {
   interface ChildArray extends Array<Children> {}
   type Children = Child | ChildArray;
   type Child = string | Vnode | Component;
+  // maybe I can try to fix that
+  type Attributes = any;
 
   interface Static {
     (
@@ -115,14 +117,6 @@ declare namespace Mithril {
     * URL on next route change.
     */
     preventDefault(): void;
-  }
-
-  interface Attributes {
-    className?: string;
-
-    key?: string | number;
-
-    [property: string]: any;
   }
 
   interface Component {

@@ -99,6 +99,7 @@ interface Navigator {
 
 interface CordovaApp {
     backHistory(): void;
+    exitApp(): void;
 }
 
 /** Apache Cordova instance */

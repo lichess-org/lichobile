@@ -152,9 +152,10 @@ declare type GameData = {
   takebackable: boolean;
   note?: string;
   chat?: Array<string>;
-  possibleMoves?: {[index: string]: string};
+  possibleMoves?: StringMap;
   userTV?: string;
   tv?: string;
+  pref?: any;
 }
 
 declare type Game = {
@@ -164,6 +165,7 @@ declare type Game = {
   id: string;
   lastMove: string;
   perf?: string;
+  check?: boolean;
   variant: Variant;
   player: Color;
   source: string;

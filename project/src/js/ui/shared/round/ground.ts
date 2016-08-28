@@ -4,11 +4,11 @@ import gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
 
-function str2move(move) {
+function str2move(move: string) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
 
-function makeConfig(data, fen, flip) {
+function makeConfig(data: GameData, fen: string, flip: boolean = false): any {
   return {
     fen: fen,
     orientation: boardOrientation(data, flip),
@@ -56,8 +56,15 @@ function makeConfig(data, fen, flip) {
   };
 }
 
-function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
-  var config = makeConfig(data, fen);
+function make(
+  data: GameData,
+  fen: string,
+  userMove: (orig: Pos, dest: Pos, meta: any) => void,
+  userNewPiece: (role: Role, key: Pos, meta: any) => void,
+  onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
+  onNewPiece: () => void
+) {
+  const config = makeConfig(data, fen);
   config.movable.events = {
     after: userMove,
     afterNewPiece: userNewPiece
@@ -70,12 +77,12 @@ function make(data, fen, userMove, userNewPiece, onMove, onNewPiece) {
   return new chessground.controller(config);
 }
 
-function reload(ground, data, fen, flip) {
+function reload(ground: Chessground.Controller, data: GameData, fen: string, flip: boolean) {
   ground.reconfigure(makeConfig(data, fen, flip));
 }
 
-function promote(ground, key, role) {
-  const pieces = {};
+function promote(ground: Chessground.Controller, key: Pos, role: Role) {
+  const pieces: Chessground.Pieces = {};
   const piece = ground.data.pieces[key];
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
@@ -86,7 +93,7 @@ function promote(ground, key, role) {
   }
 }
 
-function end(ground) {
+function end(ground: Chessground.Controller) {
   ground.stop();
 }
 

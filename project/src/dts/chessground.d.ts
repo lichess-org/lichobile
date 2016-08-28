@@ -12,6 +12,7 @@ declare namespace Chessground {
     width: number;
     height: number;
   }
+  type Pieces = {[index: string]: Piece};
 
   interface SetConfig {
     orientation?: Color;
@@ -24,14 +25,16 @@ declare namespace Chessground {
   }
 
   interface Controller {
+    new(cfg: any): void;
+    data: any;
     getFen(): string;
     set(cfg: SetConfig): void;
     reconfigure(cfg: any): void;
     toggleOrientation(): void;
-    setPieces(pieces: Array<Piece>): void;
+    setPieces(pieces: Pieces): void;
     setDragPiece(key: Pos, piece: Piece, dragOpts: any): void;
     selectSquare(key: Pos): void;
-    apiMove(orig: Pos, dest: Pos, pieces: Array<Piece>, config: SetConfig): void;
+    apiMove(orig: Pos, dest: Pos, pieces: Pieces, config: SetConfig): void;
     apiNewPiece(piece: Piece, key: Pos, config: SetConfig): void;
     playPremove(): void;
     playPredrop(): void;
@@ -57,7 +60,16 @@ declare namespace Chessground {
       controller: Controller
     ): void;
 
+    controller: Controller;
+
     fen: Fen;
+
+    util: any;
   }
 }
 
+declare const chessground: Chessground.Static;
+
+declare module 'chessground-mobile' {
+  export = chessground;
+}

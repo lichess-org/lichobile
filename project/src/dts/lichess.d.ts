@@ -120,7 +120,7 @@ declare type TimeControl = {
   daysPerTurn?: number;
 }
 
-declare type Clock = {
+declare type ClockData = {
   black: number;
   white: number;
   emerg: number;
@@ -129,7 +129,7 @@ declare type Clock = {
   increment: number;
 }
 
-declare type CorrespondenceClock = {
+declare type CorrespondenceClockData = {
   barTime: number;
   black: number;
   daysPerTurn: number;
@@ -148,8 +148,8 @@ declare type GameData = {
   game: Game;
   player: Player;
   opponent: Player;
-  correspondence?: CorrespondenceClock;
-  clock?: Clock;
+  correspondence?: CorrespondenceClockData;
+  clock?: ClockData;
   steps?: Array<GameStep>;
   tournament?: Tournament;
   takebackable: boolean;

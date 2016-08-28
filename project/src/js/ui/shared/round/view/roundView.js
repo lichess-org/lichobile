@@ -6,7 +6,6 @@ import variantApi from '../../../../lichess/variant';
 import gameApi from '../../../../lichess/game';
 import { perfTypes } from '../../../../lichess/perfs';
 import gameStatusApi from '../../../../lichess/status';
-import round from '../round';
 import settings from '../../../../settings';
 import * as utils from '../../../../utils';
 import i18n from '../../../../i18n';
@@ -255,7 +254,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
 function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
-  const step = round.plyStep(ctrl.data, ctrl.vm.ply);
+  const step = ctrl.plyStep(ctrl.vm.ply);
   const isCrazy = !!step.crazyhouse;
 
   return (

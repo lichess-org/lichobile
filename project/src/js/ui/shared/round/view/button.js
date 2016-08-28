@@ -10,7 +10,6 @@ import helper from '../../../helper';
 import * as tournamentXhr from '../../../tournament/tournamentXhr';
 import { getPGN } from '../roundXhr';
 import lobby from '../../../lobby';
-import round from '../round';
 
 export default {
   standard: function(ctrl, condition, icon, hint, socketMsg) {
@@ -238,7 +237,7 @@ export default {
   },
   first: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -252,7 +251,7 @@ export default {
   },
   backward: function(ctrl) {
     const prevPly = ctrl.vm.ply - 1;
-    const enabled = ctrl.vm.ply !== prevPly && prevPly >= round.firstPly(ctrl.data);
+    const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -266,7 +265,7 @@ export default {
   },
   forward: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
@@ -280,7 +279,7 @@ export default {
   },
   last: function(ctrl) {
     const nextPly = ctrl.vm.ply + 1;
-    const enabled = ctrl.vm.ply !== nextPly && nextPly <= round.lastPly(ctrl.data);
+    const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,

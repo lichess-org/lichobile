@@ -54,14 +54,14 @@ export default class Round {
     onUserTVRedirect: () => void
   ) {
     this.vnode = vnode;
-    this.data = round.merge({}, cfg).data;
+    this.data = data;
     this.onTVChannelChange = onTVChannelChange;
     this.onFeatured = onFeatured;
     this.data.userTV = userTv;
     this.onUserTVRedirect = onUserTVRedirect;
 
     this.vm = {
-      ply: round.lastPly(this.data),
+      ply: this.round.lastPly(),
       flip: false,
       miniUser: {
         player: {
@@ -202,18 +202,30 @@ export default class Round {
   }
 
   public replaying() {
-    return this.vm.ply !== round.lastPly(this.data);
+    return this.vm.ply !== this.round.lastPly();
   }
 
   public canDrop() {
     return !this.replaying() && gameApi.isPlayerPlaying(this.data);
   }
 
+  public firstPly() {
+    return this.data.steps[0].ply;
+  }
+
+  public lastPly() {
+    return this.data.steps[d.steps.length - 1].ply;
+  }
+
+  public plyStep(ply: number) {
+    return this.data.steps[ply - this.firstPly()];
+  }
+
   public jump(ply: number) {
-    if (ply < round.firstPly(this.data) || ply > round.lastPly(this.data)) return false;
+    if (ply < this.round.firstPly() || ply > this.round.lastPly()) return false;
     const isFwd = ply > this.vm.ply;
     this.vm.ply = ply;
-    const s = round.plyStep(this.data, ply);
+    const s = this.round.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
       lastMove: s.uci ? [s.uci.substr(0, 2), s.uci.substr(2, 2)] : null,
@@ -459,7 +471,7 @@ export default class Round {
 
     d.game.threefold = !!o.threefold;
     d.steps.push({
-      ply: round.lastPly(this.data) + 1,
+      ply: this.round.lastPly() + 1,
       fen: o.fen,
       san: o.san,
       uci: o.uci,
@@ -494,7 +506,7 @@ export default class Round {
     if (this.data.tv) rCfg.tv = this.data.tv;
     if (this.data.userTV) rCfg.userTV = this.data.userTV;
 
-    this.data = round.merge(this.data, rCfg).data;
+    this.data = rCfg;
 
     this.makeCorrespondenceClock();
     if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);

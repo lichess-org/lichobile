@@ -1,6 +1,6 @@
+import { debounce } from 'lodash';
 import router from '../../router';
 import redraw from '../../utils/redraw';
-import { debounce } from 'lodash/function';
 import session from '../../session';
 import sound from '../../sound';
 import signals from '../../signals';

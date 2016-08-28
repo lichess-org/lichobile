@@ -1,10 +1,10 @@
 import * as xhr from '../userXhr';
+import * as IScroll from 'iscroll/build/iscroll-probe';
+import * as m from 'mithril';
 import helper from '../../helper';
 import redraw from '../../../utils/redraw';
-import IScroll from 'iscroll/build/iscroll-probe';
 import { throttle } from 'lodash/function';
 import socket from '../../../socket';
-import * as m from 'mithril';
 import { handleXhrError } from '../../../utils';
 
 var scroller;

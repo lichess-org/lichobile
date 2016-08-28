@@ -1,6 +1,6 @@
 import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';

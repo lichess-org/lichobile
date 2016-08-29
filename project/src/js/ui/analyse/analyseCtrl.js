@@ -13,7 +13,7 @@ import { game as gameXhr } from '../../xhr';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import helper from '../helper';
-import notes from '../shared/round/notes';
+import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup.js';
 import { makeData, makeDefaultData } from './data';
@@ -391,7 +391,7 @@ export default function oninit(vnode) {
     this.ceval = cevalCtrl(this.data.game.variant.key, allowCeval(), onCevalMsg.bind(this));
     this.explorer = explorerCtrl(this, true);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
-    this.notes = this.data.game.speed === 'correspondence' ? new notes.controller(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
 
     let initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :

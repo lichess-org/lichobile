@@ -10,7 +10,7 @@ import { gameTitle, connectingHeader, header, backButton as renderBackbutton, vi
 import Board from '../../shared/Board';
 import helper from '../../helper';
 import layout from '../../layout';
-import notes from '../../shared/round/notes';
+import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';
 import importPgnPopup from '../importPgnPopup';
 import control from '../control';
@@ -50,7 +50,7 @@ function overlay(ctrl) {
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
-    ctrl.notes ? notes.view(ctrl.notes) : null,
+    ctrl.notes ? notesView(ctrl.notes) : null,
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
     continuePopup.view(ctrl.continuePopup),
     importPgnPopup.view(ctrl.importPgnPopup)

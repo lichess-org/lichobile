@@ -26,16 +26,19 @@ import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 
-export interface ApiMove {
+export interface ApiMoveOrDrop {
   fen: string;
-  ply: number;
-  status?: GameStatus;
-  crazyhouse?: any;
+  threefold: boolean;
   check: boolean;
+  ply: number;
+  wDraw: boolean;
+  bDraw: boolean;
   uci: string;
   san: string;
+  status?: GameStatus;
+  winner?: Color;
+  crazyhouse?: Pockets;
   isMove?: boolean;
-  threefold: boolean;
   clock?: {
     white: number;
     black: number;
@@ -45,9 +48,6 @@ export interface ApiMove {
     pieceClass: Role;
   }
   role?: Role;
-  winner?: Color;
-  wDraw?: boolean;
-  bDraw?: boolean;
   enpassant: {
     key: Pos;
     color: Color;
@@ -403,7 +403,7 @@ export default class Round {
     }
   }
 
-  public apiMove(o: ApiMove) {
+  public apiMove(o: ApiMoveOrDrop) {
     const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';

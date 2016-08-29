@@ -5,14 +5,14 @@ import vibrate from '../../../vibrate';
 import session from '../../../session';
 import { removeOfflineGameData } from '../../../utils/offlineGames';
 import socket from '../../../socket';
-import Round, { ApiMove } from './Round';
+import Round, { ApiMoveOrDrop } from './Round';
 import * as xhr from './roundXhr';
 import ground from './ground';
 
 export default function(ctrl: Round, onFeatured: () => void, onUserTVRedirect: () => void) {
 
  return {
-    takebackOffers(o: any) {
+    takebackOffers(o: { [index: string]: boolean }) {
       if (!ctrl.data.player.proposingTakeback && o[ctrl.data.player.color]) {
         sound.dong();
         vibrate.quick();
@@ -25,7 +25,7 @@ export default function(ctrl: Round, onFeatured: () => void, onUserTVRedirect: (
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
       redraw();
     },
-    move(o: ApiMove) {
+    move(o: ApiMoveOrDrop) {
       o.isMove = true;
       ctrl.apiMove(o);
       redraw();

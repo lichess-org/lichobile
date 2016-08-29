@@ -218,13 +218,24 @@ interface CheckCount {
   black: number;
 }
 
+declare type Pocket = {
+  queen: number;
+  rook: number;
+  knight: number;
+  bishop: number;
+  pawn: number;
+  [role: string]: number;
+}
+
+declare type Pockets = [Pocket, Pocket]
+
 declare type GameStep = {
   ply: number
   fen: string
   san: string
   uci: string
   check: boolean
-  crazyhouse: any
+  crazyhouse: Pockets
 }
 
 declare type GameSituation = {
@@ -242,7 +253,7 @@ declare type GameSituation = {
   pgnMoves: Array<string>
   uciMoves: Array<string>
   promotion?: string
-  crazyhouse?: string
+  crazyhouse?: Pockets
   ply: number
 }
 

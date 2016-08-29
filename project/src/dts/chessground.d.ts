@@ -68,6 +68,8 @@ declare namespace Chessground {
     fen: Fen;
 
     util: any;
+
+    board: any;
   }
 }
 

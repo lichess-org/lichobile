@@ -100,9 +100,11 @@ declare type Player = {
   engineName?: string;
   offeringDraw?: boolean;
   proposingTakeback?: boolean;
+  offeringRematch?: boolean;
   spectator?: boolean;
   berserk?: boolean;
   version?: number;
+  checks?: CheckCount;
 }
 
 declare type TournamentClock = {
@@ -142,6 +144,11 @@ declare type Tournament = {
   id: string;
   berserkable: boolean;
   secondsToFinish: number;
+  nbSecondsForFirstMove: number;
+  ranks?: {
+    white: string;
+    black: string;
+  }
 }
 
 declare type GameData = {
@@ -164,26 +171,28 @@ declare type GameData = {
     round: string;
     socket: string;
   }
+  bookmarked?: boolean;
 }
 
 declare type Game = {
-  createdAt?: Timestamp;
   fen: string;
   initialFen: string;
   id: string;
   lastMove: string;
-  perf?: string;
-  check?: boolean;
+  rated: boolean;
   variant: Variant;
   player: Color;
   source: string;
+  status: GameStatus;
+  turns: number;
+  perf?: string;
+  check?: boolean;
   speed?: string;
   startedAtTurn?: number;
   winner?: Color;
-  status: GameStatus;
-  turns: number;
   threefold?: boolean;
   tournamentId?: string;
+  createdAt?: Timestamp;
 }
 
 declare type StoredOfflineGame = {

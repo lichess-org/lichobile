@@ -22,6 +22,12 @@ declare namespace Mithril {
       ...children: Children[]
     ): Vnode;
 
+    (
+      selector: Component,
+      attributes: Attributes,
+      ...children: Children[]
+    ): Vnode;
+
     prop<T>(promise: Thennable<T>): Promise<T>;
 
     prop<T>(value: T): BasicProperty<T>;

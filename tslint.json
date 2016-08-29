@@ -23,7 +23,7 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "quotemark": [true, "single"],
+        "quotemark": false,
         "semicolon": false,
         "triple-equals": [
             true,

@@ -223,14 +223,14 @@ export default {
     };
   },
 
-  ontouch: function(tapHandler, holdHandler, repeatHandler, touchEndFeedback = true) {
+  ontouch: function(tapHandler, holdHandler = null, repeatHandler = null, touchEndFeedback = true) {
     return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },
 
-  ontouchX: function(tapHandler, holdHandler, touchEndFeedback = true) {
+  ontouchX: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
     return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
   },
-  ontouchY: function(tapHandler, holdHandler, touchEndFeedback = true) {
+  ontouchY: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
     return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
   },
 

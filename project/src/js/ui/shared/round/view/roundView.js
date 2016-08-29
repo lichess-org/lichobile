@@ -255,14 +255,14 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
   const step = ctrl.plyStep(ctrl.vm.ply);
-  const isCrazy = !!step.crazyhouse;
+  const isCrazy = !!step.crazy;
 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
       {m(CrazyPocket, {
         ctrl,
-        crazyData: step.crazyhouse,
+        crazyData: step.crazy,
         color: player.color,
         position
       })}

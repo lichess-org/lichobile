@@ -191,8 +191,7 @@ export default class Round {
     }
   }
 
-  // TODO type steps
-  public stepsHash(steps: any) {
+  public stepsHash(steps: Array<GameStep>) {
     let h = '';
     for (let i in steps) {
       h += steps[i].san;
@@ -511,7 +510,7 @@ export default class Round {
       san: o.san,
       uci: o.uci,
       check: o.check,
-      crazyhouse: o.crazyhouse
+      crazy: o.crazyhouse
     });
     gameApi.setOnGame(d, playedColor, true);
 

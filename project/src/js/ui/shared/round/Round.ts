@@ -26,6 +26,41 @@ import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 
+export interface ApiMove {
+  fen: string;
+  ply: number;
+  status?: GameStatus;
+  crazyhouse?: any;
+  check: boolean;
+  uci: string;
+  san: string;
+  isMove?: boolean;
+  threefold: boolean;
+  clock?: {
+    white: number;
+    black: number;
+  }
+  promotion?: {
+    key: Pos;
+    pieceClass: Role;
+  }
+  role?: Role;
+  winner?: Color;
+  wDraw?: boolean;
+  bDraw?: boolean;
+  enpassant: {
+    key: Pos;
+    color: Color;
+  }
+  dests: StringMap;
+  drops: Array<string>;
+  castle?: {
+    king: [Pos, Pos];
+    rook: [Pos, Pos];
+    color: Color;
+  }
+}
+
 export default class Round {
   public vnode: Mithril.Vnode;
   public data: GameData;
@@ -43,6 +78,14 @@ export default class Round {
 
   private tournamentCountInterval: number;
   private clockIntervId: number;
+
+  public static uciToMove(uci: string): [Pos, Pos] {
+    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
+  }
+
+  public static uciToDrop(uci: string): Pos {
+    return <Pos>uci.substr(2, 2);
+  }
 
   public constructor(
     vnode: Mithril.Vnode,
@@ -121,10 +164,6 @@ export default class Round {
 
     document.addEventListener('resume', this.reloadGameData.bind(this));
     window.plugins.insomnia.keepAwake();
-  }
-
-  public static lastMoveFromUci(uci: string): [Pos, Pos] {
-    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
   }
 
   private tournamentTick() {
@@ -223,7 +262,7 @@ export default class Round {
     const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? Round.lastMoveFromUci(s.uci) : null,
+      lastMove: s.uci ? Round.uciToMove(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
@@ -364,7 +403,7 @@ export default class Round {
     }
   }
 
-  public apiMove(o: any) {
+  public apiMove(o: ApiMove) {
     const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
@@ -436,9 +475,10 @@ export default class Round {
         check: o.check
       };
       if (o.isMove) {
+        const move = Round.uciToMove(o.uci);
         this.chessground.apiMove(
-          o.uci.substr(0, 2),
-          o.uci.substr(2, 2),
+          move[0],
+          move[1],
           pieces,
           newConf
         );
@@ -448,7 +488,7 @@ export default class Round {
             role: o.role,
             color: playedColor
           },
-          o.uci.substr(2, 2),
+          Round.uciToDrop(o.uci),
           newConf
         );
       }

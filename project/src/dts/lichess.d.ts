@@ -104,7 +104,7 @@ declare type Player = {
   spectator?: boolean;
   berserk?: boolean;
   version?: number;
-  checks?: CheckCount;
+  checks?: number;
 }
 
 declare type TournamentClock = {
@@ -163,7 +163,7 @@ declare type GameData = {
   note?: string;
   chat?: Array<string>;
   possibleMoves?: StringMap;
-  possibleDrops?: StringMap;
+  possibleDrops?: string | Array<string>;
   userTV?: string;
   tv?: string;
   pref?: any;

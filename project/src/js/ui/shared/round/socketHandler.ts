@@ -1,17 +1,18 @@
 import gameApi from '../../../lichess/game';
 import redraw from '../../../utils/redraw';
-import ground from './ground';
-import * as xhr from './roundXhr';
 import sound from '../../../sound';
 import vibrate from '../../../vibrate';
 import session from '../../../session';
 import { removeOfflineGameData } from '../../../utils/offlineGames';
 import socket from '../../../socket';
+import Round, { ApiMove } from './Round';
+import * as xhr from './roundXhr';
+import ground from './ground';
 
-export default function(ctrl, onFeatured, onUserTVRedirect) {
+export default function(ctrl: Round, onFeatured: () => void, onUserTVRedirect: () => void) {
 
  return {
-    takebackOffers: function(o) {
+    takebackOffers(o: any) {
       if (!ctrl.data.player.proposingTakeback && o[ctrl.data.player.color]) {
         sound.dong();
         vibrate.quick();
@@ -24,32 +25,32 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
       redraw();
     },
-    move: function(o) {
+    move(o: ApiMove) {
       o.isMove = true;
       ctrl.apiMove(o);
-      redraw(false, true);
+      redraw();
     },
-    drop: function(o) {
+    drop(o: any) {
       o.isDrop = true;
       ctrl.apiMove(o);
-      redraw(false, true);
+      redraw();
     },
-    checkCount: function(e) {
-      var isWhite = ctrl.data.player.color === 'white';
+    checkCount(e: { white: number, black: number }) {
+      const isWhite = ctrl.data.player.color === 'white';
       ctrl.data.player.checks = isWhite ? e.white : e.black;
       ctrl.data.opponent.checks = isWhite ? e.black : e.white;
       redraw();
     },
-    berserk: function(color) {
+    berserk(color: Color) {
       ctrl.setBerserk(color);
     },
-    reload: function() {
+    reload() {
       xhr.reload(ctrl).then(ctrl.reload);
     },
-    redirect: function(e) {
+    redirect(e: any) {
       socket.redirectToGame(e);
     },
-    resync: function() {
+    resync() {
       if (onUserTVRedirect) {
         onUserTVRedirect();
       } else {
@@ -60,10 +61,10 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         });
       }
     },
-    clock: function(o) {
+    clock(o: { white: number, black: number }) {
       if (ctrl.clock) ctrl.clock.update(o.white, o.black);
     },
-    end: function(winner) {
+    end(winner: Color) {
       ctrl.data.game.winner = winner;
       ground.end(ctrl.chessground);
       xhr.reload(ctrl).then(ctrl.reload);
@@ -81,23 +82,23 @@ export default function(ctrl, onFeatured, onUserTVRedirect) {
         }, 500);
       }
     },
-    gone: function(isGone) {
+    gone(isGone: boolean) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {
         gameApi.setIsGone(ctrl.data, ctrl.data.opponent.color, isGone);
-        if (!ctrl.chat || !ctrl.chat.showing) redraw(false, true);
+        if (!ctrl.chat || !ctrl.chat.showing) redraw();
       }
     },
-    message: function(msg) {
+    message(msg: string) {
       if (ctrl.chat) ctrl.chat.append(msg);
     },
-    tvSelect: function(o) {
-      if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured(o);
+    tvSelect(o: { channel: string }) {
+      if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured();
     },
-    crowd: function(o) {
-      ['white', 'black'].forEach(function(c) {
-        gameApi.setOnGame(ctrl.data, c, o[c]);
+    crowd(o: { [key: string]: boolean }) {
+      ['white', 'black'].forEach(c => {
+        gameApi.setOnGame(ctrl.data, <Color>c, o[c]);
       });
-      if (!ctrl.chat || !ctrl.chat.showing) redraw(false, true);
+      if (!ctrl.chat || !ctrl.chat.showing) redraw();
     }
   };
 }

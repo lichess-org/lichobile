@@ -294,7 +294,7 @@ export default class Round {
       this.correspondenceClock.tick(this.data.game.player);
   }
 
-  public sendMove(orig: Pos, dest: Pos, prom: string, isPremove: boolean) {
+  public sendMove(orig: Pos, dest: Pos, prom: Role, isPremove: boolean = false) {
     const move = {
       u: orig + dest
     };

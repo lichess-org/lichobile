@@ -1,14 +1,15 @@
+import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
+import settings from '../../../settings';
+import helper from '../../helper';
 import ground from './ground';
 import * as xhr from './roundXhr';
-import helper from '../../helper';
-import settings from '../../../settings';
-import * as m from 'mithril';
+import Round from './Round';
 
-var promoting = false;
+let promoting: [Pos, Pos] = null;
 
-function start(ctrl, orig, dest, isPremove) {
-  var piece = ctrl.chessground.data.pieces[dest];
+function start(ctrl: Round, orig: Pos, dest: Pos, isPremove: boolean) {
+  const piece = ctrl.chessground.data.pieces[dest];
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '8' && ctrl.data.player.color === 'white') ||
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {
@@ -20,24 +21,24 @@ function start(ctrl, orig, dest, isPremove) {
   return false;
 }
 
-function finish(ctrl, role) {
+function finish(ctrl: Round, role: Role) {
   if (promoting) {
     ground.promote(ctrl.chessground, promoting[1], role);
     ctrl.sendMove(promoting[0], promoting[1], role);
   }
-  promoting = false;
+  promoting = null;
 }
 
-function cancel(ctrl) {
+function cancel(ctrl: Round) {
   if (promoting) xhr.reload(ctrl).then(ctrl.reload);
-  promoting = false;
+  promoting = null;
 }
 
 export default {
 
   start: start,
 
-  view: function(ctrl) {
+  view: function(ctrl: Round) {
     if (!promoting) return null;
 
     const pieces = ['queen', 'knight', 'rook', 'bishop'];

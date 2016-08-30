@@ -70,6 +70,8 @@ declare namespace Chessground {
     util: any;
 
     board: any;
+
+    drag: any;
   }
 }
 

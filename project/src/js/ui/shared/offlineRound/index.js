@@ -6,7 +6,7 @@ import gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../shared/round/view/roundView';
 import * as m from 'mithril';
-import CrazyPocket from '../../shared/round/crazy/crazyPocket';
+import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 
 export function renderAntagonist(ctrl, content, material, position, isPortrait, otbFlip, customPieceTheme) {
   const sit = ctrl.replay.situation();

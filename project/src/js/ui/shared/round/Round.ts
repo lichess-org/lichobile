@@ -37,7 +37,9 @@ export interface ApiMoveOrDrop {
   san: string;
   status?: GameStatus;
   winner?: Color;
-  crazyhouse?: Pockets;
+  crazyhouse?: {
+    pockets: Pockets;
+  }
   isMove?: boolean;
   clock?: {
     white: number;
@@ -61,8 +63,13 @@ export interface ApiMoveOrDrop {
   }
 }
 
+interface RoundProps {
+  id: string;
+  flip: boolean;
+}
+
 export default class Round {
-  public vnode: Mithril.Vnode;
+  public vnode: Mithril.ComponentVnode<RoundProps>;
   public data: GameData;
   public chessground: Chessground.Controller;
   public clock: any;
@@ -88,7 +95,7 @@ export default class Round {
   }
 
   public constructor(
-    vnode: Mithril.Vnode,
+    vnode: Mithril.ComponentVnode<RoundProps>,
     cfg: GameData,
     onFeatured: () => void,
     onTVChannelChange: () => void,

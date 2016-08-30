@@ -20,7 +20,7 @@ import promotion from '../promotion';
 import gameButton from './button';
 import { chatView } from '../chat';
 import { notesView } from '../notes';
-import CrazyPocket from '../crazy/crazyPocket';
+import CrazyPocket from '../crazy/CrazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 

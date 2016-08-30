@@ -17,7 +17,7 @@ import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
 import { defined, renderEval, isSynthetic } from '../util';
-import CrazyPocket from '../../shared/round/crazy/crazyPocket';
+import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';

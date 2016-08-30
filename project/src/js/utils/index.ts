@@ -11,7 +11,7 @@ export function loadLocalJsonFile(url: string): Promise<any> {
     m.request({
       url,
       method: 'GET',
-      config(xhr) {
+      config(xhr: XMLHttpRequest) {
         curXhr = xhr;
       }
     })

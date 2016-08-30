@@ -235,7 +235,9 @@ declare type GameStep = {
   san: string
   uci: string
   check: boolean
-  crazy: Pockets
+  crazy: {
+    pockets: Pockets
+  }
 }
 
 declare type GameSituation = {

@@ -22,6 +22,11 @@ declare namespace Mithril {
 
     (
       selector: Component,
+      ...children: Children[]
+    ): Vnode;
+
+    (
+      selector: Component,
       attributes: Attributes,
       ...children: Children[]
     ): Vnode;
@@ -63,7 +68,7 @@ declare namespace Mithril {
     state: any;
   }
 
-  interface ComponentVnode<T> extends Vnode {
+  interface VnodeWithAttrs<T> extends Vnode {
     attrs?: T
   }
 
@@ -87,7 +92,7 @@ declare namespace Mithril {
   }
 
   interface ComponentWithAttrs<T> extends Component {
-    view(vnode: ComponentVnode<T>): Vnode;
+    view(vnode: VnodeWithAttrs<T>): Vnode;
   }
 
   interface TrustedString extends String {

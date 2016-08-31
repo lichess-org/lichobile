@@ -8,8 +8,14 @@ import settings from '../settings';
 import Round from './shared/round/Round';
 import roundView from './shared/round/view/roundView';
 
+interface TVAttrs {
+  id: string;
+  color: Color;
+  flip: boolean;
+}
+
 export default {
-  oninit(vnode) {
+  oninit(vnode: Mithril.VnodeWithAttrs<TVAttrs>) {
     helper.analyticsTrackView('TV');
 
     const onChannelChange = () => router.set('/tv', true);
@@ -18,7 +24,7 @@ export default {
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .then(d => {
       d.tv = settings.tv.channel();
-      this.round = new Round(vnode, d, onFeatured, onChannelChange);
+      this.round = new Round(vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange);
     })
     .catch(handleXhrError);
   },

@@ -7,8 +7,12 @@ import Round from '../shared/round/Round';
 import roundView from '../shared/round/view/roundView';
 import { tv } from './userXhr';
 
+interface Attrs {
+  id: string;
+}
+
 export default {
-  oninit(vnode) {
+  oninit(vnode: Mithril.VnodeWithAttrs<Attrs>) {
     helper.analyticsTrackView('TV');
 
     const userId = vnode.attrs.id;
@@ -17,7 +21,7 @@ export default {
     tv(userId)
     .then(data => {
       data.userTV = userId;
-      this.round = new Round(vnode, data, null, null, userId, onRedirect);
+      this.round = new Round(data.game.id, data, false, null, null, userId, onRedirect);
     })
     .catch(handleXhrError);
   },

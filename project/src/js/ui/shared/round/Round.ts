@@ -63,13 +63,8 @@ export interface ApiMoveOrDrop {
   }
 }
 
-interface RoundProps {
-  id: string;
-  flip: boolean;
-}
-
 export default class Round {
-  public vnode: Mithril.ComponentVnode<RoundProps>;
+  public id: string;
   public data: GameData;
   public chessground: Chessground.Controller;
   public clock: any;
@@ -82,6 +77,7 @@ export default class Round {
   public vm: any;
   public title: any;
   public tv: string;
+  public flipped: boolean;
 
   private tournamentCountInterval: number;
   private clockIntervId: number;
@@ -95,14 +91,16 @@ export default class Round {
   }
 
   public constructor(
-    vnode: Mithril.ComponentVnode<RoundProps>,
+    id: string,
     cfg: GameData,
-    onFeatured: () => void,
-    onTVChannelChange: () => void,
-    userTv: string,
-    onUserTVRedirect: () => void
+    flipped: boolean = false,
+    onFeatured?: () => void,
+    onTVChannelChange?: () => void,
+    userTv?: string,
+    onUserTVRedirect?: () => void
   ) {
-    this.vnode = vnode;
+    this.id = id;
+    this.flipped = flipped;
     this.data = cfg;
     this.onTVChannelChange = onTVChannelChange;
     this.onFeatured = onFeatured;
@@ -227,7 +225,7 @@ export default class Round {
 
   public flip = () => {
     if (this.data.tv) {
-      if (this.vnode.attrs.flip) router.set('/tv?flip=1', true);
+      if (this.flip) router.set('/tv?flip=1', true);
       else router.set('/tv', true);
       return;
     } else if (this.data.player.spectator) {
@@ -535,7 +533,7 @@ export default class Round {
 
     if (this.data.game.speed === 'correspondence') {
       session.refresh();
-      saveOfflineGameData(this.vnode.attrs.id, this.data);
+      saveOfflineGameData(this.id, this.data);
     }
 
   }

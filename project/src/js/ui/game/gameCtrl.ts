@@ -12,8 +12,13 @@ import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';
 
-export default function oninit(vnode) {
-  let gameData;
+interface GameAttrs {
+  id: string;
+  color: Color;
+}
+
+export default function oninit(vnode: Mithril.VnodeWithAttrs<GameAttrs>) {
+  let gameData: GameData;
 
   if (hasNetwork()) {
     gameXhr(vnode.attrs.id, vnode.attrs.color)
@@ -50,7 +55,7 @@ export default function oninit(vnode) {
           }
         }
 
-        this.round = new Round(vnode, data);
+        this.round = new Round(vnode.attrs.id, data);
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
@@ -78,7 +83,7 @@ export default function oninit(vnode) {
       if (!gameApi.playable(gameData)) {
         removeOfflineGameData(vnode.attrs.id);
       }
-      this.round = Round(vnode, gameData);
+      this.round = new Round(vnode.attrs.id, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
       router.set('/');
@@ -86,6 +91,6 @@ export default function oninit(vnode) {
   }
 }
 
-function variantStorageKey(variant) {
+function variantStorageKey(variant: string) {
   return 'game.variant.prompt.' + variant;
 }

@@ -12,7 +12,7 @@ interface Attrs {
 }
 
 export default {
-  oninit(vnode: Mithril.VnodeWithAttrs<Attrs>) {
+  oninit(vnode: Mithril.Vnode<Attrs>) {
     helper.analyticsTrackView('TV');
 
     const userId = vnode.attrs.id;

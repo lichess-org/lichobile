@@ -68,7 +68,7 @@ export function renderMaterial(material: Material) {
 }
 
 function renderTitle(ctrl: Round) {
-  function tcConfig(vnode: Mithril.Vnode) {
+  function tcConfig(vnode: Mithril.Vnode<{}>) {
     const el = vnode.dom;
     el.textContent =
       utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +

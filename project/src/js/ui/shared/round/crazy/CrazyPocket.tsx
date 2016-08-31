@@ -16,7 +16,7 @@ export interface Attrs {
 }
 
 export default {
-  oninit(vnode: Mithril.VnodeWithAttrs<Attrs>) {
+  oninit(vnode: Mithril.Vnode<Attrs>) {
     const { ctrl } = vnode.attrs;
     const onstart = crazyDrag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
@@ -41,7 +41,7 @@ export default {
     };
   },
 
-  view(vnode: Mithril.VnodeWithAttrs<Attrs>) {
+  view(vnode: Mithril.Vnode<Attrs>) {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
 
     if (!crazyData) return null;

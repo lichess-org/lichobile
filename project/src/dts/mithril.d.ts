@@ -1,8 +1,9 @@
 
 declare namespace Mithril {
   interface ChildArray extends Array<Children> {}
-  type Child = string | Vnode | Component;
+  type Child = string | BaseNode | BaseComponent;
   type Children = Child | ChildArray;
+  type BaseNode = Vnode<any>;
 
   interface Attributes {
     [key: string]: any;
@@ -12,30 +13,24 @@ declare namespace Mithril {
     (
       selector: string,
       ...children: Children[]
-    ): Vnode;
+    ): BaseNode;
 
     (
       selector: string,
       attributes: Attributes,
       ...children: Children[]
-    ): Vnode;
-
-    (
-      selector: Component,
-      ...children: Children[]
-    ): Vnode;
-
-    (
-      selector: Component,
-      attributes: Attributes,
-      ...children: Children[]
-    ): Vnode;
+    ): BaseNode;
 
     <T>(
-      selector: ComponentWithAttrs<T>,
+      selector: BaseComponent,
+      ...children: Children[]
+    ): BaseNode;
+
+    <T>(
+      selector: BaseComponent,
       attributes: T,
       ...children: Children[]
-    ): Vnode;
+    ): BaseNode;
 
     prop<T>(value: T): BasicProperty<T>;
 
@@ -51,16 +46,16 @@ declare namespace Mithril {
 
     render(
       rootElement: Element,
-      children: Vnode|Vnode[]
+      children: Children
     ): void;
 
     request(options: any): any;
   }
 
-  interface Vnode {
+  interface Vnode<T> {
     tag: string;
     key?: string | number;
-    attrs?: Attributes;
+    attrs?: T;
     children: Children[];
     text: string | number | boolean;
     dom?: Element;
@@ -68,31 +63,27 @@ declare namespace Mithril {
     state: any;
   }
 
-  interface VnodeWithAttrs<T> extends Vnode {
-    attrs?: T
-  }
-
   interface VnodeFactory {
-    (tag: string, key: string | number, attrs: Attributes, children: Array<Vnode>, text: string, dom: Element): Vnode
-    <T>(tag: Component, key: string | number, attrs: T, children: Array<Vnode>, text: string, dom: Element): Vnode
+    (tag: string, key: string | number, attrs: Attributes, children: Array<BaseNode>, text: string, dom: Element): BaseNode
+    <T>(tag: Component<T>, key: string | number, attrs: T, children: Array<BaseNode>, text: string, dom: Element): BaseNode
   }
 
-  interface Component  {
-    view(vnode: Vnode): Vnode;
-
-    oninit?(vnode: Vnode): void;
-    oncreate?(vnode: Vnode): void;
-    onupdate?(vnode: Vnode): void;
-    onbeforeremove?(vnode: Vnode, done: () => void): void;
-    onremove?(vnode: Vnode): void;
-    onbeforeupdate?(vnode: Vnode, old: Vnode): boolean;
+  interface BaseComponent {
+    view(vnode: BaseNode): BaseNode;
 
     // initial state
     [data: string]: any;
   }
 
-  interface ComponentWithAttrs<T> extends Component {
-    view(vnode: VnodeWithAttrs<T>): Vnode;
+  interface Component<T> extends BaseComponent {
+    view(vnode: Vnode<T>): BaseNode;
+
+    oninit?(vnode: Vnode<T>): void;
+    oncreate?(vnode: Vnode<T>): void;
+    onupdate?(vnode: Vnode<T>): void;
+    onbeforeremove?(vnode: Vnode<T>, done: () => void): void;
+    onremove?(vnode: Vnode<T>): void;
+    onbeforeupdate?(vnode: Vnode<T>, old: Vnode<T>): boolean;
   }
 
   interface TrustedString extends String {
@@ -120,7 +111,7 @@ declare namespace JSX {
   }
 
   interface ElementClass {
-    view: (vnode: __Mithril.Vnode) => __Mithril.Vnode;
+    view: (vnode: __Mithril.BaseNode) => __Mithril.BaseNode;
   }
 }
 

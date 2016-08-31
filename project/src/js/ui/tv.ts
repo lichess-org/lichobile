@@ -15,7 +15,7 @@ interface TVAttrs {
 }
 
 export default {
-  oninit(vnode: Mithril.VnodeWithAttrs<TVAttrs>) {
+  oninit(vnode: Mithril.Vnode<TVAttrs>) {
     helper.analyticsTrackView('TV');
 
     const onChannelChange = () => router.set('/tv', true);

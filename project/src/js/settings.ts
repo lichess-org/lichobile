@@ -201,7 +201,6 @@ export default {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
         ['Standard', '1'],
-        ['Crazyhouse', '10'],
         ['Chess960', '2'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],

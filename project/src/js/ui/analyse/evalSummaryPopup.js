@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import helper from '../helper';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import * as m from 'mithril';
 
 export default {

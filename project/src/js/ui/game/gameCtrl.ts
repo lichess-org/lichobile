@@ -6,7 +6,7 @@ import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import Round from '../shared/round/Round';
 import helper from '../helper';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import sound from '../../sound';
 import vibrate from '../../vibrate';

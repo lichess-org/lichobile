@@ -1,6 +1,6 @@
 import helper from '../helper';
 import ViewOnlyBoard from './ViewOnlyBoard';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import * as m from 'mithril';
 
 export default {

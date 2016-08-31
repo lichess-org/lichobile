@@ -11,7 +11,8 @@ import router from '../../../router';
 import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
+import { MoveOrDrop } from '../../../lichess/dataFormat';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';
 
@@ -25,43 +26,6 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
-
-export interface ApiMoveOrDrop {
-  fen: string;
-  threefold: boolean;
-  check: boolean;
-  ply: number;
-  wDraw: boolean;
-  bDraw: boolean;
-  uci: string;
-  san: string;
-  status?: GameStatus;
-  winner?: Color;
-  crazyhouse?: {
-    pockets: Pockets;
-  }
-  isMove?: boolean;
-  clock?: {
-    white: number;
-    black: number;
-  }
-  promotion?: {
-    key: Pos;
-    pieceClass: Role;
-  }
-  role?: Role;
-  enpassant: {
-    key: Pos;
-    color: Color;
-  }
-  dests: StringMap;
-  drops: Array<string>;
-  castle?: {
-    king: [Pos, Pos];
-    rook: [Pos, Pos];
-    color: Color;
-  }
-}
 
 export default class Round {
   public id: string;
@@ -407,7 +371,7 @@ export default class Round {
     }
   }
 
-  public apiMove(o: ApiMoveOrDrop) {
+  public apiMove(o: MoveOrDrop) {
     const d = this.data;
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';

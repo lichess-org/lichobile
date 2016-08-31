@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import settings from '../../settings';
 import { gameIcon, variantReminder } from '../../utils';
 import * as chessground from 'chessground-mobile';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import BoardBrush from './BoardBrush';
 import * as m from 'mithril';
 

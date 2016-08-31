@@ -1,4 +1,4 @@
-import gameApi from '../../../../lichess/game';
+import * as gameApi from '../../../../lichess/game';
 
 export default {
   drop: function(chessground, data, role, key, possibleDrops) {

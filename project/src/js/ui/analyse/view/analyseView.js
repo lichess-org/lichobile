@@ -2,7 +2,7 @@ import * as m from 'mithril';
 import { isEmpty } from 'lodash';
 import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';

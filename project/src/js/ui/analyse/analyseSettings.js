@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import * as m from 'mithril';

@@ -1,4 +1,4 @@
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import gameStatusApi from '../../lichess/status';
 import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';

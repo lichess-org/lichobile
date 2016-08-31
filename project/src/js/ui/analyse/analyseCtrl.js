@@ -5,7 +5,7 @@ import session from '../../session';
 import sound from '../../sound';
 import signals from '../../signals';
 import socket from '../../socket';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
 import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils/offlineGames';

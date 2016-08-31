@@ -3,7 +3,7 @@ import * as chessground from 'chessground-mobile';
 import socket from '../../../../socket';
 import session from '../../../../session';
 import variantApi from '../../../../lichess/variant';
-import gameApi from '../../../../lichess/game';
+import * as gameApi from '../../../../lichess/game';
 import { perfTypes } from '../../../../lichess/perfs';
 import gameStatusApi from '../../../../lichess/status';
 import settings from '../../../../settings';

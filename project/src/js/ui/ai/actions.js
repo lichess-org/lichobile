@@ -1,5 +1,5 @@
 import i18n from '../../i18n';
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import helper from '../helper';
 import settings from '../../settings';
 import formWidgets from '../shared/form';

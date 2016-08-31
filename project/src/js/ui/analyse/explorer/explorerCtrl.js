@@ -5,7 +5,7 @@ import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
 
 function tablebaseRelevant(fen) {
   const parts = fen.split(/\s/);

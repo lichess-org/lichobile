@@ -1,6 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import redraw from '../../../utils/redraw';
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
 

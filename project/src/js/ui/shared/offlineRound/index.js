@@ -2,7 +2,7 @@ import helper from '../../helper';
 import router from '../../../router';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import { renderMaterial } from '../../shared/round/view/roundView';
 import * as m from 'mithril';

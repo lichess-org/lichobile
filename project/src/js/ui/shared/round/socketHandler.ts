@@ -1,11 +1,12 @@
-import gameApi from '../../../lichess/game';
+import * as gameApi from '../../../lichess/game';
+import { MoveOrDrop } from '../../../lichess/dataFormat';
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import vibrate from '../../../vibrate';
 import session from '../../../session';
 import { removeOfflineGameData } from '../../../utils/offlineGames';
 import socket from '../../../socket';
-import Round, { ApiMoveOrDrop } from './Round';
+import Round from './Round';
 import * as xhr from './roundXhr';
 import ground from './ground';
 
@@ -25,7 +26,7 @@ export default function(ctrl: Round, onFeatured: () => void, onUserTVRedirect: (
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
       redraw();
     },
-    move(o: ApiMoveOrDrop) {
+    move(o: MoveOrDrop) {
       o.isMove = true;
       ctrl.apiMove(o);
       redraw();

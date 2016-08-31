@@ -1,4 +1,4 @@
-import gameApi from '../../lichess/game';
+import * as gameApi from '../../lichess/game';
 import * as chessground from 'chessground-mobile';
 import layout from '../layout';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';

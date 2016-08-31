@@ -1,7 +1,7 @@
 import * as m from 'mithril';
 import { throttle } from 'lodash/function';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils';
-import gameApi from '../../../../lichess/game';
+import * as gameApi from '../../../../lichess/game';
 import router from '../../../../router';
 import gameStatus from '../../../../lichess/status';
 import i18n from '../../../../i18n';

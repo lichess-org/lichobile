@@ -9,7 +9,6 @@
 /// <reference path="../dts/chessground.d.ts" />
 /// <reference path="../dts/whatwg-fetch.d.ts" />
 /// <reference path="../dts/rlite.d.ts" />
-/// <reference path="../dts/react.d.ts" />
 
 'use strict';
 

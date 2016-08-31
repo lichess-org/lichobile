@@ -5,18 +5,18 @@ import Round from '../Round';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
-export interface Props {
+export interface Attrs {
   ctrl: Round;
   crazyData: {
     pockets: Pockets;
   }
   position: string;
   color: Color;
-  customPieceTheme: string;
+  customPieceTheme?: string;
 }
 
 export default {
-  oninit(vnode: Mithril.ComponentVnode<Props>) {
+  oninit(vnode: Mithril.ComponentVnode<Attrs>) {
     const { ctrl } = vnode.attrs;
     const onstart = crazyDrag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
@@ -41,7 +41,7 @@ export default {
     };
   },
 
-  view(vnode: Mithril.ComponentVnode<Props>) {
+  view(vnode: Mithril.ComponentVnode<Attrs>) {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
 
     if (!crazyData) return null;

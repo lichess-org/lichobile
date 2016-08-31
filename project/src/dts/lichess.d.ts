@@ -148,6 +148,7 @@ declare type Tournament = {
   ranks?: {
     white: string;
     black: string;
+    [color: string]: string;
   }
 }
 

@@ -20,8 +20,14 @@ declare namespace Mithril {
       ...children: Children[]
     ): Vnode;
 
-    <T>(
+    (
       selector: Component,
+      attributes: Attributes,
+      ...children: Children[]
+    ): Vnode;
+
+    <T>(
+      selector: ComponentWithAttrs<T>,
       attributes: T,
       ...children: Children[]
     ): Vnode;
@@ -63,10 +69,10 @@ declare namespace Mithril {
 
   interface VnodeFactory {
     (tag: string, key: string | number, attrs: Attributes, children: Array<Vnode>, text: string, dom: Element): Vnode
-    <T>(tag: ComponentVnode<T>, key: string | number, attrs: Attributes, children: Array<Vnode>, text: string, dom: Element): Vnode
+    <T>(tag: Component, key: string | number, attrs: T, children: Array<Vnode>, text: string, dom: Element): Vnode
   }
 
-  interface Component {
+  interface Component  {
     view(vnode: Vnode): Vnode;
 
     oninit?(vnode: Vnode): void;
@@ -78,6 +84,10 @@ declare namespace Mithril {
 
     // initial state
     [data: string]: any;
+  }
+
+  interface ComponentWithAttrs<T> extends Component {
+    view(vnode: ComponentVnode<T>): Vnode;
   }
 
   interface TrustedString extends String {
@@ -93,6 +103,19 @@ declare namespace Mithril {
 
   interface BasicProperty<T> extends Property<T> {
     toJSON(): T;
+  }
+}
+
+declare namespace JSX {
+  import __Mithril = Mithril;
+
+  type Element = any;
+  interface IntrinsicElements {
+    [type: string]: Element;
+  }
+
+  interface ElementClass {
+    view: (vnode: __Mithril.Vnode) => __Mithril.Vnode;
   }
 }
 

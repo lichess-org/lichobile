@@ -20,11 +20,14 @@ import promotion from '../promotion';
 import gameButton from './button';
 import { chatView } from '../chat';
 import { notesView } from '../notes';
-import CrazyPocket from '../crazy/CrazyPocket';
+import CrazyPocket, { Attrs as CrazyPocketAttrs } from '../crazy/CrazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
+import Round from '../Round';
 
-export default function view(ctrl) {
+type Position = 'player' | 'opponent';
+
+export default function view(ctrl: Round) {
   const isPortrait = helper.isPortrait();
 
   return layout.board(
@@ -34,7 +37,7 @@ export default function view(ctrl) {
   );
 }
 
-function overlay(ctrl, isPortrait) {
+function overlay(ctrl: Round, isPortrait: boolean) {
   return [
     ctrl.chat ? chatView(ctrl.chat) : null,
     ctrl.notes ? notesView(ctrl.notes) : null,
@@ -46,12 +49,13 @@ function overlay(ctrl, isPortrait) {
   ];
 }
 
-export function renderMaterial(material) {
-  const children = [];
+export function renderMaterial(material: any) {
+  const children: any = [];
   for (let role in material) {
     let piece = <div className={role} />;
     let count = material[role];
-    let content;
+    // TODO fix jsx types
+    let content: any;
     if (count === 1) content = piece;
     else {
       content = [];
@@ -62,8 +66,8 @@ export function renderMaterial(material) {
   return children;
 }
 
-function renderTitle(ctrl) {
-  function tcConfig(vnode) {
+function renderTitle(ctrl: Round) {
+  function tcConfig(vnode: Mithril.Vnode) {
     const el = vnode.dom;
     el.textContent =
       utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
@@ -99,7 +103,7 @@ function renderTitle(ctrl) {
   }
 }
 
-function renderHeader(ctrl) {
+function renderHeader(ctrl: Round) {
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
       { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameTitle(ctrl.data)) : menuButton()}
@@ -109,7 +113,7 @@ function renderHeader(ctrl) {
   );
 }
 
-function renderContent(ctrl, isPortrait) {
+function renderContent(ctrl: Round, isPortrait: boolean) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
@@ -131,7 +135,7 @@ function renderContent(ctrl, isPortrait) {
       opponent,
       board,
       player,
-      renderGameActionsBar(ctrl, isPortrait)
+      renderGameActionsBar(ctrl)
     ];
   } else {
     return [
@@ -145,18 +149,18 @@ function renderContent(ctrl, isPortrait) {
           {renderReplayTable(ctrl)}
           {player}
         </section>
-        {renderGameActionsBar(ctrl, isPortrait)}
+        {renderGameActionsBar(ctrl)}
       </section>
     ];
   }
 }
 
-function getChecksCount(ctrl, color) {
+function getChecksCount(ctrl: Round, color: Color) {
   const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
   return player.checks;
 }
 
-function renderSubmitMovePopup(ctrl) {
+function renderSubmitMovePopup(ctrl: Round) {
   if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit) {
     return (
       <div className="overlay_popup_wrapper submitMovePopup">
@@ -170,8 +174,8 @@ function renderSubmitMovePopup(ctrl) {
   return null;
 }
 
-function userInfos(user, player, playerName, position) {
-  let title;
+function userInfos(user: User, player: Player, playerName: string, position: Position) {
+  let title: string;
   if (user) {
     let onlineStatus = user.online ? 'connected to lichess' : 'offline';
     let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
@@ -183,7 +187,7 @@ function userInfos(user, player, playerName, position) {
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy) {
+function renderAntagonistInfo(ctrl: Round, player: Player, material: any, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user;
   // TODO get that from server
   if (player.ai) {
@@ -202,7 +206,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
 
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
-    '#' + ctrl.data.tournament.ranks[ctrl.data[position].color] + ' ' : null;
+    '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null;
 
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
@@ -251,7 +255,7 @@ function renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCr
   );
 }
 
-function renderPlayTable(ctrl, player, material, position, isPortrait) {
+function renderPlayTable(ctrl: Round, player: Player, material: any, position: Position, isPortrait: boolean) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
   const step = ctrl.plyStep(ctrl.vm.ply);
@@ -260,7 +264,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {m(CrazyPocket, {
+      {m<CrazyPocketAttrs>(CrazyPocket, {
         ctrl,
         crazyData: step.crazy,
         color: player.color,
@@ -278,7 +282,7 @@ function renderPlayTable(ctrl, player, material, position, isPortrait) {
   );
 }
 
-function tvChannelSelector(ctrl) {
+function tvChannelSelector(ctrl: Round) {
   let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
   channels.unshift(['Top rated', 'best']);
   channels.push(['Computer', 'computer']);
@@ -289,7 +293,7 @@ function tvChannelSelector(ctrl) {
   ));
 }
 
-function renderGameRunningActions(ctrl) {
+function renderGameRunningActions(ctrl: Round) {
   if (ctrl.data.player.spectator) {
     let controls = [
       gameButton.shareLink(ctrl),
@@ -327,7 +331,7 @@ function renderGameRunningActions(ctrl) {
   );
 }
 
-function renderGameEndedActions(ctrl) {
+function renderGameEndedActions(ctrl: Round) {
   const result = gameApi.result(ctrl.data);
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
@@ -336,7 +340,7 @@ function renderGameEndedActions(ctrl) {
     m('strong', result), m('br')
   ];
   resultDom.push(m('em.resultStatus', status));
-  let buttons = null;
+  let buttons: any;
   if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
@@ -385,7 +389,7 @@ function renderGameEndedActions(ctrl) {
   );
 }
 
-function gameInfos(ctrl) {
+function gameInfos(ctrl: Round) {
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
@@ -393,7 +397,7 @@ function gameInfos(ctrl) {
   const variant = m('span.variant', {
     oncreate: helper.ontouch(
       () => {
-        var link = variantApi(data.game.variant.key).link;
+        const link = variantApi(data.game.variant.key).link;
         if (link)
           window.open(link, '_blank');
       },
@@ -416,7 +420,7 @@ function gameInfos(ctrl) {
   ];
 }
 
-function renderGamePopup(ctrl, isPortrait) {
+function renderGamePopup(ctrl: Round, isPortrait: boolean) {
   return popupWidget(
     'player_controls',
     isPortrait ? () => gameInfos(ctrl) : null,
@@ -427,7 +431,7 @@ function renderGamePopup(ctrl, isPortrait) {
   );
 }
 
-function renderGameActionsBar(ctrl) {
+function renderGameActionsBar(ctrl: Round) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||

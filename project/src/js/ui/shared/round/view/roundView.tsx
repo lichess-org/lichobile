@@ -25,7 +25,8 @@ import { view as renderCorrespondenceClock } from '../correspondenceClock/corres
 import { renderTable as renderReplayTable } from './replay';
 import Round from '../Round';
 
-type Position = 'player' | 'opponent';
+export type Position = 'player' | 'opponent';
+export type Material = { [role: string]: number; };
 
 export default function view(ctrl: Round) {
   const isPortrait = helper.isPortrait();
@@ -49,7 +50,7 @@ function overlay(ctrl: Round, isPortrait: boolean) {
   ];
 }
 
-export function renderMaterial(material: any) {
+export function renderMaterial(material: Material) {
   const children: any = [];
   for (let role in material) {
     let piece = <div className={role} />;
@@ -187,7 +188,7 @@ function userInfos(user: User, player: Player, playerName: string, position: Pos
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl: Round, player: Player, material: any, position: Position, isPortrait: boolean, isCrazy: boolean) {
+function renderAntagonistInfo(ctrl: Round, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user;
   // TODO get that from server
   if (player.ai) {
@@ -255,7 +256,7 @@ function renderAntagonistInfo(ctrl: Round, player: Player, material: any, positi
   );
 }
 
-function renderPlayTable(ctrl: Round, player: Player, material: any, position: Position, isPortrait: boolean) {
+function renderPlayTable(ctrl: Round, player: Player, material: Material, position: Position, isPortrait: boolean) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
   const step = ctrl.plyStep(ctrl.vm.ply);

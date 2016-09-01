@@ -28,6 +28,15 @@ var paths = {
   ]
 };
 
+var tsConfig = {
+  allowJs: true,
+  target: 'es2015',
+  module: 'commonjs',
+  noImplicitAny: true,
+  noImplicitThis: true,
+  jsx: 'preserve'
+};
+
 function buildHtml(src, dest, context) {
   console.log(context);
   return gulp.src(path.join(src, 'index.html'))
@@ -48,7 +57,7 @@ function buildScripts(src, dest, mode) {
   var opts = (mode === 'dev') ? { debug: true } : {};
 
   return browserify(src + '/js/main.ts', opts)
-    .plugin(tsify)
+    .plugin(tsify, tsConfig)
     .transform(babelify, {extensions: ['.tsx', '.ts', '.js', '.jsx']}, {presets: ['es2015']})
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
@@ -77,7 +86,7 @@ gulp.task('watch-scripts', function() {
 
   var bundleStream = watchify(
     browserify('./src/js/main.ts', opts)
-    .plugin(tsify)
+    .plugin(tsify, tsConfig)
     .transform(babelify, {extensions: ['.tsx', '.ts', '.js', '.jsx']}, {presets: ['es2015']})
   );
 

@@ -4,7 +4,7 @@ import { hasNetwork, handleXhrError } from '../../utils';
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
-import Round from '../shared/round/Round';
+import OnlineRound from '../shared/round/OnlineRound';
 import helper from '../helper';
 import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
@@ -55,7 +55,7 @@ export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
           }
         }
 
-        this.round = new Round(vnode.attrs.id, data);
+        this.round = new OnlineRound(vnode.attrs.id, data);
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);
@@ -83,7 +83,7 @@ export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
       if (!gameApi.playable(gameData)) {
         removeOfflineGameData(vnode.attrs.id);
       }
-      this.round = new Round(vnode.attrs.id, gameData);
+      this.round = new OnlineRound(vnode.attrs.id, gameData);
     } else {
       window.plugins.toast.show('Could not find saved data for this game', 'short', 'center');
       router.set('/');

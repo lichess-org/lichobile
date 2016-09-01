@@ -1,12 +1,12 @@
 import settings from '../../../../settings';
 import crazyDrag from './crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
-import Round from '../Round';
+import OnlineRound from '../OnlineRound';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export interface Attrs {
-  ctrl: Round;
+  ctrl: OnlineRound;
   crazyData: {
     pockets: Pockets;
   }

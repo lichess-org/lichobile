@@ -243,7 +243,7 @@ document.addEventListener('deviceready', () => {
   document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
 }, false);
 
-worker.addEventListener('message', function(msg) {
+worker.addEventListener('message', function(msg: MessageEvent) {
   switch (msg.data.topic) {
     case 'onOpen':
       if (socketHandlers.onOpen) socketHandlers.onOpen();

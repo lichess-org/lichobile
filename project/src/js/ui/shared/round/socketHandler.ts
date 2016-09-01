@@ -6,11 +6,11 @@ import vibrate from '../../../vibrate';
 import session from '../../../session';
 import { removeOfflineGameData } from '../../../utils/offlineGames';
 import socket from '../../../socket';
-import Round from './Round';
+import OnlineRound from './OnlineRound';
 import * as xhr from './roundXhr';
 import ground from './ground';
 
-export default function(ctrl: Round, onFeatured: () => void, onUserTVRedirect: () => void) {
+export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedirect: () => void) {
 
  return {
     takebackOffers(o: { [index: string]: boolean }) {

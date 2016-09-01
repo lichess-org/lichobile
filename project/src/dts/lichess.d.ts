@@ -4,12 +4,12 @@ declare type StringMap = {
   [i: string]: string;
 }
 
-declare type Prop<T> = {
+interface Prop<T> {
   (): T
   (value: T): T;
 }
 
-declare type LichessOptions = {
+interface LichessOptions {
   apiEndPoint: string;
   socketEndPoint: string;
   mode: string;
@@ -18,7 +18,7 @@ declare type LichessOptions = {
   gcmSenderId: string;
 }
 
-declare type Analytics = {
+interface Analytics {
   debugMode(success: () => void, error: (e: string) => void): void;
   startTrackerWithId(id: string, success: () => void, error: (e: string) => void): void;
   trackView(screen: string, success: () => void, error: (e: string) => void): void;
@@ -34,17 +34,17 @@ interface Window {
   shouldRotateToOrientation: () => boolean;
 }
 
-declare type PongMessage = {
+interface PongMessage {
   d: number;
   r: number;
 }
 
-declare type LichessMessage = {
+interface LichessMessage {
   t: string;
   d?: string;
 }
 
-declare type WorkerMessage = {
+interface WorkerMessage {
   topic: string;
   payload?: any;
 }
@@ -54,7 +54,7 @@ interface PlayTime {
   tv: number;
 }
 
-declare type User = {
+interface User {
   booster: boolean;
   engine: boolean;
   patron: boolean;
@@ -75,19 +75,19 @@ declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn';
 
 declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3' | 'a4' | 'b4' | 'c4' | 'd4' | 'e4' | 'f4' | 'g4' | 'h4' | 'a5' | 'b5' | 'c5' | 'd5' | 'e5' | 'f5' | 'g5' | 'h5' | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6' | 'a7' | 'b7' | 'c7' | 'd7' | 'e7' | 'f7' | 'g7' | 'h7' | 'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8';
 
-declare type Piece = {
+interface Piece {
   role: Role;
   color: Color;
 }
 
-declare type Drop = {
+interface Drop {
   role: Role;
   key: Pos;
 }
 
 declare type Color = 'white' | 'black';
 
-declare type Player = {
+interface Player {
   id: string;
   rating?: number;
   color: Color;
@@ -107,22 +107,22 @@ declare type Player = {
   checks?: number;
 }
 
-declare type TournamentClock = {
+interface TournamentClock {
   limit: number;
   increment: number;
 }
 
-declare type ChallengeClock = {
+interface ChallengeClock {
   timeControl: TimeControl;
 }
 
-declare type TimeControl = {
+interface TimeControl {
   type: string;
   show?: string;
   daysPerTurn?: number;
 }
 
-declare type ClockData = {
+interface ClockData {
   black: number;
   white: number;
   emerg: number;
@@ -131,7 +131,7 @@ declare type ClockData = {
   increment: number;
 }
 
-declare type CorrespondenceClockData = {
+interface CorrespondenceClockData {
   barTime: number;
   black: number;
   daysPerTurn: number;
@@ -140,7 +140,7 @@ declare type CorrespondenceClockData = {
   white: number;
 }
 
-declare type Tournament = {
+interface Tournament {
   id: string;
   berserkable: boolean;
   secondsToFinish: number;
@@ -152,7 +152,7 @@ declare type Tournament = {
   }
 }
 
-declare type GameData = {
+interface GameData {
   game: Game;
   player: Player;
   opponent: Player;
@@ -175,7 +175,7 @@ declare type GameData = {
   bookmarked?: boolean;
 }
 
-declare type Game = {
+interface Game {
   fen: string;
   initialFen: string;
   id: string;
@@ -196,20 +196,20 @@ declare type Game = {
   createdAt?: Timestamp;
 }
 
-declare type StoredOfflineGame = {
+interface StoredOfflineGame {
   data: GameData;
   situations: any;
   ply: number;
 }
 
-declare type Variant = {
+interface Variant {
   key: string;
   name: string;
   short: string;
   title: string;
 }
 
-declare type GameStatus = {
+interface GameStatus {
   id: number;
   name: string;
 }
@@ -219,7 +219,7 @@ interface CheckCount {
   black: number;
 }
 
-declare type Pocket = {
+interface Pocket {
   queen: number;
   rook: number;
   knight: number;
@@ -230,7 +230,7 @@ declare type Pocket = {
 
 declare type Pockets = [Pocket, Pocket]
 
-declare type GameStep = {
+interface GameStep {
   ply: number
   fen: string
   san: string
@@ -241,7 +241,7 @@ declare type GameStep = {
   }
 }
 
-declare type GameSituation = {
+interface GameSituation {
   variant: string
   fen: string
   player: string
@@ -260,7 +260,7 @@ declare type GameSituation = {
   ply: number
 }
 
-declare type Dimensions = {
+interface Dimensions {
   top: number;
   right: number;
   bottom: number;
@@ -268,5 +268,3 @@ declare type Dimensions = {
   width: number;
   height: number;
 }
-
-

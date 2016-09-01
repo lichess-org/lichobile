@@ -5,7 +5,7 @@ import { handleXhrError } from '../utils';
 import * as xhr from '../xhr';
 import { LoadingBoard } from './shared/common';
 import settings from '../settings';
-import Round from './shared/round/Round';
+import OnlineRound from './shared/round/OnlineRound';
 import roundView from './shared/round/view/roundView';
 
 interface TVAttrs {
@@ -24,7 +24,7 @@ export default {
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .then(d => {
       d.tv = settings.tv.channel();
-      this.round = new Round(vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange);
+      this.round = new OnlineRound(vnode.attrs.id, d, vnode.attrs.flip, onFeatured, onChannelChange);
     })
     .catch(handleXhrError);
   },

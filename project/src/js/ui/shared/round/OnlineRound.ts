@@ -27,7 +27,7 @@ import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 
-export default class Round {
+export default class OnlineRound {
   public id: string;
   public data: GameData;
   public chessground: Chessground.Controller;
@@ -230,7 +230,7 @@ export default class Round {
     const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? Round.uciToMove(s.uci) : null,
+      lastMove: s.uci ? OnlineRound.uciToMove(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
@@ -443,7 +443,7 @@ export default class Round {
         check: o.check
       };
       if (o.isMove) {
-        const move = Round.uciToMove(o.uci);
+        const move = OnlineRound.uciToMove(o.uci);
         this.chessground.apiMove(
           move[0],
           move[1],
@@ -456,7 +456,7 @@ export default class Round {
             role: o.role,
             color: playedColor
           },
-          Round.uciToDrop(o.uci),
+          OnlineRound.uciToDrop(o.uci),
           newConf
         );
       }

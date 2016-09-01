@@ -23,12 +23,12 @@ import { notesView } from '../notes';
 import CrazyPocket, { Attrs as CrazyPocketAttrs } from '../crazy/CrazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
-import Round from '../Round';
+import OnlineRound from '../OnlineRound';
 
 export type Position = 'player' | 'opponent';
 export type Material = { [role: string]: number; };
 
-export default function view(ctrl: Round) {
+export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait();
 
   return layout.board(
@@ -38,7 +38,7 @@ export default function view(ctrl: Round) {
   );
 }
 
-function overlay(ctrl: Round, isPortrait: boolean) {
+function overlay(ctrl: OnlineRound, isPortrait: boolean) {
   return [
     ctrl.chat ? chatView(ctrl.chat) : null,
     ctrl.notes ? notesView(ctrl.notes) : null,
@@ -67,7 +67,7 @@ export function renderMaterial(material: Material) {
   return children;
 }
 
-function renderTitle(ctrl: Round) {
+function renderTitle(ctrl: OnlineRound) {
   function tcConfig(vnode: Mithril.Vnode<{}>) {
     const el = vnode.dom;
     el.textContent =
@@ -104,7 +104,7 @@ function renderTitle(ctrl: Round) {
   }
 }
 
-function renderHeader(ctrl: Round) {
+function renderHeader(ctrl: OnlineRound) {
   return (
     <nav className={socket.isConnected() ? '' : 'reconnecting'}>
       { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameTitle(ctrl.data)) : menuButton()}
@@ -114,7 +114,7 @@ function renderHeader(ctrl: Round) {
   );
 }
 
-function renderContent(ctrl: Round, isPortrait: boolean) {
+function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
@@ -156,12 +156,12 @@ function renderContent(ctrl: Round, isPortrait: boolean) {
   }
 }
 
-function getChecksCount(ctrl: Round, color: Color) {
+function getChecksCount(ctrl: OnlineRound, color: Color) {
   const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
   return player.checks;
 }
 
-function renderSubmitMovePopup(ctrl: Round) {
+function renderSubmitMovePopup(ctrl: OnlineRound) {
   if (ctrl.vm.moveToSubmit || ctrl.vm.dropToSubmit) {
     return (
       <div className="overlay_popup_wrapper submitMovePopup">
@@ -188,7 +188,7 @@ function userInfos(user: User, player: Player, playerName: string, position: Pos
   window.plugins.toast.show(title, 'short', 'center');
 }
 
-function renderAntagonistInfo(ctrl: Round, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
+function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user;
   // TODO get that from server
   if (player.ai) {
@@ -256,7 +256,7 @@ function renderAntagonistInfo(ctrl: Round, player: Player, material: Material, p
   );
 }
 
-function renderPlayTable(ctrl: Round, player: Player, material: Material, position: Position, isPortrait: boolean) {
+function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
   const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
   const step = ctrl.plyStep(ctrl.vm.ply);
@@ -283,7 +283,7 @@ function renderPlayTable(ctrl: Round, player: Player, material: Material, positi
   );
 }
 
-function tvChannelSelector(ctrl: Round) {
+function tvChannelSelector(ctrl: OnlineRound) {
   let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
   channels.unshift(['Top rated', 'best']);
   channels.push(['Computer', 'computer']);
@@ -294,7 +294,7 @@ function tvChannelSelector(ctrl: Round) {
   ));
 }
 
-function renderGameRunningActions(ctrl: Round) {
+function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
     let controls = [
       gameButton.shareLink(ctrl),
@@ -332,7 +332,7 @@ function renderGameRunningActions(ctrl: Round) {
   );
 }
 
-function renderGameEndedActions(ctrl: Round) {
+function renderGameEndedActions(ctrl: OnlineRound) {
   const result = gameApi.result(ctrl.data);
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
@@ -390,7 +390,7 @@ function renderGameEndedActions(ctrl: Round) {
   );
 }
 
-function gameInfos(ctrl: Round) {
+function gameInfos(ctrl: OnlineRound) {
   const data = ctrl.data;
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
@@ -421,7 +421,7 @@ function gameInfos(ctrl: Round) {
   ];
 }
 
-function renderGamePopup(ctrl: Round, isPortrait: boolean) {
+function renderGamePopup(ctrl: OnlineRound, isPortrait: boolean) {
   return popupWidget(
     'player_controls',
     isPortrait ? () => gameInfos(ctrl) : null,
@@ -432,7 +432,7 @@ function renderGamePopup(ctrl: Round, isPortrait: boolean) {
   );
 }
 
-function renderGameActionsBar(ctrl: Round) {
+function renderGameActionsBar(ctrl: OnlineRound) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||

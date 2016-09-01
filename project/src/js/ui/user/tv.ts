@@ -3,7 +3,7 @@ import router from '../../router';
 import helper from '../helper';
 import { handleXhrError } from '../../utils';
 import { LoadingBoard } from '../shared/common';
-import Round from '../shared/round/Round';
+import OnlineRound from '../shared/round/OnlineRound';
 import roundView from '../shared/round/view/roundView';
 import { tv } from './userXhr';
 
@@ -21,7 +21,7 @@ export default {
     tv(userId)
     .then(data => {
       data.userTV = userId;
-      this.round = new Round(data.game.id, data, false, null, null, userId, onRedirect);
+      this.round = new OnlineRound(data.game.id, data, false, null, null, userId, onRedirect);
     })
     .catch(handleXhrError);
   },

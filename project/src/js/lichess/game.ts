@@ -5,9 +5,9 @@ import i18n from '../i18n';
 
 const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'];
 
-export function parsePossibleMoves(possibleMoves: StringMap): {[index: string]: Array<Pos>} {
+export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
   if (!possibleMoves) return {};
-  const r: {[index: string]: Array<Pos>} = {};
+  const r: DestsMap = {};
   const keys = Object.keys(possibleMoves);
   for (let i = 0, ilen = keys.length; i < ilen; i++) {
     const mvs = possibleMoves[keys[i]];

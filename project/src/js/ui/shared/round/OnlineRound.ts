@@ -437,9 +437,8 @@ export default class OnlineRound {
       const pieces = Object.assign({}, enpassantPieces, castlePieces);
       const newConf = {
         turnColor: d.game.player,
-        movable: {
-          dests: gameApi.isPlayerPlaying(d) ? gameApi.parsePossibleMoves(d.possibleMoves) : {}
-        },
+        dests: gameApi.isPlayerPlaying(d) ?
+          gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
         check: o.check
       };
       if (o.isMove) {

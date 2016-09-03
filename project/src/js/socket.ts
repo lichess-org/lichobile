@@ -26,7 +26,7 @@ interface SocketConfig {
 }
 
 interface SocketHandlers {
-  onOpen?: () => void;
+  onOpen: () => void;
   onError?: () => void;
   events: {[index: string]: (...args: any[]) => void};
 }
@@ -78,6 +78,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
         });
       }
     },
+    onOpen: challengesApi.refresh,
     events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts: SocketConfig = {
@@ -101,7 +102,8 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
 function createTournament(tournamentId: string, version: number, handlers: Object, featuredGameId: string) {
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
-    events: Object.assign({}, defaultHandlers, handlers)
+    events: Object.assign({}, defaultHandlers, handlers),
+    onOpen: challengesApi.refresh
   };
   const opts = {
     options: {
@@ -123,7 +125,10 @@ function createTournament(tournamentId: string, version: number, handlers: Objec
 
 function createChallenge(id: string, version: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
-    onOpen,
+    onOpen: () => {
+      challengesApi.refresh();
+      onOpen();
+    },
     events: Object.assign({}, defaultHandlers, handlers)
   };
   const url = `/challenge/${id}/socket/v${version}`;
@@ -148,7 +153,10 @@ function createChallenge(id: string, version: number, onOpen: () => void, handle
 
 function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
-    onOpen,
+    onOpen: () => {
+      challengesApi.refresh();
+      onOpen();
+    },
     events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts = {
@@ -173,7 +181,8 @@ function createDefault() {
   // default socket is useless when anon.
   if (hasNetwork() && session.isConnected()) {
     socketHandlers = {
-      events: defaultHandlers
+      events: defaultHandlers,
+      onOpen: challengesApi.refresh
     };
     const opts = {
       options: {

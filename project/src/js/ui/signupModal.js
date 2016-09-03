@@ -21,11 +21,14 @@ function submit(form) {
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
   })
   .catch(error => {
-    var data = error.response;
-    if (data.error.username)
-      window.plugins.toast.show(data.error.username[0], 'short', 'center');
-    else if (data.error.password)
-      window.plugins.toast.show(data.error.password[0], 'short', 'center');
+    if (error.response) {
+      error.response.json().then(data => {
+        if (data.error.username)
+          window.plugins.toast.show(data.error.username[0], 'short', 'center');
+        else if (data.error.password)
+          window.plugins.toast.show(data.error.password[0], 'short', 'center');
+      });
+    }
   });
 }
 

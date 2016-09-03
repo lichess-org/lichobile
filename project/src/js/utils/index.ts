@@ -89,22 +89,25 @@ export function handleXhrError(error: ResponseError): void {
     message = i18n(message);
 
     if (error.response) {
-      let data: any;
+      var promise: Promise<any>;
       try {
-        data = error.response.json();
+        promise = error.response.json();
       } catch (e) {
-        data = error.response.text();
+        promise = error.response.text();
       }
 
-      if (typeof data === 'string') {
-        message += ` ${data}`;
-      }
-      else if (data.global && data.global.constructor === Array) {
-        message += ` ${data.global[0]}`;
-      }
-      else if (typeof data.error === 'string') {
-        message += ` ${data.error}`;
-      }
+      promise.then((data: any) => {
+        console.log(data);
+        if (typeof data === 'string') {
+          message += ` ${data}`;
+        }
+        else if (data.global && data.global.constructor === Array) {
+          message += ` ${data.global[0]}`;
+        }
+        else if (typeof data.error === 'string') {
+          message += ` ${data.error}`;
+        }
+      })
     }
 
     window.plugins.toast.show(message, 'short', 'center');

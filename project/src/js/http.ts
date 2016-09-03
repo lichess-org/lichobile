@@ -49,7 +49,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
     return data;
   }
 
-  function onError(error: Response): Response {
+  function onError(error: any) {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     redraw();

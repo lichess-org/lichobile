@@ -58,7 +58,10 @@ function buildScripts(src, dest, mode) {
 
   return browserify(src + '/js/main.ts', opts)
     .plugin(tsify, tsConfig)
-    .transform(babelify, {extensions: ['.tsx', '.ts', '.js', '.jsx']}, {presets: ['es2015']})
+    .transform(babelify, {
+      extensions: ['.tsx', '.ts', '.js', '.jsx'],
+      presets: ['es2015']
+    })
     .bundle()
     .on('error', function(error) { gutil.log(gutil.colors.red(error.message)); })
     .pipe(source('app.js'))
@@ -87,7 +90,10 @@ gulp.task('watch-scripts', function() {
   var bundleStream = watchify(
     browserify('./src/js/main.ts', opts)
     .plugin(tsify, tsConfig)
-    .transform(babelify, {extensions: ['.tsx', '.ts', '.js', '.jsx']}, {presets: ['es2015']})
+    .transform(babelify, {
+      extensions: ['.tsx', '.ts', '.js', '.jsx'],
+      presets: ['es2015']
+    })
   );
 
   function rebundle() {

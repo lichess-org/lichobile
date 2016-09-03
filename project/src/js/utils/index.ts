@@ -97,7 +97,6 @@ export function handleXhrError(error: ResponseError): void {
       }
 
       promise.then((data: any) => {
-        console.log(data);
         if (typeof data === 'string') {
           message += ` ${data}`;
         }

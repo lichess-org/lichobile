@@ -19,7 +19,15 @@ const levelToDepth: LevelToDepht = {
 
 const bestmoveRegExp = /^bestmove (\w{4})/;
 
-export default function(ctrl: AiRoundInterface) {
+export interface EngineInterface {
+  init(): Promise<void>
+  search(initialFen: string, moves: string): void
+  setLevel(level: number): Promise<any>
+  prepare(variant: VariantKey): Promise<any>
+  exit(): Promise<any>
+}
+
+export default function(ctrl: AiRoundInterface): EngineInterface {
   let level = 1;
 
   return {

@@ -17,7 +17,7 @@ import { AiRoundInterface } from '../shared/round';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 
 import actions from './actions';
-import engineCtrl from './engine';
+import engineCtrl, { EngineInterface } from './engine';
 import helper from '../helper';
 import newGameMenu from './newAiGame';
 
@@ -32,7 +32,7 @@ export default class AiRound implements AiRoundInterface {
   public replay: any;
   public vm: any;
 
-  private engine: any;
+  private engine: EngineInterface;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.engine = engineCtrl(this);

@@ -200,9 +200,34 @@ interface Game {
   createdAt?: Timestamp;
 }
 
+interface OfflinePlayer {
+  color: Color;
+  username: string;
+}
+
+interface OfflineGame {
+  fen: string;
+  initialFen: string;
+  variant: Variant;
+  player: Color;
+  source: string;
+  status: GameStatus;
+  check?: boolean;
+  winner?: Color;
+  threefold?: boolean;
+}
+
+interface OfflineGameData {
+  game: OfflineGame;
+  player: OfflinePlayer;
+  opponent: OfflinePlayer;
+  steps?: Array<GameStep>;
+  pref?: any;
+}
+
 interface StoredOfflineGame {
-  data: GameData;
-  situations: any;
+  data: OfflineGameData;
+  situations: Array<GameSituation>;
   ply: number;
 }
 
@@ -240,7 +265,9 @@ interface GameStep {
   san: string
   uci: string
   check: boolean
-  crazy: {
+  checkCount?: CheckCount
+  dests?: DestsMap
+  crazy?: {
     pockets: Pockets
   }
 }
@@ -249,7 +276,7 @@ interface GameSituation {
   variant: string
   fen: string
   player: string
-  dests: { [key: string]: Array<string> }
+  dests: DestsMap
   drops?: Array<string>
   end: boolean
   playable: boolean

@@ -15,12 +15,11 @@ import newGameMenu from './newAiGame';
 import i18n from '../../i18n';
 
 export default function view() {
-  const ctrl = this;
   var content, header;
 
-  if (ctrl.data && ctrl.chessground) {
-    header = () => renderHeader(gameTitle(ctrl.data));
-    content = () => renderContent(ctrl);
+  if (this.round.data && this.round.chessground) {
+    header = () => renderHeader(gameTitle(this.round.data));
+    content = () => renderContent(this.round);
   } else {
     header = () => renderHeader(i18n('playOfflineComputer'));
     content = viewOnlyBoardContent;
@@ -29,7 +28,7 @@ export default function view() {
   return layout.board(
     header,
     content,
-    () => overlay(ctrl)
+    () => overlay(this.round)
   );
 }
 

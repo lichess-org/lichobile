@@ -26,9 +26,9 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
-import { RoundInterface } from './';
+import { OnlineRoundInterface } from './';
 
-export default class OnlineRound implements RoundInterface {
+export default class OnlineRound implements OnlineRoundInterface {
   public id: string;
   public data: GameData;
   public chessground: Chessground.Controller;

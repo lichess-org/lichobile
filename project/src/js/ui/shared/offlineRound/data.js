@@ -25,7 +25,8 @@ export default function data(cfg) {
       fen: cfg.fen,
       player: cfg.player,
       status: {
-        id: 20
+        id: 20,
+        name: 'created'
       }
     },
     player: {

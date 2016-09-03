@@ -1,6 +1,5 @@
 
 export interface RoundInterface {
-  data: GameData
   chessground: Chessground.Controller
 
   firstPly(): number
@@ -10,4 +9,13 @@ export interface RoundInterface {
   jumpNext(): boolean
   jumpPrev(): boolean
   jumpLast(): boolean
+}
+
+export interface OnlineRoundInterface extends RoundInterface {
+  data: GameData
+}
+
+export interface OfflineRoundInterface extends RoundInterface {
+  data: OfflineGameData
+  replay: any
 }

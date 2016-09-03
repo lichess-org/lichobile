@@ -228,12 +228,12 @@ function renderOpponents(ctrl, isPortrait) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {m(CrazyPocket, {
+        {isCrazy ? m(CrazyPocket, {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
           position: 'top'
-        })}
+        }) : null}
       </div>
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
@@ -250,12 +250,12 @@ function renderOpponents(ctrl, isPortrait) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {m(CrazyPocket, {
+        {isCrazy ? m(CrazyPocket, {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
           position: 'bottom'
-        })}
+        }) : null}
       </div>
       {!isCrazy || !isPortrait ? renderStatus(ctrl) : null}
     </div>

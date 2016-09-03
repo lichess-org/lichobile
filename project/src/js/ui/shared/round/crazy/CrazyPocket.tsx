@@ -45,6 +45,7 @@ export default {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
 
     if (!crazyData) return null;
+
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
     const className = [
       customPieceTheme || settings.general.theme.piece(),

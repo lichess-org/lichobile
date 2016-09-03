@@ -111,7 +111,7 @@ export function gameResult(replayCtrl) {
     return '?';
 }
 
-export function setResult(ctrl, status, winner) {
+export function setResult(ctrl, status, winner = null) {
   const sit = ctrl.replay.situation();
   if (status) {
     ctrl.data.game.status = status;

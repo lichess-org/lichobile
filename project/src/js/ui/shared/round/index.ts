@@ -19,3 +19,7 @@ export interface OfflineRoundInterface extends RoundInterface {
   data: OfflineGameData
   replay: any
 }
+
+export interface AiRoundInterface extends OfflineRoundInterface {
+  onEngineBestMove(bm: string): void
+}

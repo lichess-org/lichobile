@@ -231,6 +231,8 @@ interface StoredOfflineGame {
   ply: number;
 }
 
+declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
+
 interface Variant {
   key: string;
   name: string;

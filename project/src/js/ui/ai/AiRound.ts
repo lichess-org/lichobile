@@ -13,7 +13,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
-import { OfflineRoundInterface } from '../shared/round';
+import { AiRoundInterface } from '../shared/round';
 import replayCtrl from '../shared/offlineRound/replayCtrl';
 
 import actions from './actions';
@@ -23,7 +23,7 @@ import newGameMenu from './newAiGame';
 
 export const storageFenKey = 'ai.setupFen';
 
-export default class AiRound implements OfflineRoundInterface {
+export default class AiRound implements AiRoundInterface {
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;

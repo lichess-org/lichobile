@@ -1,6 +1,12 @@
+import { AiRoundInterface } from '../shared/round';
+
+interface LevelToDepht {
+  [index: number]: number
+}
+
 const maxMoveTime = 8000;
 const maxSkill = 20;
-const levelToDepth = {
+const levelToDepth: LevelToDepht = {
   1: 1,
   2: 1,
   3: 2,
@@ -13,7 +19,7 @@ const levelToDepth = {
 
 const bestmoveRegExp = /^bestmove (\w{4})/;
 
-export default function(ctrl) {
+export default function(ctrl: AiRoundInterface) {
   let level = 1;
 
   return {
@@ -29,8 +35,8 @@ export default function(ctrl) {
       .catch(console.error.bind(console));
     },
 
-    search(initialFen, moves) {
-      Stockfish.output(function(msg) {
+    search(initialFen: string, moves: string) {
+      Stockfish.output((msg: string) => {
         // console.log(msg);
         const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
         if (bestmoveRegExpMatch) {
@@ -44,21 +50,20 @@ export default function(ctrl) {
       .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
     },
 
-    setLevel(l) {
+    setLevel(l: number) {
       level = l;
-      // console.info('Skill Level', skill(level));
-      return setOption('Skill Level', skill(level));
+      return setOption('Skill Level', String(skill(level)));
     },
 
-    prepare(variant) {
+    prepare(variant: VariantKey) {
       return Promise.all([
-        setOption('UCI_Chess960', variant === 'chess960'),
-        setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),
-        setOption('UCI_3Check', variant === 'threeCheck'),
+        setOption('UCI_Chess960', String(variant === 'chess960')),
+        setOption('UCI_KingOfTheHill', String(variant === 'kingOfTheHill')),
+        setOption('UCI_3Check', String(variant === 'threeCheck')),
         // setOption('UCI_House', variant === Crazyhouse),
-        setOption('UCI_Atomic', variant === 'atomic'),
-        setOption('UCI_Horde', variant === 'horde'),
-        setOption('UCI_Race', variant === 'racingKings')
+        setOption('UCI_Atomic', String(variant === 'atomic')),
+        setOption('UCI_Horde', String(variant === 'horde')),
+        setOption('UCI_Race', String(variant === 'racingKings'))
       ]);
     },
 
@@ -73,22 +78,22 @@ function onInit() {
   .then(() => setOption('Ponder', 'false'));
 }
 
-function setOption(name, value) {
+function setOption(name: string, value: string) {
   return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
-function cmd(text) {
+function cmd(text: string) {
   return Stockfish.cmd(text);
 }
 
-function moveTime(level) {
+function moveTime(level: number) {
   return level * maxMoveTime / 8;
 }
 
-function skill(level) {
+function skill(level: number) {
   return Math.round((level - 1) * (maxSkill / 7));
 }
 
-function depth(level) {
+function depth(level: number) {
   return levelToDepth[level];
 }

@@ -24,9 +24,7 @@ import CrazyPocket, { Attrs as CrazyPocketAttrs } from '../crazy/CrazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 import OnlineRound from '../OnlineRound';
-
-export type Position = 'player' | 'opponent';
-export type Material = { [role: string]: number; };
+import { Position, Material } from '../';
 
 export default function view(ctrl: OnlineRound) {
   const isPortrait = helper.isPortrait();

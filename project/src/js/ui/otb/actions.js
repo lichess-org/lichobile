@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import * as m from 'mithril';

@@ -1,4 +1,7 @@
 import * as chessground from 'chessground-mobile';
+import i18n from '../../i18n';
+import { getBoardBounds } from '../../utils';
+
 import layout from '../layout';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
@@ -6,16 +9,15 @@ import {
   renderAntagonist,
   renderGameActionsBar,
   renderReplayTable
-} from '../shared/offlineRound';
+} from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
-import { getBoardBounds } from '../../utils';
 import actions from './actions';
 import newGameMenu from './newAiGame';
-import i18n from '../../i18n';
+import AiRound from './AiRound';
 
 export default function view() {
-  var content, header;
+  var content: any, header: any;
 
   if (this.round.data && this.round.chessground) {
     header = () => renderHeader(gameTitle(this.round.data));
@@ -32,7 +34,7 @@ export default function view() {
   );
 }
 
-function renderContent(ctrl) {
+function renderContent(ctrl: AiRound) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
@@ -78,7 +80,7 @@ function renderContent(ctrl) {
   }
 }
 
-function overlay(ctrl) {
+function overlay(ctrl: AiRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),

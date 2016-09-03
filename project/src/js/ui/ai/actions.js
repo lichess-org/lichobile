@@ -3,7 +3,7 @@ import * as gameApi from '../../lichess/game';
 import helper from '../helper';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound';
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import * as m from 'mithril';

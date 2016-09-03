@@ -157,7 +157,7 @@ interface Tournament {
 }
 
 interface GameData {
-  game: Game;
+  game: OnlineGame;
   player: Player;
   opponent: Player;
   correspondence?: CorrespondenceClockData;
@@ -179,17 +179,25 @@ interface GameData {
   bookmarked?: boolean;
 }
 
-interface Game {
+interface OfflineGameData {
+  game: OfflineGame;
+  player: OfflinePlayer;
+  opponent: OfflinePlayer;
+  steps?: Array<GameStep>;
+  pref?: any;
+}
+
+interface OnlineGame {
   fen: string;
   initialFen: string;
   id: string;
-  lastMove: string;
   rated: boolean;
   variant: Variant;
   player: Color;
   source: string;
   status: GameStatus;
   turns: number;
+  lastMove?: string;
   perf?: string;
   check?: boolean;
   speed?: string;
@@ -206,6 +214,7 @@ interface OfflinePlayer {
 }
 
 interface OfflineGame {
+  id: string;
   fen: string;
   initialFen: string;
   variant: Variant;
@@ -215,14 +224,6 @@ interface OfflineGame {
   check?: boolean;
   winner?: Color;
   threefold?: boolean;
-}
-
-interface OfflineGameData {
-  game: OfflineGame;
-  player: OfflinePlayer;
-  opponent: OfflinePlayer;
-  steps?: Array<GameStep>;
-  pref?: any;
 }
 
 interface StoredOfflineGame {

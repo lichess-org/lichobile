@@ -20,7 +20,8 @@ export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
   return r;
 }
 
-export function playable(data: GameData) {
+// TODO find a better type
+export function playable(data: GameData | OfflineGameData) {
   return data.game.status.id < gameStatus.ids.aborted;
 }
 
@@ -115,7 +116,8 @@ export function nbMoves(data: GameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
-export function result(data: GameData) {
+// TODO find a better type
+export function result(data: GameData | OfflineGameData) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0';

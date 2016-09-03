@@ -126,7 +126,7 @@ export function headerBtns() {
   }
 }
 
-export function header(title, leftButton) {
+export function header(title, leftButton = null) {
   return (
     <nav>
       {leftButton ? leftButton : menuButton()}

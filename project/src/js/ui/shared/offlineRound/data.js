@@ -18,6 +18,7 @@ export default function data(cfg) {
 
   return {
     game: {
+      id: 'offline',
       offline: true,
       variant: cfg.variant,
       initialFen: cfg.fen,

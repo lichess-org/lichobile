@@ -20,10 +20,10 @@ export default function(
   chessgroundCtrl,
   bounds,
   isPortrait,
-  wrapperClasses,
-  customPieceTheme,
-  shapes,
-  alert) {
+  wrapperClasses = null,
+  customPieceTheme = null,
+  shapes = null,
+  alert = null) {
 
   boardTheme = boardTheme || settings.general.theme.board();
   pieceTheme = pieceTheme || settings.general.theme.piece();

@@ -106,10 +106,11 @@ export function handleXhrError(error: ResponseError): void {
         else if (typeof data.error === 'string') {
           message += ` ${data.error}`;
         }
+        window.plugins.toast.show(message, 'short', 'center');
       })
+    } else {
+      window.plugins.toast.show(message, 'short', 'center');
     }
-
-    window.plugins.toast.show(message, 'short', 'center');
   }
 }
 
@@ -241,16 +242,6 @@ export function capitalize(s: string): string {
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
-}
-
-export function challengeTime(c: ChallengeClock): string {
-  if (c.timeControl.type === 'clock') {
-    return c.timeControl.show;
-  } else if (c.timeControl.type === 'correspondence') {
-    return i18n('nbDays', c.timeControl.daysPerTurn);
-  } else {
-    return '∞';
-  }
 }
 
 export function boardOrientation(data: GameData, flip: boolean): 'black' | 'white' {

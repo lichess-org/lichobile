@@ -6,6 +6,7 @@ import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
 import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
+import challengesApi from './lichess/challenges';
 
 var session = null;
 
@@ -152,11 +153,15 @@ function refresh() {
     return fetchJSON('/account/info')
     .then(data => {
       session = data;
+      // if server tells me, reload challenges
+      if (session.nbChallenges !== challengesApi.incoming().length) {
+        challengesApi.refresh().then(redraw);
+      }
       redraw();
       return session;
     })
     .catch(err => {
-      if (session && err.status === 401) {
+      if (session && err.response && err.response.status === 401) {
         session = null;
         redraw();
         window.plugins.toast.show(i18n('signedOut'), 'short', 'center');

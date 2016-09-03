@@ -116,16 +116,6 @@ interface TournamentClock {
   increment: number;
 }
 
-interface ChallengeClock {
-  timeControl: TimeControl;
-}
-
-interface TimeControl {
-  type: string;
-  show?: string;
-  daysPerTurn?: number;
-}
-
 interface ClockData {
   black: number;
   white: number;

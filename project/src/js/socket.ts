@@ -78,7 +78,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
         });
       }
     },
-    onOpen: challengesApi.refresh,
+    onOpen: session.refresh,
     events: Object.assign({}, defaultHandlers, handlers)
   };
   const opts: SocketConfig = {
@@ -103,7 +103,7 @@ function createTournament(tournamentId: string, version: number, handlers: Objec
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
-    onOpen: challengesApi.refresh
+    onOpen: session.refresh
   };
   const opts = {
     options: {
@@ -126,7 +126,7 @@ function createTournament(tournamentId: string, version: number, handlers: Objec
 function createChallenge(id: string, version: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
     onOpen: () => {
-      challengesApi.refresh();
+      session.refresh();
       onOpen();
     },
     events: Object.assign({}, defaultHandlers, handlers)
@@ -154,7 +154,7 @@ function createChallenge(id: string, version: number, onOpen: () => void, handle
 function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object) {
   socketHandlers = {
     onOpen: () => {
-      challengesApi.refresh();
+      session.refresh();
       onOpen();
     },
     events: Object.assign({}, defaultHandlers, handlers)
@@ -182,7 +182,7 @@ function createDefault() {
   if (hasNetwork() && session.isConnected()) {
     socketHandlers = {
       events: defaultHandlers,
-      onOpen: challengesApi.refresh
+      onOpen: session.refresh
     };
     const opts = {
       options: {

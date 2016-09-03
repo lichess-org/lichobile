@@ -1,4 +1,5 @@
 import * as utils from '../../utils';
+import challengesApi from '../../lichess/challenges';
 import helper from '../helper';
 import layout from '../layout';
 import { header as headerWidget } from '../shared/common';
@@ -99,7 +100,7 @@ function renderChallenge(ctrl, c) {
           {c.variant.name}
         </div>
         <div className="time">
-          {utils.challengeTime(c)}, {i18n(c.mode === 1 ? 'rated' : 'casual')}
+          {challengesApi.challengeTime(c)}, {i18n(c.mode === 1 ? 'rated' : 'casual')}
         </div>
       </div>
     </li>

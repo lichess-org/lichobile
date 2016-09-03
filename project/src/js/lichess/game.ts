@@ -3,7 +3,7 @@ import { secondsToMinutes } from '../utils';
 import settings from '../settings';
 import i18n from '../i18n';
 
-const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'];
+export const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'];
 
 export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
   if (!possibleMoves) return {};

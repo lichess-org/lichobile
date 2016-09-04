@@ -4,7 +4,7 @@ import redraw from '../../utils/redraw';
 import promotion from '../shared/offlineRound/promotion';
 import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
-import replayCtrl from '../shared/offlineRound/replayCtrl';
+import Replay from '../shared/offlineRound/Replay';
 import { setResult } from '../shared/offlineRound';
 import sound from '../../sound';
 import atomic from '../shared/round/atomic';
@@ -98,7 +98,7 @@ export default function oninit() {
     this.newGameMenu.close();
     this.data = data;
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply, this.chessWorker);
+      this.replay = new Replay(this.data, situations, ply, this.chessWorker, this.onReplayAdded);
     } else {
       this.replay.init(situations, ply);
     }

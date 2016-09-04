@@ -12,7 +12,8 @@ import { OfflineRoundInterface, Position, Material } from '../round';
 
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   const sit = ctrl.replay.situation();
-  return sit.checkCount[utils.oppositeColor(color)];
+  return utils.oppositeColor(color) === 'white' ?
+    sit.checkCount.white : sit.checkCount.black;
 }
 
 type OfflineGameType = 'ai' | 'otb';

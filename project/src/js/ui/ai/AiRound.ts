@@ -14,7 +14,7 @@ import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
 import { AiRoundInterface } from '../shared/round';
-import replayCtrl from '../shared/offlineRound/replayCtrl';
+import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
 import engineCtrl, { EngineInterface } from './engine';
@@ -29,7 +29,7 @@ export default class AiRound implements AiRoundInterface {
   public newGameMenu: any;
   public chessground: Chessground.Controller;
   public chessWorker: Worker;
-  public replay: any;
+  public replay: Replay;
   public vm: any;
 
   private engine: EngineInterface;
@@ -61,13 +61,13 @@ export default class AiRound implements AiRoundInterface {
     });
   }
 
-  private init(data: OfflineGameData, situations: Array<GameSituation>, ply: number) {
+  public init(data: OfflineGameData, situations: Array<GameSituation>, ply: number) {
     this.newGameMenu.close();
     this.actions.close();
     this.data = data;
 
     if (!this.replay) {
-      this.replay = new replayCtrl(this, situations, ply, this.chessWorker);
+      this.replay = new Replay(this.data, situations, ply, this.chessWorker, this.onReplayAdded, this.onThreefoldRepetition);
     } else {
       this.replay.init(situations, ply);
     }
@@ -188,8 +188,22 @@ export default class AiRound implements AiRoundInterface {
     vibrate.quick();
   }
 
-  public onReplayAdded = () => {
-    const sit = this.replay.situation();
+  public apply = (sit: GameSituation) => {
+    if (sit) {
+      const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
+      this.chessground.set({
+        fen: sit.fen,
+        turnColor: sit.player,
+        lastMove: lastUci ? [<Pos>lastUci.slice(0, 2), <Pos>lastUci.slice(2, 4)] : null,
+        dests: sit.dests,
+        movableColor: sit.player,
+        check: sit.check
+      });
+    }
+  }
+
+  public onReplayAdded = (sit: GameSituation) => {
+    this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
       this.onGameEnd();
@@ -198,6 +212,12 @@ export default class AiRound implements AiRoundInterface {
     }
     this.save();
     redraw();
+  }
+
+  public onThreefoldRepetition = (newStatus: GameStatus) => {
+    setResult(this, newStatus);
+    this.save();
+    this.onGameEnd();
   }
 
   public onGameEnd = () => {
@@ -228,7 +248,7 @@ export default class AiRound implements AiRoundInterface {
     this.chessground.cancelMove();
     if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
     this.replay.ply = ply;
-    this.replay.apply();
+    this.apply(this.replay.situation());
     return false;
   }
 

@@ -270,7 +270,7 @@ interface GameStep {
 interface GameSituation {
   variant: string
   fen: string
-  player: string
+  player: Color;
   dests: DestsMap
   drops?: Array<string>
   end: boolean

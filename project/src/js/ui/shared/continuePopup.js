@@ -7,7 +7,7 @@ import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
 import storage from '../../storage';
 import { storageFenKey as aiStorageFenKey } from '../ai';
-import { storageFenKey as otbStorageFenKey } from '../otb/otbCtrl';
+import { storageFenKey as otbStorageFenKey } from '../otb';
 import { validateFen, positionLooksLegit } from '../editor/editor';
 import { hasNetwork } from '../../utils';
 import * as m from 'mithril';

@@ -32,7 +32,8 @@ export default function data(cfg) {
     },
     player: {
       color: cfg.color,
-      username: i18n(cfg.color)
+      username: i18n(cfg.color),
+      spectator: false
     },
     opponent: {
       color: oppositeColor(cfg.color),

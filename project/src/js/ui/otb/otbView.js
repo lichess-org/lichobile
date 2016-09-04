@@ -11,34 +11,32 @@ import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-
-  var content, header;
+export default function view() {
+  let content, header;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
-  if (ctrl.data && ctrl.chessground) {
-    header = () => renderHeader(gameTitle(ctrl.data));
-    content = () => renderContent(ctrl, pieceTheme);
+  if (this.round.data && this.round.chessground) {
+    header = () => renderHeader(gameTitle(this.round.data));
+    content = () => renderContent(this.round, pieceTheme);
   } else {
     header = () => renderHeader(i18n('playOnTheBoardOffline'));
     content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
   }
 
-  function overlay() {
-    return [
-      actions.view(ctrl.actions),
-      newGameMenu.view(ctrl.newGameMenu),
-      renderPromotion(ctrl)
-    ];
-  }
-
   return layout.board(
     header,
     content,
-    overlay,
-    ctrl.data && ctrl.data.player.color || 'white'
+    () => overlay(this.round),
+    this.round.data && this.round.data.player.color || 'white'
   );
+}
+
+function overlay(ctrl) {
+  return [
+    actions.view(ctrl.actions),
+    newGameMenu.view(ctrl.newGameMenu),
+    renderPromotion(ctrl)
+  ];
 }
 
 function renderContent(ctrl, pieceTheme) {
@@ -85,4 +83,3 @@ function renderContent(ctrl, pieceTheme) {
       </section>
     ];
 }
-

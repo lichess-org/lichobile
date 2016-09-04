@@ -203,6 +203,9 @@ interface OnlineGame {
 interface OfflinePlayer {
   color: Color;
   username: string;
+  // just for the compat
+  // TODO maybe use same type with dummy data after all
+  spectator?: boolean;
 }
 
 interface OfflineGame {

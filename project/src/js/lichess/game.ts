@@ -25,7 +25,7 @@ export function playable(data: GameData | OfflineGameData) {
   return data.game.status.id < gameStatus.ids.aborted;
 }
 
-export function isPlayerPlaying(data: GameData) {
+export function isPlayerPlaying(data: GameData | OfflineGameData) {
   return playable(data) && !data.player.spectator;
 }
 

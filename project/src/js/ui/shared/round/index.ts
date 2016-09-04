@@ -27,6 +27,7 @@ export interface OfflineRoundInterface extends RoundInterface {
   actions: any
   newGameMenu: any
 
+  save(): void
   onReplayAdded(sit: GameSituation): void
   onThreefoldRepetition(newStatus: GameStatus): void
   apply(sit: GameSituation): void

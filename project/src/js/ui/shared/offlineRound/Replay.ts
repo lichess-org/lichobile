@@ -59,7 +59,7 @@ export default class Replay {
       return this.situations[this.ply];
     }
 
-    public addMove = (orig: Pos, dest: Pos, promotion: string) => {
+    public addMove = (orig: Pos, dest: Pos, promotion?: string) => {
       const sit = this.situation();
       this.chessWorker.postMessage({
         topic: 'move',

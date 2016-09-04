@@ -1,5 +1,5 @@
 import helper from '../helper';
-import oninit from './gameCtrl';
+import oninit from './oninit';
 import view from './gameView';
 
 export default {

@@ -33,7 +33,9 @@ export default {
 
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
-    this.round.unload();
+    if (this.round) {
+      this.round.unload();
+    }
   },
 
   view() {

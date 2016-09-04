@@ -10,9 +10,10 @@ import { getBoardBounds } from '../../utils';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
+import OtbRound from './OtbRound';
 
 export default function view() {
-  let content, header;
+  let content: any, header: any;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
   if (this.round.data && this.round.chessground) {
@@ -31,7 +32,7 @@ export default function view() {
   );
 }
 
-function overlay(ctrl) {
+function overlay(ctrl: OtbRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),
@@ -39,7 +40,7 @@ function overlay(ctrl) {
   ];
 }
 
-function renderContent(ctrl, pieceTheme) {
+function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const flip = settings.otb.flipPieces();
   const wrapperClasses = helper.classSet({
     'otb': true,

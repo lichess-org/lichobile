@@ -16,15 +16,10 @@
   };
 
   // push
-  window.PushNotification = {
-    init: function() {
-      return {
-        on: noop,
-        off: noop,
-        unregister: noop,
-        finish: noop
-      };
-    }
+  window.plugins.OneSignal = {
+    init: noop,
+    getIds: noop,
+    enableInAppAlertNotification: noop
   };
 
   // events

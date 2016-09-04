@@ -71,7 +71,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
         errorDetected = true;
         xhr.game(gameUrl.substring(1))
         .catch(err => {
-          if (err.status === 401) {
+          if (err.response && err.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
             router.set('/');
           }

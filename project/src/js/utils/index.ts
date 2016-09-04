@@ -67,29 +67,29 @@ export function hasNetwork(): boolean {
 }
 
 export function handleXhrError(error: ResponseError): void {
-  const status = error.response && error.response.status;
-
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
-    let message: string;
-    if (!status || status === 0)
-      message = 'lichessIsUnreachable';
-    else if (status === 401)
-      message = 'unauthorizedError';
-    else if (status === 404)
-      message = 'resourceNotFoundError';
-    else if (status === 503)
-      message = 'lichessIsUnavailableError';
-    else if (status >= 500)
-      message = 'Server error.';
-    else
-      message = 'Error.';
-
-    message = i18n(message);
-
     if (error.response) {
-      var promise: Promise<any>;
+      const status = error.response.status;
+      let message: string;
+
+      if (!status || status === 0)
+        message = 'lichessIsUnreachable';
+      else if (status === 401)
+        message = 'unauthorizedError';
+      else if (status === 404)
+        message = 'resourceNotFoundError';
+      else if (status === 503)
+        message = 'lichessIsUnavailableError';
+      else if (status >= 500)
+        message = 'Server error.';
+      else
+        message = 'Error.';
+
+      message = i18n(message);
+
+      let promise: Promise<any>;
       try {
         promise = error.response.json();
       } catch (e) {
@@ -109,7 +109,8 @@ export function handleXhrError(error: ResponseError): void {
         window.plugins.toast.show(message, 'short', 'center');
       })
     } else {
-      window.plugins.toast.show(message, 'short', 'center');
+      // can be a type error in promise or unreachable network
+      console.error(error);
     }
   }
 }

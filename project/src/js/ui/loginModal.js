@@ -17,14 +17,15 @@ function submit(form) {
   const pass = form[1].value;
   if (!login || !pass) return false;
   window.cordova.plugins.Keyboard.close();
-  return session.login(login, pass).then(function() {
+  return session.login(login, pass)
+  .then(function() {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
     push.register();
     challengesApi.refresh();
     session.refresh()
     .catch(err => {
-      if (err.status === 401) {
+      if (err.response && err.response.status === 401) {
         window.navigator.notification.alert('Lichess authentication cannot work without cookies enabled. Please make sure cookies are authorized.');
       }
     });

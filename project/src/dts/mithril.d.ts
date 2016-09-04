@@ -6,6 +6,7 @@ declare namespace Mithril {
   type BaseNode = Vnode<any>;
 
   interface Attributes {
+    key?: string;
     [key: string]: any;
   }
 
@@ -28,7 +29,7 @@ declare namespace Mithril {
 
     <T>(
       selector: BaseComponent,
-      attributes: T,
+      attributes: T & Attributes,
       ...children: Children[]
     ): BaseNode;
 
@@ -42,7 +43,7 @@ declare namespace Mithril {
       callbackThis?: any
     ): (e: Event) => void;
 
-    trust(html: string): TrustedString;
+    trust(html: string): any;
 
     render(
       rootElement: Element,
@@ -84,11 +85,6 @@ declare namespace Mithril {
     onbeforeremove?(vnode: Vnode<T>, done: () => void): void;
     onremove?(vnode: Vnode<T>): void;
     onbeforeupdate?(vnode: Vnode<T>, old: Vnode<T>): boolean;
-  }
-
-  interface TrustedString extends String {
-    /** @private Implementation detail. Don't depend on it. */
-    $trusted: boolean;
   }
 
   interface Property<T> {

@@ -1,18 +1,19 @@
 import * as m from 'mithril';
-import { throttle } from 'lodash/function';
+import { throttle } from 'lodash';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils';
 import * as gameApi from '../../../../lichess/game';
 import router from '../../../../router';
 import gameStatus from '../../../../lichess/status';
 import i18n from '../../../../i18n';
 import socket from '../../../../socket';
+import lobby from '../../../lobby';
 import helper from '../../../helper';
 import * as tournamentXhr from '../../../tournament/tournamentXhr';
 import { getPGN } from '../roundXhr';
-import lobby from '../../../lobby';
+import OnlineRound from '../OnlineRound';
 
 export default {
-  standard: function(ctrl, condition, icon, hint, socketMsg) {
+  standard: function(ctrl: OnlineRound, condition: (data: GameData) => boolean, icon: string, hint: string, socketMsg: string) {
     return condition(ctrl.data) && hasNetwork() ? m('button', {
       key: socketMsg,
       className: socketMsg,
@@ -20,7 +21,7 @@ export default {
       oncreate: helper.ontouch(() => { socket.send(socketMsg); })
     }, i18n(hint)) : null;
   },
-  shareLink: function(ctrl) {
+  shareLink: function(ctrl: OnlineRound) {
     return m('button', {
       key: 'shareGameLink',
       oncreate: helper.ontouch(() => {
@@ -28,7 +29,7 @@ export default {
       })
     }, [m('span.fa.fa-link'), i18n('shareGameURL')]);
   },
-  sharePGN: function(ctrl) {
+  sharePGN: function(ctrl: OnlineRound) {
     function handler() {
       getPGN(ctrl.data.game.id)
       .then(function(PGN) {
@@ -43,7 +44,7 @@ export default {
       </button>
     );
   },
-  submitMove: function(ctrl) {
+  submitMove: function(ctrl: OnlineRound) {
     return (
       <div className="negotiationIcons">
         <p>{i18n('moveConfirmation')}</p>
@@ -56,7 +57,7 @@ export default {
       </div>
     );
   },
-  resign: function(ctrl) {
+  resign: function(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? m('button', {
       key: 'resign',
       className: 'resign',
@@ -64,7 +65,7 @@ export default {
       oncreate: helper.ontouch(() => { ctrl.vm.confirmResign = true; })
     }, i18n('resign')) : null;
   },
-  resignConfirmation: function(ctrl) {
+  resignConfirmation: function(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && ctrl.vm.confirmResign ? (
       <div key="resignConfirm">
         <button className="binary_choice" data-icon="E"
@@ -80,7 +81,7 @@ export default {
       </div>
     ) : null;
   },
-  forceResign: function(ctrl) {
+  forceResign: function(ctrl: OnlineRound) {
     return gameApi.forceResignable(ctrl.data) ?
       m('div.force_resign_zone.clearfix', {
         key: 'forceResignZone'
@@ -94,7 +95,7 @@ export default {
         }, i18n('forceDraw'))
       ]) : null;
   },
-  threefoldClaimDraw: function(ctrl) {
+  threefoldClaimDraw: function(ctrl: OnlineRound) {
     return (ctrl.data.game.threefold) ? m('div.claim_draw_zone', {
       key: 'claimDrawZone'
     }, [
@@ -105,7 +106,7 @@ export default {
       }, i18n('claimADraw'))
     ]) : null;
   },
-  cancelDrawOffer: function(ctrl) {
+  cancelDrawOffer: function(ctrl: OnlineRound) {
     if (ctrl.data.player.offeringDraw) return m('div.negotiation', {
       key: 'cancelDrawOfferZone'
     }, [
@@ -116,7 +117,7 @@ export default {
     ]);
     return null;
   },
-  answerOpponentDrawOffer: function(ctrl) {
+  answerOpponentDrawOffer: function(ctrl: OnlineRound) {
     if (ctrl.data.opponent.offeringDraw) return m('div.negotiation.clearfix', {
       key: 'answerDrawOfferZone'
     }, [
@@ -130,7 +131,7 @@ export default {
     ]);
     return null;
   },
-  cancelTakebackProposition: function(ctrl) {
+  cancelTakebackProposition: function(ctrl: OnlineRound) {
     if (ctrl.data.player.proposingTakeback) return m('div.negotiation', {
       key: 'cancelTakebackPropositionZone'
     }, [
@@ -141,7 +142,7 @@ export default {
     ]);
     return null;
   },
-  answerOpponentTakebackProposition: function(ctrl) {
+  answerOpponentTakebackProposition: function(ctrl: OnlineRound) {
     if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation.clearfix', {
       key: 'answerTakebackPropositionZone'
     }, [
@@ -155,7 +156,7 @@ export default {
     ]);
     return null;
   },
-  analysisBoard: function(ctrl) {
+  analysisBoard: function(ctrl: OnlineRound) {
     const d = ctrl.data;
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
       return m('button', {
@@ -167,22 +168,22 @@ export default {
     }
     return null;
   },
-  newOpponent: function(ctrl) {
+  newOpponent: function(ctrl: OnlineRound) {
     const d = ctrl.data;
     const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && d.game.source === 'lobby';
     if (!ctrl.data.opponent.ai && newable) {
       return m('button[data-icon=r]', {
         oncreate: helper.ontouch(() => {
           ctrl.hideActions();
-          lobby.startSeeking();
+          (lobby as any).startSeeking();
         })
       }, i18n('newOpponent'));
     }
     return null;
   },
-  rematch: function(ctrl) {
+  rematch: function(ctrl: OnlineRound) {
     const d = ctrl.data;
-    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.simul && !d.game.boosted && (d.opponent.onGame || (!d.game.clock && d.player.user && d.opponent.user));
+    const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.game.boosted && (d.opponent.onGame || (!d.clock && d.player.user && d.opponent.user));
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
       return m('button', {
         key: 'rematch',
@@ -192,7 +193,7 @@ export default {
       return null;
     }
   },
-  answerOpponentRematch: function(ctrl) {
+  answerOpponentRematch: function(ctrl: OnlineRound) {
     if (ctrl.data.opponent.offeringRematch) return m('div.negotiation.clearfix', {
       key: 'answerOpponentRematchZone'
     }, [
@@ -206,7 +207,7 @@ export default {
     ]);
     return null;
   },
-  cancelRematch: function(ctrl) {
+  cancelRematch: function(ctrl: OnlineRound) {
     if (ctrl.data.player.offeringRematch) return m('div.negotiation', {
       key: 'cancelRematchZone'
     }, [
@@ -218,14 +219,14 @@ export default {
     ]);
     return null;
   },
-  moretime: function(ctrl) {
+  moretime: function(ctrl: OnlineRound) {
     if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
       key: 'moretime',
       oncreate: helper.ontouch(throttle(() => { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
     return null;
   },
-  flipBoard: function(ctrl) {
+  flipBoard: function(ctrl: OnlineRound) {
     const className = helper.classSet({
       'action_bar_button': true,
       highlight: ctrl.vm.flip
@@ -235,63 +236,63 @@ export default {
         oncreate={helper.ontouch(ctrl.flip)} />
     );
   },
-  first: function(ctrl) {
+  first: function(ctrl: OnlineRound) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
       'fa-fast-backward': true,
-      disabled: ctrl.broken || !enabled
+      disabled: !enabled
     });
     return (
       <button className={className} key="fast-backward"
         oncreate={helper.ontouch(ctrl.jumpFirst)} />
     );
   },
-  backward: function(ctrl) {
+  backward: function(ctrl: OnlineRound) {
     const prevPly = ctrl.vm.ply - 1;
     const enabled = ctrl.vm.ply !== prevPly && prevPly >= ctrl.firstPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
       'fa-backward': true,
-      disabled: ctrl.broken || !enabled
+      disabled: !enabled
     });
     return (
       <button className={className} key="backward"
         oncreate={helper.ontouch(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
     );
   },
-  forward: function(ctrl) {
+  forward: function(ctrl: OnlineRound) {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
       'fa-forward': true,
-      disabled: ctrl.broken || !enabled
+      disabled: !enabled
     });
     return (
       <button className={className} key="forward"
         oncreate={helper.ontouch(ctrl.jumpNext, null, ctrl.jumpNext)} />
     );
   },
-  last: function(ctrl) {
+  last: function(ctrl: OnlineRound) {
     const nextPly = ctrl.vm.ply + 1;
     const enabled = ctrl.vm.ply !== nextPly && nextPly <= ctrl.lastPly();
     const className = helper.classSet({
       'action_bar_button': true,
       'fa': true,
       'fa-fast-forward': true,
-      disabled: ctrl.broken || !enabled
+      disabled: !enabled
     });
     return (
       <button className={className} key="fast-forward"
         oncreate={helper.ontouch(ctrl.jumpLast)} />
     );
   },
-  notes: function(ctrl) {
+  notes: function(ctrl: OnlineRound) {
     return (
       <button className="action_bar_button" data-icon="m" key="notes"
         oncreate={helper.ontouch(
@@ -300,7 +301,7 @@ export default {
         )} />
     );
   },
-  returnToTournament: function(ctrl) {
+  returnToTournament: function(ctrl: OnlineRound) {
     function handler() {
       ctrl.hideActions();
       const url = `/tournament/${ctrl.data.game.tournamentId}`;
@@ -317,7 +318,7 @@ export default {
       </button>
     );
   },
-  withdrawFromTournament: function(ctrl) {
+  withdrawFromTournament: function(ctrl: OnlineRound) {
     function handler() {
       ctrl.hideActions();
       tournamentXhr.withdraw(ctrl.data.game.tournamentId);
@@ -330,7 +331,7 @@ export default {
       </button>
     );
   },
-  goBerserk: function(ctrl) {
+  goBerserk: function(ctrl: OnlineRound) {
     if (!gameApi.berserkableBy(ctrl.data)) return null;
     if (ctrl.vm.goneBerserk[ctrl.data.player.color]) return null;
     function handler() {

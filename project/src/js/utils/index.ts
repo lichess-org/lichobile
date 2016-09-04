@@ -244,7 +244,7 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-export function boardOrientation(data: GameData, flip: boolean): 'black' | 'white' {
+export function boardOrientation(data: GameData, flip?: boolean): 'black' | 'white' {
   if (data.game.variant.key === 'racingKings') {
     return flip ? 'black' : 'white';
   } else {

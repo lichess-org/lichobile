@@ -189,13 +189,15 @@ interface OnlineGame {
   turns: number;
   lastMove?: string;
   perf?: string;
-  check?: boolean;
-  speed?: string;
+  check?: string;
+  speed: string;
   startedAtTurn?: number;
   winner?: Color;
   threefold?: boolean;
   tournamentId?: string;
   createdAt?: Timestamp;
+  boosted?: boolean;
+  rematch?: string;
 }
 
 interface OfflinePlayer {

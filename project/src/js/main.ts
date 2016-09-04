@@ -2,6 +2,7 @@
 /// <reference path="../dts/cordova-ionic/cordova-ionic.d.ts" />
 /// <reference path="../dts/cordova-plugin-toast.d.ts" />
 /// <reference path="../dts/cordova-plugin-insomnia.d.ts" />
+/// <reference path="../dts/cordova-plugin-socialsharing.d.ts" />
 /// <reference path="../dts/mithril.d.ts" />
 /// <reference path="../dts/lodash.d.ts" />
 /// <reference path="../dts/sse.d.ts" />

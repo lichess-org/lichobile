@@ -80,7 +80,7 @@ export function removeOfflineGameData(id: string) {
 export function syncWithNowPlayingGames(nowPlaying: any) {
   if (nowPlaying === undefined) return;
 
-  const stored = storage.get(offlineCorresStorageKey);
+  const stored = storage.get(offlineCorresStorageKey) || {};
   const storedIds = Object.keys(stored);
   // TODO make now playing game type
   const toRemove = difference(storedIds, nowPlaying.map((g: any) => g.fullId));

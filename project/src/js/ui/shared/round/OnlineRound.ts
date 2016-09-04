@@ -351,7 +351,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.jump(this.vm.ply);
   }
 
-  public submitMove(v: boolean) {
+  public submitMove = (v: boolean) => {
     if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
       if (this.vm.moveToSubmit) {
         socket.send('move', this.vm.moveToSubmit, {

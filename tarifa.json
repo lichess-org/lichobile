@@ -173,13 +173,8 @@
     "cordova-plugin-x-socialsharing": "cordova-plugin-x-socialsharing@5.0.11",
     "cordova-plugin-crosswalk-webview": "cordova-plugin-crosswalk-webview@1.7.0",
     "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1",
-    "phonegap-plugin-push": {
-      "uri": "phonegap-plugin-push@1.6.3",
-      "variables": {
-        "SENDER_ID": "0000000000000"
-      }
-    },
     "cordova-plugin-fullscreen": "cordova-plugin-fullscreen",
-    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#377a285"
+    "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#377a285",
+    "onesignal-cordova-plugin": "onesignal-cordova-plugin@1.13.1"
   }
 }

@@ -4,7 +4,7 @@ import { getBoardBounds } from '../../utils';
 
 import layout from '../layout';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
-import Board from '../shared/Board';
+import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import {
   renderAntagonist,
   renderGameActionsBar,
@@ -17,7 +17,7 @@ import newGameMenu from './newAiGame';
 import AiRound from './AiRound';
 
 export default function view() {
-  var content: any, header: any;
+  let content: any, header: any;
 
   if (this.round.data && this.round.chessground) {
     header = () => renderHeader(gameTitle(this.round.data));
@@ -51,12 +51,12 @@ function renderContent(ctrl: AiRound) {
     </h2>
   );
 
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground,
+  const board = m<BoardAttrs>(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait
-  );
+  });
 
   if (isPortrait) {
     return [

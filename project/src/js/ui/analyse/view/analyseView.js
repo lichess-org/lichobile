@@ -92,15 +92,13 @@ function renderContent(ctrl, isPortrait) {
     dest: nextStep.uci.slice(2, 4)
   } : null;
 
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground,
+  const board = m(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    null,
-    null,
-    nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
-  );
+    shapes: nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
+  });
 
   return [
     board,

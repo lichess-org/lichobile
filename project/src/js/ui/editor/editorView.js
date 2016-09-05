@@ -14,12 +14,12 @@ export default function view(vnode) {
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
 
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground,
-    null,
-    helper.isPortrait()
-  );
+  const board = m(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds: null,
+    isPortrait: helper.isPortrait()
+  });
 
   function content() {
     if (helper.isPortrait())

@@ -4,7 +4,6 @@ import { gameIcon, variantReminder } from '../../utils';
 import * as chessground from 'chessground-mobile';
 import * as gameApi from '../../lichess/game';
 import BoardBrush from './BoardBrush';
-import * as m from 'mithril';
 
 let boardTheme: string;
 let pieceTheme: string;
@@ -22,7 +21,7 @@ export interface Attrs {
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string
-  shapes: any[]
+  shapes?: any[]
   alert?: string
 }
 
@@ -40,7 +39,6 @@ export default {
     }
 
     function boardOnCreate({ dom }) {
-      // fix nasty race condition bug when going from analysis to otb
       if (chessgroundCtrl) {
         if (!bounds) {
           chessgroundCtrl.setBounds(dom.getBoundingClientRect());
@@ -89,6 +87,7 @@ export default {
     } : {};
 
     // fix nasty race condition bug when going from analysis to otb
+    // TODO test that again
     if (!chessgroundCtrl) return null;
 
     return (
@@ -109,11 +108,11 @@ export default {
         }
         {
           shapes && shapes.length ?
-          m(BoardBrush, {
-            bounds,
-            orientation: chessgroundCtrl.data.orientation,
-            shapes
-          }) : null
+            BoardBrush(
+              bounds,
+              chessgroundCtrl.data.orientation,
+              shapes
+            ) : null
         }
       </section>
     );

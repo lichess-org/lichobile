@@ -1,25 +1,20 @@
 import { defs, renderShape } from './svg';
 import { brushes } from './brushes';
 
-export default {
-  view(vnode) {
+export default function BoardBrush(bounds, orientation, shapes) {
+  if (!shapes) return null;
+  if (!bounds) return null;
+  if (bounds.width !== bounds.height) return null;
 
-    const { bounds, orientation, shapes } = vnode.attrs;
+  const usedBrushes = Object.keys(brushes)
+  .filter(name =>
+    shapes.filter(s => s.dest && s.brush === name).length
+  ).map(name => brushes[name]);
 
-    if (!shapes) return null;
-    if (!bounds) return null;
-    if (bounds.width !== bounds.height) return null;
-
-    const usedBrushes = Object.keys(brushes)
-    .filter(name =>
-      shapes.filter(s => s.dest && s.brush === name).length
-    ).map(name => brushes[name]);
-
-    return (
-      <svg>
-        {defs(usedBrushes)}
-        {shapes.map(renderShape(orientation, false, brushes, bounds))}
-      </svg>
-    );
-  }
-};
+  return (
+    <svg>
+      {defs(usedBrushes)}
+      {shapes.map(renderShape(orientation, false, brushes, bounds))}
+    </svg>
+  );
+}

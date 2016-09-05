@@ -27,10 +27,10 @@ export default function view(vnode) {
 function renderContent(ctrl) {
   if (!ctrl.data) return viewOnlyBoardContent();
 
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground
-  );
+  const board = m(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground
+  });
 
   if (helper.isPortrait()) {
     return [

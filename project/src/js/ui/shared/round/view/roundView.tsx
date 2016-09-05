@@ -12,7 +12,7 @@ import i18n from '../../../../i18n';
 import layout from '../../../layout';
 import helper from '../../../helper';
 import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common';
-import Board from '../../../shared/Board';
+import Board, { Attrs as BoardAttrs } from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';
 import formWidgets from '../../../shared/form';
 import { view as renderClock } from '../clock/clockView';
@@ -117,17 +117,15 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground,
+
+  const board = m<BoardAttrs>(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    null,
-    null,
-    null,
-    gameApi.mandatory(ctrl.data) && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+    alert: gameApi.mandatory(ctrl.data) && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
       i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : null
-  );
+  });
 
   if (isPortrait) {
     return [

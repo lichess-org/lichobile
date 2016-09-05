@@ -1,7 +1,7 @@
 import * as chessground from 'chessground-mobile';
 import layout from '../layout';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
-import Board from '../shared/Board';
+import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import helper from '../helper';
@@ -55,14 +55,15 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
-  const board = Board(
-    ctrl.data,
-    ctrl.chessground,
+
+  const board = m<BoardAttrs>(Board, {
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
     wrapperClasses,
-    pieceTheme
-  );
+    customPieceTheme: pieceTheme
+  });
 
   if (isPortrait)
     return [

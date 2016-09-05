@@ -2,6 +2,31 @@ import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
 export default {
+  oninit(rootVnode) {
+
+    function boardOnInit(vnode) {
+      const el = vnode.dom;
+      const config = makeConfig(rootVnode.attrs);
+      if (!config.bounds) {
+        config.bounds = el.getBoundingClientRect();
+      }
+      vnode.state.ground = chessground(el, config);
+
+    }
+
+    function boardOnUpdate(vnode) {
+      if (vnode.state.ground) {
+        const config = makeConfig(rootVnode.attrs);
+        vnode.state.ground.set(config);
+      }
+    }
+
+    rootVnode.state = {
+      boardOnInit,
+      boardOnUpdate
+    };
+  },
+
   view(rootVnode) {
 
     const args = rootVnode.attrs;
@@ -13,25 +38,8 @@ export default {
       args.variant ? args.variant.key : ''
     ].join(' ');
 
-    function boardConf(vnode) {
-      const el = vnode.dom;
-      const config = makeConfig(args);
-      if (!config.bounds) {
-        config.bounds = el.getBoundingClientRect();
-      }
-      vnode.state.ground = chessground(el, config);
-
-    }
-
-    function boardOnUpdate(vnode) {
-      if (vnode.state.ground) {
-        const config = makeConfig(args);
-        vnode.state.ground.set(config);
-      }
-    }
-
     return (
-      <div className={boardClass} oncreate={boardConf} onupdate={boardOnUpdate} />
+      <div className={boardClass} oncreate={this.boardOnInit} onupdate={this.boardOnUpdate} />
     );
   }
 };

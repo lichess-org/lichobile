@@ -289,7 +289,7 @@ interface GameSituation {
   ply: number
 }
 
-interface Dimensions {
+interface BoardBounds {
   top: number;
   right: number;
   bottom: number;

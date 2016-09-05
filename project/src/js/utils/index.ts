@@ -253,7 +253,7 @@ export function boardOrientation(data: GameData, flip?: boolean): 'black' | 'whi
   }
 }
 
-export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, isLandscapeSmall: boolean, mode: string): Dimensions  {
+export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, isLandscapeSmall: boolean, mode: string): BoardBounds  {
   const { vh, vw } = viewportDim;
   const top = 50;
 

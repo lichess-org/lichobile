@@ -4,48 +4,41 @@ import settings from '../../settings';
 export default {
   oninit(rootVnode) {
 
-    function boardOnInit(vnode) {
-      const el = vnode.dom;
+    this.createBoard = ({ dom }) => {
       const config = makeConfig(rootVnode.attrs);
       if (!config.bounds) {
-        config.bounds = el.getBoundingClientRect();
+        config.bounds = dom.getBoundingClientRect();
       }
-      vnode.state.ground = chessground(el, config);
+      this.ground = chessground(dom, config);
+    };
 
-    }
-
-    function boardOnUpdate(vnode) {
-      if (vnode.state.ground) {
-        const config = makeConfig(rootVnode.attrs);
-        vnode.state.ground.set(config);
+    this.updateBoard = (attrs) => {
+      if (this.ground) {
+        this.ground.set(makeConfig(attrs));
       }
-    }
-
-    rootVnode.state = {
-      boardOnInit,
-      boardOnUpdate
     };
   },
 
-  view(rootVnode) {
-
-    const args = rootVnode.attrs;
+  view({ attrs }) {
 
     const boardClass = [
       'display_board',
-      args.customPieceTheme || settings.general.theme.piece(),
+      attrs.customPieceTheme || settings.general.theme.piece(),
       settings.general.theme.board(),
-      args.variant ? args.variant.key : ''
+      attrs.variant ? attrs.variant.key : ''
     ].join(' ');
 
     return (
-      <div className={boardClass} oncreate={this.boardOnInit} onupdate={this.boardOnUpdate} />
+      <div
+        className={boardClass}
+        oncreate={this.createBoard}
+        onupdate={() => this.updateBoard(attrs)}
+      />
     );
   }
 };
 
-function makeConfig(args) {
-  const { fen, lastMove, orientation, bounds } = args;
+function makeConfig({ fen, lastMove, orientation, bounds }) {
   const conf = {
     viewOnly: true,
     minimalDom: true,

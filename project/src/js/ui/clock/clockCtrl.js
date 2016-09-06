@@ -19,6 +19,7 @@ export default function oninit(vnode) {
     clockMap = {
       'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
       'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment())),
+      'handicapInc': handicapIncClock.bind(undefined, Number(settings.clock.handicapInc.topTime()) * 60, Number(settings.clock.handicapInc.topIncrement()), Number(settings.clock.handicapInc.bottomTime()) * 60, Number(settings.clock.handicapInc.bottomIncrement())),
       'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment())),
       'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment())),
       'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60),
@@ -74,8 +75,12 @@ function simpleClock(time) {
 }
 
 function incrementClock(time, increment) {
-  const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
-  const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
+  return handicapIncClock(time, increment, time, increment);
+}
+
+function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomIncrement) {
+  const topTime = (topTimeParam !== 0) ? m.prop(topTimeParam) : m.prop(topIncrement);
+  const bottomTime = (bottomTimeParam !== 0) ? m.prop(bottomTimeParam) : m.prop(bottomIncrement);
   const activeSide = m.prop(null);
   const flagged = m.prop(null);
   const isRunning = m.prop(false);
@@ -110,13 +115,13 @@ function incrementClock(time, increment) {
     if (activeSide() === 'top') {
       if (side === activeSide()) {
         activeSide('bottom');
-        topTime(topTime() + increment);
+        topTime(topTime() + topIncrement);
       }
     }
     else if (activeSide() === 'bottom') {
       if (side === activeSide()) {
         activeSide('top');
-        bottomTime(bottomTime() + increment);
+        bottomTime(bottomTime() + bottomIncrement);
       }
     }
     else {

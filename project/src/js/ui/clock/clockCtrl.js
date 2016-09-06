@@ -36,9 +36,7 @@ export default function oninit(vnode) {
   }
 
   function startStop () {
-    if (!clockObj().flagged() && clockObj().activeSide()) {
-      clockObj().startStop();
-    }
+    clockObj().startStop();
   }
 
   function goHome() {

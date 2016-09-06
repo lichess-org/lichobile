@@ -1,4 +1,3 @@
-import * as m from 'mithril';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import formWidgets from '../shared/form';

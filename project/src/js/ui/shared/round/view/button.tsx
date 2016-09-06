@@ -67,17 +67,19 @@ export default {
   },
   resignConfirmation: function(ctrl: OnlineRound) {
     return gameApi.resignable(ctrl.data) && ctrl.vm.confirmResign ? (
-      <div key="resignConfirm">
-        <button className="binary_choice" data-icon="E"
-          oncreate={helper.ontap(() => { socket.send('resign'); })}
-        >
-          {i18n('resign')}
-        </button>
-        <button className="binary_choice" data-icon="L"
-          oncreate={helper.ontap(() => { ctrl.vm.confirmResign = false; })}
-        >
-          {i18n('cancel')}
-        </button>
+      <div className="negotiation">
+        <div className="binary_choice_wrapper" key="resignConfirm">
+          <button className="binary_choice" data-icon="E"
+            oncreate={helper.ontap(() => { socket.send('resign'); })}
+          >
+            {i18n('resign')}
+          </button>
+          <button className="binary_choice" data-icon="L"
+            oncreate={helper.ontap(() => { ctrl.vm.confirmResign = false; })}
+          >
+            {i18n('cancel')}
+          </button>
+        </div>
       </div>
     ) : null;
   },
@@ -87,12 +89,14 @@ export default {
         key: 'forceResignZone'
       }, [
         m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
-        m('button.binary_choice.left', {
-          oncreate: helper.ontap(() => { socket.send('resign-force'); })
-        }, i18n('forceResignation')),
-        m('button.binary_choice.right', {
-          oncreate: helper.ontap(() => { socket.send('draw-force'); })
-        }, i18n('forceDraw'))
+        m('div.binary_choice_wrapper', [
+          m('button.binary_choice.left', {
+            oncreate: helper.ontap(() => { socket.send('resign-force'); })
+          }, i18n('forceResignation')),
+          m('button.binary_choice.right', {
+            oncreate: helper.ontap(() => { socket.send('draw-force'); })
+          }, i18n('forceDraw'))
+        ])
       ]) : null;
   },
   threefoldClaimDraw: function(ctrl: OnlineRound) {
@@ -122,12 +126,14 @@ export default {
       key: 'answerDrawOfferZone'
     }, [
       m('div.notice', i18n('yourOpponentOffersADraw')),
-      m('button.binary_choice[data-icon=E]', {
-        oncreate: helper.ontap(() => { socket.send('draw-yes'); })
-      }, i18n('accept')),
-      m('button.binary_choice[data-icon=L]', {
-        oncreate: helper.ontap(() => { socket.send('draw-no'); })
-      }, i18n('decline'))
+      m('div.binary_choice_wrapper', [
+        m('button.binary_choice[data-icon=E]', {
+          oncreate: helper.ontap(() => { socket.send('draw-yes'); })
+        }, i18n('accept')),
+        m('button.binary_choice[data-icon=L]', {
+          oncreate: helper.ontap(() => { socket.send('draw-no'); })
+        }, i18n('decline'))
+      ])
     ]);
     return null;
   },
@@ -147,12 +153,14 @@ export default {
       key: 'answerTakebackPropositionZone'
     }, [
       m('div.notice', i18n('yourOpponentProposesATakeback')),
-      m('button.binary_choice[data-icon=E]', {
-        oncreate: helper.ontap(() => { socket.send('takeback-yes'); })
-      }, i18n('accept')),
-      m('button.binary_choice[data-icon=L]', {
-        oncreate: helper.ontap(() => { socket.send('takeback-no'); })
-      }, i18n('decline'))
+      m('div.binary_choice_wrapper', [
+        m('button.binary_choice[data-icon=E]', {
+          oncreate: helper.ontap(() => { socket.send('takeback-yes'); })
+        }, i18n('accept')),
+        m('button.binary_choice[data-icon=L]', {
+          oncreate: helper.ontap(() => { socket.send('takeback-no'); })
+        }, i18n('decline'))
+      ])
     ]);
     return null;
   },
@@ -198,12 +206,14 @@ export default {
       key: 'answerOpponentRematchZone'
     }, [
       m('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
-      m('button.binary_choice[data-icon=E]', {
-        oncreate: helper.ontap(() => { socket.send('rematch-yes'); })
-      }, i18n('joinTheGame')),
-      m('button.binary_choice[data-icon=L]', {
-        oncreate: helper.ontap(() => { socket.send('rematch-no'); })
-      }, i18n('declineInvitation'))
+      m('div.binary_choice_wrapper', [
+        m('button.binary_choice[data-icon=E]', {
+          oncreate: helper.ontap(() => { socket.send('rematch-yes'); })
+        }, i18n('joinTheGame')),
+        m('button.binary_choice[data-icon=L]', {
+          oncreate: helper.ontap(() => { socket.send('rematch-no'); })
+        }, i18n('declineInvitation'))
+      ])
     ]);
     return null;
   },

@@ -194,8 +194,8 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   const playerName = utils.playerName(player, !isPortrait);
   const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
   const vConf = user ?
-    helper.ontouch(togglePopup, () => userInfos(user, player, playerName, position)) :
-    helper.ontouch(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
+    helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :
+    helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
 
   const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
@@ -392,7 +392,7 @@ function gameInfos(ctrl: OnlineRound) {
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = utils.gameIcon(data.game.perf);
   const variant = m('span.variant', {
-    oncreate: helper.ontouch(
+    oncreate: helper.ontap(
       () => {
         const link = variantApi(data.game.variant.key).link;
         if (link)
@@ -408,7 +408,7 @@ function gameInfos(ctrl: OnlineRound) {
     }),
     m('div.game-title.no_select', infos),
     session.isConnected() ? m('button.star', {
-      oncreate: helper.ontouch(
+      oncreate: helper.ontap(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')
       ),
@@ -447,8 +447,8 @@ function renderGameActionsBar(ctrl: OnlineRound) {
 
   const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null;
   const gmButton = gmDataIcon ?
-    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} /> :
-    <button className={gmClass} key="gameMenu" oncreate={helper.ontouch(ctrl.showActions)} />;
+    <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} /> :
+    <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />;
 
   const chatClass = [
     'action_bar_button',
@@ -460,7 +460,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
       {gmButton}
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat"
-        oncreate={helper.ontouch(ctrl.chat.open)} /> : null
+        oncreate={helper.ontap(ctrl.chat.open)} /> : null
       }
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}

@@ -32,7 +32,7 @@ function resignButton(ctrl) {
     key: 'resign'
   }, [
     m('button[data-icon=b]', {
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         ctrl.actions.close();
         ctrl.resign();
       })

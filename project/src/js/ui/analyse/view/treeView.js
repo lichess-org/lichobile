@@ -83,19 +83,19 @@ function renderVariationMenu(ctrl, path) {
     m('button', {
       className: 'withIcon',
       'data-icon': 'q',
-      oncreate: helper.ontouch(ctrl.deleteVariation.bind(undefined, path))
+      oncreate: helper.ontap(ctrl.deleteVariation.bind(undefined, path))
     }, 'Delete variation'),
     promotable ? m('button', {
       className: 'withIcon',
       'data-icon': 'E',
-      oncreate: helper.ontouch(ctrl.promoteVariation.bind(undefined, path))
+      oncreate: helper.ontap(ctrl.promoteVariation.bind(undefined, path))
     }, 'Promote to main line') : null
   ]);
 
   return (
     <div className="overlay_popup_wrapper variationMenuPopup">
       <div className="popup_overlay_close"
-        oncreate={helper.ontouch(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
+        oncreate={helper.ontap(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
       <div className="overlay_popup">
         {content}
       </div>

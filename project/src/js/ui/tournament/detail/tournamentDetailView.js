@@ -69,7 +69,7 @@ function renderFooter(ctrl) {
 
   return (
     <div className="actions_bar">
-      <button key="faq" className="action_bar_button" oncreate={helper.ontouch(ctrl.faqCtrl.open)}>
+      <button key="faq" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
       </button>
@@ -151,7 +151,7 @@ function joinButton(ctrl) {
   }
 
   return (
-    <button key="join" className="action_bar_button" oncreate={helper.ontouch(() => ctrl.join(ctrl.tournament().id))}>
+    <button key="join" className="action_bar_button" oncreate={helper.ontap(() => ctrl.join(ctrl.tournament().id))}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>
@@ -163,7 +163,7 @@ function withdrawButton(ctrl) {
     return null;
   }
   return (
-    <button key="withdraw" className="action_bar_button" oncreate={helper.ontouch(() => ctrl.withdraw(ctrl.tournament().id))}>
+    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(() => ctrl.withdraw(ctrl.tournament().id))}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>
@@ -223,7 +223,7 @@ function tournamentLeaderboard(ctrl) {
         {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, () => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10)))}
         <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon='7'
-          oncreate={!ctrl.isLoading() && data.me ? helper.ontouch(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : noop}
+          oncreate={!ctrl.isLoading() && data.me ? helper.ontap(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : noop}
         >
           <span>Me</span>
         </button>
@@ -235,7 +235,7 @@ function tournamentLeaderboard(ctrl) {
 function renderNavButton(icon, isEnabled, action) {
   return (
     <button className={'navigationButton' + (isEnabled ? '' : ' disabled')}
-      data-icon={icon} oncreate={isEnabled ? helper.ontouch(action) : noop} />
+      data-icon={icon} oncreate={isEnabled ? helper.ontap(action) : noop} />
   );
 }
 
@@ -313,7 +313,7 @@ function renderPlace(data) {
   return (
     <div className={'place'+rank}>
       <div className="trophy"> </div>
-      <div className="username" oncreate={helper.ontouch(() => router.set('/@/' + data.name))}>
+      <div className="username" oncreate={helper.ontap(() => router.set('/@/' + data.name))}>
         {data.name}
       </div>
       <div className="rating"> {data.rating} {helper.progress(data.ratingDiff)} </div>

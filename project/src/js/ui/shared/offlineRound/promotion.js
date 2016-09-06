@@ -59,7 +59,7 @@ export function view(ctrl) {
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
   }, pieces.map(function(role) {
     return m('piece.' + role + '.' + ctrl.data.player.color, {
-      oncreate: helper.ontouch(utils.f(finish, ctrl.chessground, role))
+      oncreate: helper.ontap(utils.f(finish, ctrl.chessground, role))
     });
   }))]) : null;
 }

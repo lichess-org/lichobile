@@ -56,7 +56,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'top'))}>
+      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontap(() => onClockTap(ctrl, 'top'))}>
         { clock.topRemainingMoves ?
         <div className="clockStageInfo">
           <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
@@ -69,12 +69,12 @@ function clockBody(ctrl) {
         </div>
       </div>
       <div className="clockControls">
-        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontouch(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
-        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
-        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
-        <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
+        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontap(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
+        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.reload)} />
+        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.clockSettingsCtrl.open)} />
+        <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.goHome)} />
       </div>
-      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
+      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontap(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeInSecs(clock.bottomTime()) }

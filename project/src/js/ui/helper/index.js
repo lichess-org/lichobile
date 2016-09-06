@@ -125,7 +125,7 @@ function findParentBySelector(el, selector) {
   return cur;
 }
 
-function ontouch(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
+function ontap(tapHandler, holdHandler, repeatHandler, scrollX, scrollY, touchEndFeedback) {
   return function(vnode) {
     ButtonHandler(vnode.dom,
       e => {
@@ -223,15 +223,15 @@ export default {
     };
   },
 
-  ontouch: function(tapHandler, holdHandler = null, repeatHandler = null, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
+  ontap: function(tapHandler, holdHandler = null, repeatHandler = null, touchEndFeedback = true) {
+    return ontap(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },
 
   ontouchX: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, true, false, touchEndFeedback);
+    return ontap(tapHandler, holdHandler, null, true, false, touchEndFeedback);
   },
   ontouchY: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
-    return ontouch(tapHandler, holdHandler, null, false, true, touchEndFeedback);
+    return ontap(tapHandler, holdHandler, null, false, true, touchEndFeedback);
   },
 
   progress: function(p) {

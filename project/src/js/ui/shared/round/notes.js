@@ -80,7 +80,7 @@ export function notesView(ctrl) {
   return m('div#notes.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'notes'))
+        oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'notes'))
       }),
       m('h2', i18n('notes'))
     ]),

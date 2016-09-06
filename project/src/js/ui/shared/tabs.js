@@ -27,7 +27,7 @@ export default {
         'tab',
         selectedTab === b.key ? 'selected' : ''
       ].join(' ');
-      const oncreate = helper.ontouch(onTabChange.bind(undefined, b.key));
+      const oncreate = helper.ontap(onTabChange.bind(undefined, b.key));
       return (
         <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}

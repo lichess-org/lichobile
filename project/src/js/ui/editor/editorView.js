@@ -87,28 +87,28 @@ function renderActionsBar(ctrl) {
     helper.isPortrait() || (helper.isLandscape() && !helper.isWideScreen()) ?
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
-      oncreate: helper.ontouch(ctrl.menu.open)
+      oncreate: helper.ontap(ctrl.menu.open)
     }) : null,
     m('button.action_bar_button[data-icon=B]', {
       key: 'toggleOrientation',
-      oncreate: helper.ontouch(ctrl.chessground.toggleOrientation)
+      oncreate: helper.ontap(ctrl.chessground.toggleOrientation)
     }),
     m('button.action_bar_button[data-icon=U]', {
       key: 'continueFromHere',
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         ctrl.continuePopup.open(ctrl.computeFen());
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
     m('button.action_bar_button[data-icon=A]', {
       key: 'analyse',
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         const fen = encodeURIComponent(ctrl.computeFen());
         router.set(`/analyse/fen/${fen}`);
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     m('button.action_bar_button.fa.fa-share-alt', {
       key: 'sharePosition',
-      oncreate: helper.ontouch(
+      oncreate: helper.ontap(
         () => window.plugins.socialsharing.share(ctrl.computeFen()),
         () => window.plugins.toast.show('Share FEN', 'short', 'bottom')
       )

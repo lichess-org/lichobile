@@ -50,7 +50,7 @@ loginModal.view = function() {
   return m('div.modal#loginModal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        oncreate: helper.ontouch(helper.slidesOutDown(loginModal.close, 'loginModal'))
+        oncreate: helper.ontap(helper.slidesOutDown(loginModal.close, 'loginModal'))
       }),
       m('h2', i18n('signIn'))
     ]),
@@ -77,7 +77,7 @@ loginModal.view = function() {
       ]),
       m('div.signup', [
         m('a', {
-          oncreate: helper.ontouch(signupModal.open)
+          oncreate: helper.ontap(signupModal.open)
         }, [i18n('newToLichess'), ' ', i18n('signUp')])
       ])
     ])

@@ -89,7 +89,7 @@ export function chatView(ctrl) {
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        oncreate: helper.ontouch(helper.slidesOutDown(ctrl.close, 'chat'))
+        oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }),
       m('h2', ctrl.root.data.opponent.user ?
         ctrl.root.data.opponent.user.username : i18n('chat'))

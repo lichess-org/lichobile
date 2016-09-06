@@ -47,7 +47,7 @@ export default {
 
 function renderAnalyseMenu(ctrl) {
 
-  const sharePGN = helper.ontouch(
+  const sharePGN = helper.ontap(
     ctrl.sharePGN,
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   );
@@ -55,11 +55,11 @@ function renderAnalyseMenu(ctrl) {
   return m('div.analyseMenu', [
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
-      oncreate: helper.ontouch(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
+      oncreate: helper.ontap(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
     }, i18n('continueFromHere')) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'boardEditor',
-      oncreate: helper.ontouch(() => router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
+      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'sharePGN',
@@ -67,21 +67,21 @@ function renderAnalyseMenu(ctrl) {
     }, [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
     m('button', {
       key: 'importPGN',
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         ctrl.menu.close();
         ctrl.importPgnPopup.open();
       })
     }, [m('span.fa.fa-upload'), i18n('importGame')]),
     ctrl.notes ? m('button', {
       key: 'notes',
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         ctrl.menu.close();
         ctrl.notes.open();
       })
     }, [m('span.fa.fa-pencil'), i18n('notes')]) : null,
     ctrl.isRemoteAnalysable() ? m('button', {
       key: 'requestAComputerAnalysis',
-      oncreate: helper.ontouch(() => {
+      oncreate: helper.ontap(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
         .then(() => {
           ctrl.vm.analysisProgress = true;

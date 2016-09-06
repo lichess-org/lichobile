@@ -49,7 +49,7 @@ signupModal.view = function() {
   return m('div.modal#signupModal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
-        oncreate: helper.ontouch(helper.slidesOutDown(signupModal.close, 'signupModal'))
+        oncreate: helper.ontap(helper.slidesOutDown(signupModal.close, 'signupModal'))
       }),
       m('h2', i18n('signUp'))
     ]),
@@ -60,7 +60,7 @@ signupModal.view = function() {
       m('p.tosWarning', [
         'By registering, you agree to be bound by our ',
         m('a', {
-          oncreate: helper.ontouch(() =>
+          oncreate: helper.ontap(() =>
           window.open('http://lichess.org/terms-of-service', '_blank', 'location=no')
           )},
           'Terms of Service'

@@ -41,7 +41,7 @@ export default function(classes, headerF, contentF, isShowing, closef) {
       }}
     >
       <div className="popup_overlay_close"
-        oncreate={closef ? helper.ontouch(closef) : utils.noop}
+        oncreate={closef ? helper.ontap(closef) : utils.noop}
       />
       <div className={className} oncreate={styleConf}>
         {headerF ? <header>{headerF()}</header> : null}

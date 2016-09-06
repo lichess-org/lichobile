@@ -313,7 +313,7 @@ gamesMenu.view = function() {
       }}
     >
       <div className="wrapper_overlay_close"
-        oncreate={helper.ontouch(gamesMenu.close)} />
+        oncreate={helper.ontap(gamesMenu.close)} />
       <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
         oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
         {helper.isWideScreen() ? (

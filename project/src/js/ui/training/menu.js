@@ -72,7 +72,7 @@ export function renderSigninBox() {
     m('p', i18n('toTrackYourProgress')),
     m('p',
       m('button', {
-        oncreate: helper.ontouch(loginModal.open)
+        oncreate: helper.ontap(loginModal.open)
       }, [m('span.fa.fa-user'), i18n('signIn')])
     ),
     m('p', i18n('trainingSignupExplanation'))

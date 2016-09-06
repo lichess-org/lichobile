@@ -38,7 +38,7 @@ function renderBody(ctrl) {
         ]),
         m('button.fat', {
           key: 'seeks_login',
-          oncreate: helper.ontouch(loginModal.open)
+          oncreate: helper.ontap(loginModal.open)
         }, i18n('logIn'))
       ])
     ];
@@ -67,7 +67,7 @@ function renderBody(ctrl) {
 function renderFooter() {
   return m('div.correpondenceFooter', m('button#newGameCorres', {
     key: 'seeks_createagame',
-    oncreate: helper.ontouch(newGameForm.openCorrespondence)
+    oncreate: helper.ontap(newGameForm.openCorrespondence)
   }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]));
 }
 

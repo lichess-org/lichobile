@@ -34,7 +34,7 @@ export default {
       <div className="modal" id="tournamentFaqModal" oncreate={helper.slidesInUp}>
         <header>
           <button className="modal_close" data-icon="L"
-            oncreate={helper.ontouch(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
+            oncreate={helper.ontap(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
           />
           <h2>Tournament FAQ</h2>
         </header>

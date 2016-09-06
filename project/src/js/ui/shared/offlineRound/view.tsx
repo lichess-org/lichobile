@@ -63,22 +63,22 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineG
   return (
     <section key="actionsBar" className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h"
-        oncreate={helper.ontouch(ctrl.actions.open)}
+        oncreate={helper.ontap(ctrl.actions.open)}
       />
       <button className="action_bar_button" data-icon="U"
-        oncreate={helper.ontouch(
+        oncreate={helper.ontap(
           ctrl.newGameMenu.open,
           () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
         )}
       />
       <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontouch(
+        oncreate={helper.ontap(
           () => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`),
           () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
         )}
       />
       <button className="fa fa-share-alt action_bar_button"
-        oncreate={helper.ontouch(
+        oncreate={helper.ontap(
           ctrl.actions.sharePGN,
           () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
@@ -93,13 +93,13 @@ export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface, type: Of
   return (
     <section className="actions_bar">
       <button className="action_bar_button" data-icon="U"
-        oncreate={helper.ontouch(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.newGameMenu.open, () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom'))}
       />
       <button data-icon="A" className="action_bar_button"
-        oncreate={helper.ontouch(() => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
+        oncreate={helper.ontap(() => router.set(`/analyse/offline/${type}/${ctrl.data.player.color}`))}
       />
       <button className="fa fa-share-alt action_bar_button"
-        oncreate={helper.ontouch(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
+        oncreate={helper.ontap(ctrl.actions.sharePGN, () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom'))}
       />
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
@@ -133,7 +133,7 @@ export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
     key: 'claimDraw'
   }, [
     m('button[data-icon=2].draw-yes', {
-      oncreate: helper.ontouch(() => ctrl.replay.claimDraw())
+      oncreate: helper.ontap(() => ctrl.replay.claimDraw())
     }, i18n('threefoldRepetition'))
   ]) : null;
 }
@@ -159,7 +159,7 @@ export function renderReplayTable(ctrl: any) {
 
 function renderBackwardButton(ctrl: OfflineRoundInterface) {
   return m('button.action_bar_button.fa.fa-step-backward', {
-    oncreate: helper.ontouch(ctrl.jumpPrev, ctrl.jumpFirst),
+    oncreate: helper.ontap(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
     })
@@ -168,7 +168,7 @@ function renderBackwardButton(ctrl: OfflineRoundInterface) {
 
 function renderForwardButton(ctrl: OfflineRoundInterface) {
   return m('button.action_bar_button.fa.fa-step-forward', {
-    oncreate: helper.ontouch(ctrl.jumpNext, () => ctrl.jumpLast),
+    oncreate: helper.ontap(ctrl.jumpNext, () => ctrl.jumpLast),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())
     })

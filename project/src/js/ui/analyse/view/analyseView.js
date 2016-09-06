@@ -187,7 +187,7 @@ function renderEvalBox(ctrl) {
         <span style={{ width: percent + '%' }}></span>
       </div>
       { ctrl.data.analysis ?
-        <div className="openSummary" oncreate={helper.ontouch(ctrl.evalSummary.open)}>
+        <div className="openSummary" oncreate={helper.ontap(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>
         </div> : null
       }
@@ -311,8 +311,8 @@ function buttons(ctrl) {
     ].join(' ');
 
     const action = b[0] === 'prev' || b[0] === 'next' ?
-      helper.ontouch(() => b[2](ctrl), null, () => b[2](ctrl)) :
-      helper.ontouch(() => b[2](ctrl));
+      helper.ontap(() => b[2](ctrl), null, () => b[2](ctrl)) :
+      helper.ontap(() => b[2](ctrl));
 
     return (
       <button className={className} key={b[1]} oncreate={action} />
@@ -332,23 +332,23 @@ function renderActionsBar(ctrl) {
   return (
     <section className="actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
-        oncreate={helper.ontouch(ctrl.menu.open)}
+        oncreate={helper.ontap(ctrl.menu.open)}
       />
       {ctrl.ceval.allowed() ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
-          oncreate={helper.ontouch(ctrl.settings.open)}
+          oncreate={helper.ontap(ctrl.settings.open)}
         /> : null
       }
       {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
-          oncreate={helper.ontouch(
+          oncreate={helper.ontap(
             ctrl.explorer.toggle,
             () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
           )}
         /> : null
       }
       <button className="action_bar_button" data-icon="B" key="flipBoard"
-        oncreate={helper.ontouch(
+        oncreate={helper.ontap(
           ctrl.flip,
           () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
         )}

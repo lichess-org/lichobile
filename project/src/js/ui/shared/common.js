@@ -32,14 +32,14 @@ export const LoadingBoard = {
 
 export function menuButton() {
   return (
-    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" oncreate={helper.ontouch(menu.toggle)}>
+    <button key="main-menu" className="fa fa-navicon main_header_button menu_button" oncreate={helper.ontap(menu.toggle)}>
     </button>
   );
 }
 
 export function backButton(title) {
   return (
-    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontouch(utils.backHistory)}>
+    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(utils.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
     </button>
@@ -52,7 +52,7 @@ export function friendsButton() {
 
   return (
     <button className="main_header_button friends_button" key="friends" data-icon="f"
-      oncreate={helper.ontouch(friendsPopup.open, longAction)}
+      oncreate={helper.ontap(friendsPopup.open, longAction)}
     >
     {nbFriends > 0 ?
       <span className="chip nb_friends">{nbFriends}</span> : null
@@ -84,7 +84,7 @@ export function gamesButton() {
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 
   return (
-    <button key={key} className={className} oncreate={helper.ontouch(action, longAction)}>
+    <button key={key} className={className} oncreate={helper.ontap(action, longAction)}>
       {!nbIncomingChallenges && myTurns ?
         <span className="chip nb_playing">{myTurns}</span> : null
       }
@@ -241,7 +241,7 @@ export function miniUser(user, mini, isOpen, close) {
     return (
       <div className="miniUser">
         <div className="title">
-          <div className="username" oncreate={helper.ontouch(() => router.set(`/@/${user.username}`))}>
+          <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
             <span className={'userStatus withIcon ' + status} data-icon="r" />
             {i18n(user.username)}
           </div>

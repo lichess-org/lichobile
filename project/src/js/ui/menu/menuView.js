@@ -32,7 +32,7 @@ function renderHeader(user) {
       </h2>
       { hasNetwork() && user ?
         <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
-          oncreate={helper.ontouch(menu.toggleHeader, null, null, false)}
+          oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
         /> : null
       }
       { hasNetwork() && !user ?
@@ -47,23 +47,23 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
-      <li className="side_link" oncreate={helper.ontouch(menu.popup(friendsPopup.open))}>
+      <li className="side_link" oncreate={helper.ontap(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
-      <li className="side_link" oncreate={helper.ontouch(menu.route(`/@/${user.id}/following`))}>
+      <li className="side_link" oncreate={helper.ontap(menu.route(`/@/${user.id}/following`))}>
         <span className="fa fa-arrow-circle-right" />
         {i18n('nbFollowing', user.nbFollowing || 0)}
       </li>
-      <li className="side_link" oncreate={helper.ontouch(menu.route(`/@/${user.id}/followers`))}>
+      <li className="side_link" oncreate={helper.ontap(menu.route(`/@/${user.id}/followers`))}>
         <span className="fa fa-arrow-circle-left" />
         {i18n('nbFollowers', user.nbFollowers || 0)}
       </li>
-      <li className="side_link" oncreate={helper.ontouch(menu.route('/settings/preferences'))}>
+      <li className="side_link" oncreate={helper.ontap(menu.route('/settings/preferences'))}>
         <span data-icon="%" />
         {i18n('preferences')}
       </li>
-      <li className="side_link" oncreate={helper.ontouch(() => {
+      <li className="side_link" oncreate={helper.ontap(() => {
         session.logout().catch(handleXhrError);
         menu.headerOpen(false);
       })}>
@@ -83,7 +83,7 @@ function renderLinks(user) {
         <span className="fa fa-home" />Home
       </li>
       {hasNetwork() && user ?
-      <li className="side_link" key="profile" oncreate={helper.ontouch(menu.route('/@/' + user.id))}>
+      <li className="side_link" key="profile" oncreate={helper.ontap(menu.route('/@/' + user.id))}>
         <span className="fa fa-user" />{i18n('profile')}
       </li> : null
       }

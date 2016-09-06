@@ -2,7 +2,7 @@ import layout from '../layout';
 import router from '../../router';
 import { header } from '../shared/common';
 import Board from '../shared/Board';
-import helper from '../helper';
+import * as helper from '../helper';
 import i18n from '../../i18n';
 import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
 import continuePopup from '../shared/continuePopup';

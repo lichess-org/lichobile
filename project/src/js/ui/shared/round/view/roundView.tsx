@@ -10,7 +10,7 @@ import settings from '../../../../settings';
 import * as utils from '../../../../utils';
 import i18n from '../../../../i18n';
 import layout from '../../../layout';
-import helper from '../../../helper';
+import * as helper from '../../../helper';
 import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common';
 import Board, { Attrs as BoardAttrs } from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';

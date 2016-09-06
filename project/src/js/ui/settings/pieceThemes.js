@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import helper from '../helper';
+import * as helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';

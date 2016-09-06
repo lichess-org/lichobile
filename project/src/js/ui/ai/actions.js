@@ -1,6 +1,6 @@
 import i18n from '../../i18n';
 import * as gameApi from '../../lichess/game';
-import helper from '../helper';
+import * as helper from '../helper';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';

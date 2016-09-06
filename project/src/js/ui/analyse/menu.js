@@ -6,7 +6,7 @@ import spinner from '../../spinner';
 import * as gameApi from '../../lichess/game';
 import { handleXhrError } from '../../utils';
 import { requestComputerAnalysis } from './analyseXhr';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 
 export default {

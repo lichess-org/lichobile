@@ -1,7 +1,7 @@
 import * as xhr from '../userXhr';
 import { handleXhrError } from '../../../utils';
 import redraw from '../../../utils/redraw';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import IScroll from 'iscroll/build/iscroll-probe';
 import { throttle } from 'lodash/function';
 import socket from '../../../socket';

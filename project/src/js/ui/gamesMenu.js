@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames';
 import router from '../router';
-import helper from './helper';
+import * as helper from './helper';
 import * as iScroll from 'iscroll';
 import session from '../session';
 import i18n from '../i18n';

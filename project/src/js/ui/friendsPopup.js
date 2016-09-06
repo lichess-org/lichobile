@@ -1,4 +1,4 @@
-import helper from './helper';
+import * as helper from './helper';
 import router from '../router';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';

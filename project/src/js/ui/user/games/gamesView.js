@@ -1,6 +1,6 @@
 import * as utils from '../../../utils';
 import router from '../../../router';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import * as gameApi from '../../../lichess/game';

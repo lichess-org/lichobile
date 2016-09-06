@@ -1,7 +1,7 @@
 import * as utils from '../../utils';
 import router from '../../router';
 import { header as headerWidget, backButton } from '../shared/common';
-import helper from '../helper';
+import * as helper from '../helper';
 import layout from '../layout';
 import i18n from '../../i18n';
 import * as m from 'mithril';

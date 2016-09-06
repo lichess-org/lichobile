@@ -4,7 +4,7 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import settings from '../../settings';
-import helper from '../helper';
+import * as helper from '../helper';
 import { onBoardThemeChange } from '../shared/Board';
 import * as m from 'mithril';
 

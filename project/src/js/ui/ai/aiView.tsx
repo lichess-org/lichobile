@@ -11,7 +11,7 @@ import {
   renderReplayTable
 } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import helper from '../helper';
+import * as helper from '../helper';
 import actions from './actions';
 import newGameMenu from './newAiGame';
 import AiRound from './AiRound';

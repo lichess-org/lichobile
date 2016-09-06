@@ -1,4 +1,4 @@
-import helper from '../../helper';
+import * as helper from '../../helper';
 import oninit from './followingCtrl';
 import view from './followingView';
 

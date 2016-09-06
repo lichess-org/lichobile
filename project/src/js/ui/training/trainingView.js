@@ -4,7 +4,7 @@ import i18n from '../../i18n';
 import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import helper from '../helper';
+import * as helper from '../helper';
 import menu, { renderUserInfos, renderSigninBox } from './menu';
 import * as m from 'mithril';
 

@@ -4,7 +4,7 @@ import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shar
 import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import helper from '../helper';
+import * as helper from '../helper';
 import i18n from '../../i18n';
 import { getBoardBounds } from '../../utils';
 import actions from './actions';

@@ -1,6 +1,6 @@
 import backbutton from '../../backbutton';
 import router from '../../router';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';

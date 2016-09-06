@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import ctrl from './editorCtrl';
 import view from './editorView';
 

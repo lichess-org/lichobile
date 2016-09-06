@@ -1,6 +1,6 @@
 import { header as headerWidget, backButton } from '../shared/common';
 import redraw from '../../utils/redraw';
-import helper from '../helper';
+import * as helper from '../helper';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';

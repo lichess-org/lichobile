@@ -3,7 +3,7 @@ import redraw from '../utils/redraw';
 import { timeline as timelineXhr } from '../xhr';
 import { gameIcon, handleXhrError } from '../utils';
 import { header as headerWidget, backButton } from './shared/common';
-import helper from './helper';
+import * as helper from './helper';
 import layout from './layout';
 import i18n from '../i18n';
 import * as m from 'mithril';

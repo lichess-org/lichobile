@@ -1,5 +1,5 @@
 import socket from '../../socket';
-import helper from '../helper';
+import * as helper from '../helper';
 import storage from '../../storage';
 import { getCurrentOTBGame } from '../../utils/offlineGames';
 import OtbRound from './OtbRound';

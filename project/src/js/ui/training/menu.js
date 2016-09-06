@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import loginModal from '../loginModal';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 import * as Chart from 'chart.js';
 import formWidgets from '../shared/form';

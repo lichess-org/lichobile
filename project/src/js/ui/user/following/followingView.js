@@ -1,7 +1,7 @@
 import router from '../../../router';
 import { header } from '../../shared/common';
 import { gameIcon } from '../../../utils';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 

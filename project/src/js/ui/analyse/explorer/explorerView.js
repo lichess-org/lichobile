@@ -1,6 +1,6 @@
 import router from '../../../router';
 import * as m from 'mithril';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
 
 function resultBar(move) {

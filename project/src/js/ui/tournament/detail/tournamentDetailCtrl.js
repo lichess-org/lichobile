@@ -4,7 +4,7 @@ import redraw from '../../../utils/redraw';
 import router from '../../../router';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';

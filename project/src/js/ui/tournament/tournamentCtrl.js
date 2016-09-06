@@ -1,7 +1,7 @@
 import socket from '../../socket';
 import { handleXhrError } from '../../utils';
 import * as xhr from './tournamentXhr';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 import settings from '../../settings';
 

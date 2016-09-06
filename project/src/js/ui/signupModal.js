@@ -1,5 +1,5 @@
 import session from '../session';
-import helper from './helper';
+import * as helper from './helper';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import loginModal from './loginModal';

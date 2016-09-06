@@ -1,6 +1,6 @@
 import * as utils from '../../../utils';
 import redraw from '../../../utils/redraw';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import settings from '../../../settings';
 import * as m from 'mithril';
 

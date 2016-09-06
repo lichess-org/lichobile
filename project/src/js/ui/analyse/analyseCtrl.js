@@ -12,7 +12,7 @@ import { getAnalyseData, getCurrentOTBGame, getCurrentAIGame } from '../../utils
 import { game as gameXhr } from '../../xhr';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
-import helper from '../helper';
+import * as helper from '../helper';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup.js';

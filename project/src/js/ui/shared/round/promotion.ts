@@ -1,7 +1,7 @@
 import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
 import settings from '../../../settings';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import ground from './ground';
 import * as xhr from './roundXhr';
 import OnlineRound from './OnlineRound';

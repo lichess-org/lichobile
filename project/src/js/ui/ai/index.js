@@ -1,7 +1,7 @@
 import socket from '../../socket';
 import storage from '../../storage';
 import { getCurrentAIGame } from '../../utils/offlineGames';
-import helper from '../helper';
+import * as helper from '../helper';
 import view from './aiView';
 import AiRound from './AiRound';
 

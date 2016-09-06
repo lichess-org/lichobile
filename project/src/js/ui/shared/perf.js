@@ -1,7 +1,7 @@
 import { gameIcon } from '../../utils';
 import router from '../../router';
 import { provisionalDeviation } from '../../lichess/perfs';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 
 export default function(key, name, perf, user) {

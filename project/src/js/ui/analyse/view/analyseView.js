@@ -8,7 +8,7 @@ import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
 import { gameTitle, connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
 import Board from '../../shared/Board';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import layout from '../../layout';
 import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';

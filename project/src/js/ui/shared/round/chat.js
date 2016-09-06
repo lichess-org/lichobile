@@ -1,4 +1,4 @@
-import helper from '../../helper';
+import * as helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import i18n from '../../../i18n';
 import storage from '../../../storage';

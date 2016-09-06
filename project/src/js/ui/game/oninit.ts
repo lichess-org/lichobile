@@ -5,7 +5,7 @@ import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import OnlineRound from '../shared/round/OnlineRound';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import sound from '../../sound';

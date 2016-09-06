@@ -8,7 +8,7 @@ import { loadLocalJsonFile } from '../../utils';
 import continuePopup from '../shared/continuePopup';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import helper from '../helper';
+import * as helper from '../helper';
 import drag from './drag';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

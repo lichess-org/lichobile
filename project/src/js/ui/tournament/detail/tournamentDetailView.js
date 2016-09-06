@@ -6,7 +6,7 @@ import i18n from '../../../i18n';
 import { noop, gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
 

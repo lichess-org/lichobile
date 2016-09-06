@@ -3,7 +3,7 @@ import router from '../../router';
 import { gameIcon, hasNetwork } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
-import helper from '../helper';
+import * as helper from '../helper';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import { header as headerWidget, userStatus } from '../shared/common';

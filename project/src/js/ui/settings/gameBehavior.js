@@ -2,7 +2,7 @@ import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
-import helper from '../helper';
+import * as helper from '../helper';
 import session from '../../session';
 import { swapKeyValue, SubmitMove, Takeback, AutoQueen, AutoThreefold } from '../../lichess/prefs';
 import * as m from 'mithril';

@@ -2,7 +2,7 @@ import router from '../../router';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import sound from '../../sound';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 import clockSettings from './clockSettings';
 

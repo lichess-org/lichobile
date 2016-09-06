@@ -18,7 +18,7 @@ import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
 import engineCtrl, { EngineInterface } from './engine';
-import helper from '../helper';
+import * as helper from '../helper';
 import newGameMenu from './newAiGame';
 
 export const storageFenKey = 'ai.setupFen';

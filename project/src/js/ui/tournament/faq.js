@@ -1,5 +1,5 @@
 import backbutton from '../../backbutton';
-import helper from '../helper';
+import * as helper from '../helper';
 
 export default {
   controller: function(tournament) {

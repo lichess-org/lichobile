@@ -9,7 +9,7 @@ import sound from '../../sound';
 import settings from '../../settings';
 import menu from './menu';
 import * as xhr from './xhr';
-import helper from '../helper';
+import * as helper from '../helper';
 import socket from '../../socket';
 
 export default function ctrl(vnode) {

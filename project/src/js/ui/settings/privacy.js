@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import { header as headerWidget, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';

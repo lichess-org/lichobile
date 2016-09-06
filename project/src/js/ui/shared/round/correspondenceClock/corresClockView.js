@@ -1,4 +1,4 @@
-import helper from '../../../helper';
+import * as helper from '../../../helper';
 import { hasNetwork } from '../../../../utils';
 import i18n from '../../../../i18n';
 

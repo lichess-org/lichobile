@@ -8,7 +8,7 @@ import loginModal from './loginModal';
 import signupModal from './signupModal';
 import friendsPopup from './friendsPopup';
 import lobby from './lobby';
-import helper from './helper';
+import * as helper from './helper';
 import settings from '../settings';
 
 var background;

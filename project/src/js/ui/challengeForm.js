@@ -9,7 +9,7 @@ import i18n from '../i18n';
 import storage from '../storage';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
-import helper from './helper';
+import * as helper from './helper';
 import * as m from 'mithril';
 
 var challengeForm = {

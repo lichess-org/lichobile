@@ -7,7 +7,7 @@ import gameStatus from '../../../../lichess/status';
 import i18n from '../../../../i18n';
 import socket from '../../../../socket';
 import lobby from '../../../lobby';
-import helper from '../../../helper';
+import * as helper from '../../../helper';
 import * as tournamentXhr from '../../../tournament/tournamentXhr';
 import { getPGN } from '../roundXhr';
 import OnlineRound from '../OnlineRound';

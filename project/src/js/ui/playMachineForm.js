@@ -7,7 +7,7 @@ import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
-import helper from './helper';
+import * as helper from './helper';
 import * as m from 'mithril';
 
 let isOpen = false;

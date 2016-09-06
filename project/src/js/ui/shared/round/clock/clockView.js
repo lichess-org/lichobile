@@ -1,4 +1,4 @@
-import helper from '../../../helper';
+import * as helper from '../../../helper';
 
 function prefixInteger(num, length) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);

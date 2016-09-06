@@ -19,7 +19,7 @@ import { OfflineRoundInterface } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
-import helper from '../helper';
+import * as helper from '../helper';
 import newGameMenu from './newOtbGame';
 
 export const storageFenKey = 'otb.setupFen';

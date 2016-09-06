@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import router from '../../router';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import helper from '../helper';
+import * as helper from '../helper';
 import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
 import storage from '../../storage';

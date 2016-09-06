@@ -9,7 +9,7 @@ import playMachineForm from '../playMachineForm';
 import i18n from '../../i18n';
 import { handleXhrError, hasNetwork } from '../../utils';
 import { getOfflineGames } from '../../utils/offlineGames';
-import helper from '../helper';
+import * as helper from '../helper';
 import friendsApi from '../../lichess/friends';
 import * as Zanimo from 'zanimo';
 

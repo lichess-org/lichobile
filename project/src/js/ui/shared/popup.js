@@ -1,5 +1,5 @@
 import * as utils from '../../utils';
-import helper from '../helper';
+import * as helper from '../helper';
 
 function styleConf(vnode) {
   const el = vnode.dom;

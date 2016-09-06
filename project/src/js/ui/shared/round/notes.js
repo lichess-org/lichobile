@@ -1,4 +1,4 @@
-import helper from '../../helper';
+import * as helper from '../../helper';
 import spinner from '../../../spinner';
 import i18n from '../../../i18n';
 import backbutton from '../../../backbutton';

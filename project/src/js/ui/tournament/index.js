@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import oninit from './tournamentCtrl';
 import view from './tournamentView';
 

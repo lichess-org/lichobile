@@ -29,7 +29,7 @@ import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
 import { status as xhrStatus, setServerLang } from './xhr';
 import challengesApi from './lichess/challenges';
-import helper from './ui/helper';
+import * as helper from './ui/helper';
 import backbutton from './backbutton';
 import socket from './socket';
 import push from './push';

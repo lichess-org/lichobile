@@ -7,7 +7,7 @@ import layout from '../layout';
 import { userStatus, header } from '../shared/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 
 export default {

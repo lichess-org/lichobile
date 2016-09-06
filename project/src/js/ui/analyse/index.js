@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import oninit from './analyseCtrl';
 import view from './view/analyseView';
 import signals from '../../signals';

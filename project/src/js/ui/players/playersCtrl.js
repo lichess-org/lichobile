@@ -4,7 +4,7 @@ import backbutton from '../../backbutton';
 import { throttle } from 'lodash/function';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
-import helper from '../helper';
+import * as helper from '../helper';
 import * as m from 'mithril';
 
 export default function oninit(vnode) {

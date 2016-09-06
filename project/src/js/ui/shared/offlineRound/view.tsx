@@ -6,7 +6,7 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 
 import { renderMaterial } from '../../shared/round/view/roundView';
-import helper from '../../helper';
+import * as helper from '../../helper';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import { OfflineRoundInterface, Position, Material } from '../round';
 

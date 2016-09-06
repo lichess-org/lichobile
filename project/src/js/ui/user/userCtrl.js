@@ -2,7 +2,7 @@ import session from '../../session';
 import * as xhr from './userXhr';
 import router from '../../router';
 import * as utils from '../../utils';
-import helper from '../helper';
+import * as helper from '../helper';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import * as m from 'mithril';

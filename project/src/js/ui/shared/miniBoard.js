@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import * as gameApi from '../../lichess/game';
 import * as m from 'mithril';

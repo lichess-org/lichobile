@@ -1,6 +1,6 @@
 import * as m from 'mithril';
 import router from '../router';
-import helper from './helper';
+import * as helper from './helper';
 import { handleXhrError } from '../utils';
 import * as xhr from '../xhr';
 import { LoadingBoard } from './shared/common';

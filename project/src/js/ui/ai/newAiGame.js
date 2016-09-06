@@ -2,7 +2,7 @@ import i18n from '../../i18n';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
-import helper from '../helper';
+import * as helper from '../helper';
 import backbutton from '../../backbutton';
 
 const colors = [

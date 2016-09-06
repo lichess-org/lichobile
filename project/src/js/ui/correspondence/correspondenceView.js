@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import challengesApi from '../../lichess/challenges';
-import helper from '../helper';
+import * as helper from '../helper';
 import layout from '../layout';
 import { header as headerWidget } from '../shared/common';
 import i18n from '../../i18n';

@@ -5,7 +5,7 @@ import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
 import countries from '../../utils/countries';
-import helper from '../helper';
+import * as helper from '../helper';
 import session from '../../session';
 
 export default function view() {

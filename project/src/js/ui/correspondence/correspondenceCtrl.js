@@ -1,4 +1,4 @@
-import helper from '../helper';
+import * as helper from '../helper';
 import redraw from '../../utils/redraw';
 import challengesApi from '../../lichess/challenges';
 import { uniqBy } from 'lodash/array';

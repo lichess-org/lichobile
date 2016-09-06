@@ -4,7 +4,7 @@ import router from '../../router';
 import * as utils from '../../utils';
 import { getOfflineGames } from '../../utils/offlineGames';
 import layout from '../layout';
-import helper from '../helper';
+import * as helper from '../helper';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';

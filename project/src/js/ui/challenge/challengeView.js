@@ -4,7 +4,7 @@ import loginModal from '../loginModal';
 import challengesApi from '../../lichess/challenges';
 import layout from '../layout';
 import * as utils from '../../utils';
-import helper from '../helper';
+import * as helper from '../helper';
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';

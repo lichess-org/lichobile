@@ -2,7 +2,7 @@ import session from '../session';
 import push from '../push';
 import challengesApi from '../lichess/challenges';
 import * as utils from '../utils';
-import helper from './helper';
+import * as helper from './helper';
 import i18n from '../i18n';
 import signupModal from './signupModal';
 import backbutton from '../backbutton';

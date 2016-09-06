@@ -76,6 +76,30 @@ export default {
           </div>
         );
       },
+      handicapInc: function () {
+        return (
+          <div key="handicapIncSettings" className="clockSettingParameters">
+            <div className="handicapRow">
+              <div className="handicapRowTitle">Top</div>
+              <div className="select_input inline handicapRowMember">
+                {formWidgets.renderSelect('Time', 'topTime', settings.clock.availableTimes, settings.clock.handicapInc.topTime, false, onChange)}
+              </div>
+              <div className="select_input inline handicapRowMember">
+                {formWidgets.renderSelect('Increment', 'topIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.topIncrement, false, onChange)}
+              </div>
+            </div>
+            <div className="handicapRow">
+              <div className="handicapRowTitle">Bottom</div>
+              <div className="select_input inline handicapRowMember">
+                {formWidgets.renderSelect('Time', 'bottomTime', settings.clock.availableTimes, settings.clock.handicapInc.bottomTime, false, onChange)}
+              </div>
+              <div className="select_input inline handicapRowMember">
+                {formWidgets.renderSelect('Increment', 'bottomIncrement', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.handicapInc.bottomIncrement, false, onChange)}
+              </div>
+            </div>
+          </div>
+        );
+      },
       delay: function () {
         return (
           <div key="delaySettings" className="clockSettingParameters">

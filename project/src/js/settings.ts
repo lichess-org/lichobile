@@ -137,6 +137,7 @@ export default {
     availableClocks: [
       ['Sudden Death', 'simple'],
       ['Increment', 'increment'],
+      ['Increment with Handicap', 'handicapInc'],
       ['Simple Delay', 'delay'],
       ['Bronstein Delay', 'bronstein'],
       ['Hourglass', 'hourglass'],
@@ -152,6 +153,13 @@ export default {
     increment: {
       time: localstorageprop('settings.clock.increment.time', '3'),
       increment: localstorageprop('settings.clock.increment.increment', '2')
+    },
+
+    handicapInc: {
+      topTime: localstorageprop('settings.clock.handicapInc.topTime', '3'),
+      topIncrement: localstorageprop('settings.clock.handicapInc.topIncrement', '2'),
+      bottomTime: localstorageprop('settings.clock.handicapInc.bottomTime', '3'),
+      bottomIncrement: localstorageprop('settings.clock.handicapInc.bottomIncrement', '2')
     },
 
     delay: {

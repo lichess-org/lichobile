@@ -29,14 +29,16 @@ function clockBody(ctrl) {
   const topClockClass = [
     'clockTapArea',
     'top',
-    topActive && clock.isRunning() ? 'running' : '',
+    topActive ? 'active' : '',
+    clock.isRunning() ? 'running' : '',
     topFlagged ? 'flagged' : ''
   ].join(' ');
 
   const bottomClockClass = [
     'clockTapArea',
     'bottom',
-    bottomActive && clock.isRunning() ? 'running' : '',
+    bottomActive ? 'active' : '',
+    clock.isRunning() ? 'running' : '',
     bottomFlagged ? 'flagged' : ''
   ].join(' ');
 
@@ -67,10 +69,10 @@ function clockBody(ctrl) {
         </div>
       </div>
       <div className="clockControls">
-        <span className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontouch(() => ctrl.startStop())} />
-        <span className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
-        <span className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
-        <span className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
+        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontouch(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
+        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.reload)} />
+        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.clockSettingsCtrl.open)} />
+        <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontouch(ctrl.goHome)} />
       </div>
       <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTap(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">

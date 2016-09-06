@@ -56,7 +56,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontap(() => onClockTap(ctrl, 'top'))}>
+      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'top'))}>
         { clock.topRemainingMoves ?
         <div className="clockStageInfo">
           <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
@@ -74,7 +74,7 @@ function clockBody(ctrl) {
         <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.clockSettingsCtrl.open)} />
         <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.goHome)} />
       </div>
-      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontap(() => onClockTap(ctrl, 'bottom'))}>
+      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTimeInSecs(clock.bottomTime()) }
@@ -90,7 +90,7 @@ function clockBody(ctrl) {
   );
 }
 
-function onClockTap(ctrl, side) {
+function onClockTouch(ctrl, side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
     ctrl.clockTap(side);
   }

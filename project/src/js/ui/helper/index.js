@@ -223,6 +223,12 @@ export default {
     };
   },
 
+  ontouch: function(handler) {
+    return ({ dom }) => {
+      dom.addEventListener('touchstart', handler);
+    };
+  },
+
   ontap: function(tapHandler, holdHandler = null, repeatHandler = null, touchEndFeedback = true) {
     return ontap(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },

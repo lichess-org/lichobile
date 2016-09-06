@@ -5,7 +5,7 @@ const emptyTd = <td className="move">...</td>;
 function renderTd(ctrl, step, curPly, orEmpty) {
   return step ? (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}
-      oncreate={helper.ontouchY(() => ctrl.jump(step.ply))}
+      oncreate={helper.ontapY(() => ctrl.jump(step.ply))}
       data-ply={step.ply}
     >
       {step.san}

@@ -233,10 +233,10 @@ export default {
     return ontap(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
   },
 
-  ontouchX: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
+  ontapX: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
     return ontap(tapHandler, holdHandler, null, true, false, touchEndFeedback);
   },
-  ontouchY: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
+  ontapY: function(tapHandler, holdHandler = null, touchEndFeedback = true) {
     return ontap(tapHandler, holdHandler, null, false, true, touchEndFeedback);
   },
 

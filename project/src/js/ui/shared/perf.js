@@ -8,7 +8,7 @@ export default function(key, name, perf, user) {
   var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};
   if (variantPerfAvailable(key, perf)) {
     options.className += ' nav';
-    options.oncreate = helper.ontouchY(() => router.set(`/@/${user.id}/${key}/perf`));
+    options.oncreate = helper.ontapY(() => router.set(`/@/${user.id}/${key}/perf`));
   }
 
   return m('div', options, [

@@ -67,7 +67,7 @@ function renderTournamentListItem(tournament) {
   return (
     <tr key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
-      oncreate={h.ontouchY(() => router.set('/tournament/' + tournament.id))}
+      oncreate={h.ontapY(() => router.set('/tournament/' + tournament.id))}
     >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>

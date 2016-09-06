@@ -56,7 +56,7 @@ function searchModal(ctrl) {
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} oncreate={h.ontouchY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={h.ontapY(utils.f(ctrl.goToProfile, u))}>
           {u}
           </li>
         );
@@ -84,7 +84,7 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item playerSuggestion nav" oncreate={h.ontouchY(() => router.set('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" oncreate={h.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

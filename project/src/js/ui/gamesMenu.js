@@ -147,8 +147,8 @@ function renderGame(g, cDim, cardStyle) {
     g.isMyTurn ? 'myTurn' : 'opponentTurn'
   ].join(' ');
   const oncreate = helper.isWideScreen() ?
-    helper.ontouchY(() => joinGame(g)) :
-    helper.ontouchX(() => joinGame(g));
+    helper.ontapY(() => joinGame(g)) :
+    helper.ontapX(() => joinGame(g));
 
   return (
     <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
@@ -192,10 +192,10 @@ function renderIncomingChallenge(c, cDim, cardStyle) {
           </p>
         </div>
         <div className="actions">
-          <button oncreate={helper.ontouchX(utils.f(acceptChallenge, c.id))}>
+          <button oncreate={helper.ontapX(utils.f(acceptChallenge, c.id))}>
             {i18n('accept')}
           </button>
-          <button oncreate={helper.ontouchX(
+          <button oncreate={helper.ontapX(
             helper.fadesOut(declineChallenge.bind(undefined, c.id), '.card', 250)
           )}>
             {i18n('decline')}
@@ -251,7 +251,7 @@ function renderAllGames(cDim) {
   if (!helper.isWideScreen()) {
     const newGameCard = (
       <div className="card standard" key="game.new-game" style={cardStyle}
-        oncreate={helper.ontouchX(() => { gamesMenu.close(); newGameForm.open(); })}
+        oncreate={helper.ontapX(() => { gamesMenu.close(); newGameForm.open(); })}
       >
         {renderViewOnlyBoard(cDim)}
         <div className="infos">

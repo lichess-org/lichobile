@@ -10,13 +10,13 @@ function renderBody() {
   return [
     m('ul.native_scroller.page.settings_list.game', [
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(router.set, '/settings/gameBehavior'))
+        oncreate: helper.ontapY(utils.f(router.set, '/settings/gameBehavior'))
       }, i18n('gameBehavior')),
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(router.set, '/settings/privacy'))
+        oncreate: helper.ontapY(utils.f(router.set, '/settings/privacy'))
       }, i18n('privacy')),
       m('li.list_item.nav', {
-        oncreate: helper.ontouchY(utils.f(router.set, '/settings/kidMode'))
+        oncreate: helper.ontapY(utils.f(router.set, '/settings/kidMode'))
       }, 'Kid mode')
     ])
   ];

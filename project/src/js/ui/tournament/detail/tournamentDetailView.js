@@ -242,7 +242,7 @@ function renderNavButton(icon, isEnabled, action) {
 function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} oncreate={helper.ontouchY(playerInfoCtrl.open.bind(undefined, player))}>
+    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} oncreate={helper.ontapY(playerInfoCtrl.open.bind(undefined, player))}>
       <td className='tournamentPlayer'>
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>

@@ -54,7 +54,7 @@ function renderMove(ctrl, move, path) {
     pathStr === ctrl.vm.pathStr ? 'current' : ''
   ].join(' ');
 
-  const jump = helper.ontouchY(() => ctrl.jump(treePath.read(pathStr)));
+  const jump = helper.ontapY(() => ctrl.jump(treePath.read(pathStr)));
 
   return (
     <move className={className} oncreate={jump}>
@@ -107,7 +107,7 @@ function renderVariation(ctrl, variation, path, klass) {
   const visiting = treePath.contains(path, ctrl.vm.path);
   return (
     <div className="variationWrapper">
-      <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontouchY(ctrl.toggleVariationMenu.bind(undefined, path))}></span>
+      <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontapY(ctrl.toggleVariationMenu.bind(undefined, path))}></span>
       <div className={klass + ' variation' + (visiting ? ' visiting' : '')}>
         {renderVariationContent(ctrl, variation, path)}
         {renderVariationMenu(ctrl, path)}

@@ -59,7 +59,7 @@ function renderAllGames(ctrl) {
 
 function bookmarkAction(ctrl, id, index) {
   const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
-  return helper.ontouchY(() => {
+  return helper.ontapY(() => {
     toggleGameBookmark(id)
     .then(() => {
       ctrl.toggleBookmark(index);
@@ -87,7 +87,7 @@ function renderGame(ctrl, g, index, userId) {
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" oncreate={helper.ontouchY(link)}>
+      <div className="nav" oncreate={helper.ontapY(link)}>
         <span className="iconGame" data-icon={icon} />
         {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
         <div className="infos">

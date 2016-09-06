@@ -70,7 +70,7 @@ function renderRankingCategory(ctrl, key) {
   const toggleFunc = h.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
   return (
     <section className={'ranking ' + key}>
-      <h3 className="rankingPerfTitle" oncreate={h.ontouchY(toggleFunc)}>
+      <h3 className="rankingPerfTitle" oncreate={h.ontapY(toggleFunc)}>
         <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
         {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
@@ -86,7 +86,7 @@ function renderRankingCategory(ctrl, key) {
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer" oncreate={h.ontouchY(() => router.set('/@/' + user.id))}>
+    <li className="rankingPlayer" oncreate={h.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

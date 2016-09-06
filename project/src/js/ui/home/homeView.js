@@ -23,8 +23,8 @@ export default function homeView() {
         <div className="page homeOffline">
           <section id="homeCreate">
             <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" oncreate={helper.ontouchY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
           </section>
         </div>
       );
@@ -38,7 +38,7 @@ export default function homeView() {
             <div>{nbGames}</div>
           </section>
           <section id="homeCreate">
-            <button className="fatButton" oncreate={helper.ontouchY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
+            <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
           </section>
           {renderDailyPuzzle(ctrl, isPortrait)}
           {renderTimeline(ctrl)}
@@ -101,7 +101,7 @@ function renderTimeline(ctrl) {
         })}
       </ul>
       <div className="homeMoreButton">
-        <button oncreate={helper.ontouchY(() => router.set('/timeline'))}>
+        <button oncreate={helper.ontapY(() => router.set('/timeline'))}>
           {i18n('more')}
         </button>
       </div>
@@ -121,7 +121,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button oncreate={helper.ontouchY(() => router.set('/players'))}>
+        <button oncreate={helper.ontapY(() => router.set('/players'))}>
           {i18n('more')}
         </button>
       </div>
@@ -140,7 +140,7 @@ function renderPlayer(p) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontouchY(() => router.set('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

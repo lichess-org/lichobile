@@ -60,7 +60,7 @@ export function renderTourJoin(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      oncreate={helper.ontouchY(() => {
+      oncreate={helper.ontapY(() => {
         router.set('/tournament/' + entry.data.tourId);
       })}
     >
@@ -78,7 +78,7 @@ export function renderFollow(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key}
-      oncreate={helper.ontouchY(() => {
+      oncreate={helper.ontapY(() => {
         router.set('/@/' + entry.data.u1);
       })}
     >
@@ -97,7 +97,7 @@ export function renderGameEnd(entry) {
 
   return (
     <li className="list_item timelineEntry" key={key} data-icon={icon}
-      oncreate={helper.ontouchY(() => {
+      oncreate={helper.ontapY(() => {
         router.set('/game/' + entry.data.playerId);
       })}
     >

@@ -87,7 +87,7 @@ function renderChallenge(ctrl, c) {
   const playerName = c.destUser && utils.lightPlayerName(c.destUser);
   return (
     <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
-      oncreate={helper.ontouchY(
+      oncreate={helper.ontapY(
         helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
       )}
     >
@@ -113,7 +113,7 @@ function renderSeek(ctrl, seek) {
     key: 'seek' + seek.id,
     'id': seek.id,
     className: 'list_item seek ' + action,
-    oncreate: helper.ontouchY(utils.partialf(ctrl[action], seek.id))
+    oncreate: helper.ontapY(utils.partialf(ctrl[action], seek.id))
   }, [
     m('div.icon', {
       'data-icon': seek.perf.icon

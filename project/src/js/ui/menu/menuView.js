@@ -36,7 +36,7 @@ function renderHeader(user) {
         /> : null
       }
       { hasNetwork() && !user ?
-        <button className="login" oncreate={helper.ontouchY(loginModal.open)}>
+        <button className="login" oncreate={helper.ontapY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
@@ -79,7 +79,7 @@ function renderLinks(user) {
 
   return (
     <ul className="side_links">
-      <li className="side_link" key="home" oncreate={helper.ontouchY(menu.route('/'))}>
+      <li className="side_link" key="home" oncreate={helper.ontapY(menu.route('/'))}>
         <span className="fa fa-home" />Home
       </li>
       {hasNetwork() && user ?
@@ -91,47 +91,47 @@ function renderLinks(user) {
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }
       {hasNetwork() && session.nowPlaying().length ?
-      <li className="side_link" key="current_games" oncreate={helper.ontouchY(menu.popup(gamesMenu.open))}>
+      <li className="side_link" key="current_games" oncreate={helper.ontapY(menu.popup(gamesMenu.open))}>
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', session.nowPlaying().length)}
       </li> : null
       }
       {!hasNetwork() && offlineGames.length ?
-      <li className="side_link" key="current_games" oncreate={helper.ontouchY(menu.popup(gamesMenu.open))}>
+      <li className="side_link" key="current_games" oncreate={helper.ontapY(menu.popup(gamesMenu.open))}>
         <span className="menu_icon_game" />{i18n('nbGamesInPlay', offlineGames.length)}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="play_real_time" oncreate={helper.ontouchY(menu.popup(newGameForm.openRealTime))}>
+      <li className="side_link" key="play_real_time" oncreate={helper.ontapY(menu.popup(newGameForm.openRealTime))}>
         <span className="fa fa-plus-circle"/>{i18n('createAGame')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="invite_friend" oncreate={helper.ontouchY(menu.popup(challengeForm.open))}>
+      <li className="side_link" key="invite_friend" oncreate={helper.ontapY(menu.popup(challengeForm.open))}>
         <span className="fa fa-share-alt"/>{i18n('playWithAFriend')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="play_online_ai" oncreate={helper.ontouchY(menu.popup(playMachineForm.open))}>
+      <li className="side_link" key="play_online_ai" oncreate={helper.ontapY(menu.popup(playMachineForm.open))}>
         <span className="fa fa-cogs"/>{i18n('playWithTheMachine')}
       </li> : null
       }
       {hasNetwork() && user ?
-      <li className="side_link" key="correspondence" oncreate={helper.ontouchY(menu.route('/correspondence'))}>
+      <li className="side_link" key="correspondence" oncreate={helper.ontapY(menu.route('/correspondence'))}>
         <span className="fa fa-paper-plane" />{i18n('correspondence')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="tv" oncreate={helper.ontouchY(menu.route('/tv'))}>
+      <li className="side_link" key="tv" oncreate={helper.ontapY(menu.route('/tv'))}>
         <span data-icon="1"/>{i18n('watchLichessTV')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="training" oncreate={helper.ontouchY(menu.route('/training'))}>
+      <li className="side_link" key="training" oncreate={helper.ontapY(menu.route('/training'))}>
         <span data-icon="-"/>{i18n('training')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="tournament" oncreate={helper.ontouchY(menu.route('/tournament'))}>
+      <li className="side_link" key="tournament" oncreate={helper.ontapY(menu.route('/tournament'))}>
         <span className="fa fa-trophy"/>{i18n('tournament')}
       </li> : null
       }
@@ -141,36 +141,36 @@ function renderLinks(user) {
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="players" oncreate={helper.ontouchY(menu.route('/players'))}>
+      <li className="side_link" key="players" oncreate={helper.ontapY(menu.route('/players'))}>
         <span className="fa fa-at"/>{i18n('players')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="ranking" oncreate={helper.ontouchY(menu.route('/ranking'))}>
+      <li className="side_link" key="ranking" oncreate={helper.ontapY(menu.route('/ranking'))}>
         <span className="fa fa-cubes"/>{i18n('leaderboard')}
       </li> : null
       }
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>
-      <li className="side_link" key="play_ai" oncreate={helper.ontouchY(menu.route('/ai'))}>
+      <li className="side_link" key="play_ai" oncreate={helper.ontapY(menu.route('/ai'))}>
         <span className="fa fa-cogs"/>{i18n('playOfflineComputer')}
       </li>
-      <li className="side_link" key="play_otb" oncreate={helper.ontouchY(menu.route('/otb'))}>
+      <li className="side_link" key="play_otb" oncreate={helper.ontapY(menu.route('/otb'))}>
         <span className="fa fa-beer"/>{i18n('playOnTheBoardOffline')}
       </li>
-      <li className="side_link" key="standalone_clock" oncreate={helper.ontouchY(menu.route('/clock'))}>
+      <li className="side_link" key="standalone_clock" oncreate={helper.ontapY(menu.route('/clock'))}>
         <span className="fa fa-clock-o"/>{i18n('clock')}
       </li>
       <li className="sep_link" key="sep_link_tools">{i18n('tools')}</li>
-      <li className="side_link" key="analyse" oncreate={helper.ontouchY(menu.route('/analyse'))}>
+      <li className="side_link" key="analyse" oncreate={helper.ontapY(menu.route('/analyse'))}>
         <span data-icon="A" />{i18n('analysis')}
       </li>
-      <li className="side_link" key="editor" oncreate={helper.ontouchY(menu.route('/editor'))}>
+      <li className="side_link" key="editor" oncreate={helper.ontapY(menu.route('/editor'))}>
         <span className="fa fa-pencil" />{i18n('boardEditor')}
       </li>
       <li className="hr" key="sep_link_settings"></li>
-      <li className="side_link" key="settings" oncreate={helper.ontouchY(menu.route('/settings'))}>
+      <li className="side_link" key="settings" oncreate={helper.ontapY(menu.route('/settings'))}>
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
     </ul>

@@ -34,7 +34,7 @@ export function renderPlayer(ctrl, obj) {
   const status = obj.online ? 'online' : 'offline';
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
   const perf = obj.perfs && obj.perfs[perfKey];
-  const userLink = helper.ontouchY(() => router.set(`/@/${obj.user}`));
+  const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`));
   return (
     <li className="list_item followingList">
       <div className="followingPlayerTitle" oncreate={userLink}>
@@ -59,7 +59,7 @@ export function renderPlayer(ctrl, obj) {
         </div> : null
       }
       <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
-        oncreate={helper.ontouchY(() => ctrl.challenge(obj.user))}
+        oncreate={helper.ontapY(() => ctrl.challenge(obj.user))}
       >
         {i18n('challengeToPlay')}
       </div>

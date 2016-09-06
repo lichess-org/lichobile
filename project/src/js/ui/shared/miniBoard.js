@@ -9,7 +9,7 @@ export default {
     const { bounds, fen, lastMove, orientation, link, gameObj } = vnode.attrs;
 
     return (
-      <div className="mini_board" oncreate={helper.ontouchY(link)}>
+      <div className="mini_board" oncreate={helper.ontapY(link)}>
         <div className="board_wrapper">
           {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
         </div>

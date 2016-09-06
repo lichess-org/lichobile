@@ -34,7 +34,7 @@ function showMoveTable(ctrl, moves) {
       <tbody>
         { moves.map(move => {
           return (
-            <tr key={move.uci} oncreate={helper.ontouchY(() => ctrl.explorerMove(move.uci))}>
+            <tr key={move.uci} oncreate={helper.ontapY(() => ctrl.explorerMove(move.uci))}>
               <td className="explorerMove">
                 {move.san[0] === 'P' ? move.san.slice(1) : move.san}
               </td>
@@ -79,7 +79,7 @@ function showGameTable(ctrl, type, games) {
       <tbody>
       { games.map(game => {
         return (
-          <tr key={game.id} oncreate={helper.ontouchY(() => link(game))}>
+          <tr key={game.id} oncreate={helper.ontapY(() => link(game))}>
             <td>
               {[game.white, game.black].map(p =>
                 <span>{p.rating}</span>
@@ -181,7 +181,7 @@ function showGameEnd(ctrl, title) {
       m('i[data-icon=]'),
       m('h3', title),
       m('button.button.text[data-icon=L]', {
-        oncreate: helper.ontouchY(ctrl.explorer.toggle)
+        oncreate: helper.ontapY(ctrl.explorer.toggle)
       }, 'Close')
     ])
   ]);

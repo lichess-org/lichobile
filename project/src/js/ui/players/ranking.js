@@ -1,7 +1,7 @@
 import socket from '../../socket';
 import router from '../../router';
 import * as utils from '../../utils';
-import h from '../helper';
+import * as h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
 import { userStatus, header } from '../shared/common';

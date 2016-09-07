@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import router from '../../router';
-import h from '../helper';
+import * as h from '../helper';
 import { menuButton, friendsButton, userStatus } from '../shared/common';
 import layout from '../layout';
 import settings from '../../settings';

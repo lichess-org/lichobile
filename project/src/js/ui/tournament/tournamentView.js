@@ -1,4 +1,4 @@
-import h from '../helper';
+import * as h from '../helper';
 import router from '../../router';
 import {header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';

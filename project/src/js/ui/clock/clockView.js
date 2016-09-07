@@ -1,4 +1,4 @@
-import h from '../helper';
+import * as h from '../helper';
 import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeInSecs } from '../../utils';

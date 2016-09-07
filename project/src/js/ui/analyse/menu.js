@@ -55,7 +55,10 @@ function renderAnalyseMenu(ctrl) {
   return m('div.analyseMenu', [
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
       key: 'continueFromHere',
-      oncreate: helper.ontap(() => ctrl.continuePopup.open(ctrl.vm.step.fen))
+      oncreate: helper.ontap(() => {
+        ctrl.menu.close();
+        ctrl.continuePopup.open(ctrl.vm.step.fen);
+      })
     }, i18n('continueFromHere')) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'boardEditor',

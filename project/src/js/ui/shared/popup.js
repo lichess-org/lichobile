@@ -34,7 +34,9 @@ export default function(classes, headerF, contentF, isShowing, closef) {
   });
 
   return (
-    <div className="overlay_popup_wrapper"
+    // dirty hack to be sure each popup element is unique
+    // TODO should refactor into a component
+    <div key={String(contentF)} className="overlay_popup_wrapper"
       onbeforeremove={(vnode, done) => {
         vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);

@@ -58,7 +58,7 @@ export function getOfflineGameData(id: string) {
   return stored[id];
 }
 
-export function saveOfflineGameData(id: string, gameData: GameData) {
+export function saveOfflineGameData(id: string, gameData: OnlineGameData) {
   const stored = storage.get(offlineCorresStorageKey) || {};
   const toStore = cloneDeep(gameData);
   toStore.player.onGame = false;

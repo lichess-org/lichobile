@@ -21,103 +21,103 @@ export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
 }
 
 // TODO find a better type
-export function playable(data: GameData | OfflineGameData) {
+export function playable(data: OnlineGameData | OfflineGameData) {
   return data.game.status.id < gameStatus.ids.aborted;
 }
 
-export function isPlayerPlaying(data: GameData | OfflineGameData) {
+export function isPlayerPlaying(data: OnlineGameData | OfflineGameData) {
   return playable(data) && !data.player.spectator;
 }
 
-export function isPlayerTurn(data: GameData) {
+export function isPlayerTurn(data: OnlineGameData) {
   return isPlayerPlaying(data) && data.game.player === data.player.color;
 }
 
-export function isOpponentTurn(data: GameData) {
+export function isOpponentTurn(data: OnlineGameData) {
   return isPlayerPlaying(data) && data.game.player !== data.player.color;
 }
 
-export function mandatory(data: GameData) {
+export function mandatory(data: OnlineGameData) {
   return !!data.tournament;
 }
 
-export function playedTurns(data: GameData) {
+export function playedTurns(data: OnlineGameData) {
   return data.game.turns - data.game.startedAtTurn;
 }
 
-export function abortable(data: GameData) {
+export function abortable(data: OnlineGameData) {
   return playable(data) && playedTurns(data) < 2 && !mandatory(data);
 }
 
-export function takebackable(data: GameData) {
+export function takebackable(data: OnlineGameData) {
   return playable(data) && data.takebackable && !data.tournament && playedTurns(data) > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback;
 }
 
-export function drawable(data: GameData) {
+export function drawable(data: OnlineGameData) {
   return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
-export function berserkableBy(data: GameData) {
+export function berserkableBy(data: OnlineGameData) {
   return data.tournament &&
     data.tournament.berserkable &&
     isPlayerPlaying(data) &&
     playedTurns(data) < 2;
 }
 
-export function resignable(data: GameData) {
+export function resignable(data: OnlineGameData) {
   return playable(data) && !abortable(data);
 }
 
-export function forceResignable(data: GameData) {
+export function forceResignable(data: OnlineGameData) {
   return !data.opponent.ai && data.clock && data.opponent.isGone && resignable(data);
 }
 
-export function moretimeable(data: GameData) {
+export function moretimeable(data: OnlineGameData) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data);
 }
 
-export function imported(data: GameData) {
+export function imported(data: OnlineGameData) {
   return data.game.source === 'import';
 }
 
-export function replayable(data: GameData) {
+export function replayable(data: OnlineGameData) {
   return imported(data) || gameStatus.finished(data);
 }
 
-export function userAnalysable(data: GameData) {
+export function userAnalysable(data: OnlineGameData) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
-export function analysable(data: GameData) {
+export function analysable(data: OnlineGameData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
 }
 
-export function getPlayer(data: GameData, color: Color) {
+export function getPlayer(data: OnlineGameData, color: Color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
   return null;
 }
 
-export function setIsGone(data: GameData, color: Color, isGone: boolean) {
+export function setIsGone(data: OnlineGameData, color: Color, isGone: boolean) {
   const player = getPlayer(data, color);
   isGone = isGone && !player.ai;
   player.isGone = isGone;
   if (!isGone && player.user) player.user.online = true;
 }
 
-export function setOnGame(data: GameData, color: Color, onGame: boolean) {
+export function setOnGame(data: OnlineGameData, color: Color, onGame: boolean) {
   const player = getPlayer(data, color);
   onGame = onGame || !!player.ai;
   player.onGame = onGame;
   if (onGame) setIsGone(data, color, false);
 }
 
-export function nbMoves(data: GameData, color: Color) {
+export function nbMoves(data: OnlineGameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
 // TODO find a better type
-export function result(data: GameData | OfflineGameData) {
+export function result(data: OnlineGameData | OfflineGameData) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0';
@@ -129,7 +129,7 @@ export function result(data: GameData | OfflineGameData) {
   return '*';
 }
 
-export function time(data: GameData) {
+export function time(data: OnlineGameData) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial);
     const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();
@@ -143,10 +143,10 @@ export function time(data: GameData) {
   }
 }
 
-export function publicUrl(data: GameData) {
+export function publicUrl(data: OnlineGameData) {
   return 'http://lichess.org/' + data.game.id;
 }
 
-export function isSupportedVariant(data: GameData) {
+export function isSupportedVariant(data: OnlineGameData) {
   return settings.game.supportedVariants.indexOf(data.game.variant.key) !== -1;
 }

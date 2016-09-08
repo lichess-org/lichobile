@@ -23,19 +23,17 @@ import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
 
 export default function analyseView() {
-  const ctrl = this;
-
   const isPortrait = helper.isPortrait();
 
-  if (ctrl.data) {
+  if (this.ctrl) {
 
-    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(ctrl.data)) : null;
-    const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
+    const backButton = this.ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(this.ctrl.data)) : null;
+    const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
     return layout.board(
       () => header(title, backButton),
-      () => renderContent(ctrl, isPortrait),
-      () => overlay(ctrl, isPortrait)
+      () => renderContent(this.ctrl, isPortrait),
+      () => overlay(this.ctrl, isPortrait)
     );
   } else {
     return layout.board(

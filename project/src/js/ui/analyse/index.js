@@ -1,5 +1,5 @@
 import * as helper from '../helper';
-import oninit from './analyseCtrl';
+import oninit from './oninit';
 import view from './view/analyseView';
 import signals from '../../signals';
 

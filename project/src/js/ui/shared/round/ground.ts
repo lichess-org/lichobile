@@ -8,7 +8,7 @@ function str2move(move: string) {
   return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
 }
 
-function makeConfig(data: GameData, fen: string, flip: boolean = false): any {
+function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
   return {
     fen: fen,
     orientation: boardOrientation(data, flip),
@@ -57,7 +57,7 @@ function makeConfig(data: GameData, fen: string, flip: boolean = false): any {
 }
 
 function make(
-  data: GameData,
+  data: OnlineGameData,
   fen: string,
   userMove: (orig: Pos, dest: Pos, meta: any) => void,
   userNewPiece: (role: Role, key: Pos, meta: any) => void,
@@ -77,7 +77,7 @@ function make(
   return new chessground.controller(config);
 }
 
-function reload(ground: Chessground.Controller, data: GameData, fen: string, flip: boolean) {
+function reload(ground: Chessground.Controller, data: OnlineGameData, fen: string, flip: boolean) {
   ground.reconfigure(makeConfig(data, fen, flip));
 }
 

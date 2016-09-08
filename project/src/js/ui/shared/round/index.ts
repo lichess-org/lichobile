@@ -18,7 +18,7 @@ export interface RoundInterface {
 }
 
 export interface OnlineRoundInterface extends RoundInterface {
-  data: GameData
+  data: OnlineGameData
 }
 
 export interface OfflineRoundInterface extends RoundInterface {

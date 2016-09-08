@@ -146,7 +146,7 @@ interface Tournament {
   }
 }
 
-interface GameData {
+interface OnlineGameData {
   game: OnlineGame;
   player: Player;
   opponent: Player;
@@ -175,6 +175,11 @@ interface OfflineGameData {
   opponent: OfflinePlayer;
   steps?: Array<GameStep>;
   pref?: any;
+}
+
+interface AnalysisData extends OnlineGameData {
+  analysis: any;
+  situations: Array<GameSituation>;
 }
 
 interface OnlineGame {

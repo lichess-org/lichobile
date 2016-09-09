@@ -18,12 +18,14 @@ export default function oninit(vnode) {
   socket.createDefault();
   window.plugins.insomnia.keepAwake();
 
+  const shouldGoBack = !!gameId;
+
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation)
     .then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(cfg), source);
+      this.ctrl = new AnalyseCtrl(makeData(cfg), source, shouldGoBack);
       redraw();
       setTimeout(this.ctrl.debouncedScroll, 250);
     })
@@ -39,7 +41,7 @@ export default function oninit(vnode) {
     } else {
       otbData.player.spectator = true;
       otbData.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(otbData), source);
+      this.ctrl = new AnalyseCtrl(makeData(otbData), source, shouldGoBack);
     }
   } else if (source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline ai)');
@@ -49,12 +51,12 @@ export default function oninit(vnode) {
     } else {
       aiData.player.spectator = true;
       aiData.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(aiData), source);
+      this.ctrl = new AnalyseCtrl(makeData(aiData), source, shouldGoBack);
     }
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg, orientation), source);
+    this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg, orientation), source, shouldGoBack);
   }
 
   if (this.ctrl.isRemoteAnalysable()) {

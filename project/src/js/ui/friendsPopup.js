@@ -72,7 +72,7 @@ function renderFriend(user) {
   return user.isPlaying ? (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
       <span>{user.name}</span>
-      <span style="float: right; margin-right: 20px;" data-icon="1" oncreate={helper.ontapY(tvAction)}> </span>
+      <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(tvAction)}> </span>
     </li>
   ) : (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>

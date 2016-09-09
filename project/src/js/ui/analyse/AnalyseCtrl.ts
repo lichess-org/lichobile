@@ -14,7 +14,7 @@ import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup.js';
-import chessLogic, { ChessMove, ChesslogicInterface } from './chessLogic';
+import chessLogic from './chessLogic';
 import * as util from './util';
 import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
@@ -27,17 +27,7 @@ import analyse from './analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { Path } from './interfaces';
-
-type Source = 'online' | 'offline' | 'fen';
-
-interface RoleToSan {
-  [role: string]: San
-}
-
-interface SanToRole {
-  [san: string]: Role
-}
+import { RoleToSan, SanToRole, Source, Path, ChessMove, ChesslogicInterface } from './interfaces';
 
 const roleToSan: RoleToSan = {
   pawn: 'P',

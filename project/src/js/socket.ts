@@ -43,17 +43,24 @@ const proxyFailMsg = 'The connection to lichess server has failed. If the proble
 
 const defaultHandlers: {[index: string]: (...args: any[]) => void} = {
   following_onlines: handleFollowingOnline,
-  following_enters: (name: string) => autoredraw(() => friendsApi.add(name)),
+  following_enters: (name: string, payload: any) =>
+    autoredraw(() => friendsApi.add(name, payload.playing || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
+  following_playing: name => autoredraw(() => friendsApi.playing(name)),
+  following_stopped_playing: name =>
+    autoredraw(() => friendsApi.stopped_playing(name)),
   challenges: (data: any) => {
     challengesApi.set(data);
     redraw();
   }
 };
 
-function handleFollowingOnline(data: Array<string>) {
+function handleFollowingOnline(data: Array<string>, payload: any) {
   const curList = friendsApi.list();
-  friendsApi.set(data);
+
+  var friendsPlaying = payload.playing;
+
+  friendsApi.set(data, friendsPlaying);
   if (xor(curList, data).length > 0) {
     redraw();
   }

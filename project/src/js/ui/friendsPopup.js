@@ -37,28 +37,48 @@ friendsPopup.view = function() {
 };
 
 function renderFriends() {
+
   return friendsApi.list().length ?
     (
-    <ul>
-      {friendsApi.list().map(renderFriend)}
-    </ul>
+        <ul>
+          {friendsApi.list().map(renderFriend)}
+        </ul>
     ) : (
       <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
     );
 }
 
-function renderFriend(name) {
-  let userId = utils.userFullNameToId(name);
+function renderFriend(user) {
+
+  // hack: Because we have an 'oncreate' within an 'oncreate' two events
+  // get fired when the tv button is clicked. So we suppress the 'outer handler'
+  // when the TV button is clicked
+  let tvTapped = false;
+
+  let userId = utils.userFullNameToId(user.name);
   let action = () => {
-    friendsPopup.close();
-    router.set('/@/' + userId);
+    if (!tvTapped) {
+      friendsPopup.close();
+      router.set('/@/' + userId);
+    }
   };
 
-  return (
+  let tvAction = () => {
+    tvTapped = true;
+    friendsPopup.close();
+    router.set('/@/' + userId + '/tv');
+  };
+
+  return user.isPlaying ? (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
-      {name}
+      <span>{user.name}</span>
+      <span style="float: right; margin-right: 20px;" data-icon="1" oncreate={helper.ontapY(tvAction)}> </span>
     </li>
-  );
+  ) : (
+    <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
+        {user.name}
+    </li>
+  )
 }
 
 export default friendsPopup;

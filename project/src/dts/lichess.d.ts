@@ -183,6 +183,7 @@ interface AnalysisData extends OnlineGameData {
   analysis: any;
   situations: Array<GameSituation>;
   orientation: Color;
+  steps?: Array<AnalysisStep>;
 }
 
 interface OnlineGame {
@@ -280,6 +281,10 @@ interface GameStep {
 
 interface AnalysisStep extends GameStep {
   ceval?: any;
+  rEval?: any;
+  fixed?: boolean;
+  variations?: any;
+  opening?: any;
 }
 
 interface GameSituation {

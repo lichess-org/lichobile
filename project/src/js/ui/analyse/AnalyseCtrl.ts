@@ -1,6 +1,5 @@
 import { debounce } from 'lodash';
 import router from '../../router';
-import signals from '../../signals';
 import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
@@ -23,11 +22,11 @@ import explorerCtrl from './explorer/explorerCtrl';
 import menu from './menu';
 import evalSummary from './evalSummaryPopup';
 import analyseSettings from './analyseSettings';
-import analyse from './analyse';
+import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { RoleToSan, SanToRole, Source, Path, ChessMove, ChesslogicInterface } from './interfaces';
+import { RoleToSan, SanToRole, Source, Path, ChessMove, ChesslogicInterface, AnalyseCtrlInterface, AnalyseInterface } from './interfaces';
 
 const roleToSan: RoleToSan = {
   pawn: 'P',
@@ -45,7 +44,7 @@ const sanToRole: SanToRole = {
   Q: 'queen'
 };
 
-export default class AnalyseCtrl {
+export default class AnalyseCtrl implements AnalyseCtrlInterface {
   public data: AnalysisData;
   public source: Source;
   public vm: any;
@@ -56,7 +55,7 @@ export default class AnalyseCtrl {
   public importPgnPopup: any;
 
   public chessground: Chessground.Controller;
-  public analyse: any;
+  public analyse: AnalyseInterface;
   public ceval: any;
   public explorer: any;
   public evalSummary: any;
@@ -94,7 +93,7 @@ export default class AnalyseCtrl {
       showComments: settings.analyse.showComments()
     };
 
-    this.analyse = new analyse(this.data);
+    this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.explorer = explorerCtrl(this, true);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
@@ -112,12 +111,6 @@ export default class AnalyseCtrl {
     this.showGround();
     this.initCeval();
     this.explorer.setStep();
-
-    if (this.isRemoteAnalysable()) {
-      this.connectGameSocket();
-      // reconnect game socket after a cancelled seek
-      signals.seekCanceled.add(this.connectGameSocket);
-    }
   }
 
   public connectGameSocket = () => {

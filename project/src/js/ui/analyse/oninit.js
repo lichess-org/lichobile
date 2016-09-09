@@ -1,4 +1,5 @@
 import router from '../../router';
+import signals from '../../signals';
 import redraw from '../../utils/redraw';
 import socket from '../../socket';
 import { handleXhrError } from '../../utils';
@@ -56,4 +57,9 @@ export default function oninit(vnode) {
     this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg, orientation), source);
   }
 
+  if (this.ctrl.isRemoteAnalysable()) {
+    this.ctrl.connectGameSocket();
+    // reconnect game socket after a cancelled seek
+    signals.seekCanceled.add(this.ctrl.connectGameSocket);
+  }
 }

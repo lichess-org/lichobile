@@ -275,6 +275,10 @@ interface GameStep {
   }
 }
 
+interface AnalysisStep extends GameStep {
+  ceval?: any;
+}
+
 interface GameSituation {
   variant: string
   fen: string

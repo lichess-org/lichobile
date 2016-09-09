@@ -1,6 +1,21 @@
 import { askWorker } from '../../utils';
 
-export default function chessLogic(ctrl) {
+export interface ChessMove {
+  situation: GameSituation
+  path: string
+}
+
+export interface ChesslogicInterface {
+  sendMoveRequest(req: any): void
+  sendDropRequest(req: any): void
+  sendDestsRequest(req: any): void
+  getSanMoveFromUci(req: any): Promise<ChessMove>
+  importPgn(pgn: string): Promise<{ pgn: string }>
+  exportPgn(variant: string, initialFen: string, pgnMoves: Array<string>): Promise<{ pgn: string }>
+  terminate(): void
+}
+
+export default function chessLogic(ctrl): ChesslogicInterface {
 
   const worker = new Worker('vendor/scalachessjs.js');
 

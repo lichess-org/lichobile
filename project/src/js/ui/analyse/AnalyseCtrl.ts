@@ -13,7 +13,7 @@ import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup.js';
-import chessLogic from './chessLogic';
+import chessLogic, { ChessMove, ChesslogicInterface } from './chessLogic';
 import * as util from './util';
 import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
@@ -26,6 +26,7 @@ import analyse from './analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
+import { Path } from './interfaces';
 
 type Source = 'online' | 'offline' | 'fen';
 
@@ -48,7 +49,7 @@ export default class AnalyseCtrl {
   public data: AnalysisData;
   public source: Source;
   public vm: any;
-  public chessLogic: any;
+  public chessLogic: ChesslogicInterface;
   public settings: any;
   public menu: any;
   public continuePopup: any;
@@ -155,7 +156,6 @@ export default class AnalyseCtrl {
     }
   }
 
-  const debouncedDests = debounce(getDests.bind(this), 100);
 
   private showGround() {
     let s = this.analyse.getStep(this.vm.path);
@@ -187,10 +187,10 @@ export default class AnalyseCtrl {
     this.vm.cgConfig = config;
 
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, config, userMove.bind(this), userNewPiece.bind(this));
+      this.chessground = ground.make(this.data, config, this.userMove, this.userNewPiece);
     }
     this.chessground.set(config);
-    if (!dests) debouncedDests();
+    if (!dests) this.debouncedDests();
   }
 
   public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
@@ -202,6 +202,7 @@ export default class AnalyseCtrl {
   private debouncedStartCeval = debounce(this.startCeval, 500);
 
   public jump = (path, direction) => {
+    console.log(path);
     this.vm.path = path;
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
@@ -218,22 +219,22 @@ export default class AnalyseCtrl {
     promotion.cancel(this, this.vm.cgConfig);
   }
 
-  public userJump = (path, direction) => {
+  public userJump = (path: Path, direction: 'forward' | 'backward') => {
     this.jump(path, direction);
   }
 
-  public jumpToMain = (ply) => {
+  public jumpToMain = (ply: number) => {
     this.userJump([{
       ply: ply,
       variation: null
     }]);
   }
 
-  public jumpToIndex = (index) => {
+  public jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + this.data.game.startedAtTurn);
   }
 
-  public jumpToNag = (color, nag) => {
+  public jumpToNag = (color: Color, nag: string) => {
     const ply = this.analyse.plyOfNextNag(color, nag, this.vm.step.ply);
     if (ply) this.jumpToMain(ply);
     redraw();
@@ -243,14 +244,14 @@ export default class AnalyseCtrl {
     return true;
   };
 
-  private preparePremoving = () => {
+  private preparePremoving() {
     this.chessground.set({
       turnColor: this.chessground.data.movable.color,
       movableColor: oppositeColor(this.chessground.data.movable.color)
     });
   }
 
-  private sendMove = (orig, dest, prom) => {
+  private sendMove = (orig: Pos, dest: Pos, prom: any) => {
     const move = {
       orig: orig,
       dest: dest,
@@ -261,16 +262,16 @@ export default class AnalyseCtrl {
     };
     if (prom) move.promotion = prom;
     this.chessLogic.sendMoveRequest(move);
-    preparePremoving();
+    this.preparePremoving();
   }
 
-  private userMove = (orig, dest, capture) => {
+  private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
     this.vm.justPlayed = orig + dest;
     sound[capture ? 'capture' : 'move']();
-    if (!promotion.start(this, orig, dest, sendMove)) sendMove(orig, dest);
+    if (!promotion.start(this, orig, dest, this.sendMove)) this.sendMove(orig, dest);
   }
 
-  private userNewPiece(piece, pos) {
+  private userNewPiece = (piece: Piece, pos: Pos) => {
     if (crazyValid.drop(this.chessground, piece, pos, this.vm.step.drops)) {
       this.vm.justPlayed = roleToSan[piece.role] + '@' + pos;
       sound.move();
@@ -282,11 +283,11 @@ export default class AnalyseCtrl {
         path: this.vm.pathStr
       };
       this.chessLogic.sendDropRequest(drop);
-      preparePremoving();
+      this.preparePremoving();
     } else this.jump(this.vm.path);
   }
 
-  public explorerMove = (uci) => {
+  public explorerMove = (uci: string) => {
     const move = util.decomposeUci(uci);
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
@@ -294,22 +295,22 @@ export default class AnalyseCtrl {
         role: sanToRole[uci[0]]
       }, move[1]);
     } else if (!move[2]) {
-      sendMove(move[0], move[1]);
+      this.sendMove(move[0], move[1]);
     }
     else {
-      sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()]);
+      this.sendMove(move[0], move[1], sanToRole[move[2].toUpperCase()]);
     }
     this.explorer.loading(true);
   }
 
-  public addStep = (step, path) => {
+  public addStep = (step: AnalysisStep, path: Path) => {
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
     redraw();
     this.chessground.playPremove();
   }
 
-  public addDests = (dests, path) => {
+  public addDests = (dests: DestsMap, path: Path) => {
     this.analyse.addDests(dests, treePath.read(path));
     if (path === this.vm.pathStr) {
       this.showGround();
@@ -319,7 +320,7 @@ export default class AnalyseCtrl {
     this.chessground.playPremove();
   }
 
-  public toggleVariationMenu = (path) => {
+  public toggleVariationMenu = (path: Path) => {
     if (!path) {
       this.vm.variationMenu = null;
     } else {
@@ -328,7 +329,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  public deleteVariation = (path) => {
+  public deleteVariation = (path: Path) => {
     const ply = path[0].ply;
     const id = path[0].variation;
     this.analyse.deleteVariation(ply, id);
@@ -336,7 +337,7 @@ export default class AnalyseCtrl {
     this.toggleVariationMenu(null);
   }
 
-  public promoteVariation = (path) => {
+  public promoteVariation = (path: Path) => {
     const ply = path[0].ply;
     const id = path[0].variation;
     this.analyse.promoteVariation(ply, id);
@@ -356,7 +357,7 @@ export default class AnalyseCtrl {
   }
 
   private onCevalMsg = (res) => {
-    this.analyse.updateAtPath(res.work.path, step => {
+    this.analyse.updateAtPath(res.work.path, (step: AnalysisStep) => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;
       // even if we don't need the san move this ensure correct arrows are
@@ -365,7 +366,7 @@ export default class AnalyseCtrl {
         fen: step.fen,
         orig: res.ceval.best.slice(0, 2),
         dest: res.ceval.best.slice(2, 4)
-      }).then(data => {
+      }).then((data: ChessMove) => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           redraw();
@@ -422,14 +423,16 @@ export default class AnalyseCtrl {
     return !this.data.analysis && !this.vm.analysisProgress &&
       session.isConnected() && gameApi.analysable(this.data);
   }
-}
 
-function getDests() {
-  if (!this.vm.step.dests) {
-    this.chessLogic.sendDestsRequest({
-      variant: this.data.game.variant.key,
-      fen: this.vm.step.fen,
-      path: this.vm.pathStr
-    });
+  private getDests = () => {
+    if (!this.vm.step.dests) {
+      this.chessLogic.sendDestsRequest({
+        variant: this.data.game.variant.key,
+        fen: this.vm.step.fen,
+        path: this.vm.pathStr
+      });
+    }
   }
+
+  private debouncedDests = debounce(this.getDests, 100);
 }

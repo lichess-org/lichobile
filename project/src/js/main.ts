@@ -94,6 +94,8 @@ function onResize() {
 function onOnline() {
   if (isForeground()) {
 
+    socket.connect();
+
     xhrStatus();
 
     session.rememberLogin()
@@ -110,7 +112,9 @@ function onOnline() {
 }
 
 function onOffline() {
-  if (isForeground()) {
+  // offline event fires every time the network connection changes
+  // it doesn't mean necessarily the network is off
+  if (isForeground() && !hasNetwork()) {
     socket.disconnect();
     redraw();
   }

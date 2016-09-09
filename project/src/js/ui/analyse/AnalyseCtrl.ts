@@ -147,12 +147,11 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     }
   }
 
-  private startCeval() {
+  public startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
     }
   }
-
 
   private showGround() {
     let s = this.analyse.getStep(this.vm.path);

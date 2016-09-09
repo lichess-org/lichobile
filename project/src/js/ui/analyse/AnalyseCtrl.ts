@@ -6,6 +6,7 @@ import session from '../../session';
 import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
+import { MoveRequest } from '../../scalachess';
 import settings from '../../settings';
 import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
@@ -30,14 +31,23 @@ import { Path } from './interfaces';
 
 type Source = 'online' | 'offline' | 'fen';
 
-const roleToSan = {
+interface RoleToSan {
+  [role: string]: San
+}
+
+interface SanToRole {
+  [san: string]: Role
+}
+
+const roleToSan: RoleToSan = {
   pawn: 'P',
   knight: 'N',
   bishop: 'B',
   rook: 'R',
   queen: 'Q'
 };
-const sanToRole = {
+
+const sanToRole: SanToRole = {
   P: 'pawn',
   N: 'knight',
   B: 'bishop',
@@ -61,6 +71,10 @@ export default class AnalyseCtrl {
   public explorer: any;
   public evalSummary: any;
   public notes: any;
+
+  public static decomposeUci(uci: string): [Pos, Pos, San] {
+    return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <San>uci.slice(4, 5)];
+  }
 
   public constructor(data: AnalysisData, source: Source, shouldGoBack: boolean) {
     this.data = data;
@@ -134,10 +148,10 @@ export default class AnalyseCtrl {
     });
   }
 
-  private uciToLastMove(uci) {
+  private uciToLastMove(uci: string): [Pos, Pos] {
     if (!uci) return null;
-    if (uci[1] === '@') return [uci.substr(2, 2), uci.substr(2, 2)];
-    return [uci.substr(0, 2), uci.substr(2, 2)];
+    if (uci[1] === '@') return [<Pos>uci.substr(2, 2), <Pos>uci.substr(2, 2)];
+    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
   }
 
   public initCeval = () => {
@@ -167,7 +181,7 @@ export default class AnalyseCtrl {
       s = this.analyse.getStep(this.vm.path);
     }
 
-    const color = s.ply % 2 === 0 ? 'white' : 'black';
+    const color: Color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,
@@ -201,8 +215,7 @@ export default class AnalyseCtrl {
 
   private debouncedStartCeval = debounce(this.startCeval, 500);
 
-  public jump = (path, direction) => {
-    console.log(path);
+  public jump = (path: Path, direction?: 'forward' | 'backward') => {
     this.vm.path = path;
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
@@ -219,7 +232,7 @@ export default class AnalyseCtrl {
     promotion.cancel(this, this.vm.cgConfig);
   }
 
-  public userJump = (path: Path, direction: 'forward' | 'backward') => {
+  public userJump = (path: Path, direction?: 'forward' | 'backward') => {
     this.jump(path, direction);
   }
 
@@ -251,8 +264,8 @@ export default class AnalyseCtrl {
     });
   }
 
-  private sendMove = (orig: Pos, dest: Pos, prom: any) => {
-    const move = {
+  private sendMove = (orig: Pos, dest: Pos, prom?: string) => {
+    const move: MoveRequest = {
       orig: orig,
       dest: dest,
       variant: this.data.game.variant.key,
@@ -267,7 +280,8 @@ export default class AnalyseCtrl {
 
   private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
     this.vm.justPlayed = orig + dest;
-    sound[capture ? 'capture' : 'move']();
+    if (capture) sound.capture();
+    else sound.move();
     if (!promotion.start(this, orig, dest, this.sendMove)) this.sendMove(orig, dest);
   }
 
@@ -288,7 +302,7 @@ export default class AnalyseCtrl {
   }
 
   public explorerMove = (uci: string) => {
-    const move = util.decomposeUci(uci);
+    const move = AnalyseCtrl.decomposeUci(uci);
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
         color: this.chessground.data.movable.color,
@@ -315,7 +329,7 @@ export default class AnalyseCtrl {
     if (path === this.vm.pathStr) {
       this.showGround();
       redraw();
-      if (dests === '') this.ceval.stop();
+      if (dests === {}) this.ceval.stop();
     }
     this.chessground.playPremove();
   }
@@ -356,7 +370,7 @@ export default class AnalyseCtrl {
     ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
   }
 
-  private onCevalMsg = (res) => {
+  private onCevalMsg = (res: any) => {
     this.analyse.updateAtPath(res.work.path, (step: AnalysisStep) => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
       step.ceval = res.ceval;

@@ -4,6 +4,8 @@ declare type StringMap = {
   [i: string]: string;
 }
 
+declare type San = 'P' | 'N' | 'B' | 'R' | 'Q'
+
 interface Prop<T> {
   (): T
   (value: T): T;
@@ -180,6 +182,7 @@ interface OfflineGameData {
 interface AnalysisData extends OnlineGameData {
   analysis: any;
   situations: Array<GameSituation>;
+  orientation: Color;
 }
 
 interface OnlineGame {

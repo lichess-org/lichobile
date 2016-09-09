@@ -59,7 +59,7 @@ function handleFollowingOnline(data: Array<string>) {
   }
 }
 
-function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv: string) {
+function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {
   errorDetected = false;
   socketHandlers = {
     onError: function() {

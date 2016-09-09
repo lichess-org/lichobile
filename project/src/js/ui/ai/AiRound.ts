@@ -66,10 +66,21 @@ export default class AiRound implements AiRoundInterface {
     this.actions.close();
     this.data = data;
 
+    const variant = this.data.game.variant.key;
+    const initialFen = this.data.game.initialFen;
+
     if (!this.replay) {
-      this.replay = new Replay(this.data, situations, ply, this.chessWorker, this.onReplayAdded, this.onThreefoldRepetition);
+      this.replay = new Replay(
+        variant,
+        initialFen,
+        situations,
+        ply,
+        this.chessWorker,
+        this.onReplayAdded,
+        this.onThreefoldRepetition
+      );
     } else {
-      this.replay.init(situations, ply);
+      this.replay.init(variant, initialFen, situations, ply);
     }
 
     if (!this.chessground) {

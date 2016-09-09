@@ -30,7 +30,7 @@ import { OnlineRoundInterface } from './';
 
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string;
-  public data: GameData;
+  public data: OnlineGameData;
   public chessground: Chessground.Controller;
   public clock: any;
   public correspondenceClock: any;
@@ -57,7 +57,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public constructor(
     id: string,
-    cfg: GameData,
+    cfg: OnlineGameData,
     flipped: boolean = false,
     onFeatured?: () => void,
     onTVChannelChange?: () => void,
@@ -502,7 +502,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   }
 
-  public reload = (rCfg: GameData) => {
+  public reload = (rCfg: OnlineGameData) => {
     if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply;
     if (this.chat) this.chat.onReload(rCfg.chat);

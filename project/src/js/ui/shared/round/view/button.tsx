@@ -13,7 +13,7 @@ import { getPGN } from '../roundXhr';
 import OnlineRound from '../OnlineRound';
 
 export default {
-  standard: function(ctrl: OnlineRound, condition: (data: GameData) => boolean, icon: string, hint: string, socketMsg: string) {
+  standard: function(ctrl: OnlineRound, condition: (data: OnlineGameData) => boolean, icon: string, hint: string, socketMsg: string) {
     return condition(ctrl.data) && hasNetwork() ? m('button', {
       key: socketMsg,
       className: socketMsg,

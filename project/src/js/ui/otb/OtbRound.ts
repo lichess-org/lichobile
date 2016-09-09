@@ -1,11 +1,9 @@
-import i18n from '../../i18n';
 import sound from '../../sound';
-import vibrate from '../../vibrate';
 import storage from '../../storage';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import * as gameApi from '../../lichess/game';
-import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
+import { askWorker, oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -60,16 +58,30 @@ export default class OtbRound implements OfflineRoundInterface {
     this.actions.close();
     this.newGameMenu.close();
     this.data = data;
+
+    const variant = this.data.game.variant.key;
+    const initialFen = this.data.game.initialFen;
+
     if (!this.replay) {
-      this.replay = new Replay(this.data, situations, ply, this.chessWorker, this.onReplayAdded, this.onThreefoldRepetition);
+      this.replay = new Replay(
+        variant,
+        initialFen,
+        situations,
+        ply,
+        this.chessWorker,
+        this.onReplayAdded,
+        this.onThreefoldRepetition
+      );
     } else {
-      this.replay.init(situations, ply);
+      this.replay.init(variant, initialFen, situations, ply);
     }
+
     if (!this.chessground) {
       this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece);
     } else {
       ground.reload(this.chessground, this.data, this.replay.situation());
     }
+
     redraw();
   }
 

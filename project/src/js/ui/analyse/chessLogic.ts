@@ -1,6 +1,7 @@
 import { askWorker } from '../../utils';
+import { ChesslogicInterface, AnalyseCtrlInterface } from './interfaces';
 
-export default function chessLogic(ctrl) {
+export default function chessLogic(ctrl: AnalyseCtrlInterface): ChesslogicInterface {
 
   const worker = new Worker('vendor/scalachessjs.js');
 

@@ -4,6 +4,8 @@ declare type StringMap = {
   [i: string]: string;
 }
 
+declare type San = 'P' | 'N' | 'B' | 'R' | 'Q'
+
 interface Prop<T> {
   (): T
   (value: T): T;
@@ -146,7 +148,7 @@ interface Tournament {
   }
 }
 
-interface GameData {
+interface OnlineGameData {
   game: OnlineGame;
   player: Player;
   opponent: Player;
@@ -175,6 +177,13 @@ interface OfflineGameData {
   opponent: OfflinePlayer;
   steps?: Array<GameStep>;
   pref?: any;
+}
+
+interface AnalysisData extends OnlineGameData {
+  analysis: any;
+  situations: Array<GameSituation>;
+  orientation: Color;
+  steps?: Array<AnalysisStep>;
 }
 
 interface OnlineGame {
@@ -268,6 +277,14 @@ interface GameStep {
   crazy?: {
     pockets: Pockets
   }
+}
+
+interface AnalysisStep extends GameStep {
+  ceval?: any;
+  rEval?: any;
+  fixed?: boolean;
+  variations?: any;
+  opening?: any;
 }
 
 interface GameSituation {

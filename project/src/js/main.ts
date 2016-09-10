@@ -21,7 +21,7 @@ import 'whatwg-fetch';
 import * as moment from 'moment';
 window.moment = moment;
 
-import * as utils from './utils';
+import { hasNetwork } from './utils';
 import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';
 import session from './session';
@@ -53,7 +53,7 @@ function main() {
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup
-  if (utils.hasNetwork()) {
+  if (hasNetwork()) {
     onOnline();
   }
 
@@ -74,7 +74,7 @@ function main() {
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
   if (window.lichess.gaId) {
-    window.analytics.startTrackerWithId(window.lichess.gaId, utils.noop, utils.noop);
+    window.analytics.startTrackerWithId(window.lichess.gaId);
   }
 
   if (cordova.platformId === 'android') {
@@ -132,7 +132,7 @@ function onPause() {
 
 function handleError(event: string, source: string, fileno: number, columnNumber: number) {
   const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.analytics.trackException(description, true, utils.noop, utils.noop);
+  window.analytics.trackException(description, true);
 }
 
 window.onerror = handleError;

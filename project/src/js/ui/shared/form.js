@@ -1,4 +1,5 @@
 import i18n from '../../i18n';
+import redraw from '../../utils/redraw';
 import * as m from 'mithril';
 
 function renderOption(label, value, storedValue, labelArg, labelArg2) {
@@ -33,6 +34,9 @@ export default {
     const onChange = function(e) {
       settingsProp(e.target.value);
       if (onChangeCallback) onChangeCallback(e.target.value);
+      setTimeout(function() {
+        redraw();
+      }, 10);
     };
     return [
       m('label', {

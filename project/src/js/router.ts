@@ -24,7 +24,13 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
       // TODO it works but would be better in a router exit hook
       signals.redraw.removeAll();
       signals.redraw.add(redraw);
-      redraw();
+      try {
+        // some error may be thrown during on init...
+        redraw();
+      } catch (e) {
+        signals.redraw.removeAll();
+        console.error(e);
+      }
     });
   }
   window.addEventListener('popstate', processQuerystring);

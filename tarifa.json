@@ -121,7 +121,7 @@
       "StatusBarOverlaysWebView": false,
       "StatusBarBackgroundColor": "#151A1E",
       "BackgroundColor": "0xFF151A1E",
-      "xwalkVersion": "20",
+      "xwalkVersion": "21",
       "xwalkCommandLine": "--enable-viewport-meta --disable-pull-to-refresh-effect",
       "android-minSdkVersion": 16
     },

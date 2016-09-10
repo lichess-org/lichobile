@@ -1,4 +1,5 @@
 import session from '../session';
+import socket from '../socket';
 import push from '../push';
 import challengesApi from '../lichess/challenges';
 import * as utils from '../utils';
@@ -21,6 +22,8 @@ function submit(form) {
   .then(function() {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
+    // reconnect socket to refresh friends...
+    socket.connect();
     push.register();
     challengesApi.refresh();
     session.refresh()

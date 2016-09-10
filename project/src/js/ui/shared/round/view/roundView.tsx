@@ -73,7 +73,7 @@ function renderTitle(ctrl: OnlineRound) {
       ' • ';
     ctrl.vm.tClockEl = el;
   }
-  if (!utils.hasNetwork() || socket.isConnected()) {
+  if (ctrl.vm.offlineWatcher || socket.isConnected()) {
     return (
       <h1 key="playingTitle" className="playing">
         { session.isKidMode() ? <span className="kiddo">😊</span> : null }
@@ -90,12 +90,12 @@ function renderTitle(ctrl: OnlineRound) {
           </span> : null
         }
         {ctrl.title}
+        { ctrl.vm.offlineWatcher ? ' • Offline' : null}
       </h1>
     );
   } else {
     return (
-      <h1 key="reconnectingTitle" className="reconnecting withTitle">
-        {i18n('reconnecting')}
+      <h1 key="reconnectingTitle" className="reconnecting">
         {loader}
       </h1>
     );

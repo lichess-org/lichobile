@@ -37,6 +37,8 @@ import routes from './routes';
 import deepLinks from './deepLinks';
 import { isForeground, setForeground, setBackground } from './utils/appMode';
 
+let firstConnection = true;
+
 function main() {
 
   routes.init();
@@ -93,21 +95,27 @@ function onResize() {
 
 function onOnline() {
   if (isForeground()) {
+    if (firstConnection) {
 
-    socket.connect();
+      firstConnection = false;
 
-    xhrStatus();
+      xhrStatus();
 
-    session.rememberLogin()
-    .then(() => {
-      push.register();
-      challengesApi.refresh();
-      redraw();
-    })
-    .then(session.nowPlaying)
-    .then(syncWithNowPlayingGames)
-    .then(() => setServerLang(settings.general.lang()))
-    .catch(() => console.log('connected as anonymous'));
+      session.rememberLogin()
+      .then(() => {
+        push.register();
+        challengesApi.refresh();
+        redraw();
+      })
+      .then(session.nowPlaying)
+      .then(syncWithNowPlayingGames)
+      .then(() => setServerLang(settings.general.lang()))
+      .catch(() => console.log('connected as anonymous'));
+
+    } else {
+      socket.connect();
+      session.refresh();
+    }
   }
 }
 

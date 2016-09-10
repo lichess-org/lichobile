@@ -280,7 +280,7 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
 }
 
 function tvChannelSelector(ctrl: OnlineRound) {
-  let channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
+  const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
   channels.unshift(['Top rated', 'best']);
   channels.push(['Computer', 'computer']);
 

@@ -24,6 +24,15 @@ var setPlaying = function(userName, playing) {
   if (user) user.isPlaying = playing;
 };
 
+var lexicallyCompareFriends = function(friend1, friend2) {
+    if (friend1.name.toLowerCase() < friend2.name.toLowerCase())
+      return -1;
+    else if (friend1.name.toLowerCase > friend2.name.toLowerCase())
+      return 1;
+    else
+      return 0;
+};
+
 export default {
 
   list() {
@@ -36,17 +45,15 @@ export default {
 
   set(friends, playings) {
       onlineFriends = friends.map(name => makeUser(name, false));
-
       for (var user of playings) setPlaying(user, true);
+      onlineFriends.sort(lexicallyCompareFriends);
   },
 
   add(name, playing) {
     var friend = makeUser(name, playing);
 
     onlineFriends.push(friend);
-    onlineFriends.sort((friend1, friend2) =>
-      friend1.name.toLowerCase() < friend2.name.toLowerCase() ? -1 : 1
-    );
+    onlineFriends.sort(lexicallyCompareFriends);
   },
 
   playing(name) {

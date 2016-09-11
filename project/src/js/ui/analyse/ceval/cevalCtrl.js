@@ -55,8 +55,15 @@ export default function cevalCtrl(variant, allow, emit) {
   }
 
   function destroy() {
-    initialized = false;
-    engine.exit();
+    if (initialized) {
+      engine.exit()
+      .then(() => {
+        initialized = false;
+      })
+      .catch(() => {
+        initialized = false;
+      });
+    }
   }
 
   function fixCastle(uci, san) {

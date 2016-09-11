@@ -5,20 +5,17 @@ import signals from './signals';
 
 const router = new Rlite();
 
-// this counter is passed to the root component as key to force mithril to
-// trash current view and re-render on every route change (even same path)
-// this way it reproduces what was the mithril 0.2 behaviour, to help having a
-// smooth migration
-let routeCounter = 0;
-
 export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}) {
   for (let route in routes) {
     const component = routes[route];
     router.add(route, function onRouteMatch({ params }) {
-      routeCounter++;
+
+      const RouteComponent = {view() {
+        return Vnode(component, null, params, undefined, undefined, undefined);
+      }}
 
       function redraw() {
-        m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
+        m.render(mountPoint, Vnode(RouteComponent, undefined, undefined, undefined, undefined, undefined));
       }
 
       // TODO it works but would be better in a router exit hook

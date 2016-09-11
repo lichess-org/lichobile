@@ -13,6 +13,8 @@ export default function oninit(vnode) {
   const pingTimeoutId = m.prop();
   const challenge = m.prop();
 
+  window.plugins.insomnia.keepAwake();
+
   function reloadChallenge() {
     getChallenge(challenge().id)
     .then(d => {

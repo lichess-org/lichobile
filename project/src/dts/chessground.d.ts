@@ -34,7 +34,7 @@ declare namespace Chessground {
     setDragPiece(key: Pos, piece: Piece, dragOpts: any): void;
     selectSquare(key: Pos): void;
     apiMove(orig: Pos, dest: Pos, pieces?: Pieces, config?: SetConfig): void;
-    apiNewPiece(piece: Piece, key: Pos, config: SetConfig): void;
+    apiNewPiece(piece: Piece, key: Pos, config?: SetConfig): void;
     playPremove(): void;
     playPredrop(validate: (drop: Drop) => boolean): void;
     cancelPremove(): void;

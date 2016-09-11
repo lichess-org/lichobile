@@ -18,7 +18,7 @@ interface GameAttrs {
 }
 
 export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
-  let gameData: GameData;
+  let gameData: OnlineGameData;
 
   if (hasNetwork()) {
     gameXhr(vnode.attrs.id, vnode.attrs.color)

@@ -21,7 +21,7 @@ import 'whatwg-fetch';
 import * as moment from 'moment';
 window.moment = moment;
 
-import * as utils from './utils';
+import { hasNetwork } from './utils';
 import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';
 import session from './session';
@@ -36,6 +36,8 @@ import push from './push';
 import routes from './routes';
 import deepLinks from './deepLinks';
 import { isForeground, setForeground, setBackground } from './utils/appMode';
+
+let firstConnection = true;
 
 function main() {
 
@@ -53,7 +55,7 @@ function main() {
   // pull session data once (to log in user automatically thanks to cookie)
   // and also listen to online event in case network was disconnected at app
   // startup
-  if (utils.hasNetwork()) {
+  if (hasNetwork()) {
     onOnline();
   }
 
@@ -74,7 +76,7 @@ function main() {
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
   if (window.lichess.gaId) {
-    window.analytics.startTrackerWithId(window.lichess.gaId, utils.noop, utils.noop);
+    window.analytics.startTrackerWithId(window.lichess.gaId);
   }
 
   if (cordova.platformId === 'android') {
@@ -93,24 +95,34 @@ function onResize() {
 
 function onOnline() {
   if (isForeground()) {
+    if (firstConnection) {
 
-    xhrStatus();
+      firstConnection = false;
 
-    session.rememberLogin()
-    .then(() => {
-      push.register();
-      challengesApi.refresh();
-      redraw();
-    })
-    .then(session.nowPlaying)
-    .then(syncWithNowPlayingGames)
-    .then(() => setServerLang(settings.general.lang()))
-    .catch(() => console.log('connected as anonymous'));
+      xhrStatus();
+
+      session.rememberLogin()
+      .then(() => {
+        push.register();
+        challengesApi.refresh();
+        redraw();
+      })
+      .then(session.nowPlaying)
+      .then(syncWithNowPlayingGames)
+      .then(() => setServerLang(settings.general.lang()))
+      .catch(() => console.log('connected as anonymous'));
+
+    } else {
+      socket.connect();
+      session.refresh();
+    }
   }
 }
 
 function onOffline() {
-  if (isForeground()) {
+  // offline event fires every time the network connection changes
+  // it doesn't mean necessarily the network is off
+  if (isForeground() && !hasNetwork()) {
     socket.disconnect();
     redraw();
   }
@@ -128,7 +140,7 @@ function onPause() {
 
 function handleError(event: string, source: string, fileno: number, columnNumber: number) {
   const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.analytics.trackException(description, true, utils.noop, utils.noop);
+  window.analytics.trackException(description, true);
 }
 
 window.onerror = handleError;

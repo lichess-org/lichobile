@@ -2,7 +2,7 @@ import signals from '../signals';
 
 let scheduledAnimationFrame = false;
 
-export default function redraw() {
+export default function() {
   if (!scheduledAnimationFrame) {
     scheduledAnimationFrame = requestAnimationFrame(() => {
       scheduledAnimationFrame = false;

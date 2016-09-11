@@ -1,9 +1,10 @@
 import i18n from '../../i18n';
-import * as m from 'mithril';
 import redraw from '../../utils/redraw';
+import * as m from 'mithril';
 
 function renderOption(label, value, storedValue, labelArg, labelArg2) {
   return m('option', {
+    key: value,
     value: value,
     selected: storedValue === value
   }, i18n(label, labelArg, labelArg2));
@@ -50,9 +51,7 @@ export default {
         onremove: function(vnode) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
-      }, options.map(function(e) {
-        return renderOption(e[0], e[1], storedValue, e[2], e[3]);
-      }))
+      }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
     ];
   },
 

@@ -4,6 +4,8 @@ declare type StringMap = {
   [i: string]: string;
 }
 
+declare type San = 'P' | 'N' | 'B' | 'R' | 'Q'
+
 interface Prop<T> {
   (): T
   (value: T): T;
@@ -18,19 +20,9 @@ interface LichessOptions {
   gcmSenderId: string;
 }
 
-interface Analytics {
-  debugMode(success: () => void, error: (e: string) => void): void;
-  startTrackerWithId(id: string, success: () => void, error: (e: string) => void): void;
-  trackView(screen: string, success: () => void, error: (e: string) => void): void;
-  trackException(description: string, fatal: boolean, success: () => void, error: (e: string) => void): void;
-  trackEvent(category: string, action: string, label: string, value: number, success: () => void, error: (e: string) => void): void;
-  trackTiming(category: string, interval: number, name: string, label: string, success: () => void, error: (e: string) => void): void;
-}
-
 interface Window {
   lichess: LichessOptions;
   moment: any;
-  analytics: Analytics;
   shouldRotateToOrientation: () => boolean;
 }
 
@@ -146,7 +138,7 @@ interface Tournament {
   }
 }
 
-interface GameData {
+interface OnlineGameData {
   game: OnlineGame;
   player: Player;
   opponent: Player;
@@ -175,6 +167,13 @@ interface OfflineGameData {
   opponent: OfflinePlayer;
   steps?: Array<GameStep>;
   pref?: any;
+}
+
+interface AnalysisData extends OnlineGameData {
+  analysis: any;
+  situations: Array<GameSituation>;
+  orientation: Color;
+  steps?: Array<AnalysisStep>;
 }
 
 interface OnlineGame {
@@ -268,6 +267,14 @@ interface GameStep {
   crazy?: {
     pockets: Pockets
   }
+}
+
+interface AnalysisStep extends GameStep {
+  ceval?: any;
+  rEval?: any;
+  fixed?: boolean;
+  variations?: any;
+  opening?: any;
 }
 
 interface GameSituation {

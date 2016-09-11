@@ -24,7 +24,13 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
       // TODO it works but would be better in a router exit hook
       signals.redraw.removeAll();
       signals.redraw.add(redraw);
-      redraw();
+      try {
+        // some error may be thrown during on init...
+        redraw();
+      } catch (e) {
+        console.error(e);
+        signals.redraw.removeAll();
+      }
     });
   }
   window.addEventListener('popstate', processQuerystring);
@@ -37,17 +43,22 @@ function processQuerystring() {
   if (!matched) router.run('/');
 }
 
-export default {
-  set(path: string, replace = false) {
-    if (replace) {
-      window.history.replaceState(null, null, '?=' + path);
-    } else {
-      window.history.pushState(null, null, '?=' + path);
-    }
-    const matched = router.run(path);
-    if (!matched) router.run('/');
-  },
-  get(): string {
-    return window.location.search || '?=';
+function set(path: string, replace = false) {
+  if (replace) {
+    window.history.replaceState(null, null, '?=' + path);
+  } else {
+    window.history.pushState(null, null, '?=' + path);
   }
+  const matched = router.run(path);
+  if (!matched) router.run('/');
+}
+
+function get(): string {
+  const path = window.location.search || '?=/';
+  return decodeURIComponent(path.substring(2));
+}
+
+export default {
+  get,
+  set
 };

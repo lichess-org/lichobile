@@ -1,24 +1,28 @@
 import treePath from './path';
+import { Path, PathObj } from './interfaces';
 
-export default function(data) {
+export default class Analyse {
+  public tree: any;
 
-  configureSteps(data);
+  constructor(data: AnalysisData) {
+    configureSteps(data);
 
-  this.tree = data.steps;
+    this.tree = data.steps;
+  }
 
-  this.firstPly = function() {
+  public firstPly = () => {
     return this.tree[0].ply;
-  }.bind(this);
+  }
 
-  this.lastPly = function() {
+  public lastPly = () => {
     return this.tree[this.tree.length - 1].ply;
-  }.bind(this);
+  }
 
-  this.getStep = function(path) {
-    var tree = this.tree;
-    for (var j in path) {
-      var p = path[j];
-      for (var i = 0, nb = tree.length; i < nb; i++) {
+  public getStep = (path: Path) => {
+    let tree = this.tree;
+    for (let j in path) {
+      const p = path[j];
+      for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
           if (p.variation) {
             tree = tree[i].variations[p.variation - 1];
@@ -28,18 +32,18 @@ export default function(data) {
         }
       }
     }
-  };
+  }
 
-  this.getStepAtPly = function(ply) {
+  public getStepAtPly = (ply: number) => {
     return this.getStep(treePath.default(ply));
-  }.bind(this);
+  }
 
-  this.getSteps = function(path) {
+  public getSteps = (path: Path) => {
     let tree = this.tree;
-    const lsteps = [];
-    for (var j in path) {
-      var p = path[j];
-      for (var i = 0, nb = tree.length; i < nb; i++) {
+    const lsteps: AnalysisStep[] = [];
+    for (let j in path) {
+      const p = path[j];
+      for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
           if (p.variation) {
             tree = tree[i].variations[p.variation - 1];
@@ -52,37 +56,37 @@ export default function(data) {
         }
       }
     }
-  }.bind(this);
+  }
 
-  this.getStepsAfterPly = function(path, ply) {
+  public getStepsAfterPly = (path: Path, ply: number) => {
     if (path[0].ply <= ply) return [];
-    return this.getSteps(path).filter(function(step) {
+    return this.getSteps(path).filter((step: AnalysisStep) => {
       return step.ply > ply;
     });
-  }.bind(this);
+  }
 
-  this.getOpening = function(path) {
-    var opening;
-    this.getSteps(path).forEach(function(s) {
+  public getOpening = (path: Path) => {
+    let opening: any;
+    this.getSteps(path).forEach((s: AnalysisStep) => {
       opening = s.opening || opening;
     });
     return opening;
-  }.bind(this);
+  }
 
-  this.nextStepEvalBest = function(path) {
+  public nextStepEvalBest = (path: Path) => {
     if (!treePath.isRoot(path)) return null;
     const nextPly = path[0].ply + 1;
     const nextStep = this.tree[nextPly - this.firstPly()];
     return (nextStep && nextStep.rEval) ? nextStep.rEval.best : null;
-  }.bind(this);
+  }
 
-  this.addStep = function(step, path) {
-    var nextPath = treePath.withPly(path, treePath.currentPly(path) + 1);
-    var tree = this.tree;
-    var curStep = null;
-    nextPath.forEach(function(p) {
-      for (var i = 0, nb = tree.length; i < nb; i++) {
-        var s = tree[i];
+  public addStep = (step: AnalysisStep, path: Path) => {
+    const nextPath = treePath.withPly(path, treePath.currentPly(path) + 1);
+    let tree = this.tree;
+    let curStep: AnalysisStep = null;
+    nextPath.forEach((p: PathObj) => {
+      for (let i = 0, nb = tree.length; i < nb; i++) {
+        const s = tree[i];
         if (p.ply === s.ply) {
           if (p.variation) {
             tree = s.variations[p.variation - 1];
@@ -94,7 +98,7 @@ export default function(data) {
     if (curStep) {
       curStep.variations = curStep.variations || [];
       if (curStep.san === step.san) return nextPath;
-      for (var i = 0; i < curStep.variations.length; i++) {
+      for (let i = 0; i < curStep.variations.length; i++) {
         if (curStep.variations[i][0].san === step.san)
           return treePath.withVariation(nextPath, i + 1);
       }
@@ -103,26 +107,19 @@ export default function(data) {
     }
     tree.push(step);
     return nextPath;
-  }.bind(this);
+  }
 
-  this.addSteps = function(lsteps, path) {
-    var step = lsteps[0];
-    if (!step) return path;
-    var newPath = this.addStep(step, path);
-    return this.addSteps(lsteps.slice(1), newPath);
-  }.bind(this);
-
-  this.addDests = function(dests, path) {
-    return this.updateAtPath(path, function(step) {
+  public addDests = (dests: DestsMap, path: Path) => {
+    this.updateAtPath(path, (step: AnalysisStep) => {
       step.dests = dests;
     });
-  }.bind(this);
+  }
 
-  this.updateAtPath = function(path, update) {
-    var tree = this.tree;
-    for (var j in path) {
-      var p = path[j];
-      for (var i = 0, nb = tree.length; i < nb; i++) {
+  public updateAtPath = (path: Path, update: (s: AnalysisStep) => void) => {
+    let tree = this.tree;
+    for (let j in path) {
+      const p = path[j];
+      for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
           if (p.variation) {
             tree = tree[i].variations[p.variation - 1];
@@ -133,39 +130,39 @@ export default function(data) {
         }
       }
     }
-  }.bind(this);
+  }
 
-  this.deleteVariation = function(ply, id) {
-    this.updateAtPath(treePath.default(ply), function(node) {
+  public deleteVariation = (ply: number, id: number) => {
+    this.updateAtPath(treePath.default(ply), (node: AnalysisStep) => {
       node.variations.splice(id - 1, 1);
       if (!node.variations.length) delete node.variations;
     });
-  }.bind(this);
+  }
 
-  this.promoteVariation = function(ply, id) {
-    var stepId = ply + this.firstPly();
-    var variation = this.getStepAtPly(ply).variations[id - 1];
+  public promoteVariation = (ply: number, id: number) => {
+    const stepId = ply + this.firstPly();
+    const variation = this.getStepAtPly(ply).variations[id - 1];
     this.deleteVariation(ply, id);
-    var demoted = this.tree.splice(stepId);
+    const demoted = this.tree.splice(stepId);
     this.tree = this.tree.concat(variation);
-    var lastMainPly = this.tree[stepId];
+    const lastMainPly = this.tree[stepId];
     lastMainPly.variations = lastMainPly.variations || [];
     lastMainPly.variations.push(demoted);
-  }.bind(this);
+  }
 
-  this.plyOfNextNag = function(color, nag, fromPly) {
-    var len = this.tree.length;
-    for (var i = 1; i < len; i++) {
-      var ply = (fromPly + i) % len;
+  public plyOfNextNag = (color: Color, nag: string, fromPly: number) => {
+    const len = this.tree.length;
+    for (let i = 1; i < len; i++) {
+      const ply = (fromPly + i) % len;
       if (this.tree[ply].nag === nag && (ply % 2 === (color === 'white' ? 1 : 0))) return ply;
     }
-  }.bind(this);
+  }
 }
 
-function configureSteps(data) {
+function configureSteps(data: AnalysisData) {
   const steps = data.steps;
   const analysis = data.analysis;
-  for (var i = 0, len = steps.length; i < len; i++) {
+  for (let i = 0, len = steps.length; i < len; i++) {
     const s = steps[i];
     s.fixed = true;
     if (analysis) {

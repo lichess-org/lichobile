@@ -1,5 +1,5 @@
 import * as helper from '../helper';
-import oninit from './analyseCtrl';
+import oninit from './oninit';
 import view from './view/analyseView';
 import signals from '../../signals';
 
@@ -20,9 +20,9 @@ export default {
     p.then(done).catch(done);
   },
   onremove() {
-    if (this.ceval) this.ceval.destroy();
-    this.chessLogic.terminate();
-    signals.seekCanceled.remove(this.connectGameSocket);
+    if (this.ctrl.ceval) this.ctrl.ceval.destroy();
+    this.ctrl.chessLogic.terminate();
+    signals.seekCanceled.remove(this.ctrl.connectGameSocket);
   },
   view
 };

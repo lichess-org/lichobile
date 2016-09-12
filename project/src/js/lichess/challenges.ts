@@ -1,4 +1,5 @@
 import i18n from '../i18n';
+import sound from '../sound';
 import settings from '../settings';
 import { throttle } from 'lodash';
 import { getChallenges } from '../xhr';
@@ -49,6 +50,9 @@ function supportedAndCreated(c: Challenge) {
 }
 
 function set(data: ChallengesData) {
+  if (data.in.length > incoming.length) {
+    sound.dong();
+  }
   incoming = data.in;
   sending = data.out;
 }

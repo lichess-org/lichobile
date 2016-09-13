@@ -216,7 +216,7 @@ export function tupleOf(x: number): [string, string] {
   return [x.toString(), x.toString()];
 }
 
-export function oppositeColor(color: 'white' | 'black'): 'white' | 'black' {
+export function oppositeColor(color: Color): Color {
   return color === 'white' ? 'black' : 'white';
 }
 

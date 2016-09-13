@@ -15,7 +15,7 @@ export function onPieceThemeChange(t: string) {
 }
 
 export interface Attrs {
-  data: OnlineGameData | OfflineGameData
+  data: GameData
   chessgroundCtrl: Chessground.Controller
   bounds: BoardBounds
   isPortrait: boolean

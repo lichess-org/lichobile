@@ -138,15 +138,49 @@ interface Tournament {
   }
 }
 
-interface OnlineGameData {
-  game: OnlineGame;
+interface Game {
+  id: string;
+  fen: string;
+  initialFen: string;
+  variant: Variant;
+  player: Color;
+  source: string;
+  status: GameStatus;
+  winner?: Color;
+  threefold?: boolean;
+  speed?: string;
+  startedAtTurn?: number;
+  rated?: boolean;
+  turns?: number;
+  lastMove?: string;
+  perf?: string;
+  // FIXME
+  check?: string | boolean;
+  tournamentId?: string;
+  createdAt?: Timestamp;
+  boosted?: boolean;
+  rematch?: string;
+}
+
+interface OnlineGame extends Game {
+  rated: boolean;
+  turns: number;
+  speed: string;
+  check?: string;
+}
+
+interface OfflineGame extends Game {
+  check?: boolean;
+}
+
+interface GameData {
+  game: Game
   player: Player;
   opponent: Player;
   correspondence?: CorrespondenceClockData;
   clock?: ClockData;
   steps?: Array<GameStep>;
   tournament?: Tournament;
-  takebackable: boolean;
   note?: string;
   chat?: Array<string>;
   possibleMoves?: StringMap;
@@ -159,65 +193,28 @@ interface OnlineGameData {
     socket: string;
   }
   bookmarked?: boolean;
+  takebackable?: boolean;
 }
 
-interface OfflineGameData {
+interface OnlineGameData extends GameData {
+  game: OnlineGame;
+  takebackable: boolean;
+}
+
+interface OfflineGameData extends GameData {
   game: OfflineGame;
-  player: OfflinePlayer;
-  opponent: OfflinePlayer;
   steps?: Array<GameStep>;
-  pref?: any;
 }
 
-interface AnalysisData extends OnlineGameData {
-  analysis: any;
-  situations: Array<GameSituation>;
-  orientation: Color;
+interface AnalysisData extends GameData {
+  // TODO type this
+  analysis?: any;
+  situations?: Array<GameSituation>;
   steps?: Array<AnalysisStep>;
-}
-
-interface OnlineGame {
-  fen: string;
-  initialFen: string;
-  id: string;
-  rated: boolean;
-  variant: Variant;
-  player: Color;
-  source: string;
-  status: GameStatus;
-  turns: number;
-  lastMove?: string;
-  perf?: string;
-  check?: string;
-  speed: string;
-  startedAtTurn?: number;
-  winner?: Color;
-  threefold?: boolean;
-  tournamentId?: string;
-  createdAt?: Timestamp;
-  boosted?: boolean;
-  rematch?: string;
-}
-
-interface OfflinePlayer {
-  color: Color;
-  username: string;
-  // just for the compat
-  // TODO maybe use same type with dummy data after all
-  spectator?: boolean;
-}
-
-interface OfflineGame {
-  id: string;
-  fen: string;
-  initialFen: string;
-  variant: Variant;
-  player: Color;
-  source: string;
-  status: GameStatus;
-  check?: boolean;
-  winner?: Color;
-  threefold?: boolean;
+  url?: {
+    round: string;
+    socket: string;
+  }
 }
 
 interface StoredOfflineGame {

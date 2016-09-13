@@ -47,6 +47,7 @@ const sanToRole: SanToRole = {
 
 export default class AnalyseCtrl implements AnalyseCtrlInterface {
   public data: AnalysisData;
+  public orientation: Color;
   public source: Source;
   public vm: any;
   public chessLogic: ChesslogicInterface;
@@ -66,8 +67,9 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <San>uci.slice(4, 5)];
   }
 
-  public constructor(data: AnalysisData, source: Source, shouldGoBack: boolean) {
+  public constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean) {
     this.data = data;
+    this.orientation = orientation;
     this.source = source;
 
     if (settings.analyse.supportedVariants.indexOf(this.data.game.variant.key) === -1) {
@@ -125,7 +127,7 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
       socket.createGame(
         this.data.url.socket,
         this.data.player.version,
-        socketHandler(this, this.data.game.id, orientation),
+        socketHandler(this, this.data.game.id, this.orientation),
         this.data.url.round
       );
     }
@@ -134,7 +136,7 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
   public flip = () => {
     this.vm.flip = !this.vm.flip;
     this.chessground.set({
-      orientation: this.vm.flip ? oppositeColor(this.data.orientation) : this.data.orientation
+      orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation
     });
   }
 
@@ -175,7 +177,7 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     const config = {
       fen: s.fen,
       turnColor: color,
-      orientation: this.vm.flip ? oppositeColor(this.data.orientation) : this.data.orientation,
+      orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation,
       movableColor: dests && Object.keys(dests).length > 0 ? color : null,
       dests: dests || {},
       check: s.check,
@@ -190,7 +192,7 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     this.vm.cgConfig = config;
 
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, config, this.userMove, this.userNewPiece);
+      this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece);
     }
     this.chessground.set(config);
     if (!dests) this.debouncedDests();

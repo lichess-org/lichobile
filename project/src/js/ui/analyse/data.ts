@@ -1,19 +1,7 @@
 import { readFen } from '../editor/editor';
 import { oppositeColor } from '../../utils';
 
-export function makeData(from) {
-
-  const data = from;
-
-  if (data.game.moves) data.game.moves = data.game.moves.split(' ');
-  else data.game.moves = [];
-
-  if (!data.game.moveTimes) data.game.moveTimes = [];
-
-  return data;
-}
-
-export function makeDefaultData(fen, orientation) {
+export function makeDefaultData(fen: string): AnalysisData {
   const player = playerFromFen(fen);
   const ply = plyFromFen(fen);
   return {
@@ -21,8 +9,8 @@ export function makeDefaultData(fen, orientation) {
       fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       id: 'synthetic',
       initialFen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      opening: null,
       player,
+      source: 'offline',
       status: {
         id: 10,
         name: 'created'
@@ -36,13 +24,12 @@ export function makeDefaultData(fen, orientation) {
       }
     },
     opponent: {
+      id: oppositeColor(player),
       color: oppositeColor(player)
     },
-    orientation: orientation || 'white',
-    path: 0,
     player: {
       color: player,
-      id: null
+      id: player
     },
     pref: {
       animationDuration: 300,
@@ -54,14 +41,14 @@ export function makeDefaultData(fen, orientation) {
         fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
         ply,
         san: null,
-        uci: null
+        uci: null,
+        check: false
       }
-    ],
-    userAnalysis: true
+    ]
   };
 }
 
-function playerFromFen(fen) {
+function playerFromFen(fen: string): Color {
   if (fen) {
     const { color } = readFen(fen);
 
@@ -71,7 +58,7 @@ function playerFromFen(fen) {
   return 'white';
 }
 
-function plyFromFen(fen) {
+function plyFromFen(fen: string) {
   if (fen) {
     const { color, moves } = readFen(fen);
     return moves() * 2 - (color() === 'w' ? 2 : 1);

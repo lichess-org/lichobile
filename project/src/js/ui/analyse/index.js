@@ -14,9 +14,11 @@ export default {
   },
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
-    if (this.ctrl.ceval) this.ctrl.ceval.destroy();
-    this.ctrl.chessLogic.terminate();
-    signals.seekCanceled.remove(this.ctrl.connectGameSocket);
+    if (this.ctrl) {
+      if (this.ctrl.ceval) this.ctrl.ceval.destroy();
+      this.ctrl.chessLogic.terminate();
+      signals.seekCanceled.remove(this.ctrl.connectGameSocket);
+    }
   },
   view
 };

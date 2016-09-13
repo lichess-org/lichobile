@@ -5,7 +5,6 @@ import view from './homeView';
 export default {
   oninit: oninit,
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.viewFadeOut,
   onremove() {
     document.removeEventListener('online', this.init);
     document.removeEventListener('resume', this.onResume);

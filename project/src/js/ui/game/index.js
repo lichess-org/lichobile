@@ -11,14 +11,8 @@ export default {
       helper.elFadeIn(vnode.dom);
     }
   },
-  onbeforeremove(vnode, done) {
-    window.plugins.insomnia.allowSleepAgain();
-    const p = vnode.attrs.color ?
-      helper.elSlideOut(vnode.dom) :
-      helper.elFadeOut(vnode.dom);
-    p.then(done).catch(done);
-  },
   onremove() {
+    window.plugins.insomnia.allowSleepAgain();
     if (this.round) {
       this.round.unload();
     }

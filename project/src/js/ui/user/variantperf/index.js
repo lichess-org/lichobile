@@ -5,6 +5,5 @@ import view from './variantPerfView';
 export default {
   oninit,
   oncreate: helper.viewSlideIn,
-  onbeforeremove: helper.viewSlideOut,
   view
 };

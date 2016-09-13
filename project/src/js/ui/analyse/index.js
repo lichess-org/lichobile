@@ -12,14 +12,8 @@ export default {
       helper.elFadeIn(vnode.dom);
     }
   },
-  onbeforeremove(vnode, done) {
-    window.plugins.insomnia.allowSleepAgain();
-    const p = vnode.attrs.source ?
-      helper.elSlideOut(vnode.dom) :
-      helper.elFadeOut(vnode.dom);
-    p.then(done).catch(done);
-  },
   onremove() {
+    window.plugins.insomnia.allowSleepAgain();
     if (this.ctrl.ceval) this.ctrl.ceval.destroy();
     this.ctrl.chessLogic.terminate();
     signals.seekCanceled.remove(this.ctrl.connectGameSocket);

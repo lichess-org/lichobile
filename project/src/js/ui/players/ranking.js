@@ -12,7 +12,6 @@ import * as m from 'mithril';
 
 export default {
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.viewFadeOut,
 
   oninit(vnode) {
 

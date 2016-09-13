@@ -21,11 +21,8 @@ export default {
     window.plugins.insomnia.keepAwake();
   },
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.onPageLeave(
-    helper.viewFadeOut,
-    () => window.plugins.insomnia.allowSleepAgain()
-  ),
   onremove() {
+    window.plugins.insomnia.allowSleepAgain();
     this.round.chessWorker.terminate();
   },
   view

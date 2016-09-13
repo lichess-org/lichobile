@@ -5,11 +5,8 @@ import view from './challengeView';
 export default {
   oninit,
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.onPageLeave(
-    helper.viewFadeOut,
-    () => window.plugins.insomnia.allowSleepAgain()
-  ),
   onremove() {
+    window.plugins.insomnia.allowSleepAgain();
     clearTimeout(this.pingTimeoutId());
   },
   view

@@ -21,7 +21,6 @@ function renderBody(ctrl) {
 
 export default {
   oncreate: helper.viewSlideIn,
-  onbeforeremove: helper.viewSlideOut,
 
   oninit: function(vnode) {
     const kidMode = session.lichessBackedProp('kid', session.toggleKidMode);

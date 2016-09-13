@@ -60,7 +60,7 @@ function challenge() {
           storage.set('donotshowpersistentchallengeexplanation', true);
         });
       }
-      router.set('/correspondence', { tab: 'challenges' });
+      router.set('/correspondence?tab=challenges');
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
       router.set(`/challenge/${data.challenge.id}`);

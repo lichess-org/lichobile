@@ -6,7 +6,8 @@ import signals from './signals';
 
 const router = new Rlite();
 
-let currentRouteId: number = 0;
+// unique incremented state id to determine slide direction
+let currentStateId: number = 0;
 let viewSlideDirection = 'fwd';
 
 export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}) {
@@ -40,12 +41,12 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
 
 function processQuerystring(e?: PopStateEvent) {
   if (e) {
-    if (e.state && e.state.id < currentRouteId) {
+    if (e.state && e.state.id < currentStateId) {
       viewSlideDirection = 'bwd';
     } else {
       viewSlideDirection = 'fwd';
     }
-    currentRouteId = e.state.id;
+    currentStateId = e.state.id;
   }
   const qs = window.location.search || '?=';
   const matched = router.run(qs.slice(2));
@@ -54,10 +55,10 @@ function processQuerystring(e?: PopStateEvent) {
 
 function set(path: string, replace = false) {
   if (replace) {
-    window.history.replaceState({ id: currentRouteId }, null, '?=' + path);
+    window.history.replaceState({ id: currentStateId }, null, '?=' + path);
   } else {
     const stateId = uid();
-    currentRouteId = stateId;
+    currentStateId = stateId;
     viewSlideDirection = 'fwd';
     window.history.pushState({ id: stateId }, null, '?=' + path);
   }

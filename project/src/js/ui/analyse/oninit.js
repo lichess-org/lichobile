@@ -11,7 +11,7 @@ import AnalyseCtrl from './AnalyseCtrl';
 export default function oninit(vnode) {
   const source = vnode.attrs.source || 'offline';
   const gameId = vnode.attrs.id;
-  const orientation = vnode.attrs.color;
+  const orientation = vnode.attrs.color || 'white';
   const fenArg = vnode.attrs.fen;
 
   socket.createDefault();

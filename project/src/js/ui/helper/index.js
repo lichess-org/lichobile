@@ -68,14 +68,13 @@ export function pageSlideIn(el) {
 
   function after() {
     clearTimeout(tId);
-    utils.setViewSlideDirection('fwd');
     if (el) {
       el.removeAttribute('style');
       el.removeEventListener('transitionend', after, false);
     }
   }
 
-  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+  const direction = router.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
   el.style.transform = `translate3d(${direction},0,0)`;
   el.style.transition = `transform ${animDuration}ms ease-out`;
 
@@ -130,12 +129,8 @@ export function viewportDim() {
 export const viewSlideIn = onPageEnter(pageSlideIn);
 export const viewFadeIn = onPageEnter(elFadeIn);
 export const viewSlideOut = onPageLeave(el => {
-  const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in')
-  .catch(err => {
-    utils.setViewSlideDirection('fwd');
-    throw err;
-  });
+  const x = router.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in');
 });
 
 export const viewFadeOut = onPageLeave(elFadeOut);

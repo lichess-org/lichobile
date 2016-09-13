@@ -175,21 +175,16 @@ export function aiName(player: any) {
 }
 
 export function backHistory(): void {
-  setViewSlideDirection('bwd');
-  if (window.navigator.app && window.navigator.app.backHistory)
+  if (window.navigator.app && window.navigator.app.backHistory) {
     window.navigator.app.backHistory();
-  else
-    window.history.go(-1);
+  }
+  window.history.go(-1);
 }
 
-// simple way to determine views animation direction
-let viewSlideDirection = 'fwd';
-export function setViewSlideDirection(d: string): void {
-  viewSlideDirection = d;
-}
-export function getViewSlideDirection(): string {
-  return viewSlideDirection;
-}
+export const uid = (function() {
+  let id = 0;
+  return () => id++;
+})();
 
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',

@@ -1,9 +1,13 @@
 import * as Rlite from 'rlite-router';
 import * as m from 'mithril';
 import * as Vnode from 'mithril/render/vnode';
+import { uid } from './utils'
 import signals from './signals';
 
 const router = new Rlite();
+
+let currentRouteId: number = 0;
+let viewSlideDirection = 'fwd';
 
 export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}) {
   for (let route in routes) {
@@ -34,7 +38,15 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
   processQuerystring();
 }
 
-function processQuerystring() {
+function processQuerystring(e?: PopStateEvent) {
+  if (e) {
+    if (e.state && e.state.id < currentRouteId) {
+      viewSlideDirection = 'bwd';
+    } else {
+      viewSlideDirection = 'fwd';
+    }
+    currentRouteId = e.state.id;
+  }
   const qs = window.location.search || '?=';
   const matched = router.run(qs.slice(2));
   if (!matched) router.run('/');
@@ -42,9 +54,12 @@ function processQuerystring() {
 
 function set(path: string, replace = false) {
   if (replace) {
-    window.history.replaceState(null, null, '?=' + path);
+    window.history.replaceState({ id: currentRouteId }, null, '?=' + path);
   } else {
-    window.history.pushState(null, null, '?=' + path);
+    const stateId = uid();
+    currentRouteId = stateId;
+    viewSlideDirection = 'fwd';
+    window.history.pushState({ id: stateId }, null, '?=' + path);
   }
   const matched = router.run(path);
   if (!matched) router.run('/');
@@ -57,5 +72,8 @@ function get(): string {
 
 export default {
   get,
-  set
+  set,
+  getViewSlideDirection(): string {
+    return viewSlideDirection;
+  }
 };

@@ -40,8 +40,8 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
 }
 
 function processQuerystring(e?: PopStateEvent) {
-  if (e) {
-    if (e.state && e.state.id < currentStateId) {
+  if (e && e.state) {
+    if (e.state.id < currentStateId) {
       viewSlideDirection = 'bwd';
     } else {
       viewSlideDirection = 'fwd';

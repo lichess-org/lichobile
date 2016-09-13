@@ -201,7 +201,7 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
   public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   private updateHref = debounce(() => {
-    window.history.replaceState(null, null, '#' + this.vm.step.ply);
+    window.history.replaceState(window.history.state, null, '#' + this.vm.step.ply);
   }, 750);
 
   private debouncedStartCeval = debounce(this.startCeval, 500);

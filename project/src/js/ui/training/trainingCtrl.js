@@ -329,7 +329,7 @@ function pushState(cfg) {
 function replaceStateForNewPuzzle(cfg) {
   // ugly hack to bypass mithril's postRedraw hook
   setTimeout(function() {
-    window.history.replaceState(null, null, '?=/training/' + cfg.puzzle.id);
+    window.history.replaceState(window.history.state, null, '?=/training/' + cfg.puzzle.id);
   }, 100);
   return cfg;
 }

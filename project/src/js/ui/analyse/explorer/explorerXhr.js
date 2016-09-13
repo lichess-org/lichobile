@@ -1,5 +1,4 @@
 import { fetchJSON } from '../../../http';
-import * as m from 'mithril';
 
 const endpoint = 'https://expl.lichess.org';
 
@@ -29,7 +28,7 @@ export function openingXhr(variant, fen, config, withGames) {
 }
 
 export function tablebaseXhr(fen) {
-  return m.request(endpoint + '/tablebase', {
+  return fetchJSON(endpoint + '/tablebase', {
     headers: {
       'Accept': 'application/json, text/*'
     },

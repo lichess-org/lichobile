@@ -32,7 +32,6 @@ interface SocketHandlers {
 }
 
 let socketHandlers: SocketHandlers;
-let errorDetected = false;
 let connectedWS = true;
 
 let alreadyWarned = false;
@@ -60,7 +59,7 @@ function handleFollowingOnline(data: Array<string>) {
 }
 
 function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {
-  errorDetected = false;
+  let errorDetected = false;
   socketHandlers = {
     onError: function() {
       // we can't get socket error, so we send an xhr to test whether the
@@ -71,7 +70,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
         errorDetected = true;
         xhr.game(gameUrl.substring(1))
         .catch(err => {
-          if (err.response && err.status === 401) {
+          if (err.response && err.response.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
             router.set('/');
           }

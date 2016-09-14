@@ -34,7 +34,7 @@ export default function view(vnode) {
 }
 
 function publicUrl(challenge) {
-  return 'http://lichess.org/' + challenge.id;
+  return 'https://lichess.org/' + challenge.id;
 }
 
 function gameInfos(challenge) {
@@ -63,7 +63,7 @@ function joinPopup(ctrl) {
         }, i18n('cancel'))
       ])
     ]);
-  } else {
+  } else if (session.isConnected()) {
     joinDom = m('div.go_or_cancel', [
       m('button.binary_choice[data-icon=E].withIcon', {
           oncreate: helper.ontap(ctrl.joinChallenge)
@@ -71,6 +71,12 @@ function joinPopup(ctrl) {
       m('button.binary_choice[data-icon=L].withIcon', {
         oncreate: helper.ontap(ctrl.declineChallenge)
       }, i18n('decline'))
+    ]);
+  } else {
+    joinDom = m('div', [
+      m('button[data-icon=E].withIcon', {
+          oncreate: helper.ontap(ctrl.joinChallenge)
+      }, i18n('join'))
     ]);
   }
 

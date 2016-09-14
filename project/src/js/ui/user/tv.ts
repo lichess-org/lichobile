@@ -1,5 +1,6 @@
 import * as m from 'mithril';
 import router from '../../router';
+import socket from '../../socket';
 import * as helper from '../helper';
 import { handleXhrError } from '../../utils';
 import { LoadingBoard } from '../shared/common';
@@ -30,6 +31,7 @@ export default {
 
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
+    socket.destroy();
     if (this.round) {
       this.round.unload();
     }

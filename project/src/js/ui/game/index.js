@@ -1,3 +1,4 @@
+import socket from '../../socket';
 import * as helper from '../helper';
 import oninit from './oninit';
 import view from './gameView';
@@ -13,6 +14,7 @@ export default {
   },
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
+    socket.destroy();
     if (this.round) {
       this.round.unload();
     }

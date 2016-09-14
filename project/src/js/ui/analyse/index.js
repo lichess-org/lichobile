@@ -1,7 +1,8 @@
+import signals from '../../signals';
+import socket from '../../socket';
 import * as helper from '../helper';
 import oninit from './oninit';
 import view from './view/analyseView';
-import signals from '../../signals';
 
 export default {
   oninit,
@@ -14,6 +15,7 @@ export default {
   },
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
+    socket.destroy();
     if (this.ctrl) {
       if (this.ctrl.ceval) this.ctrl.ceval.destroy();
       this.ctrl.chessLogic.terminate();

@@ -106,10 +106,10 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.chessground = ground.make(
       this.data,
       cfg.game.fen,
-      this.userMove.bind(this),
-      this.onUserNewPiece.bind(this),
-      this.onMove.bind(this),
-      this.onNewPiece.bind(this)
+      this.userMove,
+      this.onUserNewPiece,
+      this.onMove,
+      this.onNewPiece
     );
 
     this.clock = this.data.clock ? new clockCtrl(
@@ -121,24 +121,24 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.makeCorrespondenceClock();
 
-    if (this.clock) this.clockIntervId = setInterval(this.clockTick.bind(this), 100);
-    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick.bind(this), 6000);
+    if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100);
+    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000);
 
     if (this.data.tournament) {
-      this.tournamentCountInterval = setInterval(this.tournamentTick.bind(this), 1000);
+      this.tournamentCountInterval = setInterval(this.tournamentTick, 1000);
     }
 
     this.connectSocket();
     this.setTitle();
 
     // reconnect game socket after a cancelled seek
-    signals.seekCanceled.add(this.connectSocket.bind(this));
+    signals.seekCanceled.add(this.connectSocket);
 
-    document.addEventListener('resume', this.reloadGameData.bind(this));
+    document.addEventListener('resume', this.reloadGameData);
     window.plugins.insomnia.keepAwake();
   }
 
-  private tournamentTick() {
+  private tournamentTick = () => {
     if (this.data.tournament.secondsToFinish > 0) {
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
@@ -151,7 +151,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private connectSocket() {
+  private connectSocket = () => {
     if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
@@ -286,7 +286,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }
 
-  private clockTick() {
+  private clockTick = () => {
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }
 
@@ -299,7 +299,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       );
   }
 
-  private correspondenceClockTick() {
+  private correspondenceClockTick = () => {
     if (this.correspondenceClock && gameApi.playable(this.data))
       this.correspondenceClock.tick(this.data.game.player);
   }
@@ -533,25 +533,25 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public toggleBookmark() {
-    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData.bind(this));
+    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData);
   }
 
   public unload() {
     clearInterval(this.clockIntervId);
     clearInterval(this.tournamentCountInterval);
-    document.removeEventListener('resume', this.reloadGameData.bind(this));
-    signals.seekCanceled.remove(this.connectSocket.bind(this));
+    document.removeEventListener('resume', this.reloadGameData);
+    signals.seekCanceled.remove(this.connectSocket);
     if (this.chat) this.chat.unload();
     if (this.notes) this.notes.unload();
   }
 
-  private userMove(orig: Pos, dest: Pos, meta: any) {
+  private userMove = (orig: Pos, dest: Pos, meta: any) => {
     if (!promotion.start(this, orig, dest, meta.premove)) {
       this.sendMove(orig, dest, undefined, meta.premove);
     }
   }
 
-  private onUserNewPiece(role: Role, key: Pos, meta: any) {
+  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {
@@ -559,7 +559,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onMove(orig: Pos, dest: Pos, capturedPiece: Piece) {
+  private onMove = (orig: Pos, dest: Pos, capturedPiece: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest);
@@ -577,7 +577,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onNewPiece() {
+  private onNewPiece = () => {
     sound.move();
   };
 
@@ -587,7 +587,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     });
   }
 
-  private reloadGameData() {
+  private reloadGameData = () => {
     xhr.reload(this).then(this.reload);
   }
 

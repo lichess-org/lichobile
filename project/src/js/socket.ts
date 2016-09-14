@@ -178,8 +178,7 @@ function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object)
 }
 
 function createDefault() {
-  // default socket is useless when anon.
-  if (hasNetwork() && session.isConnected()) {
+  if (hasNetwork()) {
     socketHandlers = {
       events: defaultHandlers,
       onOpen: session.refresh

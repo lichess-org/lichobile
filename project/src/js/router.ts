@@ -23,11 +23,12 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
         m.render(mountPoint, Vnode(RouteComponent, undefined, undefined, undefined, undefined, undefined));
       }
 
-      // TODO it works but would be better in a router exit hook
       signals.redraw.removeAll();
       signals.redraw.add(redraw);
+      // some error may be thrown during component initialization
+      // in that case shutdown redraws to avoid multiple execution of oninit
+      // hook of buggy component
       try {
-        // some error may be thrown during on init...
         redraw();
       } catch (e) {
         console.error(e);
@@ -55,7 +56,7 @@ function processQuerystring(e?: PopStateEvent) {
 
 function set(path: string, replace = false) {
   if (replace) {
-    window.history.replaceState({ id: currentStateId }, null, '?=' + path);
+    window.history.replaceState(window.history.state, null, '?=' + path);
   } else {
     const stateId = uid();
     currentStateId = stateId;

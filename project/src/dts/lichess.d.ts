@@ -85,8 +85,8 @@ declare type Color = 'white' | 'black';
 
 interface Player {
   id: string;
-  rating?: number;
   color: Color;
+  rating?: number;
   user?: User;
   provisional?: boolean;
   username?: string;

@@ -151,6 +151,7 @@ function getChecksCount(ctrl, color) {
 
 function renderEvalBox(ctrl) {
   const ceval = ctrl.currentAnyEval() || {};
+  const step = ctrl.vm.step;
   let pearl, percent;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
@@ -179,11 +180,16 @@ function renderEvalBox(ctrl) {
   }
 
   return (
-    <div className="cevalBox">
+    <div className={'cevalBox' + (ctrl.data.analysis ? ' withAnalysis' : '')}>
       { pearl }
       <div className="cevalBar">
         <span style={{ width: percent + '%' }}></span>
       </div>
+      { step.ceval && step.ceval.bestSan ?
+      <div className="bestMove">
+        best {step.ceval.bestSan}
+      </div> : null
+      }
       { ctrl.data.analysis ?
         <div className="openSummary" oncreate={helper.ontap(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>

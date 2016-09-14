@@ -90,12 +90,14 @@ function renderContent(ctrl, isPortrait) {
     dest: nextStep.uci.slice(2, 4)
   } : null;
 
+  const shapes = nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull);
+
   const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    shapes: nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
+    shapes
   });
 
   return [

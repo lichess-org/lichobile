@@ -7,9 +7,8 @@ export default function BoardBrush(bounds, orientation, shapes) {
   if (bounds.width !== bounds.height) return null;
 
   const usedBrushes = Object.keys(brushes)
-  .filter(name =>
-    shapes.filter(s => s.dest && s.brush === name).length
-  ).map(name => brushes[name]);
+  .filter(name => shapes.filter(s => s.dest && s.brush === name).length)
+  .map(name => brushes[name]);
 
   return (
     <svg>

@@ -5,9 +5,6 @@ import backbutton from '../../backbutton';
 import * as helper from '../helper';
 import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
-import storage from '../../storage';
-import { storageFenKey as aiStorageFenKey } from '../ai';
-import { storageFenKey as otbStorageFenKey } from '../otb';
 import { validateFen, positionLooksLegit } from '../editor/editor';
 import { hasNetwork } from '../../utils';
 import * as m from 'mithril';
@@ -65,8 +62,7 @@ export default {
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
-                storage.set(aiStorageFenKey, ctrl.fen());
-                router.set('/ai');
+                router.set('/ai/fen/' + encodeURIComponent(ctrl.fen()));
               }
             })
           }, i18n('playOfflineComputer')),
@@ -76,8 +72,7 @@ export default {
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
                 window.plugins.toast.show('Invalid FEN', 'short', 'center');
               } else {
-                storage.set(otbStorageFenKey, ctrl.fen());
-                router.set('/otb');
+                router.set('/otb/fen/' + encodeURIComponent(ctrl.fen()));
               }
             })
           }, i18n('playOnTheBoardOffline'))

@@ -1,5 +1,5 @@
 import sound from '../../sound';
-import storage from '../../storage';
+import router from '../../router';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import * as gameApi from '../../lichess/game';
@@ -20,7 +20,11 @@ import actions from './actions';
 import * as helper from '../helper';
 import newGameMenu from './newOtbGame';
 
-export const storageFenKey = 'otb.setupFen';
+interface InitPayload {
+  variant: VariantKey
+  fen?: string
+}
+
 
 export default class OtbRound implements OfflineRoundInterface {
   public setupFen: string;
@@ -39,20 +43,27 @@ export default class OtbRound implements OfflineRoundInterface {
     this.newGameMenu = newGameMenu.controller(this);
 
     this.vm = {
-      flip: false
+      flip: false,
+      setupFen,
+      savedFen: saved && saved.data.game.fen
     };
 
     if (setupFen) {
-      this.startNewGame(setupFen);
-    } else if (saved) {
-      try {
-        this.init(saved.data, saved.situations, saved.ply);
-      } catch (e) {
-        console.log(e, 'Fail to load saved game');
-        this.startNewGame();
+      this.newGameMenu.open();
+    }
+
+    const currentVariant = <VariantKey>settings.otb.variant();
+    if (!setupFen) {
+      if (saved) {
+        try {
+          this.init(saved.data, saved.situations, saved.ply);
+        } catch (e) {
+          console.log(e, 'Fail to load saved game');
+          this.startNewGame(currentVariant);
+        }
+      } else {
+        this.startNewGame(currentVariant);
       }
-    } else {
-      this.startNewGame();
     }
   }
 
@@ -87,9 +98,10 @@ export default class OtbRound implements OfflineRoundInterface {
     redraw();
   }
 
-  public startNewGame(setupFen?: string) {
-    const variant = settings.otb.variant();
-    const payload = { variant }
+  public startNewGame(variant: VariantKey, setupFen?: string) {
+    const payload: InitPayload = {
+      variant
+    };
     if (setupFen && !['horde', 'racingKings'].includes(variant)) {
       payload.fen = setupFen;
     }
@@ -109,8 +121,11 @@ export default class OtbRound implements OfflineRoundInterface {
           centerPiece: true
         }
       }), [data.setup], 0);
+    })
+    .then(() => {
       if (setupFen) {
-        storage.remove(storageFenKey);
+        this.vm.setupFen = null;
+        router.replaceState('/otb');
       }
     });
   }

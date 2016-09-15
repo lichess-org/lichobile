@@ -1,7 +1,7 @@
 import i18n from '../../i18n';
+import router from '../../router';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
-import storage from '../../storage';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
@@ -21,10 +21,12 @@ import engineCtrl, { EngineInterface } from './engine';
 import * as helper from '../helper';
 import newGameMenu from './newAiGame';
 
-export const storageFenKey = 'ai.setupFen';
+interface InitPayload {
+  variant: VariantKey
+  fen?: string
+}
 
 export default class AiRound implements AiRoundInterface {
-  public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
@@ -36,29 +38,35 @@ export default class AiRound implements AiRoundInterface {
   private engine: EngineInterface;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
-    this.setupFen = setupFen;
     this.engine = engineCtrl(this);
     this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
 
     this.vm = {
-      engineSearching: false
+      engineSearching: false,
+      setupFen,
+      savedFen: saved && saved.data.game.fen
     };
+
+    if (setupFen) {
+      this.newGameMenu.open();
+    }
 
     this.engine.init()
     .then(() => {
-      if (setupFen) {
-        this.startNewGame(setupFen);
-      } else if (saved) {
-        try {
-          this.init(saved.data, saved.situations, saved.ply);
-        } catch (e) {
-          console.log(e, 'Fail to load saved game');
-          this.startNewGame();
+      const currentVariant = <VariantKey>settings.ai.variant();
+      if (!setupFen) {
+        if (saved) {
+          try {
+            this.init(saved.data, saved.situations, saved.ply);
+          } catch (e) {
+            console.log(e, 'Fail to load saved game');
+            this.startNewGame(currentVariant);
+          }
+        } else {
+          this.startNewGame(currentVariant);
         }
-      } else {
-        this.startNewGame();
       }
     });
   }
@@ -98,12 +106,14 @@ export default class AiRound implements AiRoundInterface {
       }
     });
 
+    this.save();
     redraw();
   }
 
-  public startNewGame(setupFen?: string) {
-    const variant = settings.ai.variant();
-    const payload = { variant }
+  public startNewGame(variant: VariantKey, setupFen?: string) {
+    const payload: InitPayload = {
+      variant
+    }
     if (setupFen && !['horde', 'racingKings'].includes(variant)) {
       payload.fen = setupFen;
     }
@@ -121,8 +131,11 @@ export default class AiRound implements AiRoundInterface {
         fen: data.setup.fen,
         color: getColorFromSettings()
       }), [data.setup], 0);
+    })
+    .then(() => {
       if (setupFen) {
-        storage.remove(storageFenKey);
+        this.vm.setupFen = null;
+        router.replaceState('/ai');
       }
     });
   }
@@ -218,6 +231,7 @@ export default class AiRound implements AiRoundInterface {
   }
 
   public onReplayAdded = (sit: GameSituation) => {
+    this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {

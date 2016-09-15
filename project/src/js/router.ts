@@ -31,8 +31,8 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
       try {
         redraw();
       } catch (e) {
-        console.error(e);
         signals.redraw.removeAll();
+        throw e;
       }
     });
   }
@@ -54,9 +54,13 @@ function processQuerystring(e?: PopStateEvent) {
   if (!matched) router.run('/');
 }
 
+function replaceState(path: string) {
+  window.history.replaceState(window.history.state, null, '?=' + path);
+}
+
 function set(path: string, replace = false) {
   if (replace) {
-    window.history.replaceState(window.history.state, null, '?=' + path);
+    replaceState(path);
   } else {
     const stateId = uid();
     currentStateId = stateId;
@@ -75,6 +79,7 @@ function get(): string {
 export default {
   get,
   set,
+  replaceState,
   getViewSlideDirection(): string {
     return viewSlideDirection;
   }

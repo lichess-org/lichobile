@@ -20,11 +20,9 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round, pieceTheme);
   } else {
-    header = hourglassHeader;
-    if (this.round.setupFen)
-      content = () => viewOnlyBoardContent(this.round.setupFen, null, null, 'standard', null, pieceTheme);
-    else
-      content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
+    header = this.round.vm.setupFen ?
+      () => renderHeader(i18n('playOnTheBoardOffline')) : hourglassHeader;
+    content = () => viewOnlyBoardContent(this.round.vm.setupFen || this.round.vm.savedFen, null, null, 'standard', null, pieceTheme);
   }
 
   return layout.board(

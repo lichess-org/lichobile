@@ -1,5 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import { getBoardBounds } from '../../utils';
+import i18n from '../../i18n';
 
 import layout from '../layout';
 import { gameTitle, header as renderHeader, hourglassHeader, viewOnlyBoardContent } from '../shared/common';
@@ -22,11 +23,9 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round);
   } else {
-    header = hourglassHeader;
-    if (this.round.setupFen)
-      content = () => viewOnlyBoardContent(this.round.setupFen);
-    else
-      content = viewOnlyBoardContent;
+    header = this.round.vm.setupFen ?
+      () => renderHeader(i18n('playOfflineComputer')) : hourglassHeader;
+    content = () => viewOnlyBoardContent(this.round.vm.setupFen || this.round.vm.savedFen);
   }
 
   return layout.board(

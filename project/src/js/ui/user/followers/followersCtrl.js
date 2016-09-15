@@ -59,6 +59,7 @@ export default function oninit(vnode) {
   .then(data => {
     paginator(data.paginator);
     followers(data.paginator.currentPageResults);
+    redraw();
   })
   .then(() => setTimeout(() => {
     if (scroller) scroller.scrollTo(0, 0, 0);

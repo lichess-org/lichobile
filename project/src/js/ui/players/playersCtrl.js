@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import router from '../../router';
 import backbutton from '../../backbutton';
 import { throttle } from 'lodash/function';
@@ -45,7 +46,10 @@ export default function oninit(vnode) {
   window.addEventListener('native.keyboardhide', onKeyboardHide);
 
   xhr.onlinePlayers()
-  .then(players)
+  .then(data => {
+    players(data);
+    redraw();
+  })
   .catch(utils.handleXhrError);
 
   vnode.state = {

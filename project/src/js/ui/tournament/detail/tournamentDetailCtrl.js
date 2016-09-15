@@ -103,6 +103,7 @@ export default function oninit(vnode) {
     clockInterval(setInterval(tick, 1000));
     const featuredGame = data.featured ? data.featured.id : null;
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
+    redraw();
   })
   .catch(utils.handleXhrError);
 

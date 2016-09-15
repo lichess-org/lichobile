@@ -1,9 +1,8 @@
 import * as chessground from 'chessground-mobile';
-import i18n from '../../i18n';
 import { getBoardBounds } from '../../utils';
 
 import layout from '../layout';
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import { gameTitle, header as renderHeader, hourglassHeader, viewOnlyBoardContent } from '../shared/common';
 import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import {
   renderAntagonist,
@@ -23,7 +22,7 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round);
   } else {
-    header = () => renderHeader(i18n('playOfflineComputer'));
+    header = hourglassHeader;
     content = viewOnlyBoardContent;
   }
 

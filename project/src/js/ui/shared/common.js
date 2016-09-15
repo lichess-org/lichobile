@@ -146,9 +146,21 @@ export function connectingHeader(title) {
   return (
     <nav>
       {menuButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-title" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
+      </h1>
+      {headerBtns()}
+    </nav>
+  );
+}
+
+export function hourglassHeader() {
+  return (
+    <nav>
+      {menuButton()}
+      <h1 key="hourglass-title" className="reconnecting">
+        <span className="fa fa-hourglass-half" />
       </h1>
       {headerBtns()}
     </nav>
@@ -159,7 +171,7 @@ export function loadingBackbutton(title) {
   return (
     <nav>
       {backButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-backbutton" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
       </h1>

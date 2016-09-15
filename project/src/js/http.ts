@@ -72,6 +72,10 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
     !(<StringMap>cfg.headers)['Content-Type']
   ) {
     (<StringMap>cfg.headers)['Content-Type'] = 'application/json; charset=UTF-8';
+    // always send a json body
+    if (!cfg.body) {
+      cfg.body = '{}';
+    }
   }
 
   if (opts && opts.query) {

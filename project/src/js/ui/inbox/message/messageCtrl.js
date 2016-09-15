@@ -1,4 +1,4 @@
-import * as xhr from '../tournamentXhr';
+import * as xhr from '../inboxXhr';
 import * as helper from '../../helper';
 import * as m from 'mithril';
 

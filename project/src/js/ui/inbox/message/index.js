@@ -1,5 +1,5 @@
-import oninit from './messageDetailCtrl';
-import view from './messageDetailView';
+import oninit from './messageCtrl';
+import view from './messageView';
 
 export default {
   oninit,

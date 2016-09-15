@@ -150,6 +150,11 @@ function renderLinks(user) {
         <span className="fa fa-cubes"/>{i18n('leaderboard')}
       </li> : null
       }
+      {hasNetwork() ?
+      <li className="side_link" key="message" oncreate={helper.ontapY(menu.route('/inbox'))}>
+        <span className="fa fa-inbox"/>{i18n('inbox')}
+      </li> : null
+      }
       <li className="sep_link" key="sep_link_offline">
         {i18n('playOffline')}
       </li>

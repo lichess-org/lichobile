@@ -30,6 +30,8 @@ import tournamentDetail from './ui/tournament/detail';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
 import clock from './ui/clock';
+import inbox from './ui/inbox';
+import inboxMessage from './ui/inbox/message';
 import { defineRoutes } from './router';
 
 export default {
@@ -59,6 +61,8 @@ export default {
       'clock': clock,
       'editor': editor,
       'editor/:fen': editor,
+      'inbox': inbox,
+      'inbox/message': inboxMessage,
       'players': players,
       'ranking': ranking,
       'settings': settingsUi,

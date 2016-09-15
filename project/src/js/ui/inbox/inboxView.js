@@ -12,7 +12,5 @@ export default function view(vnode) {
 
 
 function tournamentListBody(ctrl) {
-  if (!ctrl.tournaments()) return null;
-
   return (null);
 }

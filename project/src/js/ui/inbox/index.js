@@ -1,6 +1,6 @@
 import * as helper from '../helper';
-import oninit from './messageCtrl';
-import view from './messageView';
+import oninit from './inboxCtrl';
+import view from './inboxView';
 
 export default {
   oncreate: helper.viewFadeIn,

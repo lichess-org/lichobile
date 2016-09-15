@@ -1,6 +1,6 @@
 import socket from '../../socket';
 import { handleXhrError } from '../../utils';
-import * as xhr from './messageXhr';
+import * as xhr from './inboxXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
 

@@ -180,7 +180,7 @@ export function loadingBackbutton(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
+export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = null, variant = null, wrapperClass = null, customPieceTheme = null) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};

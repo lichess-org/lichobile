@@ -24,6 +24,7 @@ import newGameMenu from './newAiGame';
 export const storageFenKey = 'ai.setupFen';
 
 export default class AiRound implements AiRoundInterface {
+  public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
@@ -35,6 +36,7 @@ export default class AiRound implements AiRoundInterface {
   private engine: EngineInterface;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
+    this.setupFen = setupFen;
     this.engine = engineCtrl(this);
     this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
@@ -101,14 +103,16 @@ export default class AiRound implements AiRoundInterface {
 
   public startNewGame(setupFen?: string) {
     const variant = settings.ai.variant();
-    helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
+    const payload = { variant }
+    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+      payload.fen = setupFen;
+    }
+
+    helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`);
 
     askWorker(this.chessWorker, {
       topic: 'init',
-      payload: {
-        variant,
-        fen: setupFen
-      }
+      payload,
     })
     .then(data => {
       this.init(makeData({

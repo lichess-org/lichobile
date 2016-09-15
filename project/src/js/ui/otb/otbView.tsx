@@ -21,7 +21,10 @@ export default function view() {
     content = () => renderContent(this.round, pieceTheme);
   } else {
     header = hourglassHeader;
-    content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
+    if (this.round.setupFen)
+      content = () => viewOnlyBoardContent(this.round.setupFen, null, null, 'standard', null, pieceTheme);
+    else
+      content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
   }
 
   return layout.board(

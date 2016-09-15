@@ -11,6 +11,7 @@
 /// <reference path="../dts/whatwg-fetch.d.ts" />
 /// <reference path="../dts/rlite.d.ts" />
 /// <reference path="../dts/stockfish.d.ts" />
+/// <reference path="../dts/misc.d.ts" />
 
 'use strict';
 

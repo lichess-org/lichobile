@@ -23,6 +23,7 @@ import newGameMenu from './newOtbGame';
 export const storageFenKey = 'otb.setupFen';
 
 export default class OtbRound implements OfflineRoundInterface {
+  public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
@@ -32,6 +33,7 @@ export default class OtbRound implements OfflineRoundInterface {
   public vm: any;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
+    this.setupFen = setupFen;
     this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
@@ -87,14 +89,16 @@ export default class OtbRound implements OfflineRoundInterface {
 
   public startNewGame(setupFen?: string) {
     const variant = settings.otb.variant();
-    helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
+    const payload = { variant }
+    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+      payload.fen = setupFen;
+    }
+
+    helper.analyticsTrackEvent('Offline OTB Game', `New game ${variant}`);
 
     askWorker(this.chessWorker, {
       topic: 'init',
-      payload: {
-        variant,
-        fen: setupFen
-      }
+      payload
     }).then(data => {
       this.init(makeData({
         variant: data.variant,

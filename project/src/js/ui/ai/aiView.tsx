@@ -23,7 +23,10 @@ export default function view() {
     content = () => renderContent(this.round);
   } else {
     header = hourglassHeader;
-    content = viewOnlyBoardContent;
+    if (this.round.setupFen)
+      content = () => viewOnlyBoardContent(this.round.setupFen);
+    else
+      content = viewOnlyBoardContent;
   }
 
   return layout.board(

@@ -1,4 +1,4 @@
-import { readFen } from '../editor/editor';
+import { playerFromFen, plyFromFen } from '../../utils/fen';
 import { oppositeColor } from '../../utils';
 
 export function makeDefaultData(fen: string): AnalysisData {
@@ -46,23 +46,4 @@ export function makeDefaultData(fen: string): AnalysisData {
       }
     ]
   };
-}
-
-function playerFromFen(fen: string): Color {
-  if (fen) {
-    const { color } = readFen(fen);
-
-    return color() === 'w' ? 'white' : 'black';
-  }
-
-  return 'white';
-}
-
-function plyFromFen(fen: string) {
-  if (fen) {
-    const { color, moves } = readFen(fen);
-    return moves() * 2 - (color() === 'w' ? 2 : 1);
-  }
-
-  return 0;
 }

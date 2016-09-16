@@ -4,6 +4,7 @@ import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
+import { playerFromFen } from '../../utils/fen';
 import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
@@ -265,12 +266,16 @@ export default class AiRound implements AiRoundInterface {
     this.onGameEnd();
   }
 
+  private firstPlayerColor(): Color {
+    return playerFromFen(this.data.game.initialFen);
+  }
+
   public firstPly = () => {
-    return this.data.player.color === 'black' ? 1 : 0;
+    return this.data.player.color === oppositeColor(this.firstPlayerColor()) ? 1 : 0;
   }
 
   public lastPly = () => {
-    return this.replay.situations[this.replay.situations.length - 1].ply;
+    return this.replay.situations.length - 1;
   }
 
   public jump = (ply: number) => {
@@ -285,7 +290,7 @@ export default class AiRound implements AiRoundInterface {
 
   public jumpPrev = () => {
     const ply = this.replay.ply;
-    if (this.data.player.color === 'black') {
+    if (this.data.player.color === oppositeColor(this.firstPlayerColor())) {
       const offset = ply % 2 === 0 ? 1 : 2;
       return this.jump(ply - offset);
     } else {

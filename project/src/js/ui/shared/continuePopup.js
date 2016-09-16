@@ -1,11 +1,11 @@
 import i18n from '../../i18n';
 import router from '../../router';
+import { validateFen, positionLooksLegit } from '../../utils/fen';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import * as helper from '../helper';
 import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
-import { validateFen, positionLooksLegit } from '../editor/editor';
 import { hasNetwork } from '../../utils';
 import * as m from 'mithril';
 

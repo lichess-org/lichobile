@@ -186,6 +186,7 @@ export default class OtbRound implements OfflineRoundInterface {
   }
 
   public onReplayAdded = (sit: GameSituation) => {
+    this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
@@ -224,7 +225,7 @@ export default class OtbRound implements OfflineRoundInterface {
   public jumpLast = () => this.jump(this.lastPly());
 
   public firstPly = () => 0;
-  public lastPly = () => this.replay.situations[this.replay.situations.length - 1].ply;
+  public lastPly = () => this.replay.situations.length - 1;
 
   public replaying = () => {
     return this.replay.ply !== this.lastPly();

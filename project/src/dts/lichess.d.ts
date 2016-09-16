@@ -101,6 +101,7 @@ interface Player {
   berserk?: boolean;
   version?: number;
   checks?: number;
+  ratingDiff?: number;
 }
 
 interface TournamentClock {

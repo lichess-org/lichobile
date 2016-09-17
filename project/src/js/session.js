@@ -1,5 +1,5 @@
 import { get, set } from 'lodash/object';
-import { pick, mapValues, throttle } from 'lodash';
+import { pick, mapValues, mapKeys, throttle } from 'lodash';
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
@@ -47,32 +47,39 @@ function toggleKidMode() {
 
 function savePreferences() {
 
-  const prefs = mapValues(pick(session && session.prefs || {}, [
+  function numValue(v) {
+    if (v === true) return 1;
+    else if (v === false) return 0;
+    else return v;
+  }
+
+  const prefs = session && session.prefs || {};
+  const display = mapKeys(mapValues(pick(prefs, [
     'animation',
     'captured',
     'highlight',
     'destination',
     'coords',
     'replay',
-    'blindfold',
-    'clockTenths',
-    'clockBar',
-    'clockSound',
+    'blindfold'
+  ]), numValue), (_, k) => 'display.' + k);
+  const behavior = mapKeys(mapValues(pick(prefs, [
     'premove',
     'takeback',
     'autoQueen',
     'autoThreefold',
     'submitMove',
-    'confirmResign',
+    'confirmResign'
+  ]), numValue), (_, k) => 'behavior.' + k);
+  const rest = mapValues(pick(prefs, [
+    'clockTenths',
+    'clockBar',
+    'clockSound',
     'follow',
     'challenge',
     'message',
     'insightShare'
-  ]), v => {
-    if (v === true) return 1;
-    else if (v === false) return 0;
-    else return v;
-  });
+  ]), numValue);
 
   return fetchText('/account/preferences', {
     method: 'POST',
@@ -80,7 +87,7 @@ function savePreferences() {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Accept': 'application/json, text/*'
     },
-    body: serializeQueryParameters(prefs)
+    body: serializeQueryParameters(Object.assign(rest, display, behavior))
   }, true);
 }
 

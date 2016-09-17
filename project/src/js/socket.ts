@@ -289,6 +289,9 @@ export default {
   connect() {
     tellWorker(worker, 'connect');
   },
+  restorePrevious() {
+    tellWorker(worker, 'restorePrevious');
+  },
   disconnect() {
     tellWorker(worker, 'disconnect');
   },

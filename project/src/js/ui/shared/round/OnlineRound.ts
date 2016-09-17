@@ -6,7 +6,6 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
 import socket from '../../../socket';
-import signals from '../../../signals';
 import router from '../../../router';
 import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
@@ -130,9 +129,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.connectSocket();
     this.setTitle();
-
-    // reconnect game socket after a cancelled seek
-    signals.seekCanceled.add(this.connectSocket);
 
     document.addEventListener('resume', this.reloadGameData);
     window.plugins.insomnia.keepAwake();
@@ -540,7 +536,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     clearInterval(this.clockIntervId);
     clearInterval(this.tournamentCountInterval);
     document.removeEventListener('resume', this.reloadGameData);
-    signals.seekCanceled.remove(this.connectSocket);
     if (this.chat) this.chat.unload();
     if (this.notes) this.notes.unload();
   }

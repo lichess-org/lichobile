@@ -1,4 +1,5 @@
 var socketInstance;
+var previousSocketInstance;
 var currentUrl;
 
 var strongSocketDefaults = {
@@ -265,7 +266,7 @@ function create(payload) {
 
   if (socketInstance) {
     socketInstance.destroy();
-    socketInstance = null;
+    previousSocketInstance = socketInstance;
   }
   socketInstance = new StrongSocket(
     payload.clientId,
@@ -290,6 +291,13 @@ self.onmessage = function(msg) {
       break;
     case 'connect':
       if (socketInstance) socketInstance.connect();
+      break;
+    case 'restorePrevious':
+      if (socketInstance) socketInstance.destroy();
+      if (previousSocketInstance) {
+        socketInstance = previousSocketInstance;
+        socketInstance.connect();
+      }
       break;
     case 'disconnect':
       if (socketInstance) socketInstance.destroy();

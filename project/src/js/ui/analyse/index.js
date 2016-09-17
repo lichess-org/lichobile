@@ -1,4 +1,3 @@
-import signals from '../../signals';
 import socket from '../../socket';
 import * as helper from '../helper';
 import oninit from './oninit';
@@ -19,7 +18,6 @@ export default {
     if (this.ctrl) {
       if (this.ctrl.ceval) this.ctrl.ceval.destroy();
       this.ctrl.chessLogic.terminate();
-      signals.seekCanceled.remove(this.ctrl.connectGameSocket);
     }
   },
   view

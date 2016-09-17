@@ -1,6 +1,5 @@
 import router from './router';
 import redraw from './utils/redraw';
-import storage from './storage';
 import { apiVersion } from './http';
 import { xor } from 'lodash';
 import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
@@ -50,11 +49,7 @@ interface SocketSetup {
 }
 
 let connectedWS = true;
-let alreadyWarned = false;
 let redrawOnDisconnectedTimeoutID: number;
-let proxyFailTimeoutID: number;
-
-const proxyFailMsg = 'The connection to lichess server has failed. If the problem is persistent this may be caused by proxy or network issues. In that case, we\'re sorry: lichess online features such as games, connected friends or challenges won\'t work.';
 
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
@@ -268,7 +263,6 @@ function redirectToGame(obj: any) {
 function onConnected() {
   const wasOff = !connectedWS;
   connectedWS = true;
-  clearTimeout(proxyFailTimeoutID);
   clearTimeout(redrawOnDisconnectedTimeoutID);
   if (wasOff) redraw();
 }
@@ -276,25 +270,8 @@ function onConnected() {
 function onDisconnected() {
   const wasOn = connectedWS;
   connectedWS = false;
-  if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(function() {
-    redraw();
-  }, 2000);
-  if (wasOn && !alreadyWarned && !storage.get('donotshowproxyfailwarning')) proxyFailTimeoutID = setTimeout(() => {
-    // check if disconnection lasts, it could mean a proxy prevents
-    // establishing a tunnel
-    if (hasNetwork() && !connectedWS) {
-      alreadyWarned = true;
-      window.navigator.notification.alert(proxyFailMsg, function() {
-        storage.set('donotshowproxyfailwarning', true);
-      });
-    }
-  }, 20000);
+  if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(redraw, 2000);
 }
-
-document.addEventListener('deviceready', () => {
-  document.addEventListener('pause', () => clearTimeout(proxyFailTimeoutID), false);
-}, false);
-
 
 export default {
   createGame,

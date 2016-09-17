@@ -12,9 +12,18 @@ export default function oninit(vnode) {
   xhr.inbox()
   .then(data => {
     console.log(data);
+    getPosts(data.messages[0].id);
     return (data);
   })
   .catch(handleXhrError);
 
   vnode.state = { };
+}
+
+function getPosts(threadId) {
+  xhr.message(threadId)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(handleXhrError);
 }

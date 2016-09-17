@@ -52,7 +52,7 @@ export default function cevalEngine(opts) {
     },
 
     exit() {
-      Stockfish.exit();
+      return Stockfish.exit();
     }
   };
 }

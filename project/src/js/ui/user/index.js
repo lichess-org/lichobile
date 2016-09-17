@@ -5,6 +5,5 @@ import view from './userView';
 export default {
   oninit: oninit,
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.viewFadeOut,
   view
 };

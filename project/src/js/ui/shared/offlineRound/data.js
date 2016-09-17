@@ -31,11 +31,13 @@ export default function data(cfg) {
       }
     },
     player: {
+      id: 'player',
       color: cfg.color,
       username: i18n(cfg.color),
       spectator: false
     },
     opponent: {
+      id: 'opponent',
       color: oppositeColor(cfg.color),
       username: i18n(oppositeColor(cfg.color))
     },

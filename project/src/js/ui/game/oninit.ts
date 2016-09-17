@@ -6,6 +6,7 @@ import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import OnlineRound from '../shared/round/OnlineRound';
 import * as helper from '../helper';
+import gamesMenu from '../gamesMenu';
 import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import sound from '../../sound';
@@ -18,7 +19,7 @@ interface GameAttrs {
 }
 
 export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
-  let gameData: GameData;
+  let gameData: OnlineGameData;
 
   if (hasNetwork()) {
     gameXhr(vnode.attrs.id, vnode.attrs.color)
@@ -56,6 +57,7 @@ export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
         }
 
         this.round = new OnlineRound(vnode.attrs.id, data);
+        (gamesMenu as any).lastJoined = null;
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);

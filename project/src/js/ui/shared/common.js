@@ -146,9 +146,21 @@ export function connectingHeader(title) {
   return (
     <nav>
       {menuButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-title" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
+      </h1>
+      {headerBtns()}
+    </nav>
+  );
+}
+
+export function hourglassHeader() {
+  return (
+    <nav>
+      {menuButton()}
+      <h1 key="hourglass-title" className="reconnecting">
+        <span className="fa fa-hourglass-half" />
       </h1>
       {headerBtns()}
     </nav>
@@ -159,7 +171,7 @@ export function loadingBackbutton(title) {
   return (
     <nav>
       {backButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-backbutton" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
       </h1>
@@ -168,7 +180,7 @@ export function loadingBackbutton(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
+export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = null, variant = null, wrapperClass = null, customPieceTheme = null) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
@@ -177,7 +189,7 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrappe
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   const board = (
     <section key={boardKey} className={className} style={boardStyle}>
-    {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+      {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   );
   if (isPortrait) {

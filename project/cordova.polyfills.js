@@ -98,7 +98,7 @@
     CELL: 'cellular'
   };
   window.navigator.connection = {
-    type: 'wifi'
+    type: window.Connection.WIFI
   };
   window.setOffline = function() {
     window.navigator.connection.type = window.Connection.NONE;

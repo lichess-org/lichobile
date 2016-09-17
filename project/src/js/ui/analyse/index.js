@@ -1,7 +1,8 @@
-import * as helper from '../helper';
-import oninit from './analyseCtrl';
-import view from './view/analyseView';
 import signals from '../../signals';
+import socket from '../../socket';
+import * as helper from '../helper';
+import oninit from './oninit';
+import view from './view/analyseView';
 
 export default {
   oninit,
@@ -12,17 +13,14 @@ export default {
       helper.elFadeIn(vnode.dom);
     }
   },
-  onbeforeremove(vnode, done) {
-    window.plugins.insomnia.allowSleepAgain();
-    const p = vnode.attrs.source ?
-      helper.elSlideOut(vnode.dom) :
-      helper.elFadeOut(vnode.dom);
-    p.then(done).catch(done);
-  },
   onremove() {
-    if (this.ceval) this.ceval.destroy();
-    this.chessLogic.terminate();
-    signals.seekCanceled.remove(this.connectGameSocket);
+    window.plugins.insomnia.allowSleepAgain();
+    socket.destroy();
+    if (this.ctrl) {
+      if (this.ctrl.ceval) this.ctrl.ceval.destroy();
+      this.ctrl.chessLogic.terminate();
+      signals.seekCanceled.remove(this.ctrl.connectGameSocket);
+    }
   },
   view
 };

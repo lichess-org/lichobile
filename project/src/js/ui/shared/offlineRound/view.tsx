@@ -168,7 +168,7 @@ function renderBackwardButton(ctrl: OfflineRoundInterface) {
 
 function renderForwardButton(ctrl: OfflineRoundInterface) {
   return m('button.action_bar_button.fa.fa-step-forward', {
-    oncreate: helper.ontap(ctrl.jumpNext, () => ctrl.jumpLast),
+    oncreate: helper.ontap(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())
     })
@@ -211,6 +211,6 @@ function renderTable(ctrl: any, curPly: number) {
 
 function autoScroll(movelist: any) {
   if (!movelist) return;
-  var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
+  const plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
 }

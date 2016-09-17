@@ -37,7 +37,7 @@ export function elFadeIn(el) {
   var tId;
 
   el.style.opacity = '0.5';
-  el.style.transition = 'opacity 200ms ease-out';
+  el.style.transition = `opacity ${animDuration}ms ease-out`;
 
   setTimeout(() => {
     el.style.opacity = '1';
@@ -53,7 +53,7 @@ export function elFadeIn(el) {
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
-  tId = setTimeout(after, 210);
+  tId = setTimeout(after, animDuration + 10);
 }
 
 // page slide transition
@@ -68,14 +68,13 @@ export function pageSlideIn(el) {
 
   function after() {
     clearTimeout(tId);
-    utils.setViewSlideDirection('fwd');
     if (el) {
       el.removeAttribute('style');
       el.removeEventListener('transitionend', after, false);
     }
   }
 
-  const direction = utils.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
+  const direction = router.getViewSlideDirection() === 'fwd' ? '100%' : '-100%';
   el.style.transform = `translate3d(${direction},0,0)`;
   el.style.transition = `transform ${animDuration}ms ease-out`;
 
@@ -85,16 +84,7 @@ export function pageSlideIn(el) {
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
-  tId = setTimeout(after, 2100);
-}
-
-export function elSlideOut(el) {
-  const x = utils.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in')
-  .catch(err => {
-    utils.setViewSlideDirection('fwd');
-    throw err;
-  });
+  tId = setTimeout(after, animDuration + 10);
 }
 
 export function elFadeOut(el) {
@@ -138,7 +128,11 @@ export function viewportDim() {
 
 export const viewSlideIn = onPageEnter(pageSlideIn);
 export const viewFadeIn = onPageEnter(elFadeIn);
-export const viewSlideOut = onPageLeave(elSlideOut);
+export const viewSlideOut = onPageLeave(el => {
+  const x = router.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
+  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in');
+});
+
 export const viewFadeOut = onPageLeave(elFadeOut);
 
 export function transformProp() {

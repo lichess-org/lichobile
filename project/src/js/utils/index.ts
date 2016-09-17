@@ -175,21 +175,17 @@ export function aiName(player: any) {
 }
 
 export function backHistory(): void {
-  setViewSlideDirection('bwd');
-  if (window.navigator.app && window.navigator.app.backHistory)
+  if (window.navigator.app && window.navigator.app.backHistory) {
     window.navigator.app.backHistory();
-  else
+  } else {
     window.history.go(-1);
+  }
 }
 
-// simple way to determine views animation direction
-let viewSlideDirection = 'fwd';
-export function setViewSlideDirection(d: string): void {
-  viewSlideDirection = d;
-}
-export function getViewSlideDirection(): string {
-  return viewSlideDirection;
-}
+export const uid = (function() {
+  let id = 0;
+  return () => id++;
+})();
 
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
@@ -220,7 +216,7 @@ export function tupleOf(x: number): [string, string] {
   return [x.toString(), x.toString()];
 }
 
-export function oppositeColor(color: 'white' | 'black'): 'white' | 'black' {
+export function oppositeColor(color: Color): Color {
   return color === 'white' ? 'black' : 'white';
 }
 
@@ -245,7 +241,7 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-export function boardOrientation(data: GameData, flip?: boolean): 'black' | 'white' {
+export function boardOrientation(data: OnlineGameData, flip?: boolean): 'black' | 'white' {
   if (data.game.variant.key === 'racingKings') {
     return flip ? 'black' : 'white';
   } else {

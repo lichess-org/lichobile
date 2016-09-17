@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import router from '../../router';
 import * as utils from '../../utils';
 import * as h from '../helper';
@@ -12,7 +13,6 @@ import * as m from 'mithril';
 
 export default {
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.viewFadeOut,
 
   oninit(vnode) {
 
@@ -28,6 +28,7 @@ export default {
         data[k].isOpenedOnMobile = false;
       });
       ranking(data);
+      redraw();
     })
     .catch(err => {
       utils.handleXhrError(err);

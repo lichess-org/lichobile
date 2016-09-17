@@ -112,7 +112,7 @@ function showTablebase(ctrl, title, moves, fen) {
     <table className="explorerTablebase">
       <tbody>
       {moves.map(move => {
-        return <tr key={move.uci}>
+        return <tr key={move.uci} oncreate={helper.ontapY(() => ctrl.explorerMove(move.uci))}>
           <td>{move.san}</td>
           <td>
             {showDtz(stm, move)}

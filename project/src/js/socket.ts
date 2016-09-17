@@ -32,7 +32,6 @@ interface SocketHandlers {
 }
 
 let socketHandlers: SocketHandlers;
-let errorDetected = false;
 let connectedWS = true;
 
 let alreadyWarned = false;
@@ -59,8 +58,8 @@ function handleFollowingOnline(data: Array<string>) {
   }
 }
 
-function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv: string) {
-  errorDetected = false;
+function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {
+  let errorDetected = false;
   socketHandlers = {
     onError: function() {
       // we can't get socket error, so we send an xhr to test whether the
@@ -71,7 +70,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
         errorDetected = true;
         xhr.game(gameUrl.substring(1))
         .catch(err => {
-          if (err.response && err.status === 401) {
+          if (err.response && err.response.status === 401) {
             window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
             router.set('/');
           }
@@ -178,8 +177,7 @@ function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object)
 }
 
 function createDefault() {
-  // default socket is useless when anon.
-  if (hasNetwork() && session.isConnected()) {
+  if (hasNetwork()) {
     socketHandlers = {
       events: defaultHandlers,
       onOpen: session.refresh

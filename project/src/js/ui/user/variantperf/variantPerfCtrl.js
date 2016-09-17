@@ -1,7 +1,9 @@
 import * as xhr from '../userXhr';
-import socket from '../../../socket';
 import * as m from 'mithril';
+import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
+import redraw from '../../../utils/redraw';
+import spinner from '../../../spinner';
 
 export default function oninit(vnode) {
   const userId = vnode.attrs.id;
@@ -11,16 +13,22 @@ export default function oninit(vnode) {
 
   socket.createDefault();
 
+  spinner.spin();
   Promise.all([
-    xhr.user(userId),
+    xhr.user(userId, false),
     xhr.variantperf(userId, variant)
   ])
   .then(results => {
+    spinner.stop();
     const [userData, variantData] = results;
     user(userData);
     variantPerfData(variantData);
+    redraw();
   })
-  .catch(handleXhrError);
+  .catch(err => {
+    spinner.stop();
+    handleXhrError(err);
+  });
 
   vnode.state = {
     userId,

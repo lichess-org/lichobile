@@ -1,6 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import layout from '../layout';
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
+import { gameTitle, header as renderHeader, hourglassHeader, viewOnlyBoardContent } from '../shared/common';
 import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
@@ -20,8 +20,9 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round, pieceTheme);
   } else {
-    header = () => renderHeader(i18n('playOnTheBoardOffline'));
-    content = () => viewOnlyBoardContent(null, null, null, 'standard', null, pieceTheme);
+    header = this.round.vm.setupFen ?
+      () => renderHeader(i18n('playOnTheBoardOffline')) : hourglassHeader;
+    content = () => viewOnlyBoardContent(this.round.vm.setupFen || this.round.vm.savedFen, null, null, 'standard', null, pieceTheme);
   }
 
   return layout.board(

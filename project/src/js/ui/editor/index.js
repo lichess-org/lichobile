@@ -5,9 +5,8 @@ import view from './editorView';
 export default {
   oninit: ctrl,
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.onPageLeave(
-    helper.viewFadeOut,
-    () => window.plugins.insomnia.allowSleepAgain()
-  ),
+  onremove() {
+    window.plugins.insomnia.allowSleepAgain();
+  },
   view
 };

@@ -79,7 +79,7 @@ export function challenge(userId: string, fen: string) {
 }
 
 export function getChallenges() {
-  return fetchJSON('/challenge', {}, true);
+  return fetchJSON('/challenge');
 }
 
 export function getChallenge(id: string) {

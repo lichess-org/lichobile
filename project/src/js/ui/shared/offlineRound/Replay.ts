@@ -2,27 +2,24 @@ import i18n from '../../../i18n';
 import { askWorker } from '../../../utils';
 
 export default class Replay {
-  private data: OfflineGameData;
   private chessWorker: Worker;
+  private variant: VariantKey;
+  private initialFen: string;
 
   public ply: number;
   public situations: Array<GameSituation>;
 
   constructor(
-    data: OfflineGameData,
+    variant: VariantKey,
+    initialFen: string,
     initSituations: Array<GameSituation>,
     initPly: number,
     chessWorker: Worker,
     onReplayAdded: (sit: GameSituation) => void,
     onThreefoldRepetition: (newStatus: GameStatus) => void) {
 
-      this.ply = 0;
-      this.situations = [];
-
-      this.data = data;
       this.chessWorker = chessWorker;
-
-      this.init(initSituations, initPly);
+      this.init(variant, initialFen, initSituations, initPly);
 
       this.chessWorker.addEventListener('message', ({ data: msg }) => {
         const payload = msg.payload;
@@ -50,7 +47,9 @@ export default class Replay {
       });
     }
 
-    public init(situations: Array<GameSituation>, ply: number) {
+    public init(variant: VariantKey, initialFen: string, situations: Array<GameSituation>, ply: number) {
+      this.variant = variant;
+      this.initialFen = initialFen;
       this.situations = situations;
       this.ply = ply || 0;
     }
@@ -64,7 +63,7 @@ export default class Replay {
       this.chessWorker.postMessage({
         topic: 'move',
         payload: {
-          variant: this.data.game.variant.key,
+          variant: this.variant,
           fen: sit.fen,
           pgnMoves: sit.pgnMoves,
           uciMoves: sit.uciMoves,
@@ -80,7 +79,7 @@ export default class Replay {
       this.chessWorker.postMessage({
         topic: 'drop',
         payload: {
-          variant: this.data.game.variant.key,
+          variant: this.variant,
           fen: sit.fen,
           pgnMoves: sit.pgnMoves,
           uciMoves: sit.uciMoves,
@@ -95,20 +94,20 @@ export default class Replay {
       this.chessWorker.postMessage({
         topic: 'threefoldTest',
         payload: {
-          variant: this.data.game.variant.key,
-          initialFen: this.data.game.initialFen,
+          variant: this.variant,
+          initialFen: this.initialFen,
           pgnMoves: sit.pgnMoves
         }
       });
     }
 
-    public pgn = () => {
+    public pgn = (variant: VariantKey, initialFen: string) => {
       const sit = this.situation();
       return askWorker(this.chessWorker, {
         topic: 'pgnDump',
         payload: {
-          variant: this.data.game.variant.key,
-          initialFen: this.data.game.initialFen,
+          variant: this.variant,
+          initialFen: this.initialFen,
           pgnMoves: sit.pgnMoves
         }
       });

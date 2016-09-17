@@ -31,7 +31,7 @@ function tabNavigation (currentTabFn) {
         selectedTab: currentTabFn(),
         onTabChange: k => {
           const loc = window.location.search.replace(/\?tab\=\w+$/, '');
-          window.history.replaceState(null, null, loc + '?tab=' + k);
+          window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
           currentTabFn(k);
         }
     }));

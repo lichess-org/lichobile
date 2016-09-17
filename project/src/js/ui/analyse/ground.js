@@ -1,12 +1,12 @@
 import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
-function makeConfig(data, config, onMove, onNewPiece) {
+function makeConfig(data, config, orientation, onMove, onNewPiece) {
   return {
     fen: config.fen,
     check: config.check,
     lastMove: config.lastMove,
-    orientation: data.orientation,
+    orientation,
     coordinates: settings.game.coords(),
     movable: {
       free: false,
@@ -36,8 +36,8 @@ function makeConfig(data, config, onMove, onNewPiece) {
 }
 
 export default {
-  make(data, config, onMove, onNewPiece) {
-    return new chessground.controller(makeConfig(data, config, onMove, onNewPiece));
+  make(data, config, orientation, onMove, onNewPiece) {
+    return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece));
   },
 
   promote(ground, key, role) {

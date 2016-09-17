@@ -1,9 +1,10 @@
 import i18n from '../../i18n';
+import router from '../../router';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
-import storage from '../../storage';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
+import { playerFromFen } from '../../utils/fen';
 import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
@@ -21,7 +22,10 @@ import engineCtrl, { EngineInterface } from './engine';
 import * as helper from '../helper';
 import newGameMenu from './newAiGame';
 
-export const storageFenKey = 'ai.setupFen';
+interface InitPayload {
+  variant: VariantKey
+  fen?: string
+}
 
 export default class AiRound implements AiRoundInterface {
   public data: OfflineGameData;
@@ -41,22 +45,29 @@ export default class AiRound implements AiRoundInterface {
     this.newGameMenu = newGameMenu.controller(this);
 
     this.vm = {
-      engineSearching: false
+      engineSearching: false,
+      setupFen,
+      savedFen: saved && saved.data.game.fen
     };
+
+    if (setupFen) {
+      this.newGameMenu.open();
+    }
 
     this.engine.init()
     .then(() => {
-      if (setupFen) {
-        this.startNewGame(setupFen);
-      } else if (saved) {
-        try {
-          this.init(saved.data, saved.situations, saved.ply);
-        } catch (e) {
-          console.log(e, 'Fail to load saved game');
-          this.startNewGame();
+      const currentVariant = <VariantKey>settings.ai.variant();
+      if (!setupFen) {
+        if (saved) {
+          try {
+            this.init(saved.data, saved.situations, saved.ply);
+          } catch (e) {
+            console.log(e, 'Fail to load saved game');
+            this.startNewGame(currentVariant);
+          }
+        } else {
+          this.startNewGame(currentVariant);
         }
-      } else {
-        this.startNewGame();
       }
     });
   }
@@ -66,10 +77,21 @@ export default class AiRound implements AiRoundInterface {
     this.actions.close();
     this.data = data;
 
+    const variant = this.data.game.variant.key;
+    const initialFen = this.data.game.initialFen;
+
     if (!this.replay) {
-      this.replay = new Replay(this.data, situations, ply, this.chessWorker, this.onReplayAdded, this.onThreefoldRepetition);
+      this.replay = new Replay(
+        variant,
+        initialFen,
+        situations,
+        ply,
+        this.chessWorker,
+        this.onReplayAdded,
+        this.onThreefoldRepetition
+      );
     } else {
-      this.replay.init(situations, ply);
+      this.replay.init(variant, initialFen, situations, ply);
     }
 
     if (!this.chessground) {
@@ -85,19 +107,23 @@ export default class AiRound implements AiRoundInterface {
       }
     });
 
+    this.save();
     redraw();
   }
 
-  public startNewGame(setupFen?: string) {
-    const variant = settings.ai.variant();
-    helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
+  public startNewGame(variant: VariantKey, setupFen?: string) {
+    const payload: InitPayload = {
+      variant
+    }
+    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+      payload.fen = setupFen;
+    }
+
+    helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`);
 
     askWorker(this.chessWorker, {
       topic: 'init',
-      payload: {
-        variant,
-        fen: setupFen
-      }
+      payload,
     })
     .then(data => {
       this.init(makeData({
@@ -106,8 +132,11 @@ export default class AiRound implements AiRoundInterface {
         fen: data.setup.fen,
         color: getColorFromSettings()
       }), [data.setup], 0);
+    })
+    .then(() => {
       if (setupFen) {
-        storage.remove(storageFenKey);
+        this.vm.setupFen = null;
+        router.replaceState('/ai');
       }
     });
   }
@@ -203,6 +232,7 @@ export default class AiRound implements AiRoundInterface {
   }
 
   public onReplayAdded = (sit: GameSituation) => {
+    this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
@@ -236,12 +266,16 @@ export default class AiRound implements AiRoundInterface {
     this.onGameEnd();
   }
 
+  private firstPlayerColor(): Color {
+    return playerFromFen(this.data.game.initialFen);
+  }
+
   public firstPly = () => {
-    return this.data.player.color === 'black' ? 1 : 0;
+    return this.data.player.color === oppositeColor(this.firstPlayerColor()) ? 1 : 0;
   }
 
   public lastPly = () => {
-    return this.replay.situations[this.replay.situations.length - 1].ply;
+    return this.replay.situations.length - 1;
   }
 
   public jump = (ply: number) => {
@@ -256,7 +290,7 @@ export default class AiRound implements AiRoundInterface {
 
   public jumpPrev = () => {
     const ply = this.replay.ply;
-    if (this.data.player.color === 'black') {
+    if (this.data.player.color === oppositeColor(this.firstPlayerColor())) {
       const offset = ply % 2 === 0 ? 1 : 2;
       return this.jump(ply - offset);
     } else {

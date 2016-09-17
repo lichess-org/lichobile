@@ -122,6 +122,7 @@ function logout() {
   .then(function() {
     session = null;
     friendsApi.clear();
+    redraw();
   });
 }
 

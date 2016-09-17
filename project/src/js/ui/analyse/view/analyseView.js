@@ -23,19 +23,17 @@ import evalSummary from '../evalSummaryPopup';
 import { renderTree } from './treeView';
 
 export default function analyseView() {
-  const ctrl = this;
-
   const isPortrait = helper.isPortrait();
 
-  if (ctrl.data) {
+  if (this.ctrl) {
 
-    const backButton = ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(ctrl.data)) : null;
-    const title = ctrl.vm.shouldGoBack ? null : i18n('analysis');
+    const backButton = this.ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(this.ctrl.data)) : null;
+    const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
     return layout.board(
       () => header(title, backButton),
-      () => renderContent(ctrl, isPortrait),
-      () => overlay(ctrl, isPortrait)
+      () => renderContent(this.ctrl, isPortrait),
+      () => overlay(this.ctrl, isPortrait)
     );
   } else {
     return layout.board(
@@ -92,12 +90,14 @@ function renderContent(ctrl, isPortrait) {
     dest: nextStep.uci.slice(2, 4)
   } : null;
 
+  const shapes = nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull);
+
   const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    shapes: nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
+    shapes
   });
 
   return [
@@ -153,6 +153,7 @@ function getChecksCount(ctrl, color) {
 
 function renderEvalBox(ctrl) {
   const ceval = ctrl.currentAnyEval() || {};
+  const step = ctrl.vm.step;
   let pearl, percent;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
@@ -181,11 +182,16 @@ function renderEvalBox(ctrl) {
   }
 
   return (
-    <div className="cevalBox">
+    <div className={'cevalBox' + (ctrl.data.analysis ? ' withAnalysis' : '')}>
       { pearl }
       <div className="cevalBar">
         <span style={{ width: percent + '%' }}></span>
       </div>
+      { step.ceval && step.ceval.bestSan ?
+      <div className="bestMove">
+        best {step.ceval.bestSan}
+      </div> : null
+      }
       { ctrl.data.analysis ?
         <div className="openSummary" oncreate={helper.ontap(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>

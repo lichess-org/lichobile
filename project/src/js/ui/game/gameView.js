@@ -12,7 +12,6 @@ export default function view() {
   if (pov) {
     board = () => viewOnlyBoardContent(pov.fen, pov.lastMove, pov.color,
       pov.variant.key);
-    gamesMenu.lastJoined = null;
   } else {
     board = viewOnlyBoardContent;
   }

@@ -12,7 +12,6 @@ import * as m from 'mithril';
 
 export default {
   oncreate: helper.viewSlideIn,
-  onbeforeremove: helper.viewSlideOut,
 
   oninit() {
     helper.analyticsTrackView('Settings');

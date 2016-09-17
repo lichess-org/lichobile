@@ -244,14 +244,14 @@ export function miniUser(user, mini, isOpen, close) {
   function content() {
     if (!mini) {
       return (
-        <div className="miniUser">
+        <div key="loading" className="miniUser">
           {spinner.getVdom()}
         </div>
       );
     }
     const sessionUserId = session.get() && session.get().id;
     return (
-      <div className="miniUser">
+      <div key="loaded" className="miniUser">
         <div className="title">
           <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
             <span className={'userStatus withIcon ' + status} data-icon="r" />

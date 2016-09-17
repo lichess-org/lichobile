@@ -31,11 +31,6 @@ interface PongMessage {
   r: number;
 }
 
-interface LichessMessage {
-  t: string;
-  d?: string;
-}
-
 interface WorkerMessage {
   topic: string;
   payload?: any;

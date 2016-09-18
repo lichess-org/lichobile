@@ -9,10 +9,22 @@ export default function oninit(vnode) {
 
   socket.createDefault();
 
+  /*
   xhr.inbox()
   .then(data => {
     console.log(data);
-    getPosts(data.messages[0].id);
+    //getPosts(data.messages[0].id);
+    //xhr.deleteThread(data.messages[0].id);
+    return (data);
+  })
+  .catch(handleXhrError);
+  */
+
+  xhr.newThread('freefal2', 'test subject 111', 'test body 111')
+  .then(data => {
+    console.log(data);
+    //getPosts(data.messages[0].id);
+    //xhr.deleteThread(data.messages[0].id);
     return (data);
   })
   .catch(handleXhrError);

@@ -12,7 +12,7 @@ export function reload(id, page) {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
-    data: page ? { page: page } : {}
+    query: page ? { page } : {}
   });
 }
 

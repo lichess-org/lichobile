@@ -1,9 +1,10 @@
 import { header as headerWidget, backButton } from '../../shared/common';
+import router from '../../../router';
 import session from '../../../session';
 import layout from '../../layout';
 import * as m from 'mithril';
 import i18n from '../../../i18n';
-import { noop, gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
+import { gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
 import * as helper from '../../helper';
@@ -13,14 +14,14 @@ import miniBoard from '../../shared/miniBoard';
 export default function view(vnode) {
   const ctrl = vnode.state;
 
-  const headerCtrl = headerWidget.bind(undefined, null,
+  const headerCtrl = () => headerWidget(null,
     backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );
 
-  const body = tournamentBody.bind(undefined, ctrl);
-  const footer = renderFooter.bind(undefined, ctrl);
-  const faqOverlay = renderFAQOverlay.bind(undefined, ctrl);
-  const playreInfoOverlay = renderPlayerInfoOverlay.bind(undefined, ctrl);
+  const body = () => tournamentBody(ctrl);
+  const footer = () => renderFooter(ctrl);
+  const faqOverlay = () => renderFAQOverlay(ctrl);
+  const playreInfoOverlay = () => renderPlayerInfoOverlay(ctrl);
   const overlay = () => [faqOverlay(), playreInfoOverlay()];
 
   return layout.free(headerCtrl, body, footer, overlay);
@@ -211,19 +212,21 @@ function tournamentLeaderboard(ctrl) {
     <div key="leaderboard" className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
-      <table className='tournamentStandings'>
-        {data.standing.players.map(renderLeaderboardItem.bind(undefined, ctrl.playerInfoCtrl, userName))}
+      <table className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}>
+        {data.standing.players.map(p =>
+          renderLeaderboardItem(ctrl.playerInfoCtrl, userName, p)
+        )}
       </table>
 
-      <div key={'navigationButtons' + page} className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
-        {renderNavButton('W', !ctrl.isLoading() && backEnabled, () => ctrl.reload(data.id, 1))}
-        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, () => ctrl.reload(data.id, page - 1))}
+      <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
+        {renderNavButton('W', !ctrl.isLoading() && backEnabled, ctrl.first)}
+        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, ctrl.prev)}
         <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
-        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, () => ctrl.reload(data.id, page + 1))}
-        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, () => ctrl.reload(data.id, Math.ceil(data.nbPlayers/10)))}
+        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
+        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
         <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon='7'
-          oncreate={!ctrl.isLoading() && data.me ? helper.ontap(() => ctrl.reload(data.id, Math.ceil(data.me.rank/10))) : noop}
+          oncreate={helper.ontap(ctrl.me)}
         >
           <span>Me</span>
         </button>
@@ -233,16 +236,17 @@ function tournamentLeaderboard(ctrl) {
 }
 
 function renderNavButton(icon, isEnabled, action) {
+  const state = isEnabled ? 'enabled' : 'disabled';
   return (
-    <button className={'navigationButton' + (isEnabled ? '' : ' disabled')}
-      data-icon={icon} oncreate={isEnabled ? helper.ontap(action) : noop} />
+    <button className={`navigationButton ${state}`}
+      data-icon={icon} oncreate={helper.ontap(action)} />
   );
 }
 
 function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} oncreate={helper.ontapY(playerInfoCtrl.open.bind(undefined, player))}>
+    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} oncreate={helper.ontapY(() => playerInfoCtrl.open(player))}>
       <td className='tournamentPlayer'>
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>

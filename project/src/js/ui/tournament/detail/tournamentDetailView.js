@@ -197,7 +197,7 @@ function timeInfo(time, preceedingText) {
 }
 
 function getLeaderboardItemEl(e) {
-  return e.target.classList.contains('list_item') ? e :
+  return e.target.classList.contains('list_item') ? e.target :
     helper.findParentBySelector(e.target, '.list_item');
 }
 

@@ -5,7 +5,7 @@ export default function chessLogic(ctrl: AnalyseCtrlInterface): ChesslogicInterf
 
   const worker = new Worker('vendor/scalachessjs.js');
 
-  worker.addEventListener('message', function(msg) {
+  worker.onmessage = function(msg) {
     const payload = msg.data.payload;
 
     switch (msg.data.topic) {
@@ -31,7 +31,7 @@ export default function chessLogic(ctrl: AnalyseCtrlInterface): ChesslogicInterf
         }
         break;
     }
-  });
+  };
 
   return {
     sendMoveRequest(req) {

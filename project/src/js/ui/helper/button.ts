@@ -56,6 +56,7 @@ export default function ButtonHandler(
   function onTouchStart(e: TouchEvent) {
     let touch = e.changedTouches[0];
     activeElement  = getElement ? getElement(e) : el;
+    if (!activeElement) return;
     let boundingRect = activeElement.getBoundingClientRect();
     startX = touch.clientX;
     startY = touch.clientY;
@@ -78,7 +79,7 @@ export default function ButtonHandler(
 
   function onTouchMove(e: TouchEvent) {
     // if going out of bounds, no way to reenable the button
-    if (active) {
+    if (active && activeElement) {
       let touch = e.changedTouches[0];
       active = isActive(touch);
       if (!active) {
@@ -94,7 +95,7 @@ export default function ButtonHandler(
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
     clearTimeout(repeatIntervalID);
-    if (active) {
+    if (active && activeElement) {
       clearTimeout(holdTimeoutID);
       if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
       tapHandler(e);
@@ -108,7 +109,7 @@ export default function ButtonHandler(
     clearTimeout(repeatTimeoutId);
     clearTimeout(repeatIntervalID);
     active = false;
-    activeElement.classList.remove(ACTIVE_CLASS);
+    if (activeElement) activeElement.classList.remove(ACTIVE_CLASS);
   }
 
   function onContextMenu(e: TouchEvent) {
@@ -121,7 +122,7 @@ export default function ButtonHandler(
     if (holdHandler) {
       holdHandler();
       active = false;
-      activeElement.classList.remove(ACTIVE_CLASS);
+      if (activeElement) activeElement.classList.remove(ACTIVE_CLASS);
     }
   }
 

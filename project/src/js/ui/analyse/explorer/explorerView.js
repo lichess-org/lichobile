@@ -17,8 +17,6 @@ function resultBar(move) {
   return ['white', 'draws', 'black'].map(section);
 }
 
-var lastShow = <div className="scrollerWrapper" />;
-
 function getTR(e) {
   return e.target.tagName === 'TR' ? e.target :
     helper.findParentBySelector(e.target, 'tr');
@@ -198,7 +196,8 @@ function showEmpty(ctrl) {
 }
 
 function showGameEnd(ctrl, title) {
-  return m('div.data.empty.scrollerWrapper', [
+  return m('div.data.empty.scrollerWrapper', {
+  }, [
     m('div.title', 'Game over'),
     m('div.message', [
       m('i[data-icon=]'),
@@ -210,6 +209,7 @@ function showGameEnd(ctrl, title) {
   ]);
 }
 
+let lastShow = <div className="scrollerWrapper" />;
 function show(ctrl) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
@@ -258,7 +258,8 @@ function showTitle(ctrl) {
 }
 
 function showConfig(ctrl) {
-  return m('div.scrollerWrapper.explorerConfig', [
+  return m('div.scrollerWrapper.explorerConfig', {
+  }, [
     m('div.title', showTitle(ctrl)),
     explorerConfig.view(ctrl.explorer.config)
   ]);
@@ -266,7 +267,8 @@ function showConfig(ctrl) {
 
 
 function failing() {
-  return m('div.failing.message.scrollerWrapper', [
+  return m('div.failing.message.scrollerWrapper', {
+  }, [
     m('i[data-icon=,]'),
     m('h3', 'Oops, sorry!'),
     m('p', 'The explorer is temporarily'),
@@ -280,7 +282,6 @@ export default function(ctrl) {
   const config = ctrl.explorer.config;
   const configOpened = config.data.open();
   const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
-  const content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
   const className = helper.classSet({
     explorerTable: true,
     loading
@@ -290,10 +291,12 @@ export default function(ctrl) {
       <div className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div>
-      {content}
-      {(!content || ctrl.explorer.failing()) ? null :
+      { configOpened ? showConfig(ctrl) : null }
+      { !configOpened && ctrl.explorer.failing() ? failing() : null }
+      { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
+      {data && data.opening ?
         <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontap(config.toggleOpen)} />
+          oncreate={helper.ontap(config.toggleOpen)} /> : null
       }
     </div>
   );

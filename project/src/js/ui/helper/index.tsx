@@ -196,8 +196,9 @@ export function fadesOut(callback: () => void, selector?: string, time = 150) {
 }
 
 type TapHandler = (e?: Event) => void;
+type RepeatHandler = () => boolean;
 
-function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repeatHandler: TapHandler, scrollX: boolean, scrollY: boolean, touchEndFeedback: boolean) {
+function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repeatHandler: RepeatHandler, scrollX: boolean, scrollY: boolean, touchEndFeedback: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
   return function(vnode: Mithril.Vnode<any>) {
     ButtonHandler(vnode.dom,
       (e: Event) => {
@@ -208,7 +209,8 @@ function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repea
       repeatHandler,
       scrollX,
       scrollY,
-      touchEndFeedback
+      touchEndFeedback,
+      getElement
     );
   };
 }
@@ -219,8 +221,8 @@ export function ontouch(handler: TapHandler) {
   };
 }
 
-export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: TapHandler, touchEndFeedback?: boolean) {
-  return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback);
+export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, touchEndFeedback?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+  return createTapHandler(tapHandler, holdHandler, repeatHandler, false, false, touchEndFeedback, getElement);
 }
 
 export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, touchEndFeedback?: boolean) {

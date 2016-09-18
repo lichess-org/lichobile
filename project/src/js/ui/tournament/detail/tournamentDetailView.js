@@ -196,6 +196,18 @@ function timeInfo(time, preceedingText) {
   return preceedingText + ' ' + formatTimeInSecs(time);
 }
 
+function getLeaderboardItemEl(e) {
+  return e.target.classList.contains('list_item') ? e :
+    helper.findParentBySelector(e.target, '.list_item');
+}
+
+function handlePlayerInfoTap(ctrl, e) {
+  const el = getLeaderboardItemEl(e);
+  const playerId = el.dataset.player;
+
+  ctrl.playerInfoCtrl.open(playerId);
+}
+
 function tournamentLeaderboard(ctrl) {
   const data = ctrl.tournament();
   const players = data.standing.players;
@@ -212,7 +224,10 @@ function tournamentLeaderboard(ctrl) {
     <div key="leaderboard" className='tournamentLeaderboard'>
       <p className='tournamentTitle'> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
-      <table className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}>
+      <table
+        className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}
+        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), null, null, false, getLeaderboardItemEl)}
+      >
         {data.standing.players.map(p =>
           renderLeaderboardItem(ctrl.playerInfoCtrl, userName, p)
         )}
@@ -246,7 +261,7 @@ function renderNavButton(icon, isEnabled, action) {
 function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} className={'list_item' + (isMe ? ' me' : '')} oncreate={helper.ontapY(() => playerInfoCtrl.open(player))}>
+    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' me' : '')} >
       <td className='tournamentPlayer'>
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>

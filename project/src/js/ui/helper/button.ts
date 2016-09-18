@@ -9,15 +9,32 @@ function hasContextMenu() {
   return window.cordova.platformId !== 'ios';
 }
 
-export default function ButtonHandler(el,
-  tapHandler,
-  holdHandler,
-  repeatHandler,
-  scrollX,
-  scrollY,
-  touchEndFeedback) {
+interface Boundaries {
+  minX: number
+  maxX: number
+  minY: number
+  maxY: number
+}
 
-  let startX, startY, boundaries, active, holdTimeoutID, repeatTimeoutId, repeatIntervalID;
+export default function ButtonHandler(
+  el: HTMLElement,
+  tapHandler: (e?: Event) => void,
+  holdHandler: () => void,
+  repeatHandler: () => boolean,
+  scrollX: boolean,
+  scrollY: boolean,
+  touchEndFeedback: boolean,
+  getElement?: (e: TouchEvent) => HTMLElement) {
+
+  let activeElement = el;
+
+  let startX: number,
+    startY: number,
+    boundaries: Boundaries,
+    active: boolean,
+    holdTimeoutID: number,
+    repeatTimeoutId: number,
+    repeatIntervalID: number;
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!');
@@ -30,15 +47,16 @@ export default function ButtonHandler(el,
 
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
-    var res = repeatHandler();
+    const res = repeatHandler();
     repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     if (!res) clearTimeout(repeatIntervalID);
     redraw();
   }
 
-  function onTouchStart(e) {
+  function onTouchStart(e: TouchEvent) {
     let touch = e.changedTouches[0];
-    let boundingRect = el.getBoundingClientRect();
+    activeElement  = getElement ? getElement(e) : el;
+    let boundingRect = activeElement.getBoundingClientRect();
     startX = touch.clientX;
     startY = touch.clientY;
     boundaries = {
@@ -49,7 +67,7 @@ export default function ButtonHandler(el,
     };
     active = true;
     setTimeout(() => {
-      if (active) el.classList.add(ACTIVE_CLASS);
+      if (active) activeElement.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
     clearTimeout(repeatIntervalID);
@@ -58,7 +76,7 @@ export default function ButtonHandler(el,
     }, 150);
   }
 
-  function onTouchMove(e) {
+  function onTouchMove(e: TouchEvent) {
     // if going out of bounds, no way to reenable the button
     if (active) {
       let touch = e.changedTouches[0];
@@ -67,21 +85,21 @@ export default function ButtonHandler(el,
         clearTimeout(holdTimeoutID);
         clearTimeout(repeatTimeoutId);
         clearTimeout(repeatIntervalID);
-        el.classList.remove(ACTIVE_CLASS);
+        activeElement.classList.remove(ACTIVE_CLASS);
       }
     }
   }
 
-  function onTouchEnd(e) {
+  function onTouchEnd(e: TouchEvent) {
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
     clearTimeout(repeatIntervalID);
     if (active) {
       clearTimeout(holdTimeoutID);
-      if (touchEndFeedback) el.classList.add(ACTIVE_CLASS);
+      if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
       tapHandler(e);
       active = false;
-      setTimeout(() => el.classList.remove(ACTIVE_CLASS), 80);
+      setTimeout(() => activeElement.classList.remove(ACTIVE_CLASS), 80);
     }
   }
 
@@ -90,10 +108,10 @@ export default function ButtonHandler(el,
     clearTimeout(repeatTimeoutId);
     clearTimeout(repeatIntervalID);
     active = false;
-    el.classList.remove(ACTIVE_CLASS);
+    activeElement.classList.remove(ACTIVE_CLASS);
   }
 
-  function onContextMenu(e) {
+  function onContextMenu(e: TouchEvent) {
     e.preventDefault();
     e.stopPropagation();
     if (holdTimeoutID === undefined) onHold();
@@ -103,11 +121,11 @@ export default function ButtonHandler(el,
     if (holdHandler) {
       holdHandler();
       active = false;
-      el.classList.remove(ACTIVE_CLASS);
+      activeElement.classList.remove(ACTIVE_CLASS);
     }
   }
 
-  function isActive(touch) {
+  function isActive(touch: Touch) {
     let x = touch.clientX,
       y = touch.clientY,
       b = boundaries,

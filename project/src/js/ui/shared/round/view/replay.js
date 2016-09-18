@@ -16,7 +16,7 @@ function renderTr(ctrl, index, pairs, curPly) {
   const first = pairs[index][0];
   const second = pairs[index][1];
   return (
-    <tr key={'turn_' + first.ply + second.ply}>
+    <tr>
       <td className="replayMoveIndex">{ (index + 1) + '.' }</td>
       {renderTd(ctrl, first, curPly, true)}
       {renderTd(ctrl, second, curPly, false)}

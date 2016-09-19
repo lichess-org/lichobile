@@ -285,7 +285,9 @@ interface GameSituation {
   pgnMoves: Array<string>
   uciMoves: Array<string>
   promotion?: string
-  crazyhouse?: Pockets
+  crazyhouse?: {
+    pockets: Pockets
+  }
   ply: number
 }
 

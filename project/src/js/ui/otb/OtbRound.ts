@@ -1,9 +1,10 @@
 import sound from '../../sound';
 import router from '../../router';
+import chess, { InitResponse } from '../../chess';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import * as gameApi from '../../lichess/game';
-import { askWorker, oppositeColor } from '../../utils';
+import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -32,13 +33,11 @@ export default class OtbRound implements OfflineRoundInterface {
   public actions: any;
   public newGameMenu: any;
   public chessground: Chessground.Controller;
-  public chessWorker: Worker;
   public replay: Replay;
   public vm: any;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.setupFen = setupFen;
-    this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
 
@@ -81,7 +80,6 @@ export default class OtbRound implements OfflineRoundInterface {
         initialFen,
         situations,
         ply,
-        this.chessWorker,
         this.onReplayAdded,
         this.onThreefoldRepetition
       );
@@ -108,10 +106,8 @@ export default class OtbRound implements OfflineRoundInterface {
 
     helper.analyticsTrackEvent('Offline OTB Game', `New game ${variant}`);
 
-    askWorker(this.chessWorker, {
-      topic: 'init',
-      payload
-    }).then(data => {
+    chess.init(payload)
+    .then((data: InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,

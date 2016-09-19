@@ -19,12 +19,8 @@ export function getAnalyseData(data: StoredOfflineGame) {
       san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
       uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
       dests: o.dests,
+      crazy: o.crazyhouse
     };
-    if (o.crazyhouse) {
-      step.crazy = {
-        pockets: o.crazyhouse
-      };
-    }
     return step;
   });
   return data.data;

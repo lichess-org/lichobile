@@ -13,6 +13,29 @@ export interface PathObj {
   variation: any
 }
 
+export interface AnalyseCtrlInterface {
+  data: AnalysisData
+  source: Source
+  vm: any
+  explorer: ExplorerCtrlInterface
+  chessground: Chessground.Controller
+
+  explorerMove(uci: string): void
+  debouncedScroll(): void
+}
+
+export interface ExplorerCtrlInterface {
+  allowed: Mithril.Property<boolean>
+  enabled: Mithril.Property<boolean>
+  setStep(): void
+  loading: Mithril.Property<boolean>
+  failing: Mithril.Property<boolean>
+  config: any
+  withGames: boolean
+  current(): any
+  toggle(): void
+}
+
 export type Path = Array<PathObj>
 
 export interface AnalyseInterface {
@@ -30,4 +53,43 @@ export interface AnalyseInterface {
   deleteVariation(ply: number, id: number): void
   promoteVariation(ply: number, id: number): void
   plyOfNextNag(color: Color, nag: string, fromPly: number): number
+}
+
+export interface ExplorerMove {
+  white: number
+  black: number
+  draws: number
+  real_wdl: number
+  averageRating: number
+  dtz: number
+  dtm: number
+  wdl: number
+  san: string
+  uci: string
+  zeroing: boolean
+  checkmate: boolean
+  stalemate: boolean
+  insufficient_material: boolean
+}
+
+export interface ExplorerPlayer {
+  rating: number
+  name: string
+}
+
+export interface ExplorerGame {
+  id: string
+  white: ExplorerPlayer
+  black: ExplorerPlayer
+  year: string
+  winner: Color
+}
+
+export interface ExplorerData {
+  opening?: boolean
+  tablebase?: boolean
+  fen?: string
+  moves: Array<ExplorerMove>
+  topGames?: Array<ExplorerGame>
+  recentGames?: Array<ExplorerGame>
 }

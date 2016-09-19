@@ -11,24 +11,14 @@ declare namespace Mithril {
   }
 
   interface Static {
-    (
-      selector: string,
-      ...children: Children[]
-    ): BaseNode;
 
     (
-      selector: string,
-      attributes: Attributes,
+      selector: string | BaseComponent,
       ...children: Children[]
     ): BaseNode;
 
     <T>(
-      selector: BaseComponent,
-      ...children: Children[]
-    ): BaseNode;
-
-    <T>(
-      selector: BaseComponent,
+      selector: string | BaseComponent,
       attributes: T & Attributes,
       ...children: Children[]
     ): BaseNode;
@@ -46,7 +36,7 @@ declare namespace Mithril {
     trust(html: string): any;
 
     render(
-      rootElement: Element,
+      rootElement: HTMLElement,
       children: Children
     ): void;
 
@@ -59,14 +49,14 @@ declare namespace Mithril {
     attrs?: T;
     children: Children[];
     text: string | number | boolean;
-    dom?: Element;
+    dom?: HTMLElement;
     domSize?: number;
     state: any;
   }
 
   interface VnodeFactory {
-    (tag: string, key: string | number, attrs: Attributes, children: Array<BaseNode>, text: string, dom: Element): BaseNode
-    <T>(tag: Component<T>, key: string | number, attrs: T, children: Array<BaseNode>, text: string, dom: Element): BaseNode
+    (tag: string, key: string | number, attrs: Attributes, children: Array<BaseNode>, text: string, dom: HTMLElement): BaseNode
+    <T>(tag: Component<T>, key: string | number, attrs: T, children: Array<BaseNode>, text: string, dom: HTMLElement): BaseNode
   }
 
   interface BaseComponent {

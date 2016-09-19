@@ -294,6 +294,8 @@ function renderGameRunningActions(ctrl: OnlineRound) {
   if (ctrl.data.player.spectator) {
     let controls = [
       gameButton.shareLink(ctrl),
+      ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
+      ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 
@@ -361,6 +363,8 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     if (ctrl.data.player.spectator) {
       buttons = [
         gameButton.shareLink(ctrl),
+        ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
+        ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null

@@ -277,16 +277,18 @@ gamesMenu.view = function() {
   const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
   function wrapperOnCreate(vnode) {
     const el = vnode.dom;
-    scroller = new iScroll(el, {
-      scrollX: true,
-      scrollY: false,
-      momentum: false,
-      snap: '.card',
-      snapSpeed: 400,
-      preventDefaultException: {
-        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-      }
-    });
+    if (!helper.isWideScreen()) {
+      scroller = new iScroll(el, {
+        scrollX: true,
+        scrollY: false,
+        momentum: false,
+        snap: '.card',
+        snapSpeed: 400,
+        preventDefaultException: {
+          tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+        }
+      });
+    }
   }
 
   function wrapperOnRemove() {
@@ -299,8 +301,10 @@ gamesMenu.view = function() {
   function wrapperOnUpdate(vnode) {
     // see https://github.com/cubiq/iscroll/issues/412
     const el = vnode.dom;
-    scroller.options.snap = el.querySelectorAll('.card');
-    scroller.refresh();
+    if (scroller) {
+      scroller.options.snap = el.querySelectorAll('.card');
+      scroller.refresh();
+    }
   }
 
   const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';

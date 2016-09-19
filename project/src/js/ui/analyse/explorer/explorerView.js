@@ -17,12 +17,22 @@ function resultBar(move) {
   return ['white', 'draws', 'black'].map(section);
 }
 
-var lastShow = <div className="scrollerWrapper" />;
+function getTR(e) {
+  return e.target.tagName === 'TR' ? e.target :
+    helper.findParentBySelector(e.target, 'tr');
+}
+
+function onTableTap(ctrl, e) {
+  const el = getTR(e);
+  if (el.dataset.uci) ctrl.explorerMove(el.dataset.uci);
+}
 
 function showMoveTable(ctrl, moves) {
   if (!moves.length) return null;
   return (
-    <table className="moves">
+    <table className="moves"
+      oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTR)}
+    >
       <thead>
         <tr>
           <th>Move</th>
@@ -34,7 +44,7 @@ function showMoveTable(ctrl, moves) {
       <tbody>
         { moves.map(move => {
           return (
-            <tr key={move.uci} oncreate={helper.ontapY(() => ctrl.explorerMove(move.uci))}>
+            <tr key={move.uci} data-uci={move.uci}>
               <td className="explorerMove">
                 {move.san[0] === 'P' ? move.san.slice(1) : move.san}
               </td>
@@ -61,16 +71,20 @@ function showResult(w) {
   return <result className="draws">½-½</result>;
 }
 
+function link(ctrl, e) {
+  const orientation = ctrl.chessground.data.orientation;
+  const gameId = getTR(e).dataset.id;
+  if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
+    router.set(`/analyse/online/${gameId}/${orientation}`);
+  }
+}
+
 function showGameTable(ctrl, type, games) {
   if (!ctrl.explorer.withGames || !games.length) return null;
-  function link(game) {
-    const orientation = ctrl.chessground.data.orientation;
-    if (ctrl.explorer.config.data.db.selected() === 'lichess') {
-      router.set(`/analyse/online/${game.id}/${orientation}`);
-    }
-  }
   return (
-    <table className="games">
+    <table className="games"
+      oncreate={helper.ontap(e => link(ctrl, e), null, null, false, getTR)}
+    >
       <thead>
         <tr>
           <th colspan="4">{type + ' games'}</th>
@@ -79,7 +93,7 @@ function showGameTable(ctrl, type, games) {
       <tbody>
       { games.map(game => {
         return (
-          <tr key={game.id} oncreate={helper.ontapY(() => link(game))}>
+          <tr key={game.id} data-id={game.id}>
             <td>
               {[game.white, game.black].map(p =>
                 <span>{p.rating}</span>
@@ -104,15 +118,22 @@ function showGameTable(ctrl, type, games) {
   );
 }
 
+function onTablebaseTap(ctrl, e) {
+  const uci = getTR(e).dataset.uci;
+  if (uci) ctrl.explorerMove(uci);
+}
+
 function showTablebase(ctrl, title, moves, fen) {
   var stm = fen.split(/\s/)[1];
   if (!moves.length) return null;
   return [
     <div className="title">{title}</div>,
-    <table className="explorerTablebase">
+    <table className="explorerTablebase"
+      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e), null, null, false, getTR)}
+    >
       <tbody>
       {moves.map(move => {
-        return <tr key={move.uci} oncreate={helper.ontapY(() => ctrl.explorerMove(move.uci))}>
+        return <tr data-uci={move.uci} key={move.uci}>
           <td>{move.san}</td>
           <td>
             {showDtz(stm, move)}
@@ -175,7 +196,8 @@ function showEmpty(ctrl) {
 }
 
 function showGameEnd(ctrl, title) {
-  return m('div.data.empty.scrollerWrapper', [
+  return m('div.data.empty.scrollerWrapper', {
+  }, [
     m('div.title', 'Game over'),
     m('div.message', [
       m('i[data-icon=]'),
@@ -187,6 +209,7 @@ function showGameEnd(ctrl, title) {
   ]);
 }
 
+let lastShow = <div className="scrollerWrapper" />;
 function show(ctrl) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
@@ -235,7 +258,8 @@ function showTitle(ctrl) {
 }
 
 function showConfig(ctrl) {
-  return m('div.scrollerWrapper.explorerConfig', [
+  return m('div.scrollerWrapper.explorerConfig', {
+  }, [
     m('div.title', showTitle(ctrl)),
     explorerConfig.view(ctrl.explorer.config)
   ]);
@@ -243,7 +267,8 @@ function showConfig(ctrl) {
 
 
 function failing() {
-  return m('div.failing.message.scrollerWrapper', [
+  return m('div.failing.message.scrollerWrapper', {
+  }, [
     m('i[data-icon=,]'),
     m('h3', 'Oops, sorry!'),
     m('p', 'The explorer is temporarily'),
@@ -257,7 +282,6 @@ export default function(ctrl) {
   const config = ctrl.explorer.config;
   const configOpened = config.data.open();
   const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
-  const content = configOpened ? showConfig(ctrl) : (ctrl.explorer.failing() ? failing() : show(ctrl));
   const className = helper.classSet({
     explorerTable: true,
     loading
@@ -267,10 +291,12 @@ export default function(ctrl) {
       <div className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div>
-      {content}
-      {(!content || ctrl.explorer.failing()) ? null :
+      { configOpened ? showConfig(ctrl) : null }
+      { !configOpened && ctrl.explorer.failing() ? failing() : null }
+      { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
+      {data && data.opening ?
         <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontap(config.toggleOpen)} />
+          oncreate={helper.ontap(config.toggleOpen)} /> : null
       }
     </div>
   );

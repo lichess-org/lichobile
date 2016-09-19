@@ -1,6 +1,5 @@
 import { debounce } from 'lodash';
 import router from '../../router';
-import signals from '../../signals';
 import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
@@ -117,8 +116,6 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
-      // reconnect game socket after a cancelled seek
-      signals.seekCanceled.add(this.connectGameSocket);
     }
   }
 

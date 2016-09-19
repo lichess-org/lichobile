@@ -20,6 +20,7 @@ import { defined, renderEval, isSynthetic } from '../util';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
+import treePath from '../path';
 import { renderTree } from './treeView';
 
 export default function analyseView() {
@@ -277,6 +278,16 @@ function renderStatus(ctrl) {
   );
 }
 
+function getMoveEl(e) {
+  return e.target.tagName === 'MOVE' ? e.target :
+    helper.findParentBySelector(e.target, 'move');
+}
+
+function onReplayTap(ctrl, e) {
+  const el = getMoveEl(e);
+  ctrl.jump(treePath.read(el.dataset.path));
+}
+
 function renderReplay(ctrl) {
 
   var result;
@@ -297,7 +308,9 @@ function renderReplay(ctrl) {
   }
 
   return (
-    <div id="replay" className="analyseReplay native_scroller">
+    <div id="replay" className="analyseReplay native_scroller"
+      oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
+    >
       {tree}
     </div>
   );

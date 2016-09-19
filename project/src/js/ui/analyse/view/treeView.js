@@ -54,10 +54,8 @@ function renderMove(ctrl, move, path) {
     pathStr === ctrl.vm.pathStr ? 'current' : ''
   ].join(' ');
 
-  const jump = helper.ontapY(() => ctrl.jump(treePath.read(pathStr)));
-
   return (
-    <move className={className} oncreate={jump}>
+    <move data-path={pathStr} className={className}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
       {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
         defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null

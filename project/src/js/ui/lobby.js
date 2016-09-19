@@ -7,7 +7,6 @@ import popupWidget from './shared/popup';
 import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket from '../socket';
-import signals from '../signals';
 import * as m from 'mithril';
 
 let nbPlayers = 0;
@@ -56,11 +55,7 @@ lobby.cancelSeeking = function(fromBB) {
 
   window.plugins.insomnia.allowSleepAgain();
 
-  // recreate default socket after a cancelled seek
-  // and dispatch an event so I can recreate a game socket
-  // not very elegant, but well, it will work...
-  socket.createDefault();
-  signals.seekCanceled.dispatch();
+  socket.restorePrevious();
 
   helper.analyticsTrackEvent('Seek', 'Canceled');
 };

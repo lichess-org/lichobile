@@ -52,7 +52,6 @@ export function renderUserInfos(ctrl) {
     ctrl.data.user.history ? m('canvas', {
       oncreate(vnode) {
         const ctx = vnode.dom.getContext('2d');
-        console.log(vnode.dom);
         drawChart(ctrl, ctx);
         vnode.state.hash = chartHash(ctrl);
       },

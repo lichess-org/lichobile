@@ -71,7 +71,6 @@ export function defs(brushes) {
       {brushes.map(brush => {
         return (
           <marker
-            key={brush.key}
             id={'arrowhead-' + brush.key}
             orient="auto"
             markerWidth={4}

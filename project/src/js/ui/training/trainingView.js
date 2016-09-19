@@ -13,7 +13,7 @@ export default function view(vnode) {
 
   return layout.board(
     !ctrl.data || ctrl.vm.loading ?
-      connectingHeader.bind(undefined, i18n('training')) :
+      connectingHeader :
       header.bind(undefined, i18n('training')),
     renderContent.bind(undefined, ctrl),
     () => [

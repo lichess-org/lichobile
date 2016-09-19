@@ -11,8 +11,8 @@ export default {
     let isOpen = false;
     const playerData = m.prop();
 
-    function open(p) {
-      xhr.playerInfo(tournament().id, p.name)
+    function open(playerId) {
+      xhr.playerInfo(tournament().id, playerId)
       .then(data => {
         playerData(data);
         backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'));

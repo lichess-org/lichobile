@@ -31,11 +31,6 @@ interface PongMessage {
   r: number;
 }
 
-interface LichessMessage {
-  t: string;
-  d?: string;
-}
-
 interface WorkerMessage {
   topic: string;
   payload?: any;
@@ -101,6 +96,7 @@ interface Player {
   berserk?: boolean;
   version?: number;
   checks?: number;
+  ratingDiff?: number;
 }
 
 interface TournamentClock {

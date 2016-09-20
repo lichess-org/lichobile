@@ -17,6 +17,7 @@ export default {
     socket.destroy();
     if (this.ctrl) {
       if (this.ctrl.ceval) this.ctrl.ceval.destroy();
+      this.ctrl = null;
     }
   },
   view

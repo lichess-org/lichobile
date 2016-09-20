@@ -89,7 +89,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url;
 
   const timeoutPromise: PromiseLike<Response> = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject('Request timeout.'), 8000);
+    timeoutId = setTimeout(() => reject('Request timeout.'), 10000);
   });
 
   const reqPromise: PromiseLike<Response> = fetch(fullUrl, cfg);

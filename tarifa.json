@@ -110,6 +110,7 @@
   "cordova": {
     "preferences": {
       "Orientation": "all",
+      "SuppressesLongPressGesture": true,
       "EnableViewportScale": false,
       "KeyboardDisplayRequiresUserAction": false,
       "ShowSplashScreenSpinner": false,

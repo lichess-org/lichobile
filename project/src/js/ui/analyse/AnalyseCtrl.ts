@@ -25,7 +25,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { RoleToSan, SanToRole, Source, Path, AnalyseInterface } from './interfaces';
+import { RoleToSan, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface } from './interfaces';
 
 const roleToSan: RoleToSan = {
   pawn: 'P',
@@ -56,7 +56,7 @@ export default class AnalyseCtrl {
   public chessground: Chessground.Controller;
   public analyse: AnalyseInterface;
   public ceval: any;
-  public explorer: any;
+  public explorer: ExplorerCtrlInterface;
   public evalSummary: any;
   public notes: any;
 

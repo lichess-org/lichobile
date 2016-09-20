@@ -300,8 +300,11 @@ export default function(ctrl: AnalyseCtrlInterface) {
       { configOpened ? showConfig(ctrl) : null }
       { !configOpened && ctrl.explorer.failing() ? failing() : null }
       { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
-      <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
-        oncreate={helper.ontap(config.toggleOpen)} />
+      { configOpened || (data && data.opening) ?
+        <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
+          oncreate={helper.ontap(config.toggleOpen)}
+        /> : null
+      }
     </div>
   );
 }

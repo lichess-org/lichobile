@@ -4,7 +4,7 @@
   "description": "lichess.org mobile application",
   "version": "4.5.0",
   "platforms": [
-    "ios@4.1.0",
+    "ios@4.2.1",
     "android@5.1.1"
   ],
   "configurations_mixins": {

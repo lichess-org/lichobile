@@ -285,8 +285,8 @@ export default function(ctrl: AnalyseCtrlInterface) {
   if (!ctrl.explorer.enabled()) return null;
   const data = ctrl.explorer.current();
   const config = ctrl.explorer.config;
-  const configOpened = config.data.open();
-  const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
+  const configOpened = config.open();
+  const loading = !configOpened && ctrl.explorer.loading();
   const className = helper.classSet({
     explorerTable: true,
     loading

@@ -60,6 +60,8 @@ export default class AnalyseCtrl {
   public evalSummary: any;
   public notes: any;
 
+  private debouncedExplorerSetStep: () => void;
+
   public static decomposeUci(uci: string): [Pos, Pos, San] {
     return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <San>uci.slice(4, 5)];
   }
@@ -94,9 +96,11 @@ export default class AnalyseCtrl {
 
     this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
-    this.explorer = explorerCtrl(this, true);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
     this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
+
+    this.explorer = explorerCtrl(this, true);
+    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, 100);
 
     const initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
@@ -106,6 +110,7 @@ export default class AnalyseCtrl {
 
     this.vm.path = initialPath;
     this.vm.pathStr = treePath.write(initialPath);
+
 
     this.showGround();
     this.initCeval();
@@ -210,7 +215,7 @@ export default class AnalyseCtrl {
       else sound.move();
     }
     this.ceval.stop();
-    this.explorer.setStep();
+    this.debouncedExplorerSetStep();
     this.updateHref();
     this.debouncedStartCeval();
     this.debouncedScroll();

@@ -12,21 +12,17 @@ export default function view(vnode) {
 
 
 function tournamentListBody(ctrl) {
-  return (null);
-  /*
-  if (!ctrl.threads()) return null;
-
-
+  if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
+  console.log("past guard");
   return (
     <div className="inboxWrapper">
       <table>
         <tbody>
-          {ctrl.threads().map(renderInboxItem)}
+          {ctrl.threads().currentPageResults.map(renderInboxItem)}
         </tbody>
       </table>
     </div>
   );
-  */
 }
 
 function renderInboxItem(thread) {
@@ -36,6 +32,13 @@ function renderInboxItem(thread) {
   const name = thread.name;
   */
   const time = window.moment().unix(thread.updatedAt);
-  console.log(time.format());
-
+  // console.log(time.format());
+  return (
+    <tr>
+      <td> { thread.id } </td>
+      <td> { thread.author } </td>
+      <td> { thread.name } </td>
+      <td> { thread.updatedAt } </td>
+    </tr>
+  );
 }

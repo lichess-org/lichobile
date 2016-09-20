@@ -5,7 +5,7 @@ import view from './view/analyseView';
 
 export default {
   oninit,
-  oncreate(vnode) {
+  oncreate(vnode: Mithril.Vnode<any>) {
     if (vnode.attrs.source) {
       helper.pageSlideIn(vnode.dom);
     } else {
@@ -17,7 +17,6 @@ export default {
     socket.destroy();
     if (this.ctrl) {
       if (this.ctrl.ceval) this.ctrl.ceval.destroy();
-      this.ctrl.chessLogic.terminate();
     }
   },
   view

@@ -2,12 +2,14 @@ import router from '../../../router';
 import * as m from 'mithril';
 import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
+import { AnalyseCtrlInterface, ExplorerMove, ExplorerGame, ExplorerPlayer } from '../interfaces';
 
-function resultBar(move) {
+function resultBar(move: ExplorerMove) {
   const sum = move.white + move.draws + move.black;
-  function section(key) {
-    const percent = move[key] * 100 / sum;
-    const width = (Math.round(move[key] * 1000 / sum) / 10) + '%';
+  function section(key: string) {
+    const num: number = (move as any)[key];
+    const percent = num * 100 / sum;
+    const width = (Math.round(num * 1000 / sum) / 10) + '%';
     return percent === 0 ? null : (
       <span className={'explorerBar ' + key} style={{width}}>
         {percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null}
@@ -17,17 +19,18 @@ function resultBar(move) {
   return ['white', 'draws', 'black'].map(section);
 }
 
-function getTR(e) {
-  return e.target.tagName === 'TR' ? e.target :
-    helper.findParentBySelector(e.target, 'tr');
+function getTR(e: Event): HTMLElement {
+  const target = (e.target as HTMLElement);
+  return target.tagName === 'TR' ? target :
+    helper.findParentBySelector(target, 'tr');
 }
 
-function onTableTap(ctrl, e) {
+function onTableTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getTR(e);
-  if (el.dataset.uci) ctrl.explorerMove(el.dataset.uci);
+  if ((el.dataset as any).uci) ctrl.explorerMove((el.dataset as any).uci);
 }
 
-function showMoveTable(ctrl, moves) {
+function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
   if (!moves.length) return null;
   return (
     <table className="moves"
@@ -65,21 +68,21 @@ function showMoveTable(ctrl, moves) {
   );
 }
 
-function showResult(w) {
+function showResult(w: Color) {
   if (w === 'white') return <result className="white">1-0</result>;
   if (w === 'black') return <result className="black">0-1</result>;
   return <result className="draws">½-½</result>;
 }
 
-function link(ctrl, e) {
+function link(ctrl: AnalyseCtrlInterface, e: Event) {
   const orientation = ctrl.chessground.data.orientation;
-  const gameId = getTR(e).dataset.id;
+  const gameId = (getTR(e).dataset as any).id;
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
     router.set(`/analyse/online/${gameId}/${orientation}`);
   }
 }
 
-function showGameTable(ctrl, type, games) {
+function showGameTable(ctrl: AnalyseCtrlInterface, type: any, games: Array<ExplorerGame>) {
   if (!ctrl.explorer.withGames || !games.length) return null;
   return (
     <table className="games"
@@ -91,16 +94,16 @@ function showGameTable(ctrl, type, games) {
         </tr>
       </thead>
       <tbody>
-      { games.map(game => {
+      { games.map((game: ExplorerGame) => {
         return (
           <tr key={game.id} data-id={game.id}>
             <td>
-              {[game.white, game.black].map(p =>
+              {[game.white, game.black].map((p: ExplorerPlayer) =>
                 <span>{p.rating}</span>
               )}
             </td>
             <td>
-              {[game.white, game.black].map(p =>
+              {[game.white, game.black].map((p: ExplorerPlayer) =>
                 <span>{p.name}</span>
               )}
             </td>
@@ -118,13 +121,13 @@ function showGameTable(ctrl, type, games) {
   );
 }
 
-function onTablebaseTap(ctrl, e) {
-  const uci = getTR(e).dataset.uci;
+function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
+  const uci = (getTR(e).dataset as any).uci;
   if (uci) ctrl.explorerMove(uci);
 }
 
-function showTablebase(ctrl, title, moves, fen) {
-  var stm = fen.split(/\s/)[1];
+function showTablebase(ctrl: AnalyseCtrlInterface, title: string, moves: Array<ExplorerMove>, fen: string) {
+  let stm = fen.split(/\s/)[1];
   if (!moves.length) return null;
   return [
     <div className="title">{title}</div>,
@@ -132,7 +135,7 @@ function showTablebase(ctrl, title, moves, fen) {
       oncreate={helper.ontap(e => onTablebaseTap(ctrl, e), null, null, false, getTR)}
     >
       <tbody>
-      {moves.map(move => {
+      {moves.map((move: ExplorerMove) => {
         return <tr data-uci={move.uci} key={move.uci}>
           <td>{move.san}</td>
           <td>
@@ -146,7 +149,7 @@ function showTablebase(ctrl, title, moves, fen) {
   ];
 }
 
-function winner(stm, move) {
+function winner(stm: any, move: ExplorerMove) {
   if ((stm[0] === 'w' && move.wdl < 0) || (stm[0] === 'b' && move.wdl > 0))
     return 'white';
   else if ((stm[0] === 'b' && move.wdl < 0) || (stm[0] === 'w' && move.wdl > 0))
@@ -155,21 +158,21 @@ function winner(stm, move) {
     return null;
 }
 
-function showDtm(stm, move) {
+function showDtm(stm: any, move: ExplorerMove) {
   if (move.dtm) return m('result.' + winner(stm, move), {
     title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
   }, 'DTM ' + Math.abs(move.dtm));
   else return null;
 }
 
-function showDtz(stm, move) {
+function showDtz(stm: any, move: ExplorerMove) {
   if (move.checkmate) return m('result.' + winner(stm, move), 'Checkmate');
   else if (move.stalemate) return m('result.draws', 'Stalemate');
   else if (move.insufficient_material) return m('result.draws', 'Insufficient material');
   else if (move.dtz === null) return null;
   else if (move.dtz === 0) return m('result.draws', 'Draw');
   else if (move.zeroing) {
-    var capture = move.san.indexOf('x') !== -1;
+    let capture = move.san.indexOf('x') !== -1;
     if (capture) return m('result.' + winner(stm, move), 'Capture');
     else return m('result.' + winner(stm, move), 'Pawn move');
   }
@@ -178,7 +181,7 @@ function showDtz(stm, move) {
   }, 'DTZ ' + Math.abs(move.dtz));
 }
 
-function showEmpty(ctrl) {
+function showEmpty(ctrl: AnalyseCtrlInterface) {
   return (
     <div className="data empty scrollerWrapper">
       <div className="title">{showTitle(ctrl)}</div>
@@ -195,9 +198,8 @@ function showEmpty(ctrl) {
   );
 }
 
-function showGameEnd(ctrl, title) {
-  return m('div.data.empty.scrollerWrapper', {
-  }, [
+function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
+  return m('div.data.empty.scrollerWrapper', [
     m('div.title', 'Game over'),
     m('div.message', [
       m('i[data-icon=]'),
@@ -210,10 +212,10 @@ function showGameEnd(ctrl, title) {
 }
 
 let lastShow = <div className="scrollerWrapper" />;
-function show(ctrl) {
+function show(ctrl: AnalyseCtrlInterface) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
-    const moveTable = showMoveTable(ctrl, data.moves, data.fen);
+    const moveTable = showMoveTable(ctrl, data.moves);
     const recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
     const topTable = showGameTable(ctrl, 'top', data.topGames || []);
 
@@ -234,11 +236,11 @@ function show(ctrl) {
     if (moves.length) {
       lastShow = (
         <div className="data scrollerWrapper">
-          {showTablebase(ctrl, 'Winning', moves.filter(move => move.real_wdl === -2), data.fen)}
-          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter(move => move.real_wdl === -1), data.fen)}
-          {showTablebase(ctrl, 'Drawn', moves.filter(move => move.real_wdl === 0), data.fen)}
-          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter(move => move.real_wdl === 1), data.fen)}
-          {showTablebase(ctrl, 'Losing', moves.filter(move => move.real_wdl === 2), data.fen)}
+          {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.real_wdl === -2), data.fen)}
+          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.real_wdl === -1), data.fen)}
+          {showTablebase(ctrl, 'Drawn', moves.filter((move: ExplorerMove) => move.real_wdl === 0), data.fen)}
+          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: ExplorerMove) => move.real_wdl === 1), data.fen)}
+          {showTablebase(ctrl, 'Losing', moves.filter((move: ExplorerMove) => move.real_wdl === 2), data.fen)}
         </div>
       );
     }
@@ -249,7 +251,7 @@ function show(ctrl) {
   return lastShow;
 }
 
-function showTitle(ctrl) {
+function showTitle(ctrl: AnalyseCtrlInterface) {
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
     return 'Opening explorer';
   } else {
@@ -257,9 +259,8 @@ function showTitle(ctrl) {
   }
 }
 
-function showConfig(ctrl) {
-  return m('div.scrollerWrapper.explorerConfig', {
-  }, [
+function showConfig(ctrl: AnalyseCtrlInterface) {
+  return m('div.scrollerWrapper.explorerConfig', [
     m('div.title', showTitle(ctrl)),
     explorerConfig.view(ctrl.explorer.config)
   ]);
@@ -276,7 +277,7 @@ function failing() {
   ]);
 }
 
-export default function(ctrl) {
+export default function(ctrl: AnalyseCtrlInterface) {
   if (!ctrl.explorer.enabled()) return null;
   const data = ctrl.explorer.current();
   const config = ctrl.explorer.config;

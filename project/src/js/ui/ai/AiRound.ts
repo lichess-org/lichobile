@@ -1,11 +1,12 @@
 import i18n from '../../i18n';
 import router from '../../router';
+import chess, { InitResponse } from '../../chess';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import { playerFromFen } from '../../utils/fen';
-import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
+import { oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -32,7 +33,6 @@ export default class AiRound implements AiRoundInterface {
   public actions: any;
   public newGameMenu: any;
   public chessground: Chessground.Controller;
-  public chessWorker: Worker;
   public replay: Replay;
   public vm: any;
 
@@ -40,7 +40,6 @@ export default class AiRound implements AiRoundInterface {
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.engine = engineCtrl(this);
-    this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
 
@@ -86,7 +85,6 @@ export default class AiRound implements AiRoundInterface {
         initialFen,
         situations,
         ply,
-        this.chessWorker,
         this.onReplayAdded,
         this.onThreefoldRepetition
       );
@@ -121,11 +119,8 @@ export default class AiRound implements AiRoundInterface {
 
     helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`);
 
-    askWorker(this.chessWorker, {
-      topic: 'init',
-      payload,
-    })
-    .then(data => {
+    chess.init(payload)
+    .then((data: InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,

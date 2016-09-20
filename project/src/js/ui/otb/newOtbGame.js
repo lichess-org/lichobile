@@ -39,18 +39,18 @@ export default {
         'new_offline_game',
         null,
         function() {
-          const availVariants = settings.ai.availableVariants;
+          const availVariants = settings.otb.availableVariants;
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !['racingKings', 'horde'].includes(i[1])) :
             availVariants;
-          if (ctrl.root.vm.setupFen && ['racingKings', 'horde'].includes(settings.ai.variant())) {
-            settings.ai.variant('standard');
+          if (ctrl.root.vm.setupFen && ['racingKings', 'horde'].includes(settings.otb.variant())) {
+            settings.otb.variant('standard');
           }
           return (
             <div>
               <div className="action">
                 <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', variants, settings.ai.variant)}
+                  {formWidgets.renderSelect('variant', 'variant', variants, settings.otb.variant)}
                 </div>
                 { ctrl.root.vm.setupFen ?
                   <div className="from_position_wrapper">
@@ -69,7 +69,7 @@ export default {
               </div>
               <button className="newGameButton" data-icon="E"
                 oncreate={helper.ontap(() =>
-                  ctrl.root.startNewGame(settings.ai.variant(), ctrl.root.vm.setupFen))
+                  ctrl.root.startNewGame(settings.otb.variant(), ctrl.root.vm.setupFen))
                 }>
                 {i18n('play')}
               </button>
@@ -79,7 +79,7 @@ export default {
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/ai');
+            router.set('/otb');
           }
           ctrl.close();
         }

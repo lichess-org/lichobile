@@ -1,11 +1,11 @@
 import { debounce } from 'lodash';
 import router from '../../router';
+import chess, { MoveRequest, MoveResponse, PgnDumpResponse, DestsResponse } from '../../chess';
 import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
-import { MoveRequest } from '../../scalachess';
 import settings from '../../settings';
 import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
@@ -13,7 +13,6 @@ import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup.js';
-import chessLogic from './chessLogic';
 import * as util from './util';
 import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
@@ -26,7 +25,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { RoleToSan, SanToRole, Source, Path, ChessMove, ChesslogicInterface, AnalyseCtrlInterface, AnalyseInterface } from './interfaces';
+import { RoleToSan, SanToRole, Source, Path, AnalyseInterface } from './interfaces';
 
 const roleToSan: RoleToSan = {
   pawn: 'P',
@@ -44,12 +43,11 @@ const sanToRole: SanToRole = {
   Q: 'queen'
 };
 
-export default class AnalyseCtrl implements AnalyseCtrlInterface {
+export default class AnalyseCtrl {
   public data: AnalysisData;
   public orientation: Color;
   public source: Source;
   public vm: any;
-  public chessLogic: ChesslogicInterface;
   public settings: any;
   public menu: any;
   public continuePopup: any;
@@ -76,7 +74,6 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
       router.set('/');
     }
 
-    this.chessLogic = chessLogic(this);
     this.settings = analyseSettings.controller(this);
     this.menu = menu.controller(this);
     this.continuePopup = continuePopup.controller();
@@ -252,17 +249,18 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     });
   }
 
-  private sendMove = (orig: Pos, dest: Pos, prom?: string) => {
+  private sendMove = (orig: Pos, dest: Pos, prom?: Role) => {
     const move: MoveRequest = {
       orig: orig,
       dest: dest,
       variant: this.data.game.variant.key,
       fen: this.vm.step.fen,
-      path: this.vm.pathStr,
-      ply: this.vm.step.ply
+      path: this.vm.pathStr
     };
     if (prom) move.promotion = prom;
-    this.chessLogic.sendMoveRequest(move);
+    chess.move(move)
+    .then(this.addStep)
+    .catch(console.error.bind(console));
     this.preparePremoving();
   }
 
@@ -284,7 +282,9 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
         fen: this.vm.step.fen,
         path: this.vm.pathStr
       };
-      this.chessLogic.sendDropRequest(drop);
+      chess.drop(drop)
+      .then(this.addStep)
+      .catch(console.error.bind(console));
       this.preparePremoving();
     } else this.jump(this.vm.path);
   }
@@ -305,7 +305,18 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
     this.explorer.loading(true);
   }
 
-  public addStep = (step: AnalysisStep, path: Path) => {
+  public addStep = ({ situation, path}: MoveResponse) => {
+    const step = {
+      ply: situation.ply,
+      dests: situation.dests,
+      drops: situation.drops,
+      check: situation.check,
+      checkCount: situation.checkCount,
+      fen: situation.fen,
+      uci: situation.uciMoves[0],
+      san: situation.pgnMoves[0],
+      crazy: situation.crazyhouse
+    };
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
     redraw();
@@ -313,13 +324,6 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
   }
 
   public addDests = (dests: DestsMap, path: Path) => {
-    this.analyse.addDests(dests, treePath.read(path));
-    if (path === this.vm.pathStr) {
-      this.showGround();
-      redraw();
-      if (dests === {}) this.ceval.stop();
-    }
-    this.chessground.playPremove();
   }
 
   public toggleVariationMenu = (path: Path) => {
@@ -364,11 +368,11 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
       step.ceval = res.ceval;
       // even if we don't need the san move this ensure correct arrows are
       // displayed
-      this.chessLogic.getSanMoveFromUci({
+      chess.move({
         fen: step.fen,
         orig: res.ceval.best.slice(0, 2),
         dest: res.ceval.best.slice(2, 4)
-      }).then((data: ChessMove) => {
+      }).then((data: MoveResponse) => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           redraw();
@@ -409,12 +413,12 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
       .catch(handleXhrError);
     } else if (this.source === 'offline') {
       const endSituation = this.data.situations[this.data.situations.length - 1];
-      this.chessLogic.exportPgn(
-        this.data.game.variant.key,
-        this.data.game.initialFen,
-        endSituation.pgnMoves
-      )
-      .then((res: any) => window.plugins.socialsharing.share(res.pgn))
+      chess.pgnDump({
+        variant: this.data.game.variant.key,
+        initialFen: this.data.game.initialFen,
+        pgnMoves: endSituation.pgnMoves
+      })
+      .then((res: PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
       .catch(console.error.bind(console));
     } else {
       window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
@@ -428,11 +432,21 @@ export default class AnalyseCtrl implements AnalyseCtrlInterface {
 
   private getDests = () => {
     if (!this.vm.step.dests) {
-      this.chessLogic.sendDestsRequest({
+      chess.dests({
         variant: this.data.game.variant.key,
         fen: this.vm.step.fen,
         path: this.vm.pathStr
-      });
+      })
+      .then(({ dests, path }: DestsResponse) => {
+        this.analyse.addDests(dests, treePath.read(path));
+        if (path === this.vm.pathStr) {
+          this.showGround();
+          redraw();
+          if (dests === {}) this.ceval.stop();
+        }
+        this.chessground.playPremove();
+      })
+      .catch(console.error.bind(console));
     }
   }
 

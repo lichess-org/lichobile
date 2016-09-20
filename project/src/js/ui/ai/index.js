@@ -22,7 +22,6 @@ export default {
   oncreate: helper.viewFadeIn,
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
-    this.round.chessWorker.terminate();
     this.round.engine.exit();
   },
   view

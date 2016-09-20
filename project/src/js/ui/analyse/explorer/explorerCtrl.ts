@@ -6,15 +6,16 @@ import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
+import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
 
-function tablebaseRelevant(fen) {
+function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
   const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
   const castling = parts[2];
   return pieceCount <= 6 && castling === '-';
 }
 
-export default function(root, allow) {
+export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
 
   const allowed = m.prop(allow);
   const enabled = m.prop(false);
@@ -26,20 +27,20 @@ export default function(root, allow) {
     enabled(true);
   }
 
-  function close(fromBB) {
+  function close(fromBB?: string) {
     if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
     enabled(false);
     setTimeout(() => root && root.debouncedScroll(), 200);
   }
 
-  var cache = {};
+  let cache: {[index: string]: ExplorerData} = {};
   function onConfigClose() {
     redraw();
     cache = {};
     setStep();
   }
-  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.opponent.ai;
-  const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
+  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || !!root.data.opponent.ai;
+  const effectiveVariant: VariantKey = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
   const debouncedScroll = debounce(() => {
@@ -52,9 +53,9 @@ export default function(root, allow) {
     redraw();
   }
 
-  const fetchOpening = debounce(fen => {
+  const fetchOpening = debounce((fen: string) => {
     return openingXhr(effectiveVariant, fen, config.data, withGames)
-    .then(res => {
+    .then((res: ExplorerData) => {
       res.opening = true;
       res.fen = fen;
       cache[fen] = res;
@@ -65,9 +66,9 @@ export default function(root, allow) {
     .catch(handleFetchError);
   }, 1000);
 
-  const fetchTablebase = debounce(fen => {
+  const fetchTablebase = debounce((fen: string) => {
     return tablebaseXhr(root.vm.step.fen)
-    .then(res => {
+    .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;
       cache[fen] = res;
@@ -78,15 +79,15 @@ export default function(root, allow) {
     .catch(handleFetchError);
   }, 500);
 
-  const fetch = function(fen) {
+  const fetch = function(fen: string) {
     const hasTablebase = effectiveVariant === 'standard' || effectiveVariant === 'chess960';
     if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
     else return fetchOpening(fen);
   };
 
-  const empty = {
+  const empty: ExplorerData = {
     opening: true,
-    moves: {}
+    moves: []
   };
 
   function setStep() {
@@ -111,7 +112,7 @@ export default function(root, allow) {
     failing,
     config,
     withGames,
-    current() {
+    current(): ExplorerData {
       return cache[root.vm.step.fen];
     },
     toggle() {

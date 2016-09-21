@@ -115,6 +115,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
       loading(false);
       failing(false);
     }
+    redraw();
     debouncedScroll();
   }
 

@@ -14,6 +14,9 @@ import * as helper from '../helper';
 import friendsApi from '../../lichess/friends';
 import * as Zanimo from 'zanimo';
 
+const pingHelp = 'PING: Network lag between you and lichess';
+const serverHelp = 'SERVER: Time to process a move on lichess server';
+
 export default function view() {
   if (!menu.isOpen) return null;
 
@@ -48,10 +51,10 @@ function renderHeader(user) {
         <div class="pingServerLed">
           <div class="pingServer">
             <div class="ping">
-              PING&nbsp;&nbsp;&nbsp;<strong>{socket.isConnected() && ping ? ping : '?'}</strong> ms
+              <span oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}>PING<i className="fa fa-question-circle-o" /></span>&nbsp;&nbsp;&nbsp;<strong>{socket.isConnected() && ping ? ping : '?'}</strong> ms
             </div>
             <div class="server">
-              SERVER&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
+              <span oncreate={helper.ontap(() => window.plugins.toast.show(serverHelp, 'long', 'top'))}>SERVER<i className="fa fa-question-circle-o" /></span>&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
             </div>
           </div>
           <div class='ledContainer'>

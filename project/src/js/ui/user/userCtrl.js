@@ -1,4 +1,5 @@
 import session from '../../session';
+import redraw from '../../utils/redraw';
 import * as xhr from './userXhr';
 import router from '../../router';
 import * as utils from '../../utils';
@@ -22,13 +23,16 @@ export default function oninit(vnode) {
   }
 
   xhr.user(userId)
-  .then(user)
+  .then(data => {
+    user(data);
+    redraw();
+  })
   .then(session.refresh)
   .catch(utils.handleXhrError);
 
   vnode.state = {
     user,
-    isMe: () => session.getUserId() === user().id,
+    isMe: () => session.getUserId() === userId,
     toggleFollowing: () => {
       if (user().following) xhr.unfollow(user().id).then(setNewUserState);
       else xhr.follow(user().id).then(setNewUserState);

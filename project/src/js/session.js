@@ -19,7 +19,7 @@ function getSession() {
 }
 
 function getUserId() {
-  return (session && session.id) ? session.id : null;
+  return session && session.id;
 }
 
 function nowPlaying() {

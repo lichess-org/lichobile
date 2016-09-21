@@ -1,6 +1,6 @@
 import i18n from '../../i18n';
 import router from '../../router';
-import chess, { InitResponse } from '../../chess';
+import * as chess from '../../chess';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
@@ -120,7 +120,7 @@ export default class AiRound implements AiRoundInterface {
     helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`);
 
     chess.init(payload)
-    .then((data: InitResponse) => {
+    .then((data: chess.InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,

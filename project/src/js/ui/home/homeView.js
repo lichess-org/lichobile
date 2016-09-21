@@ -121,7 +121,7 @@ function renderWeekLeaders(ctrl) {
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
-        <button oncreate={helper.ontapY(() => router.set('/players'))}>
+        <button oncreate={helper.ontapY(() => router.set('/ranking'))}>
           {i18n('more')}
         </button>
       </div>

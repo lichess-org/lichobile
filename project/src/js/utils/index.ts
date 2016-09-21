@@ -38,30 +38,6 @@ export function autoredraw(action: Function): void {
   return res;
 }
 
-export function tellWorker(worker: Worker, topic: string, payload?: any): void {
-  if (payload !== undefined) {
-    worker.postMessage({ topic, payload });
-  } else {
-    worker.postMessage({ topic });
-  }
-}
-
-export function askWorker(worker: Worker, msg: WorkerMessage): Promise<any> {
-  return new Promise(function(resolve, reject) {
-    function listen(e: MessageEvent) {
-      if (e.data.topic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        resolve(e.data.payload);
-      } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        reject(e.data.payload.error);
-      }
-    }
-    worker.addEventListener('message', listen);
-    worker.postMessage(msg);
-  });
-}
-
 export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }

@@ -1,6 +1,6 @@
 import sound from '../../sound';
 import router from '../../router';
-import chess, { InitResponse } from '../../chess';
+import * as chess from '../../chess';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import * as gameApi from '../../lichess/game';
@@ -107,7 +107,7 @@ export default class OtbRound implements OfflineRoundInterface {
     helper.analyticsTrackEvent('Offline OTB Game', `New game ${variant}`);
 
     chess.init(payload)
-    .then((data: InitResponse) => {
+    .then((data: chess.InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,

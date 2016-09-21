@@ -4,8 +4,12 @@ import { getCurrentOTBGame } from '../../utils/offlineGames';
 import OtbRound from './OtbRound';
 import view from './otbView';
 
+interface Attrs {
+  fen?: string
+}
+
 export default {
-  oninit({ attrs }) {
+  oninit({ attrs }: Mithril.Vnode<Attrs>) {
     helper.analyticsTrackView('Offline On The Board');
 
     socket.createDefault();

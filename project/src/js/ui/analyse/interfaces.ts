@@ -32,7 +32,7 @@ export interface ExplorerCtrlInterface {
   failing: Mithril.Property<boolean>
   config: any
   withGames: boolean
-  current(): any
+  current: Mithril.Property<ExplorerData>
   toggle(): void
 }
 
@@ -92,4 +92,6 @@ export interface ExplorerData {
   moves: Array<ExplorerMove>
   topGames?: Array<ExplorerGame>
   recentGames?: Array<ExplorerGame>
+  checkmate?: boolean
+  stalemate?: boolean
 }

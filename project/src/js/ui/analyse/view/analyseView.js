@@ -6,7 +6,8 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import { gameTitle, connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
+import { gameTitle, connectingHeader, header, backButton as renderBackbutton } from '../../shared/common';
+import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import Board from '../../shared/Board';
 import * as helper from '../../helper';
 import layout from '../../layout';
@@ -23,8 +24,9 @@ import evalSummary from '../evalSummaryPopup';
 import treePath from '../path';
 import { renderTree } from './treeView';
 
-export default function analyseView() {
+export default function analyseView(vnode) {
   const isPortrait = helper.isPortrait();
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
 
   if (this.ctrl) {
 
@@ -33,13 +35,16 @@ export default function analyseView() {
 
     return layout.board(
       () => header(title, backButton),
-      () => renderContent(this.ctrl, isPortrait),
+      () => renderContent(this.ctrl, isPortrait, bounds),
       () => overlay(this.ctrl, isPortrait)
     );
   } else {
     return layout.board(
       connectingHeader,
-      viewOnlyBoardContent
+      () =>
+        <section className="board_wrapper">
+          {m(ViewOnlyBoard, { orientation: vnode.attrs.color })}
+        </section>
     );
   }
 }
@@ -56,8 +61,7 @@ function overlay(ctrl) {
   ];
 }
 
-function renderContent(ctrl, isPortrait) {
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
+function renderContent(ctrl, isPortrait, bounds) {
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
   let nextBest, curBestMove, pastBest;

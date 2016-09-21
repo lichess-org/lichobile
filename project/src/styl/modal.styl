@@ -10,7 +10,9 @@
   background-color #fff
   > header
     position absolute
-    z-index 2
+    z-index 112
+    // ios hack
+    transform translateZ(0)
     top 0
     left 0
     width 100%
@@ -39,5 +41,6 @@
   height 100%
   padding-top 50px
   overflow-y auto
+  -webkit-overflow-scrolling touch
   p
     margin 1em 15px 0

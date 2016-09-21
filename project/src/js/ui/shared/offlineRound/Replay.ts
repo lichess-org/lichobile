@@ -1,5 +1,5 @@
 import i18n from '../../../i18n';
-import chess, { MoveResponse } from '../../../chess';
+import * as chess from '../../../chess';
 
 export default class Replay {
   private variant: VariantKey;
@@ -89,7 +89,7 @@ export default class Replay {
       });
     }
 
-    private addMoveOrDrop = (moveOrDrop: MoveResponse) => {
+    private addMoveOrDrop = (moveOrDrop: chess.MoveResponse) => {
       this.ply++;
       if (this.ply < this.situations.length) {
         this.situations = this.situations.slice(0, this.ply);

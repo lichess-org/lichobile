@@ -317,6 +317,10 @@ self.onmessage = function(msg) {
       if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
       else postMessage({ topic: 'averageLag', payload: null });
       break;
+    case 'currentLag':
+      if (socketInstance) postMessage({ topic: 'currentLag', payload: socketInstance.currentLag });
+      else postMessage({ topic: 'currentLag', payload: null });
+      break;
     default:
       throw new Error('socker worker message not supported: ' + msg.data.topic);
   }

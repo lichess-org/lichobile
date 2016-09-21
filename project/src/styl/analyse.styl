@@ -3,6 +3,7 @@
     text-transform capitalize
 
 .analyseTable, .explorerTable
+  -webkit-overflow-scrolling touch
   width 100%
   display flex
   > .scrollerWrapper
@@ -340,15 +341,15 @@
       font-size 25px
   tbody, > .message
     transition: opacity 0.13s;
-  th
-    text-transform: capitalize;
-    padding-left: 7px;
   th, .title
-    font-size: 12px;
+    color gold
+    text-transform: capitalize;
+    font-weight bold
+    font-size: 13px;
     line-height: 22px;
-    background lighten(bgdark, 10%)
+    background headerBgDark
     text-align: left;
-    padding-left: 10px;
+    padding-left: 7px;
   tr
     transition: background-color 0.13s;
     &:nth-child(even)
@@ -387,6 +388,7 @@
       font-family: monospace;
       font-size: 0.9em;
   .toconf
+    color gold
     position: absolute;
     top: 0;
     right: 0;
@@ -420,8 +422,6 @@
 
 .view-container.light
   .explorerTable
-    th, .title
-      background darken(bglight, 13%)
     tr
       &:nth-child(even)
         background #fafafa
@@ -477,6 +477,14 @@
           text-shadow: 1px 0 0 rgba(0,0,0,0.5);
           font-weight: bold;
           box-shadow: 0 3px 5px rgba(0,0,0,0.2) inset;
+
+.explorerTableHeader
+  background headerBgDark
+  color gold
+  > th
+    background headerBgDark
+    &:first-child
+      padding-left 7px
 
 .explorerMove
   &:first-child

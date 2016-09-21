@@ -37,7 +37,7 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
       oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTR)}
     >
       <thead>
-        <tr>
+        <tr className="explorerTableHeader">
           <th>Move</th>
           <th>Games</th>
           <th>Rating</th>
@@ -89,7 +89,7 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: any, games: Array<Explo
       oncreate={helper.ontap(e => link(ctrl, e), null, null, false, getTR)}
     >
       <thead>
-        <tr>
+        <tr className="explorerTableHeader">
           <th colspan="4">{type + ' games'}</th>
         </tr>
       </thead>
@@ -183,7 +183,7 @@ function showDtz(stm: any, move: ExplorerMove) {
 
 function showEmpty(ctrl: AnalyseCtrlInterface) {
   return (
-    <div className="data empty scrollerWrapper">
+    <div key="explorer-empty" className="data empty scrollerWrapper">
       <div className="title">{showTitle(ctrl)}</div>
       <div className="message">
         <i data-icon="" />
@@ -199,7 +199,9 @@ function showEmpty(ctrl: AnalyseCtrlInterface) {
 }
 
 function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
-  return m('div.data.empty.scrollerWrapper', [
+  return m('div.data.empty.scrollerWrapper', {
+    key: 'explorer-game-end' + title
+  }, [
     m('div.title', 'Game over'),
     m('div.message', [
       m('i[data-icon=]'),
@@ -211,7 +213,6 @@ function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
   ]);
 }
 
-let lastShow = <div className="scrollerWrapper" />;
 function show(ctrl: AnalyseCtrlInterface) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
@@ -220,22 +221,22 @@ function show(ctrl: AnalyseCtrlInterface) {
     const topTable = showGameTable(ctrl, 'top', data.topGames || []);
 
     if (moveTable || recentTable || topTable) {
-      lastShow = (
-        <div className="data scrollerWrapper">
+      return (
+        <div key="explorer-opening" className="data scrollerWrapper">
           {moveTable}
           {topTable}
           {recentTable}
         </div>
       );
     } else {
-      lastShow = showEmpty(ctrl);
+      return showEmpty(ctrl);
     }
   }
   else if (data && data.tablebase) {
     const moves = data.moves;
     if (moves.length) {
-      lastShow = (
-        <div className="data scrollerWrapper">
+      return (
+        <div key="explorer-tablebase" className="data scrollerWrapper">
           {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.real_wdl === -2), data.fen)}
           {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.real_wdl === -1), data.fen)}
           {showTablebase(ctrl, 'Drawn', moves.filter((move: ExplorerMove) => move.real_wdl === 0), data.fen)}
@@ -244,11 +245,11 @@ function show(ctrl: AnalyseCtrlInterface) {
         </div>
       );
     }
-    else if (data.checkmate) lastShow = showGameEnd(ctrl, 'Checkmate');
-    else if (data.stalemate) lastShow = showGameEnd(ctrl, 'Stalemate');
-    else lastShow = showEmpty(ctrl);
+    else if (data.checkmate) return showGameEnd(ctrl, 'Checkmate');
+    else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate');
+    else return showEmpty(ctrl);
   }
-  return lastShow;
+  return <div key="explorer-no-data" className="scrollerWrapper" />;
 }
 
 function showTitle(ctrl: AnalyseCtrlInterface) {
@@ -260,7 +261,9 @@ function showTitle(ctrl: AnalyseCtrlInterface) {
 }
 
 function showConfig(ctrl: AnalyseCtrlInterface) {
-  return m('div.scrollerWrapper.explorerConfig', [
+  return m('div.scrollerWrapper.explorerConfig', {
+    key: 'opening-config'
+  }, [
     m('div.title', showTitle(ctrl)),
     explorerConfig.view(ctrl.explorer.config)
   ]);
@@ -269,6 +272,7 @@ function showConfig(ctrl: AnalyseCtrlInterface) {
 
 function failing() {
   return m('div.failing.message.scrollerWrapper', {
+    key: 'failing'
   }, [
     m('i[data-icon=,]'),
     m('h3', 'Oops, sorry!'),
@@ -281,23 +285,25 @@ export default function(ctrl: AnalyseCtrlInterface) {
   if (!ctrl.explorer.enabled()) return null;
   const data = ctrl.explorer.current();
   const config = ctrl.explorer.config;
-  const configOpened = config.data.open();
-  const loading = !configOpened && (ctrl.explorer.loading() || (!data && !ctrl.explorer.failing()));
+  const configOpened = config.open();
+  const loading = !configOpened && ctrl.explorer.loading();
   const className = helper.classSet({
     explorerTable: true,
     loading
   });
   return (
     <div id="explorerTable" className={className} key="explorer">
-      <div className="spinner_overlay">
+      { loading ? <div key="loader" className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
-      </div>
+      </div> : null
+      }
       { configOpened ? showConfig(ctrl) : null }
       { !configOpened && ctrl.explorer.failing() ? failing() : null }
       { !configOpened && !ctrl.explorer.failing() ? show(ctrl) : null }
-      {data && data.opening ?
-        <span className="toconf" data-icon={configOpened ? 'L' : '%'}
-          oncreate={helper.ontap(config.toggleOpen)} /> : null
+      { configOpened || (data && data.opening) ?
+        <span key={configOpened ? 'config-onpen' : 'config-close'} className="toconf" data-icon={configOpened ? 'L' : '%'}
+          oncreate={helper.ontap(config.toggleOpen)}
+        /> : null
       }
     </div>
   );

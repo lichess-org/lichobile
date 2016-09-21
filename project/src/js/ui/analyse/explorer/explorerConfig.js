@@ -13,19 +13,7 @@ export default {
 
     const open = m.prop(false);
 
-    function doOpen() {
-      backbutton.stack.push(doClose);
-      open(true);
-    }
-
-    function doClose(fromBB) {
-      if (fromBB !== 'backbutton' && open()) backbutton.stack.pop();
-      open(false);
-      onClose();
-    }
-
     const data = {
-      open,
       db: {
         available: available,
         selected: available.length > 1 ? settings.analyse.explorer.db : function() {
@@ -42,6 +30,26 @@ export default {
       }
     };
 
+    let openedWith;
+
+    function serializeData() {
+      return JSON.stringify(['db', 'rating', 'speed'].map(k =>
+        data[k].selected()
+      ));
+    }
+
+    function doOpen() {
+      backbutton.stack.push(doClose);
+      openedWith = serializeData();
+      open(true);
+    }
+
+    function doClose(fromBB) {
+      if (fromBB !== 'backbutton' && open()) backbutton.stack.pop();
+      open(false);
+      onClose(openedWith !== serializeData());
+    }
+
     function toggleMany(c, value) {
       if (c().indexOf(value) === -1) c(c().concat([value]));
       else if (c().length > 1) c(c().filter(function(v) {
@@ -50,7 +58,8 @@ export default {
     }
 
     return {
-      data: data,
+      open,
+      data,
       toggleOpen: function() {
         if (open()) doClose();
         else doOpen();

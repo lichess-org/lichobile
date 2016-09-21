@@ -20,7 +20,7 @@ import promotion from './promotion';
 import { chatCtrl } from './chat';
 import { notesCtrl } from './notes';
 import clockCtrl from './clock/clockCtrl';
-import correspondenceClockCtrl from './correspondenceClock/corresClockCtrl';
+import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
@@ -98,9 +98,9 @@ export default class OnlineRound implements OnlineRoundInterface {
     };
 
     this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-      null : new chatCtrl(this);
+      null : new (<any>chatCtrl)(this);
 
-    this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.chessground = ground.make(
       this.data,
@@ -111,7 +111,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.onNewPiece
     );
 
-    this.clock = this.data.clock ? new clockCtrl(
+    this.clock = this.data.clock ? new (<any>clockCtrl)(
       this.data.clock,
       this.data.player.spectator ? noop :
         throttle(() => socket.send('outoftime'), 500),
@@ -288,7 +288,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private makeCorrespondenceClock() {
     if (this.data.correspondence && !this.correspondenceClock)
-      this.correspondenceClock = new correspondenceClockCtrl(
+      this.correspondenceClock = new (<any>CorrespondenceClockCtrl)(
         this,
         this.data.correspondence,
         () => socket.send('outoftime')

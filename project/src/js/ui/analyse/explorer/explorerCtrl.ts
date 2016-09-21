@@ -21,6 +21,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
+  const current: Mithril.Property<ExplorerData> = m.prop(null);
 
   function open() {
     backbutton.stack.push(close);
@@ -34,11 +35,20 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }
 
   let cache: {[index: string]: ExplorerData} = {};
-  function onConfigClose() {
-    redraw();
-    cache = {};
-    setStep();
+
+  function setResult(fen: string, data: ExplorerData) {
+    cache[fen] = data;
+    current(data);
   }
+
+  function onConfigClose(changed: boolean) {
+    redraw();
+    if (changed) {
+      cache = {};
+      setStep();
+    }
+  }
+
   const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || !!root.data.opponent.ai;
   const effectiveVariant: VariantKey = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
@@ -58,7 +68,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     .then((res: ExplorerData) => {
       res.opening = true;
       res.fen = fen;
-      cache[fen] = res;
+      setResult(fen, res);
       loading(false);
       failing(false);
       redraw();
@@ -71,7 +81,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;
-      cache[fen] = res;
+      setResult(fen, res);
       loading(false);
       failing(false);
       redraw();
@@ -79,11 +89,11 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     .catch(handleFetchError);
   }, 500);
 
-  const fetch = function(fen: string) {
+  function fetch(fen: string) {
     const hasTablebase = effectiveVariant === 'standard' || effectiveVariant === 'chess960';
     if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
     else return fetchOpening(fen);
-  };
+  }
 
   const empty: ExplorerData = {
     opening: true,
@@ -93,14 +103,19 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   function setStep() {
     if (!enabled()) return;
     const step = root.vm.step;
-    if (step.ply > 50 && !tablebaseRelevant(step.fen)) cache[step.fen] = empty;
-    if (!cache[step.fen]) {
+    if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
+      setResult(step.fen, empty);
+    }
+    const fromCache = cache[step.fen];
+    if (!fromCache) {
       loading(true);
       fetch(step.fen);
     } else {
+      current(fromCache);
       loading(false);
       failing(false);
     }
+    redraw();
     debouncedScroll();
   }
 
@@ -112,9 +127,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     failing,
     config,
     withGames,
-    current(): ExplorerData {
-      return cache[root.vm.step.fen];
-    },
+    current,
     toggle() {
       if (enabled()) close();
       else open();

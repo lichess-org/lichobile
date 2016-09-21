@@ -33,7 +33,6 @@ var tsConfig = {
   target: 'es2015',
   module: 'commonjs',
   noImplicitAny: true,
-  noImplicitThis: true,
   jsx: 'preserve'
 };
 
@@ -47,7 +46,7 @@ function buildHtml(src, dest, context) {
 function buildStyl(src, dest, mode) {
   return gulp.src(src)
     .pipe(stylus())
-    .pipe(streamify(autoprefixer()))
+    .pipe(streamify(autoprefixer({ browsers: ['and_chr > 50', 'ios_saf > 9']})))
     .pipe(gulpif(mode === 'prod', minifyCss()))
     .pipe(rename('app.css'))
     .pipe(gulp.dest(dest + '/css/compiled/'));

@@ -1,3 +1,5 @@
+import * as h from '../helper';
+import router from '../../router';
 import {header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -5,18 +7,18 @@ import * as m from 'mithril';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
-  const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
+  const bodyCtrl = inboxBody.bind(undefined, ctrl);
 
   return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl);
 }
 
 
-function tournamentListBody(ctrl) {
+function inboxBody(ctrl) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
-  console.log("past guard");
+
   return (
-    <div className="inboxWrapper">
-      <table>
+    <div className="inboxWrapper native_scroller">
+      <table className="threadList">
         <tbody>
           {ctrl.threads().currentPageResults.map(renderInboxItem)}
         </tbody>
@@ -26,19 +28,23 @@ function tournamentListBody(ctrl) {
 }
 
 function renderInboxItem(thread) {
-  /*
-  const id = thread.id;
-  const author = thread.author;
-  const name = thread.name;
-  */
-  const time = window.moment().unix(thread.updatedAt);
-  // console.log(time.format());
   return (
-    <tr>
-      <td> { thread.id } </td>
-      <td> { thread.author } </td>
-      <td> { thread.name } </td>
-      <td> { thread.updatedAt } </td>
+    <tr className={'list_item' + (thread.isUnread ? 'unread' : '')}
+    key={thread.id}
+    oncreate={h.ontapY(() => router.set('/inbox/' + thread.id))}>
+      <td className="threadAuthor"> { thread.author } </td>
+      <td className="threadName"> { thread.name } </td>
+      <td className="threadDate"> { formatMessageTime(window.moment(thread.updatedAt)) } </td>
     </tr>
   );
+}
+
+function formatMessageTime (time) {
+  const now = window.moment();
+  if (now.isAfter(time, 'day')) {
+    return time.format('MMM D');
+  }
+  else {
+    return time.format('h:mm');
+  }
 }

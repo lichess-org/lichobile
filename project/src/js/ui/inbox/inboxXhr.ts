@@ -4,7 +4,7 @@ export function inbox() {
   return fetchJSON('/inbox', {}, true);
 }
 
-export function message(id: string) {
+export function thread(id: string) {
   return fetchJSON('/inbox/' + id, {}, true);
 }
 

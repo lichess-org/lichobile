@@ -1,4 +1,5 @@
 import menu from '.';
+import socket from '../../socket';
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
@@ -24,15 +25,17 @@ export default function view() {
 }
 
 function renderHeader(user) {
-  let ping = 0;
-  let server = 0;
-  let l = (ping || 0) + server - 100;
-  let ratio = Math.max(Math.min(l / 1200, 1), 0);
-  let hue = (Math.round((1 - ratio) * 120)).toString(10);
-  let color = ['hsl(', hue, ',100%,40%)'].join('');
+  const ping = menu.ping();
+  const server = menu.mlat();
+  const l = (ping || 0) + server - 100;
+  const ratio = Math.max(Math.min(l / 1200, 1), 0);
+  const hue = (Math.round((1 - ratio) * 120)).toString(10);
+  const color = socket.isConnected() ?
+    ['hsl(', hue, ',100%,40%)'].join('') :
+    'red';
   return (
     <header className="side_menu_header">
-      { session.isKidMode() ? <div className="kiddo">😊</div> : <div className="logo" /> }
+      { session.isKidMode() ? <div className="kiddo">😊</div> : null }
       <h2 className="username">
         { hasNetwork() ? user ? user.username : 'Anonymous' : i18n('offline') }
       </h2>
@@ -44,8 +47,12 @@ function renderHeader(user) {
       { hasNetwork() ?
         <div class="pingServerLed">
           <div class="pingServer">
-            <div class="ping"> PING {ping ? ping : '?'} ms</div>
-            <div class="server"> SERVER {server ? server : '?'} ms</div>
+            <div class="ping">
+              PING&nbsp;&nbsp;&nbsp;<strong>{socket.isConnected() && ping ? ping : '?'}</strong> ms
+            </div>
+            <div class="server">
+              SERVER&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
+            </div>
           </div>
           <div class='ledContainer'>
             <div class='led' style={'background: ' + color}/>

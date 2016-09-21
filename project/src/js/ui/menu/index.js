@@ -11,6 +11,18 @@ const menu = {};
 menu.isOpen = false;
 menu.headerOpen = m.prop(false);
 
+menu.mlat = m.prop();
+menu.ping = m.prop();
+
+function getServerLags() {
+  socket.getCurrentPing()
+  .then(ping => {
+    menu.ping(ping);
+    menu.mlat(socket.getCurrentMoveLatency());
+    if (menu.isOpen) redraw();
+  });
+}
+
 menu.route = function(route) {
   return function() {
     return menu.close().then(router.set.bind(undefined, route));
@@ -34,14 +46,15 @@ menu.toggle = function() {
 menu.open = function() {
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
-  getServerLag();
-  menu.sendPingsInterval = setInterval(getServerLag, 1000);
+  getServerLags();
+  socket.send('moveLat', true);
+  menu.sendPingsInterval = setInterval(getServerLags, 1000);
 };
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
-  m.redraw.strategy('none');
   clearInterval(menu.sendPingsInterval);
+  socket.send('moveLat', false);
   return Zanimo(
     document.getElementById('side_menu'),
     'transform',
@@ -57,18 +70,6 @@ menu.close = function(fromBB) {
 
 menu.toggleHeader = function() {
   return menu.headerOpen() ? menu.headerOpen(false) : menu.headerOpen(true);
-};
-
-function getServerLag() {
-  socket.send('moveLat', true);
-}
-
-menu.pingUpdate = function () {
-  if (menu.isOpen) m.redraw();
-};
-
-menu.lagUpdate = function () {
-  if (menu.isOpen) m.redraw();
 };
 
 export default menu;

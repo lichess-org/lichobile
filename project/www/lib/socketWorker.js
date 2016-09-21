@@ -161,7 +161,6 @@ StrongSocket.prototype = {
     self.currentLag = self.now() - self.lastPingTime;
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
-    self.handle({t: 'pingTime', d: self.currentLag});
   },
 
   pingData: function() {
@@ -317,6 +316,10 @@ self.onmessage = function(msg) {
     case 'averageLag':
       if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
       else postMessage({ topic: 'averageLag', payload: null });
+      break;
+    case 'currentLag':
+      if (socketInstance) postMessage({ topic: 'currentLag', payload: socketInstance.currentLag });
+      else postMessage({ topic: 'currentLag', payload: null });
       break;
     default:
       throw new Error('socker worker message not supported: ' + msg.data.topic);

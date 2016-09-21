@@ -116,3 +116,27 @@
 .sep_link
   color #8a8a8a
   padding 15px 15px 10px
+
+.pingServerLed
+  display flex
+  flex-flow row nowrap
+  justify-content center
+  align-items center
+  width 50%
+  margin auto
+  >.pingServer
+    flex 8 80%
+    display flex
+    flex-flow column nowrap
+    justify-content center
+    align-items center
+    align center
+  >.ledContainer
+    flex 2 20%
+    >.led
+      font-size: 2em
+      opacity: 0.8
+      width: 20px
+      height: 20px
+      border-radius: 50%
+      box-shadow: inset 0 2px 2px 0 rgba(0,0,0,0.4);

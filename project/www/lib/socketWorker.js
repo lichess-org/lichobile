@@ -161,6 +161,7 @@ StrongSocket.prototype = {
     self.currentLag = self.now() - self.lastPingTime;
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
+    self.handle({t: 'pingTime', d: self.currentLag});
   },
 
   pingData: function() {

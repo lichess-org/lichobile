@@ -3,7 +3,7 @@ import redraw from './utils/redraw';
 import { apiVersion } from './http';
 import { xor } from 'lodash';
 import { lichessSri, autoredraw, hasNetwork } from './utils';
-import { tellWorker } from './utils/worker';
+import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi from './lichess/friends';
@@ -52,6 +52,8 @@ interface SocketSetup {
 let connectedWS = true;
 let redrawOnDisconnectedTimeoutID: number;
 
+let currentMoveLatency: number = 0;
+
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string) => autoredraw(() => friendsApi.add(name)),
@@ -59,6 +61,9 @@ const defaultHandlers: MessageHandlers = {
   challenges: (data: any) => {
     challengesApi.set(data);
     redraw();
+  },
+  mlat: (mlat: number) => {
+    currentMoveLatency = mlat;
   }
 };
 
@@ -301,6 +306,12 @@ export default {
   },
   destroy() {
     tellWorker(worker, 'destroy');
+  },
+  getCurrentPing(): Promise<number> {
+    return askWorker(worker, { topic: 'currentLag' });
+  },
+  getCurrentMoveLatency() {
+    return currentMoveLatency;
   },
   terminate() {
     if (worker) worker.terminate();

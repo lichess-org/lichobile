@@ -1,4 +1,4 @@
-import { askWorker } from './utils';
+import { askWorker } from './utils/worker';
 
 const worker = new Worker('vendor/scalachessjs.js');
 
@@ -83,32 +83,30 @@ export interface PgnReadResponse {
   replay: Array<GameSituation>
 }
 
-export default {
-  init(payload: InitRequest): Promise<InitResponse> {
-    return askWorker(worker, { topic: 'init', payload });
-  },
+export function init(payload: InitRequest): Promise<InitResponse> {
+  return askWorker(worker, { topic: 'init', payload });
+}
 
-  dests(payload: DestsRequest): Promise<DestsResponse> {
-    return askWorker(worker, { topic: 'dests', payload });
-  },
+export function dests(payload: DestsRequest): Promise<DestsResponse> {
+  return askWorker(worker, { topic: 'dests', payload });
+}
 
-  move(payload: MoveRequest): Promise<MoveResponse> {
-    return askWorker(worker, { topic: 'move', payload });
-  },
+export function move(payload: MoveRequest): Promise<MoveResponse> {
+  return askWorker(worker, { topic: 'move', payload });
+}
 
-  drop(payload: DropRequest): Promise<MoveResponse> {
-    return askWorker(worker, { topic: 'drop', payload });
-  },
+export function drop(payload: DropRequest): Promise<MoveResponse> {
+  return askWorker(worker, { topic: 'drop', payload });
+}
 
-  threefoldTest(payload: ThreefoldTestRequest): Promise<ThreefoldTestResponse> {
-    return askWorker(worker, { topic: 'threefoldTest', payload });
-  },
+export function threefoldTest(payload: ThreefoldTestRequest): Promise<ThreefoldTestResponse> {
+  return askWorker(worker, { topic: 'threefoldTest', payload });
+}
 
-  pgnDump(payload: PgnDumpRequest): Promise<PgnDumpResponse> {
-    return askWorker(worker, { topic: 'pgnDump', payload });
-  },
+export function pgnDump(payload: PgnDumpRequest): Promise<PgnDumpResponse> {
+  return askWorker(worker, { topic: 'pgnDump', payload });
+}
 
-  pgnRead(payload: PgnReadRequest): Promise<PgnReadResponse> {
-    return askWorker(worker, { topic: 'pgnRead', payload });
-  }
+export function pgnRead(payload: PgnReadRequest): Promise<PgnReadResponse> {
+  return askWorker(worker, { topic: 'pgnRead', payload });
 }

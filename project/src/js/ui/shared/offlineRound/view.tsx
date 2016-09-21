@@ -148,8 +148,8 @@ export function renderReplayTable(ctrl: any) {
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        oncreate={(vnode: Mithril.BaseNode) => { autoScroll(vnode.dom); }}
-        onupdate={(vnode: Mithril.BaseNode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
+        oncreate={(vnode: Mithril.Vnode<void>) => { autoScroll(vnode.dom); }}
+        onupdate={(vnode: Mithril.Vnode<void>) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
       >
         {renderTable(ctrl, curPly)}
       </div>

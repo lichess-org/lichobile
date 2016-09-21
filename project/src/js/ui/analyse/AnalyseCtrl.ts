@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import router from '../../router';
-import chess, { MoveRequest, MoveResponse, PgnDumpResponse, DestsResponse } from '../../chess';
+import * as chess from '../../chess';
 import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
@@ -97,7 +97,7 @@ export default class AnalyseCtrl {
     this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
-    this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.explorer = explorerCtrl(this, true);
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, 100);
@@ -255,7 +255,7 @@ export default class AnalyseCtrl {
   }
 
   private sendMove = (orig: Pos, dest: Pos, prom?: Role) => {
-    const move: MoveRequest = {
+    const move: chess.MoveRequest = {
       orig: orig,
       dest: dest,
       variant: this.data.game.variant.key,
@@ -310,7 +310,7 @@ export default class AnalyseCtrl {
     this.explorer.loading(true);
   }
 
-  public addStep = ({ situation, path}: MoveResponse) => {
+  public addStep = ({ situation, path}: chess.MoveResponse) => {
     const step = {
       ply: situation.ply,
       dests: situation.dests,
@@ -377,7 +377,7 @@ export default class AnalyseCtrl {
         fen: step.fen,
         orig: res.ceval.best.slice(0, 2),
         dest: res.ceval.best.slice(2, 4)
-      }).then((data: MoveResponse) => {
+      }).then((data: chess.MoveResponse) => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (treePath.write(res.work.path) === this.vm.pathStr) {
           redraw();
@@ -423,7 +423,7 @@ export default class AnalyseCtrl {
         initialFen: this.data.game.initialFen,
         pgnMoves: endSituation.pgnMoves
       })
-      .then((res: PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
+      .then((res: chess.PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
       .catch(console.error.bind(console));
     } else {
       window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
@@ -442,7 +442,7 @@ export default class AnalyseCtrl {
         fen: this.vm.step.fen,
         path: this.vm.pathStr
       })
-      .then(({ dests, path }: DestsResponse) => {
+      .then(({ dests, path }: chess.DestsResponse) => {
         this.analyse.addDests(dests, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();

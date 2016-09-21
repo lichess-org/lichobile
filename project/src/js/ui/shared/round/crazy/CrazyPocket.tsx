@@ -22,7 +22,7 @@ export default {
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 
-    this.pocketOnCreate = function({ dom }) {
+    this.pocketOnCreate = function({ dom }: Mithril.Vnode<void>) {
       const contentNode = document.getElementById('content_round');
       dom.addEventListener('touchstart', onstart);
       if (contentNode) {
@@ -31,7 +31,7 @@ export default {
       }
     };
 
-    this.pocketOnRemove = function({ dom }) {
+    this.pocketOnRemove = function({ dom }: Mithril.Vnode<void>) {
       const contentNode = document.getElementById('content_round');
       dom.removeEventListener('touchstart', onstart);
       if (contentNode) {

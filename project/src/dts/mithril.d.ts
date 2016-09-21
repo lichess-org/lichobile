@@ -7,7 +7,7 @@ declare namespace Mithril {
 
   interface Attributes {
     key?: string;
-    [key: string]: any;
+    [index: string]: any;
   }
 
   interface Static {
@@ -21,7 +21,7 @@ declare namespace Mithril {
       selector: string | BaseComponent,
       attributes: T & Attributes,
       ...children: Children[]
-    ): BaseNode;
+    ): Vnode<T>
 
     prop<T>(value: T): BasicProperty<T>;
 
@@ -44,7 +44,7 @@ declare namespace Mithril {
   }
 
   interface Vnode<T> {
-    tag: string;
+    tag: string | BaseComponent;
     key?: string | number;
     attrs?: T;
     children: Children[];

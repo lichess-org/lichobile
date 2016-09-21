@@ -31,11 +31,6 @@ interface PongMessage {
   r: number;
 }
 
-interface WorkerMessage {
-  topic: string;
-  payload?: any;
-}
-
 interface PlayTime {
   total: number;
   tv: number;

@@ -22,14 +22,14 @@ let cachedTransformProp: string;
 let cachedViewportDim: ViewportDim = null;
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
-  return ({ dom }) => anim(dom);
+  return ({ dom }: Mithril.Vnode<void>) => anim(dom);
 }
 
 // because mithril will call 'onremove' asynchronously when the component has
 // an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
 // thus this helper
 export function onPageLeave(anim: (el: HTMLElement) => Promise<any>, cleanup: () => void = null) {
-  return function({ dom }, done: () => void) {
+  return function({ dom }: Mithril.Vnode<void>, done: () => void) {
     if (cleanup) cleanup();
     return anim(dom)
     .then(done)
@@ -149,7 +149,7 @@ export function clearCachedViewportDim() {
   cachedViewportDim = null;
 }
 
-export function slidesInUp(vnode: Mithril.Vnode<any>) {
+export function slidesInUp(vnode: Mithril.Vnode<void>) {
   const el = vnode.dom;
   el.style.transform = 'translateY(100%)';
   // force reflow hack
@@ -167,7 +167,7 @@ export function slidesOutDown(callback: () => void, elID: string) {
   };
 }
 
-export function slidesInLeft(vnode: Mithril.Vnode<any>) {
+export function slidesInLeft(vnode: Mithril.Vnode<void>) {
   const el = vnode.dom;
   el.style.transform = 'translateX(100%)';
   // force reflow hack
@@ -199,7 +199,7 @@ type TapHandler = (e?: Event) => void;
 type RepeatHandler = () => boolean;
 
 function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repeatHandler: RepeatHandler, scrollX: boolean, scrollY: boolean, touchEndFeedback: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
-  return function(vnode: Mithril.Vnode<any>) {
+  return function(vnode: Mithril.Vnode<void>) {
     ButtonHandler(vnode.dom,
       (e: Event) => {
         tapHandler(e);
@@ -216,7 +216,7 @@ function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repea
 }
 
 export function ontouch(handler: TapHandler) {
-  return ({ dom }) => {
+  return ({ dom }: Mithril.Vnode<void>) => {
     dom.addEventListener('touchstart', handler);
   };
 }

@@ -39,9 +39,24 @@ function renderHeader(user) {
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
-      <h2 key="username" className={'username' + (hasNetwork() && user ? ' connected' : '')}>
-        { hasNetwork() ? user ? user.username : 'Anonymous' : i18n('offline') }
-      </h2>
+      { !hasNetwork() ?
+        <h2 key="username-offline" className="username">
+          {i18n('offline')}
+        </h2> : null
+      }
+      { hasNetwork() && !user ?
+        <h2 key="username-anon" className="username">
+          Anonymous
+        </h2> : null
+      }
+      { hasNetwork() && user ?
+        <h2 key="username-connected" className="username connected">
+          { user.username }
+          <div class='ledContainer'>
+            <div class='led' style={'background: ' + color}/>
+          </div>
+        </h2> : null
+      }
       { hasNetwork() && user ?
         <button key="user-button" className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
           oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
@@ -56,9 +71,6 @@ function renderHeader(user) {
             <div class="server">
               <span oncreate={helper.ontap(() => window.plugins.toast.show(serverHelp, 'long', 'top'))}>SERVER<i className="fa fa-question-circle-o" /></span>&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
             </div>
-          </div>
-          <div class='ledContainer'>
-            <div class='led' style={'background: ' + color}/>
           </div>
         </div> : null
       }

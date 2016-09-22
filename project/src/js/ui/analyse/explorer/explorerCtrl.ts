@@ -1,5 +1,6 @@
 import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
+import * as helper from '../../helper';
 import { debounce } from 'lodash';
 import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
@@ -25,6 +26,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
 
   function open() {
     backbutton.stack.push(close);
+    helper.analyticsTrackView('Analysis Explorer');
     enabled(true);
   }
 

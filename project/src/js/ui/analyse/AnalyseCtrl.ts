@@ -25,15 +25,20 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { RoleToSan, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface } from './interfaces';
+import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface } from './interfaces';
 
-const roleToSan: RoleToSan = {
-  pawn: 'P',
-  knight: 'N',
-  bishop: 'B',
-  rook: 'R',
-  queen: 'Q'
-};
+interface VM {
+  shouldGoBack: boolean
+  path: Path
+  pathStr: string
+  step: AnalysisStep
+  cgConfig: Chessground.SetConfig
+  variationMenu: string
+  flip: boolean
+  analysisProgress: boolean
+  showBestMove: boolean
+  showComments: boolean
+}
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -47,7 +52,7 @@ export default class AnalyseCtrl {
   public data: AnalysisData;
   public orientation: Color;
   public source: Source;
-  public vm: any;
+  public vm: VM;
   public settings: any;
   public menu: any;
   public continuePopup: any;
@@ -270,7 +275,6 @@ export default class AnalyseCtrl {
   }
 
   private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
-    this.vm.justPlayed = orig + dest;
     if (capture) sound.capture();
     else sound.move();
     if (!promotion.start(this, orig, dest, this.sendMove)) this.sendMove(orig, dest);
@@ -278,7 +282,6 @@ export default class AnalyseCtrl {
 
   private userNewPiece = (piece: Piece, pos: Pos) => {
     if (crazyValid.drop(this.chessground, piece, pos, this.vm.step.drops)) {
-      this.vm.justPlayed = roleToSan[piece.role] + '@' + pos;
       sound.move();
       const drop = {
         role: piece.role,
@@ -289,7 +292,11 @@ export default class AnalyseCtrl {
       };
       chess.drop(drop)
       .then(this.addStep)
-      .catch(console.error.bind(console));
+      .catch(err => {
+        // catching false drops here
+        console.error(err);
+        this.jump(this.vm.path);
+      });
       this.preparePremoving();
     } else this.jump(this.vm.path);
   }
@@ -326,9 +333,6 @@ export default class AnalyseCtrl {
     this.jump(newPath);
     redraw();
     this.chessground.playPremove();
-  }
-
-  public addDests = (dests: DestsMap, path: Path) => {
   }
 
   public toggleVariationMenu = (path: Path) => {
@@ -391,7 +395,7 @@ export default class AnalyseCtrl {
   }
 
   public canUseCeval = () => {
-    return this.vm.step.dests !== '' && (!this.vm.step.rEval ||
+    return !!this.vm.step.dests && (!this.vm.step.rEval ||
       !this.nextStepBest());
   }
 

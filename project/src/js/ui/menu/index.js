@@ -7,6 +7,8 @@ import socket from '../../socket';
 
 const menu = {};
 
+let sendPingsInterval;
+
 /* properties */
 menu.isOpen = false;
 menu.headerOpen = m.prop(false);
@@ -48,12 +50,12 @@ menu.open = function() {
   menu.isOpen = true;
   getServerLags();
   socket.send('moveLat', true);
-  menu.sendPingsInterval = setInterval(getServerLags, 1000);
+  sendPingsInterval = setInterval(getServerLags, 1000);
 };
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
-  clearInterval(menu.sendPingsInterval);
+  clearInterval(sendPingsInterval);
   socket.send('moveLat', false);
   return Zanimo(
     document.getElementById('side_menu'),

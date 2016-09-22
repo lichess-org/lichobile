@@ -171,6 +171,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
+        redraw();
       });
     }
     this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;

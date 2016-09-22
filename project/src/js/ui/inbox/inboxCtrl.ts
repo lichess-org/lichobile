@@ -4,6 +4,7 @@ import * as xhr from './inboxXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
 import { InboxData, Thread } from './interfaces';
+import compose from './compose';
 
 export default function oninit(vnode: Mithril.Vnode<{}>): void {
   helper.analyticsTrackView('Inbox');
@@ -11,6 +12,7 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
   socket.createDefault();
 
   const threads = m.prop<Array<Thread>>();
+  const composeCtrl = compose.controller();
 
   xhr.inbox()
   .then(data => {
@@ -21,6 +23,7 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
   .catch(handleXhrError);
 
   vnode.state = {
-    threads
+    threads,
+    composeCtrl
   };
 }

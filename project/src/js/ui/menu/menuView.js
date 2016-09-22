@@ -179,7 +179,7 @@ function renderLinks(user) {
       }
       {hasNetwork() && user ?
       <li className="side_link" key="message" oncreate={helper.ontapY(menu.route('/inbox'))}>
-        <span className="fa fa-inbox"/>{i18n('inbox')}
+        <span className="fa fa-envelope"/>{i18n('inbox')}
       </li> : null
       }
       <li className="sep_link" key="sep_link_offline">

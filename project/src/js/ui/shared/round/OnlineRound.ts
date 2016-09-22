@@ -11,7 +11,7 @@ import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
-import { MoveOrDrop } from '../../../lichess/dataFormat';
+import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/dataFormat';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';
 
@@ -27,6 +27,31 @@ import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 import { OnlineRoundInterface } from './';
 
+interface MiniUserPlayer {
+  showing: boolean
+  data: any
+}
+interface MiniUser {
+  player: MiniUserPlayer
+  opponent: MiniUserPlayer
+  [index: string]: MiniUserPlayer
+}
+
+interface VM {
+  ply: number
+  flip: boolean
+  miniUser: MiniUser
+  showingActions: boolean
+  confirmResign: boolean
+  goneBerserk: {
+    [index: string]: boolean
+  },
+  moveToSubmit: MoveRequest
+  dropToSubmit: DropRequest
+  tClockEl: HTMLElement
+  offlineWatcher: boolean
+}
+
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string;
   public data: OnlineGameData;
@@ -38,7 +63,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public onFeatured: () => void;
   public onTVChannelChange: () => void;
   public onUserTVRedirect: () => void;
-  public vm: any;
+  public vm: VM;
   public title: any;
   public tv: string;
   public flipped: boolean;
@@ -167,13 +192,22 @@ export default class OnlineRound implements OnlineRoundInterface {
     return h;
   }
 
-  public toggleUserPopup = (position: string, userId: string) => {
+  public openUserPopup = (position: string, userId: string) => {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
+        redraw();
+      })
+      .catch(() => {
+        this.vm.miniUser[position].showing = false;
+        redraw();
       });
     }
-    this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
+    this.vm.miniUser[position].showing = true;
+  }
+
+  public closeUserPopup = (position: string) => {
+    this.vm.miniUser[position].showing = false;
   }
 
   public showActions = () => {

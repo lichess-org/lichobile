@@ -252,6 +252,7 @@ interface GameStep {
   check: boolean
   checkCount?: CheckCount
   dests?: DestsMap
+  drops?: Array<string>
   crazy?: {
     pockets: Pockets
   }

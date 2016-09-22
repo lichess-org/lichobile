@@ -366,7 +366,7 @@ function renderActionsBar(ctrl) {
         <button className={explorerBtnClass} key="explorer"
           oncreate={helper.ontap(
             ctrl.explorer.toggle,
-            () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
+            () => window.plugins.toast.show('Opening explorer & endgame tablebase', 'short', 'bottom')
           )}
         /> : null
       }

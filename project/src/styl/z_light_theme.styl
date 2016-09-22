@@ -1,6 +1,3 @@
-borderLightGray = darken(bglight, 15%)
-activeBgLight = darken(themeBgLight, 8%)
-
 .view-container.light
   main
     color textLightBg
@@ -8,30 +5,6 @@ activeBgLight = darken(themeBgLight, 8%)
   #page
     background themeBgLight
     color textMediumGray
-
-  #side_menu
-    background bglight
-    .login
-      color textLightBg
-      background borderLightGray
-      &.active
-        background lighten(borderLightGray, 10%)
-
-  .side_menu_header
-    background #fff
-    > .username
-      color textLightBg
-
-  .side_links .hr
-    border-color textLightGray
-
-  .sep_link
-    color textMediumGray
-
-  .side_link
-    color textDarkGray
-    &.active
-      background darken(themeBgLight, 5%)
 
   #games_menu
     background rgba(0,0,0,0.6)

@@ -1,3 +1,11 @@
+export interface MoveRequest {
+  u: string
+}
+
+export interface DropRequest {
+  role: Role
+  pos: Pos
+}
 
 export interface MoveOrDrop {
   fen: string;

@@ -1,6 +1,5 @@
 import { merge } from 'lodash';
 import spinner from './spinner';
-import redraw from './utils/redraw';
 import { buildQueryString } from './utils/querystring';
 
 export const apiVersion = 2;
@@ -45,14 +44,12 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   function onSuccess(data: Response): Response {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
-    redraw();
     return data;
   }
 
   function onError(error: any) {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
-    redraw();
     throw error;
   }
 

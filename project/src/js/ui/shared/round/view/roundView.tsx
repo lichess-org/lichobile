@@ -43,8 +43,8 @@ function overlay(ctrl: OnlineRound, isPortrait: boolean) {
     promotion.view(ctrl),
     renderGamePopup(ctrl, isPortrait),
     renderSubmitMovePopup(ctrl),
-    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, ctrl.toggleUserPopup.bind(ctrl, 'player')),
-    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, ctrl.toggleUserPopup.bind(ctrl, 'opponent'))
+    miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, () => ctrl.closeUserPopup('player')),
+    miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, () => ctrl.closeUserPopup('opponent'))
   ];
 }
 
@@ -192,7 +192,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       'Sunsetter' : 'Stockfish';
   }
   const playerName = utils.playerName(player, !isPortrait);
-  const togglePopup = user ? ctrl.toggleUserPopup.bind(ctrl, position, user.id) : utils.noop;
+  const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop;
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :
     helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));

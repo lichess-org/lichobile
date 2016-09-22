@@ -268,17 +268,19 @@ export function miniUser(user, mini, isOpen, close) {
               </p> : null
           }
         </div>
-        <div className="mini_perfs">
-          {Object.keys(mini.perfs).map(p => {
-            const perf = mini.perfs[p];
-            return (
-              <div className="perf">
-                <span data-icon={utils.gameIcon(p)} />
-                {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
-              </div>
-            );
-          })}
-        </div>
+        { mini.perfs &&
+          <div className="mini_perfs">
+            {Object.keys(mini.perfs).map(p => {
+              const perf = mini.perfs[p];
+              return (
+                <div className="perf">
+                  <span data-icon={utils.gameIcon(p)} />
+                  {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
+                </div>
+              );
+            })}
+          </div>
+        }
         { mini.crosstable && mini.crosstable.nbGames > 0 ?
           <div className="yourScore">
             Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>

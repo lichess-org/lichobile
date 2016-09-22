@@ -1,9 +1,5 @@
-import * as h from '../../helper';
-import router from '../../../router';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
-import i18n from '../../../i18n';
-import * as m from 'mithril';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -17,10 +13,34 @@ export default function view(vnode) {
 
 function threadBody(ctrl) {
   if (!ctrl.thread()) return null;
-
+  console.log(ctrl.thread());
   return (
-    <div className="threadWrapper native_scroller">
-
+    <div key={ctrl.thread().id} className="threadWrapper native_scroller">
+      {ctrl.thread().posts.map(renderPost)}
     </div>
   );
+}
+
+function renderPost(post, index, posts) {
+  let postId = '';
+  if (index === 0)
+    postId = 'first';
+  if (index === posts.length-1)
+    postId = 'last';
+  return (
+    <div id={postId} className="postWrapper" key={post.createdAd}>
+      <div className="infos">
+        <span>{post.sender}</span>
+        <span data-icon="H"></span>
+        <span>{post.receiver}</span>
+        <span>{postDateFormat(post.createdAd)}</span>
+      </div>
+      <div className="text">{post.text}</div>
+    </div>
+  );
+}
+
+function postDateFormat (timeInMillis) {
+  const time = window.moment(timeInMillis);
+  return time.format('MMM D H:mm');
 }

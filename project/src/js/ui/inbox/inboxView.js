@@ -37,12 +37,13 @@ function renderInboxItem(thread) {
     oncreate={h.ontapY(() => router.set('/inbox/' + thread.id))}>
       <td className="threadAuthor"> { thread.author } </td>
       <td className="threadName"> { thread.name } </td>
-      <td className="threadDate"> { formatMessageTime(window.moment(thread.updatedAt)) } </td>
+      <td className="threadDate"> { formatMessageTime(thread.updatedAt) } </td>
     </tr>
   );
 }
 
-function formatMessageTime (time) {
+function formatMessageTime (timeInMillis) {
+  const time = window.moment(timeInMillis);
   const now = window.moment();
   if (now.isAfter(time, 'day')) {
     return time.format('MMM D');

@@ -22,18 +22,19 @@ function threadBody(ctrl) {
 }
 
 function renderPost(post, index, posts) {
-  let postId = '';
+  let postId = 'postWrapper';
   if (index === 0)
-    postId = 'first';
+    postId += ' first';
   if (index === posts.length-1)
-    postId = 'last';
+    postId += ' last';
   return (
-    <div id={postId} className="postWrapper" key={post.createdAd}>
+    <div className={postId} key={post.createdAd}>
       <div className="infos">
         <span>{post.sender}</span>
         <span data-icon="H"></span>
         <span>{post.receiver}</span>
-        <span>{postDateFormat(post.createdAd)}</span>
+        <span>&nbsp;-&nbsp;</span>
+        <span>{postDateFormat(post.createdAt)}</span>
       </div>
       <div className="text">{post.text}</div>
     </div>

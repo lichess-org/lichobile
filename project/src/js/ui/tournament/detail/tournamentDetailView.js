@@ -21,8 +21,8 @@ export default function view(vnode) {
   const body = () => tournamentBody(ctrl);
   const footer = () => renderFooter(ctrl);
   const faqOverlay = () => renderFAQOverlay(ctrl);
-  const playreInfoOverlay = () => renderPlayerInfoOverlay(ctrl);
-  const overlay = () => [faqOverlay(), playreInfoOverlay()];
+  const playerInfoOverlay = () => renderPlayerInfoOverlay(ctrl);
+  const overlay = () => [faqOverlay(), playerInfoOverlay()];
 
   return layout.free(headerCtrl, body, footer, overlay);
 }

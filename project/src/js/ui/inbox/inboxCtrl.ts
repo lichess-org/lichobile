@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import * as xhr from './inboxXhr';
 import * as helper from '../helper';
@@ -18,7 +19,7 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
   .then(data => {
     console.log(data);
     threads(data);
-    return (data);
+    redraw();
   })
   .catch(handleXhrError);
 

@@ -16,7 +16,7 @@ export default function view(vnode) {
 function inboxBody(ctrl) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
   if (ctrl.threads().nbResults === 0) {
-    return (<div className="emptyInbox"> No new messages </div>);
+    return (<div className="emptyInbox"> {i18n('noNewMessages')} </div>);
   }
 
   return (
@@ -62,7 +62,7 @@ function renderFooter(ctrl) {
     <div className="actions_bar">
       <button key="compose" className="action_bar_button" oncreate={h.ontap(ctrl.composeCtrl.open)}>
         <span className="fa fa-pencil" />
-        Compose
+        {i18n('composeMessage')}
       </button>
     </div>
   );

@@ -268,7 +268,7 @@ export function miniUser(user, mini, isOpen, close) {
               </p> : null
           }
         </div>
-        { mini.perfs &&
+        { mini.perfs ?
           <div className="mini_perfs">
             {Object.keys(mini.perfs).map(p => {
               const perf = mini.perfs[p];
@@ -279,7 +279,7 @@ export function miniUser(user, mini, isOpen, close) {
                 </div>
               );
             })}
-          </div>
+          </div> : null
         }
         { mini.crosstable && mini.crosstable.nbGames > 0 ?
           <div className="yourScore">

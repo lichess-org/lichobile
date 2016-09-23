@@ -105,7 +105,7 @@ export default class AnalyseCtrl {
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.explorer = explorerCtrl(this, true);
-    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, 100);
+    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
     const initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
@@ -197,8 +197,9 @@ export default class AnalyseCtrl {
 
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece);
+    } else {
+      this.chessground.set(config);
     }
-    this.chessground.set(config);
     if (!dests) this.debouncedDests();
   }
 
@@ -240,12 +241,6 @@ export default class AnalyseCtrl {
 
   public jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + this.data.game.startedAtTurn);
-  }
-
-  public jumpToNag = (color: Color, nag: string) => {
-    const ply = this.analyse.plyOfNextNag(color, nag, this.vm.step.ply);
-    if (ply) this.jumpToMain(ply);
-    redraw();
   }
 
   public canDrop = () => {
@@ -450,7 +445,6 @@ export default class AnalyseCtrl {
         this.analyse.addDests(dests, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();
-          redraw();
           if (dests === {}) this.ceval.stop();
         }
         this.chessground.playPremove();

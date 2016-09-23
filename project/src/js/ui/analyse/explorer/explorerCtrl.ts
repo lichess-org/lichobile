@@ -7,7 +7,7 @@ import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
-import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
+import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerCurrentData, ExplorerData } from '../interfaces';
 
 function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
@@ -22,7 +22,11 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
-  const current: Mithril.Property<ExplorerData> = m.prop(null);
+  const current: Mithril.Property<ExplorerCurrentData> = m.prop({
+    data: null,
+    fen: '',
+    config: ''
+  });
 
   function open() {
     backbutton.stack.push(close);
@@ -38,13 +42,16 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
 
   let cache: {[index: string]: ExplorerData} = {};
 
-  function setResult(fen: string, data: ExplorerData) {
+  function setResult(fen: string, config: string, data: ExplorerData) {
     cache[fen] = data;
-    current(data);
+    current({
+      data,
+      fen,
+      config
+    });
   }
 
   function onConfigClose(changed: boolean) {
-    redraw();
     if (changed) {
       cache = {};
       setStep();
@@ -65,12 +72,12 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     redraw();
   }
 
-  const fetchOpening = debounce((fen: string) => {
+  const fetchOpening = debounce((fen: string, configStr: string) => {
     return openingXhr(effectiveVariant, fen, config.data, withGames)
     .then((res: ExplorerData) => {
       res.opening = true;
       res.fen = fen;
-      setResult(fen, res);
+      setResult(fen, configStr, res);
       loading(false);
       failing(false);
       redraw();
@@ -78,12 +85,12 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     .catch(handleFetchError);
   }, 1000);
 
-  const fetchTablebase = debounce((fen: string) => {
+  const fetchTablebase = debounce((fen: string, configStr: string) => {
     return tablebaseXhr(root.vm.step.fen)
     .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;
-      setResult(fen, res);
+      setResult(fen, configStr, res);
       loading(false);
       failing(false);
       redraw();
@@ -91,10 +98,10 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     .catch(handleFetchError);
   }, 500);
 
-  function fetch(fen: string) {
+  function fetch(fen: string, configStr: string) {
     const hasTablebase = effectiveVariant === 'standard' || effectiveVariant === 'chess960';
-    if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
-    else return fetchOpening(fen);
+    if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen, configStr);
+    else return fetchOpening(fen, configStr);
   }
 
   const empty: ExplorerData = {
@@ -105,15 +112,20 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   function setStep() {
     if (!enabled()) return;
     const step = root.vm.step;
+    const configStr = config.serialize();
     if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
-      setResult(step.fen, empty);
+      setResult(step.fen, configStr, empty);
     }
     const fromCache = cache[step.fen];
     if (!fromCache) {
       loading(true);
-      fetch(step.fen);
+      fetch(step.fen, configStr);
     } else {
-      current(fromCache);
+      current({
+        data: fromCache,
+        fen: step.fen,
+        config: configStr
+      });
       loading(false);
       failing(false);
     }

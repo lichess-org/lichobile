@@ -24,6 +24,12 @@ export interface AnalyseCtrlInterface {
   debouncedScroll(): void
 }
 
+export interface ExplorerCurrentData {
+  data: ExplorerData
+  fen: string
+  config: string
+}
+
 export interface ExplorerCtrlInterface {
   allowed: Mithril.Property<boolean>
   enabled: Mithril.Property<boolean>
@@ -32,7 +38,7 @@ export interface ExplorerCtrlInterface {
   failing: Mithril.Property<boolean>
   config: any
   withGames: boolean
-  current: Mithril.Property<ExplorerData>
+  current: Mithril.Property<ExplorerCurrentData>
   toggle(): void
 }
 

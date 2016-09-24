@@ -8,7 +8,7 @@ export function thread(id: string) {
   return fetchJSON('/inbox/' + id, {}, true);
 }
 
-export function answer(id: string, response: string) {
+export function respond(id: string, response: string) {
   return fetchJSON('/inbox/' + id, {
     method: 'POST',
     body: JSON.stringify({

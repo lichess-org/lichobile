@@ -32,6 +32,7 @@ import editor from './ui/editor';
 import clock from './ui/clock';
 import inbox from './ui/inbox';
 import inboxThread from './ui/inbox/thread';
+import inboxCompose from './ui/inbox/compose';
 import { defineRoutes } from './router';
 
 export default {
@@ -65,6 +66,8 @@ export default {
       'editor/:fen': editor,
       'inbox': inbox,
       'inbox/:id': inboxThread,
+      'inbox/new': inboxCompose,
+      'inbox/new/:id': inboxCompose,
       'players': players,
       'ranking': ranking,
       'settings': settingsUi,

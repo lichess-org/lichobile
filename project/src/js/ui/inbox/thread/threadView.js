@@ -1,5 +1,7 @@
+import * as h from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
+import i18n from '../../../i18n';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -17,6 +19,20 @@ function threadBody(ctrl) {
   return (
     <div key={ctrl.thread().id} className="threadWrapper native_scroller">
       {ctrl.thread().posts.map(renderPost)}
+      <div className="responseWrapper">
+        <form id="responseForm"
+        onsubmit={function(e) {
+          e.preventDefault();
+          return ctrl.send(e.target);
+        }}>
+          <input id="id" value={ctrl.id()} type="hidden" />
+          <textarea id="body" className="responseBody" oncreate={h.autofocus} />
+          <button key="send" className="action_bar_button responseSend" type="submit">
+            <span className="fa fa-check" />
+            {i18n('send')}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

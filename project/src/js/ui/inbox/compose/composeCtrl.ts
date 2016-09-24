@@ -20,34 +20,24 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
 
   socket.createDefault();
 
-  const id = m.prop<string>(vnode.attrs.id);
-  const thread = m.prop<Array<Thread>>();
-
-  xhr.thread(id())
-  .then(data => {
-    console.log(data);
-    thread(data);
-    redraw();
-  })
-  .catch(handleXhrError);
+  const id = m.prop<string>();
+  id(vnode.attrs.id);
 
   vnode.state = {
     id,
-    thread,
     send
   };
 }
 
 function send(form: Array<InputTag>) {
-  const id = form[0].value;
-  const response = form[1].value;
-  if(!response || response === '') return;
-
-  xhr.respond(id, response)
+  const recipient = form[0].value;
+  const subject = form[1].value;
+  const body = form[2].value;
+  xhr.newThread(recipient, subject, body)
   .then(data => {
     console.log(data);
     if(data.ok) {
-      router.set('/inbox/' + id)
+      router.set('/inbox/' + data.id)
     }
     else {
       redraw();

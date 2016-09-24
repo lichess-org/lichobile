@@ -3,14 +3,12 @@ import router from '../../router';
 import {header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import compose from './compose';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
   const bodyCtrl = inboxBody.bind(undefined, ctrl);
   const footer = () => renderFooter(ctrl);
-  const overlay = () => [renderComposeOverlay(ctrl)];
-  return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl, footer, overlay);
+  return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl, footer);
 }
 
 function inboxBody(ctrl) {
@@ -60,16 +58,10 @@ function renderFooter(ctrl) {
 
   return (
     <div className="actions_bar">
-      <button key="compose" className="action_bar_button" oncreate={h.ontap(ctrl.composeCtrl.open)}>
+      <button key="compose" className="action_bar_button" oncreate={h.ontapY(() => router.set('/inbox/new'))}>
         <span className="fa fa-pencil" />
         {i18n('composeMessage')}
       </button>
     </div>
   );
-}
-
-function renderComposeOverlay(ctrl) {
-  return [
-    compose.view(ctrl.composeCtrl)
-  ];
 }

@@ -35,13 +35,47 @@ table.threadList
 
 .threadWrapper
   height 100%
-  
-.postWrapper
-  width 90%
-  margin 0 auto
-  border-top 1px solid #d4d4d4
-  &.first
-    border-top none
-  .infos
+  >.responseWrapper
     width 90%
     margin 0 auto
+    textarea
+      width 100%
+      background transparent
+      border 1px solid #555555
+      margin 5px 0px 5px 0px
+      &::placeholder
+        opacity 0.6
+    button
+      margin 0 auto
+      width 100%
+  >.postWrapper
+    width 90%
+    margin 0 auto
+    padding 5px 0px 5px 0px
+    border-top 1px solid #555555
+    &.first
+      border-top none
+    .infos
+      width 90%
+      margin 0 auto
+
+.composeWrapper
+  width 95%
+  margin 0 auto
+  input
+    padding-left 5px
+    border none
+    outline none
+  .composeInput
+    background transparent
+    border 1px solid #555555
+    width 100%
+    margin 5px 0px 5px 0px
+    &::placeholder
+      opacity 0.6
+  textarea
+    width 100%
+    height 430px
+  button
+    margin 0 auto
+    width 100%

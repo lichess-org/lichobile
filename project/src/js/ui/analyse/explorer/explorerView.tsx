@@ -80,10 +80,9 @@ function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
 }
 
 function show(ctrl: AnalyseCtrlInterface) {
-  const current = ctrl.explorer.current();
-  const data = current.data;
+  const data = ctrl.explorer.current();
   if (data && data.opening) {
-    return m<OpeningTableAttrs>(OpeningTable, { fen: current.fen, data: current.data, ctrl, configStr: current.config });
+    return m<OpeningTableAttrs>(OpeningTable, { data, ctrl });
   }
   else if (data && data.tablebase) {
     const moves = data.moves;
@@ -127,7 +126,7 @@ function failing() {
 
 export default function(ctrl: AnalyseCtrlInterface) {
   if (!ctrl.explorer.enabled()) return null;
-  const data = ctrl.explorer.current().data;
+  const data = ctrl.explorer.current();
   const config = ctrl.explorer.config;
   const configOpened = config.open();
   const loading = !configOpened && ctrl.explorer.loading();

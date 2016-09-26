@@ -3,15 +3,13 @@ import * as helper from '../../helper';
 import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
 
 export interface Attrs {
-  fen: string
   ctrl: AnalyseCtrlInterface
   data: ExplorerData
-  configStr: string
 }
 
 export default {
   onbeforeupdate({ attrs }: Mithril.Vnode<Attrs>, { attrs: oldattrs }: Mithril.Vnode<Attrs>) {
-    if ((attrs.fen !== oldattrs.fen) || (attrs.configStr !== oldattrs.configStr)) return true;
+    if (attrs.data !== oldattrs.data) return true;
     else return false;
   },
 

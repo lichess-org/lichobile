@@ -23,6 +23,7 @@ import 'whatwg-fetch';
 import * as moment from 'moment';
 window.moment = moment;
 
+import { debounce } from 'lodash';
 import { hasNetwork } from './utils';
 import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';
@@ -90,9 +91,10 @@ function main() {
   }, 500);
 }
 
+const debouncedRedraw = debounce(() => redraw(), 10);
 function onResize() {
   helper.clearCachedViewportDim();
-  redraw();
+  debouncedRedraw();
 }
 
 function onOnline() {

@@ -26,8 +26,8 @@ function threadBody(ctrl) {
           return ctrl.send(e.target);
         }}>
           <input id="id" value={ctrl.id()} type="hidden" />
-          <textarea id="body" className="responseBody" oncreate={h.autofocus} />
-          <button key="send" className="action_bar_button responseSend" type="submit">
+          <textarea id="body" className="responseBody" />
+          <button key="send" className="fatButton responseSend" oncreate={h.autofocus} type="submit">
             <span className="fa fa-check" />
             {i18n('send')}
           </button>
@@ -45,13 +45,13 @@ function renderPost(post, index, posts) {
     postId += ' last';
   return (
     <div className={postId} key={post.createdAd}>
-      <div className="infos">
-        <span>{post.sender}</span>
-        <span data-icon="H"></span>
-        <span>{post.receiver}</span>
-        <span>&nbsp;-&nbsp;</span>
-        <span>{postDateFormat(post.createdAt)}</span>
-      </div>
+      <span className="infos">
+        {post.sender}
+        <span className="arrow" data-icon="H"></span>
+        {post.receiver}
+        &nbsp;–&nbsp;
+        {postDateFormat(post.createdAt)}
+      </span>
       <div className="text">{post.text}</div>
     </div>
   );

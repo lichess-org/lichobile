@@ -30,12 +30,7 @@ function submit(form) {
     socket.connect();
     push.register();
     challengesApi.refresh();
-    session.refresh()
-    .catch(err => {
-      if (err.response && err.response.status === 401) {
-        window.navigator.notification.alert('Lichess authentication cannot work without cookies enabled. Please make sure cookies are authorized.');
-      }
-    });
+    session.refresh();
   })
   .catch(utils.handleXhrError);
 }

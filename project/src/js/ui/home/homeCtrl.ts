@@ -49,7 +49,8 @@ export default function homeCtrl(vnode: Mithril.Vnode<{}>): void {
         const [dailyData, topPlayersData] = results;
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
-      });
+      })
+      .catch(console.log.bind(console));
 
       timelineXhr()
       .then(data => {
@@ -58,7 +59,8 @@ export default function homeCtrl(vnode: Mithril.Vnode<{}>): void {
           .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
           .slice(0, 10)
         );
-      });
+      })
+      .catch(console.log.bind(console));
     }
   }
 

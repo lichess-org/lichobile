@@ -2,6 +2,7 @@ import menu from '../menu';
 import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
+import { emptyFen } from '../../utils/fen';
 import { getOfflineGames } from '../../utils/offlineGames';
 import layout from '../layout';
 import * as helper from '../helper';
@@ -25,7 +26,7 @@ export const LoadingBoard = {
   view() {
     return layout.board(
       connectingHeader,
-      viewOnlyBoardContent
+      () => viewOnlyBoardContent(emptyFen)
     );
   }
 };

@@ -1,3 +1,5 @@
+export const emptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
+
 export function readFen(fen: string) {
   const parts = fen.split(' ');
   return {

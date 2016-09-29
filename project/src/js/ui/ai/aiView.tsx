@@ -1,5 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import { getBoardBounds } from '../../utils';
+import { playerFromFen } from '../../utils/fen';
 import i18n from '../../i18n';
 
 import layout from '../layout';
@@ -23,8 +24,10 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round);
   } else {
+    const fen = this.round.vm.setupFen || this.round.vm.savedFen;
+    const color = playerFromFen(fen);
     header = () => renderHeader(i18n('playOfflineComputer'));
-    content = () => viewOnlyBoardContent(this.round.vm.setupFen || this.round.vm.savedFen);
+    content = () => viewOnlyBoardContent(fen, null, color);
   }
 
   return layout.board(

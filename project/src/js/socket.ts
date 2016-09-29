@@ -79,7 +79,7 @@ function handleFollowingOnline(data: Array<string>, payload: any) {
 
   const newFriendList = friendsApi.list()
 
-  if (xorWith(oldFriendList, newFriendList, _.isEqual).length > 1) {
+  if (xorWith(oldFriendList, newFriendList, isEqual).length > 1) {
     redraw();
   }
 }

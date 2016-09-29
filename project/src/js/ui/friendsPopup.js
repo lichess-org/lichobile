@@ -69,7 +69,7 @@ function renderFriend(user) {
     router.set('/@/' + userId + '/tv');
   };
 
-  return user.isPlaying ? (
+  return user.playing ? (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
       <span>{user.name}</span>
       <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(tvAction)}> </span>

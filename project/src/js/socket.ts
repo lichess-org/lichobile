@@ -61,9 +61,7 @@ function handleFollowingOnline(data: Array<string>, payload: any) {
   var friendsPlaying = payload.playing;
 
   friendsApi.set(data, friendsPlaying);
-  if (xor(curList, data).length > 0) {
-    redraw();
-  }
+  redraw();
 }
 
 function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {

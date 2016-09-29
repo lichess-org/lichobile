@@ -21,9 +21,7 @@ function isSameUser(userId: string, name: string) {
 };
 
 function findByUsername(n: string) {
-  return onlineFriends.find(function(u) {
-    return isSameUser(n.toLowerCase(), u.name);
-  });
+  return onlineFriends.find(u => isSameUser(n.toLowerCase(), u.name));
 }
 
 function setPlaying(userName: string, playing: boolean) {

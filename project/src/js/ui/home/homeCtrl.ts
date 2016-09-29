@@ -50,7 +50,7 @@ export default function homeCtrl(vnode: Mithril.Vnode<{}>): void {
         dailyPuzzle(dailyData.puzzle);
         weekTopPlayers(topPlayersData);
       })
-      .catch(console.log.bind(console));
+      .catch(console.error.bind(console));
 
       timelineXhr()
       .then(data => {
@@ -60,7 +60,7 @@ export default function homeCtrl(vnode: Mithril.Vnode<{}>): void {
           .slice(0, 10)
         );
       })
-      .catch(console.log.bind(console));
+      .catch(console.error.bind(console));
     }
   }
 

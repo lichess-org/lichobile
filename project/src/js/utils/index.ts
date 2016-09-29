@@ -1,5 +1,5 @@
 import i18n from '../i18n';
-import { ResponseError } from '../http';
+import { FetchError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
 
@@ -42,15 +42,15 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-function isResponseError(error: Error | ResponseError): error is ResponseError {
-  return (<ResponseError>error).response !== undefined;
+function isFetchError(error: Error | FetchError): error is FetchError {
+  return (<FetchError>error).response !== undefined;
 }
 
-export function handleXhrError(error: Error | ResponseError): void {
+export function handleXhrError(error: Error | FetchError): void {
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
-    if (isResponseError(error)) {
+    if (isFetchError(error)) {
       const status = error.response.status;
       let message: string;
 

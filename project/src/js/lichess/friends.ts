@@ -64,12 +64,12 @@ function playing(name: string) {
   setPlaying(name, true);
 }
 
-function stopped_playing(name: string) {
+function stoppedPlaying(name: string) {
   setPlaying(name, false);
 }
 
 function remove(leaving: string) {
-  onlineFriends = onlineFriends.filter(friend => friend.name != leaving);
+  onlineFriends = onlineFriends.filter(friend => friend.name !== leaving);
 }
 
 function clear() {
@@ -82,7 +82,7 @@ export default {
   set,
   add,
   playing,
-  stopped_playing,
+  stoppedPlaying,
   remove,
   clear
 }

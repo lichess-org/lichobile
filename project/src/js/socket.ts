@@ -48,7 +48,7 @@ const defaultHandlers: {[index: string]: (...args: any[]) => void} = {
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
   following_playing: name => autoredraw(() => friendsApi.playing(name)),
   following_stopped_playing: name =>
-    autoredraw(() => friendsApi.stopped_playing(name)),
+    autoredraw(() => friendsApi.stoppedPlaying(name)),
   challenges: (data: any) => {
     challengesApi.set(data);
     redraw();

@@ -8,7 +8,7 @@ class Friend {
   }
 }
 
-let onlineFriends: Array < Friend > = [];
+let onlineFriends: Array <Friend> = [];
 
 function makeFriend(name: string, isPlaying: boolean) {
   return new Friend(name, isPlaying);
@@ -38,7 +38,7 @@ function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
     return 0;
 };
 
-function list(): Array < Friend > {
+function list(): Array <Friend> {
   return onlineFriends;
 }
 
@@ -46,7 +46,7 @@ function count() {
   return onlineFriends.length;
 }
 
-function set(friends: Array < string > , playings: Array < string > ) {
+function set(friends: Array <string> , playings: Array <string> ) {
   onlineFriends = friends.map(name => makeFriend(name, false));
 
   for (let user of playings) setPlaying(user, true);

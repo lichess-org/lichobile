@@ -2,7 +2,7 @@ import router from './router';
 import redraw from './utils/redraw';
 import storage from './storage';
 import { apiVersion } from './http';
-import { xor } from 'lodash';
+import { xorWith, isEqual } from 'lodash';
 import { lichessSri, autoredraw, tellWorker, hasNetwork } from './utils';
 import * as xhr from './xhr';
 import i18n from './i18n';
@@ -56,12 +56,16 @@ const defaultHandlers: {[index: string]: (...args: any[]) => void} = {
 };
 
 function handleFollowingOnline(data: Array<string>, payload: any) {
-  const curList = friendsApi.list();
+  const oldFriendList = friendsApi.list().slice();
 
   var friendsPlaying = payload.playing;
-
   friendsApi.set(data, friendsPlaying);
-  redraw();
+
+  const newFriendList = friendsApi.list()
+
+  if (xorWith(oldFriendList, newFriendList, _.isEqual).length > 1) {
+      redraw();
+  }
 }
 
 function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {

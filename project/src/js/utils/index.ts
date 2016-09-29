@@ -42,11 +42,15 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-export function handleXhrError(error: ResponseError): void {
+function isResponseError(error: Error | ResponseError): error is ResponseError {
+  return (<ResponseError>error).response !== undefined;
+}
+
+export function handleXhrError(error: Error | ResponseError): void {
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
-    if (error.response) {
+    if (isResponseError(error)) {
       const status = error.response.status;
       let message: string;
 

@@ -32,6 +32,12 @@ function submit(form) {
     challengesApi.refresh();
     session.refresh();
   })
+  .catch(err => {
+    if (err.ipban) {
+      loginModal.close();
+    }
+    throw err;
+  })
   .catch(utils.handleXhrError);
 }
 

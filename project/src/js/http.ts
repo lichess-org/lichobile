@@ -12,7 +12,7 @@ export interface RequestOpts extends RequestInit {
 
 export interface ResponseError {
   error: Error;
-  response?: Response;
+  response: Response;
 }
 
 export function checkStatus(response: Response): Response {

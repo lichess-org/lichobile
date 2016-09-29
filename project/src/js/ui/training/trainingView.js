@@ -1,5 +1,6 @@
 import layout from '../layout';
 import router from '../../router';
+import { emptyFen } from '../../utils/fen';
 import i18n from '../../i18n';
 import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
@@ -13,7 +14,7 @@ export default function view(vnode) {
 
   return layout.board(
     !ctrl.data || ctrl.vm.loading ?
-      connectingHeader.bind(undefined, i18n('training')) :
+      connectingHeader :
       header.bind(undefined, i18n('training')),
     renderContent.bind(undefined, ctrl),
     () => [
@@ -25,7 +26,7 @@ export default function view(vnode) {
 }
 
 function renderContent(ctrl) {
-  if (!ctrl.data) return viewOnlyBoardContent();
+  if (!ctrl.data) return viewOnlyBoardContent(emptyFen);
 
   const board = m(Board, {
     data: ctrl.data,

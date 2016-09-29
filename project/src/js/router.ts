@@ -1,35 +1,38 @@
 import * as Rlite from 'rlite-router';
 import * as m from 'mithril';
 import * as Vnode from 'mithril/render/vnode';
+import { uid } from './utils'
 import signals from './signals';
 
 const router = new Rlite();
 
-// this counter is passed to the root component as key to force mithril to
-// trash current view and re-render on every route change (even same path)
-// this way it reproduces what was the mithril 0.2 behaviour, to help having a
-// smooth migration
-let routeCounter = 0;
+// unique incremented state id to determine slide direction
+let currentStateId: number = 0;
+let viewSlideDirection = 'fwd';
 
-export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}) {
+export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: any}) {
   for (let route in routes) {
     const component = routes[route];
     router.add(route, function onRouteMatch({ params }) {
-      routeCounter++;
+
+      const RouteComponent = {view() {
+        return Vnode(component, null, params, undefined, undefined, undefined);
+      }}
 
       function redraw() {
-        m.render(mountPoint, Vnode(component, routeCounter, params, undefined, undefined, undefined));
+        m.render(mountPoint, Vnode(RouteComponent, undefined, undefined, undefined, undefined, undefined));
       }
 
-      // TODO it works but would be better in a router exit hook
       signals.redraw.removeAll();
       signals.redraw.add(redraw);
+      // some error may be thrown during component initialization
+      // in that case shutdown redraws to avoid multiple execution of oninit
+      // hook of buggy component
       try {
-        // some error may be thrown during on init...
         redraw();
       } catch (e) {
-        console.error(e);
         signals.redraw.removeAll();
+        throw e;
       }
     });
   }
@@ -37,17 +40,32 @@ export function defineRoutes(mountPoint: Element, routes: {[index: string]: any}
   processQuerystring();
 }
 
-function processQuerystring() {
+function processQuerystring(e?: PopStateEvent) {
+  if (e && e.state) {
+    if (e.state.id < currentStateId) {
+      viewSlideDirection = 'bwd';
+    } else {
+      viewSlideDirection = 'fwd';
+    }
+    currentStateId = e.state.id;
+  }
   const qs = window.location.search || '?=';
   const matched = router.run(qs.slice(2));
   if (!matched) router.run('/');
 }
 
+function replaceState(path: string) {
+  window.history.replaceState(window.history.state, null, '?=' + path);
+}
+
 function set(path: string, replace = false) {
   if (replace) {
-    window.history.replaceState(null, null, '?=' + path);
+    replaceState(path);
   } else {
-    window.history.pushState(null, null, '?=' + path);
+    const stateId = uid();
+    currentStateId = stateId;
+    viewSlideDirection = 'fwd';
+    window.history.pushState({ id: stateId }, null, '?=' + path);
   }
   const matched = router.run(path);
   if (!matched) router.run('/');
@@ -60,5 +78,9 @@ function get(): string {
 
 export default {
   get,
-  set
+  set,
+  replaceState,
+  getViewSlideDirection(): string {
+    return viewSlideDirection;
+  }
 };

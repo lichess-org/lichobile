@@ -2,6 +2,7 @@ import menu from '../menu';
 import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
+import { emptyFen } from '../../utils/fen';
 import { getOfflineGames } from '../../utils/offlineGames';
 import layout from '../layout';
 import * as helper from '../helper';
@@ -25,7 +26,7 @@ export const LoadingBoard = {
   view() {
     return layout.board(
       connectingHeader,
-      viewOnlyBoardContent
+      () => viewOnlyBoardContent(emptyFen)
     );
   }
 };
@@ -146,9 +147,21 @@ export function connectingHeader(title) {
   return (
     <nav>
       {menuButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-title" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
+      </h1>
+      {headerBtns()}
+    </nav>
+  );
+}
+
+export function hourglassHeader() {
+  return (
+    <nav>
+      {menuButton()}
+      <h1 key="hourglass-title" className="reconnecting">
+        <span className="fa fa-hourglass-half" />
       </h1>
       {headerBtns()}
     </nav>
@@ -159,7 +172,7 @@ export function loadingBackbutton(title) {
   return (
     <nav>
       {backButton()}
-      <h1 key="title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <h1 key="connecting-backbutton" className={'reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
       </h1>
@@ -168,7 +181,7 @@ export function loadingBackbutton(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrapperClass, customPieceTheme) {
+export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = null, variant = null, wrapperClass = null, customPieceTheme = null) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
@@ -177,7 +190,7 @@ export function viewOnlyBoardContent(fen, lastMove, orientation, variant, wrappe
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   const board = (
     <section key={boardKey} className={className} style={boardStyle}>
-    {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+      {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   );
   if (isPortrait) {
@@ -232,14 +245,14 @@ export function miniUser(user, mini, isOpen, close) {
   function content() {
     if (!mini) {
       return (
-        <div className="miniUser">
+        <div key="loading" className="miniUser">
           {spinner.getVdom()}
         </div>
       );
     }
     const sessionUserId = session.get() && session.get().id;
     return (
-      <div className="miniUser">
+      <div key="loaded" className="miniUser">
         <div className="title">
           <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
             <span className={'userStatus withIcon ' + status} data-icon="r" />
@@ -256,17 +269,19 @@ export function miniUser(user, mini, isOpen, close) {
               </p> : null
           }
         </div>
-        <div className="mini_perfs">
-          {Object.keys(mini.perfs).map(p => {
-            const perf = mini.perfs[p];
-            return (
-              <div className="perf">
-                <span data-icon={utils.gameIcon(p)} />
-                {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
-              </div>
-            );
-          })}
-        </div>
+        { mini.perfs ?
+          <div className="mini_perfs">
+            {Object.keys(mini.perfs).map(p => {
+              const perf = mini.perfs[p];
+              return (
+                <div className="perf">
+                  <span data-icon={utils.gameIcon(p)} />
+                  {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
+                </div>
+              );
+            })}
+          </div> : null
+        }
         { mini.crosstable && mini.crosstable.nbGames > 0 ?
           <div className="yourScore">
             Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>

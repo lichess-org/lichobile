@@ -1,15 +1,17 @@
+import router from '../../../router';
 import * as utils from '../../../utils';
+import i18n from '../../../i18n';
+import {shortPerfTitle} from '../../../lichess/perfs';
 import * as helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
-import i18n from '../../../i18n';
-import * as m from 'mithril';
-import {shortPerfTitle} from '../../../lichess/perfs';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
+  const userId = vnode.attrs.id;
+  const variant = vnode.attrs.variant;
   const header = utils.partialf(headerWidget, null,
-    backButton(ctrl.user() ? (ctrl.user().username + ' ' + shortPerfTitle(ctrl.variant) + ' stats') : '')
+    backButton(userId + ' ' + shortPerfTitle(variant) + ' stats')
   );
 
   function renderBody() {

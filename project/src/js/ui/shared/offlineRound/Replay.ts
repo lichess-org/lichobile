@@ -1,10 +1,11 @@
 import i18n from '../../../i18n';
-import { askWorker } from '../../../utils';
+import * as chess from '../../../chess';
 
 export default class Replay {
-  private chessWorker: Worker;
   private variant: VariantKey;
   private initialFen: string;
+  private onReplayAdded: (sit: GameSituation) => void;
+  private onThreefoldRepetition: (newStatus: GameStatus) => void;
 
   public ply: number;
   public situations: Array<GameSituation>;
@@ -14,37 +15,12 @@ export default class Replay {
     initialFen: string,
     initSituations: Array<GameSituation>,
     initPly: number,
-    chessWorker: Worker,
     onReplayAdded: (sit: GameSituation) => void,
     onThreefoldRepetition: (newStatus: GameStatus) => void) {
 
-      this.chessWorker = chessWorker;
       this.init(variant, initialFen, initSituations, initPly);
-
-      this.chessWorker.addEventListener('message', ({ data: msg }) => {
-        const payload = msg.payload;
-        switch (msg.topic) {
-          case 'error':
-            console.error(msg);
-            break;
-          case 'move':
-          case 'drop':
-            this.ply++;
-            if (this.ply < this.situations.length) {
-              this.situations = this.situations.slice(0, this.ply);
-            }
-            this.situations.push(payload.situation);
-            onReplayAdded(this.situation());
-            break;
-          case 'threefoldTest':
-            if (payload.threefoldRepetition) {
-              onThreefoldRepetition(payload.status);
-            } else {
-              window.plugins.toast.show(i18n('incorrectThreefoldClaim'), 'short', 'center');
-            }
-            break;
-        }
-      });
+      this.onReplayAdded = onReplayAdded;
+      this.onThreefoldRepetition = onThreefoldRepetition;
     }
 
     public init(variant: VariantKey, initialFen: string, situations: Array<GameSituation>, ply: number) {
@@ -58,58 +34,67 @@ export default class Replay {
       return this.situations[this.ply];
     }
 
-    public addMove = (orig: Pos, dest: Pos, promotion?: string) => {
+    public addMove = (orig: Pos, dest: Pos, promotion?: Role) => {
       const sit = this.situation();
-      this.chessWorker.postMessage({
-        topic: 'move',
-        payload: {
-          variant: this.variant,
-          fen: sit.fen,
-          pgnMoves: sit.pgnMoves,
-          uciMoves: sit.uciMoves,
-          promotion,
-          orig,
-          dest
-        }
-      });
+      chess.move({
+        variant: this.variant,
+        fen: sit.fen,
+        pgnMoves: sit.pgnMoves,
+        uciMoves: sit.uciMoves,
+        promotion,
+        orig,
+        dest
+      })
+      .then(this.addMoveOrDrop)
+      .catch(console.error.bind(console));
     }
 
     public addDrop = (role: Role, key: Pos) => {
       const sit = this.situation();
-      this.chessWorker.postMessage({
-        topic: 'drop',
-        payload: {
-          variant: this.variant,
-          fen: sit.fen,
-          pgnMoves: sit.pgnMoves,
-          uciMoves: sit.uciMoves,
-          role,
-          pos: key
-        }
-      });
+      chess.drop({
+        variant: this.variant,
+        fen: sit.fen,
+        pgnMoves: sit.pgnMoves,
+        uciMoves: sit.uciMoves,
+        role,
+        pos: key
+      })
+      .then(this.addMoveOrDrop)
+      .catch(console.error.bind(console));
     }
 
     public claimDraw = () => {
       const sit = this.situation();
-      this.chessWorker.postMessage({
-        topic: 'threefoldTest',
-        payload: {
-          variant: this.variant,
-          initialFen: this.initialFen,
-          pgnMoves: sit.pgnMoves
+      chess.threefoldTest({
+        variant: this.variant,
+        initialFen: this.initialFen,
+        pgnMoves: sit.pgnMoves
+      })
+      .then(resp => {
+        if (resp.threefoldRepetition) {
+          this.onThreefoldRepetition(resp.status);
+        } else {
+          window.plugins.toast.show(i18n('incorrectThreefoldClaim'), 'short', 'center');
         }
-      });
+      })
+      .catch(console.error.bind(console));
     }
 
     public pgn = (variant: VariantKey, initialFen: string) => {
       const sit = this.situation();
-      return askWorker(this.chessWorker, {
-        topic: 'pgnDump',
-        payload: {
-          variant: this.variant,
-          initialFen: this.initialFen,
-          pgnMoves: sit.pgnMoves
-        }
+      return chess.pgnDump({
+        variant: this.variant,
+        initialFen: this.initialFen,
+        pgnMoves: sit.pgnMoves
       });
+    }
+
+    private addMoveOrDrop = (moveOrDrop: chess.MoveResponse) => {
+      this.ply++;
+      if (this.ply < this.situations.length) {
+        this.situations = this.situations.slice(0, this.ply);
+      }
+      this.situations.push(moveOrDrop.situation);
+      this.onReplayAdded(this.situation());
     }
 }

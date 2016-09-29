@@ -6,7 +6,8 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import { gameTitle, connectingHeader, header, backButton as renderBackbutton, viewOnlyBoardContent } from '../../shared/common';
+import { gameTitle, connectingHeader, header, backButton as renderBackbutton } from '../../shared/common';
+import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import Board from '../../shared/Board';
 import * as helper from '../../helper';
 import layout from '../../layout';
@@ -20,10 +21,12 @@ import { defined, renderEval, isSynthetic } from '../util';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
+import treePath from '../path';
 import { renderTree } from './treeView';
 
-export default function analyseView() {
+export default function analyseView(vnode) {
   const isPortrait = helper.isPortrait();
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
 
   if (this.ctrl) {
 
@@ -32,13 +35,16 @@ export default function analyseView() {
 
     return layout.board(
       () => header(title, backButton),
-      () => renderContent(this.ctrl, isPortrait),
+      () => renderContent(this.ctrl, isPortrait, bounds),
       () => overlay(this.ctrl, isPortrait)
     );
   } else {
     return layout.board(
       connectingHeader,
-      viewOnlyBoardContent
+      () =>
+        <section className="board_wrapper">
+          {m(ViewOnlyBoard, { orientation: vnode.attrs.color })}
+        </section>
     );
   }
 }
@@ -55,8 +61,7 @@ function overlay(ctrl) {
   ];
 }
 
-function renderContent(ctrl, isPortrait) {
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
+function renderContent(ctrl, isPortrait, bounds) {
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
   let nextBest, curBestMove, pastBest;
@@ -90,12 +95,14 @@ function renderContent(ctrl, isPortrait) {
     dest: nextStep.uci.slice(2, 4)
   } : null;
 
+  const shapes = nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull);
+
   const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    shapes: nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull)
+    shapes
   });
 
   return [
@@ -151,6 +158,7 @@ function getChecksCount(ctrl, color) {
 
 function renderEvalBox(ctrl) {
   const ceval = ctrl.currentAnyEval() || {};
+  const step = ctrl.vm.step;
   let pearl, percent;
 
   if (defined(ceval.cp) && ctrl.nextStepBest()) {
@@ -179,11 +187,16 @@ function renderEvalBox(ctrl) {
   }
 
   return (
-    <div className="cevalBox">
+    <div className={'cevalBox' + (ctrl.data.analysis ? ' withAnalysis' : '')}>
       { pearl }
       <div className="cevalBar">
         <span style={{ width: percent + '%' }}></span>
       </div>
+      { step.ceval && step.ceval.bestSan ?
+      <div className="bestMove">
+        best {step.ceval.bestSan}
+      </div> : null
+      }
       { ctrl.data.analysis ?
         <div className="openSummary" oncreate={helper.ontap(ctrl.evalSummary.open)}>
           <span className="fa fa-question-circle"/>
@@ -269,6 +282,16 @@ function renderStatus(ctrl) {
   );
 }
 
+function getMoveEl(e) {
+  return e.target.tagName === 'MOVE' ? e.target :
+    helper.findParentBySelector(e.target, 'move');
+}
+
+function onReplayTap(ctrl, e) {
+  const el = getMoveEl(e);
+  ctrl.jump(treePath.read(el.dataset.path));
+}
+
 function renderReplay(ctrl) {
 
   var result;
@@ -289,7 +312,9 @@ function renderReplay(ctrl) {
   }
 
   return (
-    <div id="replay" className="analyseReplay native_scroller">
+    <div id="replay" className="analyseReplay native_scroller"
+      oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
+    >
       {tree}
     </div>
   );
@@ -341,7 +366,7 @@ function renderActionsBar(ctrl) {
         <button className={explorerBtnClass} key="explorer"
           oncreate={helper.ontap(
             ctrl.explorer.toggle,
-            () => window.plugins.toast.show('Opening explorer & tablebase', 'short', 'bottom')
+            () => window.plugins.toast.show('Opening explorer & endgame tablebase', 'short', 'bottom')
           )}
         /> : null
       }

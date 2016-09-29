@@ -1,4 +1,5 @@
 var socketInstance;
+var previousSocketInstance;
 var currentUrl;
 
 var strongSocketDefaults = {
@@ -265,7 +266,7 @@ function create(payload) {
 
   if (socketInstance) {
     socketInstance.destroy();
-    socketInstance = null;
+    previousSocketInstance = socketInstance;
   }
   socketInstance = new StrongSocket(
     payload.clientId,
@@ -286,10 +287,17 @@ self.onmessage = function(msg) {
       var d = msg.data.payload[1];
       var o = msg.data.payload[2];
       if (socketInstance) socketInstance.send(t, d, o);
-      else throw new Error('socket instance is null, could not send socket msg: ', msg.data.payload);
+      else console.info('socket instance is null, could not send socket msg: ', msg.data.payload);
       break;
     case 'connect':
       if (socketInstance) socketInstance.connect();
+      break;
+    case 'restorePrevious':
+      if (socketInstance) socketInstance.destroy();
+      if (previousSocketInstance) {
+        socketInstance = previousSocketInstance;
+        socketInstance.connect();
+      }
       break;
     case 'disconnect':
       if (socketInstance) socketInstance.destroy();
@@ -308,6 +316,10 @@ self.onmessage = function(msg) {
     case 'averageLag':
       if (socketInstance) postMessage({ topic: 'averageLag', payload: socketInstance.averageLag });
       else postMessage({ topic: 'averageLag', payload: null });
+      break;
+    case 'currentLag':
+      if (socketInstance) postMessage({ topic: 'currentLag', payload: socketInstance.currentLag });
+      else postMessage({ topic: 'currentLag', payload: null });
       break;
     default:
       throw new Error('socker worker message not supported: ' + msg.data.topic);

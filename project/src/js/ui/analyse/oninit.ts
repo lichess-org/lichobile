@@ -5,26 +5,34 @@ import { handleXhrError } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import * as helper from '../helper';
-import { makeData, makeDefaultData } from './data';
+import { makeDefaultData } from './data';
 import AnalyseCtrl from './AnalyseCtrl';
+import { Source } from './interfaces';
 
-export default function oninit(vnode) {
+interface Attrs {
+  id: string;
+  source: Source;
+  color: Color;
+  fen?: string;
+}
+
+export default function oninit(vnode: Mithril.Vnode<Attrs>) {
   const source = vnode.attrs.source || 'offline';
   const gameId = vnode.attrs.id;
-  const orientation = vnode.attrs.color;
+  const orientation: Color = vnode.attrs.color || 'white';
   const fenArg = vnode.attrs.fen;
 
   socket.createDefault();
   window.plugins.insomnia.keepAwake();
 
-  const shouldGoBack = !!gameId;
+  const shouldGoBack = gameId !== undefined || fenArg !== undefined;
 
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation)
     .then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
       cfg.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(cfg), source, shouldGoBack);
+      this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack);
       redraw();
       setTimeout(this.ctrl.debouncedScroll, 250);
     })
@@ -39,8 +47,7 @@ export default function oninit(vnode) {
       router.set('/analyse');
     } else {
       otbData.player.spectator = true;
-      otbData.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(otbData), source, shouldGoBack);
+      this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack);
     }
   } else if (source === 'offline' && gameId === 'ai') {
     helper.analyticsTrackView('Analysis (offline ai)');
@@ -49,12 +56,11 @@ export default function oninit(vnode) {
       router.set('/analyse');
     } else {
       aiData.player.spectator = true;
-      aiData.orientation = orientation;
-      this.ctrl = new AnalyseCtrl(makeData(aiData), source, shouldGoBack);
+      this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack);
     }
   }
   else {
     helper.analyticsTrackView('Analysis (empty)');
-    this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg, orientation), source, shouldGoBack);
+    this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg), source, orientation, shouldGoBack);
   }
 }

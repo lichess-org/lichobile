@@ -12,9 +12,11 @@ import playerInfo from '../playerInfo';
 export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament details');
 
+  const id = vnode.attrs.id;
+
   const tournament = m.prop();
   const hasJoined = m.prop(false);
-  const page = m.prop(null);
+  const currentPage = m.prop(null);
   const isLoading = m.prop(false);
   const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
@@ -48,18 +50,18 @@ export default function oninit(vnode) {
     redraw();
   }
 
-  function join(id) {
-    xhr.join(id)
+  function join(tid) {
+    xhr.join(tid)
     .then(() => {
       hasJoined(true);
-      page(null); // Reset the page so next reload goes to player position
+      currentPage(null); // Reset the page so next reload goes to player position
       redraw();
     })
     .catch(utils.handleXhrError);
   }
 
-  function withdraw(id) {
-    xhr.withdraw(id)
+  function withdraw(tid) {
+    xhr.withdraw(tid)
     .then(() => {
       hasJoined(false);
       redraw();
@@ -67,21 +69,17 @@ export default function oninit(vnode) {
     .catch(utils.handleXhrError);
   }
 
-  const id = vnode.attrs.id;
-
-  const throttledReload = throttle((t, p) => {
-    if (p) {
-      page(p);
-    }
+  const throttledReload = throttle((tid, p) => {
+    if (p) currentPage(p);
     isLoading(true);
-    xhr.reload(t, page())
+    xhr.reload(tid, currentPage())
     .then(reload)
     .catch(() => isLoading(false));
   }, 1000);
 
   const handlers = {
-    reload: () => throttledReload (id),
-    resync: () => throttledReload (id),
+    reload: () => throttledReload(id),
+    resync: () => throttledReload(id),
     redirect: function(gameId) {
       router.set('/tournament/' + tournament().id + '/game/' + gameId, true);
     },
@@ -103,6 +101,7 @@ export default function oninit(vnode) {
     clockInterval(setInterval(tick, 1000));
     const featuredGame = data.featured ? data.featured.id : null;
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
+    redraw();
   })
   .catch(utils.handleXhrError);
 
@@ -114,6 +113,28 @@ export default function oninit(vnode) {
     join: throttle(join, 1000),
     withdraw: throttle(withdraw, 1000),
     reload: throttledReload,
+    first() {
+      const p = tournament().standing.page;
+      if (!isLoading() && p > 1) throttledReload(id, 1);
+    },
+    prev() {
+      const p = tournament().standing.page;
+      if (!isLoading() && p > 1) throttledReload(id, p - 1);
+    },
+    next() {
+      const p = tournament().standing.page;
+      const nbPlayers = tournament().nbPlayers;
+      if (!isLoading() && p < nbPlayers / 10) throttledReload(id, p + 1);
+    },
+    last() {
+      const p = tournament().standing.page;
+      const nbPlayers = tournament().nbPlayers;
+      if (!isLoading() && p < nbPlayers / 10) throttledReload(id, Math.ceil(nbPlayers / 10));
+    },
+    me() {
+      const me = tournament().me;
+      if (!isLoading() && me) throttledReload(id, Math.ceil(me.rank / 10));
+    },
     isLoading,
     clockInterval
   };

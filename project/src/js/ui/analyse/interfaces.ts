@@ -13,32 +13,30 @@ export interface PathObj {
   variation: any
 }
 
-export type Path = Array<PathObj>
-
-export interface ChessMove {
-  situation: GameSituation
-  path: string
-}
-
-export interface ChesslogicInterface {
-  sendMoveRequest(req: any): void
-  sendDropRequest(req: any): void
-  sendDestsRequest(req: any): void
-  getSanMoveFromUci(req: any): Promise<ChessMove>
-  importPgn(pgn: string): Promise<{ pgn: string }>
-  exportPgn(variant: string, initialFen: string, pgnMoves: Array<string>): Promise<{ pgn: string }>
-  terminate(): void
-}
-
 export interface AnalyseCtrlInterface {
-  data: AnalysisData;
-  source: Source;
-  vm: any;
-  chessLogic: ChesslogicInterface;
+  data: AnalysisData
+  source: Source
+  vm: any
+  explorer: ExplorerCtrlInterface
+  chessground: Chessground.Controller
 
-  addStep(step: AnalysisStep, path: Path): void
-  addDests(dests: DestsMap, path: Path): void
+  explorerMove(uci: string): void
+  debouncedScroll(): void
 }
+
+export interface ExplorerCtrlInterface {
+  allowed: Mithril.Property<boolean>
+  enabled: Mithril.Property<boolean>
+  setStep(): void
+  loading: Mithril.Property<boolean>
+  failing: Mithril.Property<boolean>
+  config: any
+  withGames: boolean
+  current: Mithril.Property<ExplorerData>
+  toggle(): void
+}
+
+export type Path = Array<PathObj>
 
 export interface AnalyseInterface {
   firstPly(): number
@@ -55,4 +53,45 @@ export interface AnalyseInterface {
   deleteVariation(ply: number, id: number): void
   promoteVariation(ply: number, id: number): void
   plyOfNextNag(color: Color, nag: string, fromPly: number): number
+}
+
+export interface ExplorerMove {
+  white: number
+  black: number
+  draws: number
+  real_wdl: number
+  averageRating: number
+  dtz: number
+  dtm: number
+  wdl: number
+  san: string
+  uci: string
+  zeroing: boolean
+  checkmate: boolean
+  stalemate: boolean
+  insufficient_material: boolean
+}
+
+export interface ExplorerPlayer {
+  rating: number
+  name: string
+}
+
+export interface ExplorerGame {
+  id: string
+  white: ExplorerPlayer
+  black: ExplorerPlayer
+  year: string
+  winner: Color
+}
+
+export interface ExplorerData {
+  opening?: boolean
+  tablebase?: boolean
+  fen?: string
+  moves: Array<ExplorerMove>
+  topGames?: Array<ExplorerGame>
+  recentGames?: Array<ExplorerGame>
+  checkmate?: boolean
+  stalemate?: boolean
 }

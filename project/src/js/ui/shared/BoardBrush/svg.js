@@ -29,7 +29,6 @@ export function circle(brush, pos, current, bounds) {
   const radius = bounds.width / 16;
   return (
     <circle
-      key={current ? 'current' : pos + brush.key}
       stroke={brush.color}
       stroke-width={width}
       fill="none"
@@ -72,9 +71,8 @@ export function defs(brushes) {
       {brushes.map(brush => {
         return (
           <marker
-            key={brush.key}
             id={'arrowhead-' + brush.key}
-            orient={'auto'}
+            orient="auto"
             markerWidth={4}
             markerHeight={8}
             refX={2.05}

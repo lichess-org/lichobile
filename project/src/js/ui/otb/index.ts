@@ -1,32 +1,29 @@
 import socket from '../../socket';
 import * as helper from '../helper';
-import storage from '../../storage';
 import { getCurrentOTBGame } from '../../utils/offlineGames';
 import OtbRound from './OtbRound';
 import view from './otbView';
 
-export const storageFenKey = 'otb.setupFen';
+interface Attrs {
+  fen?: string
+}
 
 export default {
-  oninit() {
+  oninit({ attrs }: Mithril.Vnode<Attrs>) {
     helper.analyticsTrackView('Offline On The Board');
 
     socket.createDefault();
 
     const saved = getCurrentOTBGame();
-    const setupFen = storage.get(storageFenKey);
+    const setupFen = attrs.fen;
 
     this.round = new OtbRound(saved, setupFen);
 
     window.plugins.insomnia.keepAwake();
   },
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.onPageLeave(
-    helper.viewFadeOut,
-    () => window.plugins.insomnia.allowSleepAgain()
-  ),
   onremove() {
-    this.round.chessWorker.terminate();
+    window.plugins.insomnia.allowSleepAgain();
   },
   view
 };

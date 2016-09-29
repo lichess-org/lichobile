@@ -29,6 +29,15 @@ export default {
       })
     }, [m('span.fa.fa-link'), i18n('shareGameURL')]);
   },
+  userTVLink: function(user: User) {
+    return m('button.withIcon', {
+      key: `userTV_${user.username}`,
+      'data-icon': '1',
+      oncreate: helper.ontap(() => {
+        router.set(`/@/${user.username}/tv`);
+      })
+    }, user.username + '\'s TV');
+  },
   sharePGN: function(ctrl: OnlineRound) {
     function handler() {
       getPGN(ctrl.data.game.id)

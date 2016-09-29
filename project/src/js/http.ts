@@ -1,6 +1,5 @@
 import { merge } from 'lodash';
 import spinner from './spinner';
-import redraw from './utils/redraw';
 import { buildQueryString } from './utils/querystring';
 
 export const apiVersion = 2;
@@ -11,20 +10,17 @@ export interface RequestOpts extends RequestInit {
   query?: Object;
 }
 
-export interface ResponseError {
-  error: Error;
-  response?: Response;
+export interface FetchError extends Error {
+  response: Response;
 }
 
 export function checkStatus(response: Response): Response {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {
-    const error = new Error(response.statusText);
-    throw {
-      error,
-      response
-    };
+    const error: any = new Error(response.statusText);
+    error.response = response;
+    throw error;
   }
 }
 
@@ -45,14 +41,12 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   function onSuccess(data: Response): Response {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
-    redraw();
     return data;
   }
 
   function onError(error: any) {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
-    redraw();
     throw error;
   }
 
@@ -72,6 +66,10 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
     !(<StringMap>cfg.headers)['Content-Type']
   ) {
     (<StringMap>cfg.headers)['Content-Type'] = 'application/json; charset=UTF-8';
+    // always send a json body
+    if (!cfg.body) {
+      cfg.body = '{}';
+    }
   }
 
   if (opts && opts.query) {
@@ -85,7 +83,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   const fullUrl = url.indexOf('http') > -1 ? url : baseUrl + url;
 
   const timeoutPromise: PromiseLike<Response> = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject('Request timeout.'), 8000);
+    timeoutId = setTimeout(() => reject('Request timeout.'), 10000);
   });
 
   const reqPromise: PromiseLike<Response> = fetch(fullUrl, cfg);

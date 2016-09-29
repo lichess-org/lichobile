@@ -1,5 +1,5 @@
 import i18n from '../i18n';
-import { ResponseError } from '../http';
+import { FetchError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
 
@@ -38,39 +38,19 @@ export function autoredraw(action: Function): void {
   return res;
 }
 
-export function tellWorker(worker: Worker, topic: string, payload?: any): void {
-  if (payload !== undefined) {
-    worker.postMessage({ topic, payload });
-  } else {
-    worker.postMessage({ topic });
-  }
-}
-
-export function askWorker(worker: Worker, msg: WorkerMessage): Promise<any> {
-  return new Promise(function(resolve, reject) {
-    function listen(e: MessageEvent) {
-      if (e.data.topic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        resolve(e.data.payload);
-      } else if (e.data.topic === 'error' && e.data.payload.callerTopic === msg.topic) {
-        worker.removeEventListener('message', listen);
-        reject(e.data.payload.error);
-      }
-    }
-    worker.addEventListener('message', listen);
-    worker.postMessage(msg);
-  });
-}
-
 export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-export function handleXhrError(error: ResponseError): void {
+function isFetchError(error: Error | FetchError): error is FetchError {
+  return (<FetchError>error).response !== undefined;
+}
+
+export function handleXhrError(error: Error | FetchError): void {
   if (!hasNetwork()) {
     window.plugins.toast.show(i18n('noInternetConnection'), 'short', 'center');
   } else {
-    if (error.response) {
+    if (isFetchError(error)) {
       const status = error.response.status;
       let message: string;
 
@@ -175,21 +155,17 @@ export function aiName(player: any) {
 }
 
 export function backHistory(): void {
-  setViewSlideDirection('bwd');
-  if (window.navigator.app && window.navigator.app.backHistory)
+  if (window.navigator.app && window.navigator.app.backHistory) {
     window.navigator.app.backHistory();
-  else
+  } else {
     window.history.go(-1);
+  }
 }
 
-// simple way to determine views animation direction
-let viewSlideDirection = 'fwd';
-export function setViewSlideDirection(d: string): void {
-  viewSlideDirection = d;
-}
-export function getViewSlideDirection(): string {
-  return viewSlideDirection;
-}
+export const uid = (function() {
+  let id = 0;
+  return () => id++;
+})();
 
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
@@ -220,7 +196,7 @@ export function tupleOf(x: number): [string, string] {
   return [x.toString(), x.toString()];
 }
 
-export function oppositeColor(color: 'white' | 'black'): 'white' | 'black' {
+export function oppositeColor(color: Color): Color {
   return color === 'white' ? 'black' : 'white';
 }
 

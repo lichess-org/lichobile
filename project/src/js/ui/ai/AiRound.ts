@@ -1,10 +1,12 @@
 import i18n from '../../i18n';
+import router from '../../router';
+import * as chess from '../../chess';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
-import storage from '../../storage';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
-import { askWorker, oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
+import { playerFromFen } from '../../utils/fen';
+import { oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -21,14 +23,16 @@ import engineCtrl, { EngineInterface } from './engine';
 import * as helper from '../helper';
 import newGameMenu from './newAiGame';
 
-export const storageFenKey = 'ai.setupFen';
+interface InitPayload {
+  variant: VariantKey
+  fen?: string
+}
 
 export default class AiRound implements AiRoundInterface {
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
   public chessground: Chessground.Controller;
-  public chessWorker: Worker;
   public replay: Replay;
   public vm: any;
 
@@ -36,27 +40,33 @@ export default class AiRound implements AiRoundInterface {
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.engine = engineCtrl(this);
-    this.chessWorker = new Worker('vendor/scalachessjs.js');
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
 
     this.vm = {
-      engineSearching: false
+      engineSearching: false,
+      setupFen,
+      savedFen: saved && saved.data.game.fen
     };
+
+    if (setupFen) {
+      this.newGameMenu.open();
+    }
 
     this.engine.init()
     .then(() => {
-      if (setupFen) {
-        this.startNewGame(setupFen);
-      } else if (saved) {
-        try {
-          this.init(saved.data, saved.situations, saved.ply);
-        } catch (e) {
-          console.log(e, 'Fail to load saved game');
-          this.startNewGame();
+      const currentVariant = <VariantKey>settings.ai.variant();
+      if (!setupFen) {
+        if (saved) {
+          try {
+            this.init(saved.data, saved.situations, saved.ply);
+          } catch (e) {
+            console.log(e, 'Fail to load saved game');
+            this.startNewGame(currentVariant);
+          }
+        } else {
+          this.startNewGame(currentVariant);
         }
-      } else {
-        this.startNewGame();
       }
     });
   }
@@ -75,7 +85,6 @@ export default class AiRound implements AiRoundInterface {
         initialFen,
         situations,
         ply,
-        this.chessWorker,
         this.onReplayAdded,
         this.onThreefoldRepetition
       );
@@ -96,29 +105,33 @@ export default class AiRound implements AiRoundInterface {
       }
     });
 
+    this.save();
     redraw();
   }
 
-  public startNewGame(setupFen?: string) {
-    const variant = settings.ai.variant();
-    helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
+  public startNewGame(variant: VariantKey, setupFen?: string) {
+    const payload: InitPayload = {
+      variant
+    }
+    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+      payload.fen = setupFen;
+    }
 
-    askWorker(this.chessWorker, {
-      topic: 'init',
-      payload: {
-        variant,
-        fen: setupFen
-      }
-    })
-    .then(data => {
+    helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`);
+
+    chess.init(payload)
+    .then((data: chess.InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
         color: getColorFromSettings()
       }), [data.setup], 0);
+    })
+    .then(() => {
       if (setupFen) {
-        storage.remove(storageFenKey);
+        this.vm.setupFen = null;
+        router.replaceState('/ai');
       }
     });
   }
@@ -214,6 +227,7 @@ export default class AiRound implements AiRoundInterface {
   }
 
   public onReplayAdded = (sit: GameSituation) => {
+    this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
@@ -247,12 +261,16 @@ export default class AiRound implements AiRoundInterface {
     this.onGameEnd();
   }
 
+  private firstPlayerColor(): Color {
+    return playerFromFen(this.data.game.initialFen);
+  }
+
   public firstPly = () => {
-    return this.data.player.color === 'black' ? 1 : 0;
+    return this.data.player.color === oppositeColor(this.firstPlayerColor()) ? 1 : 0;
   }
 
   public lastPly = () => {
-    return this.replay.situations[this.replay.situations.length - 1].ply;
+    return this.replay.situations.length - 1;
   }
 
   public jump = (ply: number) => {
@@ -267,7 +285,7 @@ export default class AiRound implements AiRoundInterface {
 
   public jumpPrev = () => {
     const ply = this.replay.ply;
-    if (this.data.player.color === 'black') {
+    if (this.data.player.color === oppositeColor(this.firstPlayerColor())) {
       const offset = ply % 2 === 0 ? 1 : 2;
       return this.jump(ply - offset);
     } else {

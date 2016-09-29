@@ -1,4 +1,5 @@
 import router from '../../router';
+import redraw from '../../utils/redraw';
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
@@ -88,6 +89,7 @@ function renderAnalyseMenu(ctrl) {
         return requestComputerAnalysis(ctrl.data.game.id)
         .then(() => {
           ctrl.vm.analysisProgress = true;
+          redraw();
         })
         .catch(handleXhrError);
       })

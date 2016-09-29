@@ -7,6 +7,7 @@ export default {
     }
 
     const spinner = document.createElement('div');
+    spinner.id = 'globalSpinner';
     spinner.className = 'spinner globalSpinner';
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 40 40');
@@ -18,7 +19,9 @@ export default {
     svg.appendChild(circle);
     spinner.appendChild(svg);
 
-    timeoutId = setTimeout(() => document.body.appendChild(spinner), 200);
+    timeoutId = setTimeout(() => {
+      document.body.appendChild(spinner);
+    }, 200);
   },
 
   stop() {

@@ -15,7 +15,7 @@ export function onPieceThemeChange(t: string) {
 }
 
 export interface Attrs {
-  data: OnlineGameData | OfflineGameData
+  data: GameData
   chessgroundCtrl: Chessground.Controller
   bounds: BoardBounds
   isPortrait: boolean
@@ -30,7 +30,7 @@ export default {
 
     const { data, chessgroundCtrl, bounds } = vnode.attrs;
 
-    function wrapperOnCreate({ dom }) {
+    function wrapperOnCreate({ dom }: Mithril.Vnode<void>) {
       const icon = gameIcon(data.game.variant.key);
       if (icon && data.game.variant.key !== 'standard' && data.game.status &&
         gameApi.isPlayerPlaying(data)) {
@@ -38,7 +38,7 @@ export default {
         }
     }
 
-    function boardOnCreate({ dom }) {
+    function boardOnCreate({ dom }: Mithril.Vnode<void>) {
       if (chessgroundCtrl) {
         if (!bounds) {
           chessgroundCtrl.setBounds(dom.getBoundingClientRect());

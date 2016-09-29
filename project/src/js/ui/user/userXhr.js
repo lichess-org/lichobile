@@ -40,8 +40,8 @@ export function unblock(userId) {
   return fetchJSON('/rel/unblock/' + userId, { method: 'POST' });
 }
 
-export function user(id) {
-  return fetchJSON(`/api/user/${id}`, null, true);
+export function user(id, feedback = true) {
+  return fetchJSON(`/api/user/${id}`, null, feedback);
 }
 
 export function tv(userId) {
@@ -49,5 +49,5 @@ export function tv(userId) {
 }
 
 export function variantperf(userId, variantKey) {
-  return fetchJSON(`/@/${userId}/perf/${variantKey}`, {}, true);
+  return fetchJSON(`/@/${userId}/perf/${variantKey}`, null, false);
 }

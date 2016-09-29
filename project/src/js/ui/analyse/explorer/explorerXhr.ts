@@ -1,11 +1,10 @@
 import { fetchJSON } from '../../../http';
-import * as m from 'mithril';
 
 const endpoint = 'https://expl.lichess.org';
 
-export function openingXhr(variant, fen, config, withGames) {
-  let url;
-  const params = {
+export function openingXhr(variant: VariantKey, fen: string, config: any, withGames: boolean) {
+  let url: string;
+  const params: any = {
     fen,
     moves: 12
   };
@@ -28,8 +27,8 @@ export function openingXhr(variant, fen, config, withGames) {
   });
 }
 
-export function tablebaseXhr(fen) {
-  return m.request(endpoint + '/tablebase', {
+export function tablebaseXhr(fen: string) {
+  return fetchJSON(endpoint + '/tablebase', {
     headers: {
       'Accept': 'application/json, text/*'
     },

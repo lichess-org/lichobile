@@ -1,45 +1,59 @@
 import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
+import * as helper from '../../helper';
 import { debounce } from 'lodash';
 import backbutton from '../../../backbutton';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
+import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
 
-function tablebaseRelevant(fen) {
+function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
   const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
   const castling = parts[2];
   return pieceCount <= 6 && castling === '-';
 }
 
-export default function(root, allow) {
+export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
 
   const allowed = m.prop(allow);
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
+  const current: Mithril.Property<ExplorerData> = m.prop({
+    moves: []
+  });
 
   function open() {
     backbutton.stack.push(close);
+    helper.analyticsTrackView('Analysis Explorer');
     enabled(true);
   }
 
-  function close(fromBB) {
+  function close(fromBB?: string) {
     if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
     enabled(false);
     setTimeout(() => root && root.debouncedScroll(), 200);
   }
 
-  var cache = {};
-  function onConfigClose() {
-    redraw();
-    cache = {};
-    setStep();
+  let cache: {[index: string]: ExplorerData} = {};
+
+  function setResult(fen: string, data: ExplorerData) {
+    cache[fen] = data;
+    current(data);
   }
-  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.opponent.ai;
-  const effectiveVariant = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
+
+  function onConfigClose(changed: boolean) {
+    if (changed) {
+      cache = {};
+      setStep();
+    }
+  }
+
+  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || !!root.data.opponent.ai;
+  const effectiveVariant: VariantKey = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
   const debouncedScroll = debounce(() => {
@@ -52,12 +66,12 @@ export default function(root, allow) {
     redraw();
   }
 
-  const fetchOpening = debounce(fen => {
+  const fetchOpening = debounce((fen: string) => {
     return openingXhr(effectiveVariant, fen, config.data, withGames)
-    .then(res => {
+    .then((res: ExplorerData) => {
       res.opening = true;
       res.fen = fen;
-      cache[fen] = res;
+      setResult(fen, res);
       loading(false);
       failing(false);
       redraw();
@@ -65,12 +79,12 @@ export default function(root, allow) {
     .catch(handleFetchError);
   }, 1000);
 
-  const fetchTablebase = debounce(fen => {
+  const fetchTablebase = debounce((fen: string) => {
     return tablebaseXhr(root.vm.step.fen)
-    .then(res => {
+    .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;
-      cache[fen] = res;
+      setResult(fen, res);
       loading(false);
       failing(false);
       redraw();
@@ -78,28 +92,33 @@ export default function(root, allow) {
     .catch(handleFetchError);
   }, 500);
 
-  const fetch = function(fen) {
+  function fetch(fen: string) {
     const hasTablebase = effectiveVariant === 'standard' || effectiveVariant === 'chess960';
     if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
     else return fetchOpening(fen);
-  };
+  }
 
-  const empty = {
+  const empty: ExplorerData = {
     opening: true,
-    moves: {}
+    moves: []
   };
 
   function setStep() {
     if (!enabled()) return;
     const step = root.vm.step;
-    if (step.ply > 50 && !tablebaseRelevant(step.fen)) cache[step.fen] = empty;
-    if (!cache[step.fen]) {
+    if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
+      setResult(step.fen, empty);
+    }
+    const fromCache = cache[step.fen];
+    if (!fromCache) {
       loading(true);
       fetch(step.fen);
     } else {
+      current(fromCache);
       loading(false);
       failing(false);
     }
+    redraw();
     debouncedScroll();
   }
 
@@ -111,9 +130,7 @@ export default function(root, allow) {
     failing,
     config,
     withGames,
-    current() {
-      return cache[root.vm.step.fen];
-    },
+    current,
     toggle() {
       if (enabled()) close();
       else open();

@@ -1,9 +1,10 @@
 import sound from '../../sound';
-import storage from '../../storage';
+import router from '../../router';
+import * as chess from '../../chess';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import * as gameApi from '../../lichess/game';
-import { askWorker, oppositeColor } from '../../utils';
+import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -20,37 +21,48 @@ import actions from './actions';
 import * as helper from '../helper';
 import newGameMenu from './newOtbGame';
 
-export const storageFenKey = 'otb.setupFen';
+interface InitPayload {
+  variant: VariantKey
+  fen?: string
+}
+
 
 export default class OtbRound implements OfflineRoundInterface {
+  public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
   public chessground: Chessground.Controller;
-  public chessWorker: Worker;
   public replay: Replay;
   public vm: any;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
-    this.chessWorker = new Worker('vendor/scalachessjs.js');
+    this.setupFen = setupFen;
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
 
     this.vm = {
-      flip: false
+      flip: false,
+      setupFen,
+      savedFen: saved && saved.data.game.fen
     };
 
     if (setupFen) {
-      this.startNewGame(setupFen);
-    } else if (saved) {
-      try {
-        this.init(saved.data, saved.situations, saved.ply);
-      } catch (e) {
-        console.log(e, 'Fail to load saved game');
-        this.startNewGame();
+      this.newGameMenu.open();
+    }
+
+    const currentVariant = <VariantKey>settings.otb.variant();
+    if (!setupFen) {
+      if (saved) {
+        try {
+          this.init(saved.data, saved.situations, saved.ply);
+        } catch (e) {
+          console.log(e, 'Fail to load saved game');
+          this.startNewGame(currentVariant);
+        }
+      } else {
+        this.startNewGame(currentVariant);
       }
-    } else {
-      this.startNewGame();
     }
   }
 
@@ -68,7 +80,6 @@ export default class OtbRound implements OfflineRoundInterface {
         initialFen,
         situations,
         ply,
-        this.chessWorker,
         this.onReplayAdded,
         this.onThreefoldRepetition
       );
@@ -85,17 +96,18 @@ export default class OtbRound implements OfflineRoundInterface {
     redraw();
   }
 
-  public startNewGame(setupFen?: string) {
-    const variant = settings.otb.variant();
-    helper.analyticsTrackEvent('Offline Game', `New game ${variant}`);
+  public startNewGame(variant: VariantKey, setupFen?: string) {
+    const payload: InitPayload = {
+      variant
+    };
+    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+      payload.fen = setupFen;
+    }
 
-    askWorker(this.chessWorker, {
-      topic: 'init',
-      payload: {
-        variant,
-        fen: setupFen
-      }
-    }).then(data => {
+    helper.analyticsTrackEvent('Offline OTB Game', `New game ${variant}`);
+
+    chess.init(payload)
+    .then((data: chess.InitResponse) => {
       this.init(makeData({
         variant: data.variant,
         initialFen: data.setup.fen,
@@ -105,8 +117,11 @@ export default class OtbRound implements OfflineRoundInterface {
           centerPiece: true
         }
       }), [data.setup], 0);
+    })
+    .then(() => {
       if (setupFen) {
-        storage.remove(storageFenKey);
+        this.vm.setupFen = null;
+        router.replaceState('/otb');
       }
     });
   }
@@ -167,6 +182,7 @@ export default class OtbRound implements OfflineRoundInterface {
   }
 
   public onReplayAdded = (sit: GameSituation) => {
+    this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);
     if (gameStatusApi.finished(this.data)) {
@@ -205,7 +221,7 @@ export default class OtbRound implements OfflineRoundInterface {
   public jumpLast = () => this.jump(this.lastPly());
 
   public firstPly = () => 0;
-  public lastPly = () => this.replay.situations[this.replay.situations.length - 1].ply;
+  public lastPly = () => this.replay.situations.length - 1;
 
   public replaying = () => {
     return this.replay.ply !== this.lastPly();

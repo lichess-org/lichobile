@@ -22,7 +22,6 @@ function renderBody(ctrl) {
 
 export default {
   oncreate: helper.viewSlideIn,
-  onbeforeremove: helper.viewSlideOut,
 
   oninit: function(vnode) {
     const follow = session.lichessBackedProp('prefs.follow', session.savePreferences);

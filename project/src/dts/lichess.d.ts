@@ -6,10 +6,26 @@ declare type StringMap = {
 
 declare type San = 'P' | 'N' | 'B' | 'R' | 'Q'
 
+declare type Color = 'white' | 'black';
+
 interface Prop<T> {
   (): T
   (value: T): T;
 }
+
+declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
+
+declare type Speed = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'unlimited'
+declare type Perf = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
+
+declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn';
+
+declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3' | 'a4' | 'b4' | 'c4' | 'd4' | 'e4' | 'f4' | 'g4' | 'h4' | 'a5' | 'b5' | 'c5' | 'd5' | 'e5' | 'f5' | 'g5' | 'h5' | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6' | 'a7' | 'b7' | 'c7' | 'd7' | 'e7' | 'f7' | 'g7' | 'h7' | 'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8';
+
+declare type DestsMap = {
+  [index: string]: Array<Pos>
+}
+
 
 interface LichessOptions {
   apiEndPoint: string;
@@ -29,16 +45,6 @@ interface Window {
 interface PongMessage {
   d: number;
   r: number;
-}
-
-interface LichessMessage {
-  t: string;
-  d?: string;
-}
-
-interface WorkerMessage {
-  topic: string;
-  payload?: any;
 }
 
 interface PlayTime {
@@ -63,14 +69,6 @@ interface User {
   playTime?: PlayTime;
 }
 
-declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn';
-
-declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3' | 'a4' | 'b4' | 'c4' | 'd4' | 'e4' | 'f4' | 'g4' | 'h4' | 'a5' | 'b5' | 'c5' | 'd5' | 'e5' | 'f5' | 'g5' | 'h5' | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6' | 'a7' | 'b7' | 'c7' | 'd7' | 'e7' | 'f7' | 'g7' | 'h7' | 'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8';
-
-declare type DestsMap = {
-  [index: string]: Array<Pos>
-}
-
 interface Piece {
   role: Role;
   color: Color;
@@ -81,12 +79,10 @@ interface Drop {
   key: Pos;
 }
 
-declare type Color = 'white' | 'black';
-
 interface Player {
   id: string;
-  rating?: number;
   color: Color;
+  rating?: number;
   user?: User;
   provisional?: boolean;
   username?: string;
@@ -101,6 +97,13 @@ interface Player {
   berserk?: boolean;
   version?: number;
   checks?: number;
+  ratingDiff?: number;
+}
+
+interface LightPlayer {
+  id: string
+  username: string
+  rating: number
 }
 
 interface TournamentClock {
@@ -138,15 +141,49 @@ interface Tournament {
   }
 }
 
-interface OnlineGameData {
-  game: OnlineGame;
+interface Game {
+  id: string;
+  fen: string;
+  initialFen: string;
+  variant: Variant;
+  player: Color;
+  source: string;
+  status: GameStatus;
+  winner?: Color;
+  threefold?: boolean;
+  speed?: string;
+  startedAtTurn?: number;
+  rated?: boolean;
+  turns?: number;
+  lastMove?: string;
+  perf?: string;
+  // FIXME
+  check?: string | boolean;
+  tournamentId?: string;
+  createdAt?: Timestamp;
+  boosted?: boolean;
+  rematch?: string;
+}
+
+interface OnlineGame extends Game {
+  rated: boolean;
+  turns: number;
+  speed: string;
+  check?: string;
+}
+
+interface OfflineGame extends Game {
+  check?: boolean;
+}
+
+interface GameData {
+  game: Game
   player: Player;
   opponent: Player;
   correspondence?: CorrespondenceClockData;
   clock?: ClockData;
   steps?: Array<GameStep>;
   tournament?: Tournament;
-  takebackable: boolean;
   note?: string;
   chat?: Array<string>;
   possibleMoves?: StringMap;
@@ -159,65 +196,28 @@ interface OnlineGameData {
     socket: string;
   }
   bookmarked?: boolean;
+  takebackable?: boolean;
 }
 
-interface OfflineGameData {
+interface OnlineGameData extends GameData {
+  game: OnlineGame;
+  takebackable: boolean;
+}
+
+interface OfflineGameData extends GameData {
   game: OfflineGame;
-  player: OfflinePlayer;
-  opponent: OfflinePlayer;
   steps?: Array<GameStep>;
-  pref?: any;
 }
 
-interface AnalysisData extends OnlineGameData {
-  analysis: any;
-  situations: Array<GameSituation>;
-  orientation: Color;
+interface AnalysisData extends GameData {
+  // TODO type this
+  analysis?: any;
+  situations?: Array<GameSituation>;
   steps?: Array<AnalysisStep>;
-}
-
-interface OnlineGame {
-  fen: string;
-  initialFen: string;
-  id: string;
-  rated: boolean;
-  variant: Variant;
-  player: Color;
-  source: string;
-  status: GameStatus;
-  turns: number;
-  lastMove?: string;
-  perf?: string;
-  check?: string;
-  speed: string;
-  startedAtTurn?: number;
-  winner?: Color;
-  threefold?: boolean;
-  tournamentId?: string;
-  createdAt?: Timestamp;
-  boosted?: boolean;
-  rematch?: string;
-}
-
-interface OfflinePlayer {
-  color: Color;
-  username: string;
-  // just for the compat
-  // TODO maybe use same type with dummy data after all
-  spectator?: boolean;
-}
-
-interface OfflineGame {
-  id: string;
-  fen: string;
-  initialFen: string;
-  variant: Variant;
-  player: Color;
-  source: string;
-  status: GameStatus;
-  check?: boolean;
-  winner?: Color;
-  threefold?: boolean;
+  url?: {
+    round: string;
+    socket: string;
+  }
 }
 
 interface StoredOfflineGame {
@@ -225,8 +225,6 @@ interface StoredOfflineGame {
   situations: Array<GameSituation>;
   ply: number;
 }
-
-declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
 
 interface Variant {
   key: VariantKey;
@@ -264,6 +262,7 @@ interface GameStep {
   check: boolean
   checkCount?: CheckCount
   dests?: DestsMap
+  drops?: Array<string>
   crazy?: {
     pockets: Pockets
   }
@@ -292,7 +291,9 @@ interface GameSituation {
   pgnMoves: Array<string>
   uciMoves: Array<string>
   promotion?: string
-  crazyhouse?: Pockets
+  crazyhouse?: {
+    pockets: Pockets
+  }
   ply: number
 }
 

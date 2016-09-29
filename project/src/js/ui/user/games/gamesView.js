@@ -89,7 +89,7 @@ function renderGame(ctrl, g, index, userId) {
       }
       <div className="nav" oncreate={helper.ontapY(link)}>
         <span className="iconGame" data-icon={icon} />
-        {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, userColor }) : null}
+        {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, orientation: userColor }) : null}
         <div className="infos">
           <div className="title">{title}</div>
           <small className="date">{date}</small>

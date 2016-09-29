@@ -1,4 +1,5 @@
 import menu from '.';
+import socket from '../../socket';
 import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
@@ -13,6 +14,9 @@ import * as helper from '../helper';
 import friendsApi from '../../lichess/friends';
 import * as Zanimo from 'zanimo';
 
+const pingHelp = 'PING: Network lag between you and lichess';
+const serverHelp = 'SERVER: Time to process a move on lichess server';
+
 export default function view() {
   if (!menu.isOpen) return null;
 
@@ -24,19 +28,54 @@ export default function view() {
 }
 
 function renderHeader(user) {
+  const ping = menu.ping();
+  const server = menu.mlat();
+  const l = (ping || 0) + server - 100;
+  const ratio = Math.max(Math.min(l / 1200, 1), 0);
+  const hue = (Math.round((1 - ratio) * 120)).toString(10);
+  const color = socket.isConnected() ?
+    ['hsl(', hue, ',100%,40%)'].join('') :
+    'red';
   return (
     <header className="side_menu_header">
-      { session.isKidMode() ? <div className="kiddo">😊</div> : <div className="logo" /> }
-      <h2 className="username">
-        { hasNetwork() ? user ? user.username : 'Anonymous' : i18n('offline') }
-      </h2>
+      { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
+      { !hasNetwork() ?
+        <h2 key="username-offline" className="username">
+          {i18n('offline')}
+        </h2> : null
+      }
+      { hasNetwork() && !user ?
+        <h2 key="username-anon" className="username">
+          Anonymous
+        </h2> : null
+      }
       { hasNetwork() && user ?
-        <button className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
+        <h2 key="username-connected" className="username connected">
+          { user.username }
+          <div class='ledContainer'>
+            <div class='led' style={'background: ' + color}/>
+          </div>
+        </h2> : null
+      }
+      { hasNetwork() && user ?
+        <button key="user-button" className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
           oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
         /> : null
       }
+      { hasNetwork() && session.isConnected() ?
+        <div key="server-lag" class="pingServerLed">
+          <div class="pingServer">
+            <div class="ping">
+              <span oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}>PING<i className="fa fa-question-circle-o" /></span>&nbsp;&nbsp;&nbsp;<strong>{socket.isConnected() && ping ? ping : '?'}</strong> ms
+            </div>
+            <div class="server">
+              <span oncreate={helper.ontap(() => window.plugins.toast.show(serverHelp, 'long', 'top'))}>SERVER<i className="fa fa-question-circle-o" /></span>&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
+            </div>
+          </div>
+        </div> : null
+      }
       { hasNetwork() && !user ?
-        <button className="login" oncreate={helper.ontapY(loginModal.open)}>
+        <button key="login-button" className="login" oncreate={helper.ontapY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }

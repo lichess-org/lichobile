@@ -24,7 +24,6 @@ function renderBody() {
 
 export default {
   oncreate: helper.viewSlideIn,
-  onbeforeremove: helper.viewSlideOut,
 
   view: function() {
     const header = utils.partialf(headerWidget, null,

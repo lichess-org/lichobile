@@ -5,7 +5,6 @@ const emptyTd = <td className="move">...</td>;
 function renderTd(ctrl, step, curPly, orEmpty) {
   return step ? (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}
-      oncreate={helper.ontapY(() => ctrl.jump(step.ply))}
       data-ply={step.ply}
     >
       {step.san}
@@ -14,11 +13,13 @@ function renderTd(ctrl, step, curPly, orEmpty) {
 }
 
 function renderTr(ctrl, index, pairs, curPly) {
+  const first = pairs[index][0];
+  const second = pairs[index][1];
   return (
     <tr>
       <td className="replayMoveIndex">{ (index + 1) + '.' }</td>
-      {renderTd(ctrl, pairs[index][0], curPly, true)}
-      {renderTd(ctrl, pairs[index][1], curPly, false)}
+      {renderTd(ctrl, first, curPly, true)}
+      {renderTd(ctrl, second, curPly, false)}
     </tr>
   );
 }
@@ -27,6 +28,15 @@ function autoScroll(movelist) {
   if (!movelist) return;
   var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+}
+
+function getTdEl(e) {
+  return e.target;
+}
+
+function onTableTap(ctrl, e) {
+  const ply = e.target.dataset.ply;
+  if (ply) ctrl.jump(Number(ply));
 }
 
 export function renderTable(ctrl) {
@@ -55,7 +65,9 @@ export function renderTable(ctrl) {
         }}
         onupdate={(vnode) => { autoScroll(vnode.dom); }}
       >
-        <table className="moves">
+        <table className="moves"
+          oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTdEl)}
+        >
           <tbody>
             {trs}
           </tbody>

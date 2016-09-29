@@ -13,10 +13,11 @@ export default function oninit(vnode) {
   const pingTimeoutId = m.prop();
   const challenge = m.prop();
 
+  window.plugins.insomnia.keepAwake();
+
   function reloadChallenge() {
     getChallenge(challenge().id)
     .then(d => {
-      clearTimeout(pingTimeoutId());
       challenge(d.challenge);
       switch (d.challenge.status) {
         case 'accepted':
@@ -35,9 +36,15 @@ export default function oninit(vnode) {
     pingTimeoutId(setTimeout(pingNow, 2000));
   }
 
+  function onSocketOpen() {
+    // reload on open in case the reload msg has not been received
+    reloadChallenge();
+    pingNow();
+  }
+
   getChallenge(vnode.attrs.id).then(d => {
     challenge(d.challenge);
-    socket.createChallenge(d.challenge.id, d.socketVersion, pingNow, {
+    socket.createChallenge(d.challenge.id, d.socketVersion, onSocketOpen, {
       reload: reloadChallenge
     });
   })

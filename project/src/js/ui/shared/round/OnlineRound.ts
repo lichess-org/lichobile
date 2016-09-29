@@ -6,13 +6,13 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
 import socket from '../../../socket';
-import signals from '../../../signals';
 import router from '../../../router';
 import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
-import { MoveOrDrop } from '../../../lichess/dataFormat';
+import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/dataFormat';
+import * as chessFormat from '../../../utils/chessFormat';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';
 
@@ -21,12 +21,37 @@ import promotion from './promotion';
 import { chatCtrl } from './chat';
 import { notesCtrl } from './notes';
 import clockCtrl from './clock/clockCtrl';
-import correspondenceClockCtrl from './correspondenceClock/corresClockCtrl';
+import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 import { OnlineRoundInterface } from './';
+
+interface MiniUserPlayer {
+  showing: boolean
+  data: any
+}
+interface MiniUser {
+  player: MiniUserPlayer
+  opponent: MiniUserPlayer
+  [index: string]: MiniUserPlayer
+}
+
+interface VM {
+  ply: number
+  flip: boolean
+  miniUser: MiniUser
+  showingActions: boolean
+  confirmResign: boolean
+  goneBerserk: {
+    [index: string]: boolean
+  },
+  moveToSubmit: MoveRequest
+  dropToSubmit: DropRequest
+  tClockEl: HTMLElement
+  offlineWatcher: boolean
+}
 
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string;
@@ -39,21 +64,13 @@ export default class OnlineRound implements OnlineRoundInterface {
   public onFeatured: () => void;
   public onTVChannelChange: () => void;
   public onUserTVRedirect: () => void;
-  public vm: any;
+  public vm: VM;
   public title: any;
   public tv: string;
   public flipped: boolean;
 
   private tournamentCountInterval: number;
   private clockIntervId: number;
-
-  public static uciToMove(uci: string): [Pos, Pos] {
-    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
-  }
-
-  public static uciToDrop(uci: string): Pos {
-    return <Pos>uci.substr(2, 2);
-  }
 
   public constructor(
     id: string,
@@ -99,20 +116,20 @@ export default class OnlineRound implements OnlineRoundInterface {
     };
 
     this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-      null : new chatCtrl(this);
+      null : new (<any>chatCtrl)(this);
 
-    this.notes = this.data.game.speed === 'correspondence' ? new notesCtrl(this) : null;
+    this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.chessground = ground.make(
       this.data,
       cfg.game.fen,
-      this.userMove.bind(this),
-      this.onUserNewPiece.bind(this),
-      this.onMove.bind(this),
-      this.onNewPiece.bind(this)
+      this.userMove,
+      this.onUserNewPiece,
+      this.onMove,
+      this.onNewPiece
     );
 
-    this.clock = this.data.clock ? new clockCtrl(
+    this.clock = this.data.clock ? new (<any>clockCtrl)(
       this.data.clock,
       this.data.player.spectator ? noop :
         throttle(() => socket.send('outoftime'), 500),
@@ -121,24 +138,21 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.makeCorrespondenceClock();
 
-    if (this.clock) this.clockIntervId = setInterval(this.clockTick.bind(this), 100);
-    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick.bind(this), 6000);
+    if (this.clock) this.clockIntervId = setInterval(this.clockTick, 100);
+    else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000);
 
     if (this.data.tournament) {
-      this.tournamentCountInterval = setInterval(this.tournamentTick.bind(this), 1000);
+      this.tournamentCountInterval = setInterval(this.tournamentTick, 1000);
     }
 
     this.connectSocket();
     this.setTitle();
 
-    // reconnect game socket after a cancelled seek
-    signals.seekCanceled.add(this.connectSocket.bind(this));
-
-    document.addEventListener('resume', this.reloadGameData.bind(this));
+    document.addEventListener('resume', this.reloadGameData);
     window.plugins.insomnia.keepAwake();
   }
 
-  private tournamentTick() {
+  private tournamentTick = () => {
     if (this.data.tournament.secondsToFinish > 0) {
       this.data.tournament.secondsToFinish--;
       if (this.vm.tClockEl) {
@@ -151,7 +165,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private connectSocket() {
+  private connectSocket = () => {
     if (hasNetwork()) {
       socket.createGame(
         this.data.url.socket,
@@ -171,13 +185,22 @@ export default class OnlineRound implements OnlineRoundInterface {
     return h;
   }
 
-  public toggleUserPopup = (position: string, userId: string) => {
+  public openUserPopup = (position: string, userId: string) => {
     if (!this.vm.miniUser[position].data) {
       miniUserXhr(userId).then(data => {
         this.vm.miniUser[position].data = data;
+        redraw();
+      })
+      .catch(() => {
+        this.vm.miniUser[position].showing = false;
+        redraw();
       });
     }
-    this.vm.miniUser[position].showing = !this.vm.miniUser[position].showing;
+    this.vm.miniUser[position].showing = true;
+  }
+
+  public closeUserPopup = (position: string) => {
+    this.vm.miniUser[position].showing = false;
   }
 
   public showActions = () => {
@@ -233,7 +256,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? OnlineRound.uciToMove(s.uci) : null,
+      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
@@ -286,20 +309,20 @@ export default class OnlineRound implements OnlineRoundInterface {
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }
 
-  private clockTick() {
+  private clockTick = () => {
     if (this.isClockRunning()) this.clock.tick(this.data.game.player);
   }
 
   private makeCorrespondenceClock() {
     if (this.data.correspondence && !this.correspondenceClock)
-      this.correspondenceClock = new correspondenceClockCtrl(
+      this.correspondenceClock = new (<any>CorrespondenceClockCtrl)(
         this,
         this.data.correspondence,
         () => socket.send('outoftime')
       );
   }
 
-  private correspondenceClockTick() {
+  private correspondenceClockTick = () => {
     if (this.correspondenceClock && gameApi.playable(this.data))
       this.correspondenceClock.tick(this.data.game.player);
   }
@@ -445,7 +468,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         check: o.check
       };
       if (o.isMove) {
-        const move = OnlineRound.uciToMove(o.uci);
+        const move = chessFormat.uciToMove(o.uci);
         this.chessground.apiMove(
           move[0],
           move[1],
@@ -458,7 +481,7 @@ export default class OnlineRound implements OnlineRoundInterface {
             role: o.role,
             color: playedColor
           },
-          OnlineRound.uciToDrop(o.uci),
+          chessFormat.uciToDrop(o.uci),
           newConf
         );
       }
@@ -533,25 +556,24 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public toggleBookmark() {
-    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData.bind(this));
+    return toggleGameBookmark(this.data.game.id).then(this.reloadGameData);
   }
 
   public unload() {
     clearInterval(this.clockIntervId);
     clearInterval(this.tournamentCountInterval);
-    document.removeEventListener('resume', this.reloadGameData.bind(this));
-    signals.seekCanceled.remove(this.connectSocket.bind(this));
+    document.removeEventListener('resume', this.reloadGameData);
     if (this.chat) this.chat.unload();
     if (this.notes) this.notes.unload();
   }
 
-  private userMove(orig: Pos, dest: Pos, meta: any) {
+  private userMove = (orig: Pos, dest: Pos, meta: any) => {
     if (!promotion.start(this, orig, dest, meta.premove)) {
       this.sendMove(orig, dest, undefined, meta.premove);
     }
   }
 
-  private onUserNewPiece(role: Role, key: Pos, meta: any) {
+  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {
@@ -559,7 +581,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onMove(orig: Pos, dest: Pos, capturedPiece: Piece) {
+  private onMove = (orig: Pos, dest: Pos, capturedPiece: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest);
@@ -577,7 +599,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onNewPiece() {
+  private onNewPiece = () => {
     sound.move();
   };
 
@@ -587,7 +609,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     });
   }
 
-  private reloadGameData() {
+  private reloadGameData = () => {
     xhr.reload(this).then(this.reload);
   }
 

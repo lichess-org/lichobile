@@ -1,3 +1,5 @@
+import i18n from './i18n';
+import { lightPlayerName } from './utils';
 import settings from './settings';
 import session from './session';
 import router from './router';
@@ -8,6 +10,11 @@ function notificationOpenedCallback({ additionalData, isActive }) {
   if (additionalData.userData) {
     if (isActive) {
       switch (additionalData.userData.type) {
+        case 'challengeAccept':
+          session.refresh();
+          window.plugins.toast.show(
+            i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top');
+          break;
         case 'gameMove':
         case 'gameFinish':
           session.refresh();

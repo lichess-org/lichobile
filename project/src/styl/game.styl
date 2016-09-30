@@ -8,6 +8,10 @@
   overflow hidden
   &.crazy
     padding 0
+  @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+    width 80vw
+    margin 0 auto
+    height calc((100% - 80vw - 45px) / 2)
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto

@@ -1,6 +1,5 @@
 import * as chessground from 'chessground-mobile';
 import i18n from '../../i18n';
-import { getBoardBounds } from '../../utils';
 import { playerFromFen } from '../../utils/fen';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board, { Attrs as BoardAttrs } from '../shared/Board';
@@ -57,7 +56,7 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const opponentName = i18n(ctrl.data.opponent.color);
   const replayTable = renderReplayTable(ctrl.replay);
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
   const board = m<BoardAttrs>(Board, {
     data: ctrl.data,

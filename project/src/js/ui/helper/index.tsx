@@ -257,9 +257,16 @@ export function isVeryWideScreen() {
   return viewportDim().vw >= 960;
 }
 
-export function isIpadLike() {
-  const { vh, vw } = viewportDim();
+export function is43TabletLand({ vh, vw }: ViewportDim) {
   return vh >= 700 && vw <= 1050;
+}
+
+export function is43TabletPort({ vh, vw }: ViewportDim) {
+  return vw >= 700 && vh <= 1050;
+}
+
+export function isLandscapeSmall({ vh }: ViewportDim) {
+  return vh <= 450;
 }
 
 export function isPortrait() {
@@ -270,10 +277,84 @@ export function isLandscape() {
   return window.matchMedia('(orientation: landscape)').matches;
 }
 
-export function isLandscapeSmall() {
-  const { vh } = viewportDim();
-  return vh <= 450;
+export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string): BoardBounds  {
+  const { vh, vw } = viewportDim;
+  const top = 50;
+
+  if (is43TabletPort(viewportDim)) {
+    const contentHeight = vh - 50;
+    const side = vw * 0.8;
+    const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
+    return {
+      top: pTop,
+      right: vw * 0.1,
+      bottom: pTop + side,
+      left: vw * 0.1,
+      width: side,
+      height: side
+    };
+  } else if (isPortrait) {
+    const contentHeight = vh - 50;
+    const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
+    return {
+      top: pTop,
+      right: vw,
+      bottom: pTop + vw,
+      left: 0,
+      width: vw,
+      height: vw
+    };
+  } else if (is43TabletLand(viewportDim)) {
+    const wsSide = vh - top - (vh * 0.12);
+    const wsTop = top + ((vh - wsSide - top) / 2);
+    return {
+      top: wsTop,
+      right: wsSide,
+      bottom: wsTop + wsSide,
+      left: 0,
+      width: wsSide,
+      height: wsSide
+    };
+  } else if (isLandscapeSmall(viewportDim)) {
+    const smallTop = 45;
+    const lSide = vh - smallTop;
+    return {
+      top: smallTop,
+      right: lSide,
+      bottom: smallTop + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
+    };
+  } else {
+    const lSide = vh - top;
+    return {
+      top,
+      right: lSide,
+      bottom: top + lSide,
+      left: 0,
+      width: lSide,
+      height: lSide
+    };
+  }
 }
+
+export function variantReminder(el: HTMLElement, icon: string): void {
+  const div = document.createElement('div');
+  div.className = 'variant_reminder';
+  div.dataset['icon'] = icon;
+  el.appendChild(div);
+  setTimeout(function() {
+    const r = el.querySelector('.variant_reminder');
+    if (r) {
+      r.classList.add('gone');
+      setTimeout(function() {
+        if (el && r) el.removeChild(r);
+      }, 600);
+    }
+  }, 800);
+}
+
 
 // allow user to opt out of track analytics
 // only log if setting has it enabled

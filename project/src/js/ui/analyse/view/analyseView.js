@@ -1,6 +1,6 @@
 import * as m from 'mithril';
 import { isEmpty } from 'lodash';
-import { hasNetwork, getBoardBounds, playerName, oppositeColor, noNull } from '../../../utils';
+import { hasNetwork, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
 import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
@@ -26,7 +26,7 @@ import { renderTree } from './treeView';
 
 export default function analyseView(vnode) {
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse');
 
   if (this.ctrl) {
 

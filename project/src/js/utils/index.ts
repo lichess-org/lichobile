@@ -229,56 +229,6 @@ export function boardOrientation(data: OnlineGameData, flip?: boolean): 'black' 
   }
 }
 
-export function getBoardBounds(viewportDim: {vh: number, vw: number}, isPortrait: boolean, isIpadLike: boolean, isLandscapeSmall: boolean, mode: string): BoardBounds  {
-  const { vh, vw } = viewportDim;
-  const top = 50;
-
-  if (isPortrait) {
-    const contentHeight = vh - 50;
-    const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 40) / 2) : 0);
-    return {
-      top: pTop,
-      right: vw,
-      bottom: pTop + vw,
-      left: 0,
-      width: vw,
-      height: vw
-    };
-  } else if (isIpadLike) {
-    const wsSide = vh - top - (vh * 0.12);
-    const wsTop = top + ((vh - wsSide - top) / 2);
-    return {
-      top: wsTop,
-      right: wsSide,
-      bottom: wsTop + wsSide,
-      left: 0,
-      width: wsSide,
-      height: wsSide
-    };
-  } else if (isLandscapeSmall) {
-    const smallTop = 45;
-    const lSide = vh - smallTop;
-    return {
-      top: smallTop,
-      right: lSide,
-      bottom: smallTop + lSide,
-      left: 0,
-      width: lSide,
-      height: lSide
-    };
-  } else {
-    const lSide = vh - top;
-    return {
-      top,
-      right: lSide,
-      bottom: top + lSide,
-      left: 0,
-      width: lSide,
-      height: lSide
-    };
-  }
-}
-
 export function variantReminder(el: HTMLElement, icon: string): void {
   const div = document.createElement('div');
   div.className = 'variant_reminder';

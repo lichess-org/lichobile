@@ -111,7 +111,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
-  const bounds = utils.getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
   const board = m<BoardAttrs>(Board, {
     data: ctrl.data,

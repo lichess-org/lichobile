@@ -1,5 +1,5 @@
 import * as chessground from 'chessground-mobile';
-import { getBoardBounds } from '../../utils';
+import { getBoardBounds } from '../helper';
 import { playerFromFen } from '../../utils/fen';
 import i18n from '../../i18n';
 
@@ -41,7 +41,7 @@ function renderContent(ctrl: AiRound) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'game');
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game');
   const replayTable = renderReplayTable(ctrl.replay);
 
   const aiName = (

@@ -31,6 +31,10 @@ footerHeight = 45px
 html
   font-family 'Noto Sans', sans-serif
   font-size 100%
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    font-size 130%
+  @media only screen and (orientation: portrait) and (min-height 1000px)
+    font-size 130%
 
 body
   background-color bgdark

@@ -6,10 +6,14 @@
   -webkit-overflow-scrolling touch
   width 100%
   display flex
+  @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+    padding-top 2em
   > .scrollerWrapper
     width 100%
     @media only screen and (orientation: portrait)
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
+    @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+      height "calc(100vh - 80vw - 50px - 2em - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
     @media only screen and (max-height 450px) and (orientation landscape)
@@ -97,6 +101,10 @@
 .analyseOpponentsWrapper, .analyseOpening, .analyseGameInfos
   padding 5px
   font-size 0.7em
+  @media only screen and (orientation: landscape) and (min-height 700px)
+    font-size 0.8em
+  @media only screen and (orientation: portrait) and (min-height 1000px)
+    font-size 0.8em
 
 .analyseGameInfosWrapper
   display flex

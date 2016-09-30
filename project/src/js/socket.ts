@@ -1,7 +1,7 @@
 import router from './router';
 import redraw from './utils/redraw';
 import { apiVersion } from './http';
-import { xorWith, isEqual } from 'lodash';
+import { xorWith, isEqual, cloneDeep } from 'lodash';
 import { lichessSri, autoredraw, hasNetwork } from './utils';
 import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';
@@ -72,9 +72,10 @@ const defaultHandlers: MessageHandlers = {
 };
 
 function handleFollowingOnline(data: Array<string>, payload: any) {
-  const oldFriendList = friendsApi.list().slice();
+  // We clone the friends online before we update it for comparison later
+  const oldFriendList = cloneDeep(friendsApi.list());
 
-  var friendsPlaying = payload.playing;
+  const friendsPlaying = payload.playing;
   friendsApi.set(data, friendsPlaying);
 
   const newFriendList = friendsApi.list()

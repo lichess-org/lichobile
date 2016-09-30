@@ -1,24 +1,19 @@
-class Friend {
+interface Friend {
   name: string;
   playing: boolean;
-
-  constructor(name: string, playing: boolean) {
-    this.name = name;
-    this.playing = playing;
-  }
 }
 
 let onlineFriends: Array <Friend> = [];
 
 function makeFriend(name: string, isPlaying: boolean) {
-  return new Friend(name, isPlaying);
-};
+  return {'name' : name, 'playing': isPlaying};
+}
 
 /** Compares usernames for equality, ignoring prefixed titles (such as GM) */
 function isSameUser(userId: string, name: string) {
   const id = (name.indexOf(' ') >= 0) ? name.split(' ')[1] : name;
   return id.toLowerCase() === userId;
-};
+}
 
 function findByUsername(n: string) {
   return onlineFriends.find(u => isSameUser(n.toLowerCase(), u.name));
@@ -27,7 +22,7 @@ function findByUsername(n: string) {
 function setPlaying(userName: string, playing: boolean) {
   const user = findByUsername(userName);
   if (user) user.playing = playing;
-};
+}
 
 function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
   if (friend1.name.toLowerCase() < friend2.name.toLowerCase())
@@ -36,7 +31,7 @@ function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
     return 1;
   else
     return 0;
-};
+}
 
 function list(): Array <Friend> {
   return onlineFriends;

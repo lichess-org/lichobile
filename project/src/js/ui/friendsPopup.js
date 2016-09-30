@@ -50,21 +50,14 @@ function renderFriends() {
 
 function renderFriend(user) {
 
-  // hack: Because we have an 'oncreate' within an 'oncreate' two events
-  // get fired when the tv button is clicked. So we suppress the 'outer handler'
-  // when the TV button is clicked
-  let tvTapped = false;
-
   let userId = utils.userFullNameToId(user.name);
   let action = () => {
-    if (!tvTapped) {
-      friendsPopup.close();
-      router.set('/@/' + userId);
-    }
+    friendsPopup.close();
+    router.set('/@/' + userId);
   };
 
-  let tvAction = () => {
-    tvTapped = true;
+  function onTapTv(e) {
+    e.stopPropagation();
     friendsPopup.close();
     router.set('/@/' + userId + '/tv');
   };
@@ -72,7 +65,7 @@ function renderFriend(user) {
   return user.playing ? (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
       <span>{user.name}</span>
-      <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(tvAction)}> </span>
+      <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
     </li>
   ) : (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>

@@ -15,12 +15,10 @@ function isSameUser(userId: string, name: string) {
   return id.toLowerCase() === userId;
 }
 
-function findByUsername(n: string) {
-  return onlineFriends.find(u => isSameUser(n.toLowerCase(), u.name));
-}
-
 function setPlaying(userName: string, playing: boolean) {
-  const user = findByUsername(userName);
+  const user = onlineFriends.find(u =>
+    isSameUser(userName.toLowerCase(), u.name)
+  );
   if (user) user.playing = playing;
 }
 

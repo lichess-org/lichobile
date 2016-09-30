@@ -3,7 +3,7 @@ interface Friend {
   playing: boolean;
 }
 
-let onlineFriends: Array <Friend> = [];
+let onlineFriends: Array<Friend> = [];
 
 function makeFriend(name: string, isPlaying: boolean) {
   return {'name' : name, 'playing': isPlaying};

@@ -39,7 +39,7 @@ function count() {
   return onlineFriends.length;
 }
 
-function set(friends: Array <string> , playings: Array <string> ) {
+function set(friends: Array<string> , playings: Array<string> ) {
   onlineFriends = friends.map(name => makeFriend(name, false));
 
   for (let user of playings) setPlaying(user, true);

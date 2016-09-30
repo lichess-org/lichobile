@@ -31,7 +31,7 @@ function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
     return 0;
 }
 
-function list(): Array <Friend> {
+function list(): Array<Friend> {
   return onlineFriends;
 }
 

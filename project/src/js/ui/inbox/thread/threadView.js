@@ -1,5 +1,5 @@
 import * as h from '../../helper';
-import { header as headerWidget, backButton } from '../../shared/common';
+import { header as headerWidget, backButton, userStatus } from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
 
@@ -46,9 +46,9 @@ function renderPost(post, index, posts) {
   return (
     <div className={postId} key={post.createdAd}>
       <span className="infos">
-        {post.sender}
+        {userStatus(post.sender)}
         <span className="arrow" data-icon="H"></span>
-        {post.receiver}
+        {userStatus(post.receiver)}
         &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
       </span>

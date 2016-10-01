@@ -32,7 +32,7 @@ function composeBody(ctrl) {
         placeholder={i18n('subject')}
         />
         <textarea id="body" className="composeInput" />
-        <button key="send" className="action_bar_button composeSend" type="submit">
+        <button key="send" className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />
           {i18n('send')}
         </button>

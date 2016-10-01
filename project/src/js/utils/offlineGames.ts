@@ -11,7 +11,7 @@ export function getCurrentOTBGame() {
 export function getAnalyseData(data: StoredOfflineGame) {
   if (!data) return null;
   data.data.steps = data.situations.map((o: GameSituation) => {
-    const step: GameStep = {
+    const step: AnalysisStep = {
       fen: o.fen,
       ply: o.ply,
       check: o.check,
@@ -20,7 +20,8 @@ export function getAnalyseData(data: StoredOfflineGame) {
       uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
       dests: o.dests,
       drops: o.drops,
-      crazy: o.crazyhouse
+      crazy: o.crazyhouse,
+      pgnMoves: o.pgnMoves
     };
     return step;
   });

@@ -12,7 +12,7 @@ import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
-import importPgnPopup from './importPgnPopup.js';
+import importPgnPopup from './importPgnPopup';
 import * as util from './util';
 import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
@@ -25,7 +25,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface } from './interfaces';
+import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface } from './interfaces';
 
 interface VM {
   shouldGoBack: boolean
@@ -56,7 +56,7 @@ export default class AnalyseCtrl {
   public settings: any;
   public menu: any;
   public continuePopup: any;
-  public importPgnPopup: any;
+  public importPgnPopup: ImportPgnPopupInterface;
 
   public chessground: Chessground.Controller;
   public analyse: AnalyseInterface;
@@ -116,14 +116,27 @@ export default class AnalyseCtrl {
     this.vm.path = initialPath;
     this.vm.pathStr = treePath.write(initialPath);
 
-
     this.showGround();
     this.initCeval();
-    this.explorer.setStep();
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
     }
+  }
+
+  public setData(data: AnalysisData) {
+    this.data = data;
+
+    this.analyse = new Analyse(this.data);
+    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
+
+    const initialPath = treePath.default(0);
+    this.vm.step = null;
+    this.vm.path = initialPath;
+    this.vm.pathStr = treePath.write(initialPath);
+
+    this.showGround();
+    this.initCeval();
   }
 
   public connectGameSocket = () => {
@@ -416,7 +429,7 @@ export default class AnalyseCtrl {
       .then(pgn => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
     } else if (this.source === 'offline') {
-      const endSituation = this.data.situations[this.data.situations.length - 1];
+      const endSituation = this.data.steps[this.data.steps.length - 1];
       chess.pgnDump({
         variant: this.data.game.variant.key,
         initialFen: this.data.game.initialFen,

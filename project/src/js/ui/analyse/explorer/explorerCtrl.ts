@@ -57,7 +57,8 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
   const debouncedScroll = debounce(() => {
-    document.getElementById('explorerTable').scrollTop = 0;
+    const table = document.getElementById('explorerTable');
+    if (table) table.scrollTop = 0;
   }, 200);
 
   function handleFetchError() {

@@ -212,7 +212,6 @@ interface OfflineGameData extends GameData {
 interface AnalysisData extends GameData {
   // TODO type this
   analysis?: any;
-  situations?: Array<GameSituation>;
   steps?: Array<AnalysisStep>;
   url?: {
     round: string;
@@ -274,6 +273,7 @@ interface AnalysisStep extends GameStep {
   fixed?: boolean;
   variations?: any;
   opening?: any;
+  pgnMoves?: Array<string>;
 }
 
 interface GameSituation {

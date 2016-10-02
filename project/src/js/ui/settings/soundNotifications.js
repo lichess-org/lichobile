@@ -24,8 +24,12 @@ function renderBody() {
         if (isOn) push.register();
         else push.unregister();
       })),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('vibrationOnNotification'), 'vibrate', settings.general.notifications.vibrate, push.register, !allowed)),
-      m('li.list_item', formWidgets.renderCheckbox(i18n('soundOnNotification'), 'sound', settings.general.notifications.sound, push.register, !allowed))
+      m('li.list_item', formWidgets.renderCheckbox(i18n('vibrationOnNotification'), 'vibrate', settings.general.notifications.vibrate, isOn => {
+        window.plugins.OneSignal.enableVibrate(isOn);
+      }, !allowed)),
+      m('li.list_item', formWidgets.renderCheckbox(i18n('soundOnNotification'), 'sound', settings.general.notifications.sound, isOn => {
+        window.plugins.OneSignal.enableSound(isOn);
+      }, !allowed))
     ])
   ];
 }

@@ -176,6 +176,6 @@
     "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1",
     "cordova-plugin-fullscreen": "cordova-plugin-fullscreen",
     "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#377a285",
-    "onesignal-cordova-plugin": "onesignal-cordova-plugin@1.13.1"
+    "onesignal-cordova-plugin": "onesignal-cordova-plugin@2.0.3"
   }
 }

@@ -38,13 +38,13 @@ function threadBody(ctrl) {
 }
 
 function renderPost(post, index, posts) {
-  let postId = 'postWrapper';
+  let postClass = 'postWrapper';
   if (index === 0)
-    postId += ' first';
+    postClass += ' first';
   if (index === posts.length-1)
-    postId += ' last';
+    postClass += ' last';
   return (
-    <div className={postId} key={post.createdAd}>
+    <div className={postClass} key={post.createdAt}>
       <span className="infos">
         {userStatus(post.sender)}
         <span className="arrow" data-icon="H"></span>

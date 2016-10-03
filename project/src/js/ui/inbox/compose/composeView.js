@@ -15,7 +15,7 @@ export default function view(vnode) {
 
 function composeBody(ctrl) {
   return (
-    <div className="composeWrapper" oncreate={h.slidesInUp}>
+    <div className="composeWrapper">
       <form id="composeForm"
       onsubmit={function(e) {
         e.preventDefault();

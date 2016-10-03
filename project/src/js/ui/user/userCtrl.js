@@ -43,6 +43,7 @@ export default function oninit(vnode) {
     },
     goToGames: () => router.set(`/@/${user().id}/games`),
     goToUserTV: () => router.set(`/@/${user().id}/tv`),
-    challenge: () => challengeForm.open(user().id)
+    challenge: () => challengeForm.open(user().id),
+    composeMessage: () => router.set(`/inbox/new/${user().id}`)
   };
 }

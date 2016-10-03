@@ -32,7 +32,7 @@ export default {
 
     let openedWith;
 
-    function serializeData() {
+    function serialize() {
       return JSON.stringify(['db', 'rating', 'speed'].map(k =>
         data[k].selected()
       ));
@@ -40,14 +40,14 @@ export default {
 
     function doOpen() {
       backbutton.stack.push(doClose);
-      openedWith = serializeData();
+      openedWith = serialize();
       open(true);
     }
 
     function doClose(fromBB) {
       if (fromBB !== 'backbutton' && open()) backbutton.stack.pop();
       open(false);
-      onClose(openedWith !== serializeData());
+      onClose(openedWith !== serialize());
     }
 
     function toggleMany(c, value) {
@@ -74,7 +74,8 @@ export default {
           data.rating.selected().length === data.rating.available.length &&
           data.speed.selected().length === data.speed.available.length
         );
-      }
+      },
+      serialize
     };
   },
 

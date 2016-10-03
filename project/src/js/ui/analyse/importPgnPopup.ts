@@ -1,33 +1,35 @@
+import * as m from 'mithril';
 import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
+import * as chess from '../../chess';
 import popupWidget from '../shared/popup';
 import makeData from '../shared/offlineRound/data';
 import { getAnalyseData } from '../../utils/offlineGames';
 import backbutton from '../../backbutton';
-import * as m from 'mithril';
+
+import { AnalyseCtrlInterface, ImportPgnPopupInterface } from './interfaces';
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: AnalyseCtrlInterface) {
     let isOpen = false;
-    const fen = m.prop();
     const importing = m.prop(false);
 
-    function open(fentoSet) {
+    function open() {
       backbutton.stack.push(close);
-      fen(fentoSet);
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
       isOpen = false;
     }
 
-    function submit(target) {
+    function submit(e: Event) {
+      const target = <any>e.target;
       const pgn = target[0].value;
       importing(true);
-      root.chessLogic.importPgn(pgn)
+      chess.pgnRead({ pgn })
       .then(data => {
         const setup = data.setup;
         const gameData = makeData({
@@ -39,9 +41,8 @@ export default {
         });
         gameData.player.spectator = true;
         const situations = data.replay;
-        const analyseData = getAnalyseData({ data: gameData, situations });
-        analyseData.orientation = setup.player;
-        root.init(analyseData);
+        const analyseData = getAnalyseData({ data: gameData, situations, ply: setup.ply });
+        root.setData(analyseData);
         importing(false);
         close();
         redraw();
@@ -57,7 +58,6 @@ export default {
     return {
       open,
       close,
-      fen,
       importing,
       submit,
       isOpen: function() {
@@ -66,15 +66,15 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: ImportPgnPopupInterface) {
     return popupWidget(
       'importPgnPopup',
       () => m('h2.withIcon[data-icon=U]', i18n('pasteThePgnStringHere')),
       () => {
         return m('form', {
-          onsubmit: e => {
+          onsubmit: (e: Event) => {
             e.preventDefault();
-            ctrl.submit(e.target);
+            ctrl.submit(e);
           }
         }, [
           m('textarea.pgnImport'),

@@ -45,6 +45,9 @@ export default {
 
     if (settings.general.notifications.allow()) {
 
+      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate());
+      window.plugins.OneSignal.enableSound(settings.general.notifications.sound());
+
       window.plugins.OneSignal.init(
         '2d12e964-92b6-444e-9327-5b2e9a419f4c',
         {googleProjectNumber: '1050901934956'},

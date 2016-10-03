@@ -1,5 +1,4 @@
-import { get, set } from 'lodash/object';
-import { pick, mapValues, mapKeys, throttle } from 'lodash';
+import { get, set, pick, mapValues, mapKeys, throttle } from 'lodash';
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
@@ -8,7 +7,58 @@ import settings from './settings';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 
-var session = null;
+interface Profile {
+  country?: string
+  location?: string
+  bio?: string
+  firstName?: string
+  lastName?: string
+}
+
+interface NowPlayingGame {
+  gameId: string
+  fullId: string
+  isMyTurn: boolean
+  lastMove: string
+  variant: Variant
+  speed: Speed
+  perf: Perf
+  color: Color
+  fen: string
+  rated: boolean
+  opponent: LightPlayer
+  secondsLeft: number
+}
+
+interface Session {
+  id: string
+  username: string
+  title?: string
+  online: boolean
+  engine: boolean
+  booster: boolean
+  kid: boolean
+  patron: boolean
+  language?: string
+  profile?: Profile
+  perfs: any
+  createdAt: number
+  seenAt: number
+  playTime: number
+  nowPlaying: Array<NowPlayingGame>
+  prefs: any
+  nbChallenges: number
+  nbFollowers: number
+  nbFollowing: number
+}
+
+interface LobbyJson {
+  lobby: {
+    version: number
+  }
+}
+
+let session: Session = null;
 
 function isConnected() {
   return !!session;
@@ -23,8 +73,8 @@ function getUserId() {
 }
 
 function nowPlaying() {
-  var np = session && session.nowPlaying || [];
-  return np.filter(function(e) {
+  let np = session && session.nowPlaying || [];
+  return np.filter(e => {
     return settings.game.supportedVariants.indexOf(e.variant.key) !== -1;
   });
 }
@@ -34,7 +84,7 @@ function isKidMode() {
 }
 
 function myTurnGames() {
-  return nowPlaying().filter(function(e) {
+  return nowPlaying().filter(e => {
     return e.isMyTurn;
   });
 }
@@ -47,7 +97,7 @@ function toggleKidMode() {
 
 function savePreferences() {
 
-  function numValue(v) {
+  function numValue(v: any) {
     if (v === true) return 1;
     else if (v === false) return 0;
     else return v;
@@ -91,16 +141,16 @@ function savePreferences() {
   }, true);
 }
 
-function lichessBackedProp(path, prefRequest) {
+function lichessBackedProp(path: string, prefRequest: () => Promise<any>) {
   return function() {
     if (arguments.length) {
-      var oldPref;
+      let oldPref: any;
       if (session) {
         oldPref = get(session, path);
         set(session, path, arguments[0]);
       }
       prefRequest()
-      .catch(err => {
+      .catch((err: any) => {
         if (session) set(session, path, oldPref);
         handleXhrError(err);
       });
@@ -110,7 +160,11 @@ function lichessBackedProp(path, prefRequest) {
   };
 }
 
-function login(username, password) {
+function isSession(data: Session | LobbyJson): data is Session {
+  return (<Session>data).id !== undefined;
+}
+
+function login(username: string, password: string) {
   return fetchJSON('/login', {
     method: 'POST',
     body: JSON.stringify({
@@ -118,9 +172,13 @@ function login(username, password) {
       password
     })
   }, true)
-  .then(function(data) {
-    session = data;
-    return session;
+  .then((data: Session | LobbyJson) => {
+    if (isSession(data)) {
+      session = <Session>data;
+      return session;
+    } else {
+      throw { ipban: true };
+    }
   });
 }
 
@@ -133,7 +191,7 @@ function logout() {
   });
 }
 
-function signup(username, email, password) {
+function signup(username: string, email: string, password: string) {
   return fetchJSON('/signup', {
     method: 'POST',
     body: JSON.stringify({

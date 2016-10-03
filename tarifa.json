@@ -2,7 +2,7 @@
   "name": "lichess",
   "id": "org.lichess.mobileapp",
   "description": "lichess.org mobile application",
-  "version": "4.5.0",
+  "version": "4.5.4",
   "platforms": [
     "ios@4.2.1",
     "android@5.1.1"
@@ -59,7 +59,7 @@
       "API_END_POINT": "https://en.lichess.org",
       "SOCKET_END_POINT": "wss://socket.lichess.org",
       "GA_ID": "UA-7935029-3",
-      "version": "4.5.0",
+      "version": "4.5.4",
       "cordova": {
         "whitelist": [
           {
@@ -101,7 +101,7 @@
       },
       "prod": {
         "extend": "prod",
-        "version_code": "400500",
+        "version_code": "400504",
         "release": true,
         "sign": "store"
       }
@@ -176,6 +176,6 @@
     "cordova-plugin-vibration": "cordova-plugin-vibration@2.1.1",
     "cordova-plugin-fullscreen": "cordova-plugin-fullscreen",
     "cordova-plugin-stockfish": "https://github.com/veloce/cordova-plugin-stockfish.git#377a285",
-    "onesignal-cordova-plugin": "onesignal-cordova-plugin@1.13.1"
+    "onesignal-cordova-plugin": "onesignal-cordova-plugin@2.0.3"
   }
 }

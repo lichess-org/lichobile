@@ -51,15 +51,10 @@ function overlay(ctrl: OnlineRound, isPortrait: boolean) {
 export function renderMaterial(material: Material) {
   const children: any = [];
   for (let role in material) {
-    let piece = <div className={role} />;
-    let count = material[role];
-    // TODO fix jsx types
-    let content: any;
-    if (count === 1) content = piece;
-    else {
-      content = [];
-      for (let i = 0; i < count; i++) content.push(piece);
-    }
+    const piece = <div className={role} />;
+    const count = material[role];
+    const content: Array<Mithril.Vnode<any>> = [];
+    for (let i = 0; i < count; i++) content.push(piece);
     children.push(<div className="tomb" key={role}>{content}</div>);
   }
   return children;

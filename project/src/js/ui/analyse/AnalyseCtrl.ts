@@ -12,7 +12,7 @@ import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
-import importPgnPopup from './importPgnPopup.js';
+import importPgnPopup from './importPgnPopup';
 import * as util from './util';
 import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
@@ -25,7 +25,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface } from './interfaces';
+import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface } from './interfaces';
 
 interface VM {
   shouldGoBack: boolean
@@ -56,7 +56,7 @@ export default class AnalyseCtrl {
   public settings: any;
   public menu: any;
   public continuePopup: any;
-  public importPgnPopup: any;
+  public importPgnPopup: ImportPgnPopupInterface;
 
   public chessground: Chessground.Controller;
   public analyse: AnalyseInterface;
@@ -105,7 +105,7 @@ export default class AnalyseCtrl {
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.explorer = explorerCtrl(this, true);
-    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, 100);
+    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
     const initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
@@ -116,14 +116,27 @@ export default class AnalyseCtrl {
     this.vm.path = initialPath;
     this.vm.pathStr = treePath.write(initialPath);
 
-
     this.showGround();
     this.initCeval();
-    this.explorer.setStep();
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
     }
+  }
+
+  public setData(data: AnalysisData) {
+    this.data = data;
+
+    this.analyse = new Analyse(this.data);
+    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
+
+    const initialPath = treePath.default(0);
+    this.vm.step = null;
+    this.vm.path = initialPath;
+    this.vm.pathStr = treePath.write(initialPath);
+
+    this.showGround();
+    this.initCeval();
   }
 
   public connectGameSocket = () => {
@@ -197,8 +210,9 @@ export default class AnalyseCtrl {
 
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece);
+    } else {
+      this.chessground.set(config);
     }
-    this.chessground.set(config);
     if (!dests) this.debouncedDests();
   }
 
@@ -240,12 +254,6 @@ export default class AnalyseCtrl {
 
   public jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + this.data.game.startedAtTurn);
-  }
-
-  public jumpToNag = (color: Color, nag: string) => {
-    const ply = this.analyse.plyOfNextNag(color, nag, this.vm.step.ply);
-    if (ply) this.jumpToMain(ply);
-    redraw();
   }
 
   public canDrop = () => {
@@ -421,7 +429,7 @@ export default class AnalyseCtrl {
       .then(pgn => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
     } else if (this.source === 'offline') {
-      const endSituation = this.data.situations[this.data.situations.length - 1];
+      const endSituation = this.data.steps[this.data.steps.length - 1];
       chess.pgnDump({
         variant: this.data.game.variant.key,
         initialFen: this.data.game.initialFen,
@@ -450,7 +458,6 @@ export default class AnalyseCtrl {
         this.analyse.addDests(dests, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();
-          redraw();
           if (dests === {}) this.ceval.stop();
         }
         this.chessground.playPremove();

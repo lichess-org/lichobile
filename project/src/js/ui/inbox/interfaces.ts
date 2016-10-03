@@ -4,6 +4,8 @@ export interface PagedThreads {
   maxPerPage: number
   nbPages: number
   nbResults: number
+  nextPage: number
+  previousPage: number
 }
 
 export interface Thread {

@@ -86,6 +86,9 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
+      <li className="side_link" key="message" oncreate={helper.ontap(menu.route('/inbox'))}>
+        <span className="fa fa-envelope"/>{i18n('inbox')}
+      </li>
       <li className="side_link" oncreate={helper.ontap(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
@@ -187,11 +190,6 @@ function renderLinks(user) {
       {hasNetwork() ?
       <li className="side_link" key="ranking" oncreate={helper.ontapY(menu.route('/ranking'))}>
         <span className="fa fa-cubes"/>{i18n('leaderboard')}
-      </li> : null
-      }
-      {hasNetwork() && user ?
-      <li className="side_link" key="message" oncreate={helper.ontapY(menu.route('/inbox'))}>
-        <span className="fa fa-envelope"/>{i18n('inbox')}
       </li> : null
       }
       <li className="sep_link" key="sep_link_offline">

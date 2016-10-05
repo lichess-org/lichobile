@@ -287,7 +287,7 @@ self.onmessage = function(msg) {
       var d = msg.data.payload[1];
       var o = msg.data.payload[2];
       if (socketInstance) socketInstance.send(t, d, o);
-      else throw new Error('socket instance is null, could not send socket msg: ', msg.data.payload);
+      else console.info('socket instance is null, could not send socket msg: ', msg.data.payload);
       break;
     case 'connect':
       if (socketInstance) socketInstance.connect();

@@ -12,6 +12,7 @@ import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
 import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/dataFormat';
+import * as chessFormat from '../../../utils/chessFormat';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';
 
@@ -70,14 +71,6 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private tournamentCountInterval: number;
   private clockIntervId: number;
-
-  public static uciToMove(uci: string): [Pos, Pos] {
-    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
-  }
-
-  public static uciToDrop(uci: string): Pos {
-    return <Pos>uci.substr(2, 2);
-  }
 
   public constructor(
     id: string,
@@ -263,7 +256,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? OnlineRound.uciToMove(s.uci) : null,
+      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : null,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
@@ -475,7 +468,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         check: o.check
       };
       if (o.isMove) {
-        const move = OnlineRound.uciToMove(o.uci);
+        const move = chessFormat.uciToMove(o.uci);
         this.chessground.apiMove(
           move[0],
           move[1],
@@ -488,7 +481,7 @@ export default class OnlineRound implements OnlineRoundInterface {
             role: o.role,
             color: playedColor
           },
-          OnlineRound.uciToDrop(o.uci),
+          chessFormat.uciToDrop(o.uci),
           newConf
         );
       }

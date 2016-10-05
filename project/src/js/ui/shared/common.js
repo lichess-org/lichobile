@@ -2,6 +2,7 @@ import menu from '../menu';
 import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
+import { emptyFen } from '../../utils/fen';
 import { getOfflineGames } from '../../utils/offlineGames';
 import layout from '../layout';
 import * as helper from '../helper';
@@ -25,7 +26,7 @@ export const LoadingBoard = {
   view() {
     return layout.board(
       connectingHeader,
-      viewOnlyBoardContent
+      () => viewOnlyBoardContent(emptyFen)
     );
   }
 };
@@ -268,7 +269,7 @@ export function miniUser(user, mini, isOpen, close) {
               </p> : null
           }
         </div>
-        { mini.perfs &&
+        { mini.perfs ?
           <div className="mini_perfs">
             {Object.keys(mini.perfs).map(p => {
               const perf = mini.perfs[p];
@@ -279,7 +280,7 @@ export function miniUser(user, mini, isOpen, close) {
                 </div>
               );
             })}
-          </div>
+          </div> : null
         }
         { mini.crosstable && mini.crosstable.nbGames > 0 ?
           <div className="yourScore">

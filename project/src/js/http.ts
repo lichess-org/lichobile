@@ -10,20 +10,17 @@ export interface RequestOpts extends RequestInit {
   query?: Object;
 }
 
-export interface ResponseError {
-  error: Error;
-  response?: Response;
+export interface FetchError extends Error {
+  response: Response;
 }
 
 export function checkStatus(response: Response): Response {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {
-    const error = new Error(response.statusText);
-    throw {
-      error,
-      response
-    };
+    const error: any = new Error(response.statusText);
+    error.response = response;
+    throw error;
   }
 }
 

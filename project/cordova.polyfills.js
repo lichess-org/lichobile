@@ -19,7 +19,9 @@
   window.plugins.OneSignal = {
     init: noop,
     getIds: noop,
-    enableInAppAlertNotification: noop
+    enableInAppAlertNotification: noop,
+    enableSound: noop,
+    enableVibrate: noop
   };
 
   // events

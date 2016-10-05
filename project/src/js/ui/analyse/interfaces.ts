@@ -20,6 +20,7 @@ export interface AnalyseCtrlInterface {
   explorer: ExplorerCtrlInterface
   chessground: Chessground.Controller
 
+  setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
 }
@@ -94,4 +95,12 @@ export interface ExplorerData {
   recentGames?: Array<ExplorerGame>
   checkmate?: boolean
   stalemate?: boolean
+}
+
+export interface ImportPgnPopupInterface {
+  open: () => void
+  close: () => void
+  importing: Mithril.Property<boolean>
+  submit: (e: Event) => void
+  isOpen: () => boolean
 }

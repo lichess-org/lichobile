@@ -22,7 +22,9 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
-  const current: Mithril.Property<ExplorerData> = m.prop(null);
+  const current: Mithril.Property<ExplorerData> = m.prop({
+    moves: []
+  });
 
   function open() {
     backbutton.stack.push(close);
@@ -44,7 +46,6 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }
 
   function onConfigClose(changed: boolean) {
-    redraw();
     if (changed) {
       cache = {};
       setStep();
@@ -56,7 +57,8 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
   const debouncedScroll = debounce(() => {
-    document.getElementById('explorerTable').scrollTop = 0;
+    const table = document.getElementById('explorerTable');
+    if (table) table.scrollTop = 0;
   }, 200);
 
   function handleFetchError() {

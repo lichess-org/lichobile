@@ -1,5 +1,7 @@
 import session from '../session';
+import redraw from '../utils/redraw';
 import socket from '../socket';
+import signals from '../signals';
 import push from '../push';
 import challengesApi from '../lichess/challenges';
 import * as utils from '../utils';
@@ -19,19 +21,22 @@ function submit(form) {
   if (!login || !pass) return false;
   window.cordova.plugins.Keyboard.close();
   return session.login(login, pass)
-  .then(function() {
+  .then(() => {
     loginModal.close();
     window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center');
+    signals.afterLogin.dispatch();
+    redraw();
     // reconnect socket to refresh friends...
     socket.connect();
     push.register();
     challengesApi.refresh();
-    session.refresh()
-    .catch(err => {
-      if (err.response && err.response.status === 401) {
-        window.navigator.notification.alert('Lichess authentication cannot work without cookies enabled. Please make sure cookies are authorized.');
-      }
-    });
+    session.refresh();
+  })
+  .catch(err => {
+    if (err.ipban) {
+      loginModal.close();
+    }
+    throw err;
   })
   .catch(utils.handleXhrError);
 }

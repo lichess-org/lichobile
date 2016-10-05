@@ -71,6 +71,7 @@ export default {
           const newVal = !isOn;
           settingsProp(newVal);
           if (callback) callback(newVal);
+          redraw();
         }
       })
     ]);

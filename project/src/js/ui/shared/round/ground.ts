@@ -3,17 +3,21 @@ import redraw from '../../../utils/redraw';
 import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
-
-function str2move(move: string) {
-  return move ? [move.slice(0, 2), move.slice(2, 4)] : null;
-}
+import * as chessFormat from '../../../utils/chessFormat';
 
 function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
+  const lastMove = data.game.lastMove ?
+    chessFormat.uciToMove(data.game.lastMove) :
+    (data.game.variant.key === 'crazyhouse' && data.steps.length > 0 &&
+    data.steps[data.steps.length - 1].uci) ?
+      chessFormat.uciTolastDrop(data.steps[data.steps.length - 1].uci) :
+      null;
+
   return {
     fen: fen,
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
-    lastMove: str2move(data.game.lastMove),
+    lastMove,
     check: data.game.check,
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',

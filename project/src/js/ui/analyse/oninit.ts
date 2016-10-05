@@ -25,7 +25,7 @@ export default function oninit(vnode: Mithril.Vnode<Attrs>) {
   socket.createDefault();
   window.plugins.insomnia.keepAwake();
 
-  const shouldGoBack = !!gameId;
+  const shouldGoBack = gameId !== undefined || fenArg !== undefined;
 
   if (source === 'online' && gameId) {
     gameXhr(gameId, orientation)

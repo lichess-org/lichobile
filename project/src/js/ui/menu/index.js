@@ -1,5 +1,7 @@
 import * as m from 'mithril';
 import * as Zanimo from 'zanimo';
+import { hasNetwork } from '../../utils';
+import session from '../../session';
 import redraw from '../../utils/redraw';
 import router from '../../router';
 import backbutton from '../../backbutton';
@@ -17,12 +19,14 @@ menu.mlat = m.prop();
 menu.ping = m.prop();
 
 function getServerLags() {
-  socket.getCurrentPing()
-  .then(ping => {
-    menu.ping(ping);
-    menu.mlat(socket.getCurrentMoveLatency());
-    if (menu.isOpen) redraw();
-  });
+  if (hasNetwork() && session.isConnected()) {
+    socket.getCurrentPing()
+    .then(ping => {
+      menu.ping(ping);
+      menu.mlat(socket.getCurrentMoveLatency());
+      if (menu.isOpen) redraw();
+    });
+  }
 }
 
 menu.route = function(route) {
@@ -48,15 +52,19 @@ menu.toggle = function() {
 menu.open = function() {
   backbutton.stack.push(menu.close);
   menu.isOpen = true;
+  if (hasNetwork()) {
+    socket.send('moveLat', true);
+  }
   getServerLags();
-  socket.send('moveLat', true);
   sendPingsInterval = setInterval(getServerLags, 1000);
 };
 
 menu.close = function(fromBB) {
   if (fromBB !== 'backbutton' && menu.isOpen) backbutton.stack.pop();
   clearInterval(sendPingsInterval);
-  socket.send('moveLat', false);
+  if (hasNetwork()) {
+    socket.send('moveLat', false);
+  }
   return Zanimo(
     document.getElementById('side_menu'),
     'transform',

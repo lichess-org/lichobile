@@ -1,12 +1,13 @@
 import * as chessground from 'chessground-mobile';
-import layout from '../layout';
-import { gameTitle, header as renderHeader, hourglassHeader, viewOnlyBoardContent } from '../shared/common';
+import i18n from '../../i18n';
+import { getBoardBounds } from '../../utils';
+import { playerFromFen } from '../../utils/fen';
+import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board, { Attrs as BoardAttrs } from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import * as helper from '../helper';
-import i18n from '../../i18n';
-import { getBoardBounds } from '../../utils';
+import layout from '../layout';
 import actions from './actions';
 import newGameMenu from './newOtbGame';
 import settings from '../../settings';
@@ -20,9 +21,10 @@ export default function view() {
     header = () => renderHeader(gameTitle(this.round.data));
     content = () => renderContent(this.round, pieceTheme);
   } else {
-    header = this.round.vm.setupFen ?
-      () => renderHeader(i18n('playOnTheBoardOffline')) : hourglassHeader;
-    content = () => viewOnlyBoardContent(this.round.vm.setupFen || this.round.vm.savedFen, null, null, 'standard', null, pieceTheme);
+    const fen = this.round.vm.setupFen || this.round.vm.savedFen;
+    const color = playerFromFen(fen);
+    header = () => renderHeader(i18n('playOnTheBoardOffline'));
+    content = () => viewOnlyBoardContent(fen, null, color, 'standard', null, pieceTheme);
   }
 
   return layout.board(

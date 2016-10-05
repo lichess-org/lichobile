@@ -1,6 +1,7 @@
 import { last } from 'lodash/array';
 import * as chessground from 'chessground-mobile';
 import redraw from '../../utils/redraw';
+import signals from '../../signals';
 import { handleXhrError } from '../../utils';
 import makeData from './data';
 import chess from './chess';
@@ -32,11 +33,13 @@ export default function ctrl(vnode) {
 
   const onXhrSuccess = function(res) {
     this.vm.loading = false;
+    redraw();
     return res;
   }.bind(this);
 
   const onXhrError = function(res) {
     this.vm.loading = false;
+    redraw();
     handleXhrError(res);
   }.bind(this);
 
@@ -316,6 +319,8 @@ export default function ctrl(vnode) {
   } else {
     this.newPuzzle(false);
   }
+
+  signals.afterLogin.add(this.retry);
 
   window.plugins.insomnia.keepAwake();
 

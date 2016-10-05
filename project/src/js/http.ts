@@ -48,6 +48,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   }
 
   function onError(error: any) {
+    console.log(error.response.json());
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     throw error;

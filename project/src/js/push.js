@@ -6,8 +6,11 @@ import router from './router';
 import challengesApi from './lichess/challenges';
 import { fetchText } from './http';
 
-function notificationOpenedCallback({ additionalData, isActive }) {
-  if (additionalData.userData) {
+function notificationOpenedCallback(data) {
+  // this should not be the raw data according to onesignal doc
+  const additionalData = data.notification.payload.additionalData && JSON.parse(data.notification.payload.additionalData);
+  const isActive = data.isAppInFocus;
+  if (additionalData && additionalData.userData) {
     if (isActive) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
@@ -44,15 +47,11 @@ export default {
   register() {
 
     if (settings.general.notifications.allow()) {
-
-      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate());
-      window.plugins.OneSignal.enableSound(settings.general.notifications.sound());
-
-      window.plugins.OneSignal.init(
-        '2d12e964-92b6-444e-9327-5b2e9a419f4c',
-        {googleProjectNumber: '1050901934956'},
-        notificationOpenedCallback
-      );
+      window.plugins.OneSignal
+      .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c', '1050901934956')
+      .handleNotificationOpened(notificationOpenedCallback)
+      .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
+      .endInit();
 
       window.plugins.OneSignal.getIds(({ userId }) => {
         fetchText(`/mobile/register/onesignal/${userId}`, {
@@ -60,7 +59,8 @@ export default {
         });
       });
 
-      window.plugins.OneSignal.enableInAppAlertNotification(false);
+      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate());
+      window.plugins.OneSignal.enableSound(settings.general.notifications.sound());
     }
   },
 

@@ -1,7 +1,7 @@
 import treePath from './path';
-import { Path, PathObj } from './interfaces';
+import { Path, PathObj, AnalyseInterface } from './interfaces';
 
-export default class Analyse {
+export default class Analyse implements AnalyseInterface {
   public tree: any;
 
   constructor(data: AnalysisData) {

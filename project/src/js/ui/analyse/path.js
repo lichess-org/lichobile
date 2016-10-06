@@ -8,7 +8,7 @@ export default {
   },
 
   read(str) {
-    return str.split(',').map(function(step) {
+    return str.split(',').map(step => {
       var s = step.split(':');
       return {
         ply: parseInt(s[0]),

@@ -17,9 +17,11 @@ export interface AnalyseCtrlInterface {
   data: AnalysisData
   source: Source
   vm: any
+  analyse: AnalyseInterface
   explorer: ExplorerCtrlInterface
   chessground: Chessground.Controller
 
+  userJump(path: Path, direction?: 'forward' | 'backward'): void
   setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
@@ -40,6 +42,8 @@ export interface ExplorerCtrlInterface {
 export type Path = Array<PathObj>
 
 export interface AnalyseInterface {
+  tree: any
+
   firstPly(): number
   lastPly(): number
   getStep(path: Path): AnalysisStep

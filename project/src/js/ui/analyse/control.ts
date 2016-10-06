@@ -1,12 +1,13 @@
 import path from './path';
 import { empty } from './util';
+import { AnalyseCtrlInterface, PathObj } from './interfaces';
 
-function canGoForward(ctrl) {
-  var tree = ctrl.analyse.tree;
-  var ok = false;
-  ctrl.vm.path.forEach(function(step) {
-    for (var i = 0, nb = tree.length; i < nb; i++) {
-      var move = tree[i];
+function canGoForward(ctrl: AnalyseCtrlInterface) {
+  let tree = ctrl.analyse.tree;
+  let ok = false;
+  ctrl.vm.path.forEach((step: PathObj) => {
+    for (let i = 0, nb = tree.length; i < nb; i++) {
+      const move = tree[i];
       if (step.ply === move.ply && step.variation) {
         tree = move.variations[step.variation - 1];
         break;
@@ -16,12 +17,12 @@ function canGoForward(ctrl) {
   return ok;
 }
 
-function canEnterVariation(ctrl) {
-  var tree = ctrl.analyse.tree;
-  var ok = false;
-  ctrl.vm.path.forEach(function(step) {
-    for (var i = 0, nb = tree.length; i < nb; i++) {
-      var move = tree[i];
+function canEnterVariation(ctrl: AnalyseCtrlInterface) {
+  let tree = ctrl.analyse.tree;
+  let ok = false;
+  ctrl.vm.path.forEach((step: PathObj) => {
+    for (let i = 0, nb = tree.length; i < nb; i++) {
+      const move = tree[i];
       if (step.ply === move.ply) {
         if (step.variation) {
           tree = move.variations[step.variation - 1];
@@ -37,18 +38,18 @@ export default {
 
   canGoForward: canGoForward,
 
-  next: function(ctrl) {
+  next: function(ctrl: AnalyseCtrlInterface) {
     if (!canGoForward(ctrl)) return false;
-    var p = ctrl.vm.path;
+    const p = ctrl.vm.path;
     p[p.length - 1].ply++;
     ctrl.userJump(p, 'forward');
 
     return true;
   },
 
-  prev: function(ctrl) {
-    var p = ctrl.vm.path;
-    var len = p.length;
+  prev: function(ctrl: AnalyseCtrlInterface) {
+    const p = ctrl.vm.path;
+    const len = p.length;
     if (len === 1) {
       if (p[0].ply === ctrl.analyse.firstPly()) return false;
       p[0].ply--;
@@ -65,27 +66,27 @@ export default {
     return true;
   },
 
-  last: function(ctrl) {
+  last: function(ctrl: AnalyseCtrlInterface) {
     ctrl.userJump([{
       ply: ctrl.analyse.tree[ctrl.analyse.tree.length - 1].ply,
       variation: null
     }], 'forward');
   },
 
-  first: function(ctrl) {
+  first: function(ctrl: AnalyseCtrlInterface) {
     ctrl.userJump([{
       ply: ctrl.analyse.firstPly(),
       variation: null
     }]);
   },
 
-  enterVariation: function(ctrl) {
+  enterVariation: function(ctrl: AnalyseCtrlInterface) {
     if (canEnterVariation(ctrl))
       ctrl.userJump(path.withVariation(ctrl.vm.path, 1));
   },
 
-  exitVariation: function(ctrl) {
-    var p = ctrl.vm.path;
+  exitVariation: function(ctrl: AnalyseCtrlInterface) {
+    const p = ctrl.vm.path;
     if (p.length > 1)
       ctrl.userJump(path.withoutVariation(p));
   }

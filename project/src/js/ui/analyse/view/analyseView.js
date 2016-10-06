@@ -289,7 +289,9 @@ function getMoveEl(e) {
 
 function onReplayTap(ctrl, e) {
   const el = getMoveEl(e);
-  ctrl.jump(treePath.read(el.dataset.path));
+  if (el && el.dataset.path) {
+    ctrl.jump(treePath.read(el.dataset.path));
+  }
 }
 
 function renderReplay(ctrl) {

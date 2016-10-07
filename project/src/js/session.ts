@@ -83,6 +83,10 @@ function isKidMode() {
   return session && session.kid;
 }
 
+function isShadowban() {
+  return session && session.troll;
+}
+
 function myTurnGames() {
   return nowPlaying().filter(e => {
     return e.isMyTurn;
@@ -242,6 +246,7 @@ function refresh() {
 export default {
   isConnected,
   isKidMode,
+  isShadowban,
   logout,
   signup,
   login: throttle(login, 1000),

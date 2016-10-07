@@ -87,7 +87,7 @@ function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
       <li className="side_link" key="message" oncreate={helper.ontap(menu.route('/inbox'))}>
-        <span className="fa fa-envelope"/>{i18n('inbox')}
+        <span className="fa fa-envelope"/>{i18n('inbox') + (menu.inboxUnreadCount() !== null ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
       <li className="side_link" oncreate={helper.ontap(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />

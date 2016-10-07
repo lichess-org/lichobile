@@ -6,7 +6,7 @@ import redraw from '../../utils/redraw';
 import router from '../../router';
 import backbutton from '../../backbutton';
 import socket from '../../socket';
-
+import * as inboxXhr from '../inbox/inboxXhr';
 const menu = {};
 
 let sendPingsInterval;
@@ -14,6 +14,7 @@ let sendPingsInterval;
 /* properties */
 menu.isOpen = false;
 menu.headerOpen = m.prop(false);
+menu.inboxUnreadCount = m.prop(null);
 
 menu.mlat = m.prop();
 menu.ping = m.prop();
@@ -79,6 +80,11 @@ menu.close = function(fromBB) {
 };
 
 menu.toggleHeader = function() {
+  inboxXhr.inbox()
+  .then(data => {
+    menu.inboxUnreadCount(data.currentPageResults.reduce((acc, x) => (acc + (x.isUnread ? 1 : 0)), 0));
+    redraw();
+  });
   return menu.headerOpen() ? menu.headerOpen(false) : menu.headerOpen(true);
 };
 

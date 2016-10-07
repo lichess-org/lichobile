@@ -39,3 +39,14 @@ export interface ThreadAttrs {
 export interface InputTag {
   value: string;
 }
+
+export interface SendErrorResponse {
+  err: string;
+  errors: SendErrorData;
+}
+
+export interface SendErrorData {
+  username: Array<string>;
+  subject: Array<string>;
+  text: Array<string>;
+}

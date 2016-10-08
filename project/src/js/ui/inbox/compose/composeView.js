@@ -20,20 +20,20 @@ function composeBody(ctrl) {
         e.preventDefault();
         return ctrl.send(e.target);
       }}>
-        <div key="recipientError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().username) ? 'Username ' + ctrl.errors().username[0] : null}
-        </div>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName()}
-        <div key="subjectError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().subject) ? 'Subject ' + ctrl.errors().subject[0] : null}
+        <div key="recipientError" className="errorMessage">
+          {(ctrl.errors() && ctrl.errors().username) ? ctrl.errors().username[0] : null}
         </div>
         <input id="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
         />
-        <div key="textError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().text) ? 'Body ' + ctrl.errors().text[0] : null}
+        <div key="subjectError" className="errorMessage">
+          {(ctrl.errors() && ctrl.errors().subject) ? ctrl.errors().subject[0] : null}
         </div>
         <textarea id="body" className="composeInput" />
+        <div key="textError" className="errorMessage">
+          {(ctrl.errors() && ctrl.errors().text) ? ctrl.errors().text[0] : null}
+        </div>
         <button key="send" className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />
           {i18n('send')}

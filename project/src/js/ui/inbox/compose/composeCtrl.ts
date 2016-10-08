@@ -4,7 +4,7 @@ import { handleXhrError } from '../../../utils';
 import * as xhr from './../inboxXhr';
 import * as helper from '../../helper';
 import * as m from 'mithril';
-import { ComposeAttrs, InputTag, SendErrorData, SendErrorResponse } from './../interfaces';
+import { ComposeAttrs, InputTag, SendErrorResponse } from './../interfaces';
 import router from '../../../router';
 import { FetchError } from '../../../http';
 
@@ -14,7 +14,7 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
   socket.createDefault();
 
   const id = m.prop<string>();
-  const errors = m.prop<SendErrorData>();
+  const errors = m.prop<SendErrorResponse>();
   id(vnode.attrs.id);
 
   function send(form: Array<InputTag>) {
@@ -36,8 +36,12 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
 
   function handleSendError (error: FetchError) {
     error.response.json().then((errorResponse: SendErrorResponse) => {
-      errors(errorResponse.errors);
-      redraw();
+      if (errorResponse && (errorResponse.username || errorResponse.subject || errorResponse.text)) {
+        errors(errorResponse);
+        redraw();
+      }
+      else
+        throw error;
     }).catch(handleXhrError);
   }
 

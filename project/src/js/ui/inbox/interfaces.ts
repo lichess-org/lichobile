@@ -41,11 +41,6 @@ export interface InputTag {
 }
 
 export interface SendErrorResponse {
-  err: string;
-  errors: SendErrorData;
-}
-
-export interface SendErrorData {
   username: Array<string>;
   subject: Array<string>;
   text: Array<string>;

@@ -16,6 +16,12 @@ export interface Thread {
   updatedAt: number
 }
 
+export interface ThreadData {
+  id: string
+  name: string
+  posts: Array<Post>
+}
+
 export interface Post {
   sender: User
   receiver: User
@@ -29,21 +35,19 @@ export interface User {
 }
 
 export interface ComposeAttrs {
-  id: string;
+  id: string
 }
 
 export interface ThreadAttrs {
-  id: string;
-  thread: Array<Thread>;
-  deleteThread: boolean;
+  id: string
 }
 
 export interface InputTag {
-  value: string;
+  value: string
 }
 
 export interface SendErrorResponse {
-  username: Array<string>;
-  subject: Array<string>;
-  text: Array<string>;
+  username: Array<string>
+  subject: Array<string>
+  text: Array<string>
 }

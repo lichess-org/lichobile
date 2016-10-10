@@ -4,7 +4,7 @@ import { handleXhrError } from '../../../utils';
 import * as xhr from './../inboxXhr';
 import * as helper from '../../helper';
 import * as m from 'mithril';
-import { Thread, ThreadAttrs, InputTag } from './../interfaces';
+import { ThreadData, ThreadAttrs, InputTag } from './../interfaces';
 import router from '../../../router';
 
 export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
@@ -13,7 +13,7 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   socket.createDefault();
 
   const id = m.prop<string>(vnode.attrs.id);
-  const thread = m.prop<Array<Thread>>();
+  const thread = m.prop<ThreadData>();
   const deleteAttempted = m.prop<boolean>(false);
 
   xhr.thread(id())
@@ -42,7 +42,7 @@ function sendResponse(form: Array<InputTag>) {
   .then(data => {
     console.log(data);
     if(data.ok) {
-      router.set('/inbox/' + id)
+      router.set('/inbox/' + id);
     }
     else {
       redraw();

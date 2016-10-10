@@ -19,7 +19,6 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
     isLoading(true);
     xhr.reload(p)
     .then(data => {
-      console.log(data);
       threads(data);
       isLoading(false);
       redraw();
@@ -29,7 +28,6 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
 
   xhr.inbox()
   .then(data => {
-    console.log(data);
     threads(data);
     redraw();
   })

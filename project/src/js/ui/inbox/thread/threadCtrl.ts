@@ -8,7 +8,7 @@ import { ThreadData, ThreadAttrs, InputTag } from './../interfaces';
 import router from '../../../router';
 
 export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
-  helper.analyticsTrackView('Inbox');
+  helper.analyticsTrackView('Thread');
 
   socket.createDefault();
 
@@ -18,7 +18,6 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
 
   xhr.thread(id())
   .then(data => {
-    console.log(data);
     thread(data);
     redraw();
   })
@@ -40,7 +39,6 @@ function sendResponse(form: Array<InputTag>) {
 
   xhr.respond(id, response)
   .then(data => {
-    console.log(data);
     if(data.ok) {
       router.set('/inbox/' + id);
     }

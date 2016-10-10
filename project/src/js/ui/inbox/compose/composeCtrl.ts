@@ -9,7 +9,7 @@ import router from '../../../router';
 import { FetchError } from '../../../http';
 
 export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
-  helper.analyticsTrackView('Inbox');
+  helper.analyticsTrackView('Compose');
 
   socket.createDefault();
 
@@ -23,7 +23,6 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
     const body = form[2].value;
     xhr.newThread(recipient, subject, body)
     .then(data => {
-      console.log(data);
       if(data.ok) {
         router.set('/inbox/' + data.id)
       }

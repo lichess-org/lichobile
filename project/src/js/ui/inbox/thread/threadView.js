@@ -16,7 +16,6 @@ export default function view(vnode) {
 
 function threadBody(ctrl) {
   if (!ctrl.thread()) return null;
-  console.log(ctrl.thread());
   return (
     <div key={ctrl.thread().id} className="threadWrapper native_scroller">
       {ctrl.thread().posts.map(renderPost)}

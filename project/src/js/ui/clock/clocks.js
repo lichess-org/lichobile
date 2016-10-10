@@ -1,74 +1,48 @@
-import router from '../../router';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import sound from '../../sound';
-import * as helper from '../helper';
 import * as m from 'mithril';
-import clockSettings from './clockSettings';
 
-export default function oninit(vnode) {
+const MILLIS = 1000;
+const MINUTE_MILLIS = 60 * 1000;
+const CLOCK_TICK_STEP = 10;
 
-  helper.analyticsTrackView('Clock');
+export const clockMap = {
+  simple: () => simpleClock(
+    Number(settings.clock.simple.time()) * MINUTE_MILLIS
+  ),
 
-  let clockMap = null;
-  const clockObj = m.prop();
+  increment: () => incrementClock(
+    Number(settings.clock.increment.time()) * MINUTE_MILLIS,
+    Number(settings.clock.increment.increment()) * MILLIS
+  ),
 
-  function reload() {
-    if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return;
+  handicapInc: () => handicapIncClock(
+    Number(settings.clock.handicapInc.topTime()) * MINUTE_MILLIS,
+    Number(settings.clock.handicapInc.topIncrement()) * MILLIS,
+    Number(settings.clock.handicapInc.bottomTime()) * MINUTE_MILLIS,
+    Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS
+  ),
 
-    clockMap = {
-      'simple': simpleClock.bind(undefined, Number(settings.clock.simple.time()) * 60),
-      'increment': incrementClock.bind(undefined, Number(settings.clock.increment.time()) * 60, Number(settings.clock.increment.increment())),
-      'handicapInc': handicapIncClock.bind(undefined, Number(settings.clock.handicapInc.topTime()) * 60, Number(settings.clock.handicapInc.topIncrement()), Number(settings.clock.handicapInc.bottomTime()) * 60, Number(settings.clock.handicapInc.bottomIncrement())),
-      'delay': delayClock.bind(undefined, Number(settings.clock.delay.time()) * 60, Number(settings.clock.delay.increment())),
-      'bronstein': bronsteinClock.bind(undefined, Number(settings.clock.bronstein.time()) * 60, Number(settings.clock.bronstein.increment())),
-      'hourglass': hourglassClock.bind(undefined, Number(settings.clock.hourglass.time()) * 60),
-      'stage': stageClock.bind(undefined, settings.clock.stage.stages(), Number(settings.clock.stage.increment()))
-    };
-    clockObj(clockMap[settings.clock.clockType()]());
-  }
+  delay: () => delayClock.bind(
+    Number(settings.clock.delay.time()) * MINUTE_MILLIS,
+    Number(settings.clock.delay.increment()) * MILLIS
+  ),
 
-  reload();
+  bronstein: () => bronsteinClock(
+    Number(settings.clock.bronstein.time()) * MINUTE_MILLIS,
+    Number(settings.clock.bronstein.increment()) * MILLIS
+  ),
 
-  const clockSettingsCtrl = clockSettings.controller(reload, clockObj);
+  hourglass: () => hourglassClock(
+    Number(settings.clock.hourglass.time()) * MINUTE_MILLIS
+  ),
 
-  function clockTap (side) {
-    clockObj().clockHit(side);
-  }
-
-  function startStop () {
-    clockObj().startStop();
-  }
-
-  function goHome() {
-    if (!clockObj().isRunning() || clockObj().flagged()) {
-      router.set('/');
-    }
-  }
-
-  function hideStatusBar() {
-    window.StatusBar.hide();
-  }
-
-  window.StatusBar.hide();
-
-  if (window.cordova.platformId === 'android') {
-    window.AndroidFullScreen.immersiveMode();
-  }
-  window.plugins.insomnia.keepAwake();
-  document.addEventListener('resume', hideStatusBar);
-  window.addEventListener('resize', hideStatusBar);
-
-  vnode.state = {
-    hideStatusBar,
-    startStop,
-    clockSettingsCtrl,
-    clockObj,
-    reload,
-    goHome,
-    clockTap
-  };
-}
+  stage: () => stageClock(
+    settings.clock.stage.stages(),
+    Number(settings.clock.stage.increment()) * MILLIS
+  )
+};
 
 function simpleClock(time) {
   return incrementClock(time, 0);
@@ -88,7 +62,7 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime() - 1, 0));
+      topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
       if (topTime() <= 0) {
         flagged('top');
         sound.dong();
@@ -96,7 +70,7 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime() - 1, 0));
+      bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
         sound.dong();
@@ -135,7 +109,7 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
     if (clockInterval) {
       clearInterval(clockInterval);
     }
-    clockInterval = setInterval(tick, 1000);
+    clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();
   }
@@ -147,7 +121,7 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
     }
     else {
       isRunning(true);
-      clockInterval = setInterval(tick, 1000);
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP);
       if (!activeSide()) {
         activeSide('top');
       }
@@ -182,7 +156,7 @@ function delayClock(time, increment) {
         topDelay(topDelay() - 1);
       }
       else {
-        topTime(Math.max(topTime() - 1, 0));
+        topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
         if (topTime() <= 0) {
           flagged('top');
           sound.dong();
@@ -195,7 +169,7 @@ function delayClock(time, increment) {
         bottomDelay(bottomDelay() - 1);
       }
       else {
-        bottomTime(Math.max(bottomTime() - 1, 0));
+        bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
         if (bottomTime() <= 0) {
           flagged('bottom');
           sound.dong();
@@ -235,7 +209,7 @@ function delayClock(time, increment) {
     if (clockInterval) {
       clearInterval(clockInterval);
     }
-    clockInterval = setInterval(tick, 1000);
+    clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();
   }
@@ -247,7 +221,7 @@ function delayClock(time, increment) {
     }
     else {
       isRunning(true);
-      clockInterval = setInterval(tick, 1000);
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP);
       if (!activeSide()) {
         activeSide('top');
       }
@@ -279,8 +253,8 @@ function bronsteinClock(time, increment) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime() - 1, 0));
-      topDelay(Math.max(topDelay() - 1, 0));
+      topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
+      topDelay(Math.max(topDelay() - CLOCK_TICK_STEP, 0));
       if (topTime() <= 0) {
         flagged('top');
         sound.dong();
@@ -288,8 +262,8 @@ function bronsteinClock(time, increment) {
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime() - 1, 0));
-      bottomDelay(Math.max(bottomDelay() - 1, 0));
+      bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
+      bottomDelay(Math.max(bottomDelay() - CLOCK_TICK_STEP, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
         sound.dong();
@@ -330,7 +304,7 @@ function bronsteinClock(time, increment) {
     if (clockInterval) {
       clearInterval(clockInterval);
     }
-    clockInterval = setInterval(tick, 1000);
+    clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();
   }
@@ -342,7 +316,7 @@ function bronsteinClock(time, increment) {
     }
     else {
       isRunning(true);
-      clockInterval = setInterval(tick, 1000);
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP);
       if (!activeSide()) {
         activeSide('top');
       }
@@ -372,7 +346,7 @@ function hourglassClock(time) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime() - 1, 0));
+      topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
       bottomTime(time - topTime());
       if (topTime() <= 0) {
         flagged('top');
@@ -381,7 +355,7 @@ function hourglassClock(time) {
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime() - 1, 0));
+      bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
       topTime(time - bottomTime());
       if (bottomTime() <= 0) {
         flagged('bottom');
@@ -419,7 +393,7 @@ function hourglassClock(time) {
     if (clockInterval) {
       clearInterval(clockInterval);
     }
-    clockInterval = setInterval(tick, 1000);
+    clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();
   }
@@ -431,7 +405,7 @@ function hourglassClock(time) {
     }
     else {
       isRunning(true);
-      clockInterval = setInterval(tick, 1000);
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP);
       if (!activeSide()) {
         activeSide('top');
       }
@@ -451,8 +425,8 @@ function hourglassClock(time) {
 }
 
 function stageClock(stages, increment) {
-  const topTime = m.prop(Number(stages[0].time) * 60);
-  const bottomTime = m.prop(Number(stages[0].time) * 60);
+  const topTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
+  const bottomTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
   const topMoves = m.prop(0);
   const bottomMoves = m.prop(0);
   const topStage = m.prop(0);
@@ -464,7 +438,7 @@ function stageClock(stages, increment) {
 
   function tick () {
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime() - 1, 0));
+      topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
       if (topTime() <= 0) {
         flagged('top');
         sound.dong();
@@ -472,7 +446,7 @@ function stageClock(stages, increment) {
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime()- 1, 0));
+      bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
         sound.dong();
@@ -494,7 +468,7 @@ function stageClock(stages, increment) {
         topTime(topTime() + increment);
         if (topMoves() === Number(stages[topStage()].moves)) {
           topStage(topStage() + 1);
-          topTime(topTime() + Number(stages[topStage()].time) * 60);
+          topTime(topTime() + Number(stages[topStage()].time) * MINUTE_MILLIS);
           topMoves(0);
         }
         activeSide('bottom');
@@ -506,7 +480,7 @@ function stageClock(stages, increment) {
         bottomTime(bottomTime() + increment);
         if (bottomMoves() === Number(stages[bottomStage()].moves)) {
           bottomStage(bottomStage() + 1);
-          bottomTime(bottomTime() + Number(stages[bottomStage()].time) * 60);
+          bottomTime(bottomTime() + Number(stages[bottomStage()].time) * MINUTE_MILLIS);
           bottomMoves(0);
         }
         activeSide('top');
@@ -523,7 +497,7 @@ function stageClock(stages, increment) {
     if (clockInterval) {
       clearInterval(clockInterval);
     }
-    clockInterval = setInterval(tick, 1000);
+    clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();
   }
@@ -535,7 +509,7 @@ function stageClock(stages, increment) {
     }
     else {
       isRunning(true);
-      clockInterval = setInterval(tick, 1000);
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP);
       if (!activeSide()) {
         activeSide('top');
       }

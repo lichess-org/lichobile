@@ -64,7 +64,7 @@ function clockBody(ctrl) {
         }
         <div className="clockTapAreaContent">
           <span className={topClockTimeClass}>
-            { topFlagged ? 'b' : formatTimeInSecs(clock.topTime()) }
+            { topFlagged ? 'b' : formatTimeInSecs(Math.round(clock.topTime() / 1000)) }
           </span>
         </div>
       </div>
@@ -77,7 +77,7 @@ function clockBody(ctrl) {
       <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
-            { bottomFlagged ? 'b' : formatTimeInSecs(clock.bottomTime()) }
+            { bottomFlagged ? 'b' : formatTimeInSecs(Math.round(clock.bottomTime() / 1000)) }
           </span>
         </div>
         { clock.bottomRemainingMoves ?

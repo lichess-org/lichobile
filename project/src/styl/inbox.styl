@@ -1,0 +1,145 @@
+.inboxWrapper
+  height 100%
+  display flex
+  flex-flow column nowrap
+  >.navigationButtons
+    display flex
+    flex-flow row wrap
+    align-items center
+    align-self center
+    margin 10px 0
+    height 30px
+    &.invisible
+      display none
+    >.navigationButton
+      border-radius 4px
+      text-align center
+      border-style solid
+      border-color #323232
+      border-width 1px
+      height 30px
+      line-height 20px
+      margin 0 5px
+      padding 0
+      width 40px
+      &:before
+        font-family "lichess"!important
+        font-size 1.2em
+        content attr(data-icon)
+        vertical-align middle
+      &.invisible
+        display none
+      @media only screen and (max-width 380px)
+        margin 0 1px
+        width 35px
+        line-height 16px
+        &:before
+          font-size 1em
+
+.emptyInbox
+  padding-left 10px
+  padding-top 5px
+
+table.threadList
+  width 100%
+  tr.unread
+    font-weight bold
+  td.threadAuthor
+    text-align: left
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow hidden
+    width 30%
+    position relative
+    max-width 0
+  td.threadName
+    text-align: left
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow hidden
+    width 50%
+    position relative
+    max-width 0
+  td.threadDate
+    text-align: left
+    width 20%
+    white-space: nowrap
+    overflow hidden
+    position relative
+    max-width 0
+
+.threadWrapper
+  height 100%
+  >.responseWrapper
+    width 90%
+    margin 0 auto
+    textarea
+      width 100%
+      height 100px
+      background transparent
+      border 1px solid #555555
+      margin 5px 0px 5px 0px
+      &::placeholder
+        opacity 0.6
+    .sendResponse
+      margin 0 auto
+      color gold
+      width 50%
+    .deleteThread
+      width 50%
+  .confirmDeleteDialog
+    display flex
+    flex-flow row nowrap
+    >.confirmDelete
+      width 40%
+      color red
+    >.cancelDelete
+      width 40%
+  >.postWrapper
+    width 90%
+    margin 0 auto
+    padding 5px 0px 5px 0px
+    border-top 1px solid #555555
+    &.first
+      border-top none
+    .infos
+      width 90%
+      margin 0 auto
+      margin-bottom 0.5em
+      display block
+      >.arrow
+        vertical-align middle
+        line-height 1
+      >.user
+        display inline
+
+
+.composeWrapper
+  width 95%
+  margin 0 auto
+  height 100%
+  >#composeForm
+    display flex
+    flex-flow column nowrap
+    height 100%
+    >input
+      padding-left 5px
+      border none
+      outline none
+      flex none
+    >.composeInput
+      background transparent
+      border 1px solid #555555
+      width 100%
+      margin 5px 0px 5px 0px
+      &::placeholder
+        opacity 0.6
+    >textarea
+      flex 3 100%
+      width 100%
+    >button
+      margin 5px auto 10px auto
+      color gold
+      width 50%
+    >.errorMessage
+      color: red

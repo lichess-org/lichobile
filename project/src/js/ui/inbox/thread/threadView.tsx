@@ -24,7 +24,12 @@ function threadBody(ctrl: ThreadState) {
         <form id="responseForm"
         onsubmit={function(e: Event) {
           e.preventDefault();
-          return ctrl.sendResponse(e.target as HTMLFormElement);
+          const form = e.target as HTMLFormElement;
+          const body = (form[1] as HTMLTextAreaElement).value;
+          if (body.length >= 3)
+            return ctrl.sendResponse(form);
+          else
+            window.plugins.toast.show('Minimum length is 3', 'short', 'center');
         }}>
           <input id="id" value={ctrl.id()} type="hidden" />
           <textarea id="body" className="responseBody" />

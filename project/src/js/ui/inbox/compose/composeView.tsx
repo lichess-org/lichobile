@@ -27,6 +27,7 @@ function composeBody(ctrl: ComposeState) {
         </div>
         <input id="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
+        oncreate={ctrl.id() ? h.autofocus : null}
         />
         <div key="subjectError" className="errorMessage">
           {(ctrl.errors() && ctrl.errors().subject) ? ctrl.errors().subject[0] : null}
@@ -50,7 +51,6 @@ function recipientWithName(ctrl: ComposeState) {
     placeholder={i18n('recipient')}
     autocapitalize="off"
     autocomplete="off"
-    oncreate={h.autofocus}
     value={ctrl.id() ? ctrl.id() : null}
     />
   );

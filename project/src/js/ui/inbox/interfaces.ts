@@ -34,6 +34,8 @@ export interface ComposeAttrs {
 
 export interface ThreadAttrs {
   id: string;
+  thread: Array<Thread>;
+  deleteThread: boolean;
 }
 
 export interface InputTag {

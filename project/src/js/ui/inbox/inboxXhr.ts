@@ -4,6 +4,14 @@ export function inbox() {
   return fetchJSON('/inbox', {}, true);
 }
 
+export function reload(page: number) {
+  return fetchJSON('/inbox/',
+  {
+    method: 'GET',
+    query: page ? { page } : {}
+  });
+}
+
 export function thread(id: string) {
   return fetchJSON('/inbox/' + id, {}, true);
 }

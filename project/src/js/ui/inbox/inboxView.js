@@ -13,18 +13,36 @@ export default function view(vnode) {
 
 function inboxBody(ctrl) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
-  if (ctrl.threads().nbResults === 0) {
+  const threads = ctrl.threads();
+  if (threads.nbResults === 0) {
     return (<div className="emptyInbox"> {i18n('noNewMessages')} </div>);
   }
+
+  const backEnabled = threads.currentPage > 1;
+  const forwardEnabled = threads.currentPage < threads.nbPages;
 
   return (
     <div className="native_scroller inboxWrapper">
       <table className="threadList">
         <tbody>
-          {ctrl.threads().currentPageResults.map(renderInboxItem)}
+          {threads.currentPageResults.map(renderInboxItem)}
         </tbody>
       </table>
+      <div className={'navigationButtons' + (threads.nbPages <= 1 ? ' invisible' : '')}>
+        {renderNavButton('W', !ctrl.isLoading() && backEnabled, ctrl.first)}
+        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, ctrl.prev)}
+        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
+        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
+      </div>
     </div>
+  );
+}
+
+function renderNavButton(icon, isEnabled, action) {
+  const state = isEnabled ? 'enabled' : 'disabled';
+  return (
+    <button className={`navigationButton ${state}`}
+      data-icon={icon} oncreate={h.ontap(action)} />
   );
 }
 

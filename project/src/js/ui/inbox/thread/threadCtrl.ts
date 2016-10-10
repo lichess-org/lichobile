@@ -14,6 +14,7 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
 
   const id = m.prop<string>(vnode.attrs.id);
   const thread = m.prop<Array<Thread>>();
+  const deleteAttempted = m.prop<boolean>(false);
 
   xhr.thread(id())
   .then(data => {
@@ -26,11 +27,13 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   vnode.state = {
     id,
     thread,
-    send
+    sendResponse,
+    deleteThread,
+    deleteAttempted
   };
 }
 
-function send(form: Array<InputTag>) {
+function sendResponse(form: Array<InputTag>) {
   const id = form[0].value;
   const response = form[1].value;
   if(!response || response === '') return;
@@ -44,6 +47,14 @@ function send(form: Array<InputTag>) {
     else {
       redraw();
     }
+  })
+  .catch(handleXhrError);
+}
+
+function deleteThread(id: string) {
+  xhr.deleteThread(id)
+  .then(data => {
+      router.set('/inbox/')
   })
   .catch(handleXhrError);
 }

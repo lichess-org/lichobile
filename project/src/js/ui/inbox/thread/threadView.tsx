@@ -3,27 +3,28 @@ import { header as headerWidget, backButton, userStatus } from '../../shared/com
 import layout from '../../layout';
 import i18n from '../../../i18n';
 import redraw from '../../../utils/redraw';
+import { ThreadState, Post, ThreadAttrs } from '../interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(vnode: Mithril.Vnode<ThreadAttrs>) {
+  const ctrl = vnode.state as ThreadState;
   const headerCtrl = () => headerWidget(null,
     backButton(ctrl.thread() ? ctrl.thread().name : null)
   );
   const bodyCtrl = threadBody.bind(undefined, ctrl);
 
-  return layout.free(headerCtrl, bodyCtrl);
+  return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
 }
 
-function threadBody(ctrl) {
+function threadBody(ctrl: ThreadState) {
   if (!ctrl.thread()) return null;
   return (
     <div key={ctrl.thread().id} className="threadWrapper native_scroller">
       {ctrl.thread().posts.map(renderPost)}
       <div className="responseWrapper">
         <form id="responseForm"
-        onsubmit={function(e) {
+        onsubmit={function(e: Event) {
           e.preventDefault();
-          return ctrl.sendResponse(e.target);
+          return ctrl.sendResponse(e.target as HTMLFormElement);
         }}>
           <input id="id" value={ctrl.id()} type="hidden" />
           <textarea id="body" className="responseBody" />
@@ -38,7 +39,7 @@ function threadBody(ctrl) {
   );
 }
 
-function renderPost(post, index, posts) {
+function renderPost(post: Post, index: number, posts: Array<Post>) {
   let postClass = 'postWrapper';
   if (index === 0)
     postClass += ' first';
@@ -58,12 +59,12 @@ function renderPost(post, index, posts) {
   );
 }
 
-function postDateFormat (timeInMillis) {
+function postDateFormat (timeInMillis: number) {
   const time = window.moment(timeInMillis);
   return time.format('MMM D H:mm');
 }
 
-function deleteButton (ctrl) {
+function deleteButton (ctrl: ThreadState) {
   return ctrl.deleteAttempted() ? (
     <div className="negotiation confirmDeleteDialog">
       <button key="confirmDelete" className="fatButton confirmDelete" oncreate={h.ontapY(() => {ctrl.deleteThread(ctrl.id());})}>

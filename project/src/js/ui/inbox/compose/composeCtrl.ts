@@ -4,7 +4,7 @@ import { handleXhrError } from '../../../utils';
 import * as xhr from './../inboxXhr';
 import * as helper from '../../helper';
 import * as m from 'mithril';
-import { ComposeAttrs, InputTag, SendErrorResponse } from './../interfaces';
+import { ComposeAttrs, SendErrorResponse, ComposeResponse, ComposeState } from '../interfaces';
 import router from '../../../router';
 import { FetchError } from '../../../http';
 
@@ -17,12 +17,12 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
   const errors = m.prop<SendErrorResponse>();
   id(vnode.attrs.id);
 
-  function send(form: Array<InputTag>) {
-    const recipient = form[0].value;
-    const subject = form[1].value;
-    const body = form[2].value;
+  function send(form: HTMLFormElement) {
+    const recipient = (form[0] as HTMLInputElement).value;
+    const subject = (form[1] as HTMLInputElement).value;
+    const body = (form[2] as HTMLTextAreaElement).value;
     xhr.newThread(recipient, subject, body)
-    .then(data => {
+    .then((data: ComposeResponse) => {
       if(data.ok) {
         router.set('/inbox/' + data.id)
       }
@@ -44,9 +44,9 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
     }).catch(handleXhrError);
   }
 
-  vnode.state = {
+  vnode.state = <ComposeState> {
     id,
-    send,
-    errors
+    errors,
+    send
   };
 }

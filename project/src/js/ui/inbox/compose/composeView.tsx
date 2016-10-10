@@ -2,23 +2,24 @@ import * as h from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
+import { ComposeAttrs, ComposeState } from '../interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(vnode: Mithril.Vnode<ComposeAttrs>) {
+  const ctrl = vnode.state as ComposeState;
   const headerCtrl = () => headerWidget(null,
     backButton(i18n('composeMessage'))
   );
   const bodyCtrl = composeBody.bind(undefined, ctrl);
-  return layout.free(headerCtrl, bodyCtrl);
+  return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
 }
 
-function composeBody(ctrl) {
+function composeBody(ctrl: ComposeState) {
   return (
     <div className="composeWrapper">
       <form id="composeForm"
-      onsubmit={function(e) {
+      onsubmit={function(e: Event) {
         e.preventDefault();
-        return ctrl.send(e.target);
+        return ctrl.send(e.target as HTMLFormElement);
       }}>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName()}
         <div key="recipientError" className="errorMessage">
@@ -43,7 +44,7 @@ function composeBody(ctrl) {
   );
 }
 
-function recipientWithName(ctrl) {
+function recipientWithName(ctrl: ComposeState) {
   return (
     <input id="recipient" type="text" className="composeInput"
     placeholder={i18n('recipient')}

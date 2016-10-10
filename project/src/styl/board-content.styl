@@ -13,7 +13,7 @@
     height 100%
   @media only screen and (orientation landscape) and (max-height 450px)
     width calc(100vw - 100vh + 45px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
     margin auto 0
     width calc(100vw - 100vh + 50px + 12vh)
     height calc(100vh - 50px - 12vh)
@@ -22,7 +22,7 @@
   @media only screen and (orientation: portrait)
     height 100vw
     width 100vw
-  @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
     height 80vw
     width 80vw
     margin 0 auto
@@ -33,7 +33,7 @@
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
     width calc(100vh - 45px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
     height calc(100vh - 50px - 12vh)
     width calc(100vh - 50px - 12vh)
     flex 0 0 auto
@@ -149,7 +149,7 @@
       font-size 20px
       &.correspondence
         font-size 15px
-  @media only screen and (min-height 800px) and (orientation: landscape)
+  @media only screen and (orientation: landscape) and (min-height 800px)
     > .playersTable
       margin 20px 0
   @media only screen and (orientation: landscape) and (min-height 700px)

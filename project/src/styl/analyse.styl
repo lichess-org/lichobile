@@ -6,19 +6,19 @@
   -webkit-overflow-scrolling touch
   width 100%
   display flex
-  @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
     padding-top 2em
   > .scrollerWrapper
     width 100%
     @media only screen and (orientation: portrait)
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
-    @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+    @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
       height "calc(100vh - 80vw - 50px - 2em - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
     @media only screen and (max-height 450px) and (orientation landscape)
       height "calc(100vh - 45px - %s)" % footerHeight
-    @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
       height "calc(100vh - 50px - 12vh - %s)" % footerHeight
 
 .analyseTable
@@ -101,9 +101,7 @@
 .analyseOpponentsWrapper, .analyseOpening, .analyseGameInfos
   padding 5px
   font-size 0.7em
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    font-size 0.8em
-  @media only screen and (orientation: portrait) and (min-height 1000px)
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
     font-size 0.8em
 
 .analyseGameInfosWrapper
@@ -161,7 +159,7 @@
       > piece
         width calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
         height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
     > .pocket
       height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
       > piece

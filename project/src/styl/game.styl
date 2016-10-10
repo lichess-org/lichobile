@@ -8,7 +8,7 @@
   overflow hidden
   &.crazy
     padding 0
-  @media only screen and (orientation: portrait) and (min-width 700px) and (max-height 1050px)
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
     width 80vw
     margin 0 auto
     height calc((100% - 80vw - 45px) / 2)
@@ -375,7 +375,7 @@
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px - 5vw)
-    @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
@@ -419,7 +419,7 @@
     max-height 55px
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc((100vh - 45px) / 8 + 10px)
-  @media only screen and (orientation: landscape) and (min-height 700px) and (max-width 1050px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
     height calc((100vh - 50px - 12vh) / 8 + 10px)
 
 .playTable.opponent.mode_facing

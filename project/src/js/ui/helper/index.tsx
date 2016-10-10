@@ -257,85 +257,86 @@ export function isVeryWideScreen() {
   return viewportDim().vw >= 960;
 }
 
-export function is43TabletLand({ vh, vw }: ViewportDim) {
-  return vh >= 700 && vw <= 1050;
-}
-
-export function is43TabletPort({ vh, vw }: ViewportDim) {
-  return vw >= 700 && vh <= 1050;
-}
-
 export function isLandscapeSmall({ vh }: ViewportDim) {
   return vh <= 450;
 }
 
-export function isPortrait() {
+export function is43Aspect(): boolean {
+  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4)').matches;
+}
+
+export function isPortrait(): boolean {
   return window.matchMedia('(orientation: portrait)').matches;
 }
 
-export function isLandscape() {
+export function isLandscape(): boolean {
   return window.matchMedia('(orientation: landscape)').matches;
 }
 
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string): BoardBounds  {
   const { vh, vw } = viewportDim;
+  const is43 = is43Aspect();
   const top = 50;
 
-  if (is43TabletPort(viewportDim)) {
-    const contentHeight = vh - 50;
-    const side = vw * 0.8;
-    const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
-    return {
-      top: pTop,
-      right: vw * 0.1,
-      bottom: pTop + side,
-      left: vw * 0.1,
-      width: side,
-      height: side
-    };
-  } else if (isPortrait) {
-    const contentHeight = vh - 50;
-    const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
-    return {
-      top: pTop,
-      right: vw,
-      bottom: pTop + vw,
-      left: 0,
-      width: vw,
-      height: vw
-    };
-  } else if (is43TabletLand(viewportDim)) {
-    const wsSide = vh - top - (vh * 0.12);
-    const wsTop = top + ((vh - wsSide - top) / 2);
-    return {
-      top: wsTop,
-      right: wsSide,
-      bottom: wsTop + wsSide,
-      left: 0,
-      width: wsSide,
-      height: wsSide
-    };
-  } else if (isLandscapeSmall(viewportDim)) {
-    const smallTop = 45;
-    const lSide = vh - smallTop;
-    return {
-      top: smallTop,
-      right: lSide,
-      bottom: smallTop + lSide,
-      left: 0,
-      width: lSide,
-      height: lSide
-    };
+  if (isPortrait) {
+    if (is43) {
+      const contentHeight = vh - 50;
+      const side = vw * 0.8;
+      const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
+      return {
+        top: pTop,
+        right: vw * 0.1,
+        bottom: pTop + side,
+        left: vw * 0.1,
+        width: side,
+        height: side
+      };
+    } else {
+      const contentHeight = vh - 50;
+      const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
+      return {
+        top: pTop,
+        right: vw,
+        bottom: pTop + vw,
+        left: 0,
+        width: vw,
+        height: vw
+      };
+    }
   } else {
-    const lSide = vh - top;
-    return {
-      top,
-      right: lSide,
-      bottom: top + lSide,
-      left: 0,
-      width: lSide,
-      height: lSide
-    };
+    if (is43) {
+      const wsSide = vh - top - (vh * 0.12);
+      const wsTop = top + ((vh - wsSide - top) / 2);
+      return {
+        top: wsTop,
+        right: wsSide,
+        bottom: wsTop + wsSide,
+        left: 0,
+        width: wsSide,
+        height: wsSide
+      };
+    } else if (isLandscapeSmall(viewportDim)) {
+      const smallTop = 45;
+      const lSide = vh - smallTop;
+      return {
+        top: smallTop,
+        right: lSide,
+        bottom: smallTop + lSide,
+        left: 0,
+        width: lSide,
+        height: lSide
+      };
+    } else {
+      const lSide = vh - top;
+      return {
+        top,
+        right: lSide,
+        bottom: top + lSide,
+        left: 0,
+        width: lSide,
+        height: lSide
+      };
+    }
   }
 }
 

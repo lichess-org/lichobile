@@ -23,6 +23,8 @@ input[type='checkbox']:checked:before
   content "E"
 input[type='checkbox']:checked
   background gold
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    font-size 0.7rem
 input[type='checkbox']:after
   content ''
   display inline-block

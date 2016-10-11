@@ -5,7 +5,7 @@ import * as m from 'mithril';
 
 const MILLIS = 1000;
 const MINUTE_MILLIS = 60 * 1000;
-const CLOCK_TICK_STEP = 10;
+const CLOCK_TICK_STEP = 100;
 
 export const clockMap = {
   simple: () => simpleClock(

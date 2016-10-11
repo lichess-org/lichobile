@@ -72,7 +72,8 @@ export default {
     highlights: localstorageprop('settings.boardHighlights', true),
     pieceDestinations: localstorageprop('settings.pieceDestinations', true),
     coords: localstorageprop('settings.coords', true),
-    magnified: localstorageprop('settings.pieceMagnified', true)
+    magnified: localstorageprop('settings.pieceMagnified', true),
+    pieceNotation: localstorageprop('settings.pieceNotation', true)
   },
 
   analyse: {

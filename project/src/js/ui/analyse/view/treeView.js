@@ -292,4 +292,3 @@ function renderTurn(ctrl, turn, path) {
     return renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhite'));
   }
 }
-

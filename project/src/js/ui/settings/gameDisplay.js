@@ -18,7 +18,9 @@ function renderBody() {
       m('li.list_item', formWidgets.renderCheckbox(i18n('boardHighlights'), 'highlights',
         settings.game.highlights)),
       m('li.list_item', formWidgets.renderCheckbox(i18n('pieceDestinations'), 'pieceDestinations',
-        settings.game.pieceDestinations))
+        settings.game.pieceDestinations)),
+      m('li.list_item', formWidgets.renderCheckbox('Use piece symbols in move list', 'pieceNotation',
+        settings.game.pieceNotation))
     ])
   ];
 }
@@ -33,4 +35,3 @@ export default {
     return layout.free(header, renderBody);
   }
 };
-

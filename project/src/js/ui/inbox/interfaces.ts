@@ -1,3 +1,12 @@
+export interface InboxState {
+  threads: Mithril.Property<PagedThreads>
+  isLoading: Mithril.Property<boolean>
+  first: () => void
+  prev: () => void
+  next: () => void
+  last: () => void
+}
+
 export interface PagedThreads {
   currentPage: number
   currentPageResults: Array<Thread>
@@ -14,6 +23,18 @@ export interface Thread {
   name: string
   isUnread: boolean
   updatedAt: number
+}
+
+export interface ThreadState {
+  id: Mithril.Property<string>
+  thread: Mithril.Property<ThreadData>
+  deleteAttempted: Mithril.Property<boolean>
+  sendResponse: (form: HTMLFormElement) => void
+  deleteThread: (id: string) => void
+}
+
+export interface ThreadAttrs {
+  id: string
 }
 
 export interface ThreadData {
@@ -38,16 +59,19 @@ export interface ComposeAttrs {
   id: string
 }
 
-export interface ThreadAttrs {
-  id: string
-}
-
-export interface InputTag {
-  value: string
+export interface ComposeState {
+  id: Mithril.Property<string>
+  errors: Mithril.Property<SendErrorResponse>
+  send: (form: HTMLFormElement) => void
 }
 
 export interface SendErrorResponse {
   username: Array<string>
   subject: Array<string>
   text: Array<string>
+}
+
+export interface ComposeResponse {
+  ok: string
+  id: string
 }

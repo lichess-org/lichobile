@@ -4,7 +4,7 @@ import { handleXhrError } from '../../utils';
 import * as xhr from './inboxXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
-import { PagedThreads } from './interfaces';
+import { PagedThreads, InboxState } from './interfaces';
 import { throttle } from 'lodash';
 
 export default function oninit(vnode: Mithril.Vnode<{}>): void {
@@ -33,7 +33,7 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
   })
   .catch(handleXhrError);
 
-  vnode.state = {
+  vnode.state = <InboxState> {
     threads,
     isLoading,
     first() {

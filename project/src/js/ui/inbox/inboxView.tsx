@@ -3,15 +3,16 @@ import router from '../../router';
 import {header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
+import {InboxState, Thread} from './interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(vnode: Mithril.Vnode<{}>) {
+  const ctrl = vnode.state as InboxState;
   const bodyCtrl = inboxBody.bind(undefined, ctrl);
   const footer = () => renderFooter(ctrl);
-  return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl, footer);
+  return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl, footer, undefined);
 }
 
-function inboxBody(ctrl) {
+function inboxBody(ctrl: InboxState) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
   const threads = ctrl.threads();
   if (threads.nbResults === 0) {
@@ -38,7 +39,7 @@ function inboxBody(ctrl) {
   );
 }
 
-function renderNavButton(icon, isEnabled, action) {
+function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   const state = isEnabled ? 'enabled' : 'disabled';
   return (
     <button className={`navigationButton ${state}`}
@@ -46,7 +47,7 @@ function renderNavButton(icon, isEnabled, action) {
   );
 }
 
-function renderInboxItem(thread) {
+function renderInboxItem(thread: Thread) {
   return (
     <tr className={'list_item' + (thread.isUnread ? ' unread' : '')}
     key={thread.id}
@@ -58,7 +59,7 @@ function renderInboxItem(thread) {
   );
 }
 
-function formatMessageTime (timeInMillis) {
+function formatMessageTime (timeInMillis: number) {
   const time = window.moment(timeInMillis);
   const now = window.moment();
   if (now.isAfter(time, 'day')) {
@@ -69,7 +70,7 @@ function formatMessageTime (timeInMillis) {
   }
 }
 
-function renderFooter(ctrl) {
+function renderFooter(ctrl: InboxState) {
   if (!ctrl.threads()) {
     return null;
   }

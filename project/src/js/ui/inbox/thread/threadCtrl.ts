@@ -4,7 +4,7 @@ import { handleXhrError } from '../../../utils';
 import * as xhr from './../inboxXhr';
 import * as helper from '../../helper';
 import * as m from 'mithril';
-import { ThreadData, ThreadAttrs, InputTag } from './../interfaces';
+import { ThreadData, ThreadAttrs, ThreadState } from '../interfaces';
 import router from '../../../router';
 
 export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
@@ -23,18 +23,18 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   })
   .catch(handleXhrError);
 
-  vnode.state = {
+  vnode.state = <ThreadState> {
     id,
     thread,
+    deleteAttempted,
     sendResponse,
-    deleteThread,
-    deleteAttempted
+    deleteThread
   };
 }
 
-function sendResponse(form: Array<InputTag>) {
-  const id = form[0].value;
-  const response = form[1].value;
+function sendResponse(form: HTMLFormElement) {
+  const id = (form[0] as HTMLInputElement).value;
+  const response = (form[1] as HTMLTextAreaElement).value;
   if(!response || response === '') return;
 
   xhr.respond(id, response)

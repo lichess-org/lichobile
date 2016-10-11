@@ -1,5 +1,5 @@
 import * as helper from '../helper';
-import oninit from './clockCtrl';
+import oninit from './oninit';
 import view from './clockView';
 
 export default {

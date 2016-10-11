@@ -52,13 +52,13 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
     postClass += ' last';
   return (
     <div className={postClass} key={post.createdAt}>
-      <span className="infos">
+      <div className="infos">
         {userStatus(post.sender)}
-        <span className="arrow" data-icon="H"></span>
+        <span className="arrow" data-icon="H" />
         {userStatus(post.receiver)}
         &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
-      </span>
+      </div>
       <div className="text">{post.text}</div>
     </div>
   );

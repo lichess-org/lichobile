@@ -37,28 +37,41 @@ friendsPopup.view = function() {
 };
 
 function renderFriends() {
+
   return friendsApi.list().length ?
     (
-    <ul>
-      {friendsApi.list().map(renderFriend)}
-    </ul>
+        <ul>
+          {friendsApi.list().map(renderFriend)}
+        </ul>
     ) : (
       <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
     );
 }
 
-function renderFriend(name) {
-  let userId = utils.userFullNameToId(name);
+function renderFriend(user) {
+
+  let userId = utils.userFullNameToId(user.name);
   let action = () => {
     friendsPopup.close();
     router.set('/@/' + userId);
   };
 
-  return (
+  function onTapTv(e) {
+    e.stopPropagation();
+    friendsPopup.close();
+    router.set('/@/' + userId + '/tv');
+  };
+
+  return user.playing ? (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
-      {name}
+      <span>{user.name}</span>
+      <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
     </li>
-  );
+  ) : (
+    <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
+        {user.name}
+    </li>
+  )
 }
 
 export default friendsPopup;

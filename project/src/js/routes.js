@@ -67,7 +67,7 @@ export default {
       'inbox': inbox,
       'inbox/:id': inboxThread,
       'inbox/new': inboxCompose,
-      'inbox/new/:id': inboxCompose,
+      'inbox/new/:userId': inboxCompose,
       'players': players,
       'ranking': ranking,
       'settings': settingsUi,

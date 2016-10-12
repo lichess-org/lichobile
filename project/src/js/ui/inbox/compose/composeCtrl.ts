@@ -15,7 +15,7 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
 
   const id = m.prop<string>();
   const errors = m.prop<SendErrorResponse>();
-  id(vnode.attrs.id);
+  id(vnode.attrs.userId);
 
   function send(form: HTMLFormElement) {
     const recipient = (form[0] as HTMLInputElement).value;

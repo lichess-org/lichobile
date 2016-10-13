@@ -24,7 +24,7 @@ export const clockMap = {
     Number(settings.clock.handicapInc.bottomIncrement()) * MILLIS
   ),
 
-  delay: () => delayClock.bind(
+  delay: () => delayClock(
     Number(settings.clock.delay.time()) * MINUTE_MILLIS,
     Number(settings.clock.delay.increment()) * MILLIS
   ),
@@ -59,10 +59,14 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
   const flagged = m.prop(null);
   const isRunning = m.prop(false);
   let clockInterval = null;
+  let topTimestamp, bottomTimestamp;
 
   function tick () {
+    const now = performance.now();
     if (activeSide() === 'top') {
-      topTime(Math.max(topTime() - CLOCK_TICK_STEP, 0));
+      const elapsed = now - topTimestamp;
+      topTimestamp = now;
+      topTime(Math.max(topTime() - elapsed, 0));
       if (topTime() <= 0) {
         flagged('top');
         sound.dong();
@@ -70,7 +74,9 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
       }
     }
     else if (activeSide() === 'bottom') {
-      bottomTime(Math.max(bottomTime() - CLOCK_TICK_STEP, 0));
+      const elapsed = now - bottomTimestamp;
+      bottomTimestamp = now;
+      bottomTime(Math.max(bottomTime() - elapsed, 0));
       if (bottomTime() <= 0) {
         flagged('bottom');
         sound.dong();
@@ -86,29 +92,20 @@ function handicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomInc
     }
     sound.clock();
 
-    if (activeSide() === 'top') {
-      if (side === activeSide()) {
-        activeSide('bottom');
+    if (side === 'top') {
+      if (activeSide() === 'top') {
         topTime(topTime() + topIncrement);
       }
-    }
-    else if (activeSide() === 'bottom') {
-      if (side === activeSide()) {
-        activeSide('top');
+      bottomTimestamp = performance.now();
+      activeSide('bottom');
+    } else if (side === 'bottom') {
+      if (activeSide() === 'bottom') {
         bottomTime(bottomTime() + bottomIncrement);
       }
+      topTimestamp = performance.now();
+      activeSide('top');
     }
-    else {
-      if (side === 'top') {
-        activeSide('bottom');
-      }
-      else {
-        activeSide('top');
-      }
-    }
-    if (clockInterval) {
-      clearInterval(clockInterval);
-    }
+    clearInterval(clockInterval);
     clockInterval = setInterval(tick, CLOCK_TICK_STEP);
     isRunning(true);
     redraw();

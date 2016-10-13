@@ -14,7 +14,6 @@ export default function view(vnode: Mithril.Vnode<ComposeAttrs>) {
 }
 
 function composeBody(ctrl: ComposeState) {
-  console.log(ctrl.errors());
   return (
     <div className="composeWrapper">
       <form id="composeForm"

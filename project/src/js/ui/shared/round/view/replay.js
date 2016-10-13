@@ -1,4 +1,5 @@
 import * as helper from '../../../helper';
+import settings from '../../../settings';
 
 const emptyTd = <td className="move">...</td>;
 
@@ -65,7 +66,7 @@ export function renderTable(ctrl) {
         }}
         onupdate={(vnode) => { autoScroll(vnode.dom); }}
       >
-        <table className="moves"
+        <table className={'moves' + (settings.game.pieceNotation() ? ' displayPieces' : '')}
           oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTdEl)}
         >
           <tbody>

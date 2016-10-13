@@ -3,17 +3,19 @@ import settings from '../../settings';
 import * as helper from '../helper';
 import * as m from 'mithril';
 import clockSettings from './clockSettings';
-import { clockMap } from './clocks';
+import clockSet from './clockSet';
 
 export default function oninit(vnode) {
 
   helper.analyticsTrackView('Clock');
 
   const clockObj = m.prop();
+  const clockType = m.prop();
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return;
-    clockObj(clockMap[settings.clock.clockType()]());
+    clockType(settings.clock.clockType());
+    clockObj(clockSet[settings.clock.clockType()]());
   }
 
   reload();
@@ -54,6 +56,7 @@ export default function oninit(vnode) {
     clockObj,
     reload,
     goHome,
-    clockTap
+    clockTap,
+    clockType
   };
 }

@@ -7,20 +7,18 @@ import {InboxState, Thread} from './interfaces';
 
 export default function view(vnode: Mithril.Vnode<{}>) {
   const ctrl = vnode.state as InboxState;
-  const bodyCtrl = inboxBody.bind(undefined, ctrl);
+  const headerCtrl = () => header(i18n('inbox'));
+  const bodyCtrl = () => inboxBody(ctrl);
   const footer = () => renderFooter(ctrl);
-  return layout.free(header.bind(undefined, i18n('inbox')), bodyCtrl, footer, undefined);
+  return layout.free(headerCtrl, bodyCtrl, footer, undefined);
 }
 
 function inboxBody(ctrl: InboxState) {
   if (!ctrl.threads() || !ctrl.threads().currentPageResults) return null;
   const threads = ctrl.threads();
   if (threads.nbResults === 0) {
-    return (<div className="emptyInbox"> {i18n('noNewMessages')} </div>);
+    return <div className="emptyInbox"> {i18n('noNewMessages')} </div>;
   }
-
-  const backEnabled = threads.currentPage > 1;
-  const forwardEnabled = threads.currentPage < threads.nbPages;
 
   return (
     <div className="native_scroller inboxWrapper">
@@ -29,12 +27,6 @@ function inboxBody(ctrl: InboxState) {
           {threads.currentPageResults.map(renderInboxItem)}
         </tbody>
       </table>
-      <div className={'navigationButtons' + (threads.nbPages <= 1 ? ' invisible' : '')}>
-        {renderNavButton('W', !ctrl.isLoading() && backEnabled, ctrl.first)}
-        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, ctrl.prev)}
-        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
-        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
-      </div>
     </div>
   );
 }
@@ -74,13 +66,24 @@ function renderFooter(ctrl: InboxState) {
   if (!ctrl.threads()) {
     return null;
   }
+  const threads = ctrl.threads();
+  const backEnabled = threads.currentPage > 1;
+  const forwardEnabled = threads.currentPage < threads.nbPages;
 
   return (
-    <div className="actions_bar">
-      <button key="compose" className="action_bar_button" oncreate={h.ontapY(() => router.set('/inbox/new'))}>
-        <span className="fa fa-pencil" />
-        {i18n('composeMessage')}
-      </button>
+    <div className="inboxFooter">
+      <div className={'navigationButtons' + (threads.nbPages <= 1 ? ' invisible' : '')}>
+        {renderNavButton('W', !ctrl.isLoading() && backEnabled, ctrl.first)}
+        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, ctrl.prev)}
+        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
+        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
+      </div>
+      <div className="actions_bar composeAction">
+        <button key="compose" className="action_bar_button" oncreate={h.ontapY(() => router.set('/inbox/new'))}>
+          <span className="fa fa-pencil" />
+          {i18n('composeMessage')}
+        </button>
+      </div>
     </div>
   );
 }

@@ -45,6 +45,9 @@ export default {
       dom.textContent = formatClockTime(time * 1000, isRunning);
       ctrl.els[color] = dom;
     };
+    this.clockOnUpdate = function({ dom }: Mithril.Vnode<any>) {
+      ctrl.els[color] = dom;
+    };
   },
 
   view({ attrs }: Mithril.Vnode<ClockAttrs>) {
@@ -60,7 +63,8 @@ export default {
     });
     return m('div', {
       className,
-      oncreate: this.clockOnCreate
+      oncreate: this.clockOnCreate,
+      onupdate: this.clockOnUpdate
     });
   }
 };

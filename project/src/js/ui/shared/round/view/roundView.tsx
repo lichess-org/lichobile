@@ -15,7 +15,7 @@ import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from 
 import Board, { Attrs as BoardAttrs } from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';
 import formWidgets from '../../../shared/form';
-import { view as renderClock } from '../clock/clockView';
+import Clock, { ClockAttrs } from '../clock/clockView';
 import promotion from '../promotion';
 import gameButton from './button';
 import { chatView } from '../chat';
@@ -236,7 +236,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
+        m<ClockAttrs>(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -262,7 +262,7 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
         position
       })}
       {!isCrazy && ctrl.clock ?
-        renderClock(ctrl.clock, player.color, runningColor, ctrl.vm.goneBerserk[player.color]) : (
+        m<ClockAttrs>(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player

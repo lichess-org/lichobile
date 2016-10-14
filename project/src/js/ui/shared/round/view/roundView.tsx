@@ -122,15 +122,17 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
       i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : null
   });
 
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+
   if (isPortrait) {
-    return [
+    return m.fragment({ key: orientationKey }, [
       opponent,
       board,
       player,
       renderGameActionsBar(ctrl)
-    ];
+    ]);
   } else {
-    return [
+    return m.fragment({ key: orientationKey }, [
       board,
       <section className="table">
         <header className="tableHeader">
@@ -143,7 +145,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
-    ];
+    ]);
   }
 }
 

@@ -35,6 +35,11 @@ declare namespace Mithril {
 
     trust(html: string): any;
 
+    fragment(
+      attrs: Attributes,
+      children: Children[]
+    ): Vnode<any>
+
     render(
       rootElement: HTMLElement,
       children: Children

@@ -106,6 +106,7 @@ function renderContent(ctrl, isPortrait, bounds) {
   });
 
   return [
+    <div className="analysePadding" />,
     board,
     <div className="analyseTableWrapper">
       {ctrl.explorer.enabled() ?

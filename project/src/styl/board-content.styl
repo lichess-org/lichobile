@@ -1,10 +1,12 @@
 .content_round
   width 100%
-  height calc(100% - 50px)
+  height "calc(100% - %s)" % headerHeight
   @media only screen and (orientation: landscape)
     display flex
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height "calc(100% - %s)" % tabletHeaderHeight
 
 .table, .analyseTableWrapper
   flex 1 1 auto
@@ -83,6 +85,8 @@
   height footerHeight
   width 100%
   overflow hidden
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height tabletFooterHeight
 
 .action_bar_button
   flex 1 1 25%
@@ -118,6 +122,11 @@
   @media only screen and (max-height 400px) and (orientation landscape)
     &:before
       font-size 16px
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height tabletFooterHeight
+    &:before
+      font-size 24px
+      line-height tabletFooterHeight
 
 .table
   display flex
@@ -154,7 +163,7 @@
       margin 20px 0
   @media only screen and (orientation: landscape) and (min-height 700px)
     .clock
-      font-size 30px
+      font-size 35px
       max-width 160px
     .antagonistInfos
       max-width calc(100% - 160px)

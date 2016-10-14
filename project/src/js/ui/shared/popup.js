@@ -1,14 +1,6 @@
 import * as utils from '../../utils';
 import * as helper from '../helper';
 
-function styleConf(vnode) {
-  const el = vnode.dom;
-  const vh = helper.viewportDim().vh;
-  const h = el.getBoundingClientRect().height;
-  const top = (vh - h) / 2;
-  el.style.top = top + 'px';
-}
-
 export default function(classes, headerF, contentF, isShowing, closef) {
   if (!isShowing) {
     return null;
@@ -45,7 +37,7 @@ export default function(classes, headerF, contentF, isShowing, closef) {
       <div className="popup_overlay_close"
         oncreate={closef ? helper.ontap(closef) : utils.noop}
       />
-      <div className={className} oncreate={styleConf}>
+      <div className={className}>
         {headerF ? <header>{headerF()}</header> : null}
         <div className={contentClass}>
           {contentF()}

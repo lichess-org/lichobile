@@ -73,13 +73,13 @@ export default function view(vnode) {
 function sparePieces(ctrl, color, orientation, position) {
   return m('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
-  }, ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
+  }, m('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
     return m('div.sparePieceWrapper', m('piece', {
       className: color + ' ' + role,
       'data-color': color,
       'data-role': role
     }));
-  }));
+  })));
 }
 
 function renderActionsBar(ctrl) {

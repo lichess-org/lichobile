@@ -11,7 +11,7 @@
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
     width 80vw
     margin 0 auto
-    height calc((100% - 80vw - 45px) / 2)
+    height "calc((100% - 80vw - %s) / 2)" % footerHeight
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto
@@ -21,6 +21,11 @@
         order 2
       > .pocket
         order 1
+  // tablets
+  @media only screen and (orientation: portrait) and (min-height 1000px)
+    height "calc((100% - 100vw - %s) / 2)" % tabletFooterHeight
+  @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4)
+    height "calc((100% - 80vw - %s) / 2)" % tabletFooterHeight
 
 .replay
   flex 0 0 auto
@@ -108,6 +113,8 @@
       margin-top 2px
       &.correspondence
         font-size 13px
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    max-width calc(100% - 160px)
   @media only screen and (orientation: landscape)
     &.crazy
       width calc((100vh - 50px) / 8 * 3)
@@ -174,6 +181,10 @@
       color lighten(gold, 15%)
     &.offline
       color #8c8c8c
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    font-size 35px
+    padding 8px 10px 4px
+    max-width 160px
 
 .checkCount
   font-size 0.6em
@@ -369,6 +380,7 @@
 .submitMovePopup
   background-color rgba(0,0,0,0.4)
   > .overlay_popup
+    position absolute
     top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % footerHeight
     @media only screen and (orientation: landscape)
       top calc((100vh - 70px) / 2)
@@ -379,6 +391,9 @@
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
+    // tablets
+    @media only screen and (orientation: portrait) and (min-height 1000px)
+      top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % tabletFooterHeight
     border-radius 5px
     button
       &:first-child
@@ -421,6 +436,9 @@
     height calc((100vh - 45px) / 8 + 10px)
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
     height calc((100vh - 50px - 12vh) / 8 + 10px)
+  // tablets
+  @media only screen and (orientation: portrait) and (min-height 1000px)
+    max-height "calc((100vh - 100vw - 50px - %s) / 2)" % tabletFooterHeight
 
 .playTable.opponent.mode_facing
   > .pocket
@@ -443,6 +461,10 @@
     height calc((100vh - 50px) / 8)
     max-width 50px
     max-height 50px
+  // tablets
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+    max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   &:after
     content: attr(data-nb);
     bottom: 0;

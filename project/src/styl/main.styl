@@ -15,11 +15,10 @@ main
 
 .main_header
   background headerBgDark
-  height 50px
+  height headerHeight
   &.board
     background inherit
   > nav
-    height 50px
     overflow hidden
     display flex
     justify-content space-between
@@ -27,7 +26,7 @@ main
       padding-left 5px
       text-align left
       font-size 1.1rem
-      line-height 50px
+      line-height headerHeight
       color gold
       flex 1 1 auto
       overflow hidden
@@ -40,7 +39,7 @@ main
         margin-right 2px
       &.reconnecting
         white-space nowrap
-        height 50px
+        height 100%
         text-align center
         &.withTitle
           text-align left
@@ -78,6 +77,11 @@ main
     .friends_button, .timeline_button, .game_menu_button
       > .chip
         top 7.5px
+  // tablets
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height tabletHeaderHeight
+    > nav > h1
+      line-height tabletHeaderHeight
 
 .main_header_button
   flex 0 0 auto
@@ -92,11 +96,13 @@ main
     top -2px
   &.active
     background lighten(headerBgDark, 5%)
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    font-size 28px
+    line-height 28px
 
 .back_button
   flex 0 1 auto
   font-size 1.1rem
-  height 50px
   padding 0
   white-space nowrap
   overflow hidden
@@ -104,15 +110,13 @@ main
   text-align left
   > .title, .fa
     display inline-block
-    height 50px
   > .fa
     padding 15px 0 15px 10px
   > span.fa
-    font-size 18px
     margin 0
     margin-right 15px
   > .title
-    line-height 50px
+    line-height headerHeight
     padding-right 15px
   &.main_header_button
     padding 0
@@ -120,6 +124,10 @@ main
     margin-right 10px
   &.active
     background lighten(headerBgDark, 8%)
+  // tablets
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    > .title
+      line-height tabletHeaderHeight
 
 .friends_button, .timeline_button, .game_menu_button
   > .chip
@@ -136,6 +144,12 @@ main
     top 10px
     left 7px
     background lighten(gold, 50%)
+    // tablets
+    @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+      font-size 12px
+      line-height 15px
+      height 21px
+      width 21px
 
 .timeline_button
   > .chip
@@ -198,6 +212,10 @@ main
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     animation: neon 1.5s ease-in-out infinite alternate
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    &::before
+      width 28px
+      height 28px
 
 @media only screen and (min-width 600px)
   .friends_button
@@ -209,11 +227,18 @@ main
 
 .content
   width 100%
-  height calc(100% - 50px)
+  height "calc(100% - %s)" % headerHeight
   &.withFooter
     height "calc(100% - 50px - %s)" % footerHeight
   &.fullScreen
     height 100%
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height "calc(100% - %s)" % tabletHeaderHeight
+    &.withFooter
+      height "calc(100% - 60px - %s)" % tabletFooterHeight
+
 
 .main_footer
   height footerHeight
+  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+    height tabletFooterHeight

@@ -41,7 +41,11 @@ export function view(ctrl, color, runningColor) {
     el.textContent = formatClockTime(time * 1000);
     ctrl.els[color] = el;
   }
+  function cOnUpdate(vnode) {
+    const el = vnode.dom;
+    ctrl.els[color] = el;
+  }
   return (
-    <div className={className} oncreate={cOnCreate} />
+    <div className={className} oncreate={cOnCreate} onupdate={cOnUpdate} />
   );
 }

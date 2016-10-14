@@ -132,11 +132,11 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   } else {
     return [
       board,
-      <section key="table" className="table">
-        <header key="table-header" className="tableHeader">
+      <section className="table">
+        <header className="tableHeader">
           {gameInfos(ctrl)}
         </header>
-        <section key="players-table" className="playersTable">
+        <section className="playersTable">
           {opponent}
           {renderReplayTable(ctrl)}
           {player}
@@ -249,12 +249,11 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
 
 function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
-  const key = 'player' + position + (isPortrait ? 'portrait' : 'landscape');
   const step = ctrl.plyStep(ctrl.vm.ply);
   const isCrazy = !!step.crazy;
 
   return (
-    <section className={'playTable' + (isCrazy ? ' crazy' : '')} key={key}>
+    <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
       {m<CrazyPocketAttrs>(CrazyPocket, {
         ctrl,
@@ -455,7 +454,7 @@ function renderGameActionsBar(ctrl: OnlineRound) {
   ].join(' ');
 
   return (
-    <section className="actions_bar" key="game-actions-bar">
+    <section className="actions_bar">
       {gmButton}
       {ctrl.chat ?
       <button className={chatClass} data-icon="c" key="chat"

@@ -58,7 +58,7 @@ export function renderTable(ctrl) {
     trs.push(renderTr(ctrl, i, pairs, ctrl.vm.ply));
 
   return (
-    <div key="replay-table" className="replay">
+    <div className="replay">
       <div className="gameMovesList native_scroller"
         oncreate={(vnode) => {
           setTimeout(autoScroll.bind(undefined, vnode.dom), 100);

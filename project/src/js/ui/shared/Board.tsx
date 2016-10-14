@@ -61,7 +61,7 @@ export default {
   },
 
   view(vnode: Mithril.Vnode<Attrs>) {
-    const { data, chessgroundCtrl, bounds, isPortrait, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
+    const { data, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
 
     boardTheme = boardTheme || settings.general.theme.board();
     pieceTheme = pieceTheme || settings.general.theme.piece();
@@ -73,7 +73,6 @@ export default {
       data.game.variant.key
     ].join(' ');
 
-    const key = 'board' + (isPortrait ? 'portrait' : 'landscape');
     let wrapperClass = 'game_board_wrapper';
 
     if (wrapperClasses) {
@@ -92,7 +91,7 @@ export default {
 
     return (
       <section className={wrapperClass} oncreate={this.wrapperOnCreate}
-        style={wrapperStyle} key={key}
+        style={wrapperStyle}
       >
         <div className={boardClass}
           oncreate={this.boardOnCreate}

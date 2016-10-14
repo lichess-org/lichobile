@@ -71,7 +71,7 @@ function main() {
     socket.destroy();
     socket.terminate();
   });
-  window.addEventListener('resize', onResize, false);
+  window.addEventListener('resize', debounce(onResize), false);
 
   // iOs keyboard hack
   // TODO we may want to remove this and call only on purpose
@@ -91,10 +91,9 @@ function main() {
   }, 500);
 }
 
-const debouncedRedraw = debounce(() => redraw(), 10);
 function onResize() {
   helper.clearCachedViewportDim();
-  debouncedRedraw();
+  redraw();
 }
 
 function onOnline() {

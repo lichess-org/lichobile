@@ -221,7 +221,7 @@ function refresh(): Promise<Session> {
       session = data;
       // if server tells me, reload challenges
       if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(redraw);
+        challengesApi.refresh().then(() => redraw());
       }
       redraw();
       return session;

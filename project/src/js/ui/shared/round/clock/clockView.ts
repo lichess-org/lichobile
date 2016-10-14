@@ -45,6 +45,7 @@ export default {
       dom.textContent = formatClockTime(time * 1000, isRunning);
       ctrl.els[color] = dom;
     };
+    // workaround bc/ sometimes mithril doesn't call oncreate
     this.clockOnUpdate = function({ dom }: Mithril.Vnode<any>) {
       ctrl.els[color] = dom;
     };

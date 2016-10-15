@@ -7,12 +7,13 @@ import backbutton from '../../../backbutton';
 import socket from '../../../socket';
 import * as m from 'mithril';
 
-export function chatCtrl(root) {
+export function chatCtrl(root, isShadowban) {
   const storageId = 'chat.' + root.data.game.id;
 
   let chatHeight;
 
   this.root = root;
+  this.isShadowban = isShadowban;
   this.showing = false;
   this.messages = root.data.chat || [];
   this.inputValue = '';
@@ -82,9 +83,32 @@ export function chatCtrl(root) {
   }.bind(this);
 }
 
+function isSpam(txt) {
+  return /chess-bot/.test(txt);
+}
+
+function compactableDeletedLines(l1, l2) {
+  return l1.d && l2.d && l1.u === l2.u;
+}
+
+function selectLines(ctrl) {
+  var prev, ls = [];
+  ctrl.messages.forEach(function(line) {
+    if (!line.d &&
+      (!prev || !compactableDeletedLines(prev, line)) &&
+      (!line.r || ctrl.isShadowban) &&
+      !isSpam(line.t)
+    ) ls.push(line);
+    prev = line;
+  });
+  return ls;
+}
+
 export function chatView(ctrl) {
 
   if (!ctrl.showing) return null;
+
+  var player = ctrl.root.data.player;
 
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
@@ -100,8 +124,7 @@ export function chatView(ctrl) {
           el.scrollTop = el.scrollHeight;
         }
       }, [
-        m('ul.chat_messages', ctrl.messages.map(function(msg, i, all) {
-          var player = ctrl.root.data.player;
+        m('ul.chat_messages', selectLines(ctrl).map(function(msg, i, all) {
 
           var lichessTalking = msg.u === 'lichess';
           var playerTalking = msg.c ? msg.c === player.color :

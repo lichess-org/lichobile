@@ -14,6 +14,7 @@ export default {
   },
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
+    socket.send('bye');
     socket.destroy();
     if (this.round) {
       this.round.unload();

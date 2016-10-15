@@ -212,6 +212,14 @@ StrongSocket.prototype = {
     this.ws = null;
   },
 
+  appDisconnect: function() {
+    var self = this;
+    if (self.options.sendBeforeDisconnect) {
+      self.options.sendBeforeDisconnect.forEach(function(x) { self.send(x.t, x.d, x.o); });
+    }
+    self.destroy();
+  },
+
   disconnect: function() {
     if (this.ws) {
       this.debug('Disconnect', true);
@@ -300,7 +308,7 @@ self.onmessage = function(msg) {
       }
       break;
     case 'disconnect':
-      if (socketInstance) socketInstance.destroy();
+      if (socketInstance) socketInstance.appDisconnect();
       break;
     case 'destroy':
       if (socketInstance) {

@@ -63,7 +63,6 @@ function main() {
   }
 
   document.addEventListener('online', onOnline, false);
-  document.addEventListener('offline', onOffline, false);
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
   document.addEventListener('backbutton', backbutton, false);
@@ -119,15 +118,6 @@ function onOnline() {
       socket.connect();
       session.refresh();
     }
-  }
-}
-
-function onOffline() {
-  // offline event fires every time the network connection changes
-  // it doesn't mean necessarily the network is off
-  if (isForeground() && !hasNetwork()) {
-    socket.disconnect();
-    redraw();
   }
 }
 

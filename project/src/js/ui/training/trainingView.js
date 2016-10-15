@@ -33,17 +33,21 @@ function renderContent(ctrl) {
     chessgroundCtrl: ctrl.chessground
   });
 
-  if (helper.isPortrait()) {
-    return [
+  const isPortrait = helper.isPortrait();
+
+  const key = isPortrait ? 'o-portrait' : 'o-landscape';
+
+  if (isPortrait) {
+    return m.fragment({ key }, [
       ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
       board,
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
-    ];
+    ]);
   } else {
-    return [
+    return m.fragment({ key }, [
       board,
-      <section key="table" className="table">
+      <section className="table">
         <section className="trainingTable">
           {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}
           <div className="trainingUserInfos landscape">
@@ -53,7 +57,7 @@ function renderContent(ctrl) {
         </section>
         {renderActionsBar(ctrl)}
       </section>
-    ];
+    ]);
   }
 }
 

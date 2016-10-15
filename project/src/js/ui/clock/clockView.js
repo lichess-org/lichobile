@@ -17,6 +17,14 @@ function renderClockSettingsOverlay(ctrl) {
   ];
 }
 
+function formatTime(type, time) {
+  if (type === 'hourglass') {
+    return formatTimeInSecs(Math.round(time));
+  } else {
+    return formatTimeInSecs(Math.floor(time));
+  }
+}
+
 function clockBody(ctrl) {
   const clock = ctrl.clockObj();
   if (!clock) return null;
@@ -64,7 +72,7 @@ function clockBody(ctrl) {
         }
         <div className="clockTapAreaContent">
           <span className={topClockTimeClass}>
-            { topFlagged ? 'b' : formatTimeInSecs(Math.round(clock.topTime() / 1000)) }
+            { topFlagged ? 'b' : formatTime(ctrl.clockType(), clock.topTime() / 1000) }
           </span>
         </div>
       </div>
@@ -77,7 +85,7 @@ function clockBody(ctrl) {
       <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
-            { bottomFlagged ? 'b' : formatTimeInSecs(Math.round(clock.bottomTime() / 1000)) }
+            { bottomFlagged ? 'b' : formatTime(ctrl.clockType(), clock.bottomTime() / 1000) }
           </span>
         </div>
         { clock.bottomRemainingMoves ?

@@ -22,6 +22,7 @@ interface Options {
   debug?: boolean;
   pingDelay?: number;
   sendOnOpen?: Array<LichessMessage>;
+  sendBeforeDisconnect?: Array<LichessMessage>;
   registeredEvents: string[];
 }
 
@@ -136,6 +137,7 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
       name: 'game',
       debug: false,
       sendOnOpen: [{t: 'following_onlines'}],
+      sendBeforeDisconnect: [{t: 'bye' }],
       registeredEvents: Object.keys(socketHandlers.events)
     }
   };

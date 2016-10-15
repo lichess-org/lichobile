@@ -37,6 +37,7 @@ interface Session {
   online: boolean
   engine: boolean
   booster: boolean
+  troll?: boolean
   kid: boolean
   patron: boolean
   language?: string

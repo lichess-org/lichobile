@@ -149,6 +149,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.setTitle();
 
     document.addEventListener('resume', this.reloadGameData);
+    document.addEventListener('pause', () => {console.log('pause'); socket.send('bye');});
     window.plugins.insomnia.keepAwake();
   }
 

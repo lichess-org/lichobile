@@ -1,6 +1,7 @@
 import router from '../../../router';
 import * as helper from '../../helper';
 import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
+import settings from '../../../settings';
 
 export interface Attrs {
   ctrl: AnalyseCtrlInterface
@@ -142,7 +143,7 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: any, games: Array<Explo
 function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
   if (!moves.length) return null;
   return (
-    <table className="moves"
+    <table className={'moves' + (settings.game.pieceNotation() ? ' displayPieces' : '')}
       oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTR)}
     >
       <thead>
@@ -176,4 +177,3 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
     </table>
   );
 }
-

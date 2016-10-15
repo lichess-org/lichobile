@@ -13,6 +13,7 @@ export function chatCtrl(root, isShadowban) {
   let chatHeight;
 
   this.root = root;
+  this.isShadowban = isShadowban;
   this.showing = false;
   this.messages = root.data.chat || [];
   this.inputValue = '';
@@ -95,7 +96,7 @@ function selectLines(ctrl) {
   ctrl.messages.forEach(function(line) {
     if (!line.d &&
       (!prev || !compactableDeletedLines(prev, line)) &&
-      (!line.r || isShadowban) &&
+      (!line.r || ctrl.isShadowban) &&
       !isSpam(line.t)
     ) ls.push(line);
     prev = line;

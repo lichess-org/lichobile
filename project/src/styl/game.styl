@@ -381,6 +381,7 @@
   background-color rgba(0,0,0,0.4)
   > .overlay_popup
     position absolute
+    left 7.5%
     top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % footerHeight
     @media only screen and (orientation: landscape)
       top calc((100vh - 70px) / 2)
@@ -392,6 +393,16 @@
       right 1rem
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
     // tablets
+    @media only screen and (min-width 500px)
+      left 20%
+    @media only screen and (min-width 600px)
+      left 22.5%
+    @media only screen and (min-width 700px)
+      left 25%
+    @media only screen and (min-width 800px)
+      left 27.5%
+    @media only screen and (min-width 900px)
+      left 30%
     @media only screen and (orientation: portrait) and (min-height 1000px)
       top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % tabletFooterHeight
     border-radius 5px

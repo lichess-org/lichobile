@@ -8,7 +8,7 @@
   overflow hidden
   &.crazy
     padding 0
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width 768px) and (device-height: 1024px)
     width 80vw
     margin 0 auto
     height "calc((100% - 80vw - %s) / 2)" % footerHeight
@@ -24,7 +24,7 @@
   // tablets
   @media only screen and (orientation: portrait) and (min-height 1000px)
     height "calc((100% - 100vw - %s) / 2)" % tabletFooterHeight
-  @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4), (orientation: portrait) and (device-width 768px) and (device-height: 1024px), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
     height "calc((100% - 80vw - %s) / 2)" % tabletFooterHeight
 
 .replay
@@ -387,7 +387,7 @@
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px - 5vw)
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
@@ -434,7 +434,7 @@
     max-height 55px
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc((100vh - 45px) / 8 + 10px)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
     height calc((100vh - 50px - 12vh) / 8 + 10px)
   // tablets
   @media only screen and (orientation: portrait) and (min-height 1000px)

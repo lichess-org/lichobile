@@ -5,7 +5,7 @@
 .analysePadding
   display none
 
-@media only screen and (orientation: portrait) and (aspect-ratio 3/4)
+@media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
   .analysePadding
     display block
     padding-top 1em
@@ -14,29 +14,29 @@
   -webkit-overflow-scrolling touch
   width 100%
   display flex
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
     padding-top 1em
   > .scrollerWrapper
     width 100%
     @media only screen and (orientation: portrait)
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
-    @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
+    @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
       height "calc(100vh - 80vw - 50px - 2em - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
     @media only screen and (max-height 450px) and (orientation landscape)
       height "calc(100vh - 45px - %s)" % footerHeight
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
       height "calc(100vh - 50px - 12vh - %s)" % footerHeight
 
     // tablets
     @media only screen and (orientation: portrait) and (min-height 1000px)
       height "calc(100vh - 100vw - 60px - %s)" % tabletFooterHeight
-    @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4)
+    @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
       height "calc(100vh - 80vw - 60px - 2em - %s)" % tabletFooterHeight
     @media only screen and (orientation: landscape) and (min-height 1000px)
       height "calc(100vh - 60px - %s)" % tabletFooterHeight
-    @media only screen and (orientation: landscape) and (min-height 700px) and (aspect-ratio 4/3)
+    @media only screen and (orientation: landscape) and (min-height 700px) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
       height "calc(100vh - 60px - 12vh - %s)" % tabletFooterHeight
 
 .analyseTable
@@ -177,7 +177,7 @@
       > piece
         width calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
         height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
     > .pocket
       height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
       > piece

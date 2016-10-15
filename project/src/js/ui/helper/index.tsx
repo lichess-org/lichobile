@@ -262,7 +262,7 @@ export function isLandscapeSmall({ vh }: ViewportDim) {
 }
 
 export function is43Aspect(): boolean {
-  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4)').matches;
+  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-width: 768px) and (device-height: 1024px)').matches;
 }
 
 export function isPortrait(): boolean {

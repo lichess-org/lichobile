@@ -184,27 +184,26 @@ export function loadingBackbutton(title) {
 export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = null, variant = null, wrapperClass = null, customPieceTheme = null) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
-  const boardStyle = isPortrait ? { width: vw + 'px', height: vw + 'px' } : {};
-  const boardKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape');
+  const orientKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape');
   const bounds = isPortrait ? { width: vw, height: vw } : { width: vh - 50, height: vh - 50 };
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   const board = (
-    <section key={boardKey} className={className} style={boardStyle}>
+    <section className={className}>
       {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   );
   if (isPortrait) {
-    return [
-      <section key="viewonlyOpponent" className="playTable">&nbsp;</section>,
+    return m.fragment({ key: orientKey }, [
+      <section className="playTable">&nbsp;</section>,
       board,
-      <section key="viewonlyPlayer" className="playTable">&nbsp;</section>,
-      <section key="viewonlyActions" className="actions_bar">&nbsp;</section>
-    ];
+      <section className="playTable">&nbsp;</section>,
+      <section className="actions_bar">&nbsp;</section>
+    ]);
   } else {
-    return [
+    return m.fragment({ key: orientKey}, [
       board,
-      <section key="viewonlyTable" className="table" />
-    ];
+      <section className="table" />
+    ]);
   }
 }
 

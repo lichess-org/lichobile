@@ -37,6 +37,7 @@ interface Session {
   online: boolean
   engine: boolean
   booster: boolean
+  troll?: boolean
   kid: boolean
   patron: boolean
   language?: string
@@ -81,6 +82,10 @@ function nowPlaying() {
 
 function isKidMode() {
   return session && session.kid;
+}
+
+function isShadowban() {
+  return session && session.troll;
 }
 
 function myTurnGames() {
@@ -242,6 +247,7 @@ function refresh(): Promise<Session> {
 export default {
   isConnected,
   isKidMode,
+  isShadowban,
   logout,
   signup,
   login: throttle(login, 1000),

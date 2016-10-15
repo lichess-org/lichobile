@@ -116,7 +116,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     };
 
     this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
-      null : new (<any>chatCtrl)(this);
+      null : new (<any>chatCtrl)(this, session.isShadowban());
 
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 

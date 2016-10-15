@@ -1,7 +1,7 @@
 import router from './router';
 import redraw from './utils/redraw';
 import { apiVersion } from './http';
-import { xor } from 'lodash';
+import { xorWith, isEqual, cloneDeep } from 'lodash';
 import { lichessSri, autoredraw, hasNetwork } from './utils';
 import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';
@@ -56,8 +56,12 @@ let currentMoveLatency: number = 0;
 
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: (name: string) => autoredraw(() => friendsApi.add(name)),
+  following_enters: (name: string, payload: any) =>
+    autoredraw(() => friendsApi.add(name, payload.playing || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
+  following_playing: name => autoredraw(() => friendsApi.playing(name)),
+  following_stopped_playing: name =>
+    autoredraw(() => friendsApi.stoppedPlaying(name)),
   challenges: (data: any) => {
     challengesApi.set(data);
     redraw();
@@ -67,10 +71,16 @@ const defaultHandlers: MessageHandlers = {
   }
 };
 
-function handleFollowingOnline(data: Array<string>) {
-  const curList = friendsApi.list();
-  friendsApi.set(data);
-  if (xor(curList, data).length > 0) {
+function handleFollowingOnline(data: Array<string>, payload: any) {
+  // We clone the friends online before we update it for comparison later
+  const oldFriendList = cloneDeep(friendsApi.list());
+
+  const friendsPlaying = payload.playing;
+  friendsApi.set(data, friendsPlaying);
+
+  const newFriendList = friendsApi.list()
+
+  if (xorWith(oldFriendList, newFriendList, isEqual).length > 0) {
     redraw();
   }
 }

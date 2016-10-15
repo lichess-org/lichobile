@@ -214,7 +214,7 @@ function rememberLogin() {
   });
 }
 
-function refresh() {
+function refresh(): Promise<Session> {
   if (hasNetwork() && isConnected()) {
     return fetchJSON('/account/info')
     .then(data => {
@@ -235,7 +235,7 @@ function refresh() {
       throw err;
     });
   } else {
-    return Promise.resolve(false);
+    return Promise.resolve(undefined);
   }
 }
 

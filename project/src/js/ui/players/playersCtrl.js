@@ -58,8 +58,11 @@ export default function oninit(vnode) {
     searchResults,
     onInput: throttle(e => {
       const term = e.target.value.trim();
-      if (term.length > 1)
-        xhr.autocomplete(term).then(data => searchResults(data));
+      if (term.length >= 3)
+        xhr.autocomplete(term).then(data => {
+          searchResults(data);
+          redraw();
+        });
     }, 250),
     closeSearch,
     goSearch() {

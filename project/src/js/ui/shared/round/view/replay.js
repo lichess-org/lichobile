@@ -1,5 +1,5 @@
 import * as helper from '../../../helper';
-import settings from '../../../settings';
+import settings from '../../../../settings';
 
 const emptyTd = <td className="move">...</td>;
 

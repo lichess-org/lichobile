@@ -2,6 +2,7 @@ import * as helper from '../../../helper';
 import settings from '../../../../settings';
 
 const emptyTd = <td className="move">...</td>;
+let pieceNotation;
 
 function renderTd(ctrl, step, curPly, orEmpty) {
   return step ? (
@@ -57,6 +58,7 @@ export function renderTable(ctrl) {
   const trs = [];
   for (let i = 0, len = pairs.length; i < len; i++)
     trs.push(renderTr(ctrl, i, pairs, ctrl.vm.ply));
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
 
   return (
     <div key="replay-table" className="replay">
@@ -66,7 +68,7 @@ export function renderTable(ctrl) {
         }}
         onupdate={(vnode) => { autoScroll(vnode.dom); }}
       >
-        <table className={'moves' + (settings.game.pieceNotation() ? ' displayPieces' : '')}
+        <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
           oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTdEl)}
         >
           <tbody>

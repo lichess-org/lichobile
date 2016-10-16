@@ -10,6 +10,8 @@ import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import { OfflineRoundInterface, Position, Material } from '../round';
 import settings from '../../../settings';
 
+let pieceNotation: boolean;
+
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   const sit = ctrl.replay.situation();
   return utils.oppositeColor(color) === 'white' ?
@@ -192,8 +194,9 @@ function renderTable(ctrl: any, curPly: number) {
   const steps = ctrl.situations;
   const pairs: Array<[GameSituation, GameSituation]> = [];
   for (let i = 1; i < steps.length; i += 2) pairs.push([steps[i], steps[i + 1]]);
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
   return (
-    <table className={'moves' + (settings.game.pieceNotation() ? ' displayPieces' : '')}>
+    <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}>
       <tbody>
         {pairs.map((pair, i) => {
           return (

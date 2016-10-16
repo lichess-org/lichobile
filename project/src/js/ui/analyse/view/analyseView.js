@@ -25,6 +25,8 @@ import treePath from '../path';
 import { renderTree } from './treeView';
 import settings from '../../../settings';
 
+let pieceNotation;
+
 export default function analyseView(vnode) {
   const isPortrait = helper.isPortrait();
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, helper.isIpadLike(), helper.isLandscapeSmall(), 'analyse');
@@ -313,7 +315,8 @@ function renderReplay(ctrl) {
     tree.push(<div key="gameResult" className="result">{result}</div>);
     tree.push(renderStatus(ctrl));
   }
-  const replayClass = 'analyseReplay native_scroller' + (settings.game.pieceNotation() ? ' displayPieces' : '');
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+  const replayClass = 'analyseReplay native_scroller' + (pieceNotation ? ' displayPieces' : '');
   return (
     <div id="replay" className={replayClass}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}

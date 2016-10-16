@@ -14,7 +14,6 @@ import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
 import importPgnPopup from './importPgnPopup';
 import * as util from './util';
-import { renderStepsTxt } from './pgnExport';
 import cevalCtrl from './ceval/cevalCtrl';
 import crazyValid from './crazy/crazyValid';
 import explorerCtrl from './explorer/explorerCtrl';
@@ -335,7 +334,8 @@ export default class AnalyseCtrl {
       fen: situation.fen,
       uci: situation.uciMoves[0],
       san: situation.pgnMoves[0],
-      crazy: situation.crazyhouse
+      crazy: situation.crazyhouse,
+      pgnMoves: this.vm.step.pgnMoves ? this.vm.step.pgnMoves.concat(situation.pgnMoves) : undefined
     };
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
@@ -428,7 +428,7 @@ export default class AnalyseCtrl {
       getPGN(this.data.game.id)
       .then(pgn => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
-    } else if (this.source === 'offline') {
+    } else {
       const endSituation = this.data.steps[this.data.steps.length - 1];
       chess.pgnDump({
         variant: this.data.game.variant.key,
@@ -437,8 +437,6 @@ export default class AnalyseCtrl {
       })
       .then((res: chess.PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
       .catch(console.error.bind(console));
-    } else {
-      window.plugins.socialsharing.share(renderStepsTxt(this.analyse.getSteps(this.vm.path)));
     }
   }
 

@@ -8,9 +8,10 @@ export function getCurrentOTBGame() {
   return storage.get(otbStorageKey);
 }
 
-export function getAnalyseData(data: StoredOfflineGame) {
+export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
   if (!data) return null;
-  data.data.steps = data.situations.map((o: GameSituation) => {
+  const aData = <AnalysisData>data.data;
+  aData.steps = data.situations.map((o: GameSituation) => {
     const step: AnalysisStep = {
       fen: o.fen,
       ply: o.ply,
@@ -25,7 +26,7 @@ export function getAnalyseData(data: StoredOfflineGame) {
     };
     return step;
   });
-  return data.data;
+  return aData;
 }
 
 export function setCurrentOTBGame(game: StoredOfflineGame): void {

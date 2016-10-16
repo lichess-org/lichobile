@@ -42,7 +42,8 @@ export function makeDefaultData(fen: string): AnalysisData {
         ply,
         san: null,
         uci: null,
-        check: false
+        check: false,
+        pgnMoves: []
       }
     ]
   };

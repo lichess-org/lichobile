@@ -6,7 +6,7 @@ export interface SanToRole {
   [san: string]: Role
 }
 
-export type Source = 'online' | 'offline' | 'fen';
+export type Source = 'online' | 'offline';
 
 export interface PathObj {
   ply: number

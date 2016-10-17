@@ -55,6 +55,10 @@ export function chatCtrl(root, isShadowban) {
     redraw();
   }.bind(this);
 
+  this.scrollChatToBottom = function(el) {
+    el.scrollTop = 999999;
+  }.bind(this);
+
   function onKeyboardShow(e) {
     if (window.cordova.platformId === 'ios') {
       let chat = document.getElementById('chat_scroller');
@@ -121,7 +125,10 @@ export function chatView(ctrl) {
     m('div.modal_content', [
       m('div#chat_scroller.native_scroller', {
         oncreate: el => {
-          el.scrollTop = el.scrollHeight;
+          ctrl.scrollChatToBottom(el.dom);
+        },
+        onupdate: el => {
+          ctrl.scrollChatToBottom(el.dom);
         }
       }, [
         m('ul.chat_messages', selectLines(ctrl).map(function(msg, i, all) {

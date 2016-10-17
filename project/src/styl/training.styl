@@ -8,9 +8,7 @@
   color #fff
   overflow hidden
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4)
-    height "calc((100% - 80vw - %s) / 2)" % footerHeight
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
-    height "calc((100% - 80vw - %s) / 2)" % tabletFooterHeight
+    height "calc((100% - 90vw - %s) / 2)" % footerHeight
   @media only screen and (orientation: landscape)
     padding 0
     flex 1 0 auto

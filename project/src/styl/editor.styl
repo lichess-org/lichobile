@@ -1,11 +1,14 @@
 pitHeight = (100vh - 50px) / 8
-pitHeightBigScreen = (100vh - 60px) / 8 + 5vh
+pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
 
 .editor
+  height 100%
   .game_board_wrapper
     transform none
-  @media only screen and (orientation: portrait)
-    height 100%
+    @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+      height 90vw
+      width 90vw
+      margin 0 auto
   @media only screen and (orientation: landscape)
     height calc(100vh - 50px)
     width "calc(100vh - 50px - (%s * 2))" % pitHeight
@@ -38,14 +41,12 @@ pitHeightBigScreen = (100vh - 60px) / 8 + 5vh
     background-color #777
     box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
     border-radius 3px
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
-    height "calc((100% - 80vw - %s) / 2)" % footerHeight
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    height "calc((100% - 90vw - %s) / 2)" % footerHeight
   @media only screen and (orientation: landscape)
     height "calc(%s)" % pitHeight
   @media only screen and (orientation: landscape) and (min-height 700px)
     height "calc(%s - 2vh)" % pitHeightBigScreen
-  @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
-    height "calc((100% - 80vw - %s) / 2)" % tabletFooterHeight
 
 .sparePieceWrapper
   position relative

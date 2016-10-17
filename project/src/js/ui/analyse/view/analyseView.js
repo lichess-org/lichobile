@@ -102,11 +102,11 @@ function renderContent(ctrl, isPortrait, bounds) {
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    shapes
+    shapes,
+    wrapperClasses: 'analyse'
   });
 
   return [
-    <div className="analysePadding" />,
     board,
     <div className="analyseTableWrapper">
       {ctrl.explorer.enabled() ?

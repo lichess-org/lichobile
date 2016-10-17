@@ -8,10 +8,10 @@
   overflow hidden
   &.crazy
     padding 0
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width 768px) and (device-height: 1024px)
-    width 80vw
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    height "calc((100% - 95vw - %s) / 2)" % footerHeight
+    width 95vw
     margin 0 auto
-    height "calc((100% - 80vw - %s) / 2)" % footerHeight
   @media only screen and (orientation: landscape)
     padding 0
     flex 0 0 auto
@@ -21,23 +21,17 @@
         order 2
       > .pocket
         order 1
-  // tablets
-  @media only screen and (orientation: portrait) and (min-height 1000px)
-    height "calc((100% - 100vw - %s) / 2)" % tabletFooterHeight
-  @media only screen and (orientation: portrait) and (min-height 1000px) and (aspect-ratio 3/4), (orientation: portrait) and (device-width 768px) and (device-height: 1024px), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
-    height "calc((100% - 80vw - %s) / 2)" % tabletFooterHeight
 
 .replay
   flex 0 0 auto
   height 250px
-  padding 1rem 2rem
   overflow hidden
+  @media only screen and (orientation: landscape)
+    padding 0
   @media only screen and (orientation: landscape) and (max-height 450px)
     height 100px
-    padding 5px 0
   @media only screen and (orientation: landscape) and (min-height 450px)
     height 150px
-    padding 5px 0
   @media only screen and (orientation: landscape) and (min-height 550px)
     height 200px
   @media only screen and (orientation: landscape) and (min-height 700px)
@@ -113,7 +107,7 @@
       margin-top 2px
       &.correspondence
         font-size 13px
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+  @media only screen and (min-width 600px)
     max-width calc(100% - 160px)
     .ratingAndMaterial
       height 25px
@@ -121,6 +115,16 @@
     &.crazy
       width calc((100vh - 50px) / 8 * 3)
       max-width calc((100vh - 50px) / 8 * 3)
+  @media only screen and (min-width 600px)
+    &.crazy
+      > .antagonistUser
+        font-size 1em
+  @media only screen and (orientation landscape)
+    .ratingAndMaterial
+      height 14px
+  @media only screen and (orientation landscape) and (min-width 801px)
+    .ratingAndMaterial
+      height 18px
   @media only screen and (min-width 960px) and (orientation landscape)
     .ratingAndMaterial
       height 25px
@@ -146,6 +150,10 @@
       color green
     &.no
       color red
+  @media only screen and (orientation landscape) and (max-width 600px)
+    font-size 1em
+  @media only screen and (min-width: 600px)
+    font-size 1.2rem
 
 .clock
   transform translateZ(0)
@@ -183,7 +191,7 @@
       color lighten(gold, 15%)
     &.offline
       color #8c8c8c
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
+  @media only screen and (min-width: 600px)
     font-size 35px
     padding 8px 10px 4px
     max-width 160px
@@ -390,7 +398,7 @@
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px - 5vw)
-    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
+    @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
       left initial
       right 1rem
       width calc(100vw - 100vh + 50px + 12vh - 5vw)
@@ -405,8 +413,6 @@
       left 27.5%
     @media only screen and (min-width 900px)
       left 30%
-    @media only screen and (orientation: portrait) and (min-height 1000px)
-      top "calc(100vh - %s - ((100vh - 100vw) / 2) / 2)" % tabletFooterHeight
     border-radius 5px
     button
       &:first-child
@@ -447,11 +453,8 @@
     max-height 55px
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc((100vh - 45px) / 8 + 10px)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     height calc((100vh - 50px - 12vh) / 8 + 10px)
-  // tablets
-  @media only screen and (orientation: portrait) and (min-height 1000px)
-    max-height "calc((100vh - 100vw - 50px - %s) / 2)" % tabletFooterHeight
 
 .playTable.opponent.mode_facing
   > .pocket
@@ -468,16 +471,13 @@
   max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   background-position center
+  background-size contain
   position relative
   @media only screen and (orientation: landscape)
     width calc((100vh - 50px) / 8)
     height calc((100vh - 50px) / 8)
     max-width 50px
     max-height 50px
-  // tablets
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
-    max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
   &:after
     content: attr(data-nb);
     bottom: 0;

@@ -27,16 +27,13 @@ borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
 headerHeight = 50px
-tabletHeaderHeight = 60px
-
 footerHeight = 45px
-tabletFooterHeight = 55px
 
 html
   font-family 'Noto Sans', sans-serif
   font-size 100%
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    font-size 130%
+  @media only screen and (min-width 1025px)
+    font-size 120%
 
 body
   background-color bgdark

@@ -262,7 +262,7 @@ export function isLandscapeSmall({ vh }: ViewportDim) {
 }
 
 export function is43Aspect(): boolean {
-  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-width: 768px) and (device-height: 1024px)').matches;
+  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches;
 }
 
 export function isPortrait(): boolean {
@@ -281,13 +281,13 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
   if (isPortrait) {
     if (is43) {
       const contentHeight = vh - 50;
-      const side = vw * 0.8;
+      const side = vw * 0.95;
       const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
       return {
         top: pTop,
-        right: vw * 0.1,
+        right: vw * 0.025,
         bottom: pTop + side,
-        left: vw * 0.1,
+        left: vw * 0.025,
         width: side,
         height: side
       };

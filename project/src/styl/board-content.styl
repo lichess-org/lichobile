@@ -5,8 +5,6 @@
     display flex
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height "calc(100% - %s)" % tabletHeaderHeight
 
 .table, .analyseTableWrapper
   flex 1 1 auto
@@ -15,7 +13,7 @@
     height 100%
   @media only screen and (orientation landscape) and (max-height 450px)
     width calc(100vw - 100vh + 45px)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     margin auto 0
     width calc(100vw - 100vh + 50px + 12vh)
     height calc(100vh - 50px - 12vh)
@@ -24,9 +22,9 @@
   @media only screen and (orientation: portrait)
     height 100vw
     width 100vw
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-width: 768px) and (device-height: 1024px)
-    height 80vw
-    width 80vw
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    height 95vw
+    width 95vw
     margin 0 auto
   @media only screen and (orientation: landscape)
     height calc(100vh - 50px)
@@ -35,7 +33,7 @@
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
     width calc(100vh - 45px)
-  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-width: 768px) and (device-height: 1024px)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     height calc(100vh - 50px - 12vh)
     width calc(100vh - 50px - 12vh)
     flex 0 0 auto
@@ -85,8 +83,6 @@
   height footerHeight
   width 100%
   overflow hidden
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height tabletFooterHeight
 
 .action_bar_button
   flex 1 1 25%
@@ -122,11 +118,6 @@
   @media only screen and (max-height 400px) and (orientation landscape)
     &:before
       font-size 16px
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height tabletFooterHeight
-    &:before
-      font-size 24px
-      line-height tabletFooterHeight
 
 .table
   display flex
@@ -161,7 +152,15 @@
   @media only screen and (orientation: landscape) and (min-height 800px)
     > .playersTable
       margin 20px 0
-  @media only screen and (orientation: landscape) and (min-height 700px)
+  @media only screen and (orientation: landscape) and (min-width 801px)
+    .clock
+      font-size 25px
+      max-width 120px
+    .antagonistInfos
+      max-width calc(100% - 120px)
+      > .antagonistUser
+        font-size 1rem
+  @media only screen and (orientation: landscape) and (min-width 1025px)
     .clock
       font-size 35px
       max-width 160px

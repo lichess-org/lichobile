@@ -78,11 +78,6 @@ main
     .friends_button, .timeline_button, .game_menu_button
       > .chip
         top 7.5px
-  // tablets
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height tabletHeaderHeight
-    > nav > h1
-      line-height tabletHeaderHeight
 
 .main_header_button
   flex 0 0 auto
@@ -97,9 +92,6 @@ main
     top -2px
   &.active
     background lighten(headerBgDark, 5%)
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    font-size 28px
-    line-height 28px
 
 .back_button
   flex 0 1 auto
@@ -125,10 +117,6 @@ main
     margin-right 10px
   &.active
     background lighten(headerBgDark, 8%)
-  // tablets
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    > .title
-      line-height tabletHeaderHeight
 
 .friends_button, .timeline_button, .game_menu_button
   > .chip
@@ -145,12 +133,6 @@ main
     top 10px
     left 7px
     background lighten(gold, 50%)
-    // tablets
-    @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-      font-size 12px
-      line-height 15px
-      height 21px
-      width 21px
 
 .timeline_button
   > .chip
@@ -213,10 +195,6 @@ main
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     animation: neon 1.5s ease-in-out infinite alternate
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    &::before
-      width 28px
-      height 28px
 
 @media only screen and (min-width 600px)
   .friends_button
@@ -233,13 +211,7 @@ main
     height "calc(100% - 50px - %s)" % footerHeight
   &.fullScreen
     height 100%
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height "calc(100% - %s)" % tabletHeaderHeight
-    &.withFooter
-      height "calc(100% - 60px - %s)" % tabletFooterHeight
 
 
 .main_footer
   height footerHeight
-  @media only screen and (orientation: landscape) and (min-height 700px), (orientation: portrait) and (min-height 1000px)
-    height tabletFooterHeight

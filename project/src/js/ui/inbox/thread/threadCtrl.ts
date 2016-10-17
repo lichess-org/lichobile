@@ -35,7 +35,7 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
 function sendResponse(form: HTMLFormElement) {
   const id = (form[0] as HTMLInputElement).value;
   const response = (form[1] as HTMLTextAreaElement).value;
-  if(!response || response === '') return;
+  if(!response) return;
 
   xhr.respond(id, response)
   .then(data => {
@@ -51,8 +51,6 @@ function sendResponse(form: HTMLFormElement) {
 
 function deleteThread(id: string) {
   xhr.deleteThread(id)
-  .then(data => {
-      router.set('/inbox/')
-  })
+  .then(() => router.set('/inbox/'))
   .catch(handleXhrError);
 }

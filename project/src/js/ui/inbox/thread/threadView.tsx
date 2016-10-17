@@ -10,8 +10,8 @@ export default function view(vnode: Mithril.Vnode<ThreadAttrs>) {
   const headerCtrl = () => headerWidget(null,
     backButton(ctrl.thread() ? ctrl.thread().name : null)
   );
-  const bodyCtrl = threadBody.bind(undefined, ctrl);
-
+  const bodyCtrl = () => threadBody(ctrl);
+  window.addEventListener('native.keyboardshow', () => { (document.activeElement as any).scrollIntoView(true) });
   return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
 }
 
@@ -31,8 +31,8 @@ function threadBody(ctrl: ThreadState) {
           else
             window.plugins.toast.show('Minimum length is 3', 'short', 'center');
         }}>
-          <input id="id" value={ctrl.id()} type="hidden" />
-          <textarea id="body" className="responseBody" />
+          <input id="id" key="id" value={ctrl.id()} type="hidden" />
+          <textarea id="body" key="body" className="responseBody" />
           <button key="send" className="fatButton sendResponse" oncreate={h.autofocus} type="submit">
             <span className="fa fa-check" />
             {i18n('send')}
@@ -52,13 +52,13 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
     postClass += ' last';
   return (
     <div className={postClass} key={post.createdAt}>
-      <span className="infos">
+      <div className="infos">
         {userStatus(post.sender)}
-        <span className="arrow" data-icon="H"></span>
+        <span className="arrow" data-icon="H" />
         {userStatus(post.receiver)}
         &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
-      </span>
+      </div>
       <div className="text">{post.text}</div>
     </div>
   );
@@ -76,7 +76,11 @@ function deleteButton (ctrl: ThreadState) {
         <span className="fa fa-trash-o" />
         Delete
       </button>
-      <button key="cancelDelete" className="fatButton cancelDelete" oncreate={h.ontapY(() => {ctrl.deleteAttempted(false); redraw();})}>
+      <button key="cancelDelete" className="fatButton cancelDelete"
+        oncreate={h.ontapY(() => {
+          ctrl.deleteAttempted(false);
+          redraw();
+        })}>
         <span className="fa fa-ban" />
         {i18n('cancel')}
       </button>

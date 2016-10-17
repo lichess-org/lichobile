@@ -9,7 +9,7 @@ export default function view(vnode: Mithril.Vnode<ComposeAttrs>) {
   const headerCtrl = () => headerWidget(null,
     backButton(i18n('composeMessage'))
   );
-  const bodyCtrl = composeBody.bind(undefined, ctrl);
+  const bodyCtrl = () => composeBody(ctrl);
   return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
 }
 
@@ -22,20 +22,14 @@ function composeBody(ctrl: ComposeState) {
         return ctrl.send(e.target as HTMLFormElement);
       }}>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName()}
-        <div key="recipientError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().username) ? ctrl.errors().username[0] : null}
-        </div>
-        <input id="subject" type="text" className="composeInput"
+        {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
+        <input id="subject" key="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
         oncreate={ctrl.id() ? h.autofocus : null}
         />
-        <div key="subjectError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().subject) ? ctrl.errors().subject[0] : null}
-        </div>
-        <textarea id="body" className="composeInput" />
-        <div key="textError" className="errorMessage">
-          {(ctrl.errors() && ctrl.errors().text) ? ctrl.errors().text[0] : null}
-        </div>
+        {(ctrl.errors() && ctrl.errors().subject) ? renderError('subjectError', ctrl.errors().subject[0]) : null}
+        <textarea id="body" key="body" className="composeInput" />
+        {(ctrl.errors() && ctrl.errors().text) ? renderError('textError', ctrl.errors().text[0]) : null}
         <button key="send" className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />
           {i18n('send')}
@@ -47,22 +41,30 @@ function composeBody(ctrl: ComposeState) {
 
 function recipientWithName(ctrl: ComposeState) {
   return (
-    <input id="recipient" type="text" className="composeInput"
+    <input id="recipient" key="recipient" type="text" className="composeInput"
     placeholder={i18n('recipient')}
     autocapitalize="off"
     autocomplete="off"
-    value={ctrl.id() ? ctrl.id() : null}
+    value={ctrl.id()}
     />
   );
 }
 
 function recipientWithoutName() {
   return (
-    <input id="recipient" type="text" className="composeInput"
+    <input id="recipient" key="recipient" type="text" className="composeInput"
     placeholder={i18n('recipient')}
     autocapitalize="off"
     autocomplete="off"
     oncreate={h.autofocus}
     />
+  );
+}
+
+function renderError(divKey: string, errorMessage: string) {
+  return (
+    <div key={divKey} className="errorMessage">
+      {errorMessage}
+    </div>
   );
 }

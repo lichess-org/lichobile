@@ -56,7 +56,7 @@ export interface User {
 }
 
 export interface ComposeAttrs {
-  id: string
+  userId: string
 }
 
 export interface ComposeState {

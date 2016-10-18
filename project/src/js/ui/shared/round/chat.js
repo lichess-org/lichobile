@@ -56,7 +56,7 @@ export function chatCtrl(root, isShadowban) {
   }.bind(this);
 
   this.scrollChatToBottom = function(el) {
-    el.scrollTop =  el.scrollHeight;
+    el.scrollTop = el.scrollHeight;
   }.bind(this);
 
   function onKeyboardShow(e) {

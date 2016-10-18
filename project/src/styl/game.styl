@@ -13,8 +13,8 @@
     width 95vw
     margin 0 auto
   @media only screen and (orientation: landscape)
+    flex 1 0 auto
     padding 0
-    flex 0 0 auto
     height initial
     &.crazy
       > .antagonistInfos
@@ -121,21 +121,24 @@
         font-size 1em
   @media only screen and (orientation landscape)
     .ratingAndMaterial
-      height 14px
-  @media only screen and (orientation landscape) and (min-width 801px)
+      height 16px
+  @media only screen and (orientation landscape) and (min-width 600px)
     .ratingAndMaterial
       height 18px
-  @media only screen and (min-width 960px) and (orientation landscape)
+  @media only screen and (orientation landscape) and (min-width 801px)
     .ratingAndMaterial
-      height 25px
+      height 20px
     .rating
       display block
       margin 0.2rem 0 0.5rem
+  @media only screen and (min-width 1025px) and (orientation landscape)
+    .ratingAndMaterial
+      height 22px
 
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-size 1.1em
+  font-size 1em
   white-space nowrap
   > .status
     margin-right 5px
@@ -150,9 +153,9 @@
       color green
     &.no
       color red
-  @media only screen and (orientation landscape) and (max-width 600px)
+  @media only screen and (orientation landscape)
     font-size 1em
-  @media only screen and (min-width: 600px)
+  @media only screen and (orientation portrait) and (min-width: 600px)
     font-size 1.2rem
 
 .clock

@@ -23,21 +23,15 @@ export default {
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 
     this.pocketOnCreate = function({ dom }: Mithril.Vnode<void>) {
-      const contentNode = document.getElementById('content_round');
       dom.addEventListener('touchstart', onstart);
-      if (contentNode) {
-        contentNode.addEventListener('touchmove', onmove);
-        contentNode.addEventListener('touchend', onend);
-      }
+      dom.addEventListener('touchmove', onmove);
+      dom.addEventListener('touchend', onend);
     };
 
     this.pocketOnRemove = function({ dom }: Mithril.Vnode<void>) {
-      const contentNode = document.getElementById('content_round');
       dom.removeEventListener('touchstart', onstart);
-      if (contentNode) {
-        contentNode.removeEventListener('touchmove', onmove);
-        contentNode.removeEventListener('touchend', onend);
-      }
+      dom.removeEventListener('touchmove', onmove);
+      dom.removeEventListener('touchend', onend);
     };
   },
 

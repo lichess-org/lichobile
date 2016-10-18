@@ -13,6 +13,8 @@
     width 100%
     @media only screen and (orientation: portrait)
       height "calc(100vh - 100vw - 50px - %s)" % footerHeight
+    @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+      height "calc(100vh - 98vw - 50px - %s)" % footerHeight
     @media only screen and (orientation: landscape)
       height "calc(100vh - 50px - %s)" % footerHeight
     @media only screen and (max-height 450px) and (orientation landscape)
@@ -149,6 +151,11 @@
         font-size: 10px;
         line-height: 10px;
         padding: 1px 2px 2px 2px;
+  @media only screen and (orientation portrait) and (min-width 600px)
+    > .pocket > piece:after
+      font-size 18px
+      line-height 18px
+      padding 2px 3px 3px 3px
   @media only screen and (orientation: landscape)
     + .analyseOpponent
       margin-top 10px

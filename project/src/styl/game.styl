@@ -476,11 +476,6 @@
   background-position center
   background-size contain
   position relative
-  @media only screen and (orientation: landscape)
-    width calc((100vh - 50px) / 8)
-    height calc((100vh - 50px) / 8)
-    max-width 50px
-    max-height 50px
   &:after
     content: attr(data-nb);
     bottom: 0;
@@ -498,6 +493,18 @@
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15) inset
   &:first-child
     border-radius: 3px 0 0 3px;
+  @media only screen and (orientation portrait) and (min-width 600px)
+    &:after
+      font-size 18px
+      line-height 14px
+      padding 3px 5px 4px 5px
+      right 3px
+      bottom 3px
+  @media only screen and (orientation: landscape)
+    width calc((100vh - 50px) / 8)
+    height calc((100vh - 50px) / 8)
+    max-width 50px
+    max-height 50px
 
 .pocket > piece[data-nb='0']
   opacity: 0.1;

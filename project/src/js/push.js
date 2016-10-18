@@ -19,9 +19,8 @@ function notificationOpenedCallback(data) {
             i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top');
           break;
         case 'newMessage':
-          session.refresh();
           window.plugins.toast.show(
-            'New mesasge from ' + lightPlayerName(additionalData.userData.sender), 'long', 'top');
+            'New message from ' + lightPlayerName(additionalData.userData.sender), 'long', 'top');
           break;
         case 'gameMove':
         case 'gameFinish':

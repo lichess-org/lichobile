@@ -56,7 +56,7 @@ export function chatCtrl(root, isShadowban) {
   }.bind(this);
 
   this.scrollChatToBottom = function(el) {
-    el.scrollTop = 999999;
+    el.scrollTop =  el.scrollHeight;
   }.bind(this);
 
   function onKeyboardShow(e) {
@@ -124,12 +124,8 @@ export function chatView(ctrl) {
     ]),
     m('div.modal_content', [
       m('div#chat_scroller.native_scroller', {
-        oncreate: el => {
-          ctrl.scrollChatToBottom(el.dom);
-        },
-        onupdate: el => {
-          ctrl.scrollChatToBottom(el.dom);
-        }
+        oncreate: el => ctrl.scrollChatToBottom(el.dom),
+        onupdate: el => ctrl.scrollChatToBottom(el.dom)
       }, [
         m('ul.chat_messages', selectLines(ctrl).map(function(msg, i, all) {
 

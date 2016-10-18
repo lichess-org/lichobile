@@ -281,13 +281,13 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
   if (isPortrait) {
     if (is43) {
       const contentHeight = vh - 50;
-      const side = vw * 0.95;
+      const side = vw * 0.98;
       const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
       return {
         top: pTop,
-        right: vw * 0.025,
+        right: vw * 0.01,
         bottom: pTop + side,
-        left: vw * 0.025,
+        left: vw * 0.01,
         width: side,
         height: side
       };

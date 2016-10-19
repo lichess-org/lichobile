@@ -24,3 +24,10 @@
   font-weight: 700;
   src: local('Noto Sans Bold'), local('NotoSans-Bold'), url(../fonts/Noto-SansBold.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: 'ChessSansPiratf';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/ChessSansPiratf.ttf") format("truetype")
+}

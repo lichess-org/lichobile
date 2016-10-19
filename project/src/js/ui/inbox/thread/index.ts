@@ -7,7 +7,7 @@ export default {
   onbeforeremove: helper.viewFadeOut,
   oninit,
   onremove() {
-    window.removeEventListener('native.keyboardshow', helper.onKeyboardShow);
+    window.removeEventListener('native.keyboardshow', this.onKeyboardShow);
     window.removeEventListener('native.keyboardhide', helper.onKeyboardHide);
   },
   view

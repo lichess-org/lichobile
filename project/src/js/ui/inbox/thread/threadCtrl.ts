@@ -16,7 +16,11 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   const thread = m.prop<ThreadData>();
   const deleteAttempted = m.prop<boolean>(false);
 
-  window.addEventListener('native.keyboardshow', helper.onKeyboardShow);
+  function onKeyboardShow(e: any) {
+    helper.onKeyboardShow(e);
+    (document.activeElement as any).scrollIntoView(true);
+  }
+  window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', helper.onKeyboardHide);
 
   xhr.thread(id())
@@ -31,7 +35,8 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
     thread,
     deleteAttempted,
     sendResponse,
-    deleteThread
+    deleteThread,
+    onKeyboardShow
   };
 }
 

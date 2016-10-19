@@ -11,7 +11,6 @@ export default function view(vnode: Mithril.Vnode<ThreadAttrs>) {
     backButton(ctrl.thread() ? ctrl.thread().name : null)
   );
   const bodyCtrl = () => threadBody(ctrl);
-  window.addEventListener('native.keyboardshow', () => { (document.activeElement as any).scrollIntoView(true) });
   return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
 }
 

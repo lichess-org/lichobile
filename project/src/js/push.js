@@ -18,6 +18,10 @@ function notificationOpenedCallback(data) {
           window.plugins.toast.show(
             i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top');
           break;
+        case 'newMessage':
+          window.plugins.toast.show(
+            'New message from ' + lightPlayerName(additionalData.userData.sender), 'long', 'top');
+          break;
         case 'gameMove':
         case 'gameFinish':
           session.refresh();
@@ -31,6 +35,9 @@ function notificationOpenedCallback(data) {
         case 'challengeAccept':
           challengesApi.refresh();
           router.set(`/game/${additionalData.userData.challengeId}`);
+          break;
+        case 'newMessage':
+          router.set(`/inbox/${additionalData.userData.threadId}`);
           break;
         case 'gameMove':
           router.set(`/game/${additionalData.userData.fullId}`);

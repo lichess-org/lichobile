@@ -159,6 +159,13 @@ function renderActions(ctrl) {
       >
         {i18n('watchGames')}
       </div>
+      { !ctrl.isMe() ?
+      <div className="list_item nav" key="compose_message" data-icon="m"
+        oncreate={helper.ontapY(ctrl.composeMessage)}
+      >
+        {i18n('composeMessage')}
+      </div> : null
+      }
       {user.followable && !ctrl.isMe() ?
       <div className={['list_item', user.blocking ? 'disabled' : ''].join(' ')} key="user_following">
         <div className="check_container">

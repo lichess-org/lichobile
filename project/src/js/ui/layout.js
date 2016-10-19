@@ -62,7 +62,7 @@ export default {
           <header className="main_header">
             {header()}
           </header>
-          <div className={'content' + (footer ? ' withFooter' : '')}>
+          <div id="free_content" className={'content' + (footer ? ' withFooter' : '')}>
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }

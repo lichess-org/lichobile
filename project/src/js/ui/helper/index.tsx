@@ -294,6 +294,24 @@ export function autofocus(vnode: any) {
   vnode.dom.focus();
 }
 
+let contentHeight: number;
+export function onKeyboardShow(e: any) {
+  if (window.cordova.platformId === 'ios') {
+    const content = document.getElementById('free_content');
+    if (content) {
+      contentHeight = content.offsetHeight;
+      content.style.height = (contentHeight - e.keyboardHeight) + 'px';
+    }
+  }
+}
+
+export function onKeyboardHide() {
+  if (window.cordova.platformId === 'ios') {
+    const content = document.getElementById('free_content');
+    if (content) content.style.height = contentHeight + 'px';
+  }
+}
+
 export function renderRatingDiff(player: Player) {
   if (player.ratingDiff === undefined) return null;
   if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;

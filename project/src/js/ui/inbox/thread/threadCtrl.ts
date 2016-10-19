@@ -16,6 +16,9 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   const thread = m.prop<ThreadData>();
   const deleteAttempted = m.prop<boolean>(false);
 
+  window.addEventListener('native.keyboardshow', helper.onKeyboardShow);
+  window.addEventListener('native.keyboardhide', helper.onKeyboardHide);
+
   xhr.thread(id())
   .then(data => {
     thread(data);

@@ -32,6 +32,9 @@ export default function oninit(vnode: Mithril.Vnode<ComposeAttrs>): void {
     .catch(handleSendError);
   }
 
+  window.addEventListener('native.keyboardhide', helper.onKeyboardHide);
+  window.addEventListener('native.keyboardshow', helper.onKeyboardShow);
+
   function handleSendError (error: FetchError) {
     error.response.json().then((errorResponse: SendErrorResponse) => {
       if (errorResponse && (errorResponse.username || errorResponse.subject || errorResponse.text)) {

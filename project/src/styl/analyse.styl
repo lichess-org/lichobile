@@ -44,23 +44,49 @@
     width 40%
     background lighten(bgdark, 5%)
     > .cevalBox + .native_scroller
-      height calc(100% - 28px)
+      height calc(100% - 40px)
+    > .remoteAnalysisSummary + .native_scroller
+      height calc(100% - 25px)
+    > .cevalBox + .remoteAnalysisSummary + .native_scroller
+      height calc(100% - 65px)
     > .native_scroller
       height 100%
+
+.remoteAnalysisSummary
+  height 25px
+  line-height 25px
+  width 100%
+  font-size 0.7em
+  margin-right 0
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
+  padding 5px
+  display flex
+  align-items center
+  background lighten(bgdark, 8%)
+  > span
+    margin-right 5px
 
 .cevalBox
   position relative
   width 100%
-  height 28px
+  height 40px
   display flex
   flex-flow row wrap
-  justify-content space-around
   align-items center
   align-content center
   background lighten(bgdark, 10%)
-  &.withAnalysis
-    padding-right 28px
-  > .spinner
+  > .engine_info
+    flex 1 0
+    font-size 0.65em
+    padding 3px 5px
+    overflow hidden
+    > p
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+  .spinner
     width initial
     height initial
     font-size 18px
@@ -79,25 +105,21 @@
       transition width linear 1s
       height 3px
   > pearl
-    font-size 20px
-    font-weight bold
-  > .openSummary
-    position absolute
-    right 0
-    top 0
-    height 100%
-    width 28px
-    font-size 0.9em
-    margin-right 0
-    opacity 0.7
+    flex 0 0 auto
     display flex
-    align-items center
+    flex-flow column nowrap
     justify-content center
-    > span
-      margin 0
-  > .bestMove
-    font-size 0.6em
-    line-height 1.2
+    align-items center
+    min-width 40px
+    font-size 18px
+    font-weight bold
+    padding 3px 5px
+    background lighten(bgdark, 15%)
+    height 100%
+    > .bestMove
+      font-size 0.6rem
+      font-weight normal
+      line-height 1.2
 
 .analyseOpponentsWrapper, .analyseOpening, .analyseGameInfos
   padding 5px

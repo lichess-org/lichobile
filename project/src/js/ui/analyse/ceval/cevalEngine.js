@@ -2,7 +2,7 @@ export default function cevalEngine(opts) {
 
   function processOutput(text, work) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
-    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*pv (.+)/);
+    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
     if (depth < opts.minDepth) return;
@@ -13,14 +13,17 @@ export default function cevalEngine(opts) {
       if (matches[2] === 'cp') cp = -cp;
       else mate = -mate;
     }
-    const best = matches[4].split(' ')[0];
+    const nps = parseInt(matches[4], 10);
+    const best = matches[5].split(' ')[0];
     work.emit({
       work,
       ceval: {
         depth,
+        maxDepth: opts.maxDepth,
         cp,
         mate,
-        best
+        best,
+        nps
       }
     });
   }

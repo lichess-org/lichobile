@@ -15,11 +15,20 @@
     trackEvent: noop
   };
 
+
   // push
+  function oneSignalInit() {
+    return OneSignalConf;
+  }
+  var OneSignalConf = {
+    handleNotificationOpened: oneSignalInit,
+    inFocusDisplaying: oneSignalInit,
+    endInit: oneSignalInit
+  };
+
   window.plugins.OneSignal = {
-    init: noop,
+    startInit: oneSignalInit,
     getIds: noop,
-    enableInAppAlertNotification: noop,
     enableSound: noop,
     enableVibrate: noop
   };

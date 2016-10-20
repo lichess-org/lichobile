@@ -65,7 +65,7 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
 
 function postDateFormat (timeInMillis: number) {
   const time = window.moment(timeInMillis);
-  return time.format('MMM D H:mm');
+  return time.calendar();
 }
 
 function deleteButton (ctrl: ThreadState) {

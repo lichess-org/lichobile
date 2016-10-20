@@ -54,10 +54,11 @@ function renderInboxItem(thread: Thread) {
 function formatMessageTime (timeInMillis: number) {
   const time = window.moment(timeInMillis);
   const now = window.moment();
-  if (now.isAfter(time, 'day')) {
+  if (now.isAfter(time, 'year')) {
+    return time.format('MM/YY');
+  } else if (now.isAfter(time, 'day')) {
     return time.format('MMM D');
-  }
-  else {
+  } else {
     return time.format('H:mm');
   }
 }

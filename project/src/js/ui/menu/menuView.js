@@ -14,8 +14,7 @@ import * as helper from '../helper';
 import friendsApi from '../../lichess/friends';
 import * as Zanimo from 'zanimo';
 
-const pingHelp = 'PING: Network lag between you and lichess';
-const serverHelp = 'SERVER: Time to process a move on lichess server';
+const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server';
 
 export default function view() {
   if (!menu.isOpen) return null;
@@ -57,22 +56,29 @@ function renderHeader(user) {
           </div>
         </h2> : null
       }
-      { hasNetwork() && user ?
-        <button key="user-button" className="open_button" data-icon={menu.headerOpen() ? 'S' : 'R'}
-          oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
-        /> : null
-      }
       { hasNetwork() && session.isConnected() ?
-        <div key="server-lag" class="pingServerLed">
+        <div key="server-lag" class="pingServerLed"
+          oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
+        >
           <div class="pingServer">
-            <div class="ping">
-              <span oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}>PING<i className="fa fa-question-circle-o" /></span>&nbsp;&nbsp;&nbsp;<strong>{socket.isConnected() && ping ? ping : '?'}</strong> ms
+            <div>
+              <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
+              <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
             </div>
-            <div class="server">
-              <span oncreate={helper.ontap(() => window.plugins.toast.show(serverHelp, 'long', 'top'))}>SERVER<i className="fa fa-question-circle-o" /></span>&nbsp;<strong>{socket.isConnected() && server ? server : '?'}</strong> ms
+            <div>
+              <span className="pingKey">Server&nbsp;</span>
+              <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
             </div>
           </div>
         </div> : null
+      }
+      { hasNetwork() && user ?
+        <div key="user-button" className="user_profile_button"
+          oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
+        >
+          {i18n('profile')}
+          <span className="arrow" data-icon={menu.headerOpen() ? 'S' : 'R'} />
+        </div>: null
       }
       { hasNetwork() && !user ?
         <button key="login-button" className="login" oncreate={helper.ontapY(loginModal.open)}>
@@ -86,6 +92,9 @@ function renderHeader(user) {
 function renderProfileActions(user) {
   return (
     <ul className="side_links profileActions">
+      <li className="side_link" key="profile" oncreate={helper.ontap(menu.route('/@/' + user.id))}>
+        <span className="fa fa-user" />{i18n('profile')}
+      </li>
       <li className="side_link" key="message" oncreate={helper.ontap(menu.route('/inbox'))}>
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
@@ -124,11 +133,6 @@ function renderLinks(user) {
       <li className="side_link" key="home" oncreate={helper.ontapY(menu.route('/'))}>
         <span className="fa fa-home" />Home
       </li>
-      {hasNetwork() && user ?
-      <li className="side_link" key="profile" oncreate={helper.ontap(menu.route('/@/' + user.id))}>
-        <span className="fa fa-user" />{i18n('profile')}
-      </li> : null
-      }
       {hasNetwork() ?
       <li className="sep_link" key="sep_link_online">{i18n('playOnline')}</li> : null
       }

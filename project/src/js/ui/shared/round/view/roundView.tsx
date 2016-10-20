@@ -206,7 +206,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
         {user ?
-          <span className={'status ' + onlineStatus} data-icon="r" /> :
+          <span className={'fa fa-circle status ' + onlineStatus} /> :
           null
         }
         {tournamentRank}

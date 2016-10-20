@@ -80,7 +80,7 @@
   > .engine_info
     flex 1 0
     font-size 0.65em
-    padding 3px 5px
+    padding 3px
     overflow hidden
     > p
       white-space nowrap
@@ -105,12 +105,11 @@
       transition width linear 1s
       height 3px
   > pearl
-    flex 0 0 auto
+    flex 0 0 56px
     display flex
     flex-flow column nowrap
     justify-content center
     align-items center
-    min-width 40px
     font-size 18px
     font-weight bold
     padding 3px 5px
@@ -465,6 +464,21 @@
 
 
 .view-container.light
+  .analyseOpening, .cevalBox, move.active
+    background darken(bglight, 10%)
+
+  .analyseReplay > turn > index, .analyseInfos, .meta
+    background darken(bglight, 5%)
+
+  .analyseGameInfosWrapper
+    border-bottom-color darken(bglight, 15%)
+
+  pearl
+    background darken(bglight, 12%)
+
+  .remoteAnalysisSummary
+    background darken(bglight, 8%)
+
   .explorerTable
     tr
       &:nth-child(even)

@@ -1,10 +1,19 @@
 import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
-export default {
-  oninit(rootVnode) {
+interface Attrs {
+  fen: string
+  lastMove: string
+  orientation: Color
+  bounds: BoardBounds
+  customPieceTheme: string
+  variant: Variant
+}
 
-    this.createBoard = ({ dom }) => {
+export default {
+  oninit(rootVnode: Mithril.Vnode<Attrs>) {
+
+    this.createBoard = ({ dom }: Mithril.Vnode<any>) => {
       const config = makeConfig(rootVnode.attrs);
       if (!config.bounds) {
         config.bounds = dom.getBoundingClientRect();
@@ -12,14 +21,14 @@ export default {
       this.ground = chessground(dom, config);
     };
 
-    this.updateBoard = (attrs) => {
+    this.updateBoard = (attrs: Attrs) => {
       if (this.ground) {
         this.ground.set(makeConfig(attrs));
       }
     };
   },
 
-  view({ attrs }) {
+  view({ attrs }: Mithril.Vnode<Attrs>) {
 
     const boardClass = [
       'display_board',
@@ -38,8 +47,8 @@ export default {
   }
 };
 
-function makeConfig({ fen, lastMove, orientation, bounds }) {
-  const conf = {
+function makeConfig({ fen, lastMove, orientation, bounds }: Attrs): any {
+  const conf: any = {
     viewOnly: true,
     minimalDom: true,
     coordinates: false,

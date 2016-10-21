@@ -47,6 +47,25 @@ declare namespace Chessground {
     unload(): void;
   }
 
+  interface Api {
+    set(cfg: SetConfig): void
+    toggleOrientation(): void
+    getOrientation(): Color
+    setBounds(bounds: Bounds): void;
+    getPieces(): Pieces
+    getMaterialDiff(): any
+    getFen(): string
+    dump(): any
+    move(orig: Pos, dest: Pos, pieces?: Pieces, config?: SetConfig): void;
+    setPieces(pieces: Pieces): void;
+    setCheck(color: Color): void;
+    playPremove(): void;
+    cancelPremove(): void;
+    cancelMove(): void;
+    stop(): void;
+    explode(keys: Array<Pos>): void;
+  }
+
   interface ControllerFactory {
     new(cfg: any): Controller;
   }
@@ -58,6 +77,11 @@ declare namespace Chessground {
   }
 
   interface Static {
+    (
+      el: HTMLElement,
+      cfg: any
+    ): Api
+
     render(
       rootElement: Element,
       controller: Controller

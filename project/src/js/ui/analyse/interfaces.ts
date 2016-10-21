@@ -13,6 +13,61 @@ export interface PathObj {
   variation: any
 }
 
+export interface AnalysisData extends GameData {
+  // TODO type this
+  analysis?: any;
+  steps?: Array<AnalysisStep>;
+  url?: {
+    round: string;
+    socket: string;
+  }
+}
+
+export interface AnalysisStep extends GameStep {
+  ceval?: Ceval
+  rEval?: any
+  fixed?: boolean
+  variations?: any
+  opening?: any
+  pgnMoves?: Array<string>
+}
+
+export interface Work {
+  position: string
+  moves: string
+  path: Path
+  steps: Array<AnalysisStep>
+  ply: number
+  emit: (res: any) => void
+}
+
+export interface Ceval {
+  depth: number
+  maxDepth: number
+  cp: number
+  mate: number
+  best: string
+  nps: number
+  bestSan?: string
+}
+
+export interface CevalEmit {
+  work: Work
+  ceval: Ceval
+}
+
+export interface CevalCtrlInterface {
+  init(): Promise<any>
+  isInit(): boolean
+  start(path: Path, steps: Array<AnalysisStep>): void
+  stop(): void
+  destroy(): void
+  allowed: Mithril.Property<boolean>,
+  enabled(): boolean,
+  toggle(): void
+  percentComplete(): number
+}
+
 export interface AnalyseCtrlInterface {
   data: AnalysisData
   source: Source

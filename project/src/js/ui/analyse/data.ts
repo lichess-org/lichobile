@@ -1,5 +1,6 @@
 import { playerFromFen, plyFromFen } from '../../utils/fen';
 import { oppositeColor } from '../../utils';
+import { AnalysisData } from './interfaces';
 
 export function makeDefaultData(fen: string): AnalysisData {
   const player = playerFromFen(fen);

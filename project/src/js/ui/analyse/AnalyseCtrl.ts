@@ -24,7 +24,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface } from './interfaces';
+import { AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface } from './interfaces';
 
 interface VM {
   shouldGoBack: boolean
@@ -59,7 +59,7 @@ export default class AnalyseCtrl {
 
   public chessground: Chessground.Controller;
   public analyse: AnalyseInterface;
-  public ceval: any;
+  public ceval: CevalCtrlInterface;
   public explorer: ExplorerCtrlInterface;
   public evalSummary: any;
   public notes: any;

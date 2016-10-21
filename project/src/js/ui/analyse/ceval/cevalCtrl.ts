@@ -1,10 +1,14 @@
 import * as m from 'mithril';
 import settings from '../../../settings';
 import cevalEngine from './cevalEngine';
+import { AnalysisStep, Path, CevalEmit, CevalCtrlInterface } from '../interfaces';
 
-export default function cevalCtrl(variant, allow, emit) {
+export default function cevalCtrl(
+  variant: VariantKey,
+  allow: boolean,
+  emit: (res: CevalEmit) => void): CevalCtrlInterface {
 
-  var initialized = false;
+  let initialized = false;
 
   const minDepth = 8;
   const maxDepth = 20;
@@ -12,20 +16,20 @@ export default function cevalCtrl(variant, allow, emit) {
 
   const engine = cevalEngine({ minDepth, maxDepth });
 
-  var curDepth = 0;
-  var started = false;
-  var isEnabled = settings.analyse.enableCeval();
+  let curDepth = 0;
+  let started = false;
+  let isEnabled = settings.analyse.enableCeval();
 
   function enabled() {
     return allowed() && isEnabled;
   }
 
-  function onEmit(res) {
+  function onEmit(res: CevalEmit) {
     curDepth = res.ceval.depth;
     emit(res);
   }
 
-  function start(path, steps) {
+  function start(path: Path, steps: Array<AnalysisStep>) {
     if (!enabled()) {
       return;
     }
@@ -35,9 +39,7 @@ export default function cevalCtrl(variant, allow, emit) {
     }
     engine.start({
       position: steps[0].fen,
-      moves: steps.slice(1).map(function(s) {
-        return fixCastle(s.uci, s.san);
-      }).join(' '),
+      moves: steps.slice(1).map((s) => fixCastle(s.uci, s.san)).join(' '),
       path: path,
       steps: steps,
       ply: step.ply,
@@ -66,7 +68,7 @@ export default function cevalCtrl(variant, allow, emit) {
     }
   }
 
-  function fixCastle(uci, san) {
+  function fixCastle(uci: string, san: string) {
     if (san.indexOf('O-O') !== 0) return uci;
     switch (uci) {
       case 'e1h1':

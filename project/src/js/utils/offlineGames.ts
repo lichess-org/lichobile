@@ -1,5 +1,6 @@
 import storage from '../storage';
 import { cloneDeep, difference } from 'lodash';
+import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
 
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';

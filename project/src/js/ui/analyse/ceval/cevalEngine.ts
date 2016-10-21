@@ -1,12 +1,15 @@
-export default function cevalEngine(opts) {
+import { Work } from '../interfaces';
 
-  function processOutput(text, work) {
+export default function cevalEngine(opts: any) {
+
+  function processOutput(text: string, work: Work) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
     if (depth < opts.minDepth) return;
-    var cp, mate;
+    let cp: number;
+    let mate: number;
     if (matches[2] === 'cp') cp = parseFloat(matches[3]);
     else mate = parseFloat(matches[3]);
     if (work.ply % 2 === 1) {
@@ -29,18 +32,19 @@ export default function cevalEngine(opts) {
   }
 
   return {
-    init(variant) {
+    init(variant: VariantKey) {
       return Stockfish.init()
-      .then(init.bind(undefined, variant))
+      .then(() => init(variant))
+      // stockfish plugin will reject if already inited
       .catch(() => {
         return Stockfish.exit()
         .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(init.bind(undefined, variant));
+        .then(() => init(variant));
       })
       .catch(console.error.bind(console));
     },
 
-    start(work) {
+    start(work: Work) {
       send(['position', 'fen', work.position, 'moves', work.moves].join(' '))
       .then(() => send('go depth ' + opts.maxDepth));
 
@@ -60,21 +64,21 @@ export default function cevalEngine(opts) {
   };
 }
 
-function init(variant) {
+function init(variant: VariantKey) {
   return send('uci')
   .then(() => setOption('Ponder', 'false'))
   .then(() => prepare(variant));
 }
 
-function send(text) {
+function send(text: string) {
   return Stockfish.cmd(text);
 }
 
-function setOption(name, value) {
+function setOption(name: string, value: string | boolean) {
   return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
-function prepare(variant) {
+function prepare(variant: VariantKey) {
   return Promise.all([
     setOption('UCI_Chess960', variant === 'chess960'),
     setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),

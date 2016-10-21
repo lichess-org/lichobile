@@ -1,5 +1,5 @@
 import treePath from './path';
-import { Path, PathObj, AnalyseInterface } from './interfaces';
+import { AnalysisData, AnalysisStep, Path, PathObj, AnalyseInterface } from './interfaces';
 
 export default class Analyse implements AnalyseInterface {
   public tree: any;

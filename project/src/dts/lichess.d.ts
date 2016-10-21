@@ -209,16 +209,6 @@ interface OfflineGameData extends GameData {
   steps?: Array<GameStep>;
 }
 
-interface AnalysisData extends GameData {
-  // TODO type this
-  analysis?: any;
-  steps?: Array<AnalysisStep>;
-  url?: {
-    round: string;
-    socket: string;
-  }
-}
-
 interface StoredOfflineGame {
   data: OfflineGameData;
   situations: Array<GameSituation>;
@@ -265,15 +255,6 @@ interface GameStep {
   crazy?: {
     pockets: Pockets
   }
-}
-
-interface AnalysisStep extends GameStep {
-  ceval?: any;
-  rEval?: any;
-  fixed?: boolean;
-  variations?: any;
-  opening?: any;
-  pgnMoves?: Array<string>;
 }
 
 interface GameSituation {

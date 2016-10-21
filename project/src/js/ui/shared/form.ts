@@ -2,7 +2,9 @@ import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
 import * as m from 'mithril';
 
-function renderOption(label, value, storedValue, labelArg, labelArg2) {
+type SelectOption = string[]
+
+function renderOption(label: string, value: string, storedValue: string, labelArg: string, labelArg2: string) {
   return m('option', {
     key: value,
     value: value,
@@ -12,8 +14,14 @@ function renderOption(label, value, storedValue, labelArg, labelArg2) {
 
 export default {
 
-  renderRadio: function(label, name, value, checked, onchange) {
-    var id = name + '_' + value;
+  renderRadio(
+    label: string,
+    name: string,
+    value: string,
+    checked: boolean,
+    onchange: (v: boolean) => void
+  ) {
+    const id = name + '_' + value;
     return [
       m('input.radio[type=radio]', {
         name,
@@ -29,14 +37,20 @@ export default {
     ];
   },
 
-  renderSelect: function(label, name, options, settingsProp, isDisabled, onChangeCallback) {
-    var storedValue = settingsProp();
-    const onChange = function(e) {
-      settingsProp(e.target.value);
-      if (onChangeCallback) onChangeCallback(e.target.value);
-      setTimeout(function() {
-        redraw();
-      }, 10);
+  renderSelect(
+    label: string,
+    name: string,
+    options: Array<SelectOption>,
+    settingsProp: Prop<string>,
+    isDisabled: boolean,
+    onChangeCallback: (v: string) => void
+  ) {
+    const storedValue = settingsProp();
+    const onChange = function(e: Event) {
+      const val = (e.target as any).value;
+      settingsProp(val);
+      if (onChangeCallback) onChangeCallback(val);
+      setTimeout(() => redraw(), 10);
     };
     return [
       m('label', {
@@ -45,18 +59,24 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate: function(vnode) {
+        oncreate(vnode: Mithril.Vnode<any>) {
           vnode.dom.addEventListener('change', onChange, false);
         },
-        onremove: function(vnode) {
+        onremove(vnode: Mithril.Vnode<any>) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
     ];
   },
 
-  renderCheckbox: function(label, name, settingsProp, callback, disabled) {
-    var isOn = settingsProp();
+  renderCheckbox(
+    label: string,
+    name:string,
+    settingsProp: Prop<boolean>,
+    callback: (v: boolean) => void,
+    disabled: boolean
+  ) {
+    const isOn = settingsProp();
     return m('div.check_container', {
       className: disabled ? 'disabled' : ''
     }, [

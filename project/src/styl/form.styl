@@ -4,6 +4,18 @@
   justify-content space-between
   align-items center
   min-height 30px
+  &.small
+    min-height 25px
+    input[type='checkbox']
+      height 25px
+      border-radius 12px
+    input[type='checkbox']:after
+      width 15px
+      height 15px
+    input[type='checkbox']:checked:after
+      left 38px
+
+
 input[type='checkbox']
   flex 0 0 70px
   position relative
@@ -14,13 +26,6 @@ input[type='checkbox']
   background-color #444444
   transition background-color 200ms
   outline none
-input[type='checkbox']:checked:before
-  position absolute
-  top 8px
-  left 15px
-  font-family "lichess"
-  color #fff
-  content "E"
 input[type='checkbox']:checked
   background gold
 input[type='checkbox']:after

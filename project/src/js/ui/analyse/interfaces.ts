@@ -32,7 +32,7 @@ export interface AnalysisStep extends GameStep {
   pgnMoves?: Array<string>
 }
 
-export interface Work {
+export interface CevalWork {
   position: string
   moves: string
   path: Path
@@ -52,7 +52,7 @@ export interface Ceval {
 }
 
 export interface CevalEmit {
-  work: Work
+  work: CevalWork
   ceval: Ceval
 }
 

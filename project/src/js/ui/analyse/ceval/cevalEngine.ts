@@ -1,8 +1,8 @@
-import { Work } from '../interfaces';
+import { CevalWork } from '../interfaces';
 
 export default function cevalEngine(opts: any) {
 
-  function processOutput(text: string, work: Work) {
+  function processOutput(text: string, work: CevalWork) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
@@ -44,7 +44,7 @@ export default function cevalEngine(opts: any) {
       .catch(console.error.bind(console));
     },
 
-    start(work: Work) {
+    start(work: CevalWork) {
       send(['position', 'fen', work.position, 'moves', work.moves].join(' '))
       .then(() => send('go depth ' + opts.maxDepth));
 

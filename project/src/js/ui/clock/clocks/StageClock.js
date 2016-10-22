@@ -8,8 +8,8 @@ const MINUTE_MILLIS = 60 * 1000;
 export default function StageClock(stages, increment) {
   const topTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
   const bottomTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
-  const topMoves = m.prop(0);
-  const bottomMoves = m.prop(0);
+  const topMoves = m.prop(Number(stages[0].moves));
+  const bottomMoves = m.prop(Number(stages[0].moves));
   const topStage = m.prop(0);
   const bottomStage = m.prop(0);
   const activeSide = m.prop(null);
@@ -51,12 +51,16 @@ export default function StageClock(stages, increment) {
 
     if (side === 'top') {
       if (activeSide() === 'top') {
-        topMoves(topMoves() + 1);
+        if (topMoves())
+          topMoves(topMoves() - 1);
         topTime(topTime() + increment);
-        if (topMoves() === Number(stages[topStage()].moves)) {
+        if (topMoves() === 0) {
           topStage(topStage() + 1);
           topTime(topTime() + Number(stages[topStage()].time) * MINUTE_MILLIS);
-          topMoves(0);
+          if (topStage() === (stages.length - 1))
+            topMoves(null);
+          else
+            topMoves(stages[topStage()].moves);
         }
       }
       bottomTimestamp = performance.now();
@@ -64,12 +68,16 @@ export default function StageClock(stages, increment) {
     }
     else {
       if (activeSide() === 'bottom') {
-        bottomMoves(bottomMoves() + 1);
+        if (bottomMoves())
+          bottomMoves(bottomMoves() - 1);
         bottomTime(bottomTime() + increment);
-        if (bottomMoves() === Number(stages[bottomStage()].moves)) {
+        if (bottomMoves() === 0) {
           bottomStage(bottomStage() + 1);
           bottomTime(bottomTime() + Number(stages[bottomStage()].time) * MINUTE_MILLIS);
-          bottomMoves(0);
+          if (bottomStage() === (stages.length - 1))
+            bottomMoves(null);
+          else
+            bottomMoves(stages[bottomStage()].moves);
         }
       }
       topTimestamp = performance.now();
@@ -99,24 +107,6 @@ export default function StageClock(stages, increment) {
     }
   }
 
-  function topRemainingMoves() {
-    if (stages[topStage()].moves) {
-      return Number(stages[topStage()].moves) - topMoves();
-    }
-    else {
-      return null;
-    }
-  }
-
-  function bottomRemainingMoves() {
-    if (stages[bottomStage()].moves) {
-      return Number(stages[bottomStage()].moves) - bottomMoves();
-    }
-    else {
-      return null;
-    }
-  }
-
   return {
     topTime,
     bottomTime,
@@ -127,8 +117,6 @@ export default function StageClock(stages, increment) {
     clockHit,
     startStop,
     topMoves,
-    bottomMoves,
-    topRemainingMoves,
-    bottomRemainingMoves
+    bottomMoves
   };
 }

@@ -45,7 +45,8 @@ export default function cevalEngine(opts: any) {
     },
 
     start(work: CevalWork) {
-      send(['position', 'fen', work.position, 'moves', work.moves].join(' '))
+      setOption('Threads', Math.ceil(((navigator as any).hardwareConcurrency || 1) / 2))
+      .then(() => send(['position', 'fen', work.position, 'moves', work.moves].join(' ')))
       .then(() => send('go depth ' + opts.maxDepth));
 
       Stockfish.output(function(msg) {
@@ -74,7 +75,7 @@ function send(text: string) {
   return Stockfish.cmd(text);
 }
 
-function setOption(name: string, value: string | boolean) {
+function setOption(name: string, value: string | number | boolean) {
   return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 

@@ -22,6 +22,7 @@
   }
   var OneSignalConf = {
     handleNotificationOpened: oneSignalInit,
+    handleNotificationReceived: oneSignalInit,
     inFocusDisplaying: oneSignalInit,
     endInit: oneSignalInit
   };

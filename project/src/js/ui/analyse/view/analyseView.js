@@ -146,11 +146,6 @@ function renderInfos(ctrl, isPortrait) {
       { (!isCrazy || !isPortrait) && cevalEnabled ?
         renderEvalBox(ctrl) : null
       }
-      { ctrl.data.analysis ?
-        <div className="remoteAnalysisSummary" oncreate={helper.ontap(ctrl.evalSummary.open)}>
-          <span className="fa fa-plus-circle"/> Analysis summary
-        </div> : null
-      }
       { !isSynthetic(ctrl.data) ?
         <div className="native_scroller">
           {renderOpponents(ctrl, isPortrait)}

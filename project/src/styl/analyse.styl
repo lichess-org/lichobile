@@ -47,28 +47,8 @@
     background lighten(bgdark, 5%)
     > .cevalBox + .native_scroller
       height calc(100% - 40px)
-    > .remoteAnalysisSummary + .native_scroller
-      height calc(100% - 25px)
-    > .cevalBox + .remoteAnalysisSummary + .native_scroller
-      height calc(100% - 65px)
     > .native_scroller
       height 100%
-
-.remoteAnalysisSummary
-  height 25px
-  line-height 25px
-  width 100%
-  font-size 0.7em
-  margin-right 0
-  white-space nowrap
-  overflow hidden
-  text-overflow ellipsis
-  padding 5px
-  display flex
-  align-items center
-  background lighten(bgdark, 8%)
-  > span
-    margin-right 5px
 
 .cevalBox
   position relative
@@ -107,7 +87,8 @@
       transition width linear 1s
       height 3px
   > pearl
-    flex 0 0 56px
+    flex 0 0 auto
+    min-width 60px
     display flex
     flex-flow column nowrap
     justify-content center
@@ -477,9 +458,6 @@
 
   pearl
     background darken(bglight, 12%)
-
-  .remoteAnalysisSummary
-    background darken(bglight, 8%)
 
   .explorerTable
     tr

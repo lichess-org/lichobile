@@ -6,12 +6,10 @@ import router from './router';
 import challengesApi from './lichess/challenges';
 import { fetchText } from './http';
 
-function notificationOpenedCallback(data) {
-  // this should not be the raw data according to onesignal doc
-  const additionalData = data.notification.payload.additionalData && JSON.parse(data.notification.payload.additionalData);
-  const isActive = data.isAppInFocus;
+function notificationReceivedCallback(data) {
+  const additionalData = data.payload.additionalData;
   if (additionalData && additionalData.userData) {
-    if (isActive) {
+    if (data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
           session.refresh();
@@ -27,7 +25,14 @@ function notificationOpenedCallback(data) {
           session.refresh();
           break;
       }
-    } else {
+    }
+  }
+}
+
+function notificationOpenedCallback(data) {
+  const additionalData = data.notification.payload.additionalData && JSON.parse(data.notification.payload.additionalData);
+  if (additionalData && additionalData.userData) {
+    if (!data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeCreate':
           router.set(`/challenge/${additionalData.userData.challengeId}`);
@@ -57,6 +62,7 @@ export default {
       window.plugins.OneSignal
       .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c', '1050901934956')
       .handleNotificationOpened(notificationOpenedCallback)
+      .handleNotificationReceived(notificationReceivedCallback)
       .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
       .endInit();
 

@@ -290,7 +290,34 @@ export default {
       mode: localstorageprop('settings.game.invite.mode', '0')
     }
   },
-
+  tournament: {
+    availableVariants: [
+      ['Standard', '1'],
+      ['Crazyhouse', '10'],
+      ['Chess960', '2'],
+      ['King of the Hill', '4'],
+      ['Three-check', '5'],
+      ['Antichess', '6'],
+      ['Atomic', '7'],
+      ['Horde', '8'],
+      ['Racing Kings', '9'],
+      ['From Position', '3']
+    ],
+    availableModes: [
+      ['Casual', '0'],
+      ['Rated', '1']
+    ],
+    availableTimes: [['0', '0'], ['½', '0.5'], ['¾', '0.75'], ['1', '1'], ['1.5', '1.5'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7']],
+    availableIncrements: ['0', '1', '2'],
+    availableDurations: ['20', '25', '30', '35', '40', '45', '50', '55', '60', '70', '80', '90', '100', '110', '120'],
+    availableTimesToStart: ['1', '2', '3', '5', '10', '15', '20', '30', '45', '60'],
+    variant: localstorageprop('settings.tournament.variant', '1'),
+    mode: localstorageprop('settings.tournament.mode', '0'),
+    time: localstorageprop('settings.tournament.time', '5'),
+    increment: localstorageprop('settings.tournament.increment', '0'),
+    duration: localstorageprop('settings.tournament.duration', '45'),
+    timeToStart: localstorageprop('settings.tournament.timeToStart', '15')
+  },
   tv: {
     channel: localstorageprop('settings.tv.channel', 'best')
   }

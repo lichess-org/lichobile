@@ -27,6 +27,7 @@ import players from './ui/players';
 import ranking from './ui/players/ranking';
 import training from './ui/training';
 import tournamentDetail from './ui/tournament/detail';
+import tournamentCreate from './ui/tournament/create';
 import tournament from './ui/tournament';
 import editor from './ui/editor';
 import clock from './ui/clock';
@@ -83,7 +84,8 @@ export default {
       'training': training,
       'training/:id': training,
       'tournament': tournament,
-      'tournament/:id': tournamentDetail
+      'tournament/:id': tournamentDetail,
+      'tournament/new': tournamentCreate
     });
   }
 };

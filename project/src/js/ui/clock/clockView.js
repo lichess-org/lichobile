@@ -65,9 +65,9 @@ function clockBody(ctrl) {
   return (
     <div className="clockContainer">
       <div key="topClockTapArea" className={topClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'top'))}>
-        { clock.topRemainingMoves ?
+        { clock.topMoves && clock.topMoves() !== null ?
         <div className="clockStageInfo">
-          <span>Moves remaining: {clock.topRemainingMoves ? clock.topRemainingMoves() : ''}</span>
+          <span>Moves remaining: {clock.topMoves()}</span>
         </div> : null
         }
         <div className="clockTapAreaContent">
@@ -88,9 +88,9 @@ function clockBody(ctrl) {
             { bottomFlagged ? 'b' : formatTime(ctrl.clockType(), clock.bottomTime() / 1000) }
           </span>
         </div>
-        { clock.bottomRemainingMoves ?
+        { clock.bottomMoves && clock.bottomMoves() !== null ?
         <div className="clockStageInfo">
-          <span>Moves remaining: {clock.bottomRemainingMoves ? clock.bottomRemainingMoves() : ''}</span>
+          <span>Moves remaining: {clock.bottomMoves()}</span>
         </div> : null
         }
       </div>

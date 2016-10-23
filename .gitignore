@@ -3,7 +3,10 @@ npm-debug.log
 bin/*.mobileprovision
 bin/*.keystore
 
-/app
+/app/platforms
+/app/plugins
+/app/config.xml
+/app/www
 
 project/www/app.js
 project/www/index.html

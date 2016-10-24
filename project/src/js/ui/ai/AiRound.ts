@@ -18,7 +18,7 @@ import atomic from '../shared/round/atomic';
 import { AiRoundInterface } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
-import actions from './actions';
+import actions, { AiActionsCtrl } from './actions';
 import engineCtrl, { EngineInterface } from './engine';
 import * as helper from '../helper';
 import newGameMenu from './newAiGame';
@@ -29,12 +29,12 @@ interface InitPayload {
 }
 
 export default class AiRound implements AiRoundInterface {
-  public data: OfflineGameData;
-  public actions: any;
-  public newGameMenu: any;
-  public chessground: Chessground.Controller;
-  public replay: Replay;
-  public vm: any;
+  public data: OfflineGameData
+  public actions: AiActionsCtrl
+  public newGameMenu: any
+  public chessground: Chessground.Controller
+  public replay: Replay
+  public vm: any
 
   private engine: EngineInterface;
 
@@ -150,6 +150,22 @@ export default class AiRound implements AiRoundInterface {
 
   public playerName = () => {
     return i18n(this.data.player.color);
+  }
+
+  public white(): string {
+    if (this.data.player.color === 'white') {
+      return this.data.player.username;
+    } else {
+      return this.getOpponent().name;
+    }
+  }
+
+  public black(): string {
+    if (this.data.player.color === 'black') {
+      return this.data.player.username;
+    } else {
+      return this.getOpponent().name;
+    }
   }
 
   public getOpponent() {
@@ -302,7 +318,7 @@ export default class AiRound implements AiRoundInterface {
   public jumpLast = () => this.jump(this.lastPly());
 }
 
-function getColorFromSettings() {
+function getColorFromSettings(): Color {
   let color = settings.ai.color();
   if (color === 'random') {
     if (getRandomArbitrary(0, 2) > 1)
@@ -311,5 +327,5 @@ function getColorFromSettings() {
       color = 'black';
   }
 
-  return color;
+  return <Color>color;
 }

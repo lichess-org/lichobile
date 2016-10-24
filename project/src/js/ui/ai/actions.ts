@@ -1,21 +1,31 @@
+import * as m from 'mithril';
+
 import i18n from '../../i18n';
 import * as gameApi from '../../lichess/game';
-import * as helper from '../helper';
 import settings from '../../settings';
+import { PgnDumpResponse } from '../../chess';
+
+import * as helper from '../helper';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
-import * as m from 'mithril';
+import { AiRoundInterface } from '../shared/round';
+
+export interface AiActionsCtrl {
+  open: () => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  sharePGN: () => void
+  root: AiRoundInterface
+}
 
 export function opponentSelector() {
-  const opps = settings.ai.availableOpponents.map(o =>
+  const opts = settings.ai.availableOpponents.map(o =>
     ['aiNameLevelAiLevel', o[1], o[0], o[1]]
   );
-  return (
-    <div className="select_input">
-      {formWidgets.renderSelect('opponent', 'opponent', opps, settings.ai.opponent)}
-    </div>
+  return m('div.select_input',
+    formWidgets.renderSelect('opponent', 'opponent', opts, settings.ai.opponent)
   );
 }
 
@@ -27,7 +37,7 @@ function renderAlways() {
   ];
 }
 
-function resignButton(ctrl) {
+function resignButton(ctrl: AiRoundInterface) {
   return gameApi.playable(ctrl.data) ? m('div.resign', {
     key: 'resign'
   }, [
@@ -42,7 +52,7 @@ function resignButton(ctrl) {
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: AiRoundInterface) {
     let isOpen = false;
 
     function open() {
@@ -50,7 +60,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
       isOpen = false;
     }
@@ -58,21 +68,24 @@ export default {
     return {
       open: open,
       close: close,
-      isOpen: function() {
+      isOpen() {
         return isOpen;
       },
-      sharePGN: function() {
-        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
+      sharePGN() {
+        root.replay.pgn(root.white(), root.black())
+        .then((data: PgnDumpResponse) =>
+          window.plugins.socialsharing.share(data.pgn)
+        );
       },
       root: root
     };
   },
 
-  view: function(ctrl) {
+  view(ctrl: AiActionsCtrl) {
     return popupWidget(
       'offline_actions',
       null,
-      function() {
+      () => {
         return [
           renderEndedGameStatus(ctrl.root)
         ].concat(

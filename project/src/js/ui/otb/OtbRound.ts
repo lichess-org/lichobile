@@ -230,5 +230,4 @@ export default class OtbRound implements OfflineRoundInterface {
   public canDrop = () => {
     return gameApi.isPlayerPlaying(this.data);
   }
-
 }

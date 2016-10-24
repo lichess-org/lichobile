@@ -42,8 +42,8 @@ export default {
     name: string,
     options: Array<SelectOption>,
     settingsProp: Prop<string>,
-    isDisabled: boolean,
-    onChangeCallback: (v: string) => void
+    isDisabled?: boolean,
+    onChangeCallback?: (v: string) => void
   ) {
     const storedValue = settingsProp();
     const onChange = function(e: Event) {

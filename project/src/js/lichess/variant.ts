@@ -1,4 +1,13 @@
-const variantMap = {
+interface DocVariant {
+  id: number
+  name: string;
+  shortName?: string;
+  tinyName?: string;
+  link?: string
+  alert?: string
+}
+
+const variantMap: {[key: string]: DocVariant} = {
   standard: {
     name: 'Standard',
     tinyName: 'Std',
@@ -72,6 +81,6 @@ const variantMap = {
   }
 };
 
-export default function getVariant(key) {
+export default function getVariant(key: VariantKey): DocVariant {
   return variantMap[key];
 }

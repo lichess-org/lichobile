@@ -80,12 +80,14 @@ export default class Replay {
       .catch(console.error.bind(console));
     }
 
-    public pgn = (variant: VariantKey, initialFen: string) => {
+    public pgn = (white: string, black: string) => {
       const sit = this.situation();
       return chess.pgnDump({
         variant: this.variant,
         initialFen: this.initialFen,
-        pgnMoves: sit.pgnMoves
+        pgnMoves: sit.pgnMoves,
+        white,
+        black
       });
     }
 

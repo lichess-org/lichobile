@@ -35,4 +35,7 @@ export interface OfflineRoundInterface extends RoundInterface {
 
 export interface AiRoundInterface extends OfflineRoundInterface {
   onEngineBestMove(bm: string): void
+  resign(): void
+  white(): string
+  black(): string
 }

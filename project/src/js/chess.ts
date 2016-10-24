@@ -67,6 +67,8 @@ export interface PgnDumpRequest {
   variant: VariantKey
   initialFen: string
   pgnMoves: Array<string>
+  white?: string
+  black?: string
 }
 
 export interface PgnDumpResponse {

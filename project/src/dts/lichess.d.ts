@@ -163,6 +163,7 @@ interface Game {
   createdAt?: Timestamp;
   boosted?: boolean;
   rematch?: string;
+  offline?: boolean;
 }
 
 interface OnlineGame extends Game {

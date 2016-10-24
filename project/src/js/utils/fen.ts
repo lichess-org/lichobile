@@ -1,4 +1,5 @@
 export const emptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
+export const standardFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export function readFen(fen: string) {
   const parts = fen.split(' ');

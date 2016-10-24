@@ -30,7 +30,7 @@ export default {
       const pgn = target[0].value;
       importing(true);
       chess.pgnRead({ pgn })
-      .then(data => {
+      .then((data: chess.PgnReadResponse) => {
         const setup = data.setup;
         const gameData = makeData({
           variant: data.variant,

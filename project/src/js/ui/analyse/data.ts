@@ -1,4 +1,4 @@
-import { playerFromFen, plyFromFen } from '../../utils/fen';
+import { playerFromFen, plyFromFen, standardFen } from '../../utils/fen';
 import { oppositeColor } from '../../utils';
 import { AnalysisData } from './interfaces';
 
@@ -7,9 +7,9 @@ export function makeDefaultData(fen: string): AnalysisData {
   const ply = plyFromFen(fen);
   return {
     game: {
-      fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      fen: fen || standardFen,
       id: 'synthetic',
-      initialFen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      initialFen: fen || standardFen,
       player,
       source: 'offline',
       status: {

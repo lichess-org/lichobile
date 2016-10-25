@@ -24,20 +24,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface } from './interfaces';
-
-interface VM {
-  shouldGoBack: boolean
-  path: Path
-  pathStr: string
-  step: AnalysisStep
-  cgConfig: Chessground.SetConfig
-  variationMenu: string
-  flip: boolean
-  analysisProgress: boolean
-  showBestMove: boolean
-  showComments: boolean
-}
+import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface } from './interfaces';
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -430,10 +417,18 @@ export default class AnalyseCtrl {
       .catch(handleXhrError);
     } else {
       const endSituation = this.data.steps[this.data.steps.length - 1];
+      const white = this.data.player.color === 'white' ?
+        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous');
+      const black = this.data.player.color === 'black' ?
+        (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
+        (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous');
       chess.pgnDump({
         variant: this.data.game.variant.key,
         initialFen: this.data.game.initialFen,
-        pgnMoves: endSituation.pgnMoves
+        pgnMoves: endSituation.pgnMoves,
+        white,
+        black
       })
       .then((res: chess.PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
       .catch(console.error.bind(console));

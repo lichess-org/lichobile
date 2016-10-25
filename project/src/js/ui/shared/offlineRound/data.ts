@@ -1,3 +1,4 @@
+import session from '../../../session';
 import { oppositeColor } from '../../../utils';
 import { standardFen } from '../../../utils/fen';
 import i18n from '../../../i18n';
@@ -10,6 +11,7 @@ const standardVariant: Variant = {
 };
 
 export interface OfflineDataConfig {
+  id: string
   variant: Variant
   initialFen: string
   fen: string
@@ -24,9 +26,16 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
 
   const confColor = cfg.color || 'white';
 
+  const player = {
+    id: 'player',
+    color: confColor,
+    username: cfg.id === 'offline_ai' ? session.appUser(i18n(confColor)) : i18n(confColor),
+    spectator: false
+  };
+
   return {
     game: {
-      id: 'offline',
+      id: cfg.id,
       offline: true,
       variant: cfg.variant || standardVariant,
       initialFen: cfg.initialFen || standardFen,
@@ -38,12 +47,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
         name: 'created'
       }
     },
-    player: {
-      id: 'player',
-      color: confColor,
-      username: i18n(confColor),
-      spectator: false
-    },
+    player,
     opponent: {
       id: 'opponent',
       color: oppositeColor(confColor),

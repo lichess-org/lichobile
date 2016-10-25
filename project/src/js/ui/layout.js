@@ -29,7 +29,7 @@ export default {
     );
   },
 
-  board(header, content, overlay, color = '') {
+  board(header, content, overlay = null, color = '') {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>

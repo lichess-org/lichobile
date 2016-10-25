@@ -256,6 +256,12 @@ export default {
   savePreferences: throttle(savePreferences, 1000),
   get: getSession,
   getUserId,
+  appUser(fallback: string) {
+    if (session)
+      return session && session.username;
+    else
+      return fallback;
+  },
   nowPlaying,
   myTurnGames,
   lichessBackedProp,

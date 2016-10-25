@@ -109,6 +109,7 @@ export default class OtbRound implements OfflineRoundInterface {
     chess.init(payload)
     .then((data: chess.InitResponse) => {
       this.init(makeData({
+        id: 'offline_otb',
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,

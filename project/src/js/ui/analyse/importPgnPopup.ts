@@ -33,6 +33,7 @@ export default {
       .then((data: chess.PgnReadResponse) => {
         const setup = data.setup;
         const gameData = makeData({
+          id: 'imported_pgn',
           variant: data.variant,
           initialFen: setup.fen,
           fen: setup.fen,

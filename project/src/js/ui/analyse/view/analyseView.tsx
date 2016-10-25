@@ -8,7 +8,7 @@ import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
 import { gameTitle, connectingHeader, header, backButton as renderBackbutton } from '../../shared/common';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
-import Board from '../../shared/Board';
+import Board, { Attrs as BoardAttrs, Shape } from '../../shared/Board';
 import * as helper from '../../helper';
 import layout from '../../layout';
 import { notesView } from '../../shared/round/notes';
@@ -17,7 +17,7 @@ import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
-import { defined, renderEval, isSynthetic } from '../util';
+import { renderEval, isSynthetic } from '../util';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import explorerView from '../explorer/explorerView';
 import evalSummary from '../evalSummaryPopup';
@@ -25,9 +25,11 @@ import treePath from '../path';
 import { renderTree } from './treeView';
 import settings from '../../../settings';
 
-let pieceNotation;
+import { AnalyseCtrlInterface } from '../interfaces';
 
-export default function analyseView(vnode) {
+let pieceNotation: boolean;
+
+export default function analyseView(vnode: Mithril.Vnode<any>) {
   const isPortrait = helper.isPortrait();
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse');
 
@@ -39,7 +41,7 @@ export default function analyseView(vnode) {
     return layout.board(
       () => header(title, backButton),
       () => renderContent(this.ctrl, isPortrait, bounds),
-      () => overlay(this.ctrl, isPortrait)
+      () => overlay(this.ctrl)
     );
   } else {
     return layout.board(
@@ -52,7 +54,7 @@ export default function analyseView(vnode) {
   }
 }
 
-function overlay(ctrl) {
+function overlay(ctrl: AnalyseCtrlInterface) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
@@ -64,43 +66,44 @@ function overlay(ctrl) {
   ];
 }
 
-function renderContent(ctrl, isPortrait, bounds) {
+function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
-  let nextBest, curBestMove, pastBest;
+  let nextBest: string | null;
+  let curBestShape: Shape, pastBestShape: Shape;
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextStepBest();
-    curBestMove = nextBest ? {
+    curBestShape = nextBest ? {
       brush: 'paleBlue',
-      orig: nextBest.slice(0, 2),
-      dest: nextBest.slice(2, 4)
+      orig: (nextBest.slice(0, 2) as Pos),
+      dest: (nextBest.slice(2, 4) as Pos)
     } : ceval && ceval.best ? {
       brush: 'paleBlue',
-      orig: ceval.best.slice(0, 2),
-      dest: ceval.best.slice(2, 4)
+      orig: (ceval.best.slice(0, 2) as Pos),
+      dest: (ceval.best.slice(2, 4) as Pos)
     } : null;
   }
   if (ctrl.vm.showComments) {
-    pastBest = rEval && rEval.best ? {
+    pastBestShape = rEval && rEval.best ? {
       brush: 'paleGreen',
-      orig: rEval.best.slice(0, 2),
-      dest: rEval.best.slice(2, 4)
+      orig: (rEval.best.slice(0, 2) as Pos),
+      dest: (rEval.best.slice(2, 4) as Pos)
     } : null;
   }
 
   const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
   const nextMove = nextStep && nextStep.uci ? nextStep.uci.includes('@') ? {
     brush: 'palePurple',
-    orig: nextStep.uci.slice(2, 4)
+    orig: (nextStep.uci.slice(2, 4) as Pos)
   } : {
     brush: 'palePurple',
-    orig: nextStep.uci.slice(0, 2),
-    dest: nextStep.uci.slice(2, 4)
+    orig: (nextStep.uci.slice(0, 2) as Pos),
+    dest: (nextStep.uci.slice(2, 4) as Pos)
   } : null;
 
-  const shapes = nextMove ? [nextMove] : [pastBest, curBestMove].filter(noNull);
+  const shapes = nextMove ? [nextMove] : [pastBestShape, curBestShape].filter(noNull);
 
-  const board = m(Board, {
+  const board = m<BoardAttrs>(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
@@ -116,12 +119,12 @@ function renderContent(ctrl, isPortrait, bounds) {
         explorerView(ctrl) :
         renderAnalyseTable(ctrl, isPortrait)
       }
-      {renderActionsBar(ctrl, isPortrait)}
+      {renderActionsBar(ctrl)}
     </div>
   ];
 }
 
-function renderAnalyseTable(ctrl, isPortrait) {
+function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   const className = [
     isSynthetic(ctrl.data) ? 'synthetic' : '',
     'analyseTable'
@@ -137,7 +140,7 @@ function renderAnalyseTable(ctrl, isPortrait) {
   );
 }
 
-function renderInfos(ctrl, isPortrait) {
+function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   const cevalEnabled = ctrl.ceval.enabled();
   const isCrazy = !!ctrl.vm.step.crazy;
 
@@ -155,25 +158,25 @@ function renderInfos(ctrl, isPortrait) {
   );
 }
 
-function getChecksCount(ctrl, color) {
+function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
   const step = ctrl.vm.step;
   return step.checkCount[oppositeColor(color)];
 }
 
-function renderEvalBox(ctrl) {
-  const ceval = ctrl.currentAnyEval() || {};
+function renderEvalBox(ctrl: AnalyseCtrlInterface) {
+  const ceval = ctrl.currentAnyEval();
   const step = ctrl.vm.step;
-  let pearl, percent;
+  let pearl: any, percent: number;
 
-  if (defined(ceval.cp) && ctrl.nextStepBest()) {
+  if (ceval && ceval.cp && ctrl.nextStepBest()) {
     pearl = renderEval(ceval.cp);
     percent = ctrl.ceval.enabled() ? 100 : 0;
   }
-  else if (defined(ceval.cp)) {
+  else if (ceval && ceval.cp) {
     pearl = renderEval(ceval.cp);
     percent = ctrl.ceval.enabled() ? ctrl.ceval.percentComplete() : 0;
   }
-  else if (defined(ceval.mate)) {
+  else if (ceval && ceval.mate) {
     pearl = '#' + ceval.mate;
     percent = ctrl.ceval.enabled() ? 100 : 0;
   }
@@ -213,7 +216,7 @@ function renderEvalBox(ctrl) {
   );
 }
 
-function renderOpponents(ctrl, isPortrait) {
+function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   if (isSynthetic(ctrl.data)) return null;
 
   const player = ctrl.data.player;
@@ -273,12 +276,12 @@ function renderOpponents(ctrl, isPortrait) {
           position: 'bottom'
         }) : null}
       </div>
-      {!isCrazy || !isPortrait ? renderStatus(ctrl) : null}
+      {(!isCrazy || !isPortrait) && gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
     </div>
   );
 }
 
-function renderStatus(ctrl) {
+function renderStatus(ctrl: AnalyseCtrlInterface) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   return (
     <div key="gameStatus" className="status">
@@ -289,21 +292,22 @@ function renderStatus(ctrl) {
   );
 }
 
-function getMoveEl(e) {
-  return e.target.tagName === 'MOVE' ? e.target :
-    helper.findParentBySelector(e.target, 'move');
+function getMoveEl(e: Event) {
+  const target = (e.target as HTMLElement);
+  return target.tagName === 'MOVE' ? target :
+    helper.findParentBySelector(target, 'move');
 }
 
-function onReplayTap(ctrl, e) {
+function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getMoveEl(e);
-  if (el && el.dataset.path) {
-    ctrl.jump(treePath.read(el.dataset.path));
+  if (el && (el.dataset as any).path) {
+    ctrl.jump(treePath.read((el.dataset as any).path));
   }
 }
 
-function renderReplay(ctrl) {
+function renderReplay(ctrl: AnalyseCtrlInterface) {
 
-  var result;
+  let result: string;
   if (ctrl.data.game.status.id >= 30) switch (ctrl.data.game.winner) {
     case 'white':
       result = '1-0';
@@ -330,13 +334,13 @@ function renderReplay(ctrl) {
   );
 }
 
-function buttons(ctrl) {
+function buttons(ctrl: AnalyseCtrlInterface) {
   return [
     ['first', 'fast-backward', control.first ],
     ['prev', 'backward', control.prev],
     ['next', 'forward', control.next],
     ['last', 'fast-forward', control.last]
-  ].map(b => {
+  ].map((b: [string, string, (ctrl: AnalyseCtrlInterface) => boolean]) => {
     const className = [
       'action_bar_button',
       'fa',
@@ -353,7 +357,7 @@ function buttons(ctrl) {
   });
 }
 
-function renderActionsBar(ctrl) {
+function renderActionsBar(ctrl: AnalyseCtrlInterface) {
 
   const explorerBtnClass = [
     'action_bar_button',

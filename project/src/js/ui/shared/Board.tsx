@@ -21,8 +21,14 @@ export interface Attrs {
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string
-  shapes?: any[]
+  shapes?: Shape[]
   alert?: string
+}
+
+export interface Shape {
+  brush: string
+  orig: Pos
+  dest?: Pos
 }
 
 export default {

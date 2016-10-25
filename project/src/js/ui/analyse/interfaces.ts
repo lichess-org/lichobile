@@ -68,15 +68,39 @@ export interface CevalCtrlInterface {
   percentComplete(): number
 }
 
+export interface VM {
+  shouldGoBack: boolean
+  path: Path
+  pathStr: string
+  step: AnalysisStep
+  cgConfig: Chessground.SetConfig
+  variationMenu: string
+  flip: boolean
+  analysisProgress: boolean
+  showBestMove: boolean
+  showComments: boolean
+}
+
 export interface AnalyseCtrlInterface {
   data: AnalysisData
   source: Source
-  vm: any
+  vm: VM
   analyse: AnalyseInterface
   explorer: ExplorerCtrlInterface
   chessground: Chessground.Controller
+  ceval: CevalCtrlInterface
+  menu: any
+  continuePopup: any
+  settings: any
+  importPgnPopup: ImportPgnPopupInterface
+  evalSummary: any
+  notes: any
 
+  flip(): void
+  jump(path: Path, direction?: 'forward' | 'backward'): void
   userJump(path: Path, direction?: 'forward' | 'backward'): void
+  nextStepBest(): string | null
+  currentAnyEval(): Ceval | null
   setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
@@ -106,7 +130,7 @@ export interface AnalyseInterface {
   getSteps(path: Path): Array<AnalysisStep>
   getStepsAfterPly(path: Path, ply: number): Array<AnalysisStep>
   getOpening(path: Path): any
-  nextStepEvalBest(path: Path): number
+  nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
   addDests(dests: DestsMap, path: Path): void
   updateAtPath(path: Path, update: (s: AnalysisStep) => void): void

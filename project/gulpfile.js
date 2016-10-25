@@ -33,6 +33,7 @@ var tsConfig = {
   target: 'es2015',
   module: 'commonjs',
   noImplicitAny: true,
+  suppressImplicitAnyIndexErrors: true,
   jsx: 'preserve'
 };
 

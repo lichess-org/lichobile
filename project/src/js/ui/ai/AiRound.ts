@@ -122,6 +122,7 @@ export default class AiRound implements AiRoundInterface {
     chess.init(payload)
     .then((data: chess.InitResponse) => {
       this.init(makeData({
+        id: 'offline_ai',
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
@@ -149,23 +150,21 @@ export default class AiRound implements AiRoundInterface {
   }
 
   public playerName = () => {
-    return i18n(this.data.player.color);
+    return this.data.player.username;
   }
 
   public white(): string {
-    if (this.data.player.color === 'white') {
+    if (this.data.player.color === 'white')
       return this.data.player.username;
-    } else {
+    else
       return this.getOpponent().name;
-    }
   }
 
   public black(): string {
-    if (this.data.player.color === 'black') {
+    if (this.data.player.color === 'black')
       return this.data.player.username;
-    } else {
+    else
       return this.getOpponent().name;
-    }
   }
 
   public getOpponent() {

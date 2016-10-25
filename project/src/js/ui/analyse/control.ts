@@ -71,6 +71,8 @@ export default {
       ply: ctrl.analyse.tree[ctrl.analyse.tree.length - 1].ply,
       variation: null
     }], 'forward');
+
+    return false;
   },
 
   first: function(ctrl: AnalyseCtrlInterface) {
@@ -78,6 +80,8 @@ export default {
       ply: ctrl.analyse.firstPly(),
       variation: null
     }]);
+
+    return false;
   },
 
   enterVariation: function(ctrl: AnalyseCtrlInterface) {

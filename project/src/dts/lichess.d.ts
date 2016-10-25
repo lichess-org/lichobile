@@ -112,12 +112,12 @@ interface TournamentClock {
 }
 
 interface ClockData {
-  black: number;
-  white: number;
-  emerg: number;
-  running: boolean;
-  initial: number;
-  increment: number;
+  black: number
+  white: number
+  emerg: number
+  running: boolean
+  initial: number
+  increment: number
 }
 
 interface CorrespondenceClockData {
@@ -229,17 +229,18 @@ interface GameStatus {
 }
 
 interface CheckCount {
-  white: number;
-  black: number;
+  white: number
+  black: number
+  [color: string]: number
 }
 
 interface Pocket {
-  queen: number;
-  rook: number;
-  knight: number;
-  bishop: number;
-  pawn: number;
-  [role: string]: number;
+  queen: number
+  rook: number
+  knight: number
+  bishop: number
+  pawn: number
+  [role: string]: number
 }
 
 declare type Pockets = [Pocket, Pocket]

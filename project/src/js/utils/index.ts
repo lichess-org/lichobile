@@ -132,8 +132,8 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
 }
 
 export function playerName(player: Player, withRating: boolean = false): string {
-  if (player.username || player.user) {
-    let name = player.username || player.user.username;
+  if (player.name || player.username || player.user) {
+    let name = player.name || player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;
     if (withRating && (player.user || player.rating)) {
       name += ' (' + (player.rating || player.user.rating);
@@ -283,4 +283,9 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
 
 export function noNull(v: any) {
   return v !== undefined && v !== null;
+}
+
+export function isEmptyObject(obj: Object) {
+  if (typeof obj !== 'object') return false;
+  return Object.keys(obj).length === 0;
 }

@@ -54,7 +54,7 @@ export default {
     );
   },
 
-  free(header, content, footer, overlay) {
+  free(header, content, footer = null, overlay = null) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>

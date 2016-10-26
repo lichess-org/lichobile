@@ -106,13 +106,14 @@ declare namespace JSX {
   }
 }
 
-declare const m: Mithril.Static;
-declare const Vnode: Mithril.VnodeFactory;
-
 declare module 'mithril' {
+  import __Mithril = Mithril
+  const m: __Mithril.Static;
   export = m;
 }
 
 declare module 'mithril/render/vnode' {
+  import __Mithril = Mithril
+  const Vnode: __Mithril.VnodeFactory;
   export = Vnode;
 }

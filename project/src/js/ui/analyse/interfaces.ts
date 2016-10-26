@@ -1,5 +1,5 @@
 export interface RoleToSan {
-  [role: string]: San
+  [role: string]: SanChar
 }
 
 export interface SanToRole {
@@ -104,6 +104,7 @@ export interface AnalyseCtrlInterface {
   setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
+  gameOver(): boolean
 }
 
 export interface ExplorerCtrlInterface {

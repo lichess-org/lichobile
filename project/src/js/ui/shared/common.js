@@ -227,8 +227,12 @@ export function gameTitle(data) {
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
   const name = variant ? (variant.tinyName || variant.shortName || variant.name) : '?';
-  const icon = utils.gameIcon(data.game.perf || data.game.variant.key);
-  const text = `${gameApi.time(data)} • ${name} • ${mode}`;
+  const icon = data.game.source === 'import' ? '/' :
+    utils.gameIcon(data.game.perf || data.game.variant.key);
+  const time = gameApi.time(data);
+  const text = data.game.source === 'import' ?
+    `Import • ${name}` :
+    `${time} • ${name} • ${mode}`;
   return [
     <span className="withIcon" data-icon={icon} />,
     <span>{text}</span>

@@ -4,7 +4,7 @@ declare type StringMap = {
   [i: string]: string;
 }
 
-declare type San = 'P' | 'N' | 'B' | 'R' | 'Q'
+declare type SanChar = 'P' | 'N' | 'B' | 'R' | 'Q'
 
 declare type Color = 'white' | 'black';
 
@@ -80,24 +80,25 @@ interface Drop {
 }
 
 interface Player {
-  id: string;
-  color: Color;
-  rating?: number;
-  user?: User;
-  provisional?: boolean;
-  username?: string;
-  ai?: number;
-  onGame?: boolean;
-  isGone?: boolean;
-  engineName?: string;
-  offeringDraw?: boolean;
-  proposingTakeback?: boolean;
-  offeringRematch?: boolean;
-  spectator?: boolean;
-  berserk?: boolean;
-  version?: number;
-  checks?: number;
-  ratingDiff?: number;
+  id: string
+  color: Color
+  rating?: number
+  user?: User
+  provisional?: boolean
+  username?: string
+  name?: string
+  ai?: number
+  onGame?: boolean
+  isGone?: boolean
+  engineName?: string
+  offeringDraw?: boolean
+  proposingTakeback?: boolean
+  offeringRematch?: boolean
+  spectator?: boolean
+  berserk?: boolean
+  version?: number
+  checks?: number
+  ratingDiff?: number
 }
 
 interface LightPlayer {
@@ -164,13 +165,15 @@ interface Game {
   boosted?: boolean;
   rematch?: string;
   offline?: boolean;
+  importedBy?: string
 }
 
 interface OnlineGame extends Game {
-  rated: boolean;
-  turns: number;
-  speed: string;
-  check?: string;
+  rated: boolean
+  turns: number
+  speed: string
+  check?: string
+  importedBy?: string
 }
 
 interface OfflineGame extends Game {

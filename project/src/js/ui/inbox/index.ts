@@ -4,7 +4,6 @@ import view from './inboxView';
 
 export default {
   oncreate: helper.viewFadeIn,
-  onbeforeremove: helper.viewFadeOut,
   oninit,
   view
 };

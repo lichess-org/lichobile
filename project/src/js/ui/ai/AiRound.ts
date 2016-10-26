@@ -190,7 +190,7 @@ export default class AiRound implements AiRoundInterface {
     const sit = this.replay.situation();
     setTimeout(() => {
       const l = this.getOpponent().level;
-      this.data.opponent.username = aiName({
+      this.data.opponent.name = aiName({
         engineName: 'Stockfish',
         ai: l
       });

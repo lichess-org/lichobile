@@ -14,22 +14,23 @@ const ids = {
   outoftime: 35,
   cheat: 36,
   noStart: 37,
+  unknownFinish: 38,
   variantEnd: 60
 };
 
-function started(data) {
+function started(data: GameData) {
   return data.game.status.id >= ids.started;
 }
 
-function finished(data) {
+function finished(data: GameData) {
   return data.game.status.id >= ids.mate;
 }
 
-function aborted(data) {
+function aborted(data: GameData) {
   return data.game.status.id === ids.aborted;
 }
 
-function toLabel(status, winner, variant) {
+function toLabel(status: string, winner: Color, variant: VariantKey) {
   switch (status) {
     case 'started':
       return i18n('playingRightNow');
@@ -56,6 +57,8 @@ function toLabel(status, winner, variant) {
       return i18n('timeOut');
     case 'noStart':
       return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move';
+    case 'unknownFinish':
+      return i18n('finished');
     case 'cheat':
       return 'Cheat detected';
     case 'variantEnd':
@@ -72,24 +75,10 @@ function toLabel(status, winner, variant) {
   }
 }
 
-function offlineSituationToStatus(sit) {
-  if (sit.finished) {
-    if (sit.checkmate) return ids.mate;
-    else if (sit.stalemate) return ids.stalemate;
-    else if (sit.threefold) return ids.draw;
-    else if (sit.draw) return ids.draw;
-    else return ids.resign;
-  }
-  else {
-    return ids.started;
-  }
-}
-
 export default {
   ids,
   started,
   finished,
   aborted,
-  toLabel,
-  offlineSituationToStatus
+  toLabel
 };

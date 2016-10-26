@@ -33,6 +33,7 @@ import clock from './ui/clock';
 import inbox from './ui/inbox';
 import inboxThread from './ui/inbox/thread';
 import inboxCompose from './ui/inbox/compose';
+import importer from './ui/importer';
 import { defineRoutes } from './router';
 
 export default {
@@ -51,6 +52,7 @@ export default {
       'analyse/:source/:id': analyse,
       'analyse/fen/:fen': analyse,
       'analyse': analyse,
+      'importer': importer,
       'challenge/:id': challenge,
       'tv': tv,
       'correspondence': correspondence,

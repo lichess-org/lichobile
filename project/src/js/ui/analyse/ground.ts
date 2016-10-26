@@ -1,7 +1,15 @@
 import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
 
-function makeConfig(data, config, orientation, onMove, onNewPiece) {
+import { AnalysisData } from './interfaces';
+
+function makeConfig(
+  data: AnalysisData,
+  config: Chessground.SetConfig,
+  orientation: Color,
+  onMove: (orig: Pos, dest: Pos, capture: boolean) => void,
+  onNewPiece: (piece: Piece, pos: Pos) => void
+) {
   return {
     fen: config.fen,
     check: config.check,
@@ -36,11 +44,17 @@ function makeConfig(data, config, orientation, onMove, onNewPiece) {
 }
 
 export default {
-  make(data, config, orientation, onMove, onNewPiece) {
+  make(
+    data: AnalysisData,
+    config: Chessground.SetConfig,
+    orientation: Color,
+    onMove: (orig: Pos, dest: Pos, capture: boolean) => void,
+    onNewPiece: (piece: Piece, pos: Pos) => void
+  ) {
     return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece));
   },
 
-  promote(ground, key, role) {
+  promote(ground: Chessground.Controller, key: Pos, role: Role) {
     const pieces = {};
     const piece = ground.data.pieces[key];
     if (piece && piece.role === 'pawn') {

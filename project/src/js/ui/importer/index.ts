@@ -1,6 +1,6 @@
-import * as helper from '../../helper';
-import oninit from './composeCtrl';
-import view from './composeView';
+import * as helper from '../helper';
+import oninit from './importerOninit';
+import view from './importerView';
 
 export default {
   oncreate: helper.viewFadeIn,

@@ -1,5 +1,4 @@
 import * as m from 'mithril';
-import { isEmpty } from 'lodash';
 import { hasNetwork, playerName, oppositeColor, noNull } from '../../../utils';
 import i18n from '../../../i18n';
 import * as gameApi from '../../../lichess/game';
@@ -180,7 +179,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
     pearl = '#' + ceval.mate;
     percent = ctrl.ceval.enabled() ? 100 : 0;
   }
-  else if (ctrl.ceval.enabled() && isEmpty(ctrl.vm.step.dests)) {
+  else if (ctrl.ceval.enabled() && ctrl.gameOver()) {
     pearl = '-';
     percent = 0;
   }
@@ -224,6 +223,8 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   if (!player || !opponent) return null;
 
   const isCrazy = !!ctrl.vm.step.crazy;
+
+  const gameMoment = window.moment(ctrl.data.game.createdAt);
 
   // TODO get that from server
   if (opponent.ai) {
@@ -275,6 +276,12 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           color: opponent.color,
           position: 'bottom'
         }) : null}
+      </div>
+      <div className="gameInfos">
+        {gameMoment.format('L') + ' ' + gameMoment.format('LT')}
+        { ctrl.data.game.source === 'import' ?
+          <div>Imported by {ctrl.data.game.importedBy}</div> : null
+        }
       </div>
       {(!isCrazy || !isPortrait) && gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
     </div>

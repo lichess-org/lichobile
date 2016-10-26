@@ -5,9 +5,17 @@ import sound from '../../sound';
 import vibrate from '../../vibrate';
 import Analyse from './Analyse';
 
-export default function(ctrl, gameId, orientation) {
+import { AnalyseCtrlInterface } from './interfaces';
+
+interface ProgressEval {
+  tree: {
+    eval?: any
+  }
+}
+
+export default function(ctrl: AnalyseCtrlInterface, gameId: string, orientation: Color) {
   return {
-    analysisProgress: data => {
+    analysisProgress: (data: ProgressEval) => {
       if (!ctrl.vm.analysisProgress) {
         ctrl.vm.analysisProgress = true;
         redraw();

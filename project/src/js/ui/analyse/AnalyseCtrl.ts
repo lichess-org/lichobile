@@ -7,7 +7,7 @@ import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
+import { isEmptyObject, handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
@@ -24,7 +24,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface } from './interfaces';
+import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface, Ceval, CevalEmit } from './interfaces';
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -53,8 +53,8 @@ export default class AnalyseCtrl {
 
   private debouncedExplorerSetStep: () => void;
 
-  public static decomposeUci(uci: string): [Pos, Pos, San] {
-    return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <San>uci.slice(4, 5)];
+  public static decomposeUci(uci: string): [Pos, Pos, SanChar] {
+    return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <SanChar>uci.slice(4, 5)];
   }
 
   public constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean) {
@@ -366,19 +366,22 @@ export default class AnalyseCtrl {
     ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
   }
 
-  private onCevalMsg = (res: any) => {
+  private onCevalMsg = (res: CevalEmit) => {
     this.analyse.updateAtPath(res.work.path, (step: AnalysisStep) => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
-      step.ceval = res.ceval;
-      // even if we don't need the san move this ensure correct arrows are
-      // displayed
+
+      if (step.ceval === undefined)
+        step.ceval = <Ceval>Object.assign({}, res.ceval);
+      else
+        step.ceval = <Ceval>Object.assign(step.ceval, res.ceval);
+
       chess.move({
         fen: step.fen,
-        orig: res.ceval.best.slice(0, 2),
-        dest: res.ceval.best.slice(2, 4)
+        orig: <Pos>res.ceval.best.slice(0, 2),
+        dest: <Pos>res.ceval.best.slice(2, 4)
       }).then((data: chess.MoveResponse) => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
-        if (treePath.write(res.work.path) === this.vm.pathStr) {
+        if (res.work.path === this.vm.path) {
           redraw();
         }
       })
@@ -389,9 +392,24 @@ export default class AnalyseCtrl {
     });
   }
 
+  public gameOver() {
+    if (!isEmptyObject(this.vm.step.dests)) return false;
+    if (this.vm.step.check) {
+      const san = this.vm.step.san;
+      const checkmate = san && san[san.length - 1] === '#';
+      return checkmate;
+    }
+    if (this.vm.step.crazy) {
+      // no stalemate with full crazyhouse pockets
+      const wtm = this.vm.step.fen.indexOf(' w ') !== -1;
+      const p = this.vm.step.crazy.pockets[wtm ? 0 : 1];
+      if (p.pawn || p.knight || p.bishop || p.rook || p.queen) return false;
+    }
+    return true;
+  }
+
   public canUseCeval = () => {
-    return !!this.vm.step.dests && (!this.vm.step.rEval ||
-      !this.nextStepBest());
+    return !this.gameOver() && (!this.vm.step.rEval || !this.nextStepBest());
   }
 
   public nextStepBest = () => {

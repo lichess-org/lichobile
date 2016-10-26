@@ -1,3 +1,4 @@
+import * as m from 'mithril'
 import * as chessground from 'chessground-mobile';
 import { getBoardBounds } from '../helper';
 import { playerFromFen } from '../../utils/fen';

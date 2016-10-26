@@ -1,3 +1,4 @@
+import * as m from 'mithril'
 import * as chessground from 'chessground-mobile';
 import i18n from '../../i18n';
 import { playerFromFen } from '../../utils/fen';

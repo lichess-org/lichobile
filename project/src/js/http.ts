@@ -47,7 +47,7 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
   function onError(error: any) {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
-    throw error;
+    return Promise.reject(error);
   }
 
   const cfg: RequestInit = {

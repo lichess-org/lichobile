@@ -4,7 +4,8 @@ let scheduledAnimationFrame = false;
 
 export default function() {
   if (!scheduledAnimationFrame) {
-    scheduledAnimationFrame = requestAnimationFrame(() => {
+    scheduledAnimationFrame = true;
+    requestAnimationFrame(() => {
       scheduledAnimationFrame = false;
       signals.redraw.dispatch();
     });

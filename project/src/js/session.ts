@@ -185,7 +185,7 @@ function login(username: string, password: string) {
       session = <Session>data;
       return session;
     } else {
-      Promise.reject({ ipban: true });
+      throw { ipban: true };
     }
   });
 }

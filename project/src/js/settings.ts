@@ -1,10 +1,15 @@
 import store from './storage';
 import { range } from 'lodash';
 
-function localstorageprop<T>(key: string, initialValue?: T): Prop<T> {
-  return function() {
+export interface SettingsProp<T> {
+  (): T
+  (value: T): T;
+}
+
+function localstorageprop<T>(key: string, initialValue?: T): SettingsProp<T> {
+  return function(): T {
     if (arguments.length) store.set(key, arguments[0]);
-    const ret = store.get(key);
+    const ret = store.get<T>(key);
     return (ret !== null) ? ret : initialValue;
   };
 }
@@ -14,9 +19,9 @@ function tupleOf(x: number) {
 }
 
 interface GameSettings {
-  time: Prop<string>;
-  timeMode: Prop<string>;
-  increment: Prop<string>;
+  time: SettingsProp<string>;
+  timeMode: SettingsProp<string>;
+  increment: SettingsProp<string>;
 }
 
 export default {

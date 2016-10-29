@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
 import * as m from 'mithril';
+import { SettingsProp } from '../../settings';
 
 type SelectOption = string[]
 
@@ -41,7 +42,7 @@ export default {
     label: string,
     name: string,
     options: Array<SelectOption>,
-    settingsProp: Prop<string>,
+    settingsProp: SettingsProp<string>,
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
@@ -72,7 +73,7 @@ export default {
   renderCheckbox(
     label: string,
     name:string,
-    settingsProp: Prop<boolean>,
+    settingsProp: SettingsProp<boolean>,
     callback: (v: boolean) => void,
     disabled: boolean
   ) {

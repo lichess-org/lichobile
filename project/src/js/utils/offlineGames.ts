@@ -5,8 +5,8 @@ import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';
 
-export function getCurrentOTBGame() {
-  return storage.get(otbStorageKey);
+export function getCurrentOTBGame(): StoredOfflineGame {
+  return storage.get<StoredOfflineGame>(otbStorageKey);
 }
 
 export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
@@ -34,8 +34,8 @@ export function setCurrentOTBGame(game: StoredOfflineGame): void {
   storage.set(otbStorageKey, game);
 }
 
-export function getCurrentAIGame() {
-  return storage.get(aiStorageKey);
+export function getCurrentAIGame(): StoredOfflineGame {
+  return storage.get<StoredOfflineGame>(aiStorageKey);
 }
 
 export function setCurrentAIGame(game: StoredOfflineGame): void {

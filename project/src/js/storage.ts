@@ -1,4 +1,4 @@
-function withStorage(f) {
+function withStorage<T>(f: (s: Storage) => T | void): T | void {
   // can throw an exception when storage is full
   try {
     return !!window.localStorage ? f(window.localStorage) : null;
@@ -6,18 +6,18 @@ function withStorage(f) {
 }
 
 export default {
-  get: function(k) {
-    return withStorage(function(s) {
+  get<T>(k: string): T {
+    return withStorage((s) => {
       return JSON.parse(s.getItem(k));
     });
   },
-  remove: function(k) {
-    withStorage(function(s) {
+  remove(k: string): void {
+    withStorage((s) => {
       s.removeItem(k);
     });
   },
-  set: function(k, v) {
-    withStorage(function(s) {
+  set<T>(k: string, v: T): void {
+    withStorage((s) => {
       s.removeItem(k);
       s.setItem(k, JSON.stringify(v));
     });

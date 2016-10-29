@@ -8,11 +8,6 @@ declare type SanChar = 'P' | 'N' | 'B' | 'R' | 'Q'
 
 declare type Color = 'white' | 'black';
 
-interface Prop<T> {
-  (): T
-  (value: T): T;
-}
-
 declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
 
 declare type Speed = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'unlimited'
@@ -25,7 +20,6 @@ declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' 
 declare type DestsMap = {
   [index: string]: Array<Pos>
 }
-
 
 interface LichessOptions {
   apiEndPoint: string;

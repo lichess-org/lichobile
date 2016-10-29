@@ -7,7 +7,7 @@ import settings from './settings';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 
-import { LobbyData } from './lichess/interfaces';
+import { LobbyData, NowPlayingGame } from './lichess/interfaces';
 
 interface Profile {
   country?: string
@@ -15,28 +15,6 @@ interface Profile {
   bio?: string
   firstName?: string
   lastName?: string
-}
-
-interface NowPlayingOpponent {
-  id: string
-  username: string
-  rating: number
-  ai?: number
-}
-
-export interface NowPlayingGame {
-  gameId: string
-  fullId: string
-  isMyTurn: boolean
-  lastMove: string
-  variant: Variant
-  speed: Speed
-  perf: Perf
-  color: Color
-  fen: string
-  rated: boolean
-  opponent?: NowPlayingOpponent
-  secondsLeft: number
 }
 
 interface Session {

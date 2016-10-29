@@ -3,13 +3,14 @@ import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames'
 import router from '../router';
 import * as helper from './helper';
 import * as IScroll from 'iscroll';
-import session, { NowPlayingGame } from '../session';
+import session from '../session';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import * as gameApi from '../lichess/game';
 import challengesApi, { Challenge } from '../lichess/challenges';
+import { NowPlayingGame } from '../lichess/interfaces';
 import * as m from 'mithril';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 
@@ -211,7 +212,9 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
       id: data.opponent.user.id,
       username: data.opponent.user.username,
       rating: data.opponent.rating
-    } : undefined,
+    } : {
+      username: 'Anonymous'
+    },
     rated: data.game.rated,
     secondsLeft: data.correspondence && data.correspondence[data.player.color],
     speed: data.game.speed,
@@ -221,6 +224,7 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
 
 function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
   const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
+  const playerName = utils.playerName(g.opponent, false);
   const cardClass = [
     'card',
     'standard',
@@ -242,7 +246,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
       <div className="infos">
         <div className="icon-game" data-icon={icon ? icon : ''} />
         <div className="description">
-          <h2 className="title">{utils.playerName(g.opponent, false)}</h2>
+          <h2 className="title">{playerName}</h2>
           <p>
             <span className="variant">{g.variant.name}</span>
             <span className={timeClass}>{timeLeft(g)}</span>

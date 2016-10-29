@@ -1,6 +1,7 @@
 import storage from '../storage';
 import { cloneDeep, difference } from 'lodash';
 import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
+import { NowPlayingGame } from '../lichess/interfaces';
 
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';
@@ -77,13 +78,13 @@ export function removeOfflineGameData(id: string) {
   storage.set(offlineCorresStorageKey, stored);
 }
 
-export function syncWithNowPlayingGames(nowPlaying: any) {
+export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>) {
   if (nowPlaying === undefined) return;
 
   const stored = storage.get(offlineCorresStorageKey) || {};
   const storedIds = Object.keys(stored);
   // TODO make now playing game type
-  const toRemove = difference(storedIds, nowPlaying.map((g: any) => g.fullId));
+  const toRemove = difference(storedIds, nowPlaying.map((g: NowPlayingGame) => g.fullId));
 
   if (toRemove.length > 0) {
     toRemove.forEach(id => {

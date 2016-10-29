@@ -2,6 +2,7 @@ import i18n from '../i18n';
 import { FetchError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
+import { NowPlayingOpponent } from '../lichess/interfaces';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
@@ -131,8 +132,8 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
   }
 }
 
-// type of player should be Player | NowPlayingOpponent | LightUser
-// but this function needs rewrite with type guards
+// TODO
+// this is too polymorphic to be typed... needs a complete refactoring
 export function playerName(player: any, withRating: boolean = false): string {
   if (player.name || player.username || player.user) {
     let name = player.name || player.username || player.user.username;
@@ -152,7 +153,7 @@ export function playerName(player: any, withRating: boolean = false): string {
   return 'Anonymous';
 }
 
-export function aiName(player: any) {
+export function aiName(player: { engineName?: string, ai: number }) {
   return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 

@@ -12,6 +12,7 @@
 /// <reference path="../dts/rlite.d.ts" />
 /// <reference path="../dts/stockfish.d.ts" />
 /// <reference path="../dts/zanimo.d.ts" />
+/// <reference path="../dts/signals.d.ts" />
 /// <reference path="../dts/misc.d.ts" />
 
 'use strict';

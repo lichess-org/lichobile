@@ -26,7 +26,6 @@ let isOpen = false;
 let lastJoined: NowPlayingGame | undefined;
 
 export interface GamesMenu {
-  isOpen(): boolean
   lastJoined(): NowPlayingGame | undefined
   resetLastJoined(): void
   open(): void
@@ -35,9 +34,6 @@ export interface GamesMenu {
 }
 
 export default {
-  isOpen() {
-    return isOpen;
-  },
   lastJoined() {
     return lastJoined;
   },

@@ -1,4 +1,4 @@
-interface Friend {
+export interface Friend {
   name: string;
   playing: boolean;
 }

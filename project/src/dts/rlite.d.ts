@@ -1,16 +1,20 @@
-declare module 'rlite-router' {
-  interface RouteParams {
+declare namespace Rlite {
+  interface RouteParams<T> {
     url: string;
-    params: any;
+    params: T
   }
   interface Rlite {
-    add(route: string, handler: (params: RouteParams) => void): void;
+    add<T>(route: string, handler: (params: RouteParams<T>) => void): void;
     run(url: string): boolean;
     exists(url: string): boolean;
   }
   interface RliteFactory {
     new(): Rlite;
   }
-  const Rlite: RliteFactory
-  export = Rlite;
+}
+
+declare module 'rlite-router' {
+  import __Rlite = Rlite
+  const rlite: __Rlite.RliteFactory
+  export = rlite;
 }

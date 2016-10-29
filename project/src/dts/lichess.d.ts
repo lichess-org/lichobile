@@ -34,6 +34,7 @@ interface Window {
   lichess: LichessOptions;
   moment: any;
   shouldRotateToOrientation: () => boolean;
+  handleOpenURL: (url: string) => void
 }
 
 interface PongMessage {

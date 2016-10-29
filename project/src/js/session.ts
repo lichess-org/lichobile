@@ -7,6 +7,8 @@ import settings from './settings';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
 
+import { LobbyData } from './lichess/interfaces';
+
 interface Profile {
   country?: string
   location?: string
@@ -51,12 +53,6 @@ interface Session {
   nbChallenges: number
   nbFollowers: number
   nbFollowing: number
-}
-
-interface LobbyJson {
-  lobby: {
-    version: number
-  }
 }
 
 let session: Session = null;
@@ -165,7 +161,7 @@ function lichessBackedProp(path: string, prefRequest: () => Promise<any>) {
   };
 }
 
-function isSession(data: Session | LobbyJson): data is Session {
+function isSession(data: Session | LobbyData): data is Session {
   return (<Session>data).id !== undefined;
 }
 
@@ -177,12 +173,12 @@ function login(username: string, password: string) {
       password
     })
   }, true)
-  .then((data: Session | LobbyJson) => {
+  .then((data: Session | LobbyData) => {
     if (isSession(data)) {
       session = <Session>data;
       return session;
     } else {
-      throw { ipban: true };
+      Promise.reject({ ipban: true });
     }
   });
 }
@@ -196,7 +192,7 @@ function logout() {
   });
 }
 
-function signup(username: string, email: string, password: string) {
+function signup(username: string, email: string, password: string): Promise<Session> {
   return fetchJSON('/signup', {
     method: 'POST',
     body: JSON.stringify({
@@ -205,15 +201,15 @@ function signup(username: string, email: string, password: string) {
       password
     })
   }, true)
-  .then(function(data) {
+  .then((data: Session) => {
     session = data;
     return session;
   });
 }
 
-function rememberLogin() {
+function rememberLogin(): Promise<Session> {
   return fetchJSON('/account/info')
-  .then(data => {
+  .then((data: Session) => {
     session = data;
     return data;
   });
@@ -222,7 +218,7 @@ function rememberLogin() {
 function refresh(): Promise<Session> {
   if (hasNetwork() && isConnected()) {
     return fetchJSON('/account/info')
-    .then(data => {
+    .then((data: Session) => {
       session = data;
       // if server tells me, reload challenges
       if (session.nbChallenges !== challengesApi.incoming().length) {

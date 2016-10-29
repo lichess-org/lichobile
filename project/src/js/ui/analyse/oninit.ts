@@ -31,7 +31,6 @@ export default function oninit(vnode: Mithril.Vnode<Attrs>) {
     gameXhr(gameId, orientation)
     .then(cfg => {
       helper.analyticsTrackView('Analysis (online game)');
-      cfg.orientation = orientation;
       this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack);
       redraw();
       setTimeout(this.ctrl.debouncedScroll, 250);

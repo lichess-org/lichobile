@@ -1,3 +1,4 @@
+import * as m from 'mithril';
 import socket from '../../socket';
 import redraw from '../../utils/redraw';
 import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
@@ -5,13 +6,7 @@ import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWe
 import { hasNetwork, noop } from '../../utils';
 import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
-import * as m from 'mithril';
-
-interface TimelineEntry {
-  data: any;
-  date: number;
-  type: string;
-}
+import { TimelineEntry } from '../../lichess/interfaces'
 
 export interface HomeCtrl {
   nbConnectedPlayers: Mithril.Property<number>;

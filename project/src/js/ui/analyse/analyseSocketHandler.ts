@@ -23,7 +23,6 @@ export default function(ctrl: AnalyseCtrlInterface, gameId: string, orientation:
       if (data.tree.eval) {
         ctrl.vm.analysisProgress = false;
         gameXhr(gameId, orientation).then(cfg => {
-          cfg.orientation = orientation;
           ctrl.data = cfg;
           ctrl.analyse = new Analyse(ctrl.data);
           ctrl.evalSummary = ctrl.data.analysis ? evalSummary.controller(ctrl) : null;

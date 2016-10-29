@@ -22,7 +22,7 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
 
   const importing = m.prop(false);
 
-  function submitOnline(pgn: string) {
+  function submitOnline(pgn: string): Promise<OnlineGameData> {
     return fetchJSON('/import', {
       method: 'POST',
       headers: {

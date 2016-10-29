@@ -2,19 +2,21 @@ import { fetchJSON, fetchText } from '../../../http';
 import { noop, serializeQueryParameters } from '../../../utils';
 import i18n from '../../../i18n';
 
-export function reload(ctrl) {
+import { OnlineRoundInterface } from '.'
+
+export function reload(ctrl: OnlineRoundInterface): Promise<OnlineGameData> {
   return fetchJSON(ctrl.data.url.round);
 }
 
-export function getPGN(gameId) {
+export function getPGN(gameId: string) {
   return fetchText(`/game/export/${gameId}.pgn`, null, true);
 }
 
-export function readNote(gameId) {
+export function readNote(gameId: string) {
   return fetchText(`/${gameId}/note`);
 }
 
-export function syncNote(gameId, notes) {
+export function syncNote(gameId: string, notes: string) {
 
   return fetchText(`/${gameId}/note`, {
     method: 'POST',

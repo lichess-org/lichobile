@@ -3,6 +3,7 @@ import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
+import { TimelineData, LobbyData } from './lichess/interfaces';
 
 interface GameSetup {
   variant: string;
@@ -18,7 +19,7 @@ interface GameSetup {
   level?: string;
 }
 
-export function newAiGame(fen: string) {
+export function newAiGame(fen: string): Promise<OnlineGameData> {
   const config = settings.gameSetup.ai;
   const body: GameSetup = {
     variant: config.variant(),
@@ -38,7 +39,7 @@ export function newAiGame(fen: string) {
   }, true);
 }
 
-export function seekGame() {
+export function seekGame(): Promise<OnlineGameData> {
   const config = settings.gameSetup.human;
   return fetchJSON('/setup/hook/' + lichessSri, {
     method: 'POST',
@@ -102,7 +103,7 @@ export function acceptChallenge(id: string) {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
-export function lobby(feedback: boolean) {
+export function lobby(feedback: boolean): Promise<LobbyData> {
   return fetchJSON('/', null, feedback);
 }
 
@@ -110,7 +111,7 @@ export function seeks(feedback: boolean) {
   return fetchJSON('/lobby/seeks', null, feedback);
 }
 
-export function game(id: string, color?: string) {
+export function game(id: string, color?: string): Promise<OnlineGameData> {
   let url = '/' + id;
   if (color) url += ('/' + color);
   return fetchJSON(url, null);
@@ -122,7 +123,7 @@ export function toggleGameBookmark(id: string) {
   });
 }
 
-export function featured(channel: string, flip: boolean) {
+export function featured(channel: string, flip: boolean): Promise<OnlineGameData> {
   return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
@@ -143,13 +144,13 @@ export function miniUser(userId: string) {
   return fetchJSON(`/@/${userId}/mini`);
 }
 
-export function timeline() {
+export function timeline(): Promise<TimelineData> {
   return fetchJSON('/timeline', null, false);
 }
 
 export function status() {
   return fetchJSON('/api/status')
-  .then(function(data) {
+  .then((data: any) => {
     if (data.api.current !== apiVersion) {
       for (let i = 0, len = data.api.olds.length; i < len; i++) {
         const o = data.api.olds[i];

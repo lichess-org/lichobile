@@ -11,7 +11,7 @@ import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
-import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/dataFormat';
+import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/interfaces/game';
 import * as chessFormat from '../../../utils/chessFormat';
 import backbutton from '../../../backbutton';
 import { gameTitle } from '../../shared/common';

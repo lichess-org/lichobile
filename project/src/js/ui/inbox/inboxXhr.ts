@@ -1,10 +1,11 @@
 import { fetchJSON } from '../../http';
+import { PagedThreads, ThreadData, ComposeResponse } from './interfaces'
 
-export function inbox() {
+export function inbox(): Promise<PagedThreads> {
   return fetchJSON('/inbox', {}, true);
 }
 
-export function reload(page: number) {
+export function reload(page: number): Promise<PagedThreads> {
   return fetchJSON('/inbox/',
   {
     method: 'GET',
@@ -12,11 +13,11 @@ export function reload(page: number) {
   });
 }
 
-export function thread(id: string) {
+export function thread(id: string): Promise<ThreadData> {
   return fetchJSON('/inbox/' + id, {}, true);
 }
 
-export function respond(id: string, response: string) {
+export function respond(id: string, response: string): Promise<ComposeResponse> {
   return fetchJSON('/inbox/' + id, {
     method: 'POST',
     body: JSON.stringify({

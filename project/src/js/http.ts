@@ -24,17 +24,13 @@ export function checkStatus(response: Response): Response {
   }
 }
 
-export function parseJSON(response: Response): Promise<any> {
-  return response.json();
-}
-
 function addQuerystring(url: string, querystring: string): string {
   const prefix = url.indexOf('?') < 0 ? '?' : '&';
   let res = url + prefix + querystring;
   return res;
 }
 
-function request(url: string, opts?: RequestOpts, feedback = false): Promise<any> {
+export function request(url: string, opts?: RequestOpts, feedback = false): Promise<Response> {
 
   let timeoutId: number;
 
@@ -103,12 +99,12 @@ function request(url: string, opts?: RequestOpts, feedback = false): Promise<any
     .catch(onError);
 }
 
-export function fetchJSON(url: string, opts?: RequestOpts, feedback = false) {
+export function fetchJSON<T>(url: string, opts?: RequestOpts, feedback = false): Promise<T> {
   return request(url, opts, feedback)
-  .then(parseJSON);
+  .then(r => r.json());
 }
 
-export function fetchText(url: string, opts?: RequestOpts, feedback = false) {
+export function fetchText(url: string, opts?: RequestOpts, feedback = false): Promise<string> {
   return request(url, opts, feedback)
   .then(r => r.text());
 }

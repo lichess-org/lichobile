@@ -17,10 +17,6 @@ export interface AnalysisData extends GameData {
   // TODO type this
   analysis?: any;
   steps?: Array<AnalysisStep>;
-  url?: {
-    round: string;
-    socket: string;
-  }
 }
 
 export interface AnalysisStep extends GameStep {

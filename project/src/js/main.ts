@@ -1,19 +1,4 @@
-/// <reference path="../dts/cordova/cordova.d.ts" />
-/// <reference path="../dts/cordova-ionic/cordova-ionic.d.ts" />
-/// <reference path="../dts/cordova-plugin-toast.d.ts" />
-/// <reference path="../dts/cordova-plugin-insomnia.d.ts" />
-/// <reference path="../dts/cordova-plugin-socialsharing.d.ts" />
-/// <reference path="../dts/mithril.d.ts" />
-/// <reference path="../dts/lodash.d.ts" />
-/// <reference path="../dts/sse.d.ts" />
-/// <reference path="../dts/lichess.d.ts" />
-/// <reference path="../dts/chessground.d.ts" />
-/// <reference path="../dts/whatwg-fetch.d.ts" />
-/// <reference path="../dts/rlite.d.ts" />
-/// <reference path="../dts/stockfish.d.ts" />
-/// <reference path="../dts/zanimo.d.ts" />
-/// <reference path="../dts/signals.d.ts" />
-/// <reference path="../dts/misc.d.ts" />
+/// <reference path="../dts/index.d.ts" />
 
 'use strict';
 

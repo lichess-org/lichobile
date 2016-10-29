@@ -44,9 +44,9 @@ export function setCurrentAIGame(game: StoredOfflineGame): void {
 
 const offlineCorresStorageKey = 'offline.corres.games';
 
-export function getOfflineGames(): StoredOfflineGame[] {
+export function getOfflineGames(): Array<OnlineGameData> {
   const stored = storage.get(offlineCorresStorageKey) || {};
-  let arr: StoredOfflineGame[] = [];
+  let arr: OnlineGameData[] = [];
   for (const i in stored) {
     arr.push(stored[i]);
   }

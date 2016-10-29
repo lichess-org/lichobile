@@ -7,8 +7,8 @@ import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
 export default function view() {
   if (this.round) return roundView(this.round);
 
-  const pov = gamesMenu.lastJoined;
-  let board;
+  const pov = gamesMenu.lastJoined();
+  let board: () => Mithril.Child;
 
   if (pov) {
     board = () => viewOnlyBoardContent(pov.fen, pov.lastMove, pov.color,

@@ -96,12 +96,6 @@ interface Player {
   ratingDiff?: number
 }
 
-interface LightPlayer {
-  id: string
-  username: string
-  rating: number
-}
-
 interface TournamentClock {
   limit: number;
   increment: number;
@@ -138,35 +132,35 @@ interface Tournament {
 }
 
 interface Game {
-  id: string;
-  fen: string;
-  initialFen: string;
+  id: string
+  fen: string
+  initialFen: string
   variant: Variant;
-  player: Color;
-  source: string;
-  status: GameStatus;
-  winner?: Color;
-  threefold?: boolean;
-  speed?: string;
-  startedAtTurn?: number;
-  rated?: boolean;
-  turns?: number;
-  lastMove?: string;
-  perf?: string;
-  // FIXME
-  check?: string | boolean;
-  tournamentId?: string;
-  createdAt?: Timestamp;
-  boosted?: boolean;
-  rematch?: string;
-  offline?: boolean;
+  player: Color
+  source: string
+  status: GameStatus
+  winner?: Color
+  threefold?: boolean
+  speed?: Speed
+  startedAtTurn?: number
+  rated?: boolean
+  turns?: number
+  lastMove?: string
+  perf?: Perf
+  // FIXM
+  check?: string | boolean
+  tournamentId?: string
+  createdAt?: Timestamp
+  boosted?: boolean
+  rematch?: string
+  offline?: boolean
   importedBy?: string
 }
 
 interface OnlineGame extends Game {
   rated: boolean
   turns: number
-  speed: string
+  speed: Speed
   check?: string
   importedBy?: string
 }

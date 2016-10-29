@@ -17,7 +17,14 @@ interface Profile {
   lastName?: string
 }
 
-interface NowPlayingGame {
+interface NowPlayingOpponent {
+  id: string
+  username: string
+  rating: number
+  ai?: number
+}
+
+export interface NowPlayingGame {
   gameId: string
   fullId: string
   isMyTurn: boolean
@@ -28,7 +35,7 @@ interface NowPlayingGame {
   color: Color
   fen: string
   rated: boolean
-  opponent: LightPlayer
+  opponent?: NowPlayingOpponent
   secondsLeft: number
 }
 

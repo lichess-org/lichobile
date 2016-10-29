@@ -2,26 +2,121 @@ import * as utils from '../utils';
 import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames';
 import router from '../router';
 import * as helper from './helper';
-import * as iScroll from 'iscroll';
-import session from '../session';
+import * as IScroll from 'iscroll';
+import session, { NowPlayingGame } from '../session';
 import i18n from '../i18n';
 import backbutton from '../backbutton';
 import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import * as gameApi from '../lichess/game';
-import challengesApi from '../lichess/challenges';
+import challengesApi, { Challenge } from '../lichess/challenges';
 import * as m from 'mithril';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 
-var scroller = null;
+interface CardDim {
+  w: number
+  h: number
+  innerW: number
+  margin: number
+}
 
-const gamesMenu = {};
+let scroller: IScroll = null;
 
-gamesMenu.isOpen = false;
+let isOpen = false;
+let lastJoined: NowPlayingGame | undefined;
 
-gamesMenu.open = function() {
-  backbutton.stack.push(gamesMenu.close);
-  gamesMenu.isOpen = true;
+export interface GamesMenu {
+  isOpen(): boolean
+  lastJoined(): NowPlayingGame | undefined
+  resetLastJoined(): void
+  open(): void
+  close(fromBB?: string): void
+  view(): Mithril.Child
+}
+
+export default {
+  isOpen() {
+    return isOpen;
+  },
+  lastJoined() {
+    return lastJoined;
+  },
+  resetLastJoined() {
+    lastJoined = undefined
+  },
+  open,
+  close,
+  view() {
+    if (!isOpen) return null;
+
+    const vh = helper.viewportDim().vh;
+    const cDim = cardDims();
+    const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
+    function wrapperOnCreate(vnode: Mithril.Vnode<{}>) {
+      const el = vnode.dom;
+      if (!helper.isWideScreen()) {
+        scroller = new IScroll(el, {
+          scrollX: true,
+          scrollY: false,
+          momentum: false,
+          snap: '.card',
+          preventDefaultException: {
+            tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+          }
+        });
+      }
+    }
+
+    function wrapperOnRemove() {
+      if (scroller) {
+        scroller.destroy();
+        scroller = null;
+      }
+    }
+
+    function wrapperOnUpdate(vnode: Mithril.Vnode<{}>) {
+      // see https://github.com/cubiq/iscroll/issues/412
+      const el = vnode.dom;
+      if (scroller) {
+        scroller.options.snap = el.querySelectorAll('.card');
+        scroller.refresh();
+      }
+    }
+
+    const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
+
+    return (
+      <div id="games_menu" className="overlay_popup_wrapper"
+      onbeforeremove={(vnode: Mithril.Vnode<{}>, done: () => void) => {
+        vnode.dom.classList.add('fading_out');
+        setTimeout(done, 500);
+      }}
+      >
+      <div className="wrapper_overlay_close"
+      oncreate={helper.ontap(() => close())} />
+      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
+      oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
+      {helper.isWideScreen() ? (
+        <header>
+        {i18n('nbGamesInPlay', session.nowPlaying().length)}
+        </header>
+      ) : null
+      }
+      {helper.isWideScreen() ? (
+        <div className="popup_content">
+        {renderAllGames(null)}
+        </div>
+      ) : renderAllGames(cDim)
+      }
+      </div>
+      </div>
+    );
+  }
+}
+
+function open() {
+  backbutton.stack.push(close);
+  isOpen = true;
   setTimeout(function() {
     if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
   }, 400);
@@ -33,30 +128,29 @@ gamesMenu.open = function() {
   .then(syncWithNowPlayingGames);
 };
 
-gamesMenu.close = function(fromBB) {
-  if (fromBB !== 'backbutton' && gamesMenu.isOpen) backbutton.stack.pop();
-  gamesMenu.isOpen = false;
+function close(fromBB?: string) {
+  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  isOpen = false;
 };
 
-gamesMenu.lastJoined = null;
 
-function joinGame(g) {
-  gamesMenu.lastJoined = g;
-  gamesMenu.close();
+function joinGame(g: NowPlayingGame) {
+  lastJoined = g;
+  close();
   router.set('/game/' + g.fullId);
 }
 
-function acceptChallenge(id) {
+function acceptChallenge(id: string) {
   return xhr.acceptChallenge(id)
   .then(data => {
     helper.analyticsTrackEvent('Challenge', 'Accepted');
     router.set('/game' + data.url.round);
   })
   .then(() => challengesApi.remove(id))
-  .then(gamesMenu.close);
+  .then(() => close());
 }
 
-function declineChallenge(id) {
+function declineChallenge(id: string) {
   return xhr.declineChallenge(id)
   .then(() => {
     helper.analyticsTrackEvent('Challenge', 'Declined');
@@ -64,7 +158,7 @@ function declineChallenge(id) {
   });
 }
 
-function cardDims() {
+function cardDims(): CardDim {
   const vp = helper.viewportDim();
 
   // if we're here it's a phone
@@ -89,7 +183,7 @@ function cardDims() {
   }
 }
 
-function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
+function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: Variant) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
@@ -99,17 +193,17 @@ function renderViewOnlyBoard(cDim, fen, lastMove, orientation, variant) {
   );
 }
 
-function timeLeft(g) {
+function timeLeft(g: NowPlayingGame): Mithril.Child {
   if (!g.isMyTurn) return i18n('waitingForOpponent');
   if (!g.secondsLeft) return i18n('yourTurn');
-  var time = window.moment().add(g.secondsLeft, 'seconds');
+  const time = window.moment().add(g.secondsLeft, 'seconds');
   return m('time', {
     datetime: time.format()
   }, time.fromNow());
 }
 
-function savedGameDataToCardData(data) {
-  const obj = {
+function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
+  return {
     color: data.player.color,
     fen: data.game.fen,
     fullId: data.url.round.substr(1),
@@ -117,25 +211,19 @@ function savedGameDataToCardData(data) {
     isMyTurn: gameApi.isPlayerTurn(data),
     lastMove: data.game.lastMove,
     perf: data.game.perf,
-    opponent: {},
+    opponent: data.opponent.user ? {
+      id: data.opponent.user.id,
+      username: data.opponent.user.username,
+      rating: data.opponent.rating
+    } : undefined,
     rated: data.game.rated,
     secondsLeft: data.correspondence && data.correspondence[data.player.color],
     speed: data.game.speed,
     variant: data.game.variant
   };
-
-  if (data.opponent.user) {
-    obj.opponent = {
-      id: data.opponent.user.id,
-      username: data.opponent.user.username,
-      rating: data.opponent.rating
-    };
-  }
-
-  return obj;
 }
 
-function renderGame(g, cDim, cardStyle) {
+function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
   const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
   const cardClass = [
     'card',
@@ -169,7 +257,7 @@ function renderGame(g, cDim, cardStyle) {
   );
 }
 
-function renderIncomingChallenge(c, cDim, cardStyle) {
+function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object) {
   if (!c.challenger) {
     return null;
   }
@@ -206,7 +294,7 @@ function renderIncomingChallenge(c, cDim, cardStyle) {
   );
 }
 
-function renderAllGames(cDim) {
+function renderAllGames(cDim: CardDim) {
   const nowPlaying = session.nowPlaying();
   const challenges = challengesApi.incoming();
   const cardStyle = cDim ? {
@@ -219,7 +307,7 @@ function renderAllGames(cDim) {
     challenges.length + nowPlaying.length + 1 :
     getOfflineGames().length;
 
-  let wrapperStyle, wrapperWidth;
+  let wrapperStyle: Object, wrapperWidth: number;
   if (cDim) {
     // scroller wrapper width
     // calcul is:
@@ -239,7 +327,7 @@ function renderAllGames(cDim) {
     return renderIncomingChallenge(c, cDim, cardStyle);
   });
 
-  var allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
+  let allCards = challengesDom.concat(nowPlaying.map(g => renderGame(g, cDim, cardStyle)));
 
   if (!utils.hasNetwork()) {
     allCards = getOfflineGames().map(d => {
@@ -251,7 +339,7 @@ function renderAllGames(cDim) {
   if (!helper.isWideScreen()) {
     const newGameCard = (
       <div className="card standard" key="game.new-game" style={cardStyle}
-        oncreate={helper.ontapX(() => { gamesMenu.close(); newGameForm.open(); })}
+        oncreate={helper.ontapX(() => { close(); newGameForm.open(); })}
       >
         {renderViewOnlyBoard(cDim)}
         <div className="infos">
@@ -269,72 +357,3 @@ function renderAllGames(cDim) {
   return m('div#all_games', { style: wrapperStyle }, allCards);
 }
 
-gamesMenu.view = function() {
-  if (!gamesMenu.isOpen) return null;
-
-  const vh = helper.viewportDim().vh;
-  const cDim = cardDims();
-  const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
-  function wrapperOnCreate(vnode) {
-    const el = vnode.dom;
-    if (!helper.isWideScreen()) {
-      scroller = new iScroll(el, {
-        scrollX: true,
-        scrollY: false,
-        momentum: false,
-        snap: '.card',
-        snapSpeed: 400,
-        preventDefaultException: {
-          tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-        }
-      });
-    }
-  }
-
-  function wrapperOnRemove() {
-    if (scroller) {
-      scroller.destroy();
-      scroller = null;
-    }
-  }
-
-  function wrapperOnUpdate(vnode) {
-    // see https://github.com/cubiq/iscroll/issues/412
-    const el = vnode.dom;
-    if (scroller) {
-      scroller.options.snap = el.querySelectorAll('.card');
-      scroller.refresh();
-    }
-  }
-
-  const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : '';
-
-  return (
-    <div id="games_menu" className="overlay_popup_wrapper"
-      onbeforeremove={(vnode, done) => {
-        vnode.dom.classList.add('fading_out');
-        setTimeout(done, 500);
-      }}
-    >
-      <div className="wrapper_overlay_close"
-        oncreate={helper.ontap(gamesMenu.close)} />
-      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
-        oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
-        {helper.isWideScreen() ? (
-          <header>
-            {i18n('nbGamesInPlay', session.nowPlaying().length)}
-          </header>
-        ) : null
-        }
-        {helper.isWideScreen() ? (
-          <div className="popup_content">
-            {renderAllGames(null)}
-          </div>
-          ) : renderAllGames(cDim)
-        }
-      </div>
-    </div>
-  );
-};
-
-export default gamesMenu;

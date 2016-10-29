@@ -3,9 +3,13 @@ import * as helper from '../helper';
 import oninit from './oninit';
 import view from './gameView';
 
+interface Attrs {
+  color: Color
+}
+
 export default {
   oninit,
-  oncreate(vnode) {
+  oncreate(vnode: Mithril.Vnode<Attrs>) {
     if (vnode.attrs.color) {
       helper.pageSlideIn(vnode.dom);
     } else {

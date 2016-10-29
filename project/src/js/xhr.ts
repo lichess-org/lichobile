@@ -99,7 +99,7 @@ export function declineChallenge(id: string) {
   }, true);
 }
 
-export function acceptChallenge(id: string) {
+export function acceptChallenge(id: string): Promise<OnlineGameData> {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 

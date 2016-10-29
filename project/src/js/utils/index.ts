@@ -131,7 +131,9 @@ export function lightPlayerName(player?: any, withRating?: boolean) {
   }
 }
 
-export function playerName(player: Player, withRating: boolean = false): string {
+// type of player should be Player | NowPlayingOpponent | LightUser
+// but this function needs rewrite with type guards
+export function playerName(player: any, withRating: boolean = false): string {
   if (player.name || player.username || player.user) {
     let name = player.name || player.username || player.user.username;
     if (player.user && player.user.title) name = player.user.title + ' ' + name;

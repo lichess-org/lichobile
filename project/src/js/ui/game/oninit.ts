@@ -57,7 +57,7 @@ export default function oninit(vnode: Mithril.Vnode<GameAttrs>) {
         }
 
         this.round = new OnlineRound(vnode.attrs.id, data);
-        (gamesMenu as any).lastJoined = null;
+        gamesMenu.resetLastJoined();
 
         if (data.player.user === undefined) {
           storage.set('lastPlayedGameURLAsAnon', data.url.round);

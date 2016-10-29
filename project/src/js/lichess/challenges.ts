@@ -9,6 +9,7 @@ type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accept
 interface ChallengeUser {
   id: string;
   rating: number;
+  provisional?: boolean
 }
 
 interface TimeControl {
@@ -19,7 +20,7 @@ interface TimeControl {
   increment: number;
 }
 
-interface Challenge {
+export interface Challenge {
   id: string
   direction: 'in' | 'out'
   status: ChallengeStatus

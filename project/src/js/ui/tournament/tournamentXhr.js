@@ -27,3 +27,18 @@ export function withdraw(id) {
 export function playerInfo(tournamentId, playerId) {
   return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
 }
+
+export function create(variant, position, mode, clockTime, clockIncrement, minutes, waitMinutes) {
+  return fetchJSON('/tournament/new', {
+    method: 'POST',
+    body: JSON.stringify({
+      variant,
+      position,
+      mode,
+      clockTime,
+      clockIncrement,
+      minutes,
+      waitMinutes
+    })
+  }, true);
+}

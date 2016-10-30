@@ -3,11 +3,25 @@ import redraw from '../../utils/redraw';
 import * as m from 'mithril';
 
 function renderOption(label, value, storedValue, labelArg, labelArg2) {
+
   return m('option', {
     key: value,
     value: value,
     selected: storedValue === value
   }, i18n(label, labelArg, labelArg2));
+}
+
+
+function renderOptionGroup(label, value, storedValue, labelArg, labelArg2) {
+  if (typeof value === 'string') {
+    return renderOption(label, value, storedValue, labelArg, labelArg2);
+  }
+  else {
+    return m('optgroup', {
+      key: label,
+      label
+    }, value.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])));
+  }
 }
 
 export default {
@@ -75,6 +89,31 @@ export default {
         }
       })
     ]);
-  }
+  },
 
+  renderSelectWithGroups: function(label, name, options, settingsProp, isDisabled, onChangeCallback) {
+    var storedValue = settingsProp();
+    const onChange = function(e) {
+      settingsProp(e.target.value);
+      if (onChangeCallback) onChangeCallback(e.target.value);
+      setTimeout(function() {
+        redraw();
+      }, 10);
+    };
+    return [
+      m('label', {
+        'for': 'select_' + name
+      }, i18n(label)),
+      m('select', {
+        id: 'select_' + name,
+        disabled: isDisabled,
+        oncreate: function(vnode) {
+          vnode.dom.addEventListener('change', onChange, false);
+        },
+        onremove: function(vnode) {
+          vnode.dom.removeEventListener('change', onChange, false);
+        }
+      }, options.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])))
+    ];
+  },
 };

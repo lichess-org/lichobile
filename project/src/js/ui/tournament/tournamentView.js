@@ -10,8 +10,9 @@ import tabs from '../shared/tabs';
 export default function view(vnode) {
   const ctrl = vnode.state;
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
+  const footer = () => renderFooter();
 
-  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl);
+  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, footer);
 }
 
 const TABS = [{
@@ -81,6 +82,17 @@ function renderTournamentListItem(tournament) {
         &#xf054;
       </td>
     </tr>
+  );
+}
+
+function renderFooter() {
+  return (
+    <div className="actions_bar">
+      <button key="createTournament" className="action_bar_button" oncreate={h.ontap(() => router.set('/tournament/new'))}>
+        <span className="fa fa-pencil" />
+        {i18n('createANewTournament')}
+      </button>
+    </div>
   );
 }
 

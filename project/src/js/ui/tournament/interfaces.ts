@@ -1,8 +1,18 @@
 export interface TournamentCreateState {
   errors: Mithril.Property<CreateErrorResponse>
-  send: (form: HTMLFormElement) => void
+  create: (form: HTMLFormElement) => void
+}
+
+export interface TournamentCreateResponse {
+  id: string
 }
 
 export interface CreateErrorResponse {
+  global: Array<string>
   variant: Array<string>
+  mode: Array<string>
+  time: Array<string>
+  increment: Array<string>
+  duration: Array<string>
+  timeToStart: Array<string>
 }

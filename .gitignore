@@ -3,18 +3,15 @@ npm-debug.log
 bin/*.mobileprovision
 bin/*.keystore
 
-/app/platforms
-/app/plugins
-/app/config.xml
-/app/www
+/platforms
+/plugins
 
-project/www/app.js
-project/www/index.html
-project/www/css/compiled
-project/node_modules
-project/env.json
+/www/app.js
+/www/index.html
+/www/css/compiled
 
-private.json
+/node_modules
+/env.json
 
 .DS_Store
 .tags

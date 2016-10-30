@@ -24,7 +24,7 @@ Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 
 Lichess mobile is written in JavaScript (ES6), with the help of [cordova](https://cordova.apache.org/)
 and [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
-[browserify](http://browserify.org/), [gulp](http://gulpjs.com/) and [tarifa](http://tarifa.tools/)
+[browserify](http://browserify.org/) and [gulp](http://gulpjs.com/)
 as build tools. It talks to a native [Stockfish](https://stockfishchess.org/) interface through a
 [cordova plugin](https://github.com/veloce/cordova-plugin-stockfish) and uses
 an [async chess worker](https://github.com/veloce/scalachessjs) which is based
@@ -35,7 +35,6 @@ to JavaScript.
 
 * [node](http://nodejs.org) v5.x
 * [gulp](http://gulpjs.com/) version 3.9.x
-* [tarifa](http://tarifa.tools) latest version
 
 **Android:**
 
@@ -50,13 +49,6 @@ to JavaScript.
 **iOS:**
 
 * OS X and [Xcode](https://developer.apple.com/xcode/download/) version 7.x
-
-## Init project after checkout
-
-    $ tarifa check --force
-
-This will recreate the cordova folder with android and iOS platforms and also
-install plugins.
 
 ## Build the web application
 

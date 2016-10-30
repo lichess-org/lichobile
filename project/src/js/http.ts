@@ -18,8 +18,8 @@ export function checkStatus(response: Response): Response {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {
-    const error: any = new Error(response.statusText);
-    error.response = response;
+    const error = new Error(response.statusText);
+    (error as any).response = response;
     throw error;
   }
 }
@@ -40,7 +40,7 @@ export function request(url: string, opts?: RequestOpts, feedback = false): Prom
     return data;
   }
 
-  function onError(error: any) {
+  function onError(error: Error | Response) {
     clearTimeout(timeoutId);
     if (feedback) spinner.stop();
     return Promise.reject(error);

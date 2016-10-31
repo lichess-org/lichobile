@@ -85,7 +85,7 @@ function renderBody() {
         key: 'analytics'
       }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))
     ]),
-    window.lichess.version ? m('section.app_version', 'v' + window.lichess.version) : null
+    window.AppVersion ? m('section.app_version', 'v' + window.AppVersion.version) : null
   ]);
 }
 

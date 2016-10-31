@@ -18,7 +18,11 @@ var rename = require('gulp-rename');
 // command line options
 var minimistOptions = {
   string: ['env', 'mode', 'target'],
-  default: { env: 'env.json', mode: 'dev', target: 'browser' }
+  default: {
+    env: 'env.json',
+    mode: 'dev',
+    target: 'browser'
+  }
 };
 var options = minimist(process.argv.slice(2), minimistOptions);
 

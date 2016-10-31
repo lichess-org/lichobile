@@ -84,7 +84,6 @@ function submit(form: HTMLElement) {
 }
 
 function open() {
-  console.log(isOpen)
   backbutton.stack.push(helper.slidesOutDown(close, 'loginModal'));
   isOpen = true;
 }

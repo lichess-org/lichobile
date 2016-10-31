@@ -35,6 +35,7 @@ interface Window {
   moment: any;
   shouldRotateToOrientation: () => boolean;
   handleOpenURL: (url: string) => void
+  AppVersion: { version: string }
 }
 
 interface PongMessage {

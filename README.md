@@ -34,7 +34,6 @@ to JavaScript.
 ## Requirements
 
 * [node](http://nodejs.org) v5.x
-* [gulp](http://gulpjs.com/) version 3.9.x
 
 **Android:**
 
@@ -54,15 +53,10 @@ to JavaScript.
 
 Make sure you installed all deps:
 
-    $ cd project
     $ npm install
 
-Then copy `project/env.json.example` to `project/env.json` and modify settings
+Then copy `env.json.example` to `env.json` and modify settings
 to link your app to a lichess server.
-
-To build in dev mode:
-
-    $ gulp
 
 To build and watch for changes:
 
@@ -105,6 +99,3 @@ Connect your device with USB debugging enabled and:
 
 This will use the default configuration which use a development lichess server
 end point.
-
-Please look at [tarifa documentation](http://42loops.gitbooks.io/tarifa/content/)
-for further documentation.

@@ -12,6 +12,8 @@ bin/*.keystore
 
 /node_modules
 /env.json
+/env-prod.json
+/env-stage.json
 
 .DS_Store
 .tags

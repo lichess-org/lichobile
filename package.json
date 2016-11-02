@@ -66,7 +66,7 @@
     "build-js": "gulp --target='cordova'",
     "build-js-prod": "gulp --mode='prod' --target='cordova' --env='env-prod.json'",
     "build-js-stage": "gulp --mode='prod' --target='cordova' --env='env-stage.json'",
-    "emulate-android": "gulp --target='cordova' && cordova emulate android",
+    "emulate-android": "npm run build-js && cordova emulate android",
     "android": "npm run build-js && cordova run android",
     "android-prod": "npm run build-js-prod && cordova run android",
     "android-stage": "npm run build-js-stage && cordova run android",

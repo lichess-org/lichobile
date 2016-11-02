@@ -1,7 +1,7 @@
 {
   "android": {
     "release": {
-      "keystore": "bin/org.lichess.keystore",
+      "keystore": "org.lichess.keystore",
       "storePassword": "",
       "alias": "lichessmobile",
       "password" : "",

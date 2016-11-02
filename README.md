@@ -33,7 +33,8 @@ to JavaScript.
 
 ## Requirements
 
-* [node](http://nodejs.org) v5.x
+* [node](http://nodejs.org) v6.x
+* [cordova](https://cordova.apache.org/) v6.x
 
 **Android:**
 

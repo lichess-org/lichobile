@@ -7,7 +7,10 @@
     <access origin="https://en.lichess.org" />
     <access origin="https://en.stage.lichess.org" />
     <access origin="https://expl.lichess.org" />
+    <hook type="after_prepare" src="scripts/copy_icons.js" />
     <platform name="android">
+        <hook type="after_prepare" src="scripts/android/add_to_manifest.js" />
+        <hook type="after_prepare" src="scripts/android/remove_permissions.js" />
         <icon density="ldpi" src="resources/android/icons/icon-36.png" />
         <icon density="mdpi" src="resources/android/icons/icon-48.png" />
         <icon density="hdpi" src="resources/android/icons/icon-72.png" />

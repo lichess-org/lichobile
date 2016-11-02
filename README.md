@@ -60,21 +60,7 @@ to link your app to a lichess server.
 
 To build and watch for changes:
 
-    $ gulp watch
-
-To run in a browser it needs to have
-web security disabled for loading files and make requests to lichess.
-For mouse interaction you need to use
-[device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/)
-
-Launch chrome with disabled security under linux
-
-    $ chromium --user-data-dir=$HOME/.chromium_dev_dir --disable-web-security
-
-Launch chrome with disabled security under OSX
-
-    $ open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/Users/myUser/.chrome_dev_dir
-
+    $ npm run watch
 
 ## Build stockfish
 
@@ -90,12 +76,3 @@ ndk-build -C app/platforms/android
 Through XCode, in the build settings menu:
   * Set `C++ Language Dialect` option to `C++11` value.
   * Set `C++ Standard Library` option to `lib++` value.
-
-## Build and run on your device
-
-Connect your device with USB debugging enabled and:
-
-    $ tarifa run [platform]
-
-This will use the default configuration which use a development lichess server
-end point.

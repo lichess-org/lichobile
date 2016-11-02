@@ -50,8 +50,8 @@
     "name": "Caro-Kann Defence: Panov-Botvinnik Attack"
   },
   {
-    "eco": "B14",
-    "fen": "rnbqkb1r/pp3ppp/4pn2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+    "eco": "B17",
+    "fen": "r1bqkbnr/pp1npppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
     "name": "Caro-Kann Defence: Steinitz Variation"
   },
   {

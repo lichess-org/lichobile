@@ -48,7 +48,7 @@ to JavaScript.
 
 **iOS:**
 
-* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 7.x
+* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 8.x
 
 ## Build the web application
 

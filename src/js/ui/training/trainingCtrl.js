@@ -202,8 +202,13 @@ export default function ctrl(vnode) {
   this.jump = function(to) {
     const history = this.data.replay.history;
     const step = this.data.replay.step;
+    const state = this.data.replay.history[to];
     if (!(step !== to && to >= 0 && to < history.length)) return false;
     chessground.anim(puzzle.jump, this.chessground.data)(this.data, to);
+    if (step + 1 === to) {
+      if (state.capture) sound.capture();
+      else sound.move();
+    }
     return true;
   }.bind(this);
 

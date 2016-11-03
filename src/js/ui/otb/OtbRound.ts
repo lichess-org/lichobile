@@ -57,7 +57,6 @@ export default class OtbRound implements OfflineRoundInterface {
         try {
           this.init(saved.data, saved.situations, saved.ply);
         } catch (e) {
-          console.log(e, 'Fail to load saved game');
           this.startNewGame(currentVariant);
         }
       } else {

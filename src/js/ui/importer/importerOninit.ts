@@ -75,7 +75,6 @@ export default function oninit(vnode: Mithril.Vnode<{}>): void {
       if (hasNetwork()) {
         submitOnline(pgn)
         .then(data => {
-          console.log(data)
           router.set(`/analyse/online${data.url.round}`);
         })
         .catch(err => {

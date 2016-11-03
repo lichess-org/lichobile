@@ -128,6 +128,7 @@ StrongSocket.prototype = {
     clearTimeout(self.pingSchedule);
     clearTimeout(self.connectSchedule);
     self.connectSchedule = setTimeout(function() {
+      postMessage({ topic: 'disconnected' });
       self.tryAnotherUrl = true;
       self.connect();
     }, delay);
@@ -235,10 +236,10 @@ StrongSocket.prototype = {
   onError: function(e) {
     var self = this;
     postMessage({ topic: 'onError' });
+    postMessage({ topic: 'disconnected' });
     self.options.debug = true;
     self.debug('error: ' + JSON.stringify(e));
     self.tryAnotherUrl = true;
-    postMessage({ topic: 'disconnected' });
     clearTimeout(self.pingSchedule);
   },
 

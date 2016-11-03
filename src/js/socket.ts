@@ -50,9 +50,7 @@ interface SocketSetup {
   opts: SocketConfig
 }
 
-let connectedWS = true;
-let redrawOnDisconnectedTimeoutID: number;
-
+let connectedWS = false;
 let currentMoveLatency: number = 0;
 
 const defaultHandlers: MessageHandlers = {
@@ -278,16 +276,17 @@ function redirectToGame(obj: any) {
 }
 
 function onConnected() {
-  const wasOff = !connectedWS;
-  connectedWS = true;
-  clearTimeout(redrawOnDisconnectedTimeoutID);
-  if (wasOff) redraw();
+  if (!connectedWS) {
+    connectedWS = true;
+    redraw();
+  }
 }
 
 function onDisconnected() {
-  const wasOn = connectedWS;
-  connectedWS = false;
-  if (wasOn) redrawOnDisconnectedTimeoutID = setTimeout(redraw, 2000);
+  if (connectedWS) {
+    connectedWS = false;
+    redraw();
+  }
 }
 
 export default {
@@ -300,7 +299,7 @@ export default {
   setVersion(version: number) {
     tellWorker(worker, 'setVersion', version);
   },
-  send(t: string, data?: any, opts?: any) {
+  send<D, O>(t: string, data?: D, opts?: O) {
     tellWorker(worker, 'send', [t, data, opts]);
   },
   connect() {

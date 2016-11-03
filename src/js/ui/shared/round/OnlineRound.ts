@@ -166,15 +166,13 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private connectSocket = () => {
-    if (hasNetwork()) {
-      socket.createGame(
-        this.data.url.socket,
-        this.data.player.version,
-        socketHandler(this, this.onFeatured, this.onUserTVRedirect),
-        this.data.url.round,
-        this.data.userTV
-      );
-    }
+    socket.createGame(
+      this.data.url.socket,
+      this.data.player.version,
+      socketHandler(this, this.onFeatured, this.onUserTVRedirect),
+      this.data.url.round,
+      this.data.userTV
+    );
   }
 
   public stepsHash(steps: Array<GameStep>) {

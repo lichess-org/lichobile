@@ -9,8 +9,8 @@ var strongSocketDefaults = {
   },
   options: {
     name: 'unnamed',
-    pingMaxLag: 7000, // time to wait for pong before reseting the connection
-    pingDelay: 1000, // time between pong and ping
+    pingMaxLag: 8000, // time to wait for pong before reseting the connection
+    pingDelay: 2000, // time between pong and ping
     autoReconnectDelay: 1000,
     ignoreUnknownMessages: true,
     sendOnOpen: null, // message to send on socket open

@@ -64,6 +64,7 @@
     "build": "gulp",
     "watch": "gulp watch",
     "build-js": "gulp --target='cordova'",
+    "build-js-dev": "gulp --target='cordova' --env='env-dev.json'",
     "build-js-prod": "gulp --mode='prod' --target='cordova' --env='env-prod.json'",
     "build-js-stage": "gulp --mode='prod' --target='cordova' --env='env-stage.json'",
     "emulate-android": "npm run build-js && cordova emulate android",

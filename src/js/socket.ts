@@ -242,7 +242,7 @@ function createDefault() {
       options: {
         name: 'default',
         debug: false,
-        pingDelay: 2000,
+        pingDelay: 3000,
         sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)
       }

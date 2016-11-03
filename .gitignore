@@ -12,8 +12,7 @@ npm-debug.log
 
 /node_modules
 /env.json
-/env-prod.json
-/env-stage.json
+/env-*.json
 
 .DS_Store
 .tags

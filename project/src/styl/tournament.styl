@@ -319,8 +319,37 @@ td.tournamentPoints
 .double
   color #d59120
 
-.tournamentCreate
-  .select_input
-    background black
-    >select
-      padding-left 100px
+#tournamentCreateForm
+  >fieldset
+    padding 0px 20px
+    >.select_input
+      >select
+        padding-left 100px
+      &.no-margin
+        margin-right 0px
+      &.notVisible
+        visibility hidden
+        position absolute
+
+.tournament_form_popup
+  background bglight
+  >.popup_content
+    padding 0
+
+button.newTournamentButton
+  width 100%
+  height 45px
+  border-radius 0 0 5px 5px
+  margin 20px 0 0
+  background gold
+  color #FFF
+  font-size 0.85em
+  text-transform uppercase
+  &[data-icon=E]:before
+    color #fff
+  &:before
+    margin-right 10px
+  &.active
+    background lighten(gold, 10%)
+  > .fa-hourglass-half
+    font-size 20px

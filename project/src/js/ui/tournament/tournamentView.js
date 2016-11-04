@@ -6,6 +6,7 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import * as m from 'mithril';
 import tabs from '../shared/tabs';
+import newTournamentForm from './newTournamentForm';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -88,7 +89,7 @@ function renderTournamentListItem(tournament) {
 function renderFooter() {
   return (
     <div className="actions_bar">
-      <button key="createTournament" className="action_bar_button" oncreate={h.ontap(() => router.set('/tournament/new'))}>
+      <button key="createTournament" className="action_bar_button" oncreate={h.ontap(newTournamentForm.open)}>
         <span className="fa fa-pencil" />
         {i18n('createANewTournament')}
       </button>

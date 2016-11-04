@@ -34,7 +34,7 @@ interface SocketConfig {
 }
 
 type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
-type MessageHandlerGeneric = MessageHandler<any, any>
+type MessageHandlerGeneric = MessageHandler<{}, undefined>
 interface MessageHandlers {
   [index: string]: MessageHandlerGeneric
 }
@@ -69,8 +69,8 @@ const defaultHandlers: MessageHandlers = {
   following_enters: (name: string, payload: FollowingEntersPayload) =>
     autoredraw(() => friendsApi.add(name, payload.playing || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
-  following_playing: name => autoredraw(() => friendsApi.playing(name)),
-  following_stopped_playing: name =>
+  following_playing: (name: string) => autoredraw(() => friendsApi.playing(name)),
+  following_stopped_playing: (name: string) =>
     autoredraw(() => friendsApi.stoppedPlaying(name)),
   challenges: (data: ChallengesData) => {
     challengesApi.set(data);
@@ -267,7 +267,7 @@ function createDefault() {
   }
 }
 
-interface RedirectObj {
+export interface RedirectObj {
   url: string
   cookie?: {
     name: string

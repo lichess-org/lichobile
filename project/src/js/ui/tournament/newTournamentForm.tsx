@@ -16,7 +16,7 @@ export default {
   close,
   view() {
     return popupWidget(
-      'new_tournament_form_popup tournament_form_popup',
+      'tournament_form_popup',
       null,
       () => renderForm(),
       isOpen,

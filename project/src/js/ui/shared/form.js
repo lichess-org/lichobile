@@ -3,7 +3,6 @@ import redraw from '../../utils/redraw';
 import * as m from 'mithril';
 
 function renderOption(label, value, storedValue, labelArg, labelArg2) {
-
   return m('option', {
     key: value,
     value: value,

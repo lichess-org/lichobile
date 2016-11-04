@@ -37,7 +37,7 @@ export interface Challenge {
   }
 }
 
-interface ChallengesData {
+export interface ChallengesData {
   in: Array<Challenge>
   out: Array<Challenge>
 }

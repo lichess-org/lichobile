@@ -77,3 +77,8 @@ ndk-build -C app/platforms/android
 Through XCode, in the build settings menu:
   * Set `C++ Language Dialect` option to `C++11` value.
   * Set `C++ Standard Library` option to `lib++` value.
+  
+
+## Advanced setup
+
+See the wiki.

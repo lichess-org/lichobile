@@ -43,6 +43,7 @@
             true,
             "ban-keywords"
         ],
-        "whitespace": false
+        "whitespace": false,
+        "no-any": true
     }
 }

@@ -1,7 +1,7 @@
 lichess mobile
 ==============
 
-![lichess mobile screenshots](screens/3-screens.png)
+![lichess mobile screenshots](resources/3-screens.png)
 
 ### Official lichess.org mobile application for Android & iOS.
 
@@ -24,7 +24,7 @@ Get it now from [lichess.org/mobile](http://lichess.org/mobile)
 
 Lichess mobile is written in JavaScript (ES6), with the help of [cordova](https://cordova.apache.org/)
 and [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
-[browserify](http://browserify.org/), [gulp](http://gulpjs.com/) and [tarifa](http://tarifa.tools/)
+[browserify](http://browserify.org/) and [gulp](http://gulpjs.com/)
 as build tools. It talks to a native [Stockfish](https://stockfishchess.org/) interface through a
 [cordova plugin](https://github.com/veloce/cordova-plugin-stockfish) and uses
 an [async chess worker](https://github.com/veloce/scalachessjs) which is based
@@ -33,9 +33,8 @@ to JavaScript.
 
 ## Requirements
 
-* [node](http://nodejs.org) v5.x
-* [gulp](http://gulpjs.com/) version 3.9.x
-* [tarifa](http://tarifa.tools) latest version
+* [node](http://nodejs.org) v6.x
+* [cordova](https://cordova.apache.org/) v6.x
 
 **Android:**
 
@@ -49,46 +48,20 @@ to JavaScript.
 
 **iOS:**
 
-* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 7.x
-
-## Init project after checkout
-
-    $ tarifa check --force
-
-This will recreate the cordova folder with android and iOS platforms and also
-install plugins.
+* OS X and [Xcode](https://developer.apple.com/xcode/download/) version 8.x
 
 ## Build the web application
 
 Make sure you installed all deps:
 
-    $ cd project
     $ npm install
 
-Then copy `project/env.json.example` to `project/env.json` and modify settings
+Then copy `env.json.example` to `env.json` and modify settings
 to link your app to a lichess server.
-
-To build in dev mode:
-
-    $ gulp
 
 To build and watch for changes:
 
-    $ gulp watch
-
-To run in a browser it needs to have
-web security disabled for loading files and make requests to lichess.
-For mouse interaction you need to use
-[device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/)
-
-Launch chrome with disabled security under linux
-
-    $ chromium --user-data-dir=$HOME/.chromium_dev_dir --disable-web-security
-
-Launch chrome with disabled security under OSX
-
-    $ open -n -a Google\ Chrome --args --disable-web-security --user-data-dir=/Users/myUser/.chrome_dev_dir
-
+    $ npm run watch
 
 ## Build stockfish
 
@@ -104,15 +77,3 @@ ndk-build -C app/platforms/android
 Through XCode, in the build settings menu:
   * Set `C++ Language Dialect` option to `C++11` value.
   * Set `C++ Standard Library` option to `lib++` value.
-
-## Build and run on your device
-
-Connect your device with USB debugging enabled and:
-
-    $ tarifa run [platform]
-
-This will use the default configuration which use a development lichess server
-end point.
-
-Please look at [tarifa documentation](http://42loops.gitbooks.io/tarifa/content/)
-for further documentation.

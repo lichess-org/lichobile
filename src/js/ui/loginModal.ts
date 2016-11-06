@@ -48,9 +48,16 @@ export default {
           m('button.fat', i18n('signIn'))
         ]),
         m('div.signup', [
+          i18n('newToLichess') + ' ',
           m('a', {
             oncreate: helper.ontap(signupModal.open)
-          }, [i18n('newToLichess'), ' ', i18n('signUp')])
+          }, [i18n('signUp')])
+        ]),
+        m('div.reset', [
+          i18n('forgotPassword') + ' ',
+          m('a', {
+            href: 'https://en.lichess.org/password/reset'
+          }, [i18n('passwordReset')])
         ])
       ])
     ]);

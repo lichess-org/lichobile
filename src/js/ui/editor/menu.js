@@ -61,7 +61,7 @@ export function renderSelectColorPosition(ctrl) {
     m('div.select_input', [
       m('label', {
         'for': 'select_editor_positions'
-      }, 'Position'),
+      }, 'Openings'),
       m('select.positions', {
         id: 'select_editor_positions',
         onchange: function(e) {
@@ -77,6 +77,24 @@ export function renderSelectColorPosition(ctrl) {
         ]),
         optgroup('Popular openings',
           ctrl.positions().map(position2option.bind(undefined, fen))
+        )
+      ])
+    ]),
+    m('div.select_input', [
+      m('label', {
+        'for': 'select_editor_positions'
+      }, 'Endgames'),
+      m('select.positions', {
+        id: 'select_editor_positions',
+        onchange: function(e) {
+          ctrl.loadNewFen(e.target.value);
+        }
+      }, [
+        optgroup('Set the board', [
+          ctrl.extraPositions.slice(1).map(position2option.bind(undefined, fen))
+        ]),
+        optgroup('Endgames positions',
+          ctrl.endgamesPositions().map(position2option.bind(undefined, fen))
         )
       ])
     ]),

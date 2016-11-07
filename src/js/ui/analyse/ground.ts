@@ -30,7 +30,7 @@ function makeConfig(
       dropNewPiece: onNewPiece
     },
     premovable: {
-      enabled: true
+      enabled: false
     },
     highlight: {
       lastMove: settings.game.highlights(),

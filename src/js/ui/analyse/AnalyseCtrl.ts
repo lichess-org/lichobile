@@ -246,13 +246,6 @@ export default class AnalyseCtrl {
     return true;
   };
 
-  private preparePremoving() {
-    this.chessground.set({
-      turnColor: this.chessground.data.movable.color,
-      movableColor: oppositeColor(this.chessground.data.movable.color)
-    });
-  }
-
   private sendMove = (orig: Pos, dest: Pos, prom?: Role) => {
     const move: chess.MoveRequest = {
       orig: orig,
@@ -265,7 +258,6 @@ export default class AnalyseCtrl {
     chess.move(move)
     .then(this.addStep)
     .catch(console.error.bind(console));
-    this.preparePremoving();
   }
 
   private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
@@ -291,7 +283,6 @@ export default class AnalyseCtrl {
         console.error(err);
         this.jump(this.vm.path);
       });
-      this.preparePremoving();
     } else this.jump(this.vm.path);
   }
 
@@ -327,7 +318,6 @@ export default class AnalyseCtrl {
     const newPath = this.analyse.addStep(step, treePath.read(path));
     this.jump(newPath);
     redraw();
-    this.chessground.playPremove();
   }
 
   public toggleVariationMenu = (path: Path) => {
@@ -471,7 +461,6 @@ export default class AnalyseCtrl {
           this.showGround();
           if (dests === {}) this.ceval.stop();
         }
-        this.chessground.playPremove();
       })
       .catch(console.error.bind(console));
     }

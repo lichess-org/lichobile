@@ -7,13 +7,21 @@ import popupWidget from '../shared/popup';
 import backbutton from '../../backbutton';
 import * as m from 'mithril';
 
-function renderAlways() {
+function renderAlways(ctrl) {
   return [
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
+    )),
+    m('div.action', formWidgets.renderCheckbox(
+      i18n('See Symmetric coordinates'),
+      'seeSymmetricCoordinates',
+      settings.otb.seeSymmetricCoordinates, v =>
+        ctrl.chessground.reconfigure({
+          symmetricCoordinates: v
+        })
     ))
   ];
 }
@@ -56,7 +64,7 @@ export default {
             renderEndedGameStatus(ctrl.root)
           ].concat(
             renderClaimDrawButton(ctrl.root),
-            renderAlways()
+            renderAlways(ctrl.root)
           );
         },
         ctrl.isOpen(),

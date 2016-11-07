@@ -45,7 +45,6 @@ function overlay(ctrl: OtbRound) {
 
 function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const flip = settings.otb.flipPieces();
-  ctrl.chessground.data.symmetricCoordinates = settings.otb.seeSymmetricCoordinates();
   const wrapperClasses = helper.classSet({
     'otb': true,
     'mode_flip': flip,

@@ -14,6 +14,9 @@ function renderAlways() {
     )),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
+    )),
+    m('div.action', formWidgets.renderCheckbox(
+      i18n('See Symmetric coordinates'), 'seeSymmetricCoordinates', settings.otb.seeSymmetricCoordinates, redraw
     ))
   ];
 }

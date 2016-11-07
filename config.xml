@@ -4,9 +4,8 @@
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
     <content src="index.html" />
-    <access origin="https://en.lichess.org" />
-    <access origin="https://en.stage.lichess.org" />
-    <access origin="https://expl.lichess.org" />
+    <access origin="https://*.lichess.org" />
+    <access origin="http://*.l.dev" />
     <hook type="after_prepare" src="scripts/copy_icons.js" />
     <platform name="android">
         <hook type="after_prepare" src="scripts/android/add_to_manifest.js" />

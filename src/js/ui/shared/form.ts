@@ -74,8 +74,8 @@ export default {
     label: string,
     name:string,
     settingsProp: SettingsProp<boolean>,
-    callback: (v: boolean) => void,
-    disabled: boolean
+    callback?: (v: boolean) => void,
+    disabled?: boolean
   ) {
     const isOn = settingsProp();
     return m('div.check_container', {

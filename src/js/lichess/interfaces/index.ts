@@ -5,6 +5,12 @@ export interface LobbyData {
   }
 }
 
+export interface HookData {
+  hook: {
+    id: string
+  }
+}
+
 export interface TimelineEntry {
   data: any;
   date: number;

@@ -195,7 +195,7 @@ export function secondsToMinutes(sec: number): number {
   return sec === 0 ? sec : sec / 60;
 }
 
-export function tupleOf(x: number): [string, string] {
+export function tupleOf(x: number | string): [string, string] {
   return [x.toString(), x.toString()];
 }
 

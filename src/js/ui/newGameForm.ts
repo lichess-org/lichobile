@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import router from '../router';
 import * as xhr from '../xhr';
-import settings from '../settings';
+import settings, { GameSettings } from '../settings';
 import session from '../session';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
@@ -57,7 +57,7 @@ function open() {
   isOpen = true;
 }
 
-function close(fromBB) {
+function close(fromBB?: string) {
   if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
   isOpen = false;
 }
@@ -74,7 +74,7 @@ function seekHumanGame() {
   }
 }
 
-function renderForm(formName, settingsObj, variants, timeModes) {
+function renderForm(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode();
   const hasClock = timeMode === '1';
   const hasDays = timeMode === '2' && session.isConnected();
@@ -88,7 +88,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
   }
 
   // if mode is rated only allow random color
-  var colors;
+  let colors: string[][];
   if (settingsObj.mode() === '1') {
     settingsObj.color('random');
     colors = [
@@ -148,7 +148,9 @@ function renderForm(formName, settingsObj, variants, timeModes) {
 
   if (session.isConnected() && settingsObj.mode() === '0') {
     generalFieldset.push(
-      formWidgets.renderCheckbox(i18n('membersOnly'), 'membersOnly', settingsObj.membersOnly)
+      m('div', { key: 'membersOnly' }, [
+        formWidgets.renderCheckbox(i18n('membersOnly'), 'membersOnly', settingsObj.membersOnly)
+      ])
     );
   }
 
@@ -188,7 +190,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
   }
 
   return m('form.game_form', {
-    onsubmit: function(e) {
+    onsubmit(e: Event) {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
       close();

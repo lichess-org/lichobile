@@ -1,7 +1,7 @@
 import * as utils from '../../utils';
 import * as helper from '../helper';
 
-export default function(classes, headerF, contentF, isShowing, closef) {
+export default function(classes, headerF, contentF, isShowing, closef = null) {
   if (!isShowing) {
     return null;
   }

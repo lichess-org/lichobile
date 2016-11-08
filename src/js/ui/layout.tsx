@@ -11,11 +11,11 @@ import lobby from './lobby';
 import * as helper from './helper';
 import settings from '../settings';
 
-var background;
+let background: string;
 
 export default {
 
-  onBackgroundChange: function(bg) {
+  onBackgroundChange: function(bg: string) {
     background = bg;
   },
 
@@ -29,7 +29,12 @@ export default {
     );
   },
 
-  board(header, content, overlay = null, color = '') {
+  board(
+    header: () => Mithril.Children,
+    content: () => Mithril.Children,
+    overlay?: () => Mithril.Children,
+    color?: string
+  ) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>
@@ -38,7 +43,7 @@ export default {
             {header()}
           </header>
           <div id="content_round" className="content_round">{content()}</div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(menu.close)} /> : null }
+          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
         </main>
         {menuView()}
         {gamesMenu.view()}
@@ -54,7 +59,12 @@ export default {
     );
   },
 
-  free(header, content, footer = null, overlay = null) {
+  free(
+    header: () => Mithril.Children,
+    content: () => Mithril.Children,
+    footer?: () => Mithril.Children,
+    overlay?: () => Mithril.Children
+  ) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>
@@ -66,7 +76,7 @@ export default {
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(menu.close)} /> : null }
+          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
         </main>
         {menuView()}
         {gamesMenu.view()}
@@ -82,7 +92,7 @@ export default {
     );
   },
 
-  clock(content, overlay) {
+  clock(content: () => Mithril.Children, overlay?: () => Mithril.Children) {
     background = background || settings.general.theme.background();
     return (
       <div className={'view-container ' + background}>
@@ -90,7 +100,7 @@ export default {
           <div className="content fullScreen">
             {content()}
           </div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(menu.close)} /> : null }
+          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
         </main>
         {overlay ? overlay() : null}
       </div>

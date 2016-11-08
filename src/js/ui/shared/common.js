@@ -143,7 +143,7 @@ export const loader = (
   </div>
 );
 
-export function connectingHeader(title) {
+export function connectingHeader(title = null) {
   return (
     <nav>
       {menuButton()}

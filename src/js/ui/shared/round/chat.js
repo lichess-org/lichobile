@@ -113,8 +113,15 @@ export function chatView(ctrl) {
   if (!ctrl.showing) return null;
 
   var player = ctrl.root.data.player;
-  var header = (ctrl.root.data.player.spectator || !ctrl.root.data.opponent.user) ? i18n('chat') : ctrl.root.data.opponent.user.username;
-  
+  var header = (!ctrl.root.data.opponent.user || ctrl.root.data.player.spectator) ? i18n('chat'): ctrl.root.data.opponent.user.username;
+  const watchers = ctrl.root.data.watchers;
+  if (ctrl.root.data.player.spectator && watchers) {
+    if (watchers.nb <= 3)
+      header = watchers.users.reduce((a, b) => (a + ', ' + b));
+    else
+      header = (watchers.nb + (watchers.anon ? watchers.anon : 0)) + ' Spectators';
+  }
+
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {

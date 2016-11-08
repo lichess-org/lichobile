@@ -29,6 +29,7 @@ export interface GameSettings {
   ratingMax?: SettingsProp<string>
   membersOnly?: SettingsProp<boolean>
   days?: SettingsProp<string>
+  level?: SettingsProp<string>
 }
 
 export default {

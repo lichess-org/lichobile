@@ -1,7 +1,18 @@
 import * as helper from '../helper';
 
+interface TabButton {
+  key: string
+  label: string
+}
+
+interface Attrs {
+  buttons: Array<TabButton>
+  selectedTab: string
+  onTabChange: (k: string) => void
+}
+
 export default {
-  view(vnode) {
+  view(vnode: Mithril.Vnode<Attrs>) {
 
     const {
       buttons,
@@ -22,12 +33,12 @@ export default {
       width: iWidth + '%'
     };
 
-    function renderTab(b) {
+    function renderTab(b: TabButton) {
       const className = [
         'tab',
         selectedTab === b.key ? 'selected' : ''
       ].join(' ');
-      const oncreate = helper.ontap(onTabChange.bind(undefined, b.key));
+      const oncreate = helper.ontap(() => onTabChange(b.key));
       return (
         <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}

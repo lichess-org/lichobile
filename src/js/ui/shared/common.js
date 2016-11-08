@@ -1,4 +1,4 @@
-import menu from '../menu';
+import * as menu from '../menu';
 import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';

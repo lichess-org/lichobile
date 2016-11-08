@@ -4,6 +4,7 @@ import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 import { TimelineData, LobbyData, HookData } from './lichess/interfaces';
+import { Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
   variant: string;
@@ -57,7 +58,7 @@ export function seekGame(): Promise<HookData> {
   }, true);
 }
 
-export function challenge(userId: string, fen: string) {
+export function challenge(userId: string, fen: string): Promise<{ challenge: Challenge }> {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 

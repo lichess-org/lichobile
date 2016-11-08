@@ -9,8 +9,9 @@ import backbutton from '../backbutton';
 import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import * as gameApi from '../lichess/game';
-import challengesApi, { Challenge } from '../lichess/challenges';
+import challengesApi from '../lichess/challenges';
 import { NowPlayingGame } from '../lichess/interfaces';
+import { Challenge } from '../lichess/interfaces/challenge';
 import * as m from 'mithril';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 

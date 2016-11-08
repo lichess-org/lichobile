@@ -7,7 +7,8 @@ import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';
 import i18n from './i18n';
 import friendsApi, { Friend } from './lichess/friends';
-import challengesApi, { ChallengesData } from './lichess/challenges';
+import challengesApi from './lichess/challenges';
+import { ChallengesData } from './lichess/interfaces/challenge';
 import session from './session';
 
 const worker = new Worker('lib/socketWorker.js');

@@ -50,11 +50,6 @@ export interface Post {
   text: string
 }
 
-export interface User {
-  online: boolean
-  username: string
-}
-
 export interface ComposeAttrs {
   userId: string
 }

@@ -43,3 +43,13 @@ export interface NowPlayingGame {
   secondsLeft: number
 }
 
+export interface MiniUserPlayer {
+  showing: boolean
+  data: any
+}
+export interface MiniUser {
+  player: MiniUserPlayer
+  opponent: MiniUserPlayer
+  [index: string]: MiniUserPlayer
+}
+

@@ -11,6 +11,7 @@ import sound from '../../../sound';
 import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
+import { MiniUser } from '../../../lichess/interfaces';
 import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/interfaces/game';
 import * as chessFormat from '../../../utils/chessFormat';
 import backbutton from '../../../backbutton';
@@ -27,16 +28,6 @@ import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
 import { OnlineRoundInterface } from './';
-
-interface MiniUserPlayer {
-  showing: boolean
-  data: any
-}
-interface MiniUser {
-  player: MiniUserPlayer
-  opponent: MiniUserPlayer
-  [index: string]: MiniUserPlayer
-}
 
 interface VM {
   ply: number

@@ -63,6 +63,7 @@ interface User {
   seenAt: Timestamp;
   perfs: any;
   playTime?: PlayTime;
+  profile?: any
 }
 
 interface Piece {

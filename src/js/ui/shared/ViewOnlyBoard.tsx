@@ -7,13 +7,13 @@ interface Attrs {
   orientation: Color
   bounds: BoardBounds
   customPieceTheme: string
-  variant: Variant
+  variant: VariantKey
 }
 
 export default {
   oninit(rootVnode: Mithril.Vnode<Attrs>) {
 
-    this.createBoard = ({ dom }: Mithril.Vnode<any>) => {
+    this.createBoard = ({ dom }: Mithril.Vnode<{}>) => {
       const config = makeConfig(rootVnode.attrs);
       if (!config.bounds) {
         config.bounds = dom.getBoundingClientRect();
@@ -34,7 +34,7 @@ export default {
       'display_board',
       attrs.customPieceTheme || settings.general.theme.piece(),
       settings.general.theme.board(),
-      attrs.variant ? attrs.variant.key : ''
+      attrs.variant
     ].join(' ');
 
     return (
@@ -47,7 +47,7 @@ export default {
   }
 };
 
-function makeConfig({ fen, lastMove, orientation, bounds }: Attrs): any {
+function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
   const conf: any = {
     viewOnly: true,
     minimalDom: true,

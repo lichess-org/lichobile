@@ -113,14 +113,14 @@ export function chatView(ctrl) {
   if (!ctrl.showing) return null;
 
   var player = ctrl.root.data.player;
-
+  var header = (ctrl.root.data.player.spectator || !ctrl.root.data.opponent.user) ? i18n('chat') : ctrl.root.data.opponent.user.username;
+  
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }),
-      m('h2', ctrl.root.data.opponent.user ?
-        ctrl.root.data.opponent.user.username : i18n('chat'))
+      m('h2', header)
     ]),
     m('div.modal_content', [
       m('div#chat_scroller.native_scroller', {

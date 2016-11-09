@@ -10,7 +10,6 @@ import i18n from '../i18n';
 import signupModal from './signupModal';
 import backbutton from '../backbutton';
 import * as m from 'mithril';
-import settings from '../settings';
 
 let isOpen = false;
 
@@ -57,7 +56,7 @@ export default {
         m('div.reset', [
           i18n('forgotPassword') + ' ',
           m('a', {
-            oncreate: helper.ontap(() => window.open(`https://${settings.general.lang()}.lichess.org/password/reset`, '_blank', 'location=no'))
+            oncreate: helper.ontap(() => window.open(`https://en.lichess.org/password/reset`, '_blank', 'location=no'))
           }, [i18n('passwordReset')])
         ])
       ])

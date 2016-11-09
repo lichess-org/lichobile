@@ -118,7 +118,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    alert: gameApi.mandatory(ctrl.data) && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+    alert: gameApi.mandatory(ctrl.data) && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
       i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : null
   });
 

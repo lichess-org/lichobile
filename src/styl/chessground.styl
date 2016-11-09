@@ -33,7 +33,7 @@ square
   &.selected
     background-color rgba(216, 85, 0, 0.3)
 
-square[data-coord-x]:after, square[data-coord-y]:before
+square[data-coord-white-x]:after, square[data-coord-white-y]:before, square[data-coord-black-x]:after, square[data-coord-black-y]:before
   position absolute
   font-family Cousine
   font-weight bold
@@ -43,16 +43,27 @@ square[data-coord-x]:after, square[data-coord-y]:before
     font-size 15px
     line-height 15px
 
-
-square[data-coord-x]:after
-  left 1px
+square[data-coord-white-x]:after
+  right 1px
   bottom 0px
-  content attr(data-coord-x)
+  content attr(data-coord-white-x)
 
-square[data-coord-y]:before
+square[data-coord-white-y]:before
   right 1px
   top 1px
-  content attr(data-coord-y)
+  content attr(data-coord-white-y)
+
+square[data-coord-black-x]:after
+  left 1px
+  top 0px
+  content attr(data-coord-black-x)
+  transform: rotate(180deg)
+
+square[data-coord-black-y]:before
+  left 1px
+  bottom 0px
+  content attr(data-coord-black-y)
+  transform: rotate(180deg)
 
 piece
   position absolute

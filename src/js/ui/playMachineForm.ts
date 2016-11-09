@@ -1,24 +1,23 @@
 import * as utils from '../utils';
 import router from '../router';
 import * as xhr from '../xhr';
-import settings from '../settings';
+import settings, { GameSettings } from '../settings';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
 import * as m from 'mithril';
 
 let isOpen = false;
-let fromPositionFen = null;
+let fromPositionFen: string;
 
 export default {
   open,
 
   close,
 
-  openAIFromPosition(fen) {
+  openAIFromPosition(fen: string) {
     settings.gameSetup.ai.variant('3');
     open();
     fromPositionFen = fen;
@@ -46,13 +45,13 @@ export default {
 };
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   fromPositionFen = null;
   isOpen = true;
 }
 
-function close(fromBB) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+function close(fromBB?: string) {
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }
 
@@ -65,7 +64,7 @@ function startAIGame() {
   .catch(utils.handleXhrError);
 }
 
-function renderForm(formName, settingsObj, variants, timeModes) {
+function renderForm(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode();
   const hasClock = timeMode === '1';
 
@@ -145,7 +144,7 @@ function renderForm(formName, settingsObj, variants, timeModes) {
   }
 
   return m('form.game_form', {
-    onsubmit: function(e) {
+    onsubmit: function(e: Event) {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
       close();

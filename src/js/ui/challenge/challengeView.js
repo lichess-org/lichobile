@@ -59,7 +59,7 @@ function joinPopup(ctrl) {
           oncreate: helper.ontap(loginModal.open)
         }, i18n('signIn')),
         m('button.binary_choice[data-icon=L].withIcon', {
-          oncreate: helper.ontap(utils.backHistory)
+          oncreate: helper.ontap(router.backHistory)
         }, i18n('cancel'))
       ])
     ]);

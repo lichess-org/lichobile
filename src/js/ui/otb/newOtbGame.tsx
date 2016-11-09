@@ -1,63 +1,62 @@
 import * as m from 'mithril';
-import router from '../../router';
 import i18n from '../../i18n';
+import router from '../../router';
 import settings from '../../settings';
-import formWidgets from '../shared/form';
 import ViewOnlyBoard from '../shared/ViewOnlyBoard';
+import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
 import * as helper from '../helper';
-import backbutton from '../../backbutton';
 
-const colors = [
-  ['white', 'white'],
-  ['black', 'black'],
-  ['randomColor', 'random']
-];
+import { OtbRoundInterface } from '../shared/round';
+
+export interface NewOtbGameCtrl {
+  open: () => void
+  close: (fromBB?: string) => void
+  isOpen: Mithril.Property<boolean>
+  root: OtbRoundInterface
+}
 
 export default {
 
-  controller: function(root) {
-    let isOpen = false;
+  controller(root: OtbRoundInterface) {
+    const isOpen = m.prop(false);
 
     function open() {
-      backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close);
+      isOpen(true);
     }
 
-    function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
-      isOpen = false;
+    function close(fromBB?: string) {
+      if (fromBB !== 'backbutton' && isOpen() === true) router.backbutton.stack.pop();
+      isOpen(false);
     }
 
     return {
-      open: open,
-      close: close,
-      isOpen: function() {
-        return isOpen;
-      },
-      root: root
+      open,
+      close,
+      isOpen,
+      root
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: NewOtbGameCtrl) {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
         null,
         function() {
-          const availVariants = settings.ai.availableVariants;
+          const availVariants = settings.otb.availableVariants;
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !['racingKings', 'horde'].includes(i[1])) :
             availVariants;
-          if (ctrl.root.vm.setupFen && ['racingKings', 'horde'].includes(settings.ai.variant())) {
-            settings.ai.variant('standard');
+          if (ctrl.root.vm.setupFen && ['racingKings', 'horde'].includes(settings.otb.variant())) {
+            settings.otb.variant('standard');
           }
           return (
             <div>
               <div className="action">
-                {sideSelector()}
                 <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', variants, settings.ai.variant)}
+                  {formWidgets.renderSelect('variant', 'variant', variants, settings.otb.variant)}
                 </div>
                 { ctrl.root.vm.setupFen ?
                   <div className="from_position_wrapper">
@@ -76,7 +75,7 @@ export default {
               </div>
               <button className="newGameButton" data-icon="E"
                 oncreate={helper.ontap(() =>
-                  ctrl.root.startNewGame(settings.ai.variant(), ctrl.root.vm.setupFen))
+                  ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen))
                 }>
                 {i18n('play')}
               </button>
@@ -86,7 +85,7 @@ export default {
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/ai');
+            router.set('/otb');
           }
           ctrl.close();
         }
@@ -97,10 +96,3 @@ export default {
   }
 };
 
-function sideSelector() {
-  return (
-    <div className="select_input">
-      {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
-    </div>
-  );
-}

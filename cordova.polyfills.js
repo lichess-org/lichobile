@@ -31,7 +31,10 @@
     startInit: oneSignalInit,
     getIds: noop,
     enableSound: noop,
-    enableVibrate: noop
+    enableVibrate: noop,
+    OSInFocusDisplayOption: {
+      None: 1
+    }
   };
 
   // events

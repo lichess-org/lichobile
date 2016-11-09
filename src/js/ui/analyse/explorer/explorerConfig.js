@@ -1,6 +1,6 @@
 import * as m from 'mithril';
 import * as helper from '../../helper';
-import backbutton from '../../../backbutton';
+import router from '../../../router';
 import settings from '../../../settings';
 
 export default {
@@ -39,13 +39,13 @@ export default {
     }
 
     function doOpen() {
-      backbutton.stack.push(doClose);
+      router.backbutton.stack.push(doClose);
       openedWith = serialize();
       open(true);
     }
 
     function doClose(fromBB) {
-      if (fromBB !== 'backbutton' && open()) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && open()) router.backbutton.stack.pop();
       open(false);
       onClose(openedWith !== serialize());
     }

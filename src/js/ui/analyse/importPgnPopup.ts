@@ -5,7 +5,7 @@ import * as chess from '../../chess';
 import popupWidget from '../shared/popup';
 import makeData from '../shared/offlineRound/data';
 import { getAnalyseData } from '../../utils/offlineGames';
-import backbutton from '../../backbutton';
+import router from '../../router';
 
 import { AnalyseCtrlInterface, ImportPgnPopupInterface } from './interfaces';
 
@@ -16,12 +16,12 @@ export default {
     const importing = m.prop(false);
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

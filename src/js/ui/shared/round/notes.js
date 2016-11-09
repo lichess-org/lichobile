@@ -1,7 +1,7 @@
 import * as helper from '../../helper';
 import spinner from '../../../spinner';
 import i18n from '../../../i18n';
-import backbutton from '../../../backbutton';
+import router from '../../../router';
 import { debounce }  from 'lodash/function';
 import { readNote, syncNote } from './roundXhr';
 import * as m from 'mithril';
@@ -27,13 +27,13 @@ export function notesCtrl(root) {
   this.inputValue = '';
 
   this.open = function() {
-    backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'));
+    router.backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'));
     this.showing = true;
   }.bind(this);
 
   this.close = function(fromBB) {
     window.cordova.plugins.Keyboard.close();
-    if (fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
+    if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop();
     this.showing = false;
   }.bind(this);
 

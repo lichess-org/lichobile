@@ -27,15 +27,31 @@ export interface OfflineRoundInterface extends RoundInterface {
   actions: any
   newGameMenu: any
 
+  startNewGame(variant: VariantKey, setupFen?: string): void
   save(): void
   onReplayAdded(sit: GameSituation): void
   onThreefoldRepetition(newStatus: GameStatus): void
   apply(sit: GameSituation): void
 }
 
+export interface AiVM {
+  engineSearching: boolean
+  setupFen?: string
+  savedFen?: string
+}
 export interface AiRoundInterface extends OfflineRoundInterface {
   onEngineBestMove(bm: string): void
   resign(): void
   white(): string
   black(): string
+  vm: AiVM
+}
+
+export interface OtbVM {
+  flip: boolean
+  setupFen?: string
+  savedFen?: string
+}
+export interface OtbRoundInterface extends OfflineRoundInterface {
+  vm: OtbVM
 }

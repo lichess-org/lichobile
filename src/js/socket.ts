@@ -6,23 +6,26 @@ import { lichessSri, autoredraw, hasNetwork } from './utils';
 import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';
 import i18n from './i18n';
-import friendsApi from './lichess/friends';
+import friendsApi, { Friend } from './lichess/friends';
 import challengesApi from './lichess/challenges';
+import { ChallengesData } from './lichess/interfaces/challenge';
 import session from './session';
 
 const worker = new Worker('lib/socketWorker.js');
 
-interface LichessMessage {
-  t: string;
-  d?: any;
+interface LichessMessage<T> {
+  t: string
+  d?: T
 }
+
+type LichessMessageAny = LichessMessage<{}>
 
 interface Options {
   name: string;
   debug?: boolean;
   pingDelay?: number;
-  sendOnOpen?: Array<LichessMessage>;
-  sendBeforeDisconnect?: Array<LichessMessage>;
+  sendOnOpen?: Array<LichessMessageAny>;
+  sendBeforeDisconnect?: Array<LichessMessageAny>;
   registeredEvents: string[];
 }
 
@@ -31,9 +34,10 @@ interface SocketConfig {
   params?: Object;
 }
 
-type MessageHandler = (d: any, payload?: LichessMessage) => void;
+type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
+type MessageHandlerGeneric = MessageHandler<{}, undefined>
 interface MessageHandlers {
-  [index: string]: MessageHandler
+  [index: string]: MessageHandlerGeneric
 }
 
 interface SocketHandlers {
@@ -53,15 +57,23 @@ interface SocketSetup {
 let connectedWS = false;
 let currentMoveLatency: number = 0;
 
+interface FollowingEntersPayload extends LichessMessage<Friend> {
+  playing: boolean
+}
+
+interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
+  playing: Array<string>
+}
+
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
-  following_enters: (name: string, payload: any) =>
+  following_enters: (name: string, payload: FollowingEntersPayload) =>
     autoredraw(() => friendsApi.add(name, payload.playing || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
-  following_playing: name => autoredraw(() => friendsApi.playing(name)),
-  following_stopped_playing: name =>
+  following_playing: (name: string) => autoredraw(() => friendsApi.playing(name)),
+  following_stopped_playing: (name: string) =>
     autoredraw(() => friendsApi.stoppedPlaying(name)),
-  challenges: (data: any) => {
+  challenges: (data: ChallengesData) => {
     challengesApi.set(data);
     redraw();
   },
@@ -70,7 +82,7 @@ const defaultHandlers: MessageHandlers = {
   }
 };
 
-function handleFollowingOnline(data: Array<string>, payload: any) {
+function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayload) {
   // We clone the friends online before we update it for comparison later
   const oldFriendList = cloneDeep(friendsApi.list());
 
@@ -101,7 +113,7 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
         break;
       case 'handle':
         let h = socketHandlers.events[msg.data.payload.t];
-        if (h) h(msg.data.payload.d || null, msg.data.payload);
+        if (h) h(msg.data.payload.d, msg.data.payload);
         break;
     }
   };
@@ -256,7 +268,15 @@ function createDefault() {
   }
 }
 
-function redirectToGame(obj: any) {
+export interface RedirectObj {
+  url: string
+  cookie?: {
+    name: string
+    value: string
+    maxAge: string
+  }
+}
+function redirectToGame(obj: string | RedirectObj) {
   let url: string;
   if (typeof obj === 'string') url = obj;
   else {

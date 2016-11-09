@@ -19,7 +19,7 @@ import settings from './settings';
 import { status as xhrStatus, setServerLang } from './xhr';
 import challengesApi from './lichess/challenges';
 import * as helper from './ui/helper';
-import backbutton from './backbutton';
+import router from './router';
 import socket from './socket';
 import push from './push';
 import routes from './routes';
@@ -51,7 +51,7 @@ function main() {
   document.addEventListener('online', onOnline, false);
   document.addEventListener('resume', onResume, false);
   document.addEventListener('pause', onPause, false);
-  document.addEventListener('backbutton', backbutton, false);
+  document.addEventListener('backbutton', router.backbutton, false);
   window.addEventListener('unload', function() {
     socket.destroy();
     socket.terminate();

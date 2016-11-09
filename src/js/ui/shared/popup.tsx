@@ -1,7 +1,13 @@
 import * as utils from '../../utils';
 import * as helper from '../helper';
 
-export default function(classes, headerF, contentF, isShowing, closef) {
+export default function(
+  classes: Object | string,
+  headerF: () => Mithril.Children,
+  contentF: () => Mithril.Children,
+  isShowing: boolean,
+  closef?: () => void
+) {
   if (!isShowing) {
     return null;
   }
@@ -11,7 +17,7 @@ export default function(classes, headerF, contentF, isShowing, closef) {
     native_scroller: true
   };
 
-  let className;
+  let className: string;
 
   if (typeof classes === 'object')
     className = helper.classSet(Object.assign({}, defaultClasses, classes));
@@ -29,7 +35,7 @@ export default function(classes, headerF, contentF, isShowing, closef) {
     // dirty hack to be sure each popup element is unique
     // TODO should refactor into a component
     <div key={String(contentF)} className="overlay_popup_wrapper"
-      onbeforeremove={(vnode, done) => {
+      onbeforeremove={(vnode: Mithril.Vnode<{}>, done: () => void) => {
         vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);
       }}

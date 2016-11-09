@@ -1,7 +1,6 @@
 import socket from '../../socket';
 import redraw from '../../utils/redraw';
 import router from '../../router';
-import backbutton from '../../backbutton';
 import { throttle } from 'lodash/function';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
@@ -38,7 +37,7 @@ export default function oninit(vnode) {
   }
 
   function closeSearch(fromBB) {
-    if (fromBB !== 'backbutton' && isSearchOpen()) backbutton.stack.pop();
+    if (fromBB !== 'backbutton' && isSearchOpen()) router.backbutton.stack.pop();
     isSearchOpen(false);
   }
 
@@ -67,7 +66,7 @@ export default function oninit(vnode) {
     closeSearch,
     goSearch() {
       helper.analyticsTrackView('Player search');
-      backbutton.stack.push(closeSearch);
+      router.backbutton.stack.push(closeSearch);
       isSearchOpen(true);
     },
     goToProfile(u) {

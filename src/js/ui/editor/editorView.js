@@ -48,7 +48,7 @@ export default function view(vnode) {
           m('div.editorMenuOuter', [
             m('div.editorMenuInner', [
               renderSelectColorPosition(ctrl),
-              helper.isWideScreen() ? renderCastlingOptions(ctrl) : null
+              !helper.isLandscapeSmall(helper.viewportDim()) ? renderCastlingOptions(ctrl) : null
             ]),
             renderActionsBar(ctrl)
           ])

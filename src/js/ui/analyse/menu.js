@@ -2,7 +2,6 @@ import router from '../../router';
 import redraw from '../../utils/redraw';
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
-import backbutton from '../../backbutton';
 import spinner from '../../spinner';
 import * as gameApi from '../../lichess/game';
 import { handleXhrError } from '../../utils';
@@ -16,12 +15,12 @@ export default {
     let isOpen = false;
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

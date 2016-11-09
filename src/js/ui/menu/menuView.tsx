@@ -1,6 +1,6 @@
-import menu from '.';
+import * as menu from '.';
 import socket from '../../socket';
-import session from '../../session';
+import session, { Session } from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
 import gamesMenu from '../gamesMenu';
@@ -17,7 +17,7 @@ import * as Zanimo from 'zanimo';
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server';
 
 export default function view() {
-  if (!menu.isOpen) return null;
+  if (!menu.isOpen()) return null;
 
   return (
     <aside id="side_menu" oncreate={slidesInUp}>
@@ -26,7 +26,7 @@ export default function view() {
   );
 }
 
-function renderHeader(user) {
+function renderHeader(user: Session) {
   const ping = menu.ping();
   const server = menu.mlat();
   const l = (ping || 0) + server - 100;
@@ -89,7 +89,7 @@ function renderHeader(user) {
   );
 }
 
-function renderProfileActions(user) {
+function renderProfileActions(user: Session) {
   return (
     <ul className="side_links profileActions">
       <li className="side_link" key="profile" oncreate={helper.ontap(menu.route('/@/' + user.id))}>
@@ -125,7 +125,7 @@ function renderProfileActions(user) {
   );
 }
 
-function renderLinks(user) {
+function renderLinks(user: Session) {
   const offlineGames = getOfflineGames();
 
   return (
@@ -237,7 +237,7 @@ function renderMenu() {
   );
 }
 
-function slidesInUp(vnode) {
+function slidesInUp(vnode: Mithril.Vnode<{}>) {
   const el = vnode.dom;
   el.style.transform = 'translate3d(-100%,0,0)';
   // force reflow hack

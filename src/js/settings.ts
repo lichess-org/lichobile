@@ -18,10 +18,18 @@ function tupleOf(x: number) {
   return [x.toString(), x.toString()];
 }
 
-interface GameSettings {
-  time: SettingsProp<string>;
-  timeMode: SettingsProp<string>;
-  increment: SettingsProp<string>;
+export interface GameSettings {
+  time: SettingsProp<string>
+  timeMode: SettingsProp<string>
+  increment: SettingsProp<string>
+  mode?: SettingsProp<string>
+  color: SettingsProp<string>
+  variant: SettingsProp<string>
+  ratingMin?: SettingsProp<string>
+  ratingMax?: SettingsProp<string>
+  membersOnly?: SettingsProp<boolean>
+  days?: SettingsProp<string>
+  level?: SettingsProp<string>
 }
 
 export default {
@@ -125,6 +133,7 @@ export default {
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
+    seeSymmetricCoordinates: localstorageprop('settings.otb.seeSymmetricCoordinates', true),
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: [
       ['Standard', 'standard'],

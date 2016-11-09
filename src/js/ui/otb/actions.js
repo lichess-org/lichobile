@@ -4,16 +4,24 @@ import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
-import backbutton from '../../backbutton';
+import router from '../../router';
 import * as m from 'mithril';
 
-function renderAlways() {
+function renderAlways(ctrl) {
   return [
     m('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
     m('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
+    )),
+    m('div.action', formWidgets.renderCheckbox(
+      i18n('See Symmetric coordinates'),
+      'seeSymmetricCoordinates',
+      settings.otb.seeSymmetricCoordinates, v =>
+        ctrl.chessground.reconfigure({
+          symmetricCoordinates: v
+        })
     ))
   ];
 }
@@ -24,12 +32,12 @@ export default {
     let isOpen = false;
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 
@@ -56,7 +64,7 @@ export default {
             renderEndedGameStatus(ctrl.root)
           ].concat(
             renderClaimDrawButton(ctrl.root),
-            renderAlways()
+            renderAlways(ctrl.root)
           );
         },
         ctrl.isOpen(),

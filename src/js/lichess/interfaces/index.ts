@@ -5,6 +5,12 @@ export interface LobbyData {
   }
 }
 
+export interface HookData {
+  hook: {
+    id: string
+  }
+}
+
 export interface TimelineEntry {
   data: any;
   date: number;
@@ -35,5 +41,15 @@ export interface NowPlayingGame {
   rated: boolean
   opponent: NowPlayingOpponent
   secondsLeft: number
+}
+
+export interface MiniUserPlayer {
+  showing: boolean
+  data: any
+}
+export interface MiniUser {
+  player: MiniUserPlayer
+  opponent: MiniUserPlayer
+  [index: string]: MiniUserPlayer
 }
 

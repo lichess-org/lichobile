@@ -8,7 +8,7 @@ import * as utils from '../utils';
 import * as helper from './helper';
 import i18n from '../i18n';
 import signupModal from './signupModal';
-import backbutton from '../backbutton';
+import router from '../router';
 import * as m from 'mithril';
 
 let isOpen = false;
@@ -48,9 +48,16 @@ export default {
           m('button.fat', i18n('signIn'))
         ]),
         m('div.signup', [
+          i18n('newToLichess') + ' ',
           m('a', {
             oncreate: helper.ontap(signupModal.open)
-          }, [i18n('newToLichess'), ' ', i18n('signUp')])
+          }, [i18n('signUp')])
+        ]),
+        m('div.reset', [
+          i18n('forgotPassword') + ' ',
+          m('a', {
+            oncreate: helper.ontap(() => window.open(`https://en.lichess.org/password/reset`, '_blank', 'location=no'))
+          }, [i18n('passwordReset')])
         ])
       ])
     ]);
@@ -84,12 +91,12 @@ function submit(form: HTMLElement) {
 }
 
 function open() {
-  backbutton.stack.push(helper.slidesOutDown(close, 'loginModal'));
+  router.backbutton.stack.push(helper.slidesOutDown(close, 'loginModal'));
   isOpen = true;
 }
 
 function close(fromBB?: string) {
   window.cordova.plugins.Keyboard.close();
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }

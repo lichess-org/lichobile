@@ -35,7 +35,7 @@ export default {
     }
   },
 
-  getVdom(classes) {
+  getVdom(classes = null) {
     return (
       <div class={'spinner ' + (classes ? classes : '')}>
         <svg viewBox="0 0 40 40">

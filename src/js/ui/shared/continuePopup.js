@@ -2,7 +2,6 @@ import i18n from '../../i18n';
 import router from '../../router';
 import { validateFen, positionLooksLegit } from '../../utils/fen';
 import popupWidget from '../shared/popup';
-import backbutton from '../../backbutton';
 import * as helper from '../helper';
 import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
@@ -16,13 +15,13 @@ export default {
     const fen = m.prop();
 
     function open(fentoSet) {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       fen(fentoSet);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

@@ -1,5 +1,5 @@
 import router from '../../router';
-import { handleXhrError, backHistory } from '../../utils';
+import { handleXhrError } from '../../utils';
 import { throttle } from 'lodash/function';
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
 import challengesApi from '../../lichess/challenges';
@@ -25,7 +25,7 @@ export default function oninit(vnode) {
           break;
         case 'declined':
           window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
-          backHistory();
+          router.backHistory();
           break;
       }
     });
@@ -64,12 +64,12 @@ export default function oninit(vnode) {
     declineChallenge() {
       return declineChallenge(challenge().id)
       .then(() => challengesApi.remove(challenge().id))
-      .then(backHistory);
+      .then(router.backHistory);
     },
     cancelChallenge() {
       return cancelChallenge(challenge().id)
       .then(() => challengesApi.remove(challenge().id))
-      .then(backHistory);
+      .then(router.backHistory);
     }
   };
 }

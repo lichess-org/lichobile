@@ -7,46 +7,37 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import storage from '../storage';
-import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
 import * as m from 'mithril';
 
-var challengeForm = {
-  actionName: '',
-  userId: null,
-  isOpen: false
-};
+let actionName = '';
+let userId: string;
+let fen: string;
 
-challengeForm.open = function(userId) {
-  if (userId) {
-    challengeForm.userId = userId;
-    challengeForm.actionName = i18n('challengeToPlay');
+const isOpen = m.prop(false);
+
+function open(uid?: string) {
+  if (uid) {
+    userId = uid;
+    actionName = i18n('challengeToPlay');
   } else {
-    challengeForm.userId = null;
-    challengeForm.actionName = i18n('playWithAFriend');
+    userId = null;
+    actionName = i18n('playWithAFriend');
   }
-  backbutton.stack.push(challengeForm.close);
-  challengeForm.isOpen = true;
-  challengeForm.fen = null;
-};
+  router.backbutton.stack.push(close);
+  isOpen(true);
+  fen = null;
+}
 
-challengeForm.openFromPosition = function(fen) {
-  challengeForm.userId = null;
-  settings.gameSetup.challenge.variant('3');
-  settings.gameSetup.challenge.mode('0');
-  challengeForm.open();
-  challengeForm.fen = fen;
-};
 
-challengeForm.close = function(fromBB) {
-  if (fromBB !== 'backbutton' && challengeForm.isOpen) backbutton.stack.pop();
-  challengeForm.isOpen = false;
+function close(fromBB?: string) {
+  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop();
+  isOpen(false);
 };
 
 function challenge() {
-  const userId = challengeForm.userId;
-  return challengeXhr(userId, challengeForm.fen)
+  return challengeXhr(userId, fen)
   .then(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
@@ -70,17 +61,17 @@ function challenge() {
 }
 
 function renderForm() {
-  var formName = 'invite';
-  var settingsObj = settings.gameSetup.challenge;
-  var variants = settings.gameSetup.challenge.availableVariants;
-  var timeModes = settings.gameSetup.challenge.availableTimeModes;
-  var timeMode = settingsObj.timeMode();
-  var hasClock = timeMode === '1';
-  var hasDays = timeMode === '2';
+  const formName = 'invite';
+  const settingsObj = settings.gameSetup.challenge;
+  const variants = settings.gameSetup.challenge.availableVariants;
+  const timeModes = settings.gameSetup.challenge.availableTimeModes;
+  const timeMode = settingsObj.timeMode();
+  const hasClock = timeMode === '1';
+  const hasDays = timeMode === '2';
 
   // if mode is rated only allow random color for three-check, atomic, antichess
   // horde variants
-  var colors;
+  let colors: string[][];
   if (settingsObj.mode() === '1' &&
     ['5', '6', '7', '8', '9'].indexOf(settingsObj.variant()) !== -1) {
     settingsObj.color('random');
@@ -95,14 +86,14 @@ function renderForm() {
     ];
   }
 
-  var modes = session.isConnected() ? [
+  const modes = session.isConnected() ? [
     ['casual', '0'],
     ['rated', '1']
   ] : [
     ['casual', '0']
   ];
 
-  var generalFieldset = [
+  const generalFieldset = [
     m('div.select_input', {
       key: formName + 'color'
     }, [
@@ -116,18 +107,18 @@ function renderForm() {
     settingsObj.variant() === '3' ?
     m('div.setupPosition', {
       key: 'position'
-    }, challengeForm.fen ? [
+    }, fen ? [
       m('div.setupMiniBoardWrapper', {
         oncreate: helper.ontap(() => {
-          challengeForm.close();
-          router.set(`/editor/${encodeURIComponent(challengeForm.fen)}`);
+          close();
+          router.set(`/editor/${encodeURIComponent(fen)}`);
         })
       }, [
-        m(ViewOnlyBoard, { fen: challengeForm.fen })
+        m(ViewOnlyBoard, { fen: fen })
       ])
       ] : m('div', m('button.withIcon', {
         oncreate: helper.ontap(() => {
-          challengeForm.close();
+          close();
           router.set('/editor');
         })
       }, [m('span.fa.fa-pencil'), i18n('boardEditor')]))
@@ -140,7 +131,7 @@ function renderForm() {
     ]) : null
   ];
 
-  var timeFieldset = [
+  const timeFieldset = [
     m('div.select_input', {
       key: formName + 'timeMode'
     }, [
@@ -176,27 +167,36 @@ function renderForm() {
   }
 
   return m('form#invite_form.game_form', {
-    onsubmit: function(e) {
+    onsubmit(e: Event) {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
-      challengeForm.close();
+      close();
       challenge();
     }
   }, [
     m('fieldset', generalFieldset),
     m('fieldset#clock', timeFieldset),
-    m('button[data-icon=E][type=submit].newGameButton', challengeForm.actionName)
+    m('button[data-icon=E][type=submit].newGameButton', actionName)
   ]);
 }
 
-challengeForm.view = function() {
-  return popupWidget(
-    'invite_form_popup game_form_popup',
-    null,
-    renderForm,
-    challengeForm.isOpen,
-    challengeForm.close
-  );
-};
+export default {
+  view() {
+    return popupWidget(
+      'invite_form_popup game_form_popup',
+      null,
+      renderForm,
+      isOpen(),
+      close
+    );
+  },
 
-export default challengeForm;
+  open,
+  openFromPosition(f: string) {
+    userId = null;
+    fen = f;
+    settings.gameSetup.challenge.variant('3');
+    settings.gameSetup.challenge.mode('0');
+    open();
+  }
+}

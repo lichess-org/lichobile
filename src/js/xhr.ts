@@ -3,7 +3,8 @@ import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
-import { TimelineData, LobbyData } from './lichess/interfaces';
+import { TimelineData, LobbyData, HookData } from './lichess/interfaces';
+import { Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
   variant: string;
@@ -39,7 +40,7 @@ export function newAiGame(fen: string): Promise<OnlineGameData> {
   }, true);
 }
 
-export function seekGame(): Promise<OnlineGameData> {
+export function seekGame(): Promise<HookData> {
   const config = settings.gameSetup.human;
   return fetchJSON('/setup/hook/' + lichessSri, {
     method: 'POST',
@@ -57,7 +58,7 @@ export function seekGame(): Promise<OnlineGameData> {
   }, true);
 }
 
-export function challenge(userId: string, fen: string) {
+export function challenge(userId: string, fen: string): Promise<{ challenge: Challenge }> {
   const config = settings.gameSetup.challenge;
   const url = userId ? `/setup/friend?user=${userId}` : '/setup/friend';
 
@@ -103,7 +104,7 @@ export function acceptChallenge(id: string): Promise<OnlineGameData> {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
-export function lobby(feedback: boolean): Promise<LobbyData> {
+export function lobby(feedback?: boolean): Promise<LobbyData> {
   return fetchJSON('/', null, feedback);
 }
 

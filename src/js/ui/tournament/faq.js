@@ -1,4 +1,4 @@
-import backbutton from '../../backbutton';
+import router from '../../router';
 import * as helper from '../helper';
 
 export default {
@@ -6,12 +6,12 @@ export default {
     let isOpen = false;
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

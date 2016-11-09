@@ -17,7 +17,7 @@ interface Profile {
   lastName?: string
 }
 
-interface Session {
+export interface Session {
   id: string
   username: string
   title?: string

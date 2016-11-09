@@ -5,12 +5,12 @@ import * as helper from './helper';
 import * as IScroll from 'iscroll';
 import session from '../session';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import * as gameApi from '../lichess/game';
-import challengesApi, { Challenge } from '../lichess/challenges';
+import challengesApi from '../lichess/challenges';
 import { NowPlayingGame } from '../lichess/interfaces';
+import { Challenge } from '../lichess/interfaces/challenge';
 import * as m from 'mithril';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 
@@ -112,7 +112,7 @@ export default {
 }
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen = true;
   setTimeout(function() {
     if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
@@ -126,7 +126,7 @@ function open() {
 };
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 };
 

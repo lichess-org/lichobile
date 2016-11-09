@@ -2,7 +2,6 @@ import * as helper from './helper';
 import router from '../router';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import friendsApi, { Friend } from '../lichess/friends';
 import * as utils from '../utils';
 
@@ -28,12 +27,12 @@ export default {
 }
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen = true;
 }
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }
 

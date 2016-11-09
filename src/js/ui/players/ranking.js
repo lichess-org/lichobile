@@ -56,7 +56,7 @@ export default {
 
 function renderBody(ctrl) {
   const categories = Object.keys(ctrl.ranking())
-    .filter(k => k !== 'online' && k !== 'crazyhouse')
+    .filter(k => k !== 'online')
     .map(k => renderRankingCategory(ctrl, k));
   return (
     <div id="allRanking" className="native_scroller page">

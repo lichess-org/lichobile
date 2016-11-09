@@ -5,7 +5,7 @@ import sound from '../../../sound';
 import vibrate from '../../../vibrate';
 import session from '../../../session';
 import { removeOfflineGameData } from '../../../utils/offlineGames';
-import socket from '../../../socket';
+import socket, { RedirectObj } from '../../../socket';
 import OnlineRound from './OnlineRound';
 import * as xhr from './roundXhr';
 import ground from './ground';
@@ -31,7 +31,7 @@ export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedir
       ctrl.apiMove(o);
       redraw();
     },
-    drop(o: any) {
+    drop(o: MoveOrDrop) {
       o.isDrop = true;
       ctrl.apiMove(o);
       redraw();
@@ -48,7 +48,7 @@ export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedir
     reload() {
       xhr.reload(ctrl).then(ctrl.reload);
     },
-    redirect(e: any) {
+    redirect(e: string | RedirectObj) {
       socket.redirectToGame(e);
     },
     resync() {

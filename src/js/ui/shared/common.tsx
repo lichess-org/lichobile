@@ -1,4 +1,4 @@
-import menu from '../menu';
+import * as menu from '../menu';
 import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
@@ -38,9 +38,9 @@ export function menuButton() {
   );
 }
 
-export function backButton(title) {
+export function backButton(title?: string | Mithril.Children) {
   return (
-    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(utils.backHistory)}>
+    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(router.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
     </button>
@@ -63,7 +63,7 @@ export function friendsButton() {
 }
 
 export function gamesButton() {
-  let key, action;
+  let key: string, action: () => void;
   const nbChallenges = challengesApi.all().length;
   const nbIncomingChallenges = challengesApi.incoming().length;
   const withOfflineGames = !utils.hasNetwork() && getOfflineGames().length;
@@ -127,7 +127,7 @@ export function headerBtns() {
   }
 }
 
-export function header(title, leftButton = null) {
+export function header(title: Mithril.Children, leftButton?: () => Mithril.Children) {
   return (
     <nav>
       {leftButton ? leftButton : menuButton()}
@@ -143,7 +143,7 @@ export const loader = (
   </div>
 );
 
-export function connectingHeader(title) {
+export function connectingHeader(title?: string) {
   return (
     <nav>
       {menuButton()}
@@ -168,7 +168,7 @@ export function hourglassHeader() {
   );
 }
 
-export function loadingBackbutton(title) {
+export function loadingBackbutton(title?: string) {
   return (
     <nav>
       {backButton()}
@@ -181,7 +181,7 @@ export function loadingBackbutton(title) {
   );
 }
 
-export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = null, variant = null, wrapperClass = null, customPieceTheme = null) {
+export function viewOnlyBoardContent(fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey, wrapperClass?: string, customPieceTheme?: string) {
   const isPortrait = helper.isPortrait();
   const { vw, vh } = helper.viewportDim();
   const orientKey = 'viewonlyboard' + (isPortrait ? 'portrait' : 'landscape');
@@ -207,11 +207,11 @@ export function viewOnlyBoardContent(fen = null, lastMove = null, orientation = 
   }
 }
 
-export function empty() {
+export function empty(): Mithril.Children {
   return [];
 }
 
-export function userStatus(user) {
+export function userStatus(user: User) {
   const status = user.online ? 'online' : 'offline';
   return (
     <div className="user">
@@ -222,7 +222,7 @@ export function userStatus(user) {
   );
 }
 
-export function gameTitle(data) {
+export function gameTitle(data: GameData): Mithril.Children {
   const mode = data.game.offline ? i18n('offline') :
     data.game.rated ? i18n('rated') : i18n('casual');
   const variant = getVariant(data.game.variant.key);
@@ -240,7 +240,7 @@ export function gameTitle(data) {
 }
 
 
-export function miniUser(user, mini, isOpen, close) {
+export function miniUser(user: User, mini: any, isOpen: boolean, close: () => void) {
   if (!user) return null;
 
   const status = user.online ? 'online' : 'offline';

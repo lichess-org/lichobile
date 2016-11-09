@@ -157,14 +157,6 @@ export function aiName(player: { engineName?: string, ai: number }) {
   return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 
-export function backHistory(): void {
-  if (window.navigator.app && window.navigator.app.backHistory) {
-    window.navigator.app.backHistory();
-  } else {
-    window.history.go(-1);
-  }
-}
-
 export const uid = (function() {
   let id = 0;
   return () => id++;
@@ -195,7 +187,7 @@ export function secondsToMinutes(sec: number): number {
   return sec === 0 ? sec : sec / 60;
 }
 
-export function tupleOf(x: number): [string, string] {
+export function tupleOf(x: number | string): [string, string] {
   return [x.toString(), x.toString()];
 }
 

@@ -1,6 +1,6 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
-import backbutton from '../../backbutton';
+import router from '../../router';
 import * as helper from '../helper';
 import * as m from 'mithril';
 
@@ -10,12 +10,12 @@ export default {
     let isOpen = false;
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 
@@ -61,7 +61,7 @@ export function renderSelectColorPosition(ctrl) {
     m('div.select_input', [
       m('label', {
         'for': 'select_editor_positions'
-      }, 'Position'),
+      }, 'Openings'),
       m('select.positions', {
         id: 'select_editor_positions',
         onchange: function(e) {
@@ -80,7 +80,29 @@ export function renderSelectColorPosition(ctrl) {
         )
       ])
     ]),
-    m('div.select_input.color', [
+    m('div.select_input', [
+      m('label', {
+        'for': 'select_editor_endgames'
+      }, 'Endgames'),
+      m('select.positions', {
+        id: 'select_editor_endgames',
+        onchange: function(e) {
+          ctrl.loadNewFen(e.target.value);
+        }
+      }, [
+        optgroup('Set the board', [
+          position2option(fen, {
+            name: '-- Position --',
+            fen: ''
+          }),
+          ctrl.extraPositions.slice(1).map(position2option.bind(undefined, fen))
+        ]),
+        optgroup('Endgames positions',
+          ctrl.endgamesPositions().map(position2option.bind(undefined, fen))
+        )
+      ])
+    ]),
+    m('div.select_input', [
       m('label', {
         'for': 'select_editor_color'
       }, 'Color'),

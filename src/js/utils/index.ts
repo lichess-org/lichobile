@@ -157,14 +157,6 @@ export function aiName(player: { engineName?: string, ai: number }) {
   return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
 }
 
-export function backHistory(): void {
-  if (window.navigator.app && window.navigator.app.backHistory) {
-    window.navigator.app.backHistory();
-  } else {
-    window.history.go(-1);
-  }
-}
-
 export const uid = (function() {
   let id = 0;
   return () => id++;

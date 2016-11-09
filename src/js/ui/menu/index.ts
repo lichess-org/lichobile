@@ -4,7 +4,6 @@ import { hasNetwork } from '../../utils';
 import session from '../../session';
 import redraw from '../../utils/redraw';
 import router from '../../router';
-import backbutton from '../../backbutton';
 import socket from '../../socket';
 import * as inboxXhr from '../inbox/inboxXhr';
 
@@ -48,7 +47,7 @@ export function toggle() {
 }
 
 export function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen(true);
   if (hasNetwork()) {
     socket.send('moveLat', true);
@@ -58,7 +57,7 @@ export function open() {
 }
 
 export function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen()) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop();
   clearInterval(sendPingsInterval);
   if (hasNetwork()) {
     socket.send('moveLat', false);

@@ -3,6 +3,14 @@ import * as m from 'mithril';
 import * as Vnode from 'mithril/render/vnode';
 import { uid } from './utils'
 import signals from './signals';
+import { isFunction } from 'lodash';
+import session from './session';
+import redraw from './utils/redraw';
+
+interface Backbutton {
+  (): void;
+  stack: Array<(fromBB?: string) => void>;
+}
 
 const router = new Rlite();
 
@@ -58,7 +66,42 @@ function replaceState(path: string) {
   window.history.replaceState(window.history.state, null, '?=' + path);
 }
 
+const backbutton = (() => {
+  interface X {
+    (): void;
+    stack?: Array<(fromBB?: string) => void>;
+  }
+
+  const x: X = () => {
+    const b = x.stack.pop();
+    if (isFunction(b)) {
+      b('backbutton');
+      redraw();
+    } else if (!/^\/$/.test(get())) {
+      // if playing a game as anon ask for confirmation because there is no way
+      // back!
+      if (/^\/game\/[a-zA-Z0-9]{12}/.test(get()) && !session.isConnected()) {
+        navigator.notification.confirm(
+          'Do you really want to leave the game? You can\'t go back to it after.',
+          i => { if (i === 1) backHistory(); }
+        );
+      } else {
+        backHistory();
+      }
+    } else {
+      window.navigator.app.exitApp();
+    }
+  };
+
+  x.stack = [];
+
+  return <Backbutton>x;
+
+})();
+
 function set(path: string, replace = false) {
+  // reset backbutton stack when changing route
+  backbutton.stack = [];
   if (replace) {
     replaceState(path);
   } else {
@@ -76,11 +119,21 @@ function get(): string {
   return decodeURIComponent(path.substring(2));
 }
 
+function backHistory(): void {
+  if (window.navigator.app && window.navigator.app.backHistory) {
+    window.navigator.app.backHistory();
+  } else {
+    window.history.go(-1);
+  }
+}
+
 export default {
   get,
   set,
   replaceState,
+  backHistory,
   getViewSlideDirection(): string {
     return viewSlideDirection;
-  }
+  },
+  backbutton
 };

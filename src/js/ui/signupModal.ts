@@ -1,7 +1,7 @@
 import session from '../session';
 import * as helper from './helper';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
+import router from '../router';
 import loginModal from './loginModal';
 import * as m from 'mithril';
 
@@ -96,12 +96,12 @@ function submit(form: HTMLElement) {
 }
 
 function open() {
-  backbutton.stack.push(helper.slidesOutDown(close, 'signupModal'));
+  router.backbutton.stack.push(helper.slidesOutDown(close, 'signupModal'));
   isOpen = true;
 }
 
 function close(fromBB?: string) {
   window.cordova.plugins.Keyboard.close();
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }

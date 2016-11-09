@@ -7,7 +7,6 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import storage from '../storage';
-import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
 import * as m from 'mithril';
@@ -26,14 +25,14 @@ function open(uid?: string) {
     userId = null;
     actionName = i18n('playWithAFriend');
   }
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen(true);
   fen = null;
 }
 
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen()) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop();
   isOpen(false);
 };
 

@@ -4,7 +4,7 @@ import settings from '../../settings';
 import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
-import backbutton from '../../backbutton';
+import router from '../../router';
 import * as m from 'mithril';
 
 function renderAlways(ctrl) {
@@ -32,12 +32,12 @@ export default {
     let isOpen = false;
 
     function open() {
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

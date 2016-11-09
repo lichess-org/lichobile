@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import redraw from '../utils/redraw';
 import * as helper from './helper';
-import backbutton from '../backbutton';
+import router from '../router';
 import { loader } from './shared/common';
 import popupWidget from './shared/popup';
 import * as xhr from '../xhr';
@@ -50,7 +50,7 @@ export default {
 }
 
 function startSeeking() {
-  backbutton.stack.push(cancelSeeking);
+  router.backbutton.stack.push(cancelSeeking);
 
   isOpen = true;
   window.plugins.insomnia.keepAwake();
@@ -76,7 +76,7 @@ function startSeeking() {
 };
 
 function closePopup(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 };
 

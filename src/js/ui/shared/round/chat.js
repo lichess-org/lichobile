@@ -3,7 +3,7 @@ import redraw from '../../../utils/redraw';
 import i18n from '../../../i18n';
 import storage from '../../../storage';
 import * as gameApi from '../../../lichess/game';
-import backbutton from '../../../backbutton';
+import router from '../../../router';
 import socket from '../../../socket';
 import * as m from 'mithril';
 
@@ -28,13 +28,13 @@ export function chatCtrl(root, isShadowban) {
   storage.set(storageId, this.messages.length);
 
   this.open = function() {
-    backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'));
+    router.backbutton.stack.push(helper.slidesOutDown(this.close, 'chat'));
     this.showing = true;
   }.bind(this);
 
   this.close = function(fromBB) {
     window.cordova.plugins.Keyboard.close();
-    if (fromBB !== 'backbutton' && this.showing) backbutton.stack.pop();
+    if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop();
     this.showing = false;
     this.unread = false;
   }.bind(this);

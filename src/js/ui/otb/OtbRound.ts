@@ -14,7 +14,7 @@ import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
 import crazyValid from '../shared/round/crazy/crazyValid';
-import { OfflineRoundInterface } from '../shared/round';
+import { OtbRoundInterface, OtbVM } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
@@ -27,14 +27,14 @@ interface InitPayload {
 }
 
 
-export default class OtbRound implements OfflineRoundInterface {
+export default class OtbRound implements OtbRoundInterface {
   public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
   public newGameMenu: any;
   public chessground: Chessground.Controller;
   public replay: Replay;
-  public vm: any;
+  public vm: OtbVM;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.setupFen = setupFen;
@@ -48,7 +48,7 @@ export default class OtbRound implements OfflineRoundInterface {
     };
 
     if (setupFen) {
-      this.newGameMenu.open();
+      this.newGameMenu.isOpen(true);
     }
 
     const currentVariant = <VariantKey>settings.otb.variant();

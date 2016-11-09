@@ -40,7 +40,7 @@ export function menuButton() {
 
 export function backButton(title?: string | Mithril.Children) {
   return (
-    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(utils.backHistory)}>
+    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(router.backHistory)}>
       <span className="fa fa-arrow-left"/>
       {title ? <div className="title">{title}</div> : null }
     </button>

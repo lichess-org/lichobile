@@ -5,7 +5,6 @@ import settings, { GameSettings } from '../settings';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
 import * as m from 'mithril';
@@ -46,13 +45,13 @@ export default {
 };
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   fromPositionFen = null;
   isOpen = true;
 }
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }
 

@@ -5,7 +5,6 @@ import * as helper from './helper';
 import * as IScroll from 'iscroll';
 import session from '../session';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import * as xhr from '../xhr';
 import newGameForm from './newGameForm';
 import * as gameApi from '../lichess/game';
@@ -113,7 +112,7 @@ export default {
 }
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen = true;
   setTimeout(function() {
     if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
@@ -127,7 +126,7 @@ function open() {
 };
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 };
 

@@ -15,13 +15,13 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
-import { AiRoundInterface } from '../shared/round';
+import { AiRoundInterface, AiVM } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions, { AiActionsCtrl } from './actions';
 import engineCtrl, { EngineInterface } from './engine';
 import * as helper from '../helper';
-import newGameMenu from './newAiGame';
+import newGameMenu, { NewAiGameCtrl } from './newAiGame';
 
 interface InitPayload {
   variant: VariantKey
@@ -31,10 +31,10 @@ interface InitPayload {
 export default class AiRound implements AiRoundInterface {
   public data: OfflineGameData
   public actions: AiActionsCtrl
-  public newGameMenu: any
+  public newGameMenu: NewAiGameCtrl
   public chessground: Chessground.Controller
   public replay: Replay
-  public vm: any
+  public vm: AiVM
 
   private engine: EngineInterface;
 
@@ -50,7 +50,7 @@ export default class AiRound implements AiRoundInterface {
     };
 
     if (setupFen) {
-      this.newGameMenu.open();
+      this.newGameMenu.isOpen(true);
     }
 
     this.engine.init()

@@ -2,7 +2,7 @@ import * as m from 'mithril';
 import redraw from '../../../utils/redraw';
 import * as helper from '../../helper';
 import { debounce } from 'lodash';
-import backbutton from '../../../backbutton';
+import router from '../../../router';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
@@ -27,13 +27,13 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   });
 
   function open() {
-    backbutton.stack.push(close);
+    router.backbutton.stack.push(close);
     helper.analyticsTrackView('Analysis Explorer');
     enabled(true);
   }
 
   function close(fromBB?: string) {
-    if (fromBB !== 'backbutton' && enabled()) backbutton.stack.pop();
+    if (fromBB !== 'backbutton' && enabled()) router.backbutton.stack.pop();
     enabled(false);
     setTimeout(() => root && root.debouncedScroll(), 200);
   }

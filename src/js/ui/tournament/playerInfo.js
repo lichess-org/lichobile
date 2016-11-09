@@ -1,4 +1,3 @@
-import backbutton from '../../backbutton';
 import router from '../../router';
 import * as helper from '../helper';
 import * as m from 'mithril';
@@ -15,14 +14,14 @@ export default {
       xhr.playerInfo(tournament().id, playerId)
       .then(data => {
         playerData(data);
-        backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'));
+        router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'));
         isOpen = true;
       })
       .catch(utils.handleXhrError);
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

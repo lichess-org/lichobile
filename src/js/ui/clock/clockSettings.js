@@ -3,7 +3,7 @@ import settings from '../../settings';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
 import * as helper from '../helper';
-import backbutton from '../../backbutton';
+import router from '../../router';
 import * as utils from '../../utils';
 
 export default {
@@ -14,12 +14,12 @@ export default {
     function open() {
       if (clockObj().isRunning() && !clockObj().flagged()) return;
 
-      backbutton.stack.push(close);
+      router.backbutton.stack.push(close);
       isOpen = true;
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
 

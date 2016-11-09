@@ -6,7 +6,6 @@ import session from '../session';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
-import backbutton from '../backbutton';
 import lobby from './lobby';
 import * as m from 'mithril';
 
@@ -53,12 +52,12 @@ export default {
 };
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen = true;
 }
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }
 

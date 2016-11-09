@@ -102,7 +102,7 @@ export function renderSelectColorPosition(ctrl) {
         )
       ])
     ]),
-    m('div.select_input.color', [
+    m('div.select_input', [
       m('label', {
         'for': 'select_editor_color'
       }, 'Color'),

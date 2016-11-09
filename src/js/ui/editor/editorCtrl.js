@@ -31,6 +31,7 @@ export default function oninit(vnode) {
   };
 
   this.positions = m.prop([]);
+  this.endgamesPositions = m.prop([]);
 
   this.extraPositions = [{
     fen: startingFen,
@@ -43,6 +44,11 @@ export default function oninit(vnode) {
   loadLocalJsonFile('data/positions.json')
   .then(data => {
     this.positions(data);
+  });
+
+  loadLocalJsonFile('data/endgames.json')
+  .then(data => {
+    this.endgamesPositions(data);
   });
 
   this.chessground = new chessground.controller({

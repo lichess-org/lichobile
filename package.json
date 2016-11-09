@@ -63,6 +63,8 @@
   "scripts": {
     "build": "gulp",
     "watch": "gulp watch",
+    "watch-dev": "gulp watch --env='env-dev.json'",
+    "watch-stage": "gulp watch --env='env-stage.json'",
     "build-js-dev": "gulp --target='cordova' --env='env-dev.json'",
     "build-js-prod": "gulp --mode='prod' --target='cordova' --env='env-prod.json'",
     "build-js-stage": "gulp --mode='prod' --target='cordova' --env='env-stage.json'",

@@ -61,7 +61,7 @@ export function renderSelectColorPosition(ctrl) {
     m('div.select_input', [
       m('label', {
         'for': 'select_editor_positions'
-      }, 'Position'),
+      }, 'Openings'),
       m('select.positions', {
         id: 'select_editor_positions',
         onchange: function(e) {
@@ -80,7 +80,29 @@ export function renderSelectColorPosition(ctrl) {
         )
       ])
     ]),
-    m('div.select_input.color', [
+    m('div.select_input', [
+      m('label', {
+        'for': 'select_editor_endgames'
+      }, 'Endgames'),
+      m('select.positions', {
+        id: 'select_editor_endgames',
+        onchange: function(e) {
+          ctrl.loadNewFen(e.target.value);
+        }
+      }, [
+        optgroup('Set the board', [
+          position2option(fen, {
+            name: '-- Position --',
+            fen: ''
+          }),
+          ctrl.extraPositions.slice(1).map(position2option.bind(undefined, fen))
+        ]),
+        optgroup('Endgames positions',
+          ctrl.endgamesPositions().map(position2option.bind(undefined, fen))
+        )
+      ])
+    ]),
+    m('div.select_input', [
       m('label', {
         'for': 'select_editor_color'
       }, 'Color'),

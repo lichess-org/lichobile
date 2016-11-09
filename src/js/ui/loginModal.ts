@@ -10,6 +10,7 @@ import i18n from '../i18n';
 import signupModal from './signupModal';
 import backbutton from '../backbutton';
 import * as m from 'mithril';
+import settings from '../settings';
 
 let isOpen = false;
 
@@ -48,9 +49,16 @@ export default {
           m('button.fat', i18n('signIn'))
         ]),
         m('div.signup', [
+          i18n('newToLichess') + ' ',
           m('a', {
             oncreate: helper.ontap(signupModal.open)
-          }, [i18n('newToLichess'), ' ', i18n('signUp')])
+          }, [i18n('signUp')])
+        ]),
+        m('div.reset', [
+          i18n('forgotPassword') + ' ',
+          m('a', {
+            oncreate: helper.ontap(() => window.open(`https://${settings.general.lang()}.lichess.org/password/reset`, '_blank', 'location=no'))
+          }, [i18n('passwordReset')])
         ])
       ])
     ]);

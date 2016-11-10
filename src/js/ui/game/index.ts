@@ -6,14 +6,18 @@ import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
 import OnlineRound from '../shared/round/OnlineRound';
 import * as helper from '../helper';
-import gamesMenu from '../gamesMenu';
 import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';
 import socket from '../../socket';
-import view from './gameView';
+import { emptyFen } from '../../utils/fen';
+import roundView from '../shared/round/view/roundView';
+import gamesMenu from '../gamesMenu';
+import layout from '../layout';
+import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
+
 
 interface Attrs {
   id: string
@@ -116,7 +120,21 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     }
   },
 
-  view
+  view() {
+    if (this.round) return roundView(this.round);
+
+    const pov = gamesMenu.lastJoined();
+    let board: () => Mithril.Child;
+
+    if (pov) {
+      board = () => viewOnlyBoardContent(pov.fen, pov.lastMove, pov.color,
+        pov.variant.key);
+    } else {
+      board = () => viewOnlyBoardContent(emptyFen);
+    }
+
+    return layout.board(connectingHeader, board);
+  }
 };
 
 function variantStorageKey(variant: string) {

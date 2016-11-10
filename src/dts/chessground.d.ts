@@ -88,6 +88,7 @@ declare namespace Chessground {
     ): void;
 
     controller: ControllerFactory;
+    view(ctrl: Controller): Mithril.Vnode<any>
 
     fen: Fen;
 

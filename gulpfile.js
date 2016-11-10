@@ -43,7 +43,7 @@ function buildStyl(src, dest, mode) {
   return gulp.src(src)
     .pipe(stylus())
     .pipe(streamify(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']})))
-    .pipe(gulpif(mode === 'prod', minifyCss()))
+    .pipe(gulpif(mode === 'release', minifyCss()))
     .pipe(rename('app.css'))
     .pipe(gulp.dest(dest + '/css/compiled/'));
 }
@@ -65,7 +65,6 @@ function buildScripts(src, dest, mode) {
 
 gulp.task('html', function() {
   var context = require('./' + options.env);
-  context.MODE = options.mode;
   context.TARGET = options.target;
 
   return buildHtml('src', 'www', context);

@@ -14,15 +14,17 @@ function renderOption(label: string, value: string, storedValue: string, labelAr
 }
 
 
-function renderOptionGroup(label, value, storedValue, labelArg, labelArg2) {
+function renderOptionGroup(label:string, value:any, storedValue:string, labelArg:string, labelArg2:string): any {
   if (typeof value === 'string') {
-    return renderOption(label, value, storedValue, labelArg, labelArg2);
+    const valStr = value as string;
+    return renderOption(label, valStr, storedValue, labelArg, labelArg2);
   }
   else {
+    const valOptGrp = value as Array<SelectOption>;
     return m('optgroup', {
       key: label,
       label
-    }, value.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])));
+    }, valOptGrp.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])));
   }
 }
 
@@ -85,7 +87,7 @@ export default {
 
   renderCheckbox(
     label: string,
-    name:string,
+    name: string,
     settingsProp: SettingsProp<boolean>,
     callback?: (v: boolean) => void,
     disabled?: boolean
@@ -111,14 +113,20 @@ export default {
     ]);
   },
 
-  renderSelectWithGroups: function(label, name, options, settingsProp, isDisabled, onChangeCallback) {
-    var storedValue = settingsProp();
-    const onChange = function(e) {
-      settingsProp(e.target.value);
-      if (onChangeCallback) onChangeCallback(e.target.value);
-      setTimeout(function() {
-        redraw();
-      }, 10);
+  renderSelectWithGroup(
+    label: string,
+    name: string,
+    options: any,
+    settingsProp: SettingsProp<string>,
+    isDisabled?: boolean,
+    onChangeCallback?: (v: string) => void
+  ) {
+    const storedValue = settingsProp();
+    const onChange = function(e: Event) {
+      const val = (e.target as any).value;
+      settingsProp(val);
+      if (onChangeCallback) onChangeCallback(val);
+      setTimeout(() => redraw(), 10);
     };
     return [
       m('label', {
@@ -127,13 +135,13 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate: function(vnode) {
+        oncreate(vnode: Mithril.Vnode<any>) {
           vnode.dom.addEventListener('change', onChange, false);
         },
-        onremove: function(vnode) {
+        onremove(vnode: Mithril.Vnode<any>) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
-      }, options.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])))
+      }, options.map((e: SelectOption) => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])))
     ];
-  },
+  }
 };

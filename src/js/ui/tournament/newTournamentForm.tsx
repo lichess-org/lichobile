@@ -1,4 +1,3 @@
-import backbutton from '../../backbutton';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import * as utils from '../../utils';
@@ -26,12 +25,12 @@ export default {
 };
 
 function open() {
-  backbutton.stack.push(close);
+  router.backbutton.stack.push(close);
   isOpen = true;
 }
 
-function close(fromBB: string) {
-  if (fromBB !== 'backbutton' && isOpen) backbutton.stack.pop();
+function close(fromBB?: string) {
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
   isOpen = false;
 }
 
@@ -47,7 +46,7 @@ function renderForm() {
           {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false, null)}
         </div>
         <div className={'select_input' + (settings.tournament.variant() !== '1' ? ' notVisible' : '')}>
-          {formWidgets.renderSelectWithGroups('Position', 'position', settings.tournament.availablePositions, settings.tournament.position, false, null)}
+          {formWidgets.renderSelectWithGroup('Position', 'position', settings.tournament.availablePositions, settings.tournament.position, false, null)}
         </div>
         <div className="select_input">
           {formWidgets.renderSelect('Mode', 'mode', settings.tournament.availableModes, settings.tournament.mode, false, null)}

@@ -1,14 +1,15 @@
 import { fetchJSON } from '../../http';
+import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentList } from './interfaces';
 
-export function currentTournaments() {
+export function currentTournaments(): Promise<TournamentList> {
   return fetchJSON('/tournament', {}, true);
 }
 
-export function tournament(id) {
+export function tournament(id: string): Promise<Tournament> {
   return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true);
 }
 
-export function reload(id, page) {
+export function reload(id: string, page: number): Promise<Tournament> {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
@@ -16,19 +17,19 @@ export function reload(id, page) {
   });
 }
 
-export function join(id) {
+export function join(id: string): Promise<{}> {
   return fetchJSON('/tournament/' + id + '/join', {method: 'POST'});
 }
 
-export function withdraw(id) {
+export function withdraw(id: string): Promise<{}> {
   return fetchJSON('/tournament/' + id + '/withdraw', {method: 'POST'});
 }
 
-export function playerInfo(tournamentId, playerId) {
+export function playerInfo(tournamentId: string, playerId: string): Promise<PlayerInfo> {
   return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
 }
 
-export function create(variant, position, mode, clockTime, clockIncrement, minutes, waitMinutes) {
+export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string): Promise<TournamentCreateResponse> {
   return fetchJSON('/tournament/new', {
     method: 'POST',
     body: JSON.stringify({

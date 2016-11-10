@@ -26,15 +26,21 @@ interface Config {
   bounds?: Bounds
 }
 
-export default {
-  oninit({ attrs }: Mithril.Vnode<Attrs>) {
+interface State {
+  ground: Chessground.Controller
+  pieceTheme: string
+  boardTheme: string
+}
+
+const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
+  oninit({ attrs }) {
     const config = makeConfig(attrs);
     this.pieceTheme = settings.general.theme.piece();
     this.boardTheme = settings.general.theme.board();
     this.ground = new chessground.controller(config);
   },
 
-  onbeforeupdate({ attrs }: Mithril.Vnode<Attrs>, { attrs: oldattrs }: Mithril.Vnode<Attrs>) {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     if (
       attrs.fen !== oldattrs.fen ||
       attrs.lastMove !== oldattrs.lastMove ||
@@ -45,13 +51,13 @@ export default {
       this.ground.data.orientation = attrs.orientation || 'white';
       this.ground.data.lastMove = attrs.lastMove && uciToMove(attrs.lastMove);
       if (attrs.fen) this.ground.data.pieces = chessground.fen.read(attrs.fen);
-      if (attrs.bounds) this.ground.bounds = attrs.bounds;
+      if (attrs.bounds) this.ground.data.bounds = attrs.bounds;
       return true;
     }
     else return false;
   },
 
-  view({ attrs }: Mithril.Vnode<Attrs>) {
+  view({ attrs }) {
 
     const boardClass = [
       'display_board',
@@ -67,6 +73,8 @@ export default {
     );
   }
 };
+
+export default ViewOnlyBoard
 
 function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
   const conf: Config = {

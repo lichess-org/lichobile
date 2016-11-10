@@ -12,7 +12,7 @@ import { OtbRoundInterface } from '../shared/round';
 export interface NewOtbGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
-  isOpen: Mithril.Property<boolean>
+  isOpen: Mithril.Stream<boolean>
   root: OtbRoundInterface
 }
 

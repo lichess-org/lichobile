@@ -36,7 +36,7 @@ export default class AiRound implements AiRoundInterface {
   public replay: Replay
   public vm: AiVM
 
-  private engine: EngineInterface;
+  public engine: EngineInterface;
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.engine = engineCtrl(this);
@@ -315,6 +315,8 @@ export default class AiRound implements AiRoundInterface {
   }
 
   public jumpLast = () => this.jump(this.lastPly());
+
+  public canDrop = () => false
 }
 
 function getColorFromSettings(): Color {

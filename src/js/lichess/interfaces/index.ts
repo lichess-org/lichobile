@@ -1,3 +1,5 @@
+export interface LightPlayer {
+}
 
 export interface LobbyData {
   lobby: {
@@ -51,5 +53,24 @@ export interface MiniUser {
   player: MiniUserPlayer
   opponent: MiniUserPlayer
   [index: string]: MiniUserPlayer
+}
+
+export interface MiniBoardGameObjPlayer {
+  rating: number
+  user: {
+    username: string
+  }
+}
+
+export interface MiniBoardGameObj {
+  player: MiniBoardGameObjPlayer
+  opponent: MiniBoardGameObjPlayer
+  clock?: {
+    initial: number
+    increment: number
+  }
+  correspondence?: {
+    daysPerTurn: number
+  }
 }
 

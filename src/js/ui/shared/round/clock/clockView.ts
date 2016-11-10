@@ -10,6 +10,11 @@ export interface ClockAttrs {
   isBerserk: boolean
 }
 
+interface ClockState {
+  clockOnCreate(vnode: Mithril.ChildNode): void
+  clockOnUpdate(vnode: Mithril.ChildNode): void
+}
+
 function prefixInteger(num: number, length: number) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
@@ -37,21 +42,21 @@ export function formatClockTime(time: number, isRunning: boolean) {
 }
 
 export default {
-  oninit({ attrs }: Mithril.Vnode<ClockAttrs>) {
+  oninit({ attrs }: Mithril.Vnode<ClockAttrs, ClockState>) {
     const { ctrl, color, runningColor } = attrs;
     const time = ctrl.data[color];
     const isRunning = runningColor === color;
-    this.clockOnCreate = function({ dom }: Mithril.Vnode<any>) {
+    this.clockOnCreate = function({ dom }: Mithril.ChildNode) {
       dom.textContent = formatClockTime(time * 1000, isRunning);
       ctrl.els[color] = dom;
     };
     // safety measure if oncreate is not called
-    this.clockOnUpdate = function({ dom }: Mithril.Vnode<any>) {
+    this.clockOnUpdate = function({ dom }: Mithril.ChildNode) {
       ctrl.els[color] = dom;
     };
   },
 
-  view({ attrs }: Mithril.Vnode<ClockAttrs>) {
+  view({ attrs }: Mithril.Vnode<ClockAttrs, ClockState>) {
     const { ctrl, color, runningColor, isBerserk } = attrs;
     const time = ctrl.data[color];
     const isRunning = runningColor === color;

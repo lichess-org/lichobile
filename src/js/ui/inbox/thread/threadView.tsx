@@ -5,7 +5,7 @@ import i18n from '../../../i18n';
 import redraw from '../../../utils/redraw';
 import { ThreadState, Post, ThreadAttrs } from '../interfaces';
 
-export default function view(vnode: Mithril.Vnode<ThreadAttrs>) {
+export default function view(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>) {
   const ctrl = vnode.state as ThreadState;
   const headerCtrl = () => headerWidget(null,
     backButton(ctrl.thread() ? ctrl.thread().name : null)

@@ -49,8 +49,8 @@ export default {
     const vh = helper.viewportDim().vh;
     const cDim = cardDims();
     const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
-    function wrapperOnCreate(vnode: Mithril.Vnode<{}>) {
-      const el = vnode.dom;
+    function wrapperOnCreate(vnode: Mithril.ChildNode) {
+      const el = vnode.dom as HTMLElement;
       if (!helper.isWideScreen()) {
         scroller = new IScroll(el, {
           scrollX: true,
@@ -71,7 +71,7 @@ export default {
       }
     }
 
-    function wrapperOnUpdate(vnode: Mithril.Vnode<{}>) {
+    function wrapperOnUpdate(vnode: Mithril.ChildNode) {
       // see https://github.com/cubiq/iscroll/issues/412
       const el = vnode.dom;
       if (scroller) {
@@ -84,7 +84,7 @@ export default {
 
     return (
       <div id="games_menu" className="overlay_popup_wrapper"
-      onbeforeremove={(vnode: Mithril.Vnode<{}>, done: () => void) => {
+      onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
         vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);
       }}

@@ -4,9 +4,12 @@ import Replay from '../offlineRound/Replay';
 export type Position = 'player' | 'opponent';
 export type Material = { [role: string]: number; };
 
-export interface RoundInterface {
+export interface BoardInterface {
   chessground: Chessground.Controller
+  canDrop(): boolean
+}
 
+export interface RoundInterface extends BoardInterface {
   firstPly(): number
   lastPly(): number
 

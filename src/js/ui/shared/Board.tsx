@@ -31,20 +31,26 @@ export interface Shape {
   dest?: Pos
 }
 
-export default {
-  oninit(vnode: Mithril.Vnode<Attrs>) {
+interface State {
+  wrapperOnCreate(vnode: Mithril.ChildNode): void
+  boardOnCreate(vnode: Mithril.ChildNode): void
+  boardOnRemove(): void
+}
+
+const Board: Mithril.Component<Attrs, State> = {
+  oninit(vnode) {
 
     const { data, chessgroundCtrl, bounds } = vnode.attrs;
 
-    function wrapperOnCreate({ dom }: Mithril.Vnode<void>) {
+    function wrapperOnCreate({ dom }: Mithril.ChildNode) {
       const icon = gameIcon(data.game.variant.key);
       if (icon && data.game.variant.key !== 'standard' && data.game.status &&
         gameApi.isPlayerPlaying(data)) {
-          variantReminder(dom, icon);
+          variantReminder(dom as HTMLElement, icon);
         }
     }
 
-    function boardOnCreate({ dom }: Mithril.Vnode<void>) {
+    function boardOnCreate({ dom }: Mithril.ChildNode) {
       if (chessgroundCtrl) {
         if (!bounds) {
           chessgroundCtrl.setBounds(dom.getBoundingClientRect());
@@ -66,7 +72,7 @@ export default {
     };
   },
 
-  view(vnode: Mithril.Vnode<Attrs>) {
+  view(vnode) {
     const { data, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
 
     boardTheme = boardTheme || settings.general.theme.board();
@@ -123,3 +129,5 @@ export default {
     );
   }
 }
+
+export default Board

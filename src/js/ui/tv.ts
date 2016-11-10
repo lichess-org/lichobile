@@ -15,8 +15,12 @@ interface TVAttrs {
   flip: boolean;
 }
 
-export default {
-  oninit(vnode: Mithril.Vnode<TVAttrs>) {
+interface State {
+  round: OnlineRound
+}
+
+const TV: Mithril.Component<TVAttrs, State> = {
+  oninit(vnode) {
     helper.analyticsTrackView('TV');
 
     const onChannelChange = () => router.set('/tv', true);
@@ -48,3 +52,5 @@ export default {
     }
   }
 };
+
+export default TV

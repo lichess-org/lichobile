@@ -7,7 +7,7 @@ import * as m from 'mithril';
 import { ThreadData, ThreadAttrs, ThreadState } from '../interfaces';
 import router from '../../../router';
 
-export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
+export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): void {
   helper.analyticsTrackView('Thread');
 
   socket.createDefault();
@@ -16,9 +16,9 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs>): void {
   const thread = m.prop<ThreadData>();
   const deleteAttempted = m.prop<boolean>(false);
 
-  function onKeyboardShow(e: any) {
+  function onKeyboardShow(e: Event) {
     helper.onKeyboardShow(e);
-    (document.activeElement as any).scrollIntoView(true);
+    (document.activeElement as HTMLElement).scrollIntoView(true);
   }
   window.addEventListener('native.keyboardshow', onKeyboardShow);
   window.addEventListener('native.keyboardhide', helper.onKeyboardHide);

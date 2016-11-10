@@ -11,8 +11,8 @@ interface Attrs {
   onTabChange: (k: string) => void
 }
 
-export default {
-  view(vnode: Mithril.Vnode<Attrs>) {
+const Tabs: Mithril.Component<Attrs, {}> = {
+  view(vnode) {
 
     const {
       buttons,
@@ -55,3 +55,4 @@ export default {
   }
 };
 
+export default Tabs

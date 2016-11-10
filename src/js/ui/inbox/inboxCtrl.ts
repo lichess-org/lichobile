@@ -7,7 +7,7 @@ import * as m from 'mithril';
 import { PagedThreads, InboxState } from './interfaces';
 import { throttle } from 'lodash';
 
-export default function oninit(vnode: Mithril.Vnode<{}>): void {
+export default function oninit(vnode: Mithril.Vnode<void, InboxState>): void {
   helper.analyticsTrackView('Inbox');
 
   socket.createDefault();

@@ -53,7 +53,7 @@ export function renderMaterial(material: Material) {
   for (let role in material) {
     const piece = <div className={role} />;
     const count = material[role];
-    const content: Array<Mithril.Vnode<any>> = [];
+    const content: Array<Mithril.ChildNode> = [];
     for (let i = 0; i < count; i++) content.push(piece);
     children.push(<div className="tomb" key={role}>{content}</div>);
   }
@@ -61,8 +61,8 @@ export function renderMaterial(material: Material) {
 }
 
 function renderTitle(ctrl: OnlineRound) {
-  function tcConfig(vnode: Mithril.Vnode<{}>) {
-    const el = vnode.dom;
+  function tcConfig(vnode: Mithril.ChildNode) {
+    const el = vnode.dom as HTMLElement;
     el.textContent =
       utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
       ' • ';
@@ -113,7 +113,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
-  const board = m<BoardAttrs>(Board, {
+  const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
@@ -238,7 +238,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        m<ClockAttrs>(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+        m(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player

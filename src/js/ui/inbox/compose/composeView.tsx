@@ -1,19 +1,8 @@
 import * as h from '../../helper';
-import { header as headerWidget, backButton } from '../../shared/common';
-import layout from '../../layout';
 import i18n from '../../../i18n';
-import { ComposeAttrs, ComposeState } from '../interfaces';
+import { ComposeState } from '../interfaces';
 
-export default function view(vnode: Mithril.Vnode<ComposeAttrs>) {
-  const ctrl = vnode.state as ComposeState;
-  const headerCtrl = () => headerWidget(null,
-    backButton(i18n('composeMessage'))
-  );
-  const bodyCtrl = () => composeBody(ctrl);
-  return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
-}
-
-function composeBody(ctrl: ComposeState) {
+export function composeBody(ctrl: ComposeState) {
   return (
     <div className="composeWrapper">
       <form id="composeForm"

@@ -12,10 +12,10 @@ import { getAnalyseData } from '../../utils/offlineGames';
 
 export interface State {
   importGame(e: Event): void
-  importing: Mithril.Property<boolean>
+  importing: Mithril.Stream<boolean>
 }
 
-export default function oninit(vnode: Mithril.Vnode<{}>): void {
+export default function oninit(vnode: Mithril.Vnode<{}, State>): void {
   helper.analyticsTrackView('Import game');
 
   socket.createDefault();

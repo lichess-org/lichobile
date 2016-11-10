@@ -8,15 +8,17 @@ import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import { TimelineEntry } from '../../lichess/interfaces'
 
-export interface HomeCtrl {
-  nbConnectedPlayers: Mithril.Property<number>;
-  nbGamesInPlay: Mithril.Property<number>;
-  dailyPuzzle: Mithril.Property<any>;
-  weekTopPlayers: Mithril.Property<Array<any>>;
-  timeline: Mithril.Property<Array<any>>;
+export interface HomeState {
+  nbConnectedPlayers: Mithril.Stream<number>;
+  nbGamesInPlay: Mithril.Stream<number>;
+  dailyPuzzle: Mithril.Stream<any>;
+  weekTopPlayers: Mithril.Stream<Array<any>>;
+  timeline: Mithril.Stream<Array<any>>;
+  init(): void
+  onResume(): void
 }
 
-export default function homeCtrl(vnode: Mithril.Vnode<{}>): void {
+export default function homeCtrl(vnode: Mithril.Vnode<void, HomeState>): void {
 
   const nbConnectedPlayers = m.prop<number>();
   const nbGamesInPlay = m.prop<number>();

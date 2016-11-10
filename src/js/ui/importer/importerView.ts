@@ -5,10 +5,9 @@ import i18n from '../../i18n';
 
 import { State as ImporterState } from './importerOninit'
 
-export default function view(vnode: Mithril.Vnode<{}>) {
-  const ctrl = vnode.state;
+export default function view(vnode: Mithril.Vnode<{}, ImporterState>) {
   const headerCtrl = () => header(i18n('importGame'));
-  const bodyCtrl = () => renderBody(ctrl);
+  const bodyCtrl = () => renderBody(vnode.state);
   return layout.free(headerCtrl, bodyCtrl);
 }
 

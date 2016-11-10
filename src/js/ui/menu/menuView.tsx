@@ -237,8 +237,8 @@ function renderMenu() {
   );
 }
 
-function menuSlide(vnode: Mithril.Vnode<{}>) {
-  const el = vnode.dom;
+function menuSlide(vnode: Mithril.ChildNode) {
+  const el = vnode.dom as HTMLElement
   el.style.transform = 'translate3d(-100%,0,0)';
   Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
 }

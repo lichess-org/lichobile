@@ -10,12 +10,12 @@ export interface Attrs {
   data: ExplorerData
 }
 
-export default {
-  onbeforeupdate({ attrs }: Mithril.Vnode<Attrs>, { attrs: oldattrs }: Mithril.Vnode<Attrs>) {
+const OpeningTable: Mithril.Component<Attrs, {}> = {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.data !== oldattrs.data;
   },
 
-  view({ attrs }: Mithril.Vnode<Attrs>) {
+  view({ attrs }) {
     const { ctrl, data } = attrs;
 
     const moveTable = showMoveTable(ctrl, data.moves);
@@ -34,8 +34,9 @@ export default {
       return showEmpty(ctrl);
     }
   }
-
 }
+
+export default OpeningTable
 
 export function showTitle(ctrl: AnalyseCtrlInterface) {
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {

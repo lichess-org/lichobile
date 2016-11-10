@@ -23,6 +23,12 @@ export interface TimelineData {
   entries: Array<TimelineEntry>
 }
 
+export interface DailyPuzzle {
+  id: string
+  fen: string
+  color: Color
+}
+
 export interface NowPlayingOpponent {
   username: string
   id?: string

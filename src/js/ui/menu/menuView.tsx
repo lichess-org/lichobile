@@ -20,7 +20,7 @@ export default function view() {
   if (!menu.isOpen()) return null;
 
   return (
-    <aside id="side_menu" oncreate={slidesInUp}>
+    <aside id="side_menu" oncreate={menuSlide}>
       {renderMenu()}
     </aside>
   );
@@ -237,10 +237,8 @@ function renderMenu() {
   );
 }
 
-function slidesInUp(vnode: Mithril.Vnode<{}>) {
+function menuSlide(vnode: Mithril.Vnode<{}>) {
   const el = vnode.dom;
   el.style.transform = 'translate3d(-100%,0,0)';
-  // force reflow hack
-  vnode.state.lol = el.offsetHeight;
   Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
 }

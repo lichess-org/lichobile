@@ -2,13 +2,18 @@ import * as chessground from 'chessground-mobile';
 import { uciToMove } from '../../utils/chessFormat';
 import settings from '../../settings';
 
-interface Attrs {
-  fen: string
-  lastMove: string
-  orientation: Color
-  bounds: BoardBounds
-  customPieceTheme: string
-  variant: VariantKey
+interface Bounds {
+  width: number
+  height: number
+}
+
+export interface Attrs {
+  fen?: string
+  lastMove?: string
+  orientation?: Color
+  bounds?: Bounds
+  customPieceTheme?: string
+  variant?: VariantKey
 }
 
 interface Config {
@@ -18,12 +23,14 @@ interface Config {
   fen: string
   lastMove: MoveTuple
   orientation: Color
-  bounds?: ClientRect
+  bounds?: Bounds
 }
 
 export default {
   oninit({ attrs }: Mithril.Vnode<Attrs>) {
     const config = makeConfig(attrs);
+    this.pieceTheme = settings.general.theme.piece();
+    this.boardTheme = settings.general.theme.board();
     this.ground = new chessground.controller(config);
   },
 
@@ -35,9 +42,9 @@ export default {
       attrs.bounds.height !== oldattrs.bounds.height ||
       attrs.bounds.width !== oldattrs.bounds.width
     ) {
-      this.ground.data.pieces = chessground.fen.read(attrs.fen);
       this.ground.data.orientation = attrs.orientation || 'white';
-      if (attrs.lastMove) this.ground.data.lastMove = uciToMove(attrs.lastMove);
+      this.ground.data.lastMove = attrs.lastMove && uciToMove(attrs.lastMove);
+      if (attrs.fen) this.ground.data.pieces = chessground.fen.read(attrs.fen);
       if (attrs.bounds) this.ground.bounds = attrs.bounds;
       return true;
     }
@@ -48,9 +55,9 @@ export default {
 
     const boardClass = [
       'display_board',
-      attrs.customPieceTheme || settings.general.theme.piece(),
-      settings.general.theme.board(),
-      attrs.variant
+      attrs.customPieceTheme || this.pieceTheme,
+      this.boardTheme,
+      attrs.variant || 'standard'
     ].join(' ');
 
     return (

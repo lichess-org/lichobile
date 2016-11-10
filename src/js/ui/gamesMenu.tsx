@@ -12,7 +12,7 @@ import challengesApi from '../lichess/challenges';
 import { NowPlayingGame } from '../lichess/interfaces';
 import { Challenge } from '../lichess/interfaces/challenge';
 import * as m from 'mithril';
-import ViewOnlyBoard from './shared/ViewOnlyBoard';
+import ViewOnlyBoard, { Attrs as ViewOnlyBoardAttrs } from './shared/ViewOnlyBoard';
 
 interface CardDim {
   w: number
@@ -180,12 +180,12 @@ function cardDims(): CardDim {
   }
 }
 
-function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: Variant) {
+function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
     <div className="boardWrapper" style={style}>
-      {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
+      {m<ViewOnlyBoardAttrs>(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
     </div>
   );
 }
@@ -242,7 +242,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
     <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
       oncreate={oncreate}
     >
-      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant)}
+      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={icon ? icon : ''} />
         <div className="description">
@@ -269,7 +269,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">

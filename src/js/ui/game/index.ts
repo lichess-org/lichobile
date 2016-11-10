@@ -18,7 +18,6 @@ import gamesMenu from '../gamesMenu';
 import layout from '../layout';
 import { connectingHeader, viewOnlyBoardContent } from '../shared/common';
 
-
 interface Attrs {
   id: string
   color: Color

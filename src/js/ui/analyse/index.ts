@@ -21,7 +21,7 @@ export interface Attrs {
 }
 
 export interface State {
-  ctrl: AnalyseCtrl
+  ctrl?: AnalyseCtrl
 }
 
 const AnalyseScreen: Mithril.Component<Attrs, State> = {

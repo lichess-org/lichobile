@@ -5,18 +5,23 @@ export interface TournamentCreateResponse {
 export interface Tournament {
   clock: TournamentClock
   createdBy: string
-  featured: FeaturedGame
+  featured?: FeaturedGame
   fullName: string
   id: string
   isFinished: boolean
+  isRecentlyFinished?: boolean
   isStarted: boolean
+  me?: TournamentMe
   minutes: number
   nbPlayers: number
   pairings: Array<TournamentPairing>
   pairingsClosed: boolean
   perf: Perf
+  podium?: Array<PodiumPlace>
+  quote?: Quote
   schedule: Schedule
-  secondsToFinish: number
+  secondsToStart?: number
+  secondsToFinish?: number
   socketVersion: number
   standing: Standing
   startsAt: string
@@ -40,6 +45,12 @@ interface FeaturedGame {
   opponent: FeaturedPlayer
   player: FeaturedPlayer
   white: FeaturedColorPlayer
+}
+
+interface TournamentMe {
+  rank: number
+  username: string
+  withdraw: boolean
 }
 
 interface FeaturedColorPlayer {
@@ -75,6 +86,21 @@ interface Perf {
   position?: number
 }
 
+export interface PodiumPlace {
+  name: string
+  nb: PlayerInfoNb
+  performance: number
+  rank: number
+  rating: number
+  ratingDiff: number
+  score: number
+}
+
+interface Quote {
+  author: string
+  text: string
+}
+
 interface Schedule {
   freq: string
   speed: string
@@ -85,7 +111,7 @@ interface Standing {
   players: Array<StandingPlayer>
 }
 
-interface StandingPlayer {
+export interface StandingPlayer {
   name: string
   provisional: boolean
   rank: number
@@ -93,6 +119,7 @@ interface StandingPlayer {
   ratingDiff: number
   score: number
   sheet: Sheet
+  withdraw?: boolean
 }
 
 interface Sheet {
@@ -108,7 +135,7 @@ interface Verdicts {
 
 interface Verdict {
   condition: string
-  verdict: string
+  accepted: string
 }
 
 export interface PlayerInfo {
@@ -211,8 +238,35 @@ export interface PlayerInfoState {
 }
 
 export interface FaqState {
-  open: (playerId: string) => void
+  open: () => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
   tournament: Mithril.Property<Tournament>
+}
+
+export interface TournamentAttrs {
+  id: string
+}
+
+export interface FeaturedGameUpdate {
+  id: string
+  fen: string
+  lm: string
+}
+
+export interface TournamentState {
+  tournament: Mithril.Property<Tournament>
+  hasJoined: Mithril.Property<boolean>
+  faqCtrl: FaqState
+  playerInfoCtrl: PlayerInfoState
+  join: (tid: string) => void
+  withdraw: (tid: string) => void
+  reload: (tid: string, p: number) => void
+  first: () => void
+  prev: () => void
+  next: () => void
+  last: () => void
+  me: () => void
+  isLoading: Mithril.Property<boolean>
+  clockInterval: Mithril.Property<number>
 }

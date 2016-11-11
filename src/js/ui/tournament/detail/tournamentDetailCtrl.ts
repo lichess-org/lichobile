@@ -1,5 +1,5 @@
 import socket from '../../../socket';
-import { throttle } from 'lodash/function';
+import { throttle } from 'lodash';
 import redraw from '../../../utils/redraw';
 import router from '../../../router';
 import * as utils from '../../../utils';
@@ -8,20 +8,21 @@ import * as helper from '../../helper';
 import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
+import { TournamentAttrs, Tournament, FeaturedGameUpdate, TournamentState } from '../interfaces'
 
-export default function oninit(vnode) {
+export default function oninit(vnode: Mithril.Vnode<TournamentAttrs>) {
   helper.analyticsTrackView('Tournament details');
 
   const id = vnode.attrs.id;
 
-  const tournament = m.prop();
-  const hasJoined = m.prop(false);
-  const currentPage = m.prop(null);
-  const isLoading = m.prop(false);
+  const tournament = m.prop<Tournament>();
+  const hasJoined = m.prop<boolean>(false);
+  const currentPage = m.prop<number>(null);
+  const isLoading = m.prop<boolean>(false);
   const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
 
-  function reload(data) {
+  function reload(data: Tournament) {
     isLoading(false);
     const oldData = tournament();
     if (data.featured && (data.featured.id !== oldData.featured.id)) {
@@ -50,7 +51,7 @@ export default function oninit(vnode) {
     redraw();
   }
 
-  function join(tid) {
+  function join(tid: string) {
     xhr.join(tid)
     .then(() => {
       hasJoined(true);
@@ -60,7 +61,7 @@ export default function oninit(vnode) {
     .catch(utils.handleXhrError);
   }
 
-  function withdraw(tid) {
+  function withdraw(tid: string) {
     xhr.withdraw(tid)
     .then(() => {
       hasJoined(false);
@@ -69,7 +70,7 @@ export default function oninit(vnode) {
     .catch(utils.handleXhrError);
   }
 
-  const throttledReload = throttle((tid, p) => {
+  const throttledReload = throttle((tid: string, p: number) => {
     if (p) currentPage(p);
     isLoading(true);
     xhr.reload(tid, currentPage())
@@ -78,12 +79,12 @@ export default function oninit(vnode) {
   }, 1000);
 
   const handlers = {
-    reload: () => throttledReload(id),
-    resync: () => throttledReload(id),
-    redirect: function(gameId) {
+    reload: () => throttledReload(id, null),
+    resync: () => throttledReload(id, null),
+    redirect: function(gameId: string) {
       router.set('/tournament/' + tournament().id + '/game/' + gameId, true);
     },
-    fen: function(d) {
+    fen: function(d: FeaturedGameUpdate) {
       const featured = tournament().featured;
       if (!featured) return;
       if (featured.id !== d.id) return;
@@ -93,7 +94,7 @@ export default function oninit(vnode) {
     }
   };
 
-  const clockInterval = m.prop();
+  const clockInterval = m.prop<number>();
   xhr.tournament(id)
   .then(data => {
     tournament(data);
@@ -105,7 +106,7 @@ export default function oninit(vnode) {
   })
   .catch(utils.handleXhrError);
 
-  vnode.state = {
+  vnode.state = <TournamentState> {
     tournament,
     hasJoined,
     faqCtrl,

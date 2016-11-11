@@ -10,41 +10,42 @@ import playerInfo from '../playerInfo';
 import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
+import { TournamentState, Tournament, PlayerInfoState, StandingPlayer, PodiumPlace } from '../interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(vnode: Mithril.Vnode<{}>) {
+  const ctrl = vnode.state as TournamentState;
 
   const headerCtrl = () => headerWidget(null,
     backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
   );
 
-  const body = () => tournamentBody(ctrl);
+  const bodyCtrl = () => tournamentBody(ctrl);
   const footer = () => renderFooter(ctrl);
   const faqOverlay = () => renderFAQOverlay(ctrl);
   const playerInfoOverlay = () => renderPlayerInfoOverlay(ctrl);
   const overlay = () => [faqOverlay(), playerInfoOverlay()];
 
-  return layout.free(headerCtrl, body, footer, overlay);
+  return layout.free(headerCtrl, bodyCtrl, footer, overlay);
 }
 
-function renderFAQOverlay(ctrl) {
+function renderFAQOverlay(ctrl: TournamentState) {
   return [
     faq.view(ctrl.faqCtrl)
   ];
 }
 
-function renderPlayerInfoOverlay(ctrl) {
+function renderPlayerInfoOverlay(ctrl: TournamentState) {
   return [
     playerInfo.view(ctrl.playerInfoCtrl)
   ];
 }
 
-function tournamentBody(ctrl) {
+function tournamentBody(ctrl: TournamentState) {
   const data = ctrl.tournament();
 
   if (!data) return null;
 
-  let body;
+  let body: Mithril.Children;
 
   if (data.isFinished) {
     body = tournamentContentFinished(ctrl);
@@ -63,7 +64,7 @@ function tournamentBody(ctrl) {
   );
 }
 
-function renderFooter(ctrl) {
+function renderFooter(ctrl: TournamentState) {
   if (!ctrl.tournament()) {
     return null;
   }
@@ -79,7 +80,7 @@ function renderFooter(ctrl) {
   );
 }
 
-function tournamentContentFinished(ctrl) {
+function tournamentContentFinished(ctrl: TournamentState) {
   const data = ctrl.tournament();
   return [
     tournamentHeader(data, null, null),
@@ -88,7 +89,7 @@ function tournamentContentFinished(ctrl) {
   ];
 }
 
-function tournamentContentCreated(ctrl) {
+function tournamentContentCreated(ctrl: TournamentState) {
   const data = ctrl.tournament();
   return [
     tournamentHeader(data, data.secondsToStart, 'Starts in:'),
@@ -96,7 +97,7 @@ function tournamentContentCreated(ctrl) {
   ];
 }
 
-function tournamentContentStarted(ctrl) {
+function tournamentContentStarted(ctrl: TournamentState) {
   const data = ctrl.tournament();
   return [
       tournamentHeader(data, data.secondsToFinish, ''),
@@ -105,7 +106,7 @@ function tournamentContentStarted(ctrl) {
   ];
 }
 
-function tournamentHeader(data, time, timeText) {
+function tournamentHeader(data: Tournament, time: number, timeText: string) {
   const variant = variantDisplay(data);
   const control = formatTournamentTimeControl(data.clock);
   const conditionsClass = [
@@ -143,7 +144,7 @@ function tournamentHeader(data, time, timeText) {
   );
 }
 
-function joinButton(ctrl) {
+function joinButton(ctrl: TournamentState) {
   if (!session.isConnected() ||
     ctrl.tournament().isFinished ||
     settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0 ||
@@ -159,7 +160,7 @@ function joinButton(ctrl) {
   );
 }
 
-function withdrawButton(ctrl) {
+function withdrawButton(ctrl: TournamentState) {
   if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
     return null;
   }
@@ -171,7 +172,7 @@ function withdrawButton(ctrl) {
   );
 }
 
-function variantDisplay(data) {
+function variantDisplay(data: Tournament) {
   let variant = variantKey(data);
   variant = variant.split(' ')[0]; // Cut off names to first word
 
@@ -182,7 +183,7 @@ function variantDisplay(data) {
   return variant;
 }
 
-function variantKey(data) {
+function variantKey(data: Tournament) {
   let variant = data.variant;
   if (variant === 'standard') {
     variant = data.perf.name.toLowerCase();
@@ -190,25 +191,26 @@ function variantKey(data) {
   return variant;
 }
 
-function timeInfo(time, preceedingText) {
+function timeInfo(time: number, preceedingText: string) {
   if (!time) return '';
 
   return preceedingText + ' ' + formatTimeInSecs(time);
 }
 
-function getLeaderboardItemEl(e) {
-  return e.target.classList.contains('list_item') ? e.target :
-    helper.findParentBySelector(e.target, '.list_item');
+function getLeaderboardItemEl(e: Event) {
+  const target = e.target as HTMLElement
+  return (target as HTMLElement).classList.contains('list_item') ? target :
+    helper.findParentBySelector(target, '.list_item');
 }
 
-function handlePlayerInfoTap(ctrl, e) {
+function handlePlayerInfoTap(ctrl: TournamentState, e: Event) {
   const el = getLeaderboardItemEl(e);
-  const playerId = el.dataset.player;
+  const playerId = el.dataset['player'];
 
   ctrl.playerInfoCtrl.open(playerId);
 }
 
-function tournamentLeaderboard(ctrl) {
+function tournamentLeaderboard(ctrl: TournamentState) {
   const data = ctrl.tournament();
   const players = data.standing.players;
   const page = data.standing.page;
@@ -250,7 +252,7 @@ function tournamentLeaderboard(ctrl) {
   );
 }
 
-function renderNavButton(icon, isEnabled, action) {
+function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   const state = isEnabled ? 'enabled' : 'disabled';
   return (
     <button className={`navigationButton ${state}`}
@@ -258,7 +260,7 @@ function renderNavButton(icon, isEnabled, action) {
   );
 }
 
-function renderLeaderboardItem (playerInfoCtrl, userName, player) {
+function renderLeaderboardItem (playerInfoCtrl: PlayerInfoState, userName: string, player: StandingPlayer) {
   const isMe = player.name === userName;
   return (
     <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' me' : '')} >
@@ -275,7 +277,7 @@ function renderLeaderboardItem (playerInfoCtrl, userName, player) {
   );
 }
 
-function tournamentFeaturedGame(ctrl) {
+function tournamentFeaturedGame(ctrl: TournamentState) {
   const data = ctrl.tournament();
   const featured = data.featured;
   if (!featured) return null;
@@ -304,7 +306,7 @@ function tournamentFeaturedGame(ctrl) {
 }
 
 
-function miniBoardSize(isPortrait) {
+function miniBoardSize(isPortrait: boolean) {
   const { vh, vw } = helper.viewportDim();
   const side = isPortrait ? vw * 0.66 : vh * 0.66;
   const bounds = {
@@ -314,7 +316,7 @@ function miniBoardSize(isPortrait) {
   return bounds;
 }
 
-function tournamentPodium(podium) {
+function tournamentPodium(podium: Array<PodiumPlace>) {
   return (
     <div key="podium" className="podium">
       { renderPlace(podium[1]) }
@@ -324,7 +326,7 @@ function tournamentPodium(podium) {
   );
 }
 
-function renderPlace(data) {
+function renderPlace(data: PodiumPlace) {
   // tournament can exist with only 2 players
   if (!data) return null;
 

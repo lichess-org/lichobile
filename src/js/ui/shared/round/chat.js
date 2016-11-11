@@ -124,7 +124,7 @@ export function chatView(ctrl) {
       headerClass = 'list';
     }
     else
-      header = (watchers.nb + watchers.anons)  + ' ' + i18n('spectators');
+      header = i18n('spectators') + ' ' + watchers.nb;
   }
 
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [

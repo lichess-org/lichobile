@@ -4,6 +4,7 @@ import * as m from 'mithril';
 import { SettingsProp } from '../../settings';
 
 type SelectOption = string[]
+type SelectOptionGroup = Array<SelectOption>;
 
 function renderOption(label: string, value: string, storedValue: string, labelArg: string, labelArg2: string) {
   return m('option', {
@@ -14,17 +15,17 @@ function renderOption(label: string, value: string, storedValue: string, labelAr
 }
 
 
-function renderOptionGroup(label:string, value:any, storedValue:string, labelArg:string, labelArg2:string): any {
+function renderOptionGroup(label:string, value:string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
   if (typeof value === 'string') {
     const valStr = value as string;
     return renderOption(label, valStr, storedValue, labelArg, labelArg2);
   }
   else {
-    const valOptGrp = value as Array<SelectOption>;
+    const valOptGrp = value as SelectOptionGroup;
     return m('optgroup', {
       key: label,
       label
-    }, valOptGrp.map(e => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])));
+    }, valOptGrp.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])));
   }
 }
 
@@ -63,7 +64,7 @@ export default {
   ) {
     const storedValue = settingsProp();
     const onChange = function(e: Event) {
-      const val = (e.target as any).value;
+      const val = (e.target as HTMLSelectElement).value;
       settingsProp(val);
       if (onChangeCallback) onChangeCallback(val);
       setTimeout(() => redraw(), 10);
@@ -116,14 +117,14 @@ export default {
   renderSelectWithGroup(
     label: string,
     name: string,
-    options: any,
+    options: Array<Array<string | SelectOptionGroup>>,
     settingsProp: SettingsProp<string>,
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
     const storedValue = settingsProp();
     const onChange = function(e: Event) {
-      const val = (e.target as any).value;
+      const val = (e.target as HTMLSelectElement).value;
       settingsProp(val);
       if (onChangeCallback) onChangeCallback(val);
       setTimeout(() => redraw(), 10);
@@ -141,7 +142,7 @@ export default {
         onremove(vnode: Mithril.Vnode<any>) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
-      }, options.map((e: SelectOption) => renderOptionGroup(e[0], e[1], storedValue, e[2], e[3])))
+      }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
     ];
   }
 };

@@ -1,8 +1,9 @@
 import router from '../../router';
 import * as helper from '../helper';
+import { FaqState, Tournament } from './interfaces';
 
 export default {
-  controller: function(tournament) {
+  controller: function(tournament: Mithril.Property<Tournament>) {
     let isOpen = false;
 
     function open() {
@@ -10,7 +11,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -22,10 +23,10 @@ export default {
         return isOpen;
       },
       tournament
-    };
+    } as FaqState;
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: FaqState) {
     if (!ctrl.isOpen()) return null;
     const tournament = ctrl.tournament();
 
@@ -41,13 +42,7 @@ export default {
         <div className="modal_content">
           <div className="tournamentFaq">
             <h2>Is it rated?</h2>
-            { tournament.rated === undefined ?
-              'Some tournaments are rated and will affect your rating.' :
-              tournament.rated ?
-              'This tournament is rated and will affect your rating.' :
-              'This tournament is *not* rated and will *not* affect your rating.'
-            }
-
+              Some tournaments are rated and will affect your rating.
             <h2>How are scores calculated?</h2>
             { tournament.system === 'arena' ?
               <div>

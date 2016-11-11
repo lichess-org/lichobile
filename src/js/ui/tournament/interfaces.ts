@@ -116,7 +116,7 @@ export interface PlayerInfo {
   player: PlayerInfoPlayer
 }
 
-interface PlayerInfoPairing {
+export interface PlayerInfoPairing {
   berserk: true
   color: string
   id: string
@@ -140,7 +140,7 @@ interface PlayerInfoPlayer {
   rank: number
   rating: number
   ratingDiff: number
-  score: number
+  score: number | Array<number>
 }
 
 interface PlayerInfoNb {
@@ -149,13 +149,13 @@ interface PlayerInfoNb {
   win: number
 }
 
-export interface TournamentList {
-  created: number
-  finished: number
-  started: number
+export interface TournamentLists {
+  created: Array<TournamentListItem>
+  finished: Array<TournamentListItem>
+  started: Array<TournamentListItem>
 }
 
-interface TournamentListItem {
+export interface TournamentListItem {
   clock: TournamentClock
   conditions: Conditions
   createdBy: string
@@ -191,4 +191,28 @@ interface WinnerUser {
   id: string
   name: string
   title: string
+}
+
+export interface TournamentListAttrs {
+  tab: string
+}
+
+export interface TournamentListsState {
+  tournaments: Mithril.Property<TournamentLists>
+  currentTab: Mithril.Property<string>
+}
+
+export interface PlayerInfoState {
+  open: (playerId: string) => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  tournament: Mithril.Property<Tournament>
+  playerData: Mithril.Property<PlayerInfo>
+}
+
+export interface FaqState {
+  open: (playerId: string) => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  tournament: Mithril.Property<Tournament>
 }

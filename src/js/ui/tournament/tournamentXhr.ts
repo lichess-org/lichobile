@@ -1,7 +1,7 @@
 import { fetchJSON } from '../../http';
-import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentList } from './interfaces';
+import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from './interfaces';
 
-export function currentTournaments(): Promise<TournamentList> {
+export function currentTournaments(): Promise<TournamentLists> {
   return fetchJSON('/tournament', {}, true);
 }
 

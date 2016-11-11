@@ -5,14 +5,15 @@ import * as xhr from './tournamentXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
 import settings from '../../settings';
+import { TournamentListAttrs, TournamentListItem, TournamentListsState, TournamentLists } from './interfaces';
 
-export default function oninit(vnode) {
+export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs>) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();
 
-  const tournaments = m.prop();
-  const currentTab = m.prop(vnode.attrs.tab || 'started');
+  const tournaments = m.prop<TournamentLists>();
+  const currentTab = m.prop<string>(vnode.attrs.tab || 'started');
 
   xhr.currentTournaments()
   .then(data => {
@@ -26,17 +27,17 @@ export default function oninit(vnode) {
   })
   .catch(handleXhrError);
 
-  vnode.state = {
+  vnode.state = <TournamentListsState> {
     tournaments,
     currentTab
   };
 }
 
-function supported(t) {
+function supported(t: TournamentListItem) {
   return settings.game.supportedVariants.indexOf(t.variant.key) !== -1;
 }
 
-function sortByLichessAndDate(a, b) {
+function sortByLichessAndDate(a: TournamentListItem, b: TournamentListItem) {
   if (a.createdBy === 'lichess' && b.createdBy === 'lichess') {
     return a.startsAt - b.startsAt;
   } else if (a.createdBy === 'lichess') {
@@ -46,6 +47,6 @@ function sortByLichessAndDate(a, b) {
   }
 }
 
-function sortByEndDate(a, b) {
+function sortByEndDate(a: TournamentListItem, b: TournamentListItem) {
   return b.finishesAt - a.finishesAt;
 }

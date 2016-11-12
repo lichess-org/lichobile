@@ -199,6 +199,19 @@ interface GameData {
 interface OnlineGameData extends GameData {
   game: OnlineGame;
   takebackable: boolean;
+  watchers: GameWatchers
+}
+
+interface GameCrowd {
+  white: boolean;
+  black: boolean;
+  watchers: GameWatchers;
+}
+
+interface GameWatchers {
+  anons: number;
+  nb: number;
+  users: Array<string>;
 }
 
 interface OfflineGameData extends GameData {

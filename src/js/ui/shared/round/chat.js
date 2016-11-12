@@ -113,14 +113,30 @@ export function chatView(ctrl) {
   if (!ctrl.showing) return null;
 
   var player = ctrl.root.data.player;
+  var header = (!ctrl.root.data.opponent.user || ctrl.root.data.player.spectator) ? i18n('chat'): ctrl.root.data.opponent.user.username;
+  const watchers = ctrl.root.data.watchers;
+  var headerClass = '';
+  if (ctrl.root.data.player.spectator && watchers) {
+    if (watchers.users) {
+      header = watchers.users.reduce((a, b) => (a + ', ' + b));
+      if (watchers.anons)
+        header += ', Anonymous(' + watchers.anons + ')';
+      headerClass = 'list';
+    }
+    else
+      header = i18n('spectators') + ' ' + watchers.nb;
+  }
 
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
-    m('header', [
+    m('header', {
+      className: headerClass
+      },
+      [
       m('button.modal_close[data-icon=L]', {
+        className: headerClass,
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }),
-      m('h2', ctrl.root.data.opponent.user ?
-        ctrl.root.data.opponent.user.username : i18n('chat'))
+      m('h2', header)
     ]),
     m('div.modal_content', [
       m('div#chat_scroller.native_scroller', {

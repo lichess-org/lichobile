@@ -85,7 +85,7 @@ export default class AnalyseCtrl {
     this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
-    this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
+    this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.explorer = explorerCtrl(this, true);
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);

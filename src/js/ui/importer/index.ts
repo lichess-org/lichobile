@@ -1,6 +1,7 @@
 import * as m from 'mithril'
 import socket from '../../socket';
 import router from '../../router';
+import settings from '../../settings';
 import { apiVersion } from '../../http';
 import redraw from '../../utils/redraw';
 import { hasNetwork, serializeQueryParameters, handleXhrError } from '../../utils'
@@ -9,10 +10,16 @@ import * as helper from '../helper';
 import { header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
+import formWidgets from '../shared/form';
 
 export interface State {
   importGame(e: Event): void
   importing: Mithril.Stream<boolean>
+}
+
+interface SendData {
+  pgn: string
+  analyse?: boolean
 }
 
 const ImporterScreen: Mithril.Component<{}, State> = {
@@ -23,7 +30,10 @@ const ImporterScreen: Mithril.Component<{}, State> = {
 
     const importing = m.prop(false);
 
-    function submitOnline(pgn: string): Promise<OnlineGameData> {
+    function submitOnline(pgn: string, analyse: boolean): Promise<OnlineGameData> {
+      const data: SendData = { pgn }
+      if (analyse) data.analyse = true;
+
       return fetchJSON('/import', {
         method: 'POST',
         headers: {
@@ -31,7 +41,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
         },
-        body: serializeQueryParameters({ pgn })
+        body: serializeQueryParameters(data)
       }, true)
     }
 
@@ -46,7 +56,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
         importing(true);
         redraw()
         if (hasNetwork()) {
-          submitOnline(pgn)
+          submitOnline(pgn, settings.importer.analyse())
           .then(data => {
             router.set(`/analyse/online${data.url.round}`);
           })
@@ -88,6 +98,7 @@ function renderBody(ctrl: State) {
     }, [
       m('label', i18n('pasteThePgnStringHere') + ' :'),
       m('textarea.pgnImport'),
+      formWidgets.renderCheckbox(i18n('requestAComputerAnalysis'), 'analyse', settings.importer.analyse),
       m('button.fat', ctrl.importing() ?
         m('div.fa.fa-hourglass-half') : i18n('importGame'))
     ])

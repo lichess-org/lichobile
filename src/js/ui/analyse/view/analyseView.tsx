@@ -135,7 +135,7 @@ function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
 function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   const ceval = ctrl.currentAnyEval();
   const step = ctrl.vm.step;
-  let pearl: any, percent: number;
+  let pearl: Mithril.Children, percent: number;
 
   if (ceval && ceval.cp && ctrl.nextStepBest()) {
     pearl = renderEval(ceval.cp);
@@ -249,7 +249,7 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
       </div>
       <div className="gameInfos">
         {gameMoment.format('L') + ' ' + gameMoment.format('LT')}
-        { ctrl.data.game.source === 'import' ?
+        { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }
       </div>
@@ -275,10 +275,13 @@ function getMoveEl(e: Event) {
     helper.findParentBySelector(target, 'move');
 }
 
+interface ReplayDataSet extends DOMStringMap {
+  path: string
+}
 function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getMoveEl(e);
-  if (el && (el.dataset as any).path) {
-    ctrl.jump(treePath.read((el.dataset as any).path));
+  if (el && (el.dataset as ReplayDataSet).path) {
+    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
   }
 }
 

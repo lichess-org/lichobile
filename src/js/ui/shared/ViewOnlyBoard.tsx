@@ -44,9 +44,9 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
     if (
       attrs.fen !== oldattrs.fen ||
       attrs.lastMove !== oldattrs.lastMove ||
-      attrs.orientation !== oldattrs.orientation ||
+      attrs.orientation !== oldattrs.orientation || (attrs.bounds && (
       attrs.bounds.height !== oldattrs.bounds.height ||
-      attrs.bounds.width !== oldattrs.bounds.width
+      attrs.bounds.width !== oldattrs.bounds.width))
     ) {
       this.ground.data.orientation = attrs.orientation || 'white';
       this.ground.data.lastMove = attrs.lastMove && uciToMove(attrs.lastMove);

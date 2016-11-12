@@ -1,5 +1,6 @@
+import * as m from 'mithril';
 import socket from '../../socket';
-import { viewOnlyBoard, renderContent, overlay } from './view/analyseView';
+import { renderContent, overlay } from './view/analyseView';
 import router from '../../router';
 import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
@@ -7,6 +8,7 @@ import { game as gameXhr } from '../../xhr';
 import i18n from '../../i18n';
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import * as helper from '../helper';
+import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import { makeDefaultData } from './data';
 import AnalyseCtrl from './AnalyseCtrl';
 import { Source } from './interfaces';
@@ -108,10 +110,14 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else {
       return layout.board(
         connectingHeader,
-        viewOnlyBoard(vnode.attrs.color)
+        () => viewOnlyBoard(vnode.attrs.color)
       );
     }
   }
 };
+
+function viewOnlyBoard(color: Color) {
+  return m('section.board_wrapper', m(ViewOnlyBoard, { orientation: color }));
+}
 
 export default AnalyseScreen

@@ -5,7 +5,6 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import Board, { Attrs as BoardAttrs, Shape } from '../../shared/Board';
 import * as helper from '../../helper';
 import { notesView } from '../../shared/round/notes';
@@ -25,14 +24,6 @@ import settings from '../../../settings';
 import { AnalyseCtrlInterface } from '../interfaces';
 
 let pieceNotation: boolean;
-
-export function viewOnlyBoard(color: Color) {
-  return (
-    <section className="board_wrapper">
-      {m(ViewOnlyBoard, { orientation: color })}
-    </section>
-  )
-}
 
 export function overlay(ctrl: AnalyseCtrlInterface) {
   return [

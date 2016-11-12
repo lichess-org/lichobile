@@ -9,7 +9,6 @@ import Board, { Attrs as BoardAttrs, Shape } from '../../shared/Board';
 import * as helper from '../../helper';
 import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';
-import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
@@ -32,8 +31,7 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
-    continuePopup.view(ctrl.continuePopup),
-    importPgnPopup.view(ctrl.importPgnPopup)
+    continuePopup.view(ctrl.continuePopup)
   ];
 }
 

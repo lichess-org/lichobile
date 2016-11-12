@@ -68,13 +68,6 @@ function renderAnalyseMenu(ctrl) {
       key: 'sharePGN',
       oncreate: sharePGN
     }, [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
-    m('button', {
-      key: 'importPGN',
-      oncreate: helper.ontap(() => {
-        ctrl.menu.close();
-        ctrl.importPgnPopup.open();
-      })
-    }, [m('span.fa.fa-upload'), i18n('importGame')]),
     ctrl.notes ? m('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {

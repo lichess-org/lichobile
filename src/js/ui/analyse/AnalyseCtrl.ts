@@ -12,7 +12,6 @@ import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
 import { getPGN } from '../shared/round/roundXhr';
-import importPgnPopup from './importPgnPopup';
 import * as util from './util';
 import cevalCtrl from './ceval/cevalCtrl';
 import crazyValid from './crazy/crazyValid';
@@ -24,7 +23,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, ImportPgnPopupInterface, CevalCtrlInterface, Ceval, CevalEmit } from './interfaces';
+import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, CevalCtrlInterface, Ceval, CevalEmit } from './interfaces';
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -42,7 +41,6 @@ export default class AnalyseCtrl {
   public settings: any;
   public menu: any;
   public continuePopup: any;
-  public importPgnPopup: ImportPgnPopupInterface;
 
   public chessground: Chessground.Controller;
   public analyse: AnalyseInterface;
@@ -70,7 +68,6 @@ export default class AnalyseCtrl {
     this.settings = analyseSettings.controller(this);
     this.menu = menu.controller(this);
     this.continuePopup = continuePopup.controller();
-    this.importPgnPopup = importPgnPopup.controller(this);
 
     this.vm = {
       shouldGoBack,

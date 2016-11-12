@@ -88,7 +88,6 @@ export interface AnalyseCtrlInterface {
   menu: any
   continuePopup: any
   settings: any
-  importPgnPopup: ImportPgnPopupInterface
   evalSummary: any
   notes: any
 
@@ -176,12 +175,4 @@ export interface ExplorerData {
   recentGames?: Array<ExplorerGame>
   checkmate?: boolean
   stalemate?: boolean
-}
-
-export interface ImportPgnPopupInterface {
-  open: () => void
-  close: () => void
-  importing: Mithril.Stream<boolean>
-  submit: (e: Event) => void
-  isOpen: () => boolean
 }

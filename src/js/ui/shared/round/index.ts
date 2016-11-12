@@ -22,6 +22,9 @@ export interface RoundInterface extends BoardInterface {
 
 export interface OnlineRoundInterface extends RoundInterface {
   data: OnlineGameData
+
+  reload(cfg: OnlineGameData): void
+  sendMove(orig: Pos, dest: Pos, prom: Role, isPremove?: boolean): void
 }
 
 export interface OfflineRoundInterface extends RoundInterface {

@@ -4,11 +4,11 @@ import settings from '../../../settings';
 import * as helper from '../../helper';
 import ground from './ground';
 import * as xhr from './roundXhr';
-import OnlineRound from './OnlineRound';
+import { OnlineRoundInterface } from '.'
 
 let promoting: [Pos, Pos] = null;
 
-function start(ctrl: OnlineRound, orig: Pos, dest: Pos, isPremove: boolean) {
+function start(ctrl: OnlineRoundInterface, orig: Pos, dest: Pos, isPremove: boolean) {
   const piece = ctrl.chessground.data.pieces[dest];
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '8' && ctrl.data.player.color === 'white') ||
@@ -21,7 +21,7 @@ function start(ctrl: OnlineRound, orig: Pos, dest: Pos, isPremove: boolean) {
   return false;
 }
 
-function finish(ctrl: OnlineRound, role: Role) {
+function finish(ctrl: OnlineRoundInterface, role: Role) {
   if (promoting) {
     ground.promote(ctrl.chessground, promoting[1], role);
     ctrl.sendMove(promoting[0], promoting[1], role);
@@ -29,7 +29,7 @@ function finish(ctrl: OnlineRound, role: Role) {
   promoting = null;
 }
 
-function cancel(ctrl: OnlineRound) {
+function cancel(ctrl: OnlineRoundInterface) {
   if (promoting) xhr.reload(ctrl).then(ctrl.reload);
   promoting = null;
 }
@@ -38,7 +38,7 @@ export default {
 
   start: start,
 
-  view: function(ctrl: OnlineRound) {
+  view: function(ctrl: OnlineRoundInterface) {
     if (!promoting) return null;
 
     const pieces = ['queen', 'knight', 'rook', 'bishop'];

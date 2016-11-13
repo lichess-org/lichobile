@@ -1,59 +1,88 @@
 import * as chessground from 'chessground-mobile';
+import { uciToMove } from '../../utils/chessFormat';
 import settings from '../../settings';
 
-interface Attrs {
-  fen: string
-  lastMove: string
-  orientation: Color
-  bounds: BoardBounds
-  customPieceTheme: string
-  variant: VariantKey
+interface Bounds {
+  width: number
+  height: number
 }
 
-export default {
-  oninit(rootVnode: Mithril.Vnode<Attrs>) {
+export interface Attrs {
+  fen?: string
+  lastMove?: string
+  orientation?: Color
+  bounds?: Bounds
+  customPieceTheme?: string
+  variant?: VariantKey
+}
 
-    this.createBoard = ({ dom }: Mithril.Vnode<{}>) => {
-      const config = makeConfig(rootVnode.attrs);
-      if (!config.bounds) {
-        config.bounds = dom.getBoundingClientRect();
-      }
-      this.ground = chessground(dom, config);
-    };
+interface Config {
+  viewOnly: boolean
+  minimalDom: boolean
+  coordinates: boolean
+  fen: string
+  lastMove: MoveTuple
+  orientation: Color
+  bounds?: Bounds
+}
 
-    this.updateBoard = (attrs: Attrs) => {
-      if (this.ground) {
-        this.ground.set(makeConfig(attrs));
-      }
-    };
+interface State {
+  ground: Chessground.Controller
+  pieceTheme: string
+  boardTheme: string
+}
+
+const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
+  oninit({ attrs }) {
+    const config = makeConfig(attrs);
+    this.pieceTheme = settings.general.theme.piece();
+    this.boardTheme = settings.general.theme.board();
+    this.ground = new chessground.controller(config);
   },
 
-  view({ attrs }: Mithril.Vnode<Attrs>) {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
+    if (
+      attrs.fen !== oldattrs.fen ||
+      attrs.lastMove !== oldattrs.lastMove ||
+      attrs.orientation !== oldattrs.orientation || (attrs.bounds && (
+      attrs.bounds.height !== oldattrs.bounds.height ||
+      attrs.bounds.width !== oldattrs.bounds.width))
+    ) {
+      this.ground.data.orientation = attrs.orientation || 'white';
+      this.ground.data.lastMove = attrs.lastMove && uciToMove(attrs.lastMove);
+      if (attrs.fen) this.ground.data.pieces = chessground.fen.read(attrs.fen);
+      if (attrs.bounds) this.ground.data.bounds = attrs.bounds;
+      return true;
+    }
+    else return false;
+  },
+
+  view({ attrs }) {
 
     const boardClass = [
       'display_board',
-      attrs.customPieceTheme || settings.general.theme.piece(),
-      settings.general.theme.board(),
-      attrs.variant
+      attrs.customPieceTheme || this.pieceTheme,
+      this.boardTheme,
+      attrs.variant || 'standard'
     ].join(' ');
 
     return (
-      <div
-        className={boardClass}
-        oncreate={this.createBoard}
-        onupdate={() => this.updateBoard(attrs)}
-      />
+      <div className={boardClass}>
+        {chessground.view(this.ground)}
+      </div>
     );
   }
 };
 
+export default ViewOnlyBoard
+
 function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
-  const conf: any = {
+  const conf: Config = {
     viewOnly: true,
     minimalDom: true,
     coordinates: false,
     fen,
-    lastMove: lastMove ? lastMove.match(/.{2}/g) : null,
+    lastMove: lastMove && uciToMove(lastMove),
     orientation: orientation || 'white'
   };
 

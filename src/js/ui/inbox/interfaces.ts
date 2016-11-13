@@ -1,6 +1,6 @@
 export interface InboxState {
-  threads: Mithril.Property<PagedThreads>
-  isLoading: Mithril.Property<boolean>
+  threads: Mithril.Stream<PagedThreads>
+  isLoading: Mithril.Stream<boolean>
   first: () => void
   prev: () => void
   next: () => void
@@ -26,11 +26,12 @@ export interface Thread {
 }
 
 export interface ThreadState {
-  id: Mithril.Property<string>
-  thread: Mithril.Property<ThreadData>
-  deleteAttempted: Mithril.Property<boolean>
+  id: Mithril.Stream<string>
+  thread: Mithril.Stream<ThreadData>
+  deleteAttempted: Mithril.Stream<boolean>
   sendResponse: (form: HTMLFormElement) => void
   deleteThread: (id: string) => void
+  onKeyboardShow(e: Event): void
 }
 
 export interface ThreadAttrs {
@@ -55,8 +56,8 @@ export interface ComposeAttrs {
 }
 
 export interface ComposeState {
-  id: Mithril.Property<string>
-  errors: Mithril.Property<SendErrorResponse>
+  id: Mithril.Stream<string>
+  errors: Mithril.Stream<SendErrorResponse>
   send: (form: HTMLFormElement) => void
 }
 

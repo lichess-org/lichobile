@@ -1,17 +1,34 @@
 import * as helper from '../helper';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import * as gameApi from '../../lichess/game';
+import { MiniBoardGameObj } from '../../lichess/interfaces';
 import * as m from 'mithril';
 
-export default {
-  view(vnode) {
+interface Bounds {
+  width: number
+  height: number
+}
 
-    const { bounds, fen, lastMove, orientation, link, gameObj } = vnode.attrs;
+export interface Attrs {
+  link: () => void
+  gameObj?: MiniBoardGameObj
+  fen?: string
+  lastMove?: string
+  orientation?: Color
+  bounds?: Bounds
+  customPieceTheme?: string
+  variant?: VariantKey
+}
+
+const MiniBoard: Mithril.Component<Attrs, {}> = {
+  view({ attrs }) {
+
+    const { link, gameObj } = attrs;
 
     return (
       <div className="mini_board" oncreate={helper.ontapY(link)}>
         <div className="board_wrapper">
-          {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation })}
+          {m(ViewOnlyBoard, attrs)}
         </div>
         { gameObj ?
         <div className="vsbloc">
@@ -40,3 +57,5 @@ export default {
     );
   }
 };
+
+export default MiniBoard

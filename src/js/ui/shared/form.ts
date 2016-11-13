@@ -76,10 +76,10 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate(vnode: Mithril.Vnode<any>) {
+        oncreate(vnode: Mithril.ChildNode) {
           vnode.dom.addEventListener('change', onChange, false);
         },
-        onremove(vnode: Mithril.Vnode<any>) {
+        onremove(vnode: Mithril.ChildNode) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))

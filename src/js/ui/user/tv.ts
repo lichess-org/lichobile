@@ -12,8 +12,12 @@ interface Attrs {
   id: string;
 }
 
-export default {
-  oninit(vnode: Mithril.Vnode<Attrs>) {
+interface State {
+  round: OnlineRound
+}
+
+const UserTv: Mithril.Component<Attrs, State> = {
+  oninit(vnode) {
     helper.analyticsTrackView('TV');
 
     const userId = vnode.attrs.id;
@@ -45,3 +49,5 @@ export default {
     }
   }
 };
+
+export default UserTv

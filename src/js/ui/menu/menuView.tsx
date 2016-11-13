@@ -20,7 +20,7 @@ export default function view() {
   if (!menu.isOpen()) return null;
 
   return (
-    <aside id="side_menu" oncreate={slidesInUp}>
+    <aside id="side_menu" oncreate={menuSlide}>
       {renderMenu()}
     </aside>
   );
@@ -215,9 +215,11 @@ function renderLinks(user: Session) {
       <li className="side_link" key="editor" oncreate={helper.ontapY(menu.route('/editor'))}>
         <span className="fa fa-pencil" />{i18n('boardEditor')}
       </li>
+      {hasNetwork() ?
       <li className="side_link" key="importer" oncreate={helper.ontapY(menu.route('/importer'))}>
         <span className="fa fa-cloud-upload" />{i18n('importGame')}
-      </li>
+      </li> : null
+      }
       <li className="hr" key="sep_link_settings"></li>
       <li className="side_link" key="settings" oncreate={helper.ontapY(menu.route('/settings'))}>
         <span className="fa fa-cog"/>{i18n('settings')}
@@ -237,10 +239,8 @@ function renderMenu() {
   );
 }
 
-function slidesInUp(vnode: Mithril.Vnode<{}>) {
-  const el = vnode.dom;
+function menuSlide(vnode: Mithril.ChildNode) {
+  const el = vnode.dom as HTMLElement
   el.style.transform = 'translate3d(-100%,0,0)';
-  // force reflow hack
-  vnode.state.lol = el.offsetHeight;
   Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out');
 }

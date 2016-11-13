@@ -1,59 +1,51 @@
 import * as m from 'mithril';
 import router from '../../router';
 import { gameIcon, hasNetwork } from '../../utils';
-import layout from '../layout';
 import i18n from '../../i18n';
 import * as helper from '../helper';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
-import { header as headerWidget, userStatus } from '../shared/common';
+import { userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
 import miniBoard from '../shared/miniBoard';
+import { HomeState } from './interfaces'
 
-export default function homeView() {
-  const ctrl = this;
+export function body(ctrl: HomeState) {
   const isPortrait = helper.isPortrait();
+  const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?');
+  const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?');
 
-  function body() {
-    const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?');
-    const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?');
-
-    if (!hasNetwork()) {
-      return (
-        <div className="page homeOffline">
-          <section id="homeCreate">
-            <h2>{i18n('playOffline')}</h2>
-            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
-            <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
-          </section>
-        </div>
-      );
-    }
-
+  if (!hasNetwork()) {
     return (
-      <div className="native_scroller page">
-        <div className="home">
-          <section>
-            <div>{nbPlayers}</div>
-            <div>{nbGames}</div>
-          </section>
-          <section id="homeCreate">
-            <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
-          </section>
-          {renderDailyPuzzle(ctrl, isPortrait)}
-          {renderTimeline(ctrl)}
-          {renderWeekLeaders(ctrl)}
-        </div>
+      <div className="page homeOffline">
+        <section id="homeCreate">
+          <h2>{i18n('playOffline')}</h2>
+          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/ai'))}>{i18n('playOfflineComputer')}</button>
+          <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
+        </section>
       </div>
     );
   }
 
-  const header = headerWidget.bind(undefined, 'lichess.org');
-
-  return layout.free(header, body);
+  return (
+    <div className="native_scroller page">
+      <div className="home">
+        <section>
+          <div>{nbPlayers}</div>
+          <div>{nbGames}</div>
+        </section>
+        <section id="homeCreate">
+          <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
+        </section>
+        {renderDailyPuzzle(ctrl, isPortrait)}
+        {renderTimeline(ctrl)}
+        {renderWeekLeaders(ctrl)}
+      </div>
+    </div>
+  );
 }
 
-function miniBoardSize(isPortrait) {
+function miniBoardSize(isPortrait: boolean) {
   const { vh, vw } = helper.viewportDim();
   const side = isPortrait ? vw * 0.66 : vh * 0.66;
   const bounds = {
@@ -63,7 +55,7 @@ function miniBoardSize(isPortrait) {
   return bounds;
 }
 
-function renderDailyPuzzle(ctrl, isPortrait) {
+function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
   const puzzle = ctrl.dailyPuzzle();
 
   if (!puzzle) return null;
@@ -81,7 +73,7 @@ function renderDailyPuzzle(ctrl, isPortrait) {
   );
 }
 
-function renderTimeline(ctrl) {
+function renderTimeline(ctrl: HomeState) {
   const timeline = ctrl.timeline();
   if (timeline.length === 0) return null;
 
@@ -89,7 +81,7 @@ function renderTimeline(ctrl) {
     <section id="timeline">
       <h2 className="homeTitle">{i18n('timeline')}</h2>
       <ul>
-        { timeline.map(e => {
+        { timeline.map((e: any) => {
           if (e.type === 'follow') {
             return renderFollow(e);
           } else if (e.type === 'game-end') {
@@ -109,7 +101,7 @@ function renderTimeline(ctrl) {
   );
 }
 
-function renderWeekLeaders(ctrl) {
+function renderWeekLeaders(ctrl: HomeState) {
   const players = ctrl.weekTopPlayers();
 
   if (players.length === 0) return null;
@@ -129,7 +121,7 @@ function renderWeekLeaders(ctrl) {
   );
 }
 
-function renderPlayer(p) {
+function renderPlayer(p: any) {
   const perfKey = Object.keys(p.perfs)[0];
   const perf = p.perfs[perfKey];
 

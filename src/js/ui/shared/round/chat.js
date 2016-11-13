@@ -2,6 +2,7 @@ import * as helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import i18n from '../../../i18n';
 import storage from '../../../storage';
+import session from '../../../session';
 import * as gameApi from '../../../lichess/game';
 import router from '../../../router';
 import socket from '../../../socket';
@@ -19,10 +20,14 @@ export function chatCtrl(root, isShadowban) {
   this.inputValue = '';
   this.unread = false;
 
-  var checkUnreadFromStorage = function() {
+  const checkUnreadFromStorage = function() {
     var nbMessages = storage.get(storageId);
     if (this.messages && nbMessages < this.messages.length) this.unread = true;
   }.bind(this);
+
+  this.canTalk = () => {
+    return !this.root.data.player.spectator || session.isConnected();
+  };
 
   checkUnreadFromStorage();
   storage.set(storageId, this.messages.length);
@@ -57,7 +62,7 @@ export function chatCtrl(root, isShadowban) {
 
   this.scrollChatToBottom = function(el) {
     el.scrollTop = el.scrollHeight;
-  }.bind(this);
+  };
 
   function onKeyboardShow(e) {
     if (window.cordova.platformId === 'ios') {
@@ -113,14 +118,18 @@ export function chatView(ctrl) {
   if (!ctrl.showing) return null;
 
   var player = ctrl.root.data.player;
+  var header = (!ctrl.root.data.opponent.user || ctrl.root.data.player.spectator) ? i18n('chat') : ctrl.root.data.opponent.user.username;
+  const watchers = ctrl.root.data.watchers;
+  if (ctrl.root.data.player.spectator && watchers.nb >= 2) {
+    header = i18n('spectators') + ' ' + watchers.nb;
+  }
 
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
       m('button.modal_close[data-icon=L]', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }),
-      m('h2', ctrl.root.data.opponent.user ?
-        ctrl.root.data.opponent.user.username : i18n('chat'))
+      m('h2', header)
     ]),
     m('div.modal_content', [
       m('div#chat_scroller.native_scroller', {
@@ -165,7 +174,8 @@ export function chatView(ctrl) {
         }
       }, [
         m('input#chat_input.chat_input[type=text]', {
-          placeholder: i18n('talkInChat'),
+          placeholder: ctrl.canTalk() ? i18n('talkInChat') : 'Login to chat',
+          disabled: !ctrl.canTalk(),
           autocomplete: 'off',
           value: ctrl.inputValue,
           oncreate: function(vnode) {

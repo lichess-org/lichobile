@@ -104,8 +104,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       // I came to this game offline: I'm an offline watcher
       offlineWatcher: !hasNetwork()
     };
-
-    this.chat = (session.isKidMode() || this.data.game.tournamentId || this.data.opponent.ai || this.data.player.spectator) ?
+    this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ?
       null : new (<any>chatCtrl)(this, session.isShadowban());
 
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;

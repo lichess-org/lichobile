@@ -1,41 +1,46 @@
 import settings from '../../../../settings';
 import crazyDrag from './crazyDrag';
 import { drag as chessgroundDrag } from 'chessground-mobile';
-import OnlineRound from '../OnlineRound';
+import { BoardInterface } from '../'
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 
 export interface Attrs {
-  ctrl: OnlineRound;
+  ctrl: BoardInterface
   crazyData: {
-    pockets: Pockets;
+    pockets: Pockets
   }
-  position: string;
-  color: Color;
-  customPieceTheme?: string;
+  position: string
+  color: Color
+  customPieceTheme?: string
+}
+
+interface State {
+  pocketOnCreate(vnode: Mithril.ChildNode): void
+  pocketOnRemove(vnode: Mithril.ChildNode): void
 }
 
 export default {
-  oninit(vnode: Mithril.Vnode<Attrs>) {
+  oninit(vnode: Mithril.Vnode<Attrs, State>) {
     const { ctrl } = vnode.attrs;
     const onstart = crazyDrag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 
-    this.pocketOnCreate = function({ dom }: Mithril.Vnode<void>) {
+    this.pocketOnCreate = function({ dom }: Mithril.ChildNode) {
       dom.addEventListener('touchstart', onstart);
       dom.addEventListener('touchmove', onmove);
       dom.addEventListener('touchend', onend);
     };
 
-    this.pocketOnRemove = function({ dom }: Mithril.Vnode<void>) {
+    this.pocketOnRemove = function({ dom }: Mithril.ChildNode) {
       dom.removeEventListener('touchstart', onstart);
       dom.removeEventListener('touchmove', onmove);
       dom.removeEventListener('touchend', onend);
     };
   },
 
-  view(vnode: Mithril.Vnode<Attrs>) {
+  view(vnode: Mithril.Vnode<Attrs, State>) {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
 
     if (!crazyData) return null;

@@ -1,8 +1,9 @@
 import * as helper from '../../helper';
 import oninit from './threadCtrl';
 import view from './threadView';
+import { ThreadAttrs, ThreadState } from '../interfaces';
 
-export default {
+const ThreadScreen: Mithril.Component<ThreadAttrs, ThreadState> = {
   oncreate: helper.viewFadeIn,
   oninit,
   onremove() {
@@ -11,3 +12,5 @@ export default {
   },
   view
 };
+
+export default ThreadScreen

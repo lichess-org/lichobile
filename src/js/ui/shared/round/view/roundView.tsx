@@ -12,7 +12,7 @@ import i18n from '../../../../i18n';
 import layout from '../../../layout';
 import * as helper from '../../../helper';
 import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common';
-import Board, { Attrs as BoardAttrs } from '../../../shared/Board';
+import Board from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';
 import formWidgets from '../../../shared/form';
 import Clock, { ClockAttrs } from '../clock/clockView';
@@ -49,11 +49,11 @@ function overlay(ctrl: OnlineRound, isPortrait: boolean) {
 }
 
 export function renderMaterial(material: Material) {
-  const children: any = [];
+  const children: Mithril.Children = [];
   for (let role in material) {
     const piece = <div className={role} />;
     const count = material[role];
-    const content: Array<Mithril.Vnode<any>> = [];
+    const content: Array<Mithril.ChildNode> = [];
     for (let i = 0; i < count; i++) content.push(piece);
     children.push(<div className="tomb" key={role}>{content}</div>);
   }
@@ -61,8 +61,8 @@ export function renderMaterial(material: Material) {
 }
 
 function renderTitle(ctrl: OnlineRound) {
-  function tcConfig(vnode: Mithril.Vnode<{}>) {
-    const el = vnode.dom;
+  function tcConfig(vnode: Mithril.ChildNode) {
+    const el = vnode.dom as HTMLElement;
     el.textContent =
       utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
       ' • ';
@@ -113,7 +113,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
-  const board = m<BoardAttrs>(Board, {
+  const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
@@ -194,7 +194,6 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
     helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :
     helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
 
-  const onlineStatus = user && user.online ? 'online' : 'offline';
   const checksNb = getChecksCount(ctrl, player.color);
 
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
@@ -205,16 +204,9 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
-        {user ?
-          <span className={'fa fa-circle status ' + onlineStatus} /> :
-          null
-        }
+        <span className={'fa fa-circle status ' + (player.onGame ? 'ongame' : 'offgame')} />
         {tournamentRank}
         {playerName}
-        {player.onGame ?
-          <span className="ongame yes" data-icon="3" /> :
-          <span className="ongame no" data-icon="0" />
-        }
         { isCrazy && position === 'opponent' && user && (user.engine || user.booster) ?
           <span className="warning" data-icon="j"></span> : null
         }
@@ -238,7 +230,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        m<ClockAttrs>(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+        m(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -335,7 +327,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     m('strong', result), m('br')
   ];
   resultDom.push(m('em.resultStatus', status));
-  let buttons: any;
+  let buttons: Mithril.Children;
   if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [

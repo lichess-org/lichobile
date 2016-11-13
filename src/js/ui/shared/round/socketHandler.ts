@@ -95,10 +95,10 @@ export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedir
     tvSelect(o: { channel: string }) {
       if (ctrl.data.tv && o.channel === ctrl.data.tv && onFeatured) onFeatured();
     },
-    crowd(o: { [key: string]: boolean }) {
-      ['white', 'black'].forEach(c => {
-        gameApi.setOnGame(ctrl.data, <Color>c, o[c]);
-      });
+    crowd(o: GameCrowd) {
+      gameApi.setOnGame(ctrl.data, <Color>'white', o.white);
+      gameApi.setOnGame(ctrl.data, <Color>'black', o.black);
+      ctrl.data.watchers = o.watchers;
       if (!ctrl.chat || !ctrl.chat.showing) redraw();
     }
   };

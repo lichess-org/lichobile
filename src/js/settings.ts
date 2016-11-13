@@ -480,5 +480,9 @@ export default {
   },
   tv: {
     channel: localstorageprop('settings.tv.channel', 'best')
+  },
+
+  importer: {
+    analyse: localstorageprop('importer.analyse', false)
   }
 };

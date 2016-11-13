@@ -4,6 +4,7 @@
 /// <reference path="cordova-plugin-insomnia.d.ts" />
 /// <reference path="cordova-plugin-socialsharing.d.ts" />
 /// <reference path="mithril.d.ts" />
+/// <reference path="jsx.d.ts" />
 /// <reference path="lodash.d.ts" />
 /// <reference path="sse.d.ts" />
 /// <reference path="lichess.d.ts" />

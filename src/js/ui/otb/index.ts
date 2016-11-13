@@ -8,8 +8,12 @@ interface Attrs {
   fen?: string
 }
 
-export default {
-  oninit({ attrs }: Mithril.Vnode<Attrs>) {
+interface State {
+  round: OtbRound
+}
+
+const OtbScreen: Mithril.Component<Attrs, State> = {
+  oninit({ attrs }) {
     helper.analyticsTrackView('Offline On The Board');
 
     socket.createDefault();
@@ -26,4 +30,6 @@ export default {
     window.plugins.insomnia.allowSleepAgain();
   },
   view
-};
+}
+
+export default OtbScreen

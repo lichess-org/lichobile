@@ -12,7 +12,7 @@ import challengesApi from '../lichess/challenges';
 import { NowPlayingGame } from '../lichess/interfaces';
 import { Challenge } from '../lichess/interfaces/challenge';
 import * as m from 'mithril';
-import ViewOnlyBoard from './shared/ViewOnlyBoard';
+import ViewOnlyBoard, { Attrs as ViewOnlyBoardAttrs } from './shared/ViewOnlyBoard';
 
 interface CardDim {
   w: number
@@ -49,8 +49,8 @@ export default {
     const vh = helper.viewportDim().vh;
     const cDim = cardDims();
     const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
-    function wrapperOnCreate(vnode: Mithril.Vnode<{}>) {
-      const el = vnode.dom;
+    function wrapperOnCreate(vnode: Mithril.ChildNode) {
+      const el = vnode.dom as HTMLElement;
       if (!helper.isWideScreen()) {
         scroller = new IScroll(el, {
           scrollX: true,
@@ -71,7 +71,7 @@ export default {
       }
     }
 
-    function wrapperOnUpdate(vnode: Mithril.Vnode<{}>) {
+    function wrapperOnUpdate(vnode: Mithril.ChildNode) {
       // see https://github.com/cubiq/iscroll/issues/412
       const el = vnode.dom;
       if (scroller) {
@@ -84,7 +84,7 @@ export default {
 
     return (
       <div id="games_menu" className="overlay_popup_wrapper"
-      onbeforeremove={(vnode: Mithril.Vnode<{}>, done: () => void) => {
+      onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
         vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);
       }}
@@ -180,12 +180,12 @@ function cardDims(): CardDim {
   }
 }
 
-function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: Variant) {
+function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
     <div className="boardWrapper" style={style}>
-      {m(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
+      {m<ViewOnlyBoardAttrs>(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
     </div>
   );
 }
@@ -242,7 +242,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
     <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
       oncreate={oncreate}
     >
-      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant)}
+      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={icon ? icon : ''} />
         <div className="description">
@@ -269,7 +269,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant)}
+      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">

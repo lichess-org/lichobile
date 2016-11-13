@@ -10,13 +10,12 @@ export interface Attrs {
   data: ExplorerData
 }
 
-export default {
-  onbeforeupdate({ attrs }: Mithril.Vnode<Attrs>, { attrs: oldattrs }: Mithril.Vnode<Attrs>) {
-    if (attrs.data !== oldattrs.data) return true;
-    else return false;
+const OpeningTable: Mithril.Component<Attrs, {}> = {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
+    return attrs.data !== oldattrs.data;
   },
 
-  view({ attrs }: Mithril.Vnode<Attrs>) {
+  view({ attrs }) {
     const { ctrl, data } = attrs;
 
     const moveTable = showMoveTable(ctrl, data.moves);
@@ -35,8 +34,9 @@ export default {
       return showEmpty(ctrl);
     }
   }
-
 }
+
+export default OpeningTable
 
 export function showTitle(ctrl: AnalyseCtrlInterface) {
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
@@ -72,7 +72,7 @@ export function getTR(e: Event): HTMLElement {
 function resultBar(move: ExplorerMove) {
   const sum = move.white + move.draws + move.black;
   function section(key: string) {
-    const num: number = (move as any)[key];
+    const num: number = move[key];
     const percent = num * 100 / sum;
     const width = (Math.round(num * 1000 / sum) / 10) + '%';
     return percent === 0 ? null : (
@@ -103,7 +103,7 @@ function link(ctrl: AnalyseCtrlInterface, e: Event) {
   }
 }
 
-function showGameTable(ctrl: AnalyseCtrlInterface, type: any, games: Array<ExplorerGame>) {
+function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<ExplorerGame>) {
   if (!ctrl.explorer.withGames || !games.length) return null;
   return (
     <table className="games"

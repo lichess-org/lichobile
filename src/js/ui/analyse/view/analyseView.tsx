@@ -5,14 +5,10 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import { gameTitle, connectingHeader, header, backButton as renderBackbutton } from '../../shared/common';
-import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import Board, { Attrs as BoardAttrs, Shape } from '../../shared/Board';
 import * as helper from '../../helper';
-import layout from '../../layout';
 import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';
-import importPgnPopup from '../importPgnPopup';
 import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
@@ -28,44 +24,18 @@ import { AnalyseCtrlInterface } from '../interfaces';
 
 let pieceNotation: boolean;
 
-export default function analyseView(vnode: Mithril.Vnode<any>) {
-  const isPortrait = helper.isPortrait();
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse');
-
-  if (this.ctrl) {
-
-    const backButton = this.ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(this.ctrl.data)) : null;
-    const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis');
-
-    return layout.board(
-      () => header(title, backButton),
-      () => renderContent(this.ctrl, isPortrait, bounds),
-      () => overlay(this.ctrl)
-    );
-  } else {
-    return layout.board(
-      connectingHeader,
-      () =>
-        <section className="board_wrapper">
-          {m(ViewOnlyBoard, { orientation: vnode.attrs.color })}
-        </section>
-    );
-  }
-}
-
-function overlay(ctrl: AnalyseCtrlInterface) {
+export function overlay(ctrl: AnalyseCtrlInterface) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
-    continuePopup.view(ctrl.continuePopup),
-    importPgnPopup.view(ctrl.importPgnPopup)
+    continuePopup.view(ctrl.continuePopup)
   ];
 }
 
-function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
+export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
   let nextBest: string | null;
@@ -165,7 +135,7 @@ function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
 function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   const ceval = ctrl.currentAnyEval();
   const step = ctrl.vm.step;
-  let pearl: any, percent: number;
+  let pearl: Mithril.Children, percent: number;
 
   if (ceval && ceval.cp && ctrl.nextStepBest()) {
     pearl = renderEval(ceval.cp);
@@ -279,7 +249,7 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
       </div>
       <div className="gameInfos">
         {gameMoment.format('L') + ' ' + gameMoment.format('LT')}
-        { ctrl.data.game.source === 'import' ?
+        { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }
       </div>
@@ -305,10 +275,13 @@ function getMoveEl(e: Event) {
     helper.findParentBySelector(target, 'move');
 }
 
+interface ReplayDataSet extends DOMStringMap {
+  path: string
+}
 function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getMoveEl(e);
-  if (el && (el.dataset as any).path) {
-    ctrl.jump(treePath.read((el.dataset as any).path));
+  if (el && (el.dataset as ReplayDataSet).path) {
+    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
   }
 }
 

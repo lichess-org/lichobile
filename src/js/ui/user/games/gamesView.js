@@ -1,3 +1,4 @@
+import * as m from 'mithril';
 import * as utils from '../../../utils';
 import router from '../../../router';
 import * as helper from '../../helper';
@@ -8,7 +9,6 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
-import * as m from 'mithril';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 
 export default function view(vnode) {
@@ -80,7 +80,9 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
-  const link = g.winner ? () => router.set(`/analyse/online/${g.id}/${userColor}`) : () => router.set(`/game/${g.id}/${userColor}`);
+  const link = g.status.id < gameStatus.ids.aborted ?
+    () => router.set(`/game/${g.id}/${userColor}`) :
+    () => router.set(`/analyse/online/${g.id}/${userColor}`);
 
   return (
     <li className={`list_item userGame ${evenOrOdd}`} key={g.id}>

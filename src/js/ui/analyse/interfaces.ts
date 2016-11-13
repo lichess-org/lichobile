@@ -58,7 +58,7 @@ export interface CevalCtrlInterface {
   start(path: Path, steps: Array<AnalysisStep>): void
   stop(): void
   destroy(): void
-  allowed: Mithril.Property<boolean>,
+  allowed: Mithril.Stream<boolean>,
   enabled(): boolean,
   toggle(): void
   percentComplete(): number
@@ -88,7 +88,6 @@ export interface AnalyseCtrlInterface {
   menu: any
   continuePopup: any
   settings: any
-  importPgnPopup: ImportPgnPopupInterface
   evalSummary: any
   notes: any
 
@@ -101,17 +100,18 @@ export interface AnalyseCtrlInterface {
   explorerMove(uci: string): void
   debouncedScroll(): void
   gameOver(): boolean
+  canDrop(): boolean
 }
 
 export interface ExplorerCtrlInterface {
-  allowed: Mithril.Property<boolean>
-  enabled: Mithril.Property<boolean>
+  allowed: Mithril.Stream<boolean>
+  enabled: Mithril.Stream<boolean>
   setStep(): void
-  loading: Mithril.Property<boolean>
-  failing: Mithril.Property<boolean>
+  loading: Mithril.Stream<boolean>
+  failing: Mithril.Stream<boolean>
   config: any
   withGames: boolean
-  current: Mithril.Property<ExplorerData>
+  current: Mithril.Stream<ExplorerData>
   toggle(): void
 }
 
@@ -175,12 +175,4 @@ export interface ExplorerData {
   recentGames?: Array<ExplorerGame>
   checkmate?: boolean
   stalemate?: boolean
-}
-
-export interface ImportPgnPopupInterface {
-  open: () => void
-  close: () => void
-  importing: Mithril.Property<boolean>
-  submit: (e: Event) => void
-  isOpen: () => boolean
 }

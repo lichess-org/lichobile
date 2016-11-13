@@ -4,9 +4,15 @@ import * as helper from '../helper';
 import view from './aiView';
 import AiRound from './AiRound';
 
-export const storageFenKey = 'ai.setupFen';
+interface Attrs {
+  fen?: string
+}
 
-export default {
+interface State {
+  round: AiRound
+}
+
+const AiScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     helper.analyticsTrackView('Offline AI');
 
@@ -26,3 +32,5 @@ export default {
   },
   view
 };
+
+export default AiScreen

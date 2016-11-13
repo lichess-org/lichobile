@@ -105,7 +105,7 @@
       font-size 0.8em
     > .clock
       display inline-block
-      font-size 20px
+      font-size 22px
       text-align left
       margin-top 2px
       &.correspondence
@@ -146,16 +146,10 @@
   > .status
     font-size 15px
     margin-right 5px
-    &.online
+    &.ongame
       color green
-    &.offline
+    &.offgame
       opacity 0.6
-  > .ongame
-    margin-left 5px
-    &.yes
-      color green
-    &.no
-      color red
   @media only screen and (orientation landscape)
     font-size 1em
   @media only screen and (orientation portrait) and (min-width: 600px)
@@ -165,9 +159,8 @@
   transform translateZ(0)
   max-width 120px
   font-family Cousine
-  font-weight bold
   text-align right
-  font-size 25px
+  font-size 30px
   padding 4px 5px 2px
   line-height 1
   color #8c8c8c

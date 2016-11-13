@@ -1,6 +1,7 @@
 import gameStatus from './status';
 import { secondsToMinutes } from '../utils';
 import settings from '../settings';
+import { MiniBoardGameObj } from './interfaces';
 import i18n from '../i18n';
 
 export const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'];
@@ -129,7 +130,7 @@ export function result(data: GameData | OfflineGameData) {
   return '*';
 }
 
-export function time(data: GameData) {
+export function time(data: GameData | MiniBoardGameObj) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial);
     const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString();

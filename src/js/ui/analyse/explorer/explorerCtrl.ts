@@ -22,7 +22,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   const enabled = m.prop(false);
   const loading = m.prop(true);
   const failing = m.prop(false);
-  const current: Mithril.Property<ExplorerData> = m.prop({
+  const current: Mithril.Stream<ExplorerData> = m.prop({
     moves: []
   });
 

@@ -17,7 +17,7 @@ const colors = [
 export interface NewAiGameCtrl {
   open: () => void
   close: (fromBB?: string) => void
-  isOpen: Mithril.Property<boolean>
+  isOpen: Mithril.Stream<boolean>
   root: AiRoundInterface
 }
 

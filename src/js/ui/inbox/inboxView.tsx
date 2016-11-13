@@ -5,7 +5,7 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import {InboxState, Thread} from './interfaces';
 
-export default function view(vnode: Mithril.Vnode<{}>) {
+export default function view(vnode: Mithril.Vnode<void, InboxState>) {
   const ctrl = vnode.state as InboxState;
   const headerCtrl = () => header(i18n('inbox'));
   const bodyCtrl = () => inboxBody(ctrl);

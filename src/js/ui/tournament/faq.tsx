@@ -3,7 +3,7 @@ import * as helper from '../helper';
 import { FaqState, Tournament } from './interfaces';
 
 export default {
-  controller: function(tournament: Mithril.Property<Tournament>) {
+  controller: function(tournament: Mithril.Stream<Tournament>) {
     let isOpen = false;
 
     function open() {

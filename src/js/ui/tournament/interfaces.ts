@@ -225,23 +225,23 @@ export interface TournamentListAttrs {
 }
 
 export interface TournamentListsState {
-  tournaments: Mithril.Property<TournamentLists>
-  currentTab: Mithril.Property<string>
+  tournaments: Mithril.Stream<TournamentLists>
+  currentTab: Mithril.Stream<string>
 }
 
 export interface PlayerInfoState {
   open: (playerId: string) => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
-  tournament: Mithril.Property<Tournament>
-  playerData: Mithril.Property<PlayerInfo>
+  tournament: Mithril.Stream<Tournament>
+  playerData: Mithril.Stream<PlayerInfo>
 }
 
 export interface FaqState {
   open: () => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
-  tournament: Mithril.Property<Tournament>
+  tournament: Mithril.Stream<Tournament>
 }
 
 export interface TournamentAttrs {
@@ -255,8 +255,8 @@ export interface FeaturedGameUpdate {
 }
 
 export interface TournamentState {
-  tournament: Mithril.Property<Tournament>
-  hasJoined: Mithril.Property<boolean>
+  tournament: Mithril.Stream<Tournament>
+  hasJoined: Mithril.Stream<boolean>
   faqCtrl: FaqState
   playerInfoCtrl: PlayerInfoState
   join: (tid: string) => void
@@ -267,6 +267,6 @@ export interface TournamentState {
   next: () => void
   last: () => void
   me: () => void
-  isLoading: Mithril.Property<boolean>
-  clockInterval: Mithril.Property<number>
+  isLoading: Mithril.Stream<boolean>
+  clockInterval: Mithril.Stream<number>
 }

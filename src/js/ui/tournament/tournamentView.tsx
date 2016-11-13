@@ -9,8 +9,8 @@ import tabs from '../shared/tabs';
 import newTournamentForm from './newTournamentForm';
 import { TournamentListsState, TournamentListItem } from './interfaces';
 
-export default function view(vnode: Mithril.Vnode<{}>) {
-  const ctrl = vnode.state as TournamentListsState;
+export default function view(vnode: Mithril.Vnode<{}, TournamentListsState>) {
+  const ctrl = vnode.state;
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
   const footer = () => renderFooter();
 
@@ -28,7 +28,7 @@ const TABS = [{
     label: 'Completed'
 }];
 
-function tabNavigation (currentTabFn: Mithril.Property<string>) {
+function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     return m('.nav-header', m(tabs, {
         buttons: TABS,
         selectedTab: currentTabFn(),

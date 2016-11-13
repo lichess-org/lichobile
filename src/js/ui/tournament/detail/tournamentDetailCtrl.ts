@@ -10,7 +10,7 @@ import faq from '../faq';
 import playerInfo from '../playerInfo';
 import { TournamentAttrs, Tournament, FeaturedGameUpdate, TournamentState } from '../interfaces'
 
-export default function oninit(vnode: Mithril.Vnode<TournamentAttrs>) {
+export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentState>) {
   helper.analyticsTrackView('Tournament details');
 
   const id = vnode.attrs.id;
@@ -106,7 +106,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs>) {
   })
   .catch(utils.handleXhrError);
 
-  vnode.state = <TournamentState> {
+  vnode.state = {
     tournament,
     hasJoined,
     faqCtrl,

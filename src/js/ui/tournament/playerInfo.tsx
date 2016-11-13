@@ -7,7 +7,7 @@ import i18n from '../../i18n';
 import { Tournament, PlayerInfoState, PlayerInfo, PlayerInfoPairing } from './interfaces';
 
 export default {
-  controller: function(tournament: Mithril.Property<Tournament>) {
+  controller: function(tournament: Mithril.Stream<Tournament>) {
     let isOpen = false;
     const playerData = m.prop<PlayerInfo>();
 

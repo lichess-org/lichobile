@@ -7,7 +7,7 @@ import * as m from 'mithril';
 import settings from '../../settings';
 import { TournamentListAttrs, TournamentListItem, TournamentListsState, TournamentLists } from './interfaces';
 
-export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs>) {
+export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs, TournamentListsState>) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();

@@ -12,7 +12,7 @@ import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
 import { TournamentState, Tournament, PlayerInfoState, StandingPlayer, PodiumPlace } from '../interfaces';
 
-export default function view(vnode: Mithril.Vnode<{}>) {
+export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
   const ctrl = vnode.state as TournamentState;
 
   const headerCtrl = () => headerWidget(null,

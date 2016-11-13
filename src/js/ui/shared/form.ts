@@ -17,15 +17,13 @@ function renderOption(label: string, value: string, storedValue: string, labelAr
 
 function renderOptionGroup(label:string, value:string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
   if (typeof value === 'string') {
-    const valStr = value as string;
-    return renderOption(label, valStr, storedValue, labelArg, labelArg2);
+    return renderOption(label, value, storedValue, labelArg, labelArg2);
   }
   else {
-    const valOptGrp = value as SelectOptionGroup;
     return m('optgroup', {
       key: label,
       label
-    }, valOptGrp.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])));
+    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])));
   }
 }
 
@@ -136,10 +134,10 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate(vnode: Mithril.Vnode<any>) {
+        oncreate(vnode: Mithril.ChildNode) {
           vnode.dom.addEventListener('change', onChange, false);
         },
-        onremove(vnode: Mithril.Vnode<any>) {
+        onremove(vnode: Mithril.ChildNode) {
           vnode.dom.removeEventListener('change', onChange, false);
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))

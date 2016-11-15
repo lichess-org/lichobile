@@ -52,6 +52,7 @@
     <preference name="xwalkVersion" value="20" />
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
     <engine name="ios" spec="~4.2.1" />
     <engine name="android" spec="~5.1.1" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.0" />
@@ -77,4 +78,24 @@
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#377a285" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.4" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
+    <universal-links>
+        <host name="*.lichess.org" scheme="https">
+            <path url="/tournament" event="tournamentList"/>
+            <path url="/tournament/*" event="tournamentDetail"/>
+            <path url="/@/*/perf/*" event="userVariantProfile"/>
+            <path url="/@/*" event="userProfile"/>
+            <path url="/challenge/*" event="challenge"/>
+            <path url="/training/*" event="training"/>
+            <path url="*" event="other"/>
+        </host>
+        <host name="lichess.org" scheme="https">
+            <path url="/tournament" event="tournamentList"/>
+            <path url="/tournament/*" event="tournamentDetail"/>
+            <path url="/@/*/perf/*" event="userVariantProfile"/>
+            <path url="/@/*" event="userProfile"/>
+            <path url="/challenge/*" event="challenge"/>
+            <path url="/training/*" event="training"/>
+            <path url="*" event="other"/>
+        </host>
+    </universal-links>
 </widget>

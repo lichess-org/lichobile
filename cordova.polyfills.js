@@ -143,7 +143,6 @@
       });
     }
   };
-
 }());
 
 if (!window.Stockfish) {
@@ -297,3 +296,9 @@ if (!window.Stockfish) {
   window.hotjs = hotjs;
 
 })();
+
+
+// universalLinks
+export var universalLinks = {
+  subscribe: function () { }
+};

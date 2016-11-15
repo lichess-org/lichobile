@@ -88,6 +88,12 @@ export function getChallenge(id: string) {
   return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
+export function isChallenge(id: string) {
+  fetchJSON(`/challenge/${id}`, {}, true).then((data: any) => {
+    console.log(data);
+  });
+}
+
 export function cancelChallenge(id: string) {
   return fetchText(`/challenge/${id}/cancel`, {
     method: 'POST'

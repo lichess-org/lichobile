@@ -12,8 +12,7 @@ import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../in
 function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
   const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
-  const castling = parts[2];
-  return pieceCount <= 6 && castling === '-';
+  return pieceCount <= 7;
 }
 
 export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
@@ -81,7 +80,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }, 1000);
 
   const fetchTablebase = debounce((fen: string) => {
-    return tablebaseXhr(root.vm.step.fen)
+    return tablebaseXhr(effectiveVariant, root.vm.step.fen)
     .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;

@@ -8,16 +8,17 @@ import * as helper from '../../helper';
 import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament details');
 
   const id = vnode.attrs.id;
 
-  const tournament = m.prop();
-  const hasJoined = m.prop(false);
-  const currentPage = m.prop(null);
-  const isLoading = m.prop(false);
+  const tournament = stream();
+  const hasJoined = stream(false);
+  const currentPage = stream(null);
+  const isLoading = stream(false);
   const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
 
@@ -93,7 +94,7 @@ export default function oninit(vnode) {
     }
   };
 
-  const clockInterval = m.prop();
+  const clockInterval = stream();
   xhr.tournament(id)
   .then(data => {
     tournament(data);

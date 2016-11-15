@@ -10,6 +10,7 @@ import i18n from '../../i18n';
 import socket from '../../socket';
 import * as helper from '../helper';
 import drag from './drag';
+import * as stream from 'mithril/stream';
 
 const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -30,8 +31,8 @@ export default function oninit(vnode) {
     }
   };
 
-  this.positions = m.prop([]);
-  this.endgamesPositions = m.prop([]);
+  this.positions = stream([]);
+  this.endgamesPositions = stream([]);
 
   this.extraPositions = [{
     fen: startingFen,

@@ -12,15 +12,16 @@ import { hasNetwork, noop } from '../../utils';
 import { isForeground, setForeground } from '../../utils/appMode';
 import { supportedTypes as supportedTimelineTypes } from '../timeline';
 import { TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
+import * as stream from 'mithril/stream';
 
 const HomeScreen: Mithril.Component<{}, HomeState> = {
   oninit(vnode) {
 
-    const nbConnectedPlayers = m.prop<number>();
-    const nbGamesInPlay = m.prop<number>();
-    const dailyPuzzle = m.prop<DailyPuzzle>();
-    const weekTopPlayers = m.prop<Array<any>>([]);
-    const timeline = m.prop<TimelineEntry[]>([]);
+    const nbConnectedPlayers = stream<number>();
+    const nbGamesInPlay = stream<number>();
+    const dailyPuzzle = stream<DailyPuzzle>();
+    const weekTopPlayers = stream<Array<any>>([]);
+    const timeline = stream<TimelineEntry[]>([]);
 
     function init() {
       if (isForeground()) {

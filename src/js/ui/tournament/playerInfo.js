@@ -4,11 +4,12 @@ import * as m from 'mithril';
 import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
+import * as stream from 'mithril/stream';
 
 export default {
   controller: function(tournament) {
     let isOpen = false;
-    const playerData = m.prop();
+    const playerData = stream();
 
     function open(playerId) {
       xhr.playerInfo(tournament().id, playerId)

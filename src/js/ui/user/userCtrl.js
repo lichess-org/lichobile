@@ -7,6 +7,7 @@ import * as helper from '../helper';
 import challengeForm from '../challengeForm';
 import socket from '../../socket';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
 
@@ -16,7 +17,7 @@ export default function oninit(vnode) {
 
   socket.createDefault();
 
-  const user = m.prop();
+  const user = stream();
 
   function setNewUserState(newData) {
     Object.assign(user(), newData);

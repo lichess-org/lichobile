@@ -10,6 +10,7 @@ import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
 import * as helper from '../helper';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default {
   oncreate: helper.viewFadeIn,
@@ -20,7 +21,7 @@ export default {
 
     socket.createDefault();
 
-    const ranking = m.prop({});
+    const ranking = stream({});
 
     xhr.ranking()
     .then(data => {

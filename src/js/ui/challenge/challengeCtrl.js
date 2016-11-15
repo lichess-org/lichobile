@@ -6,12 +6,13 @@ import challengesApi from '../../lichess/challenges';
 import i18n from '../../i18n';
 import socket from '../../socket';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
 
 export default function oninit(vnode) {
-  const pingTimeoutId = m.prop();
-  const challenge = m.prop();
+  const pingTimeoutId = stream();
+  const challenge = stream();
 
   window.plugins.insomnia.keepAwake();
 

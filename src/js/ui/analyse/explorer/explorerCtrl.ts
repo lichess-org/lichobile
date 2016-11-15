@@ -8,6 +8,7 @@ import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
 import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
+import * as stream from 'mithril/stream';
 
 function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
@@ -18,11 +19,11 @@ function tablebaseRelevant(fen: string) {
 
 export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
 
-  const allowed = m.prop(allow);
-  const enabled = m.prop(false);
-  const loading = m.prop(true);
-  const failing = m.prop(false);
-  const current: Mithril.Stream<ExplorerData> = m.prop({
+  const allowed = stream(allow);
+  const enabled = stream(false);
+  const loading = stream(true);
+  const failing = stream(false);
+  const current: Mithril.Stream<ExplorerData> = stream({
     moves: []
   });
 

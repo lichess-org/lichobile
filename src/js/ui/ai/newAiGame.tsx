@@ -7,6 +7,7 @@ import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import popupWidget from '../shared/popup';
 import * as helper from '../helper';
 import { AiRoundInterface } from '../shared/round';
+import * as stream from 'mithril/stream';
 
 const colors = [
   ['white', 'white'],
@@ -24,7 +25,7 @@ export interface NewAiGameCtrl {
 export default {
 
   controller(root: AiRoundInterface) {
-    const isOpen = m.prop(false);
+    const isOpen = stream(false);
 
     function open() {
       router.backbutton.stack.push(close);

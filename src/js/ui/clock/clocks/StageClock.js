@@ -1,20 +1,21 @@
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 const CLOCK_TICK_STEP = 100;
 const MINUTE_MILLIS = 60 * 1000;
 
 export default function StageClock(stages, increment) {
-  const topTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
-  const bottomTime = m.prop(Number(stages[0].time) * MINUTE_MILLIS);
-  const topMoves = m.prop(Number(stages[0].moves));
-  const bottomMoves = m.prop(Number(stages[0].moves));
-  const topStage = m.prop(0);
-  const bottomStage = m.prop(0);
-  const activeSide = m.prop(null);
-  const flagged = m.prop(null);
-  const isRunning = m.prop(false);
+  const topTime = stream(Number(stages[0].time) * MINUTE_MILLIS);
+  const bottomTime = stream(Number(stages[0].time) * MINUTE_MILLIS);
+  const topMoves = stream(Number(stages[0].moves));
+  const bottomMoves = stream(Number(stages[0].moves));
+  const topStage = stream(0);
+  const bottomStage = stream(0);
+  const activeSide = stream(null);
+  const flagged = stream(null);
+  const isRunning = stream(false);
   let clockInterval = null;
   let topTimestamp, bottomTimestamp;
 

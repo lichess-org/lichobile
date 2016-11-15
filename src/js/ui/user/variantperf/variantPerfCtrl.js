@@ -4,12 +4,13 @@ import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
 import redraw from '../../../utils/redraw';
 import spinner from '../../../spinner';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
   const userId = vnode.attrs.id;
   const variant = vnode.attrs.variant;
-  const user = m.prop();
-  const variantPerfData = m.prop();
+  const user = stream();
+  const variantPerfData = stream();
 
   socket.createDefault();
 

@@ -1,17 +1,18 @@
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 const CLOCK_TICK_STEP = 100;
 
 export default function BronsteinClock(time, increment) {
-  const topTime = (time !== 0) ? m.prop(time) : m.prop(increment);
-  const bottomTime = (time !== 0) ? m.prop(time) : m.prop(increment);
-  const topDelay = m.prop(increment);
-  const bottomDelay = m.prop(increment);
-  const activeSide = m.prop(null);
-  const flagged = m.prop(null);
-  const isRunning = m.prop(false);
+  const topTime = (time !== 0) ? stream(time) : stream(increment);
+  const bottomTime = (time !== 0) ? stream(time) : stream(increment);
+  const topDelay = stream(increment);
+  const bottomDelay = stream(increment);
+  const activeSide = stream(null);
+  const flagged = stream(null);
+  const isRunning = stream(false);
   let clockInterval = null;
   let topTimestamp, bottomTimestamp;
 

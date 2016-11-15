@@ -1,16 +1,17 @@
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 const CLOCK_TICK_STEP = 100;
 
 
 export default function HourglassClock(time) {
-  const topTime = m.prop(time/2);
-  const bottomTime = m.prop(time/2);
-  const activeSide = m.prop(null);
-  const flagged = m.prop(null);
-  const isRunning = m.prop(false);
+  const topTime = stream(time/2);
+  const bottomTime = stream(time/2);
+  const activeSide = stream(null);
+  const flagged = stream(null);
+  const isRunning = stream(false);
   let clockInterval = null;
   let topTimestamp, bottomTimestamp;
 

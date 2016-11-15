@@ -1,5 +1,6 @@
 import { mapValues } from 'lodash/object';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export function castlesAt(v) {
   return mapValues({
@@ -7,7 +8,7 @@ export function castlesAt(v) {
     Q: v,
     k: v,
     q: v
-  }, m.prop);
+  }, stream);
 }
 
 export function fenMetadatas(data) {
@@ -25,15 +26,15 @@ export function computeFen(data, getBaseFen) {
 export function readFen(fen) {
   const parts = fen.split(' ');
   return {
-    color: m.prop(parts[1]),
+    color: stream(parts[1]),
     castles: {
-      K: m.prop(parts[2].includes('K')),
-      Q: m.prop(parts[2].includes('Q')),
-      k: m.prop(parts[2].includes('k')),
-      q: m.prop(parts[2].includes('q'))
+      K: stream(parts[2].includes('K')),
+      Q: stream(parts[2].includes('Q')),
+      k: stream(parts[2].includes('k')),
+      q: stream(parts[2].includes('q'))
     },
-    enpassant: m.prop(parts[3]),
-    halfmove: m.prop(parts[4]),
-    moves: m.prop(parts[5])
+    enpassant: stream(parts[3]),
+    halfmove: stream(parts[4]),
+    moves: stream(parts[5])
   };
 }

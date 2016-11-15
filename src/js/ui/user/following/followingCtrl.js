@@ -7,6 +7,7 @@ import { throttle } from 'lodash/function';
 import socket from '../../../socket';
 import challengeForm from '../../challengeForm';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 var scroller;
 
@@ -17,9 +18,9 @@ export default function oninit(vnode) {
   socket.createDefault();
 
   const userId = vnode.attrs.id;
-  const following = m.prop([]);
-  const paginator = m.prop(null);
-  const isLoadingNextPage = m.prop(false);
+  const following = stream([]);
+  const paginator = stream(null);
+  const isLoadingNextPage = stream(false);
 
   function onScroll() {
     if (this.y + this.distY <= this.maxScrollY) {

@@ -5,14 +5,15 @@ import * as xhr from './tournamentXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
 import settings from '../../settings';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();
 
-  const tournaments = m.prop();
-  const currentTab = m.prop(vnode.attrs.tab || 'started');
+  const tournaments = stream();
+  const currentTab = stream(vnode.attrs.tab || 'started');
 
   xhr.currentTournaments()
   .then(data => {

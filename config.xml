@@ -6,10 +6,10 @@
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="http://*.l.dev" />
-    <hook type="after_prepare" src="scripts/copy_icons.js" />
+    <hook src="scripts/copy_icons.js" type="after_prepare" />
     <platform name="android">
-        <hook type="after_prepare" src="scripts/android/add_to_manifest.js" />
-        <hook type="after_prepare" src="scripts/android/remove_permissions.js" />
+        <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
+        <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
         <icon density="ldpi" src="resources/android/icons/icon-36.png" />
         <icon density="mdpi" src="resources/android/icons/icon-48.png" />
         <icon density="hdpi" src="resources/android/icons/icon-72.png" />
@@ -78,24 +78,27 @@
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#377a285" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.4" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
+    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
-            <path url="/tournament" event="tournamentList"/>
-            <path url="/tournament/*" event="tournamentDetail"/>
-            <path url="/@/*/perf/*" event="userVariantProfile"/>
-            <path url="/@/*" event="userProfile"/>
-            <path url="/challenge/*" event="challenge"/>
-            <path url="/training/*" event="training"/>
-            <path url="*" event="other"/>
+            <path event="tournamentList" url="/tournament" />
+            <path event="tournamentDetail" url="/tournament/*" />
+            <path event="userVariantProfile" url="/@/*/perf/*" />
+            <path event="userProfile" url="/@/*" />
+            <path event="challenge" url="/challenge/*" />
+            <path event="training" url="/training/*" />
+            <path event="other" url="*" />
         </host>
         <host name="lichess.org" scheme="https">
-            <path url="/tournament" event="tournamentList"/>
-            <path url="/tournament/*" event="tournamentDetail"/>
-            <path url="/@/*/perf/*" event="userVariantProfile"/>
-            <path url="/@/*" event="userProfile"/>
-            <path url="/challenge/*" event="challenge"/>
-            <path url="/training/*" event="training"/>
-            <path url="*" event="other"/>
+            <path event="tournamentList" url="/tournament" />
+            <path event="tournamentDetail" url="/tournament/*" />
+            <path event="userVariantProfile" url="/@/*/perf/*" />
+            <path event="userProfile" url="/@/*" />
+            <path event="challenge" url="/challenge/*" />
+            <path event="training" url="/training/*" />
+            <path event="other" url="*" />
         </host>
     </universal-links>
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
 </widget>

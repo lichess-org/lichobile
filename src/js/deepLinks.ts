@@ -63,28 +63,19 @@ function handleVariantProfile (eventData: EventData) {
 }
 
 function handleOther (eventData: EventData) {
-  console.log('in other block');
-  console.log(eventData.path);
   const pieces = eventData.path.split('/');
   if (eventData.path.search('^\/([a-zA-Z0-9]{8})$') !== -1) {
-    console.log(1);
-    if (isChallenge (pieces[1])) {
+    isChallenge(pieces[1]).then(() => {
       router.set('/challenge/' + pieces[1]);
-    }
-    else {
-      router.set('/game/' + pieces[1]);
-    }
+    }).catch(() => { router.set('/game/' + pieces[1]); });
   }
   else if (eventData.path.search('^\/([a-zA-Z0-9]{8})+\/+(white|black)$') !== -1) {
-    console.log(2);
     router.set('/game/' + pieces[1] + '/' + pieces[2]);
   }
   else if (eventData.path.search('^\/([a-zA-Z0-9]{12})$') !== -1) {
-    console.log(3);
     router.set('/game/' + pieces[1]);
   }
   else {
-    console.log(4);
-    window.open(eventData.url, '_blank', 'location=no')
+    window.open(eventData.url, '_system')
   }
 }

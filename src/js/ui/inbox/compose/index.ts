@@ -11,6 +11,7 @@ import { ComposeAttrs, SendErrorResponse, ComposeResponse, ComposeState } from '
 import { composeBody } from './composeView';
 import router from '../../../router';
 import { FetchError } from '../../../http';
+import * as stream from 'mithril/stream';
 
 const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
 
@@ -19,8 +20,8 @@ const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
 
     socket.createDefault();
 
-    const id = m.prop<string>(vnode.attrs.userId);
-    const errors = m.prop<SendErrorResponse>();
+    const id = stream<string>(vnode.attrs.userId);
+    const errors = stream<SendErrorResponse>();
 
     function send(form: HTMLFormElement) {
       const recipient = (form[0] as HTMLInputElement).value;

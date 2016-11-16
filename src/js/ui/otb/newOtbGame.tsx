@@ -6,6 +6,7 @@ import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import formWidgets from '../shared/form';
 import popupWidget from '../shared/popup';
 import * as helper from '../helper';
+import * as stream from 'mithril/stream';
 
 import { OtbRoundInterface } from '../shared/round';
 
@@ -19,7 +20,7 @@ export interface NewOtbGameCtrl {
 export default {
 
   controller(root: OtbRoundInterface) {
-    const isOpen = m.prop(false);
+    const isOpen = stream(false);
 
     function open() {
       router.backbutton.stack.push(close);

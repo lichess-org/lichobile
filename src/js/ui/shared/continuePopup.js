@@ -7,12 +7,13 @@ import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
 import { hasNetwork } from '../../utils';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default {
 
   controller: function() {
     let isOpen = false;
-    const fen = m.prop();
+    const fen = stream();
 
     function open(fentoSet) {
       router.backbutton.stack.push(close);

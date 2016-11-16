@@ -6,14 +6,15 @@ import * as helper from '../helper';
 import * as m from 'mithril';
 import settings from '../../settings';
 import { TournamentListAttrs, TournamentListItem, TournamentListsState, TournamentLists } from './interfaces';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs, TournamentListsState>) {
   helper.analyticsTrackView('Tournament List');
 
   socket.createDefault();
 
-  const tournaments = m.prop<TournamentLists>();
-  const currentTab = m.prop<string>(vnode.attrs.tab || 'started');
+  const tournaments = stream<TournamentLists>();
+  const currentTab = stream<string>(vnode.attrs.tab || 'started');
 
   xhr.currentTournaments()
   .then(data => {

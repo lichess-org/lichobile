@@ -89,11 +89,12 @@ function show(ctrl: AnalyseCtrlInterface) {
     if (moves.length) {
       return (
         <div key="explorer-tablebase" className="data scrollerWrapper">
-          {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.real_wdl === -2), data.fen)}
-          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.real_wdl === -1), data.fen)}
-          {showTablebase(ctrl, 'Drawn', moves.filter((move: ExplorerMove) => move.real_wdl === 0), data.fen)}
-          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: ExplorerMove) => move.real_wdl === 1), data.fen)}
-          {showTablebase(ctrl, 'Losing', moves.filter((move: ExplorerMove) => move.real_wdl === 2), data.fen)}
+          {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.wdl === -2), data.fen)}
+          {showTablebase(ctrl, 'Unknown', moves.filter((move: ExplorerMove) => move.wdl === null), data.fen)}
+          {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === -1), data.fen)}
+          {showTablebase(ctrl, 'Drawn', moves.filter((move: ExplorerMove) => move.wdl === 0), data.fen)}
+          {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === 1), data.fen)}
+          {showTablebase(ctrl, 'Losing', moves.filter((move: ExplorerMove) => move.wdl === 2), data.fen)}
         </div>
       );
     }

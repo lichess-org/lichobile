@@ -2,6 +2,7 @@ import * as m from 'mithril';
 import settings from '../../../settings';
 import cevalEngine from './cevalEngine';
 import { AnalysisStep, Path, CevalEmit, CevalCtrlInterface } from '../interfaces';
+import * as stream from 'mithril/stream';
 
 export default function cevalCtrl(
   variant: VariantKey,
@@ -12,7 +13,7 @@ export default function cevalCtrl(
 
   const minDepth = 8;
   const maxDepth = 20;
-  const allowed = m.prop(allow);
+  const allowed = stream(allow);
 
   const engine = cevalEngine({ minDepth, maxDepth });
 

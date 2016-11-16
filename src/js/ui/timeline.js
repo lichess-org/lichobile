@@ -7,12 +7,13 @@ import * as helper from './helper';
 import layout from './layout';
 import i18n from '../i18n';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export const supportedTypes = ['follow', 'game-end', 'tour-join'];
 
 export default {
   oninit(vnode) {
-    const timeline = m.prop([]);
+    const timeline = stream([]);
 
     timelineXhr()
     .then(data => {

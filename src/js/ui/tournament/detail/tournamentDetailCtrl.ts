@@ -9,16 +9,18 @@ import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
 import { TournamentAttrs, Tournament, FeaturedGameUpdate, TournamentState } from '../interfaces'
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentState>) {
   helper.analyticsTrackView('Tournament details');
 
   const id = vnode.attrs.id;
 
-  const tournament = m.prop<Tournament>();
-  const hasJoined = m.prop<boolean>(false);
-  const currentPage = m.prop<number>(null);
-  const isLoading = m.prop<boolean>(false);
+  const tournament = stream<Tournament>();
+  const hasJoined = stream<boolean>(false);
+  const currentPage = stream<number>(null);
+  const isLoading = stream<boolean>(false);
+
   const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
 
@@ -94,7 +96,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
     }
   };
 
-  const clockInterval = m.prop<number>();
+  const clockInterval = stream<number>();
   xhr.tournament(id)
   .then(data => {
     tournament(data);

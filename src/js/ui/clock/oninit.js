@@ -4,13 +4,14 @@ import * as helper from '../helper';
 import * as m from 'mithril';
 import clockSettings from './clockSettings';
 import clockSet from './clockSet';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
 
   helper.analyticsTrackView('Clock');
 
-  const clockObj = m.prop();
-  const clockType = m.prop();
+  const clockObj = stream();
+  const clockType = stream();
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return;

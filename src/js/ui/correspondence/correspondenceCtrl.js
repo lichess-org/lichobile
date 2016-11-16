@@ -8,12 +8,13 @@ import * as xhr from '../../xhr';
 import socket from '../../socket';
 import * as Zanimo from 'zanimo';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
 
   var pool = [];
-  const selectedTab = m.prop(vnode.attrs.tab || 'public');
-  const sendingChallenges = m.prop(getSendingCorres());
+  const selectedTab = stream(vnode.attrs.tab || 'public');
+  const sendingChallenges = stream(getSendingCorres());
 
   helper.analyticsTrackView('Correspondence');
 

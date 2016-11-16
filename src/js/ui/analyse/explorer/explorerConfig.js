@@ -2,6 +2,7 @@ import * as m from 'mithril';
 import * as helper from '../../helper';
 import router from '../../../router';
 import settings from '../../../settings';
+import * as stream from 'mithril/stream';
 
 export default {
 
@@ -11,7 +12,7 @@ export default {
       available.push('masters');
     }
 
-    const open = m.prop(false);
+    const open = stream(false);
 
     const data = {
       db: {

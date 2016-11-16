@@ -11,6 +11,7 @@ import { header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';
+import * as stream from 'mithril/stream';
 
 export interface State {
   importGame(e: Event): void
@@ -28,7 +29,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
 
     socket.createDefault();
 
-    const importing = m.prop(false);
+    const importing = stream(false);
 
     function submitOnline(pgn: string, analyse: boolean): Promise<OnlineGameData> {
       const data: SendData = { pgn }

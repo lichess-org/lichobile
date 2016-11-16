@@ -1,11 +1,11 @@
 import * as xhr from '../userXhr';
 import * as IScroll from 'iscroll/build/iscroll-probe';
-import * as m from 'mithril';
 import * as helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import { throttle } from 'lodash/function';
 import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
+import * as stream from 'mithril/stream';
 
 var scroller;
 
@@ -16,17 +16,19 @@ const filters = {
   loss: 'nbLosses',
   draw: 'nbDraws',
   bookmark: 'nbBookmarks',
-  me: 'nbGamesWithYou'
+  me: 'nbGamesWithYou',
+  import: 'nbImportedGames',
+  playing: 'playingRightNow'
 };
 
 export default function oninit(vnode) {
   const userId = vnode.attrs.id;
-  const user = m.prop();
-  const availableFilters = m.prop([]);
-  const currentFilter = m.prop(vnode.attrs.filter || 'all');
-  const games = m.prop([]);
-  const paginator = m.prop(null);
-  const isLoadingNextPage = m.prop(false);
+  const user = stream();
+  const availableFilters = stream([]);
+  const currentFilter = stream(vnode.attrs.filter || 'all');
+  const games = stream([]);
+  const paginator = stream(null);
+  const isLoadingNextPage = stream(false);
 
   helper.analyticsTrackView('User games list');
 

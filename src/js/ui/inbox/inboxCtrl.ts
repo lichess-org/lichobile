@@ -6,14 +6,15 @@ import * as helper from '../helper';
 import * as m from 'mithril';
 import { PagedThreads, InboxState } from './interfaces';
 import { throttle } from 'lodash';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<void, InboxState>): void {
   helper.analyticsTrackView('Inbox');
 
   socket.createDefault();
 
-  const threads = m.prop<PagedThreads>();
-  const isLoading = m.prop<boolean>(false);
+  const threads = stream<PagedThreads>();
+  const isLoading = stream<boolean>(false);
 
   const throttledReload = throttle((p: number) => {
     isLoading(true);

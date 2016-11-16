@@ -7,12 +7,13 @@ import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
 import { setServerLang } from '../../xhr';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default {
   oncreate: helper.viewSlideIn,
 
   oninit: function() {
-    this.langs = m.prop([]);
+    this.langs = stream([]);
 
     getAvailableLanguages().then(data => {
       this.langs(data);

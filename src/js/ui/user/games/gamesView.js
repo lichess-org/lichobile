@@ -123,7 +123,9 @@ function renderGame(ctrl, g, index, userId) {
 function renderPlayer(players, color, variant) {
   let player = players[color];
   let playerName;
+  // TODO fetch title info from server; refactor
   if (player.userId) playerName = player.userId;
+  else if (!player.aiLevel) playerName = utils.playerName(player);
   else if (player.aiLevel) {
     player.ai = player.aiLevel;
     player.engineName = variant === 'crazyhouse' ? 'Sunsetter' : 'Stockfish';

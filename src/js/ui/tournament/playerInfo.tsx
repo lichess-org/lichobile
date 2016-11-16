@@ -5,11 +5,12 @@ import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
 import { Tournament, PlayerInfoState, PlayerInfo, PlayerInfoPairing } from './interfaces';
+import * as stream from 'mithril/stream';
 
 export default {
   controller: function(tournament: Mithril.Stream<Tournament>) {
     let isOpen = false;
-    const playerData = m.prop<PlayerInfo>();
+    const playerData = stream<PlayerInfo>();
 
     function open(playerId: string) {
       xhr.playerInfo(tournament().id, playerId)

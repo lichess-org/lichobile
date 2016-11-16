@@ -10,31 +10,78 @@ export type Source = 'online' | 'offline';
 
 export interface PathObj {
   ply: number
-  variation: any
+  variation: number
+}
+
+export type AnalysisTree = Array<AnalysisStep>
+export type Path = Array<PathObj>
+
+export interface EvalJugdment {
+  comment: string
+  glyph: Glyph
+  name: string
+}
+
+export interface RemoteAnalysisMove {
+  eval: number
+  best?: string
+  mate?: number
+  variation?: string
+  judgment?: EvalJugdment
+}
+
+// TODO refactor to keep only one interface for remove eval
+export interface RemoteEval {
+  cp: number
+  best?: string
+  mate?: number
+  variation?: string
+  judgment?: EvalJugdment
+}
+
+interface PlayerEvalSummary {
+  acpl: number
+  blunder: number
+  inaccuracy: number
+  mistake: number
+}
+
+export interface RemoteEvalSummary {
+  white: PlayerEvalSummary
+  black: PlayerEvalSummary
+}
+
+export interface RemoteAnalysis {
+  moves: Array<RemoteAnalysisMove>
+  summary: RemoteEvalSummary
 }
 
 export interface AnalysisData extends GameData {
-  // TODO type this
-  analysis?: any;
-  steps?: Array<AnalysisStep>;
+  analysis?: RemoteAnalysis
+  steps?: AnalysisTree
+}
+
+export interface Glyph {
+  symbol: string
+  name: string
 }
 
 export interface AnalysisStep extends GameStep {
   ceval?: Ceval
-  rEval?: any
+  rEval?: RemoteEval
   fixed?: boolean
-  variations?: any
-  opening?: any
+  variations?: Array<AnalysisTree>
   pgnMoves?: Array<string>
+  nag?: string
 }
 
 export interface CevalWork {
   position: string
   moves: string
   path: Path
-  steps: Array<AnalysisStep>
+  steps: AnalysisTree
   ply: number
-  emit: (res: any) => void
+  emit: (res: CevalEmit) => void
 }
 
 export interface Ceval {
@@ -53,9 +100,9 @@ export interface CevalEmit {
 }
 
 export interface CevalCtrlInterface {
-  init(): Promise<any>
+  init(): Promise<void>
   isInit(): boolean
-  start(path: Path, steps: Array<AnalysisStep>): void
+  start(path: Path, steps: AnalysisTree): void
   stop(): void
   destroy(): void
   allowed: Mithril.Stream<boolean>,
@@ -95,12 +142,15 @@ export interface AnalyseCtrlInterface {
   jump(path: Path, direction?: 'forward' | 'backward'): void
   userJump(path: Path, direction?: 'forward' | 'backward'): void
   nextStepBest(): string | null
-  currentAnyEval(): Ceval | null
+  currentAnyEval(): Ceval | RemoteEval
   setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
   gameOver(): boolean
   canDrop(): boolean
+  toggleVariationMenu(path?: Path): void
+  deleteVariation(path: Path): void
+  promoteVariation(path: Path): void
 }
 
 export interface ExplorerCtrlInterface {
@@ -115,18 +165,16 @@ export interface ExplorerCtrlInterface {
   toggle(): void
 }
 
-export type Path = Array<PathObj>
 
 export interface AnalyseInterface {
-  tree: any
+  tree: AnalysisTree
 
   firstPly(): number
   lastPly(): number
   getStep(path: Path): AnalysisStep
   getStepAtPly(ply: number): AnalysisStep
-  getSteps(path: Path): Array<AnalysisStep>
-  getStepsAfterPly(path: Path, ply: number): Array<AnalysisStep>
-  getOpening(path: Path): any
+  getSteps(path: Path): AnalysisTree
+  getStepsAfterPly(path: Path, ply: number): AnalysisTree
   nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
   addDests(dests: DestsMap, path: Path): void
@@ -140,7 +188,6 @@ export interface ExplorerMove {
   white: number
   black: number
   draws: number
-  real_wdl: number
   averageRating: number
   dtz: number
   dtm: number

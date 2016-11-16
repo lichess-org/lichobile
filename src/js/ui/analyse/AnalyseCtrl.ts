@@ -317,7 +317,7 @@ export default class AnalyseCtrl {
     redraw();
   }
 
-  public toggleVariationMenu = (path: Path) => {
+  public toggleVariationMenu = (path?: Path) => {
     if (!path) {
       this.vm.variationMenu = null;
     } else {

@@ -23,7 +23,7 @@ export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
 
 // TODO find a better type
 export function playable(data: GameData | OfflineGameData) {
-  return data.game.status.id < gameStatus.ids.aborted;
+  return data.game.source !== 'import' && data.game.status.id < gameStatus.ids.aborted;
 }
 
 export function isPlayerPlaying(data: GameData | OfflineGameData) {

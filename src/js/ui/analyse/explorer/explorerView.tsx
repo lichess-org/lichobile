@@ -5,7 +5,7 @@ import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
 import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR, showTitle } from './OpeningTable';
 
 function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
-  const uci = (getTR(e).dataset as any).uci;
+  const uci = getTR(e).dataset['uci'];
   if (uci) ctrl.explorerMove(uci);
 }
 
@@ -32,7 +32,7 @@ function showTablebase(ctrl: AnalyseCtrlInterface, title: string, moves: Array<E
   ];
 }
 
-function winner(stm: any, move: ExplorerMove) {
+function winner(stm: string, move: ExplorerMove) {
   if ((stm[0] === 'w' && move.wdl < 0) || (stm[0] === 'b' && move.wdl > 0))
     return 'white';
   else if ((stm[0] === 'b' && move.wdl < 0) || (stm[0] === 'w' && move.wdl > 0))
@@ -41,14 +41,14 @@ function winner(stm: any, move: ExplorerMove) {
     return null;
 }
 
-function showDtm(stm: any, move: ExplorerMove) {
+function showDtm(stm: string, move: ExplorerMove) {
   if (move.dtm) return m('result.' + winner(stm, move), {
     title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
   }, 'DTM ' + Math.abs(move.dtm));
   else return null;
 }
 
-function showDtz(stm: any, move: ExplorerMove) {
+function showDtz(stm: string, move: ExplorerMove) {
   if (move.checkmate) return m('result.' + winner(stm, move), 'Checkmate');
   else if (move.stalemate) return m('result.draws', 'Stalemate');
   else if (move.insufficient_material) return m('result.draws', 'Insufficient material');

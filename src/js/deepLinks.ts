@@ -1,6 +1,6 @@
 import router from './router';
 import * as Rlite from 'rlite-router';
-import { isChallenge } from './xhr';
+import { getChallenge } from './xhr';
 
 const deepRouter = new Rlite();
 
@@ -36,6 +36,7 @@ export default {
       setTimeout(() => deepRouter.run(url.replace(/^lichess:\/\//, '')), 0);
     };
     */
+    const universalLinks = window.universalLinks;
     universalLinks.subscribe('tournamentList', () => router.set('/tournament'));
     universalLinks.subscribe('tournamentDetail', (eventData: EventData) => router.set('/tournament/' + eventData.path.split('/').pop()));
     universalLinks.subscribe('userProfile', (eventData: EventData) => router.set('/@/' + eventData.path.split('/').pop()));
@@ -45,15 +46,6 @@ export default {
     universalLinks.subscribe('other', handleOther);
   }
 };
-
-interface EventData {
-  url: string
-  scheme: string
-  host: string
-  path: string
-  params: string
-  hash: string
-}
 
 function handleVariantProfile (eventData: EventData) {
   const pieces = eventData.path.split('/');
@@ -65,7 +57,7 @@ function handleVariantProfile (eventData: EventData) {
 function handleOther (eventData: EventData) {
   const pieces = eventData.path.split('/');
   if (eventData.path.search('^\/([a-zA-Z0-9]{8})$') !== -1) {
-    isChallenge(pieces[1]).then(() => {
+    getChallenge(pieces[1]).then(() => {
       router.set('/challenge/' + pieces[1]);
     }).catch(() => { router.set('/game/' + pieces[1]); });
   }

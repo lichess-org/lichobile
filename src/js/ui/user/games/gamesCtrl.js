@@ -1,6 +1,5 @@
 import * as xhr from '../userXhr';
 import * as IScroll from 'iscroll/build/iscroll-probe';
-import * as m from 'mithril';
 import * as helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import { throttle } from 'lodash/function';
@@ -17,7 +16,9 @@ const filters = {
   loss: 'nbLosses',
   draw: 'nbDraws',
   bookmark: 'nbBookmarks',
-  me: 'nbGamesWithYou'
+  me: 'nbGamesWithYou',
+  import: 'nbImportedGames',
+  playing: 'playingRightNow'
 };
 
 export default function oninit(vnode) {

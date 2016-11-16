@@ -71,16 +71,11 @@ declare namespace Mithril {
   interface Stream<T> {
     (): T;
     (value: T): this;
-    run(f: (current: T) => Stream<T> | T | void): Stream<T>;
-    run<U>(f: (current: T) => Stream<U> | U): Stream<U>;
     map(f: (current: T) => Stream<T> | T | void): Stream<T>;
     map<U>(f: (current: T) => Stream<U> | U): Stream<U>;
-    catch(f: (current: T) => T | void): Stream<T>;
-    catch<U>(f: (current: T) => U): Stream<U>;
     of(val?: T): Stream<T>;
     ap<U>(f: Stream<(value: T) => U>): Stream<U>;
     end: Stream<boolean>;
-    error: Stream<any>
   }
 
   type StreamCombiner<T> = (...streams: Stream<any>[]) => T

@@ -72,15 +72,17 @@ function renderGame(ctrl, g, index, userId) {
   const wideScreenOrLandscape = helper.isWideScreen() || helper.isLandscape();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
-  const title = time + ' • ' + g.variant.name + ' • ' + mode;
+  const title = g.source === 'import' ?
+    `Import • ${g.variant.name}` :
+    `${time} • ${g.variant.name} • ${mode}`;
   const date = window.moment(g.timestamp).calendar();
   const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
     (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-  const icon = utils.gameIcon(g.perf) || '';
+  const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || '';
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
-  const link = g.status.id < gameStatus.ids.aborted ?
+  const link = g.source !== 'import' && g.status.id < gameStatus.ids.aborted ?
     () => router.set(`/game/${g.id}/${userColor}`) :
     () => router.set(`/analyse/online/${g.id}/${userColor}`);
 

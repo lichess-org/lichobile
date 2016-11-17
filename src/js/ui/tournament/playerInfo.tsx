@@ -4,14 +4,15 @@ import * as m from 'mithril';
 import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
+import { Tournament, PlayerInfoState, PlayerInfo, PlayerInfoPairing } from './interfaces';
 import * as stream from 'mithril/stream';
 
 export default {
-  controller: function(tournament) {
+  controller: function(tournament: Mithril.Stream<Tournament>) {
     let isOpen = false;
-    const playerData = stream();
+    const playerData = stream<PlayerInfo>();
 
-    function open(playerId) {
+    function open(playerId: string) {
       xhr.playerInfo(tournament().id, playerId)
       .then(data => {
         playerData(data);
@@ -21,7 +22,7 @@ export default {
       .catch(utils.handleXhrError);
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -34,10 +35,10 @@ export default {
       },
       tournament,
       playerData
-    };
+    } as PlayerInfoState;
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: PlayerInfoState) {
     if (!ctrl.isOpen()) return null;
 
     const tournament = ctrl.tournament();
@@ -51,8 +52,8 @@ export default {
     const avgOpRating = pairings.length ? (pairings.reduce((prev, x) => prev + x.op.rating, 0) / pairings.length).toFixed(0) : '0';
 
 
-    function renderPlayerGame (game, index, gameArray) {
-      let outcome = null;
+    function renderPlayerGame (game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
+      let outcome: string = null;
       let outcomeClass = 'oppOutcome';
       if (game.score === undefined) {
         outcome = '*';
@@ -65,7 +66,7 @@ export default {
           outcomeClass += ' double';
       }
       else {
-        outcome = game.score;
+        outcome = game.score.toString();
       }
       return (
         <tr className='list_item' key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color))}>

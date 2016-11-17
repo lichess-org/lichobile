@@ -6,12 +6,15 @@ import layout from '../layout';
 import i18n from '../../i18n';
 import * as m from 'mithril';
 import tabs from '../shared/tabs';
+import newTournamentForm from './newTournamentForm';
+import { TournamentListsState, TournamentListItem } from './interfaces';
 
-export default function view(vnode) {
+export default function view(vnode: Mithril.Vnode<{}, TournamentListsState>) {
   const ctrl = vnode.state;
   const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
+  const footer = () => renderFooter();
 
-  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl);
+  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, footer);
 }
 
 const TABS = [{
@@ -25,11 +28,11 @@ const TABS = [{
     label: 'Completed'
 }];
 
-function tabNavigation (currentTabFn) {
+function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     return m('.nav-header', m(tabs, {
         buttons: TABS,
         selectedTab: currentTabFn(),
-        onTabChange: k => {
+        onTabChange: (k: string) => {
           const loc = window.location.search.replace(/\?tab\=\w+$/, '');
           window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
           currentTabFn(k);
@@ -37,7 +40,7 @@ function tabNavigation (currentTabFn) {
     }));
 }
 
-function tournamentListBody(ctrl) {
+function tournamentListBody(ctrl: TournamentListsState) {
   if (!ctrl.tournaments()) return null;
 
   const id = ctrl.currentTab();
@@ -57,7 +60,7 @@ function tournamentListBody(ctrl) {
   );
 }
 
-function renderTournamentListItem(tournament) {
+function renderTournamentListItem(tournament: TournamentListItem) {
   const time = formatTournamentTimeControl(tournament.clock);
   const mode = tournament.rated ? i18n('rated') : i18n('casual');
   const duration = formatTournamentDuration(tournament.minutes);
@@ -84,9 +87,20 @@ function renderTournamentListItem(tournament) {
   );
 }
 
-function formatTime(timeInMillis) {
+function renderFooter() {
+  return (
+    <div className="actions_bar">
+      <button key="createTournament" className="action_bar_button" oncreate={h.ontap(newTournamentForm.open)}>
+        <span className="fa fa-pencil" />
+        {i18n('createANewTournament')}
+      </button>
+    </div>
+  );
+}
+
+function formatTime(timeInMillis: number) {
   const date = new Date(timeInMillis);
-  const hours = pad(date.getHours().toString(), 2);
-  const mins = pad(date.getMinutes().toString(), 2);
+  const hours = pad(date.getHours(), 2);
+  const mins = pad(date.getMinutes(), 2);
   return hours + ':' + mins;
 }

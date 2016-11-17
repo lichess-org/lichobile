@@ -4,6 +4,7 @@ import * as m from 'mithril';
 import { SettingsProp } from '../../settings';
 
 type SelectOption = string[]
+type SelectOptionGroup = Array<SelectOption>;
 
 function renderOption(label: string, value: string, storedValue: string, labelArg: string, labelArg2: string) {
   return m('option', {
@@ -11,6 +12,19 @@ function renderOption(label: string, value: string, storedValue: string, labelAr
     value: value,
     selected: storedValue === value
   }, i18n(label, labelArg, labelArg2));
+}
+
+
+function renderOptionGroup(label:string, value:string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
+  if (typeof value === 'string') {
+    return renderOption(label, value, storedValue, labelArg, labelArg2);
+  }
+  else {
+    return m('optgroup', {
+      key: label,
+      label
+    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])));
+  }
 }
 
 export default {
@@ -48,7 +62,7 @@ export default {
   ) {
     const storedValue = settingsProp();
     const onChange = function(e: Event) {
-      const val = (e.target as any).value;
+      const val = (e.target as HTMLSelectElement).value;
       settingsProp(val);
       if (onChangeCallback) onChangeCallback(val);
       setTimeout(() => redraw(), 10);
@@ -72,7 +86,7 @@ export default {
 
   renderCheckbox(
     label: string,
-    name:string,
+    name: string,
     settingsProp: SettingsProp<boolean>,
     callback?: (v: boolean) => void,
     disabled?: boolean
@@ -96,6 +110,37 @@ export default {
         }
       })
     ]);
-  }
+  },
 
+  renderSelectWithGroup(
+    label: string,
+    name: string,
+    options: Array<Array<string | SelectOptionGroup>>,
+    settingsProp: SettingsProp<string>,
+    isDisabled?: boolean,
+    onChangeCallback?: (v: string) => void
+  ) {
+    const storedValue = settingsProp();
+    const onChange = function(e: Event) {
+      const val = (e.target as HTMLSelectElement).value;
+      settingsProp(val);
+      if (onChangeCallback) onChangeCallback(val);
+      setTimeout(() => redraw(), 10);
+    };
+    return [
+      m('label', {
+        'for': 'select_' + name
+      }, i18n(label)),
+      m('select', {
+        id: 'select_' + name,
+        disabled: isDisabled,
+        oncreate(vnode: Mithril.ChildNode) {
+          vnode.dom.addEventListener('change', onChange, false);
+        },
+        onremove(vnode: Mithril.ChildNode) {
+          vnode.dom.removeEventListener('change', onChange, false);
+        }
+      }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
+    ];
+  }
 };

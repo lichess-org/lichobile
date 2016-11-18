@@ -91,7 +91,6 @@ interface Player {
   ai?: number
   onGame?: boolean
   isGone?: boolean
-  engineName?: string
   offeringDraw?: boolean
   proposingTakeback?: boolean
   offeringRematch?: boolean

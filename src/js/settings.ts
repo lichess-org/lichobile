@@ -121,9 +121,11 @@ export default {
     variant: localstorageprop('settings.ai.variant', 'standard'),
     availableVariants: [
       ['Standard', 'standard'],
+      ['Crazyhouse', 'crazyhouse'],
       ['Chess960', 'chess960'],
       ['King of the Hill', 'kingOfTheHill'],
       ['Three-check', 'threeCheck'],
+      ['Antichess', 'antichess'],
       ['Atomic', 'atomic'],
       ['Horde', 'horde'],
       ['Racing Kings', 'racingKings']
@@ -224,9 +226,11 @@ export default {
       color: localstorageprop('settings.game.ai.color', 'random'),
       availableVariants: [
         ['Standard', '1'],
+        ['Crazyhouse', '10'],
         ['Chess960', '2'],
         ['King of the Hill', '4'],
         ['Three-check', '5'],
+        ['Antichess', '6'],
         ['Atomic', '7'],
         ['Horde', '8'],
         ['Racing Kings', '9'],
@@ -304,6 +308,7 @@ export default {
       mode: localstorageprop('settings.game.invite.mode', '0')
     }
   },
+
   tournament: {
     availableVariants: [
       ['Standard', '1'],
@@ -478,6 +483,7 @@ export default {
     timeToStart: localstorageprop('settings.tournament.timeToStart', '15'),
     position: localstorageprop('settings.tournament.timeToStart', '15')
   },
+
   tv: {
     channel: localstorageprop('settings.tv.channel', 'best')
   },

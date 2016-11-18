@@ -149,8 +149,8 @@ export function playerName(player: any, withRating: boolean = false): string {
   return 'Anonymous';
 }
 
-export function aiName(player: { engineName?: string, ai: number }) {
-  return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
+export function aiName(player: { ai: number }) {
+  return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
 }
 
 export const uid = (function() {

@@ -196,11 +196,6 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
 
   const gameMoment = window.moment(ctrl.data.game.createdAt);
 
-  // TODO get that from server
-  if (opponent.ai) {
-    opponent.engineName = isCrazy ? 'Sunsetter' : 'Stockfish';
-  }
-
   return (
     <div className="analyseOpponentsWrapper">
       <div className="analyseOpponent">

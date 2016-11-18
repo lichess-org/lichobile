@@ -130,7 +130,6 @@ function renderPlayer(players, color, variant) {
   else if (!player.aiLevel) playerName = utils.playerName(player);
   else if (player.aiLevel) {
     player.ai = player.aiLevel;
-    player.engineName = variant === 'crazyhouse' ? 'Sunsetter' : 'Stockfish';
     playerName = utils.aiName(player);
   }
   else playerName = 'Anonymous';

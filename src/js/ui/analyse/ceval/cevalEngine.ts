@@ -1,4 +1,5 @@
 import { CevalWork } from '../interfaces';
+import { setOption, setVariant } from '../../../utils/stockfish';
 
 export default function cevalEngine(opts: any) {
 
@@ -75,18 +76,6 @@ function send(text: string) {
   return Stockfish.cmd(text);
 }
 
-function setOption(name: string, value: string | number | boolean) {
-  return Stockfish.cmd(`setoption name ${name} value ${value}`);
-}
-
 function prepare(variant: VariantKey) {
-  return Promise.all([
-    setOption('UCI_Chess960', variant === 'chess960'),
-    setOption('UCI_KingOfTheHill', variant === 'kingOfTheHill'),
-    setOption('UCI_3Check', variant === 'threeCheck'),
-    setOption('UCI_Atomic', variant === 'atomic'),
-    setOption('UCI_Horde', variant === 'horde'),
-    setOption('UCI_Race', variant === 'racingKings')
-    // setOption('UCI_House', variant === Crazyhouse)
-  ]);
+  return setVariant(variant);
 }

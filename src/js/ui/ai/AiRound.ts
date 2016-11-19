@@ -1,6 +1,7 @@
 import i18n from '../../i18n';
 import router from '../../router';
 import * as chess from '../../chess';
+import * as chessFormat from '../../utils/chessFormat';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
@@ -147,10 +148,6 @@ export default class AiRound implements AiRoundInterface {
     });
   }
 
-  private addMove(orig: Pos, dest: Pos, promotionRole?: Role) {
-    this.replay.addMove(orig, dest, promotionRole);
-  }
-
   public playerName = () => {
     return this.data.player.username;
   }
@@ -178,12 +175,22 @@ export default class AiRound implements AiRoundInterface {
     };
   }
 
-  public onEngineBestMove = (bestmove: string) => {
+  public onEngineMove = (bestmove: string) => {
     const from = <Pos>bestmove.slice(0, 2);
     const to = <Pos>bestmove.slice(2, 4);
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
-    this.addMove(from, to);
+    this.replay.addMove(from, to);
+    redraw();
+  }
+
+  public onEngineDrop = (bestdrop: string) => {
+    const pos = chessFormat.uciToDropPos(bestdrop);
+    const role = chessFormat.uciToDropRole(bestdrop);
+    const piece = { role, color: this.data.opponent.color };
+    this.vm.engineSearching = false;
+    this.chessground.apiNewPiece(piece, pos);
+    this.replay.addDrop(role, pos);
     redraw();
   }
 
@@ -206,12 +213,12 @@ export default class AiRound implements AiRoundInterface {
   }
 
   private onPromotion = (orig: Pos, dest: Pos, role: Role) => {
-    this.addMove(orig, dest, role);
+    this.replay.addMove(orig, dest, role);
   }
 
   private userMove = (orig: Pos, dest: Pos) => {
     if (!promotion.start(this, orig, dest, this.onPromotion)) {
-      this.addMove(orig, dest);
+      this.replay.addMove(orig, dest);
     }
   }
 
@@ -228,7 +235,7 @@ export default class AiRound implements AiRoundInterface {
     vibrate.quick();
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
+  private onUserNewPiece = (role: Role, key: Pos) => {
     const sit = this.replay.situation();
     if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key);

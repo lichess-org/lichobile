@@ -18,8 +18,6 @@ const levelToDepth: LevelToDepht = {
   8: 21
 };
 
-const bestmoveRegExp = /^bestmove (\w{4})/;
-
 export interface EngineInterface {
   init(): Promise<void>
   search(initialFen: string, moves: string): void
@@ -46,16 +44,16 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
     search(initialFen: string, moves: string) {
       Stockfish.output((msg: string) => {
-        // console.log(msg);
-        const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
-        if (bestmoveRegExpMatch) {
-          ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
+        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/);
+        if (match) {
+          if (match[1]) ctrl.onEngineMove(match[1]);
+          else if (match[2]) ctrl.onEngineDrop(match[2]);
         }
       });
 
       const fen = convertFenForStockfish(initialFen);
 
-      console.info('engine search pos: ', `position fen ${fen} moves ${moves}`);
+      // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`);
 
       cmd(`position fen ${fen} moves ${moves}`)
       .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));

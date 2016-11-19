@@ -7,8 +7,6 @@ export function setVariant(variant: VariantKey) {
   const uci960p =
     setOption('UCI_Chess960', ['fromPosition', 'chess960'].includes(variant))
 
-  console.log(variant.toLowerCase())
-
   if (['standard', 'fromPosition', 'chess960'].includes(variant))
     return Promise.all([uci960p, setOption('UCI_Variant', 'chess')]);
   else if (variant === 'antichess')

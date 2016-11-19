@@ -1,7 +1,5 @@
-lichess mobile
-==============
-
 [lichess.org/mobile](http://lichess.org/mobile)
+--------------------
 
 ![lichess mobile screenshots](resources/3-screens.png)
 

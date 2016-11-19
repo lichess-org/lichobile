@@ -5,7 +5,6 @@ import * as chessFormat from '../../utils/chessFormat';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
-import * as gameApi from '../../lichess/game';
 import gameStatusApi from '../../lichess/status';
 import { playerFromFen } from '../../utils/fen';
 import { oppositeColor, aiName, getRandomArbitrary } from '../../utils';
@@ -337,9 +336,7 @@ export default class AiRound implements AiRoundInterface {
 
   public jumpLast = () => this.jump(this.lastPly());
 
-  public canDrop = () => {
-    return gameApi.isPlayerPlaying(this.data);
-  }
+  public canDrop = () => true;
 }
 
 function getColorFromSettings(): Color {

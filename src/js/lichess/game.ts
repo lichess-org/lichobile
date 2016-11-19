@@ -4,7 +4,7 @@ import settings from '../settings';
 import { MiniBoardGameObj } from './interfaces';
 import i18n from '../i18n';
 
-export const analysableVariants = ['standard', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings'];
+export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings'];
 
 export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
   if (!possibleMoves) return {};

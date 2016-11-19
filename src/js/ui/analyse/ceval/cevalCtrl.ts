@@ -39,7 +39,7 @@ export default function cevalCtrl(
       return;
     }
     engine.start({
-      position: steps[0].fen,
+      initialFen: steps[0].fen,
       moves: steps.slice(1).map((s) => fixCastle(s.uci, s.san)).join(' '),
       path: path,
       steps: steps,

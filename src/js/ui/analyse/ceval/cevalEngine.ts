@@ -1,7 +1,12 @@
 import { CevalWork } from '../interfaces';
-import { setOption, setVariant } from '../../../utils/stockfish';
+import { setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
 
-export default function cevalEngine(opts: any) {
+interface Opts {
+  minDepth: number
+  maxDepth: number
+}
+
+export default function cevalEngine(opts: Opts) {
 
   function processOutput(text: string, work: CevalWork) {
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
@@ -46,8 +51,10 @@ export default function cevalEngine(opts: any) {
     },
 
     start(work: CevalWork) {
+      const fen = convertFenForStockfish(work.initialFen);
+
       setOption('Threads', Math.ceil(((navigator as any).hardwareConcurrency || 1) / 2))
-      .then(() => send(['position', 'fen', work.position, 'moves', work.moves].join(' ')))
+      .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
       .then(() => send('go depth ' + opts.maxDepth));
 
       Stockfish.output(function(msg) {
@@ -69,13 +76,9 @@ export default function cevalEngine(opts: any) {
 function init(variant: VariantKey) {
   return send('uci')
   .then(() => setOption('Ponder', 'false'))
-  .then(() => prepare(variant));
+  .then(() => setVariant(variant));
 }
 
 function send(text: string) {
   return Stockfish.cmd(text);
-}
-
-function prepare(variant: VariantKey) {
-  return setVariant(variant);
 }

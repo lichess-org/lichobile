@@ -3,8 +3,9 @@
 
 ![lichess mobile screenshots](resources/3-screens.png)
 
-Lichess mobile is written in JavaScript (ES6), with the help of [cordova](https://cordova.apache.org/)
-and [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
+Lichess mobile is a [cordova](https://cordova.apache.org/) application written
+in [TypeScript](http://www.typescriptlang.org/) and JavaScript. The rendering
+library is [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
 [browserify](http://browserify.org/) and [gulp](http://gulpjs.com/)
 as build tools. It talks to a native [Stockfish](https://stockfishchess.org/) interface, [with multiple variants support](https://github.com/ddugovic/Stockfish), through a
 [cordova plugin](https://github.com/veloce/cordova-plugin-stockfish) and uses

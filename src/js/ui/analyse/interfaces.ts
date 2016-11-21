@@ -77,6 +77,7 @@ export interface AnalysisStep extends GameStep {
 
 export interface CevalWork {
   initialFen: string
+  currentFen: string
   moves: string
   path: Path
   steps: AnalysisTree

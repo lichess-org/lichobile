@@ -1,15 +1,35 @@
 import { CevalWork } from '../interfaces';
 import { setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
+import * as Signal from 'signals';
 
 interface Opts {
   minDepth: number
   maxDepth: number
 }
 
+interface ExtendedNavigator extends Navigator {
+  hardwareConcurrency: number
+}
+
+const output = new Signal();
+
 export default function cevalEngine(opts: Opts) {
+  // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
+  // message, reached by depth or after a 'stop' command
+  // finished here means stockfish has emited the bestmove and is ready for
+  // another command
+  let finished = true;
+
+  // stopped flag is true when a search has been interrupted before its end
+  let stopped = false;
 
   function processOutput(text: string, work: CevalWork) {
-    if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
+    if (text.indexOf('bestmove') === 0) {
+      finished = true;
+    }
+    if (stopped) return;
+    if (text.indexOf('currmovenumber') !== -1) return;
+    // console.log('stockfish output', text)
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
@@ -37,6 +57,40 @@ export default function cevalEngine(opts: Opts) {
     });
   }
 
+  function stop() {
+    stopped = true;
+    return new Promise((resolve, reject) => {
+      if (finished) resolve();
+      else {
+        function listen(msg: string) {
+          if (msg.indexOf('bestmove') === 0) {
+            output.remove(listen);
+            finished = true;
+            resolve();
+          }
+        }
+        output.add(listen);
+        send('stop');
+      }
+    })
+  }
+
+  function doStart(work: CevalWork) {
+    const fen = convertFenForStockfish(work.initialFen);
+
+    output.removeAll();
+    output.add((msg: string) => processOutput(msg, work));
+
+    stopped = false;
+    finished = false;
+
+    return setOption('Threads',
+      Math.ceil(((navigator as ExtendedNavigator).hardwareConcurrency || 1) / 2)
+    )
+    .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
+    .then(() => send('go depth ' + opts.maxDepth));
+  }
+
   return {
     init(variant: VariantKey) {
       return Stockfish.init()
@@ -45,40 +99,32 @@ export default function cevalEngine(opts: Opts) {
       .catch(() => {
         return Stockfish.exit()
         .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(() => init(variant));
+        .then(() => init(variant))
       })
       .catch(console.error.bind(console));
     },
 
     start(work: CevalWork) {
-      const fen = convertFenForStockfish(work.initialFen);
-
-      setOption('Threads', Math.ceil(((navigator as any).hardwareConcurrency || 1) / 2))
-      .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
-      .then(() => send('go depth ' + opts.maxDepth));
-
-      Stockfish.output(function(msg) {
-        // console.log(msg);
-        processOutput(msg, work);
-      });
+      stop().then(() => doStart(work));
     },
 
-    stop() {
-      send('stop');
-    },
+    stop,
 
     exit() {
+      output.removeAll();
       return Stockfish.exit();
     }
   };
 }
 
 function init(variant: VariantKey) {
+  Stockfish.output(output.dispatch);
   return send('uci')
   .then(() => setOption('Ponder', 'false'))
   .then(() => setVariant(variant));
 }
 
 function send(text: string) {
+  // console.log('stockfish send', text)
   return Stockfish.cmd(text);
 }

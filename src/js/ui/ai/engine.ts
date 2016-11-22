@@ -1,4 +1,5 @@
 import { AiRoundInterface } from '../shared/round';
+import { setOption, setVariant, convertFenForStockfish } from '../../utils/stockfish'
 
 interface LevelToDepht {
   [index: number]: number
@@ -17,14 +18,12 @@ const levelToDepth: LevelToDepht = {
   8: 21
 };
 
-const bestmoveRegExp = /^bestmove (\w{4})/;
-
 export interface EngineInterface {
   init(): Promise<void>
   search(initialFen: string, moves: string): void
-  setLevel(level: number): Promise<any>
-  prepare(variant: VariantKey): Promise<any>
-  exit(): Promise<any>
+  setLevel(level: number): Promise<void>
+  prepare(variant: VariantKey): Promise<void>
+  exit(): Promise<void>
 }
 
 export default function(ctrl: AiRoundInterface): EngineInterface {
@@ -45,16 +44,18 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
     search(initialFen: string, moves: string) {
       Stockfish.output((msg: string) => {
-        // console.log(msg);
-        const bestmoveRegExpMatch = msg.match(bestmoveRegExp);
-        if (bestmoveRegExpMatch) {
-          ctrl.onEngineBestMove(bestmoveRegExpMatch[1]);
+        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/);
+        if (match) {
+          if (match[1]) ctrl.onEngineMove(match[1]);
+          else if (match[2]) ctrl.onEngineDrop(match[2]);
         }
       });
 
-      // console.info('engine search pos: ', `position fen ${initialFen} moves ${moves}`);
-      // console.info(`go movetime ${moveTime(level)} depth ${depth(level)}`);
-      cmd(`position fen ${initialFen} moves ${moves}`)
+      const fen = convertFenForStockfish(initialFen);
+
+      // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`);
+
+      cmd(`position fen ${fen} moves ${moves}`)
       .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
     },
 
@@ -64,15 +65,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
     },
 
     prepare(variant: VariantKey) {
-      return Promise.all([
-        setOption('UCI_Chess960', String(variant === 'chess960')),
-        setOption('UCI_KingOfTheHill', String(variant === 'kingOfTheHill')),
-        setOption('UCI_3Check', String(variant === 'threeCheck')),
-        // setOption('UCI_House', variant === Crazyhouse),
-        setOption('UCI_Atomic', String(variant === 'atomic')),
-        setOption('UCI_Horde', String(variant === 'horde')),
-        setOption('UCI_Race', String(variant === 'racingKings'))
-      ]);
+      return setVariant(variant);
     },
 
     exit() {
@@ -84,10 +77,6 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 function onInit() {
   return cmd('uci')
   .then(() => setOption('Ponder', 'false'));
-}
-
-function setOption(name: string, value: string) {
-  return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
 function cmd(text: string) {

@@ -2,7 +2,7 @@ import treePath from './path';
 import { AnalysisData, AnalysisStep, Path, PathObj, AnalyseInterface } from './interfaces';
 
 export default class Analyse implements AnalyseInterface {
-  public tree: any;
+  public tree: Array<AnalysisStep>
 
   constructor(data: AnalysisData) {
     configureSteps(data);
@@ -63,14 +63,6 @@ export default class Analyse implements AnalyseInterface {
     return this.getSteps(path).filter((step: AnalysisStep) => {
       return step.ply > ply;
     });
-  }
-
-  public getOpening = (path: Path) => {
-    let opening: any;
-    this.getSteps(path).forEach((s: AnalysisStep) => {
-      opening = s.opening || opening;
-    });
-    return opening;
   }
 
   public nextStepEvalBest = (path: Path) => {

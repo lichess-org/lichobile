@@ -1,15 +1,16 @@
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 const CLOCK_TICK_STEP = 100;
 
 export default function HandicapIncClock(topTimeParam, topIncrement, bottomTimeParam, bottomIncrement) {
-  const topTime = (topTimeParam !== 0) ? m.prop(topTimeParam) : m.prop(topIncrement);
-  const bottomTime = (bottomTimeParam !== 0) ? m.prop(bottomTimeParam) : m.prop(bottomIncrement);
-  const activeSide = m.prop(null);
-  const flagged = m.prop(null);
-  const isRunning = m.prop(false);
+  const topTime = (topTimeParam !== 0) ? stream(topTimeParam) : stream(topIncrement);
+  const bottomTime = (bottomTimeParam !== 0) ? stream(bottomTimeParam) : stream(bottomIncrement);
+  const activeSide = stream(null);
+  const flagged = stream(null);
+  const isRunning = stream(false);
   let clockInterval = null;
   let topTimestamp, bottomTimestamp;
 

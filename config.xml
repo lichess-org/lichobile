@@ -7,6 +7,8 @@
     <access origin="https://*.lichess.org" />
     <access origin="http://*.l.dev" />
     <hook src="scripts/copy_icons.js" type="after_prepare" />
+    <engine name="ios" spec="~4.2.1" />
+    <engine name="android" spec="~6.1.0" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
@@ -52,9 +54,6 @@
     <preference name="xwalkVersion" value="20" />
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="16" />
-    <preference name="AndroidLaunchMode" value="singleInstance" />
-    <engine name="ios" spec="~4.2.1" />
-    <engine name="android" spec="~5.1.1" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.1" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
@@ -72,13 +71,16 @@
     <plugin name="ionic-plugin-keyboard" spec="~1.0.8" />
     <plugin name="cordova-plugin-insomnia" spec="~4.2.0" />
     <plugin name="cordova-plugin-x-socialsharing" spec="~5.0.11" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="~1.7.0" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.1" />
     <plugin name="cordova-plugin-fullscreen" spec="~1.1.0" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#377a285" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.4" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
     <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.2.0">
+        <variable name="XWALK_MODE" value="embedded" />
+        <variable name="XWALK_MULTIPLEAPK" value="true" />
+    </plugin>
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#8d0370a" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
             <path event="tournamentList" url="/tournament" />

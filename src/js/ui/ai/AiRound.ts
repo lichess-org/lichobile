@@ -1,12 +1,13 @@
 import i18n from '../../i18n';
 import router from '../../router';
 import * as chess from '../../chess';
+import * as chessFormat from '../../utils/chessFormat';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import { playerFromFen } from '../../utils/fen';
-import { oppositeColor, aiName, noop, getRandomArbitrary } from '../../utils';
+import { oppositeColor, aiName, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
@@ -15,6 +16,7 @@ import ground from '../shared/offlineRound/ground';
 import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
+import crazyValid from '../shared/round/crazy/crazyValid';
 import { AiRoundInterface, AiVM } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
@@ -93,7 +95,7 @@ export default class AiRound implements AiRoundInterface {
     }
 
     if (!this.chessground) {
-      this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, noop, this.onMove, noop);
+      this.chessground = ground.make(this.data, this.replay.situation(), this.userMove, this.onUserNewPiece, this.onMove, this.onNewPiece);
     } else {
       ground.reload(this.chessground, this.data, this.replay.situation());
     }
@@ -145,10 +147,6 @@ export default class AiRound implements AiRoundInterface {
     });
   }
 
-  private addMove(orig: Pos, dest: Pos, promotionRole?: Role) {
-    this.replay.addMove(orig, dest, promotionRole);
-  }
-
   public playerName = () => {
     return this.data.player.username;
   }
@@ -176,12 +174,22 @@ export default class AiRound implements AiRoundInterface {
     };
   }
 
-  public onEngineBestMove = (bestmove: string) => {
+  public onEngineMove = (bestmove: string) => {
     const from = <Pos>bestmove.slice(0, 2);
     const to = <Pos>bestmove.slice(2, 4);
     this.vm.engineSearching = false;
     this.chessground.apiMove(from, to);
-    this.addMove(from, to);
+    this.replay.addMove(from, to);
+    redraw();
+  }
+
+  public onEngineDrop = (bestdrop: string) => {
+    const pos = chessFormat.uciToDropPos(bestdrop);
+    const role = chessFormat.uciToDropRole(bestdrop);
+    const piece = { role, color: this.data.opponent.color };
+    this.vm.engineSearching = false;
+    this.chessground.apiNewPiece(piece, pos);
+    this.replay.addDrop(role, pos);
     redraw();
   }
 
@@ -191,7 +199,6 @@ export default class AiRound implements AiRoundInterface {
     setTimeout(() => {
       const l = this.getOpponent().level;
       this.data.opponent.name = aiName({
-        engineName: 'Stockfish',
         ai: l
       });
       this.engine.setLevel(l)
@@ -205,12 +212,12 @@ export default class AiRound implements AiRoundInterface {
   }
 
   private onPromotion = (orig: Pos, dest: Pos, role: Role) => {
-    this.addMove(orig, dest, role);
+    this.replay.addMove(orig, dest, role);
   }
 
   private userMove = (orig: Pos, dest: Pos) => {
     if (!promotion.start(this, orig, dest, this.onPromotion)) {
-      this.addMove(orig, dest);
+      this.replay.addMove(orig, dest);
     }
   }
 
@@ -225,6 +232,19 @@ export default class AiRound implements AiRoundInterface {
       sound.move();
     }
     vibrate.quick();
+  }
+
+  private onUserNewPiece = (role: Role, key: Pos) => {
+    const sit = this.replay.situation();
+    if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
+      this.replay.addDrop(role, key);
+    } else {
+      this.jump(this.replay.ply);
+    }
+  }
+
+  private onNewPiece = () => {
+    sound.move();
   }
 
   public apply(sit: GameSituation) {
@@ -316,7 +336,7 @@ export default class AiRound implements AiRoundInterface {
 
   public jumpLast = () => this.jump(this.lastPly());
 
-  public canDrop = () => false
+  public canDrop = () => true;
 }
 
 function getColorFromSettings(): Color {

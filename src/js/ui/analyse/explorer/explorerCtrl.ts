@@ -8,21 +8,21 @@ import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
 import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
+import * as stream from 'mithril/stream';
 
 function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
   const pieceCount = parts[0].split(/[nbrqkp]/i).length - 1;
-  const castling = parts[2];
-  return pieceCount <= 6 && castling === '-';
+  return pieceCount <= 7;
 }
 
 export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
 
-  const allowed = m.prop(allow);
-  const enabled = m.prop(false);
-  const loading = m.prop(true);
-  const failing = m.prop(false);
-  const current: Mithril.Stream<ExplorerData> = m.prop({
+  const allowed = stream(allow);
+  const enabled = stream(false);
+  const loading = stream(true);
+  const failing = stream(false);
+  const current: Mithril.Stream<ExplorerData> = stream({
     moves: []
   });
 
@@ -81,7 +81,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }, 1000);
 
   const fetchTablebase = debounce((fen: string) => {
-    return tablebaseXhr(root.vm.step.fen)
+    return tablebaseXhr(effectiveVariant, root.vm.step.fen)
     .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;

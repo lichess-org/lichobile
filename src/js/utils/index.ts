@@ -2,34 +2,30 @@ import i18n from '../i18n';
 import { FetchError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
-import { NowPlayingOpponent } from '../lichess/interfaces';
 
 export const lichessSri = Math.random().toString(36).substring(2);
 
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;
-  return new Promise((resolve, reject) => {
-    m.request({
-      url,
-      method: 'GET',
-      config(xhr: XMLHttpRequest) {
-        curXhr = xhr;
+  return m.request({
+    url,
+    method: 'GET',
+    config(xhr: XMLHttpRequest) {
+      curXhr = xhr;
+    }
+  })
+  .catch((error: Error) => {
+    // workaround when xhr for local file has a 0 status it will
+    // reject the promise and still have the response object
+    if (curXhr.status === 0) {
+      try {
+        return JSON.parse(curXhr.responseText);
+      } catch (e) {
+        return Promise.reject(e);
       }
-    })
-    .run((data: any) => resolve(data))
-    .catch((error: Error) => {
-      // workaround when xhr for local file has a 0 status it will
-      // reject the promise and still have the response object
-      if (curXhr.status === 0) {
-        try {
-          resolve(JSON.parse(curXhr.responseText));
-        } catch (e) {
-          reject(e);
-        }
-      } else {
-        reject(error);
-      }
-    });
+    } else {
+      return Promise.reject(error);
+    }
   });
 }
 
@@ -153,8 +149,8 @@ export function playerName(player: any, withRating: boolean = false): string {
   return 'Anonymous';
 }
 
-export function aiName(player: { engineName?: string, ai: number }) {
-  return i18n('aiNameLevelAiLevel', player.engineName || 'Stockfish', player.ai);
+export function aiName(player: { ai: number }) {
+  return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
 }
 
 export const uid = (function() {

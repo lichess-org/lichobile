@@ -183,11 +183,6 @@ function userInfos(user: User, player: Player, playerName: string, position: Pos
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user;
-  // TODO get that from server
-  if (player.ai) {
-    player.engineName = ctrl.data.game.variant.key === 'crazyhouse' ?
-      'Sunsetter' : 'Stockfish';
-  }
   const playerName = utils.playerName(player, !isPortrait);
   const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop;
   const vConf = user ?

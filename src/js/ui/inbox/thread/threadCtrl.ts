@@ -6,15 +6,16 @@ import * as helper from '../../helper';
 import * as m from 'mithril';
 import { ThreadData, ThreadAttrs, ThreadState } from '../interfaces';
 import router from '../../../router';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): void {
   helper.analyticsTrackView('Thread');
 
   socket.createDefault();
 
-  const id = m.prop<string>(vnode.attrs.id);
-  const thread = m.prop<ThreadData>();
-  const deleteAttempted = m.prop<boolean>(false);
+  const id = stream<string>(vnode.attrs.id);
+  const thread = stream<ThreadData>();
+  const deleteAttempted = stream<boolean>(false);
 
   function onKeyboardShow(e: Event) {
     helper.onKeyboardShow(e);

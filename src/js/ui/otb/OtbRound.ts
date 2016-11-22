@@ -19,7 +19,7 @@ import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
 import * as helper from '../helper';
-import newGameMenu from './newOtbGame';
+import newGameMenu, { NewOtbGameCtrl } from './newOtbGame';
 
 interface InitPayload {
   variant: VariantKey
@@ -31,7 +31,7 @@ export default class OtbRound implements OtbRoundInterface {
   public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
-  public newGameMenu: any;
+  public newGameMenu: NewOtbGameCtrl;
   public chessground: Chessground.Controller;
   public replay: Replay;
   public vm: OtbVM;
@@ -154,7 +154,7 @@ export default class OtbRound implements OtbRoundInterface {
     } else sound.move();
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
+  private onUserNewPiece = (role: Role, key: Pos) => {
     const sit = this.replay.situation();
     if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key);
@@ -199,10 +199,9 @@ export default class OtbRound implements OtbRoundInterface {
   }
 
   public onGameEnd = () => {
-    const self = this;
     this.chessground.stop();
-    setTimeout(function() {
-      self.actions.open();
+    setTimeout(() => {
+      this.actions.open();
       redraw();
     }, 500);
   }
@@ -227,7 +226,5 @@ export default class OtbRound implements OtbRoundInterface {
     return this.replay.ply !== this.lastPly();
   }
 
-  public canDrop = () => {
-    return gameApi.isPlayerPlaying(this.data);
-  }
+  public canDrop = () => true;
 }

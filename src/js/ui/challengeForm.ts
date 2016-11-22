@@ -10,12 +10,13 @@ import storage from '../storage';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 let actionName = '';
 let userId: string;
 let fen: string;
 
-const isOpen = m.prop(false);
+const isOpen = stream(false);
 
 function open(uid?: string) {
   if (uid) {

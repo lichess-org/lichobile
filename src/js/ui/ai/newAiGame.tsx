@@ -1,3 +1,4 @@
+import * as stream from 'mithril/stream';
 import * as m from 'mithril';
 import router from '../../router';
 import i18n from '../../i18n';
@@ -7,6 +8,7 @@ import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import popupWidget from '../shared/popup';
 import * as helper from '../helper';
 import { AiRoundInterface } from '../shared/round';
+import { opponentSelector } from './actions';
 
 const colors = [
   ['white', 'white'],
@@ -24,7 +26,7 @@ export interface NewAiGameCtrl {
 export default {
 
   controller(root: AiRoundInterface) {
-    const isOpen = m.prop(false);
+    const isOpen = stream(false);
 
     function open() {
       router.backbutton.stack.push(close);
@@ -60,6 +62,7 @@ export default {
           return (
             <div>
               <div className="action">
+                {opponentSelector()}
                 {sideSelector()}
                 <div className="select_input">
                   {formWidgets.renderSelect('variant', 'variant', variants, settings.ai.variant)}

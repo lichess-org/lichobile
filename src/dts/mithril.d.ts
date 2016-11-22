@@ -71,16 +71,11 @@ declare namespace Mithril {
   interface Stream<T> {
     (): T;
     (value: T): this;
-    run(f: (current: T) => Stream<T> | T | void): Stream<T>;
-    run<U>(f: (current: T) => Stream<U> | U): Stream<U>;
     map(f: (current: T) => Stream<T> | T | void): Stream<T>;
     map<U>(f: (current: T) => Stream<U> | U): Stream<U>;
-    catch(f: (current: T) => T | void): Stream<T>;
-    catch<U>(f: (current: T) => U): Stream<U>;
     of(val?: T): Stream<T>;
     ap<U>(f: Stream<(value: T) => U>): Stream<U>;
     end: Stream<boolean>;
-    error: Stream<any>
   }
 
   type StreamCombiner<T> = (...streams: Stream<any>[]) => T
@@ -94,7 +89,7 @@ declare namespace Mithril {
   }
 
   interface Request {
-    <T>(options: RequestOptions<T>): Stream<T>;
+    <T>(options: RequestOptions<T>): Promise<T>;
   }
 
   interface RequestService {
@@ -119,14 +114,13 @@ declare namespace Mithril {
   }
 
   interface Jsonp {
-    <T>(options: JsonpOptions<T>): Stream<T>;
+    <T>(options: JsonpOptions<T>): Promise<T>;
   }
 
   interface Static extends Hyperscript {
     route: Route;
     mount: Mount;
     withAttr: WithAttr;
-    prop: StreamFactory;
     render: Render;
     redraw: Publish;
     request: Request;
@@ -165,7 +159,7 @@ declare namespace Mithril {
 
   interface RequestOptions<T> {
     url: string;
-    method: string;
+    method?: string;
     data?: any;
     async?: boolean;
     user?: string;
@@ -175,7 +169,6 @@ declare namespace Mithril {
     serialize?: (data: T) => string;
     deserialze?: (str: string) => T;
     extract?: (xhr: XMLHttpRequest, options: RequestOptions<T>) => string;
-    initialValue?: T;
     useBody?: boolean;
   }
 
@@ -183,7 +176,6 @@ declare namespace Mithril {
     url: string;
     data?: any;
     type?: new <U>(data: U) => T;
-    initialValue?: T;
     callbackName?: string;
     callbackKey?: string;
   }
@@ -207,4 +199,9 @@ declare module 'mithril/util/withAttr' {
 declare module 'mithril/render/vnode' {
   const vnode: Mithril.VnodeFactory;
   export = vnode;
+}
+
+declare module 'mithril/stream' {
+  const s: Mithril.StreamFactory;
+  export = s;
 }

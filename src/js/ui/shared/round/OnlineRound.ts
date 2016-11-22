@@ -468,7 +468,7 @@ export default class OnlineRound implements OnlineRoundInterface {
             role: o.role,
             color: playedColor
           },
-          chessFormat.uciToDrop(o.uci),
+          chessFormat.uciToDropPos(o.uci),
           newConf
         );
       }

@@ -156,7 +156,7 @@ export default class AnalyseCtrl {
     }
   }
 
-  public startCeval = () => {
+  private startCeval = () => {
     if (this.ceval.enabled() && this.canUseCeval()) {
       this.ceval.start(this.vm.path, this.analyse.getSteps(this.vm.path));
     }
@@ -205,7 +205,7 @@ export default class AnalyseCtrl {
     window.history.replaceState(window.history.state, null, '#' + this.vm.step.ply);
   }, 750);
 
-  private debouncedStartCeval = debounce(this.startCeval, 500);
+  private debouncedStartCeval = debounce(this.startCeval, 800);
 
   public jump = (path: Path, direction?: 'forward' | 'backward') => {
     this.vm.path = path;
@@ -317,7 +317,7 @@ export default class AnalyseCtrl {
     redraw();
   }
 
-  public toggleVariationMenu = (path: Path) => {
+  public toggleVariationMenu = (path?: Path) => {
     if (!path) {
       this.vm.variationMenu = null;
     } else {
@@ -362,6 +362,8 @@ export default class AnalyseCtrl {
       else
         step.ceval = <Ceval>Object.assign(step.ceval, res.ceval);
 
+      redraw();
+
       chess.move({
         fen: step.fen,
         orig: <Pos>res.ceval.best.slice(0, 2),
@@ -372,10 +374,7 @@ export default class AnalyseCtrl {
           redraw();
         }
       })
-      // we just ignore errors here
-      // TODO should try to find a way to stop ceval msg after the position
-      // has been changed
-      .catch(noop);
+      .catch(console.error.bind(console));
     });
   }
 
@@ -456,7 +455,7 @@ export default class AnalyseCtrl {
         this.analyse.addDests(dests, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();
-          if (dests === {}) this.ceval.stop();
+          if (this.gameOver()) this.ceval.stop();
         }
       })
       .catch(console.error.bind(console));

@@ -3,11 +3,19 @@ import * as helper from '../../helper';
 import treePath from '../path';
 import { empty, defined, renderEval, isSynthetic } from '../util';
 
-export function renderTree(ctrl, tree) {
-  const turns = [];
+import { AnalyseCtrlInterface, AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
+
+interface Turn {
+  turn: number
+  white?: AnalysisStep
+  black?: AnalysisStep
+}
+
+export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
+  const turns: Array<Turn> = [];
   const initPly = ctrl.analyse.firstPly();
   if (initPly % 2 === 0) {
-    for (var i = 1, nb = tree.length; i < nb; i += 2) turns.push({
+    for (let i = 1, nb = tree.length; i < nb; i += 2) turns.push({
       turn: Math.floor((initPly + i) / 2) + 1,
       white: tree[i],
       black: tree[i + 1]
@@ -19,7 +27,7 @@ export function renderTree(ctrl, tree) {
       white: null,
       black: tree[1]
     });
-    for (var j = 2, jnb = tree.length; j < jnb; j += 2) turns.push({
+    for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns.push({
       turn: Math.floor((initPly + j) / 2) + 1,
       white: tree[j],
       black: tree[j + 1]
@@ -27,28 +35,28 @@ export function renderTree(ctrl, tree) {
   }
 
   const path = treePath.default();
-  var tags = [];
-  for (var k = 0, len = turns.length; k < len; k++) {
-    tags = tags.concat(renderTurn(ctrl, turns[k], path));
+  let tags: Array<Mithril.ChildNode> = [];
+  for (let k = 0, len = turns.length; k < len; k++) {
+    tags.push(renderTurn(ctrl, turns[k], path));
   }
 
   return tags;
 }
 
-function renderEvalTag(e) {
+function renderEvalTag(e: string) {
   return <eval>{e}</eval>;
 }
 
-function renderGlyph(glyph) {
+function renderGlyph(glyph: Glyph) {
   return <glyph>{glyph.symbol}</glyph>;
 }
 
 const emptyMove = <move className="emptyMove">...</move>;
 
-function renderMove(ctrl, move, path) {
+function renderMove(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) {
   if (!move) return emptyMove;
   const pathStr = treePath.write(path);
-  const evaluation = path[1] ? {} : (move.rEval || move.ceval || {});
+  const evaluation = path[1] ? null : (move.rEval || move.ceval);
   const judgment = move.rEval && move.rEval.judgment;
   const className = [
     pathStr === ctrl.vm.pathStr ? 'current' : ''
@@ -57,19 +65,19 @@ function renderMove(ctrl, move, path) {
   return (
     <move data-path={pathStr} className={className}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
-      {defined(evaluation.cp) ? renderEvalTag(renderEval(evaluation.cp)) : (
-        defined(evaluation.mate) ? renderEvalTag('#' + evaluation.mate) : null
+      {evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
+        evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
       )}
       {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
     </move>
   );
 }
 
-function plyToTurn(ply) {
+function plyToTurn(ply: number) {
   return Math.floor((ply - 1) / 2) + 1;
 }
 
-function renderVariationMenu(ctrl, path) {
+function renderVariationMenu(ctrl: AnalyseCtrlInterface, path: Path) {
   const showing = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
 
   if (!showing) return null;
@@ -93,7 +101,7 @@ function renderVariationMenu(ctrl, path) {
   return (
     <div className="overlay_popup_wrapper variationMenuPopup">
       <div className="popup_overlay_close"
-        oncreate={helper.ontap(helper.fadesOut(ctrl.toggleVariationMenu, '.overlay_popup_wrapper'))} />
+        oncreate={helper.ontap(helper.fadesOut(() => ctrl.toggleVariationMenu(), '.overlay_popup_wrapper'))} />
       <div className="overlay_popup">
         {content}
       </div>
@@ -101,11 +109,11 @@ function renderVariationMenu(ctrl, path) {
   );
 }
 
-function renderVariation(ctrl, variation, path, klass) {
+function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path, klass: string) {
   const visiting = treePath.contains(path, ctrl.vm.path);
   return (
     <div className="variationWrapper">
-      <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontapY(ctrl.toggleVariationMenu.bind(undefined, path))}></span>
+      <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontapY(() => ctrl.toggleVariationMenu(path))}></span>
       <div className={klass + ' variation' + (visiting ? ' visiting' : '')}>
         {renderVariationContent(ctrl, variation, path)}
         {renderVariationMenu(ctrl, path)}
@@ -114,7 +122,7 @@ function renderVariation(ctrl, variation, path, klass) {
   );
 }
 
-function renderVariationNested(ctrl, variation, path) {
+function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path): Mithril.ChildNode {
   return (
     <span className="variation nested">
       (
@@ -124,8 +132,8 @@ function renderVariationNested(ctrl, variation, path) {
   );
 }
 
-function renderVariationContent(ctrl, variation, path) {
-  const turns = [];
+function renderVariationContent(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
+  const turns: Turn[] = [];
   if (variation[0].ply % 2 === 0) {
     variation = variation.slice(0);
     const move = variation.shift();
@@ -136,7 +144,7 @@ function renderVariationContent(ctrl, variation, path) {
   }
   const visiting = treePath.contains(path, ctrl.vm.path);
   const maxPlies = Math.min(visiting ? 999 : (path[2] ? 2 : 4), variation.length);
-  for (var i = 0; i < maxPlies; i += 2) turns.push({
+  for (let i = 0; i < maxPlies; i += 2) turns.push({
     turn: plyToTurn(variation[i].ply),
     white: variation[i],
     black: variation[i + 1]
@@ -144,14 +152,14 @@ function renderVariationContent(ctrl, variation, path) {
   return turns.map(turn => renderVariationTurn(ctrl, turn, path));
 }
 
-function renderVariationMeta(ctrl, move, path) {
+function renderVariationMeta(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) {
   if (!move || empty(move.variations)) return null;
-  return move.variations.map(function(variation, i) {
+  return move.variations.map((variation: AnalysisTree, i: number) => {
     return renderVariationNested(ctrl, variation, treePath.withVariation(path, i + 1));
   });
 }
 
-function renderVariationTurn(ctrl, turn, path) {
+function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
   const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
   const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
@@ -181,7 +189,7 @@ function renderVariationTurn(ctrl, turn, path) {
   ];
 }
 
-function renderCommentOpening(opening) {
+function renderCommentOpening(opening: Opening) {
   return (
     <div className="comment opening">
       {truncateComment(opening.eco + ' ' + opening.name)}
@@ -189,14 +197,14 @@ function renderCommentOpening(opening) {
   );
 }
 
-function renderMeta(ctrl, step, path) {
+function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) {
   const judgment = step && step.rEval && step.rEval.judgment;
   const opening = ctrl.data.game.opening;
   const moveOpening = (step && opening && opening.ply === step.ply) ? renderCommentOpening(opening) : null;
 
   if (!step || (!moveOpening && empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments))) return null;
 
-  const children = [];
+  const children: Mithril.Children = [];
   if (moveOpening) {
     children.push(moveOpening);
   }
@@ -205,7 +213,7 @@ function renderMeta(ctrl, step, path) {
     children.push(renderComment(judgment.comment, colorClass, judgment.name));
   }
   if (!empty(step.variations)) {
-    for (var i = 0, len = step.variations.length; i < len; i++) {
+    for (let i = 0, len = step.variations.length; i < len; i++) {
       const variation = step.variations[i];
       if (empty(variation)) return null;
       children.push(renderVariation(
@@ -221,12 +229,12 @@ function renderMeta(ctrl, step, path) {
   );
 }
 
-function truncateComment(text) {
+function truncateComment(text: string) {
   if (text.length <= 140) return text;
   return text.slice(0, 125) + ' [...]';
 }
 
-function renderComment(comment, colorClass, commentClass) {
+function renderComment(comment: string, colorClass: string, commentClass: string) {
   return comment && (
     <div className={'comment ' + colorClass + commentClass}>
       {truncateComment(comment)}
@@ -234,21 +242,21 @@ function renderComment(comment, colorClass, commentClass) {
   );
 }
 
-function turnKey(turn, meta) {
+function turnKey(turn: Turn, meta?: string) {
   const key = turn.turn.toString() + ':' + (meta ? meta : '');
   return key;
 }
 
-function renderIndex(txt) {
+function renderIndex(txt: string) {
   return <index>{txt}</index>;
 }
 
-function renderTurnEl(children, key) {
+function renderTurnEl(children: Mithril.Children, key: string) {
   return <turn key={key}>{children}</turn>;
 }
 
-function renderTurn(ctrl, turn, path) {
-  const index = renderIndex(turn.turn);
+function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
+  const index = renderIndex(String(turn.turn));
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
   const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
   const wMeta = renderMeta(ctrl, turn.white, wPath);

@@ -6,14 +6,15 @@ import redraw from '../../utils/redraw';
 import router from '../../router';
 import socket from '../../socket';
 import * as inboxXhr from '../inbox/inboxXhr';
+import * as stream from 'mithril/stream';
 
 let sendPingsInterval: number;
 
-export const inboxUnreadCount = m.prop(0);
-export const headerOpen = m.prop(false);
-export const isOpen = m.prop(false);
-export const mlat = m.prop(0);
-export const ping = m.prop(0);
+export const inboxUnreadCount = stream(0);
+export const headerOpen = stream(false);
+export const isOpen = stream(false);
+export const mlat = stream(0);
+export const ping = stream(0);
 
 export function getServerLags() {
   if (hasNetwork() && session.isConnected()) {

@@ -1,6 +1,7 @@
 import { fetchJSON } from '../../../http';
 
-const endpoint = 'https://expl.lichess.org';
+const explorerEndpoint = 'https://expl.lichess.org';
+const tablebaseEndpoint = 'https://tablebase.lichess.org';
 
 export function openingXhr(variant: VariantKey, fen: string, config: any, withGames: boolean) {
   let url: string;
@@ -19,7 +20,7 @@ export function openingXhr(variant: VariantKey, fen: string, config: any, withGa
     params['speeds[]'] = config.speed.selected();
     params['ratings[]'] = config.rating.selected();
   }
-  return fetchJSON(endpoint + url, {
+  return fetchJSON(explorerEndpoint + url, {
     headers: {
       'Accept': 'application/json, text/*'
     },
@@ -27,8 +28,8 @@ export function openingXhr(variant: VariantKey, fen: string, config: any, withGa
   });
 }
 
-export function tablebaseXhr(fen: string) {
-  return fetchJSON(endpoint + '/tablebase', {
+export function tablebaseXhr(variant: VariantKey, fen: string) {
+  return fetchJSON(tablebaseEndpoint + '/' + variant, {
     headers: {
       'Accept': 'application/json, text/*'
     },

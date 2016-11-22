@@ -6,15 +6,16 @@ import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
+import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {
   socket.createDefault();
 
   helper.analyticsTrackView('Players');
 
-  const isSearchOpen = m.prop(false);
-  const searchResults = m.prop([]);
-  const players = m.prop([]);
+  const isSearchOpen = stream(false);
+  const searchResults = stream([]);
+  const players = stream([]);
   let listHeight;
 
   function onKeyboardShow(e) {

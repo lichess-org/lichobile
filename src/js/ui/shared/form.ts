@@ -61,12 +61,6 @@ export default {
     onChangeCallback?: (v: string) => void
   ) {
     const storedValue = settingsProp();
-    const onChange = function(e: Event) {
-      const val = (e.target as HTMLSelectElement).value;
-      settingsProp(val);
-      if (onChangeCallback) onChangeCallback(val);
-      setTimeout(() => redraw(), 10);
-    };
     return [
       m('label', {
         'for': 'select_' + name
@@ -74,11 +68,11 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate(vnode: Mithril.ChildNode) {
-          vnode.dom.addEventListener('change', onChange, false);
-        },
-        onremove(vnode: Mithril.ChildNode) {
-          vnode.dom.removeEventListener('change', onChange, false);
+        onchange(e: Event) {
+          const val = (e.target as HTMLSelectElement).value;
+          settingsProp(val);
+          if (onChangeCallback) onChangeCallback(val);
+          setTimeout(() => redraw(), 10);
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
     ];
@@ -121,12 +115,6 @@ export default {
     onChangeCallback?: (v: string) => void
   ) {
     const storedValue = settingsProp();
-    const onChange = function(e: Event) {
-      const val = (e.target as HTMLSelectElement).value;
-      settingsProp(val);
-      if (onChangeCallback) onChangeCallback(val);
-      setTimeout(() => redraw(), 10);
-    };
     return [
       m('label', {
         'for': 'select_' + name
@@ -134,11 +122,11 @@ export default {
       m('select', {
         id: 'select_' + name,
         disabled: isDisabled,
-        oncreate(vnode: Mithril.ChildNode) {
-          vnode.dom.addEventListener('change', onChange, false);
-        },
-        onremove(vnode: Mithril.ChildNode) {
-          vnode.dom.removeEventListener('change', onChange, false);
+        onchange(e: Event) {
+          const val = (e.target as HTMLSelectElement).value;
+          settingsProp(val);
+          if (onChangeCallback) onChangeCallback(val);
+          setTimeout(() => redraw(), 10);
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
     ];

@@ -51,6 +51,7 @@ export default {
       'analyse/:source/:id/:color': analyse,
       'analyse/:source/:id': analyse,
       'analyse/fen/:fen': analyse,
+      'analyse/variant/:variant': analyse,
       'analyse': analyse,
       'importer': importer,
       'challenge/:id': challenge,

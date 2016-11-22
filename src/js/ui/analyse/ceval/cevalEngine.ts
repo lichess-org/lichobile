@@ -29,7 +29,7 @@ export default function cevalEngine(opts: Opts) {
     }
     if (stopped) return;
     if (text.indexOf('currmovenumber') !== -1) return;
-    // console.log('stockfish output', text)
+    // console.log(text)
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
@@ -125,6 +125,6 @@ function init(variant: VariantKey) {
 }
 
 function send(text: string) {
-  // console.log('stockfish send', text)
+  // console.info('stockfish send', text)
   return Stockfish.cmd(text);
 }

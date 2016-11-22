@@ -1,15 +1,28 @@
-import { playerFromFen, plyFromFen, standardFen } from '../../utils/fen';
+import { getLichessVariant, getInitialFen } from '../../lichess/variant';
+import { playerFromFen, plyFromFen } from '../../utils/fen';
 import { oppositeColor } from '../../utils';
 import { AnalysisData } from './interfaces';
 
-export function makeDefaultData(fen: string): AnalysisData {
+const emptyPocket = {
+  queen: 0,
+  rook: 0,
+  knight: 0,
+  bishop: 0,
+  pawn: 0
+}
+
+export function makeDefaultData(fen: string, variantKey: VariantKey): AnalysisData {
   const player = playerFromFen(fen);
   const ply = plyFromFen(fen);
+  const variant = getLichessVariant(variantKey);
+
+  const initialFen = fen || getInitialFen(variantKey);
+
   return {
     game: {
-      fen: fen || standardFen,
+      fen: fen || initialFen,
       id: 'synthetic',
-      initialFen: fen || standardFen,
+      initialFen: fen || initialFen,
       player,
       source: 'offline',
       status: {
@@ -17,12 +30,7 @@ export function makeDefaultData(fen: string): AnalysisData {
         name: 'created'
       },
       turns: 0,
-      variant: {
-        key: 'standard',
-        name: 'Standard',
-        short: 'Std',
-        title: 'Standard rules of chess (FIDE)'
-      }
+      variant
     },
     opponent: {
       id: oppositeColor(player),
@@ -39,12 +47,15 @@ export function makeDefaultData(fen: string): AnalysisData {
     },
     steps: [
       {
-        fen: fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+        fen: initialFen,
         ply,
         san: null,
         uci: null,
         check: false,
-        pgnMoves: []
+        pgnMoves: [],
+        crazy: variantKey === 'crazyhouse' ? {
+          pockets: [emptyPocket, emptyPocket]
+        } : undefined
       }
     ]
   };

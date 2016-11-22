@@ -54,6 +54,9 @@
     <preference name="xwalkVersion" value="20" />
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.1" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
@@ -83,24 +86,36 @@
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#8d0370a" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
-            <path event="tournamentList" url="/tournament" />
-            <path event="tournamentDetail" url="/tournament/*" />
-            <path event="userVariantProfile" url="/@/*/perf/*" />
-            <path event="userProfile" url="/@/*" />
-            <path event="challenge" url="/challenge/*" />
-            <path event="training" url="/training/*" />
-            <path event="other" url="*" />
+          <path event="challenge" url="/challenge/*" />
+          <path event="editor" url="/editor" />
+          <path event="inbox" url="/inbox" />
+          <path event="inboxNew" url="/inbox/new" />
+          <path event="players" url="/player" />
+          <path event="tournamentDetail" url="/tournament/*" />
+          <path event="tournamentList" url="/tournament" />
+          <path event="training" url="/training" />
+          <path event="trainingProblem" url="/training/*" />
+          <path event="tv" url="/tv" />
+          <path event="tvChannel" url="/tv/*" />
+          <path event="userVariantProfile" url="/@/*/perf/*" />
+          <path event="userProfile" url="/@/*" />
+          <path event="other" url="*" />
         </host>
         <host name="lichess.org" scheme="https">
-            <path event="tournamentList" url="/tournament" />
-            <path event="tournamentDetail" url="/tournament/*" />
-            <path event="userVariantProfile" url="/@/*/perf/*" />
-            <path event="userProfile" url="/@/*" />
-            <path event="challenge" url="/challenge/*" />
-            <path event="training" url="/training/*" />
-            <path event="other" url="*" />
+          <path event="challenge" url="/challenge/*" />
+          <path event="editor" url="/editor" />
+          <path event="inbox" url="/inbox" />
+          <path event="inboxNew" url="/inbox/new" />
+          <path event="players" url="/player" />
+          <path event="tournamentDetail" url="/tournament/*" />
+          <path event="tournamentList" url="/tournament" />
+          <path event="training" url="/training" />
+          <path event="trainingProblem" url="/training/*" />
+          <path event="tv" url="/tv" />
+          <path event="tvChannel" url="/tv/*" />
+          <path event="userVariantProfile" url="/@/*/perf/*" />
+          <path event="userProfile" url="/@/*" />
+          <path event="other" url="*" />
         </host>
     </universal-links>
-    <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
 </widget>

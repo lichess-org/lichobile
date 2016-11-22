@@ -37,12 +37,19 @@ export default {
     };
     */
     const universalLinks = window.universalLinks;
-    universalLinks.subscribe('tournamentList', () => router.set('/tournament'));
-    universalLinks.subscribe('tournamentDetail', (eventData: EventData) => router.set('/tournament/' + eventData.path.split('/').pop()));
-    universalLinks.subscribe('userProfile', (eventData: EventData) => router.set('/@/' + eventData.path.split('/').pop()));
-    universalLinks.subscribe('userVariantProfile', handleVariantProfile);
     universalLinks.subscribe('challenge', (eventData: EventData) => router.set('/challenge/' + eventData.path.split('/').pop()));
-    universalLinks.subscribe('training', (eventData: EventData) => router.set('/training/' + eventData.path.split('/').pop()));
+    universalLinks.subscribe('editor', (eventData: EventData) => router.set('/editor'));
+    universalLinks.subscribe('inbox', (eventData: EventData) => router.set('/inbox'));
+    universalLinks.subscribe('inboxNew', (eventData: EventData) => router.set('/inbox/new'));
+    universalLinks.subscribe('players', (eventData: EventData) => router.set('/players'));
+    universalLinks.subscribe('tournamentDetail', (eventData: EventData) => router.set('/tournament/' + eventData.path.split('/').pop()));
+    universalLinks.subscribe('tournamentList', () => router.set('/tournament'));
+    universalLinks.subscribe('training', () => router.set('/training'));
+    universalLinks.subscribe('trainingProblem', handleTrainingProblem);
+    universalLinks.subscribe('tv', () => router.set('/tv'));
+    universalLinks.subscribe('tvChannel', (eventData: EventData) => router.set('/tv/' + eventData.path.split('/').pop()));
+    universalLinks.subscribe('userVariantProfile', handleVariantProfile);
+    universalLinks.subscribe('userProfile', (eventData: EventData) => router.set('/@/' + eventData.path.split('/').pop()));
     universalLinks.subscribe('other', handleOther);
   }
 };
@@ -54,12 +61,28 @@ function handleVariantProfile (eventData: EventData) {
   router.set('/@/' + uid + '/' + variant + '/perf');
 }
 
+function handleTrainingProblem (eventData: EventData) {
+  const pieces = eventData.path.split('/');
+  const problem = pieces[2];
+  if (problem === 'coordinate') {
+    window.open(eventData.url, '_blank', 'location=no');
+  }
+  else {
+    router.set('/training/' + problem);
+  }
+}
+
 function handleOther (eventData: EventData) {
   const pieces = eventData.path.split('/');
   if (eventData.path.search('^\/([a-zA-Z0-9]{8})$') !== -1) {
-    getChallenge(pieces[1]).then(() => {
-      router.set('/challenge/' + pieces[1]);
-    }).catch(() => { router.set('/game/' + pieces[1]); });
+    if (eventData.path === '/analysis') {
+      router.set('/analyse');
+    }
+    else {
+      getChallenge(pieces[1]).then(() => {
+        router.set('/challenge/' + pieces[1]);
+      }).catch(() => { router.set('/game/' + pieces[1]); });
+    }
   }
   else if (eventData.path.search('^\/([a-zA-Z0-9]{8})+\/+(white|black)$') !== -1) {
     router.set('/game/' + pieces[1] + '/' + pieces[2]);
@@ -68,6 +91,6 @@ function handleOther (eventData: EventData) {
     router.set('/game/' + pieces[1]);
   }
   else {
-    window.open(eventData.url, '_system')
+    window.open(eventData.url, '_blank', 'location=no')
   }
 }

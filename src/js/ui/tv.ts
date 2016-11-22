@@ -13,6 +13,7 @@ interface TVAttrs {
   id: string;
   color: Color;
   flip: boolean;
+  channel?: string;
 }
 
 interface State {
@@ -25,6 +26,10 @@ const TV: Mithril.Component<TVAttrs, State> = {
 
     const onChannelChange = () => router.set('/tv', true);
     const onFeatured = () => router.set('/tv', true);
+
+    if (vnode.attrs.channel) {
+      settings.tv.channel(vnode.attrs.channel)
+    }
 
     xhr.featured(settings.tv.channel(), vnode.attrs.flip)
     .then(d => {

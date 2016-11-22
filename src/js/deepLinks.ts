@@ -30,12 +30,12 @@ for (let dr in deepRoutes) deepRouter.add(dr, deepRoutes[dr]);
 
 export default {
   init() {
-    // open games from external links with url scheme
-    /*
+    // open links that follow the custom url scheme
       window.handleOpenURL = function(url: string) {
       setTimeout(() => deepRouter.run(url.replace(/^lichess:\/\//, '')), 0);
     };
-    */
+
+    // open normal Lichess links
     const universalLinks = window.universalLinks;
     universalLinks.subscribe('challenge', (eventData: EventData) => router.set('/challenge/' + eventData.path.split('/').pop()));
     universalLinks.subscribe('editor', (eventData: EventData) => router.set('/editor'));

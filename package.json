@@ -25,6 +25,7 @@
   "devDependencies": {
     "babel-plugin-transform-react-jsx": "~6.8.0",
     "babel-plugin-transform-react-require": "~1.0.1",
+    "babel-plugin-transform-remove-console": "^6.8.0",
     "gulp": "~3.9.1",
     "gulp-autoprefixer": "~3.1.1",
     "gulp-preprocess": "~2.0.0",
@@ -63,7 +64,7 @@
     "build-js-dev": "gulp --target='cordova' --env=env-dev.json",
     "build-js-stage": "gulp --target='cordova' --env=env-stage.json",
     "build-js-prod": "gulp --target='cordova' --env=env-prod.json",
-    "build-js-release": "gulp --mode='release' --target='cordova' --env=env-prod.json",
+    "build-js-release": "BABEL_ENV=production gulp --mode='release' --target='cordova' --env=env-prod.json",
     "android-dev": "npm run build-js-dev && cordova run android",
     "android-stage": "npm run build-js-stage && cordova run android",
     "android-prod": "npm run build-js-prod && cordova run android",

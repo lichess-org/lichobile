@@ -8,5 +8,10 @@
       "identifier": "m",
       "moduleName": "mithril"
     }]
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
 }

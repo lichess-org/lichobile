@@ -3,15 +3,14 @@
 
 ![lichess mobile screenshots](resources/3-screens.png)
 
-Lichess mobile is a [cordova](https://cordova.apache.org/) application written
+Lichess mobile is a [cordova](https://cordova.apache.org/) application that runs
+on the [crosswalk webview](https://crosswalk-project.org/). It is written
 in [TypeScript](http://www.typescriptlang.org/) and JavaScript. The rendering
 library is [mithril.js](http://mithril.js.org/). It uses [babel](http://babeljs.io/),
 [browserify](http://browserify.org/) and [gulp](http://gulpjs.com/)
 as build tools. It talks to a native [Stockfish](https://stockfishchess.org/) interface, [with multiple variants support](https://github.com/ddugovic/Stockfish), through a
-[cordova plugin](https://github.com/veloce/cordova-plugin-stockfish) and uses
-an [async chess worker](https://github.com/veloce/scalachessjs) which is based
-on [lichess scalachess module](https://github.com/ornicar/scalachess) compiled
-to JavaScript.
+[cordova plugin](https://github.com/veloce/cordova-plugin-stockfish). It has
+multi-variant supports thanks to [a JavaScript version of scalachess](https://github.com/veloce/scalachessjs).
 
 ## Requirements
 

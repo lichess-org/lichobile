@@ -20,7 +20,7 @@ export default {
   },
 
   write(path: Path): string {
-    return path.map(function(step) {
+    return path.map((step: PathObj) => {
       return step.variation ? step.ply + ':' + step.variation : step.ply;
     }).join(',');
   },

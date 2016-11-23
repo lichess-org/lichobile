@@ -35,9 +35,9 @@ interface LichessOptions {
 }
 
 interface Window {
-  lichess: LichessOptions;
-  moment: any;
-  shouldRotateToOrientation: () => boolean;
+  lichess: LichessOptions
+  moment: any
+  shouldRotateToOrientation: () => boolean
   handleOpenURL: (url: string) => void
   AppVersion: { version: string }
 }

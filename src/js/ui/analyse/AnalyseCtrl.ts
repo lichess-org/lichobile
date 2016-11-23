@@ -7,7 +7,7 @@ import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { isEmptyObject, handleXhrError, oppositeColor, noop, hasNetwork } from '../../utils';
+import { isEmptyObject, handleXhrError, oppositeColor, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
@@ -69,19 +69,6 @@ export default class AnalyseCtrl {
     this.menu = menu.controller(this);
     this.continuePopup = continuePopup.controller();
 
-    this.vm = {
-      shouldGoBack,
-      path: null,
-      pathStr: '',
-      step: null,
-      cgConfig: null,
-      variationMenu: null,
-      flip: false,
-      analysisProgress: false,
-      showBestMove: settings.analyse.showBestMove(),
-      showComments: settings.analyse.showComments()
-    };
-
     this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
@@ -96,8 +83,18 @@ export default class AnalyseCtrl {
         treePath.default(this.analyse.lastPly()) :
         treePath.default(this.analyse.firstPly());
 
-    this.vm.path = initialPath;
-    this.vm.pathStr = treePath.write(initialPath);
+    this.vm = {
+      shouldGoBack,
+      path: initialPath,
+      pathStr: treePath.write(initialPath),
+      step: null,
+      cgConfig: null,
+      variationMenu: null,
+      flip: false,
+      analysisProgress: false,
+      showBestMove: settings.analyse.showBestMove(),
+      showComments: settings.analyse.showComments()
+    };
 
     this.showGround();
     this.initCeval();
@@ -105,21 +102,6 @@ export default class AnalyseCtrl {
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
     }
-  }
-
-  public setData(data: AnalysisData) {
-    this.data = data;
-
-    this.analyse = new Analyse(this.data);
-    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
-
-    const initialPath = treePath.default(0);
-    this.vm.step = null;
-    this.vm.path = initialPath;
-    this.vm.pathStr = treePath.write(initialPath);
-
-    this.showGround();
-    this.initCeval();
   }
 
   public connectGameSocket = () => {
@@ -256,7 +238,7 @@ export default class AnalyseCtrl {
     if (prom) move.promotion = prom;
     chess.move(move)
     .then(this.addStep)
-    .catch(console.error.bind(console));
+    .catch(err => console.error('send move error', move, err));
   }
 
   private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
@@ -279,7 +261,7 @@ export default class AnalyseCtrl {
       .then(this.addStep)
       .catch(err => {
         // catching false drops here
-        console.error(err);
+        console.error('wrong drop', err);
         this.jump(this.vm.path);
       });
     } else this.jump(this.vm.path);
@@ -301,7 +283,7 @@ export default class AnalyseCtrl {
     this.explorer.loading(true);
   }
 
-  public addStep = ({ situation, path}: chess.MoveResponse) => {
+  public addStep = ({ situation, path }: chess.MoveResponse) => {
     const step = {
       ply: situation.ply,
       dests: situation.dests,
@@ -333,7 +315,7 @@ export default class AnalyseCtrl {
     const id = path[0].variation;
     this.analyse.deleteVariation(ply, id);
     if (treePath.contains(path, this.vm.path)) this.jumpToMain(ply - 1);
-    this.toggleVariationMenu(null);
+    this.toggleVariationMenu();
   }
 
   public promoteVariation = (path: Path) => {
@@ -342,7 +324,7 @@ export default class AnalyseCtrl {
     this.analyse.promoteVariation(ply, id);
     if (treePath.contains(path, this.vm.path))
       this.jump(this.vm.path.splice(1));
-    this.toggleVariationMenu(null);
+    this.toggleVariationMenu();
   }
 
   public currentAnyEval = () => {
@@ -372,16 +354,18 @@ export default class AnalyseCtrl {
         dest: <Pos>res.ceval.best.slice(2, 4)
       }
 
-      chess.move(m)
-      .then((data: chess.MoveResponse) => {
-        step.ceval.bestSan = data.situation.pgnMoves[0];
-        if (res.work.path === this.vm.path) {
-          redraw();
-        }
-      })
-      .catch((err) => {
-        console.error('ceval move err', m, err);
-      });
+      if (step.ceval.best !== res.ceval.best) {
+        chess.move(m)
+        .then((data: chess.MoveResponse) => {
+          step.ceval.bestSan = data.situation.pgnMoves[0];
+          if (res.work.path === this.vm.path) {
+            redraw();
+          }
+        })
+        .catch((err) => {
+          console.error('ceval move err', m, err);
+        });
+      }
     });
   }
 
@@ -424,7 +408,7 @@ export default class AnalyseCtrl {
   public sharePGN = () => {
     if (this.source === 'online') {
       getPGN(this.data.game.id)
-      .then(pgn => window.plugins.socialsharing.share(pgn))
+      .then((pgn: string) => window.plugins.socialsharing.share(pgn))
       .catch(handleXhrError);
     } else {
       const endSituation = this.data.steps[this.data.steps.length - 1];
@@ -465,7 +449,7 @@ export default class AnalyseCtrl {
           if (this.gameOver()) this.ceval.stop();
         }
       })
-      .catch(console.error.bind(console));
+      .catch(err => console.error('get dests error', err));
     }
   }
 

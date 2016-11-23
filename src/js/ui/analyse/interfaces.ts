@@ -144,7 +144,6 @@ export interface AnalyseCtrlInterface {
   userJump(path: Path, direction?: 'forward' | 'backward'): void
   nextStepBest(): string | null
   currentAnyEval(): Ceval | RemoteEval
-  setData(data: AnalysisData): void
   explorerMove(uci: string): void
   debouncedScroll(): void
   gameOver(): boolean

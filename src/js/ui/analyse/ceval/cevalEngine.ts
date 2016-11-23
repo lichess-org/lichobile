@@ -25,7 +25,6 @@ export default function cevalEngine(opts: Opts) {
 
   // we may have several start requests queued while we wait for previous
   // eval to complete
-  // we'll simply take the last request
   let startQueue: Array<CevalWork> = []
 
   function processOutput(text: string, work: CevalWork) {
@@ -101,13 +100,14 @@ export default function cevalEngine(opts: Opts) {
     .then(() => send('go depth ' + opts.maxDepth));
   }
 
+  // take the last work in queue and clear the queue just after
+  // to ensure we send to stockfish only one position to evaluate at a time
   function doStart() {
     const work = startQueue.pop();
     if (work) {
-      launchEval(work);
       startQueue = [];
+      launchEval(work);
     }
-    else console.error('no work queued to start eval');
   }
 
   return {
@@ -120,7 +120,7 @@ export default function cevalEngine(opts: Opts) {
         .then(() => Stockfish.init(), () => Stockfish.init())
         .then(() => init(variant))
       })
-      .catch(console.error.bind(console));
+      .catch(err => console.error('stockfish init error', err));
     },
 
     start(work: CevalWork) {

@@ -18,6 +18,18 @@ function tupleOf(x: number) {
   return [x.toString(), x.toString()];
 }
 
+const offlineAvailableVariants = [
+  ['Standard', 'standard'],
+  ['Crazyhouse', 'crazyhouse'],
+  ['Chess960', 'chess960'],
+  ['King of the Hill', 'kingOfTheHill'],
+  ['Three-check', 'threeCheck'],
+  ['Antichess', 'antichess'],
+  ['Atomic', 'atomic'],
+  ['Horde', 'horde'],
+  ['Racing Kings', 'racingKings']
+];
+
 export interface GameSettings {
   time: SettingsProp<string>
   timeMode: SettingsProp<string>
@@ -93,6 +105,8 @@ export default {
     supportedVariants: ['standard', 'chess960', 'antichess', 'fromPosition',
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
+    availableVariants: offlineAvailableVariants,
+    syntheticVariant: localstorageprop('settings.analyse.syntheticVariant', 'standard'),
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true),
     showComments: localstorageprop('settings.analyse.showComments', true),
@@ -119,17 +133,7 @@ export default {
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1'),
     variant: localstorageprop('settings.ai.variant', 'standard'),
-    availableVariants: [
-      ['Standard', 'standard'],
-      ['Crazyhouse', 'crazyhouse'],
-      ['Chess960', 'chess960'],
-      ['King of the Hill', 'kingOfTheHill'],
-      ['Three-check', 'threeCheck'],
-      ['Antichess', 'antichess'],
-      ['Atomic', 'atomic'],
-      ['Horde', 'horde'],
-      ['Racing Kings', 'racingKings']
-    ]
+    availableVariants: offlineAvailableVariants
   },
 
   otb: {
@@ -137,17 +141,7 @@ export default {
     useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
     seeSymmetricCoordinates: localstorageprop('settings.otb.seeSymmetricCoordinates', true),
     variant: localstorageprop('settings.otb.variant', 'standard'),
-    availableVariants: [
-      ['Standard', 'standard'],
-      ['Crazyhouse', 'crazyhouse'],
-      ['Chess960', 'chess960'],
-      ['King of the Hill', 'kingOfTheHill'],
-      ['Three-check', 'threeCheck'],
-      ['Antichess', 'antichess'],
-      ['Atomic', 'atomic'],
-      ['Horde', 'horde'],
-      ['Racing Kings', 'racingKings']
-    ]
+    availableVariants: offlineAvailableVariants
   },
 
   clock: {

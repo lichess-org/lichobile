@@ -332,14 +332,18 @@ export default function ctrl(vnode) {
 }
 
 function pushState(cfg) {
-  window.history.pushState(null, null, '?=/training/' + cfg.puzzle.id);
+  try {
+    window.history.pushState(null, null, '?=/training/' + cfg.puzzle.id);
+  } catch (e) { console.error(e); }
   return cfg;
 }
 
 function replaceStateForNewPuzzle(cfg) {
   // ugly hack to bypass mithril's postRedraw hook
   setTimeout(function() {
-    window.history.replaceState(window.history.state, null, '?=/training/' + cfg.puzzle.id);
+    try {
+      window.history.replaceState(window.history.state, null, '?=/training/' + cfg.puzzle.id);
+    } catch (e) { console.error(e); }
   }, 100);
   return cfg;
 }

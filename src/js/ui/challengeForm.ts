@@ -97,14 +97,14 @@ function renderForm() {
   const generalFieldset = [
     m('div.select_input', {
       key: formName + 'color'
-    }, [
+    },
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
-    ]),
+    ),
     m('div.select_input', {
       key: formName + 'variant'
-    }, [
+    },
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
-    ]),
+    ),
     settingsObj.variant() === '3' ?
     m('div.setupPosition', {
       key: 'position'
@@ -127,33 +127,33 @@ function renderForm() {
     settingsObj.variant() !== '3' ?
     m('div.select_input', {
       key: formName + 'mode'
-    }, [
+    },
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
-    ]) : null
+    ) : null
   ];
 
   const timeFieldset = [
     m('div.select_input', {
       key: formName + 'timeMode'
-    }, [
+    },
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
-    ])
+    )
   ];
 
   if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', {
         key: formName + 'time'
-      }, [
+      },
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
-      ]),
+      ),
       m('div.select_input.inline', {
         key: formName + 'increment'
-      }, [
+      },
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
-      ])
+      )
     );
   }
 
@@ -161,10 +161,10 @@ function renderForm() {
     timeFieldset.push(
       m('div.select_input.large_label', {
         key: formName + 'days'
-      }, [
+      },
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
-      ]));
+      ));
   }
 
   return m('form#invite_form.game_form', {

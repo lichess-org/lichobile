@@ -1,5 +1,6 @@
 import * as m from 'mithril';
 import socket from '../../socket';
+import settings from '../../settings';
 import { renderContent, overlay } from './view/analyseView';
 import router from '../../router';
 import redraw from '../../utils/redraw';
@@ -16,10 +17,11 @@ import { gameTitle, connectingHeader, header, backButton as renderBackbutton } f
 import layout from '../layout';
 
 export interface Attrs {
-  id: string;
-  source: Source;
-  color: Color;
-  fen?: string;
+  id: string
+  source: Source
+  color: Color
+  fen?: string
+  variant?: VariantKey
 }
 
 export interface State {
@@ -33,6 +35,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     const gameId = vnode.attrs.id;
     const orientation: Color = vnode.attrs.color || 'white';
     const fenArg = vnode.attrs.fen;
+    const variant = vnode.attrs.variant;
 
     socket.createDefault();
     window.plugins.insomnia.keepAwake();
@@ -71,8 +74,12 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       }
     }
     else {
-      helper.analyticsTrackView('Analysis (empty)');
-      this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg), source, orientation, shouldGoBack);
+      if (variant === undefined) {
+        router.set(`/analyse/variant/${settings.analyse.syntheticVariant()}`, true)
+      } else {
+        helper.analyticsTrackView('Analysis (empty)');
+        this.ctrl = new AnalyseCtrl(makeDefaultData(fenArg, variant), source, orientation, shouldGoBack);
+      }
     }
   },
 

@@ -50,6 +50,23 @@
     > .native_scroller
       height 100%
 
+.analyse_variant_selector
+  width 95%
+  margin 5px auto
+  padding 0
+  padding-left 5px
+  background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
+  color #8a8a8a
+  border 1px solid #323232
+  border-radius 2px
+  > select
+    padding-left 30px
+    font-size 0.9em
+  > label
+    > i
+      color gold
+      font-size 20px
+
 .cevalBox
   position relative
   width 100%
@@ -439,38 +456,6 @@
     tbody, .message
       opacity: 0.4;
 
-
-.view-container.light
-  .analyseOpening, .cevalBox, move.active
-    background darken(bglight, 10%)
-
-  .analyseReplay > turn > index, .analyseInfos, .meta
-    background darken(bglight, 5%)
-
-  .analyseGameInfosWrapper
-    border-bottom-color darken(bglight, 15%)
-
-  pearl
-    background darken(bglight, 12%)
-
-  .explorerTable
-    tr
-      &:nth-child(even)
-        background #fafafa
-    .white
-      background: #fff;
-      box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
-    .draws
-      background: #a0a0a0;
-    .black
-      background: #555;
-      color: #ddd;
-  .explorerBar
-    border-color #ccc
-  .explorerConfig
-    span
-      border-color #ccc
-
 .explorerConfig
   font-size 0.75em
   section
@@ -594,3 +579,42 @@
 .moves.displayPieces
   .explorerMove
     font-family ChessSansPiratf
+
+.view-container.light
+  .analyseOpening, .cevalBox, move.active
+    background darken(bglight, 10%)
+
+  .analyseReplay > turn > index, .analyseInfos, .meta
+    background darken(bglight, 5%)
+
+  .analyseGameInfosWrapper
+    border-bottom-color darken(bglight, 15%)
+
+  .analyse_variant_selector
+    background: linear-gradient(to bottom,rgba(245,245,245,1) 0%,rgba(240,240,240,1) 100%);
+    text-shadow: 0 1px 0 #FFF;
+    color: #848484;
+    border-color #e2e2e2
+    box-shadow none
+
+  pearl
+    background darken(bglight, 12%)
+
+  .explorerTable
+    tr
+      &:nth-child(even)
+        background #fafafa
+    .white
+      background: #fff;
+      box-shadow: 0 -5px 7px rgba(0,0,0,0.1) inset;
+    .draws
+      background: #a0a0a0;
+    .black
+      background: #555;
+      color: #ddd;
+  .explorerBar
+    border-color #ccc
+  .explorerConfig
+    span
+      border-color #ccc
+

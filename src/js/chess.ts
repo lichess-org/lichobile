@@ -1,6 +1,6 @@
 import { askWorker } from './utils/worker';
 
-const worker = new Worker('vendor/scalachessjs.js');
+const worker = new Worker('vendor/scalachess.js');
 
 // warmup
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
@@ -39,7 +39,7 @@ export interface MoveRequest {
 
 export interface MoveResponse {
   situation: GameSituation
-  path: string
+  path?: string
 }
 
 export interface DropRequest {
@@ -85,20 +85,24 @@ export interface PgnReadResponse {
   replay: Array<GameSituation>
 }
 
+function uniqId() {
+  return String(performance.now());
+}
+
 export function init(payload: InitRequest): Promise<InitResponse> {
   return askWorker(worker, { topic: 'init', payload });
 }
 
 export function dests(payload: DestsRequest): Promise<DestsResponse> {
-  return askWorker(worker, { topic: 'dests', payload });
+  return askWorker(worker, { topic: 'dests', payload, reqid: uniqId() });
 }
 
 export function move(payload: MoveRequest): Promise<MoveResponse> {
-  return askWorker(worker, { topic: 'move', payload });
+  return askWorker(worker, { topic: 'move', payload, reqid: uniqId() });
 }
 
 export function drop(payload: DropRequest): Promise<MoveResponse> {
-  return askWorker(worker, { topic: 'drop', payload });
+  return askWorker(worker, { topic: 'drop', payload, reqid: uniqId() });
 }
 
 export function threefoldTest(payload: ThreefoldTestRequest): Promise<ThreefoldTestResponse> {

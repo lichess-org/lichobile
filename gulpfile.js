@@ -1,7 +1,6 @@
 var path = require('path');
 var source = require('vinyl-source-stream');
 var minimist = require('minimist');
-var gulpif = require('gulp-if');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var preprocess = require('gulp-preprocess');
@@ -10,8 +9,6 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var tsify = require('tsify');
 var stylus = require('gulp-stylus');
-var minifyCss = require('gulp-minify-css');
-var streamify = require('gulp-streamify');
 var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
 
@@ -41,9 +38,10 @@ function buildHtml(src, dest, context) {
 
 function buildStyl(src, dest, mode) {
   return gulp.src(src)
-    .pipe(stylus())
-    .pipe(streamify(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']})))
-    .pipe(gulpif(mode === 'release', minifyCss()))
+    .pipe(stylus({
+      compress: mode === 'release'
+    }))
+    .pipe(autoprefixer({ browsers: ['and_chr >= 50', 'ios_saf >= 9']}))
     .pipe(rename('app.css'))
     .pipe(gulp.dest(dest + '/css/compiled/'));
 }

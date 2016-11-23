@@ -1,6 +1,7 @@
 import * as m from 'mithril';
-import { hasNetwork, playerName, oppositeColor, noNull } from '../../../utils';
+import { hasNetwork, playerName, oppositeColor, noNull, gameIcon } from '../../../utils';
 import i18n from '../../../i18n';
+import router from '../../../router';
 import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
@@ -94,13 +95,8 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
-  const className = [
-    isSynthetic(ctrl.data) ? 'synthetic' : '',
-    'analyseTable'
-  ].join(' ');
-
   return (
-    <div className={className} key="analyse">
+    <div className="analyseTable" key="analyse">
       <div className="analyse scrollerWrapper">
         {renderReplay(ctrl)}
       </div>
@@ -118,13 +114,38 @@ function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
       { (!isCrazy || !isPortrait) && cevalEnabled ?
         renderEvalBox(ctrl) : null
       }
-      { !isSynthetic(ctrl.data) ?
-        <div className="native_scroller">
-          {renderOpponents(ctrl, isPortrait)}
-        </div> : null
-      }
+      <div className="native_scroller">
+        { isSynthetic(ctrl.data) ?
+          renderVariantSelector(ctrl) : null
+        }
+        { isSynthetic(ctrl.data) ?
+          (isCrazy ? renderSyntheticPockets(ctrl) : null) :
+          renderOpponents(ctrl, isPortrait)
+        }
+      </div>
     </div>
   );
+}
+
+function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
+  const variant = settings.analyse.syntheticVariant();
+  const icon = gameIcon(variant);
+  return (
+    <div className="select_input analyse_variant_selector">
+      <label for="variant_selector">
+        <i data-icon={icon} />
+      </label>
+      <select id="variant_selector" value={variant} onchange={(e: Event) => {
+        const val = (e.target as HTMLSelectElement).value;
+        settings.analyse.syntheticVariant(val);
+        router.set(`/analyse/variant/${val}`);
+      }}>
+        {settings.analyse.availableVariants.map(v => {
+          return <option key={v[1]} value={v[1]}>{v[0]}</option>;
+        })}
+      </select>
+    </div>
+  )
 }
 
 function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
@@ -185,9 +206,40 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   );
 }
 
-function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
-  if (isSynthetic(ctrl.data)) return null;
+function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
+  const player = ctrl.data.player;
+  const opponent = ctrl.data.opponent;
+  return (
+    <div className="analyseOpponentsWrapper synthetic">
+      <div className="analyseOpponent">
+        <div className="analysePlayerName">
+          <span className={'color-icon ' + player.color} />
+          {player.color}
+        </div>
+        {m(CrazyPocket, {
+          ctrl,
+          crazyData: ctrl.vm.step.crazy,
+          color: player.color,
+          position: 'top'
+        })}
+      </div>
+      <div className="analyseOpponent">
+        <div className="analysePlayerName">
+          <span className={'color-icon ' + opponent.color} />
+          {opponent.color}
+        </div>
+        {m(CrazyPocket, {
+          ctrl,
+          crazyData: ctrl.vm.step.crazy,
+          color: opponent.color,
+          position: 'bottom'
+        })}
+      </div>
+    </div>
+  );
+}
 
+function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;

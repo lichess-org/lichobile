@@ -63,7 +63,9 @@ function processQuerystring(e?: PopStateEvent) {
 }
 
 function replaceState(path: string) {
-  window.history.replaceState(window.history.state, null, '?=' + path);
+  try {
+    window.history.replaceState(window.history.state, null, '?=' + path);
+  } catch (e) { console.error(e) }
 }
 
 const backbutton = (() => {
@@ -108,7 +110,9 @@ function set(path: string, replace = false) {
     const stateId = uid();
     currentStateId = stateId;
     viewSlideDirection = 'fwd';
-    window.history.pushState({ id: stateId }, null, '?=' + path);
+    try {
+      window.history.pushState({ id: stateId }, null, '?=' + path);
+    } catch (e) { console.error(e); }
   }
   const matched = router.run(path);
   if (!matched) router.run('/');

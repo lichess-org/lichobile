@@ -223,7 +223,7 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
 }
 
 function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
-  const icon = g.opponent.ai ? ':' : utils.gameIcon(g.perf);
+  const icon = g.opponent.ai ? 'n' : utils.gameIcon(g.perf);
   const playerName = utils.playerName(g.opponent, false);
   const cardClass = [
     'card',

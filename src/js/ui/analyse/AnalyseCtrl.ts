@@ -364,17 +364,22 @@ export default class AnalyseCtrl {
 
       redraw();
 
-      chess.move({
+      const m = {
         fen: step.fen,
         orig: <Pos>res.ceval.best.slice(0, 2),
         dest: <Pos>res.ceval.best.slice(2, 4)
-      }).then((data: chess.MoveResponse) => {
+      }
+
+      chess.move(m)
+      .then((data: chess.MoveResponse) => {
         step.ceval.bestSan = data.situation.pgnMoves[0];
         if (res.work.path === this.vm.path) {
           redraw();
         }
       })
-      .catch(console.error.bind(console));
+      .catch((err) => {
+        console.error('ceval move err', m, err);
+      });
     });
   }
 

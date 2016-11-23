@@ -23,13 +23,19 @@ export default function cevalEngine(opts: Opts) {
   // stopped flag is true when a search has been interrupted before its end
   let stopped = false;
 
+  // we may have several start requests queued while we wait for previous
+  // eval to complete
+  // we'll simply take the last request
+  let startQueue: Array<CevalWork> = []
+
   function processOutput(text: string, work: CevalWork) {
     if (text.indexOf('bestmove') === 0) {
+      console.info('stockfish analysis done', text)
       finished = true;
     }
     if (stopped) return;
-    if (text.indexOf('currmovenumber') !== -1) return;
-    // console.log(text)
+    if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
+    console.log(text)
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
@@ -57,11 +63,12 @@ export default function cevalEngine(opts: Opts) {
     });
   }
 
-  function stop() {
-    stopped = true;
+  function stop(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (finished) resolve();
-      else {
+      if (finished) {
+        stopped = true;
+        resolve();
+      } else {
         function listen(msg: string) {
           if (msg.indexOf('bestmove') === 0) {
             output.remove(listen);
@@ -70,12 +77,15 @@ export default function cevalEngine(opts: Opts) {
           }
         }
         output.add(listen);
-        send('stop');
+        if (!stopped) {
+          stopped = true;
+          send('stop');
+        }
       }
     })
   }
 
-  function doStart(work: CevalWork) {
+  function launchEval(work: CevalWork) {
     const fen = convertFenForStockfish(work.initialFen);
 
     output.removeAll();
@@ -89,6 +99,15 @@ export default function cevalEngine(opts: Opts) {
     )
     .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
     .then(() => send('go depth ' + opts.maxDepth));
+  }
+
+  function doStart() {
+    const work = startQueue.pop();
+    if (work) {
+      launchEval(work);
+      startQueue = [];
+    }
+    else console.error('no work queued to start eval');
   }
 
   return {
@@ -105,7 +124,8 @@ export default function cevalEngine(opts: Opts) {
     },
 
     start(work: CevalWork) {
-      stop().then(() => doStart(work));
+      startQueue.push(work);
+      stop().then(doStart);
     },
 
     stop,
@@ -125,6 +145,6 @@ function init(variant: VariantKey) {
 }
 
 function send(text: string) {
-  // console.info('stockfish send', text)
+  console.info('stockfish send', text)
   return Stockfish.cmd(text);
 }

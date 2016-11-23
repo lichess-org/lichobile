@@ -5,6 +5,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": false,
     "jsx": "preserve"
   },
   "include": [

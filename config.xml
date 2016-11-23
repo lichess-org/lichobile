@@ -86,6 +86,7 @@
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#8d0370a" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
+          <path event="analysis" url="/analysis" />
           <path event="challenge" url="/challenge/*" />
           <path event="editor" url="/editor" />
           <path event="inbox" url="/inbox" />
@@ -102,6 +103,7 @@
           <path event="other" url="*" />
         </host>
         <host name="lichess.org" scheme="https">
+          <path event="analysis" url="/analysis" />
           <path event="challenge" url="/challenge/*" />
           <path event="editor" url="/editor" />
           <path event="inbox" url="/inbox" />

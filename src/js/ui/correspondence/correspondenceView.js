@@ -49,7 +49,9 @@ function renderBody(ctrl) {
     selectedTab: ctrl.selectedTab(),
     onTabChange: k => {
       const loc = window.location.search.replace(/\?tab\=\w+$/, '');
-      window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+      try {
+        window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+      } catch (e) { console.error(e) }
       ctrl.selectedTab(k);
     }
   });

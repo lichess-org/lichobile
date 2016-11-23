@@ -202,7 +202,9 @@ export default class AnalyseCtrl {
   public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   private updateHref = debounce(() => {
-    window.history.replaceState(window.history.state, null, '#' + this.vm.step.ply);
+    try {
+      window.history.replaceState(window.history.state, undefined, '#' + this.vm.step.ply);
+    } catch (e) { console.error(e) }
   }, 750);
 
   private debouncedStartCeval = debounce(this.startCeval, 800);

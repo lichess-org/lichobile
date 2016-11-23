@@ -34,7 +34,9 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
         selectedTab: currentTabFn(),
         onTabChange: (k: string) => {
           const loc = window.location.search.replace(/\?tab\=\w+$/, '');
-          window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+          try {
+            window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+          } catch (e) { console.error(e) }
           currentTabFn(k);
         }
     }));

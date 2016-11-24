@@ -11,7 +11,7 @@ const emptyPocket = {
   pawn: 0
 }
 
-export function makeDefaultData(fen: string, variantKey: VariantKey): AnalysisData {
+export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisData {
   const player = playerFromFen(fen);
   const ply = plyFromFen(fen);
   const variant = getLichessVariant(variantKey);
@@ -20,9 +20,9 @@ export function makeDefaultData(fen: string, variantKey: VariantKey): AnalysisDa
 
   return {
     game: {
-      fen: fen || initialFen,
+      fen: initialFen,
       id: 'synthetic',
-      initialFen: fen || initialFen,
+      initialFen: initialFen,
       player,
       source: 'offline',
       status: {

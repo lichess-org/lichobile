@@ -128,8 +128,12 @@ function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
 }
 
 function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
-  const variant = settings.analyse.syntheticVariant();
+  const variant = ctrl.data.game.variant.key;
   const icon = gameIcon(variant);
+  let availVariants = settings.analyse.availableVariants;
+  if (variant === 'fromPosition') {
+    availVariants = availVariants.concat([['From position', 'fromPosition']]);
+  }
   return (
     <div className="select_input analyse_variant_selector">
       <label for="variant_selector">
@@ -140,7 +144,7 @@ function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
         settings.analyse.syntheticVariant(val);
         router.set(`/analyse/variant/${val}`);
       }}>
-        {settings.analyse.availableVariants.map(v => {
+        {availVariants.map(v => {
           return <option key={v[1]} value={v[1]}>{v[0]}</option>;
         })}
       </select>

@@ -1,5 +1,6 @@
 import * as m from 'mithril';
 import { hasNetwork, playerName, oppositeColor, noNull, gameIcon } from '../../../utils';
+import * as chessFormat from '../../../utils/chessFormat';
 import i18n from '../../../i18n';
 import router from '../../../router';
 import * as gameApi from '../../../lichess/game';
@@ -36,6 +37,21 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
   ];
 }
 
+function moveOrDropShape(uci: string, brush: string): Shape {
+  if (uci.includes('@')) {
+    return {
+      brush, orig: chessFormat.uciToDropPos(uci)
+    };
+  } else {
+    const move = chessFormat.uciToMove(uci);
+    return {
+      brush,
+      orig: move[0],
+      dest: move[1]
+    }
+  }
+}
+
 export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
@@ -43,33 +59,18 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
   let curBestShape: Shape, pastBestShape: Shape;
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextStepBest();
-    curBestShape = nextBest ? {
-      brush: 'paleBlue',
-      orig: (nextBest.slice(0, 2) as Pos),
-      dest: (nextBest.slice(2, 4) as Pos)
-    } : ceval && ceval.best ? {
-      brush: 'paleBlue',
-      orig: (ceval.best.slice(0, 2) as Pos),
-      dest: (ceval.best.slice(2, 4) as Pos)
-    } : null;
+    curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue') :
+      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue') :
+        null;
   }
   if (ctrl.vm.showComments) {
-    pastBestShape = rEval && rEval.best ? {
-      brush: 'paleGreen',
-      orig: (rEval.best.slice(0, 2) as Pos),
-      dest: (rEval.best.slice(2, 4) as Pos)
-    } : null;
+    pastBestShape = rEval && rEval.best ?
+      moveOrDropShape(rEval.best, 'paleGreen') : null;
   }
 
   const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
-  const nextMove = nextStep && nextStep.uci ? nextStep.uci.includes('@') ? {
-    brush: 'palePurple',
-    orig: (nextStep.uci.slice(2, 4) as Pos)
-  } : {
-    brush: 'palePurple',
-    orig: (nextStep.uci.slice(0, 2) as Pos),
-    dest: (nextStep.uci.slice(2, 4) as Pos)
-  } : null;
+  const nextMove = nextStep && nextStep.uci ?
+    moveOrDropShape(nextStep.uci, 'palePurple') : null;
 
   const shapes = nextMove ? [nextMove] : [pastBestShape, curBestShape].filter(noNull);
 

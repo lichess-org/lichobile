@@ -83,7 +83,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
     wrapperClasses: 'analyse'
   });
 
-  return [
+  return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
     <div className="analyseTableWrapper">
       {ctrl.explorer.enabled() ?
@@ -92,7 +92,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
       }
       {renderActionsBar(ctrl)}
     </div>
-  ];
+  ]);
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {

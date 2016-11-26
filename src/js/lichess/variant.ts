@@ -86,6 +86,7 @@ const variantMap: {[key: string]: DocVariant} = {
     link: 'https://lichess.org/variant/racingKings',
     alert: 'Race to the eighth rank to win.',
     title: 'Race your King to the eighth rank to win.',
+    initialFen: '8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1'
   },
   crazyhouse: {
     name: 'Crazyhouse',

@@ -29,6 +29,7 @@ export interface Shape {
   brush: string
   orig: Pos
   dest?: Pos
+  role?: Role
 }
 
 interface State {

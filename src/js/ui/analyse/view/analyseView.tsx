@@ -40,7 +40,9 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
 function moveOrDropShape(uci: string, brush: string): Shape {
   if (uci.includes('@')) {
     return {
-      brush, orig: chessFormat.uciToDropPos(uci)
+      brush,
+      orig: chessFormat.uciToDropPos(uci),
+      role: chessFormat.uciToDropRole(uci)
     };
   } else {
     const move = chessFormat.uciToMove(uci);
@@ -88,25 +90,25 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
     <div className="analyseTableWrapper">
       {ctrl.explorer.enabled() ?
         explorerView(ctrl) :
-        renderAnalyseTable(ctrl, isPortrait)
+        renderAnalyseTable(ctrl, isPortrait, shapes)
       }
       {renderActionsBar(ctrl)}
     </div>
   ]);
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   return (
     <div className="analyseTable" key="analyse">
       <div className="analyse scrollerWrapper">
         {renderReplay(ctrl)}
       </div>
-      {renderInfos(ctrl, isPortrait)}
+      {renderInfos(ctrl, isPortrait, shapes)}
     </div>
   );
 }
 
-function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   const cevalEnabled = ctrl.ceval.enabled();
   const isCrazy = !!ctrl.vm.step.crazy;
 
@@ -120,8 +122,8 @@ function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           renderVariantSelector(ctrl) : null
         }
         { isSynthetic(ctrl.data) ?
-          (isCrazy ? renderSyntheticPockets(ctrl) : null) :
-          renderOpponents(ctrl, isPortrait)
+          (isCrazy ? renderSyntheticPockets(ctrl, shapes) : null) :
+          renderOpponents(ctrl, isPortrait, shapes)
         }
       </div>
     </div>
@@ -211,9 +213,14 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   );
 }
 
-function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
+function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
+  const curPlayer = ctrl.data.game.player;
+  const bestDropRole = shapes.length > 0 && shapes[shapes.length -1].role ? {
+    role: shapes[shapes.length - 1].role,
+    brush: shapes[shapes.length - 1].brush
+  } : undefined;
   return (
     <div className="analyseOpponentsWrapper synthetic">
       <div className="analyseOpponent">
@@ -225,7 +232,8 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
-          position: 'top'
+          position: 'top',
+          bestDropRole: curPlayer === player.color ? bestDropRole : undefined
         })}
       </div>
       <div className="analyseOpponent">
@@ -237,19 +245,25 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
-          position: 'bottom'
+          position: 'bottom',
+          bestDropRole: curPlayer === opponent.color ? bestDropRole : undefined
         })}
       </div>
     </div>
   );
 }
 
-function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
 
   const isCrazy = !!ctrl.vm.step.crazy;
+  const curPlayer = ctrl.data.game.player;
+  const bestDropRole = shapes.length > 0 && shapes[shapes.length -1].role ? {
+    role: shapes[shapes.length - 1].role,
+    brush: shapes[shapes.length - 1].brush
+  } : undefined;
 
   const gameMoment = window.moment(ctrl.data.game.createdAt);
 
@@ -274,7 +288,8 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
-          position: 'top'
+          position: 'top',
+          bestDropRole: curPlayer === player.color ? bestDropRole : undefined
         }) : null}
       </div>
       <div className="analyseOpponent">
@@ -296,7 +311,8 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
-          position: 'bottom'
+          position: 'bottom',
+          bestDropRole: curPlayer === opponent.color ? bestDropRole : undefined
         }) : null}
       </div>
       <div className="gameInfos">

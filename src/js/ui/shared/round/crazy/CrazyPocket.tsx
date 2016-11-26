@@ -13,6 +13,10 @@ export interface Attrs {
   position: string
   color: Color
   customPieceTheme?: string
+  bestDropRole?: {
+    role: Role
+    brush: string
+  }
 }
 
 interface State {
@@ -41,7 +45,7 @@ export default {
   },
 
   view(vnode: Mithril.Vnode<Attrs, State>) {
-    const { crazyData, position, color, customPieceTheme } = vnode.attrs;
+    const { crazyData, position, color, customPieceTheme, bestDropRole } = vnode.attrs;
 
     if (!crazyData) return null;
 
@@ -59,7 +63,7 @@ export default {
             data-role={role}
             data-color={color}
             data-nb={pocket[role] || 0}
-            className={role + ' ' + color}
+            className={role + ' ' + color + (bestDropRole && bestDropRole.role === role ? ' bestDrop ' + bestDropRole.brush : '')}
           />
         )}
       </div>

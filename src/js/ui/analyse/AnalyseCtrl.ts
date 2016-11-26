@@ -172,6 +172,7 @@ export default class AnalyseCtrl {
 
     this.vm.step = s;
     this.vm.cgConfig = config;
+    this.data.game.player = color;
 
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece);

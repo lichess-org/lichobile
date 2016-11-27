@@ -68,6 +68,7 @@
     "android-dev": "npm run build-js-dev && cordova run android",
     "android-stage": "npm run build-js-stage && cordova run android",
     "android-prod": "npm run build-js-prod && cordova run android",
+    "android-release": "npm run build-js-release && cordova run android",
     "ios-dev": "npm run build-js-dev && cordova run ios",
     "ios-stage": "npm run build-js-stage && cordova run ios",
     "ios-prod": "npm run build-js-prod && cordova run ios",

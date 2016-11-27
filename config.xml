@@ -6,37 +6,49 @@
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="http://*.l.dev" />
-    <hook src="scripts/copy_icons.js" type="after_prepare" />
     <engine name="ios" spec="~4.2.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
-        <icon density="ldpi" src="resources/android/icons/icon-36.png" />
-        <icon density="mdpi" src="resources/android/icons/icon-48.png" />
-        <icon density="hdpi" src="resources/android/icons/icon-72.png" />
-        <icon density="xhdpi" src="resources/android/icons/icon-96.png" />
-        <icon density="xxhdpi" src="resources/android/icons/icon-144.png" />
-        <icon density="xxxhdpi" src="resources/android/icons/icon-192.png" />
+        <hook src="scripts/copy_icons.js" type="after_prepare" />
+        <icon density="ldpi" src="res/android/icons/icon-36.png" />
+        <icon density="mdpi" src="res/android/icons/icon-48.png" />
+        <icon density="hdpi" src="res/android/icons/icon-72.png" />
+        <icon density="xhdpi" src="res/android/icons/icon-96.png" />
+        <icon density="xxhdpi" src="res/android/icons/icon-144.png" />
+        <icon density="xxxhdpi" src="res/android/icons/icon-192.png" />
+        <splash density="land-ldpi" src="res/android/screens/screen-426x320.png" />
+        <splash density="land-mdpi" src="res/android/screens/screen-470x320.png" />
+        <splash density="land-hdpi" src="res/android/screens/screen-640x480.png" />
+        <splash density="land-xhdpi" src="res/android/screens/screen-960x720.png" />
+        <splash density="land-xxhdpi" src="res/android/screens/screen-1410x960.png" />
+        <splash density="land-xxxhdpi" src="res/android/screens/screen-1880x1280.png" />
+        <splash density="port-ldpi" src="res/android/screens/screen-320x426.png" />
+        <splash density="port-mdpi" src="res/android/screens/screen-320x470.png" />
+        <splash density="port-hdpi" src="res/android/screens/screen-480x640.png" />
+        <splash density="port-xhdpi" src="res/android/screens/screen-720x960.png" />
+        <splash density="port-xxhdpi" src="res/android/screens/screen-960x1410.png" />
+        <splash density="port-xxxhdpi" src="res/android/screens/screen-1280x1880.png" />
     </platform>
     <platform name="ios">
         <preference name="Orientation" value="all" />
-        <icon height="180" src="resources/ios/icons/icon-60@3x.png" width="180" />
-        <icon height="60" src="resources/ios/icons/icon-60.png" width="60" />
-        <icon height="120" src="resources/ios/icons/icon-60@2x.png" width="120" />
-        <icon height="76" src="resources/ios/icons/icon-76.png" width="76" />
-        <icon height="152" src="resources/ios/icons/icon-76@2x.png" width="152" />
-        <icon height="40" src="resources/ios/icons/icon-40.png" width="40" />
-        <icon height="80" src="resources/ios/icons/icon-40@2x.png" width="80" />
-        <icon height="57" src="resources/ios/icons/icon.png" width="57" />
-        <icon height="114" src="resources/ios/icons/icon@2x.png" width="114" />
-        <icon height="72" src="resources/ios/icons/icon-72.png" width="72" />
-        <icon height="144" src="resources/ios/icons/icon-72@2x.png" width="144" />
-        <icon height="29" src="resources/ios/icons/icon-small.png" width="29" />
-        <icon height="58" src="resources/ios/icons/icon-small@2x.png" width="58" />
-        <icon height="50" src="resources/ios/icons/icon-50.png" width="50" />
-        <icon height="100" src="resources/ios/icons/icon-50@2x.png" width="100" />
-        <icon height="167" src="resources/ios/icons/icon-83.5@2x.png" width="167" />
+        <icon height="180" src="res/ios/icons/icon-60@3x.png" width="180" />
+        <icon height="60" src="res/ios/icons/icon-60.png" width="60" />
+        <icon height="120" src="res/ios/icons/icon-60@2x.png" width="120" />
+        <icon height="76" src="res/ios/icons/icon-76.png" width="76" />
+        <icon height="152" src="res/ios/icons/icon-76@2x.png" width="152" />
+        <icon height="40" src="res/ios/icons/icon-40.png" width="40" />
+        <icon height="80" src="res/ios/icons/icon-40@2x.png" width="80" />
+        <icon height="57" src="res/ios/icons/icon.png" width="57" />
+        <icon height="114" src="res/ios/icons/icon@2x.png" width="114" />
+        <icon height="72" src="res/ios/icons/icon-72.png" width="72" />
+        <icon height="144" src="res/ios/icons/icon-72@2x.png" width="144" />
+        <icon height="29" src="res/ios/icons/icon-small.png" width="29" />
+        <icon height="58" src="res/ios/icons/icon-small@2x.png" width="58" />
+        <icon height="50" src="res/ios/icons/icon-50.png" width="50" />
+        <icon height="100" src="res/ios/icons/icon-50@2x.png" width="100" />
+        <icon height="167" src="res/ios/icons/icon-83.5@2x.png" width="167" />
     </platform>
     <preference name="Orientation" value="default" />
     <preference name="SuppressesLongPressGesture" value="true" />

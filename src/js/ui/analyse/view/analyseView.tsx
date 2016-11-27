@@ -265,8 +265,6 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
     brush: shapes[shapes.length - 1].brush
   } : undefined;
 
-  const gameMoment = window.moment(ctrl.data.game.createdAt);
-
   return (
     <div className="analyseOpponentsWrapper">
       <div className="analyseOpponent">
@@ -316,7 +314,7 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
         }) : null}
       </div>
       <div className="gameInfos">
-        {gameMoment.format('L') + ' ' + gameMoment.format('LT')}
+        {ctrl.vm.formattedDate}
         { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }

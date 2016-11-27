@@ -83,7 +83,9 @@ export default class AnalyseCtrl {
         treePath.default(this.analyse.lastPly()) :
         treePath.default(this.analyse.firstPly());
 
+    const gameMoment = window.moment(this.data.game.createdAt);
     this.vm = {
+      formattedDate: gameMoment.format('L') + ' ' + gameMoment.format('LT'),
       shouldGoBack,
       path: initialPath,
       pathStr: treePath.write(initialPath),

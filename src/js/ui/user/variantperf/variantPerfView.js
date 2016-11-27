@@ -233,7 +233,7 @@ function drawChart(data, ctx) {
           type: 'time',
           time: {
             displayFormats: {
-              month: 'MMM YYYY'
+              month: 'MMM \'YY'
             },
             min: now - 1000*60*60*24*365,
             max: now,

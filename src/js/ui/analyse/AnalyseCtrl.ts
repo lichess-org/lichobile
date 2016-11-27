@@ -182,7 +182,7 @@ export default class AnalyseCtrl {
     if (!dests) this.debouncedDests();
   }
 
-  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
+  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 300);
 
   private updateHref = debounce(() => {
     try {

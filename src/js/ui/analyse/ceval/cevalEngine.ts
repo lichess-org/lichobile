@@ -1,14 +1,10 @@
 import { CevalWork } from '../interfaces';
-import { setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
+import { setThreads, setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
 import * as Signal from 'signals';
 
 interface Opts {
   minDepth: number
   maxDepth: number
-}
-
-interface ExtendedNavigator extends Navigator {
-  hardwareConcurrency: number
 }
 
 const output = new Signal();
@@ -93,9 +89,7 @@ export default function cevalEngine(opts: Opts) {
     stopped = false;
     finished = false;
 
-    return setOption('Threads',
-      Math.ceil(((navigator as ExtendedNavigator).hardwareConcurrency || 1) / 2)
-    )
+    return setThreads()
     .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
     .then(() => send('go depth ' + opts.maxDepth));
   }
@@ -132,6 +126,8 @@ export default function cevalEngine(opts: Opts) {
 
     exit() {
       output.removeAll();
+      finished = true;
+      stopped = false;
       return Stockfish.exit();
     }
   };

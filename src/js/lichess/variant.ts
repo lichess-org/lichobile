@@ -76,6 +76,7 @@ const variantMap: {[key: string]: DocVariant} = {
     link: 'https://lichess.org/variant/horde',
     alert: 'This is a horde chess game!\n\nWhite must take all black pawns to win. Black must checkmate white king.',
     title: 'Destroy the horde to win!',
+    initialFen: 'rnbqkbnr/pppppppp/8/1PP2PP1/PPPPPPPP/PPPPPPPP/PPPPPPPP/PPPPPPPP w kq - 0 1'
   },
   racingKings: {
     name: 'Racing Kings',
@@ -85,6 +86,7 @@ const variantMap: {[key: string]: DocVariant} = {
     link: 'https://lichess.org/variant/racingKings',
     alert: 'Race to the eighth rank to win.',
     title: 'Race your King to the eighth rank to win.',
+    initialFen: '8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1'
   },
   crazyhouse: {
     name: 'Crazyhouse',

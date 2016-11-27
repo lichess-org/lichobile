@@ -113,6 +113,7 @@ export interface CevalCtrlInterface {
 }
 
 export interface VM {
+  formattedDate: string
   shouldGoBack: boolean
   path: Path
   pathStr: string

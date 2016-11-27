@@ -1,5 +1,5 @@
 var ncp = require('ncp').ncp;
-var source = 'resources/android/res';
+var source = 'res/android/onesignal';
 var destination = 'platforms/android/res';
 
 module.exports = function() {

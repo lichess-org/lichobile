@@ -3,12 +3,12 @@ import getVariant from '../../lichess/variant';
 import router from '../../router';
 import * as utils from '../../utils';
 import { emptyFen } from '../../utils/fen';
-import { getOfflineGames } from '../../utils/offlineGames';
+import { hasOfflineGames } from '../../utils/offlineGames';
+import settings from '../../settings';
 import layout from '../layout';
 import * as helper from '../helper';
 import gamesMenu from '../gamesMenu';
 import newGameForm from '../newGameForm';
-import settings from '../../settings';
 import session from '../../session';
 import * as gameApi from '../../lichess/game';
 import challengesApi from '../../lichess/challenges';
@@ -62,11 +62,16 @@ export function friendsButton() {
   );
 }
 
-export function gamesButton() {
+let boardTheme: string;
+export function onBoardThemeChange(theme: string) {
+  boardTheme = theme;
+}
+function gamesButton() {
   let key: string, action: () => void;
   const nbChallenges = challengesApi.all().length;
   const nbIncomingChallenges = challengesApi.incoming().length;
-  const withOfflineGames = !utils.hasNetwork() && getOfflineGames().length;
+  const withOfflineGames = !utils.hasNetwork() && hasOfflineGames();
+  boardTheme = boardTheme || settings.general.theme.board();
   if (session.nowPlaying().length || nbChallenges || withOfflineGames) {
     key = 'games-menu';
     action = gamesMenu.open;
@@ -78,10 +83,10 @@ export function gamesButton() {
   const className = [
     'main_header_button',
     'game_menu_button',
-    settings.general.theme.board(),
+    boardTheme,
     nbIncomingChallenges ? 'new_challenge' : '',
-    !utils.hasNetwork() && getOfflineGames().length === 0 ? 'invisible' : ''
-    ].join(' ');
+    !utils.hasNetwork() && !hasOfflineGames() ? 'invisible' : ''
+  ].join(' ');
   const longAction = () => window.plugins.toast.show(i18n('nbGamesInPlay', session.nowPlaying().length), 'short', 'top');
 
   return (

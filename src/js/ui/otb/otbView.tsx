@@ -14,7 +14,7 @@ import settings from '../../settings';
 import OtbRound from './OtbRound';
 
 export default function view() {
-  let content: any, header: any;
+  let content: () => Mithril.Children, header: () => Mithril.Children;
   const pieceTheme = settings.otb.useSymmetric() ? 'symmetric' : undefined;
 
   if (this.round.data && this.round.chessground) {
@@ -68,15 +68,17 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
     customPieceTheme: pieceTheme
   });
 
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+
   if (isPortrait)
-    return [
+    return m.fragment({ key: orientationKey }, [
       renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
       board,
       renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
       renderGameActionsBar(ctrl, 'otb')
-    ];
+    ]);
   else
-    return [
+    return m.fragment({ key: orientationKey }, [
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
@@ -86,5 +88,5 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
         </section>
         {renderGameActionsBar(ctrl, 'otb')}
       </section>
-    ];
+    ]);
 }

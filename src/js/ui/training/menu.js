@@ -5,7 +5,6 @@ import router from '../../router';
 import * as helper from '../helper';
 import * as m from 'mithril';
 import * as Chart from 'chart.js';
-import formWidgets from '../shared/form';
 
 Chart.defaults.global.animation = false;
 
@@ -118,21 +117,9 @@ function drawChart(ctrl, ctx) {
   });
 }
 
-function renderDifficulty(ctrl) {
-  const opts = ctrl.data.difficulty.choices.map(c => ['difficulty' + c[1], c[0]]);
-  return m('div.select_input.puzzleDifficulty',
-    formWidgets.renderSelect('level', 'difficulty', opts,
-      () => ctrl.data.difficulty.current, false, ctrl.setDifficulty)
-  );
-}
-
-
 function renderTrainingMenu(ctrl) {
   if (ctrl.data.user) {
-    if (helper.isPortrait())
-      return renderUserInfos(ctrl).concat(renderDifficulty(ctrl));
-    else
-      return renderDifficulty(ctrl);
+    return renderUserInfos(ctrl);
   } else {
     return renderSigninBox();
   }

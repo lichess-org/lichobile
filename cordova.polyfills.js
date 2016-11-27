@@ -15,8 +15,6 @@
     trackEvent: noop
   };
 
-  window.AppVersion = 'dev';
-
   // push
   function oneSignalInit() {
     return OneSignalConf;

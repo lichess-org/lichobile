@@ -2,6 +2,7 @@ npm-debug.log
 
 /*.mobileprovision
 /*.keystore
+/build.json
 
 /platforms
 /plugins

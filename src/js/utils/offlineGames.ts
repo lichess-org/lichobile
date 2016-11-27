@@ -54,6 +54,14 @@ export function getOfflineGames(): Array<OnlineGameData> {
   return arr;
 }
 
+let nbOfflineGames: number;
+export function hasOfflineGames(): boolean {
+  nbOfflineGames =
+    nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length;
+
+  return nbOfflineGames > 0;
+}
+
 export function getOfflineGameData(id: string) {
   const stored = storage.get(offlineCorresStorageKey) || {};
   return stored[id];
@@ -68,12 +76,14 @@ export function saveOfflineGameData(id: string, gameData: OnlineGameData) {
   if (toStore.opponent.user) toStore.opponent.user.online = false;
   stored[id] = toStore;
   storage.set(offlineCorresStorageKey, stored);
+  nbOfflineGames = undefined;
 }
 
 export function removeOfflineGameData(id: string) {
   const stored = storage.get(offlineCorresStorageKey);
   if (stored && stored[id]) {
     delete stored[id];
+    nbOfflineGames = undefined;
   }
   storage.set(offlineCorresStorageKey, stored);
 }
@@ -93,5 +103,6 @@ export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>) {
       }
     });
     storage.set(offlineCorresStorageKey, stored);
+    nbOfflineGames = undefined;
   }
 }

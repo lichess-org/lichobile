@@ -5,15 +5,6 @@ import * as chessground from 'chessground-mobile';
 import * as gameApi from '../../lichess/game';
 import BoardBrush from './BoardBrush';
 
-let boardTheme: string;
-let pieceTheme: string;
-export function onBoardThemeChange(t: string) {
-  boardTheme = t;
-}
-export function onPieceThemeChange(t: string) {
-  pieceTheme = t;
-}
-
 export interface Attrs {
   data: GameData
   chessgroundCtrl: Chessground.Controller
@@ -29,12 +20,15 @@ export interface Shape {
   brush: string
   orig: Pos
   dest?: Pos
+  role?: Role
 }
 
 interface State {
   wrapperOnCreate(vnode: Mithril.ChildNode): void
   boardOnCreate(vnode: Mithril.ChildNode): void
   boardOnRemove(): void
+  boardTheme: string
+  pieceTheme: string
 }
 
 const Board: Mithril.Component<Attrs, State> = {
@@ -66,6 +60,8 @@ const Board: Mithril.Component<Attrs, State> = {
     }
 
     vnode.state = {
+      pieceTheme: settings.general.theme.piece(),
+      boardTheme: settings.general.theme.board(),
       wrapperOnCreate,
       boardOnCreate,
       boardOnRemove
@@ -75,13 +71,10 @@ const Board: Mithril.Component<Attrs, State> = {
   view(vnode) {
     const { data, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
 
-    boardTheme = boardTheme || settings.general.theme.board();
-    pieceTheme = pieceTheme || settings.general.theme.piece();
-
     const boardClass = [
       'display_board',
-      boardTheme,
-      customPieceTheme || pieceTheme,
+      this.boardTheme,
+      customPieceTheme || this.pieceTheme,
       data.game.variant.key
     ].join(' ');
 

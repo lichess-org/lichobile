@@ -62,15 +62,17 @@ function renderContent(ctrl: AiRound) {
     isPortrait
   });
 
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+
   if (isPortrait) {
-    return [
+    return m.fragment({ key: orientationKey }, [
       renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
-    ];
+    ]);
   } else {
-    return [
+    return m.fragment({ key: orientationKey }, [
       board,
       <section key="table" className="table">
         <section className="playersTable offline">
@@ -80,7 +82,7 @@ function renderContent(ctrl: AiRound) {
         </section>
         {renderGameActionsBar(ctrl, 'ai')}
       </section>
-    ];
+    ]);
   }
 }
 

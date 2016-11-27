@@ -83,7 +83,9 @@ export default class AnalyseCtrl {
         treePath.default(this.analyse.lastPly()) :
         treePath.default(this.analyse.firstPly());
 
+    const gameMoment = window.moment(this.data.game.createdAt);
     this.vm = {
+      formattedDate: gameMoment.format('L') + ' ' + gameMoment.format('LT'),
       shouldGoBack,
       path: initialPath,
       pathStr: treePath.write(initialPath),
@@ -172,6 +174,7 @@ export default class AnalyseCtrl {
 
     this.vm.step = s;
     this.vm.cgConfig = config;
+    this.data.game.player = color;
 
     if (!this.chessground) {
       this.chessground = ground.make(this.data, config, this.orientation, this.userMove, this.userNewPiece);
@@ -181,7 +184,7 @@ export default class AnalyseCtrl {
     if (!dests) this.debouncedDests();
   }
 
-  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
+  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 300);
 
   private updateHref = debounce(() => {
     try {
@@ -341,31 +344,37 @@ export default class AnalyseCtrl {
     this.analyse.updateAtPath(res.work.path, (step: AnalysisStep) => {
       if (step.ceval && step.ceval.depth >= res.ceval.depth) return;
 
+      // get best move in pgn format
+      if (step.ceval === undefined || step.ceval.best !== res.ceval.best) {
+        if (!res.ceval.best.includes('@')) {
+          chess.move({
+            fen: step.fen,
+            orig: <Pos>res.ceval.best.slice(0, 2),
+            dest: <Pos>res.ceval.best.slice(2, 4)
+          })
+          .then((data: chess.MoveResponse) => {
+            step.ceval.bestSan = data.situation.pgnMoves[0];
+            if (res.work.path === this.vm.path) {
+              redraw();
+            }
+          })
+          .catch((err) => {
+            console.error('ceval move err', err);
+          });
+        }
+      }
+
       if (step.ceval === undefined)
         step.ceval = <Ceval>Object.assign({}, res.ceval);
       else
         step.ceval = <Ceval>Object.assign(step.ceval, res.ceval);
 
+      if (res.ceval.best.includes('@')) {
+        step.ceval.bestSan = res.ceval.best;
+      }
+
       redraw();
 
-      const m = {
-        fen: step.fen,
-        orig: <Pos>res.ceval.best.slice(0, 2),
-        dest: <Pos>res.ceval.best.slice(2, 4)
-      }
-
-      if (step.ceval.best !== res.ceval.best) {
-        chess.move(m)
-        .then((data: chess.MoveResponse) => {
-          step.ceval.bestSan = data.situation.pgnMoves[0];
-          if (res.work.path === this.vm.path) {
-            redraw();
-          }
-        })
-        .catch((err) => {
-          console.error('ceval move err', m, err);
-        });
-      }
     });
   }
 

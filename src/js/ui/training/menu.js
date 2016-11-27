@@ -91,7 +91,6 @@ function drawChart(ctrl, ctx) {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
     canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
   }
-  console.log(ctrl.data.user.history);
   new Chart(ctx, {
     type: 'line',
     data: {

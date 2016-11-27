@@ -1,7 +1,7 @@
 [lichess.org/mobile](http://lichess.org/mobile)
 --------------------
 
-![lichess mobile screenshots](resources/3-screens.png)
+![lichess mobile screenshots](res/3-screens.png)
 
 Lichess mobile is a [cordova](https://cordova.apache.org/) application that runs
 on the [crosswalk webview](https://crosswalk-project.org/). It is written

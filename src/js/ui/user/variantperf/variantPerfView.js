@@ -7,6 +7,8 @@ import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import * as Chart from 'chart.js';
 
+const ONE_YEAR = 1000*60*60*24*365;
+
 export default function view(vnode) {
   const ctrl = vnode.state;
   const userId = vnode.attrs.id;
@@ -195,7 +197,9 @@ function chartHash(data) {
 
 function drawChart(data, ctx) {
   const canvas = ctx.canvas;
-  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
+  const now = (new Date()).getTime();
+  const yearAgo = now - ONE_YEAR;
+  const graphData = data.graph.map(normalizeGraphData).reduce((acc, i) => removeOld(yearAgo, acc, i), []);
 
   if (!graphData || graphData.length < 3) {
     canvas.className = 'hideVariantPerfCanvas';
@@ -207,10 +211,9 @@ function drawChart(data, ctx) {
     canvas.height = canvas.style.height = 150;
   } else {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
+    canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 50;
   }
 
-  const now = (new Date()).getTime();
   if (graphData[graphData.length-1].x < now) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
   }
@@ -235,7 +238,7 @@ function drawChart(data, ctx) {
             displayFormats: {
               month: 'MMM \'YY'
             },
-            min: now - 1000*60*60*24*365,
+            min: yearAgo,
             max: now,
             unit: 'month',
             unitStepSize: 3
@@ -259,9 +262,8 @@ function drawChart(data, ctx) {
   });
 }
 
-function removeOld (acc, i) {
-  const yearAgo = (new Date()).getTime() - 1000*60*60*24*365;
-  if (i.x > yearAgo) {
+function removeOld (cutOff, acc, i) {
+  if (i.x > cutOff) {
     acc.push(i);
   }
   return acc;

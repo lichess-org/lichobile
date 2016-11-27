@@ -176,9 +176,8 @@ function toTitleCase(str) {
 }
 
 function createGraph(data, node) {
-  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
   const ctx = node.dom.getContext('2d');
-  drawChart(graphData, ctx);
+  drawChart(data, ctx);
   node.state.hash = chartHash(data);
 }
 
@@ -186,17 +185,18 @@ function updateGraph(data, node) {
   const hash = chartHash(data);
   if (hash === node.state.hash) return;
   node.state.hash = hash;
-  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
   const ctx = node.dom.getContext('2d');
-  drawChart(graphData, ctx);
+  drawChart(data, ctx);
 }
 
 function chartHash(data) {
   return data.graph.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
 }
 
-function drawChart(graphData, ctx) {
+function drawChart(data, ctx) {
   const canvas = ctx.canvas;
+  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
+
   if (!graphData || graphData.length < 3) {
     canvas.className = 'hideVariantPerfCanvas';
     return;
@@ -214,7 +214,7 @@ function drawChart(graphData, ctx) {
   if (graphData[graphData.length-1].x < now) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
   }
-  const scatterChart = new Chart(ctx, {
+  new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [{

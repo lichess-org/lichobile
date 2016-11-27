@@ -6,7 +6,6 @@ import * as helper from '../../helper';
 import { header as headerWidget, backButton } from '../../shared/common';
 import layout from '../../layout';
 import * as Chart from 'chart.js';
-import redraw from '../../../utils/redraw';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -258,7 +257,6 @@ function drawChart(graphData, ctx) {
       }
     }
   });
-  redraw();
 }
 
 function removeOld (acc, i) {

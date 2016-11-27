@@ -217,6 +217,7 @@ function drawChart(data, ctx) {
   if (graphData[graphData.length-1].x < now) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
   }
+
   new Chart(ctx, {
     type: 'line',
     data: {

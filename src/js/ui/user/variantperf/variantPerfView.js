@@ -177,8 +177,9 @@ function toTitleCase(str) {
 }
 
 function createGraph(data, node) {
+  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
   const ctx = node.dom.getContext('2d');
-  drawChart(data, ctx);
+  drawChart(graphData, ctx);
   node.state.hash = chartHash(data);
 }
 
@@ -186,18 +187,22 @@ function updateGraph(data, node) {
   const hash = chartHash(data);
   if (hash === node.state.hash) return;
   node.state.hash = hash;
+  const graphData = data.graph.map(normalizeGraphData).reduce(removeOld, []);
   const ctx = node.dom.getContext('2d');
-  drawChart(data, ctx);
+  drawChart(graphData, ctx);
 }
 
 function chartHash(data) {
   return data.graph.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
 }
 
-function drawChart(data, ctx) {
-  console.log(data);
-  console.log(ctx);
+function drawChart(graphData, ctx) {
   const canvas = ctx.canvas;
+  if (!graphData || graphData.length < 3) {
+    canvas.className = 'hideVariantPerfCanvas';
+    return;
+  }
+
   if (helper.isPortrait()) {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth - 20;
     canvas.height = canvas.style.height = 150;
@@ -205,7 +210,11 @@ function drawChart(data, ctx) {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
     canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
   }
-  const graphData = data.graph.map(normalizeGraphData);
+
+  const now = (new Date()).getTime();
+  if (graphData[graphData.length-1].x < now) {
+    graphData.push({x: now, y: graphData[graphData.length-1].y});
+  }
   console.log(graphData);
   const scatterChart = new Chart(ctx, {
     type: 'line',
@@ -214,7 +223,6 @@ function drawChart(data, ctx) {
         data: graphData,
         xAxisID: 'x',
         yAxisID: 'y',
-        backgroundColor: 'rgba(196, 168, 111, 0.4)',
         borderColor: 'rgba(196, 168, 111, 0.8)',
         pointRadius: 0,
         fill: false
@@ -227,15 +235,23 @@ function drawChart(data, ctx) {
           type: 'time',
           time: {
             displayFormats: {
-              quarter: 'MMM YYYY'
+              month: 'MMM YYYY'
             },
-            min: (new Date()).getTime() - 1000*60*60*24*365,
-            max: (new Date()).getTime()
+            min: now - 1000*60*60*24*365,
+            max: now,
+            unit: 'month',
+            unitStepSize: 3
+          },
+          gridLines: {
+            display: false
           }
         }],
         yAxes: [{
           id: 'y',
-          type: 'linear'
+          type: 'linear',
+          gridLines: {
+            color: '#666'
+          }
         }]
       },
       legend: {
@@ -245,6 +261,14 @@ function drawChart(data, ctx) {
   });
   redraw();
   console.log(scatterChart);
+}
+
+function removeOld (acc, i) {
+  const yearAgo = (new Date()).getTime() - 1000*60*60*24*365;
+  if (i.x > yearAgo) {
+    acc.push(i);
+  }
+  return acc;
 }
 
 function normalizeGraphData (i) {

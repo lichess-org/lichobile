@@ -126,6 +126,8 @@ export default function cevalEngine(opts: Opts) {
 
     exit() {
       output.removeAll();
+      finished = true;
+      stopped = false;
       return Stockfish.exit();
     }
   };

@@ -215,7 +215,6 @@ function drawChart(graphData, ctx) {
   if (graphData[graphData.length-1].x < now) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
   }
-  console.log(graphData);
   const scatterChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -260,7 +259,6 @@ function drawChart(graphData, ctx) {
     }
   });
   redraw();
-  console.log(scatterChart);
 }
 
 function removeOld (acc, i) {

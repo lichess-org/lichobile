@@ -31,7 +31,7 @@ function renderBody(ctrl) {
 
   return (
     <div class="variantPerfBody native_scroller page">
-      <canvas oncreate={node => createGraph(data, node)} onupdate={node => updateGraph(data, node)} />
+      <canvas oncreate={node => drawChart(data, node)} onupdate={node => drawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
       <table class="variantPerf">
         <tbody>
         <tr>
@@ -177,25 +177,8 @@ function toTitleCase(str) {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
-function createGraph(data, node) {
+function drawChart(data, node) {
   const ctx = node.dom.getContext('2d');
-  drawChart(data, ctx);
-  node.state.hash = chartHash(data);
-}
-
-function updateGraph(data, node) {
-  const hash = chartHash(data);
-  if (hash === node.state.hash) return;
-  node.state.hash = hash;
-  const ctx = node.dom.getContext('2d');
-  drawChart(data, ctx);
-}
-
-function chartHash(data) {
-  return data.graph.join('') + (helper.isPortrait() ? 'portrait' : 'landscape');
-}
-
-function drawChart(data, ctx) {
   const canvas = ctx.canvas;
   const now = (new Date()).getTime();
   const yearAgo = now - ONE_YEAR;

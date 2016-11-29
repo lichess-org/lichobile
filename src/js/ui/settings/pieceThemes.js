@@ -5,7 +5,6 @@ import layout from '../layout';
 import formWidgets from '../shared/form';
 import i18n from '../../i18n';
 import settings from '../../settings';
-import { onPieceThemeChange } from '../shared/Board';
 import * as m from 'mithril';
 
 function renderBody() {
@@ -18,7 +17,6 @@ function renderBody() {
           settings.general.theme.piece() === t,
           e => {
             settings.general.theme.piece(e.target.value);
-            onPieceThemeChange(e.target.value);
           }
         ));
       }))

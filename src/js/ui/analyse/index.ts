@@ -119,14 +119,14 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else {
       return layout.board(
         connectingHeader,
-        () => viewOnlyBoard(vnode.attrs.color)
+        () => viewOnlyBoard(vnode.attrs.color, bounds)
       );
     }
   }
 };
 
-function viewOnlyBoard(color: Color) {
-  return m('section.board_wrapper', m(ViewOnlyBoard, { orientation: color }));
+function viewOnlyBoard(color: Color, bounds: ClientRect) {
+  return m('section.board_wrapper', m(ViewOnlyBoard, { orientation: color, bounds }));
 }
 
 export default AnalyseScreen

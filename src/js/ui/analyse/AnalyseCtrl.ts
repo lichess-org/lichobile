@@ -99,7 +99,7 @@ export default class AnalyseCtrl {
     };
 
     this.showGround();
-    this.initCeval();
+    setTimeout(this.initCeval, 1500);
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();

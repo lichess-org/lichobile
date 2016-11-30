@@ -36,6 +36,10 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const { data, chessgroundCtrl, bounds } = vnode.attrs;
 
+    if (bounds) {
+      chessgroundCtrl.setBounds(bounds);
+    }
+
     function wrapperOnCreate({ dom }: Mithril.ChildNode) {
       const icon = gameIcon(data.game.variant.key);
       if (icon && data.game.variant.key !== 'standard' && data.game.status &&
@@ -46,11 +50,6 @@ const Board: Mithril.Component<Attrs, State> = {
 
     function boardOnCreate({ dom }: Mithril.ChildNode) {
       if (chessgroundCtrl) {
-        if (!bounds) {
-          chessgroundCtrl.setBounds(dom.getBoundingClientRect());
-        } else {
-          chessgroundCtrl.setBounds(bounds);
-        }
         chessground.render(dom, chessgroundCtrl);
       }
     }

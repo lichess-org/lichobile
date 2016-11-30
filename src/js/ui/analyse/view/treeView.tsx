@@ -1,7 +1,7 @@
 import * as m from 'mithril';
 import * as helper from '../../helper';
 import treePath from '../path';
-import { empty, defined, renderEval, isSynthetic } from '../util';
+import { empty, renderEval, isSynthetic } from '../util';
 
 import { AnalyseCtrlInterface, AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
 
@@ -65,10 +65,10 @@ function renderMove(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) 
   return (
     <move data-path={pathStr} className={className}>
       {move.san[0] === 'P' ? move.san.slice(1) : move.san}
+      {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
       {evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
         evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
       )}
-      {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
     </move>
   );
 }
@@ -225,7 +225,7 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
     }
   }
   return (
-    <div key={step.ply + ':meta'} className="meta">{children}</div>
+    <div key={step.ply + ':meta'} className="analysisMeta">{children}</div>
   );
 }
 

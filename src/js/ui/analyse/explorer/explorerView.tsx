@@ -65,7 +65,7 @@ function showDtz(stm: string, move: ExplorerMove) {
 }
 
 function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
-  return m('div.data.empty.scrollerWrapper', {
+  return m('div.data.empty.analyseScrollerWrapper', {
     key: 'explorer-game-end' + title
   }, [
     m('div.title', 'Game over'),
@@ -88,7 +88,7 @@ function show(ctrl: AnalyseCtrlInterface) {
     const moves = data.moves;
     if (moves.length) {
       return (
-        <div key="explorer-tablebase" className="data scrollerWrapper">
+        <div key="explorer-tablebase" className="data analyseScrollerWrapper">
           {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.wdl === -2), data.fen)}
           {showTablebase(ctrl, 'Unknown', moves.filter((move: ExplorerMove) => move.wdl === null), data.fen)}
           {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === -1), data.fen)}
@@ -102,11 +102,11 @@ function show(ctrl: AnalyseCtrlInterface) {
     else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate');
     else return showEmpty(ctrl);
   }
-  return <div key="explorer-no-data" className="scrollerWrapper" />;
+  return <div key="explorer-no-data" className="analyseScrollerWrapper" />;
 }
 
 function showConfig(ctrl: AnalyseCtrlInterface) {
-  return m('div.scrollerWrapper.explorerConfig', {
+  return m('div.analyseScrollerWrapper.explorerConfig', {
     key: 'opening-config'
   }, [
     m('div.title', showTitle(ctrl)),
@@ -115,7 +115,7 @@ function showConfig(ctrl: AnalyseCtrlInterface) {
 }
 
 function failing() {
-  return m('div.failing.message.scrollerWrapper', {
+  return m('div.failing.message.analyseScrollerWrapper', {
     key: 'failing'
   }, [
     m('i[data-icon=,]'),

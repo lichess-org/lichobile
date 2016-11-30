@@ -99,10 +99,8 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   return (
-    <div className="analyseTable" key="analyse">
-      <div className="analyse scrollerWrapper">
-        {renderReplay(ctrl)}
-      </div>
+    <div className="analyse-table analyseScrollerWrapper" key="analyse">
+      {renderReplay(ctrl)}
       {renderInfos(ctrl, isPortrait, shapes)}
     </div>
   );
@@ -113,7 +111,7 @@ function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Sh
   const isCrazy = !!ctrl.vm.step.crazy;
 
   return (
-    <div id="analyseInfos" className="analyseInfos scrollerWrapper">
+    <div className="analyse-infos">
       { (!isCrazy || !isPortrait) && cevalEnabled ?
         renderEvalBox(ctrl) : null
       }
@@ -191,20 +189,21 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   }
 
   return (
-    <div className="cevalBox">
-      <pearl>
+    <div className="analyse-cevalBox">
+      <div className="analyse-curEval">
         { pearl }
         { step.ceval && step.ceval.bestSan ?
-        <div className="bestMove">
+        <div className="analyse-bestMove">
           best {step.ceval.bestSan}
         </div> : null
         }
-      </pearl>
-      <div className="cevalBar">
-        <span style={{ width: percent + '%' }}></span>
       </div>
+      <div
+        className="analyse-cevalBar"
+        style={{ transform: `translateX(-${100 - percent}%)` }}
+      />
       { step.ceval ?
-      <div className="engine_info">
+      <div className="analyse-engine_info">
         <p>Depth {step.ceval.depth}/{step.ceval.maxDepth}</p>
         <p>{Math.round(step.ceval.nps / 1000)} kn/s</p>
       </div> : null
@@ -370,7 +369,7 @@ function renderReplay(ctrl: AnalyseCtrlInterface) {
     tree.push(renderStatus(ctrl));
   }
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
-  const replayClass = 'analyseReplay native_scroller' + (pieceNotation ? ' displayPieces' : '');
+  const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '');
   return (
     <div id="replay" className={replayClass}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}

@@ -13,8 +13,8 @@ export default {
     return str.split(',').map(step => {
       const s = step.split(':');
       return {
-        ply: parseInt(s[0]),
-        variation: s[1] ? parseInt(s[1]) : null
+        ply: ~~s[0],
+        variation: s[1] ? ~~s[1] : null
       };
     });
   },

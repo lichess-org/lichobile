@@ -28,7 +28,7 @@ export function onPageEnter(anim: (el: HTMLElement) => void) {
 // because mithril will call 'onremove' asynchronously when the component has
 // an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
 // thus this helper
-export function onPageLeave(anim: (el: HTMLElement) => Promise<any>, cleanup: () => void = null) {
+export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup: () => void = null) {
   return function({ dom }: Mithril.ChildNode, done: () => void) {
     if (cleanup) cleanup();
     return anim(dom as HTMLElement)
@@ -133,10 +133,6 @@ export function viewportDim(): ViewportDim {
 
 export const viewSlideIn = onPageEnter(pageSlideIn);
 export const viewFadeIn = onPageEnter(elFadeIn);
-export const viewSlideOut = onPageLeave((el: HTMLElement) => {
-  const x = router.getViewSlideDirection() === 'fwd' ? '-100%' : '100%';
-  return Zanimo(el, 'transform', `translateX(${x})`, animDuration, 'ease-in');
-});
 
 export const viewFadeOut = onPageLeave(elFadeOut);
 
@@ -372,12 +368,12 @@ export function analyticsTrackEvent(category: string, action: string) {
   }
 }
 
-export function autofocus(vnode: any) {
-  vnode.dom.focus();
+export function autofocus(vnode: Mithril.ChildNode) {
+  (vnode.dom as HTMLElement).focus();
 }
 
 let contentHeight: number;
-export function onKeyboardShow(e: any) {
+export function onKeyboardShow(e: Ionic.KeyboardEvent) {
   if (window.cordova.platformId === 'ios') {
     const content = document.getElementById('free_content');
     if (content) {

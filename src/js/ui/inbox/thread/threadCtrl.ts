@@ -3,7 +3,6 @@ import redraw from '../../../utils/redraw';
 import { handleXhrError } from '../../../utils';
 import * as xhr from './../inboxXhr';
 import * as helper from '../../helper';
-import * as m from 'mithril';
 import { ThreadData, ThreadAttrs, ThreadState } from '../interfaces';
 import router from '../../../router';
 import * as stream from 'mithril/stream';
@@ -17,7 +16,7 @@ export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): 
   const thread = stream<ThreadData>();
   const deleteAttempted = stream<boolean>(false);
 
-  function onKeyboardShow(e: Event) {
+  function onKeyboardShow(e: Ionic.KeyboardEvent) {
     helper.onKeyboardShow(e);
     (document.activeElement as HTMLElement).scrollIntoView(true);
   }

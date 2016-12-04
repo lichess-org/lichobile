@@ -1,5 +1,4 @@
 var socketInstance;
-var previousSocketInstance;
 var currentUrl;
 
 var strongSocketDefaults = {
@@ -29,7 +28,7 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.pingSchedule = null;
   this.connectSchedule = null;
   this.ackableMessages = [];
-  this.lastPingTime = this.now();
+  this.lastPingTime = Date.now();
   this.currentLag = 0;
   this.averageLag = 0;
   this.autoReconnect = true;
@@ -47,48 +46,52 @@ StrongSocket.prototype = {
 
   connect: function() {
     var self = this;
-    self.destroy();
+
+    // be sure any previous ws instance is closed
+    clearTimeout(self.pingSchedule);
+    clearTimeout(self.connectSchedule);
+    if (self.ws) self.ws.close();
+
     self.autoReconnect = true;
     var fullUrl = self.baseUrl() + self.url + '?' + serializeQueryParameters(self.settings.params);
     self.debug('connection attempt to ' + fullUrl, true);
-    try {
-      if (WebSocket) self.ws = new WebSocket(fullUrl);
-      else throw '[lila] no websockets available!';
 
-      self.ws.onerror = function(e) {
-        self.onError(e);
-      };
-      self.ws.onclose = function() {
-        postMessage({ topic: 'disconnected' });
-        if (self.autoReconnect) {
-          self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);
-          self.scheduleConnect(self.options.autoReconnectDelay);
-        }
-      };
-      self.ws.onopen = function() {
-        self.debug('connected to ' + fullUrl, true);
-        postMessage({ topic: 'onOpen' });
-        if (self.options.sendOnOpen) self.options.sendOnOpen.forEach(function(x) { self.send(x.t, x.d, x.o); });
-        self.onSuccess();
-        self.pingNow();
-        var resend = self.ackableMessages;
-        self.ackableMessages = [];
-        resend.forEach(function(x) { self.send(x.t, x.d); });
-      };
-      self.ws.onmessage = function(e) {
-        var msg = JSON.parse(e.data);
-        var mData = msg.d || [];
-
-        if (msg.t === 'n') self.pong();
-        else self.debug(e.data);
-
-        if (msg.t === 'b') mData.forEach(function(x) { self.handle(x); });
-        else self.handle(msg);
-      };
-    } catch (e) {
+    self.ws = new WebSocket(fullUrl);
+    self.ws.onerror = function(e) {
       self.onError(e);
-    }
+    };
+    self.ws.onclose = function() {
+      postMessage({ topic: 'disconnected' });
+      if (self.autoReconnect) {
+        self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);
+        self.scheduleConnect(self.options.autoReconnectDelay);
+      }
+    };
+    self.ws.onopen = function() {
+      self.debug('connected to ' + fullUrl, true);
+      postMessage({ topic: 'onOpen' });
+      if (self.options.sendOnOpen) self.options.sendOnOpen.forEach(function(x) { self.send(x.t, x.d, x.o); });
+      self.onSuccess();
+      self.pingNow();
+      var resend = self.ackableMessages;
+      self.ackableMessages = [];
+      resend.forEach(function(x) { self.send(x.t, x.d); });
+    };
+    self.ws.onmessage = function(e) {
+      var msg = JSON.parse(e.data);
+      var mData = msg.d || [];
+
+      if (msg.t === 'n') self.pong();
+      else self.debug(e.data);
+
+      if (msg.t === 'b') mData.forEach(function(x) { self.handle(x); });
+      else self.handle(msg);
+    };
     self.scheduleConnect(self.options.pingMaxLag);
+  },
+
+  isOpen: function() {
+    return this.ws && this.ws.readyState === WebSocket.OPEN;
   },
 
   setVersion: function(version) {
@@ -101,21 +104,22 @@ StrongSocket.prototype = {
     var data = d || {},
     options = o || {};
     if (options.withLag) d.lag = Math.round(self.averageLag);
-    if (options.ackable)
+    if (options.ackable) {
       self.ackableMessages.push({
         t: t,
         d: d
       });
-      var message = JSON.stringify({
-        t: t,
-        d: data
-      });
-      self.debug('send ' + message);
-      try {
-        self.ws.send(message);
-      } catch (e) {
-        self.debug(e);
-      }
+    }
+    var message = JSON.stringify({
+      t: t,
+      d: data
+    });
+    self.debug('send ' + message);
+    try {
+      self.ws.send(message);
+    } catch (e) {
+      self.debug(e);
+    }
   },
 
   sendAckable: function(t, d) {
@@ -148,7 +152,7 @@ StrongSocket.prototype = {
     clearTimeout(self.connectSchedule);
     try {
       self.ws.send(self.pingData());
-      self.lastPingTime = self.now();
+      self.lastPingTime = Date.now();
     } catch (e) {
       self.debug(e, true);
     }
@@ -159,7 +163,7 @@ StrongSocket.prototype = {
     var self = this;
     clearTimeout(self.connectSchedule);
     self.schedulePing(self.options.pingDelay);
-    self.currentLag = self.now() - self.lastPingTime;
+    self.currentLag = Date.now() - self.lastPingTime;
     if (!self.averageLag) self.averageLag = self.currentLag;
     else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
   },
@@ -196,40 +200,40 @@ StrongSocket.prototype = {
     }
   },
 
-  now: function() {
-    return new Date().getTime();
-  },
-
   debug: function(msg, always) {
     if ((always || this.options.debug) && console && console.debug) {
       console.debug('[' + this.options.name + ' ' + this.settings.params.sri + ']', msg);
     }
   },
 
-  destroy: function() {
+  appDisconnect: function() {
+    this.disconnect();
+  },
+
+  // close websocket only when all queued messages are sent
+  // accepts a callback to notify when the websocket is properly closed
+  disconnect: function(onDisconnected) {
     clearTimeout(this.pingSchedule);
     clearTimeout(this.connectSchedule);
-    this.disconnect();
-    this.ws = null;
-  },
+    this.autoReconnect = false;
 
-  appDisconnect: function() {
-    var self = this;
-    if (self.options.sendBeforeDisconnect) {
-      self.options.sendBeforeDisconnect.forEach(function(x) { self.send(x.t, x.d, x.o); });
-    }
-    self.destroy();
-  },
-
-  disconnect: function() {
     if (this.ws) {
-      this.debug('Disconnect', true);
-      this.autoReconnect = false;
-      this.ws.onerror = function() {};
-      this.ws.onclose = function() {};
-      this.ws.onopen = function() {};
-      this.ws.onmessage = function() {};
-      this.ws.close();
+      // if all messages are not sent before closed just retry until so
+      if (this.ws.readyState === WebSocket.OPEN && this.ws.bufferedAmount > 0) {
+        this.debug('Queued messages are waiting to being sent, retrying to close...', true);
+        setTimeout(this.disconnect.bind(this, onDisconnected), 2);
+      } else {
+        this.ws.onerror = function() {};
+        this.ws.onclose = function() {};
+        this.ws.onopen = function() {};
+        this.ws.onmessage = function() {};
+        this.ws.close();
+        this.ws = null;
+        this.debug('Disconnect', true);
+        if (onDisconnected) setTimeout(onDisconnected, 0);
+      }
+    } else if (onDisconnected) {
+      setTimeout(onDisconnected, 0);
     }
   },
 
@@ -268,22 +272,33 @@ StrongSocket.prototype = {
 
 function create(payload) {
   // don't always recreate default socket on page change
+  // we don't want to do it for other sockets bc/ we want to register other
+  // handlers on create
   if (socketInstance && payload.opts.options.name === 'default' &&
-  socketInstance.options.name === 'default') {
+    socketInstance.options.name === 'default'
+  ) {
     return;
   }
 
   if (socketInstance) {
-    socketInstance.destroy();
-    previousSocketInstance = socketInstance;
+    socketInstance.disconnect(function() {
+      socketInstance = new StrongSocket(
+        payload.clientId,
+        payload.socketEndPoint,
+        payload.url,
+        payload.version,
+        payload.opts
+      );
+    });
+  } else {
+    socketInstance = new StrongSocket(
+      payload.clientId,
+      payload.socketEndPoint,
+      payload.url,
+      payload.version,
+      payload.opts
+    );
   }
-  socketInstance = new StrongSocket(
-    payload.clientId,
-    payload.socketEndPoint,
-    payload.url,
-    payload.version,
-    payload.opts
-  );
 }
 
 self.onmessage = function(msg) {
@@ -301,19 +316,12 @@ self.onmessage = function(msg) {
     case 'connect':
       if (socketInstance) socketInstance.connect();
       break;
-    case 'restorePrevious':
-      if (socketInstance) socketInstance.destroy();
-      if (previousSocketInstance) {
-        socketInstance = previousSocketInstance;
-        socketInstance.connect();
-      }
-      break;
     case 'disconnect':
       if (socketInstance) socketInstance.appDisconnect();
       break;
     case 'destroy':
       if (socketInstance) {
-        socketInstance.destroy();
+        socketInstance.disconnect();
         socketInstance = null;
       }
       break;

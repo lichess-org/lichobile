@@ -11,8 +11,6 @@ import challengesApi from './lichess/challenges';
 import { ChallengesData } from './lichess/interfaces/challenge';
 import session from './session';
 
-const worker = new Worker('lib/socketWorker.js');
-
 interface LichessMessage<T> {
   t: string
   d?: T
@@ -25,13 +23,12 @@ interface Options {
   debug?: boolean;
   pingDelay?: number;
   sendOnOpen?: Array<LichessMessageAny>;
-  sendBeforeDisconnect?: Array<LichessMessageAny>;
   registeredEvents: string[];
 }
 
 interface SocketConfig {
   options: Options;
-  params?: Object;
+  params?: StringMap
 }
 
 type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
@@ -54,8 +51,10 @@ interface SocketSetup {
   opts: SocketConfig
 }
 
-let connectedWS = false;
-let currentMoveLatency: number = 0;
+interface ConnectionSetup {
+  setup: SocketSetup
+  handlers: SocketHandlers
+}
 
 interface FollowingEntersPayload extends LichessMessage<Friend> {
   playing: boolean
@@ -65,6 +64,12 @@ interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
   playing: Array<string>
 }
 
+// connection is established an server ping/pong working normally
+let connectedWS = false;
+let currentMoveLatency: number = 0;
+let rememberedSetups: Array<ConnectionSetup> = [];
+
+const worker = new Worker('lib/socketWorker.js');
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>
@@ -117,10 +122,19 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
         break;
     }
   };
+  // remember last 2 connection setup, to be able to restore the previous one
+  rememberedSetups.push({ setup, handlers: socketHandlers })
+  if (rememberedSetups.length > 2) rememberedSetups.shift()
   tellWorker(worker, 'create', setup);
 }
 
-function createGame(url: string, version: number, handlers: Object, gameUrl: string, userTv?: string) {
+function createGame(
+  url: string,
+  version: number,
+  handlers: MessageHandlers,
+  gameUrl: string,
+  userTv?: string
+) {
   let errorDetected = false;
   const socketHandlers = {
     onError: function() {
@@ -161,7 +175,12 @@ function createGame(url: string, version: number, handlers: Object, gameUrl: str
   setupConnection(setup, socketHandlers)
 }
 
-function createTournament(tournamentId: string, version: number, handlers: Object, featuredGameId: string) {
+function createTournament(
+  tournamentId: string,
+  version: number,
+  handlers: MessageHandlers,
+  featuredGameId: string
+) {
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
@@ -186,7 +205,12 @@ function createTournament(tournamentId: string, version: number, handlers: Objec
   setupConnection(setup, socketHandlers);
 }
 
-function createChallenge(id: string, version: number, onOpen: () => void, handlers: Object) {
+function createChallenge(
+  id: string,
+  version: number,
+  onOpen: () => void,
+  handlers: MessageHandlers
+) {
   const socketHandlers = {
     onOpen: () => {
       session.refresh();
@@ -215,7 +239,11 @@ function createChallenge(id: string, version: number, onOpen: () => void, handle
   setupConnection(setup, socketHandlers);
 }
 
-function createLobby(lobbyVersion: number, onOpen: () => void, handlers: Object) {
+function createLobby(
+  lobbyVersion: number,
+  onOpen: () => void,
+  handlers: MessageHandlers
+) {
   const socketHandlers = {
     onOpen: () => {
       session.refresh();
@@ -326,7 +354,9 @@ export default {
     tellWorker(worker, 'connect');
   },
   restorePrevious() {
-    tellWorker(worker, 'restorePrevious');
+    const { setup, handlers } = rememberedSetups.shift();
+    rememberedSetups = [];
+    setupConnection(setup, handlers)
   },
   disconnect() {
     tellWorker(worker, 'disconnect');

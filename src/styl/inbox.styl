@@ -114,7 +114,7 @@ table.threadList
     border-top 1px solid #555555
     &.first
       border-top none
-    .infos
+    > .infos
       width 90%
       margin 0 auto
       margin-bottom 0.5em
@@ -123,6 +123,10 @@ table.threadList
         line-height 1
       >.user
         display inline
+    > .text
+      overflow hidden
+      word-break break-word
+
 
 
 .composeWrapper

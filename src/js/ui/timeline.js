@@ -91,7 +91,7 @@ export function renderFollow(entry) {
 
 export function renderGameEnd(entry) {
   const icon = gameIcon(entry.data.perf);
-  const result = typeof entry.data.win === 'undefined' ? 'Draw' : (entry.data.win ? 'Victory' : 'Defeat');
+  const result = typeof entry.data.win === 'undefined' ? i18n('draw') : (entry.data.win ? 'Victory' : 'Defeat');
   const fromNow = window.moment(entry.date).fromNow();
   const key = 'game-end' + entry.date;
 

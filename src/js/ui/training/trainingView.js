@@ -196,8 +196,7 @@ function renderWin(ctrl, attempt) {
     m('h3.puzzleState.withIcon[data-icon=E]', [
       m('strong', i18n('victory')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
-    ]),
-    attempt ? m('span.nbSeconds', i18n('puzzleSolvedInXSeconds', attempt.seconds)) : null
+    ])
   ]);
 }
 

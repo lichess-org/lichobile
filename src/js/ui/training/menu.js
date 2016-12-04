@@ -90,18 +90,30 @@ function drawChart(ctrl, ctx) {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
     canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
   }
-  new Chart(ctx).Line({
-    labels: ctrl.data.user.history.map(() => ''),
-    datasets: [
-      {
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ctrl.data.user.history.map(() => ''),
+      datasets: [{
         data: ctrl.data.user.history,
-        fillColor: 'rgba(196, 168, 111, 0.4)',
-        strokeColor: 'rgba(196, 168, 111, 0.8)'
+        backgroundColor: 'rgba(196, 168, 111, 0.4)',
+        borderColor: 'rgba(196, 168, 111, 0.8)',
+        pointRadius: 0
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          display: false
+        }],
+        yAxes: [{
+          display: false
+        }]
+      },
+      legend: {
+        display: false
       }
-    ]
-  }, {
-    pointDot: false,
-    scaleShowGridLines: false
+    }
   });
 }
 

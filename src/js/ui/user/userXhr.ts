@@ -49,5 +49,5 @@ export function tv(userId: string): Promise<OnlineGameData> {
 }
 
 export function variantperf(userId: string, variantKey: string) {
-  return fetchJSON(`/@/${userId}/perf/${variantKey}`, null, false);
+  return fetchJSON(`/@/${userId}/perf/${variantKey}?graph=1`, null, false);
 }

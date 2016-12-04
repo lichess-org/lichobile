@@ -64,7 +64,8 @@ interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
   playing: Array<string>
 }
 
-// connection is established an server ping/pong working normally
+// connectedWS means connection is established and server ping/pong
+// is working normally
 let connectedWS = false;
 let currentMoveLatency: number = 0;
 let rememberedSetups: Array<ConnectionSetup> = [];
@@ -354,9 +355,14 @@ export default {
     tellWorker(worker, 'connect');
   },
   restorePrevious() {
-    const { setup, handlers } = rememberedSetups.shift();
-    rememberedSetups = [];
-    setupConnection(setup, handlers)
+    // if by chance we don't have a previous connection, just close
+    if (rememberedSetups.length === 2) {
+      const { setup, handlers } = rememberedSetups.shift();
+      rememberedSetups = [];
+      setupConnection(setup, handlers)
+    } else {
+      tellWorker(worker, 'destroy');
+    }
   },
   disconnect() {
     tellWorker(worker, 'disconnect');

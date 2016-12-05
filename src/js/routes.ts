@@ -56,6 +56,7 @@ export default {
       'importer': importer,
       'challenge/:id': challenge,
       'tv': tv,
+      'tv/:channel': tv,
       'correspondence': correspondence,
       '@/:id': user,
       '@/:id/following': userFollowing,

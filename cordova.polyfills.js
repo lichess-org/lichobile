@@ -143,6 +143,11 @@
     }
   };
 
+  // universal/deep linking
+  window.universalLinks = {
+    subscribe: noop
+  };
+
 }());
 
 if (!window.Stockfish) {

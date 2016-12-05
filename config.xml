@@ -66,6 +66,9 @@
     <preference name="xwalkVersion" value="22" />
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
     <plugin name="cordova-plugin-splashscreen" spec="~3.2.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.1" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
@@ -87,9 +90,46 @@
     <plugin name="cordova-plugin-fullscreen" spec="~1.1.0" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.4" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
+    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="~2.2.0">
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
     <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#8d0370a" />
+    <universal-links>
+        <host name="*.lichess.org" scheme="https">
+          <path event="analysis" url="/analysis" />
+          <path event="challenge" url="/challenge/*" />
+          <path event="editor" url="/editor" />
+          <path event="inbox" url="/inbox" />
+          <path event="inboxNew" url="/inbox/new" />
+          <path event="players" url="/player" />
+          <path event="tournamentDetail" url="/tournament/*" />
+          <path event="tournamentList" url="/tournament" />
+          <path event="training" url="/training" />
+          <path event="trainingProblem" url="/training/*" />
+          <path event="tv" url="/tv" />
+          <path event="tvChannel" url="/tv/*" />
+          <path event="userVariantProfile" url="/@/*/perf/*" />
+          <path event="userProfile" url="/@/*" />
+          <path event="other" url="*" />
+        </host>
+        <host name="lichess.org" scheme="https">
+          <path event="analysis" url="/analysis" />
+          <path event="challenge" url="/challenge/*" />
+          <path event="editor" url="/editor" />
+          <path event="inbox" url="/inbox" />
+          <path event="inboxNew" url="/inbox/new" />
+          <path event="players" url="/player" />
+          <path event="tournamentDetail" url="/tournament/*" />
+          <path event="tournamentList" url="/tournament" />
+          <path event="training" url="/training" />
+          <path event="trainingProblem" url="/training/*" />
+          <path event="tv" url="/tv" />
+          <path event="tvChannel" url="/tv/*" />
+          <path event="userVariantProfile" url="/@/*/perf/*" />
+          <path event="userProfile" url="/@/*" />
+          <path event="other" url="*" />
+        </host>
+    </universal-links>
 </widget>

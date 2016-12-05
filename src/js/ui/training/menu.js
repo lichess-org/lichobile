@@ -46,8 +46,7 @@ export default {
 
 export function renderUserInfos(ctrl) {
   return [
-    m('p', m.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
-    helper.isPortrait() ? m('br') : null,
+    m('p.trainingRatingHeader', m.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
     ctrl.data.user.history ? m('canvas', {
       oncreate(vnode) {
         const ctx = vnode.dom.getContext('2d');
@@ -66,7 +65,7 @@ export function renderUserInfos(ctrl) {
 }
 
 export function renderSigninBox() {
-  return m('div', [
+  return m('div.trainingMenuContent', [
     m('p', i18n('toTrackYourProgress')),
     m('p',
       m('button', {
@@ -90,15 +89,15 @@ function drawChart(ctrl, ctx) {
     canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
     canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
   }
-  new Chart(ctx, {
+  const c = new Chart(ctx, {
     type: 'line',
     data: {
       labels: ctrl.data.user.history.map(() => ''),
       datasets: [{
         data: ctrl.data.user.history,
-        backgroundColor: 'rgba(196, 168, 111, 0.4)',
         borderColor: 'rgba(196, 168, 111, 0.8)',
-        pointRadius: 0
+        pointRadius: 0,
+        fill: false
       }]
     },
     options: {
@@ -107,7 +106,11 @@ function drawChart(ctrl, ctx) {
           display: false
         }],
         yAxes: [{
-          display: false
+          id: 'y',
+          type: 'linear',
+          gridLines: {
+            color: '#ddd'
+          }
         }]
       },
       legend: {
@@ -115,6 +118,7 @@ function drawChart(ctrl, ctx) {
       }
     }
   });
+  return c;
 }
 
 function renderTrainingMenu(ctrl) {

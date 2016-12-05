@@ -9,7 +9,10 @@
             true,
             "spaces"
         ],
-        "no-unused-variable": [true, "react"],
+        "no-duplicate-variable": true,
+        "no-unused-variable": true,
+        "no-unused-new": true,
+        "no-unused-expression": true,
         "no-use-before-declare": true,
         "no-duplicate-variable": true,
         "no-shadowed-variable": true,

@@ -31,7 +31,7 @@ function renderBody(ctrl) {
 
   return (
     <div class="variantPerfBody native_scroller page">
-      <canvas oncreate={node => drawChart(data, node)} onupdate={node => drawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
+      <canvas oncreate={node => drawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
       <table class="variantPerf">
         <tbody>
         <tr>
@@ -174,7 +174,9 @@ function isEmpty(element) {
 }
 
 function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  return str.replace(/\w\S*/g, txt =>
+    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  );
 }
 
 function drawChart(data, node) {
@@ -182,11 +184,13 @@ function drawChart(data, node) {
   const canvas = ctx.canvas;
   const now = (new Date()).getTime();
   const yearAgo = now - ONE_YEAR;
-  const graphData = data.graph.map(normalizeGraphData).reduce((acc, i) => removeOld(yearAgo, acc, i), []);
+  const graphData = data.graph
+    .map(normalizeGraphData)
+    .filter(i => i.x > yearAgo);
 
   if (!graphData || graphData.length < 3) {
     canvas.className = 'hideVariantPerfCanvas';
-    return;
+    return null;
   }
 
   if (helper.isPortrait()) {
@@ -201,7 +205,7 @@ function drawChart(data, node) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
   }
 
-  new Chart(ctx, {
+  const c = new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [{
@@ -244,16 +248,10 @@ function drawChart(data, node) {
       }
     }
   });
+  return c;
 }
 
-function removeOld (cutOff, acc, i) {
-  if (i.x > cutOff) {
-    acc.push(i);
-  }
-  return acc;
-}
-
-function normalizeGraphData (i) {
+function normalizeGraphData(i) {
   const unixTime = (new Date(i[0], i[1], i[2])).getTime();
   return {x: unixTime, y: i[3]};
 }

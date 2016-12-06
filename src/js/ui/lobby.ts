@@ -1,6 +1,8 @@
 import * as utils from '../utils';
 import redraw from '../utils/redraw';
+import settings from '../settings';
 import * as helper from './helper';
+import spinner from '../spinner';
 import router from '../router';
 import { loader } from './shared/common';
 import popupWidget from './shared/popup';
@@ -12,28 +14,51 @@ import * as m from 'mithril';
 
 let nbPlayers = 0;
 let nbGames = 0;
-let hookId: string = null;
-
 let isOpen = false;
+
+// reference created hookId to avoid creating more than 1 hook
+let hookId: string | null = null;
 
 export default {
   startSeeking,
   cancelSeeking,
   view() {
-    const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?');
-    const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?');
+
     function content() {
-      return m('div.seek_real_time', [
-        m('div.nb_players', socket.isConnected() ?
-          m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-          m('div', [i18n('reconnecting'), loader])
-        ),
-        m('div.nb_players', socket.isConnected() ?
-          m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-          m('div', [i18n('reconnecting'), loader])
-        ),
+      const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?');
+      const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?');
+      const conf = settings.gameSetup.human;
+      const variant = conf.availableVariants.find(v => v[1] === conf.variant())[0];
+      const timeMode = conf.timeMode();
+      const mode = conf.mode() === '0' ? i18n('casual') : i18n('rated');
+      let time: string;
+      if (timeMode === '1') {
+        time = conf.time() + '+' + conf.increment();
+      } else if (timeMode === '2') {
+        time = i18n('nbDays', conf.days());
+      } else {
+        time = '∞';
+      }
+      const variantMode = ` • ${variant} • ${mode}`;
+
+      return m('div.lobby-waitingPopup', [
+        m('div.lobby-waitingForOpponent', i18n('waitingForOpponent')),
         m('br'),
+        m('div.gameInfos', [
+          m('span[data-icon=p]', time), variantMode
+        ]),
         m('br'),
+        spinner.getVdom(),
+        m('div.lobby-nbPlayers', [
+          m('div', socket.isConnected() ?
+            m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
+            m('div', [i18n('reconnecting'), loader])
+          ),
+          m('div', socket.isConnected() ?
+            m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
+            m('div', [i18n('reconnecting'), loader])
+          ),
+        ]),
         m('button[data-icon=L]', {
           oncreate: helper.ontap(() => cancelSeeking())
         }, i18n('cancel'))
@@ -42,7 +67,7 @@ export default {
 
     return popupWidget(
       null,
-      () => m('div', i18n('waitingForOpponent') + '...'),
+      null,
       content,
       isOpen
     );

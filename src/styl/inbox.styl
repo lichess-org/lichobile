@@ -1,7 +1,11 @@
 .view-container.light
   .postWrapper
     border-top-color borderLightGray
-
+  .responseWrapper
+    textarea
+      border-color borderLightGray
+  .composeInput
+    border-color borderLightGray
 
 .inboxWrapper
   height 100%
@@ -128,33 +132,33 @@ table.threadList
       word-break break-word
 
 
-
 .composeWrapper
   width 95%
   margin 0 auto
   height 100%
-  >#composeForm
-    display flex
-    flex-flow column nowrap
-    height 100%
-    >input
-      padding-left 5px
-      border none
-      outline none
-      flex none
-    >.composeInput
-      background transparent
-      border 1px solid #555555
-      width 100%
-      margin 5px 0px 5px 0px
-      &::placeholder
-        opacity 0.6
-    >textarea
-      flex 3 100%
-      width 100%
-    >button
-      margin 5px auto 10px auto
-      color gold
-      width 50%
-    >.errorMessage
-      color: red
+
+#composeForm
+  display flex
+  flex-flow column nowrap
+  height 100%
+  >input
+    padding-left 5px
+    outline none
+    flex none
+  >textarea
+    flex 3 100%
+    width 100%
+  >button
+    margin 5px auto 10px auto
+    color gold
+    width 50%
+  >.errorMessage
+    color: red
+
+.composeInput
+  background transparent
+  border 1px solid #555555
+  width 100%
+  margin 5px 0px 5px 0px
+  &::placeholder
+    opacity 0.6

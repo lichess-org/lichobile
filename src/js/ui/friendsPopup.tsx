@@ -1,3 +1,4 @@
+import * as m from 'mithril';
 import * as helper from './helper';
 import router from '../router';
 import popupWidget from './shared/popup';
@@ -13,7 +14,10 @@ export default {
   view() {
 
     function header() {
-      return <div><span data-icon="f"/>{i18n('onlineFriends')}</div>;
+      return [
+        m('span.nbFriends', friendsApi.count()),
+        ' ' + i18n('onlineFriends')
+      ]
     }
 
     return popupWidget(

@@ -3,42 +3,18 @@ import session from '../../session';
 import loginModal from '../loginModal';
 import spinner from '../../spinner';
 import challengesApi from '../../lichess/challenges';
-import layout from '../layout';
-import * as utils from '../../utils';
 import * as helper from '../helper';
-import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import * as m from 'mithril';
+import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge';
+import { ChallengeState } from './interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-  var overlay;
-
-  const header = utils.partialf(headerWidget, 'lichess.org');
-  const board = viewOnlyBoardContent;
-  const challenge = ctrl.challenge();
-
-  if (challenge) {
-    if (challenge.direction === 'in') {
-      overlay = joinPopup(ctrl);
-    } else if (challenge.direction === 'out') {
-      if (challenge.destUser) {
-        overlay = awaitChallengePopup(ctrl);
-      } else {
-        overlay = awaitInvitePopup(ctrl);
-      }
-    }
-  }
-
-  return layout.board(header, board, overlay);
-}
-
-function publicUrl(challenge) {
+function publicUrl(challenge: Challenge) {
   return 'https://lichess.org/' + challenge.id;
 }
 
-function gameInfos(challenge) {
+function gameInfos(challenge: Challenge) {
   const mode = challenge.rated ? i18n('rated') : i18n('casual');
   const time = challengesApi.challengeTime(challenge);
   return (
@@ -48,9 +24,9 @@ function gameInfos(challenge) {
   );
 }
 
-function joinPopup(ctrl) {
+export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
   const challenge = ctrl.challenge();
-  var joinDom;
+  let joinDom: Mithril.ChildNode;
   if (challenge.rated && !session.isConnected()) {
     joinDom = m('div.error', [
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
@@ -102,7 +78,7 @@ function joinPopup(ctrl) {
   };
 }
 
-function awaitInvitePopup(ctrl) {
+export function awaitInvitePopup(ctrl: ChallengeState) {
   const challenge = ctrl.challenge();
 
   const isPersistent = challengesApi.isPersistent(challenge);
@@ -144,12 +120,12 @@ function awaitInvitePopup(ctrl) {
   };
 }
 
-function challengeUserFormat(user) {
+function challengeUserFormat(user: ChallengeUser) {
   const ratingString = user.rating + (user.provisional ? '?' : '');
   return `${user.id} (${ratingString})`;
 }
 
-function awaitChallengePopup(ctrl) {
+export function awaitChallengePopup(ctrl: ChallengeState) {
 
   const challenge = ctrl.challenge();
 

@@ -51,9 +51,7 @@ function renderHeader(user: Session) {
       { hasNetwork() && user ?
         <h2 key="username-connected" className="username connected">
           { user.username }
-          <div class='ledContainer'>
-            <div class='led' style={'background: ' + color}/>
-          </div>
+          <div class='led' style={'background: ' + color}/>
         </h2> : null
       }
       { hasNetwork() && session.isConnected() ?

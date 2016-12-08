@@ -53,9 +53,13 @@ function renderWarnings(user) {
 
 function renderStatus(user) {
   const status = user.online ? 'online' : 'offline';
+  console.log(user);
   return (
     <section className="onlineStatus">
-      <span className={'fa fa-circle userStatus ' + status} />
+      { user.patron ?
+        <span className={'userStatus patron ' + status}>&nbsp;</span> :
+        <span className={'fa fa-circle userStatus ' + status} />
+      }
       {i18n(status)}
     </section>
   );

@@ -192,7 +192,7 @@ export default {
       return m('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions();
-          (lobby as any).startSeeking();
+          lobby.startSeeking();
         })
       }, i18n('newOpponent'));
     }

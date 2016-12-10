@@ -47,7 +47,7 @@ interface SocketSetup {
   clientId: string
   socketEndPoint: string
   url: string
-  version: number
+  version?: number
   opts: SocketConfig
 }
 
@@ -241,7 +241,6 @@ function createChallenge(
 }
 
 function createLobby(
-  lobbyVersion: number,
   onOpen: () => void,
   handlers: MessageHandlers
 ) {
@@ -265,7 +264,6 @@ function createLobby(
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url: `/lobby/socket/v${apiVersion}`,
-    version: lobbyVersion,
     opts
   };
   setupConnection(setup, socketHandlers);

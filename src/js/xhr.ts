@@ -3,7 +3,7 @@ import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
-import { TimelineData, LobbyData, HookData } from './lichess/interfaces';
+import { TimelineData, LobbyData, HookData, Pool } from './lichess/interfaces';
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
@@ -108,8 +108,13 @@ export function acceptChallenge(id: string): Promise<OnlineGameData> {
   return fetchJSON(`/challenge/${id}/accept`, { method: 'POST'}, true);
 }
 
+export let cachedPools: Array<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
-  return fetchJSON('/', null, feedback);
+  return fetchJSON('/', null, feedback)
+  .then((d: LobbyData) => {
+    cachedPools = d.lobby.pools
+    return d
+  })
 }
 
 export function seeks(feedback: boolean) {

@@ -16,7 +16,7 @@ import redraw from './utils/redraw';
 import session from './session';
 import { loadPreferredLanguage } from './i18n';
 import settings from './settings';
-import { status as xhrStatus, setServerLang } from './xhr';
+import * as xhr from './xhr';
 import challengesApi from './lichess/challenges';
 import * as helper from './ui/helper';
 import router from './router';
@@ -88,7 +88,10 @@ function onOnline() {
 
       firstConnection = false;
 
-      xhrStatus();
+      xhr.status();
+
+      // pre fetch and cache available pools
+      xhr.lobby();
 
       session.rememberLogin()
       .then(() => {
@@ -98,7 +101,7 @@ function onOnline() {
       })
       .then(session.nowPlaying)
       .then(syncWithNowPlayingGames)
-      .then(() => setServerLang(settings.general.lang()))
+      .then(() => xhr.setServerLang(settings.general.lang()))
       .catch(() => console.log('connected as anonymous'));
 
     } else {

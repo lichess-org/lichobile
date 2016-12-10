@@ -2,14 +2,17 @@ import * as utils from '../utils';
 import router from '../router';
 import * as xhr from '../xhr';
 import settings, { GameSettings } from '../settings';
+import spinner from '../spinner';
 import session from '../session';
+import * as helper from './helper';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import lobby from './lobby';
 import * as m from 'mithril';
+import { Pool } from '../lichess/interfaces';
 
-let isOpen = false;
+let isOpen = false
 
 export default {
   open,
@@ -27,24 +30,10 @@ export default {
   },
 
   view() {
-
-    function form() {
-      return renderForm(
-        'human',
-        settings.gameSetup.human,
-        settings.gameSetup.human.availableVariants,
-        settings.gameSetup.human.availableTimeModes.filter(function(e) {
-          // correspondence and unlimited time modes are only available when
-          // connected
-          return e[1] === '1' || session.isConnected();
-        })
-      );
-    }
-
     return popupWidget(
       'new_game_form_popup game_form_popup',
       null,
-      form,
+      renderContent,
       isOpen,
       close
     );
@@ -52,6 +41,7 @@ export default {
 };
 
 function open() {
+  if (!xhr.cachedPools) xhr.lobby(false)
   router.backbutton.stack.push(close);
   isOpen = true;
 }
@@ -61,8 +51,9 @@ function close(fromBB?: string) {
   isOpen = false;
 }
 
-function seekHumanGame() {
-  if (settings.gameSetup.human.timeMode() === '1') {
+function goSeek() {
+  const conf = settings.gameSetup.human
+  if (conf.preset() === 'quick' || conf.timeMode() === '1') {
     close();
     lobby.startSeeking();
   }
@@ -73,7 +64,78 @@ function seekHumanGame() {
   }
 }
 
-function renderForm(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
+function renderContent() {
+
+  const conf = settings.gameSetup.human;
+  const preset = conf.preset();
+
+  return m('form.game_form', {
+    onsubmit(e: Event) {
+      e.preventDefault();
+      if (!settings.gameSetup.isTimeValid(conf)) return;
+      if (!xhr.cachedPools.map(p => p.id).includes(settings.gameSetup.human.pool())) return;
+      close();
+      goSeek();
+    }
+  }, [
+    m('div.newGame-preset_switch', [
+      m('div.nice-radio', formWidgets.renderRadio(
+        'Quick game',
+        'preset',
+        'quick',
+        preset === 'quick',
+        e => utils.autoredraw(() => conf.preset((e.target as any).value))
+      )),
+      m('div.nice-radio', formWidgets.renderRadio(
+        'Custom',
+        'preset',
+        'custom',
+        preset === 'custom',
+        e => utils.autoredraw(() => conf.preset((e.target as any).value))
+      ))
+    ]),
+    preset === 'quick' ?
+    renderQuickSetup() :
+    renderCustomSetup(
+      'human',
+      conf,
+      conf.availableVariants,
+      conf.availableTimeModes.filter((e) => {
+        // correspondence and unlimited time modes are only available when
+        // connected
+        return e[1] === '1' || session.isConnected();
+      })
+    ),
+    m('button[data-icon=E][type=submit].newGameButton', i18n('playOnline'))
+  ])
+}
+
+function renderQuickSetup() {
+  const pools = xhr.cachedPools
+  const selectedPool = settings.gameSetup.human.pool()
+  const availIds = pools.map(p => p.id)
+  return m('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
+    xhr.cachedPools.map(p => renderPool(p, selectedPool, availIds)) : spinner.getVdom()
+  )
+}
+
+function renderPool(p: Pool, selectedPool: string, allPoolIds: Array<string>) {
+  return m('div.newGame-pool', {
+    key: 'pools',
+    className: [
+      p.id === selectedPool ? 'on' : '',
+      allPoolIds.includes(selectedPool) && selectedPool !== p.id ? 'transp' : ''
+    ].join(' '),
+    oncreate: helper.ontap(() =>
+      utils.autoredraw(() => settings.gameSetup.human.pool(p.id))
+    )
+  }, [
+    m('div.newGame-clock', p.id),
+    m('div.newGame-perf', p.perf)
+  ])
+}
+
+function renderCustomSetup(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode();
   const hasClock = timeMode === '1';
   const hasDays = timeMode === '2' && session.isConnected();
@@ -187,16 +249,8 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
       ));
   }
 
-  return m('form.game_form', {
-    onsubmit(e: Event) {
-      e.preventDefault();
-      if (!settings.gameSetup.isTimeValid(settingsObj)) return;
-      close();
-      seekHumanGame();
-    }
-  }, [
+  return m.fragment({ key: 'customSetup' }, [
     m('fieldset', generalFieldset),
-    m('fieldset', timeFieldset),
-    m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
-  ]);
+    m('fieldset', timeFieldset)
+  ])
 }

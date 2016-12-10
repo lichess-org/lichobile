@@ -1,9 +1,17 @@
 export interface LightPlayer {
 }
 
+export interface Pool {
+  id: string
+  lim: number
+  inc: number
+  perf: string
+}
+
 export interface LobbyData {
   lobby: {
     version: number
+    pools: Array<Pool>
   }
 }
 

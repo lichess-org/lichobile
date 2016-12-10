@@ -3,6 +3,10 @@
   > .popup_content
     padding 0
 
+.new_game_form_popup
+  align-self flex-start
+  margin-top 20%
+
 .game_form
   fieldset
     padding 0px 20px
@@ -42,3 +46,46 @@ button.newGameButton
 .setupMiniBoardWrapper
   width 100px
   height 100px
+
+.newGame-preset_switch
+  > .nice-radio
+    > input.radio + label
+      text-align center
+      padding 0
+      &:after
+        content none
+
+.newGame-pools
+  display flex
+  flex-flow row wrap
+  justify-content space-between
+  padding 20px
+
+.newGame-pool
+  height 80px
+  flex 0 0 31%
+  background rgba(255,255,255,0.7)
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+  display flex
+  flex-flow column
+  justify-content center
+  align-items center
+  margin-bottom 10px
+  padding 5px 0
+  color textMediumGray
+  opacity 1
+  transition opacity 0.5s
+  &.on
+    background #fff
+    box-shadow 0 2px 5px rgba(0,0,0,0.3)
+  &.transp
+    opacity 0.6
+
+.newGame-clock
+  font-size 22px
+  letter-spacing 3px
+
+.newGame-perf
+  font-size 14px
+  text-transform capitalize
+

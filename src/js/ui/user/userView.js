@@ -53,7 +53,6 @@ function renderWarnings(user) {
 
 function renderStatus(user) {
   const status = user.online ? 'online' : 'offline';
-  console.log(user);
   return (
     <section className="onlineStatus">
       { user.patron ?

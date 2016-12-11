@@ -19,6 +19,9 @@ let isOpen = false;
 let hookId: string | null = null
 // ref to selected pool
 let currentPool: string | null = null
+// we send poolIn message every 10s in case of server disconnection
+// (bad network, server restart, etc.)
+let poolInIntervalId: number
 
 export default {
   startSeeking,
@@ -65,7 +68,7 @@ const socketHandlers = {
   redirect: (d: RedirectObj) => {
     closePopup();
     if (isPool()) {
-      socket.send('poolOut', currentPool)
+      leavePool()
     }
     socket.redirectToGame(d);
   },
@@ -132,7 +135,7 @@ function cancelSeeking(fromBB?: string) {
   closePopup(fromBB);
 
   if (isPool()) {
-    socket.send('poolOut', currentPool)
+    leavePool()
   } else {
     if (hookId) socket.send('cancel', hookId);
     hookId = null;
@@ -159,5 +162,13 @@ function enterPool() {
   currentPool = settings.gameSetup.human.pool()
   socket.createLobby(() => {
     socket.send('poolIn', { id: currentPool })
+    poolInIntervalId = setInterval(() => {
+      socket.send('poolIn', { id: currentPool })
+    }, 10000)
   }, socketHandlers)
+}
+
+function leavePool() {
+  clearInterval(poolInIntervalId)
+  socket.send('poolOut', currentPool)
 }

@@ -112,7 +112,7 @@ export let cachedPools: Array<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
   return fetchJSON('/', null, feedback)
   .then((d: LobbyData) => {
-    cachedPools = d.lobby.pools
+    if (d.lobby.pools !== undefined) cachedPools = d.lobby.pools
     return d
   })
 }

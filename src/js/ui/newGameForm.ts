@@ -41,7 +41,7 @@ export default {
 };
 
 function open() {
-  if (!xhr.cachedPools) xhr.lobby(false)
+  if (xhr.cachedPools.length === 0) xhr.lobby(false)
   router.backbutton.stack.push(close);
   isOpen = true;
 }
@@ -69,15 +69,7 @@ function renderContent() {
   const conf = settings.gameSetup.human;
   const preset = conf.preset();
 
-  return m('form.game_form', {
-    onsubmit(e: Event) {
-      e.preventDefault();
-      if (!settings.gameSetup.isTimeValid(conf)) return;
-      if (!xhr.cachedPools.map(p => p.id).includes(settings.gameSetup.human.pool())) return;
-      close();
-      goSeek();
-    }
-  }, [
+  return m('div', [
     m('div.newGame-preset_switch', [
       m('div.nice-radio', formWidgets.renderRadio(
         'Quick game',
@@ -106,29 +98,24 @@ function renderContent() {
         return e[1] === '1' || session.isConnected();
       })
     ),
-    m('button[data-icon=E][type=submit].newGameButton', i18n('playOnline'))
   ])
 }
 
 function renderQuickSetup() {
-  const pools = xhr.cachedPools
   const selectedPool = settings.gameSetup.human.pool()
-  const availIds = pools.map(p => p.id)
   return m('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
-    xhr.cachedPools.map(p => renderPool(p, selectedPool, availIds)) : spinner.getVdom()
+    xhr.cachedPools.map(p => renderPool(p, selectedPool)) : spinner.getVdom()
   )
 }
 
-function renderPool(p: Pool, selectedPool: string, allPoolIds: Array<string>) {
+function renderPool(p: Pool, selectedPool: string) {
   return m('div.newGame-pool', {
     key: 'pools',
-    className: [
-      p.id === selectedPool ? 'on' : '',
-      allPoolIds.includes(selectedPool) && selectedPool !== p.id ? 'transp' : ''
-    ].join(' '),
-    oncreate: helper.ontap(() =>
-      utils.autoredraw(() => settings.gameSetup.human.pool(p.id))
-    )
+    oncreate: helper.ontap(() => {
+      settings.gameSetup.human.pool(p.id)
+      close();
+      goSeek();
+    })
   }, [
     m('div.newGame-clock', p.id),
     m('div.newGame-perf', p.perf)
@@ -249,8 +236,17 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
       ));
   }
 
-  return m.fragment({ key: 'customSetup' }, [
+  return m('form.game_form', {
+    key: 'customSetup',
+    onsubmit(e: Event) {
+      e.preventDefault();
+      if (!settings.gameSetup.isTimeValid(settingsObj)) return;
+      close();
+      goSeek();
+    }
+  }, [
     m('fieldset', generalFieldset),
-    m('fieldset', timeFieldset)
+    m('fieldset', timeFieldset),
+    m('button[data-icon=E][type=submit].newGameButton', i18n('playOnline'))
   ])
 }

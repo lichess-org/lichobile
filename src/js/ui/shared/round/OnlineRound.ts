@@ -542,7 +542,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     redraw();
   }
 
-  public toggleBookmark() {
+  public toggleBookmark = () => {
     return toggleGameBookmark(this.data.game.id).then(this.reloadGameData);
   }
 

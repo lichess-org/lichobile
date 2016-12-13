@@ -1,56 +1,32 @@
 import router from '../../router';
 import session from '../../session';
 import loginModal from '../loginModal';
+import spinner from '../../spinner';
 import challengesApi from '../../lichess/challenges';
-import layout from '../layout';
-import * as utils from '../../utils';
 import * as helper from '../helper';
-import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import * as m from 'mithril';
+import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge';
+import { ChallengeState } from './interfaces';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-  var overlay;
-
-  const header = utils.partialf(headerWidget, 'lichess.org');
-  const board = viewOnlyBoardContent;
-  const challenge = ctrl.challenge();
-
-  if (challenge) {
-    if (challenge.direction === 'in') {
-      overlay = joinPopup(ctrl);
-    } else if (challenge.direction === 'out') {
-      if (challenge.destUser) {
-        overlay = awaitChallengePopup(ctrl);
-      } else {
-        overlay = awaitInvitePopup(ctrl);
-      }
-    }
-  }
-
-  return layout.board(header, board, overlay);
-}
-
-function publicUrl(challenge) {
+function publicUrl(challenge: Challenge) {
   return 'https://lichess.org/' + challenge.id;
 }
 
-function gameInfos(challenge) {
+function gameInfos(challenge: Challenge) {
   const mode = challenge.rated ? i18n('rated') : i18n('casual');
+  const time = challengesApi.challengeTime(challenge);
   return (
     <div className="gameInfos">
-      <p className="explanation small">{`${i18n('variant')}: ${challenge.variant.name}`}</p>
-      <p className="time small" data-icon="p">{challengesApi.challengeTime(challenge)}</p>
-      <p className="mode small">{`${i18n('mode')}: ${mode}`}</p>
+      <span data-icon="p">{time}</span> • <span>{challenge.variant.name}</span> • <span>{mode}</span>
     </div>
   );
 }
 
-function joinPopup(ctrl) {
+export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
   const challenge = ctrl.challenge();
-  var joinDom;
+  let joinDom: Mithril.ChildNode;
   if (challenge.rated && !session.isConnected()) {
     joinDom = m('div.error', [
       i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
@@ -81,13 +57,17 @@ function joinPopup(ctrl) {
   }
 
   return function() {
+    const challenger = challenge.challenger ?
+      i18n('playerisInvitingYou', challengeUserFormat(challenge.challenger)) :
+      i18n('playerisInvitingYou', 'Anonymous');
+
     return popupWidget(
       'join_url_challenge',
-      () => challenge.challenger ?
-        i18n('playerisInvitingYou', challenge.challenger.id) :
-        i18n('playerisInvitingYou', 'Anonymous'),
+      null,
       function() {
         return m('div.infos', [
+          m('div.challenger', challenger),
+          m('br'),
           gameInfos(challenge),
           m('br'),
           joinDom
@@ -98,7 +78,7 @@ function joinPopup(ctrl) {
   };
 }
 
-function awaitInvitePopup(ctrl) {
+export function awaitInvitePopup(ctrl: ChallengeState) {
   const challenge = ctrl.challenge();
 
   const isPersistent = challengesApi.isPersistent(challenge);
@@ -109,6 +89,8 @@ function awaitInvitePopup(ctrl) {
       null,
       function() {
         return m('div.infos', [
+          gameInfos(challenge),
+          m('br'),
           m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
           m('input.lichess_game_url', {
             value: publicUrl(challenge),
@@ -125,8 +107,6 @@ function awaitInvitePopup(ctrl) {
               oncreate: helper.ontap(ctrl.cancelChallenge)
             }, i18n('cancel'))
           ]),
-          m('br'),
-          gameInfos(challenge),
           isPersistent ? m('div', [
             m('br'),
             m('button', {
@@ -140,28 +120,34 @@ function awaitInvitePopup(ctrl) {
   };
 }
 
-function awaitChallengePopup(ctrl) {
+function challengeUserFormat(user: ChallengeUser) {
+  const ratingString = user.rating + (user.provisional ? '?' : '');
+  return `${user.id} (${ratingString})`;
+}
+
+export function awaitChallengePopup(ctrl: ChallengeState) {
 
   const challenge = ctrl.challenge();
 
   function popupContent() {
     return (
       <div className="infos">
-        <div className="user">{challenge.destUser.id}</div>
+        <div>{i18n('waitingForOpponent')}</div>
         <br />
-        <div className="loader"><span data-icon="U" /></div>
+        <div className="user">{challengeUserFormat(challenge.destUser)}</div>
+        {gameInfos(challenge)}
         <br />
-        <p>{i18n('waitingForOpponent')}</p>
+        {spinner.getVdom()}
+        <br />
+        <br />
         <button className="withIcon" data-icon="L" oncreate={helper.ontap(ctrl.cancelChallenge)}>
           {i18n('cancel')}
         </button>
-        <br />
-        {gameInfos(challenge)}
       </div>
     );
   }
 
   return function() {
-    return popupWidget('await_url_challenge', () => i18n('challengeToPlay'), popupContent, true);
+    return popupWidget('await_url_challenge', null, popupContent, true);
   };
 }

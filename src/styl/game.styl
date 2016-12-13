@@ -183,7 +183,7 @@
     color #d0d0d0
   &.correspondence
     font-family 'Noto Sans'
-    font-size 16px
+    font-size 20px
     border none
     background-color inherit
     &.running
@@ -291,6 +291,8 @@
     display flex
     justify-content center
     align-items center
+    > .star
+      background-color transparent
   button
     &.draw-yes:before
       display inline-block
@@ -320,7 +322,7 @@
     margin 5px 0
 
 .negotiationIcons
-  background-color selectBg
+  background-color bgpopup
   height 70px
   display flex
   padding 0 10px
@@ -357,34 +359,6 @@
     margin 1em 0
   .resultStatus
     font-size 0.9em
-
-.join_url_challenge, .await_url_challenge
-  header
-    color gold
-  .infos
-    padding 10px
-    text-align center
-  .explanation, .time
-    margin 5px 0
-  .time:before
-    margin-right 5px
-  .go_or_cancel
-    margin-top 10px
-  .error
-    font-size 0.9em
-  button
-    color textDarkGray
-    border-bottom none
-
-.lichess_game_url
-  margin 10px 0;
-  width: 98%
-  text-align: center;
-  font-size: 0.7em;
-  padding: 10px
-  background: #eee;
-  font-family: monospace
-  border: 1px solid #ccc;
 
 .submitMovePopup
   background-color rgba(0,0,0,0.4)
@@ -425,6 +399,7 @@
     margin-bottom 10px
 
 .notesTextarea, #notesTextarea
+  background-color transparent
   width 100%
   height 100%
   border none

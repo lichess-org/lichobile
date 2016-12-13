@@ -57,7 +57,7 @@ h3.fullname
     background lighten(bgdark, 5%)
   &:before
     color gold
-    font-size 2em
+    font-size 1.2em
     float left
     margin-right 5px
   > .rating
@@ -90,16 +90,10 @@ h3.fullname
     width 80%
   &.nav
     &:after
-      content "\f054"
-      display: inline-block;
-      font: normal normal normal 14px/1 FontAwesome;
-      font-size: inherit;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-      position relative
-      float right
-      right 15px
-      line-height 20px
+      content none
+  @media only screen and (min-width 600px)
+    &:before
+      font-size 2em
 
 #userProfileActions
   .check_container

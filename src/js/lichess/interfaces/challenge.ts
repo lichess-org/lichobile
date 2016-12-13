@@ -1,12 +1,12 @@
 type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accepted';
 
-interface ChallengeUser {
+export interface ChallengeUser {
   id: string;
   rating: number;
   provisional?: boolean
 }
 
-interface TimeControl {
+export interface TimeControl {
   type: 'clock' | 'correspondence' | 'unlimited';
   show?: string;
   daysPerTurn?: number;

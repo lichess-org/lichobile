@@ -111,21 +111,21 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
   const generalFieldset = [
     m('div.select_input', {
       key: formName + 'color'
-    }, [
+    },
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
-    ]),
+    ),
     m('div.select_input', {
       key: formName + 'variant'
-    }, [
+    },
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
-    ])
+    )
   ];
 
   generalFieldset.push(m('div.select_input', {
     key: formName + 'mode'
-  }, [
+  },
     formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
-  ]));
+  ));
 
   if (session.isConnected() && settingsObj.mode() === '1') {
     generalFieldset.push(
@@ -133,48 +133,48 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
         key: 'rating_range'
       }, [
         m('div.title', i18n('ratingRange')),
-        m('div.select_input.inline', [
+        m('div.select_input.inline',
           formWidgets.renderSelect('Min', formName + 'rating_min',
             settings.gameSetup.human.availableRatingRanges.min, settingsObj.ratingMin, false)
-        ]),
-        m('div.select_input.inline', [
+        ),
+        m('div.select_input.inline',
           formWidgets.renderSelect('Max', formName + 'rating_max',
             settings.gameSetup.human.availableRatingRanges.max, settingsObj.ratingMax, false)
-        ])
+        )
       ])
     );
   }
 
   if (session.isConnected() && settingsObj.mode() === '0') {
     generalFieldset.push(
-      m('div', { key: 'membersOnly' }, [
+      m('div', { key: 'membersOnly' },
         formWidgets.renderCheckbox(i18n('membersOnly'), 'membersOnly', settingsObj.membersOnly)
-      ])
+      )
     );
   }
 
   const timeFieldset = [
     m('div.select_input', {
       key: formName + 'timeMode'
-    }, [
+    },
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
-    ])
+    )
   ];
 
   if (hasClock) {
     timeFieldset.push(
       m('div.select_input.inline', {
         key: formName + 'time'
-      }, [
+      },
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
-      ]),
+      ),
       m('div.select_input.inline', {
         key: formName + 'increment'
-      }, [
+      },
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
-      ])
+      )
     );
   }
 
@@ -182,10 +182,9 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
     timeFieldset.push(
       m('div.select_input.large_label', {
         key: formName + 'days'
-      }, [
-        formWidgets.renderSelect('daysPerTurn', formName + 'days',
+      }, formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
-      ]));
+      ));
   }
 
   return m('form.game_form', {

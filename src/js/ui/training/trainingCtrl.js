@@ -67,7 +67,7 @@ export default function ctrl(vnode) {
 
   const attempt = function(winFlag, giveUpFlag) {
     showLoading();
-    xhr.attempt(this.data.puzzle.id, this.data.startedAt, winFlag)
+    xhr.attempt(this.data.puzzle.id, winFlag)
     .then(cfg => {
       cfg.progress = this.data.progress;
       this.reload(cfg);
@@ -191,7 +191,6 @@ export default function ctrl(vnode) {
   this.playInitialMove = function() {
     if (this.data.mode !== 'view') {
       this.playOpponentMove(this.data.puzzle.initialMove);
-      this.data.startedAt = new Date();
     }
   }.bind(this);
 

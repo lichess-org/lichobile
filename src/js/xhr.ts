@@ -4,7 +4,7 @@ import settings from './settings';
 import i18n from './i18n';
 import session from './session';
 import { TimelineData, LobbyData, HookData } from './lichess/interfaces';
-import { Challenge } from './lichess/interfaces/challenge';
+import { ChallengesData, Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
   variant: string;
@@ -80,21 +80,25 @@ export function challenge(userId: string, fen: string): Promise<{ challenge: Cha
   }, true);
 }
 
-export function getChallenges() {
+export function getChallenges(): Promise<ChallengesData> {
   return fetchJSON('/challenge');
 }
 
-export function getChallenge(id: string) {
+interface ChallengeData {
+  challenge: Challenge
+  socketVersion: number
+}
+export function getChallenge(id: string): Promise<ChallengeData> {
   return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id: string) {
+export function cancelChallenge(id: string): Promise<void> {
   return fetchText(`/challenge/${id}/cancel`, {
     method: 'POST'
   }, true);
 }
 
-export function declineChallenge(id: string) {
+export function declineChallenge(id: string): Promise<void> {
   return fetchText(`/challenge/${id}/decline`, {
     method: 'POST'
   }, true);

@@ -1,5 +1,6 @@
 import * as utils from '../utils';
 import redraw from '../utils/redraw';
+import session from '../session';
 import settings from '../settings';
 import * as helper from './helper';
 import spinner from '../spinner';
@@ -31,12 +32,11 @@ export default {
     function content() {
       const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?')
       const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?')
-      const preset = settings.gameSetup.human.preset()
 
       return m('div.lobby-waitingPopup', [
         m('div.lobby-waitingForOpponent', i18n('waitingForOpponent')),
         m('br'),
-        preset === 'quick' ? renderPoolSetup() : renderCustomSetup(),
+        isPool() ? renderPoolSetup() : renderCustomSetup(),
         m('br'),
         spinner.getVdom(),
         m('div.lobby-nbPlayers', [
@@ -108,7 +108,7 @@ function renderPoolSetup() {
 }
 
 function isPool() {
-  return settings.gameSetup.human.preset() === 'quick'
+  return session.isConnected() && settings.gameSetup.human.preset() === 'quick'
 }
 
 // generic function to seek a game, using either hook or pool method,

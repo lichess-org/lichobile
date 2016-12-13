@@ -53,6 +53,15 @@ function close(fromBB?: string) {
 
 function goSeek() {
   const conf = settings.gameSetup.human
+  // anon. can't enter pool: we'll just create a similar hook
+  if (conf.preset() === 'quick' && !session.isConnected()) {
+    const pool = xhr.cachedPools.find(p => p.id  === conf.pool())
+    conf.time(String(pool.lim))
+    conf.increment(String(pool.inc))
+    conf.variant('1')
+    conf.mode('0')
+  }
+
   if (conf.preset() === 'quick' || conf.timeMode() === '1') {
     close();
     lobby.startSeeking();

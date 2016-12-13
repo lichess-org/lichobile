@@ -1,11 +1,10 @@
 import { fetchJSON } from '../../http';
 
-export function attempt(id, startedAt, win) {
+export function attempt(id, win) {
   return fetchJSON(`/training/${id}/attempt`, {
     method: 'POST',
     body: JSON.stringify({
-      win: win ? 1 : 0,
-      time: new Date().getTime() - (startedAt || new Date()).getTime()
+      win: win ? 1 : 0
     })
   });
 }

@@ -256,6 +256,6 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
   }, [
     m('fieldset', generalFieldset),
     m('fieldset', timeFieldset),
-    m('button[data-icon=E][type=submit].newGameButton', i18n('playOnline'))
+    m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
   ])
 }

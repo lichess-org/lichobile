@@ -1,3 +1,8 @@
+.game_board_wrapper.analyse
+  height 'calc((100vh - %s) / 2)' % headerHeight
+  width 'calc((100vh - %s) / 2)' % headerHeight
+  margin auto
+
 .analyseSettings
   label[for='showComments']
     text-transform capitalize
@@ -13,15 +18,15 @@
 .analyseScrollerWrapper
   width 100%
   @media only screen and (orientation: portrait)
-    height "calc(100vh - 100vw - 50px - %s)" % footerHeight
+    height "calc(100vh - %s - 100vw - %s)" % (headerHeight footerHeight)
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-    height "calc(100vh - 98vw - 50px - %s)" % footerHeight
+    height "calc(100vh - 98vw - %s - %s)" % (headerHeight footerHeight)
   @media only screen and (orientation: landscape)
-    height "calc(100vh - 50px - %s)" % footerHeight
+    height "calc(100vh - %s - %s)" % (headerHeight footerHeight)
   @media only screen and (max-height 450px) and (orientation landscape)
-    height "calc(100vh - 45px - %s)" % footerHeight
+    height "calc(100vh - %s - %s)" % (headerHeight footerHeight)
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 3/4)
-    height "calc(100vh - 50px - 12vh - %s)" % footerHeight
+    height "calc(100vh - %s - 12vh - %s)" % (headerHeight footerHeight)
 
 .analyse-table
   &.synthetic
@@ -193,23 +198,17 @@
       padding 2px 3px 3px 3px
   @media only screen and (orientation: landscape)
     > .pocket
-      height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
+      height 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
       max-width initial
       > piece
-        width calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
-        height calc(((100vw - 100vh - 50px) * 40 / 100) / 6 + 10px)
-  @media only screen and (orientation: landscape) and (max-height 450px)
-    > .pocket
-      height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
-      > piece
-        width calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
-        height calc(((100vw - 100vh - 45px) * 40 / 100) / 6 + 10px)
+        width 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
+        height 'calc(((100vw - 100vh - %s) * 40 / 100) / 6 + 10px)' % headerHeight
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
     > .pocket
-      height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
+      height 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
       > piece
-        width calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
-        height calc(((100vw - (100vh - 50px - 12vh)) * 40 / 100) / 6 + 10px)
+        width 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
+        height 'calc(((100vw - (100vh - %s - 12vh)) * 40 / 100) / 6 + 10px)' % headerHeight
 
 .analyseClock
   font-family Cousine

@@ -116,8 +116,8 @@
       height 25px
   @media only screen and (orientation: landscape)
     &.crazy
-      width calc((100vh - 50px) / 8 * 3)
-      max-width calc((100vh - 50px) / 8 * 3)
+      width 'calc((100vh - %s) / 8 * 3)' % headerHeight
+      max-width 'calc((100vh - %s) / 8 * 3)' % headerHeight
   @media only screen and (min-width 600px)
     &.crazy
       > .antagonistUser
@@ -370,11 +370,11 @@
       top calc((100vh - 70px) / 2)
       left initial
       right 1rem
-      width calc(100vw - 100vh + 50px - 5vw)
+      width 'calc(100vw - 100vh + %s - 5vw)' % headerHeight
     @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
       left initial
       right 1rem
-      width calc(100vw - 100vh + 50px + 12vh - 5vw)
+      width 'calc(100vw - 100vh + %s + 12vh - 5vw)' % headerHeight
     // tablets
     @media only screen and (min-width 500px)
       left 20%
@@ -413,7 +413,7 @@
   box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
   width calc(100vw / 8 * 5)
   height calc(100vw / 8 + 10px)
-  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background #888;
   white-space nowrap
   overflow hidden
@@ -422,13 +422,11 @@
   align-items center
   justify-content space-around
   @media only screen and (orientation: landscape)
-    height calc((100vh - 50px) / 8 + 10px)
+    height 'calc((100vh - %s) / 8 + 10px)' % headerHeight
     max-width 60%
     max-height 55px
-  @media only screen and (max-height 450px) and (orientation landscape)
-    height calc((100vh - 45px) / 8 + 10px)
   @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
-    height calc((100vh - 50px - 12vh) / 8 + 10px)
+    height 'calc((100vh - %s - 12vh) / 8 + 10px)' % headerHeight
 
 .playTable.opponent.mode_facing
   > .pocket
@@ -442,8 +440,8 @@
 .pocket > piece
   width calc(100vw / 8)
   height calc(100vw / 8)
-  max-width "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
-  max-height "calc((100vh - 100vw - 50px - %s) / 2)" % footerHeight
+  max-width "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
+  max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
   background-position center
   background-size contain
   position relative
@@ -472,8 +470,8 @@
       right 3px
       bottom 3px
   @media only screen and (orientation: landscape)
-    width calc((100vh - 50px) / 8)
-    height calc((100vh - 50px) / 8)
+    width 'calc((100vh - %s) / 8)' % headerHeight
+    height 'calc((100vh - %s) / 8)' % headerHeight
     max-width 50px
     max-height 50px
 

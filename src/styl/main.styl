@@ -57,32 +57,11 @@ main
         padding-right 10px
         > .chip
           left 2px
-  @media only screen and (max-height 450px) and (orientation landscape)
-    height 45px
-    > nav
-      height 45px
-      > h1
-        font-size 1rem
-        height 45px
-        line-height 45px
-    .main_header_button
-      padding 12.5px 0.9rem
-    .back_button
-      height 45px
-      font-size 1rem
-      > .title
-        height 45px
-        line-height 45px
-      > span.fa
-        font-size 16px
-    .friends_button, .timeline_button, .game_menu_button
-      > .chip
-        top 7.5px
 
 .main_header_button
   flex 0 0 auto
   background transparent
-  padding 15px 0.9rem
+  padding 12.5px 0.9rem
   margin 0
   color gold
   font-size 20px
@@ -130,7 +109,7 @@ main
     border-radius 50%
     height 17px
     width 17px
-    top 10px
+    top 7.5px
     left 7px
     background lighten(gold, 50%)
 
@@ -208,7 +187,7 @@ main
   width 100%
   height "calc(100% - %s)" % headerHeight
   &.withFooter
-    height "calc(100% - 50px - %s)" % footerHeight
+    height "calc(100% - %s - %s)" % (headerHeight footerHeight)
   &.fullScreen
     height 100%
 

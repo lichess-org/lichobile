@@ -226,7 +226,7 @@ function renderLinks(user: Session) {
       <li className="side_link" key="settings" oncreate={helper.ontapY(menu.route('/settings'))}>
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
-      <li className="side_link" key="patron" oncreate={helper.ontapY(() => window.open('https://lichess.org/patron', '_blank', 'location=no'))}>
+      <li className="side_link" key="patron" oncreate={helper.ontapY(menu.loginToWebsite)}>
         <span className="patron" data-icon="" />Patron
       </li>
     </ul>

@@ -70,7 +70,7 @@ function renderFriend(user: Friend) {
   return (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
       { user.patron ?
-        <span className="patron">  </span>
+        <span className="patron" data-icon="" />
         :
         null
       }

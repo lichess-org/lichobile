@@ -51,7 +51,7 @@ function renderHeader(user: Session) {
       { hasNetwork() && user ?
         <h2 key="username-connected" className="username connected">
         { user.patron ?
-          <div class='patron' style={'color: ' + color}>  </div>
+          <div class='patron' style={'color: ' + color} data-icon="" />
           :
           <div class='led' style={'background: ' + color}/>
         }
@@ -227,7 +227,7 @@ function renderLinks(user: Session) {
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
       <li className="side_link" key="patron" oncreate={helper.ontapY(() => window.open('https://lichess.org/patron', '_blank', 'location=no'))}>
-        <span className="patron"></span>Patron
+        <span className="patron" data-icon="" />Patron
       </li>
     </ul>
   );

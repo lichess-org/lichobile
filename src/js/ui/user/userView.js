@@ -56,7 +56,7 @@ function renderStatus(user) {
   return (
     <section className="onlineStatus">
       { user.patron ?
-        <span className={'userStatus patron ' + status}>&nbsp;</span> :
+        <span className={'userStatus patron ' + status} data-icon="" /> :
         <span className={'fa fa-circle userStatus ' + status} />
       }
       {i18n(status)}

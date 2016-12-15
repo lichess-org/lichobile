@@ -221,7 +221,7 @@ export function userStatus(user: User) {
   return (
     <div className="user">
       {user.patron ?
-        <span className={'patron userStatus ' + status}>  </span> :
+        <span className={'patron userStatus ' + status} data-icon="" /> :
         <span className={'fa fa-circle userStatus ' + status} />
       }
       {user.title ? <span className="userTitle">{user.title}&nbsp;</span> : null}

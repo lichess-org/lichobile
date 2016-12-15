@@ -187,12 +187,12 @@ export default {
   },
   newOpponent: function(ctrl: OnlineRound) {
     const d = ctrl.data;
-    const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && d.game.source === 'lobby';
+    const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool');
     if (!ctrl.data.opponent.ai && newable) {
       return m('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions();
-          (lobby as any).startSeeking();
+          lobby.startSeeking();
         })
       }, i18n('newOpponent'));
     }

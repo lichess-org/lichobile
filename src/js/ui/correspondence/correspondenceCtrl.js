@@ -18,14 +18,12 @@ export default function oninit(vnode) {
 
   helper.analyticsTrackView('Correspondence');
 
-  xhr.lobby(true).then(function(data) {
-    socket.createLobby(data.lobby.version, reload, {
-      redirect: socket.redirectToGame,
-      reload_seeks: reload,
-      resync: () => xhr.lobby().then(d => {
-        socket.setVersion(d.lobby.version);
-      })
-    });
+  socket.createLobby(reload, {
+    redirect: socket.redirectToGame,
+    reload_seeks: reload,
+    resync: () => xhr.lobby().then(d => {
+      socket.setVersion(d.lobby.version);
+    })
   });
 
   challengesApi.refresh().then(() => {

@@ -156,23 +156,24 @@ export default class AnalyseCtrl {
       s = this.analyse.getStep(this.vm.path);
     }
 
+    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
+      s.checkCount = util.readCheckCount(s.fen);
+    }
+
+    this.vm.step = s;
+
     const color: Color = s.ply % 2 === 0 ? 'white' : 'black';
     const dests = util.readDests(s.dests);
     const config = {
       fen: s.fen,
       turnColor: color,
       orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation,
-      movableColor: dests && Object.keys(dests).length > 0 ? color : null,
+      movableColor: this.gameOver() ? null : color,
       dests: dests || {},
       check: s.check,
       lastMove: this.uciToLastMove(s.uci)
     };
 
-    if (this.data.game.variant.key === 'threeCheck' && !s.checkCount) {
-      s.checkCount = util.readCheckCount(s.fen);
-    }
-
-    this.vm.step = s;
     this.vm.cgConfig = config;
     this.data.game.player = color;
 

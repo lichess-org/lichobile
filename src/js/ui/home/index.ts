@@ -6,7 +6,7 @@ import layout from '../layout';
 import { header as headerWidget } from '../shared/common';
 import { HomeState } from './interfaces'
 import redraw from '../../utils/redraw';
-import { lobby as lobbyXhr, timeline as timelineXhr } from '../../xhr';
+import { timeline as timelineXhr } from '../../xhr';
 import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWeekXhr } from './homeXhr';
 import { hasNetwork, noop } from '../../utils';
 import { isForeground, setForeground } from '../../utils/appMode';
@@ -25,14 +25,12 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
 
     function init() {
       if (isForeground()) {
-        lobbyXhr(true).then(data => {
-          socket.createLobby(data.lobby.version, noop, {
-            n: (_: never, d: PongMessage) => {
-              nbConnectedPlayers(d.d);
-              nbGamesInPlay(d.r);
-              redraw();
-            }
-          });
+        socket.createLobby(noop, {
+          n: (_: never, d: PongMessage) => {
+            nbConnectedPlayers(d.d);
+            nbGamesInPlay(d.r);
+            redraw();
+          }
         });
 
         Promise.all([

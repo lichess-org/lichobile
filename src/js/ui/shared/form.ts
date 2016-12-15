@@ -34,7 +34,7 @@ export default {
     name: string,
     value: string,
     checked: boolean,
-    onchange: (v: boolean) => void
+    onchange: (e: Event) => void
   ) {
     const id = name + '_' + value;
     return [

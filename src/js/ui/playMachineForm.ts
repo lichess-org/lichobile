@@ -34,7 +34,7 @@ export default {
     }
 
     return popupWidget(
-      'new_game_form_popup game_form_popup',
+      'game_form_popup',
       null,
       form,
       isOpen,

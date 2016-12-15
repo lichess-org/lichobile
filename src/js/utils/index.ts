@@ -29,7 +29,7 @@ export function loadLocalJsonFile(url: string): Promise<any> {
   });
 }
 
-export function autoredraw(action: Function): void {
+export function autoredraw(action: () => void): void {
   const res = action();
   redraw();
   return res;

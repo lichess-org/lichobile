@@ -255,7 +255,7 @@ export default class AiRound implements AiRoundInterface {
         turnColor: sit.player,
         lastMove: lastUci ? [<Pos>lastUci.slice(0, 2), <Pos>lastUci.slice(2, 4)] : null,
         dests: sit.dests,
-        movableColor: sit.player,
+        movableColor: sit.player === this.data.player.color ? sit.player : null,
         check: sit.check
       });
     }

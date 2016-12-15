@@ -88,8 +88,7 @@ export function toggleHeader() {
 
 export function loginToWebsite() {
   menuXhr.createToken().then((data: LoginData) => {
-    window.open(data.url, 'patronPage', 'location=no');
-    window.open('https://lichess.org/patron', 'patronPage', 'location=no');
+		window.open(data.url + '?referrer=/patron', '_blank', 'location=no');
   });
 }
 

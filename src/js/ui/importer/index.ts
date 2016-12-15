@@ -100,7 +100,7 @@ function renderBody(ctrl: State) {
       m('label', i18n('pasteThePgnStringHere') + ' :'),
       m('textarea.pgnImport'),
       formWidgets.renderCheckbox(i18n('requestAComputerAnalysis'), 'analyse', settings.importer.analyse),
-      m('button.fat', ctrl.importing() ?
+      m('button.fatButton', ctrl.importing() ?
         m('div.fa.fa-hourglass-half') : i18n('importGame'))
     ])
   ]);

@@ -65,7 +65,7 @@ function showDtz(stm: string, move: ExplorerMove) {
 }
 
 function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
-  return m('div.data.empty.analyseScrollerWrapper', {
+  return m('div.explorer-data.empty', {
     key: 'explorer-game-end' + title
   }, [
     m('div.title', 'Game over'),
@@ -88,7 +88,7 @@ function show(ctrl: AnalyseCtrlInterface) {
     const moves = data.moves;
     if (moves.length) {
       return (
-        <div key="explorer-tablebase" className="data analyseScrollerWrapper">
+        <div key="explorer-tablebase" className="explorer-data">
           {showTablebase(ctrl, 'Winning', moves.filter((move: ExplorerMove) => move.wdl === -2), data.fen)}
           {showTablebase(ctrl, 'Unknown', moves.filter((move: ExplorerMove) => move.wdl === null), data.fen)}
           {showTablebase(ctrl, 'Win prevented by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === -1), data.fen)}
@@ -102,20 +102,17 @@ function show(ctrl: AnalyseCtrlInterface) {
     else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate');
     else return showEmpty(ctrl);
   }
-  return <div key="explorer-no-data" className="analyseScrollerWrapper" />;
+  return <div key="explorer-no-data" />;
 }
 
 function showConfig(ctrl: AnalyseCtrlInterface) {
-  return m('div.analyseScrollerWrapper.explorerConfig', {
+  return m('div.explorerConfig', {
     key: 'opening-config'
-  }, [
-    m('div.title', showTitle(ctrl)),
-    explorerConfig.view(ctrl.explorer.config)
-  ]);
+  }, explorerConfig.view(ctrl.explorer.config));
 }
 
 function failing() {
-  return m('div.failing.message.analyseScrollerWrapper', {
+  return m('div.failing.message', {
     key: 'failing'
   }, [
     m('i[data-icon=,]'),
@@ -137,6 +134,7 @@ export default function(ctrl: AnalyseCtrlInterface) {
   });
   return (
     <div id="explorerTable" className={className} key="explorer">
+      <div className="explorer-fixedTitle">{showTitle(ctrl)}</div>
       { loading ? <div key="loader" className="spinner_overlay">
         <div className="spinner fa fa-hourglass-half" />
       </div> : null

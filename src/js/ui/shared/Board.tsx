@@ -8,7 +8,7 @@ import BoardBrush from './BoardBrush';
 export interface Attrs {
   data: GameData
   chessgroundCtrl: Chessground.Controller
-  bounds: BoardBounds
+  bounds?: BoardBounds
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string

@@ -77,17 +77,18 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
   const shapes = nextMove ? [nextMove] : [pastBestShape, curBestShape].filter(noNull);
 
   const board = m<BoardAttrs>(Board, {
+    key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
     shapes,
-    wrapperClasses: 'analyse'
+    wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
   });
 
   return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
-    <div className="analyseTableWrapper">
+    <div className="analyse-tableWrapper">
       {ctrl.explorer.enabled() ?
         explorerView(ctrl) :
         renderAnalyseTable(ctrl, isPortrait, shapes)
@@ -99,29 +100,29 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   return (
-    <div className="analyse-table analyseScrollerWrapper" key="analyse">
+    <div className="analyse-table" key="analyse">
+      {renderInfosBox(ctrl, isPortrait, shapes)}
       {renderReplay(ctrl)}
-      {renderInfos(ctrl, isPortrait, shapes)}
     </div>
   );
 }
 
-function renderInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
+function renderInfosBox(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   const cevalEnabled = ctrl.ceval.enabled();
   const isCrazy = !!ctrl.vm.step.crazy;
 
   return (
-    <div className="analyse-infos">
-      { (!isCrazy || !isPortrait) && cevalEnabled ?
+    <div className="analyse-infosBox">
+      { cevalEnabled ?
         renderEvalBox(ctrl) : null
+      }
+      { isSynthetic(ctrl.data) ?
+        renderVariantSelector(ctrl) : null
       }
       <div className="native_scroller">
         { isSynthetic(ctrl.data) ?
-          renderVariantSelector(ctrl) : null
-        }
-        { isSynthetic(ctrl.data) ?
           (isCrazy ? renderSyntheticPockets(ctrl, shapes) : null) :
-          renderOpponents(ctrl, isPortrait, shapes)
+          renderGameInfos(ctrl, isPortrait, shapes)
         }
       </div>
     </div>
@@ -221,7 +222,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
     brush: shapes[shapes.length - 1].brush
   } : undefined;
   return (
-    <div className="analyseOpponentsWrapper synthetic">
+    <div className="analyse-gameInfosWrapper synthetic">
       <div className="analyseOpponent">
         <div className="analysePlayerName">
           <span className={'color-icon ' + player.color} />
@@ -252,7 +253,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
   );
 }
 
-function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
+function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
@@ -265,7 +266,7 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
   } : undefined;
 
   return (
-    <div className="analyseOpponentsWrapper">
+    <div className="analyse-gameInfosWrapper">
       <div className="analyseOpponent">
         <div className={'analysePlayerName' + (isCrazy ? ' crazy' : '')}>
           <span className={'color-icon ' + player.color} />
@@ -318,7 +319,7 @@ function renderOpponents(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }
       </div>
-      {(!isCrazy || !isPortrait) && gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
+      {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
     </div>
   );
 }
@@ -381,10 +382,8 @@ function renderReplay(ctrl: AnalyseCtrlInterface) {
 
 function buttons(ctrl: AnalyseCtrlInterface) {
   return [
-    ['first', 'fast-backward', control.first ],
     ['prev', 'backward', control.prev],
-    ['next', 'forward', control.next],
-    ['last', 'fast-forward', control.last]
+    ['next', 'forward', control.next]
   ].map((b: [string, string, (ctrl: AnalyseCtrlInterface) => boolean]) => {
     const className = [
       'action_bar_button',
@@ -412,7 +411,7 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
   ].join(' ');
 
   return (
-    <section className="actions_bar">
+    <section className="actions_bar analyse_actions_bar">
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         oncreate={helper.ontap(ctrl.menu.open)}
       />
@@ -433,6 +432,12 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
         oncreate={helper.ontap(
           ctrl.flip,
           () => window.plugins.toast.show(i18n('flipBoard'), 'short', 'bottom')
+        )}
+      />
+      <button className={'action_bar_button fa fa-' + (ctrl.vm.smallBoard ? 'compress' : 'expand')} key="expand-compress"
+        oncreate={helper.ontap(
+          ctrl.toggleBoardSize,
+          () => window.plugins.toast.show('Expand board', 'short', 'bottom')
         )}
       />
       {buttons(ctrl)}

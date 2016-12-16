@@ -269,16 +269,29 @@ export function isLandscape(): boolean {
   return window.matchMedia('(orientation: landscape)').matches;
 }
 
-export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string): BoardBounds  {
+export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): BoardBounds  {
   const { vh, vw } = viewportDim;
   const is43 = is43Aspect();
-  const top = 50;
+  const headerHeight = 45;
 
   if (isPortrait) {
-    if (is43) {
-      const contentHeight = vh - 50;
+    if (halfsize) {
+      const side = (vh - headerHeight) / 2;
+      const pTop = headerHeight;
+      const margin = (vw - side) / 2;
+      return {
+        top: pTop,
+        right: margin,
+        bottom: pTop + side,
+        left: margin,
+        width: side,
+        height: side
+      };
+    }
+    else if (is43) {
+      const contentHeight = vh - headerHeight;
       const side = vw * 0.98;
-      const pTop = 50 + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
+      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
       return {
         top: pTop,
         right: vw * 0.01,
@@ -288,8 +301,8 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
         height: side
       };
     } else {
-      const contentHeight = vh - 50;
-      const pTop = 50 + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
+      const contentHeight = vh - headerHeight;
+      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
       return {
         top: pTop,
         right: vw,
@@ -301,8 +314,8 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
     }
   } else {
     if (is43) {
-      const wsSide = vh - top - (vh * 0.12);
-      const wsTop = top + ((vh - wsSide - top) / 2);
+      const wsSide = vh - headerHeight - (vh * 0.12);
+      const wsTop = headerHeight + ((vh - wsSide - headerHeight) / 2);
       return {
         top: wsTop,
         right: wsSide,
@@ -311,23 +324,12 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
         width: wsSide,
         height: wsSide
       };
-    } else if (isLandscapeSmall(viewportDim)) {
-      const smallTop = 45;
-      const lSide = vh - smallTop;
-      return {
-        top: smallTop,
-        right: lSide,
-        bottom: smallTop + lSide,
-        left: 0,
-        width: lSide,
-        height: lSide
-      };
     } else {
-      const lSide = vh - top;
+      const lSide = vh - headerHeight;
       return {
-        top,
+        top: headerHeight,
         right: lSide,
-        bottom: top + lSide,
+        bottom: headerHeight + lSide,
         left: 0,
         width: lSide,
         height: lSide

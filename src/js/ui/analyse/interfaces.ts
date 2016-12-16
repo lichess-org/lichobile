@@ -121,6 +121,7 @@ export interface VM {
   cgConfig: Chessground.SetConfig
   variationMenu: string
   flip: boolean
+  smallBoard: boolean
   analysisProgress: boolean
   showBestMove: boolean
   showComments: boolean
@@ -141,6 +142,7 @@ export interface AnalyseCtrlInterface {
   notes: any
 
   flip(): void
+  toggleBoardSize(): void
   jump(path: Path, direction?: 'forward' | 'backward'): void
   userJump(path: Path, direction?: 'forward' | 'backward'): void
   nextStepBest(): string | null

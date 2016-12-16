@@ -52,7 +52,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     }
   }
 
-  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || !!root.data.opponent.ai;
+  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.game.offline;
   const effectiveVariant: VariantKey = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);

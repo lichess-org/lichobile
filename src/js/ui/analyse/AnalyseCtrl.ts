@@ -93,6 +93,7 @@ export default class AnalyseCtrl {
       cgConfig: null,
       variationMenu: null,
       flip: false,
+      smallBoard: settings.analyse.smallBoard(),
       analysisProgress: false,
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments()
@@ -122,6 +123,12 @@ export default class AnalyseCtrl {
     this.chessground.set({
       orientation: this.vm.flip ? oppositeColor(this.orientation) : this.orientation
     });
+  }
+
+  public toggleBoardSize = () => {
+    const newVal = !this.vm.smallBoard;
+    settings.analyse.smallBoard(newVal);
+    this.vm.smallBoard = newVal;
   }
 
   private uciToLastMove(uci: string): [Pos, Pos] {

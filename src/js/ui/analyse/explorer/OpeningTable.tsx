@@ -24,7 +24,7 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
 
     if (moveTable || recentTable || topTable) {
       return (
-        <div key="explorer-opening" className="data analyseScrollerWrapper">
+        <div key="explorer-opening" className="explorer-data">
           {moveTable}
           {topTable}
           {recentTable}
@@ -48,8 +48,7 @@ export function showTitle(ctrl: AnalyseCtrlInterface) {
 
 export function showEmpty(ctrl: AnalyseCtrlInterface) {
   return (
-    <div key="explorer-empty" className="data empty analyseScrollerWrapper">
-      <div className="title">{showTitle(ctrl)}</div>
+    <div key="explorer-empty" className="explorer-data empty">
       <div className="message">
         <i data-icon="" />
         <h3>No game found</h3>

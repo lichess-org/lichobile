@@ -1,14 +1,14 @@
 .content_round
   display flex
-  flex-flow column wrap
-  width 100%
+  flex-flow column nowrap
   height "calc(100% - %s)" % headerHeight
   @media only screen and (orientation: landscape)
     display flex
+    flex-flow row nowrap
   @media only screen and (max-height 450px) and (orientation landscape)
     height calc(100vh - 45px)
 
-.table, .analyseTableWrapper
+.table
   flex 1 1 auto
   @media only screen and (orientation landscape)
     width 'calc(100vw - 100vh + %s)' % headerHeight
@@ -22,6 +22,10 @@
   @media only screen and (orientation: portrait)
     height 100vw
     width 100vw
+    &.halfsize
+      height 'calc((100vh - %s) / 2)' % headerHeight
+      width 'calc((100vh - %s) / 2)' % headerHeight
+      align-self center
   @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
     height 98vw
     width 98vw

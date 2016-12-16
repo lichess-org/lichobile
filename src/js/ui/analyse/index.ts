@@ -104,10 +104,10 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
 
   view(vnode) {
     const isPortrait = helper.isPortrait();
-    const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse');
 
     if (this.ctrl) {
 
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', this.ctrl.vm.smallBoard);
       const backButton = this.ctrl.vm.shouldGoBack ? renderBackbutton(gameTitle(this.ctrl.data)) : null;
       const title = this.ctrl.vm.shouldGoBack ? null : i18n('analysis');
 
@@ -117,6 +117,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         () => overlay(this.ctrl)
       );
     } else {
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', settings.analyse.smallBoard());
       return layout.board(
         connectingHeader,
         () => viewOnlyBoard(vnode.attrs.color, bounds)
@@ -126,7 +127,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
 };
 
 function viewOnlyBoard(color: Color, bounds: ClientRect) {
-  return m('section.board_wrapper', m(ViewOnlyBoard, { orientation: color, bounds }));
+  return m('section.board_wrapper.halfsize', m(ViewOnlyBoard, { orientation: color, bounds }));
 }
 
 export default AnalyseScreen

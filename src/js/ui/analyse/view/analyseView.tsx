@@ -99,23 +99,26 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 }
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
+  const cevalEnabled = ctrl.ceval.enabled();
+
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait, shapes)}
-      {renderReplay(ctrl)}
+      <div className="analyse-game">
+        { cevalEnabled ?
+          renderEvalBox(ctrl) : null
+        }
+        {renderReplay(ctrl)}
+      </div>
     </div>
   );
 }
 
 function renderInfosBox(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes: Shape[]) {
-  const cevalEnabled = ctrl.ceval.enabled();
   const isCrazy = !!ctrl.vm.step.crazy;
 
   return (
     <div className="analyse-infosBox">
-      { cevalEnabled ?
-        renderEvalBox(ctrl) : null
-      }
       { isSynthetic(ctrl.data) ?
         renderVariantSelector(ctrl) : null
       }
@@ -205,8 +208,8 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
       />
       { step.ceval ?
       <div className="analyse-engine_info">
-        <p>Depth {step.ceval.depth}/{step.ceval.maxDepth}</p>
-        <p>{Math.round(step.ceval.nps / 1000)} kn/s</p>
+        <p>depth {step.ceval.depth}/{step.ceval.maxDepth}</p>
+        <p>{Math.round(step.ceval.nps / 1000)} kn/s, {ctrl.ceval.cores} cores</p>
       </div> : null
       }
     </div>

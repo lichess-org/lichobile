@@ -106,10 +106,11 @@ export interface CevalCtrlInterface {
   start(path: Path, steps: AnalysisTree): void
   stop(): void
   destroy(): void
-  allowed: Mithril.Stream<boolean>,
+  allowed: Mithril.Stream<boolean>
   enabled(): boolean,
   toggle(): void
   percentComplete(): number
+  cores: number
 }
 
 export interface VM {

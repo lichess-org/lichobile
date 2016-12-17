@@ -1,10 +1,11 @@
 import { CevalWork } from '../interfaces';
-import { setThreads, setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
+import { setOption, setVariant, convertFenForStockfish } from '../../../utils/stockfish';
 import * as Signal from 'signals';
 
 interface Opts {
   minDepth: number
   maxDepth: number
+  cores: number
 }
 
 const output = new Signal();
@@ -89,7 +90,7 @@ export default function cevalEngine(opts: Opts) {
     stopped = false;
     finished = false;
 
-    return setThreads()
+    return setOption('Threads', opts.cores)
     .then(() => send(['position', 'fen', fen, 'moves', work.moves].join(' ')))
     .then(() => send('go depth ' + opts.maxDepth));
   }

@@ -1,5 +1,5 @@
 import { AiRoundInterface } from '../shared/round';
-import { setThreads, setOption, setVariant, convertFenForStockfish } from '../../utils/stockfish'
+import { getNbCores, setOption, setVariant, convertFenForStockfish } from '../../utils/stockfish'
 
 interface LevelToDepht {
   [index: number]: number
@@ -55,7 +55,7 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
 
       // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`);
 
-      setThreads()
+      setOption('Threads', getNbCores())
       .then(() => cmd(`position fen ${fen} moves ${moves}`))
       .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
     },

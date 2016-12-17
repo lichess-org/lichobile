@@ -6,9 +6,9 @@ export function setOption(name: string, value: string | number | boolean) {
   return Stockfish.cmd(`setoption name ${name} value ${value}`);
 }
 
-export function setThreads() {
+export function getNbCores(): number {
   const cores = (<XNavigator>navigator).hardwareConcurrency || 1;
-  return setOption('Threads', cores > 2 ? cores - 1 : 1);
+  return cores > 2 ? cores - 1 : 1;
 }
 
 export function setVariant(variant: VariantKey) {

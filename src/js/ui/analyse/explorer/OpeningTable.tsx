@@ -38,14 +38,6 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
 
 export default OpeningTable
 
-export function showTitle(ctrl: AnalyseCtrlInterface) {
-  if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
-    return 'Opening explorer';
-  } else {
-    return ctrl.data.game.variant.name + ' opening explorer';
-  }
-}
-
 export function showEmpty(ctrl: AnalyseCtrlInterface) {
   return (
     <div key="explorer-empty" className="explorer-data empty">

@@ -2,12 +2,24 @@ import * as m from 'mithril';
 import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
 import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
-import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR, showTitle } from './OpeningTable';
+import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR } from './OpeningTable';
 
 function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const uci = getTR(e).dataset['uci'];
   if (uci) ctrl.explorerMove(uci);
 }
+
+function showTitle(ctrl: AnalyseCtrlInterface) {
+  const data = ctrl.explorer.current();
+  if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
+    if (data && data.tablebase) return 'Endgame tablebase';
+    else return 'Opening explorer';
+  } else {
+    const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer';
+    return ctrl.data.game.variant.name + what;
+  }
+}
+
 
 function showTablebase(ctrl: AnalyseCtrlInterface, title: string, moves: Array<ExplorerMove>, fen: string) {
   let stm = fen.split(/\s/)[1];

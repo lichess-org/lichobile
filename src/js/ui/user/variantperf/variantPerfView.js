@@ -31,7 +31,7 @@ function renderBody(ctrl) {
 
   return (
     <div class="variantPerfBody native_scroller page">
-      <canvas oncreate={node => drawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
+      <canvas oncreate={node => delayDrawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
       <table class="variantPerf">
         <tbody>
         <tr>
@@ -179,6 +179,10 @@ function toTitleCase(str) {
   );
 }
 
+function delayDrawChart(data, node) {
+  setTimeout(() => drawChart(data, node), 1000);
+}
+
 function drawChart(data, node) {
   const ctx = node.dom.getContext('2d');
   const canvas = ctx.canvas;
@@ -218,6 +222,10 @@ function drawChart(data, node) {
       }]
     },
     options: {
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart'
+      },
       scales: {
         xAxes: [{
           id: 'x',

@@ -1,8 +1,6 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
-import { gameIcon, variantReminder } from '../../utils';
 import * as chessground from 'chessground-mobile';
-import * as gameApi from '../../lichess/game';
 import BoardBrush from './BoardBrush';
 
 export interface Attrs {
@@ -24,7 +22,6 @@ export interface Shape {
 }
 
 interface State {
-  wrapperOnCreate(vnode: Mithril.ChildNode): void
   boardOnCreate(vnode: Mithril.ChildNode): void
   boardOnRemove(): void
   boardTheme: string
@@ -34,18 +31,10 @@ interface State {
 const Board: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
-    const { data, chessgroundCtrl, bounds } = vnode.attrs;
+    const { chessgroundCtrl, bounds } = vnode.attrs;
 
     if (bounds) {
       chessgroundCtrl.setBounds(bounds);
-    }
-
-    function wrapperOnCreate({ dom }: Mithril.ChildNode) {
-      const icon = gameIcon(data.game.variant.key);
-      if (icon && data.game.variant.key !== 'standard' && data.game.status &&
-        gameApi.isPlayerPlaying(data)) {
-          variantReminder(dom as HTMLElement, icon);
-        }
     }
 
     function boardOnCreate({ dom }: Mithril.ChildNode) {
@@ -61,7 +50,6 @@ const Board: Mithril.Component<Attrs, State> = {
     vnode.state = {
       pieceTheme: settings.general.theme.piece(),
       boardTheme: settings.general.theme.board(),
-      wrapperOnCreate,
       boardOnCreate,
       boardOnRemove
     };
@@ -94,9 +82,7 @@ const Board: Mithril.Component<Attrs, State> = {
     if (!chessgroundCtrl) return null;
 
     return (
-      <section className={wrapperClass} oncreate={this.wrapperOnCreate}
-        style={wrapperStyle}
-      >
+      <section className={wrapperClass} style={wrapperStyle}>
         <div className={boardClass}
           oncreate={this.boardOnCreate}
           onremove={this.boardOnRemove}

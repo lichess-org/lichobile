@@ -52,6 +52,7 @@ export default {
       'analyse/:source/:id': analyse,
       'analyse/fen/:fen': analyse,
       'analyse/variant/:variant': analyse,
+      'analyse/variant/:variant/fen/:fen': analyse,
       'analyse': analyse,
       'importer': importer,
       'challenge/:id': challenge,

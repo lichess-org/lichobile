@@ -72,15 +72,14 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         aiData.player.spectator = true;
         this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack);
       }
-    } else if (fenArg) {
-        helper.analyticsTrackView('Analysis (empty)');
-        this.ctrl = new AnalyseCtrl(makeDefaultData('fromPosition', fenArg), source, orientation, shouldGoBack);
     } else {
       if (variant === undefined) {
-        router.set(`/analyse/variant/${settings.analyse.syntheticVariant()}`, true)
+        let url = `/analyse/variant/${settings.analyse.syntheticVariant()}`
+        if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
+        router.set(url, true)
       } else {
         helper.analyticsTrackView('Analysis (empty)');
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant), source, orientation, shouldGoBack);
+        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
       }
     }
   },

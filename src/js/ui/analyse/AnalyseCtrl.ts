@@ -1,6 +1,7 @@
 import { debounce } from 'lodash';
 import router from '../../router';
 import * as chess from '../../chess';
+import * as chessFormat from '../../utils/chessFormat';
 import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
@@ -355,10 +356,12 @@ export default class AnalyseCtrl {
       // get best move in pgn format
       if (step.ceval === undefined || step.ceval.best !== res.ceval.best) {
         if (!res.ceval.best.includes('@')) {
+          const move = chessFormat.uciToMove(res.ceval.best);
           chess.move({
             fen: step.fen,
-            orig: <Pos>res.ceval.best.slice(0, 2),
-            dest: <Pos>res.ceval.best.slice(2, 4)
+            orig: move[0],
+            dest: move[1],
+            promotion: chessFormat.uciToProm(res.ceval.best)
           })
           .then((data: chess.MoveResponse) => {
             step.ceval.bestSan = data.situation.pgnMoves[0];

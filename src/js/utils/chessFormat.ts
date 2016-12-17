@@ -1,17 +1,27 @@
-export function uciToMove(uci: string): [Pos, Pos] {
-  return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
-}
-
-export function uciToDropPos(uci: string): Pos {
-  return <Pos>uci.substr(2, 2);
-}
-
 const uciRoleMap = {
   P: 'pawn',
   B: 'bishop',
   N: 'knight',
   R: 'rook',
-  Q: 'queen'
+  Q: 'queen',
+  p: 'pawn',
+  b: 'bishop',
+  n: 'knight',
+  r: 'rook',
+  q: 'queen',
+}
+
+export function uciToMove(uci: string): [Pos, Pos] {
+  return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
+}
+
+export function uciToProm(uci: string): Role | undefined {
+  const p = uci.substr(4, 1);
+  return uciRoleMap[p];
+}
+
+export function uciToDropPos(uci: string): Pos {
+  return <Pos>uci.substr(2, 2);
 }
 
 export function uciToDropRole(uci: string): Role {

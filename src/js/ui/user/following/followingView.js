@@ -20,7 +20,7 @@ function renderBody(ctrl) {
       <ul className="native_scroller page">
         {ctrl.following().map(p => renderPlayer(ctrl, p))}
         {nextPage ?
-          <li className="list_item followingList" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
+          <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
           null
         }
       </ul>

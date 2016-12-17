@@ -209,7 +209,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
       { step.ceval ?
       <div className="analyse-engine_info">
         <p>depth {step.ceval.depth}/{step.ceval.maxDepth}</p>
-        <p>{Math.round(step.ceval.nps / 1000)} kn/s, {ctrl.ceval.cores} cores</p>
+        <p>{Math.round(step.ceval.nps / 1000)} kn/s, {ctrl.ceval.cores} {ctrl.ceval.cores > 1 ? 'cores' : 'core' }</p>
       </div> : null
       }
     </div>
@@ -368,10 +368,6 @@ function renderReplay(ctrl: AnalyseCtrlInterface) {
       result = '½-½';
   }
   const tree = renderTree(ctrl, ctrl.analyse.tree);
-  if (result) {
-    tree.push(<div key="gameResult" className="result">{result}</div>);
-    tree.push(renderStatus(ctrl));
-  }
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
   const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '');
   return (
@@ -440,7 +436,7 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
       <button className={'action_bar_button fa fa-' + (ctrl.vm.smallBoard ? 'compress' : 'expand')} key="expand-compress"
         oncreate={helper.ontap(
           ctrl.toggleBoardSize,
-          () => window.plugins.toast.show('Expand board', 'short', 'bottom')
+          () => window.plugins.toast.show('Expand/compress board', 'short', 'bottom')
         )}
       />
       {buttons(ctrl)}

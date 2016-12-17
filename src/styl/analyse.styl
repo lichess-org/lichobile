@@ -145,6 +145,10 @@ eval
       white-space nowrap
       overflow hidden
       &.visiting
+        > index, > move
+          color lighten(gold, 40%)
+        > move.current
+          color gold
         white-space normal
       &.nested
         display inline

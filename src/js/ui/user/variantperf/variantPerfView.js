@@ -180,7 +180,7 @@ function toTitleCase(str) {
 }
 
 function delayDrawChart(data, node) {
-  setTimeout(() => drawChart(data, node), 1000);
+  setTimeout(() => drawChart(data, node), 500);
 }
 
 function drawChart(data, node) {

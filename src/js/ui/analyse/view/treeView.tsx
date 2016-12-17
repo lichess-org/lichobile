@@ -225,7 +225,7 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
     }
   }
   return (
-    <div key={step.ply + ':meta'} className="analysisMeta">{children}</div>
+    <div className="analysisMeta">{children}</div>
   );
 }
 
@@ -242,17 +242,12 @@ function renderComment(comment: string, colorClass: string, commentClass: string
   );
 }
 
-function turnKey(turn: Turn, meta?: string) {
-  const key = turn.turn.toString() + ':' + (meta ? meta : '');
-  return key;
-}
-
 function renderIndex(txt: string) {
   return <index>{txt}</index>;
 }
 
-function renderTurnEl(children: Mithril.Children, key: string) {
-  return <turn key={key}>{children}</turn>;
+function renderTurnEl(children: Mithril.Children) {
+  return <turn>{children}</turn>;
 }
 
 function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
@@ -266,37 +261,37 @@ function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   if (wMove) {
     if (wMeta) {
       let temp = [
-        renderTurnEl([index, wMove, emptyMove], turnKey(turn, 'emptyBlack')),
+        renderTurnEl([index, wMove, emptyMove]),
         wMeta
       ];
       if (bMove) {
         if (bMeta) {
           temp = temp.concat([
-            renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAfterWhiteMetaAndBlackMeta')),
+            renderTurnEl([index, emptyMove, bMove]),
             bMeta
           ]);
         } else {
           temp.push(
-            renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAfterWhiteMeta'))
+            renderTurnEl([index, emptyMove, bMove])
           );
         }
       }
       return temp;
     } else if (bMeta) {
       return [
-        renderTurnEl([index, wMove, bMove], turnKey(turn, 'andBlackMeta')),
+        renderTurnEl([index, wMove, bMove]),
         bMeta
       ];
     } else {
-      return renderTurnEl([index, wMove, bMove], turnKey(turn));
+      return renderTurnEl([index, wMove, bMove]);
     }
   }
   else if (bMeta) {
     return [
-      renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhiteAndBlackMeta')),
+      renderTurnEl([index, emptyMove, bMove]),
       bMeta
     ];
   } else {
-    return renderTurnEl([index, emptyMove, bMove], turnKey(turn, 'emptyWhite'));
+    return renderTurnEl([index, emptyMove, bMove]);
   }
 }

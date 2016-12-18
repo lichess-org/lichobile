@@ -1,12 +1,38 @@
 import * as m from 'mithril';
 import * as helper from '../../helper';
 import router from '../../../router';
-import settings from '../../../settings';
+import settings, { SettingsProp } from '../../../settings';
 import * as stream from 'mithril/stream';
+
+interface Data {
+  db: {
+    available: string[]
+    selected: SettingsProp<string>
+  },
+  rating: {
+    available: number[]
+    selected: SettingsProp<number[]>
+  },
+  speed: {
+    available: string[]
+    selected: SettingsProp<string[]>
+  }
+}
+
+interface Controller {
+  open: Mithril.Stream<boolean>
+  data: Data
+  toggleOpen(): void
+  toggleDb(db: string): void
+  toggleRating(v: number): void
+  toggleSpeed(v: string): void
+  fullHouse(): boolean
+  serialize(): string
+}
 
 export default {
 
-  controller(variant, onClose) {
+  controller(variant: Variant, onClose: (changed: boolean) => void) {
     const available = ['lichess'];
     if (variant.key === 'standard' || variant.key === 'fromPosition') {
       available.push('masters');
@@ -31,7 +57,7 @@ export default {
       }
     };
 
-    let openedWith;
+    let openedWith: string;
 
     function serialize() {
       return JSON.stringify(['db', 'rating', 'speed'].map(k =>
@@ -45,15 +71,15 @@ export default {
       open(true);
     }
 
-    function doClose(fromBB) {
+    function doClose(fromBB?: string) {
       if (fromBB !== 'backbutton' && open()) router.backbutton.stack.pop();
       open(false);
       onClose(openedWith !== serialize());
     }
 
-    function toggleMany(c, value) {
+    function toggleMany(c: SettingsProp<any>, value: any) {
       if (c().indexOf(value) === -1) c(c().concat([value]));
-      else if (c().length > 1) c(c().filter(function(v) {
+      else if (c().length > 1) c(c().filter((v: any) => {
         return v !== value;
       }));
     }
@@ -61,16 +87,16 @@ export default {
     return {
       open,
       data,
-      toggleOpen: function() {
+      toggleOpen() {
         if (open()) doClose();
         else doOpen();
       },
-      toggleDb: function(db) {
+      toggleDb(db: string) {
         data.db.selected(db);
       },
-      toggleRating: toggleMany.bind(undefined, data.rating.selected),
-      toggleSpeed: toggleMany.bind(undefined, data.speed.selected),
-      fullHouse: function() {
+      toggleRating: (v: number) => toggleMany(data.rating.selected, v),
+      toggleSpeed: (v: string) => toggleMany(data.speed.selected, v),
+      fullHouse() {
         return data.db.selected() === 'masters' || (
           data.rating.selected().length === data.rating.available.length &&
           data.speed.selected().length === data.speed.available.length
@@ -80,7 +106,7 @@ export default {
     };
   },
 
-  view(ctrl) {
+  view(ctrl: Controller) {
     const d = ctrl.data;
     return [
       m('section.db', [
@@ -88,7 +114,7 @@ export default {
         m('div.choices', d.db.available.map(s => {
           return m('span', {
             className: d.db.selected() === s ? 'selected' : '',
-            oncreate: helper.ontapY(ctrl.toggleDb.bind(undefined, s))
+            oncreate: helper.ontapY(() => ctrl.toggleDb(s))
           }, s);
         }))
       ]),
@@ -104,7 +130,7 @@ export default {
             d.rating.available.map(r => {
               return m('span', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
-                oncreate: helper.ontapY(ctrl.toggleRating.bind(undefined, r))
+                oncreate: helper.ontapY(() => ctrl.toggleRating(r))
               }, r);
             })
           )
@@ -115,7 +141,7 @@ export default {
             d.speed.available.map(s => {
               return m('span', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',
-                oncreate: helper.ontapY(ctrl.toggleSpeed.bind(undefined, s))
+                oncreate: helper.ontapY(() => ctrl.toggleSpeed(s))
               }, s);
             })
           )

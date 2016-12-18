@@ -115,7 +115,7 @@ function renderForm() {
           router.set(`/editor/${encodeURIComponent(fen)}`);
         })
       }, [
-        m(ViewOnlyBoard, { fen: fen })
+        m(ViewOnlyBoard, { fen })
       ])
       ] : m('div', m('button.withIcon', {
         oncreate: helper.ontap(() => {
@@ -194,10 +194,9 @@ export default {
 
   open,
   openFromPosition(f: string) {
-    userId = null;
+    open();
     fen = f;
     settings.gameSetup.challenge.variant('3');
     settings.gameSetup.challenge.mode('0');
-    open();
   }
 }

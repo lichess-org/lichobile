@@ -9,19 +9,26 @@ import { hasNetwork } from '../../utils';
 import * as m from 'mithril';
 import * as stream from 'mithril/stream';
 
+interface Controller {
+  open(fentoSet: string): void
+  close(fromBB?: string): void
+  fen: Mithril.Stream<string>
+  isOpen(): boolean
+}
+
 export default {
 
   controller: function() {
     let isOpen = false;
     const fen = stream();
 
-    function open(fentoSet) {
+    function open(fentoSet: string) {
       router.backbutton.stack.push(close);
       fen(fentoSet);
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -36,7 +43,7 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: Controller) {
     return popupWidget(
       'continueFromHere',
       () => m('h2', i18n('continueFromHere')),

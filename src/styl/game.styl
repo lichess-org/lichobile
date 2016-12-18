@@ -409,12 +409,10 @@
     align-items center
 
 .pocket
-  border-radius 3px
-  box-shadow 0 2px 3px rgba(0,0,0,0.3) inset
   width calc(100vw / 8 * 5)
   height calc(100vw / 8 + 10px)
   max-height "calc((100vh - 100vw - %s - %s) / 2)" % (headerHeight footerHeight)
-  background #888;
+  background #cdcdcd
   white-space nowrap
   overflow hidden
   display flex
@@ -479,3 +477,7 @@
   opacity: 0.1;
   &:after
     content none
+
+.view-container.light
+  .pocket
+    background #888

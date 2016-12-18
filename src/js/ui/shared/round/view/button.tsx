@@ -185,6 +185,18 @@ export default {
     }
     return null;
   },
+  analysisBoardIconOnly: function(ctrl: OnlineRound) {
+    const d = ctrl.data;
+    if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
+      return m('button.action_bar_button[data-icon=A]', {
+        oncreate: helper.ontap(() => {
+          socket.send('rematch-no');
+          router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
+        })
+      });
+    }
+    return null;
+  },
   newOpponent: function(ctrl: OnlineRound) {
     const d = ctrl.data;
     const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool');

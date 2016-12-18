@@ -101,7 +101,7 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<Ex
       oncreate={helper.ontap(e => link(ctrl, e), null, null, false, getTR)}
     >
       <thead>
-        <tr className="explorerTableHeader">
+        <tr>
           <th colspan="4">{type + ' games'}</th>
         </tr>
       </thead>
@@ -141,7 +141,7 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
       oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTR)}
     >
       <thead>
-        <tr className="explorerTableHeader">
+        <tr>
           <th>Move</th>
           <th>Games</th>
           <th>Rating</th>

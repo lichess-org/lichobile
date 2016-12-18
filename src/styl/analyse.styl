@@ -446,7 +446,7 @@ eval
   -webkit-overflow-scrolling touch
 
 .explorer-fixedTitle
-  flex 0 0 22px
+  flex 0 0 23px
   font-size 13px
   font-weight bold
   line-height 22px
@@ -471,37 +471,6 @@ eval
       line-height: 2em;
       max-width 300px
       margin 0 auto
-    .choices
-      display: flex;
-      max-width 300px
-      margin 0 auto
-      span
-        flex-grow: 1;
-        padding: 5px 0;
-        text-align: center;
-        transition: background 0.13s;
-        border: 1px solid #3d3d3d;
-        border-width: 1px 0 1px 1px;
-        text-transform: capitalize;
-        &:first-child
-          border-radius: 3px 0 0 3px;
-        &:last-child
-          border-radius: 0 3px 3px 0;
-          border-right-width: 1px;
-        &.selected
-          background gold
-          color: #fff;
-          text-shadow: 1px 0 0 rgba(0,0,0,0.5);
-          font-weight: bold;
-          box-shadow: 0 3px 5px rgba(0,0,0,0.2) inset;
-
-.explorerTableHeader
-  background headerBgDark
-  color gold
-  > th
-    background headerBgDark
-    &:first-child
-      padding-left 7px
 
 .explorerMove
   &:first-child
@@ -595,7 +564,12 @@ eval
   .analyse-curEval
     background darken(bglight, 7%)
 
+  .explorer-fixedTitle
+    background bgdark
+
   .explorerTable
+    th, .title
+      background bgdark
     tr
       &:nth-child(even)
         background #fafafa

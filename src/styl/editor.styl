@@ -1,66 +1,42 @@
-pitHeight = (100vh - 50px) / 8
-pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
+.editor-wrapper
+  flex 1 1 auto
+  width 100%
+  display flex
+  flex-flow column nowrap
 
-.editor
-  height 100%
-  .game_board_wrapper
-    transform none
-    @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-      height 90vw
-      width 90vw
-      margin 0 auto
-  @media only screen and (orientation: landscape)
-    height calc(100vh - 50px)
-    width "calc(100vh - 50px - (%s * 2))" % pitHeight
-    flex 0 0 auto
-    display flex
-    flex-flow column nowrap
-    align-items center
-    justify-content space-around
-    .game_board_wrapper
-      margin 0
-      height "calc(100% - (%s * 2))" % pitHeight
-      width 100%
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    width "calc(100vh - 50px - (%s * 2))" % pitHeightBigScreen
-    flex 0 0 auto
-    margin auto 0
-    .game_board_wrapper
-      height "calc(100% - (%s * 2))" % pitHeightBigScreen
-      width 100%
+.editor-table
+  flex 1 1 auto
+  display: flex
+  flex-flow: column nowrap
+  justify-content: center
+
+.editor-piecesDrawer
+  background #e6e6e6
 
 .sparePieces
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   display flex
   justify-content center
   align-items center
-  padding 0 10px
-  color #fff
+  padding 3px 0
   overflow hidden
-  > .sparePiecesInner
-    background-color #777
-    box-shadow 0px 1px 3px 1px rgba(0,0,0,0.2) inset
-    border-radius 3px
-  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
-    height "calc((100% - 90vw - %s) / 2)" % footerHeight
-  @media only screen and (orientation: landscape)
-    height "calc(%s)" % pitHeight
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    height "calc(%s - 2vh)" % pitHeightBigScreen
 
-.sparePieceWrapper
+.sparePiece
   position relative
   display inline-block
-  width calc(100vw / 8 - 1vh)
-  height calc(100vw / 8 - 1vh)
+  width calc(100vw / 8)
+  height calc(100vw / 8)
   > piece
     z-index 1
   @media only screen and (orientation: landscape)
-    width "calc(%s - 1vh)" % pitHeight
-    height "calc(%s - 1vh)" % pitHeight
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    width "calc(%s - 3vh)" % pitHeightBigScreen
-    height "calc(%s - 3vh)" % pitHeightBigScreen
+    width "calc((100vh - %s) / 8)" % headerHeight
+    height "calc((100vh - %s) / 8)" % headerHeight
+  @media only screen and (orientation: portrait) and (aspect-ratio 3/4), (orientation: portrait) and (device-aspect-ratio 3/4)
+    width calc(100vw / 14)
+    height calc(100vw / 14)
+  @media only screen and (orientation: landscape) and (aspect-ratio 4/3), (orientation: landscape) and (device-aspect-ratio 4/3), (orientation landscape) and (device-aspect-ratio 3/4)
+    width "calc((100vh - %s) / 12)" % headerHeight
+    height "calc((100vh - %s) / 12)" % headerHeight
 
 .editorMenu
   > .popup_content
@@ -71,35 +47,18 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
       margin-top 5px
     select
       padding-left 80px
-  .castling
-    margin-top 10px
-  .check_container
-    margin-top 10px
 
-.table.editorTable
-  padding 0 10px
-  height "calc(100vh - %s * 2)" % pitHeight
-  @media only screen and (orientation: landscape) and (min-height 700px)
-    height "calc(100vh - %s * 2)" % pitHeightBigScreen
-  > .editorMenuOuter
-    flex 1 1 auto
-    display flex
-    flex-flow column nowrap
-    justify-content space-around
-    align-items center
-    .check_container
-      margin-top 10px
-    > .editorMenuInner
-      width 100%
-    @media only screen and (orientation: landscape) and (max-height 450px)
-      > .editorMenuInner
-        width 70%
-    @media only screen and (orientation: landscape) and (min-height 700px)
-      > .editorMenuInner
-        width 80%
-      .castling
-        margin-top 3em
-
+.editor-castling
+  margin 10px auto 0
+  width 80%
+  text-align center
+  h3
+    font-weight bold
+    margin-bottom 5px
+  .form-multipleChoice
+    margin-bottom 3px
+    span
+      border-color #eee
 
 .continueFromHere
   h2
@@ -108,3 +67,8 @@ pitHeightBigScreen = (100vh - 50px) / 8 + 5vh
     margin-top 10px
     padding-left 10px
     color textMediumGray
+
+
+.view-container.light
+  .editor-piecesDrawer
+    background #888

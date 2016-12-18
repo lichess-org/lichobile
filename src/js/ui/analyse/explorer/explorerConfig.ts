@@ -111,7 +111,7 @@ export default {
     return [
       m('section.db', [
         m('label', 'Database'),
-        m('div.choices', d.db.available.map(s => {
+        m('div.form-multipleChoice', d.db.available.map(s => {
           return m('span', {
             className: d.db.selected() === s ? 'selected' : '',
             oncreate: helper.ontapY(() => ctrl.toggleDb(s))
@@ -126,7 +126,7 @@ export default {
       ]) : m('div', [
         m('section.rating', [
           m('label', 'Players Average rating'),
-          m('div.choices',
+          m('div.form-multipleChoice',
             d.rating.available.map(r => {
               return m('span', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
@@ -137,7 +137,7 @@ export default {
         ]),
         m('section.speed', [
           m('label', 'Game speed'),
-          m('div.choices',
+          m('div.form-multipleChoice',
             d.speed.available.map(s => {
               return m('span', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',

@@ -4,7 +4,7 @@ import { header } from '../shared/common';
 import Board from '../shared/Board';
 import * as helper from '../helper';
 import i18n from '../../i18n';
-import menu, { renderSelectColorPosition, renderCastlingOptions } from './menu';
+import menu from './menu';
 import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
 import * as m from 'mithril';
@@ -13,47 +13,33 @@ export default function view(vnode) {
   const ctrl = vnode.state;
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
+  const isPortrait = helper.isPortrait();
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor');
 
   const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
-    bounds: null,
+    bounds,
     isPortrait: helper.isPortrait()
   });
 
   function content() {
-    if (helper.isPortrait())
-      return m('div#boardEditor.editor', {
+    return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
+      board,
+      m('div.editor-wrapper', [
+        m('div#boardEditor.editor-table', {
           className: settings.general.theme.piece(),
           oncreate: ctrl.editorOnCreate,
           onremove: ctrl.editorOnRemove
         }, [
-          sparePieces(ctrl, opposite, color, 'top'),
-          board,
-          sparePieces(ctrl, color, color, 'bottom'),
-          renderActionsBar(ctrl)
-        ]);
-    else
-      return [
-        m('div.editor', {
-          className: settings.general.theme.piece(),
-          oncreate: ctrl.editorOnCreate,
-          onremove: ctrl.editorOnRemove
-        }, [
-          sparePieces(ctrl, opposite, color, 'top'),
-          board,
-          sparePieces(ctrl, color, color, 'bottom')
+          m('div.editor-piecesDrawer', [
+            sparePieces(ctrl, opposite, color, 'top'),
+            sparePieces(ctrl, color, color, 'bottom')
+          ]),
         ]),
-        m('section.table.editorTable', { key: 'table' }, [
-          m('div.editorMenuOuter', [
-            m('div.editorMenuInner', [
-              renderSelectColorPosition(ctrl),
-              !helper.isLandscapeSmall(helper.viewportDim()) ? renderCastlingOptions(ctrl) : null
-            ]),
-            renderActionsBar(ctrl)
-          ])
-        ])
-      ];
+        renderActionsBar(ctrl)
+      ])
+    ]);
   }
 
   function overlay() {
@@ -73,8 +59,8 @@ export default function view(vnode) {
 function sparePieces(ctrl, color, orientation, position) {
   return m('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
-  }, m('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map(function(role) {
-    return m('div.sparePieceWrapper', m('piece', {
+  }, m('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map((role) => {
+    return m('div.sparePiece', m('piece', {
       className: color + ' ' + role,
       'data-color': color,
       'data-role': role
@@ -84,11 +70,10 @@ function sparePieces(ctrl, color, orientation, position) {
 
 function renderActionsBar(ctrl) {
   return m('section.actions_bar', [
-    helper.isPortrait() || (helper.isLandscape() && !helper.isWideScreen()) ?
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
       oncreate: helper.ontap(ctrl.menu.open)
-    }) : null,
+    }),
     m('button.action_bar_button[data-icon=B]', {
       key: 'toggleOrientation',
       oncreate: helper.ontap(ctrl.chessground.toggleOrientation)

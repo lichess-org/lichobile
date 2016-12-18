@@ -41,18 +41,10 @@ export default {
 };
 
 function renderEditorMenu(ctrl) {
-  let children;
-  if (helper.isPortrait())
-    children = [
-      renderSelectColorPosition(ctrl),
-      renderCastlingOptions(ctrl)
-    ];
-  else
-    children = [
-      helper.isWideScreen() ? null : renderCastlingOptions(ctrl)
-    ];
-
-  return m('div.editorMenu', children);
+  return m('div.editorMenu', [
+    renderSelectColorPosition(ctrl),
+    renderCastlingOptions(ctrl)
+  ]);
 }
 
 export function renderSelectColorPosition(ctrl) {
@@ -118,33 +110,29 @@ export function renderSelectColorPosition(ctrl) {
   ]);
 }
 
-export function renderCastlingOptions(ctrl) {
-  return m('div.castling', [
-    m('strong', i18n('castling')),
-    m('div', [
-      castleCheckBox(ctrl, 'K', i18n('whiteCastlingKingside')),
-      castleCheckBox(ctrl, 'Q', i18n('whiteCastlingQueenside'))
-    ]),
-    m('div', [
-      castleCheckBox(ctrl, 'k', i18n('blackCastlingKingside')),
-      castleCheckBox(ctrl, 'q', i18n('blackCastlingQueenside'))
-    ])
+function renderCastlingOptions(ctrl) {
+  const white = [
+    ['K', i18n('whiteCastlingKingside')],
+    ['Q', i18n('whiteCastlingQueenside')],
+  ];
+  const black = [
+    ['k', i18n('blackCastlingKingside')],
+    ['q', i18n('blackCastlingQueenside')]
+  ];
+
+  return m('div.editor-castling', [
+    m('h3', i18n('castling')),
+    m('div.form-multipleChoice', white.map(c => castlingButton(ctrl, c))),
+    m('div.form-multipleChoice', black.map(c => castlingButton(ctrl, c))),
   ]);
 }
 
-function castleCheckBox(ctrl, id, label) {
-  return m('div.check_container', [
-    m('label', {
-      'for': id
-    }, label),
-    m('input[type=checkbox]', {
-      name: id,
-      checked: ctrl.data.editor.castles[id](),
-      onchange: function() {
-        ctrl.data.editor.castles[id](this.checked);
-      }
-    })
-  ]);
+function castlingButton(ctrl, c) {
+  const cur = ctrl.data.editor.castles[c[0]];
+  return m('span', {
+    className: cur() ? 'selected' : '',
+    oncreate: helper.ontap(() => cur(!cur()))
+  }, c[1]);
 }
 
 function position2option(fen, pos) {

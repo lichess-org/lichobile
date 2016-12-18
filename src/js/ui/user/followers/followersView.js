@@ -1,6 +1,7 @@
 import { header } from '../../shared/common';
 import { renderPlayer } from '../following/followingView';
 import layout from '../../layout';
+import * as helper from '../../helper';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -13,9 +14,14 @@ export default function view(vnode) {
 
 function renderBody(ctrl) {
   if (ctrl.followers().length) {
+    const nextPage = ctrl.paginator().nextPage;
     return (
       <ul className="native_scroller page">
         {ctrl.followers().map(p => renderPlayer(ctrl, p))}
+        {nextPage ?
+          <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
+          null
+        }
       </ul>
     );
   } else {

@@ -7,7 +7,6 @@ import i18n from '../../../i18n';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
-
   return layout.free(
     header.bind(undefined, 'Following'),
     renderBody.bind(undefined, ctrl)
@@ -16,9 +15,14 @@ export default function view(vnode) {
 
 function renderBody(ctrl) {
   if (ctrl.following().length) {
+    const nextPage = ctrl.paginator().nextPage;
     return (
       <ul className="native_scroller page">
         {ctrl.following().map(p => renderPlayer(ctrl, p))}
+        {nextPage ?
+          <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
+          null
+        }
       </ul>
     );
   } else {

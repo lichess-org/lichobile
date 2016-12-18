@@ -82,7 +82,8 @@ function renderGame(ctrl, g, index, userId) {
   const userColor = g.players.white.userId === userId ? 'white' : 'black';
   const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
   const star = g.bookmarked ? 't' : 's';
-  const link = g.source !== 'import' && g.status.id < gameStatus.ids.aborted ?
+  const mePlaying = session.getUserId() === userId;
+  const link = mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted) ?
     () => router.set(`/game/${g.id}/${userColor}`) :
     () => router.set(`/analyse/online/${g.id}/${userColor}`);
 
@@ -98,9 +99,9 @@ function renderGame(ctrl, g, index, userId) {
           <div className="title">{title}</div>
           <small className="date">{date}</small>
           <div className="players">
-            {renderPlayer(g.players, 'white', g.variant.key)}
+            {renderPlayer(g.players, 'white')}
             <div className="swords" data-icon="U" />
-            {renderPlayer(g.players, 'black', g.variant.key)}
+            {renderPlayer(g.players, 'black')}
           </div>
           <div className={helper.classSet({
             status: true,
@@ -122,7 +123,7 @@ function renderGame(ctrl, g, index, userId) {
   );
 }
 
-function renderPlayer(players, color, variant) {
+function renderPlayer(players, color) {
   let player = players[color];
   let playerName;
   // TODO fetch title info from server; refactor

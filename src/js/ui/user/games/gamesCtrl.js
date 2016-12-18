@@ -1,6 +1,7 @@
 import * as xhr from '../userXhr';
 import * as IScroll from 'iscroll/build/iscroll-probe';
 import * as helper from '../../helper';
+import spinner from '../../../spinner';
 import redraw from '../../../utils/redraw';
 import { throttle } from 'lodash/function';
 import socket from '../../../socket';
@@ -34,16 +35,21 @@ export default function oninit(vnode) {
 
   socket.createDefault();
 
+  spinner.spin();
   Promise.all([
-    xhr.games(userId, currentFilter(), 1, true),
-    xhr.user(userId)
+    xhr.games(userId, currentFilter(), 1, false).then(formatDates),
+    xhr.user(userId, false)
   ])
   .then(results => {
+    spinner.stop();
     const [gamesData, userData] = results;
     loadInitialGames(gamesData);
     loadUserAndFilters(userData);
   })
-  .catch(handleXhrError);
+  .catch(err => {
+    spinner.stop();
+    handleXhrError(err);
+  });
 
   function loadUserAndFilters(userData) {
     user(userData);
@@ -57,6 +63,15 @@ export default function oninit(vnode) {
       };
     });
     availableFilters(f);
+  }
+
+  function formatDates(xhrData) {
+    if (xhrData.paginator && xhrData.paginator.currentPageResults) {
+      xhrData.paginator.currentPageResults.forEach(g => {
+        g.date = window.moment(g.timestamp).calendar();
+      });
+    }
+    return xhrData;
   }
 
   function onScroll() {
@@ -99,6 +114,7 @@ export default function oninit(vnode) {
   function loadNextPage(page) {
     isLoadingNextPage(true);
     xhr.games(userId, currentFilter(), page)
+    .then(formatDates)
     .then(data => {
       isLoadingNextPage(false);
       paginator(data.paginator);
@@ -111,11 +127,13 @@ export default function oninit(vnode) {
   function onFilterChange(e) {
     currentFilter(e.target.value);
     xhr.games(userId, currentFilter(), 1, true)
+    .then(formatDates)
     .then(loadInitialGames);
   }
 
   function toggleBookmark(index) {
     games()[index].bookmarked = !games()[index].bookmarked;
+    redraw();
   }
 
   vnode.state = {

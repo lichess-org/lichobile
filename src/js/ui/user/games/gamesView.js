@@ -58,24 +58,19 @@ function renderAllGames(ctrl) {
 }
 
 function bookmarkAction(ctrl, id, index) {
-  const longAction = () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'top');
   return helper.ontapY(() => {
     toggleGameBookmark(id)
-    .then(() => {
-      ctrl.toggleBookmark(index);
-    })
+    .then(() => ctrl.toggleBookmark(index))
     .catch(utils.handleXhrError);
-  }, longAction);
+  });
 }
 
 function renderGame(ctrl, g, index, userId) {
-  const wideScreenOrLandscape = helper.isWideScreen() || helper.isLandscape();
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = g.source === 'import' ?
     `Import • ${g.variant.name}` :
     `${time} • ${g.variant.name} • ${mode}`;
-  const date = window.moment(g.timestamp).calendar();
   const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
     (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || '';
@@ -93,11 +88,13 @@ function renderGame(ctrl, g, index, userId) {
         <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
       <div className="nav" oncreate={helper.ontapY(link)}>
-        <span className="iconGame" data-icon={icon} />
-        {wideScreenOrLandscape ? m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, orientation: userColor }) : null}
+        {m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, orientation: userColor })}
         <div className="infos">
-          <div className="title">{title}</div>
-          <small className="date">{date}</small>
+          <div className="title">
+            <span className="withIcon" data-icon={icon} />
+            {title}
+          </div>
+          <small className="date">{g.date}</small>
           <div className="players">
             {renderPlayer(g.players, 'white')}
             <div className="swords" data-icon="U" />
@@ -141,6 +138,9 @@ function renderPlayer(players, color) {
       <br/>
       {player.rating ?
       <small className="playerRating">{player.rating}{player.conditional && '?'}</small> : null
+      }
+      {player.ratingDiff ?
+        helper.renderRatingDiff(player) : null
       }
     </div>
   );

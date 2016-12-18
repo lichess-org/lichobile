@@ -122,82 +122,81 @@ h3.fullname
   &.odd
     background-color lighten(bgdark, 10%)
   > .nav
-    padding 15px
+    display flex
+    flex-flow row nowrap
+    padding 10px
+    align-items center
     &:after
       line-height 1
       top 50%
-  .iconGame
-    color gold
-    position absolute
-    left 15px
-    top 20px
-    &:before
-      font-size 30px
+      right 8px
   .iconStar
     position absolute
-    left 15px
-    bottom 13px
+    top 5px
+    right 0
     width 30px
-    padding 0
-    text-align center
     color textGray
     &:before
-      font-size 25px
+      font-size 18px
   .title
     text-transform uppercase
+    line-height 0.8em
+  .date
+    font-size 0.7em
   .infos
-    padding-left 40px
+    align-self flex-start
+    flex 1 1 auto
+    font-size 0.85em
+    line-height 1.5em
+    padding-left 10px
   .players
-    text-align center
-    margin-top 1em
-    padding-right 20px
+    display flex
+    justify-content center
+    align-items center
+    margin-top 0.5em
     > div
-      display inline-block
-      vertical-align middle
-    .swords
-      font-size 1.2em
-      margin 0 10px
+      text-align center
+      line-height 1.2em
+    > .player
+      > .playerRating
+        font-size 0.7em
+      > .rp
+        font-size 0.7em
+    > .swords
+      margin 0 3px
   .playerName
     font-weight bold
   .status
     text-align center
-    padding-right 20px
-    margin-top 5px
-    font-size 0.9em
+    font-size 0.6em
+    margin-bottom 0.5em
     &.win
       color green
     &.loose
       color red
   .opening, .analysed
-    margin-top 1em
-    font-size 0.8em
-  @media only screen and (orientation: landscape), only screen and (orientation portrait) and (min-width 600px)
-    > .nav
-      display flex
-    .display_board
-      width 125px
-      height 125px
-    .iconStar
-      top 15px
-      right 15px
-      left initial
-      bottom initial
-    .iconGame
-      left 155px
-    .infos
-      padding-left 50px
+    font-size 0.6em
+  .display_board
+    flex 0 0 110px
+    height 110px
   @media only screen and (orientation landscape) and (min-height 450px)
     .display_board
-      width 150px
+      flex 0 0 150px
       height 150px
-    .iconGame
-      left 180px
   @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
     .display_board
-      width 200px
+      flex 0 0 200px
       height 200px
-    .iconGame
-      left 230px
+    .infos
+      font-size 1em
+      line-height 2em
+    .title
+      font-size 1.3em
+      line-height 1.3em
+    .date
+      font-size 0.8em
+    .status, .opening
+      font-size 1em
 
 #filterGames
   padding-left 15px

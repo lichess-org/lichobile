@@ -29,8 +29,8 @@
     flex 1 1 auto
 
 .analyse-game
-  width 60%
-  max-width 220px
+  flex 0 0 60%
+  max-width 230px
   display flex
   flex-flow column nowrap
 
@@ -186,7 +186,7 @@ eval
   overflow hidden
   width 100%
   display flex
-  flex-flow row wrap
+  flex-flow row nowrap
   align-items center
   align-content center
 
@@ -213,6 +213,7 @@ eval
 
 .analyse-curEval
   flex 0 0 auto
+  height 36px
   min-width 55px
   display flex
   flex-flow column nowrap
@@ -222,11 +223,10 @@ eval
   font-weight bold
   padding 3px 5px
   background lighten(bgdark, 5%)
-  height 100%
   > .spinner
     width initial
     height initial
-    font-size 18px
+    font-size 16px
     padding 0
     margin 0
     text-align center
@@ -234,7 +234,7 @@ eval
     min-width 50px
     font-size 16px
     > .spinner
-      font-size 16px
+      font-size 14px
 
 .analyse-bestMove
   font-size 0.5rem

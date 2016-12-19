@@ -1,6 +1,17 @@
+import { UserFullProfile, GameFilter, UserGame } from '../../lichess/interfaces/user';
+import { Paginator } from '../../lichess/interfaces';
 import { fetchJSON } from '../../http';
 
-export function games(userId: string, filter = 'all', page = 1, feedback = false) {
+export interface UserGameWithDate extends UserGame {
+  date?: string
+}
+
+export interface FilterResult {
+  filter: GameFilter
+  paginator: Paginator<UserGameWithDate>
+}
+
+export function games(userId: string, filter = 'all', page = 1, feedback = false): Promise<FilterResult> {
   return fetchJSON(`/@/${userId}/${filter}`, {
     query: {
       page
@@ -40,7 +51,7 @@ export function unblock(userId: string) {
   return fetchJSON('/rel/unblock/' + userId, { method: 'POST' });
 }
 
-export function user(id: string, feedback = true) {
+export function user(id: string, feedback = true): Promise<UserFullProfile> {
   return fetchJSON(`/api/user/${id}`, null, feedback);
 }
 

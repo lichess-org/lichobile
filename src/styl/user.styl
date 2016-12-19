@@ -121,6 +121,14 @@ h3.fullname
   border-color lighten(bgdark, 5%)
   &.odd
     background-color lighten(bgdark, 10%)
+  > .iconStar
+    position absolute
+    top 5px
+    right 0
+    width 30px
+    color textGray
+    &:before
+      font-size 18px
   > .nav
     display flex
     flex-flow row nowrap
@@ -130,32 +138,69 @@ h3.fullname
       line-height 1
       top 50%
       right 8px
-  .iconStar
-    position absolute
-    top 5px
-    right 0
-    width 30px
-    color textGray
-    &:before
-      font-size 18px
-  .title
-    text-transform uppercase
-    line-height 1
-  .date
-    font-size 0.7em
-  .infos
-    align-self flex-start
-    flex 1 1 auto
-    font-size 0.85em
-    padding-left 10px
+  .display_board
+    flex 0 0 31%
+    height calc((100vw - 20px) * 0.31)
+  @media only screen and (orientation portrait) and (max-width 320px)
+    .userGame-infos
+      font-size 0.8em
+    .userGame-title
+      font-size 0.7em
+    .userGame-versus
+      font-size 0.9em
+  @media only screen and (orientation landscape)
+    .display_board
+      flex 0 0 110px
+      height 110px
+  @media only screen and (orientation landscape) and (min-height 450px)
+    .display_board
+      flex 0 0 150px
+      height 150px
+  @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
+    .display_board
+      flex 0 0 200px
+      height 200px
+    .userGame-infos
+      font-size 1em
+      line-height 2em
+    .userGame-title
+      font-size 1.3em
+      line-height 1.3em
+    .userGame-meta
+      font-size 1em
+
+.userGame-title
+  display flex
+  font-size 0.8em
+  line-height 1
+  opacity 0.9
+  > .variant-icon
+    font-size 2em
+  > .variant-date
+    margin-left 5px
+    > .variant
+      text-transform uppercase
+    > .date
+      font-size 0.7em
+
+.userGame-infos
+  align-self stretch
+  flex 1 1 auto
+  display flex
+  flex-flow column nowrap
+  justify-content space-between
+  font-size 0.85em
+  padding 0 10px
+
+.userGame-versus
   .players
     display flex
     justify-content center
     align-items center
     margin-top 0.5em
+    line-height 1.2em
     > div
       text-align center
-      line-height 1.2em
     > .player
       > .playerRating
         font-size 0.7em
@@ -173,30 +218,11 @@ h3.fullname
       color green
     &.loose
       color red
-  .opening, .analysed
-    font-size 0.6em
-    line-height 1.5em
-  .display_board
-    flex 0 0 110px
-    height 110px
-  @media only screen and (orientation landscape) and (min-height 450px)
-    .display_board
-      flex 0 0 150px
-      height 150px
-  @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
-    .display_board
-      flex 0 0 200px
-      height 200px
-    .infos
-      font-size 1em
-      line-height 2em
-    .title
-      font-size 1.3em
-      line-height 1.3em
-    .date
-      font-size 0.8em
-    .status, .opening
-      font-size 1em
+
+.userGame-meta
+  font-size 0.6em
+  line-height 1.5em
+  opacity 0.8
 
 #filterGames
   padding-left 15px

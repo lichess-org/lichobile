@@ -73,6 +73,9 @@
     "ios-dev": "npm run build-js-dev && cordova run ios",
     "ios-stage": "npm run build-js-stage && cordova run ios",
     "ios-prod": "npm run build-js-prod && cordova run ios",
+    "prepare-ios-dev": "npm run build-js-dev && cordova prepare ios",
+    "prepare-ios-stage": "npm run build-js-stage && cordova prepare ios",
+    "prepare-ios-prod": "npm run build-js-prod && cordova prepare ios",
     "release-android": "npm run build-js-release && cordova build android --release",
     "release-ios": "npm run build-js-release && cordova build ios --release"
   }

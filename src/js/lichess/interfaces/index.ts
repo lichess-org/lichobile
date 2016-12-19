@@ -1,6 +1,3 @@
-export interface LightPlayer {
-}
-
 export interface Pool {
   id: string
   lim: number
@@ -88,3 +85,12 @@ export interface MiniBoardGameObj {
   }
 }
 
+export interface Paginator<T> {
+  currentPage: number
+  maxPerPage: number
+  currentPageResults: Array<T>
+  nbResults: number
+  previousPage: number
+  nextPage: number
+  nbPages: number
+}

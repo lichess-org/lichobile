@@ -39,7 +39,6 @@ export interface GameSettings {
   variant: SettingsProp<string>
   ratingMin?: SettingsProp<string>
   ratingMax?: SettingsProp<string>
-  membersOnly?: SettingsProp<boolean>
   days?: SettingsProp<string>
   level?: SettingsProp<string>
 }
@@ -273,7 +272,6 @@ export default {
       increment: localstorageprop('settings.game.human.increment', '0'),
       days: localstorageprop('settings.game.human.days', '2'),
       mode: localstorageprop('settings.game.human.mode', '0'),
-      membersOnly: localstorageprop('settings.game.human.membersOnly', false),
       preset: localstorageprop('settings.game.human.preset', 'quick'),
       pool: localstorageprop('settings.game.human.pool', ''),
     },

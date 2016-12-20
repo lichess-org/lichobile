@@ -203,14 +203,6 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
     );
   }
 
-  if (session.isConnected() && settingsObj.mode() === '0') {
-    generalFieldset.push(
-      m('div', { key: 'membersOnly' },
-        formWidgets.renderCheckbox(i18n('membersOnly'), 'membersOnly', settingsObj.membersOnly)
-      )
-    );
-  }
-
   const timeFieldset = [
     m('div.select_input', {
       key: formName + 'timeMode'

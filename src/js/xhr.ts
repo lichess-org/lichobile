@@ -14,7 +14,6 @@ interface GameSetup {
   increment: string;
   color: string;
   mode?: string;
-  membersOnly?: boolean;
   ratingRange?: string;
   fen?: string;
   level?: string;
@@ -52,7 +51,6 @@ export function seekGame(): Promise<HookData> {
       increment: config.increment(),
       color: config.color(),
       mode: session.isConnected() ? config.mode() : '0',
-      membersOnly: config.membersOnly(),
       ratingRange: config.ratingMin() + '-' + config.ratingMax()
     })
   }, true);

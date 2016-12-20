@@ -6,7 +6,7 @@
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="http://*.l.dev" />
-    <engine name="ios" spec="~4.2.1" />
+    <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />

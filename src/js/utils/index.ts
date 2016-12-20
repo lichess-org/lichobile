@@ -3,7 +3,7 @@ import { FetchError } from '../http';
 import redraw from './redraw';
 import * as m from 'mithril';
 
-export const lichessSri = Math.random().toString(36).substring(2);
+export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;

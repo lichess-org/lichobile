@@ -185,7 +185,7 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
     formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
   ));
 
-  if (session.isConnected() && settingsObj.mode() === '1') {
+  if (session.isConnected()) {
     generalFieldset.push(
       m('div.rating_range', {
         key: 'rating_range'

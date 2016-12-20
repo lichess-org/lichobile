@@ -65,7 +65,7 @@ function main() {
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
   if (window.lichess.gaId) {
-    window.analytics.startTrackerWithId(window.lichess.gaId);
+    window.ga.startTrackerWithId(window.lichess.gaId);
   }
 
   if (cordova.platformId === 'android') {
@@ -131,7 +131,7 @@ function onPause() {
 
 function handleError(event: string, source: string, fileno: number, columnNumber: number) {
   const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.analytics.trackException(description, true);
+  window.ga.trackException(description, true);
 }
 
 window.onerror = handleError;

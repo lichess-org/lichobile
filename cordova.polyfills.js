@@ -8,7 +8,7 @@
   window.cordova.platformId = 'browser';
 
   // analytics
-  window.analytics = {
+  window.ga = {
     startTrackerWithId: noop,
     trackException: noop,
     trackView: noop,

@@ -360,13 +360,13 @@ export function variantReminder(el: HTMLElement, icon: string): void {
 export function analyticsTrackView(view: string) {
   const enabled = settings.general.analytics();
   if (enabled)
-    window.analytics.trackView(view);
+    window.ga.trackView(view);
 }
 
 export function analyticsTrackEvent(category: string, action: string) {
   const enabled = settings.general.analytics();
   if (enabled) {
-    window.analytics.trackEvent(category, action);
+    window.ga.trackEvent(category, action);
   }
 }
 

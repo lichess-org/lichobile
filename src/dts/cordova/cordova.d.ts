@@ -88,7 +88,7 @@ interface Document {
 
 interface Window {
   cordova:Cordova;
-  analytics: Analytics;
+  ga: Analytics;
 }
 
 // cordova/argscheck module

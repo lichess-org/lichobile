@@ -43,7 +43,10 @@ export function renderPlayer(ctrl, obj) {
     <li className="list_item followingList">
       <div className="followingPlayerTitle" oncreate={userLink}>
         <div className="user">
-          <span className={'userStatus ' + status} data-icon="r" />
+          {obj.patron ?
+            <span className={'patron userStatus ' + status} data-icon="" /> :
+            <span className={'userStatus ' + status} data-icon="r" />
+          }
           {obj.title ? <span className="userTitle">{obj.title}&nbsp;</span> : null}
           {obj.user}
         </div>

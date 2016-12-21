@@ -50,8 +50,12 @@ function renderHeader(user: Session) {
       }
       { hasNetwork() && user ?
         <h2 key="username-connected" className="username connected">
-          { user.username }
+        { user.patron ?
+          <div class='patron' style={'color: ' + color} data-icon="" />
+          :
           <div class='led' style={'background: ' + color}/>
+        }
+        { user.username }
         </h2> : null
       }
       { hasNetwork() && session.isConnected() ?
@@ -218,9 +222,12 @@ function renderLinks(user: Session) {
         <span className="fa fa-cloud-upload" />{i18n('importGame')}
       </li> : null
       }
-      <li className="hr" key="sep_link_settings"></li>
+      <li className="hr" key="sep_link_settings_patron"></li>
       <li className="side_link" key="settings" oncreate={helper.ontapY(menu.route('/settings'))}>
         <span className="fa fa-cog"/>{i18n('settings')}
+      </li>
+      <li className="side_link" key="patron" oncreate={helper.ontapY(menu.loginToWebsite)}>
+        <span className="patron" data-icon="" />Patron
       </li>
     </ul>
   );

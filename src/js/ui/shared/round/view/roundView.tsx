@@ -199,7 +199,10 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
       <h2 className="antagonistUser">
-        <span className={'fa fa-circle status ' + (player.onGame ? 'ongame' : 'offgame')} />
+        { user.patron ?
+          <span className={'patron status ' + (player.onGame ? 'ongame' : 'offgame')} data-icon="" />
+          :
+          <span className={'fa fa-circle status ' + (player.onGame ? 'ongame' : 'offgame')} /> }
         {tournamentRank}
         {playerName}
         { isCrazy && position === 'opponent' && user && (user.engine || user.booster) ?

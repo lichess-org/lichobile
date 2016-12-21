@@ -6,6 +6,7 @@ import redraw from '../../utils/redraw';
 import router from '../../router';
 import socket from '../../socket';
 import * as inboxXhr from '../inbox/inboxXhr';
+import * as menuXhr from './menuXhr';
 import * as stream from 'mithril/stream';
 
 let sendPingsInterval: number;
@@ -83,4 +84,15 @@ export function toggleHeader() {
     redraw();
   });
   return headerOpen() ? headerOpen(false) : headerOpen(true);
+}
+
+export function loginToWebsite() {
+  menuXhr.createToken().then((data: LoginData) => {
+		window.open(data.url + '?referrer=/patron', '_blank', 'location=no');
+  });
+}
+
+interface LoginData {
+  url: string
+  userId: string
 }

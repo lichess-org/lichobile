@@ -1,12 +1,13 @@
 export interface Friend {
   name: string;
   playing: boolean;
+  patron: boolean;
 }
 
 let onlineFriends: Array<Friend> = [];
 
-function makeFriend(name: string, isPlaying: boolean) {
-  return {'name' : name, 'playing': isPlaying};
+function makeFriend(name: string, isPlaying: boolean, isPatron: boolean) {
+  return {'name' : name, 'playing': isPlaying, 'patron': isPatron};
 }
 
 /** Compares usernames for equality, ignoring prefixed titles (such as GM) */
@@ -20,6 +21,13 @@ function setPlaying(userName: string, playing: boolean) {
     isSameUser(userName.toLowerCase(), u.name)
   );
   if (user) user.playing = playing;
+}
+
+function setPatron(userName: string, patron: boolean) {
+  const user = onlineFriends.find(u =>
+    isSameUser(userName.toLowerCase(), u.name)
+  );
+  if (user) user.patron = patron;
 }
 
 function lexicallyCompareFriends(friend1: Friend, friend2: Friend) {
@@ -39,15 +47,16 @@ function count() {
   return onlineFriends.length;
 }
 
-function set(friends: Array<string> , playings: Array<string> ) {
-  onlineFriends = friends.map(name => makeFriend(name, false));
+function set(friends: Array<string>, playings: Array<string>, patrons: Array<string> ) {
+  onlineFriends = friends.map(name => makeFriend(name, false, false));
 
   for (let user of playings) setPlaying(user, true);
+  for (let user of patrons) setPatron(user, true);
   onlineFriends.sort(lexicallyCompareFriends);
 }
 
-function add(name: string, playing: boolean) {
-  const friend = makeFriend(name, playing);
+function add(name: string, playing: boolean, patron: boolean) {
+  const friend = makeFriend(name, playing, patron);
 
   onlineFriends.push(friend);
   onlineFriends.sort(lexicallyCompareFriends);

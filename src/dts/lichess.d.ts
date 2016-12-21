@@ -55,7 +55,7 @@ interface PlayTime {
 interface User {
   booster: boolean;
   engine: boolean;
-  patron: boolean;
+  patron?: boolean;
   id: string;
   username: string;
   name?: string;

@@ -67,14 +67,19 @@ function renderFriend(user: Friend) {
     router.set('/@/' + userId + '/tv');
   }
 
-  return user.playing ? (
+  return (
     <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
+      { user.patron ?
+        <span className="patron" data-icon="" />
+        :
+        null
+      }
       <span>{user.name}</span>
-      <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
+      { user.playing ?
+        <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
+        :
+        null
+      }
     </li>
-  ) : (
-    <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
-        {user.name}
-    </li>
-  )
+  );
 }

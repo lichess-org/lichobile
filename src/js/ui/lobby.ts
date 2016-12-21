@@ -162,6 +162,7 @@ function enterPool() {
   currentPool = settings.gameSetup.human.pool()
   socket.createLobby(() => {
     socket.send('poolIn', { id: currentPool })
+    clearInterval(poolInIntervalId)
     poolInIntervalId = setInterval(() => {
       socket.send('poolIn', { id: currentPool })
     }, 10000)

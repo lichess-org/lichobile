@@ -153,6 +153,16 @@ span.fa
   &.offline
     opacity 0.6
 
+.patron
+  &.is-green
+    color green
+  font-family "lichess"!important
+  font-size 1.2em
+  content attr(data-icon)
+  width 1.2em
+  display inline-block
+  vertical-align baseline
+
 .withIcon
   &[data-icon]:before
     margin-right 3px
@@ -228,4 +238,3 @@ span.fa
     &.black
       &:before
         content: "J"
-

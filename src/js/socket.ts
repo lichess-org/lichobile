@@ -58,10 +58,12 @@ interface ConnectionSetup {
 
 interface FollowingEntersPayload extends LichessMessage<Friend> {
   playing: boolean
+  patron: boolean
 }
 
 interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
   playing: Array<string>
+  patrons: Array<string>
 }
 
 // connectedWS means connection is established and server ping/pong
@@ -74,7 +76,7 @@ const worker = new Worker('lib/socketWorker.js');
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>
-    autoredraw(() => friendsApi.add(name, payload.playing || false)),
+    autoredraw(() => friendsApi.add(name, payload.playing || false, payload.patron || false)),
   following_leaves: (name: string) => autoredraw(() => friendsApi.remove(name)),
   following_playing: (name: string) => autoredraw(() => friendsApi.playing(name)),
   following_stopped_playing: (name: string) =>
@@ -93,7 +95,8 @@ function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayl
   const oldFriendList = cloneDeep(friendsApi.list());
 
   const friendsPlaying = payload.playing;
-  friendsApi.set(data, friendsPlaying);
+  const friendsPatrons = payload.patrons;
+  friendsApi.set(data, friendsPlaying, friendsPatrons);
 
   const newFriendList = friendsApi.list()
 

@@ -220,7 +220,10 @@ export function userStatus(user: User) {
   const status = user.online ? 'online' : 'offline';
   return (
     <div className="user">
-      <span className={'fa fa-circle userStatus ' + status} />
+      {user.patron ?
+        <span className={'patron userStatus ' + status} data-icon="" /> :
+        <span className={'fa fa-circle userStatus ' + status} />
+      }
       {user.title ? <span className="userTitle">{user.title}&nbsp;</span> : null}
       {user.username}
     </div>

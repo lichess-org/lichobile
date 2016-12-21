@@ -78,34 +78,33 @@ function renderGame(ctrl: State, g: UserGameWithDate, index: number, userId: str
       { session.isConnected() ?
         <button className="iconStar" data-icon={star} oncreate={bookmarkAction(ctrl, g.id, index)} /> : null
       }
-      <div className="nav" oncreate={helper.ontapY(link)}>
+      <div className="userGame-wrapper" oncreate={helper.ontapY(link)}>
         {m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, orientation: userColor })}
         <div className="userGame-infos">
-          <div className="userGame-title">
-            <span className="variant-icon" data-icon={icon} />
-            <div className="variant-date">
-              <div className="variant">{title}</div>
-              <small className="date">{g.date}</small>
-            </div>
-          </div>
           <div className="userGame-versus">
-            <div className="players">
-              {renderPlayer(g.players, 'white')}
-              <div className="swords" data-icon="U" />
-              {renderPlayer(g.players, 'black')}
+            <span className="variant-icon" data-icon={icon} />
+            <div className="game-result">
+              <div className="userGame-players">
+                {renderPlayer(g.players, 'white')}
+                <div className="swords" data-icon="U" />
+                {renderPlayer(g.players, 'black')}
+              </div>
+              <div className={helper.classSet({
+                'userGame-status': true,
+                win: userColor === g.winner,
+                loose: g.winner && userColor !== g.winner
+              })}>{status}</div>
             </div>
-            <div className={helper.classSet({
-              status: true,
-              win: userColor === g.winner,
-              loose: g.winner && userColor !== g.winner
-            })}>{status}</div>
           </div>
           <div className="userGame-meta">
+            <p className="game-infos">
+              {g.date} • {title}
+            </p>
             {g.opening ?
-            <p>{g.opening.name}</p> : null
+            <p className="opening">{g.opening.name}</p> : null
             }
             {g.analysed ?
-            <p>
+            <p className="analysis">
               <span className="fa fa-bar-chart" />
               Computer analysis available
             </p> : null

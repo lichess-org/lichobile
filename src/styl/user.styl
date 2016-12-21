@@ -123,31 +123,26 @@ h3.fullname
     background-color lighten(bgdark, 10%)
   > .iconStar
     position absolute
-    top 5px
+    top 8px
     right 0
     width 30px
     color textGray
     &:before
       font-size 18px
-  > .nav
+  > .userGame-wrapper
     display flex
     flex-flow row nowrap
     padding 10px
     align-items center
-    &:after
-      line-height 1
-      top 50%
-      right 8px
   .display_board
-    flex 0 0 31%
-    height calc((100vw - 20px) * 0.31)
+    flex 0 0 29%
+    height calc((100vw - 20px) * 0.29)
   @media only screen and (orientation portrait) and (max-width 320px)
     .userGame-infos
-      font-size 0.8em
-    .userGame-title
-      font-size 0.7em
-    .userGame-versus
       font-size 0.9em
+    .userGame-versus
+      > .variant-icon
+        font-size 1.4em
   @media only screen and (orientation landscape)
     .display_board
       flex 0 0 110px
@@ -158,71 +153,93 @@ h3.fullname
       height 150px
   @media only screen and (orientation landscape) and (min-height 700px), only screen and (orientation portrait) and (min-width 600px)
     .display_board
-      flex 0 0 200px
-      height 200px
+      flex 0 0 210px
+      height 210px
+    .userGame-wrapper
+      padding 15px
+    .iconStar
+      right 12px
+      &:before
+        font-size 26px
     .userGame-infos
-      font-size 1em
+      font-size 1.1em
       line-height 2em
-    .userGame-title
-      font-size 1.3em
-      line-height 1.3em
     .userGame-meta
       font-size 1em
-
-.userGame-title
-  display flex
-  font-size 0.9em
-  line-height 1
-  opacity 0.95
-  > .variant-icon
-    font-size 1.9em
-  > .variant-date
-    margin-left 5px
-    > .variant
-      text-transform uppercase
-    > .date
-      font-size 0.7em
+    .userGame-versus
+      > .variant-icon
+        font-size 1.8em
+    .userGame-players
+      font-size 1.3em
+      > .swords
+        font-size 38px
+        width 60px
+      > .player
+        width calc((100% - 60px) / 2)
+    .userGame-status
+      font-size 1em
+      margin 1em 0
 
 .userGame-infos
   align-self stretch
   flex 1 1 auto
   display flex
   flex-flow column nowrap
-  justify-content space-between
-  font-size 0.85em
+  justify-content space-around
   padding 0 10px
 
 .userGame-versus
-  .players
+  display flex
+  flex-flow row nowrap
+  align-items flex-start
+  > .variant-icon
+    font-size 1.6em
+  > .game-result
+    padding 0 5px
+    line-height 1.1em
+    flex 1 1 auto
     display flex
-    justify-content center
-    align-items center
-    margin-top 0.5em
-    line-height 1.2em
-    > div
-      text-align center
-    > .player
-      > .playerRating
-        font-size 0.7em
-      > .rp
-        font-size 0.7em
-    > .swords
-      margin 0 3px
-  .playerName
-    font-weight bold
-  .status
+    flex-flow column nowrap
+
+.userGame-players
+  font-size 0.9em
+  > .swords, > .player
+    display inline-block
+    vertical-align middle
+  > .swords
+    width 24px
+    font-size 18px
+    opacity 0.7
     text-align center
-    font-size 0.6em
-    margin-bottom 0.5em
-    &.win
-      color green
-    &.loose
-      color red
+  > .player
+    width calc((100% - 24px) / 2)
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
+    > .playerName
+      font-weight bold
+    > .playerRating, > .rp
+      font-size 0.8em
+    &.white
+      text-align right
+    &.black
+      text-align left
+
+.userGame-status
+  text-align center
+  margin 0.5em 0
+  font-size 0.6em
+  &.win
+    color green
+  &.loose
+    color red
 
 .userGame-meta
-  font-size 0.7em
+  font-size 0.65em
   line-height 1.5em
-  opacity 0.8
+  opacity 0.7
+  > .analysis
+    font-size 0.8em
 
 #filterGames
   padding-left 15px

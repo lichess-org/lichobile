@@ -28,14 +28,15 @@ export default function view(vnode) {
 function renderContent(ctrl) {
   if (!ctrl.data) return viewOnlyBoardContent(emptyFen);
 
+  const isPortrait = helper.isPortrait();
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
+  const key = isPortrait ? 'o-portrait' : 'o-landscape';
+
   const board = m(Board, {
     data: ctrl.data,
+    bounds,
     chessgroundCtrl: ctrl.chessground
   });
-
-  const isPortrait = helper.isPortrait();
-
-  const key = isPortrait ? 'o-portrait' : 'o-landscape';
 
   if (isPortrait) {
     return m.fragment({ key }, [

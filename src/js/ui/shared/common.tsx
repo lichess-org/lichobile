@@ -251,7 +251,7 @@ export function gameTitle(data: GameData): Mithril.Children {
 export function miniUser(user: User, mini: any, isOpen: boolean, close: () => void) {
   if (!user) return null;
 
-  const status = user.online ? 'online' : 'offline';
+  const status = userStatus(user);
 
   function content() {
     if (!mini) {
@@ -266,8 +266,7 @@ export function miniUser(user: User, mini: any, isOpen: boolean, close: () => vo
       <div key="loaded" className="miniUser">
         <div className="title">
           <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
-            <span className={'userStatus withIcon ' + status} data-icon="r" />
-            {i18n(user.username)}
+            {status}
           </div>
           { user.profile && user.profile.country ?
             <p className="country">

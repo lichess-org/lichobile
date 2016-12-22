@@ -203,6 +203,16 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
         }
       </div>
       <div
+        oncreate={({ state }: Mithril.ChildNode) => state.percent = percent}
+        onupdate={({ dom, state }: Mithril.ChildNode) => {
+          if (state.percent > percent) {
+            // remove el to avoid downward animation
+            const p = dom.parentNode;
+            p.removeChild(dom);
+            p.appendChild(dom);
+          }
+          state.percent = percent
+        }}
         className="analyse-cevalBar"
         style={{ transform: `translateX(-${100 - percent}%)` }}
       />

@@ -183,3 +183,13 @@ export function status() {
     }
   });
 }
+
+export function createToken() {
+  return fetchJSON('/auth/token', {method: 'POST'}, true);
+}
+
+export function openWebsitePatronPage() {
+  createToken().then((data: {url: string, userId: string}) => {
+    window.open(data.url + '?referrer=/patron', '_blank', 'location=no');
+  });
+}

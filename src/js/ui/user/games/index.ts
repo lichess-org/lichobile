@@ -2,15 +2,15 @@ import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../../utils';
 import * as helper from '../../helper';
 import * as xhr from '../userXhr';
-import * as IScroll from 'iscroll/build/iscroll-probe';
 import spinner from '../../../spinner';
 import redraw from '../../../utils/redraw';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 import socket from '../../../socket';
 import layout from '../../layout';
 import { header as headerWidget, backButton } from '../../shared/common';
 import { renderBody } from './gamesView';
-import { GameFilter, UserFullProfile, UserGame } from '../../../lichess/interfaces/user';
+import { Paginator } from '../../../lichess/interfaces';
+import { GameFilter, UserFullProfile } from '../../../lichess/interfaces/user';
 
 interface Attrs {
   id: string
@@ -18,17 +18,22 @@ interface Attrs {
 }
 
 export interface State {
-  availableFilters: Mithril.Stream<Array<AvailableFilter>>
-  currentFilter: Mithril.Stream<GameFilter>
-  isLoadingNextPage: Mithril.Stream<boolean>
-  games: Mithril.Stream<Array<UserGame>>
-  scrollerOnCreate(vn: Mithril.ChildNode): void
-  scrollerOnRemove(vn: Mithril.ChildNode): void
-  scrollerOnUpdate(vn: Mithril.ChildNode): void
-  userId: string
-  user: Mithril.Stream<UserFullProfile | undefined>
+  scrollState: ScrollState
+  onScroll(e: Event): void
+  onGamesLoaded(vn: Mithril.ChildNode): void
   onFilterChange(e: Event): void
   toggleBookmark(i: number): void
+}
+
+interface ScrollState {
+  paginator: Paginator<xhr.UserGameWithDate>
+  games: Array<xhr.UserGameWithDate>
+  currentFilter: string
+  scrollPos: number
+  user: UserFullProfile
+  userId: string
+  availableFilters: Array<AvailableFilter>
+  isLoadingNextPage: boolean
 }
 
 interface AvailableFilter {
@@ -36,8 +41,6 @@ interface AvailableFilter {
   label: string
   count: number
 }
-
-let scroller: IScroll = null;
 
 const filters = {
   all: 'gamesPlayed',
@@ -51,136 +54,128 @@ const filters = {
   playing: 'playingRightNow'
 };
 
+let cachedScrollState: ScrollState
+
 const UserGames: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit(vnode) {
-    const userId = vnode.attrs.id;
-    const user = stream(undefined);
-    const availableFilters = stream([]);
-    const currentFilter = stream(vnode.attrs.filter || <GameFilter>'all');
-    const games = stream([]);
-    const paginator = stream(null);
-    const isLoadingNextPage = stream(false);
-
     helper.analyticsTrackView('User games list');
-
     socket.createDefault();
 
-    spinner.spin();
-    Promise.all([
-      xhr.games(userId, currentFilter(), 1, false).then(formatDates),
-      xhr.user(userId, false)
-    ])
-    .then(results => {
-      spinner.stop();
-      const [gamesData, userData] = results;
-      loadInitialGames(gamesData);
-      loadUserAndFilters(userData);
-    })
-    .catch(err => {
-      spinner.stop();
-      handleXhrError(err);
-    });
+    const cacheAvailable = cachedScrollState &&
+      window.history.state.scrollStateId === cachedScrollState.userId
 
-    function loadUserAndFilters(userData: UserFullProfile) {
-      user(userData);
+    if (cacheAvailable) {
+      this.scrollState = cachedScrollState
+    } else {
+      this.scrollState = {
+        userId: vnode.attrs.id,
+        user: undefined,
+        availableFilters: [],
+        currentFilter: vnode.attrs.filter || <GameFilter>'all',
+        games: [],
+        paginator: undefined,
+        isLoadingNextPage: false,
+        scrollPos: 0
+      }
+
+      spinner.spin();
+      Promise.all([
+        xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false).then(formatDates),
+        xhr.user(this.scrollState.userId, false)
+      ])
+      .then(results => {
+        spinner.stop();
+        const [gamesData, userData] = results;
+        loadInitialGames(gamesData);
+        loadUserAndFilters(userData);
+      })
+      .catch(err => {
+        spinner.stop();
+        handleXhrError(err);
+      });
+
+    }
+
+    try {
+      const newState = Object.assign({}, window.history.state, { scrollStateId: this.scrollState.userId })
+      window.history.replaceState(newState, null);
+    } catch (e) { console.error(e) }
+
+    const loadUserAndFilters = (userData: UserFullProfile) => {
+      this.scrollState.user = userData
       const f = Object.keys(userData.count)
       .filter(k => filters.hasOwnProperty(k) && userData.count[k] > 0)
       .map(k => {
         return {
           key: <GameFilter>k,
           label: filters[k],
-          count: user().count[k]
+          count: this.scrollState.user.count[k]
         };
       });
-      availableFilters(f);
+      this.scrollState.availableFilters = f
     }
 
-    function formatDates(xhrData: xhr.FilterResult) {
-      if (xhrData.paginator && xhrData.paginator.currentPageResults) {
-        xhrData.paginator.currentPageResults.forEach(g => {
-          g.date = window.moment(g.timestamp).calendar();
-        });
-      }
-      return xhrData;
-    }
+    const saveScrollState = debounce(() => {
+      cachedScrollState = this.scrollState
+    }, 200)
 
-    function onScroll() {
-      if (this.y + this.distY <= this.maxScrollY) {
-        // lichess doesn't allow for more than 39 pages
-        if (!isLoadingNextPage() && paginator().nextPage && paginator().nextPage < 40) {
-          loadNextPage(paginator().nextPage);
-        }
-      }
-    }
-
-    function scrollerOnCreate(vn: Mithril.ChildNode) {
-      const el = <HTMLElement>vn.dom;
-      scroller = new IScroll(el, {
-        probeType: 2
-      });
-      scroller.on('scroll', throttle(onScroll, 150));
-    }
-
-    function scrollerOnRemove() {
-      if (scroller) {
-        scroller.destroy();
-        scroller = null;
-      }
-    }
-
-    function scrollerOnUpdate() {
-      scroller.refresh();
-    }
-
-    function loadInitialGames(data: xhr.FilterResult) {
-      paginator(data.paginator);
-      games(data.paginator.currentPageResults);
+    const loadInitialGames = (data: xhr.FilterResult) => {
+      this.scrollState.paginator = data.paginator
+      this.scrollState.games = data.paginator.currentPageResults
       setTimeout(() => {
-        if (scroller) scroller.scrollTo(0, 0, 0);
+        const scroller = document.getElementById('scroller-wrapper')
+        if (scroller) scroller.scrollTop = 0
       }, 50);
       redraw();
     }
 
-    function loadNextPage(page: number) {
-      isLoadingNextPage(true);
-      xhr.games(userId, currentFilter(), page)
+    const loadNextPage = (page: number) => {
+      this.scrollState.isLoadingNextPage = true
+      xhr.games(this.scrollState.userId, this.scrollState.currentFilter, page)
       .then(formatDates)
       .then(data => {
-        isLoadingNextPage(false);
-        paginator(data.paginator);
-        games(games().concat(data.paginator.currentPageResults));
+        this.scrollState.paginator = data.paginator
+        this.scrollState.isLoadingNextPage = false
+        this.scrollState.games = this.scrollState.games.concat(data.paginator.currentPageResults)
+        saveScrollState();
         redraw();
       });
       redraw();
     }
 
-    function onFilterChange(e: Event) {
-      currentFilter((e.target as any).value);
-      xhr.games(userId, currentFilter(), 1, true)
+    this.onGamesLoaded = ({ dom }: Mithril.ChildNode) => {
+      if (cacheAvailable) {
+        (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos
+      }
+    }
+
+    this.onScroll = (e: Event) => {
+      const target = (e.target as any)
+      const content = target.firstChild
+      this.scrollState.scrollPos = target.scrollTop
+      const nextPage = this.scrollState.paginator.nextPage
+      if ((this.scrollState.scrollPos + target.offsetHeight + 50) > content.offsetHeight) {
+        // lichess doesn't allow for more than 39 pages
+        if (!this.scrollState.isLoadingNextPage && nextPage && nextPage < 40) {
+          loadNextPage(nextPage);
+        }
+      }
+      saveScrollState()
+    }
+
+    this.onFilterChange = (e: Event) => {
+      this.scrollState.currentFilter = (e.target as any).value
+      xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, true)
       .then(formatDates)
       .then(loadInitialGames);
     }
 
-    function toggleBookmark(index: number) {
-      games()[index].bookmarked = !games()[index].bookmarked;
+    this.toggleBookmark = (index: number) => {
+      this.scrollState.games[index].bookmarked = !this.scrollState.games[index].bookmarked;
       redraw();
     }
-
-    vnode.state = {
-      availableFilters,
-      currentFilter,
-      isLoadingNextPage,
-      games,
-      scrollerOnCreate,
-      scrollerOnRemove,
-      scrollerOnUpdate,
-      userId,
-      user,
-      onFilterChange,
-      toggleBookmark
-    };
   },
 
   view(vnode) {
@@ -190,7 +185,15 @@ const UserGames: Mithril.Component<Attrs, State> = {
 
     return layout.free(header, () => renderBody(this));
   }
+}
 
+function formatDates(xhrData: xhr.FilterResult) {
+  if (xhrData.paginator && xhrData.paginator.currentPageResults) {
+    xhrData.paginator.currentPageResults.forEach(g => {
+      g.date = window.moment(g.timestamp).calendar();
+    });
+  }
+  return xhrData;
 }
 
 export default UserGames

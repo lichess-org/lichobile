@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import * as m from 'mithril';
 import * as utils from '../../../utils';
 import router from '../../../router';
@@ -19,9 +20,9 @@ export function renderBody(ctrl: State) {
       <div className="select_input select_games_filter">
         <label htmlFor="filterGames"></label>
         <select id="filterGames" onchange={ctrl.onFilterChange}>
-          {ctrl.availableFilters().map(f => {
+          {ctrl.scrollState.availableFilters.map(f => {
             return (
-              <option value={f.key} selected={ctrl.currentFilter() === f.key}>
+              <option value={f.key} selected={ctrl.scrollState.currentFilter === f.key}>
                 {utils.capitalize(i18n(f.label).replace('%s ', ''))} ({f.count})
               </option>
             );
@@ -35,12 +36,12 @@ export function renderBody(ctrl: State) {
 
 function renderAllGames(ctrl: State) {
   return (
-    <div className="scroller games" oncreate={ctrl.scrollerOnCreate}
-      onupdate={ctrl.scrollerOnUpdate} onremove={ctrl.scrollerOnRemove}
+    <div id="scroller-wrapper" className="scroller native_scroller games"
+      onscroll={throttle(ctrl.onScroll, 30)}
     >
-      <ul className="userGames">
-        { ctrl.games().map((g, i) => renderGame(ctrl, g, i, ctrl.userId)) }
-        {ctrl.isLoadingNextPage() ?
+      <ul id="scroller-content" className="userGames" oncreate={ctrl.onGamesLoaded}>
+        { ctrl.scrollState.games.map((g, i) => renderGame(ctrl, g, i, ctrl.scrollState.userId)) }
+        {ctrl.scrollState.isLoadingNextPage ?
         <li className="list_item loadingNext">loading...</li> : null
         }
       </ul>

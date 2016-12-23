@@ -1,5 +1,6 @@
 import * as utils from '../../utils';
 import { header as headerWidget, backButton, onBoardThemeChange } from '../shared/common';
+import redraw from '../../utils/redraw';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -18,6 +19,7 @@ function renderBody() {
             e => {
               settings.general.theme.board(e.target.value);
               onBoardThemeChange(e.target.value);
+              redraw();
             }
           ),
           m('div.board_icon.vertical_align', {

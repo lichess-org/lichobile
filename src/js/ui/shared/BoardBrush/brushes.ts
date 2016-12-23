@@ -1,4 +1,12 @@
-export const brushes = {
+export interface Brush {
+  key: string
+  color: string
+  opacity: number
+  lineWidth: number
+  circleMargin: number
+}
+
+export const brushes: { [key: string]: Brush } = {
   green: {
     key: 'g',
     color: '#15781B',
@@ -48,4 +56,4 @@ export const brushes = {
     lineWidth: 15,
     circleMargin: 0
   }
-};
+}

@@ -1,7 +1,7 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
 import * as chessground from 'chessground-mobile';
-import BoardBrush from './BoardBrush';
+import BoardBrush, { Shape } from './BoardBrush';
 
 export interface Attrs {
   data: GameData
@@ -12,13 +12,6 @@ export interface Attrs {
   customPieceTheme?: string
   shapes?: Shape[]
   alert?: string
-}
-
-export interface Shape {
-  brush: string
-  orig: Pos
-  dest?: Pos
-  role?: Role
 }
 
 interface State {
@@ -100,7 +93,8 @@ const Board: Mithril.Component<Attrs, State> = {
             BoardBrush(
               bounds,
               chessgroundCtrl.data.orientation,
-              shapes
+              shapes,
+              this.pieceTheme
             ) : null
         }
       </section>

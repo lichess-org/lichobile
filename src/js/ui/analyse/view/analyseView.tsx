@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import { hasNetwork, playerName, oppositeColor, noNull, gameIcon } from '../../../utils';
+import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';
 import i18n from '../../../i18n';
 import router from '../../../router';
@@ -7,7 +7,8 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import Board, { Attrs as BoardAttrs, Shape } from '../../shared/Board';
+import Board, { Attrs as BoardAttrs } from '../../shared/Board';
+import { Shape } from '../../shared/BoardBrush';
 import * as helper from '../../helper';
 import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';
@@ -37,44 +38,67 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
   ];
 }
 
-function moveOrDropShape(uci: string, brush: string): Shape {
+function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
   if (uci.includes('@')) {
-    return {
-      brush,
-      orig: chessFormat.uciToDropPos(uci),
-      role: chessFormat.uciToDropRole(uci)
-    };
+    const pos = chessFormat.uciToDropPos(uci)
+    return [
+      {
+        brush,
+        orig: pos
+      },
+      {
+        brush,
+        orig: pos,
+        piece: {
+          role: chessFormat.uciToDropRole(uci),
+          color: player
+        }
+      }
+    ];
   } else {
-    const move = chessFormat.uciToMove(uci);
-    return {
+    const move = chessFormat.uciToMove(uci)
+    const prom = chessFormat.uciToProm(uci)
+    const shapes: Shape[] = [{
       brush,
       orig: move[0],
       dest: move[1]
-    }
+    }]
+    if (prom) shapes.push({
+      brush,
+      orig: move[1],
+      piece: {
+        role: prom,
+        color: player
+      }
+    })
+    return shapes
   }
 }
 
 export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
+  const player = ctrl.data.game.player;
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
   let nextBest: string | null;
-  let curBestShape: Shape, pastBestShape: Shape;
+  let curBestShape: Shape[], pastBestShape: Shape[];
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextStepBest();
-    curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue') :
-      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue') :
-        null;
+    curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
+      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
+        [];
   }
   if (ctrl.vm.showComments) {
     pastBestShape = rEval && rEval.best ?
-      moveOrDropShape(rEval.best, 'paleGreen') : null;
+      moveOrDropShape(rEval.best, 'paleGreen', player) : [];
   }
 
   const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
-  const nextMove = nextStep && nextStep.uci ?
-    moveOrDropShape(nextStep.uci, 'palePurple') : null;
 
-  const shapes = nextMove ? [nextMove] : [pastBestShape, curBestShape].filter(noNull);
+  const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
+    moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
+
+  const shapes: Shape[] = nextMoveShape.length > 0 ?
+    nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
 
   const board = m<BoardAttrs>(Board, {
     key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
@@ -230,10 +254,6 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   const curPlayer = ctrl.data.game.player;
-  const bestDropRole = shapes.length > 0 && shapes[shapes.length -1].role ? {
-    role: shapes[shapes.length - 1].role,
-    brush: shapes[shapes.length - 1].brush
-  } : undefined;
   return (
     <div className="analyse-gameInfosWrapper synthetic">
       <div className="analyseOpponent">
@@ -245,8 +265,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
-          position: 'top',
-          bestDropRole: curPlayer === player.color ? bestDropRole : undefined
+          position: 'top'
         })}
       </div>
       <div className="analyseOpponent">
@@ -258,8 +277,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface, shapes: Shape[]) {
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
-          position: 'bottom',
-          bestDropRole: curPlayer === opponent.color ? bestDropRole : undefined
+          position: 'bottom'
         })}
       </div>
     </div>
@@ -273,10 +291,6 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
 
   const isCrazy = !!ctrl.vm.step.crazy;
   const curPlayer = ctrl.data.game.player;
-  const bestDropRole = shapes.length > 0 && shapes[shapes.length -1].role ? {
-    role: shapes[shapes.length - 1].role,
-    brush: shapes[shapes.length - 1].brush
-  } : undefined;
 
   return (
     <div className="analyse-gameInfosWrapper">
@@ -299,8 +313,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
-          position: 'top',
-          bestDropRole: curPlayer === player.color ? bestDropRole : undefined
+          position: 'top'
         }) : null}
       </div>
       <div className="analyseOpponent">
@@ -322,8 +335,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean, shapes
           ctrl,
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
-          position: 'bottom',
-          bestDropRole: curPlayer === opponent.color ? bestDropRole : undefined
+          position: 'bottom'
         }) : null}
       </div>
       <div className="gameInfos">

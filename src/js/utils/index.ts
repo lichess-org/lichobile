@@ -264,3 +264,7 @@ export function isEmptyObject(obj: Object) {
   if (typeof obj !== 'object') return false;
   return Object.keys(obj).length === 0;
 }
+
+export function flatten<T>(arr: T[][]): T[] {
+  return arr.reduce((a: T[], b: T[]) => a.concat(b), []);
+}

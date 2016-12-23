@@ -1,29 +1,33 @@
 import { util } from 'chessground-mobile';
+import { Shape } from '.'
+import { Brush } from './brushes'
 
-const key2pos = util.key2pos;
+type BoardPos = [number, number]
 
-function circleWidth(current, bounds) {
+const key2pos: (key: Pos) => BoardPos = util.key2pos;
+
+function circleWidth(current: boolean, bounds: ClientRect) {
   return (current ? 2 : 4) / 512 * bounds.width;
 }
 
-function lineWidth(brush, current, bounds) {
+function lineWidth(brush: Brush, current: boolean, bounds: ClientRect) {
   return (brush.lineWidth || 10) * (current ? 0.7 : 1) / 512 * bounds.width;
 }
 
-function opacity(brush, current) {
+function opacity(brush: Brush, current: boolean) {
   return (brush.opacity || 1) * (current ? 0.6 : 1);
 }
 
-function arrowMargin(current, bounds) {
+function arrowMargin(current: boolean, bounds: ClientRect) {
   return (current ? 10 : 20) / 512 * bounds.width;
 }
 
-function pos2px(pos, bounds) {
+function pos2px(pos: BoardPos, bounds: ClientRect) {
   var squareSize = bounds.width / 8;
   return [(pos[0] - 0.5) * squareSize, (8.5 - pos[1]) * squareSize];
 }
 
-export function circle(brush, pos, current, bounds) {
+export function circle(brush: Brush, pos: BoardPos, current: boolean, bounds: ClientRect) {
   const o = pos2px(pos, bounds);
   const width = circleWidth(current, bounds);
   const radius = bounds.width / 16;
@@ -40,7 +44,7 @@ export function circle(brush, pos, current, bounds) {
   );
 }
 
-export function arrow(brush, orig, dest, current, bounds) {
+export function arrow(brush: Brush, orig: BoardPos, dest: BoardPos, current: boolean, bounds: ClientRect) {
   const margin = arrowMargin(current, bounds);
   const a = pos2px(orig, bounds);
   const b = pos2px(dest, bounds);
@@ -65,7 +69,26 @@ export function arrow(brush, orig, dest, current, bounds) {
   );
 }
 
-export function defs(brushes) {
+export function piece(theme: string, pos: BoardPos, piece: Piece, bounds: ClientRect) {
+  const o = pos2px(pos, bounds);
+  const size = bounds.width / 8
+  let name = piece.color === 'white' ? 'w' : 'b';
+  name += (piece.role === 'knight' ? 'n' : piece.role[0]).toUpperCase();
+  const href = `images/pieces/${theme}/${name}.svg`;
+  return {
+    tag: 'image',
+    attrs: {
+      class: piece.color + ' ' + piece.role,
+      x: o[0] - size / 2,
+      y: o[1] - size / 2,
+      width: size,
+      height: size,
+      href: href
+    }
+  };
+}
+
+export function defs(brushes: Brush[]) {
   return (
     <defs>
       {brushes.map(brush => {
@@ -86,12 +109,23 @@ export function defs(brushes) {
   );
 }
 
-function orient(pos, color) {
+function orient(pos: BoardPos, color: Color): [number, number] {
   return color === 'white' ? pos : [9 - pos[0], 9 - pos[1]];
 }
 
-export function renderShape(orientation, current, brushes, bounds) {
-  return function(shape) {
+export function renderShape(
+  orientation: Color,
+  current: boolean,
+  brushes: {[key: string]: Brush},
+  bounds: ClientRect,
+  pieceTheme: string
+) {
+  return function(shape: Shape) {
+    if (shape.piece) return piece(
+      pieceTheme,
+      orient(key2pos(shape.orig), orientation),
+      shape.piece,
+      bounds);
     if (shape.orig && shape.dest) return arrow(
       brushes[shape.brush],
       orient(key2pos(shape.orig), orientation),
@@ -103,5 +137,4 @@ export function renderShape(orientation, current, brushes, bounds) {
       current, bounds);
     else return null;
   };
-
 }

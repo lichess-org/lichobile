@@ -62,6 +62,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       } else {
         otbData.player.spectator = true;
         this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack);
+        redraw();
       }
     } else if (source === 'offline' && gameId === 'ai') {
       helper.analyticsTrackView('Analysis (offline ai)');
@@ -71,6 +72,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       } else {
         aiData.player.spectator = true;
         this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack);
+        redraw();
       }
     } else {
       if (variant === undefined) {
@@ -80,6 +82,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       } else {
         helper.analyticsTrackView('Analysis (empty)');
         this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
+        redraw();
       }
     }
   },

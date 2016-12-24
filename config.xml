@@ -95,7 +95,7 @@
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#8d0370a" />
+    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#c4bdd32" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
           <path event="analysis" url="/analysis" />

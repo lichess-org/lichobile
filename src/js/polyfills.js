@@ -138,7 +138,8 @@ function semverCompare(a, b) {
 
 document.addEventListener('deviceready', () => {
   // temporary workaround for android versions where stockfish plugin does not work
-  if (window.device.platform === 'Android' && semverCompare(window.device.version, '4.4') === -1) {
+  // temp workaround for ios (crazyhouse crash bug)
+  if ((window.device.platform === 'Android' && semverCompare(window.device.version, '4.4') === -1) || window.device.platform === 'iOS') {
     // cordova-stockfish-plugin interface
     var stockfishWorker;
     window.Stockfish = {

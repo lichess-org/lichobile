@@ -23,24 +23,3 @@ export function setVariant(variant: VariantKey) {
   else
     return setOption('UCI_Variant', variant.toLowerCase());
 }
-
-export function convertFenForStockfish(fen: string) {
-  // convert three check fens
-  // lichess: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 +0+0
-  // stockfish: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 3+3 0 1
-  let m = fen.match(/^(.+) (w|b) (.+) (.+) (\d+) (\d+) \+(\d+)\+(\d+)$/);
-  if (m) {
-    const w = parseInt(m[7], 10);
-    const b = parseInt(m[8], 10);
-    const checks = (3 - w) + '+' + (3 - b);
-    return [m[1], m[2], m[3], m[4], checks, m[5], m[6]].join(' ');
-  }
-
-  // convert crazyhouse fens
-  // lichess: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/ w KQkq - 0 1
-  // stockfish: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1
-  m = fen.match(/^((?:\w+\/){7}\w+)\/([PNBRQKpnbrqk]*) (.*)$/);
-  if (m) return m[1] + '[' + m[2] + '] ' + m[3];
-
-  return fen;
-}

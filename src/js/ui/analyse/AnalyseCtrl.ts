@@ -346,7 +346,11 @@ export default class AnalyseCtrl {
   private allowCeval() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
+    ) &&
+      gameApi.analysableVariants
+      // temporarily disable ios crazy ceval bc/ of stockfish crash
+      .filter(v => window.cordova.platformId === 'android' || v !== 'crazyhouse')
+      .indexOf(this.data.game.variant.key) !== -1;
   }
 
   private onCevalMsg = (res: CevalEmit) => {

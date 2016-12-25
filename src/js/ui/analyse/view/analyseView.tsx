@@ -232,8 +232,10 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
           if (state.percent > percent) {
             // remove el to avoid downward animation
             const p = dom.parentNode;
-            p.removeChild(dom);
-            p.appendChild(dom);
+            if (p) {
+              p.removeChild(dom);
+              p.appendChild(dom);
+            }
           }
           state.percent = percent
         }}

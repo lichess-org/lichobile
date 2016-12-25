@@ -2,6 +2,7 @@ import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../../utils';
 import * as helper from '../../helper';
 import * as xhr from '../userXhr';
+import { toggleGameBookmark } from '../../../xhr';
 import spinner from '../../../spinner';
 import redraw from '../../../utils/redraw';
 import { debounce } from 'lodash';
@@ -22,14 +23,17 @@ export interface State {
   onScroll(e: Event): void
   onGamesLoaded(vn: Mithril.ChildNode): void
   onFilterChange(e: Event): void
-  toggleBookmark(i: number): void
+  toggleBookmark(id: string): void
 }
 
-interface ScrollState {
+export interface ScrollState {
   paginator: Paginator<xhr.UserGameWithDate>
   games: Array<xhr.UserGameWithDate>
   currentFilter: string
   scrollPos: number
+  viewport: number
+  itemSize: number
+  boardBounds: { width: number, height: number }
   user: UserFullProfile
   userId: string
   availableFilters: Array<AvailableFilter>
@@ -66,20 +70,26 @@ const UserGames: Mithril.Component<Attrs, State> = {
     const cacheAvailable = cachedScrollState &&
       window.history.state.scrollStateId === cachedScrollState.userId
 
+    const viewport = helper.viewportDim()
+    const boardsize = (viewport.vw - 20) * 0.30
+
+    this.scrollState = {
+      userId: vnode.attrs.id,
+      user: undefined,
+      availableFilters: [],
+      currentFilter: vnode.attrs.filter || <GameFilter>'all',
+      games: [],
+      paginator: undefined,
+      isLoadingNextPage: false,
+      scrollPos: 0,
+      viewport: viewport.vh - 85,
+      boardBounds: { height: boardsize, width: boardsize },
+      itemSize: (viewport.vw - 20) * 0.30 + 20 + 1
+    }
+
     if (cacheAvailable) {
       this.scrollState = cachedScrollState
     } else {
-      this.scrollState = {
-        userId: vnode.attrs.id,
-        user: undefined,
-        availableFilters: [],
-        currentFilter: vnode.attrs.filter || <GameFilter>'all',
-        games: [],
-        paginator: undefined,
-        isLoadingNextPage: false,
-        scrollPos: 0
-      }
-
       spinner.spin();
       Promise.all([
         xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false).then(formatDates),
@@ -95,7 +105,6 @@ const UserGames: Mithril.Component<Attrs, State> = {
         spinner.stop();
         handleXhrError(err);
       });
-
     }
 
     try {
@@ -154,15 +163,16 @@ const UserGames: Mithril.Component<Attrs, State> = {
     this.onScroll = (e: Event) => {
       const target = (e.target as any)
       const content = target.firstChild
-      this.scrollState.scrollPos = target.scrollTop
       const nextPage = this.scrollState.paginator.nextPage
-      if ((this.scrollState.scrollPos + target.offsetHeight + 50) > content.offsetHeight) {
+      if ((target.scrollTop + target.offsetHeight + 50) > content.offsetHeight) {
         // lichess doesn't allow for more than 39 pages
         if (!this.scrollState.isLoadingNextPage && nextPage && nextPage < 40) {
           loadNextPage(nextPage);
         }
       }
+      this.scrollState.scrollPos = target.scrollTop
       saveScrollState()
+      redraw()
     }
 
     this.onFilterChange = (e: Event) => {
@@ -172,9 +182,17 @@ const UserGames: Mithril.Component<Attrs, State> = {
       .then(loadInitialGames);
     }
 
-    this.toggleBookmark = (index: number) => {
-      this.scrollState.games[index].bookmarked = !this.scrollState.games[index].bookmarked;
-      redraw();
+    this.toggleBookmark = (id: string) => {
+      toggleGameBookmark(id).then(() => {
+        const i = this.scrollState.games.findIndex(g => g.id === id)
+        const g = this.scrollState.games[i]
+        if (g) {
+          const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
+          this.scrollState.games[i] = ng
+          redraw();
+        }
+      })
+      .catch(handleXhrError);
     }
   },
 

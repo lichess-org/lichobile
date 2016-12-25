@@ -225,8 +225,8 @@ export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, touchEn
   return createTapHandler(tapHandler, holdHandler, null, true, false, touchEndFeedback);
 }
 
-export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, touchEndFeedback?: boolean) {
-  return createTapHandler(tapHandler, holdHandler, null, false, true, touchEndFeedback);
+export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, touchEndFeedback?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+  return createTapHandler(tapHandler, holdHandler, null, false, true, touchEndFeedback, getElement);
 }
 
 export function progress(p: number) {

@@ -47,7 +47,6 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
         orig: pos
       },
       {
-        brush,
         orig: pos,
         piece: {
           role: chessFormat.uciToDropRole(uci),

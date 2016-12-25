@@ -113,12 +113,21 @@ h3.fullname
 .scroller.games
   height calc(100% - 40px)
 
+.scroller-content
+  position relative
+
 .userGame
+  display flex
+  flex-flow row nowrap
+  padding 10px
+  align-items center
   background-color lighten(bgdark, 5%)
   color textLightGray
   min-height 60px
-  padding 0
+  padding 10px
   border-color lighten(bgdark, 5%)
+  &:active,&.active
+    opacity 0.8
   &.odd
     background-color lighten(bgdark, 10%)
   > .iconStar
@@ -129,14 +138,9 @@ h3.fullname
     color textGray
     &:before
       font-size 18px
-  > .userGame-wrapper
-    display flex
-    flex-flow row nowrap
-    padding 10px
-    align-items center
   .display_board
-    flex 0 0 29%
-    height calc((100vw - 20px) * 0.29)
+    flex 0 0 30%
+    height calc((100vw - 20px) * 0.3)
   @media only screen and (orientation portrait) and (max-width 320px)
     .userGame-infos
       font-size 0.9em
@@ -155,8 +159,6 @@ h3.fullname
     .display_board
       flex 0 0 210px
       height 210px
-    .userGame-wrapper
-      padding 15px
     .iconStar
       right 12px
       &:before

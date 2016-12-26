@@ -113,8 +113,11 @@ h3.fullname
 .scroller.games
   height calc(100% - 40px)
 
-.scroller-content
-  position relative
+.userGame-loader
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 
 .userGame
   display flex
@@ -124,7 +127,6 @@ h3.fullname
   background-color lighten(bgdark, 5%)
   color textLightGray
   min-height 60px
-  padding 10px
   border-color lighten(bgdark, 5%)
   &:active,&.active
     opacity 0.8

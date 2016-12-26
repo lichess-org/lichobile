@@ -8,6 +8,7 @@ import * as gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
+import spinner from '../../../spinner';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import { makeBoard } from '../../shared/svgboard';
 import { UserGameWithDate } from '../userXhr';
@@ -75,31 +76,25 @@ function onTap(ctrl: State, e: Event) {
 }
 
 function renderAllGames(ctrl: State) {
-  const { games, scrollPos, viewport, itemSize } = ctrl.scrollState
-  const start = scrollPos / itemSize | 0
-  const end = start + (viewport / itemSize | 0) + 2
-  const offset = (scrollPos % itemSize) * -1;
-  const occlusion = games.slice(start, end);
+  const { games  } = ctrl.scrollState
   return (
-    <div className="scroller-container scroller native_scroller games"
+    <div id="scroller-wrapper" className="scroller native_scroller games"
       oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
-      onscroll={ctrl.onScroll}
+      onscroll={throttle(ctrl.onScroll, 30)}
     >
-      <div className="scroller-content"
-        style={{ height: games.length * itemSize + 'px', top: offset + 'px' }}
-        oncreate={ctrl.onGamesLoaded}
-      >
-        <ul className="scroller-content userGames"
-          style={{ top: scrollPos + 'px' }}
-        >
-          { occlusion.map((g, i) =>
-            m(Game, { key: g.id, g, index: start + i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+      { games.length ?
+        <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
+          { games.map((g, i) =>
+            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
           }
           {ctrl.scrollState.isLoadingNextPage ?
           <li className="list_item loadingNext">loading...</li> : null
           }
-        </ul>
-      </div>
+        </ul> :
+        <div className="userGame-loader">
+          {spinner.getVdom('monochrome')}
+        </div>
+      }
     </div>
   );
 }
@@ -127,7 +122,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const bounds = scrollState.boardBounds;
 
     return (
-      <li data-id={g.id} className={`list_item userGame ${evenOrOdd}`}>
+      <li data-id={g.id} className={`userGame ${evenOrOdd}`}>
         { session.isConnected() ?
           <button className="iconStar" data-icon={star} /> : null
         }
@@ -186,7 +181,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
         })
       }}
     >
-      <img className="cg-board" src="images/board/svg/brown.svg" />
+      <div className="cg-board" />
     </div>
   );
 }

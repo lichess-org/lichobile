@@ -3,7 +3,6 @@ import { handleXhrError } from '../../../utils';
 import * as helper from '../../helper';
 import * as xhr from '../userXhr';
 import { toggleGameBookmark } from '../../../xhr';
-import spinner from '../../../spinner';
 import redraw from '../../../utils/redraw';
 import { debounce } from 'lodash';
 import socket from '../../../socket';
@@ -67,8 +66,10 @@ const UserGames: Mithril.Component<Attrs, State> = {
     helper.analyticsTrackView('User games list');
     socket.createDefault();
 
-    const cacheAvailable = cachedScrollState &&
-      window.history.state.scrollStateId === cachedScrollState.userId
+    let initialized = false
+
+    const scrollStateId = window.history.state.scrollStateId
+    const cacheAvailable = cachedScrollState && scrollStateId === cachedScrollState.userId
 
     const viewport = helper.viewportDim()
     const boardsize = (viewport.vw - 20) * 0.30
@@ -88,21 +89,21 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     if (cacheAvailable) {
-      this.scrollState = cachedScrollState
+      setTimeout(() => {
+        this.scrollState = cachedScrollState
+        redraw()
+      }, 300)
     } else {
-      spinner.spin();
       Promise.all([
         xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false).then(formatDates),
         xhr.user(this.scrollState.userId, false)
       ])
       .then(results => {
-        spinner.stop();
         const [gamesData, userData] = results;
-        loadInitialGames(gamesData);
         loadUserAndFilters(userData);
+        setTimeout(() => loadInitialGames(gamesData), 300)
       })
       .catch(err => {
-        spinner.stop();
         handleXhrError(err);
       });
     }
@@ -155,8 +156,9 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     this.onGamesLoaded = ({ dom }: Mithril.ChildNode) => {
-      if (cacheAvailable) {
+      if (cacheAvailable && !initialized) {
         (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos
+        initialized = true
       }
     }
 
@@ -172,7 +174,6 @@ const UserGames: Mithril.Component<Attrs, State> = {
       }
       this.scrollState.scrollPos = target.scrollTop
       saveScrollState()
-      redraw()
     }
 
     this.onFilterChange = (e: Event) => {

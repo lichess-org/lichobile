@@ -63,9 +63,17 @@ function renderForm() {
         <div className="select_input inline no-margin">
           {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.timeToStart, false, null)}
         </div>
-        <div className="select_input inline no-margin">
+        <div className="select_input">
           {formWidgets.renderCheckbox(i18n('isPrivate'), 'private', settings.tournament.private)}
         </div>
+        { settings.tournament.private() ?
+          <div className="select_input no_after">
+            <div className="text_input_container">
+              <label>Password: </label>
+              <input type="text" id="password" className="passwordField" />
+            </div>
+          </div>
+          : null }
       </fieldset>
       <button key="create" className="newGameButton" type="submit">
         <span className="fa fa-check" />

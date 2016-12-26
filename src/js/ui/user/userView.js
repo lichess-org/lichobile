@@ -7,6 +7,7 @@ import i18n from '../../i18n';
 import countries from '../../utils/countries';
 import * as helper from '../helper';
 import session from '../../session';
+import * as xhr from '../../xhr';
 
 export default function view() {
   const ctrl = this;
@@ -56,7 +57,7 @@ function renderStatus(user) {
   return (
     <section className="onlineStatus">
       { user.patron ?
-        <span className={'userStatus patron ' + status} data-icon="" /> :
+        <span className={'userStatus patron ' + status} data-icon="" oncreate={helper.ontapY(xhr.openWebsitePatronPage)} /> :
         <span className={'fa fa-circle userStatus ' + status} />
       }
       {i18n(status)}

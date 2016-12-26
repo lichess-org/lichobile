@@ -43,12 +43,13 @@ export default class AnalyseCtrl {
   public menu: any;
   public continuePopup: any;
 
-  public chessground: Chessground.Controller;
-  public analyse: AnalyseInterface;
   public ceval: CevalCtrlInterface;
   public explorer: ExplorerCtrlInterface;
   public evalSummary: any;
   public notes: any;
+
+  public chessground?: Chessground.Controller;
+  public analyse?: AnalyseInterface;
 
   private debouncedExplorerSetStep: () => void;
 
@@ -70,7 +71,6 @@ export default class AnalyseCtrl {
     this.menu = menu.controller(this);
     this.continuePopup = continuePopup.controller();
 
-    this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
@@ -78,18 +78,14 @@ export default class AnalyseCtrl {
     this.explorer = explorerCtrl(this, true);
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
-    const initialPath = location.hash ?
-      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
-      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
-        treePath.default(this.analyse.lastPly()) :
-        treePath.default(this.analyse.firstPly());
-
     const gameMoment = window.moment(this.data.game.createdAt);
+    const defaultPath = [{ ply: 0, variation: 0 }]
+
     this.vm = {
       formattedDate: gameMoment.format('L') + ' ' + gameMoment.format('LT'),
       shouldGoBack,
-      path: initialPath,
-      pathStr: treePath.write(initialPath),
+      path: defaultPath,
+      pathStr: treePath.write(defaultPath),
       step: null,
       cgConfig: null,
       variationMenu: null,
@@ -100,12 +96,30 @@ export default class AnalyseCtrl {
       showComments: settings.analyse.showComments()
     };
 
-    this.showGround();
-    setTimeout(this.initCeval, 2000);
-
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
     }
+
+    if (util.isSynthetic(this.data))
+      this.initAnalyse()
+    else
+      setTimeout(() => this.initAnalyse(), 1000)
+  }
+
+  public initAnalyse() {
+    this.analyse = new Analyse(this.data);
+    const initialPath = location.hash ?
+      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
+      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+        treePath.default(this.analyse.lastPly()) :
+        treePath.default(this.analyse.firstPly());
+
+    this.vm.path = initialPath
+    this.vm.pathStr = treePath.write(initialPath)
+    this.showGround();
+    redraw();
+
+    setTimeout(this.initCeval, 2000);
   }
 
   public connectGameSocket = () => {

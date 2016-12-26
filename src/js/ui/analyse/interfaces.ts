@@ -132,9 +132,9 @@ export interface AnalyseCtrlInterface {
   data: AnalysisData
   source: Source
   vm: VM
-  analyse: AnalyseInterface
+  analyse?: AnalyseInterface
+  chessground?: Chessground.Controller
   explorer: ExplorerCtrlInterface
-  chessground: Chessground.Controller
   ceval: CevalCtrlInterface
   menu: any
   continuePopup: any

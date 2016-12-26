@@ -18,6 +18,7 @@ export interface Tournament {
   pairingsClosed: boolean
   perf: Perf
   podium?: Array<PodiumPlace>
+  private: boolean
   quote?: Quote
   schedule: Schedule
   secondsToStart?: number
@@ -259,7 +260,7 @@ export interface TournamentState {
   hasJoined: Mithril.Stream<boolean>
   faqCtrl: FaqState
   playerInfoCtrl: PlayerInfoState
-  join: (tid: string) => void
+  join: (tid: string, password: string) => void
   withdraw: (tid: string) => void
   reload: (tid: string, p: number) => void
   first: () => void

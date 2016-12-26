@@ -11,6 +11,7 @@ import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
 import { TournamentState, Tournament, PlayerInfoState, StandingPlayer, PodiumPlace } from '../interfaces';
+import passwordForm from './passwordForm';
 
 export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
   const ctrl = vnode.state as TournamentState;
@@ -145,15 +146,18 @@ function tournamentHeader(data: Tournament, time: number, timeText: string) {
 }
 
 function joinButton(ctrl: TournamentState) {
+  const t = ctrl.tournament();
   if (!session.isConnected() ||
-    ctrl.tournament().isFinished ||
-    settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0 ||
-    !ctrl.tournament().verdicts.accepted) {
+    t.isFinished ||
+    settings.game.supportedVariants.indexOf(t.variant) < 0 ||
+    !t.verdicts.accepted) {
     return null;
   }
 
+  const action = ctrl.tournament().private ?  (() => passwordForm.open(ctrl)) : (() => ctrl.join(t.id, null));
+
   return (
-    <button key="join" className="action_bar_button" oncreate={helper.ontap(() => ctrl.join(ctrl.tournament().id))}>
+    <button key="join" className="action_bar_button" oncreate={helper.ontap(action)}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>

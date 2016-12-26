@@ -17,8 +17,12 @@ export function reload(id: string, page: number): Promise<Tournament> {
   });
 }
 
-export function join(id: string): Promise<{}> {
-  return fetchJSON('/tournament/' + id + '/join', {method: 'POST'});
+export function join(id: string, password: string): Promise<{}> {
+  return fetchJSON('/tournament/' + id + '/join',
+  {
+    method: 'POST',
+    body: password ? JSON.stringify({p: password}) : null
+  });
 }
 
 export function withdraw(id: string): Promise<{}> {

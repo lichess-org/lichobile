@@ -92,6 +92,7 @@ function create(form: HTMLFormElement) {
   const timeToStart = (elements[6] as HTMLTextAreaElement).value;
   const isPrivate = (elements[7] as HTMLInputElement).checked ? (elements[7] as HTMLInputElement).value : '';
   const password = isPrivate ? (elements[8] as HTMLInputElement).value : '';
+
   xhr.create(variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
     close(null);

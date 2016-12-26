@@ -83,7 +83,6 @@ export function piece(theme: string, pos: BoardPos, piece: Piece, bounds: Bounds
   return {
     tag: 'image',
     attrs: {
-      class: piece.color + ' ' + piece.role,
       x: o[0] - size / 2,
       y: o[1] - size / 2,
       width: size,

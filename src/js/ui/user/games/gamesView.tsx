@@ -2,16 +2,23 @@ import { throttle } from 'lodash';
 import * as m from 'mithril';
 import * as utils from '../../../utils';
 import router from '../../../router';
+import settings from '../../../settings';
 import * as helper from '../../helper';
 import * as gameApi from '../../../lichess/game';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
+import { makeBoard } from '../../shared/svgboard';
 import { UserGameWithDate } from '../userXhr';
 import { UserGamePlayer } from '../../../lichess/interfaces/user';
 
 import { State, ScrollState } from './';
+
+interface Bounds {
+  width: number
+  height: number
+}
 
 export function renderBody(ctrl: State) {
   return (
@@ -86,7 +93,7 @@ function renderAllGames(ctrl: State) {
           style={{ top: scrollPos + 'px' }}
         >
           { occlusion.map((g, i) =>
-            m(Game, { g, index: start + i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+            m(Game, { key: g.id, g, index: start + i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
           }
           {ctrl.scrollState.isLoadingNextPage ?
           <li className="list_item loadingNext">loading...</li> : null
@@ -97,9 +104,12 @@ function renderAllGames(ctrl: State) {
   );
 }
 
-const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: string, scrollState: ScrollState }, {}> = {
+const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: string, scrollState: ScrollState }, { boardTheme: string }> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.g !== oldattrs.g;
+    return attrs.g !== oldattrs.g
+  },
+  oninit() {
+    this.boardTheme = settings.general.theme.board();
   },
   view({ attrs }) {
     const { g, index, userId, scrollState } = attrs
@@ -117,11 +127,11 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const bounds = scrollState.boardBounds;
 
     return (
-      <li data-id={g.id} className={`list_item userGame ${evenOrOdd}`} key={g.id}>
+      <li data-id={g.id} className={`list_item userGame ${evenOrOdd}`}>
         { session.isConnected() ?
           <button className="iconStar" data-icon={star} /> : null
         }
-        {m(ViewOnlyBoard, {fen: g.fen, lastMove: g.lastMove, orientation: userColor, bounds })}
+        {renderBoard(g.fen, userColor, bounds, this.boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">
             <span className="variant-icon" data-icon={icon} />
@@ -156,6 +166,29 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
       </li>
     );
   }
+}
+
+function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
+
+  const boardClass = [
+    'display_board',
+    boardTheme
+  ].join(' ');
+
+  return (
+    <div className={boardClass} key={fen}
+      oncreate={({ dom }: Mithril.ChildNode) => {
+        const img = document.createElement('img')
+        img.className = 'cg-board'
+        img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)
+        requestAnimationFrame(() => {
+          dom.replaceChild(img, dom.firstChild)
+        })
+      }}
+    >
+      <img className="cg-board" src="images/board/svg/brown.svg" />
+    </div>
+  );
 }
 
 function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {

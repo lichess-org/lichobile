@@ -66,14 +66,12 @@ function renderForm() {
         <div className="select_input">
           {formWidgets.renderCheckbox(i18n('isPrivate'), 'private', settings.tournament.private)}
         </div>
-        { settings.tournament.private() ?
-          <div className="select_input no_after">
-            <div className="text_input_container">
-              <label>Password: </label>
-              <input type="text" id="password" className="passwordField" />
-            </div>
+        <div className={'select_input no_arrow_after' + (settings.tournament.private() ? '' : ' notVisible')}>
+          <div className="text_input_container">
+            <label>Password: </label>
+            <input type="text" id="password" className="passwordField" />
           </div>
-          : null }
+        </div>
       </fieldset>
       <button key="create" className="newGameButton" type="submit">
         <span className="fa fa-check" />
@@ -92,7 +90,9 @@ function create(form: HTMLFormElement) {
   const increment = (elements[4] as HTMLTextAreaElement).value;
   const duration = (elements[5] as HTMLTextAreaElement).value;
   const timeToStart = (elements[6] as HTMLTextAreaElement).value;
-  xhr.create(variant, position, mode, time, increment, duration, timeToStart)
+  const isPrivate = (elements[7] as HTMLInputElement).checked ? (elements[7] as HTMLInputElement).value : '';
+  const password = isPrivate ? (elements[8] as HTMLInputElement).value : '';
+  xhr.create(variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
     close(null);
     router.set('/tournament/' + data.id)

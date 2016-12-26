@@ -29,7 +29,7 @@ export function playerInfo(tournamentId: string, playerId: string): Promise<Play
   return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
 }
 
-export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string): Promise<TournamentCreateResponse> {
+export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string, isPrivate: string, password: string): Promise<TournamentCreateResponse> {
   return fetchJSON('/tournament/new', {
     method: 'POST',
     body: JSON.stringify({
@@ -39,7 +39,9 @@ export function create(variant: string, position: string, mode: string, clockTim
       clockTime,
       clockIncrement,
       minutes,
-      waitMinutes
+      waitMinutes,
+      private: isPrivate,
+      password
     })
   }, true);
 }

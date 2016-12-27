@@ -9,6 +9,7 @@ import session from '../../session';
 import i18n from '../../i18n';
 import socket from '../../socket';
 import * as m from 'mithril';
+import * as xhr from '../../xhr';
 
 export default {
   oncreate: helper.viewSlideIn,
@@ -83,9 +84,12 @@ function renderBody() {
       ]),
       m('li.list_item', {
         key: 'analytics'
-      }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))
+      }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics)),
+      m('li.list_item.nav', {
+        key: 'patron',
+        oncreate: helper.ontapY(xhr.openWebsitePatronPage)
+      }, m('span.menuPatron', 'Become a Patron'))
     ]),
     window.AppVersion ? m('section.app_version', 'v' + window.AppVersion.version) : null
   ]);
 }
-

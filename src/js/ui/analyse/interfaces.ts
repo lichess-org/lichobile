@@ -142,6 +142,7 @@ export interface AnalyseCtrlInterface {
   evalSummary: any
   notes: any
 
+  loadingFen(): string
   flip(): void
   toggleBoardSize(): void
   jump(path: Path, direction?: 'forward' | 'backward'): void

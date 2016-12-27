@@ -79,7 +79,7 @@ export default class AnalyseCtrl {
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
     const gameMoment = window.moment(this.data.game.createdAt);
-    const defaultPath = [{ ply: 0, variation: 0 }]
+    const defaultPath = treePath.default(0);
 
     this.vm = {
       formattedDate: gameMoment.format('L') + ' ' + gameMoment.format('LT'),
@@ -104,6 +104,15 @@ export default class AnalyseCtrl {
       this.initAnalyse()
     else
       setTimeout(() => this.initAnalyse(), 1000)
+  }
+
+  public loadingFen() {
+    const initStep = location.hash ?
+      parseInt(location.hash.replace(/#/, ''), 10) :
+      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+      this.data.steps.length - 1 : 0
+
+    return this.data.steps[initStep] && this.data.steps[initStep].fen
   }
 
   public initAnalyse() {

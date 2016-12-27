@@ -40,10 +40,10 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
   ];
 }
 
-export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean) {
+export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen?: string) {
   return m('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
-  }, m(ViewOnlyBoard, { orientation: color, bounds }));
+  }, m(ViewOnlyBoard, { orientation: color, bounds, fen }));
 }
 
 
@@ -86,7 +86,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
       wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
     })
   } else {
-   board = viewOnlyBoard(ctrl.data.player.color, bounds, ctrl.vm.smallBoard)
+   board = viewOnlyBoard(ctrl.data.player.color, bounds, ctrl.vm.smallBoard, ctrl.loadingFen())
   }
 
   return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [

@@ -1,5 +1,5 @@
 import * as stream from 'mithril/stream';
-import { handleXhrError } from '../../../utils';
+import { handleXhrError, gamePosCache } from '../../../utils';
 import * as helper from '../../helper';
 import * as xhr from '../userXhr';
 import { toggleGameBookmark } from '../../../xhr';
@@ -88,6 +88,17 @@ const UserGames: Mithril.Component<Attrs, State> = {
       itemSize: (viewport.vw - 20) * 0.30 + 20 + 1
     }
 
+    function prepareData(xhrData: xhr.FilterResult) {
+      if (xhrData.paginator && xhrData.paginator.currentPageResults) {
+        xhrData.paginator.currentPageResults.forEach(g => {
+          const userColor: Color = g.players.white.userId === vnode.attrs.id ? 'white' : 'black';
+          gamePosCache[g.id] = { fen: g.fen, orientation: userColor }
+          g.date = window.moment(g.timestamp).calendar();
+        });
+      }
+      return xhrData;
+    }
+
     if (cacheAvailable) {
       setTimeout(() => {
         this.scrollState = cachedScrollState
@@ -95,7 +106,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
       }, 300)
     } else {
       Promise.all([
-        xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false).then(formatDates),
+        xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false)
+        .then(prepareData),
         xhr.user(this.scrollState.userId, false)
       ])
       .then(results => {
@@ -144,7 +156,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
     const loadNextPage = (page: number) => {
       this.scrollState.isLoadingNextPage = true
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, page)
-      .then(formatDates)
+      .then(prepareData)
       .then(data => {
         this.scrollState.paginator = data.paginator
         this.scrollState.isLoadingNextPage = false
@@ -179,7 +191,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
     this.onFilterChange = (e: Event) => {
       this.scrollState.currentFilter = (e.target as any).value
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, true)
-      .then(formatDates)
+      .then(prepareData)
       .then(loadInitialGames);
     }
 
@@ -206,13 +218,5 @@ const UserGames: Mithril.Component<Attrs, State> = {
   }
 }
 
-function formatDates(xhrData: xhr.FilterResult) {
-  if (xhrData.paginator && xhrData.paginator.currentPageResults) {
-    xhrData.paginator.currentPageResults.forEach(g => {
-      g.date = window.moment(g.timestamp).calendar();
-    });
-  }
-  return xhrData;
-}
 
 export default UserGames

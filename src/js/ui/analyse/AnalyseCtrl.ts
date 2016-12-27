@@ -433,7 +433,7 @@ export default class AnalyseCtrl {
   }
 
   public canUseCeval = () => {
-    return !this.gameOver() && (!this.vm.step.rEval || !this.nextStepBest());
+    return !this.gameOver()
   }
 
   public nextStepBest = () => {

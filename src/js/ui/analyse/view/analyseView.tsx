@@ -144,7 +144,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait)}
-      <div className="analyse-game">
+      <div className={'analyse-game' + (ctrl.analyse ? '' : ' loading')}>
         { ctrl.vm.step && cevalEnabled ?
           renderEvalBox(ctrl) : null
         }
@@ -206,11 +206,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   const step = ctrl.vm.step;
   let pearl: Mithril.Children, percent: number;
 
-  if (ceval && ceval.cp && ctrl.nextStepBest()) {
-    pearl = renderEval(ceval.cp);
-    percent = ctrl.ceval.enabled() ? 100 : 0;
-  }
-  else if (ceval && ceval.cp) {
+  if (ceval && ceval.cp !== undefined) {
     pearl = renderEval(ceval.cp);
     percent = ctrl.ceval.enabled() ? ctrl.ceval.percentComplete() : 0;
   }
@@ -218,16 +214,12 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
     pearl = '#' + ceval.mate;
     percent = ctrl.ceval.enabled() ? 100 : 0;
   }
-  else if (ctrl.ceval.enabled() && ctrl.gameOver()) {
+  else if (ctrl.gameOver()) {
     pearl = '-';
     percent = 0;
   }
-  else if (ctrl.ceval.enabled()) {
+  else  {
     pearl = <div className="spinner fa fa-hourglass-half"></div>;
-    percent = 0;
-  }
-  else {
-    pearl = '-';
     percent = 0;
   }
 
@@ -316,7 +308,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           <span className={'color-icon ' + player.color} />
           {playerName(player, true)}
           {helper.renderRatingDiff(player)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step && ctrl.vm.step.checkCount ?
             ' +' + getChecksCount(ctrl, player.color) : null
           }
         </div>
@@ -338,7 +330,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
           <span className={'color-icon ' + opponent.color} />
           {playerName(opponent, true)}
           {helper.renderRatingDiff(opponent)}
-          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step.checkCount ?
+          { ctrl.data.game.variant.key === 'threeCheck' && ctrl.vm.step && ctrl.vm.step.checkCount ?
             ' +' + getChecksCount(ctrl, opponent.color) : null
           }
         </div>

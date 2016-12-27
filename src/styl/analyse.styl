@@ -33,12 +33,10 @@
   max-width 230px
   display flex
   flex-flow column nowrap
+  &.loading
+    justify-content center
 
 .analyse-loadingReplay
-  display flex
-  flex-flow column nowrap
-  justify-content center
-  height 100%
   > .spinner
     width 40px
     height 40px
@@ -48,6 +46,7 @@
   display flex
   flex-flow column nowrap
   font-size 0.9rem
+  padding-right 5px
   > .result, > .status
     font-size 0.8em
     width 100%

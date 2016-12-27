@@ -7,6 +7,8 @@ import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import i18n from '../../i18n';
+import { specialFenVariants } from '../../lichess/variant';
+import { emptyFen } from '../../utils/fen';
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import * as helper from '../helper';
 import { makeDefaultData } from './data';
@@ -75,7 +77,13 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       }
     } else {
       if (variant === undefined) {
-        let url = `/analyse/variant/${settings.analyse.syntheticVariant()}`
+        let settingsVariant = settings.analyse.syntheticVariant()
+        // don't allow special variants fen since they are not supported
+        if (fenArg) {
+          settingsVariant = specialFenVariants.includes(settingsVariant) ?
+            'standard' : settingsVariant
+        }
+        let url = `/analyse/variant/${settingsVariant}`
         if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
         router.set(url, true)
       } else {
@@ -122,7 +130,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall);
       return layout.board(
         connectingHeader,
-        () => viewOnlyBoard(vnode.attrs.color, bounds, isSmall)
+        () => viewOnlyBoard(vnode.attrs.color, bounds, isSmall, emptyFen)
       );
     }
   }

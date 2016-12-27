@@ -32,7 +32,7 @@ const offlineAvailableVariants = [
 
 // temporarily disable ios crazy ceval bc/ of stockfish crash
 function filterIOSCrazy(p: [string, string]) {
-  return window.cordova.platformId === 'android' || p[1] !== 'crazyhouse'
+  return window.cordova.platformId !== 'ios' || p[1] !== 'crazyhouse'
 }
 
 export interface GameSettings {

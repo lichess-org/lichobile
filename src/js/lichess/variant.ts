@@ -117,3 +117,5 @@ export function getInitialFen(key: VariantKey): string {
   const v = variantMap[key];
   return v.initialFen || standardFen;
 }
+
+export const specialFenVariants = ['crazyhouse', 'threeCheck']

@@ -101,9 +101,10 @@ export default class Analyse implements AnalyseInterface {
     return nextPath;
   }
 
-  public addDests = (dests: DestsMap, path: Path) => {
+  public addDests = (situation: GameSituation, path: Path) => {
     this.updateAtPath(path, (step: AnalysisStep) => {
-      step.dests = dests;
+      step.dests = situation.dests;
+      step.end = situation.end;
     });
   }
 

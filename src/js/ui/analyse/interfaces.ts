@@ -72,6 +72,7 @@ export interface AnalysisStep extends GameStep {
   fixed?: boolean
   variations?: Array<AnalysisTree>
   pgnMoves?: Array<string>
+  end?: boolean
   nag?: string
 }
 
@@ -182,7 +183,7 @@ export interface AnalyseInterface {
   getStepsAfterPly(path: Path, ply: number): AnalysisTree
   nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
-  addDests(dests: DestsMap, path: Path): void
+  addDests(situation: GameSituation, path: Path): void
   updateAtPath(path: Path, update: (s: AnalysisStep) => void): void
   deleteVariation(ply: number, id: number): void
   promoteVariation(ply: number, id: number): void

@@ -8,7 +8,7 @@ import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { isEmptyObject, handleXhrError, oppositeColor, hasNetwork } from '../../utils';
+import { handleXhrError, oppositeColor, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
@@ -324,6 +324,7 @@ export default class AnalyseCtrl {
       dests: situation.dests,
       drops: situation.drops,
       check: situation.check,
+      end: situation.end,
       checkCount: situation.checkCount,
       fen: situation.fen,
       uci: situation.uciMoves[0],
@@ -372,7 +373,7 @@ export default class AnalyseCtrl {
     ) &&
       gameApi.analysableVariants
       // temporarily disable ios crazy ceval bc/ of stockfish crash
-      .filter(v => window.cordova.platformId === 'android' || v !== 'crazyhouse')
+      .filter(v => window.cordova.platformId !== 'ios' || v !== 'crazyhouse')
       .indexOf(this.data.game.variant.key) !== -1;
   }
 
@@ -417,19 +418,17 @@ export default class AnalyseCtrl {
   }
 
   public gameOver() {
-    if (!isEmptyObject(this.vm.step.dests)) return false;
-    if (this.vm.step.check) {
-      const san = this.vm.step.san;
-      const checkmate = san && san[san.length - 1] === '#';
-      return checkmate;
+    if (!this.vm.step) return false;
+    // step.end boolean is fetched async for online games (along with the dests)
+    if (this.vm.step.end === undefined) {
+      if (this.vm.step.check) {
+        const san = this.vm.step.san;
+        const checkmate = san && san[san.length - 1] === '#';
+        return checkmate;
+      }
+    } else {
+      return this.vm.step.end;
     }
-    if (this.vm.step.crazy) {
-      // no stalemate with full crazyhouse pockets
-      const wtm = this.vm.step.fen.indexOf(' w ') !== -1;
-      const p = this.vm.step.crazy.pockets[wtm ? 0 : 1];
-      if (p.pawn || p.knight || p.bishop || p.rook || p.queen) return false;
-    }
-    return true;
   }
 
   public canUseCeval = () => {
@@ -482,17 +481,18 @@ export default class AnalyseCtrl {
       session.isConnected() && gameApi.analysable(this.data);
   }
 
-  private getDests = () => {
+  private getSituation = () => {
     if (!this.vm.step.dests) {
-      chess.dests({
+      chess.situation({
         variant: this.data.game.variant.key,
         fen: this.vm.step.fen,
         path: this.vm.pathStr
       })
-      .then(({ dests, path }: chess.DestsResponse) => {
-        this.analyse.addDests(dests, treePath.read(path));
+      .then(({ situation, path }) => {
+        this.analyse.addDests(situation, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();
+          redraw();
           if (this.gameOver()) this.ceval.stop();
         }
       })
@@ -500,5 +500,5 @@ export default class AnalyseCtrl {
     }
   }
 
-  private debouncedDests = debounce(this.getDests, 100);
+  private debouncedDests = debounce(this.getSituation, 50);
 }

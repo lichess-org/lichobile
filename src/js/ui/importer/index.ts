@@ -11,6 +11,7 @@ import { header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';
+import { validateFen, cleanFenUri } from '../../utils/fen';
 import * as stream from 'mithril/stream';
 
 export interface State {
@@ -43,7 +44,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
           'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
         },
         body: serializeQueryParameters(data)
-      }, true)
+      }, true);
     }
 
     window.addEventListener('native.keyboardhide', helper.onKeyboardHide);
@@ -57,16 +58,21 @@ const ImporterScreen: Mithril.Component<{}, State> = {
         importing(true);
         redraw()
         if (hasNetwork()) {
-          submitOnline(pgn, settings.importer.analyse())
-          .then(data => {
-            router.set(`/analyse/online${data.url.round}`);
-          })
-          .catch(err => {
-            importing(false);
-            redraw()
-            console.error(err);
-            handleXhrError(err);
-          })
+          if(validateFen(pgn).valid){
+            // They are importing a FEN.
+            router.set(`/analyse/fen/${encodeURIComponent(pgn)}`)
+          } else {
+            submitOnline(pgn, settings.importer.analyse())
+            .then(data => {
+              router.set(`/analyse/online${data.url.round}`);
+            })
+            .catch(err => {
+              importing(false);
+              redraw()
+              console.error(err);
+              handleXhrError(err);
+            })
+          }
         }
       },
       importing

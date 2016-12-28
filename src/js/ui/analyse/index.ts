@@ -35,7 +35,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     const gameId = vnode.attrs.id;
     const orientation: Color = vnode.attrs.color || 'white';
     const fenArg = vnode.attrs.fen;
-    const variant = vnode.attrs.variant;
+    const variant: VariantKey = vnode.attrs.variant || (<VariantKey>settings.analyse.syntheticVariant());
 
     socket.createDefault();
     window.plugins.insomnia.keepAwake();
@@ -75,15 +75,9 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         redraw();
       }
     } else {
-      if (variant === undefined) {
-        let url = `/analyse/variant/${settings.analyse.syntheticVariant()}`
-        if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
-        router.set(url, true)
-      } else {
-        helper.analyticsTrackView('Analysis (empty)');
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
-        redraw();
-      }
+      helper.analyticsTrackView('Analysis (empty)');
+      this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
+      redraw();
     }
   },
 

@@ -112,4 +112,16 @@ function renderBody(ctrl: State) {
   ]);
 }
 
+function fetchImport(data: SendData) {
+  return fetchJSON('/import', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
+        },
+        body: serializeQueryParameters(data)
+      }, true)
+}
+
 export default ImporterScreen

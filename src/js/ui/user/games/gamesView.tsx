@@ -9,7 +9,6 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
 import spinner from '../../../spinner';
-import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import { makeBoard } from '../../shared/svgboard';
 import { UserGameWithDate } from '../userXhr';
 import { UserGamePlayer } from '../../../lichess/interfaces/user';
@@ -120,12 +119,10 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
     const star = g.bookmarked ? 't' : 's';
     const bounds = scrollState.boardBounds;
+    const withStar = session.isConnected() ? ' withStar' : ''
 
     return (
-      <li data-id={g.id} className={`userGame ${evenOrOdd}`}>
-        { session.isConnected() ?
-          <button className="iconStar" data-icon={star} /> : null
-        }
+      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, userColor, bounds, this.boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">
@@ -158,6 +155,9 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
           }
           </div>
         </div>
+        { session.isConnected() ?
+          <button className="iconStar" data-icon={star} /> : null
+        }
       </li>
     );
   }
@@ -193,8 +193,7 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
   if (player.userId) playerName = player.userId;
   else if (!player.aiLevel) playerName = utils.playerName(player);
   else if (player.aiLevel) {
-    player.ai = player.aiLevel;
-    playerName = utils.aiName(player);
+    playerName = utils.aiName({ ai: player.aiLevel });
   }
   else playerName = 'Anonymous';
 
@@ -203,7 +202,7 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
       <span className="playerName">{playerName}</span>
       <br/>
       {player.rating ?
-      <small className="playerRating">{player.rating}{player.conditional && '?'}</small> : null
+      <small className="playerRating">{player.rating}</small> : null
       }
       {player.ratingDiff ?
         helper.renderRatingDiff(player) : null

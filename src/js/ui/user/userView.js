@@ -1,6 +1,7 @@
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
+import * as xhr from '../../xhr';
 import perf from '../shared/perf';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -15,7 +16,16 @@ export default function view() {
   if (!user) return layout.empty();
 
   function header() {
-    const title = (user.title ? `${user.title} ` : '') + user.username;
+    const status = user.online ? 'online' : 'offline';
+    const icon = user.patron ?
+      <span className={'userStatus patron ' + status} data-icon="" /> :
+      <span className={'fa fa-circle userStatus ' + status} />
+
+    const title = m('div', [
+      icon,
+      (user.title ? `${user.title} ` : '') + user.username
+    ]);
+
     const backButton = !ctrl.isMe() ? renderBackbutton(title) : null;
     return headerWidget(backButton ? null : title, backButton);
   }
@@ -23,10 +33,10 @@ export default function view() {
   function profile() {
     return (
       <div id="userProfile" className="native_scroller page">
-        {renderStatus(user)}
         {renderWarnings(user)}
         {renderProfile(user)}
         {renderStats(user)}
+        {renderPatron(user)}
         {renderRatings(user)}
         {renderActions(ctrl)}
       </div>
@@ -47,19 +57,6 @@ function renderWarnings(user) {
       {user.booster ?
       <div className="warning" data-icon="j">{i18n('thisPlayerArtificiallyIncreasesTheirRating')}</div> : null
       }
-    </section>
-  );
-}
-
-function renderStatus(user) {
-  const status = user.online ? 'online' : 'offline';
-  return (
-    <section className="onlineStatus">
-      { user.patron ?
-        <span className={'userStatus patron ' + status} data-icon="" /> :
-        <span className={'fa fa-circle userStatus ' + status} />
-      }
-      {i18n(status)}
     </section>
   );
 }
@@ -106,6 +103,21 @@ function renderProfile(user) {
       </section>
     );
   } else
+    return null;
+}
+
+function renderPatron(user) {
+  if (user.patron)
+    return (
+      <p className="user-patron"
+        oncreate={helper.ontapY(xhr.openWebsitePatronPage)}
+      >
+        <span className="userStatus patron" data-icon="" />
+        Lichess Patron
+        <span className="fa fa-external-link" />
+      </p>
+    );
+  else
     return null;
 }
 

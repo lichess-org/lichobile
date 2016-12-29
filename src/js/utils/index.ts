@@ -5,6 +5,14 @@ import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 
+// game -> last pos fen
+interface GamePosCached {
+  fen: string
+  orientation: Color
+}
+export const gamePosCache: { [id: string]: GamePosCached } = {
+}
+
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;
   return m.request({
@@ -258,11 +266,6 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
 
 export function noNull(v: any) {
   return v !== undefined && v !== null;
-}
-
-export function isEmptyObject(obj: Object) {
-  if (typeof obj !== 'object') return false;
-  return Object.keys(obj).length === 0;
 }
 
 export function flatten<T>(arr: T[][]): T[] {

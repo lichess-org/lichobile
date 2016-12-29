@@ -3,10 +3,10 @@ import { defs, renderShape } from './svg';
 import { brushes } from './brushes';
 
 export interface Shape {
-  brush: string
   orig: Pos
   dest?: Pos
   piece?: Piece
+  brush?: string
 }
 
 export default function BoardBrush(bounds: ClientRect, orientation: Color, shapes: Shape[], pieceTheme: string) {

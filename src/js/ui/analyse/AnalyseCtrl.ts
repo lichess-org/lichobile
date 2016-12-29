@@ -8,7 +8,7 @@ import sound from '../../sound';
 import socket from '../../socket';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { isEmptyObject, handleXhrError, oppositeColor, hasNetwork } from '../../utils';
+import { handleXhrError, oppositeColor, hasNetwork } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
@@ -43,12 +43,13 @@ export default class AnalyseCtrl {
   public menu: any;
   public continuePopup: any;
 
-  public chessground: Chessground.Controller;
-  public analyse: AnalyseInterface;
   public ceval: CevalCtrlInterface;
   public explorer: ExplorerCtrlInterface;
   public evalSummary: any;
   public notes: any;
+
+  public chessground?: Chessground.Controller;
+  public analyse?: AnalyseInterface;
 
   private debouncedExplorerSetStep: () => void;
 
@@ -70,7 +71,6 @@ export default class AnalyseCtrl {
     this.menu = menu.controller(this);
     this.continuePopup = continuePopup.controller();
 
-    this.analyse = new Analyse(this.data);
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null;
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
@@ -78,18 +78,14 @@ export default class AnalyseCtrl {
     this.explorer = explorerCtrl(this, true);
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
-    const initialPath = location.hash ?
-      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
-      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
-        treePath.default(this.analyse.lastPly()) :
-        treePath.default(this.analyse.firstPly());
-
     const gameMoment = window.moment(this.data.game.createdAt);
+    const defaultPath = treePath.default(0);
+
     this.vm = {
       formattedDate: gameMoment.format('L') + ' ' + gameMoment.format('LT'),
       shouldGoBack,
-      path: initialPath,
-      pathStr: treePath.write(initialPath),
+      path: defaultPath,
+      pathStr: treePath.write(defaultPath),
       step: null,
       cgConfig: null,
       variationMenu: null,
@@ -100,12 +96,39 @@ export default class AnalyseCtrl {
       showComments: settings.analyse.showComments()
     };
 
-    this.showGround();
-    setTimeout(this.initCeval, 2000);
-
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
     }
+
+    if (util.isSynthetic(this.data))
+      this.initAnalyse()
+    else
+      setTimeout(() => this.initAnalyse(), 1000)
+  }
+
+  public loadingFen() {
+    const initStep = location.hash ?
+      parseInt(location.hash.replace(/#/, ''), 10) :
+      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+      this.data.steps.length - 1 : 0
+
+    return this.data.steps[initStep] && this.data.steps[initStep].fen
+  }
+
+  public initAnalyse() {
+    this.analyse = new Analyse(this.data);
+    const initialPath = location.hash ?
+      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
+      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+        treePath.default(this.analyse.lastPly()) :
+        treePath.default(this.analyse.firstPly());
+
+    this.vm.path = initialPath
+    this.vm.pathStr = treePath.write(initialPath)
+    this.showGround();
+    redraw();
+
+    setTimeout(this.initCeval, 2000);
   }
 
   public connectGameSocket = () => {
@@ -301,6 +324,7 @@ export default class AnalyseCtrl {
       dests: situation.dests,
       drops: situation.drops,
       check: situation.check,
+      end: situation.end,
       checkCount: situation.checkCount,
       fen: situation.fen,
       uci: situation.uciMoves[0],
@@ -346,7 +370,11 @@ export default class AnalyseCtrl {
   private allowCeval() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)
-    ) && gameApi.analysableVariants.indexOf(this.data.game.variant.key) !== -1;
+    ) &&
+      gameApi.analysableVariants
+      // temporarily disable ios crazy ceval bc/ of stockfish crash
+      .filter(v => window.cordova.platformId !== 'ios' || v !== 'crazyhouse')
+      .indexOf(this.data.game.variant.key) !== -1;
   }
 
   private onCevalMsg = (res: CevalEmit) => {
@@ -390,23 +418,21 @@ export default class AnalyseCtrl {
   }
 
   public gameOver() {
-    if (!isEmptyObject(this.vm.step.dests)) return false;
-    if (this.vm.step.check) {
-      const san = this.vm.step.san;
-      const checkmate = san && san[san.length - 1] === '#';
-      return checkmate;
+    if (!this.vm.step) return false;
+    // step.end boolean is fetched async for online games (along with the dests)
+    if (this.vm.step.end === undefined) {
+      if (this.vm.step.check) {
+        const san = this.vm.step.san;
+        const checkmate = san && san[san.length - 1] === '#';
+        return checkmate;
+      }
+    } else {
+      return this.vm.step.end;
     }
-    if (this.vm.step.crazy) {
-      // no stalemate with full crazyhouse pockets
-      const wtm = this.vm.step.fen.indexOf(' w ') !== -1;
-      const p = this.vm.step.crazy.pockets[wtm ? 0 : 1];
-      if (p.pawn || p.knight || p.bishop || p.rook || p.queen) return false;
-    }
-    return true;
   }
 
   public canUseCeval = () => {
-    return !this.gameOver() && (!this.vm.step.rEval || !this.nextStepBest());
+    return !this.gameOver()
   }
 
   public nextStepBest = () => {
@@ -455,17 +481,18 @@ export default class AnalyseCtrl {
       session.isConnected() && gameApi.analysable(this.data);
   }
 
-  private getDests = () => {
+  private getSituation = () => {
     if (!this.vm.step.dests) {
-      chess.dests({
+      chess.situation({
         variant: this.data.game.variant.key,
         fen: this.vm.step.fen,
         path: this.vm.pathStr
       })
-      .then(({ dests, path }: chess.DestsResponse) => {
-        this.analyse.addDests(dests, treePath.read(path));
+      .then(({ situation, path }) => {
+        this.analyse.addDests(situation, treePath.read(path));
         if (path === this.vm.pathStr) {
           this.showGround();
+          redraw();
           if (this.gameOver()) this.ceval.stop();
         }
       })
@@ -473,5 +500,5 @@ export default class AnalyseCtrl {
     }
   }
 
-  private debouncedDests = debounce(this.getDests, 100);
+  private debouncedDests = debounce(this.getSituation, 50);
 }

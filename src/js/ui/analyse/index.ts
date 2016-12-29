@@ -1,15 +1,16 @@
 import * as m from 'mithril';
 import socket from '../../socket';
 import settings from '../../settings';
-import { renderContent, overlay } from './view/analyseView';
+import { renderContent, overlay, viewOnlyBoard } from './view/analyseView';
 import router from '../../router';
 import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import { game as gameXhr } from '../../xhr';
 import i18n from '../../i18n';
+import { specialFenVariants } from '../../lichess/variant';
+import { emptyFen } from '../../utils/fen';
 import { getAnalyseData, getCurrentAIGame, getCurrentOTBGame } from '../../utils/offlineGames';
 import * as helper from '../helper';
-import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import { makeDefaultData } from './data';
 import AnalyseCtrl from './AnalyseCtrl';
 import { Source } from './interfaces';
@@ -76,7 +77,13 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       }
     } else {
       if (variant === undefined) {
-        let url = `/analyse/variant/${settings.analyse.syntheticVariant()}`
+        let settingsVariant = settings.analyse.syntheticVariant()
+        // don't allow special variants fen since they are not supported
+        if (fenArg) {
+          settingsVariant = specialFenVariants.includes(settingsVariant) ?
+            'standard' : settingsVariant
+        }
+        let url = `/analyse/variant/${settingsVariant}`
         if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
         router.set(url, true)
       } else {
@@ -119,17 +126,14 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         () => overlay(this.ctrl)
       );
     } else {
-      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', settings.analyse.smallBoard());
+      const isSmall = settings.analyse.smallBoard()
+      const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall);
       return layout.board(
         connectingHeader,
-        () => viewOnlyBoard(vnode.attrs.color, bounds)
+        () => viewOnlyBoard(vnode.attrs.color, bounds, isSmall, emptyFen)
       );
     }
   }
 };
-
-function viewOnlyBoard(color: Color, bounds: ClientRect) {
-  return m('section.board_wrapper.halfsize', m(ViewOnlyBoard, { orientation: color, bounds }));
-}
 
 export default AnalyseScreen

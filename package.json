@@ -35,7 +35,7 @@
     "minimist": "~1.2.0",
     "ncp": "~2.0.0",
     "tsify": "~2.0.3",
-    "typescript": "~2.0.6",
+    "typescript": "~2.1.4",
     "vinyl-source-stream": "~1.1.0",
     "yargs": "~1.3.1"
   },

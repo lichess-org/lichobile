@@ -264,7 +264,7 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
   }
 }
 
-export function noNull(v: any) {
+export function noNull<T>(v: T) {
   return v !== undefined && v !== null;
 }
 

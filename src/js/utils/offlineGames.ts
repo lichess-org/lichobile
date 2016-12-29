@@ -25,7 +25,8 @@ export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
       drops: o.drops,
       crazy: o.crazyhouse,
       pgnMoves: o.pgnMoves,
-      end: o.end
+      end: o.end,
+      player: o.player
     };
     return step;
   });

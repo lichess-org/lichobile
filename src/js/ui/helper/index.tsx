@@ -5,6 +5,7 @@ import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
 import * as m from 'mithril';
+import { UserGamePlayer } from '../../lichess/interfaces/user'
 
 export interface ViewportDim {
   vw: number
@@ -85,7 +86,7 @@ export function pageSlideIn(el: HTMLElement) {
 
   setTimeout(() => {
     el.style.transform = 'translate3d(0%,0,0)';
-  }, 10);
+  });
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire
@@ -392,7 +393,7 @@ export function onKeyboardHide() {
   }
 }
 
-export function renderRatingDiff(player: Player) {
+export function renderRatingDiff(player: Player | UserGamePlayer) {
   if (player.ratingDiff === undefined) return null;
   if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;
   if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>;

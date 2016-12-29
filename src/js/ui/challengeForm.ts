@@ -1,6 +1,8 @@
 import * as utils from '../utils';
 import router from '../router';
+import redraw from '../utils/redraw';
 import { challenge as challengeXhr } from '../xhr';
+import { validateFen } from '../utils/fen';
 import settings from '../settings';
 import session from '../session';
 import formWidgets from './shared/form';
@@ -14,7 +16,8 @@ import * as stream from 'mithril/stream';
 
 let actionName = '';
 let userId: string;
-let fen: string;
+let setupFen: string;
+let setupFenError: string;
 
 const isOpen = stream(false);
 
@@ -28,7 +31,8 @@ function open(uid?: string) {
   }
   router.backbutton.stack.push(close);
   isOpen(true);
-  fen = null;
+  setupFen = null;
+  setupFenError = null;
 }
 
 
@@ -37,8 +41,8 @@ function close(fromBB?: string) {
   isOpen(false);
 };
 
-function challenge() {
-  return challengeXhr(userId, fen)
+function doChallenge() {
+  return challengeXhr(userId, setupFen)
   .then(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
@@ -108,21 +112,41 @@ function renderForm() {
     settingsObj.variant() === '3' ?
     m('div.setupPosition', {
       key: 'position'
-    }, fen ? [
-      m('div.setupMiniBoardWrapper', {
+    },
+    userId ?
+    m('input[type=text][name=fen]', {
+      placeholder: i18n('pasteTheFenStringHere'),
+      oninput: (e: Event) => {
+        const rawfen = (e.target as HTMLInputElement).value
+        if (validateFen(rawfen).valid) {
+          setupFen = rawfen
+          setupFenError = null
+        }
+        else setupFenError = 'Invalid FEN'
+        redraw()
+      }
+    }) : m('div', m('button.withIcon', {
+      oncreate: helper.ontap(() => {
+        close();
+        router.set('/editor');
+      })
+    }, [m('span.fa.fa-pencil'), i18n('boardEditor')])),
+    setupFenError ?
+    m('div.setupFenError', setupFenError) : null,
+    setupFen ? [
+      m('div', {
+        style: {
+          width: '100px',
+          height: '100px'
+        },
         oncreate: helper.ontap(() => {
           close();
-          router.set(`/editor/${encodeURIComponent(fen)}`);
+          router.set(`/editor/${encodeURIComponent(setupFen)}`);
         })
       }, [
-        m(ViewOnlyBoard, { fen })
+        m(ViewOnlyBoard, { fen: setupFen, bounds: { width: 100, height: 100 }})
       ])
-      ] : m('div', m('button.withIcon', {
-        oncreate: helper.ontap(() => {
-          close();
-          router.set('/editor');
-        })
-      }, [m('span.fa.fa-pencil'), i18n('boardEditor')]))
+      ] : null
     ) : null,
     settingsObj.variant() !== '3' ?
     m('div.select_input', {
@@ -172,7 +196,7 @@ function renderForm() {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
       close();
-      challenge();
+      doChallenge();
     }
   }, [
     m('fieldset', generalFieldset),
@@ -195,7 +219,7 @@ export default {
   open,
   openFromPosition(f: string) {
     open();
-    fen = f;
+    setupFen = f;
     settings.gameSetup.challenge.variant('3');
     settings.gameSetup.challenge.mode('0');
   }

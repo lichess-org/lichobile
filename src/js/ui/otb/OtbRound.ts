@@ -3,7 +3,6 @@ import router from '../../router';
 import * as chess from '../../chess';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
-import * as gameApi from '../../lichess/game';
 import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
@@ -14,7 +13,7 @@ import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
 import crazyValid from '../shared/round/crazy/crazyValid';
-import { OtbRoundInterface, OtbVM } from '../shared/round';
+import { OtbRoundInterface, OtbVM, PromotingInterface } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
@@ -27,7 +26,7 @@ interface InitPayload {
 }
 
 
-export default class OtbRound implements OtbRoundInterface {
+export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
@@ -139,7 +138,7 @@ export default class OtbRound implements OtbRoundInterface {
   }
 
   private userMove = (orig: Pos, dest: Pos) => {
-    if (!promotion.start(this, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest);
     }
   }
@@ -204,6 +203,10 @@ export default class OtbRound implements OtbRoundInterface {
       this.actions.open();
       redraw();
     }, 500);
+  }
+
+  public player = () => {
+    return this.replay.situation().player
   }
 
   public jump = (ply: number) => {

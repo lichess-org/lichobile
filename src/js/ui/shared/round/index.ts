@@ -9,6 +9,12 @@ export interface BoardInterface {
   canDrop(): boolean
 }
 
+export interface PromotingInterface {
+  chessground: Chessground.Controller
+  data: GameData
+  player: () => Color
+}
+
 export interface RoundInterface extends BoardInterface {
   firstPly(): number
   lastPly(): number

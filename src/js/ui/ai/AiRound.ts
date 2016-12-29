@@ -17,7 +17,7 @@ import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
 import crazyValid from '../shared/round/crazy/crazyValid';
-import { AiRoundInterface, AiVM } from '../shared/round';
+import { AiRoundInterface, AiVM, PromotingInterface } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions, { AiActionsCtrl } from './actions';
@@ -30,7 +30,7 @@ interface InitPayload {
   fen?: string
 }
 
-export default class AiRound implements AiRoundInterface {
+export default class AiRound implements AiRoundInterface, PromotingInterface {
   public data: OfflineGameData
   public actions: AiActionsCtrl
   public newGameMenu: NewAiGameCtrl
@@ -174,6 +174,10 @@ export default class AiRound implements AiRoundInterface {
     };
   }
 
+  public player(): Color {
+    return this.data.game.player
+  }
+
   public onEngineMove = (bestmove: string) => {
     const from = <Pos>bestmove.slice(0, 2);
     const to = <Pos>bestmove.slice(2, 4);
@@ -216,7 +220,7 @@ export default class AiRound implements AiRoundInterface {
   }
 
   private userMove = (orig: Pos, dest: Pos) => {
-    if (!promotion.start(this, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest);
     }
   }

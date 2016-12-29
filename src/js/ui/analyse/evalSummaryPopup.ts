@@ -4,10 +4,11 @@ import router from '../../router';
 import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
 import * as m from 'mithril';
+import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: AnalyseCtrlInterface) {
     let isOpen = false;
 
     function open() {
@@ -15,7 +16,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -30,7 +31,7 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: MenuInterface) {
     if (!ctrl.root.data.analysis) return null;
 
     return popupWidget(
@@ -49,19 +50,19 @@ const advices = [
   ['blunder', 'blunders']
 ];
 
-function renderPlayer(data, color) {
+function renderPlayer(data: GameData, color: Color) {
   const p = gameApi.getPlayer(data, color);
-  if (p.name) return p.name;
-  if (p.ai) return 'Stockfish level ' + p.ai;
+  if (p.name) return [p.name];
+  if (p.ai) return ['Stockfish level ' + p.ai]
   if (p.user) return [p.user.username, helper.renderRatingDiff(p)];
-  return 'Anonymous';
+  return ['Anonymous'];
 }
 
 
-function renderEvalSummary(ctrl) {
+function renderEvalSummary(ctrl: AnalyseCtrlInterface) {
   const d = ctrl.data;
 
-  return m('div.evalSummary', ['white', 'black'].map(color => {
+  return m('div.evalSummary', ['white', 'black'].map((color: Color) => {
     return m('table', [
       m('thead', m('tr', [
         m('th', m('span.light.color-icon.' + color)),

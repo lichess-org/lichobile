@@ -8,10 +8,11 @@ import { handleXhrError } from '../../utils';
 import { requestComputerAnalysis } from './analyseXhr';
 import * as helper from '../helper';
 import * as m from 'mithril';
+import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: AnalyseCtrlInterface) {
     let isOpen = false;
 
     function open() {
@@ -19,7 +20,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -34,18 +35,18 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
       null,
-      renderAnalyseMenu.bind(undefined, ctrl.root),
+      () => renderAnalyseMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
     );
   }
 };
 
-function renderAnalyseMenu(ctrl) {
+function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
 
   const sharePGN = helper.ontap(
     ctrl.sharePGN,

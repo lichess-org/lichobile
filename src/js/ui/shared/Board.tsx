@@ -6,7 +6,7 @@ import BoardBrush, { Shape } from './BoardBrush';
 export interface Attrs {
   data: GameData
   chessgroundCtrl: Chessground.Controller
-  bounds?: BoardBounds
+  bounds: BoardBounds
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string
@@ -26,9 +26,7 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const { chessgroundCtrl, bounds } = vnode.attrs;
 
-    if (bounds) {
-      chessgroundCtrl.setBounds(bounds);
-    }
+    chessgroundCtrl.setBounds(bounds);
 
     function boardOnCreate({ dom }: Mithril.ChildNode) {
       if (chessgroundCtrl) {

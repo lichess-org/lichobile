@@ -90,13 +90,13 @@ export function getChallenge(id: string): Promise<ChallengeData> {
   return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id: string): Promise<void> {
+export function cancelChallenge(id: string): Promise<string> {
   return fetchText(`/challenge/${id}/cancel`, {
     method: 'POST'
   }, true);
 }
 
-export function declineChallenge(id: string): Promise<void> {
+export function declineChallenge(id: string): Promise<string> {
   return fetchText(`/challenge/${id}/decline`, {
     method: 'POST'
   }, true);
@@ -135,14 +135,15 @@ export function featured(channel: string, flip: boolean): Promise<OnlineGameData
   return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
-export function setServerLang(lang: string) {
+export function setServerLang(lang: string): Promise<void> {
   if (session.isConnected()) {
     return fetchJSON('/translation/select', {
       method: 'POST',
       body: JSON.stringify({
         lang
       })
-    });
+    })
+    .then(() => {});
   } else {
     return Promise.resolve();
   }

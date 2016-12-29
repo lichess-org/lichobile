@@ -491,4 +491,4 @@ export default {
   importer: {
     analyse: localstorageprop('importer.analyse', false)
   }
-};
+}

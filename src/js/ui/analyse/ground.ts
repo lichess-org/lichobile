@@ -14,6 +14,7 @@ function makeConfig(
     fen: config.fen,
     check: config.check,
     lastMove: config.lastMove,
+    turnColor: config.turnColor,
     orientation,
     coordinates: settings.game.coords(),
     movable: {

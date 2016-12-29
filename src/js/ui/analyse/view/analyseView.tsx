@@ -8,7 +8,7 @@ import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import Board, { Attrs as BoardAttrs } from '../../shared/Board';
+import Board from '../../shared/Board';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import { Shape } from '../../shared/BoardBrush';
 import * as helper from '../../helper';
@@ -31,13 +31,13 @@ let pieceNotation: boolean;
 
 export function overlay(ctrl: AnalyseCtrlInterface) {
   return [
-    renderPromotion(ctrl),
+    ctrl.chessground ? renderPromotion({ chessground: ctrl.chessground, data: ctrl.data, player: ctrl.player }) : null,
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
     continuePopup.view(ctrl.continuePopup)
-  ];
+  ].filter(noNull);
 }
 
 export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen?: string) {
@@ -54,29 +54,29 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
   let board: Mithril.ChildNode
 
-  if (ctrl.analyse && ctrl.chessground) {
+  if (ctrl.chessground) {
     let nextBest: string | null;
     let curBestShape: Shape[], pastBestShape: Shape[];
     if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
       nextBest = ctrl.nextStepBest();
       curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
-        ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
-          [];
+      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
+      [];
     }
     if (ctrl.vm.showComments) {
       pastBestShape = rEval && rEval.best ?
-        moveOrDropShape(rEval.best, 'paleGreen', player) : [];
+      moveOrDropShape(rEval.best, 'paleGreen', player) : [];
     }
 
     const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
 
     const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
-      moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
+    moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
 
     const shapes: Shape[] = nextMoveShape.length > 0 ?
-      nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
+    nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
 
-    board = m<BoardAttrs>(Board, {
+    board = m(Board, {
       key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
       data: ctrl.data,
       chessgroundCtrl: ctrl.chessground,
@@ -86,13 +86,13 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
       wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
     })
   } else {
-   board = viewOnlyBoard(ctrl.data.player.color, bounds, ctrl.vm.smallBoard, ctrl.loadingFen())
+    board = viewOnlyBoard(ctrl.data.player.color, bounds, ctrl.vm.smallBoard, ctrl.loadingFen())
   }
 
   return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
     <div className="analyse-tableWrapper">
-      {ctrl.explorer.enabled() ?
+      {ctrl.explorer && ctrl.explorer.enabled() ?
         explorerView(ctrl) :
         renderAnalyseTable(ctrl, isPortrait)
       }
@@ -139,12 +139,12 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
 
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
-  const cevalEnabled = ctrl.ceval.enabled();
+  const cevalEnabled = ctrl.ceval && ctrl.ceval.enabled();
 
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait)}
-      <div className={'analyse-game' + (ctrl.analyse ? '' : ' loading')}>
+      <div className="analyse-game">
         { ctrl.vm.step && cevalEnabled ?
           renderEvalBox(ctrl) : null
         }
@@ -262,7 +262,6 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
 function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
-  const curPlayer = ctrl.data.game.player;
   return (
     <div className="analyse-gameInfosWrapper synthetic">
       <div className="analyseOpponent">
@@ -270,7 +269,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           <span className={'color-icon ' + player.color} />
           {player.color}
         </div>
-        {ctrl.chessground && ctrl.vm.step ? m(CrazyPocket, {
+        {ctrl.vm.step ? m(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
@@ -282,7 +281,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           <span className={'color-icon ' + opponent.color} />
           {opponent.color}
         </div>
-        {ctrl.chessground && ctrl.vm.step ? m(CrazyPocket, {
+        {ctrl.vm.step ? m(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
@@ -299,7 +298,6 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   if (!player || !opponent) return null;
 
   const isCrazy = ctrl.data.game.variant.key === 'crazyhouse'
-  const curPlayer = ctrl.data.game.player;
 
   return (
     <div className="analyse-gameInfosWrapper">
@@ -318,7 +316,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {isCrazy && ctrl.chessground && ctrl.vm.step ? m(CrazyPocket, {
+        {isCrazy && ctrl.vm.step ? m(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
@@ -340,7 +338,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {isCrazy && ctrl.chessground && ctrl.vm.step ? m(CrazyPocket, {
+        {isCrazy && ctrl.vm.step ? m(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
@@ -348,7 +346,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
         }) : null}
       </div>
       <div className="gameInfos">
-        {ctrl.vm.formattedDate}
+        {ctrl.vm.formattedDate ? ctrl.vm.formattedDate : null}
         { ctrl.data.game.source === 'import' && ctrl.data.game.importedBy ?
           <div>Imported by {ctrl.data.game.importedBy}</div> : null
         }
@@ -386,21 +384,16 @@ function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
 }
 
 function renderReplay(ctrl: AnalyseCtrlInterface) {
-
-  if (!ctrl.analyse) return (
-    <div key="loading-replay" className="analyse-loadingReplay">
-      {spinner.getVdom('monochrome')}
-    </div>
-  )
-
   const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '');
-  const tree = renderTree(ctrl, ctrl.analyse.tree);
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
   return (
-    <div key="manipulable-replay" id="replay" className={replayClass}
+    <div id="replay" className={replayClass}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
     >
-      {tree}
+      {ctrl.vm.treeReady ?
+        renderTree(ctrl, ctrl.analyse.tree) :
+        spinner.getVdom('monochrome')
+      }
     </div>
   );
 }
@@ -432,7 +425,7 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
     'action_bar_button',
     'fa',
     'fa-book',
-    ctrl.explorer.enabled() ? 'highlight' : ''
+    ctrl.explorer && ctrl.explorer.enabled() ? 'highlight' : ''
   ].join(' ');
 
   return (
@@ -440,12 +433,12 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         oncreate={helper.ontap(ctrl.menu.open)}
       />
-      {ctrl.ceval.allowed() ?
+      {ctrl.ceval && ctrl.ceval.allowed ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
           oncreate={helper.ontap(ctrl.settings.open)}
         /> : null
       }
-      {hasNetwork() ?
+      {ctrl.explorer && hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
           oncreate={helper.ontap(
             ctrl.explorer.toggle,

@@ -2,11 +2,10 @@ import settings from '../../../settings';
 import cevalEngine from './cevalEngine';
 import { getNbCores } from '../../../utils/stockfish';
 import { AnalysisStep, Path, CevalEmit, CevalCtrlInterface } from '../interfaces';
-import * as stream from 'mithril/stream';
 
 export default function cevalCtrl(
   variant: VariantKey,
-  allow: boolean,
+  allowed: boolean,
   emit: (res: CevalEmit) => void): CevalCtrlInterface {
 
   let initialized = false;
@@ -14,7 +13,6 @@ export default function cevalCtrl(
   const minDepth = 8;
   const maxDepth = 20;
   const cores = getNbCores();
-  const allowed = stream(allow);
 
   const engine = cevalEngine({ minDepth, maxDepth, cores });
 
@@ -23,7 +21,7 @@ export default function cevalCtrl(
   let isEnabled = settings.analyse.enableCeval();
 
   function enabled() {
-    return allowed() && isEnabled;
+    return allowed && isEnabled;
   }
 
   function onEmit(res: CevalEmit) {

@@ -101,7 +101,7 @@ export function request(url: string, opts?: RequestOpts, feedback = false): Prom
 
 export function fetchJSON<T>(url: string, opts?: RequestOpts, feedback = false): Promise<T> {
   return request(url, opts, feedback)
-  .then(r => r.json());
+  .then(r => r.json<T>());
 }
 
 export function fetchText(url: string, opts?: RequestOpts, feedback = false): Promise<string> {

@@ -1,3 +1,5 @@
+import { Controller as ContinuePopupController } from '../shared/continuePopup'
+
 export interface RoleToSan {
   [role: string]: SanChar
 }
@@ -66,6 +68,8 @@ export interface Glyph {
   name: string
 }
 
+// everything is optional bc fetched async with chess.ts worker
+// for online game data
 export interface AnalysisStep extends GameStep {
   ceval?: Ceval
   rEval?: RemoteEval
@@ -74,6 +78,7 @@ export interface AnalysisStep extends GameStep {
   pgnMoves?: Array<string>
   end?: boolean
   nag?: string
+  player?: Color
 }
 
 export interface CevalWork {
@@ -107,19 +112,20 @@ export interface CevalCtrlInterface {
   start(path: Path, steps: AnalysisTree): void
   stop(): void
   destroy(): void
-  allowed: Mithril.Stream<boolean>
-  enabled(): boolean,
+  allowed: boolean
+  enabled(): boolean
   toggle(): void
   percentComplete(): number
   cores: number
 }
 
 export interface VM {
-  formattedDate: string
+  treeReady: boolean
+  formattedDate?: string
   shouldGoBack: boolean
   path: Path
   pathStr: string
-  step: AnalysisStep
+  step?: AnalysisStep
   cgConfig: Chessground.SetConfig
   variationMenu: string
   flip: boolean
@@ -129,21 +135,29 @@ export interface VM {
   showComments: boolean
 }
 
+export interface MenuInterface {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: AnalyseCtrlInterface
+}
+
 export interface AnalyseCtrlInterface {
   data: AnalysisData
   source: Source
   vm: VM
-  analyse?: AnalyseInterface
+  analyse: AnalyseInterface
   chessground?: Chessground.Controller
-  explorer: ExplorerCtrlInterface
-  ceval: CevalCtrlInterface
-  menu: any
-  continuePopup: any
-  settings: any
-  evalSummary: any
+  explorer?: ExplorerCtrlInterface
+  ceval?: CevalCtrlInterface
+  menu: MenuInterface
+  continuePopup: ContinuePopupController
+  settings: MenuInterface
+  evalSummary: MenuInterface
   notes: any
 
   loadingFen(): string
+  player(): Color
   flip(): void
   toggleBoardSize(): void
   jump(path: Path, direction?: 'forward' | 'backward'): void
@@ -157,6 +171,11 @@ export interface AnalyseCtrlInterface {
   toggleVariationMenu(path?: Path): void
   deleteVariation(path: Path): void
   promoteVariation(path: Path): void
+  initCeval(): void
+  toggleBestMove(): void
+  toggleComments(): void
+  sharePGN(): void
+  isRemoteAnalysable(): boolean
 }
 
 export interface ExplorerCtrlInterface {
@@ -183,7 +202,7 @@ export interface AnalyseInterface {
   getStepsAfterPly(path: Path, ply: number): AnalysisTree
   nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
-  addDests(situation: GameSituation, path: Path): void
+  addStepSituationData(situation: GameSituation, path: Path): void
   updateAtPath(path: Path, update: (s: AnalysisStep) => void): void
   deleteVariation(ply: number, id: number): void
   promoteVariation(ply: number, id: number): void

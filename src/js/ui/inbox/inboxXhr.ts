@@ -1,8 +1,8 @@
 import { fetchJSON } from '../../http';
 import { PagedThreads, ThreadData, ComposeResponse } from './interfaces'
 
-export function inbox(): Promise<PagedThreads> {
-  return fetchJSON('/inbox', {}, true);
+export function inbox(feedback = true): Promise<PagedThreads> {
+  return fetchJSON('/inbox', {}, feedback);
 }
 
 export function reload(page: number): Promise<PagedThreads> {

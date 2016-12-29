@@ -5,10 +5,11 @@ import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import * as m from 'mithril';
+import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: AnalyseCtrlInterface) {
     let isOpen = false;
 
     function open() {
@@ -16,7 +17,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -31,21 +32,21 @@ export default {
     };
   },
 
-  view: function(ctrl) {
+  view(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
       null,
-      renderAnalyseSettings.bind(undefined, ctrl.root),
+      () => renderAnalyseSettings(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
     );
   }
 };
 
-function renderAnalyseSettings(ctrl) {
+function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
 
   return m('div.analyseSettings', [
-    ctrl.ceval.allowed() ? m('div.action', {
+    ctrl.ceval.allowed ? m('div.action', {
       key: 'enableCeval'
     }, [
       formWidgets.renderCheckbox(
@@ -58,7 +59,7 @@ function renderAnalyseSettings(ctrl) {
       ),
       m('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    ctrl.ceval.allowed() ? m('div.action', {
+    ctrl.ceval.allowed ? m('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(

@@ -9,6 +9,7 @@ import gameStatusApi from '../../lichess/status';
 import { playerFromFen } from '../../utils/fen';
 import { oppositeColor, aiName, getRandomArbitrary } from '../../utils';
 import { setCurrentAIGame } from '../../utils/offlineGames';
+import { specialFenVariants } from '../../lichess/variant';
 import redraw from '../../utils/redraw';
 
 import promotion from '../shared/offlineRound/promotion';
@@ -115,7 +116,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const payload: InitPayload = {
       variant
     }
-    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+    if (setupFen && !specialFenVariants.includes(variant)) {
       payload.fen = setupFen;
     }
 
@@ -128,7 +129,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
-        color: getColorFromSettings()
+        color: getColorFromSettings(),
+        player: data.setup.player
       }), [data.setup], 0);
     })
     .then(() => {
@@ -175,7 +177,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public player(): Color {
-    return this.data.game.player
+    return this.data.player.color
   }
 
   public onEngineMove = (bestmove: string) => {

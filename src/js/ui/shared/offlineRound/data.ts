@@ -16,7 +16,7 @@ export interface OfflineDataConfig {
   initialFen: string
   fen: string
   color: Color
-  player?: Color
+  player: Color
   pref?: {
     centerPiece: boolean
   }

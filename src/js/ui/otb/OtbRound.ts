@@ -3,6 +3,7 @@ import router from '../../router';
 import * as chess from '../../chess';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
+import { specialFenVariants } from '../../lichess/variant';
 import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
@@ -98,7 +99,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     const payload: InitPayload = {
       variant
     };
-    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+    if (setupFen && !specialFenVariants.includes(variant)) {
       payload.fen = setupFen;
     }
 
@@ -111,6 +112,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
+        player: data.setup.player,
         color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {
           centerPiece: true

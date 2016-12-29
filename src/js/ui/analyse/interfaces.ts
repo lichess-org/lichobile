@@ -120,8 +120,7 @@ export interface CevalCtrlInterface {
 }
 
 export interface VM {
-  treeReady: boolean
-  formattedDate?: string
+  formattedDate: string
   shouldGoBack: boolean
   path: Path
   pathStr: string
@@ -148,9 +147,9 @@ export interface AnalyseCtrlInterface {
   source: Source
   vm: VM
   analyse: AnalyseInterface
-  chessground?: Chessground.Controller
-  explorer?: ExplorerCtrlInterface
-  ceval?: CevalCtrlInterface
+  chessground: Chessground.Controller
+  explorer: ExplorerCtrlInterface
+  ceval: CevalCtrlInterface
   menu: MenuInterface
   continuePopup: ContinuePopupController
   settings: MenuInterface

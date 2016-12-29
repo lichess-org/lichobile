@@ -45,10 +45,10 @@ export default class AnalyseCtrl {
   public evalSummary: MenuInterface
   public notes: any;
 
-  public chessground?: Chessground.Controller;
-  public ceval?: CevalCtrlInterface;
-  public explorer?: ExplorerCtrlInterface;
-  private debouncedExplorerSetStep?: () => void;
+  public chessground: Chessground.Controller;
+  public ceval: CevalCtrlInterface;
+  public explorer: ExplorerCtrlInterface;
+  private debouncedExplorerSetStep: () => void;
 
   public analyse: AnalyseInterface;
 
@@ -74,6 +74,9 @@ export default class AnalyseCtrl {
     this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
     this.analyse = new Analyse(this.data);
+    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
+    this.explorer = explorerCtrl(this, true);
+    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
     const initialPath = location.hash ?
       treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
@@ -81,9 +84,10 @@ export default class AnalyseCtrl {
         treePath.default(this.analyse.lastPly()) :
         treePath.default(this.analyse.firstPly());
 
+    const gameMoment = window.moment(this.data.game.createdAt);
     this.vm = {
-      treeReady: false,
       shouldGoBack,
+      formattedDate: gameMoment.format('L LT'),
       path: initialPath,
       pathStr: treePath.write(initialPath),
       step: null,
@@ -99,28 +103,14 @@ export default class AnalyseCtrl {
 
     if (this.isRemoteAnalysable()) {
       this.connectGameSocket();
+    } else {
+      socket.createDefault();
     }
-
-    if (util.isSynthetic(this.data)) {
-      this.vm.treeReady = true
-    }
-
-    setTimeout(() => {
-      this.init()
-      redraw()
-    }, 800)
-  }
-
-  public init() {
-    this.vm.treeReady = true
-    const gameMoment = window.moment(this.data.game.createdAt);
-    this.vm.formattedDate = gameMoment.format('L LT');
-    this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg);
-    this.explorer = explorerCtrl(this, true);
-    this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
     this.showGround();
+    setTimeout(this.debouncedScroll, 250);
     setTimeout(this.initCeval, 2000);
+    window.plugins.insomnia.keepAwake();
   }
 
   public loadingFen() {

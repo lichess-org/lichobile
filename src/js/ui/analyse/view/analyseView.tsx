@@ -3,7 +3,6 @@ import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten } from
 import * as chessFormat from '../../../utils/chessFormat';
 import i18n from '../../../i18n';
 import router from '../../../router';
-import spinner from '../../../spinner';
 import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
@@ -31,7 +30,7 @@ let pieceNotation: boolean;
 
 export function overlay(ctrl: AnalyseCtrlInterface) {
   return [
-    ctrl.chessground ? renderPromotion({ chessground: ctrl.chessground, data: ctrl.data, player: ctrl.player }) : null,
+    renderPromotion(ctrl),
     menu.view(ctrl.menu),
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
@@ -54,40 +53,36 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
   let board: Mithril.ChildNode
 
-  if (ctrl.chessground) {
-    let nextBest: string | null;
-    let curBestShape: Shape[], pastBestShape: Shape[];
-    if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
-      nextBest = ctrl.nextStepBest();
-      curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
-      ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
-      [];
-    }
-    if (ctrl.vm.showComments) {
-      pastBestShape = rEval && rEval.best ?
-      moveOrDropShape(rEval.best, 'paleGreen', player) : [];
-    }
-
-    const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
-
-    const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
-    moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
-
-    const shapes: Shape[] = nextMoveShape.length > 0 ?
-    nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
-
-    board = m(Board, {
-      key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
-      data: ctrl.data,
-      chessgroundCtrl: ctrl.chessground,
-      bounds,
-      isPortrait,
-      shapes,
-      wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
-    })
-  } else {
-    board = viewOnlyBoard(ctrl.data.player.color, bounds, ctrl.vm.smallBoard, ctrl.loadingFen())
+  let nextBest: string | null;
+  let curBestShape: Shape[], pastBestShape: Shape[];
+  if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
+    nextBest = ctrl.nextStepBest();
+    curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
+    ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
+    [];
   }
+  if (ctrl.vm.showComments) {
+    pastBestShape = rEval && rEval.best ?
+    moveOrDropShape(rEval.best, 'paleGreen', player) : [];
+  }
+
+  const nextStep = ctrl.explorer.enabled() && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
+
+  const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
+  moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
+
+  const shapes: Shape[] = nextMoveShape.length > 0 ?
+  nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
+
+  board = m(Board, {
+    key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
+    data: ctrl.data,
+    chessgroundCtrl: ctrl.chessground,
+    bounds,
+    isPortrait,
+    shapes,
+    wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
+  })
 
   return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
@@ -390,9 +385,8 @@ function renderReplay(ctrl: AnalyseCtrlInterface) {
     <div id="replay" className={replayClass}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
     >
-      {ctrl.vm.treeReady ?
-        renderTree(ctrl, ctrl.analyse.tree) :
-        spinner.getVdom('monochrome')
+      {
+        renderTree(ctrl, ctrl.analyse.tree)
       }
     </div>
   );
@@ -433,12 +427,12 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
       <button className="action_bar_button fa fa-ellipsis-h" key="analyseMenu"
         oncreate={helper.ontap(ctrl.menu.open)}
       />
-      {ctrl.ceval && ctrl.ceval.allowed ?
+      {ctrl.ceval.allowed ?
         <button className="action_bar_button fa fa-gear" key="analyseSettings"
           oncreate={helper.ontap(ctrl.settings.open)}
         /> : null
       }
-      {ctrl.explorer && hasNetwork() ?
+      {hasNetwork() ?
         <button className={explorerBtnClass} key="explorer"
           oncreate={helper.ontap(
             ctrl.explorer.toggle,

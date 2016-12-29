@@ -14,10 +14,6 @@ export interface ViewportDim {
 
 const animDuration = 250;
 
-// store temporarily last route to disable animations on same route
-// TODO find a better way cause this is ugly
-let lastRoute: string;
-
 // this must be cached because of the access to document.body.style
 let cachedTransformProp: string;
 let cachedViewportDim: ViewportDim = null;
@@ -66,11 +62,7 @@ export function elFadeIn(el: HTMLElement) {
 // apply only to page change transitions
 // they listen to history to determine if animation is going forward or backward
 export function pageSlideIn(el: HTMLElement) {
-  if (router.get() === lastRoute) {
-    return;
-  }
   let tId: number;
-  lastRoute = router.get();
 
   function after() {
     clearTimeout(tId);

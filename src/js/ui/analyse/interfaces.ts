@@ -132,7 +132,8 @@ export interface VM {
   smallBoard: boolean
   analysisProgress: boolean
   showBestMove: boolean
-  showComments: boolean
+  showComments: boolean,
+  computingPGN: boolean
 }
 
 export interface MenuInterface {

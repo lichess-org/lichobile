@@ -93,7 +93,8 @@ export default class AnalyseCtrl {
       smallBoard: settings.analyse.smallBoard(),
       analysisProgress: false,
       showBestMove: settings.analyse.showBestMove(),
-      showComments: settings.analyse.showComments()
+      showComments: settings.analyse.showComments(),
+      computingPGN: false
     };
 
     if (this.isRemoteAnalysable()) {
@@ -463,27 +464,46 @@ export default class AnalyseCtrl {
   }
 
   public sharePGN = () => {
-    if (this.source === 'online') {
-      getPGN(this.data.game.id)
-      .then((pgn: string) => window.plugins.socialsharing.share(pgn))
-      .catch(handleXhrError);
-    } else {
-      const endSituation = this.data.steps[this.data.steps.length - 1];
-      const white = this.data.player.color === 'white' ?
+    if (!this.vm.computingPGN) {
+      this.vm.computingPGN = true
+      if (this.source === 'online') {
+        getPGN(this.data.game.id)
+        .then((pgn: string) => {
+          this.vm.computingPGN = false
+          redraw()
+          window.plugins.socialsharing.share(pgn)
+        })
+        .catch(e => {
+          this.vm.computingPGN = false
+          redraw()
+          handleXhrError(e)
+        });
+      } else {
+        const endSituation = this.data.steps[this.data.steps.length - 1];
+        const white = this.data.player.color === 'white' ?
         (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
         (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous');
-      const black = this.data.player.color === 'black' ?
+        const black = this.data.player.color === 'black' ?
         (this.data.game.id === 'offline_ai' ? session.appUser('Anonymous') : 'Anonymous') :
         (this.data.game.id === 'offline_ai' ? this.data.opponent.username : 'Anonymous');
-      chess.pgnDump({
-        variant: this.data.game.variant.key,
-        initialFen: this.data.game.initialFen,
-        pgnMoves: endSituation.pgnMoves,
-        white,
-        black
-      })
-      .then((res: chess.PgnDumpResponse) => window.plugins.socialsharing.share(res.pgn))
-      .catch(console.error.bind(console));
+        chess.pgnDump({
+          variant: this.data.game.variant.key,
+          initialFen: this.data.game.initialFen,
+          pgnMoves: endSituation.pgnMoves,
+          white,
+          black
+        })
+        .then((res: chess.PgnDumpResponse) => {
+          this.vm.computingPGN = false
+          redraw()
+          window.plugins.socialsharing.share(res.pgn)
+        })
+        .catch(e => {
+          this.vm.computingPGN = false
+          redraw()
+          console.error(e)
+        })
+      }
     }
   }
 

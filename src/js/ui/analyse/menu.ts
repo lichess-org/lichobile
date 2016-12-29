@@ -68,7 +68,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
       key: 'sharePGN',
       oncreate: sharePGN
-    }, [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
+    }, ctrl.vm.computingPGN ? spinner.getVdom('monochrome') : [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
     ctrl.notes ? m('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {

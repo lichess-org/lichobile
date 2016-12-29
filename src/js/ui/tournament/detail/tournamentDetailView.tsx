@@ -69,12 +69,17 @@ function renderFooter(ctrl: TournamentState) {
   if (!ctrl.tournament()) {
     return null;
   }
+  const tUrl = 'https://lichess.org/tournament/' + ctrl.tournament().id;
 
   return (
     <div className="actions_bar">
       <button key="faq" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
+      </button>
+      <button key="share" className="action_bar_button" oncreate={helper.ontap(() => window.plugins.socialsharing.share(tUrl))}>
+        <span className="fa fa-share-alt" />
+        Share
       </button>
       { ctrl.hasJoined() ? withdrawButton(ctrl) : joinButton(ctrl) }
     </div>

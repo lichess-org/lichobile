@@ -9,7 +9,7 @@ import gameStatus from '../../../lichess/status';
 import { toggleGameBookmark } from '../../../xhr';
 import session from '../../../session';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
-import { UserGameWithDate } from '../userXhr';
+import { UserGameWithDate } from '../../user/userXhr';
 import { UserGamePlayer } from '../../../lichess/interfaces/user';
 
 import { State } from './';

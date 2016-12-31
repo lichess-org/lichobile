@@ -1,7 +1,7 @@
 import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../../utils';
 import * as helper from '../../helper';
-import * as xhr from '../userXhr';
+import * as xhr from '../../user/userXhr';
 import spinner from '../../../spinner';
 import redraw from '../../../utils/redraw';
 import { debounce } from 'lodash';

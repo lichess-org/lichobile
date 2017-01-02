@@ -304,6 +304,12 @@ export default {
     }
   },
 
+  search: {
+    ratings: ['800', '900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400', '2500', '2600', '2700', '2800', '2900'],
+    opponents: [['0', 'Human Opponent'], ['1', 'Human Opponent']],
+    sources: [['0', 'Lobby'], ['2', 'Friend'], ['3', 'Ai'], ['6', 'Position'], ['7', 'Import'], ['5', 'Tournament'], ['10', 'Simul'], ['12', 'Pool']]
+  },
+
   tournament: {
     availableVariants: [
       ['Standard', '1'],

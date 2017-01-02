@@ -217,6 +217,9 @@ function renderLinks(user: Session) {
       <li className="side_link" key="editor" oncreate={helper.ontapY(menu.route('/editor'))}>
         <span className="fa fa-pencil" />{i18n('boardEditor')}
       </li>
+      <li className="side_link" key="search" oncreate={helper.ontapY(menu.route('/search'))}>
+        <span className="fa fa-search" />{i18n('advancedSearch')}
+      </li>
       {hasNetwork() ?
       <li className="side_link" key="importer" oncreate={helper.ontapY(menu.route('/importer'))}>
         <span className="fa fa-cloud-upload" />{i18n('importGame')}

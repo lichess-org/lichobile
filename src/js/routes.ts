@@ -34,6 +34,7 @@ import inbox from './ui/inbox';
 import inboxThread from './ui/inbox/thread';
 import inboxCompose from './ui/inbox/compose';
 import importer from './ui/importer';
+import search from './ui/search';
 import { defineRoutes } from './router';
 
 export default {
@@ -75,6 +76,7 @@ export default {
       'inbox/new/:userId': inboxCompose,
       'players': players,
       'ranking': ranking,
+      'search': search,
       'settings': settingsUi,
       'settings/preferences': settingsPreferences,
       'settings/gameDisplay': settingsGameDisplay,

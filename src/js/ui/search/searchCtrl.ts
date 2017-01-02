@@ -1,50 +1,29 @@
-import session from '../../session';
-import redraw from '../../utils/redraw';
-import * as xhr from './userXhr';
 import router from '../../router';
-import * as utils from '../../utils';
-import * as helper from '../helper';
-import challengeForm from '../challengeForm';
-import socket from '../../socket';
-import * as m from 'mithril';
-import * as stream from 'mithril/stream';
+import {SearchState} from './interfaces';
+import * as xhr from './searchXhr'
 
-export default function oninit(vnode) {
-
-  const userId = vnode.attrs.id;
-
-  helper.analyticsTrackView('User Profile');
-
-  socket.createDefault();
-
-  const user = stream();
-
-  function setNewUserState(newData) {
-    Object.assign(user(), newData);
-  }
-
-  xhr.user(userId)
-  .then(data => {
-    user(data);
-    redraw();
-  })
-  .then(session.refresh)
-  .catch(utils.handleXhrError);
+export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
   vnode.state = {
-    user,
-    isMe: () => session.getUserId() === userId,
-    toggleFollowing: () => {
-      if (user().following) xhr.unfollow(user().id).then(setNewUserState);
-      else xhr.follow(user().id).then(setNewUserState);
-    },
-    toggleBlocking: () => {
-      if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
-      else xhr.block(user().id).then(setNewUserState);
-    },
-    goToGames: () => router.set(`/@/${user().id}/games`),
-    goToUserTV: () => router.set(`/@/${user().id}/tv`),
-    challenge: () => challengeForm.open(user().id),
-    composeMessage: () => router.set(`/inbox/new/${user().id}`)
+    search
   };
+
+  function search(form: HTMLFormElement) {
+    const elements: HTMLCollection = form[0].elements as HTMLCollection;
+    const variant = (elements[0] as HTMLInputElement).value;
+    const position = (elements[1] as HTMLInputElement).value;
+    const mode = (elements[2] as HTMLInputElement).value;
+    const time = (elements[3] as HTMLTextAreaElement).value;
+    const increment = (elements[4] as HTMLTextAreaElement).value;
+    const duration = (elements[5] as HTMLTextAreaElement).value;
+    const timeToStart = (elements[6] as HTMLTextAreaElement).value;
+    /*
+    xhr.search(variant, position, mode, time, increment, duration, timeToStart)
+    .then((data: TournamentCreateResponse) => {
+      close(null);
+      router.set('/tournament/' + data.id)
+    })
+    .catch(handleXhrError);
+    */
+  }
 }

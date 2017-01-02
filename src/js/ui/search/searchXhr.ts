@@ -10,7 +10,7 @@ export interface FilterResult {
   paginator: Paginator<UserGameWithDate>
 }
 
-export function games(userId: string, filter = 'all', page = 1, feedback = false): Promise<FilterResult> {
+export function search(userId: string, filter = 'all', page = 1, feedback = false): Promise<FilterResult> {
   return fetchJSON(`/@/${userId}/${filter}`, {
     query: {
       page

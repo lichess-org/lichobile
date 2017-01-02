@@ -23,6 +23,11 @@ function renderSearchForm(ctrl: SearchState) {
   const perfOptions = settings.search.perfs.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const turnOptions = settings.search.turns.map((a: string) => ({value: a, label: a}));
   const durationOptions = settings.search.durations.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const timeOptions = settings.search.times.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const incrementOptions = settings.search.increments.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const resultOptions = settings.search.results.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const winnerOptions = settings.search.winners.map((a: Array<string>) => ({value: a[0], label: i18n(a[1])}));
+  const dateOptions = settings.search.dates.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   return (
     <form id="advancedSearchForm"
     onsubmit={function(e: Event) {
@@ -32,10 +37,10 @@ function renderSearchForm(ctrl: SearchState) {
         <div className="game_search_row">
           <label>Players: </label>
           <div className="game_search_input">
-            <input type="text" id="players.a" name="players_a" onkeyup={(e: Event) => { redraw(); }}/>
+            <input type="text" id="players.a" name="players_a" onkeyup={(e: Event) => { redraw(); }} />
           </div>
           <div className="game_search_input">
-            <input type="text" id="players.b" name="players_b" onkeyup={(e: Event) => { redraw(); }}/>
+            <input type="text" id="players.b" name="players_b" onkeyup={(e: Event) => { redraw(); }} />
           </div>
         </div>
         {renderSelectRow(i18n('white'), playersNonEmpty(), 'players.white', getPlayers(), null, null)}
@@ -47,8 +52,17 @@ function renderSearchForm(ctrl: SearchState) {
         {renderSelectRow(i18n('variant'), true, 'perf', perfOptions, null, null)}
         {renderSelectRow('Turns', true, 'turnsMin', turnOptions, 'turnsMax', turnOptions)}
         {renderSelectRow(i18n('duration'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
-        {renderSelectRow(i18n('time'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
-        {renderSelectRow(i18n('increment'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
+        {renderSelectRow(i18n('time'), true, 'clock.initMin', timeOptions, 'clock.initMax', timeOptions)}
+        {renderSelectRow(i18n('increment'), true, 'clock.incMin', incrementOptions, 'clock.incMax', incrementOptions)}
+        {renderSelectRow('Result', true, 'status', resultOptions, null, null)}
+        {renderSelectRow(i18n('winner'), true, 'winnerColor', winnerOptions, null, null)}
+        {renderSelectRow('Date', true, 'dateMin', dateOptions, 'dateMax', dateOptions)}
+        <div className="game_search_row">
+          <label>Analysis?: </label>
+          <div className="game_search_input double_wide">
+            <input type="checkbox" id="analysed" name="analysed" value="1" />
+          </div>
+        </div>
       <button key="create" className="newGameButton" type="submit">
         <span className="fa fa-search" />
         {i18n('search')}

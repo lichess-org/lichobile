@@ -16,13 +16,13 @@ export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
 }
 
 function renderSearchForm(ctrl: SearchState) {
-  const ratingOptions = settings.search.ratings.map((rating: string) => ({value: rating, label: rating}));
-  ratingOptions.unshift({value: null, label:''});
-  const opponentOptions = settings.search.opponents.map((opp: Array<string>) => ({value: opp[0], label: opp[1]}));
-  opponentOptions.unshift({value: null, label:''});
-  const sourceOptions = settings.search.sources.map((source: Array<string>) => ({value: source[0], label: source[1]}));
-  sourceOptions.unshift({value: null, label:''});
-  // const ratingOptions = settings.search.ratingOptions;
+  const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}));
+  const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]];
+  const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const sourceOptions = settings.search.sources.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const perfOptions = settings.search.perfs.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const turnOptions = settings.search.turns.map((a: string) => ({value: a, label: a}));
+  const durationOptions = settings.search.durations.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   return (
     <form id="advancedSearchForm"
     onsubmit={function(e: Event) {
@@ -38,12 +38,17 @@ function renderSearchForm(ctrl: SearchState) {
             <input type="text" id="players.b" name="players_b" onkeyup={(e: Event) => { redraw(); }}/>
           </div>
         </div>
-        {renderSelectRow('White', playersNonEmpty(), 'players.white', getPlayers(), null, null)}
-        {renderSelectRow('Black', playersNonEmpty(), 'players.black', getPlayers(), null, null)}
-        {renderSelectRow('Winner', playersNonEmpty(), 'players.winner', getPlayers(), null, null)}
-        {renderSelectRow('Rating Range', true, 'ratingMin', ratingOptions, 'ratingMax', ratingOptions)}
-        {renderSelectRow('Opponent', true, 'hasAi', opponentOptions, null, null)}
+        {renderSelectRow(i18n('white'), playersNonEmpty(), 'players.white', getPlayers(), null, null)}
+        {renderSelectRow(i18n('black'), playersNonEmpty(), 'players.black', getPlayers(), null, null)}
+        {renderSelectRow(i18n('winner'), playersNonEmpty(), 'players.winner', getPlayers(), null, null)}
+        {renderSelectRow(i18n('ratingRange'), true, 'ratingMin', ratingOptions, 'ratingMax', ratingOptions)}
+        {renderSelectRow(i18n('opponent'), true, 'hasAi', opponentOptions, null, null)}
         {renderSelectRow('Source', true, 'source', sourceOptions, null, null)}
+        {renderSelectRow(i18n('variant'), true, 'perf', perfOptions, null, null)}
+        {renderSelectRow('Turns', true, 'turnsMin', turnOptions, 'turnsMax', turnOptions)}
+        {renderSelectRow(i18n('duration'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
+        {renderSelectRow(i18n('time'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
+        {renderSelectRow(i18n('increment'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
       <button key="create" className="newGameButton" type="submit">
         <span className="fa fa-search" />
         {i18n('search')}
@@ -60,12 +65,14 @@ function renderSelectRow(label: string, isDisplayed: boolean, name1: string, opt
       <label>{label}: </label>
       <div className={'game_search_select' + (name2 ? '' : ' double_wide')}>
         <select id={name1.replace('.', '_')} name={name1}>
+          <option> </option>
           {options1.map(renderOption)}
         </select>
       </div>
       {name2 ?
         <div className="game_search_select">
           <select id={name2.replace('.', '_')} name={name2}>
+            <option> </option>
             {options2.map(renderOption)}
           </select>
         </div>

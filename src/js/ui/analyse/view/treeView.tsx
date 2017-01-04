@@ -53,13 +53,13 @@ function renderGlyph(glyph: Glyph) {
 
 const emptyMove = <move className="emptyMove">...</move>;
 
-function renderMove(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) {
+function renderMove(currentPath: string, move: AnalysisStep, path: Path) {
   if (!move) return emptyMove;
   const pathStr = treePath.write(path);
   const evaluation = path[1] ? null : (move.rEval || move.ceval);
   const judgment = move.rEval && move.rEval.judgment;
   const className = [
-    pathStr === ctrl.vm.pathStr ? 'current' : ''
+    pathStr === currentPath ? 'current' : ''
   ].join(' ');
 
   return (
@@ -161,10 +161,10 @@ function renderVariationMeta(ctrl: AnalyseCtrlInterface, move: AnalysisStep, pat
 
 function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
+  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath) : null;
   const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath) : null;
   const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) return [
@@ -191,9 +191,9 @@ function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path)
 
 function renderCommentOpening(opening: Opening) {
   return (
-    <div className="comment opening">
+    <comment>
       {truncateComment(opening.eco + ' ' + opening.name)}
-    </div>
+    </comment>
   );
 }
 
@@ -225,7 +225,7 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
     }
   }
   return (
-    <div className="analysisMeta">{children}</div>
+    <interrupt>{children}</interrupt>
   );
 }
 
@@ -235,10 +235,10 @@ function truncateComment(text: string) {
 }
 
 function renderComment(comment: string, colorClass: string, commentClass: string) {
-  return comment && (
-    <div className={'comment ' + colorClass + commentClass}>
+  return (
+    <comment className={colorClass + commentClass}>
       {truncateComment(comment)}
-    </div>
+    </comment>
   );
 }
 
@@ -253,10 +253,10 @@ function renderTurnEl(children: Mithril.Children) {
 function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   const index = renderIndex(String(turn.turn));
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
-  const wMeta = renderMeta(ctrl, turn.white, wPath);
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath) : null;
+  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath) : null;
+  const wMeta = renderMeta(ctrl, turn.white, wPath);
   const bMeta = renderMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) {

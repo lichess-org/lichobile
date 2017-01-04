@@ -113,19 +113,6 @@ export default class AnalyseCtrl {
     window.plugins.insomnia.keepAwake();
   }
 
-  public loadingFen() {
-    let s = this.analyse.getStep(this.vm.path);
-    // might happen to have no step, for exemple with a bad step number in location
-    // hash
-    if (!s) {
-      this.vm.path = treePath.default(this.analyse.firstPly());
-      this.vm.pathStr = treePath.write(this.vm.path);
-      s = this.analyse.getStep(this.vm.path);
-    }
-
-    return s.fen
-  }
-
   public player = () => {
     const step = this.vm.step
     return step && step.player || this.data.game.player
@@ -232,8 +219,8 @@ export default class AnalyseCtrl {
     this.toggleVariationMenu(null);
     this.showGround();
     if (this.vm.step && this.vm.step.san && direction === 'forward') {
-      if (this.vm.step.san.indexOf('x') !== -1) sound.capture();
-      else sound.move();
+      if (this.vm.step.san.indexOf('x') !== -1) sound.throttledCapture();
+      else sound.throttledMove();
     }
     this.ceval.stop();
     this.debouncedExplorerSetStep();

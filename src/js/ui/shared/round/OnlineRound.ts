@@ -26,7 +26,7 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
-import { OnlineRoundInterface } from './';
+import { OnlineRoundInterface, AfterMoveMeta } from './';
 
 interface VM {
   ply: number
@@ -44,23 +44,23 @@ interface VM {
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
-  public id: string;
-  public data: OnlineGameData;
-  public chessground: Chessground.Controller;
-  public clock: any;
-  public correspondenceClock: any;
-  public chat: any;
-  public notes: any;
-  public onFeatured: () => void;
-  public onTVChannelChange: () => void;
-  public onUserTVRedirect: () => void;
-  public vm: VM;
-  public title: any;
-  public tv: string;
-  public flipped: boolean;
+  public id: string
+  public data: OnlineGameData
+  public chessground: Chessground.Controller
+  public clock: any
+  public correspondenceClock: any
+  public chat: any
+  public notes: any
+  public onFeatured: () => void
+  public onTVChannelChange: () => void
+  public onUserTVRedirect: () => void
+  public vm: VM
+  public title: Mithril.Children
+  public tv: string
+  public flipped: boolean
 
-  private tournamentCountInterval: number;
-  private clockIntervId: number;
+  private tournamentCountInterval: number
+  private clockIntervId: number
 
   public constructor(
     id: string,
@@ -254,8 +254,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.chessground.set(config);
     if (this.replaying()) this.chessground.stop();
     if (s.san && isFwd) {
-      if (s.san.indexOf('x') !== -1) sound.capture();
-      else sound.move();
+      if (s.san.indexOf('x') !== -1) sound.throttledCapture();
+      else sound.throttledMove();
     }
     return true;
   }
@@ -554,13 +554,13 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.notes) this.notes.unload();
   }
 
-  private userMove = (orig: Pos, dest: Pos, meta: any) => {
+  private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
     if (!promotion.start(this, orig, dest, meta.premove)) {
       this.sendMove(orig, dest, undefined, meta.premove);
     }
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
+  private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {

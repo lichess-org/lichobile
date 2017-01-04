@@ -33,8 +33,6 @@
   max-width 230px
   display flex
   flex-flow column nowrap
-  &.loading
-    justify-content center
 
 .analyse-loadingReplay
   flex 1 1 auto
@@ -123,58 +121,60 @@ eval
   font-weight lighter
   color rgba(textDarkBg, 70%)
 
-.analysisMeta
+interrupt
   flex 0 0 auto
   min-height 25px
   display flex
-  flex-flow row wrap
+  flex-flow column nowrap
   font-size 0.8em
   background lighten(bgdark, 5%)
-  > .comment
-    font-size 0.8em
-    width 100%
-    display flex
-    padding: 0 5px
-    align-items center
-    word-wrap: break-word;
-    &.white
-      border-left 2px solid #ccc
-    &.black
-      border-right 2px solid #ccc
-      justify-content flex-end
-    &.Inaccuracy
-      border-color: #56B4E9;
-    &.Mistake
-      border-color: #E69F00;
-    &.Blunder
-      border-color: #DF5353;
-  > .variationWrapper
-    width 100%
-    display flex
-    align-items center
-    > .variation
-      flex 0 1 auto
-      width calc(100% - 25px)
-      white-space nowrap
-      overflow hidden
-      &.visiting
-        > index, > move
-          color #ebe1cd
-        > move.current
-          color gold
-        white-space normal
-      &.nested
-        display inline
-        margin-left 5px
-    > .menuIcon
-      flex 0 0 13%
-      height 25px
-      font-size 1.5em
-      text-align center
-      margin 0
-      &:before
-        position relative
-        top 5px
+
+.variationWrapper
+  width 100%
+  display flex
+  align-items center
+  > .variation
+    flex 0 1 auto
+    width calc(100% - 25px)
+    white-space nowrap
+    overflow hidden
+    &.visiting
+      > index, > move
+        color #ebe1cd
+      > move.current
+        color gold
+      white-space normal
+    &.nested
+      display inline
+      margin-left 5px
+  > .menuIcon
+    flex 0 0 13%
+    height 25px
+    font-size 1.5em
+    text-align center
+    margin 0
+    &:before
+      position relative
+      top 5px
+
+comment
+  flex 1 1 auto
+  font-size 0.8em
+  display flex
+  padding: 0 5px
+  align-items center
+  word-wrap: break-word;
+  &.white
+    border-left 2px solid #ccc
+  &.black
+    border-right 2px solid #ccc
+    justify-content flex-end
+  &.Inaccuracy
+    border-color: #56B4E9;
+  &.Mistake
+    border-color: #E69F00;
+  &.Blunder
+    border-color: #DF5353;
 
 .analyse_variant_selector
   width 100%

@@ -26,8 +26,6 @@ import settings from '../../../settings';
 
 import { AnalyseCtrlInterface } from '../interfaces';
 
-let pieceNotation: boolean;
-
 export function overlay(ctrl: AnalyseCtrlInterface) {
   return [
     renderPromotion(ctrl),
@@ -87,7 +85,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
   return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
     <div className="analyse-tableWrapper">
-      {ctrl.explorer && ctrl.explorer.enabled() ?
+      {ctrl.explorer.enabled() ?
         explorerView(ctrl) :
         renderAnalyseTable(ctrl, isPortrait)
       }
@@ -134,13 +132,11 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
 
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
-  const cevalEnabled = ctrl.ceval && ctrl.ceval.enabled();
-
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait)}
       <div className="analyse-game">
-        { ctrl.vm.step && cevalEnabled ?
+        { ctrl.ceval.enabled() ?
           renderEvalBox(ctrl) : null
         }
         {renderReplay(ctrl)}
@@ -378,16 +374,15 @@ function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
   }
 }
 
+let pieceNotation: boolean;
 function renderReplay(ctrl: AnalyseCtrlInterface) {
-  const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '');
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+  pieceNotation = pieceNotation || settings.game.pieceNotation()
+  const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
   return (
     <div id="replay" className={replayClass}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
     >
-      {
-        renderTree(ctrl, ctrl.analyse.tree)
-      }
+      { renderTree(ctrl, ctrl.analyse.tree) }
     </div>
   );
 }

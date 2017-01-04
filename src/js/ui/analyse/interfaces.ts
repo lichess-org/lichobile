@@ -156,7 +156,6 @@ export interface AnalyseCtrlInterface {
   evalSummary: MenuInterface
   notes: any
 
-  loadingFen(): string
   player(): Color
   flip(): void
   toggleBoardSize(): void

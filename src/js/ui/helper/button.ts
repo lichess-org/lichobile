@@ -1,6 +1,7 @@
-import { redrawSync } from '../../utils/redraw';
+import redraw from '../../utils/redraw';
 
 const HOLD_DURATION = 600;
+const REPEAT_RATE = 30;
 const SCROLL_TOLERANCE = 8;
 const ACTIVE_CLASS = 'active';
 
@@ -47,8 +48,8 @@ export default function ButtonHandler(
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
     const res = repeatHandler();
-    if (res) repeatIntervalID = requestAnimationFrame(onRepeat);
-    redrawSync();
+    if (res) repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
+    redraw();
   }
 
   function onTouchStart(e: TouchEvent) {
@@ -69,9 +70,9 @@ export default function ButtonHandler(
       if (active) activeElement.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
-    cancelAnimationFrame(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
-      repeatIntervalID = requestAnimationFrame(onRepeat);
+      repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
     }, 150);
   }
 
@@ -83,7 +84,7 @@ export default function ButtonHandler(
       if (!active) {
         clearTimeout(holdTimeoutID);
         clearTimeout(repeatTimeoutId);
-        cancelAnimationFrame(repeatIntervalID);
+        clearTimeout(repeatIntervalID);
         activeElement.classList.remove(ACTIVE_CLASS);
       }
     }
@@ -92,7 +93,7 @@ export default function ButtonHandler(
   function onTouchEnd(e: TouchEvent) {
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
-    cancelAnimationFrame(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     if (active && activeElement) {
       clearTimeout(holdTimeoutID);
       if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
@@ -105,7 +106,7 @@ export default function ButtonHandler(
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
-    cancelAnimationFrame(repeatIntervalID);
+    clearTimeout(repeatIntervalID);
     active = false;
     if (activeElement) activeElement.classList.remove(ACTIVE_CLASS);
   }
@@ -140,3 +141,4 @@ export default function ButtonHandler(
   el.addEventListener('touchcancel', onTouchCancel, false);
   el.addEventListener('contextmenu', onContextMenu, false);
 }
+

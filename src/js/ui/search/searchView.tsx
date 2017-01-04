@@ -1,7 +1,7 @@
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import {SearchState, Option} from './interfaces';
+import {SearchState, Select, Option} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 
@@ -28,6 +28,8 @@ function renderSearchForm(ctrl: SearchState) {
   const resultOptions = settings.search.results.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const winnerOptions = settings.search.winners.map((a: Array<string>) => ({value: a[0], label: i18n(a[1])}));
   const dateOptions = settings.search.dates.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const sortFieldOptions = settings.search.sortFields.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const sortOrderOptions = settings.search.sortOrders.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   return (
     <form id="advancedSearchForm"
     onsubmit={function(e: Event) {
@@ -43,20 +45,21 @@ function renderSearchForm(ctrl: SearchState) {
             <input type="text" id="players.b" name="players_b" onkeyup={(e: Event) => { redraw(); }} />
           </div>
         </div>
-        {renderSelectRow(i18n('white'), playersNonEmpty(), 'players.white', getPlayers(), null, null)}
-        {renderSelectRow(i18n('black'), playersNonEmpty(), 'players.black', getPlayers(), null, null)}
-        {renderSelectRow(i18n('winner'), playersNonEmpty(), 'players.winner', getPlayers(), null, null)}
-        {renderSelectRow(i18n('ratingRange'), true, 'ratingMin', ratingOptions, 'ratingMax', ratingOptions)}
-        {renderSelectRow(i18n('opponent'), true, 'hasAi', opponentOptions, null, null)}
-        {renderSelectRow('Source', true, 'source', sourceOptions, null, null)}
-        {renderSelectRow(i18n('variant'), true, 'perf', perfOptions, null, null)}
-        {renderSelectRow('Turns', true, 'turnsMin', turnOptions, 'turnsMax', turnOptions)}
-        {renderSelectRow(i18n('duration'), true, 'durationMin', durationOptions, 'durationMax', durationOptions)}
-        {renderSelectRow(i18n('time'), true, 'clock.initMin', timeOptions, 'clock.initMax', timeOptions)}
-        {renderSelectRow(i18n('increment'), true, 'clock.incMin', incrementOptions, 'clock.incMax', incrementOptions)}
-        {renderSelectRow('Result', true, 'status', resultOptions, null, null)}
-        {renderSelectRow(i18n('winner'), true, 'winnerColor', winnerOptions, null, null)}
-        {renderSelectRow('Date', true, 'dateMin', dateOptions, 'dateMax', dateOptions)}
+        {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: null}, null)}
+        {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: null}, null)}
+        {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: null}, null)}
+        {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
+        {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null}, null)}
+        {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: null}, null)}
+        {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: null}, null)}
+        {renderSelectRow('Turns', true, {name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
+        {renderSelectRow(i18n('duration'), true, {name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
+        {renderSelectRow(i18n('time'), true, {name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
+        {renderSelectRow(i18n('increment'), true, {name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
+        {renderSelectRow('Result', true, {name: 'status', options: resultOptions, default: null}, null)}
+        {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: null}, null)}
+        {renderSelectRow('Date', true, {name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
+        {renderSelectRow('Sort', true, {name: 'sort.field', options: sortFieldOptions, default: 'From'}, {name: 'sort.order', options: sortOrderOptions, default: 'To'})}
         <div className="game_search_row">
           <label>Analysis?: </label>
           <div className="game_search_input double_wide">
@@ -71,23 +74,23 @@ function renderSearchForm(ctrl: SearchState) {
   );
 }
 
-function renderSelectRow(label: string, isDisplayed: boolean, name1: string, options1: Array<{value: string, label: string}>, name2: string, options2: Array<{value: string, label: string}> ) {
+function renderSelectRow(label: string, isDisplayed: boolean, select1: Select, select2: Select) {
   if(!isDisplayed) return null;
 
   return (
     <div className="game_search_row">
       <label>{label}: </label>
-      <div className={'game_search_select' + (name2 ? '' : ' double_wide')}>
-        <select id={name1.replace('.', '_')} name={name1}>
-          <option> </option>
-          {options1.map(renderOption)}
+      <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
+        <select id={select1.name.replace('.', '_')} name={select1.name}>
+          <option selected> {select1.default ? select1.default : ''} </option>
+          {select1.options.map(renderOption)}
         </select>
       </div>
-      {name2 ?
+      {select2 ?
         <div className="game_search_select">
-          <select id={name2.replace('.', '_')} name={name2}>
-            <option> </option>
-            {options2.map(renderOption)}
+          <select id={select2.name.replace('.', '_')} name={select2.name}>
+            <option selected> {select2.default ? select2.default : ''} </option>
+            {select2.options.map(renderOption)}
           </select>
         </div>
         : null }

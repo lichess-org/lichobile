@@ -11,3 +11,7 @@ export default function() {
     });
   }
 }
+
+export function redrawSync() {
+  signals.redraw.dispatch();
+}

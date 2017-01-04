@@ -1,7 +1,6 @@
-import redraw from '../../utils/redraw';
+import { redrawSync } from '../../utils/redraw';
 
 const HOLD_DURATION = 600;
-const REPEAT_RATE = 30;
 const SCROLL_TOLERANCE = 8;
 const ACTIVE_CLASS = 'active';
 
@@ -48,9 +47,8 @@ export default function ButtonHandler(
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
     const res = repeatHandler();
-    repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
-    if (!res) clearTimeout(repeatIntervalID);
-    redraw();
+    if (res) repeatIntervalID = requestAnimationFrame(onRepeat);
+    redrawSync();
   }
 
   function onTouchStart(e: TouchEvent) {
@@ -71,9 +69,9 @@ export default function ButtonHandler(
       if (active) activeElement.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
-    clearTimeout(repeatIntervalID);
+    cancelAnimationFrame(repeatIntervalID);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
-      repeatIntervalID = setTimeout(onRepeat, REPEAT_RATE);
+      repeatIntervalID = requestAnimationFrame(onRepeat);
     }, 150);
   }
 
@@ -85,7 +83,7 @@ export default function ButtonHandler(
       if (!active) {
         clearTimeout(holdTimeoutID);
         clearTimeout(repeatTimeoutId);
-        clearTimeout(repeatIntervalID);
+        cancelAnimationFrame(repeatIntervalID);
         activeElement.classList.remove(ACTIVE_CLASS);
       }
     }
@@ -94,7 +92,7 @@ export default function ButtonHandler(
   function onTouchEnd(e: TouchEvent) {
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
-    clearTimeout(repeatIntervalID);
+    cancelAnimationFrame(repeatIntervalID);
     if (active && activeElement) {
       clearTimeout(holdTimeoutID);
       if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
@@ -107,7 +105,7 @@ export default function ButtonHandler(
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
-    clearTimeout(repeatIntervalID);
+    cancelAnimationFrame(repeatIntervalID);
     active = false;
     if (activeElement) activeElement.classList.remove(ACTIVE_CLASS);
   }

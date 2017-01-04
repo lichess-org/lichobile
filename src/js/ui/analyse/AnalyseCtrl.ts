@@ -109,7 +109,7 @@ export default class AnalyseCtrl {
 
     this.showGround();
     setTimeout(this.debouncedScroll, 250);
-    setTimeout(this.initCeval, 2000);
+    setTimeout(this.initCeval, 1000);
     window.plugins.insomnia.keepAwake();
   }
 

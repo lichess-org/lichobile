@@ -455,10 +455,8 @@ function renderGameActionsBar(ctrl: OnlineRound) {
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}
       {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
-      {gameApi.playable(ctrl.data) ? gameButton.first(ctrl) : null}
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
-      {gameApi.playable(ctrl.data) ? gameButton.last(ctrl) : null}
     </section>
   );
 }

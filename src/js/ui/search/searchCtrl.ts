@@ -8,22 +8,17 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     search
   };
 
-  function search(form: HTMLFormElement) {
+	const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order'];
+
+	function search(form: HTMLFormElement) {
     const elements: HTMLCollection = form[0].elements as HTMLCollection;
-    const variant = (elements[0] as HTMLInputElement).value;
-    const position = (elements[1] as HTMLInputElement).value;
-    const mode = (elements[2] as HTMLInputElement).value;
-    const time = (elements[3] as HTMLTextAreaElement).value;
-    const increment = (elements[4] as HTMLTextAreaElement).value;
-    const duration = (elements[5] as HTMLTextAreaElement).value;
-    const timeToStart = (elements[6] as HTMLTextAreaElement).value;
-    /*
-    xhr.search(variant, position, mode, time, increment, duration, timeToStart)
-    .then((data: TournamentCreateResponse) => {
-      close(null);
-      router.set('/tournament/' + data.id)
+		const queryData = fields.map((name: string) => ({name: name, value: elements['name'].value}));
+		/*
+    xhr.search(queryData)
+    .then((data: any) => {
+      results(data);
     })
     .catch(handleXhrError);
     */
-  }
+		}
 }

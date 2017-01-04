@@ -39,10 +39,10 @@ function renderSearchForm(ctrl: SearchState) {
         <div className="game_search_row">
           <label>Players: </label>
           <div className="game_search_input">
-            <input type="text" id="players.a" name="players_a" onkeyup={(e: Event) => { redraw(); }} />
+            <input type="text" id="players_a" name="players.a" onkeyup={(e: Event) => { redraw(); }} />
           </div>
           <div className="game_search_input">
-            <input type="text" id="players.b" name="players_b" onkeyup={(e: Event) => { redraw(); }} />
+            <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
           </div>
         </div>
         {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: null}, null)}

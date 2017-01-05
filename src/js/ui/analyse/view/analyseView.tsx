@@ -380,6 +380,7 @@ function renderReplay(ctrl: AnalyseCtrlInterface) {
   const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
   return (
     <div id="replay" className={replayClass}
+      key={ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple'}
       oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
     >
       { renderTree(ctrl, ctrl.analyse.tree) }

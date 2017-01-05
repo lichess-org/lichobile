@@ -47,28 +47,14 @@
   flex 1 1 auto
   position relative
   display flex
-  flex-flow column nowrap
+  flex-flow row wrap
+  align-content flex-start
+  align-items flex-start
   font-size 0.9rem
   padding-right 5px
-  > .result, > .status
-    font-size 0.8em
-    width 100%
-  > .result
-    margin-top 2px
-    text-align center
-    font-weight bold
-  > .status
-    font-style italic
-    text-align center
   &.displayPieces
-    > turn
-      > move
-        font-family ChessSansPiratf
-
-turn
-  width 100%
-  display flex
-  flex 0 0 25px
+    > move
+      font-family ChessSansPiratf
   > move
     display flex
     flex 0 0 44%
@@ -122,31 +108,16 @@ eval
   color rgba(textDarkBg, 70%)
 
 interrupt
-  flex 0 0 auto
+  flex 0 0 100%
   min-height 25px
   display flex
   flex-flow column nowrap
   font-size 0.8em
   background lighten(bgdark, 5%)
 
-.variationWrapper
-  width 100%
+lines
   display flex
   align-items center
-  > .variation
-    flex 0 1 auto
-    width calc(100% - 25px)
-    white-space nowrap
-    overflow hidden
-    &.visiting
-      > index, > move
-        color #ebe1cd
-      > move.current
-        color gold
-      white-space normal
-    &.nested
-      display inline
-      margin-left 5px
   > .menuIcon
     flex 0 0 13%
     height 25px
@@ -156,6 +127,20 @@ interrupt
     &:before
       position relative
       top 5px
+
+line
+  flex 0 1 auto
+  width calc(100% - 25px)
+  white-space nowrap
+  overflow hidden
+  &.visiting
+    > index, > move
+      color #ebe1cd
+    > move.current
+      color gold
+    white-space normal
+  > .nested
+    margin-left 5px
 
 comment
   flex 1 1 auto

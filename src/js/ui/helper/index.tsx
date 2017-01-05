@@ -78,7 +78,7 @@ export function pageSlideIn(el: HTMLElement) {
 
   setTimeout(() => {
     el.style.transform = 'translate3d(0%,0,0)';
-  });
+  }, 10);
 
   el.addEventListener('transitionend', after, false);
   // in case transitionend does not fire

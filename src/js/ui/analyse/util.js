@@ -44,7 +44,8 @@ export function autoScroll(movelist) {
     const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
     if (plyEl) {
       movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+    } else {
+      movelist.scrollTop = 0
     }
   });
 }
-

@@ -13,7 +13,6 @@ import { Shape } from '../../shared/BoardBrush';
 import * as helper from '../../helper';
 import { notesView } from '../../shared/round/notes';
 import { formatClockTime } from '../../shared/round/clock/clockView';
-import control from '../control';
 import menu from '../menu';
 import analyseSettings from '../analyseSettings';
 import { renderEval, isSynthetic } from '../util';
@@ -130,6 +129,41 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
   }
 }
 
+function getMoveEl(e: Event) {
+  const target = (e.target as HTMLElement);
+  return target.tagName === 'MOVE' ? target :
+    helper.findParentBySelector(target, 'move');
+}
+
+interface ReplayDataSet extends DOMStringMap {
+  path: string
+}
+function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
+  const el = getMoveEl(e);
+  if (el && (el.dataset as ReplayDataSet).path) {
+    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
+  }
+}
+
+let pieceNotation: boolean;
+const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
+  onbeforeupdate({ attrs }) {
+    return !attrs.ctrl.vm.replaying
+  },
+  view({ attrs }) {
+    const { ctrl } = attrs
+    pieceNotation = pieceNotation || settings.game.pieceNotation()
+    const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
+    return (
+      <div id="replay" className={replayClass}
+        key={ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple'}
+        oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
+      >
+        { renderTree(ctrl, ctrl.analyse.tree) }
+      </div>
+    );
+  }
+}
 
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   return (
@@ -139,7 +173,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
         { ctrl.ceval.enabled() ?
           renderEvalBox(ctrl) : null
         }
-        {renderReplay(ctrl)}
+        {m(Replay, { ctrl })}
       </div>
     </div>
   );
@@ -358,57 +392,6 @@ function renderStatus(ctrl: AnalyseCtrlInterface) {
   );
 }
 
-function getMoveEl(e: Event) {
-  const target = (e.target as HTMLElement);
-  return target.tagName === 'MOVE' ? target :
-    helper.findParentBySelector(target, 'move');
-}
-
-interface ReplayDataSet extends DOMStringMap {
-  path: string
-}
-function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
-  const el = getMoveEl(e);
-  if (el && (el.dataset as ReplayDataSet).path) {
-    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
-  }
-}
-
-let pieceNotation: boolean;
-function renderReplay(ctrl: AnalyseCtrlInterface) {
-  pieceNotation = pieceNotation || settings.game.pieceNotation()
-  const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
-  return (
-    <div id="replay" className={replayClass}
-      key={ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple'}
-      oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
-    >
-      { renderTree(ctrl, ctrl.analyse.tree) }
-    </div>
-  );
-}
-
-function buttons(ctrl: AnalyseCtrlInterface) {
-  return [
-    ['prev', 'backward', control.prev],
-    ['next', 'forward', control.next]
-  ].map((b: [string, string, (ctrl: AnalyseCtrlInterface) => boolean]) => {
-    const className = [
-      'action_bar_button',
-      'fa',
-      'fa-' + b[1]
-    ].join(' ');
-
-    const action = b[0] === 'prev' || b[0] === 'next' ?
-      helper.ontap(() => b[2](ctrl), null, () => b[2](ctrl)) :
-      helper.ontap(() => b[2](ctrl));
-
-    return (
-      <button className={className} key={b[1]} oncreate={action} />
-    );
-  });
-}
-
 function renderActionsBar(ctrl: AnalyseCtrlInterface) {
 
   const explorerBtnClass = [
@@ -448,7 +431,12 @@ function renderActionsBar(ctrl: AnalyseCtrlInterface) {
           () => window.plugins.toast.show('Expand/compress board', 'short', 'bottom')
         )}
       />
-      {buttons(ctrl)}
+      <button key="backward" className="action_bar_button fa fa-backward"
+        oncreate={helper.ontap(ctrl.stoprewind, null, ctrl.rewind)}
+      />
+      <button key="forward" className="action_bar_button fa fa-forward"
+        oncreate={helper.ontap(ctrl.stopff, null, ctrl.fastforward)}
+      />
     </section>
   );
 }

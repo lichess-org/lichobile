@@ -131,8 +131,9 @@ export interface VM {
   smallBoard: boolean
   analysisProgress: boolean
   showBestMove: boolean
-  showComments: boolean,
+  showComments: boolean
   computingPGN: boolean
+  replaying: boolean
 }
 
 export interface MenuInterface {
@@ -161,6 +162,10 @@ export interface AnalyseCtrlInterface {
   toggleBoardSize(): void
   jump(path: Path, direction?: 'forward' | 'backward'): void
   userJump(path: Path, direction?: 'forward' | 'backward'): void
+  fastforward(): boolean
+  rewind(): boolean
+  stopff(): void
+  stoprewind(): void
   nextStepBest(): string | null
   currentAnyEval(): Ceval | RemoteEval
   explorerMove(uci: string): void

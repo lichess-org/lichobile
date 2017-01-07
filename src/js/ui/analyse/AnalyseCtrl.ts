@@ -24,7 +24,7 @@ import Analyse from './Analyse';
 import treePath from './path';
 import ground from './ground';
 import socketHandler from './analyseSocketHandler';
-import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, AnalyseInterface, ExplorerCtrlInterface, CevalCtrlInterface, MenuInterface, Ceval, CevalEmit } from './interfaces';
+import { VM, AnalysisData, AnalysisStep, SanToRole, Source, Path, PathObj, AnalyseInterface, ExplorerCtrlInterface, CevalCtrlInterface, MenuInterface, Ceval, CevalEmit } from './interfaces';
 
 const sanToRole: SanToRole = {
   P: 'pawn',
@@ -98,7 +98,8 @@ export default class AnalyseCtrl {
       analysisProgress: false,
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments(),
-      computingPGN: false
+      computingPGN: false,
+      replaying: false
     };
 
     if (this.isRemoteAnalysable()) {
@@ -203,7 +204,7 @@ export default class AnalyseCtrl {
     if (!dests) this.debouncedGetStepSituation();
   }
 
-  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 300);
+  public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
 
   private updateHref = debounce(() => {
     try {
@@ -226,7 +227,6 @@ export default class AnalyseCtrl {
     this.debouncedExplorerSetStep();
     this.updateHref();
     this.debouncedStartCeval();
-    this.debouncedScroll();
     promotion.cancel(this.chessground, this.vm.cgConfig);
   }
 
@@ -243,6 +243,81 @@ export default class AnalyseCtrl {
 
   public jumpToIndex = (index: number) => {
     this.jumpToMain(index + 1 + this.data.game.startedAtTurn);
+  }
+
+  private canGoForward() {
+    let tree = this.analyse.tree;
+    let ok = false;
+    this.vm.path.forEach((step: PathObj) => {
+      for (let i = 0, nb = tree.length; i < nb; i++) {
+        const move = tree[i];
+        if (step.ply === move.ply && step.variation) {
+          tree = move.variations[step.variation - 1];
+          break;
+        } else ok = step.ply < move.ply;
+      }
+    });
+    return ok;
+  }
+
+  private next = () => {
+    if (!this.canGoForward()) return false;
+    const p = this.vm.path;
+    p[p.length - 1].ply++;
+    this.userJump(p, 'forward');
+
+    return true;
+  }
+
+  private prev =  () => {
+    const p = this.vm.path;
+    const len = p.length;
+    if (len === 1) {
+      if (p[0].ply === this.analyse.firstPly()) return false;
+      p[0].ply--;
+    } else {
+      if (p[len - 1].ply > p[len - 2].ply) p[len - 1].ply--;
+      else {
+        p.pop();
+        p[len - 2].variation = null;
+        if (p[len - 2].ply > 1) p[len - 2].ply--;
+      }
+    }
+    this.userJump(p);
+
+    return true;
+  }
+
+  public fastforward = () => {
+    this.vm.replaying = true
+    const more = this.next()
+    if (!more) {
+      this.vm.replaying = false
+      this.debouncedScroll();
+    }
+    return more
+  }
+
+  public stopff = () => {
+    this.vm.replaying = false
+    this.next()
+    this.debouncedScroll();
+  }
+
+  public rewind = () => {
+    this.vm.replaying = true
+    const more = this.prev()
+    if (!more) {
+      this.vm.replaying = false
+      this.debouncedScroll();
+    }
+    return more
+  }
+
+  public stoprewind = () => {
+    this.vm.replaying = false
+    this.prev()
+    this.debouncedScroll();
   }
 
   public canDrop = () => {

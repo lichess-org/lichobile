@@ -207,7 +207,7 @@ interface GameData {
 interface OnlineGameData extends GameData {
   game: OnlineGame;
   takebackable: boolean;
-  watchers: GameWatchers
+  watchers?: GameWatchers
 }
 
 interface GameCrowd {

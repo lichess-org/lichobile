@@ -120,7 +120,7 @@ export function chatView(ctrl) {
   var player = ctrl.root.data.player;
   var header = (!ctrl.root.data.opponent.user || ctrl.root.data.player.spectator) ? i18n('chat') : ctrl.root.data.opponent.user.username;
   const watchers = ctrl.root.data.watchers;
-  if (ctrl.root.data.player.spectator && watchers.nb >= 2) {
+  if (ctrl.root.data.player.spectator && watchers && watchers.nb >= 2) {
     header = i18n('spectators') + ' ' + watchers.nb;
   }
 

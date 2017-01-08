@@ -156,7 +156,6 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
     const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
     return (
       <div id="replay" className={replayClass}
-        key={ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple'}
         oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
       >
         { renderTree(ctrl, ctrl.analyse.tree) }
@@ -173,7 +172,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
         { ctrl.ceval.enabled() ?
           renderEvalBox(ctrl) : null
         }
-        {m(Replay, { ctrl })}
+        {m(Replay, { key: ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple', ctrl })}
       </div>
     </div>
   );

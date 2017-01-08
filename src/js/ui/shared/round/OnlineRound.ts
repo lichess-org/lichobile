@@ -18,7 +18,7 @@ import { gameTitle } from '../../shared/common';
 
 import ground from './ground';
 import promotion from './promotion';
-import { chatCtrl } from './chat';
+import { Chat } from './chat';
 import { notesCtrl } from './notes';
 import clockCtrl from './clock/clockCtrl';
 import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl';
@@ -49,7 +49,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public chessground: Chessground.Controller
   public clock: any
   public correspondenceClock: any
-  public chat: any
+  public chat: Chat
   public notes: any
   public onFeatured: () => void
   public onTVChannelChange: () => void
@@ -105,7 +105,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       offlineWatcher: !hasNetwork()
     };
     this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ?
-      null : new (<any>chatCtrl)(this, session.isShadowban());
+      null : new Chat(this, session.isShadowban());
 
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 

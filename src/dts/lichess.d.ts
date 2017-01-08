@@ -181,6 +181,14 @@ interface OfflineGame extends Game {
   check?: boolean;
 }
 
+interface ChatMsg {
+  u: string
+  c: Color
+  t: string
+  r?: boolean
+  d?: boolean
+}
+
 interface GameData {
   game: Game
   player: Player;
@@ -190,7 +198,7 @@ interface GameData {
   steps?: Array<GameStep>;
   tournament?: Tournament;
   note?: string;
-  chat?: Array<string>;
+  chat?: Array<ChatMsg>;
   possibleMoves?: StringMap;
   possibleDrops?: string | Array<string>;
   userTV?: string;

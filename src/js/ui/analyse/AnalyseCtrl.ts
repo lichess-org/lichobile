@@ -143,12 +143,6 @@ export default class AnalyseCtrl {
     this.vm.smallBoard = newVal;
   }
 
-  private uciToLastMove(uci: string): [Pos, Pos] {
-    if (!uci) return null;
-    if (uci[1] === '@') return [<Pos>uci.substr(2, 2), <Pos>uci.substr(2, 2)];
-    return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)];
-  }
-
   public initCeval = () => {
     if (this.ceval.enabled()) {
       if (this.ceval.isInit()) {
@@ -190,7 +184,7 @@ export default class AnalyseCtrl {
       movableColor: this.gameOver() ? null : color,
       dests: dests || {},
       check: s.check,
-      lastMove: this.uciToLastMove(s.uci)
+      lastMove: s.uci ? chessFormat.uciToMoveOrDrop(s.uci) : null
     };
 
     this.vm.cgConfig = config;

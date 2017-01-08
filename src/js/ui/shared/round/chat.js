@@ -176,6 +176,7 @@ export function chatView(ctrl) {
         m('input#chat_input.chat_input[type=text]', {
           placeholder: ctrl.canTalk() ? i18n('talkInChat') : 'Login to chat',
           disabled: !ctrl.canTalk(),
+          maxlength: 140,
           autocomplete: 'off',
           value: ctrl.inputValue,
           oncreate: function(vnode) {

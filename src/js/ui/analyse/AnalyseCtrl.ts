@@ -254,7 +254,7 @@ export default class AnalyseCtrl {
     return ok;
   }
 
-  private next = () => {
+  private next() {
     if (!this.canGoForward()) return false;
     const p = this.vm.path;
     p[p.length - 1].ply++;
@@ -263,7 +263,7 @@ export default class AnalyseCtrl {
     return true;
   }
 
-  private prev =  () => {
+  private prev() {
     const p = this.vm.path;
     const len = p.length;
     if (len === 1) {

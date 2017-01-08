@@ -9,6 +9,7 @@ import * as helper from '../../helper';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
 import { OfflineRoundInterface, Position, Material } from '../round';
 import settings from '../../../settings';
+import Replay from './Replay';
 
 let pieceNotation: boolean;
 
@@ -20,7 +21,7 @@ function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
 
 type OfflineGameType = 'ai' | 'otb';
 
-export function renderAntagonist(ctrl: OfflineRoundInterface, content: any, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
+export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
   const sit = ctrl.replay.situation();
   const isCrazy = !!sit.crazyhouse;
   const key = isPortrait ? position + '-portrait' : position + '-landscape';
@@ -141,16 +142,16 @@ export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
 }
 
 
-export function renderReplayTable(ctrl: any) {
+export function renderReplayTable(ctrl: Replay) {
   const curPly = ctrl.ply;
-  const shouldDisplay = helper.isLandscape();
+  const shouldDisplay = !helper.isPortrait();
 
   if (!shouldDisplay) return null;
 
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        oncreate={(vnode: Mithril.ChildNode) => { autoScroll(vnode.dom); }}
+        oncreate={(vnode: Mithril.ChildNode) => { autoScroll(vnode.dom as HTMLElement); }}
         onupdate={(vnode: Mithril.ChildNode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
       >
         {renderTable(ctrl, curPly)}
@@ -189,8 +190,7 @@ function renderTd(sit: GameSituation, curPly: number) {
   return null;
 }
 
-// TODO type replay ctrl
-function renderTable(ctrl: any, curPly: number) {
+function renderTable(ctrl: Replay, curPly: number) {
   const steps = ctrl.situations;
   const pairs: Array<[GameSituation, GameSituation]> = [];
   for (let i = 1; i < steps.length; i += 2) pairs.push([steps[i], steps[i + 1]]);
@@ -212,8 +212,8 @@ function renderTable(ctrl: any, curPly: number) {
   );
 }
 
-function autoScroll(movelist: any) {
+function autoScroll(movelist: HTMLElement) {
   if (!movelist) return;
-  const plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
+  const plyEl = (movelist.querySelector('.current') || movelist.querySelector('tr:first-child')) as HTMLElement
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
 }

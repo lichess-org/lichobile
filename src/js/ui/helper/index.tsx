@@ -15,8 +15,10 @@ export interface ViewportDim {
 const animDuration = 250;
 
 // this must be cached because of the access to document.body.style
-let cachedTransformProp: string;
-let cachedViewportDim: ViewportDim = null;
+let cachedTransformProp: string
+let cachedIsPortrait: boolean
+let cachedViewportAspectIs43: boolean
+let cachedViewportDim: ViewportDim = null
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
   return ({ dom }: Mithril.ChildNode) => anim(dom as HTMLElement);
@@ -135,7 +137,8 @@ export function transformProp() {
 }
 
 export function clearCachedViewportDim() {
-  cachedViewportDim = null;
+  cachedViewportDim = null
+  cachedIsPortrait = undefined
 }
 
 export function slidesInUp(vnode: Mithril.ChildNode) {
@@ -246,20 +249,20 @@ export function isVeryWideScreen() {
   return viewportDim().vw >= 960;
 }
 
-export function isLandscapeSmall({ vh }: ViewportDim) {
-  return vh <= 450;
-}
-
 export function is43Aspect(): boolean {
-  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches;
+  if (cachedViewportAspectIs43 !== undefined) return cachedViewportAspectIs43
+  else {
+    cachedViewportAspectIs43 = window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches;
+    return cachedViewportAspectIs43
+  }
 }
 
 export function isPortrait(): boolean {
-  return window.matchMedia('(orientation: portrait)').matches;
-}
-
-export function isLandscape(): boolean {
-  return window.matchMedia('(orientation: landscape)').matches;
+  if (cachedIsPortrait !== undefined) return cachedIsPortrait
+  else {
+    cachedIsPortrait = window.matchMedia('(orientation: portrait)').matches;
+    return cachedIsPortrait
+  }
 }
 
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): BoardBounds  {

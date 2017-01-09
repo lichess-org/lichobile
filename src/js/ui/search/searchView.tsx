@@ -82,14 +82,14 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: Select, s
       <label>{label}: </label>
       <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
         <select id={select1.name.replace('.', '_')} name={select1.name}>
-          <option selected> {select1.default ? select1.default : ''} </option>
+          <option selected value=""> {select1.default ? select1.default : ''} </option>
           {select1.options.map(renderOption)}
         </select>
       </div>
       {select2 ?
         <div className="game_search_select">
           <select id={select2.name.replace('.', '_')} name={select2.name}>
-            <option selected> {select2.default ? select2.default : ''} </option>
+            <option selected value=""> {select2.default ? select2.default : ''} </option>
             {select2.options.map(renderOption)}
           </select>
         </div>

@@ -1,8 +1,9 @@
 #chat
   color #353535
 
-#chat_scroller
-  height 'calc(100% - %s)' % headerHeight
+.chat_content
+  display flex
+  flex-flow column nowrap
 
 .chat_messages
   position relative
@@ -73,26 +74,26 @@
       margin-top -10px
       padding-top 0
 
+.chat_scroller
+  flex 1 1 auto
+
 .chat_form
-  position relative
-  width 100%
-  height headerHeight
+  flex 0 1 auto
+  display flex
+  flex-flow row nowrap
+  min-height 50px
+  background-color #fff
 
 .chat_input
-  display block
-  width 100%
-  height 100%
-  padding 15px
-  padding-right 50px
+  flex 1 1 auto
+  padding 0
   border none
-  color #C3C3C3
+  outline none
+  color textMediumGray
 
 .chat_send
-  position absolute
-  top 0
-  right 0
-  padding 0 10px
-  width 50px
-  height 100%
+  flex 0 0 50px
+  padding 0
+  font-size 30px
   background transparent
   color #C3A86F

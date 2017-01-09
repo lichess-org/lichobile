@@ -1,8 +1,8 @@
-var timeoutId;
+let timeoutId: number | undefined
 
 export default {
   spin() {
-    if (timeoutId || document.getElementById('globalSpinner')) {
+    if (timeoutId !== undefined || document.getElementById('globalSpinner')) {
       return;
     }
 
@@ -26,7 +26,7 @@ export default {
 
   stop() {
     clearTimeout(timeoutId);
-    timeoutId = null;
+    timeoutId = undefined;
     const spinners = document.getElementsByClassName('globalSpinner');
     if (spinners.length) {
       setTimeout(function() {
@@ -35,7 +35,7 @@ export default {
     }
   },
 
-  getVdom(classes = null) {
+  getVdom(classes?: string) {
     return (
       <div class={'spinner ' + (classes ? classes : '')}>
         <svg viewBox="0 0 40 40">
@@ -48,5 +48,4 @@ export default {
   getHtml() {
     return '<div class="spinner monochrome"><svg viewBox="0 0 40 40"><circle cx=20 cy=20 r=18 fill="none"></circle></svg></div>';
   }
-
-};
+}

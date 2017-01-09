@@ -6,7 +6,23 @@ import router from './router';
 import challengesApi from './lichess/challenges';
 import { fetchText } from './http';
 
-function notificationReceivedCallback(data) {
+interface NotificationReceivedData {
+  isAppInFocus: boolean
+  payload: {
+    additionalData: any
+  }
+}
+
+interface NotificationOpenedData {
+  isAppInFocus: boolean
+  notification: {
+    payload: {
+      additionalData: string
+    }
+  }
+}
+
+function notificationReceivedCallback(data: NotificationReceivedData) {
   const additionalData = data.payload.additionalData;
   if (additionalData && additionalData.userData) {
     if (data.isAppInFocus) {
@@ -31,7 +47,7 @@ function notificationReceivedCallback(data) {
   }
 }
 
-function notificationOpenedCallback(data) {
+function notificationOpenedCallback(data: NotificationOpenedData) {
   const additionalData = data.notification.payload.additionalData && JSON.parse(data.notification.payload.additionalData);
   if (additionalData && additionalData.userData) {
     if (!data.isAppInFocus) {

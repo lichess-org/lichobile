@@ -4,6 +4,7 @@
 /// <reference path="cordova-plugin-insomnia.d.ts" />
 /// <reference path="cordova-plugin-socialsharing.d.ts" />
 /// <reference path="cordova-plugin-lowlatencyaudio.d.ts" />
+/// <reference path="cordova-plugin-onesignal.d.ts" />
 /// <reference path="mithril.d.ts" />
 /// <reference path="jsx.d.ts" />
 /// <reference path="lodash.d.ts" />

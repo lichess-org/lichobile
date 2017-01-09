@@ -18,15 +18,6 @@ export function vote(id, v) {
   });
 }
 
-export function setDifficulty(d) {
-  return fetchJSON('/training/difficulty', {
-    method: 'POST',
-    body: JSON.stringify({
-      difficulty: d
-    })
-  });
-}
-
 export function loadPuzzle(id) {
   return fetchJSON(`/training/${id}/load`);
 }

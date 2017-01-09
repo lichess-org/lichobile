@@ -143,7 +143,7 @@ function renderViewControls(ctrl) {
     }),
     m('button.action_bar_button.training_action[data-icon=A]', {
       key: 'analysePuzzle',
-      oncreate: helper.ontap(() => router.set(`/analyse/fen/${encodeURIComponent(ctrl.getFen())}?color=${ctrl.chessground.data.orientation}`), () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
+      oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
     m('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',

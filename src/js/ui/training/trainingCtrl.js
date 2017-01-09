@@ -1,5 +1,6 @@
 import { last } from 'lodash/array';
 import * as chessground from 'chessground-mobile';
+import router from '../../router';
 import redraw from '../../utils/redraw';
 import signals from '../../signals';
 import { handleXhrError } from '../../utils';
@@ -308,14 +309,8 @@ export default function ctrl(vnode) {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`);
   }.bind(this);
 
-  this.getFen = function() {
-    return this.data.replay.history[this.data.replay.step].fen;
-  }.bind(this);
-
-  this.setDifficulty = function(id) {
-    return xhr.setDifficulty(id)
-      .then(pushState)
-      .then(this.reload);
+  this.goToAnalysis = function() {
+    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(this.data.puzzle.fen)}?color=${this.data.puzzle.color}`)
   }.bind(this);
 
   if (vnode.attrs.id) {

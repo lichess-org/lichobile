@@ -3,7 +3,7 @@ import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
-import { TimelineData, LobbyData, HookData, Pool } from './lichess/interfaces';
+import { TimelineData, LobbyData, HookData, Pool, Seek } from './lichess/interfaces';
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
@@ -115,7 +115,7 @@ export function lobby(feedback?: boolean): Promise<LobbyData> {
   })
 }
 
-export function seeks(feedback: boolean) {
+export function seeks(feedback: boolean): Promise<Array<Seek>> {
   return fetchJSON('/lobby/seeks', null, feedback);
 }
 

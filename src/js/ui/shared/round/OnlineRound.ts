@@ -57,7 +57,6 @@ export default class OnlineRound implements OnlineRoundInterface {
   public vm: VM
   public title: Mithril.Children
   public tv: string
-  public flipped: boolean
 
   private tournamentCountInterval: number
   private clockIntervId: number
@@ -72,7 +71,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     onUserTVRedirect?: () => void
   ) {
     this.id = id;
-    this.flipped = flipped;
     this.data = cfg;
     this.onTVChannelChange = onTVChannelChange;
     this.onFeatured = onFeatured;
@@ -81,7 +79,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.vm = {
       ply: this.lastPly(),
-      flip: false,
+      flip: flipped,
       miniUser: {
         player: {
           showing: false,
@@ -201,16 +199,12 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public flip = () => {
+    this.vm.flip = !this.vm.flip;
     if (this.data.tv) {
-      if (this.flip) router.set('/tv?flip=1', true);
+      if (this.vm.flip) router.set('/tv?flip=1', true);
       else router.set('/tv', true);
       return;
-    } else if (this.data.player.spectator) {
-      router.set('/game/' + this.data.game.id + '/' +
-        oppositeColor(this.data.player.color), true);
-      return;
     }
-    this.vm.flip = !this.vm.flip;
     this.chessground.set({
       orientation: boardOrientation(this.data, this.vm.flip)
     });

@@ -99,7 +99,12 @@ export default class AnalyseCtrl {
       showBestMove: settings.analyse.showBestMove(),
       showComments: settings.analyse.showComments(),
       computingPGN: false,
-      replaying: false
+      replaying: false,
+      // unique id that changes each time a variation operation is performed on
+      // analysis tree
+      // this is an easy way to address mithril issues by assigning a key to the
+      // whole tree element
+      treeId: 0
     };
 
     if (this.isRemoteAnalysable()) {
@@ -390,7 +395,11 @@ export default class AnalyseCtrl {
       pgnMoves: this.vm.step.pgnMoves ? this.vm.step.pgnMoves.concat(situation.pgnMoves) : undefined
     };
     const newPath = this.analyse.addStep(step, treePath.read(path));
+    if (this.vm.path.length === 1 && newPath && newPath.length > 1) {
+      this.vm.treeId = performance.now()
+    }
     this.jump(newPath);
+    this.debouncedScroll();
     redraw();
   }
 
@@ -407,6 +416,7 @@ export default class AnalyseCtrl {
     const ply = path[0].ply;
     const id = path[0].variation;
     this.analyse.deleteVariation(ply, id);
+    this.vm.treeId = performance.now()
     if (treePath.contains(path, this.vm.path)) this.jumpToMain(ply - 1);
     this.toggleVariationMenu();
   }
@@ -415,6 +425,7 @@ export default class AnalyseCtrl {
     const ply = path[0].ply;
     const id = path[0].variation;
     this.analyse.promoteVariation(ply, id);
+    this.vm.treeId = performance.now()
     if (treePath.contains(path, this.vm.path))
       this.jump(this.vm.path.splice(1));
     this.toggleVariationMenu();
@@ -506,7 +517,8 @@ export default class AnalyseCtrl {
   }
 
   public toggleComments = () => {
-    this.vm.showComments = !this.vm.showComments;
+    this.vm.showComments = !this.vm.showComments
+    this.vm.treeId = performance.now()
   }
 
   public sharePGN = () => {

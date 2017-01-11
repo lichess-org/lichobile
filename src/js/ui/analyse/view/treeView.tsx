@@ -13,12 +13,12 @@ interface Turn {
 }
 
 export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
-  const turns: Mithril.Children = [];
+  let turns: Mithril.Children = [];
   const initPly = ctrl.analyse.firstPly();
   const path = treePath.default()
 
   if (initPly % 2 === 0) {
-    for (let i = 1, nb = tree.length; i < nb; i += 2) turns.push(
+    for (let i = 1, nb = tree.length; i < nb; i += 2) turns = turns.concat(
       renderTurn(
         ctrl,
         {
@@ -31,12 +31,12 @@ export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
     )
   }
   else {
-    turns.push(renderTurn(ctrl, {
+    turns = turns.concat(renderTurn(ctrl, {
       turn: Math.floor(initPly / 2) + 1,
       white: null,
       black: tree[1]
     }, path))
-    for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns.push(
+    for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns = turns.concat(
       renderTurn(
         ctrl,
         {
@@ -56,11 +56,6 @@ function renderIndex(txt: string) {
   return Vnode('index', undefined, undefined, undefined, txt, undefined)
 }
 
-function turnKey(turn: Turn, meta?: string) {
-  const key = turn.turn + ':' + (meta ? meta : '');
-  return key;
-}
-
 function renderEvalTag(e: string) {
   return Vnode('eval', undefined, undefined, undefined, e, undefined)
 }
@@ -71,9 +66,8 @@ function renderGlyph(glyph: Glyph) {
 
 const emptyMove = Vnode('move', undefined, undefined, undefined, '...', undefined)
 
-function renderMove(currentPath: string, move: AnalysisStep, path: Path) {
+function renderMove(currentPath: string, move: AnalysisStep, path: Path, pathStr: string) {
   if (!move) return emptyMove;
-  const pathStr = treePath.write(path);
   const evaluation = path[1] ? null : (move.rEval || move.ceval);
   const judgment = move.rEval && move.rEval.judgment;
   const className = [
@@ -177,10 +171,10 @@ function renderVariationMeta(ctrl: AnalyseCtrlInterface, move: AnalysisStep, pat
 
 function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath) : null;
+  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath, treePath.write(wPath)) : null;
   const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath) : null;
+  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath, treePath.write(bPath)) : null;
   const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) return [
@@ -231,8 +225,11 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
       ));
     }
   }
+  const key = 'meta:' + treePath.write(path) +
+    (ctrl.vm.showComments && judgment ? judgment.name : '') +
+    (opening && opening.ply === step.ply ? opening.name : '')
   return (
-    <interrupt>{children}</interrupt>
+    <interrupt key={key}>{children}</interrupt>
   );
 }
 
@@ -249,50 +246,57 @@ function renderComment(comment: string, colorClass: string, commentClass: string
   return Vnode('comment', undefined, { className: colorClass + commentClass }, undefined, truncateComment(comment), undefined)
 }
 
+function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
+  let key = 'turn:' + turn.turn
+  let wMove: Mithril.ChildNode, bMove: Mithril.ChildNode
+  if (wPath !== undefined) {
+    const wPathStr = wPath && treePath.write(wPath)
+    key += ':' + wPathStr + (turn.white && turn.white.san)
+    wMove = wPath ? renderMove(pathStr, turn.white, wPath, wPathStr) : null
+  } else {
+    key += ':empty'
+    wMove = emptyMove
+  }
+  if (bPath !== undefined) {
+    const bPathStr = bPath && treePath.write(bPath)
+    key += ':' + bPathStr + (turn.black && turn.black.san)
+    bMove = bPath ? renderMove(pathStr, turn.black, bPath, bPathStr) : null;
+  } else {
+    key += ':empty'
+    bMove = emptyMove
+  }
+  return m.fragment(
+    { key },
+    [renderIndex(String(turn.turn)), wMove, bMove]
+  )
+}
+
 function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path): Mithril.Children {
-  const index = renderIndex(String(turn.turn));
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath) : null;
-  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath) : null;
   const wMeta = renderMeta(ctrl, turn.white, wPath);
   const bMeta = renderMeta(ctrl, turn.black, bPath);
-  if (wMove) {
+  if (wPath) {
     if (wMeta) {
-      const temp = [
-        index, wMove, emptyMove,
-        wMeta
-      ];
-      if (bMove) {
+      const temp = [ renderTurnEl(turn, ctrl.vm.pathStr, wPath), wMeta ]
+      if (bPath) {
         if (bMeta) {
-          return m.fragment({ key: turnKey(turn, 'emptyWAndWMetaAndBMeta')}, temp.concat([
-            index, emptyMove, bMove,
-            bMeta
-          ]));
+          return temp.concat([ renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath), bMeta ])
         } else {
-          return m.fragment({ key: turnKey(turn, 'emptyWAndWMeta')}, temp.concat([
-
-            index, emptyMove, bMove
-          ]));
+          return temp.concat([ renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath) ])
         }
       } else {
-        return m.fragment({ key: turnKey(turn, 'emptyB') }, temp)
+        return temp
       }
     } else if (bMeta) {
-      return m.fragment({ key: turnKey(turn, 'bMeta') }, [
-        index, wMove, bMove,
-        bMeta
-      ]);
+      return [ renderTurnEl(turn, ctrl.vm.pathStr, wPath, bPath), bMeta]
     } else {
-      return m.fragment({ key: turnKey(turn) }, [index, wMove, bMove]);
+      return [renderTurnEl(turn, ctrl.vm.pathStr, wPath, bPath)]
     }
   }
   else if (bMeta) {
-    return m.fragment({ key: turnKey(turn, 'emptyWbMeta') }, [
-      index, emptyMove, bMove,
-      bMeta
-    ]);
+    return [renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath), bMeta]
   } else {
-    return m.fragment({ key: turnKey(turn, 'emptyW') }, [index, emptyMove, bMove]);
+    return [renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath)]
   }
 }

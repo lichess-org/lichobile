@@ -161,11 +161,6 @@ export function aiName(player: { ai: number }) {
   return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
 }
 
-export const uid = (function() {
-  let id = 0;
-  return () => id++;
-})();
-
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
   blitz: ')',

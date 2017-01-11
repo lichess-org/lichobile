@@ -134,7 +134,7 @@ export default class Analyse implements AnalyseInterface {
   }
 
   public promoteVariation = (ply: number, id: number) => {
-    const stepId = ply + this.firstPly();
+    const stepId = this.tree.findIndex(s => s.ply === ply)
     const variation = this.getStepAtPly(ply).variations[id - 1];
     this.deleteVariation(ply, id);
     const demoted = this.tree.splice(stepId);

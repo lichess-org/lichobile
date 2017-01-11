@@ -1,7 +1,6 @@
 import * as Rlite from 'rlite-router';
 import * as m from 'mithril';
 import * as Vnode from 'mithril/render/vnode';
-import { uid } from './utils'
 import signals from './signals';
 import { isFunction } from 'lodash';
 import session from './session';
@@ -11,6 +10,11 @@ interface Backbutton {
   (): void;
   stack: Array<(fromBB?: string) => void>;
 }
+
+const uid = (function() {
+  let id = 0;
+  return () => id++;
+})();
 
 const router = new Rlite();
 

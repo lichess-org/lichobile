@@ -172,7 +172,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
         { ctrl.ceval.enabled() ?
           renderEvalBox(ctrl) : null
         }
-        {m(Replay, { key: ctrl.vm.showComments ? 'replay-annoted' : 'replay-simple', ctrl })}
+        {m(Replay, { key: ctrl.vm.treeId, ctrl })}
       </div>
     </div>
   );

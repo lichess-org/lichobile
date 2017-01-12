@@ -1,5 +1,6 @@
 import router from './router';
 import * as Rlite from 'rlite-router';
+import { cleanFenUri } from './utils/fen';
 import { getChallenge } from './xhr';
 
 const deepRouter = new Rlite();
@@ -38,6 +39,7 @@ export default {
     // open normal Lichess links
     const universalLinks = window.universalLinks;
     universalLinks.subscribe('analysis', () => router.set('/analyse'));
+    universalLinks.subscribe('analysisPosition', handleAnalysisPosition);
     universalLinks.subscribe('challenge', (eventData: EventData) => router.set('/challenge/' + eventData.path.split('/').pop()));
     universalLinks.subscribe('editor', () => router.set('/editor'));
     universalLinks.subscribe('inbox', () => router.set('/inbox'));
@@ -60,6 +62,14 @@ function handleVariantProfile (eventData: EventData) {
   const uid = pieces[2];
   const variant = pieces[4];
   router.set('/@/' + uid + '/' + variant + '/perf');
+}
+
+// handle link like: 
+// https://www.en.lichess.org/analysis/2b1rrk1/p4Np1/6Pp/q2p3Q/n1pP4/b1P1B3/P1BK1P2/1R4R1_w_-_-_0_1
+function handleAnalysisPosition (eventData: EventData) {
+  let pathSuffix = eventData.path.replace("/analysis", "");
+  pathSuffix = cleanFenUri(pathSuffix);
+  router.set(`/analyse/fen/${encodeURIComponent(pathSuffix)}`)
 }
 
 function handleTrainingProblem (eventData: EventData) {

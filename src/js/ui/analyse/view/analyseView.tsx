@@ -248,7 +248,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   }
 
   return (
-    <div className="analyse-cevalBox">
+    <div key={'ceval' + ctrl.vm.treeId} className="analyse-cevalBox">
       <div className="analyse-curEval">
         { pearl }
         { step.ceval && step.ceval.bestSan ?

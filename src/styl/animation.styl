@@ -161,5 +161,13 @@
       stroke gold
 
 .fading_out
-  transition opacity 200ms ease-out
+  transition opacity 300ms ease-out
   opacity 0
+
+@keyframes fade-in {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+
+.fade-in
+  animation fade-in 300ms

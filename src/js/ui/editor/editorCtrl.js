@@ -5,6 +5,7 @@ import { computeFen, readFen } from './editor';
 import menu from './menu';
 import * as m from 'mithril';
 import { loadLocalJsonFile } from '../../utils';
+import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 import continuePopup from '../shared/continuePopup';
 import i18n from '../../i18n';
 import socket from '../../socket';
@@ -53,6 +54,7 @@ export default function oninit(vnode) {
   });
 
   this.chessground = new chessground.controller({
+    batchRAF: batchRequestAnimationFrame,
     fen: initFen,
     orientation: 'white',
     movable: {

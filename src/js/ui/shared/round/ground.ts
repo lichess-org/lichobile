@@ -1,5 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import redraw from '../../../utils/redraw';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
 import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
@@ -16,6 +17,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
 
   return {
     fen: fen,
+    batchRAF: batchRequestAnimationFrame,
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
     lastMove,

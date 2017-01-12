@@ -1,4 +1,5 @@
-import { redrawSync } from '../../utils/redraw';
+import { redrawSync } from '../../utils/redraw'
+import { batchRequestAnimationFrame, removeFromBatchAnimationFrame } from '../../utils/batchRAF'
 
 const HOLD_DURATION = 600;
 const SCROLL_TOLERANCE = 8;
@@ -32,8 +33,7 @@ export default function ButtonHandler(
     boundaries: Boundaries,
     active: boolean,
     holdTimeoutID: number,
-    repeatTimeoutId: number,
-    repeatIntervalID: number;
+    repeatTimeoutId: number;
 
   if (typeof tapHandler !== 'function')
     throw new Error('ButtonHandler 2nd argument must be a function!');
@@ -47,7 +47,7 @@ export default function ButtonHandler(
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
     const res = repeatHandler();
-    if (res) repeatIntervalID = requestAnimationFrame(onRepeat);
+    if (res) batchRequestAnimationFrame(onRepeat);
     redrawSync();
   }
 
@@ -69,9 +69,8 @@ export default function ButtonHandler(
       if (active) activeElement.classList.add(ACTIVE_CLASS);
     }, 200);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
-    cancelAnimationFrame(repeatIntervalID);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
-      repeatIntervalID = requestAnimationFrame(onRepeat);
+      batchRequestAnimationFrame(onRepeat);
     }, 150);
   }
 
@@ -83,7 +82,7 @@ export default function ButtonHandler(
       if (!active) {
         clearTimeout(holdTimeoutID);
         clearTimeout(repeatTimeoutId);
-        cancelAnimationFrame(repeatIntervalID);
+        removeFromBatchAnimationFrame(onRepeat);
         activeElement.classList.remove(ACTIVE_CLASS);
       }
     }
@@ -92,7 +91,7 @@ export default function ButtonHandler(
   function onTouchEnd(e: TouchEvent) {
     if (e.cancelable) e.preventDefault();
     clearTimeout(repeatTimeoutId);
-    cancelAnimationFrame(repeatIntervalID);
+    removeFromBatchAnimationFrame(onRepeat);
     if (active && activeElement) {
       clearTimeout(holdTimeoutID);
       if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
@@ -105,7 +104,7 @@ export default function ButtonHandler(
   function onTouchCancel() {
     clearTimeout(holdTimeoutID);
     clearTimeout(repeatTimeoutId);
-    cancelAnimationFrame(repeatIntervalID);
+    removeFromBatchAnimationFrame(onRepeat);
     active = false;
     if (activeElement) activeElement.classList.remove(ACTIVE_CLASS);
   }

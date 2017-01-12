@@ -2,10 +2,12 @@ import * as chessground from 'chessground-mobile';
 import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
 
 function makeConfig(data, sit) {
   const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
   return {
+    batchRAF: batchRequestAnimationFrame,
     fen: sit.fen,
     orientation: boardOrientation(data),
     turnColor: sit.player,

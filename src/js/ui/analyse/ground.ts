@@ -1,5 +1,6 @@
 import * as chessground from 'chessground-mobile';
 import settings from '../../settings';
+import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 
 import { AnalysisData } from './interfaces';
 
@@ -12,6 +13,7 @@ function makeConfig(
 ) {
   return {
     fen: config.fen,
+    batchRAF: batchRequestAnimationFrame,
     check: config.check,
     lastMove: config.lastMove,
     turnColor: config.turnColor,

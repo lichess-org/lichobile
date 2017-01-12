@@ -4,6 +4,7 @@ import router from '../../router';
 import redraw from '../../utils/redraw';
 import signals from '../../signals';
 import { handleXhrError } from '../../utils';
+import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 import makeData from './data';
 import chess from './chess';
 import puzzle from './puzzle';
@@ -236,6 +237,7 @@ export default function ctrl(vnode) {
   this.init = function(cfg) {
     this.data = makeData(cfg);
     const chessgroundConf = {
+      batchRAF: batchRequestAnimationFrame,
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
       coordinates: settings.game.coords(),

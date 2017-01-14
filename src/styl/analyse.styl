@@ -47,14 +47,18 @@
   flex 1 1 auto
   position relative
   display flex
-  flex-flow row wrap
-  align-content flex-start
-  align-items flex-start
+  flex-flow column nowrap
   font-size 0.9rem
   padding-right 5px
   &.displayPieces
-    > move
-      font-family ChessSansPiratf
+    > turn
+      > move
+        font-family ChessSansPiratf
+
+turn
+  width 100%
+  display flex
+  flex 0 0 25px
   > move
     display flex
     flex 0 0 44%
@@ -108,7 +112,7 @@ eval
   color rgba(textDarkBg, 70%)
 
 interrupt
-  flex 0 0 100%
+  flex 0 0 auto
   min-height 25px
   display flex
   flex-flow column nowrap

@@ -172,7 +172,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
         { ctrl.ceval.enabled() ?
           renderEvalBox(ctrl) : null
         }
-        {m(Replay, { key: ctrl.vm.treeId, ctrl })}
+        {m(Replay, { ctrl })}
       </div>
     </div>
   );
@@ -248,7 +248,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
   }
 
   return (
-    <div key={'ceval' + ctrl.vm.treeId} className="analyse-cevalBox">
+    <div className="analyse-cevalBox">
       <div className="analyse-curEval">
         { pearl }
         { step.ceval && step.ceval.bestSan ?

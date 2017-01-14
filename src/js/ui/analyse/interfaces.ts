@@ -134,7 +134,6 @@ export interface VM {
   showComments: boolean
   computingPGN: boolean
   replaying: boolean
-  treeId: number
 }
 
 export interface MenuInterface {

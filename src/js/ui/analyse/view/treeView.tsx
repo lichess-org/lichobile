@@ -48,6 +48,7 @@ export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
       )
     )
   }
+  console.log(turns)
 
   return turns
 }
@@ -265,9 +266,13 @@ function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
     key += ':empty'
     bMove = emptyMove
   }
-  return m.fragment(
-    { key },
-    [renderIndex(String(turn.turn)), wMove, bMove]
+  return Vnode(
+    'turn',
+    key,
+    undefined,
+    [renderIndex(String(turn.turn)), wMove, bMove],
+    undefined,
+    undefined
   )
 }
 

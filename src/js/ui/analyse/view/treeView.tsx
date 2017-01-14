@@ -48,7 +48,6 @@ export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
       )
     )
   }
-  console.log(turns)
 
   return turns
 }

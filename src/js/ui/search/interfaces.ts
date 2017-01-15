@@ -7,6 +7,7 @@ export interface Select {
   name: string
   options: Array<Option>
   default: string
+  onchange?: () => void
 }
 
 export interface Option {

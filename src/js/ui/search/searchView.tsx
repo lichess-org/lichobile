@@ -19,6 +19,7 @@ function renderSearchForm(ctrl: SearchState) {
   const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}));
   const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]];
   const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const aiLevelOptions = settings.search.aiLevels.map((a: string) => ({value: a, label: i18n('level') + ' ' + a}));
   const sourceOptions = settings.search.sources.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const perfOptions = settings.search.perfs.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const turnOptions = settings.search.turns.map((a: string) => ({value: a, label: a}));
@@ -49,7 +50,8 @@ function renderSearchForm(ctrl: SearchState) {
         {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: null}, null)}
         {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: null}, null)}
         {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
-        {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null}, null)}
+        {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null, onchange: () => { redraw() }}, null)}
+        {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, {name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
         {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: null}, null)}
         {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: null}, null)}
         {renderSelectRow('Turns', true, {name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
@@ -81,14 +83,14 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: Select, s
     <div className="game_search_row">
       <label>{label}: </label>
       <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
-        <select id={select1.name.replace('.', '_')} name={select1.name}>
+        <select id={select1.name.replace('.', '_')} name={select1.name} onchange={select1.onchange ? select1.onchange : ''}>
           <option selected value=""> {select1.default ? select1.default : ''} </option>
           {select1.options.map(renderOption)}
         </select>
       </div>
       {select2 ?
         <div className="game_search_select">
-          <select id={select2.name.replace('.', '_')} name={select2.name}>
+          <select id={select2.name.replace('.', '_')} name={select2.name} onchange={select1.onchange ? select1.onchange : ''}>
             <option selected value=""> {select2.default ? select2.default : ''} </option>
             {select2.options.map(renderOption)}
           </select>
@@ -105,8 +107,8 @@ function renderOption(opt: Option) {
 }
 
 function getPlayers(): Array<Option> {
-  const playerAEl = (document.getElementById('players.a') as HTMLInputElement);
-  const playerBEl = (document.getElementById('players.b') as HTMLInputElement);
+  const playerAEl = (document.getElementById('players_a') as HTMLInputElement);
+  const playerBEl = (document.getElementById('players_b') as HTMLInputElement);
   if(!playerAEl || !playerBEl)
     return [];
   const playerA = playerAEl.value.trim();
@@ -123,4 +125,9 @@ function getPlayers(): Array<Option> {
 
 function playersNonEmpty() {
   return getPlayers().reduce((acc, cur) => acc + cur.label.length, 0) > 0;
+}
+
+function isComputerOpp() {
+  const hasAi = (document.getElementById('hasAi') as HTMLInputElement);
+  return hasAi && (hasAi.value === '1');
 }

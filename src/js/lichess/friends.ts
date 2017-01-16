@@ -50,8 +50,8 @@ function count() {
 function set(friends: Array<string>, playings: Array<string>, patrons: Array<string> ) {
   onlineFriends = friends.map(name => makeFriend(name, false, false));
 
-  for (let user of playings) setPlaying(user, true);
-  for (let user of patrons) setPatron(user, true);
+  playings.forEach(user => setPlaying(user, true))
+  patrons.forEach(user => setPatron(user, true))
   onlineFriends.sort(lexicallyCompareFriends);
 }
 

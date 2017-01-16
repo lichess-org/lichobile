@@ -1,6 +1,10 @@
 let callbacks: Set<() => void> = new Set()
 let batching = false
 
+function callSelf(f: () => void) {
+  f();
+}
+
 export function batchRequestAnimationFrame(callback: () => void) {
   callbacks.add(callback)
   if (!batching) {
@@ -10,7 +14,7 @@ export function batchRequestAnimationFrame(callback: () => void) {
       batching = false
       callbacks = new Set()
       // console.log(Array.from(batch).map(f => f.name))
-      for (const c of batch) c()
+      batch.forEach(callSelf)
     })
   }
 }

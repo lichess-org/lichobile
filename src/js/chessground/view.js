@@ -69,7 +69,7 @@ function diffBoard(ctrl) {
       // there is a piece at this dom key
       if (pieceAtKey) {
         // continue animation if flag and same color
-        // (otherwise it would animate a captured piece)
+        // (otherwise it could animate a captured piece)
         if (anim && el.cgAnimating && el.cgColor === pieceAtKey.color) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
           translate[0] += anim[1][0];
@@ -241,29 +241,29 @@ function addSquare(squares, key, klass) {
 function computeSquareMap(ctrl) {
   const d = ctrl.data;
   const squares = new Map();
-  if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach(function(k) {
+  if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
     addSquare(squares, k, 'last-move');
   });
   if (d.check && d.highlight.check) addSquare(squares, d.check, 'check');
   if (d.selected) {
     addSquare(squares, d.selected, 'selected');
-    var dests = d.movable.dests[d.selected];
-    if (dests) dests.forEach(function(k) {
+    const dests = d.movable.dests[d.selected];
+    if (dests) dests.forEach((k) => {
       if (d.movable.showDests) addSquare(squares, k, 'move-dest' + (d.pieces[k] ? ' occupied' : ''));
     });
-    var pDests = d.premovable.dests;
-    if (pDests) pDests.forEach(function(k) {
+    const pDests = d.premovable.dests;
+    if (pDests) pDests.forEach((k) => {
       if (d.movable.showDests) addSquare(squares, k, 'premove-dest' + (d.pieces[k] ? ' occupied' : ''));
     });
   }
-  var premove = d.premovable.current;
-  if (premove) premove.forEach(function(k) {
+  const premove = d.premovable.current;
+  if (premove) premove.forEach((k) => {
     addSquare(squares, k, 'current-premove');
   });
   else if (d.predroppable.current.key)
     addSquare(squares, d.predroppable.current.key, 'current-premove');
 
-  if (ctrl.vm.exploding) ctrl.vm.exploding.keys.forEach(function(k) {
+  if (ctrl.vm.exploding) ctrl.vm.exploding.keys.forEach((k) => {
     addSquare(squares, k, 'exploding' + ctrl.vm.exploding.stage);
   });
   return squares;

@@ -1,4 +1,4 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import router from '../../router';
 import settings from '../../settings';
 import { computeFen, readFen } from './editor';

@@ -1,4 +1,4 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import { uciToMove } from '../../utils/chessFormat';
 import settings from '../../settings';
 

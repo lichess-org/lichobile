@@ -1,5 +1,5 @@
 import * as m from 'mithril'
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import { getBoardBounds } from '../helper';
 import { playerFromFen } from '../../utils/fen';
 import i18n from '../../i18n';

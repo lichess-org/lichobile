@@ -1,4 +1,4 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../../chessground';
 import redraw from '../../../utils/redraw';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
 import * as gameApi from '../../../lichess/game';

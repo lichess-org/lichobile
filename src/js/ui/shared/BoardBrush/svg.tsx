@@ -1,4 +1,4 @@
-import { util } from 'chessground-mobile';
+import chessground from '../../../chessground';
 import { Shape } from '.'
 import { Brush } from './brushes'
 
@@ -9,7 +9,7 @@ interface Bounds {
   height: number
 }
 
-const key2pos: (key: Pos) => BoardPos = util.key2pos;
+const key2pos: (key: Pos) => BoardPos = chessground.util.key2pos;
 
 function circleWidth(current: boolean, bounds: Bounds) {
   return (current ? 2 : 4) / 512 * bounds.width;
@@ -28,7 +28,7 @@ function arrowMargin(current: boolean, bounds: Bounds) {
 }
 
 function pos2px(pos: BoardPos, bounds: Bounds) {
-  var squareSize = bounds.width / 8;
+  const squareSize = bounds.width / 8;
   return [(pos[0] - 0.5) * squareSize, (8.5 - pos[1]) * squareSize];
 }
 

@@ -1,5 +1,5 @@
 import * as m from 'mithril'
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import i18n from '../../i18n';
 import { playerFromFen } from '../../utils/fen';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';

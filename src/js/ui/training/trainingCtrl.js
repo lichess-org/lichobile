@@ -1,5 +1,5 @@
 import { last } from 'lodash/array';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import router from '../../router';
 import redraw from '../../utils/redraw';
 import signals from '../../signals';

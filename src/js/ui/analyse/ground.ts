@@ -1,4 +1,4 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import settings from '../../settings';
 import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 

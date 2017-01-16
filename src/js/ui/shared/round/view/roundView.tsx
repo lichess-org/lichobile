@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../../../chessground';
 import socket from '../../../../socket';
 import session from '../../../../session';
 import variantApi from '../../../../lichess/variant';

@@ -1,6 +1,6 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import BoardBrush, { Shape } from './BoardBrush';
 
 export interface Attrs {

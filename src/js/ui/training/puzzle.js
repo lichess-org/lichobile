@@ -1,7 +1,7 @@
 import { compact } from 'lodash/array';
 import { keys, toPairs } from 'lodash/object';
 import { head, tail } from 'lodash/array';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import chess from './chess';
 
 function str2move(str) {

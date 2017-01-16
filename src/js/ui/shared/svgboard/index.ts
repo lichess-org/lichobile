@@ -1,4 +1,4 @@
-import { fen as fenUtils, util as boardUtil } from 'chessground-mobile'
+import chessground from '../../../chessground'
 import svgPieces from './pieces'
 
 interface Bounds {
@@ -12,11 +12,11 @@ export function makeBoard(fen: string, orientation: Color, bounds: Bounds) {
   const cached = cache[fen]
   if (cached) return cached
   else {
-    const pieces = fenUtils.read(fen)
+    const pieces = chessground.fen.read(fen)
     const piecesKey = Object.keys(pieces)
     let b = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360">'
     for (let i = 0, len = piecesKey.length; i < len; i++) {
-      let pos = pos2px(orient(boardUtil.key2pos(piecesKey[i]), orientation))
+      let pos = pos2px(orient(chessground.util.key2pos(piecesKey[i]), orientation))
       b += makePiece(pos, pieces[piecesKey[i]])
     }
     b += '</svg>'

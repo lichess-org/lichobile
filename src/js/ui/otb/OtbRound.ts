@@ -1,6 +1,7 @@
 import sound from '../../sound';
 import router from '../../router';
 import * as chess from '../../chess';
+import * as chessFormat from '../../utils/chessFormat';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import { specialFenVariants } from '../../lichess/variant';
@@ -174,7 +175,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.chessground.set({
         fen: sit.fen,
         turnColor: sit.player,
-        lastMove: lastUci ? [<Pos>lastUci.slice(0, 2), <Pos>lastUci.slice(2, 4)] : null,
+        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : null,
         dests: sit.dests,
         movableColor: sit.player,
         check: sit.check

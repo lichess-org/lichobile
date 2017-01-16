@@ -1,6 +1,7 @@
 import { throttle } from 'lodash';
 import * as m from 'mithril';
 import * as utils from '../../../utils';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import router from '../../../router';
 import settings from '../../../settings';
 import * as helper from '../../helper';
@@ -62,9 +63,10 @@ function onTap(ctrl: State, e: Event) {
     ctrl.toggleBookmark(id)
   } else {
     if (id) {
-      const g = ctrl.scrollState.games.find(g => g.id === id)
+      const g = ctrl.scrollState.games.find(game => game.id === id)
       const userId = ctrl.scrollState.userId
       const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
+      utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
       const mePlaying = session.getUserId() === userId;
       if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
         router.set(`/game/${id}/${userColor}`)
@@ -72,30 +74,6 @@ function onTap(ctrl: State, e: Event) {
         router.set(`/analyse/online/${id}/${userColor}`)
     }
   }
-}
-
-function renderAllGames(ctrl: State) {
-  const { games  } = ctrl.scrollState
-  return (
-    <div id="scroller-wrapper" className="scroller native_scroller games"
-      oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
-      onscroll={throttle(ctrl.onScroll, 30)}
-    >
-      { games.length ?
-        <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
-          { games.map((g, i) =>
-            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
-          }
-          {ctrl.scrollState.isLoadingNextPage ?
-          <li className="list_item loadingNext">loading...</li> : null
-          }
-        </ul> :
-        <div className="userGame-loader">
-          {spinner.getVdom('monochrome')}
-        </div>
-      }
-    </div>
-  );
 }
 
 const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: string, scrollState: ScrollState }, { boardTheme: string }> = {
@@ -163,6 +141,30 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
   }
 }
 
+function renderAllGames(ctrl: State) {
+  const { games  } = ctrl.scrollState
+  return (
+    <div id="scroller-wrapper" className="scroller native_scroller games"
+      oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
+      onscroll={throttle(ctrl.onScroll, 30)}
+    >
+      { games.length ?
+        <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
+          { games.map((g, i) =>
+            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+          }
+          {ctrl.scrollState.isLoadingNextPage ?
+          <li className="list_item loadingNext">loading...</li> : null
+          }
+        </ul> :
+        <div className="userGame-loader">
+          {spinner.getVdom('monochrome')}
+        </div>
+      }
+    </div>
+  );
+}
+
 function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
 
   const boardClass = [
@@ -176,7 +178,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
         const img = document.createElement('img')
         img.className = 'cg-board'
         img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)
-        requestAnimationFrame(() => {
+        batchRequestAnimationFrame(() => {
           dom.replaceChild(img, dom.firstChild)
         })
       }}

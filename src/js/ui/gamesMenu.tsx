@@ -133,7 +133,7 @@ function close(fromBB?: string) {
 
 function joinGame(g: NowPlayingGame) {
   lastJoined = g;
-  utils.gamePosCache[g.fullId] = { fen: g.fen, orientation: g.color }
+  utils.gamePosCache.set(g.fullId, { fen: g.fen, orientation: g.color })
   close();
   router.set('/game/' + g.fullId);
 }

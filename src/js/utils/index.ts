@@ -10,8 +10,8 @@ interface GamePosCached {
   fen: string
   orientation: Color
 }
-export const gamePosCache: { [id: string]: GamePosCached } = {
-}
+
+export const gamePosCache: Map<string, GamePosCached> = new Map()
 
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;

@@ -259,7 +259,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       this.chessground.set({
         fen: sit.fen,
         turnColor: sit.player,
-        lastMove: lastUci ? [<Pos>lastUci.slice(0, 2), <Pos>lastUci.slice(2, 4)] : null,
+        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : null,
         dests: sit.dests,
         movableColor: sit.player === this.data.player.color ? sit.player : null,
         check: sit.check

@@ -1,9 +1,9 @@
-import board from './board'
-import configure from './configure'
-import data from './data'
-import fen from './fen'
-import anim from './anim'
-import drag from './drag'
+import board from './board';
+import configure from './configure';
+import data from './data';
+import fen from './fen';
+import anim from './anim';
+import drag from './drag';
 
 var ttId;
 
@@ -46,7 +46,7 @@ export default function(cfg) {
   this.data = data(cfg);
 
   this.vm = {
-    exploding: false
+    exploding: null
   };
 
   this.getFen = function() {
@@ -105,12 +105,19 @@ export default function(cfg) {
 
   this.explode = function(keys) {
     if (!this.data.render) return;
-    this.vm.exploding = keys;
+    this.vm.exploding = {
+      stage: 1,
+      keys: keys
+    };
     this.data.renderRAF();
     setTimeout(function() {
-      this.vm.exploding = false;
+      this.vm.exploding.stage = 2;
       this.data.renderRAF();
-    }.bind(this), 200);
+      setTimeout(function() {
+        this.vm.exploding = false;
+        this.data.renderRAF();
+      }.bind(this), 120);
+    }.bind(this), 120);
   }.bind(this);
 
   // view-only needs only `width` and `height` props
@@ -139,4 +146,4 @@ export default function(cfg) {
       window.removeEventListener('resize', onresize);
     }
   };
-};
+}

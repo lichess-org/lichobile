@@ -68,7 +68,7 @@ function diffBoard(ctrl) {
     if (el.cgRole) {
       // there is a piece at this dom key
       if (pieceAtKey) {
-        // continue animation if flag and same color
+        // continue animation if already animating and same color
         // (otherwise it could animate a captured piece)
         if (anim && el.cgAnimating && el.cgColor === pieceAtKey.color) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);

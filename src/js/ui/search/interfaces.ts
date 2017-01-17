@@ -1,3 +1,6 @@
+import { UserGame } from '../../lichess/interfaces/user';
+import { Paginator } from '../../lichess/interfaces';
+
 export interface SearchState {
   search: (form: HTMLFormElement) => void
   result: Mithril.Stream<SearchResult>
@@ -43,4 +46,9 @@ export interface SearchQuery {
 }
 
 export interface SearchResult {
+  paginator: Paginator<UserGameWithDate>
+}
+
+export interface UserGameWithDate extends UserGame {
+  date?: string
 }

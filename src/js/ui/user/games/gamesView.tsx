@@ -57,7 +57,7 @@ function bookmarkAction(ctrl: State, id: string, index: number) {
   });
 }
 
-function renderGame(ctrl: State, g: UserGameWithDate, index: number, userId: string) {
+export function renderGame(ctrl: State, g: UserGameWithDate, index: number, userId: string) {
   const time = gameApi.time(g);
   const mode = g.rated ? i18n('rated') : i18n('casual');
   const title = g.source === 'import' ?

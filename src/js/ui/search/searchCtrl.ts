@@ -3,9 +3,11 @@ import {SearchState, SearchResult, SearchQuery} from './interfaces';
 import * as xhr from './searchXhr'
 import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../utils';
+import * as helper from '../helper';
+import redraw from '../../utils/redraw';
 
 export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
-
+  helper.analyticsTrackView('Advanced search');
   const result = stream<SearchResult>();
 
   vnode.state = {
@@ -23,6 +25,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     .then((data: SearchResult) => {
       console.log(data);
       result(data);
+      redraw();
     })
     .catch(handleXhrError);
 

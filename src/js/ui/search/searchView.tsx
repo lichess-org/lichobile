@@ -1,9 +1,10 @@
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import {SearchState, Select, Option} from './interfaces';
+import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
+import { renderGame } from '../user/games/gamesView';
 
 export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
@@ -32,47 +33,54 @@ function renderSearchForm(ctrl: SearchState) {
   const sortFieldOptions = settings.search.sortFields.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const sortOrderOptions = settings.search.sortOrders.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   return (
-    <form id="advancedSearchForm"
-    onsubmit={function(e: Event) {
-      e.preventDefault();
-      return ctrl.search(e.target as HTMLFormElement);
-    }}>
-        <div className="game_search_row">
-          <label>Players: </label>
-          <div className="game_search_input">
-            <input type="text" id="players_a" name="players.a" onkeyup={(e: Event) => { redraw(); }} />
+    <div className="native_scroller searchWraper">
+      <form id="advancedSearchForm"
+      onsubmit={function(e: Event) {
+        e.preventDefault();
+        return ctrl.search(e.target as HTMLFormElement);
+      }}>
+          <div className="game_search_row">
+            <label>Players: </label>
+            <div className="game_search_input">
+              <input type="text" id="players_a" name="players.a" onkeyup={(e: Event) => { redraw(); }} />
+            </div>
+            <div className="game_search_input">
+              <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
+            </div>
           </div>
-          <div className="game_search_input">
-            <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
+          {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: null}, null)}
+          {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: null}, null)}
+          {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: null}, null)}
+          {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
+          {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null, onchange: () => { redraw() }}, null)}
+          {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, {name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
+          {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: null}, null)}
+          {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: null}, null)}
+          {renderSelectRow('Turns', true, {name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
+          {renderSelectRow(i18n('duration'), true, {name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
+          {renderSelectRow(i18n('time'), true, {name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
+          {renderSelectRow(i18n('increment'), true, {name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
+          {renderSelectRow('Result', true, {name: 'status', options: resultOptions, default: null}, null)}
+          {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: null}, null)}
+          {renderSelectRow('Date', true, {name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
+          {renderSelectRow('Sort', true, {name: 'sort.field', options: sortFieldOptions, default: 'From'}, {name: 'sort.order', options: sortOrderOptions, default: 'To'})}
+          <div className="game_search_row">
+            <label>Analysis?: </label>
+            <div className="game_search_input double_wide">
+              <input type="checkbox" id="analysed" name="analysed" value="1" />
+            </div>
           </div>
+        <button key="search" className="newGameButton" type="submit">
+          <span className="fa fa-search" />
+          {i18n('search')}
+        </button>
+      </form>
+      {ctrl.result() ?
+        <div className="searchGamesList">
+          {ctrl.result().paginator.currentPageResults.map((g: UserGameWithDate, index: number) => renderGame(null, g, index, null))}
         </div>
-        {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: null}, null)}
-        {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: null}, null)}
-        {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: null}, null)}
-        {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
-        {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null, onchange: () => { redraw() }}, null)}
-        {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, {name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
-        {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: null}, null)}
-        {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: null}, null)}
-        {renderSelectRow('Turns', true, {name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
-        {renderSelectRow(i18n('duration'), true, {name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
-        {renderSelectRow(i18n('time'), true, {name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
-        {renderSelectRow(i18n('increment'), true, {name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
-        {renderSelectRow('Result', true, {name: 'status', options: resultOptions, default: null}, null)}
-        {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: null}, null)}
-        {renderSelectRow('Date', true, {name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
-        {renderSelectRow('Sort', true, {name: 'sort.field', options: sortFieldOptions, default: 'From'}, {name: 'sort.order', options: sortOrderOptions, default: 'To'})}
-        <div className="game_search_row">
-          <label>Analysis?: </label>
-          <div className="game_search_input double_wide">
-            <input type="checkbox" id="analysed" name="analysed" value="1" />
-          </div>
-        </div>
-      <button key="create" className="newGameButton" type="submit">
-        <span className="fa fa-search" />
-        {i18n('search')}
-      </button>
-    </form>
+      : null }
+    </div>
   );
 }
 

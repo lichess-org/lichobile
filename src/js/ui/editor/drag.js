@@ -30,7 +30,9 @@ export default function(ctrl, e) {
     rel: rel,
     epos: position,
     pos: [position[0] - rel[0], position[1] - rel[1]],
-    dec: [-squareBounds.width, -squareBounds.height],
+    dec: cgData.draggable.magnified ?
+      [-squareBounds.width, -squareBounds.height * 2] :
+      [-squareBounds.width / 2, -squareBounds.height / 2],
     bounds: bounds,
     started: true,
     originTarget: e.target

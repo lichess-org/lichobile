@@ -74,13 +74,15 @@ function renderMove(currentPath: string, move: AnalysisStep, path: Path, pathStr
     pathStr === currentPath ? 'current' : ''
   ].join(' ');
 
-  return Vnode('move', undefined, { 'data-path': pathStr, className }, [
-    Vnode('#', undefined, undefined, move.san[0] === 'P' ? move.san.slice(1) : move.san, undefined, undefined),
-    judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null,
-    evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
-      evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
-    )
-  ], undefined, undefined)
+  return (
+    <move data-path={pathStr} className={className}>
+      {move.san[0] === 'P' ? move.san.slice(1) : move.san}
+      {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
+      {evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
+        evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
+      )}
+    </move>
+  )
 }
 
 function plyToTurn(ply: number) {
@@ -239,11 +241,11 @@ function truncateComment(text: string) {
 }
 
 function renderCommentOpening(opening: Opening) {
-  return Vnode('comment', undefined, undefined, undefined, truncateComment(opening.eco + ' ' + opening.name), undefined)
+  return <div className="comment">{truncateComment(opening.eco + ' ' + opening.name)}</div>
 }
 
 function renderComment(comment: string, colorClass: string, commentClass: string) {
-  return Vnode('comment', undefined, { className: colorClass + commentClass }, undefined, truncateComment(comment), undefined)
+  return <div className={'comment ' + colorClass + commentClass}>{truncateComment(comment)}</div>
 }
 
 function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {

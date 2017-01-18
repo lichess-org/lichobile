@@ -56,7 +56,7 @@ export default class AnalyseCtrl {
     return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <SanChar>uci.slice(4, 5)];
   }
 
-  public constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean) {
+  public constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean, ply?: number) {
     this.data = data;
     this.orientation = orientation;
     this.source = source;
@@ -78,11 +78,12 @@ export default class AnalyseCtrl {
     this.explorer = explorerCtrl(this, true);
     this.debouncedExplorerSetStep = debounce(this.explorer.setStep, this.data.pref.animationDuration + 50);
 
-    const initialPath = location.hash ?
-      treePath.default(parseInt(location.hash.replace(/#/, ''), 10)) :
-      this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
-        treePath.default(this.analyse.lastPly()) :
-        treePath.default(this.analyse.firstPly());
+    const initPly = Number(ply) ||
+      (location.hash && parseInt(location.hash.replace(/#/, ''), 10)) ||
+      (this.source === 'online' && gameApi.isPlayerPlaying(this.data) ?
+        this.analyse.lastPly() : this.analyse.firstPly())
+
+    const initialPath = treePath.default(initPly)
 
     const gameMoment = window.moment(this.data.game.createdAt);
     this.vm = {

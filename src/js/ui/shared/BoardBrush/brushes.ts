@@ -7,34 +7,6 @@ export interface Brush {
 }
 
 export const brushes: { [key: string]: Brush } = {
-  green: {
-    key: 'g',
-    color: '#15781B',
-    opacity: 1,
-    lineWidth: 10,
-    circleMargin: 0
-  },
-  red: {
-    key: 'r',
-    color: '#882020',
-    opacity: 1,
-    lineWidth: 10,
-    circleMargin: 1
-  },
-  blue: {
-    key: 'b',
-    color: '#003088',
-    opacity: 1,
-    lineWidth: 10,
-    circleMargin: 2
-  },
-  yellow: {
-    key: 'y',
-    color: '#e68f00',
-    opacity: 1,
-    lineWidth: 10,
-    circleMargin: 3
-  },
   paleBlue: {
     key: 'pb',
     color: '#003088',

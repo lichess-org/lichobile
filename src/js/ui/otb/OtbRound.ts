@@ -161,7 +161,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key);
     } else {
-      this.jump(this.replay.ply);
+      this.apply(this.replay.situation());
     }
   }
 

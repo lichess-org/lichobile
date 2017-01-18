@@ -1,8 +1,7 @@
-import * as m from 'mithril';
 import * as Vnode from 'mithril/render/vnode';
 import * as helper from '../../helper';
 import treePath from '../path';
-import { empty, renderEval, isSynthetic } from '../util';
+import { empty, renderEval } from '../util';
 
 import { AnalyseCtrlInterface, AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
 
@@ -74,49 +73,19 @@ function renderMove(currentPath: string, move: AnalysisStep, path: Path, pathStr
     pathStr === currentPath ? 'current' : ''
   ].join(' ');
 
-  return Vnode('move', undefined, { 'data-path': pathStr, className }, [
-    Vnode('#', undefined, undefined, move.san[0] === 'P' ? move.san.slice(1) : move.san, undefined, undefined),
-    judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null,
-    evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
-      evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
-    )
-  ], undefined, undefined)
+  return (
+    <move data-path={pathStr} className={className}>
+      {move.san[0] === 'P' ? move.san.slice(1) : move.san}
+      {judgment && judgment.glyph ? renderGlyph(judgment.glyph) : null}
+      {evaluation && evaluation.cp ? renderEvalTag(renderEval(evaluation.cp)) : (
+        evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
+      )}
+    </move>
+  )
 }
 
 function plyToTurn(ply: number) {
   return Math.floor((ply - 1) / 2) + 1;
-}
-
-function renderVariationMenu(ctrl: AnalyseCtrlInterface, path: Path) {
-  const showing = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
-
-  if (!showing) return null;
-
-  const promotable = isSynthetic(ctrl.data) ||
-    !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
-
-  const content = m('div.variationMenu', [
-    m('button', {
-      className: 'withIcon',
-      'data-icon': 'q',
-      oncreate: helper.ontap(ctrl.deleteVariation.bind(undefined, path))
-    }, 'Delete variation'),
-    promotable ? m('button', {
-      className: 'withIcon',
-      'data-icon': 'E',
-      oncreate: helper.ontap(ctrl.promoteVariation.bind(undefined, path))
-    }, 'Promote to main line') : null
-  ]);
-
-  return (
-    <div className="overlay_popup_wrapper variationMenuPopup">
-      <div className="popup_overlay_close"
-        oncreate={helper.ontap(helper.fadesOut(() => ctrl.toggleVariationMenu(), '.overlay_popup_wrapper'))} />
-      <div className="overlay_popup">
-        {content}
-      </div>
-    </div>
-  );
 }
 
 function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
@@ -126,7 +95,6 @@ function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, pa
       <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontapY(() => ctrl.toggleVariationMenu(path))}></span>
       <line className={visiting ? ' visiting' : ''}>
         {renderVariationContent(ctrl, variation, path)}
-        {renderVariationMenu(ctrl, path)}
       </line>
     </lines>
   );
@@ -239,11 +207,11 @@ function truncateComment(text: string) {
 }
 
 function renderCommentOpening(opening: Opening) {
-  return Vnode('comment', undefined, undefined, undefined, truncateComment(opening.eco + ' ' + opening.name), undefined)
+  return <div className="comment">{truncateComment(opening.eco + ' ' + opening.name)}</div>
 }
 
 function renderComment(comment: string, colorClass: string, commentClass: string) {
-  return Vnode('comment', undefined, { className: colorClass + commentClass }, undefined, truncateComment(comment), undefined)
+  return <div className={'comment ' + colorClass + commentClass}>{truncateComment(comment)}</div>
 }
 
 function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {

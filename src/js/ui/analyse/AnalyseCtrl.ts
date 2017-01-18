@@ -396,12 +396,7 @@ export default class AnalyseCtrl {
   }
 
   public toggleVariationMenu = (path?: Path) => {
-    if (!path) {
-      this.vm.variationMenu = null;
-    } else {
-      const key = treePath.write(path.slice(0, 1));
-      this.vm.variationMenu = this.vm.variationMenu === key ? null : key;
-    }
+    this.vm.variationMenu = path
   }
 
   public deleteVariation = (path: Path) => {

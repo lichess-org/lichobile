@@ -6,6 +6,7 @@ import router from '../../../router';
 import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
 import continuePopup from '../../shared/continuePopup';
+import popupWidget from '../../shared/popup';
 import { view as renderPromotion } from '../../shared/offlineRound/promotion';
 import Board from '../../shared/Board';
 import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
@@ -32,7 +33,8 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
     analyseSettings.view(ctrl.settings),
     ctrl.notes ? notesView(ctrl.notes) : null,
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
-    continuePopup.view(ctrl.continuePopup)
+    continuePopup.view(ctrl.continuePopup),
+    renderVariationMenu(ctrl)
   ].filter(noNull);
 }
 
@@ -389,6 +391,36 @@ function renderStatus(ctrl: AnalyseCtrlInterface) {
       {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
     </div>
   );
+}
+
+function renderVariationMenu(ctrl: AnalyseCtrlInterface) {
+
+  function content() {
+    const path = ctrl.vm.variationMenu
+    const promotable = isSynthetic(ctrl.data) ||
+      !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
+
+    return m('div.variationMenu', [
+      m('button', {
+        className: 'withIcon',
+        'data-icon': 'q',
+        oncreate: helper.ontap(() => ctrl.deleteVariation(path))
+      }, 'Delete variation'),
+      promotable ? m('button', {
+        className: 'withIcon',
+        'data-icon': 'E',
+        oncreate: helper.ontap(() => ctrl.promoteVariation(path))
+      }, 'Promote to main line') : null
+    ]);
+  }
+
+  return popupWidget(
+    'variationMenuPopup',
+    null,
+    content,
+    !!ctrl.vm.variationMenu,
+    () => ctrl.toggleVariationMenu()
+  )
 }
 
 function renderActionsBar(ctrl: AnalyseCtrlInterface) {

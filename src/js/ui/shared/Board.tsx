@@ -87,7 +87,7 @@ const Board: Mithril.Component<Attrs, State> = {
           </div> : null
         }
         {
-          shapes && shapes.length ?
+          !!shapes ?
             BoardBrush(
               bounds,
               chessgroundCtrl.data.orientation,

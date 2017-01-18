@@ -126,7 +126,7 @@ export interface VM {
   pathStr: string
   step?: AnalysisStep
   cgConfig: Chessground.SetConfig
-  variationMenu: string
+  variationMenu: Path | null
   flip: boolean
   smallBoard: boolean
   analysisProgress: boolean

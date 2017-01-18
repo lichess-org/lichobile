@@ -51,12 +51,13 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const boardClass = [
       'display_board',
+      'orientation-' + chessgroundCtrl.data.orientation,
       this.boardTheme,
       customPieceTheme || this.pieceTheme,
       data.game.variant.key
     ].join(' ');
 
-    let wrapperClass = 'game_board_wrapper';
+    let wrapperClass = 'game_board_wrapper'
 
     if (wrapperClasses) {
       wrapperClass += ' ';

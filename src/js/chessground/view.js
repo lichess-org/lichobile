@@ -8,7 +8,7 @@ export default function renderBoard(ctrl) {
     undefined,
     {
       className: [
-        'cg-board orientation-' + ctrl.data.orientation,
+        'cg-board',
         ctrl.data.viewOnly ? 'view-only' : 'manipulable'
       ].join(' '),
       oncreate: function(vnode) {
@@ -27,6 +27,13 @@ export default function renderBoard(ctrl) {
         if (!ctrl.data.viewOnly) {
           ctrl.data.render();
           bindEvents(ctrl, vnode.dom);
+        }
+
+        if (ctrl.data.coordinates) {
+          makeCoords(ctrl.data.element.parentNode, !!ctrl.data.symmetricCoordinates);
+          if (ctrl.data.symmetricCoordinates) {
+            makeSymmCoords(ctrl.data.element.parentNode);
+          }
         }
       }
     },
@@ -64,9 +71,8 @@ function diffBoard(ctrl) {
     pieceId = el.cgRole + el.cgColor;
     anim = anims && anims[k];
     captured = capturedPieces && capturedPieces[k];
-    // el is a piece
-    if (el.cgRole) {
-      // there is a piece at this dom key
+    if (el.tagName === 'PIECE') {
+      // there is now a piece at this dom key
       if (pieceAtKey) {
         // continue animation if already animating and same color
         // (otherwise it could animate a captured piece)
@@ -98,8 +104,7 @@ function diffBoard(ctrl) {
         movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
       }
     }
-    // el is a square
-    else {
+    else if (el.tagName === 'SQUARE') {
       if (!orientationChange && squareClassAtKey === el.className) {
         sameSquares.add(k);
       }
@@ -340,4 +345,30 @@ function bindEvents(ctrl, el) {
   el.addEventListener('touchmove', onmove);
   el.addEventListener('touchend', onend);
   el.addEventListener('touchcancel', oncancel);
+}
+
+function renderCoords(elems, klass) {
+  const el = document.createElement('li-coords');
+  el.className = klass;
+  elems.forEach(function(content, i) {
+    const f = document.createElement('li-coord');
+    f.className = i % 2 === 0 ? 'coord-odd' : 'coord-even';
+    f.textContent = content;
+    el.appendChild(f);
+  });
+  return el;
+}
+
+function makeCoords(el, withSymm) {
+  const coords = document.createDocumentFragment();
+  coords.appendChild(renderCoords(util.ranks, 'ranks'));
+  coords.appendChild(renderCoords(util.files, 'files' + (withSymm ? ' withSymm' : '')));
+  el.appendChild(coords);
+}
+
+function makeSymmCoords(el) {
+  const coords = document.createDocumentFragment();
+  coords.appendChild(renderCoords(util.ranks, 'ranks symm'));
+  coords.appendChild(renderCoords(util.files, 'files symm'));
+  el.appendChild(coords);
 }

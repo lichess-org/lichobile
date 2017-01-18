@@ -60,3 +60,54 @@ piece
   transform translate3d(0, 0, 0)
   border-radius 50%
   z-index 3
+
+.orientation-black
+  > li-coords.files
+    flex-flow row-reverse
+  > li-coords.ranks
+    flex-flow column
+
+li-coords
+  position absolute
+  display flex
+  align-items center
+  font-family Cousine
+  font-weight bold
+  font-size 11px
+  line-height 11px
+  color #fff
+  @media (min-width 600px)
+    font-size 15px
+    line-height 15px
+  &.files
+    bottom 0
+    left 1px
+    flex-flow: row;
+    width: 100%;
+    &.withSymm
+      left initial
+      right 1px
+      > li-coord
+        text-align right
+    &.symm
+      transform rotate(180deg)
+      bottom initial
+      top 0
+      > li-coord
+        text-align right
+    > li-coord
+      text-align left
+  &.ranks
+    right 1px
+    top 1px
+    flex-flow: column-reverse
+    height: 100%
+    &.symm
+      transform rotate(180deg)
+      top initial
+      right initial
+      left 1px
+      bottom 1px
+
+li-coord
+  flex 1 1 auto

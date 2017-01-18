@@ -14,7 +14,7 @@ function makeConfig(data, sit) {
     lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
     check: sit.check,
     coordinates: settings.game.coords(),
-    symmetricCoordinates: data.game.id === 'offline_otb' && settings.otb.seeSymmetricCoordinates(),
+    symmetricCoordinates: data.game.id === 'offline_otb',
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: settings.game.highlights(),

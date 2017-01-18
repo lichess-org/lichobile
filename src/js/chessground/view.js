@@ -46,13 +46,13 @@ function diffBoard(ctrl) {
   const pieces = ctrl.data.pieces;
   const anims = ctrl.data.animation.current.anims;
   const capturedPieces = ctrl.data.animation.current.capturedPieces;
-  const squares = computeSquareMap(ctrl);
+  const squares = computeSquareClassesMap(ctrl);
   const samePieces = new Set();
   const sameSquares = new Set();
   const movedPieces = new Map();
   const movedSquares = new Map();
   const piecesKeys = Object.keys(pieces);
-  let el, squareAtKey, pieceAtKey, pieceId, anim, captured, translate;
+  let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
   let mvdset, mvd;
 
   // walk over all dom elements, apply animations and flag moved pieces
@@ -60,7 +60,7 @@ function diffBoard(ctrl) {
     el = els[i];
     let k = el.cgKey;
     pieceAtKey = pieces[k];
-    squareAtKey = squares.get(k);
+    squareClassAtKey = squares.get(k);
     pieceId = el.cgRole + el.cgColor;
     anim = anims && anims[k];
     captured = capturedPieces && capturedPieces[k];
@@ -100,7 +100,7 @@ function diffBoard(ctrl) {
     }
     // el is a square
     else {
-      if (!orientationChange && squareAtKey && squareAtKey === el.className) {
+      if (!orientationChange && squareClassAtKey === el.className) {
         sameSquares.add(k);
       }
       else {
@@ -119,10 +119,7 @@ function diffBoard(ctrl) {
     let p = pieces[k];
     pieceId = p.role + p.color;
     anim = anims && anims[k];
-    // same piece: nothing to do
-    if (samePieces.has(k)) {
-      continue;
-    } else {
+    if (!samePieces.has(k)) {
       mvdset = movedPieces.get(pieceId);
       mvd = mvdset && mvdset.pop();
       // a same piece was moved
@@ -238,7 +235,7 @@ function addSquare(squares, key, klass) {
   squares.set(key, (squares.get(key) || '') + ' ' + klass);
 }
 
-function computeSquareMap(ctrl) {
+function computeSquareClassesMap(ctrl) {
   const d = ctrl.data;
   const squares = new Map();
   if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
@@ -270,7 +267,7 @@ function computeSquareMap(ctrl) {
 }
 
 function renderSquares(ctrl, ctx) {
-  var squares = computeSquareMap(ctrl);
+  var squares = computeSquareClassesMap(ctrl);
 
   var dom = [];
   squares.forEach((v, k) => {

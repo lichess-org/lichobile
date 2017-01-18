@@ -22,6 +22,7 @@ export interface Attrs {
   color: Color
   fen?: string
   variant?: VariantKey
+  ply?: number
 }
 
 export interface State {
@@ -36,6 +37,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     const orientation: Color = vnode.attrs.color || 'white';
     const fenArg = vnode.attrs.fen;
     const variant = vnode.attrs.variant;
+    const ply = vnode.attrs.ply;
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined;
 
@@ -46,13 +48,14 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       .then(cfg => {
         const elapsed = performance.now() - now
         setTimeout(() => {
-          this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack);
+          this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack, ply);
           redraw();
         }, Math.max(400 - elapsed, 0))
       })
       .catch(err => {
         handleXhrError(err);
         router.set('/analyse', true);
+        redraw();
       });
     } else if (source === 'offline' && gameId === 'otb') {
       helper.analyticsTrackView('Analysis (offline otb)');
@@ -62,7 +65,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
           router.set('/analyse', true);
         } else {
           otbData.player.spectator = true;
-          this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack);
+          this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack, ply);
           redraw();
         }
       }, 400)
@@ -74,7 +77,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
           router.set('/analyse', true);
         } else {
           aiData.player.spectator = true;
-          this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack);
+          this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack, ply);
           redraw();
         }
       }, 400)
@@ -91,7 +94,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         router.set(url, true)
       } else {
         helper.analyticsTrackView('Analysis (empty)');
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
+        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply);
         redraw();
       }
     }

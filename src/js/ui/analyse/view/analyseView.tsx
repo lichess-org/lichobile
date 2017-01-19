@@ -273,7 +273,7 @@ function renderEvalBox(ctrl: AnalyseCtrlInterface) {
           state.percent = percent
         }}
         className="analyse-cevalBar"
-        style={{ transform: `translateX(-${100 - percent}%)` }}
+        style={{ width: `${percent}%` }}
       />
       { step.ceval ?
       <div className="analyse-engine_info">

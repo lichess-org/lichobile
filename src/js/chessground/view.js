@@ -49,7 +49,7 @@ function diffBoard(ctrl) {
   const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation;
   d.prevOrientation = d.orientation;
   const bounds = d.bounds;
-  const els = ctrl.data.element.childNodes;
+  const elements = ctrl.data.element.childNodes;
   const pieces = ctrl.data.pieces;
   const anims = ctrl.data.animation.current.anims;
   const capturedPieces = ctrl.data.animation.current.capturedPieces;
@@ -62,9 +62,9 @@ function diffBoard(ctrl) {
   let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
   let mvdset, mvd;
 
-  // walk over all dom elements, apply animations and flag moved pieces
-  for (let i = 0, len = els.length; i < len; i++) {
-    el = els[i];
+  // walk over all board dom elements, apply animations and flag moved pieces
+  for (let i = 0, len = elements.length; i < len; i++) {
+    el = elements[i];
     let k = el.cgKey;
     pieceAtKey = pieces[k];
     squareClassAtKey = squares.get(k);
@@ -174,8 +174,9 @@ function diffBoard(ctrl) {
   });
 
   // remove any dom el that remains in the moved sets
-  movedPieces.forEach(p => p.forEach(e => d.element.removeChild(e)));
-  movedSquares.forEach(s => s.forEach(e => d.element.removeChild(e)));
+  const rmEl = e => d.element.removeChild(e);
+  movedPieces.forEach(els => els.forEach(rmEl));
+  movedSquares.forEach(els => els.forEach(rmEl));
 }
 
 function renderPieceDom(piece, key, vdom, isAnimating) {

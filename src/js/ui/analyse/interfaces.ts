@@ -227,6 +227,8 @@ export interface ExplorerMove {
   checkmate: boolean
   stalemate: boolean
   insufficient_material: boolean
+  variant_win: boolean
+  variant_loss: boolean
 }
 
 export interface ExplorerPlayer {
@@ -251,4 +253,6 @@ export interface ExplorerData {
   recentGames?: Array<ExplorerGame>
   checkmate?: boolean
   stalemate?: boolean
+  variant_win?: boolean
+  variant_loss?: boolean
 }

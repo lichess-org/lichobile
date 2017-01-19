@@ -16,7 +16,6 @@ export default function cevalCtrl(
 
   const engine = cevalEngine({ minDepth, maxDepth, cores });
 
-  let curDepth = 0;
   let started = false;
   let isEnabled = settings.analyse.enableCeval();
 
@@ -25,7 +24,6 @@ export default function cevalCtrl(
   }
 
   function onEmit(res: CevalEmit) {
-    curDepth = res.ceval.depth;
     emit(res);
   }
 
@@ -88,10 +86,10 @@ export default function cevalCtrl(
     init() {
       return engine.init(variant).then(() => {
         initialized = true;
-      });
+      })
     },
     isInit() {
-      return initialized;
+      return initialized
     },
     cores,
     start,
@@ -100,10 +98,7 @@ export default function cevalCtrl(
     allowed,
     enabled,
     toggle() {
-      isEnabled = settings.analyse.enableCeval();
-    },
-    percentComplete() {
-      return Math.round(100 * curDepth / maxDepth);
+      isEnabled = settings.analyse.enableCeval()
     }
-  };
+  }
 }

@@ -166,13 +166,81 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
   }
 }
 
+const spinnerPearl = <div className="spinner fa fa-hourglass-half"></div>
+const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
+  onbeforeupdate({ attrs }) {
+    return !attrs.ctrl.vm.replaying
+  },
+  view({ attrs }) {
+    const { ctrl } = attrs
+    const step = ctrl.vm.step
+    const { rEval, ceval } = step
+    const fav = rEval || ceval
+    let pearl: Mithril.Children, percent: number;
+
+    if (fav && fav.cp !== undefined) {
+      pearl = renderEval(fav.cp);
+      percent = ctrl.nextStepBest() ?
+        100 :
+        (ceval ? Math.min(100, Math.round(100 * ceval.depth / ceval.maxDepth)) : 0)
+    }
+    else if (fav && fav.mate) {
+      pearl = '#' + fav.mate
+      percent = 100
+    }
+    else if (ctrl.gameOver()) {
+      pearl = '-'
+      percent = 0
+    }
+    else  {
+      pearl = ctrl.vm.replaying ? '' : spinnerPearl
+      percent = 0
+    }
+
+    return (
+      <div className="analyse-cevalBox">
+        <div className="analyse-curEval">
+          { pearl }
+          { ceval && ceval.bestSan ?
+          <div className="analyse-bestMove">
+            best {ceval.bestSan}
+          </div> : null
+          }
+        </div>
+        <div
+          oncreate={({ state }: Mithril.ChildNode) => state.percent = percent}
+          onupdate={({ dom, state }: Mithril.ChildNode) => {
+            if (state.percent > percent) {
+              // remove el to avoid downward animation
+              const p = dom.parentNode;
+              if (p) {
+                p.removeChild(dom);
+                p.appendChild(dom);
+              }
+            }
+            state.percent = percent
+          }}
+          className="analyse-cevalBar"
+          style={{ width: `${percent}%` }}
+        />
+        { ceval ?
+        <div className="analyse-engine_info">
+          <p>depth {ceval.depth}/{ceval.maxDepth}</p>
+          <p>{Math.round(ceval.nps / 1000)} kn/s, {ctrl.ceval.cores} {ctrl.ceval.cores > 1 ? 'cores' : 'core' }</p>
+        </div> : null
+        }
+      </div>
+    );
+  }
+}
+
 function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait)}
       <div className="analyse-game">
         { ctrl.ceval.enabled() ?
-          renderEvalBox(ctrl) : null
+          m(EvalBox, { ctrl }) : null
         }
         {m(Replay, { ctrl })}
       </div>
@@ -225,64 +293,6 @@ function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
 function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
   const step = ctrl.vm.step;
   return step.checkCount[oppositeColor(color)];
-}
-
-function renderEvalBox(ctrl: AnalyseCtrlInterface) {
-  const ceval = ctrl.currentAnyEval();
-  const step = ctrl.vm.step;
-  let pearl: Mithril.Children, percent: number;
-
-  if (ceval && ceval.cp !== undefined) {
-    pearl = renderEval(ceval.cp);
-    percent = ctrl.ceval.enabled() ? ctrl.ceval.percentComplete() : 0;
-  }
-  else if (ceval && ceval.mate) {
-    pearl = '#' + ceval.mate;
-    percent = ctrl.ceval.enabled() ? 100 : 0;
-  }
-  else if (ctrl.gameOver()) {
-    pearl = '-';
-    percent = 0;
-  }
-  else  {
-    pearl = <div className="spinner fa fa-hourglass-half"></div>;
-    percent = 0;
-  }
-
-  return (
-    <div className="analyse-cevalBox">
-      <div className="analyse-curEval">
-        { pearl }
-        { step.ceval && step.ceval.bestSan ?
-        <div className="analyse-bestMove">
-          best {step.ceval.bestSan}
-        </div> : null
-        }
-      </div>
-      <div
-        oncreate={({ state }: Mithril.ChildNode) => state.percent = percent}
-        onupdate={({ dom, state }: Mithril.ChildNode) => {
-          if (state.percent > percent) {
-            // remove el to avoid downward animation
-            const p = dom.parentNode;
-            if (p) {
-              p.removeChild(dom);
-              p.appendChild(dom);
-            }
-          }
-          state.percent = percent
-        }}
-        className="analyse-cevalBar"
-        style={{ width: `${percent}%` }}
-      />
-      { step.ceval ?
-      <div className="analyse-engine_info">
-        <p>depth {step.ceval.depth}/{step.ceval.maxDepth}</p>
-        <p>{Math.round(step.ceval.nps / 1000)} kn/s, {ctrl.ceval.cores} {ctrl.ceval.cores > 1 ? 'cores' : 'core' }</p>
-      </div> : null
-      }
-    </div>
-  );
 }
 
 function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {

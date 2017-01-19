@@ -417,10 +417,6 @@ export default class AnalyseCtrl {
     this.toggleVariationMenu();
   }
 
-  public currentAnyEval = () => {
-    return this.vm.step ? (this.vm.step.rEval || this.vm.step.ceval) : null;
-  }
-
   private allowCeval() {
     return (
       this.source === 'offline' || util.isSynthetic(this.data) || !gameApi.playable(this.data)

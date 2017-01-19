@@ -32,7 +32,6 @@ export interface RemoteAnalysisMove {
   judgment?: EvalJugdment
 }
 
-// TODO refactor to keep only one interface for remove eval
 export interface RemoteEval {
   cp: number
   best?: string
@@ -115,7 +114,6 @@ export interface CevalCtrlInterface {
   allowed: boolean
   enabled(): boolean
   toggle(): void
-  percentComplete(): number
   cores: number
 }
 
@@ -167,7 +165,6 @@ export interface AnalyseCtrlInterface {
   stopff(): void
   stoprewind(): void
   nextStepBest(): string | null
-  currentAnyEval(): Ceval | RemoteEval
   explorerMove(uci: string): void
   debouncedScroll(): void
   gameOver(): boolean

@@ -221,7 +221,7 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
             state.percent = percent
           }}
           className="analyse-cevalBar"
-          style={{ width: `${percent}%` }}
+          style={{ transform: `translateX(-${100 - percent}%)` }}
         />
         { ceval ?
         <div className="analyse-engine_info">

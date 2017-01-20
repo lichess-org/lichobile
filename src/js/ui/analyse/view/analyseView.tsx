@@ -1,3 +1,4 @@
+import * as ProgressBar from 'progressbar.js';
 import * as m from 'mithril';
 import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';
@@ -208,20 +209,22 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
           }
         </div>
         <div
-          oncreate={({ state }: Mithril.ChildNode) => state.percent = percent}
-          onupdate={({ dom, state }: Mithril.ChildNode) => {
+          oncreate={({ dom, state }: Mithril.ChildNode) => {
+            state.progressbar = new ProgressBar.Line(dom, {
+              color: '#c4a86f',
+            })
+            state.progressbar.set(percent / 100)
+            state.percent = percent
+          }}
+          onupdate={({ state }: Mithril.ChildNode) => {
             if (state.percent > percent) {
-              // remove el to avoid downward animation
-              const p = dom.parentNode;
-              if (p) {
-                p.removeChild(dom);
-                p.appendChild(dom);
-              }
+              state.progressbar.set(percent / 100)
+            } else {
+              state.progressbar.animate(percent / 100)
             }
             state.percent = percent
           }}
           className="analyse-cevalBar"
-          style={{ transform: `translateX(-${100 - percent}%)` }}
         />
         { ceval ?
         <div className="analyse-engine_info">

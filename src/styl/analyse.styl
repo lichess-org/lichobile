@@ -182,7 +182,7 @@ line
       font-size 20px
 
 .analyse-cevalBox
-  flex 0 0 36px
+  flex 0 0 38px
   position relative
   overflow hidden
   width 100%
@@ -190,6 +190,7 @@ line
   flex-flow row nowrap
   align-items center
   align-content center
+  background lighten(bgdark, 5%)
 
 .analyse-engine_info
   flex 1 0
@@ -205,9 +206,10 @@ line
 .analyse-cevalBar
   position absolute
   width 100%
-  height 2px
+  height 3px
   top 0
   left 0
+  background lighten(bgdark, 15%)
 
 .analyse-curEval
   flex 0 0 auto
@@ -220,7 +222,7 @@ line
   font-size 16px
   font-weight bold
   padding 3px 5px
-  background lighten(bgdark, 5%)
+  background lighten(bgdark, 10%)
   > .spinner
     width initial
     height initial
@@ -543,6 +545,15 @@ line
   move.active
     background darken(bglight, 10%)
 
+  interrupt
+    background darken(bglight, 5%)
+
+  line.visiting
+    > index, > move
+      color lighten(gold, 20%)
+    > move.current
+      color gold
+
   .analyse-replay > turn > index, .analysisMeta
     background darken(bglight, 7%)
 
@@ -551,8 +562,12 @@ line
     text-shadow: 0 1px 0 #FFF;
     color: #848484;
 
+  .analyse-cevalBox
+    background darken(bglight, 5%)
   .analyse-curEval
-    background darken(bglight, 7%)
+    background darken(bglight, 8%)
+  .analyse-cevalBar
+    background darken(bglight, 10%)
 
   .explorer-fixedTitle
     background bgdark

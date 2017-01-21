@@ -202,7 +202,7 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
       <div className="analyse-cevalBox">
         <div className="analyse-curEval">
           { pearl }
-          { ceval && ceval.bestSan ?
+          { ctrl.vm.showBestMove && ceval && ceval.bestSan ?
           <div className="analyse-bestMove">
             best {ceval.bestSan}
           </div> : null
@@ -212,6 +212,7 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
           oncreate={({ dom, state }: Mithril.ChildNode) => {
             state.progressbar = new ProgressBar.Line(dom, {
               color: '#c4a86f',
+              strokeWidth: '1.2'
             })
             state.progressbar.set(percent / 100)
             state.percent = percent

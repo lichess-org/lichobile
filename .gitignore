@@ -1,5 +1,6 @@
 npm-debug.log
 
+/app.js.map
 /*.mobileprovision
 /*.keystore
 /build.json

@@ -26,12 +26,13 @@ declare type DestsMap = {
 }
 
 interface LichessOptions {
-  apiEndPoint: string;
-  socketEndPoint: string;
-  mode: string;
-  version: string;
-  gaId: string;
-  gcmSenderId: string;
+  apiEndPoint: string
+  socketEndPoint: string
+  mode: string
+  version: string
+  gaId: string
+  gcmSenderId: string
+  sentryDSN: string
 }
 
 interface Window {

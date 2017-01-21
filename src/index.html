@@ -19,7 +19,10 @@
         gaId: "<!-- @echo GA_ID -->",
         <!-- @endif -->
         <!-- @ifdef GCM_senderId -->
-        gcmSenderId: "<!-- @echo GCM_senderId -->"
+        gcmSenderId: "<!-- @echo GCM_senderId -->",
+        <!-- @endif -->
+        <!-- @ifdef SENTRY_DSN -->
+        sentryDSN: "<!-- @echo SENTRY_DSN -->"
         <!-- @endif -->
       };
     </script>

@@ -1,6 +1,6 @@
-import board from './board'
-import util from './util'
-import hold from './hold'
+import board from './board';
+import util from './util';
+import hold from './hold';
 
 function renderSquareTarget(data, cur) {
   var pos = util.key2pos(cur.over),
@@ -41,16 +41,6 @@ function getPieceByKey(data, key) {
   return null;
 }
 
-function undoDomChanges(data) {
-  var cur = data.draggable.current;
-  if (cur.draggingPiece) {
-    var translate = util.posToTranslate(cur.origPos, data.orientation === 'white', data.bounds);
-    cur.draggingPiece.style.transform = util.translate(translate);
-    cur.draggingPiece.classList.remove('dragging');
-    cur.draggingPiece.classList.remove('magnified');
-  }
-}
-
 function start(data, e) {
   if (e.touches && e.touches.length > 1) return; // support one finger touch only
   e.preventDefault();
@@ -65,7 +55,6 @@ function start(data, e) {
   board.selectSquare(data, orig);
   var stillSelected = data.selected === orig;
   if (data.pieces[orig] && stillSelected && board.isDraggable(data, orig)) {
-    var bpos = util.boardpos(util.key2pos(orig), data.orientation === 'white');
     var squareBounds = util.computeSquareBounds(data.orientation, bounds, orig);
     var origPos = util.key2pos(orig);
     data.draggable.current = {
@@ -170,6 +159,7 @@ function move(data, e) {
       if (data.draggable.magnified) {
         cur.draggingPiece.classList.add('magnified');
       }
+      cur.draggingPiece.cgDragging = true;
       processDrag(data);
     }
   }
@@ -196,7 +186,6 @@ function end(data, e) {
     return;
   }
   removeSquareTarget(data);
-  undoDomChanges(data);
   board.unsetPremove(data);
   board.unsetPredrop(data);
   if (draggable.current.started) {
@@ -216,7 +205,6 @@ function end(data, e) {
 
 function cancel(data) {
   removeSquareTarget(data);
-  undoDomChanges(data);
   if (data.draggable.current.orig) {
     data.draggable.current = {};
     board.selectSquare(data, null);
@@ -230,4 +218,4 @@ export default {
   end,
   cancel,
   processDrag // must be exposed for board editors
-}
+};

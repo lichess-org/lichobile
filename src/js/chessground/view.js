@@ -59,7 +59,7 @@ function diffBoard(ctrl) {
   const movedPieces = new Map();
   const movedSquares = new Map();
   const piecesKeys = Object.keys(pieces);
-  let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
+  let el, dragging, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
   let mvdset, mvd;
 
   // walk over all board dom elements, apply animations and flag moved pieces
@@ -71,9 +71,18 @@ function diffBoard(ctrl) {
     pieceId = el.cgRole + el.cgColor;
     anim = anims && anims[k];
     captured = capturedPieces && capturedPieces[k];
+    dragging = d.draggable.current.orig === k;
     if (el.tagName === 'PIECE') {
       // there is now a piece at this dom key
       if (pieceAtKey) {
+        // if piece not being dragged, remove dragging style
+        if (!dragging && el.cgDragging) {
+          translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
+          el.style.transform = util.translate(translate);
+          el.classList.remove('dragging');
+          el.classList.remove('magnified');
+          el.cgDragging = false;
+        }
         // continue animation if already animating and same color
         // (otherwise it could animate a captured piece)
         if (anim && el.cgAnimating && el.cgColor === pieceAtKey.color) {

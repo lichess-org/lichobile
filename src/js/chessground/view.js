@@ -79,8 +79,6 @@ function diffBoard(ctrl) {
         if (!dragging && el.cgDragging) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
           el.style.transform = util.translate(translate);
-          el.classList.remove('dragging');
-          el.classList.remove('magnified');
           el.cgDragging = false;
         }
         // continue animation if already animating and same color

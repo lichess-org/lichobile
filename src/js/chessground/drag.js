@@ -31,15 +31,6 @@ function removeSquareTarget(data) {
   }
 }
 
-function undoDomChanges(data) {
-  var cur = data.draggable.current;
-  if (cur.draggingPiece) {
-    cur.draggingPiece.classList.remove('dragging');
-    cur.draggingPiece.classList.remove('magnified');
-  }
-}
-
-
 function getPieceByKey(data, key) {
   const els = data.element.childNodes;
   for (let i = 0, len = els.length; i < len; i++) {
@@ -195,7 +186,6 @@ function end(data, e) {
     return;
   }
   removeSquareTarget(data);
-  undoDomChanges(data);
   board.unsetPremove(data);
   board.unsetPredrop(data);
   if (draggable.current.started) {
@@ -215,7 +205,6 @@ function end(data, e) {
 
 function cancel(data) {
   removeSquareTarget(data);
-  undoDomChanges(data);
   if (data.draggable.current.orig) {
     data.draggable.current = {};
     board.selectSquare(data, null);

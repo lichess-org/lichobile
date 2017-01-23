@@ -92,6 +92,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         let url = `/analyse/variant/${settingsVariant}`
         if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
         router.set(url, true)
+        redraw();
       } else {
         helper.analyticsTrackView('Analysis (empty)');
         this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply);

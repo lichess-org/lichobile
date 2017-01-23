@@ -135,6 +135,10 @@ export function featured(channel: string, flip: boolean): Promise<OnlineGameData
   return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
+export function importMasterGame(gameId: string, orientation: Color): Promise<OnlineGameData> {
+  return fetchJSON(`/import/master/${gameId}/${orientation}`)
+}
+
 export function setServerLang(lang: string): Promise<void> {
   if (session.isConnected()) {
     return fetchJSON('/translation/select', {

@@ -544,16 +544,13 @@ line
   move.active
     background darken(bglight, 10%)
 
-  interrupt
-    background darken(bglight, 5%)
-
   line.visiting
     > index, > move
       color lighten(gold, 20%)
     > move.current
       color gold
 
-  .analyse-replay > turn > index, .analysisMeta
+  .analyse-replay > turn > index, interrupt
     background darken(bglight, 7%)
 
   .analyse_variant_selector

@@ -180,9 +180,8 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
 
     if (fav && fav.cp !== undefined) {
       pearl = renderEval(fav.cp);
-      percent = ctrl.nextStepBest() ?
-        100 :
-        (ceval ? Math.min(100, Math.round(100 * ceval.depth / ceval.maxDepth)) : 0)
+      percent = ceval ?
+        Math.min(100, Math.round(100 * ceval.depth / ceval.maxDepth)) : 0
     }
     else if (fav && fav.mate) {
       pearl = '#' + fav.mate

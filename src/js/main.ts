@@ -68,7 +68,7 @@ function main() {
     window.ga.startTrackerWithId(window.lichess.gaId);
   }
 
-  if (window.lichess.target === 'cordova' && window.lichess.sentryDSN) {
+  if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
     Raven.config(window.lichess.sentryDSN, {
       release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
     }).install()

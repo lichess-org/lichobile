@@ -69,6 +69,7 @@ function buildScripts(src, dest) {
 gulp.task('html', function() {
   var context = require('./' + options.env);
   context.TARGET = options.target;
+  context.MODE = options.mode;
 
   return buildHtml('src', 'www', context);
 });

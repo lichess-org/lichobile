@@ -26,7 +26,6 @@ declare type DestsMap = {
 }
 
 interface LichessOptions {
-  target: string
   apiEndPoint: string
   socketEndPoint: string
   mode: string

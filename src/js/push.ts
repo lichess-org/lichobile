@@ -17,7 +17,7 @@ interface NotificationOpenedData {
   isAppInFocus: boolean
   notification: {
     payload: {
-      additionalData: string
+      additionalData: any
     }
   }
 }
@@ -48,7 +48,7 @@ function notificationReceivedCallback(data: NotificationReceivedData) {
 }
 
 function notificationOpenedCallback(data: NotificationOpenedData) {
-  const additionalData = data.notification.payload.additionalData && JSON.parse(data.notification.payload.additionalData);
+  const additionalData = data.notification.payload.additionalData
   if (additionalData && additionalData.userData) {
     if (!data.isAppInFocus) {
       switch (additionalData.userData.type) {

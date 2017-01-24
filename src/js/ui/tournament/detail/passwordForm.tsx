@@ -43,7 +43,7 @@ function renderForm() {
         <div className={'select_input no_arrow_after' + (settings.tournament.private() ? '' : ' notVisible')}>
           <div className="text_input_container">
             <label>Password: </label>
-            <input type="text" id="password" className="passwordField" />
+            <input type="text" id="tournamentPassword" className="passwordField" />
           </div>
         </div>
       </fieldset>

@@ -105,19 +105,20 @@ export default function(cfg) {
 
   this.explode = function(keys) {
     if (!this.data.render) return;
-    this.vm.exploding = {
+    const self = this;
+    self.vm.exploding = {
       stage: 1,
       keys: keys
     };
-    this.data.renderRAF();
-    setTimeout(function() {
-      this.vm.exploding.stage = 2;
-      this.data.renderRAF();
-      setTimeout(function() {
-        this.vm.exploding = false;
-        this.data.renderRAF();
-      }.bind(this), 120);
-    }.bind(this), 120);
+    self.data.renderRAF();
+    setTimeout(() => {
+      self.vm.exploding.stage = 2;
+      self.data.renderRAF();
+      setTimeout(() => {
+        self.vm.exploding = null;
+        self.data.renderRAF();
+      }, 120);
+    }, 120);
   }.bind(this);
 
   // view-only needs only `width` and `height` props

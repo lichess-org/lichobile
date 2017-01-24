@@ -1,9 +1,10 @@
 import sound from '../../sound';
 import router from '../../router';
 import * as chess from '../../chess';
+import * as chessFormat from '../../utils/chessFormat';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
-import * as gameApi from '../../lichess/game';
+import { specialFenVariants } from '../../lichess/variant';
 import { oppositeColor } from '../../utils';
 import { setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
@@ -14,7 +15,7 @@ import makeData from '../shared/offlineRound/data';
 import { setResult } from '../shared/offlineRound';
 import atomic from '../shared/round/atomic';
 import crazyValid from '../shared/round/crazy/crazyValid';
-import { OtbRoundInterface, OtbVM } from '../shared/round';
+import { OtbRoundInterface, OtbVM, PromotingInterface } from '../shared/round';
 import Replay from '../shared/offlineRound/Replay';
 
 import actions from './actions';
@@ -27,7 +28,7 @@ interface InitPayload {
 }
 
 
-export default class OtbRound implements OtbRoundInterface {
+export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public setupFen: string;
   public data: OfflineGameData;
   public actions: any;
@@ -99,7 +100,7 @@ export default class OtbRound implements OtbRoundInterface {
     const payload: InitPayload = {
       variant
     };
-    if (setupFen && !['horde', 'racingKings'].includes(variant)) {
+    if (setupFen && !specialFenVariants.includes(variant)) {
       payload.fen = setupFen;
     }
 
@@ -112,6 +113,7 @@ export default class OtbRound implements OtbRoundInterface {
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
+        player: data.setup.player,
         color: this.data && oppositeColor(this.data.player.color) || data.setup.player,
         pref: {
           centerPiece: true
@@ -139,7 +141,7 @@ export default class OtbRound implements OtbRoundInterface {
   }
 
   private userMove = (orig: Pos, dest: Pos) => {
-    if (!promotion.start(this, orig, dest, this.onPromotion)) {
+    if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest);
     }
   }
@@ -159,7 +161,7 @@ export default class OtbRound implements OtbRoundInterface {
     if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key);
     } else {
-      this.jump(this.replay.ply);
+      this.apply(this.replay.situation());
     }
   }
 
@@ -173,7 +175,7 @@ export default class OtbRound implements OtbRoundInterface {
       this.chessground.set({
         fen: sit.fen,
         turnColor: sit.player,
-        lastMove: lastUci ? [<Pos>lastUci.slice(0, 2), <Pos>lastUci.slice(2, 4)] : null,
+        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : null,
         dests: sit.dests,
         movableColor: sit.player,
         check: sit.check
@@ -204,6 +206,10 @@ export default class OtbRound implements OtbRoundInterface {
       this.actions.open();
       redraw();
     }, 500);
+  }
+
+  public player = () => {
+    return this.replay.situation().player
   }
 
   public jump = (ply: number) => {

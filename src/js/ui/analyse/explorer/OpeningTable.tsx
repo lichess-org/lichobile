@@ -2,6 +2,7 @@ import router from '../../../router';
 import * as helper from '../../helper';
 import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
 import settings from '../../../settings';
+import * as xhr from '../../../xhr';
 
 let pieceNotation: boolean;
 
@@ -91,6 +92,11 @@ function link(ctrl: AnalyseCtrlInterface, e: Event) {
   const gameId = (getTR(e).dataset as any).id;
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
     router.set(`/analyse/online/${gameId}/${orientation}`);
+  } else {
+    xhr.importMasterGame(gameId, orientation)
+    .then((data: OnlineGameData) =>
+      router.set(`/analyse/online/${data.game.id}/${orientation}`)
+    )
   }
 }
 

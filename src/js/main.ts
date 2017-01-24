@@ -5,7 +5,7 @@
 import './polyfills';
 import 'whatwg-fetch';
 
-// for moment a global object makes loading locales easier
+import * as Raven from 'raven-js'
 import * as moment from 'moment';
 window.moment = moment;
 
@@ -66,6 +66,12 @@ function main() {
 
   if (window.lichess.gaId) {
     window.ga.startTrackerWithId(window.lichess.gaId);
+  }
+
+  if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
+    Raven.config(window.lichess.sentryDSN, {
+      release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
+    }).install()
   }
 
   if (cordova.platformId === 'android') {

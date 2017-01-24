@@ -1,267 +1,286 @@
 // standard 2D boards
 .brown > .cg-board
   background-image url('../../images/board/svg/brown.svg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.brown.orientation-white
+  > .files > li-coord
+    &.coord-even
+      color rgba(#b58863, 1)
+    &.coord-odd
       color rgba(#f0d9b5, 1)
-    &:nth-child(even)
-      color rgba(#b58863, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#f0d9b5, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#b58863, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
-      color rgba(#b58863, 1)
-    &:nth-child(even)
+.brown.orientation-black
+  > .files > li-coord
+    &.coord-even
       color rgba(#f0d9b5, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+    &.coord-odd
       color rgba(#b58863, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+  > .ranks > li-coord
+    &.coord-even
+      color rgba(#b58863, 1)
+    &.coord-odd
       color rgba(#f0d9b5, 1)
 .blue > .cg-board
   background-image url('../../images/board/svg/blue.svg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.blue.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#dee3e6, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#8ca2ad, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#dee3e6, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#8ca2ad, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.blue.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#8ca2ad, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#dee3e6, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#8ca2ad, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#dee3e6, 1)
 .green > .cg-board
   background-image url('../../images/board/svg/green.svg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.green.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#ffffdd, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#86a666, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#ffffdd, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#86a666, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.green.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#86a666, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#ffffdd, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#86a666, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#ffffdd, 1)
 .purple > .cg-board
   background-image url('../../images/board/svg/purple.svg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.purple.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#9f90b0, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#7d4a8d, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#9f90b0, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#7d4a8d, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.purple.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#7d4a8d, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#9f90b0, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#7d4a8d, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#9f90b0, 1)
 .wood > .cg-board
   background-image url('../../images/board/wood.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.wood.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#d29d51, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#985520, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#d29d51, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#985520, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.wood.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#985520, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#d29d51, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#985520, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#d29d51, 1)
 .wood2 > .cg-board
   background-image url('../../images/board/wood2.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.wood2.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#94794c, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(darken(#836839, 20%), 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#94794c, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(darken(#836839, 20%), 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
-      color rgba(#836839, 1)
-    &:nth-child(even)
+.wood2.orientation-black
+  > .files > li-coord
+    &.coord-odd
+      color rgba(darken(#836839, 20%), 1)
+    &.coord-even
       color rgba(#94794c, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
-      color rgba(#836839, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+  > .ranks > li-coord
+    &.coord-even
+      color rgba(darken(#836839, 20%), 1)
+    &.coord-odd
       color rgba(#94794c, 1)
 .wood3 > .cg-board
   background-image url('../../images/board/wood3.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.wood3.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#bdb3a7, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#91683a, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#bdb3a7, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#91683a, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.wood3.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#91683a, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#bdb3a7, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#91683a, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#bdb3a7, 1)
 .maple > .cg-board
   background-image url('../../images/board/maple.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.maple.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#ECCCA3, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#BB7D4A, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#ECCCA3, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#BB7D4A, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.maple.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#BB7D4A, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#ECCCA3, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#BB7D4A, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#ECCCA3, 1)
 .blue3 > .cg-board
   background-image url('../../images/board/blue3.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
-      color rgba(#c3cdd7, 1)
-    &:nth-child(even)
-      color rgba(#487aad, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
-      color rgba(#c3cdd7, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
-      color rgba(#487aad, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
-      color rgba(#487aad, 1)
-    &:nth-child(even)
-      color rgba(#c3cdd7, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
-      color rgba(#487aad, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
-      color rgba(#c3cdd7, 1)
+.blue3
+  > li-coords
+    color rgba(#c3cdd7, 1)
+  &.orientation-white
+    > .files > li-coord
+      &.coord-even
+        color rgba(#487aad, 1)
+    > .ranks > li-coord
+      &.coord-odd
+        color rgba(#487aad, 1)
+  &.orientation-black
+    > .files > li-coord
+      &.coord-odd
+        color rgba(#487aad, 1)
+    > .ranks > li-coord
+      &.coord-even
+        color rgba(#487aad, 1)
 .canvas > .cg-board
   background-image url('../../images/board/canvas.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.canvas.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#c3cdd7, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#7687a3, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#c3cdd7, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#7687a3, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.canvas.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#7687a3, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#c3cdd7, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#7687a3, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#c3cdd7, 1)
 .grey > .cg-board
   background-image url('../../images/board/grey.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.grey.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#a3a3a3, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#888888, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#a3a3a3, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#888888, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.grey.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#888888, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#a3a3a3, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#888888, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#a3a3a3, 1)
 .metal > .cg-board
   background-image url('../../images/board/metal.jpg')
-  > square[data-coord-white-x]
-    &:nth-child(odd)
+.metal.orientation-white
+  > .files > li-coord
+    &.coord-odd
       color rgba(#cecece, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#727272, 1)
-  > square[data-coord-white-y]
-    &:nth-child(8), &:nth-child(24), &:nth-child(40), &:nth-child(56)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#cecece, 1)
-    &:nth-child(16), &:nth-child(32), &:nth-child(48), &:nth-child(64)
+    &.coord-odd
       color rgba(#727272, 1)
-  > square[data-coord-black-x]
-    &:nth-child(odd)
+.metal.orientation-black
+  > .files > li-coord
+    &.coord-odd
       color rgba(#727272, 1)
-    &:nth-child(even)
+    &.coord-even
       color rgba(#cecece, 1)
-  > square[data-coord-black-y]
-    &:nth-child(1), &:nth-child(17), &:nth-child(33), &:nth-child(49)
+  > .ranks > li-coord
+    &.coord-even
       color rgba(#727272, 1)
-    &:nth-child(9), &:nth-child(25), &:nth-child(41), &:nth-child(57)
+    &.coord-odd
       color rgba(#cecece, 1)
 
 .kingOfTheHill > .cg-board:before

@@ -94,7 +94,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }, 500);
 
   function fetch(fen: string) {
-    const hasTablebase = ['standard', 'chess960', 'atomic'].includes(effectiveVariant);
+    const hasTablebase = ['standard', 'chess960', 'atomic', 'antichess'].includes(effectiveVariant);
     if (hasTablebase && withGames && tablebaseRelevant(fen)) return fetchTablebase(fen);
     else return fetchOpening(fen);
   }

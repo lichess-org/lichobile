@@ -1,9 +1,11 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../../chessground';
 import redraw from '../../../utils/redraw';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
 import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';
+import { AfterMoveMeta } from './';
 
 function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
   const lastMove = data.game.lastMove ?
@@ -15,6 +17,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
 
   return {
     fen: fen,
+    batchRAF: batchRequestAnimationFrame,
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
     lastMove,
@@ -63,8 +66,8 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
 function make(
   data: OnlineGameData,
   fen: string,
-  userMove: (orig: Pos, dest: Pos, meta: any) => void,
-  userNewPiece: (role: Role, key: Pos, meta: any) => void,
+  userMove: (orig: Pos, dest: Pos, meta: AfterMoveMeta) => void,
+  userNewPiece: (role: Role, key: Pos, meta: AfterMoveMeta) => void,
   onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
   onNewPiece: () => void
 ): Chessground.Controller {

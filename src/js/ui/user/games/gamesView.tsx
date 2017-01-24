@@ -1,6 +1,7 @@
 import { throttle } from 'lodash';
 import * as m from 'mithril';
 import * as utils from '../../../utils';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import router from '../../../router';
 import settings from '../../../settings';
 import * as helper from '../../helper';
@@ -9,7 +10,6 @@ import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
 import spinner from '../../../spinner';
-import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
 import { makeBoard } from '../../shared/svgboard';
 import { UserGameWithDate } from '../userXhr';
 import { UserGamePlayer } from '../../../lichess/interfaces/user';
@@ -63,9 +63,10 @@ function onTap(ctrl: State, e: Event) {
     ctrl.toggleBookmark(id)
   } else {
     if (id) {
-      const g = ctrl.scrollState.games.find(g => g.id === id)
+      const g = ctrl.scrollState.games.find(game => game.id === id)
       const userId = ctrl.scrollState.userId
       const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
+      utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
       const mePlaying = session.getUserId() === userId;
       if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
         router.set(`/game/${id}/${userColor}`)
@@ -73,30 +74,6 @@ function onTap(ctrl: State, e: Event) {
         router.set(`/analyse/online/${id}/${userColor}`)
     }
   }
-}
-
-function renderAllGames(ctrl: State) {
-  const { games  } = ctrl.scrollState
-  return (
-    <div id="scroller-wrapper" className="scroller native_scroller games"
-      oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
-      onscroll={throttle(ctrl.onScroll, 30)}
-    >
-      { games.length ?
-        <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
-          { games.map((g, i) =>
-            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
-          }
-          {ctrl.scrollState.isLoadingNextPage ?
-          <li className="list_item loadingNext">loading...</li> : null
-          }
-        </ul> :
-        <div className="userGame-loader">
-          {spinner.getVdom('monochrome')}
-        </div>
-      }
-    </div>
-  );
 }
 
 const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: string, scrollState: ScrollState }, { boardTheme: string }> = {
@@ -120,12 +97,10 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
     const star = g.bookmarked ? 't' : 's';
     const bounds = scrollState.boardBounds;
+    const withStar = session.isConnected() ? ' withStar' : ''
 
     return (
-      <li data-id={g.id} className={`userGame ${evenOrOdd}`}>
-        { session.isConnected() ?
-          <button className="iconStar" data-icon={star} /> : null
-        }
+      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, userColor, bounds, this.boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">
@@ -158,9 +133,36 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
           }
           </div>
         </div>
+        { session.isConnected() ?
+          <button className="iconStar" data-icon={star} /> : null
+        }
       </li>
     );
   }
+}
+
+function renderAllGames(ctrl: State) {
+  const { games  } = ctrl.scrollState
+  return (
+    <div id="scroller-wrapper" className="scroller native_scroller games"
+      oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
+      onscroll={throttle(ctrl.onScroll, 30)}
+    >
+      { games.length ?
+        <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
+          { games.map((g, i) =>
+            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+          }
+          {ctrl.scrollState.isLoadingNextPage ?
+          <li className="list_item loadingNext">loading...</li> : null
+          }
+        </ul> :
+        <div className="userGame-loader">
+          {spinner.getVdom('monochrome')}
+        </div>
+      }
+    </div>
+  );
 }
 
 function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
@@ -176,7 +178,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
         const img = document.createElement('img')
         img.className = 'cg-board'
         img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)
-        requestAnimationFrame(() => {
+        batchRequestAnimationFrame(() => {
           dom.replaceChild(img, dom.firstChild)
         })
       }}
@@ -193,8 +195,7 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
   if (player.userId) playerName = player.userId;
   else if (!player.aiLevel) playerName = utils.playerName(player);
   else if (player.aiLevel) {
-    player.ai = player.aiLevel;
-    playerName = utils.aiName(player);
+    playerName = utils.aiName({ ai: player.aiLevel });
   }
   else playerName = 'Anonymous';
 
@@ -203,7 +204,7 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
       <span className="playerName">{playerName}</span>
       <br/>
       {player.rating ?
-      <small className="playerRating">{player.rating}{player.conditional && '?'}</small> : null
+      <small className="playerRating">{player.rating}</small> : null
       }
       {player.ratingDiff ?
         helper.renderRatingDiff(player) : null

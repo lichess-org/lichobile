@@ -89,7 +89,7 @@ export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedir
         if (!ctrl.chat || !ctrl.chat.showing) redraw();
       }
     },
-    message(msg: string) {
+    message(msg: ChatMsg) {
       if (ctrl.chat) ctrl.chat.append(msg);
     },
     tvSelect(o: { channel: string }) {

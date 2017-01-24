@@ -1,12 +1,12 @@
 import * as m from 'mithril'
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import { getBoardBounds } from '../helper';
 import { playerFromFen } from '../../utils/fen';
 import i18n from '../../i18n';
 
 import layout from '../layout';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
-import Board, { Attrs as BoardAttrs } from '../shared/Board';
+import Board from '../shared/Board';
 import {
   renderAntagonist,
   renderGameActionsBar,
@@ -55,7 +55,7 @@ function renderContent(ctrl: AiRound) {
     </h2>
   );
 
-  const board = m<BoardAttrs>(Board, {
+  const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,

@@ -94,12 +94,16 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
       key: 'position'
     }, fromPositionFen ? [
         m('div.setupMiniBoardWrapper', {
+          style: {
+            width: '100px',
+            height: '100px'
+          },
           oncreate: helper.ontap(() => {
             close();
             router.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
-          m(ViewOnlyBoard, { fen: fromPositionFen })
+          m(ViewOnlyBoard, { fen: fromPositionFen, bounds: { width: 100, height: 100 }})
         ])
       ] : m('div', m('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontap(() => {

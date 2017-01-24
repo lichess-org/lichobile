@@ -5,7 +5,7 @@
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
-    <access origin="http://*.l.dev" />
+    <access origin="https://sentry.io" />
     <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">
@@ -18,18 +18,18 @@
         <icon density="xhdpi" src="res/android/icons/icon-96.png" />
         <icon density="xxhdpi" src="res/android/icons/icon-144.png" />
         <icon density="xxxhdpi" src="res/android/icons/icon-192.png" />
-        <splash density="land-ldpi" src="res/android/screens/screen-426x320.png" />
-        <splash density="land-mdpi" src="res/android/screens/screen-470x320.png" />
-        <splash density="land-hdpi" src="res/android/screens/screen-640x480.png" />
-        <splash density="land-xhdpi" src="res/android/screens/screen-960x720.png" />
-        <splash density="land-xxhdpi" src="res/android/screens/screen-1410x960.png" />
-        <splash density="land-xxxhdpi" src="res/android/screens/screen-1880x1280.png" />
-        <splash density="port-ldpi" src="res/android/screens/screen-320x426.png" />
-        <splash density="port-mdpi" src="res/android/screens/screen-320x470.png" />
-        <splash density="port-hdpi" src="res/android/screens/screen-480x640.png" />
-        <splash density="port-xhdpi" src="res/android/screens/screen-720x960.png" />
-        <splash density="port-xxhdpi" src="res/android/screens/screen-960x1410.png" />
-        <splash density="port-xxxhdpi" src="res/android/screens/screen-1280x1880.png" />
+        <splash density="land-ldpi" src="res/android/screens/drawable-land-ldpi/screen.png" />
+        <splash density="land-mdpi" src="res/android/screens/drawable-land-mdpi/screen.png" />
+        <splash density="land-hdpi" src="res/android/screens/drawable-land-hdpi/screen.png" />
+        <splash density="land-xhdpi" src="res/android/screens/drawable-land-xhdpi/screen.png" />
+        <splash density="land-xxhdpi" src="res/android/screens/drawable-land-xxhdpi/screen.png" />
+        <splash density="land-xxxhdpi" src="res/android/screens/drawable-land-xxxhdpi/screen.png" />
+        <splash density="port-ldpi" src="res/android/screens/drawable-ldpi/screen.png" />
+        <splash density="port-mdpi" src="res/android/screens/drawable-mdpi/screen.png" />
+        <splash density="port-hdpi" src="res/android/screens/drawable-hdpi/screen.png" />
+        <splash density="port-xhdpi" src="res/android/screens/drawable-xhdpi/screen.png" />
+        <splash density="port-xxhdpi" src="res/android/screens/drawable-xxhdpi/screen.png" />
+        <splash density="port-xxxhdpi" src="res/android/screens/drawable-xxxhdpi/screen.png" />
     </platform>
     <platform name="ios">
         <preference name="Orientation" value="all" />
@@ -49,6 +49,16 @@
         <icon height="50" src="res/ios/icons/icon-50.png" width="50" />
         <icon height="100" src="res/ios/icons/icon-50@2x.png" width="100" />
         <icon height="167" src="res/ios/icons/icon-83.5@2x.png" width="167" />
+        <splash src="res/ios/screens/Default~iphone.png" width="320" height="480"/>
+        <splash src="res/ios/screens/Default@2x~iphone_640x960.png" width="640" height="960"/>
+        <splash src="res/ios/screens/Default-Portrait~ipad_768x1024.png" width="768" height="1024"/>
+        <splash src="res/ios/screens/Default-Portrait@2x~ipad_1536x2048.png" width="1536" height="2048"/>
+        <splash src="res/ios/screens/Default-Landscape~ipad_1024x768.png" width="1024" height="768"/>
+        <splash src="res/ios/screens/Default-Landscape@2x~ipad_2048x1536.png" width="2048" height="1536"/>
+        <splash src="res/ios/screens/Default-568h@2x~iphone_640x1136.png" width="640" height="1136"/>
+        <splash src="res/ios/screens/Default-750@2x~iphone6-portrait_750x1334.png" width="750" height="1334"/>
+        <splash src="res/ios/screens/Default-1242@3x~iphone6s-portrait_1242x2208.png" width="1242" height="2208"/>
+        <splash src="res/ios/screens/Default-1242@3x~iphone6s-landscape_2208x1242.png" width="2208" height="1242"/>
     </platform>
     <preference name="Orientation" value="default" />
     <preference name="SuppressesLongPressGesture" value="true" />

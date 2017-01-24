@@ -26,12 +26,13 @@ declare type DestsMap = {
 }
 
 interface LichessOptions {
-  apiEndPoint: string;
-  socketEndPoint: string;
-  mode: string;
-  version: string;
-  gaId: string;
-  gcmSenderId: string;
+  apiEndPoint: string
+  socketEndPoint: string
+  mode: string
+  version: string
+  gaId: string
+  gcmSenderId: string
+  sentryDSN: string
 }
 
 interface Window {
@@ -181,6 +182,14 @@ interface OfflineGame extends Game {
   check?: boolean;
 }
 
+interface ChatMsg {
+  u: string
+  c: Color
+  t: string
+  r?: boolean
+  d?: boolean
+}
+
 interface GameData {
   game: Game
   player: Player;
@@ -190,7 +199,7 @@ interface GameData {
   steps?: Array<GameStep>;
   tournament?: Tournament;
   note?: string;
-  chat?: Array<string>;
+  chat?: Array<ChatMsg>;
   possibleMoves?: StringMap;
   possibleDrops?: string | Array<string>;
   userTV?: string;
@@ -207,7 +216,7 @@ interface GameData {
 interface OnlineGameData extends GameData {
   game: OnlineGame;
   takebackable: boolean;
-  watchers: GameWatchers
+  watchers?: GameWatchers
 }
 
 interface GameCrowd {
@@ -234,10 +243,10 @@ interface StoredOfflineGame {
 }
 
 interface Variant {
-  key: VariantKey;
-  name: string;
-  short: string;
-  title: string;
+  key: VariantKey
+  name: string
+  short: string
+  title?: string
 }
 
 interface GameStatus {

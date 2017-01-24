@@ -1,4 +1,3 @@
-import * as m from 'mithril';
 import * as Zanimo from 'zanimo';
 import { hasNetwork } from '../../utils';
 import session from '../../session';
@@ -77,9 +76,11 @@ export function close(fromBB?: string) {
 }
 
 export function toggleHeader() {
-  inboxXhr.inbox()
+  inboxXhr.inbox(false)
   .then(data => {
-    inboxUnreadCount(data.currentPageResults.reduce((acc, x) => (acc + (x.isUnread ? 1 : 0)), 0));
+    inboxUnreadCount(data.currentPageResults.reduce((acc, x) =>
+      (acc + (x.isUnread ? 1 : 0)), 0)
+    );
     redraw();
   });
   return headerOpen() ? headerOpen(false) : headerOpen(true);

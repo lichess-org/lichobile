@@ -10,8 +10,8 @@ interface GamePosCached {
   fen: string
   orientation: Color
 }
-export const gamePosCache: { [id: string]: GamePosCached } = {
-}
+
+export const gamePosCache: Map<string, GamePosCached> = new Map()
 
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;
@@ -161,11 +161,6 @@ export function aiName(player: { ai: number }) {
   return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
 }
 
-export const uid = (function() {
-  let id = 0;
-  return () => id++;
-})();
-
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
   blitz: ')',
@@ -264,7 +259,7 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
   }
 }
 
-export function noNull(v: any) {
+export function noNull<T>(v: T) {
   return v !== undefined && v !== null;
 }
 

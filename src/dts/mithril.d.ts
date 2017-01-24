@@ -149,7 +149,7 @@ declare namespace Mithril {
   }
 
   interface VnodeFactory {
-    <A,S>(tag: string | Component<A,S>, key: string | number, attrs: A, children: Array<ChildNode>, text: string, dom: Element): ChildNode
+    <A,S>(tag: string | Component<A,S>, key: string | number, attrs: A, children: Children, text: string, dom: Element): ChildNode
   }
 
   /** Component with typed vnode state & attrs */

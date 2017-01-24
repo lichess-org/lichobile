@@ -1,12 +1,12 @@
 import i18n from '../../i18n';
 import settings from '../../settings';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import BoardBrush, { Shape } from './BoardBrush';
 
 export interface Attrs {
   data: GameData
   chessgroundCtrl: Chessground.Controller
-  bounds?: BoardBounds
+  bounds: BoardBounds
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string
@@ -26,9 +26,7 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const { chessgroundCtrl, bounds } = vnode.attrs;
 
-    if (bounds) {
-      chessgroundCtrl.setBounds(bounds);
-    }
+    chessgroundCtrl.setBounds(bounds);
 
     function boardOnCreate({ dom }: Mithril.ChildNode) {
       if (chessgroundCtrl) {
@@ -53,12 +51,13 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const boardClass = [
       'display_board',
+      'orientation-' + chessgroundCtrl.data.orientation,
       this.boardTheme,
       customPieceTheme || this.pieceTheme,
       data.game.variant.key
     ].join(' ');
 
-    let wrapperClass = 'game_board_wrapper';
+    let wrapperClass = 'game_board_wrapper'
 
     if (wrapperClasses) {
       wrapperClass += ' ';
@@ -89,7 +88,7 @@ const Board: Mithril.Component<Attrs, State> = {
           </div> : null
         }
         {
-          shapes && shapes.length ?
+          !!shapes ?
             BoardBrush(
               bounds,
               chessgroundCtrl.data.orientation,

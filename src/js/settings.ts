@@ -144,7 +144,6 @@ export default {
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
-    seeSymmetricCoordinates: localstorageprop('settings.otb.seeSymmetricCoordinates', true),
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants
   },
@@ -492,4 +491,4 @@ export default {
   importer: {
     analyse: localstorageprop('importer.analyse', false)
   }
-};
+}

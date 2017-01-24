@@ -3,6 +3,7 @@ import * as m from 'mithril';
 import router from '../../router';
 import i18n from '../../i18n';
 import settings from '../../settings';
+import { specialFenVariants } from '../../lichess/variant';
 import formWidgets from '../shared/form';
 import ViewOnlyBoard from '../shared/ViewOnlyBoard';
 import popupWidget from '../shared/popup';
@@ -54,9 +55,9 @@ export default {
         function() {
           const availVariants = settings.ai.availableVariants;
           const variants = ctrl.root.vm.setupFen ?
-            availVariants.filter(i => !['racingKings', 'horde'].includes(i[1])) :
+            availVariants.filter(i => !specialFenVariants.includes(i[1])) :
             availVariants;
-          if (ctrl.root.vm.setupFen && ['racingKings', 'horde'].includes(settings.ai.variant())) {
+          if (ctrl.root.vm.setupFen && specialFenVariants.includes(settings.ai.variant())) {
             settings.ai.variant('standard');
           }
           return (
@@ -71,12 +72,16 @@ export default {
                   <div className="from_position_wrapper">
                     <p>{i18n('fromPosition')}</p>
                     <div className="from_position">
-                      <div className="setupMiniBoardWrapper"
+                      <div
+                        style={{
+                          width: '130px',
+                          height: '130px'
+                        }}
                         oncreate={helper.ontap(() => {
                           router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`);
                         })}
                       >
-                        {m(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen })}
+                        {m(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
                       </div>
                     </div>
                   </div> : null

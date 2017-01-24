@@ -25,7 +25,8 @@ export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
       drops: o.drops,
       crazy: o.crazyhouse,
       pgnMoves: o.pgnMoves,
-      end: o.end
+      end: o.end,
+      player: o.player
     };
     return step;
   });
@@ -94,7 +95,6 @@ export function syncWithNowPlayingGames(nowPlaying: Array<NowPlayingGame>) {
 
   const stored = storage.get(offlineCorresStorageKey) || {};
   const storedIds = Object.keys(stored);
-  // TODO make now playing game type
   const toRemove = difference(storedIds, nowPlaying.map((g: NowPlayingGame) => g.fullId));
 
   if (toRemove.length > 0) {

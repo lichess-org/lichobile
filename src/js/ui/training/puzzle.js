@@ -1,11 +1,12 @@
 import { compact } from 'lodash/array';
 import { keys, toPairs } from 'lodash/object';
 import { head, tail } from 'lodash/array';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
+import { noNull } from '../../utils';
 import chess from './chess';
 
 function str2move(str) {
-  return str ? [str.slice(0, 2), str.slice(2, 4), str[4]] : null;
+  return str ? [str.slice(0, 2), str.slice(2, 4), str[4]].filter(noNull) : null;
 }
 
 function move2str(move) {

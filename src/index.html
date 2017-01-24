@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, width=device-width" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' gap: data: https://ssl.gstatic.com; connect-src 'self' https://expl.lichess.org https://tablebase.lichess.org <!-- @echo API_END_POINT --> <!-- @echo SOCKET_END_POINT -->:*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; child-src 'self' filesystem: gap://ready; style-src 'self' 'unsafe-inline'; media-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' gap: data: https://ssl.gstatic.com; connect-src 'self' https://sentry.io https://expl.lichess.org https://tablebase.lichess.org <!-- @echo API_END_POINT --> <!-- @echo SOCKET_END_POINT -->:*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; child-src 'self' filesystem: gap://ready; style-src 'self' 'unsafe-inline'; media-src 'self'">
     <title>Mobile app • lichess.org</title>
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="css/fa.css" />
@@ -13,13 +13,17 @@
     <link rel="stylesheet" type="text/css" href="css/compiled/app.css" />
     <script>
       window.lichess = {
+        mode: "<!-- @echo MODE -->",
         apiEndPoint: "<!-- @echo API_END_POINT -->",
         socketEndPoint: "<!-- @echo SOCKET_END_POINT -->",
         <!-- @ifdef GA_ID -->
         gaId: "<!-- @echo GA_ID -->",
         <!-- @endif -->
         <!-- @ifdef GCM_senderId -->
-        gcmSenderId: "<!-- @echo GCM_senderId -->"
+        gcmSenderId: "<!-- @echo GCM_senderId -->",
+        <!-- @endif -->
+        <!-- @ifdef SENTRY_DSN -->
+        sentryDSN: "<!-- @echo SENTRY_DSN -->"
         <!-- @endif -->
       };
     </script>

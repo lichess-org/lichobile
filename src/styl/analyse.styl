@@ -33,30 +33,23 @@
   max-width 230px
   display flex
   flex-flow column nowrap
-  &.loading
-    justify-content center
 
 .analyse-loadingReplay
+  flex 1 1 auto
+  display flex
+  justify-content center
+  align-items center
   > .spinner
     width 40px
     height 40px
 
 .analyse-replay
+  flex 1 1 auto
   position relative
   display flex
   flex-flow column nowrap
   font-size 0.9rem
   padding-right 5px
-  > .result, > .status
-    font-size 0.8em
-    width 100%
-  > .result
-    margin-top 2px
-    text-align center
-    font-weight bold
-  > .status
-    font-style italic
-    text-align center
   &.displayPieces
     > turn
       > move
@@ -118,58 +111,58 @@ eval
   font-weight lighter
   color rgba(textDarkBg, 70%)
 
-.analysisMeta
+interrupt
   flex 0 0 auto
   min-height 25px
   display flex
-  flex-flow row wrap
+  flex-flow column nowrap
   font-size 0.8em
   background lighten(bgdark, 5%)
-  > .comment
-    font-size 0.8em
-    width 100%
+
+lines
+  display flex
+  align-items center
+  > .menuIcon
+    flex 0 0 13%
+    height 25px
+    font-size 1.5em
+    margin 0
     display flex
-    padding: 0 5px
+    justify-content center
     align-items center
-    word-wrap: break-word;
-    &.white
-      border-left 2px solid #ccc
-    &.black
-      border-right 2px solid #ccc
-      justify-content flex-end
-    &.Inaccuracy
-      border-color: #56B4E9;
-    &.Mistake
-      border-color: #E69F00;
-    &.Blunder
-      border-color: #DF5353;
-  > .variationWrapper
-    width 100%
-    display flex
-    align-items center
-    > .variation
-      flex 0 1 auto
-      width calc(100% - 25px)
-      white-space nowrap
-      overflow hidden
-      &.visiting
-        > index, > move
-          color #ebe1cd
-        > move.current
-          color gold
-        white-space normal
-      &.nested
-        display inline
-        margin-left 5px
-    > .menuIcon
-      flex 0 0 13%
-      height 25px
-      font-size 1.5em
-      text-align center
-      margin 0
-      &:before
-        position relative
-        top 5px
+
+line
+  flex 0 1 auto
+  width calc(100% - 25px)
+  white-space nowrap
+  overflow hidden
+  &.visiting
+    > index, > move
+      color #ebe1cd
+    > move.current
+      color gold
+    white-space normal
+  > .nested
+    margin-left 5px
+
+.comment
+  flex 1 1 auto
+  font-size 0.8em
+  display flex
+  padding: 0 5px
+  align-items center
+  word-wrap: break-word;
+  &.white
+    border-left 2px solid #ccc
+  &.black
+    border-right 2px solid #ccc
+    justify-content flex-end
+  &.Inaccuracy
+    border-color: #56B4E9;
+  &.Mistake
+    border-color: #E69F00;
+  &.Blunder
+    border-color: #DF5353;
 
 .analyse_variant_selector
   width 100%
@@ -189,14 +182,16 @@ eval
       font-size 20px
 
 .analyse-cevalBox
-  flex 0 0 36px
+  flex 0 0 38px
   position relative
   overflow hidden
-  width 100%
+  width calc(100% - 5px)
+  margin-right 5px
   display flex
   flex-flow row nowrap
   align-items center
   align-content center
+  background lighten(bgdark, 5%)
 
 .analyse-engine_info
   flex 1 0
@@ -211,13 +206,12 @@ eval
 
 .analyse-cevalBar
   position absolute
-  transform translateX(-100%)
-  width 100%
+  width 0%
   height 2px
   top 0
   left 0
-  background green
-  transition transform linear 1s
+  background gold
+  transition width linear 800ms
 
 .analyse-curEval
   flex 0 0 auto
@@ -230,7 +224,7 @@ eval
   font-size 16px
   font-weight bold
   padding 3px 5px
-  background lighten(bgdark, 5%)
+  background lighten(bgdark, 10%)
   > .spinner
     width initial
     height initial
@@ -278,7 +272,6 @@ eval
 
 .analyseOpponent
   text-align left
-  width 100%
   margin-bottom 0.5em
   > .pocket
     width 100%
@@ -318,25 +311,21 @@ eval
   > span
     margin-left 5px
 
-.analysePlayerName.crazy
-  white-space nowrap
+.analysePlayerName
   overflow hidden
   text-overflow ellipsis
 
-
 .variationMenuPopup
-  position fixed
   font-size 1rem
-  .overlay_popup
-    height 100px
-    top calc((100% - 100px) / 2)
-    border-radius 5px
-    text-align center
-    > .variationMenu
-      display flex
-      flex-flow column nowrap
-      justify-content center
-      height 100%
+  height 100px
+  top calc((100% - 100px) / 2)
+  border-radius 5px
+  text-align center
+  .variationMenu
+    display flex
+    flex-flow column nowrap
+    justify-content center
+    height 100%
 
 .explorerTable
   position relative
@@ -555,7 +544,13 @@ eval
   move.active
     background darken(bglight, 10%)
 
-  .analyse-replay > turn > index, .analysisMeta
+  line.visiting
+    > index, > move
+      color lighten(gold, 20%)
+    > move.current
+      color gold
+
+  .analyse-replay > turn > index, interrupt
     background darken(bglight, 7%)
 
   .analyse_variant_selector
@@ -563,8 +558,10 @@ eval
     text-shadow: 0 1px 0 #FFF;
     color: #848484;
 
+  .analyse-cevalBox
+    background darken(bglight, 5%)
   .analyse-curEval
-    background darken(bglight, 7%)
+    background darken(bglight, 8%)
 
   .explorer-fixedTitle
     background bgdark

@@ -38,7 +38,7 @@ export interface SituationResponse {
 }
 
 export interface MoveRequest {
-  variant?: VariantKey
+  variant: VariantKey
   fen: string
   orig: Pos
   dest: Pos

@@ -1,5 +1,5 @@
-import * as stream from 'mithril/stream';
-import { handleXhrError, gamePosCache } from '../../../utils';
+import { handleXhrError } from '../../../utils';
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as helper from '../../helper';
 import * as xhr from '../userXhr';
 import { toggleGameBookmark } from '../../../xhr';
@@ -91,39 +91,11 @@ const UserGames: Mithril.Component<Attrs, State> = {
     function prepareData(xhrData: xhr.FilterResult) {
       if (xhrData.paginator && xhrData.paginator.currentPageResults) {
         xhrData.paginator.currentPageResults.forEach(g => {
-          const userColor: Color = g.players.white.userId === vnode.attrs.id ? 'white' : 'black';
-          gamePosCache[g.id] = { fen: g.fen, orientation: userColor }
           g.date = window.moment(g.timestamp).calendar();
         });
       }
       return xhrData;
     }
-
-    if (cacheAvailable) {
-      setTimeout(() => {
-        this.scrollState = cachedScrollState
-        redraw()
-      }, 300)
-    } else {
-      Promise.all([
-        xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false)
-        .then(prepareData),
-        xhr.user(this.scrollState.userId, false)
-      ])
-      .then(results => {
-        const [gamesData, userData] = results;
-        loadUserAndFilters(userData);
-        setTimeout(() => loadInitialGames(gamesData), 300)
-      })
-      .catch(err => {
-        handleXhrError(err);
-      });
-    }
-
-    try {
-      const newState = Object.assign({}, window.history.state, { scrollStateId: this.scrollState.userId })
-      window.history.replaceState(newState, null);
-    } catch (e) { console.error(e) }
 
     const loadUserAndFilters = (userData: UserFullProfile) => {
       this.scrollState.user = userData
@@ -153,6 +125,33 @@ const UserGames: Mithril.Component<Attrs, State> = {
       redraw();
     }
 
+
+    if (cacheAvailable) {
+      setTimeout(() => {
+        this.scrollState = cachedScrollState
+        redraw()
+      }, 300)
+    } else {
+      Promise.all([
+        xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, false)
+        .then(prepareData),
+        xhr.user(this.scrollState.userId, false)
+      ])
+      .then(results => {
+        const [gamesData, userData] = results;
+        loadUserAndFilters(userData);
+        setTimeout(() => loadInitialGames(gamesData), 300)
+      })
+      .catch(err => {
+        handleXhrError(err);
+      });
+    }
+
+    try {
+      const newState = Object.assign({}, window.history.state, { scrollStateId: this.scrollState.userId })
+      window.history.replaceState(newState, null);
+    } catch (e) { console.error(e) }
+
     const loadNextPage = (page: number) => {
       this.scrollState.isLoadingNextPage = true
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, page)
@@ -169,8 +168,10 @@ const UserGames: Mithril.Component<Attrs, State> = {
 
     this.onGamesLoaded = ({ dom }: Mithril.ChildNode) => {
       if (cacheAvailable && !initialized) {
-        (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos
-        initialized = true
+        batchRequestAnimationFrame(() => {
+          (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos
+          initialized = true
+        })
       }
     }
 

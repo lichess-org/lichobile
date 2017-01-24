@@ -125,28 +125,29 @@ h3.fullname
 
 .userGame
   display flex
+  padding 10px 0
   flex-flow row nowrap
-  padding 10px
   align-items center
   background-color lighten(bgdark, 5%)
   color textLightGray
   min-height 60px
   border-color lighten(bgdark, 5%)
-  &:active,&.active
-    opacity 0.8
+  &.withStar
+    > .userGame-infos
+      padding-right 0
   &.odd
     background-color lighten(bgdark, 10%)
   > .iconStar
-    position absolute
-    top 8px
-    right 0
-    width 30px
+    flex 0 0 30px
+    align-self flex-start
+    padding 0
     color textGray
     &:before
       font-size 18px
   .display_board
+    margin-left 10px
     flex 0 0 30%
-    height calc((100vw - 20px) * 0.3)
+    height calc(100vw * 0.3)
   @media only screen and (orientation portrait) and (max-width 320px)
     .userGame-infos
       font-size 0.9em

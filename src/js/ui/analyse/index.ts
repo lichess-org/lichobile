@@ -1,4 +1,3 @@
-import * as m from 'mithril';
 import socket from '../../socket';
 import settings from '../../settings';
 import { renderContent, overlay, viewOnlyBoard } from './view/analyseView';
@@ -14,7 +13,7 @@ import * as helper from '../helper';
 import { makeDefaultData } from './data';
 import AnalyseCtrl from './AnalyseCtrl';
 import { Source } from './interfaces';
-import { gameTitle, connectingHeader, header, backButton as renderBackbutton } from '../shared/common';
+import { gameTitle, loadingBackbutton, header, backButton as renderBackbutton } from '../shared/common';
 import layout from '../layout';
 
 export interface Attrs {
@@ -23,6 +22,7 @@ export interface Attrs {
   color: Color
   fen?: string
   variant?: VariantKey
+  ply?: number
 }
 
 export interface State {
@@ -37,44 +37,50 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     const orientation: Color = vnode.attrs.color || 'white';
     const fenArg = vnode.attrs.fen;
     const variant = vnode.attrs.variant;
-
-    socket.createDefault();
-    window.plugins.insomnia.keepAwake();
+    const ply = vnode.attrs.ply;
 
     const shouldGoBack = gameId !== undefined || fenArg !== undefined;
 
     if (source === 'online' && gameId) {
+      helper.analyticsTrackView('Analysis (online game)');
+      const now = performance.now()
       gameXhr(gameId, orientation)
       .then(cfg => {
-        helper.analyticsTrackView('Analysis (online game)');
-        this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack);
-        redraw();
-        setTimeout(this.ctrl.debouncedScroll, 250);
+        const elapsed = performance.now() - now
+        setTimeout(() => {
+          this.ctrl = new AnalyseCtrl(cfg, source, orientation, shouldGoBack, ply);
+          redraw();
+        }, Math.max(400 - elapsed, 0))
       })
       .catch(err => {
         handleXhrError(err);
-        router.set('/');
+        router.set('/analyse', true);
+        redraw();
       });
     } else if (source === 'offline' && gameId === 'otb') {
       helper.analyticsTrackView('Analysis (offline otb)');
-      const otbData = getAnalyseData(getCurrentOTBGame());
-      if (!otbData) {
-        router.set('/analyse');
-      } else {
-        otbData.player.spectator = true;
-        this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack);
-        redraw();
-      }
+      setTimeout(() => {
+        const otbData = getAnalyseData(getCurrentOTBGame());
+        if (!otbData) {
+          router.set('/analyse', true);
+        } else {
+          otbData.player.spectator = true;
+          this.ctrl = new AnalyseCtrl(otbData, source, orientation, shouldGoBack, ply);
+          redraw();
+        }
+      }, 400)
     } else if (source === 'offline' && gameId === 'ai') {
       helper.analyticsTrackView('Analysis (offline ai)');
-      const aiData = getAnalyseData(getCurrentAIGame());
-      if (!aiData) {
-        router.set('/analyse');
-      } else {
-        aiData.player.spectator = true;
-        this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack);
-        redraw();
-      }
+      setTimeout(() => {
+        const aiData = getAnalyseData(getCurrentAIGame());
+        if (!aiData) {
+          router.set('/analyse', true);
+        } else {
+          aiData.player.spectator = true;
+          this.ctrl = new AnalyseCtrl(aiData, source, orientation, shouldGoBack, ply);
+          redraw();
+        }
+      }, 400)
     } else {
       if (variant === undefined) {
         let settingsVariant = settings.analyse.syntheticVariant()
@@ -86,9 +92,10 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         let url = `/analyse/variant/${settingsVariant}`
         if (fenArg) url += `/fen/${encodeURIComponent(fenArg)}`;
         router.set(url, true)
+        redraw();
       } else {
         helper.analyticsTrackView('Analysis (empty)');
-        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack);
+        this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply);
         redraw();
       }
     }
@@ -129,7 +136,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
       const isSmall = settings.analyse.smallBoard()
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall);
       return layout.board(
-        connectingHeader,
+        loadingBackbutton,
         () => viewOnlyBoard(vnode.attrs.color, bounds, isSmall, emptyFen)
       );
     }

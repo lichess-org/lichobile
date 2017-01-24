@@ -1,4 +1,4 @@
-import { util, drag } from 'chessground-mobile';
+import chessground from '../../../../chessground';
 
 function isDraggable(data, color) {
   return data.movable.color === color && (
@@ -18,14 +18,14 @@ export default function(ctrl, e) {
   e.stopPropagation();
   e.preventDefault();
   var key;
-  for (var i in util.allKeys) {
-    if (!cgData.pieces[util.allKeys[i]]) {
-      key = util.allKeys[i];
+  for (var i in chessground.util.allKeys) {
+    if (!cgData.pieces[chessground.util.allKeys[i]]) {
+      key = chessground.util.allKeys[i];
       break;
     }
   }
   if (!key) return;
-  const coords = util.key2pos(cgData.orientation === 'white' ? key : util.invertKey(key));
+  const coords = chessground.util.key2pos(cgData.orientation === 'white' ? key : chessground.util.invertKey(key));
   const piece = {
     role: role,
     color: color
@@ -34,8 +34,8 @@ export default function(ctrl, e) {
   obj[key] = piece;
   ctrl.chessground.setPieces(obj);
   const bounds = cgData.bounds;
-  const position = util.eventPosition(e);
-  const squareBounds = util.computeSquareBounds(cgData.orientation, bounds, key);
+  const position = chessground.util.eventPosition(e);
+  const squareBounds = chessground.util.computeSquareBounds(cgData.orientation, bounds, key);
   const rel = [
     (coords[0] - 1) * squareBounds.width + bounds.left,
     (8 - coords[1]) * squareBounds.height + bounds.top
@@ -45,8 +45,11 @@ export default function(ctrl, e) {
     rel: rel,
     epos: position,
     pos: [position[0] - rel[0], position[1] - rel[1]],
-    dec: [-squareBounds.width, -squareBounds.height],
+    dec: cgData.draggable.magnified ?
+      [-squareBounds.width, -squareBounds.height * 2] :
+      [-squareBounds.width / 2, -squareBounds.height / 2],
     bounds: bounds,
+    origPos: chessground.util.key2pos(key),
     originTarget: e.target,
     started: true,
     newPiece: true
@@ -54,11 +57,11 @@ export default function(ctrl, e) {
   ctrl.chessground.setDragPiece(key, piece, dragOpts);
   // must render synchronously to have dragging piece
   cgData.render();
-  cgData.draggable.current.draggingPiece = cgData.element.querySelector('.' + key + ' > piece');
+  cgData.draggable.current.draggingPiece = chessground.drag.getPieceByKey(cgData, key);
   cgData.draggable.current.draggingPiece.classList.add('dragging');
   if (cgData.draggable.magnified) {
     cgData.draggable.current.draggingPiece.classList.add('magnified');
   }
   cgData.draggable.current.draggingPiece.cgDragging = true;
-  drag.processDrag(cgData);
+  chessground.drag.processDrag(cgData);
 }

@@ -34,7 +34,7 @@ export default function(
   return (
     // dirty hack to be sure each popup element is unique
     // TODO should refactor into a component
-    <div key={String(contentF)} className="overlay_popup_wrapper"
+    <div key={String(contentF)} className="overlay_popup_wrapper fade-in"
       onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
         vnode.dom.classList.add('fading_out');
         setTimeout(done, 500);

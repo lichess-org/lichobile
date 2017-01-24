@@ -1,7 +1,7 @@
-import * as m from 'mithril';
+import * as Vnode from 'mithril/render/vnode';
 import * as helper from '../../helper';
 import treePath from '../path';
-import { empty, renderEval, isSynthetic } from '../util';
+import { empty, renderEval } from '../util';
 
 import { AnalyseCtrlInterface, AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
 
@@ -12,54 +12,65 @@ interface Turn {
 }
 
 export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
-  const turns: Array<Turn> = [];
+  let turns: Mithril.Children = [];
   const initPly = ctrl.analyse.firstPly();
+  const path = treePath.default()
+
   if (initPly % 2 === 0) {
-    for (let i = 1, nb = tree.length; i < nb; i += 2) turns.push({
-      turn: Math.floor((initPly + i) / 2) + 1,
-      white: tree[i],
-      black: tree[i + 1]
-    });
+    for (let i = 1, nb = tree.length; i < nb; i += 2) turns = turns.concat(
+      renderTurn(
+        ctrl,
+        {
+          turn: Math.floor((initPly + i) / 2) + 1,
+          white: tree[i],
+          black: tree[i + 1]
+        },
+        path
+      )
+    )
   }
   else {
-    turns.push({
+    turns = turns.concat(renderTurn(ctrl, {
       turn: Math.floor(initPly / 2) + 1,
       white: null,
       black: tree[1]
-    });
-    for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns.push({
-      turn: Math.floor((initPly + j) / 2) + 1,
-      white: tree[j],
-      black: tree[j + 1]
-    });
+    }, path))
+    for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns = turns.concat(
+      renderTurn(
+        ctrl,
+        {
+          turn: Math.floor((initPly + j) / 2) + 1,
+          white: tree[j],
+          black: tree[j + 1]
+        },
+        path
+      )
+    )
   }
 
-  const path = treePath.default();
-  let tags: Array<Mithril.ChildNode> = [];
-  for (let k = 0, len = turns.length; k < len; k++) {
-    tags.push(renderTurn(ctrl, turns[k], path));
-  }
+  return turns
+}
 
-  return tags;
+function renderIndex(txt: string) {
+  return Vnode('index', undefined, undefined, undefined, txt, undefined)
 }
 
 function renderEvalTag(e: string) {
-  return <eval>{e}</eval>;
+  return Vnode('eval', undefined, undefined, undefined, e, undefined)
 }
 
 function renderGlyph(glyph: Glyph) {
-  return <glyph>{glyph.symbol}</glyph>;
+  return Vnode('glyph', undefined, undefined, undefined, glyph.symbol, undefined)
 }
 
-const emptyMove = <move className="emptyMove">...</move>;
+const emptyMove = Vnode('move', undefined, undefined, undefined, '...', undefined)
 
-function renderMove(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) {
+function renderMove(currentPath: string, move: AnalysisStep, path: Path, pathStr: string) {
   if (!move) return emptyMove;
-  const pathStr = treePath.write(path);
   const evaluation = path[1] ? null : (move.rEval || move.ceval);
   const judgment = move.rEval && move.rEval.judgment;
   const className = [
-    pathStr === ctrl.vm.pathStr ? 'current' : ''
+    pathStr === currentPath ? 'current' : ''
   ].join(' ');
 
   return (
@@ -70,61 +81,28 @@ function renderMove(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) 
         evaluation && evaluation.mate ? renderEvalTag('#' + evaluation.mate) : null
       )}
     </move>
-  );
+  )
 }
 
 function plyToTurn(ply: number) {
   return Math.floor((ply - 1) / 2) + 1;
 }
 
-function renderVariationMenu(ctrl: AnalyseCtrlInterface, path: Path) {
-  const showing = ctrl.vm.variationMenu && ctrl.vm.variationMenu === treePath.write(path.slice(0, 1));
-
-  if (!showing) return null;
-
-  const promotable = isSynthetic(ctrl.data) ||
-    !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
-
-  const content = m('div.variationMenu', [
-    m('button', {
-      className: 'withIcon',
-      'data-icon': 'q',
-      oncreate: helper.ontap(ctrl.deleteVariation.bind(undefined, path))
-    }, 'Delete variation'),
-    promotable ? m('button', {
-      className: 'withIcon',
-      'data-icon': 'E',
-      oncreate: helper.ontap(ctrl.promoteVariation.bind(undefined, path))
-    }, 'Promote to main line') : null
-  ]);
-
-  return (
-    <div className="overlay_popup_wrapper variationMenuPopup">
-      <div className="popup_overlay_close"
-        oncreate={helper.ontap(helper.fadesOut(() => ctrl.toggleVariationMenu(), '.overlay_popup_wrapper'))} />
-      <div className="overlay_popup">
-        {content}
-      </div>
-    </div>
-  );
-}
-
-function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path, klass: string) {
+function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
   const visiting = treePath.contains(path, ctrl.vm.path);
   return (
-    <div className="variationWrapper">
+    <lines>
       <span className="menuIcon fa fa-ellipsis-v" oncreate={helper.ontapY(() => ctrl.toggleVariationMenu(path))}></span>
-      <div className={klass + ' variation' + (visiting ? ' visiting' : '')}>
+      <line className={visiting ? ' visiting' : ''}>
         {renderVariationContent(ctrl, variation, path)}
-        {renderVariationMenu(ctrl, path)}
-      </div>
-    </div>
+      </line>
+    </lines>
   );
 }
 
 function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path): Mithril.ChildNode {
   return (
-    <span className="variation nested">
+    <span className="nested">
       (
       {renderVariationContent(ctrl, variation, path)}
       )
@@ -161,10 +139,10 @@ function renderVariationMeta(ctrl: AnalyseCtrlInterface, move: AnalysisStep, pat
 
 function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
+  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath, treePath.write(wPath)) : null;
   const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath, treePath.write(bPath)) : null;
   const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
   if (wMove) {
     if (wMeta) return [
@@ -189,14 +167,6 @@ function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path)
   ];
 }
 
-function renderCommentOpening(opening: Opening) {
-  return (
-    <div className="comment opening">
-      {truncateComment(opening.eco + ' ' + opening.name)}
-    </div>
-  );
-}
-
 function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) {
   const judgment = step && step.rEval && step.rEval.judgment;
   const opening = ctrl.data.game.opening;
@@ -219,13 +189,15 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
       children.push(renderVariation(
         ctrl,
         variation,
-        treePath.withVariation(path, i + 1),
-        i === 0 ? colorClass : null
+        treePath.withVariation(path, i + 1)
       ));
     }
   }
+  const key = 'meta:' + treePath.write(path) +
+    (ctrl.vm.showComments && judgment ? judgment.name : '') +
+    (opening && opening.ply === step.ply ? opening.name : '')
   return (
-    <div className="analysisMeta">{children}</div>
+    <interrupt key={key}>{children}</interrupt>
   );
 }
 
@@ -234,64 +206,69 @@ function truncateComment(text: string) {
   return text.slice(0, 125) + ' [...]';
 }
 
+function renderCommentOpening(opening: Opening) {
+  return <div className="comment">{truncateComment(opening.eco + ' ' + opening.name)}</div>
+}
+
 function renderComment(comment: string, colorClass: string, commentClass: string) {
-  return comment && (
-    <div className={'comment ' + colorClass + commentClass}>
-      {truncateComment(comment)}
-    </div>
-  );
+  return <div className={'comment ' + colorClass + commentClass}>{truncateComment(comment)}</div>
 }
 
-function renderIndex(txt: string) {
-  return <index>{txt}</index>;
+function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
+  let key = 'turn:' + turn.turn
+  let wMove: Mithril.ChildNode, bMove: Mithril.ChildNode
+  if (wPath !== undefined) {
+    const wPathStr = wPath && treePath.write(wPath)
+    key += ':' + wPathStr + (turn.white && turn.white.san)
+    wMove = wPath ? renderMove(pathStr, turn.white, wPath, wPathStr) : null
+  } else {
+    key += ':empty'
+    wMove = emptyMove
+  }
+  if (bPath !== undefined) {
+    const bPathStr = bPath && treePath.write(bPath)
+    key += ':' + bPathStr + (turn.black && turn.black.san)
+    bMove = bPath ? renderMove(pathStr, turn.black, bPath, bPathStr) : null;
+  } else {
+    key += ':empty'
+    bMove = emptyMove
+  }
+  return Vnode(
+    'turn',
+    key,
+    undefined,
+    [renderIndex(String(turn.turn)), wMove, bMove],
+    undefined,
+    undefined
+  )
 }
 
-function renderTurnEl(children: Mithril.Children) {
-  return <turn>{children}</turn>;
-}
-
-function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
-  const index = renderIndex(String(turn.turn));
+function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path): Mithril.Children {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl, turn.white, wPath) : null;
-  const wMeta = renderMeta(ctrl, turn.white, wPath);
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl, turn.black, bPath) : null;
+  const wMeta = renderMeta(ctrl, turn.white, wPath);
   const bMeta = renderMeta(ctrl, turn.black, bPath);
-  if (wMove) {
+  if (wPath) {
     if (wMeta) {
-      let temp = [
-        renderTurnEl([index, wMove, emptyMove]),
-        wMeta
-      ];
-      if (bMove) {
+      const temp = [ renderTurnEl(turn, ctrl.vm.pathStr, wPath), wMeta ]
+      if (bPath) {
         if (bMeta) {
-          temp = temp.concat([
-            renderTurnEl([index, emptyMove, bMove]),
-            bMeta
-          ]);
+          return temp.concat([ renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath), bMeta ])
         } else {
-          temp.push(
-            renderTurnEl([index, emptyMove, bMove])
-          );
+          return temp.concat([ renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath) ])
         }
+      } else {
+        return temp
       }
-      return temp;
     } else if (bMeta) {
-      return [
-        renderTurnEl([index, wMove, bMove]),
-        bMeta
-      ];
+      return [ renderTurnEl(turn, ctrl.vm.pathStr, wPath, bPath), bMeta]
     } else {
-      return renderTurnEl([index, wMove, bMove]);
+      return [renderTurnEl(turn, ctrl.vm.pathStr, wPath, bPath)]
     }
   }
   else if (bMeta) {
-    return [
-      renderTurnEl([index, emptyMove, bMove]),
-      bMeta
-    ];
+    return [renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath), bMeta]
   } else {
-    return renderTurnEl([index, emptyMove, bMove]);
+    return [renderTurnEl(turn, ctrl.vm.pathStr, undefined, bPath)]
   }
 }

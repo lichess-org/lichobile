@@ -151,7 +151,7 @@ export default function ctrl(vnode) {
     });
     this.chessground.set({
       fen: this.data.chess.fen(),
-      lastMove: move,
+      lastMove: [move[0], move[1]],
       turnColor: this.data.puzzle.opponentColor,
       check: null
     });

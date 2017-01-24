@@ -253,7 +253,7 @@ function computeSquareClassesMap(ctrl) {
   const d = ctrl.data;
   const squares = new Map();
   if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
-    addSquare(squares, k, 'last-move');
+    if (k) addSquare(squares, k, 'last-move');
   });
   if (d.check && d.highlight.check) addSquare(squares, d.check, 'check');
   if (d.selected) {

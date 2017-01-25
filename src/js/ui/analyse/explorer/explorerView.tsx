@@ -5,7 +5,8 @@ import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
 import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR } from './OpeningTable';
 
 function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
-  const uci = getTR(e).dataset['uci'];
+  const el = getTR(e)
+  const uci = el && el.dataset['uci'];
   if (uci) ctrl.explorerMove(uci);
 }
 

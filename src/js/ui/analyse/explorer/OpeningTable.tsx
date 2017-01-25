@@ -78,7 +78,7 @@ function resultBar(move: ExplorerMove) {
 
 function onTableTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getTR(e);
-  if ((el.dataset as any).uci) ctrl.explorerMove((el.dataset as any).uci);
+  if (el && el.dataset['uci']) ctrl.explorerMove(el.dataset['uci']);
 }
 
 function showResult(w: Color) {
@@ -89,7 +89,8 @@ function showResult(w: Color) {
 
 function link(ctrl: AnalyseCtrlInterface, e: Event) {
   const orientation = ctrl.chessground.data.orientation;
-  const gameId = (getTR(e).dataset as any).id;
+  const el = getTR(e)
+  const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
     router.set(`/analyse/online/${gameId}/${orientation}`);
   } else {

@@ -135,13 +135,6 @@ function onPause() {
   socket.disconnect();
 }
 
-function handleError(event: string, source: string, fileno: number, columnNumber: number) {
-  const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.ga.trackException(description, true);
-}
-
-window.onerror = handleError;
-
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens
   () => loadPreferredLanguage().then(main),

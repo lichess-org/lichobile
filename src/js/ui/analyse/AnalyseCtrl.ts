@@ -578,7 +578,6 @@ export default class AnalyseCtrl {
       this.vm.step.ply <= 20 && this.vm.step.ply > 0 &&
       openingSensibleVariants.has(this.data.game.variant.key)
     ) {
-      console.log('hihi')
       let msg: { fen: string, path: string, variant?: VariantKey } = {
         fen: this.vm.step.fen,
         path: this.vm.pathStr

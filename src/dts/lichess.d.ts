@@ -138,7 +138,7 @@ interface Tournament {
 }
 
 interface Opening {
-  ply: number
+  ply?: number
   eco: string
   name: string
 }

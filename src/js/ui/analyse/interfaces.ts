@@ -78,6 +78,7 @@ export interface AnalysisStep extends GameStep {
   end?: boolean
   nag?: string
   player?: Color
+  opening?: Opening
 }
 
 export interface CevalWork {
@@ -201,6 +202,7 @@ export interface AnalyseInterface {
   getStepAtPly(ply: number): AnalysisStep
   getSteps(path: Path): AnalysisTree
   getStepsAfterPly(path: Path, ply: number): AnalysisTree
+  getOpening(path: Path): Opening | undefined
   nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
   addStepSituationData(situation: GameSituation, path: Path): void

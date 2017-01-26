@@ -301,17 +301,29 @@ function create(payload) {
   }
 }
 
+function doSend(payload) {
+  var t = payload[0];
+  var d = payload[1];
+  var o = payload[2];
+  if (socketInstance) socketInstance.send(t, d, o);
+  else console.info('socket instance is null, could not send socket msg: ', payload);
+}
+
 self.onmessage = function(msg) {
   switch (msg.data.topic) {
     case 'create':
       create(msg.data.payload);
       break;
     case 'send':
-      var t = msg.data.payload[0];
-      var d = msg.data.payload[1];
-      var o = msg.data.payload[2];
-      if (socketInstance) socketInstance.send(t, d, o);
-      else console.info('socket instance is null, could not send socket msg: ', msg.data.payload);
+      doSend(msg.data.payload);
+      break;
+    case 'ask':
+      var event = msg.data.payload.listenTo;
+      if (socketInstance &&
+        socketInstance.options.registeredEvents.indexOf(event) === -1) {
+        socketInstance.options.registeredEvents.push(event);
+      }
+      doSend(msg.data.payload.msg);
       break;
     case 'connect':
       if (socketInstance) socketInstance.connect();

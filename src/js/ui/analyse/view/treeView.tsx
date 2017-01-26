@@ -169,15 +169,11 @@ function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path)
 
 function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) {
   const judgment = step && step.rEval && step.rEval.judgment;
-  const opening = ctrl.data.game.opening;
-  const moveOpening = (step && opening && opening.ply === step.ply) ? renderCommentOpening(opening) : null;
 
-  if (!step || (!moveOpening && empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments))) return null;
+  if (!step || (empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments)))
+    return null
 
   const children: Mithril.Children = [];
-  if (moveOpening) {
-    children.push(moveOpening);
-  }
   const colorClass = step.ply % 2 === 0 ? 'black ' : 'white ';
   if (ctrl.vm.showComments && !empty(judgment)) {
     children.push(renderComment(judgment.comment, colorClass, judgment.name));
@@ -194,8 +190,7 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
     }
   }
   const key = 'meta:' + treePath.write(path) +
-    (ctrl.vm.showComments && judgment ? judgment.name : '') +
-    (opening && opening.ply === step.ply ? opening.name : '')
+    (ctrl.vm.showComments && judgment ? judgment.name : '')
   return (
     <interrupt key={key}>{children}</interrupt>
   );
@@ -204,10 +199,6 @@ function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) 
 function truncateComment(text: string) {
   if (text.length <= 140) return text;
   return text.slice(0, 125) + ' [...]';
-}
-
-function renderCommentOpening(opening: Opening) {
-  return <div className="comment">{truncateComment(opening.eco + ' ' + opening.name)}</div>
 }
 
 function renderComment(comment: string, colorClass: string, commentClass: string) {

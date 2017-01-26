@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten } from '../../../utils';
+import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';
 import i18n from '../../../i18n';
 import router from '../../../router';
@@ -160,10 +160,23 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
       <div id="replay" className={replayClass}
         oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
       >
+        { renderOpeningBox(ctrl) }
         { renderTree(ctrl, ctrl.analyse.tree) }
       </div>
     );
   }
+}
+
+function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
+  let opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
+  if (opening) return m('div', {
+    key: 'opening-box',
+    className: 'analyse-openingBox',
+    oncreate: helper.ontapY(noop, () => window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'))
+  }, [
+    m('strong', opening.eco),
+    ' ' + opening.name
+  ]);
 }
 
 const spinnerPearl = <div className="spinner fa fa-hourglass-half"></div>

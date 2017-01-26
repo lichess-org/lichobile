@@ -119,3 +119,7 @@ export function getInitialFen(key: VariantKey): string {
 }
 
 export const specialFenVariants = ['crazyhouse', 'threeCheck']
+
+export const openingSensibleVariants = new Set([
+'standard', 'crazyhouse', 'threeCheck', 'kingOfTheHill'
+]) as Set<VariantKey>

@@ -38,6 +38,16 @@ export default class Analyse implements AnalyseInterface {
     return this.getStep(treePath.default(ply));
   }
 
+  public getOpening(path: Path) {
+    const steps = this.getSteps(path)
+    let opening;
+    for (let i = 0, len = steps.length; i < len; i++) {
+      const s = steps[i];
+      opening = s.opening || opening
+    }
+    return opening
+  }
+
   public getSteps = (path: Path) => {
     let tree = this.tree;
     const lsteps: AnalysisStep[] = [];

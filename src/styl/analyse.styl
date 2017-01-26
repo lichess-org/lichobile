@@ -55,6 +55,16 @@
       > move
         font-family ChessSansPiratf
 
+.analyse-openingBox
+  flex 0 0 25px
+  line-height 25px
+  padding 0 4px
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size 0.75rem
+  background lighten(bgdark, 5%)
+
 turn
   width 100%
   display flex
@@ -191,7 +201,7 @@ line
   flex-flow row nowrap
   align-items center
   align-content center
-  background lighten(bgdark, 5%)
+  background lighten(bgdark, 7%)
 
 .analyse-engine_info
   flex 1 0
@@ -224,7 +234,7 @@ line
   font-size 16px
   font-weight bold
   padding 3px 5px
-  background lighten(bgdark, 10%)
+  background lighten(bgdark, 12%)
   > .spinner
     width initial
     height initial
@@ -550,7 +560,7 @@ line
     > move.current
       color gold
 
-  .analyse-replay > turn > index, interrupt
+  .analyse-replay > turn > index, interrupt, .analyse-openingBox
     background darken(bglight, 7%)
 
   .analyse_variant_selector

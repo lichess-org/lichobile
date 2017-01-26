@@ -6,9 +6,10 @@ import redraw from '../../utils/redraw';
 import session from '../../session';
 import sound from '../../sound';
 import socket from '../../socket';
+import { openingSensibleVariants } from '../../lichess/variant';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
-import { handleXhrError, oppositeColor, hasNetwork } from '../../utils';
+import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils';
 import promotion from '../shared/offlineRound/promotion';
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup';
 import { notesCtrl } from '../shared/round/notes';
@@ -196,7 +197,7 @@ export default class AnalyseCtrl {
       this.chessground.set(config);
     }
 
-    if (!dests) this.debouncedGetStepSituation();
+    if (!dests) this.getStepSituation()
   }
 
   public debouncedScroll = debounce(() => util.autoScroll(document.getElementById('replay')), 200);
@@ -214,6 +215,7 @@ export default class AnalyseCtrl {
     this.vm.pathStr = treePath.write(path);
     this.toggleVariationMenu(null);
     this.showGround();
+    this.getOpening()
     if (this.vm.step && this.vm.step.san && direction === 'forward') {
       if (this.vm.step.san.indexOf('x') !== -1) sound.throttledCapture();
       else sound.throttledMove();
@@ -551,7 +553,7 @@ export default class AnalyseCtrl {
       session.isConnected() && gameApi.analysable(this.data);
   }
 
-  private getSituation = () => {
+  private getStepSituation = debounce(() => {
     if (!this.vm.step.dests) {
       chess.situation({
         variant: this.data.game.variant.key,
@@ -568,7 +570,33 @@ export default class AnalyseCtrl {
       })
       .catch(err => console.error('get dests error', err));
     }
-  }
+  }, 50)
 
-  private debouncedGetStepSituation = debounce(this.getSituation, 50);
+  private getOpening = debounce(() => {
+    if (
+      hasNetwork() && this.vm.step.opening === undefined &&
+      this.vm.step.ply <= 20 && this.vm.step.ply > 0 &&
+      openingSensibleVariants.has(this.data.game.variant.key)
+    ) {
+      console.log('hihi')
+      let msg: { fen: string, path: string, variant?: VariantKey } = {
+        fen: this.vm.step.fen,
+        path: this.vm.pathStr
+      }
+      const variant = this.data.game.variant.key
+      if (variant !== 'standard') msg.variant = variant
+      this.analyse.updateAtPath(treePath.read(this.vm.pathStr), (step: AnalysisStep) => {
+        // flag opening as null in any case to not request twice
+        step.opening = null
+        socket.ask('opening', 'opening', msg)
+        .then((d: { opening: Opening, path: string }) => {
+          if (d.opening && d.path) {
+            step.opening = d.opening
+            if (d.path === this.vm.pathStr) redraw()
+          }
+        })
+        .catch(noop)
+      })
+    }
+  }, 50)
 }

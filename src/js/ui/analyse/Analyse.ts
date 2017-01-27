@@ -125,7 +125,7 @@ export default class Analyse implements AnalyseInterface {
       const p = path[j];
       for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
-          if (p.variation) {
+          if (tree[i].variations && p.variation) {
             tree = tree[i].variations[p.variation - 1];
             break;
           }

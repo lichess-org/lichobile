@@ -1,9 +1,9 @@
 import chessground from '../../chessground';
 import router from '../../router';
+import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import { computeFen, readFen } from './editor';
 import menu from './menu';
-import * as m from 'mithril';
 import { loadLocalJsonFile } from '../../utils';
 import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 import continuePopup from '../shared/continuePopup';
@@ -45,12 +45,14 @@ export default function oninit(vnode) {
 
   loadLocalJsonFile('data/positions.json')
   .then(data => {
-    this.positions(data);
+    this.positions(data.reduce((acc, c) => acc.concat(c.positions), []));
+    redraw();
   });
 
   loadLocalJsonFile('data/endgames.json')
   .then(data => {
     this.endgamesPositions(data);
+    redraw();
   });
 
   this.chessground = new chessground.controller({

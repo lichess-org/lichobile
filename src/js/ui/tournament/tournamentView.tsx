@@ -1,5 +1,6 @@
 import * as h from '../helper';
 import router from '../../router';
+import session from '../../session';
 import {header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
@@ -10,11 +11,12 @@ import newTournamentForm from './newTournamentForm';
 import { TournamentListsState, TournamentListItem } from './interfaces';
 
 export default function view(vnode: Mithril.Vnode<{}, TournamentListsState>) {
-  const ctrl = vnode.state;
-  const bodyCtrl = tournamentListBody.bind(undefined, ctrl);
-  const footer = () => renderFooter();
+  const ctrl = vnode.state
+  const bodyCtrl = tournamentListBody.bind(undefined, ctrl)
+  const footer = session.isConnected() ? () => renderFooter() : null
+  const overlay = () => newTournamentForm.view(ctrl)
 
-  return layout.free(header.bind(undefined, i18n('tournaments')), bodyCtrl, footer);
+  return layout.free(() => header(i18n('tournaments')), bodyCtrl, footer, overlay)
 }
 
 const TABS = [{

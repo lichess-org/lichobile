@@ -141,6 +141,8 @@ interface Opening {
   ply?: number
   eco: string
   name: string
+  fen?: string
+  wikiPath?: string
 }
 
 interface Game {

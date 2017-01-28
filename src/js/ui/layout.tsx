@@ -2,7 +2,6 @@ import * as menu from './menu';
 import menuView from './menu/menuView';
 import gamesMenu from './gamesMenu';
 import newGameForm from './newGameForm';
-import newTournamentForm from './tournament/newTournamentForm';
 import playMachineForm from './playMachineForm';
 import challengeForm from './challengeForm';
 import loginModal from './loginModal';
@@ -51,7 +50,6 @@ export default {
         {loginModal.view()}
         {signupModal.view()}
         {newGameForm.view()}
-        {newTournamentForm.view()}
         {playMachineForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}
@@ -85,7 +83,6 @@ export default {
         {loginModal.view()}
         {signupModal.view()}
         {newGameForm.view()}
-        {newTournamentForm.view()}
         {playMachineForm.view()}
         {challengeForm.view()}
         {friendsPopup.view()}

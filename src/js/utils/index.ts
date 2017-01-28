@@ -47,7 +47,7 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-function isFetchError(error: Error | FetchError): error is FetchError {
+export function isFetchError(error: Error | FetchError): error is FetchError {
   return (<FetchError>error).response !== undefined;
 }
 

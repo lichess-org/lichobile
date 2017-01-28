@@ -11,7 +11,6 @@ import { header } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';
-import { validateFen, cleanFenUri } from '../../utils/fen';
 import * as stream from 'mithril/stream';
 
 export interface State {
@@ -44,7 +43,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
           'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
         },
         body: serializeQueryParameters(data)
-      }, true);
+      }, true)
     }
 
     window.addEventListener('native.keyboardhide', helper.onKeyboardHide);
@@ -58,21 +57,16 @@ const ImporterScreen: Mithril.Component<{}, State> = {
         importing(true);
         redraw()
         if (hasNetwork()) {
-          if(validateFen(pgn).valid){
-            // They are importing a FEN.
-            router.set(`/analyse/fen/${encodeURIComponent(pgn)}`)
-          } else {
-            submitOnline(pgn, settings.importer.analyse())
-            .then(data => {
-              router.set(`/analyse/online${data.url.round}`);
-            })
-            .catch(err => {
-              importing(false);
-              redraw()
-              console.error(err);
-              handleXhrError(err);
-            })
-          }
+          submitOnline(pgn, settings.importer.analyse())
+          .then(data => {
+            router.set(`/analyse/online${data.url.round}`);
+          })
+          .catch(err => {
+            importing(false);
+            redraw()
+            console.error(err);
+            handleXhrError(err);
+          })
         }
       },
       importing
@@ -110,18 +104,6 @@ function renderBody(ctrl: State) {
         m('div.fa.fa-hourglass-half') : i18n('importGame'))
     ])
   ]);
-}
-
-function fetchImport(data: SendData) {
-  return fetchJSON('/import', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/vnd.lichess.v' + apiVersion + '+json'
-        },
-        body: serializeQueryParameters(data)
-      }, true)
 }
 
 export default ImporterScreen

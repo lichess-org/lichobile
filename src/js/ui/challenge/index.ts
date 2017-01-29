@@ -93,12 +93,15 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
   view(vnode) {
     let overlay: () => Mithril.Children;
+    let board = viewOnlyBoardContent;
 
-    const header = () => headerWidget('lichess.org');
-    const board = viewOnlyBoardContent;
     const challenge = this.challenge();
 
+    const header = () => headerWidget('lichess.org');
+
     if (challenge) {
+      board = () => viewOnlyBoardContent(challenge.initialFen, null, challenge.color)
+
       if (challenge.direction === 'in') {
         overlay = joinPopup(this);
       } else if (challenge.direction === 'out') {

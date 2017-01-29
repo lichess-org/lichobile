@@ -18,7 +18,7 @@ import { gameTitle } from '../../shared/common';
 
 import ground from './ground';
 import promotion from './promotion';
-import { chatCtrl } from './chat';
+import { Chat } from './chat';
 import { notesCtrl } from './notes';
 import clockCtrl from './clock/clockCtrl';
 import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl';
@@ -26,7 +26,7 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
-import { OnlineRoundInterface } from './';
+import { OnlineRoundInterface, AfterMoveMeta } from './';
 
 interface VM {
   ply: number
@@ -44,23 +44,22 @@ interface VM {
 }
 
 export default class OnlineRound implements OnlineRoundInterface {
-  public id: string;
-  public data: OnlineGameData;
-  public chessground: Chessground.Controller;
-  public clock: any;
-  public correspondenceClock: any;
-  public chat: any;
-  public notes: any;
-  public onFeatured: () => void;
-  public onTVChannelChange: () => void;
-  public onUserTVRedirect: () => void;
-  public vm: VM;
-  public title: any;
-  public tv: string;
-  public flipped: boolean;
+  public id: string
+  public data: OnlineGameData
+  public chessground: Chessground.Controller
+  public clock: any
+  public correspondenceClock: any
+  public chat: Chat
+  public notes: any
+  public onFeatured: () => void
+  public onTVChannelChange: () => void
+  public onUserTVRedirect: () => void
+  public vm: VM
+  public title: Mithril.Children
+  public tv: string
 
-  private tournamentCountInterval: number;
-  private clockIntervId: number;
+  private tournamentCountInterval: number
+  private clockIntervId: number
 
   public constructor(
     id: string,
@@ -72,7 +71,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     onUserTVRedirect?: () => void
   ) {
     this.id = id;
-    this.flipped = flipped;
     this.data = cfg;
     this.onTVChannelChange = onTVChannelChange;
     this.onFeatured = onFeatured;
@@ -81,7 +79,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.vm = {
       ply: this.lastPly(),
-      flip: false,
+      flip: flipped,
       miniUser: {
         player: {
           showing: false,
@@ -105,7 +103,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       offlineWatcher: !hasNetwork()
     };
     this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ?
-      null : new (<any>chatCtrl)(this, session.isShadowban());
+      null : new Chat(this, session.isShadowban());
 
     this.notes = this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null;
 
@@ -201,16 +199,12 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public flip = () => {
+    this.vm.flip = !this.vm.flip;
     if (this.data.tv) {
-      if (this.flip) router.set('/tv?flip=1', true);
+      if (this.vm.flip) router.set('/tv?flip=1', true);
       else router.set('/tv', true);
       return;
-    } else if (this.data.player.spectator) {
-      router.set('/game/' + this.data.game.id + '/' +
-        oppositeColor(this.data.player.color), true);
-      return;
     }
-    this.vm.flip = !this.vm.flip;
     this.chessground.set({
       orientation: boardOrientation(this.data, this.vm.flip)
     });
@@ -254,8 +248,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.chessground.set(config);
     if (this.replaying()) this.chessground.stop();
     if (s.san && isFwd) {
-      if (s.san.indexOf('x') !== -1) sound.capture();
-      else sound.move();
+      if (s.san.indexOf('x') !== -1) sound.throttledCapture();
+      else sound.throttledMove();
     }
     return true;
   }
@@ -554,13 +548,13 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.notes) this.notes.unload();
   }
 
-  private userMove = (orig: Pos, dest: Pos, meta: any) => {
+  private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
     if (!promotion.start(this, orig, dest, meta.premove)) {
       this.sendMove(orig, dest, undefined, meta.premove);
     }
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: any) => {
+  private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, meta.predrop);
     } else {

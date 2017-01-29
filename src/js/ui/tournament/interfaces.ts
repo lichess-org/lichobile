@@ -28,6 +28,7 @@ export interface Tournament {
   system: string
   variant: string
   verdicts: Verdicts
+  position?: Opening
 }
 
 interface TournamentClock {
@@ -224,9 +225,15 @@ export interface TournamentListAttrs {
   tab: string
 }
 
+interface PositionCategory {
+  name: string
+  positions: Array<Opening>
+}
+
 export interface TournamentListsState {
   tournaments: Mithril.Stream<TournamentLists>
   currentTab: Mithril.Stream<string>
+  startPositions?: Array<PositionCategory>
 }
 
 export interface PlayerInfoState {
@@ -269,4 +276,5 @@ export interface TournamentState {
   me: () => void
   isLoading: Mithril.Stream<boolean>
   clockInterval: Mithril.Stream<number>
+  notFound: Mithril.Stream<boolean>
 }

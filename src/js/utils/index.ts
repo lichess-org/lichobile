@@ -5,6 +5,14 @@ import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 
+// game -> last pos fen
+interface GamePosCached {
+  fen: string
+  orientation: Color
+}
+
+export const gamePosCache: Map<string, GamePosCached> = new Map()
+
 export function loadLocalJsonFile(url: string): Promise<any> {
   let curXhr: XMLHttpRequest;
   return m.request({
@@ -39,7 +47,7 @@ export function hasNetwork(): boolean {
   return window.navigator.connection.type !== Connection.NONE;
 }
 
-function isFetchError(error: Error | FetchError): error is FetchError {
+export function isFetchError(error: Error | FetchError): error is FetchError {
   return (<FetchError>error).response !== undefined;
 }
 
@@ -153,11 +161,6 @@ export function aiName(player: { ai: number }) {
   return i18n('aiNameLevelAiLevel', 'Stockfish', player.ai);
 }
 
-export const uid = (function() {
-  let id = 0;
-  return () => id++;
-})();
-
 const perfIconsMap: {[index:string]: string} = {
   bullet: 'T',
   blitz: ')',
@@ -256,13 +259,8 @@ export function formatTournamentTimeControl(clock: TournamentClock): string {
   }
 }
 
-export function noNull(v: any) {
+export function noNull<T>(v: T) {
   return v !== undefined && v !== null;
-}
-
-export function isEmptyObject(obj: Object) {
-  if (typeof obj !== 'object') return false;
-  return Object.keys(obj).length === 0;
 }
 
 export function flatten<T>(arr: T[][]): T[] {

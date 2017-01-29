@@ -31,7 +31,7 @@ export default function cevalEngine(opts: Opts) {
     }
     if (stopped) return;
     if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
-    console.log(text)
+    // console.log(text)
     const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
     if (!matches) return;
     const depth = parseInt(matches[1]);
@@ -59,7 +59,7 @@ export default function cevalEngine(opts: Opts) {
     });
   }
 
-  function stop(): Promise<void> {
+  function stop(): Promise<{}> {
     return new Promise((resolve, reject) => {
       if (finished) {
         stopped = true;

@@ -352,6 +352,24 @@ export default {
   send<D, O>(t: string, data?: D, opts?: O) {
     tellWorker(worker, 'send', [t, data, opts]);
   },
+  ask<D, O>(t: string, listenTo: string, data?: D, opts?: O) {
+    return new Promise((resolve, reject) => {
+      let tid: number
+      function listen(e: MessageEvent) {
+        if (e.data.topic === 'handle' && e.data.payload.t === listenTo) {
+          clearTimeout(tid)
+          worker.removeEventListener('message', listen);
+          resolve(e.data.payload.d);
+        }
+      }
+      worker.addEventListener('message', listen);
+      tellWorker(worker, 'ask', { msg: [t, data, opts], listenTo });
+      tid = setTimeout(() => {
+        worker.removeEventListener('message', listen)
+        reject()
+      }, 3000)
+    });
+  },
   connect() {
     tellWorker(worker, 'connect');
   },

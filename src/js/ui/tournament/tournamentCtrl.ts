@@ -1,9 +1,8 @@
 import socket from '../../socket';
 import redraw from '../../utils/redraw';
-import { handleXhrError } from '../../utils';
+import { handleXhrError, loadLocalJsonFile } from '../../utils';
 import * as xhr from './tournamentXhr';
 import * as helper from '../helper';
-import * as m from 'mithril';
 import settings from '../../settings';
 import { TournamentListAttrs, TournamentListItem, TournamentListsState, TournamentLists } from './interfaces';
 import * as stream from 'mithril/stream';
@@ -13,8 +12,9 @@ export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs, Tournam
 
   socket.createDefault();
 
-  const tournaments = stream<TournamentLists>();
-  const currentTab = stream<string>(vnode.attrs.tab || 'started');
+  this.tournaments = stream<TournamentLists>();
+  this.currentTab = stream<string>(vnode.attrs.tab || 'started');
+  this.startPositions = []
 
   xhr.currentTournaments()
   .then(data => {
@@ -23,15 +23,16 @@ export default function oninit(vnode: Mithril.Vnode<TournamentListAttrs, Tournam
     data.finished = data.finished.filter(supported);
     data.started.sort(sortByLichessAndDate);
     data.finished.sort(sortByEndDate);
-    tournaments(data);
+    this.tournaments(data);
     redraw();
   })
   .catch(handleXhrError);
 
-  vnode.state = <TournamentListsState> {
-    tournaments,
-    currentTab
-  };
+  loadLocalJsonFile('data/positions.json')
+  .then(data => {
+    this.startPositions = data
+    redraw()
+  });
 }
 
 function supported(t: TournamentListItem) {

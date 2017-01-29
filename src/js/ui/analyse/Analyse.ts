@@ -38,6 +38,16 @@ export default class Analyse implements AnalyseInterface {
     return this.getStep(treePath.default(ply));
   }
 
+  public getOpening(path: Path) {
+    const steps = this.getSteps(path)
+    let opening;
+    for (let i = 0, len = steps.length; i < len; i++) {
+      const s = steps[i];
+      opening = s.opening || opening
+    }
+    return opening
+  }
+
   public getSteps = (path: Path) => {
     let tree = this.tree;
     const lsteps: AnalysisStep[] = [];
@@ -101,9 +111,11 @@ export default class Analyse implements AnalyseInterface {
     return nextPath;
   }
 
-  public addDests = (dests: DestsMap, path: Path) => {
+  public addStepSituationData = (situation: GameSituation, path: Path) => {
     this.updateAtPath(path, (step: AnalysisStep) => {
-      step.dests = dests;
+      step.dests = situation.dests;
+      step.end = situation.end;
+      step.player = situation.player;
     });
   }
 
@@ -113,7 +125,7 @@ export default class Analyse implements AnalyseInterface {
       const p = path[j];
       for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
-          if (p.variation) {
+          if (tree[i].variations && p.variation) {
             tree = tree[i].variations[p.variation - 1];
             break;
           }
@@ -132,7 +144,7 @@ export default class Analyse implements AnalyseInterface {
   }
 
   public promoteVariation = (ply: number, id: number) => {
-    const stepId = ply + this.firstPly();
+    const stepId = this.tree.findIndex(s => s.ply === ply)
     const variation = this.getStepAtPly(ply).variations[id - 1];
     this.deleteVariation(ply, id);
     const demoted = this.tree.splice(stepId);

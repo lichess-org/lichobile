@@ -1,6 +1,6 @@
 import settings from '../../../../settings';
 import crazyDrag from './crazyDrag';
-import { drag as chessgroundDrag } from 'chessground-mobile';
+import chessgroundDrag from '../../../../chessground/drag';
 import { BoardInterface } from '../'
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];

@@ -26,8 +26,19 @@ export interface DestsResponse {
   path: string
 }
 
+export interface SituationRequest {
+  variant: VariantKey
+  fen: string
+  path?: string
+}
+
+export interface SituationResponse {
+  situation: GameSituation
+  path: string
+}
+
 export interface MoveRequest {
-  variant?: VariantKey
+  variant: VariantKey
   fen: string
   orig: Pos
   dest: Pos
@@ -95,6 +106,10 @@ export function init(payload: InitRequest): Promise<InitResponse> {
 
 export function dests(payload: DestsRequest): Promise<DestsResponse> {
   return askWorker(worker, { topic: 'dests', payload, reqid: uniqId() });
+}
+
+export function situation(payload: SituationRequest): Promise<SituationResponse> {
+  return askWorker(worker, { topic: 'situation', payload, reqid: uniqId() });
 }
 
 export function move(payload: MoveRequest): Promise<MoveResponse> {

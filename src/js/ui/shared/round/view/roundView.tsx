@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../../../chessground';
 import socket from '../../../../socket';
 import session from '../../../../session';
 import variantApi from '../../../../lichess/variant';
@@ -281,7 +281,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
     let controls = [
       gameButton.shareLink(ctrl),
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-      ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
+      ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
     ];
 
@@ -350,7 +350,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       buttons = [
         gameButton.shareLink(ctrl),
         ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
-        ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
+        ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null
@@ -455,10 +455,8 @@ function renderGameActionsBar(ctrl: OnlineRound) {
       {ctrl.notes ? gameButton.notes(ctrl) : null}
       {gameButton.flipBoard(ctrl)}
       {gameApi.playable(ctrl.data) ? null : gameButton.analysisBoardIconOnly(ctrl)}
-      {gameApi.playable(ctrl.data) ? gameButton.first(ctrl) : null}
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
-      {gameApi.playable(ctrl.data) ? gameButton.last(ctrl) : null}
     </section>
   );
 }

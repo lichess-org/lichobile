@@ -5,6 +5,7 @@ import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
 import * as m from 'mithril';
+import { UserGamePlayer } from '../../lichess/interfaces/user'
 
 export interface ViewportDim {
   vw: number
@@ -13,13 +14,11 @@ export interface ViewportDim {
 
 const animDuration = 250;
 
-// store temporarily last route to disable animations on same route
-// TODO find a better way cause this is ugly
-let lastRoute: string;
-
 // this must be cached because of the access to document.body.style
-let cachedTransformProp: string;
-let cachedViewportDim: ViewportDim = null;
+let cachedTransformProp: string
+let cachedIsPortrait: boolean
+let cachedViewportAspectIs43: boolean
+let cachedViewportDim: ViewportDim = null
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
   return ({ dom }: Mithril.ChildNode) => anim(dom as HTMLElement);
@@ -65,11 +64,7 @@ export function elFadeIn(el: HTMLElement) {
 // apply only to page change transitions
 // they listen to history to determine if animation is going forward or backward
 export function pageSlideIn(el: HTMLElement) {
-  if (router.get() === lastRoute) {
-    return;
-  }
   let tId: number;
-  lastRoute = router.get();
 
   function after() {
     clearTimeout(tId);
@@ -142,7 +137,8 @@ export function transformProp() {
 }
 
 export function clearCachedViewportDim() {
-  cachedViewportDim = null;
+  cachedViewportDim = null
+  cachedIsPortrait = undefined
 }
 
 export function slidesInUp(vnode: Mithril.ChildNode) {
@@ -225,8 +221,8 @@ export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler, touchEn
   return createTapHandler(tapHandler, holdHandler, null, true, false, touchEndFeedback);
 }
 
-export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, touchEndFeedback?: boolean) {
-  return createTapHandler(tapHandler, holdHandler, null, false, true, touchEndFeedback);
+export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, touchEndFeedback?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+  return createTapHandler(tapHandler, holdHandler, null, false, true, touchEndFeedback, getElement);
 }
 
 export function progress(p: number) {
@@ -253,20 +249,20 @@ export function isVeryWideScreen() {
   return viewportDim().vw >= 960;
 }
 
-export function isLandscapeSmall({ vh }: ViewportDim) {
-  return vh <= 450;
-}
-
 export function is43Aspect(): boolean {
-  return window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches;
+  if (cachedViewportAspectIs43 !== undefined) return cachedViewportAspectIs43
+  else {
+    cachedViewportAspectIs43 = window.matchMedia('(aspect-ratio: 4/3), (aspect-ratio: 3/4), (device-aspect-ratio: 4/3), (device-aspect-ratio: 3/4)').matches;
+    return cachedViewportAspectIs43
+  }
 }
 
 export function isPortrait(): boolean {
-  return window.matchMedia('(orientation: portrait)').matches;
-}
-
-export function isLandscape(): boolean {
-  return window.matchMedia('(orientation: landscape)').matches;
+  if (cachedIsPortrait !== undefined) return cachedIsPortrait
+  else {
+    cachedIsPortrait = window.matchMedia('(orientation: portrait)').matches;
+    return cachedIsPortrait
+  }
 }
 
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): BoardBounds  {
@@ -392,7 +388,7 @@ export function onKeyboardHide() {
   }
 }
 
-export function renderRatingDiff(player: Player) {
+export function renderRatingDiff(player: Player | UserGamePlayer) {
   if (player.ratingDiff === undefined) return null;
   if (player.ratingDiff === 0) return <span className="rp null"> +0</span>;
   if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>;

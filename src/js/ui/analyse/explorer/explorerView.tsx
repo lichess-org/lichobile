@@ -5,7 +5,8 @@ import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
 import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR } from './OpeningTable';
 
 function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
-  const uci = getTR(e).dataset['uci'];
+  const el = getTR(e)
+  const uci = el && el.dataset['uci'];
   if (uci) ctrl.explorerMove(uci);
 }
 
@@ -63,6 +64,8 @@ function showDtm(stm: string, move: ExplorerMove) {
 function showDtz(stm: string, move: ExplorerMove) {
   if (move.checkmate) return m('result.' + winner(stm, move), 'Checkmate');
   else if (move.stalemate) return m('result.draws', 'Stalemate');
+  else if (move.variant_win) return m('result.' + winner(stm, move), 'Variant loss');
+  else if (move.variant_loss) return m('result.' + winner(stm, move), 'Variant win');
   else if (move.insufficient_material) return m('result.draws', 'Insufficient material');
   else if (move.dtz === null) return null;
   else if (move.dtz === 0) return m('result.draws', 'Draw');
@@ -112,6 +115,7 @@ function show(ctrl: AnalyseCtrlInterface) {
     }
     else if (data.checkmate) return showGameEnd(ctrl, 'Checkmate');
     else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate');
+    else if (data.variant_win || data.variant_loss) return showGameEnd(ctrl, 'Variant end');
     else return showEmpty(ctrl);
   }
   return <div key="explorer-no-data" />;

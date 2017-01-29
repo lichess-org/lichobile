@@ -42,12 +42,17 @@ button.newGameButton
 
 .setupPosition
   display flex
+  flex-flow column nowrap
   justify-content center
+  align-items center
   margin-top 10px
-
-.setupMiniBoardWrapper
-  width 100px
-  height 100px
+  input[type=text]
+    width 90%
+    margin 10px auto
+    border 1px solid borderLightGray
+    padding 2px 4px
+  .setupFenError
+    color red
 
 .newGame-preset_switch
   > .nice-radio

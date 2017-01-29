@@ -1,3 +1,5 @@
+import { Controller as ContinuePopupController } from '../shared/continuePopup'
+
 export interface RoleToSan {
   [role: string]: SanChar
 }
@@ -30,7 +32,6 @@ export interface RemoteAnalysisMove {
   judgment?: EvalJugdment
 }
 
-// TODO refactor to keep only one interface for remove eval
 export interface RemoteEval {
   cp: number
   best?: string
@@ -66,13 +67,18 @@ export interface Glyph {
   name: string
 }
 
+// everything is optional bc fetched async with chess.ts worker
+// for online game data
 export interface AnalysisStep extends GameStep {
   ceval?: Ceval
   rEval?: RemoteEval
   fixed?: boolean
   variations?: Array<AnalysisTree>
   pgnMoves?: Array<string>
+  end?: boolean
   nag?: string
+  player?: Color
+  opening?: Opening
 }
 
 export interface CevalWork {
@@ -106,10 +112,9 @@ export interface CevalCtrlInterface {
   start(path: Path, steps: AnalysisTree): void
   stop(): void
   destroy(): void
-  allowed: Mithril.Stream<boolean>
-  enabled(): boolean,
+  allowed: boolean
+  enabled(): boolean
   toggle(): void
-  percentComplete(): number
   cores: number
 }
 
@@ -118,14 +123,23 @@ export interface VM {
   shouldGoBack: boolean
   path: Path
   pathStr: string
-  step: AnalysisStep
+  step?: AnalysisStep
   cgConfig: Chessground.SetConfig
-  variationMenu: string
+  variationMenu: Path | null
   flip: boolean
   smallBoard: boolean
   analysisProgress: boolean
   showBestMove: boolean
   showComments: boolean
+  computingPGN: boolean
+  replaying: boolean
+}
+
+export interface MenuInterface {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: AnalyseCtrlInterface
 }
 
 export interface AnalyseCtrlInterface {
@@ -133,21 +147,25 @@ export interface AnalyseCtrlInterface {
   source: Source
   vm: VM
   analyse: AnalyseInterface
-  explorer: ExplorerCtrlInterface
   chessground: Chessground.Controller
+  explorer: ExplorerCtrlInterface
   ceval: CevalCtrlInterface
-  menu: any
-  continuePopup: any
-  settings: any
-  evalSummary: any
+  menu: MenuInterface
+  continuePopup: ContinuePopupController
+  settings: MenuInterface
+  evalSummary: MenuInterface
   notes: any
 
+  player(): Color
   flip(): void
   toggleBoardSize(): void
   jump(path: Path, direction?: 'forward' | 'backward'): void
   userJump(path: Path, direction?: 'forward' | 'backward'): void
+  fastforward(): boolean
+  rewind(): boolean
+  stopff(): void
+  stoprewind(): void
   nextStepBest(): string | null
-  currentAnyEval(): Ceval | RemoteEval
   explorerMove(uci: string): void
   debouncedScroll(): void
   gameOver(): boolean
@@ -155,6 +173,11 @@ export interface AnalyseCtrlInterface {
   toggleVariationMenu(path?: Path): void
   deleteVariation(path: Path): void
   promoteVariation(path: Path): void
+  initCeval(): void
+  toggleBestMove(): void
+  toggleComments(): void
+  sharePGN(): void
+  isRemoteAnalysable(): boolean
 }
 
 export interface ExplorerCtrlInterface {
@@ -179,9 +202,10 @@ export interface AnalyseInterface {
   getStepAtPly(ply: number): AnalysisStep
   getSteps(path: Path): AnalysisTree
   getStepsAfterPly(path: Path, ply: number): AnalysisTree
+  getOpening(path: Path): Opening | undefined
   nextStepEvalBest(path: Path): string | null
   addStep(step: AnalysisStep, path: Path): Path
-  addDests(dests: DestsMap, path: Path): void
+  addStepSituationData(situation: GameSituation, path: Path): void
   updateAtPath(path: Path, update: (s: AnalysisStep) => void): void
   deleteVariation(ply: number, id: number): void
   promoteVariation(ply: number, id: number): void
@@ -202,6 +226,8 @@ export interface ExplorerMove {
   checkmate: boolean
   stalemate: boolean
   insufficient_material: boolean
+  variant_win: boolean
+  variant_loss: boolean
 }
 
 export interface ExplorerPlayer {
@@ -226,4 +252,6 @@ export interface ExplorerData {
   recentGames?: Array<ExplorerGame>
   checkmate?: boolean
   stalemate?: boolean
+  variant_win?: boolean
+  variant_loss?: boolean
 }

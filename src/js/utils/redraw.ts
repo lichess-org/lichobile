@@ -1,13 +1,10 @@
-import signals from '../signals';
-
-let scheduledAnimationFrame = false;
+import signals from '../signals'
+import { batchRequestAnimationFrame } from './batchRAF'
 
 export default function() {
-  if (!scheduledAnimationFrame) {
-    scheduledAnimationFrame = true;
-    requestAnimationFrame(() => {
-      scheduledAnimationFrame = false;
-      signals.redraw.dispatch();
-    });
-  }
+  batchRequestAnimationFrame(redrawSync)
+}
+
+export function redrawSync() {
+  signals.redraw.dispatch()
 }

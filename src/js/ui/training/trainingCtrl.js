@@ -1,8 +1,10 @@
 import { last } from 'lodash/array';
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
+import router from '../../router';
 import redraw from '../../utils/redraw';
 import signals from '../../signals';
 import { handleXhrError } from '../../utils';
+import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 import makeData from './data';
 import chess from './chess';
 import puzzle from './puzzle';
@@ -149,7 +151,7 @@ export default function ctrl(vnode) {
     });
     this.chessground.set({
       fen: this.data.chess.fen(),
-      lastMove: move,
+      lastMove: [move[0], move[1]],
       turnColor: this.data.puzzle.opponentColor,
       check: null
     });
@@ -235,6 +237,7 @@ export default function ctrl(vnode) {
   this.init = function(cfg) {
     this.data = makeData(cfg);
     const chessgroundConf = {
+      batchRAF: batchRequestAnimationFrame,
       fen: this.data.puzzle.fen,
       orientation: this.data.puzzle.color,
       coordinates: settings.game.coords(),
@@ -308,14 +311,9 @@ export default function ctrl(vnode) {
     window.plugins.socialsharing.share(null, null, null, `http://lichess.org/training/${this.data.puzzle.id}`);
   }.bind(this);
 
-  this.getFen = function() {
-    return this.data.replay.history[this.data.replay.step].fen;
-  }.bind(this);
-
-  this.setDifficulty = function(id) {
-    return xhr.setDifficulty(id)
-      .then(pushState)
-      .then(this.reload);
+  this.goToAnalysis = function() {
+    const fen = this.data.replay.history[0].fen
+    router.set(`/analyse/variant/standard/fen/${encodeURIComponent(fen)}?color=${this.data.puzzle.color}`)
   }.bind(this);
 
   if (vnode.attrs.id) {

@@ -161,18 +161,6 @@ export function connectingHeader(title?: string) {
   );
 }
 
-export function hourglassHeader() {
-  return (
-    <nav>
-      {menuButton()}
-      <h1 key="hourglass-title" className="reconnecting">
-        <span className="fa fa-hourglass-half" />
-      </h1>
-      {headerBtns()}
-    </nav>
-  );
-}
-
 export function loadingBackbutton(title?: string) {
   return (
     <nav>

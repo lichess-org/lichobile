@@ -15,7 +15,7 @@ export interface Attrs {
   fen?: string
   lastMove?: string
   orientation?: Color
-  bounds?: Bounds
+  bounds: Bounds
   customPieceTheme?: string
   variant?: VariantKey
 }

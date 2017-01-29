@@ -1,6 +1,6 @@
 import session from '../../session';
 import router from '../../router';
-import { hasNetwork, handleXhrError } from '../../utils';
+import { hasNetwork, handleXhrError, gamePosCache } from '../../utils';
 import { getOfflineGameData, saveOfflineGameData, removeOfflineGameData } from '../../utils/offlineGames';
 import { game as gameXhr } from '../../xhr';
 import storage from '../../storage';
@@ -119,7 +119,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     }
   },
 
-  view() {
+  view({ attrs }) {
     if (this.round) return roundView(this.round);
 
     const pov = gamesMenu.lastJoined();
@@ -129,7 +129,11 @@ const GameScreen: Mithril.Component<Attrs, State> = {
       board = () => viewOnlyBoardContent(pov.fen, pov.lastMove, pov.color,
         pov.variant.key);
     } else {
-      board = () => viewOnlyBoardContent(emptyFen);
+      const g = gamePosCache.get(attrs.id)
+      if (g)
+        board = () => viewOnlyBoardContent(g.fen, null, g.orientation);
+      else
+        board = () => viewOnlyBoardContent(emptyFen);
     }
 
     return layout.board(connectingHeader, board);

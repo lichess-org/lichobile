@@ -1,9 +1,9 @@
 import * as m from 'mithril'
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import i18n from '../../i18n';
 import { playerFromFen } from '../../utils/fen';
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
-import Board, { Attrs as BoardAttrs } from '../shared/Board';
+import Board from '../shared/Board';
 import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import * as helper from '../helper';
@@ -59,7 +59,7 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const isPortrait = helper.isPortrait();
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
-  const board = m<BoardAttrs>(Board, {
+  const board = m(Board, {
     data: ctrl.data,
     chessgroundCtrl: ctrl.chessground,
     bounds,

@@ -5,7 +5,7 @@
 import './polyfills';
 import 'whatwg-fetch';
 
-// for moment a global object makes loading locales easier
+import * as Raven from 'raven-js'
 import * as moment from 'moment';
 window.moment = moment;
 
@@ -68,6 +68,12 @@ function main() {
     window.ga.startTrackerWithId(window.lichess.gaId);
   }
 
+  if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
+    Raven.config(window.lichess.sentryDSN, {
+      release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'
+    }).install()
+  }
+
   if (cordova.platformId === 'android') {
       window.StatusBar.backgroundColorByHexString('#151A1E');
   }
@@ -128,13 +134,6 @@ function onPause() {
   setBackground();
   socket.disconnect();
 }
-
-function handleError(event: string, source: string, fileno: number, columnNumber: number) {
-  const description = event + ' at ' + source + ' [' + fileno + ', ' + columnNumber + ']';
-  window.ga.trackException(description, true);
-}
-
-window.onerror = handleError;
 
 document.addEventListener('deviceready',
   // i18n must be loaded before any rendering happens

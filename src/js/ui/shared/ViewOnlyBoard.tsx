@@ -1,4 +1,4 @@
-import * as chessground from 'chessground-mobile';
+import chessground from '../../chessground';
 import { uciToMove } from '../../utils/chessFormat';
 import settings from '../../settings';
 
@@ -11,7 +11,7 @@ export interface Attrs {
   fen?: string
   lastMove?: string
   orientation?: Color
-  bounds?: Bounds
+  bounds: Bounds
   customPieceTheme?: string
   variant?: VariantKey
 }
@@ -23,7 +23,7 @@ interface Config {
   fen: string
   lastMove: MoveTuple
   orientation: Color
-  bounds?: Bounds
+  bounds: Bounds
 }
 
 interface State {
@@ -83,10 +83,9 @@ function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
     coordinates: false,
     fen,
     lastMove: lastMove && uciToMove(lastMove),
-    orientation: orientation || 'white'
+    orientation: orientation || 'white',
+    bounds
   };
-
-  if (bounds) conf.bounds = bounds;
 
   return conf;
 }

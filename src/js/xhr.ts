@@ -3,7 +3,7 @@ import { lichessSri, noop } from './utils';
 import settings from './settings';
 import i18n from './i18n';
 import session from './session';
-import { TimelineData, LobbyData, HookData, Pool } from './lichess/interfaces';
+import { TimelineData, LobbyData, HookData, Pool, Seek } from './lichess/interfaces';
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge';
 
 interface GameSetup {
@@ -90,13 +90,13 @@ export function getChallenge(id: string): Promise<ChallengeData> {
   return fetchJSON(`/challenge/${id}`, {}, true);
 }
 
-export function cancelChallenge(id: string): Promise<void> {
+export function cancelChallenge(id: string): Promise<string> {
   return fetchText(`/challenge/${id}/cancel`, {
     method: 'POST'
   }, true);
 }
 
-export function declineChallenge(id: string): Promise<void> {
+export function declineChallenge(id: string): Promise<string> {
   return fetchText(`/challenge/${id}/decline`, {
     method: 'POST'
   }, true);
@@ -115,7 +115,7 @@ export function lobby(feedback?: boolean): Promise<LobbyData> {
   })
 }
 
-export function seeks(feedback: boolean) {
+export function seeks(feedback: boolean): Promise<Array<Seek>> {
   return fetchJSON('/lobby/seeks', null, feedback);
 }
 
@@ -135,14 +135,19 @@ export function featured(channel: string, flip: boolean): Promise<OnlineGameData
   return fetchJSON('/tv/' + channel, flip ? { query: { flip: 1 }} : {});
 }
 
-export function setServerLang(lang: string) {
+export function importMasterGame(gameId: string, orientation: Color): Promise<OnlineGameData> {
+  return fetchJSON(`/import/master/${gameId}/${orientation}`)
+}
+
+export function setServerLang(lang: string): Promise<void> {
   if (session.isConnected()) {
     return fetchJSON('/translation/select', {
       method: 'POST',
       body: JSON.stringify({
         lang
       })
-    });
+    })
+    .then(() => {});
   } else {
     return Promise.resolve();
   }

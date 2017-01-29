@@ -145,8 +145,8 @@
   75%,95% { stroke: green }
 }
 .spinner
-  width: 45px
-  height: 45px
+  width: 40px
+  height: 40px
   padding 5px
   margin: auto
   circle
@@ -158,8 +158,16 @@
   &.monochrome
     circle
       animation spinnerDash 1.275s ease-in-out infinite
-      stroke blue
+      stroke gold
 
 .fading_out
-  transition opacity 200ms ease-out
+  transition opacity 300ms ease-out
   opacity 0
+
+@keyframes fade-in {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+
+.fade-in
+  animation fade-in 250ms

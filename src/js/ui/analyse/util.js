@@ -40,16 +40,12 @@ export function isSynthetic(data) {
 
 export function autoScroll(movelist) {
   if (!movelist) return;
-  var scheduledAF = false;
-  if (!scheduledAF) {
-    scheduledAF = true;
-    requestAnimationFrame(function() {
-      scheduledAF = false;
-      const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
-      if (plyEl) {
-        movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
-      }
-    });
-  }
+  requestAnimationFrame(function() {
+    const plyEl = movelist.querySelector('.current') || movelist.querySelector('turn:first-child');
+    if (plyEl) {
+      movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+    } else {
+      movelist.scrollTop = 0
+    }
+  });
 }
-

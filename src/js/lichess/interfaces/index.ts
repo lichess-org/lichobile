@@ -18,6 +18,22 @@ export interface HookData {
   }
 }
 
+export type ModeId = 0 | 1
+
+export interface Seek {
+  id: string
+  username: string
+  rating: number
+  variant: Variant
+  mode: ModeId
+  days: number
+  color: Color
+  perf: {
+    icon: string
+    name: Perf
+  }
+}
+
 export interface TimelineEntry {
   data: any;
   date: number;

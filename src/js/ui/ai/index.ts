@@ -28,7 +28,7 @@ const AiScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
   onremove() {
     window.plugins.insomnia.allowSleepAgain();
-    this.round.engine.exit();
+    if (this.round) this.round.engine.exit();
   },
   view
 };

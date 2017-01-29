@@ -5,7 +5,6 @@ import router from '../../../router';
 import * as utils from '../../../utils';
 import * as xhr from '../tournamentXhr';
 import * as helper from '../../helper';
-import * as m from 'mithril';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
 import { TournamentAttrs, Tournament, FeaturedGameUpdate, TournamentState } from '../interfaces'
@@ -20,6 +19,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   const hasJoined = stream<boolean>(false);
   const currentPage = stream<number>(null);
   const isLoading = stream<boolean>(false);
+  const notFound = stream<boolean>(false);
 
   const faqCtrl = faq.controller(tournament);
   const playerInfoCtrl = playerInfo.controller(tournament);
@@ -77,7 +77,12 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
     isLoading(true);
     xhr.reload(tid, currentPage())
     .then(reload)
-    .catch(() => isLoading(false));
+    .catch(err => {
+      if (utils.isFetchError(err) && err.response.status === 404) {
+        notFound(true)
+      }
+      isLoading(false)
+    });
   }, 1000);
 
   const handlers = {
@@ -97,6 +102,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   };
 
   const clockInterval = stream<number>();
+
   xhr.tournament(id)
   .then(data => {
     tournament(data);
@@ -106,7 +112,13 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
     redraw();
   })
-  .catch(utils.handleXhrError);
+  .catch(err => {
+    if (utils.isFetchError(err) && err.response.status === 404) {
+      notFound(true)
+    } else {
+      utils.handleXhrError(err)
+    }
+  });
 
   vnode.state = {
     tournament,
@@ -139,6 +151,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
       if (!isLoading() && me) throttledReload(id, Math.ceil(me.rank / 10));
     },
     isLoading,
-    clockInterval
-  };
+    clockInterval,
+    notFound
+  }
 }

@@ -8,16 +8,16 @@ import menu from './menu';
 import continuePopup from '../shared/continuePopup';
 import settings from '../../settings';
 import * as m from 'mithril';
+import Editor from './Editor'
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(ctrl: Editor) {
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
   const isPortrait = helper.isPortrait();
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor');
 
   const board = m(Board, {
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait: helper.isPortrait()
@@ -56,7 +56,7 @@ export default function view(vnode) {
   );
 }
 
-function sparePieces(ctrl, color, orientation, position) {
+function sparePieces(ctrl: Editor, color: Color, orientation: Color, position: 'top' | 'bottom') {
   return m('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
   }, m('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map((role) => {
@@ -68,7 +68,7 @@ function sparePieces(ctrl, color, orientation, position) {
   })));
 }
 
-function renderActionsBar(ctrl) {
+function renderActionsBar(ctrl: Editor) {
   return m('section.actions_bar', [
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',

@@ -56,7 +56,7 @@ function renderContent(ctrl: AiRound) {
   );
 
   const board = m(Board, {
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait

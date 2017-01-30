@@ -4,7 +4,7 @@ import chessground from '../../chessground';
 import BoardBrush, { Shape } from './BoardBrush';
 
 export interface Attrs {
-  data: GameData
+  variant: VariantKey
   chessgroundCtrl: Chessground.Controller
   bounds: BoardBounds
   isPortrait: boolean
@@ -47,14 +47,14 @@ const Board: Mithril.Component<Attrs, State> = {
   },
 
   view(vnode) {
-    const { data, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
+    const { variant, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
 
     const boardClass = [
       'display_board',
       'orientation-' + chessgroundCtrl.data.orientation,
       this.boardTheme,
       customPieceTheme || this.pieceTheme,
-      data.game.variant.key
+      variant
     ].join(' ');
 
     let wrapperClass = 'game_board_wrapper'

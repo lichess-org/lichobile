@@ -137,6 +137,17 @@ interface Tournament {
   }
 }
 
+interface BoardPosition {
+  name: string
+  fen: string
+  eco?: string
+}
+
+interface BoardPositionCategory {
+  name: string
+  positions: Array<BoardPosition>
+}
+
 interface Opening {
   ply?: number
   eco: string

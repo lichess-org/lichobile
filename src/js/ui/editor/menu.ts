@@ -3,10 +3,18 @@ import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
 import * as m from 'mithril';
+import Editor from './Editor'
+
+export interface MenuInterface {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: Editor
+}
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: Editor) {
     let isOpen = false;
 
     function open() {
@@ -14,7 +22,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -22,32 +30,32 @@ export default {
     return {
       open: open,
       close: close,
-      isOpen: function() {
-        return isOpen;
+      isOpen() {
+        return isOpen
       },
       root
     };
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: MenuInterface) {
     return popupWidget(
       'editorMenu',
       null,
-      renderEditorMenu.bind(undefined, ctrl.root),
+      () => renderEditorMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
     );
   }
 };
 
-function renderEditorMenu(ctrl) {
+function renderEditorMenu(ctrl: Editor) {
   return m('div.editorMenu', [
     renderSelectColorPosition(ctrl),
     renderCastlingOptions(ctrl)
   ]);
 }
 
-export function renderSelectColorPosition(ctrl) {
+export function renderSelectColorPosition(ctrl: Editor) {
   const fen = ctrl.computeFen();
   return m('div.editorSelectors', [
     m('div.select_input', [
@@ -56,8 +64,8 @@ export function renderSelectColorPosition(ctrl) {
       }, 'Openings'),
       m('select.positions', {
         id: 'select_editor_positions',
-        onchange: function(e) {
-          ctrl.loadNewFen(e.target.value);
+        onchange(e: Event) {
+          ctrl.loadNewFen((e.target as HTMLInputElement).value);
         }
       }, [
         optgroup('Set the board', [
@@ -65,10 +73,10 @@ export function renderSelectColorPosition(ctrl) {
             name: '-- Position --',
             fen: ''
           }),
-          ctrl.extraPositions.map(position2option.bind(undefined, fen))
+          ctrl.extraPositions.map((pos: BoardPosition) => position2option(fen, pos))
         ]),
         optgroup('Popular openings',
-          ctrl.positions().map(position2option.bind(undefined, fen))
+          ctrl.positions().map((pos: BoardPosition) => position2option(fen, pos))
         )
       ])
     ]),
@@ -78,8 +86,8 @@ export function renderSelectColorPosition(ctrl) {
       }, 'Endgames'),
       m('select.positions', {
         id: 'select_editor_endgames',
-        onchange: function(e) {
-          ctrl.loadNewFen(e.target.value);
+        onchange(e: Event) {
+          ctrl.loadNewFen((e.target as HTMLInputElement).value);
         }
       }, [
         optgroup('Set the board', [
@@ -87,10 +95,10 @@ export function renderSelectColorPosition(ctrl) {
             name: '-- Position --',
             fen: ''
           }),
-          ctrl.extraPositions.slice(1).map(position2option.bind(undefined, fen))
+          ctrl.extraPositions.slice(1).map((pos: BoardPosition) => position2option(fen, pos))
         ]),
         optgroup('Endgames positions',
-          ctrl.endgamesPositions().map(position2option.bind(undefined, fen))
+          ctrl.endgamesPositions().map((pos: BoardPosition) => position2option.bind(fen, pos))
         )
       ])
     ]),
@@ -110,7 +118,7 @@ export function renderSelectColorPosition(ctrl) {
   ]);
 }
 
-function renderCastlingOptions(ctrl) {
+function renderCastlingOptions(ctrl: Editor) {
   const white = [
     ['K', i18n('whiteCastlingKingside')],
     ['Q', i18n('whiteCastlingQueenside')],
@@ -127,7 +135,7 @@ function renderCastlingOptions(ctrl) {
   ]);
 }
 
-function castlingButton(ctrl, c) {
+function castlingButton(ctrl: Editor, c: string[]) {
   const cur = ctrl.data.editor.castles[c[0]];
   return m('span', {
     className: cur() ? 'selected' : '',
@@ -135,11 +143,14 @@ function castlingButton(ctrl, c) {
   }, c[1]);
 }
 
-function position2option(fen, pos) {
-  return <option value={pos.fen} selected={fen === pos.fen}>{pos.name}</option>;
+function position2option(fen: string, pos: BoardPosition): Mithril.ChildNode {
+  return m('option', {
+    value: pos.fen,
+    selected: fen === pos.fen
+  }, pos.name)
 }
 
-function optgroup(name, opts) {
+function optgroup(name: string, opts: Mithril.Children) {
   return m('optgroup', {
     label: name
   }, opts);

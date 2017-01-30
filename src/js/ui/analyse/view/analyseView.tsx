@@ -75,7 +75,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
   board = m(Board, {
     key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,

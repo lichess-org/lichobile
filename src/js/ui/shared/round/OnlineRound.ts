@@ -1,7 +1,7 @@
 import { throttle } from 'lodash';
 import redraw from '../../../utils/redraw';
 import { saveOfflineGameData } from '../../../utils/offlineGames';
-import { hasNetwork, boardOrientation, formatTimeInSecs, oppositeColor, noop } from '../../../utils';
+import { hasNetwork, boardOrientation, formatTimeInSecs, noop } from '../../../utils';
 import i18n from '../../../i18n';
 import gameStatus from '../../../lichess/status';
 import session from '../../../session';
@@ -20,7 +20,7 @@ import ground from './ground';
 import promotion from './promotion';
 import { Chat } from './chat';
 import { notesCtrl } from './notes';
-import clockCtrl from './clock/clockCtrl';
+import ClockCtrl from './clock/ClockCtrl';
 import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl';
 import socketHandler from './socketHandler';
 import atomic from './atomic';
@@ -47,7 +47,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public id: string
   public data: OnlineGameData
   public chessground: Chessground.Controller
-  public clock: any
+  public clock: ClockCtrl | null
   public correspondenceClock: any
   public chat: Chat
   public notes: any
@@ -116,12 +116,12 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.onNewPiece
     );
 
-    this.clock = this.data.clock ? new (<any>clockCtrl)(
+    this.clock = this.data.clock ? new ClockCtrl(
       this.data.clock,
       this.data.player.spectator ? noop :
         throttle(() => socket.send('outoftime'), 500),
       this.data.player.spectator ? null : this.data.player.color
-    ) : false;
+    ) : null;
 
     this.makeCorrespondenceClock();
 

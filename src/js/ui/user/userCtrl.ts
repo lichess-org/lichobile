@@ -3,35 +3,38 @@ import redraw from '../../utils/redraw';
 import * as xhr from './userXhr';
 import router from '../../router';
 import * as utils from '../../utils';
-import * as helper from '../helper';
 import challengeForm from '../challengeForm';
-import socket from '../../socket';
-import * as m from 'mithril';
 import * as stream from 'mithril/stream';
+import { UserFullProfile } from '../../lichess/interfaces/user';
 
-export default function oninit(vnode) {
+export interface UserCtrl {
+  user: Mithril.Stream<UserFullProfile | undefined>
+  isMe: () => boolean
+  toggleFollowing: () => void
+  toggleBlocking: () => void
+  goToGames: () => void
+  goToUserTV: () => void
+  challenge: () => void
+  composeMessage: () => void
+}
 
-  const userId = vnode.attrs.id;
+export default function oninit(userId: string) {
 
-  helper.analyticsTrackView('User Profile');
+  const user: Mithril.Stream<UserFullProfile | undefined> = stream(undefined)
 
-  socket.createDefault();
-
-  const user = stream();
-
-  function setNewUserState(newData) {
-    Object.assign(user(), newData);
+  function setNewUserState(newData: Partial<UserFullProfile>) {
+    Object.assign(user(), newData)
   }
 
   xhr.user(userId)
   .then(data => {
-    user(data);
-    redraw();
+    user(data)
+    redraw()
   })
   .then(session.refresh)
-  .catch(utils.handleXhrError);
+  .catch(utils.handleXhrError)
 
-  vnode.state = {
+  return {
     user,
     isMe: () => session.getUserId() === userId,
     toggleFollowing: () => {
@@ -46,5 +49,5 @@ export default function oninit(vnode) {
     goToUserTV: () => router.set(`/@/${user().id}/tv`),
     challenge: () => challengeForm.open(user().id),
     composeMessage: () => router.set(`/inbox/new/${user().id}`)
-  };
+  }
 }

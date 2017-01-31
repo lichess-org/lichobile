@@ -3,14 +3,7 @@ import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
 import * as m from 'mithril';
-import Editor from './Editor'
-
-export interface MenuInterface {
-  open: () => void
-  close: () => void
-  isOpen: () => boolean
-  root: Editor
-}
+import Editor, { MenuInterface } from './Editor'
 
 export default {
 
@@ -98,7 +91,7 @@ export function renderSelectColorPosition(ctrl: Editor) {
           ctrl.extraPositions.slice(1).map((pos: BoardPosition) => position2option(fen, pos))
         ]),
         optgroup('Endgames positions',
-          ctrl.endgamesPositions().map((pos: BoardPosition) => position2option.bind(fen, pos))
+          ctrl.endgamesPositions().map((pos: BoardPosition) => position2option(fen, pos))
         )
       ])
     ]),

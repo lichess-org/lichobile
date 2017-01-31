@@ -2,7 +2,9 @@ import chessground from '../../chessground';
 import router from '../../router';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
-import menu, { MenuInterface } from './menu';
+import menu from './menu';
+import pasteFenPopup from './pasteFenPopup';
+import { validateFen } from '../../utils/fen';
 import { loadLocalJsonFile } from '../../utils';
 import { batchRequestAnimationFrame } from '../../utils/batchRAF';
 import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup';
@@ -34,9 +36,17 @@ interface Data {
   }
 }
 
+export interface MenuInterface {
+  open: () => void
+  close: () => void
+  isOpen: () => boolean
+  root: Editor
+}
+
 export default class Editor {
   public data: Data
   public menu: MenuInterface
+  public pasteFenPopup: MenuInterface
   public continuePopup: ContinuePopupCtrl
   public chessground: Chessground.Controller
 
@@ -45,10 +55,11 @@ export default class Editor {
   public extraPositions: Array<BoardPosition>
 
   public constructor(fen?: string) {
-    const initFen = fen || startingFen;
+    const initFen = fen || startingFen
 
-    this.menu = menu.controller(this);
-    this.continuePopup = continuePopup.controller();
+    this.menu = menu.controller(this)
+    this.pasteFenPopup = pasteFenPopup.controller(this)
+    this.continuePopup = continuePopup.controller()
 
     this.data = {
       editor: this.readFen(initFen),
@@ -70,19 +81,17 @@ export default class Editor {
       name: i18n('clearBoard')
     }]
 
-    loadLocalJsonFile('data/positions.json')
-    .then(data => {
+    Promise.all([
+      loadLocalJsonFile('data/positions.json'),
+      loadLocalJsonFile('data/endgames.json')
+    ])
+    .then(([openings, endgames]) => {
       this.positions(
-        data.reduce((acc: Array<BoardPosition>, c: BoardPositionCategory) =>
+        openings.reduce((acc: Array<BoardPosition>, c: BoardPositionCategory) =>
           acc.concat(c.positions), [])
       )
+      this.endgamesPositions(endgames);
       redraw()
-    })
-
-    loadLocalJsonFile('data/endgames.json')
-    .then(data => {
-      this.endgamesPositions(data);
-      redraw();
     })
 
     this.chessground = new chessground.controller({
@@ -152,7 +161,10 @@ export default class Editor {
     this.chessground.getFen() + ' ' + this.fenMetadatas()
 
   public loadNewFen = (newFen: string) => {
-    router.set(`/editor/${encodeURIComponent(newFen)}`);
+    if (validateFen(newFen).valid === true)
+      router.set(`/editor/${encodeURIComponent(newFen)}`, true);
+    else
+      window.plugins.toast.show('Invalid FEN', 'short', 'center');
   }
 
   private fenMetadatas() {

@@ -377,7 +377,7 @@ function makeCoords(el, withSymm) {
 
 function makeSymmCoords(el) {
   const coords = document.createDocumentFragment();
-  coords.appendChild(renderCoords(util.ranks, 'ranks symm'));
-  coords.appendChild(renderCoords(util.files, 'files symm'));
+  coords.appendChild(renderCoords(util.invRanks, 'ranks symm'));
+  coords.appendChild(renderCoords(util.invFiles, 'files symm'));
   el.appendChild(coords);
 }

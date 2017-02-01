@@ -167,7 +167,7 @@ function renderActions(ctrl: UserCtrl) {
       >
         {i18n('watchGames')}
       </div>
-      { !ctrl.isMe() ?
+      { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item nav" key="compose_message" data-icon="m"
         oncreate={helper.ontapY(ctrl.composeMessage)}
       >

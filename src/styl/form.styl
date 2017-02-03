@@ -17,30 +17,32 @@
 
 
 input[type='checkbox']
-  flex 0 0 70px
+  flex 0 0 60px
   position relative
   margin 0
   border none
   height 30px
   border-radius 15px
-  background-color #444444
-  transition background-color 200ms
+  background-color #ccc
+  transition background-color 250ms ease-out
   outline none
+  box-shadow inset 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked
   background gold
 input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 5px
-  left 5px
-  width 20px
-  height 20px
+  top 1px
+  left 1px
+  width 28px
+  height 28px
   border-radius 50%
   background #fff
   transition left 200ms
+  box-shadow 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked:after
-  left 40px
+  left 31px
 
 // select
 .select_input

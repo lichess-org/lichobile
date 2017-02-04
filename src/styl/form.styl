@@ -4,6 +4,8 @@
   justify-content space-between
   align-items center
   min-height 30px
+  > input[type='checkbox']
+    margin-left 10px
   &.small
     min-height 25px
     input[type='checkbox']
@@ -17,11 +19,11 @@
 
 
 input[type='checkbox']
-  flex 0 0 60px
+  flex 0 0 55px
   position relative
   margin 0
   border none
-  height 30px
+  height 26px
   border-radius 15px
   background-color #ccc
   transition background-color 250ms ease-out
@@ -33,16 +35,16 @@ input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 1px
-  left 1px
-  width 28px
-  height 28px
+  top 0px
+  left 0px
+  width 26px
+  height 26px
   border-radius 50%
   background #fff
   transition left 200ms
   box-shadow 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked:after
-  left 31px
+  left 29px
 
 // select
 .select_input

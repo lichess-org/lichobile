@@ -9,7 +9,6 @@
 .analyse-tableWrapper
   margin-top 5px
   flex 1 1 auto
-  width 100%
   display flex
   flex-flow column nowrap
 
@@ -22,15 +21,15 @@
   overflow hidden
 
 .analyse-infosBox
-  flex 1 1 auto
+  flex 1 1 40%
   display flex
   flex-flow column nowrap
   > .native_scroller
     flex 1 1 auto
 
 .analyse-game
-  flex 0 0 60%
-  max-width 230px
+  width 60%
+  max-width 400px
   display flex
   flex-flow column nowrap
 
@@ -54,6 +53,8 @@
     > turn
       > move
         font-family ChessSansPiratf
+  @media only screen and (orientation: landscape) and (max-height 450px)
+    font-size 0.7em
 
 .analyse-openingBox
   flex 0 0 25px
@@ -62,7 +63,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size 0.75rem
+  font-size 0.75em
   background lighten(bgdark, 5%)
 
 turn

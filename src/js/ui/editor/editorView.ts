@@ -6,18 +6,19 @@ import * as helper from '../helper';
 import i18n from '../../i18n';
 import menu from './menu';
 import continuePopup from '../shared/continuePopup';
+import pasteFenPopup from './pasteFenPopup'
 import settings from '../../settings';
 import * as m from 'mithril';
+import Editor from './Editor'
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
+export default function view(ctrl: Editor) {
   const color = ctrl.chessground.data.orientation;
   const opposite = color === 'white' ? 'black' : 'white';
   const isPortrait = helper.isPortrait();
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor');
 
   const board = m(Board, {
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait: helper.isPortrait()
@@ -45,18 +46,19 @@ export default function view(vnode) {
   function overlay() {
     return [
       menu.view(ctrl.menu),
-      continuePopup.view(ctrl.continuePopup)
-    ];
+      continuePopup.view(ctrl.continuePopup),
+      pasteFenPopup.view(ctrl.pasteFenPopup)
+    ]
   }
 
   return layout.board(
-    header.bind(undefined, i18n('boardEditor')),
+    () => header(i18n('boardEditor')),
     content,
     overlay
   );
 }
 
-function sparePieces(ctrl, color, orientation, position) {
+function sparePieces(ctrl: Editor, color: Color, orientation: Color, position: 'top' | 'bottom') {
   return m('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
   }, m('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map((role) => {
@@ -68,7 +70,7 @@ function sparePieces(ctrl, color, orientation, position) {
   })));
 }
 
-function renderActionsBar(ctrl) {
+function renderActionsBar(ctrl: Editor) {
   return m('section.actions_bar', [
     m('button.action_bar_button.fa.fa-ellipsis-h', {
       key: 'editorMenu',
@@ -91,6 +93,11 @@ function renderActionsBar(ctrl) {
         router.set(`/analyse/fen/${fen}`);
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
+    m('button.action_bar_button.fa.fa-upload', {
+      key: 'pastePosition',
+      oncreate: helper.ontap(ctrl.pasteFenPopup.open,
+        () => window.plugins.toast.show(i18n('Load position from FEN'), 'short', 'center'))
+    }),
     m('button.action_bar_button.fa.fa-share-alt', {
       key: 'sharePosition',
       oncreate: helper.ontap(
@@ -98,6 +105,5 @@ function renderActionsBar(ctrl) {
         () => window.plugins.toast.show('Share FEN', 'short', 'bottom')
       )
     })
-  ]);
+  ])
 }
-

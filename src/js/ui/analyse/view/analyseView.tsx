@@ -75,7 +75,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
 
   board = m(Board, {
     key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
@@ -168,7 +168,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
 }
 
 function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
-  let opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
+  const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
   if (opening) return m('div', {
     key: 'opening-box',
     className: 'analyse-openingBox',

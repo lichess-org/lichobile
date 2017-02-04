@@ -4,6 +4,8 @@
   justify-content space-between
   align-items center
   min-height 30px
+  > input[type='checkbox']
+    margin-left 10px
   &.small
     min-height 25px
     input[type='checkbox']
@@ -17,30 +19,32 @@
 
 
 input[type='checkbox']
-  flex 0 0 70px
+  flex 0 0 55px
   position relative
   margin 0
   border none
-  height 30px
+  height 26px
   border-radius 15px
-  background-color #444444
-  transition background-color 200ms
+  background-color #ccc
+  transition background-color 250ms ease-out
   outline none
+  box-shadow inset 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked
   background gold
 input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 5px
-  left 5px
-  width 20px
-  height 20px
+  top 0px
+  left 0px
+  width 26px
+  height 26px
   border-radius 50%
   background #fff
   transition left 200ms
+  box-shadow 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked:after
-  left 40px
+  left 29px
 
 // select
 .select_input
@@ -156,7 +160,6 @@ button.fat
     border: 1px solid #3d3d3d;
     border-width: 1px 0 1px 1px;
     text-transform: capitalize;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset;
     &:first-child
       border-radius: 3px 0 0 3px;
     &:last-child
@@ -166,7 +169,7 @@ button.fat
       background gold
       color: #fff;
       text-shadow: 1px 0 0 rgba(0,0,0,0.5);
-      box-shadow: none
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
 
 .view-container.light
   .form-multipleChoice

@@ -1,7 +1,6 @@
 import * as helper from '../../../helper';
 import * as m from 'mithril';
-
-type ClockCtrl = any
+import ClockCtrl from './ClockCtrl'
 
 export interface ClockAttrs {
   ctrl: ClockCtrl
@@ -22,7 +21,7 @@ function prefixInteger(num: number, length: number) {
 const sepHigh = ':';
 const sepLow = ' ';
 
-export function formatClockTime(time: number, isRunning: boolean) {
+export function formatClockTime(time: number, isRunning: boolean = false) {
   const date = new Date(time);
   const minutes = prefixInteger(date.getUTCMinutes(), 2);
   const seconds = prefixInteger(date.getUTCSeconds(), 2);
@@ -41,36 +40,38 @@ export function formatClockTime(time: number, isRunning: boolean) {
   return minutes + sepHigh + seconds;
 }
 
-export default {
-  oninit({ attrs }: Mithril.Vnode<ClockAttrs, ClockState>) {
+const Clock: Mithril.Component<ClockAttrs, ClockState> = {
+  oninit({ attrs }) {
     const { ctrl, color, runningColor } = attrs;
     const time = ctrl.data[color];
     const isRunning = runningColor === color;
-    this.clockOnCreate = function({ dom }: Mithril.ChildNode) {
+    this.clockOnCreate = ({ dom }: Mithril.ChildNode) => {
       dom.textContent = formatClockTime(time * 1000, isRunning);
-      ctrl.els[color] = dom;
-    };
+      ctrl.els[color] = dom as HTMLElement
+    }
     // safety measure if oncreate is not called
-    this.clockOnUpdate = function({ dom }: Mithril.ChildNode) {
-      ctrl.els[color] = dom;
-    };
+    this.clockOnUpdate = ({ dom }: Mithril.ChildNode) => {
+      ctrl.els[color] = dom as HTMLElement
+    }
   },
 
-  view({ attrs }: Mithril.Vnode<ClockAttrs, ClockState>) {
-    const { ctrl, color, runningColor, isBerserk } = attrs;
-    const time = ctrl.data[color];
-    const isRunning = runningColor === color;
+  view({ attrs }) {
+    const { ctrl, color, runningColor, isBerserk } = attrs
+    const time = ctrl.data[color]
+    const isRunning = runningColor === color
     const className = helper.classSet({
       clock: true,
       outoftime: !time,
       running: isRunning,
       emerg: time < ctrl.data.emerg,
       berserk: isBerserk
-    });
+    })
     return m('div', {
       className,
       oncreate: this.clockOnCreate,
       onupdate: this.clockOnUpdate
-    });
+    })
   }
-};
+}
+
+export default Clock

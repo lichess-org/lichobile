@@ -1,52 +1,45 @@
+import * as m from 'mithril';
 import userPerfs from '../../lichess/perfs';
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
 import * as xhr from '../../xhr';
 import perf from '../shared/perf';
-import layout from '../layout';
 import i18n from '../../i18n';
 import countries from '../../utils/countries';
 import * as helper from '../helper';
 import session from '../../session';
+import { UserFullProfile } from '../../lichess/interfaces/user';
+import { UserCtrl } from './userCtrl';
 
-export default function view() {
-  const ctrl = this;
-  const user = ctrl.user();
+export function header(user: UserFullProfile, ctrl: UserCtrl) {
+  const status = user.online ? 'online' : 'offline';
+  const icon = user.patron ?
+    <span className={'userStatus patron ' + status} data-icon="" /> :
+    <span className={'fa fa-circle userStatus ' + status} />
 
-  if (!user) return layout.empty();
+  const title = m('div', [
+    icon,
+    (user.title ? `${user.title} ` : '') + user.username
+  ])
 
-  function header() {
-    const status = user.online ? 'online' : 'offline';
-    const icon = user.patron ?
-      <span className={'userStatus patron ' + status} data-icon="" /> :
-      <span className={'fa fa-circle userStatus ' + status} />
-
-    const title = m('div', [
-      icon,
-      (user.title ? `${user.title} ` : '') + user.username
-    ]);
-
-    const backButton = !ctrl.isMe() ? renderBackbutton(title) : null;
-    return headerWidget(backButton ? null : title, backButton);
-  }
-
-  function profile() {
-    return (
-      <div id="userProfile" className="native_scroller page">
-        {renderWarnings(user)}
-        {renderProfile(user)}
-        {renderStats(user)}
-        {renderPatron(user)}
-        {renderRatings(user)}
-        {renderActions(ctrl)}
-      </div>
-    );
-  }
-
-  return layout.free(header, profile);
+  const backButton = !ctrl.isMe() ? renderBackbutton(title) : null;
+  return headerWidget(backButton ? null : title, backButton);
 }
 
-function renderWarnings(user) {
+export function profile(user: UserFullProfile, ctrl: UserCtrl) {
+  return (
+    <div id="userProfile" className="native_scroller page">
+      {renderWarnings(user)}
+      {renderProfile(user)}
+      {renderStats(user)}
+      {renderPatron(user)}
+      {renderRatings(user)}
+      {renderActions(ctrl)}
+    </div>
+  )
+}
+
+function renderWarnings(user: UserFullProfile) {
   if (!user.engine && !user.booster) return null;
 
   return (
@@ -61,7 +54,7 @@ function renderWarnings(user) {
   );
 }
 
-function renderProfile(user) {
+function renderProfile(user: UserFullProfile) {
   if (user.profile) {
     let fullname = '';
     if (user.profile.firstName) fullname += user.profile.firstName;
@@ -106,7 +99,7 @@ function renderProfile(user) {
     return null;
 }
 
-function renderPatron(user) {
+function renderPatron(user: UserFullProfile) {
   if (user.patron)
     return (
       <p className="user-patron"
@@ -121,7 +114,7 @@ function renderPatron(user) {
     return null;
 }
 
-function renderStats(user) {
+function renderStats(user: UserFullProfile) {
   const totalPlayTime = user.playTime ? 'Time spent playing: ' + window.moment.duration(user.playTime.total, 'seconds').humanize() : null;
   const tvTime = user.playTime && user.playTime.tv > 0 ? 'Time on TV: ' + window.moment.duration(user.playTime.tv, 'seconds').humanize() : null;
 
@@ -134,25 +127,25 @@ function renderStats(user) {
       <p className="onTv">{tvTime}</p> : null
       }
     </section>
-  );
+  )
 }
 
-function renderRatings(user) {
-  function isShowing(p) {
+function renderRatings(user: UserFullProfile) {
+  function isShowing(p: { key: string, perf: { games: number }}) {
     return [
       'blitz', 'bullet', 'classical', 'correspondence'
-    ].indexOf(p.key) !== -1 || p.perf.games > 0;
+    ].indexOf(p.key) !== -1 || p.perf.games > 0
   }
 
   return (
     <section id="userProfileRatings" className="perfs">
       {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf, user))}
     </section>
-  );
+  )
 }
 
-function renderActions(ctrl) {
-  const user = ctrl.user();
+function renderActions(ctrl: UserCtrl) {
+  const user = ctrl.user()
   return (
     <section id="userProfileActions" class="noPadding">
       <div className="list_item nav"
@@ -174,7 +167,7 @@ function renderActions(ctrl) {
       >
         {i18n('watchGames')}
       </div>
-      { !ctrl.isMe() ?
+      { session.isConnected() && !ctrl.isMe() ?
       <div className="list_item nav" key="compose_message" data-icon="m"
         oncreate={helper.ontapY(ctrl.composeMessage)}
       >
@@ -202,5 +195,5 @@ function renderActions(ctrl) {
       </div> : null
       }
     </section>
-  );
+  )
 }

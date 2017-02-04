@@ -1,4 +1,5 @@
 var files = 'abcdefgh'.split('');
+var invFiles = files.slice().reverse();
 var ranks = [1, 2, 3, 4, 5, 6, 7, 8];
 var invRanks = [8, 7, 6, 5, 4, 3, 2, 1];
 var fileNumbers = {
@@ -115,7 +116,8 @@ function computeSquareBounds(orientation, bounds, key) {
 }
 
 export default {
-  files: files,
+  files,
+  invFiles,
   ranks: ranks,
   invRanks: invRanks,
   allPos: allPos,

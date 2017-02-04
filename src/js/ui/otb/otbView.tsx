@@ -60,7 +60,7 @@ function renderContent(ctrl: OtbRound, pieceTheme: string) {
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
   const board = m(Board, {
-    data: ctrl.data,
+    variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,

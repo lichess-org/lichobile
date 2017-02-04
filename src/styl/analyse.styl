@@ -368,12 +368,17 @@ line
   th, .title
     color gold
     text-transform: capitalize;
-    font-weight bold
+    font-weight normal
     font-size: 12px;
     line-height: 22px;
     background headerBgDark
     text-align: left;
     padding-left: 7px;
+  th
+    &.explorerMove-games
+      padding-left 15px
+    &.explorerMove-result
+      padding-left 15px
   tr
     transition: background-color 0.13s;
     &:nth-child(even)
@@ -381,6 +386,18 @@ line
   td
     vertical-align middle
     padding-left: 7px;
+    &.explorerMove-move
+      font-size: 14px;
+      line-height: 30px;
+      padding-left: 7px;
+    &.explorerMove-games
+      font-size: 11px;
+      text-align: right;
+      padding-left 10px
+    &.explorerMove-result
+      width: 100%;
+      padding-right: 7px;
+      padding-left 15px
   .white
     background: #bbb;
     color: #222;
@@ -414,17 +431,16 @@ line
   .toconf
     color gold
     position: absolute;
-    top: 0;
+    top: 1px;
     right: 0;
     display: block;
     font-size: 20px;
     line-height: 20px;
     width 30px
-    height 30px
+    height 22px
     text-align: center;
     opacity: 0.7;
   .message
-    font-size 0.8em
     text-align: center;
     font-style: italic;
     i
@@ -449,13 +465,14 @@ line
 
 .explorer-fixedTitle
   flex 0 0 23px
-  font-size 13px
-  font-weight bold
+  font-size 12px
   line-height 22px
   overflow hidden
   white-space nowrap
+  text-overflow ellipsis
   background headerBgDark
   padding 0 7px
+  padding-right 28px
   color gold
 
 .explorerConfig
@@ -473,19 +490,6 @@ line
       line-height: 2em;
       max-width 300px
       margin 0 auto
-
-.explorerMove
-  &:first-child
-    font-size: 14px;
-    line-height: 30px;
-    padding-left: 7px;
-  &:nth-child(2), &:nth-child(3)
-    font-size: 10px;
-    opacity: 0.8;
-    text-align: right;
-  &:last-child
-    width: 100%;
-    padding-right: 7px;
 
 .explorerBar
   text-align: center;
@@ -548,7 +552,7 @@ line
   padding 10px
 
 .moves.displayPieces
-  .explorerMove
+  .explorerMove-move
     font-family ChessSansPiratf
 
 .view-container.light
@@ -575,11 +579,16 @@ line
     background darken(bglight, 8%)
 
   .explorer-fixedTitle
-    background bgdark
+    background blue
+    color #fff
 
   .explorerTable
+    thead
+      > tr
+        background blue
     th, .title
-      background bgdark
+      background blue
+      color #fff
     tr
       &:nth-child(even)
         background #fafafa
@@ -591,9 +600,15 @@ line
     .black
       background: #555;
       color: #ddd;
+    .toconf
+      color #fff
+
   .explorerBar
     border-color #ccc
+
   .explorerConfig
     span
       border-color #ccc
+      &.selected
+        background blue
 

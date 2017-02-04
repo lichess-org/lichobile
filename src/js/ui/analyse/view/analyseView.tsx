@@ -168,7 +168,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
 }
 
 function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
-  let opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
+  const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
   if (opening) return m('div', {
     key: 'opening-box',
     className: 'analyse-openingBox',

@@ -10,14 +10,15 @@ function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
   if (uci) ctrl.explorerMove(uci);
 }
 
-function showTitle(ctrl: AnalyseCtrlInterface) {
-  const data = ctrl.explorer.current();
+function showTitle(ctrl: AnalyseCtrlInterface): Mithril.Children {
+  const data = ctrl.explorer.current()
+  const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
-    if (data && data.tablebase) return 'Endgame tablebase';
-    else return 'Opening explorer';
+    if (data && data.tablebase) return 'Endgame tablebase'
+    else return opening ? opening.eco + ' ' + opening.name : 'Opening explorer'
   } else {
-    const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer';
-    return ctrl.data.game.variant.name + what;
+    const what = data && data.tablebase ? ' endgame tablebase' :  ' opening explorer'
+    return ctrl.data.game.variant.name + what
   }
 }
 

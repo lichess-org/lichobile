@@ -149,26 +149,22 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
     >
       <thead>
         <tr>
-          <th>Move</th>
-          <th>Games</th>
-          <th>Rating</th>
-          <th>White / Draw / Black</th>
+          <th className="explorerMove-move">Move</th>
+          <th className="explorerMove-games">Games</th>
+          <th className="explorerMove-result">White / Draw / Black</th>
         </tr>
       </thead>
       <tbody>
         { moves.map(move => {
           return (
             <tr key={move.uci} data-uci={move.uci}>
-              <td className="explorerMove">
+              <td className="explorerMove-move">
                 {move.san[0] === 'P' ? move.san.slice(1) : move.san}
               </td>
-              <td className="explorerMove">
+              <td className="explorerMove-games">
                 {move.white + move.draws + move.black}
               </td>
-              <td className="explorerMove">
-                {move.averageRating}
-              </td>
-              <td className="explorerMove">
+              <td className="explorerMove-result">
                 {resultBar(move)}
               </td>
             </tr>

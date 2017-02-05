@@ -99,10 +99,10 @@ move
   overflow hidden
   white-space nowrap
   &.current
-    color gold
+    color orangeDark
     font-weight bold
     > eval
-      color rgba(gold, 70%)
+      color rgba(orangeDark, 70%)
   &.active
       background lighten(bgdark, 10%)
 
@@ -148,10 +148,6 @@ line
   white-space nowrap
   overflow hidden
   &.visiting
-    > index, > move
-      color #ebe1cd
-    > move.current
-      color gold
     white-space normal
   > .nested
     margin-left 5px
@@ -366,12 +362,12 @@ line
   tbody, > .message
     transition: opacity 0.13s;
   th, .title
-    color gold
+    color #ccc
     text-transform: capitalize;
     font-weight normal
     font-size: 12px;
     line-height: 22px;
-    background headerBgDark
+    background darkBlue
     text-align: left;
     padding-left: 7px;
   th
@@ -429,7 +425,7 @@ line
       font-family: monospace;
       font-size: 0.9em;
   .toconf
-    color gold
+    color #ccc
     position: absolute;
     top: 1px;
     right: 0;
@@ -442,6 +438,7 @@ line
     opacity: 0.7;
   .message
     text-align: center;
+    font-size 0.9em
     font-style: italic;
     i
       font-size: 22px;
@@ -470,10 +467,10 @@ line
   overflow hidden
   white-space nowrap
   text-overflow ellipsis
-  background headerBgDark
+  background darkBlue
   padding 0 7px
   padding-right 28px
-  color gold
+  color #ccc
 
 .explorerConfig
   font-size 0.75em
@@ -556,17 +553,14 @@ line
     font-family ChessSansPiratf
 
 .view-container.light
+  turn > move
+    background-color #fff
+
   move.active
     background darken(bglight, 10%)
 
-  line.visiting
-    > index, > move
-      color lighten(gold, 20%)
-    > move.current
-      color gold
-
   .analyse-replay > turn > index, interrupt, .analyse-openingBox
-    background darken(bglight, 7%)
+    background darken(bglight, 5%)
 
   .analyse_variant_selector
     background: themeBgLight
@@ -574,9 +568,9 @@ line
     color: #848484;
 
   .analyse-cevalBox
-    background darken(bglight, 5%)
+    background darken(bglight, 7%)
   .analyse-curEval
-    background darken(bglight, 8%)
+    background darken(bglight, 9%)
 
   .explorer-fixedTitle
     background blue

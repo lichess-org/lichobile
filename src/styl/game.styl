@@ -4,7 +4,6 @@
   display flex
   justify-content space-between
   align-items center
-  color #fff
   overflow hidden
   &.crazy
     padding 0
@@ -141,10 +140,11 @@
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-size 1em
+  font-size 1.1em
   white-space nowrap
+  color textLightGray
   > .status
-    font-size 15px
+    font-size 18px
     margin-right 5px
     &.ongame
       color green
@@ -165,7 +165,6 @@
   line-height 1
   color #8c8c8c
   background-color #262626
-  border 1px solid #3d3d3d
   > seph
     opacity 0.7
   > sepl
@@ -173,8 +172,7 @@
   > tens
     font-size 0.8em
   &.berserk
-    border-width 2px
-    border-color #dc322f
+    color #dc322f !important
   &.running
     background-color #505a60
     color #fff
@@ -184,7 +182,6 @@
   &.correspondence
     font-family 'Noto Sans'
     font-size 20px
-    border none
     background-color inherit
     &.running
       color lighten(gold, 15%)
@@ -480,4 +477,4 @@
 
 .view-container.light
   .pocket
-    background #888
+    background #aaa

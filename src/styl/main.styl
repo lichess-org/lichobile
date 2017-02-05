@@ -16,6 +16,7 @@ main
 .main_header
   background headerBgDark
   height headerHeight
+  color lighten(textDarkBg, 25%)
   &.board
     background inherit
   > nav
@@ -28,7 +29,6 @@ main
       text-align left
       font-size 1.1rem
       line-height headerHeight
-      color gold
       flex 1 1 auto
       overflow hidden
       text-overflow ellipsis
@@ -55,15 +55,12 @@ main
       > .main_header_button
         padding-left 10px
         padding-right 10px
-        > .chip
-          left 2px
 
 .main_header_button
   flex 0 0 auto
   background transparent
   padding 12.5px 0.9rem
   margin 0
-  color gold
   font-size 20px
   line-height 20px
   &.fa-bell
@@ -100,18 +97,18 @@ main
 .friends_button, .timeline_button, .game_menu_button
   > .chip
     position absolute
-    font-size 10px
+    font-size 9px
     font-weight bold
     line-height 13px
     letter-spacing 0px
     color bgdark
-    border 2px solid bgdark
+    border 3px solid bgdark
     border-radius 50%
-    height 17px
-    width 17px
-    top 7.5px
-    left 7px
-    background lighten(gold, 50%)
+    height 19px
+    width 19px
+    top 3px
+    right 0
+    background gold
 
 .timeline_button
   > .chip
@@ -121,9 +118,6 @@ main
 .friends_button
   position relative
   padding-right 10px
-  color gold
-  &.nofriend
-    color rgba(gold, 0.7)
 
 .game_menu_button
   position relative

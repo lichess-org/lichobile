@@ -29,22 +29,33 @@ input[type='checkbox']
   transition background-color 250ms ease-out
   outline none
   box-shadow inset 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
-input[type='checkbox']:checked
-  background gold
+input[type='checkbox']:checked, input[type='checkbox']:checked:before
+  background-color gold
+input[type='checkbox']:before
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  right 1px
+  transition background-color 250ms ease-out
+  border-radius 15px
+  background-color #ccc
+  content: "";
 input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 0px
+  top 1px
   left 0px
-  width 26px
-  height 26px
+  width 24px
+  height 24px
   border-radius 50%
-  background #fff
+  background #fefefe
   transition left 200ms
   box-shadow 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked:after
-  left 29px
+  left 31px
 
 // select
 .select_input
@@ -166,12 +177,17 @@ button.fat
       border-radius: 0 3px 3px 0;
       border-right-width: 1px;
     &.selected
-      background gold
-      color: #fff;
+      background blue
+      color: #fff
       text-shadow: 1px 0 0 rgba(0,0,0,0.5);
       box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
 
 .view-container.light
+  input[type='checkbox'], input[type='checkbox']:before
+    background-color #ccc
+  input[type='checkbox']:checked, input[type='checkbox']:checked:before
+    background-color gold
+
   .form-multipleChoice
     span
       border-color #eee

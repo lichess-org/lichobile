@@ -222,7 +222,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
           </h3> : null
         }
         {checksNb !== undefined ?
-          <div className="checkCount">{checksNb}</div> : null
+          <div className="checkCount">+{checksNb}</div> : null
         }
         {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
       </div> : null

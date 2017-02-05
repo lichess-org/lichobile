@@ -15,8 +15,11 @@ let pieceNotation: boolean;
 
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   const sit = ctrl.replay.situation();
-  return utils.oppositeColor(color) === 'white' ?
-    sit.checkCount.white : sit.checkCount.black;
+  if (sit.checkCount)
+    return utils.oppositeColor(color) === 'white' ?
+      sit.checkCount.white : sit.checkCount.black;
+  else
+    return 0
 }
 
 type OfflineGameType = 'ai' | 'otb';
@@ -39,13 +42,13 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
   return (
     <section className={className} key={key}>
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
-        <div>
+        <div className="antagonistUser">
           {content}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
           { ctrl.data.game.variant.key === 'threeCheck' ?
-            <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
+            <div className="checkCount">&nbsp;+{getChecksCount(ctrl, antagonistColor)}</div> : null
           }
         </div> : null
         }

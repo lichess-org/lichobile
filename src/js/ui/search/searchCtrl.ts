@@ -5,6 +5,10 @@ import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../utils';
 import * as helper from '../helper';
 import redraw from '../../utils/redraw';
+import { ScrollState } from '../user/games';
+import { toggleGameBookmark } from '../../xhr';
+
+let cachedScrollState: ScrollState;
 
 export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   helper.analyticsTrackView('Advanced search');
@@ -12,7 +16,8 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
   vnode.state = {
     search,
-    result
+    result,
+    bookmark
   };
 
   const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order'];
@@ -23,12 +28,16 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
     xhr.search(queryData)
     .then((data: SearchResult) => {
+      result(prepareData(data));
       console.log(data);
-      result(data);
       redraw();
     })
     .catch(handleXhrError);
 
+  }
+
+  function bookmark(id: string) {
+    toggleGameBookmark(id);
   }
 }
 
@@ -40,4 +49,13 @@ function buildQuery (elements: HTMLCollection, acc: any, name: string) {
   else {
     return acc;
   }
+}
+
+function prepareData(xhrData: SearchResult) {
+  if (xhrData.paginator && xhrData.paginator.currentPageResults) {
+    xhrData.paginator.currentPageResults.forEach(g => {
+      g.date = window.moment(g.timestamp).calendar();
+    });
+  }
+  return xhrData;
 }

@@ -4,6 +4,7 @@ import { Paginator } from '../../lichess/interfaces';
 export interface SearchState {
   search: (form: HTMLFormElement) => void
   result: Mithril.Stream<SearchResult>
+  bookmark: (id: string) => void
 }
 
 export interface Select {

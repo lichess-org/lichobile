@@ -1,10 +1,17 @@
+import * as m from 'mithril';
 import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
-import { renderGame } from '../user/games/gamesView';
+import { renderPlayer, renderBoard, getButton, getGameEl } from '../user/games/gamesView';
+import * as helper from '../helper';
+import * as gameApi from '../../lichess/game';
+import gameStatus from '../../lichess/status';
+import session from '../../session';
+import * as utils from '../../utils';
+import router from '../../router';
 
 export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
@@ -32,6 +39,10 @@ function renderSearchForm(ctrl: SearchState) {
   const dateOptions = settings.search.dates.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const sortFieldOptions = settings.search.sortFields.map((a: Array<string>) => ({value: a[0], label: a[1]}));
   const sortOrderOptions = settings.search.sortOrders.map((a: Array<string>) => ({value: a[0], label: a[1]}));
+  const viewport = helper.viewportDim();
+  const boardsize = (viewport.vw - 20) * 0.30;
+  const boardBounds = { height: boardsize, width: boardsize };
+
   return (
     <div className="native_scroller searchWraper">
       <form id="advancedSearchForm"
@@ -48,9 +59,9 @@ function renderSearchForm(ctrl: SearchState) {
               <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
             </div>
           </div>
-          {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: null}, null)}
-          {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: null}, null)}
-          {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: null}, null)}
+          {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: ''}, null)}
+          {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: ''}, null)}
+          {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: ''}, null)}
           {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
           {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null, onchange: () => { redraw() }}, null)}
           {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, {name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
@@ -77,7 +88,7 @@ function renderSearchForm(ctrl: SearchState) {
       </form>
       {ctrl.result() ?
         <div className="searchGamesList">
-          {ctrl.result().paginator.currentPageResults.map((g: UserGameWithDate, index: number) => renderGame(null, g, index, null))}
+          {ctrl.result().paginator.currentPageResults.map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
         </div>
       : null }
     </div>
@@ -121,7 +132,7 @@ function getPlayers(): Array<Option> {
     return [];
   const playerA = playerAEl.value.trim();
   const playerB = playerBEl.value.trim();
-  const players: Array<Option> = [{value: null, label: ''}];
+  const players: Array<Option> = [];
   if (playerA) {
     players.push({value: playerA, label: playerA});
   }
@@ -138,4 +149,77 @@ function playersNonEmpty() {
 function isComputerOpp() {
   const hasAi = (document.getElementById('hasAi') as HTMLInputElement);
   return hasAi && (hasAi.value === '1');
+}
+
+const Game: Mithril.Component<{ g: UserGameWithDate, index: number, boardBounds: {height: number, width: number}, ctrl: SearchState }, { boardTheme: string }> = {
+  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
+    return attrs.g !== oldattrs.g
+  },
+  oninit() {
+    this.boardTheme = settings.general.theme.board();
+  },
+  view({ attrs }) {
+    const { g, index, boardBounds, ctrl } = attrs
+    const time = gameApi.time(g);
+    const mode = g.rated ? i18n('rated') : i18n('casual');
+    const title = g.source === 'import' ?
+    `Import • ${g.variant.name}` :
+    `${time} • ${g.variant.name} • ${mode}`;
+    const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
+      (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+    const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || '';
+    const perspectiveColor = 'white';
+    const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
+    const star = g.bookmarked ? 't' : 's';
+    const withStar = session.isConnected() ? ' withStar' : '';
+    return (
+      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`} oncreate={helper.ontap(e => onTap(e, g, ctrl.bookmark))}>
+        {renderBoard(g.fen, perspectiveColor, boardBounds, this.boardTheme)}
+        <div className="userGame-infos">
+          <div className="userGame-versus">
+            <span className="variant-icon" data-icon={icon} />
+          <div className="game-result">
+        <div className="userGame-players">
+          {renderPlayer(g.players, 'white')}
+          <div className="swords" data-icon="U" />
+          {renderPlayer(g.players, 'black')}
+          </div>
+          <div className={helper.classSet({
+            'userGame-status': true,
+            win: perspectiveColor === g.winner,
+            loose: g.winner && perspectiveColor !== g.winner
+          })}>{status}</div>
+          </div>
+        </div>
+        <div className="userGame-meta">
+          <p className="game-infos">
+          {g.date} • {title}
+          </p>
+          {g.opening ?
+            <p className="opening">{g.opening.name}</p> : null
+          }
+          {g.analysed ?
+            <p className="analysis">
+            <span className="fa fa-bar-chart" />
+            Computer analysis available
+            </p> : null
+          }
+          </div>
+        </div>
+        { session.isConnected() ?
+          <button className="iconStar" data-icon={star} /> : null
+        }
+      </li>
+    );
+  }
+}
+
+function onTap (e: Event, g: UserGameWithDate, bookmark: (id: string) => void) {
+  const starButton = getButton(e);
+  if (starButton) {
+    bookmark(g.id);
+  }
+  else {
+    router.set('/game/' + g.id);
+  }
 }

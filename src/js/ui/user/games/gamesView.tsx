@@ -41,13 +41,13 @@ export function renderBody(ctrl: State) {
   );
 }
 
-function getGameEl(e: Event) {
+export function getGameEl(e: Event) {
   const target = (e.target as HTMLElement);
   return target.tagName === 'LI' ? target :
     helper.findParentBySelector(target, 'li');
 }
 
-function getButton(e: Event) {
+export function getButton(e: Event) {
   const target = (e.target as HTMLElement);
   return target.tagName === 'BUTTON' ? target : undefined
 }
@@ -97,8 +97,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
     const star = g.bookmarked ? 't' : 's';
     const bounds = scrollState.boardBounds;
-    const withStar = session.isConnected() ? ' withStar' : ''
-
+    const withStar = session.isConnected() ? ' withStar' : '';
     return (
       <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, userColor, bounds, this.boardTheme)}
@@ -165,7 +164,7 @@ function renderAllGames(ctrl: State) {
   );
 }
 
-function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
+export function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
 
   const boardClass = [
     'display_board',
@@ -188,7 +187,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
   );
 }
 
-function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
+export function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
   let player = players[color];
   let playerName: string;
   // TODO fetch title info from server; refactor

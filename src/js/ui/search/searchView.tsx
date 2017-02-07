@@ -88,7 +88,7 @@ function renderSearchForm(ctrl: SearchState) {
       </form>
       {ctrl.result() ?
         <div className="searchGamesList">
-          {ctrl.result().paginator.currentPageResults.map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
+          {ctrl.games().map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
         </div>
       : null }
     </div>

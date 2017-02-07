@@ -1,5 +1,5 @@
 import router from '../../router';
-import {SearchState, SearchResult, SearchQuery} from './interfaces';
+import {SearchState, SearchResult, SearchQuery, UserGameWithDate} from './interfaces';
 import * as xhr from './searchXhr'
 import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../utils';
@@ -13,10 +13,12 @@ let cachedScrollState: ScrollState;
 export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   helper.analyticsTrackView('Advanced search');
   const result = stream<SearchResult>();
+  const games = stream<Array<UserGameWithDate>>();
 
   vnode.state = {
     search,
     result,
+    games,
     bookmark
   };
 
@@ -29,6 +31,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     xhr.search(queryData)
     .then((data: SearchResult) => {
       result(prepareData(data));
+      games(result().paginator.currentPageResults);
       console.log(data);
       redraw();
     })

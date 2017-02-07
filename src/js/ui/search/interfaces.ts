@@ -5,6 +5,7 @@ export interface SearchState {
   search: (form: HTMLFormElement) => void
   result: Mithril.Stream<SearchResult>
   bookmark: (id: string) => void
+  games: Mithril.Stream<Array<UserGameWithDate>>
 }
 
 export interface Select {

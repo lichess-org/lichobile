@@ -132,7 +132,7 @@ function renderPlayer(p: any) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

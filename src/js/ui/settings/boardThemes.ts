@@ -1,5 +1,4 @@
-import * as utils from '../../utils';
-import { header as headerWidget, backButton, onBoardThemeChange } from '../shared/common';
+import { dropShadowHeader, backButton, onBoardThemeChange } from '../shared/common';
 import redraw from '../../utils/redraw';
 import formWidgets from '../shared/form';
 import layout from '../layout';
@@ -17,8 +16,8 @@ function renderBody() {
             t[0], 'board_theme', t[1],
             settings.general.theme.board() === t[1],
             e => {
-              settings.general.theme.board(e.target.value);
-              onBoardThemeChange(e.target.value);
+              settings.general.theme.board((e.target as HTMLInputElement).value);
+              onBoardThemeChange((e.target as HTMLInputElement).value);
               redraw();
             }
           ),
@@ -35,9 +34,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('board'))
-    );
+    const header = () => dropShadowHeader(null, backButton(i18n('board')))
     return layout.free(header, renderBody);
   }
-};
+}

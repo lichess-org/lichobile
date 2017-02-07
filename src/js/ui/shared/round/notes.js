@@ -4,6 +4,7 @@ import i18n from '../../../i18n';
 import router from '../../../router';
 import { debounce }  from 'lodash/function';
 import { readNote, syncNote } from './roundXhr';
+import { closeIcon } from '../../shared/icons'
 import * as m from 'mithril';
 
 export function notesCtrl(root) {
@@ -79,9 +80,9 @@ export function notesView(ctrl) {
 
   return m('div#notes.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
-      m('button.modal_close[data-icon=L]', {
+      m('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'notes'))
-      }),
+      }, closeIcon),
       m('h2', i18n('notes'))
     ]),
     m('div.modal_content', [

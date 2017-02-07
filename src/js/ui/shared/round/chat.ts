@@ -6,6 +6,7 @@ import session from '../../../session';
 import * as gameApi from '../../../lichess/game';
 import router from '../../../router';
 import socket from '../../../socket';
+import { closeIcon } from '../../shared/icons'
 import * as m from 'mithril';
 import { OnlineRoundInterface } from '.';
 
@@ -114,9 +115,9 @@ export function chatView(ctrl: Chat) {
 
   return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
     m('header', [
-      m('button.modal_close[data-icon=L]', {
+      m('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
-      }),
+      }, closeIcon),
       m('h2', header)
     ]),
     m('div#chat_content.modal_content.chat_content', [

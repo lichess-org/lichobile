@@ -35,6 +35,7 @@ export function renderBody(ctrl: State) {
             );
           })}
         </select>
+        <div className="main_header_drop_shadow" />
       </div>
       {renderAllGames(ctrl)}
     </div>

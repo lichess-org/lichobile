@@ -1,11 +1,11 @@
 import router from '../../router';
 import * as helper from '../helper';
-import * as m from 'mithril';
 import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
 import { Tournament, PlayerInfoState, PlayerInfo, PlayerInfoPairing } from './interfaces';
 import * as stream from 'mithril/stream';
+import { closeIcon } from '../shared/icons'
 
 export default {
   controller: function(tournament: Mithril.Stream<Tournament>) {
@@ -82,9 +82,11 @@ export default {
     return (
       <div className="modal dark" id="tournamentPlayerInfoModal" oncreate={helper.slidesInLeft}>
         <header>
-          <button className="modal_close" data-icon="L"
+          <button className="modal_close"
             oncreate={helper.ontap(helper.slidesOutRight(ctrl.close, 'tournamentPlayerInfoModal'))}
-          />
+          >
+            { closeIcon }
+          </button>
           <h2 className="playerModalHeader">
             {player.rank + '. ' + player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)}
           </h2>

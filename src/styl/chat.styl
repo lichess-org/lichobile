@@ -17,7 +17,7 @@
   border-top-left-radius: 8px
   border-top-right-radius: 8px
   line-height 1.2em
-  color #767676
+  color textDarkGray
   width 90%
   word-wrap break-word
   &:before
@@ -38,8 +38,7 @@
     border-bottom-left-radius: 8px
     border-bottom-right-radius: 8px
   &.player
-    background gold
-    color #fff
+    background #d8d8d8
     margin-left 10%
     & + .chat_msg.player
       margin-top -10px
@@ -49,7 +48,7 @@
       &:before
         display none
     &:before
-      background gold
+      background #d8d8d8
       left auto
       right 5px
   &.opponent
@@ -97,4 +96,7 @@
   font-size 30px
   background transparent
   color #C3A86F
-  transform rotate(50deg)
+  overflow hidden
+  &:before
+    display block
+    transform rotate(50deg)

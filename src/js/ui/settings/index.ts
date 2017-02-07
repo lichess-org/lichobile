@@ -1,7 +1,7 @@
 import * as utils from '../../utils';
 import router from '../../router';
 import * as helper from '../helper';
-import { header as headerWidget, backButton } from '../shared/common';
+import { dropShadowHeader, backButton } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
 import settings from '../../settings';
@@ -10,7 +10,7 @@ import i18n from '../../i18n';
 import socket from '../../socket';
 import * as m from 'mithril';
 
-export default {
+const SettingsScreen: Mithril.Component<{}, {}> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
@@ -19,12 +19,12 @@ export default {
   },
 
   view() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('settings'))
-    );
+    const header = () => dropShadowHeader(null, backButton(i18n('settings')))
     return layout.free(header, renderBody);
   }
-};
+}
+
+export default SettingsScreen
 
 function renderBody() {
   return m('div', {
@@ -66,8 +66,8 @@ function renderBody() {
             'dark',
             settings.general.theme.background() === 'dark',
             e => utils.autoredraw(() => {
-              settings.general.theme.background(e.target.value);
-              layout.onBackgroundChange(e.target.value);
+              settings.general.theme.background((e.target as HTMLInputElement).value);
+              layout.onBackgroundChange((e.target as HTMLInputElement).value);
             })
           )),
           m('div.nice-radio', formWidgets.renderRadio(
@@ -76,8 +76,8 @@ function renderBody() {
             'light',
             settings.general.theme.background() === 'light',
             e => utils.autoredraw(() => {
-              settings.general.theme.background(e.target.value);
-              layout.onBackgroundChange(e.target.value);
+              settings.general.theme.background((e.target as HTMLInputElement).value);
+              layout.onBackgroundChange((e.target as HTMLInputElement).value);
             })
         ))])
       ]),

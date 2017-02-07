@@ -1,6 +1,7 @@
 import router from '../../router';
 import * as helper from '../helper';
 import { FaqState, Tournament } from './interfaces';
+import { closeIcon } from '../shared/icons'
 
 export default {
   controller: function(tournament: Mithril.Stream<Tournament>) {
@@ -34,9 +35,11 @@ export default {
     return (
       <div className="modal" id="tournamentFaqModal" oncreate={helper.slidesInUp}>
         <header>
-          <button className="modal_close" data-icon="L"
+          <button className="modal_close"
             oncreate={helper.ontap(helper.slidesOutDown(ctrl.close, 'tournamentFaqModal'))}
-          />
+          >
+            { closeIcon }
+          </button>
           <h2>Tournament FAQ</h2>
         </header>
         <div className="modal_content">

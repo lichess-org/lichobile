@@ -19,7 +19,7 @@ import newGameMenu from './newAiGame';
 import AiRound from './AiRound';
 
 export default function view() {
-  let content: () => Mithril.Children, header: () => Mithril.ChildNode;
+  let content: () => Mithril.Children, header: () => Mithril.Children
 
   if (this.round.data && this.round.chessground) {
     header = () => renderHeader(gameTitle(this.round.data));

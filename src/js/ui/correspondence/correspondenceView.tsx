@@ -52,7 +52,7 @@ export function renderBody(ctrl: State) {
   });
 
   return [
-    m('div.nav_header', tabsBar),
+    m('div.tabs-nav-header', tabsBar, m('div.main_header_drop_shadow')),
     m('div.tab_content.native_scroller.seeks_scroller',
       ctrl.selectedTab() === 'public' ?
         renderPool(ctrl) :

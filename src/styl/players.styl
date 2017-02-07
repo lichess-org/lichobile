@@ -1,18 +1,19 @@
 #searchPlayersModal
   color textDarkBg
   > header
-    background-color headerBgDark
+    background headerBgDark
     border-bottom-style none
     display flex
     justify-content space-between
+    > .main_header_drop_shadow
+      bottom -2px
     > button
+      > .svg-icon-wrapper
+        width 24px
+        height 24px
+        position relative
       width 50px
-      background transparent
-      padding 15px
       margin 0
-      color gold
-      font-size 20px
-      line-height 15px
       &.active
         background lighten(bgdark, 8%)
   > .modal_content
@@ -39,6 +40,10 @@
   display flex
   justify-content space-between
   padding-right 35px
+  > .rating:before
+    font-size 1.2em
+    vertical-align bottom
+    margin-right 1px
 
 #allRanking
   display flex
@@ -81,8 +86,12 @@
     padding 5px 0
 
 .playerMiniPerf
-  span
+  > .rating, > .progress
     padding 0 5px
+  > .rating:before
+    font-size 1.2em
+    vertical-align middle
+    margin-right 1px
   > .progress
     &.positive
       color green
@@ -91,3 +100,15 @@
         top 2px
     &.negative
       color red
+
+
+.view-container.light
+  #searchPlayersModal
+    > .modal_content
+      color textMediumGray
+      background-color themeBgLight
+    .list_item
+      border-bottom-color borderLightGray
+      &.active
+        background-color darken(bglight, 5%)
+

@@ -68,13 +68,15 @@ function renderFriend(user: Friend) {
   }
 
   return (
-    <li className="list_item nav" key={userId} oncreate={helper.ontapY(action)}>
-      { user.patron ?
-        <span className="patron is-green" data-icon="" />
-        :
-        null
-      }
-      <span>{user.name}</span>
+    <li className="list_item" key={userId} oncreate={helper.ontapY(action)}>
+      <div className="friends-name">
+        { user.patron ?
+          <span className="patron is-green" data-icon="" />
+          :
+          null
+        }
+        <span>{user.name}</span>
+      </div>
       { user.playing ?
         <span className="friend_tv" data-icon="1" oncreate={helper.ontapY(onTapTv)}> </span>
         :

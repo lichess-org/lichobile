@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import router from '../../router';
-import { header as headerWidget, backButton } from '../shared/common';
+import { dropShadowHeader, backButton } from '../shared/common';
 import * as helper from '../helper';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -22,13 +22,13 @@ function renderBody() {
   ];
 }
 
-export default {
+const PreferencesScreen: Mithril.Component<{}, {}> = {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('preferences'))
-    );
+    const header = () => dropShadowHeader(null, backButton(i18n('preferences')))
     return layout.free(header, renderBody);
   }
-};
+}
+
+export default PreferencesScreen

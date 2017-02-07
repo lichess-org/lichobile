@@ -1,7 +1,7 @@
 import * as h from '../helper';
 import router from '../../router';
 import session from '../../session';
-import {header } from '../shared/common';
+import { header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
@@ -31,17 +31,20 @@ const TABS = [{
 }];
 
 function tabNavigation (currentTabFn: Mithril.Stream<string>) {
-    return m('.nav-header', m(tabs, {
-        buttons: TABS,
-        selectedTab: currentTabFn(),
-        onTabChange: (k: string) => {
-          const loc = window.location.search.replace(/\?tab\=\w+$/, '');
-          try {
-            window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
-          } catch (e) { console.error(e) }
-          currentTabFn(k);
-        }
-    }));
+    return m('.tabs-nav-header', [
+      m(tabs, {
+          buttons: TABS,
+          selectedTab: currentTabFn(),
+          onTabChange: (k: string) => {
+            const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+            try {
+              window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+            } catch (e) { console.error(e) }
+            currentTabFn(k);
+          }
+      }),
+      m('div.main_header_drop_shadow')
+    ]);
 }
 
 function tournamentListBody(ctrl: TournamentListsState) {

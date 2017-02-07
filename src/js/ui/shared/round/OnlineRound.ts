@@ -56,6 +56,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public onUserTVRedirect: () => void
   public vm: VM
   public title: Mithril.Children
+  public subTitle: string
   public tv: string
 
   private tournamentCountInterval: number
@@ -271,18 +272,26 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public setTitle() {
-    if (this.data.tv)
+    if (this.data.tv) {
       this.title = 'Lichess TV';
-    else if (this.data.userTV)
+    }
+    else if (this.data.userTV) {
       this.title = this.data.userTV;
-    else if (gameStatus.started(this.data))
+    }
+    else if (gameStatus.started(this.data)) {
       this.title = gameTitle(this.data);
-    else if (gameStatus.finished(this.data))
-      this.title = i18n('gameOver');
-    else if (gameStatus.aborted(this.data))
-      this.title = i18n('gameAborted');
-    else
+    }
+    else {
       this.title = 'lichess.org';
+    }
+
+    if (gameStatus.finished(this.data)) {
+      this.subTitle = i18n('gameOver');
+    } else if (gameApi.isPlayerTurn(this.data)) {
+      this.subTitle = i18n('yourTurn');
+    } else {
+      this.subTitle = i18n('waitingForOpponent');
+    }
   }
 
   public isClockRunning(): boolean {

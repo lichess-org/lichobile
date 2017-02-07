@@ -49,7 +49,7 @@
         color #fff
 
   .list_item
-    border-bottom-color #eee
+    border-bottom-color #ddd
     &.active
       background-color darken(bglight, 5%)
 
@@ -104,19 +104,22 @@
     color textMediumGray
 
   .main_header
-    box-shadow 0px 1px 1px 0px rgba(0,0,0,0.2)
     &.board
       background themeBgLight
       box-shadow none
-      .main_header_button
+      .back_button, .main_header_button
         color textLightBg
         &.active
           background darken(themeBgLight, 8%)
+      .back_button
+        > button
+          &.active
+            background darken(themeBgLight, 8%)
       .chip
         color #eee
         background gold
         border-color #eee
-      h1
+      .main_header_title
         color textLightBg
     &:not(.board)
       .game_menu_button
@@ -140,18 +143,6 @@
   .select_games_filter
     margin-top -1px
 
-  #searchPlayersModal
-    > header
-      color textMediumGray
-      border-bottom 1px solid borderLightGray
-    > .modal_content
-      color textMediumGray
-      background-color themeBgLight
-    .list_item
-      border-bottom-color borderLightGray
-      &.active
-        background-color darken(bglight, 5%)
-
   .userGame
     background-color bglight
     color textMediumGray
@@ -168,10 +159,6 @@
   .followingPlayerAction
     &.active
       background darken(bglight, 5%)
-
-  .tabs
-    background-color headerBgDark
-    margin-top -1px
 
   .tab
     height 45px

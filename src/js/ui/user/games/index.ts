@@ -176,8 +176,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     this.onScroll = (e: Event) => {
-      const target = (e.target as any)
-      const content = target.firstChild
+      const target = (e.target as HTMLElement)
+      const content = target.firstChild as HTMLElement
       const nextPage = this.scrollState.paginator.nextPage
       if ((target.scrollTop + target.offsetHeight + 50) > content.offsetHeight) {
         // lichess doesn't allow for more than 39 pages
@@ -190,7 +190,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     this.onFilterChange = (e: Event) => {
-      this.scrollState.currentFilter = (e.target as any).value
+      this.scrollState.currentFilter = (e.target as HTMLInputElement).value
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, true)
       .then(prepareData)
       .then(loadInitialGames);

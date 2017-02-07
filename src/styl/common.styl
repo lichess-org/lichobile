@@ -1,5 +1,5 @@
 /* COLORS */
-bgdark = #191919
+bgdark = #1a1a1a
 themeBgLight = #eeeeee // TODO rename
 bglight = #f5f5f5
 bgpopup = #eeeeee
@@ -21,16 +21,18 @@ green = #759900
 paleGreen = rgba(117,153,0,0.7)
 red = #ac524f
 blue = #3b93da
+paleBlue = lighten(blue, 60%)
 darkBlue = #215279
 
 selectBg = #e6e6e6
-headerBgDark = darken(bgdark, 30%)
+headerBgDark = #282828
+headerBgDarkActive = lighten(headerBgDark, 8%)
 borderColor = lighten(bgdark, 8%)
 
 borderLightGray = darken(bglight, 15%)
 activeBgLight = darken(themeBgLight, 8%)
 
-headerHeight = 45px
+headerHeight = 56px
 footerHeight = 45px
 
 html
@@ -57,6 +59,26 @@ button
     opacity 1
     &::before
       opacity 0.4
+
+.svg_icon
+  position relative
+  width 24px
+  height 24px
+  > .svg_icon_inner
+    font-size: inherit;
+    color: inherit;
+    line-height: inherit;
+    height 100%
+    position absolute
+    top 0px
+    left 0px
+    right 0px
+    bottom 0px
+    > svg
+      height 100%
+      width 100%
+      fill currentcolor
+      color inherit
 
 input, textarea
   -webkit-appearance none
@@ -141,7 +163,8 @@ span.fa
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     position absolute
-    right 15px
+    right 10px
+    opacity 0.6
     line-height 20px
 
 .noPadding
@@ -163,9 +186,10 @@ span.fa
   font-family "lichess"!important
   font-size 1.2em
   content attr(data-icon)
+  margin-right 5px
   width 1.2em
   display inline-block
-  vertical-align baseline
+  vertical-align -0.15em
 
 .withIcon
   &[data-icon]:before

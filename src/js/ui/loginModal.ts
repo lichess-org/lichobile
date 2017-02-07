@@ -10,6 +10,7 @@ import i18n from '../i18n';
 import signupModal from './signupModal';
 import router from '../router';
 import * as m from 'mithril';
+import { closeIcon } from './shared/icons'
 
 let isOpen = false;
 
@@ -21,9 +22,9 @@ export default {
 
     return m('div.modal#loginModal', { oncreate: helper.slidesInUp }, [
       m('header', [
-        m('button.modal_close[data-icon=L]', {
+        m('button.modal_close', {
           oncreate: helper.ontap(helper.slidesOutDown(close, 'loginModal'))
-        }),
+        }, closeIcon),
         m('h2', i18n('signIn'))
       ]),
       m('div.modal_content', [
@@ -49,12 +50,14 @@ export default {
         ]),
         m('div.signup', [
           i18n('newToLichess') + ' ',
+          m('br'),
           m('a', {
             oncreate: helper.ontap(signupModal.open)
           }, [i18n('signUp')])
         ]),
         m('div.reset', [
           i18n('forgotPassword') + ' ',
+          m('br'),
           m('a', {
             oncreate: helper.ontap(() => window.open(`https://en.lichess.org/password/reset`, '_blank', 'location=no'))
           }, [i18n('passwordReset')])

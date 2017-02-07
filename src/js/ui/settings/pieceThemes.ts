@@ -1,6 +1,5 @@
-import * as utils from '../../utils';
 import * as helper from '../helper';
-import { header as headerWidget, backButton } from '../shared/common';
+import { dropShadowHeader, backButton } from '../shared/common';
 import layout from '../layout';
 import formWidgets from '../shared/form';
 import i18n from '../../i18n';
@@ -16,7 +15,7 @@ function renderBody() {
         }, formWidgets.renderRadio(t, 'piece_theme', t,
           settings.general.theme.piece() === t,
           e => {
-            settings.general.theme.piece(e.target.value);
+            settings.general.theme.piece((e.target as HTMLInputElement).value);
           }
         ));
       }))
@@ -28,9 +27,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('pieces'))
-    );
+    const header = () => dropShadowHeader(null, backButton(i18n('pieces')));
     return layout.free(header, renderBody);
   }
 };

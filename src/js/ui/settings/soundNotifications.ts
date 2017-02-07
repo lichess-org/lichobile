@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import * as helper from '../helper';
-import { header as headerWidget, backButton } from '../shared/common';
+import { dropShadowHeader, backButton } from '../shared/common';
 import formWidgets from '../shared/form';
 import layout from '../layout';
 import push from '../../push';
@@ -38,9 +38,7 @@ export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = utils.partialf(headerWidget, null,
-      backButton(i18n('soundAndNotifications'))
-    );
-    return layout.free(header, renderBody);
+    const header = () => dropShadowHeader(null, backButton(i18n('soundAndNotifications')))
+    return layout.free(header, renderBody)
   }
-};
+}

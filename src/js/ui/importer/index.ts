@@ -7,7 +7,7 @@ import redraw from '../../utils/redraw';
 import { hasNetwork, serializeQueryParameters, handleXhrError } from '../../utils'
 import { fetchJSON } from '../../http';
 import * as helper from '../helper';
-import { header } from '../shared/common';
+import { dropShadowHeader } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';
@@ -81,7 +81,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
   },
 
   view(vnode) {
-    const headerCtrl = () => header(i18n('importGame'));
+    const headerCtrl = () => dropShadowHeader(i18n('importGame'));
     const bodyCtrl = () => renderBody(vnode.state);
     return layout.free(headerCtrl, bodyCtrl);
   }

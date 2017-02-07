@@ -3,6 +3,7 @@ import * as helper from './helper';
 import i18n from '../i18n';
 import router from '../router';
 import loginModal from './loginModal';
+import { closeIcon } from './shared/icons'
 import * as m from 'mithril';
 
 interface SubmitError {
@@ -22,9 +23,9 @@ export default {
 
     return m('div.modal#signupModal', { oncreate: helper.slidesInUp }, [
       m('header', [
-        m('button.modal_close[data-icon=L]', {
+        m('button.modal_close', {
           oncreate: helper.ontap(helper.slidesOutDown(close, 'signupModal'))
-        }),
+        }, closeIcon),
         m('h2', i18n('signUp'))
       ]),
       m('div.modal_content', [

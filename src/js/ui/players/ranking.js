@@ -5,11 +5,10 @@ import * as utils from '../../utils';
 import * as h from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
-import { userStatus, header } from '../shared/common';
+import { userStatus, dropShadowHeader } from '../shared/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
 import * as helper from '../helper';
-import * as m from 'mithril';
 import * as stream from 'mithril/stream';
 
 export default {
@@ -49,7 +48,7 @@ export default {
     const ctrl = vnode.state;
 
     return layout.free(
-      () => header(i18n('leaderboard')),
+      () => dropShadowHeader(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl)
     );
   }

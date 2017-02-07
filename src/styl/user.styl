@@ -108,7 +108,9 @@ h3.fullname
 
 .select_games_filter
   margin 0
-  background-color headerBgDark
+  background headerBgDark
+  box-shadow none
+  position relative
   label:after
     color labelText
   select
@@ -128,15 +130,13 @@ h3.fullname
   padding 10px 0
   flex-flow row nowrap
   align-items center
-  background-color lighten(bgdark, 5%)
-  color textLightGray
+  background-color bgdark
   min-height 60px
-  border-color lighten(bgdark, 5%)
   &.withStar
     > .userGame-infos
       padding-right 0
   &.odd
-    background-color lighten(bgdark, 10%)
+    background-color lighten(bgdark, 2%)
   > .iconStar
     flex 0 0 30px
     align-self flex-start

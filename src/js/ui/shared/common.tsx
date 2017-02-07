@@ -21,6 +21,7 @@ import * as m from 'mithril';
 import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
+import { backArrow } from './icons'
 
 export const LoadingBoard = {
   view() {
@@ -40,10 +41,12 @@ export function menuButton() {
 
 export function backButton(title?: string | Mithril.Children) {
   return (
-    <button key="default-history-backbutton" className="back_button main_header_button" oncreate={helper.ontap(router.backHistory)}>
-      <span className="fa fa-arrow-left"/>
+    <div key="default-history-backbutton" className="back_button">
+      <button oncreate={helper.ontap(router.backHistory)}>
+        {backArrow}
+      </button>
       {title ? <div className="title">{title}</div> : null }
-    </button>
+    </div>
   );
 }
 
@@ -132,14 +135,23 @@ export function headerBtns() {
   }
 }
 
-export function header(title: Mithril.Children, leftButton?: () => Mithril.Children) {
-  return (
-    <nav>
-      {leftButton ? leftButton : menuButton()}
-      {title ? <h1 key="title">{title}</h1> : null}
-      {headerBtns()}
-    </nav>
-  );
+export function header(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
+  return m('nav', [
+    leftButton ? leftButton : menuButton(),
+    title ? <div className="main_header_title" key="title">{title}</div> : null,
+    headerBtns()
+  ])
+}
+
+export function dropShadowHeader(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
+  return [
+    m('nav', [
+      leftButton ? leftButton : menuButton(),
+      title ? <div className="main_header_title" key="title">{title}</div> : null,
+      headerBtns()
+    ]),
+    m('div.main_header_drop_shadow')
+  ]
 }
 
 export const loader = (
@@ -152,10 +164,10 @@ export function connectingHeader(title?: string) {
   return (
     <nav>
       {menuButton()}
-      <h1 key="connecting-title" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <div key="connecting-title" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
-      </h1>
+      </div>
       {headerBtns()}
     </nav>
   );
@@ -165,10 +177,10 @@ export function loadingBackbutton(title?: string) {
   return (
     <nav>
       {backButton()}
-      <h1 key="connecting-backbutton" className={'reconnecting' + (title ? 'withTitle' : '')}>
+      <div key="connecting-backbutton" className={'main_header_title reconnecting' + (title ? 'withTitle' : '')}>
         {title ? <span>{title}</span> : null}
         {loader}
-      </h1>
+      </div>
       {headerBtns()}
     </nav>
   );

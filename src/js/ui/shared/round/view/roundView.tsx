@@ -60,51 +60,81 @@ export function renderMaterial(material: Material) {
   return children;
 }
 
+function tcConfig(ctrl: OnlineRound, vnode: Mithril.ChildNode) {
+  const el = vnode.dom as HTMLElement;
+  el.textContent =
+    utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • ';
+  ctrl.vm.tClockEl = el;
+}
+
 function renderTitle(ctrl: OnlineRound) {
-  function tcConfig(vnode: Mithril.ChildNode) {
-    const el = vnode.dom as HTMLElement;
-    el.textContent =
-      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
-      ' • ';
-    ctrl.vm.tClockEl = el;
-  }
   if (ctrl.vm.offlineWatcher || socket.isConnected()) {
+    const className = 'main_header_title playing' +
+      (!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
+        ' withSub' : '')
     return (
-      <h1 key="playingTitle" className="playing">
-        { session.isKidMode() ? <span className="kiddo">😊</span> : null }
-        {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
-        {ctrl.data.tournament ?
-          <span className="fa fa-trophy" /> : null
-        }
-        {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span oncreate={tcConfig}>
-          {
-            utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
-            ' • '
+      <div key="playingTitle" className={className}>
+        <h1 className="round-title">
+          { session.isKidMode() ? <span className="kiddo">😊</span> : null }
+          {ctrl.data.userTV ? <span className="withIcon" data-icon="1" /> : null}
+          {ctrl.data.tournament ?
+            <span className="fa fa-trophy" /> : null
           }
-          </span> : null
+          {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
+            <span oncreate={(v: Mithril.ChildNode) => tcConfig(ctrl, v)}>
+            {
+              utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
+              ' • '
+            }
+            </span> : null
+          }
+          {ctrl.title}
+          { ctrl.vm.offlineWatcher ? ' • Offline' : null}
+        </h1>
+        {!ctrl.data.player.spectator && ctrl.data.game.speed === 'correspondence' ?
+          <h2 className="round-subTitle">
+            {ctrl.subTitle}
+          </h2> : null
         }
-        {ctrl.title}
-        { ctrl.vm.offlineWatcher ? ' • Offline' : null}
-      </h1>
+      </div>
     );
   } else {
     return (
-      <h1 key="reconnectingTitle" className="reconnecting">
+      <div key="reconnectingTitle" className="main_header_title reconnecting">
         {loader}
-      </h1>
+      </div>
     );
   }
 }
 
 function renderHeader(ctrl: OnlineRound) {
-  return (
-    <nav className={socket.isConnected() ? '' : 'reconnecting'}>
-      { !ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator ? backButton(gameTitle(ctrl.data)) : menuButton()}
-      { ctrl.data.tv || ctrl.data.userTV || !ctrl.data.player.spectator ? renderTitle(ctrl) : null}
-      {headerBtns()}
-    </nav>
-  );
+
+  let children
+  if (!ctrl.data.tv && !ctrl.data.userTV && ctrl.data.player.spectator) {
+    children = [
+      backButton([
+        ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
+        ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
+          <span oncreate={(v: Mithril.ChildNode) => tcConfig(ctrl, v)}>
+          {
+            utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
+            ' • '
+          }
+          </span> : null,
+        gameTitle(ctrl.data)
+      ])
+    ]
+  } else {
+    children = [
+      menuButton(),
+      renderTitle(ctrl)
+    ]
+  }
+  children.push(headerBtns())
+
+  return m('nav', {
+    className: socket.isConnected() ? '' : 'reconnecting'
+  }, children)
 }
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {

@@ -1,4 +1,4 @@
-import { header as headerWidget, backButton } from '../shared/common';
+import { dropShadowHeader, backButton } from '../shared/common';
 import redraw from '../../utils/redraw';
 import * as helper from '../helper';
 import formWidgets from '../shared/form';
@@ -6,13 +6,18 @@ import layout from '../layout';
 import i18n, { loadFromSettings, getAvailableLanguages } from '../../i18n';
 import settings from '../../settings';
 import { setServerLang } from '../../xhr';
-import * as m from 'mithril';
 import * as stream from 'mithril/stream';
 
-export default {
+type Lang = [string, string]
+
+interface State {
+  langs: Mithril.Stream<Array<Lang>>
+}
+
+export const LangPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
-  oninit: function() {
+  oninit() {
     this.langs = stream([]);
 
     getAvailableLanguages().then(data => {
@@ -21,18 +26,18 @@ export default {
     });
   },
 
-  view: function() {
-    const ctrl = this;
-    const header = headerWidget.bind(undefined, null, backButton(i18n('language')));
+  view() {
+    const ctrl = this
+    const header = () => dropShadowHeader(null, backButton(i18n('language')))
 
-    function renderLang(l) {
+    function renderLang(l: Lang) {
       return (
         <li className="list_item">
           {formWidgets.renderRadio(l[1], 'lang', l[0],
             settings.general.lang() === l[0],
             e => {
-              settings.general.lang(e.target.value);
-              setServerLang(e.target.value);
+              settings.general.lang((e.target as HTMLInputElement).value);
+              setServerLang((e.target as HTMLInputElement).value);
               loadFromSettings();
             }
           )}
@@ -50,4 +55,6 @@ export default {
 
     return layout.free(header, renderBody);
   }
-};
+}
+
+export default LangPrefScreen

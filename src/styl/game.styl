@@ -1,3 +1,21 @@
+.main_header_title.playing
+  display flex
+  flex-flow column nowrap
+  line-height initial
+  justify-content center
+  align-items flex-start
+
+.round-title
+  > .kiddo
+    margin-right 5px
+    font-size 20px
+  > .fa-trophy
+    margin-right 2px
+
+.round-subTitle
+  font-size 0.8em
+  opacity 0.9
+
 .playTable
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
@@ -174,7 +192,7 @@
   > tens
     font-size 0.8em
   &.berserk
-    color #dc322f !important
+    color #e35d5b !important
   &.running
     background-color #505a60
     color #fff

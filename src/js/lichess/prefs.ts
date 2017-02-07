@@ -3,7 +3,7 @@ export const AutoQueen = {
   PREMOVE: 2,
   ALWAYS: 3
 };
-AutoQueen.choices = [
+export const AutoQueenChoices = [
   [ AutoQueen.NEVER, 'never' ],
   [ AutoQueen.ALWAYS, 'always' ],
   [ AutoQueen.PREMOVE, 'whenPremoving' ]
@@ -15,7 +15,7 @@ export const SubmitMove = {
   CORRESPONDENCE_UNLIMITED: 1,
   ALWAYS: 2
 };
-SubmitMove.choices = [
+export const SubmitMoveChoices = [
   [ SubmitMove.NEVER, 'never' ],
   [ SubmitMove.CORRESPONDENCE_ONLY, 'inCorrespondenceGames' ],
   [ SubmitMove.CORRESPONDENCE_UNLIMITED, 'Correspondence and unlimited' ],
@@ -26,7 +26,7 @@ export const ConfirmResign = {
   NO: 0,
   YES: 1
 };
-ConfirmResign.choices = [
+export const ConfirmResignChoices = [
   [ ConfirmResign.NO, 'no' ],
   [ ConfirmResign.YES, 'yes' ]
 ];
@@ -36,7 +36,7 @@ export const AutoThreefold = {
   TIME: 2,
   ALWAYS: 3
 };
-AutoThreefold.choices = [
+export const AutoThreefoldChoices = [
   [ AutoThreefold.NEVER, 'never' ],
   [ AutoThreefold.ALWAYS, 'always' ],
   [ AutoThreefold.TIME, 'whenTimeRemainingLessThanThirtySeconds' ]
@@ -47,7 +47,7 @@ export const Takeback = {
   CASUAL: 2,
   ALWAYS: 3
 };
-Takeback.choices = [
+export const TakebackChoices = [
   [ Takeback.NEVER, 'never' ],
   [ Takeback.ALWAYS, 'always' ],
   [ Takeback.CASUAL, 'inCasualGamesOnly' ]
@@ -59,7 +59,7 @@ export const Animation = {
   NORMAL: 2,
   SLOW: 3
 };
-Animation.choices = [
+export const AnimationChoices = [
   [ Animation.NONE, 'none' ],
   [ Animation.FAST, 'fast' ],
   [ Animation.NORMAL, 'normal' ],
@@ -71,7 +71,7 @@ export const Replay = {
   SLOW: 1,
   ALWAYS: 2
 };
-Replay.choices = [
+export const ReplayChoices = [
   [ Replay.NEVER, 'never' ],
   [ Replay.SLOW, 'onSlowGames' ],
   [ Replay.ALWAYS, 'always' ]
@@ -82,7 +82,7 @@ export const ClockTenths = {
   LOWTIME: 1,
   ALWAYS: 2
 };
-ClockTenths.choices = [
+export const ClockTenthsChoices = [
   [ ClockTenths.NEVER, 'never' ],
   [ ClockTenths.LOWTIME, 'whenTimeRemainingLessThanTenSeconds' ],
   [ ClockTenths.ALWAYS, 'always' ]
@@ -94,7 +94,7 @@ export const Challenge = {
   FRIEND: 3,
   ALWAYS: 4
 };
-Challenge.choices = [
+export const ChallengeChoices = [
   [ Challenge.NEVER, 'never' ],
   [ Challenge.RATING, 'ifRatingIsPlusMinusX', 500 ],
   [ Challenge.FRIEND, 'onlyFriends' ],
@@ -106,12 +106,12 @@ export const Message = {
   FRIEND: 2,
   ALWAYS: 3
 };
-Message.choices = [
+export const MessageChoices = [
   [ Message.NEVER, 'never' ],
   [ Message.FRIEND, 'onlyFriends' ],
   [ Message.ALWAYS, 'always' ]
 ];
 
-export function swapKeyValue(array) {
+export function swapKeyValue(array: any[][]): any[][] {
   return array.map(v => [v[1], v[0], v[2]]);
 }

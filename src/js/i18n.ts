@@ -74,7 +74,7 @@ export function loadPreferredLanguage(): Promise<string> {
   .then(loadMomentLocale);
 }
 
-export function getAvailableLanguages(): Promise<string> {
+export function getAvailableLanguages(): Promise<Array<[string, string]>> {
   return loadLocalJsonFile('i18n/refs.json');
 }
 

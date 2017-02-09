@@ -31,7 +31,7 @@ function threadBody(ctrl: ThreadState) {
             window.plugins.toast.show('Minimum length is 3', 'short', 'center');
         }}>
           <input id="id" key="id" value={ctrl.id()} type="hidden" />
-          <textarea id="body" key="body" className="responseBody" />
+          <textarea id="body" key="body" className="responseBody composeTextarea" />
           <button key="send" className="fatButton sendResponse" oncreate={h.autofocus} type="submit">
             <span className="fa fa-check" />
             {i18n('send')}

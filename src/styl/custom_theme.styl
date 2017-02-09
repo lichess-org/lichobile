@@ -1,0 +1,80 @@
+.view-container.transp
+  > main
+    background-color transparent
+    background-position: center center;
+    background-repeat: no-repeat;
+  &.wood
+    > main
+      background-image url('../../images/bg/wood.jpg')
+  &.bgshapes
+    > main
+      background-image url('../../images/bg/shapes.jpg')
+      background-size cover
+  &.grey
+    > main
+      background-image url('../../images/bg/grey.jpg')
+      background-position initial
+  &.leaves
+    > main
+      background-image url('../../images/bg/leaves.jpg')
+  &.autumn
+    > main
+      background-image url('../../images/bg/autumn.jpg')
+
+  main, .main_header, .action_bar_button, .antagonistUser
+    color textTransp
+
+  .main_header_button.active, .action_bar_button.active, .antagonistInfos.active,
+  .back_button > button.active
+    background-color transpWhite01
+
+  .main_header, .fatButton, .homeMoreButton > button, .tabs,
+  .mini_board > .vsbloc, .select_input, .clock
+    background transpBlack
+
+  .threadWrapper > .responseWrapper textarea, .composeInput
+    border-color transpWhite02
+
+  .radio_list input.radio:checked + label
+    background-color transpWhite02
+
+  .select_input, .fatButton
+    color #ccc
+
+  .fatButton
+    box-shadow transpShadow
+
+  .list_item
+    border-bottom-color transpWhite01
+    &.active
+      background-color transpWhite02
+
+  .items_list_block
+    background transpBlack2
+    &.noPadding
+      > .list_item.nav:after
+        right 5px
+    > .list_item
+      padding-right 10px
+      padding-left 10px
+
+  .popup_content .select_input
+    background selectBg
+
+  .main_header.board .chip, .chip
+    color black
+    border-color black
+
+  .tomb
+    .pawn
+      background-image url(../../images/pieces/mono/P_white.svg)
+    .bishop
+      background-image url(../../images/pieces/mono/B_white.svg)
+    .knight
+      background-image url(../../images/pieces/mono/N_white.svg)
+    .rook
+      background-image url(../../images/pieces/mono/R_white.svg)
+    .queen
+      background-image url(../../images/pieces/mono/Q_white.svg)
+    .king
+      background-image url(../../images/pieces/mono/K_white.svg)

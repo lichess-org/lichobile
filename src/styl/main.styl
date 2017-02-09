@@ -19,7 +19,7 @@ main
   height headerHeight
   color lighten(textDarkBg, 25%)
   &.board
-    background inherit
+    background initial
     button.active
       background lighten(bgdark, 5%)
   > nav
@@ -115,30 +115,25 @@ main
     overflow hidden
     text-overflow ellipsis
 
-.friends_button, .timeline_button, .game_menu_button
-  > .chip
-    position absolute
-    font-size 9px
-    font-weight bold
-    line-height 13px
-    letter-spacing 0px
-    color headerBgDark
-    border 3px solid headerBgDark
-    border-radius 50%
-    height 19px
-    width 19px
-    top 5px
-    right 5px
-    background gold
+.chip
+  position absolute
+  font-size 9px
+  font-weight bold
+  line-height 13px
+  letter-spacing 0px
+  color headerBgDark
+  border 3px solid headerBgDark
+  border-radius 50%
+  height 19px
+  width 19px
+  top 5px
+  right 5px
+  background gold
 
 .main_header.board
   .chip
     color bgdark
     border-color bgdark
-
-.timeline_button
-  > .chip
-    font-family 'Noto Sans', sans-serif
 
 .friends_button
   position relative

@@ -84,28 +84,28 @@ export default {
 
     return (
       <div id="games_menu" className="overlay_popup_wrapper"
-      onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
-        vnode.dom.classList.add('fading_out');
-        setTimeout(done, 500);
-      }}
+        onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
+          vnode.dom.classList.add('fading_out');
+          setTimeout(done, 500);
+        }}
       >
-      <div className="wrapper_overlay_close"
-      oncreate={helper.ontap(() => close())} />
-      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
-      oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
-      {helper.isWideScreen() ? (
-        <header>
-        {i18n('nbGamesInPlay', session.nowPlaying().length)}
-        </header>
-      ) : null
-      }
-      {helper.isWideScreen() ? (
-        <div className="popup_content">
-        {renderAllGames(null)}
+        <div className="wrapper_overlay_close"
+          oncreate={helper.ontap(() => close())}
+        />
+        <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
+          oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
+          {helper.isWideScreen() ? (
+            <header>
+            {i18n('nbGamesInPlay', session.nowPlaying().length)}
+            </header>
+          ) : null
+          }
+          {helper.isWideScreen() ?
+            <div className="popup_content">
+              {renderAllGames(null)}
+            </div> : renderAllGames(cDim)
+          }
         </div>
-      ) : renderAllGames(cDim)
-      }
-      </div>
       </div>
     );
   }
@@ -114,8 +114,8 @@ export default {
 function open() {
   router.backbutton.stack.push(close);
   isOpen = true;
-  setTimeout(function() {
-    if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
+  setTimeout(() => {
+    if (scroller) scroller.goToPage(1, 0);
   }, 400);
   session.refresh()
   .then(v => {
@@ -306,7 +306,7 @@ function renderAllGames(cDim: CardDim) {
   } : {};
   const nbCards = utils.hasNetwork() ?
     challenges.length + nowPlaying.length + 1 :
-    getOfflineGames().length;
+    getOfflineGames().length + 1;
 
   let wrapperStyle: Object, wrapperWidth: number;
   if (cDim) {
@@ -352,7 +352,7 @@ function renderAllGames(cDim: CardDim) {
       </div>
     );
 
-    if (utils.hasNetwork()) allCards.unshift(newGameCard);
+    allCards.unshift(newGameCard);
   }
 
   return m('div#all_games', { style: wrapperStyle }, allCards);

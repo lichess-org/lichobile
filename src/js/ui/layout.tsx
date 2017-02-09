@@ -22,7 +22,7 @@ export default {
   empty() {
     background = background || settings.general.theme.background();
     return (
-      <div className={'view-container ' + background}>
+      <div className={'view-container ' + bgClass(background)}>
         <main id="page">
         </main>
       </div>
@@ -37,7 +37,7 @@ export default {
   ) {
     background = background || settings.general.theme.background();
     return (
-      <div className={'view-container ' + background}>
+      <div className={'view-container ' + bgClass(background)}>
         <main id="page" className={color}>
           <header className="main_header board">
             {header()}
@@ -67,7 +67,7 @@ export default {
   ) {
     background = background || settings.general.theme.background();
     return (
-      <div className={'view-container ' + background}>
+      <div className={'view-container ' + bgClass(background)}>
         <main id="page">
           <header className="main_header">
             {header()}
@@ -107,3 +107,7 @@ export default {
     );
   }
 };
+
+function bgClass(bgTheme: string) {
+  return bgTheme === 'dark' || bgTheme === 'light' ? bgTheme : 'transp ' + bgTheme
+}

@@ -17,7 +17,7 @@ export function composeBody(ctrl: ComposeState) {
         oncreate={ctrl.id() ? h.autofocus : null}
         />
         {(ctrl.errors() && ctrl.errors().subject) ? renderError('subjectError', ctrl.errors().subject[0]) : null}
-        <textarea id="body" key="body" className="composeInput" />
+        <textarea id="body" key="body" className="composeInput composeTextarea" />
         {(ctrl.errors() && ctrl.errors().text) ? renderError('textError', ctrl.errors().text[0]) : null}
         <button key="send" className="fatButton composeSend" type="submit">
           <span className="fa fa-check" />

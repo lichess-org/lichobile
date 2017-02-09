@@ -44,43 +44,21 @@ function renderBody() {
         oncreate: helper.ontapY(utils.f(router.set, '/settings/gameDisplay'))
       }, i18n('gameDisplay')),
       m('li.list_item.nav', {
+        key: 'theme',
+        oncreate: helper.ontapY(utils.f(router.set, '/settings/theme'))
+      }, `${i18n('theming')}`),
+      m('li.list_item.nav', {
         key: 'boardTheme',
         oncreate: helper.ontapY(utils.f(router.set, '/settings/themes/board'))
-      }, `${i18n('theming')} (${i18n('board')})`),
+      }, i18n('board')),
       m('li.list_item.nav', {
         key: 'piecesTheme',
         oncreate: helper.ontapY(utils.f(router.set, '/settings/themes/piece'))
-      }, `${i18n('theming')} (${i18n('pieces')})`),
+      }, i18n('pieces')),
       m('li.list_item.nav', {
         key: 'soundNotifications',
         oncreate: helper.ontapY(utils.f(router.set, '/settings/soundNotifications'))
       }, i18n('soundAndNotifications')),
-      m('li.list_item.settingsChoicesInline', {
-        key: 'backgroundTheme'
-      }, [
-        m('label', 'Background'),
-        m('fieldset', [
-          m('div.nice-radio', formWidgets.renderRadio(
-            'Dark',
-            'bgTheme',
-            'dark',
-            settings.general.theme.background() === 'dark',
-            e => utils.autoredraw(() => {
-              settings.general.theme.background((e.target as HTMLInputElement).value);
-              layout.onBackgroundChange((e.target as HTMLInputElement).value);
-            })
-          )),
-          m('div.nice-radio', formWidgets.renderRadio(
-            'Light',
-            'bgTheme',
-            'light',
-            settings.general.theme.background() === 'light',
-            e => utils.autoredraw(() => {
-              settings.general.theme.background((e.target as HTMLInputElement).value);
-              layout.onBackgroundChange((e.target as HTMLInputElement).value);
-            })
-        ))])
-      ]),
       m('li.list_item', {
         key: 'analytics'
       }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))

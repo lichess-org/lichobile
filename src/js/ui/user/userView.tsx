@@ -146,7 +146,7 @@ function renderRatings(user: UserFullProfile) {
 function renderActions(ctrl: UserCtrl) {
   const user = ctrl.user()
   return (
-    <section id="userProfileActions" class="noPadding">
+    <section id="userProfileActions" className="items_list_block noPadding">
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.goToGames)}
         key="view_all_games"

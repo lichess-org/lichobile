@@ -606,3 +606,42 @@ line
       &.selected
         background blue
 
+.view-container.transp
+  .analyse-replay
+    background transpWhite01
+    padding-right 0
+    margin-right 5px
+
+  .analyse-cevalBox, .analyse-infosBox
+    background transpBlack3
+
+  .analyse-curEval
+    background transparent
+    border-right 1px solid transpWhite01
+
+  .analyse-engine_info
+    padding-left 5px
+
+  .analyse-openingBox, interrupt
+    background rgba(255,255,255,0.15)
+
+  .analyse_actions_bar
+    background transpBlack
+
+  turn > index
+    background transpBlack3
+
+  .explorer-data
+    background rgba(0,0,0,0.2)
+
+  .explorerTable
+    tr
+      background transpWhite01
+      &:nth-child(even)
+        background transpWhite015
+    .black
+      background lighten(#000, 10%)
+
+  .explorer-fixedTitle, .explorerTable th, .explorerTable .title
+    background rgba(0,0,0,0.4)
+

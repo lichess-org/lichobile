@@ -15,6 +15,7 @@ import settingsPreferences from './ui/settings/preferences';
 import settingsGameDisplay from './ui/settings/gameDisplay';
 import settingsGameBehavior from './ui/settings/gameBehavior';
 import settingsPrivacy from './ui/settings/privacy';
+import theme from './ui/settings/theme';
 import boardThemes from './ui/settings/boardThemes';
 import pieceThemes from './ui/settings/pieceThemes';
 import user from './ui/user';
@@ -81,6 +82,7 @@ export default {
       'settings/gameBehavior': settingsGameBehavior,
       'settings/soundNotifications': settingsSoundNotifications,
       'settings/privacy': settingsPrivacy,
+      'settings/theme': theme,
       'settings/themes/board': boardThemes,
       'settings/themes/piece': pieceThemes,
       'settings/lang': settingsLang,

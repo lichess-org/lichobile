@@ -39,16 +39,14 @@ export default {
         isPool() ? renderPoolSetup() : renderCustomSetup(),
         m('br'),
         spinner.getVdom(),
-        m('div.lobby-nbPlayers', [
-          m('div', socket.isConnected() ?
-            m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-            m('div', [i18n('reconnecting'), loader])
+        m('div.lobby-nbPlayers', socket.isConnected() ? [
+          m('div',
+            m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>'))
           ),
-          m('div', socket.isConnected() ?
-            m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-            m('div', [i18n('reconnecting'), loader])
+          m('div',
+            m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>'))
           ),
-        ]),
+        ] : m('div', [i18n('reconnecting'), loader])),
         m('button[data-icon=L]', {
           oncreate: helper.ontap(() => cancelSeeking())
         }, i18n('cancel'))

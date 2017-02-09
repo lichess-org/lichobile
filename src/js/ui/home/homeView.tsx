@@ -80,7 +80,7 @@ function renderTimeline(ctrl: HomeState) {
   return (
     <section id="timeline">
       <h2 className="homeTitle">{i18n('timeline')}</h2>
-      <ul>
+      <ul className="items_list_block">
         { timeline.map((e: any) => {
           if (e.type === 'follow') {
             return renderFollow(e);
@@ -109,7 +109,7 @@ function renderWeekLeaders(ctrl: HomeState) {
   return (
     <section id="weekTopPlayers">
       <h2 className="homeTitle">{i18n('leaderboard')}</h2>
-      <ul>
+      <ul className="items_list_block">
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">

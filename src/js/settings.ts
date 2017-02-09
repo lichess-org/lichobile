@@ -53,6 +53,14 @@ export default {
     lang: localstorageprop<string>('settings.lang'),
     sound: localstorageprop('settings.sound', true),
     theme: {
+      availableBackgroundThemes: [
+        ['bgThemeDark', 'dark'],
+        ['bgThemeLight', 'light'],
+        ['bgThemeWood', 'wood'],
+        ['bgThemeShapes', 'bgshapes'],
+        ['bgThemeGrey', 'grey'],
+        ['bgThemeLeaves', 'leaves']
+      ],
       background: localstorageprop('settings.bgTheme', 'dark'),
       availableBoardThemes: [
         ['boardThemeBrown', 'brown'],

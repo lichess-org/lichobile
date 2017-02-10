@@ -6,6 +6,7 @@ export interface SearchState {
   result: Mithril.Stream<SearchResult>
   bookmark: (id: string) => void
   games: Mithril.Stream<Array<UserGameWithDate>>
+  more: () => void
 }
 
 export interface Select {
@@ -45,6 +46,7 @@ export interface SearchQuery {
   dateMax: string
   'sort.field': string
   'sort.order': string
+  p?: number
 }
 
 export interface SearchResult {

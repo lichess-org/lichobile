@@ -14,12 +14,14 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   helper.analyticsTrackView('Advanced search');
   const result = stream<SearchResult>();
   const games = stream<Array<UserGameWithDate>>();
+  const lastQuery = stream<SearchQuery>();
 
   vnode.state = {
     search,
     result,
     games,
-    bookmark
+    bookmark,
+    more
   };
 
   const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order'];
@@ -27,7 +29,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   function search(form: HTMLFormElement) {
     const elements: HTMLCollection = form.elements as HTMLCollection;
     const queryData = fields.reduce((acc, el) => buildQuery(elements, acc, el), {}) as SearchQuery;
-
+    lastQuery(queryData);
     xhr.search(queryData)
     .then((data: SearchResult) => {
       result(prepareData(data));
@@ -41,6 +43,19 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
   function bookmark(id: string) {
     toggleGameBookmark(id);
+  }
+
+  function more() {
+    const queryData = lastQuery();
+    queryData.p = result().paginator.nextPage;
+    xhr.search(queryData)
+    .then((data: SearchResult) => {
+      result(prepareData(data));
+      games(games().concat(result().paginator.currentPageResults));
+      console.log(data);
+      redraw();
+    })
+    .catch(handleXhrError);
   }
 }
 

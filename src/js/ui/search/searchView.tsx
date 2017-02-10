@@ -89,6 +89,12 @@ function renderSearchForm(ctrl: SearchState) {
       {ctrl.result() ?
         <div className="searchGamesList">
           {ctrl.games().map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
+          {ctrl.result().paginator.nextPage ?
+            <button key="more" className="newGameButton" oncreate={helper.ontap(() => ctrl.more())}>
+              <span className="fa fa-search" />
+              {i18n('more')}
+            </button>
+            : null}
         </div>
       : null }
     </div>

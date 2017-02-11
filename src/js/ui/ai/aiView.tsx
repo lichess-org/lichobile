@@ -1,4 +1,4 @@
-import * as m from 'mithril'
+import * as h from 'mithril/hyperscript'
 import chessground from '../../chessground';
 import { getBoardBounds } from '../helper';
 import { playerFromFen } from '../../utils/fen';
@@ -55,7 +55,7 @@ function renderContent(ctrl: AiRound) {
     </h2>
   );
 
-  const board = m(Board, {
+  const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
@@ -65,14 +65,14 @@ function renderContent(ctrl: AiRound) {
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
 
   if (isPortrait) {
-    return m.fragment({ key: orientationKey }, [
+    return h.fragment({ key: orientationKey }, [
       renderAntagonist(ctrl, aiName, material[ctrl.data.opponent.color], 'opponent', isPortrait),
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
     ]);
   } else {
-    return m.fragment({ key: orientationKey }, [
+    return h.fragment({ key: orientationKey }, [
       board,
       <section key="table" className="table">
         <section className="playersTable offline">

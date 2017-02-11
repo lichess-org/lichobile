@@ -17,7 +17,7 @@ import i18n from '../../i18n';
 import popupWidget from './popup';
 import { getLanguageNativeName } from '../../utils/langs';
 import friendsPopup from '../friendsPopup';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
@@ -136,7 +136,7 @@ export function headerBtns() {
 }
 
 export function header(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
-  return m('nav', [
+  return h('nav', [
     leftButton ? leftButton : menuButton(),
     title ? <div className="main_header_title" key="title">{title}</div> : null,
     headerBtns()
@@ -145,12 +145,12 @@ export function header(title: Mithril.Children, leftButton?: () => Mithril.Child
 
 export function dropShadowHeader(title: Mithril.Children, leftButton?: () => Mithril.Children): Mithril.Children {
   return [
-    m('nav', [
+    h('nav', [
       leftButton ? leftButton : menuButton(),
       title ? <div className="main_header_title" key="title">{title}</div> : null,
       headerBtns()
     ]),
-    m('div.main_header_drop_shadow')
+    h('div.main_header_drop_shadow')
   ]
 }
 
@@ -194,18 +194,18 @@ export function viewOnlyBoardContent(fen?: string, lastMove?: string, orientatio
   const className = 'board_wrapper' + (wrapperClass ? ' ' + wrapperClass : '');
   const board = (
     <section className={className}>
-      {m(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
+      {h(ViewOnlyBoard, {bounds, fen, lastMove, orientation, variant, customPieceTheme})}
     </section>
   );
   if (isPortrait) {
-    return m.fragment({ key: orientKey }, [
+    return h.fragment({ key: orientKey }, [
       <section className="playTable">&nbsp;</section>,
       board,
       <section className="playTable">&nbsp;</section>,
       <section className="actions_bar">&nbsp;</section>
     ]);
   } else {
-    return m.fragment({ key: orientKey}, [
+    return h.fragment({ key: orientKey}, [
       board,
       <section className="table" />
     ]);

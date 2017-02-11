@@ -5,14 +5,14 @@ import formWidgets from '../shared/form';
 import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
 import popupWidget from '../shared/popup';
 import router from '../../router';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 function renderAlways(ctrl) {
   return [
-    m('div.action', formWidgets.renderCheckbox(
+    h('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces
     )),
-    m('div.action', formWidgets.renderCheckbox(
+    h('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
     ))
   ];

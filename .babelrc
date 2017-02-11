@@ -1,12 +1,12 @@
 {
   "plugins": [
     ["transform-react-jsx", {
-      "pragma": "m"
+      "pragma": "h"
     }],
 
     ["transform-react-require", {
-      "identifier": "m",
-      "moduleName": "mithril"
+      "identifier": "h",
+      "moduleName": "mithril/hyperscript"
     }]
   ],
   "env": {

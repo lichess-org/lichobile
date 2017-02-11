@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import redraw from '../../../utils/redraw';
 import * as helper from '../../helper';
 import { debounce } from 'lodash';

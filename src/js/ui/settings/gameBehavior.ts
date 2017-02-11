@@ -6,7 +6,7 @@ import * as helper from '../helper';
 import session from '../../session';
 import { SettingsProp } from '../../settings'
 import { swapKeyValue, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 interface State {
   premove: SettingsProp<boolean>
@@ -40,24 +40,24 @@ export default GameBehaviorPrefScreen
 
 function renderBody(ctrl: State) {
   return [
-    m('ul.native_scroller.page.settings_list.game', [
-      m('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),
+    h('ul.native_scroller.page.settings_list.game', [
+      h('li.list_item', formWidgets.renderCheckbox(i18n('premovesPlayingDuringOpponentTurn'),
         'premove', ctrl.premove)),
-      m('li.list_item', [
-        m('div.label', i18n('takebacksWithOpponentApproval')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'takeback', swapKeyValue(TakebackChoices), ctrl.takeback))
+      h('li.list_item', [
+        h('div.label', i18n('takebacksWithOpponentApproval')),
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'takeback', swapKeyValue(TakebackChoices), ctrl.takeback))
       ]),
-      m('li.list_item', [
-        m('div.label', i18n('promoteToQueenAutomatically')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoQueen', swapKeyValue(AutoQueenChoices), ctrl.autoQueen))
+      h('li.list_item', [
+        h('div.label', i18n('promoteToQueenAutomatically')),
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoQueen', swapKeyValue(AutoQueenChoices), ctrl.autoQueen))
       ]),
-      m('li.list_item', [
-        m('div.label', i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, '')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoThreefold', swapKeyValue(AutoThreefoldChoices), ctrl.autoThreefold))
+      h('li.list_item', [
+        h('div.label', i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, '')),
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoThreefold', swapKeyValue(AutoThreefoldChoices), ctrl.autoThreefold))
       ]),
-      m('li.list_item', [
-        m('div.label', i18n('moveConfirmation')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'moveConfirmation', swapKeyValue(SubmitMoveChoices), ctrl.submitMove))
+      h('li.list_item', [
+        h('div.label', i18n('moveConfirmation')),
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'moveConfirmation', swapKeyValue(SubmitMoveChoices), ctrl.submitMove))
       ])
     ])
   ];

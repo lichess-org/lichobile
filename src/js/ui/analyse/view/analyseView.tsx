@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';
 import i18n from '../../../i18n';
@@ -39,9 +39,9 @@ export function overlay(ctrl: AnalyseCtrlInterface) {
 }
 
 export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen?: string) {
-  return m('section.board_wrapper', {
+  return h('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
-  }, m(ViewOnlyBoard, { orientation: color, bounds, fen }));
+  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }));
 }
 
 
@@ -50,7 +50,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
 
-  let board: Mithril.ChildNode
+  let board: Mithril.BaseNode
 
   let nextBest: string | null;
   let curBestShape: Shape[], pastBestShape: Shape[];
@@ -73,7 +73,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
   const shapes: Shape[] = nextMoveShape.length > 0 ?
   nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
 
-  board = m(Board, {
+  board = h(Board, {
     key: ctrl.vm.smallBoard ? 'board-small' : 'board-full',
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
@@ -83,7 +83,7 @@ export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, b
     wrapperClasses: ctrl.vm.smallBoard ? 'halfsize' : ''
   })
 
-  return m.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
+  return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
     board,
     <div className="analyse-tableWrapper">
       {ctrl.explorer.enabled() ?
@@ -169,12 +169,12 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
 
 function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
   const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
-  if (opening) return m('div', {
+  if (opening) return h('div', {
     key: 'opening-box',
     className: 'analyse-openingBox',
     oncreate: helper.ontapY(noop, () => window.plugins.toast.show(opening.eco + ' ' + opening.name, 'short', 'center'))
   }, [
-    m('strong', opening.eco),
+    h('strong', opening.eco),
     ' ' + opening.name
   ]);
 }
@@ -220,8 +220,8 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
           }
         </div>
         <div
-          oncreate={({ state }: Mithril.ChildNode) => state.percent = percent}
-          onupdate={({ dom, state }: Mithril.ChildNode) => {
+          oncreate={({ state }: Mithril.DOMNode) => state.percent = percent}
+          onupdate={({ dom, state }: Mithril.DOMNode) => {
             if (state.percent > percent) {
               // remove el to avoid downward animation
               const p = dom.parentNode;
@@ -252,9 +252,9 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
       {renderInfosBox(ctrl, isPortrait)}
       <div className="analyse-game">
         { ctrl.ceval.enabled() ?
-          m(EvalBox, { ctrl }) : null
+          h(EvalBox, { ctrl }) : null
         }
-        {m(Replay, { ctrl })}
+        {h(Replay, { ctrl })}
       </div>
     </div>
   );
@@ -317,7 +317,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           <span className={'color-icon ' + player.color} />
           {player.color}
         </div>
-        {ctrl.vm.step ? m(CrazyPocket, {
+        {ctrl.vm.step ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
@@ -329,7 +329,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
           <span className={'color-icon ' + opponent.color} />
           {opponent.color}
         </div>
-        {ctrl.vm.step ? m(CrazyPocket, {
+        {ctrl.vm.step ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
@@ -364,7 +364,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {isCrazy && ctrl.vm.step ? m(CrazyPocket, {
+        {isCrazy && ctrl.vm.step ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: player.color,
@@ -386,7 +386,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
             <span className="fa fa-clock-o" />
           </div> : null
         }
-        {isCrazy && ctrl.vm.step ? m(CrazyPocket, {
+        {isCrazy && ctrl.vm.step ? h(CrazyPocket, {
           ctrl: { chessground: ctrl.chessground, canDrop: ctrl.canDrop },
           crazyData: ctrl.vm.step.crazy,
           color: opponent.color,
@@ -422,13 +422,13 @@ function renderVariationMenu(ctrl: AnalyseCtrlInterface) {
     const promotable = isSynthetic(ctrl.data) ||
       !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
 
-    return m('div.variationMenu', [
-      m('button', {
+    return h('div.variationMenu', [
+      h('button', {
         className: 'withIcon',
         'data-icon': 'q',
         oncreate: helper.ontap(() => ctrl.deleteVariation(path))
       }, 'Delete variation'),
-      promotable ? m('button', {
+      promotable ? h('button', {
         className: 'withIcon',
         'data-icon': 'E',
         oncreate: helper.ontap(() => ctrl.promoteVariation(path))

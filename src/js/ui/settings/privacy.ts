@@ -6,7 +6,7 @@ import i18n from '../../i18n';
 import session from '../../session';
 import { swapKeyValue, ChallengeChoices } from '../../lichess/prefs';
 import { SettingsProp } from '../../settings'
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 interface State {
   follow: SettingsProp<boolean>
@@ -37,12 +37,12 @@ export default PrivacyPrefScreen
 
 function renderBody(ctrl: State) {
   return [
-    m('ul.native_scroller.page.settings_list.game', [
-      m('li.list_item', formWidgets.renderCheckbox(i18n('letOtherPlayersFollowYou'),
+    h('ul.native_scroller.page.settings_list.game', [
+      h('li.list_item', formWidgets.renderCheckbox(i18n('letOtherPlayersFollowYou'),
         'follow', ctrl.follow)),
-      m('li.list_item', [
-        m('div.label', i18n('letOtherPlayersChallengeYou')),
-        m('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'challenge', swapKeyValue(ChallengeChoices), ctrl.challenge))
+      h('li.list_item', [
+        h('div.label', i18n('letOtherPlayersChallengeYou')),
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'challenge', swapKeyValue(ChallengeChoices), ctrl.challenge))
       ])
     ])
   ];

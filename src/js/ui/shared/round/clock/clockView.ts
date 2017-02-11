@@ -1,5 +1,5 @@
 import * as helper from '../../../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import ClockCtrl from './ClockCtrl'
 
 export interface ClockAttrs {
@@ -10,8 +10,8 @@ export interface ClockAttrs {
 }
 
 interface ClockState {
-  clockOnCreate(vnode: Mithril.ChildNode): void
-  clockOnUpdate(vnode: Mithril.ChildNode): void
+  clockOnCreate(vnode: Mithril.DOMNode): void
+  clockOnUpdate(vnode: Mithril.DOMNode): void
 }
 
 function prefixInteger(num: number, length: number) {
@@ -45,12 +45,12 @@ const Clock: Mithril.Component<ClockAttrs, ClockState> = {
     const { ctrl, color, runningColor } = attrs;
     const time = ctrl.data[color];
     const isRunning = runningColor === color;
-    this.clockOnCreate = ({ dom }: Mithril.ChildNode) => {
+    this.clockOnCreate = ({ dom }: Mithril.DOMNode) => {
       dom.textContent = formatClockTime(time * 1000, isRunning);
       ctrl.els[color] = dom as HTMLElement
     }
     // safety measure if oncreate is not called
-    this.clockOnUpdate = ({ dom }: Mithril.ChildNode) => {
+    this.clockOnUpdate = ({ dom }: Mithril.DOMNode) => {
       ctrl.els[color] = dom as HTMLElement
     }
   },
@@ -66,7 +66,7 @@ const Clock: Mithril.Component<ClockAttrs, ClockState> = {
       emerg: time < ctrl.data.emerg,
       berserk: isBerserk
     })
-    return m('div', {
+    return h('div', {
       className,
       oncreate: this.clockOnCreate,
       onupdate: this.clockOnUpdate

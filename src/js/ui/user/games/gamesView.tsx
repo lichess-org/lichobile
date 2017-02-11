@@ -1,5 +1,5 @@
 import { throttle } from 'lodash';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as utils from '../../../utils';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import router from '../../../router';
@@ -152,7 +152,7 @@ function renderAllGames(ctrl: State) {
       { games.length ?
         <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
           { games.map((g, i) =>
-            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+            h(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
           }
           {ctrl.scrollState.isLoadingNextPage ?
           <li className="list_item loadingNext">loading...</li> : null
@@ -175,7 +175,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
 
   return (
     <div className={boardClass} key={fen}
-      oncreate={({ dom }: Mithril.ChildNode) => {
+      oncreate={({ dom }: Mithril.DOMNode) => {
         const img = document.createElement('img')
         img.className = 'cg-board'
         img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)

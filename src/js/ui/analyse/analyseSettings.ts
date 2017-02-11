@@ -4,7 +4,7 @@ import router from '../../router';
 import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
@@ -45,8 +45,8 @@ export default {
 
 function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
 
-  return m('div.analyseSettings', [
-    ctrl.ceval.allowed ? m('div.action', {
+  return h('div.analyseSettings', [
+    ctrl.ceval.allowed ? h('div.action', {
       key: 'enableCeval'
     }, [
       formWidgets.renderCheckbox(
@@ -57,9 +57,9 @@ function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
           else ctrl.ceval.destroy();
         }
       ),
-      m('small.caution', i18n('localEvalCaution'))
+      h('small.caution', i18n('localEvalCaution'))
     ]) : null,
-    ctrl.ceval.allowed ? m('div.action', {
+    ctrl.ceval.allowed ? h('div.action', {
       key: 'showBestMove'
     }, [
       formWidgets.renderCheckbox(
@@ -67,7 +67,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
         ctrl.toggleBestMove
       )
     ]) : null,
-    ctrl.source === 'online' && gameApi.analysable(ctrl.data) ? m('div.action', {
+    ctrl.source === 'online' && gameApi.analysable(ctrl.data) ? h('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(

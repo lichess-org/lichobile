@@ -1,6 +1,6 @@
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
 
 const CLOCK_TICK_STEP = 100;

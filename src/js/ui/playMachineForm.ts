@@ -7,7 +7,7 @@ import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import ViewOnlyBoard from './shared/ViewOnlyBoard';
 import * as helper from './helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 let isOpen = false;
 let fromPositionFen: string;
@@ -69,7 +69,7 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
   const hasClock = timeMode === '1';
 
   const generalFieldset = [
-    m('div.select_input', {
+    h('div.select_input', {
       key: formName + 'variant'
     }, [
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
@@ -82,7 +82,7 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
       ['black', 'black']
     ];
     generalFieldset.unshift(
-      m('div.select_input', {
+      h('div.select_input', {
         key: formName + 'color'
       }, [
         formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
@@ -90,10 +90,10 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
     );
 
   if (settingsObj.variant() === '3') {
-    generalFieldset.push(m('div.setupPosition', {
+    generalFieldset.push(h('div.setupPosition', {
       key: 'position'
     }, fromPositionFen ? [
-        m('div.setupMiniBoardWrapper', {
+        h('div.setupMiniBoardWrapper', {
           style: {
             width: '100px',
             height: '100px'
@@ -103,9 +103,9 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
             router.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
           })
         }, [
-          m(ViewOnlyBoard, { fen: fromPositionFen, bounds: { width: 100, height: 100 }})
+          h(ViewOnlyBoard, { fen: fromPositionFen, bounds: { width: 100, height: 100 }})
         ])
-      ] : m('div', m('button.withIcon.fa.fa-pencil', {
+      ] : h('div', h('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontap(() => {
           close();
           router.set('/editor');
@@ -114,7 +114,7 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
     ));
   }
 
-  generalFieldset.push(m('div.select_input', {
+  generalFieldset.push(h('div.select_input', {
     key: 'ailevel'
   }, [
     formWidgets.renderSelect('level', 'ailevel', [
@@ -123,7 +123,7 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
   ]));
 
   const timeFieldset = [
-    m('div.select_input', {
+    h('div.select_input', {
       key: formName + 'timeMode'
     }, [
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
@@ -132,13 +132,13 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
 
   if (hasClock) {
     timeFieldset.push(
-      m('div.select_input.inline', {
+      h('div.select_input.inline', {
         key: formName + 'time'
       }, [
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
       ]),
-      m('div.select_input.inline', {
+      h('div.select_input.inline', {
         key: formName + 'increment'
       }, [
         formWidgets.renderSelect('increment', formName + 'increment',
@@ -147,7 +147,7 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
     );
   }
 
-  return m('form.game_form', {
+  return h('form.game_form', {
     onsubmit: function(e: Event) {
       e.preventDefault();
       if (!settings.gameSetup.isTimeValid(settingsObj)) return;
@@ -155,8 +155,8 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
       startAIGame();
     }
   }, [
-    m('fieldset', generalFieldset),
-    m('fieldset', timeFieldset),
-    m('button[data-icon=E][type=submit].newGameButton', i18n('playWithTheMachine'))
+    h('fieldset', generalFieldset),
+    h('fieldset', timeFieldset),
+    h('button[data-icon=E][type=submit].newGameButton', i18n('playWithTheMachine'))
   ]);
 }

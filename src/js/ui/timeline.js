@@ -6,7 +6,7 @@ import { header as headerWidget, backButton } from './shared/common';
 import * as helper from './helper';
 import layout from './layout';
 import i18n from '../i18n';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
 
 export const supportedTypes = ['follow', 'game-end', 'tour-join'];
@@ -65,7 +65,7 @@ export function renderTourJoin(entry) {
       })}
     >
       <span className="fa fa-trophy" />
-      {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+      {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
       <small><em>&nbsp;{fromNow}</em></small>
     </li>
   );
@@ -83,7 +83,7 @@ export function renderFollow(entry) {
       })}
     >
       <span className="fa fa-arrow-circle-right" />
-      {m.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
+      {h.trust(entryText.replace(/^(\w+)\s/, '<strong>$1&nbsp;</strong>'))}
       <small><em>&nbsp;{fromNow}</em></small>
     </li>
   );

@@ -1,7 +1,6 @@
 import i18n from '../i18n';
 import { FetchError } from '../http';
 import redraw from './redraw';
-import * as m from 'mithril';
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 
@@ -14,27 +13,20 @@ interface GamePosCached {
 export const gamePosCache: Map<string, GamePosCached> = new Map()
 
 export function loadLocalJsonFile(url: string): Promise<any> {
-  let curXhr: XMLHttpRequest;
-  return m.request({
-    url,
-    method: 'GET',
-    config(xhr: XMLHttpRequest) {
-      curXhr = xhr;
-    }
-  })
-  .catch((error: Error) => {
-    // workaround when xhr for local file has a 0 status it will
-    // reject the promise and still have the response object
-    if (curXhr.status === 0) {
-      try {
-        return JSON.parse(curXhr.responseText);
-      } catch (e) {
-        return Promise.reject(e);
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.overrideMimeType("application/json");
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 0 || xhr.status === 200)
+          resolve(JSON.parse(xhr.responseText));
+        else
+          reject(xhr)
       }
-    } else {
-      return Promise.reject(error);
     }
-  });
+    xhr.send(null);
+  })
 }
 
 export function autoredraw(action: () => void): void {

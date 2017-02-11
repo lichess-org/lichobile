@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { throttle } from 'lodash';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils';
 import * as gameApi from '../../../../lichess/game';
@@ -14,7 +14,7 @@ import OnlineRound from '../OnlineRound';
 
 export default {
   standard: function(ctrl: OnlineRound, condition: (data: OnlineGameData) => boolean, icon: string, hint: string, socketMsg: string) {
-    return condition(ctrl.data) && hasNetwork() ? m('button', {
+    return condition(ctrl.data) && hasNetwork() ? h('button', {
       key: socketMsg,
       className: socketMsg,
       'data-icon': icon,
@@ -22,15 +22,15 @@ export default {
     }, i18n(hint)) : null;
   },
   shareLink: function(ctrl: OnlineRound) {
-    return m('button', {
+    return h('button', {
       key: 'shareGameLink',
       oncreate: helper.ontap(() => {
         window.plugins.socialsharing.share(null, null, null, gameApi.publicUrl(ctrl.data));
       })
-    }, [m('span.fa.fa-link'), i18n('shareGameURL')]);
+    }, [h('span.fa.fa-link'), i18n('shareGameURL')]);
   },
   userTVLink: function(user: User) {
-    return m('button.withIcon', {
+    return h('button.withIcon', {
       key: `userTV_${user.username}`,
       'data-icon': '1',
       oncreate: helper.ontap(() => {
@@ -67,7 +67,7 @@ export default {
     );
   },
   resign: function(ctrl: OnlineRound) {
-    return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? m('button', {
+    return gameApi.resignable(ctrl.data) && !ctrl.vm.confirmResign ? h('button', {
       key: 'resign',
       className: 'resign',
       'data-icon': 'b',
@@ -94,52 +94,52 @@ export default {
   },
   forceResign: function(ctrl: OnlineRound) {
     return gameApi.forceResignable(ctrl.data) ?
-      m('div.force_resign_zone.clearfix', {
+      h('div.force_resign_zone.clearfix', {
         key: 'forceResignZone'
       }, [
-        m('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
-        m('div.binary_choice_wrapper', [
-          m('button.binary_choice.left', {
+        h('div.notice', i18n('theOtherPlayerHasLeftTheGameYouCanForceResignationOrWaitForHim')),
+        h('div.binary_choice_wrapper', [
+          h('button.binary_choice.left', {
             oncreate: helper.ontap(() => { socket.send('resign-force'); })
           }, i18n('forceResignation')),
-          m('button.binary_choice.right', {
+          h('button.binary_choice.right', {
             oncreate: helper.ontap(() => { socket.send('draw-force'); })
           }, i18n('forceDraw'))
         ])
       ]) : null;
   },
   threefoldClaimDraw: function(ctrl: OnlineRound) {
-    return (ctrl.data.game.threefold) ? m('div.claim_draw_zone', {
+    return (ctrl.data.game.threefold) ? h('div.claim_draw_zone', {
       key: 'claimDrawZone'
     }, [
-      m('div.notice', i18n('threefoldRepetition')),
-      m.trust('&nbsp;'),
-      m('button[data-icon=E]', {
+      h('div.notice', i18n('threefoldRepetition')),
+      h.trust('&nbsp;'),
+      h('button[data-icon=E]', {
         oncreate: helper.ontap(() => { socket.send('draw-claim'); })
       }, i18n('claimADraw'))
     ]) : null;
   },
   cancelDrawOffer: function(ctrl: OnlineRound) {
-    if (ctrl.data.player.offeringDraw) return m('div.negotiation', {
+    if (ctrl.data.player.offeringDraw) return h('div.negotiation', {
       key: 'cancelDrawOfferZone'
     }, [
-      m('div.notice', i18n('drawOfferSent')),
-      m('button[data-icon=L]', {
+      h('div.notice', i18n('drawOfferSent')),
+      h('button[data-icon=L]', {
         oncreate: helper.ontap(() => { socket.send('draw-no'); })
       }, i18n('cancel'))
     ]);
     return null;
   },
   answerOpponentDrawOffer: function(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.offeringDraw) return m('div.negotiation.clearfix', {
+    if (ctrl.data.opponent.offeringDraw) return h('div.negotiation.clearfix', {
       key: 'answerDrawOfferZone'
     }, [
-      m('div.notice', i18n('yourOpponentOffersADraw')),
-      m('div.binary_choice_wrapper', [
-        m('button.binary_choice[data-icon=E]', {
+      h('div.notice', i18n('yourOpponentOffersADraw')),
+      h('div.binary_choice_wrapper', [
+        h('button.binary_choice[data-icon=E]', {
           oncreate: helper.ontap(() => { socket.send('draw-yes'); })
         }, i18n('accept')),
-        m('button.binary_choice[data-icon=L]', {
+        h('button.binary_choice[data-icon=L]', {
           oncreate: helper.ontap(() => { socket.send('draw-no'); })
         }, i18n('decline'))
       ])
@@ -147,26 +147,26 @@ export default {
     return null;
   },
   cancelTakebackProposition: function(ctrl: OnlineRound) {
-    if (ctrl.data.player.proposingTakeback) return m('div.negotiation', {
+    if (ctrl.data.player.proposingTakeback) return h('div.negotiation', {
       key: 'cancelTakebackPropositionZone'
     }, [
-      m('div.notice', i18n('takebackPropositionSent')),
-      m('button[data-icon=L]', {
+      h('div.notice', i18n('takebackPropositionSent')),
+      h('button[data-icon=L]', {
         oncreate: helper.ontap(() => { socket.send('takeback-no'); })
       }, i18n('cancel'))
     ]);
     return null;
   },
   answerOpponentTakebackProposition: function(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.proposingTakeback) return m('div.negotiation.clearfix', {
+    if (ctrl.data.opponent.proposingTakeback) return h('div.negotiation.clearfix', {
       key: 'answerTakebackPropositionZone'
     }, [
-      m('div.notice', i18n('yourOpponentProposesATakeback')),
-      m('div.binary_choice_wrapper', [
-        m('button.binary_choice[data-icon=E]', {
+      h('div.notice', i18n('yourOpponentProposesATakeback')),
+      h('div.binary_choice_wrapper', [
+        h('button.binary_choice[data-icon=E]', {
           oncreate: helper.ontap(() => { socket.send('takeback-yes'); })
         }, i18n('accept')),
-        m('button.binary_choice[data-icon=L]', {
+        h('button.binary_choice[data-icon=L]', {
           oncreate: helper.ontap(() => { socket.send('takeback-no'); })
         }, i18n('decline'))
       ])
@@ -176,19 +176,19 @@ export default {
   analysisBoard: function(ctrl: OnlineRound) {
     const d = ctrl.data;
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
-      return m('button', {
+      return h('button', {
         oncreate: helper.ontap(() => {
           socket.send('rematch-no');
           router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
         })
-      }, [m('span[data-icon=A].withIcon'), i18n('analysis')]);
+      }, [h('span[data-icon=A].withIcon'), i18n('analysis')]);
     }
     return null;
   },
   analysisBoardIconOnly: function(ctrl: OnlineRound) {
     const d = ctrl.data;
     if (gameApi.userAnalysable(d) || gameApi.replayable(d)) {
-      return m('button.action_bar_button[data-icon=A]', {
+      return h('button.action_bar_button[data-icon=A]', {
         oncreate: helper.ontap(() => {
           socket.send('rematch-no');
           router.set(`/analyse/online/${d.game.id}/${boardOrientation(d)}`);
@@ -201,7 +201,7 @@ export default {
     const d = ctrl.data;
     const newable = (gameStatus.finished(d) || gameStatus.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool');
     if (!ctrl.data.opponent.ai && newable) {
-      return m('button[data-icon=r]', {
+      return h('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions();
           lobby.startSeeking();
@@ -214,24 +214,24 @@ export default {
     const d = ctrl.data;
     const rematchable = !d.game.rematch && (gameStatus.finished(d) || gameStatus.aborted(d)) && !d.game.tournamentId && !d.game.boosted && (d.opponent.onGame || (!d.clock && d.player.user && d.opponent.user));
     if (!ctrl.data.opponent.offeringRematch && !ctrl.data.player.offeringRematch && rematchable) {
-      return m('button', {
+      return h('button', {
         key: 'rematch',
         oncreate: helper.ontap(() => { socket.send('rematch-yes'); })
-      }, [m('span.fa.fa-refresh'), i18n('rematch')]);
+      }, [h('span.fa.fa-refresh'), i18n('rematch')]);
     } else {
       return null;
     }
   },
   answerOpponentRematch: function(ctrl: OnlineRound) {
-    if (ctrl.data.opponent.offeringRematch) return m('div.negotiation.clearfix', {
+    if (ctrl.data.opponent.offeringRematch) return h('div.negotiation.clearfix', {
       key: 'answerOpponentRematchZone'
     }, [
-      m('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
-      m('div.binary_choice_wrapper', [
-        m('button.binary_choice[data-icon=E]', {
+      h('div.notice', i18n('yourOpponentWantsToPlayANewGameWithYou')),
+      h('div.binary_choice_wrapper', [
+        h('button.binary_choice[data-icon=E]', {
           oncreate: helper.ontap(() => { socket.send('rematch-yes'); })
         }, i18n('joinTheGame')),
-        m('button.binary_choice[data-icon=L]', {
+        h('button.binary_choice[data-icon=L]', {
           oncreate: helper.ontap(() => { socket.send('rematch-no'); })
         }, i18n('declineInvitation'))
       ])
@@ -239,19 +239,19 @@ export default {
     return null;
   },
   cancelRematch: function(ctrl: OnlineRound) {
-    if (ctrl.data.player.offeringRematch) return m('div.negotiation', {
+    if (ctrl.data.player.offeringRematch) return h('div.negotiation', {
       key: 'cancelRematchZone'
     }, [
-      m('div.notice', i18n('rematchOfferSent')),
-      m('div.notice', i18n('waitingForOpponent')),
-      m('button[data-icon=L]', {
+      h('div.notice', i18n('rematchOfferSent')),
+      h('div.notice', i18n('waitingForOpponent')),
+      h('button[data-icon=L]', {
         oncreate: helper.ontap(() => { socket.send('rematch-no'); })
       }, i18n('cancelRematchOffer'))
     ]);
     return null;
   },
   moretime: function(ctrl: OnlineRound) {
-    if (gameApi.moretimeable(ctrl.data)) return m('button[data-icon=O]', {
+    if (gameApi.moretimeable(ctrl.data)) return h('button[data-icon=O]', {
       key: 'moretime',
       oncreate: helper.ontap(throttle(() => { socket.send('moretime'); }, 600))
     }, i18n('giveNbSeconds', 15));
@@ -325,7 +325,7 @@ export default {
   },
   notes: function(ctrl: OnlineRound) {
     return (
-      <button className="action_bar_button" data-icon="m" key="notes"
+      <button className="action_bar_button" data-icon="h" key="notes"
         oncreate={helper.ontap(
           ctrl.notes.open,
           () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')

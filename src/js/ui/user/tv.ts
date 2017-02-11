@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import router from '../../router';
 import socket from '../../socket';
 import * as helper from '../helper';
@@ -45,7 +45,7 @@ const UserTv: Mithril.Component<Attrs, State> = {
     if (this.round) {
       return roundView(this.round);
     } else {
-      return m(LoadingBoard);
+      return h(LoadingBoard);
     }
   }
 };

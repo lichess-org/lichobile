@@ -1,7 +1,7 @@
 import redraw from '../../../utils/redraw';
 import * as helper from '../../helper';
 import settings from '../../../settings';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { PromotingInterface } from '../round'
 
 type PromoteCallback = (orig: Pos, dest: Pos, prom: Role) => void
@@ -63,11 +63,11 @@ export function view(ctrl: PromotingInterface) {
     pieces.push('king');
   }
 
-  return m('div.overlay.open', [m('div#promotion_choice', {
+  return h('div.overlay.open', [h('div#promotion_choice', {
     className: settings.general.theme.piece(),
     style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
   }, pieces.map((role: Role) => {
-    return m('piece.' + role + '.' + ctrl.player(), {
+    return h('piece.' + role + '.' + ctrl.player(), {
       oncreate: helper.ontap(() => finish(ctrl.chessground, role))
     });
   }))])

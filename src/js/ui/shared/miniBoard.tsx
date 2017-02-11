@@ -2,7 +2,7 @@ import * as helper from '../helper';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import * as gameApi from '../../lichess/game';
 import { MiniBoardGameObj } from '../../lichess/interfaces';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 interface Bounds {
   width: number
@@ -28,7 +28,7 @@ const MiniBoard: Mithril.Component<Attrs, {}> = {
     return (
       <div className="mini_board" oncreate={helper.ontapY(link)}>
         <div className="board_wrapper">
-          {m(ViewOnlyBoard, attrs)}
+          {h(ViewOnlyBoard, attrs)}
         </div>
         { gameObj ?
         <div className="vsbloc">

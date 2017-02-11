@@ -101,7 +101,7 @@ function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, pa
   );
 }
 
-function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path): Mithril.ChildNode {
+function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path): Mithril.DOMNode {
   return (
     <span className="nested">
       (
@@ -208,7 +208,7 @@ function renderComment(comment: string, colorClass: string, commentClass: string
 
 function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
   let key = 'turn:' + turn.turn
-  let wMove: Mithril.ChildNode, bMove: Mithril.ChildNode
+  let wMove: Mithril.DOMNode, bMove: Mithril.DOMNode
   if (wPath !== undefined) {
     const wPathStr = wPath && treePath.write(wPath)
     key += ':' + wPathStr + (turn.white && turn.white.san)

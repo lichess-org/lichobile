@@ -3,7 +3,7 @@ import redraw from '../../utils/redraw';
 import { handleXhrError } from '../../utils';
 import * as xhr from './inboxXhr';
 import * as helper from '../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { PagedThreads, InboxState } from './interfaces';
 import { throttle } from 'lodash';
 import * as stream from 'mithril/stream';

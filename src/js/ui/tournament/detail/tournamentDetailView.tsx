@@ -2,7 +2,7 @@ import { header as headerWidget, backButton } from '../../shared/common';
 import router from '../../../router';
 import session from '../../../session';
 import layout from '../../layout';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import i18n from '../../../i18n';
 import { gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
@@ -311,7 +311,7 @@ function tournamentFeaturedGame(ctrl: TournamentState) {
     <div className='tournamentGames'>
       <p className='tournamentTitle'>Featured Game</p>
       <div key={featured.id} className='tournamentMiniBoard'>
-        {m(miniBoard, {
+        {h(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: featured.fen,
           lastMove: featured.lastMove,

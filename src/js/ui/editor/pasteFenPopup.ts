@@ -1,7 +1,7 @@
 import i18n from '../../i18n';
 import popupWidget from '../shared/popup';
 import router from '../../router';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import Editor, { MenuInterface } from './Editor'
 
 export default {
@@ -34,7 +34,7 @@ export default {
       'pasteFenPopup',
       null,
       () => {
-        return m('form', {
+        return h('form', {
           onsubmit(e: Event) {
             e.preventDefault()
             const input = (e.target as HTMLElement)[0]
@@ -43,10 +43,10 @@ export default {
               ctrl.root.loadNewFen(input.value)
           }
         }, [
-          m('input[type=text]', {
+          h('input[type=text]', {
             placeholder: i18n('pasteThePgnStringHere')
           }),
-          m('button[data-icon=E].withIcon', i18n('loadPosition'))
+          h('button[data-icon=E].withIcon', i18n('loadPosition'))
         ])
       },
       ctrl.isOpen(),

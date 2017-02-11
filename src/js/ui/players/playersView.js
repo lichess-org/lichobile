@@ -1,6 +1,6 @@
 import * as utils from '../../utils';
 import router from '../../router';
-import * as h from '../helper';
+import * as helper from '../helper';
 import { menuButton, friendsButton, userStatus } from '../shared/common';
 import { backArrow } from '../shared/icons';
 import layout from '../layout';
@@ -24,7 +24,7 @@ function header(ctrl) {
       <div className="buttons">
         {friendsButton()}
         <button className="main_header_button" key="searchPlayers" data-icon="y"
-          oncreate={h.ontap(ctrl.goSearch)}/>
+          oncreate={helper.ontap(ctrl.goSearch)}/>
       </div>
     </nav>,
     <div className="main_header_drop_shadow" />
@@ -44,7 +44,7 @@ function searchModal(ctrl) {
   return (
     <div id="searchPlayersModal" className={className}>
       <header class="main_header">
-        <button className="main_header_button" oncreate={h.ontap(ctrl.closeSearch)}>
+        <button className="main_header_button" oncreate={helper.ontap(ctrl.closeSearch)}>
           {backArrow}
         </button>
         <div className="search_input allow_select">
@@ -52,7 +52,7 @@ function searchModal(ctrl) {
           placeholder="Search players" oninput={ctrl.onInput}
           autocapitalize="off"
           autocomplete="off"
-          oncreate={h.autofocus}
+          oncreate={helper.autofocus}
           />
         </div>
         <div className="main_header_drop_shadow" />
@@ -60,7 +60,7 @@ function searchModal(ctrl) {
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} oncreate={h.ontapY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={helper.ontapY(utils.f(ctrl.goToProfile, u))}>
           {u}
           </li>
         );
@@ -88,7 +88,7 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item playerSuggestion nav" oncreate={h.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import router from '../../router';
 import { gameIcon, hasNetwork } from '../../utils';
 import i18n from '../../i18n';
@@ -63,7 +63,7 @@ function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
   return (
     <section id="dailyPuzzle">
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
-        {m(miniBoard, {
+        {h(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: puzzle.fen,
           orientation: puzzle.color,

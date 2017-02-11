@@ -7,7 +7,7 @@ import * as gameApi from '../../lichess/game';
 import { handleXhrError } from '../../utils';
 import { requestComputerAnalysis } from './analyseXhr';
 import * as helper from '../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
@@ -53,30 +53,30 @@ function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
   );
 
-  return m('div.analyseMenu', [
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button[data-icon=U]', {
+  return h('div.analyseMenu', [
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close();
         ctrl.continuePopup.open(ctrl.vm.step.fen);
       })
     }, i18n('continueFromHere')) : null,
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'boardEditor',
       oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
-    }, [m('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
-    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? m('button', {
+    }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'sharePGN',
       oncreate: sharePGN
-    }, ctrl.vm.computingPGN ? spinner.getVdom('monochrome') : [m('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
-    ctrl.notes ? m('button', {
+    }, ctrl.vm.computingPGN ? spinner.getVdom('monochrome') : [h('span.fa.fa-share-alt'), i18n('sharePGN')]) : null,
+    ctrl.notes ? h('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {
         ctrl.menu.close();
         ctrl.notes.open();
       })
-    }, [m('span.fa.fa-pencil'), i18n('notes')]) : null,
-    ctrl.isRemoteAnalysable() ? m('button', {
+    }, [h('span.fa.fa-pencil'), i18n('notes')]) : null,
+    ctrl.isRemoteAnalysable() ? h('button', {
       key: 'requestAComputerAnalysis',
       oncreate: helper.ontap(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
@@ -86,18 +86,18 @@ function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
         })
         .catch(handleXhrError);
       })
-    }, [m('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
-    ctrl.vm.analysisProgress ? m('div.analysisProgress', [
-      m('span', 'Analysis in progress'),
+    }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
+    ctrl.vm.analysisProgress ? h('div.analysisProgress', [
+      h('span', 'Analysis in progress'),
       spinner.getVdom()
     ]) : null,
-    ctrl.data.analysis ? m('button', {
+    ctrl.data.analysis ? h('button', {
       key: 'open_analysis_summary',
       oncreate: helper.ontap(() => {
         ctrl.menu.close();
         ctrl.evalSummary.open();
       })
-    }, [m('span.fa.fa-line-chart'), 'Analysis summary']) : null
+    }, [h('span.fa.fa-line-chart'), 'Analysis summary']) : null
   ]);
 }
 

@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import chessground from '../../../../chessground';
 import socket from '../../../../socket';
 import session from '../../../../session';
@@ -15,12 +15,12 @@ import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from 
 import Board from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';
 import formWidgets from '../../../shared/form';
-import Clock, { ClockAttrs } from '../clock/clockView';
+import Clock from '../clock/clockView';
 import promotion from '../promotion';
 import gameButton from './button';
 import { chatView } from '../chat';
 import { notesView } from '../notes';
-import CrazyPocket, { Attrs as CrazyPocketAttrs } from '../crazy/CrazyPocket';
+import CrazyPocket from '../crazy/CrazyPocket';
 import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
 import { renderTable as renderReplayTable } from './replay';
 import OnlineRound from '../OnlineRound';
@@ -53,14 +53,14 @@ export function renderMaterial(material: Material) {
   for (let role in material) {
     const piece = <div className={role} />;
     const count = material[role];
-    const content: Array<Mithril.ChildNode> = [];
+    const content: Array<Mithril.DOMNode> = [];
     for (let i = 0; i < count; i++) content.push(piece);
     children.push(<div className="tomb" key={role}>{content}</div>);
   }
   return children;
 }
 
-function tcConfig(ctrl: OnlineRound, vnode: Mithril.ChildNode) {
+function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
   const el = vnode.dom as HTMLElement;
   el.textContent =
     utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • ';
@@ -81,7 +81,7 @@ function renderTitle(ctrl: OnlineRound) {
             <span className="fa fa-trophy" /> : null
           }
           {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-            <span oncreate={(v: Mithril.ChildNode) => tcConfig(ctrl, v)}>
+            <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)}>
             {
               utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
               ' • '
@@ -115,7 +115,7 @@ function renderHeader(ctrl: OnlineRound) {
       backButton([
         ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
         ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span oncreate={(v: Mithril.ChildNode) => tcConfig(ctrl, v)}>
+          <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)}>
           {
             utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
             ' • '
@@ -132,7 +132,7 @@ function renderHeader(ctrl: OnlineRound) {
   }
   children.push(headerBtns())
 
-  return m('nav', {
+  return h('nav', {
     className: socket.isConnected() ? '' : 'reconnecting'
   }, children)
 }
@@ -143,7 +143,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
 
-  const board = m(Board, {
+  const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
@@ -155,14 +155,14 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
 
   if (isPortrait) {
-    return m.fragment({ key: orientationKey }, [
+    return h.fragment({ key: orientationKey }, [
       opponent,
       board,
       player,
       renderGameActionsBar(ctrl)
     ]);
   } else {
-    return m.fragment({ key: orientationKey }, [
+    return h.fragment({ key: orientationKey }, [
       board,
       <section className="table">
         <header className="tableHeader">
@@ -258,7 +258,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        m(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+        h(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -277,14 +277,14 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {m<CrazyPocketAttrs>(CrazyPocket, {
+      {h(CrazyPocket, {
         ctrl,
         crazyData: step.crazy,
         color: player.color,
         position
       })}
       {!isCrazy && ctrl.clock ?
-        m<ClockAttrs>(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+        h(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
@@ -300,7 +300,7 @@ function tvChannelSelector(ctrl: OnlineRound) {
   channels.unshift(['Top rated', 'best']);
   channels.push(['Computer', 'computer']);
 
-  return m('div.action', m('div.select_input',
+  return h('div.action', h('div.select_input',
     formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
       false, ctrl.onTVChannelChange)
   ));
@@ -352,9 +352,9 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
     (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
-    m('strong', result), m('br')
+    h('strong', result), h('br')
   ];
-  resultDom.push(m('em.resultStatus', status));
+  resultDom.push(h('em.resultStatus', status));
   let buttons: Mithril.Children;
   if (ctrl.data.game.tournamentId) {
     if (ctrl.data.player.spectator) {
@@ -411,7 +411,7 @@ function gameInfos(ctrl: OnlineRound) {
   const time = gameApi.time(data);
   const mode = data.game.rated ? i18n('rated') : i18n('casual');
   const icon = utils.gameIcon(data.game.perf);
-  const variant = m('span.variant', {
+  const variant = h('span.variant', {
     oncreate: helper.ontap(
       () => {
         const link = variantApi(data.game.variant.key).link;
@@ -421,13 +421,13 @@ function gameInfos(ctrl: OnlineRound) {
       () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
     )
   }, data.game.variant.name);
-  const infos = [time + ' • ', variant, m('br'), mode];
+  const infos = [time + ' • ', variant, h('br'), mode];
   return [
-    m('div.icon-game', {
+    h('div.icon-game', {
       'data-icon': icon ? icon : ''
     }),
-    m('div.game-title.no_select', infos),
-    session.isConnected() ? m('button.star', {
+    h('div.game-title.no_select', infos),
+    session.isConnected() ? h('button.star', {
       oncreate: helper.ontap(
         ctrl.toggleBookmark,
         () => window.plugins.toast.show(i18n('bookmarkThisGame'), 'short', 'center')

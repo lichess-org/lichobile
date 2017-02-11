@@ -7,7 +7,7 @@ import * as gameApi from '../../../lichess/game';
 import router from '../../../router';
 import socket from '../../../socket';
 import { closeIcon } from '../../shared/icons'
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { OnlineRoundInterface } from '.';
 
 let chatHeight: number;
@@ -113,19 +113,19 @@ export function chatView(ctrl: Chat) {
     header = i18n('spectators') + ' ' + watchers.nb;
   }
 
-  return m('div#chat.modal', { oncreate: helper.slidesInUp }, [
-    m('header', [
-      m('button.modal_close', {
+  return h('div#chat.modal', { oncreate: helper.slidesInUp }, [
+    h('header', [
+      h('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'chat'))
       }, closeIcon),
-      m('h2', header)
+      h('h2', header)
     ]),
-    m('div#chat_content.modal_content.chat_content', [
-      m('div.chat_scroller.native_scroller', {
-        oncreate: ({ dom }: Mithril.ChildNode) => scrollChatToBottom(dom as HTMLElement),
-        onupdate: ({ dom }: Mithril.ChildNode) => scrollChatToBottom(dom as HTMLElement)
+    h('div#chat_content.modal_content.chat_content', [
+      h('div.chat_scroller.native_scroller', {
+        oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
+        onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
-        m('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
+        h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
 
           const lichessTalking = msg.u === 'lichess';
           const playerTalking = msg.c ? msg.c === player.color :
@@ -140,7 +140,7 @@ export function chatView(ctrl: Chat) {
           }
           if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
 
-          return m('li.chat_msg.allow_select', {
+          return h('li.chat_msg.allow_select', {
             className: helper.classSet({
               system: lichessTalking,
               player: playerTalking,
@@ -150,7 +150,7 @@ export function chatView(ctrl: Chat) {
           }, msg.t);
         }))
       ]),
-      m('form.chat_form', {
+      h('form.chat_form', {
         onsubmit: (e: Event) => {
           e.preventDefault();
           const target = (e.target as HTMLFormElement)
@@ -168,7 +168,7 @@ export function chatView(ctrl: Chat) {
           }
         }
       }, [
-        m('textarea#chat_input.chat_input', {
+        h('textarea#chat_input.chat_input', {
           placeholder: ctrl.canTalk() ? i18n('talkInChat') : 'Login to chat',
           disabled: !ctrl.canTalk(),
           rows: 1,
@@ -194,7 +194,7 @@ export function chatView(ctrl: Chat) {
             else sendButton.classList.add('disabled')
           }
         }),
-        m('button#chat_send.chat_send.fa.fa-telegram.disabled')
+        h('button#chat_send.chat_send.fa.fa-telegram.disabled')
       ])
     ])
   ]);

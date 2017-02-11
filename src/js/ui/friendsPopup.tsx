@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as helper from './helper';
 import router from '../router';
 import popupWidget from './shared/popup';
@@ -15,7 +15,7 @@ export default {
 
     function header() {
       return [
-        m('span.nbFriends', friendsApi.count()),
+        h('span.nbFriends', friendsApi.count()),
         ' ' + i18n('onlineFriends')
       ]
     }

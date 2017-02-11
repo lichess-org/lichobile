@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as helper from '../../helper';
 import router from '../../../router';
 import settings, { SettingsProp } from '../../../settings';
@@ -109,37 +109,37 @@ export default {
   view(ctrl: Controller) {
     const d = ctrl.data;
     return [
-      m('section.db', [
-        m('label', 'Database'),
-        m('div.form-multipleChoice', d.db.available.map(s => {
-          return m('span', {
+      h('section.db', [
+        h('label', 'Database'),
+        h('div.form-multipleChoice', d.db.available.map(s => {
+          return h('span', {
             className: d.db.selected() === s ? 'selected' : '',
             oncreate: helper.ontapY(() => ctrl.toggleDb(s))
           }, s);
         }))
       ]),
-      d.db.selected() === 'masters' ? m('div.masters.message', [
-        m('i[data-icon=C]'),
-        m('p', 'Two million OTB games'),
-        m('p', 'of 2200+ FIDE rated players'),
-        m('p', 'from 1952 to 2016')
-      ]) : m('div', [
-        m('section.rating', [
-          m('label', 'Players Average rating'),
-          m('div.form-multipleChoice',
+      d.db.selected() === 'masters' ? h('div.masters.message', [
+        h('i[data-icon=C]'),
+        h('p', 'Two million OTB games'),
+        h('p', 'of 2200+ FIDE rated players'),
+        h('p', 'from 1952 to 2016')
+      ]) : h('div', [
+        h('section.rating', [
+          h('label', 'Players Average rating'),
+          h('div.form-multipleChoice',
             d.rating.available.map(r => {
-              return m('span', {
+              return h('span', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleRating(r))
               }, r);
             })
           )
         ]),
-        m('section.speed', [
-          m('label', 'Game speed'),
-          m('div.form-multipleChoice',
+        h('section.speed', [
+          h('label', 'Game speed'),
+          h('div.form-multipleChoice',
             d.speed.available.map(s => {
-              return m('span', {
+              return h('span', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleSpeed(s))
               }, s);
@@ -147,8 +147,8 @@ export default {
           )
         ])
       ]),
-      m('section.save',
-        m('button.button.text[data-icon=E]', {
+      h('section.save',
+        h('button.button.text[data-icon=E]', {
           oncreate: helper.ontapY(ctrl.toggleOpen)
         }, 'All set!')
       )

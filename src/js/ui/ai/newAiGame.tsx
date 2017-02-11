@@ -1,5 +1,5 @@
 import * as stream from 'mithril/stream';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import router from '../../router';
 import i18n from '../../i18n';
 import settings from '../../settings';
@@ -81,7 +81,7 @@ export default {
                           router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`);
                         })}
                       >
-                        {m(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
+                        {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
                       </div>
                     </div>
                   </div> : null

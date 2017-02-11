@@ -5,7 +5,7 @@ import router from '../../../router';
 import { debounce }  from 'lodash/function';
 import { readNote, syncNote } from './roundXhr';
 import { closeIcon } from '../../shared/icons'
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 export function notesCtrl(root) {
 
@@ -78,17 +78,17 @@ export function notesView(ctrl) {
 
   if (!ctrl.showing) return null;
 
-  return m('div#notes.modal', { oncreate: helper.slidesInUp }, [
-    m('header', [
-      m('button.modal_close', {
+  return h('div#notes.modal', { oncreate: helper.slidesInUp }, [
+    h('header', [
+      h('button.modal_close', {
         oncreate: helper.ontap(helper.slidesOutDown(ctrl.close, 'notes'))
       }, closeIcon),
-      m('h2', i18n('notes'))
+      h('h2', i18n('notes'))
     ]),
-    m('div.modal_content', [
+    h('div.modal_content', [
       ctrl.syncing ?
-      m('div.notesTextarea.loading', spinner.getVdom()) :
-      m('textarea#notesTextarea.native_scroller', {
+      h('div.notesTextarea.loading', spinner.getVdom()) :
+      h('textarea#notesTextarea.native_scroller', {
         placeholder: i18n('typePrivateNotesHere'),
         oninput: ctrl.syncNotes
       }, ctrl.root.data.note)

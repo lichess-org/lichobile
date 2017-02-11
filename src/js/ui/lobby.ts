@@ -10,7 +10,7 @@ import popupWidget from './shared/popup';
 import * as xhr from '../xhr';
 import i18n from '../i18n';
 import socket, { RedirectObj } from '../socket';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 let nbPlayers = 0;
 let nbGames = 0;
@@ -33,23 +33,23 @@ export default {
       const nbPlayersStr = i18n('nbConnectedPlayers', nbPlayers || '?')
       const nbGamesStr = i18n('nbGamesInPlay', nbGames || '?')
 
-      return m('div.lobby-waitingPopup', [
-        m('div.lobby-waitingForOpponent', i18n('waitingForOpponent')),
-        m('br'),
+      return h('div.lobby-waitingPopup', [
+        h('div.lobby-waitingForOpponent', i18n('waitingForOpponent')),
+        h('br'),
         isPool() ? renderPoolSetup() : renderCustomSetup(),
-        m('br'),
+        h('br'),
         spinner.getVdom(),
-        m('div.lobby-nbPlayers', [
-          m('div', socket.isConnected() ?
-            m.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-            m('div', [i18n('reconnecting'), loader])
+        h('div.lobby-nbPlayers', [
+          h('div', socket.isConnected() ?
+            h.trust(nbPlayersStr.replace(/(\d+)/, '<strong>$1</strong>')) :
+            h('div', [i18n('reconnecting'), loader])
           ),
-          m('div', socket.isConnected() ?
-            m.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
-            m('div', [i18n('reconnecting'), loader])
+          h('div', socket.isConnected() ?
+            h.trust(nbGamesStr.replace(/(\d+)/, '<strong>$1</strong>')) :
+            h('div', [i18n('reconnecting'), loader])
           ),
         ]),
-        m('button[data-icon=L]', {
+        h('button[data-icon=L]', {
           oncreate: helper.ontap(() => cancelSeeking())
         }, i18n('cancel'))
       ]);
@@ -94,16 +94,16 @@ function renderCustomSetup() {
   }
   const variantMode = ` • ${variant} • ${mode}`;
 
-  return m('div.gameInfos', [
-    m('span[data-icon=p]', time), variantMode
+  return h('div.gameInfos', [
+    h('span[data-icon=p]', time), variantMode
   ])
 }
 
 function renderPoolSetup() {
   const pool = settings.gameSetup.human.pool();
   const variantMode = ` • Standard • ${i18n('rated')}`;
-  return m('div.gameInfos', [
-    m('span[data-icon=p]', pool), variantMode
+  return h('div.gameInfos', [
+    h('span[data-icon=p]', pool), variantMode
   ])
 }
 

@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
 import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
@@ -56,39 +56,39 @@ function winner(stm: string, move: ExplorerMove) {
 }
 
 function showDtm(stm: string, move: ExplorerMove) {
-  if (move.dtm) return m('result.' + winner(stm, move), {
+  if (move.dtm) return h('result.' + winner(stm, move), {
     title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
   }, 'DTM ' + Math.abs(move.dtm));
   else return null;
 }
 
 function showDtz(stm: string, move: ExplorerMove) {
-  if (move.checkmate) return m('result.' + winner(stm, move), 'Checkmate');
-  else if (move.stalemate) return m('result.draws', 'Stalemate');
-  else if (move.variant_win) return m('result.' + winner(stm, move), 'Variant loss');
-  else if (move.variant_loss) return m('result.' + winner(stm, move), 'Variant win');
-  else if (move.insufficient_material) return m('result.draws', 'Insufficient material');
+  if (move.checkmate) return h('result.' + winner(stm, move), 'Checkmate');
+  else if (move.stalemate) return h('result.draws', 'Stalemate');
+  else if (move.variant_win) return h('result.' + winner(stm, move), 'Variant loss');
+  else if (move.variant_loss) return h('result.' + winner(stm, move), 'Variant win');
+  else if (move.insufficient_material) return h('result.draws', 'Insufficient material');
   else if (move.dtz === null) return null;
-  else if (move.dtz === 0) return m('result.draws', 'Draw');
+  else if (move.dtz === 0) return h('result.draws', 'Draw');
   else if (move.zeroing) {
     let capture = move.san.indexOf('x') !== -1;
-    if (capture) return m('result.' + winner(stm, move), 'Capture');
-    else return m('result.' + winner(stm, move), 'Pawn move');
+    if (capture) return h('result.' + winner(stm, move), 'Capture');
+    else return h('result.' + winner(stm, move), 'Pawn move');
   }
-  else return m('result.' + winner(stm, move), {
+  else return h('result.' + winner(stm, move), {
     title: 'Next capture or pawn move in ' + Math.abs(move.dtz) + ' half-moves (Distance To Zeroing of the 50 move counter)'
   }, 'DTZ ' + Math.abs(move.dtz));
 }
 
 function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
-  return m('div.explorer-data.empty', {
+  return h('div.explorer-data.empty', {
     key: 'explorer-game-end' + title
   }, [
-    m('div.title', 'Game over'),
-    m('div.message', [
-      m('i[data-icon=]'),
-      m('h3', title),
-      m('button.button.text[data-icon=L]', {
+    h('div.title', 'Game over'),
+    h('div.message', [
+      h('i[data-icon=]'),
+      h('h3', title),
+      h('button.button.text[data-icon=L]', {
         oncreate: helper.ontapY(ctrl.explorer.toggle)
       }, 'Close')
     ])
@@ -98,7 +98,7 @@ function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
 function show(ctrl: AnalyseCtrlInterface) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
-    return m<OpeningTableAttrs>(OpeningTable, { data, ctrl });
+    return h(OpeningTable, { data, ctrl });
   }
   else if (data && data.tablebase) {
     const moves = data.moves;
@@ -123,19 +123,19 @@ function show(ctrl: AnalyseCtrlInterface) {
 }
 
 function showConfig(ctrl: AnalyseCtrlInterface) {
-  return m('div.explorerConfig', {
+  return h('div.explorerConfig', {
     key: 'opening-config'
   }, explorerConfig.view(ctrl.explorer.config));
 }
 
 function failing() {
-  return m('div.failing.message', {
+  return h('div.failing.message', {
     key: 'failing'
   }, [
-    m('i[data-icon=,]'),
-    m('h3', 'Oops, sorry!'),
-    m('p', 'The explorer is temporarily'),
-    m('p', 'out of service. Try again soon!')
+    h('i[data-icon=,]'),
+    h('h3', 'Oops, sorry!'),
+    h('p', 'The explorer is temporarily'),
+    h('p', 'out of service. Try again soon!')
   ]);
 }
 

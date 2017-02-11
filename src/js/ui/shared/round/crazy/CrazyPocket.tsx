@@ -16,31 +16,31 @@ export interface Attrs {
 }
 
 interface State {
-  pocketOnCreate(vnode: Mithril.ChildNode): void
-  pocketOnRemove(vnode: Mithril.ChildNode): void
+  pocketOnCreate(vnode: Mithril.DOMNode): void
+  pocketOnRemove(vnode: Mithril.DOMNode): void
 }
 
-export default {
-  oninit(vnode: Mithril.Vnode<Attrs, State>) {
+const CrazyPocket: Mithril.Component<Attrs, State> = {
+  oninit(vnode) {
     const { ctrl } = vnode.attrs;
     const onstart = crazyDrag.bind(undefined, ctrl);
     const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
     const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
 
-    this.pocketOnCreate = function({ dom }: Mithril.ChildNode) {
+    this.pocketOnCreate = function({ dom }: Mithril.DOMNode) {
       dom.addEventListener('touchstart', onstart);
       dom.addEventListener('touchmove', onmove);
       dom.addEventListener('touchend', onend);
     };
 
-    this.pocketOnRemove = function({ dom }: Mithril.ChildNode) {
+    this.pocketOnRemove = function({ dom }: Mithril.DOMNode) {
       dom.removeEventListener('touchstart', onstart);
       dom.removeEventListener('touchmove', onmove);
       dom.removeEventListener('touchend', onend);
     };
   },
 
-  view(vnode: Mithril.Vnode<Attrs, State>) {
+  view(vnode) {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
 
     if (!crazyData) return null;
@@ -65,4 +65,6 @@ export default {
       </div>
     );
   }
-};
+}
+
+export default CrazyPocket

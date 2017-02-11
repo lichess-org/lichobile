@@ -4,7 +4,7 @@ import router from '../../router';
 import settings from '../../settings';
 import * as utils from '../../utils';
 import ButtonHandler from './button';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { UserGamePlayer } from '../../lichess/interfaces/user'
 
 export interface ViewportDim {
@@ -21,14 +21,14 @@ let cachedViewportAspectIs43: boolean
 let cachedViewportDim: ViewportDim = null
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
-  return ({ dom }: Mithril.ChildNode) => anim(dom as HTMLElement);
+  return ({ dom }: Mithril.DOMNode) => anim(dom as HTMLElement);
 }
 
 // because mithril will call 'onremove' asynchronously when the component has
 // an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
 // thus this helper
 export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup: () => void = null) {
-  return function({ dom }: Mithril.ChildNode, done: () => void) {
+  return function({ dom }: Mithril.DOMNode, done: () => void) {
     if (cleanup) cleanup();
     return anim(dom as HTMLElement)
     .then(done)
@@ -141,7 +141,7 @@ export function clearCachedViewportDim() {
   cachedIsPortrait = undefined
 }
 
-export function slidesInUp(vnode: Mithril.ChildNode) {
+export function slidesInUp(vnode: Mithril.DOMNode) {
   const el = (vnode.dom as HTMLElement);
   el.style.transform = 'translateY(100%)';
   // force reflow hack
@@ -159,7 +159,7 @@ export function slidesOutDown(callback: () => void, elID: string) {
   };
 }
 
-export function slidesInLeft(vnode: Mithril.ChildNode) {
+export function slidesInLeft(vnode: Mithril.DOMNode) {
   const el = vnode.dom as HTMLElement;
   el.style.transform = 'translateX(100%)';
   // force reflow hack
@@ -191,7 +191,7 @@ type TapHandler = (e?: Event) => void;
 type RepeatHandler = () => boolean;
 
 function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repeatHandler: RepeatHandler, scrollX: boolean, scrollY: boolean, touchEndFeedback: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
-  return function(vnode: Mithril.ChildNode) {
+  return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: Event) => {
         tapHandler(e);
@@ -208,7 +208,7 @@ function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repea
 }
 
 export function ontouch(handler: TapHandler) {
-  return ({ dom }: Mithril.ChildNode) => {
+  return ({ dom }: Mithril.DOMNode) => {
     dom.addEventListener('touchstart', handler);
   };
 }
@@ -227,9 +227,9 @@ export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, touchEn
 
 export function progress(p: number) {
   if (p === 0) return null;
-  return m('span', {
+  return h('span', {
     className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
-    'data-icon': p > 0 ? 'N' : 'M'
+    'data-icon': p > 0 ? 'N' : 'h'
   }, String(Math.abs(p)));
 }
 
@@ -366,7 +366,7 @@ export function analyticsTrackEvent(category: string, action: string) {
   }
 }
 
-export function autofocus(vnode: Mithril.ChildNode) {
+export function autofocus(vnode: Mithril.DOMNode) {
   (vnode.dom as HTMLElement).focus();
 }
 

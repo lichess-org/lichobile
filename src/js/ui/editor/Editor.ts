@@ -138,7 +138,7 @@ export default class Editor {
   public onmove = (e: TouchEvent) => chessground.drag.move(this.chessground.data, e)
   public onend = (e: TouchEvent) => chessground.drag.end(this.chessground.data, e)
 
-  public editorOnCreate = (vn: Mithril.ChildNode) => {
+  public editorOnCreate = (vn: Mithril.DOMNode) => {
     if (!vn.dom) return;
     const editorNode = document.getElementById('boardEditor');
     if (editorNode) {

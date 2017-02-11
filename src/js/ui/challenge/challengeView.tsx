@@ -6,7 +6,7 @@ import challengesApi from '../../lichess/challenges';
 import * as helper from '../helper';
 import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge';
 import { ChallengeState } from './interfaces';
 
@@ -26,31 +26,31 @@ function gameInfos(challenge: Challenge) {
 
 export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
   const challenge = ctrl.challenge();
-  let joinDom: Mithril.ChildNode;
+  let joinDom: Mithril.BaseNode;
   if (challenge.rated && !session.isConnected()) {
-    joinDom = m('div.error', [
-      i18n('thisGameIsRated'), m('br'), m('br'), i18n('mustSignInToJoin'),
-      m('div.go_or_cancel', [
-        m('button.binary_choice[data-icon=E].withIcon', {
+    joinDom = h('div.error', [
+      i18n('thisGameIsRated'), h('br'), h('br'), i18n('mustSignInToJoin'),
+      h('div.go_or_cancel', [
+        h('button.binary_choice[data-icon=E].withIcon', {
           oncreate: helper.ontap(loginModal.open)
         }, i18n('signIn')),
-        m('button.binary_choice[data-icon=L].withIcon', {
+        h('button.binary_choice[data-icon=L].withIcon', {
           oncreate: helper.ontap(router.backHistory)
         }, i18n('cancel'))
       ])
     ]);
   } else if (session.isConnected()) {
-    joinDom = m('div.go_or_cancel', [
-      m('button.binary_choice[data-icon=E].withIcon', {
+    joinDom = h('div.go_or_cancel', [
+      h('button.binary_choice[data-icon=E].withIcon', {
           oncreate: helper.ontap(ctrl.joinChallenge)
       }, i18n('join')),
-      m('button.binary_choice[data-icon=L].withIcon', {
+      h('button.binary_choice[data-icon=L].withIcon', {
         oncreate: helper.ontap(ctrl.declineChallenge)
       }, i18n('decline'))
     ]);
   } else {
-    joinDom = m('div', [
-      m('button[data-icon=E].withIcon', {
+    joinDom = h('div', [
+      h('button[data-icon=E].withIcon', {
           oncreate: helper.ontap(ctrl.joinChallenge)
       }, i18n('join'))
     ]);
@@ -65,11 +65,11 @@ export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
       'join_url_challenge',
       null,
       function() {
-        return m('div.infos', [
-          m('div.challenger', challenger),
-          m('br'),
+        return h('div.infos', [
+          h('div.challenger', challenger),
+          h('br'),
           gameInfos(challenge),
-          m('br'),
+          h('br'),
           joinDom
         ]);
       },
@@ -88,30 +88,30 @@ export function awaitInvitePopup(ctrl: ChallengeState) {
       'await_url_challenge',
       null,
       function() {
-        return m('div.infos', [
+        return h('div.infos', [
           gameInfos(challenge),
-          m('br'),
-          m('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
-          m('input.lichess_game_url', {
+          h('br'),
+          h('p.explanation', i18n('toInviteSomeoneToPlayGiveThisUrl')),
+          h('input.lichess_game_url', {
             value: publicUrl(challenge),
             readonly: true
           }),
-          m('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
-          m('div.go_or_cancel.clearfix', [
-            m('button.binary_choice[data-icon=E].withIcon', {
+          h('p.explanation.small', i18n('theFirstPersonToComeOnThisUrlWillPlayWithYou')),
+          h('div.go_or_cancel.clearfix', [
+            h('button.binary_choice[data-icon=E].withIcon', {
               oncreate: helper.ontap(function() {
                 window.plugins.socialsharing.share(null, null, null, publicUrl(challenge));
               })
             }, i18n('shareGameURL')),
-            m('button.binary_choice[data-icon=L].withIcon', {
+            h('button.binary_choice[data-icon=L].withIcon', {
               oncreate: helper.ontap(ctrl.cancelChallenge)
             }, i18n('cancel'))
           ]),
-          isPersistent ? m('div', [
-            m('br'),
-            m('button', {
+          isPersistent ? h('div', [
+            h('br'),
+            h('button', {
               oncreate: helper.ontap(() => router.set('/'))
-            }, [m('span.fa.fa-home'), i18n('returnToHome')])
+            }, [h('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
         ]);
       },

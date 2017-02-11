@@ -1,11 +1,11 @@
-import * as h from '../helper';
+import * as helper from '../helper';
 import router from '../../router';
 import session from '../../session';
 import { header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
 import layout from '../layout';
 import i18n from '../../i18n';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import tabs from '../shared/tabs';
 import newTournamentForm from './newTournamentForm';
 import { TournamentListsState, TournamentListItem } from './interfaces';
@@ -31,8 +31,8 @@ const TABS = [{
 }];
 
 function tabNavigation (currentTabFn: Mithril.Stream<string>) {
-    return m('.tabs-nav-header', [
-      m(tabs, {
+    return h('.tabs-nav-header', [
+      h(tabs, {
           buttons: TABS,
           selectedTab: currentTabFn(),
           onTabChange: (k: string) => {
@@ -43,7 +43,7 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
             currentTabFn(k);
           }
       }),
-      m('div.main_header_drop_shadow')
+      h('div.main_header_drop_shadow')
     ]);
 }
 
@@ -77,7 +77,7 @@ function renderTournamentListItem(tournament: TournamentListItem) {
   return (
     <tr key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
-      oncreate={h.ontapY(() => router.set('/tournament/' + tournament.id))}
+      oncreate={helper.ontapY(() => router.set('/tournament/' + tournament.id))}
     >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>
@@ -97,7 +97,7 @@ function renderTournamentListItem(tournament: TournamentListItem) {
 function renderFooter() {
   return (
     <div className="actions_bar">
-      <button key="createTournament" className="action_bar_button" oncreate={h.ontap(newTournamentForm.open)}>
+      <button key="createTournament" className="action_bar_button" oncreate={helper.ontap(newTournamentForm.open)}>
         <span className="fa fa-pencil" />
         {i18n('createANewTournament')}
       </button>

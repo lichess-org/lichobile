@@ -20,7 +20,7 @@ const UserScreen: Mithril.Component<Attrs, State> = {
     this.user = userCtrl(attrs.id)
   },
 
-  oncreate(vnode: Mithril.ChildNode) {
+  oncreate(vnode: Mithril.DOMNode) {
     if (this.user.isMe()) {
       helper.elFadeIn(vnode.dom as HTMLElement);
     } else {

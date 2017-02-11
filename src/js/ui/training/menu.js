@@ -3,7 +3,7 @@ import loginModal from '../loginModal';
 import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as Chart from 'chart.js';
 
 Chart.defaults.global.animation = false;
@@ -46,8 +46,8 @@ export default {
 
 export function renderUserInfos(ctrl) {
   return [
-    m('p.trainingRatingHeader', m.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
-    ctrl.data.user.history ? m('canvas', {
+    h('p.trainingRatingHeader', h.trust(i18n('yourPuzzleRatingX', `<strong>${ctrl.data.user.rating}</strong>`))),
+    ctrl.data.user.history ? h('canvas', {
       oncreate(vnode) {
         const ctx = vnode.dom.getContext('2d');
         drawChart(ctrl, ctx);
@@ -65,14 +65,14 @@ export function renderUserInfos(ctrl) {
 }
 
 export function renderSigninBox() {
-  return m('div.trainingMenuContent', [
-    m('p', i18n('toTrackYourProgress')),
-    m('p',
-      m('button', {
+  return h('div.trainingMenuContent', [
+    h('p', i18n('toTrackYourProgress')),
+    h('p',
+      h('button', {
         oncreate: helper.ontap(loginModal.open)
-      }, [m('span.fa.fa-user'), i18n('signIn')])
+      }, [h('span.fa.fa-user'), i18n('signIn')])
     ),
-    m('p', i18n('trainingSignupExplanation'))
+    h('p', i18n('trainingSignupExplanation'))
   ]);
 }
 

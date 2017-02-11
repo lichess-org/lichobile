@@ -20,7 +20,7 @@ interface Attrs {
 export interface State {
   scrollState: ScrollState
   onScroll(e: Event): void
-  onGamesLoaded(vn: Mithril.ChildNode): void
+  onGamesLoaded(vn: Mithril.DOMNode): void
   onFilterChange(e: Event): void
   toggleBookmark(id: string): void
 }
@@ -166,7 +166,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
       redraw();
     }
 
-    this.onGamesLoaded = ({ dom }: Mithril.ChildNode) => {
+    this.onGamesLoaded = ({ dom }: Mithril.DOMNode) => {
       if (cacheAvailable && !initialized) {
         batchRequestAnimationFrame(() => {
           (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos

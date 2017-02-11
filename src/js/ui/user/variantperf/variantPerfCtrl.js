@@ -1,5 +1,4 @@
 import * as xhr from '../userXhr';
-import * as m from 'mithril';
 import socket from '../../../socket';
 import { handleXhrError } from '../../../utils';
 import redraw from '../../../utils/redraw';

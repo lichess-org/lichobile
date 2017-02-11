@@ -4,18 +4,18 @@ import { dropShadowHeader, backButton } from '../shared/common';
 import * as helper from '../helper';
 import layout from '../layout';
 import i18n from '../../i18n';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 function renderBody() {
   return [
-    m('ul.native_scroller.page.settings_list.game', [
-      m('li.list_item.nav', {
+    h('ul.native_scroller.page.settings_list.game', [
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(utils.f(router.set, '/settings/gameBehavior'))
       }, i18n('gameBehavior')),
-      m('li.list_item.nav', {
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(utils.f(router.set, '/settings/privacy'))
       }, i18n('privacy')),
-      m('li.list_item.nav', {
+      h('li.list_item.nav', {
         oncreate: helper.ontapY(utils.f(router.set, '/settings/kidMode'))
       }, 'Kid mode')
     ])

@@ -3,7 +3,7 @@ import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 
 export default {
@@ -62,23 +62,23 @@ function renderPlayer(data: GameData, color: Color) {
 function renderEvalSummary(ctrl: AnalyseCtrlInterface) {
   const d = ctrl.data;
 
-  return m('div.evalSummary', ['white', 'black'].map((color: Color) => {
-    return m('table', [
-      m('thead', m('tr', [
-        m('th', m('span.light.color-icon.' + color)),
-        m('td', renderPlayer(d, color))
+  return h('div.evalSummary', ['white', 'black'].map((color: Color) => {
+    return h('table', [
+      h('thead', h('tr', [
+        h('th', h('span.light.color-icon.' + color)),
+        h('td', renderPlayer(d, color))
       ])),
-      m('tbody', [
+      h('tbody', [
         advices.map(a => {
           const nb = d.analysis.summary[color][a[0]];
-          return m('tr', [
-            m('th', nb),
-            m('td', i18n(a[1]))
+          return h('tr', [
+            h('th', nb),
+            h('td', i18n(a[1]))
           ]);
         }),
-        m('tr', [
-          m('th', d.analysis.summary[color].acpl),
-          m('td', i18n('averageCentipawnLoss'))
+        h('tr', [
+          h('th', d.analysis.summary[color].acpl),
+          h('td', i18n('averageCentipawnLoss'))
         ])
       ])
     ]);

@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import redraw from '../../../utils/redraw';
 import { saveOfflineGameData } from '../../../utils/offlineGames';
 import { hasNetwork, boardOrientation, formatTimeInSecs, noop } from '../../../utils';

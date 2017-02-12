@@ -5,7 +5,7 @@ import * as xhr from './inboxXhr';
 import * as helper from '../helper';
 import * as h from 'mithril/hyperscript';
 import { PagedThreads, InboxState } from './interfaces';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<void, InboxState>): void {

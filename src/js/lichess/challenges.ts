@@ -1,7 +1,7 @@
 import i18n from '../i18n';
 import sound from '../sound';
 import settings from '../settings';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import { getChallenges } from '../xhr';
 import { Challenge, ChallengesData } from '../lichess/interfaces/challenge';
 

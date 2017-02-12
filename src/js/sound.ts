@@ -1,5 +1,5 @@
 import settings from './settings';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 
 interface Media {
   move: string

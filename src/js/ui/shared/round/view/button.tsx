@@ -1,5 +1,5 @@
 import * as h from 'mithril/hyperscript';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils';
 import * as gameApi from '../../../../lichess/game';
 import router from '../../../../router';

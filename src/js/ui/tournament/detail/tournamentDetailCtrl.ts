@@ -1,5 +1,5 @@
 import socket from '../../../socket';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import redraw from '../../../utils/redraw';
 import router from '../../../router';
 import * as utils from '../../../utils';

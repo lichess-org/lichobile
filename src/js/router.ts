@@ -2,7 +2,7 @@ import * as Rlite from 'rlite-router';
 import * as RenderService from 'mithril/render';
 import * as Vnode from 'mithril/render/vnode';
 import signals from './signals';
-import { isFunction } from 'lodash';
+import * as isFunction from 'lodash/isFunction';
 import session from './session';
 import redraw from './utils/redraw';
 

@@ -4,7 +4,7 @@ import * as helper from '../../helper';
 import * as xhr from '../userXhr';
 import { toggleGameBookmark } from '../../../xhr';
 import redraw from '../../../utils/redraw';
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import socket from '../../../socket';
 import layout from '../../layout';
 import { header as headerWidget, backButton } from '../../shared/common';

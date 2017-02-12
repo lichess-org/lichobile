@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript';
 import redraw from '../../../utils/redraw';
 import * as helper from '../../helper';
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import router from '../../../router';
 import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';

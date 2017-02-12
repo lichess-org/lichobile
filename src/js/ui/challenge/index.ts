@@ -2,7 +2,7 @@ import socket from '../../socket';
 import * as helper from '../helper';
 import router from '../../router';
 import { handleXhrError } from '../../utils';
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr';
 import challengesApi from '../../lichess/challenges';
 import i18n from '../../i18n';

@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import router from '../../router';
 import * as chess from '../../chess';
 import * as chessFormat from '../../utils/chessFormat';

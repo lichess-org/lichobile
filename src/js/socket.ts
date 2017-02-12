@@ -1,7 +1,9 @@
 import router from './router';
 import redraw from './utils/redraw';
 import { apiVersion } from './http';
-import { xorWith, isEqual, cloneDeep } from 'lodash';
+import * as xorWith from 'lodash/xorWith'
+import * as isEqual from 'lodash/isEqual'
+import * as cloneDeep from 'lodash/cloneDeep'
 import { lichessSri, autoredraw, hasNetwork } from './utils';
 import { tellWorker, askWorker } from './utils/worker';
 import * as xhr from './xhr';

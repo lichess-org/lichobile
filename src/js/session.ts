@@ -1,4 +1,9 @@
-import { get, set, pick, mapValues, mapKeys, throttle } from 'lodash';
+import * as get from 'lodash/get'
+import * as set from 'lodash/set'
+import * as pick from 'lodash/pick'
+import * as mapValues from 'lodash/mapValues'
+import * as mapKeys from 'lodash/mapKeys'
+import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';

@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import * as throttle from 'lodash/throttle';
 import * as h from 'mithril/hyperscript';
 import * as utils from '../../../utils';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'

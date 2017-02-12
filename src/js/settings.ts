@@ -1,5 +1,5 @@
 import store from './storage';
-import { range } from 'lodash';
+import * as range from 'lodash/range';
 
 export interface SettingsProp<T> {
   (): T

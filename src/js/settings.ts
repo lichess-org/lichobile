@@ -60,6 +60,7 @@ export default {
         ['bgThemeShapes', 'bgshapes'],
         ['bgThemeGrey', 'grey'],
         ['bgThemeBlueHaven', 'bluehaven'],
+        ['bgThemeGreen', 'green'],
         ['bgThemeCrackedEarth', 'cracked-earth'],
         ['bgThemeVioletSpace', 'violet-space'],
         ['bgThemeBlueWood', 'bluewood'],

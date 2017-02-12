@@ -9,7 +9,7 @@ import * as Raven from 'raven-js'
 import * as moment from 'moment';
 window.moment = moment;
 
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import { hasNetwork } from './utils';
 import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';

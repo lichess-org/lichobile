@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript';
 import router from '../../router';
+import { emptyFen } from '../../utils/fen'
 import { gameIcon, hasNetwork } from '../../utils';
 import i18n from '../../i18n';
 import * as helper from '../helper';
@@ -7,7 +8,7 @@ import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import { userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
-import miniBoard from '../shared/miniBoard';
+import MiniBoard from '../shared/miniBoard';
 import { HomeState } from './interfaces'
 
 export function body(ctrl: HomeState) {
@@ -57,18 +58,20 @@ function miniBoardSize(isPortrait: boolean) {
 
 function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
   const puzzle = ctrl.dailyPuzzle();
-
-  if (!puzzle) return null;
+  const boardConf = puzzle ? {
+    bounds: miniBoardSize(isPortrait),
+    fen: puzzle.fen,
+    orientation: puzzle.color,
+    link: () => router.set('/training/' + puzzle.id),
+  } : {
+    bounds: miniBoardSize(isPortrait),
+    fen: emptyFen
+  }
 
   return (
-    <section id="dailyPuzzle">
+    <section id="dailyPuzzle" key={puzzle ? puzzle.id : 'empty'}>
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
-        {h(miniBoard, {
-          bounds: miniBoardSize(isPortrait),
-          fen: puzzle.fen,
-          orientation: puzzle.color,
-          link: () => router.set('/training/' + puzzle.id)
-        })}
+      {h(MiniBoard, boardConf)}
     </section>
   );
 }

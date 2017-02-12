@@ -266,9 +266,10 @@ export function isPortrait(): boolean {
 }
 
 export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): BoardBounds  {
-  const { vh, vw } = viewportDim;
-  const is43 = is43Aspect();
-  const headerHeight = 45;
+  const { vh, vw } = viewportDim
+  const is43 = is43Aspect()
+  const headerHeight = 56
+  const footerHeight = 45
 
   if (isPortrait) {
     if (halfsize) {
@@ -287,7 +288,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
     else if (is43) {
       const contentHeight = vh - headerHeight;
       const side = vw * 0.98;
-      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - side - 45) / 2) : 0);
+      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - side - footerHeight) / 2) : 0);
       return {
         top: pTop,
         right: vw * 0.01,
@@ -298,7 +299,7 @@ export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mo
       };
     } else {
       const contentHeight = vh - headerHeight;
-      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - vw - 45) / 2) : 0);
+      const pTop = headerHeight + (mode === 'game' ? ((contentHeight - vw - footerHeight) / 2) : 0);
       return {
         top: pTop,
         right: vw,

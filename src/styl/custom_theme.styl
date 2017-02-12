@@ -1,31 +1,67 @@
 .view-container.transp
   > main
     background-color transparent
-    background-position: center center;
-    background-repeat: no-repeat;
+    &:before
+      content: ' ';
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0
+      left: 0
+      right 0
+      bottom 0
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size cover
+      z-index: -1;
   &.wood
-    > main
+    > main:before
       background-image url('../../images/bg/wood.jpg')
   &.bgshapes
-    > main
+    > main:before
       background-image url('../../images/bg/shapes.jpg')
-      background-size cover
   &.grey
-    > main
+    > main:before
       background-image url('../../images/bg/grey.jpg')
       background-position initial
-  &.leaves
-    > main
-      background-image url('../../images/bg/leaves.jpg')
-  &.autumn
-    > main
-      background-image url('../../images/bg/autumn.jpg')
+  &.green-stains
+    .main_header.board .chip, .chip
+      color rgba(#153624, 0.9)
+      border-color rgba(#153624, 0.9)
+    > main:before
+      background-image url('../../images/bg/green-stains.jpg')
+  &.violet-space
+    .main_header.board .chip, .chip
+      color rgba(#120100, 0.9)
+      border-color rgba(#120100, 0.9)
+    > main:before
+      background-image url('../../images/bg/violet-space.jpg')
+  &.cracked-earth
+    > main:before
+      background-image url('../../images/bg/cracked-earth.jpg')
+  &.bluewood
+    > main:before
+      background-image url('../../images/bg/bluewood.jpg')
+  &.grass
+    > main:before
+      background-image url('../../images/bg/grass.jpg')
+      background-position initial
+  &.bluehaven
+    > main:before
+      background-image url('../../images/bg/bluehaven.jpg')
+      background-position initial
+      @media only screen and (orientation: portrait)
+        transform rotate(90deg)
+        width 100vh
+    .main_header.board .chip, .chip
+      color rgba(#071c3b, 0.9)
+      border-color rgba(#071c3b, 0.9)
 
   main, .main_header, .action_bar_button, .antagonistUser
     color textTransp
 
   .main_header_button.active, .action_bar_button.active, .antagonistInfos.active,
-  .back_button > button.active
+  .back_button > button.active, .tab:active, .tab.active
     background-color transpWhite01
 
   .main_header, .fatButton, .homeMoreButton > button, .tabs,
@@ -62,8 +98,9 @@
     background selectBg
 
   .main_header.board .chip, .chip
-    color black
-    border-color black
+    color rgba(black, 0.9)
+    border-color rgba(black, 0.9)
+    background rgba(gold, 0.9)
 
   .tomb
     .pawn

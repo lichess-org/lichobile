@@ -59,7 +59,10 @@ export default {
         ['bgThemeWood', 'wood'],
         ['bgThemeShapes', 'bgshapes'],
         ['bgThemeGrey', 'grey'],
-        ['bgThemeLeaves', 'leaves']
+        ['bgThemeBlueHaven', 'bluehaven'],
+        ['bgThemeCrackedEarth', 'cracked-earth'],
+        ['bgThemeVioletSpace', 'violet-space'],
+        ['bgThemeBlueWood', 'bluewood'],
       ],
       background: localstorageprop('settings.bgTheme', 'dark'),
       availableBoardThemes: [

@@ -325,7 +325,7 @@ export default {
   },
   notes: function(ctrl: OnlineRound) {
     return (
-      <button className="action_bar_button" data-icon="h" key="notes"
+      <button className="action_bar_button fa fa-pencil" key="notes"
         oncreate={helper.ontap(
           ctrl.notes.open,
           () => window.plugins.toast.show(i18n('notes'), 'short', 'bottom')

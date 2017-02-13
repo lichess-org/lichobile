@@ -7,6 +7,15 @@
 
   window.cordova.platformId = 'browser';
 
+  // filesystem
+  window.LocalFileSystem = {
+    PERSISTENT: 0,
+    TEMPORARY: 1
+  };
+  window.requestFileSystem = function() {
+    return Promise.resolve();
+  };
+
   // analytics
   window.ga = {
     startTrackerWithId: noop,

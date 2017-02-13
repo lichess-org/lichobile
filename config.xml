@@ -6,6 +6,7 @@
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="https://sentry.io" />
+    <access origin="https://raw.githubusercontent.com" />
     <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">
@@ -142,4 +143,5 @@
             <path event="other" url="*" />
         </host>
     </universal-links>
+    <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
 </widget>

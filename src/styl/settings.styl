@@ -23,13 +23,26 @@
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
     content: "\f00c"
-    text-indent .9em
+    margin-left 1em
   label
-    display block
+    display inline-block
+    vertical-align middle
     padding 15px
     width 100%
     height 100%
     text-transform capitalize
+
+#bgThemes
+  &.loading
+    .list_item input.radio + label
+      opacity 0.5
+    .list_item input.radio:checked + label
+      opacity 1
+    .list_item input.radio:checked + label:after
+      content: "\f1ce";
+      animation: fa-spin 2s infinite linear;
+      font-size 1.5em
+      vertical-align middle
 
 .settingsChoicesInline
   display flex

@@ -34,7 +34,8 @@ export default {
     name: string,
     value: string,
     checked: boolean,
-    onchange: (e: Event) => void
+    onchange: (e: Event) => void,
+    disabled?: boolean
   ) {
     const id = name + '_' + value;
     return [
@@ -44,7 +45,8 @@ export default {
         className: value,
         value,
         checked,
-        onchange
+        onchange,
+        disabled
       }),
       h('label', {
         'for': id

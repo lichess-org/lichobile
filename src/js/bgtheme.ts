@@ -1,6 +1,6 @@
 import * as filesystem from './utils/filesystem'
 
-const baseUrl = 'https://raw.githubusercontent.com/veloce/lichobile-themes/master/background'
+const baseUrl = 'https://veloce.github.io/lichobile-themes/background'
 const imagePrefix = 'bg-'
 let styleEl: HTMLStyleElement
 

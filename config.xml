@@ -6,7 +6,7 @@
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="https://sentry.io" />
-    <access origin="https://raw.githubusercontent.com" />
+    <access origin="https://veloce.github.io" />
     <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">

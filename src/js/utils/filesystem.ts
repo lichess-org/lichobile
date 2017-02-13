@@ -12,7 +12,6 @@ export function getLocalFileOrDowload(remoteFileUri: string, fileName: string, p
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
       fs.root.getFile(prefix + fileName, null, (fe) => {
-        console.log(fe)
         resolve(fe)
       }, (err: FileError) => {
         if (err.code === FileError.NOT_FOUND_ERR) {
@@ -37,7 +36,9 @@ function syncRemoteFile(fs: FileSystem, remoteFileUri: string, fileName: string,
       prefix + fileName,
       { create: true, exclusive: false },
       (fileEntry) =>
-        download(fileEntry, remoteFileUri).then(resolve).catch(err => {
+        download(fileEntry, remoteFileUri)
+        .then(resolve)
+        .catch(err => {
           // a zero lenght file is created while trying to download and save
           fileEntry.remove(() => {})
           reject(err)

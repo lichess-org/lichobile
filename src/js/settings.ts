@@ -59,6 +59,7 @@ export default {
         { key: 'wood', name: 'bgThemeWood', ext: 'jpg' },
         { key: 'bgshapes', name: 'bgThemeShapes', ext: 'jpg' },
         { key: 'blue-maze', name: 'bgThemeBlueMaze', ext: 'jpg' },
+        { key: 'green-maze', name: 'bgThemeGreenMaze', ext: 'jpg' },
         { key: 'red-maze', name: 'bgThemeRedMaze', ext: 'jpg' },
         { key: 'grey', name: 'bgThemeGrey', ext: 'jpg' },
         { key: 'green', name: 'bgThemeGreen', ext: 'png' },

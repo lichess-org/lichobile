@@ -33,10 +33,6 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.averageLag = 0;
   this.autoReconnect = true;
   this.tryAnotherUrl = false;
-  this.urlsPool = [this.socketEndPoint].concat(
-  [9025, 9026, 9027, 9028, 9029].map(
-    function(e) { return this.socketEndPoint + ':' + e; }.bind(this)
-  ));
 
   this.debug('Debug is enabled');
   this.connect();
@@ -53,7 +49,7 @@ StrongSocket.prototype = {
     if (self.ws) self.ws.close();
 
     self.autoReconnect = true;
-    var fullUrl = self.baseUrl() + self.url + '?' + serializeQueryParameters(self.settings.params);
+    var fullUrl = self.socketEndPoint + self.url + '?' + serializeQueryParameters(self.settings.params);
     self.debug('connection attempt to ' + fullUrl, true);
 
     self.ws = new WebSocket(fullUrl);
@@ -253,20 +249,6 @@ StrongSocket.prototype = {
 
   pingInterval: function() {
     return this.options.pingDelay + this.averageLag;
-  },
-
-  baseUrl: function() {
-    if (this.socketEndPoint === 'wss://socket.lichess.org') {
-      if (!currentUrl) {
-        currentUrl = this.urlsPool[0];
-      } else if (this.tryAnotherUrl) {
-        this.tryAnotherUrl = false;
-        currentUrl = this.urlsPool[(this.urlsPool.indexOf(currentUrl) + 1) % this.urlsPool.length];
-      }
-      return currentUrl;
-    }
-
-    return this.socketEndPoint;
   }
 };
 

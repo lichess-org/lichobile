@@ -51,7 +51,7 @@ function overlay(ctrl: OnlineRound, isPortrait: boolean) {
 export function renderMaterial(material: Material) {
   const children: Mithril.Children = [];
   for (let role in material) {
-    const piece = <div className={role} />;
+    const piece = <piece className={role} />;
     const count = material[role];
     const content: Array<Mithril.DOMNode> = [];
     for (let i = 0; i < count; i++) content.push(piece);
@@ -165,9 +165,6 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     return h.fragment({ key: orientationKey }, [
       board,
       <section className="table">
-        <header className="tableHeader">
-          {gameInfos(ctrl)}
-        </header>
         <section className="playersTable">
           {opponent}
           {renderReplayTable(ctrl)}
@@ -440,7 +437,7 @@ function gameInfos(ctrl: OnlineRound) {
 function renderGamePopup(ctrl: OnlineRound, isPortrait: boolean) {
   return popupWidget(
     'player_controls',
-    isPortrait ? () => gameInfos(ctrl) : null,
+    () => gameInfos(ctrl),
     gameApi.playable(ctrl.data) ?
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,

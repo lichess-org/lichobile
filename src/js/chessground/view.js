@@ -62,6 +62,14 @@ function diffBoard(ctrl) {
   let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
   let mvdset, mvd;
 
+  let otbTurnFlipChange, otbModeChange;
+  if (d.otb) {
+    otbTurnFlipChange = d.prevTurnColor && d.prevTurnColor !== d.turnColor;
+    otbModeChange = d.prevOtbMode && d.prevOtbMode !== d.otbMode;
+    d.prevOtbMode = d.otbMode;
+    d.prevTurnColor = d.turnColor;
+  }
+
   // walk over all board dom elements, apply animations and flag moved pieces
   for (let i = 0, len = elements.length; i < len; i++) {
     el = elements[i];
@@ -77,7 +85,7 @@ function diffBoard(ctrl) {
         el.classList.remove('dragging');
         el.classList.remove('magnified');
         translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
-        el.style.transform = util.translate(translate);
+        el.style.transform = util.transform(d, el.cgColor, util.translate(translate));
         el.cgDragging = false;
       }
       // there is now a piece at this dom key
@@ -88,14 +96,14 @@ function diffBoard(ctrl) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
           translate[0] += anim[1][0];
           translate[1] += anim[1][1];
-          el.style.transform = util.translate(translate);
+          el.style.transform = util.transform(d, el.cgColor, util.translate(translate));
         } else if (el.cgAnimating) {
           translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
-          el.style.transform = util.translate(translate);
+          el.style.transform = util.transform(d, el.cgColor, util.translate(translate));
           el.cgAnimating = false;
         }
         // same piece: flag as same
-        if (!orientationChange && el.cgColor === pieceAtKey.color && el.cgRole === pieceAtKey.role) {
+        if (!orientationChange && !otbTurnFlipChange && !otbModeChange && el.cgColor === pieceAtKey.color && el.cgRole === pieceAtKey.role) {
           samePieces.add(k);
         }
         // different piece: flag as moved unless it is a captured piece
@@ -145,7 +153,7 @@ function diffBoard(ctrl) {
           translate[0] += anim[1][0];
           translate[1] += anim[1][1];
         }
-        mvd.style.transform = util.translate(translate);
+        mvd.style.transform = util.transform(d, mvd.cgColor, util.translate(translate));
       }
       // no piece in moved obj: insert the new piece
       else {
@@ -234,7 +242,7 @@ function renderPiece(d, key, ctx) {
     translate[0] += animation[1][0];
     translate[1] += animation[1][1];
   }
-  attrs.style.transform = util.translate(translate);
+  attrs.style.transform = util.transform(d, p.color, util.translate(translate));
   return Vnode(
     'piece',
     'p' + key,

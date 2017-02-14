@@ -218,7 +218,8 @@
 
 .tomb
   margin-left 6px
-  div
+  piece
+    position initial
     margin-left -6px
     width 18px
     height 18px
@@ -237,14 +238,8 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
-  @media only screen and (orientation landscape)
-    &:first-child
-      margin-left 0
-      div
-        margin-top 0
-        margin-left 0
   @media only screen and (min-width 960px) and (orientation landscape)
-    div
+    piece
       width 25px
       height 25px
 

@@ -13,7 +13,9 @@ function makeConfig(data, sit) {
     turnColor: sit.player,
     lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
     check: sit.check,
+    otb: data.game.id === 'offline_otb',
     coordinates: settings.game.coords(),
+    otbMode: settings.otb.flipPieces() ? 'flip' : 'facing',
     symmetricCoordinates: data.game.id === 'offline_otb',
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
@@ -60,6 +62,10 @@ function reload(ground, data, sit) {
   ground.reconfigure(makeConfig(data, sit));
 }
 
+function changeOTBMode(ground, flip) {
+  ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' });
+}
+
 function promote(ground, key, role) {
   var pieces = {};
   var piece = ground.data.pieces[key];
@@ -80,5 +86,6 @@ export default {
   make,
   reload,
   promote,
-  end
+  end,
+  changeOTBMode
 };

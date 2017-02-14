@@ -49,8 +49,8 @@ export class Chat {
     storage.set(this.storageId, this.messages.length);
   }
 
-  public canTalk = () => {
-    return !this.root.data.player.spectator || session.isConnected();
+  public canTalk = (data: OnlineGameData) => {
+    return session.isConnected() || data.game.source === 'friend'
   }
 
   public open = () => {
@@ -169,8 +169,8 @@ export function chatView(ctrl: Chat) {
         }
       }, [
         h('textarea#chat_input.chat_input', {
-          placeholder: ctrl.canTalk() ? i18n('talkInChat') : 'Login to chat',
-          disabled: !ctrl.canTalk(),
+          placeholder: ctrl.canTalk(ctrl.root.data) ? i18n('talkInChat') : 'Login to chat',
+          disabled: !ctrl.canTalk(ctrl.root.data),
           rows: 1,
           maxlength: 140,
           value: ctrl.inputValue,

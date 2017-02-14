@@ -62,7 +62,7 @@ export default {
         { key: 'green-maze', name: 'bgThemeGreenMaze', ext: 'jpg' },
         { key: 'red-maze', name: 'bgThemeRedMaze', ext: 'jpg' },
         { key: 'grey', name: 'bgThemeGrey', ext: 'jpg' },
-        { key: 'green', name: 'bgThemeGreen', ext: 'png' },
+        // { key: 'green', name: 'bgThemeGreen', ext: 'png' },
         { key: 'earth', name: 'bgThemeCrackedEarth', ext: 'jpg'},
         { key: 'space', name: 'bgThemeVioletSpace', ext: 'jpg' },
       ],

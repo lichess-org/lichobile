@@ -28,10 +28,17 @@ function renderBody(ctrl) {
   const days = Math.floor(data.stat.count.seconds / (60 * 60 * 24));
   const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24;
   const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60;
+  const now = Date.now();
+  const yearAgo = now - ONE_YEAR;
+  const graphData = data.graph
+    .map(normalizeGraphData)
+    .filter(i => i.x > yearAgo);
 
   return (
     <div class="variantPerfBody native_scroller page">
-      <canvas oncreate={node => delayDrawChart(data, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
+      {graphData && graphData.length >= 3 ?
+        <canvas className="variantPerf-graph" oncreate={node => delayDrawChart(graphData, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} /> : null
+      }
       <table class="variantPerf">
         <tbody>
         <tr>
@@ -179,21 +186,17 @@ function toTitleCase(str) {
   );
 }
 
-function delayDrawChart(data, node) {
-  setTimeout(() => drawChart(data, node), 500);
+function delayDrawChart(graphData, node) {
+  setTimeout(() => drawChart(graphData, node), 500);
 }
 
-function drawChart(data, node) {
+function drawChart(graphData, node) {
   const ctx = node.dom.getContext('2d');
   const canvas = ctx.canvas;
-  const now = (new Date()).getTime();
+  const now = Date.now();
   const yearAgo = now - ONE_YEAR;
-  const graphData = data.graph
-    .map(normalizeGraphData)
-    .filter(i => i.x > yearAgo);
 
   if (!graphData || graphData.length < 3) {
-    canvas.className = 'hideVariantPerfCanvas';
     return null;
   }
 
@@ -241,14 +244,14 @@ function drawChart(data, node) {
           },
           gridLines: {
             display: false
-          }
+          },
         }],
         yAxes: [{
           id: 'y',
           type: 'linear',
           gridLines: {
             color: '#666'
-          }
+          },
         }]
       },
       legend: {

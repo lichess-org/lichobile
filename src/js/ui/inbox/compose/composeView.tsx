@@ -1,4 +1,4 @@
-import * as h from '../../helper';
+import * as helper from '../../helper';
 import i18n from '../../../i18n';
 import { ComposeState } from '../interfaces';
 
@@ -14,7 +14,7 @@ export function composeBody(ctrl: ComposeState) {
         {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
         <input id="subject" key="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
-        oncreate={ctrl.id() ? h.autofocus : null}
+        oncreate={ctrl.id() ? helper.autofocus : null}
         />
         {(ctrl.errors() && ctrl.errors().subject) ? renderError('subjectError', ctrl.errors().subject[0]) : null}
         <textarea id="body" key="body" className="composeInput composeTextarea" />
@@ -45,7 +45,7 @@ function recipientWithoutName() {
     placeholder={i18n('recipient')}
     autocapitalize="off"
     autocomplete="off"
-    oncreate={h.autofocus}
+    oncreate={helper.autofocus}
     />
   );
 }

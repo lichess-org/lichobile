@@ -1,4 +1,4 @@
-import * as h from '../helper';
+import * as helper from '../helper';
 import layout from '../layout';
 import clockSettings from './clockSettings';
 import { formatTimeInSecs } from '../../utils';
@@ -64,7 +64,7 @@ function clockBody(ctrl) {
 
   return (
     <div className="clockContainer">
-      <div key="topClockTapArea" className={topClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'top'))}>
+      <div key="topClockTapArea" className={topClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'top'))}>
         { clock.topMoves && clock.topMoves() !== null ?
         <div className="clockStageInfo">
           <span>Moves remaining: {clock.topMoves()}</span>
@@ -77,12 +77,12 @@ function clockBody(ctrl) {
         </div>
       </div>
       <div className="clockControls">
-        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={h.ontap(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
-        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.reload)} />
-        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.clockSettingsCtrl.open)} />
-        <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={h.ontap(ctrl.goHome)} />
+        { !flagged && clock.activeSide() ? <span key="running-play-pause" className={'fa' + (clock.isRunning() ? ' fa-pause' : ' fa-play')} oncreate={helper.ontap(() => ctrl.startStop())} /> : <span key="disabled-pause" className="fa fa-pause disabled" /> }
+        <span key="refresh" className={'fa fa-refresh' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.reload)} />
+        <span key="settings" className={'fa fa-cog' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.clockSettingsCtrl.open)} />
+        <span hey="home" className={'fa fa-home' + ((clock.isRunning() && !flagged) ? ' disabled' : '')} oncreate={helper.ontap(ctrl.goHome)} />
       </div>
-      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={h.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
+      <div key="bottomClockTapArea" className={bottomClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'bottom'))}>
         <div className="clockTapAreaContent">
           <span className={bottomClockTimeClass}>
             { bottomFlagged ? 'b' : formatTime(ctrl.clockType(), clock.bottomTime() / 1000) }

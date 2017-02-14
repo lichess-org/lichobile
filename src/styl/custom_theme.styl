@@ -29,25 +29,25 @@
       @media only screen and (orientation: portrait)
         transform rotate(90deg)
         width 100vh
-      // background-image url('../../../../lichobile-themes/background/green.png')
+      background-image url('../../../../lichobile-themes/background/green.png')
     .main_header.board .chip, .chip
       color rgba(#0a160b, 0.9)
       border-color rgba(#0a160b, 0.9)
   &.blue-maze
     > main:before
-      // background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
+      background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
       @media only screen and (orientation: portrait)
-        background-position initial
+        background-position right center
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
-      color rgba(#020a11, 0.9)
-      border-color rgba(#020a11, 0.9)
+      color rgba(#041320, 0.9)
+      border-color rgba(#041320, 0.9)
   &.green-maze
     > main:before
-      // background-image url('../../../../lichobile-themes/background/green-maze.jpg')
+      background-image url('../../../../lichobile-themes/background/green-maze.jpg')
       @media only screen and (orientation: portrait)
-        background-position initial
+        background-position right center
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
@@ -55,9 +55,9 @@
       border-color rgba(#0a160b, 0.9)
   &.red-maze
     > main:before
-      // background-image url('../../../../lichobile-themes/background/red-maze.jpg')
+      background-image url('../../../../lichobile-themes/background/red-maze.jpg')
       @media only screen and (orientation: portrait)
-        background-position initial
+        background-position right center
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
@@ -66,13 +66,16 @@
   &.wood
     > main:before
       background-position initial
-      // background-image url('../../../../lichobile-themes/background/wood.jpg')
+      background-image url('../../../../lichobile-themes/background/wood.jpg')
+    .main_header.board .chip, .chip
+      color rgba(#1c0a07, 0.9)
+      border-color rgba(#1c0a07, 0.9)
   // &.shapes
   //   > main:before
   //     background-image url('../../images/bg/shapes.jpg')
-  // &.earth
-  //   > main:before
-  //     background-image url('../../images/bg/earth.jpg')
+  &.earth
+    > main:before
+      background-image url('../../images/bg/earth.jpg')
 
   main, .main_header, .action_bar_button, .antagonistUser
     color textTransp
@@ -81,8 +84,12 @@
   .back_button > button.active, .tab:active, .tab.active
     background-color transpWhite01
 
+  .action_bar_button
+    &.glow
+      animation answer_glow_transp 5s infinite
+
   .main_header, .fatButton, .homeMoreButton > button, .tabs,
-  .mini_board > .vsbloc, .select_input, .clock
+  .mini_board > .vsbloc, .select_input, .clock, .main_footer
     background transpBlack
 
   .threadWrapper > .responseWrapper textarea, .composeInput
@@ -103,7 +110,7 @@
       background-color transpWhite02
 
   .items_list_block
-    background transpBlack2
+    background transpBlack3
     &.noPadding
       > .list_item.nav:after
         right 5px

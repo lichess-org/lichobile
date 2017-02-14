@@ -261,8 +261,12 @@ h3.fullname
   .empty
     display none
 
-.hideVariantPerfCanvas
-  display none
+.variantPerf-graph
+  margin-bottom 0.5em
+  padding 5px
+  height 150px
+  @media only screen and (orientation landscape)
+    height 'calc(100vh - %s - 50px)' % headerHeight
 
 table.variantPerf
   width 100%
@@ -334,15 +338,22 @@ td.variantPerfMemo
 
 .view-container.transp
   .userGame
-    background transpWhite01
+    background rgba(0,0,0,0.1)
     &.odd
-      background transpWhite015
+      background transpWhite01
   .userGame-meta
     opacity 1
 
+  .variantPerfBody, #allRanking
+    background-color transpBlack01
+
   #userProfileRatings
-    background transpBlack
+    background transpBlack2
     margin 10px 0
     padding-left 10px
     padding-right 10px
+
+  .variantPerf-graph
+    background-color transpBlack
+    width 100%
 

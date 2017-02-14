@@ -1,5 +1,4 @@
 var socketInstance;
-var currentUrl;
 
 var strongSocketDefaults = {
   params: {

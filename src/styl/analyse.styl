@@ -608,9 +608,20 @@ line
 
 .view-container.transp
   .analyse-replay
-    background transpWhite01
+    background-color transpWhite01
     padding-right 0
     margin-right 5px
+
+  eval
+    color rgba(textTransp, 0.7)
+
+  move.current
+    color orangeDark
+    > eval
+      color rgba(orangeDark, 70%)
+
+  .analyse-game
+    background transpBlack02
 
   .analyse-cevalBox, .analyse-infosBox
     background transpBlack3
@@ -631,10 +642,8 @@ line
   turn > index
     background transpBlack3
 
-  .explorer-data
-    background rgba(0,0,0,0.2)
-
   .explorerTable
+    background rgba(0,0,0,0.2)
     tr
       background transpWhite01
       &:nth-child(even)

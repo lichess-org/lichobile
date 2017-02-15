@@ -106,32 +106,34 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
         <div className="userGame-infos">
           <div className="userGame-versus">
             <span className="variant-icon" data-icon={icon} />
-          <div className="game-result">
-        <div className="userGame-players">
-          {renderPlayer(g.players, 'white')}
-          <div className="swords" data-icon="U" />
-          {renderPlayer(g.players, 'black')}
+            <div className="game-result">
+              <div className="userGame-players">
+                {renderPlayer(g.players, 'white')}
+                <div className="swords" data-icon="U" />
+                {renderPlayer(g.players, 'black')}
+              </div>
+              <div className={helper.classSet({
+                'userGame-status': true,
+                win: userColor === g.winner,
+                loose: g.winner && userColor !== g.winner
+              })}>
+                {status}
+              </div>
+            </div>
           </div>
-          <div className={helper.classSet({
-            'userGame-status': true,
-            win: userColor === g.winner,
-            loose: g.winner && userColor !== g.winner
-          })}>{status}</div>
-          </div>
-        </div>
-        <div className="userGame-meta">
-          <p className="game-infos">
-          {g.date} • {title}
-          </p>
-          {g.opening ?
-            <p className="opening">{g.opening.name}</p> : null
-          }
-          {g.analysed ?
-            <p className="analysis">
-            <span className="fa fa-bar-chart" />
-            Computer analysis available
-            </p> : null
-          }
+          <div className="userGame-meta">
+            <p className="game-infos">
+            {g.date} • {title}
+            </p>
+            {g.opening ?
+              <p className="opening">{g.opening.name}</p> : null
+            }
+            {g.analysed ?
+              <p className="analysis">
+              <span className="fa fa-bar-chart" />
+              Computer analysis available
+              </p> : null
+            }
           </div>
         </div>
         { session.isConnected() ?

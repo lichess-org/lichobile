@@ -1,3 +1,4 @@
+
 export function getFiles(prefix: string): Promise<FileEntry[]> {
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
@@ -8,14 +9,14 @@ export function getFiles(prefix: string): Promise<FileEntry[]> {
   })
 }
 
-export function getLocalFileOrDowload(remoteFileUri: string, fileName: string, prefix: string): Promise<FileEntry> {
+export function getLocalFileOrDowload(remoteFileUri: string, fileName: string, prefix: string, onProgress?: (e: ProgressEvent) => void): Promise<FileEntry> {
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
       fs.root.getFile(prefix + fileName, null, (fe) => {
         resolve(fe)
       }, (err: FileError) => {
         if (err.code === FileError.NOT_FOUND_ERR) {
-          syncRemoteFile(fs, remoteFileUri, fileName, prefix)
+          syncRemoteFile(fs, remoteFileUri, fileName, prefix, onProgress)
           .then(resolve)
           .catch(reject)
         } else {
@@ -30,13 +31,13 @@ export function isFileTransfertError(error: FileError | FileTransferError): erro
   return (error as FileTransferError).source !== undefined
 }
 
-function syncRemoteFile(fs: FileSystem, remoteFileUri: string, fileName: string, prefix: string): Promise<FileEntry> {
+function syncRemoteFile(fs: FileSystem, remoteFileUri: string, fileName: string, prefix: string, onProgress?: (e: ProgressEvent) => void): Promise<FileEntry> {
   return new Promise((resolve, reject) => {
     fs.root.getFile(
       prefix + fileName,
       { create: true, exclusive: false },
       (fileEntry) =>
-        download(fileEntry, remoteFileUri)
+        download(fileEntry, remoteFileUri, onProgress)
         .then(resolve)
         .catch(err => {
           // a zero lenght file is created while trying to download and save
@@ -48,9 +49,10 @@ function syncRemoteFile(fs: FileSystem, remoteFileUri: string, fileName: string,
   })
 }
 
-function download(fileEntry: FileEntry, uri: string): Promise<FileEntry> {
+function download(fileEntry: FileEntry, uri: string, onProgress?: (e: ProgressEvent) => void): Promise<FileEntry> {
   return new Promise((resolve, reject) => {
     const fileTransfer = new FileTransfer()
+    if (onProgress) fileTransfer.onprogress = onProgress
     const fileURL = fileEntry.toURL()
     fileTransfer.download(uri, fileURL, resolve, reject)
   })

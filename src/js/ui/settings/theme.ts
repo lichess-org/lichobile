@@ -8,15 +8,46 @@ import * as helper from '../helper';
 import * as h from 'mithril/hyperscript';
 import { loadImage, handleError } from '../../bgtheme'
 
+interface Progress {
+  loaded: number
+  total: number
+}
+
 interface State {
   loading: boolean
+  progress: Progress | null
+  onProgress: (e: ProgressEvent) => void
+  stopLoading: () => void
 }
+
+let timeoutId: number
 
 const ThemePrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
     this.loading = false
+    this.progress = null
+    this.onProgress = (e: ProgressEvent) => {
+      if (e.lengthComputable) {
+        this.progress = e
+        redraw()
+      }
+    }
+    this.stopLoading = () => {
+      if (this.progress) {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          this.loading = false
+          this.progress = null
+          redraw()
+        }, 1000)
+      } else {
+        this.loading = false
+        this.progress = null
+        redraw()
+      }
+    }
   },
 
   view() {
@@ -34,12 +65,13 @@ function renderBody(ctrl: State) {
       className: ctrl.loading ? 'loading' : ''
     }, [
       h('ul', list.map((t) => {
+        const selected = settings.general.theme.background() === t.key
         return h('li.list_item', [
           formWidgets.renderRadio(
             t.name,
             'bg_theme',
             t.key,
-            settings.general.theme.background() === t.key,
+            selected,
             e => {
               const val = (e.target as HTMLInputElement).value
               const prevTheme = settings.general.theme.background()
@@ -49,25 +81,36 @@ function renderBody(ctrl: State) {
                 redraw();
               } else {
                 ctrl.loading = true
-                loadImage(val + '.' + t.ext)
+                loadImage(val + '.' + t.ext, ctrl.onProgress)
                 .then(() => {
                   layout.onBackgroundChange(val);
-                  ctrl.loading = false
-                  redraw()
+                  ctrl.stopLoading()
                 })
                 .catch((err) => {
                   settings.general.theme.background(prevTheme)
-                  ctrl.loading = false
-                  redraw()
+                  ctrl.stopLoading()
                   handleError(err)
                 })
                 redraw()
               }
             },
             ctrl.loading
-          )
+          ),
+          selected && ctrl.progress ? h('div.theme-progressBarContainer', [
+            h('div.theme-progressBar', { style: { width: progressPercent(ctrl.progress) + '%' }}, progressAmount(ctrl.progress))
+          ]) : null
         ]);
       }))
     ])
   ];
+}
+
+function progressAmount(p: Progress) {
+  const loaded = (p.loaded / 1000).toFixed(2)
+  const total = (p.total / 1000).toFixed(2)
+  return `${loaded}k/${total}k`
+}
+
+function progressPercent(p: Progress) {
+  return (p.loaded / p.total) * 100
 }

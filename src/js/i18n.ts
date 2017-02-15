@@ -31,7 +31,7 @@ const untranslated: {[key: string]: string} = {
   bgThemeBlueMaze: 'Blue maze',
   bgThemeGreenMaze: 'Green maze',
   bgThemeRedMaze: 'Red maze',
-  bgThemeGreen: 'Green',
+  bgThemeGreenCheckerboard: 'Checkerboard',
   bgThemeCrackedEarth: 'Earth',
   bgThemeVioletSpace: 'Space',
   playerisInvitingYou: '%s is inviting you',

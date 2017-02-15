@@ -229,7 +229,7 @@ export function progress(p: number) {
   if (p === 0) return null;
   return h('span', {
     className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
-    'data-icon': p > 0 ? 'N' : 'h'
+    'data-icon': p > 0 ? 'N' : 'M'
   }, String(Math.abs(p)));
 }
 

@@ -5,8 +5,8 @@ const imagePrefix = 'bg-'
 let styleEl: HTMLStyleElement
 
 // either download it from server of get it from filesystem
-export function loadImage(fileName: string): Promise<void> {
-  return filesystem.getLocalFileOrDowload(baseUrl + '/' + fileName, fileName, imagePrefix)
+export function loadImage(fileName: string, onProgress: (e: ProgressEvent) => void): Promise<void> {
+  return filesystem.getLocalFileOrDowload(baseUrl + '/' + fileName, fileName, imagePrefix, onProgress)
   .then(createStylesheetRule)
 }
 

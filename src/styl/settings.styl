@@ -39,10 +39,23 @@
     .list_item input.radio:checked + label
       opacity 1
     .list_item input.radio:checked + label:after
-      content: "\f1ce";
+      content: '\f1ce'
       animation: fa-spin 2s infinite linear;
-      font-size 1.5em
-      vertical-align middle
+  .theme-progressBarContainer
+    position absolute
+    top 15px
+    left 170px
+    width calc(100vw - 170px - 15px)
+    height 20px
+    border 1px solid transpWhite02
+    > .theme-progressBar
+      transition width ease-out 500ms
+      font-size 11px
+      line-height 18px
+      padding-left 3px
+      height 100%
+      background rgba(gold, 0.6)
+      color #d5d5d5
 
 .settingsChoicesInline
   display flex

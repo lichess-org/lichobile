@@ -17,27 +17,28 @@
   &.grey
     > main:before
       background-position initial
-      // background-image url('../../images/bg/grey.jpg')
+      background-image url('../../../../lichobile-themes/background/grey.jpg')
   &.space
     .main_header.board .chip, .chip
       color rgba(#120100, 0.9)
       border-color rgba(#120100, 0.9)
-    // > main:before
-    //   background-image url('../../images/bg/space.jpg')
-  &.green
     > main:before
-      @media only screen and (orientation: portrait)
+      background-image url('../../../../lichobile-themes/background/space.jpg')
+  &.checkerboard
+    > main:before
+      background-image url('../../../../lichobile-themes/background/checkerboard.png')
+      @media only screen and (orientation: landscape)
         transform rotate(90deg)
-        width 100vh
-      background-image url('../../../../lichobile-themes/background/green.png')
+        height 100vw
     .main_header.board .chip, .chip
       color rgba(#0a160b, 0.9)
       border-color rgba(#0a160b, 0.9)
   &.blue-maze
     > main:before
       background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
+      background-position bottom
       @media only screen and (orientation: portrait)
-        background-position right center
+        background-position right top
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
@@ -46,8 +47,9 @@
   &.green-maze
     > main:before
       background-image url('../../../../lichobile-themes/background/green-maze.jpg')
+      background-position bottom
       @media only screen and (orientation: portrait)
-        background-position right center
+        background-position right top
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
@@ -56,8 +58,9 @@
   &.red-maze
     > main:before
       background-image url('../../../../lichobile-themes/background/red-maze.jpg')
+      background-position bottom
       @media only screen and (orientation: portrait)
-        background-position right center
+        background-position right top
         transform rotate(90deg)
         width 100vh
     .main_header.board .chip, .chip
@@ -92,17 +95,38 @@
   .mini_board > .vsbloc, .select_input, .clock, .main_footer
     background transpBlack
 
+  #free_content
+    background-color transpBlack01
+    .tabs, .select_games_filter
+      background-color rgba(0,0,0,0.45)
+
   .threadWrapper > .responseWrapper textarea, .composeInput
     border-color transpWhite02
 
+  .composeInput:focus
+    border-bottom-color rgba(255,255,255,0.8)
+  .composeTextarea:focus
+    outline-color rgba(255,255,255,0.8)
+
   .radio_list input.radio:checked + label
     background-color transpWhite02
+
+  .userGame, .progress
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+
+  .rp.up, .userGame-status.win
+    color lighten(green, 10%)
+
+  .rp.down, .userGame-status.loose
+    color lighten(red, 15%)
 
   .select_input, .fatButton
     color #ccc
 
   .fatButton
     box-shadow transpShadow
+    &.active, &:active
+      background transpBlack2
 
   .list_item
     border-bottom-color transpWhite01
@@ -118,8 +142,10 @@
       padding-right 10px
       padding-left 10px
 
-  .popup_content .select_input
-    background selectBg
+  .popup_content
+    .select_input
+      background selectBg
+      color textDarkGray
 
   .main_header.board .chip, .chip
     color rgba(black, 0.9)

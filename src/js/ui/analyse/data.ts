@@ -13,7 +13,7 @@ const emptyPocket = {
 
 export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisData {
   const player = playerFromFen(fen);
-  const ply = plyFromFen(fen);
+  const ply = plyFromFen(fen) || player === "white" ? 0 : 1;
   const variant = getLichessVariant(variantKey);
 
   const initialFen = fen || getInitialFen(variantKey);

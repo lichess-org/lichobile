@@ -347,7 +347,8 @@ export default {
     increment: localstorageprop('settings.tournament.increment', '0'),
     duration: localstorageprop('settings.tournament.duration', '45'),
     timeToStart: localstorageprop('settings.tournament.timeToStart', '15'),
-    position: localstorageprop('settings.tournament.timeToStart', '15')
+    position: localstorageprop('settings.tournament.timeToStart', '15'),
+    private: localstorageprop('settings.tournament.private', false)
   },
 
   tv: {

@@ -273,7 +273,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
         <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
         {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
         {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
-        <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
+        <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon='7'
           oncreate={helper.ontap(ctrl.me)}
         >
@@ -295,7 +295,7 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
 function renderLeaderboardItem (playerInfoCtrl: PlayerInfoState, userName: string, player: StandingPlayer) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' me' : '')} >
+    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >
       <td className='tournamentPlayer'>
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>
@@ -322,7 +322,7 @@ function tournamentFeaturedGame(ctrl: TournamentState) {
 
   return (
     <div className='tournamentGames'>
-      <p className='tournamentTitle'>Featured Game</p>
+      <p className='tournamentTitle tournamentFeatured'>Featured Game</p>
       <div key={featured.id} className='tournamentMiniBoard'>
         {h(miniBoard, {
           bounds: miniBoardSize(isPortrait),

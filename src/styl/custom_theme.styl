@@ -37,10 +37,6 @@
     > main:before
       background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
       background-position bottom
-      @media only screen and (orientation: portrait)
-        background-position right top
-        transform rotate(90deg)
-        width 100vh
     .main_header.board .chip, .chip
       color rgba(#041320, 0.9)
       border-color rgba(#041320, 0.9)
@@ -48,10 +44,6 @@
     > main:before
       background-image url('../../../../lichobile-themes/background/green-maze.jpg')
       background-position bottom
-      @media only screen and (orientation: portrait)
-        background-position right top
-        transform rotate(90deg)
-        width 100vh
     .main_header.board .chip, .chip
       color rgba(#0a160b, 0.9)
       border-color rgba(#0a160b, 0.9)
@@ -59,10 +51,6 @@
     > main:before
       background-image url('../../../../lichobile-themes/background/red-maze.jpg')
       background-position bottom
-      @media only screen and (orientation: portrait)
-        background-position right top
-        transform rotate(90deg)
-        width 100vh
     .main_header.board .chip, .chip
       color rgba(#170407, 0.9)
       border-color rgba(#170407, 0.9)
@@ -73,9 +61,9 @@
     .main_header.board .chip, .chip
       color rgba(#1c0a07, 0.9)
       border-color rgba(#1c0a07, 0.9)
-  // &.shapes
-  //   > main:before
-  //     background-image url('../../images/bg/shapes.jpg')
+  &.shapes
+    > main:before
+      background-image url('../../../../lichobile-themes/background/shapes.jpg')
   &.earth
     > main:before
       background-image url('../../../../lichobile-themes/background/earth.jpg')
@@ -84,7 +72,8 @@
     color textTransp
 
   .main_header_button.active, .action_bar_button.active, .antagonistInfos.active,
-  .back_button > button.active, .tab:active, .tab.active
+  .back_button > button.active, .tab:active, .tab.active, .profilePerf.active,
+  move.active
     background-color transpWhite01
 
   .action_bar_button
@@ -100,7 +89,8 @@
     .tabs, .select_games_filter
       background-color rgba(0,0,0,0.45)
 
-  .threadWrapper > .responseWrapper textarea, .composeInput
+  .threadWrapper > .responseWrapper textarea, .composeInput, .tournamentInfoTime,
+  .tournamentConditions, .navigationButton, .postWrapper, .vsbloc
     border-color transpWhite02
 
   .composeInput:focus
@@ -111,13 +101,16 @@
   .radio_list input.radio:checked + label
     background-color transpWhite02
 
-  .userGame, .progress
-    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  .userGame, .progress, .puzzleComment, .action_bar_button, .tournamentConditions,
+  .tournamentInfoTime, .tournamentTitle, .homeTitle, .patron.online
+    text-shadow 0 1px 1px rgba(0,0,0,0.5)
 
-  .rp.up, .userGame-status.win
+  .rp.up, .userGame-status.win, .puzzleComment.great, .puzzleComment.win,
+  .tournamentConditions.accepted
     color lighten(green, 10%)
 
-  .rp.down, .userGame-status.loose
+  .rp.down, .userGame-status.loose, .puzzleComment.loss, .puzzleComment.fail,
+  .tournamentConditions.rejected
     color lighten(red, 15%)
 
   .select_input, .fatButton

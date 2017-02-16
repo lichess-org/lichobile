@@ -15,38 +15,12 @@
   flex-flow row nowrap
   >.composeAction
     flex 50% 1 1
-  >.navigationButtons
+  > .navigationButtons
     flex 50% 1 1
     display flex
-    flex-flow row wrap
+    flex-flow row nowrap
     justify-content center
     align-items center
-    &.invisible
-      display none
-    >.navigationButton
-      border-radius 4px
-      text-align center
-      border-style solid
-      border-color #323232
-      border-width 1px
-      height 30px
-      line-height 20px
-      margin 0 5px
-      padding 0
-      width 40px
-      &:before
-        font-family "lichess"!important
-        font-size 1.2em
-        content attr(data-icon)
-        vertical-align middle
-      &.invisible
-        display none
-      @media only screen and (max-width 380px)
-        margin 0 1px
-        width 35px
-        line-height 16px
-        &:before
-          font-size 1em
 
 .emptyInbox
   padding-left 10px

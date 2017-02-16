@@ -201,7 +201,7 @@
     color #d0d0d0
   &.correspondence
     font-family 'Noto Sans'
-    font-size 20px
+    font-size 18px
     background-color inherit
     &.running
       color lighten(gold, 15%)
@@ -496,6 +496,12 @@
     background transpWhite05
   .clock
     color rgba(#8c8c8c, 0.6)
+    &.correspondence
+      background transparent
+      text-shadow 0 1px 1px rgba(0,0,0,0.5)
+      color rgba(#ccc, 0.8)
+      &.running
+        color #fff
     &.running
       color #fff
     &.emerg

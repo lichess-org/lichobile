@@ -41,21 +41,33 @@
     .list_item input.radio:checked + label:after
       content: '\f1ce'
       animation: fa-spin 2s infinite linear;
-  .theme-progressBarContainer
+
+.theme-progressBarContainer
+  position absolute
+  top 15px
+  left 170px
+  width calc(100vw - 170px - 15px)
+  height 20px
+  border 1px solid transpWhite02
+  font-size 11px
+  line-height 18px
+  padding-left 3px
+  color #d5d5d5
+  overflow hidden
+  > .theme-progressBar
     position absolute
-    top 15px
-    left 170px
-    width calc(100vw - 170px - 15px)
-    height 20px
-    border 1px solid transpWhite02
-    > .theme-progressBar
-      transition width ease-out 500ms
-      font-size 11px
-      line-height 18px
-      padding-left 3px
-      height 100%
-      background rgba(gold, 0.6)
-      color #d5d5d5
+    top 0
+    left 0
+    width 100%
+    height 100%
+    transition transform ease-out 500ms
+    transform translateX(-100%)
+    background rgba(gold, 0.5)
+  > .theme-progressInner
+    position absolute
+    top 0
+    left 3px
+    z-index 2
 
 .settingsChoicesInline
   display flex

@@ -41,7 +41,7 @@ const ThemePrefScreen: Mithril.Component<{}, State> = {
           this.loading = false
           this.progress = null
           redraw()
-        }, 1000)
+        }, 1500)
       } else {
         this.loading = false
         this.progress = null
@@ -97,7 +97,8 @@ function renderBody(ctrl: State) {
             ctrl.loading
           ),
           selected && ctrl.progress ? h('div.theme-progressBarContainer', [
-            h('div.theme-progressBar', { style: { width: progressPercent(ctrl.progress) + '%' }}, progressAmount(ctrl.progress))
+            h('div.theme-progressBar', { style: { transform: `translateX(-${100 - progressPercent(ctrl.progress)}%)` }}),
+            h('div.theme-progressInner', progressAmount(ctrl.progress))
           ]) : null
         ]);
       }))

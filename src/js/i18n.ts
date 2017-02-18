@@ -27,7 +27,7 @@ const untranslated: {[key: string]: string} = {
   bgThemeLight: 'Light',
   bgThemeWood: 'Wood',
   bgThemeShapes: 'Shapes',
-  bgThemeGrey: 'Grey',
+  bgThemeAnthracite: 'Anthracite',
   bgThemeBlueMaze: 'Blue maze',
   bgThemeGreenMaze: 'Green maze',
   bgThemeRedMaze: 'Red maze',

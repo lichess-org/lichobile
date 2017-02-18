@@ -57,7 +57,7 @@ export default {
         { key: 'dark', name: 'bgThemeDark', ext: '' },
         { key: 'light', name: 'bgThemeLight', ext: '' },
         { key: 'bgshapes', name: 'bgThemeShapes', ext: 'jpg' },
-        { key: 'grey', name: 'bgThemeGrey', ext: 'jpg' },
+        { key: 'anthracite', name: 'bgThemeAnthracite', ext: 'jpg' },
         { key: 'blue-maze', name: 'bgThemeBlueMaze', ext: 'jpg' },
         { key: 'red-maze', name: 'bgThemeRedMaze', ext: 'jpg' },
         { key: 'checkerboard', name: 'bgThemeGreenCheckerboard', ext: 'png' },

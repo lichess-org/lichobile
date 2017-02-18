@@ -1,72 +1,56 @@
 .view-container.transp
   > main
     background-color transparent
-    &:before
-      content: ' '
-      position: fixed
-      width: 100%
-      height: 100%
-      top: 0
-      left: 0
-      right 0
-      bottom 0
-      background-position: center center
-      background-repeat: no-repeat
-      background-size cover
-      z-index: -1
+    background-position center center
+    background-repeat no-repeat
+    background-size cover
   &.grey
-    > main:before
+    > main
       background-position initial
       background-image url('../../../../lichobile-themes/background/grey.jpg')
   &.space
     .main_header.board .chip, .chip
       color rgba(#120100, 0.9)
       border-color rgba(#120100, 0.9)
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/space.jpg')
   &.checkerboard
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/checkerboard.png')
-      @media only screen and (orientation: landscape)
-        transform rotate(90deg)
-        height 100vw
     .main_header.board .chip, .chip
       color rgba(#0a160b, 0.9)
       border-color rgba(#0a160b, 0.9)
   &.blue-maze
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
       background-position bottom
     .main_header.board .chip, .chip
       color rgba(#041320, 0.9)
       border-color rgba(#041320, 0.9)
   &.green-maze
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/green-maze.jpg')
       background-position bottom
     .main_header.board .chip, .chip
       color rgba(#0a160b, 0.9)
       border-color rgba(#0a160b, 0.9)
   &.red-maze
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/red-maze.jpg')
       background-position bottom
     .main_header.board .chip, .chip
       color rgba(#170407, 0.9)
       border-color rgba(#170407, 0.9)
   &.wood
-    > main:before
+    > main
       background-position initial
       background-image url('../../../../lichobile-themes/background/wood.jpg')
     .main_header.board .chip, .chip
       color rgba(#1c0a07, 0.9)
       border-color rgba(#1c0a07, 0.9)
   &.shapes
-    > main:before
+    > main
       background-image url('../../../../lichobile-themes/background/shapes.jpg')
-  &.earth
-    > main:before
-      background-image url('../../../../lichobile-themes/background/earth.jpg')
 
   main, .main_header, .action_bar_button, .antagonistUser
     color textTransp

@@ -33,7 +33,7 @@ function createStylesheetRule(entry: FileEntry) {
   const sheet = <CSSStyleSheet>styleEl.sheet
   const theme = entry.name.replace(/^bg-([a-z-_]+).\w+$/, '$1')
   sheet.insertRule(
-    `.view-container.transp.${theme} > main::before { background-image: url(${entry.toURL()}) }`,
+    `.view-container.transp.${theme} > main { background-image: url(${entry.toURL()}) }`,
     sheet.cssRules.length
   );
 }

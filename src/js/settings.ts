@@ -62,7 +62,6 @@ export default {
         { key: 'red-maze', name: 'bgThemeRedMaze', ext: 'jpg' },
         { key: 'checkerboard', name: 'bgThemeGreenCheckerboard', ext: 'png' },
         { key: 'wood', name: 'bgThemeWood', ext: 'jpg' },
-        { key: 'earth', name: 'bgThemeCrackedEarth', ext: 'jpg'},
         { key: 'space', name: 'bgThemeVioletSpace', ext: 'jpg' },
       ],
       background: localstorageprop('settings.bgTheme', 'dark'),

@@ -24,17 +24,18 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     more
   };
 
-  const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order'];
+  const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed'];
 
   function search(form: HTMLFormElement) {
     const elements: HTMLCollection = form.elements as HTMLCollection;
     const queryData = fields.reduce((acc, el) => buildQuery(elements, acc, el), {}) as SearchQuery;
     lastQuery(queryData);
+    console.log(queryData);
     xhr.search(queryData)
     .then((data: SearchResult) => {
+      console.log(data);
       result(prepareData(data));
       games(result().paginator.currentPageResults);
-      console.log(data);
       redraw();
     })
     .catch(handleXhrError);
@@ -47,7 +48,8 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
   function more() {
     const queryData = lastQuery();
-    queryData.p = result().paginator.nextPage;
+    queryData.page = result().paginator.nextPage;
+    console.log(queryData);
     xhr.search(queryData)
     .then((data: SearchResult) => {
       result(prepareData(data));

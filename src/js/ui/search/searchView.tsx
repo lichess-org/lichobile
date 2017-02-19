@@ -48,6 +48,8 @@ function renderSearchForm(ctrl: SearchState) {
       <form id="advancedSearchForm"
       onsubmit={function(e: Event) {
         e.preventDefault();
+        const analysed = document.getElementById('analysed') as HTMLInputElement;
+        analysed.value = analysed.checked ? '1' : '';
         return ctrl.search(e.target as HTMLFormElement);
       }}>
           <div className="game_search_row">
@@ -78,7 +80,7 @@ function renderSearchForm(ctrl: SearchState) {
           <div className="game_search_row">
             <label>Analysis?: </label>
             <div className="game_search_input double_wide">
-              <input type="checkbox" id="analysed" name="analysed" value="1" />
+              <input type="checkbox" id="analysed" name="analysed" value="" />
             </div>
           </div>
         <button key="search" className="newGameButton" type="submit">
@@ -91,8 +93,7 @@ function renderSearchForm(ctrl: SearchState) {
           {ctrl.games().map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
           {ctrl.result().paginator.nextPage ?
             <button key="more" className="newGameButton" oncreate={helper.ontap(() => ctrl.more())}>
-              <span className="fa fa-search" />
-              {i18n('more')}
+              <span className="fa fa-arrow-down" />
             </button>
             : null}
         </div>

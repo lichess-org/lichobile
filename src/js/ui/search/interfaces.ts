@@ -46,7 +46,7 @@ export interface SearchQuery {
   dateMax: string
   'sort.field': string
   'sort.order': string
-  p?: number
+  page?: number
 }
 
 export interface SearchResult {

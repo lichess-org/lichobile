@@ -19,7 +19,7 @@ import layout from '../layout';
 export interface Attrs {
   id: string
   source: Source
-  color: Color
+  color?: Color
   fen?: string
   variant?: VariantKey
   ply?: number

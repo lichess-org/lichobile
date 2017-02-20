@@ -1,4 +1,4 @@
-import * as h from '../helper';
+import * as helper from '../helper';
 import router from '../../router';
 import {header } from '../shared/common';
 import layout from '../layout';
@@ -35,7 +35,7 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   const state = isEnabled ? 'enabled' : 'disabled';
   return (
     <button className={`navigationButton ${state}`}
-      data-icon={icon} oncreate={h.ontap(action)} />
+      data-icon={icon} oncreate={helper.ontap(action)} />
   );
 }
 
@@ -43,7 +43,7 @@ function renderInboxItem(thread: Thread) {
   return (
     <tr className={'list_item' + (thread.isUnread ? ' unread' : '')}
     key={thread.id}
-    oncreate={h.ontapY(() => router.set('/inbox/' + thread.id))}>
+    oncreate={helper.ontapY(() => router.set('/inbox/' + thread.id))}>
       <td className="threadAuthor"> { thread.author } </td>
       <td className="threadName"> { thread.name } </td>
       <td className="threadDate"> { formatMessageTime(thread.updatedAt) } </td>
@@ -80,7 +80,7 @@ function renderFooter(ctrl: InboxState) {
         {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
       </div>
       <div className="actions_bar composeAction">
-        <button key="compose" className="action_bar_button" oncreate={h.ontapY(() => router.set('/inbox/new'))}>
+        <button key="compose" className="action_bar_button" oncreate={helper.ontapY(() => router.set('/inbox/new'))}>
           <span className="fa fa-pencil" />
           {i18n('composeMessage')}
         </button>

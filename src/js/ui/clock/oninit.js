@@ -1,7 +1,7 @@
 import router from '../../router';
 import settings from '../../settings';
 import * as helper from '../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import clockSettings from './clockSettings';
 import clockSet from './clockSet';
 import * as stream from 'mithril/stream';

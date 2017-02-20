@@ -6,7 +6,7 @@ import * as helper from '../helper';
 import playMachineForm from '../playMachineForm';
 import challengeForm from '../challengeForm';
 import { hasNetwork } from '../../utils';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
 
 export interface Controller {
@@ -46,24 +46,24 @@ export default {
   view(ctrl: Controller) {
     return popupWidget(
       'continueFromHere',
-      () => m('h2', i18n('continueFromHere')),
+      () => h('h2', i18n('continueFromHere')),
       () => {
         return [
-          hasNetwork() ? m('p.sep', i18n('playOnline')) : null,
-          hasNetwork() ? m('button', {
+          hasNetwork() ? h('p.sep', i18n('playOnline')) : null,
+          hasNetwork() ? h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
               playMachineForm.openAIFromPosition(ctrl.fen());
             })
           }, i18n('playWithTheMachine')) : null,
-          hasNetwork() ? m('button', {
+          hasNetwork() ? h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
               challengeForm.openFromPosition(ctrl.fen());
             })
           }, i18n('playWithAFriend')) : null,
-          m('p.sep', i18n('playOffline')),
-          m('button', {
+          h('p.sep', i18n('playOffline')),
+          h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
@@ -73,7 +73,7 @@ export default {
               }
             })
           }, i18n('playOfflineComputer')),
-          m('button', {
+          h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
               if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {

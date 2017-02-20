@@ -1,4 +1,9 @@
-import { get, set, pick, mapValues, mapKeys, throttle } from 'lodash';
+import * as get from 'lodash/get'
+import * as set from 'lodash/set'
+import * as pick from 'lodash/pick'
+import * as mapValues from 'lodash/mapValues'
+import * as mapKeys from 'lodash/mapKeys'
+import * as throttle from 'lodash/throttle'
 import redraw from './utils/redraw';
 import { fetchJSON, fetchText } from './http';
 import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
@@ -6,6 +11,7 @@ import i18n from './i18n';
 import settings from './settings';
 import friendsApi from './lichess/friends';
 import challengesApi from './lichess/challenges';
+import { SettingsProp } from './settings'
 
 import { LobbyData, NowPlayingGame } from './lichess/interfaces';
 
@@ -127,23 +133,23 @@ function savePreferences() {
   }, true);
 }
 
-function lichessBackedProp(path: string, prefRequest: () => Promise<any>) {
+function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>): SettingsProp<T> {
   return function() {
     if (arguments.length) {
-      let oldPref: any;
+      let oldPref: T;
       if (session) {
-        oldPref = get(session, path);
+        oldPref = <T>get(session, path);
         set(session, path, arguments[0]);
       }
       prefRequest()
-      .catch((err: any) => {
+      .catch((err) => {
         if (session) set(session, path, oldPref);
         handleXhrError(err);
       });
     }
 
-    return session && get(session, path);
-  };
+    return session && <T>get(session, path)
+  }
 }
 
 function isSession(data: Session | LobbyData): data is Session {

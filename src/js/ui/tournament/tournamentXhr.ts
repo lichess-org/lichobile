@@ -17,8 +17,12 @@ export function reload(id: string, page: number): Promise<Tournament> {
   });
 }
 
-export function join(id: string): Promise<{}> {
-  return fetchJSON('/tournament/' + id + '/join', {method: 'POST'});
+export function join(id: string, password: string): Promise<{}> {
+  return fetchJSON('/tournament/' + id + '/join',
+  {
+    method: 'POST',
+    body: password ? JSON.stringify({p: password}) : null
+  });
 }
 
 export function withdraw(id: string): Promise<{}> {
@@ -29,7 +33,7 @@ export function playerInfo(tournamentId: string, playerId: string): Promise<Play
   return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
 }
 
-export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string): Promise<TournamentCreateResponse> {
+export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string, isPrivate: string, password: string): Promise<TournamentCreateResponse> {
   return fetchJSON('/tournament/new', {
     method: 'POST',
     body: JSON.stringify({
@@ -39,7 +43,9 @@ export function create(variant: string, position: string, mode: string, clockTim
       clockTime,
       clockIncrement,
       minutes,
-      waitMinutes
+      waitMinutes,
+      private: isPrivate,
+      password
     })
   }, true);
 }

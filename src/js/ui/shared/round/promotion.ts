@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import redraw from '../../../utils/redraw';
 import settings from '../../../settings';
 import * as helper from '../../helper';
@@ -44,13 +44,13 @@ export default {
     const pieces = ['queen', 'knight', 'rook', 'bishop'];
     if (ctrl.data.game.variant.key === 'antichess') pieces.push('king');
 
-    return m('div.overlay.open', {
+    return h('div.overlay.open', {
       oncreate: helper.ontap(cancel.bind(undefined, ctrl))
-    }, [m('div#promotion_choice', {
+    }, [h('div#promotion_choice', {
       className: settings.general.theme.piece(),
       style: { top: (helper.viewportDim().vh - 100) / 2 + 'px' }
     }, pieces.map(function(role) {
-      return m('piece.' + role + '.' + ctrl.data.player.color, {
+      return h('piece.' + role + '.' + ctrl.data.player.color, {
         oncreate: helper.ontap(finish.bind(undefined, ctrl, role))
       });
     }))]);

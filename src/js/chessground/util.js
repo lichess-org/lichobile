@@ -85,6 +85,25 @@ function distance(pos1, pos2) {
   return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2));
 }
 
+function transform(data, pieceColor, translateProp) {
+  if (data.otb) {
+    const o = data.orientation;
+    const m = data.otbMode;
+    const t = data.turnColor;
+    if ((m === 'facing' && o === 'white' && pieceColor === 'black') ||
+      (m === 'facing' && o === 'black' && pieceColor === 'white') ||
+      (m === 'flip' && o === 'white' && t === 'black') ||
+      (m === 'flip' && o === 'black' && t === 'white')
+    ) {
+      return translateProp + ' rotate(180deg)';
+    } else {
+      return translateProp;
+    }
+  }
+
+  return translateProp;
+}
+
 function translate(pos) {
   return 'translate(' + pos[0] + 'px,' + pos[1] + 'px)';
 }
@@ -130,6 +149,7 @@ export default {
   invertKey: invertKey,
   classSet: classSet,
   opposite: opposite,
+  transform,
   translate: translate,
   translate3d: translate3d,
   contains2: contains2,

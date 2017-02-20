@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { defs, renderShape } from './svg';
 import { brushes } from './brushes';
 
@@ -16,7 +16,7 @@ export default function BoardBrush(bounds: ClientRect, orientation: Color, shape
   if (!bounds) return null;
   if (bounds.width !== bounds.height) return null;
 
-  return m('svg', [
+  return h('svg', [
     usedBrushes,
     shapes.map(renderShape(orientation, false, brushes, bounds, pieceTheme))
   ])

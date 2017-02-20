@@ -11,6 +11,8 @@ export default function(cfg) {
     selected: null, // square currently selected "a1" | null
     coordinates: true, // include coords attributes
     symmetricCoordinates: false, // include symmetric coords attributes for otb
+    otb: false, // is this an otb game?
+    otbMode: 'facing', // 'facing' | 'flip'
     batchRAF: requestAnimationFrame.bind(window), // function to batch raf calls (use rAF by default)
     render: null, // function that rerenders the board
     renderRAF: null, // function that rerenders the board using requestAnimationFrame

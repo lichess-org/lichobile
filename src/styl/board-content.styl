@@ -5,8 +5,6 @@
   @media only screen and (orientation: landscape)
     display flex
     flex-flow row nowrap
-  @media only screen and (max-height 450px) and (orientation landscape)
-    height calc(100vh - 45px)
 
 .table
   flex 1 1 auto
@@ -94,7 +92,7 @@
   padding 0
   outline none
   border none
-  color: gold
+  color: buttonGray
   height footerHeight
   width 25%
   &:last-child
@@ -102,20 +100,20 @@
   &.disabled
     &:before
       opacity 1
-    color rgba(gold, 0.4)
+    color rgba(buttonGray, 0.4)
   &.active
-    background lighten(bgdark, 8%)
-    color lighten(gold, 40%)
+    background darkBlue
+    color #ccc
   &.empty::before
     visibility hidden
   &.glow
     animation answer_glow 5s infinite
   &.highlight
-    color #000
-    background gold
+    color #fff
+    background blue
   &:before
     font-size 18px
-    line-height 45px
+    line-height footerHeight
   &[data-icon='2']
     transform rotate(-90deg)
   @media only screen and (max-height 400px) and (orientation landscape)

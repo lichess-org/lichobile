@@ -1,6 +1,5 @@
-import * as m from 'mithril';
 import userPerfs from '../../lichess/perfs';
-import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
+import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common';
 import { getLanguageNativeName } from '../../utils/langs';
 import * as xhr from '../../xhr';
 import perf from '../shared/perf';
@@ -17,13 +16,13 @@ export function header(user: UserFullProfile, ctrl: UserCtrl) {
     <span className={'userStatus patron ' + status} data-icon="" /> :
     <span className={'fa fa-circle userStatus ' + status} />
 
-  const title = m('div', [
+  const title = [
     icon,
-    (user.title ? `${user.title} ` : '') + user.username
-  ])
+    <span>{(user.title ? `${user.title} ` : '') + user.username}</span>
+  ]
 
   const backButton = !ctrl.isMe() ? renderBackbutton(title) : null;
-  return headerWidget(backButton ? null : title, backButton);
+  return dropShadowHeader(backButton ? null : title, backButton);
 }
 
 export function profile(user: UserFullProfile, ctrl: UserCtrl) {
@@ -147,7 +146,7 @@ function renderRatings(user: UserFullProfile) {
 function renderActions(ctrl: UserCtrl) {
   const user = ctrl.user()
   return (
-    <section id="userProfileActions" class="noPadding">
+    <section id="userProfileActions" className="items_list_block noPadding">
       <div className="list_item nav"
         oncreate={helper.ontapY(ctrl.goToGames)}
         key="view_all_games"

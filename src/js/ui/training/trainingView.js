@@ -7,7 +7,7 @@ import Board from '../shared/Board';
 import { view as renderPromotion } from '../shared/offlineRound/promotion';
 import * as helper from '../helper';
 import menu, { renderUserInfos, renderSigninBox } from './menu';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -32,21 +32,21 @@ function renderContent(ctrl) {
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
   const key = isPortrait ? 'o-portrait' : 'o-landscape';
 
-  const board = m(Board, {
+  const board = h(Board, {
     data: ctrl.data,
     bounds,
     chessgroundCtrl: ctrl.chessground
   });
 
   if (isPortrait) {
-    return m.fragment({ key }, [
+    return h.fragment({ key }, [
       ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl),
       board,
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
     ]);
   } else {
-    return m.fragment({ key }, [
+    return h.fragment({ key }, [
       board,
       <section className="table">
         <section className="trainingTable">
@@ -114,15 +114,15 @@ function renderViewTable(ctrl) {
 
 function renderActionsBar(ctrl) {
   const vdom = [
-    m('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
+    h('button.action_bar_button.training_action.fa.fa-ellipsis-h', {
       key: 'puzzleMenu',
       oncreate: helper.ontap(ctrl.menu.open)
     })
   ];
-  return m('section#training_actions.actions_bar', vdom.concat(
+  return h('section#training_actions.actions_bar', vdom.concat(
     ctrl.data.mode === 'view' ?
       renderViewControls(ctrl) :
-      m('button.action_bar_button.training_action[data-icon=b]', {
+      h('button.action_bar_button.training_action[data-icon=b]', {
         key: 'giveUpPuzzle',
         oncreate: helper.ontap(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
@@ -133,30 +133,30 @@ function renderViewControls(ctrl) {
   const history = ctrl.data.replay.history;
   const step = ctrl.data.replay.step;
   return [
-    m('button.action_bar_button.training_action[data-icon=G]', {
+    h('button.action_bar_button.training_action[data-icon=G]', {
       key: 'continueTraining',
       oncreate: helper.ontap(ctrl.newPuzzle.bind(ctrl, true), () => window.plugins.toast.show(i18n('continueTraining'), 'short', 'bottom'))
     }),
-    m('button.action_bar_button.training_action[data-icon=P]', {
+    h('button.action_bar_button.training_action[data-icon=P]', {
       key: 'retryPuzzle',
       oncreate: helper.ontap(ctrl.retry, () => window.plugins.toast.show(i18n('retryThisPuzzle'), 'short', 'bottom'))
     }),
-    m('button.action_bar_button.training_action[data-icon=A]', {
+    h('button.action_bar_button.training_action[data-icon=A]', {
       key: 'analysePuzzle',
       oncreate: helper.ontap(ctrl.goToAnalysis, () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom'))
     }),
-    m('button.action_bar_button.training_action.fa.fa-share-alt', {
+    h('button.action_bar_button.training_action.fa.fa-share-alt', {
       key: 'sharePuzzle',
       oncreate: helper.ontap(ctrl.share, () => window.plugins.toast.show('Share this puzzle', 'short', 'bottom'))
     }),
-    m('button.action_bar_button.training_action.fa.fa-backward', {
+    h('button.action_bar_button.training_action.fa.fa-backward', {
       oncreate: helper.ontap(ctrl.jumpPrev, null, ctrl.jumpPrev),
       key: 'historyPrev',
       className: helper.classSet({
         disabled: !(step !== step - 1 && step - 1 >= 0 && step - 1 < history.length)
       })
     }),
-    m('button.action_bar_button.training_action.fa.fa-forward', {
+    h('button.action_bar_button.training_action.fa.fa-forward', {
       oncreate: helper.ontap(ctrl.jumpNext, null, ctrl.jumpNext),
       key: 'historyNext',
       className: helper.classSet({
@@ -169,19 +169,19 @@ function renderViewControls(ctrl) {
 function renderCommentary(ctrl) {
   switch (ctrl.data.comment) {
     case 'retry':
-      return m('div.puzzleComment.retry', [
-        m('h3.puzzleState', m('strong', i18n('goodMove'))),
-        m('span', i18n('butYouCanDoBetter'))
+      return h('div.puzzleComment.retry', [
+        h('h3.puzzleState', h('strong', i18n('goodMove'))),
+        h('span', i18n('butYouCanDoBetter'))
       ]);
     case 'great':
-      return m('div.puzzleComment.great', [
-        m('h3.puzzleState.withIcon[data-icon=E]', m('strong', i18n('bestMove'))),
-        m('span', i18n('keepGoing'))
+      return h('div.puzzleComment.great', [
+        h('h3.puzzleState.withIcon[data-icon=E]', h('strong', i18n('bestMove'))),
+        h('span', i18n('keepGoing'))
       ]);
     case 'fail':
-      return m('div.puzzleComment.fail', [
-        m('h3.puzzleState.withIcon[data-icon=k]', m('strong', i18n('puzzleFailed'))),
-        ctrl.data.mode === 'try' ? m('span', i18n('butYouCanKeepTrying')) : null
+      return h('div.puzzleComment.fail', [
+        h('h3.puzzleState.withIcon[data-icon=k]', h('strong', i18n('puzzleFailed'))),
+        ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
       ]);
     default:
       return ctrl.data.comment;
@@ -189,22 +189,22 @@ function renderCommentary(ctrl) {
 }
 
 function renderRatingDiff(diff) {
-  return m('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff);
+  return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff);
 }
 
 function renderWin(ctrl, attempt) {
-  return m('div.puzzleComment.win', [
-    m('h3.puzzleState.withIcon[data-icon=E]', [
-      m('strong', i18n('victory')),
+  return h('div.puzzleComment.win', [
+    h('h3.puzzleState.withIcon[data-icon=E]', [
+      h('strong', i18n('victory')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ])
   ]);
 }
 
 function renderLoss(ctrl, attempt) {
-  return m('div.puzzleComment.loss',
-    m('h3.puzzleState.withIcon[data-icon=k]', [
-      m('strong', i18n('puzzleFailed')),
+  return h('div.puzzleComment.loss',
+    h('h3.puzzleState.withIcon[data-icon=k]', [
+      h('strong', i18n('puzzleFailed')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ])
   );

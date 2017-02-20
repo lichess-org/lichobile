@@ -1,5 +1,5 @@
-import { throttle } from 'lodash';
-import * as m from 'mithril';
+import * as throttle from 'lodash/throttle';
+import * as h from 'mithril/hyperscript';
 import * as utils from '../../../utils';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import router from '../../../router';
@@ -35,6 +35,7 @@ export function renderBody(ctrl: State) {
             );
           })}
         </select>
+        <div className="main_header_drop_shadow" />
       </div>
       {renderAllGames(ctrl)}
     </div>
@@ -104,32 +105,34 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
         <div className="userGame-infos">
           <div className="userGame-versus">
             <span className="variant-icon" data-icon={icon} />
-          <div className="game-result">
-        <div className="userGame-players">
-          {renderPlayer(g.players, 'white')}
-          <div className="swords" data-icon="U" />
-          {renderPlayer(g.players, 'black')}
+            <div className="game-result">
+              <div className="userGame-players">
+                {renderPlayer(g.players, 'white')}
+                <div className="swords" data-icon="U" />
+                {renderPlayer(g.players, 'black')}
+              </div>
+              <div className={helper.classSet({
+                'userGame-status': true,
+                win: userColor === g.winner,
+                loose: g.winner && userColor !== g.winner
+              })}>
+                {status}
+              </div>
+            </div>
           </div>
-          <div className={helper.classSet({
-            'userGame-status': true,
-            win: userColor === g.winner,
-            loose: g.winner && userColor !== g.winner
-          })}>{status}</div>
-          </div>
-        </div>
-        <div className="userGame-meta">
-          <p className="game-infos">
-          {g.date} • {title}
-          </p>
-          {g.opening ?
-            <p className="opening">{g.opening.name}</p> : null
-          }
-          {g.analysed ?
-            <p className="analysis">
-            <span className="fa fa-bar-chart" />
-            Computer analysis available
-            </p> : null
-          }
+          <div className="userGame-meta">
+            <p className="game-infos">
+            {g.date} • {title}
+            </p>
+            {g.opening ?
+              <p className="opening">{g.opening.name}</p> : null
+            }
+            {g.analysed ?
+              <p className="analysis">
+              <span className="fa fa-bar-chart" />
+              Computer analysis available
+              </p> : null
+            }
           </div>
         </div>
         { session.isConnected() ?
@@ -150,7 +153,7 @@ function renderAllGames(ctrl: State) {
       { games.length ?
         <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
           { games.map((g, i) =>
-            m(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+            h(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
           }
           {ctrl.scrollState.isLoadingNextPage ?
           <li className="list_item loadingNext">loading...</li> : null
@@ -173,7 +176,7 @@ export function renderBoard(fen: string, orientation: Color, bounds: Bounds, boa
 
   return (
     <div className={boardClass} key={fen}
-      oncreate={({ dom }: Mithril.ChildNode) => {
+      oncreate={({ dom }: Mithril.DOMNode) => {
         const img = document.createElement('img')
         img.className = 'cg-board'
         img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)

@@ -14,116 +14,130 @@ main
   overflow hidden
 
 .main_header
+  position relative
   background headerBgDark
   height headerHeight
+  color lighten(textDarkBg, 25%)
   &.board
-    background inherit
+    background initial
+    button.active
+      background lighten(bgdark, 5%)
   > nav
     height 100%
     overflow hidden
     display flex
     justify-content space-between
-    > h1
-      padding-left 5px
-      text-align left
-      font-size 1.1rem
-      line-height headerHeight
-      color gold
-      flex 1 1 auto
-      overflow hidden
-      text-overflow ellipsis
-      white-space nowrap
-      > .kiddo
-        margin-right 5px
-        font-size 20px
-      > .fa-trophy
-        margin-right 2px
-      &.reconnecting
-        white-space nowrap
-        height 100%
-        text-align center
-        &.withTitle
-          text-align left
-          > span
-            margin-right 5px
-      @media only screen and (max-width 320px)
-        &.playing
-          padding-left 0
-          font-size 1rem
     > .buttons
       flex 0 0 auto
+      display flex
+      align-items center
       > .main_header_button
         padding-left 10px
         padding-right 10px
         > .chip
-          left 2px
+          right 2px
+      > .game_menu_button
+        padding-right 15px
+        > .chip
+          right 5px
+
+.main_header_drop_shadow
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom -2px
+  height: 2px;
+  z-index: 1;
+  box-shadow inset 0px 2px 2px -1px rgba(0, 0, 0, 0.3)
+
+.main_header_title
+  display flex
+  flex-flow row nowrap
+  align-items center
+  padding-left 10px
+  font-size 1.1rem
+  line-height headerHeight
+  flex 1 1 auto
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+  &.withSub
+    font-size 1rem
+  &.reconnecting
+    white-space nowrap
+    justify-content center
+    &.withTitle
+      justify-content flex-start
+      > span
+        margin-right 5px
+  @media only screen and (max-width 320px)
+    &.playing
+      padding-left 0
+      font-size 1rem
 
 .main_header_button
   flex 0 0 auto
   background transparent
-  padding 12.5px 0.9rem
+  padding 0 18px
   margin 0
-  color gold
   font-size 20px
   line-height 20px
+  height headerHeight
   &.fa-bell
     position relative
     top -2px
   &.active
-    background lighten(headerBgDark, 5%)
+    background headerBgDarkActive
 
 .back_button
   flex 0 1 auto
+  display flex
+  flex-flow row nowrap
+  height headerHeight
   font-size 1.1rem
-  padding 0
-  white-space nowrap
   overflow hidden
+  white-space nowrap
   text-overflow ellipsis
-  text-align left
-  > .title, .fa
-    display inline-block
-  > .fa
-    padding 15px 0 15px 10px
-  > span.fa
+  padding 0
+  > button
     margin 0
-    margin-right 15px
+    margin-right 5px
+    height headerHeight
+    padding 0 18px
+    > .svg-icon-wrapper
+      width 24px
+      height 24px
+    &.active
+      background headerBgDarkActive
   > .title
     line-height headerHeight
-    padding-right 15px
-  &.main_header_button
-    padding 0
-  &:before
-    margin-right 10px
-  &.active
-    background lighten(headerBgDark, 8%)
+    padding-right 10px
+    overflow hidden
+    text-overflow ellipsis
 
-.friends_button, .timeline_button, .game_menu_button
-  > .chip
-    position absolute
-    font-size 10px
-    font-weight bold
-    line-height 13px
-    letter-spacing 0px
+.chip
+  position absolute
+  font-size 9px
+  font-weight bold
+  line-height 13px
+  letter-spacing 0px
+  color headerBgDark
+  border 3px solid headerBgDark
+  border-radius 50%
+  height 19px
+  width 19px
+  top 5px
+  right 5px
+  background gold
+
+.main_header.board
+  .chip
     color bgdark
-    border 2px solid bgdark
-    border-radius 50%
-    height 17px
-    width 17px
-    top 7.5px
-    left 7px
-    background lighten(gold, 50%)
-
-.timeline_button
-  > .chip
-    font-family 'Noto Sans', sans-serif
-
+    border-color bgdark
 
 .friends_button
   position relative
   padding-right 10px
-  color gold
-  &.nofriend
-    color rgba(gold, 0.7)
 
 .game_menu_button
   position relative

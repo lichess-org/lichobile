@@ -2,14 +2,12 @@ import socket from '../../socket';
 import redraw from '../../utils/redraw';
 import router from '../../router';
 import * as utils from '../../utils';
-import * as h from '../helper';
+import * as helper from '../helper';
 import * as xhr from './playerXhr';
 import layout from '../layout';
-import { userStatus, header } from '../shared/common';
+import { userStatus, dropShadowHeader } from '../shared/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
-import * as helper from '../helper';
-import * as m from 'mithril';
 import * as stream from 'mithril/stream';
 
 export default {
@@ -49,7 +47,7 @@ export default {
     const ctrl = vnode.state;
 
     return layout.free(
-      () => header(i18n('leaderboard')),
+      () => dropShadowHeader(i18n('leaderboard')),
       renderBody.bind(undefined, ctrl)
     );
   }
@@ -69,15 +67,15 @@ function renderBody(ctrl) {
 function renderRankingCategory(ctrl, key) {
   const ranking = ctrl.ranking();
   const toggleDataIcon = ranking[key].isOpenedOnMobile ? 'S' : 'R';
-  const toggleFunc = h.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
+  const toggleFunc = helper.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
   return (
     <section className={'ranking ' + key}>
-      <h3 className="rankingPerfTitle" oncreate={h.ontapY(toggleFunc)}>
+      <h3 className="rankingPerfTitle" oncreate={helper.ontapY(toggleFunc)}>
         <span className="perfIcon" data-icon={utils.gameIcon(key)} />
         {perfTitle(key)}
-        {h.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
+        {helper.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      {ranking[key].isOpenedOnMobile || h.isWideScreen() ?
+      {ranking[key].isOpenedOnMobile || helper.isWideScreen() ?
       <ul className="rankingList">
         {ranking[key].map(p => renderRankingPlayer(p, key))}
       </ul> : null
@@ -88,7 +86,7 @@ function renderRankingCategory(ctrl, key) {
 
 function renderRankingPlayer(user, key) {
   return (
-    <li className="rankingPlayer" oncreate={h.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="rankingPlayer" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating">
         {user.perfs[key].rating}

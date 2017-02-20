@@ -1,6 +1,5 @@
 import store from './storage';
-import { range } from 'lodash';
-import i18n from './i18n';
+import * as range from 'lodash/range';
 
 export interface SettingsProp<T> {
   (): T
@@ -54,6 +53,17 @@ export default {
     lang: localstorageprop<string>('settings.lang'),
     sound: localstorageprop('settings.sound', true),
     theme: {
+      availableBackgroundThemes: [
+        { key: 'dark', name: 'bgThemeDark', ext: '' },
+        { key: 'light', name: 'bgThemeLight', ext: '' },
+        { key: 'bgshapes', name: 'bgThemeShapes', ext: 'jpg' },
+        { key: 'anthracite', name: 'bgThemeAnthracite', ext: 'jpg' },
+        { key: 'blue-maze', name: 'bgThemeBlueMaze', ext: 'jpg' },
+        { key: 'red-maze', name: 'bgThemeRedMaze', ext: 'jpg' },
+        { key: 'checkerboard', name: 'bgThemeGreenCheckerboard', ext: 'png' },
+        { key: 'wood', name: 'bgThemeWood', ext: 'jpg' },
+        { key: 'space', name: 'bgThemeVioletSpace', ext: 'jpg' },
+      ],
       background: localstorageprop('settings.bgTheme', 'dark'),
       availableBoardThemes: [
         ['boardThemeBrown', 'brown'],
@@ -144,7 +154,7 @@ export default {
 
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
-    useSymmetric: localstorageprop('settings.otb.useSymmetric', true),
+    useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants
   },
@@ -351,7 +361,8 @@ export default {
     increment: localstorageprop('settings.tournament.increment', '0'),
     duration: localstorageprop('settings.tournament.duration', '45'),
     timeToStart: localstorageprop('settings.tournament.timeToStart', '15'),
-    position: localstorageprop('settings.tournament.timeToStart', '15')
+    position: localstorageprop('settings.tournament.timeToStart', '15'),
+    private: localstorageprop('settings.tournament.private', false)
   },
 
   tv: {

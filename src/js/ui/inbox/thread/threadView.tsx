@@ -1,4 +1,4 @@
-import * as h from '../../helper';
+import * as helper from '../../helper';
 import { header as headerWidget, backButton, userStatus } from '../../shared/common';
 import layout from '../../layout';
 import i18n from '../../../i18n';
@@ -31,8 +31,8 @@ function threadBody(ctrl: ThreadState) {
             window.plugins.toast.show('Minimum length is 3', 'short', 'center');
         }}>
           <input id="id" key="id" value={ctrl.id()} type="hidden" />
-          <textarea id="body" key="body" className="responseBody" />
-          <button key="send" className="fatButton sendResponse" oncreate={h.autofocus} type="submit">
+          <textarea id="body" key="body" className="responseBody composeTextarea" />
+          <button key="send" className="fatButton sendResponse" oncreate={helper.autofocus} type="submit">
             <span className="fa fa-check" />
             {i18n('send')}
           </button>
@@ -71,12 +71,12 @@ function postDateFormat (timeInMillis: number) {
 function deleteButton (ctrl: ThreadState) {
   return ctrl.deleteAttempted() ? (
     <div className="negotiation confirmDeleteDialog">
-      <button key="confirmDelete" className="fatButton confirmDelete" oncreate={h.ontapY(() => {ctrl.deleteThread(ctrl.id());})}>
+      <button key="confirmDelete" className="fatButton confirmDelete" oncreate={helper.ontapY(() => {ctrl.deleteThread(ctrl.id());})}>
         <span className="fa fa-trash-o" />
         Delete
       </button>
       <button key="cancelDelete" className="fatButton cancelDelete"
-        oncreate={h.ontapY(() => {
+        oncreate={helper.ontapY(() => {
           ctrl.deleteAttempted(false);
           redraw();
         })}>
@@ -85,7 +85,7 @@ function deleteButton (ctrl: ThreadState) {
       </button>
     </div>
   ) : (
-    <button key="delete" className="fatButton deleteThread" oncreate={h.ontapY(() => {ctrl.deleteAttempted(true); redraw();})}>
+    <button key="delete" className="fatButton deleteThread" oncreate={helper.ontapY(() => {ctrl.deleteAttempted(true); redraw();})}>
       <span className="fa fa-trash-o" />
       Delete
     </button>

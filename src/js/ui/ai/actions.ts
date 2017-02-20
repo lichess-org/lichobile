@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 import i18n from '../../i18n';
 import * as gameApi from '../../lichess/game';
@@ -24,24 +24,24 @@ export function opponentSelector() {
   const opts = settings.ai.availableOpponents.map(o =>
     ['aiNameLevelAiLevel', o[1], o[0], o[1]]
   );
-  return m('div.select_input',
+  return h('div.select_input',
     formWidgets.renderSelect('opponent', 'opponent', opts, settings.ai.opponent)
   );
 }
 
 function renderAlways() {
   return [
-    m('div.action.opponentSelector', [
+    h('div.action.opponentSelector', [
       opponentSelector()
     ])
   ];
 }
 
 function resignButton(ctrl: AiRoundInterface) {
-  return gameApi.playable(ctrl.data) ? m('div.resign', {
+  return gameApi.playable(ctrl.data) ? h('div.resign', {
     key: 'resign'
   }, [
-    m('button[data-icon=b]', {
+    h('button[data-icon=b]', {
       oncreate: helper.ontap(() => {
         ctrl.actions.close();
         ctrl.resign();

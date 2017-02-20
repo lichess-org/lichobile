@@ -6,7 +6,7 @@ import session from '../../session';
 import loginModal from '../loginModal';
 import newGameForm from '../newGameForm';
 import tabs from '../shared/tabs';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { Seek } from '../../lichess/interfaces';
 import { Challenge } from '../../lichess/interfaces/challenge';
 
@@ -26,12 +26,12 @@ const tabButtons = [
 export function renderBody(ctrl: State) {
   if (!session.isConnected()) {
     return [
-      m('div.seeks.disconnected', [
-        m('div.seeks_background'),
-        m('div.seeks_scroller', [
-          m('div.vertical_align.must_signin', i18n('mustSignIn'))
+      h('div.seeks.disconnected', [
+        h('div.seeks_background'),
+        h('div.seeks_scroller', [
+          h('div.vertical_align.must_signin', i18n('mustSignIn'))
         ]),
-        m('button.fat', {
+        h('button.fat', {
           key: 'seeks_login',
           oncreate: helper.ontap(loginModal.open)
         }, i18n('logIn'))
@@ -39,7 +39,7 @@ export function renderBody(ctrl: State) {
     ];
   }
 
-  const tabsBar = m(tabs, {
+  const tabsBar = h(tabs, {
     buttons: tabButtons,
     selectedTab: ctrl.selectedTab(),
     onTabChange: (k: string) => {
@@ -52,8 +52,8 @@ export function renderBody(ctrl: State) {
   });
 
   return [
-    m('div.nav_header', tabsBar),
-    m('div.tab_content.native_scroller.seeks_scroller',
+    h('div.tabs-nav-header', tabsBar, h('div.main_header_drop_shadow')),
+    h('div.tab_content.native_scroller.seeks_scroller',
       ctrl.selectedTab() === 'public' ?
         renderPool(ctrl) :
         renderChallenges(ctrl)
@@ -62,22 +62,22 @@ export function renderBody(ctrl: State) {
 }
 
 export function renderFooter() {
-  return m('div.correpondenceFooter', m('button#newGameCorres', {
+  return h('div.correpondenceFooter', h('button#newGameCorres', {
     key: 'seeks_createagame',
     oncreate: helper.ontap(newGameForm.openCorrespondence)
-  }, [m('span.fa.fa-plus-circle'), i18n('createAGame')]));
+  }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]));
 }
 
 function renderChallenges(ctrl: State) {
   return ctrl.sendingChallenges().length ?
-    m('ul', ctrl.sendingChallenges().map(c => renderChallenge(ctrl, c))) :
-    m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+    h('ul', ctrl.sendingChallenges().map(c => renderChallenge(ctrl, c))) :
+    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
 }
 
 function renderPool(ctrl: State) {
   return ctrl.getPool().length ?
-    m('ul', ctrl.getPool().map(s => renderSeek(ctrl, s))) :
-    m('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+    h('ul', ctrl.getPool().map(s => renderSeek(ctrl, s))) :
+    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
 }
 
 function renderChallenge(ctrl: State, c: Challenge) {
@@ -106,19 +106,19 @@ function renderChallenge(ctrl: State, c: Challenge) {
 
 function renderSeek(ctrl: State, seek: Seek) {
   const action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
-  return m('li', {
+  return h('li', {
     key: 'seek' + seek.id,
     'id': seek.id,
     className: 'list_item seek ' + action,
     oncreate: helper.ontapY(() => ctrl[action](seek.id))
   }, [
-    m('div.icon', {
+    h('div.icon', {
       'data-icon': seek.perf.icon
     }),
-    m('div.body', [
-      m('div.player', seek.username + ' (' + seek.rating + ')'),
-      m('div.variant', seek.variant.name),
-      m('div.time', [
+    h('div.body', [
+      h('div.player', seek.username + ' (' + seek.rating + ')'),
+      h('div.variant', seek.variant.name),
+      h('div.time', [
         seek.days ? i18n(seek.days === 1 ? 'oneDay' : 'nbDays', seek.days) : '∞',
         ', ',
         i18n(seek.mode === 1 ? 'rated' : 'casual')

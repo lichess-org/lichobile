@@ -1,32 +1,4 @@
-/* COLORS */
-bgdark = #212121
-themeBgLight = #eeeeee // TODO rename
-bglight = #f5f5f5
-bgpopup = #eeeeee
-
-gold = #C4A86F
-orange = #d85000
-
-textDarkBg = #aeaeae
-textLightBg = #747474
-
-textLightGray = #aeaeae
-textMediumGray = #707070
-textDarkGray = #404040
-textGray = #656565
-labelText = #969696
-green = #759900
-red = #ac524f
-blue = #3b93da
-
-selectBg = #e6e6e6
-headerBgDark = darken(bgdark, 30%)
-borderColor = lighten(bgdark, 8%)
-
-borderLightGray = darken(bglight, 15%)
-activeBgLight = darken(themeBgLight, 8%)
-
-headerHeight = 45px
+headerHeight = 56px
 footerHeight = 45px
 
 html
@@ -53,6 +25,26 @@ button
     opacity 1
     &::before
       opacity 0.4
+
+.svg_icon
+  position relative
+  width 24px
+  height 24px
+  > .svg_icon_inner
+    font-size: inherit;
+    color: inherit;
+    line-height: inherit;
+    height 100%
+    position absolute
+    top 0px
+    left 0px
+    right 0px
+    bottom 0px
+    > svg
+      height 100%
+      width 100%
+      fill currentcolor
+      color inherit
 
 input, textarea
   -webkit-appearance none
@@ -105,6 +97,10 @@ span.fa
     background lighten(bgdark, 5%)
 
 /* lists */
+.items_list_block
+  > .list_item
+    padding 15px 0
+
 .list_item
   position relative
   line-height 20px
@@ -137,7 +133,8 @@ span.fa
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     position absolute
-    right 15px
+    right 10px
+    opacity 0.6
     line-height 20px
 
 .noPadding
@@ -159,9 +156,10 @@ span.fa
   font-family "lichess"!important
   font-size 1.2em
   content attr(data-icon)
+  margin-right 5px
   width 1.2em
   display inline-block
-  vertical-align baseline
+  vertical-align -0.15em
 
 .withIcon
   &[data-icon]:before
@@ -178,14 +176,15 @@ span.fa
 
 .fatButton
   display block
-  width 80%
-  padding 15px
+  width 70%
+  padding 0 5px
   margin 20px auto
   background linear-gradient(to bottom,rgba(40,40,40,1),rgba(34,34,34,1) 100%);
   text-shadow 0 1px 0 #000
   border 1px solid #323232
   color #8a8a8a
   font-weight bold
+  height 52px
   border-radius 2px
   &.active, &:active
     background linear-gradient(to bottom,rgba(44,44,44,1),rgba(40,40,40,1) 100%);
@@ -238,3 +237,40 @@ span.fa
     &.black
       &:before
         content: "J"
+
+
+.navigationButtons
+  display flex
+  flex-flow row wrap
+  align-items center
+  align-self center
+  margin 10px 0
+  height 30px
+  &.invisible
+    display none
+
+.navigationButton
+  border-radius 4px
+  text-align center
+  border-style solid
+  border-color #323232
+  border-width 1px
+  height 30px
+  line-height 20px
+  margin 0 5px
+  padding 0
+  width 40px
+  &:before
+    font-family "lichess"!important
+    font-size 1.2em
+    content attr(data-icon)
+    vertical-align middle
+  &.invisible
+    display none
+  @media only screen and (max-width 380px)
+    margin 0 1px
+    width 35px
+    line-height 16px
+    &:before
+      font-size 1em
+

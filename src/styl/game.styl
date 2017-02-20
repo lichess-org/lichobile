@@ -1,10 +1,27 @@
+.main_header_title.playing
+  display flex
+  flex-flow column nowrap
+  line-height initial
+  justify-content center
+  align-items flex-start
+
+.round-title
+  > .kiddo
+    margin-right 5px
+    font-size 20px
+  > .fa-trophy
+    margin-right 2px
+
+.round-subTitle
+  font-size 0.8em
+  opacity 0.9
+
 .playTable
   height "calc((100% - 100vw - %s) / 2)" % footerHeight
   padding 0 10px
   display flex
   justify-content space-between
   align-items center
-  color #fff
   overflow hidden
   &.crazy
     padding 0
@@ -68,7 +85,7 @@
   transition: background-color 0.13s ease 0s;
   width 42.5%
   &.current
-    color darken(gold, 20%)
+    color orangeDark
     font-weight bold
   &.active
     background-color lighten(bgdark, 8%)
@@ -90,7 +107,9 @@
     vertical-align top
     margin-right 10px
   .ratingAndMaterial
+    display flex
     height 18px
+    margin-top 2px
   &.active
     background-color lighten(bgdark, 8%)
   &.offline
@@ -141,10 +160,11 @@
 .antagonistUser
   overflow hidden
   text-overflow ellipsis
-  font-size 1em
+  font-size 1.1em
   white-space nowrap
+  color textLightGray
   > .status
-    font-size 15px
+    font-size 18px
     margin-right 5px
     &.ongame
       color green
@@ -165,7 +185,6 @@
   line-height 1
   color #8c8c8c
   background-color #262626
-  border 1px solid #3d3d3d
   > seph
     opacity 0.7
   > sepl
@@ -173,18 +192,18 @@
   > tens
     font-size 0.8em
   &.berserk
-    border-width 2px
-    border-color #dc322f
+    color #e35d5b
   &.running
     background-color #505a60
     color #fff
   &.emerg
     background-color #a00000
     color #d0d0d0
+    &.running
+      color #fff
   &.correspondence
     font-family 'Noto Sans'
-    font-size 20px
-    border none
+    font-size 18px
     background-color inherit
     &.running
       color lighten(gold, 15%)
@@ -196,16 +215,13 @@
     max-width 160px
 
 .checkCount
-  font-size 0.6em
-  display inline-block
-  vertical-align top
-  margin 2px 10px 0 0
+  font-size 0.8em
   font-weight bold
 
 .tomb
-  display inline-block
-  margin-left 8px
-  div
+  margin-left 6px
+  piece
+    position initial
     margin-left -6px
     width 18px
     height 18px
@@ -224,14 +240,8 @@
     background-image url(../../images/pieces/mono/Q.svg)
   .king
     background-image url(../../images/pieces/mono/K.svg)
-  @media only screen and (orientation landscape)
-    &:first-child
-      margin-left 0
-      div
-        margin-top 0
-        margin-left 0
   @media only screen and (min-width 960px) and (orientation landscape)
-    div
+    piece
       width 25px
       height 25px
 
@@ -270,7 +280,6 @@
   .icon-game
     flex 0 0 auto
     font-size 33px
-    color gold
   .game-title
     flex 0 0 auto
     line-height 20px
@@ -480,4 +489,27 @@
 
 .view-container.light
   .pocket
-    background #888
+    background #aaa
+  .antagonistUser
+    color textDarkGray
+
+.view-container.transp
+  .pocket
+    background transpWhite05
+  .clock
+    color rgba(#8c8c8c, 0.6)
+    &.correspondence
+      background transparent
+      text-shadow 0 1px 1px rgba(0,0,0,0.5)
+      color rgba(#ccc, 0.8)
+      &.running
+        color #fff
+    &.running
+      color #fff
+    &.emerg
+      background-color rgba(#a00000, 0.6)
+      color #d0d0d0
+      &.running
+        color #fff
+  .gameMovesList
+    background transpBlack2

@@ -1,8 +1,9 @@
 import * as helper from '../helper';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import * as gameApi from '../../lichess/game';
+import { noop } from '../../utils'
 import { MiniBoardGameObj } from '../../lichess/interfaces';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 
 interface Bounds {
   width: number
@@ -10,7 +11,7 @@ interface Bounds {
 }
 
 export interface Attrs {
-  link: () => void
+  link?: () => void
   gameObj?: MiniBoardGameObj
   fen?: string
   lastMove?: string
@@ -20,15 +21,25 @@ export interface Attrs {
   variant?: VariantKey
 }
 
-const MiniBoard: Mithril.Component<Attrs, {}> = {
+interface State {
+  link: () => void
+}
+
+const MiniBoard: Mithril.Component<Attrs, State> = {
+  oninit({ attrs }) {
+    this.link = attrs.link || noop
+  },
+  onupdate({ attrs }) {
+    this.link = attrs.link || noop
+  },
   view({ attrs }) {
 
-    const { link, gameObj } = attrs;
+    const { gameObj } = attrs;
 
     return (
-      <div className="mini_board" oncreate={helper.ontapY(link)}>
+      <div className="mini_board" oncreate={helper.ontapY(() => this.link())}>
         <div className="board_wrapper">
-          {m(ViewOnlyBoard, attrs)}
+          {h(ViewOnlyBoard, attrs)}
         </div>
         { gameObj ?
         <div className="vsbloc">

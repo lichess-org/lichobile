@@ -9,7 +9,8 @@ import * as helper from './helper';
 import i18n from '../i18n';
 import signupModal from './signupModal';
 import router from '../router';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
+import { closeIcon } from './shared/icons'
 
 let isOpen = false;
 
@@ -19,21 +20,21 @@ export default {
   view() {
     if (!isOpen) return null;
 
-    return m('div.modal#loginModal', { oncreate: helper.slidesInUp }, [
-      m('header', [
-        m('button.modal_close[data-icon=L]', {
+    return h('div.modal#loginModal', { oncreate: helper.slidesInUp }, [
+      h('header', [
+        h('button.modal_close', {
           oncreate: helper.ontap(helper.slidesOutDown(close, 'loginModal'))
-        }),
-        m('h2', i18n('signIn'))
+        }, closeIcon),
+        h('h2', i18n('signIn'))
       ]),
-      m('div.modal_content', [
-        m('form.login', {
+      h('div.modal_content', [
+        h('form.login', {
           onsubmit: (e: Event) => {
             e.preventDefault();
             submit((e.target as HTMLElement));
           }
         }, [
-          m('input#pseudo[type=text]', {
+          h('input#pseudo[type=text]', {
             placeholder: i18n('username'),
             autocomplete: 'off',
             autocapitalize: 'off',
@@ -41,21 +42,23 @@ export default {
             spellcheck: false,
             required: true
           }),
-          m('input#password[type=password]', {
+          h('input#password[type=password]', {
             placeholder: i18n('password'),
             required: true
           }),
-          m('button.fat', i18n('signIn'))
+          h('button.fat', i18n('signIn'))
         ]),
-        m('div.signup', [
+        h('div.signup', [
           i18n('newToLichess') + ' ',
-          m('a', {
+          h('br'),
+          h('a', {
             oncreate: helper.ontap(signupModal.open)
           }, [i18n('signUp')])
         ]),
-        m('div.reset', [
+        h('div.reset', [
           i18n('forgotPassword') + ' ',
-          m('a', {
+          h('br'),
+          h('a', {
             oncreate: helper.ontap(() => window.open(`https://en.lichess.org/password/reset`, '_blank', 'location=no'))
           }, [i18n('passwordReset')])
         ])

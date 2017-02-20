@@ -23,6 +23,17 @@ const untranslated: {[key: string]: string} = {
   boardThemeBlue2: 'Blue 2',
   boardThemeCanvas: 'Canvas',
   boardThemeMetal: 'Metal',
+  bgThemeDark: 'Dark',
+  bgThemeLight: 'Light',
+  bgThemeWood: 'Wood',
+  bgThemeShapes: 'Shapes',
+  bgThemeAnthracite: 'Anthracite',
+  bgThemeBlueMaze: 'Blue maze',
+  bgThemeGreenMaze: 'Green maze',
+  bgThemeRedMaze: 'Red maze',
+  bgThemeGreenCheckerboard: 'Checkerboard',
+  bgThemeCrackedEarth: 'Earth',
+  bgThemeVioletSpace: 'Space',
   playerisInvitingYou: '%s is inviting you',
   toATypeGame: 'To a %s game',
   unsupportedVariant: 'Variant %s is not supported in this version',
@@ -74,7 +85,7 @@ export function loadPreferredLanguage(): Promise<string> {
   .then(loadMomentLocale);
 }
 
-export function getAvailableLanguages(): Promise<string> {
+export function getAvailableLanguages(): Promise<Array<[string, string]>> {
   return loadLocalJsonFile('i18n/refs.json');
 }
 

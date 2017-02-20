@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="401003" id="org.lichess.mobileapp" version="4.10.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="401101" id="org.lichess.mobileapp" version="4.11.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>lichess</name>
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
     <content src="index.html" />
     <access origin="https://*.lichess.org" />
     <access origin="https://sentry.io" />
+    <access origin="https://veloce.github.io" />
     <engine name="ios" spec="~4.3.1" />
     <engine name="android" spec="~6.1.0" />
     <platform name="android">
@@ -109,6 +110,7 @@
     <universal-links>
         <host name="*.lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />
+            <path event="analysisPosition" url="/analysis/*" />
             <path event="challenge" url="/challenge/*" />
             <path event="editor" url="/editor" />
             <path event="inbox" url="/inbox" />
@@ -142,4 +144,5 @@
             <path event="other" url="*" />
         </host>
     </universal-links>
+    <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
 </widget>

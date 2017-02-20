@@ -9,7 +9,7 @@ import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
 import lobby from './lobby';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import { Pool } from '../lichess/interfaces';
 
 let isOpen = false
@@ -78,16 +78,16 @@ function renderContent() {
   const conf = settings.gameSetup.human;
   const preset = conf.preset();
 
-  return m('div', [
-    m('div.newGame-preset_switch', [
-      m('div.nice-radio', formWidgets.renderRadio(
+  return h('div', [
+    h('div.newGame-preset_switch', [
+      h('div.nice-radio', formWidgets.renderRadio(
         'Quick game',
         'preset',
         'quick',
         preset === 'quick',
         e => utils.autoredraw(() => conf.preset((e.target as any).value))
       )),
-      m('div.nice-radio', formWidgets.renderRadio(
+      h('div.nice-radio', formWidgets.renderRadio(
         'Custom',
         'preset',
         'custom',
@@ -112,13 +112,13 @@ function renderContent() {
 
 function renderQuickSetup() {
   const selectedPool = settings.gameSetup.human.pool()
-  return m('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
+  return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
     xhr.cachedPools.map(p => renderPool(p, selectedPool)) : spinner.getVdom()
   )
 }
 
 function renderPool(p: Pool, selectedPool: string) {
-  return m('div.newGame-pool', {
+  return h('div.newGame-pool', {
     key: 'pools',
     oncreate: helper.ontap(() => {
       settings.gameSetup.human.pool(p.id)
@@ -126,8 +126,8 @@ function renderPool(p: Pool, selectedPool: string) {
       goSeek();
     })
   }, [
-    m('div.newGame-clock', p.id),
-    m('div.newGame-perf', p.perf)
+    h('div.newGame-clock', p.id),
+    h('div.newGame-perf', p.perf)
   ])
 }
 
@@ -167,19 +167,19 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
   ];
 
   const generalFieldset = [
-    m('div.select_input', {
+    h('div.select_input', {
       key: formName + 'color'
     },
       formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
     ),
-    m('div.select_input', {
+    h('div.select_input', {
       key: formName + 'variant'
     },
       formWidgets.renderSelect('variant', formName + 'variant', variants, settingsObj.variant)
     )
   ];
 
-  generalFieldset.push(m('div.select_input', {
+  generalFieldset.push(h('div.select_input', {
     key: formName + 'mode'
   },
     formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
@@ -187,15 +187,15 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
 
   if (session.isConnected()) {
     generalFieldset.push(
-      m('div.rating_range', {
+      h('div.rating_range', {
         key: 'rating_range'
       }, [
-        m('div.title', i18n('ratingRange')),
-        m('div.select_input.inline',
+        h('div.title', i18n('ratingRange')),
+        h('div.select_input.inline',
           formWidgets.renderSelect('Min', formName + 'rating_min',
             settings.gameSetup.human.availableRatingRanges.min, settingsObj.ratingMin, false)
         ),
-        m('div.select_input.inline',
+        h('div.select_input.inline',
           formWidgets.renderSelect('Max', formName + 'rating_max',
             settings.gameSetup.human.availableRatingRanges.max, settingsObj.ratingMax, false)
         )
@@ -204,7 +204,7 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
   }
 
   const timeFieldset = [
-    m('div.select_input', {
+    h('div.select_input', {
       key: formName + 'timeMode'
     },
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
@@ -213,13 +213,13 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
 
   if (hasClock) {
     timeFieldset.push(
-      m('div.select_input.inline', {
+      h('div.select_input.inline', {
         key: formName + 'time'
       },
         formWidgets.renderSelect('time', formName + 'time',
           settings.gameSetup.availableTimes, settingsObj.time, false)
       ),
-      m('div.select_input.inline', {
+      h('div.select_input.inline', {
         key: formName + 'increment'
       },
         formWidgets.renderSelect('increment', formName + 'increment',
@@ -230,14 +230,14 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
 
   if (hasDays) {
     timeFieldset.push(
-      m('div.select_input.large_label', {
+      h('div.select_input.large_label', {
         key: formName + 'days'
       }, formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
       ));
   }
 
-  return m('form.game_form', {
+  return h('form.game_form', {
     key: 'customSetup',
     onsubmit(e: Event) {
       e.preventDefault();
@@ -246,8 +246,8 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
       goSeek();
     }
   }, [
-    m('fieldset', generalFieldset),
-    m('fieldset', timeFieldset),
-    m('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
+    h('fieldset', generalFieldset),
+    h('fieldset', timeFieldset),
+    h('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
   ])
 }

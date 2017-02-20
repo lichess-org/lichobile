@@ -127,7 +127,7 @@ function processDrag(data) {
         var translate = util.posToTranslate(cur.origPos, asWhite, data.bounds);
         translate[0] += cur.pos[0] + cur.dec[0];
         translate[1] += cur.pos[1] + cur.dec[1];
-        cur.draggingPiece.style.transform = util.translate3d(translate);
+        cur.draggingPiece.style.transform = util.transform(data, cur.piece.color, util.translate3d(translate));
 
         // move square target
         if (cur.over && cur.squareTarget && cur.over !== cur.prevTarget) {

@@ -15,7 +15,7 @@ export interface Attrs {
 }
 
 interface State {
-  boardOnCreate(vnode: Mithril.ChildNode): void
+  boardOnCreate(vnode: Mithril.DOMNode): void
   boardOnRemove(): void
   boardTheme: string
   pieceTheme: string
@@ -28,7 +28,7 @@ const Board: Mithril.Component<Attrs, State> = {
 
     chessgroundCtrl.setBounds(bounds);
 
-    function boardOnCreate({ dom }: Mithril.ChildNode) {
+    function boardOnCreate({ dom }: Mithril.DOMNode) {
       if (chessgroundCtrl) {
         chessground.render(dom, chessgroundCtrl);
       }

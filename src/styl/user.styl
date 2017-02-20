@@ -108,7 +108,9 @@ h3.fullname
 
 .select_games_filter
   margin 0
-  background-color headerBgDark
+  background headerBgDark
+  box-shadow none
+  position relative
   label:after
     color labelText
   select
@@ -128,15 +130,13 @@ h3.fullname
   padding 10px 0
   flex-flow row nowrap
   align-items center
-  background-color lighten(bgdark, 5%)
-  color textLightGray
+  background-color bgdark
   min-height 60px
-  border-color lighten(bgdark, 5%)
   &.withStar
     > .userGame-infos
       padding-right 0
   &.odd
-    background-color lighten(bgdark, 10%)
+    background-color lighten(bgdark, 2%)
   > .iconStar
     flex 0 0 30px
     align-self flex-start
@@ -261,8 +261,12 @@ h3.fullname
   .empty
     display none
 
-.hideVariantPerfCanvas
-  display none
+.variantPerf-graph
+  margin-bottom 0.5em
+  padding 5px
+  height 150px
+  @media only screen and (orientation landscape)
+    height 'calc(100vh - %s - 50px)' % headerHeight
 
 table.variantPerf
   width 100%
@@ -331,3 +335,23 @@ td.variantPerfMemo
 .moreFollow
   text-align center
   font-size 1.5em
+
+.view-container.transp
+  .userGame
+    background rgba(0,0,0,0.1)
+    &.odd
+      background transpWhite01
+
+  .iconStar, .profilePerf > .rating
+    color textTransp
+
+  #userProfileRatings
+    background transpBlack2
+    margin 10px 0
+    padding-left 10px
+    padding-right 10px
+
+  .variantPerf-graph
+    background-color rgba(0,0,0,0.6)
+    width 100%
+

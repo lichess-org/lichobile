@@ -1,4 +1,4 @@
-import * as m from 'mithril'
+import * as h from 'mithril/hyperscript'
 import socket from '../../socket';
 import router from '../../router';
 import settings from '../../settings';
@@ -7,7 +7,7 @@ import redraw from '../../utils/redraw';
 import { hasNetwork, serializeQueryParameters, handleXhrError } from '../../utils'
 import { fetchJSON } from '../../http';
 import * as helper from '../helper';
-import { header } from '../shared/common';
+import { dropShadowHeader } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';
@@ -81,7 +81,7 @@ const ImporterScreen: Mithril.Component<{}, State> = {
   },
 
   view(vnode) {
-    const headerCtrl = () => header(i18n('importGame'));
+    const headerCtrl = () => dropShadowHeader(i18n('importGame'));
     const bodyCtrl = () => renderBody(vnode.state);
     return layout.free(headerCtrl, bodyCtrl);
   }
@@ -89,19 +89,19 @@ const ImporterScreen: Mithril.Component<{}, State> = {
 }
 
 function renderBody(ctrl: State) {
-  return m('div.gameImporter.native_scroller', [
-    m('p', 'When pasting a game PGN, you get a browsable replay and a computer analysis.'),
-    m('form', {
+  return h('div.gameImporter.native_scroller', [
+    h('p', 'When pasting a game PGN, you get a browsable replay and a computer analysis.'),
+    h('form', {
       onsubmit: (e: Event) => {
         e.preventDefault();
         ctrl.importGame(e);
       }
     }, [
-      m('label', i18n('pasteThePgnStringHere') + ' :'),
-      m('textarea.pgnImport'),
+      h('label', i18n('pasteThePgnStringHere') + ' :'),
+      h('textarea.pgnImport'),
       formWidgets.renderCheckbox(i18n('requestAComputerAnalysis'), 'analyse', settings.importer.analyse),
-      m('button.fatButton', ctrl.importing() ?
-        m('div.fa.fa-hourglass-half') : i18n('importGame'))
+      h('button.fatButton', ctrl.importing() ?
+        h('div.fa.fa-hourglass-half') : i18n('importGame'))
     ])
   ]);
 }

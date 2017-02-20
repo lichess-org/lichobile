@@ -3,7 +3,8 @@ import * as helper from './helper';
 import i18n from '../i18n';
 import router from '../router';
 import loginModal from './loginModal';
-import * as m from 'mithril';
+import { closeIcon } from './shared/icons'
+import * as h from 'mithril/hyperscript';
 
 interface SubmitError {
   error: {
@@ -20,33 +21,33 @@ export default {
   view() {
     if (!isOpen) return null;
 
-    return m('div.modal#signupModal', { oncreate: helper.slidesInUp }, [
-      m('header', [
-        m('button.modal_close[data-icon=L]', {
+    return h('div.modal#signupModal', { oncreate: helper.slidesInUp }, [
+      h('header', [
+        h('button.modal_close', {
           oncreate: helper.ontap(helper.slidesOutDown(close, 'signupModal'))
-        }),
-        m('h2', i18n('signUp'))
+        }, closeIcon),
+        h('h2', i18n('signUp'))
       ]),
-      m('div.modal_content', [
-        m('p.signupWarning.withIcon[data-icon=!]', [
+      h('div.modal_content', [
+        h('p.signupWarning.withIcon[data-icon=!]', [
           i18n('computersAreNotAllowedToPlay')
         ]),
-        m('p.tosWarning', [
+        h('p.tosWarning', [
           'By registering, you agree to be bound by our ',
-          m('a', {
+          h('a', {
             oncreate: helper.ontap(() =>
             window.open('http://lichess.org/terms-of-service', '_blank', 'location=no')
             )},
             'Terms of Service'
           ), '.'
         ]),
-        m('form.login', {
+        h('form.login', {
           onsubmit: function(e: Event) {
             e.preventDefault();
             return submit((e.target as HTMLElement));
           }
         }, [
-          m('input#pseudo[type=text]', {
+          h('input#pseudo[type=text]', {
             placeholder: i18n('username'),
             autocomplete: 'off',
             autocapitalize: 'off',
@@ -54,18 +55,18 @@ export default {
             spellcheck: false,
             required: true
           }),
-          m('input#email[type=email]', {
+          h('input#email[type=email]', {
             placeholder: i18n('email'),
             autocapitalize: 'off',
             autocorrect: 'off',
             spellcheck: false,
             required: true
           }),
-          m('input#password[type=password]', {
+          h('input#password[type=password]', {
             placeholder: i18n('password'),
             required: true
           }),
-          m('button.fat', i18n('signUp'))
+          h('button.fat', i18n('signUp'))
         ])
       ])
     ]);

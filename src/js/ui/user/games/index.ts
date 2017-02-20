@@ -4,7 +4,7 @@ import * as helper from '../../helper';
 import * as xhr from '../userXhr';
 import { toggleGameBookmark } from '../../../xhr';
 import redraw from '../../../utils/redraw';
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import socket from '../../../socket';
 import layout from '../../layout';
 import { header as headerWidget, backButton } from '../../shared/common';
@@ -20,7 +20,7 @@ interface Attrs {
 export interface State {
   scrollState: ScrollState
   onScroll(e: Event): void
-  onGamesLoaded(vn: Mithril.ChildNode): void
+  onGamesLoaded(vn: Mithril.DOMNode): void
   onFilterChange(e: Event): void
   toggleBookmark(id: string): void
 }
@@ -166,7 +166,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
       redraw();
     }
 
-    this.onGamesLoaded = ({ dom }: Mithril.ChildNode) => {
+    this.onGamesLoaded = ({ dom }: Mithril.DOMNode) => {
       if (cacheAvailable && !initialized) {
         batchRequestAnimationFrame(() => {
           (dom.parentNode as HTMLElement).scrollTop = cachedScrollState.scrollPos
@@ -176,8 +176,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     this.onScroll = (e: Event) => {
-      const target = (e.target as any)
-      const content = target.firstChild
+      const target = (e.target as HTMLElement)
+      const content = target.firstChild as HTMLElement
       const nextPage = this.scrollState.paginator.nextPage
       if ((target.scrollTop + target.offsetHeight + 50) > content.offsetHeight) {
         // lichess doesn't allow for more than 39 pages
@@ -190,7 +190,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
     }
 
     this.onFilterChange = (e: Event) => {
-      this.scrollState.currentFilter = (e.target as any).value
+      this.scrollState.currentFilter = (e.target as HTMLInputElement).value
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, true)
       .then(prepareData)
       .then(loadInitialGames);

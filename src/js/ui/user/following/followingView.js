@@ -65,11 +65,11 @@ export function renderPlayer(ctrl, obj) {
           </div>
         </div> : null
       }
-      <div className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
+      <button className="followingPlayerItem followingPlayerAction withIcon" data-icon="U"
         oncreate={helper.ontapY(() => ctrl.challenge(obj.user))}
       >
         {i18n('challengeToPlay')}
-      </div>
+      </button>
     </li>
   );
 

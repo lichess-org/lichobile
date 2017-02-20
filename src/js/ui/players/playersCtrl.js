@@ -5,7 +5,7 @@ import { throttle } from 'lodash/function';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import * as helper from '../helper';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
 
 export default function oninit(vnode) {

@@ -2,7 +2,7 @@ import * as helper from '../helper';
 import i18n from '../../i18n';
 import redraw from '../../utils/redraw';
 import challengesApi from '../../lichess/challenges';
-import { uniqBy } from 'lodash';
+import * as uniqBy from 'lodash/uniqBy';
 import session from '../../session';
 import settings from '../../settings';
 import * as xhr from '../../xhr';

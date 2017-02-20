@@ -1,5 +1,6 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import router from '../../router';
+import { emptyFen } from '../../utils/fen'
 import { gameIcon, hasNetwork } from '../../utils';
 import i18n from '../../i18n';
 import * as helper from '../helper';
@@ -7,7 +8,7 @@ import newGameForm from '../newGameForm';
 import settings from '../../settings';
 import { userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
-import miniBoard from '../shared/miniBoard';
+import MiniBoard from '../shared/miniBoard';
 import { HomeState } from './interfaces'
 
 export function body(ctrl: HomeState) {
@@ -57,18 +58,20 @@ function miniBoardSize(isPortrait: boolean) {
 
 function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
   const puzzle = ctrl.dailyPuzzle();
-
-  if (!puzzle) return null;
+  const boardConf = puzzle ? {
+    bounds: miniBoardSize(isPortrait),
+    fen: puzzle.fen,
+    orientation: puzzle.color,
+    link: () => router.set('/training/' + puzzle.id),
+  } : {
+    bounds: miniBoardSize(isPortrait),
+    fen: emptyFen
+  }
 
   return (
-    <section id="dailyPuzzle">
+    <section id="dailyPuzzle" key={puzzle ? puzzle.id : 'empty'}>
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
-        {m(miniBoard, {
-          bounds: miniBoardSize(isPortrait),
-          fen: puzzle.fen,
-          orientation: puzzle.color,
-          link: () => router.set('/training/' + puzzle.id)
-        })}
+      {h(MiniBoard, boardConf)}
     </section>
   );
 }
@@ -80,7 +83,7 @@ function renderTimeline(ctrl: HomeState) {
   return (
     <section id="timeline">
       <h2 className="homeTitle">{i18n('timeline')}</h2>
-      <ul>
+      <ul className="items_list_block">
         { timeline.map((e: any) => {
           if (e.type === 'follow') {
             return renderFollow(e);
@@ -109,7 +112,7 @@ function renderWeekLeaders(ctrl: HomeState) {
   return (
     <section id="weekTopPlayers">
       <h2 className="homeTitle">{i18n('leaderboard')}</h2>
-      <ul>
+      <ul className="items_list_block">
         { players.map(renderPlayer) }
       </ul>
       <div className="homeMoreButton">
@@ -132,7 +135,7 @@ function renderPlayer(p: any) {
   if (supportedPerfs.indexOf(perfKey) === -1) return null;
 
   return (
-    <li key={perfKey} className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
+    <li key={perfKey} className="list_item playerSuggestion" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
       {userStatus(p)}
       <div className="playerMiniPerf">
         <span className="rating" data-icon={gameIcon(perfKey)}>

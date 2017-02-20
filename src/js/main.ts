@@ -9,7 +9,7 @@ import * as Raven from 'raven-js'
 import * as moment from 'moment';
 window.moment = moment;
 
-import { debounce } from 'lodash';
+import * as debounce from 'lodash/debounce';
 import { hasNetwork } from './utils';
 import { syncWithNowPlayingGames } from './utils/offlineGames';
 import redraw from './utils/redraw';
@@ -25,6 +25,7 @@ import push from './push';
 import routes from './routes';
 import deepLinks from './deepLinks';
 import { isForeground, setForeground, setBackground } from './utils/appMode';
+import { loadCachedImages } from './bgtheme'
 
 let firstConnection = true;
 
@@ -32,6 +33,9 @@ function main() {
 
   routes.init();
   deepLinks.init();
+
+  // cached background images
+  loadCachedImages();
 
   // cache viewport dims
   helper.viewportDim();

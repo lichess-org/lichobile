@@ -1,5 +1,6 @@
 import storage from '../storage';
-import { cloneDeep, difference } from 'lodash';
+import * as cloneDeep from 'lodash/cloneDeep';
+import * as difference from 'lodash/difference';
 import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
 import { NowPlayingGame } from '../lichess/interfaces';
 

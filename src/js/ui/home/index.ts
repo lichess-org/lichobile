@@ -1,9 +1,8 @@
-import * as m from 'mithril'
 import socket from '../../socket';
 import * as helper from '../helper';
 import { body } from './homeView';
 import layout from '../layout';
-import { header as headerWidget } from '../shared/common';
+import { dropShadowHeader } from '../shared/common';
 import { HomeState } from './interfaces'
 import redraw from '../../utils/redraw';
 import { timeline as timelineXhr } from '../../xhr';
@@ -87,7 +86,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
     document.removeEventListener('resume', this.onResume);
   },
   view() {
-    const header = () => headerWidget('lichess.org');
+    const header = () => dropShadowHeader('lichess.org');
 
     return layout.free(header, () => body(this));
   }

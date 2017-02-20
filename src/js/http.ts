@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import * as merge from 'lodash/merge';
 import spinner from './spinner';
 import { buildQueryString } from './utils/querystring';
 

@@ -1,11 +1,11 @@
 import * as utils from '../../utils';
 import router from '../../router';
-import * as h from '../helper';
+import * as helper from '../helper';
 import { menuButton, friendsButton, userStatus } from '../shared/common';
+import { backArrow } from '../shared/icons';
 import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
-import * as m from 'mithril';
 
 export default function view(vnode) {
   const ctrl = vnode.state;
@@ -17,17 +17,18 @@ export default function view(vnode) {
 }
 
 function header(ctrl) {
-  return (
+  return [
     <nav>
       {menuButton()}
-      <h1>{i18n('players')}</h1>
+      <div className="main_header_title">{i18n('players')}</div>
       <div className="buttons">
         {friendsButton()}
         <button className="main_header_button" key="searchPlayers" data-icon="y"
-          oncreate={h.ontap(ctrl.goSearch)}/>
+          oncreate={helper.ontap(ctrl.goSearch)}/>
       </div>
-    </nav>
-  );
+    </nav>,
+    <div className="main_header_drop_shadow" />
+  ];
 }
 
 function searchModal(ctrl) {
@@ -42,21 +43,24 @@ function searchModal(ctrl) {
 
   return (
     <div id="searchPlayersModal" className={className}>
-      <header>
-        <button key="search-players-backbutton" className="fa fa-arrow-left search_back" oncreate={h.ontap(ctrl.closeSearch)} />
+      <header class="main_header">
+        <button className="main_header_button" oncreate={helper.ontap(ctrl.closeSearch)}>
+          {backArrow}
+        </button>
         <div className="search_input allow_select">
           <input id="searchPlayers" type="search"
           placeholder="Search players" oninput={ctrl.onInput}
           autocapitalize="off"
           autocomplete="off"
-          oncreate={h.autofocus}
+          oncreate={helper.autofocus}
           />
         </div>
+        <div className="main_header_drop_shadow" />
       </header>
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} oncreate={h.ontapY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={helper.ontapY(utils.f(ctrl.goToProfile, u))}>
           {u}
           </li>
         );
@@ -84,7 +88,7 @@ function renderPlayer(user) {
       return prev;
   });
   return (
-    <li className="list_item playerSuggestion nav" oncreate={h.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

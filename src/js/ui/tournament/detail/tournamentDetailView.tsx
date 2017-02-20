@@ -2,7 +2,7 @@ import { header as headerWidget, backButton } from '../../shared/common';
 import router from '../../../router';
 import session from '../../../session';
 import layout from '../../layout';
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import i18n from '../../../i18n';
 import { gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils';
 import faq from '../faq';
@@ -11,6 +11,7 @@ import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
 import { TournamentState, Tournament, PlayerInfoState, StandingPlayer, PodiumPlace } from '../interfaces';
+import passwordForm from './passwordForm';
 
 export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
   const ctrl = vnode.state as TournamentState;
@@ -33,7 +34,11 @@ export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
   const footer = () => renderFooter(ctrl);
   const faqOverlay = () => renderFAQOverlay(ctrl);
   const playerInfoOverlay = () => renderPlayerInfoOverlay(ctrl);
-  const overlay = () => [faqOverlay(), playerInfoOverlay()];
+  const overlay = () => [
+    faqOverlay(),
+    playerInfoOverlay(),
+    passwordForm.view()
+  ];
 
   return layout.free(headerCtrl, bodyCtrl, footer, overlay);
 }
@@ -78,12 +83,17 @@ function renderFooter(ctrl: TournamentState) {
   if (!ctrl.tournament()) {
     return null;
   }
+  const tUrl = 'https://lichess.org/tournament/' + ctrl.tournament().id;
 
   return (
     <div className="actions_bar">
       <button key="faq" className="action_bar_button" oncreate={helper.ontap(ctrl.faqCtrl.open)}>
         <span className="fa fa-question-circle" />
         FAQ
+      </button>
+      <button key="share" className="action_bar_button" oncreate={helper.ontap(() => window.plugins.socialsharing.share(tUrl))}>
+        <span className="fa fa-share-alt" />
+        Share
       </button>
       { ctrl.hasJoined() ? withdrawButton(ctrl) : joinButton(ctrl) }
     </div>
@@ -164,15 +174,18 @@ function tournamentHeader(data: Tournament, time: number, timeText: string) {
 }
 
 function joinButton(ctrl: TournamentState) {
+  const t = ctrl.tournament();
   if (!session.isConnected() ||
-    ctrl.tournament().isFinished ||
-    settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0 ||
-    !ctrl.tournament().verdicts.accepted) {
+    t.isFinished ||
+    settings.game.supportedVariants.indexOf(t.variant) < 0 ||
+    !t.verdicts.accepted) {
     return null;
   }
 
+  const action = ctrl.tournament().private ?  (() => passwordForm.open(ctrl)) : (() => ctrl.join(t.id, null));
+
   return (
-    <button key="join" className="action_bar_button" oncreate={helper.ontap(() => ctrl.join(ctrl.tournament().id))}>
+    <button key="join" className="action_bar_button" oncreate={helper.ontap(action)}>
       <span className="fa fa-play" />
       {i18n('join')}
     </button>
@@ -260,7 +273,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
         <span class='pageInfo'> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
         {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
         {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
-        <button className={'navigationButton me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
+        <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon='7'
           oncreate={helper.ontap(ctrl.me)}
         >
@@ -282,7 +295,7 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
 function renderLeaderboardItem (playerInfoCtrl: PlayerInfoState, userName: string, player: StandingPlayer) {
   const isMe = player.name === userName;
   return (
-    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' me' : '')} >
+    <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >
       <td className='tournamentPlayer'>
         <span className="flagRank" data-icon={player.withdraw ? 'b' : ''}> {player.withdraw ? '' : (player.rank + '. ')} </span>
         <span> {player.name + ' (' + player.rating + ') '} {helper.progress(player.ratingDiff)} </span>
@@ -309,9 +322,9 @@ function tournamentFeaturedGame(ctrl: TournamentState) {
 
   return (
     <div className='tournamentGames'>
-      <p className='tournamentTitle'>Featured Game</p>
+      <p className='tournamentTitle tournamentFeatured'>Featured Game</p>
       <div key={featured.id} className='tournamentMiniBoard'>
-        {m(miniBoard, {
+        {h(miniBoard, {
           bounds: miniBoardSize(isPortrait),
           fen: featured.fen,
           lastMove: featured.lastMove,

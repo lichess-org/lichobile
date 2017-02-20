@@ -1,0 +1,144 @@
+.view-container.transp
+  > main
+    background-color transparent
+    background-position center center
+    background-repeat no-repeat
+    background-size cover
+  &.anthracite
+    > main
+      background-position initial
+      background-image url('../../../../lichobile-themes/background/anthracite.jpg')
+  &.space
+    .main_header.board .chip, .chip
+      color rgba(#120100, 0.9)
+      border-color rgba(#120100, 0.9)
+    > main
+      background-image url('../../../../lichobile-themes/background/space.jpg')
+  &.checkerboard
+    > main
+      background-image url('../../../../lichobile-themes/background/checkerboard.png')
+    .main_header.board .chip, .chip
+      color rgba(#0a160b, 0.9)
+      border-color rgba(#0a160b, 0.9)
+  &.blue-maze
+    > main
+      background-image url('../../../../lichobile-themes/background/blue-maze.jpg')
+      background-position bottom
+    .main_header.board .chip, .chip
+      color rgba(#041320, 0.9)
+      border-color rgba(#041320, 0.9)
+  &.green-maze
+    > main
+      background-image url('../../../../lichobile-themes/background/green-maze.jpg')
+      background-position bottom
+    .main_header.board .chip, .chip
+      color rgba(#0a160b, 0.9)
+      border-color rgba(#0a160b, 0.9)
+  &.red-maze
+    > main
+      background-image url('../../../../lichobile-themes/background/red-maze.jpg')
+      background-position bottom
+    .main_header.board .chip, .chip
+      color rgba(#170407, 0.9)
+      border-color rgba(#170407, 0.9)
+  &.wood
+    > main
+      background-position initial
+      background-image url('../../../../lichobile-themes/background/wood.jpg')
+    .main_header.board .chip, .chip
+      color rgba(#1c0a07, 0.9)
+      border-color rgba(#1c0a07, 0.9)
+  &.bgshapes
+    > main
+      background-image url('../../../../lichobile-themes/background/bgshapes.jpg')
+
+  main, .main_header, .action_bar_button, .antagonistUser
+    color textTransp
+
+  .main_header_button.active, .action_bar_button.active, .antagonistInfos.active,
+  .back_button > button.active, .tab:active, .tab.active, .profilePerf.active,
+  move.active, .rankingPlayer.active, .button.active, .followingPlayerAction.active
+    background-color transpWhite01
+
+  .action_bar_button
+    &.glow
+      animation answer_glow_transp 5s infinite
+
+  .main_header, .fatButton, .homeMoreButton > button, .tabs,
+  .mini_board > .vsbloc, .select_input, .clock, .main_footer
+    background transpBlack
+
+  #free_content
+    background-color transpBlack01
+    .tabs, .select_games_filter
+      background-color rgba(0,0,0,0.45)
+
+  .threadWrapper > .responseWrapper textarea, .composeInput, .tournamentInfoTime,
+  .tournamentConditions, .navigationButton, .postWrapper, .vsbloc
+    border-color transpWhite02
+
+  .composeInput:focus
+    border-bottom-color rgba(255,255,255,0.8)
+  .composeTextarea:focus
+    outline-color rgba(255,255,255,0.8)
+
+  .radio_list input.radio:checked + label
+    background-color transpWhite02
+
+  .userGame, .progress, .puzzleComment, .action_bar_button, .tournamentConditions,
+  .tournamentInfoTime, .tournamentTitle, .homeTitle, .patron.online
+    text-shadow 0 1px 1px rgba(0,0,0,0.5)
+
+  .rp.up, .userGame-status.win, .puzzleComment.great, .puzzleComment.win,
+  .tournamentConditions.accepted
+    color lighten(green, 13%)
+
+  .rp.down, .userGame-status.loose, .puzzleComment.loss, .puzzleComment.fail,
+  .tournamentConditions.rejected
+    color lighten(red, 20%)
+
+  .select_input, .fatButton
+    color #ccc
+
+  .fatButton
+    box-shadow transpShadow
+    &.active, &:active
+      background transpBlack2
+
+  .list_item
+    border-bottom-color transpWhite01
+    &.active
+      background-color transpWhite02
+
+  .items_list_block
+    background transpBlack3
+    &.noPadding
+      > .list_item.nav:after
+        right 5px
+    > .list_item
+      padding-right 10px
+      padding-left 10px
+
+  .popup_content
+    .select_input
+      background selectBg
+      color textDarkGray
+
+  .main_header.board .chip, .chip
+    color rgba(black, 0.9)
+    border-color rgba(black, 0.9)
+    background rgba(gold, 0.9)
+
+  .tomb
+    .pawn
+      background-image url(../../images/pieces/mono/P_white.svg)
+    .bishop
+      background-image url(../../images/pieces/mono/B_white.svg)
+    .knight
+      background-image url(../../images/pieces/mono/N_white.svg)
+    .rook
+      background-image url(../../images/pieces/mono/R_white.svg)
+    .queen
+      background-image url(../../images/pieces/mono/Q_white.svg)
+    .king
+      background-image url(../../images/pieces/mono/K_white.svg)

@@ -1,4 +1,4 @@
-import * as m from 'mithril';
+import * as h from 'mithril/hyperscript';
 import router from '../../../router';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
@@ -15,8 +15,11 @@ let pieceNotation: boolean;
 
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
   const sit = ctrl.replay.situation();
-  return utils.oppositeColor(color) === 'white' ?
-    sit.checkCount.white : sit.checkCount.black;
+  if (sit.checkCount)
+    return utils.oppositeColor(color) === 'white' ?
+      sit.checkCount.white : sit.checkCount.black;
+  else
+    return 0
 }
 
 type OfflineGameType = 'ai' | 'otb';
@@ -39,18 +42,18 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
   return (
     <section className={className} key={key}>
       <div key="infos" className={'antagonistInfos offline' + (isCrazy ? ' crazy' : '')}>
-        <div>
+        <div className="antagonistUser">
           {content}
         </div>
         { !isCrazy ? <div className="ratingAndMaterial">
           {ctrl.data.game.variant.key === 'horde' ? null : renderMaterial(material)}
           { ctrl.data.game.variant.key === 'threeCheck' ?
-            <div className="checkCount">&nbsp;{getChecksCount(ctrl, antagonistColor)}</div> : null
+            <div className="checkCount">&nbsp;+{getChecksCount(ctrl, antagonistColor)}</div> : null
           }
         </div> : null
         }
       </div>
-      {m(CrazyPocket, {
+      {h(CrazyPocket, {
         ctrl,
         crazyData: sit.crazyhouse,
         color: antagonistColor,
@@ -132,10 +135,10 @@ export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
 }
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
-  return gameApi.playable(ctrl.data) ? m('div.claimDraw', {
+  return gameApi.playable(ctrl.data) ? h('div.claimDraw', {
     key: 'claimDraw'
   }, [
-    m('button[data-icon=2].draw-yes', {
+    h('button[data-icon=2].draw-yes', {
       oncreate: helper.ontap(() => ctrl.replay.claimDraw())
     }, i18n('threefoldRepetition'))
   ]) : null;
@@ -151,8 +154,8 @@ export function renderReplayTable(ctrl: Replay) {
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        oncreate={(vnode: Mithril.ChildNode) => { autoScroll(vnode.dom as HTMLElement); }}
-        onupdate={(vnode: Mithril.ChildNode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
+        oncreate={(vnode: Mithril.DOMNode) => { autoScroll(vnode.dom as HTMLElement); }}
+        onupdate={(vnode: Mithril.DOMNode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
       >
         {renderTable(ctrl, curPly)}
       </div>
@@ -161,7 +164,7 @@ export function renderReplayTable(ctrl: Replay) {
 }
 
 function renderBackwardButton(ctrl: OfflineRoundInterface) {
-  return m('button.action_bar_button.fa.fa-step-backward', {
+  return h('button.action_bar_button.fa.fa-step-backward', {
     oncreate: helper.ontap(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
@@ -170,7 +173,7 @@ function renderBackwardButton(ctrl: OfflineRoundInterface) {
 }
 
 function renderForwardButton(ctrl: OfflineRoundInterface) {
-  return m('button.action_bar_button.fa.fa-step-forward', {
+  return h('button.action_bar_button.fa.fa-step-forward', {
     oncreate: helper.ontap(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())

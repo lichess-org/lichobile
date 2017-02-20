@@ -15,38 +15,12 @@
   flex-flow row nowrap
   >.composeAction
     flex 50% 1 1
-  >.navigationButtons
+  > .navigationButtons
     flex 50% 1 1
     display flex
-    flex-flow row wrap
+    flex-flow row nowrap
     justify-content center
     align-items center
-    &.invisible
-      display none
-    >.navigationButton
-      border-radius 4px
-      text-align center
-      border-style solid
-      border-color #323232
-      border-width 1px
-      height 30px
-      line-height 20px
-      margin 0 5px
-      padding 0
-      width 40px
-      &:before
-        font-family "lichess"!important
-        font-size 1.2em
-        content attr(data-icon)
-        vertical-align middle
-      &.invisible
-        display none
-      @media only screen and (max-width 380px)
-        margin 0 1px
-        width 35px
-        line-height 16px
-        &:before
-          font-size 1em
 
 .emptyInbox
   padding-left 10px
@@ -77,8 +51,8 @@ table.threadList
     max-width 0
   td.threadDate
     font-size 0.85em
-    text-align: left
-    width 20%
+    text-align right
+    width 15%
     white-space: nowrap
     overflow hidden
     position relative
@@ -141,24 +115,36 @@ table.threadList
   display flex
   flex-flow column nowrap
   height 100%
-  >input
-    padding-left 5px
+  > input
     outline none
     flex none
   >textarea
     flex 3 100%
     width 100%
-  >button
+  > button
     margin 5px auto 10px auto
     color gold
     width 50%
+    flex 0 0 45px
   >.errorMessage
     color: red
 
-.composeInput
+.composeInput, .composeTextarea
   background transparent
-  border 1px solid #444
   width 100%
   margin 5px 0px 5px 0px
   &::placeholder
     opacity 0.6
+
+.composeInput
+  padding-bottom 5px
+  border none
+  height 35px
+  border-bottom 1px solid lighten(bgdark, 10%)
+  &:focus
+    border-bottom-color gold
+
+.composeTextarea
+  border 1px solid lighten(bgdark, 10%)
+  padding 10px
+  outline-color gold

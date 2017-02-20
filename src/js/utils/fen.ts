@@ -17,6 +17,13 @@ export function readFen(fen: string) {
   };
 }
 
+// clean a FEN string from a lichess.org URI path.
+export function cleanFenUri(fenUri: string): string {
+  let fen = fenUri.replace(/_/g, ' ');
+  if (fen[0] === '/') fen = fen.substring(1);
+  return fen;
+}
+
 // function taken from chess.js
 export function validateFen(fen: string) {
   const errors = {

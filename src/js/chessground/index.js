@@ -1,4 +1,4 @@
-import * as m from 'mithril'
+import * as RenderService from 'mithril/render'
 import controller from './ctrl'
 import view from './view'
 import fen from './fen'
@@ -10,7 +10,7 @@ import drag from './drag'
 
 export default {
   render(element, ctrl) {
-    m.render(element, [view(ctrl)])
+    RenderService.render(element, [view(ctrl)])
   },
   controller,
   view,

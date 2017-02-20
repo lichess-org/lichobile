@@ -28,23 +28,22 @@ input[type='checkbox']
   background-color #ccc
   transition background-color 250ms ease-out
   outline none
-  box-shadow inset 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked
-  background gold
+  background-color gold
 input[type='checkbox']:after
   content ''
   display inline-block
   position absolute
-  top 0px
-  left 0px
-  width 26px
-  height 26px
+  top 2px
+  left 2px
+  width 22px
+  height 22px
   border-radius 50%
   background #fff
   transition left 200ms
-  box-shadow 0px 0px 2px 0px rgba(0, 0, 0, 0.3)
+  box-shadow 0px 2px 5px 0px rgba(0, 0, 0, 0.3)
 input[type='checkbox']:checked:after
-  left 29px
+  left 31px
 
 // select
 .select_input
@@ -138,6 +137,13 @@ input[type='checkbox']:checked:after
     content: "\f00c"
     text-indent .9em
 
+// text
+.text_input_container
+  display: flex;
+  justify-content space-between
+  align-items center
+  min-height 30px
+
 button.fat
   display block
   width 80%
@@ -166,12 +172,21 @@ button.fat
       border-radius: 0 3px 3px 0;
       border-right-width: 1px;
     &.selected
-      background gold
-      color: #fff;
+      background blue
+      color: #fff
       text-shadow: 1px 0 0 rgba(0,0,0,0.5);
       box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
 
 .view-container.light
+  input[type='checkbox'], input[type='checkbox']:before
+    background-color #ccc
+  input[type='checkbox']:checked, input[type='checkbox']:checked:before
+    background-color gold
+
   .form-multipleChoice
     span
       border-color #eee
+
+.no_arrow_after
+  label:after
+    content: ''

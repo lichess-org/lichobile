@@ -11,8 +11,8 @@ import * as gameApi from '../lichess/game';
 import challengesApi from '../lichess/challenges';
 import { NowPlayingGame } from '../lichess/interfaces';
 import { Challenge } from '../lichess/interfaces/challenge';
-import * as m from 'mithril';
-import ViewOnlyBoard, { Attrs as ViewOnlyBoardAttrs } from './shared/ViewOnlyBoard';
+import * as h from 'mithril/hyperscript';
+import ViewOnlyBoard from './shared/ViewOnlyBoard';
 
 interface CardDim {
   w: number
@@ -49,7 +49,7 @@ export default {
     const vh = helper.viewportDim().vh;
     const cDim = cardDims();
     const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' };
-    function wrapperOnCreate(vnode: Mithril.ChildNode) {
+    function wrapperOnCreate(vnode: Mithril.DOMNode) {
       const el = vnode.dom as HTMLElement;
       if (!helper.isWideScreen()) {
         scroller = new IScroll(el, {
@@ -71,7 +71,7 @@ export default {
       }
     }
 
-    function wrapperOnUpdate(vnode: Mithril.ChildNode) {
+    function wrapperOnUpdate(vnode: Mithril.DOMNode) {
       // see https://github.com/cubiq/iscroll/issues/412
       const el = vnode.dom;
       if (scroller) {
@@ -84,28 +84,30 @@ export default {
 
     return (
       <div id="games_menu" className="overlay_popup_wrapper"
-      onbeforeremove={(vnode: Mithril.ChildNode, done: () => void) => {
-        vnode.dom.classList.add('fading_out');
-        setTimeout(done, 500);
-      }}
+        onbeforeremove={(vnode: Mithril.DOMNode) => {
+          vnode.dom.classList.add('fading_out');
+          return new Promise((resolve) => {
+            setTimeout(resolve, 500);
+          })
+        }}
       >
-      <div className="wrapper_overlay_close"
-      oncreate={helper.ontap(() => close())} />
-      <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
-      oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
-      {helper.isWideScreen() ? (
-        <header>
-        {i18n('nbGamesInPlay', session.nowPlaying().length)}
-        </header>
-      ) : null
-      }
-      {helper.isWideScreen() ? (
-        <div className="popup_content">
-        {renderAllGames(null)}
+        <div className="wrapper_overlay_close"
+          oncreate={helper.ontap(() => close())}
+        />
+        <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
+          oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
+          {helper.isWideScreen() ? (
+            <header>
+            {i18n('nbGamesInPlay', session.nowPlaying().length)}
+            </header>
+          ) : null
+          }
+          {helper.isWideScreen() ?
+            <div className="popup_content">
+              {renderAllGames(null)}
+            </div> : renderAllGames(cDim)
+          }
         </div>
-      ) : renderAllGames(cDim)
-      }
-      </div>
       </div>
     );
   }
@@ -114,8 +116,8 @@ export default {
 function open() {
   router.backbutton.stack.push(close);
   isOpen = true;
-  setTimeout(function() {
-    if (utils.hasNetwork() && scroller) scroller.goToPage(1, 0);
+  setTimeout(() => {
+    if (scroller) scroller.goToPage(1, 0);
   }, 400);
   session.refresh()
   .then(v => {
@@ -186,7 +188,7 @@ function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, ori
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
   return (
     <div className="boardWrapper" style={style}>
-      {m<ViewOnlyBoardAttrs>(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
+      {h(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
     </div>
   );
 }
@@ -195,7 +197,7 @@ function timeLeft(g: NowPlayingGame): Mithril.Child {
   if (!g.isMyTurn) return i18n('waitingForOpponent');
   if (!g.secondsLeft) return i18n('yourTurn');
   const time = window.moment().add(g.secondsLeft, 'seconds');
-  return m('time', {
+  return h('time', {
     datetime: time.format()
   }, time.fromNow());
 }
@@ -306,7 +308,7 @@ function renderAllGames(cDim: CardDim) {
   } : {};
   const nbCards = utils.hasNetwork() ?
     challenges.length + nowPlaying.length + 1 :
-    getOfflineGames().length;
+    getOfflineGames().length + 1;
 
   let wrapperStyle: Object, wrapperWidth: number;
   if (cDim) {
@@ -352,9 +354,9 @@ function renderAllGames(cDim: CardDim) {
       </div>
     );
 
-    if (utils.hasNetwork()) allCards.unshift(newGameCard);
+    allCards.unshift(newGameCard);
   }
 
-  return m('div#all_games', { style: wrapperStyle }, allCards);
+  return h('div#all_games', { style: wrapperStyle }, allCards);
 }
 

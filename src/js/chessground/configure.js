@@ -1,4 +1,4 @@
-import { merge } from 'lodash'
+import * as merge from 'lodash/merge'
 import board from './board'
 import fen from './fen'
 

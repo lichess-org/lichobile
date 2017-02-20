@@ -1,14 +1,10 @@
-import router from '../../router';
 import {SearchState, SearchResult, SearchQuery, UserGameWithDate} from './interfaces';
 import * as xhr from './searchXhr'
 import * as stream from 'mithril/stream';
 import { handleXhrError } from '../../utils';
 import * as helper from '../helper';
 import redraw from '../../utils/redraw';
-import { ScrollState } from '../user/games';
-import { toggleGameBookmark } from '../../xhr';
-
-let cachedScrollState: ScrollState;
+import { toggleGameBookmark as toggleBookmarkXhr} from '../../xhr';
 
 export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   helper.analyticsTrackView('Advanced search');
@@ -20,7 +16,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     search,
     result,
     games,
-    bookmark,
+    toggleBookmark,
     more
   };
 
@@ -30,10 +26,8 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     const elements: HTMLCollection = form.elements as HTMLCollection;
     const queryData = fields.reduce((acc, el) => buildQuery(elements, acc, el), {}) as SearchQuery;
     lastQuery(queryData);
-    console.log(queryData);
     xhr.search(queryData)
     .then((data: SearchResult) => {
-      console.log(data);
       result(prepareData(data));
       games(result().paginator.currentPageResults);
       redraw();
@@ -42,19 +36,26 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
 
   }
 
-  function bookmark(id: string) {
-    toggleGameBookmark(id);
+  function toggleBookmark(id: string) {
+    toggleBookmarkXhr(id).then(() => {
+        const i = games().findIndex(h => h.id === id);
+        const g = games()[i]
+        if (g) {
+          const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
+          games()[i] = ng
+          redraw();
+        }
+      }
+    );
   }
 
   function more() {
     const queryData = lastQuery();
     queryData.page = result().paginator.nextPage;
-    console.log(queryData);
     xhr.search(queryData)
     .then((data: SearchResult) => {
       result(prepareData(data));
       games(games().concat(result().paginator.currentPageResults));
-      console.log(data);
       redraw();
     })
     .catch(handleXhrError);

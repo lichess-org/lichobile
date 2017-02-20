@@ -17,7 +17,7 @@ export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
 
   function header() {
-    return headerWidget(renderBackbutton('Search'));
+    return headerWidget(i18n('search'));
   }
 
   return layout.free(header, () => renderSearchForm(ctrl));
@@ -65,18 +65,18 @@ function renderSearchForm(ctrl: SearchState) {
           {renderSelectRow(i18n('black'), playersNonEmpty(), {name: 'players.black', options: getPlayers(), default: ''}, null)}
           {renderSelectRow(i18n('winner'), playersNonEmpty(), {name: 'players.winner', options: getPlayers(), default: ''}, null)}
           {renderSelectRow(i18n('ratingRange'), true, {name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
-          {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: null, onchange: () => { redraw() }}, null)}
+          {renderSelectRow(i18n('opponent'), true, {name: 'hasAi', options: opponentOptions, default: '', onchange: () => { redraw() }}, null)}
           {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, {name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
-          {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: null}, null)}
-          {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: null}, null)}
+          {renderSelectRow('Source', true, {name: 'source', options: sourceOptions, default: ''}, null)}
+          {renderSelectRow(i18n('variant'), true, {name: 'perf', options: perfOptions, default: ''}, null)}
           {renderSelectRow('Turns', true, {name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
           {renderSelectRow(i18n('duration'), true, {name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
           {renderSelectRow(i18n('time'), true, {name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
           {renderSelectRow(i18n('increment'), true, {name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
-          {renderSelectRow('Result', true, {name: 'status', options: resultOptions, default: null}, null)}
-          {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: null}, null)}
+          {renderSelectRow('Result', true, {name: 'status', options: resultOptions, default: ''}, null)}
+          {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: ''}, null)}
           {renderSelectRow('Date', true, {name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
-          {renderSelectRow('Sort', true, {name: 'sort.field', options: sortFieldOptions, default: 'From'}, {name: 'sort.order', options: sortOrderOptions, default: 'To'})}
+          {renderSelectRow('Sort', true, {name: 'sort.field', options: sortFieldOptions, default: null}, {name: 'sort.order', options: sortOrderOptions, default: null})}
           <div className="game_search_row">
             <label>Analysis?: </label>
             <div className="game_search_input double_wide">
@@ -110,14 +110,20 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: Select, s
       <label>{label}: </label>
       <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
         <select id={select1.name.replace('.', '_')} name={select1.name} onchange={select1.onchange ? select1.onchange : ''}>
-          <option selected value=""> {select1.default ? select1.default : ''} </option>
+          { select1.default !== null ?
+            <option selected value=""> {select1.default} </option> :
+            null
+          }
           {select1.options.map(renderOption)}
         </select>
       </div>
       {select2 ?
         <div className="game_search_select">
           <select id={select2.name.replace('.', '_')} name={select2.name} onchange={select1.onchange ? select1.onchange : ''}>
-            <option selected value=""> {select2.default ? select2.default : ''} </option>
+            { select2.default !== null ?
+              <option selected value=""> {select2.default} </option> :
+              null
+            }
             {select2.options.map(renderOption)}
           </select>
         </div>
@@ -180,7 +186,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, boardBounds:
     const star = g.bookmarked ? 't' : 's';
     const withStar = session.isConnected() ? ' withStar' : '';
     return (
-      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`} oncreate={helper.ontap(e => onTap(e, g, ctrl.bookmark))}>
+      <li data-id={g.id} key={g.id} className={`userGame ${evenOrOdd}${withStar}`} oncreate={helper.ontap(e => onTap(e, g, ctrl.toggleBookmark))}>
         {renderBoard(g.fen, perspectiveColor, boardBounds, this.boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">
@@ -221,10 +227,10 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, boardBounds:
   }
 }
 
-function onTap (e: Event, g: UserGameWithDate, bookmark: (id: string) => void) {
+function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => void) {
   const starButton = getButton(e);
   if (starButton) {
-    bookmark(g.id);
+    toggleBookmark(g.id);
   }
   else {
     router.set('/game/' + g.id);

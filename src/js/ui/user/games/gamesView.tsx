@@ -42,7 +42,7 @@ export function renderBody(ctrl: State) {
   );
 }
 
-export function getGameEl(e: Event) {
+function getGameEl(e: Event) {
   const target = (e.target as HTMLElement);
   return target.tagName === 'LI' ? target :
     helper.findParentBySelector(target, 'li');
@@ -99,6 +99,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const star = g.bookmarked ? 't' : 's';
     const bounds = scrollState.boardBounds;
     const withStar = session.isConnected() ? ' withStar' : '';
+
     return (
       <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
         {renderBoard(g.fen, userColor, bounds, this.boardTheme)}

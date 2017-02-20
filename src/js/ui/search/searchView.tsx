@@ -5,7 +5,7 @@ import i18n from '../../i18n';
 import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
-import { renderPlayer, renderBoard, getButton, getGameEl } from '../user/games/gamesView';
+import { renderPlayer, renderBoard, getButton } from '../user/games/gamesView';
 import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
 import gameStatus from '../../lichess/status';

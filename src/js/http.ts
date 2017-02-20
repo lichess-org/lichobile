@@ -83,6 +83,7 @@ export function request(url: string, opts?: RequestOpts, feedback = false): Prom
   });
 
   const reqPromise: PromiseLike<Response> = fetch(fullUrl, cfg);
+
   const promise: Promise<Response> = Promise.race([
     reqPromise,
     timeoutPromise

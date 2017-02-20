@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
+import { header as headerWidget } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
@@ -12,6 +12,7 @@ import gameStatus from '../../lichess/status';
 import session from '../../session';
 import * as utils from '../../utils';
 import router from '../../router';
+import * as throttle from 'lodash/throttle';
 
 export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
@@ -24,6 +25,7 @@ export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
 }
 
 function renderSearchForm(ctrl: SearchState) {
+  const throttledRedraw = throttle (() => redraw(), 500);
   const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}));
   const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]];
   const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}));
@@ -55,10 +57,10 @@ function renderSearchForm(ctrl: SearchState) {
           <div className="game_search_row">
             <label>Players: </label>
             <div className="game_search_input">
-              <input type="text" id="players_a" name="players.a" onkeyup={(e: Event) => { redraw(); }} />
+              <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
             </div>
             <div className="game_search_input">
-              <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
+              <input type="text" id="players_b" name="players.b" oninput={throttledRedraw} />
             </div>
           </div>
           {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: ''}, null)}

@@ -62,7 +62,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
   }
 }
 
-function buildQuery (elements: HTMLCollection, acc: any, name: string) {
+function buildQuery (elements: HTMLCollection, acc: Partial<SearchQuery>, name: string) {
   if(elements[name]) {
     acc[name] = elements[name].value;
     return acc;

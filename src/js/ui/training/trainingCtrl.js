@@ -1,4 +1,4 @@
-import { last } from 'lodash/array';
+import * as last from 'lodash/last';
 import chessground from '../../chessground';
 import router from '../../router';
 import redraw from '../../utils/redraw';

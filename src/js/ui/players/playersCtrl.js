@@ -1,7 +1,7 @@
 import socket from '../../socket';
 import redraw from '../../utils/redraw';
 import router from '../../router';
-import { throttle } from 'lodash/function';
+import * as throttle from 'lodash/throttle';
 import * as utils from '../../utils';
 import * as xhr from './playerXhr';
 import * as helper from '../helper';

@@ -76,7 +76,7 @@ function renderHeader(user: Session) {
       }
       { hasNetwork() && user ?
         <div key="user-button" className="user_profile_button"
-          oncreate={helper.ontap(menu.toggleHeader, null, null, false)}
+          oncreate={helper.ontap(menu.toggleHeader, null, null)}
         >
           {i18n('profile')}
           <span className="arrow" data-icon={menu.headerOpen() ? 'S' : 'R'} />

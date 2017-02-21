@@ -148,7 +148,7 @@ function renderAllGames(ctrl: State) {
   const { games  } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="scroller native_scroller games"
-      oncreate={helper.ontapY(e => onTap(ctrl, e), null, false, getGameEl)}
+      oncreate={helper.ontapY(e => onTap(ctrl, e), null, getGameEl)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
       { games.length ?

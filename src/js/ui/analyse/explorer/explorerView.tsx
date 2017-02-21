@@ -2,7 +2,7 @@ import * as h from 'mithril/hyperscript';
 import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
 import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
-import OpeningTable, { Attrs as OpeningTableAttrs, showEmpty, getTR } from './OpeningTable';
+import OpeningTable, { showEmpty, getTR } from './OpeningTable';
 
 function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
   const el = getTR(e)
@@ -29,7 +29,7 @@ function showTablebase(ctrl: AnalyseCtrlInterface, title: string, moves: Array<E
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
-      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e), null, null, false, getTR)}
+      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e), null, null, getTR)}
     >
       <tbody>
       {moves.map((move: ExplorerMove) => {

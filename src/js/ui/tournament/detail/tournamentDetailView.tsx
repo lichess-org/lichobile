@@ -260,7 +260,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
 
       <table
         className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}
-        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), null, null, false, getLeaderboardItemEl)}
+        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), null, null, getLeaderboardItemEl)}
       >
         {data.standing.players.map(p =>
           renderLeaderboardItem(ctrl.playerInfoCtrl, userName, p)

@@ -52,7 +52,7 @@ export function searchModal(ctrl: State) {
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} oncreate={helper.ontapY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={helper.ontapY(() => ctrl.goToProfile(u))}>
           {u}
           </li>
         );

@@ -6,5 +6,3 @@ interface Array<T> {
       */
     includes(searchElement: T, fromIndex?: number): boolean;
 }
-
-declare module 'chart.js'

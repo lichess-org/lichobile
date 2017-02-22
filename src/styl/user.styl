@@ -264,9 +264,14 @@ h3.fullname
 .variantPerf-graph
   margin-bottom 0.5em
   padding 5px
-  height 150px
-  @media only screen and (orientation landscape)
-    height 'calc(100vh - %s - 50px)' % headerHeight
+  text
+    fill textDarkBg
+  line, .domain
+    stroke textDarkBg
+  .path
+    stroke gold
+  .legend
+    fill gold
 
 table.variantPerf
   width 100%

@@ -82,8 +82,8 @@ export default class Editor {
     }]
 
     Promise.all([
-      loadLocalJsonFile('data/positions.json'),
-      loadLocalJsonFile('data/endgames.json')
+      loadLocalJsonFile<Array<BoardPositionCategory>>('data/positions.json'),
+      loadLocalJsonFile<Array<BoardPosition>>('data/endgames.json')
     ])
     .then(([openings, endgames]) => {
       this.positions(

@@ -91,11 +91,13 @@ export interface UserGame {
   analysed?: boolean
 }
 
+export type GraphPoint = [number, number, number, number]
+
 export interface VariantPerfStats {
   user: LightUser
   perf: any
   rank: number
   percentile: number
   stat: any
-  graph: any
+  graph: Array<GraphPoint>
 }

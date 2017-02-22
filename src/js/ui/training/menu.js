@@ -4,9 +4,6 @@ import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
 import * as h from 'mithril/hyperscript';
-import * as Chart from 'chart.js';
-
-Chart.defaults.global.animation = false;
 
 export default {
 
@@ -81,44 +78,44 @@ function chartHash(ctrl) {
 }
 
 function drawChart(ctrl, ctx) {
-  const canvas = ctx.canvas;
-  if (helper.isPortrait()) {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth - 20;
-    canvas.height = canvas.style.height = 150;
-  } else {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
-  }
-  const c = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ctrl.data.user.history.map(() => ''),
-      datasets: [{
-        data: ctrl.data.user.history,
-        borderColor: 'rgba(196, 168, 111, 0.8)',
-        pointRadius: 0,
-        fill: false
-      }]
-    },
-    options: {
-      scales: {
-        xAxes: [{
-          display: false
-        }],
-        yAxes: [{
-          id: 'y',
-          type: 'linear',
-          gridLines: {
-            color: '#ddd'
-          }
-        }]
-      },
-      legend: {
-        display: false
-      }
-    }
-  });
-  return c;
+  // const canvas = ctx.canvas;
+  // if (helper.isPortrait()) {
+  //   canvas.width = canvas.style.width = canvas.parentElement.offsetWidth - 20;
+  //   canvas.height = canvas.style.height = 150;
+  // } else {
+  //   canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
+  //   canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 20;
+  // }
+  // const c = new Chart(ctx, {
+  //   type: 'line',
+  //   data: {
+  //     labels: ctrl.data.user.history.map(() => ''),
+  //     datasets: [{
+  //       data: ctrl.data.user.history,
+  //       borderColor: 'rgba(196, 168, 111, 0.8)',
+  //       pointRadius: 0,
+  //       fill: false
+  //     }]
+  //   },
+  //   options: {
+  //     scales: {
+  //       xAxes: [{
+  //         display: false
+  //       }],
+  //       yAxes: [{
+  //         id: 'y',
+  //         type: 'linear',
+  //         gridLines: {
+  //           color: '#ddd'
+  //         }
+  //       }]
+  //     },
+  //     legend: {
+  //       display: false
+  //     }
+  //   }
+  // });
+  // return c;
 }
 
 function renderTrainingMenu(ctrl) {

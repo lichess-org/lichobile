@@ -65,7 +65,7 @@ export default function ButtonHandler(
     };
     active = true;
     setTimeout(() => {
-      if (active) activeElement.classList.add(ACTIVE_CLASS);
+      if (active && activeElement) activeElement.classList.add(ACTIVE_CLASS);
     }, 30);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {

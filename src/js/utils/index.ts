@@ -258,3 +258,9 @@ export function noNull<T>(v: T) {
 export function flatten<T>(arr: T[][]): T[] {
   return arr.reduce((a: T[], b: T[]) => a.concat(b), []);
 }
+
+export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U> {
+  let tmp = {} as Record<K, U>
+  Object.keys(obj).map((k: K) => tmp[k] = f(obj[k]))
+  return tmp
+}

@@ -30,7 +30,7 @@ export interface Seek {
   color: Color
   perf: {
     icon: string
-    name: Perf
+    name: PerfKey
   }
 }
 
@@ -64,7 +64,7 @@ export interface NowPlayingGame {
   lastMove: string
   variant: Variant
   speed: Speed
-  perf: Perf
+  perf: PerfKey
   color: Color
   fen: string
   rated: boolean

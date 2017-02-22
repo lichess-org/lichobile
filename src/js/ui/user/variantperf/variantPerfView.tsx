@@ -1,26 +1,14 @@
 import router from '../../../router';
 import * as utils from '../../../utils';
 import i18n from '../../../i18n';
-import {shortPerfTitle} from '../../../lichess/perfs';
 import * as helper from '../../helper';
-import { header as headerWidget, backButton } from '../../shared/common';
-import layout from '../../layout';
 import * as Chart from 'chart.js';
+
+import { State } from './'
 
 const ONE_YEAR = 1000*60*60*24*365;
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-  const userId = vnode.attrs.id;
-  const variant = vnode.attrs.variant;
-  const header = utils.partialf(headerWidget, null,
-    backButton(userId + ' ' + shortPerfTitle(variant) + ' stats')
-  );
-
-  return layout.free(header, () => renderBody(ctrl));
-}
-
-function renderBody(ctrl) {
+export function renderBody(ctrl: State) {
   const data = ctrl.variantPerfData();
 
   if (!data) return null;
@@ -32,12 +20,12 @@ function renderBody(ctrl) {
   const yearAgo = now - ONE_YEAR;
   const graphData = data.graph
     .map(normalizeGraphData)
-    .filter(i => i.x > yearAgo);
+    .filter((i: any) => i.x > yearAgo);
 
   return (
     <div class="variantPerfBody native_scroller page">
       {graphData && graphData.length >= 3 ?
-        <canvas className="variantPerf-graph" oncreate={node => delayDrawChart(graphData, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} /> : null
+        <canvas className="variantPerf-graph" oncreate={(node: Mithril.DOMNode) => delayDrawChart(graphData, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} /> : null
       }
       <table class="variantPerf">
         <tbody>
@@ -155,13 +143,13 @@ function renderBody(ctrl) {
       </table>
       <div class={'variantPerfGames noPadding ' + isEmpty(data.stat.bestWins.results.length)}>
         <div class="variantPerfHeading"> Best Wins </div>
-        {data.stat.bestWins.results.map(p => renderGame(p))}
+        {data.stat.bestWins.results.map((p: any) => renderGame(p))}
       </div>
     </div>
   );
 }
 
-function renderGame(game) {
+function renderGame(game: any) {
   const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
   const date = game.at.substring(0, 10);
   const gameId = game.gameId;
@@ -173,25 +161,25 @@ function renderGame(game) {
   );
 }
 
-function isEmpty(element) {
+function isEmpty(element: any) {
   if (!element)
     return 'empty';
   else
     return '';
 }
 
-function toTitleCase(str) {
+function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, txt =>
     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   );
 }
 
-function delayDrawChart(graphData, node) {
+function delayDrawChart(graphData: any, node: Mithril.DOMNode) {
   setTimeout(() => drawChart(graphData, node), 500);
 }
 
-function drawChart(graphData, node) {
-  const ctx = node.dom.getContext('2d');
+function drawChart(graphData: any, node: Mithril.DOMNode) {
+  const ctx = (node.dom as HTMLCanvasElement).getContext('2d');
   const canvas = ctx.canvas;
   const now = Date.now();
   const yearAgo = now - ONE_YEAR;
@@ -201,12 +189,16 @@ function drawChart(graphData, node) {
   }
 
   if (helper.isPortrait()) {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth - 20;
-    canvas.height = canvas.style.height = 150;
+    canvas.width = canvas.parentElement.offsetWidth - 20
+    canvas.height = 150
+    canvas.style.width = canvas.width + 'px'
+    canvas.style.height = canvas.height + 'px'
   } else {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 50;
+    canvas.width = canvas.parentElement.offsetWidth
+    canvas.height = canvas.parentElement.offsetHeight - 50
   }
+  canvas.style.width = canvas.width + 'px'
+  canvas.style.height = canvas.height + 'px'
 
   if (graphData[graphData.length-1].x < now) {
     graphData.push({x: now, y: graphData[graphData.length-1].y});
@@ -262,7 +254,7 @@ function drawChart(graphData, node) {
   return c;
 }
 
-function normalizeGraphData(i) {
+function normalizeGraphData(i: any) {
   const unixTime = (new Date(i[0], i[1], i[2])).getTime();
   return {x: unixTime, y: i[3]};
 }

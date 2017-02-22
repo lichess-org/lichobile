@@ -1,4 +1,4 @@
-import { UserFullProfile, GameFilter, UserGame } from '../../lichess/interfaces/user';
+import { UserFullProfile, GameFilter, UserGame, VariantPerfStats } from '../../lichess/interfaces/user';
 import { Paginator } from '../../lichess/interfaces';
 import { fetchJSON } from '../../http';
 
@@ -59,6 +59,6 @@ export function tv(userId: string): Promise<OnlineGameData> {
   return fetchJSON(`/@/${userId}/tv`);
 }
 
-export function variantperf(userId: string, variantKey: string) {
+export function variantperf(userId: string, variantKey: string): Promise<VariantPerfStats> {
   return fetchJSON(`/@/${userId}/perf/${variantKey}?graph=1`, null, false);
 }

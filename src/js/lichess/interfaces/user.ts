@@ -90,3 +90,12 @@ export interface UserGame {
   bookmarked?: boolean
   analysed?: boolean
 }
+
+export interface VariantPerfStats {
+  user: LightUser
+  perf: any
+  rank: number
+  percentile: number
+  stat: any
+  graph: any
+}

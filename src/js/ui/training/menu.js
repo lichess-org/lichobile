@@ -1,7 +1,7 @@
 import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
-import { line } from 'd3-shape';
-import { axisLeft, axisBottom } from 'd3-axis';
+import { area } from 'd3-shape';
+import { axisLeft } from 'd3-axis';
 import i18n from '../../i18n';
 import loginModal from '../loginModal';
 import popupWidget from '../shared/popup';
@@ -91,9 +91,10 @@ function drawChart(ctrl) {
   .domain([Math.min.apply(null, yvalues) - 10, Math.max.apply(null, yvalues) + 10])
   .rangeRound([height, 0]);
 
-  const l = line()
+  const l = area()
   .x(d => scaleX(d[0]))
-  .y(d => scaleY(d[1]));
+  .y0(height)
+  .y1(d => scaleY(d[1]));
 
   const yAxis = axisLeft(scaleY)
   .tickFormat(d => String(d));
@@ -110,11 +111,11 @@ function drawChart(ctrl) {
 
   g.append('path')
   .attr('class', 'path')
-  .attr('fill', 'none')
-  .attr('stroke', 'blue')
+  .attr('fill', 'steelblue')
+  .attr('stroke', 'steelblue')
   .attr('stroke-linejoin', 'round')
   .attr('stroke-linecap', 'round')
-  .attr('stroke-width', 1.5)
+  .attr('stroke-width', 0)
   .attr('d', l(data));
 }
 

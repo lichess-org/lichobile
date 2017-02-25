@@ -112,10 +112,10 @@ function diffBoard(ctrl) {
         }
         // different piece: flag as moved unless it is a captured piece
         else {
-          if (captured && !el.cgCaptured && captured.role === el.cgRole && captured.color === el.cgColor) {
-            el.cgCaptured = true;
+          if (captured && captured.role === el.cgRole && captured.color === el.cgColor) {
             el.classList.add('captured');
-          } else if (!el.cgCaptured) {
+            el.cgCaptured = true;
+          } else {
             movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
           }
         }

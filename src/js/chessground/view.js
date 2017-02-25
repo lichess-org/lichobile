@@ -49,7 +49,6 @@ function diffBoard(ctrl) {
   const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation;
   d.prevOrientation = d.orientation;
   const bounds = d.bounds;
-  const elements = ctrl.data.element.childNodes;
   const pieces = ctrl.data.pieces;
   const anims = ctrl.data.animation.current.anims;
   const capturedPieces = ctrl.data.animation.current.capturedPieces;
@@ -71,8 +70,8 @@ function diffBoard(ctrl) {
   }
 
   // walk over all board dom elements, apply animations and flag moved pieces
-  for (let i = 0, len = elements.length; i < len; i++) {
-    el = elements[i];
+  el = ctrl.data.element.firstChild;
+  while (el) {
     let k = el.cgKey;
     pieceAtKey = pieces[k];
     squareClassAtKey = squares.get(k);
@@ -131,6 +130,7 @@ function diffBoard(ctrl) {
         );
       }
     }
+    el = el.nextSibling;
   }
 
   // walk over all pieces in current set, apply dom changes to moved pieces

@@ -88,7 +88,6 @@ function diffBoard(ctrl) {
         el.cgDragging = false;
       }
       // remove captured class if it still remains
-      // (not sure yet if that branch is reachable)
       if (!captured && el.cgCaptured) {
         el.cgCaptured = false;
         el.classList.remove('captured');
@@ -116,7 +115,7 @@ function diffBoard(ctrl) {
           if (captured && !el.cgCaptured && captured.role === el.cgRole && captured.color === el.cgColor) {
             el.cgCaptured = true;
             el.classList.add('captured');
-          } else {
+          } else if (!el.cgCaptured) {
             movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
           }
         }

@@ -87,6 +87,12 @@ function diffBoard(ctrl) {
         el.style.transform = util.transform(d, el.cgColor, util.translate(translate));
         el.cgDragging = false;
       }
+      // remove captured class if it still remains
+      // (not sure yet if that branch is reachable)
+      if (!captured && el.cgCaptured) {
+        el.cgCaptured = false;
+        el.classList.remove('captured');
+      }
       // there is now a piece at this dom key
       if (pieceAtKey) {
         // continue animation if already animating and same color
@@ -107,7 +113,8 @@ function diffBoard(ctrl) {
         }
         // different piece: flag as moved unless it is a captured piece
         else {
-          if (captured && captured.role === el.cgRole && captured.color === el.cgColor) {
+          if (captured && !el.cgCaptured && captured.role === el.cgRole && captured.color === el.cgColor) {
+            el.cgCaptured = true;
             el.classList.add('captured');
           } else {
             movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));

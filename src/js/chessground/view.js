@@ -58,7 +58,7 @@ function diffBoard(ctrl) {
   const movedPieces = new Map();
   const movedSquares = new Map();
   const piecesKeys = Object.keys(pieces);
-  let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
+  let el, squareClassAtKey, pieceAtKey, pieceClass, anim, captured, translate;
   let mvdset, mvd;
 
   let otbTurnFlipChange, otbModeChange;
@@ -75,7 +75,7 @@ function diffBoard(ctrl) {
     let k = el.cgKey;
     pieceAtKey = pieces[k];
     squareClassAtKey = squares.get(k);
-    pieceId = el.cgRole + el.cgColor;
+    pieceClass = el.cgRole + el.cgColor;
     anim = anims && anims[k];
     captured = capturedPieces && capturedPieces[k];
     if (el.tagName === 'PIECE') {
@@ -116,13 +116,13 @@ function diffBoard(ctrl) {
             el.classList.add('captured');
             el.cgCaptured = true;
           } else {
-            movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
+            movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el));
           }
         }
       }
       // no piece: flag as moved
       else {
-        movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
+        movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el));
       }
     }
     else if (el.tagName === 'SQUARE') {
@@ -144,10 +144,10 @@ function diffBoard(ctrl) {
   for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
     let k = piecesKeys[j];
     let p = pieces[k];
-    pieceId = p.role + p.color;
+    pieceClass = p.role + p.color;
     anim = anims && anims[k];
     if (!samePieces.has(k)) {
-      mvdset = movedPieces.get(pieceId);
+      mvdset = movedPieces.get(pieceClass);
       mvd = mvdset && mvdset.pop();
       // a same piece was moved
       if (mvd) {
@@ -220,7 +220,7 @@ function renderSquareDom(key, vdom) {
   return s;
 }
 
-function pieceClass(p) {
+function pieceClassOf(p) {
   return p.role + ' ' + p.color;
 }
 
@@ -234,7 +234,7 @@ function renderPiece(d, key, ctx) {
   var dragging = draggable.orig === key && draggable.started;
   var attrs = {
     style: {},
-    className: pieceClass(p)
+    className: pieceClassOf(p)
   };
   var translate = util.posToTranslate(util.key2pos(key), ctx.asWhite, ctx.bounds);
   if (dragging) {
@@ -345,7 +345,7 @@ function renderContent(ctrl) {
 
 function renderCaptured(cfg, ctx) {
   var attrs = {
-    className: 'fading ' + pieceClass(cfg.piece),
+    className: 'fading ' + pieceClassOf(cfg.piece),
     style: {}
   };
   attrs.style.transform = util.translate(util.posToTranslate(cfg.piece.pos, ctx.asWhite, ctx.bounds));

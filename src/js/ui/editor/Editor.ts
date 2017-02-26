@@ -1,3 +1,4 @@
+import * as debounce from 'lodash/debounce';
 import chessground from '../../chessground';
 import router from '../../router';
 import redraw from '../../utils/redraw';
@@ -128,11 +129,22 @@ export default class Editor {
           this.data.editor.enpassant('-');
           this.data.editor.halfmove('0');
           this.data.editor.moves('1');
+          this.updateHref();
         }
       },
       disableContextMenu: true
     });
   }
+
+  private updateHref = debounce(() => {
+    const newFen = this.computeFen()
+    if (validateFen(newFen).valid === true) {
+      const path = `/editor/${encodeURIComponent(newFen)}`
+      try {
+        window.history.replaceState(window.history.state, null, '?=' + path);
+      } catch (e) { console.error(e) }
+    }
+  }, 250);
 
   public onstart = (e: TouchEvent) => drag(this, e)
   public onmove = (e: TouchEvent) => chessground.drag.move(this.chessground.data, e)

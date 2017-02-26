@@ -106,7 +106,7 @@
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
     <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
-    <plugin name="cordova-plugin-stockfish" spec="https://github.com/veloce/cordova-plugin-stockfish.git#94ac06a" />
+    <plugin name="cordova-plugin-stockfish" spec="~1.2.0" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />

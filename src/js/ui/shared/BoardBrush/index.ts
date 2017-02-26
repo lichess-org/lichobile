@@ -16,7 +16,10 @@ export default function BoardBrush(bounds: ClientRect, orientation: Color, shape
   if (!bounds) return null;
   if (bounds.width !== bounds.height) return null;
 
-  return h('svg', [
+  return h('svg', {
+    xmlns:'http://www.w3.org/2000/svg',
+    version:'1.1'
+  }, [
     usedBrushes,
     shapes.map(renderShape(orientation, false, brushes, bounds, pieceTheme))
   ])

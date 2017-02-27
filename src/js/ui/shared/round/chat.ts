@@ -125,30 +125,7 @@ export function chatView(ctrl: Chat) {
         oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
-        h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
-
-          const lichessTalking = msg.u === 'lichess';
-          const playerTalking = msg.c ? msg.c === player.color :
-          player.user && msg.u === player.user.username;
-
-          let closeBalloon = true;
-          let next = all[i + 1];
-          let nextTalking;
-          if (next) {
-            nextTalking = next.c ? next.c === player.color :
-            player.user && next.u === player.user.username;
-          }
-          if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
-
-          return h('li.chat_msg.allow_select', {
-            className: helper.classSet({
-              system: lichessTalking,
-              player: playerTalking,
-              opponent: !lichessTalking && !playerTalking,
-              'close_balloon': closeBalloon
-            })
-          }, msg.t);
-        }))
+        h('ul.chat_messages', ctrl.selectLines().map(!ctrl.root.data.player.spectator ? playerChatRender.bind(null, player) : spectatorChatRender.bind(null, player)))
       ]),
       h('form.chat_form', {
         onsubmit: (e: Event) => {
@@ -198,6 +175,52 @@ export function chatView(ctrl: Chat) {
       ])
     ])
   ]);
+}
+
+function playerChatRender (player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
+  const lichessTalking = msg.u === 'lichess';
+  const playerTalking = msg.c ? msg.c === player.color :
+  player.user && msg.u === player.user.username;
+
+  let closeBalloon = true;
+  let next = all[i + 1];
+  let nextTalking;
+  if (next) {
+    nextTalking = next.c ? next.c === player.color :
+    player.user && next.u === player.user.username;
+  }
+  if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking;
+
+  return h('li.chat_msg.allow_select', {
+    className: helper.classSet({
+      system: lichessTalking,
+      player: playerTalking,
+      opponent: !lichessTalking && !playerTalking,
+      'close_balloon': closeBalloon
+    })
+  }, msg.t);
+}
+
+function spectatorChatRender (player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
+  const lichessTalking = msg.u === 'lichess';
+  const meTalking = msg.u && (msg.u === session.getUserId());
+
+  let closeBalloon = true;
+  let next = all[i + 1];
+  let nextTalking;
+  if (next) {
+    nextTalking = next.u && (next.u === session.getUserId());
+  }
+  if (nextTalking !== undefined) closeBalloon = nextTalking !== meTalking;
+
+  return h('li.chat_msg.allow_select', {
+    className: helper.classSet({
+      system: lichessTalking,
+      player: meTalking,
+      opponent: !lichessTalking && !meTalking,
+      'close_balloon': closeBalloon
+    })
+  }, (meTalking || lichessTalking) ? msg.t : (msg.u + ': ' + msg.t));
 }
 
 function scrollChatToBottom(el: HTMLElement) {

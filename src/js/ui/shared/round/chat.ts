@@ -125,7 +125,7 @@ export function chatView(ctrl: Chat) {
         oncreate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement),
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
-        h('ul.chat_messages', ctrl.selectLines().map(!ctrl.root.data.player.spectator ? playerChatRender.bind(null, player) : spectatorChatRender.bind(null, player)))
+        h('ul.chat_messages', ctrl.selectLines().map(!ctrl.root.data.player.spectator ? playerChatRender.bind(null, player) : spectatorChatRender))
       ]),
       h('form.chat_form', {
         onsubmit: (e: Event) => {
@@ -201,7 +201,7 @@ function playerChatRender (player: Player, msg: ChatMsg, i: number, all: ChatMsg
   }, msg.t);
 }
 
-function spectatorChatRender (player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
+function spectatorChatRender (msg: ChatMsg, i: number, all: ChatMsg[]) {
   const lichessTalking = msg.u === 'lichess';
   const meTalking = msg.u && (msg.u === session.getUserId());
 

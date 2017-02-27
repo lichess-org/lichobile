@@ -2,7 +2,7 @@ import * as m from 'mithril';
 import { header as headerWidget } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import {SearchState, Select, Option, UserGameWithDate, SearchQuery} from './interfaces';
+import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import { renderPlayer, renderBoard, getButton } from '../user/games/gamesView';

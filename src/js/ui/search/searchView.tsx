@@ -2,7 +2,7 @@ import * as m from 'mithril';
 import { header as headerWidget } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
-import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
+import {SearchState, Select, Option, UserGameWithDate, SearchQuery} from './interfaces';
 import redraw from '../../utils/redraw';
 import settings from '../../settings';
 import { renderPlayer, renderBoard, getButton } from '../user/games/gamesView';
@@ -16,7 +16,6 @@ import * as throttle from 'lodash/throttle';
 
 export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
-
   function header() {
     return headerWidget(i18n('search'));
   }
@@ -46,14 +45,15 @@ function renderSearchForm(ctrl: SearchState) {
   const boardBounds = { height: boardsize, width: boardsize };
 
   return (
-    <div className="native_scroller searchWraper">
+    <div id="searchContent" className="native_scroller searchWraper">
       <form id="advancedSearchForm"
       onsubmit={function(e: Event) {
         e.preventDefault();
         const analysed = document.getElementById('analysed') as HTMLInputElement;
         analysed.value = analysed.checked ? '1' : '';
         return ctrl.search(e.target as HTMLFormElement);
-      }}>
+      }}
+      oncreate={() => onFormCreate(ctrl)}>
           <div className="game_search_row">
             <label>Players: </label>
             <div className="game_search_input">
@@ -235,6 +235,38 @@ function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => v
     toggleBookmark(g.id);
   }
   else {
+    const scrollPos = document.getElementById('searchContent').scrollTop;
+    const state = settings.search.state();
+    state.scrollPos = scrollPos;
+    settings.search.state(state);
     router.set('/game/' + g.id);
   }
+}
+
+function onFormCreate(ctrl: SearchState) {
+  if (ctrl.firstDraw && ctrl.scrollPos()) {
+    const searchContent = document.getElementById('searchContent');
+    if (searchContent) {
+      searchContent.scrollTop = ctrl.scrollPos();
+    }
+  }
+  setQueryParams(ctrl);
+  setTimeout(() => setQueryParams(ctrl), 1000); // For some reason the player.white, player.black and player.winner take a long time to appears in the DOM
+}
+
+function setQueryParams (ctrl: SearchState) {
+  if (!ctrl.firstDraw)
+    return
+
+  const query = ctrl.lastQuery();
+  ctrl.firstDraw = ctrl.firstDraw.reduce((acc: Array<string>, item: string) => {
+    const el = document.getElementById(item.replace('.', '_')) as HTMLInputElement;
+    if (el) {
+      el.value = query[item];
+    }
+    else {
+      acc.push(item)
+    }
+    return acc;
+  }, []);
 }

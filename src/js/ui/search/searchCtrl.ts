@@ -5,22 +5,35 @@ import { handleXhrError } from '../../utils';
 import * as helper from '../helper';
 import redraw from '../../utils/redraw';
 import { toggleGameBookmark as toggleBookmarkXhr} from '../../xhr';
+import settings from '../../settings';
 
-export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
+export default function oninit(vnode: Mithril.Vnode<{state: number}, SearchState>) {
   helper.analyticsTrackView('Advanced search');
   const result = stream<SearchResult>();
   const games = stream<Array<UserGameWithDate>>();
   const lastQuery = stream<SearchQuery>();
+  const scrollPos = stream<number>();
+
+  if(vnode.attrs.state) {
+    games(settings.search.state().games);
+    lastQuery(settings.search.state().query);
+    result(settings.search.state().result);
+    scrollPos(settings.search.state().scrollPos);
+  }
+
+  const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed'];
+  const firstDraw = fields.slice();
 
   vnode.state = {
     search,
     result,
     games,
     toggleBookmark,
-    more
+    more,
+    lastQuery,
+    firstDraw,
+    scrollPos
   };
-
-  const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed'];
 
   function search(form: HTMLFormElement) {
     const elements: HTMLCollection = form.elements as HTMLCollection;
@@ -30,10 +43,10 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     .then((data: SearchResult) => {
       result(prepareData(data));
       games(result().paginator.currentPageResults);
+      saveState(queryData, games(), result());
       redraw();
     })
     .catch(handleXhrError);
-
   }
 
   function toggleBookmark(id: string) {
@@ -56,6 +69,7 @@ export default function oninit(vnode: Mithril.Vnode<{}, SearchState>) {
     .then((data: SearchResult) => {
       result(prepareData(data));
       games(games().concat(result().paginator.currentPageResults));
+      saveState(queryData, games(), result());
       redraw();
     })
     .catch(handleXhrError);
@@ -79,4 +93,11 @@ function prepareData(xhrData: SearchResult) {
     });
   }
   return xhrData;
+}
+
+function saveState(query: SearchQuery, games: Array<UserGameWithDate>, result: SearchResult) {
+  settings.search.state({query, games, result});
+  try {
+    window.history.replaceState(window.history.state, null, '?=/search?state=1');
+  } catch (e) { console.error(e) }
 }

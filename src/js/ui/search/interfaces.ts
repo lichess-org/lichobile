@@ -7,6 +7,9 @@ export interface SearchState {
   toggleBookmark: (id: string) => void
   games: Mithril.Stream<Array<UserGameWithDate>>
   more: () => void
+  lastQuery: Mithril.Stream<SearchQuery>
+  firstDraw: Array<string>
+  scrollPos: Mithril.Stream<number>
 }
 
 export interface Select {
@@ -55,4 +58,11 @@ export interface SearchResult {
 
 export interface UserGameWithDate extends UserGame {
   date?: string
+}
+
+export interface SearchStateSetting {
+  query?: SearchQuery
+  games?: Array<UserGameWithDate>
+  result?: SearchResult
+  scrollPos?: number
 }

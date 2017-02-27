@@ -8,12 +8,17 @@ import layout from './layout';
 import i18n from '../i18n';
 import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
+import { TimelineEntry } from '../lichess/interfaces'
 
 export const supportedTypes = ['follow', 'game-end', 'tour-join'];
 
-export default {
+interface State {
+  timeline: Mithril.Stream<Array<TimelineEntry>>
+}
+
+const TimelineScreen: Mithril.Component<{}, State> = {
   oninit(vnode) {
-    const timeline = stream([]);
+    const timeline = stream([])
 
     timelineXhr()
     .then(data => {
@@ -24,19 +29,20 @@ export default {
 
     vnode.state = {
       timeline
-    };
+    }
   },
 
   oncreate: helper.viewFadeIn,
 
-  view(vnode) {
-    const ctrl = vnode.state;
-    const header = headerWidget.bind(undefined, null, backButton(i18n('timeline')));
-    return layout.free(header, renderBody.bind(undefined, ctrl));
+  view() {
+    const header = () => headerWidget(null, backButton(i18n('timeline')))
+    return layout.free(header, () => renderBody(this))
   }
-};
+}
 
-function renderBody(ctrl) {
+export default TimelineScreen
+
+function renderBody(ctrl: State) {
   return (
     <ul className="timeline native_scroller page">
       {ctrl.timeline().map(e => {
@@ -53,7 +59,7 @@ function renderBody(ctrl) {
   );
 }
 
-export function renderTourJoin(entry) {
+export function renderTourJoin(entry: TimelineEntry) {
   const fromNow = window.moment(entry.date).fromNow();
   const entryText = i18n('xCompetesInY', entry.data.userId, entry.data.tourName);
   const key = 'tour' + entry.date;
@@ -71,7 +77,7 @@ export function renderTourJoin(entry) {
   );
 }
 
-export function renderFollow(entry) {
+export function renderFollow(entry: TimelineEntry) {
   const fromNow = window.moment(entry.date).fromNow();
   const entryText = i18n('xStartedFollowingY', entry.data.u1, entry.data.u2);
   const key = 'follow' + entry.date;
@@ -89,7 +95,7 @@ export function renderFollow(entry) {
   );
 }
 
-export function renderGameEnd(entry) {
+export function renderGameEnd(entry: TimelineEntry) {
   const icon = gameIcon(entry.data.perf);
   const result = typeof entry.data.win === 'undefined' ? i18n('draw') : (entry.data.win ? 'Victory' : 'Defeat');
   const fromNow = window.moment(entry.date).fromNow();

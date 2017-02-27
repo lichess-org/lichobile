@@ -32,12 +32,11 @@ function removeSquareTarget(data) {
 }
 
 function getPieceByKey(data, key) {
-  const els = data.element.childNodes;
-  for (let i = 0, len = els.length; i < len; i++) {
-    let el = els[i];
+  let el = data.element.firstChild;
+  while (el) {
     if (el.tagName === 'PIECE' && el.cgKey === key) return el;
+    el = el.nextSibling;
   }
-
   return null;
 }
 

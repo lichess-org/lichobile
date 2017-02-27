@@ -2,7 +2,7 @@ import * as helper from '../../helper';
 import spinner from '../../../spinner';
 import i18n from '../../../i18n';
 import router from '../../../router';
-import { debounce }  from 'lodash/function';
+import * as debounce from 'lodash/debounce';
 import { readNote, syncNote } from './roundXhr';
 import { closeIcon } from '../../shared/icons'
 import * as h from 'mithril/hyperscript';

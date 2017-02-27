@@ -122,7 +122,7 @@ export function awaitInvitePopup(ctrl: ChallengeState) {
 
 function challengeUserFormat(user: ChallengeUser) {
   const ratingString = user.rating + (user.provisional ? '?' : '');
-  return `${user.id} (${ratingString})`;
+  return `${user.name} (${ratingString})`;
 }
 
 export function awaitChallengePopup(ctrl: ChallengeState) {

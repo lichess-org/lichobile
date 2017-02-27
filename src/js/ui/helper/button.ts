@@ -23,7 +23,6 @@ export default function ButtonHandler(
   repeatHandler: () => boolean,
   scrollX: boolean,
   scrollY: boolean,
-  touchEndFeedback: boolean,
   getElement?: (e: TouchEvent) => HTMLElement) {
 
   let activeElement = el;
@@ -66,8 +65,8 @@ export default function ButtonHandler(
     };
     active = true;
     setTimeout(() => {
-      if (active) activeElement.classList.add(ACTIVE_CLASS);
-    }, 200);
+      if (active && activeElement) activeElement.classList.add(ACTIVE_CLASS);
+    }, 30);
     if (!hasContextMenu()) holdTimeoutID = setTimeout(onHold, HOLD_DURATION);
     if (repeatHandler) repeatTimeoutId = setTimeout(() => {
       batchRequestAnimationFrame(onRepeat);
@@ -94,10 +93,9 @@ export default function ButtonHandler(
     removeFromBatchAnimationFrame(onRepeat);
     if (active && activeElement) {
       clearTimeout(holdTimeoutID);
-      if (touchEndFeedback) activeElement.classList.add(ACTIVE_CLASS);
       tapHandler(e);
       active = false;
-      setTimeout(() => activeElement.classList.remove(ACTIVE_CLASS), 80);
+      activeElement.classList.remove(ACTIVE_CLASS);
     }
   }
 

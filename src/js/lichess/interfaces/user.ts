@@ -28,12 +28,32 @@ export interface UserFullProfile extends User {
   followsYou?: boolean
 }
 
+export interface Perf {
+  rating: number
+  progress: number
+}
+
 export interface LightUser {
   id: string
   name: string
   title?: string
   patron: boolean
 }
+
+export interface BaseUser {
+  id: string
+  username: string
+  online?: boolean
+  patron?: boolean
+  title?: string
+}
+
+export interface RankingUser extends BaseUser {
+  perfs: Record<PerfKey, Perf>
+}
+
+export type RankingKey = PerfKey | 'online'
+export type Rankings = Record<RankingKey, Array<RankingUser>>
 
 export interface UserGamePlayer {
   user?: LightUser
@@ -49,7 +69,7 @@ export interface UserGame {
   rated: boolean
   variant: Variant
   speed: Speed
-  perf: Perf
+  perf: PerfKey
   timestamp: Timestamp
   turns: number
   status: GameStatus
@@ -69,4 +89,15 @@ export interface UserGame {
   bookmarks: number
   bookmarked?: boolean
   analysed?: boolean
+}
+
+export type GraphPoint = [number, number, number, number]
+
+export interface VariantPerfStats {
+  user: LightUser
+  perf: any
+  rank: number
+  percentile: number
+  stat: any
+  graph: Array<GraphPoint>
 }

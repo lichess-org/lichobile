@@ -3,20 +3,12 @@ import router from '../../router';
 import * as helper from '../helper';
 import { menuButton, friendsButton, userStatus } from '../shared/common';
 import { backArrow } from '../shared/icons';
-import layout from '../layout';
 import settings from '../../settings';
 import i18n from '../../i18n';
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-  const headerCtrl = header.bind(undefined, ctrl);
-  const bodyCtrl = body.bind(undefined, ctrl);
-  const searchModalCtrl = searchModal.bind(undefined, ctrl);
+import { State } from './'
 
-  return layout.free(headerCtrl, bodyCtrl, null, searchModalCtrl);
-}
-
-function header(ctrl) {
+export function header(ctrl: State) {
   return [
     <nav>
       {menuButton()}
@@ -31,7 +23,7 @@ function header(ctrl) {
   ];
 }
 
-function searchModal(ctrl) {
+export function searchModal(ctrl: State) {
   if (!ctrl.isSearchOpen())
     return null;
 
@@ -44,7 +36,7 @@ function searchModal(ctrl) {
   return (
     <div id="searchPlayersModal" className={className}>
       <header class="main_header">
-        <button className="main_header_button" oncreate={helper.ontap(ctrl.closeSearch)}>
+        <button className="main_header_button" oncreate={helper.ontap(() => ctrl.closeSearch())}>
           {backArrow}
         </button>
         <div className="search_input allow_select">
@@ -60,7 +52,7 @@ function searchModal(ctrl) {
       <ul id="playersSearchResults" className="modal_content native_scroller">
       {ctrl.searchResults().map(u => {
         return (
-          <li className="list_item nav" key={u} oncreate={helper.ontapY(utils.f(ctrl.goToProfile, u))}>
+          <li className="list_item nav" key={u} oncreate={helper.ontapY(() => ctrl.goToProfile(u))}>
           {u}
           </li>
         );
@@ -70,7 +62,7 @@ function searchModal(ctrl) {
   );
 }
 
-function body(ctrl) {
+export function body(ctrl: State) {
   return (
     <ul className="playersSuggestion native_scroller page">
       {ctrl.players().map(renderPlayer)}
@@ -78,7 +70,7 @@ function body(ctrl) {
   );
 }
 
-function renderPlayer(user) {
+function renderPlayer(user: User) {
   const perf = Object.keys(user.perfs).reduce((prev, curr) => {
     if (!prev) return curr;
     if (curr === 'opening' || curr === 'puzzle') return prev;

@@ -22,6 +22,7 @@ import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import { backArrow } from './icons'
+import { BaseUser } from '../../lichess/interfaces/user'
 
 export const LoadingBoard = {
   view() {
@@ -216,7 +217,7 @@ export function empty(): Mithril.Children {
   return [];
 }
 
-export function userStatus(user: User) {
+export function userStatus(user: BaseUser) {
   const status = user.online ? 'online' : 'offline';
   return (
     <div className="user">

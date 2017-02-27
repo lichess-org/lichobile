@@ -1,8 +1,9 @@
 type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accepted';
 
 export interface ChallengeUser {
-  id: string;
-  rating: number;
+  id: string
+  name: string
+  rating: number
   provisional?: boolean
 }
 

@@ -31,11 +31,6 @@ const offlineAvailableVariants = [
   ['Racing Kings', 'racingKings']
 ]
 
-// temporarily disable ios crazy ceval bc/ of stockfish crash
-function filterIOSCrazy(p: [string, string]) {
-  return window.cordova.platformId !== 'ios' || p[1] !== 'crazyhouse'
-}
-
 export interface GameSettings {
   time: SettingsProp<string>
   timeMode: SettingsProp<string>
@@ -150,7 +145,7 @@ export default {
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1'),
     variant: localstorageprop('settings.ai.variant', 'standard'),
-    availableVariants: offlineAvailableVariants.filter(filterIOSCrazy)
+    availableVariants: offlineAvailableVariants
   },
 
   otb: {

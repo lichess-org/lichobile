@@ -24,8 +24,9 @@ export default class Analyse implements AnalyseInterface {
       const p = path[j];
       for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
-          if (p.variation) {
-            tree = tree[i].variations[p.variation - 1];
+          const vs = tree[i].variations
+          if (vs && p.variation) {
+            tree = vs[p.variation - 1];
             break;
           }
           return tree[i];
@@ -55,8 +56,9 @@ export default class Analyse implements AnalyseInterface {
       const p = path[j];
       for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
-          if (p.variation) {
-            tree = tree[i].variations[p.variation - 1];
+          const vs = tree[i].variations
+          if (vs && p.variation) {
+            tree = vs[p.variation - 1];
             break;
           }
           lsteps.push(tree[i]);
@@ -89,9 +91,10 @@ export default class Analyse implements AnalyseInterface {
     nextPath.forEach((p: PathObj) => {
       for (let i = 0, nb = tree.length; i < nb; i++) {
         const s = tree[i];
+        const vs = s.variations
         if (p.ply === s.ply) {
-          if (p.variation) {
-            tree = s.variations[p.variation - 1];
+          if (vs && p.variation) {
+            tree = vs[p.variation - 1];
             break;
           } else curStep = s;
         } else if (p.ply < s.ply) break;
@@ -125,8 +128,9 @@ export default class Analyse implements AnalyseInterface {
       const p = path[j];
       for (let i = 0, nb = tree.length; i < nb; i++) {
         if (p.ply === tree[i].ply) {
-          if (tree[i].variations && p.variation) {
-            tree = tree[i].variations[p.variation - 1];
+          const vs = tree[i].variations
+          if (vs && p.variation) {
+            tree = vs[p.variation - 1];
             break;
           }
           update(tree[i]);
@@ -145,13 +149,16 @@ export default class Analyse implements AnalyseInterface {
 
   public promoteVariation = (ply: number, id: number) => {
     const stepId = this.tree.findIndex(s => s.ply === ply)
-    const variation = this.getStepAtPly(ply).variations[id - 1];
-    this.deleteVariation(ply, id);
-    const demoted = this.tree.splice(stepId);
-    this.tree = this.tree.concat(variation);
-    const lastMainPly = this.tree[stepId];
-    lastMainPly.variations = lastMainPly.variations || [];
-    lastMainPly.variations.push(demoted);
+    const step = this.getStepAtPly(ply)
+    const variation = step.variations && step.variations[id - 1];
+    if (variation) {
+      this.deleteVariation(ply, id);
+      const demoted = this.tree.splice(stepId);
+      this.tree = this.tree.concat(variation);
+      const lastMainPly = this.tree[stepId];
+      lastMainPly.variations = lastMainPly.variations || [];
+      lastMainPly.variations.push(demoted);
+    }
   }
 
   public plyOfNextNag = (color: Color, nag: string, fromPly: number) => {

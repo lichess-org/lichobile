@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import redraw from '../../utils/redraw';
 import * as helper from '../helper';
 import router from '../../router';
 import { handleXhrError } from '../../utils';
@@ -64,6 +65,7 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
       socket.createChallenge(d.challenge.id, d.socketVersion, onSocketOpen, {
         reload: reloadChallenge
       });
+      redraw();
     })
     .catch(err => {
       handleXhrError(err);

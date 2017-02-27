@@ -87,7 +87,7 @@ export function piece(theme: string, pos: BoardPos, piece: Piece, bounds: Bounds
       y: o[1] - size / 2,
       width: size,
       height: size,
-      href: href
+      'xlink:href': href,
     }
   };
 }

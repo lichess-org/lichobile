@@ -105,7 +105,7 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<Ex
   if (!ctrl.explorer.withGames || !games.length) return null;
   return (
     <table className="games"
-      oncreate={helper.ontap(e => link(ctrl, e), null, null, false, getTR)}
+      oncreate={helper.ontap(e => link(ctrl, e), null, null, getTR)}
     >
       <thead>
         <tr>
@@ -145,7 +145,7 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
   return (
     <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
-      oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTR)}
+      oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, getTR)}
     >
       <thead>
         <tr>

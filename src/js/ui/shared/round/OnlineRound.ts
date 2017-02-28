@@ -60,6 +60,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public tv: string
 
   private tournamentCountInterval: number
+  private tournamentClockTime: number
   private clockIntervId: number
 
   public constructor(
@@ -130,7 +131,8 @@ export default class OnlineRound implements OnlineRoundInterface {
     else if (this.correspondenceClock) this.clockIntervId = setInterval(this.correspondenceClockTick, 6000);
 
     if (this.data.tournament) {
-      this.tournamentCountInterval = setInterval(this.tournamentTick, 1000);
+      this.tournamentClockTime = performance.now()
+      this.tournamentCountInterval = setInterval(this.tournamentTick, 100)
     }
 
     this.connectSocket();
@@ -141,11 +143,15 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private tournamentTick = () => {
-    if (this.data.tournament.secondsToFinish > 0) {
-      this.data.tournament.secondsToFinish--;
+    if (this.data.tournament && this.data.tournament.secondsToFinish > 0) {
+      const now = performance.now()
+      const ttl = this.data.tournament.secondsToFinish
+      const elapsed = (now - this.tournamentClockTime) / 1000
+      this.tournamentClockTime = now
+      this.data.tournament.secondsToFinish = ttl - elapsed
       if (this.vm.tClockEl) {
         this.vm.tClockEl.textContent =
-          formatTimeInSecs(this.data.tournament.secondsToFinish) +
+          formatTimeInSecs(Math.round(ttl)) +
         ' • ';
       }
     } else {

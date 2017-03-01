@@ -60,7 +60,7 @@ export default function cevalEngine(opts: Opts) {
   }
 
   function stop(): Promise<{}> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (finished) {
         stopped = true;
         resolve();

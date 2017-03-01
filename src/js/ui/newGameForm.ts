@@ -111,13 +111,12 @@ function renderContent() {
 }
 
 function renderQuickSetup() {
-  const selectedPool = settings.gameSetup.human.pool()
   return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
-    xhr.cachedPools.map(p => renderPool(p, selectedPool)) : spinner.getVdom()
+    xhr.cachedPools.map(p => renderPool(p)) : spinner.getVdom()
   )
 }
 
-function renderPool(p: Pool, selectedPool: string) {
+function renderPool(p: Pool) {
   return h('div.newGame-pool', {
     key: 'pools',
     oncreate: helper.ontap(() => {

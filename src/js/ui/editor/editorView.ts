@@ -34,8 +34,8 @@ export default function view(ctrl: Editor) {
           onremove: ctrl.editorOnRemove
         }, [
           h('div.editor-piecesDrawer', [
-            sparePieces(ctrl, opposite, color, 'top'),
-            sparePieces(ctrl, color, color, 'bottom')
+            sparePieces(opposite, color, 'top'),
+            sparePieces(color, color, 'bottom')
           ]),
         ]),
         renderActionsBar(ctrl)
@@ -58,7 +58,7 @@ export default function view(ctrl: Editor) {
   );
 }
 
-function sparePieces(ctrl: Editor, color: Color, orientation: Color, position: 'top' | 'bottom') {
+function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom') {
   return h('div', {
     className: ['sparePieces', position, 'orientation-' + orientation, color].join(' ')
   }, h('div.sparePiecesInner', ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'].map((role) => {

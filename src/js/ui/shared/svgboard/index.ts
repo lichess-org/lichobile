@@ -1,14 +1,9 @@
 import chessground from '../../../chessground'
 import svgPieces from './pieces'
 
-interface Bounds {
-  width: number
-  height: number
-}
-
 type BoardPos = [number, number]
 
-export function makeBoard(fen: string, orientation: Color, bounds: Bounds) {
+export function makeBoard(fen: string, orientation: Color) {
   const pieces = chessground.fen.read(fen)
   const piecesKey = Object.keys(pieces)
   let b = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360">'

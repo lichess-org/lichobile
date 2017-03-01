@@ -222,19 +222,10 @@ interface WinnerUser {
   title: string
 }
 
-export interface TournamentListAttrs {
-  tab: string
-}
-
-interface PositionCategory {
-  name: string
-  positions: Array<Opening>
-}
-
-export interface TournamentListsState {
+export interface TournamentListState {
   tournaments: Mithril.Stream<TournamentLists>
   currentTab: Mithril.Stream<string>
-  startPositions?: Array<PositionCategory>
+  startPositions: Array<BoardPositionCategory>
 }
 
 export interface PlayerInfoState {

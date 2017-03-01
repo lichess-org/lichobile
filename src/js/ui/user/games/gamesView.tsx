@@ -16,11 +16,6 @@ import { UserGamePlayer } from '../../../lichess/interfaces/user';
 
 import { State, ScrollState } from './';
 
-interface Bounds {
-  width: number
-  height: number
-}
-
 export function renderBody(ctrl: State) {
   return (
     <div className="userGamesWrapper">
@@ -85,7 +80,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     this.boardTheme = settings.general.theme.board();
   },
   view({ attrs }) {
-    const { g, index, userId, scrollState } = attrs
+    const { g, index, userId } = attrs
     const time = gameApi.time(g);
     const mode = g.rated ? i18n('rated') : i18n('casual');
     const title = g.source === 'import' ?
@@ -97,12 +92,11 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
     const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
     const star = g.bookmarked ? 't' : 's';
-    const bounds = scrollState.boardBounds;
     const withStar = session.isConnected() ? ' withStar' : ''
 
     return (
       <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
-        {renderBoard(g.fen, userColor, bounds, this.boardTheme)}
+        {renderBoard(g.fen, userColor, this.boardTheme)}
         <div className="userGame-infos">
           <div className="userGame-versus">
             <span className="variant-icon" data-icon={icon} />
@@ -168,7 +162,7 @@ function renderAllGames(ctrl: State) {
   );
 }
 
-function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme: string) {
+function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 
   const boardClass = [
     'display_board',
@@ -180,7 +174,7 @@ function renderBoard(fen: string, orientation: Color, bounds: Bounds, boardTheme
       oncreate={({ dom }: Mithril.DOMNode) => {
         const img = document.createElement('img')
         img.className = 'cg-board'
-        img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation, bounds)
+        img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation)
         batchRequestAnimationFrame(() => {
           dom.replaceChild(img, dom.firstChild)
         })

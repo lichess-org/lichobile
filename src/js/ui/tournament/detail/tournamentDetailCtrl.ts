@@ -55,7 +55,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
 
   function join(tid: string, password: string) {
     xhr.join(tid, password)
-    .then((response) => {
+    .then(() => {
       hasJoined(true);
       currentPage(null); // Reset the page so next reload goes to player position
       redraw();

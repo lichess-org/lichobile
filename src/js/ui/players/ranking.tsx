@@ -31,7 +31,7 @@ const RankingScreen: Mithril.Component<{}, State> = {
 
     xhr.ranking()
     .then(data => {
-      catOpenedMap(utils.mapObject(data, k => false))
+      catOpenedMap(utils.mapObject(data, () => false))
       ranking(data)
       redraw()
     })

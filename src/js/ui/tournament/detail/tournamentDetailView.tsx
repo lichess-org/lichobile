@@ -10,7 +10,7 @@ import playerInfo from '../playerInfo';
 import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
-import { TournamentState, Tournament, PlayerInfoState, StandingPlayer, PodiumPlace } from '../interfaces';
+import { TournamentState, Tournament, StandingPlayer, PodiumPlace } from '../interfaces';
 import passwordForm from './passwordForm';
 
 export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
@@ -263,7 +263,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), null, null, getLeaderboardItemEl)}
       >
         {data.standing.players.map(p =>
-          renderLeaderboardItem(ctrl.playerInfoCtrl, userName, p)
+          renderLeaderboardItem(userName, p)
         )}
       </table>
 
@@ -292,7 +292,7 @@ function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
   );
 }
 
-function renderLeaderboardItem (playerInfoCtrl: PlayerInfoState, userName: string, player: StandingPlayer) {
+function renderLeaderboardItem (userName: string, player: StandingPlayer) {
   const isMe = player.name === userName;
   return (
     <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >

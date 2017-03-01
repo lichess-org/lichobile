@@ -1,23 +1,11 @@
 import * as helper from '../helper';
 import router from '../../router';
-import session from '../../session';
-import { header } from '../shared/common';
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
-import layout from '../layout';
 import i18n from '../../i18n';
 import * as h from 'mithril/hyperscript';
 import tabs from '../shared/tabs';
+import { TournamentListState, TournamentListItem } from './interfaces';
 import newTournamentForm from './newTournamentForm';
-import { TournamentListsState, TournamentListItem } from './interfaces';
-
-export default function view(vnode: Mithril.Vnode<{}, TournamentListsState>) {
-  const ctrl = vnode.state
-  const bodyCtrl = tournamentListBody.bind(undefined, ctrl)
-  const footer = session.isConnected() ? () => renderFooter() : null
-  const overlay = () => newTournamentForm.view(ctrl)
-
-  return layout.free(() => header(i18n('tournaments')), bodyCtrl, footer, overlay)
-}
 
 const TABS = [{
     key: 'started',
@@ -47,7 +35,7 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     ]);
 }
 
-function tournamentListBody(ctrl: TournamentListsState) {
+export function tournamentListBody(ctrl: TournamentListState) {
   if (!ctrl.tournaments()) return null;
 
   const id = ctrl.currentTab();
@@ -63,6 +51,17 @@ function tournamentListBody(ctrl: TournamentListsState) {
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+export function renderFooter() {
+  return (
+    <div className="actions_bar">
+      <button key="createTournament" className="action_bar_button" oncreate={helper.ontap(newTournamentForm.open)}>
+        <span className="fa fa-pencil" />
+        {i18n('createANewTournament')}
+      </button>
     </div>
   );
 }
@@ -91,17 +90,6 @@ function renderTournamentListItem(tournament: TournamentListItem) {
         &#xf054;
       </td>
     </tr>
-  );
-}
-
-function renderFooter() {
-  return (
-    <div className="actions_bar">
-      <button key="createTournament" className="action_bar_button" oncreate={helper.ontap(newTournamentForm.open)}>
-        <span className="fa fa-pencil" />
-        {i18n('createANewTournament')}
-      </button>
-    </div>
   );
 }
 

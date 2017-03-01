@@ -34,16 +34,16 @@ export default function view(ctrl: OnlineRound) {
   return layout.board(
     () => renderHeader(ctrl),
     () => renderContent(ctrl, isPortrait),
-    () => overlay(ctrl, isPortrait)
+    () => overlay(ctrl)
   );
 }
 
-function overlay(ctrl: OnlineRound, isPortrait: boolean) {
+function overlay(ctrl: OnlineRound) {
   return [
     ctrl.chat ? chatView(ctrl.chat) : null,
     ctrl.notes ? notesView(ctrl.notes) : null,
     promotion.view(ctrl),
-    renderGamePopup(ctrl, isPortrait),
+    renderGamePopup(ctrl),
     renderSubmitMovePopup(ctrl),
     miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, () => ctrl.closeUserPopup('player')),
     miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, () => ctrl.closeUserPopup('opponent'))
@@ -436,7 +436,7 @@ function gameInfos(ctrl: OnlineRound) {
   ];
 }
 
-function renderGamePopup(ctrl: OnlineRound, isPortrait: boolean) {
+function renderGamePopup(ctrl: OnlineRound) {
   return popupWidget(
     'player_controls',
     () => gameInfos(ctrl),

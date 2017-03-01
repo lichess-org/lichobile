@@ -3,7 +3,7 @@ import { scaleTime, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { timeFormat } from 'd3-time-format'
-import { timeMonth, timeYear, timeWeek } from 'd3-time'
+import { timeMonth, timeYear } from 'd3-time'
 import router from '../../../router';
 import i18n from '../../../i18n';
 import * as helper from '../../helper';

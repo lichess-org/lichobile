@@ -1,4 +1,3 @@
-import * as utils from '../../utils';
 import * as helper from '../helper';
 import { dropShadowHeader, backButton } from '../shared/common';
 import formWidgets from '../shared/form';

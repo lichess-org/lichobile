@@ -93,7 +93,7 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
     }
   },
 
-  view(vnode) {
+  view() {
     let overlay: () => Mithril.Children;
     let board = viewOnlyBoardContent;
 

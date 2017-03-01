@@ -1,11 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import chessground from '../../chessground';
 import { getBoardBounds } from '../helper';
-import { playerFromFen } from '../../utils/fen';
-import i18n from '../../i18n';
-
-import layout from '../layout';
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
 import Board from '../shared/Board';
 import {
   renderAntagonist,
@@ -18,27 +13,7 @@ import actions from './actions';
 import newGameMenu from './newAiGame';
 import AiRound from './AiRound';
 
-export default function view() {
-  let content: () => Mithril.Children, header: () => Mithril.Children
-
-  if (this.round.data && this.round.chessground) {
-    header = () => renderHeader(gameTitle(this.round.data));
-    content = () => renderContent(this.round);
-  } else {
-    const fen = this.round.vm.setupFen || this.round.vm.savedFen;
-    const color = playerFromFen(fen);
-    header = () => renderHeader(i18n('playOfflineComputer'));
-    content = () => viewOnlyBoardContent(fen, null, color);
-  }
-
-  return layout.board(
-    header,
-    content,
-    () => overlay(this.round)
-  );
-}
-
-function renderContent(ctrl: AiRound) {
+export function renderContent(ctrl: AiRound) {
 
   const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
   const isPortrait = helper.isPortrait();
@@ -86,7 +61,7 @@ function renderContent(ctrl: AiRound) {
   }
 }
 
-function overlay(ctrl: AiRound) {
+export function overlay(ctrl: AiRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),

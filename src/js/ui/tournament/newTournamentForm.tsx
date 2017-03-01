@@ -5,7 +5,7 @@ import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import router from '../../router';
 import { handleXhrError } from '../../utils';
-import { TournamentListsState, TournamentCreateResponse } from './interfaces';
+import { TournamentListState, TournamentCreateResponse } from './interfaces';
 import * as xhr from './tournamentXhr';
 
 let isOpen = false;
@@ -13,7 +13,7 @@ let isOpen = false;
 export default {
   open,
   close,
-  view(ctrl: TournamentListsState) {
+  view(ctrl: TournamentListState) {
     return popupWidget(
       'tournament_form_popup',
       null,
@@ -35,7 +35,7 @@ function close(fromBB?: string) {
 }
 
 
-function renderForm(ctrl: TournamentListsState) {
+function renderForm(ctrl: TournamentListState) {
   return (
     <form id="tournamentCreateForm"
     onsubmit={function(e: Event) {

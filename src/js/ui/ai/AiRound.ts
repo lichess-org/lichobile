@@ -229,6 +229,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   private onMove = (orig: Pos, dest: Pos, capturedPiece: Piece) => {
+    // fixme
+    console.log(orig)
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest);

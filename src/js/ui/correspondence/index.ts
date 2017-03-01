@@ -91,7 +91,7 @@ const CorrespondenceScreen: Mithril.Component<Attrs, State> = {
 
   oncreate: helper.viewFadeIn,
 
-  view(vnode) {
+  view() {
     const header = () => headerWidget(i18n('correspondence'))
     const body = () => renderBody(this)
 

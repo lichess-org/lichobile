@@ -8,6 +8,7 @@
     "strictNullChecks": false,
     "noUnusedLocals": true,
     "noImplicitThis": true,
+    "strictNullChecks": true,
     "noUnusedParameters": true,
     "jsx": "preserve"
   },

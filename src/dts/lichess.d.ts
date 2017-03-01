@@ -205,25 +205,25 @@ interface ChatMsg {
 
 interface GameData {
   game: Game
-  player: Player;
-  opponent: Player;
-  correspondence?: CorrespondenceClockData;
-  clock?: ClockData;
-  steps?: Array<GameStep>;
-  tournament?: Tournament;
-  note?: string;
-  chat?: Array<ChatMsg>;
-  possibleMoves?: StringMap;
-  possibleDrops?: string | Array<string>;
-  userTV?: string;
-  tv?: string;
-  pref?: any;
+  player: Player
+  opponent: Player
+  correspondence?: CorrespondenceClockData
+  clock?: ClockData
+  steps: Array<GameStep>
+  tournament?: Tournament
+  note?: string
+  chat?: Array<ChatMsg>
+  possibleMoves?: StringMap
+  possibleDrops?: string | Array<string>
+  userTV?: string
+  tv?: string
+  pref?: any
   url?: {
-    round: string;
-    socket: string;
+    round: string
+    socket: string
   }
-  bookmarked?: boolean;
-  takebackable?: boolean;
+  bookmarked?: boolean
+  takebackable?: boolean
 }
 
 interface OnlineGameData extends GameData {
@@ -246,7 +246,6 @@ interface GameWatchers {
 
 interface OfflineGameData extends GameData {
   game: OfflineGame;
-  steps?: Array<GameStep>;
 }
 
 interface StoredOfflineGame {

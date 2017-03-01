@@ -58,6 +58,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       highlight: true,
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false
-    }
+    },
+    steps: []
   };
 }

@@ -59,7 +59,7 @@ export interface RemoteAnalysis {
 
 export interface AnalysisData extends GameData {
   analysis?: RemoteAnalysis
-  steps?: AnalysisTree
+  steps: AnalysisTree
 }
 
 export interface Glyph {

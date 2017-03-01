@@ -8,6 +8,7 @@ import OnlineRound from '../shared/round/OnlineRound';
 import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
 import variantApi from '../../lichess/variant';
+import { OnlineGameData } from '../../lichess/interfaces/game';
 import sound from '../../sound';
 import vibrate from '../../vibrate';
 import i18n from '../../i18n';

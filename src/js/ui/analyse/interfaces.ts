@@ -1,4 +1,6 @@
 import { Controller as ContinuePopupController } from '../shared/continuePopup'
+import { GameData, GameStep } from '../../lichess/interfaces/game';
+import { GameSituation } from '../../chess'
 
 export interface RoleToSan {
   [role: string]: SanChar

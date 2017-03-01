@@ -5,8 +5,9 @@ import * as chessFormat from '../../utils/chessFormat';
 import settings from '../../settings';
 import gameStatusApi from '../../lichess/status';
 import { specialFenVariants } from '../../lichess/variant';
+import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game';
 import { oppositeColor } from '../../utils';
-import { setCurrentOTBGame } from '../../utils/offlineGames';
+import { StoredOfflineGame, setCurrentOTBGame } from '../../utils/offlineGames';
 import redraw from '../../utils/redraw';
 
 import promotion from '../shared/offlineRound/promotion';
@@ -66,7 +67,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
   }
 
-  public init(data: OfflineGameData, situations: Array<GameSituation>, ply: number) {
+  public init(data: OfflineGameData, situations: Array<chess.GameSituation>, ply: number) {
     this.actions.close();
     this.newGameMenu.close();
     this.data = data;
@@ -169,7 +170,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     sound.move();
   }
 
-  public apply(sit: GameSituation) {
+  public apply(sit: chess.GameSituation) {
     if (sit) {
       const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
       this.chessground.set({
@@ -183,7 +184,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     }
   }
 
-  public onReplayAdded = (sit: GameSituation) => {
+  public onReplayAdded = (sit: chess.GameSituation) => {
     this.data.game.fen = sit.fen;
     this.apply(sit);
     setResult(this, sit.status);

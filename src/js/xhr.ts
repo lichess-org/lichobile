@@ -5,6 +5,7 @@ import i18n from './i18n';
 import session from './session';
 import { TimelineData, LobbyData, HookData, Pool, Seek } from './lichess/interfaces';
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge';
+import { OnlineGameData } from './lichess/interfaces/game';
 
 interface GameSetup {
   variant: string;

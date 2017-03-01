@@ -53,24 +53,6 @@ interface PlayTime {
   tv: number;
 }
 
-interface User {
-  booster: boolean;
-  engine: boolean;
-  patron?: boolean;
-  id: string;
-  username: string;
-  name?: string;
-  language: string;
-  title?: string;
-  rating?: number;
-  online?: boolean;
-  createdAt: Timestamp;
-  seenAt: Timestamp;
-  perfs: any;
-  playTime?: PlayTime;
-  profile?: any
-}
-
 interface Piece {
   role: Role;
   color: Color;
@@ -79,27 +61,6 @@ interface Piece {
 interface Drop {
   role: Role;
   key: Pos;
-}
-
-interface Player {
-  id: string
-  color: Color
-  rating?: number
-  user?: User
-  provisional?: boolean
-  username?: string
-  name?: string
-  ai?: number
-  onGame?: boolean
-  isGone?: boolean
-  offeringDraw?: boolean
-  proposingTakeback?: boolean
-  offeringRematch?: boolean
-  spectator?: boolean
-  berserk?: boolean
-  version?: number
-  checks?: number
-  ratingDiff?: number
 }
 
 interface TournamentClock {
@@ -156,45 +117,6 @@ interface Opening {
   wikiPath?: string
 }
 
-interface Game {
-  id: string
-  fen: string
-  initialFen: string
-  variant: Variant;
-  player: Color
-  source: GameSource
-  status: GameStatus
-  winner?: Color
-  threefold?: boolean
-  speed?: Speed
-  startedAtTurn?: number
-  rated?: boolean
-  turns?: number
-  lastMove?: string
-  perf?: PerfKey
-  // FIXM
-  check?: string | boolean
-  tournamentId?: string
-  createdAt?: Timestamp
-  boosted?: boolean
-  rematch?: string
-  offline?: boolean
-  importedBy?: string
-  opening?: Opening
-}
-
-interface OnlineGame extends Game {
-  rated: boolean
-  turns: number
-  speed: Speed
-  check?: string
-  importedBy?: string
-}
-
-interface OfflineGame extends Game {
-  check?: boolean;
-}
-
 interface ChatMsg {
   u: string
   c: Color
@@ -203,119 +125,11 @@ interface ChatMsg {
   d?: boolean
 }
 
-interface GameData {
-  game: Game
-  player: Player
-  opponent: Player
-  correspondence?: CorrespondenceClockData
-  clock?: ClockData
-  steps: Array<GameStep>
-  tournament?: Tournament
-  note?: string
-  chat?: Array<ChatMsg>
-  possibleMoves?: StringMap
-  possibleDrops?: string | Array<string>
-  userTV?: string
-  tv?: string
-  pref?: any
-  url?: {
-    round: string
-    socket: string
-  }
-  bookmarked?: boolean
-  takebackable?: boolean
-}
-
-interface OnlineGameData extends GameData {
-  game: OnlineGame;
-  takebackable: boolean;
-  watchers?: GameWatchers
-}
-
-interface GameCrowd {
-  white: boolean;
-  black: boolean;
-  watchers: GameWatchers;
-}
-
-interface GameWatchers {
-  anons: number;
-  nb: number;
-  users: Array<string>;
-}
-
-interface OfflineGameData extends GameData {
-  game: OfflineGame;
-}
-
-interface StoredOfflineGame {
-  data: OfflineGameData;
-  situations: Array<GameSituation>;
-  ply: number;
-}
-
 interface Variant {
   key: VariantKey
   name: string
   short: string
   title?: string
-}
-
-interface GameStatus {
-  id: number;
-  name: string;
-}
-
-interface CheckCount {
-  white: number
-  black: number
-  [color: string]: number
-}
-
-interface Pocket {
-  queen: number
-  rook: number
-  knight: number
-  bishop: number
-  pawn: number
-  [role: string]: number
-}
-
-declare type Pockets = [Pocket, Pocket]
-
-interface GameStep {
-  ply: number
-  fen: string
-  san: string
-  uci: string
-  check: boolean
-  checkCount?: CheckCount
-  dests?: DestsMap
-  drops?: Array<string>
-  crazy?: {
-    pockets: Pockets
-  }
-}
-
-interface GameSituation {
-  variant: string
-  fen: string
-  player: Color;
-  dests: DestsMap
-  drops?: Array<string>
-  end: boolean
-  playable: boolean
-  status?: GameStatus
-  winner?: Color
-  check: boolean
-  checkCount: CheckCount
-  pgnMoves: Array<string>
-  uciMoves: Array<string>
-  promotion?: string
-  crazyhouse?: {
-    pockets: Pockets
-  }
-  ply: number
 }
 
 interface BoardBounds {

@@ -22,7 +22,8 @@ import spinner from '../../spinner';
 import countries from '../../utils/countries';
 import ViewOnlyBoard from './ViewOnlyBoard';
 import { backArrow } from './icons'
-import { BaseUser } from '../../lichess/interfaces/user'
+import { BaseUser, User } from '../../lichess/interfaces/user'
+import { GameData } from '../../lichess/interfaces/game';
 
 export const LoadingBoard = {
   view() {

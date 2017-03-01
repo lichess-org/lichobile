@@ -6,6 +6,8 @@ import variantApi from '../../../../lichess/variant';
 import * as gameApi from '../../../../lichess/game';
 import { perfTypes } from '../../../../lichess/perfs';
 import gameStatusApi from '../../../../lichess/status';
+import { Player } from '../../../../lichess/interfaces/game';
+import { User } from '../../../../lichess/interfaces/user'
 import settings from '../../../../settings';
 import * as utils from '../../../../utils';
 import i18n from '../../../../i18n';

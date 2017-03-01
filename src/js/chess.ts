@@ -1,9 +1,31 @@
-import { askWorker } from './utils/worker';
+import { askWorker } from './utils/worker'
+import { GameStatus, CheckCount, Pockets } from './lichess/interfaces/game'
 
-const worker = new Worker('vendor/scalachess.js');
+const worker = new Worker('vendor/scalachess.js')
 
 // warmup
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
+
+export interface GameSituation {
+  variant: string
+  fen: string
+  player: Color;
+  dests: DestsMap
+  drops?: Array<string>
+  end: boolean
+  playable: boolean
+  status?: GameStatus
+  winner?: Color
+  check: boolean
+  checkCount: CheckCount
+  pgnMoves: Array<string>
+  uciMoves: Array<string>
+  promotion?: string
+  crazyhouse?: {
+    pockets: Pockets
+  }
+  ply: number
+}
 
 export interface InitRequest {
   variant: VariantKey

@@ -1,21 +1,22 @@
 import i18n from '../../../i18n';
 import * as chess from '../../../chess';
+import { GameStatus } from '../../../lichess/interfaces/game'
 
 export default class Replay {
   private variant: VariantKey;
   private initialFen: string;
-  private onReplayAdded: (sit: GameSituation) => void;
+  private onReplayAdded: (sit: chess.GameSituation) => void;
   private onThreefoldRepetition: (newStatus: GameStatus) => void;
 
   public ply: number;
-  public situations: Array<GameSituation>;
+  public situations: Array<chess.GameSituation>;
 
   constructor(
     variant: VariantKey,
     initialFen: string,
-    initSituations: Array<GameSituation>,
+    initSituations: Array<chess.GameSituation>,
     initPly: number,
-    onReplayAdded: (sit: GameSituation) => void,
+    onReplayAdded: (sit: chess.GameSituation) => void,
     onThreefoldRepetition: (newStatus: GameStatus) => void
   ) {
 
@@ -24,14 +25,14 @@ export default class Replay {
     this.onThreefoldRepetition = onThreefoldRepetition;
   }
 
-  public init(variant: VariantKey, initialFen: string, situations: Array<GameSituation>, ply: number) {
+  public init(variant: VariantKey, initialFen: string, situations: Array<chess.GameSituation>, ply: number) {
     this.variant = variant;
     this.initialFen = initialFen;
     this.situations = situations;
     this.ply = ply || 0;
   }
 
-  public situation = (): GameSituation => {
+  public situation = (): chess.GameSituation => {
     return this.situations[this.ply];
   }
 

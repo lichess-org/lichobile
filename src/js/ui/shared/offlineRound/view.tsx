@@ -4,6 +4,7 @@ import * as utils from '../../../utils';
 import i18n from '../../../i18n';
 import * as gameApi from '../../../lichess/game';
 import gameStatusApi from '../../../lichess/status';
+import { GameSituation } from '../../../chess'
 import { renderMaterial } from '../../shared/round/view/roundView';
 import * as helper from '../../helper';
 import CrazyPocket from '../../shared/round/crazy/CrazyPocket';

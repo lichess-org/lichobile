@@ -1,5 +1,6 @@
 import * as utils from '../utils';
 import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames';
+import { OnlineGameData } from '../lichess/interfaces/game';
 import router from '../router';
 import * as helper from './helper';
 import * as IScroll from 'iscroll';

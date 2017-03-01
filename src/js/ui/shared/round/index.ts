@@ -1,5 +1,6 @@
 import Replay from '../offlineRound/Replay';
-
+import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../lichess/interfaces/game'
+import { GameSituation } from '../../../chess'
 
 export type Position = 'player' | 'opponent';
 export type Material = { [role: string]: number; };

@@ -1,5 +1,6 @@
 import { UserFullProfile, GameFilter, UserGame, VariantPerfStats } from '../../lichess/interfaces/user';
 import { Paginator } from '../../lichess/interfaces';
+import { OnlineGameData } from '../../lichess/interfaces/game';
 import { fetchJSON } from '../../http';
 
 export interface UserGameWithDate extends UserGame {

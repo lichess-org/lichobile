@@ -1,5 +1,6 @@
 import router from '../../../router';
 import * as helper from '../../helper';
+import { OnlineGameData } from '../../../lichess/interfaces/game';
 import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
 import settings from '../../../settings';
 import * as xhr from '../../../xhr';

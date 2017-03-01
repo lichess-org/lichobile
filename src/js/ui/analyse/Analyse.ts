@@ -1,5 +1,6 @@
 import treePath from './path';
 import { AnalysisData, AnalysisStep, Path, PathObj, AnalyseInterface } from './interfaces';
+import { GameSituation } from '../../chess'
 
 export default class Analyse implements AnalyseInterface {
   public tree: Array<AnalysisStep>

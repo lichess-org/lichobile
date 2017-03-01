@@ -1,5 +1,6 @@
 import * as gameApi from '../../../lichess/game';
-import { MoveOrDrop } from '../../../lichess/interfaces/game';
+import { GameCrowd } from '../../../lichess/interfaces/game';
+import { MoveOrDrop } from '../../../lichess/interfaces/move';
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import vibrate from '../../../vibrate';

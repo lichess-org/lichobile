@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../http';
-import { Rankings } from '../../lichess/interfaces/user'
+import { User, Rankings } from '../../lichess/interfaces/user'
 
 export function autocomplete(term: string): Promise<Array<string>> {
   return fetchJSON('/player/autocomplete', { query: { term }});

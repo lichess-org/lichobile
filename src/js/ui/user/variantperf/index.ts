@@ -7,7 +7,7 @@ import redraw from '../../../utils/redraw';
 import spinner from '../../../spinner';
 import { header as headerWidget, backButton } from '../../shared/common';
 import { shortPerfTitle } from '../../../lichess/perfs';
-import { VariantPerfStats } from '../../../lichess/interfaces/user'
+import { User, VariantPerfStats } from '../../../lichess/interfaces/user'
 import layout from '../../layout';
 import { renderBody } from './variantPerfView';
 

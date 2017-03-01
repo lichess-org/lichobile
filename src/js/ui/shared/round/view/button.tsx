@@ -4,6 +4,8 @@ import { handleXhrError, hasNetwork, boardOrientation } from '../../../../utils'
 import * as gameApi from '../../../../lichess/game';
 import router from '../../../../router';
 import gameStatus from '../../../../lichess/status';
+import { OnlineGameData } from '../../../../lichess/interfaces/game';
+import { User } from '../../../../lichess/interfaces/user'
 import i18n from '../../../../i18n';
 import socket from '../../../../socket';
 import lobby from '../../../lobby';

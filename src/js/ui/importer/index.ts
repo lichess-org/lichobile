@@ -8,6 +8,7 @@ import { hasNetwork, serializeQueryParameters, handleXhrError } from '../../util
 import { fetchJSON } from '../../http';
 import * as helper from '../helper';
 import { dropShadowHeader } from '../shared/common';
+import { OnlineGameData } from '../../lichess/interfaces/game';
 import layout from '../layout';
 import i18n from '../../i18n';
 import formWidgets from '../shared/form';

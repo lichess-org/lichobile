@@ -1,7 +1,9 @@
 import settings from '../../../../settings';
-import crazyDrag from './crazyDrag';
 import chessgroundDrag from '../../../../chessground/drag';
+import { Pockets } from '../../../../lichess/interfaces/game'
+
 import { BoardInterface } from '../'
+import crazyDrag from './crazyDrag';
 
 const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
 

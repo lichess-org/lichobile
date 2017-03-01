@@ -3,9 +3,17 @@ import * as cloneDeep from 'lodash/cloneDeep';
 import * as difference from 'lodash/difference';
 import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
 import { NowPlayingGame } from '../lichess/interfaces';
+import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game';
+import { GameSituation } from '../chess';
 
 const otbStorageKey = 'otb.current';
 const aiStorageKey = 'ai.current';
+
+export interface StoredOfflineGame {
+  data: OfflineGameData;
+  situations: Array<GameSituation>;
+  ply: number;
+}
 
 export function getCurrentOTBGame(): StoredOfflineGame {
   return storage.get<StoredOfflineGame>(otbStorageKey);

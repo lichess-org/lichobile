@@ -3,6 +3,7 @@ import { secondsToMinutes } from '../utils';
 import settings from '../settings';
 import { MiniBoardGameObj } from './interfaces';
 import { UserGame } from './interfaces/user';
+import { GameData, OfflineGameData } from './interfaces/game';
 import i18n from '../i18n';
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings'];

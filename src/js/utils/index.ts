@@ -1,6 +1,7 @@
 import i18n from '../i18n';
 import { FetchError } from '../http';
 import redraw from './redraw';
+import { OnlineGameData } from '../lichess/interfaces/game';
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 

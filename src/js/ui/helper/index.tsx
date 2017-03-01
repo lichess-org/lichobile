@@ -6,6 +6,7 @@ import * as utils from '../../utils';
 import ButtonHandler from './button';
 import * as h from 'mithril/hyperscript';
 import { UserGamePlayer } from '../../lichess/interfaces/user'
+import { Player } from '../../lichess/interfaces/game'
 
 export interface ViewportDim {
   vw: number

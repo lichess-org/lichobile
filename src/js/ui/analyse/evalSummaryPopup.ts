@@ -3,6 +3,7 @@ import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as helper from '../helper';
 import * as gameApi from '../../lichess/game';
+import { GameData } from '../../lichess/interfaces/game'
 import * as h from 'mithril/hyperscript';
 import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
 

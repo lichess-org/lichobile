@@ -2,6 +2,7 @@ import chessground from '../../../chessground';
 import redraw from '../../../utils/redraw';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
 import * as gameApi from '../../../lichess/game';
+import { OnlineGameData } from '../../../lichess/interfaces/game'
 import settings from '../../../settings';
 import { boardOrientation } from '../../../utils';
 import * as chessFormat from '../../../utils/chessFormat';

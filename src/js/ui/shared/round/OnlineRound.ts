@@ -12,7 +12,8 @@ import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr';
 import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
 import { MiniUser } from '../../../lichess/interfaces';
-import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/interfaces/game';
+import { OnlineGameData, GameStep, Player } from '../../../lichess/interfaces/game';
+import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/interfaces/move';
 import * as chessFormat from '../../../utils/chessFormat';
 import { gameTitle } from '../../shared/common';
 

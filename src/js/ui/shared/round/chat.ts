@@ -1,13 +1,14 @@
+import * as h from 'mithril/hyperscript';
 import * as helper from '../../helper';
 import redraw from '../../../utils/redraw';
 import i18n from '../../../i18n';
 import storage from '../../../storage';
 import session from '../../../session';
 import * as gameApi from '../../../lichess/game';
+import { OnlineGameData } from '../../../lichess/interfaces/game'
 import router from '../../../router';
 import socket from '../../../socket';
 import { closeIcon } from '../../shared/icons'
-import * as h from 'mithril/hyperscript';
 import { OnlineRoundInterface } from '.';
 
 let chatHeight: number;

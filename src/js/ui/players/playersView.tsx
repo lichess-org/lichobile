@@ -5,6 +5,7 @@ import { menuButton, friendsButton, userStatus } from '../shared/common';
 import { backArrow } from '../shared/icons';
 import settings from '../../settings';
 import i18n from '../../i18n';
+import { User } from '../../lichess/interfaces/user'
 
 import { State } from './'
 

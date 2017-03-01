@@ -1,10 +1,13 @@
 import chessground from '../../../chessground';
 import * as gameApi from '../../../lichess/game';
 import settings from '../../../settings';
+import { OfflineGameData } from '../../../lichess/interfaces/game';
+import { AfterMoveMeta } from '../../../lichess/interfaces/move'
 import { boardOrientation } from '../../../utils';
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
+import { GameSituation } from '../../../chess'
 
-function makeConfig(data, sit) {
+function makeConfig(data: OfflineGameData, sit: GameSituation): any {
   const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
   return {
     batchRAF: batchRequestAnimationFrame,
@@ -45,8 +48,15 @@ function makeConfig(data, sit) {
   };
 }
 
-function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
-  var config = makeConfig(data, sit);
+function make(
+  data: OfflineGameData,
+  sit: GameSituation,
+  userMove: (orig: Pos, dest: Pos, meta: AfterMoveMeta) => void,
+  userNewPiece: (role: Role, key: Pos, meta: AfterMoveMeta) => void,
+  onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
+  onNewPiece: () => void
+) {
+  const config = makeConfig(data, sit);
   config.movable.events = {
     after: userMove,
     afterNewPiece: userNewPiece
@@ -58,17 +68,17 @@ function make(data, sit, userMove, userNewPiece, onMove, onNewPiece) {
   return new chessground.controller(config);
 }
 
-function reload(ground, data, sit) {
+function reload(ground: Chessground.Controller, data: OfflineGameData, sit: GameSituation) {
   ground.reconfigure(makeConfig(data, sit));
 }
 
-function changeOTBMode(ground, flip) {
+function changeOTBMode(ground: Chessground.Controller, flip: boolean) {
   ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' });
 }
 
-function promote(ground, key, role) {
-  var pieces = {};
-  var piece = ground.data.pieces[key];
+function promote(ground: Chessground.Controller, key: Pos, role: Role) {
+  const pieces = {};
+  const piece = ground.data.pieces[key];
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
@@ -78,7 +88,7 @@ function promote(ground, key, role) {
   }
 }
 
-function end(ground) {
+function end(ground: Chessground.Controller) {
   ground.stop();
 }
 

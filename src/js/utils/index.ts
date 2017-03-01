@@ -1,7 +1,7 @@
 import i18n from '../i18n';
 import { FetchError } from '../http';
 import redraw from './redraw';
-import { OnlineGameData } from '../lichess/interfaces/game';
+import { GameData } from '../lichess/interfaces/game';
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10);
 
@@ -195,7 +195,7 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-export function boardOrientation(data: OnlineGameData, flip?: boolean): 'black' | 'white' {
+export function boardOrientation(data: GameData, flip?: boolean): 'black' | 'white' {
   if (data.game.variant.key === 'racingKings') {
     return flip ? 'black' : 'white';
   } else {

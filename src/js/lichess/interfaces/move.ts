@@ -47,3 +47,7 @@ export interface MoveOrDrop {
   }
 }
 
+export interface AfterMoveMeta {
+  premove?: boolean
+  predrop?: boolean
+}

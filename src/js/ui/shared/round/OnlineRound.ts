@@ -13,7 +13,7 @@ import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
 import { MiniUser } from '../../../lichess/interfaces';
 import { OnlineGameData, GameStep, Player } from '../../../lichess/interfaces/game';
-import { MoveRequest, DropRequest, MoveOrDrop } from '../../../lichess/interfaces/move';
+import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta } from '../../../lichess/interfaces/move';
 import * as chessFormat from '../../../utils/chessFormat';
 import { gameTitle } from '../../shared/common';
 
@@ -27,7 +27,7 @@ import socketHandler from './socketHandler';
 import atomic from './atomic';
 import * as xhr from './roundXhr';
 import crazyValid from './crazy/crazyValid';
-import { OnlineRoundInterface, AfterMoveMeta } from './';
+import { OnlineRoundInterface } from './';
 
 interface VM {
   ply: number

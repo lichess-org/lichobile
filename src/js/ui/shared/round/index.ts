@@ -5,11 +5,6 @@ import { GameSituation } from '../../../chess'
 export type Position = 'player' | 'opponent';
 export type Material = { [role: string]: number; };
 
-export interface AfterMoveMeta {
-  premove?: boolean
-  predrop?: boolean
-}
-
 export interface BoardInterface {
   chessground: Chessground.Controller
   canDrop(): boolean

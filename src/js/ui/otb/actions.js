@@ -7,6 +7,7 @@ import ground from '../shared/offlineRound/ground';
 import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as h from 'mithril/hyperscript';
+import * as helper from '../helper';
 
 function renderAlways(ctrl) {
   return [
@@ -16,7 +17,13 @@ function renderAlways(ctrl) {
     )),
     h('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
-    ))
+    )),
+    h('button', {
+      key: 'importGame',
+      oncreate: helper.ontap(() => {
+        ctrl.actions.importGame();
+      })
+    }, [h('span.fa.fa-cloud-upload'), i18n('importGame')])
   ];
 }
 
@@ -44,25 +51,34 @@ export default {
       sharePGN: function() {
         root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
       },
+      importGame: function() {
+        root.replay.pgn().then(data => {
+          const games = settings.otb.savedGames();
+          games[1] = data;
+          settings.otb.savedGames(games);
+          router.set('/importer?game=1');
+        });
+      },
       root: root
     };
   },
 
   view: function(ctrl) {
-    if (ctrl.isOpen()) {
+    const actions = ctrl.actions;
+    if (actions.isOpen()) {
       return popupWidget(
         'offline_actions',
         null,
         function() {
           return [
-            renderEndedGameStatus(ctrl.root)
+            renderEndedGameStatus(ctrl)
           ].concat(
-            renderClaimDrawButton(ctrl.root),
-            renderAlways(ctrl.root)
+            renderClaimDrawButton(ctrl),
+            renderAlways(ctrl)
           );
         },
-        ctrl.isOpen(),
-        ctrl.close
+        actions.isOpen(),
+        actions.close
       );
     }
 

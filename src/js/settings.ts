@@ -151,7 +151,8 @@ export default {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
     variant: localstorageprop('settings.otb.variant', 'standard'),
-    availableVariants: offlineAvailableVariants
+    availableVariants: offlineAvailableVariants,
+    savedGames: localstorageprop('settings.otb.savedGames', {})
   },
 
   clock: {

@@ -24,7 +24,7 @@ interface SendData {
   analyse?: boolean
 }
 
-const ImporterScreen: Mithril.Component<{}, State> = {
+const ImporterScreen: Mithril.Component<{game: string}, State> = {
   oninit(vnode) {
     helper.analyticsTrackView('Import game');
 
@@ -83,13 +83,14 @@ const ImporterScreen: Mithril.Component<{}, State> = {
 
   view(vnode) {
     const headerCtrl = () => dropShadowHeader(i18n('importGame'));
-    const bodyCtrl = () => renderBody(vnode.state);
+    const bodyCtrl = () => renderBody(vnode.state, vnode.attrs.game);
     return layout.free(headerCtrl, bodyCtrl);
   }
 
 }
 
-function renderBody(ctrl: State) {
+function renderBody(ctrl: State, gameId: string) {
+  const pgn = (gameId && settings.otb.savedGames()[gameId]) ? settings.otb.savedGames()[gameId].pgn : '';
   return h('div.gameImporter.native_scroller', [
     h('p', 'When pasting a game PGN, you get a browsable replay and a computer analysis.'),
     h('form', {
@@ -99,7 +100,7 @@ function renderBody(ctrl: State) {
       }
     }, [
       h('label', i18n('pasteThePgnStringHere') + ' :'),
-      h('textarea.pgnImport'),
+      h('textarea.pgnImport', pgn),
       formWidgets.renderCheckbox(i18n('requestAComputerAnalysis'), 'analyse', settings.importer.analyse),
       h('button.fatButton', ctrl.importing() ?
         h('div.fa.fa-hourglass-half') : i18n('importGame'))

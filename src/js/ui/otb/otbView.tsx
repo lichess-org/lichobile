@@ -12,7 +12,7 @@ import OtbRound from './OtbRound';
 
 export function overlay(ctrl: OtbRound) {
   return [
-    actions.view(ctrl.actions),
+    actions.view(ctrl),
     newGameMenu.view(ctrl.newGameMenu),
     renderPromotion(ctrl)
   ];

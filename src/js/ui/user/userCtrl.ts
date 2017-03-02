@@ -37,17 +37,39 @@ export default function oninit(userId: string) {
   return {
     user,
     isMe: () => session.getUserId() === userId,
-    toggleFollowing: () => {
-      if (user().following) xhr.unfollow(user().id).then(setNewUserState);
-      else xhr.follow(user().id).then(setNewUserState);
+    toggleFollowing() {
+      const u = user()
+      if (u && u.following) xhr.unfollow(u.id).then(setNewUserState);
+      else if (u) xhr.follow(u.id).then(setNewUserState);
     },
-    toggleBlocking: () => {
-      if (user().blocking) xhr.unblock(user().id).then(setNewUserState);
-      else xhr.block(user().id).then(setNewUserState);
+    toggleBlocking() {
+      const u = user()
+      if (u && u.blocking) xhr.unblock(u.id).then(setNewUserState);
+      else if (u) xhr.block(u.id).then(setNewUserState);
     },
-    goToGames: () => router.set(`/@/${user().id}/games`),
-    goToUserTV: () => router.set(`/@/${user().id}/tv`),
-    challenge: () => challengeForm.open(user().id),
-    composeMessage: () => router.set(`/inbox/new/${user().id}`)
+    goToGames() {
+      const u = user()
+      if (u) {
+        router.set(`/@/${u.id}/games`)
+      }
+    },
+    goToUserTV() {
+      const u = user()
+      if (u) {
+        router.set(`/@/${u.id}/tv`)
+      }
+    },
+    challenge() {
+      const u = user()
+      if (u) {
+        challengeForm.open(u.id)
+      }
+    },
+    composeMessage() {
+      const u = user()
+      if (u) {
+        router.set(`/inbox/new/${u.id}`)
+      }
+    }
   }
 }

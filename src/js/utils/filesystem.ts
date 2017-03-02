@@ -12,7 +12,7 @@ export function getFiles(prefix: string): Promise<FileEntry[]> {
 export function getLocalFileOrDowload(remoteFileUri: string, fileName: string, prefix: string, onProgress?: (e: ProgressEvent) => void): Promise<FileEntry> {
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
-      fs.root.getFile(prefix + fileName, null, (fe) => {
+      fs.root.getFile(prefix + fileName, undefined, (fe) => {
         resolve(fe)
       }, (err: FileError) => {
         if (err.code === FileError.NOT_FOUND_ERR) {

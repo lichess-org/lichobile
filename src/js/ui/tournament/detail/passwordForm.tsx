@@ -5,7 +5,7 @@ import router from '../../../router';
 import {TournamentState} from '../interfaces';
 
 let isOpen = false;
-let tournamentCtrl: TournamentState = null;
+let tournamentCtrl: TournamentState
 
 export default {
   open,
@@ -13,7 +13,7 @@ export default {
   view() {
     return popupWidget(
       'tournament_password_popup',
-      null,
+      undefined,
       () => renderForm(),
       isOpen,
       close
@@ -59,5 +59,5 @@ function join(form: HTMLFormElement) {
   const elements: HTMLCollection = form[0].elements as HTMLCollection;
   const password = (elements[0] as HTMLInputElement).value;
   tournamentCtrl.join(tournamentCtrl.tournament().id, password);
-  close(null);
+  close();
 }

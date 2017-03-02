@@ -5,7 +5,8 @@ import popupWidget from '../shared/popup';
 import i18n from '../../i18n';
 import router from '../../router';
 import { handleXhrError } from '../../utils';
-import { TournamentListState, TournamentCreateResponse } from './interfaces';
+import { TournamentListState } from './interfaces';
+import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
 import * as xhr from './tournamentXhr';
 
 let isOpen = false;
@@ -16,7 +17,7 @@ export default {
   view(ctrl: TournamentListState) {
     return popupWidget(
       'tournament_form_popup',
-      null,
+      undefined,
       () => renderForm(ctrl),
       isOpen,
       close
@@ -44,7 +45,7 @@ function renderForm(ctrl: TournamentListState) {
     }}>
       <fieldset>
         <div className="select_input">
-          {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false, null)}
+          {formWidgets.renderSelect('Variant', 'variant', settings.tournament.availableVariants, settings.tournament.variant, false)}
         </div>
         <div className={'select_input' + (settings.tournament.variant() !== '1' ? ' notVisible' : '')}>
           <label for="select_start_position">
@@ -64,19 +65,19 @@ function renderForm(ctrl: TournamentListState) {
           </select>
         </div>
         <div className="select_input">
-          {formWidgets.renderSelect('Mode', 'mode', settings.tournament.availableModes, settings.tournament.mode, false, null)}
+          {formWidgets.renderSelect('Mode', 'mode', settings.tournament.availableModes, settings.tournament.mode, false)}
         </div>
         <div className="select_input inline">
-          {formWidgets.renderSelect('Time', 'time', settings.tournament.availableTimes, settings.tournament.time, false, null)}
+          {formWidgets.renderSelect('Time', 'time', settings.tournament.availableTimes, settings.tournament.time, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Increment', 'increment', settings.tournament.availableIncrements.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.increment, false, null)}
+          {formWidgets.renderSelect('Increment', 'increment', settings.tournament.availableIncrements.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.increment, false)}
         </div>
         <div className="select_input inline">
-          {formWidgets.renderSelect('Duration', 'duration', settings.tournament.availableDurations.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.duration, false, null)}
+          {formWidgets.renderSelect('Duration', 'duration', settings.tournament.availableDurations.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.duration, false)}
         </div>
         <div className="select_input inline no-margin">
-          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.timeToStart, false, null)}
+          {formWidgets.renderSelect('Time to Start', 'timeToStart', settings.tournament.availableTimesToStart.map((x: string) => utils.tupleOf(Number(x))), settings.tournament.timeToStart, false)}
         </div>
         <div className="select_input">
           {formWidgets.renderCheckbox(i18n('isPrivate'), 'private', settings.tournament.private)}
@@ -117,7 +118,7 @@ function create(form: HTMLFormElement) {
 
   xhr.create(variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
-    close(null);
+    close();
     router.set('/tournament/' + data.id)
   })
   .catch(handleXhrError);

@@ -3,7 +3,8 @@ import * as helper from '../helper';
 import * as xhr from './tournamentXhr';
 import * as utils from '../../utils';
 import i18n from '../../i18n';
-import { Tournament, PlayerInfoState, PlayerInfo, PlayerInfoPairing } from './interfaces';
+import { PlayerInfoState } from './interfaces';
+import { Tournament, PlayerInfo, PlayerInfoPairing } from '../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream';
 import { closeIcon } from '../shared/icons'
 
@@ -53,7 +54,7 @@ export default {
 
 
     function renderPlayerGame (game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
-      let outcome: string = null;
+      let outcome: string;
       let outcomeClass = 'oppOutcome';
       if (game.score === undefined) {
         outcome = '*';

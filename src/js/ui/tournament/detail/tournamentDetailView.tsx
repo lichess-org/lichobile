@@ -10,7 +10,8 @@ import playerInfo from '../playerInfo';
 import * as helper from '../../helper';
 import settings from '../../../settings';
 import miniBoard from '../../shared/miniBoard';
-import { TournamentState, Tournament, StandingPlayer, PodiumPlace } from '../interfaces';
+import { TournamentState } from '../interfaces';
+import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament';
 import passwordForm from './passwordForm';
 
 export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
@@ -80,10 +81,9 @@ function tournamentBody(ctrl: TournamentState) {
 }
 
 function renderFooter(ctrl: TournamentState) {
-  if (!ctrl.tournament()) {
-    return null;
-  }
-  const tUrl = 'https://lichess.org/tournament/' + ctrl.tournament().id;
+  const t = ctrl.tournament()
+  if (!t) return null
+  const tUrl = 'https://lichess.org/tournament/' + t.id;
 
   return (
     <div className="actions_bar">
@@ -95,7 +95,7 @@ function renderFooter(ctrl: TournamentState) {
         <span className="fa fa-share-alt" />
         Share
       </button>
-      { ctrl.hasJoined() ? withdrawButton(ctrl) : joinButton(ctrl) }
+      { ctrl.hasJoined() ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
     </div>
   );
 }
@@ -103,7 +103,7 @@ function renderFooter(ctrl: TournamentState) {
 function tournamentContentFinished(ctrl: TournamentState) {
   const data = ctrl.tournament();
   return [
-    tournamentHeader(data, null, null),
+    tournamentHeader(data),
     data.podium ? tournamentPodium(data.podium) : null,
     tournamentLeaderboard(ctrl)
   ];
@@ -126,7 +126,7 @@ function tournamentContentStarted(ctrl: TournamentState) {
   ];
 }
 
-function tournamentHeader(data: Tournament, time: number, timeText: string) {
+function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
   const variant = variantDisplay(data);
   const control = formatTournamentTimeControl(data.clock);
   const conditionsClass = [
@@ -162,7 +162,7 @@ function tournamentHeader(data: Tournament, time: number, timeText: string) {
       </div>
       { data.position ?
       <div className={'tournamentPositionInfo' + (data.position.wikiPath ? ' withLink' : '')}
-        oncreate={helper.ontapY(() => data.position.wikiPath &&
+        oncreate={helper.ontapY(() => data.position && data.position.wikiPath &&
           window.open(`https://en.wikipedia.org/wiki/${data.position.wikiPath}`)
         )}
       >
@@ -173,8 +173,7 @@ function tournamentHeader(data: Tournament, time: number, timeText: string) {
   );
 }
 
-function joinButton(ctrl: TournamentState) {
-  const t = ctrl.tournament();
+function joinButton(ctrl: TournamentState, t: Tournament) {
   if (!session.isConnected() ||
     t.isFinished ||
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
@@ -182,7 +181,9 @@ function joinButton(ctrl: TournamentState) {
     return null;
   }
 
-  const action = ctrl.tournament().private ?  (() => passwordForm.open(ctrl)) : (() => ctrl.join(t.id, null));
+  const action = ctrl.tournament().private ?
+    () => passwordForm.open(ctrl) :
+    () => ctrl.join(t.id)
 
   return (
     <button key="join" className="action_bar_button" oncreate={helper.ontap(action)}>
@@ -192,12 +193,12 @@ function joinButton(ctrl: TournamentState) {
   );
 }
 
-function withdrawButton(ctrl: TournamentState) {
-  if (ctrl.tournament().isFinished || settings.game.supportedVariants.indexOf(ctrl.tournament().variant) < 0) {
+function withdrawButton(ctrl: TournamentState, t: Tournament) {
+  if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
     return null;
   }
   return (
-    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(() => ctrl.withdraw(ctrl.tournament().id))}>
+    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(() => ctrl.withdraw(t.id))}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>
@@ -223,10 +224,10 @@ function variantKey(data: Tournament) {
   return variant;
 }
 
-function timeInfo(time: number, preceedingText: string) {
-  if (!time) return '';
+function timeInfo(time?: number, preceedingText?: string) {
+  if (time === undefined) return ''
 
-  return preceedingText + ' ' + formatTimeInSecs(time);
+  return (preceedingText ? preceedingText : '') + ' ' + formatTimeInSecs(time);
 }
 
 function getLeaderboardItemEl(e: Event) {
@@ -260,7 +261,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
 
       <table
         className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}
-        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e), null, null, getLeaderboardItemEl)}
+        oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
         {data.standing.players.map(p =>
           renderLeaderboardItem(userName, p)

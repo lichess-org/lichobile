@@ -53,7 +53,7 @@ export function unblock(userId: string) {
 }
 
 export function user(id: string, feedback = true): Promise<UserFullProfile> {
-  return fetchJSON(`/api/user/${id}`, null, feedback);
+  return fetchJSON(`/api/user/${id}`, undefined, feedback);
 }
 
 export function tv(userId: string): Promise<OnlineGameData> {
@@ -61,5 +61,5 @@ export function tv(userId: string): Promise<OnlineGameData> {
 }
 
 export function variantperf(userId: string, variantKey: string): Promise<VariantPerfStats> {
-  return fetchJSON(`/@/${userId}/perf/${variantKey}?graph=1`, null, false);
+  return fetchJSON(`/@/${userId}/perf/${variantKey}?graph=1`, undefined, false);
 }

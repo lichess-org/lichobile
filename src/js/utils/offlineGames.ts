@@ -19,7 +19,7 @@ export function getCurrentOTBGame(): StoredOfflineGame {
   return storage.get<StoredOfflineGame>(otbStorageKey);
 }
 
-export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
+export function getAnalyseData(data: StoredOfflineGame): AnalysisData | null {
   if (!data) return null;
   const aData = <AnalysisData>data.data;
   aData.steps = data.situations.map((o: GameSituation) => {
@@ -28,8 +28,8 @@ export function getAnalyseData(data: StoredOfflineGame): AnalysisData {
       ply: o.ply,
       check: o.check,
       checkCount: o.checkCount,
-      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : null,
-      uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : null,
+      san: o.pgnMoves.length ? o.pgnMoves[o.pgnMoves.length - 1] : undefined,
+      uci: o.uciMoves.length ? o.uciMoves[o.uciMoves.length - 1] : undefined,
       dests: o.dests,
       drops: o.drops,
       crazy: o.crazyhouse,
@@ -65,7 +65,7 @@ export function getOfflineGames(): Array<OnlineGameData> {
   return arr;
 }
 
-let nbOfflineGames: number;
+let nbOfflineGames: number | undefined
 export function hasOfflineGames(): boolean {
   nbOfflineGames =
     nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length;

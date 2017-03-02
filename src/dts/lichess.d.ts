@@ -86,18 +86,6 @@ interface CorrespondenceClockData {
   white: number;
 }
 
-interface Tournament {
-  id: string;
-  berserkable: boolean;
-  secondsToFinish: number;
-  nbSecondsForFirstMove: number;
-  ranks?: {
-    white: string;
-    black: string;
-    [color: string]: string;
-  }
-}
-
 interface BoardPosition {
   name: string
   fen: string

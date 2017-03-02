@@ -185,7 +185,7 @@ function createTournament(
   tournamentId: string,
   version: number,
   handlers: MessageHandlers,
-  featuredGameId: string
+  featuredGameId?: string
 ) {
   let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
   const socketHandlers = {

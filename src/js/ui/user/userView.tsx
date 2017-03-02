@@ -33,7 +33,7 @@ export function profile(user: UserFullProfile, ctrl: UserCtrl) {
       {renderStats(user)}
       {renderPatron(user)}
       {renderRatings(user)}
-      {renderActions(ctrl)}
+      {renderActions(ctrl, user)}
     </div>
   )
 }
@@ -143,8 +143,7 @@ function renderRatings(user: UserFullProfile) {
   )
 }
 
-function renderActions(ctrl: UserCtrl) {
-  const user = ctrl.user()
+function renderActions(ctrl: UserCtrl, user: UserFullProfile) {
   return (
     <section id="userProfileActions" className="items_list_block noPadding">
       <div className="list_item nav"

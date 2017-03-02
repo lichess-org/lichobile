@@ -250,7 +250,7 @@ export function gameTitle(data: GameData): Mithril.Children {
 }
 
 
-export function miniUser(user: User, mini: any, isOpen: boolean, close: () => void) {
+export function miniUser(user: User | undefined, mini: any, isOpen: boolean, close: () => void) {
   if (!user) return null;
 
   const status = userStatus(user);

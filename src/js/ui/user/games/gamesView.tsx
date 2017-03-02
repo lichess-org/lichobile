@@ -61,13 +61,15 @@ function onTap(ctrl: State, e: Event) {
     if (id) {
       const g = ctrl.scrollState.games.find(game => game.id === id)
       const userId = ctrl.scrollState.userId
-      const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
-      utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
-      const mePlaying = session.getUserId() === userId;
-      if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
-        router.set(`/game/${id}/${userColor}`)
-      else
-        router.set(`/analyse/online/${id}/${userColor}`)
+      if (g) {
+        const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
+        utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
+        const mePlaying = session.getUserId() === userId;
+        if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
+          router.set(`/game/${id}/${userColor}`)
+        else
+          router.set(`/analyse/online/${id}/${userColor}`)
+      }
     }
   }
 }
@@ -108,8 +110,8 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
               </div>
               <div className={helper.classSet({
                 'userGame-status': true,
-                win: userColor === g.winner,
-                loose: g.winner && userColor !== g.winner
+                win: !!(g.winner && userColor === g.winner),
+                loose: !!(g.winner && userColor !== g.winner)
               })}>
                 {status}
               </div>
@@ -142,7 +144,7 @@ function renderAllGames(ctrl: State) {
   const { games  } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="scroller native_scroller games"
-      oncreate={helper.ontapY(e => onTap(ctrl, e), null, getGameEl)}
+      oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, getGameEl)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
       { games.length ?
@@ -176,7 +178,8 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
         img.className = 'cg-board'
         img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation)
         batchRequestAnimationFrame(() => {
-          dom.replaceChild(img, dom.firstChild)
+          const placeholder = dom.firstChild
+          if (placeholder) dom.replaceChild(img, placeholder)
         })
       }}
     >

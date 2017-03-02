@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../http';
-import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from './interfaces';
+import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from '../../lichess/interfaces/tournament'
 
 export function currentTournaments(): Promise<TournamentLists> {
   return fetchJSON('/tournament', {}, true);
@@ -9,7 +9,7 @@ export function tournament(id: string): Promise<Tournament> {
   return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true);
 }
 
-export function reload(id: string, page: number): Promise<Tournament> {
+export function reload(id: string, page?: number): Promise<Tournament> {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
@@ -17,11 +17,11 @@ export function reload(id: string, page: number): Promise<Tournament> {
   });
 }
 
-export function join(id: string, password: string): Promise<{}> {
+export function join(id: string, password?: string): Promise<{}> {
   return fetchJSON('/tournament/' + id + '/join',
   {
     method: 'POST',
-    body: password ? JSON.stringify({p: password}) : null
+    body: password ? JSON.stringify({p: password}) : undefined
   });
 }
 

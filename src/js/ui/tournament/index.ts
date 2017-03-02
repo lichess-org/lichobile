@@ -5,7 +5,8 @@ import redraw from '../../utils/redraw';
 import { handleXhrError, loadLocalJsonFile } from '../../utils';
 import * as xhr from './tournamentXhr';
 import settings from '../../settings';
-import { TournamentListState, TournamentListItem, TournamentLists } from './interfaces';
+import { TournamentListState } from './interfaces';
+import { TournamentListItem, TournamentLists } from '../../lichess/interfaces/tournament'
 import session from '../../session';
 import { header } from '../shared/common';
 import layout from '../layout';
@@ -51,8 +52,8 @@ const TournamentListScreen: Mithril.Component<Attrs, TournamentListState> = {
 
   view(vnode) {
     const ctrl = vnode.state
-    const bodyCtrl = tournamentListBody.bind(undefined, ctrl)
-    const footer = session.isConnected() ? () => renderFooter() : null
+    const bodyCtrl = () => tournamentListBody(ctrl)
+    const footer = session.isConnected() ? () => renderFooter() : undefined
     const overlay = () => newTournamentForm.view(ctrl)
 
     return layout.free(() => header(i18n('tournaments')), bodyCtrl, footer, overlay)

@@ -18,12 +18,12 @@ interface State {
 
 const TimelineScreen: Mithril.Component<{}, State> = {
   oninit(vnode) {
-    const timeline = stream([])
+    const timeline = stream([] as TimelineEntry[])
 
     timelineXhr()
     .then(data => {
-      timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1));
-      redraw();
+      timeline(data.entries.filter(o => supportedTypes.indexOf(o.type) !== -1))
+      redraw()
     })
     .catch(handleXhrError);
 

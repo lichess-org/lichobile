@@ -248,7 +248,7 @@ function drawChart(graphData: GraphData) {
   .attr('stroke-linejoin', 'round')
   .attr('stroke-linecap', 'round')
   .attr('stroke-width', 1.5)
-  .attr('d', l(graphData));
+  .attr('d', l(graphData) as string);
 }
 
 function normalizeGraphData(i: GraphPoint): DateRating {

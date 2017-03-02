@@ -31,12 +31,14 @@ const UserScreen: Mithril.Component<Attrs, State> = {
   view() {
     const user = this.user.user();
 
-    if (!user) return layout.empty();
-
-    return layout.free(
-      () => view.header(user, this.user),
-      () => view.profile(user, this.user)
-    )
+    if (user) {
+      return layout.free(
+        () => view.header(user, this.user),
+        () => view.profile(user, this.user)
+      )
+    } else {
+      return layout.empty();
+    }
   }
 }
 

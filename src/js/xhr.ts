@@ -109,7 +109,7 @@ export function acceptChallenge(id: string): Promise<OnlineGameData> {
 
 export let cachedPools: Array<Pool> = []
 export function lobby(feedback?: boolean): Promise<LobbyData> {
-  return fetchJSON('/', null, feedback)
+  return fetchJSON('/', undefined, feedback)
   .then((d: LobbyData) => {
     if (d.lobby.pools !== undefined) cachedPools = d.lobby.pools
     return d
@@ -117,13 +117,13 @@ export function lobby(feedback?: boolean): Promise<LobbyData> {
 }
 
 export function seeks(feedback: boolean): Promise<Array<Seek>> {
-  return fetchJSON('/lobby/seeks', null, feedback);
+  return fetchJSON('/lobby/seeks', undefined, feedback);
 }
 
 export function game(id: string, color?: string): Promise<OnlineGameData> {
   let url = '/' + id;
   if (color) url += ('/' + color);
-  return fetchJSON(url, null);
+  return fetchJSON(url);
 }
 
 export function toggleGameBookmark(id: string) {
@@ -159,7 +159,7 @@ export function miniUser(userId: string) {
 }
 
 export function timeline(): Promise<TimelineData> {
-  return fetchJSON('/timeline', null, false);
+  return fetchJSON('/timeline', undefined, false);
 }
 
 export function status() {

@@ -151,7 +151,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     bounds,
     isPortrait,
     alert: gameApi.mandatory(ctrl.data) && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
-      i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : null
+      i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : undefined
   });
 
   const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
@@ -417,7 +417,7 @@ function gameInfos(ctrl: OnlineRound) {
         if (link)
           window.open(link, '_blank');
       },
-      () => window.plugins.toast.show(data.game.variant.title, 'short', 'center')
+      () => window.plugins.toast.show(data.game.variant.title!, 'short', 'center')
     )
   }, data.game.variant.name);
   const infos = [time + ' • ', variant, h('br'), mode];

@@ -31,7 +31,7 @@ function aborted(data: GameData) {
   return data.game.status.id === ids.aborted;
 }
 
-function toLabel(status: string, winner: Color, variant: VariantKey) {
+function toLabel(status: string, winner: Color | undefined, variant: VariantKey) {
   switch (status) {
     case 'started':
       return i18n('playingRightNow');

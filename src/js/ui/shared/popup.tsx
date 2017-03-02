@@ -3,7 +3,7 @@ import * as helper from '../helper';
 
 export default function(
   classes: Object | string,
-  headerF: () => Mithril.Children,
+  headerF: (() => Mithril.Children) | undefined,
   contentF: () => Mithril.Children,
   isShowing: boolean,
   closef?: () => void

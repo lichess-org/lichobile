@@ -26,7 +26,7 @@ const UserTv: Mithril.Component<Attrs, State> = {
     tv(userId)
     .then(data => {
       data.userTV = userId;
-      this.round = new OnlineRound(data.game.id, data, false, null, null, userId, onRedirect);
+      this.round = new OnlineRound(data.game.id, data, false, undefined, undefined, userId, onRedirect);
     })
     .catch(handleXhrError);
   },

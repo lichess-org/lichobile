@@ -26,14 +26,14 @@ export interface State {
 }
 
 export interface ScrollState {
-  paginator: Paginator<xhr.UserGameWithDate>
+  user: UserFullProfile | undefined
+  paginator: Paginator<xhr.UserGameWithDate> | undefined
   games: Array<xhr.UserGameWithDate>
   currentFilter: string
   scrollPos: number
   viewport: number
   itemSize: number
   boardBounds: { width: number, height: number }
-  user: UserFullProfile
   userId: string
   availableFilters: Array<AvailableFilter>
   isLoadingNextPage: boolean
@@ -105,7 +105,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
         return {
           key: <GameFilter>k,
           label: filters[k],
-          count: this.scrollState.user.count[k]
+          count: this.scrollState.user && this.scrollState.user.count[k]
         };
       });
       this.scrollState.availableFilters = f
@@ -149,7 +149,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
 
     try {
       const newState = Object.assign({}, window.history.state, { scrollStateId: this.scrollState.userId })
-      window.history.replaceState(newState, null);
+      window.history.replaceState(newState, '');
     } catch (e) { console.error(e) }
 
     const loadNextPage = (page: number) => {
@@ -178,7 +178,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
     this.onScroll = (e: Event) => {
       const target = (e.target as HTMLElement)
       const content = target.firstChild as HTMLElement
-      const nextPage = this.scrollState.paginator.nextPage
+      const paginator = this.scrollState.paginator
+      const nextPage = paginator && paginator.nextPage
       if ((target.scrollTop + target.offsetHeight + 50) > content.offsetHeight) {
         // lichess doesn't allow for more than 39 pages
         if (!this.scrollState.isLoadingNextPage && nextPage && nextPage < 40) {

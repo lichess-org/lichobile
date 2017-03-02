@@ -1,6 +1,7 @@
 import router from '../../router';
 import * as helper from '../helper';
-import { FaqState, Tournament } from './interfaces';
+import { FaqState } from './interfaces';
+import { Tournament } from '../../lichess/interfaces/tournament'
 import { closeIcon } from '../shared/icons'
 
 export default {

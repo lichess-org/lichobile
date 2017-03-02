@@ -7,7 +7,8 @@ import * as xhr from '../tournamentXhr';
 import * as helper from '../../helper';
 import faq from '../faq';
 import playerInfo from '../playerInfo';
-import { TournamentAttrs, Tournament, FeaturedGameUpdate, TournamentState } from '../interfaces'
+import { TournamentAttrs, TournamentState, FeaturedGameUpdate  } from '../interfaces'
+import { Tournament } from '../../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream';
 
 export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentState>) {
@@ -17,7 +18,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
 
   const tournament = stream<Tournament>();
   const hasJoined = stream<boolean>(false);
-  const currentPage = stream<number>(null);
+  const currentPage = stream<number | undefined>(undefined);
   const isLoading = stream<boolean>(false);
   const notFound = stream<boolean>(false);
 
@@ -27,14 +28,14 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   function reload(data: Tournament) {
     isLoading(false);
     const oldData = tournament();
-    if (data.featured && (data.featured.id !== oldData.featured.id)) {
+    if (data.featured && (!oldData || !oldData.featured || (data.featured.id !== oldData.featured.id))) {
       socket.send('startWatching', data.featured.id);
     }
-    else if (data.featured && (data.featured.id === oldData.featured.id)) {
+    else if (data.featured && (!oldData || !oldData.featured || (data.featured.id === oldData.featured.id))) {
       data.featured = oldData.featured;
     }
     tournament(data);
-    hasJoined(data.me && !data.me.withdraw);
+    hasJoined(!!(data.me && !data.me.withdraw));
 
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion);
@@ -53,11 +54,11 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
     redraw();
   }
 
-  function join(tid: string, password: string) {
+  function join(tid: string, password?: string) {
     xhr.join(tid, password)
     .then(() => {
       hasJoined(true);
-      currentPage(null); // Reset the page so next reload goes to player position
+      currentPage(undefined); // Reset the page so next reload goes to player position
       redraw();
     })
     .catch(utils.handleXhrError);
@@ -72,7 +73,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
     .catch(utils.handleXhrError);
   }
 
-  const throttledReload = throttle((tid: string, p: number) => {
+  const throttledReload = throttle((tid: string, p?: number) => {
     if (p) currentPage(p);
     isLoading(true);
     xhr.reload(tid, currentPage())
@@ -86,8 +87,8 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   }, 1000);
 
   const handlers = {
-    reload: () => throttledReload(id, null),
-    resync: () => throttledReload(id, null),
+    reload: () => throttledReload(id),
+    resync: () => throttledReload(id),
     redirect: function(gameId: string) {
       router.set('/tournament/' + tournament().id + '/game/' + gameId, true);
     },
@@ -106,9 +107,9 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   xhr.tournament(id)
   .then(data => {
     tournament(data);
-    hasJoined(data.me && !data.me.withdraw);
+    hasJoined(!!(data.me && !data.me.withdraw));
     clockInterval(setInterval(tick, 1000));
-    const featuredGame = data.featured ? data.featured.id : null;
+    const featuredGame = data.featured ? data.featured.id : undefined;
     socket.createTournament(id, tournament().socketVersion, handlers, featuredGame);
     redraw();
   })

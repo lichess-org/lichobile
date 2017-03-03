@@ -152,7 +152,7 @@ export default {
     useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
     variant: localstorageprop('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
-    savedGames: localstorageprop('settings.otb.savedGames', {})
+    savedPGN: localstorageprop('settings.otb.savedPGN', '')
   },
 
   clock: {

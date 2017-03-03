@@ -53,10 +53,8 @@ export default {
       },
       importGame: function() {
         root.replay.pgn().then(data => {
-          const games = settings.otb.savedGames();
-          games[1] = data;
-          settings.otb.savedGames(games);
-          router.set('/importer?game=1');
+          settings.otb.savedPGN(data.pgn);
+          router.set('/importer?otbGame=1');
         });
       },
       root: root

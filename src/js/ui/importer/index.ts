@@ -24,7 +24,7 @@ interface SendData {
   analyse?: boolean
 }
 
-const ImporterScreen: Mithril.Component<{game: string}, State> = {
+const ImporterScreen: Mithril.Component<{otbGame: string}, State> = {
   oninit(vnode) {
     helper.analyticsTrackView('Import game');
 
@@ -83,14 +83,14 @@ const ImporterScreen: Mithril.Component<{game: string}, State> = {
 
   view(vnode) {
     const headerCtrl = () => dropShadowHeader(i18n('importGame'));
-    const bodyCtrl = () => renderBody(vnode.state, vnode.attrs.game);
+    const bodyCtrl = () => renderBody(vnode.state, vnode.attrs.otbGame === '1');
     return layout.free(headerCtrl, bodyCtrl);
   }
 
 }
 
-function renderBody(ctrl: State, gameId: string) {
-  const pgn = (gameId && settings.otb.savedGames()[gameId]) ? settings.otb.savedGames()[gameId].pgn : '';
+function renderBody(ctrl: State, otbGame: boolean) {
+  const pgn = otbGame ? settings.otb.savedPGN() : '';
   return h('div.gameImporter.native_scroller', [
     h('p', 'When pasting a game PGN, you get a browsable replay and a computer analysis.'),
     h('form', {

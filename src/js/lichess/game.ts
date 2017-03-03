@@ -8,7 +8,7 @@ import i18n from '../i18n';
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings'];
 
-export function parsePossibleMoves(possibleMoves: StringMap): DestsMap {
+export function parsePossibleMoves(possibleMoves?: StringMap): DestsMap {
   if (!possibleMoves) return {};
   const r: DestsMap = {};
   const keys = Object.keys(possibleMoves);
@@ -52,8 +52,8 @@ export function abortable(data: GameData) {
   return playable(data) && playedTurns(data) < 2 && !mandatory(data);
 }
 
-export function takebackable(data: GameData) {
-  return playable(data) && data.takebackable && !data.tournament && playedTurns(data) > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback;
+export function takebackable(data: GameData): boolean {
+  return !!(playable(data) && data.takebackable && !data.tournament && playedTurns(data) > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback)
 }
 
 export function drawable(data: GameData) {
@@ -95,7 +95,7 @@ export function analysable(data: GameData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
 }
 
-export function getPlayer(data: GameData, color: Color) {
+export function getPlayer(data: GameData, color?: Color) {
   if (data.player.color === color) return data.player;
   if (data.opponent.color === color) return data.opponent;
   return null;
@@ -103,16 +103,20 @@ export function getPlayer(data: GameData, color: Color) {
 
 export function setIsGone(data: GameData, color: Color, isGone: boolean) {
   const player = getPlayer(data, color);
-  isGone = isGone && !player.ai;
-  player.isGone = isGone;
-  if (!isGone && player.user) player.user.online = true;
+  if (player) {
+    isGone = isGone && !player.ai;
+    player.isGone = isGone;
+    if (!isGone && player.user) player.user.online = true;
+  }
 }
 
 export function setOnGame(data: GameData, color: Color, onGame: boolean) {
   const player = getPlayer(data, color);
-  onGame = onGame || !!player.ai;
-  player.onGame = onGame;
-  if (onGame) setIsGone(data, color, false);
+  if (player) {
+    onGame = onGame || !!player.ai;
+    player.onGame = onGame;
+    if (onGame) setIsGone(data, color, false);
+  }
 }
 
 export function nbMoves(data: GameData, color: Color) {

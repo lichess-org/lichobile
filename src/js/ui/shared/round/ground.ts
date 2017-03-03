@@ -11,9 +11,13 @@ import * as chessFormat from '../../../utils/chessFormat';
 function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
   const lastMove = data.game.lastMove ?
     chessFormat.uciToMove(data.game.lastMove) :
-    (data.game.variant.key === 'crazyhouse' && data.steps.length > 0 &&
-    data.steps[data.steps.length - 1].uci) ?
-      chessFormat.uciTolastDrop(data.steps[data.steps.length - 1].uci) :
+    (
+      data.game.variant.key === 'crazyhouse' &&
+      data.steps.length > 0 &&
+      data.steps[data.steps.length - 1].uci !== undefined
+    ) ?
+      // bad inference here
+      chessFormat.uciTolastDrop(data.steps[data.steps.length - 1].uci!) :
       null;
 
   return {

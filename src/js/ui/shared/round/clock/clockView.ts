@@ -5,7 +5,7 @@ import ClockCtrl from './ClockCtrl'
 export interface ClockAttrs {
   ctrl: ClockCtrl
   color: Color
-  runningColor: Color
+  runningColor?: Color
   isBerserk: boolean
 }
 

@@ -158,8 +158,8 @@ const perfIconsMap: {[index:string]: string} = {
   crazyhouse: ''
 };
 
-export function gameIcon(perf: string): string {
-  return perfIconsMap[perf] || '8';
+export function gameIcon(perf?: string): string {
+  return perf ? perfIconsMap[perf] || '8' : '8'
 }
 
 export function secondsToMinutes(sec: number): number {

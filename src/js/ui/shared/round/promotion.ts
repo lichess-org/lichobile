@@ -6,7 +6,7 @@ import ground from './ground';
 import * as xhr from './roundXhr';
 import { OnlineRoundInterface } from '.'
 
-let promoting: [Pos, Pos] = null;
+let promoting: [Pos, Pos] | null = null
 
 function start(ctrl: OnlineRoundInterface, orig: Pos, dest: Pos, isPremove: boolean) {
   const piece = ctrl.chessground.data.pieces[dest];

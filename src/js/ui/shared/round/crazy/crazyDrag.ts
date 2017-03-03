@@ -1,24 +1,25 @@
 import chessground from '../../../../chessground';
+import { BoardInterface } from '../'
 
-function isDraggable(data, color) {
+function isDraggable(data: any, color: Color) {
   return data.movable.color === color && (
     data.turnColor === color || data.predroppable.enabled
   );
 }
 
-export default function(ctrl, e) {
-  if (e.button !== undefined && e.button !== 0) return; // only touch or left click
+export default function(ctrl: BoardInterface, e: TouchEvent) {
+  if (e.touches && e.touches.length > 1) return; // support one finger touch only
   if (!ctrl.canDrop()) return;
   const cgData = ctrl.chessground.data;
-  const role = e.target.getAttribute('data-role'),
-    color = e.target.getAttribute('data-color'),
-    number = e.target.getAttribute('data-nb');
+  const role = <Role>(e.target as HTMLElement).getAttribute('data-role'),
+    color = <Color>(e.target as HTMLElement).getAttribute('data-color'),
+    number = (e.target as HTMLElement).getAttribute('data-nb');
   if (!role || !color || number === '0') return;
   if (!isDraggable(ctrl.chessground.data, color)) return;
   e.stopPropagation();
   e.preventDefault();
-  var key;
-  for (var i in chessground.util.allKeys) {
+  let key;
+  for (let i in chessground.util.allKeys) {
     if (!cgData.pieces[chessground.util.allKeys[i]]) {
       key = chessground.util.allKeys[i];
       break;
@@ -27,9 +28,9 @@ export default function(ctrl, e) {
   if (!key) return;
   const coords = chessground.util.key2pos(cgData.orientation === 'white' ? key : chessground.util.invertKey(key));
   const piece = {
-    role: role,
-    color: color
-  };
+    role,
+    color
+  }
   const obj = {};
   obj[key] = piece;
   ctrl.chessground.setPieces(obj);

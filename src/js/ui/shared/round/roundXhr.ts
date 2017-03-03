@@ -10,7 +10,7 @@ export function reload(ctrl: OnlineRoundInterface): Promise<OnlineGameData> {
 }
 
 export function getPGN(gameId: string) {
-  return fetchText(`/game/export/${gameId}.pgn`, null, true);
+  return fetchText(`/game/export/${gameId}.pgn`, undefined, true);
 }
 
 export function readNote(gameId: string) {

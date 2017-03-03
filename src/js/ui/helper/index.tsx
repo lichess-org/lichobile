@@ -233,7 +233,7 @@ export function progress(p: number) {
   }, String(Math.abs(p)));
 }
 
-export function classSet(classes: {[cl: string]: boolean}) {
+export function classSet(classes: {[cl: string]: boolean}): string {
   const arr: string[] = [];
   for (let i in classes) {
     if (classes[i]) arr.push(i);

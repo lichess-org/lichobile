@@ -130,7 +130,7 @@ export function chatView(ctrl: Chat) {
 
           const lichessTalking = msg.u === 'lichess';
           const playerTalking = msg.c ? msg.c === player.color :
-          player.user && msg.u === player.user.username;
+            player.user && msg.u === player.user.username;
 
           let closeBalloon = true;
           let next = all[i + 1];
@@ -144,7 +144,7 @@ export function chatView(ctrl: Chat) {
           return h('li.chat_msg.allow_select', {
             className: helper.classSet({
               system: lichessTalking,
-              player: playerTalking,
+              player: !!playerTalking,
               opponent: !lichessTalking && !playerTalking,
               'close_balloon': closeBalloon
             })
@@ -177,12 +177,11 @@ export function chatView(ctrl: Chat) {
           value: ctrl.inputValue,
           style: { lineHeight: '18px', margin: '8px 0 8px 10px', paddingTop: '8px' },
           oninput(e: Event) {
-            const sendButton = document.getElementById('chat_send')
             const ta = (e.target as HTMLTextAreaElement)
             if (ta.value.length > 140) ta.value = ta.value.substr(0, 140)
             ctrl.inputValue = ta.value
             const style = window.getComputedStyle(ta)
-            const taLineHeight = parseInt(style.lineHeight, 10)
+            const taLineHeight = parseInt(style.lineHeight || '18', 10)
             const taHeight = calculateContentHeight(ta, taLineHeight)
             const computedNbLines = Math.ceil(taHeight / taLineHeight)
             const nbLines =
@@ -191,8 +190,11 @@ export function chatView(ctrl: Chat) {
             ta.setAttribute('rows', String(nbLines))
             if (nbLines === 1) ta.style.paddingTop = '8px'
             else ta.style.paddingTop = '0'
-            if (validateMsg(ctrl.inputValue)) sendButton.classList.remove('disabled')
-            else sendButton.classList.add('disabled')
+            const sendButton = document.getElementById('chat_send')
+            if (sendButton) {
+              if (validateMsg(ctrl.inputValue)) sendButton.classList.remove('disabled')
+              else sendButton.classList.add('disabled')
+            }
           }
         }),
         h('button#chat_send.chat_send.fa.fa-telegram.disabled')
@@ -252,9 +254,9 @@ function calculateContentHeight(ta: HTMLElement, scanAmount: number): number {
       ta.style.overflow = overflow;
       return height;
     }
-  } else {
-    return scrollHeight;
   }
+
+  return scrollHeight;
 }
 
 function isSpam(txt: string) {

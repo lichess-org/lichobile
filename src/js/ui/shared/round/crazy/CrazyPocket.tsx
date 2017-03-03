@@ -24,28 +24,26 @@ interface State {
 
 const CrazyPocket: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
-    const { ctrl } = vnode.attrs;
-    const onstart = crazyDrag.bind(undefined, ctrl);
-    const onmove = chessgroundDrag.move.bind(undefined, ctrl.chessground.data);
-    const onend = chessgroundDrag.end.bind(undefined, ctrl.chessground.data);
+    const { ctrl } = vnode.attrs
+    const onstart = (e: TouchEvent) => crazyDrag(ctrl, e)
+    const onmove = (e: TouchEvent) => chessgroundDrag.move(ctrl.chessground.data, e)
+    const onend = (e: TouchEvent) => chessgroundDrag.end(ctrl.chessground.data, e)
 
     this.pocketOnCreate = function({ dom }: Mithril.DOMNode) {
-      dom.addEventListener('touchstart', onstart);
-      dom.addEventListener('touchmove', onmove);
-      dom.addEventListener('touchend', onend);
-    };
+      dom.addEventListener('touchstart', onstart)
+      dom.addEventListener('touchmove', onmove)
+      dom.addEventListener('touchend', onend)
+    }
 
     this.pocketOnRemove = function({ dom }: Mithril.DOMNode) {
-      dom.removeEventListener('touchstart', onstart);
-      dom.removeEventListener('touchmove', onmove);
-      dom.removeEventListener('touchend', onend);
-    };
+      dom.removeEventListener('touchstart', onstart)
+      dom.removeEventListener('touchmove', onmove)
+      dom.removeEventListener('touchend', onend)
+    }
   },
 
   view(vnode) {
     const { crazyData, position, color, customPieceTheme } = vnode.attrs;
-
-    if (!crazyData) return null;
 
     const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
     const className = [

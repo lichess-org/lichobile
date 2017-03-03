@@ -60,6 +60,22 @@ export interface Player {
   ratingDiff?: number
 }
 
+export interface OnlinePlayer extends Player {
+  version: number
+}
+
+interface Tournament {
+  id: string;
+  berserkable: boolean;
+  secondsToFinish: number;
+  nbSecondsForFirstMove: number;
+  ranks?: {
+    white: string;
+    black: string;
+    [color: string]: string;
+  }
+}
+
 export interface GameData {
   game: Game
   player: Player
@@ -75,18 +91,19 @@ export interface GameData {
   userTV?: string
   tv?: string
   pref?: any
-  url?: {
-    round: string
-    socket: string
-  }
   bookmarked?: boolean
   takebackable?: boolean
 }
 
 export interface OnlineGameData extends GameData {
-  game: OnlineGame;
-  takebackable: boolean;
+  player: OnlinePlayer
+  game: OnlineGame
+  takebackable: boolean
   watchers?: GameWatchers
+  url: {
+    round: string
+    socket: string
+  }
 }
 
 export interface GameCrowd {

@@ -43,9 +43,7 @@ export default {
   sharePGN: function(ctrl: OnlineRound) {
     function handler() {
       getPGN(ctrl.data.game.id)
-      .then(function(PGN) {
-        window.plugins.socialsharing.share(PGN);
-      })
+      .then((PGN: string) => window.plugins.socialsharing.share(PGN))
       .catch(handleXhrError);
     }
     return (
@@ -294,7 +292,7 @@ export default {
     });
     return (
       <button className={className} key="backward"
-        oncreate={helper.ontap(ctrl.jumpPrev, null, ctrl.jumpPrev)} />
+        oncreate={helper.ontap(ctrl.jumpPrev, undefined, ctrl.jumpPrev)} />
     );
   },
   forward: function(ctrl: OnlineRound) {
@@ -308,7 +306,7 @@ export default {
     });
     return (
       <button className={className} key="forward"
-        oncreate={helper.ontap(ctrl.jumpNext, null, ctrl.jumpNext)} />
+        oncreate={helper.ontap(ctrl.jumpNext, undefined, ctrl.jumpNext)} />
     );
   },
   last: function(ctrl: OnlineRound) {
@@ -351,11 +349,11 @@ export default {
       </button>
     );
   },
-  withdrawFromTournament: function(ctrl: OnlineRound) {
+  withdrawFromTournament: function(ctrl: OnlineRound, tournamentId: string) {
     function handler() {
       ctrl.hideActions();
-      tournamentXhr.withdraw(ctrl.data.game.tournamentId);
-      router.set('/tournament/' + ctrl.data.game.tournamentId, true);
+      tournamentXhr.withdraw(tournamentId);
+      router.set(`/tournament/${tournamentId}`, true);
     }
     return (
       <button key="withdrawFromTournament" oncreate={helper.ontap(handler)}>

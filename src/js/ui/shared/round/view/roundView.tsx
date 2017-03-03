@@ -18,6 +18,7 @@ import Board from '../../../shared/Board';
 import popupWidget from '../../../shared/popup';
 import formWidgets from '../../../shared/form';
 import Clock from '../clock/clockView';
+import ClockCtrl from '../clock/ClockCtrl'
 import promotion from '../promotion';
 import gameButton from './button';
 import { chatView } from '../chat';
@@ -63,10 +64,12 @@ export function renderMaterial(material: Material) {
 }
 
 function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
-  const el = vnode.dom as HTMLElement;
-  el.textContent =
-    utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • ';
-  ctrl.vm.tClockEl = el;
+  if (ctrl.data.tournament) {
+    const el = vnode.dom as HTMLElement;
+    el.textContent =
+      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • ';
+    ctrl.vm.tClockEl = el;
+  }
 }
 
 function renderTitle(ctrl: OnlineRound) {
@@ -150,7 +153,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait,
-    alert: gameApi.mandatory(ctrl.data) && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
+    alert: !!ctrl.data.tournament && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
       i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : undefined
   });
 
@@ -210,6 +213,15 @@ function userInfos(user: User, player: Player, playerName: string, position: Pos
   window.plugins.toast.show(title, 'short', 'center');
 }
 
+function renderClock(ctrl: ClockCtrl, color: Color, isBerserk: boolean, runningColor?: Color) {
+  return h(Clock, {
+    ctrl,
+    color,
+    runningColor,
+    isBerserk
+  })
+}
+
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
   const user = player.user;
   const playerName = utils.playerName(player, !isPortrait);
@@ -220,7 +232,7 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
 
   const checksNb = getChecksCount(ctrl, player.color);
 
-  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
 
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
     '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null;
@@ -257,38 +269,38 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
       </div> : null
       }
       {isCrazy && ctrl.clock ?
-        h(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+        renderClock(ctrl.clock, player.color, ctrl.vm.goneBerserk[player.color], runningColor) :
         isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
-        )
       }
     </div>
   );
 }
 
 function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean) {
-  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : null;
+  const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
   const step = ctrl.plyStep(ctrl.vm.ply);
   const isCrazy = !!step.crazy;
 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
       {renderAntagonistInfo(ctrl, player, material, position, isPortrait, isCrazy)}
-      {h(CrazyPocket, {
-        ctrl,
-        crazyData: step.crazy,
-        color: player.color,
-        position
-      })}
-      {!isCrazy && ctrl.clock ?
-        h(Clock, { ctrl: ctrl.clock, color: player.color, runningColor, isBerserk: ctrl.vm.goneBerserk[player.color] }) : (
+      { !!step.crazy ?
+        h(CrazyPocket, {
+          ctrl,
+          crazyData: step.crazy,
+          color: player.color,
+          position
+        }) : null
+      }
+      { !isCrazy && ctrl.clock ?
+        renderClock(ctrl.clock, player.color, ctrl.vm.goneBerserk[player.color], runningColor) :
         !isCrazy && ctrl.correspondenceClock ?
           renderCorrespondenceClock(
             ctrl.correspondenceClock, player.color, ctrl.data.game.player
           ) : null
-        )
       }
     </section>
   );
@@ -355,7 +367,8 @@ function renderGameEndedActions(ctrl: OnlineRound) {
   ];
   resultDom.push(h('em.resultStatus', status));
   let buttons: Mithril.Children;
-  if (ctrl.data.game.tournamentId) {
+  const tournamentId = ctrl.data.game.tournamentId
+  if (tournamentId) {
     if (ctrl.data.player.spectator) {
       buttons = [
         gameButton.returnToTournament(ctrl),
@@ -367,7 +380,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
     else {
       buttons = [
         gameButton.returnToTournament(ctrl),
-        gameButton.withdrawFromTournament(ctrl),
+        gameButton.withdrawFromTournament(ctrl, tournamentId),
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)

@@ -5,12 +5,13 @@ import i18n from '../../../i18n';
 import socket from '../../../socket';
 import redraw from '../../../utils/redraw';
 import { handleXhrError } from '../../../utils';
-import * as xhr from './../inboxXhr';
+import * as xhr from '../inboxXhr';
 import { ComposeAttrs, SendErrorResponse, ComposeResponse, ComposeState } from '../interfaces';
 import { composeBody } from './composeView';
 import router from '../../../router';
 import { FetchError } from '../../../http';
 import * as stream from 'mithril/stream';
+import * as throttle from 'lodash/throttle';
 
 const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
 
@@ -21,6 +22,7 @@ const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
 
     const id = stream<string>(vnode.attrs.userId);
     const errors = stream<SendErrorResponse>();
+    const autocompleteResults = stream<string[]>();
 
     function send(form: HTMLFormElement) {
       const recipient = (form[0] as HTMLInputElement).value;
@@ -55,7 +57,16 @@ const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
     vnode.state = <ComposeState> {
       id,
       errors,
-      send
+      send,
+      onInput: throttle((e: Event) => {
+        const term = (e.target as HTMLInputElement).value.trim();
+        if (term.length >= 3)
+          xhr.autocomplete(term).then(data => {
+            autocompleteResults(data);
+            redraw();
+          });
+      }, 250),
+      autocompleteResults
     };
   },
 

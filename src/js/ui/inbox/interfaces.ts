@@ -61,6 +61,7 @@ export interface ComposeState {
   id: Mithril.Stream<string>
   errors: Mithril.Stream<SendErrorResponse>
   send: (form: HTMLFormElement) => void
+  onInput: (e: Event) => void
 }
 
 export interface SendErrorResponse {

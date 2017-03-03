@@ -10,7 +10,7 @@ export function composeBody(ctrl: ComposeState) {
         e.preventDefault();
         return ctrl.send(e.target as HTMLFormElement);
       }}>
-        {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName()}
+        {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName(ctrl)}
         {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
         <input id="subject" key="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
@@ -35,17 +35,19 @@ function recipientWithName(ctrl: ComposeState) {
     autocapitalize="off"
     autocomplete="off"
     value={ctrl.id()}
+    oninput={ctrl.onInput}
     />
   );
 }
 
-function recipientWithoutName() {
+function recipientWithoutName(ctrl: ComposeState) {
   return (
     <input id="recipient" key="recipient" type="text" className="composeInput"
     placeholder={i18n('recipient')}
     autocapitalize="off"
     autocomplete="off"
     oncreate={helper.autofocus}
+    oninput={ctrl.onInput}
     />
   );
 }

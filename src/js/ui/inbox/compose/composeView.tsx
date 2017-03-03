@@ -1,6 +1,7 @@
 import * as helper from '../../helper';
 import i18n from '../../../i18n';
 import { ComposeState } from '../interfaces';
+import redraw from '../../../utils/redraw';
 
 export function composeBody(ctrl: ComposeState) {
   return (
@@ -11,12 +12,23 @@ export function composeBody(ctrl: ComposeState) {
         return ctrl.send(e.target as HTMLFormElement);
       }}>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName(ctrl)}
+        <ul id="autocompleteResults" className="">
+        {ctrl.autocompleteResults().map(u => {
+          return (
+            <li className="list_item nav" key={u} oncreate={helper.ontapY(() => recipientSelected(u, ctrl))}>
+            {u}
+            </li>
+          );
+        })}
+        </ul>
         {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
+
         <input id="subject" key="subject" type="text" className="composeInput"
         placeholder={i18n('subject')}
         oncreate={ctrl.id() ? helper.autofocus : null}
         />
         {(ctrl.errors() && ctrl.errors().subject) ? renderError('subjectError', ctrl.errors().subject[0]) : null}
+
         <textarea id="body" key="body" className="composeInput composeTextarea" />
         {(ctrl.errors() && ctrl.errors().text) ? renderError('textError', ctrl.errors().text[0]) : null}
         <button key="send" className="fatButton composeSend" type="submit">
@@ -36,6 +48,10 @@ function recipientWithName(ctrl: ComposeState) {
     autocomplete="off"
     value={ctrl.id()}
     oninput={ctrl.onInput}
+    onblur={() => {
+      ctrl.autocompleteResults([]);
+      redraw();
+    }}
     />
   );
 }
@@ -48,6 +64,10 @@ function recipientWithoutName(ctrl: ComposeState) {
     autocomplete="off"
     oncreate={helper.autofocus}
     oninput={ctrl.onInput}
+    onblur={() => {
+      ctrl.autocompleteResults([]);
+      redraw();
+    }}
     />
   );
 }
@@ -58,4 +78,10 @@ function renderError(divKey: string, errorMessage: string) {
       {errorMessage}
     </div>
   );
+}
+
+function recipientSelected (user: string, ctrl: ComposeState) {
+  ctrl.autocompleteResults([]);
+  (document.getElementById('recipient') as HTMLInputElement).value = user;
+  document.getElementById('subject').focus();
 }

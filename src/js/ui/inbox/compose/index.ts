@@ -22,7 +22,7 @@ const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
 
     const id = stream<string>(vnode.attrs.userId);
     const errors = stream<SendErrorResponse>();
-    const autocompleteResults = stream<string[]>();
+    const autocompleteResults = stream<string[]>([]);
 
     function send(form: HTMLFormElement) {
       const recipient = (form[0] as HTMLInputElement).value;
@@ -60,11 +60,16 @@ const ComposeScreen: Mithril.Component<ComposeAttrs, ComposeState> = {
       send,
       onInput: throttle((e: Event) => {
         const term = (e.target as HTMLInputElement).value.trim();
-        if (term.length >= 3)
+        if (term.length >= 3) {
           xhr.autocomplete(term).then(data => {
             autocompleteResults(data);
             redraw();
           });
+        }
+        else {
+          autocompleteResults([]);
+          redraw();
+        }
       }, 250),
       autocompleteResults
     };

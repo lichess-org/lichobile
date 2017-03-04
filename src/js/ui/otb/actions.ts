@@ -7,8 +7,11 @@ import ground from '../shared/offlineRound/ground';
 import popupWidget from '../shared/popup';
 import router from '../../router';
 import * as h from 'mithril/hyperscript';
+import * as helper from '../helper';
+import OtbRound from './OtbRound';
+import * as chess from '../../chess';
 
-function renderAlways(ctrl) {
+function renderAlways(ctrl: OtbRound) {
   return [
     h('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces,
@@ -16,13 +19,19 @@ function renderAlways(ctrl) {
     )),
     h('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
-    ))
+    )),
+    h('button', {
+      key: 'importGame',
+      oncreate: helper.ontap(() => {
+        ctrl.actions.importGame();
+      })
+    }, [h('span.fa.fa-cloud-upload'), i18n('importGame')])
   ];
 }
 
 export default {
 
-  controller: function(root) {
+  controller: function(root: OtbRound) {
     let isOpen = false;
 
     function open() {
@@ -30,7 +39,7 @@ export default {
       isOpen = true;
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
       isOpen = false;
     }
@@ -42,27 +51,34 @@ export default {
         return isOpen;
       },
       sharePGN: function() {
-        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
+        root.replay.pgn(undefined, undefined).then((data: chess.PgnDumpResponse) => window.plugins.socialsharing.share(data.pgn));
+      },
+      importGame: function() {
+        root.replay.pgn(undefined, undefined).then((data: chess.PgnDumpResponse) => {
+          settings.otb.savedPGN(data.pgn);
+          router.set('/importer?otbGame=1');
+        });
       },
       root: root
     };
   },
 
-  view: function(ctrl) {
-    if (ctrl.isOpen()) {
+  view: function(ctrl: OtbRound) {
+    const actions = ctrl.actions;
+    if (actions.isOpen()) {
       return popupWidget(
         'offline_actions',
         null,
         function() {
           return [
-            renderEndedGameStatus(ctrl.root)
+            renderEndedGameStatus(ctrl)
           ].concat(
-            renderClaimDrawButton(ctrl.root),
-            renderAlways(ctrl.root)
+            renderClaimDrawButton(ctrl),
+            renderAlways(ctrl)
           );
         },
-        ctrl.isOpen(),
-        ctrl.close
+        actions.isOpen(),
+        actions.close
       );
     }
 

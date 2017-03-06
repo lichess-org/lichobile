@@ -17,11 +17,11 @@ export interface Attrs {
 }
 
 interface Config {
+  fen?: string
+  lastMove?: MoveTuple
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
-  fen: string
-  lastMove: MoveTuple
   orientation: Color
   bounds: Bounds
 }
@@ -82,7 +82,7 @@ function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
     minimalDom: true,
     coordinates: false,
     fen,
-    lastMove: lastMove && uciToMove(lastMove),
+    lastMove: lastMove ? uciToMove(lastMove) : undefined,
     orientation: orientation || 'white',
     bounds
   };

@@ -22,7 +22,7 @@ interface CardDim {
   margin: number
 }
 
-let scroller: IScroll = null;
+let scroller: IScroll | null = null
 
 let isOpen = false;
 let lastJoined: NowPlayingGame | undefined;
@@ -105,7 +105,7 @@ export default {
           }
           {helper.isWideScreen() ?
             <div className="popup_content">
-              {renderAllGames(null)}
+              {renderAllGames(cDim)}
             </div> : renderAllGames(cDim)
           }
         </div>
@@ -186,7 +186,7 @@ function cardDims(): CardDim {
 
 function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
-  const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : null;
+  const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : undefined
   return (
     <div className="boardWrapper" style={style}>
       {h(ViewOnlyBoard, { bounds, fen, lastMove, orientation, variant })}
@@ -273,7 +273,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.initialFen, null, null, c.variant.key)}
+      {renderViewOnlyBoard(cDim, c.initialFen, undefined, undefined, c.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
@@ -288,7 +288,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
             {i18n('accept')}
           </button>
           <button oncreate={helper.ontapX(
-            helper.fadesOut(declineChallenge.bind(undefined, c.id), '.card', 250)
+            helper.fadesOut(() => declineChallenge(c.id), '.card', 250)
           )}>
             {i18n('decline')}
           </button>

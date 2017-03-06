@@ -24,11 +24,11 @@ export default class ClockCtrl {
   public emerg: ClockBools
   public outOfTime: () => void
 
-  private soundColor: Color
+  private soundColor?: Color
   private emergSound: { last: number, delay: number, playable: ClockBools }
   private lastUpdate: LastUpdate
 
-  constructor(data: ClockData, outOfTime: () => void, soundColor: Color) {
+  constructor(data: ClockData, outOfTime: () => void, soundColor?: Color) {
 
     this.lastUpdate = {
       white: data.white,

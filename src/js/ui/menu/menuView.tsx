@@ -26,7 +26,7 @@ export default function view() {
   );
 }
 
-function renderHeader(user: Session) {
+function renderHeader(user?: Session) {
   const ping = menu.ping();
   const server = menu.mlat();
   const l = (ping || 0) + server - 100;
@@ -76,7 +76,7 @@ function renderHeader(user: Session) {
       }
       { hasNetwork() && user ?
         <div key="user-button" className="user_profile_button"
-          oncreate={helper.ontap(menu.toggleHeader, null, null)}
+          oncreate={helper.ontap(menu.toggleHeader)}
         >
           {i18n('profile')}
           <span className="arrow" data-icon={menu.headerOpen() ? 'S' : 'R'} />
@@ -127,7 +127,7 @@ function renderProfileActions(user: Session) {
   );
 }
 
-function renderLinks(user: Session) {
+function renderLinks(user?: Session) {
   const offlineGames = getOfflineGames();
 
   return (

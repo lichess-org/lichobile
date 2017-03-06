@@ -11,7 +11,7 @@ interface Promoting {
   callback: PromoteCallback
 }
 
-let promoting: Promoting = null
+let promoting: Promoting | null = null
 
 function promote(ground: Chessground.Controller, key: Pos, role: Role) {
   const pieces = {};
@@ -43,7 +43,7 @@ function start(chessground: Chessground.Controller, orig: Pos, dest: Pos, callba
 
 function finish(ground: Chessground.Controller, role: Role) {
   if (promoting) promote(ground, promoting.dest, role);
-  if (promoting.callback) promoting.callback(promoting.orig, promoting.dest, role);
+  if (promoting && promoting.callback) promoting.callback(promoting.orig, promoting.dest, role);
   promoting = null;
 }
 

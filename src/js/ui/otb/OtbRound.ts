@@ -30,13 +30,13 @@ interface InitPayload {
 
 
 export default class OtbRound implements OtbRoundInterface, PromotingInterface {
-  public setupFen: string;
-  public data: OfflineGameData;
-  public actions: any;
-  public newGameMenu: NewOtbGameCtrl;
-  public chessground: Chessground.Controller;
-  public replay: Replay;
-  public vm: OtbVM;
+  public setupFen: string | undefined
+  public data: OfflineGameData
+  public actions: any
+  public newGameMenu: NewOtbGameCtrl
+  public chessground: Chessground.Controller
+  public replay: Replay
+  public vm: OtbVM
 
   public constructor(saved?: StoredOfflineGame, setupFen?: string) {
     this.setupFen = setupFen;
@@ -123,8 +123,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     })
     .then(() => {
       if (setupFen) {
-        this.vm.setupFen = null;
-        router.replaceState('/otb');
+        this.vm.setupFen = undefined
+        router.replaceState('/otb')
       }
     });
   }
@@ -176,7 +176,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       this.chessground.set({
         fen: sit.fen,
         turnColor: sit.player,
-        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : null,
+        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : undefined,
         dests: sit.dests,
         movableColor: sit.player,
         check: sit.check
@@ -213,9 +213,9 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     return this.replay.situation().player
   }
 
-  public jump = (ply: number) => {
+  public jump = (ply: number): false => {
     this.chessground.cancelMove();
-    if (ply < 0 || ply >= this.replay.situations.length) return;
+    if (ply < 0 || ply >= this.replay.situations.length) return false
     this.replay.ply = ply;
     this.apply(this.replay.situation());
     return false;

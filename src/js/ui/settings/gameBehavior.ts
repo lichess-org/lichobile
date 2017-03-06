@@ -5,15 +5,15 @@ import i18n from '../../i18n';
 import * as helper from '../helper';
 import session from '../../session';
 import { SettingsProp } from '../../settings'
-import { swapKeyValue, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs';
+import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs';
 import * as h from 'mithril/hyperscript';
 
 interface State {
   premove: SettingsProp<boolean>
-  takeback: SettingsProp<string>
-  autoQueen: SettingsProp<string>
-  autoThreefold: SettingsProp<string>
-  submitMove: SettingsProp<string>
+  takeback: SettingsProp<number>
+  autoQueen: SettingsProp<number>
+  autoThreefold: SettingsProp<number>
+  submitMove: SettingsProp<number>
 }
 
 const GameBehaviorPrefScreen: Mithril.Component<{}, State> = {
@@ -21,11 +21,11 @@ const GameBehaviorPrefScreen: Mithril.Component<{}, State> = {
 
   oninit: function(vnode) {
     vnode.state = {
-      premove: session.lichessBackedProp<boolean>('prefs.premove', session.savePreferences),
-      takeback: session.lichessBackedProp<string>('prefs.takeback', session.savePreferences),
-      autoQueen: session.lichessBackedProp<string>('prefs.autoQueen', session.savePreferences),
-      autoThreefold: session.lichessBackedProp<string>('prefs.autoThreefold', session.savePreferences),
-      submitMove: session.lichessBackedProp<string>('prefs.submitMove', session.savePreferences)
+      premove: session.lichessBackedProp<boolean>('prefs.premove', session.savePreferences, true),
+      takeback: session.lichessBackedProp<number>('prefs.takeback', session.savePreferences, Takeback.ALWAYS),
+      autoQueen: session.lichessBackedProp<number>('prefs.autoQueen', session.savePreferences, AutoQueen.PREMOVE),
+      autoThreefold: session.lichessBackedProp<number>('prefs.autoThreefold', session.savePreferences, AutoThreefold.TIME),
+      submitMove: session.lichessBackedProp<number>('prefs.submitMove', session.savePreferences, SubmitMove.CORRESPONDENCE_ONLY)
     }
   },
 
@@ -45,19 +45,19 @@ function renderBody(ctrl: State) {
         'premove', ctrl.premove)),
       h('li.list_item', [
         h('div.label', i18n('takebacksWithOpponentApproval')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'takeback', swapKeyValue(TakebackChoices), ctrl.takeback))
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'takeback', <Array<LichessPropOption>>TakebackChoices, ctrl.takeback))
       ]),
       h('li.list_item', [
         h('div.label', i18n('promoteToQueenAutomatically')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoQueen', swapKeyValue(AutoQueenChoices), ctrl.autoQueen))
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'autoQueen', <Array<LichessPropOption>>AutoQueenChoices, ctrl.autoQueen))
       ]),
       h('li.list_item', [
         h('div.label', i18n('claimDrawOnThreefoldRepetitionAutomatically').replace(/\%s/g, '')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'autoThreefold', swapKeyValue(AutoThreefoldChoices), ctrl.autoThreefold))
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'autoThreefold', <Array<LichessPropOption>>AutoThreefoldChoices, ctrl.autoThreefold))
       ]),
       h('li.list_item', [
         h('div.label', i18n('moveConfirmation')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'moveConfirmation', swapKeyValue(SubmitMoveChoices), ctrl.submitMove))
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'moveConfirmation', <Array<LichessPropOption>>SubmitMoveChoices, ctrl.submitMove))
       ])
     ])
   ];

@@ -13,7 +13,7 @@ import vibrate from '../../../vibrate';
 import * as gameApi from '../../../lichess/game';
 import { MiniUser } from '../../../lichess/interfaces';
 import { OnlineGameData, GameStep, Player } from '../../../lichess/interfaces/game';
-import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta } from '../../../lichess/interfaces/move';
+import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop } from '../../../lichess/interfaces/move';
 import * as chessFormat from '../../../utils/chessFormat';
 import { gameTitle } from '../../shared/common';
 
@@ -38,9 +38,9 @@ interface VM {
   goneBerserk: {
     [index: string]: boolean
   },
-  moveToSubmit: MoveRequest
-  dropToSubmit: DropRequest
-  tClockEl: HTMLElement
+  moveToSubmit: MoveRequest | null
+  dropToSubmit: DropRequest | null
+  tClockEl: HTMLElement | null
   offlineWatcher: boolean
 }
 
@@ -50,11 +50,11 @@ export default class OnlineRound implements OnlineRoundInterface {
   public chessground: Chessground.Controller
   public clock: ClockCtrl | null
   public correspondenceClock: any
-  public chat: Chat
+  public chat: Chat | null
   public notes: any
-  public onFeatured: () => void
-  public onTVChannelChange: () => void
-  public onUserTVRedirect: () => void
+  public onFeatured?: () => void
+  public onTVChannelChange?: () => void
+  public onUserTVRedirect?: () => void
   public vm: VM
   public title: Mithril.Children
   public subTitle: string
@@ -96,15 +96,16 @@ export default class OnlineRound implements OnlineRoundInterface {
       showingActions: false,
       confirmResign: false,
       goneBerserk: {
-        [this.data.player.color]: this.data.player.berserk,
-        [this.data.opponent.color]: this.data.opponent.berserk
+        [this.data.player.color]: !!this.data.player.berserk,
+        [this.data.opponent.color]: !!this.data.opponent.berserk
       },
       moveToSubmit: null,
       dropToSubmit: null,
       tClockEl: null,
       // I came to this game offline: I'm an offline watcher
       offlineWatcher: !hasNetwork()
-    };
+    }
+
     this.chat = (session.isKidMode() || this.data.tv || (!this.data.player.spectator && (this.data.game.tournamentId || this.data.opponent.ai))) ?
       null : new Chat(this, session.isShadowban());
 
@@ -123,7 +124,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.data.clock,
       this.data.player.spectator ? noop :
         throttle(() => socket.send('outoftime'), 500),
-      this.data.player.spectator ? null : this.data.player.color
+      this.data.player.spectator ? undefined : this.data.player.color
     ) : null;
 
     this.makeCorrespondenceClock();
@@ -245,12 +246,12 @@ export default class OnlineRound implements OnlineRoundInterface {
     const s = this.plyStep(ply);
     const config: Chessground.SetConfig = {
       fen: s.fen,
-      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : null,
+      lastMove: s.uci ? chessFormat.uciToMove(s.uci) : undefined,
       check: s.check,
       turnColor: this.vm.ply % 2 === 0 ? 'white' : 'black'
     };
     if (!this.replaying()) {
-      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : null;
+      config.movableColor = gameApi.isPlayerPlaying(this.data) ? this.data.player.color : undefined;
       config.dests = gameApi.parsePossibleMoves(this.data.possibleMoves);
     }
     this.chessground.set(config);
@@ -302,12 +303,12 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public isClockRunning(): boolean {
-    return this.data.clock && gameApi.playable(this.data) &&
+    return !!this.data.clock && gameApi.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running);
   }
 
   private clockTick = () => {
-    if (this.isClockRunning()) this.clock.tick(this.data.game.player);
+    if (this.clock && this.isClockRunning()) this.clock.tick(this.data.game.player);
   }
 
   private makeCorrespondenceClock() {
@@ -324,7 +325,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.correspondenceClock.tick(this.data.game.player);
   }
 
-  public sendMove(orig: Pos, dest: Pos, prom: Role, isPremove: boolean = false) {
+  public sendMove(orig: Pos, dest: Pos, prom?: Role, isPremove: boolean = false) {
     const move = {
       u: orig + dest
     };
@@ -420,18 +421,18 @@ export default class OnlineRound implements OnlineRoundInterface {
       sound.dong();
       vibrate.quick();
     }
-    white.offeringDraw = o.wDraw;
-    black.offeringDraw = o.bDraw;
+    white.offeringDraw = o.wDraw
+    black.offeringDraw = o.bDraw
 
-    d.possibleMoves = d.player.color === d.game.player ? o.dests : null;
-    d.possibleDrops = d.player.color === d.game.player ? o.drops : null;
+    d.possibleMoves = d.player.color === d.game.player ? o.dests : undefined
+    d.possibleDrops = d.player.color === d.game.player ? o.drops : undefined
 
     this.setTitle();
 
     if (!this.replaying()) {
       this.vm.ply++;
 
-      const enpassantPieces: {[index:string]: Piece} = {};
+      const enpassantPieces: {[index:string]: Piece | null} = {};
       if (o.enpassant) {
         const p = o.enpassant;
         enpassantPieces[p.key] = null;
@@ -442,7 +443,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         }
       }
 
-      const castlePieces: {[index:string]: Piece} = {};
+      const castlePieces: {[index:string]: Piece | null} = {};
       if (o.castle && !this.chessground.data.autoCastle) {
         const c = o.castle;
         castlePieces[c.king[0]] = null;
@@ -464,7 +465,7 @@ export default class OnlineRound implements OnlineRoundInterface {
           gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
         check: o.check
       };
-      if (o.isMove) {
+      if (isMove(o)) {
         const move = chessFormat.uciToMove(o.uci);
         this.chessground.apiMove(
           move[0],
@@ -472,7 +473,7 @@ export default class OnlineRound implements OnlineRoundInterface {
           pieces,
           newConf
         );
-      } else {
+      } else if (isDrop(o)) {
         this.chessground.apiNewPiece(
           {
             role: o.role,
@@ -534,7 +535,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.data = rCfg;
 
     this.makeCorrespondenceClock();
-    if (this.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
+    if (this.clock && this.data.clock) this.clock.update(this.data.clock.white, this.data.clock.black);
     this.setTitle();
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip);
     redraw();
@@ -565,16 +566,17 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
-    if (!promotion.start(this, orig, dest, meta.premove)) {
-      this.sendMove(orig, dest, undefined, meta.premove);
+    const hasPremove = !!meta.premove
+    if (!promotion.start(this, orig, dest, hasPremove)) {
+      this.sendMove(orig, dest, undefined, hasPremove)
     }
   }
 
   private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
     if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
-      this.sendNewPiece(role, key, meta.predrop);
+      this.sendNewPiece(role, key, !!meta.predrop)
     } else {
-      this.jump(this.vm.ply);
+      this.jump(this.vm.ply)
     }
   }
 

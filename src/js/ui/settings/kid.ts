@@ -14,7 +14,7 @@ const KidPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit: function(vnode) {
-    const kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode);
+    const kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode, false);
 
     vnode.state = {
       kidMode

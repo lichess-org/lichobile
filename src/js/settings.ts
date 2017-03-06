@@ -3,15 +3,15 @@ import * as range from 'lodash/range';
 
 export interface SettingsProp<T> {
   (): T
-  (value: T): T;
+  (value: T): T
 }
 
-function localstorageprop<T>(key: string, initialValue?: T): SettingsProp<T> {
-  return function(): T {
+function localstorageprop<T>(key: string, initialValue: T): SettingsProp<T> {
+  return function() {
     if (arguments.length) store.set(key, arguments[0]);
     const ret = store.get<T>(key);
     return (ret !== null) ? ret : initialValue;
-  };
+  }
 }
 
 function tupleOf(x: number) {
@@ -34,8 +34,8 @@ export interface GameSettings {
   time: SettingsProp<string>
   timeMode: SettingsProp<string>
   increment: SettingsProp<string>
-  mode?: SettingsProp<string>
   color: SettingsProp<string>
+  mode?: SettingsProp<string>
   variant: SettingsProp<string>
   ratingMin?: SettingsProp<string>
   ratingMax?: SettingsProp<string>
@@ -43,9 +43,20 @@ export interface GameSettings {
   level?: SettingsProp<string>
 }
 
+export interface HumanSettings extends GameSettings {
+  mode: SettingsProp<string>
+  ratingMin: SettingsProp<string>
+  ratingMax: SettingsProp<string>
+  days: SettingsProp<string>
+}
+
+export interface AiSettings extends GameSettings {
+  level: SettingsProp<string>
+}
+
 export default {
   general: {
-    lang: localstorageprop<string>('settings.lang'),
+    lang: localstorageprop<string>('settings.lang', 'en'),
     sound: localstorageprop('settings.sound', true),
     theme: {
       availableBackgroundThemes: [

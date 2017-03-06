@@ -29,8 +29,8 @@ const PlayersScreen: Mithril.Component<{}, State> = {
     helper.analyticsTrackView('Players');
 
     const isSearchOpen = stream(false);
-    const searchResults = stream([]);
-    const players = stream([]);
+    const searchResults: Mithril.Stream<string[]> = stream([]);
+    const players: Mithril.Stream<User[]> = stream([]);
     let listHeight: number;
 
     function onKeyboardShow(e: Ionic.KeyboardEvent) {
@@ -105,7 +105,7 @@ const PlayersScreen: Mithril.Component<{}, State> = {
     const bodyCtrl = () => body(ctrl)
     const searchModalCtrl = () => searchModal(ctrl)
 
-    return layout.free(headerCtrl, bodyCtrl, null, searchModalCtrl)
+    return layout.free(headerCtrl, bodyCtrl, undefined, searchModalCtrl)
   }
 }
 

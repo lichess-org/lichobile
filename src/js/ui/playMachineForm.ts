@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import router from '../router';
 import * as xhr from '../xhr';
-import settings, { GameSettings } from '../settings';
+import settings, { AiSettings } from '../settings';
 import formWidgets from './shared/form';
 import popupWidget from './shared/popup';
 import i18n from '../i18n';
@@ -10,7 +10,7 @@ import * as helper from './helper';
 import * as h from 'mithril/hyperscript';
 
 let isOpen = false;
-let fromPositionFen: string;
+let fromPositionFen: string | undefined;
 
 export default {
   open,
@@ -35,7 +35,7 @@ export default {
 
     return popupWidget(
       'game_form_popup',
-      null,
+      undefined,
       form,
       isOpen,
       close
@@ -46,7 +46,7 @@ export default {
 
 function open() {
   router.backbutton.stack.push(close);
-  fromPositionFen = null;
+  fromPositionFen = undefined
   isOpen = true;
 }
 
@@ -64,7 +64,7 @@ function startAIGame() {
   .catch(utils.handleXhrError);
 }
 
-function renderForm(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
+function renderForm(formName: string, settingsObj: AiSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode();
   const hasClock = timeMode === '1';
 
@@ -76,35 +76,38 @@ function renderForm(formName: string, settingsObj: GameSettings, variants: strin
     ])
   ];
 
-    const colors = [
-      ['randomColor', 'random'],
-      ['white', 'white'],
-      ['black', 'black']
-    ];
-    generalFieldset.unshift(
-      h('div.select_input', {
-        key: formName + 'color'
-      }, [
-        formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
-      ])
-    );
+  const colors = [
+    ['randomColor', 'random'],
+    ['white', 'white'],
+    ['black', 'black']
+  ];
+
+  generalFieldset.unshift(
+    h('div.select_input', {
+      key: formName + 'color'
+    }, [
+      formWidgets.renderSelect('side', formName + 'color', colors, settingsObj.color)
+    ])
+  );
 
   if (settingsObj.variant() === '3') {
     generalFieldset.push(h('div.setupPosition', {
       key: 'position'
     }, fromPositionFen ? [
-        h('div.setupMiniBoardWrapper', {
-          style: {
-            width: '100px',
-            height: '100px'
-          },
-          oncreate: helper.ontap(() => {
-            close();
+      h('div.setupMiniBoardWrapper', {
+        style: {
+          width: '100px',
+          height: '100px'
+        },
+        oncreate: helper.ontap(() => {
+          close();
+          if (fromPositionFen) {
             router.set(`/editor/${encodeURIComponent(fromPositionFen)}`);
-          })
-        }, [
-          h(ViewOnlyBoard, { fen: fromPositionFen, bounds: { width: 100, height: 100 }})
-        ])
+          }
+        })
+      }, [
+        h(ViewOnlyBoard, { fen: fromPositionFen, bounds: { width: 100, height: 100 }})
+      ])
       ] : h('div', h('button.withIcon.fa.fa-pencil', {
         oncreate: helper.ontap(() => {
           close();

@@ -54,15 +54,15 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
         </div> : null
         }
       </div>
-      {h(CrazyPocket, {
+      {sit.crazyhouse ? h(CrazyPocket, {
         ctrl,
         crazyData: sit.crazyhouse,
         color: antagonistColor,
         position,
         customPieceTheme
-      })}
+      }) : null}
     </section>
-  );
+  )
 }
 
 

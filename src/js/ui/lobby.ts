@@ -54,8 +54,8 @@ export default {
     }
 
     return popupWidget(
-      null,
-      null,
+      '',
+      undefined,
       content,
       isOpen
     );
@@ -78,8 +78,9 @@ const socketHandlers = {
 }
 
 function renderCustomSetup() {
-  const conf = settings.gameSetup.human;
-  const variant = conf.availableVariants.find(v => v[1] === conf.variant())[0];
+  const conf = settings.gameSetup.human
+  const variantConf = conf.availableVariants.find(v => v[1] === conf.variant())
+  const variant = variantConf && variantConf[0] || 'Standard';
   const timeMode = conf.timeMode();
   const mode = conf.mode() === '0' ? i18n('casual') : i18n('rated');
   let time: string;

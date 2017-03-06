@@ -34,7 +34,7 @@ interface SocketConfig {
 }
 
 type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
-type MessageHandlerGeneric = MessageHandler<{}, undefined>
+type MessageHandlerGeneric = MessageHandler<{}, any>
 interface MessageHandlers {
   [index: string]: MessageHandlerGeneric
 }
@@ -378,9 +378,11 @@ export default {
   restorePrevious() {
     // if by chance we don't have a previous connection, just close
     if (rememberedSetups.length === 2) {
-      const { setup, handlers } = rememberedSetups.shift();
+      const connSetup = rememberedSetups.shift();
       rememberedSetups = [];
-      setupConnection(setup, handlers)
+      if (connSetup) {
+        setupConnection(connSetup.setup, connSetup.handlers)
+      }
     } else {
       tellWorker(worker, 'destroy');
     }

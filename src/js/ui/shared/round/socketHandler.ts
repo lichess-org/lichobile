@@ -1,6 +1,6 @@
 import * as gameApi from '../../../lichess/game';
 import { GameCrowd } from '../../../lichess/interfaces/game';
-import { MoveOrDrop } from '../../../lichess/interfaces/move';
+import { Move, Drop } from '../../../lichess/interfaces/move';
 import redraw from '../../../utils/redraw';
 import sound from '../../../sound';
 import vibrate from '../../../vibrate';
@@ -11,7 +11,7 @@ import OnlineRound from './OnlineRound';
 import * as xhr from './roundXhr';
 import ground from './ground';
 
-export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedirect: () => void) {
+export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedirect?: () => void) {
 
  return {
     takebackOffers(o: { [index: string]: boolean }) {
@@ -27,12 +27,12 @@ export default function(ctrl: OnlineRound, onFeatured: () => void, onUserTVRedir
       ctrl.data.opponent.proposingTakeback = o[ctrl.data.opponent.color];
       redraw();
     },
-    move(o: MoveOrDrop) {
+    move(o: Move) {
       o.isMove = true;
       ctrl.apiMove(o);
       redraw();
     },
-    drop(o: MoveOrDrop) {
+    drop(o: Drop) {
       o.isDrop = true;
       ctrl.apiMove(o);
       redraw();

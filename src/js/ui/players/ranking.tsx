@@ -12,7 +12,7 @@ import * as stream from 'mithril/stream';
 import { RankingKey, RankingUser, Rankings } from '../../lichess/interfaces/user'
 
 interface State {
-  ranking: Mithril.Stream<Rankings>
+  ranking: Mithril.Stream<Rankings | undefined>
   catOpenedMap: Mithril.Stream<Record<RankingKey, boolean>>
   toggleRankingCat(key: RankingKey): void
 }
@@ -26,7 +26,7 @@ const RankingScreen: Mithril.Component<{}, State> = {
 
     socket.createDefault();
 
-    const ranking = stream(undefined);
+    const ranking: Mithril.Stream<Rankings | undefined> = stream(undefined);
     const catOpenedMap = stream({} as Record<RankingKey, boolean>)
 
     xhr.ranking()
@@ -77,22 +77,24 @@ function renderBody(ctrl: State) {
 
 function renderRankingCategory(ctrl: State, key: RankingKey) {
   const ranking = ctrl.ranking();
-  const toggleDataIcon = ctrl.catOpenedMap()[key] ? 'S' : 'R';
-  const toggleFunc = helper.isWideScreen() ? utils.noop : () => ctrl.toggleRankingCat(key);
-  return (
-    <section className={'ranking ' + key}>
-      <h3 className="rankingPerfTitle" oncreate={helper.ontapY(toggleFunc)}>
-        <span className="perfIcon" data-icon={utils.gameIcon(key)} />
-        {perfTitle(key)}
-        {helper.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
-      </h3>
-      {ctrl.catOpenedMap()[key] || helper.isWideScreen() ?
-      <ul className="rankingList">
-        {ranking[key].map((p: RankingUser) => renderRankingPlayer(p, key))}
-      </ul> : null
-      }
-    </section>
-  );
+  if (ranking) {
+    const toggleDataIcon = ctrl.catOpenedMap()[key] ? 'S' : 'R';
+    const toggleFunc = helper.isWideScreen() ? utils.noop : () => ctrl.toggleRankingCat(key);
+    return (
+      <section className={'ranking ' + key}>
+        <h3 className="rankingPerfTitle" oncreate={helper.ontapY(toggleFunc)}>
+          <span className="perfIcon" data-icon={utils.gameIcon(key)} />
+          {perfTitle(key)}
+          {helper.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
+        </h3>
+        {ctrl.catOpenedMap()[key] || helper.isWideScreen() ?
+        <ul className="rankingList">
+          {ranking[key].map((p: RankingUser) => renderRankingPlayer(p, key))}
+        </ul> : null
+        }
+      </section>
+    );
+  }
 }
 
 function renderRankingPlayer(user: RankingUser, key: RankingKey) {

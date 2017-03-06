@@ -4,21 +4,21 @@ import formWidgets from '../shared/form';
 import layout from '../layout';
 import i18n from '../../i18n';
 import session from '../../session';
-import { swapKeyValue, ChallengeChoices } from '../../lichess/prefs';
+import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/prefs';
 import { SettingsProp } from '../../settings'
 import * as h from 'mithril/hyperscript';
 
 interface State {
   follow: SettingsProp<boolean>
-  challenge: SettingsProp<string>
+  challenge: SettingsProp<number>
 }
 
 const PrivacyPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit: function(vnode) {
-    const follow = session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences);
-    const challenge = session.lichessBackedProp<string>('prefs.challenge', session.savePreferences);
+    const follow = session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences, true);
+    const challenge = session.lichessBackedProp<number>('prefs.challenge', session.savePreferences, Challenge.ALWAYS);
 
     vnode.state = {
       follow,
@@ -42,7 +42,7 @@ function renderBody(ctrl: State) {
         'follow', ctrl.follow)),
       h('li.list_item', [
         h('div.label', i18n('letOtherPlayersChallengeYou')),
-        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderSelect('', 'challenge', swapKeyValue(ChallengeChoices), ctrl.challenge))
+        h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'challenge', <Array<LichessPropOption>>ChallengeChoices, ctrl.challenge))
       ])
     ])
   ];

@@ -6,16 +6,29 @@ import { SettingsProp } from '../../settings';
 type SelectOption = string[]
 type SelectOptionGroup = Array<SelectOption>;
 
-function renderOption(label: string, value: string, storedValue: string, labelArg: string, labelArg2: string) {
+type LichessPropOption = [number, string, string | undefined]
+
+function renderOption(label: string, value: string, storedValue: string, labelArg?: string, labelArg2?: string) {
+  const l = labelArg && labelArg2 ? i18n(label, labelArg, labelArg2) :
+    labelArg ? i18n(label, labelArg) : i18n(label)
   return h('option', {
     key: value,
-    value: value,
+    value,
     selected: storedValue === value
-  }, i18n(label, labelArg, labelArg2));
+  }, l)
+}
+
+function renderLichessPropOption(label: string, value: number, storedValue: number, labelArg?: string) {
+  const l = labelArg ? i18n(label, labelArg) : i18n(label)
+  return h('option', {
+    key: value,
+    value,
+    selected: storedValue === value
+  }, l)
 }
 
 
-function renderOptionGroup(label:string, value:string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
+function renderOptionGroup(label:string, value: string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
   if (typeof value === 'string') {
     return renderOption(label, value, storedValue, labelArg, labelArg2);
   }
@@ -78,6 +91,29 @@ export default {
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
     ];
+  },
+
+  renderLichessPropSelect(
+    label: string,
+    name: string,
+    options: Array<LichessPropOption>,
+    settingsProp: SettingsProp<number>,
+    isDisabled?: boolean
+  ) {
+    const storedValue = settingsProp();
+    return [
+      h('label', {
+        'for': 'select_' + name
+      }, i18n(label)),
+      h('select', {
+        id: 'select_' + name,
+        disabled: isDisabled,
+        onchange(e: Event) {
+          const val = (e.target as HTMLSelectElement).value;
+          settingsProp(~~val);
+        }
+      }, options.map(e => renderLichessPropOption(e[1], e[0], storedValue, e[2])))
+    ]
   },
 
   renderCheckbox(

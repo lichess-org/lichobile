@@ -17,9 +17,9 @@ const animDuration = 250;
 
 // this must be cached because of the access to document.body.style
 let cachedTransformProp: string
-let cachedIsPortrait: boolean
+let cachedIsPortrait: boolean | undefined
 let cachedViewportAspectIs43: boolean
-let cachedViewportDim: ViewportDim = null
+let cachedViewportDim: ViewportDim | null = null
 
 export function onPageEnter(anim: (el: HTMLElement) => void) {
   return ({ dom }: Mithril.DOMNode) => anim(dom as HTMLElement);
@@ -28,7 +28,7 @@ export function onPageEnter(anim: (el: HTMLElement) => void) {
 // because mithril will call 'onremove' asynchronously when the component has
 // an 'onbeforeremove' hook, some cleanup tasks must be done in the latter hook
 // thus this helper
-export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup: () => void = null) {
+export function onPageLeave(anim: (el: HTMLElement) => Promise<void>, cleanup?: () => void) {
   return function({ dom }: Mithril.DOMNode, done: () => void) {
     if (cleanup) cleanup();
     return anim(dom as HTMLElement)
@@ -191,14 +191,14 @@ export function fadesOut(callback: () => void, selector?: string, time = 150) {
 type TapHandler = (e?: Event) => void;
 type RepeatHandler = () => boolean;
 
-function createTapHandler(tapHandler: TapHandler, holdHandler: TapHandler, repeatHandler: RepeatHandler, scrollX: boolean, scrollY: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
+function createTapHandler(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHandler?: RepeatHandler, scrollX?: boolean, scrollY?: boolean, getElement?: (e: TouchEvent) => HTMLElement) {
   return function(vnode: Mithril.DOMNode) {
     ButtonHandler(vnode.dom as HTMLElement,
       (e: Event) => {
         tapHandler(e);
         redraw();
       },
-      holdHandler ? () => utils.autoredraw(holdHandler) : null,
+      holdHandler ? () => utils.autoredraw(holdHandler) : undefined,
       repeatHandler,
       scrollX,
       scrollY,
@@ -218,11 +218,11 @@ export function ontap(tapHandler: TapHandler, holdHandler?: TapHandler, repeatHa
 }
 
 export function ontapX(tapHandler: TapHandler, holdHandler?: TapHandler) {
-  return createTapHandler(tapHandler, holdHandler, null, true, false);
+  return createTapHandler(tapHandler, holdHandler, undefined, true, false);
 }
 
 export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
-  return createTapHandler(tapHandler, holdHandler, null, false, true, getElement);
+  return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement);
 }
 
 export function progress(p: number) {

@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 import router from '../router';
 import * as xhr from '../xhr';
-import settings, { GameSettings } from '../settings';
+import settings, { HumanSettings } from '../settings';
 import spinner from '../spinner';
 import session from '../session';
 import * as helper from './helper';
@@ -32,7 +32,7 @@ export default {
   view() {
     return popupWidget(
       'new_game_form_popup game_form_popup',
-      null,
+      undefined,
       renderContent,
       isOpen,
       close
@@ -56,10 +56,12 @@ function goSeek() {
   // anon. can't enter pool: we'll just create a similar hook
   if (conf.preset() === 'quick' && !session.isConnected()) {
     const pool = xhr.cachedPools.find(p => p.id  === conf.pool())
-    conf.time(String(pool.lim))
-    conf.increment(String(pool.inc))
-    conf.variant('1')
-    conf.mode('0')
+    if (pool) {
+      conf.time(String(pool.lim))
+      conf.increment(String(pool.inc))
+      conf.variant('1')
+      conf.mode('0')
+    }
   }
 
   if (conf.preset() === 'quick' || conf.timeMode() === '1') {
@@ -130,7 +132,7 @@ function renderPool(p: Pool) {
   ])
 }
 
-function renderCustomSetup(formName: string, settingsObj: GameSettings, variants: string[][], timeModes: string[][]) {
+function renderCustomSetup(formName: string, settingsObj: HumanSettings, variants: string[][], timeModes: string[][]) {
   const timeMode = settingsObj.timeMode();
   const hasClock = timeMode === '1';
   const hasDays = timeMode === '2' && session.isConnected();
@@ -232,7 +234,7 @@ function renderCustomSetup(formName: string, settingsObj: GameSettings, variants
       h('div.select_input.large_label', {
         key: formName + 'days'
       }, formWidgets.renderSelect('daysPerTurn', formName + 'days',
-          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
+          settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days!, false)
       ));
   }
 

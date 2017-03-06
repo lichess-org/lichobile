@@ -19,10 +19,10 @@ interface Boundaries {
 export default function ButtonHandler(
   el: HTMLElement,
   tapHandler: (e?: Event) => void,
-  holdHandler: () => void,
-  repeatHandler: () => boolean,
-  scrollX: boolean,
-  scrollY: boolean,
+  holdHandler?: () => void,
+  repeatHandler?: () => boolean,
+  scrollX?: boolean,
+  scrollY?: boolean,
   getElement?: (e: TouchEvent) => HTMLElement) {
 
   let activeElement = el;
@@ -45,7 +45,7 @@ export default function ButtonHandler(
 
   // http://ejohn.org/blog/how-javascript-timers-work/
   function onRepeat() {
-    const res = repeatHandler();
+    const res = repeatHandler!();
     if (res) batchRequestAnimationFrame(onRepeat);
     redrawSync();
   }

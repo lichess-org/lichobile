@@ -44,9 +44,9 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
       content = () => renderContent(this.round, pieceTheme);
     } else {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen;
-      const color = playerFromFen(fen);
+      const color = fen ? playerFromFen(fen) : 'white'
       header = () => renderHeader(i18n('playOnTheBoardOffline'));
-      content = () => viewOnlyBoardContent(fen, null, color, 'standard', null, pieceTheme);
+      content = () => viewOnlyBoardContent(fen, undefined, color, 'standard', undefined, pieceTheme);
     }
 
     return layout.board(

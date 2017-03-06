@@ -251,63 +251,67 @@ export function gameTitle(data: GameData): Mithril.Children {
 
 
 export function miniUser(user: User | undefined, mini: any, isOpen: boolean, close: () => void) {
-  if (!user) return null;
+  if (user) {
 
-  const status = userStatus(user);
+    const status = userStatus(user);
 
-  function content() {
-    if (!mini) {
-      return (
-        <div key="loading" className="miniUser">
-          {spinner.getVdom()}
-        </div>
-      );
-    }
-    const sessionUserId = session.get() && session.get().id;
-    return (
-      <div key="loaded" className="miniUser">
-        <div className="title">
-          <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
-            {status}
+    function content() {
+      if (!mini || !user) {
+        return (
+          <div key="loading" className="miniUser">
+            {spinner.getVdom()}
           </div>
-          { user.profile && user.profile.country ?
-            <p className="country">
-              <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
-              {countries[user.profile.country]}
-            </p> : user.language ?
-              <p className="language">
-                <span className="fa fa-comment-o" />
-                {getLanguageNativeName(user.language)}
-              </p> : null
-          }
+        )
+      }
+      const curSess = session.get()
+      const sessionUserId = curSess && curSess.id;
+      return (
+        <div key="loaded" className="miniUser">
+        <div className="title">
+        <div className="username" oncreate={helper.ontap(() => router.set(`/@/${user.username}`))}>
+        {status}
+        </div>
+        { user.profile && user.profile.country ?
+          <p className="country">
+          <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+          {countries[user.profile.country]}
+          </p> : user.language ?
+          <p className="language">
+          <span className="fa fa-comment-o" />
+          {getLanguageNativeName(user.language)}
+          </p> : null
+        }
         </div>
         { mini.perfs ?
           <div className="mini_perfs">
-            {Object.keys(mini.perfs).map(p => {
-              const perf = mini.perfs[p];
-              return (
-                <div className="perf">
-                  <span data-icon={utils.gameIcon(p)} />
-                  {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
-                </div>
-              );
-            })}
+          {Object.keys(mini.perfs).map(p => {
+            const perf = mini.perfs[p];
+            return (
+              <div className="perf">
+              <span data-icon={utils.gameIcon(p)} />
+              {perf.games > 0 ? perf.rating + (perf.prov ? '?' : '') : '-'}
+              </div>
+            );
+          })}
           </div> : null
         }
-        { mini.crosstable && mini.crosstable.nbGames > 0 ?
+        { sessionUserId && mini.crosstable && mini.crosstable.nbGames > 0 ?
           <div className="yourScore">
-            Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>
+          Your score: <span className="score">{`${mini.crosstable.users[sessionUserId]} - ${mini.crosstable.users[user.id]}`}</span>
           </div> : null
         }
-      </div>
-    );
+        </div>
+      )
+    }
+
+    return popupWidget(
+      'miniUserInfos',
+      undefined,
+      content,
+      isOpen,
+      close
+    )
   }
 
-  return popupWidget(
-    'miniUserInfos',
-    null,
-    content,
-    isOpen,
-    close
-  );
+  return null
 }

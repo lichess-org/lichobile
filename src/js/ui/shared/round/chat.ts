@@ -66,8 +66,8 @@ export class Chat {
     this.unread = false;
   }
 
-  public onReload = (messages: ChatMsg[]) => {
-    if (!messages) {
+  public onReload = (messages?: ChatMsg[]) => {
+    if (messages === undefined) {
       return;
     }
     this.messages = messages;

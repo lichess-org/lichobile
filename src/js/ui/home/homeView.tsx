@@ -6,6 +6,7 @@ import i18n from '../../i18n';
 import * as helper from '../helper';
 import newGameForm from '../newGameForm';
 import settings from '../../settings';
+import { User } from '../../lichess/interfaces/user'
 import { userStatus } from '../shared/common';
 import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
 import MiniBoard from '../shared/miniBoard';
@@ -124,7 +125,7 @@ function renderWeekLeaders(ctrl: HomeState) {
   );
 }
 
-function renderPlayer(p: any) {
+function renderPlayer(p: User) {
   const perfKey = Object.keys(p.perfs)[0];
   const perf = p.perfs[perfKey];
 

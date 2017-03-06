@@ -1,3 +1,5 @@
+export type LichessPropOption = [number, string, string | undefined]
+
 export const AutoQueen = {
   NEVER: 1,
   PREMOVE: 2,
@@ -96,7 +98,7 @@ export const Challenge = {
 };
 export const ChallengeChoices = [
   [ Challenge.NEVER, 'never' ],
-  [ Challenge.RATING, 'ifRatingIsPlusMinusX', 500 ],
+  [ Challenge.RATING, 'ifRatingIsPlusMinusX', '500' ],
   [ Challenge.FRIEND, 'onlyFriends' ],
   [ Challenge.ALWAYS, 'always' ]
 ];
@@ -111,7 +113,3 @@ export const MessageChoices = [
   [ Message.FRIEND, 'onlyFriends' ],
   [ Message.ALWAYS, 'always' ]
 ];
-
-export function swapKeyValue(array: any[][]): any[][] {
-  return array.map(v => [v[1], v[0], v[2]]);
-}

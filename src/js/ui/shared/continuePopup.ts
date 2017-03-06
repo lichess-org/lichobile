@@ -20,7 +20,7 @@ export default {
 
   controller() {
     let isOpen = false;
-    const fen = stream(undefined);
+    const fen: Mithril.Stream<string | undefined> = stream(undefined)
 
     function open(fentoSet: string) {
       router.backbutton.stack.push(close);
@@ -29,8 +29,8 @@ export default {
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
@@ -53,33 +53,41 @@ export default {
           hasNetwork() ? h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
-              playMachineForm.openAIFromPosition(ctrl.fen());
+              const f = ctrl.fen()
+              if (f) playMachineForm.openAIFromPosition(f)
             })
           }, i18n('playWithTheMachine')) : null,
           hasNetwork() ? h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
-              challengeForm.openFromPosition(ctrl.fen());
+              const f = ctrl.fen()
+              if (f) challengeForm.openFromPosition(f)
             })
           }, i18n('playWithAFriend')) : null,
           h('p.sep', i18n('playOffline')),
           h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
-              if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
-                window.plugins.toast.show('Invalid FEN', 'short', 'center');
-              } else {
-                router.set('/ai/fen/' + encodeURIComponent(ctrl.fen()));
+              const f = ctrl.fen()
+              if (f) {
+                if (!validateFen(f).valid || !positionLooksLegit(f)) {
+                  window.plugins.toast.show('Invalid FEN', 'short', 'center');
+                } else {
+                  router.set('/ai/fen/' + encodeURIComponent(f));
+                }
               }
             })
           }, i18n('playOfflineComputer')),
           h('button', {
             oncreate: helper.ontap(() => {
               ctrl.close();
-              if (!validateFen(ctrl.fen()).valid || !positionLooksLegit(ctrl.fen())) {
-                window.plugins.toast.show('Invalid FEN', 'short', 'center');
-              } else {
-                router.set('/otb/fen/' + encodeURIComponent(ctrl.fen()));
+              const f = ctrl.fen()
+              if (f) {
+                if (!validateFen(f).valid || !positionLooksLegit(f)) {
+                  window.plugins.toast.show('Invalid FEN', 'short', 'center');
+                } else {
+                  router.set('/otb/fen/' + encodeURIComponent(f));
+                }
               }
             })
           }, i18n('playOnTheBoardOffline'))

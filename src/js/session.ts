@@ -15,6 +15,11 @@ import { SettingsProp } from './settings'
 
 import { LobbyData, NowPlayingGame } from './lichess/interfaces';
 
+type PrefValue = number | string | boolean
+interface Prefs {
+  [key: string]: PrefValue
+}
+
 interface Profile {
   country?: string
   location?: string
@@ -40,13 +45,13 @@ export interface Session {
   seenAt: number
   playTime: number
   nowPlaying: Array<NowPlayingGame>
-  prefs: any
+  prefs: Prefs
   nbChallenges: number
   nbFollowers: number
   nbFollowing: number
 }
 
-let session: Session = null;
+let session: Session | undefined
 
 function isConnected() {
   return !!session;
@@ -64,15 +69,15 @@ function nowPlaying() {
   let np = session && session.nowPlaying || [];
   return np.filter(e => {
     return settings.game.supportedVariants.indexOf(e.variant.key) !== -1;
-  });
+  })
 }
 
-function isKidMode() {
-  return session && session.kid;
+function isKidMode(): boolean {
+  return !!(session && session.kid)
 }
 
-function isShadowban() {
-  return session && session.troll;
+function isShadowban(): boolean {
+  return !!(session && session.troll)
 }
 
 function myTurnGames() {
@@ -89,14 +94,14 @@ function toggleKidMode() {
 
 function savePreferences() {
 
-  function numValue(v: any) {
+  function numValue(v: boolean | number) {
     if (v === true) return 1;
     else if (v === false) return 0;
     else return v;
   }
 
   const prefs = session && session.prefs || {};
-  const display = mapKeys(mapValues(pick(prefs, [
+  const display = mapKeys(<Prefs>mapValues(pick(prefs, [
     'animation',
     'captured',
     'highlight',
@@ -105,7 +110,7 @@ function savePreferences() {
     'replay',
     'blindfold'
   ]), numValue), (_, k) => 'display.' + k);
-  const behavior = mapKeys(mapValues(pick(prefs, [
+  const behavior = mapKeys(<Prefs>mapValues(pick(prefs, [
     'premove',
     'takeback',
     'autoQueen',
@@ -133,7 +138,7 @@ function savePreferences() {
   }, true);
 }
 
-function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>): SettingsProp<T> {
+function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
   return function() {
     if (arguments.length) {
       let oldPref: T;
@@ -148,7 +153,7 @@ function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>):
       });
     }
 
-    return session && <T>get(session, path)
+    return session ? <T>get(session, path) : defaultVal
   }
 }
 
@@ -175,9 +180,9 @@ function login(username: string, password: string) {
 }
 
 function logout() {
-  return fetchJSON('/logout', null, true)
+  return fetchJSON('/logout', undefined, true)
   .then(function() {
-    session = null;
+    session = undefined
     friendsApi.clear();
     redraw();
   });
@@ -206,9 +211,9 @@ function rememberLogin(): Promise<Session> {
   });
 }
 
-function refresh(): Promise<Session> {
+function refresh(): Promise<Session | undefined> {
   if (hasNetwork() && isConnected()) {
-    return fetchJSON('/account/info')
+    return fetchJSON<Session>('/account/info')
     .then((data: Session) => {
       session = data;
       // if server tells me, reload challenges
@@ -220,7 +225,7 @@ function refresh(): Promise<Session> {
     })
     .catch(err => {
       if (session && err.response && err.response.status === 401) {
-        session = null;
+        session = undefined
         redraw();
         window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
       }

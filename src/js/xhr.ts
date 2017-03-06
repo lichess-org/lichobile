@@ -20,7 +20,7 @@ interface GameSetup {
   level?: string;
 }
 
-export function newAiGame(fen: string): Promise<OnlineGameData> {
+export function newAiGame(fen?: string): Promise<OnlineGameData> {
   const config = settings.gameSetup.ai;
   const body: GameSetup = {
     variant: config.variant(),

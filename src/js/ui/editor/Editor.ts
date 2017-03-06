@@ -141,7 +141,7 @@ export default class Editor {
     if (validateFen(newFen).valid === true) {
       const path = `/editor/${encodeURIComponent(newFen)}`
       try {
-        window.history.replaceState(window.history.state, null, '?=' + path);
+        window.history.replaceState(window.history.state, '', '?=' + path);
       } catch (e) { console.error(e) }
     }
   }, 250);

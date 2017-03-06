@@ -32,7 +32,7 @@ export default {
   view: function(ctrl: MenuInterface) {
     return popupWidget(
       'pasteFenPopup',
-      null,
+      undefined,
       () => {
         return h('form', {
           onsubmit(e: Event) {

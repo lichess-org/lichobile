@@ -61,7 +61,7 @@ export interface NowPlayingGame {
   gameId: string
   fullId: string
   isMyTurn: boolean
-  lastMove: string
+  lastMove?: string
   variant: Variant
   speed: Speed
   perf: PerfKey
@@ -69,7 +69,7 @@ export interface NowPlayingGame {
   fen: string
   rated: boolean
   opponent: NowPlayingOpponent
-  secondsLeft: number
+  secondsLeft?: number
 }
 
 export interface MiniUserPlayer {

@@ -21,7 +21,7 @@ interface Attrs {
 
 export interface State {
   selectedTab: Mithril.Stream<string>
-  sendingChallenges: Mithril.Stream<Array<Challenge>>
+  sendingChallenges: Mithril.Stream<Challenge[]>
   cancelChallenge: (id: string) => Promise<void>
   getPool: () => Array<Seek>
   cancel: (seekId: string) => Promise<void>
@@ -32,14 +32,14 @@ const CorrespondenceScreen: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
     let pool: Array<Seek> = [];
-    const selectedTab = stream(vnode.attrs.tab || 'public');
-    const sendingChallenges = stream(getSendingCorres());
+    const selectedTab: Mithril.Stream<string> = stream(vnode.attrs.tab || 'public');
+    const sendingChallenges: Mithril.Stream<Challenge[]> = stream(getSendingCorres());
 
     helper.analyticsTrackView('Correspondence');
 
     socket.createLobby(reload, {
       redirect: socket.redirectToGame,
-      reload_seeks: reload,
+      reload_seeks: () => reload(),
       resync: () => xhr.lobby().then(d => {
         socket.setVersion(d.lobby.version);
       })
@@ -62,11 +62,11 @@ const CorrespondenceScreen: Mithril.Component<Attrs, State> = {
     }
 
     function reload(feedback?: boolean) {
-      xhr.seeks(feedback)
-      .then((d) => {
+      xhr.seeks(feedback = false)
+      .then(d => {
         pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
         redraw();
-      });
+      })
     }
 
     reload(true);

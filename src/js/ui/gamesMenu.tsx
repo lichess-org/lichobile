@@ -105,7 +105,7 @@ export default {
           }
           {helper.isWideScreen() ?
             <div className="popup_content">
-              {renderAllGames(cDim)}
+              {renderAllGames()}
             </div> : renderAllGames(cDim)
           }
         </div>
@@ -184,7 +184,7 @@ function cardDims(): CardDim {
   }
 }
 
-function renderViewOnlyBoard(cDim: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
+function renderViewOnlyBoard(cDim?: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {};
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : undefined
   return (
@@ -226,7 +226,7 @@ function savedGameDataToCardData(data: OnlineGameData): NowPlayingGame {
   };
 }
 
-function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
+function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Object) {
   const icon = g.opponent.ai ? 'n' : utils.gameIcon(g.perf);
   const playerName = utils.playerName(g.opponent, false);
   const cardClass = [
@@ -261,7 +261,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim, cardStyle: Object) {
   );
 }
 
-function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object) {
+function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardStyle: Object) {
   if (!c.challenger) {
     return null;
   }
@@ -298,7 +298,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
   );
 }
 
-function renderAllGames(cDim: CardDim) {
+function renderAllGames(cDim?: CardDim) {
   const nowPlaying = session.nowPlaying();
   const challenges = challengesApi.incoming();
   const cardStyle = cDim ? {

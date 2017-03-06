@@ -34,7 +34,7 @@ export default {
   view: function(ctrl: MenuInterface) {
     return popupWidget(
       'editorMenu',
-      null,
+      undefined,
       () => renderEditorMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close

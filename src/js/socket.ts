@@ -33,7 +33,7 @@ interface SocketConfig {
   params?: StringMap
 }
 
-type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
+type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void;
 type MessageHandlerGeneric = MessageHandler<{}, any>
 interface MessageHandlers {
   [index: string]: MessageHandlerGeneric

@@ -11,7 +11,7 @@ export interface Attrs {
   fen?: string
   lastMove?: string
   orientation?: Color
-  bounds: Bounds
+  bounds?: Bounds
   customPieceTheme?: string
   variant?: VariantKey
 }
@@ -23,7 +23,7 @@ interface Config {
   minimalDom: boolean
   coordinates: boolean
   orientation: Color
-  bounds: Bounds
+  bounds?: Bounds
 }
 
 interface State {
@@ -44,7 +44,7 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
     if (
       attrs.fen !== oldattrs.fen ||
       attrs.lastMove !== oldattrs.lastMove ||
-      attrs.orientation !== oldattrs.orientation || (attrs.bounds && (
+      attrs.orientation !== oldattrs.orientation || (!oldattrs.bounds || attrs.bounds && (
       attrs.bounds.height !== oldattrs.bounds.height ||
       attrs.bounds.width !== oldattrs.bounds.width))
     ) {
@@ -85,7 +85,7 @@ function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
     lastMove: lastMove ? uciToMove(lastMove) : undefined,
     orientation: orientation || 'white',
     bounds
-  };
+  }
 
-  return conf;
+  return conf
 }

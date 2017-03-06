@@ -59,9 +59,9 @@ const GameScreen: Mithril.Component<Attrs, State> = {
             vibrate.quick();
             const variant = variantApi(data.game.variant.key);
             const storageKey = variantStorageKey(data.game.variant.key);
-            if ([1, 3].indexOf(variant.id) === -1 &&
+            if (variant.alert && [1, 3].indexOf(variant.id) === -1 &&
             !storage.get(storageKey)) {
-              window.navigator.notification.alert(variant.alert, function() {
+              window.navigator.notification.alert(variant.alert, () => {
                 storage.set(storageKey, true);
               });
             }
@@ -132,7 +132,7 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     } else {
       const g = gamePosCache.get(attrs.id)
       if (g)
-        board = () => viewOnlyBoardContent(g.fen, null, g.orientation);
+        board = () => viewOnlyBoardContent(g.fen, undefined, g.orientation);
       else
         board = () => viewOnlyBoardContent(emptyFen);
     }

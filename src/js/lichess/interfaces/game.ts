@@ -31,6 +31,7 @@ export interface OnlineGame extends Game {
   rated: boolean
   turns: number
   speed: Speed
+  perf: PerfKey
   check?: string
   importedBy?: string
 }

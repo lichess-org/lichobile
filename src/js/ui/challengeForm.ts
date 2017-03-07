@@ -15,9 +15,9 @@ import * as h from 'mithril/hyperscript';
 import * as stream from 'mithril/stream';
 
 let actionName = '';
-let userId: string;
-let setupFen: string;
-let setupFenError: string;
+let userId: string | undefined
+let setupFen: string | undefined
+let setupFenError: string | undefined
 
 const isOpen = stream(false);
 
@@ -26,13 +26,13 @@ function open(uid?: string) {
     userId = uid;
     actionName = i18n('challengeToPlay');
   } else {
-    userId = null;
+    userId = undefined
     actionName = i18n('playWithAFriend');
   }
   router.backbutton.stack.push(close);
   isOpen(true);
-  setupFen = null;
-  setupFenError = null;
+  setupFen = undefined
+  setupFenError = undefined
 }
 
 
@@ -42,7 +42,7 @@ function close(fromBB?: string) {
 };
 
 function doChallenge() {
-  return challengeXhr(userId, setupFen)
+  return challengeXhr(userId!, setupFen)
   .then(data => {
 
     helper.analyticsTrackEvent('Challenge', 'Sent');
@@ -120,7 +120,7 @@ function renderForm() {
         const rawfen = (e.target as HTMLInputElement).value
         if (validateFen(rawfen).valid) {
           setupFen = rawfen
-          setupFenError = null
+          setupFenError = undefined
         }
         else setupFenError = 'Invalid FEN'
         redraw()
@@ -141,7 +141,7 @@ function renderForm() {
         },
         oncreate: helper.ontap(() => {
           close();
-          router.set(`/editor/${encodeURIComponent(setupFen)}`);
+          if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`);
         })
       }, [
         h(ViewOnlyBoard, { fen: setupFen, bounds: { width: 100, height: 100 }})
@@ -209,7 +209,7 @@ export default {
   view() {
     return popupWidget(
       'invite_form_popup game_form_popup',
-      null,
+      undefined,
       renderForm,
       isOpen(),
       close

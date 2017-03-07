@@ -148,8 +148,8 @@ export type Pockets = [Pocket, Pocket]
 export interface GameStep {
   ply: number
   fen: string
-  san?: string
-  uci?: string
+  san: string | null
+  uci: string | null
   check: boolean
   checkCount?: CheckCount
   dests?: DestsMap

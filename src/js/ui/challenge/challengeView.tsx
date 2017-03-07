@@ -24,8 +24,7 @@ function gameInfos(challenge: Challenge) {
   );
 }
 
-export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
-  const challenge = ctrl.challenge();
+export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mithril.Children {
   let joinDom: Mithril.BaseNode;
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
@@ -63,7 +62,7 @@ export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
 
     return popupWidget(
       'join_url_challenge',
-      null,
+      undefined,
       function() {
         return h('div.infos', [
           h('div.challenger', challenger),
@@ -78,15 +77,14 @@ export function joinPopup(ctrl: ChallengeState): () => Mithril.Children {
   };
 }
 
-export function awaitInvitePopup(ctrl: ChallengeState) {
-  const challenge = ctrl.challenge();
+export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
 
   const isPersistent = challengesApi.isPersistent(challenge);
 
   return function() {
     return popupWidget(
       'await_url_challenge',
-      null,
+      undefined,
       function() {
         return h('div.infos', [
           gameInfos(challenge),
@@ -125,16 +123,16 @@ function challengeUserFormat(user: ChallengeUser) {
   return `${user.name} (${ratingString})`;
 }
 
-export function awaitChallengePopup(ctrl: ChallengeState) {
+export function awaitChallengePopup(ctrl: ChallengeState, challenge: Challenge) {
 
-  const challenge = ctrl.challenge();
-
+  // destUser is there in await challenge
+  // todo: discriminate in types
   function popupContent() {
     return (
       <div className="infos">
         <div>{i18n('waitingForOpponent')}</div>
         <br />
-        <div className="user">{challengeUserFormat(challenge.destUser)}</div>
+        <div className="user">{challengeUserFormat(challenge.destUser!)}</div>
         {gameInfos(challenge)}
         <br />
         {spinner.getVdom()}
@@ -148,6 +146,6 @@ export function awaitChallengePopup(ctrl: ChallengeState) {
   }
 
   return function() {
-    return popupWidget('await_url_challenge', null, popupContent, true);
-  };
+    return popupWidget('await_url_challenge', undefined, popupContent, true);
+  }
 }

@@ -11,6 +11,7 @@ import * as stream from 'mithril/stream';
 import layout from '../layout';
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common';
 import { joinPopup, awaitChallengePopup, awaitInvitePopup } from './challengeView';
+import { Challenge } from '../../lichess/interfaces/challenge';
 import { ChallengeState } from './interfaces';
 
 const throttledPing = throttle(() => socket.send('ping'), 1000);
@@ -29,24 +30,27 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
   },
 
   oninit(vnode) {
-    const challenge = stream(undefined);
+    const challenge: Mithril.Stream<Challenge | undefined> = stream(undefined)
 
-    window.plugins.insomnia.keepAwake();
+    window.plugins.insomnia.keepAwake()
 
     const reloadChallenge = () => {
-      getChallenge(challenge().id)
-      .then(d => {
-        challenge(d.challenge);
-        switch (d.challenge.status) {
-          case 'accepted':
-            router.set(`/game/${d.challenge.id}`, true);
-            break;
-          case 'declined':
-            window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
-            router.backHistory();
-            break;
-        }
-      });
+      const c = challenge()
+      if (c) {
+        getChallenge(c.id)
+        .then(d => {
+          challenge(d.challenge);
+          switch (d.challenge.status) {
+            case 'accepted':
+              router.set(`/game/${d.challenge.id}`, true);
+              break;
+            case 'declined':
+              window.plugins.toast.show(i18n('challengeDeclined'), 'short', 'center');
+              router.backHistory();
+              break;
+          }
+        });
+      }
     }
 
     const pingNow = () => {
@@ -75,48 +79,60 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
     this.challenge = challenge;
 
     this.joinChallenge = () => {
-      return acceptChallenge(challenge().id)
-      .then(d => router.set('/game' + d.url.round, true))
-      .then(() => challengesApi.remove(challenge().id))
+      const c = challenge()
+      if (c) {
+        return acceptChallenge(c.id)
+        .then(d => router.set('/game' + d.url.round, true))
+        .then(() => challengesApi.remove(c.id))
+      }
+      return Promise.reject('no challenge')
     }
 
     this.declineChallenge = () => {
-      return declineChallenge(challenge().id)
-      .then(() => challengesApi.remove(challenge().id))
-      .then(router.backHistory);
+      const c = challenge()
+      if (c) {
+        return declineChallenge(c.id)
+        .then(() => challengesApi.remove(c.id))
+        .then(router.backHistory);
+      }
+      return Promise.reject('no challenge')
     }
 
     this.cancelChallenge = () => {
-      return cancelChallenge(challenge().id)
-      .then(() => challengesApi.remove(challenge().id))
-      .then(router.backHistory);
+      const c = challenge()
+      if (c) {
+        return cancelChallenge(c.id)
+        .then(() => challengesApi.remove(c.id))
+        .then(router.backHistory);
+      }
+      return Promise.reject('no challenge')
     }
   },
 
   view() {
-    let overlay: () => Mithril.Children;
-    let board = viewOnlyBoardContent;
+    let overlay: (() => Mithril.Children) | undefined = undefined
+    let board = viewOnlyBoardContent
 
-    const challenge = this.challenge();
+    const challenge = this.challenge()
 
     const header = () => headerWidget('lichess.org');
 
     if (challenge) {
-      board = () => viewOnlyBoardContent(challenge.initialFen, null, challenge.color)
+      board = () => viewOnlyBoardContent(challenge.initialFen, undefined, challenge.color)
 
       if (challenge.direction === 'in') {
-        overlay = joinPopup(this);
+        overlay = joinPopup(this, challenge);
       } else if (challenge.direction === 'out') {
         if (challenge.destUser) {
-          overlay = awaitChallengePopup(this);
+          overlay = awaitChallengePopup(this, challenge);
         } else {
-          overlay = awaitInvitePopup(this);
+          overlay = awaitInvitePopup(this, challenge);
         }
       }
     }
 
-    return layout.board(header, board, overlay);
+    return layout.board(header, board, overlay)
   }
-};
+}
 
-export default ChallengeScreen;
+export default ChallengeScreen

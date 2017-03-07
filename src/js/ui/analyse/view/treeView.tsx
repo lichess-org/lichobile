@@ -32,7 +32,7 @@ export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
   else {
     turns = turns.concat(renderTurn(ctrl, {
       turn: Math.floor(initPly / 2) + 1,
-      white: null,
+      white: undefined,
       black: tree[1]
     }, path))
     for (let j = 2, jnb = tree.length; j < jnb; j += 2) turns = turns.concat(
@@ -66,8 +66,8 @@ function renderGlyph(glyph: Glyph) {
 const threeDotsMove = Vnode('move', undefined, undefined, undefined, '...', undefined)
 const emptyMove = Vnode('move', undefined, undefined, undefined, '', undefined)
 
-function renderMove(currentPath: string, move: AnalysisStep, path: Path, pathStr: string) {
-  if (!move) return threeDotsMove;
+function renderMove(currentPath: string, move: AnalysisStep | undefined, path: Path, pathStr: string) {
+  if (!move || !move.san) return threeDotsMove;
   const evaluation = path[1] ? null : (move.rEval || move.ceval);
   const judgment = move.rEval && move.rEval.judgment;
   const className = [
@@ -113,9 +113,8 @@ function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTr
 
 function renderVariationContent(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
   const turns: Turn[] = [];
-  if (variation[0].ply % 2 === 0) {
-    variation = variation.slice(0);
-    const move = variation.shift();
+  if (variation.length > 0 && variation[0].ply % 2 === 0) {
+    const move = variation[0]
     turns.push({
       turn: plyToTurn(move.ply),
       black: move
@@ -131,20 +130,20 @@ function renderVariationContent(ctrl: AnalyseCtrlInterface, variation: AnalysisT
   return turns.map(turn => renderVariationTurn(ctrl, turn, path));
 }
 
-function renderVariationMeta(ctrl: AnalyseCtrlInterface, move: AnalysisStep, path: Path) {
-  if (!move || empty(move.variations)) return null;
-  return move.variations.map((variation: AnalysisTree, i: number) => {
+function renderVariationMeta(ctrl: AnalyseCtrlInterface, move?: AnalysisStep, path?: Path) {
+  if (!move || !path || empty(move.variations)) return null
+  return move.variations && move.variations.map((variation: AnalysisTree, i: number) => {
     return renderVariationNested(ctrl, variation, treePath.withVariation(path, i + 1));
-  });
+  })
 }
 
 function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
-  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath, treePath.write(wPath)) : null;
-  const wMeta = renderVariationMeta(ctrl, turn.white, wPath);
-  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath, treePath.write(bPath)) : null;
-  const bMeta = renderVariationMeta(ctrl, turn.black, bPath);
+  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : undefined
+  const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath, treePath.write(wPath)) : undefined
+  const wMeta = renderVariationMeta(ctrl, turn.white, wPath)
+  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : undefined
+  const bMove = bPath ? renderMove(ctrl.vm.pathStr, turn.black, bPath, treePath.write(bPath)) : undefined
+  const bMeta = renderVariationMeta(ctrl, turn.black, bPath)
   if (wMove) {
     if (wMeta) return [
         renderIndex(turn.turn + '.'),
@@ -168,26 +167,26 @@ function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path)
   ];
 }
 
-function renderMeta(ctrl: AnalyseCtrlInterface, step: AnalysisStep, path: Path) {
+function renderMeta(ctrl: AnalyseCtrlInterface, step?: AnalysisStep, path?: Path) {
   const judgment = step && step.rEval && step.rEval.judgment;
 
-  if (!step || (empty(step.variations) && (empty(judgment) || !ctrl.vm.showComments)))
+  if (!step || !path || (empty(step.variations) && (!judgment || !ctrl.vm.showComments)))
     return null
 
   const children: Mithril.Children = [];
   const colorClass = step.ply % 2 === 0 ? 'black ' : 'white ';
-  if (ctrl.vm.showComments && !empty(judgment)) {
+  if (ctrl.vm.showComments && judgment) {
     children.push(renderComment(judgment.comment, colorClass, judgment.name));
   }
-  if (!empty(step.variations)) {
+  if (step.variations && step.variations.length > 0) {
     for (let i = 0, len = step.variations.length; i < len; i++) {
-      const variation = step.variations[i];
-      if (empty(variation)) return null;
+      const variation = step.variations[i]
+      if (empty(variation)) return null
       children.push(renderVariation(
         ctrl,
         variation,
         treePath.withVariation(path, i + 1)
-      ));
+      ))
     }
   }
   const key = 'meta:' + treePath.write(path) +
@@ -236,10 +235,10 @@ function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
 }
 
 function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path): Mithril.Children {
-  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null;
-  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null;
-  const wMeta = renderMeta(ctrl, turn.white, wPath);
-  const bMeta = renderMeta(ctrl, turn.black, bPath);
+  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : undefined
+  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : undefined
+  const wMeta = renderMeta(ctrl, turn.white, wPath)
+  const bMeta = renderMeta(ctrl, turn.black, bPath)
   if (wPath) {
     if (wMeta) {
       const temp = [ renderTurnEl(turn, ctrl.vm.pathStr, wPath), wMeta ]

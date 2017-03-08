@@ -1,3 +1,4 @@
+import * as stream from 'mithril/stream';
 import redraw from '../../../utils/redraw';
 import * as helper from '../../helper';
 import * as debounce from 'lodash/debounce';
@@ -6,8 +7,8 @@ import explorerConfig from './explorerConfig';
 import { openingXhr, tablebaseXhr } from './explorerXhr';
 import { isSynthetic } from '../util';
 import * as gameApi from '../../../lichess/game';
-import { AnalyseCtrlInterface, ExplorerCtrlInterface, ExplorerData } from '../interfaces';
-import * as stream from 'mithril/stream';
+import { ExplorerCtrlInterface, ExplorerData } from '../interfaces';
+import AnalyseCtrl from '../AnalyseCtrl'
 
 function tablebaseRelevant(fen: string) {
   const parts = fen.split(/\s/);
@@ -15,7 +16,7 @@ function tablebaseRelevant(fen: string) {
   return pieceCount <= 7;
 }
 
-export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtrlInterface {
+export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterface {
 
   const allowed = stream(allow);
   const enabled = stream(false);
@@ -51,7 +52,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
     }
   }
 
-  const withGames = isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.game.offline;
+  const withGames = !!(isSynthetic(root.data) || gameApi.replayable(root.data) || root.data.game.offline)
   const effectiveVariant: VariantKey = root.data.game.variant.key === 'fromPosition' ? 'standard' : root.data.game.variant.key;
 
   const config = explorerConfig.controller(root.data.game.variant, onConfigClose);
@@ -80,7 +81,7 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   }, 1000);
 
   const fetchTablebase = debounce((fen: string) => {
-    return tablebaseXhr(effectiveVariant, root.vm.step.fen)
+    return tablebaseXhr(effectiveVariant, fen)
     .then((res: ExplorerData) => {
       res.tablebase = true;
       res.fen = fen;
@@ -106,20 +107,22 @@ export default function(root: AnalyseCtrlInterface, allow: boolean): ExplorerCtr
   function setStep() {
     if (!enabled()) return;
     const step = root.vm.step;
-    if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
-      setResult(step.fen, empty);
+    if (step) {
+      if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
+        setResult(step.fen, empty);
+      }
+      const fromCache = cache[step.fen];
+      if (!fromCache) {
+        loading(true);
+        fetch(step.fen);
+      } else {
+        current(fromCache);
+        loading(false);
+        failing(false);
+      }
+      redraw();
+      debouncedScroll();
     }
-    const fromCache = cache[step.fen];
-    if (!fromCache) {
-      loading(true);
-      fetch(step.fen);
-    } else {
-      current(fromCache);
-      loading(false);
-      failing(false);
-    }
-    redraw();
-    debouncedScroll();
   }
 
   return {

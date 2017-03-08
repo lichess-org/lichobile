@@ -42,7 +42,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
 
   public engine: EngineInterface;
 
-  public constructor(saved?: StoredOfflineGame, setupFen?: string) {
+  public constructor(saved?: StoredOfflineGame | null, setupFen?: string) {
     this.engine = engineCtrl(this);
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
@@ -50,8 +50,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     this.vm = {
       engineSearching: false,
       setupFen,
-      savedFen: saved && saved.data.game.fen
-    };
+      savedFen: saved ? saved.data.game.fen : undefined
+    }
 
     if (setupFen) {
       this.newGameMenu.isOpen(true);
@@ -136,7 +136,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     })
     .then(() => {
       if (setupFen) {
-        this.vm.setupFen = null;
+        this.vm.setupFen = undefined
         router.replaceState('/ai');
       }
     });
@@ -150,27 +150,30 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     });
   }
 
-  public playerName = () => {
-    return this.data.player.username;
+  public playerName = (): string => {
+    return this.data.player.username!
   }
 
   public white(): string {
     if (this.data.player.color === 'white')
-      return this.data.player.username;
+      // set in offlineround data
+      return this.data.player.username!
     else
-      return this.getOpponent().name;
+      return this.getOpponent().name
   }
 
   public black(): string {
     if (this.data.player.color === 'black')
-      return this.data.player.username;
+      // set in offlineround data
+      return this.data.player.username!
     else
       return this.getOpponent().name;
   }
 
   public getOpponent() {
     const level = settings.ai.opponent();
-    const name = settings.ai.availableOpponents.find(e => e[1] === level)[0];
+    const opp = settings.ai.availableOpponents.find(e => e[1] === level)
+    const name = opp && opp.length && opp[0] || 'Stockfish'
     return {
       name: i18n('aiNameLevelAiLevel', name, level),
       level: parseInt(level) || 1
@@ -260,9 +263,9 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
       this.chessground.set({
         fen: sit.fen,
         turnColor: sit.player,
-        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : null,
+        lastMove: lastUci ? chessFormat.uciToMoveOrDrop(lastUci) : undefined,
         dests: sit.dests,
-        movableColor: sit.player === this.data.player.color ? sit.player : null,
+        movableColor: sit.player === this.data.player.color ? sit.player : undefined,
         check: sit.check
       });
     }
@@ -317,7 +320,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
 
   public jump = (ply: number) => {
     this.chessground.cancelMove();
-    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return;
+    if (this.replay.ply === ply || ply < 0 || ply >= this.replay.situations.length) return false
     this.replay.ply = ply;
     this.apply(this.replay.situation());
     return false;

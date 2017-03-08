@@ -2,10 +2,6 @@ import { piotr2key } from './piotr';
 import * as isObject from 'lodash/isObject';
 import { AnalysisData } from './interfaces'
 
-export function defined(v: any) {
-  return v !== undefined;
-}
-
 function isString(o: DestsMap | string): o is string {
   return typeof o === 'string'
 }
@@ -14,9 +10,9 @@ function isDestMap(o: DestsMap | string): o is DestsMap {
   return isObject(o)
 }
 
-export function readDests(lines: DestsMap | string): DestsMap | null {
-  if (!defined(lines)) return null;
-  if (isDestMap(lines)) return lines;
+export function readDests(lines?: DestsMap | string): DestsMap | null {
+  if (lines === undefined) return null
+  if (isDestMap(lines)) return lines
   const dests = {};
   if (lines && isString(lines)) lines.split(' ').forEach(line => {
     dests[piotr2key[line[0]]] = line.split('').slice(1).map((c) => piotr2key[c])
@@ -29,7 +25,7 @@ export function readCheckCount(fen: string) {
   return {
     white: parseInt(counts[3], 10),
     black: parseInt(counts[1], 10)
-  };
+  }
 }
 
 export function empty(a?: any) {
@@ -45,8 +41,8 @@ export function isSynthetic(data: AnalysisData) {
   return data.game.id === 'synthetic';
 }
 
-export function autoScroll(movelist: HTMLElement) {
-  if (!movelist) return;
+export function autoScroll(movelist: HTMLElement | null) {
+  if (!movelist) return
   requestAnimationFrame(() => {
     const plyEl = (movelist.querySelector('.current') || movelist.querySelector('turn:first-child')) as HTMLElement
     if (plyEl) {

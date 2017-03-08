@@ -38,7 +38,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public replay: Replay
   public vm: OtbVM
 
-  public constructor(saved?: StoredOfflineGame, setupFen?: string) {
+  public constructor(saved?: StoredOfflineGame | null, setupFen?: string) {
     this.setupFen = setupFen;
     this.actions = actions.controller(this);
     this.newGameMenu = newGameMenu.controller(this);
@@ -46,8 +46,8 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     this.vm = {
       flip: false,
       setupFen,
-      savedFen: saved && saved.data.game.fen
-    };
+      savedFen: saved ? saved.data.game.fen : undefined
+    }
 
     if (setupFen) {
       this.newGameMenu.isOpen(true);

@@ -24,9 +24,9 @@ import treePath from '../path';
 import { renderTree } from './treeView';
 import settings from '../../../settings';
 
-import { AnalyseCtrlInterface } from '../interfaces';
+import AnalyseCtrl from '../AnalyseCtrl'
 
-export function overlay(ctrl: AnalyseCtrlInterface) {
+export function overlay(ctrl: AnalyseCtrl) {
   return [
     renderPromotion(ctrl),
     menu.view(ctrl.menu),
@@ -45,14 +45,14 @@ export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean
 }
 
 
-export function renderContent(ctrl: AnalyseCtrlInterface, isPortrait: boolean, bounds: ClientRect) {
+export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
   const player = ctrl.data.game.player;
   const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
   const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
 
   let board: Mithril.BaseNode
 
-  let nextBest: string | null;
+  let nextBest: string | undefined
   let curBestShape: Shape[] = [], pastBestShape: Shape[] = [];
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
     nextBest = ctrl.nextStepBest();
@@ -141,7 +141,7 @@ function getMoveEl(e: Event) {
 interface ReplayDataSet extends DOMStringMap {
   path: string
 }
-function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
+function onReplayTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getMoveEl(e);
   if (el && (el.dataset as ReplayDataSet).path) {
     ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
@@ -149,7 +149,7 @@ function onReplayTap(ctrl: AnalyseCtrlInterface, e: Event) {
 }
 
 let pieceNotation: boolean;
-const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
+const Replay: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.vm.replaying
   },
@@ -168,7 +168,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
   }
 }
 
-function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
+function renderOpeningBox(ctrl: AnalyseCtrl) {
   const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
   if (opening) return h('div', {
     key: 'opening-box',
@@ -181,7 +181,7 @@ function renderOpeningBox(ctrl: AnalyseCtrlInterface) {
 }
 
 const spinnerPearl = <div className="spinner fa fa-hourglass-half"></div>
-const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
+const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.vm.replaying
   },
@@ -249,7 +249,7 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
   }
 }
 
-function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderAnalyseTable(ctrl: AnalyseCtrl, isPortrait: boolean) {
   return (
     <div className="analyse-table" key="analyse">
       {renderInfosBox(ctrl, isPortrait)}
@@ -263,7 +263,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   );
 }
 
-function renderInfosBox(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderInfosBox(ctrl: AnalyseCtrl, isPortrait: boolean) {
 
   return (
     <div className="analyse-infosBox">
@@ -280,7 +280,7 @@ function renderInfosBox(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   );
 }
 
-function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
+function renderVariantSelector(ctrl: AnalyseCtrl) {
   const variant = ctrl.data.game.variant.key;
   const icon = gameIcon(variant);
   let availVariants = settings.analyse.availableVariants;
@@ -305,12 +305,12 @@ function renderVariantSelector(ctrl: AnalyseCtrlInterface) {
   )
 }
 
-function getChecksCount(ctrl: AnalyseCtrlInterface, color: Color) {
+function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
   const step = ctrl.vm.step;
   return step && step.checkCount && step.checkCount[oppositeColor(color)];
 }
 
-function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
+function renderSyntheticPockets(ctrl: AnalyseCtrl) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   return (
@@ -343,7 +343,7 @@ function renderSyntheticPockets(ctrl: AnalyseCtrlInterface) {
   );
 }
 
-function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
+function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
   const player = ctrl.data.player;
   const opponent = ctrl.data.opponent;
   if (!player || !opponent) return null;
@@ -407,7 +407,7 @@ function renderGameInfos(ctrl: AnalyseCtrlInterface, isPortrait: boolean) {
   );
 }
 
-function renderStatus(ctrl: AnalyseCtrlInterface) {
+function renderStatus(ctrl: AnalyseCtrl) {
   const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
   return (
     <div key="gameStatus" className="status">
@@ -418,39 +418,39 @@ function renderStatus(ctrl: AnalyseCtrlInterface) {
   );
 }
 
-function renderVariationMenu(ctrl: AnalyseCtrlInterface) {
+function renderVariationMenuContent(ctrl: AnalyseCtrl) {
+  const path = ctrl.vm.variationMenu
+  if (!path) return null
+  const step = ctrl.analyse.getStepAtPly(path[0].ply)
+  if (!step) return null
 
-  function content() {
-    const path = ctrl.vm.variationMenu
-    if (!path) return null
+  const promotable = isSynthetic(ctrl.data) || !step.fixed;
 
-    const promotable = isSynthetic(ctrl.data) ||
-      !ctrl.analyse.getStepAtPly(path[0].ply).fixed;
+  return h('div.variationMenu', [
+    h('button', {
+      className: 'withIcon',
+      'data-icon': 'q',
+      oncreate: helper.ontap(() => ctrl.deleteVariation(path))
+    }, 'Delete variation'),
+    promotable ? h('button', {
+      className: 'withIcon',
+      'data-icon': 'E',
+      oncreate: helper.ontap(() => ctrl.promoteVariation(path))
+    }, 'Promote to main line') : null
+  ]);
+}
 
-    return h('div.variationMenu', [
-      h('button', {
-        className: 'withIcon',
-        'data-icon': 'q',
-        oncreate: helper.ontap(() => ctrl.deleteVariation(path))
-      }, 'Delete variation'),
-      promotable ? h('button', {
-        className: 'withIcon',
-        'data-icon': 'E',
-        oncreate: helper.ontap(() => ctrl.promoteVariation(path))
-      }, 'Promote to main line') : null
-    ]);
-  }
-
+function renderVariationMenu(ctrl: AnalyseCtrl) {
   return popupWidget(
     'variationMenuPopup',
     undefined,
-    content,
+    () => renderVariationMenuContent(ctrl),
     !!ctrl.vm.variationMenu,
     () => ctrl.toggleVariationMenu()
   )
 }
 
-function renderActionsBar(ctrl: AnalyseCtrlInterface) {
+function renderActionsBar(ctrl: AnalyseCtrl) {
 
   const explorerBtnClass = [
     'action_bar_button',

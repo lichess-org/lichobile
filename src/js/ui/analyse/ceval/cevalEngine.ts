@@ -36,8 +36,8 @@ export default function cevalEngine(opts: Opts) {
     if (!matches) return;
     const depth = parseInt(matches[1]);
     if (depth < opts.minDepth) return;
-    let cp: number;
-    let mate: number;
+    let cp: number = 0;
+    let mate: number = 0;
     if (matches[2] === 'cp') cp = parseFloat(matches[3]);
     else mate = parseFloat(matches[3]);
     if (work.ply % 2 === 1) {

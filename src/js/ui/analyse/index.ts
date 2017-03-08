@@ -60,7 +60,8 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else if (source === 'offline' && gameId === 'otb') {
       helper.analyticsTrackView('Analysis (offline otb)');
       setTimeout(() => {
-        const otbData = getAnalyseData(getCurrentOTBGame());
+        const savedOtbGame = getCurrentOTBGame()
+        const otbData = savedOtbGame && getAnalyseData(savedOtbGame)
         if (!otbData) {
           router.set('/analyse', true);
         } else {
@@ -72,7 +73,8 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     } else if (source === 'offline' && gameId === 'ai') {
       helper.analyticsTrackView('Analysis (offline ai)');
       setTimeout(() => {
-        const aiData = getAnalyseData(getCurrentAIGame());
+        const savedAiGame = getCurrentAIGame()
+        const aiData = savedAiGame && getAnalyseData(savedAiGame)
         if (!aiData) {
           router.set('/analyse', true);
         } else {
@@ -114,7 +116,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     socket.destroy();
     if (this.ctrl) {
       if (this.ctrl.ceval) this.ctrl.ceval.destroy();
-      this.ctrl = null;
+      this.ctrl = undefined
     }
   },
 
@@ -129,15 +131,15 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
 
       return layout.board(
         () => header(title, backButton),
-        () => renderContent(this.ctrl, isPortrait, bounds),
-        () => overlay(this.ctrl)
+        () => renderContent(this.ctrl!, isPortrait, bounds),
+        () => overlay(this.ctrl!)
       );
     } else {
       const isSmall = settings.analyse.smallBoard()
       const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'analyse', isSmall);
       return layout.board(
         loadingBackbutton,
-        () => viewOnlyBoard(vnode.attrs.color, bounds, isSmall, emptyFen)
+        () => viewOnlyBoard(vnode.attrs.color || 'white', bounds, isSmall, emptyFen)
       );
     }
   }

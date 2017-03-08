@@ -8,11 +8,12 @@ import { handleXhrError } from '../../utils';
 import { requestComputerAnalysis } from './analyseXhr';
 import * as helper from '../helper';
 import * as h from 'mithril/hyperscript';
-import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
+import { MenuInterface } from './interfaces';
+import AnalyseCtrl from './AnalyseCtrl'
 
 export default {
 
-  controller: function(root: AnalyseCtrlInterface) {
+  controller: function(root: AnalyseCtrl) {
     let isOpen = false;
 
     function open() {
@@ -38,7 +39,7 @@ export default {
   view: function(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
-      null,
+      undefined,
       () => renderAnalyseMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
@@ -46,7 +47,7 @@ export default {
   }
 };
 
-function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
+function renderAnalyseMenu(ctrl: AnalyseCtrl) {
 
   const sharePGN = helper.ontap(
     ctrl.sharePGN,
@@ -58,12 +59,14 @@ function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close();
-        ctrl.continuePopup.open(ctrl.vm.step.fen);
+        if (ctrl.vm.step) {
+          ctrl.continuePopup.open(ctrl.vm.step.fen);
+        }
       })
     }, i18n('continueFromHere')) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'boardEditor',
-      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
+      oncreate: helper.ontap(() => ctrl.vm.step && router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'sharePGN',
@@ -95,7 +98,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrlInterface) {
       key: 'open_analysis_summary',
       oncreate: helper.ontap(() => {
         ctrl.menu.close();
-        ctrl.evalSummary.open();
+        ctrl.evalSummary!.open();
       })
     }, [h('span.fa.fa-line-chart'), 'Analysis summary']) : null
   ]);

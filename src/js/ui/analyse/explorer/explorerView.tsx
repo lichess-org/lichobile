@@ -1,16 +1,17 @@
 import * as h from 'mithril/hyperscript';
 import * as helper from '../../helper';
 import explorerConfig from './explorerConfig';
-import { AnalyseCtrlInterface, ExplorerMove } from '../interfaces';
+import { ExplorerMove, isTablebaseData } from '../interfaces';
+import AnalyseCtrl from '../AnalyseCtrl'
 import OpeningTable, { showEmpty, getTR } from './OpeningTable';
 
-function onTablebaseTap(ctrl: AnalyseCtrlInterface, e: Event) {
+function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
   const uci = el && el.dataset['uci'];
   if (uci) ctrl.explorerMove(uci);
 }
 
-function showTitle(ctrl: AnalyseCtrlInterface): Mithril.Children {
+function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
   const data = ctrl.explorer.current()
   const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
@@ -23,13 +24,13 @@ function showTitle(ctrl: AnalyseCtrlInterface): Mithril.Children {
 }
 
 
-function showTablebase(ctrl: AnalyseCtrlInterface, title: string, moves: Array<ExplorerMove>, fen: string) {
+function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMove>, fen: string) {
   let stm = fen.split(/\s/)[1];
   if (!moves.length) return null;
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
-      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e), null, null, getTR)}
+      oncreate={helper.ontap(e => onTablebaseTap(ctrl, e!), undefined, undefined, getTR)}
     >
       <tbody>
       {moves.map((move: ExplorerMove) => {
@@ -80,7 +81,7 @@ function showDtz(stm: string, move: ExplorerMove) {
   }, 'DTZ ' + Math.abs(move.dtz));
 }
 
-function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
+function showGameEnd(ctrl: AnalyseCtrl, title: string) {
   return h('div.explorer-data.empty', {
     key: 'explorer-game-end' + title
   }, [
@@ -95,12 +96,12 @@ function showGameEnd(ctrl: AnalyseCtrlInterface, title: string) {
   ]);
 }
 
-function show(ctrl: AnalyseCtrlInterface) {
+function show(ctrl: AnalyseCtrl) {
   const data = ctrl.explorer.current();
   if (data && data.opening) {
     return h(OpeningTable, { data, ctrl });
   }
-  else if (data && data.tablebase) {
+  else if (data && isTablebaseData(data)) {
     const moves = data.moves;
     if (moves.length) {
       return (
@@ -122,7 +123,7 @@ function show(ctrl: AnalyseCtrlInterface) {
   return <div key="explorer-no-data" />;
 }
 
-function showConfig(ctrl: AnalyseCtrlInterface) {
+function showConfig(ctrl: AnalyseCtrl) {
   return h('div.explorerConfig', {
     key: 'opening-config'
   }, explorerConfig.view(ctrl.explorer.config));
@@ -139,7 +140,7 @@ function failing() {
   ]);
 }
 
-export default function(ctrl: AnalyseCtrlInterface) {
+export default function(ctrl: AnalyseCtrl) {
   if (!ctrl.explorer.enabled()) return null;
   const data = ctrl.explorer.current();
   const config = ctrl.explorer.config;

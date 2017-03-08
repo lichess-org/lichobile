@@ -1,14 +1,15 @@
 import router from '../../../router';
 import * as helper from '../../helper';
 import { OnlineGameData } from '../../../lichess/interfaces/game';
-import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
+import { ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
+import AnalyseCtrl from '../AnalyseCtrl'
 import settings from '../../../settings';
 import * as xhr from '../../../xhr';
 
 let pieceNotation: boolean;
 
 export interface Attrs {
-  ctrl: AnalyseCtrlInterface
+  ctrl: AnalyseCtrl
   data: ExplorerData
 }
 
@@ -40,7 +41,7 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
 
 export default OpeningTable
 
-export function showEmpty(ctrl: AnalyseCtrlInterface) {
+export function showEmpty(ctrl: AnalyseCtrl) {
   return (
     <div key="explorer-empty" className="explorer-data empty">
       <div className="message">
@@ -77,7 +78,7 @@ function resultBar(move: ExplorerMove) {
   return ['white', 'draws', 'black'].map(section);
 }
 
-function onTableTap(ctrl: AnalyseCtrlInterface, e: Event) {
+function onTableTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e);
   if (el && el.dataset['uci']) ctrl.explorerMove(el.dataset['uci']);
 }
@@ -88,7 +89,7 @@ function showResult(w: Color) {
   return <result className="draws">½-½</result>;
 }
 
-function link(ctrl: AnalyseCtrlInterface, e: Event) {
+function link(ctrl: AnalyseCtrl, e: Event) {
   const orientation = ctrl.chessground.data.orientation;
   const el = getTR(e)
   const gameId = el && el.dataset['id']
@@ -102,11 +103,11 @@ function link(ctrl: AnalyseCtrlInterface, e: Event) {
   }
 }
 
-function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<ExplorerGame>) {
+function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGame>) {
   if (!ctrl.explorer.withGames || !games.length) return null;
   return (
     <table className="games"
-      oncreate={helper.ontap(e => link(ctrl, e), null, null, getTR)}
+      oncreate={helper.ontap(e => link(ctrl, e!), undefined, undefined, getTR)}
     >
       <thead>
         <tr>
@@ -141,12 +142,12 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<Ex
   );
 }
 
-function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
+function showMoveTable(ctrl: AnalyseCtrl, moves: Array<ExplorerMove>) {
   if (!moves.length) return null;
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
   return (
     <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
-      oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, getTR)}
+      oncreate={helper.ontap(e => onTableTap(ctrl, e!), undefined, undefined, getTR)}
     >
       <thead>
         <tr>

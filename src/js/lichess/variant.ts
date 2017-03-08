@@ -108,7 +108,7 @@ export function getLichessVariant(key: VariantKey): Variant {
   return {
     key,
     name: dv.name,
-    short: dv.shortName || dv.tinyName,
+    short: dv.shortName || dv.tinyName || dv.name,
     title: dv.title
   }
 }

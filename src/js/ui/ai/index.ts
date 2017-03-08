@@ -45,7 +45,7 @@ const AiScreen: Mithril.Component<Attrs, State> = {
       const fen = this.round.vm.setupFen || this.round.vm.savedFen;
       const color = playerFromFen(fen);
       header = () => renderHeader(i18n('playOfflineComputer'));
-      content = () => viewOnlyBoardContent(fen, null, color);
+      content = () => viewOnlyBoardContent(fen, undefined, color);
     }
 
     return layout.board(

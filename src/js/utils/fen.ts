@@ -113,7 +113,7 @@ export function positionLooksLegit(fen: string) {
   return (pieces.match(/k/g) || []).length === 1 && (pieces.match(/K/g) || []).length === 1;
 }
 
-export function playerFromFen(fen: string): Color {
+export function playerFromFen(fen?: string): Color {
   if (fen) {
     const { color } = readFen(fen);
 
@@ -123,7 +123,7 @@ export function playerFromFen(fen: string): Color {
   return 'white';
 }
 
-export function plyFromFen(fen: string) {
+export function plyFromFen(fen?: string) {
   if (fen) {
     const { color, moves } = readFen(fen);
     return moves * 2 - (color === 'w' ? 2 : 1);

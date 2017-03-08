@@ -51,7 +51,7 @@ export default {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        null,
+        undefined,
         function() {
           const availVariants = settings.ai.availableVariants;
           const variants = ctrl.root.vm.setupFen ?
@@ -78,7 +78,7 @@ export default {
                           height: '130px'
                         }}
                         oncreate={helper.ontap(() => {
-                          router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`);
+                          if (ctrl.root.vm.setupFen) router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
                         {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}

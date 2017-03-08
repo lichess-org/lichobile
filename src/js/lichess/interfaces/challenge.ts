@@ -15,6 +15,14 @@ export interface TimeControl {
   increment: number;
 }
 
+export interface TimeControlClock extends TimeControl {
+  show: string
+}
+
+export interface TimeControlCorrespondence extends TimeControl {
+  daysPerTurn: number
+}
+
 export interface Challenge {
   id: string
   direction: 'in' | 'out'
@@ -37,3 +45,10 @@ export interface ChallengesData {
   out: Array<Challenge>
 }
 
+export function isTimeControlClock(t: TimeControl): t is TimeControlClock {
+  return t.type === 'clock'
+}
+
+export function isTimeControlCorrespondence(t: TimeControl): t is TimeControlCorrespondence {
+  return t.type === 'correspondence'
+}

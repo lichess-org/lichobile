@@ -1,8 +1,8 @@
 import treePath from './path';
-import { AnalysisData, AnalysisStep, Path, PathObj, AnalyseInterface } from './interfaces';
+import { AnalysisData, AnalysisStep, Path, PathObj } from './interfaces';
 import { GameSituation } from '../../chess'
 
-export default class Analyse implements AnalyseInterface {
+export default class Analyse {
   public tree: Array<AnalysisStep>
 
   constructor(data: AnalysisData) {
@@ -43,9 +43,11 @@ export default class Analyse implements AnalyseInterface {
   public getOpening(path: Path) {
     const steps = this.getSteps(path)
     let opening;
-    for (let i = 0, len = steps.length; i < len; i++) {
-      const s = steps[i];
-      opening = s.opening || opening
+    if (steps && steps.length > 0) {
+      for (let i = 0, len = steps.length; i < len; i++) {
+        const s = steps[i];
+        opening = s.opening || opening
+      }
     }
     return opening
   }
@@ -71,24 +73,29 @@ export default class Analyse implements AnalyseInterface {
     }
   }
 
-  public getStepsAfterPly = (path: Path, ply: number) => {
+  public getStepsAfterPly = (path: Path, ply: number): AnalysisStep[] => {
     if (path[0].ply <= ply) return [];
-    return this.getSteps(path).filter((step: AnalysisStep) => {
-      return step.ply > ply;
-    });
+    const steps = this.getSteps(path)
+    if (steps && steps.length) {
+      return steps.filter((step: AnalysisStep) => {
+        return step.ply > ply;
+      })
+    }
+
+    return []
   }
 
-  public nextStepEvalBest = (path: Path) => {
-    if (!treePath.isRoot(path)) return null;
+  public nextStepEvalBest = (path: Path): string | undefined => {
+    if (!treePath.isRoot(path)) return undefined
     const nextPly = path[0].ply + 1;
     const nextStep = this.tree[nextPly - this.firstPly()];
-    return (nextStep && nextStep.rEval) ? nextStep.rEval.best : null;
+    return (nextStep && nextStep.rEval) ? nextStep.rEval.best : undefined
   }
 
   public addStep = (step: AnalysisStep, path: Path) => {
     const nextPath = treePath.withPly(path, treePath.currentPly(path) + 1);
     let tree = this.tree;
-    let curStep: AnalysisStep = null;
+    let curStep: AnalysisStep | undefined = undefined
     nextPath.forEach((p: PathObj) => {
       for (let i = 0, nb = tree.length; i < nb; i++) {
         const s = tree[i];
@@ -101,7 +108,7 @@ export default class Analyse implements AnalyseInterface {
         } else if (p.ply < s.ply) break;
       }
     });
-    if (curStep) {
+    if (isStep(curStep)) {
       curStep.variations = curStep.variations || [];
       if (curStep.san === step.san) return nextPath;
       for (let i = 0; i < curStep.variations.length; i++) {
@@ -143,15 +150,17 @@ export default class Analyse implements AnalyseInterface {
 
   public deleteVariation = (ply: number, id: number) => {
     this.updateAtPath(treePath.default(ply), (node: AnalysisStep) => {
-      node.variations.splice(id - 1, 1);
-      if (!node.variations.length) delete node.variations;
-    });
+      if (node.variations) {
+        node.variations.splice(id - 1, 1);
+        if (!node.variations.length) delete node.variations;
+      }
+    })
   }
 
   public promoteVariation = (ply: number, id: number) => {
     const stepId = this.tree.findIndex(s => s.ply === ply)
     const step = this.getStepAtPly(ply)
-    const variation = step.variations && step.variations[id - 1];
+    const variation = step && step.variations && step.variations[id - 1];
     if (variation) {
       this.deleteVariation(ply, id);
       const demoted = this.tree.splice(stepId);
@@ -190,4 +199,8 @@ function configureSteps(data: AnalysisData) {
       }
     }
   }
+}
+
+function isStep(v: AnalysisStep | undefined): v is AnalysisStep {
+  return v !== undefined
 }

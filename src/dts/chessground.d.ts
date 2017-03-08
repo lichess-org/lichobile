@@ -26,7 +26,7 @@ declare namespace Chessground {
   interface Controller {
     data: any;
     getFen(): string;
-    set(cfg: SetConfig): void;
+    set(cfg?: SetConfig): void;
     reconfigure(cfg: any): void;
     toggleOrientation(): void;
     setPieces(pieces: Pieces): void;
@@ -47,7 +47,7 @@ declare namespace Chessground {
   }
 
   interface Api {
-    set(cfg: SetConfig): void
+    set(cfg?: SetConfig): void
     toggleOrientation(): void
     getOrientation(): Color
     setBounds(bounds: Bounds): void;

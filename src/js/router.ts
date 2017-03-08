@@ -28,7 +28,7 @@ export function defineRoutes(mountPoint: HTMLElement, routes: {[index: string]: 
     router.add(route, function onRouteMatch({ params }) {
 
       const RouteComponent = {view() {
-        return Vnode(component, null, params, undefined, undefined, undefined);
+        return Vnode(component, undefined, params, undefined, undefined, undefined);
       }}
 
       function redraw() {
@@ -68,7 +68,7 @@ function processQuerystring(e?: PopStateEvent) {
 
 function replaceState(path: string) {
   try {
-    window.history.replaceState(window.history.state, null, '?=' + path);
+    window.history.replaceState(window.history.state, '', '?=' + path);
   } catch (e) { console.error(e) }
 }
 
@@ -79,31 +79,31 @@ const backbutton = (() => {
   }
 
   const x: X = () => {
-    const b = x.stack.pop();
+    const b = x.stack!.pop()
     if (isFunction(b)) {
-      b('backbutton');
-      redraw();
+      b('backbutton')
+      redraw()
     } else if (!/^\/$/.test(get())) {
       // if playing a game as anon ask for confirmation because there is no way
       // back!
       if (/^\/game\/[a-zA-Z0-9]{12}/.test(get()) && !session.isConnected()) {
         navigator.notification.confirm(
           'Do you really want to leave the game? You can\'t go back to it after.',
-          i => { if (i === 1) backHistory(); }
-        );
+          i => { if (i === 1) backHistory() }
+        )
       } else {
-        backHistory();
+        backHistory()
       }
     } else {
-      window.navigator.app.exitApp();
+      window.navigator.app.exitApp()
     }
-  };
+  }
 
-  x.stack = [];
+  x.stack = []
 
-  return <Backbutton>x;
+  return <Backbutton>x
 
-})();
+})()
 
 function set(path: string, replace = false) {
   // reset backbutton stack when changing route
@@ -115,7 +115,7 @@ function set(path: string, replace = false) {
     currentStateId = stateId;
     viewSlideDirection = 'fwd';
     try {
-      window.history.pushState({ id: stateId }, null, '?=' + path);
+      window.history.pushState({ id: stateId }, '', '?=' + path);
     } catch (e) { console.error(e); }
   }
   const matched = router.run(path);

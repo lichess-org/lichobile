@@ -158,3 +158,7 @@ export interface GameStep {
     pockets: Pockets
   }
 }
+
+export function isOnlineGameData(d: GameData): d is OnlineGameData {
+  return (<OnlineGameData>d).url !== undefined
+}

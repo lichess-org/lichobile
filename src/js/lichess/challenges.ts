@@ -3,7 +3,7 @@ import sound from '../sound';
 import settings from '../settings';
 import * as throttle from 'lodash/throttle';
 import { getChallenges } from '../xhr';
-import { Challenge, ChallengesData } from '../lichess/interfaces/challenge';
+import { Challenge, ChallengesData, isTimeControlClock, isTimeControlCorrespondence } from '../lichess/interfaces/challenge';
 
 let incoming: Array<Challenge> = [];
 let sending: Array<Challenge> = [];
@@ -51,12 +51,12 @@ export default {
   },
 
   challengeTime(c: Challenge): string {
-    if (c.timeControl.type === 'clock') {
-      return c.timeControl.show;
-    } else if (c.timeControl.type === 'correspondence') {
-      return i18n('nbDays', c.timeControl.daysPerTurn);
+    if (isTimeControlClock(c.timeControl)) {
+      return c.timeControl.show
+    } else if (isTimeControlCorrespondence(c.timeControl)) {
+      return i18n('nbDays', c.timeControl.daysPerTurn)
     } else {
-      return '∞';
+      return '∞'
     }
   }
-};
+}

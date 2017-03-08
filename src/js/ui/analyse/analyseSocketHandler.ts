@@ -5,7 +5,7 @@ import sound from '../../sound';
 import vibrate from '../../vibrate';
 import Analyse from './Analyse';
 
-import { AnalyseCtrlInterface } from './interfaces';
+import AnalyseCtrl from './AnalyseCtrl'
 
 interface ProgressEval {
   tree: {
@@ -13,7 +13,7 @@ interface ProgressEval {
   }
 }
 
-export default function(ctrl: AnalyseCtrlInterface, gameId: string, orientation: Color) {
+export default function(ctrl: AnalyseCtrl, gameId: string, orientation: Color) {
   return {
     analysisProgress: (data: ProgressEval) => {
       if (!ctrl.vm.analysisProgress) {

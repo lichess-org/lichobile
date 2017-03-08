@@ -23,10 +23,10 @@ export interface AiActionsCtrl {
 export function opponentSelector() {
   const opts = settings.ai.availableOpponents.map(o =>
     ['aiNameLevelAiLevel', o[1], o[0], o[1]]
-  );
+  )
   return h('div.select_input',
     formWidgets.renderSelect('opponent', 'opponent', opts, settings.ai.opponent)
-  );
+  )
 }
 
 function renderAlways() {
@@ -78,13 +78,13 @@ export default {
         );
       },
       root: root
-    };
+    }
   },
 
   view(ctrl: AiActionsCtrl) {
     return popupWidget(
       'offline_actions',
-      null,
+      undefined,
       () => {
         return [
           renderEndedGameStatus(ctrl.root)
@@ -96,6 +96,6 @@ export default {
       },
       ctrl.isOpen(),
       ctrl.close
-    );
+    )
   }
-};
+}

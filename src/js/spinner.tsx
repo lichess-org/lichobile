@@ -25,8 +25,8 @@ export default {
   },
 
   stop() {
-    clearTimeout(timeoutId);
-    timeoutId = undefined;
+    clearTimeout(timeoutId as number)
+    timeoutId = undefined
     const spinners = document.getElementsByClassName('globalSpinner');
     if (spinners.length) {
       setTimeout(function() {

@@ -5,11 +5,12 @@ import * as gameApi from '../../lichess/game';
 import settings from '../../settings';
 import formWidgets from '../shared/form';
 import * as h from 'mithril/hyperscript';
-import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
+import { MenuInterface } from './interfaces';
+import AnalyseCtrl from './AnalyseCtrl'
 
 export default {
 
-  controller: function(root: AnalyseCtrlInterface) {
+  controller: function(root: AnalyseCtrl) {
     let isOpen = false;
 
     function open() {
@@ -35,7 +36,7 @@ export default {
   view(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
-      null,
+      undefined,
       () => renderAnalyseSettings(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
@@ -43,7 +44,7 @@ export default {
   }
 };
 
-function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
+function renderAnalyseSettings(ctrl: AnalyseCtrl) {
 
   return h('div.analyseSettings', [
     ctrl.ceval.allowed ? h('div.action', {

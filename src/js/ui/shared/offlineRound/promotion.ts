@@ -47,7 +47,7 @@ function finish(ground: Chessground.Controller, role: Role) {
   promoting = null;
 }
 
-function cancel(chessground: Chessground.Controller, cgConfig: Chessground.SetConfig) {
+function cancel(chessground: Chessground.Controller, cgConfig?: Chessground.SetConfig) {
   if (promoting) {
     promoting = null;
     chessground.set(cgConfig);

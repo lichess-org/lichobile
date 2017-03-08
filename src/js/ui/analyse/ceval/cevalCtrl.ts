@@ -38,7 +38,7 @@ export default function cevalCtrl(
     engine.start({
       initialFen: steps[0].fen,
       currentFen: step.fen,
-      moves: steps.slice(1).map((s) => fixCastle(s.uci, s.san)).join(' '),
+      moves: steps.slice(1).map((s) => fixCastle(s.uci!, s.san!)).join(' '),
       path: path,
       steps: steps,
       ply: step.ply,

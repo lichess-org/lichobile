@@ -43,7 +43,7 @@ document.addEventListener('deviceready', () => {
   shouldPlay = settings.general.sound();
 
   if (window.hotjs) {
-    window.hotjs.Audio.init();
+    window.hotjs.Audio!.init!();
     lla = window.hotjs.Audio;
   } else {
     lla = window.plugins.LowLatencyAudio;

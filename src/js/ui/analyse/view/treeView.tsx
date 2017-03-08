@@ -3,7 +3,8 @@ import * as helper from '../../helper';
 import treePath from '../path';
 import { empty, renderEval } from '../util';
 
-import { AnalyseCtrlInterface, AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
+import { AnalysisStep, AnalysisTree, Glyph, Path } from '../interfaces';
+import AnalyseCtrl from '../AnalyseCtrl'
 
 interface Turn {
   turn: number
@@ -11,7 +12,7 @@ interface Turn {
   black?: AnalysisStep
 }
 
-export function renderTree(ctrl: AnalyseCtrlInterface, tree: AnalysisTree) {
+export function renderTree(ctrl: AnalyseCtrl, tree: AnalysisTree) {
   let turns: Mithril.Children = [];
   const initPly = ctrl.analyse.firstPly();
   const path = treePath.default()
@@ -89,7 +90,7 @@ function plyToTurn(ply: number) {
   return Math.floor((ply - 1) / 2) + 1;
 }
 
-function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
+function renderVariation(ctrl: AnalyseCtrl, variation: AnalysisTree, path: Path) {
   const visiting = treePath.contains(path, ctrl.vm.path);
   return (
     <lines>
@@ -101,7 +102,7 @@ function renderVariation(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, pa
   );
 }
 
-function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path): Mithril.DOMNode {
+function renderVariationNested(ctrl: AnalyseCtrl, variation: AnalysisTree, path: Path): Mithril.DOMNode {
   return (
     <span className="nested">
       (
@@ -111,7 +112,7 @@ function renderVariationNested(ctrl: AnalyseCtrlInterface, variation: AnalysisTr
   );
 }
 
-function renderVariationContent(ctrl: AnalyseCtrlInterface, variation: AnalysisTree, path: Path) {
+function renderVariationContent(ctrl: AnalyseCtrl, variation: AnalysisTree, path: Path) {
   const turns: Turn[] = [];
   if (variation.length > 0 && variation[0].ply % 2 === 0) {
     const move = variation[0]
@@ -130,14 +131,14 @@ function renderVariationContent(ctrl: AnalyseCtrlInterface, variation: AnalysisT
   return turns.map(turn => renderVariationTurn(ctrl, turn, path));
 }
 
-function renderVariationMeta(ctrl: AnalyseCtrlInterface, move?: AnalysisStep, path?: Path) {
+function renderVariationMeta(ctrl: AnalyseCtrl, move?: AnalysisStep, path?: Path) {
   if (!move || !path || empty(move.variations)) return null
   return move.variations && move.variations.map((variation: AnalysisTree, i: number) => {
     return renderVariationNested(ctrl, variation, treePath.withVariation(path, i + 1));
   })
 }
 
-function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path) {
+function renderVariationTurn(ctrl: AnalyseCtrl, turn: Turn, path: Path) {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : undefined
   const wMove = wPath ? renderMove(ctrl.vm.pathStr, turn.white, wPath, treePath.write(wPath)) : undefined
   const wMeta = renderVariationMeta(ctrl, turn.white, wPath)
@@ -167,7 +168,7 @@ function renderVariationTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path)
   ];
 }
 
-function renderMeta(ctrl: AnalyseCtrlInterface, step?: AnalysisStep, path?: Path) {
+function renderMeta(ctrl: AnalyseCtrl, step?: AnalysisStep, path?: Path) {
   const judgment = step && step.rEval && step.rEval.judgment;
 
   if (!step || !path || (empty(step.variations) && (!judgment || !ctrl.vm.showComments)))
@@ -234,7 +235,7 @@ function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
   )
 }
 
-function renderTurn(ctrl: AnalyseCtrlInterface, turn: Turn, path: Path): Mithril.Children {
+function renderTurn(ctrl: AnalyseCtrl, turn: Turn, path: Path): Mithril.Children {
   const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : undefined
   const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : undefined
   const wMeta = renderMeta(ctrl, turn.white, wPath)

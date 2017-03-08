@@ -15,8 +15,8 @@ export interface StoredOfflineGame {
   ply: number;
 }
 
-export function getCurrentOTBGame(): StoredOfflineGame {
-  return storage.get<StoredOfflineGame>(otbStorageKey);
+export function getCurrentOTBGame(): StoredOfflineGame | null {
+  return storage.get<StoredOfflineGame>(otbStorageKey)
 }
 
 export function getAnalyseData(data: StoredOfflineGame): AnalysisData | null {
@@ -46,8 +46,8 @@ export function setCurrentOTBGame(game: StoredOfflineGame): void {
   storage.set(otbStorageKey, game);
 }
 
-export function getCurrentAIGame(): StoredOfflineGame {
-  return storage.get<StoredOfflineGame>(aiStorageKey);
+export function getCurrentAIGame(): StoredOfflineGame | null {
+  return storage.get<StoredOfflineGame>(aiStorageKey)
 }
 
 export function setCurrentAIGame(game: StoredOfflineGame): void {

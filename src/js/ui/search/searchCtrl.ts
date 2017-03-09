@@ -13,7 +13,6 @@ export interface ISearchCtrl {
   games: Mithril.Stream<Array<UserGameWithDate>>
   more: () => void
   lastQuery: Mithril.Stream<SearchQuery>
-  firstDraw: Array<string>
   scrollPos: Mithril.Stream<number>
 }
 
@@ -24,7 +23,6 @@ export default function SearchCtrl(): ISearchCtrl {
   const scrollPos = stream<number>()
 
   const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed']
-  const firstDraw = fields.slice()
 
   function search(form: HTMLFormElement) {
     const elements: HTMLCollection = form.elements as HTMLCollection
@@ -73,7 +71,6 @@ export default function SearchCtrl(): ISearchCtrl {
     toggleBookmark,
     more,
     lastQuery,
-    firstDraw,
     scrollPos
   }
 

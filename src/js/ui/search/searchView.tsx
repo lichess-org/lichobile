@@ -15,7 +15,6 @@ import { ISearchCtrl } from './searchCtrl'
 import { SearchSelect, SearchOption, UserGameWithDate } from './interfaces'
 
 export function renderSearchForm(ctrl: ISearchCtrl) {
-  const throttledRedraw = throttle (() => redraw(), 500)
   const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}))
   const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]]
   const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}))
@@ -38,44 +37,44 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
   return (
     <div id="searchContent" className="native_scroller searchWraper">
       <form id="advancedSearchForm"
-      onsubmit={function(e: Event) {
-        e.preventDefault()
-        const analysed = document.getElementById('analysed') as HTMLInputElement
-        analysed.value = analysed.checked ? '1' : ''
-        return ctrl.search(e.target as HTMLFormElement)
-      }}
-      oncreate={() => onFormCreate(ctrl)}>
-          <div className="game_search_row">
-            <label>Players: </label>
-            <div className="game_search_input">
-              <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
-            </div>
-            <div className="game_search_input">
-              <input type="text" id="players_b" name="players.b" oninput={throttledRedraw} />
-            </div>
+        onsubmit={function(e: Event) {
+          e.preventDefault()
+          const analysed = document.getElementById('analysed') as HTMLInputElement
+          analysed.value = analysed.checked ? '1' : ''
+          return ctrl.search(e.target as HTMLFormElement)
+        }}
+      >
+        <div className="game_search_row">
+          <label>Players: </label>
+          <div className="game_search_input">
+            <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
           </div>
-          {renderSelectRow(i18n('white'), playersNonEmpty(), { name: 'players.white', options: getPlayers(), default: ''})}
-          {renderSelectRow(i18n('black'), playersNonEmpty(), { name: 'players.black', options: getPlayers(), default: ''})}
-          {renderSelectRow(i18n('winner'), playersNonEmpty(), { name: 'players.winner', options: getPlayers(), default: ''})}
-          {renderSelectRow(i18n('ratingRange'), true, { name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
-          {renderSelectRow(i18n('opponent'), true, { name: 'hasAi', options: opponentOptions, default: '', onchange: () => { redraw() }})}
-          {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, { name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
-          {renderSelectRow('Source', true, { name: 'source', options: sourceOptions, default: ''})}
-          {renderSelectRow(i18n('variant'), true, { name: 'perf', options: perfOptions, default: ''})}
-          {renderSelectRow('Turns', true, { name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
-          {renderSelectRow(i18n('duration'), true, { name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
-          {renderSelectRow(i18n('time'), true, { name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
-          {renderSelectRow(i18n('increment'), true, { name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
-          {renderSelectRow('Result', true, { name: 'status', options: resultOptions, default: ''})}
-          {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: ''})}
-          {renderSelectRow('Date', true, { name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
-          {renderSelectRow('Sort', true, { name: 'sort.field', options: sortFieldOptions, default: null}, {name: 'sort.order', options: sortOrderOptions, default: null})}
-          <div className="game_search_row">
-            <label>Analysis?: </label>
-            <div className="game_search_input double_wide">
-              <input type="checkbox" id="analysed" name="analysed" value="" />
-            </div>
+          <div className="game_search_input">
+            <input type="text" id="players_b" name="players.b" oninput={throttledRedraw} />
           </div>
+        </div>
+        {renderSelectRow(i18n('white'), playersNonEmpty(), { name: 'players.white', options: getPlayers(), default: ''})}
+        {renderSelectRow(i18n('black'), playersNonEmpty(), { name: 'players.black', options: getPlayers(), default: ''})}
+        {renderSelectRow(i18n('winner'), playersNonEmpty(), { name: 'players.winner', options: getPlayers(), default: ''})}
+        {renderSelectRow(i18n('ratingRange'), true, { name: 'ratingMin', options: ratingOptions, default: 'From'}, {name: 'ratingMax', options: ratingOptions, default: 'To'})}
+        {renderSelectRow(i18n('opponent'), true, { name: 'hasAi', options: opponentOptions, default: '', onchange: () => { redraw() }})}
+        {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: 'From'}, { name: 'aiLevelMax', options: aiLevelOptions, default: 'To'})}
+        {renderSelectRow('Source', true, { name: 'source', options: sourceOptions, default: ''})}
+        {renderSelectRow(i18n('variant'), true, { name: 'perf', options: perfOptions, default: ''})}
+        {renderSelectRow('Turns', true, { name: 'turnsMin', options: turnOptions, default: 'From'}, {name: 'turnsMax', options: turnOptions, default: 'To'})}
+        {renderSelectRow(i18n('duration'), true, { name: 'durationMin', options: durationOptions, default: 'From'}, {name: 'durationMax', options: durationOptions, default: 'To'})}
+        {renderSelectRow(i18n('time'), true, { name: 'clock.initMin', options: timeOptions, default: 'From'}, {name: 'clock.initMax', options: timeOptions, default: 'To'})}
+        {renderSelectRow(i18n('increment'), true, { name: 'clock.incMin', options: incrementOptions, default: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: 'To'})}
+        {renderSelectRow('Result', true, { name: 'status', options: resultOptions, default: ''})}
+        {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: ''})}
+        {renderSelectRow('Date', true, { name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
+        {renderSelectRow('Sort', true, { name: 'sort.field', options: sortFieldOptions, default: null}, {name: 'sort.order', options: sortOrderOptions, default: null})}
+        <div className="game_search_row">
+          <label>Analysis?: </label>
+          <div className="game_search_input double_wide">
+            <input type="checkbox" id="analysed" name="analysed" value="" />
+          </div>
+        </div>
         <button key="search" className="newGameButton" type="submit">
           <span className="fa fa-search" />
           {i18n('search')}
@@ -235,30 +234,4 @@ function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => v
   }
 }
 
-function onFormCreate(ctrl: ISearchCtrl) {
-  if (ctrl.firstDraw && ctrl.scrollPos()) {
-    const searchContent = document.getElementById('searchContent')
-    if (searchContent) {
-      searchContent.scrollTop = ctrl.scrollPos()
-    }
-  }
-  setQueryParams(ctrl)
-  setTimeout(() => setQueryParams(ctrl), 1000); // For some reason the player.white, player.black and player.winner take a long time to appears in the DOM
-}
-
-function setQueryParams(ctrl: ISearchCtrl) {
-  if (!ctrl.firstDraw)
-    return
-
-  const query = ctrl.lastQuery()
-  ctrl.firstDraw = ctrl.firstDraw.reduce((acc: Array<string>, item: string) => {
-    const el = document.getElementById(item.replace('.', '_')) as HTMLInputElement
-    if (el) {
-      el.value = query[item]
-    }
-    else {
-      acc.push(item)
-    }
-    return acc
-  }, [])
-}
+const throttledRedraw = throttle (() => redraw(), 300)

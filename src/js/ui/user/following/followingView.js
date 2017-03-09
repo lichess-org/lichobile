@@ -1,21 +1,21 @@
-import router from '../../../router';
-import { header } from '../../shared/common';
-import { gameIcon } from '../../../utils';
-import * as helper from '../../helper';
-import layout from '../../layout';
-import i18n from '../../../i18n';
+import router from '../../../router'
+import { header } from '../../shared/common'
+import { gameIcon } from '../../../utils'
+import * as helper from '../../helper'
+import layout from '../../layout'
+import i18n from '../../../i18n'
 
 export default function view(vnode) {
-  const ctrl = vnode.state;
+  const ctrl = vnode.state
   return layout.free(
     header.bind(undefined, 'Following'),
     renderBody.bind(undefined, ctrl)
-  );
+  )
 }
 
 function renderBody(ctrl) {
   if (ctrl.following().length) {
-    const nextPage = ctrl.paginator().nextPage;
+    const nextPage = ctrl.paginator().nextPage
     return (
       <ul className="native_scroller page">
         {ctrl.following().map(p => renderPlayer(ctrl, p))}
@@ -24,21 +24,21 @@ function renderBody(ctrl) {
           null
         }
       </ul>
-    );
+    )
   } else {
     return (
       <div className="followingListEmpty">
         Oops! Nothing here.
       </div>
-    );
+    )
   }
 }
 
 export function renderPlayer(ctrl, obj) {
-  const status = obj.online ? 'online' : 'offline';
-  const perfKey = obj.perfs && Object.keys(obj.perfs)[0];
-  const perf = obj.perfs && obj.perfs[perfKey];
-  const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`));
+  const status = obj.online ? 'online' : 'offline'
+  const perfKey = obj.perfs && Object.keys(obj.perfs)[0]
+  const perf = obj.perfs && obj.perfs[perfKey]
+  const userLink = helper.ontapY(() => router.set(`/@/${obj.user}`))
   return (
     <li className="list_item followingList">
       <div className="followingPlayerTitle" oncreate={userLink}>
@@ -71,6 +71,6 @@ export function renderPlayer(ctrl, obj) {
         {i18n('challengeToPlay')}
       </button>
     </li>
-  );
+  )
 
 }

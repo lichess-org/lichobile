@@ -1,11 +1,11 @@
-import { dropShadowHeader, backButton, onBoardThemeChange } from '../shared/common';
-import redraw from '../../utils/redraw';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import i18n from '../../i18n';
-import settings from '../../settings';
-import * as helper from '../helper';
-import * as h from 'mithril/hyperscript';
+import { dropShadowHeader, backButton, onBoardThemeChange } from '../shared/common'
+import redraw from '../../utils/redraw'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import i18n from '../../i18n'
+import settings from '../../settings'
+import * as helper from '../helper'
+import * as h from 'mithril/hyperscript'
 
 function renderBody() {
   return [
@@ -16,18 +16,18 @@ function renderBody() {
             t[0], 'board_theme', t[1],
             settings.general.theme.board() === t[1],
             e => {
-              settings.general.theme.board((e.target as HTMLInputElement).value);
-              onBoardThemeChange((e.target as HTMLInputElement).value);
-              redraw();
+              settings.general.theme.board((e.target as HTMLInputElement).value)
+              onBoardThemeChange((e.target as HTMLInputElement).value)
+              redraw()
             }
           ),
           h('div.board_icon.vertical_align', {
             className: t[1]
           })
-        ]);
+        ])
       }))
     ])
-  ];
+  ]
 }
 
 export default {
@@ -35,6 +35,6 @@ export default {
 
   view: function() {
     const header = () => dropShadowHeader(null, backButton(i18n('board')))
-    return layout.free(header, renderBody);
+    return layout.free(header, renderBody)
   }
 }

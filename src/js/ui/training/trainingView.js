@@ -1,16 +1,16 @@
-import layout from '../layout';
-import router from '../../router';
-import { emptyFen } from '../../utils/fen';
-import i18n from '../../i18n';
-import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common';
-import Board from '../shared/Board';
-import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import * as helper from '../helper';
-import menu, { renderUserInfos, renderSigninBox } from './menu';
-import * as h from 'mithril/hyperscript';
+import layout from '../layout'
+import router from '../../router'
+import { emptyFen } from '../../utils/fen'
+import i18n from '../../i18n'
+import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common'
+import Board from '../shared/Board'
+import { view as renderPromotion } from '../shared/offlineRound/promotion'
+import * as helper from '../helper'
+import menu, { renderUserInfos, renderSigninBox } from './menu'
+import * as h from 'mithril/hyperscript'
 
 export default function view(vnode) {
-  const ctrl = vnode.state;
+  const ctrl = vnode.state
 
   return layout.board(
     !ctrl.data || ctrl.vm.loading ?
@@ -21,22 +21,22 @@ export default function view(vnode) {
       renderPromotion(ctrl),
       menu.view(ctrl.menu)
     ]
-  );
+  )
 
 }
 
 function renderContent(ctrl) {
-  if (!ctrl.data) return viewOnlyBoardContent(emptyFen);
+  if (!ctrl.data) return viewOnlyBoardContent(emptyFen)
 
-  const isPortrait = helper.isPortrait();
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
-  const key = isPortrait ? 'o-portrait' : 'o-landscape';
+  const isPortrait = helper.isPortrait()
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const key = isPortrait ? 'o-portrait' : 'o-landscape'
 
   const board = h(Board, {
     data: ctrl.data,
     bounds,
     chessgroundCtrl: ctrl.chessground
-  });
+  })
 
   if (isPortrait) {
     return h.fragment({ key }, [
@@ -44,7 +44,7 @@ function renderContent(ctrl) {
       board,
       ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl),
       renderActionsBar(ctrl)
-    ]);
+    ])
   } else {
     return h.fragment({ key }, [
       board,
@@ -58,7 +58,7 @@ function renderContent(ctrl) {
         </section>
         {renderActionsBar(ctrl)}
       </section>
-    ]);
+    ])
   }
 }
 
@@ -69,7 +69,7 @@ function renderExplanation(ctrl) {
         {i18n(ctrl.data.puzzle.color === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')}
       </p>
     </section>
-  );
+  )
 }
 
 function renderProblemDetails(ctrl) {
@@ -77,7 +77,7 @@ function renderProblemDetails(ctrl) {
   const viewGame = ctrl.data.puzzle.gameId ? helper.ontap(
     () => router.set(`/game/${ctrl.data.puzzle.gameId}/${ctrl.data.puzzle.color}`),
     () => window.plugins.toast.show(i18n('fromGameLink', ctrl.data.puzzle.gameId), 'short', 'bottom')
-  ) : () => {};
+  ) : () => {}
   return (
     <section className="trainingSection">
       <h3 className="puzzle withIcon button" data-icon="-" oncreate={viewGame}>
@@ -88,7 +88,7 @@ function renderProblemDetails(ctrl) {
         <p>{i18n('playedXTimes', ctrl.data.puzzle.attempts)}</p>
       </div>
     </section>
-  );
+  )
 }
 
 function renderPlayerTable(ctrl) {
@@ -100,7 +100,7 @@ function renderPlayerTable(ctrl) {
       {renderCommentary(ctrl)}
       {renderResult(ctrl)}
     </section>
-  );
+  )
 }
 
 function renderViewTable(ctrl) {
@@ -109,7 +109,7 @@ function renderViewTable(ctrl) {
       <div />
       {renderResult(ctrl)}
     </section>
-  );
+  )
 }
 
 function renderActionsBar(ctrl) {
@@ -118,7 +118,7 @@ function renderActionsBar(ctrl) {
       key: 'puzzleMenu',
       oncreate: helper.ontap(ctrl.menu.open)
     })
-  ];
+  ]
   return h('section#training_actions.actions_bar', vdom.concat(
     ctrl.data.mode === 'view' ?
       renderViewControls(ctrl) :
@@ -126,12 +126,12 @@ function renderActionsBar(ctrl) {
         key: 'giveUpPuzzle',
         oncreate: helper.ontap(ctrl.giveUp, () => window.plugins.toast.show(i18n('giveUp'), 'short', 'bottom'))
       })
-  ).filter(el => el !== null));
+  ).filter(el => el !== null))
 }
 
 function renderViewControls(ctrl) {
-  const history = ctrl.data.replay.history;
-  const step = ctrl.data.replay.step;
+  const history = ctrl.data.replay.history
+  const step = ctrl.data.replay.step
   return [
     h('button.action_bar_button.training_action[data-icon=G]', {
       key: 'continueTraining',
@@ -163,7 +163,7 @@ function renderViewControls(ctrl) {
         disabled: !(step !== step + 1 && step + 1 >= 0 && step + 1 < history.length)
       })
     })
-  ];
+  ]
 }
 
 function renderCommentary(ctrl) {
@@ -172,24 +172,24 @@ function renderCommentary(ctrl) {
       return h('div.puzzleComment.retry', [
         h('h3.puzzleState', h('strong', i18n('goodMove'))),
         h('span', i18n('butYouCanDoBetter'))
-      ]);
+      ])
     case 'great':
       return h('div.puzzleComment.great', [
         h('h3.puzzleState.withIcon[data-icon=E]', h('strong', i18n('bestMove'))),
         h('span', i18n('keepGoing'))
-      ]);
+      ])
     case 'fail':
       return h('div.puzzleComment.fail', [
         h('h3.puzzleState.withIcon[data-icon=k]', h('strong', i18n('puzzleFailed'))),
         ctrl.data.mode === 'try' ? h('span', i18n('butYouCanKeepTrying')) : null
-      ]);
+      ])
     default:
-      return ctrl.data.comment;
+      return ctrl.data.comment
   }
 }
 
 function renderRatingDiff(diff) {
-  return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff);
+  return h('strong.puzzleRatingDiff', diff > 0 ? '+' + diff : diff)
 }
 
 function renderWin(ctrl, attempt) {
@@ -198,7 +198,7 @@ function renderWin(ctrl, attempt) {
       h('strong', i18n('victory')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ])
-  ]);
+  ])
 }
 
 function renderLoss(ctrl, attempt) {
@@ -207,23 +207,23 @@ function renderLoss(ctrl, attempt) {
       h('strong', i18n('puzzleFailed')),
       attempt ? renderRatingDiff(attempt.userRatingDiff) : null
     ])
-  );
+  )
 }
 
 function renderResult(ctrl) {
   switch (ctrl.data.win) {
     case true:
-      return renderWin(ctrl, null);
+      return renderWin(ctrl, null)
     case false:
-      return renderLoss(ctrl, null);
+      return renderLoss(ctrl, null)
     default:
       switch (ctrl.data.attempt && ctrl.data.attempt.win) {
         case true:
-          return renderWin(ctrl, ctrl.data.attempt);
+          return renderWin(ctrl, ctrl.data.attempt)
         case false:
-          return renderLoss(ctrl, ctrl.data.attempt);
+          return renderLoss(ctrl, ctrl.data.attempt)
       }
   }
-  return null;
+  return null
 }
 

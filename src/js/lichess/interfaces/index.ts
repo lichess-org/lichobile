@@ -35,9 +35,9 @@ export interface Seek {
 }
 
 export interface TimelineEntry {
-  data: any;
-  date: number;
-  type: string;
+  data: any
+  date: number
+  type: string
 }
 
 export interface TimelineData {

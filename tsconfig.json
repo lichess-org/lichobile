@@ -12,7 +12,9 @@
     "jsx": "preserve"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

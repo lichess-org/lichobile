@@ -1,11 +1,11 @@
-import * as merge from 'lodash/merge';
-import chess from './chess';
-import puzzle from './puzzle';
-import { oppositeColor } from '../../utils';
+import * as merge from 'lodash/merge'
+import chess from './chess'
+import puzzle from './puzzle'
+import { oppositeColor } from '../../utils'
 
 export default function(cfg) {
 
-  const sit = chess.make(cfg.puzzle.fen);
+  const sit = chess.make(cfg.puzzle.fen)
 
   const defaults = {
     game: {
@@ -27,9 +27,9 @@ export default function(cfg) {
       turnColor: sit.turn() === 'w' ? 'white' : 'black'
     }],
     chess: sit
-  };
+  }
 
-  cfg.puzzle.initialMove = puzzle.str2move(cfg.puzzle.initialMove);
+  cfg.puzzle.initialMove = puzzle.str2move(cfg.puzzle.initialMove)
 
-  return merge({}, defaults, cfg);
+  return merge({}, defaults, cfg)
 }

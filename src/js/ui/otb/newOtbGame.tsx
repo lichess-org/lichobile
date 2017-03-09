@@ -1,15 +1,15 @@
-import * as h from 'mithril/hyperscript';
-import i18n from '../../i18n';
-import router from '../../router';
-import settings from '../../settings';
-import { specialFenVariants } from '../../lichess/variant';
-import ViewOnlyBoard from '../shared/ViewOnlyBoard';
-import formWidgets from '../shared/form';
-import popupWidget from '../shared/popup';
-import * as helper from '../helper';
-import * as stream from 'mithril/stream';
+import * as h from 'mithril/hyperscript'
+import i18n from '../../i18n'
+import router from '../../router'
+import settings from '../../settings'
+import { specialFenVariants } from '../../lichess/variant'
+import ViewOnlyBoard from '../shared/ViewOnlyBoard'
+import formWidgets from '../shared/form'
+import popupWidget from '../shared/popup'
+import * as helper from '../helper'
+import * as stream from 'mithril/stream'
 
-import { OtbRoundInterface } from '../shared/round';
+import { OtbRoundInterface } from '../shared/round'
 
 export interface NewOtbGameCtrl {
   open: () => void
@@ -21,16 +21,16 @@ export interface NewOtbGameCtrl {
 export default {
 
   controller(root: OtbRoundInterface) {
-    const isOpen = stream(false);
+    const isOpen = stream(false)
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen(true);
+      router.backbutton.stack.push(close)
+      isOpen(true)
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen() === true) router.backbutton.stack.pop();
-      isOpen(false);
+      if (fromBB !== 'backbutton' && isOpen() === true) router.backbutton.stack.pop()
+      isOpen(false)
     }
 
     return {
@@ -38,7 +38,7 @@ export default {
       close,
       isOpen,
       root
-    };
+    }
   },
 
   view: function(ctrl: NewOtbGameCtrl) {
@@ -47,12 +47,12 @@ export default {
         'new_offline_game',
         undefined,
         function() {
-          const availVariants = settings.otb.availableVariants;
+          const availVariants = settings.otb.availableVariants
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !specialFenVariants.includes(i[1])) :
-            availVariants;
+            availVariants
           if (ctrl.root.vm.setupFen && specialFenVariants.includes(settings.otb.variant())) {
-            settings.otb.variant('standard');
+            settings.otb.variant('standard')
           }
           return (
             <div>
@@ -71,7 +71,7 @@ export default {
                         }}
                         oncreate={helper.ontap(() => {
                           if (ctrl.root.vm.setupFen)
-                            router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`);
+                            router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
                         {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
@@ -87,19 +87,19 @@ export default {
                 {i18n('play')}
               </button>
             </div>
-          );
+          )
         },
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/otb');
+            router.set('/otb')
           }
-          ctrl.close();
+          ctrl.close()
         }
-      );
+      )
     }
 
-    return null;
+    return null
   }
-};
+}
 

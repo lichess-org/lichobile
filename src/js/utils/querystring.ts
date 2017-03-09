@@ -3,41 +3,41 @@
 function stringifyPrimitive (v: any) {
   switch (typeof v) {
     case 'string':
-      return v;
+      return v
 
     case 'boolean':
-      return v ? 'true' : 'false';
+      return v ? 'true' : 'false'
 
     case 'number':
-      return isFinite(v) ? v : '';
+      return isFinite(v) ? v : ''
 
     default:
-      return '';
+      return ''
   }
 }
 
-export function buildQueryString(obj: any, sep?: string, eq?:string, name?: string) {
-  sep = sep || '&';
-  eq = eq || '=';
+export function buildQueryString(obj: any, sep?: string, eq?: string, name?: string) {
+  sep = sep || '&'
+  eq = eq || '='
   if (obj === null) {
-    obj = undefined;
+    obj = undefined
   }
 
   if (typeof obj === 'object') {
     return Object.keys(obj).map(function(k) {
-      let ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      let ks = encodeURIComponent(stringifyPrimitive(k)) + eq
       if (Array.isArray(obj[k])) {
         return obj[k].map(function(v: any) {
-          return ks + encodeURIComponent(stringifyPrimitive(v));
-        }).join(sep);
+          return ks + encodeURIComponent(stringifyPrimitive(v))
+        }).join(sep)
       } else {
-        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]))
       }
-    }).join(sep);
+    }).join(sep)
 
   }
 
-  if (!name) return '';
+  if (!name) return ''
   return encodeURIComponent(stringifyPrimitive(name)) + eq +
-         encodeURIComponent(stringifyPrimitive(obj));
-};
+         encodeURIComponent(stringifyPrimitive(obj))
+}

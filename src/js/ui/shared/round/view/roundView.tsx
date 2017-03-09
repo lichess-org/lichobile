@@ -1,42 +1,42 @@
-import * as h from 'mithril/hyperscript';
-import chessground from '../../../../chessground';
-import socket from '../../../../socket';
-import session from '../../../../session';
-import variantApi from '../../../../lichess/variant';
-import * as gameApi from '../../../../lichess/game';
-import { perfTypes } from '../../../../lichess/perfs';
-import gameStatusApi from '../../../../lichess/status';
-import { Player } from '../../../../lichess/interfaces/game';
+import * as h from 'mithril/hyperscript'
+import chessground from '../../../../chessground'
+import socket from '../../../../socket'
+import session from '../../../../session'
+import variantApi from '../../../../lichess/variant'
+import * as gameApi from '../../../../lichess/game'
+import { perfTypes } from '../../../../lichess/perfs'
+import gameStatusApi from '../../../../lichess/status'
+import { Player } from '../../../../lichess/interfaces/game'
 import { User } from '../../../../lichess/interfaces/user'
-import settings from '../../../../settings';
-import * as utils from '../../../../utils';
-import i18n from '../../../../i18n';
-import layout from '../../../layout';
-import * as helper from '../../../helper';
-import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common';
-import Board from '../../../shared/Board';
-import popupWidget from '../../../shared/popup';
-import formWidgets from '../../../shared/form';
-import Clock from '../clock/clockView';
+import settings from '../../../../settings'
+import * as utils from '../../../../utils'
+import i18n from '../../../../i18n'
+import layout from '../../../layout'
+import * as helper from '../../../helper'
+import { gameTitle, backButton, menuButton, loader, headerBtns, miniUser } from '../../../shared/common'
+import Board from '../../../shared/Board'
+import popupWidget from '../../../shared/popup'
+import formWidgets from '../../../shared/form'
+import Clock from '../clock/clockView'
 import ClockCtrl from '../clock/ClockCtrl'
-import promotion from '../promotion';
-import gameButton from './button';
-import { chatView } from '../chat';
-import { notesView } from '../notes';
-import CrazyPocket from '../crazy/CrazyPocket';
-import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView';
-import { renderTable as renderReplayTable } from './replay';
-import OnlineRound from '../OnlineRound';
-import { Position, Material } from '../';
+import promotion from '../promotion'
+import gameButton from './button'
+import { chatView } from '../chat'
+import { notesView } from '../notes'
+import CrazyPocket from '../crazy/CrazyPocket'
+import { view as renderCorrespondenceClock } from '../correspondenceClock/corresClockView'
+import { renderTable as renderReplayTable } from './replay'
+import OnlineRound from '../OnlineRound'
+import { Position, Material } from '../'
 
 export default function view(ctrl: OnlineRound) {
-  const isPortrait = helper.isPortrait();
+  const isPortrait = helper.isPortrait()
 
   return layout.board(
     () => renderHeader(ctrl),
     () => renderContent(ctrl, isPortrait),
     () => overlay(ctrl)
-  );
+  )
 }
 
 function overlay(ctrl: OnlineRound) {
@@ -48,27 +48,27 @@ function overlay(ctrl: OnlineRound) {
     renderSubmitMovePopup(ctrl),
     miniUser(ctrl.data.player.user, ctrl.vm.miniUser.player.data, ctrl.vm.miniUser.player.showing, () => ctrl.closeUserPopup('player')),
     miniUser(ctrl.data.opponent.user, ctrl.vm.miniUser.opponent.data, ctrl.vm.miniUser.opponent.showing, () => ctrl.closeUserPopup('opponent'))
-  ];
+  ]
 }
 
 export function renderMaterial(material: Material) {
-  const children: Mithril.Children = [];
+  const children: Mithril.Children = []
   for (let role in material) {
-    const piece = <piece className={role} />;
-    const count = material[role];
-    const content: Array<Mithril.DOMNode> = [];
-    for (let i = 0; i < count; i++) content.push(piece);
-    children.push(<div className="tomb" key={role}>{content}</div>);
+    const piece = <piece className={role} />
+    const count = material[role]
+    const content: Array<Mithril.DOMNode> = []
+    for (let i = 0; i < count; i++) content.push(piece)
+    children.push(<div className="tomb" key={role}>{content}</div>)
   }
-  return children;
+  return children
 }
 
 function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
   if (ctrl.data.tournament) {
-    const el = vnode.dom as HTMLElement;
+    const el = vnode.dom as HTMLElement
     el.textContent =
-      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • ';
-    ctrl.vm.tClockEl = el;
+      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • '
+    ctrl.vm.tClockEl = el
   }
 }
 
@@ -102,13 +102,13 @@ function renderTitle(ctrl: OnlineRound) {
           </h2> : null
         }
       </div>
-    );
+    )
   } else {
     return (
       <div key="reconnectingTitle" className="main_header_title reconnecting">
         {loader}
       </div>
-    );
+    )
   }
 }
 
@@ -143,10 +143,10 @@ function renderHeader(ctrl: OnlineRound) {
 }
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait);
-  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait);
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game');
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data)
+  const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
+  const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
@@ -155,9 +155,9 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
     isPortrait,
     alert: !!ctrl.data.tournament && !ctrl.data.player.spectator && gameApi.nbMoves(ctrl.data, ctrl.data.player.color) === 0 ?
       i18n('youHaveNbSecondsToMakeYourFirstMove', ctrl.data.tournament.nbSecondsForFirstMove) : undefined
-  });
+  })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
@@ -165,7 +165,7 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
       board,
       player,
       renderGameActionsBar(ctrl)
-    ]);
+    ])
   } else {
     return h.fragment({ key: orientationKey }, [
       board,
@@ -177,13 +177,13 @@ function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
         </section>
         {renderGameActionsBar(ctrl)}
       </section>
-    ]);
+    ])
   }
 }
 
 function getChecksCount(ctrl: OnlineRound, color: Color) {
-  const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player;
-  return player.checks;
+  const player = color === ctrl.data.player.color ? ctrl.data.opponent : ctrl.data.player
+  return player.checks
 }
 
 function renderSubmitMovePopup(ctrl: OnlineRound) {
@@ -194,23 +194,23 @@ function renderSubmitMovePopup(ctrl: OnlineRound) {
       {gameButton.submitMove(ctrl)}
       </div>
       </div>
-    );
+    )
   }
 
-  return null;
+  return null
 }
 
 function userInfos(user: User, player: Player, playerName: string, position: Position) {
-  let title: string;
+  let title: string
   if (user) {
-    let onlineStatus = user.online ? 'connected to lichess' : 'offline';
-    let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game';
-    let engine = position === 'opponent' && user.engine ? i18n('thisPlayerUsesChessComputerAssistance') + '; ' : '';
-    let booster = position === 'opponent' && user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') + '; ' : '';
-    title = `${playerName}: ${engine}${booster}${onlineStatus}; ${onGameStatus}`;
+    let onlineStatus = user.online ? 'connected to lichess' : 'offline'
+    let onGameStatus = player.onGame ? 'currently on this game' : 'currently not on this game'
+    let engine = position === 'opponent' && user.engine ? i18n('thisPlayerUsesChessComputerAssistance') + '; ' : ''
+    let booster = position === 'opponent' && user.booster ? i18n('thisPlayerArtificiallyIncreasesTheirRating') + '; ' : ''
+    title = `${playerName}: ${engine}${booster}${onlineStatus}; ${onGameStatus}`
   } else
-    title = playerName;
-  window.plugins.toast.show(title, 'short', 'center');
+    title = playerName
+  window.plugins.toast.show(title, 'short', 'center')
 }
 
 function renderClock(ctrl: ClockCtrl, color: Color, isBerserk: boolean, runningColor?: Color) {
@@ -223,19 +223,19 @@ function renderClock(ctrl: ClockCtrl, color: Color, isBerserk: boolean, runningC
 }
 
 function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean, isCrazy: boolean) {
-  const user = player.user;
-  const playerName = utils.playerName(player, !isPortrait);
-  const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop;
+  const user = player.user
+  const playerName = utils.playerName(player, !isPortrait)
+  const togglePopup = user ? () => ctrl.openUserPopup(position, user.id) : utils.noop
   const vConf = user ?
     helper.ontap(togglePopup, () => userInfos(user, player, playerName, position)) :
-    helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'));
+    helper.ontap(utils.noop, () => window.plugins.toast.show(playerName, 'short', 'center'))
 
-  const checksNb = getChecksCount(ctrl, player.color);
+  const checksNb = getChecksCount(ctrl, player.color)
 
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
 
   const tournamentRank = ctrl.data.tournament && ctrl.data.tournament.ranks ?
-    '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null;
+    '#' + ctrl.data.tournament.ranks[player.color] + ' ' : null
 
   return (
     <div className={'antagonistInfos' + (isCrazy ? ' crazy' : '')} oncreate={vConf}>
@@ -276,13 +276,13 @@ function renderAntagonistInfo(ctrl: OnlineRound, player: Player, material: Mater
           ) : null
       }
     </div>
-  );
+  )
 }
 
 function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, position: Position, isPortrait: boolean) {
   const runningColor = ctrl.isClockRunning() ? ctrl.data.game.player : undefined
-  const step = ctrl.plyStep(ctrl.vm.ply);
-  const isCrazy = !!step.crazy;
+  const step = ctrl.plyStep(ctrl.vm.ply)
+  const isCrazy = !!step.crazy
 
   return (
     <section className={'playTable' + (isCrazy ? ' crazy' : '')}>
@@ -303,18 +303,18 @@ function renderPlayTable(ctrl: OnlineRound, player: Player, material: Material, 
           ) : null
       }
     </section>
-  );
+  )
 }
 
 function tvChannelSelector(ctrl: OnlineRound) {
-  const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]]);
-  channels.unshift(['Top rated', 'best']);
-  channels.push(['Computer', 'computer']);
+  const channels = perfTypes.filter(e => e[0] !== 'correspondence').map(e => [e[1], e[0]])
+  channels.unshift(['Top rated', 'best'])
+  channels.push(['Computer', 'computer'])
 
   return h('div.action', h('div.select_input',
     formWidgets.renderSelect('TV channel', 'tvChannel', channels, settings.tv.channel,
       false, ctrl.onTVChannelChange)
-  ));
+  ))
 }
 
 function renderGameRunningActions(ctrl: OnlineRound) {
@@ -324,9 +324,9 @@ function renderGameRunningActions(ctrl: OnlineRound) {
       ctrl.data.tv && ctrl.data.player.user ? gameButton.userTVLink(ctrl.data.player.user) : null,
       ctrl.data.tv && ctrl.data.opponent.user ? gameButton.userTVLink(ctrl.data.opponent.user) : null,
       ctrl.data.tv ? tvChannelSelector(ctrl) : null
-    ];
+    ]
 
-    return <div className="game_controls">{controls}</div>;
+    return <div className="game_controls">{controls}</div>
   }
 
   const answerButtons = [
@@ -334,7 +334,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
     gameButton.answerOpponentDrawOffer(ctrl),
     gameButton.cancelTakebackProposition(ctrl),
     gameButton.answerOpponentTakebackProposition(ctrl)
-  ];
+  ]
 
   const gameControls = gameButton.forceResign(ctrl) || [
     gameButton.standard(ctrl, gameApi.takebackable, 'i', 'proposeATakeback', 'takeback-yes'),
@@ -343,7 +343,7 @@ function renderGameRunningActions(ctrl: OnlineRound) {
     gameButton.resign(ctrl),
     gameButton.resignConfirmation(ctrl),
     gameButton.goBerserk(ctrl)
-  ];
+  ]
 
   return (
     <div className="game_controls">
@@ -354,19 +354,19 @@ function renderGameRunningActions(ctrl: OnlineRound) {
       {gameControls}
       {answerButtons ? <div className="answers">{answerButtons}</div> : null}
     </div>
-  );
+  )
 }
 
 function renderGameEndedActions(ctrl: OnlineRound) {
-  const result = gameApi.result(ctrl.data);
-  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+  const result = gameApi.result(ctrl.data)
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
-    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+    (winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
   const resultDom = gameStatusApi.aborted(ctrl.data) ? [] : [
     h('strong', result), h('br')
-  ];
-  resultDom.push(h('em.resultStatus', status));
-  let buttons: Mithril.Children;
+  ]
+  resultDom.push(h('em.resultStatus', status))
+  let buttons: Mithril.Children
   const tournamentId = ctrl.data.game.tournamentId
   if (tournamentId) {
     if (ctrl.data.player.spectator) {
@@ -375,7 +375,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
-      ];
+      ]
     }
     else {
       buttons = [
@@ -384,7 +384,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         gameButton.shareLink(ctrl),
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl)
-      ];
+      ]
     }
   }
   else {
@@ -396,7 +396,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         gameButton.sharePGN(ctrl),
         gameButton.analysisBoard(ctrl),
         ctrl.data.tv ? tvChannelSelector(ctrl) : null
-      ];
+      ]
     }
     else {
       buttons = [
@@ -407,7 +407,7 @@ function renderGameEndedActions(ctrl: OnlineRound) {
         gameButton.cancelRematch(ctrl),
         gameButton.rematch(ctrl),
         gameButton.analysisBoard(ctrl)
-      ];
+      ]
     }
   }
   return (
@@ -415,25 +415,25 @@ function renderGameEndedActions(ctrl: OnlineRound) {
       <div className="result">{resultDom}</div>
       <div className="control buttons">{buttons}</div>
     </div>
-  );
+  )
 }
 
 function gameInfos(ctrl: OnlineRound) {
-  const data = ctrl.data;
-  const time = gameApi.time(data);
-  const mode = data.game.rated ? i18n('rated') : i18n('casual');
-  const icon = utils.gameIcon(data.game.perf);
+  const data = ctrl.data
+  const time = gameApi.time(data)
+  const mode = data.game.rated ? i18n('rated') : i18n('casual')
+  const icon = utils.gameIcon(data.game.perf)
   const variant = h('span.variant', {
     oncreate: helper.ontap(
       () => {
-        const link = variantApi(data.game.variant.key).link;
+        const link = variantApi(data.game.variant.key).link
         if (link)
-          window.open(link, '_blank');
+          window.open(link, '_blank')
       },
       () => window.plugins.toast.show(data.game.variant.title!, 'short', 'center')
     )
-  }, data.game.variant.name);
-  const infos = [time + ' • ', variant, h('br'), mode];
+  }, data.game.variant.name)
+  const infos = [time + ' • ', variant, h('br'), mode]
   return [
     h('div.icon-game', {
       'data-icon': icon ? icon : ''
@@ -446,7 +446,7 @@ function gameInfos(ctrl: OnlineRound) {
       ),
       'data-icon': data.bookmarked ? 't' : 's'
     }) : null
-  ];
+  ]
 }
 
 function renderGamePopup(ctrl: OnlineRound) {
@@ -457,14 +457,14 @@ function renderGamePopup(ctrl: OnlineRound) {
       () => renderGameRunningActions(ctrl) : () => renderGameEndedActions(ctrl),
     ctrl.vm.showingActions,
     ctrl.hideActions
-  );
+  )
 }
 
 function renderGameActionsBar(ctrl: OnlineRound) {
   const answerRequired = ctrl.data.opponent.proposingTakeback ||
     ctrl.data.opponent.offeringDraw ||
     gameApi.forceResignable(ctrl.data) ||
-    ctrl.data.opponent.offeringRematch;
+    ctrl.data.opponent.offeringRematch
 
   const gmClass = (ctrl.data.opponent.proposingTakeback ? [
     'fa',
@@ -475,17 +475,17 @@ function renderGameActionsBar(ctrl: OnlineRound) {
   ]).concat([
     'action_bar_button',
     answerRequired ? 'glow' : ''
-  ]).join(' ');
+  ]).join(' ')
 
-  const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null;
+  const gmDataIcon = ctrl.data.opponent.offeringDraw ? '2' : null
   const gmButton = gmDataIcon ?
     <button className={gmClass} data-icon={gmDataIcon} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} /> :
-    <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />;
+    <button className={gmClass} key="gameMenu" oncreate={helper.ontap(ctrl.showActions)} />
 
   const chatClass = [
     'action_bar_button',
     ctrl.chat && ctrl.chat.unread ? 'glow' : ''
-  ].join(' ');
+  ].join(' ')
 
   return (
     <section className="actions_bar">
@@ -500,5 +500,5 @@ function renderGameActionsBar(ctrl: OnlineRound) {
       {gameButton.backward(ctrl)}
       {gameButton.forward(ctrl)}
     </section>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import settings from '../../settings';
-import formWidgets from '../shared/form';
-import * as utils from '../../utils';
-import popupWidget from '../shared/popup';
-import i18n from '../../i18n';
-import router from '../../router';
-import { handleXhrError } from '../../utils';
-import { TournamentListState } from './interfaces';
+import settings from '../../settings'
+import formWidgets from '../shared/form'
+import * as utils from '../../utils'
+import popupWidget from '../shared/popup'
+import i18n from '../../i18n'
+import router from '../../router'
+import { handleXhrError } from '../../utils'
+import { TournamentListState } from './interfaces'
 import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
-import * as xhr from './tournamentXhr';
+import * as xhr from './tournamentXhr'
 
-let isOpen = false;
+let isOpen = false
 
 export default {
   open,
@@ -21,18 +21,18 @@ export default {
       () => renderForm(ctrl),
       isOpen,
       close
-    );
+    )
   }
-};
+}
 
 function open() {
-  router.backbutton.stack.push(close);
-  isOpen = true;
+  router.backbutton.stack.push(close)
+  isOpen = true
 }
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-  isOpen = false;
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+  isOpen = false
 }
 
 
@@ -40,8 +40,8 @@ function renderForm(ctrl: TournamentListState) {
   return (
     <form id="tournamentCreateForm"
     onsubmit={function(e: Event) {
-      e.preventDefault();
-      return create(e.target as HTMLFormElement);
+      e.preventDefault()
+      return create(e.target as HTMLFormElement)
     }}>
       <fieldset>
         <div className="select_input">
@@ -101,25 +101,25 @@ function renderForm(ctrl: TournamentListState) {
         {i18n('createANewTournament')}
       </button>
     </form>
-  );
+  )
 }
 
 function create(form: HTMLFormElement) {
-  const elements: HTMLCollection = form[0].elements as HTMLCollection;
-  const variant = (elements[0] as HTMLInputElement).value;
-  const position = settings.tournament.variant() === '1' ? (elements[1] as HTMLInputElement).value : '---';
-  const mode = (elements[2] as HTMLInputElement).value;
-  const time = (elements[3] as HTMLTextAreaElement).value;
-  const increment = (elements[4] as HTMLTextAreaElement).value;
-  const duration = (elements[5] as HTMLTextAreaElement).value;
-  const timeToStart = (elements[6] as HTMLTextAreaElement).value;
-  const isPrivate = (elements[7] as HTMLInputElement).checked ? (elements[7] as HTMLInputElement).value : '';
-  const password = isPrivate ? (elements[8] as HTMLInputElement).value : '';
+  const elements: HTMLCollection = form[0].elements as HTMLCollection
+  const variant = (elements[0] as HTMLInputElement).value
+  const position = settings.tournament.variant() === '1' ? (elements[1] as HTMLInputElement).value : '---'
+  const mode = (elements[2] as HTMLInputElement).value
+  const time = (elements[3] as HTMLTextAreaElement).value
+  const increment = (elements[4] as HTMLTextAreaElement).value
+  const duration = (elements[5] as HTMLTextAreaElement).value
+  const timeToStart = (elements[6] as HTMLTextAreaElement).value
+  const isPrivate = (elements[7] as HTMLInputElement).checked ? (elements[7] as HTMLInputElement).value : ''
+  const password = isPrivate ? (elements[8] as HTMLInputElement).value : ''
 
   xhr.create(variant, position, mode, time, increment, duration, timeToStart, isPrivate, password)
   .then((data: TournamentCreateResponse) => {
-    close();
+    close()
     router.set('/tournament/' + data.id)
   })
-  .catch(handleXhrError);
+  .catch(handleXhrError)
 }

@@ -1,10 +1,10 @@
-import { standardFen } from '../utils/fen';
+import { standardFen } from '../utils/fen'
 
 interface DocVariant {
   id: number
-  name: string;
-  shortName?: string;
-  tinyName?: string;
+  name: string
+  shortName?: string
+  tinyName?: string
   link?: string
   alert?: string
   title: string
@@ -97,14 +97,14 @@ const variantMap: {[key: string]: DocVariant} = {
     title: 'Captured pieces can be dropped back on the board instead of moving a piece.',
     initialFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/ w KQkq - 0 1'
   }
-};
+}
 
 export default function getVariant(key: VariantKey): DocVariant {
-  return variantMap[key];
+  return variantMap[key]
 }
 
 export function getLichessVariant(key: VariantKey): Variant {
-  const dv = variantMap[key];
+  const dv = variantMap[key]
   return {
     key,
     name: dv.name,
@@ -114,8 +114,8 @@ export function getLichessVariant(key: VariantKey): Variant {
 }
 
 export function getInitialFen(key: VariantKey): string {
-  const v = variantMap[key];
-  return v.initialFen || standardFen;
+  const v = variantMap[key]
+  return v.initialFen || standardFen
 }
 
 export const specialFenVariants = ['crazyhouse', 'threeCheck']

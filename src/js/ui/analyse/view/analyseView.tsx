@@ -1,28 +1,28 @@
-import * as h from 'mithril/hyperscript';
-import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils';
-import * as chessFormat from '../../../utils/chessFormat';
-import i18n from '../../../i18n';
-import router from '../../../router';
-import * as gameApi from '../../../lichess/game';
-import gameStatusApi from '../../../lichess/status';
-import continuePopup from '../../shared/continuePopup';
-import popupWidget from '../../shared/popup';
-import { view as renderPromotion } from '../../shared/offlineRound/promotion';
-import Board from '../../shared/Board';
-import ViewOnlyBoard from '../../shared/ViewOnlyBoard';
-import { Shape } from '../../shared/BoardBrush';
-import * as helper from '../../helper';
-import { notesView } from '../../shared/round/notes';
-import { formatClockTime } from '../../shared/round/clock/clockView';
-import menu from '../menu';
-import analyseSettings from '../analyseSettings';
-import { renderEval, isSynthetic } from '../util';
-import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
-import explorerView from '../explorer/explorerView';
-import evalSummary from '../evalSummaryPopup';
-import treePath from '../path';
-import { renderTree } from './treeView';
-import settings from '../../../settings';
+import * as h from 'mithril/hyperscript'
+import { hasNetwork, playerName, oppositeColor, noNull, gameIcon, flatten, noop } from '../../../utils'
+import * as chessFormat from '../../../utils/chessFormat'
+import i18n from '../../../i18n'
+import router from '../../../router'
+import * as gameApi from '../../../lichess/game'
+import gameStatusApi from '../../../lichess/status'
+import continuePopup from '../../shared/continuePopup'
+import popupWidget from '../../shared/popup'
+import { view as renderPromotion } from '../../shared/offlineRound/promotion'
+import Board from '../../shared/Board'
+import ViewOnlyBoard from '../../shared/ViewOnlyBoard'
+import { Shape } from '../../shared/BoardBrush'
+import * as helper from '../../helper'
+import { notesView } from '../../shared/round/notes'
+import { formatClockTime } from '../../shared/round/clock/clockView'
+import menu from '../menu'
+import analyseSettings from '../analyseSettings'
+import { renderEval, isSynthetic } from '../util'
+import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
+import explorerView from '../explorer/explorerView'
+import evalSummary from '../evalSummaryPopup'
+import treePath from '../path'
+import { renderTree } from './treeView'
+import settings from '../../../settings'
 
 import AnalyseCtrl from '../AnalyseCtrl'
 
@@ -35,40 +35,40 @@ export function overlay(ctrl: AnalyseCtrl) {
     ctrl.evalSummary ? evalSummary.view(ctrl.evalSummary) : null,
     continuePopup.view(ctrl.continuePopup),
     renderVariationMenu(ctrl)
-  ].filter(noNull);
+  ].filter(noNull)
 }
 
 export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen?: string) {
   return h('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
-  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }));
+  }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))
 }
 
 
 export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: ClientRect) {
-  const player = ctrl.data.game.player;
-  const ceval = ctrl.vm.step && ctrl.vm.step.ceval;
-  const rEval = ctrl.vm.step && ctrl.vm.step.rEval;
+  const player = ctrl.data.game.player
+  const ceval = ctrl.vm.step && ctrl.vm.step.ceval
+  const rEval = ctrl.vm.step && ctrl.vm.step.rEval
 
   let board: Mithril.BaseNode
 
   let nextBest: string | undefined
-  let curBestShape: Shape[] = [], pastBestShape: Shape[] = [];
+  let curBestShape: Shape[] = [], pastBestShape: Shape[] = []
   if (!ctrl.explorer.enabled() && ctrl.ceval.enabled() && ctrl.vm.showBestMove) {
-    nextBest = ctrl.nextStepBest();
+    nextBest = ctrl.nextStepBest()
     curBestShape = nextBest ? moveOrDropShape(nextBest, 'paleBlue', player) :
     ceval && ceval.best ? moveOrDropShape(ceval.best, 'paleBlue', player) :
-    [];
+    []
   }
   if (ctrl.vm.showComments) {
     pastBestShape = rEval && rEval.best ?
-    moveOrDropShape(rEval.best, 'paleGreen', player) : [];
+    moveOrDropShape(rEval.best, 'paleGreen', player) : []
   }
 
-  const nextStep = ctrl.explorer.enabled() && ctrl.vm.step && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1);
+  const nextStep = ctrl.explorer.enabled() && ctrl.vm.step && ctrl.analyse.getStepAtPly(ctrl.vm.step.ply + 1)
 
   const nextMoveShape: Shape[] = nextStep && nextStep.uci ?
-  moveOrDropShape(nextStep.uci, 'palePurple', player) : [];
+  moveOrDropShape(nextStep.uci, 'palePurple', player) : []
 
   const shapes: Shape[] = nextMoveShape.length > 0 ?
   nextMoveShape : flatten([pastBestShape, curBestShape].filter(noNull))
@@ -92,7 +92,7 @@ export function renderContent(ctrl: AnalyseCtrl, isPortrait: boolean, bounds: Cl
       }
       {renderActionsBar(ctrl)}
     </div>
-  ]);
+  ])
 }
 
 function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
@@ -111,7 +111,7 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
         },
         brush
       }
-    ];
+    ]
   } else {
     const move = chessFormat.uciToMove(uci)
     const prom = chessFormat.uciToProm(uci)
@@ -133,22 +133,22 @@ function moveOrDropShape(uci: string, brush: string, player: Color): Shape[] {
 }
 
 function getMoveEl(e: Event) {
-  const target = (e.target as HTMLElement);
+  const target = (e.target as HTMLElement)
   return target.tagName === 'MOVE' ? target :
-    helper.findParentBySelector(target, 'move');
+    helper.findParentBySelector(target, 'move')
 }
 
 interface ReplayDataSet extends DOMStringMap {
   path: string
 }
 function onReplayTap(ctrl: AnalyseCtrl, e: Event) {
-  const el = getMoveEl(e);
+  const el = getMoveEl(e)
   if (el && (el.dataset as ReplayDataSet).path) {
-    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path));
+    ctrl.jump(treePath.read((el.dataset as ReplayDataSet).path))
   }
 }
 
-let pieceNotation: boolean;
+let pieceNotation: boolean
 const Replay: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
   onbeforeupdate({ attrs }) {
     return !attrs.ctrl.vm.replaying
@@ -164,7 +164,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
         { renderOpeningBox(ctrl) }
         { renderTree(ctrl, ctrl.analyse.tree) }
       </div>
-    );
+    )
   }
 }
 
@@ -177,7 +177,7 @@ function renderOpeningBox(ctrl: AnalyseCtrl) {
   }, [
     h('strong', opening.eco),
     ' ' + opening.name
-  ]);
+  ])
 }
 
 const spinnerPearl = <div className="spinner fa fa-hourglass-half"></div>
@@ -192,10 +192,10 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
 
     const { rEval, ceval } = step
     const fav = rEval || ceval
-    let pearl: Mithril.Children, percent: number;
+    let pearl: Mithril.Children, percent: number
 
     if (fav && fav.cp !== undefined) {
-      pearl = renderEval(fav.cp);
+      pearl = renderEval(fav.cp)
       percent = ceval ?
         Math.min(100, Math.round(100 * ceval.depth / ceval.maxDepth)) : 0
     }
@@ -227,10 +227,10 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
           onupdate={({ dom, state }: Mithril.DOMNode) => {
             if (state.percent > percent) {
               // remove el to avoid downward animation
-              const p = dom.parentNode;
+              const p = dom.parentNode
               if (p) {
-                p.removeChild(dom);
-                p.appendChild(dom);
+                p.removeChild(dom)
+                p.appendChild(dom)
               }
             }
             state.percent = percent
@@ -245,7 +245,7 @@ const EvalBox: Mithril.Component<{ ctrl: AnalyseCtrl }, {}> = {
         </div> : null
         }
       </div>
-    );
+    )
   }
 }
 
@@ -260,7 +260,7 @@ function renderAnalyseTable(ctrl: AnalyseCtrl, isPortrait: boolean) {
         {h(Replay, { ctrl })}
       </div>
     </div>
-  );
+  )
 }
 
 function renderInfosBox(ctrl: AnalyseCtrl, isPortrait: boolean) {
@@ -277,15 +277,15 @@ function renderInfosBox(ctrl: AnalyseCtrl, isPortrait: boolean) {
         }
       </div>
     </div>
-  );
+  )
 }
 
 function renderVariantSelector(ctrl: AnalyseCtrl) {
-  const variant = ctrl.data.game.variant.key;
-  const icon = gameIcon(variant);
-  let availVariants = settings.analyse.availableVariants;
+  const variant = ctrl.data.game.variant.key
+  const icon = gameIcon(variant)
+  let availVariants = settings.analyse.availableVariants
   if (variant === 'fromPosition') {
-    availVariants = availVariants.concat([['From position', 'fromPosition']]);
+    availVariants = availVariants.concat([['From position', 'fromPosition']])
   }
   return (
     <div className="select_input analyse_variant_selector">
@@ -293,12 +293,12 @@ function renderVariantSelector(ctrl: AnalyseCtrl) {
         <i data-icon={icon} />
       </label>
       <select id="variant_selector" value={variant} onchange={(e: Event) => {
-        const val = (e.target as HTMLSelectElement).value;
-        settings.analyse.syntheticVariant(val);
-        router.set(`/analyse/variant/${val}`);
+        const val = (e.target as HTMLSelectElement).value
+        settings.analyse.syntheticVariant(val)
+        router.set(`/analyse/variant/${val}`)
       }}>
         {availVariants.map(v => {
-          return <option key={v[1]} value={v[1]}>{v[0]}</option>;
+          return <option key={v[1]} value={v[1]}>{v[0]}</option>
         })}
       </select>
     </div>
@@ -306,13 +306,13 @@ function renderVariantSelector(ctrl: AnalyseCtrl) {
 }
 
 function getChecksCount(ctrl: AnalyseCtrl, color: Color) {
-  const step = ctrl.vm.step;
-  return step && step.checkCount && step.checkCount[oppositeColor(color)];
+  const step = ctrl.vm.step
+  return step && step.checkCount && step.checkCount[oppositeColor(color)]
 }
 
 function renderSyntheticPockets(ctrl: AnalyseCtrl) {
-  const player = ctrl.data.player;
-  const opponent = ctrl.data.opponent;
+  const player = ctrl.data.player
+  const opponent = ctrl.data.opponent
   return (
     <div className="analyse-gameInfosWrapper synthetic">
       <div className="analyseOpponent">
@@ -340,13 +340,13 @@ function renderSyntheticPockets(ctrl: AnalyseCtrl) {
         }) : null}
       </div>
     </div>
-  );
+  )
 }
 
 function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
-  const player = ctrl.data.player;
-  const opponent = ctrl.data.opponent;
-  if (!player || !opponent) return null;
+  const player = ctrl.data.player
+  const opponent = ctrl.data.opponent
+  if (!player || !opponent) return null
 
   const isCrazy = ctrl.data.game.variant.key === 'crazyhouse'
 
@@ -404,18 +404,18 @@ function renderGameInfos(ctrl: AnalyseCtrl, isPortrait: boolean) {
       </div>
       {gameStatusApi.finished(ctrl.data) ? renderStatus(ctrl) : null}
     </div>
-  );
+  )
 }
 
 function renderStatus(ctrl: AnalyseCtrl) {
-  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner);
+  const winner = gameApi.getPlayer(ctrl.data, ctrl.data.game.winner)
   return (
     <div key="gameStatus" className="status">
       {gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key)}
 
       {winner ? '. ' + i18n(winner.color === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : null}
     </div>
-  );
+  )
 }
 
 function renderVariationMenuContent(ctrl: AnalyseCtrl) {
@@ -424,7 +424,7 @@ function renderVariationMenuContent(ctrl: AnalyseCtrl) {
   const step = ctrl.analyse.getStepAtPly(path[0].ply)
   if (!step) return null
 
-  const promotable = isSynthetic(ctrl.data) || !step.fixed;
+  const promotable = isSynthetic(ctrl.data) || !step.fixed
 
   return h('div.variationMenu', [
     h('button', {
@@ -437,7 +437,7 @@ function renderVariationMenuContent(ctrl: AnalyseCtrl) {
       'data-icon': 'E',
       oncreate: helper.ontap(() => ctrl.promoteVariation(path))
     }, 'Promote to main line') : null
-  ]);
+  ])
 }
 
 function renderVariationMenu(ctrl: AnalyseCtrl) {
@@ -457,7 +457,7 @@ function renderActionsBar(ctrl: AnalyseCtrl) {
     'fa',
     'fa-book',
     ctrl.explorer && ctrl.explorer.enabled() ? 'highlight' : ''
-  ].join(' ');
+  ].join(' ')
 
   return (
     <section className="actions_bar analyse_actions_bar">
@@ -496,5 +496,5 @@ function renderActionsBar(ctrl: AnalyseCtrl) {
         oncreate={helper.ontap(ctrl.stopff, undefined, ctrl.fastforward)}
       />
     </section>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import session from '../../session';
-import redraw from '../../utils/redraw';
-import * as xhr from './userXhr';
-import router from '../../router';
-import * as utils from '../../utils';
-import challengeForm from '../challengeForm';
-import * as stream from 'mithril/stream';
-import { UserFullProfile } from '../../lichess/interfaces/user';
+import session from '../../session'
+import redraw from '../../utils/redraw'
+import * as xhr from './userXhr'
+import router from '../../router'
+import * as utils from '../../utils'
+import challengeForm from '../challengeForm'
+import * as stream from 'mithril/stream'
+import { UserFullProfile } from '../../lichess/interfaces/user'
 
 export interface UserCtrl {
   user: Mithril.Stream<UserFullProfile | undefined>
@@ -39,13 +39,13 @@ export default function oninit(userId: string) {
     isMe: () => session.getUserId() === userId,
     toggleFollowing() {
       const u = user()
-      if (u && u.following) xhr.unfollow(u.id).then(setNewUserState);
-      else if (u) xhr.follow(u.id).then(setNewUserState);
+      if (u && u.following) xhr.unfollow(u.id).then(setNewUserState)
+      else if (u) xhr.follow(u.id).then(setNewUserState)
     },
     toggleBlocking() {
       const u = user()
-      if (u && u.blocking) xhr.unblock(u.id).then(setNewUserState);
-      else if (u) xhr.block(u.id).then(setNewUserState);
+      if (u && u.blocking) xhr.unblock(u.id).then(setNewUserState)
+      else if (u) xhr.block(u.id).then(setNewUserState)
     },
     goToGames() {
       const u = user()

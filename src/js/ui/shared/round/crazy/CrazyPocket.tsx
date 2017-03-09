@@ -1,11 +1,11 @@
-import settings from '../../../../settings';
-import chessgroundDrag from '../../../../chessground/drag';
+import settings from '../../../../settings'
+import chessgroundDrag from '../../../../chessground/drag'
 import { Pockets } from '../../../../lichess/interfaces/game'
 
 import { BoardInterface } from '../'
-import crazyDrag from './crazyDrag';
+import crazyDrag from './crazyDrag'
 
-const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen'];
+const pieceRoles = ['pawn', 'knight', 'bishop', 'rook', 'queen']
 
 export interface Attrs {
   ctrl: BoardInterface
@@ -43,14 +43,14 @@ const CrazyPocket: Mithril.Component<Attrs, State> = {
   },
 
   view(vnode) {
-    const { crazyData, position, color, customPieceTheme } = vnode.attrs;
+    const { crazyData, position, color, customPieceTheme } = vnode.attrs
 
-    const pocket = crazyData.pockets[color === 'white' ? 0 : 1];
+    const pocket = crazyData.pockets[color === 'white' ? 0 : 1]
     const className = [
       customPieceTheme || settings.general.theme.piece(),
       'pocket',
       position
-    ].join(' ');
+    ].join(' ')
 
     return (
       <div className={className} oncreate={this.pocketOnCreate} onremove={this.pocketOnRemove}>
@@ -63,7 +63,7 @@ const CrazyPocket: Mithril.Component<Attrs, State> = {
           />
         )}
       </div>
-    );
+    )
   }
 }
 

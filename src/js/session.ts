@@ -4,16 +4,16 @@ import * as pick from 'lodash/pick'
 import * as mapValues from 'lodash/mapValues'
 import * as mapKeys from 'lodash/mapKeys'
 import * as throttle from 'lodash/throttle'
-import redraw from './utils/redraw';
-import { fetchJSON, fetchText } from './http';
-import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils';
-import i18n from './i18n';
-import settings from './settings';
-import friendsApi from './lichess/friends';
-import challengesApi from './lichess/challenges';
+import redraw from './utils/redraw'
+import { fetchJSON, fetchText } from './http'
+import { hasNetwork, handleXhrError, serializeQueryParameters } from './utils'
+import i18n from './i18n'
+import settings from './settings'
+import friendsApi from './lichess/friends'
+import challengesApi from './lichess/challenges'
 import { SettingsProp } from './settings'
 
-import { LobbyData, NowPlayingGame } from './lichess/interfaces';
+import { LobbyData, NowPlayingGame } from './lichess/interfaces'
 
 type PrefValue = number | string | boolean
 interface Prefs {
@@ -54,21 +54,21 @@ export interface Session {
 let session: Session | undefined
 
 function isConnected() {
-  return !!session;
+  return !!session
 }
 
 function getSession() {
-  return session;
+  return session
 }
 
 function getUserId() {
-  return session && session.id;
+  return session && session.id
 }
 
 function nowPlaying() {
-  let np = session && session.nowPlaying || [];
+  let np = session && session.nowPlaying || []
   return np.filter(e => {
-    return settings.game.supportedVariants.indexOf(e.variant.key) !== -1;
+    return settings.game.supportedVariants.indexOf(e.variant.key) !== -1
   })
 }
 
@@ -82,25 +82,25 @@ function isShadowban(): boolean {
 
 function myTurnGames() {
   return nowPlaying().filter(e => {
-    return e.isMyTurn;
-  });
+    return e.isMyTurn
+  })
 }
 
 function toggleKidMode() {
   return fetchText('/account/kidConfirm', {
     method: 'POST'
-  });
+  })
 }
 
 function savePreferences() {
 
   function numValue(v: boolean | number): string {
-    if (v === true) return '1';
-    else if (v === false) return '0';
-    else return String(v);
+    if (v === true) return '1'
+    else if (v === false) return '0'
+    else return String(v)
   }
 
-  const prefs = session && session.prefs || {};
+  const prefs = session && session.prefs || {}
   const display = mapKeys(<Prefs>mapValues(pick(prefs, [
     'animation',
     'captured',
@@ -135,22 +135,22 @@ function savePreferences() {
       'Accept': 'application/json, text/*'
     },
     body: serializeQueryParameters(Object.assign(rest, display, behavior))
-  }, true);
+  }, true)
 }
 
 function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>, defaultVal: T): SettingsProp<T> {
   return function() {
     if (arguments.length) {
-      let oldPref: T;
+      let oldPref: T
       if (session) {
-        oldPref = <T>get(session, path);
-        set(session, path, arguments[0]);
+        oldPref = <T>get(session, path)
+        set(session, path, arguments[0])
       }
       prefRequest()
       .catch((err) => {
-        if (session) set(session, path, oldPref);
-        handleXhrError(err);
-      });
+        if (session) set(session, path, oldPref)
+        handleXhrError(err)
+      })
     }
 
     return session ? <T>get(session, path) : defaultVal
@@ -158,7 +158,7 @@ function lichessBackedProp<T>(path: string, prefRequest: () => Promise<string>, 
 }
 
 function isSession(data: Session | LobbyData): data is Session {
-  return (<Session>data).id !== undefined;
+  return (<Session>data).id !== undefined
 }
 
 function login(username: string, password: string) {
@@ -171,21 +171,21 @@ function login(username: string, password: string) {
   }, true)
   .then((data: Session | LobbyData) => {
     if (isSession(data)) {
-      session = <Session>data;
-      return session;
+      session = <Session>data
+      return session
     } else {
-      throw { ipban: true };
+      throw { ipban: true }
     }
-  });
+  })
 }
 
 function logout() {
   return fetchJSON('/logout', undefined, true)
   .then(function() {
     session = undefined
-    friendsApi.clear();
-    redraw();
-  });
+    friendsApi.clear()
+    redraw()
+  })
 }
 
 function signup(username: string, email: string, password: string): Promise<Session> {
@@ -198,41 +198,41 @@ function signup(username: string, email: string, password: string): Promise<Sess
     })
   }, true)
   .then((data: Session) => {
-    session = data;
-    return session;
-  });
+    session = data
+    return session
+  })
 }
 
 function rememberLogin(): Promise<Session> {
   return fetchJSON('/account/info')
   .then((data: Session) => {
-    session = data;
-    return data;
-  });
+    session = data
+    return data
+  })
 }
 
 function refresh(): Promise<Session | undefined> {
   if (hasNetwork() && isConnected()) {
     return fetchJSON<Session>('/account/info')
     .then((data: Session) => {
-      session = data;
+      session = data
       // if server tells me, reload challenges
       if (session.nbChallenges !== challengesApi.incoming().length) {
-        challengesApi.refresh().then(() => redraw());
+        challengesApi.refresh().then(() => redraw())
       }
-      redraw();
-      return session;
+      redraw()
+      return session
     })
     .catch(err => {
       if (session && err.response && err.response.status === 401) {
         session = undefined
-        redraw();
-        window.plugins.toast.show(i18n('signedOut'), 'short', 'center');
+        redraw()
+        window.plugins.toast.show(i18n('signedOut'), 'short', 'center')
       }
-      throw err;
-    });
+      throw err
+    })
   } else {
-    return Promise.resolve(undefined);
+    return Promise.resolve(undefined)
   }
 }
 
@@ -250,12 +250,12 @@ export default {
   getUserId,
   appUser(fallback: string) {
     if (session)
-      return session && session.username;
+      return session && session.username
     else
-      return fallback;
+      return fallback
   },
   nowPlaying,
   myTurnGames,
   lichessBackedProp,
   toggleKidMode
-};
+}

@@ -1,12 +1,12 @@
-import * as helper from '../helper';
-import router from '../../router';
-import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils';
-import i18n from '../../i18n';
-import * as h from 'mithril/hyperscript';
-import tabs from '../shared/tabs';
-import { TournamentListState } from './interfaces';
+import * as helper from '../helper'
+import router from '../../router'
+import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils'
+import i18n from '../../i18n'
+import * as h from 'mithril/hyperscript'
+import tabs from '../shared/tabs'
+import { TournamentListState } from './interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
-import newTournamentForm from './newTournamentForm';
+import newTournamentForm from './newTournamentForm'
 
 const TABS = [{
     key: 'started',
@@ -17,7 +17,7 @@ const TABS = [{
 }, {
     key: 'finished',
     label: 'Completed'
-}];
+}]
 
 function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     return h('.tabs-nav-header', [
@@ -25,22 +25,22 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
           buttons: TABS,
           selectedTab: currentTabFn(),
           onTabChange: (k: string) => {
-            const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+            const loc = window.location.search.replace(/\?tab\=\w+$/, '')
             try {
-              window.history.replaceState(window.history.state, '', loc + '?tab=' + k);
+              window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
             } catch (e) { console.error(e) }
-            currentTabFn(k);
+            currentTabFn(k)
           }
       }),
       h('div.main_header_drop_shadow')
-    ]);
+    ])
 }
 
 export function tournamentListBody(ctrl: TournamentListState) {
-  if (!ctrl.tournaments()) return null;
+  if (!ctrl.tournaments()) return null
 
-  const id = ctrl.currentTab();
-  const tabContent = ctrl.tournaments()[id];
+  const id = ctrl.currentTab()
+  const tabContent = ctrl.tournaments()[id]
 
   return (
     <div className="tournamentTabsWrapper">
@@ -53,7 +53,7 @@ export function tournamentListBody(ctrl: TournamentListState) {
         </table>
       </div>
     </div>
-  );
+  )
 }
 
 export function renderFooter() {
@@ -64,15 +64,15 @@ export function renderFooter() {
         {i18n('createANewTournament')}
       </button>
     </div>
-  );
+  )
 }
 
 function renderTournamentListItem(tournament: TournamentListItem) {
-  const time = formatTournamentTimeControl(tournament.clock);
-  const mode = tournament.rated ? i18n('rated') : i18n('casual');
-  const duration = formatTournamentDuration(tournament.minutes);
+  const time = formatTournamentTimeControl(tournament.clock)
+  const mode = tournament.rated ? i18n('rated') : i18n('casual')
+  const duration = formatTournamentDuration(tournament.minutes)
   const variant = tournament.variant.key !== 'standard' ?
-    capitalize(tournament.variant.short) : '';
+    capitalize(tournament.variant.short) : ''
 
   return (
     <tr key={tournament.id}
@@ -88,15 +88,15 @@ function renderTournamentListItem(tournament: TournamentListItem) {
         <small className="nbUsers withIcon" data-icon="r">{tournament.nbPlayers}</small>
       </td>
       <td className="tournamentListNav">
-        &#xf054;
+        &#xf054
       </td>
     </tr>
-  );
+  )
 }
 
 function formatTime(timeInMillis: number) {
-  const date = new Date(timeInMillis);
-  const hours = pad(date.getHours(), 2);
-  const mins = pad(date.getMinutes(), 2);
-  return hours + ':' + mins;
+  const date = new Date(timeInMillis)
+  const hours = pad(date.getHours(), 2)
+  const mins = pad(date.getMinutes(), 2)
+  return hours + ':' + mins
 }

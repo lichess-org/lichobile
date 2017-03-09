@@ -1,16 +1,16 @@
-import { handleXhrError } from '../../../utils';
+import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
-import * as helper from '../../helper';
-import * as xhr from '../userXhr';
-import { toggleGameBookmark } from '../../../xhr';
-import redraw from '../../../utils/redraw';
-import * as debounce from 'lodash/debounce';
-import socket from '../../../socket';
-import layout from '../../layout';
-import { header as headerWidget, backButton } from '../../shared/common';
-import { renderBody } from './gamesView';
-import { Paginator } from '../../../lichess/interfaces';
-import { GameFilter, UserFullProfile } from '../../../lichess/interfaces/user';
+import * as helper from '../../helper'
+import * as xhr from '../userXhr'
+import { toggleGameBookmark } from '../../../xhr'
+import redraw from '../../../utils/redraw'
+import * as debounce from 'lodash/debounce'
+import socket from '../../../socket'
+import layout from '../../layout'
+import { header as headerWidget, backButton } from '../../shared/common'
+import { renderBody } from './gamesView'
+import { Paginator } from '../../../lichess/interfaces'
+import { GameFilter, UserFullProfile } from '../../../lichess/interfaces/user'
 
 interface Attrs {
   id: string
@@ -63,8 +63,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit(vnode) {
-    helper.analyticsTrackView('User games list');
-    socket.createDefault();
+    helper.analyticsTrackView('User games list')
+    socket.createDefault()
 
     let initialized = false
 
@@ -91,10 +91,10 @@ const UserGames: Mithril.Component<Attrs, State> = {
     function prepareData(xhrData: xhr.FilterResult) {
       if (xhrData.paginator && xhrData.paginator.currentPageResults) {
         xhrData.paginator.currentPageResults.forEach(g => {
-          g.date = window.moment(g.timestamp).calendar();
-        });
+          g.date = window.moment(g.timestamp).calendar()
+        })
       }
-      return xhrData;
+      return xhrData
     }
 
     const loadUserAndFilters = (userData: UserFullProfile) => {
@@ -121,8 +121,8 @@ const UserGames: Mithril.Component<Attrs, State> = {
       setTimeout(() => {
         const scroller = document.getElementById('scroller-wrapper')
         if (scroller) scroller.scrollTop = 0
-      }, 50);
-      redraw();
+      }, 50)
+      redraw()
     }
 
 
@@ -138,18 +138,18 @@ const UserGames: Mithril.Component<Attrs, State> = {
         xhr.user(this.scrollState.userId, false)
       ])
       .then(results => {
-        const [gamesData, userData] = results;
-        loadUserAndFilters(userData);
+        const [gamesData, userData] = results
+        loadUserAndFilters(userData)
         setTimeout(() => loadInitialGames(gamesData), 300)
       })
       .catch(err => {
-        handleXhrError(err);
-      });
+        handleXhrError(err)
+      })
     }
 
     try {
       const newState = Object.assign({}, window.history.state, { scrollStateId: this.scrollState.userId })
-      window.history.replaceState(newState, '');
+      window.history.replaceState(newState, '')
     } catch (e) { console.error(e) }
 
     const loadNextPage = (page: number) => {
@@ -160,10 +160,10 @@ const UserGames: Mithril.Component<Attrs, State> = {
         this.scrollState.paginator = data.paginator
         this.scrollState.isLoadingNextPage = false
         this.scrollState.games = this.scrollState.games.concat(data.paginator.currentPageResults)
-        saveScrollState();
-        redraw();
-      });
-      redraw();
+        saveScrollState()
+        redraw()
+      })
+      redraw()
     }
 
     this.onGamesLoaded = ({ dom }: Mithril.DOMNode) => {
@@ -183,7 +183,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
       if ((target.scrollTop + target.offsetHeight + 50) > content.offsetHeight) {
         // lichess doesn't allow for more than 39 pages
         if (!this.scrollState.isLoadingNextPage && nextPage && nextPage < 40) {
-          loadNextPage(nextPage);
+          loadNextPage(nextPage)
         }
       }
       this.scrollState.scrollPos = target.scrollTop
@@ -194,7 +194,7 @@ const UserGames: Mithril.Component<Attrs, State> = {
       this.scrollState.currentFilter = (e.target as HTMLInputElement).value
       xhr.games(this.scrollState.userId, this.scrollState.currentFilter, 1, true)
       .then(prepareData)
-      .then(loadInitialGames);
+      .then(loadInitialGames)
     }
 
     this.toggleBookmark = (id: string) => {
@@ -204,19 +204,19 @@ const UserGames: Mithril.Component<Attrs, State> = {
         if (g) {
           const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
           this.scrollState.games[i] = ng
-          redraw();
+          redraw()
         }
       })
-      .catch(handleXhrError);
+      .catch(handleXhrError)
     }
   },
 
   view(vnode) {
-    const username = vnode.attrs.id;
+    const username = vnode.attrs.id
 
-    const header = () => headerWidget(null, backButton(username + ' games'));
+    const header = () => headerWidget(null, backButton(username + ' games'))
 
-    return layout.free(header, () => renderBody(this));
+    return layout.free(header, () => renderBody(this))
   }
 }
 

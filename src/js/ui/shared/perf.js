@@ -1,14 +1,14 @@
-import { gameIcon } from '../../utils';
-import router from '../../router';
-import { provisionalDeviation } from '../../lichess/perfs';
-import * as helper from '../helper';
-import * as h from 'mithril/hyperscript';
+import { gameIcon } from '../../utils'
+import router from '../../router'
+import { provisionalDeviation } from '../../lichess/perfs'
+import * as helper from '../helper'
+import * as h from 'mithril/hyperscript'
 
 export default function(key, name, perf, user) {
-  var options = { className: 'profilePerf', 'data-icon': gameIcon(key)};
+  var options = { className: 'profilePerf', 'data-icon': gameIcon(key)}
   if (variantPerfAvailable(key, perf)) {
-    options.className += ' nav';
-    options.oncreate = helper.ontapY(() => router.set(`/@/${user.id}/${key}/perf`));
+    options.className += ' nav'
+    options.oncreate = helper.ontapY(() => router.set(`/@/${user.id}/${key}/perf`))
   }
 
   return h('div', options, [
@@ -19,9 +19,9 @@ export default function(key, name, perf, user) {
       helper.progress(perf.prog),
       h('span.nb', '/ ' + perf.games)
     ])
-  ]);
+  ])
 }
 
 function variantPerfAvailable (key, perf) {
-  return (key !== 'puzzle' && perf.games > 0);
+  return (key !== 'puzzle' && perf.games > 0)
 }

@@ -67,6 +67,7 @@
     "zanimo": "git://github.com/veloce/Zanimo"
   },
   "scripts": {
+    "lint": "tslint --project tsconfig.json -e '**/dts/**' -e '**/*.js'",
     "build": "gulp",
     "watch": "gulp watch",
     "watch-dev": "gulp watch --env=env-dev.json",

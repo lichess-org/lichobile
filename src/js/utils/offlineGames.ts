@@ -1,13 +1,13 @@
-import storage from '../storage';
-import * as cloneDeep from 'lodash/cloneDeep';
-import * as difference from 'lodash/difference';
-import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces';
-import { NowPlayingGame } from '../lichess/interfaces';
-import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game';
-import { GameSituation } from '../chess';
+import storage from '../storage'
+import * as cloneDeep from 'lodash/cloneDeep'
+import * as difference from 'lodash/difference'
+import { AnalysisData, AnalysisStep } from '../ui/analyse/interfaces'
+import { NowPlayingGame } from '../lichess/interfaces'
+import { OnlineGameData, OfflineGameData } from '../lichess/interfaces/game'
+import { GameSituation } from '../chess'
 
-const otbStorageKey = 'otb.current';
-const aiStorageKey = 'ai.current';
+const otbStorageKey = 'otb.current'
+const aiStorageKey = 'ai.current'
 
 export interface StoredOfflineGame {
   data: OfflineGameData
@@ -38,7 +38,7 @@ export function getAnalyseData(data: StoredOfflineGame): AnalysisData | null {
       pgnMoves: o.pgnMoves,
       end: o.end,
       player: o.player
-    };
+    }
     return step
   })
   return aData
@@ -56,7 +56,7 @@ export function setCurrentAIGame(game: StoredOfflineGame): void {
   storage.set(aiStorageKey, game)
 }
 
-const offlineCorresStorageKey = 'offline.corres.games';
+const offlineCorresStorageKey = 'offline.corres.games'
 
 export function getOfflineGames(): Array<OnlineGameData> {
   const stored = storage.get<StoredOfflineGames>(offlineCorresStorageKey)
@@ -72,9 +72,9 @@ export function getOfflineGames(): Array<OnlineGameData> {
 let nbOfflineGames: number | undefined
 export function hasOfflineGames(): boolean {
   nbOfflineGames =
-    nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length;
+    nbOfflineGames !== undefined ? nbOfflineGames : getOfflineGames().length
 
-  return nbOfflineGames > 0;
+  return nbOfflineGames > 0
 }
 
 export function getOfflineGameData(id: string): OnlineGameData | null {

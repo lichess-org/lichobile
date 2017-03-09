@@ -1,5 +1,5 @@
-import { piotr2key } from './piotr';
-import * as isObject from 'lodash/isObject';
+import { piotr2key } from './piotr'
+import * as isObject from 'lodash/isObject'
 import { AnalysisData } from './interfaces'
 
 function isString(o: DestsMap | string): o is string {
@@ -13,15 +13,15 @@ function isDestMap(o: DestsMap | string): o is DestsMap {
 export function readDests(lines?: DestsMap | string): DestsMap | null {
   if (lines === undefined) return null
   if (isDestMap(lines)) return lines
-  const dests: DestsMap = {};
+  const dests: DestsMap = {}
   if (lines && isString(lines)) lines.split(' ').forEach(line => {
     dests[piotr2key[line[0]]] = line.split('').slice(1).map(c => piotr2key[c])
-  });
-  return dests;
+  })
+  return dests
 }
 
 export function readCheckCount(fen: string) {
-  const counts = fen.substr(fen.length - 4);
+  const counts = fen.substr(fen.length - 4)
   return {
     white: parseInt(counts[3], 10),
     black: parseInt(counts[1], 10)
@@ -29,16 +29,16 @@ export function readCheckCount(fen: string) {
 }
 
 export function empty(a?: any) {
-  return !a || a.length === 0;
+  return !a || a.length === 0
 }
 
 export function renderEval(e: number) {
-  e = Math.max(Math.min(Math.round(e / 10) / 10, 99), -99);
-  return (e > 0 ? '+' : '') + e;
+  e = Math.max(Math.min(Math.round(e / 10) / 10, 99), -99)
+  return (e > 0 ? '+' : '') + e
 }
 
 export function isSynthetic(data: AnalysisData) {
-  return data.game.id === 'synthetic';
+  return data.game.id === 'synthetic'
 }
 
 export function autoScroll(movelist: HTMLElement | null) {

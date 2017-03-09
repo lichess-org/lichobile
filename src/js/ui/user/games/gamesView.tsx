@@ -1,20 +1,20 @@
-import * as throttle from 'lodash/throttle';
-import * as h from 'mithril/hyperscript';
-import * as utils from '../../../utils';
+import * as throttle from 'lodash/throttle'
+import * as h from 'mithril/hyperscript'
+import * as utils from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
-import router from '../../../router';
-import settings from '../../../settings';
-import * as helper from '../../helper';
-import * as gameApi from '../../../lichess/game';
-import i18n from '../../../i18n';
-import gameStatus from '../../../lichess/status';
-import session from '../../../session';
-import spinner from '../../../spinner';
-import { makeBoard } from '../../shared/svgboard';
-import { UserGameWithDate } from '../userXhr';
-import { UserGamePlayer } from '../../../lichess/interfaces/user';
+import router from '../../../router'
+import settings from '../../../settings'
+import * as helper from '../../helper'
+import * as gameApi from '../../../lichess/game'
+import i18n from '../../../i18n'
+import gameStatus from '../../../lichess/status'
+import session from '../../../session'
+import spinner from '../../../spinner'
+import { makeBoard } from '../../shared/svgboard'
+import { UserGameWithDate } from '../userXhr'
+import { UserGamePlayer } from '../../../lichess/interfaces/user'
 
-import { State, ScrollState } from './';
+import { State, ScrollState } from './'
 
 export function renderBody(ctrl: State) {
   return (
@@ -27,24 +27,24 @@ export function renderBody(ctrl: State) {
               <option value={f.key} selected={ctrl.scrollState.currentFilter === f.key}>
                 {utils.capitalize(i18n(f.label).replace('%s ', ''))} ({f.count})
               </option>
-            );
+            )
           })}
         </select>
         <div className="main_header_drop_shadow" />
       </div>
       {renderAllGames(ctrl)}
     </div>
-  );
+  )
 }
 
 function getGameEl(e: Event) {
-  const target = (e.target as HTMLElement);
+  const target = (e.target as HTMLElement)
   return target.tagName === 'LI' ? target :
-    helper.findParentBySelector(target, 'li');
+    helper.findParentBySelector(target, 'li')
 }
 
 function getButton(e: Event) {
-  const target = (e.target as HTMLElement);
+  const target = (e.target as HTMLElement)
   return target.tagName === 'BUTTON' ? target : undefined
 }
 
@@ -53,7 +53,7 @@ interface GameDataSet extends DOMStringMap {
 }
 function onTap(ctrl: State, e: Event) {
   const starButton = getButton(e)
-  const el = getGameEl(e);
+  const el = getGameEl(e)
   const id = el && (el.dataset as GameDataSet).id
   if (starButton) {
     ctrl.toggleBookmark(id)
@@ -62,9 +62,9 @@ function onTap(ctrl: State, e: Event) {
       const g = ctrl.scrollState.games.find(game => game.id === id)
       const userId = ctrl.scrollState.userId
       if (g) {
-        const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
+        const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
         utils.gamePosCache.set(g.id, { fen: g.fen, orientation: userColor })
-        const mePlaying = session.getUserId() === userId;
+        const mePlaying = session.getUserId() === userId
         if (mePlaying || (g.source !== 'import' && g.status.id < gameStatus.ids.aborted))
           router.set(`/game/${id}/${userColor}`)
         else
@@ -79,21 +79,21 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
     return attrs.g !== oldattrs.g
   },
   oninit() {
-    this.boardTheme = settings.general.theme.board();
+    this.boardTheme = settings.general.theme.board()
   },
   view({ attrs }) {
     const { g, index, userId } = attrs
-    const time = gameApi.time(g);
-    const mode = g.rated ? i18n('rated') : i18n('casual');
+    const time = gameApi.time(g)
+    const mode = g.rated ? i18n('rated') : i18n('casual')
     const title = g.source === 'import' ?
     `Import • ${g.variant.name}` :
-    `${time} • ${g.variant.name} • ${mode}`;
+    `${time} • ${g.variant.name} • ${mode}`
     const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
-      (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
-    const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || '';
-    const userColor: Color = g.players.white.userId === userId ? 'white' : 'black';
-    const evenOrOdd = index % 2 === 0 ? 'even' : 'odd';
-    const star = g.bookmarked ? 't' : 's';
+      (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
+    const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || ''
+    const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
+    const evenOrOdd = index % 2 === 0 ? 'even' : 'odd'
+    const star = g.bookmarked ? 't' : 's'
     const withStar = session.isConnected() ? ' withStar' : ''
 
     return (
@@ -136,7 +136,7 @@ const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: stri
           <button className="iconStar" data-icon={star} /> : null
         }
       </li>
-    );
+    )
   }
 }
 
@@ -161,7 +161,7 @@ function renderAllGames(ctrl: State) {
         </div>
       }
     </div>
-  );
+  )
 }
 
 function renderBoard(fen: string, orientation: Color, boardTheme: string) {
@@ -169,7 +169,7 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
   const boardClass = [
     'display_board',
     boardTheme
-  ].join(' ');
+  ].join(' ')
 
   return (
     <div className={boardClass} key={fen}
@@ -185,19 +185,19 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
     >
       <div className="cg-board" />
     </div>
-  );
+  )
 }
 
 function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
-  let player = players[color];
-  let playerName: string;
+  let player = players[color]
+  let playerName: string
   // TODO fetch title info from server; refactor
-  if (player.userId) playerName = player.userId;
-  else if (!player.aiLevel) playerName = utils.playerName(player);
+  if (player.userId) playerName = player.userId
+  else if (!player.aiLevel) playerName = utils.playerName(player)
   else if (player.aiLevel) {
-    playerName = utils.aiName({ ai: player.aiLevel });
+    playerName = utils.aiName({ ai: player.aiLevel })
   }
-  else playerName = 'Anonymous';
+  else playerName = 'Anonymous'
 
   return (
     <div className={'player ' + color}>
@@ -210,5 +210,5 @@ function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, 
         helper.renderRatingDiff(player) : null
       }
     </div>
-  );
+  )
 }

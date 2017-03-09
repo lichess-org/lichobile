@@ -1,8 +1,8 @@
-import * as helper from '../../../helper';
-import settings from '../../../../settings';
+import * as helper from '../../../helper'
+import settings from '../../../../settings'
 
-const emptyTd = <td className="move">...</td>;
-let pieceNotation;
+const emptyTd = <td className="move">...</td>
+let pieceNotation
 
 function renderTd(ctrl, step, curPly, orEmpty) {
   return step ? (
@@ -11,60 +11,60 @@ function renderTd(ctrl, step, curPly, orEmpty) {
     >
       {step.san}
     </td>
-  ) : (orEmpty ? emptyTd : null);
+  ) : (orEmpty ? emptyTd : null)
 }
 
 function renderTr(ctrl, index, pairs, curPly) {
-  const first = pairs[index][0];
-  const second = pairs[index][1];
+  const first = pairs[index][0]
+  const second = pairs[index][1]
   return (
     <tr>
       <td className="replayMoveIndex">{ (index + 1) + '.' }</td>
       {renderTd(ctrl, first, curPly, true)}
       {renderTd(ctrl, second, curPly, false)}
     </tr>
-  );
+  )
 }
 
 function autoScroll(movelist) {
-  if (!movelist) return;
-  var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child');
-  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+  if (!movelist) return
+  var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child')
+  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
 }
 
 function getTdEl(e) {
-  return e.target;
+  return e.target
 }
 
 function onTableTap(ctrl, e) {
-  const ply = e.target.dataset.ply;
-  if (ply) ctrl.jump(Number(ply));
+  const ply = e.target.dataset.ply
+  if (ply) ctrl.jump(Number(ply))
 }
 
 export function renderTable(ctrl) {
-  const steps = ctrl.data.steps;
-  const firstPly = ctrl.firstPly();
+  const steps = ctrl.data.steps
+  const firstPly = ctrl.firstPly()
 
-  const pairs = [];
+  const pairs = []
   if (firstPly % 2 === 0) {
     for (let i = 1, len = steps.length; i < len; i += 2)
-      pairs.push([steps[i], steps[i + 1]]);
+      pairs.push([steps[i], steps[i + 1]])
   } else {
-    pairs.push([null, steps[1]]);
+    pairs.push([null, steps[1]])
     for (let i = 2, len = steps.length; i < len; i += 2)
-      pairs.push([steps[i], steps[i + 1]]);
+      pairs.push([steps[i], steps[i + 1]])
   }
 
-  const trs = [];
+  const trs = []
   for (let i = 0, len = pairs.length; i < len; i++)
-    trs.push(renderTr(ctrl, i, pairs, ctrl.vm.ply));
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+    trs.push(renderTr(ctrl, i, pairs, ctrl.vm.ply))
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
 
   return (
     <div className="replay">
       <div className="gameMovesList native_scroller"
         oncreate={(vnode) => {
-          setTimeout(autoScroll.bind(undefined, vnode.dom), 100);
+          setTimeout(autoScroll.bind(undefined, vnode.dom), 100)
         }}
         onupdate={(vnode) => { autoScroll(vnode.dom); }}
       >
@@ -77,5 +77,5 @@ export function renderTable(ctrl) {
         </table>
       </div>
     </div>
-  );
+  )
 }

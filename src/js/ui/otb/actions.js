@@ -1,12 +1,12 @@
-import i18n from '../../i18n';
-import redraw from '../../utils/redraw';
-import settings from '../../settings';
-import formWidgets from '../shared/form';
-import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
-import ground from '../shared/offlineRound/ground';
-import popupWidget from '../shared/popup';
-import router from '../../router';
-import * as h from 'mithril/hyperscript';
+import i18n from '../../i18n'
+import redraw from '../../utils/redraw'
+import settings from '../../settings'
+import formWidgets from '../shared/form'
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view'
+import ground from '../shared/offlineRound/ground'
+import popupWidget from '../shared/popup'
+import router from '../../router'
+import * as h from 'mithril/hyperscript'
 
 function renderAlways(ctrl) {
   return [
@@ -17,35 +17,35 @@ function renderAlways(ctrl) {
     h('div.action', formWidgets.renderCheckbox(
       i18n('Use Symmetric pieces'), 'useSymmetric', settings.otb.useSymmetric, redraw
     ))
-  ];
+  ]
 }
 
 export default {
 
   controller: function(root) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
       open: open,
       close: close,
       isOpen: function() {
-        return isOpen;
+        return isOpen
       },
       sharePGN: function() {
-        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn));
+        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn))
       },
       root: root
-    };
+    }
   },
 
   view: function(ctrl) {
@@ -59,13 +59,13 @@ export default {
           ].concat(
             renderClaimDrawButton(ctrl.root),
             renderAlways(ctrl.root)
-          );
+          )
         },
         ctrl.isOpen(),
         ctrl.close
-      );
+      )
     }
 
-    return null;
+    return null
   }
-};
+}

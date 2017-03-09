@@ -1,28 +1,28 @@
-import layout from '../layout';
-import router from '../../router';
-import { header } from '../shared/common';
-import Board from '../shared/Board';
-import * as helper from '../helper';
-import i18n from '../../i18n';
-import menu from './menu';
-import continuePopup from '../shared/continuePopup';
+import layout from '../layout'
+import router from '../../router'
+import { header } from '../shared/common'
+import Board from '../shared/Board'
+import * as helper from '../helper'
+import i18n from '../../i18n'
+import menu from './menu'
+import continuePopup from '../shared/continuePopup'
 import pasteFenPopup from './pasteFenPopup'
-import settings from '../../settings';
-import * as h from 'mithril/hyperscript';
+import settings from '../../settings'
+import * as h from 'mithril/hyperscript'
 import Editor from './Editor'
 
 export default function view(ctrl: Editor) {
-  const color = ctrl.chessground.data.orientation;
-  const opposite = color === 'white' ? 'black' : 'white';
-  const isPortrait = helper.isPortrait();
-  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor');
+  const color = ctrl.chessground.data.orientation
+  const opposite = color === 'white' ? 'black' : 'white'
+  const isPortrait = helper.isPortrait()
+  const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor')
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait: helper.isPortrait()
-  });
+  })
 
   function content() {
     return h.fragment({ key: isPortrait ? 'portrait' : 'landscape' }, [
@@ -40,7 +40,7 @@ export default function view(ctrl: Editor) {
         ]),
         renderActionsBar(ctrl)
       ])
-    ]);
+    ])
   }
 
   function overlay() {
@@ -55,7 +55,7 @@ export default function view(ctrl: Editor) {
     () => header(i18n('boardEditor')),
     content,
     overlay
-  );
+  )
 }
 
 function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom') {
@@ -66,8 +66,8 @@ function sparePieces(color: Color, orientation: Color, position: 'top' | 'bottom
       className: color + ' ' + role,
       'data-color': color,
       'data-role': role
-    }));
-  })));
+    }))
+  })))
 }
 
 function renderActionsBar(ctrl: Editor) {
@@ -83,14 +83,14 @@ function renderActionsBar(ctrl: Editor) {
     h('button.action_bar_button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
-        ctrl.continuePopup.open(ctrl.computeFen());
+        ctrl.continuePopup.open(ctrl.computeFen())
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
     h('button.action_bar_button[data-icon=A]', {
       key: 'analyse',
       oncreate: helper.ontap(() => {
-        const fen = encodeURIComponent(ctrl.computeFen());
-        router.set(`/analyse/fen/${fen}`);
+        const fen = encodeURIComponent(ctrl.computeFen())
+        router.set(`/analyse/fen/${fen}`)
       }, () => window.plugins.toast.show(i18n('analysis'), 'short', 'center'))
     }),
     h('button.action_bar_button.fa.fa-upload', {

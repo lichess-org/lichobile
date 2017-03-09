@@ -1,11 +1,11 @@
-import { dropShadowHeader, backButton } from '../shared/common';
-import redraw from '../../utils/redraw';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import i18n from '../../i18n';
-import settings from '../../settings';
-import * as helper from '../helper';
-import * as h from 'mithril/hyperscript';
+import { dropShadowHeader, backButton } from '../shared/common'
+import redraw from '../../utils/redraw'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import i18n from '../../i18n'
+import settings from '../../settings'
+import * as helper from '../helper'
+import * as h from 'mithril/hyperscript'
 import { loadImage, handleError } from '../../bgtheme'
 
 interface Progress {
@@ -52,7 +52,7 @@ const ThemePrefScreen: Mithril.Component<{}, State> = {
 
   view() {
     const header = () => dropShadowHeader(null, backButton(i18n('theming')))
-    return layout.free(header, () => renderBody(this));
+    return layout.free(header, () => renderBody(this))
   }
 }
 
@@ -77,13 +77,13 @@ function renderBody(ctrl: State) {
               const prevTheme = settings.general.theme.background()
               settings.general.theme.background(val)
               if (val === 'dark' || val === 'light') {
-                layout.onBackgroundChange(val);
-                redraw();
+                layout.onBackgroundChange(val)
+                redraw()
               } else {
                 ctrl.loading = true
                 loadImage(val + '.' + t.ext, ctrl.onProgress)
                 .then(() => {
-                  layout.onBackgroundChange(val);
+                  layout.onBackgroundChange(val)
                   ctrl.stopLoading()
                 })
                 .catch((err) => {
@@ -100,10 +100,10 @@ function renderBody(ctrl: State) {
             h('div.theme-progressBar', { style: { transform: `translateX(-${100 - progressPercent(ctrl.progress)}%)` }}),
             h('div.theme-progressInner', progressAmount(ctrl.progress))
           ]) : null
-        ]);
+        ])
       }))
     ])
-  ];
+  ]
 }
 
 function progressAmount(p: Progress) {

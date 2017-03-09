@@ -1,12 +1,12 @@
-import * as helper from '../helper';
-import { dropShadowHeader, backButton } from '../shared/common';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import i18n from '../../i18n';
-import session from '../../session';
-import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/prefs';
+import * as helper from '../helper'
+import { dropShadowHeader, backButton } from '../shared/common'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import i18n from '../../i18n'
+import session from '../../session'
+import { LichessPropOption, ChallengeChoices, Challenge } from '../../lichess/prefs'
 import { SettingsProp } from '../../settings'
-import * as h from 'mithril/hyperscript';
+import * as h from 'mithril/hyperscript'
 
 interface State {
   follow: SettingsProp<boolean>
@@ -17,8 +17,8 @@ const PrivacyPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit: function(vnode) {
-    const follow = session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences, true);
-    const challenge = session.lichessBackedProp<number>('prefs.challenge', session.savePreferences, Challenge.ALWAYS);
+    const follow = session.lichessBackedProp<boolean>('prefs.follow', session.savePreferences, true)
+    const challenge = session.lichessBackedProp<number>('prefs.challenge', session.savePreferences, Challenge.ALWAYS)
 
     vnode.state = {
       follow,
@@ -27,9 +27,9 @@ const PrivacyPrefScreen: Mithril.Component<{}, State> = {
   },
 
   view: function(vnode) {
-    const ctrl = vnode.state;
-    const header = () => dropShadowHeader(null, backButton(i18n('privacy')));
-    return layout.free(header, renderBody.bind(undefined, ctrl));
+    const ctrl = vnode.state
+    const header = () => dropShadowHeader(null, backButton(i18n('privacy')))
+    return layout.free(header, renderBody.bind(undefined, ctrl))
   }
 }
 
@@ -45,6 +45,6 @@ function renderBody(ctrl: State) {
         h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'challenge', <Array<LichessPropOption>>ChallengeChoices, ctrl.challenge))
       ])
     ])
-  ];
+  ]
 }
 

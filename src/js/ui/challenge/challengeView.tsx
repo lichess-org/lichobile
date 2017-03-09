@@ -1,31 +1,31 @@
-import router from '../../router';
-import session from '../../session';
-import loginModal from '../loginModal';
-import spinner from '../../spinner';
-import challengesApi from '../../lichess/challenges';
-import * as helper from '../helper';
-import popupWidget from '../shared/popup';
-import i18n from '../../i18n';
-import * as h from 'mithril/hyperscript';
-import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge';
-import { ChallengeState } from './interfaces';
+import router from '../../router'
+import session from '../../session'
+import loginModal from '../loginModal'
+import spinner from '../../spinner'
+import challengesApi from '../../lichess/challenges'
+import * as helper from '../helper'
+import popupWidget from '../shared/popup'
+import i18n from '../../i18n'
+import * as h from 'mithril/hyperscript'
+import { Challenge, ChallengeUser } from '../../lichess/interfaces/challenge'
+import { ChallengeState } from './interfaces'
 
 function publicUrl(challenge: Challenge) {
-  return 'https://lichess.org/' + challenge.id;
+  return 'https://lichess.org/' + challenge.id
 }
 
 function gameInfos(challenge: Challenge) {
-  const mode = challenge.rated ? i18n('rated') : i18n('casual');
-  const time = challengesApi.challengeTime(challenge);
+  const mode = challenge.rated ? i18n('rated') : i18n('casual')
+  const time = challengesApi.challengeTime(challenge)
   return (
     <div className="gameInfos">
       <span data-icon="p">{time}</span> • <span>{challenge.variant.name}</span> • <span>{mode}</span>
     </div>
-  );
+  )
 }
 
 export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mithril.Children {
-  let joinDom: Mithril.BaseNode;
+  let joinDom: Mithril.BaseNode
   if (challenge.rated && !session.isConnected()) {
     joinDom = h('div.error', [
       i18n('thisGameIsRated'), h('br'), h('br'), i18n('mustSignInToJoin'),
@@ -37,7 +37,7 @@ export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mit
           oncreate: helper.ontap(router.backHistory)
         }, i18n('cancel'))
       ])
-    ]);
+    ])
   } else if (session.isConnected()) {
     joinDom = h('div.go_or_cancel', [
       h('button.binary_choice[data-icon=E].withIcon', {
@@ -46,19 +46,19 @@ export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mit
       h('button.binary_choice[data-icon=L].withIcon', {
         oncreate: helper.ontap(ctrl.declineChallenge)
       }, i18n('decline'))
-    ]);
+    ])
   } else {
     joinDom = h('div', [
       h('button[data-icon=E].withIcon', {
           oncreate: helper.ontap(ctrl.joinChallenge)
       }, i18n('join'))
-    ]);
+    ])
   }
 
   return function() {
     const challenger = challenge.challenger ?
       i18n('playerisInvitingYou', challengeUserFormat(challenge.challenger)) :
-      i18n('playerisInvitingYou', 'Anonymous');
+      i18n('playerisInvitingYou', 'Anonymous')
 
     return popupWidget(
       'join_url_challenge',
@@ -70,16 +70,16 @@ export function joinPopup(ctrl: ChallengeState, challenge: Challenge): () => Mit
           gameInfos(challenge),
           h('br'),
           joinDom
-        ]);
+        ])
       },
       true
-    );
-  };
+    )
+  }
 }
 
 export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
 
-  const isPersistent = challengesApi.isPersistent(challenge);
+  const isPersistent = challengesApi.isPersistent(challenge)
 
   return function() {
     return popupWidget(
@@ -98,7 +98,7 @@ export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
           h('div.go_or_cancel.clearfix', [
             h('button.binary_choice[data-icon=E].withIcon', {
               oncreate: helper.ontap(function() {
-                window.plugins.socialsharing.share(null, null, null, publicUrl(challenge));
+                window.plugins.socialsharing.share(null, null, null, publicUrl(challenge))
               })
             }, i18n('shareGameURL')),
             h('button.binary_choice[data-icon=L].withIcon', {
@@ -111,16 +111,16 @@ export function awaitInvitePopup(ctrl: ChallengeState, challenge: Challenge) {
               oncreate: helper.ontap(() => router.set('/'))
             }, [h('span.fa.fa-home'), i18n('returnToHome')])
           ]) : null
-        ]);
+        ])
       },
       true
-    );
-  };
+    )
+  }
 }
 
 function challengeUserFormat(user: ChallengeUser) {
-  const ratingString = user.rating + (user.provisional ? '?' : '');
-  return `${user.name} (${ratingString})`;
+  const ratingString = user.rating + (user.provisional ? '?' : '')
+  return `${user.name} (${ratingString})`
 }
 
 export function awaitChallengePopup(ctrl: ChallengeState, challenge: Challenge) {
@@ -142,10 +142,10 @@ export function awaitChallengePopup(ctrl: ChallengeState, challenge: Challenge) 
           {i18n('cancel')}
         </button>
       </div>
-    );
+    )
   }
 
   return function() {
-    return popupWidget('await_url_challenge', undefined, popupContent, true);
+    return popupWidget('await_url_challenge', undefined, popupContent, true)
   }
 }

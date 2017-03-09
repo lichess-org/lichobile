@@ -1,38 +1,38 @@
-import * as helper from '../helper';
-import layout from '../layout';
-import clockSettings from './clockSettings';
-import { formatTimeInSecs } from '../../utils';
+import * as helper from '../helper'
+import layout from '../layout'
+import clockSettings from './clockSettings'
+import { formatTimeInSecs } from '../../utils'
 
 export default function view() {
-  const ctrl = this;
-  const body = clockBody.bind(undefined, ctrl);
-  const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl);
+  const ctrl = this
+  const body = clockBody.bind(undefined, ctrl)
+  const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl)
 
-  return layout.clock(body, clockSettingsOverlay);
+  return layout.clock(body, clockSettingsOverlay)
 }
 
 function renderClockSettingsOverlay(ctrl) {
   return [
     clockSettings.view(ctrl.clockSettingsCtrl)
-  ];
+  ]
 }
 
 function formatTime(type, time) {
   if (type === 'hourglass') {
-    return formatTimeInSecs(Math.round(time));
+    return formatTimeInSecs(Math.round(time))
   } else {
-    return formatTimeInSecs(Math.floor(time));
+    return formatTimeInSecs(Math.floor(time))
   }
 }
 
 function clockBody(ctrl) {
-  const clock = ctrl.clockObj();
-  if (!clock) return null;
-  const topActive = clock.activeSide() === 'top';
-  const bottomActive = clock.activeSide() === 'bottom';
-  const topFlagged = clock.flagged() === 'top';
-  const bottomFlagged = clock.flagged() === 'bottom';
-  const flagged = topFlagged || bottomFlagged;
+  const clock = ctrl.clockObj()
+  if (!clock) return null
+  const topActive = clock.activeSide() === 'top'
+  const bottomActive = clock.activeSide() === 'bottom'
+  const topFlagged = clock.flagged() === 'top'
+  const bottomFlagged = clock.flagged() === 'bottom'
+  const flagged = topFlagged || bottomFlagged
 
   const topClockClass = [
     'clockTapArea',
@@ -40,7 +40,7 @@ function clockBody(ctrl) {
     topActive ? 'active' : '',
     clock.isRunning() ? 'running' : '',
     topFlagged ? 'flagged' : ''
-  ].join(' ');
+  ].join(' ')
 
   const bottomClockClass = [
     'clockTapArea',
@@ -48,19 +48,19 @@ function clockBody(ctrl) {
     bottomActive ? 'active' : '',
     clock.isRunning() ? 'running' : '',
     bottomFlagged ? 'flagged' : ''
-  ].join(' ');
+  ].join(' ')
 
   const topClockTimeClass = [
     'clockTime',
     topFlagged ? 'flagged' : '',
     clock.topTime() >= 3600 ? 'long' : ''
-  ].join(' ');
+  ].join(' ')
 
   const bottomClockTimeClass = [
     'clockTime',
     bottomFlagged ? 'flagged' : '',
     clock.bottomTime() >= 3600 ? 'long' : ''
-  ].join(' ');
+  ].join(' ')
 
   return (
     <div className="clockContainer">
@@ -95,11 +95,11 @@ function clockBody(ctrl) {
         }
       </div>
     </div>
-  );
+  )
 }
 
 function onClockTouch(ctrl, side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
-    ctrl.clockTap(side);
+    ctrl.clockTap(side)
   }
 }

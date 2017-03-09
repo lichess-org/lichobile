@@ -1,19 +1,19 @@
-import settings from '../../settings';
-import HandicapIncClock from './clocks/HandicapIncClock';
-import DelayClock from './clocks/DelayClock';
-import BronsteinClock from './clocks/BronsteinClock';
-import HourglassClock from './clocks/HourglassClock';
-import StageClock from './clocks/StageClock';
+import settings from '../../settings'
+import HandicapIncClock from './clocks/HandicapIncClock'
+import DelayClock from './clocks/DelayClock'
+import BronsteinClock from './clocks/BronsteinClock'
+import HourglassClock from './clocks/HourglassClock'
+import StageClock from './clocks/StageClock'
 
-const MILLIS = 1000;
-const MINUTE_MILLIS = 60 * 1000;
+const MILLIS = 1000
+const MINUTE_MILLIS = 60 * 1000
 
 function SimpleClock(time) {
-  return IncrementClock(time, 0);
+  return IncrementClock(time, 0)
 }
 
 function IncrementClock(time, increment) {
-  return HandicapIncClock(time, increment, time, increment);
+  return HandicapIncClock(time, increment, time, increment)
 }
 
 export default {
@@ -51,4 +51,4 @@ export default {
     settings.clock.stage.stages(),
     Number(settings.clock.stage.increment()) * MILLIS
   )
-};
+}

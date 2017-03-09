@@ -242,11 +242,11 @@ function calculateContentHeight(ta: HTMLElement, scanAmount: number): number {
       /// now try and scan the ta's height downwards
       /// until scrollHeight becomes larger than height
       while (ta.offsetHeight >= ta.scrollHeight) {
-        ta.style.height = (height -= scanAmount)+'px'
+        ta.style.height = (height -= scanAmount) + 'px'
       }
       /// be more specific to get the exact height
       while (ta.offsetHeight < ta.scrollHeight) {
-        ta.style.height = (height++)+'px'
+        ta.style.height = (height++) + 'px'
       }
       /// reset the ta back to it's original height
       ta.style.height = origHeight

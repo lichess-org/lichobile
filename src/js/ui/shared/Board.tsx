@@ -1,7 +1,7 @@
-import i18n from '../../i18n';
-import settings from '../../settings';
-import chessground from '../../chessground';
-import BoardBrush, { Shape } from './BoardBrush';
+import i18n from '../../i18n'
+import settings from '../../settings'
+import chessground from '../../chessground'
+import BoardBrush, { Shape } from './BoardBrush'
 
 export interface Attrs {
   variant: VariantKey
@@ -24,18 +24,18 @@ interface State {
 const Board: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
-    const { chessgroundCtrl, bounds } = vnode.attrs;
+    const { chessgroundCtrl, bounds } = vnode.attrs
 
-    chessgroundCtrl.setBounds(bounds);
+    chessgroundCtrl.setBounds(bounds)
 
     function boardOnCreate({ dom }: Mithril.DOMNode) {
       if (chessgroundCtrl) {
-        chessground.render(dom, chessgroundCtrl);
+        chessground.render(dom, chessgroundCtrl)
       }
     }
 
     function boardOnRemove() {
-      if (chessgroundCtrl) chessgroundCtrl.unload();
+      if (chessgroundCtrl) chessgroundCtrl.unload()
     }
 
     vnode.state = {
@@ -43,11 +43,11 @@ const Board: Mithril.Component<Attrs, State> = {
       boardTheme: settings.general.theme.board(),
       boardOnCreate,
       boardOnRemove
-    };
+    }
   },
 
   view(vnode) {
-    const { variant, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs;
+    const { variant, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs
 
     const boardClass = [
       'display_board',
@@ -55,23 +55,23 @@ const Board: Mithril.Component<Attrs, State> = {
       this.boardTheme,
       customPieceTheme || this.pieceTheme,
       variant
-    ].join(' ');
+    ].join(' ')
 
     let wrapperClass = 'game_board_wrapper'
 
     if (wrapperClasses) {
-      wrapperClass += ' ';
-      wrapperClass += wrapperClasses;
+      wrapperClass += ' '
+      wrapperClass += wrapperClasses
     }
 
     const wrapperStyle = bounds ? {
       height: bounds.height + 'px',
       width: bounds.width + 'px'
-    } : {};
+    } : {}
 
     // fix nasty race condition bug when going from analysis to otb
     // TODO test that again
-    if (!chessgroundCtrl) return null;
+    if (!chessgroundCtrl) return null
 
     return (
       <section className={wrapperClass} style={wrapperStyle}>
@@ -97,7 +97,7 @@ const Board: Mithril.Component<Attrs, State> = {
             ) : null
         }
       </section>
-    );
+    )
   }
 }
 

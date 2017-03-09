@@ -1,8 +1,8 @@
-import { fetchJSON } from '../../http';
+import { fetchJSON } from '../../http'
 import { PagedThreads, ThreadData, ComposeResponse } from './interfaces'
 
 export function inbox(feedback = true): Promise<PagedThreads> {
-  return fetchJSON('/inbox', {}, feedback);
+  return fetchJSON('/inbox', {}, feedback)
 }
 
 export function reload(page: number): Promise<PagedThreads> {
@@ -10,11 +10,11 @@ export function reload(page: number): Promise<PagedThreads> {
   {
     method: 'GET',
     query: page ? { page } : {}
-  });
+  })
 }
 
 export function thread(id: string): Promise<ThreadData> {
-  return fetchJSON('/inbox/' + id, {}, true);
+  return fetchJSON('/inbox/' + id, {}, true)
 }
 
 export function respond(id: string, response: string): Promise<ComposeResponse> {
@@ -23,7 +23,7 @@ export function respond(id: string, response: string): Promise<ComposeResponse> 
     body: JSON.stringify({
       text: response
     })
-  }, true);
+  }, true)
 }
 
 export function newThread(username: string, subject: string, text: string) {
@@ -34,9 +34,9 @@ export function newThread(username: string, subject: string, text: string) {
       subject,
       text
     })
-  }, true);
+  }, true)
 }
 
 export function deleteThread(id: string) {
-  return fetchJSON('/inbox/' + id + '/delete', {method: 'POST'}, true);
+  return fetchJSON('/inbox/' + id + '/delete', {method: 'POST'}, true)
 }

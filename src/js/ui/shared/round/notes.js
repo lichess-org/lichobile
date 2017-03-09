@@ -1,82 +1,82 @@
-import * as helper from '../../helper';
-import spinner from '../../../spinner';
-import i18n from '../../../i18n';
-import router from '../../../router';
-import * as debounce from 'lodash/debounce';
-import { readNote, syncNote } from './roundXhr';
+import * as helper from '../../helper'
+import spinner from '../../../spinner'
+import i18n from '../../../i18n'
+import router from '../../../router'
+import * as debounce from 'lodash/debounce'
+import { readNote, syncNote } from './roundXhr'
 import { closeIcon } from '../../shared/icons'
-import * as h from 'mithril/hyperscript';
+import * as h from 'mithril/hyperscript'
 
 export function notesCtrl(root) {
 
-  this.syncing = true;
+  this.syncing = true
 
   readNote(root.data.game.id)
   .then(note => {
-    root.data.note = note;
-    this.syncing = false;
+    root.data.note = note
+    this.syncing = false
   })
   .catch(() => {
-    this.syncing = false;
-    window.plugins.toast.show('Could not read notes from server.', 'short', 'center');
-  });
+    this.syncing = false
+    window.plugins.toast.show('Could not read notes from server.', 'short', 'center')
+  })
 
-  let notesHeight;
+  let notesHeight
 
-  this.root = root;
-  this.showing = false;
-  this.inputValue = '';
+  this.root = root
+  this.showing = false
+  this.inputValue = ''
 
   this.open = function() {
-    router.backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'));
-    this.showing = true;
-  }.bind(this);
+    router.backbutton.stack.push(helper.slidesOutDown(this.close, 'notes'))
+    this.showing = true
+  }.bind(this)
 
   this.close = function(fromBB) {
-    window.cordova.plugins.Keyboard.close();
-    if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop();
-    this.showing = false;
-  }.bind(this);
+    window.cordova.plugins.Keyboard.close()
+    if (fromBB !== 'backbutton' && this.showing) router.backbutton.stack.pop()
+    this.showing = false
+  }.bind(this)
 
   function onKeyboardShow(e) {
     if (window.cordova.platformId === 'ios') {
-      let ta = document.getElementById('notesTextarea');
-      if (!ta) return;
-      notesHeight = ta.offsetHeight;
-      ta.style.height = (notesHeight - e.keyboardHeight) + 'px';
+      let ta = document.getElementById('notesTextarea')
+      if (!ta) return
+      notesHeight = ta.offsetHeight
+      ta.style.height = (notesHeight - e.keyboardHeight) + 'px'
     }
   }
 
   function onKeyboardHide() {
-    let ta = document.getElementById('notesTextarea');
+    let ta = document.getElementById('notesTextarea')
     if (window.cordova.platformId === 'ios') {
-      if (ta) ta.style.height = notesHeight + 'px';
+      if (ta) ta.style.height = notesHeight + 'px'
     }
-    if (ta) ta.blur();
+    if (ta) ta.blur()
   }
 
   this.syncNotes = debounce(e => {
-    const text = e.target.value;
+    const text = e.target.value
     if (this.root.data.note !== text) {
       syncNote(this.root.data.game.id, text)
       .then(() => {
-        this.root.data.note = text;
-      });
+        this.root.data.note = text
+      })
     }
-  }, 1000);
+  }, 1000)
 
-  window.addEventListener('native.keyboardhide', onKeyboardHide);
-  window.addEventListener('native.keyboardshow', onKeyboardShow);
+  window.addEventListener('native.keyboardhide', onKeyboardHide)
+  window.addEventListener('native.keyboardshow', onKeyboardShow)
 
   this.unload = function() {
-    document.removeEventListener('native.keyboardhide', onKeyboardHide);
-    document.removeEventListener('native.keyboardshow', onKeyboardShow);
-  };
+    document.removeEventListener('native.keyboardhide', onKeyboardHide)
+    document.removeEventListener('native.keyboardshow', onKeyboardShow)
+  }
 }
 
 export function notesView(ctrl) {
 
-  if (!ctrl.showing) return null;
+  if (!ctrl.showing) return null
 
   return h('div#notes.modal', { oncreate: helper.slidesInUp }, [
     h('header', [
@@ -93,5 +93,5 @@ export function notesView(ctrl) {
         oninput: ctrl.syncNotes
       }, ctrl.root.data.note)
     ])
-  ]);
+  ])
 }

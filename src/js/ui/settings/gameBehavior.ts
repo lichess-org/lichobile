@@ -1,12 +1,12 @@
-import { dropShadowHeader, backButton } from '../shared/common';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import i18n from '../../i18n';
-import * as helper from '../helper';
-import session from '../../session';
+import { dropShadowHeader, backButton } from '../shared/common'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import i18n from '../../i18n'
+import * as helper from '../helper'
+import session from '../../session'
 import { SettingsProp } from '../../settings'
-import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs';
-import * as h from 'mithril/hyperscript';
+import { LichessPropOption, Takeback, SubmitMove, AutoQueen, AutoThreefold, SubmitMoveChoices, TakebackChoices, AutoQueenChoices, AutoThreefoldChoices } from '../../lichess/prefs'
+import * as h from 'mithril/hyperscript'
 
 interface State {
   premove: SettingsProp<boolean>
@@ -30,7 +30,7 @@ const GameBehaviorPrefScreen: Mithril.Component<{}, State> = {
   },
 
   view: function(vnode) {
-    const ctrl = vnode.state;
+    const ctrl = vnode.state
     const header = () => dropShadowHeader(null, backButton(i18n('gameBehavior')))
     return layout.free(header, () => renderBody(ctrl))
   }
@@ -60,6 +60,6 @@ function renderBody(ctrl: State) {
         h('div.select_input.no_label.settingsChoicesBlock', formWidgets.renderLichessPropSelect('', 'moveConfirmation', <Array<LichessPropOption>>SubmitMoveChoices, ctrl.submitMove))
       ])
     ])
-  ];
+  ]
 }
 

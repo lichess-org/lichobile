@@ -1,12 +1,12 @@
-import router from '../../../router';
-import * as helper from '../../helper';
-import { OnlineGameData } from '../../../lichess/interfaces/game';
-import { ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
+import router from '../../../router'
+import * as helper from '../../helper'
+import { OnlineGameData } from '../../../lichess/interfaces/game'
+import { ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
-import settings from '../../../settings';
-import * as xhr from '../../../xhr';
+import settings from '../../../settings'
+import * as xhr from '../../../xhr'
 
-let pieceNotation: boolean;
+let pieceNotation: boolean
 
 export interface Attrs {
   ctrl: AnalyseCtrl
@@ -15,15 +15,15 @@ export interface Attrs {
 
 const OpeningTable: Mithril.Component<Attrs, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.data !== oldattrs.data;
+    return attrs.data !== oldattrs.data
   },
 
   view({ attrs }) {
-    const { ctrl, data } = attrs;
+    const { ctrl, data } = attrs
 
-    const moveTable = showMoveTable(ctrl, data.moves);
-    const recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
-    const topTable = showGameTable(ctrl, 'top', data.topGames || []);
+    const moveTable = showMoveTable(ctrl, data.moves)
+    const recentTable = showGameTable(ctrl, 'recent', data.recentGames || [])
+    const topTable = showGameTable(ctrl, 'top', data.topGames || [])
 
     if (moveTable || recentTable || topTable) {
       return (
@@ -32,9 +32,9 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
           {topTable}
           {recentTable}
         </div>
-      );
+      )
     } else {
-      return showEmpty(ctrl);
+      return showEmpty(ctrl)
     }
   }
 }
@@ -54,48 +54,48 @@ export function showEmpty(ctrl: AnalyseCtrl) {
         }</p>
       </div>
     </div>
-  );
+  )
 }
 
 export function getTR(e: Event): HTMLElement {
-  const target = (e.target as HTMLElement);
+  const target = (e.target as HTMLElement)
   return target.tagName === 'TR' ? target :
-    helper.findParentBySelector(target, 'tr');
+    helper.findParentBySelector(target, 'tr')
 }
 
 function resultBar(move: ExplorerMove) {
-  const sum = move.white + move.draws + move.black;
+  const sum = move.white + move.draws + move.black
   function section(key: string) {
-    const num: number = (move as any)[key];
-    const percent = num * 100 / sum;
-    const width = (Math.round(num * 1000 / sum) / 10) + '%';
+    const num: number = (move as any)[key]
+    const percent = num * 100 / sum
+    const width = (Math.round(num * 1000 / sum) / 10) + '%'
     return percent === 0 ? null : (
       <span className={'explorerBar ' + key} style={{width}}>
         {percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null}
       </span>
-    );
+    )
   }
-  return ['white', 'draws', 'black'].map(section);
+  return ['white', 'draws', 'black'].map(section)
 }
 
 function onTableTap(ctrl: AnalyseCtrl, e: Event) {
-  const el = getTR(e);
+  const el = getTR(e)
   const uci = el && el.dataset['uci']
   if (uci) ctrl.explorerMove(uci)
 }
 
 function showResult(w: Color) {
-  if (w === 'white') return <result className="white">1-0</result>;
-  if (w === 'black') return <result className="black">0-1</result>;
-  return <result className="draws">½-½</result>;
+  if (w === 'white') return <result className="white">1-0</result>
+  if (w === 'black') return <result className="black">0-1</result>
+  return <result className="draws">½-½</result>
 }
 
 function link(ctrl: AnalyseCtrl, e: Event) {
-  const orientation = ctrl.chessground.data.orientation;
+  const orientation = ctrl.chessground.data.orientation
   const el = getTR(e)
   const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
-    router.set(`/analyse/online/${gameId}/${orientation}`);
+    router.set(`/analyse/online/${gameId}/${orientation}`)
   } else if (gameId) {
     xhr.importMasterGame(gameId, orientation)
     .then((data: OnlineGameData) =>
@@ -105,7 +105,7 @@ function link(ctrl: AnalyseCtrl, e: Event) {
 }
 
 function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGame>) {
-  if (!ctrl.explorer.withGames || !games.length) return null;
+  if (!ctrl.explorer.withGames || !games.length) return null
   return (
     <table className="games"
       oncreate={helper.ontap(e => link(ctrl, e!), undefined, undefined, getTR)}
@@ -136,16 +136,16 @@ function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGam
               {game.year}
             </td>
           </tr>
-        );
+        )
       })}
       </tbody>
     </table>
-  );
+  )
 }
 
 function showMoveTable(ctrl: AnalyseCtrl, moves: Array<ExplorerMove>) {
-  if (!moves.length) return null;
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+  if (!moves.length) return null
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return (
     <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
       oncreate={helper.ontap(e => onTableTap(ctrl, e!), undefined, undefined, getTR)}
@@ -171,9 +171,9 @@ function showMoveTable(ctrl: AnalyseCtrl, moves: Array<ExplorerMove>) {
                 {resultBar(move)}
               </td>
             </tr>
-          );
+          )
         })}
       </tbody>
     </table>
-  );
+  )
 }

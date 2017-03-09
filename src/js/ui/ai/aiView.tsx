@@ -1,24 +1,24 @@
 import * as h from 'mithril/hyperscript'
-import chessground from '../../chessground';
-import { getBoardBounds } from '../helper';
-import Board from '../shared/Board';
+import chessground from '../../chessground'
+import { getBoardBounds } from '../helper'
+import Board from '../shared/Board'
 import {
   renderAntagonist,
   renderGameActionsBar,
   renderReplayTable
-} from '../shared/offlineRound/view';
-import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import * as helper from '../helper';
-import actions from './actions';
-import newGameMenu from './newAiGame';
-import AiRound from './AiRound';
+} from '../shared/offlineRound/view'
+import { view as renderPromotion } from '../shared/offlineRound/promotion'
+import * as helper from '../helper'
+import actions from './actions'
+import newGameMenu from './newAiGame'
+import AiRound from './AiRound'
 
 export function renderContent(ctrl: AiRound) {
 
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game');
-  const replayTable = renderReplayTable(ctrl.replay);
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data)
+  const isPortrait = helper.isPortrait()
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const replayTable = renderReplayTable(ctrl.replay)
 
   const aiName = (
     <h2>
@@ -28,16 +28,16 @@ export function renderContent(ctrl: AiRound) {
         null
       }
     </h2>
-  );
+  )
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait
-  });
+  })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
@@ -45,7 +45,7 @@ export function renderContent(ctrl: AiRound) {
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
-    ]);
+    ])
   } else {
     return h.fragment({ key: orientationKey }, [
       board,
@@ -57,7 +57,7 @@ export function renderContent(ctrl: AiRound) {
         </section>
         {renderGameActionsBar(ctrl, 'ai')}
       </section>
-    ]);
+    ])
   }
 }
 
@@ -66,6 +66,6 @@ export function overlay(ctrl: AiRound) {
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),
     renderPromotion(ctrl)
-  ];
+  ]
 }
 

@@ -432,7 +432,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (!this.replaying()) {
       this.vm.ply++
 
-      const enpassantPieces: {[index:string]: Piece | null} = {}
+      const enpassantPieces: {[index: string]: Piece | null} = {}
       if (o.enpassant) {
         const p = o.enpassant
         enpassantPieces[p.key] = null
@@ -443,7 +443,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         }
       }
 
-      const castlePieces: {[index:string]: Piece | null} = {}
+      const castlePieces: {[index: string]: Piece | null} = {}
       if (o.castle && !this.chessground.data.autoCastle) {
         const c = o.castle
         castlePieces[c.king[0]] = null

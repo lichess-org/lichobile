@@ -1,32 +1,32 @@
-import * as menu from './menu';
-import menuView from './menu/menuView';
-import gamesMenu from './gamesMenu';
-import newGameForm from './newGameForm';
-import playMachineForm from './playMachineForm';
-import challengeForm from './challengeForm';
-import loginModal from './loginModal';
-import signupModal from './signupModal';
-import friendsPopup from './friendsPopup';
-import lobby from './lobby';
-import * as helper from './helper';
-import settings from '../settings';
+import * as menu from './menu'
+import menuView from './menu/menuView'
+import gamesMenu from './gamesMenu'
+import newGameForm from './newGameForm'
+import playMachineForm from './playMachineForm'
+import challengeForm from './challengeForm'
+import loginModal from './loginModal'
+import signupModal from './signupModal'
+import friendsPopup from './friendsPopup'
+import lobby from './lobby'
+import * as helper from './helper'
+import settings from '../settings'
 
-let background: string;
+let background: string
 
 export default {
 
   onBackgroundChange: function(bg: string) {
-    background = bg;
+    background = bg
   },
 
   empty() {
-    background = background || settings.general.theme.background();
+    background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
         <main id="page">
         </main>
       </div>
-    );
+    )
   },
 
   board(
@@ -35,7 +35,7 @@ export default {
     overlay?: () => Mithril.Children,
     color?: string
   ) {
-    background = background || settings.general.theme.background();
+    background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
         <main id="page" className={color}>
@@ -56,7 +56,7 @@ export default {
         {lobby.view()}
         {overlay ? overlay() : null}
       </div>
-    );
+    )
   },
 
   free(
@@ -65,7 +65,7 @@ export default {
     footer?: () => Mithril.Children,
     overlay?: () => Mithril.Children
   ) {
-    background = background || settings.general.theme.background();
+    background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
         <main id="page">
@@ -89,11 +89,11 @@ export default {
         {lobby.view()}
         {overlay ? overlay() : null}
       </div>
-    );
+    )
   },
 
   clock(content: () => Mithril.Children, overlay?: () => Mithril.Children) {
-    background = background || settings.general.theme.background();
+    background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + background}>
         <main id="page">
@@ -104,9 +104,9 @@ export default {
         </main>
         {overlay ? overlay() : null}
       </div>
-    );
+    )
   }
-};
+}
 
 function bgClass(bgTheme: string) {
   return bgTheme === 'dark' || bgTheme === 'light' ? bgTheme : 'transp ' + bgTheme

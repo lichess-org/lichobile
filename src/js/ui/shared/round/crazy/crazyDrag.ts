@@ -8,7 +8,7 @@ function isDraggable(data: any, color: Color) {
 }
 
 export default function(ctrl: BoardInterface, e: TouchEvent) {
-  if (e.touches && e.touches.length > 1) return; // support one finger touch only
+  if (e.touches && e.touches.length > 1) return
   if (!ctrl.canDrop()) return
   const cgData = ctrl.chessground.data
   const role = <Role>(e.target as HTMLElement).getAttribute('data-role'),

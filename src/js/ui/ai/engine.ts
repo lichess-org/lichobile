@@ -1,12 +1,12 @@
-import { AiRoundInterface } from '../shared/round';
+import { AiRoundInterface } from '../shared/round'
 import { getNbCores, setOption, setVariant } from '../../utils/stockfish'
 
 interface LevelToDepht {
   [index: number]: number
 }
 
-const maxMoveTime = 8000;
-const maxSkill = 20;
+const maxMoveTime = 8000
+const maxSkill = 20
 const levelToDepth: LevelToDepht = {
   1: 1,
   2: 1,
@@ -16,7 +16,7 @@ const levelToDepth: LevelToDepht = {
   6: 8,
   7: 13,
   8: 21
-};
+}
 
 export interface EngineInterface {
   init(): Promise<void>
@@ -27,7 +27,7 @@ export interface EngineInterface {
 }
 
 export default function(ctrl: AiRoundInterface): EngineInterface {
-  let level = 1;
+  let level = 1
 
   return {
     init() {
@@ -37,59 +37,59 @@ export default function(ctrl: AiRoundInterface): EngineInterface {
         // trying to init an already init stockfish will return an error
         return Stockfish.exit()
         .then(() => Stockfish.init(), () => Stockfish.init())
-        .then(onInit);
+        .then(onInit)
       })
-      .catch(console.error.bind(console));
+      .catch(console.error.bind(console))
     },
 
     search(initialFen: string, moves: string) {
       Stockfish.output((msg: string) => {
-        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/);
+        const match = msg.match(/^bestmove (\w{4})|^bestmove ([PNBRQ]@\w{2})/)
         if (match) {
-          if (match[1]) ctrl.onEngineMove(match[1]);
-          else if (match[2]) ctrl.onEngineDrop(match[2]);
+          if (match[1]) ctrl.onEngineMove(match[1])
+          else if (match[2]) ctrl.onEngineDrop(match[2])
         }
-      });
+      })
 
-      // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`);
+      // console.info('engine search pos: ', `position fen ${fen} moves ${moves}`)
 
       setOption('Threads', getNbCores())
       .then(() => cmd(`position fen ${initialFen} moves ${moves}`))
-      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`));
+      .then(() => cmd(`go movetime ${moveTime(level)} depth ${depth(level)}`))
     },
 
     setLevel(l: number) {
-      level = l;
-      return setOption('Skill Level', String(skill(level)));
+      level = l
+      return setOption('Skill Level', String(skill(level)))
     },
 
     prepare(variant: VariantKey) {
-      return setVariant(variant);
+      return setVariant(variant)
     },
 
     exit() {
-      return Stockfish.exit();
+      return Stockfish.exit()
     }
-  };
+  }
 }
 
 function onInit() {
   return cmd('uci')
-  .then(() => setOption('Ponder', 'false'));
+  .then(() => setOption('Ponder', 'false'))
 }
 
 function cmd(text: string) {
-  return Stockfish.cmd(text);
+  return Stockfish.cmd(text)
 }
 
 function moveTime(level: number) {
-  return level * maxMoveTime / 8;
+  return level * maxMoveTime / 8
 }
 
 function skill(level: number) {
-  return Math.round((level - 1) * (maxSkill / 7));
+  return Math.round((level - 1) * (maxSkill / 7))
 }
 
 function depth(level: number) {
-  return levelToDepth[level];
+  return levelToDepth[level]
 }

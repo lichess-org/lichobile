@@ -1,6 +1,6 @@
-import { CevalWork } from '../interfaces';
-import { setOption, setVariant } from '../../../utils/stockfish';
-import * as Signal from 'signals';
+import { CevalWork } from '../interfaces'
+import { setOption, setVariant } from '../../../utils/stockfish'
+import * as Signal from 'signals'
 
 interface Opts {
   minDepth: number
@@ -8,17 +8,17 @@ interface Opts {
   cores: number
 }
 
-const output = new Signal();
+const output = new Signal()
 
 export default function cevalEngine(opts: Opts) {
   // after a 'go' command, stockfish will be continue to emit until the 'bestmove'
   // message, reached by depth or after a 'stop' command
   // finished here means stockfish has emited the bestmove and is ready for
   // another command
-  let finished = true;
+  let finished = true
 
   // stopped flag is true when a search has been interrupted before its end
-  let stopped = false;
+  let stopped = false
 
   // we may have several start requests queued while we wait for previous
   // eval to complete
@@ -27,25 +27,25 @@ export default function cevalEngine(opts: Opts) {
   function processOutput(text: string, work: CevalWork) {
     if (text.indexOf('bestmove') === 0) {
       console.info('stockfish analysis done', text)
-      finished = true;
+      finished = true
     }
-    if (stopped) return;
-    if (/currmovenumber|lowerbound|upperbound/.test(text)) return;
+    if (stopped) return
+    if (/currmovenumber|lowerbound|upperbound/.test(text)) return
     // console.log(text)
-    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/);
-    if (!matches) return;
-    const depth = parseInt(matches[1]);
-    if (depth < opts.minDepth) return;
-    let cp: number = 0;
-    let mate: number = 0;
-    if (matches[2] === 'cp') cp = parseFloat(matches[3]);
-    else mate = parseFloat(matches[3]);
+    const matches = text.match(/depth (\d+) .*score (cp|mate) ([-\d]+) .*nps (\d+) .*pv (.+)/)
+    if (!matches) return
+    const depth = parseInt(matches[1])
+    if (depth < opts.minDepth) return
+    let cp: number = 0
+    let mate: number = 0
+    if (matches[2] === 'cp') cp = parseFloat(matches[3])
+    else mate = parseFloat(matches[3])
     if (work.ply % 2 === 1) {
-      if (matches[2] === 'cp') cp = -cp;
-      else mate = -mate;
+      if (matches[2] === 'cp') cp = -cp
+      else mate = -mate
     }
-    const nps = parseInt(matches[4], 10);
-    const best = matches[5].split(' ')[0];
+    const nps = parseInt(matches[4], 10)
+    const best = matches[5].split(' ')[0]
     work.emit({
       work,
       ceval: {
@@ -56,26 +56,26 @@ export default function cevalEngine(opts: Opts) {
         best,
         nps
       }
-    });
+    })
   }
 
   function stop(): Promise<{}> {
     return new Promise((resolve) => {
       if (finished) {
-        stopped = true;
-        resolve();
+        stopped = true
+        resolve()
       } else {
         function listen(msg: string) {
           if (msg.indexOf('bestmove') === 0) {
-            output.remove(listen);
-            finished = true;
-            resolve();
+            output.remove(listen)
+            finished = true
+            resolve()
           }
         }
-        output.add(listen);
+        output.add(listen)
         if (!stopped) {
-          stopped = true;
-          send('stop');
+          stopped = true
+          send('stop')
         }
       }
     })
@@ -83,24 +83,24 @@ export default function cevalEngine(opts: Opts) {
 
   function launchEval(work: CevalWork) {
 
-    output.removeAll();
-    output.add((msg: string) => processOutput(msg, work));
+    output.removeAll()
+    output.add((msg: string) => processOutput(msg, work))
 
-    stopped = false;
-    finished = false;
+    stopped = false
+    finished = false
 
     return setOption('Threads', opts.cores)
     .then(() => send(['position', 'fen', work.initialFen, 'moves', work.moves].join(' ')))
-    .then(() => send('go depth ' + opts.maxDepth));
+    .then(() => send('go depth ' + opts.maxDepth))
   }
 
   // take the last work in queue and clear the queue just after
   // to ensure we send to stockfish only one position to evaluate at a time
   function doStart() {
-    const work = startQueue.pop();
+    const work = startQueue.pop()
     if (work) {
-      startQueue = [];
-      launchEval(work);
+      startQueue = []
+      launchEval(work)
     }
   }
 
@@ -114,33 +114,33 @@ export default function cevalEngine(opts: Opts) {
         .then(() => Stockfish.init(), () => Stockfish.init())
         .then(() => init(variant))
       })
-      .catch(err => console.error('stockfish init error', err));
+      .catch(err => console.error('stockfish init error', err))
     },
 
     start(work: CevalWork) {
-      startQueue.push(work);
-      stop().then(doStart);
+      startQueue.push(work)
+      stop().then(doStart)
     },
 
     stop,
 
     exit() {
-      output.removeAll();
-      finished = true;
-      stopped = false;
-      return Stockfish.exit();
+      output.removeAll()
+      finished = true
+      stopped = false
+      return Stockfish.exit()
     }
-  };
+  }
 }
 
 function init(variant: VariantKey) {
-  Stockfish.output(output.dispatch);
+  Stockfish.output(output.dispatch)
   return send('uci')
   .then(() => setOption('Ponder', 'false'))
-  .then(() => setVariant(variant));
+  .then(() => setVariant(variant))
 }
 
 function send(text: string) {
   console.info('stockfish send', text)
-  return Stockfish.cmd(text);
+  return Stockfish.cmd(text)
 }

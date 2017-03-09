@@ -1,10 +1,10 @@
-import i18n from './i18n';
-import { lightPlayerName } from './utils';
-import settings from './settings';
-import session from './session';
-import router from './router';
-import challengesApi from './lichess/challenges';
-import { fetchText } from './http';
+import i18n from './i18n'
+import { lightPlayerName } from './utils'
+import settings from './settings'
+import session from './session'
+import router from './router'
+import challengesApi from './lichess/challenges'
+import { fetchText } from './http'
 
 interface NotificationReceivedData {
   isAppInFocus: boolean
@@ -23,25 +23,25 @@ interface NotificationOpenedData {
 }
 
 function notificationReceivedCallback(data: NotificationReceivedData) {
-  const additionalData = data.payload.additionalData;
+  const additionalData = data.payload.additionalData
   if (additionalData && additionalData.userData) {
     if (data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
-          session.refresh();
+          session.refresh()
           window.plugins.toast.show(
-            i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top');
-          break;
+            i18n('userAcceptsYourChallenge', lightPlayerName(additionalData.userData.joiner)), 'long', 'top')
+          break
         case 'corresAlarm':
-          break;
+          break
         case 'gameMove':
         case 'gameFinish':
-          session.refresh();
-          break;
+          session.refresh()
+          break
         case 'newMessage':
           window.plugins.toast.show(
-            'New message from ' + lightPlayerName(additionalData.userData.sender), 'long', 'top');
-          break;
+            'New message from ' + lightPlayerName(additionalData.userData.sender), 'long', 'top')
+          break
       }
     }
   }
@@ -53,24 +53,24 @@ function notificationOpenedCallback(data: NotificationOpenedData) {
     if (!data.isAppInFocus) {
       switch (additionalData.userData.type) {
         case 'challengeAccept':
-          challengesApi.refresh();
-          router.set(`/game/${additionalData.userData.challengeId}`);
-          break;
+          challengesApi.refresh()
+          router.set(`/game/${additionalData.userData.challengeId}`)
+          break
         case 'challengeCreate':
-          router.set(`/challenge/${additionalData.userData.challengeId}`);
-          break;
+          router.set(`/challenge/${additionalData.userData.challengeId}`)
+          break
         case 'corresAlarm':
-          router.set(`/game/${additionalData.userData.fullId}`);
-          break;
+          router.set(`/game/${additionalData.userData.fullId}`)
+          break
         case 'gameMove':
-          router.set(`/game/${additionalData.userData.fullId}`);
-          break;
+          router.set(`/game/${additionalData.userData.fullId}`)
+          break
         case 'gameFinish':
-          router.set(`/game/${additionalData.userData.fullId}`);
-          break;
+          router.set(`/game/${additionalData.userData.fullId}`)
+          break
         case 'newMessage':
-          router.set(`/inbox/${additionalData.userData.threadId}`);
-          break;
+          router.set(`/inbox/${additionalData.userData.threadId}`)
+          break
       }
     }
   }
@@ -85,20 +85,20 @@ export default {
       .handleNotificationOpened(notificationOpenedCallback)
       .handleNotificationReceived(notificationReceivedCallback)
       .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
-      .endInit();
+      .endInit()
 
       window.plugins.OneSignal.getIds(({ userId }) => {
         fetchText(`/mobile/register/onesignal/${userId}`, {
           method: 'POST'
-        });
-      });
+        })
+      })
 
-      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate());
-      window.plugins.OneSignal.enableSound(settings.general.notifications.sound());
+      window.plugins.OneSignal.enableVibrate(settings.general.notifications.vibrate())
+      window.plugins.OneSignal.enableSound(settings.general.notifications.sound())
     }
   },
 
   unregister() {
-    fetchText('/mobile/unregister', { method: 'POST' });
+    fetchText('/mobile/unregister', { method: 'POST' })
   }
-};
+}

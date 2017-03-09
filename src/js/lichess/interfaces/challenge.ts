@@ -1,4 +1,4 @@
-type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accepted';
+type ChallengeStatus = 'created' | 'offline' | 'canceled' | 'declined' | 'accepted'
 
 export interface ChallengeUser {
   id: string
@@ -8,11 +8,11 @@ export interface ChallengeUser {
 }
 
 export interface TimeControl {
-  type: 'clock' | 'correspondence' | 'unlimited';
-  show?: string;
-  daysPerTurn?: number;
-  limit: number;
-  increment: number;
+  type: 'clock' | 'correspondence' | 'unlimited'
+  show?: string
+  daysPerTurn?: number
+  limit: number
+  increment: number
 }
 
 export interface TimeControlClock extends TimeControl {

@@ -1,14 +1,14 @@
-import * as helper from '../../helper';
-import i18n from '../../../i18n';
-import { ComposeState } from '../interfaces';
+import * as helper from '../../helper'
+import i18n from '../../../i18n'
+import { ComposeState } from '../interfaces'
 
 export function composeBody(ctrl: ComposeState) {
   return (
     <div className="composeWrapper">
       <form id="composeForm"
       onsubmit={function(e: Event) {
-        e.preventDefault();
-        return ctrl.send(e.target as HTMLFormElement);
+        e.preventDefault()
+        return ctrl.send(e.target as HTMLFormElement)
       }}>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName()}
         {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
@@ -25,7 +25,7 @@ export function composeBody(ctrl: ComposeState) {
         </button>
       </form>
     </div>
-  );
+  )
 }
 
 function recipientWithName(ctrl: ComposeState) {
@@ -36,7 +36,7 @@ function recipientWithName(ctrl: ComposeState) {
     autocomplete="off"
     value={ctrl.id()}
     />
-  );
+  )
 }
 
 function recipientWithoutName() {
@@ -47,7 +47,7 @@ function recipientWithoutName() {
     autocomplete="off"
     oncreate={helper.autofocus}
     />
-  );
+  )
 }
 
 function renderError(divKey: string, errorMessage: string) {
@@ -55,5 +55,5 @@ function renderError(divKey: string, errorMessage: string) {
     <div key={divKey} className="errorMessage">
       {errorMessage}
     </div>
-  );
+  )
 }

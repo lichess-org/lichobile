@@ -1,4 +1,4 @@
-import * as helper from '../helper';
+import * as helper from '../helper'
 
 interface TabButton {
   key: string
@@ -18,32 +18,32 @@ const Tabs: Mithril.Component<Attrs, {}> = {
       buttons,
       selectedTab,
       onTabChange
-    } = vnode.attrs;
+    } = vnode.attrs
 
-    const iWidth = 100 / buttons.length;
-    const index = buttons.findIndex(e => e.key === selectedTab);
-    const shift = index * (iWidth * buttons.length);
+    const iWidth = 100 / buttons.length
+    const index = buttons.findIndex(e => e.key === selectedTab)
+    const shift = index * (iWidth * buttons.length)
 
     const indicatorStyle = {
       width: iWidth + '%',
       transform: `translateX(${shift}%)`
-    };
+    }
 
     const buttonStyle = {
       width: iWidth + '%'
-    };
+    }
 
     function renderTab(b: TabButton) {
       const className = [
         'tab',
         selectedTab === b.key ? 'selected' : ''
-      ].join(' ');
-      const oncreate = helper.ontap(() => onTabChange(b.key));
+      ].join(' ')
+      const oncreate = helper.ontap(() => onTabChange(b.key))
       return (
         <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}
         </button>
-      );
+      )
     }
 
     return (
@@ -51,8 +51,8 @@ const Tabs: Mithril.Component<Attrs, {}> = {
         { buttons.map(renderTab) }
         <div className="tabIndicator" style={indicatorStyle} />
       </div>
-    );
+    )
   }
-};
+}
 
 export default Tabs

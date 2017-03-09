@@ -19,21 +19,21 @@ export function loadCachedImages() {
 
 export function handleError(err: FileError | FileTransferError) {
   if (filesystem.isFileTransfertError(err)) {
-    window.plugins.toast.show('Error while downloading file from server. Please try later.', 'long', 'center');
+    window.plugins.toast.show('Error while downloading file from server. Please try later.', 'long', 'center')
   } else {
-    window.plugins.toast.show('Cannot load theme file', 'long', 'center');
+    window.plugins.toast.show('Cannot load theme file', 'long', 'center')
   }
 }
 
 function createStylesheetRule(entry: FileEntry) {
   if (!styleEl) {
-    styleEl = document.createElement("style");
-    document.head.appendChild(styleEl);
+    styleEl = document.createElement('style')
+    document.head.appendChild(styleEl)
   }
   const sheet = <CSSStyleSheet>styleEl.sheet
   const theme = entry.name.replace(/^bg-([a-z-_]+).\w+$/, '$1')
   sheet.insertRule(
     `.view-container.transp.${theme} > main { background-image: url(${entry.toURL()}) }`,
     sheet.cssRules.length
-  );
+  )
 }

@@ -16,16 +16,16 @@ export function makeBoard(fen: string, orientation: Color) {
 }
 
 function orient(pos: BoardPos, color: Color): BoardPos {
-  return color === 'white' ? pos : [9 - pos[0], 9 - pos[1]];
+  return color === 'white' ? pos : [9 - pos[0], 9 - pos[1]]
 }
 
 function pos2px(pos: BoardPos): BoardPos {
-  return [(pos[0] - 1) * 45, (8 - pos[1]) * 45];
+  return [(pos[0] - 1) * 45, (8 - pos[1]) * 45]
 }
 
 function makePiece(pos: BoardPos, piece: Piece) {
-  let name = piece.color === 'white' ? 'w' : 'b';
-  name += (piece.role === 'knight' ? 'n' : piece.role[0]).toUpperCase();
+  let name = piece.color === 'white' ? 'w' : 'b'
+  name += (piece.role === 'knight' ? 'n' : piece.role[0]).toUpperCase()
   return '<svg x="' + pos[0] + '" y="' + pos[1] + '" width="45" height="45">' +
     svgPieces[name] +
     '</svg>'

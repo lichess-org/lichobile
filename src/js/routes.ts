@@ -1,41 +1,41 @@
-import home from './ui/home';
-import timeline from './ui/timeline';
-import game from './ui/game';
-import analyse from './ui/analyse';
-import challenge from './ui/challenge';
-import tv from './ui/tv';
-import correspondence from './ui/correspondence';
-import otb from './ui/otb';
-import ai from './ui/ai';
-import settingsUi from './ui/settings';
-import settingsSoundNotifications from './ui/settings/soundNotifications';
-import settingsLang from './ui/settings/lang';
-import settingsKidMode from './ui/settings/kid';
-import settingsPreferences from './ui/settings/preferences';
-import settingsGameDisplay from './ui/settings/gameDisplay';
-import settingsGameBehavior from './ui/settings/gameBehavior';
-import settingsPrivacy from './ui/settings/privacy';
-import theme from './ui/settings/theme';
-import boardThemes from './ui/settings/boardThemes';
-import pieceThemes from './ui/settings/pieceThemes';
-import user from './ui/user';
-import userFollowing from './ui/user/following';
-import userFollowers from './ui/user/followers';
-import userGames from './ui/user/games';
-import userVariantPerf from './ui/user/variantperf';
-import userTV from './ui/user/tv';
-import players from './ui/players';
-import ranking from './ui/players/ranking';
-import training from './ui/training';
-import tournamentDetail from './ui/tournament/detail';
-import tournament from './ui/tournament';
-import editor from './ui/editor';
-import clock from './ui/clock';
-import inbox from './ui/inbox';
-import inboxThread from './ui/inbox/thread';
-import inboxCompose from './ui/inbox/compose';
-import importer from './ui/importer';
-import { defineRoutes } from './router';
+import home from './ui/home'
+import timeline from './ui/timeline'
+import game from './ui/game'
+import analyse from './ui/analyse'
+import challenge from './ui/challenge'
+import tv from './ui/tv'
+import correspondence from './ui/correspondence'
+import otb from './ui/otb'
+import ai from './ui/ai'
+import settingsUi from './ui/settings'
+import settingsSoundNotifications from './ui/settings/soundNotifications'
+import settingsLang from './ui/settings/lang'
+import settingsKidMode from './ui/settings/kid'
+import settingsPreferences from './ui/settings/preferences'
+import settingsGameDisplay from './ui/settings/gameDisplay'
+import settingsGameBehavior from './ui/settings/gameBehavior'
+import settingsPrivacy from './ui/settings/privacy'
+import theme from './ui/settings/theme'
+import boardThemes from './ui/settings/boardThemes'
+import pieceThemes from './ui/settings/pieceThemes'
+import user from './ui/user'
+import userFollowing from './ui/user/following'
+import userFollowers from './ui/user/followers'
+import userGames from './ui/user/games'
+import userVariantPerf from './ui/user/variantperf'
+import userTV from './ui/user/tv'
+import players from './ui/players'
+import ranking from './ui/players/ranking'
+import training from './ui/training'
+import tournamentDetail from './ui/tournament/detail'
+import tournament from './ui/tournament'
+import editor from './ui/editor'
+import clock from './ui/clock'
+import inbox from './ui/inbox'
+import inboxThread from './ui/inbox/thread'
+import inboxCompose from './ui/inbox/compose'
+import importer from './ui/importer'
+import { defineRoutes } from './router'
 
 export default {
   init() {
@@ -91,6 +91,6 @@ export default {
       'training/:id': training,
       'tournament': tournament,
       'tournament/:id': tournamentDetail
-    });
+    })
   }
-};
+}

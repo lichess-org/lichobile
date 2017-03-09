@@ -1,5 +1,5 @@
-import fen from './fen';
-import configure from './configure';
+import fen from './fen'
+import configure from './configure'
 
 export default function(cfg) {
   var defaults = {
@@ -100,9 +100,9 @@ export default function(cfg) {
       move: function(orig, dest, capturedPiece) {},
       dropNewPiece: function(role, pos) {}
     }
-  };
+  }
 
-  configure(defaults, cfg || {});
+  configure(defaults, cfg || {})
 
-  return defaults;
-};
+  return defaults
+}

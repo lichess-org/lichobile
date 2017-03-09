@@ -1,14 +1,14 @@
-import * as h from 'mithril/hyperscript';
-import * as helper from '../../helper';
-import explorerConfig from './explorerConfig';
-import { ExplorerMove, isTablebaseData } from '../interfaces';
+import * as h from 'mithril/hyperscript'
+import * as helper from '../../helper'
+import explorerConfig from './explorerConfig'
+import { ExplorerMove, isTablebaseData } from '../interfaces'
 import AnalyseCtrl from '../AnalyseCtrl'
-import OpeningTable, { showEmpty, getTR } from './OpeningTable';
+import OpeningTable, { showEmpty, getTR } from './OpeningTable'
 
 function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e)
-  const uci = el && el.dataset['uci'];
-  if (uci) ctrl.explorerMove(uci);
+  const uci = el && el.dataset['uci']
+  if (uci) ctrl.explorerMove(uci)
 }
 
 function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
@@ -25,8 +25,8 @@ function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
 
 
 function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMove>, fen: string) {
-  let stm = fen.split(/\s/)[1];
-  if (!moves.length) return null;
+  let stm = fen.split(/\s/)[1]
+  if (!moves.length) return null
   return [
     <div className="title">{title}</div>,
     <table className="explorerTablebase"
@@ -40,45 +40,45 @@ function showTablebase(ctrl: AnalyseCtrl, title: string, moves: Array<ExplorerMo
             {showDtz(stm, move)}
             {showDtm(stm, move)}
           </td>
-        </tr>;
+        </tr>
       })}
       </tbody>
     </table>
-  ];
+  ]
 }
 
 function winner(stm: string, move: ExplorerMove) {
   if ((stm[0] === 'w' && move.wdl < 0) || (stm[0] === 'b' && move.wdl > 0))
-    return 'white';
+    return 'white'
   else if ((stm[0] === 'b' && move.wdl < 0) || (stm[0] === 'w' && move.wdl > 0))
-    return 'black';
+    return 'black'
   else
-    return null;
+    return null
 }
 
 function showDtm(stm: string, move: ExplorerMove) {
   if (move.dtm) return h('result.' + winner(stm, move), {
     title: 'Mate in ' + Math.abs(move.dtm) + ' half-moves (Depth To Mate)'
-  }, 'DTM ' + Math.abs(move.dtm));
-  else return null;
+  }, 'DTM ' + Math.abs(move.dtm))
+  else return null
 }
 
 function showDtz(stm: string, move: ExplorerMove) {
-  if (move.checkmate) return h('result.' + winner(stm, move), 'Checkmate');
-  else if (move.stalemate) return h('result.draws', 'Stalemate');
-  else if (move.variant_win) return h('result.' + winner(stm, move), 'Variant loss');
-  else if (move.variant_loss) return h('result.' + winner(stm, move), 'Variant win');
-  else if (move.insufficient_material) return h('result.draws', 'Insufficient material');
-  else if (move.dtz === null) return null;
-  else if (move.dtz === 0) return h('result.draws', 'Draw');
+  if (move.checkmate) return h('result.' + winner(stm, move), 'Checkmate')
+  else if (move.stalemate) return h('result.draws', 'Stalemate')
+  else if (move.variant_win) return h('result.' + winner(stm, move), 'Variant loss')
+  else if (move.variant_loss) return h('result.' + winner(stm, move), 'Variant win')
+  else if (move.insufficient_material) return h('result.draws', 'Insufficient material')
+  else if (move.dtz === null) return null
+  else if (move.dtz === 0) return h('result.draws', 'Draw')
   else if (move.zeroing) {
-    let capture = move.san.indexOf('x') !== -1;
-    if (capture) return h('result.' + winner(stm, move), 'Capture');
-    else return h('result.' + winner(stm, move), 'Pawn move');
+    let capture = move.san.indexOf('x') !== -1
+    if (capture) return h('result.' + winner(stm, move), 'Capture')
+    else return h('result.' + winner(stm, move), 'Pawn move')
   }
   else return h('result.' + winner(stm, move), {
     title: 'Next capture or pawn move in ' + Math.abs(move.dtz) + ' half-moves (Distance To Zeroing of the 50 move counter)'
-  }, 'DTZ ' + Math.abs(move.dtz));
+  }, 'DTZ ' + Math.abs(move.dtz))
 }
 
 function showGameEnd(ctrl: AnalyseCtrl, title: string) {
@@ -93,16 +93,16 @@ function showGameEnd(ctrl: AnalyseCtrl, title: string) {
         oncreate: helper.ontapY(ctrl.explorer.toggle)
       }, 'Close')
     ])
-  ]);
+  ])
 }
 
 function show(ctrl: AnalyseCtrl) {
-  const data = ctrl.explorer.current();
+  const data = ctrl.explorer.current()
   if (data && data.opening) {
-    return h(OpeningTable, { data, ctrl });
+    return h(OpeningTable, { data, ctrl })
   }
   else if (data && isTablebaseData(data)) {
-    const moves = data.moves;
+    const moves = data.moves
     if (moves.length) {
       return (
         <div key="explorer-tablebase" className="explorer-data">
@@ -113,20 +113,20 @@ function show(ctrl: AnalyseCtrl) {
           {showTablebase(ctrl, 'Loss saved by 50-move rule', moves.filter((move: ExplorerMove) => move.wdl === 1), data.fen)}
           {showTablebase(ctrl, 'Losing', moves.filter((move: ExplorerMove) => move.wdl === 2), data.fen)}
         </div>
-      );
+      )
     }
-    else if (data.checkmate) return showGameEnd(ctrl, 'Checkmate');
-    else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate');
-    else if (data.variant_win || data.variant_loss) return showGameEnd(ctrl, 'Variant end');
-    else return showEmpty(ctrl);
+    else if (data.checkmate) return showGameEnd(ctrl, 'Checkmate')
+    else if (data.stalemate) return showGameEnd(ctrl, 'Stalemate')
+    else if (data.variant_win || data.variant_loss) return showGameEnd(ctrl, 'Variant end')
+    else return showEmpty(ctrl)
   }
-  return <div key="explorer-no-data" />;
+  return <div key="explorer-no-data" />
 }
 
 function showConfig(ctrl: AnalyseCtrl) {
   return h('div.explorerConfig', {
     key: 'opening-config'
-  }, explorerConfig.view(ctrl.explorer.config));
+  }, explorerConfig.view(ctrl.explorer.config))
 }
 
 function failing() {
@@ -137,19 +137,19 @@ function failing() {
     h('h3', 'Oops, sorry!'),
     h('p', 'The explorer is temporarily'),
     h('p', 'out of service. Try again soon!')
-  ]);
+  ])
 }
 
 export default function(ctrl: AnalyseCtrl) {
-  if (!ctrl.explorer.enabled()) return null;
-  const data = ctrl.explorer.current();
-  const config = ctrl.explorer.config;
-  const configOpened = config.open();
-  const loading = !configOpened && ctrl.explorer.loading();
+  if (!ctrl.explorer.enabled()) return null
+  const data = ctrl.explorer.current()
+  const config = ctrl.explorer.config
+  const configOpened = config.open()
+  const loading = !configOpened && ctrl.explorer.loading()
   const className = helper.classSet({
     explorerTable: true,
     loading
-  });
+  })
   return (
     <div id="explorerTable" className={className} key="explorer">
       <div className="explorer-fixedTitle">{showTitle(ctrl)}</div>
@@ -166,5 +166,5 @@ export default function(ctrl: AnalyseCtrl) {
         /> : null
       }
     </div>
-  );
+  )
 }

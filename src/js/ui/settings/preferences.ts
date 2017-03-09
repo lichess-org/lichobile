@@ -1,9 +1,9 @@
-import router from '../../router';
-import { dropShadowHeader, backButton } from '../shared/common';
-import * as helper from '../helper';
-import layout from '../layout';
-import i18n from '../../i18n';
-import * as h from 'mithril/hyperscript';
+import router from '../../router'
+import { dropShadowHeader, backButton } from '../shared/common'
+import * as helper from '../helper'
+import layout from '../layout'
+import i18n from '../../i18n'
+import * as h from 'mithril/hyperscript'
 
 function renderBody() {
   return [
@@ -18,7 +18,7 @@ function renderBody() {
         oncreate: helper.ontapY(() => router.set('/settings/kidMode'))
       }, 'Kid mode')
     ])
-  ];
+  ]
 }
 
 const PreferencesScreen: Mithril.Component<{}, {}> = {
@@ -26,7 +26,7 @@ const PreferencesScreen: Mithril.Component<{}, {}> = {
 
   view: function() {
     const header = () => dropShadowHeader(null, backButton(i18n('preferences')))
-    return layout.free(header, renderBody);
+    return layout.free(header, renderBody)
   }
 }
 

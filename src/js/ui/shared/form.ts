@@ -1,10 +1,10 @@
-import i18n from '../../i18n';
-import redraw from '../../utils/redraw';
-import * as h from 'mithril/hyperscript';
-import { SettingsProp } from '../../settings';
+import i18n from '../../i18n'
+import redraw from '../../utils/redraw'
+import * as h from 'mithril/hyperscript'
+import { SettingsProp } from '../../settings'
 
 type SelectOption = string[]
-type SelectOptionGroup = Array<SelectOption>;
+type SelectOptionGroup = Array<SelectOption>
 
 type LichessPropOption = [number, string, string | undefined]
 
@@ -28,15 +28,15 @@ function renderLichessPropOption(label: string, value: number, storedValue: numb
 }
 
 
-function renderOptionGroup(label:string, value: string | SelectOptionGroup, storedValue:string, labelArg:string, labelArg2:string): Mithril.Children {
+function renderOptionGroup(label: string, value: string | SelectOptionGroup, storedValue: string, labelArg: string, labelArg2: string): Mithril.Children {
   if (typeof value === 'string') {
-    return renderOption(label, value, storedValue, labelArg, labelArg2);
+    return renderOption(label, value, storedValue, labelArg, labelArg2)
   }
   else {
     return h('optgroup', {
       key: label,
       label
-    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])));
+    }, value.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
   }
 }
 
@@ -50,7 +50,7 @@ export default {
     onchange: (e: Event) => void,
     disabled?: boolean
   ) {
-    const id = name + '_' + value;
+    const id = name + '_' + value
     return [
       h('input.radio[type=radio]', {
         name,
@@ -64,7 +64,7 @@ export default {
       h('label', {
         'for': id
       }, i18n(label))
-    ];
+    ]
   },
 
   renderSelect(
@@ -75,7 +75,7 @@ export default {
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
-    const storedValue = settingsProp();
+    const storedValue = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -84,13 +84,13 @@ export default {
         id: 'select_' + name,
         disabled: isDisabled,
         onchange(e: Event) {
-          const val = (e.target as HTMLSelectElement).value;
-          settingsProp(val);
-          if (onChangeCallback) onChangeCallback(val);
-          setTimeout(() => redraw(), 10);
+          const val = (e.target as HTMLSelectElement).value
+          settingsProp(val)
+          if (onChangeCallback) onChangeCallback(val)
+          setTimeout(() => redraw(), 10)
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
-    ];
+    ]
   },
 
   renderLichessPropSelect(
@@ -100,7 +100,7 @@ export default {
     settingsProp: SettingsProp<number>,
     isDisabled?: boolean
   ) {
-    const storedValue = settingsProp();
+    const storedValue = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -109,8 +109,8 @@ export default {
         id: 'select_' + name,
         disabled: isDisabled,
         onchange(e: Event) {
-          const val = (e.target as HTMLSelectElement).value;
-          settingsProp(~~val);
+          const val = (e.target as HTMLSelectElement).value
+          settingsProp(~~val)
         }
       }, options.map(e => renderLichessPropOption(e[1], e[0], storedValue, e[2])))
     ]
@@ -123,7 +123,7 @@ export default {
     callback?: (v: boolean) => void,
     disabled?: boolean
   ) {
-    const isOn = settingsProp();
+    const isOn = settingsProp()
     return h('div.check_container', {
       className: disabled ? 'disabled' : ''
     }, [
@@ -135,13 +135,13 @@ export default {
         disabled,
         checked: isOn,
         onchange: function() {
-          const newVal = !isOn;
-          settingsProp(newVal);
-          if (callback) callback(newVal);
-          redraw();
+          const newVal = !isOn
+          settingsProp(newVal)
+          if (callback) callback(newVal)
+          redraw()
         }
       })
-    ]);
+    ])
   },
 
   renderSelectWithGroup(
@@ -152,7 +152,7 @@ export default {
     isDisabled?: boolean,
     onChangeCallback?: (v: string) => void
   ) {
-    const storedValue = settingsProp();
+    const storedValue = settingsProp()
     return [
       h('label', {
         'for': 'select_' + name
@@ -161,12 +161,12 @@ export default {
         id: 'select_' + name,
         disabled: isDisabled,
         onchange(e: Event) {
-          const val = (e.target as HTMLSelectElement).value;
-          settingsProp(val);
-          if (onChangeCallback) onChangeCallback(val);
-          setTimeout(() => redraw(), 10);
+          const val = (e.target as HTMLSelectElement).value
+          settingsProp(val)
+          if (onChangeCallback) onChangeCallback(val)
+          setTimeout(() => redraw(), 10)
         }
       }, options.map(e => renderOptionGroup(e[0] as string, e[1], storedValue, e[2] as string, e[3] as string)))
-    ];
+    ]
   }
-};
+}

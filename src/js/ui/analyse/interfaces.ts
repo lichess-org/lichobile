@@ -1,4 +1,4 @@
-import { GameData, GameStep } from '../../lichess/interfaces/game';
+import { GameData, GameStep } from '../../lichess/interfaces/game'
 import AnalyseCtrl from './AnalyseCtrl'
 
 export interface RoleToSan {
@@ -9,7 +9,7 @@ export interface SanToRole {
   [san: string]: Role
 }
 
-export type Source = 'online' | 'offline';
+export type Source = 'online' | 'offline'
 
 export interface PathObj {
   ply: number

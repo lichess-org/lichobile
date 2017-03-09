@@ -1,39 +1,39 @@
-import router from '../../router';
-import redraw from '../../utils/redraw';
-import i18n from '../../i18n';
-import popupWidget from '../shared/popup';
-import spinner from '../../spinner';
-import * as gameApi from '../../lichess/game';
-import { handleXhrError } from '../../utils';
-import { requestComputerAnalysis } from './analyseXhr';
-import * as helper from '../helper';
-import * as h from 'mithril/hyperscript';
-import { MenuInterface } from './interfaces';
+import router from '../../router'
+import redraw from '../../utils/redraw'
+import i18n from '../../i18n'
+import popupWidget from '../shared/popup'
+import spinner from '../../spinner'
+import * as gameApi from '../../lichess/game'
+import { handleXhrError } from '../../utils'
+import { requestComputerAnalysis } from './analyseXhr'
+import * as helper from '../helper'
+import * as h from 'mithril/hyperscript'
+import { MenuInterface } from './interfaces'
 import AnalyseCtrl from './AnalyseCtrl'
 
 export default {
 
   controller: function(root: AnalyseCtrl) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
       open: open,
       close: close,
       isOpen: function() {
-        return isOpen;
+        return isOpen
       },
       root
-    };
+    }
   },
 
   view: function(ctrl: MenuInterface) {
@@ -43,24 +43,24 @@ export default {
       () => renderAnalyseMenu(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
-    );
+    )
   }
-};
+}
 
 function renderAnalyseMenu(ctrl: AnalyseCtrl) {
 
   const sharePGN = helper.ontap(
     ctrl.sharePGN,
     () => window.plugins.toast.show('Share PGN', 'short', 'bottom')
-  );
+  )
 
   return h('div.analyseMenu', [
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
-        ctrl.menu.close();
+        ctrl.menu.close()
         if (ctrl.vm.step) {
-          ctrl.continuePopup.open(ctrl.vm.step.fen);
+          ctrl.continuePopup.open(ctrl.vm.step.fen)
         }
       })
     }, i18n('continueFromHere')) : null,
@@ -75,8 +75,8 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.notes ? h('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {
-        ctrl.menu.close();
-        ctrl.notes.open();
+        ctrl.menu.close()
+        ctrl.notes.open()
       })
     }, [h('span.fa.fa-pencil'), i18n('notes')]) : null,
     ctrl.isRemoteAnalysable() ? h('button', {
@@ -84,10 +84,10 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       oncreate: helper.ontap(() => {
         return requestComputerAnalysis(ctrl.data.game.id)
         .then(() => {
-          ctrl.vm.analysisProgress = true;
-          redraw();
+          ctrl.vm.analysisProgress = true
+          redraw()
         })
-        .catch(handleXhrError);
+        .catch(handleXhrError)
       })
     }, [h('span.fa.fa-bar-chart'), i18n('requestAComputerAnalysis')]) : null,
     ctrl.vm.analysisProgress ? h('div.analysisProgress', [
@@ -97,10 +97,10 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.data.analysis ? h('button', {
       key: 'open_analysis_summary',
       oncreate: helper.ontap(() => {
-        ctrl.menu.close();
-        ctrl.evalSummary!.open();
+        ctrl.menu.close()
+        ctrl.evalSummary!.open()
       })
     }, [h('span.fa.fa-line-chart'), 'Analysis summary']) : null
-  ]);
+  ])
 }
 

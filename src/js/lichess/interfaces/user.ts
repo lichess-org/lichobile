@@ -52,16 +52,16 @@ export interface BaseUser {
 }
 
 export interface User extends BaseUser {
-  engine: boolean;
-  name?: string;
-  language: string;
-  rating?: number;
-  createdAt: Timestamp;
-  seenAt: Timestamp;
+  engine: boolean
+  name?: string
+  language: string
+  rating?: number
+  createdAt: Timestamp
+  seenAt: Timestamp
   perfs: Perfs
-  playTime?: PlayTime;
+  playTime?: PlayTime
   profile?: any
-  booster: boolean;
+  booster: boolean
 }
 
 export type Perfs = { [pk: string]: Perf }

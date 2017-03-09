@@ -1,5 +1,5 @@
-import store from './storage';
-import * as range from 'lodash/range';
+import store from './storage'
+import * as range from 'lodash/range'
 
 export interface SettingsProp<T> {
   (): T
@@ -8,14 +8,14 @@ export interface SettingsProp<T> {
 
 function localstorageprop<T>(key: string, initialValue: T): SettingsProp<T> {
   return function() {
-    if (arguments.length) store.set(key, arguments[0]);
-    const ret = store.get<T>(key);
-    return (ret !== null) ? ret : initialValue;
+    if (arguments.length) store.set(key, arguments[0])
+    const ret = store.get<T>(key)
+    return (ret !== null) ? ret : initialValue
   }
 }
 
 function tupleOf(x: number) {
-  return [x.toString(), x.toString()];
+  return [x.toString(), x.toString()]
 }
 
 const offlineAvailableVariants = [
@@ -234,7 +234,7 @@ export default {
     isTimeValid: function(gameSettings: GameSettings) {
       return gameSettings.timeMode() !== '1' ||
         gameSettings.time() !== '0' ||
-        gameSettings.increment() !== '0';
+        gameSettings.increment() !== '0'
     },
 
     ai: {

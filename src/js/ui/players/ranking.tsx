@@ -9,8 +9,15 @@ import { userStatus, dropShadowHeader } from '../shared/common';
 import i18n from '../../i18n';
 import { perfTitle } from '../../lichess/perfs';
 import * as stream from 'mithril/stream';
+import { RankingKey, RankingUser, Rankings } from '../../lichess/interfaces/user'
 
-export default {
+interface State {
+  ranking: Mithril.Stream<Rankings>
+  catOpenedMap: Mithril.Stream<Record<RankingKey, boolean>>
+  toggleRankingCat(key: RankingKey): void
+}
+
+const RankingScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit(vnode) {
@@ -19,15 +26,14 @@ export default {
 
     socket.createDefault();
 
-    const ranking = stream({});
+    const ranking = stream(undefined);
+    const catOpenedMap = stream({} as Record<RankingKey, boolean>)
 
     xhr.ranking()
     .then(data => {
-      Object.keys(data).forEach(k => {
-        data[k].isOpenedOnMobile = false;
-      });
-      ranking(data);
-      redraw();
+      catOpenedMap(utils.mapObject(data, k => false))
+      ranking(data)
+      redraw()
     })
     .catch(err => {
       utils.handleXhrError(err);
@@ -36,9 +42,9 @@ export default {
 
     vnode.state = {
       ranking,
-      toggleRankingCat(key) {
-        let cat = ranking()[key];
-        cat.isOpenedOnMobile = !cat.isOpenedOnMobile;
+      catOpenedMap,
+      toggleRankingCat(key: RankingKey) {
+        catOpenedMap()[key] = !catOpenedMap()[key]
       }
     };
   },
@@ -51,23 +57,28 @@ export default {
       renderBody.bind(undefined, ctrl)
     );
   }
-};
+}
 
-function renderBody(ctrl) {
-  const categories = Object.keys(ctrl.ranking())
+export default RankingScreen
+
+function renderBody(ctrl: State) {
+  if (!ctrl.ranking()) return
+
+  const keys = Object.keys(ctrl.ranking()) as RankingKey[]
+  const categories = keys
     .filter(k => k !== 'online')
     .map(k => renderRankingCategory(ctrl, k));
   return (
     <div id="allRanking" className="native_scroller page">
       {categories}
     </div>
-  );
+  )
 }
 
-function renderRankingCategory(ctrl, key) {
+function renderRankingCategory(ctrl: State, key: RankingKey) {
   const ranking = ctrl.ranking();
-  const toggleDataIcon = ranking[key].isOpenedOnMobile ? 'S' : 'R';
-  const toggleFunc = helper.isWideScreen() ? utils.noop : ctrl.toggleRankingCat.bind(undefined, key);
+  const toggleDataIcon = ctrl.catOpenedMap()[key] ? 'S' : 'R';
+  const toggleFunc = helper.isWideScreen() ? utils.noop : () => ctrl.toggleRankingCat(key);
   return (
     <section className={'ranking ' + key}>
       <h3 className="rankingPerfTitle" oncreate={helper.ontapY(toggleFunc)}>
@@ -75,16 +86,16 @@ function renderRankingCategory(ctrl, key) {
         {perfTitle(key)}
         {helper.isWideScreen() ? null : <span className="toggleIcon" data-icon={toggleDataIcon} />}
       </h3>
-      {ranking[key].isOpenedOnMobile || helper.isWideScreen() ?
+      {ctrl.catOpenedMap()[key] || helper.isWideScreen() ?
       <ul className="rankingList">
-        {ranking[key].map(p => renderRankingPlayer(p, key))}
+        {ranking[key].map((p: RankingUser) => renderRankingPlayer(p, key))}
       </ul> : null
       }
     </section>
   );
 }
 
-function renderRankingPlayer(user, key) {
+function renderRankingPlayer(user: RankingUser, key: RankingKey) {
   return (
     <li className="rankingPlayer" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
@@ -92,5 +103,5 @@ function renderRankingPlayer(user, key) {
         {user.perfs[key].rating}
       </span>
     </li>
-  );
+  )
 }

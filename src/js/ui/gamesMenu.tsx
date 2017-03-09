@@ -283,7 +283,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim, cardStyle: Object)
           </p>
         </div>
         <div className="actions">
-          <button oncreate={helper.ontapX(utils.f(acceptChallenge, c.id))}>
+          <button oncreate={helper.ontapX(() => acceptChallenge(c.id))}>
             {i18n('accept')}
           </button>
           <button oncreate={helper.ontapX(

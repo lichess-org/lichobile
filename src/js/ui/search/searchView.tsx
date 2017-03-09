@@ -1,5 +1,5 @@
 import * as m from 'mithril';
-import { header as headerWidget, backButton as renderBackbutton } from '../shared/common';
+import { header as headerWidget } from '../shared/common';
 import layout from '../layout';
 import i18n from '../../i18n';
 import {SearchState, Select, Option, UserGameWithDate} from './interfaces';
@@ -12,10 +12,10 @@ import gameStatus from '../../lichess/status';
 import session from '../../session';
 import * as utils from '../../utils';
 import router from '../../router';
+import * as throttle from 'lodash/throttle';
 
 export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
   const ctrl = vnode.state;
-
   function header() {
     return headerWidget(i18n('search'));
   }
@@ -24,6 +24,7 @@ export default function view(vnode: Mithril.Vnode<{}, SearchState>) {
 }
 
 function renderSearchForm(ctrl: SearchState) {
+  const throttledRedraw = throttle (() => redraw(), 500);
   const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}));
   const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]];
   const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}));
@@ -44,21 +45,22 @@ function renderSearchForm(ctrl: SearchState) {
   const boardBounds = { height: boardsize, width: boardsize };
 
   return (
-    <div className="native_scroller searchWraper">
+    <div id="searchContent" className="native_scroller searchWraper">
       <form id="advancedSearchForm"
       onsubmit={function(e: Event) {
         e.preventDefault();
         const analysed = document.getElementById('analysed') as HTMLInputElement;
         analysed.value = analysed.checked ? '1' : '';
         return ctrl.search(e.target as HTMLFormElement);
-      }}>
+      }}
+      oncreate={() => onFormCreate(ctrl)}>
           <div className="game_search_row">
             <label>Players: </label>
             <div className="game_search_input">
-              <input type="text" id="players_a" name="players.a" onkeyup={(e: Event) => { redraw(); }} />
+              <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
             </div>
             <div className="game_search_input">
-              <input type="text" id="players_b" name="players.b" onkeyup={(e: Event) => { redraw(); }} />
+              <input type="text" id="players_b" name="players.b" oninput={throttledRedraw} />
             </div>
           </div>
           {renderSelectRow(i18n('white'), playersNonEmpty(), {name: 'players.white', options: getPlayers(), default: ''}, null)}
@@ -233,6 +235,38 @@ function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => v
     toggleBookmark(g.id);
   }
   else {
+    const scrollPos = document.getElementById('searchContent').scrollTop;
+    const state = settings.search.state();
+    state.scrollPos = scrollPos;
+    settings.search.state(state);
     router.set('/game/' + g.id);
   }
+}
+
+function onFormCreate(ctrl: SearchState) {
+  if (ctrl.firstDraw && ctrl.scrollPos()) {
+    const searchContent = document.getElementById('searchContent');
+    if (searchContent) {
+      searchContent.scrollTop = ctrl.scrollPos();
+    }
+  }
+  setQueryParams(ctrl);
+  setTimeout(() => setQueryParams(ctrl), 1000); // For some reason the player.white, player.black and player.winner take a long time to appears in the DOM
+}
+
+function setQueryParams (ctrl: SearchState) {
+  if (!ctrl.firstDraw)
+    return
+
+  const query = ctrl.lastQuery();
+  ctrl.firstDraw = ctrl.firstDraw.reduce((acc: Array<string>, item: string) => {
+    const el = document.getElementById(item.replace('.', '_')) as HTMLInputElement;
+    if (el) {
+      el.value = query[item];
+    }
+    else {
+      acc.push(item)
+    }
+    return acc;
+  }, []);
 }

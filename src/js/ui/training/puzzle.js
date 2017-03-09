@@ -1,6 +1,8 @@
-import { compact } from 'lodash/array';
-import { keys, toPairs } from 'lodash/object';
-import { head, tail } from 'lodash/array';
+import * as compact from 'lodash/compact';
+import * as keys from 'lodash/keys';
+import * as toPairs from 'lodash/toPairs';
+import * as head from 'lodash/head';
+import * as tail from 'lodash/tail';
 import chessground from '../../chessground';
 import { noNull } from '../../utils';
 import chess from './chess';

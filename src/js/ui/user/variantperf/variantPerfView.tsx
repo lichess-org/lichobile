@@ -1,26 +1,25 @@
+import { select } from 'd3-selection'
+import { scaleTime, scaleLinear } from 'd3-scale'
+import { line } from 'd3-shape'
+import { axisLeft, axisBottom } from 'd3-axis'
+import { timeFormat } from 'd3-time-format'
+import { timeMonth, timeYear, timeWeek } from 'd3-time'
 import router from '../../../router';
-import * as utils from '../../../utils';
 import i18n from '../../../i18n';
-import {shortPerfTitle} from '../../../lichess/perfs';
 import * as helper from '../../helper';
-import { header as headerWidget, backButton } from '../../shared/common';
-import layout from '../../layout';
-import * as Chart from 'chart.js';
+import { GraphPoint } from '../../../lichess/interfaces/user'
+
+import { State } from './'
+
+interface DateRating {
+  date: Date
+  rating: number
+}
+type GraphData = Array<DateRating>
 
 const ONE_YEAR = 1000*60*60*24*365;
 
-export default function view(vnode) {
-  const ctrl = vnode.state;
-  const userId = vnode.attrs.id;
-  const variant = vnode.attrs.variant;
-  const header = utils.partialf(headerWidget, null,
-    backButton(userId + ' ' + shortPerfTitle(variant) + ' stats')
-  );
-
-  return layout.free(header, () => renderBody(ctrl));
-}
-
-function renderBody(ctrl) {
+export function renderBody(ctrl: State) {
   const data = ctrl.variantPerfData();
 
   if (!data) return null;
@@ -29,15 +28,19 @@ function renderBody(ctrl) {
   const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24;
   const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60;
   const now = Date.now();
-  const yearAgo = now - ONE_YEAR;
+  const yearsAgo = now - (ONE_YEAR * 3);
   const graphData = data.graph
     .map(normalizeGraphData)
-    .filter(i => i.x > yearAgo);
+    .filter(d => d.date.getTime() > yearsAgo)
+
+  const { vw } = helper.viewportDim()
 
   return (
     <div class="variantPerfBody native_scroller page">
       {graphData && graphData.length >= 3 ?
-        <canvas className="variantPerf-graph" oncreate={node => delayDrawChart(graphData, node)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} /> : null
+        <div>
+          <svg width={vw - 20} height="230" id="variantPerf-graph" className="variantPerf-graph" oncreate={() => delayDrawChart(graphData)} key={'graph_' + helper.isPortrait() ? 'portrait' : 'landscape'} />
+        </div> : null
       }
       <table class="variantPerf">
         <tbody>
@@ -155,13 +158,13 @@ function renderBody(ctrl) {
       </table>
       <div class={'variantPerfGames noPadding ' + isEmpty(data.stat.bestWins.results.length)}>
         <div class="variantPerfHeading"> Best Wins </div>
-        {data.stat.bestWins.results.map(p => renderGame(p))}
+        {data.stat.bestWins.results.map((p: any) => renderGame(p))}
       </div>
     </div>
   );
 }
 
-function renderGame(game) {
+function renderGame(game: any) {
   const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
   const date = game.at.substring(0, 10);
   const gameId = game.gameId;
@@ -173,96 +176,91 @@ function renderGame(game) {
   );
 }
 
-function isEmpty(element) {
+function isEmpty(element: any) {
   if (!element)
     return 'empty';
   else
     return '';
 }
 
-function toTitleCase(str) {
+function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, txt =>
     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   );
 }
 
-function delayDrawChart(graphData, node) {
-  setTimeout(() => drawChart(graphData, node), 500);
+function delayDrawChart(graphData: GraphData) {
+  setTimeout(() => drawChart(graphData), 500);
 }
 
-function drawChart(graphData, node) {
-  const ctx = node.dom.getContext('2d');
-  const canvas = ctx.canvas;
-  const now = Date.now();
-  const yearAgo = now - ONE_YEAR;
+function drawChart(graphData: GraphData) {
+  const graph = select('#variantPerf-graph')
+  const margin = {top: 0, right: 20, bottom: 40, left: 30}
+  const width = +graph.attr('width') - margin.left - margin.right
+  const height = +graph.attr('height') - margin.top - margin.bottom
+  const g = graph.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-  if (!graphData || graphData.length < 3) {
-    return null;
-  }
+  const scaleX = scaleTime()
+  .domain([graphData[0].date, graphData[graphData.length - 1].date])
+  .rangeRound([0, width])
 
-  if (helper.isPortrait()) {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth - 20;
-    canvas.height = canvas.style.height = 150;
-  } else {
-    canvas.width = canvas.style.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.style.height = canvas.parentElement.offsetHeight - 50;
-  }
+  const values = graphData.map(p => p.rating)
+  const scaleY = scaleLinear()
+  .domain([Math.min.apply(null, values) - 50, Math.max.apply(null, values) + 50])
+  .rangeRound([height, 0])
 
-  if (graphData[graphData.length-1].x < now) {
-    graphData.push({x: now, y: graphData[graphData.length-1].y});
-  }
+  const l = line<DateRating>()
+  .x(d => scaleX(d.date))
+  .y(d => scaleY(d.rating))
 
-  const c = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [{
-        data: graphData,
-        xAxisID: 'x',
-        yAxisID: 'y',
-        borderColor: 'rgba(196, 168, 111, 0.8)',
-        pointRadius: 0,
-        fill: false
-      }]
-    },
-    options: {
-      animation: {
-        duration: 1000,
-        easing: 'easeOutQuart'
-      },
-      scales: {
-        xAxes: [{
-          id: 'x',
-          type: 'time',
-          time: {
-            displayFormats: {
-              month: 'MMM \'YY'
-            },
-            min: yearAgo,
-            max: now,
-            unit: 'month',
-            unitStepSize: 3
-          },
-          gridLines: {
-            display: false
-          },
-        }],
-        yAxes: [{
-          id: 'y',
-          type: 'linear',
-          gridLines: {
-            color: '#666'
-          },
-        }]
-      },
-      legend: {
-        display: false
-      }
-    }
-  });
-  return c;
+  const yAxis = axisLeft(scaleY)
+  .tickFormat(d => String(d))
+
+  const xAxis = axisBottom(scaleX)
+  .tickFormat(multiFormat)
+
+  g.append('g')
+  .attr('transform', 'translate(0,' + height + ')')
+  .call(xAxis)
+  .selectAll('text')
+  .attr('y', 0)
+  .attr('x', 9)
+  .attr('dy', '.35em')
+  .attr('transform', 'rotate(60)')
+  .style('text-anchor', 'start')
+  .select('.domain')
+  .remove();
+
+  g.append('g')
+  .call(yAxis)
+  .append('text')
+  .attr('class', 'legend')
+  .attr('transform', 'rotate(-90)')
+  .attr('y', 6)
+  .attr('dy', '0.71em')
+  .attr('text-anchor', 'end')
+  .text(i18n('rating'));
+
+  g.append('path')
+  .attr('class', 'path')
+  .attr('fill', 'none')
+  .attr('stroke', 'blue')
+  .attr('stroke-linejoin', 'round')
+  .attr('stroke-linecap', 'round')
+  .attr('stroke-width', 1.5)
+  .attr('d', l(graphData));
 }
 
-function normalizeGraphData(i) {
-  const unixTime = (new Date(i[0], i[1], i[2])).getTime();
-  return {x: unixTime, y: i[3]};
+function normalizeGraphData(i: GraphPoint): DateRating {
+  return { date: new Date(i[0], i[1], i[2]), rating: i[3] }
+}
+
+const formatWeek = timeFormat("%b %d")
+const formatMonth = timeFormat("%b")
+const formatYear = timeFormat("%Y")
+
+function multiFormat(date: Date) {
+ return (timeMonth(date) < date ? formatWeek
+    : timeYear(date) < date ? formatMonth
+    : formatYear)(date);
 }

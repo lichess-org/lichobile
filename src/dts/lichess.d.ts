@@ -11,7 +11,7 @@ declare type Color = 'white' | 'black';
 declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
 
 declare type Speed = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'unlimited'
-declare type Perf = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
+declare type PerfKey = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
 declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn';
 
@@ -171,7 +171,7 @@ interface Game {
   rated?: boolean
   turns?: number
   lastMove?: string
-  perf?: Perf
+  perf?: PerfKey
   // FIXM
   check?: string | boolean
   tournamentId?: string

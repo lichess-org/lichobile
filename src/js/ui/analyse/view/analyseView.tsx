@@ -158,7 +158,7 @@ const Replay: Mithril.Component<{ ctrl: AnalyseCtrlInterface }, {}> = {
     const replayClass = 'analyse-replay native_scroller' + (pieceNotation ? ' displayPieces' : '')
     return (
       <div id="replay" className={replayClass}
-        oncreate={helper.ontap(e => onReplayTap(ctrl, e), null, null, false, getMoveEl)}
+        oncreate={helper.ontapY(e => onReplayTap(ctrl, e), null, getMoveEl)}
       >
         { renderOpeningBox(ctrl) }
         { renderTree(ctrl, ctrl.analyse.tree) }

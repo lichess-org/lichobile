@@ -1,9 +1,9 @@
 import settings from './settings';
 import { loadLocalJsonFile } from './utils';
 
-let messages: { [key: string]: string } = {};
+let messages = {} as StringMap
 
-const untranslated: {[key: string]: string} = {
+const untranslated: StringMap = {
   apiUnsupported: 'Your version of lichess app is too old! Please upgrade for free to the latest version.',
   apiDeprecated: 'Upgrade for free to the latest lichess app! Support for this version will be dropped on %s.',
   resourceNotFoundError: 'Resource not found.',
@@ -95,7 +95,7 @@ export function loadFromSettings(): Promise<string> {
 }
 
 function loadFile(code: string): Promise<string> {
-  return loadLocalJsonFile('i18n/' + code + '.json')
+  return loadLocalJsonFile<StringMap>('i18n/' + code + '.json')
   .then(data => {
     messages = data;
     return code;

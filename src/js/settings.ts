@@ -1,5 +1,6 @@
 import store from './storage';
 import * as range from 'lodash/range';
+import {SearchStateSetting} from './ui/search/interfaces';
 
 export interface SettingsProp<T> {
   (): T
@@ -29,11 +30,6 @@ const offlineAvailableVariants = [
   ['Horde', 'horde'],
   ['Racing Kings', 'racingKings']
 ]
-
-// temporarily disable ios crazy ceval bc/ of stockfish crash
-function filterIOSCrazy(p: [string, string]) {
-  return window.cordova.platformId !== 'ios' || p[1] !== 'crazyhouse'
-}
 
 export interface GameSettings {
   time: SettingsProp<string>
@@ -149,7 +145,7 @@ export default {
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1'),
     variant: localstorageprop('settings.ai.variant', 'standard'),
-    availableVariants: offlineAvailableVariants.filter(filterIOSCrazy)
+    availableVariants: offlineAvailableVariants
   },
 
   otb: {
@@ -332,7 +328,8 @@ export default {
     winners: [['1', 'white'], ['2', 'black'], ['3', 'none']],
     dates: [['0d', 'Now'], ['1h', '1 hour ago'], ['2h', '2 hours ago'], ['6h', '6 hours ago'], ['1d', '1 day ago'], ['2d', '2 days ago'], ['3d', '3 days ago'], ['4d', '4 days ago'], ['5d', '5 days ago'], ['6d', '6 days ago'], ['1w', '1 week ago'], ['2w', '2 weeks ago'], ['3w', '3 weeks ago'], ['4w', '4 weeks ago'], ['5w', '5 weeks ago'], ['6w', '6 weeks ago'], ['1m', '1 month ago'], ['2m', '2 months ago'], ['3m', '3 months ago'], ['4m', '4 months ago'], ['5m', '5 months ago'], ['6m', '6 months ago'], ['1y', '1 year ago'], ['2y', '2 years ago'], ['3y', '3 years ago'], ['4y', '4 years ago'], ['5y', '5 years ago']],
     sortFields: [['d', 'Date'], ['t', 'Moves'], ['a', 'Rating']],
-    sortOrders: [['desc', 'Descending'], ['asc', 'Ascending']]
+    sortOrders: [['desc', 'Descending'], ['asc', 'Ascending']],
+    state: localstorageprop<SearchStateSetting>('settings.search.state', {})
   },
 
   tournament: {

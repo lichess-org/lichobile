@@ -49,7 +49,6 @@ function diffBoard(ctrl) {
   const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation;
   d.prevOrientation = d.orientation;
   const bounds = d.bounds;
-  const elements = ctrl.data.element.childNodes;
   const pieces = ctrl.data.pieces;
   const anims = ctrl.data.animation.current.anims;
   const capturedPieces = ctrl.data.animation.current.capturedPieces;
@@ -59,7 +58,7 @@ function diffBoard(ctrl) {
   const movedPieces = new Map();
   const movedSquares = new Map();
   const piecesKeys = Object.keys(pieces);
-  let el, squareClassAtKey, pieceAtKey, pieceId, anim, captured, translate;
+  let el, squareClassAtKey, pieceAtKey, pieceClass, anim, captured, translate;
   let mvdset, mvd;
 
   let otbTurnFlipChange, otbModeChange;
@@ -71,12 +70,12 @@ function diffBoard(ctrl) {
   }
 
   // walk over all board dom elements, apply animations and flag moved pieces
-  for (let i = 0, len = elements.length; i < len; i++) {
-    el = elements[i];
+  el = ctrl.data.element.firstChild;
+  while (el) {
     let k = el.cgKey;
     pieceAtKey = pieces[k];
     squareClassAtKey = squares.get(k);
-    pieceId = el.cgRole + el.cgColor;
+    pieceClass = el.cgRole + el.cgColor;
     anim = anims && anims[k];
     captured = capturedPieces && capturedPieces[k];
     if (el.tagName === 'PIECE') {
@@ -87,6 +86,11 @@ function diffBoard(ctrl) {
         translate = util.posToTranslate(util.key2pos(k), asWhite, bounds);
         el.style.transform = util.transform(d, el.cgColor, util.translate(translate));
         el.cgDragging = false;
+      }
+      // remove captured class if it still remains
+      if (!captured && el.cgCaptured) {
+        el.cgCaptured = false;
+        el.classList.remove('captured');
       }
       // there is now a piece at this dom key
       if (pieceAtKey) {
@@ -110,14 +114,15 @@ function diffBoard(ctrl) {
         else {
           if (captured && captured.role === el.cgRole && captured.color === el.cgColor) {
             el.classList.add('captured');
+            el.cgCaptured = true;
           } else {
-            movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
+            movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el));
           }
         }
       }
       // no piece: flag as moved
       else {
-        movedPieces.set(pieceId, (movedPieces.get(pieceId) || []).concat(el));
+        movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el));
       }
     }
     else if (el.tagName === 'SQUARE') {
@@ -131,6 +136,7 @@ function diffBoard(ctrl) {
         );
       }
     }
+    el = el.nextSibling;
   }
 
   // walk over all pieces in current set, apply dom changes to moved pieces
@@ -138,10 +144,10 @@ function diffBoard(ctrl) {
   for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
     let k = piecesKeys[j];
     let p = pieces[k];
-    pieceId = p.role + p.color;
+    pieceClass = p.role + p.color;
     anim = anims && anims[k];
     if (!samePieces.has(k)) {
-      mvdset = movedPieces.get(pieceId);
+      mvdset = movedPieces.get(pieceClass);
       mvd = mvdset && mvdset.pop();
       // a same piece was moved
       if (mvd) {
@@ -214,7 +220,7 @@ function renderSquareDom(key, vdom) {
   return s;
 }
 
-function pieceClass(p) {
+function pieceClassOf(p) {
   return p.role + ' ' + p.color;
 }
 
@@ -228,7 +234,7 @@ function renderPiece(d, key, ctx) {
   var dragging = draggable.orig === key && draggable.started;
   var attrs = {
     style: {},
-    className: pieceClass(p)
+    className: pieceClassOf(p)
   };
   var translate = util.posToTranslate(util.key2pos(key), ctx.asWhite, ctx.bounds);
   if (dragging) {
@@ -339,7 +345,7 @@ function renderContent(ctrl) {
 
 function renderCaptured(cfg, ctx) {
   var attrs = {
-    className: 'fading ' + pieceClass(cfg.piece),
+    className: 'fading ' + pieceClassOf(cfg.piece),
     style: {}
   };
   attrs.style.transform = util.translate(util.posToTranslate(cfg.piece.pos, ctx.asWhite, ctx.bounds));

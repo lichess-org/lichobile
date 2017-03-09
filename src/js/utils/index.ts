@@ -12,7 +12,7 @@ interface GamePosCached {
 
 export const gamePosCache: Map<string, GamePosCached> = new Map()
 
-export function loadLocalJsonFile(url: string): Promise<any> {
+export function loadLocalJsonFile<T>(url: string): Promise<T> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.overrideMimeType("application/json");
@@ -92,29 +92,16 @@ export function handleXhrError(error: Error | FetchError): void {
   }
 }
 
-export function serializeQueryParameters(obj: any): string {
+export function serializeQueryParameters(obj: Object): string {
   let str = '';
-  for (const key in obj) {
+  const keys = Object.keys(obj)
+  keys.forEach(key => {
     if (str !== '') {
       str += '&';
     }
     str += encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]);
-  }
+  })
   return str;
-}
-
-function partialApply(fn: Function, args: Array<any>): Function {
-  return fn.bind.apply(fn, [null].concat(args));
-}
-
-export function partialf(): Function {
-  return partialApply(arguments[0], Array.prototype.slice.call(arguments, 1));
-}
-
-export function f(fn: Function, ...args: Array<any>) {
-  return function() {
-    fn.apply(fn, args);
-  };
 }
 
 export function noop() {}
@@ -257,4 +244,10 @@ export function noNull<T>(v: T) {
 
 export function flatten<T>(arr: T[][]): T[] {
   return arr.reduce((a: T[], b: T[]) => a.concat(b), []);
+}
+
+export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U> {
+  const res = {} as Record<K, U>
+  Object.keys(obj).map((k: K) => res[k] = f(obj[k]))
+  return res
 }

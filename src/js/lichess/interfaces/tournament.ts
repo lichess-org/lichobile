@@ -175,9 +175,10 @@ interface PlayerInfoNb {
 }
 
 export interface TournamentLists {
-  created: Array<TournamentListItem>
-  finished: Array<TournamentListItem>
-  started: Array<TournamentListItem>
+  created: TournamentListItem[]
+  finished: TournamentListItem[]
+  started: TournamentListItem[]
+  [i: string]: TournamentListItem[]
 }
 
 export interface TournamentListItem {

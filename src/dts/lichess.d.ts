@@ -1,21 +1,21 @@
-declare type Timestamp = number;
+declare type Timestamp = number
 
 declare type StringMap = {
-  [i: string]: string;
+  [i: string]: string
 }
 
 declare type SanChar = 'P' | 'N' | 'B' | 'R' | 'Q'
 
-declare type Color = 'white' | 'black';
+declare type Color = 'white' | 'black'
 
-declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse';
+declare type VariantKey = 'standard' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
 declare type Speed = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'unlimited'
 declare type PerfKey = 'bullet' | 'blitz' | 'classical' | 'correspondence' | 'chess960' | 'antichess' | 'fromPosition' | 'kingOfTheHill' | 'threeCheck' | 'atomic' | 'horde' | 'racingKings' | 'crazyhouse'
 
-declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn';
+declare type Role = 'king' | 'queen' | 'knight' | 'bishop' | 'rook' | 'pawn'
 
-declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3' | 'a4' | 'b4' | 'c4' | 'd4' | 'e4' | 'f4' | 'g4' | 'h4' | 'a5' | 'b5' | 'c5' | 'd5' | 'e5' | 'f5' | 'g5' | 'h5' | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6' | 'a7' | 'b7' | 'c7' | 'd7' | 'e7' | 'f7' | 'g7' | 'h7' | 'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8';
+declare type Pos = 'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1' | 'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3' | 'a4' | 'b4' | 'c4' | 'd4' | 'e4' | 'f4' | 'g4' | 'h4' | 'a5' | 'b5' | 'c5' | 'd5' | 'e5' | 'f5' | 'g5' | 'h5' | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6' | 'a7' | 'b7' | 'c7' | 'd7' | 'e7' | 'f7' | 'g7' | 'h7' | 'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8'
 
 declare type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'
 
@@ -44,28 +44,28 @@ interface Window {
 }
 
 interface PongMessage {
-  d: number;
-  r: number;
+  d: number
+  r: number
 }
 
 interface PlayTime {
-  total: number;
-  tv: number;
+  total: number
+  tv: number
 }
 
 interface Piece {
-  role: Role;
-  color: Color;
+  role: Role
+  color: Color
 }
 
 interface Drop {
-  role: Role;
-  key: Pos;
+  role: Role
+  key: Pos
 }
 
 interface TournamentClock {
-  limit: number;
-  increment: number;
+  limit: number
+  increment: number
 }
 
 interface ClockData {
@@ -78,12 +78,12 @@ interface ClockData {
 }
 
 interface CorrespondenceClockData {
-  barTime: number;
-  black: number;
-  daysPerTurn: number;
-  emerg: number;
-  increment: number;
-  white: number;
+  barTime: number
+  black: number
+  daysPerTurn: number
+  emerg: number
+  increment: number
+  white: number
 }
 
 interface BoardPosition {
@@ -121,10 +121,10 @@ interface Variant {
 }
 
 interface BoardBounds {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-  width: number;
-  height: number;
+  top: number
+  right: number
+  bottom: number
+  left: number
+  width: number
+  height: number
 }

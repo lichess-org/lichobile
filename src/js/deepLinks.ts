@@ -10,6 +10,8 @@ interface GameParams {
   color: string
 }
 
+type ctrl = (data: Rlite.RouteParams<any>) => void
+
 function analyseCtrl({ params }: Rlite.RouteParams<GameParams>) {
   router.set(`/analyse/online/${params.id}` + (params.color ? `/${params.color}` : ''));
 }
@@ -18,7 +20,7 @@ function gameCtrl({ params }: Rlite.RouteParams<GameParams>) {
   router.set(`/game/${params.id}` + (params.color ? `/${params.color}` : ''));
 }
 
-const deepRoutes = {
+const deepRoutes: { [route: string]: ctrl } = {
   'training/:id': ({ params }: Rlite.RouteParams<{ id: string }>) => router.set(`/training/${params.id}`),
   'challenge/:id': ({ params }: Rlite.RouteParams<{ id: string }>) => router.set(`/challenge/${params.id}`),
   'analyse/:id': analyseCtrl,

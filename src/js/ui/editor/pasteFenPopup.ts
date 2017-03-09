@@ -37,7 +37,7 @@ export default {
         return h('form', {
           onsubmit(e: Event) {
             e.preventDefault()
-            const input = (e.target as HTMLElement)[0]
+            const input = (e.target as HTMLFormElement)[0]
             const value = input.value
             if (value && value.length)
               ctrl.root.loadNewFen(input.value)

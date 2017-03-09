@@ -1,14 +1,14 @@
-import chessground from '../../../chessground';
-import * as gameApi from '../../../lichess/game';
-import settings from '../../../settings';
-import { OfflineGameData } from '../../../lichess/interfaces/game';
+import chessground from '../../../chessground'
+import * as gameApi from '../../../lichess/game'
+import settings from '../../../settings'
+import { OfflineGameData } from '../../../lichess/interfaces/game'
 import { AfterMoveMeta } from '../../../lichess/interfaces/move'
-import { boardOrientation } from '../../../utils';
-import { batchRequestAnimationFrame } from '../../../utils/batchRAF';
+import { boardOrientation } from '../../../utils'
+import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { GameSituation } from '../../../chess'
 
 function makeConfig(data: OfflineGameData, sit: GameSituation): any {
-  const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null;
+  const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
   return {
     batchRAF: batchRequestAnimationFrame,
     fen: sit.fen,
@@ -45,7 +45,7 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): any {
       squareTarget: true,
       magnified: settings.game.magnified()
     }
-  };
+  }
 }
 
 function make(
@@ -56,40 +56,40 @@ function make(
   onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
   onNewPiece: () => void
 ) {
-  const config = makeConfig(data, sit);
+  const config = makeConfig(data, sit)
   config.movable.events = {
     after: userMove,
     afterNewPiece: userNewPiece
-  };
+  }
   config.events = {
     move: onMove,
     dropNewPiece: onNewPiece
-  };
-  return new chessground.controller(config);
+  }
+  return new chessground.controller(config)
 }
 
 function reload(ground: Chessground.Controller, data: OfflineGameData, sit: GameSituation) {
-  ground.reconfigure(makeConfig(data, sit));
+  ground.reconfigure(makeConfig(data, sit))
 }
 
 function changeOTBMode(ground: Chessground.Controller, flip: boolean) {
-  ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' });
+  ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' })
 }
 
 function promote(ground: Chessground.Controller, key: Pos, role: Role) {
-  const pieces = {};
-  const piece = ground.data.pieces[key];
+  const pieces: {[k: string]: Piece } = {}
+  const piece = ground.data.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
       role: role
-    };
-    ground.setPieces(pieces);
+    }
+    ground.setPieces(pieces)
   }
 }
 
 function end(ground: Chessground.Controller) {
-  ground.stop();
+  ground.stop()
 }
 
 export default {
@@ -98,4 +98,4 @@ export default {
   promote,
   end,
   changeOTBMode
-};
+}

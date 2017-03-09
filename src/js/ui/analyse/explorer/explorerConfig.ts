@@ -60,9 +60,11 @@ export default {
     let openedWith: string;
 
     function serialize() {
-      return JSON.stringify(['db', 'rating', 'speed'].map(k =>
-        data[k].selected()
-      ));
+      return JSON.stringify([
+        data.db.selected(),
+        data.rating.selected(),
+        data.speed.selected()
+      ])
     }
 
     function doOpen() {

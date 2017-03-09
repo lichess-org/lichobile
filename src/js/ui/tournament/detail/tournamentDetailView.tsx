@@ -217,43 +217,43 @@ function variantDisplay(data: Tournament) {
 }
 
 function variantKey(data: Tournament) {
-  let variant = data.variant;
+  let variant = data.variant
   if (variant === 'standard') {
-    variant = data.perf.name.toLowerCase();
+    variant = data.perf.name.toLowerCase()
   }
-  return variant;
+  return variant
 }
 
 function timeInfo(time?: number, preceedingText?: string) {
   if (time === undefined) return ''
 
-  return (preceedingText ? preceedingText : '') + ' ' + formatTimeInSecs(time);
+  return (preceedingText ? preceedingText : '') + ' ' + formatTimeInSecs(time)
 }
 
 function getLeaderboardItemEl(e: Event) {
   const target = e.target as HTMLElement
   return (target as HTMLElement).classList.contains('list_item') ? target :
-    helper.findParentBySelector(target, '.list_item');
+    helper.findParentBySelector(target, '.list_item')
 }
 
 function handlePlayerInfoTap(ctrl: TournamentState, e: Event) {
-  const el = getLeaderboardItemEl(e);
-  const playerId = el.dataset['player'];
+  const el = getLeaderboardItemEl(e)
+  const playerId = el.dataset['player']
 
-  ctrl.playerInfoCtrl.open(playerId);
+  if (playerId) ctrl.playerInfoCtrl.open(playerId)
 }
 
 function tournamentLeaderboard(ctrl: TournamentState) {
-  const data = ctrl.tournament();
-  const players = data.standing.players;
-  const page = data.standing.page;
-  const firstPlayer = (players.length > 0) ? players[0].rank : 0;
-  const lastPlayer = (players.length > 0) ? players[players.length-1].rank : 0;
-  const backEnabled = page > 1;
-  const forwardEnabled = page < data.nbPlayers/10;
-  const isUserPage = data.me && (page === Math.ceil(data.me.rank/10));
-  const user = session.get();
-  const userName = user ? user.username : '';
+  const data = ctrl.tournament()
+  const players = data.standing.players
+  const page = data.standing.page
+  const firstPlayer = (players.length > 0) ? players[0].rank : 0
+  const lastPlayer = (players.length > 0) ? players[players.length-1].rank : 0
+  const backEnabled = page > 1
+  const forwardEnabled = page < data.nbPlayers/10
+  const isUserPage = data.me && (page === Math.ceil(data.me.rank/10))
+  const user = session.get()
+  const userName = user ? user.username : ''
 
   return (
     <div key="leaderboard" className='tournamentLeaderboard'>

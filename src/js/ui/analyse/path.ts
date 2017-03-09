@@ -5,7 +5,7 @@ export default {
   default(ply?: number): Path {
     return [{
       ply: ply || 0,
-      variation: null
+      variation: undefined
     } as PathObj];
   },
 
@@ -14,7 +14,7 @@ export default {
       const s = step.split(':');
       return {
         ply: ~~s[0],
-        variation: s[1] ? ~~s[1] : null
+        variation: s[1] ? ~~s[1] : undefined
       };
     });
   },
@@ -61,7 +61,7 @@ export default {
     });
     p2.push({
       ply: ply,
-      variation: null
+      variation: undefined
     });
     return p2;
   },
@@ -70,19 +70,19 @@ export default {
     const p2 = path.slice(0, path.length - 1);
     const last = p2.length - 1;
     p2[last] = copy(p2[last], {
-      variation: null
+      variation: undefined
     });
     return p2;
   }
 };
 
-function copy(obj: PathObj, newValues: Object): PathObj {
-  const c = {};
+function copy(obj: PathObj, newValues: Partial<PathObj>): PathObj {
+  const c: any = {};
   for (let k in obj) {
-    c[k] = obj[k];
+    c[k] = (<any>obj)[k];
   }
   for (let k in newValues) {
-    c[k] = newValues[k];
+    c[k] = (<any>newValues)[k];
   }
-  return c as PathObj;
+  return c as PathObj
 }

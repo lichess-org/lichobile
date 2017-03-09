@@ -22,6 +22,7 @@ interface EditorData {
     Q: Mithril.Stream<boolean>
     k: Mithril.Stream<boolean>
     q: Mithril.Stream<boolean>
+    [k: string]: Mithril.Stream<boolean>
   }
   enpassant: Mithril.Stream<string>
   halfmove: Mithril.Stream<string>

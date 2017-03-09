@@ -241,12 +241,12 @@ export default class AnalyseCtrl {
   public jumpToMain = (ply: number) => {
     this.userJump([{
       ply: ply,
-      variation: null
+      variation: undefined
     }]);
   }
 
   public jumpToIndex = (index: number) => {
-    this.jumpToMain(index + 1 + this.data.game.startedAtTurn);
+    this.jumpToMain(index + 1 + (this.data.game.startedAtTurn || 0))
   }
 
   private canGoForward() {
@@ -283,7 +283,7 @@ export default class AnalyseCtrl {
       if (p[len - 1].ply > p[len - 2].ply) p[len - 1].ply--;
       else {
         p.pop();
-        p[len - 2].variation = null;
+        p[len - 2].variation = undefined
         if (p[len - 2].ply > 1) p[len - 2].ply--;
       }
     }
@@ -565,7 +565,8 @@ export default class AnalyseCtrl {
 
   public isRemoteAnalysable = () => {
     return !this.data.analysis && !this.vm.analysisProgress &&
-      session.isConnected() && gameApi.analysable(this.data);
+      session.isConnected() && isOnlineGameData(this.data) &&
+      gameApi.analysable(this.data)
   }
 
   private getStepSituation = debounce(() => {

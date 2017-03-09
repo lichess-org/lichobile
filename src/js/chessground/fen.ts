@@ -2,7 +2,7 @@ import util from './util';
 
 const initial = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 
-const roles = {
+const roles: {[i: string]: string} = {
   p: 'pawn',
   r: 'rook',
   n: 'knight',
@@ -28,7 +28,7 @@ const letters = {
 
 function read(fen: string) {
   if (fen === 'start') fen = initial;
-  const pieces = {};
+  const pieces: Chessground.Pieces = {};
   const space = fen.indexOf(' ');
   const first = space !== -1 ? fen.substr(0, space) : fen;
   const parts = first.split('/');
@@ -43,7 +43,7 @@ function read(fen: string) {
       else {
         x++;
         pieces[util.pos2key([x, 8 - i])] = {
-          role: roles[v],
+          role: roles[v] as Role,
           color: v === v.toLowerCase() ? 'black' : 'white'
         };
       }
@@ -53,7 +53,7 @@ function read(fen: string) {
   return pieces;
 }
 
-function write(pieces: Piece[]) {
+function write(pieces: Chessground.Pieces) {
   return [8, 7, 6, 5, 4, 3, 2].reduce(
     function(str, nb) {
       return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb));

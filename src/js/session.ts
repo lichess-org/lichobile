@@ -94,10 +94,10 @@ function toggleKidMode() {
 
 function savePreferences() {
 
-  function numValue(v: boolean | number) {
-    if (v === true) return 1;
-    else if (v === false) return 0;
-    else return v;
+  function numValue(v: boolean | number): string {
+    if (v === true) return '1';
+    else if (v === false) return '0';
+    else return String(v);
   }
 
   const prefs = session && session.prefs || {};
@@ -109,7 +109,7 @@ function savePreferences() {
     'coords',
     'replay',
     'blindfold'
-  ]), numValue), (_, k) => 'display.' + k);
+  ]), numValue), (_, k) => 'display.' + k) as StringMap
   const behavior = mapKeys(<Prefs>mapValues(pick(prefs, [
     'premove',
     'takeback',
@@ -117,7 +117,7 @@ function savePreferences() {
     'autoThreefold',
     'submitMove',
     'confirmResign'
-  ]), numValue), (_, k) => 'behavior.' + k);
+  ]), numValue), (_, k) => 'behavior.' + k) as StringMap
   const rest = mapValues(pick(prefs, [
     'clockTenths',
     'clockBar',
@@ -126,7 +126,7 @@ function savePreferences() {
     'challenge',
     'message',
     'insightShare'
-  ]), numValue);
+  ]), numValue) as StringMap
 
   return fetchText('/account/preferences', {
     method: 'POST',

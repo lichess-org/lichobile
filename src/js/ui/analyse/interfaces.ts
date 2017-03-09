@@ -13,7 +13,7 @@ export type Source = 'online' | 'offline';
 
 export interface PathObj {
   ply: number
-  variation: number | null
+  variation: number | undefined
 }
 
 export type AnalysisTree = Array<AnalysisStep>
@@ -46,6 +46,7 @@ interface PlayerEvalSummary {
   blunder: number
   inaccuracy: number
   mistake: number
+  [i: string]: number
 }
 
 export interface RemoteEvalSummary {

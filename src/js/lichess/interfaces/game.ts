@@ -4,7 +4,7 @@ export interface Game {
   id: string
   fen: string
   initialFen: string
-  variant: Variant;
+  variant: Variant
   player: Color
   source: GameSource
   status: GameStatus
@@ -32,12 +32,13 @@ export interface OnlineGame extends Game {
   turns: number
   speed: Speed
   perf: PerfKey
+  startedAtTurn: number
   check?: string
   importedBy?: string
 }
 
 export interface OfflineGame extends Game {
-  check?: boolean;
+  check?: boolean
 }
 
 export interface Player {
@@ -66,14 +67,14 @@ export interface OnlinePlayer extends Player {
 }
 
 interface Tournament {
-  id: string;
-  berserkable: boolean;
-  secondsToFinish: number;
-  nbSecondsForFirstMove: number;
+  id: string
+  berserkable: boolean
+  secondsToFinish: number
+  nbSecondsForFirstMove: number
   ranks?: {
-    white: string;
-    black: string;
-    [color: string]: string;
+    white: string
+    black: string
+    [color: string]: string
   }
 }
 
@@ -108,24 +109,24 @@ export interface OnlineGameData extends GameData {
 }
 
 export interface GameCrowd {
-  white: boolean;
-  black: boolean;
-  watchers: GameWatchers;
+  white: boolean
+  black: boolean
+  watchers: GameWatchers
 }
 
 export interface GameWatchers {
-  anons: number;
-  nb: number;
-  users: Array<string>;
+  anons: number
+  nb: number
+  users: Array<string>
 }
 
 export interface GameStatus {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 export interface OfflineGameData extends GameData {
-  game: OfflineGame;
+  game: OfflineGame
 }
 
 export interface CheckCount {

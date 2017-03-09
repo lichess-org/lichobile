@@ -3,7 +3,7 @@ import { secondsToMinutes } from '../utils';
 import settings from '../settings';
 import { MiniBoardGameObj } from './interfaces';
 import { UserGame } from './interfaces/user';
-import { GameData, OfflineGameData } from './interfaces/game';
+import { GameData, OnlineGameData, OfflineGameData } from './interfaces/game';
 import i18n from '../i18n';
 
 export const analysableVariants = ['standard', 'crazyhouse', 'chess960', 'fromPosition', 'kingOfTheHill', 'threeCheck', 'atomic', 'antichess', 'horde', 'racingKings'];
@@ -40,42 +40,42 @@ export function isOpponentTurn(data: GameData) {
   return isPlayerPlaying(data) && data.game.player !== data.player.color;
 }
 
-export function mandatory(data: GameData) {
+export function mandatory(data: OnlineGameData) {
   return !!data.tournament;
 }
 
-export function playedTurns(data: GameData) {
+export function playedTurns(data: OnlineGameData) {
   return data.game.turns - data.game.startedAtTurn;
 }
 
-export function abortable(data: GameData) {
+export function abortable(data: OnlineGameData) {
   return playable(data) && playedTurns(data) < 2 && !mandatory(data);
 }
 
-export function takebackable(data: GameData): boolean {
+export function takebackable(data: OnlineGameData): boolean {
   return !!(playable(data) && data.takebackable && !data.tournament && playedTurns(data) > 1 && !data.player.proposingTakeback && !data.opponent.proposingTakeback)
 }
 
-export function drawable(data: GameData) {
+export function drawable(data: OnlineGameData) {
   return playable(data) && data.game.turns >= 2 && !data.player.offeringDraw && !data.opponent.ai && !data.opponent.offeringDraw;
 }
 
-export function berserkableBy(data: GameData) {
+export function berserkableBy(data: OnlineGameData) {
   return data.tournament &&
     data.tournament.berserkable &&
     isPlayerPlaying(data) &&
     playedTurns(data) < 2;
 }
 
-export function resignable(data: GameData) {
+export function resignable(data: OnlineGameData) {
   return playable(data) && !abortable(data);
 }
 
-export function forceResignable(data: GameData) {
+export function forceResignable(data: OnlineGameData) {
   return !data.opponent.ai && data.clock && data.opponent.isGone && resignable(data);
 }
 
-export function moretimeable(data: GameData) {
+export function moretimeable(data: OnlineGameData) {
   return data.clock && isPlayerPlaying(data) && !mandatory(data);
 }
 
@@ -91,7 +91,7 @@ export function userAnalysable(data: GameData) {
   return settings.analyse.supportedVariants.indexOf(data.game.variant.key) !== -1 && playable(data) && (!data.clock || !isPlayerPlaying(data));
 }
 
-export function analysable(data: GameData) {
+export function analysable(data: OnlineGameData) {
   return replayable(data) && playedTurns(data) > 4 && analysableVariants.indexOf(data.game.variant.key) !== -1;
 }
 
@@ -119,12 +119,12 @@ export function setOnGame(data: GameData, color: Color, onGame: boolean) {
   }
 }
 
-export function nbMoves(data: GameData, color: Color) {
+export function nbMoves(data: OnlineGameData, color: Color) {
   return Math.floor((data.game.turns + (color === 'white' ? 1 : 0)) / 2);
 }
 
 // TODO find a better type
-export function result(data: GameData | OfflineGameData) {
+export function result(data: GameData) {
   if (gameStatus.finished(data)) switch (data.game.winner) {
     case 'white':
       return '1-0';

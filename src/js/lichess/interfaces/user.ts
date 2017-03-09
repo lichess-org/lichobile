@@ -16,6 +16,7 @@ export interface UserGamesCount {
   playing: number
   import: number
   me: number
+  [index: string]: number
 }
 
 export interface UserFullProfile extends User {
@@ -63,7 +64,7 @@ export interface User extends BaseUser {
   booster: boolean;
 }
 
-export type Perfs = Record<PerfKey, Perf>
+export type Perfs = { [pk: string]: Perf }
 
 export interface RankingUser extends BaseUser {
   perfs: Perfs

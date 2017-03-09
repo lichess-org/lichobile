@@ -13,9 +13,9 @@ function isDestMap(o: DestsMap | string): o is DestsMap {
 export function readDests(lines?: DestsMap | string): DestsMap | null {
   if (lines === undefined) return null
   if (isDestMap(lines)) return lines
-  const dests = {};
+  const dests: DestsMap = {};
   if (lines && isString(lines)) lines.split(' ').forEach(line => {
-    dests[piotr2key[line[0]]] = line.split('').slice(1).map((c) => piotr2key[c])
+    dests[piotr2key[line[0]]] = line.split('').slice(1).map(c => piotr2key[c])
   });
   return dests;
 }

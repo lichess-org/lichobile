@@ -66,7 +66,7 @@ export function getTR(e: Event): HTMLElement {
 function resultBar(move: ExplorerMove) {
   const sum = move.white + move.draws + move.black;
   function section(key: string) {
-    const num: number = move[key];
+    const num: number = (move as any)[key];
     const percent = num * 100 / sum;
     const width = (Math.round(num * 1000 / sum) / 10) + '%';
     return percent === 0 ? null : (
@@ -80,7 +80,8 @@ function resultBar(move: ExplorerMove) {
 
 function onTableTap(ctrl: AnalyseCtrl, e: Event) {
   const el = getTR(e);
-  if (el && el.dataset['uci']) ctrl.explorerMove(el.dataset['uci']);
+  const uci = el && el.dataset['uci']
+  if (uci) ctrl.explorerMove(uci)
 }
 
 function showResult(w: Color) {
@@ -95,7 +96,7 @@ function link(ctrl: AnalyseCtrl, e: Event) {
   const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
     router.set(`/analyse/online/${gameId}/${orientation}`);
-  } else {
+  } else if (gameId) {
     xhr.importMasterGame(gameId, orientation)
     .then((data: OnlineGameData) =>
       router.set(`/analyse/online/${data.game.id}/${orientation}`)

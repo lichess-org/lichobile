@@ -45,7 +45,7 @@ interface AvailableFilter {
   count: number
 }
 
-const filters = {
+const filters: StringMap = {
   all: 'gamesPlayed',
   rated: 'rated',
   win: 'wins',
@@ -55,7 +55,7 @@ const filters = {
   me: 'nbGamesWithYou',
   import: 'nbImportedGames',
   playing: 'playingRightNow'
-};
+}
 
 let cachedScrollState: ScrollState
 
@@ -105,9 +105,9 @@ const UserGames: Mithril.Component<Attrs, State> = {
         return {
           key: <GameFilter>k,
           label: filters[k],
-          count: this.scrollState.user && this.scrollState.user.count[k]
-        };
-      });
+          count: this.scrollState.user ? this.scrollState.user.count[k] : 0
+        }
+      })
       this.scrollState.availableFilters = f
     }
 

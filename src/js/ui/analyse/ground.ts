@@ -58,7 +58,7 @@ export default {
   },
 
   promote(ground: Chessground.Controller, key: Pos, role: Role) {
-    const pieces = {};
+    const pieces: {[i: string]: Piece } = {};
     const piece = ground.data.pieces[key];
     if (piece && piece.role === 'pawn') {
       pieces[key] = {

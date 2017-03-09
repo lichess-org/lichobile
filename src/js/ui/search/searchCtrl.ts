@@ -4,7 +4,6 @@ import * as stream from 'mithril/stream'
 import { handleXhrError } from '../../utils'
 import redraw from '../../utils/redraw'
 import { toggleGameBookmark as toggleBookmarkXhr} from '../../xhr'
-import settings from '../../settings'
 
 export interface ISearchCtrl {
   search: (form: HTMLFormElement) => void
@@ -32,7 +31,6 @@ export default function SearchCtrl(): ISearchCtrl {
     .then((data: SearchResult) => {
       result(prepareData(data))
       games(result().paginator.currentPageResults)
-      saveState(queryData, games(), result())
       redraw()
     })
     .catch(handleXhrError)
@@ -58,7 +56,6 @@ export default function SearchCtrl(): ISearchCtrl {
     .then((data: SearchResult) => {
       result(prepareData(data))
       games(games().concat(result().paginator.currentPageResults))
-      saveState(queryData, games(), result())
       redraw()
     })
     .catch(handleXhrError)
@@ -94,11 +91,4 @@ function prepareData(xhrData: SearchResult) {
     })
   }
   return xhrData
-}
-
-function saveState(query: SearchQuery, games: Array<UserGameWithDate>, result: SearchResult) {
-  settings.search.state({query, games, result})
-  try {
-    window.history.replaceState(window.history.state, '', '?=/search?state=1')
-  } catch (e) { console.error(e) }
 }

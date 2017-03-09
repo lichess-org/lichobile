@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
 import * as m from 'mithril'
 import i18n from '../../i18n'
@@ -12,7 +13,7 @@ import * as utils from '../../utils'
 import router from '../../router'
 
 import { ISearchCtrl } from './searchCtrl'
-import { SearchSelect, SearchOption, UserGameWithDate } from './interfaces'
+import { SearchSelect, SearchResult, SearchOption, UserGameWithDate } from './interfaces'
 
 export function renderSearchForm(ctrl: ISearchCtrl) {
   const ratingOptions = settings.search.ratings.map((a: string) => ({value: a, label: a}))
@@ -30,9 +31,6 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
   const dateOptions = settings.search.dates.map((a: Array<string>) => ({value: a[0], label: a[1]}))
   const sortFieldOptions = settings.search.sortFields.map((a: Array<string>) => ({value: a[0], label: a[1]}))
   const sortOrderOptions = settings.search.sortOrders.map((a: Array<string>) => ({value: a[0], label: a[1]}))
-  const viewport = helper.viewportDim()
-  const boardsize = (viewport.vw - 20) * 0.30
-  const boardBounds = { height: boardsize, width: boardsize }
 
   return (
     <div id="searchContent" className="native_scroller searchWraper">
@@ -45,7 +43,7 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
         }}
       >
         <div className="game_search_row">
-          <label>Players: </label>
+          <label>Players</label>
           <div className="game_search_input">
             <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
           </div>
@@ -70,28 +68,34 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
         {renderSelectRow('Date', true, { name: 'dateMin', options: dateOptions, default: 'From'}, {name: 'dateMax', options: dateOptions, default: 'To'})}
         {renderSelectRow('Sort', true, { name: 'sort.field', options: sortFieldOptions, default: null}, {name: 'sort.order', options: sortOrderOptions, default: null})}
         <div className="game_search_row">
-          <label>Analysis?: </label>
+          <label>Analysis</label>
           <div className="game_search_input double_wide">
             <input type="checkbox" id="analysed" name="analysed" value="" />
           </div>
         </div>
-        <button key="search" className="newGameButton" type="submit">
+        <button key="search" className="fatButton" type="submit">
           <span className="fa fa-search" />
           {i18n('search')}
         </button>
       </form>
-      {ctrl.result() ?
-        <div className="searchGamesList">
-          {ctrl.games().map((g: UserGameWithDate, index: number) => m(Game, { key: g.id, g, index, boardBounds, ctrl })) }
-          {ctrl.result().paginator.nextPage ?
-            <button key="more" className="newGameButton" oncreate={helper.ontap(() => ctrl.more())}>
-              <span className="fa fa-arrow-down" />
-            </button>
-            : null}
-        </div>
-      : null }
+      { ctrl.result() && ctrl.games() ?
+        renderResult(ctrl, ctrl.result(), ctrl.games()) : null
+      }
     </div>
   )
+}
+
+function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWithDate[]) {
+  return h('div.searchGamesList', [
+    games.map((g: UserGameWithDate, index: number) =>
+      m(Game, { key: g.id, g, index, ctrl })
+    ),
+    result.paginator.nextPage ?
+      h('button.fatButton', {
+        key: 'more',
+        oncreate: helper.ontap(ctrl.more)
+      }, h('span.fa.fa-arrow-down')) : null
+  ])
 }
 
 function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {
@@ -99,11 +103,12 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSel
 
   return (
     <div className="game_search_row">
-      <label>{label}: </label>
+      <label>{label}</label>
       <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
+        <label></label>
         <select id={select1.name.replace('.', '_')} name={select1.name} onchange={select1.onchange ? select1.onchange : ''}>
           { select1.default !== null ?
-            <option selected value=""> {select1.default} </option> :
+            <option disabled selected value=""> {select1.default} </option> :
             null
           }
           {select1.options.map(renderOption)}
@@ -111,9 +116,10 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSel
       </div>
       {select2 ?
         <div className="game_search_select">
+          <label></label>
           <select id={select2.name.replace('.', '_')} name={select2.name} onchange={select1.onchange ? select1.onchange : ''}>
             { select2.default !== null ?
-              <option selected value=""> {select2.default} </option> :
+              <option disabled selected value=""> {select2.default} </option> :
               null
             }
             {select2.options.map(renderOption)}
@@ -156,7 +162,7 @@ function isComputerOpp() {
   return hasAi && (hasAi.value === '1')
 }
 
-const Game: Mithril.Component<{ g: UserGameWithDate, index: number, boardBounds: {height: number, width: number}, ctrl: ISearchCtrl }, { boardTheme: string }> = {
+const Game: Mithril.Component<{ g: UserGameWithDate, index: number, ctrl: ISearchCtrl }, { boardTheme: string }> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.g !== oldattrs.g
   },
@@ -225,11 +231,6 @@ function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => v
     toggleBookmark(g.id)
   }
   else {
-    const sc = document.getElementById('searchContent')
-    const scrollPos = sc && sc.scrollTop || 0
-    const state = settings.search.state()
-    state.scrollPos = scrollPos
-    settings.search.state(state)
     router.set('/game/' + g.id)
   }
 }

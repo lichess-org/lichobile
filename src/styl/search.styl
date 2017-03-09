@@ -7,32 +7,48 @@
   justify-content space-around
   margin-top 5px
   width 100%
-  .game_search_input
-    flex 0 0 33%
-    &.double_wide
-      flex 0 0 66%
-    input[type=text]
-      background transparent
-      border 1px solid #444
-      width 100%
-      margin-right 5px
-    input[type='checkbox']
-      background #444
-      width 55px
-    input[type='checkbox']:checked
-      background gold
-  .game_search_select
-    flex 0 0 33%
-    &.double_wide
-      flex 0 0 66%
-    select
-      background #444
-      border none
-      outline none
-      width 100%
   label
     flex 0 0 33%
     color labelText
+
+.game_search_input
+  flex 0 0 33%
+  &.double_wide
+    flex 0 0 66%
+  input[type=text]
+    background transparent
+    border 1px solid #444
+    width 100%
+    margin-right 5px
+  input[type='checkbox']
+    background #444
+    width 55px
+  input[type='checkbox']:checked
+    background gold
+
+.game_search_select
+  font-size 0.9em
+  background #fff
+  position relative
+  flex 0 0 33%
+  height 20px
+  &.double_wide
+    flex 0 0 66%
+  select
+    position absolute
+    background transparent
+    border none
+    outline none
+    width 100%
+  label
+    color labelText
+    &:after
+      content "▼"
+      font-size 0.6em
+      line-height 20px
+      position absolute
+      right 5px
+      color #5f5f5f
 
 .searchWraper
   height 100%

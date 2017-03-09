@@ -43,7 +43,7 @@ function getGameEl(e: Event) {
     helper.findParentBySelector(target, 'li')
 }
 
-function getButton(e: Event) {
+export function getButton(e: Event) {
   const target = (e.target as HTMLElement)
   return target.tagName === 'BUTTON' ? target : undefined
 }
@@ -164,7 +164,7 @@ function renderAllGames(ctrl: State) {
   )
 }
 
-function renderBoard(fen: string, orientation: Color, boardTheme: string) {
+export function renderBoard(fen: string, orientation: Color, boardTheme: string) {
 
   const boardClass = [
     'display_board',
@@ -188,7 +188,7 @@ function renderBoard(fen: string, orientation: Color, boardTheme: string) {
   )
 }
 
-function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
+export function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
   let player = players[color]
   let playerName: string
   // TODO fetch title info from server; refactor

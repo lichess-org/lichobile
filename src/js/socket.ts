@@ -1,17 +1,17 @@
-import router from './router';
-import redraw from './utils/redraw';
-import { apiVersion } from './http';
+import router from './router'
+import redraw from './utils/redraw'
+import { apiVersion } from './http'
 import * as xorWith from 'lodash/xorWith'
 import * as isEqual from 'lodash/isEqual'
 import * as cloneDeep from 'lodash/cloneDeep'
-import { lichessSri, autoredraw, hasNetwork } from './utils';
-import { tellWorker, askWorker } from './utils/worker';
-import * as xhr from './xhr';
-import i18n from './i18n';
-import friendsApi, { Friend } from './lichess/friends';
-import challengesApi from './lichess/challenges';
-import { ChallengesData } from './lichess/interfaces/challenge';
-import session from './session';
+import { lichessSri, autoredraw, hasNetwork } from './utils'
+import { tellWorker, askWorker } from './utils/worker'
+import * as xhr from './xhr'
+import i18n from './i18n'
+import friendsApi, { Friend } from './lichess/friends'
+import challengesApi from './lichess/challenges'
+import { ChallengesData } from './lichess/interfaces/challenge'
+import session from './session'
 
 interface LichessMessage<T> {
   t: string
@@ -21,27 +21,27 @@ interface LichessMessage<T> {
 type LichessMessageAny = LichessMessage<{}>
 
 interface Options {
-  name: string;
-  debug?: boolean;
-  pingDelay?: number;
-  sendOnOpen?: Array<LichessMessageAny>;
-  registeredEvents: string[];
+  name: string
+  debug?: boolean
+  pingDelay?: number
+  sendOnOpen?: Array<LichessMessageAny>
+  registeredEvents: string[]
 }
 
 interface SocketConfig {
-  options: Options;
+  options: Options
   params?: StringMap
 }
 
-type MessageHandler<D, P extends LichessMessage<D>> = (data: D, payload?: P) => void;
-type MessageHandlerGeneric = MessageHandler<{}, undefined>
+type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void
+type MessageHandlerGeneric = MessageHandler<{}, any>
 interface MessageHandlers {
   [index: string]: MessageHandlerGeneric
 }
 
 interface SocketHandlers {
-  onOpen: () => void;
-  onError?: () => void;
+  onOpen: () => void
+  onError?: () => void
   events: MessageHandlers
 }
 
@@ -70,11 +70,11 @@ interface FollowingOnlinePayload extends LichessMessage<Array<string>> {
 
 // connectedWS means connection is established and server ping/pong
 // is working normally
-let connectedWS = false;
-let currentMoveLatency: number = 0;
-let rememberedSetups: Array<ConnectionSetup> = [];
+let connectedWS = false
+let currentMoveLatency: number = 0
+let rememberedSetups: Array<ConnectionSetup> = []
 
-const worker = new Worker('lib/socketWorker.js');
+const worker = new Worker('lib/socketWorker.js')
 const defaultHandlers: MessageHandlers = {
   following_onlines: handleFollowingOnline,
   following_enters: (name: string, payload: FollowingEntersPayload) =>
@@ -84,26 +84,26 @@ const defaultHandlers: MessageHandlers = {
   following_stopped_playing: (name: string) =>
     autoredraw(() => friendsApi.stoppedPlaying(name)),
   challenges: (data: ChallengesData) => {
-    challengesApi.set(data);
-    redraw();
+    challengesApi.set(data)
+    redraw()
   },
   mlat: (mlat: number) => {
-    currentMoveLatency = mlat;
+    currentMoveLatency = mlat
   }
-};
+}
 
 function handleFollowingOnline(data: Array<string>, payload: FollowingOnlinePayload) {
   // We clone the friends online before we update it for comparison later
-  const oldFriendList = cloneDeep(friendsApi.list());
+  const oldFriendList = cloneDeep(friendsApi.list())
 
-  const friendsPlaying = payload.playing;
-  const friendsPatrons = payload.patrons;
-  friendsApi.set(data, friendsPlaying, friendsPatrons);
+  const friendsPlaying = payload.playing
+  const friendsPatrons = payload.patrons
+  friendsApi.set(data, friendsPlaying, friendsPatrons)
 
   const newFriendList = friendsApi.list()
 
   if (xorWith(oldFriendList, newFriendList, isEqual).length > 0) {
-    redraw();
+    redraw()
   }
 }
 
@@ -111,27 +111,27 @@ function setupConnection(setup: SocketSetup, socketHandlers: SocketHandlers) {
   worker.onmessage = (msg: MessageEvent) => {
     switch (msg.data.topic) {
       case 'onOpen':
-        if (socketHandlers.onOpen) socketHandlers.onOpen();
-        break;
+        if (socketHandlers.onOpen) socketHandlers.onOpen()
+        break
       case 'disconnected':
-        onDisconnected();
-        break;
+        onDisconnected()
+        break
       case 'connected':
-        onConnected();
-        break;
+        onConnected()
+        break
       case 'onError':
-        if (socketHandlers.onError) socketHandlers.onError();
-        break;
+        if (socketHandlers.onError) socketHandlers.onError()
+        break
       case 'handle':
-        let h = socketHandlers.events[msg.data.payload.t];
-        if (h) h(msg.data.payload.d, msg.data.payload);
-        break;
+        let h = socketHandlers.events[msg.data.payload.t]
+        if (h) h(msg.data.payload.d, msg.data.payload)
+        break
     }
-  };
+  }
   // remember last 2 connection setup, to be able to restore the previous one
   rememberedSetups.push({ setup, handlers: socketHandlers })
   if (rememberedSetups.length > 2) rememberedSetups.shift()
-  tellWorker(worker, 'create', setup);
+  tellWorker(worker, 'create', setup)
 }
 
 function createGame(
@@ -141,7 +141,7 @@ function createGame(
   gameUrl: string,
   userTv?: string
 ) {
-  let errorDetected = false;
+  let errorDetected = false
   const socketHandlers = {
     onError: function() {
       // we can't get socket error, so we send an xhr to test whether the
@@ -149,19 +149,19 @@ function createGame(
       if (!errorDetected) {
         // just to be sure that we don't send an xhr every second when the
         // websocket is trying to reconnect
-        errorDetected = true;
+        errorDetected = true
         xhr.game(gameUrl.substring(1))
         .catch(err => {
           if (err.response && err.response.status === 401) {
-            window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center');
-            router.set('/');
+            window.plugins.toast.show(i18n('unauthorizedError'), 'short', 'center')
+            router.set('/')
           }
-        });
+        })
       }
     },
     onOpen: session.refresh,
     events: Object.assign({}, defaultHandlers, handlers)
-  };
+  }
   const opts: SocketConfig = {
     options: {
       name: 'game',
@@ -169,8 +169,8 @@ function createGame(
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
-  };
-  if (userTv) opts.params = { userTv };
+  }
+  if (userTv) opts.params = { userTv }
   const setup = {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
@@ -185,13 +185,13 @@ function createTournament(
   tournamentId: string,
   version: number,
   handlers: MessageHandlers,
-  featuredGameId: string
+  featuredGameId?: string
 ) {
-  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`;
+  let url = '/tournament/' + tournamentId + `/socket/v${apiVersion}`
   const socketHandlers = {
     events: Object.assign({}, defaultHandlers, handlers),
     onOpen: session.refresh
-  };
+  }
   const opts = {
     options: {
       name: 'tournament',
@@ -200,15 +200,15 @@ function createTournament(
       sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGameId}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
-  };
+  }
   const setup = {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
-  };
-  setupConnection(setup, socketHandlers);
+  }
+  setupConnection(setup, socketHandlers)
 }
 
 function createChallenge(
@@ -219,12 +219,12 @@ function createChallenge(
 ) {
   const socketHandlers = {
     onOpen: () => {
-      session.refresh();
-      onOpen();
+      session.refresh()
+      onOpen()
     },
     events: Object.assign({}, defaultHandlers, handlers)
-  };
-  const url = `/challenge/${id}/socket/v${version}`;
+  }
+  const url = `/challenge/${id}/socket/v${version}`
   const opts = {
     options: {
       name: 'challenge',
@@ -234,15 +234,15 @@ function createChallenge(
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
-  };
+  }
   const setup = {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
     opts
-  };
-  setupConnection(setup, socketHandlers);
+  }
+  setupConnection(setup, socketHandlers)
 }
 
 function createLobby(
@@ -251,11 +251,11 @@ function createLobby(
 ) {
   const socketHandlers = {
     onOpen: () => {
-      session.refresh();
-      onOpen();
+      session.refresh()
+      onOpen()
     },
     events: Object.assign({}, defaultHandlers, handlers)
-  };
+  }
   const opts = {
     options: {
       name: 'lobby',
@@ -264,14 +264,14 @@ function createLobby(
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
-  };
+  }
   const setup = {
     clientId: lichessSri,
     socketEndPoint: window.lichess.socketEndPoint,
     url: `/lobby/socket/v${apiVersion}`,
     opts
-  };
-  setupConnection(setup, socketHandlers);
+  }
+  setupConnection(setup, socketHandlers)
 }
 
 function createDefault() {
@@ -279,7 +279,7 @@ function createDefault() {
     const socketHandlers = {
       events: defaultHandlers,
       onOpen: session.refresh
-    };
+    }
     const opts = {
       options: {
         name: 'default',
@@ -288,15 +288,15 @@ function createDefault() {
         sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)
       }
-    };
+    }
     const setup = {
       clientId: lichessSri,
       socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
       version: 0,
       opts
-    };
-    setupConnection(setup, socketHandlers);
+    }
+    setupConnection(setup, socketHandlers)
   }
 }
 
@@ -309,35 +309,35 @@ export interface RedirectObj {
   }
 }
 function redirectToGame(obj: string | RedirectObj) {
-  let url: string;
-  if (typeof obj === 'string') url = obj;
+  let url: string
+  if (typeof obj === 'string') url = obj
   else {
-    url = obj.url;
+    url = obj.url
     if (obj.cookie) {
-      const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1');
+      const domain = document.domain.replace(/^.+(\.[^\.]+\.[^\.]+)$/, '$1')
       const cookie = [
         encodeURIComponent(obj.cookie.name) + '=' + obj.cookie.value,
         '; max-age=' + obj.cookie.maxAge,
         '; path=/',
         '; domain=' + domain
-        ].join('');
-        document.cookie = cookie;
+        ].join('')
+        document.cookie = cookie
     }
-    router.set('/game' + url);
+    router.set('/game' + url)
   }
 }
 
 function onConnected() {
   if (!connectedWS) {
-    connectedWS = true;
-    redraw();
+    connectedWS = true
+    redraw()
   }
 }
 
 function onDisconnected() {
   if (connectedWS) {
-    connectedWS = false;
-    redraw();
+    connectedWS = false
+    redraw()
   }
 }
 
@@ -349,10 +349,10 @@ export default {
   createDefault,
   redirectToGame,
   setVersion(version: number) {
-    tellWorker(worker, 'setVersion', version);
+    tellWorker(worker, 'setVersion', version)
   },
   send<D, O>(t: string, data?: D, opts?: O) {
-    tellWorker(worker, 'send', [t, data, opts]);
+    tellWorker(worker, 'send', [t, data, opts])
   },
   ask<D, O>(t: string, listenTo: string, data?: D, opts?: O) {
     return new Promise((resolve, reject) => {
@@ -360,47 +360,49 @@ export default {
       function listen(e: MessageEvent) {
         if (e.data.topic === 'handle' && e.data.payload.t === listenTo) {
           clearTimeout(tid)
-          worker.removeEventListener('message', listen);
-          resolve(e.data.payload.d);
+          worker.removeEventListener('message', listen)
+          resolve(e.data.payload.d)
         }
       }
-      worker.addEventListener('message', listen);
-      tellWorker(worker, 'ask', { msg: [t, data, opts], listenTo });
+      worker.addEventListener('message', listen)
+      tellWorker(worker, 'ask', { msg: [t, data, opts], listenTo })
       tid = setTimeout(() => {
         worker.removeEventListener('message', listen)
         reject()
       }, 3000)
-    });
+    })
   },
   connect() {
-    tellWorker(worker, 'connect');
+    tellWorker(worker, 'connect')
   },
   restorePrevious() {
     // if by chance we don't have a previous connection, just close
     if (rememberedSetups.length === 2) {
-      const { setup, handlers } = rememberedSetups.shift();
-      rememberedSetups = [];
-      setupConnection(setup, handlers)
+      const connSetup = rememberedSetups.shift()
+      rememberedSetups = []
+      if (connSetup) {
+        setupConnection(connSetup.setup, connSetup.handlers)
+      }
     } else {
-      tellWorker(worker, 'destroy');
+      tellWorker(worker, 'destroy')
     }
   },
   disconnect() {
-    tellWorker(worker, 'disconnect');
+    tellWorker(worker, 'disconnect')
   },
   isConnected() {
-    return connectedWS;
+    return connectedWS
   },
   destroy() {
-    tellWorker(worker, 'destroy');
+    tellWorker(worker, 'destroy')
   },
   getCurrentPing(): Promise<number> {
-    return askWorker(worker, { topic: 'currentLag' });
+    return askWorker(worker, { topic: 'currentLag' })
   },
   getCurrentMoveLatency() {
-    return currentMoveLatency;
+    return currentMoveLatency
   },
   terminate() {
-    if (worker) worker.terminate();
+    if (worker) worker.terminate()
   }
-};
+}

@@ -1,20 +1,21 @@
-import * as h from 'mithril/hyperscript';
-import router from '../../router';
+import * as h from 'mithril/hyperscript'
+import router from '../../router'
 import { emptyFen } from '../../utils/fen'
-import { gameIcon, hasNetwork } from '../../utils';
-import i18n from '../../i18n';
-import * as helper from '../helper';
-import newGameForm from '../newGameForm';
-import settings from '../../settings';
-import { userStatus } from '../shared/common';
-import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline';
-import MiniBoard from '../shared/miniBoard';
+import { gameIcon, hasNetwork } from '../../utils'
+import i18n from '../../i18n'
+import * as helper from '../helper'
+import newGameForm from '../newGameForm'
+import settings from '../../settings'
+import { User } from '../../lichess/interfaces/user'
+import { userStatus } from '../shared/common'
+import { renderTourJoin, renderGameEnd, renderFollow } from '../timeline'
+import MiniBoard from '../shared/miniBoard'
 import { HomeState } from './interfaces'
 
 export function body(ctrl: HomeState) {
-  const isPortrait = helper.isPortrait();
-  const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?');
-  const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?');
+  const isPortrait = helper.isPortrait()
+  const nbPlayers = i18n('nbConnectedPlayers', ctrl.nbConnectedPlayers() || '?')
+  const nbGames = i18n('nbGamesInPlay', ctrl.nbGamesInPlay() || '?')
 
   if (!hasNetwork()) {
     return (
@@ -25,7 +26,7 @@ export function body(ctrl: HomeState) {
           <button className="fatButton" oncreate={helper.ontapY(() => router.set('/otb'))}>{i18n('playOnTheBoardOffline')}</button>
         </section>
       </div>
-    );
+    )
   }
 
   return (
@@ -43,21 +44,21 @@ export function body(ctrl: HomeState) {
         {renderTimeline(ctrl)}
       </div>
     </div>
-  );
+  )
 }
 
 function miniBoardSize(isPortrait: boolean) {
-  const { vh, vw } = helper.viewportDim();
-  const side = isPortrait ? vw * 0.66 : vh * 0.66;
+  const { vh, vw } = helper.viewportDim()
+  const side = isPortrait ? vw * 0.66 : vh * 0.66
   const bounds = {
     height: side,
     width: side
-  };
-  return bounds;
+  }
+  return bounds
 }
 
 function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
-  const puzzle = ctrl.dailyPuzzle();
+  const puzzle = ctrl.dailyPuzzle()
   const boardConf = puzzle ? {
     bounds: miniBoardSize(isPortrait),
     fen: puzzle.fen,
@@ -73,12 +74,12 @@ function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
       <h2 className="homeTitle">{i18n('puzzleOfTheDay')}</h2>
       {h(MiniBoard, boardConf)}
     </section>
-  );
+  )
 }
 
 function renderTimeline(ctrl: HomeState) {
-  const timeline = ctrl.timeline();
-  if (timeline.length === 0) return null;
+  const timeline = ctrl.timeline()
+  if (timeline.length === 0) return null
 
   return (
     <section id="timeline">
@@ -86,13 +87,13 @@ function renderTimeline(ctrl: HomeState) {
       <ul className="items_list_block">
         { timeline.map((e: any) => {
           if (e.type === 'follow') {
-            return renderFollow(e);
+            return renderFollow(e)
           } else if (e.type === 'game-end') {
-            return renderGameEnd(e);
+            return renderGameEnd(e)
           } else if (e.type === 'tour-join') {
-            return renderTourJoin(e);
+            return renderTourJoin(e)
           }
-          return null;
+          return null
         })}
       </ul>
       <div className="homeMoreButton">
@@ -101,13 +102,13 @@ function renderTimeline(ctrl: HomeState) {
         </button>
       </div>
     </section>
-  );
+  )
 }
 
 function renderWeekLeaders(ctrl: HomeState) {
-  const players = ctrl.weekTopPlayers();
+  const players = ctrl.weekTopPlayers()
 
-  if (players.length === 0) return null;
+  if (players.length === 0) return null
 
   return (
     <section id="weekTopPlayers">
@@ -121,18 +122,18 @@ function renderWeekLeaders(ctrl: HomeState) {
         </button>
       </div>
     </section>
-  );
+  )
 }
 
-function renderPlayer(p: any) {
-  const perfKey = Object.keys(p.perfs)[0];
-  const perf = p.perfs[perfKey];
+function renderPlayer(p: User) {
+  const perfKey = Object.keys(p.perfs)[0]
+  const perf = p.perfs[perfKey]
 
   const supportedPerfs = settings.game.supportedVariants.concat([
     'blitz', 'bullet', 'classical'
-  ]);
+  ])
 
-  if (supportedPerfs.indexOf(perfKey) === -1) return null;
+  if (supportedPerfs.indexOf(perfKey) === -1) return null
 
   return (
     <li key={perfKey} className="list_item playerSuggestion" oncreate={helper.ontapY(() => router.set('/@/' + p.id))}>
@@ -144,5 +145,5 @@ function renderPlayer(p: any) {
         {helper.progress(perf.progress)}
       </div>
     </li>
-  );
+  )
 }

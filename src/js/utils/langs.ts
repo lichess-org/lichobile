@@ -736,9 +736,9 @@ const isoLangs: {[index: string]: Lang} = {
         'name': 'Zhuang, Chuang',
         'nativeName': 'Saɯ cueŋƅ, Saw cuengh'
     }
-};
+}
 
 export function getLanguageNativeName(code: string): string {
-  const lang = isoLangs[code];
-  return lang ? lang.nativeName : code;
+  const lang = isoLangs[code]
+  return lang ? lang.nativeName : code
 }

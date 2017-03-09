@@ -1,3 +1,5 @@
+import { User } from '../../lichess/interfaces/user'
+
 export interface InboxState {
   threads: Mithril.Stream<PagedThreads>
   isLoading: Mithril.Stream<boolean>

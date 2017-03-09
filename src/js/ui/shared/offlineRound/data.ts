@@ -1,14 +1,15 @@
-import session from '../../../session';
-import { oppositeColor } from '../../../utils';
-import { standardFen } from '../../../utils/fen';
-import i18n from '../../../i18n';
+import session from '../../../session'
+import { oppositeColor } from '../../../utils'
+import { standardFen } from '../../../utils/fen'
+import i18n from '../../../i18n'
+import { OfflineGameData } from '../../../lichess/interfaces/game'
 
 const standardVariant: Variant = {
   key: 'standard',
   name: 'Standard',
   short: 'STD',
   title: 'Standard rules of chess (FIDE)'
-};
+}
 
 export interface OfflineDataConfig {
   id: string
@@ -24,14 +25,14 @@ export interface OfflineDataConfig {
 
 export default function data(cfg: OfflineDataConfig): OfflineGameData {
 
-  const confColor = cfg.color || 'white';
+  const confColor = cfg.color || 'white'
 
   const player = {
     id: 'player',
     color: confColor,
     username: cfg.id === 'offline_ai' ? session.appUser(i18n(confColor)) : i18n(confColor),
     spectator: false
-  };
+  }
 
   return {
     game: {
@@ -58,6 +59,7 @@ export default function data(cfg: OfflineDataConfig): OfflineGameData {
       highlight: true,
       destination: true,
       centerPiece: cfg.pref && cfg.pref.centerPiece || false
-    }
-  };
+    },
+    steps: []
+  }
 }

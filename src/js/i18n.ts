@@ -1,5 +1,5 @@
-import settings from './settings';
-import { loadLocalJsonFile } from './utils';
+import settings from './settings'
+import { loadLocalJsonFile } from './utils'
 
 let messages = {} as StringMap
 
@@ -56,62 +56,62 @@ const untranslated: StringMap = {
   vibrateOnGameEvents: 'Vibrate on game events',
   soundAndNotifications: 'Sound and notifications',
   offline: 'Offline'
-};
+}
 
-const defaultCode = 'en';
+const defaultCode = 'en'
 
 export default function i18n(key: string, ...args: Array<string | number>): string {
-  let str: string = messages[key] || untranslated[key] || key;
-  args.forEach(a => { str = str.replace('%s', String(a)); })
-  return str;
+  let str: string = messages[key] || untranslated[key] || key
+  args.forEach(a => { str = str.replace('%s', String(a)) })
+  return str
 }
 
 export function loadPreferredLanguage(): Promise<string> {
   if (settings.general.lang()) {
-    return loadFromSettings();
+    return loadFromSettings()
   }
 
   return new Promise(resolve => {
     window.navigator.globalization.getPreferredLanguage(
       l => resolve(l.value.split('-')[0]),
       () => resolve(defaultCode)
-    );
+    )
   })
   .then((code: string) => {
-    settings.general.lang(code);
-    return code;
+    settings.general.lang(code)
+    return code
   })
   .then(loadFile)
-  .then(loadMomentLocale);
+  .then(loadMomentLocale)
 }
 
 export function getAvailableLanguages(): Promise<Array<[string, string]>> {
-  return loadLocalJsonFile('i18n/refs.json');
+  return loadLocalJsonFile('i18n/refs.json')
 }
 
 export function loadFromSettings(): Promise<string> {
   return loadFile(settings.general.lang())
-  .then(loadMomentLocale);
+  .then(loadMomentLocale)
 }
 
 function loadFile(code: string): Promise<string> {
   return loadLocalJsonFile<StringMap>('i18n/' + code + '.json')
   .then(data => {
-    messages = data;
-    return code;
+    messages = data
+    return code
   })
   .catch(error => {
-    if (code === defaultCode) throw new Error(error);
-    return loadFile(defaultCode);
-  });
+    if (code === defaultCode) throw new Error(error)
+    return loadFile(defaultCode)
+  })
 }
 
 function loadMomentLocale(code: string): string {
   if (code !== 'en') {
-    const script = document.createElement('script');
-    script.src = 'moment/locale/' + code + '.js';
-    document.head.appendChild(script);
+    const script = document.createElement('script')
+    script.src = 'moment/locale/' + code + '.js'
+    document.head.appendChild(script)
   }
-  window.moment.locale(code);
-  return code;
+  window.moment.locale(code)
+  return code
 }

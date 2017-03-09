@@ -1,10 +1,10 @@
-import * as helper from '../helper';
-import { dropShadowHeader, backButton } from '../shared/common';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import i18n from '../../i18n';
-import settings from '../../settings';
-import * as h from 'mithril/hyperscript';
+import * as helper from '../helper'
+import { dropShadowHeader, backButton } from '../shared/common'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import i18n from '../../i18n'
+import settings from '../../settings'
+import * as h from 'mithril/hyperscript'
 
 function renderBody() {
   return [
@@ -21,14 +21,14 @@ function renderBody() {
       h('li.list_item', formWidgets.renderCheckbox('Use piece symbols in move list', 'pieceNotation',
         settings.game.pieceNotation))
     ])
-  ];
+  ]
 }
 
 export default {
   oncreate: helper.viewSlideIn,
 
   view: function() {
-    const header = () => dropShadowHeader(null, backButton(i18n('gameDisplay')));
-    return layout.free(header, renderBody);
+    const header = () => dropShadowHeader(null, backButton(i18n('gameDisplay')))
+    return layout.free(header, renderBody)
   }
 }

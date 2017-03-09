@@ -1,10 +1,11 @@
-import * as utils from '../../utils';
-import router from '../../router';
-import * as helper from '../helper';
-import { menuButton, friendsButton, userStatus } from '../shared/common';
-import { backArrow } from '../shared/icons';
-import settings from '../../settings';
-import i18n from '../../i18n';
+import * as utils from '../../utils'
+import router from '../../router'
+import * as helper from '../helper'
+import { menuButton, friendsButton, userStatus } from '../shared/common'
+import { backArrow } from '../shared/icons'
+import settings from '../../settings'
+import i18n from '../../i18n'
+import { User } from '../../lichess/interfaces/user'
 
 import { State } from './'
 
@@ -20,18 +21,18 @@ export function header(ctrl: State) {
       </div>
     </nav>,
     <div className="main_header_drop_shadow" />
-  ];
+  ]
 }
 
 export function searchModal(ctrl: State) {
   if (!ctrl.isSearchOpen())
-    return null;
+    return null
 
   const className = [
     'modal',
     'show',
     settings.general.theme.background()
-  ].join(' ');
+  ].join(' ')
 
   return (
     <div id="searchPlayersModal" className={className}>
@@ -55,11 +56,11 @@ export function searchModal(ctrl: State) {
           <li className="list_item nav" key={u} oncreate={helper.ontapY(() => ctrl.goToProfile(u))}>
           {u}
           </li>
-        );
+        )
       })}
       </ul>
     </div>
-  );
+  )
 }
 
 export function body(ctrl: State) {
@@ -67,18 +68,18 @@ export function body(ctrl: State) {
     <ul className="playersSuggestion native_scroller page">
       {ctrl.players().map(renderPlayer)}
     </ul>
-  );
+  )
 }
 
 function renderPlayer(user: User) {
   const perf = Object.keys(user.perfs).reduce((prev, curr) => {
-    if (!prev) return curr;
-    if (curr === 'opening' || curr === 'puzzle') return prev;
+    if (!prev) return curr
+    if (curr === 'opening' || curr === 'puzzle') return prev
     if (user.perfs[prev].rating < user.perfs[curr].rating)
-      return curr;
+      return curr
     else
-      return prev;
-  });
+      return prev
+  })
   return (
     <li className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
       {userStatus(user)}
@@ -86,5 +87,5 @@ function renderPlayer(user: User) {
         {user.perfs[perf].rating}
       </span>
     </li>
-  );
+  )
 }

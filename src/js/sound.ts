@@ -1,5 +1,5 @@
-import settings from './settings';
-import * as throttle from 'lodash/throttle';
+import settings from './settings'
+import * as throttle from 'lodash/throttle'
 
 interface Media {
   move: string
@@ -24,7 +24,7 @@ if (window.cordova.platformId === 'ios')
     dong: 'sounds/dong.aifc',
     berserk: 'sounds/berserk.aifc',
     clock: 'sounds/clock.aifc'
-  };
+  }
 else
   media = {
     move: 'sounds/move.mp3',
@@ -34,77 +34,77 @@ else
     dong: 'sounds/dong.mp3',
     berserk: 'sounds/berserk.mp3',
     clock: 'sounds/clock.mp3'
-  };
+  }
 
 
 
 document.addEventListener('deviceready', () => {
 
-  shouldPlay = settings.general.sound();
+  shouldPlay = settings.general.sound()
 
   if (window.hotjs) {
-    window.hotjs.Audio.init();
-    lla = window.hotjs.Audio;
+    window.hotjs.Audio!.init!()
+    lla = window.hotjs.Audio
   } else {
-    lla = window.plugins.LowLatencyAudio;
+    lla = window.plugins.LowLatencyAudio
   }
 
   lla.preloadFX('move', media.move, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('capture', media.capture, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('explosion', media.explosion, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('lowtime', media.lowtime, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('dong', media.dong, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('berserk', media.berserk, () => {}, (err) => {
-    console.log(err);
-  });
+    console.log(err)
+  })
   lla.preloadFX('clock', media.clock, () => {}, (err) => {
-    console.log(err);
-  });
-}, false);
+    console.log(err)
+  })
+}, false)
 
 
 export default {
   move() {
-    if (shouldPlay) lla.play('move');
+    if (shouldPlay) lla.play('move')
   },
   throttledMove: throttle(() => {
-    if (shouldPlay) lla.play('move');
+    if (shouldPlay) lla.play('move')
   }, 50),
   capture() {
-    if (shouldPlay) lla.play('capture');
+    if (shouldPlay) lla.play('capture')
   },
   throttledCapture: throttle(() => {
-    if (shouldPlay) lla.play('capture');
+    if (shouldPlay) lla.play('capture')
   }, 50),
   explosion() {
-    if (shouldPlay) lla.play('explosion');
+    if (shouldPlay) lla.play('explosion')
   },
   throttledExplosion: throttle(() => {
-    if (shouldPlay) lla.play('explosion');
+    if (shouldPlay) lla.play('explosion')
   }, 50),
   lowtime() {
-    if (shouldPlay) lla.play('lowtime');
+    if (shouldPlay) lla.play('lowtime')
   },
   dong() {
-    if (shouldPlay) lla.play('dong');
+    if (shouldPlay) lla.play('dong')
   },
   berserk() {
-    if (shouldPlay) lla.play('berserk');
+    if (shouldPlay) lla.play('berserk')
   },
   clock() {
-    if (shouldPlay) lla.play('clock');
+    if (shouldPlay) lla.play('clock')
   },
   onSettingChange(v: boolean) {
-    shouldPlay = v;
+    shouldPlay = v
   }
-};
+}

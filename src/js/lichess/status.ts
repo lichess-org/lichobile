@@ -1,6 +1,7 @@
 // https://github.com/ornicar/scalachess/blob/master/src/main/scala/Status.scala
 
-import i18n from '../i18n';
+import i18n from '../i18n'
+import { GameData } from './interfaces/game'
 
 const ids = {
   created: 10,
@@ -16,62 +17,62 @@ const ids = {
   noStart: 37,
   unknownFinish: 38,
   variantEnd: 60
-};
+}
 
 function started(data: GameData) {
-  return data.game.status.id >= ids.started;
+  return data.game.status.id >= ids.started
 }
 
 function finished(data: GameData) {
-  return data.game.status.id >= ids.mate;
+  return data.game.status.id >= ids.mate
 }
 
 function aborted(data: GameData) {
-  return data.game.status.id === ids.aborted;
+  return data.game.status.id === ids.aborted
 }
 
-function toLabel(status: string, winner: Color, variant: VariantKey) {
+function toLabel(status: string, winner: Color | undefined, variant: VariantKey) {
   switch (status) {
     case 'started':
-      return i18n('playingRightNow');
+      return i18n('playingRightNow')
     case 'aborted':
-      return i18n('gameAborted');
+      return i18n('gameAborted')
     case 'mate':
-      return i18n('checkmate');
+      return i18n('checkmate')
     case 'resign':
-      return i18n(winner === 'white' ? 'blackResigned' : 'whiteResigned');
+      return i18n(winner === 'white' ? 'blackResigned' : 'whiteResigned')
     case 'stalemate':
-      return i18n('stalemate');
+      return i18n('stalemate')
     case 'timeout':
       switch (winner) {
         case 'white':
-          return i18n('blackLeftTheGame');
+          return i18n('blackLeftTheGame')
         case 'black':
-          return i18n('whiteLeftTheGame');
+          return i18n('whiteLeftTheGame')
         default:
-          return i18n('draw');
+          return i18n('draw')
       }
     case 'draw':
-      return i18n('draw');
+      return i18n('draw')
     case 'outoftime':
-      return i18n('timeOut');
+      return i18n('timeOut')
     case 'noStart':
-      return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move';
+      return (winner === 'white' ? 'Black' : 'White') + ' didn\'t move'
     case 'unknownFinish':
-      return i18n('finished');
+      return i18n('finished')
     case 'cheat':
-      return 'Cheat detected';
+      return 'Cheat detected'
     case 'variantEnd':
       switch (variant) {
         case 'kingOfTheHill':
-          return 'King in the center';
+          return 'King in the center'
         case 'threeCheck':
-          return 'Three checks';
+          return 'Three checks'
         default:
-          return 'Variant ending';
+          return 'Variant ending'
       }
     default:
-      return status;
+      return status
   }
 }
 
@@ -81,4 +82,4 @@ export default {
   finished,
   aborted,
   toLabel
-};
+}

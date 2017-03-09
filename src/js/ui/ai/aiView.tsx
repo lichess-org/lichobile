@@ -1,49 +1,24 @@
 import * as h from 'mithril/hyperscript'
-import chessground from '../../chessground';
-import { getBoardBounds } from '../helper';
-import { playerFromFen } from '../../utils/fen';
-import i18n from '../../i18n';
-
-import layout from '../layout';
-import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common';
-import Board from '../shared/Board';
+import chessground from '../../chessground'
+import { getBoardBounds } from '../helper'
+import Board from '../shared/Board'
 import {
   renderAntagonist,
   renderGameActionsBar,
   renderReplayTable
-} from '../shared/offlineRound/view';
-import { view as renderPromotion } from '../shared/offlineRound/promotion';
-import * as helper from '../helper';
-import actions from './actions';
-import newGameMenu from './newAiGame';
-import AiRound from './AiRound';
+} from '../shared/offlineRound/view'
+import { view as renderPromotion } from '../shared/offlineRound/promotion'
+import * as helper from '../helper'
+import actions from './actions'
+import newGameMenu from './newAiGame'
+import AiRound from './AiRound'
 
-export default function view() {
-  let content: () => Mithril.Children, header: () => Mithril.Children
+export function renderContent(ctrl: AiRound) {
 
-  if (this.round.data && this.round.chessground) {
-    header = () => renderHeader(gameTitle(this.round.data));
-    content = () => renderContent(this.round);
-  } else {
-    const fen = this.round.vm.setupFen || this.round.vm.savedFen;
-    const color = playerFromFen(fen);
-    header = () => renderHeader(i18n('playOfflineComputer'));
-    content = () => viewOnlyBoardContent(fen, null, color);
-  }
-
-  return layout.board(
-    header,
-    content,
-    () => overlay(this.round)
-  );
-}
-
-function renderContent(ctrl: AiRound) {
-
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data);
-  const isPortrait = helper.isPortrait();
-  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game');
-  const replayTable = renderReplayTable(ctrl.replay);
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.data)
+  const isPortrait = helper.isPortrait()
+  const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game')
+  const replayTable = renderReplayTable(ctrl.replay)
 
   const aiName = (
     <h2>
@@ -53,16 +28,16 @@ function renderContent(ctrl: AiRound) {
         null
       }
     </h2>
-  );
+  )
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
     chessgroundCtrl: ctrl.chessground,
     bounds,
     isPortrait
-  });
+  })
 
-  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape';
+  const orientationKey = isPortrait ? 'o-portrait' : 'o-landscape'
 
   if (isPortrait) {
     return h.fragment({ key: orientationKey }, [
@@ -70,7 +45,7 @@ function renderContent(ctrl: AiRound) {
       board,
       renderAntagonist(ctrl, ctrl.playerName(), material[ctrl.data.player.color], 'player', isPortrait),
       renderGameActionsBar(ctrl, 'ai')
-    ]);
+    ])
   } else {
     return h.fragment({ key: orientationKey }, [
       board,
@@ -82,15 +57,15 @@ function renderContent(ctrl: AiRound) {
         </section>
         {renderGameActionsBar(ctrl, 'ai')}
       </section>
-    ]);
+    ])
   }
 }
 
-function overlay(ctrl: AiRound) {
+export function overlay(ctrl: AiRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),
     renderPromotion(ctrl)
-  ];
+  ]
 }
 

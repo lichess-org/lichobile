@@ -1,44 +1,44 @@
-import * as utils from '../../utils';
-import * as helper from '../helper';
+import * as utils from '../../utils'
+import * as helper from '../helper'
 
 export default function(
   classes: Object | string,
-  headerF: () => Mithril.Children,
+  headerF: (() => Mithril.Children) | undefined,
   contentF: () => Mithril.Children,
   isShowing: boolean,
   closef?: () => void
 ) {
   if (!isShowing) {
-    return null;
+    return null
   }
 
   const defaultClasses = {
     overlay_popup: true,
     native_scroller: true
-  };
+  }
 
-  let className: string;
+  let className: string
 
   if (typeof classes === 'object')
-    className = helper.classSet(Object.assign({}, defaultClasses, classes));
+    className = helper.classSet(Object.assign({}, defaultClasses, classes))
   else if (typeof classes === 'string')
-    className = helper.classSet(defaultClasses) + ' ' + classes;
+    className = helper.classSet(defaultClasses) + ' ' + classes
   else
-    throw new Error('First popup argument must be either a string or an object');
+    throw new Error('First popup argument must be either a string or an object')
 
   const contentClass = helper.classSet({
     'popup_content': true,
     'noheader': !headerF
-  });
+  })
 
   return (
     // dirty hack to be sure each popup element is unique
     // TODO should refactor into a component
     <div key={String(contentF)} className="overlay_popup_wrapper fade-in"
       onbeforeremove={(vnode: Mithril.DOMNode) => {
-        vnode.dom.classList.add('fading_out');
+        vnode.dom.classList.add('fading_out')
         return new Promise((resolve) => {
-          setTimeout(resolve, 500);
+          setTimeout(resolve, 500)
         })
       }}
     >
@@ -52,5 +52,5 @@ export default function(
         </div>
       </div>
     </div>
-  );
+  )
 }

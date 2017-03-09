@@ -1,10 +1,10 @@
-import * as helper from '../helper';
-import { dropShadowHeader, backButton } from '../shared/common';
-import formWidgets from '../shared/form';
-import layout from '../layout';
-import session from '../../session';
+import * as helper from '../helper'
+import { dropShadowHeader, backButton } from '../shared/common'
+import formWidgets from '../shared/form'
+import layout from '../layout'
+import session from '../../session'
 import { SettingsProp } from '../../settings'
-import * as h from 'mithril/hyperscript';
+import * as h from 'mithril/hyperscript'
 
 interface State {
   kidMode: SettingsProp<boolean>
@@ -14,17 +14,17 @@ const KidPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit: function(vnode) {
-    const kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode);
+    const kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode, false)
 
     vnode.state = {
       kidMode
-    };
+    }
   },
 
   view: function(vnode) {
-    const ctrl = vnode.state;
-    const header = () => dropShadowHeader(null, backButton('Kid mode'));
-    return layout.free(header, () => renderBody(ctrl));
+    const ctrl = vnode.state
+    const header = () => dropShadowHeader(null, backButton('Kid mode'))
+    return layout.free(header, () => renderBody(ctrl))
   }
 }
 
@@ -41,6 +41,6 @@ function renderBody(ctrl: State) {
       ]),
       h('p.list_item', formWidgets.renderCheckbox('Enable kid mode', 'kidMode', ctrl.kidMode))
     ])
-  ];
+  ]
 }
 

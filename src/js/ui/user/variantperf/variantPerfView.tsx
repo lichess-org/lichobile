@@ -3,10 +3,10 @@ import { scaleTime, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { timeFormat } from 'd3-time-format'
-import { timeMonth, timeYear, timeWeek } from 'd3-time'
-import router from '../../../router';
-import i18n from '../../../i18n';
-import * as helper from '../../helper';
+import { timeMonth, timeYear } from 'd3-time'
+import router from '../../../router'
+import i18n from '../../../i18n'
+import * as helper from '../../helper'
 import { GraphPoint } from '../../../lichess/interfaces/user'
 
 import { State } from './'
@@ -17,18 +17,18 @@ interface DateRating {
 }
 type GraphData = Array<DateRating>
 
-const ONE_YEAR = 1000*60*60*24*365;
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 
 export function renderBody(ctrl: State) {
-  const data = ctrl.variantPerfData();
+  const data = ctrl.variantPerfData()
 
-  if (!data) return null;
+  if (!data) return null
 
-  const days = Math.floor(data.stat.count.seconds / (60 * 60 * 24));
-  const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24;
-  const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60;
-  const now = Date.now();
-  const yearsAgo = now - (ONE_YEAR * 3);
+  const days = Math.floor(data.stat.count.seconds / (60 * 60 * 24))
+  const hours = Math.floor(data.stat.count.seconds / (60 * 60)) - days * 24
+  const mins = Math.floor(data.stat.count.seconds / 60) - days * 24 * 60 - hours * 60
+  const now = Date.now()
+  const yearsAgo = now - (ONE_YEAR * 3)
   const graphData = data.graph
     .map(normalizeGraphData)
     .filter(d => d.date.getTime() > yearsAgo)
@@ -161,36 +161,36 @@ export function renderBody(ctrl: State) {
         {data.stat.bestWins.results.map((p: any) => renderGame(p))}
       </div>
     </div>
-  );
+  )
 }
 
 function renderGame(game: any) {
-  const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name;
-  const date = game.at.substring(0, 10);
-  const gameId = game.gameId;
+  const opp = (game.opId.title === null ? '' : game.opId.title) + ' ' + game.opId.name
+  const date = game.at.substring(0, 10)
+  const gameId = game.gameId
 
   return (
     <div class="list_item nav" oncreate={helper.ontapY(() => router.set('/analyse/online/' + gameId))}>
       {opp} ({date})
     </div>
-  );
+  )
 }
 
 function isEmpty(element: any) {
   if (!element)
-    return 'empty';
+    return 'empty'
   else
-    return '';
+    return ''
 }
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, txt =>
     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  );
+  )
 }
 
 function delayDrawChart(graphData: GraphData) {
-  setTimeout(() => drawChart(graphData), 500);
+  setTimeout(() => drawChart(graphData), 500)
 }
 
 function drawChart(graphData: GraphData) {
@@ -229,7 +229,7 @@ function drawChart(graphData: GraphData) {
   .attr('transform', 'rotate(60)')
   .style('text-anchor', 'start')
   .select('.domain')
-  .remove();
+  .remove()
 
   g.append('g')
   .call(yAxis)
@@ -239,7 +239,7 @@ function drawChart(graphData: GraphData) {
   .attr('y', 6)
   .attr('dy', '0.71em')
   .attr('text-anchor', 'end')
-  .text(i18n('rating'));
+  .text(i18n('rating'))
 
   g.append('path')
   .attr('class', 'path')
@@ -248,19 +248,19 @@ function drawChart(graphData: GraphData) {
   .attr('stroke-linejoin', 'round')
   .attr('stroke-linecap', 'round')
   .attr('stroke-width', 1.5)
-  .attr('d', l(graphData));
+  .attr('d', l(graphData) as string)
 }
 
 function normalizeGraphData(i: GraphPoint): DateRating {
   return { date: new Date(i[0], i[1], i[2]), rating: i[3] }
 }
 
-const formatWeek = timeFormat("%b %d")
-const formatMonth = timeFormat("%b")
-const formatYear = timeFormat("%Y")
+const formatWeek = timeFormat('%b %d')
+const formatMonth = timeFormat('%b')
+const formatYear = timeFormat('%Y')
 
 function multiFormat(date: Date) {
  return (timeMonth(date) < date ? formatWeek
     : timeYear(date) < date ? formatMonth
-    : formatYear)(date);
+    : formatYear)(date)
 }

@@ -1,8 +1,8 @@
-import util from './util';
+import util from './util'
 
-const initial = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+const initial = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-const roles = {
+const roles: {[i: string]: string} = {
   p: 'pawn',
   r: 'rook',
   n: 'knight',
@@ -27,46 +27,46 @@ const letters = {
 }
 
 function read(fen: string) {
-  if (fen === 'start') fen = initial;
-  const pieces = {};
-  const space = fen.indexOf(' ');
-  const first = space !== -1 ? fen.substr(0, space) : fen;
-  const parts = first.split('/');
+  if (fen === 'start') fen = initial
+  const pieces: Chessground.Pieces = {}
+  const space = fen.indexOf(' ')
+  const first = space !== -1 ? fen.substr(0, space) : fen
+  const parts = first.split('/')
   for (let i = 0; i < 8; i++) {
-    let row = parts[i];
-    let x = 0;
+    let row = parts[i]
+    let x = 0
     for (let j = 0, jlen = row.length; j < jlen; j++) {
-      let v = row[j];
-      if (v === '~') continue;
-      let nb = ~~v;
-      if (nb) x += nb;
+      let v = row[j]
+      if (v === '~') continue
+      let nb = ~~v
+      if (nb) x += nb
       else {
-        x++;
+        x++
         pieces[util.pos2key([x, 8 - i])] = {
-          role: roles[v],
+          role: roles[v] as Role,
           color: v === v.toLowerCase() ? 'black' : 'white'
-        };
+        }
       }
     }
   }
 
-  return pieces;
+  return pieces
 }
 
-function write(pieces: Piece[]) {
+function write(pieces: Chessground.Pieces) {
   return [8, 7, 6, 5, 4, 3, 2].reduce(
     function(str, nb) {
-      return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb));
+      return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb))
     },
     util.invRanks.map(function(y) {
       return util.ranks.map(function(x) {
-        const piece = pieces[util.pos2key([x, y])];
+        const piece = pieces[util.pos2key([x, y])]
         if (piece) {
-          const letter = letters[piece.role];
-          return piece.color === 'white' ? letter.toUpperCase() : letter;
-        } else return '1';
-      }).join('');
-    }).join('/'));
+          const letter = letters[piece.role]
+          return piece.color === 'white' ? letter.toUpperCase() : letter
+        } else return '1'
+      }).join('')
+    }).join('/'))
 }
 
 export default {

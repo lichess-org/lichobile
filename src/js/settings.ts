@@ -1,22 +1,22 @@
-import store from './storage';
-import * as range from 'lodash/range';
-import {SearchStateSetting} from './ui/search/interfaces';
+import store from './storage'
+import * as range from 'lodash/range'
+import { SearchStateSetting } from './ui/search/interfaces'
 
 export interface SettingsProp<T> {
   (): T
-  (value: T): T;
+  (value: T): T
 }
 
-function localstorageprop<T>(key: string, initialValue?: T): SettingsProp<T> {
-  return function(): T {
-    if (arguments.length) store.set(key, arguments[0]);
-    const ret = store.get<T>(key);
-    return (ret !== null) ? ret : initialValue;
-  };
+function localstorageprop<T>(key: string, initialValue: T): SettingsProp<T> {
+  return function() {
+    if (arguments.length) store.set(key, arguments[0])
+    const ret = store.get<T>(key)
+    return (ret !== null) ? ret : initialValue
+  }
 }
 
 function tupleOf(x: number) {
-  return [x.toString(), x.toString()];
+  return [x.toString(), x.toString()]
 }
 
 const offlineAvailableVariants = [
@@ -35,8 +35,8 @@ export interface GameSettings {
   time: SettingsProp<string>
   timeMode: SettingsProp<string>
   increment: SettingsProp<string>
-  mode?: SettingsProp<string>
   color: SettingsProp<string>
+  mode?: SettingsProp<string>
   variant: SettingsProp<string>
   ratingMin?: SettingsProp<string>
   ratingMax?: SettingsProp<string>
@@ -44,9 +44,20 @@ export interface GameSettings {
   level?: SettingsProp<string>
 }
 
+export interface HumanSettings extends GameSettings {
+  mode: SettingsProp<string>
+  ratingMin: SettingsProp<string>
+  ratingMax: SettingsProp<string>
+  days: SettingsProp<string>
+}
+
+export interface AiSettings extends GameSettings {
+  level: SettingsProp<string>
+}
+
 export default {
   general: {
-    lang: localstorageprop<string>('settings.lang'),
+    lang: localstorageprop<string>('settings.lang', 'en'),
     sound: localstorageprop('settings.sound', true),
     theme: {
       availableBackgroundThemes: [
@@ -224,7 +235,7 @@ export default {
     isTimeValid: function(gameSettings: GameSettings) {
       return gameSettings.timeMode() !== '1' ||
         gameSettings.time() !== '0' ||
-        gameSettings.increment() !== '0';
+        gameSettings.increment() !== '0'
     },
 
     ai: {

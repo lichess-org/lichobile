@@ -1,8 +1,8 @@
-import chessground from '../../chessground';
-import settings from '../../settings';
-import { batchRequestAnimationFrame } from '../../utils/batchRAF';
+import chessground from '../../chessground'
+import settings from '../../settings'
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 
-import { AnalysisData } from './interfaces';
+import { AnalysisData } from './interfaces'
 
 function makeConfig(
   data: AnalysisData,
@@ -43,7 +43,7 @@ function makeConfig(
       enabled: settings.game.animations(),
       duration: data.pref.animationDuration
     }
-  };
+  }
 }
 
 export default {
@@ -54,19 +54,19 @@ export default {
     onMove: (orig: Pos, dest: Pos, capture: boolean) => void,
     onNewPiece: (piece: Piece, pos: Pos) => void
   ) {
-    return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece));
+    return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece))
   },
 
   promote(ground: Chessground.Controller, key: Pos, role: Role) {
-    const pieces = {};
-    const piece = ground.data.pieces[key];
+    const pieces: {[i: string]: Piece } = {}
+    const piece = ground.data.pieces[key]
     if (piece && piece.role === 'pawn') {
       pieces[key] = {
         color: piece.color,
         role: role
-      };
-      ground.setPieces(pieces);
+      }
+      ground.setPieces(pieces)
     }
   }
 
-};
+}

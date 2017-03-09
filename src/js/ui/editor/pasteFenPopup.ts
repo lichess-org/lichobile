@@ -1,22 +1,22 @@
-import i18n from '../../i18n';
-import popupWidget from '../shared/popup';
-import router from '../../router';
-import * as h from 'mithril/hyperscript';
+import i18n from '../../i18n'
+import popupWidget from '../shared/popup'
+import router from '../../router'
+import * as h from 'mithril/hyperscript'
 import Editor, { MenuInterface } from './Editor'
 
 export default {
 
   controller: function(root: Editor) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
@@ -26,18 +26,18 @@ export default {
         return isOpen
       },
       root
-    };
+    }
   },
 
   view: function(ctrl: MenuInterface) {
     return popupWidget(
       'pasteFenPopup',
-      null,
+      undefined,
       () => {
         return h('form', {
           onsubmit(e: Event) {
             e.preventDefault()
-            const input = (e.target as HTMLElement)[0]
+            const input = (e.target as HTMLFormElement)[0]
             const value = input.value
             if (value && value.length)
               ctrl.root.loadNewFen(input.value)
@@ -51,6 +51,6 @@ export default {
       },
       ctrl.isOpen(),
       ctrl.close
-    );
+    )
   }
 }

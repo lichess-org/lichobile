@@ -1,8 +1,8 @@
-import * as h from 'mithril/hyperscript';
-import * as helper from '../../helper';
-import router from '../../../router';
-import settings, { SettingsProp } from '../../../settings';
-import * as stream from 'mithril/stream';
+import * as h from 'mithril/hyperscript'
+import * as helper from '../../helper'
+import router from '../../../router'
+import settings, { SettingsProp } from '../../../settings'
+import * as stream from 'mithril/stream'
 
 interface Data {
   db: {
@@ -33,18 +33,18 @@ interface Controller {
 export default {
 
   controller(variant: Variant, onClose: (changed: boolean) => void) {
-    const available = ['lichess'];
+    const available = ['lichess']
     if (variant.key === 'standard' || variant.key === 'fromPosition') {
-      available.push('masters');
+      available.push('masters')
     }
 
-    const open = stream(false);
+    const open = stream(false)
 
     const data = {
       db: {
         available: available,
         selected: available.length > 1 ? settings.analyse.explorer.db : function() {
-          return available[0];
+          return available[0]
         }
       },
       rating: {
@@ -55,44 +55,46 @@ export default {
         available: settings.analyse.explorer.availableSpeeds,
         selected: settings.analyse.explorer.speed
       }
-    };
+    }
 
-    let openedWith: string;
+    let openedWith: string
 
     function serialize() {
-      return JSON.stringify(['db', 'rating', 'speed'].map(k =>
-        data[k].selected()
-      ));
+      return JSON.stringify([
+        data.db.selected(),
+        data.rating.selected(),
+        data.speed.selected()
+      ])
     }
 
     function doOpen() {
-      router.backbutton.stack.push(doClose);
-      openedWith = serialize();
-      open(true);
+      router.backbutton.stack.push(doClose)
+      openedWith = serialize()
+      open(true)
     }
 
     function doClose(fromBB?: string) {
-      if (fromBB !== 'backbutton' && open()) router.backbutton.stack.pop();
-      open(false);
-      onClose(openedWith !== serialize());
+      if (fromBB !== 'backbutton' && open()) router.backbutton.stack.pop()
+      open(false)
+      onClose(openedWith !== serialize())
     }
 
     function toggleMany(c: SettingsProp<any>, value: any) {
-      if (c().indexOf(value) === -1) c(c().concat([value]));
+      if (c().indexOf(value) === -1) c(c().concat([value]))
       else if (c().length > 1) c(c().filter((v: any) => {
-        return v !== value;
-      }));
+        return v !== value
+      }))
     }
 
     return {
       open,
       data,
       toggleOpen() {
-        if (open()) doClose();
-        else doOpen();
+        if (open()) doClose()
+        else doOpen()
       },
       toggleDb(db: string) {
-        data.db.selected(db);
+        data.db.selected(db)
       },
       toggleRating: (v: number) => toggleMany(data.rating.selected, v),
       toggleSpeed: (v: string) => toggleMany(data.speed.selected, v),
@@ -100,14 +102,14 @@ export default {
         return data.db.selected() === 'masters' || (
           data.rating.selected().length === data.rating.available.length &&
           data.speed.selected().length === data.speed.available.length
-        );
+        )
       },
       serialize
-    };
+    }
   },
 
   view(ctrl: Controller) {
-    const d = ctrl.data;
+    const d = ctrl.data
     return [
       h('section.db', [
         h('label', 'Database'),
@@ -115,7 +117,7 @@ export default {
           return h('span', {
             className: d.db.selected() === s ? 'selected' : '',
             oncreate: helper.ontapY(() => ctrl.toggleDb(s))
-          }, s);
+          }, s)
         }))
       ]),
       d.db.selected() === 'masters' ? h('div.masters.message', [
@@ -131,7 +133,7 @@ export default {
               return h('span', {
                 className: d.rating.selected().indexOf(r) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleRating(r))
-              }, r);
+              }, r)
             })
           )
         ]),
@@ -142,7 +144,7 @@ export default {
               return h('span', {
                 className: d.speed.selected().indexOf(s) > -1 ? 'selected' : '',
                 oncreate: helper.ontapY(() => ctrl.toggleSpeed(s))
-              }, s);
+              }, s)
             })
           )
         ])
@@ -152,6 +154,6 @@ export default {
           oncreate: helper.ontapY(ctrl.toggleOpen)
         }, 'All set!')
       )
-    ];
+    ]
   }
-};
+}

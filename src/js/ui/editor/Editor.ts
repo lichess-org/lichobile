@@ -1,19 +1,19 @@
-import * as debounce from 'lodash/debounce';
-import chessground from '../../chessground';
-import router from '../../router';
-import redraw from '../../utils/redraw';
-import settings from '../../settings';
-import menu from './menu';
-import pasteFenPopup from './pasteFenPopup';
-import { validateFen } from '../../utils/fen';
-import { loadLocalJsonFile } from '../../utils';
-import { batchRequestAnimationFrame } from '../../utils/batchRAF';
-import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup';
-import i18n from '../../i18n';
-import drag from './drag';
-import * as stream from 'mithril/stream';
+import * as debounce from 'lodash/debounce'
+import chessground from '../../chessground'
+import router from '../../router'
+import redraw from '../../utils/redraw'
+import settings from '../../settings'
+import menu from './menu'
+import pasteFenPopup from './pasteFenPopup'
+import { validateFen } from '../../utils/fen'
+import { loadLocalJsonFile } from '../../utils'
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
+import continuePopup, { Controller as ContinuePopupCtrl } from '../shared/continuePopup'
+import i18n from '../../i18n'
+import drag from './drag'
+import * as stream from 'mithril/stream'
 
-const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+const startingFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 interface EditorData {
   color: Mithril.Stream<Color>
@@ -22,6 +22,7 @@ interface EditorData {
     Q: Mithril.Stream<boolean>
     k: Mithril.Stream<boolean>
     q: Mithril.Stream<boolean>
+    [k: string]: Mithril.Stream<boolean>
   }
   enpassant: Mithril.Stream<string>
   halfmove: Mithril.Stream<string>
@@ -91,7 +92,7 @@ export default class Editor {
         openings.reduce((acc: Array<BoardPosition>, c: BoardPositionCategory) =>
           acc.concat(c.positions), [])
       )
-      this.endgamesPositions(endgames);
+      this.endgamesPositions(endgames)
       redraw()
     })
 
@@ -126,14 +127,14 @@ export default class Editor {
         change: () => {
           // we don't support enpassant, halfmove and moves fields when setting
           // position manually
-          this.data.editor.enpassant('-');
-          this.data.editor.halfmove('0');
-          this.data.editor.moves('1');
-          this.updateHref();
+          this.data.editor.enpassant('-')
+          this.data.editor.halfmove('0')
+          this.data.editor.moves('1')
+          this.updateHref()
         }
       },
       disableContextMenu: true
-    });
+    })
   }
 
   private updateHref = debounce(() => {
@@ -141,31 +142,31 @@ export default class Editor {
     if (validateFen(newFen).valid === true) {
       const path = `/editor/${encodeURIComponent(newFen)}`
       try {
-        window.history.replaceState(window.history.state, null, '?=' + path);
+        window.history.replaceState(window.history.state, '', '?=' + path)
       } catch (e) { console.error(e) }
     }
-  }, 250);
+  }, 250)
 
   public onstart = (e: TouchEvent) => drag(this, e)
   public onmove = (e: TouchEvent) => chessground.drag.move(this.chessground.data, e)
   public onend = (e: TouchEvent) => chessground.drag.end(this.chessground.data, e)
 
   public editorOnCreate = (vn: Mithril.DOMNode) => {
-    if (!vn.dom) return;
-    const editorNode = document.getElementById('boardEditor');
+    if (!vn.dom) return
+    const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
-      editorNode.addEventListener('touchstart', this.onstart);
-      editorNode.addEventListener('touchmove', this.onmove);
-      editorNode.addEventListener('touchend', this.onend);
+      editorNode.addEventListener('touchstart', this.onstart)
+      editorNode.addEventListener('touchmove', this.onmove)
+      editorNode.addEventListener('touchend', this.onend)
     }
   }
 
   public editorOnRemove = () => {
-    const editorNode = document.getElementById('boardEditor');
+    const editorNode = document.getElementById('boardEditor')
     if (editorNode) {
-      editorNode.removeEventListener('touchstart', this.onstart);
-      editorNode.removeEventListener('touchmove', this.onmove);
-      editorNode.removeEventListener('touchend', this.onend);
+      editorNode.removeEventListener('touchstart', this.onstart)
+      editorNode.removeEventListener('touchmove', this.onmove)
+      editorNode.removeEventListener('touchend', this.onend)
     }
   }
 
@@ -174,22 +175,22 @@ export default class Editor {
 
   public loadNewFen = (newFen: string) => {
     if (validateFen(newFen).valid === true)
-      router.set(`/editor/${encodeURIComponent(newFen)}`, true);
+      router.set(`/editor/${encodeURIComponent(newFen)}`, true)
     else
-      window.plugins.toast.show('Invalid FEN', 'short', 'center');
+      window.plugins.toast.show('Invalid FEN', 'short', 'center')
   }
 
   private fenMetadatas() {
     const data = this.data.editor
-    let castlesStr = '';
+    let castlesStr = ''
     Object.keys(data.castles).forEach(function(piece) {
-      if (data.castles[piece]()) castlesStr += piece;
-    });
-    return data.color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + data.enpassant() + ' ' + data.halfmove() + ' ' + data.moves();
+      if (data.castles[piece]()) castlesStr += piece
+    })
+    return data.color() + ' ' + (castlesStr.length ? castlesStr : '-') + ' ' + data.enpassant() + ' ' + data.halfmove() + ' ' + data.moves()
   }
 
   private readFen(fen: string): EditorData {
-    const parts = fen.split(' ');
+    const parts = fen.split(' ')
     return {
       color: stream(parts[1] as Color),
       castles: {

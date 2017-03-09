@@ -1,4 +1,5 @@
-import { Controller as ContinuePopupController } from '../shared/continuePopup'
+import { GameData, GameStep } from '../../lichess/interfaces/game'
+import AnalyseCtrl from './AnalyseCtrl'
 
 export interface RoleToSan {
   [role: string]: SanChar
@@ -8,11 +9,11 @@ export interface SanToRole {
   [san: string]: Role
 }
 
-export type Source = 'online' | 'offline';
+export type Source = 'online' | 'offline'
 
 export interface PathObj {
   ply: number
-  variation: number
+  variation: number | undefined
 }
 
 export type AnalysisTree = Array<AnalysisStep>
@@ -45,6 +46,7 @@ interface PlayerEvalSummary {
   blunder: number
   inaccuracy: number
   mistake: number
+  [i: string]: number
 }
 
 export interface RemoteEvalSummary {
@@ -59,7 +61,7 @@ export interface RemoteAnalysis {
 
 export interface AnalysisData extends GameData {
   analysis?: RemoteAnalysis
-  steps?: AnalysisTree
+  steps: AnalysisTree
 }
 
 export interface Glyph {
@@ -78,7 +80,7 @@ export interface AnalysisStep extends GameStep {
   end?: boolean
   nag?: string
   player?: Color
-  opening?: Opening
+  opening?: Opening | null
 }
 
 export interface CevalWork {
@@ -124,8 +126,8 @@ export interface VM {
   path: Path
   pathStr: string
   step?: AnalysisStep
-  cgConfig: Chessground.SetConfig
-  variationMenu: Path | null
+  cgConfig?: Chessground.SetConfig
+  variationMenu?: Path
   flip: boolean
   smallBoard: boolean
   analysisProgress: boolean
@@ -139,45 +141,7 @@ export interface MenuInterface {
   open: () => void
   close: () => void
   isOpen: () => boolean
-  root: AnalyseCtrlInterface
-}
-
-export interface AnalyseCtrlInterface {
-  data: AnalysisData
-  source: Source
-  vm: VM
-  analyse: AnalyseInterface
-  chessground: Chessground.Controller
-  explorer: ExplorerCtrlInterface
-  ceval: CevalCtrlInterface
-  menu: MenuInterface
-  continuePopup: ContinuePopupController
-  settings: MenuInterface
-  evalSummary: MenuInterface
-  notes: any
-
-  player(): Color
-  flip(): void
-  toggleBoardSize(): void
-  jump(path: Path, direction?: 'forward' | 'backward'): void
-  userJump(path: Path, direction?: 'forward' | 'backward'): void
-  fastforward(): boolean
-  rewind(): boolean
-  stopff(): void
-  stoprewind(): void
-  nextStepBest(): string | null
-  explorerMove(uci: string): void
-  debouncedScroll(): void
-  gameOver(): boolean
-  canDrop(): boolean
-  toggleVariationMenu(path?: Path): void
-  deleteVariation(path: Path): void
-  promoteVariation(path: Path): void
-  initCeval(): void
-  toggleBestMove(): void
-  toggleComments(): void
-  sharePGN(): void
-  isRemoteAnalysable(): boolean
+  root: AnalyseCtrl
 }
 
 export interface ExplorerCtrlInterface {
@@ -190,26 +154,6 @@ export interface ExplorerCtrlInterface {
   withGames: boolean
   current: Mithril.Stream<ExplorerData>
   toggle(): void
-}
-
-
-export interface AnalyseInterface {
-  tree: AnalysisTree
-
-  firstPly(): number
-  lastPly(): number
-  getStep(path: Path): AnalysisStep
-  getStepAtPly(ply: number): AnalysisStep
-  getSteps(path: Path): AnalysisTree
-  getStepsAfterPly(path: Path, ply: number): AnalysisTree
-  getOpening(path: Path): Opening | undefined
-  nextStepEvalBest(path: Path): string | null
-  addStep(step: AnalysisStep, path: Path): Path
-  addStepSituationData(situation: GameSituation, path: Path): void
-  updateAtPath(path: Path, update: (s: AnalysisStep) => void): void
-  deleteVariation(ply: number, id: number): void
-  promoteVariation(ply: number, id: number): void
-  plyOfNextNag(color: Color, nag: string, fromPly: number): number
 }
 
 export interface ExplorerMove {
@@ -246,12 +190,24 @@ export interface ExplorerGame {
 export interface ExplorerData {
   opening?: boolean
   tablebase?: boolean
-  fen?: string
   moves: Array<ExplorerMove>
   topGames?: Array<ExplorerGame>
   recentGames?: Array<ExplorerGame>
+  fen?: string
   checkmate?: boolean
   stalemate?: boolean
   variant_win?: boolean
   variant_loss?: boolean
+}
+
+export interface TablebaseData extends ExplorerData {
+  fen: string
+  checkmate: boolean
+  stalemate: boolean
+  variant_win: boolean
+  variant_loss: boolean
+}
+
+export function isTablebaseData(data: ExplorerData): data is TablebaseData {
+  return !!data.tablebase
 }

@@ -11,7 +11,6 @@
 /// <reference path="sse.d.ts" />
 /// <reference path="lichess.d.ts" />
 /// <reference path="chessground.d.ts" />
-/// <reference path="whatwg-fetch.d.ts" />
 /// <reference path="rlite.d.ts" />
 /// <reference path="stockfish.d.ts" />
 /// <reference path="zanimo.d.ts" />

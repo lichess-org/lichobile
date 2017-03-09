@@ -1,21 +1,21 @@
-import * as stream from 'mithril/stream';
-import * as h from 'mithril/hyperscript';
-import router from '../../router';
-import i18n from '../../i18n';
-import settings from '../../settings';
-import { specialFenVariants } from '../../lichess/variant';
-import formWidgets from '../shared/form';
-import ViewOnlyBoard from '../shared/ViewOnlyBoard';
-import popupWidget from '../shared/popup';
-import * as helper from '../helper';
-import { AiRoundInterface } from '../shared/round';
-import { opponentSelector } from './actions';
+import * as stream from 'mithril/stream'
+import * as h from 'mithril/hyperscript'
+import router from '../../router'
+import i18n from '../../i18n'
+import settings from '../../settings'
+import { specialFenVariants } from '../../lichess/variant'
+import formWidgets from '../shared/form'
+import ViewOnlyBoard from '../shared/ViewOnlyBoard'
+import popupWidget from '../shared/popup'
+import * as helper from '../helper'
+import { AiRoundInterface } from '../shared/round'
+import { opponentSelector } from './actions'
 
 const colors = [
   ['white', 'white'],
   ['black', 'black'],
   ['randomColor', 'random']
-];
+]
 
 export interface NewAiGameCtrl {
   open: () => void
@@ -27,16 +27,16 @@ export interface NewAiGameCtrl {
 export default {
 
   controller(root: AiRoundInterface) {
-    const isOpen = stream(false);
+    const isOpen = stream(false)
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen(true);
+      router.backbutton.stack.push(close)
+      isOpen(true)
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen() === true) router.backbutton.stack.pop();
-      isOpen(false);
+      if (fromBB !== 'backbutton' && isOpen() === true) router.backbutton.stack.pop()
+      isOpen(false)
     }
 
     return {
@@ -44,21 +44,21 @@ export default {
       close,
       isOpen,
       root
-    };
+    }
   },
 
   view(ctrl: NewAiGameCtrl) {
     if (ctrl.isOpen()) {
       return popupWidget(
         'new_offline_game',
-        null,
+        undefined,
         function() {
-          const availVariants = settings.ai.availableVariants;
+          const availVariants = settings.ai.availableVariants
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !specialFenVariants.includes(i[1])) :
-            availVariants;
+            availVariants
           if (ctrl.root.vm.setupFen && specialFenVariants.includes(settings.ai.variant())) {
-            settings.ai.variant('standard');
+            settings.ai.variant('standard')
           }
           return (
             <div>
@@ -78,7 +78,7 @@ export default {
                           height: '130px'
                         }}
                         oncreate={helper.ontap(() => {
-                          router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`);
+                          if (ctrl.root.vm.setupFen) router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
                         {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
@@ -94,26 +94,26 @@ export default {
                 {i18n('play')}
               </button>
             </div>
-          );
+          )
         },
         ctrl.isOpen(),
         () => {
           if (ctrl.root.vm.setupFen) {
-            router.set('/ai');
+            router.set('/ai')
           }
-          ctrl.close();
+          ctrl.close()
         }
-      );
+      )
     }
 
-    return null;
+    return null
   }
-};
+}
 
 function sideSelector() {
   return (
     <div className="select_input">
       {formWidgets.renderSelect('side', 'color', colors, settings.ai.color)}
     </div>
-  );
+  )
 }

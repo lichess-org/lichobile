@@ -1,7 +1,7 @@
-import redraw from '../../../utils/redraw';
-import * as helper from '../../helper';
-import settings from '../../../settings';
-import * as h from 'mithril/hyperscript';
+import redraw from '../../../utils/redraw'
+import * as helper from '../../helper'
+import settings from '../../../settings'
+import * as h from 'mithril/hyperscript'
 import { PromotingInterface } from '../round'
 
 type PromoteCallback = (orig: Pos, dest: Pos, prom: Role) => void
@@ -11,22 +11,22 @@ interface Promoting {
   callback: PromoteCallback
 }
 
-let promoting: Promoting = null
+let promoting: Promoting | null = null
 
 function promote(ground: Chessground.Controller, key: Pos, role: Role) {
-  const pieces = {};
-  const piece = ground.data.pieces[key];
+  const pieces: {[k: string]: Piece } = {}
+  const piece = ground.data.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
       role: role
-    };
-    ground.setPieces(pieces);
+    }
+    ground.setPieces(pieces)
   }
 }
 
 function start(chessground: Chessground.Controller, orig: Pos, dest: Pos, callback: PromoteCallback) {
-  const piece = chessground.data.pieces[dest];
+  const piece = chessground.data.pieces[dest]
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '1' && chessground.data.turnColor === 'white') ||
     (dest[1] === '8' && chessground.data.turnColor === 'black'))) {
@@ -34,33 +34,33 @@ function start(chessground: Chessground.Controller, orig: Pos, dest: Pos, callba
       orig: orig,
       dest: dest,
       callback: callback
-    };
-    redraw();
-    return true;
+    }
+    redraw()
+    return true
   }
-  return false;
+  return false
 }
 
 function finish(ground: Chessground.Controller, role: Role) {
-  if (promoting) promote(ground, promoting.dest, role);
-  if (promoting.callback) promoting.callback(promoting.orig, promoting.dest, role);
-  promoting = null;
+  if (promoting) promote(ground, promoting.dest, role)
+  if (promoting && promoting.callback) promoting.callback(promoting.orig, promoting.dest, role)
+  promoting = null
 }
 
-function cancel(chessground: Chessground.Controller, cgConfig: Chessground.SetConfig) {
+function cancel(chessground: Chessground.Controller, cgConfig?: Chessground.SetConfig) {
   if (promoting) {
-    promoting = null;
-    chessground.set(cgConfig);
-    redraw();
+    promoting = null
+    chessground.set(cgConfig)
+    redraw()
   }
 }
 
 export function view(ctrl: PromotingInterface) {
   if (!promoting) return null
 
-  const pieces = ['queen', 'knight', 'rook', 'bishop'];
+  const pieces = ['queen', 'knight', 'rook', 'bishop']
   if (ctrl.data && ctrl.data.game.variant.key === 'antichess') {
-    pieces.push('king');
+    pieces.push('king')
   }
 
   return h('div.overlay.open', [h('div#promotion_choice', {
@@ -69,11 +69,11 @@ export function view(ctrl: PromotingInterface) {
   }, pieces.map((role: Role) => {
     return h('piece.' + role + '.' + ctrl.player(), {
       oncreate: helper.ontap(() => finish(ctrl.chessground, role))
-    });
+    })
   }))])
 }
 
 export default {
   start,
   cancel
-};
+}

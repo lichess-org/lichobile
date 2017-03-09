@@ -1,9 +1,31 @@
-import { askWorker } from './utils/worker';
+import { askWorker } from './utils/worker'
+import { GameStatus, CheckCount, Pockets } from './lichess/interfaces/game'
 
-const worker = new Worker('vendor/scalachess.js');
+const worker = new Worker('vendor/scalachess.js')
 
 // warmup
 worker.postMessage({ topic: 'init', payload: { variant: 'standard'}})
+
+export interface GameSituation {
+  variant: string
+  fen: string
+  player: Color
+  dests: DestsMap
+  drops?: Array<string>
+  end: boolean
+  playable: boolean
+  status?: GameStatus
+  winner?: Color
+  check: boolean
+  checkCount: CheckCount
+  pgnMoves: Array<string>
+  uciMoves: Array<string>
+  promotion?: string
+  crazyhouse?: {
+    pockets: Pockets
+  }
+  ply: number
+}
 
 export interface InitRequest {
   variant: VariantKey
@@ -97,37 +119,37 @@ export interface PgnReadResponse {
 }
 
 function uniqId() {
-  return String(performance.now());
+  return String(performance.now())
 }
 
 export function init(payload: InitRequest): Promise<InitResponse> {
-  return askWorker(worker, { topic: 'init', payload });
+  return askWorker(worker, { topic: 'init', payload })
 }
 
 export function dests(payload: DestsRequest): Promise<DestsResponse> {
-  return askWorker(worker, { topic: 'dests', payload, reqid: uniqId() });
+  return askWorker(worker, { topic: 'dests', payload, reqid: uniqId() })
 }
 
 export function situation(payload: SituationRequest): Promise<SituationResponse> {
-  return askWorker(worker, { topic: 'situation', payload, reqid: uniqId() });
+  return askWorker(worker, { topic: 'situation', payload, reqid: uniqId() })
 }
 
 export function move(payload: MoveRequest): Promise<MoveResponse> {
-  return askWorker(worker, { topic: 'move', payload, reqid: uniqId() });
+  return askWorker(worker, { topic: 'move', payload, reqid: uniqId() })
 }
 
 export function drop(payload: DropRequest): Promise<MoveResponse> {
-  return askWorker(worker, { topic: 'drop', payload, reqid: uniqId() });
+  return askWorker(worker, { topic: 'drop', payload, reqid: uniqId() })
 }
 
 export function threefoldTest(payload: ThreefoldTestRequest): Promise<ThreefoldTestResponse> {
-  return askWorker(worker, { topic: 'threefoldTest', payload });
+  return askWorker(worker, { topic: 'threefoldTest', payload })
 }
 
 export function pgnDump(payload: PgnDumpRequest): Promise<PgnDumpResponse> {
-  return askWorker(worker, { topic: 'pgnDump', payload });
+  return askWorker(worker, { topic: 'pgnDump', payload })
 }
 
 export function pgnRead(payload: PgnReadRequest): Promise<PgnReadResponse> {
-  return askWorker(worker, { topic: 'pgnRead', payload });
+  return askWorker(worker, { topic: 'pgnRead', payload })
 }

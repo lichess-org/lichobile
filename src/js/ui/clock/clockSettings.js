@@ -1,55 +1,55 @@
-import redraw from '../../utils/redraw';
-import settings from '../../settings';
-import formWidgets from '../shared/form';
-import popupWidget from '../shared/popup';
-import * as helper from '../helper';
-import router from '../../router';
-import * as utils from '../../utils';
+import redraw from '../../utils/redraw'
+import settings from '../../settings'
+import formWidgets from '../shared/form'
+import popupWidget from '../shared/popup'
+import * as helper from '../helper'
+import router from '../../router'
+import * as utils from '../../utils'
 
 export default {
 
   controller: function(reload, clockObj) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      if (clockObj().isRunning() && !clockObj().flagged()) return;
+      if (clockObj().isRunning() && !clockObj().flagged()) return
 
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     function addStage () {
-      let stages = settings.clock.stage.stages();
-      stages[stages.length-1].moves = stages[stages.length-2].moves;
-      stages.push({time: stages[stages.length-1].time});
-      settings.clock.stage.stages(stages);
-      redraw();
+      let stages = settings.clock.stage.stages()
+      stages[stages.length-1].moves = stages[stages.length-2].moves
+      stages.push({time: stages[stages.length-1].time})
+      settings.clock.stage.stages(stages)
+      redraw()
     }
 
     function removeStage () {
-      let stages = settings.clock.stage.stages();
+      let stages = settings.clock.stage.stages()
       if (stages.length <= 2)
-        return;
-      stages.pop();
-      settings.clock.stage.stages(stages);
-      redraw();
+        return
+      stages.pop()
+      settings.clock.stage.stages(stages)
+      redraw()
     }
 
     return {
       open,
       close,
       isOpen: function() {
-        return isOpen;
+        return isOpen
       },
       reload,
       addStage,
       removeStage
-    };
+    }
   },
 
   view: function(ctrl) {
@@ -61,7 +61,7 @@ export default {
               {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.simple.time, false, onChange)}
             </div>
           </div>
-        );
+        )
       },
       increment: function () {
         return (
@@ -73,7 +73,7 @@ export default {
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.increment.increment, false, onChange)}
             </div>
           </div>
-        );
+        )
       },
       handicapInc: function () {
         return (
@@ -97,7 +97,7 @@ export default {
               </div>
             </div>
           </div>
-        );
+        )
       },
       delay: function () {
         return (
@@ -109,7 +109,7 @@ export default {
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.delay.increment, false, onChange)}
             </div>
           </div>
-        );
+        )
       },
       bronstein: function () {
         return (
@@ -121,7 +121,7 @@ export default {
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.bronstein.increment, false, onChange)}
             </div>
           </div>
-        );
+        )
       },
       hourglass: function () {
         return (
@@ -130,7 +130,7 @@ export default {
               {formWidgets.renderSelect('Time', 'time', settings.clock.availableTimes, settings.clock.hourglass.time, false, onChange)}
             </div>
           </div>
-        );
+        )
       },
       stage: function () {
         return (
@@ -140,9 +140,9 @@ export default {
               {formWidgets.renderSelect('Increment', 'increment', settings.clock.availableIncrements.map(utils.tupleOf), settings.clock.stage.increment, false, onChange)}
             </div>
           </div>
-        );
+        )
       }
-    };
+    }
 
     if (ctrl.isOpen()) {
       return popupWidget(
@@ -158,28 +158,28 @@ export default {
                 {clockSettingsView[settings.clock.clockType()]()}
               </div>
               <button className="newClockButton" data-icon="E" oncreate={helper.ontap(function () {
-                  ctrl.reload();
-                  ctrl.close();
+                  ctrl.reload()
+                  ctrl.close()
                 })}>
                 Set Clock
               </button>
             </div>
-          );
+          )
         },
         ctrl.isOpen(),
         ctrl.close
-      );
+      )
     }
 
-    return null;
+    return null
   }
-};
+}
 
 function renderStage (ctrl, stage, index) {
-  const time = updateTime.bind(undefined, index);
-  const moves = updateMoves.bind(undefined, index);
-  const hidePlus = settings.clock.stage.stages().length >= 5;
-  const hideMinus = settings.clock.stage.stages().length <= 2;
+  const time = updateTime.bind(undefined, index)
+  const moves = updateMoves.bind(undefined, index)
+  const hidePlus = settings.clock.stage.stages().length >= 5
+  const hideMinus = settings.clock.stage.stages().length <= 2
   return (
     <div className="stageRow">
       <div className="stageRowTitle">{index + 1}</div>
@@ -193,30 +193,30 @@ function renderStage (ctrl, stage, index) {
         <span  className={'fa fa-plus-square-o' + (hidePlus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => ctrl.addStage())}/> <span className={'fa fa-minus-square-o' + (hideMinus ? ' hiddenButton' : '')} oncreate={helper.ontap(() => ctrl.removeStage())}/>
       </div>
     </div>
-  );
+  )
 }
 
 function updateTime (index, time) {
-  let stages = settings.clock.stage.stages();
+  let stages = settings.clock.stage.stages()
 
   if (time) {
-    stages[index].time = time;
-    settings.clock.stage.stages(stages);
+    stages[index].time = time
+    settings.clock.stage.stages(stages)
   }
-  return stages[index].time;
+  return stages[index].time
 }
 
 function updateMoves (index, moves) {
-  let stages = settings.clock.stage.stages();
+  let stages = settings.clock.stage.stages()
   if (moves) {
-    stages[index].moves = moves;
-    settings.clock.stage.stages(stages);
+    stages[index].moves = moves
+    settings.clock.stage.stages(stages)
   }
 
-  return stages[index].moves;
+  return stages[index].moves
 }
 
 function onChange () {
-  window.StatusBar.hide();
-  redraw();
+  window.StatusBar.hide()
+  redraw()
 }

@@ -1,37 +1,38 @@
-import router from '../../router';
-import * as helper from '../helper';
-import { FaqState, Tournament } from './interfaces';
+import router from '../../router'
+import * as helper from '../helper'
+import { FaqState } from './interfaces'
+import { Tournament } from '../../lichess/interfaces/tournament'
 import { closeIcon } from '../shared/icons'
 
 export default {
   controller: function(tournament: Mithril.Stream<Tournament>) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
       open,
       close,
       isOpen: function() {
-        return isOpen;
+        return isOpen
       },
       tournament
-    } as FaqState;
+    } as FaqState
   },
 
   view: function(ctrl: FaqState) {
-    if (!ctrl.isOpen()) return null;
-    const tournament = ctrl.tournament();
+    if (!ctrl.isOpen()) return null
+    const tournament = ctrl.tournament()
 
-    if (!tournament) return null;
+    if (!tournament) return null
     return (
       <div className="modal" id="tournamentFaqModal" oncreate={helper.slidesInUp}>
         <header>
@@ -110,6 +111,6 @@ export default {
           </div>
         </div>
       </div>
-    );
+    )
   }
-};
+}

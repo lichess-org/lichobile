@@ -1,13 +1,13 @@
-let foreground = true;
+let foreground = true
 
 export function isForeground() {
-  return foreground;
+  return foreground
 }
 
 export function setForeground() {
-  foreground = true;
+  foreground = true
 }
 
 export function setBackground() {
-  foreground = false;
+  foreground = false
 }

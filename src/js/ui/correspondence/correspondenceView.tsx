@@ -1,14 +1,14 @@
-import * as utils from '../../utils';
-import challengesApi from '../../lichess/challenges';
-import * as helper from '../helper';
-import i18n from '../../i18n';
-import session from '../../session';
-import loginModal from '../loginModal';
-import newGameForm from '../newGameForm';
-import tabs from '../shared/tabs';
-import * as h from 'mithril/hyperscript';
-import { Seek } from '../../lichess/interfaces';
-import { Challenge } from '../../lichess/interfaces/challenge';
+import * as utils from '../../utils'
+import challengesApi from '../../lichess/challenges'
+import * as helper from '../helper'
+import i18n from '../../i18n'
+import session from '../../session'
+import loginModal from '../loginModal'
+import newGameForm from '../newGameForm'
+import tabs from '../shared/tabs'
+import * as h from 'mithril/hyperscript'
+import { Seek } from '../../lichess/interfaces'
+import { Challenge } from '../../lichess/interfaces/challenge'
 
 import { State } from '.'
 
@@ -21,7 +21,7 @@ const tabButtons = [
     label: 'Challenges',
     key: 'challenges'
   }
-];
+]
 
 export function renderBody(ctrl: State) {
   if (!session.isConnected()) {
@@ -36,20 +36,20 @@ export function renderBody(ctrl: State) {
           oncreate: helper.ontap(loginModal.open)
         }, i18n('logIn'))
       ])
-    ];
+    ]
   }
 
   const tabsBar = h(tabs, {
     buttons: tabButtons,
     selectedTab: ctrl.selectedTab(),
     onTabChange: (k: string) => {
-      const loc = window.location.search.replace(/\?tab\=\w+$/, '');
+      const loc = window.location.search.replace(/\?tab\=\w+$/, '')
       try {
-        window.history.replaceState(window.history.state, null, loc + '?tab=' + k);
+        window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
       } catch (e) { console.error(e) }
-      ctrl.selectedTab(k);
+      ctrl.selectedTab(k)
     }
-  });
+  })
 
   return [
     h('div.tabs-nav-header', tabsBar, h('div.main_header_drop_shadow')),
@@ -58,30 +58,30 @@ export function renderBody(ctrl: State) {
         renderPool(ctrl) :
         renderChallenges(ctrl)
     )
-  ];
+  ]
 }
 
 export function renderFooter() {
   return h('div.correpondenceFooter', h('button#newGameCorres', {
     key: 'seeks_createagame',
     oncreate: helper.ontap(newGameForm.openCorrespondence)
-  }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]));
+  }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]))
 }
 
 function renderChallenges(ctrl: State) {
   return ctrl.sendingChallenges().length ?
     h('ul', ctrl.sendingChallenges().map(c => renderChallenge(ctrl, c))) :
-    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
 }
 
 function renderPool(ctrl: State) {
   return ctrl.getPool().length ?
     h('ul', ctrl.getPool().map(s => renderSeek(ctrl, s))) :
-    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.');
+    h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
 }
 
 function renderChallenge(ctrl: State, c: Challenge) {
-  const playerName = c.destUser && utils.lightPlayerName(c.destUser);
+  const playerName = c.destUser && utils.lightPlayerName(c.destUser)
   return (
     <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
       oncreate={helper.ontapY(
@@ -101,11 +101,11 @@ function renderChallenge(ctrl: State, c: Challenge) {
         </div>
       </div>
     </li>
-  );
+  )
 }
 
 function renderSeek(ctrl: State, seek: Seek) {
-  const action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join';
+  const action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join'
   return h('li', {
     key: 'seek' + seek.id,
     'id': seek.id,
@@ -124,5 +124,5 @@ function renderSeek(ctrl: State, seek: Seek) {
         i18n(seek.mode === 1 ? 'rated' : 'casual')
       ])
     ])
-  ]);
+  ])
 }

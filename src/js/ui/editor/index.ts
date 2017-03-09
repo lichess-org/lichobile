@@ -21,7 +21,7 @@ const EditorScreen: Mithril.Component<Attrs, State> = {
   },
   oncreate: helper.viewFadeIn,
   onremove() {
-    window.plugins.insomnia.allowSleepAgain();
+    window.plugins.insomnia.allowSleepAgain()
   },
   view() {
     return editorView(this.editor)

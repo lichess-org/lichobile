@@ -1,35 +1,36 @@
-import * as h from 'mithril/hyperscript';
-import router from '../../../router';
-import * as utils from '../../../utils';
-import i18n from '../../../i18n';
-import * as gameApi from '../../../lichess/game';
-import gameStatusApi from '../../../lichess/status';
-import { renderMaterial } from '../../shared/round/view/roundView';
-import * as helper from '../../helper';
-import CrazyPocket from '../../shared/round/crazy/CrazyPocket';
-import { OfflineRoundInterface, Position, Material } from '../round';
-import settings from '../../../settings';
-import Replay from './Replay';
+import * as h from 'mithril/hyperscript'
+import router from '../../../router'
+import * as utils from '../../../utils'
+import i18n from '../../../i18n'
+import * as gameApi from '../../../lichess/game'
+import gameStatusApi from '../../../lichess/status'
+import { GameSituation } from '../../../chess'
+import { renderMaterial } from '../../shared/round/view/roundView'
+import * as helper from '../../helper'
+import CrazyPocket from '../../shared/round/crazy/CrazyPocket'
+import { OfflineRoundInterface, Position, Material } from '../round'
+import settings from '../../../settings'
+import Replay from './Replay'
 
-let pieceNotation: boolean;
+let pieceNotation: boolean
 
 function getChecksCount(ctrl: OfflineRoundInterface, color: Color) {
-  const sit = ctrl.replay.situation();
+  const sit = ctrl.replay.situation()
   if (sit.checkCount)
     return utils.oppositeColor(color) === 'white' ?
-      sit.checkCount.white : sit.checkCount.black;
+      sit.checkCount.white : sit.checkCount.black
   else
     return 0
 }
 
-type OfflineGameType = 'ai' | 'otb';
+type OfflineGameType = 'ai' | 'otb'
 
 export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.Children, material: Material, position: Position, isPortrait: boolean, otbFlip?: boolean, customPieceTheme?: string) {
-  const sit = ctrl.replay.situation();
-  const isCrazy = !!sit.crazyhouse;
-  const key = isPortrait ? position + '-portrait' : position + '-landscape';
-  const antagonist = position === 'player' ? ctrl.data.player : ctrl.data.opponent;
-  const antagonistColor = antagonist.color;
+  const sit = ctrl.replay.situation()
+  const isCrazy = !!sit.crazyhouse
+  const key = isPortrait ? position + '-portrait' : position + '-landscape'
+  const antagonist = position === 'player' ? ctrl.data.player : ctrl.data.opponent
+  const antagonistColor = antagonist.color
 
   const className = [
     'playTable',
@@ -37,7 +38,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
     isCrazy ? 'crazy' : '',
     otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
     ctrl.chessground.data.turnColor === 'white' ? 'turn_white' : 'turn_black'
-  ].join(' ');
+  ].join(' ')
 
   return (
     <section className={className} key={key}>
@@ -53,15 +54,15 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
         </div> : null
         }
       </div>
-      {h(CrazyPocket, {
+      {sit.crazyhouse ? h(CrazyPocket, {
         ctrl,
         crazyData: sit.crazyhouse,
         color: antagonistColor,
         position,
         customPieceTheme
-      })}
+      }) : null}
     </section>
-  );
+  )
 }
 
 
@@ -92,7 +93,7 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineG
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
     </section>
-  );
+  )
 }
 
 export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface, type: OfflineGameType) {
@@ -110,28 +111,28 @@ export function renderGameActionsBarTablet(ctrl: OfflineRoundInterface, type: Of
       {renderBackwardButton(ctrl)}
       {renderForwardButton(ctrl)}
     </section>
-  );
+  )
 }
 
 export function renderEndedGameStatus(ctrl: OfflineRoundInterface) {
-  if (!ctrl.replay) return null;
+  if (!ctrl.replay) return null
 
-  const sit = ctrl.replay.situation();
+  const sit = ctrl.replay.situation()
   if (gameStatusApi.finished(ctrl.data)) {
-    const result = gameApi.result(ctrl.data);
-    const winner = sit.winner;
+    const result = gameApi.result(ctrl.data)
+    const winner = sit.winner
     const status = gameStatusApi.toLabel(ctrl.data.game.status.name, ctrl.data.game.winner, ctrl.data.game.variant.key) +
-      (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '');
+      (winner ? '. ' + i18n(winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
     return (
       <div key="result" className="result">
         {result}
         <br />
         <em className="resultStatus">{status}</em>
       </div>
-    );
+    )
   }
 
-  return null;
+  return null
 }
 
 export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
@@ -141,26 +142,26 @@ export function renderClaimDrawButton(ctrl: OfflineRoundInterface) {
     h('button[data-icon=2].draw-yes', {
       oncreate: helper.ontap(() => ctrl.replay.claimDraw())
     }, i18n('threefoldRepetition'))
-  ]) : null;
+  ]) : null
 }
 
 
 export function renderReplayTable(ctrl: Replay) {
-  const curPly = ctrl.ply;
-  const shouldDisplay = !helper.isPortrait();
+  const curPly = ctrl.ply
+  const shouldDisplay = !helper.isPortrait()
 
-  if (!shouldDisplay) return null;
+  if (!shouldDisplay) return null
 
   return (
     <div key="replay-table" className="replay">
       <div className="gameMovesList native_scroller"
-        oncreate={(vnode: Mithril.DOMNode) => { autoScroll(vnode.dom as HTMLElement); }}
+        oncreate={(vnode: Mithril.DOMNode) => { autoScroll(vnode.dom as HTMLElement) }}
         onupdate={(vnode: Mithril.DOMNode) => setTimeout(autoScroll.bind(undefined, vnode.dom), 100)}
       >
         {renderTable(ctrl, curPly)}
       </div>
     </div>
-  );
+  )
 }
 
 function renderBackwardButton(ctrl: OfflineRoundInterface) {
@@ -169,7 +170,7 @@ function renderBackwardButton(ctrl: OfflineRoundInterface) {
     className: helper.classSet({
       disabled: !(ctrl.replay.ply > ctrl.firstPly())
     })
-  });
+  })
 }
 
 function renderForwardButton(ctrl: OfflineRoundInterface) {
@@ -178,26 +179,26 @@ function renderForwardButton(ctrl: OfflineRoundInterface) {
     className: helper.classSet({
       disabled: !(ctrl.replay.ply < ctrl.lastPly())
     })
-  });
+  })
 }
 
 function renderTd(sit: GameSituation, curPly: number) {
   if (sit && sit.pgnMoves.length) {
-    const san = sit.pgnMoves[sit.pgnMoves.length - 1];
+    const san = sit.pgnMoves[sit.pgnMoves.length - 1]
     return (
       <td className={'replayMove' + (sit.ply === curPly ? ' current' : '')}>
         {san}
       </td>
-    );
+    )
   }
-  return null;
+  return null
 }
 
 function renderTable(ctrl: Replay, curPly: number) {
-  const steps = ctrl.situations;
-  const pairs: Array<[GameSituation, GameSituation]> = [];
-  for (let i = 1; i < steps.length; i += 2) pairs.push([steps[i], steps[i + 1]]);
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+  const steps = ctrl.situations
+  const pairs: Array<[GameSituation, GameSituation]> = []
+  for (let i = 1; i < steps.length; i += 2) pairs.push([steps[i], steps[i + 1]])
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return (
     <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}>
       <tbody>
@@ -208,15 +209,15 @@ function renderTable(ctrl: Replay, curPly: number) {
               {renderTd(pair[0], curPly)}
               {renderTd(pair[1], curPly)}
             </tr>
-          );
+          )
         })}
       </tbody>
     </table>
-  );
+  )
 }
 
 function autoScroll(movelist: HTMLElement) {
-  if (!movelist) return;
+  if (!movelist) return
   const plyEl = (movelist.querySelector('.current') || movelist.querySelector('tr:first-child')) as HTMLElement
-  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2;
+  if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
 }

@@ -1,36 +1,36 @@
-import { fetchJSON } from '../../http';
-import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from './interfaces';
+import { fetchJSON } from '../../http'
+import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from '../../lichess/interfaces/tournament'
 
 export function currentTournaments(): Promise<TournamentLists> {
-  return fetchJSON('/tournament', {}, true);
+  return fetchJSON('/tournament', {}, true)
 }
 
 export function tournament(id: string): Promise<Tournament> {
-  return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true);
+  return fetchJSON('/tournament/' + id, {query: {socketVersion: 1}}, true)
 }
 
-export function reload(id: string, page: number): Promise<Tournament> {
+export function reload(id: string, page?: number): Promise<Tournament> {
   return fetchJSON('/tournament/' + id,
   {
     method: 'GET',
     query: page ? { page } : {}
-  });
+  })
 }
 
-export function join(id: string, password: string): Promise<{}> {
+export function join(id: string, password?: string): Promise<{}> {
   return fetchJSON('/tournament/' + id + '/join',
   {
     method: 'POST',
-    body: password ? JSON.stringify({p: password}) : null
-  });
+    body: password ? JSON.stringify({p: password}) : undefined
+  })
 }
 
 export function withdraw(id: string): Promise<{}> {
-  return fetchJSON('/tournament/' + id + '/withdraw', {method: 'POST'});
+  return fetchJSON('/tournament/' + id + '/withdraw', {method: 'POST'})
 }
 
 export function playerInfo(tournamentId: string, playerId: string): Promise<PlayerInfo> {
-  return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true);
+  return fetchJSON('/tournament/' + tournamentId + '/player/' + playerId, {}, true)
 }
 
 export function create(variant: string, position: string, mode: string, clockTime: string, clockIncrement: string, minutes: string, waitMinutes: string, isPrivate: string, password: string): Promise<TournamentCreateResponse> {
@@ -47,5 +47,5 @@ export function create(variant: string, position: string, mode: string, clockTim
       private: isPrivate,
       password
     })
-  }, true);
+  }, true)
 }

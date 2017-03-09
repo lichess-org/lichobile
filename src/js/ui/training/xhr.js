@@ -1,4 +1,4 @@
-import { fetchJSON } from '../../http';
+import { fetchJSON } from '../../http'
 
 export function attempt(id, win) {
   return fetchJSON(`/training/${id}/attempt`, {
@@ -6,7 +6,7 @@ export function attempt(id, win) {
     body: JSON.stringify({
       win: win ? 1 : 0
     })
-  });
+  })
 }
 
 export function vote(id, v) {
@@ -15,17 +15,17 @@ export function vote(id, v) {
     body: JSON.stringify({
       vote: v
     })
-  });
+  })
 }
 
 export function loadPuzzle(id) {
-  return fetchJSON(`/training/${id}/load`);
+  return fetchJSON(`/training/${id}/load`)
 }
 
 export function newPuzzle() {
-  return fetchJSON('/training/new');
+  return fetchJSON('/training/new')
 }
 
 export function history() {
-  return fetchJSON('/training/history');
+  return fetchJSON('/training/history')
 }

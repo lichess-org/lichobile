@@ -144,9 +144,9 @@ declare namespace Mithril {
   // Vnode children types
   type DOMNode = VnodeDOM<any, any>
   type BaseNode = Vnode<any, any>
-  type Child = string | number | boolean | Vnode<any,any>;
+  type Child = string | number | boolean | Vnode<any,any> | null
   interface ChildArray extends Array<Children> {}
-  type Children = Child | ChildArray;
+  type Children = Child | ChildArray
 
   interface Vnode<A, S extends Lifecycle<A,S>> {
     tag: string | Component<A,S>;
@@ -165,7 +165,7 @@ declare namespace Mithril {
   }
 
   interface VnodeFactory {
-    <A,S>(tag: string | Component<A,S>, key: string | number, attrs: A, children: Children, text: string, dom: Element): DOMNode
+    <A,S>(tag: string | Component<A,S>, key: string | number | undefined, attrs: A | undefined, children: Children | undefined, text: string | undefined, dom: Element | undefined): DOMNode
   }
 
   interface Component<A, S extends Lifecycle<A,S>> extends Lifecycle<A,S> {

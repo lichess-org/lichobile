@@ -1,19 +1,20 @@
-import { fetchJSON, fetchText } from '../../../http';
-import { noop, serializeQueryParameters } from '../../../utils';
-import i18n from '../../../i18n';
+import { fetchJSON, fetchText } from '../../../http'
+import { noop, serializeQueryParameters } from '../../../utils'
+import i18n from '../../../i18n'
+import { OnlineGameData } from '../../../lichess/interfaces/game'
 
 import { OnlineRoundInterface } from '.'
 
 export function reload(ctrl: OnlineRoundInterface): Promise<OnlineGameData> {
-  return fetchJSON(ctrl.data.url.round);
+  return fetchJSON(ctrl.data.url.round)
 }
 
 export function getPGN(gameId: string) {
-  return fetchText(`/game/export/${gameId}.pgn`, null, true);
+  return fetchText(`/game/export/${gameId}.pgn`, undefined, true)
 }
 
 export function readNote(gameId: string) {
-  return fetchText(`/${gameId}/note`);
+  return fetchText(`/${gameId}/note`)
 }
 
 export function syncNote(gameId: string, notes: string) {
@@ -28,7 +29,7 @@ export function syncNote(gameId: string, notes: string) {
   }, false)
   .then(noop)
   .catch(err => {
-    window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center');
-    throw err;
-  });
+    window.plugins.toast.show(i18n('notesSynchronizationHasFailed'), 'short', 'center')
+    throw err
+  })
 }

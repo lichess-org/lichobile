@@ -1,49 +1,51 @@
-import i18n from '../../i18n';
-import popupWidget from '../shared/popup';
-import router from '../../router';
-import * as gameApi from '../../lichess/game';
-import settings from '../../settings';
-import formWidgets from '../shared/form';
-import * as h from 'mithril/hyperscript';
-import { MenuInterface, AnalyseCtrlInterface } from './interfaces';
+import i18n from '../../i18n'
+import popupWidget from '../shared/popup'
+import router from '../../router'
+import * as gameApi from '../../lichess/game'
+import { isOnlineGameData } from '../../lichess/interfaces/game'
+import settings from '../../settings'
+import formWidgets from '../shared/form'
+import * as h from 'mithril/hyperscript'
+import { MenuInterface } from './interfaces'
+import AnalyseCtrl from './AnalyseCtrl'
 
 export default {
 
-  controller: function(root: AnalyseCtrlInterface) {
-    let isOpen = false;
+  controller: function(root: AnalyseCtrl) {
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
       open: open,
       close: close,
       isOpen: function() {
-        return isOpen;
+        return isOpen
       },
       root
-    };
+    }
   },
 
   view(ctrl: MenuInterface) {
     return popupWidget(
       'analyse_menu',
-      null,
+      undefined,
       () => renderAnalyseSettings(ctrl.root),
       ctrl.isOpen(),
       ctrl.close
-    );
+    )
   }
-};
+}
 
-function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
+function renderAnalyseSettings(ctrl: AnalyseCtrl) {
 
   return h('div.analyseSettings', [
     ctrl.ceval.allowed ? h('div.action', {
@@ -52,9 +54,9 @@ function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
       formWidgets.renderCheckbox(
         i18n('enableLocalComputerEvaluation'), 'allowCeval', settings.analyse.enableCeval,
         v => {
-          ctrl.ceval.toggle();
-          if (v) ctrl.initCeval();
-          else ctrl.ceval.destroy();
+          ctrl.ceval.toggle()
+          if (v) ctrl.initCeval()
+          else ctrl.ceval.destroy()
         }
       ),
       h('small.caution', i18n('localEvalCaution'))
@@ -67,7 +69,7 @@ function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
         ctrl.toggleBestMove
       )
     ]) : null,
-    ctrl.source === 'online' && gameApi.analysable(ctrl.data) ? h('div.action', {
+    ctrl.source === 'online' && isOnlineGameData(ctrl.data) && gameApi.analysable(ctrl.data) ? h('div.action', {
       key: 'showComments'
     }, [
       formWidgets.renderCheckbox(
@@ -75,6 +77,6 @@ function renderAnalyseSettings(ctrl: AnalyseCtrlInterface) {
         ctrl.toggleComments
       )
     ]) : null
-  ]);
+  ])
 }
 

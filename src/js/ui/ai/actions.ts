@@ -1,16 +1,16 @@
-import * as h from 'mithril/hyperscript';
+import * as h from 'mithril/hyperscript'
 
-import i18n from '../../i18n';
-import * as gameApi from '../../lichess/game';
-import settings from '../../settings';
-import { PgnDumpResponse } from '../../chess';
+import i18n from '../../i18n'
+import * as gameApi from '../../lichess/game'
+import settings from '../../settings'
+import { PgnDumpResponse } from '../../chess'
 
-import * as helper from '../helper';
-import formWidgets from '../shared/form';
-import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view';
-import popupWidget from '../shared/popup';
-import router from '../../router';
-import { AiRoundInterface } from '../shared/round';
+import * as helper from '../helper'
+import formWidgets from '../shared/form'
+import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineRound/view'
+import popupWidget from '../shared/popup'
+import router from '../../router'
+import { AiRoundInterface } from '../shared/round'
 
 export interface AiActionsCtrl {
   open: () => void
@@ -23,10 +23,10 @@ export interface AiActionsCtrl {
 export function opponentSelector() {
   const opts = settings.ai.availableOpponents.map(o =>
     ['aiNameLevelAiLevel', o[1], o[0], o[1]]
-  );
+  )
   return h('div.select_input',
     formWidgets.renderSelect('opponent', 'opponent', opts, settings.ai.opponent)
-  );
+  )
 }
 
 function renderAlways() {
@@ -34,7 +34,7 @@ function renderAlways() {
     h('div.action.opponentSelector', [
       opponentSelector()
     ])
-  ];
+  ]
 }
 
 function resignButton(ctrl: AiRoundInterface) {
@@ -43,48 +43,48 @@ function resignButton(ctrl: AiRoundInterface) {
   }, [
     h('button[data-icon=b]', {
       oncreate: helper.ontap(() => {
-        ctrl.actions.close();
-        ctrl.resign();
+        ctrl.actions.close()
+        ctrl.resign()
       })
     }, i18n('resign'))
-  ]) : null;
+  ]) : null
 }
 
 export default {
 
   controller: function(root: AiRoundInterface) {
-    let isOpen = false;
+    let isOpen = false
 
     function open() {
-      router.backbutton.stack.push(close);
-      isOpen = true;
+      router.backbutton.stack.push(close)
+      isOpen = true
     }
 
     function close(fromBB?: string) {
-      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-      isOpen = false;
+      if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+      isOpen = false
     }
 
     return {
       open: open,
       close: close,
       isOpen() {
-        return isOpen;
+        return isOpen
       },
       sharePGN() {
         root.replay.pgn(root.white(), root.black())
         .then((data: PgnDumpResponse) =>
           window.plugins.socialsharing.share(data.pgn)
-        );
+        )
       },
       root: root
-    };
+    }
   },
 
   view(ctrl: AiActionsCtrl) {
     return popupWidget(
       'offline_actions',
-      null,
+      undefined,
       () => {
         return [
           renderEndedGameStatus(ctrl.root)
@@ -92,10 +92,10 @@ export default {
           renderClaimDrawButton(ctrl.root),
           resignButton(ctrl.root),
           renderAlways()
-        );
+        )
       },
       ctrl.isOpen(),
       ctrl.close
-    );
+    )
   }
-};
+}

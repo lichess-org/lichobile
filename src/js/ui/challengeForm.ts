@@ -1,51 +1,51 @@
-import * as utils from '../utils';
-import router from '../router';
-import redraw from '../utils/redraw';
-import { challenge as challengeXhr } from '../xhr';
-import { validateFen } from '../utils/fen';
-import settings from '../settings';
-import session from '../session';
-import formWidgets from './shared/form';
-import popupWidget from './shared/popup';
-import i18n from '../i18n';
-import storage from '../storage';
-import ViewOnlyBoard from './shared/ViewOnlyBoard';
-import * as helper from './helper';
-import * as h from 'mithril/hyperscript';
-import * as stream from 'mithril/stream';
+import * as utils from '../utils'
+import router from '../router'
+import redraw from '../utils/redraw'
+import { challenge as challengeXhr } from '../xhr'
+import { validateFen } from '../utils/fen'
+import settings from '../settings'
+import session from '../session'
+import formWidgets from './shared/form'
+import popupWidget from './shared/popup'
+import i18n from '../i18n'
+import storage from '../storage'
+import ViewOnlyBoard from './shared/ViewOnlyBoard'
+import * as helper from './helper'
+import * as h from 'mithril/hyperscript'
+import * as stream from 'mithril/stream'
 
-let actionName = '';
-let userId: string;
-let setupFen: string;
-let setupFenError: string;
+let actionName = ''
+let userId: string | undefined
+let setupFen: string | undefined
+let setupFenError: string | undefined
 
-const isOpen = stream(false);
+const isOpen = stream(false)
 
 function open(uid?: string) {
   if (uid) {
-    userId = uid;
-    actionName = i18n('challengeToPlay');
+    userId = uid
+    actionName = i18n('challengeToPlay')
   } else {
-    userId = null;
-    actionName = i18n('playWithAFriend');
+    userId = undefined
+    actionName = i18n('playWithAFriend')
   }
-  router.backbutton.stack.push(close);
-  isOpen(true);
-  setupFen = null;
-  setupFenError = null;
+  router.backbutton.stack.push(close)
+  isOpen(true)
+  setupFen = undefined
+  setupFenError = undefined
 }
 
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop();
-  isOpen(false);
-};
+  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop()
+  isOpen(false)
+}
 
 function doChallenge() {
-  return challengeXhr(userId, setupFen)
+  return challengeXhr(userId!, setupFen)
   .then(data => {
 
-    helper.analyticsTrackEvent('Challenge', 'Sent');
+    helper.analyticsTrackEvent('Challenge', 'Sent')
 
     if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
@@ -53,42 +53,42 @@ function doChallenge() {
 
       if (!storage.get('donotshowpersistentchallengeexplanation')) {
         window.navigator.notification.alert(i18n('persistentChallengeCreated'), function() {
-          storage.set('donotshowpersistentchallengeexplanation', true);
-        });
+          storage.set('donotshowpersistentchallengeexplanation', true)
+        })
       }
-      router.set('/correspondence?tab=challenges');
+      router.set('/correspondence?tab=challenges')
     }
     if (!data.challenge.destUser || data.challenge.timeControl.type === 'clock') {
-      router.set(`/challenge/${data.challenge.id}`);
+      router.set(`/challenge/${data.challenge.id}`)
     }
   })
-  .catch(utils.handleXhrError);
+  .catch(utils.handleXhrError)
 }
 
 function renderForm() {
-  const formName = 'invite';
-  const settingsObj = settings.gameSetup.challenge;
-  const variants = settings.gameSetup.challenge.availableVariants;
-  const timeModes = settings.gameSetup.challenge.availableTimeModes;
-  const timeMode = settingsObj.timeMode();
-  const hasClock = timeMode === '1';
-  const hasDays = timeMode === '2';
+  const formName = 'invite'
+  const settingsObj = settings.gameSetup.challenge
+  const variants = settings.gameSetup.challenge.availableVariants
+  const timeModes = settings.gameSetup.challenge.availableTimeModes
+  const timeMode = settingsObj.timeMode()
+  const hasClock = timeMode === '1'
+  const hasDays = timeMode === '2'
 
   // if mode is rated only allow random color for three-check, atomic, antichess
   // horde variants
-  let colors: string[][];
+  let colors: string[][]
   if (settingsObj.mode() === '1' &&
     ['5', '6', '7', '8', '9'].indexOf(settingsObj.variant()) !== -1) {
-    settingsObj.color('random');
+    settingsObj.color('random')
     colors = [
       ['randomColor', 'random']
-    ];
+    ]
   } else {
     colors = [
       ['randomColor', 'random'],
       ['white', 'white'],
       ['black', 'black']
-    ];
+    ]
   }
 
   const modes = session.isConnected() ? [
@@ -96,7 +96,7 @@ function renderForm() {
     ['rated', '1']
   ] : [
     ['casual', '0']
-  ];
+  ]
 
   const generalFieldset = [
     h('div.select_input', {
@@ -120,15 +120,15 @@ function renderForm() {
         const rawfen = (e.target as HTMLInputElement).value
         if (validateFen(rawfen).valid) {
           setupFen = rawfen
-          setupFenError = null
+          setupFenError = undefined
         }
         else setupFenError = 'Invalid FEN'
         redraw()
       }
     }) : h('div', h('button.withIcon', {
       oncreate: helper.ontap(() => {
-        close();
-        router.set('/editor');
+        close()
+        router.set('/editor')
       })
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')])),
     setupFenError ?
@@ -140,8 +140,8 @@ function renderForm() {
           height: '100px'
         },
         oncreate: helper.ontap(() => {
-          close();
-          router.set(`/editor/${encodeURIComponent(setupFen)}`);
+          close()
+          if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
         })
       }, [
         h(ViewOnlyBoard, { fen: setupFen, bounds: { width: 100, height: 100 }})
@@ -154,7 +154,7 @@ function renderForm() {
     },
       formWidgets.renderSelect('mode', formName + 'mode', modes, settingsObj.mode)
     ) : null
-  ];
+  ]
 
   const timeFieldset = [
     h('div.select_input', {
@@ -162,7 +162,7 @@ function renderForm() {
     },
       formWidgets.renderSelect('clock', formName + 'timeMode', timeModes, settingsObj.timeMode)
     )
-  ];
+  ]
 
   if (hasClock) {
     timeFieldset.push(
@@ -178,7 +178,7 @@ function renderForm() {
         formWidgets.renderSelect('increment', formName + 'increment',
           settings.gameSetup.availableIncrements.map(utils.tupleOf), settingsObj.increment, false)
       )
-    );
+    )
   }
 
   if (hasDays) {
@@ -188,39 +188,39 @@ function renderForm() {
       },
         formWidgets.renderSelect('daysPerTurn', formName + 'days',
           settings.gameSetup.availableDays.map(utils.tupleOf), settingsObj.days, false)
-      ));
+      ))
   }
 
   return h('form#invite_form.game_form', {
     onsubmit(e: Event) {
-      e.preventDefault();
-      if (!settings.gameSetup.isTimeValid(settingsObj)) return;
-      close();
-      doChallenge();
+      e.preventDefault()
+      if (!settings.gameSetup.isTimeValid(settingsObj)) return
+      close()
+      doChallenge()
     }
   }, [
     h('fieldset', generalFieldset),
     h('fieldset#clock', timeFieldset),
     h('button[data-icon=E][type=submit].newGameButton', actionName)
-  ]);
+  ])
 }
 
 export default {
   view() {
     return popupWidget(
       'invite_form_popup game_form_popup',
-      null,
+      undefined,
       renderForm,
       isOpen(),
       close
-    );
+    )
   },
 
   open,
   openFromPosition(f: string) {
-    open();
-    setupFen = f;
-    settings.gameSetup.challenge.variant('3');
-    settings.gameSetup.challenge.mode('0');
+    open()
+    setupFen = f
+    settings.gameSetup.challenge.variant('3')
+    settings.gameSetup.challenge.mode('0')
   }
 }

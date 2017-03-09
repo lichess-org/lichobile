@@ -1,19 +1,19 @@
-import * as helper from '../helper';
-import i18n from '../../i18n';
-import redraw from '../../utils/redraw';
-import challengesApi from '../../lichess/challenges';
-import * as uniqBy from 'lodash/uniqBy';
-import session from '../../session';
-import settings from '../../settings';
-import * as xhr from '../../xhr';
-import socket from '../../socket';
-import * as Zanimo from 'zanimo';
-import * as stream from 'mithril/stream';
-import layout from '../layout';
-import { header as headerWidget } from '../shared/common';
-import { Seek } from '../../lichess/interfaces';
-import { Challenge } from '../../lichess/interfaces/challenge';
-import { renderBody, renderFooter } from './correspondenceView';
+import * as helper from '../helper'
+import i18n from '../../i18n'
+import redraw from '../../utils/redraw'
+import challengesApi from '../../lichess/challenges'
+import * as uniqBy from 'lodash/uniqBy'
+import session from '../../session'
+import settings from '../../settings'
+import * as xhr from '../../xhr'
+import socket from '../../socket'
+import * as Zanimo from 'zanimo'
+import * as stream from 'mithril/stream'
+import layout from '../layout'
+import { header as headerWidget } from '../shared/common'
+import { Seek } from '../../lichess/interfaces'
+import { Challenge } from '../../lichess/interfaces/challenge'
+import { renderBody, renderFooter } from './correspondenceView'
 
 interface Attrs {
   tab: string
@@ -21,7 +21,7 @@ interface Attrs {
 
 export interface State {
   selectedTab: Mithril.Stream<string>
-  sendingChallenges: Mithril.Stream<Array<Challenge>>
+  sendingChallenges: Mithril.Stream<Challenge[]>
   cancelChallenge: (id: string) => Promise<void>
   getPool: () => Array<Seek>
   cancel: (seekId: string) => Promise<void>
@@ -31,90 +31,90 @@ export interface State {
 const CorrespondenceScreen: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
-    let pool: Array<Seek> = [];
-    const selectedTab = stream(vnode.attrs.tab || 'public');
-    const sendingChallenges = stream(getSendingCorres());
+    let pool: Array<Seek> = []
+    const selectedTab: Mithril.Stream<string> = stream(vnode.attrs.tab || 'public')
+    const sendingChallenges: Mithril.Stream<Challenge[]> = stream(getSendingCorres())
 
-    helper.analyticsTrackView('Correspondence');
+    helper.analyticsTrackView('Correspondence')
 
     socket.createLobby(reload, {
       redirect: socket.redirectToGame,
-      reload_seeks: reload,
+      reload_seeks: () => reload(),
       resync: () => xhr.lobby().then(d => {
-        socket.setVersion(d.lobby.version);
+        socket.setVersion(d.lobby.version)
       })
-    });
+    })
 
     challengesApi.refresh().then(() => {
-      sendingChallenges(getSendingCorres());
-    });
+      sendingChallenges(getSendingCorres())
+    })
 
     function getSendingCorres() {
-      return challengesApi.sending().filter(challengesApi.isPersistent);
+      return challengesApi.sending().filter(challengesApi.isPersistent)
     }
 
     function cancelChallenge(id: string) {
       return xhr.cancelChallenge(id)
       .then(() => {
-        challengesApi.remove(id);
-        sendingChallenges(getSendingCorres());
-      });
+        challengesApi.remove(id)
+        sendingChallenges(getSendingCorres())
+      })
     }
 
     function reload(feedback?: boolean) {
-      xhr.seeks(feedback)
-      .then((d) => {
-        pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1);
-        redraw();
-      });
+      xhr.seeks(feedback = false)
+      .then(d => {
+        pool = fixSeeks(d).filter(s => settings.game.supportedVariants.indexOf(s.variant.key) !== -1)
+        redraw()
+      })
     }
 
-    reload(true);
+    reload(true)
 
     vnode.state = {
       selectedTab,
       sendingChallenges,
       cancelChallenge,
       getPool() {
-        return pool;
+        return pool
       },
       cancel(seekId) {
         return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
           .then(() => socket.send('cancelSeek', seekId))
-          .catch(console.log.bind(console));
+          .catch(console.log.bind(console))
       },
       join(seekId) {
-        socket.send('joinSeek', seekId);
+        socket.send('joinSeek', seekId)
       }
     }
   },
 
   oncreate: helper.viewFadeIn,
 
-  view(vnode) {
+  view() {
     const header = () => headerWidget(i18n('correspondence'))
     const body = () => renderBody(this)
 
-    return layout.free(header, body, renderFooter);
+    return layout.free(header, body, renderFooter)
   }
 }
 
 function seekUserId(seek: Seek) {
-  return seek.username.toLowerCase();
+  return seek.username.toLowerCase()
 }
 
 function fixSeeks(seeks: Seek[]): Array<Seek> {
-  const userId = session.getUserId();
+  const userId = session.getUserId()
   if (userId) seeks.sort((a, b) => {
-    if (seekUserId(a) === userId) return -1;
-    if (seekUserId(b) === userId) return 1;
-    return 0;
-  });
+    if (seekUserId(a) === userId) return -1
+    if (seekUserId(b) === userId) return 1
+    return 0
+  })
   return uniqBy(seeks, s => {
-    const username = seekUserId(s) === userId ? s.id : s.username;
-    const key = username + s.mode + s.variant.key + s.days;
-    return key;
-  });
+    const username = seekUserId(s) === userId ? s.id : s.username
+    const key = username + s.mode + s.variant.key + s.days
+    return key
+  })
 }
 
 export default CorrespondenceScreen

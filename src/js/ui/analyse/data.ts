@@ -1,7 +1,7 @@
-import { getLichessVariant, getInitialFen } from '../../lichess/variant';
-import { playerFromFen, plyFromFen } from '../../utils/fen';
-import { oppositeColor } from '../../utils';
-import { AnalysisData } from './interfaces';
+import { getLichessVariant, getInitialFen } from '../../lichess/variant'
+import { playerFromFen, plyFromFen } from '../../utils/fen'
+import { oppositeColor } from '../../utils'
+import { AnalysisData } from './interfaces'
 
 const emptyPocket = {
   queen: 0,
@@ -12,11 +12,11 @@ const emptyPocket = {
 }
 
 export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisData {
-  const player = playerFromFen(fen);
+  const player = playerFromFen(fen)
   const ply = plyFromFen(fen)
-  const variant = getLichessVariant(variantKey);
+  const variant = getLichessVariant(variantKey)
 
-  const initialFen = fen || getInitialFen(variantKey);
+  const initialFen = fen || getInitialFen(variantKey)
 
   return {
     game: {
@@ -58,5 +58,5 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisD
         } : undefined
       }
     ]
-  };
+  }
 }

@@ -1,12 +1,12 @@
-import * as h from 'mithril/hyperscript';
-import * as helper from './helper';
-import router from '../router';
-import popupWidget from './shared/popup';
-import i18n from '../i18n';
-import friendsApi, { Friend } from '../lichess/friends';
-import * as utils from '../utils';
+import * as h from 'mithril/hyperscript'
+import * as helper from './helper'
+import router from '../router'
+import popupWidget from './shared/popup'
+import i18n from '../i18n'
+import friendsApi, { Friend } from '../lichess/friends'
+import * as utils from '../utils'
 
-let isOpen = false;
+let isOpen = false
 
 export default {
   open,
@@ -26,18 +26,18 @@ export default {
       renderFriends,
       isOpen,
       close
-    );
+    )
   }
 }
 
 function open() {
-  router.backbutton.stack.push(close);
-  isOpen = true;
+  router.backbutton.stack.push(close)
+  isOpen = true
 }
 
 function close(fromBB?: string) {
-  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop();
-  isOpen = false;
+  if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
+  isOpen = false
 }
 
 function renderFriends() {
@@ -49,22 +49,22 @@ function renderFriends() {
       </ul>
     ) : (
       <div className="native_scroller nofriend">{i18n('noFriendsOnline')}</div>
-    );
+    )
 }
 
 function renderFriend(user: Friend) {
 
-  const userId = utils.userFullNameToId(user.name);
+  const userId = utils.userFullNameToId(user.name)
 
   function action() {
-    close();
-    router.set('/@/' + userId);
+    close()
+    router.set('/@/' + userId)
   }
 
   function onTapTv(e: Event) {
-    e.stopPropagation();
-    close();
-    router.set('/@/' + userId + '/tv');
+    e.stopPropagation()
+    close()
+    router.set('/@/' + userId + '/tv')
   }
 
   return (
@@ -83,5 +83,5 @@ function renderFriend(user: Friend) {
         null
       }
     </li>
-  );
+  )
 }

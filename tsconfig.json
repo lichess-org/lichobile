@@ -4,12 +4,17 @@
     "target": "es2015",
     "module": "commonjs",
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": false,
+    "noUnusedLocals": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noUnusedParameters": true,
     "jsx": "preserve"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

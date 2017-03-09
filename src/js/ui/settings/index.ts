@@ -1,26 +1,26 @@
-import * as utils from '../../utils';
-import router from '../../router';
-import * as helper from '../helper';
-import { dropShadowHeader, backButton } from '../shared/common';
-import layout from '../layout';
-import formWidgets from '../shared/form';
-import settings from '../../settings';
-import session from '../../session';
-import i18n from '../../i18n';
-import socket from '../../socket';
-import * as h from 'mithril/hyperscript';
+import * as utils from '../../utils'
+import router from '../../router'
+import * as helper from '../helper'
+import { dropShadowHeader, backButton } from '../shared/common'
+import layout from '../layout'
+import formWidgets from '../shared/form'
+import settings from '../../settings'
+import session from '../../session'
+import i18n from '../../i18n'
+import socket from '../../socket'
+import * as h from 'mithril/hyperscript'
 
 const SettingsScreen: Mithril.Component<{}, {}> = {
   oncreate: helper.viewSlideIn,
 
   oninit() {
-    helper.analyticsTrackView('Settings');
-    socket.createDefault();
+    helper.analyticsTrackView('Settings')
+    socket.createDefault()
   },
 
   view() {
     const header = () => dropShadowHeader(null, backButton(i18n('settings')))
-    return layout.free(header, renderBody);
+    return layout.free(header, renderBody)
   }
 }
 
@@ -64,5 +64,5 @@ function renderBody() {
       }, formWidgets.renderCheckbox(i18n('allowAnalytics'), 'analytics', settings.general.analytics))
     ]),
     window.AppVersion ? h('section.app_version', 'v' + window.AppVersion.version) : null
-  ]);
+  ])
 }

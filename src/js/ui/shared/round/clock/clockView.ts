@@ -1,11 +1,11 @@
-import * as helper from '../../../helper';
-import * as h from 'mithril/hyperscript';
+import * as helper from '../../../helper'
+import * as h from 'mithril/hyperscript'
 import ClockCtrl from './ClockCtrl'
 
 export interface ClockAttrs {
   ctrl: ClockCtrl
   color: Color
-  runningColor: Color
+  runningColor?: Color
   isBerserk: boolean
 }
 
@@ -15,38 +15,38 @@ interface ClockState {
 }
 
 function prefixInteger(num: number, length: number) {
-  return (num / Math.pow(10, length)).toFixed(length).substr(2);
+  return (num / Math.pow(10, length)).toFixed(length).substr(2)
 }
 
-const sepHigh = ':';
-const sepLow = ' ';
+const sepHigh = ':'
+const sepLow = ' '
 
 export function formatClockTime(time: number, isRunning: boolean = false) {
-  const date = new Date(time);
-  const minutes = prefixInteger(date.getUTCMinutes(), 2);
-  const seconds = prefixInteger(date.getUTCSeconds(), 2);
-  const tenths = Math.floor(date.getUTCMilliseconds() / 100);
-  let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh;
+  const date = new Date(time)
+  const minutes = prefixInteger(date.getUTCMinutes(), 2)
+  const seconds = prefixInteger(date.getUTCSeconds(), 2)
+  const tenths = Math.floor(date.getUTCMilliseconds() / 100)
+  let pulse = (isRunning && tenths < 5) ? sepLow : sepHigh
 
   if (time < 10000) {
-    return seconds + '.' + tenths;
+    return seconds + '.' + tenths
   }
 
   if (time >= 3600000) {
-    let hours = prefixInteger(date.getUTCHours(), 1);
-    return hours + pulse + minutes;
+    let hours = prefixInteger(date.getUTCHours(), 1)
+    return hours + pulse + minutes
   }
 
-  return minutes + sepHigh + seconds;
+  return minutes + sepHigh + seconds
 }
 
 const Clock: Mithril.Component<ClockAttrs, ClockState> = {
   oninit({ attrs }) {
-    const { ctrl, color, runningColor } = attrs;
-    const time = ctrl.data[color];
-    const isRunning = runningColor === color;
+    const { ctrl, color, runningColor } = attrs
+    const time = ctrl.data[color]
+    const isRunning = runningColor === color
     this.clockOnCreate = ({ dom }: Mithril.DOMNode) => {
-      dom.textContent = formatClockTime(time * 1000, isRunning);
+      dom.textContent = formatClockTime(time * 1000, isRunning)
       ctrl.els[color] = dom as HTMLElement
     }
     // safety measure if oncreate is not called

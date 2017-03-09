@@ -1,27 +1,29 @@
-import router from '../../../router';
-import * as helper from '../../helper';
-import { AnalyseCtrlInterface, ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces';
-import settings from '../../../settings';
-import * as xhr from '../../../xhr';
+import router from '../../../router'
+import * as helper from '../../helper'
+import { OnlineGameData } from '../../../lichess/interfaces/game'
+import { ExplorerData, ExplorerGame, ExplorerMove, ExplorerPlayer } from '../interfaces'
+import AnalyseCtrl from '../AnalyseCtrl'
+import settings from '../../../settings'
+import * as xhr from '../../../xhr'
 
-let pieceNotation: boolean;
+let pieceNotation: boolean
 
 export interface Attrs {
-  ctrl: AnalyseCtrlInterface
+  ctrl: AnalyseCtrl
   data: ExplorerData
 }
 
 const OpeningTable: Mithril.Component<Attrs, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.data !== oldattrs.data;
+    return attrs.data !== oldattrs.data
   },
 
   view({ attrs }) {
-    const { ctrl, data } = attrs;
+    const { ctrl, data } = attrs
 
-    const moveTable = showMoveTable(ctrl, data.moves);
-    const recentTable = showGameTable(ctrl, 'recent', data.recentGames || []);
-    const topTable = showGameTable(ctrl, 'top', data.topGames || []);
+    const moveTable = showMoveTable(ctrl, data.moves)
+    const recentTable = showGameTable(ctrl, 'recent', data.recentGames || [])
+    const topTable = showGameTable(ctrl, 'top', data.topGames || [])
 
     if (moveTable || recentTable || topTable) {
       return (
@@ -30,16 +32,16 @@ const OpeningTable: Mithril.Component<Attrs, {}> = {
           {topTable}
           {recentTable}
         </div>
-      );
+      )
     } else {
-      return showEmpty(ctrl);
+      return showEmpty(ctrl)
     }
   }
 }
 
 export default OpeningTable
 
-export function showEmpty(ctrl: AnalyseCtrlInterface) {
+export function showEmpty(ctrl: AnalyseCtrl) {
   return (
     <div key="explorer-empty" className="explorer-data empty">
       <div className="message">
@@ -52,48 +54,49 @@ export function showEmpty(ctrl: AnalyseCtrlInterface) {
         }</p>
       </div>
     </div>
-  );
+  )
 }
 
 export function getTR(e: Event): HTMLElement {
-  const target = (e.target as HTMLElement);
+  const target = (e.target as HTMLElement)
   return target.tagName === 'TR' ? target :
-    helper.findParentBySelector(target, 'tr');
+    helper.findParentBySelector(target, 'tr')
 }
 
 function resultBar(move: ExplorerMove) {
-  const sum = move.white + move.draws + move.black;
+  const sum = move.white + move.draws + move.black
   function section(key: string) {
-    const num: number = move[key];
-    const percent = num * 100 / sum;
-    const width = (Math.round(num * 1000 / sum) / 10) + '%';
+    const num: number = (move as any)[key]
+    const percent = num * 100 / sum
+    const width = (Math.round(num * 1000 / sum) / 10) + '%'
     return percent === 0 ? null : (
       <span className={'explorerBar ' + key} style={{width}}>
         {percent > 12 ? Math.round(percent) + (percent > 20 ? '%' : '') : null}
       </span>
-    );
+    )
   }
-  return ['white', 'draws', 'black'].map(section);
+  return ['white', 'draws', 'black'].map(section)
 }
 
-function onTableTap(ctrl: AnalyseCtrlInterface, e: Event) {
-  const el = getTR(e);
-  if (el && el.dataset['uci']) ctrl.explorerMove(el.dataset['uci']);
+function onTableTap(ctrl: AnalyseCtrl, e: Event) {
+  const el = getTR(e)
+  const uci = el && el.dataset['uci']
+  if (uci) ctrl.explorerMove(uci)
 }
 
 function showResult(w: Color) {
-  if (w === 'white') return <result className="white">1-0</result>;
-  if (w === 'black') return <result className="black">0-1</result>;
-  return <result className="draws">½-½</result>;
+  if (w === 'white') return <result className="white">1-0</result>
+  if (w === 'black') return <result className="black">0-1</result>
+  return <result className="draws">½-½</result>
 }
 
-function link(ctrl: AnalyseCtrlInterface, e: Event) {
-  const orientation = ctrl.chessground.data.orientation;
+function link(ctrl: AnalyseCtrl, e: Event) {
+  const orientation = ctrl.chessground.data.orientation
   const el = getTR(e)
   const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {
-    router.set(`/analyse/online/${gameId}/${orientation}`);
-  } else {
+    router.set(`/analyse/online/${gameId}/${orientation}`)
+  } else if (gameId) {
     xhr.importMasterGame(gameId, orientation)
     .then((data: OnlineGameData) =>
       router.set(`/analyse/online/${data.game.id}/${orientation}`)
@@ -101,11 +104,11 @@ function link(ctrl: AnalyseCtrlInterface, e: Event) {
   }
 }
 
-function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<ExplorerGame>) {
-  if (!ctrl.explorer.withGames || !games.length) return null;
+function showGameTable(ctrl: AnalyseCtrl, type: string, games: Array<ExplorerGame>) {
+  if (!ctrl.explorer.withGames || !games.length) return null
   return (
     <table className="games"
-      oncreate={helper.ontap(e => link(ctrl, e), null, null, getTR)}
+      oncreate={helper.ontap(e => link(ctrl, e!), undefined, undefined, getTR)}
     >
       <thead>
         <tr>
@@ -133,19 +136,19 @@ function showGameTable(ctrl: AnalyseCtrlInterface, type: string, games: Array<Ex
               {game.year}
             </td>
           </tr>
-        );
+        )
       })}
       </tbody>
     </table>
-  );
+  )
 }
 
-function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
-  if (!moves.length) return null;
-  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation;
+function showMoveTable(ctrl: AnalyseCtrl, moves: Array<ExplorerMove>) {
+  if (!moves.length) return null
+  pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
   return (
     <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
-      oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, getTR)}
+      oncreate={helper.ontap(e => onTableTap(ctrl, e!), undefined, undefined, getTR)}
     >
       <thead>
         <tr>
@@ -168,9 +171,9 @@ function showMoveTable(ctrl: AnalyseCtrlInterface, moves: Array<ExplorerMove>) {
                 {resultBar(move)}
               </td>
             </tr>
-          );
+          )
         })}
       </tbody>
     </table>
-  );
+  )
 }

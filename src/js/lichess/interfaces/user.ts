@@ -1,3 +1,5 @@
+import { GameStatus } from './game'
+
 export type GameFilter = 'all' | 'rated' | 'win' | 'loss' | 'draw' | 'bookmark' | 'me' | 'import' | 'playing'
 
 export interface UserGamesCount {
@@ -14,6 +16,7 @@ export interface UserGamesCount {
   playing: number
   import: number
   me: number
+  [index: string]: number
 }
 
 export interface UserFullProfile extends User {
@@ -48,8 +51,23 @@ export interface BaseUser {
   title?: string
 }
 
+export interface User extends BaseUser {
+  engine: boolean
+  name?: string
+  language: string
+  rating?: number
+  createdAt: Timestamp
+  seenAt: Timestamp
+  perfs: Perfs
+  playTime?: PlayTime
+  profile?: any
+  booster: boolean
+}
+
+export type Perfs = { [pk: string]: Perf }
+
 export interface RankingUser extends BaseUser {
-  perfs: Record<PerfKey, Perf>
+  perfs: Perfs
 }
 
 export type RankingKey = PerfKey | 'online'

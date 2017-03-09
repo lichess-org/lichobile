@@ -1,34 +1,34 @@
-import * as helper from '../../helper';
-import { header as headerWidget, backButton, userStatus } from '../../shared/common';
-import layout from '../../layout';
-import i18n from '../../../i18n';
-import redraw from '../../../utils/redraw';
-import { ThreadState, Post, ThreadAttrs } from '../interfaces';
+import * as helper from '../../helper'
+import { header as headerWidget, backButton, userStatus } from '../../shared/common'
+import layout from '../../layout'
+import i18n from '../../../i18n'
+import redraw from '../../../utils/redraw'
+import { ThreadState, Post, ThreadAttrs } from '../interfaces'
 
 export default function view(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>) {
-  const ctrl = vnode.state as ThreadState;
+  const ctrl = vnode.state as ThreadState
   const headerCtrl = () => headerWidget(null,
     backButton(ctrl.thread() ? ctrl.thread().name : null)
-  );
-  const bodyCtrl = () => threadBody(ctrl);
-  return layout.free(headerCtrl, bodyCtrl, undefined, undefined);
+  )
+  const bodyCtrl = () => threadBody(ctrl)
+  return layout.free(headerCtrl, bodyCtrl, undefined, undefined)
 }
 
 function threadBody(ctrl: ThreadState) {
-  if (!ctrl.thread()) return null;
+  if (!ctrl.thread()) return null
   return (
     <div key={ctrl.thread().id} className="threadWrapper native_scroller">
       {ctrl.thread().posts.map(renderPost)}
       <div className="responseWrapper">
         <form id="responseForm"
         onsubmit={function(e: Event) {
-          e.preventDefault();
-          const form = e.target as HTMLFormElement;
-          const body = (form[1] as HTMLTextAreaElement).value;
+          e.preventDefault()
+          const form = e.target as HTMLFormElement
+          const body = (form[1] as HTMLTextAreaElement).value
           if (body.length >= 3)
-            return ctrl.sendResponse(form);
+            return ctrl.sendResponse(form)
           else
-            window.plugins.toast.show('Minimum length is 3', 'short', 'center');
+            window.plugins.toast.show('Minimum length is 3', 'short', 'center')
         }}>
           <input id="id" key="id" value={ctrl.id()} type="hidden" />
           <textarea id="body" key="body" className="responseBody composeTextarea" />
@@ -40,55 +40,58 @@ function threadBody(ctrl: ThreadState) {
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 function renderPost(post: Post, index: number, posts: Array<Post>) {
-  let postClass = 'postWrapper';
+  let postClass = 'postWrapper'
   if (index === 0)
-    postClass += ' first';
-  if (index === posts.length-1)
-    postClass += ' last';
+    postClass += ' first'
+  if (index === posts.length - 1)
+    postClass += ' last'
   return (
     <div className={postClass} key={post.createdAt}>
       <div className="infos">
         {userStatus(post.sender)}
         <span className="arrow" data-icon="H" />
         {userStatus(post.receiver)}
-        &nbsp;–&nbsp;
+        &nbsp;–&nbsp
         {postDateFormat(post.createdAt)}
       </div>
       <div className="text">{post.text}</div>
     </div>
-  );
+  )
 }
 
 function postDateFormat (timeInMillis: number) {
-  const time = window.moment(timeInMillis);
-  return time.calendar();
+  const time = window.moment(timeInMillis)
+  return time.calendar()
 }
 
 function deleteButton (ctrl: ThreadState) {
   return ctrl.deleteAttempted() ? (
     <div className="negotiation confirmDeleteDialog">
-      <button key="confirmDelete" className="fatButton confirmDelete" oncreate={helper.ontapY(() => {ctrl.deleteThread(ctrl.id());})}>
+      <button key="confirmDelete" className="fatButton confirmDelete" oncreate={helper.ontapY(() => {ctrl.deleteThread(ctrl.id())})}>
         <span className="fa fa-trash-o" />
         Delete
       </button>
       <button key="cancelDelete" className="fatButton cancelDelete"
         oncreate={helper.ontapY(() => {
-          ctrl.deleteAttempted(false);
-          redraw();
+          ctrl.deleteAttempted(false)
+          redraw()
         })}>
         <span className="fa fa-ban" />
         {i18n('cancel')}
       </button>
     </div>
   ) : (
-    <button key="delete" className="fatButton deleteThread" oncreate={helper.ontapY(() => {ctrl.deleteAttempted(true); redraw();})}>
+    <button key="delete" className="fatButton deleteThread" oncreate={helper.ontapY(() => {
+      ctrl.deleteAttempted(true)
+      redraw()
+    })}>
       <span className="fa fa-trash-o" />
       Delete
     </button>
   )
-  ;
+
 }

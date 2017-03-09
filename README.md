@@ -44,6 +44,24 @@ To build and watch for changes:
 
     $ npm run watch
 
+## Build cordova application and run on device
+
+Be sure to check requirements above.
+
+See scripts defined in package.json for various environments.
+
+### Android
+
+Plug your device with USB, or use an emulator. Then:
+
+    $ npm run android-stage
+
+### iOS
+
+Plug your device with USB, or use an emulator. Then:
+
+    $ npm run ios-stage
+
 ## Build stockfish
 
 ### Android
@@ -62,3 +80,13 @@ Through XCode, in the build settings menu:
 ## Advanced setup
 
 See the wiki.
+
+## Contributing
+
+Mithril views should be written with the hyperscript function (imported as h),
+and not JSX. Current JSX views are here for legacy reasons.
+
+We use tslint to enforce some coding conventions. Before sending a pull request,
+please run the linter and ensure there is no error:
+
+    $ npm run lint

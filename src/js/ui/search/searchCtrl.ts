@@ -30,7 +30,10 @@ export default function SearchCtrl(): ISearchCtrl {
     xhr.search(queryData)
     .then((data: SearchResult) => {
       result(prepareData(data))
-      games(result().paginator.currentPageResults)
+      const curPaginator = result().paginator
+      if (curPaginator) {
+        games(curPaginator.currentPageResults)
+      }
       redraw()
     })
     .catch(handleXhrError)
@@ -51,14 +54,17 @@ export default function SearchCtrl(): ISearchCtrl {
 
   function more() {
     const queryData = lastQuery()
-    queryData.page = String(result().paginator.nextPage)
-    xhr.search(queryData)
-    .then((data: SearchResult) => {
-      result(prepareData(data))
-      games(games().concat(result().paginator.currentPageResults))
-      redraw()
-    })
-    .catch(handleXhrError)
+    const curPaginator = result().paginator
+    if (curPaginator && curPaginator.nextPage) {
+      queryData.page = String(curPaginator.nextPage)
+      xhr.search(queryData)
+      .then((data: SearchResult) => {
+        result(prepareData(data))
+        games(games().concat(curPaginator.currentPageResults))
+        redraw()
+      })
+      .catch(handleXhrError)
+    }
   }
 
   return {

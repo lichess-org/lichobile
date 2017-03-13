@@ -109,6 +109,10 @@ export interface UserGame {
   analysed?: boolean
 }
 
+export interface UserGameWithDate extends UserGame {
+  date?: string
+}
+
 export type GraphPoint = [number, number, number, number]
 
 export interface VariantPerfStats {

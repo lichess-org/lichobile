@@ -397,3 +397,14 @@ export function renderRatingDiff(player: Player | UserGamePlayer) {
 
   return null
 }
+
+export function getButton(e: Event) {
+  const target = (e.target as HTMLElement)
+  return target.tagName === 'BUTTON' ? target : undefined
+}
+
+export function getLI(e: Event) {
+  const target = (e.target as HTMLElement)
+  return target.tagName === 'LI' ? target : findParentBySelector(target, 'li')
+}
+

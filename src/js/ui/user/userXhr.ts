@@ -1,11 +1,7 @@
-import { UserFullProfile, GameFilter, UserGame, VariantPerfStats } from '../../lichess/interfaces/user'
+import { UserFullProfile, GameFilter, UserGameWithDate, VariantPerfStats } from '../../lichess/interfaces/user'
 import { Paginator } from '../../lichess/interfaces'
 import { OnlineGameData } from '../../lichess/interfaces/game'
 import { fetchJSON } from '../../http'
-
-export interface UserGameWithDate extends UserGame {
-  date?: string
-}
 
 export interface FilterResult {
   filter: GameFilter

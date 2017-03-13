@@ -1,22 +1,17 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../../utils'
-import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import router from '../../../router'
-import settings from '../../../settings'
 import * as helper from '../../helper'
-import * as gameApi from '../../../lichess/game'
 import i18n from '../../../i18n'
 import gameStatus from '../../../lichess/status'
 import session from '../../../session'
 import spinner from '../../../spinner'
-import { makeBoard } from '../../shared/svgboard'
-import { UserGameWithDate } from '../userXhr'
-import { UserGamePlayer } from '../../../lichess/interfaces/user'
+import GameItem from '../../shared/GameItem'
 
-import { State, ScrollState } from './'
+import { IUserGamesCtrl, } from './UserGamesCtrl'
 
-export function renderBody(ctrl: State) {
+export function renderBody(ctrl: IUserGamesCtrl) {
   return (
     <div className="userGamesWrapper">
       <div className="select_input select_games_filter">
@@ -37,23 +32,12 @@ export function renderBody(ctrl: State) {
   )
 }
 
-function getGameEl(e: Event) {
-  const target = (e.target as HTMLElement)
-  return target.tagName === 'LI' ? target :
-    helper.findParentBySelector(target, 'li')
-}
-
-export function getButton(e: Event) {
-  const target = (e.target as HTMLElement)
-  return target.tagName === 'BUTTON' ? target : undefined
-}
-
 interface GameDataSet extends DOMStringMap {
   id: string
 }
-function onTap(ctrl: State, e: Event) {
-  const starButton = getButton(e)
-  const el = getGameEl(e)
+function onTap(ctrl: IUserGamesCtrl, e: Event) {
+  const starButton = helper.getButton(e)
+  const el = helper.getLI(e)
   const id = el && (el.dataset as GameDataSet).id
   if (starButton) {
     ctrl.toggleBookmark(id)
@@ -74,83 +58,25 @@ function onTap(ctrl: State, e: Event) {
   }
 }
 
-const Game: Mithril.Component<{ g: UserGameWithDate, index: number, userId: string, scrollState: ScrollState }, { boardTheme: string }> = {
-  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.g !== oldattrs.g
-  },
-  oninit() {
-    this.boardTheme = settings.general.theme.board()
-  },
-  view({ attrs }) {
-    const { g, index, userId } = attrs
-    const time = gameApi.time(g)
-    const mode = g.rated ? i18n('rated') : i18n('casual')
-    const title = g.source === 'import' ?
-    `Import • ${g.variant.name}` :
-    `${time} • ${g.variant.name} • ${mode}`
-    const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
-      (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
-    const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || ''
-    const userColor: Color = g.players.white.userId === userId ? 'white' : 'black'
-    const evenOrOdd = index % 2 === 0 ? 'even' : 'odd'
-    const star = g.bookmarked ? 't' : 's'
-    const withStar = session.isConnected() ? ' withStar' : ''
 
-    return (
-      <li data-id={g.id} className={`userGame ${evenOrOdd}${withStar}`}>
-        {renderBoard(g.fen, userColor, this.boardTheme)}
-        <div className="userGame-infos">
-          <div className="userGame-versus">
-            <span className="variant-icon" data-icon={icon} />
-            <div className="game-result">
-              <div className="userGame-players">
-                {renderPlayer(g.players, 'white')}
-                <div className="swords" data-icon="U" />
-                {renderPlayer(g.players, 'black')}
-              </div>
-              <div className={helper.classSet({
-                'userGame-status': true,
-                win: !!(g.winner && userColor === g.winner),
-                loose: !!(g.winner && userColor !== g.winner)
-              })}>
-                {status}
-              </div>
-            </div>
-          </div>
-          <div className="userGame-meta">
-            <p className="game-infos">
-            {g.date} • {title}
-            </p>
-            {g.opening ?
-              <p className="opening">{g.opening.name}</p> : null
-            }
-            {g.analysed ?
-              <p className="analysis">
-              <span className="fa fa-bar-chart" />
-              Computer analysis available
-              </p> : null
-            }
-          </div>
-        </div>
-        { session.isConnected() ?
-          <button className="iconStar" data-icon={star} /> : null
-        }
-      </li>
-    )
-  }
-}
-
-function renderAllGames(ctrl: State) {
+function renderAllGames(ctrl: IUserGamesCtrl) {
   const { games  } = ctrl.scrollState
   return (
     <div id="scroller-wrapper" className="scroller native_scroller games"
-      oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, getGameEl)}
+      oncreate={helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)}
       onscroll={throttle(ctrl.onScroll, 30)}
     >
       { games.length ?
         <ul className="userGames" oncreate={ctrl.onGamesLoaded}>
           { games.map((g, i) =>
-            h(Game, { key: g.id, g, index: i, scrollState: ctrl.scrollState, userId: ctrl.scrollState.userId }))
+              h(GameItem, {
+                key: g.id,
+                g,
+                index: i,
+                boardTheme: ctrl.boardTheme,
+                userId: ctrl.scrollState.userId
+              })
+            )
           }
           {ctrl.scrollState.isLoadingNextPage ?
           <li className="list_item loadingNext">loading...</li> : null
@@ -159,55 +85,6 @@ function renderAllGames(ctrl: State) {
         <div className="userGame-loader">
           {spinner.getVdom('monochrome')}
         </div>
-      }
-    </div>
-  )
-}
-
-export function renderBoard(fen: string, orientation: Color, boardTheme: string) {
-
-  const boardClass = [
-    'display_board',
-    boardTheme
-  ].join(' ')
-
-  return (
-    <div className={boardClass} key={fen}
-      oncreate={({ dom }: Mithril.DOMNode) => {
-        const img = document.createElement('img')
-        img.className = 'cg-board'
-        img.src = 'data:image/svg+xml;utf8,' + makeBoard(fen, orientation)
-        batchRequestAnimationFrame(() => {
-          const placeholder = dom.firstChild
-          if (placeholder) dom.replaceChild(img, placeholder)
-        })
-      }}
-    >
-      <div className="cg-board" />
-    </div>
-  )
-}
-
-export function renderPlayer(players: { white: UserGamePlayer, black: UserGamePlayer}, color: Color) {
-  let player = players[color]
-  let playerName: string
-  // TODO fetch title info from server; refactor
-  if (player.userId) playerName = player.userId
-  else if (!player.aiLevel) playerName = utils.playerName(player)
-  else if (player.aiLevel) {
-    playerName = utils.aiName({ ai: player.aiLevel })
-  }
-  else playerName = 'Anonymous'
-
-  return (
-    <div className={'player ' + color}>
-      <span className="playerName">{playerName}</span>
-      <br/>
-      {player.rating ?
-      <small className="playerRating">{player.rating}</small> : null
-      }
-      {player.ratingDiff ?
-        helper.renderRatingDiff(player) : null
       }
     </div>
   )

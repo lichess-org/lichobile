@@ -1,4 +1,5 @@
 import { SearchResult, SearchQuery, UserGameWithDate } from './interfaces'
+import settings from '../../settings'
 import * as xhr from './searchXhr'
 import * as stream from 'mithril/stream'
 import { handleXhrError } from '../../utils'
@@ -13,6 +14,7 @@ export interface ISearchCtrl {
   more: () => void
   lastQuery: Mithril.Stream<SearchQuery>
   scrollPos: Mithril.Stream<number>
+  boardTheme: string
 }
 
 export default function SearchCtrl(): ISearchCtrl {
@@ -20,6 +22,8 @@ export default function SearchCtrl(): ISearchCtrl {
   const games = stream<Array<UserGameWithDate>>()
   const lastQuery = stream<SearchQuery>()
   const scrollPos = stream<number>()
+
+  const boardTheme = settings.general.theme.board()
 
   const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed']
 
@@ -74,9 +78,9 @@ export default function SearchCtrl(): ISearchCtrl {
     toggleBookmark,
     more,
     lastQuery,
-    scrollPos
+    scrollPos,
+    boardTheme
   }
-
 }
 
 function buildQuery(elements: HTMLCollection, acc: Partial<SearchQuery>, name: string) {

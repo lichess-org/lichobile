@@ -1,16 +1,12 @@
 import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
 import * as m from 'mithril'
+import router from '../../router'
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
-import settings from '../../settings'
-import { renderPlayer, renderBoard, getButton } from '../user/games/gamesView'
+
 import * as helper from '../helper'
-import * as gameApi from '../../lichess/game'
-import gameStatus from '../../lichess/status'
-import session from '../../session'
-import * as utils from '../../utils'
-import router from '../../router'
+import GameItem from '../shared/GameItem'
 
 import { ISearchCtrl } from './searchCtrl'
 import { SearchResult, UserGameWithDate } from './interfaces'
@@ -82,6 +78,25 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
   )
 }
 
+interface GameDataSet extends DOMStringMap {
+  id: string
+}
+function onTap (ctrl: ISearchCtrl, e: Event) {
+  const starButton = helper.getButton(e)
+  const el = helper.getLI(e)
+  const id = el && (el.dataset as GameDataSet).id
+  if (starButton) {
+    ctrl.toggleBookmark(id)
+  } else {
+    if (id) {
+      const g = ctrl.games().find(game => game.id === id)
+      if (g) {
+        router.set(`/analyse/online/${id}`)
+      }
+    }
+  }
+}
+
 function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWithDate[]) {
   if (games.length === 0) {
     return h('div.searchGamesList', [
@@ -89,9 +104,11 @@ function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWi
     ])
   }
 
-  return h('div.searchGamesList', [
+  return h('div.searchGamesList', {
+    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)
+  }, [
     games.map((g: UserGameWithDate, index: number) =>
-      m(Game, { key: g.id, g, index, ctrl })
+      m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
     ),
     result.paginator && result.paginator.nextPage ?
       h('button.fatButton', {
@@ -173,78 +190,7 @@ function isComputerOpp() {
   return hasAi && (hasAi.value === '1')
 }
 
-const Game: Mithril.Component<{ g: UserGameWithDate, index: number, ctrl: ISearchCtrl }, { boardTheme: string }> = {
-  onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    return attrs.g !== oldattrs.g
-  },
-  oninit() {
-    this.boardTheme = settings.general.theme.board()
-  },
-  view({ attrs }) {
-    const { g, index, ctrl } = attrs
-    const time = gameApi.time(g)
-    const mode = g.rated ? i18n('rated') : i18n('casual')
-    const title = g.source === 'import' ?
-    `Import • ${g.variant.name}` :
-    `${time} • ${g.variant.name} • ${mode}`
-    const status = gameStatus.toLabel(g.status.name, g.winner, g.variant.key) +
-      (g.winner ? '. ' + i18n(g.winner === 'white' ? 'whiteIsVictorious' : 'blackIsVictorious') + '.' : '')
-    const icon = g.source === 'import' ? '/' : utils.gameIcon(g.perf) || ''
-    const perspectiveColor = 'white'
-    const evenOrOdd = index % 2 === 0 ? 'even' : 'odd'
-    const star = g.bookmarked ? 't' : 's'
-    const withStar = session.isConnected() ? ' withStar' : ''
-    return (
-      <li data-id={g.id} key={g.id} className={`userGame ${evenOrOdd}${withStar}`} oncreate={helper.ontap(e => onTap(e!, g, ctrl.toggleBookmark))}>
-        {renderBoard(g.fen, perspectiveColor, this.boardTheme)}
-        <div className="userGame-infos">
-          <div className="userGame-versus">
-            <span className="variant-icon" data-icon={icon} />
-          <div className="game-result">
-        <div className="userGame-players">
-          {renderPlayer(g.players, 'white')}
-          <div className="swords" data-icon="U" />
-          {renderPlayer(g.players, 'black')}
-          </div>
-          <div className={helper.classSet({
-            'userGame-status': true,
-            win: perspectiveColor === g.winner,
-            loose: !!(g.winner && perspectiveColor !== g.winner)
-          })}>{status}</div>
-          </div>
-        </div>
-        <div className="userGame-meta">
-          <p className="game-infos">
-          {g.date} • {title}
-          </p>
-          {g.opening ?
-            <p className="opening">{g.opening.name}</p> : null
-          }
-          {g.analysed ?
-            <p className="analysis">
-            <span className="fa fa-bar-chart" />
-            Computer analysis available
-            </p> : null
-          }
-          </div>
-        </div>
-        { session.isConnected() ?
-          <button className="iconStar" data-icon={star} /> : null
-        }
-      </li>
-    )
-  }
-}
-
-function onTap (e: Event, g: UserGameWithDate, toggleBookmark: (id: string) => void) {
-  const starButton = getButton(e)
-  if (starButton) {
-    toggleBookmark(g.id)
-  }
-  else {
-    router.set('/game/' + g.id)
-  }
-}
+const throttledRedraw = throttle(redraw, 300)
 
 const searchOpts = {
   ratings: ['800', '900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400', '2500', '2600', '2700', '2800', '2900'],
@@ -262,7 +208,6 @@ const searchOpts = {
   sortOrders: [['desc', 'Descending'], ['asc', 'Ascending']]
 }
 
-const throttledRedraw = throttle (() => redraw(), 300)
 const ratingOptions = searchOpts.ratings.map((a: string) => ({value: a, label: a}))
 const opponents = [['0', i18n('human') + ' ' + i18n('opponent')], ['1', i18n('computer') + ' ' + i18n('opponent')]]
 const opponentOptions = opponents.map((a: Array<string>) => ({value: a[0], label: a[1]}))

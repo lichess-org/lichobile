@@ -56,6 +56,7 @@ interface PlayTime {
 interface Piece {
   role: Role
   color: Color
+  promoted?: boolean
 }
 
 interface Drop {

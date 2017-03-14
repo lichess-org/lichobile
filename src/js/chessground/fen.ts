@@ -2,7 +2,7 @@ import util from './util'
 
 const initial = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-const roles: {[i: string]: string} = {
+const roles: {[i: string]: Role} = {
   p: 'pawn',
   r: 'rook',
   n: 'knight',
@@ -26,30 +26,36 @@ const letters = {
   king: 'k'
 }
 
-function read(fen: string) {
+export function read(fen: string): { [k: string]: Piece } {
   if (fen === 'start') fen = initial
-  const pieces: Chessground.Pieces = {}
-  const space = fen.indexOf(' ')
-  const first = space !== -1 ? fen.substr(0, space) : fen
-  const parts = first.split('/')
-  for (let i = 0; i < 8; i++) {
-    let row = parts[i]
-    let x = 0
-    for (let j = 0, jlen = row.length; j < jlen; j++) {
-      let v = row[j]
-      if (v === '~') continue
-      let nb = ~~v
-      if (nb) x += nb
-      else {
-        x++
-        pieces[util.pos2key([x, 8 - i])] = {
-          role: roles[v] as Role,
-          color: v === v.toLowerCase() ? 'black' : 'white'
+  const pieces: { [k: string]: Piece } = {}
+  let row: number = 8
+  let col: number = 0
+  for (let i = 0; i < fen.length; i++) {
+    const c = fen[i]
+    switch (c) {
+      case ' ': return pieces
+      case '/':
+        --row
+        if (row === 0) return pieces
+        col = 0
+        break
+      case '~':
+        pieces[util.pos2key([col, row])].promoted = true
+        break
+      default:
+        const nb = ~~c
+        if (nb) col += nb
+        else {
+          ++col
+          const role = c.toLowerCase()
+          pieces[util.pos2key([col, row])] = {
+            role: roles[role],
+            color: (c === role ? 'black' : 'white') as Color
+          }
         }
-      }
     }
   }
-
   return pieces
 }
 

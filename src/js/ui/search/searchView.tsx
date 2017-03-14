@@ -1,22 +1,20 @@
-import * as h from 'mithril/hyperscript'
 import * as throttle from 'lodash/throttle'
+import * as h from 'mithril/hyperscript'
 import * as m from 'mithril'
 import router from '../../router'
 import i18n from '../../i18n'
-import redraw from '../../utils/redraw'
 
 import * as helper from '../helper'
 import GameItem from '../shared/GameItem'
 
-import { ISearchCtrl } from './searchCtrl'
-import { SearchResult, UserGameWithDate } from './interfaces'
+import { ISearchCtrl } from './SearchCtrl'
+import { SearchResult, UserGameWithDate, SearchQuery } from './interfaces'
 
 interface SearchSelect {
   name: string
   options: SearchOption[]
   placeholder?: string
-  default?: string
-  onchange?: () => void
+  noEmpty?: boolean
 }
 
 interface SearchOption {
@@ -25,45 +23,45 @@ interface SearchOption {
 }
 
 export function renderSearchForm(ctrl: ISearchCtrl) {
+  const players = getPlayers(ctrl.query)
+  const isComputerOpp = ctrl.query.hasAi === '1'
   return (
     <div id="searchContent" className="native_scroller searchWraper">
       <form id="advancedSearchForm"
-        onsubmit={function(e: Event) {
+        onsubmit={(e: Event) => {
           e.preventDefault()
-          const analysed = document.getElementById('analysed') as HTMLInputElement
-          analysed.value = analysed.checked ? '1' : ''
-          return ctrl.search(e.target as HTMLFormElement)
+          ctrl.search()
         }}
       >
         <div className="game_search_row">
           <label>Players</label>
           <div className="game_search_input">
-            <input type="text" id="players_a" name="players.a" oninput={throttledRedraw} />
+            <input type="text" name="players.a" value={ctrl.query['players.a']} oninput={throttle(ctrl.handleChange('players.a'), 200)} />
           </div>
           <div className="game_search_input">
-            <input type="text" id="players_b" name="players.b" oninput={throttledRedraw} />
+            <input type="text" name="players.b" value={ctrl.query['players.b']} oninput={throttle(ctrl.handleChange('players.b'), 200)} />
           </div>
         </div>
-        {renderSelectRow(i18n('white'), playersNonEmpty(), { name: 'players.white', options: getPlayers(), default: ''})}
-        {renderSelectRow(i18n('black'), playersNonEmpty(), { name: 'players.black', options: getPlayers(), default: ''})}
-        {renderSelectRow(i18n('winner'), playersNonEmpty(), { name: 'players.winner', options: getPlayers(), default: ''})}
-        {renderSelectRow(i18n('ratingRange'), true, { name: 'ratingMin', options: ratingOptions, default: '', placeholder: 'From'}, {name: 'ratingMax', options: ratingOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow(i18n('opponent'), true, { name: 'hasAi', options: opponentOptions, default: '', onchange: () => { redraw() }})}
-        {renderSelectRow(i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp(), {name: 'aiLevelMin', options: aiLevelOptions, default: '', placeholder: 'From'}, { name: 'aiLevelMax', options: aiLevelOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow('Source', true, { name: 'source', options: sourceOptions, default: ''})}
-        {renderSelectRow(i18n('variant'), true, { name: 'perf', options: perfOptions, default: ''})}
-        {renderSelectRow('Turns', true, { name: 'turnsMin', options: turnOptions, default: '', placeholder: 'From'}, {name: 'turnsMax', options: turnOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow(i18n('duration'), true, { name: 'durationMin', options: durationOptions, default: '', placeholder: 'From'}, {name: 'durationMax', options: durationOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow(i18n('time'), true, { name: 'clock.initMin', options: timeOptions, default: '', placeholder: 'From'}, {name: 'clock.initMax', options: timeOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow(i18n('increment'), true, { name: 'clock.incMin', options: incrementOptions, default: '', placeholder: 'From'}, {name: 'clock.incMax', options: incrementOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow('Result', true, { name: 'status', options: resultOptions, default: ''})}
-        {renderSelectRow(i18n('winner'), true, {name: 'winnerColor', options: winnerOptions, default: ''})}
-        {renderSelectRow('Date', true, { name: 'dateMin', options: dateOptions, default: '', placeholder: 'From'}, {name: 'dateMax', options: dateOptions, default: '', placeholder: 'To'})}
-        {renderSelectRow('Sort', true, { name: 'sort.field', options: sortFieldOptions }, {name: 'sort.order', options: sortOrderOptions })}
+        {renderSelectRow(ctrl, i18n('white'), !!players.length, { name: 'players.white', options: players})}
+        {renderSelectRow(ctrl, i18n('black'), !!players.length, { name: 'players.black', options: players})}
+        {renderSelectRow(ctrl, i18n('winner'), !!players.length, { name: 'players.winner', options: players})}
+        {renderSelectRow(ctrl, i18n('ratingRange'), true, { name: 'ratingMin', options: ratingOptions, placeholder: 'From'}, {name: 'ratingMax', options: ratingOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, i18n('opponent'), true, { name: 'hasAi', options: opponentOptions })}
+        {renderSelectRow(ctrl, i18n('aiNameLevelAiLevel', 'A.I.', '').trim(), isComputerOpp, {name: 'aiLevelMin', options: aiLevelOptions, placeholder: 'From'}, { name: 'aiLevelMax', options: aiLevelOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, 'Source', true, { name: 'source', options: sourceOptions})}
+        {renderSelectRow(ctrl, i18n('variant'), true, { name: 'perf', options: perfOptions})}
+        {renderSelectRow(ctrl, 'Turns', true, { name: 'turnsMin', options: turnOptions, placeholder: 'From'}, {name: 'turnsMax', options: turnOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, i18n('duration'), true, { name: 'durationMin', options: durationOptions, placeholder: 'From'}, {name: 'durationMax', options: durationOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, i18n('time'), true, { name: 'clock.initMin', options: timeOptions, placeholder: 'From'}, {name: 'clock.initMax', options: timeOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, i18n('increment'), true, { name: 'clock.incMin', options: incrementOptions, placeholder: 'From'}, {name: 'clock.incMax', options: incrementOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, 'Result', true, { name: 'status', options: resultOptions})}
+        {renderSelectRow(ctrl, i18n('winner'), true, {name: 'winnerColor', options: winnerOptions})}
+        {renderSelectRow(ctrl, 'Date', true, { name: 'dateMin', options: dateOptions, placeholder: 'From', noEmpty: true }, {name: 'dateMax', options: dateOptions, placeholder: 'To'})}
+        {renderSelectRow(ctrl, 'Sort', true, { name: 'sort.field', options: sortFieldOptions, noEmpty: true }, {name: 'sort.order', options: sortOrderOptions, noEmpty: true })}
         <div className="game_search_row">
           <label>Analysis</label>
           <div className="game_search_input double_wide">
-            <input type="checkbox" id="analysed" name="analysed" value="" />
+            <input type="checkbox" name="analysed" checked={ctrl.query.analysed === '1'} onchange={ctrl.toggleAnalysis} />
           </div>
         </div>
         <button key="search" className="fatButton" type="submit">
@@ -118,7 +116,7 @@ function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWi
   ])
 }
 
-function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {
+function renderSelectRow(ctrl: ISearchCtrl, label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {
   if (!isDisplayed) return null
 
   return (
@@ -126,13 +124,13 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSel
       <label>{label}</label>
       <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
         <label></label>
-        <select id={select1.name.replace('.', '_')} name={select1.name} onchange={select1.onchange ? select1.onchange : ''}>
+        <select value={ctrl.query[select1.name]} name={select1.name} onchange={ctrl.handleChange(select1.name)}>
           { select1.placeholder !== undefined ?
-            <option value="" selected disabled> {select1.placeholder} </option> :
+            <option value="" selected disabled>{select1.placeholder}</option> :
             null
           }
-          { select1.default !== undefined ?
-            <option value=""> {select1.default} </option> :
+          { !select1.noEmpty ?
+            <option value=""></option> :
             null
           }
           {select1.options.map(renderOption)}
@@ -141,13 +139,13 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSel
       {select2 ?
         <div className="game_search_select">
           <label></label>
-          <select id={select2.name.replace('.', '_')} name={select2.name} onchange={select1.onchange ? select1.onchange : ''}>
+          <select value={ctrl.query[select2.name]} name={select2.name} onchange={ctrl.handleChange(select2.name)}>
             { select2.placeholder !== undefined ?
-              <option value="" selected disabled> {select2.placeholder} </option> :
+              <option value="" selected disabled>{select2.placeholder}</option> :
               null
             }
-            { select2.default !== undefined ?
-              <option value=""> {select2.default} </option> :
+            { !select2.noEmpty ?
+              <option value=""></option> :
               null
             }
             {select2.options.map(renderOption)}
@@ -159,19 +157,13 @@ function renderSelectRow(label: string, isDisplayed: boolean, select1: SearchSel
 }
 
 function renderOption(opt: SearchOption) {
-  return (
-    <option key={opt.value} value={opt.value}> {opt.label} </option>
-  )
+  return <option key={opt.value} value={opt.value}>{opt.label}</option>
 }
 
-function getPlayers(): Array<SearchOption> {
-  const playerAEl = (document.getElementById('players_a') as HTMLInputElement)
-  const playerBEl = (document.getElementById('players_b') as HTMLInputElement)
-  if (!playerAEl || !playerBEl)
-    return []
-  const playerA = playerAEl.value.trim()
-  const playerB = playerBEl.value.trim()
+function getPlayers(query: SearchQuery): Array<SearchOption> {
   const players: Array<SearchOption> = []
+  const playerA = query['players.a']
+  const playerB = query['players.b']
   if (playerA) {
     players.push({value: playerA, label: playerA})
   }
@@ -180,17 +172,6 @@ function getPlayers(): Array<SearchOption> {
   }
   return players
 }
-
-function playersNonEmpty() {
-  return getPlayers().reduce((acc, cur) => acc + cur.label.length, 0) > 0
-}
-
-function isComputerOpp() {
-  const hasAi = (document.getElementById('hasAi') as HTMLInputElement)
-  return hasAi && (hasAi.value === '1')
-}
-
-const throttledRedraw = throttle(redraw, 300)
 
 const searchOpts = {
   ratings: ['800', '900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400', '2500', '2600', '2700', '2800', '2900'],

@@ -1,38 +1,63 @@
+import * as debounce from 'lodash/debounce'
+
 import { SearchResult, SearchQuery, UserGameWithDate } from './interfaces'
 import settings from '../../settings'
 import * as xhr from './searchXhr'
 import * as stream from 'mithril/stream'
-import { handleXhrError } from '../../utils'
+import { handleXhrError, serializeQueryParameters } from '../../utils'
 import redraw from '../../utils/redraw'
 import { toggleGameBookmark as toggleBookmarkXhr} from '../../xhr'
 
 export interface ISearchCtrl {
-  search: (form: HTMLFormElement) => void
+  query: SearchQuery,
+  handleChange: (name: string) => (e: Event) => void
+  toggleAnalysis: () => void
+  search: () => void
   result: Mithril.Stream<SearchResult>
   toggleBookmark: (id: string) => void
   games: Mithril.Stream<Array<UserGameWithDate>>
   more: () => void
-  lastQuery: Mithril.Stream<SearchQuery>
-  scrollPos: Mithril.Stream<number>
   boardTheme: string
 }
 
-export default function SearchCtrl(): ISearchCtrl {
+export default function SearchCtrl(initQuery?: SearchQuery): ISearchCtrl {
   const result = stream<SearchResult>()
   const games = stream<Array<UserGameWithDate>>()
-  const lastQuery = stream<SearchQuery>()
-  const scrollPos = stream<number>()
+
+  const query: SearchQuery = initQuery || {
+    'players.a': '',
+    'players.b': '',
+    'players.white': '',
+    'players.black': '',
+    'players.winner': '',
+    ratingMin: '',
+    ratingMax: '',
+    hasAi: '',
+    source: '',
+    perf: '',
+    turnsMin: '',
+    turnsMax: '',
+    durationMin: '',
+    durationMax: '',
+    'clock.initMin': '',
+    'clock.initMax': '',
+    'clock.incMin': '',
+    'clock.incMax': '',
+    status: '',
+    winnerColor: '',
+    dateMin: '',
+    dateMax: '',
+    'sort.field': 'd',
+    'sort.order': 'desc',
+    analysed: ''
+  }
 
   const boardTheme = settings.general.theme.board()
 
-  const fields = ['players.a', 'players.b', 'players.white', 'players.black', 'players.winner', 'ratingMin', 'ratingMax', 'hasAi', 'source', 'perf', 'turnsMin', 'turnsMax', 'durationMin', 'durationMax', 'clock.initMin', 'clock.initMax', 'clock.incMin', 'clock.incMax', 'status', 'winnerColor', 'dateMin', 'dateMax', 'sort.field', 'sort.order', 'analysed']
-
-  function search(form: HTMLFormElement) {
-    const elements: HTMLCollection = form.elements as HTMLCollection
-    const queryData = fields.reduce((acc, el) => buildQuery(elements, acc, el), {}) as SearchQuery
-    lastQuery(queryData)
-    xhr.search(queryData)
+  function search() {
+    xhr.search(query)
     .then((data: SearchResult) => {
+      updateHref()
       result(prepareData(data))
       const curPaginator = result().paginator
       if (curPaginator) {
@@ -56,12 +81,17 @@ export default function SearchCtrl(): ISearchCtrl {
     )
   }
 
+  const updateHref = debounce(() => {
+    const path = `/search?${serializeQueryParameters(query)}`
+    try {
+      window.history.replaceState(window.history.state, '', '?=' + path)
+    } catch (e) { console.error(e) }
+  }, 100)
+
   function more() {
-    const queryData = lastQuery()
     const curPaginator = result().paginator
     if (curPaginator && curPaginator.nextPage) {
-      queryData.page = String(curPaginator.nextPage)
-      xhr.search(queryData)
+      xhr.search(query)
       .then((data: SearchResult) => {
         result(prepareData(data))
         games(games().concat(curPaginator.currentPageResults))
@@ -71,26 +101,29 @@ export default function SearchCtrl(): ISearchCtrl {
     }
   }
 
+  const handleChange = (name: string) => (e: Event) => {
+    const val = (e.target as HTMLInputElement).value.trim()
+    Object.assign(query, { [name]: val })
+    redraw()
+  }
+
+  const toggleAnalysis = () => {
+    query.analysed = query.analysed === '1' ? '' : '1'
+    redraw()
+  }
+
+  if (initQuery) search()
+
   return {
+    query,
     search,
     result,
     games,
     toggleBookmark,
     more,
-    lastQuery,
-    scrollPos,
-    boardTheme
-  }
-}
-
-function buildQuery(elements: HTMLCollection, acc: Partial<SearchQuery>, name: string) {
-  // ts don't support string access in HTMLCollection it seems
-  if ((<any>elements)[name]) {
-    acc[name] = (<any>elements)[name].value
-    return acc
-  }
-  else {
-    return acc
+    boardTheme,
+    handleChange,
+    toggleAnalysis
   }
 }
 

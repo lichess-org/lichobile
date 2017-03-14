@@ -87,7 +87,7 @@ export default {
           const val = (e.target as HTMLSelectElement).value
           settingsProp(val)
           if (onChangeCallback) onChangeCallback(val)
-          setTimeout(() => redraw(), 10)
+          setTimeout(redraw, 10)
         }
       }, options.map(e => renderOption(e[0], e[1], storedValue, e[2], e[3])))
     ]

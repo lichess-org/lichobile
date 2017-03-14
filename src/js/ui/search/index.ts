@@ -2,21 +2,26 @@ import i18n from '../../i18n'
 import * as helper from '../helper'
 import { header as headerWidget } from '../shared/common'
 import layout from '../layout'
-import SearchCtrl, { ISearchCtrl } from './searchCtrl'
+import SearchCtrl, { ISearchCtrl } from './SearchCtrl'
 
 import { renderSearchForm } from './searchView'
+import { SearchQuery } from './interfaces'
+
+interface Attrs {
+  [param: string]: string
+}
 
 interface State {
   ctrl: ISearchCtrl
 }
 
-const SearchScreen: Mithril.Component<{}, State> = {
+const SearchScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
-  oninit() {
+  oninit({ attrs }) {
     helper.analyticsTrackView('Advanced search')
 
-    this.ctrl = SearchCtrl()
+    this.ctrl = SearchCtrl(<SearchQuery>attrs)
   },
 
   view() {

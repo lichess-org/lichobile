@@ -21,7 +21,7 @@ const SearchScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     helper.analyticsTrackView('Advanced search')
 
-    this.ctrl = SearchCtrl(<SearchQuery>attrs)
+    this.ctrl = SearchCtrl(<Partial<SearchQuery>>attrs)
   },
 
   view() {

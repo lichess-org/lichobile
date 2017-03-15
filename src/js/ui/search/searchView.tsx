@@ -35,11 +35,13 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
       >
         <div className="game_search_row">
           <label>Players</label>
-          <div className="game_search_input">
-            <input type="text" name="players.a" value={ctrl.query['players.a']} oninput={throttle(ctrl.handleChange('players.a'), 200)} />
-          </div>
-          <div className="game_search_input">
-            <input type="text" name="players.b" value={ctrl.query['players.b']} oninput={throttle(ctrl.handleChange('players.b'), 200)} />
+          <div className="game_search_input_wrapper">
+            <div className="game_search_input">
+              <input type="text" name="players.a" value={ctrl.query['players.a']} oninput={throttle(ctrl.handleChange('players.a'), 200)} />
+            </div>
+            <div className="game_search_input">
+              <input type="text" name="players.b" value={ctrl.query['players.b']} oninput={throttle(ctrl.handleChange('players.b'), 200)} />
+            </div>
           </div>
         </div>
         {renderSelectRow(ctrl, i18n('white'), !!players.length, { name: 'players.white', options: players})}
@@ -60,8 +62,12 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
         {renderSelectRow(ctrl, 'Sort', true, { name: 'sort.field', options: sortFieldOptions, noEmpty: true }, {name: 'sort.order', options: sortOrderOptions, noEmpty: true })}
         <div className="game_search_row">
           <label>Analysis</label>
-          <div className="game_search_input double_wide">
-            <input type="checkbox" name="analysed" checked={ctrl.query.analysed === '1'} onchange={ctrl.toggleAnalysis} />
+          <div className="game_search_input_wrapper">
+            <div className="game_search_input full">
+              <div className="check_container">
+                <input type="checkbox" name="analysed" checked={ctrl.query.analysed === '1'} onchange={ctrl.toggleAnalysis} />
+              </div>
+            </div>
           </div>
         </div>
         <button key="search" className="fatButton" type="submit">
@@ -122,39 +128,35 @@ function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWi
 function renderSelectRow(ctrl: ISearchCtrl, label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {
   if (!isDisplayed) return null
 
+  const select1Val = ctrl.query[select1.name]
+
   return (
     <div className="game_search_row">
       <label>{label}</label>
-      <div className={'game_search_select' + (select2 ? '' : ' double_wide')}>
-        <label></label>
-        <select value={ctrl.query[select1.name]} name={select1.name} onchange={ctrl.handleChange(select1.name)}>
-          { select1.placeholder !== undefined ?
-            <option value="" selected disabled>{select1.placeholder}</option> :
-            null
-          }
-          { !select1.noEmpty ?
-            <option value=""></option> :
-            null
-          }
-          {select1.options.map(renderOption)}
-        </select>
-      </div>
-      {select2 ?
-        <div className="game_search_select">
-          <label></label>
-          <select value={ctrl.query[select2.name]} name={select2.name} onchange={ctrl.handleChange(select2.name)}>
-            { select2.placeholder !== undefined ?
-              <option value="" selected disabled>{select2.placeholder}</option> :
-              null
-            }
-            { !select2.noEmpty ?
+      <div className="game_search_input_wrapper">
+        <div className={'game_search_select' + (select2 ? '' : ' full')}>
+          <label>{select1Val === '' && select1.placeholder ? select1.placeholder : ''}</label>
+          <select value={select1Val} name={select1.name} onchange={ctrl.handleChange(select1.name)}>
+            { !select1.noEmpty ?
               <option value=""></option> :
               null
             }
-            {select2.options.map(renderOption)}
+            {select1.options.map(renderOption)}
           </select>
         </div>
-        : null }
+        {select2 ?
+          <div className="game_search_select">
+            <label>{ctrl.query[select2.name] === '' && select2.placeholder ? select2.placeholder : ''}</label>
+            <select value={ctrl.query[select2.name]} name={select2.name} onchange={ctrl.handleChange(select2.name)}>
+              { !select2.noEmpty ?
+                <option value=""></option> :
+                null
+              }
+              {select2.options.map(renderOption)}
+            </select>
+          </div> : null
+        }
+      </div>
     </div>
   )
 }

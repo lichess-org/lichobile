@@ -20,7 +20,7 @@ export interface ISearchCtrl {
   boardTheme: string
 }
 
-export default function SearchCtrl(initQuery: SearchQuery): ISearchCtrl {
+export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl {
   const result = stream<SearchResult>()
   const games = stream<Array<UserGameWithDate>>()
 

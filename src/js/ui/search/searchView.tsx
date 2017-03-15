@@ -109,10 +109,13 @@ function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWi
       m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
     ),
     result.paginator && result.paginator.nextPage ?
-      h('button.fatButton', {
+      h('div.moreButton', {
         key: 'more',
-        oncreate: helper.ontap(ctrl.more)
-      }, h('span.fa.fa-arrow-down')) : null
+      }, [
+        h('button', {
+          oncreate: helper.ontap(ctrl.more)
+        }, h('span.fa.fa-arrow-down'))
+      ]) : null
   ])
 }
 

@@ -20,11 +20,11 @@ export interface ISearchCtrl {
   boardTheme: string
 }
 
-export default function SearchCtrl(initQuery?: SearchQuery): ISearchCtrl {
+export default function SearchCtrl(initQuery: SearchQuery): ISearchCtrl {
   const result = stream<SearchResult>()
   const games = stream<Array<UserGameWithDate>>()
 
-  const query: SearchQuery = initQuery || {
+  const query: SearchQuery = {
     'players.a': '',
     'players.b': '',
     'players.white': '',
@@ -51,6 +51,7 @@ export default function SearchCtrl(initQuery?: SearchQuery): ISearchCtrl {
     'sort.order': 'desc',
     analysed: ''
   }
+  Object.assign(query, initQuery)
 
   const boardTheme = settings.general.theme.board()
 
@@ -112,7 +113,7 @@ export default function SearchCtrl(initQuery?: SearchQuery): ISearchCtrl {
     redraw()
   }
 
-  if (initQuery) search()
+  if (Object.keys(initQuery).length > 0) search()
 
   return {
     query,

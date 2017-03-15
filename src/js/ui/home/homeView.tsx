@@ -96,7 +96,7 @@ function renderTimeline(ctrl: HomeState) {
           return null
         })}
       </ul>
-      <div className="homeMoreButton">
+      <div className="moreButton">
         <button oncreate={helper.ontapY(() => router.set('/timeline'))}>
           {i18n('more')}
         </button>
@@ -116,7 +116,7 @@ function renderWeekLeaders(ctrl: HomeState) {
       <ul className="items_list_block">
         { players.map(renderPlayer) }
       </ul>
-      <div className="homeMoreButton">
+      <div className="moreButton">
         <button oncreate={helper.ontapY(() => router.set('/ranking'))}>
           {i18n('more')}
         </button>

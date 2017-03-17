@@ -1,7 +1,6 @@
 import { handleXhrError } from '../../../utils'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import settings from '../../../settings'
-import * as helper from '../../helper'
 import * as xhr from '../userXhr'
 import { toggleGameBookmark } from '../../../xhr'
 import redraw from '../../../utils/redraw'
@@ -24,9 +23,6 @@ export interface ScrollState {
   games: Array<UserGameWithDate>
   currentFilter: string
   scrollPos: number
-  viewport: number
-  itemSize: number
-  boardBounds: { width: number, height: number }
   userId: string
   availableFilters: Array<AvailableFilter>
   isLoadingNextPage: boolean
@@ -58,8 +54,6 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
   const scrollStateId = window.history.state.scrollStateId
   const cacheAvailable = cachedScrollState && scrollStateId === cachedScrollState.userId
 
-  const viewport = helper.viewportDim()
-  const boardsize = (viewport.vw - 20) * 0.30
   const boardTheme = settings.general.theme.board()
 
   const scrollState: ScrollState = {
@@ -70,10 +64,7 @@ export default function UserGamesCtrl(userId: string, filter?: string): IUserGam
     games: [],
     paginator: undefined,
     isLoadingNextPage: false,
-    scrollPos: 0,
-    viewport: viewport.vh - 85,
-    boardBounds: { height: boardsize, width: boardsize },
-    itemSize: (viewport.vw - 20) * 0.30 + 20 + 1
+    scrollPos: 0
   }
 
   function prepareData(xhrData: xhr.FilterResult) {

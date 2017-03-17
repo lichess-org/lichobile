@@ -3,12 +3,14 @@ import * as h from 'mithril/hyperscript'
 import * as m from 'mithril'
 import router from '../../router'
 import i18n from '../../i18n'
+import { Paginator } from '../../lichess/interfaces'
+import { UserGameWithDate } from '../../lichess/interfaces/user'
 
 import * as helper from '../helper'
 import GameItem from '../shared/GameItem'
 
 import { ISearchCtrl } from './SearchCtrl'
-import { SearchResult, UserGameWithDate, SearchQuery } from './interfaces'
+import { SearchQuery } from './interfaces'
 
 interface SearchSelect {
   name: string
@@ -26,7 +28,9 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
   const players = getPlayers(ctrl.query)
   const isComputerOpp = ctrl.query.hasAi === '1'
   return (
-    <div id="searchContent" className="native_scroller searchWraper">
+    <div id="searchContent" className="native_scroller searchWraper"
+      onscroll={throttle(ctrl.onScroll, 30)}
+    >
       <form id="advancedSearchForm"
         onsubmit={(e: Event) => {
           e.preventDefault()
@@ -75,8 +79,8 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
           {i18n('search')}
         </button>
       </form>
-      { ctrl.result() && ctrl.games() ?
-        renderResult(ctrl, ctrl.result(), ctrl.games()) : null
+      { ctrl.searchState.paginator ?
+        renderResult(ctrl, ctrl.searchState.paginator, ctrl.searchState.games) : null
       }
     </div>
   )
@@ -93,7 +97,7 @@ function onTap (ctrl: ISearchCtrl, e: Event) {
     ctrl.toggleBookmark(id)
   } else {
     if (id) {
-      const g = ctrl.games().find(game => game.id === id)
+      const g = ctrl.searchState.games.find(game => game.id === id)
       if (g) {
         router.set(`/analyse/online/${id}`)
       }
@@ -101,7 +105,7 @@ function onTap (ctrl: ISearchCtrl, e: Event) {
   }
 }
 
-function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWithDate[]) {
+function renderResult(ctrl: ISearchCtrl, paginator: Paginator<UserGameWithDate>, games: UserGameWithDate[]) {
   if (games.length === 0) {
     return h('div.searchGamesList', [
       h('div.search-empty', 'No game found')
@@ -114,7 +118,7 @@ function renderResult(ctrl: ISearchCtrl, result: SearchResult, games: UserGameWi
     games.map((g: UserGameWithDate, index: number) =>
       m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
     ),
-    result.paginator && result.paginator.nextPage ?
+    paginator.nextPage ?
       h('div.moreButton', {
         key: 'more',
       }, [

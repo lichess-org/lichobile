@@ -1,28 +1,37 @@
 import * as debounce from 'lodash/debounce'
 
-import { SearchResult, SearchQuery, UserGameWithDate } from './interfaces'
+import { Paginator } from '../../lichess/interfaces'
+import { UserGameWithDate } from '../../lichess/interfaces/user'
 import settings from '../../settings'
-import * as xhr from './searchXhr'
-import * as stream from 'mithril/stream'
 import { handleXhrError, serializeQueryParameters } from '../../utils'
 import redraw from '../../utils/redraw'
 import { toggleGameBookmark as toggleBookmarkXhr} from '../../xhr'
+
+import * as xhr from './searchXhr'
+import { SearchResult, SearchQuery } from './interfaces'
 
 export interface ISearchCtrl {
   query: SearchQuery,
   handleChange: (name: string) => (e: Event) => void
   toggleAnalysis: () => void
   search: () => void
-  result: Mithril.Stream<SearchResult>
   toggleBookmark: (id: string) => void
-  games: Mithril.Stream<Array<UserGameWithDate>>
   more: () => void
   boardTheme: string
+  searchState: SearchState
+  onScroll(e: Event): void
 }
 
+export interface SearchState {
+  paginator: Paginator<UserGameWithDate> | undefined
+  games: Array<UserGameWithDate>
+  scrollPos: number
+  queryString: string
+}
+
+let cachedSearchState: SearchState
+
 export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl {
-  const result = stream<SearchResult>()
-  const games = stream<Array<UserGameWithDate>>()
 
   const query: SearchQuery = {
     'players.a': '',
@@ -53,16 +62,33 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   }
   Object.assign(query, initQuery)
 
+  const searchState: SearchState = {
+    paginator: undefined,
+    games: [],
+    scrollPos: 0,
+    queryString: serializeQueryParameters(query)
+  }
+
   const boardTheme = settings.general.theme.board()
+
+  const saveSearchState = debounce(() => {
+    cachedSearchState = searchState
+  }, 200)
+
+  const onScroll = (e: Event) => {
+    const target = (e.target as HTMLElement)
+    searchState.scrollPos = target.scrollTop
+    saveSearchState()
+  }
 
   function search() {
     xhr.search(query)
-    .then((data: SearchResult) => {
+    .then(prepareData)
+    .then(data => {
       updateHref()
-      result(prepareData(data))
-      const curPaginator = result().paginator
-      if (curPaginator) {
-        games(curPaginator.currentPageResults)
+      searchState.paginator = data.paginator
+      if (data.paginator) {
+        searchState.games = data.paginator.currentPageResults
       }
       redraw()
     })
@@ -71,11 +97,11 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
 
   function toggleBookmark(id: string) {
     toggleBookmarkXhr(id).then(() => {
-        const i = games().findIndex(h => h.id === id)
-        const g = games()[i]
+        const i = searchState.games.findIndex(h => h.id === id)
+        const g = searchState.games[i]
         if (g) {
           const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
-          games()[i] = ng
+          searchState.games[i] = ng
           redraw()
         }
       }
@@ -90,13 +116,17 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   }, 100)
 
   function more() {
-    const curPaginator = result().paginator
+    const curPaginator = searchState.paginator
     if (curPaginator && curPaginator.nextPage) {
-      xhr.search(query)
-      .then((data: SearchResult) => {
-        result(prepareData(data))
-        games(games().concat(curPaginator.currentPageResults))
-        redraw()
+      xhr.search(query, curPaginator.nextPage)
+      .then(prepareData)
+      .then(data => {
+        searchState.paginator = data.paginator
+        if (searchState.paginator) {
+          searchState.games = searchState.games.concat(searchState.paginator.currentPageResults)
+          redraw()
+        }
+        saveSearchState()
       })
       .catch(handleXhrError)
     }
@@ -116,15 +146,15 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   if (Object.keys(initQuery).length > 0) search()
 
   return {
+    searchState,
     query,
     search,
-    result,
-    games,
     toggleBookmark,
     more,
     boardTheme,
     handleChange,
-    toggleAnalysis
+    toggleAnalysis,
+    onScroll
   }
 }
 

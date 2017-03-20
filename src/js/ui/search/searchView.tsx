@@ -91,7 +91,7 @@ interface GameDataSet extends DOMStringMap {
 }
 function onTap (ctrl: ISearchCtrl, e: Event) {
   const starButton = helper.getButton(e)
-  const el = helper.getLI(e)
+  const el = helper.findElByClassName(e, 'userGame')
   const id = el && (el.dataset as GameDataSet).id
   if (starButton) {
     ctrl.toggleBookmark(id)
@@ -112,21 +112,23 @@ function renderResult(ctrl: ISearchCtrl, paginator: Paginator<UserGameWithDate>,
     ])
   }
 
-  return h('div.searchGamesList', {
-    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, helper.getLI)
+  return h('ul.searchGamesList', {
+    oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, e => helper.findElByClassName(e!, 'userGame'))
+  }, h.fragment({
+    oncreate: ctrl.onGamesLoaded
   }, [
     games.map((g: UserGameWithDate, index: number) =>
       m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
     ),
     paginator.nextPage ?
-      h('div.moreButton', {
+      h('li.moreButton', {
         key: 'more',
       }, [
         h('button', {
           oncreate: helper.ontap(ctrl.more)
         }, h('span.fa.fa-arrow-down'))
       ]) : null
-  ])
+  ]))
 }
 
 function renderSelectRow(ctrl: ISearchCtrl, label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {

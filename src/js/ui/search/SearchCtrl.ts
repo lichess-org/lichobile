@@ -1,5 +1,6 @@
 import * as debounce from 'lodash/debounce'
 
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import { Paginator } from '../../lichess/interfaces'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
 import settings from '../../settings'
@@ -20,6 +21,7 @@ export interface ISearchCtrl {
   boardTheme: string
   searchState: SearchState
   onScroll(e: Event): void
+  onGamesLoaded(vn: Mithril.DOMNode): void
 }
 
 export interface SearchState {
@@ -32,6 +34,8 @@ export interface SearchState {
 let cachedSearchState: SearchState
 
 export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl {
+
+  let initialized = false
 
   const query: SearchQuery = {
     'players.a': '',
@@ -62,18 +66,31 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   }
   Object.assign(query, initQuery)
 
+  const queryString = serializeQueryParameters(query)
+  const cacheAvailable = cachedSearchState && queryString === cachedSearchState.queryString
+
   const searchState: SearchState = {
     paginator: undefined,
     games: [],
     scrollPos: 0,
-    queryString: serializeQueryParameters(query)
+    queryString
   }
 
   const boardTheme = settings.general.theme.board()
 
-  const saveSearchState = debounce(() => {
+  const saveSearchState = () => {
     cachedSearchState = searchState
-  }, 200)
+  }
+
+  const onGamesLoaded = () => {
+    if (cacheAvailable && !initialized) {
+      batchRequestAnimationFrame(() => {
+        const scroller = document.getElementById('searchContent')
+        if (scroller) scroller.scrollTop = cachedSearchState.scrollPos
+        initialized = true
+      })
+    }
+  }
 
   const onScroll = (e: Event) => {
     const target = (e.target as HTMLElement)
@@ -97,15 +114,14 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
 
   function toggleBookmark(id: string) {
     toggleBookmarkXhr(id).then(() => {
-        const i = searchState.games.findIndex(h => h.id === id)
-        const g = searchState.games[i]
-        if (g) {
-          const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
-          searchState.games[i] = ng
-          redraw()
-        }
+      const i = searchState.games.findIndex(h => h.id === id)
+      const g = searchState.games[i]
+      if (g) {
+        const ng = Object.assign({}, g, { bookmarked: !g.bookmarked })
+        searchState.games[i] = ng
+        redraw()
       }
-    )
+    })
   }
 
   const updateHref = debounce(() => {
@@ -143,7 +159,14 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
     redraw()
   }
 
-  if (Object.keys(initQuery).length > 0) search()
+  if (cacheAvailable) {
+    setTimeout(() => {
+      Object.assign(searchState, cachedSearchState)
+      redraw()
+    }, 300)
+  } else if (Object.keys(initQuery).length > 0) {
+    search()
+  }
 
   return {
     searchState,
@@ -154,7 +177,8 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
     boardTheme,
     handleChange,
     toggleAnalysis,
-    onScroll
+    onScroll,
+    onGamesLoaded
   }
 }
 

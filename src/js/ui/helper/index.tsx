@@ -408,3 +408,9 @@ export function getLI(e: Event) {
   return target.tagName === 'LI' ? target : findParentBySelector(target, 'li')
 }
 
+export function findElByClassName(e: Event, className: string) {
+  const target = (e.target as HTMLElement)
+  return target.classList.contains(className) ?
+    target : findParentBySelector(target, '.' + className)
+}
+

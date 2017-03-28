@@ -41,10 +41,28 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
           <label>Players</label>
           <div className="game_search_input_wrapper">
             <div className="game_search_input">
-              <input type="text" name="players.a" value={ctrl.query['players.a']} oninput={throttle(ctrl.handleChange('players.a'), 200)} />
+              <input
+                type="text"
+                name="players.a"
+                value={ctrl.query['players.a']}
+                oninput={throttle(ctrl.handleChange('players.a'), 200)}
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck={false}
+              />
             </div>
             <div className="game_search_input">
-              <input type="text" name="players.b" value={ctrl.query['players.b']} oninput={throttle(ctrl.handleChange('players.b'), 200)} />
+              <input
+                type="text"
+                name="players.b"
+                value={ctrl.query['players.b']}
+                oninput={throttle(ctrl.handleChange('players.b'), 200)}
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck={false}
+              />
             </div>
           </div>
         </div>

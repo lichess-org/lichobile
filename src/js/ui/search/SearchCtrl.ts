@@ -1,5 +1,3 @@
-import * as debounce from 'lodash/debounce'
-
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import { Paginator } from '../../lichess/interfaces'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
@@ -80,7 +78,7 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
 
   const boardTheme = settings.general.theme.board()
 
-  const saveSearchState = () => {
+  const updateSearchStateCache = () => {
     cachedSearchState = searchState
   }
 
@@ -97,7 +95,7 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   const onScroll = (e: Event) => {
     const target = (e.target as HTMLElement)
     searchState.scrollPos = target.scrollTop
-    saveSearchState()
+    updateSearchStateCache()
   }
 
   function search() {
@@ -115,19 +113,19 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
       xhr.search(query)
       .then(prepareData)
       .then(data => {
+        searchState.queryString = serializeQueryParameters(query)
+        searchState.searching = false
+        searchState.paginator = data.paginator
+        if (data.paginator) {
+          searchState.games = data.paginator.currentPageResults
+        } else {
+          searchState.games = []
+        }
         updateHref()
+        updateSearchStateCache()
         // delay display of result to have a little feedback of searching
         // even when it's super fast
-        setTimeout(() => {
-          searchState.searching = false
-          searchState.paginator = data.paginator
-          if (data.paginator) {
-            searchState.games = data.paginator.currentPageResults
-          } else {
-            searchState.games = []
-          }
-          redraw()
-        }, 500)
+        setTimeout(redraw, 500)
       })
       .catch(err => {
         searchState.searching = false
@@ -149,12 +147,12 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
     })
   }
 
-  const updateHref = debounce(() => {
-    const path = `/search?${serializeQueryParameters(query)}`
+  function updateHref() {
+    const path = `/search?${searchState.queryString}`
     try {
       window.history.replaceState(window.history.state, '', '?=' + path)
     } catch (e) { console.error(e) }
-  }, 100)
+  }
 
   function more() {
     const curPaginator = searchState.paginator
@@ -167,7 +165,7 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
           searchState.games = searchState.games.concat(searchState.paginator.currentPageResults)
           redraw()
         }
-        saveSearchState()
+        updateSearchStateCache()
       })
       .catch(handleXhrError)
     }

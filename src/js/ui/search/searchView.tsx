@@ -3,8 +3,8 @@ import * as h from 'mithril/hyperscript'
 import * as m from 'mithril'
 import router from '../../router'
 import i18n from '../../i18n'
-import { Paginator } from '../../lichess/interfaces'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
+import spinner from '../../spinner'
 
 import * as helper from '../helper'
 import GameItem from '../shared/GameItem'
@@ -97,9 +97,7 @@ export function renderSearchForm(ctrl: ISearchCtrl) {
           {i18n('search')}
         </button>
       </form>
-      { ctrl.searchState.paginator ?
-        renderResult(ctrl, ctrl.searchState.paginator, ctrl.searchState.games) : null
-      }
+      {renderResult(ctrl)}
     </div>
   )
 }
@@ -123,30 +121,28 @@ function onTap (ctrl: ISearchCtrl, e: Event) {
   }
 }
 
-function renderResult(ctrl: ISearchCtrl, paginator: Paginator<UserGameWithDate>, games: UserGameWithDate[]) {
-  if (games.length === 0) {
-    return h('div.searchGamesList', [
-      h('div.search-empty', 'No game found')
-    ])
-  }
+function renderResult(ctrl: ISearchCtrl) {
+  const children = ctrl.searchState.searching ?
+    spinner.getVdom('monochrome') : ctrl.searchState.games.length === 0 ?
+      h('div.search-empty', 'No game found') :
+      h.fragment({ oncreate: ctrl.onGamesLoaded }, [
+        ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
+          m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
+        ),
+        ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
+          h('li.moreButton', {
+            key: 'more',
+          }, [
+            h('button', {
+              oncreate: helper.ontap(ctrl.more)
+            }, h('span.fa.fa-arrow-down'))
+          ]) : null
+      ])
 
   return h('ul.searchGamesList', {
+    className: ctrl.searchState.searching ? 'searching' : '',
     oncreate: helper.ontapY(e => onTap(ctrl, e!), undefined, e => helper.findElByClassName(e!, 'userGame'))
-  }, h.fragment({
-    oncreate: ctrl.onGamesLoaded
-  }, [
-    games.map((g: UserGameWithDate, index: number) =>
-      m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
-    ),
-    paginator.nextPage ?
-      h('li.moreButton', {
-        key: 'more',
-      }, [
-        h('button', {
-          oncreate: helper.ontap(ctrl.more)
-        }, h('span.fa.fa-arrow-down'))
-      ]) : null
-  ]))
+  }, children)
 }
 
 function renderSelectRow(ctrl: ISearchCtrl, label: string, isDisplayed: boolean, select1: SearchSelect, select2?: SearchSelect) {

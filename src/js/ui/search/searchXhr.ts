@@ -5,5 +5,5 @@ export function search(query: SearchQuery, page: number = 1): Promise<SearchResu
   return fetchJSON('/games/search', {
     method: 'GET',
     query: Object.assign({}, query, { page })
-  }, true)
+  }, false)
 }

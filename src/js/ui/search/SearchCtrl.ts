@@ -29,6 +29,7 @@ export interface SearchState {
   games: Array<UserGameWithDate>
   scrollPos: number
   queryString: string
+  searching: boolean
 }
 
 let cachedSearchState: SearchState
@@ -73,7 +74,8 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
     paginator: undefined,
     games: [],
     scrollPos: 0,
-    queryString
+    queryString,
+    searching: false
   }
 
   const boardTheme = settings.general.theme.board()
@@ -99,17 +101,40 @@ export default function SearchCtrl(initQuery: Partial<SearchQuery>): ISearchCtrl
   }
 
   function search() {
-    xhr.search(query)
-    .then(prepareData)
-    .then(data => {
-      updateHref()
-      searchState.paginator = data.paginator
-      if (data.paginator) {
-        searchState.games = data.paginator.currentPageResults
-      }
+    if (!searchState.searching) {
+      searchState.searching = true
       redraw()
-    })
-    .catch(handleXhrError)
+      // go to the bottom to see spinner and the beginning of search results
+      setTimeout(() => {
+        const scroller = document.getElementById('searchContent')
+        if (scroller) {
+          scroller.scrollTop = 99999
+        }
+      }, 250)
+
+      xhr.search(query)
+      .then(prepareData)
+      .then(data => {
+        updateHref()
+        // delay display of result to have a little feedback of searching
+        // even when it's super fast
+        setTimeout(() => {
+          searchState.searching = false
+          searchState.paginator = data.paginator
+          if (data.paginator) {
+            searchState.games = data.paginator.currentPageResults
+          } else {
+            searchState.games = []
+          }
+          redraw()
+        }, 500)
+      })
+      .catch(err => {
+        searchState.searching = false
+        redraw()
+        handleXhrError(err)
+      })
+    }
   }
 
   function toggleBookmark(id: string) {

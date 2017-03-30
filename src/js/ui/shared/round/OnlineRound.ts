@@ -22,7 +22,7 @@ import promotion from './promotion'
 import { Chat } from './chat'
 import { notesCtrl } from './notes'
 import ClockCtrl from './clock/ClockCtrl'
-import CorrespondenceClockCtrl from './correspondenceClock/corresClockCtrl'
+import CorresClockCtrl from './correspondenceClock/corresClockCtrl'
 import socketHandler from './socketHandler'
 import atomic from './atomic'
 import * as xhr from './roundXhr'
@@ -49,7 +49,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public data: OnlineGameData
   public chessground: Chessground.Controller
   public clock: ClockCtrl | null
-  public correspondenceClock: any
+  public correspondenceClock: CorresClockCtrl
   public chat: Chat | null
   public notes: any
   public onFeatured?: () => void
@@ -313,8 +313,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private makeCorrespondenceClock() {
     if (this.data.correspondence && !this.correspondenceClock)
-      this.correspondenceClock = new (<any>CorrespondenceClockCtrl)(
-        this,
+      this.correspondenceClock = new CorresClockCtrl(
         this.data.correspondence,
         () => socket.send('outoftime')
       )

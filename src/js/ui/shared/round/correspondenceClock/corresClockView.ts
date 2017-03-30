@@ -1,19 +1,22 @@
+import * as h from 'mithril/hyperscript'
 import * as helper from '../../../helper'
 import { hasNetwork } from '../../../../utils'
 import i18n from '../../../../i18n'
 
-function prefixInteger(num, length) {
+import CorresClockCtrl from './corresClockCtrl'
+
+function prefixInteger(num: number, length: number) {
   return (num / Math.pow(10, length)).toFixed(length).substr(2)
 }
 
-export function formatClockTime(time) {
-  var date = new Date(time)
-  var minutes = prefixInteger(date.getUTCMinutes(), 2)
-  var seconds = prefixInteger(date.getSeconds(), 2)
-  var hours, str = ''
+export function formatClockTime(time: number) {
+  const date = new Date(time)
+  const minutes = prefixInteger(date.getUTCMinutes(), 2)
+  const seconds = prefixInteger(date.getSeconds(), 2)
+  let hours, str = ''
   if (time >= 86400 * 1000) {
     // days : hours
-    var days = date.getUTCDate() - 1
+    const days = date.getUTCDate() - 1
     hours = date.getUTCHours()
     str += (days === 1 ? i18n('oneDay') : i18n('nbDays', days))
     if (hours !== 0) str += ' ' + i18n('nbHours', hours)
@@ -28,7 +31,7 @@ export function formatClockTime(time) {
   return str + (hasNetwork() ? '' : '?')
 }
 
-export function view(ctrl, color, runningColor) {
+export function view(ctrl: CorresClockCtrl, color: Color, runningColor: Color) {
   const time = ctrl.data[color]
   const className = 'correspondence clock ' + helper.classSet({
     'outoftime': !time,
@@ -36,16 +39,18 @@ export function view(ctrl, color, runningColor) {
     'emerg': time < ctrl.data.emerg,
     'offline': !hasNetwork()
   })
-  function cOnCreate(vnode) {
-    const el = vnode.dom
+  function cOnCreate(vnode: Mithril.DOMNode) {
+    const el = vnode.dom as HTMLElement
     el.textContent = formatClockTime(time * 1000)
     ctrl.els[color] = el
   }
-  function cOnUpdate(vnode) {
-    const el = vnode.dom
+  function cOnUpdate(vnode: Mithril.DOMNode) {
+    const el = vnode.dom as HTMLElement
     ctrl.els[color] = el
   }
-  return (
-    <div className={className} oncreate={cOnCreate} onupdate={cOnUpdate} />
-  )
+  return h('div', {
+    className,
+    oncreate: cOnCreate,
+    onupdate: cOnUpdate
+  })
 }

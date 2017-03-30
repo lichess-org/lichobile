@@ -78,15 +78,6 @@ interface ClockData {
   increment: number
 }
 
-interface CorrespondenceClockData {
-  barTime: number
-  black: number
-  daysPerTurn: number
-  emerg: number
-  increment: number
-  white: number
-}
-
 interface BoardPosition {
   name: string
   fen: string

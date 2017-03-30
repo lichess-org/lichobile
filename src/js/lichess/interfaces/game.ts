@@ -80,6 +80,15 @@ interface Tournament {
 
 export type PossibleDrops = string | Array<string>
 
+export interface CorrespondenceClockData {
+  barTime: number
+  black: number
+  daysPerTurn: number
+  emerg: number
+  increment: number
+  white: number
+}
+
 export interface GameData {
   game: Game
   player: Player

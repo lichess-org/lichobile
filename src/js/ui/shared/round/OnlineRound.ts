@@ -573,7 +573,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
-    if (!this.replaying() && crazyValid.drop(this.chessground, this.data, role, key, this.data.possibleDrops)) {
+    if (!this.replaying() && crazyValid.drop(this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, !!meta.predrop)
     } else {
       this.jump(this.vm.ply)
@@ -604,7 +604,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   private playPredrop() {
     return this.chessground.playPredrop((drop: Drop) => {
-      return crazyValid.drop(this.chessground, this.data, drop.role, drop.key, this.data.possibleDrops)
+      return crazyValid.drop(this.data, drop.role, drop.key, this.data.possibleDrops)
     })
   }
 

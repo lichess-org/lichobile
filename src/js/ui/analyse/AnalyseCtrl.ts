@@ -354,7 +354,7 @@ export default class AnalyseCtrl {
   private userNewPiece = (piece: Piece, pos: Pos) => {
     const step = this.vm.step
     if (step) {
-      if (crazyValid.drop(this.chessground, piece, pos, step.drops)) {
+      if (crazyValid.drop(piece.role, pos, step.drops)) {
         sound.move()
         const drop = {
           role: piece.role,

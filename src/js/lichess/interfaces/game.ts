@@ -78,6 +78,8 @@ interface Tournament {
   }
 }
 
+export type PossibleDrops = string | Array<string>
+
 export interface GameData {
   game: Game
   player: Player
@@ -89,7 +91,7 @@ export interface GameData {
   note?: string
   chat?: Array<ChatMsg>
   possibleMoves?: StringMap
-  possibleDrops?: string | Array<string>
+  possibleDrops?: PossibleDrops
   userTV?: string
   tv?: string
   pref?: any

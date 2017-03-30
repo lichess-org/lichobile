@@ -1,9 +1,7 @@
-import * as gameApi from '../../../../lichess/game'
+import { PossibleDrops } from '../../../lichess/interfaces/game'
 
 export default {
-  drop: function(chessground, data, role, key, possibleDrops) {
-
-    if (!data.game.offline && !gameApi.isPlayerTurn(data)) return false
+  drop(role: Role, key: Pos, possibleDrops?: PossibleDrops) {
 
     if (role === 'pawn' && (key[1] === '1' || key[1] === '8')) return false
 

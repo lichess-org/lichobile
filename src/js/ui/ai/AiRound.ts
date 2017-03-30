@@ -246,7 +246,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
 
   private onUserNewPiece = (role: Role, key: Pos) => {
     const sit = this.replay.situation()
-    if (crazyValid.drop(this.chessground, this.data, role, key, sit.drops)) {
+    if (crazyValid.drop(this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key)
     } else {
       this.apply(this.replay.situation())

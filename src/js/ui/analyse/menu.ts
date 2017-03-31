@@ -75,8 +75,10 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
     ctrl.notes ? h('button', {
       key: 'notes',
       oncreate: helper.ontap(() => {
-        ctrl.menu.close()
-        ctrl.notes.open()
+        if (ctrl.notes) {
+          ctrl.menu.close()
+          ctrl.notes.open()
+        }
       })
     }, [h('span.fa.fa-pencil'), i18n('notes')]) : null,
     ctrl.isRemoteAnalysable() ? h('button', {

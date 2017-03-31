@@ -13,7 +13,7 @@ import settings from '../../settings'
 import { handleXhrError, oppositeColor, hasNetwork, noop } from '../../utils'
 import promotion from '../shared/offlineRound/promotion'
 import continuePopup, { Controller as ContinuePopupController } from '../shared/continuePopup'
-import { notesCtrl } from '../shared/round/notes'
+import { NotesCtrl } from '../shared/round/notes'
 import { getPGN } from '../shared/round/roundXhr'
 import * as util from './util'
 import cevalCtrl from './ceval/cevalCtrl'
@@ -45,7 +45,7 @@ export default class AnalyseCtrl {
   public menu: MenuInterface
   public continuePopup: ContinuePopupController
   public evalSummary: MenuInterface | null
-  public notes: any
+  public notes: NotesCtrl | null
 
   public chessground: Chessground.Controller
   public ceval: CevalCtrlInterface
@@ -73,7 +73,7 @@ export default class AnalyseCtrl {
     this.continuePopup = continuePopup.controller()
 
     this.evalSummary = this.data.analysis ? evalSummary.controller(this) : null
-    this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new (<any>notesCtrl)(this) : null
+    this.notes = session.isConnected() && this.data.game.speed === 'correspondence' ? new NotesCtrl(this.data) : null
 
     this.analyse = new Analyse(this.data)
     this.ceval = cevalCtrl(this.data.game.variant.key, this.allowCeval(), this.onCevalMsg)

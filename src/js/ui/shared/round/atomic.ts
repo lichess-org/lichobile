@@ -1,8 +1,8 @@
 import chessground from '../../../chessground'
 
-function capture(chessgroundCtrl, key) {
+function capture(chessgroundCtrl: Chessground.Controller, key: Pos) {
   const exploding = []
-  const diff = {}
+  const diff: Chessground.PiecesDiff = {}
   const orig = chessground.util.key2pos(key)
   for (let x = -1; x < 2; x++) {
     for (let y = -1; y < 2; y++) {
@@ -20,7 +20,7 @@ function capture(chessgroundCtrl, key) {
 }
 
 // needs to explicitly destroy the capturing pawn
-function enpassant(chessgroundCtrl, key, color) {
+function enpassant(chessgroundCtrl: Chessground.Controller, key: Pos, color: Color) {
   const pos = chessground.util.key2pos(key)
   const pawnPos = [pos[0], pos[1] + (color === 'white' ? -1 : 1)]
   capture(chessgroundCtrl, chessground.util.pos2key(pawnPos))

@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
@@ -6,9 +7,19 @@ import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineR
 import ground from '../shared/offlineRound/ground'
 import popupWidget from '../shared/popup'
 import router from '../../router'
-import * as h from 'mithril/hyperscript'
+import { PgnDumpResponse } from '../../chess'
 
-function renderAlways(ctrl) {
+import OtbRound from './OtbRound'
+
+export interface OtbActionsCtrl {
+  open: () => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  sharePGN: () => void
+  root: OtbRound
+}
+
+function renderAlways(ctrl: OtbRound) {
   return [
     h('div.action', formWidgets.renderCheckbox(
       i18n('Flip pieces after move'), 'flipPieces', settings.otb.flipPieces,
@@ -22,7 +33,7 @@ function renderAlways(ctrl) {
 
 export default {
 
-  controller: function(root) {
+  controller(root: OtbRound) {
     let isOpen = false
 
     function open() {
@@ -30,7 +41,7 @@ export default {
       isOpen = true
     }
 
-    function close(fromBB) {
+    function close(fromBB?: string) {
       if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
       isOpen = false
     }
@@ -42,17 +53,21 @@ export default {
         return isOpen
       },
       sharePGN: function() {
-        root.replay.pgn().then(data => window.plugins.socialsharing.share(data.pgn))
+        // TODO prompt for names
+        root.replay.pgn('White', 'Black')
+        .then((data: PgnDumpResponse) =>
+          window.plugins.socialsharing.share(data.pgn)
+        )
       },
       root: root
     }
   },
 
-  view: function(ctrl) {
+  view: function(ctrl: OtbActionsCtrl) {
     if (ctrl.isOpen()) {
       return popupWidget(
         'offline_actions',
-        null,
+        undefined,
         function() {
           return [
             renderEndedGameStatus(ctrl.root)

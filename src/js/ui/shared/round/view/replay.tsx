@@ -1,10 +1,14 @@
 import * as helper from '../../../helper'
 import settings from '../../../../settings'
+import { GameStep } from '../../../../lichess/interfaces/game'
+import OnlineRound from '../OnlineRound'
+
+type StepPair = [GameStep | null, GameStep | null]
 
 const emptyTd = <td className="move">...</td>
-let pieceNotation
+let pieceNotation: boolean
 
-function renderTd(ctrl, step, curPly, orEmpty) {
+function renderTd(step: GameStep | null, curPly: number, orEmpty: boolean) {
   return step ? (
     <td className={'replayMove' + (step.ply === curPly ? ' current' : '')}
       data-ply={step.ply}
@@ -14,38 +18,38 @@ function renderTd(ctrl, step, curPly, orEmpty) {
   ) : (orEmpty ? emptyTd : null)
 }
 
-function renderTr(ctrl, index, pairs, curPly) {
+function renderTr(index: number, pairs: StepPair[], curPly: number) {
   const first = pairs[index][0]
   const second = pairs[index][1]
   return (
     <tr>
       <td className="replayMoveIndex">{ (index + 1) + '.' }</td>
-      {renderTd(ctrl, first, curPly, true)}
-      {renderTd(ctrl, second, curPly, false)}
+      {renderTd(first, curPly, true)}
+      {renderTd(second, curPly, false)}
     </tr>
   )
 }
 
-function autoScroll(movelist) {
+function autoScroll(movelist?: HTMLElement) {
   if (!movelist) return
-  var plyEl = movelist.querySelector('.current') || movelist.querySelector('tr:first-child')
+  const plyEl = movelist.querySelector('.current') as HTMLElement || movelist.querySelector('tr:first-child') as HTMLElement
   if (plyEl) movelist.scrollTop = plyEl.offsetTop - movelist.offsetHeight / 2 + plyEl.offsetHeight / 2
 }
 
-function getTdEl(e) {
-  return e.target
+function getTdEl(e: Event) {
+  return e.target as HTMLElement
 }
 
-function onTableTap(ctrl, e) {
-  const ply = e.target.dataset.ply
+function onTableTap(ctrl: OnlineRound, e: Event) {
+  const ply = (e.target as HTMLElement).dataset.ply
   if (ply) ctrl.jump(Number(ply))
 }
 
-export function renderTable(ctrl) {
+export function renderTable(ctrl: OnlineRound) {
   const steps = ctrl.data.steps
   const firstPly = ctrl.firstPly()
 
-  const pairs = []
+  const pairs: StepPair[] = []
   if (firstPly % 2 === 0) {
     for (let i = 1, len = steps.length; i < len; i += 2)
       pairs.push([steps[i], steps[i + 1]])
@@ -57,19 +61,19 @@ export function renderTable(ctrl) {
 
   const trs = []
   for (let i = 0, len = pairs.length; i < len; i++)
-    trs.push(renderTr(ctrl, i, pairs, ctrl.vm.ply))
+    trs.push(renderTr(i, pairs, ctrl.vm.ply))
   pieceNotation = pieceNotation === undefined ? settings.game.pieceNotation() : pieceNotation
 
   return (
     <div className="replay">
       <div className="gameMovesList native_scroller"
-        oncreate={(vnode) => {
-          setTimeout(autoScroll.bind(undefined, vnode.dom), 100)
+        oncreate={(vnode: Mithril.DOMNode) => {
+          setTimeout(() => autoScroll(vnode.dom as HTMLElement), 100)
         }}
-        onupdate={(vnode) => { autoScroll(vnode.dom); }}
+        onupdate={(vnode: Mithril.DOMNode) => autoScroll(vnode.dom as HTMLElement)}
       >
         <table className={'moves' + (pieceNotation ? ' displayPieces' : '')}
-          oncreate={helper.ontap(e => onTableTap(ctrl, e), null, null, false, getTdEl)}
+          oncreate={helper.ontap((e: Event) => onTableTap(ctrl, e), undefined, undefined, getTdEl)}
         >
           <tbody>
             {trs}

@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import * as range from 'lodash/range'
 import chessground from '../../../../chessground'
 import socket from '../../../../socket'
 import session from '../../../../session'
@@ -52,15 +53,11 @@ function overlay(ctrl: OnlineRound) {
 }
 
 export function renderMaterial(material: Material) {
-  const children: Mithril.Children = []
-  for (let role in material) {
-    const piece = <piece className={role} />
-    const count = material[role]
-    const content: Array<Mithril.DOMNode> = []
-    for (let i = 0; i < count; i++) content.push(piece)
-    children.push(<div className="tomb" key={role}>{content}</div>)
-  }
-  return children
+  return Object.keys(material).map((role: Role) =>
+    h('div.tomb', { key: role }, range(material[role])
+      .map(_ => h('piece', { className: role }))
+    )
+  )
 }
 
 function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {

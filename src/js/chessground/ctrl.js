@@ -112,8 +112,10 @@ export default function(cfg) {
     }
     self.data.renderRAF()
     setTimeout(() => {
-      self.vm.exploding.stage = 2
-      self.data.renderRAF()
+      if (self.vm.exploding) {
+        self.vm.exploding.stage = 2
+        self.data.renderRAF()
+      }
       setTimeout(() => {
         self.vm.exploding = null
         self.data.renderRAF()

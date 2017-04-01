@@ -67,7 +67,7 @@ function tcConfig(ctrl: OnlineRound, vnode: Mithril.DOMNode) {
   if (ctrl.data.tournament) {
     const el = vnode.dom as HTMLElement
     el.textContent =
-      utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) + ' • '
+      utils.formatTimeInSecs(Math.round(ctrl.data.tournament.secondsToFinish)) + ' • '
     ctrl.vm.tClockEl = el
   }
 }
@@ -86,12 +86,7 @@ function renderTitle(ctrl: OnlineRound) {
             <span className="fa fa-trophy" /> : null
           }
           {ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-            <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)}>
-            {
-              utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
-              ' • '
-            }
-            </span> : null
+            <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null
           }
           {ctrl.title}
           { ctrl.vm.offlineWatcher ? ' • Offline' : null}
@@ -120,12 +115,7 @@ function renderHeader(ctrl: OnlineRound) {
       backButton([
         ctrl.data.tournament ?  <span className="fa fa-trophy" /> : null,
         ctrl.data.tournament && ctrl.data.tournament.secondsToFinish ?
-          <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)}>
-          {
-            utils.formatTimeInSecs(ctrl.data.tournament.secondsToFinish) +
-            ' • '
-          }
-          </span> : null,
+          <span oncreate={(v: Mithril.DOMNode) => tcConfig(ctrl, v)} /> : null,
         gameTitle(ctrl.data)
       ])
     ]

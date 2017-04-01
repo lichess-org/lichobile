@@ -1,3 +1,5 @@
+import { UserFullProfile } from './interfaces/user'
+
 export const perfTypes = [
   ['bullet', 'Bullet', 'Bullet'],
   ['blitz', 'Blitz', 'Blitz'],
@@ -13,11 +15,11 @@ export const perfTypes = [
   ['racingKings', 'Racing Kings', 'Racing']
 ]
 
-export default function userPerfs(user) {
-  var res = perfTypes.map(p => {
-    var perf = user.perfs[p[0]]
+export default function userPerfs(user: UserFullProfile) {
+  const res = perfTypes.map(p => {
+    const perf = user.perfs[p[0]]
     return {
-      key: p[0],
+      key: p[0] as PerfKey,
       name: p[1],
       perf: perf || '-'
     }
@@ -32,14 +34,14 @@ export default function userPerfs(user) {
   return res
 }
 
-export function perfTitle(perf) {
+export function perfTitle(perf: string) {
   return perfTypes.reduce((prev, curr) => {
     if (curr[0] === perf) return curr[1]
     else return prev
   }, '')
 }
 
-export function shortPerfTitle(perf) {
+export function shortPerfTitle(perf: string) {
   return perfTypes.reduce((prev, curr) => {
     if (curr[0] === perf) return curr[2]
     else return prev

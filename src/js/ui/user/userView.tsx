@@ -2,7 +2,7 @@ import userPerfs from '../../lichess/perfs'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
 import * as xhr from '../../xhr'
-import perf from '../shared/perf'
+import renderPerf from '../shared/perf'
 import i18n from '../../i18n'
 import countries from '../../utils/countries'
 import * as helper from '../helper'
@@ -138,7 +138,7 @@ function renderRatings(user: UserFullProfile) {
 
   return (
     <section id="userProfileRatings" className="perfs">
-      {userPerfs(user).filter(isShowing).map(p => perf(p.key, p.name, p.perf, user))}
+      {userPerfs(user).filter(isShowing).map(p => renderPerf(p.key, p.name, p.perf, user))}
     </section>
   )
 }

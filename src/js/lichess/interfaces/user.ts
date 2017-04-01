@@ -34,6 +34,9 @@ export interface UserFullProfile extends User {
 export interface Perf {
   rating: number
   progress: number
+  rd: number
+  prog: number
+  games: number
 }
 
 export interface LightUser {

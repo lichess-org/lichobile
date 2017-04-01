@@ -76,7 +76,7 @@
     <preference name="BackgroundColor" value="0xFF151A1E" />
     <preference name="xwalkVersion" value="23" />
     <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
-    <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-minSdkVersion" value="19" />
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="AndroidLaunchMode" value="singleInstance" />

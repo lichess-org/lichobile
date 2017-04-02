@@ -96,8 +96,8 @@ export interface CevalWork {
 export interface Ceval {
   depth: number
   maxDepth: number
-  cp: number
-  mate: number
+  cp: number | undefined
+  mate: number | undefined
   best: string
   nps: number
   bestSan?: string

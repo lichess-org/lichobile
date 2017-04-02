@@ -36,13 +36,13 @@ export default function cevalEngine(opts: Opts) {
     if (!matches) return
     const depth = parseInt(matches[1])
     if (depth < opts.minDepth) return
-    let cp: number = 0
-    let mate: number = 0
+    let cp: number | undefined
+    let mate: number | undefined
     if (matches[2] === 'cp') cp = parseFloat(matches[3])
     else mate = parseFloat(matches[3])
     if (work.ply % 2 === 1) {
-      if (matches[2] === 'cp') cp = -cp
-      else mate = -mate
+      if (matches[2] === 'cp' && cp !== undefined) cp = -cp
+      else if (mate !== undefined) mate = -mate
     }
     const nps = parseInt(matches[4], 10)
     const best = matches[5].split(' ')[0]

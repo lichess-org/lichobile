@@ -2,7 +2,6 @@
 
 'use strict'
 
-import './polyfills'
 import 'whatwg-fetch'
 
 import * as Raven from 'raven-js'

@@ -168,7 +168,7 @@ function renderVariationTurn(ctrl: AnalyseCtrl, turn: Turn, path: Path) {
   ]
 }
 
-function renderMeta(ctrl: AnalyseCtrl, step?: AnalysisStep, path?: Path) {
+function renderMeta(ctrl: AnalyseCtrl, step?: AnalysisStep, path?: Path | null) {
   const judgment = step && step.rEval && step.rEval.judgment
 
   if (!step || !path || (empty(step.variations) && (!judgment || !ctrl.vm.showComments)))
@@ -206,13 +206,13 @@ function renderComment(comment: string, colorClass: string, commentClass: string
   return <div className={'comment ' + colorClass + commentClass}>{truncateComment(comment)}</div>
 }
 
-function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
+function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path | null, bPath?: Path | null) {
   let key = 'turn:' + turn.turn
   let wMove: Mithril.DOMNode, bMove: Mithril.DOMNode
   if (wPath !== undefined) {
     const wPathStr = wPath && treePath.write(wPath)
     key += ':' + wPathStr + (turn.white && turn.white.san)
-    wMove = wPath ? renderMove(pathStr, turn.white, wPath, wPathStr) : emptyMove
+    wMove = wPath && wPathStr ? renderMove(pathStr, turn.white, wPath, wPathStr) : emptyMove
   } else {
     key += ':empty'
     wMove = threeDotsMove
@@ -220,7 +220,7 @@ function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
   if (bPath !== undefined) {
     const bPathStr = bPath && treePath.write(bPath)
     key += ':' + bPathStr + (turn.black && turn.black.san)
-    bMove = bPath ? renderMove(pathStr, turn.black, bPath, bPathStr) : emptyMove
+    bMove = bPath && bPathStr ? renderMove(pathStr, turn.black, bPath, bPathStr) : emptyMove
   } else {
     key += ':empty'
     bMove = threeDotsMove
@@ -236,8 +236,8 @@ function renderTurnEl(turn: Turn, pathStr: string, wPath?: Path, bPath?: Path) {
 }
 
 function renderTurn(ctrl: AnalyseCtrl, turn: Turn, path: Path): Mithril.Children {
-  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : undefined
-  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : undefined
+  const wPath = turn.white ? treePath.withPly(path, turn.white.ply) : null
+  const bPath = turn.black ? treePath.withPly(path, turn.black.ply) : null
   const wMeta = renderMeta(ctrl, turn.white, wPath)
   const bMeta = renderMeta(ctrl, turn.black, bPath)
   if (wPath) {

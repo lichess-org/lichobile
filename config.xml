@@ -98,7 +98,7 @@
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
     <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
     <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
-    <plugin name="cordova-plugin-stockfish" spec="~1.2.0" />
+    <plugin name="cordova-plugin-stockfish" spec="~1.3.0" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />

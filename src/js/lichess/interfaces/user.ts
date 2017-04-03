@@ -126,3 +126,14 @@ export interface VariantPerfStats {
   stat: any
   graph: Array<GraphPoint>
 }
+
+export type Relation = boolean
+export interface Related {
+  online: boolean
+  perfs: Perfs
+  patron: boolean
+  user: string
+  followable: boolean
+  relation: Relation
+  title?: string
+}

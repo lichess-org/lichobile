@@ -1,20 +1,12 @@
-import { header } from '../../shared/common'
 import { renderPlayer } from '../following/followingView'
-import layout from '../../layout'
 import * as helper from '../../helper'
 
-export default function view(vnode) {
-  const ctrl = vnode.state
+import { IFollowersCtrl } from './followersCtrl'
 
-  return layout.free(
-    header.bind(undefined, 'Followers'),
-    renderBody.bind(undefined, ctrl)
-  )
-}
-
-function renderBody(ctrl) {
+export function renderBody(ctrl: IFollowersCtrl) {
   if (ctrl.followers().length) {
-    const nextPage = ctrl.paginator().nextPage
+    const paginator = ctrl.paginator()
+    const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
         {ctrl.followers().map(p => renderPlayer(ctrl, p))}

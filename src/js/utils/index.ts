@@ -1,3 +1,4 @@
+import * as Map from 'es6-map'
 import i18n from '../i18n'
 import { FetchError } from '../http'
 import redraw from './redraw'

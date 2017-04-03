@@ -81,6 +81,8 @@
     "d3-time-format": "2.0.3",
     "hammerjs": "2.0.8",
     "ionic-plugin-keyboard": "~2.2.1",
+    "es6-map": "0.1.5",
+    "es6-set": "0.1.5",
     "iscroll": "5.1.3",
     "lodash": "4.17.4",
     "mithril": "1.1.3",

@@ -1,3 +1,4 @@
+import * as Set from 'es6-set'
 import { Variant, VariantKey } from './interfaces/variant'
 
 export const standardFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'

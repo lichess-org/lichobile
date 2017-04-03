@@ -6,3 +6,6 @@ interface Array<T> {
       */
     includes(searchElement: T, fromIndex?: number): boolean;
 }
+
+declare module 'es6-map'
+declare module 'es6-set'

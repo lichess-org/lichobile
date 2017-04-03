@@ -1,3 +1,5 @@
+import * as Set from 'es6-set'
+
 let callbacks: Set<() => void> = new Set()
 let batching = false
 

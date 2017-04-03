@@ -1,3 +1,5 @@
+import * as Map from 'es6-map'
+import * as Set from 'es6-set'
 import drag from './drag'
 import util from './util'
 import * as Vnode from 'mithril/render/vnode'

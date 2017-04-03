@@ -40,7 +40,7 @@ export default function FollowersCtrl(userId: string): IRelationCtrl {
   .catch(handleXhrError)
 
   function setNewUserState(obj: Related, newData: xhr.RelationActionResult) {
-    obj.relation = newData.followable
+    obj.relation = newData.following
   }
 
   return {

@@ -1,16 +1,23 @@
-import * as stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
 import * as xhr from '../userXhr'
 import { handleXhrError } from '../../../utils'
 import socket from '../../../socket'
 import challengeForm from '../../challengeForm'
+import * as stream from 'mithril/stream'
 
 import { Related } from '../../../lichess/interfaces/user'
 import { Paginator } from '../../../lichess/interfaces'
 
-import { IRelationCtrl } from '../following/followingCtrl'
+export interface IRelationCtrl {
+  related: Mithril.Stream<Related[]>
+  loadNextPage: (page: number) => void
+  isLoadingNextPage: Mithril.Stream<boolean>
+  toggleFollowing: (obj: Related) => void
+  challenge: (id: string) => void
+  paginator: Mithril.Stream<Paginator<Related> | undefined>
+}
 
-export default function FollowersCtrl(userId: string): IRelationCtrl {
+export default function FollowingCtrl(userId: string): IRelationCtrl {
 
   socket.createDefault()
 
@@ -20,7 +27,7 @@ export default function FollowersCtrl(userId: string): IRelationCtrl {
 
   function loadNextPage(page: number) {
     isLoadingNextPage(true)
-    xhr.followers(userId, page)
+    xhr.following(userId, page)
     .then(data => {
       isLoadingNextPage(false)
       paginator(data.paginator)
@@ -31,7 +38,7 @@ export default function FollowersCtrl(userId: string): IRelationCtrl {
     redraw()
   }
 
-  xhr.followers(userId, 1, true)
+  xhr.following(userId, 1, true)
   .then(data => {
     paginator(data.paginator)
     related(data.paginator.currentPageResults)

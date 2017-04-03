@@ -1,15 +1,15 @@
 import { renderPlayer } from '../following/followingView'
 import * as helper from '../../helper'
 
-import { IFollowersCtrl } from './followersCtrl'
+import { IRelationCtrl } from '../following/followingCtrl'
 
-export function renderBody(ctrl: IFollowersCtrl) {
-  if (ctrl.followers().length) {
+export function renderBody(ctrl: IRelationCtrl) {
+  if (ctrl.related().length) {
     const paginator = ctrl.paginator()
     const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
-        {ctrl.followers().map(p => renderPlayer(ctrl, p))}
+        {ctrl.related().map(p => renderPlayer(ctrl, p))}
         {nextPage ?
           <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
           null

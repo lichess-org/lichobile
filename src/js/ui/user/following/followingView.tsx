@@ -1,24 +1,18 @@
 import router from '../../../router'
-import { header } from '../../shared/common'
 import { gameIcon } from '../../../utils'
 import * as helper from '../../helper'
-import layout from '../../layout'
 import i18n from '../../../i18n'
 
-export default function view(vnode) {
-  const ctrl = vnode.state
-  return layout.free(
-    header.bind(undefined, 'Following'),
-    renderBody.bind(undefined, ctrl)
-  )
-}
+import { IRelationCtrl } from './followingCtrl'
+import { Related } from '../../../lichess/interfaces/user'
 
-function renderBody(ctrl) {
-  if (ctrl.following().length) {
-    const nextPage = ctrl.paginator().nextPage
+export function renderBody(ctrl: IRelationCtrl) {
+  if (ctrl.related().length) {
+    const paginator = ctrl.paginator()
+    const nextPage = paginator && paginator.nextPage
     return (
       <ul className="native_scroller page">
-        {ctrl.following().map(p => renderPlayer(ctrl, p))}
+        {ctrl.related().map(p => renderPlayer(ctrl, p))}
         {nextPage ?
           <li className="list_item followingList moreFollow" oncreate={helper.ontapY(() => ctrl.loadNextPage(nextPage))}> ... </li> :
           null
@@ -34,7 +28,7 @@ function renderBody(ctrl) {
   }
 }
 
-export function renderPlayer(ctrl, obj) {
+export function renderPlayer(ctrl: IRelationCtrl, obj: Related) {
   const status = obj.online ? 'online' : 'offline'
   const perfKey = obj.perfs && Object.keys(obj.perfs)[0]
   const perf = obj.perfs && obj.perfs[perfKey]

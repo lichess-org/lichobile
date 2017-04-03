@@ -2,9 +2,8 @@ import * as helper from '../../helper'
 import layout from '../../layout'
 import { header } from '../../shared/common'
 
-import FollowersCtrl from './followersCtrl'
-import { IRelationCtrl } from '../following/followingCtrl'
-import { renderBody } from './followersView'
+import FollowingCtrl, { IRelationCtrl } from './followingCtrl'
+import { renderBody } from './followingView'
 
 interface Attrs {
   id: string
@@ -18,16 +17,17 @@ const FollowersScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit(vnode) {
-    helper.analyticsTrackView('User followers')
+    helper.analyticsTrackView('User following')
 
-    this.ctrl = FollowersCtrl(vnode.attrs.id)
+    this.ctrl = FollowingCtrl(vnode.attrs.id)
   },
   view() {
     return layout.free(
-      () => header('Followers'),
+      () => header('Following'),
       () => renderBody(this.ctrl)
     )
   }
 }
 
 export default FollowersScreen
+

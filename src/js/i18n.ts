@@ -109,7 +109,7 @@ function loadFile(code: string): Promise<string> {
 function loadMomentLocale(code: string): string {
   if (code !== 'en') {
     const script = document.createElement('script')
-    script.src = 'moment/locale/' + code + '.js'
+    script.src = 'locale/' + code + '.js'
     document.head.appendChild(script)
   }
   window.moment.locale(code)

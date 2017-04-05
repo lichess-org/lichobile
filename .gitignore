@@ -11,6 +11,7 @@ npm-debug.log
 /www/app.js
 /www/index.html
 /www/css/compiled
+/www/locale
 
 /node_modules
 /env.json

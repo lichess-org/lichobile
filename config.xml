@@ -101,7 +101,7 @@
     <plugin name="cordova-plugin-fullscreen" spec="~1.1.0" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
     <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.2.0">
+    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
         <variable name="XWALK_MODE" value="embedded" />
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>

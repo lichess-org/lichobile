@@ -252,3 +252,7 @@ export function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) =
   Object.keys(obj).map((k: K) => res[k] = f(obj[k]))
   return res
 }
+
+export function lichessAssetSrc(path: string) {
+  return `${window.lichess.apiEndPoint}/assets/${path}`
+}

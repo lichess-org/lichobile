@@ -1,6 +1,7 @@
 import userPerfs from '../../lichess/perfs'
 import { dropShadowHeader, backButton as renderBackbutton } from '../shared/common'
 import { getLanguageNativeName } from '../../utils/langs'
+import { lichessAssetSrc } from '../../utils'
 import * as xhr from '../../xhr'
 import renderPerf from '../shared/perf'
 import i18n from '../../i18n'
@@ -82,7 +83,7 @@ function renderProfile(user: UserFullProfile) {
             {location}
             {country ?
             <span className="country">
-              {location ? ',' : ''} <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+              {location ? ',' : ''} <img className="flag" src={lichessAssetSrc('images/flags/' + user.profile.country + '.png')} />
               {country}
             </span> : null
             }

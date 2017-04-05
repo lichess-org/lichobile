@@ -273,7 +273,7 @@ export function miniUser(user: User | undefined, mini: any, isOpen: boolean, clo
         </div>
         { user.profile && user.profile.country ?
           <p className="country">
-          <img className="flag" src={'images/flags/' + user.profile.country + '.png'} />
+          <img className="flag" src={utils.lichessAssetSrc('images/flags/' + user.profile.country + '.png')} />
           {countries[user.profile.country]}
           </p> : user.language ?
           <p className="language">

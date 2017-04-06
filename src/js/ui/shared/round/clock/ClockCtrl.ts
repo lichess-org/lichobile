@@ -1,3 +1,4 @@
+import { ClockData } from '../../../../lichess/interfaces/game'
 import { formatClockTime } from './clockView'
 import redraw from '../../../../utils/redraw'
 import sound from '../../../../sound'

@@ -34,6 +34,11 @@ export interface Seek {
   }
 }
 
+export interface PongMessage {
+  d: number
+  r: number
+}
+
 export interface TimelineEntry {
   data: any
   date: number

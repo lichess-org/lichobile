@@ -8,6 +8,7 @@ import spinner from '../../../spinner'
 import { header as headerWidget, backButton } from '../../shared/common'
 import { shortPerfTitle } from '../../../lichess/perfs'
 import { User, VariantPerfStats } from '../../../lichess/interfaces/user'
+import { VariantKey } from '../../../lichess/interfaces/variant'
 import layout from '../../layout'
 import { renderBody } from './variantPerfView'
 

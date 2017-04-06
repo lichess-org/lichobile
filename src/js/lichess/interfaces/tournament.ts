@@ -1,3 +1,5 @@
+import { Opening } from './game'
+
 export interface Tournament {
   clock: TournamentClock
   createdBy: string
@@ -34,7 +36,7 @@ interface Perf {
   position?: number
 }
 
-interface TournamentClock {
+export interface TournamentClock {
   increment: number
   limit: number
 }

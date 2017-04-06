@@ -1,5 +1,6 @@
 import { askWorker } from './utils/worker'
 import { GameStatus, CheckCount, Pockets } from './lichess/interfaces/game'
+import { VariantKey, Variant } from './lichess/interfaces/variant'
 
 const worker = new Worker('vendor/scalachess.js')
 

@@ -6,7 +6,7 @@ import BoardBrush, { Shape } from './BoardBrush'
 export interface Attrs {
   variant: VariantKey
   chessgroundCtrl: Chessground.Controller
-  bounds: BoardBounds
+  bounds: ClientRect
   isPortrait: boolean
   wrapperClasses?: string
   customPieceTheme?: string

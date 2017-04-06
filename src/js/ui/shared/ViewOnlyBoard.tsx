@@ -18,7 +18,7 @@ export interface Attrs {
 
 interface Config {
   fen?: string
-  lastMove?: MoveTuple
+  lastMove?: [Pos, Pos]
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean

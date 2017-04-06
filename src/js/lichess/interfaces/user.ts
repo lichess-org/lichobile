@@ -1,4 +1,4 @@
-import { GameStatus } from './game'
+import { GameSource, GameStatus, ClockData, Opening } from './game'
 
 export type GameFilter = 'all' | 'rated' | 'win' | 'loss' | 'draw' | 'bookmark' | 'me' | 'import' | 'playing'
 
@@ -65,6 +65,11 @@ export interface User extends BaseUser {
   playTime?: PlayTime
   profile?: any
   booster: boolean
+}
+
+interface PlayTime {
+  total: number
+  tv: number
 }
 
 export type Perfs = { [pk: string]: Perf }

@@ -10,7 +10,7 @@ import { dailyPuzzle as dailyPuzzleXhr, topPlayersOfTheWeek as topPlayersOfTheWe
 import { hasNetwork, noop } from '../../utils'
 import { isForeground, setForeground } from '../../utils/appMode'
 import { supportedTypes as supportedTimelineTypes } from '../timeline'
-import { TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
+import { PongMessage, TimelineEntry, DailyPuzzle } from '../../lichess/interfaces'
 import { User } from '../../lichess/interfaces/user'
 import * as stream from 'mithril/stream'
 

@@ -2,6 +2,7 @@
 
 import i18n from '../i18n'
 import { GameData } from './interfaces/game'
+import { VariantKey } from './interfaces/variant'
 
 const ids = {
   created: 10,

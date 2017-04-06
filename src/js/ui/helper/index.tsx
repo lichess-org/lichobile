@@ -265,7 +265,7 @@ export function isPortrait(): boolean {
   }
 }
 
-export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): BoardBounds  {
+export function getBoardBounds(viewportDim: ViewportDim, isPortrait: boolean, mode: string, halfsize: boolean = false): ClientRect  {
   const { vh, vw } = viewportDim
   const is43 = is43Aspect()
   const headerHeight = 56

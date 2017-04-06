@@ -1,3 +1,5 @@
+import { VariantKey } from '../lichess/interfaces/variant'
+
 interface XNavigator extends Navigator {
   hardwareConcurrency: number
 }

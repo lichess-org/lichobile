@@ -1,4 +1,5 @@
 import { standardFen } from '../utils/fen'
+import { Variant, VariantKey } from './interfaces/variant'
 
 interface DocVariant {
   id: number

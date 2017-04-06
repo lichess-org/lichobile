@@ -1,4 +1,4 @@
-import { GameData, GameStep } from '../../lichess/interfaces/game'
+import { GameData, GameStep, Opening } from '../../lichess/interfaces/game'
 import AnalyseCtrl from './AnalyseCtrl'
 
 export interface RoleToSan {

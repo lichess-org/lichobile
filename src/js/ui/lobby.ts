@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import * as utils from '../utils'
 import redraw from '../utils/redraw'
 import session from '../session'
@@ -10,7 +11,7 @@ import popupWidget from './shared/popup'
 import * as xhr from '../xhr'
 import i18n from '../i18n'
 import socket, { RedirectObj } from '../socket'
-import * as h from 'mithril/hyperscript'
+import { PongMessage } from '../lichess/interfaces'
 
 let nbPlayers = 0
 let nbGames = 0

@@ -1,5 +1,5 @@
 import * as gameApi from '../../../lichess/game'
-import { GameCrowd } from '../../../lichess/interfaces/game'
+import { GameCrowd, ChatMsg } from '../../../lichess/interfaces/game'
 import { Move, Drop } from '../../../lichess/interfaces/move'
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'

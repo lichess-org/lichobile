@@ -11,6 +11,10 @@ declare namespace Chessground {
     width: number
     height: number
   }
+  interface Drop {
+    role: Role
+    key: Pos
+  }
 
   type Pieces = {[index: string]: Piece}
 

@@ -602,7 +602,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private playPredrop() {
-    return this.chessground.playPredrop((drop: Drop) => {
+    return this.chessground.playPredrop((drop: Chessground.Drop) => {
       return crazyValid.drop(this.data, drop.role, drop.key, this.data.possibleDrops)
     })
   }

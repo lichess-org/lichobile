@@ -2,6 +2,7 @@ import i18n from '../i18n'
 import { FetchError } from '../http'
 import redraw from './redraw'
 import { GameData } from '../lichess/interfaces/game'
+import { TournamentClock } from '../lichess/interfaces/tournament'
 
 export const lichessSri = Math.random().toString(36).substring(2).slice(0, 10)
 

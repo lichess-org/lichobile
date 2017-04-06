@@ -1,5 +1,7 @@
 import { User } from './user'
 
+export type GameSource = 'lobby' | 'pool' | 'friend' | 'ai' | 'api' | 'tournament' | 'position' | 'import' | 'offline'
+
 export interface Game {
   id: string
   fen: string
@@ -89,6 +91,15 @@ export interface CorrespondenceClockData {
   white: number
 }
 
+export interface ClockData {
+  black: number
+  white: number
+  emerg: number
+  running: boolean
+  initial: number
+  increment: number
+}
+
 export interface GameData {
   game: Game
   player: Player
@@ -169,6 +180,22 @@ export interface GameStep {
   crazy?: {
     pockets: Pockets
   }
+}
+
+export interface ChatMsg {
+  u: string
+  c: Color
+  t: string
+  r?: boolean
+  d?: boolean
+}
+
+export interface Opening {
+  ply?: number
+  eco: string
+  name: string
+  fen?: string
+  wikiPath?: string
 }
 
 export function isOnlineGameData(d: GameData): d is OnlineGameData {

@@ -89,6 +89,7 @@ interface Document {
 interface Window {
   cordova:Cordova;
   ga: Analytics;
+  AndroidFullScreen: any
 }
 
 // cordova/argscheck module

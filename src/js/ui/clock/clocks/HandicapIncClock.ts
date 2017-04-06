@@ -1,20 +1,20 @@
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
-import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
+
+import { Side, IChessClock } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function BronsteinClock(time, increment) {
-  const topTime = (time !== 0) ? stream(time) : stream(increment)
-  const bottomTime = (time !== 0) ? stream(time) : stream(increment)
-  const topDelay = stream(increment)
-  const bottomDelay = stream(increment)
-  const activeSide = stream(null)
-  const flagged = stream(null)
-  const isRunning = stream(false)
-  let clockInterval = null
-  let topTimestamp, bottomTimestamp
+export default function HandicapIncClock(topTimeParam: number, topIncrement: number, bottomTimeParam: number, bottomIncrement: number): IChessClock {
+  const topTime: Mithril.Stream<number> = (topTimeParam !== 0) ? stream(topTimeParam) : stream(topIncrement)
+  const bottomTime: Mithril.Stream<number> = (bottomTimeParam !== 0) ? stream(bottomTimeParam) : stream(bottomIncrement)
+  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
+  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
+  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let clockInterval: number
+  let topTimestamp: number
+  let bottomTimestamp: number
 
   function tick () {
     const now = performance.now()
@@ -22,7 +22,6 @@ export default function BronsteinClock(time, increment) {
       const elapsed = now - topTimestamp
       topTimestamp = now
       topTime(Math.max(topTime() - elapsed, 0))
-      topDelay(Math.max(topDelay() - elapsed, 0))
       if (topTime() <= 0) {
         flagged('top')
         sound.dong()
@@ -33,7 +32,6 @@ export default function BronsteinClock(time, increment) {
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
       bottomTime(Math.max(bottomTime() - elapsed, 0))
-      bottomDelay(Math.max(bottomDelay() - elapsed, 0))
       if (bottomTime() <= 0) {
         flagged('bottom')
         sound.dong()
@@ -43,7 +41,7 @@ export default function BronsteinClock(time, increment) {
     redraw()
   }
 
-  function clockHit (side) {
+  function clockHit(side: Side) {
     if (flagged()) {
       return
     }
@@ -51,25 +49,18 @@ export default function BronsteinClock(time, increment) {
 
     if (side === 'top') {
       if (activeSide() === 'top') {
-        activeSide('bottom')
-        topTime(topTime() + (increment - topDelay()))
-        topDelay(increment)
+        topTime(topTime() + topIncrement)
       }
       bottomTimestamp = performance.now()
       activeSide('bottom')
-    }
-    else {
+    } else if (side === 'bottom') {
       if (activeSide() === 'bottom') {
-        activeSide('top')
-        bottomTime(bottomTime() + (increment - bottomDelay()))
-        bottomDelay(increment)
+        bottomTime(bottomTime() + bottomIncrement)
       }
       topTimestamp = performance.now()
       activeSide('top')
     }
-    if (clockInterval) {
-      clearInterval(clockInterval)
-    }
+    clearInterval(clockInterval)
     clockInterval = setInterval(tick, CLOCK_TICK_STEP)
     isRunning(true)
     redraw()
@@ -82,15 +73,14 @@ export default function BronsteinClock(time, increment) {
     }
     else {
       isRunning(true)
-      clockInterval = setInterval(tick, CLOCK_TICK_STEP)
       if (activeSide() === 'top') {
         topTimestamp = performance.now()
       } else {
         bottomTimestamp = performance.now()
       }
+      clockInterval = setInterval(tick, CLOCK_TICK_STEP)
     }
   }
-
 
   return {
     topTime,
@@ -98,8 +88,10 @@ export default function BronsteinClock(time, increment) {
     activeSide,
     flagged,
     isRunning,
-    tick,
     clockHit,
-    startStop
+    startStop,
+    clear() {
+      clearInterval(clockInterval)
+    }
   }
 }

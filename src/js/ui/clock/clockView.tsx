@@ -1,31 +1,17 @@
 import * as helper from '../helper'
-import layout from '../layout'
 import clockSettings from './clockSettings'
 import { formatTimeInSecs } from '../../utils'
 
-export default function view() {
-  const ctrl = this
-  const body = clockBody.bind(undefined, ctrl)
-  const clockSettingsOverlay = renderClockSettingsOverlay.bind(undefined, ctrl)
+import { IChessClockCtrl } from './ChessClockCtrl'
+import { ClockType, Side, IChessClock, IStageClock } from './interfaces'
 
-  return layout.clock(body, clockSettingsOverlay)
-}
-
-function renderClockSettingsOverlay(ctrl) {
+export function renderClockSettingsOverlay(ctrl: IChessClockCtrl) {
   return [
     clockSettings.view(ctrl.clockSettingsCtrl)
   ]
 }
 
-function formatTime(type, time) {
-  if (type === 'hourglass') {
-    return formatTimeInSecs(Math.round(time))
-  } else {
-    return formatTimeInSecs(Math.floor(time))
-  }
-}
-
-function clockBody(ctrl) {
+export function clockBody(ctrl: IChessClockCtrl) {
   const clock = ctrl.clockObj()
   if (!clock) return null
   const topActive = clock.activeSide() === 'top'
@@ -65,11 +51,7 @@ function clockBody(ctrl) {
   return (
     <div className="clockContainer">
       <div key="topClockTapArea" className={topClockClass} oncreate={helper.ontouch(() => onClockTouch(ctrl, 'top'))}>
-        { clock.topMoves && clock.topMoves() !== null ?
-        <div className="clockStageInfo">
-          <span>Moves remaining: {clock.topMoves()}</span>
-        </div> : null
-        }
+        { isStageClock(clock) ? renderMoves(clock.topMoves()) : null }
         <div className="clockTapAreaContent">
           <span className={topClockTimeClass}>
             { topFlagged ? 'b' : formatTime(ctrl.clockType(), clock.topTime() / 1000) }
@@ -88,18 +70,39 @@ function clockBody(ctrl) {
             { bottomFlagged ? 'b' : formatTime(ctrl.clockType(), clock.bottomTime() / 1000) }
           </span>
         </div>
-        { clock.bottomMoves && clock.bottomMoves() !== null ?
-        <div className="clockStageInfo">
-          <span>Moves remaining: {clock.bottomMoves()}</span>
-        </div> : null
-        }
+        { isStageClock(clock) ? renderMoves(clock.bottomMoves()) : null }
       </div>
     </div>
   )
 }
 
-function onClockTouch(ctrl, side) {
+function renderMoves(moves: number | null) {
+  console.log(moves)
+  if (moves !== null) {
+    return (
+      <div className="clockStageInfo">
+        <span>Moves remaining: {moves}</span>
+      </div>
+    )
+  }
+
+  return null
+}
+
+function onClockTouch(ctrl: IChessClockCtrl, side: Side) {
   if (((ctrl.clockObj().activeSide() !== 'top') && (side === 'bottom')) || ((ctrl.clockObj().activeSide() !== 'bottom') && (side === 'top'))) {
     ctrl.clockTap(side)
   }
+}
+
+function formatTime(clockType: ClockType, time: number) {
+  if (clockType === 'hourglass') {
+    return formatTimeInSecs(Math.round(time))
+  } else {
+    return formatTimeInSecs(Math.floor(time))
+  }
+}
+
+function isStageClock(c: IChessClock | IStageClock): c is IStageClock {
+  return (c as IStageClock).topMoves !== undefined
 }

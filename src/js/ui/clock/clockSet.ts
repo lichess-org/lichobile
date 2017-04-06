@@ -8,11 +8,11 @@ import StageClock from './clocks/StageClock'
 const MILLIS = 1000
 const MINUTE_MILLIS = 60 * 1000
 
-function SimpleClock(time) {
+function SimpleClock(time: number) {
   return IncrementClock(time, 0)
 }
 
-function IncrementClock(time, increment) {
+function IncrementClock(time: number, increment: number) {
   return HandicapIncClock(time, increment, time, increment)
 }
 
@@ -48,7 +48,12 @@ export default {
   ),
 
   stage: () => StageClock(
-    settings.clock.stage.stages(),
+    settings.clock.stage.stages().map((s: { time: string, moves: string }) => {
+      return {
+        time: Number(s.time),
+        moves: s.moves !== null ? Number(s.moves) : null
+      }
+    }),
     Number(settings.clock.stage.increment()) * MILLIS
   )
 }

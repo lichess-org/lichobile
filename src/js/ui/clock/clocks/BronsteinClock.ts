@@ -1,19 +1,22 @@
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
-import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
+
+import { Side, IChessClock } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-
-export default function HourglassClock(time) {
-  const topTime = stream(time/2)
-  const bottomTime = stream(time/2)
-  const activeSide = stream(null)
-  const flagged = stream(null)
-  const isRunning = stream(false)
-  let clockInterval = null
-  let topTimestamp, bottomTimestamp
+export default function BronsteinClock(time: number, increment: number): IChessClock {
+  const topTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const bottomTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const topDelay: Mithril.Stream<number> = stream(increment)
+  const bottomDelay: Mithril.Stream<number> = stream(increment)
+  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
+  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
+  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let clockInterval: number
+  let topTimestamp: number
+  let bottomTimestamp: number
 
   function tick () {
     const now = performance.now()
@@ -21,7 +24,7 @@ export default function HourglassClock(time) {
       const elapsed = now - topTimestamp
       topTimestamp = now
       topTime(Math.max(topTime() - elapsed, 0))
-      bottomTime(time - topTime())
+      topDelay(Math.max(topDelay() - elapsed, 0))
       if (topTime() <= 0) {
         flagged('top')
         sound.dong()
@@ -32,7 +35,7 @@ export default function HourglassClock(time) {
       const elapsed = now - bottomTimestamp
       bottomTimestamp = now
       bottomTime(Math.max(bottomTime() - elapsed, 0))
-      topTime(time - bottomTime())
+      bottomDelay(Math.max(bottomDelay() - elapsed, 0))
       if (bottomTime() <= 0) {
         flagged('bottom')
         sound.dong()
@@ -42,17 +45,27 @@ export default function HourglassClock(time) {
     redraw()
   }
 
-  function clockHit (side) {
+  function clockHit(side: Side) {
     if (flagged()) {
       return
     }
     sound.clock()
 
     if (side === 'top') {
+      if (activeSide() === 'top') {
+        activeSide('bottom')
+        topTime(topTime() + (increment - topDelay()))
+        topDelay(increment)
+      }
       bottomTimestamp = performance.now()
       activeSide('bottom')
     }
     else {
+      if (activeSide() === 'bottom') {
+        activeSide('top')
+        bottomTime(bottomTime() + (increment - bottomDelay()))
+        bottomDelay(increment)
+      }
       topTimestamp = performance.now()
       activeSide('top')
     }
@@ -80,14 +93,17 @@ export default function HourglassClock(time) {
     }
   }
 
+
   return {
     topTime,
     bottomTime,
     activeSide,
     flagged,
     isRunning,
-    tick,
     clockHit,
-    startStop
+    startStop,
+    clear() {
+      clearInterval(clockInterval)
+    }
   }
 }

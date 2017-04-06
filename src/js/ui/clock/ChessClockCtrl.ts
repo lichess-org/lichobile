@@ -1,29 +1,36 @@
 import router from '../../router'
 import settings from '../../settings'
-import * as helper from '../helper'
-import * as h from 'mithril/hyperscript'
 import clockSettings from './clockSettings'
 import clockSet from './clockSet'
 import * as stream from 'mithril/stream'
 
-export default function oninit(vnode) {
+import { ClockType, IChessClock, IStageClock } from './interfaces'
 
-  helper.analyticsTrackView('Clock')
+export interface IChessClockCtrl {
+  hideStatusBar: () => void
+  startStop: () => void
+  clockSettingsCtrl: any
+  clockObj: Mithril.Stream<IChessClock | IStageClock>
+  reload: () => void
+  goHome: () => void
+  clockTap: (side: 'top' | 'bottom') => void
+  clockType: Mithril.Stream<ClockType>
+}
 
-  const clockObj = stream()
-  const clockType = stream()
+export default function ChessClockCtrl(): IChessClockCtrl {
+
+  const clockType: Mithril.Stream<ClockType> = stream(settings.clock.clockType() as ClockType)
+  const clockObj: Mithril.Stream<IChessClock> = stream(clockSet[clockType()]())
 
   function reload() {
     if (clockObj() && clockObj().isRunning() && !clockObj().flagged()) return
-    clockType(settings.clock.clockType())
-    clockObj(clockSet[settings.clock.clockType()]())
+    clockType(settings.clock.clockType() as ClockType)
+    clockObj(clockSet[clockType()]())
   }
-
-  reload()
 
   const clockSettingsCtrl = clockSettings.controller(reload, clockObj)
 
-  function clockTap (side) {
+  function clockTap(side: 'top' | 'bottom') {
     clockObj().clockHit(side)
   }
 
@@ -50,7 +57,7 @@ export default function oninit(vnode) {
   document.addEventListener('resume', hideStatusBar)
   window.addEventListener('resize', hideStatusBar)
 
-  vnode.state = {
+  return {
     hideStatusBar,
     startStop,
     clockSettingsCtrl,

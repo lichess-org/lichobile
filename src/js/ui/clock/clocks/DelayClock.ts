@@ -1,20 +1,22 @@
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
-import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
+
+import { Side, IChessClock } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 
-export default function DelayClock(time, increment) {
-  const topTime = (time !== 0) ? stream(time) : stream(increment)
-  const bottomTime = (time !== 0) ? stream(time) : stream(increment)
-  const topDelay = stream(increment)
-  const bottomDelay = stream(increment)
-  const activeSide = stream(null)
-  const flagged = stream(null)
-  const isRunning = stream(false)
-  let clockInterval = null
-  let topTimestamp, bottomTimestamp
+export default function DelayClock(time: number, increment: number): IChessClock {
+  const topTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const bottomTime: Mithril.Stream<number> = (time !== 0) ? stream(time) : stream(increment)
+  const topDelay: Mithril.Stream<number> = stream(increment)
+  const bottomDelay: Mithril.Stream<number> = stream(increment)
+  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
+  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
+  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let clockInterval: number
+  let topTimestamp: number
+  let bottomTimestamp: number
 
   function tick () {
     const now = performance.now()
@@ -49,7 +51,7 @@ export default function DelayClock(time, increment) {
     redraw()
   }
 
-  function clockHit (side) {
+  function clockHit(side: Side) {
     if (flagged()) {
       return
     }
@@ -98,9 +100,11 @@ export default function DelayClock(time, increment) {
     activeSide,
     flagged,
     isRunning,
-    tick,
     clockHit,
-    startStop
+    startStop,
+    clear() {
+      clearInterval(clockInterval)
+    }
   }
 }
 

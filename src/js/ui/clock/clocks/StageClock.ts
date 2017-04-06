@@ -1,23 +1,25 @@
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
-import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
+
+import { Side, Stage, IStageClock } from '../interfaces'
 
 const CLOCK_TICK_STEP = 100
 const MINUTE_MILLIS = 60 * 1000
 
-export default function StageClock(stages, increment) {
-  const topTime = stream(Number(stages[0].time) * MINUTE_MILLIS)
-  const bottomTime = stream(Number(stages[0].time) * MINUTE_MILLIS)
-  const topMoves = stream(Number(stages[0].moves))
-  const bottomMoves = stream(Number(stages[0].moves))
-  const topStage = stream(0)
-  const bottomStage = stream(0)
-  const activeSide = stream(null)
-  const flagged = stream(null)
-  const isRunning = stream(false)
-  let clockInterval = null
-  let topTimestamp, bottomTimestamp
+export default function StageClock(stages: Stage[], increment: number): IStageClock {
+  const topTime: Mithril.Stream<number> = stream(Number(stages[0].time) * MINUTE_MILLIS)
+  const bottomTime: Mithril.Stream<number> = stream(Number(stages[0].time) * MINUTE_MILLIS)
+  const topMoves: Mithril.Stream<number | null> = stream(Number(stages[0].moves))
+  const bottomMoves: Mithril.Stream<number | null> = stream(Number(stages[0].moves))
+  const topStage: Mithril.Stream<number> = stream(0)
+  const bottomStage: Mithril.Stream<number> = stream(0)
+  const activeSide: Mithril.Stream<Side | undefined> = stream(undefined)
+  const flagged: Mithril.Stream<Side | undefined> = stream(undefined)
+  const isRunning: Mithril.Stream<boolean> = stream(false)
+  let clockInterval: number
+  let topTimestamp: number
+  let bottomTimestamp: number
 
   function tick () {
     const now = performance.now()
@@ -44,16 +46,19 @@ export default function StageClock(stages, increment) {
     redraw()
   }
 
-  function clockHit (side) {
+  function clockHit(side: Side) {
     if (flagged()) {
       return
     }
     sound.clock()
 
+    const tm = topMoves()
+    const bm = bottomMoves()
+
     if (side === 'top') {
       if (activeSide() === 'top') {
-        if (topMoves())
-          topMoves(topMoves() - 1)
+        if (tm !== null)
+          topMoves(tm - 1)
         topTime(topTime() + increment)
         if (topMoves() === 0) {
           topStage(topStage() + 1)
@@ -69,8 +74,8 @@ export default function StageClock(stages, increment) {
     }
     else {
       if (activeSide() === 'bottom') {
-        if (bottomMoves())
-          bottomMoves(bottomMoves() - 1)
+        if (bm !== null)
+          bottomMoves(bm - 1)
         bottomTime(bottomTime() + increment)
         if (bottomMoves() === 0) {
           bottomStage(bottomStage() + 1)
@@ -114,10 +119,12 @@ export default function StageClock(stages, increment) {
     activeSide,
     flagged,
     isRunning,
-    tick,
     clockHit,
     startStop,
     topMoves,
-    bottomMoves
+    bottomMoves,
+    clear() {
+      clearInterval(clockInterval)
+    }
   }
 }

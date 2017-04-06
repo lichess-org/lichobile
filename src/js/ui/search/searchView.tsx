@@ -1,6 +1,5 @@
 import * as throttle from 'lodash/throttle'
 import * as h from 'mithril/hyperscript'
-import * as m from 'mithril'
 import router from '../../router'
 import i18n from '../../i18n'
 import { UserGameWithDate } from '../../lichess/interfaces/user'
@@ -127,7 +126,7 @@ function renderResult(ctrl: ISearchCtrl) {
       h('div.search-empty', 'No game found') :
       h.fragment({ oncreate: ctrl.onGamesLoaded }, [
         ctrl.searchState.games.map((g: UserGameWithDate, index: number) =>
-          m(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
+          h(GameItem, { key: g.id, g, index, boardTheme: ctrl.boardTheme })
         ),
         ctrl.searchState.paginator && ctrl.searchState.paginator.nextPage ?
           h('li.moreButton', {

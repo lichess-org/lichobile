@@ -87,9 +87,6 @@ function renderTournamentListItem(tournament: TournamentListItem) {
         <div className="time">{formatTime(tournament.startsAt)} <strong className="timeArrow">-</strong> {formatTime(tournament.finishesAt)}</div>
         <small className="nbUsers withIcon" data-icon="r">{tournament.nbPlayers}</small>
       </td>
-      <td className="tournamentListNav">
-        &#xf054
-      </td>
     </tr>
   )
 }

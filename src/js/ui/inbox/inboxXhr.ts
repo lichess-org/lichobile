@@ -40,3 +40,7 @@ export function newThread(username: string, subject: string, text: string) {
 export function deleteThread(id: string) {
   return fetchJSON('/inbox/' + id + '/delete', {method: 'POST'}, true)
 }
+
+export function autocomplete(term: string): Promise<Array<string>> {
+  return fetchJSON('/player/autocomplete?friend=1', { query: { term }});
+}

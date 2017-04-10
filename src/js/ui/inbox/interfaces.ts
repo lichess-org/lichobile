@@ -53,18 +53,6 @@ export interface Post {
   text: string
 }
 
-export interface ComposeAttrs {
-  userId: string
-}
-
-export interface ComposeState {
-  id: Mithril.Stream<string>
-  errors: Mithril.Stream<SendErrorResponse>
-  send: (form: HTMLFormElement) => void
-  onInput: (e: Event) => void
-  autocompleteResults: Mithril.Stream<Array<string>>
-}
-
 export interface SendErrorResponse {
   username: Array<string>
   subject: Array<string>

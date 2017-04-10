@@ -112,6 +112,7 @@ table.threadList
   height 100%
 
 #composeForm
+  position relative
   display flex
   flex-flow column nowrap
   height 100%
@@ -148,3 +149,17 @@ table.threadList
   border 1px solid lighten(bgdark, 10%)
   padding 10px
   outline-color gold
+
+.compose_autocompleteResults
+  height: calc(100% - 60px);
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  top: 50px;
+  background: black;
+  box-shadow 2px 2px 6px rgba(0,0,0,0.3)
+
+
+.view-container.light
+  .compose_autocompleteResults
+    background #eee

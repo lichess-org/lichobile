@@ -1,26 +1,29 @@
 import * as helper from '../../helper'
 import i18n from '../../../i18n'
-import { ComposeState } from '../interfaces'
 import redraw from '../../../utils/redraw'
 
-export function composeBody(ctrl: ComposeState) {
+import { IComposeCtrl } from './ComposeCtrl'
+
+export function composeBody(ctrl: IComposeCtrl) {
   return (
     <div className="composeWrapper">
       <form id="composeForm"
-      onsubmit={function(e: Event) {
+      onsubmit={(e: Event) => {
         e.preventDefault()
         return ctrl.send(e.target as HTMLFormElement)
       }}>
         {ctrl.id() ? recipientWithName(ctrl) : recipientWithoutName(ctrl)}
-        <ul id="autocompleteResults" className="">
-        {ctrl.autocompleteResults().map(u => {
-          return (
-            <li className="list_item nav" key={u} oncreate={helper.ontapY(() => recipientSelected(u, ctrl))}>
-            {u}
-            </li>
-          )
-        })}
-        </ul>
+        {ctrl.autocompleteResults().length ?
+          <ul className="compose_autocompleteResults native_scroller">
+            {ctrl.autocompleteResults().map(u => {
+              return (
+                <li className="list_item nav" key={u} oncreate={helper.ontapY(() => recipientSelected(u, ctrl))}>
+                {u}
+                </li>
+              )
+            })}
+          </ul> : null
+        }
         {(ctrl.errors() && ctrl.errors().username) ? renderError('recipientError', ctrl.errors().username[0]) : null}
 
         <input id="subject" key="subject" type="text" className="composeInput"
@@ -40,34 +43,34 @@ export function composeBody(ctrl: ComposeState) {
   )
 }
 
-function recipientWithName(ctrl: ComposeState) {
+function recipientWithName(ctrl: IComposeCtrl) {
   return (
     <input id="recipient" key="recipient" type="text" className="composeInput"
-    placeholder={i18n('recipient')}
-    autocapitalize="off"
-    autocomplete="off"
-    value={ctrl.id()}
-    oninput={ctrl.onInput}
-    onblur={() => {
-      ctrl.autocompleteResults([])
-      redraw()
-    }}
+      placeholder={i18n('recipient')}
+      autocapitalize="off"
+      autocomplete="off"
+      value={ctrl.id()}
+      oninput={ctrl.onInput}
+      onblur={() => {
+        ctrl.autocompleteResults([])
+        redraw()
+      }}
     />
   )
 }
 
-function recipientWithoutName(ctrl: ComposeState) {
+function recipientWithoutName(ctrl: IComposeCtrl) {
   return (
     <input id="recipient" key="recipient" type="text" className="composeInput"
-    placeholder={i18n('recipient')}
-    autocapitalize="off"
-    autocomplete="off"
-    oncreate={helper.autofocus}
-    oninput={ctrl.onInput}
-    onblur={() => {
-      ctrl.autocompleteResults([])
-      redraw()
-    }}
+      placeholder={i18n('recipient')}
+      autocapitalize="off"
+      autocomplete="off"
+      oncreate={helper.autofocus}
+      oninput={ctrl.onInput}
+      onblur={() => {
+        ctrl.autocompleteResults([])
+        redraw()
+      }}
     />
   )
 }
@@ -80,7 +83,7 @@ function renderError(divKey: string, errorMessage: string) {
   )
 }
 
-function recipientSelected(user: string, ctrl: ComposeState) {
+function recipientSelected(user: string, ctrl: IComposeCtrl) {
   ctrl.autocompleteResults([])
   const recipient = document.getElementById('recipient')
   const subject = document.getElementById('subject')

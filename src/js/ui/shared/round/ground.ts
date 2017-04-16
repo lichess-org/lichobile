@@ -9,15 +9,15 @@ import { boardOrientation } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 
 function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
+  const lastStep = data.steps[data.steps.length - 1]
   const lastMove = data.game.lastMove ?
     chessFormat.uciToMove(data.game.lastMove) :
     (
       data.game.variant.key === 'crazyhouse' &&
-      data.steps.length > 0 &&
-      data.steps[data.steps.length - 1].uci !== undefined
+      lastStep &&
+      lastStep.uci !== null
     ) ?
-      // bad inference here
-      chessFormat.uciTolastDrop(data.steps[data.steps.length - 1].uci!) :
+      chessFormat.uciTolastDrop(lastStep.uci) :
       null
 
   return {

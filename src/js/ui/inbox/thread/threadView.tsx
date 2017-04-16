@@ -55,7 +55,7 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
         {userStatus(post.sender)}
         <span className="arrow" data-icon="H" />
         {userStatus(post.receiver)}
-        &nbsp;–&nbsp
+        &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
       </div>
       <div className="text">{post.text}</div>

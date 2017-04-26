@@ -1,7 +1,9 @@
+import * as h from 'mithril/hyperscript'
 import * as helper from '../../helper'
 import { header as headerWidget, backButton, userStatus } from '../../shared/common'
 import layout from '../../layout'
 import i18n from '../../../i18n'
+import { escapeHtml } from '../../../utils'
 import redraw from '../../../utils/redraw'
 import { ThreadState, Post, ThreadAttrs } from '../interfaces'
 
@@ -58,7 +60,9 @@ function renderPost(post: Post, index: number, posts: Array<Post>) {
         &nbsp;–&nbsp;
         {postDateFormat(post.createdAt)}
       </div>
-      <div className="text">{post.text}</div>
+      <div className="text">
+        {h.trust(escapeHtml(post.text).replace(/\n/g, '<br>'))}
+      </div>
     </div>
   )
 }

@@ -5,7 +5,7 @@ import i18n from '../../../i18n'
 import storage from '../../../storage'
 import session from '../../../session'
 import * as gameApi from '../../../lichess/game'
-import { OnlineGameData, ChatMsg } from '../../../lichess/interfaces/game'
+import { OnlineGameData, ChatMsg, Player } from '../../../lichess/interfaces/game'
 import router from '../../../router'
 import socket from '../../../socket'
 import { closeIcon } from '../../shared/icons'
@@ -127,28 +127,8 @@ export function chatView(ctrl: Chat) {
         onupdate: ({ dom }: Mithril.DOMNode) => scrollChatToBottom(dom as HTMLElement)
       }, [
         h('ul.chat_messages', ctrl.selectLines().map((msg: ChatMsg, i: number, all: ChatMsg[]) => {
-
-          const lichessTalking = msg.u === 'lichess'
-          const playerTalking = msg.c ? msg.c === player.color :
-            player.user && msg.u === player.user.username
-
-          let closeBalloon = true
-          let next = all[i + 1]
-          let nextTalking
-          if (next) {
-            nextTalking = next.c ? next.c === player.color :
-            player.user && next.u === player.user.username
-          }
-          if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking
-
-          return h('li.chat_msg.allow_select', {
-            className: helper.classSet({
-              system: lichessTalking,
-              player: !!playerTalking,
-              opponent: !lichessTalking && !playerTalking,
-              'close_balloon': closeBalloon
-            })
-          }, msg.t)
+          if (ctrl.root.data.player.spectator) return spectatorChatRender(msg, i, all)
+          else return playerChatRender(player, msg, i, all)
         }))
       ]),
       h('form.chat_form', {
@@ -201,6 +181,52 @@ export function chatView(ctrl: Chat) {
       ])
     ])
   ])
+}
+
+function playerChatRender(player: Player, msg: ChatMsg, i: number, all: ChatMsg[]) {
+  const lichessTalking = msg.u === 'lichess'
+  const playerTalking = msg.c ? msg.c === player.color :
+  player.user && msg.u === player.user.username
+
+  let closeBalloon = true
+  let next = all[i + 1]
+  let nextTalking
+  if (next) {
+    nextTalking = next.c ? next.c === player.color :
+    player.user && next.u === player.user.username
+  }
+  if (nextTalking !== undefined) closeBalloon = nextTalking !== playerTalking
+
+  return h('li.chat_msg.allow_select', {
+    className: helper.classSet({
+      system: lichessTalking,
+      player: !!playerTalking,
+      opponent: !lichessTalking && !playerTalking,
+      'close_balloon': closeBalloon
+    })
+  }, msg.t)
+}
+
+function spectatorChatRender(msg: ChatMsg, i: number, all: ChatMsg[]) {
+  const lichessTalking = msg.u === 'lichess'
+  const meTalking = msg.u && (msg.u === session.getUserId())
+
+  let closeBalloon = true
+  let next = all[i + 1]
+  let nextTalking
+  if (next) {
+    nextTalking = next.u && (next.u === session.getUserId())
+  }
+  if (nextTalking !== undefined) closeBalloon = nextTalking !== meTalking
+
+  return h('li.chat_msg.allow_select', {
+    className: helper.classSet({
+      system: lichessTalking,
+      player: !!meTalking,
+      opponent: !lichessTalking && !meTalking,
+      'close_balloon': closeBalloon
+    })
+  }, (meTalking || lichessTalking) ? msg.t : (msg.u + ': ' + msg.t))
 }
 
 function scrollChatToBottom(el: HTMLElement) {

@@ -1,7 +1,6 @@
 import * as Zanimo from 'zanimo'
 import redraw from '../../utils/redraw'
 import router from '../../router'
-import settings from '../../settings'
 import * as utils from '../../utils'
 import ButtonHandler from './button'
 import * as h from 'mithril/hyperscript'
@@ -349,22 +348,6 @@ export function variantReminder(el: HTMLElement, icon: string): void {
       }, 600)
     }
   }, 800)
-}
-
-
-// allow user to opt out of track analytics
-// only log if setting has it enabled
-export function analyticsTrackView(view: string) {
-  const enabled = settings.general.analytics()
-  if (enabled)
-    window.ga.trackView(view)
-}
-
-export function analyticsTrackEvent(category: string, action: string) {
-  const enabled = settings.general.analytics()
-  if (enabled) {
-    window.ga.trackEvent(category, action)
-  }
 }
 
 export function autofocus(vnode: Mithril.DOMNode) {

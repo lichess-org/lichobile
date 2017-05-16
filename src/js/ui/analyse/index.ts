@@ -42,7 +42,6 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
     const shouldGoBack = gameId !== undefined || fenArg !== undefined
 
     if (source === 'online' && gameId) {
-      helper.analyticsTrackView('Analysis (online game)')
       const now = performance.now()
       gameXhr(gameId, orientation)
       .then(cfg => {
@@ -58,7 +57,6 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         redraw()
       })
     } else if (source === 'offline' && gameId === 'otb') {
-      helper.analyticsTrackView('Analysis (offline otb)')
       setTimeout(() => {
         const savedOtbGame = getCurrentOTBGame()
         const otbData = savedOtbGame && getAnalyseData(savedOtbGame)
@@ -71,7 +69,6 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         }
       }, 400)
     } else if (source === 'offline' && gameId === 'ai') {
-      helper.analyticsTrackView('Analysis (offline ai)')
       setTimeout(() => {
         const savedAiGame = getCurrentAIGame()
         const aiData = savedAiGame && getAnalyseData(savedAiGame)
@@ -96,7 +93,6 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         router.set(url, true)
         redraw()
       } else {
-        helper.analyticsTrackView('Analysis (empty)')
         this.ctrl = new AnalyseCtrl(makeDefaultData(variant, fenArg), source, orientation, shouldGoBack, ply)
         redraw()
       }

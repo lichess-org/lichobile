@@ -19,7 +19,6 @@ const UserGames: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewSlideIn,
 
   oninit(vnode) {
-    helper.analyticsTrackView('User games list')
     socket.createDefault()
 
     this.ctrl = UserGamesCtrl(vnode.attrs.id, vnode.attrs.filter)

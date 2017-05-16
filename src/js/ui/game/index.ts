@@ -42,17 +42,6 @@ const GameScreen: Mithril.Component<Attrs, State> = {
           router.set('/')
         }
         else {
-
-          if (gameData.player.spectator) {
-            helper.analyticsTrackView('Online Game (spectator)')
-          } else {
-            helper.analyticsTrackView('Online Game (player)')
-            if (gameApi.isPlayerPlaying(data)) {
-              helper.analyticsTrackEvent('Online Game', `Variant ${data.game.variant.key}`)
-              helper.analyticsTrackEvent('Online Game', `Speed ${data.game.speed}`)
-            }
-          }
-
           if (gameApi.isPlayerPlaying(data) &&
           gameApi.nbMoves(data, data.player.color) === 0) {
             sound.dong()

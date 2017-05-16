@@ -26,8 +26,6 @@ const PlayersScreen: Mithril.Component<{}, State> = {
   oninit(vnode) {
     socket.createDefault()
 
-    helper.analyticsTrackView('Players')
-
     const isSearchOpen = stream(false)
     const searchResults: Mithril.Stream<string[]> = stream([])
     const players: Mithril.Stream<User[]> = stream([])
@@ -81,7 +79,6 @@ const PlayersScreen: Mithril.Component<{}, State> = {
       }, 250),
       closeSearch,
       goSearch() {
-        helper.analyticsTrackView('Player search')
         router.backbutton.stack.push(closeSearch)
         isSearchOpen(true)
       },

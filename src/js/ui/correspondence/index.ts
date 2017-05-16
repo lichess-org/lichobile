@@ -35,8 +35,6 @@ const CorrespondenceScreen: Mithril.Component<Attrs, State> = {
     const selectedTab: Mithril.Stream<string> = stream(vnode.attrs.tab || 'public')
     const sendingChallenges: Mithril.Stream<Challenge[]> = stream(getSendingCorres())
 
-    helper.analyticsTrackView('Correspondence')
-
     socket.createLobby(reload, {
       redirect: socket.redirectToGame,
       reload_seeks: () => reload(),

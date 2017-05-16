@@ -101,7 +101,6 @@ export default {
       board: localstorageprop('settings.theme.board', 'brown'),
       piece: localstorageprop('settings.theme.piece', 'cburnett')
     },
-    analytics: localstorageprop('settings.analytics', true),
     vibrateOnGameEvents: localstorageprop('settings.vibrateOnGameEvents', false),
     notifications: {
       allow: localstorageprop('settings.notifications', true),

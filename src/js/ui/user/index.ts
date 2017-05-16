@@ -14,7 +14,6 @@ interface State {
 
 const UserScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
-    helper.analyticsTrackView('User Profile')
     socket.createDefault()
 
     this.user = userCtrl(attrs.id)

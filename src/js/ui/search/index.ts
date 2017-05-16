@@ -19,8 +19,6 @@ const SearchScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit({ attrs }) {
-    helper.analyticsTrackView('Advanced search')
-
     this.ctrl = SearchCtrl(<Partial<SearchQuery>>attrs)
   },
 

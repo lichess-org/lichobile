@@ -18,8 +18,6 @@ const FollowersScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit(vnode) {
-    helper.analyticsTrackView('User followers')
-
     this.ctrl = FollowersCtrl(vnode.attrs.id)
   },
   view() {

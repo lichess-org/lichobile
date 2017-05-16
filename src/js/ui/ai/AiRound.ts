@@ -24,7 +24,6 @@ import Replay from '../shared/offlineRound/Replay'
 
 import actions, { AiActionsCtrl } from './actions'
 import engineCtrl, { EngineInterface } from './engine'
-import * as helper from '../helper'
 import newGameMenu, { NewAiGameCtrl } from './newAiGame'
 
 interface InitPayload {
@@ -120,8 +119,6 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     if (setupFen && !specialFenVariants.includes(variant)) {
       payload.fen = setupFen
     }
-
-    helper.analyticsTrackEvent('Offline AI Game', `New game ${variant}`)
 
     chess.init(payload)
     .then((data: chess.InitResponse) => {

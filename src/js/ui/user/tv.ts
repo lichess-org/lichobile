@@ -18,8 +18,6 @@ interface State {
 
 const UserTv: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
-    helper.analyticsTrackView('TV')
-
     const userId = vnode.attrs.id
     const onRedirect = () => router.set(`/@/${userId}/tv`, true)
 

@@ -4,7 +4,6 @@ import redraw from '../../../utils/redraw'
 import router from '../../../router'
 import * as utils from '../../../utils'
 import * as xhr from '../tournamentXhr'
-import * as helper from '../../helper'
 import faq from '../faq'
 import playerInfo from '../playerInfo'
 import { TournamentAttrs, TournamentState, FeaturedGameUpdate  } from '../interfaces'
@@ -12,8 +11,6 @@ import { Tournament } from '../../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream'
 
 export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentState>) {
-  helper.analyticsTrackView('Tournament details')
-
   const id = vnode.attrs.id
 
   const tournament = stream<Tournament>()

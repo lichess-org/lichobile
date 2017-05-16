@@ -1,6 +1,5 @@
 import * as stream from 'mithril/stream'
 import redraw from '../../../utils/redraw'
-import * as helper from '../../helper'
 import * as debounce from 'lodash/debounce'
 import router from '../../../router'
 import explorerConfig from './explorerConfig'
@@ -28,7 +27,6 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
 
   function open() {
     router.backbutton.stack.push(close)
-    helper.analyticsTrackView('Analysis Explorer')
     enabled(true)
   }
 

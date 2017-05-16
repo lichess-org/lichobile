@@ -58,7 +58,6 @@ function close(fromBB?: string) {
 function startAIGame() {
   return xhr.newAiGame(fromPositionFen)
   .then(function(data) {
-    helper.analyticsTrackEvent('Online AI', `New game ${data.game.variant.key}`)
     router.set('/game' + data.url.round)
   })
   .catch(utils.handleXhrError)

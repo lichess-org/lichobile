@@ -20,7 +20,6 @@ import { OtbRoundInterface, OtbVM, PromotingInterface } from '../shared/round'
 import Replay from '../shared/offlineRound/Replay'
 
 import actions from './actions'
-import * as helper from '../helper'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
 
 interface InitPayload {
@@ -104,8 +103,6 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     if (setupFen && !specialFenVariants.includes(variant)) {
       payload.fen = setupFen
     }
-
-    helper.analyticsTrackEvent('Offline OTB Game', `New game ${variant}`)
 
     chess.init(payload)
     .then((data: chess.InitResponse) => {

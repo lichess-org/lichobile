@@ -45,8 +45,6 @@ function doChallenge() {
   return challengeXhr(userId!, setupFen)
   .then(data => {
 
-    helper.analyticsTrackEvent('Challenge', 'Sent')
-
     if (session.isConnected() && (
       data.challenge.timeControl.type === 'correspondence' ||
       data.challenge.timeControl.type === 'unlimited')) {

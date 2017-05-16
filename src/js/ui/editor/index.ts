@@ -15,8 +15,6 @@ const EditorScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
     socket.createDefault()
 
-    helper.analyticsTrackView('Board Editor')
-
     this.editor = new Editor(attrs.fen)
   },
   oncreate: helper.viewFadeIn,

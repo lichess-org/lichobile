@@ -67,10 +67,6 @@ function main() {
   window.cordova.plugins.Keyboard.disableScroll(true)
   window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false)
 
-  if (window.lichess.gaId) {
-    window.ga.startTrackerWithId(window.lichess.gaId)
-  }
-
   if (window.lichess.mode === 'release' && window.lichess.sentryDSN) {
     Raven.config(window.lichess.sentryDSN, {
       release: window.AppVersion ? window.AppVersion.version : 'snapshot-dev'

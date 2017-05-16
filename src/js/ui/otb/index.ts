@@ -20,8 +20,6 @@ interface State {
 
 const OtbScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
-    helper.analyticsTrackView('Offline On The Board')
-
     socket.createDefault()
 
     const saved = getCurrentOTBGame()

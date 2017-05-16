@@ -17,7 +17,6 @@ import socket from '../../socket'
 
 export default function ctrl(vnode) {
 
-  helper.analyticsTrackView('Puzzle')
   socket.createDefault()
 
   this.data = null

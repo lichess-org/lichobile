@@ -19,8 +19,6 @@ interface State {
 
 const AiScreen: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
-    helper.analyticsTrackView('Offline AI')
-
     socket.createDefault()
 
     const saved = getCurrentAIGame()

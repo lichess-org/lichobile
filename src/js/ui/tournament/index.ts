@@ -23,8 +23,6 @@ const TournamentListScreen: Mithril.Component<Attrs, TournamentListState> = {
   oncreate: helper.viewFadeIn,
 
   oninit({ attrs }) {
-    helper.analyticsTrackView('Tournament List')
-
     socket.createDefault()
 
     this.tournaments = stream<TournamentLists>()

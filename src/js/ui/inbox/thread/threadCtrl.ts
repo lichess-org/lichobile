@@ -8,8 +8,6 @@ import router from '../../../router'
 import * as stream from 'mithril/stream'
 
 export default function oninit(vnode: Mithril.Vnode<ThreadAttrs, ThreadState>): void {
-  helper.analyticsTrackView('Thread')
-
   socket.createDefault()
 
   const id = stream<string>(vnode.attrs.id)

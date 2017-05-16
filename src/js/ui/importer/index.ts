@@ -21,8 +21,6 @@ export interface State {
 
 const ImporterScreen: Mithril.Component<{}, State> = {
   oninit(vnode) {
-    helper.analyticsTrackView('Import game')
-
     socket.createDefault()
 
     const importing = stream(false)

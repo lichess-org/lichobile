@@ -144,7 +144,6 @@ function joinGame(g: NowPlayingGame) {
 function acceptChallenge(id: string) {
   return xhr.acceptChallenge(id)
   .then(data => {
-    helper.analyticsTrackEvent('Challenge', 'Accepted')
     router.set('/game' + data.url.round)
   })
   .then(() => challengesApi.remove(id))
@@ -154,7 +153,6 @@ function acceptChallenge(id: string) {
 function declineChallenge(id: string) {
   return xhr.declineChallenge(id)
   .then(() => {
-    helper.analyticsTrackEvent('Challenge', 'Declined')
     challengesApi.remove(id)
   })
 }

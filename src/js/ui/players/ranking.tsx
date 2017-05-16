@@ -22,8 +22,6 @@ const RankingScreen: Mithril.Component<{}, State> = {
 
   oninit(vnode) {
 
-    helper.analyticsTrackView('Leaderboard')
-
     socket.createDefault()
 
     const ranking: Mithril.Stream<Rankings | undefined> = stream(undefined)

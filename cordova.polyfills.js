@@ -16,14 +16,6 @@
     return Promise.resolve();
   };
 
-  // analytics
-  window.ga = {
-    startTrackerWithId: noop,
-    trackException: noop,
-    trackView: noop,
-    trackEvent: noop
-  };
-
   // push
   function oneSignalInit() {
     return OneSignalConf;

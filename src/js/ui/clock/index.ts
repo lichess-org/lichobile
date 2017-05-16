@@ -11,8 +11,6 @@ const ChessClockScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit() {
-    helper.analyticsTrackView('Clock')
-
     this.ctrl = ChessClockCtrl()
   },
 

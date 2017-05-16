@@ -22,8 +22,6 @@ interface State {
 
 const TV: Mithril.Component<TVAttrs, State> = {
   oninit(vnode) {
-    helper.analyticsTrackView('TV')
-
     const onChannelChange = () => router.set('/tv', true)
     const onFeatured = () => router.set('/tv', true)
 

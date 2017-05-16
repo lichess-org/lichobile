@@ -18,8 +18,6 @@ interface State {
 const ComposeScreen: Mithril.Component<Attrs, State> = {
 
   oninit({ attrs }) {
-    helper.analyticsTrackView('Compose')
-
     socket.createDefault()
 
     this.ctrl = ComposeCtrl(attrs.userId)

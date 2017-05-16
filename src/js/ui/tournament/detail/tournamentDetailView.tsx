@@ -157,7 +157,7 @@ function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
       }
       <div className="tournamentCreatorInfo">
         { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
-        &nbsp;•&nbsp
+        &nbsp;•&nbsp;
         { window.moment(data.startsAt).calendar() }
       </div>
       { data.position ?

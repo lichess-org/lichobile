@@ -40,8 +40,8 @@ export function body(ctrl: HomeState) {
           <button className="fatButton" oncreate={helper.ontapY(newGameForm.openRealTime)}>{i18n('createAGame')}</button>
         </section>
         {renderDailyPuzzle(ctrl, isPortrait)}
-        {renderWeekLeaders(ctrl)}
         {renderTimeline(ctrl)}
+        {renderWeekLeaders(ctrl)}
       </div>
     </div>
   )

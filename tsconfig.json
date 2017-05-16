@@ -3,12 +3,10 @@
     "allowJs": true,
     "target": "es2015",
     "module": "commonjs",
-    "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": false,
-    "noUnusedLocals": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
+    "strict": true,
     "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "jsx": "preserve"
   },
   "include": [

@@ -111,10 +111,16 @@ h3.fullname
   background headerBgDark
   box-shadow none
   position relative
-  label:after
-    color labelText
+  label
+    &:after
+      position absolute
+      left 10px
+      right initial
+      color labelText
+      font-size 1em
   select
     color lighten(labelText, 50%)
+    padding-left 32px
 
 .scroller.games
   height calc(100% - 40px)
@@ -250,9 +256,6 @@ h3.fullname
   opacity 0.7
   > .analysis
     font-size 0.8em
-
-#filterGames
-  padding-left 15px
 
 .variantPerfBody
   width 100%

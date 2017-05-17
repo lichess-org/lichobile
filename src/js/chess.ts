@@ -103,6 +103,7 @@ export interface PgnDumpRequest {
   pgnMoves: Array<string>
   white?: string
   black?: string
+  date?: string
 }
 
 export interface PgnDumpResponse {

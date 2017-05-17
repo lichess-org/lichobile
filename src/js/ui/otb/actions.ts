@@ -53,7 +53,6 @@ export default {
         return isOpen
       },
       sharePGN: function() {
-        // TODO prompt for names
         root.replay.pgn('White', 'Black')
         .then((data: PgnDumpResponse) =>
           window.plugins.socialsharing.share(data.pgn)

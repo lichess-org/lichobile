@@ -44,7 +44,7 @@ export default {
           }
         }, [
           h('input[type=text]', {
-            placeholder: i18n('pasteThePgnStringHere')
+            placeholder: 'Paste FEN position'
           }),
           h('button[data-icon=E].withIcon', i18n('loadPosition'))
         ])

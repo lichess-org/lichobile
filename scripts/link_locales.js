@@ -5,7 +5,9 @@ var dest = 'www/locale';
 
 function recreateLink() {
   // might have broken link
-  fs.unlinkSync(dest);
+  if (fs.existsSync(dest)) {
+    fs.unlinkSync(dest);
+  }
   fs.symlinkSync('../' + source, dest);
 }
 

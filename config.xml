@@ -7,8 +7,6 @@
     <access origin="https://*.lichess.org" />
     <access origin="https://sentry.io" />
     <access origin="https://veloce.github.io" />
-    <engine name="ios" spec="~4.3.1" />
-    <engine name="android" spec="~6.1.0" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
@@ -81,32 +79,6 @@
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
-    <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
-    <plugin name="cordova-plugin-device" spec="~1.1.4" />
-    <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />
-    <plugin name="cordova-plugin-globalization" spec="~1.0.5" />
-    <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
-    <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
-    <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
-    <plugin name="cordova-plugin-whitelist" spec="~1.3.1" />
-    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
-    <plugin name="cordova-plugin-customurlscheme" spec="~4.1.3">
-        <variable name="URL_SCHEME" value="lichess" />
-    </plugin>
-    <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
-    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <plugin name="cordova-plugin-insomnia" spec="~4.2.0" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.3" />
-    <plugin name="cordova-plugin-vibration" spec="~2.1.3" />
-    <plugin name="cordova-plugin-fullscreen" spec="~1.1.0" />
-    <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
-    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
-        <variable name="XWALK_MODE" value="embedded" />
-        <variable name="XWALK_MULTIPLEAPK" value="true" />
-    </plugin>
-    <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
-    <plugin name="cordova-plugin-stockfish" spec="~1.3.0" />
     <universal-links>
         <host name="*.lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />
@@ -144,5 +116,33 @@
             <path event="other" url="*" />
         </host>
     </universal-links>
+    <engine name="android" spec="~6.2.2" />
+    <engine name="ios" spec="~4.3.1" />
+    <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
+    <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
+        <variable name="XWALK_MODE" value="embedded" />
+        <variable name="XWALK_MULTIPLEAPK" value="true" />
+    </plugin>
+    <plugin name="cordova-plugin-customurlscheme" spec="~4.1.3">
+        <variable name="URL_SCHEME" value="lichess" />
+    </plugin>
+    <plugin name="cordova-plugin-device" spec="~1.1.4" />
+    <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />
     <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
+    <plugin name="cordova-plugin-fullscreen" spec="~1.1.0" />
+    <plugin name="cordova-plugin-globalization" spec="~1.0.5" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
+    <plugin name="cordova-plugin-insomnia" spec="~4.2.0" />
+    <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
+    <plugin name="cordova-plugin-stockfish" spec="~1.3.0" />
+    <plugin name="cordova-plugin-vibration" spec="~2.1.3" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.1" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.3" />
+    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
+    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
+    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
 </widget>

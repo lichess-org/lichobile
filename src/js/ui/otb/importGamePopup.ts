@@ -1,4 +1,4 @@
-import * as throttle from 'lodash/throttle'
+import * as debounce from 'lodash/debounce'
 import router from '../../router'
 import settings from '../../settings'
 import i18n from '../../i18n'
@@ -65,7 +65,7 @@ export default {
               h('label', i18n('white')),
               h('input[type=text]', {
                 value: white(),
-                oninput: throttle((e: Event) => {
+                oninput: debounce((e: Event) => {
                   const val = (e.target as HTMLInputElement).value.trim()
                   white(val)
                 }, 300),
@@ -79,7 +79,7 @@ export default {
               h('label', i18n('black')),
               h('input[type=text]', {
                 value: black(),
-                oninput: throttle((e: Event) => {
+                oninput: debounce((e: Event) => {
                   const val = (e.target as HTMLInputElement).value.trim()
                   black(val)
                 }, 300),

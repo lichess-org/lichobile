@@ -47,10 +47,12 @@ function renderForm() {
           </div>
         </div>
       </fieldset>
-      <button key="join" className="newGameButton" type="submit">
-        <span className="fa fa-check" />
-        {i18n('join')}
-      </button>
+      <div className="popupActionWrapper">
+        <button key="join" className="popupAction" type="submit">
+          <span className="fa fa-check" />
+          {i18n('join')}
+        </button>
+      </div>
     </form>
   )
 }

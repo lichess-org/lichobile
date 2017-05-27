@@ -87,12 +87,14 @@ export default {
                   </div> : null
                 }
               </div>
-              <button className="newGameButton" data-icon="E"
-                oncreate={helper.ontap(() =>
-                  ctrl.root.startNewGame(settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen))
-                }>
-                {i18n('play')}
-              </button>
+              <div className="popupActionWrapper">
+                <button className="popupAction" data-icon="E"
+                  oncreate={helper.ontap(() =>
+                    ctrl.root.startNewGame(settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen))
+                  }>
+                  {i18n('play')}
+                </button>
+              </div>
             </div>
           )
         },

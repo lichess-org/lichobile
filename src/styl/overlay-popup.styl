@@ -109,3 +109,20 @@
     .action
       padding 15px 20px
 
+.popupActionWrapper
+  width 100%
+  text-align center
+  margin 10px 0
+  > button.popupAction
+    background transparent
+    width initial
+    display initial
+    border-radius 0
+    font-size 0.90em
+    text-transform uppercase
+    &.active, &:active
+      background transparent
+      box-shadow 0px 0px 2px 1px rgba(0,0,0,0.1) inset
+      &:before
+        color green
+

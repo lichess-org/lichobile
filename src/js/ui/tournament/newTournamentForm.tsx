@@ -96,10 +96,12 @@ function renderForm(ctrl: TournamentListState) {
           </div>
         </div>
       </fieldset>
-      <button key="create" className="newGameButton" type="submit">
-        <span className="fa fa-check" />
-        {i18n('createANewTournament')}
-      </button>
+      <div className="popupActionWrapper">
+        <button key="create" className="popupAction" type="submit">
+          <span className="fa fa-check" />
+          {i18n('createANewTournament')}
+        </button>
+      </div>
     </form>
   )
 }

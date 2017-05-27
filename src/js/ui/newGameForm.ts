@@ -249,6 +249,8 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
   }, [
     h('fieldset', generalFieldset),
     h('fieldset', timeFieldset),
-    h('button[data-icon=E][type=submit].newGameButton', i18n('createAGame'))
+    h('div.popupActionWrapper', [
+      h('button[data-icon=E][type=submit].popupAction', i18n('createAGame'))
+    ])
   ])
 }

@@ -90,10 +90,10 @@ export default {
               })
             ])
           ]),
-          h('div.button-wrapper', [
+          h('div.popupActionWrapper', [
             ctrl.importer.importing() ?
               h('div', [h('span.fa.fa-hourglass-half'), h('span', 'Importing...')]) :
-              h('button.withIcon[data-icon=E]', {
+              h('button.popupAction.withIcon[data-icon=E]', {
                 oncreate: helper.ontap(
                   () => {
                     const white = settings.otb.whitePlayer

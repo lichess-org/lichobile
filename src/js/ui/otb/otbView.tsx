@@ -1,12 +1,15 @@
 import * as h from 'mithril/hyperscript'
+import router from '../../router'
+import * as utils from '../../utils'
 import chessground from '../../chessground'
 import i18n from '../../i18n'
 import Board from '../shared/Board'
-import { renderAntagonist, renderGameActionsBar, renderReplayTable } from '../shared/offlineRound/view'
+import { renderAntagonist, renderReplayTable, renderBackwardButton, renderForwardButton } from '../shared/offlineRound/view'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import * as helper from '../helper'
 import actions from './actions'
 import newGameMenu from './newOtbGame'
+import importGamePopup from './importGamePopup'
 import settings from '../../settings'
 import OtbRound from './OtbRound'
 
@@ -14,6 +17,7 @@ export function overlay(ctrl: OtbRound) {
   return [
     actions.view(ctrl.actions),
     newGameMenu.view(ctrl.newGameMenu),
+    importGamePopup.view(ctrl.importGamePopup),
     renderPromotion(ctrl)
   ]
 }
@@ -50,7 +54,7 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
       renderAntagonist(ctrl, opponentName, material[ctrl.data.opponent.color], 'opponent', isPortrait, flip, pieceTheme),
       board,
       renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme),
-      renderGameActionsBar(ctrl, 'otb')
+      renderGameActionsBar(ctrl)
     ])
   else
     return h.fragment({ key: orientationKey }, [
@@ -61,7 +65,45 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
           {replayTable}
           {renderAntagonist(ctrl, playerName, material[ctrl.data.player.color], 'player', isPortrait, flip, pieceTheme)}
         </section>
-        {renderGameActionsBar(ctrl, 'otb')}
+        {renderGameActionsBar(ctrl)}
       </section>
     ])
+}
+
+function renderGameActionsBar(ctrl: OtbRound) {
+  return (
+    <section key="actionsBar" className="actions_bar">
+      <button className="action_bar_button fa fa-ellipsis-h"
+        oncreate={helper.ontap(ctrl.actions.open)}
+      />
+      <button className="action_bar_button" data-icon="U"
+        oncreate={helper.ontap(
+          ctrl.newGameMenu.open,
+          () => window.plugins.toast.show(i18n('createAGame'), 'short', 'bottom')
+        )}
+      />
+      <button data-icon="A" className="action_bar_button"
+        oncreate={helper.ontap(
+          () => router.set(`/analyse/offline/otb/${ctrl.data.player.color}`),
+          () => window.plugins.toast.show(i18n('analysis'), 'short', 'bottom')
+        )}
+      />
+      <button className="fa fa-share-alt action_bar_button"
+        oncreate={helper.ontap(
+          ctrl.sharePGN,
+          () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
+        )}
+      />
+      {utils.hasNetwork() ?
+        <button className="fa fa-cloud-upload action_bar_button"
+          oncreate={helper.ontap(
+            ctrl.importGamePopup.open,
+            () => window.plugins.toast.show(i18n('Import game to lichess'), 'short', 'bottom')
+          )}
+        /> : null
+      }
+      {renderBackwardButton(ctrl)}
+      {renderForwardButton(ctrl)}
+    </section>
+  )
 }

@@ -86,7 +86,7 @@ export function renderGameActionsBar(ctrl: OfflineRoundInterface, type: OfflineG
       />
       <button className="fa fa-share-alt action_bar_button"
         oncreate={helper.ontap(
-          ctrl.actions.sharePGN,
+          ctrl.sharePGN,
           () => window.plugins.toast.show(i18n('sharePGN'), 'short', 'bottom')
         )}
       />
@@ -164,7 +164,7 @@ export function renderReplayTable(ctrl: Replay) {
   )
 }
 
-function renderBackwardButton(ctrl: OfflineRoundInterface) {
+export function renderBackwardButton(ctrl: OfflineRoundInterface) {
   return h('button.action_bar_button.fa.fa-step-backward', {
     oncreate: helper.ontap(ctrl.jumpPrev, ctrl.jumpFirst),
     className: helper.classSet({
@@ -173,7 +173,7 @@ function renderBackwardButton(ctrl: OfflineRoundInterface) {
   })
 }
 
-function renderForwardButton(ctrl: OfflineRoundInterface) {
+export function renderForwardButton(ctrl: OfflineRoundInterface) {
   return h('button.action_bar_button.fa.fa-step-forward', {
     oncreate: helper.ontap(ctrl.jumpNext, ctrl.jumpLast),
     className: helper.classSet({

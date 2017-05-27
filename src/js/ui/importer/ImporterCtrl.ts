@@ -10,7 +10,7 @@ import { OnlineGameData } from '../../lichess/interfaces/game'
 import * as stream from 'mithril/stream'
 
 export interface IImporterCtrl {
-  importGame(e: Event): void
+  importGame(pgn: string): void
   importing: Mithril.Stream<boolean>
 }
 
@@ -38,10 +38,7 @@ export default function ImporterCtrl(): IImporterCtrl {
   window.addEventListener('native.keyboardshow', helper.onKeyboardShow)
 
   return {
-    importGame(e: Event) {
-      const target = e.target as HTMLFormElement
-      const pgn = target[0].value
-      if (!pgn) return
+    importGame(pgn: string) {
       importing(true)
       redraw()
       submitOnline(pgn, settings.importer.analyse())

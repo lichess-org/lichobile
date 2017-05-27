@@ -161,7 +161,9 @@ export default {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
     variant: localstorageprop('settings.otb.variant', 'standard'),
-    availableVariants: offlineAvailableVariants
+    availableVariants: offlineAvailableVariants,
+    whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
+    blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black')
   },
 
   clock: {

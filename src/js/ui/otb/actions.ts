@@ -7,7 +7,6 @@ import { renderClaimDrawButton, renderEndedGameStatus } from '../shared/offlineR
 import ground from '../shared/offlineRound/ground'
 import popupWidget from '../shared/popup'
 import router from '../../router'
-import { PgnDumpResponse } from '../../chess'
 
 import OtbRound from './OtbRound'
 
@@ -15,7 +14,6 @@ export interface OtbActionsCtrl {
   open: () => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
-  sharePGN: () => void
   root: OtbRound
 }
 
@@ -51,12 +49,6 @@ export default {
       close: close,
       isOpen: function() {
         return isOpen
-      },
-      sharePGN: function() {
-        root.replay.pgn('White', 'Black')
-        .then((data: PgnDumpResponse) =>
-          window.plugins.socialsharing.share(data.pgn)
-        )
       },
       root: root
     }

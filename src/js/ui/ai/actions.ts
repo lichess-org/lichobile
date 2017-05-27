@@ -3,7 +3,6 @@ import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import * as gameApi from '../../lichess/game'
 import settings from '../../settings'
-import { PgnDumpResponse } from '../../chess'
 
 import * as helper from '../helper'
 import formWidgets from '../shared/form'
@@ -16,7 +15,6 @@ export interface AiActionsCtrl {
   open: () => void
   close: (fromBB?: string) => void
   isOpen: () => boolean
-  sharePGN: () => void
   root: AiRoundInterface
 }
 
@@ -70,12 +68,6 @@ export default {
       close: close,
       isOpen() {
         return isOpen
-      },
-      sharePGN() {
-        root.replay.pgn(root.white(), root.black())
-        .then((data: PgnDumpResponse) =>
-          window.plugins.socialsharing.share(data.pgn)
-        )
       },
       root: root
     }

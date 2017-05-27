@@ -38,7 +38,9 @@ function renderBody(ctrl: IImporterCtrl) {
     h('form', {
       onsubmit: (e: Event) => {
         e.preventDefault()
-        ctrl.importGame(e)
+        const target = e.target as HTMLFormElement
+        const pgn: string = target[0].value
+        if (pgn) ctrl.importGame(pgn)
       }
     }, [
       h('label', i18n('pasteThePgnStringHere') + ' :'),

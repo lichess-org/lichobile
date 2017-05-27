@@ -147,6 +147,13 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     })
   }
 
+  public sharePGN = () => {
+    this.replay.pgn(this.white(), this.black())
+    .then((data: chess.PgnDumpResponse) =>
+      window.plugins.socialsharing.share(data.pgn)
+    )
+  }
+
   public playerName = (): string => {
     return this.data.player.username!
   }

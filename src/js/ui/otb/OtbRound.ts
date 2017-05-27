@@ -21,6 +21,7 @@ import Replay from '../shared/offlineRound/Replay'
 
 import actions from './actions'
 import newGameMenu, { NewOtbGameCtrl } from './newOtbGame'
+import importGamePopup, { Controller as ImportGameController } from './importGamePopup'
 
 interface InitPayload {
   variant: VariantKey
@@ -33,6 +34,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public data: OfflineGameData
   public actions: any
   public newGameMenu: NewOtbGameCtrl
+  public importGamePopup: ImportGameController
   public chessground: Chessground.Controller
   public replay: Replay
   public vm: OtbVM
@@ -40,6 +42,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public constructor(saved?: StoredOfflineGame | null, setupFen?: string) {
     this.setupFen = setupFen
     this.actions = actions.controller(this)
+    this.importGamePopup = importGamePopup.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
 
     this.vm = {
@@ -132,6 +135,13 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
       situations: this.replay.situations,
       ply: this.replay.ply
     })
+  }
+
+  public sharePGN = () => {
+    this.replay.pgn('White', 'Black')
+    .then((data: chess.PgnDumpResponse) =>
+      window.plugins.socialsharing.share(data.pgn)
+    )
   }
 
   private onPromotion = (orig: Pos, dest: Pos, role: Role) => {

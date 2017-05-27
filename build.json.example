@@ -1,0 +1,11 @@
+{
+    "android": {
+        "release": {
+            "keystore": "org.lichess.keystore",
+            "storePassword": "password",
+            "alias": "alias",
+            "password" : "password",
+            "keystoreType": ""
+        }
+    }
+}

@@ -21,7 +21,7 @@ export interface Controller {
 export default {
 
   controller(root: OtbRound) {
-    let isOpen = true
+    let isOpen = false
     function open() {
       router.backbutton.stack.push(close)
       isOpen = true

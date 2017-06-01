@@ -10,7 +10,7 @@ function localstorageprop<T>(key: string, initialValue: T): SettingsProp<T> {
   return function() {
     if (arguments.length) store.set(key, arguments[0])
     const ret = store.get<T>(key)
-    return (ret !== null) ? ret : initialValue
+    return (ret !== null && ret !== undefined) ? ret : initialValue
   }
 }
 

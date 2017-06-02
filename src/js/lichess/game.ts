@@ -139,7 +139,7 @@ export function result(data: GameData) {
 export function time(data: GameData | MiniBoardGameObj | UserGame) {
   if (data.clock) {
     const min = secondsToMinutes(data.clock.initial)
-    const t = min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString()
+    const t = min === 0.25 ? '¼' : min === 0.5 ? '½' : min === 0.75 ? '¾' : min.toString()
     return t + '+' + data.clock.increment
   }
   else if (data.correspondence) {

@@ -277,3 +277,11 @@ export function escapeHtml(str: string) {
     return str
   }
 }
+
+export function displayTime(time: string): string {
+  if (time === '0.75') return '¾'
+  if (time === '0.5') return '½'
+  if (time === '0.25') return '¼'
+
+  return time
+}

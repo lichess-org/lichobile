@@ -28,22 +28,18 @@ const Board: Mithril.Component<Attrs, State> = {
 
     chessgroundCtrl.setBounds(bounds)
 
-    function boardOnCreate({ dom }: Mithril.DOMNode) {
+    this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
       if (chessgroundCtrl) {
         chessground.render(dom, chessgroundCtrl)
       }
     }
 
-    function boardOnRemove() {
+    this.boardOnRemove = () => {
       if (chessgroundCtrl) chessgroundCtrl.unload()
     }
 
-    vnode.state = {
-      pieceTheme: settings.general.theme.piece(),
-      boardTheme: settings.general.theme.board(),
-      boardOnCreate,
-      boardOnRemove
-    }
+    this.pieceTheme = settings.general.theme.piece()
+    this.boardTheme = settings.general.theme.board()
   },
 
   view(vnode) {

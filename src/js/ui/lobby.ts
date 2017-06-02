@@ -84,9 +84,10 @@ function renderCustomSetup() {
   const variant = variantConf && variantConf[0] || 'Standard'
   const timeMode = conf.timeMode()
   const mode = conf.mode() === '0' ? i18n('casual') : i18n('rated')
+  const minutes = conf.time()
   let time: string
   if (timeMode === '1') {
-    time = conf.time() + '+' + conf.increment()
+    time = utils.displayTime(minutes) + '+' + conf.increment()
   } else if (timeMode === '2') {
     time = i18n('nbDays', conf.days())
   } else {

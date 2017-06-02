@@ -14,18 +14,23 @@ import { Pool } from '../lichess/interfaces'
 
 let isOpen = false
 
+const humanSetup = settings.gameSetup.human
+
+// cached tab preset
+let tabPreset: string = humanSetup.preset()
+
 export default {
   open,
 
   close,
 
   openRealTime() {
-    settings.gameSetup.human.timeMode('1')
+    humanSetup.timeMode('1')
     open()
   },
 
   openCorrespondence() {
-    settings.gameSetup.human.timeMode('2')
+    humanSetup.timeMode('2')
     open()
   },
 
@@ -52,9 +57,9 @@ function close(fromBB?: string) {
 }
 
 function goSeek() {
-  const conf = settings.gameSetup.human
+  const conf = humanSetup
   // anon. can't enter pool: we'll just create a similar hook
-  if (conf.preset() === 'quick' && !session.isConnected()) {
+  if (tabPreset === 'quick' && !session.isConnected()) {
     const pool = xhr.cachedPools.find(p => p.id  === conf.pool())
     if (pool) {
       conf.time(String(pool.lim))
@@ -64,7 +69,7 @@ function goSeek() {
     }
   }
 
-  if (conf.preset() === 'quick' || conf.timeMode() === '1') {
+  if (tabPreset === 'quick' || conf.timeMode() === '1') {
     close()
     lobby.startSeeking()
   }
@@ -77,8 +82,13 @@ function goSeek() {
 
 function renderContent() {
 
-  const conf = settings.gameSetup.human
-  const preset = conf.preset()
+  const conf = humanSetup
+
+  const handleTabTap = (e: Event) => utils.autoredraw(() => {
+    const val = (e.target as any).value
+    tabPreset = val
+    conf.preset(val)
+  })
 
   return h('div', [
     h('div.newGame-preset_switch', [
@@ -86,18 +96,18 @@ function renderContent() {
         'Quick game',
         'preset',
         'quick',
-        preset === 'quick',
-        e => utils.autoredraw(() => conf.preset((e.target as any).value))
+        tabPreset === 'quick',
+        handleTabTap
       )),
       h('div.nice-radio', formWidgets.renderRadio(
         'Custom',
         'preset',
         'custom',
-        preset === 'custom',
-        e => utils.autoredraw(() => conf.preset((e.target as any).value))
+        tabPreset === 'custom',
+        handleTabTap
       ))
     ]),
-    preset === 'quick' ?
+    tabPreset === 'quick' ?
     renderQuickSetup() :
     renderCustomSetup(
       'human',
@@ -114,15 +124,25 @@ function renderContent() {
 
 function renderQuickSetup() {
   return h('div.newGame-pools', { key: 'quickSetup' }, xhr.cachedPools.length ?
-    xhr.cachedPools.map(p => renderPool(p)) : spinner.getVdom()
+    xhr.cachedPools
+      .map(p => renderPool(p))
+      .concat(h('div.newGame-pool', {
+          oncreate: helper.ontap(() => {
+            tabPreset = 'custom'
+            humanSetup.preset('custom')
+          })
+        }, [
+          h('div.newGame-custom', 'Custom')
+        ])
+      ) : spinner.getVdom()
   )
 }
 
 function renderPool(p: Pool) {
   return h('div.newGame-pool', {
-    key: 'pools',
+    key: 'pool-' + p.id,
     oncreate: helper.ontap(() => {
-      settings.gameSetup.human.pool(p.id)
+      humanSetup.pool(p.id)
       close()
       goSeek()
     })
@@ -139,10 +159,10 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
 
   // be sure to set real time clock if disconnected
   if (!session.isConnected()) {
-    settings.gameSetup.human.timeMode('1')
+    humanSetup.timeMode('1')
   }
   if (timeMode === '0') {
-    settings.gameSetup.human.mode('0')
+    humanSetup.mode('0')
   }
 
   // if mode is rated only allow random color
@@ -194,11 +214,11 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
         h('div.title', i18n('ratingRange')),
         h('div.select_input.inline',
           formWidgets.renderSelect('Min', formName + 'rating_min',
-            settings.gameSetup.human.availableRatingRanges.min, settingsObj.ratingMin, false)
+            humanSetup.availableRatingRanges.min, settingsObj.ratingMin, false)
         ),
         h('div.select_input.inline',
           formWidgets.renderSelect('Max', formName + 'rating_max',
-            settings.gameSetup.human.availableRatingRanges.max, settingsObj.ratingMax, false)
+            humanSetup.availableRatingRanges.max, settingsObj.ratingMax, false)
         )
       ])
     )

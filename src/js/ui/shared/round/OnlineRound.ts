@@ -60,6 +60,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public subTitle: string
   public tv: string
 
+  private lastDrawOfferAtPly: number
   private tournamentCountInterval: number
   private tournamentClockTime: number
   private clockIntervId: number
@@ -217,6 +218,18 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.chessground.set({
       orientation: boardOrientation(this.data, this.vm.flip)
     })
+  }
+
+
+  public canOfferDraw = () => {
+    return gameApi.drawable(this.data) && (this.lastDrawOfferAtPly || -99) < (this.vm.ply - 20)
+  }
+
+  public offerDraw = () => {
+    if (this.canOfferDraw()) {
+      this.lastDrawOfferAtPly = this.vm.ply
+      socket.send('draw-yes', null)
+    }
   }
 
   public replaying() {

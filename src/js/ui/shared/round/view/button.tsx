@@ -15,12 +15,12 @@ import { getPGN } from '../roundXhr'
 import OnlineRound from '../OnlineRound'
 
 export default {
-  standard: function(ctrl: OnlineRound, condition: (data: OnlineGameData) => boolean, icon: string, hint: string, socketMsg: string) {
+  standard(ctrl: OnlineRound, condition: (data: OnlineGameData) => boolean, icon: string, hint: string, socketMsg: string, onTap?: () => void) {
     return condition(ctrl.data) && hasNetwork() ? h('button', {
       key: socketMsg,
       className: socketMsg,
       'data-icon': icon,
-      oncreate: helper.ontap(() => { socket.send(socketMsg) })
+      oncreate: helper.ontap(onTap ? onTap : () => { socket.send(socketMsg) })
     }, i18n(hint)) : null
   },
   shareLink: function(ctrl: OnlineRound) {
@@ -124,9 +124,6 @@ export default {
       key: 'cancelDrawOfferZone'
     }, [
       h('div.notice', i18n('drawOfferSent')),
-      h('button[data-icon=L]', {
-        oncreate: helper.ontap(() => { socket.send('draw-no') })
-      }, i18n('cancel'))
     ])
     return null
   },

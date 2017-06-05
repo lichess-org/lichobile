@@ -80,10 +80,13 @@ export function handleXhrError(error: Error | FetchError): void {
           message += ` ${data}`
         }
         else if (data.global && data.global.constructor === Array) {
-          message += ` ${data.global[0]}`
+          message += ` ${i18n(data.global[0])}`
+        }
+        else if (data.error && data.error.constructor === Array) {
+          message += ` ${i18n(data.error[0])}`
         }
         else if (typeof data.error === 'string') {
-          message += ` ${data.error}`
+          message += ` ${i18n(data.error)}`
         }
         window.plugins.toast.show(message, 'short', 'center')
       })

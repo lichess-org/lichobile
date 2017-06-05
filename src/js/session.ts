@@ -181,26 +181,23 @@ function login(username: string, password: string) {
 
 function logout() {
   return fetchJSON('/logout', undefined, true)
-  .then(function() {
+  .then(() => {
     session = undefined
     friendsApi.clear()
     redraw()
   })
 }
 
-function signup(username: string, email: string, password: string): Promise<Session> {
+function signup(username: string, email: string, password: string): Promise<{}> {
   return fetchJSON('/signup', {
     method: 'POST',
     body: JSON.stringify({
       username,
       email,
-      password
+      password,
+      'can-confirm': true
     })
   }, true)
-  .then((data: Session) => {
-    session = data
-    return session
-  })
 }
 
 function rememberLogin(): Promise<Session> {

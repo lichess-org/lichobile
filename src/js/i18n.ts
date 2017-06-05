@@ -57,7 +57,7 @@ const untranslated: StringMap = {
   soundAndNotifications: 'Sound and notifications',
   usernameStartNoNumber: 'The username must not start with a number',
   usernameUnacceptable: 'This username is not acceptable',
-  usernameInvalid: 'The username contain invalid characters',
+  usernameInvalid: 'The username contains invalid characters',
   offline: 'Offline'
 }
 

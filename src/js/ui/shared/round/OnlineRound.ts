@@ -13,7 +13,7 @@ import vibrate from '../../../vibrate'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
 import { OnlineGameData, GameStep, Player } from '../../../lichess/interfaces/game'
-import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop } from '../../../lichess/interfaces/move'
+import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 import { gameTitle } from '../../shared/common'
 
@@ -60,6 +60,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public subTitle: string
   public tv: string
 
+  private lastMoveMillis: number
   private lastDrawOfferAtPly: number
   private tournamentCountInterval: number
   private tournamentClockTime: number
@@ -337,6 +338,24 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.correspondenceClock.tick(this.data.game.player)
   }
 
+  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest) {
+    const millis = this.lastMoveMillis !== undefined ?
+      performance.now() - this.lastMoveMillis : undefined
+
+    const opts = {
+      ackable: true,
+      withLag: !!this.clock,
+      millis
+    }
+
+    if (isMoveRequest(moveOrDropReq)) {
+      socket.send('move', moveOrDropReq, opts)
+    }
+    else if (isDropRequest(moveOrDropReq)) {
+      socket.send('drop', moveOrDropReq, opts)
+    }
+  }
+
   public sendMove(orig: Pos, dest: Pos, prom?: Role, isPremove: boolean = false) {
     const move = {
       u: orig + dest
@@ -352,10 +371,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      socket.send('move', move, {
-        ackable: true,
-        withLag: !!this.clock
-      })
+      this.socketSendMoveOrDrop(move)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
       }
@@ -373,10 +389,9 @@ export default class OnlineRound implements OnlineRoundInterface {
         this.vm.dropToSubmit = drop
         redraw()
       }, this.data.pref.animationDuration || 0)
-    } else socket.send('drop', drop, {
-      ackable: true,
-      withLag: !!this.clock
-    })
+    } else {
+      this.socketSendMoveOrDrop(drop)
+    }
   }
 
   public cancelMove = (fromBB?: string) => {
@@ -389,13 +404,9 @@ export default class OnlineRound implements OnlineRoundInterface {
   public submitMove = (v: boolean) => {
     if (v && (this.vm.moveToSubmit || this.vm.dropToSubmit)) {
       if (this.vm.moveToSubmit) {
-        socket.send('move', this.vm.moveToSubmit, {
-          ackable: true
-        })
+        this.socketSendMoveOrDrop(this.vm.moveToSubmit)
       } else if (this.vm.dropToSubmit) {
-        socket.send('drop', this.vm.dropToSubmit, {
-          ackable: true
-        })
+        this.socketSendMoveOrDrop(this.vm.dropToSubmit)
       }
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
@@ -409,6 +420,10 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public apiMove(o: MoveOrDrop) {
     const d = this.data
+    const playing = gameApi.isPlayerPlaying(d)
+
+    if (playing) this.lastMoveMillis = performance.now()
+
     d.game.turns = o.ply
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black'
     const playedColor: Color = o.ply % 2 === 0 ? 'black' : 'white'
@@ -473,7 +488,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       const pieces = Object.assign({}, enpassantPieces, castlePieces)
       const newConf = {
         turnColor: d.game.player,
-        dests: gameApi.isPlayerPlaying(d) ?
+        dests: playing ?
           gameApi.parsePossibleMoves(d.possibleMoves) : <DestsMap>{},
         check: o.check
       }

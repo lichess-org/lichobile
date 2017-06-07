@@ -98,7 +98,12 @@ StrongSocket.prototype = {
     var self = this;
     var data = d || {},
     options = o || {};
-    if (options.withLag) d.l = Math.round(self.averageLag);
+    if (options.withLag) {
+      d.l = Math.round(self.averageLag);
+    }
+    if (options.millis !== undefined) {
+      d.s = Math.floor(options.millis * 0.1).toString(36);
+    }
     if (options.ackable) {
       self.ackableMessages.push({
         t: t,

@@ -65,3 +65,11 @@ export function isMove(o: MoveOrDrop): o is Move {
 export function isDrop(o: MoveOrDrop): o is Drop {
   return (<Drop>o).isDrop
 }
+
+export function isMoveRequest(r: MoveRequest | DropRequest): r is MoveRequest {
+  return (<MoveRequest>r).u !== undefined
+}
+
+export function isDropRequest(r: MoveRequest | DropRequest): r is DropRequest {
+  return (<DropRequest>r).role !== undefined
+}

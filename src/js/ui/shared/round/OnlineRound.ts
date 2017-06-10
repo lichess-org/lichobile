@@ -124,8 +124,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.clock = this.data.clock ? new ClockCtrl(
       this.data.clock,
-      this.data.player.spectator ? noop :
-        throttle(() => socket.send('outoftime'), 500),
+      this.data.player.spectator ? noop : this.outoftime,
       this.data.player.spectator ? undefined : this.data.player.color
     ) : null
 
@@ -328,10 +327,13 @@ export default class OnlineRound implements OnlineRoundInterface {
   private makeCorrespondenceClock() {
     if (this.data.correspondence && !this.correspondenceClock)
       this.correspondenceClock = new CorresClockCtrl(
-        this.data.correspondence,
-        () => socket.send('outoftime')
+        this.data.correspondence, this.outoftime
       )
   }
+
+  private outoftime = throttle(() => {
+    socket.send('flag', this.data.game.player)
+  }, 500)
 
   private correspondenceClockTick = () => {
     if (this.correspondenceClock && gameApi.playable(this.data))

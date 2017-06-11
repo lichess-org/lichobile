@@ -74,7 +74,9 @@ export function renderSigninBox() {
 }
 
 function drawChart(ctrl) {
-  const data = ctrl.data.user.history.map((x, i) => [i + 1, x])
+  const history = Array.from(ctrl.data.user.history);
+  history.push(ctrl.data.user.rating);
+  const data = history.map((x, i) => [i + 1, x])
   const graph = select('#training-graph')
   const margin = {top: 0, right: 20, bottom: 15, left: 35}
   const width = +graph.attr('width') - margin.left - margin.right

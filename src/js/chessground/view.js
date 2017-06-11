@@ -29,6 +29,14 @@ export default function renderBoard(ctrl) {
           bindEvents(ctrl, vnode.dom)
         }
 
+        if (!ctrl.data.viewOnly && ctrl.data.draggable.showGhost) {
+          const ghost = document.createElement('piece')
+          ghost.className = 'ghost'
+          ghost.style.transform = util.translateAway
+          ctrl.data.element.parentNode.appendChild(ghost)
+          ctrl.data.domElements.ghost = ghost
+        }
+
         if (ctrl.data.coordinates) {
           makeCoords(ctrl.data.element.parentNode, !!ctrl.data.symmetricCoordinates)
           if (ctrl.data.symmetricCoordinates) {

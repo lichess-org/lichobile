@@ -24,10 +24,13 @@ function renderSquareTarget(data, cur) {
   return sq
 }
 
-function removeSquareTarget(data) {
+function removeDragElements(data) {
   if (data.element) {
     var sqs = data.element.getElementsByClassName('cg-square-target')
     while (sqs[0]) sqs[0].parentNode.removeChild(sqs[0])
+  }
+  if (data.domElements.ghost) {
+    data.domElements.ghost.style.transform = util.translateAway
   }
 }
 
@@ -159,6 +162,14 @@ function move(data, e) {
         cur.draggingPiece.classList.add('magnified')
       }
       cur.draggingPiece.cgDragging = true
+      const ghost = data.domElements.ghost
+      if (ghost) {
+        ghost.className = `ghost ${cur.piece.color} ${cur.piece.role}`
+        const translation = util.posToTranslate(
+          util.key2pos(cur.orig), data.orientation === 'white', data.bounds
+        )
+        ghost.style.transform = util.translate(translation)
+      }
       processDrag(data)
     }
   }
@@ -181,10 +192,10 @@ function end(data, e) {
     return
   }
   if (!orig) {
-    removeSquareTarget(data)
+    removeDragElements(data)
     return
   }
-  removeSquareTarget(data)
+  removeDragElements(data)
   board.unsetPremove(data)
   board.unsetPredrop(data)
   if (draggable.current.started) {
@@ -203,7 +214,7 @@ function end(data, e) {
 }
 
 function cancel(data) {
-  removeSquareTarget(data)
+  removeDragElements(data)
   if (data.draggable.current.orig) {
     data.draggable.current = {}
     board.selectSquare(data, null)

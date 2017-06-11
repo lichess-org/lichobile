@@ -152,6 +152,7 @@ export default {
   transform,
   translate: translate,
   translate3d: translate3d,
+  translateAway: translate([-99999, -99999]),
   contains2: contains2,
   containsX: containsX,
   distance: distance,

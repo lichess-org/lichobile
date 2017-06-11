@@ -18,6 +18,7 @@ export default function(cfg) {
     renderRAF: null, // function that rerenders the board using requestAnimationFrame
     element: null, // DOM element of the board, required for drag piece centering
     bounds: null, // board bounds
+    domElements: {},
     squareEls: {}, // square elements
     autoCastle: false, // immediately complete the castle by moving the rook after king move
     viewOnly: false, // don't bind events: the user will never be able to move pieces around
@@ -83,6 +84,7 @@ export default function(cfg) {
       magnified: true, // whether dragging piece is magnified
       centerPiece: false, // when magnified, center the piece under finger (otherwise shifted up)
       preventDefault: true, // whether to prevent default on move and end
+      showGhost: true,
       /*{ // current
        *  orig: "a2", // orig key of dragging piece
        *  rel: [100, 170] // x, y of the piece at original position

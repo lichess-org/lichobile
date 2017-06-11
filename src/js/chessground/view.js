@@ -29,6 +29,14 @@ export default function renderBoard(ctrl) {
           bindEvents(ctrl, vnode.dom)
         }
 
+        if (!ctrl.data.viewOnly) {
+          const shadow = document.createElement('div')
+          shadow.className = 'cg-square-target'
+          shadow.style.transform = util.translate3dAway
+          ctrl.data.element.parentNode.appendChild(shadow)
+          ctrl.data.domElements.shadow = shadow
+        }
+
         if (!ctrl.data.viewOnly && ctrl.data.draggable.showGhost) {
           const ghost = document.createElement('piece')
           ghost.className = 'ghost'

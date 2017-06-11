@@ -2,32 +2,9 @@ import board from './board'
 import util from './util'
 import hold from './hold'
 
-function renderSquareTarget(data, cur) {
-  var pos = util.key2pos(cur.over),
-    width = cur.bounds.width,
-    targetWidth = width / 4,
-    squareWidth = width / 8,
-    asWhite = data.orientation === 'white'
-  var sq = document.createElement('div')
-  var style = sq.style
-  var vector = [
-    (asWhite ? pos[0] - 1 : 8 - pos[0]) * squareWidth,
-    (asWhite ? 8 - pos[1] : pos[1] - 1) * squareWidth
-  ]
-  style.width = targetWidth + 'px'
-  style.height = targetWidth + 'px'
-  style.left = (-0.5 * squareWidth) + 'px'
-  style.top = (-0.5 * squareWidth) + 'px'
-  style.transform = util.translate(vector)
-  sq.className = 'cg-square-target'
-  data.element.appendChild(sq)
-  return sq
-}
-
 function removeDragElements(data) {
-  if (data.element) {
-    var sqs = data.element.getElementsByClassName('cg-square-target')
-    while (sqs[0]) sqs[0].parentNode.removeChild(sqs[0])
+  if (data.domElements.shadow) {
+    data.domElements.shadow.style.transform = util.translate3dAway
   }
   if (data.domElements.ghost) {
     data.domElements.ghost.style.transform = util.translateAway
@@ -96,8 +73,8 @@ function processDrag(data) {
   if (data.draggable.current.scheduledAnimationFrame) return
   data.draggable.current.scheduledAnimationFrame = true
   requestAnimationFrame(function() {
-    var cur = data.draggable.current
-    var asWhite = data.orientation === 'white'
+    const cur = data.draggable.current
+    const asWhite = data.orientation === 'white'
     cur.scheduledAnimationFrame = false
     if (cur.orig) {
       // if moving piece is gone, cancel
@@ -118,12 +95,6 @@ function processDrag(data) {
         ]
 
         cur.over = board.getKeyAtDomPos(data, cur.epos, cur.bounds)
-        if (cur.over && !cur.squareTarget) {
-          cur.squareTarget = renderSquareTarget(data, cur)
-        } else if (!cur.over && cur.squareTarget) {
-          if (cur.squareTarget.parentNode) cur.squareTarget.parentNode.removeChild(cur.squareTarget)
-          cur.squareTarget = null
-        }
 
         // move piece
         var translate = util.posToTranslate(cur.origPos, asWhite, data.bounds)
@@ -132,15 +103,19 @@ function processDrag(data) {
         cur.draggingPiece.style.transform = util.transform(data, cur.piece.color, util.translate3d(translate))
 
         // move square target
-        if (cur.over && cur.squareTarget && cur.over !== cur.prevTarget) {
-          var squareWidth = cur.bounds.width / 8,
-          stPos = util.key2pos(cur.over),
-          vector = [
-            (asWhite ? stPos[0] - 1 : 8 - stPos[0]) * squareWidth,
-            (asWhite ? 8 - stPos[1] : stPos[1] - 1) * squareWidth
-          ]
-          cur.squareTarget.style.transform = util.translate3d(vector)
-          cur.prevTarget = cur.over
+        const shadow = data.domElements.shadow
+        if (shadow) {
+          if (cur.over && cur.over !== cur.prevTarget) {
+            const sqSize = data.bounds.width / 8
+            const pos =  util.key2pos(cur.over)
+            const translate = util.posToTranslate(pos, asWhite, data.bounds)
+            shadow.style.transform = util.translate3d([
+              translate[0] - sqSize / 2,
+              translate[1] - sqSize / 2
+            ])
+          } else if (!cur.over) {
+            shadow.style.transform = util.translate3dAway
+          }
         }
       }
       processDrag(data)

@@ -45,7 +45,7 @@ const untranslated: StringMap = {
   submitMove: 'Submit move',
   returnToHome: 'Return to home',
   enableLocalComputerEvaluation: 'Enable local computer evaluation',
-  localEvalCaution: 'Caution: it may be slow, and intensive usage will drain more battery.',
+  localEvalCaution: 'Caution: intensive usage will drain battery.',
   showBestMove: 'Show computer best move',
   followers: 'Followers',
   userAcceptsYourChallenge: '%s accepts your challenge!',

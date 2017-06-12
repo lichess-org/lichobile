@@ -3,7 +3,7 @@ import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import i18n from '../../i18n'
 import settings from '../../settings'
-import { specialFenVariants } from '../../lichess/variant'
+import getVariant, { specialFenVariants } from '../../lichess/variant'
 import formWidgets from '../shared/form'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import popupWidget from '../shared/popup'
@@ -54,20 +54,34 @@ export default {
         undefined,
         function() {
           const availVariants = settings.ai.availableVariants
+          const setupVariant = ctrl.root.vm.setupVariant
           const variants = ctrl.root.vm.setupFen ?
-            availVariants.filter(i => !specialFenVariants.includes(i[1])) :
+            availVariants.filter(i => !specialFenVariants.has(i[1])) :
             availVariants
-          if (ctrl.root.vm.setupFen && specialFenVariants.includes(settings.ai.variant())) {
-            settings.ai.variant('standard')
+
+          const hasSpecialSetup = setupVariant && specialFenVariants.has(setupVariant)
+          if (setupVariant) {
+            settings.ai.variant(setupVariant)
           }
+
           return (
             <div>
               <div className="action">
                 {opponentSelector()}
                 {sideSelector()}
-                <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', variants, settings.ai.variant)}
-                </div>
+                {hasSpecialSetup ?
+                  <div className="select_input disabled">
+                    <label for="variant">{i18n('variant')}</label>
+                    <select disabled id="variant">
+                      <option value={setupVariant} selected>
+                        {getVariant(setupVariant || 'standard' as VariantKey).name}
+                      </option>
+                    </select>
+                  </div> :
+                  <div className="select_input">
+                    {formWidgets.renderSelect('variant', 'variant', variants, settings.ai.variant)}
+                  </div>
+                }
                 { ctrl.root.vm.setupFen ?
                   <div className="from_position_wrapper">
                     <p>{i18n('fromPosition')}</p>
@@ -89,9 +103,9 @@ export default {
               </div>
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
-                  oncreate={helper.ontap(() =>
-                    ctrl.root.startNewGame(settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen))
-                  }>
+                  oncreate={helper.ontap(() => {
+                    ctrl.root.startNewGame(setupVariant || settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen)
+                  })}>
                   {i18n('play')}
                 </button>
               </div>

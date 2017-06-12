@@ -9,7 +9,6 @@ import gameStatusApi from '../../lichess/status'
 import { playerFromFen } from '../../utils/fen'
 import { oppositeColor, aiName, getRandomArbitrary } from '../../utils'
 import { StoredOfflineGame, setCurrentAIGame } from '../../utils/offlineGames'
-import { specialFenVariants } from '../../lichess/variant'
 import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game'
 import redraw from '../../utils/redraw'
 
@@ -41,7 +40,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
 
   public engine: EngineInterface
 
-  public constructor(saved?: StoredOfflineGame | null, setupFen?: string) {
+  public constructor(saved?: StoredOfflineGame | null, setupFen?: string, setupVariant?: VariantKey) {
     this.engine = engineCtrl(this)
     this.actions = actions.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
@@ -49,6 +48,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     this.vm = {
       engineSearching: false,
       setupFen,
+      setupVariant,
       savedFen: saved ? saved.data.game.fen : undefined
     }
 
@@ -116,7 +116,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     const payload: InitPayload = {
       variant
     }
-    if (setupFen && !specialFenVariants.includes(variant)) {
+    if (setupFen) {
       payload.fen = setupFen
     }
 

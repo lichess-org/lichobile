@@ -139,7 +139,7 @@ export default class Editor {
 
   private updateHref = debounce(() => {
     const newFen = this.computeFen()
-    if (validateFen(newFen).valid === true) {
+    if (validateFen(newFen)) {
       const path = `/editor/${encodeURIComponent(newFen)}`
       try {
         window.history.replaceState(window.history.state, '', '?=' + path)
@@ -174,7 +174,7 @@ export default class Editor {
     this.chessground.getFen() + ' ' + this.fenMetadatas()
 
   public loadNewFen = (newFen: string) => {
-    if (validateFen(newFen).valid === true)
+    if (validateFen(newFen))
       router.set(`/editor/${encodeURIComponent(newFen)}`, true)
     else
       window.plugins.toast.show('Invalid FEN', 'short', 'center')

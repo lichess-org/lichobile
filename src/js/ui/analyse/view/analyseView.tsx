@@ -294,7 +294,7 @@ function renderVariantSelector(ctrl: AnalyseCtrl) {
       </label>
       <select id="variant_selector" value={variant} onchange={(e: Event) => {
         const val = (e.target as HTMLSelectElement).value
-        settings.analyse.syntheticVariant(val)
+        settings.analyse.syntheticVariant(val as VariantKey)
         router.set(`/analyse/variant/${val}`)
       }}>
         {availVariants.map(v => {

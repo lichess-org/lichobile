@@ -18,7 +18,7 @@ function tupleOf(x: number) {
   return [x.toString(), x.toString()]
 }
 
-const offlineAvailableVariants = [
+const offlineAvailableVariants: [string, VariantKey][] = [
   ['Standard', 'standard'],
   ['Crazyhouse', 'crazyhouse'],
   ['Chess960', 'chess960'],
@@ -126,7 +126,7 @@ export default {
       'kingOfTheHill', 'threeCheck', 'atomic', 'horde', 'racingKings', 'crazyhouse'
     ],
     availableVariants: offlineAvailableVariants,
-    syntheticVariant: localstorageprop('settings.analyse.syntheticVariant', 'standard'),
+    syntheticVariant: localstorageprop<VariantKey>('settings.analyse.syntheticVariant', 'standard'),
     enableCeval: localstorageprop('settings.analyse.enableCeval', false),
     showBestMove: localstorageprop('settings.analyse.showBestMove', true),
     showComments: localstorageprop('settings.analyse.showComments', true),
@@ -153,14 +153,14 @@ export default {
     ],
     color: localstorageprop('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1'),
-    variant: localstorageprop('settings.ai.variant', 'standard'),
+    variant: localstorageprop<VariantKey>('settings.ai.variant', 'standard'),
     availableVariants: offlineAvailableVariants
   },
 
   otb: {
     flipPieces: localstorageprop('settings.otb.flipPieces', false),
     useSymmetric: localstorageprop('settings.otb.useSymmetric', false),
-    variant: localstorageprop('settings.otb.variant', 'standard'),
+    variant: localstorageprop<VariantKey>('settings.otb.variant', 'standard'),
     availableVariants: offlineAvailableVariants,
     whitePlayer: localstorageprop('settings.otb.whitePlayer', 'White'),
     blackPlayer: localstorageprop('settings.otb.blackPlayer', 'Black')

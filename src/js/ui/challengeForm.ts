@@ -116,7 +116,7 @@ function renderForm() {
       placeholder: i18n('pasteTheFenStringHere'),
       oninput: (e: Event) => {
         const rawfen = (e.target as HTMLInputElement).value
-        if (validateFen(rawfen).valid) {
+        if (validateFen(rawfen)) {
           setupFen = rawfen
           setupFenError = undefined
         }

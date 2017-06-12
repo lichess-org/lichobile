@@ -1,5 +1,6 @@
-import { standardFen } from '../utils/fen'
 import { Variant, VariantKey } from './interfaces/variant'
+
+export const standardFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 interface DocVariant {
   id: number
@@ -119,7 +120,7 @@ export function getInitialFen(key: VariantKey): string {
   return v.initialFen || standardFen
 }
 
-export const specialFenVariants = ['crazyhouse', 'threeCheck']
+export const specialFenVariants = new Set(['crazyhouse', 'threeCheck']) as Set<VariantKey>
 
 export const openingSensibleVariants = new Set([
 'standard', 'crazyhouse', 'threeCheck', 'kingOfTheHill'

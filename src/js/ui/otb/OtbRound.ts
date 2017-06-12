@@ -4,7 +4,6 @@ import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import settings from '../../settings'
 import gameStatusApi from '../../lichess/status'
-import { specialFenVariants } from '../../lichess/variant'
 import { OfflineGameData, GameStatus } from '../../lichess/interfaces/game'
 import { oppositeColor } from '../../utils'
 import { StoredOfflineGame, setCurrentOTBGame } from '../../utils/offlineGames'
@@ -39,7 +38,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public replay: Replay
   public vm: OtbVM
 
-  public constructor(saved?: StoredOfflineGame | null, setupFen?: string) {
+  public constructor(saved?: StoredOfflineGame | null, setupFen?: string, setupVariant?: VariantKey) {
     this.setupFen = setupFen
     this.actions = actions.controller(this)
     this.importGamePopup = importGamePopup.controller(this)
@@ -48,6 +47,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     this.vm = {
       flip: false,
       setupFen,
+      setupVariant,
       savedFen: saved ? saved.data.game.fen : undefined
     }
 
@@ -103,7 +103,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     const payload: InitPayload = {
       variant
     }
-    if (setupFen && !specialFenVariants.includes(variant)) {
+    if (setupFen) {
       payload.fen = setupFen
     }
 

@@ -1,7 +1,7 @@
 import session from '../../../session'
 import { oppositeColor } from '../../../utils'
-import { standardFen } from '../../../utils/fen'
 import i18n from '../../../i18n'
+import { standardFen } from '../../../lichess/variant'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
 
 const standardVariant: Variant = {

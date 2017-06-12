@@ -4,7 +4,6 @@ import i18n from '../../i18n'
 import popupWidget from '../shared/popup'
 import spinner from '../../spinner'
 import * as gameApi from '../../lichess/game'
-import { specialFenVariants } from '../../lichess/variant'
 import { handleXhrError } from '../../utils'
 import { requestComputerAnalysis } from './analyseXhr'
 import * as helper from '../helper'
@@ -56,12 +55,12 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
   )
 
   return h('div.analyseMenu', [
-    !specialFenVariants.includes(ctrl.data.game.variant.key) && (ctrl.source === 'offline' || !gameApi.playable(ctrl.data)) ? h('button[data-icon=U]', {
+    ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         if (ctrl.vm.step) {
-          ctrl.continuePopup.open(ctrl.vm.step.fen)
+          ctrl.continuePopup.open(ctrl.vm.step.fen, ctrl.data.game.variant.key)
         }
       })
     }, i18n('continueFromHere')) : null,

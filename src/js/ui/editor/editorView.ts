@@ -83,7 +83,7 @@ function renderActionsBar(ctrl: Editor) {
     h('button.action_bar_button[data-icon=U]', {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
-        ctrl.continuePopup.open(ctrl.computeFen())
+        ctrl.continuePopup.open(ctrl.computeFen(), 'standard')
       }, () => window.plugins.toast.show(i18n('continueFromHere'), 'short', 'center'))
     }),
     h('button.action_bar_button[data-icon=A]', {

@@ -12,6 +12,7 @@ import { overlay, renderContent } from './otbView'
 
 interface Attrs {
   fen?: string
+  variant?: VariantKey
 }
 
 interface State {
@@ -24,8 +25,9 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
 
     const saved = getCurrentOTBGame()
     const setupFen = attrs.fen
+    const setupVariant = attrs.variant
 
-    this.round = new OtbRound(saved, setupFen)
+    this.round = new OtbRound(saved, setupFen, setupVariant)
 
     window.plugins.insomnia.keepAwake()
   },

@@ -2,7 +2,7 @@ import * as h from 'mithril/hyperscript'
 import i18n from '../../i18n'
 import router from '../../router'
 import settings from '../../settings'
-import { specialFenVariants } from '../../lichess/variant'
+import getVariant, { specialFenVariants } from '../../lichess/variant'
 import ViewOnlyBoard from '../shared/ViewOnlyBoard'
 import formWidgets from '../shared/form'
 import popupWidget from '../shared/popup'
@@ -48,18 +48,32 @@ export default {
         undefined,
         function() {
           const availVariants = settings.otb.availableVariants
+          const setupVariant = ctrl.root.vm.setupVariant
           const variants = ctrl.root.vm.setupFen ?
-            availVariants.filter(i => !specialFenVariants.includes(i[1])) :
+            availVariants.filter(i => !specialFenVariants.has(i[1])) :
             availVariants
-          if (ctrl.root.vm.setupFen && specialFenVariants.includes(settings.otb.variant())) {
-            settings.otb.variant('standard')
+
+          const hasSpecialSetup = setupVariant && specialFenVariants.has(setupVariant)
+          if (setupVariant) {
+            settings.otb.variant(setupVariant)
           }
+
           return (
             <div>
               <div className="action">
-                <div className="select_input">
-                  {formWidgets.renderSelect('variant', 'variant', variants, settings.otb.variant)}
-                </div>
+                {hasSpecialSetup ?
+                  <div className="select_input disabled">
+                    <label for="variant">{i18n('variant')}</label>
+                    <select disabled id="variant">
+                      <option value={setupVariant} selected>
+                        {getVariant(setupVariant || 'standard' as VariantKey).name}
+                      </option>
+                    </select>
+                  </div> :
+                  <div className="select_input">
+                    {formWidgets.renderSelect('variant', 'variant', variants, settings.otb.variant)}
+                  </div>
+                }
                 { ctrl.root.vm.setupFen ?
                   <div className="from_position_wrapper">
                     <p>{i18n('fromPosition')}</p>

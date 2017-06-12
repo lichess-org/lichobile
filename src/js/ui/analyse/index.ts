@@ -85,7 +85,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
         let settingsVariant = settings.analyse.syntheticVariant()
         // don't allow special variants fen since they are not supported
         if (fenArg) {
-          settingsVariant = specialFenVariants.includes(settingsVariant) ?
+          settingsVariant = specialFenVariants.has(settingsVariant) ?
             'standard' : settingsVariant
         }
         let url = `/analyse/variant/${settingsVariant}`

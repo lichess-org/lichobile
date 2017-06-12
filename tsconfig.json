@@ -18,6 +18,7 @@
     "node_modules",
     "plugins",
     "platforms",
-    "scripts"
+    "scripts",
+    "src/**/__tests__/*"
   ]
 }

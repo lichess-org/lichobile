@@ -51,6 +51,7 @@ export interface OfflineRoundInterface extends RoundInterface {
 export interface AiVM {
   engineSearching: boolean
   setupFen?: string
+  setupVariant?: VariantKey
   savedFen?: string
 }
 export interface AiRoundInterface extends OfflineRoundInterface {
@@ -65,6 +66,7 @@ export interface AiRoundInterface extends OfflineRoundInterface {
 export interface OtbVM {
   flip: boolean
   setupFen?: string
+  setupVariant?: VariantKey
   savedFen?: string
 }
 export interface OtbRoundInterface extends OfflineRoundInterface {

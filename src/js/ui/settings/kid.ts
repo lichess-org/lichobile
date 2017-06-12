@@ -13,18 +13,13 @@ interface State {
 const KidPrefScreen: Mithril.Component<{}, State> = {
   oncreate: helper.viewSlideIn,
 
-  oninit: function(vnode) {
-    const kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode, false)
-
-    vnode.state = {
-      kidMode
-    }
+  oninit() {
+    this.kidMode = session.lichessBackedProp<boolean>('kid', session.toggleKidMode, false)
   },
 
-  view: function(vnode) {
-    const ctrl = vnode.state
+  view() {
     const header = () => dropShadowHeader(null, backButton('Kid mode'))
-    return layout.free(header, () => renderBody(ctrl))
+    return layout.free(header, () => renderBody(this))
   }
 }
 

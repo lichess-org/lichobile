@@ -4,9 +4,11 @@
     <description>lichess.org mobile application</description>
     <author email="vincent.velociter@gmail.com" href="https://github.com/veloce/lichobile">Vincent Velociter</author>
     <content src="index.html" />
-    <access origin="https://*.lichess.org" />
+    <access origin="https://lichess.org" />
+    <access origin="https://socket.lichess.org" />
     <access origin="https://sentry.io" />
     <access origin="https://veloce.github.io" />
+    <access origin="https://listage.ovh" />
     <platform name="android">
         <hook src="scripts/android/add_to_manifest.js" type="after_prepare" />
         <hook src="scripts/android/remove_permissions.js" type="after_prepare" />
@@ -80,24 +82,6 @@
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <universal-links>
-        <host name="*.lichess.org" scheme="https">
-            <path event="analysis" url="/analysis" />
-            <path event="analysisPosition" url="/analysis/*" />
-            <path event="challenge" url="/challenge/*" />
-            <path event="editor" url="/editor" />
-            <path event="inbox" url="/inbox" />
-            <path event="inboxNew" url="/inbox/new" />
-            <path event="players" url="/player" />
-            <path event="tournamentDetail" url="/tournament/*" />
-            <path event="tournamentList" url="/tournament" />
-            <path event="training" url="/training" />
-            <path event="trainingProblem" url="/training/*" />
-            <path event="tv" url="/tv" />
-            <path event="tvChannel" url="/tv/*" />
-            <path event="userVariantProfile" url="/@/*/perf/*" />
-            <path event="userProfile" url="/@/*" />
-            <path event="other" url="*" />
-        </host>
         <host name="lichess.org" scheme="https">
             <path event="analysis" url="/analysis" />
             <path event="challenge" url="/challenge/*" />

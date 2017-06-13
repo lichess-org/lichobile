@@ -81,7 +81,7 @@ export default {
 
     if (settings.general.notifications.allow()) {
       window.plugins.OneSignal
-      .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c', window.lichess.gcmSenderId)
+      .startInit('2d12e964-92b6-444e-9327-5b2e9a419f4c')
       .handleNotificationOpened(notificationOpenedCallback)
       .handleNotificationReceived(notificationReceivedCallback)
       .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)

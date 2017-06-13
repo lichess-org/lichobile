@@ -27,7 +27,6 @@ interface LichessOptions {
   socketEndPoint: string
   mode: string
   version: string
-  gcmSenderId: string
   sentryDSN: string
 }
 

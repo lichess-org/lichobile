@@ -144,5 +144,5 @@
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <plugin name="onesignal-cordova-plugin" spec="~2.0.11" />
+    <plugin name="onesignal-cordova-plugin" spec="~2.1.2" />
 </widget>

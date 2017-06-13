@@ -7,7 +7,7 @@ interface OneSignalConf {
 }
 
 interface OneSignalStatic {
-  startInit: (appId: string, gcmId?: string) => OneSignalConf
+  startInit: (appId: string) => OneSignalConf
   getIds: (callback: (ids: any) => void) => void
   enableSound: (v: boolean) => void
   enableVibrate: (v: boolean) => void

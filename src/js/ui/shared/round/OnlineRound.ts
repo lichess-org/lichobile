@@ -340,8 +340,8 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.correspondenceClock.tick(this.data.game.player)
   }
 
-  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest) {
-    const millis = this.lastMoveMillis !== undefined ?
+  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false) {
+    const millis = premove ? 0 : this.lastMoveMillis !== undefined ?
       performance.now() - this.lastMoveMillis : undefined
 
     const opts = {
@@ -373,7 +373,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(move)
+      this.socketSendMoveOrDrop(move, isPremove)
       if (this.data.game.speed === 'correspondence' && !hasNetwork()) {
         window.plugins.toast.show('You need to be connected to Internet to send your move.', 'short', 'center')
       }
@@ -392,7 +392,7 @@ export default class OnlineRound implements OnlineRoundInterface {
         redraw()
       }, this.data.pref.animationDuration || 0)
     } else {
-      this.socketSendMoveOrDrop(drop)
+      this.socketSendMoveOrDrop(drop, isPredrop)
     }
   }
 

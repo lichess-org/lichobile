@@ -12,6 +12,7 @@ import AiRound from './AiRound'
 interface Attrs {
   fen?: string
   variant?: VariantKey
+  color?: Color
 }
 
 interface State {
@@ -25,8 +26,9 @@ const AiScreen: Mithril.Component<Attrs, State> = {
     const saved = getCurrentAIGame()
     const setupFen = attrs.fen
     const setupVariant = attrs.variant
+    const setupColor = attrs.color
 
-    this.round = new AiRound(saved, setupFen, setupVariant)
+    this.round = new AiRound(saved, setupFen, setupVariant, setupColor)
 
     window.plugins.insomnia.keepAwake()
   },

@@ -48,15 +48,12 @@ export default {
         undefined,
         function() {
           const availVariants = settings.otb.availableVariants
-          const setupVariant = ctrl.root.vm.setupVariant
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !specialFenVariants.has(i[1])) :
             availVariants
 
-          const hasSpecialSetup = setupVariant && specialFenVariants.has(setupVariant)
-          if (setupVariant) {
-            settings.otb.variant(setupVariant)
-          }
+          const setupVariant = settings.ai.variant()
+          const hasSpecialSetup = ctrl.root.vm.setupFen && specialFenVariants.has(setupVariant)
 
           return (
             <div>
@@ -66,7 +63,7 @@ export default {
                     <label for="variant">{i18n('variant')}</label>
                     <select disabled id="variant">
                       <option value={setupVariant} selected>
-                        {getVariant(setupVariant || 'standard' as VariantKey).name}
+                        {getVariant(setupVariant).name}
                       </option>
                     </select>
                   </div> :
@@ -97,7 +94,7 @@ export default {
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
                   oncreate={helper.ontap(() =>
-                    ctrl.root.startNewGame(settings.otb.variant() as VariantKey, ctrl.root.vm.setupFen))
+                    ctrl.root.startNewGame(setupVariant, ctrl.root.vm.setupFen))
                   }>
                   {i18n('play')}
                 </button>

@@ -54,15 +54,15 @@ export default {
         undefined,
         function() {
           const availVariants = settings.ai.availableVariants
-          const setupVariant = ctrl.root.vm.setupVariant
           const variants = ctrl.root.vm.setupFen ?
             availVariants.filter(i => !specialFenVariants.has(i[1])) :
             availVariants
 
-          const hasSpecialSetup = setupVariant && specialFenVariants.has(setupVariant)
-          if (setupVariant) {
-            settings.ai.variant(setupVariant)
-          }
+          const setupVariant = settings.ai.variant()
+          const hasSpecialSetup = ctrl.root.vm.setupFen && specialFenVariants.has(setupVariant)
+
+          const settingsColor = settings.ai.color()
+          const setupColor = settingsColor !== 'random' ? settingsColor : 'white'
 
           return (
             <div>
@@ -74,7 +74,7 @@ export default {
                     <label for="variant">{i18n('variant')}</label>
                     <select disabled id="variant">
                       <option value={setupVariant} selected>
-                        {getVariant(setupVariant || 'standard' as VariantKey).name}
+                        {getVariant(setupVariant).name}
                       </option>
                     </select>
                   </div> :
@@ -95,7 +95,11 @@ export default {
                           if (ctrl.root.vm.setupFen) router.set(`/editor/${encodeURIComponent(ctrl.root.vm.setupFen)}`)
                         })}
                       >
-                        {h(ViewOnlyBoard, { fen: ctrl.root.vm.setupFen, bounds: { width: 130, height: 130 }})}
+                        {h(ViewOnlyBoard, {
+                          fen: ctrl.root.vm.setupFen,
+                          orientation: setupColor,
+                          bounds: { width: 130, height: 130 }
+                        })}
                       </div>
                     </div>
                   </div> : null
@@ -104,7 +108,7 @@ export default {
               <div className="popupActionWrapper">
                 <button className="popupAction" data-icon="E"
                   oncreate={helper.ontap(() => {
-                    ctrl.root.startNewGame(setupVariant || settings.ai.variant() as VariantKey, ctrl.root.vm.setupFen)
+                    ctrl.root.startNewGame(setupVariant, ctrl.root.vm.setupFen)
                   })}>
                   {i18n('play')}
                 </button>

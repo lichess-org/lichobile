@@ -60,7 +60,7 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
         if (ctrl.vm.step) {
-          ctrl.continuePopup.open(ctrl.vm.step.fen, ctrl.data.game.variant.key)
+          ctrl.continuePopup.open(ctrl.vm.step.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
         }
       })
     }, i18n('continueFromHere')) : null,

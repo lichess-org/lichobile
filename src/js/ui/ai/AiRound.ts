@@ -40,7 +40,12 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
 
   public engine: EngineInterface
 
-  public constructor(saved?: StoredOfflineGame | null, setupFen?: string, setupVariant?: VariantKey) {
+  public constructor(
+    saved?: StoredOfflineGame | null,
+    setupFen?: string,
+    setupVariant?: VariantKey,
+    setupColor?: Color
+  ) {
     this.engine = engineCtrl(this)
     this.actions = actions.controller(this)
     this.newGameMenu = newGameMenu.controller(this)
@@ -48,12 +53,19 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     this.vm = {
       engineSearching: false,
       setupFen,
-      setupVariant,
       savedFen: saved ? saved.data.game.fen : undefined
     }
 
     if (setupFen) {
       this.newGameMenu.isOpen(true)
+
+      if (setupColor) {
+        settings.ai.color(setupColor)
+      }
+
+      if (setupVariant) {
+        settings.ai.variant(setupVariant)
+      }
     }
 
     this.engine.init()
@@ -112,7 +124,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     redraw()
   }
 
-  public startNewGame(variant: VariantKey, setupFen?: string) {
+  public startNewGame(variant: VariantKey, setupFen?: string, setupColor?: Color) {
     const payload: InitPayload = {
       variant
     }
@@ -127,7 +139,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
         variant: data.variant,
         initialFen: data.setup.fen,
         fen: data.setup.fen,
-        color: getColorFromSettings(),
+        color: setupColor || getColorFromSettings(),
         player: data.setup.player
       }), [data.setup], 0)
     })

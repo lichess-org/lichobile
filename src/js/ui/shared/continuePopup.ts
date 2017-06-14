@@ -11,10 +11,11 @@ import * as h from 'mithril/hyperscript'
 import * as stream from 'mithril/stream'
 
 export interface Controller {
-  open(fentoSet: string, variantToSet: VariantKey): void
+  open(fentoSet: string, variantToSet: VariantKey, colorToSet?: Color): void
   close(fromBB?: string): void
   fen: Mithril.Stream<string | undefined>
   variant: Mithril.Stream<VariantKey>
+  color: Mithril.Stream<Color>
   isOpen(): boolean
 }
 
@@ -24,11 +25,13 @@ export default {
     let isOpen = false
     const fen: Mithril.Stream<string | undefined> = stream(undefined)
     const variant: Mithril.Stream<VariantKey> = stream('standard' as VariantKey)
+    const color: Mithril.Stream<Color> = stream('white' as Color)
 
-    function open(fentoSet: string, variantToSet: VariantKey) {
+    function open(fentoSet: string, variantToSet: VariantKey, colorToSet: Color = 'white') {
       router.backbutton.stack.push(close)
       fen(fentoSet)
       variant(variantToSet)
+      color(colorToSet)
       isOpen = true
     }
 
@@ -42,6 +45,7 @@ export default {
       close,
       fen,
       variant,
+      color,
       isOpen: function() {
         return isOpen
       }
@@ -75,9 +79,10 @@ export default {
               ctrl.close()
               const f = ctrl.fen()
               const v = ctrl.variant()
+              const c = ctrl.color()
               if (f) {
                 if (validateFen(f, v) && positionLooksLegit(f)) {
-                  router.set(`/ai/variant/${v}/fen/${encodeURIComponent(f)}`)
+                  router.set(`/ai/variant/${v}/fen/${encodeURIComponent(f)}/color/${c}`)
                 } else {
                   window.plugins.toast.show('Invalid FEN', 'short', 'center')
                 }

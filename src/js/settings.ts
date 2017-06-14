@@ -151,7 +151,7 @@ export default {
       ['Stockfish', '7'],
       ['Stockfish', '8']
     ],
-    color: localstorageprop('settings.ai.color', 'white'),
+    color: localstorageprop<Color | 'random'>('settings.ai.color', 'white'),
     opponent: localstorageprop('settings.ai.opponent', '1'),
     variant: localstorageprop<VariantKey>('settings.ai.variant', 'standard'),
     availableVariants: offlineAvailableVariants

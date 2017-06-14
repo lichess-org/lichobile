@@ -38,7 +38,11 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public replay: Replay
   public vm: OtbVM
 
-  public constructor(saved?: StoredOfflineGame | null, setupFen?: string, setupVariant?: VariantKey) {
+  public constructor(
+    saved?: StoredOfflineGame | null,
+    setupFen?: string,
+    setupVariant?: VariantKey,
+  ) {
     this.setupFen = setupFen
     this.actions = actions.controller(this)
     this.importGamePopup = importGamePopup.controller(this)
@@ -47,12 +51,15 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     this.vm = {
       flip: false,
       setupFen,
-      setupVariant,
       savedFen: saved ? saved.data.game.fen : undefined
     }
 
     if (setupFen) {
       this.newGameMenu.isOpen(true)
+
+      if (setupVariant) {
+        settings.otb.variant(setupVariant)
+      }
     }
 
     const currentVariant = <VariantKey>settings.otb.variant()

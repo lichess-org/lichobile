@@ -46,7 +46,7 @@ export default {
       'otb': otb,
       'otb/variant/:variant/fen/:fen': otb,
       'ai': ai,
-      'ai/variant/:variant/fen/:fen': ai,
+      'ai/variant/:variant/fen/:fen/color/:color': ai,
       'game/:id': game,
       'game/:id/:color': game,
       'tournament/:tournamentId/game/:id': game,

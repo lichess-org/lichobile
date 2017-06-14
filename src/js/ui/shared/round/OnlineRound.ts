@@ -1,7 +1,7 @@
 import * as throttle from 'lodash/throttle'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData } from '../../../utils/offlineGames'
-import { hasNetwork, boardOrientation, formatTimeInSecs, noop } from '../../../utils'
+import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
 import i18n from '../../../i18n'
 import gameStatus from '../../../lichess/status'
 import session from '../../../session'
@@ -124,7 +124,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.clock = this.data.clock ? new ClockCtrl(
       this.data.clock,
-      this.data.player.spectator ? noop : this.outoftime,
+      this.outoftime,
       this.data.player.spectator ? undefined : this.data.player.color
     ) : null
 

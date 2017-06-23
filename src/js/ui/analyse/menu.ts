@@ -59,14 +59,12 @@ function renderAnalyseMenu(ctrl: AnalyseCtrl) {
       key: 'continueFromHere',
       oncreate: helper.ontap(() => {
         ctrl.menu.close()
-        if (ctrl.vm.step) {
-          ctrl.continuePopup.open(ctrl.vm.step.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
-        }
+        ctrl.continuePopup.open(ctrl.node.fen, ctrl.data.game.variant.key, ctrl.data.player.color)
       })
     }, i18n('continueFromHere')) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'boardEditor',
-      oncreate: helper.ontap(() => ctrl.vm.step && router.set(`/editor/${encodeURIComponent(ctrl.vm.step.fen)}`))
+      oncreate: helper.ontap(() => router.set(`/editor/${encodeURIComponent(ctrl.node.fen)}`))
     }, [h('span.fa.fa-pencil'), i18n('boardEditor')]) : null,
     ctrl.source === 'offline' || !gameApi.playable(ctrl.data) ? h('button', {
       key: 'sharePGN',

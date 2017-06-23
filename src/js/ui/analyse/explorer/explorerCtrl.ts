@@ -104,23 +104,21 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
 
   function setStep() {
     if (!enabled()) return
-    const step = root.vm.step
-    if (step) {
-      if (step.ply > 50 && !tablebaseRelevant(step.fen)) {
-        setResult(step.fen, empty)
-      }
-      const fromCache = cache[step.fen]
-      if (!fromCache) {
-        loading(true)
-        fetch(step.fen)
-      } else {
-        current(fromCache)
-        loading(false)
-        failing(false)
-      }
-      redraw()
-      debouncedScroll()
+    const node = root.node
+    if (node.ply > 50 && !tablebaseRelevant(node.fen)) {
+      setResult(node.fen, empty)
     }
+    const fromCache = cache[node.fen]
+    if (!fromCache) {
+      loading(true)
+      fetch(node.fen)
+    } else {
+      current(fromCache)
+      loading(false)
+      failing(false)
+    }
+    redraw()
+    debouncedScroll()
   }
 
   return {

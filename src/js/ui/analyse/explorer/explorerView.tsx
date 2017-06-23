@@ -13,7 +13,7 @@ function onTablebaseTap(ctrl: AnalyseCtrl, e: Event) {
 
 function showTitle(ctrl: AnalyseCtrl): Mithril.Children {
   const data = ctrl.explorer.current()
-  const opening = ctrl.analyse.getOpening(ctrl.vm.path) || ctrl.data.game.opening
+  const opening = ctrl.tree.getOpening(ctrl.nodeList) || ctrl.data.game.opening
   if (ctrl.data.game.variant.key === 'standard' || ctrl.data.game.variant.key === 'fromPosition') {
     if (data && data.tablebase) return 'Endgame tablebase'
     else return opening ? opening.eco + ' ' + opening.name : 'Opening explorer'

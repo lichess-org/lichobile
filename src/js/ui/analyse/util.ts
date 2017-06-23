@@ -20,6 +20,11 @@ export function readDests(lines?: DestsMap | string): DestsMap | null {
   return dests
 }
 
+export function readDrops(line?: string | null): string[] | null {
+  if (typeof line === 'undefined' || line === null) return null
+  return line.match(/.{2}/g) || []
+}
+
 export function readCheckCount(fen: string) {
   const counts = fen.substr(fen.length - 4)
   return {

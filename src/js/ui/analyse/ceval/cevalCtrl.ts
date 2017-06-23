@@ -1,7 +1,8 @@
 import settings from '../../../settings'
 import cevalEngine from './cevalEngine'
 import { getNbCores } from '../../../utils/stockfish'
-import { AnalysisStep, Path, CevalEmit, CevalCtrlInterface } from '../interfaces'
+import { Tree } from '../../../utils/tree'
+import { CevalEmit, CevalCtrlInterface } from '../interfaces'
 
 export default function cevalCtrl(
   variant: VariantKey,
@@ -27,7 +28,7 @@ export default function cevalCtrl(
     emit(res)
   }
 
-  function start(path: Path, steps: Array<AnalysisStep>) {
+  function start(path: Tree.Path, steps: Tree.Node[]) {
     if (!enabled()) {
       return
     }

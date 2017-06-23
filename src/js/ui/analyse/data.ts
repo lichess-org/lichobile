@@ -57,6 +57,13 @@ export function makeDefaultData(variantKey: VariantKey, fen?: string): AnalysisD
           pockets: [emptyPocket, emptyPocket]
         } : undefined
       }
-    ]
+    ],
+    treeParts: [
+      {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        ply: 0
+      }
+    ],
+    userAnalysis: true
   }
 }

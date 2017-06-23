@@ -4,7 +4,7 @@ import { renderContent, overlay, viewOnlyBoard } from './view/analyseView'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import { handleXhrError } from '../../utils'
-import { game as gameXhr } from '../../xhr'
+import { gameAnalysis as gameAnalysisXhr } from './analyseXhr'
 import i18n from '../../i18n'
 import { specialFenVariants } from '../../lichess/variant'
 import { emptyFen } from '../../utils/fen'
@@ -43,7 +43,7 @@ const AnalyseScreen: Mithril.Component<Attrs, State> = {
 
     if (source === 'online' && gameId) {
       const now = performance.now()
-      gameXhr(gameId, orientation)
+      gameAnalysisXhr(gameId, orientation)
       .then(cfg => {
         const elapsed = performance.now() - now
         setTimeout(() => {

@@ -65,7 +65,7 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
     redraw()
   }
 
-  const fetchOpening = debounce((fen: string) => {
+  const fetchOpening = debounce((fen: string): Promise<void> => {
     return openingXhr(effectiveVariant, fen, config.data, withGames)
     .then((res: ExplorerData) => {
       res.opening = true
@@ -78,7 +78,7 @@ export default function(root: AnalyseCtrl, allow: boolean): ExplorerCtrlInterfac
     .catch(handleFetchError)
   }, 1000)
 
-  const fetchTablebase = debounce((fen: string) => {
+  const fetchTablebase = debounce((fen: string): Promise<void> => {
     return tablebaseXhr(effectiveVariant, fen)
     .then((res: ExplorerData) => {
       res.tablebase = true

@@ -148,7 +148,7 @@ declare namespace Mithril {
   interface ChildArray extends Array<Children> {}
   type Children = Child | ChildArray
 
-  interface Vnode<A, S extends Lifecycle<A,S>> {
+  interface Vnode<A, S> {
     tag: string | Component<A,S>;
     attrs: A;
     state: S;
@@ -168,8 +168,8 @@ declare namespace Mithril {
     <A,S>(tag: string | Component<A,S>, key: string | number | undefined, attrs: A | undefined, children: Children | undefined, text: string | undefined, dom: Element | undefined): DOMNode
   }
 
-  interface Component<A, S extends Lifecycle<A,S>> extends Lifecycle<A,S> {
-    view: (this: S, vnode: Vnode<A,S>) => Vnode<any,any> | null | void | (Vnode<any,any> | null | void)[];
+  interface Component<A, S> extends Lifecycle<A,S> {
+    view: (this: S, vnode: Vnode<A,S>) => Children | void
   }
 
   type Unary<T,U> = (input: T) => U;

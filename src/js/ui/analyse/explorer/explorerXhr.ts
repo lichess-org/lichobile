@@ -1,9 +1,10 @@
 import { fetchJSON } from '../../../http'
+import { ExplorerData } from '../interfaces'
 
 const explorerEndpoint = 'https://expl.lichess.org'
 const tablebaseEndpoint = 'https://tablebase.lichess.org'
 
-export function openingXhr(variant: VariantKey, fen: string, config: any, withGames: boolean) {
+export function openingXhr(variant: VariantKey, fen: string, config: any, withGames: boolean): Promise<ExplorerData> {
   let url: string
   const params: any = {
     fen,
@@ -28,7 +29,7 @@ export function openingXhr(variant: VariantKey, fen: string, config: any, withGa
   })
 }
 
-export function tablebaseXhr(variant: VariantKey, fen: string) {
+export function tablebaseXhr(variant: VariantKey, fen: string): Promise<ExplorerData> {
   return fetchJSON(tablebaseEndpoint + '/' + variant, {
     headers: {
       'Accept': 'application/json, text/*'

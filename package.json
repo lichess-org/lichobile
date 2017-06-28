@@ -38,7 +38,7 @@
     "minimist": "~1.2.0",
     "ncp": "~2.0.0",
     "tsify": "~2.0.3",
-    "typescript": "~2.3.0",
+    "typescript": "~2.4.0",
     "uglify-js": "~2.7.5",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.1.0",
@@ -152,10 +152,16 @@
     }
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/testPreprocessor.js"
     },
-    "testMatch": ["**/__tests__/*.(ts|tsx|js)"]
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx|js)"
+    ]
   }
 }

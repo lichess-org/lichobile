@@ -571,7 +571,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   public goBerserk() {
-    throttle(() => socket.send('berserk'), 500)()
+    throttle((): void => socket.send('berserk'), 500)()
     sound.berserk()
   }
 

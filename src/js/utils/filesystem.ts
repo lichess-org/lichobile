@@ -2,7 +2,7 @@
 export function getFiles(prefix: string): Promise<FileEntry[]> {
   return new Promise((resolve, reject) => {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
-      fs.root.createReader().readEntries((entries: Entry[]) => {
+      fs.root.createReader().readEntries((entries: FileEntry[]) => {
         resolve(entries.filter(e => e.isFile && e.name.includes(prefix)))
       }, reject)
     }, reject)

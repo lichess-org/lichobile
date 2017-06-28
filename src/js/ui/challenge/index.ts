@@ -14,7 +14,7 @@ import { joinPopup, awaitChallengePopup, awaitInvitePopup } from './challengeVie
 import { Challenge } from '../../lichess/interfaces/challenge'
 import { ChallengeState } from './interfaces'
 
-const throttledPing = throttle(() => socket.send('ping'), 1000)
+const throttledPing = throttle((): void => socket.send('ping'), 1000)
 
 interface Attrs {
   id: string

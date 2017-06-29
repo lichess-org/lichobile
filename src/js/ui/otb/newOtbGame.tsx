@@ -52,7 +52,7 @@ export default {
             availVariants.filter(i => !specialFenVariants.has(i[1])) :
             availVariants
 
-          const setupVariant = settings.ai.variant()
+          const setupVariant = settings.otb.variant()
           const hasSpecialSetup = ctrl.root.vm.setupFen && specialFenVariants.has(setupVariant)
 
           return (

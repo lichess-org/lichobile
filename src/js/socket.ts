@@ -4,7 +4,7 @@ import { apiVersion } from './http'
 import * as xorWith from 'lodash/xorWith'
 import * as isEqual from 'lodash/isEqual'
 import * as cloneDeep from 'lodash/cloneDeep'
-import { lichessSri, autoredraw, hasNetwork } from './utils'
+import { newSri, autoredraw, hasNetwork } from './utils'
 import { tellWorker, askWorker } from './utils/worker'
 import * as xhr from './xhr'
 import i18n from './i18n'
@@ -172,7 +172,7 @@ function createGame(
   }
   if (userTv) opts.params = { userTv }
   const setup = {
-    clientId: lichessSri,
+    clientId: newSri(),
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
@@ -202,7 +202,7 @@ function createTournament(
     }
   }
   const setup = {
-    clientId: lichessSri,
+    clientId: newSri(),
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
@@ -236,7 +236,7 @@ function createChallenge(
     }
   }
   const setup = {
-    clientId: lichessSri,
+    clientId: newSri(),
     socketEndPoint: window.lichess.socketEndPoint,
     url,
     version,
@@ -266,7 +266,7 @@ function createLobby(
     }
   }
   const setup = {
-    clientId: lichessSri,
+    clientId: newSri(),
     socketEndPoint: window.lichess.socketEndPoint,
     url: `/lobby/socket/v${apiVersion}`,
     opts
@@ -290,7 +290,7 @@ function createDefault() {
       }
     }
     const setup = {
-      clientId: lichessSri,
+      clientId: newSri(),
       socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
       version: 0,

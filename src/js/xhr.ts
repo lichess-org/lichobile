@@ -1,5 +1,5 @@
 import { fetchJSON, fetchText, apiVersion } from './http'
-import { lichessSri, noop } from './utils'
+import { currentSri, noop } from './utils'
 import settings from './settings'
 import i18n from './i18n'
 import session from './session'
@@ -42,7 +42,7 @@ export function newAiGame(fen?: string): Promise<OnlineGameData> {
 
 export function seekGame(): Promise<HookData> {
   const config = settings.gameSetup.human
-  return fetchJSON('/setup/hook/' + lichessSri, {
+  return fetchJSON('/setup/hook/' + currentSri(), {
     method: 'POST',
     body: JSON.stringify({
       variant: config.variant(),

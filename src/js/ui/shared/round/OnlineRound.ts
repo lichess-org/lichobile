@@ -346,7 +346,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     const opts = {
       ackable: true,
-      withLag: this.clock && (millis === undefined),
+      withLag: !!this.clock && (millis === undefined),
       millis
     }
 

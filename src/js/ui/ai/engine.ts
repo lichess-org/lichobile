@@ -1,13 +1,13 @@
 import { AiRoundInterface } from '../shared/round'
 import { getNbCores, setOption, setVariant } from '../../utils/stockfish'
 
-interface LevelToDepht {
+interface LevelToDepth {
   [index: number]: number
 }
 
 const maxMoveTime = 8000
 const maxSkill = 20
-const levelToDepth: LevelToDepht = {
+const levelToDepth: LevelToDepth = {
   1: 1,
   2: 1,
   3: 2,

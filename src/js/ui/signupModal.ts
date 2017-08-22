@@ -101,10 +101,17 @@ function submit(form: HTMLFormElement) {
   loading = true
   redraw()
   session.signup(login, email, pass)
-  .then(() => {
-    loading = false
-    checkEmail = true
-    redraw()
+  .then((d: { email_confirm?: boolean }) => {
+    if (d && d.email_confirm) {
+      // should comfirm email
+      loading = false
+      checkEmail = true
+      redraw()
+    } else {
+      // user already authenticated
+      window.plugins.toast.show(i18n('loginSuccessful'), 'short', 'center')
+      loginModal.close()
+    }
   })
   .catch(error => {
     loading = false

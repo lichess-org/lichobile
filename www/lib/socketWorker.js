@@ -28,6 +28,7 @@ function StrongSocket(clientId, socketEndPoint, url, version, settings) {
   this.connectSchedule = null;
   this.ackableMessages = [];
   this.lastPingTime = Date.now();
+  this.pongCount = 0;
   this.currentLag = 0;
   this.averageLag = 0;
   this.autoReconnect = true;
@@ -163,16 +164,23 @@ StrongSocket.prototype = {
     var self = this;
     clearTimeout(self.connectSchedule);
     self.schedulePing(self.options.pingDelay);
-    self.currentLag = Date.now() - self.lastPingTime;
-    if (!self.averageLag) self.averageLag = self.currentLag;
-    else self.averageLag = 0.2 * (self.currentLag - self.averageLag) + self.averageLag;
+
+    self.pongCount++;
+    self.currentLag = Math.min(Date.now() - self.lastPingTime, 10000);
+
+    // Average first 4 pings, then switch to decaying average.
+    var mix = self.pongCount > 4 ? 0.1 : (1 / self.pongCount);
+    self.averageLag += mix * (self.currentLag - self.averageLag);
   },
 
   pingData: function() {
-    return JSON.stringify({
+    var self = this;
+    var data = {
       t: 'p',
-      v: this.version
-    });
+      v: self.version
+    };
+    if (self.pongCount % 8 === 2) data.l = Math.round(0.1 * self.averageLag);
+    return JSON.stringify(data);
   },
 
   handle: function(msg) {

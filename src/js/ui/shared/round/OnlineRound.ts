@@ -12,7 +12,7 @@ import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr'
 import vibrate from '../../../vibrate'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
-import { OnlineGameData, GameStep, Player } from '../../../lichess/interfaces/game'
+import { OnlineGameData, Player } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 import { gameTitle } from '../../shared/common'
@@ -138,10 +138,17 @@ export default class OnlineRound implements OnlineRoundInterface {
       this.tournamentCountInterval = setInterval(this.tournamentTick, 100)
     }
 
-    this.connectSocket()
+    socket.createGame(
+      this.data.url.socket,
+      this.data.player.version,
+      socketHandler(this, this.onFeatured, this.onUserTVRedirect),
+      this.data.url.round,
+      this.data.userTV
+    )
+
     this.setTitle()
 
-    document.addEventListener('resume', this.reloadGameData)
+    document.addEventListener('resume', this.onResume)
     window.plugins.insomnia.keepAwake()
   }
 
@@ -160,24 +167,6 @@ export default class OnlineRound implements OnlineRoundInterface {
     } else {
       clearInterval(this.tournamentCountInterval)
     }
-  }
-
-  private connectSocket = () => {
-    socket.createGame(
-      this.data.url.socket,
-      this.data.player.version,
-      socketHandler(this, this.onFeatured, this.onUserTVRedirect),
-      this.data.url.round,
-      this.data.userTV
-    )
-  }
-
-  public stepsHash(steps: Array<GameStep>) {
-    let h = ''
-    for (let i in steps) {
-      h += steps[i].san
-    }
-    return h
   }
 
   public openUserPopup = (position: string, userId: string) => {
@@ -554,9 +543,10 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   }
 
-  public reload = (rCfg: OnlineGameData) => {
-    if (this.stepsHash(rCfg.steps) !== this.stepsHash(this.data.steps))
+  public onReload = (rCfg: OnlineGameData) => {
+    if (rCfg.steps.length !== this.data.steps.length) {
       this.vm.ply = rCfg.steps[rCfg.steps.length - 1].ply
+    }
     if (this.chat) this.chat.onReload(rCfg.chat)
     if (this.data.tv) rCfg.tv = this.data.tv
     if (this.data.userTV) rCfg.userTV = this.data.userTV
@@ -568,6 +558,10 @@ export default class OnlineRound implements OnlineRoundInterface {
     this.setTitle()
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip)
     redraw()
+  }
+
+  public reloadGameData = () => {
+    xhr.reload(this).then(this.onReload)
   }
 
   public goBerserk() {
@@ -589,7 +583,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   public unload() {
     clearInterval(this.clockIntervId)
     clearInterval(this.tournamentCountInterval)
-    document.removeEventListener('resume', this.reloadGameData)
+    document.removeEventListener('resume', this.onResume)
     if (this.chat) this.chat.unload()
     if (this.notes) this.notes.unload()
   }
@@ -637,8 +631,17 @@ export default class OnlineRound implements OnlineRoundInterface {
     })
   }
 
-  private reloadGameData = () => {
-    xhr.reload(this).then(this.reload)
+  private onResume = () => {
+    // hack to avoid nasty race condition on resume: socket will reconnect with
+    // an old version and server will send move event that will be processed after
+    // a reload by xhr triggered by same resume event
+    // thus we disconnect socket and reconnect it after reloading data in order to
+    // have last version
+    socket.disconnect()
+    xhr.reload(this)
+    .then(data => {
+      socket.setVersion(data.player.version)
+      this.onReload(data)
+    })
   }
-
 }

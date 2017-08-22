@@ -3,7 +3,6 @@ import redraw from '../../../utils/redraw'
 import settings from '../../../settings'
 import * as helper from '../../helper'
 import ground from './ground'
-import * as xhr from './roundXhr'
 import { OnlineRoundInterface } from '.'
 
 let promoting: [Pos, Pos] | null = null
@@ -30,7 +29,7 @@ function finish(ctrl: OnlineRoundInterface, role: Role) {
 }
 
 function cancel(ctrl: OnlineRoundInterface) {
-  if (promoting) xhr.reload(ctrl).then(ctrl.reload)
+  if (promoting) ctrl.reloadGameData()
   promoting = null
 }
 

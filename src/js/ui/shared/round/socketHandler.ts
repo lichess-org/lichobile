@@ -46,12 +46,13 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
     berserk(color: Color) {
       ctrl.setBerserk(color)
     },
-    reload() {
-      xhr.reload(ctrl).then(ctrl.reload)
-    },
     redirect(e: string | RedirectObj) {
       socket.redirectToGame(e)
     },
+    // server tells client to reload at once game data
+    reload: ctrl.reloadGameData,
+    // if client version is too old compared to server, the latter will send a
+    // resync event
     resync() {
       if (onUserTVRedirect) {
         onUserTVRedirect()
@@ -59,7 +60,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
         xhr.reload(ctrl)
         .then(data => {
           socket.setVersion(data.player.version)
-          ctrl.reload(data)
+          ctrl.onReload(data)
         })
       }
     },
@@ -69,7 +70,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
     end(winner: Color) {
       ctrl.data.game.winner = winner
       ground.end(ctrl.chessground)
-      xhr.reload(ctrl).then(ctrl.reload)
+      ctrl.reloadGameData()
       window.plugins.insomnia.allowSleepAgain()
       if (ctrl.data.game.speed === 'correspondence') {
         removeOfflineGameData(ctrl.data.url.round.substr(1))

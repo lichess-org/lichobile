@@ -355,7 +355,7 @@ export default {
     return (
       <button key="withdrawFromTournament" oncreate={helper.ontap(handler)}>
         <span className="fa fa-flag" />
-        {i18n('withdraw')}
+        Pause
       </button>
     )
   },

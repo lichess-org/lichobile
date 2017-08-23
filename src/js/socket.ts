@@ -13,12 +13,12 @@ import challengesApi from './lichess/challenges'
 import { ChallengesData } from './lichess/interfaces/challenge'
 import session from './session'
 
-interface LichessMessage<T> {
+export interface LichessMessage<T> {
   t: string
   d?: T
 }
 
-type LichessMessageAny = LichessMessage<{}>
+export type LichessMessageAny = LichessMessage<{}>
 
 interface Options {
   name: string
@@ -35,7 +35,8 @@ interface SocketConfig {
 
 type MessageHandler<D, P extends LichessMessage<D>> = (data?: D, payload?: P) => void
 type MessageHandlerGeneric = MessageHandler<{}, any>
-interface MessageHandlers {
+
+export interface MessageHandlers {
   [index: string]: MessageHandlerGeneric
 }
 

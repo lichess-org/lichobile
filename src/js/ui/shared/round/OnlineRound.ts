@@ -1,6 +1,6 @@
 import * as throttle from 'lodash/throttle'
 import redraw from '../../../utils/redraw'
-import { saveOfflineGameData } from '../../../utils/offlineGames'
+import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
 import i18n from '../../../i18n'
 import gameStatus from '../../../lichess/status'
@@ -12,7 +12,7 @@ import { miniUser as miniUserXhr, toggleGameBookmark } from '../../../xhr'
 import vibrate from '../../../vibrate'
 import * as gameApi from '../../../lichess/game'
 import { MiniUser } from '../../../lichess/interfaces'
-import { OnlineGameData, Player } from '../../../lichess/interfaces/game'
+import { OnlineGameData, Player, ApiEnd } from '../../../lichess/interfaces/game'
 import { MoveRequest, DropRequest, MoveOrDrop, AfterMoveMeta, isMove, isDrop, isMoveRequest, isDropRequest } from '../../../lichess/interfaces/move'
 import * as chessFormat from '../../../utils/chessFormat'
 import { gameTitle } from '../../shared/common'
@@ -265,6 +265,12 @@ export default class OnlineRound implements OnlineRoundInterface {
     return true
   }
 
+  public userJump = (ply: number): void => {
+    this.cancelMove()
+    this.chessground.selectSquare(null)
+    this.jump(ply)
+  }
+
   public jumpNext = () => {
     return this.jump(this.vm.ply + 1)
   }
@@ -307,44 +313,6 @@ export default class OnlineRound implements OnlineRoundInterface {
   public isClockRunning(): boolean {
     return !!this.data.clock && gameApi.playable(this.data) &&
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running)
-  }
-
-  private clockTick = () => {
-    if (this.clock && this.isClockRunning()) this.clock.tick(this.data.game.player)
-  }
-
-  private makeCorrespondenceClock() {
-    if (this.data.correspondence && !this.correspondenceClock)
-      this.correspondenceClock = new CorresClockCtrl(
-        this.data.correspondence, this.outoftime
-      )
-  }
-
-  private outoftime = throttle(() => {
-    socket.send('flag', this.data.game.player)
-  }, 500)
-
-  private correspondenceClockTick = () => {
-    if (this.correspondenceClock && gameApi.playable(this.data))
-      this.correspondenceClock.tick(this.data.game.player)
-  }
-
-  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false) {
-    const millis = premove ? 0 : this.lastMoveMillis !== undefined ?
-      performance.now() - this.lastMoveMillis : undefined
-
-    const opts = {
-      ackable: true,
-      withLag: !!this.clock && (millis === undefined),
-      millis
-    }
-
-    if (isMoveRequest(moveOrDropReq)) {
-      socket.send('move', moveOrDropReq, opts)
-    }
-    else if (isDropRequest(moveOrDropReq)) {
-      socket.send('drop', moveOrDropReq, opts)
-    }
   }
 
   public sendMove(orig: Pos, dest: Pos, prom?: Role, isPremove: boolean = false) {
@@ -540,7 +508,6 @@ export default class OnlineRound implements OnlineRoundInterface {
       session.refresh()
       saveOfflineGameData(this.id, this.data)
     }
-
   }
 
   public onReload = (rCfg: OnlineGameData) => {
@@ -562,6 +529,37 @@ export default class OnlineRound implements OnlineRoundInterface {
 
   public reloadGameData = () => {
     xhr.reload(this).then(this.onReload)
+  }
+
+  public endWithData = (o: ApiEnd) => {
+    const d = this.data
+    d.game.winner = o.winner
+    d.game.status = o.status
+    d.game.boosted = o.boosted
+
+    this.userJump(this.lastPly())
+    this.chessground.stop()
+
+    if (o.ratingDiff) {
+      d.player.ratingDiff = o.ratingDiff[d.player.color]
+      d.opponent.ratingDiff = o.ratingDiff[d.opponent.color]
+    }
+    if (this.clock && o.clock) this.clock.update(o.clock.wc * .01, o.clock.bc * .01)
+
+    window.plugins.insomnia.allowSleepAgain()
+    if (this.data.game.speed === 'correspondence') {
+      removeOfflineGameData(this.data.url.round.substr(1))
+    }
+    if (!this.data.player.spectator) {
+      if (d.game.turns > 1) {
+        sound.dong()
+        vibrate.quick()
+        session.refresh()
+      }
+
+      this.showActions()
+      setTimeout(redraw, 500)
+    }
   }
 
   public goBerserk() {
@@ -587,6 +585,45 @@ export default class OnlineRound implements OnlineRoundInterface {
     if (this.chat) this.chat.unload()
     if (this.notes) this.notes.unload()
   }
+
+  private clockTick = () => {
+    if (this.clock && this.isClockRunning()) this.clock.tick(this.data.game.player)
+  }
+
+  private makeCorrespondenceClock() {
+    if (this.data.correspondence && !this.correspondenceClock)
+      this.correspondenceClock = new CorresClockCtrl(
+        this.data.correspondence, this.outoftime
+      )
+  }
+
+  private outoftime = throttle(() => {
+    socket.send('flag', this.data.game.player)
+  }, 500)
+
+  private correspondenceClockTick = () => {
+    if (this.correspondenceClock && gameApi.playable(this.data))
+      this.correspondenceClock.tick(this.data.game.player)
+  }
+
+  private socketSendMoveOrDrop(moveOrDropReq: MoveRequest | DropRequest, premove = false) {
+    const millis = premove ? 0 : this.lastMoveMillis !== undefined ?
+      performance.now() - this.lastMoveMillis : undefined
+
+    const opts = {
+      ackable: true,
+      withLag: !!this.clock && (millis === undefined),
+      millis
+    }
+
+    if (isMoveRequest(moveOrDropReq)) {
+      socket.send('move', moveOrDropReq, opts)
+    }
+    else if (isDropRequest(moveOrDropReq)) {
+      socket.send('drop', moveOrDropReq, opts)
+    }
+  }
+
 
   private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
     const hasPremove = !!meta.premove

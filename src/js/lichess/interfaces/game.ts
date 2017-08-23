@@ -130,6 +130,20 @@ export interface OnlineGameData extends GameData {
   }
 }
 
+export interface ApiEnd {
+  winner?: Color
+  status: GameStatus
+  ratingDiff?: {
+    white: number
+    black: number
+  }
+  boosted: boolean
+  clock?: {
+    wc: number
+    bc: number
+  }
+}
+
 export interface GameCrowd {
   white: boolean
   black: boolean

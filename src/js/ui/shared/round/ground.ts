@@ -105,13 +105,8 @@ function promote(ground: Chessground.Controller, key: Pos, role: Role) {
   }
 }
 
-function end(ground: Chessground.Controller) {
-  ground.stop()
-}
-
 export default {
   make,
   reload,
-  promote,
-  end
+  promote
 }

@@ -38,7 +38,7 @@ declare namespace Chessground {
     toggleOrientation(): void
     setPieces(pieces: PiecesDiff): void
     setDragPiece(key: Pos, piece: Piece, dragOpts: any): void
-    selectSquare(key: Pos): void
+    selectSquare(key: Pos | null): void
     apiMove(orig: Pos, dest: Pos, pieces?: PiecesDiff, config?: SetConfig): void
     apiNewPiece(piece: Piece, key: Pos, config?: SetConfig): void
     playPremove(): void

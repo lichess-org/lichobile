@@ -1,19 +1,25 @@
+import i18n from '../../../i18n'
+import socket, { RedirectObj, LichessMessageAny, MessageHandlers } from '../../../socket'
 import * as gameApi from '../../../lichess/game'
-import { GameCrowd, ChatMsg } from '../../../lichess/interfaces/game'
+import { GameCrowd, ChatMsg, ApiEnd } from '../../../lichess/interfaces/game'
 import { Move, Drop } from '../../../lichess/interfaces/move'
 import redraw from '../../../utils/redraw'
 import sound from '../../../sound'
 import vibrate from '../../../vibrate'
-import session from '../../../session'
-import { removeOfflineGameData } from '../../../utils/offlineGames'
-import socket, { RedirectObj } from '../../../socket'
 import OnlineRound from './OnlineRound'
 import * as xhr from './roundXhr'
-import ground from './ground'
 
 export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedirect?: () => void) {
 
- return {
+  function reload(o: LichessMessageAny) {
+    // lichess trick for mobile API BC
+    if (o && o.t)
+      handlers[o.t](o.d)
+    else
+      ctrl.reloadGameData()
+  }
+
+ const handlers: MessageHandlers = {
     takebackOffers(o: { [index: string]: boolean }) {
       if (!ctrl.data.player.proposingTakeback && o[ctrl.data.player.color]) {
         sound.dong()
@@ -50,7 +56,7 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       socket.redirectToGame(e)
     },
     // server tells client to reload at once game data
-    reload: ctrl.reloadGameData,
+    reload,
     // if client version is too old compared to server, the latter will send a
     // resync event
     resync() {
@@ -67,23 +73,28 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
     clock(o: { white: number, black: number }) {
       if (ctrl.clock) ctrl.clock.update(o.white, o.black)
     },
-    end(winner: Color) {
-      ctrl.data.game.winner = winner
-      ground.end(ctrl.chessground)
-      ctrl.reloadGameData()
-      window.plugins.insomnia.allowSleepAgain()
-      if (ctrl.data.game.speed === 'correspondence') {
-        removeOfflineGameData(ctrl.data.url.round.substr(1))
+    endData(o: ApiEnd) {
+      ctrl.endWithData(o)
+    },
+    rematchOffer(by: Color) {
+      ctrl.data.player.offeringRematch = by === ctrl.data.player.color
+      const fromOp = ctrl.data.opponent.offeringRematch = by === ctrl.data.opponent.color
+      if (fromOp) {
+        window.plugins.toast.show(i18n('yourOpponentWantsToPlayANewGameWithYou'), 'short', 'center')
       }
-      if (!ctrl.data.player.spectator) {
-        sound.dong()
-        vibrate.quick()
-        setTimeout(function() {
-          session.refresh()
-          ctrl.showActions()
-          redraw()
-        }, 500)
+      redraw()
+    },
+    rematchTaken(nextId: string) {
+      ctrl.data.game.rematch = nextId
+      // redraw()
+    },
+    drawOffer(by: Color) {
+      ctrl.data.player.offeringDraw = by === ctrl.data.player.color
+      const fromOp = ctrl.data.opponent.offeringDraw = by === ctrl.data.opponent.color
+      if (fromOp) {
+        window.plugins.toast.show(i18n('yourOpponentOffersADraw'), 'short', 'center')
       }
+      redraw()
     },
     gone(isGone: boolean) {
       if (!ctrl.data.opponent.ai && ctrl.data.game.speed !== 'correspondence') {
@@ -104,4 +115,6 @@ export default function(ctrl: OnlineRound, onFeatured?: () => void, onUserTVRedi
       if (!ctrl.chat || !ctrl.chat.showing) redraw()
     }
   }
+
+  return handlers
 }

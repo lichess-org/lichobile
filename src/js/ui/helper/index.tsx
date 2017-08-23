@@ -391,6 +391,11 @@ export function getLI(e: Event) {
   return target.tagName === 'LI' ? target : findParentBySelector(target, 'li')
 }
 
+export function getTR(e: Event) {
+  const target = (e.target as HTMLElement)
+  return target.tagName === 'TR' ? target : findParentBySelector(target, 'tr')
+}
+
 export function findElByClassName(e: Event, className: string) {
   const target = (e.target as HTMLElement)
   return target.classList.contains(className) ?

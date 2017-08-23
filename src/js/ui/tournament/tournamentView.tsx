@@ -36,6 +36,18 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     ])
 }
 
+interface IdDataset extends DOMStringMap {
+  route?: string
+  popup?: string
+}
+function onTournamentTap(e: Event) {
+  const el = helper.getTR(e)
+  const ds = el.dataset as IdDataset
+  if (el && ds.id) {
+    router.set('/tournament/' + ds.id)
+  }
+}
+
 export function tournamentListBody(ctrl: TournamentListState) {
   if (!ctrl.tournaments()) return null
 
@@ -46,7 +58,9 @@ export function tournamentListBody(ctrl: TournamentListState) {
     <div className="tournamentTabsWrapper">
       {tabNavigation(ctrl.currentTab)}
       <div className="native_scroller tournamentList">
-        <table>
+        <table
+          oncreate={helper.ontapY(onTournamentTap, undefined, helper.getTR)}
+        >
           <tbody>
             {tabContent.map(renderTournamentListItem)}
           </tbody>
@@ -77,7 +91,7 @@ function renderTournamentListItem(tournament: TournamentListItem) {
   return (
     <tr key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
-      oncreate={helper.ontapY(() => router.set('/tournament/' + tournament.id))}
+      data-id={tournament.id}
     >
       <td className="tournamentListName" data-icon={tournament.perf.icon}>
         <div className="fullName">{tournament.fullName}</div>

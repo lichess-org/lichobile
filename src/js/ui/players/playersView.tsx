@@ -63,9 +63,19 @@ export function searchModal(ctrl: State) {
   )
 }
 
+function onPlayerTap(e: Event) {
+  const el = helper.getLI(e)
+  const ds = el.dataset as DOMStringMap
+  if (el && ds.id) {
+    router.set('/@/' + ds.id)
+  }
+}
+
 export function body(ctrl: State) {
   return (
-    <ul className="playersSuggestion native_scroller page">
+    <ul className="playersSuggestion native_scroller page"
+      oncreate={helper.ontapY(onPlayerTap, undefined, helper.getLI)}
+    >
       {ctrl.players().map(renderPlayer)}
     </ul>
   )
@@ -81,7 +91,7 @@ function renderPlayer(user: User) {
       return prev
   })
   return (
-    <li className="list_item playerSuggestion nav" oncreate={helper.ontapY(() => router.set('/@/' + user.id))}>
+    <li className="list_item playerSuggestion nav" data-id={user.id}>
       {userStatus(user)}
       <span className="rating" data-icon={utils.gameIcon(perf)}>
         {user.perfs[perf].rating}

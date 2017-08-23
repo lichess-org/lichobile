@@ -36,13 +36,9 @@ function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     ])
 }
 
-interface IdDataset extends DOMStringMap {
-  route?: string
-  popup?: string
-}
 function onTournamentTap(e: Event) {
   const el = helper.getTR(e)
-  const ds = el.dataset as IdDataset
+  const ds = el.dataset as DOMStringMap
   if (el && ds.id) {
     router.set('/tournament/' + ds.id)
   }

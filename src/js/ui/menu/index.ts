@@ -7,10 +7,10 @@ import socket from '../../socket'
 import * as inboxXhr from '../inbox/inboxXhr'
 import * as stream from 'mithril/stream'
 
-let sendPingsInterval: number
+let pingsTimeoutID: number
 
 export const inboxUnreadCount = stream(0)
-export const headerOpen = stream(false)
+export const profileMenuOpen = stream(false)
 export const isOpen = stream(false)
 export const mlat = stream(0)
 export const ping = stream(0)
@@ -21,7 +21,10 @@ export function getServerLags() {
     .then((p: number) => {
       ping(p)
       mlat(socket.getCurrentMoveLatency())
-      if (isOpen()) redraw()
+      if (isOpen()) {
+        redraw()
+        setTimeout(getServerLags, 1000)
+      }
     })
   }
 }
@@ -52,13 +55,12 @@ export function open() {
   if (hasNetwork()) {
     socket.send('moveLat', true)
   }
-  getServerLags()
-  sendPingsInterval = setInterval(getServerLags, 1000)
+  pingsTimeoutID = setTimeout(getServerLags, 1000)
 }
 
 export function close(fromBB?: string) {
   if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop()
-  clearInterval(sendPingsInterval)
+  clearTimeout(pingsTimeoutID)
   if (hasNetwork()) {
     socket.send('moveLat', false)
   }
@@ -68,7 +70,7 @@ export function close(fromBB?: string) {
     'translate3d(-100%,0,0)', 250, 'ease-out'
   )
   .then(() => {
-    headerOpen(false)
+    profileMenuOpen(false)
     isOpen(false)
     redraw()
   })
@@ -83,5 +85,5 @@ export function toggleHeader() {
     )
     redraw()
   })
-  return headerOpen() ? headerOpen(false) : headerOpen(true)
+  return profileMenuOpen() ? profileMenuOpen(false) : profileMenuOpen(true)
 }

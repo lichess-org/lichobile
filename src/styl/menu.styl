@@ -67,42 +67,33 @@
     &.connected
       justify-content flex-start
       position relative
-      padding-left 55px
-      > .led
-        position absolute
-        top 22px
-        left 17px
-        font-size: 2em
-        opacity: 0.8
-        width: 20px
-        height: 20px
-        border-radius: 50%
-      > .patron
-        position absolute
-        left 17px
-  > .user_profile_button
-    color darken(#fff, 20%)
-    text-align left
-    margin-left 15px
-    > .arrow
-      margin-left 10px
-      width 50px
-      height 40px
-      line-height 40px
-      color gold
-      text-align center
-      &.active
-        background lighten(#353535, 8%)
+      padding-left 15px
+
+.menu-toggleButton
+  background #282828
+  color #aeaeae
+  text-align left
+  padding-left 15px
+  line-height 40px
+  &.side_link
+    margin-top 0
+  &.active
+    background lighten(#353535, 8%)
 
 .pingServerLed
   margin-left 15px
   margin-right 50px
   position relative
   > .pingServer
-    color darken(#fff, 20%)
+    padding-left 40px
+    color darken(#fff, 40%)
     white-space nowrap
-    font-size 0.8em
+    font-size 0.75em
     text-align left
+    > signal
+      position absolute
+      left 0
+      top 10px
     .pingKey
       display inline-block
       width 45px
@@ -146,3 +137,29 @@
 .sep_link
   color #8a8a8a
   padding 15px 15px 10px
+
+signal
+  display: inline-block;
+  height: 1.5em;
+  width: 2.25em;
+  overflow: visible;
+  white-space: nowrap;
+  > i
+    width: 20%;
+    margin-left: 1px;
+    display: inline-block;
+    height: 40%;
+    background-color: green
+
+signal > i:nth-child(2) { height: 60%; }
+signal > i:nth-child(3) { height: 80%; }
+signal > i:nth-child(4) { height: 100%; }
+
+signal.q1 > i
+  background-color: #dc322f;
+
+signal.q2 > i
+  background-color: #d59120;
+
+signal > i.off
+  background-color darken(#fff, 40%)

@@ -1,4 +1,6 @@
-import * as menu from '.'
+import * as h from 'mithril/hyperscript'
+import * as Zanimo from 'zanimo'
+
 import socket from '../../socket'
 import session, { Session } from '../../session'
 import loginModal from '../loginModal'
@@ -12,7 +14,12 @@ import { handleXhrError, hasNetwork } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
-import * as Zanimo from 'zanimo'
+import * as menu from '.'
+
+interface PingData {
+  ping: number | undefined
+  server: number | undefined
+}
 
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
@@ -27,14 +34,6 @@ export default function view() {
 }
 
 function renderHeader(user?: Session) {
-  const ping = menu.ping()
-  const server = menu.mlat()
-  const l = (ping || 0) + server - 100
-  const ratio = Math.max(Math.min(l / 1200, 1), 0)
-  const hue = (Math.round((1 - ratio) * 120)).toString(10)
-  const color = socket.isConnected() ?
-    ['hsl(', hue, ',100%,40%)'].join('') :
-    'red'
   return (
     <header className="side_menu_header">
       { session.isKidMode() ? <div key="kiddo" className="kiddo">😊</div> : null }
@@ -50,38 +49,13 @@ function renderHeader(user?: Session) {
       }
       { hasNetwork() && user ?
         <h2 key="username-connected" className="username connected">
-        { user.patron ?
-          <div class="patron" style={'color: ' + color} data-icon="" />
-          :
-          <div class="led" style={'background: ' + color}/>
-        }
-        { user.username }
+          { user.patron ?
+            <div className="patron" data-icon="" /> : null
+          }
+          { user.username }
         </h2> : null
       }
-      { hasNetwork() && session.isConnected() ?
-        <div key="server-lag" class="pingServerLed"
-          oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
-        >
-          <div class="pingServer">
-            <div>
-              <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
-              <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
-            </div>
-            <div>
-              <span className="pingKey">Server&nbsp;</span>
-              <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
-            </div>
-          </div>
-        </div> : null
-      }
-      { hasNetwork() && user ?
-        <div key="user-button" className="user_profile_button"
-          oncreate={helper.ontap(menu.toggleHeader)}
-        >
-          {i18n('profile')}
-          <span className="arrow" data-icon={menu.headerOpen() ? 'S' : 'R'} />
-        </div> : null
-      }
+      { hasNetwork() && session.isConnected() ? networkStatus() : null }
       { hasNetwork() && !user ?
         <button key="login-button" className="login" oncreate={helper.ontapY(loginModal.open)}>
           {i18n('signIn')}
@@ -118,7 +92,7 @@ function renderProfileActions(user: Session) {
       </li>
       <li className="side_link" oncreate={helper.ontap(() => {
         session.logout().catch(handleXhrError)
-        menu.headerOpen(false)
+        menu.profileMenuOpen(false)
       })}>
         <span data-icon="w" />
         {i18n('logOut')}
@@ -262,9 +236,55 @@ function renderMenu() {
   return (
     <div className="native_scroller">
       {renderHeader(user)}
-      {user && menu.headerOpen() ? renderProfileActions(user) : renderLinks(user)}
+      { hasNetwork() && user ? profileActionsToggle() : null }
+      {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
     </div>
   )
+}
+
+function profileActionsToggle() {
+
+  return (
+    <div key="user-button" className="menu-toggleButton side_link"
+      oncreate={helper.ontap(menu.toggleHeader)}
+    >
+      <span className="fa fa-exchange" />
+      {menu.profileMenuOpen() ? 'Main menu' : 'User menu'}
+    </div>
+  )
+}
+
+function networkStatus() {
+  const ping = menu.ping()
+  const server = menu.mlat()
+  return (
+    <div key="server-lag" className="pingServerLed"
+      oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
+    >
+      <div className="pingServer">
+        {signalBars({ ping, server })}
+        <div>
+          <span className="pingKey">Ping&nbsp;&nbsp;&nbsp;</span>
+          <strong className="pingValue">{socket.isConnected() && ping ? ping : '?'}</strong> ms
+        </div>
+        <div>
+          <span className="pingKey">Server&nbsp;</span>
+          <strong className="pingValue">{socket.isConnected() && server ? server : '?'}</strong> ms
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function signalBars(d: PingData) {
+  const lagRating =
+    !d.ping ? 0 :
+    (d.ping < 150) ? 4 :
+    (d.ping < 300) ? 3 :
+    (d.ping < 500) ? 2 : 1
+  const bars = []
+  for (let i = 1; i <= 4; i++) bars.push(h(i <= lagRating ? 'i' : 'i.off'))
+  return h('signal.q' + lagRating, bars)
 }
 
 function menuSlide(vnode: Mithril.DOMNode) {

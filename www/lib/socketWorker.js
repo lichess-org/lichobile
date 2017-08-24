@@ -57,6 +57,7 @@ StrongSocket.prototype = {
       self.onError(e);
     };
     self.ws.onclose = function() {
+      self.debug('connection closed');
       postMessage({ topic: 'disconnected' });
       if (self.autoReconnect) {
         self.debug('Will autoreconnect in ' + self.options.autoReconnectDelay);

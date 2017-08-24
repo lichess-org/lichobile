@@ -176,9 +176,9 @@ StrongSocket.prototype = {
   pingData: function() {
     var self = this;
     var data = {
-      t: 'p',
-      v: self.version
+      t: 'p'
     };
+    if (self.version !== undefined) data.v = self.version
     if (self.pongCount % 8 === 2) data.l = Math.round(0.1 * self.averageLag);
     return JSON.stringify(data);
   },

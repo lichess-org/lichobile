@@ -294,7 +294,6 @@ function createDefault() {
       clientId: newSri(),
       socketEndPoint: window.lichess.socketEndPoint,
       url: '/socket',
-      version: 0,
       opts
     }
     setupConnection(setup, socketHandlers)

@@ -123,13 +123,13 @@ function backdropOpacity(el: HTMLElement, opacity: number) {
   el.style.opacity = `${opacity}`
 }
 
-interface SlideHandlerState {
+interface ContentSlideHandlerState {
   menuElement: HTMLElement | null
   backDropElement: HTMLElement | null
   canSlide: boolean
 }
 
-export function SlideHandler(
+export function ContentSlideHandler(
   mainEl: HTMLElement
 ) {
 
@@ -138,7 +138,7 @@ export function SlideHandler(
   const menuSizeRatio = vw >= 960 ? 0.35 : vw >= 500 ? 0.5 : 0.85
   const maxSlide = vw * menuSizeRatio
 
-  const state: SlideHandlerState = {
+  const state: ContentSlideHandlerState = {
     menuElement: null,
     backDropElement: null,
     canSlide: false
@@ -154,7 +154,13 @@ export function SlideHandler(
   }))
 
   mc.on('panstart', (e: HammerInput) => {
-    if (e.center.x > MAX_EDGE_CAN_SLIDE) {
+    if (
+      // TODO: fix this in a better way
+      e.target.nodeName === 'PIECE' ||
+      e.target.nodeName === 'SQUARE' ||
+      e.target.className.startsWith('cg-board manipulable') ||
+      (!isOpen() && e.center.x > MAX_EDGE_CAN_SLIDE)
+    ) {
       state.canSlide = false
     } else {
       state.menuElement = document.getElementById('side_menu')
@@ -178,12 +184,88 @@ export function SlideHandler(
   })
   mc.on('panend pancancel', (e: HammerInput) => {
     if (state.canSlide) {
-      const velocity = e.velocity
+      const velocity = e.velocityX
       if (
-        velocity >=0 &&
+        velocity >= 0 &&
         (e.center.x >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
-      ) open()
-      else close()
+      ) {
+        open()
+      } else {
+        state.canSlide = false
+        close()
+      }
+    }
+  })
+}
+
+
+interface MenuSlideHandlerState {
+  backDropElement: HTMLElement | null
+  startingPos: number
+  isScrolling: boolean
+}
+
+export function MenuSlideHandler(el: HTMLElement) {
+
+  const vw = helper.viewportDim().vw
+  // see menu.styl
+  const menuSizeRatio = vw >= 960 ? 0.35 : vw >= 500 ? 0.5 : 0.85
+  const maxSlide = vw * menuSizeRatio
+
+  const state: MenuSlideHandlerState = {
+    backDropElement: null,
+    startingPos: 0,
+    isScrolling: false
+  }
+
+  const mc = new Hammer.Manager(el, {
+    inputClass: Hammer.TouchInput
+  })
+  mc.add(new Hammer.Pan({
+    direction: Hammer.DIRECTION_HORIZONTAL,
+    pointers: 1,
+    threshold: 10
+  }))
+
+  mc.on('panstart', (e: HammerInput) => {
+    state.backDropElement = document.getElementById('menu-close-overlay')
+    state.startingPos = e.center.y
+    state.isScrolling = false
+    e.preventDefault()
+  })
+  mc.on('panmove', (e: HammerInput) => {
+    // if scrolling shutdown everything
+    if (!state.isScrolling) {
+      // disable scrolling of content when sliding menu
+      e.preventDefault()
+
+      // if not already scroll prevented check if scrolling
+      if (!e.srcEvent.defaultPrevented) {
+        // set scrolling if moved vertically by more than scroll threshold
+        state.isScrolling = Math.abs(state.startingPos - e.center.y) > 5
+
+        if (state.isScrolling) return
+      }
+
+      if (e.deltaX < 0 && e.deltaX >= -maxSlide) {
+        translateMenu(el, e.deltaX)
+        backdropOpacity(state.backDropElement!, ((maxSlide + e.deltaX) / maxSlide * 100) / 100 / 2)
+      }
+    }
+  })
+  mc.on('panend pancancel', (e: HammerInput) => {
+    if (!state.isScrolling) {
+      state.isScrolling = false
+      const velocity = e.velocityX
+      if (
+        velocity >= 0 &&
+        (e.deltaX >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+      ) {
+        open()
+      }
+      else {
+        close()
+      }
     }
   })
 }

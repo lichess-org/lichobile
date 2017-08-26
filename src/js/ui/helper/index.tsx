@@ -224,6 +224,10 @@ export function ontapY(tapHandler: TapHandler, holdHandler?: TapHandler, getElem
   return createTapHandler(tapHandler, holdHandler, undefined, false, true, getElement)
 }
 
+export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getElement?: (e: TouchEvent) => HTMLElement) {
+  return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement)
+}
+
 export function progress(p: number) {
   if (p === 0) return null
   return h('span', {

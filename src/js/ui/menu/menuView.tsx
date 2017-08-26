@@ -28,7 +28,11 @@ export default {
   },
   view() {
     return (
-      <aside id="side_menu">
+      <aside id="side_menu"
+        oncreate={({ dom }: Mithril.DOMNode) => {
+          menu.MenuSlideHandler(dom as HTMLElement)
+        }}
+      >
         {renderMenu()}
       </aside>
     )
@@ -59,7 +63,7 @@ function renderHeader(user?: Session) {
       }
       { hasNetwork() && session.isConnected() ? networkStatus() : null }
       { hasNetwork() && !user ?
-        <button key="login-button" className="login" oncreate={helper.ontapY(loginModal.open)}>
+        <button key="login-button" className="login" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
@@ -128,7 +132,7 @@ function renderLinks(user?: Session) {
   const offlineGames = getOfflineGames()
 
   return (
-    <ul className="side_links" oncreate={helper.ontapY(onLinkTap, undefined, helper.getLI)}>
+    <ul className="side_links" oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}>
       <li className="side_link" key="home" data-route="/">
         <span className="fa fa-home" />Home
       </li>

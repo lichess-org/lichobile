@@ -1,3 +1,4 @@
+import * as stream from 'mithril/stream'
 import * as Zanimo from 'zanimo'
 import * as Hammer from 'hammerjs'
 import { hasNetwork } from '../../utils'
@@ -5,8 +6,11 @@ import session from '../../session'
 import redraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
+import * as helper from '../helper'
 import * as inboxXhr from '../inbox/inboxXhr'
-import * as stream from 'mithril/stream'
+
+const OPEN_AFTER_SLIDE_RATIO = 0.65
+const MAX_EDGE_CAN_SLIDE = 30
 
 let pingsTimeoutID: number
 
@@ -111,27 +115,75 @@ export function getServerLags() {
   }
 }
 
+function translateMenu(el: HTMLElement, xPos: number) {
+  el.style.transform = `translate3d(${xPos}px, 0, 0)`
+}
+
+function backdropOpacity(el: HTMLElement, opacity: number) {
+  el.style.opacity = `${opacity}`
+}
+
+interface SlideHandlerState {
+  menuElement: HTMLElement | null
+  backDropElement: HTMLElement | null
+  canSlide: boolean
+}
+
 export function SlideHandler(
-  el: HTMLElement,
-  onStart: () => void,
-  onMove: () => void,
-  onEnd: () => void
+  mainEl: HTMLElement
 ) {
-  const mc = new Hammer.Manager(el)
+
+  const vw = helper.viewportDim().vw
+  // see menu.styl
+  const menuSizeRatio = vw >= 960 ? 0.35 : vw >= 500 ? 0.5 : 0.85
+  const maxSlide = vw * menuSizeRatio
+
+  const state: SlideHandlerState = {
+    menuElement: null,
+    backDropElement: null,
+    canSlide: false
+  }
+
+  const mc = new Hammer.Manager(mainEl, {
+    inputClass: Hammer.TouchInput
+  })
   mc.add(new Hammer.Pan({
     direction: Hammer.DIRECTION_HORIZONTAL,
+    pointers: 1,
     threshold: 5
   }))
 
-  mc.on('panstart', onStart)
-  mc.on('panmove', onMove)
-  mc.on('panend', onEnd)
-
-  return {
-    destroy: () => {
-      mc.off('panstart', onStart)
-      mc.off('panmove', onMove)
-      mc.off('panend', onEnd)
+  mc.on('panstart', (e: HammerInput) => {
+    if (e.center.x > MAX_EDGE_CAN_SLIDE) {
+      state.canSlide = false
+    } else {
+      state.menuElement = document.getElementById('side_menu')
+      state.backDropElement = document.getElementById('menu-close-overlay')
+      if (state.menuElement && state.backDropElement) {
+        state.menuElement.style.visibility = 'visible'
+        state.backDropElement.style.visibility = 'visible'
+        state.canSlide = true
+      }
     }
-  }
+  })
+  mc.on('panmove', (e: HammerInput) => {
+    if (state.canSlide) {
+      // disable scrolling of content when sliding menu
+      e.preventDefault()
+      if (e.center.x <= maxSlide) {
+        translateMenu(state.menuElement!, -maxSlide + e.center.x)
+        backdropOpacity(state.backDropElement!, (e.center.x / maxSlide * 100) / 100 / 2)
+      }
+    }
+  })
+  mc.on('panend pancancel', (e: HammerInput) => {
+    if (state.canSlide) {
+      const velocity = e.velocity
+      if (
+        velocity >=0 &&
+        (e.center.x >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+      ) open()
+      else close()
+    }
+  })
 }

@@ -69,7 +69,11 @@ export default {
     background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
-        <main id="page">
+        <main id="page"
+          oncreate={({ dom }: Mithril.DOMNode) => {
+            menu.SlideHandler(dom as HTMLElement)
+          }}
+        >
           <header className="main_header">
             {header()}
           </header>

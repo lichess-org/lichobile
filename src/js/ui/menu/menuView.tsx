@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import * as Zanimo from 'zanimo'
 
 import socket from '../../socket'
 import session, { Session } from '../../session'
@@ -23,15 +22,18 @@ interface PingData {
 
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
-export default function view() {
-  if (!menu.isOpen()) return null
-
-  return (
-    <aside id="side_menu" oncreate={menuSlide}>
-      {renderMenu()}
-    </aside>
-  )
-}
+export default {
+  onbeforeupdate() {
+    return menu.isOpen()
+  },
+  view() {
+    return (
+      <aside id="side_menu">
+        {renderMenu()}
+      </aside>
+    )
+  }
+} as Mithril.Component<{}, {}>
 
 function renderHeader(user?: Session) {
   return (
@@ -285,10 +287,4 @@ function signalBars(d: PingData) {
   const bars = []
   for (let i = 1; i <= 4; i++) bars.push(h(i <= lagRating ? 'i' : 'i.off'))
   return h('signal.q' + lagRating, bars)
-}
-
-function menuSlide(vnode: Mithril.DOMNode) {
-  const el = vnode.dom as HTMLElement
-  el.style.transform = 'translate3d(-100%,0,0)'
-  Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out')
 }

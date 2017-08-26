@@ -1,14 +1,17 @@
-.menu-close-overlay
+#menu-close-overlay
   height 100%
   width 100%
   z-index 99
-  background rgba(0,0,0,0.5)
+  background rgb(0,0,0)
+  opacity 0.5
+  visibility hidden
   position absolute
   top 0
   left 0
 
 #side_menu
   position absolute
+  visibility hidden
   top 0
   bottom 0
   height 100%
@@ -24,6 +27,7 @@
   overflow hidden
   z-index 100
   box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.5)
+  transform translate3d(-100%, 0,0)
   section
     padding 0 15px
   .login

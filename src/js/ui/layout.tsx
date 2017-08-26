@@ -1,5 +1,6 @@
+import * as h from 'mithril/hyperscript'
 import * as menu from './menu'
-import menuView from './menu/menuView'
+import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
 import newGameForm from './newGameForm'
 import playMachineForm from './playMachineForm'
@@ -43,9 +44,9 @@ export default {
             {header()}
           </header>
           <div id="content_round" className="content_round">{content()}</div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
         </main>
-        {menuView()}
+        {h(MenuView)}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
@@ -76,9 +77,9 @@ export default {
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
         </main>
-        {menuView()}
+        {h(MenuView)}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
@@ -100,7 +101,7 @@ export default {
           <div className="content fullScreen">
             {content()}
           </div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
         </main>
         {overlay ? overlay() : null}
       </div>

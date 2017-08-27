@@ -49,9 +49,9 @@ export function open() {
 }
 
 export function close(fromBB?: string) {
+  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop()
   profileMenuOpen(false)
   isOpen(false)
-  if (fromBB !== 'backbutton' && isOpen()) router.backbutton.stack.pop()
   clearTimeout(pingsTimeoutID)
   if (hasNetwork()) {
     socket.send('moveLat', false)
@@ -231,7 +231,6 @@ export function MenuSlideHandler(el: HTMLElement) {
     state.backDropElement = document.getElementById('menu-close-overlay')
     state.startingPos = e.center.y
     state.isScrolling = false
-    e.preventDefault()
   })
   mc.on('panmove', (e: HammerInput) => {
     // if scrolling shutdown everything
@@ -256,15 +255,17 @@ export function MenuSlideHandler(el: HTMLElement) {
   mc.on('panend pancancel', (e: HammerInput) => {
     if (!state.isScrolling) {
       state.isScrolling = false
+      // we don't want to close menu accidentaly when scrolling thus it is important
+      // to check X velocity only
       const velocity = e.velocityX
       if (
-        velocity >= 0 &&
-        (e.deltaX >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+        velocity <= 0 &&
+        (e.deltaX < -(maxSlide - maxSlide * OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
       ) {
-        open()
+        close()
       }
       else {
-        close()
+        open()
       }
     }
   })

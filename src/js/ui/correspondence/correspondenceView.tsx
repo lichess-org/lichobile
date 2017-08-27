@@ -5,7 +5,7 @@ import i18n from '../../i18n'
 import session from '../../session'
 import loginModal from '../loginModal'
 import newGameForm from '../newGameForm'
-import tabs from '../shared/tabs'
+import Tabs from '../shared/Tabs'
 import * as h from 'mithril/hyperscript'
 import { Seek } from '../../lichess/interfaces'
 import { Challenge } from '../../lichess/interfaces/challenge'
@@ -39,7 +39,7 @@ export function renderBody(ctrl: State) {
     ]
   }
 
-  const tabsBar = h(tabs, {
+  const tabsBar = h(Tabs, {
     buttons: tabButtons,
     selectedTab: ctrl.selectedTab(),
     onTabChange: (k: string) => {

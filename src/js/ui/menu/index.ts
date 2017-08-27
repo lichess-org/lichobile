@@ -18,6 +18,9 @@ export const isOpen = stream(false)
 export const mlat = stream(0)
 export const ping = stream(0)
 
+// used to redraw before opening
+export const isSliding = stream(false)
+
 export function toggle() {
   if (isOpen()) close()
   else open()

@@ -1,5 +1,6 @@
 import * as Hammer from 'hammerjs'
-import { open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
+import redraw from '../../utils/redraw'
+import * as menu from '.'
 
 const MAX_EDGE_CAN_SLIDE = 30
 
@@ -13,7 +14,7 @@ export default function OpenSlideHandler(
   mainEl: HTMLElement
 ) {
 
-  const maxSlide = getMenuWidth()
+  const maxSlide = menu.getMenuWidth()
 
   const state: OpenSlideHandlerState = {
     menuElement: null,
@@ -45,6 +46,8 @@ export default function OpenSlideHandler(
         state.menuElement.style.visibility = 'visible'
         state.backDropElement.style.visibility = 'visible'
         state.canSlide = true
+        menu.isSliding(true)
+        redraw()
       }
     }
   })
@@ -54,23 +57,24 @@ export default function OpenSlideHandler(
       e.preventDefault()
       const delta = e.deltaX
       if (delta <= maxSlide) {
-        translateMenu(state.menuElement!, -maxSlide + delta)
-        backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
+        menu.translateMenu(state.menuElement!, -maxSlide + delta)
+        menu.backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
       }
     }
   })
   mc.on('panend pancancel', (e: HammerInput) => {
     if (state.canSlide) {
+      menu.isSliding(false)
       state.canSlide = false
       const velocity = e.velocityX
       const delta = e.deltaX
       if (
         velocity >= 0 &&
-        (delta >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
       ) {
-        open()
+        menu.open()
       } else {
-        close()
+        menu.close()
       }
     }
   })

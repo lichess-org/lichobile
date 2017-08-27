@@ -1,5 +1,5 @@
 import * as Hammer from 'hammerjs'
-import { open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
+import * as menu from '.'
 
 interface CloseSlideHandlerState {
   backDropElement: HTMLElement | null
@@ -9,7 +9,7 @@ interface CloseSlideHandlerState {
 
 export default function CloseSlideHandler(el: HTMLElement) {
 
-  const maxSlide = getMenuWidth()
+  const maxSlide = menu.getMenuWidth()
 
   const state: CloseSlideHandlerState = {
     backDropElement: null,
@@ -45,8 +45,8 @@ export default function CloseSlideHandler(el: HTMLElement) {
       }
 
       if (e.deltaX < 0 && e.deltaX >= -maxSlide) {
-        translateMenu(el, e.deltaX)
-        backdropOpacity(state.backDropElement!, ((maxSlide + e.deltaX) / maxSlide * 100) / 100 / 2)
+        menu.translateMenu(el, e.deltaX)
+        menu.backdropOpacity(state.backDropElement!, ((maxSlide + e.deltaX) / maxSlide * 100) / 100 / 2)
       }
     }
   })
@@ -58,12 +58,12 @@ export default function CloseSlideHandler(el: HTMLElement) {
       const velocity = e.velocityX
       if (
         velocity <= 0 &&
-        (e.deltaX < -(maxSlide - maxSlide * OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
+        (e.deltaX < -(maxSlide - maxSlide * menu.OPEN_AFTER_SLIDE_RATIO) || velocity < -0.4)
       ) {
-        close()
+        menu.close()
       }
       else {
-        open()
+        menu.open()
       }
     }
   })

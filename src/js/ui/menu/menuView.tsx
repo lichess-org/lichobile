@@ -26,16 +26,22 @@ const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to pro
 
 export default {
   onbeforeupdate() {
-    return menu.isOpen()
+    return menu.isOpen() || menu.isSliding()
   },
   view() {
+    const user = session.get()
+
     return (
       <aside id="side_menu"
         oncreate={({ dom }: Mithril.DOMNode) => {
           CloseSlideHandler(dom as HTMLElement)
         }}
       >
-        {renderMenu()}
+        <div className="native_scroller">
+          {renderHeader(user)}
+          { hasNetwork() && user ? profileActionsToggle() : null }
+          {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
+        </div>
       </aside>
     )
   }
@@ -235,18 +241,6 @@ function renderLinks(user?: Session) {
         <span className="fa fa-cog"/>{i18n('settings')}
       </li>
     </ul>
-  )
-}
-
-function renderMenu() {
-  const user = session.get()
-
-  return (
-    <div className="native_scroller">
-      {renderHeader(user)}
-      { hasNetwork() && user ? profileActionsToggle() : null }
-      {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
-    </div>
   )
 }
 

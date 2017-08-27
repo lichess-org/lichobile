@@ -13,7 +13,9 @@ import { handleXhrError, hasNetwork } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
+
 import * as menu from '.'
+import CloseSlideHandler from './CloseSlideHandler'
 
 interface PingData {
   ping: number | undefined
@@ -30,7 +32,7 @@ export default {
     return (
       <aside id="side_menu"
         oncreate={({ dom }: Mithril.DOMNode) => {
-          menu.MenuSlideHandler(dom as HTMLElement)
+          CloseSlideHandler(dom as HTMLElement)
         }}
       >
         {renderMenu()}

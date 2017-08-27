@@ -1,5 +1,7 @@
 import * as h from 'mithril/hyperscript'
+import settings from '../settings'
 import * as menu from './menu'
+import MenuOpenSlideHandler from './menu/OpenSlideHandler'
 import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
 import newGameForm from './newGameForm'
@@ -10,7 +12,6 @@ import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
 import * as helper from './helper'
-import settings from '../settings'
 
 let background: string
 
@@ -41,7 +42,7 @@ export default {
       <div className={'view-container ' + bgClass(background)}>
         <main id="page" className={color}
           oncreate={({ dom }: Mithril.DOMNode) => {
-            menu.ContentSlideHandler(dom as HTMLElement)
+            MenuOpenSlideHandler(dom as HTMLElement)
           }}
         >
           <header className="main_header board">
@@ -75,7 +76,7 @@ export default {
       <div className={'view-container ' + bgClass(background)}>
         <main id="page"
           oncreate={({ dom }: Mithril.DOMNode) => {
-            menu.ContentSlideHandler(dom as HTMLElement)
+            MenuOpenSlideHandler(dom as HTMLElement)
           }}
         >
           <header className="main_header">

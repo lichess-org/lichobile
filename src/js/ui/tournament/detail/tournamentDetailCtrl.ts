@@ -114,6 +114,7 @@ export default function oninit(vnode: Mithril.Vnode<TournamentAttrs, TournamentS
   .catch(err => {
     if (utils.isFetchError(err) && err.response.status === 404) {
       notFound(true)
+      redraw()
     } else {
       utils.handleXhrError(err)
     }

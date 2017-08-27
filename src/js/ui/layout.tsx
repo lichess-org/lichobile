@@ -21,16 +21,6 @@ export default {
     background = bg
   },
 
-  empty() {
-    background = background || settings.general.theme.background()
-    return (
-      <div className={'view-container ' + bgClass(background)}>
-        <main id="page">
-        </main>
-      </div>
-    )
-  },
-
   board(
     header: () => Mithril.Children,
     content: () => Mithril.Children,

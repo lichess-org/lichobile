@@ -1,6 +1,5 @@
 import * as Hammer from 'hammerjs'
-import * as helper from '../helper'
-import { open, close, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO } from '.'
+import { open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
 
 interface CloseSlideHandlerState {
   backDropElement: HTMLElement | null
@@ -10,10 +9,7 @@ interface CloseSlideHandlerState {
 
 export default function CloseSlideHandler(el: HTMLElement) {
 
-  const vw = helper.viewportDim().vw
-  // see menu.styl
-  const menuSizeRatio = vw >= 960 ? 0.35 : vw >= 500 ? 0.5 : 0.85
-  const maxSlide = vw * menuSizeRatio
+  const maxSlide = getMenuWidth()
 
   const state: CloseSlideHandlerState = {
     backDropElement: null,

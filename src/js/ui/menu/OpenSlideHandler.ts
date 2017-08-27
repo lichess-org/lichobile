@@ -1,6 +1,5 @@
 import * as Hammer from 'hammerjs'
-import * as helper from '../helper'
-import { isOpen, open, close, translateMenu, backdropOpacity, OPEN_AFTER_SLIDE_RATIO } from '.'
+import { isOpen, open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
 
 const MAX_EDGE_CAN_SLIDE = 30
 
@@ -14,10 +13,7 @@ export default function OpenSlideHandler(
   mainEl: HTMLElement
 ) {
 
-  const vw = helper.viewportDim().vw
-  // see menu.styl
-  const menuSizeRatio = vw >= 960 ? 0.35 : vw >= 500 ? 0.5 : 0.85
-  const maxSlide = vw * menuSizeRatio
+  const maxSlide = getMenuWidth()
 
   const state: OpenSlideHandlerState = {
     menuElement: null,

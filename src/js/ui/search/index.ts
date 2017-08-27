@@ -1,4 +1,5 @@
 import i18n from '../../i18n'
+import socket from '../../socket'
 import * as helper from '../helper'
 import { header as headerWidget } from '../shared/common'
 import layout from '../layout'
@@ -19,6 +20,7 @@ const SearchScreen: Mithril.Component<Attrs, State> = {
   oncreate: helper.viewFadeIn,
 
   oninit({ attrs }) {
+    socket.createDefault()
     this.ctrl = SearchCtrl(<Partial<SearchQuery>>attrs)
   },
 

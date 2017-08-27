@@ -11,7 +11,6 @@ import loginModal from './loginModal'
 import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
-import * as helper from './helper'
 
 let background: string
 
@@ -39,7 +38,7 @@ export default {
             {header()}
           </header>
           <div id="content_round" className="content_round">{content()}</div>
-          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
         {h(MenuView)}
         {gamesMenu.view()}
@@ -76,7 +75,7 @@ export default {
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }
-          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
         {h(MenuView)}
         {gamesMenu.view()}
@@ -100,7 +99,7 @@ export default {
           <div className="content fullScreen">
             {content()}
           </div>
-          <div id="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} />
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
         {overlay ? overlay() : null}
       </div>

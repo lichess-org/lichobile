@@ -6,7 +6,7 @@ import redraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
 import * as inboxXhr from '../inbox/inboxXhr'
-import { viewportDim } from '../helper'
+import { viewportDim, ontap } from '../helper'
 
 export const OPEN_AFTER_SLIDE_RATIO = 0.65
 
@@ -127,3 +127,9 @@ export function translateMenu(el: HTMLElement, xPos: number) {
 export function backdropOpacity(el: HTMLElement, opacity: number) {
   el.style.opacity = `${opacity}`
 }
+
+export const backdropCloseHandler = ontap((e: Event) => {
+  e.preventDefault()
+  // e.stopPropagation()
+  close()
+})

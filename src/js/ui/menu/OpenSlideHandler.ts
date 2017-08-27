@@ -1,5 +1,5 @@
 import * as Hammer from 'hammerjs'
-import { isOpen, open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
+import { open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_SLIDE_RATIO } from '.'
 
 const MAX_EDGE_CAN_SLIDE = 30
 
@@ -35,7 +35,7 @@ export default function OpenSlideHandler(
       e.target.nodeName === 'PIECE' ||
       e.target.nodeName === 'SQUARE' ||
       e.target.className.startsWith('cg-board manipulable') ||
-      (!isOpen() && e.center.x > MAX_EDGE_CAN_SLIDE)
+      e.center.x > MAX_EDGE_CAN_SLIDE
     ) {
       state.canSlide = false
     } else {
@@ -61,6 +61,7 @@ export default function OpenSlideHandler(
   })
   mc.on('panend pancancel', (e: HammerInput) => {
     if (state.canSlide) {
+      state.canSlide = false
       const velocity = e.velocityX
       const delta = e.deltaX
       if (
@@ -69,7 +70,6 @@ export default function OpenSlideHandler(
       ) {
         open()
       } else {
-        state.canSlide = false
         close()
       }
     }

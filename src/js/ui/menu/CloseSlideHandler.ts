@@ -3,7 +3,7 @@ import { open, close, translateMenu, backdropOpacity, getMenuWidth, OPEN_AFTER_S
 
 interface CloseSlideHandlerState {
   backDropElement: HTMLElement | null
-  startingPos: number
+  startingY: number
   isScrolling: boolean
 }
 
@@ -13,7 +13,7 @@ export default function CloseSlideHandler(el: HTMLElement) {
 
   const state: CloseSlideHandlerState = {
     backDropElement: null,
-    startingPos: 0,
+    startingY: 0,
     isScrolling: false
   }
 
@@ -27,7 +27,7 @@ export default function CloseSlideHandler(el: HTMLElement) {
 
   mc.on('panstart', (e: HammerInput) => {
     state.backDropElement = document.getElementById('menu-close-overlay')
-    state.startingPos = e.center.y
+    state.startingY = e.center.y
     state.isScrolling = false
   })
   mc.on('panmove', (e: HammerInput) => {
@@ -39,7 +39,7 @@ export default function CloseSlideHandler(el: HTMLElement) {
       // if not already scroll prevented check if scrolling
       if (!e.srcEvent.defaultPrevented) {
         // set scrolling if moved vertically by more than scroll threshold
-        state.isScrolling = Math.abs(state.startingPos - e.center.y) > 5
+        state.isScrolling = Math.abs(state.startingY - e.center.y) > 5
 
         if (state.isScrolling) return
       }

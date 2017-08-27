@@ -52,18 +52,20 @@ export default function OpenSlideHandler(
     if (state.canSlide) {
       // disable scrolling of content when sliding menu
       e.preventDefault()
-      if (e.center.x <= maxSlide) {
-        translateMenu(state.menuElement!, -maxSlide + e.center.x)
-        backdropOpacity(state.backDropElement!, (e.center.x / maxSlide * 100) / 100 / 2)
+      const delta = e.deltaX
+      if (delta <= maxSlide) {
+        translateMenu(state.menuElement!, -maxSlide + delta)
+        backdropOpacity(state.backDropElement!, (delta / maxSlide * 100) / 100 / 2)
       }
     }
   })
   mc.on('panend pancancel', (e: HammerInput) => {
     if (state.canSlide) {
       const velocity = e.velocityX
+      const delta = e.deltaX
       if (
         velocity >= 0 &&
-        (e.center.x >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+        (delta >= maxSlide * OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
       ) {
         open()
       } else {

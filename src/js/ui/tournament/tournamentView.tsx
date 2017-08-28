@@ -1,12 +1,13 @@
-import * as helper from '../helper'
+import * as h from 'mithril/hyperscript'
+import i18n from '../../i18n'
 import router from '../../router'
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils'
-import i18n from '../../i18n'
-import * as h from 'mithril/hyperscript'
-import TabNavigation from '../shared/TabNavigation'
-import { TournamentListState } from './interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
+import * as helper from '../helper'
+import TabNavigation from '../shared/TabNavigation'
+
 import newTournamentForm from './newTournamentForm'
+import TournamentCtrl from './TournamentCtrl'
 
 const TABS = [{
     key: 'started',
@@ -19,23 +20,6 @@ const TABS = [{
     label: 'Completed'
 }]
 
-function tabNavigation (currentTabFn: Mithril.Stream<string>) {
-    return h('.tabs-nav-header', [
-      h(TabNavigation, {
-          buttons: TABS,
-          selectedTab: currentTabFn(),
-          onTabChange: (k: string) => {
-            const loc = window.location.search.replace(/\?tab\=\w+$/, '')
-            try {
-              window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
-            } catch (e) { console.error(e) }
-            currentTabFn(k)
-          }
-      }),
-      h('div.main_header_drop_shadow')
-    ])
-}
-
 function onTournamentTap(e: Event) {
   const el = helper.getTR(e)
   const ds = el.dataset as DOMStringMap
@@ -44,15 +28,28 @@ function onTournamentTap(e: Event) {
   }
 }
 
-export function tournamentListBody(ctrl: TournamentListState) {
-  if (!ctrl.tournaments()) return null
+export function tournamentListBody(ctrl: TournamentCtrl) {
+  if (!ctrl.tournaments) return null
 
-  const id = ctrl.currentTab()
-  const tabContent = ctrl.tournaments()[id]
+  const id = ctrl.currentTab
+  const tabContent = ctrl.tournaments[id]
 
   return (
     <div className="tournamentTabsWrapper">
-      {tabNavigation(ctrl.currentTab)}
+      <div className="tabs-nav-header">
+        {h(TabNavigation, {
+            buttons: TABS,
+            selectedTab: ctrl.currentTab,
+            onTabChange: (k: string) => {
+              const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+              try {
+                window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
+              } catch (e) { console.error(e) }
+              ctrl.currentTab = k
+            }
+        })}
+        <div className="main_header_drop_shadow" />
+      </div>
       <div className="native_scroller tournamentList">
         <table
           oncreate={helper.ontapY(onTournamentTap, undefined, helper.getTR)}

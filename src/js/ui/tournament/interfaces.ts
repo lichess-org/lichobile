@@ -1,10 +1,4 @@
-import { Tournament, TournamentLists, PlayerInfo } from '../../lichess/interfaces/tournament'
-
-export interface TournamentListState {
-  tournaments: Mithril.Stream<TournamentLists>
-  currentTab: Mithril.Stream<string>
-  startPositions: Array<BoardPositionCategory>
-}
+import { Tournament, PlayerInfo } from '../../lichess/interfaces/tournament'
 
 export interface PlayerInfoState {
   open: (playerId: string) => void

@@ -2,7 +2,8 @@ import { redrawSync } from '../../utils/redraw'
 import { batchRequestAnimationFrame, removeFromBatchAnimationFrame } from '../../utils/batchRAF'
 
 const HOLD_DURATION = 600
-const SCROLL_TOLERANCE = 8
+const SCROLL_TOLERANCE_X = 5
+const SCROLL_TOLERANCE_Y = 5
 const ACTIVE_CLASS = 'active'
 
 function hasContextMenu() {
@@ -125,10 +126,18 @@ export default function ButtonHandler(
     let x = touch.clientX,
       y = touch.clientY,
       b = boundaries,
-      d = 0
-    if (scrollX) d = Math.abs(x - startX)
-    if (scrollY) d = Math.abs(y - startY)
-    return x < b.maxX && x > b.minX && y < b.maxY && y > b.minY && d < SCROLL_TOLERANCE
+      dX = 0,
+      dY = 0
+    if (scrollX) dX = Math.abs(x - startX)
+    if (scrollY) dY = Math.abs(y - startY)
+    return (
+      x < b.maxX &&
+      x > b.minX &&
+      y < b.maxY &&
+      y > b.minY &&
+      dX < SCROLL_TOLERANCE_X &&
+      dY < SCROLL_TOLERANCE_Y
+    )
   }
 
   el.addEventListener('touchstart', onTouchStart, false)

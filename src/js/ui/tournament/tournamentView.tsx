@@ -3,7 +3,7 @@ import router from '../../router'
 import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize } from '../../utils'
 import i18n from '../../i18n'
 import * as h from 'mithril/hyperscript'
-import Tabs from '../shared/Tabs'
+import TabNavigation from '../shared/TabNavigation'
 import { TournamentListState } from './interfaces'
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import newTournamentForm from './newTournamentForm'
@@ -21,7 +21,7 @@ const TABS = [{
 
 function tabNavigation (currentTabFn: Mithril.Stream<string>) {
     return h('.tabs-nav-header', [
-      h(Tabs, {
+      h(TabNavigation, {
           buttons: TABS,
           selectedTab: currentTabFn(),
           onTabChange: (k: string) => {

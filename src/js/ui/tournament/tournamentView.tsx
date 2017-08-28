@@ -21,7 +21,7 @@ const TABS = [{
 }]
 
 function onTournamentTap(e: Event) {
-  const el = helper.getTR(e)
+  const el = helper.getLI(e)
   const ds = el.dataset as DOMStringMap
   if (el && ds.id) {
     router.set('/tournament/' + ds.id)
@@ -50,15 +50,11 @@ export function tournamentListBody(ctrl: TournamentCtrl) {
         })}
         <div className="main_header_drop_shadow" />
       </div>
-      <div className="native_scroller tournamentList">
-        <table
-          oncreate={helper.ontapY(onTournamentTap, undefined, helper.getTR)}
-        >
-          <tbody>
-            {tabContent.map(renderTournamentListItem)}
-          </tbody>
-        </table>
-      </div>
+      <ul className="native_scroller tournamentList"
+        oncreate={helper.ontapY(onTournamentTap, undefined, helper.getLI)}
+      >
+        {tabContent.map(renderTournamentListItem)}
+      </ul>
     </div>
   )
 }
@@ -82,19 +78,20 @@ function renderTournamentListItem(tournament: TournamentListItem) {
     capitalize(tournament.variant.short) : ''
 
   return (
-    <tr key={tournament.id}
+    <li key={tournament.id}
       className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
       data-id={tournament.id}
+      data-icon={tournament.perf.icon}
     >
-      <td className="tournamentListName" data-icon={tournament.perf.icon}>
+      <div className="tournamentListName">
         <div className="fullName">{tournament.fullName}</div>
         <small className="infos">{time} {variant} {mode} • {duration}</small>
-      </td>
-      <td className="tournamentListTime">
+      </div>
+      <div className="tournamentListTime">
         <div className="time">{formatTime(tournament.startsAt)} <strong className="timeArrow">-</strong> {formatTime(tournament.finishesAt)}</div>
         <small className="nbUsers withIcon" data-icon="r">{tournament.nbPlayers}</small>
-      </td>
-    </tr>
+      </div>
+    </li>
   )
 }
 

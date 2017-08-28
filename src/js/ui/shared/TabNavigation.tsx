@@ -35,7 +35,7 @@ export default {
 
     function renderTab(b: TabButton) {
       const className = [
-        'tab',
+        'tab-button',
         selectedTab === b.key ? 'selected' : ''
       ].join(' ')
       const oncreate = helper.ontap(() => onTabChange(b.key))
@@ -47,7 +47,7 @@ export default {
     }
 
     return (
-      <div className="tabs">
+      <div className="tabs-navigation">
         { buttons.map(renderTab) }
         <div className="tabIndicator" style={indicatorStyle} />
       </div>

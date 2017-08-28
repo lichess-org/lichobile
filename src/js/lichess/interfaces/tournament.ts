@@ -177,9 +177,9 @@ interface PlayerInfoNb {
 }
 
 export interface TournamentLists {
+  started: TournamentListItem[]
   created: TournamentListItem[]
   finished: TournamentListItem[]
-  started: TournamentListItem[]
   [i: string]: TournamentListItem[]
 }
 

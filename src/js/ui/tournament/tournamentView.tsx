@@ -5,6 +5,7 @@ import { pad, formatTournamentDuration, formatTournamentTimeControl, capitalize 
 import { TournamentListItem } from '../../lichess/interfaces/tournament'
 import * as helper from '../helper'
 import TabNavigation from '../shared/TabNavigation'
+import TabView from '../shared/TabView'
 
 import newTournamentForm from './newTournamentForm'
 import TournamentCtrl from './TournamentCtrl'
@@ -28,11 +29,26 @@ function onTournamentTap(e: Event) {
   }
 }
 
+const tabIndexMap: { [tab: string]: number } = {
+  started: 0,
+  created: 1,
+  finished: 2
+}
+
+const indexTabMap: { [i: number]: string  } = {
+  0: 'started',
+  1: 'created',
+  2: 'finished'
+}
+
 export function tournamentListBody(ctrl: TournamentCtrl) {
   if (!ctrl.tournaments) return null
 
-  const id = ctrl.currentTab
-  const tabContent = ctrl.tournaments[id]
+  const tabsContent = [
+    ctrl.tournaments['started'],
+    ctrl.tournaments['created'],
+    ctrl.tournaments['finished']
+  ]
 
   return (
     <div className="tournamentTabsWrapper">
@@ -40,21 +56,16 @@ export function tournamentListBody(ctrl: TournamentCtrl) {
         {h(TabNavigation, {
             buttons: TABS,
             selectedTab: ctrl.currentTab,
-            onTabChange: (k: string) => {
-              const loc = window.location.search.replace(/\?tab\=\w+$/, '')
-              try {
-                window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
-              } catch (e) { console.error(e) }
-              ctrl.currentTab = k
-            }
+            onTabChange: (k: string) => ctrl.onTabChange(k)
         })}
         <div className="main_header_drop_shadow" />
       </div>
-      <ul className="native_scroller tournamentList"
-        oncreate={helper.ontapY(onTournamentTap, undefined, helper.getLI)}
-      >
-        {tabContent.map(renderTournamentListItem)}
-      </ul>
+      {h(TabView, {
+        selectedIndex: tabIndexMap[ctrl.currentTab],
+        content: tabsContent,
+        renderer: renderTabContent,
+        onTabChange: (i: number) => ctrl.onTabChange(indexTabMap[i])
+      })}
     </div>
   )
 }
@@ -68,6 +79,12 @@ export function renderFooter() {
       </button>
     </div>
   )
+}
+
+function renderTabContent(list: Array<TournamentListItem>) {
+  return h('ul.native_scroller.tournamentList', {
+    oncreate: helper.ontapXY(onTournamentTap, undefined, helper.getLI)
+  }, list.map(renderTournamentListItem))
 }
 
 function renderTournamentListItem(tournament: TournamentListItem) {

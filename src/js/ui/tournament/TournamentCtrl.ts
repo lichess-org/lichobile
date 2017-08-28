@@ -30,6 +30,15 @@ export default class TournamentCtrl {
       redraw()
     })
   }
+
+  onTabChange(tabKey: string) {
+    const loc = window.location.search.replace(/\?tab\=\w+$/, '')
+    try {
+      window.history.replaceState(window.history.state, '', loc + '?tab=' + tabKey)
+    } catch (e) { console.error(e) }
+    this.currentTab = tabKey
+    redraw()
+  }
 }
 
 function supported(t: TournamentListItem) {

@@ -2,7 +2,7 @@ import * as Hammer from 'hammerjs'
 import redraw from '../../utils/redraw'
 import * as menu from '.'
 
-const MAX_EDGE_CAN_SLIDE = 30
+const MAX_EDGE_CAN_SLIDE = 40
 
 interface OpenSlideHandlerState {
   menuElement: HTMLElement | null
@@ -70,7 +70,7 @@ export default function OpenSlideHandler(
       const delta = e.deltaX
       if (
         velocity >= 0 &&
-        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.4)
+        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.3)
       ) {
         menu.open()
       } else {

@@ -76,10 +76,7 @@ interface TabAttrs<T> extends Attrs<T> {
 }
 const Tab: Mithril.Component<TabAttrs<any>, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
-    const same = attrs.content.every((el: any, i: number) =>
-      el === oldattrs.content[i]
-    )
-    return !same
+    return attrs.content[attrs.index] !== oldattrs.content[oldattrs.index]
   },
 
   view({ attrs }) {

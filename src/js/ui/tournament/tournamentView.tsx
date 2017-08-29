@@ -11,13 +11,10 @@ import newTournamentForm from './newTournamentForm'
 import TournamentCtrl from './TournamentCtrl'
 
 const TABS = [{
-    key: 'started',
     label: 'In Progress'
 }, {
-    key: 'created',
     label: 'Upcoming'
 }, {
-    key: 'finished',
     label: 'Completed'
 }]
 
@@ -27,18 +24,6 @@ function onTournamentTap(e: Event) {
   if (el && ds.id) {
     router.set('/tournament/' + ds.id)
   }
-}
-
-const tabIndexMap: { [tab: string]: number } = {
-  started: 0,
-  created: 1,
-  finished: 2
-}
-
-const indexTabMap: { [i: number]: string  } = {
-  0: 'started',
-  1: 'created',
-  2: 'finished'
 }
 
 export function tournamentListBody(ctrl: TournamentCtrl) {
@@ -55,16 +40,16 @@ export function tournamentListBody(ctrl: TournamentCtrl) {
       <div className="tabs-nav-header">
         {h(TabNavigation, {
             buttons: TABS,
-            selectedTab: ctrl.currentTab,
-            onTabChange: (k: string) => ctrl.onTabChange(k)
+            selectedIndex: ctrl.currentTab,
+            onTabChange: ctrl.onTabChange
         })}
         <div className="main_header_drop_shadow" />
       </div>
       {h(TabView, {
-        selectedIndex: tabIndexMap[ctrl.currentTab],
+        selectedIndex: ctrl.currentTab,
         content: tabsContent,
         renderer: renderTabContent,
-        onTabChange: (i: number) => ctrl.onTabChange(indexTabMap[i])
+        onTabChange: ctrl.onTabChange
       })}
     </div>
   )

@@ -99,16 +99,16 @@ function computeTransformProp() {
     'oTransform' : 'msTransform'
 }
 
-function collectionHas(coll: NodeListOf<Element>, el: HTMLElement) {
+function collectionHas(coll: NodeListOf<Element>, el: HTMLElement): boolean {
   for (let i = 0, len = coll.length; i < len; i++) {
     if (coll[i] === el) return true
   }
   return false
 }
 
-export function findParentBySelector(el: HTMLElement, selector: string) {
+export function findParentBySelector(el: HTMLElement, selector: string): HTMLElement {
   const matches = document.querySelectorAll(selector)
-  let cur = (el.parentNode as HTMLElement)
+  let cur = el as HTMLElement
   while (cur && !collectionHas(matches, cur)) {
     cur = (cur.parentNode as HTMLElement)
   }
@@ -131,26 +131,26 @@ export const viewFadeIn = onPageEnter(elFadeIn)
 
 export const viewFadeOut = onPageLeave(elFadeOut)
 
-export function transformProp() {
+export function transformProp(): string {
   if (!cachedTransformProp) cachedTransformProp = computeTransformProp()
   return cachedTransformProp
 }
 
-export function clearCachedViewportDim() {
+export function clearCachedViewportDim(): void {
   cachedViewportDim = null
   cachedIsPortrait = undefined
 }
 
-export function slidesInUp(vnode: Mithril.DOMNode) {
+export function slidesInUp(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   const el = (vnode.dom as HTMLElement)
   el.style.transform = 'translateY(100%)'
   // force reflow hack
   vnode.state.lol = el.offsetHeight
-  Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
+  return Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
   .catch(console.log.bind(console))
 }
 
-export function slidesOutDown(callback: () => void, elID: string) {
+export function slidesOutDown(callback: () => void, elID: string): () => Promise<HTMLElement> {
   return function() {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateY(100%)', 250, 'ease-out')
@@ -159,16 +159,16 @@ export function slidesOutDown(callback: () => void, elID: string) {
   }
 }
 
-export function slidesInLeft(vnode: Mithril.DOMNode) {
+export function slidesInLeft(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   const el = vnode.dom as HTMLElement
   el.style.transform = 'translateX(100%)'
   // force reflow hack
   vnode.state.lol = el.offsetHeight
-  Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
+  return Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')
   .catch(console.log.bind(console))
 }
 
-export function slidesOutRight(callback: () => void, elID: string) {
+export function slidesOutRight(callback: () => void, elID: string): () => Promise<HTMLElement> {
   return function() {
     const el = document.getElementById(elID)
     return Zanimo(el, 'transform', 'translateX(100%)', 250, 'ease-out')
@@ -177,7 +177,7 @@ export function slidesOutRight(callback: () => void, elID: string) {
   }
 }
 
-export function fadesOut(callback: () => void, selector?: string, time = 150) {
+export function fadesOut(callback: () => void, selector?: string, time = 150): (e: Event) => Promise<HTMLElement> {
   return function(e: Event) {
     e.stopPropagation()
     const el = selector ? findParentBySelector((e.target as HTMLElement), selector) : e.target
@@ -228,7 +228,7 @@ export function ontapXY(tapHandler: TapHandler, holdHandler?: TapHandler, getEle
   return createTapHandler(tapHandler, holdHandler, undefined, true, true, getElement)
 }
 
-export function progress(p: number) {
+export function progress(p: number): Mithril.Children {
   if (p === 0) return null
   return h('span', {
     className: 'progress ' + (p > 0 ? 'positive' : 'negative'),
@@ -244,11 +244,11 @@ export function classSet(classes: {[cl: string]: boolean}): string {
   return arr.join(' ')
 }
 
-export function isWideScreen() {
+export function isWideScreen(): boolean {
   return viewportDim().vw >= 600
 }
 
-export function isVeryWideScreen() {
+export function isVeryWideScreen(): boolean {
   return viewportDim().vw >= 960
 }
 
@@ -354,12 +354,12 @@ export function variantReminder(el: HTMLElement, icon: string): void {
   }, 800)
 }
 
-export function autofocus(vnode: Mithril.DOMNode) {
+export function autofocus(vnode: Mithril.DOMNode): void {
   (vnode.dom as HTMLElement).focus()
 }
 
 let contentHeight: number
-export function onKeyboardShow(e: Ionic.KeyboardEvent) {
+export function onKeyboardShow(e: Ionic.KeyboardEvent): void {
   if (window.cordova.platformId === 'ios') {
     const content = document.getElementById('free_content')
     if (content) {
@@ -369,14 +369,14 @@ export function onKeyboardShow(e: Ionic.KeyboardEvent) {
   }
 }
 
-export function onKeyboardHide() {
+export function onKeyboardHide(): void {
   if (window.cordova.platformId === 'ios') {
     const content = document.getElementById('free_content')
     if (content) content.style.height = contentHeight + 'px'
   }
 }
 
-export function renderRatingDiff(player: Player | UserGamePlayer) {
+export function renderRatingDiff(player: Player | UserGamePlayer): Mithril.Children {
   if (player.ratingDiff === undefined) return null
   if (player.ratingDiff === 0) return <span className="rp null"> +0</span>
   if (player.ratingDiff > 0) return <span className="rp up"> + {player.ratingDiff}</span>
@@ -385,7 +385,7 @@ export function renderRatingDiff(player: Player | UserGamePlayer) {
   return null
 }
 
-export function getButton(e: Event) {
+export function getButton(e: Event): HTMLElement | undefined {
   const target = (e.target as HTMLElement)
   return target.tagName === 'BUTTON' ? target : undefined
 }

@@ -3,14 +3,15 @@ import * as Hammer from 'hammerjs'
 import { viewportDim, findParentBySelector } from '../helper'
 
 
-type TabsContent<T> = Array<T>
-type Renderer<T> = (c: T) => Mithril.Children
+type TabsContent = Array<any>
+type Renderer = (c: any, index: number) => Mithril.Children
 
-interface Attrs<T> {
+interface Attrs {
   selectedIndex: number
-  content: TabsContent<T>
-  renderer: Renderer<T>
+  content: TabsContent
+  renderer: Renderer
   onTabChange: (i: number) => void
+  className?: string
 }
 
 interface State {
@@ -59,27 +60,28 @@ export default {
     }
 
     return h('div.tabs-view', {
-      style
+      style,
+      className: attrs.className
     }, attrs.content.map((_: any, index: number) =>
       h('div.tab-content', {
         'data-index': index
       }, h(Tab, { index, ...attrs }))
     ))
   }
-} as Mithril.Component<Attrs<any>, State>
+} as Mithril.Component<Attrs, State>
 
 
 // --
 
-interface TabAttrs<T> extends Attrs<T> {
+interface TabAttrs extends Attrs {
   index: number
 }
-const Tab: Mithril.Component<TabAttrs<any>, {}> = {
+const Tab: Mithril.Component<TabAttrs, {}> = {
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     return attrs.content[attrs.index] !== oldattrs.content[oldattrs.index]
   },
 
   view({ attrs }) {
-    return attrs.renderer(attrs.content[attrs.index])
+    return attrs.renderer(attrs.content[attrs.index], attrs.index)
   }
 }

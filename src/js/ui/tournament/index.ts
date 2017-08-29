@@ -10,7 +10,7 @@ import TournamentCtrl from './TournamentCtrl'
 import { tournamentListBody, renderFooter } from './tournamentView'
 
 interface Attrs {
-  tab: string
+  tab: number
 }
 
 interface State {

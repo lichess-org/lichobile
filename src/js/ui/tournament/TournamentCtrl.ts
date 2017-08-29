@@ -6,11 +6,11 @@ import { TournamentListItem, TournamentLists } from '../../lichess/interfaces/to
 
 export default class TournamentCtrl {
   tournaments: TournamentLists
-  currentTab: string
+  currentTab: number
   startPositions: BoardPositionCategory[]
 
-  constructor(defaultTab: string) {
-    this.currentTab = defaultTab || 'started'
+  constructor(defaultTab: number) {
+    this.currentTab = defaultTab || 0
 
     xhr.currentTournaments()
     .then(data => {
@@ -31,12 +31,12 @@ export default class TournamentCtrl {
     })
   }
 
-  onTabChange(tabKey: string) {
+  onTabChange = (tabIndex: number) => {
     const loc = window.location.search.replace(/\?tab\=\w+$/, '')
     try {
-      window.history.replaceState(window.history.state, '', loc + '?tab=' + tabKey)
+      window.history.replaceState(window.history.state, '', loc + '?tab=' + tabIndex)
     } catch (e) { console.error(e) }
-    this.currentTab = tabKey
+    this.currentTab = tabIndex
     redraw()
   }
 }

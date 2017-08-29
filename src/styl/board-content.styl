@@ -78,48 +78,6 @@
   width 100%
   height 100%
 
-.actions_bar
-  display flex
-  padding 0
-  height footerHeight
-  width 100%
-  overflow hidden
-
-.action_bar_button
-  flex 1 1 25%
-  text-align center
-  background transparent
-  padding 0
-  outline none
-  border none
-  color: buttonGray
-  height footerHeight
-  width 25%
-  &:last-child
-    border-right none
-  &.disabled
-    &:before
-      opacity 1
-    color rgba(buttonGray, 0.4)
-  &.active
-    background darkBlue
-    color #ccc
-  &.empty::before
-    visibility hidden
-  &.glow
-    animation answer_glow 5s infinite
-  &.highlight
-    color #fff
-    background blue
-  &:before
-    font-size 18px
-    line-height footerHeight
-  &[data-icon='2']
-    transform rotate(-90deg)
-  @media only screen and (max-height 400px) and (orientation landscape)
-    &:before
-      font-size 16px
-
 .table
   display flex
   flex-flow column nowrap

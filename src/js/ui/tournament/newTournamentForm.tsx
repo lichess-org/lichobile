@@ -1,12 +1,12 @@
 import settings from '../../settings'
-import formWidgets from '../shared/form'
-import * as utils from '../../utils'
-import popupWidget from '../shared/popup'
 import i18n from '../../i18n'
 import router from '../../router'
-import { handleXhrError } from '../../utils'
-import { TournamentListState } from './interfaces'
+import * as utils from '../../utils'
 import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
+import popupWidget from '../shared/popup'
+import formWidgets from '../shared/form'
+
+import TournamentCtrl from './TournamentCtrl'
 import * as xhr from './tournamentXhr'
 
 let isOpen = false
@@ -14,7 +14,7 @@ let isOpen = false
 export default {
   open,
   close,
-  view(ctrl: TournamentListState) {
+  view(ctrl: TournamentCtrl) {
     return popupWidget(
       'tournament_form_popup',
       undefined,
@@ -36,7 +36,7 @@ function close(fromBB?: string) {
 }
 
 
-function renderForm(ctrl: TournamentListState) {
+function renderForm(ctrl: TournamentCtrl) {
   return (
     <form id="tournamentCreateForm"
     onsubmit={function(e: Event) {
@@ -123,5 +123,5 @@ function create(form: HTMLFormElement) {
     close()
     router.set('/tournament/' + data.id)
   })
-  .catch(handleXhrError)
+  .catch(utils.handleXhrError)
 }

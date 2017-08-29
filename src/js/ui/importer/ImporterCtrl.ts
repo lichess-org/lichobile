@@ -1,4 +1,3 @@
-import socket from '../../socket'
 import router from '../../router'
 import settings from '../../settings'
 import { apiVersion } from '../../http'
@@ -15,7 +14,6 @@ export interface IImporterCtrl {
 }
 
 export default function ImporterCtrl(): IImporterCtrl {
-  socket.createDefault()
 
   const importing = stream(false)
 

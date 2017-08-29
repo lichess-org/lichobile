@@ -1,5 +1,8 @@
+import * as h from 'mithril/hyperscript'
+import settings from '../settings'
 import * as menu from './menu'
-import menuView from './menu/menuView'
+import MenuOpenSlideHandler from './menu/OpenSlideHandler'
+import MenuView from './menu/menuView'
 import gamesMenu from './gamesMenu'
 import newGameForm from './newGameForm'
 import playMachineForm from './playMachineForm'
@@ -8,8 +11,6 @@ import loginModal from './loginModal'
 import signupModal from './signupModal'
 import friendsPopup from './friendsPopup'
 import lobby from './lobby'
-import * as helper from './helper'
-import settings from '../settings'
 
 let background: string
 
@@ -17,16 +18,6 @@ export default {
 
   onBackgroundChange: function(bg: string) {
     background = bg
-  },
-
-  empty() {
-    background = background || settings.general.theme.background()
-    return (
-      <div className={'view-container ' + bgClass(background)}>
-        <main id="page">
-        </main>
-      </div>
-    )
   },
 
   board(
@@ -38,14 +29,18 @@ export default {
     background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
-        <main id="page" className={color}>
+        <main id="page" className={color}
+          oncreate={({ dom }: Mithril.DOMNode) => {
+            MenuOpenSlideHandler(dom as HTMLElement)
+          }}
+        >
           <header className="main_header board">
             {header()}
           </header>
           <div id="content_round" className="content_round">{content()}</div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
-        {menuView()}
+        {h(MenuView)}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
@@ -68,7 +63,11 @@ export default {
     background = background || settings.general.theme.background()
     return (
       <div className={'view-container ' + bgClass(background)}>
-        <main id="page">
+        <main id="page"
+          oncreate={({ dom }: Mithril.DOMNode) => {
+            MenuOpenSlideHandler(dom as HTMLElement)
+          }}
+        >
           <header className="main_header">
             {header()}
           </header>
@@ -76,9 +75,9 @@ export default {
             {content()}
           </div>
           { footer ? <footer className="main_footer">{footer()}</footer> : null }
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
-        {menuView()}
+        {h(MenuView)}
         {gamesMenu.view()}
         {loginModal.view()}
         {signupModal.view()}
@@ -100,7 +99,7 @@ export default {
           <div className="content fullScreen">
             {content()}
           </div>
-          { menu.isOpen() ? <div className="menu-close-overlay" oncreate={helper.ontap(() => menu.close())} /> : null }
+          <div id="menu-close-overlay" oncreate={menu.backdropCloseHandler} />
         </main>
         {overlay ? overlay() : null}
       </div>

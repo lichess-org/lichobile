@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import socket from '../../socket'
 import settings from '../../settings'
 import * as helper from '../helper'
 import { dropShadowHeader } from '../shared/common'
@@ -14,6 +15,7 @@ interface State {
 
 const ImporterScreen: Mithril.Component<{}, State> = {
   oninit() {
+    socket.createDefault()
     this.ctrl = ImporterCtrl()
   },
 

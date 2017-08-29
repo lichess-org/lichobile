@@ -1,29 +1,28 @@
+import * as h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import challengesApi from '../../lichess/challenges'
+import { Seek } from '../../lichess/interfaces'
+import { Challenge } from '../../lichess/interfaces/challenge'
 import * as helper from '../helper'
 import i18n from '../../i18n'
 import session from '../../session'
 import loginModal from '../loginModal'
 import newGameForm from '../newGameForm'
-import tabs from '../shared/tabs'
-import * as h from 'mithril/hyperscript'
-import { Seek } from '../../lichess/interfaces'
-import { Challenge } from '../../lichess/interfaces/challenge'
+import TabNavigation from '../shared/TabNavigation'
+import TabView from '../shared/TabView'
 
-import { State } from '.'
+import CorrespondenceCtrl from './CorrespondenceCtrl'
 
 const tabButtons = [
   {
-    label: 'Public games',
-    key: 'public'
+    label: 'Public games'
   },
   {
-    label: 'Challenges',
-    key: 'challenges'
+    label: 'Challenges'
   }
 ]
 
-export function renderBody(ctrl: State) {
+export function renderBody(ctrl: CorrespondenceCtrl) {
   if (!session.isConnected()) {
     return [
       h('div.seeks.disconnected', [
@@ -39,53 +38,61 @@ export function renderBody(ctrl: State) {
     ]
   }
 
-  const tabsBar = h(tabs, {
+  const tabsBar = h(TabNavigation, {
     buttons: tabButtons,
-    selectedTab: ctrl.selectedTab(),
-    onTabChange: (k: string) => {
-      const loc = window.location.search.replace(/\?tab\=\w+$/, '')
-      try {
-        window.history.replaceState(window.history.state, '', loc + '?tab=' + k)
-      } catch (e) { console.error(e) }
-      ctrl.selectedTab(k)
-    }
+    selectedIndex: ctrl.currentTab,
+    onTabChange: ctrl.onTabChange
   })
+
+  const tabsContent = [
+    ctrl.pool,
+    ctrl.sendingChallenges
+  ]
 
   return [
     h('div.tabs-nav-header', tabsBar, h('div.main_header_drop_shadow')),
-    h('div.tab_content.native_scroller.seeks_scroller',
-      ctrl.selectedTab() === 'public' ?
-        renderPool(ctrl) :
-        renderChallenges(ctrl)
-    )
+    h(TabView, {
+      className: 'correspondence-tabs',
+      selectedIndex: ctrl.currentTab,
+      content: tabsContent,
+      renderer: (tab: any, i: number) => renderTabContent(ctrl, tab, i),
+      onTabChange: ctrl.onTabChange
+    })
   ]
 }
 
 export function renderFooter() {
-  return h('div.correpondenceFooter', h('button#newGameCorres', {
-    key: 'seeks_createagame',
+  return h('div.actions_bar', h('button.action_bar_button', {
     oncreate: helper.ontap(newGameForm.openCorrespondence)
   }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]))
 }
 
-function renderChallenges(ctrl: State) {
-  return ctrl.sendingChallenges().length ?
-    h('ul', ctrl.sendingChallenges().map(c => renderChallenge(ctrl, c))) :
+function renderTabContent(ctrl: CorrespondenceCtrl, tab: any, index: number) {
+  if (index === 0) {
+    return renderPool(tab, ctrl)
+  } else {
+    return renderChallenges(tab, ctrl)
+  }
+}
+
+function renderChallenges(challenges: Challenge[], ctrl: CorrespondenceCtrl) {
+  return challenges.length ?
+    h('ul.native_scroller.seeks_scroller', challenges.map(c => renderChallenge(ctrl, c))) :
     h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
 }
 
-function renderPool(ctrl: State) {
-  return ctrl.getPool().length ?
-    h('ul', ctrl.getPool().map(s => renderSeek(ctrl, s))) :
+function renderPool(pool: Seek[], ctrl: CorrespondenceCtrl) {
+  return pool.length ?
+    h('ul.native_scroller.seeks_scroller', pool.map(s => renderSeek(ctrl, s))) :
     h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
 }
 
-function renderChallenge(ctrl: State, c: Challenge) {
+function renderChallenge(ctrl: CorrespondenceCtrl, c: Challenge) {
   const playerName = c.destUser && utils.lightPlayerName(c.destUser)
   return (
     <li id={c.id} key={'challenge' + c.id} className="list_item sendingChallenge"
       oncreate={helper.ontapY(
-        helper.fadesOut(ctrl.cancelChallenge.bind(undefined, c.id), '.sendingChallenge', 300)
+        helper.fadesOut(() => ctrl.cancelChallenge(c.id), '.sendingChallenge', 300)
       )}
     >
       <div className="icon" data-icon={c.perf.icon} />
@@ -104,7 +111,7 @@ function renderChallenge(ctrl: State, c: Challenge) {
   )
 }
 
-function renderSeek(ctrl: State, seek: Seek) {
+function renderSeek(ctrl: CorrespondenceCtrl, seek: Seek) {
   const action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join'
   return h('li', {
     key: 'seek' + seek.id,

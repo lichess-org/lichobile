@@ -1,45 +1,34 @@
 .tournament_item
+  display flex
+  flex-flow row nowrap
+  align-items center
   opacity 0.9
-  &.official
-    opacity 1
-
-td.tournamentListName
-  text-align: left
-  text-overflow: ellipsis
-  white-space: nowrap;
-  overflow hidden
-  max-width 0
-  width 60%
-  position relative
-  &:first-child
-    padding-left 45px
   &:before
     position absolute
     left 8px
     top 21px
     font-size 28px
+  &.official
+    opacity 1
+
+.tournamentListName
+  text-align: left
+  text-overflow: ellipsis
+  white-space: nowrap;
+  overflow hidden
+  width 65%
+  position relative
+  &:first-child
+    padding-left 45px
   > .fullName
     overflow hidden
     text-overflow ellipsis
 
-td.tournamentListTime
+.tournamentListTime
   > .time
     letter-spacing 0px
-  padding 10px
   text-align right
-  max-width 0
   width 35%
-
-td.tournamentListNav
-  font: normal normal normal 14px/1 FontAwesome
-  font-size: inherit
-  text-rendering: auto
-  -webkit-font-smoothing: antialiased
-  max-width 0
-  width 10%
-  text-align right
-  padding-right 10px
-  opacity 0.6
 
 .tournamentTitle
   text-align left
@@ -53,11 +42,8 @@ td.tournamentListNav
 
 .tournamentTabsWrapper
   height 100%;
-
-.tournamentList
-  height 'calc(100% - %s)' % headerHeight
-  table
-    width 100%
+  > .tabs-view
+    height 'calc(100% - %s)' % footerHeight
 
 table.tournamentStandings
   width 100%

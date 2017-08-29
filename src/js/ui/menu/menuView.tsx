@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import * as Zanimo from 'zanimo'
 
 import socket from '../../socket'
 import session, { Session } from '../../session'
@@ -14,7 +13,10 @@ import { handleXhrError, hasNetwork } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
+
 import * as menu from '.'
+import CloseSlideHandler from './CloseSlideHandler'
+import CloseSwipeHandler from './CloseSwipeHandler'
 
 interface PingData {
   ping: number | undefined
@@ -23,15 +25,32 @@ interface PingData {
 
 const pingHelp = 'PING: Network lag between you and lichess; SERVER: Time to process a move on lichess server'
 
-export default function view() {
-  if (!menu.isOpen()) return null
+export default {
+  onbeforeupdate() {
+    return menu.isOpen() || menu.isSliding()
+  },
+  view() {
+    const user = session.get()
 
-  return (
-    <aside id="side_menu" oncreate={menuSlide}>
-      {renderMenu()}
-    </aside>
-  )
-}
+    return (
+      <aside id="side_menu"
+        oncreate={({ dom }: Mithril.DOMNode) => {
+          if (window.cordova.platformId === 'ios') {
+            CloseSwipeHandler(dom as HTMLElement)
+          } else {
+            CloseSlideHandler(dom as HTMLElement)
+          }
+        }}
+      >
+        <div className="native_scroller">
+          {renderHeader(user)}
+          { hasNetwork() && user ? profileActionsToggle() : null }
+          {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
+        </div>
+      </aside>
+    )
+  }
+} as Mithril.Component<{}, {}>
 
 function renderHeader(user?: Session) {
   return (
@@ -57,7 +76,7 @@ function renderHeader(user?: Session) {
       }
       { hasNetwork() && session.isConnected() ? networkStatus() : null }
       { hasNetwork() && !user ?
-        <button key="login-button" className="login" oncreate={helper.ontapY(loginModal.open)}>
+        <button key="login-button" className="login" oncreate={helper.ontapXY(loginModal.open)}>
           {i18n('signIn')}
         </button> : null
       }
@@ -68,29 +87,29 @@ function renderHeader(user?: Session) {
 function renderProfileActions(user: Session) {
   return (
     <ul className="side_links profileActions">
-      <li className="side_link" key="profile" oncreate={helper.ontap(menu.route('/@/' + user.id))}>
+      <li className="side_link" key="profile" oncreate={helper.ontapXY(menu.route('/@/' + user.id))}>
         <span className="fa fa-user" />{i18n('profile')}
       </li>
-      <li className="side_link" key="message" oncreate={helper.ontap(menu.route('/inbox'))}>
+      <li className="side_link" key="message" oncreate={helper.ontapXY(menu.route('/inbox'))}>
         <span className="fa fa-envelope"/>{i18n('inbox') + ((menu.inboxUnreadCount() !== null && menu.inboxUnreadCount() > 0) ? (' (' + menu.inboxUnreadCount() + ')') : '')}
       </li>
-      <li className="side_link" oncreate={helper.ontap(menu.popup(friendsPopup.open))}>
+      <li className="side_link" oncreate={helper.ontapXY(menu.popup(friendsPopup.open))}>
         <span data-icon="f" />
         {i18n('onlineFriends') + ` (${friendsApi.count()})`}
       </li>
-      <li className="side_link" oncreate={helper.ontap(menu.route(`/@/${user.id}/following`))}>
+      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/following`))}>
         <span className="fa fa-arrow-circle-right" />
         {i18n('nbFollowing', user.nbFollowing || 0)}
       </li>
-      <li className="side_link" oncreate={helper.ontap(menu.route(`/@/${user.id}/followers`))}>
+      <li className="side_link" oncreate={helper.ontapXY(menu.route(`/@/${user.id}/followers`))}>
         <span className="fa fa-arrow-circle-left" />
         {i18n('nbFollowers', user.nbFollowers || 0)}
       </li>
-      <li className="side_link" oncreate={helper.ontap(menu.route('/settings/preferences'))}>
+      <li className="side_link" oncreate={helper.ontapXY(menu.route('/settings/preferences'))}>
         <span data-icon="%" />
         {i18n('preferences')}
       </li>
-      <li className="side_link" oncreate={helper.ontap(() => {
+      <li className="side_link" oncreate={helper.ontapXY(() => {
         session.logout().catch(handleXhrError)
         menu.profileMenuOpen(false)
       })}>
@@ -126,7 +145,7 @@ function renderLinks(user?: Session) {
   const offlineGames = getOfflineGames()
 
   return (
-    <ul className="side_links" oncreate={helper.ontapY(onLinkTap, undefined, helper.getLI)}>
+    <ul className="side_links" oncreate={helper.ontapXY(onLinkTap, undefined, helper.getLI)}>
       <li className="side_link" key="home" data-route="/">
         <span className="fa fa-home" />Home
       </li>
@@ -230,23 +249,11 @@ function renderLinks(user?: Session) {
   )
 }
 
-function renderMenu() {
-  const user = session.get()
-
-  return (
-    <div className="native_scroller">
-      {renderHeader(user)}
-      { hasNetwork() && user ? profileActionsToggle() : null }
-      {user && menu.profileMenuOpen() ? renderProfileActions(user) : renderLinks(user)}
-    </div>
-  )
-}
-
 function profileActionsToggle() {
 
   return (
     <div key="user-button" className="menu-toggleButton side_link"
-      oncreate={helper.ontap(menu.toggleHeader)}
+      oncreate={helper.ontapXY(menu.toggleHeader)}
     >
       <span className="fa fa-exchange" />
       {menu.profileMenuOpen() ? 'Main menu' : 'User menu'}
@@ -259,7 +266,7 @@ function networkStatus() {
   const server = menu.mlat()
   return (
     <div key="server-lag" className="pingServerLed"
-      oncreate={helper.ontap(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
+      oncreate={helper.ontapXY(() => window.plugins.toast.show(pingHelp, 'long', 'top'))}
     >
       <div className="pingServer">
         {signalBars({ ping, server })}
@@ -285,10 +292,4 @@ function signalBars(d: PingData) {
   const bars = []
   for (let i = 1; i <= 4; i++) bars.push(h(i <= lagRating ? 'i' : 'i.off'))
   return h('signal.q' + lagRating, bars)
-}
-
-function menuSlide(vnode: Mithril.DOMNode) {
-  const el = vnode.dom as HTMLElement
-  el.style.transform = 'translate3d(-100%,0,0)'
-  Zanimo(el, 'transform', 'translate3d(0,0,0)', 250, 'ease-out')
 }

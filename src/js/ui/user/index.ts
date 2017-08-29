@@ -1,4 +1,5 @@
 import * as helper from '../helper'
+import { loadingBackbutton } from '../shared/common'
 import userCtrl, { UserCtrl } from './userCtrl'
 import socket from '../../socket'
 import * as view from './userView'
@@ -36,7 +37,10 @@ const UserScreen: Mithril.Component<Attrs, State> = {
         () => view.profile(user, this.user)
       )
     } else {
-      return layout.empty()
+      return layout.free(
+        () => loadingBackbutton(),
+        () => null
+      )
     }
   }
 }

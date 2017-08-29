@@ -1,15 +1,16 @@
 
+// tab navigation
 .tabs-nav-header
   position relative
 
-.tabs
+.tabs-navigation
   display flex
   flex-flow row nowrap
   height 48px
   position relative
   background headerBgDark
 
-.tab
+.tab-button
   flex 0 1 auto
   text-transform uppercase
   text-align center
@@ -30,3 +31,15 @@
   background-color gold
   transition transform ease-out 200ms
   z-index 3
+
+
+// tab content
+.tabs-view
+  display flex
+  flex-flow row nowrap
+  width 300vw
+  height 100%
+  transition transform ease-out 100ms
+
+.tab-content
+  width 100vw

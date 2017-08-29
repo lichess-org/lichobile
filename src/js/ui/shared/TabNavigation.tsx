@@ -1,28 +1,26 @@
 import * as helper from '../helper'
 
 interface TabButton {
-  key: string
   label: string
 }
 
 interface Attrs {
   buttons: Array<TabButton>
-  selectedTab: string
-  onTabChange: (k: string) => void
+  selectedIndex: number
+  onTabChange: (i: number) => void
 }
 
-const Tabs: Mithril.Component<Attrs, {}> = {
+export default {
   view(vnode) {
 
     const {
       buttons,
-      selectedTab,
+      selectedIndex,
       onTabChange
     } = vnode.attrs
 
     const iWidth = 100 / buttons.length
-    const index = buttons.findIndex(e => e.key === selectedTab)
-    const shift = index * (iWidth * buttons.length)
+    const shift = selectedIndex * (iWidth * buttons.length)
 
     const indicatorStyle = {
       width: iWidth + '%',
@@ -33,12 +31,12 @@ const Tabs: Mithril.Component<Attrs, {}> = {
       width: iWidth + '%'
     }
 
-    function renderTab(b: TabButton) {
+    function renderTab(b: TabButton, i: number) {
       const className = [
-        'tab',
-        selectedTab === b.key ? 'selected' : ''
+        'tab-button',
+        selectedIndex === i ? 'selected' : ''
       ].join(' ')
-      const oncreate = helper.ontap(() => onTabChange(b.key))
+      const oncreate = helper.ontap(() => onTabChange(i))
       return (
         <button className={className} oncreate={oncreate} style={buttonStyle}>
           {b.label}
@@ -47,12 +45,10 @@ const Tabs: Mithril.Component<Attrs, {}> = {
     }
 
     return (
-      <div className="tabs">
+      <div className="tabs-navigation">
         { buttons.map(renderTab) }
         <div className="tabIndicator" style={indicatorStyle} />
       </div>
     )
   }
-}
-
-export default Tabs
+} as Mithril.Component<Attrs, {}>

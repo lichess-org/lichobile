@@ -166,7 +166,7 @@ function createGame(
   const opts: SocketConfig = {
     options: {
       name: 'game',
-      debug: false,
+      debug: window.lichess.mode === 'dev',
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
     }
@@ -196,7 +196,7 @@ function createTournament(
   const opts = {
     options: {
       name: 'tournament',
-      debug: false,
+      debug: window.lichess.mode === 'dev',
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}, {t: 'startWatching', d: featuredGameId}],
       registeredEvents: Object.keys(socketHandlers.events)
@@ -229,7 +229,7 @@ function createChallenge(
   const opts = {
     options: {
       name: 'challenge',
-      debug: false,
+      debug: window.lichess.mode === 'dev',
       ignoreUnknownMessages: true,
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}],
@@ -260,7 +260,7 @@ function createLobby(
   const opts = {
     options: {
       name: 'lobby',
-      debug: false,
+      debug: window.lichess.mode === 'dev',
       pingDelay: 2000,
       sendOnOpen: [{t: 'following_onlines'}],
       registeredEvents: Object.keys(socketHandlers.events)
@@ -284,7 +284,7 @@ function createDefault() {
     const opts = {
       options: {
         name: 'default',
-        debug: false,
+        debug: window.lichess.mode === 'dev',
         pingDelay: 3000,
         sendOnOpen: [{t: 'following_onlines'}],
         registeredEvents: Object.keys(socketHandlers.events)

@@ -59,7 +59,7 @@ export function renderFooter() {
   return (
     <div className="actions_bar">
       <button key="createTournament" className="action_bar_button" oncreate={helper.ontap(newTournamentForm.open)}>
-        <span className="fa fa-pencil" />
+        <span className="fa fa-plus-circle" />
         {i18n('createANewTournament')}
       </button>
     </div>

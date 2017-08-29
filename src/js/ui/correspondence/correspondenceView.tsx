@@ -62,8 +62,7 @@ export function renderBody(ctrl: CorrespondenceCtrl) {
 }
 
 export function renderFooter() {
-  return h('div.correpondenceFooter', h('button#newGameCorres', {
-    key: 'seeks_createagame',
+  return h('div.actions_bar', h('button.action_bar_button', {
     oncreate: helper.ontap(newGameForm.openCorrespondence)
   }, [h('span.fa.fa-plus-circle'), i18n('createAGame')]))
 }

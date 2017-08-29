@@ -497,7 +497,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       // atrocious hack to prevent race condition
       // with explosions and premoves
       // https://github.com/ornicar/lila/issues/343
-      const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 10
+      const premoveDelay = d.game.variant.key === 'atomic' ? 100 : 1
       setTimeout(() => {
         this.chessground.playPremove()
         this.playPredrop()

@@ -9,7 +9,7 @@ import friendsPopup from '../friendsPopup'
 import challengeForm from '../challengeForm'
 import playMachineForm from '../playMachineForm'
 import i18n from '../../i18n'
-import { handleXhrError, hasNetwork } from '../../utils'
+import { hasNetwork } from '../../utils'
 import { getOfflineGames } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import friendsApi from '../../lichess/friends'
@@ -110,7 +110,7 @@ function renderProfileActions(user: Session) {
         {i18n('preferences')}
       </li>
       <li className="side_link" oncreate={helper.ontapXY(() => {
-        session.logout().catch(handleXhrError)
+        session.logout()
         menu.profileMenuOpen(false)
       })}>
         <span data-icon="w" />

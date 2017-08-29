@@ -180,12 +180,13 @@ function login(username: string, password: string) {
 }
 
 function logout() {
-  return fetchJSON('/logout', undefined, true)
+  return fetchJSON('/logout', { method: 'POST' }, true)
   .then(() => {
     session = undefined
     friendsApi.clear()
     redraw()
   })
+  .catch(handleXhrError)
 }
 
 function signup(username: string, email: string, password: string): Promise<{}> {

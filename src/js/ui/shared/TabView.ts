@@ -53,9 +53,11 @@ export default {
   view({ attrs }) {
     const curIndex = attrs.selectedIndex
     const vw = viewportDim().vw
+    const width = attrs.content.length * 100
     const shift = -(curIndex * vw)
 
     const style = {
+      width: `${width}vw`,
       transform: `translateX(${shift}px)`
     }
 

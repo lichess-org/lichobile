@@ -35,24 +35,23 @@ export function tournamentListBody(ctrl: TournamentCtrl) {
     ctrl.tournaments['finished']
   ]
 
-  return (
-    <div className="tournamentTabsWrapper">
-      <div className="tabs-nav-header">
-        {h(TabNavigation, {
-            buttons: TABS,
-            selectedIndex: ctrl.currentTab,
-            onTabChange: ctrl.onTabChange
-        })}
-        <div className="main_header_drop_shadow" />
-      </div>
-      {h(TabView, {
-        selectedIndex: ctrl.currentTab,
-        content: tabsContent,
-        renderer: renderTabContent,
-        onTabChange: ctrl.onTabChange
-      })}
-    </div>
-  )
+  return [
+    h('div.tabs-nav-header',
+      h(TabNavigation, {
+          buttons: TABS,
+          selectedIndex: ctrl.currentTab,
+          onTabChange: ctrl.onTabChange
+      }),
+      h('div.main_header_drop_shadow')
+    ),
+    h(TabView, {
+      className: 'tournamentTabsWrapper',
+      selectedIndex: ctrl.currentTab,
+      content: tabsContent,
+      renderer: renderTabContent,
+      onTabChange: ctrl.onTabChange
+    })
+  ]
 }
 
 export function renderFooter() {

@@ -35,7 +35,7 @@ export default class CorrespondenceCtrl {
     this.reload()
   }
 
-  public cancelChallenge(id: string) {
+  public cancelChallenge = (id: string) => {
     return xhr.cancelChallenge(id)
     .then(() => {
       challengesApi.remove(id)
@@ -44,13 +44,13 @@ export default class CorrespondenceCtrl {
     })
   }
 
-  public cancel(seekId: string) {
+  public cancel = (seekId: string) => {
     return Zanimo(document.getElementById(seekId), 'opacity', '0', '300', 'ease-out')
       .then(() => socket.send('cancelSeek', seekId))
       .catch(console.log.bind(console))
   }
 
-  public join(seekId: string) {
+  public join = (seekId: string) => {
     socket.send('joinSeek', seekId)
   }
 

@@ -537,6 +537,9 @@ export default class OnlineRound implements OnlineRoundInterface {
     d.game.status = o.status
     d.game.boosted = o.boosted
 
+    // in case game is ended with a draw offer
+    d.opponent.offeringDraw = false
+
     this.userJump(this.lastPly())
     this.chessground.stop()
 

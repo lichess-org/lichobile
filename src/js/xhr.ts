@@ -42,8 +42,13 @@ export function newAiGame(fen?: string): Promise<OnlineGameData> {
 
 export function seekGame(setup: HumanSeekSetup): Promise<HookData> {
   const { ratingMin, ratingMax, ...rest } = setup
-  const ratingRange = ratingMin + '-' + ratingMax
-  const body = JSON.stringify({ ratingRange, ...rest })
+  let body: string
+  if (ratingMin !== undefined && ratingMax !== undefined) {
+    const ratingRange = ratingMin + '-' + ratingMax
+    body = JSON.stringify({ ratingRange, ...rest })
+  } else {
+    body = JSON.stringify({ ...rest })
+  }
   return fetchJSON('/setup/hook/' + currentSri(), {
     method: 'POST',
     body

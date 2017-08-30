@@ -63,7 +63,7 @@ export default {
       const poolId = conf.pool()
       if (poolId && conf.preset() === 'quick') {
         const pm = { id: poolId }
-        if (session.isConnected()) doStartAnonPoolSeek(pm)
+        if (!session.isConnected()) doStartAnonPoolSeek(pm)
         else doStartSeeking(pm)
       } else {
         doStartSeeking(humanSetupFromSettings(conf))

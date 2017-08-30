@@ -4,6 +4,7 @@ import * as xhr from '../xhr'
 import settings, { HumanSettings } from '../settings'
 import spinner from '../spinner'
 import session from '../session'
+import redraw from '../utils/redraw'
 import * as helper from './helper'
 import formWidgets from './shared/form'
 import popupWidget from './shared/popup'
@@ -47,7 +48,9 @@ export default {
 }
 
 function open() {
-  if (xhr.cachedPools.length === 0) xhr.lobby(false)
+  if (xhr.cachedPools.length === 0) {
+    xhr.lobby(false).then(redraw)
+  }
   router.backbutton.stack.push(close)
   isOpen = true
 }
@@ -123,6 +126,7 @@ function renderQuickSetup() {
     xhr.cachedPools
       .map(p => renderPool(p))
       .concat(h('div.newGame-pool', {
+          key: 'pool-custom',
           oncreate: helper.ontap(() => {
             tabPreset = 'custom'
             humanSetup.preset('custom')

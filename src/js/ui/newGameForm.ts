@@ -10,7 +10,8 @@ import popupWidget from './shared/popup'
 import i18n from '../i18n'
 import lobby from './lobby'
 import * as h from 'mithril/hyperscript'
-import { Pool } from '../lichess/interfaces'
+import { humanSetupFromSettings } from '../lichess/setup'
+import { Pool, PoolMember, HumanSeekSetup, isPoolMember, isSeekSetup } from '../lichess/interfaces'
 
 let isOpen = false
 
@@ -56,25 +57,20 @@ function close(fromBB?: string) {
   isOpen = false
 }
 
-function goSeek() {
-  const conf = humanSetup
-  // anon. can't enter pool: we'll just create a similar hook
-  if (tabPreset === 'quick' && !session.isConnected()) {
-    const pool = xhr.cachedPools.find(p => p.id  === conf.pool())
-    if (pool) {
-      conf.time(String(pool.lim))
-      conf.increment(String(pool.inc))
-      conf.variant('1')
-      conf.mode('0')
-    }
-  }
+function goSeek(conf: PoolMember | HumanSeekSetup) {
+  close()
 
-  if (tabPreset === 'quick' || conf.timeMode() === '1') {
-    close()
-    lobby.startSeeking()
+  // pool or real time seek
+  if (isPoolMember(conf)) {
+    lobby.startSeeking(conf)
   }
+  // correspondence or unlimited seek
+  else if (isSeekSetup(conf) && conf.timeMode === 1) {
+    lobby.startSeeking(conf)
+  }
+  // correspondence seek
   else {
-    xhr.seekGame()
+    xhr.seekGame(conf)
     .catch(utils.handleXhrError)
     router.set('/correspondence')
   }
@@ -131,9 +127,7 @@ function renderQuickSetup() {
             tabPreset = 'custom'
             humanSetup.preset('custom')
           })
-        }, [
-          h('div.newGame-custom', 'Custom')
-        ])
+        }, h('div.newGame-custom', 'Custom'))
       ) : spinner.getVdom()
   )
 }
@@ -142,9 +136,10 @@ function renderPool(p: Pool) {
   return h('div.newGame-pool', {
     key: 'pool-' + p.id,
     oncreate: helper.ontap(() => {
+      // remember pool id for new opponent button
       humanSetup.pool(p.id)
+      goSeek({ id: p.id })
       close()
-      goSeek()
     })
   }, [
     h('div.newGame-clock', p.id),
@@ -264,7 +259,8 @@ function renderCustomSetup(formName: string, settingsObj: HumanSettings, variant
       e.preventDefault()
       if (!settings.gameSetup.isTimeValid(settingsObj)) return
       close()
-      goSeek()
+      // TODO just use localstorage as settings saver
+      goSeek(humanSetupFromSettings(settingsObj))
     }
   }, [
     h('fieldset', generalFieldset),

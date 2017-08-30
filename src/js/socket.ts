@@ -323,8 +323,8 @@ function redirectToGame(obj: string | RedirectObj) {
         ].join('')
         document.cookie = cookie
     }
-    router.set('/game' + url)
   }
+  router.set('/game' + url)
 }
 
 function onConnected() {

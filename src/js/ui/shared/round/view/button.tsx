@@ -201,7 +201,7 @@ export default {
       return h('button[data-icon=r]', {
         oncreate: helper.ontap(() => {
           ctrl.hideActions()
-          lobby.startSeeking()
+          lobby.onNewOpponent()
         })
       }, i18n('newOpponent'))
     }

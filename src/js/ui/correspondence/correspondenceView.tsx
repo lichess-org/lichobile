@@ -1,7 +1,7 @@
 import * as h from 'mithril/hyperscript'
 import * as utils from '../../utils'
 import challengesApi from '../../lichess/challenges'
-import { Seek } from '../../lichess/interfaces'
+import { CorrespondenceSeek } from '../../lichess/interfaces'
 import { Challenge } from '../../lichess/interfaces/challenge'
 import * as helper from '../helper'
 import i18n from '../../i18n'
@@ -81,7 +81,7 @@ function renderChallenges(challenges: Challenge[], ctrl: CorrespondenceCtrl) {
     h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
 }
 
-function renderPool(pool: Seek[], ctrl: CorrespondenceCtrl) {
+function renderPool(pool: CorrespondenceSeek[], ctrl: CorrespondenceCtrl) {
   return pool.length ?
     h('ul.native_scroller.seeks_scroller', pool.map(s => renderSeek(ctrl, s))) :
     h('div.vertical_align.empty_seeks_list', 'Oops! Nothing here.')
@@ -111,7 +111,7 @@ function renderChallenge(ctrl: CorrespondenceCtrl, c: Challenge) {
   )
 }
 
-function renderSeek(ctrl: CorrespondenceCtrl, seek: Seek) {
+function renderSeek(ctrl: CorrespondenceCtrl, seek: CorrespondenceSeek) {
   const action = seek.username.toLowerCase() === session.getUserId() ? 'cancel' : 'join'
   return h('li', {
     key: 'seek' + seek.id,

@@ -6,12 +6,12 @@ import session from '../../session'
 import settings from '../../settings'
 import * as xhr from '../../xhr'
 import socket from '../../socket'
-import { Seek } from '../../lichess/interfaces'
+import { CorrespondenceSeek } from '../../lichess/interfaces'
 import { Challenge } from '../../lichess/interfaces/challenge'
 
 export default class CorrespondenceCtrl {
   currentTab: number
-  pool: Seek[]
+  pool: CorrespondenceSeek[]
   sendingChallenges: Challenge[]
 
   constructor(defaultTab: number) {
@@ -76,11 +76,11 @@ export default class CorrespondenceCtrl {
   }
 }
 
-function seekUserId(seek: Seek) {
+function seekUserId(seek: CorrespondenceSeek) {
   return seek.username.toLowerCase()
 }
 
-function fixSeeks(seeks: Seek[]): Seek[] {
+function fixSeeks(seeks: CorrespondenceSeek[]): CorrespondenceSeek[] {
   const userId = session.getUserId()
   if (userId) seeks.sort((a, b) => {
     if (seekUserId(a) === userId) return -1

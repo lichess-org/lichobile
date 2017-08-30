@@ -3,7 +3,7 @@ import { currentSri, noop } from './utils'
 import settings from './settings'
 import i18n from './i18n'
 import session from './session'
-import { TimelineData, LobbyData, HookData, Pool, Seek } from './lichess/interfaces'
+import { TimelineData, LobbyData, HookData, Pool, HumanSeekSetup, CorrespondenceSeek } from './lichess/interfaces'
 import { ChallengesData, Challenge } from './lichess/interfaces/challenge'
 import { OnlineGameData } from './lichess/interfaces/game'
 
@@ -40,20 +40,13 @@ export function newAiGame(fen?: string): Promise<OnlineGameData> {
   }, true)
 }
 
-export function seekGame(): Promise<HookData> {
-  const config = settings.gameSetup.human
+export function seekGame(setup: HumanSeekSetup): Promise<HookData> {
+  const { ratingMin, ratingMax, ...rest } = setup
+  const ratingRange = ratingMin + '-' + ratingMax
+  const body = JSON.stringify({ ratingRange, ...rest })
   return fetchJSON('/setup/hook/' + currentSri(), {
     method: 'POST',
-    body: JSON.stringify({
-      variant: config.variant(),
-      timeMode: config.timeMode(),
-      days: config.days(),
-      time: config.time(),
-      increment: config.increment(),
-      color: config.color(),
-      mode: session.isConnected() ? config.mode() : '0',
-      ratingRange: config.ratingMin() + '-' + config.ratingMax()
-    })
+    body
   }, true)
 }
 
@@ -116,7 +109,7 @@ export function lobby(feedback?: boolean): Promise<LobbyData> {
   })
 }
 
-export function seeks(feedback: boolean): Promise<Array<Seek>> {
+export function seeks(feedback: boolean): Promise<CorrespondenceSeek[]> {
   return fetchJSON('/lobby/seeks', undefined, feedback)
 }
 

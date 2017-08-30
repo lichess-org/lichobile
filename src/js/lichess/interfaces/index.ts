@@ -5,6 +5,10 @@ export interface Pool {
   perf: string
 }
 
+export interface PoolMember {
+  id: string
+}
+
 export interface LobbyData {
   lobby: {
     version: number
@@ -18,9 +22,30 @@ export interface HookData {
   }
 }
 
-export type ModeId = 0 | 1
+export type ModeId = 0 | 1 // casual | rated
+export type TimeModeId = 0 | 1 | 2 // unlimited | realTime | correspondence
 
-export interface Seek {
+export interface SeekSetup {
+  variant: number
+  timeMode: TimeModeId
+  days: number
+  time: number
+  increment: number
+  color: Color | 'random'
+}
+
+export interface HumanSeekSetup extends SeekSetup {
+  mode: ModeId
+  ratingMin?: number
+  ratingMax?: number
+}
+
+export interface AiSeekSetup extends SeekSetup {
+  level: number
+  fen?: string
+}
+
+export interface CorrespondenceSeek {
   id: string
   username: string
   rating: number
@@ -114,4 +139,13 @@ export interface Paginator<T> {
   previousPage: number
   nextPage: number
   nbPages: number
+}
+
+
+export function isPoolMember(conf: PoolMember | SeekSetup): conf is PoolMember {
+  return (conf as PoolMember).id !== undefined
+}
+
+export function isSeekSetup(conf: PoolMember | SeekSetup): conf is SeekSetup {
+  return (conf as SeekSetup).timeMode !== undefined
 }

@@ -2,8 +2,8 @@ import { redrawSync } from '../../utils/redraw'
 import { batchRequestAnimationFrame, removeFromBatchAnimationFrame } from '../../utils/batchRAF'
 
 const HOLD_DURATION = 600
-const SCROLL_TOLERANCE_X = 5
-const SCROLL_TOLERANCE_Y = 5
+const SCROLL_TOLERANCE_X = 4
+const SCROLL_TOLERANCE_Y = 4
 const ACTIVE_CLASS = 'active'
 
 function hasContextMenu() {

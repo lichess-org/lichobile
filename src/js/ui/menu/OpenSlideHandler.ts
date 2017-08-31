@@ -27,7 +27,7 @@ export default function OpenSlideHandler(
   })
   mc.add(new Hammer.Pan({
     direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 10
+    threshold: 5
   }))
 
   mc.on('panstart', (e: HammerInput) => {

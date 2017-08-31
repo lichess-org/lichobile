@@ -144,13 +144,13 @@ export interface PlayerInfo {
 }
 
 export interface PlayerInfoPairing {
-  berserk: true
-  color: string
+  berserk: boolean
+  color: Color
   id: string
   op: PlayerInfoOpponent
-  score: number
+  score: [number, number] | number | null
   status: number
-  win: boolean
+  win: boolean | null
 }
 
 interface PlayerInfoOpponent {

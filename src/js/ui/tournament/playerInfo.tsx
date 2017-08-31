@@ -54,9 +54,9 @@ export default {
 
 
     function renderPlayerGame (game: PlayerInfoPairing, index: number, gameArray: Array<PlayerInfoPairing>) {
-      let outcome: string
+      let outcome: string | number
       let outcomeClass = 'oppOutcome'
-      if (game.score === undefined) {
+      if (game.score === undefined || game.score === null) {
         outcome = '*'
       }
       else if (Array.isArray(game.score)) {
@@ -67,7 +67,7 @@ export default {
           outcomeClass += ' double'
       }
       else {
-        outcome = game.score.toString()
+        outcome = game.score
       }
       return (
         <tr className="list_item" key={game.id} oncreate={helper.ontap(() => router.set('/game/' + game.id + '/' + game.color))}>

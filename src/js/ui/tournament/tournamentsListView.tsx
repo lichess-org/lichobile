@@ -71,16 +71,17 @@ function renderTabContent(list: Array<TournamentListItem>) {
   }, list.map(renderTournamentListItem))
 }
 
-function renderTournamentListItem(tournament: TournamentListItem) {
+function renderTournamentListItem(tournament: TournamentListItem, index: number) {
   const time = formatTournamentTimeControl(tournament.clock)
   const mode = tournament.rated ? i18n('rated') : i18n('casual')
   const duration = formatTournamentDuration(tournament.minutes)
   const variant = tournament.variant.key !== 'standard' ?
     capitalize(tournament.variant.short) : ''
+  const evenOrOdd = index % 2 === 0 ? ' even ' : ' odd '
 
   return (
     <li key={tournament.id}
-      className={'list_item tournament_item' + (tournament.createdBy === 'lichess' ? ' official' : '')}
+      className={'list_item tournament_item' + evenOrOdd + (tournament.createdBy === 'lichess' ? ' official' : '')}
       data-id={tournament.id}
       data-icon={tournament.perf.icon}
     >

@@ -195,7 +195,7 @@ export interface TournamentListItem {
   perf: Perf
   private: boolean
   rated: boolean
-  schedule: Schedule
+  schedule?: Schedule
   secondsToStart: number
   startsAt: number
   status: number

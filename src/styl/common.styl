@@ -115,12 +115,17 @@ span.fa
     margin-right 10px
   &:last-child
     border-bottom none
+  &.odd
+    background-color lighten(bgdark, 2%)
   &.active
     background lighten(bgdark, 5%)
   &.bglight
     border-bottom-color darken(bglight, 15%)
     &.active
       background-color darken(bglight, 5%)
+
+.list_item.odd, .list_item.even
+  border-bottom none
 
 .nav
   &:after

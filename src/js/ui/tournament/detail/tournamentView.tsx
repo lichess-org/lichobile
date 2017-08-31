@@ -81,8 +81,8 @@ function tournamentContentFinished(ctrl: TournamentCtrl) {
 function tournamentContentCreated(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   return [
-    tournamentHeader(data, data.secondsToStart, 'Starts in:'),
-    tournamentLeaderboard(ctrl)
+    tournamentHeader(data, data.secondsToStart, 'Starts in'),
+    ctrl.tournament.standing.players.length ? tournamentLeaderboard(ctrl) : null
   ]
 }
 
@@ -194,9 +194,12 @@ function variantKey(data: Tournament) {
 }
 
 function timeInfo(time?: number, preceedingText?: string) {
-  if (time === undefined) return ''
+  if (time === undefined) return null
 
-  return (preceedingText ? preceedingText : '') + ' ' + formatTimeInSecs(time)
+  return [
+    preceedingText ? (preceedingText + ' ') : null,
+    h('strong', formatTimeInSecs(time))
+  ]
 }
 
 function getLeaderboardItemEl(e: Event) {
@@ -226,7 +229,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
 
   return (
     <div key="leaderboard" className="tournamentLeaderboard">
-      <p className="tournamentTitle"> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
+      <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p>
 
       <table
         className={'tournamentStandings' + (ctrl.isLoading ? ' loading' : '')}

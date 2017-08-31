@@ -3,7 +3,7 @@ import socket from '../../../socket'
 import i18n from '../../../i18n'
 import { header as headerWidget, backButton } from '../../shared/common'
 import layout from '../../layout'
-import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter } from './tournamentDetailView'
+import { tournamentBody, renderPlayerInfoOverlay, renderFAQOverlay, renderFooter } from './tournamentView'
 
 import passwordForm from './passwordForm'
 import TournamentCtrl from './TournamentCtrl'

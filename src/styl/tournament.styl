@@ -2,14 +2,13 @@
   display flex
   flex-flow row nowrap
   align-items center
-  opacity 0.9
+  &.official:before
+    color gold
   &:before
     position absolute
-    left 8px
+    left 10px
     top 21px
     font-size 28px
-  &.official
-    opacity 1
 
 .tournamentListName
   text-align: left
@@ -19,7 +18,7 @@
   width 65%
   position relative
   &:first-child
-    padding-left 45px
+    padding-left 40px
   > .fullName
     overflow hidden
     text-overflow ellipsis
@@ -34,7 +33,6 @@
   text-align left
   font-weight bold
   color gold
-  padding-left 10px
   margin 10px 0 5px
 
 .tournamentFeatured
@@ -130,15 +128,17 @@ td.tournamentPoints
   padding-bottom 0.6em
   display flex
   justify-content space-between
+  align-items center
 
 .tournamentInfo
   &:before
     content: attr(data-icon)
 
 .timeInfo
-  font-weight bold
-  font-family Cousine
-  font-size 1.2em
+  > strong
+    font-weight bold
+    font-family Cousine
+    font-size 1.2em
 
 .tournamentMiniBoard
   display flex
@@ -217,7 +217,7 @@ td.tournamentPoints
 .tournamentLeaderboard
   display flex
   flex-flow column nowrap
-
+  padding 0 10px
 
 .flagRank
   &:before

@@ -2,10 +2,10 @@ import settings from '../../../settings'
 import popupWidget from '../../shared/popup'
 import i18n from '../../../i18n'
 import router from '../../../router'
-import {TournamentState} from '../interfaces'
+import TournamentCtrl from './TournamentCtrl'
 
 let isOpen = false
-let tournamentCtrl: TournamentState
+let tournamentCtrl: TournamentCtrl
 
 export default {
   open,
@@ -21,7 +21,7 @@ export default {
   }
 }
 
-function open(ctrl: TournamentState) {
+function open(ctrl: TournamentCtrl) {
   router.backbutton.stack.push(close)
   isOpen = true
   tournamentCtrl = ctrl
@@ -60,6 +60,6 @@ function renderForm() {
 function join(form: HTMLFormElement) {
   const elements: HTMLCollection = form[0].elements as HTMLCollection
   const password = (elements[0] as HTMLInputElement).value
-  tournamentCtrl.join(tournamentCtrl.tournament().id, password)
+  tournamentCtrl.join(tournamentCtrl.tournament.id, password)
   close()
 }

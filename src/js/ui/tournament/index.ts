@@ -5,16 +5,16 @@ import { header } from '../shared/common'
 import layout from '../layout'
 import i18n from '../../i18n'
 import newTournamentForm from './newTournamentForm'
-import TournamentCtrl from './TournamentCtrl'
+import TournamentsListCtrl from './TournamentsListCtrl'
 
-import { tournamentListBody, renderFooter } from './tournamentView'
+import { renderTournamentsList, renderFooter } from './tournamentsListView'
 
 interface Attrs {
   tab: number
 }
 
 interface State {
-  ctrl: TournamentCtrl
+  ctrl: TournamentsListCtrl
 }
 
 export default {
@@ -23,16 +23,16 @@ export default {
   oninit({ attrs }) {
     socket.createDefault()
 
-    this.ctrl = new TournamentCtrl(attrs.tab)
+    this.ctrl = new TournamentsListCtrl(attrs.tab)
   },
 
   view() {
     const ctrl = this.ctrl
-    const bodyCtrl = () => tournamentListBody(ctrl)
+    const body = () => renderTournamentsList(ctrl)
     const footer = session.isConnected() ? () => renderFooter() : undefined
     const overlay = () => newTournamentForm.view(ctrl)
 
-    return layout.free(() => header(i18n('tournaments')), bodyCtrl, footer, overlay)
+    return layout.free(() => header(i18n('tournaments')), body, footer, overlay)
   }
 
 } as Mithril.Component<Attrs, State>

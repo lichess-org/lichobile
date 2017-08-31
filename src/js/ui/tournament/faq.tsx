@@ -1,11 +1,17 @@
 import router from '../../router'
 import * as helper from '../helper'
-import { FaqState } from './interfaces'
-import { Tournament } from '../../lichess/interfaces/tournament'
 import { closeIcon } from '../shared/icons'
+import TournamentCtrl from './detail/TournamentCtrl'
+
+export interface FaqCtrl {
+  open: () => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  root: TournamentCtrl
+}
 
 export default {
-  controller: function(tournament: Mithril.Stream<Tournament>) {
+  controller(root: TournamentCtrl): FaqCtrl {
     let isOpen = false
 
     function open() {
@@ -21,16 +27,16 @@ export default {
     return {
       open,
       close,
-      isOpen: function() {
+      isOpen() {
         return isOpen
       },
-      tournament
-    } as FaqState
+      root
+    }
   },
 
-  view: function(ctrl: FaqState) {
+  view: function(ctrl: FaqCtrl) {
     if (!ctrl.isOpen()) return null
-    const tournament = ctrl.tournament()
+    const tournament = ctrl.root.tournament
 
     if (!tournament) return null
     return (

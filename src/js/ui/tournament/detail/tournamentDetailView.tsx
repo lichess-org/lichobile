@@ -1,63 +1,32 @@
-import { header as headerWidget, backButton } from '../../shared/common'
+import * as h from 'mithril/hyperscript'
 import router from '../../../router'
 import session from '../../../session'
-import layout from '../../layout'
-import * as h from 'mithril/hyperscript'
 import i18n from '../../../i18n'
+import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament'
 import { gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
-import faq from '../faq'
-import playerInfo from '../playerInfo'
 import * as helper from '../../helper'
 import settings from '../../../settings'
 import miniBoard from '../../shared/miniBoard'
-import { TournamentState } from '../interfaces'
-import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament'
+
+import faq from '../faq'
+import playerInfo from './playerInfo'
 import passwordForm from './passwordForm'
+import TournamentCtrl from './TournamentCtrl'
 
-export default function view(vnode: Mithril.Vnode<{}, TournamentState>) {
-  const ctrl = vnode.state as TournamentState
-
-  if (ctrl.notFound()) {
-    return layout.free(
-      () => headerWidget(null, backButton(i18n('tournamentNotFound'))),
-      () =>
-        <div key="tournament-not-found" className="tournamentNotFound">
-          <p>{i18n('tournamentDoesNotExist')}</p>
-          <p>{i18n('tournamentMayHaveBeenCanceled')}</p>
-        </div>
-    )
-  }
-
-  const headerCtrl = () => headerWidget(null,
-    backButton(ctrl.tournament() ? ctrl.tournament().fullName : null)
-  )
-  const bodyCtrl = () => tournamentBody(ctrl)
-  const footer = () => renderFooter(ctrl)
-  const faqOverlay = () => renderFAQOverlay(ctrl)
-  const playerInfoOverlay = () => renderPlayerInfoOverlay(ctrl)
-  const overlay = () => [
-    faqOverlay(),
-    playerInfoOverlay(),
-    passwordForm.view()
-  ]
-
-  return layout.free(headerCtrl, bodyCtrl, footer, overlay)
-}
-
-function renderFAQOverlay(ctrl: TournamentState) {
+export function renderFAQOverlay(ctrl: TournamentCtrl) {
   return [
     faq.view(ctrl.faqCtrl)
   ]
 }
 
-function renderPlayerInfoOverlay(ctrl: TournamentState) {
+export function renderPlayerInfoOverlay(ctrl: TournamentCtrl) {
   return [
     playerInfo.view(ctrl.playerInfoCtrl)
   ]
 }
 
-function tournamentBody(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+export function tournamentBody(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
 
   if (!data) return null
 
@@ -80,8 +49,8 @@ function tournamentBody(ctrl: TournamentState) {
   )
 }
 
-function renderFooter(ctrl: TournamentState) {
-  const t = ctrl.tournament()
+export function renderFooter(ctrl: TournamentCtrl) {
+  const t = ctrl.tournament
   if (!t) return null
   const tUrl = 'https://lichess.org/tournament/' + t.id
 
@@ -95,13 +64,13 @@ function renderFooter(ctrl: TournamentState) {
         <span className="fa fa-share-alt" />
         Share
       </button>
-      { ctrl.hasJoined() ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
+      { ctrl.hasJoined ? withdrawButton(ctrl, t) : joinButton(ctrl, t) }
     </div>
   )
 }
 
-function tournamentContentFinished(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+function tournamentContentFinished(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
   return [
     tournamentHeader(data),
     data.podium ? tournamentPodium(data.podium) : null,
@@ -109,16 +78,16 @@ function tournamentContentFinished(ctrl: TournamentState) {
   ]
 }
 
-function tournamentContentCreated(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+function tournamentContentCreated(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
   return [
     tournamentHeader(data, data.secondsToStart, 'Starts in:'),
     tournamentLeaderboard(ctrl)
   ]
 }
 
-function tournamentContentStarted(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+function tournamentContentStarted(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
   return [
       tournamentHeader(data, data.secondsToFinish, ''),
       tournamentLeaderboard(ctrl),
@@ -136,25 +105,14 @@ function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
   ].join(' ')
   return (
     <div key="header" className="tournamentHeader">
-      <div className="tournamentInfoTime clearfix">
+      <div className="tournamentInfoTime">
         <strong className="tournamentInfo withIcon" data-icon={gameIcon(variantKey(data))}>
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
         <div className="timeInfo">
-          <strong> {timeInfo(time, timeText)} </strong>
+          {timeInfo(time, timeText)}
         </div>
       </div>
-      { data.verdicts.list.length > 0 ?
-        <div className={conditionsClass} data-icon="7">
-          { data.verdicts.list.map(o => {
-            return (
-              <p className={'condition' + (o.accepted ? 'accepted' : 'rejected')}>
-                { o.condition }
-              </p>
-            )
-          })}
-        </div> : null
-      }
       <div className="tournamentCreatorInfo">
         { data.createdBy === 'lichess' ? i18n('tournamentOfficial') : i18n('by', data.createdBy) }
         &nbsp;•&nbsp;
@@ -169,11 +127,22 @@ function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
         {data.position.eco + ' ' + data.position.name}
       </div> : null
       }
+      { data.verdicts.list.length > 0 ?
+        <div className={conditionsClass} data-icon="7">
+          { data.verdicts.list.map(o => {
+            return (
+              <p className={'condition' + (o.accepted ? 'accepted' : 'rejected')}>
+                { o.condition }
+              </p>
+            )
+          })}
+        </div> : null
+      }
    </div>
   )
 }
 
-function joinButton(ctrl: TournamentState, t: Tournament) {
+function joinButton(ctrl: TournamentCtrl, t: Tournament) {
   if (!session.isConnected() ||
     t.isFinished ||
     settings.game.supportedVariants.indexOf(t.variant) < 0 ||
@@ -181,7 +150,7 @@ function joinButton(ctrl: TournamentState, t: Tournament) {
     return null
   }
 
-  const action = ctrl.tournament().private ?
+  const action = ctrl.tournament.private ?
     () => passwordForm.open(ctrl) :
     () => ctrl.join(t.id)
 
@@ -193,7 +162,7 @@ function joinButton(ctrl: TournamentState, t: Tournament) {
   )
 }
 
-function withdrawButton(ctrl: TournamentState, t: Tournament) {
+function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
   if (t.isFinished || settings.game.supportedVariants.indexOf(t.variant) < 0) {
     return null
   }
@@ -236,15 +205,15 @@ function getLeaderboardItemEl(e: Event) {
     helper.findParentBySelector(target, '.list_item')
 }
 
-function handlePlayerInfoTap(ctrl: TournamentState, e: Event) {
+function handlePlayerInfoTap(ctrl: TournamentCtrl, e: Event) {
   const el = getLeaderboardItemEl(e)
   const playerId = el.dataset['player']
 
   if (playerId) ctrl.playerInfoCtrl.open(playerId)
 }
 
-function tournamentLeaderboard(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+function tournamentLeaderboard(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
   const players = data.standing.players
   const page = data.standing.page
   const firstPlayer = (players.length > 0) ? players[0].rank : 0
@@ -260,7 +229,7 @@ function tournamentLeaderboard(ctrl: TournamentState) {
       <p className="tournamentTitle"> {i18n('leaderboard')} ({data.nbPlayers} Players)</p>
 
       <table
-        className={'tournamentStandings' + (ctrl.isLoading() ? ' loading' : '')}
+        className={'tournamentStandings' + (ctrl.isLoading ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
         {data.standing.players.map(p =>
@@ -269,11 +238,11 @@ function tournamentLeaderboard(ctrl: TournamentState) {
       </table>
 
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
-        {renderNavButton('W', !ctrl.isLoading() && backEnabled, ctrl.first)}
-        {renderNavButton('Y', !ctrl.isLoading() && backEnabled, ctrl.prev)}
+        {renderNavButton('W', !ctrl.isLoading && backEnabled, ctrl.first)}
+        {renderNavButton('Y', !ctrl.isLoading && backEnabled, ctrl.prev)}
         <span class="pageInfo"> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
-        {renderNavButton('X', !ctrl.isLoading() && forwardEnabled, ctrl.next)}
-        {renderNavButton('V', !ctrl.isLoading() && forwardEnabled, ctrl.last)}
+        {renderNavButton('X', !ctrl.isLoading && forwardEnabled, ctrl.next)}
+        {renderNavButton('V', !ctrl.isLoading && forwardEnabled, ctrl.last)}
         <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
           data-icon="7"
           oncreate={helper.ontap(ctrl.me)}
@@ -310,8 +279,8 @@ function renderLeaderboardItem (userName: string, player: StandingPlayer) {
   )
 }
 
-function tournamentFeaturedGame(ctrl: TournamentState) {
-  const data = ctrl.tournament()
+function tournamentFeaturedGame(ctrl: TournamentCtrl) {
+  const data = ctrl.tournament
   const featured = data.featured
   if (!featured) return null
 

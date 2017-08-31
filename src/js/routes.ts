@@ -27,8 +27,8 @@ import userTV from './ui/user/tv'
 import players from './ui/players'
 import ranking from './ui/players/ranking'
 import training from './ui/training'
+import tournamentsList from './ui/tournament'
 import tournamentDetail from './ui/tournament/detail'
-import tournament from './ui/tournament'
 import editor from './ui/editor'
 import clock from './ui/clock'
 import inbox from './ui/inbox'
@@ -91,7 +91,7 @@ export default {
       'settings/kidMode': settingsKidMode,
       'training': training,
       'training/:id': training,
-      'tournament': tournament,
+      'tournament': tournamentsList,
       'tournament/:id': tournamentDetail
     })
   }

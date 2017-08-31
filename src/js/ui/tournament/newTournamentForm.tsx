@@ -6,7 +6,7 @@ import { TournamentCreateResponse } from '../../lichess/interfaces/tournament'
 import popupWidget from '../shared/popup'
 import formWidgets from '../shared/form'
 
-import TournamentCtrl from './TournamentCtrl'
+import TournamentsListCtrl from './TournamentsListCtrl'
 import * as xhr from './tournamentXhr'
 
 let isOpen = false
@@ -14,7 +14,7 @@ let isOpen = false
 export default {
   open,
   close,
-  view(ctrl: TournamentCtrl) {
+  view(ctrl: TournamentsListCtrl) {
     return popupWidget(
       'tournament_form_popup',
       undefined,
@@ -36,7 +36,7 @@ function close(fromBB?: string) {
 }
 
 
-function renderForm(ctrl: TournamentCtrl) {
+function renderForm(ctrl: TournamentsListCtrl) {
   return (
     <form id="tournamentCreateForm"
     onsubmit={function(e: Event) {

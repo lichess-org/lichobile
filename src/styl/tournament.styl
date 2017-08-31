@@ -91,12 +91,10 @@ td.tournamentPoints
 .tournamentHeader
   padding 10px
 
-.tournamentInfoTime, .tournamentConditions
-  padding-bottom 5px
-  border-bottom 1px solid borderColor
+.tournamentConditions, .tournamentCreatorInfo, .tournamentPositionInfo
+  padding-bottom 0.8em
 
 .tournamentConditions
-  font-size 0.8em
   position relative
   padding-left 23px
   &.accepted
@@ -116,9 +114,8 @@ td.tournamentPoints
     left 0
     opacity 0.7
 
-.tournamentCreatorInfo, .tournamentPositionInfo
-  font-size 0.85em
-  padding-top 5px
+.tournamentCreatorInfo, .tournamentPositionInfo, .tournamentConditions
+  font-size 0.9em
 
 .tournamentPositionInfo.withLink
   text-decoration underline
@@ -128,12 +125,20 @@ td.tournamentPoints
   p
     margin-bottom 0.5em
 
+.tournamentInfoTime
+  font-size 1.1em
+  padding-bottom 0.6em
+  display flex
+  justify-content space-between
+
 .tournamentInfo
   &:before
     content: attr(data-icon)
 
 .timeInfo
-  float right
+  font-weight bold
+  font-family Cousine
+  font-size 1.2em
 
 .tournamentMiniBoard
   display flex

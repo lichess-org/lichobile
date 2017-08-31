@@ -1,21 +1,30 @@
 import * as stream from 'mithril/stream'
-import router from '../../router'
-import * as utils from '../../utils'
-import redraw from '../../utils/redraw'
-import * as helper from '../helper'
-import i18n from '../../i18n'
-import { Tournament, PlayerInfo, PlayerInfoPairing } from '../../lichess/interfaces/tournament'
-import { closeIcon } from '../shared/icons'
-import * as xhr from './tournamentXhr'
-import { PlayerInfoState } from './interfaces'
+import router from '../../../router'
+import * as utils from '../../../utils'
+import redraw from '../../../utils/redraw'
+import * as helper from '../../helper'
+import { PlayerInfo, PlayerInfoPairing } from '../../../lichess/interfaces/tournament'
+import i18n from '../../../i18n'
+import { closeIcon } from '../../shared/icons'
+
+import * as xhr from '../tournamentXhr'
+import TournamentCtrl from './TournamentCtrl'
+
+export interface PlayerInfoCtrl {
+  open: (playerId: string) => void
+  close: (fromBB?: string) => void
+  isOpen: () => boolean
+  root: TournamentCtrl
+  playerData: Mithril.Stream<PlayerInfo>
+}
 
 export default {
-  controller: function(tournament: Mithril.Stream<Tournament>) {
+  controller(root: TournamentCtrl): PlayerInfoCtrl {
     let isOpen = false
     const playerData = stream<PlayerInfo>()
 
     function open(playerId: string) {
-      xhr.playerInfo(tournament().id, playerId)
+      xhr.playerInfo(root.tournament.id, playerId)
       .then(data => {
         playerData(data)
         router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'))
@@ -33,18 +42,18 @@ export default {
     return {
       open,
       close,
-      isOpen: function() {
+      isOpen() {
         return isOpen
       },
-      tournament,
+      root,
       playerData
-    } as PlayerInfoState
+    }
   },
 
-  view: function(ctrl: PlayerInfoState) {
+  view: function(ctrl: PlayerInfoCtrl) {
     if (!ctrl.isOpen()) return null
 
-    const tournament = ctrl.tournament()
+    const tournament = ctrl.root.tournament
     if (!tournament) return null
 
     const playerData = ctrl.playerData()

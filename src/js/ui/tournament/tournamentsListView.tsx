@@ -8,7 +8,7 @@ import TabNavigation from '../shared/TabNavigation'
 import TabView from '../shared/TabView'
 
 import newTournamentForm from './newTournamentForm'
-import TournamentCtrl from './TournamentCtrl'
+import TournamentsListCtrl from './TournamentsListCtrl'
 
 const TABS = [{
     label: 'In Progress'
@@ -26,7 +26,7 @@ function onTournamentTap(e: Event) {
   }
 }
 
-export function tournamentListBody(ctrl: TournamentCtrl) {
+export function renderTournamentsList(ctrl: TournamentsListCtrl) {
   if (!ctrl.tournaments) return null
 
   const tabsContent = [

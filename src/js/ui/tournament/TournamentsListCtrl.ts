@@ -4,7 +4,7 @@ import { handleXhrError, loadLocalJsonFile } from '../../utils'
 import * as xhr from './tournamentXhr'
 import { TournamentListItem, TournamentLists } from '../../lichess/interfaces/tournament'
 
-export default class TournamentCtrl {
+export default class TournamentsListCtrl {
   tournaments: TournamentLists
   currentTab: number
   startPositions: BoardPositionCategory[]

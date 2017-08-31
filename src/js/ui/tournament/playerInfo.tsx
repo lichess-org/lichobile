@@ -1,12 +1,13 @@
-import router from '../../router'
-import * as helper from '../helper'
-import * as xhr from './tournamentXhr'
-import * as utils from '../../utils'
-import i18n from '../../i18n'
-import { PlayerInfoState } from './interfaces'
-import { Tournament, PlayerInfo, PlayerInfoPairing } from '../../lichess/interfaces/tournament'
 import * as stream from 'mithril/stream'
+import router from '../../router'
+import * as utils from '../../utils'
+import redraw from '../../utils/redraw'
+import * as helper from '../helper'
+import i18n from '../../i18n'
+import { Tournament, PlayerInfo, PlayerInfoPairing } from '../../lichess/interfaces/tournament'
 import { closeIcon } from '../shared/icons'
+import * as xhr from './tournamentXhr'
+import { PlayerInfoState } from './interfaces'
 
 export default {
   controller: function(tournament: Mithril.Stream<Tournament>) {
@@ -19,6 +20,7 @@ export default {
         playerData(data)
         router.backbutton.stack.push(helper.slidesOutRight(close, 'tournamentPlayerInfoModal'))
         isOpen = true
+        redraw()
       })
       .catch(utils.handleXhrError)
     }

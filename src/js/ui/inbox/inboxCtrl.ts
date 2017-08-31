@@ -20,7 +20,10 @@ export default function oninit(vnode: Mithril.Vnode<void, InboxState>): void {
       isLoading(false)
       redraw()
     })
-    .catch(() => isLoading(false))
+    .catch(() => {
+      isLoading(false)
+      redraw()
+    })
   }, 1000)
 
   xhr.inbox()

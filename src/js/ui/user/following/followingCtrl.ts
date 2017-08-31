@@ -48,6 +48,7 @@ export default function FollowingCtrl(userId: string): IRelationCtrl {
 
   function setNewUserState(obj: Related, newData: xhr.RelationActionResult) {
     obj.relation = newData.following
+    redraw()
   }
 
   return {

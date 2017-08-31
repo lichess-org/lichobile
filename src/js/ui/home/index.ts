@@ -41,6 +41,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
           const [dailyData, topPlayersData] = results
           dailyPuzzle(dailyData.puzzle)
           weekTopPlayers(topPlayersData)
+          redraw()
         })
         .catch(console.error.bind(console))
 
@@ -51,6 +52,7 @@ const HomeScreen: Mithril.Component<{}, HomeState> = {
             .filter((o: TimelineEntry) => supportedTimelineTypes.indexOf(o.type) !== -1)
             .slice(0, 10)
           )
+          redraw()
         })
         .catch(console.error.bind(console))
       }

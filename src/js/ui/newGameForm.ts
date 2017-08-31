@@ -74,8 +74,8 @@ function goSeek(conf: PoolMember | HumanSeekSetup) {
   // correspondence seek
   else {
     xhr.seekGame(conf)
+    .then(() => router.set('/correspondence'))
     .catch(utils.handleXhrError)
-    router.set('/correspondence')
   }
 }
 

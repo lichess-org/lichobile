@@ -24,6 +24,7 @@ export default function oninit(userId: string) {
 
   function setNewUserState(newData: Partial<UserFullProfile>) {
     Object.assign(user(), newData)
+    redraw()
   }
 
   xhr.user(userId)

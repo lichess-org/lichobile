@@ -81,6 +81,7 @@ export default function ctrl(vnode) {
       const msg = 'Your move has failed to reach lichess server. Please retry to move when the network is back.'
       window.plugins.toast.show(msg, 'long', 'center')
       this.vm.loading = false
+      redraw()
     })
   }.bind(this)
 

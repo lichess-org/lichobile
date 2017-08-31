@@ -1,12 +1,13 @@
 import * as h from 'mithril/hyperscript'
-import * as helper from '../../helper'
+import * as debounce from 'lodash/debounce'
+import redraw from '../../../utils/redraw'
 import spinner from '../../../spinner'
 import i18n from '../../../i18n'
 import router from '../../../router'
-import * as debounce from 'lodash/debounce'
-import { readNote, syncNote } from './roundXhr'
+import * as helper from '../../helper'
 import { closeIcon } from '../../shared/icons'
 import { GameData } from '../../../lichess/interfaces/game'
+import { readNote, syncNote } from './roundXhr'
 
 let notesHeight: number
 
@@ -27,9 +28,11 @@ export class NotesCtrl {
     .then(note => {
       this.data.note = note
       this.syncing = false
+      redraw()
     })
     .catch(() => {
       this.syncing = false
+      redraw()
       window.plugins.toast.show('Could not read notes from server.', 'short', 'center')
     })
 
@@ -43,6 +46,7 @@ export class NotesCtrl {
       syncNote(this.data.game.id, text)
       .then(() => {
         this.data.note = text
+        redraw()
       })
     }
   }, 1000)

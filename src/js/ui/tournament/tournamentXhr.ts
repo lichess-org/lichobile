@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../http'
-import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists } from '../../lichess/interfaces/tournament'
+import { Tournament, PlayerInfo, TournamentCreateResponse, TournamentLists, StandingPage } from '../../lichess/interfaces/tournament'
 
 export function currentTournaments(): Promise<TournamentLists> {
   return fetchJSON('/tournament', {}, true)
@@ -15,6 +15,10 @@ export function reload(id: string, page?: number): Promise<Tournament> {
     method: 'GET',
     query: page ? { page } : {}
   })
+}
+
+export function loadPage(id: string, p: number): Promise<StandingPage> {
+  return fetchJSON('/tournament/' + id + '/standing/' + p)
 }
 
 export function join(id: string, password?: string): Promise<{}> {

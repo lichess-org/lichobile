@@ -22,7 +22,7 @@ export interface Tournament {
   secondsToStart?: number
   secondsToFinish?: number
   socketVersion: number
-  standing: Standing
+  standing: StandingPage
   startsAt: string
   system: string
   variant: string
@@ -106,7 +106,7 @@ interface Schedule {
   speed: string
 }
 
-interface Standing {
+export interface StandingPage {
   page: number
   players: Array<StandingPlayer>
 }

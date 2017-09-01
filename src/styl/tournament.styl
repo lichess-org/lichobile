@@ -41,8 +41,9 @@
 .tournamentTabsWrapper
   height 'calc(100% - %s)' % footerHeight
 
-table.tournamentStandings
+.tournamentStandings
   width 100%
+  transition opacity 100ms
   &.loading
     opacity 0.8
 
@@ -205,8 +206,11 @@ td.tournamentPoints
 .navigationButton.tournament-me
   line-height 25px
   width 60px
+  transition opacity 100ms
   &:before
     margin-right 5px
+  &.disabled
+    opacity 0.8
   &.activated
     color #ccc
     text-shadow 0 1px 0 #000

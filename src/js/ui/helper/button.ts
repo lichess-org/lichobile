@@ -55,6 +55,7 @@ export default function ButtonHandler(
     let touch = e.changedTouches[0]
     activeElement  = getElement ? getElement(e) : el
     if (!activeElement) return
+    if ((activeElement as HTMLButtonElement).disabled === true) return
     let boundingRect = activeElement.getBoundingClientRect()
     startX = touch.clientX
     startY = touch.clientY

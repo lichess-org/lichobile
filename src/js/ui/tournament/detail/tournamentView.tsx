@@ -153,7 +153,7 @@ function joinButton(ctrl: TournamentCtrl, t: Tournament) {
 
   const action = ctrl.tournament.private ?
     () => passwordForm.open(ctrl) :
-    () => ctrl.join(t.id)
+    () => ctrl.join()
 
   return (
     <button key="join" className="action_bar_button" oncreate={helper.ontap(action)}>
@@ -168,7 +168,7 @@ function withdrawButton(ctrl: TournamentCtrl, t: Tournament) {
     return null
   }
   return (
-    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(() => ctrl.withdraw(t.id))}>
+    <button key="withdraw" className="action_bar_button" oncreate={helper.ontap(ctrl.withdraw)}>
       <span className="fa fa-flag" />
       {i18n('withdraw')}
     </button>
@@ -218,13 +218,12 @@ function handlePlayerInfoTap(ctrl: TournamentCtrl, e: Event) {
 
 function tournamentLeaderboard(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
-  const players = data.standing.players
-  const page = data.standing.page
+  const players = ctrl.currentPageResults
+  const page = ctrl.page
   const firstPlayer = (players.length > 0) ? players[0].rank : 0
   const lastPlayer = (players.length > 0) ? players[players.length - 1].rank : 0
   const backEnabled = page > 1
   const forwardEnabled = page < data.nbPlayers / 10
-  const isUserPage = data.me && (page === Math.ceil(data.me.rank / 10))
   const user = session.get()
   const userName = user ? user.username : ''
 
@@ -233,23 +232,20 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
       <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p>
 
       <table
-        className={'tournamentStandings' + (ctrl.isLoading ? ' loading' : '')}
+        className={'tournamentStandings' + (ctrl.isLoadingPage ? ' loading' : '')}
         oncreate={helper.ontap(e => handlePlayerInfoTap(ctrl, e!), undefined, undefined, getLeaderboardItemEl)}
       >
-        {data.standing.players.map(p =>
-          renderLeaderboardItem(userName, p)
-        )}
+        {players.map(p => renderPlayerEntry(userName, p))}
       </table>
-
       <div className={'navigationButtons' + (players.length < 1 ? ' invisible' : '')}>
-        {renderNavButton('W', !ctrl.isLoading && backEnabled, ctrl.first)}
-        {renderNavButton('Y', !ctrl.isLoading && backEnabled, ctrl.prev)}
+        {renderNavButton('W', !ctrl.isLoadingPage && backEnabled, ctrl.first)}
+        {renderNavButton('Y', !ctrl.isLoadingPage && backEnabled, ctrl.prev)}
         <span class="pageInfo"> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
-        {renderNavButton('X', !ctrl.isLoading && forwardEnabled, ctrl.next)}
-        {renderNavButton('V', !ctrl.isLoading && forwardEnabled, ctrl.last)}
-        <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (isUserPage ? ' activated' : '')}
+        {renderNavButton('X', !ctrl.isLoadingPage && forwardEnabled, ctrl.next)}
+        {renderNavButton('V', !ctrl.isLoadingPage && forwardEnabled, ctrl.last)}
+        <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (ctrl.myPage() ? ' activated' : '')}
           data-icon="7"
-          oncreate={helper.ontap(ctrl.me)}
+          oncreate={helper.ontap(ctrl.toggleFocusOnMe)}
         >
           <span>Me</span>
         </button>
@@ -259,14 +255,14 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
 }
 
 function renderNavButton(icon: string, isEnabled: boolean, action: () => void) {
-  const state = isEnabled ? 'enabled' : 'disabled'
-  return (
-    <button className={`navigationButton ${state}`}
-      data-icon={icon} oncreate={helper.ontap(action)} />
-  )
+  return h('button.navigationButton', {
+    'data-icon': icon,
+    oncreate: helper.ontap(action),
+    disabled: !isEnabled
+  })
 }
 
-function renderLeaderboardItem (userName: string, player: StandingPlayer) {
+function renderPlayerEntry(userName: string, player: StandingPlayer) {
   const isMe = player.name === userName
   return (
     <tr key={player.name} data-player={player.name} className={'list_item' + (isMe ? ' tournament-me' : '')} >

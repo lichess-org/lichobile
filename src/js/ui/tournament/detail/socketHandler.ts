@@ -12,8 +12,8 @@ interface FeaturedGameUpdate {
 
 export default function(ctrl: TournamentCtrl) {
   return {
-    reload: () => ctrl.throttledReload(ctrl.id),
-    resync: () => ctrl.throttledReload(ctrl.id),
+    reload: ctrl.reload,
+    resync: ctrl.reload,
     redirect(gameId: string) {
       router.set('/tournament/' + ctrl.tournament.id + '/game/' + gameId, true)
     },

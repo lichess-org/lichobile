@@ -3,10 +3,11 @@ import router from '../../../router'
 import session from '../../../session'
 import i18n from '../../../i18n'
 import { Tournament, StandingPlayer, PodiumPlace } from '../../../lichess/interfaces/tournament'
-import { gameIcon, formatTimeInSecs, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
+import { gameIcon, formatTournamentDuration, formatTournamentTimeControl } from '../../../utils'
 import * as helper from '../../helper'
 import settings from '../../../settings'
 import miniBoard from '../../shared/miniBoard'
+import CountdownTimer from '../../shared/CountdownTimer'
 
 import faq from '../faq'
 import playerInfo from './playerInfo'
@@ -95,7 +96,7 @@ function tournamentContentStarted(ctrl: TournamentCtrl) {
   ]
 }
 
-function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
+function tournamentHeader(data: Tournament, seconds?: number, timeText?: string) {
   const variant = variantDisplay(data)
   const control = formatTournamentTimeControl(data.clock)
   const conditionsClass = [
@@ -110,7 +111,7 @@ function tournamentHeader(data: Tournament, time?: number, timeText?: string) {
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
         <div className="timeInfo">
-          {timeInfo(time, timeText)}
+          {timeInfo(seconds, timeText)}
         </div>
       </div>
       <div className="tournamentCreatorInfo">
@@ -193,12 +194,12 @@ function variantKey(data: Tournament) {
   return variant
 }
 
-function timeInfo(time?: number, preceedingText?: string) {
-  if (time === undefined) return null
+function timeInfo(seconds?: number, preceedingText?: string) {
+  if (seconds === undefined) return null
 
   return [
     preceedingText ? (preceedingText + ' ') : null,
-    h('strong', formatTimeInSecs(time))
+    h(CountdownTimer, { seconds })
   ]
 }
 

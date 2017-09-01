@@ -20,7 +20,6 @@ export default class TournamentCtrl {
   public playerInfoCtrl: PlayerInfoCtrl
 
   private currentPage?: number
-  private clockIntervalId: number
 
   constructor(id: string) {
     this.id = id
@@ -35,7 +34,6 @@ export default class TournamentCtrl {
     .then(data => {
       this.tournament = data
       this.hasJoined = !!(data.me && !data.me.withdraw)
-      this.clockIntervalId = setInterval(this.tick, 1000)
       const featuredGame = data.featured ? data.featured.id : undefined
       socket.createTournament(
         this.id,
@@ -69,17 +67,6 @@ export default class TournamentCtrl {
 
     if (data.socketVersion) {
       socket.setVersion(data.socketVersion)
-    }
-    redraw()
-  }
-
-  tick = () => {
-    const data = this.tournament
-    if (data.secondsToStart && data.secondsToStart > 0) {
-      data.secondsToStart--
-    }
-    if (data.secondsToFinish && data.secondsToFinish > 0) {
-      data.secondsToFinish--
     }
     redraw()
   }
@@ -142,9 +129,5 @@ export default class TournamentCtrl {
   me = () => {
     const me = this.tournament.me
     if (!this.isLoading && me) this.throttledReload(this.id, Math.ceil(me.rank / 10))
-  }
-
-  onUnload() {
-    clearInterval(this.clockIntervalId)
   }
 }

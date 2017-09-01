@@ -24,7 +24,7 @@ export default {
       this.clockTime = now
       const remaining = this.seconds - elapsed
       if (this.el) {
-        this.el.textContent = formatTimeInSecs(remaining >= 0 ? remaining : 0)
+        this.el.textContent = formatTimeInSecs(remaining > 0 ? remaining : 0)
       }
       if (remaining <= 0) {
         clearTimeout(this.clockTimeoutId)

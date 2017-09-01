@@ -73,7 +73,7 @@ export function renderFooter(ctrl: TournamentCtrl) {
 function tournamentContentFinished(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   return [
-    tournamentHeader(data),
+    tournamentHeader(data, 'finished'),
     data.podium ? tournamentPodium(data.podium) : null,
     tournamentLeaderboard(ctrl)
   ]
@@ -82,7 +82,7 @@ function tournamentContentFinished(ctrl: TournamentCtrl) {
 function tournamentContentCreated(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   return [
-    tournamentHeader(data, data.secondsToStart, 'Starts in'),
+    tournamentHeader(data, 'created', data.secondsToStart, 'Starts in'),
     ctrl.tournament.standing.players.length ? tournamentLeaderboard(ctrl) : null
   ]
 }
@@ -90,13 +90,13 @@ function tournamentContentCreated(ctrl: TournamentCtrl) {
 function tournamentContentStarted(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   return [
-      tournamentHeader(data, data.secondsToFinish, ''),
+      tournamentHeader(data, 'started', data.secondsToFinish, ''),
       tournamentLeaderboard(ctrl),
       data.featured ? tournamentFeaturedGame(ctrl) : ''
   ]
 }
 
-function tournamentHeader(data: Tournament, seconds?: number, timeText?: string) {
+function tournamentHeader(data: Tournament, key: string, seconds?: number, timeText?: string) {
   const variant = variantDisplay(data)
   const control = formatTournamentTimeControl(data.clock)
   const conditionsClass = [
@@ -111,7 +111,7 @@ function tournamentHeader(data: Tournament, seconds?: number, timeText?: string)
           {variant + ' • ' + control + ' • ' + formatTournamentDuration(data.minutes) }
         </strong>
         <div className="timeInfo">
-          {timeInfo(seconds, timeText)}
+          {timeInfo(key, seconds, timeText)}
         </div>
       </div>
       <div className="tournamentCreatorInfo">
@@ -194,12 +194,12 @@ function variantKey(data: Tournament) {
   return variant
 }
 
-function timeInfo(seconds?: number, preceedingText?: string) {
+function timeInfo(key: string, seconds?: number, preceedingText?: string) {
   if (seconds === undefined) return null
 
   return [
     preceedingText ? (preceedingText + ' ') : null,
-    h(CountdownTimer, { seconds })
+    h(CountdownTimer, { key, seconds })
   ]
 }
 

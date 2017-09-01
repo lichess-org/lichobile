@@ -44,7 +44,7 @@
 table.tournamentStandings
   width 100%
   &.loading
-    opacity 0.7
+    opacity 0.8
 
 .on-fire
   line-height 10px
@@ -59,12 +59,15 @@ table.tournamentStandings
 
 td.tournamentPlayer
   padding 10px
+  padding-left 0
   text-align: left
   text-overflow: ellipsis
   white-space: nowrap;
   overflow hidden
   max-width 0
   width 80%
+  &:first-child
+    padding-left 0
 
 .list_item.tournament-me
   > td.tournamentPlayer
@@ -82,6 +85,8 @@ td.tournamentPoints
   text-align: right
   max-width 0
   width 20%
+  &:last-child
+    padding-right 0
 
 .timeArrow
   font-weight: bold
@@ -203,11 +208,11 @@ td.tournamentPoints
   &:before
     margin-right 5px
   &.activated
-    color #ccc!important
-    text-shadow 0 1px 0 #000!important
-    background #444!important
-    border-color #404040!important
-    box-shadow 0 3px 4px rgba(0,0,0,0.35) inset!important
+    color #ccc
+    text-shadow 0 1px 0 #000
+    background #444
+    border-color #404040
+    box-shadow 0 3px 4px rgba(0,0,0,0.35) inset
 
 .pageInfo
   margin 0px 5px 0px 5px

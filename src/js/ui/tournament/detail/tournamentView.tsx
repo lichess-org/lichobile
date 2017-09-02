@@ -83,7 +83,7 @@ function tournamentContentCreated(ctrl: TournamentCtrl) {
   const data = ctrl.tournament
   return [
     tournamentHeader(data, 'created', data.secondsToStart, 'Starts in'),
-    ctrl.tournament.standing.players.length ? tournamentLeaderboard(ctrl) : null
+    tournamentLeaderboard(ctrl)
   ]
 }
 
@@ -229,7 +229,9 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
 
   return (
     <div key="leaderboard" className="tournamentLeaderboard">
-      <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p>
+      { data.nbPlayers > 0 ?
+        <p className="tournamentTitle"> {i18n('leaderboard')} ({i18n('nbConnectedPlayers', data.nbPlayers)})</p> : null
+      }
 
       <table
         className={'tournamentStandings' + (ctrl.isLoadingPage ? ' loading' : '')}

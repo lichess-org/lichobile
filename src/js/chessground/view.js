@@ -1,6 +1,6 @@
+import * as Vnode from 'mithril/render/vnode'
 import drag from './drag'
 import util from './util'
-import * as Vnode from 'mithril/render/vnode'
 
 export default function renderBoard(ctrl) {
   return Vnode(
@@ -24,8 +24,9 @@ export default function renderBoard(ctrl) {
           ctrl.data.bounds = vnode.dom.getBoundingClientRect()
         }
 
+        ctrl.data.render()
+
         if (!ctrl.data.viewOnly) {
-          ctrl.data.render()
           bindEvents(ctrl, vnode.dom)
         }
 
@@ -53,7 +54,7 @@ export default function renderBoard(ctrl) {
         }
       }
     },
-    ctrl.data.viewOnly ? renderContent(ctrl) : [],
+    [],
     undefined,
     undefined
   )
@@ -61,6 +62,7 @@ export default function renderBoard(ctrl) {
 
 function diffBoard(ctrl) {
   const d = ctrl.data
+  const boardElement = d.element
   const asWhite = d.orientation === 'white'
   const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation
   d.prevOrientation = d.orientation
@@ -179,12 +181,19 @@ function diffBoard(ctrl) {
       }
       // no piece in moved obj: insert the new piece
       else {
-        ctrl.data.element.appendChild(
-          renderPieceDom(p, k, renderPiece(d, k, {
-            asWhite: asWhite,
-            bounds: bounds
-          }), !!anim)
-        )
+        const pe = document.createElement('piece')
+        pe.className = pieceClassOf(p)
+        pe.cgRole = p.role
+        pe.cgColor = p.color
+        pe.cgKey = k
+        translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
+        if (anim) {
+          pe.cgAnimating = true
+          translate[0] += anim[1][0]
+          translate[1] += anim[1][1]
+        }
+        pe.style.transform = util.transform(d, pe.color, util.translate(translate))
+        boardElement.appendChild(pe)
       }
     }
   }
@@ -201,78 +210,23 @@ function diffBoard(ctrl) {
         mvd.style.transform = util.translate(translate)
       }
       else {
-        ctrl.data.element.appendChild(
-          renderSquareDom(k, renderSquare(k, v, {
-            asWhite: asWhite,
-            bounds: bounds
-          }))
-        )
+        const se = document.createElement('square')
+        se.className = v
+        se.cgKey = k
+        se.style.transform = util.translate(util.posToTranslate(util.key2pos(k), asWhite, bounds))
+        boardElement.appendChild(se)
       }
     }
   })
 
   // remove any dom el that remains in the moved sets
-  const rmEl = e => d.element.removeChild(e)
+  const rmEl = e => boardElement.removeChild(e)
   movedPieces.forEach(els => els.forEach(rmEl))
   movedSquares.forEach(els => els.forEach(rmEl))
 }
 
-function renderPieceDom(piece, key, vdom, isAnimating) {
-  const p = document.createElement('piece')
-  p.className = vdom.attrs.className
-  p.cgRole = piece.role
-  p.cgColor = piece.color
-  p.cgKey = key
-  if (isAnimating) p.cgAnimating = true
-  p.style.transform = vdom.attrs.style.transform
-  return p
-}
-
-function renderSquareDom(key, vdom) {
-  var s = document.createElement('square')
-  s.className = vdom.attrs.className
-  s.cgKey = key
-  s.style.transform = vdom.attrs.style.transform
-  return s
-}
-
 function pieceClassOf(p) {
   return p.role + ' ' + p.color
-}
-
-function renderPiece(d, key, ctx) {
-  var animation
-  if (d.animation.current.anims) {
-    animation = d.animation.current.anims[key]
-  }
-  var p = d.pieces[key]
-  var draggable = d.draggable.current
-  var dragging = draggable.orig === key && draggable.started
-  var attrs = {
-    style: {},
-    className: pieceClassOf(p)
-  }
-  var translate = util.posToTranslate(util.key2pos(key), ctx.asWhite, ctx.bounds)
-  if (dragging) {
-    translate[0] += draggable.pos[0] + draggable.dec[0]
-    translate[1] += draggable.pos[1] + draggable.dec[1]
-    attrs.className += ' dragging'
-    if (d.draggable.magnified) {
-      attrs.className += ' magnified'
-    }
-  } else if (animation) {
-    translate[0] += animation[1][0]
-    translate[1] += animation[1][1]
-  }
-  attrs.style.transform = util.transform(d, p.color, util.translate(translate))
-  return Vnode(
-    'piece',
-    'p' + key,
-    attrs,
-    undefined,
-    undefined,
-    undefined
-  )
 }
 
 function addSquare(squares, key, klass) {
@@ -308,71 +262,6 @@ function computeSquareClassesMap(ctrl) {
     addSquare(squares, k, 'exploding' + ctrl.vm.exploding.stage)
   })
   return squares
-}
-
-function renderSquares(ctrl, ctx) {
-  var squares = computeSquareClassesMap(ctrl)
-
-  var dom = []
-  squares.forEach((v, k) => {
-    dom.push(renderSquare(k, v, ctx))
-  })
-
-  return dom
-}
-
-function renderSquare(key, classes, ctx) {
-  var attrs = {
-    className: classes,
-    style: {}
-  }
-  attrs.style.transform = util.translate(util.posToTranslate(util.key2pos(key), ctx.asWhite, ctx.bounds))
-  return Vnode(
-    'square',
-    's' + key,
-    attrs,
-    undefined,
-    undefined,
-    undefined
-  )
-}
-
-function renderContent(ctrl) {
-  var d = ctrl.data
-  if (!d.bounds) return null
-  var ctx = {
-    asWhite: d.orientation === 'white',
-    bounds: d.bounds
-  }
-  var children = renderSquares(ctrl, ctx)
-  if (d.animation.current.capturedPieces) {
-    Object.keys(d.animation.current.capturedPieces).forEach(function(k) {
-      children.push(renderCaptured(d.animation.current.capturedPieces[k], ctx))
-    })
-  }
-
-  var keys = ctx.asWhite ? util.allKeys : util.invKeys
-  for (var i = 0; i < 64; i++) {
-    if (d.pieces[keys[i]]) children.push(renderPiece(d, keys[i], ctx))
-  }
-
-  return children
-}
-
-function renderCaptured(cfg, ctx) {
-  var attrs = {
-    className: 'fading ' + pieceClassOf(cfg.piece),
-    style: {}
-  }
-  attrs.style.transform = util.translate(util.posToTranslate(cfg.piece.pos, ctx.asWhite, ctx.bounds))
-  return Vnode(
-    'piece',
-    'f' + cfg.piece.key,
-    attrs,
-    undefined,
-    undefined,
-    undefined
-  )
 }
 
 function bindEvents(ctrl, el) {

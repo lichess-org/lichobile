@@ -75,11 +75,11 @@ export function pageSlideIn(el: HTMLElement) {
   }
 
   const direction = router.getViewSlideDirection() === 'fwd' ? '100%' : '-100%'
-  el.style.transform = `translate3d(${direction},0,0)`
+  transform(el, `translate3d(${direction},0,0)`)
   el.style.transition = `transform ${animDuration}ms ease-out`
 
   setTimeout(() => {
-    el.style.transform = 'translate3d(0%,0,0)'
+    transform(el, 'translate3d(0%,0,0)')
   }, 10)
 
   el.addEventListener('transitionend', after, false)
@@ -92,11 +92,7 @@ export function elFadeOut(el: HTMLElement) {
 }
 
 function computeTransformProp() {
-  return 'transform' in document.body.style ?
-    'transform' : 'webkitTransform' in document.body.style ?
-    'webkitTransform' : 'mozTransform' in document.body.style ?
-    'mozTransform' : 'oTransform' in document.body.style ?
-    'oTransform' : 'msTransform'
+  return 'transform' in document.body.style ? 'transform' : 'webkitTransform'
 }
 
 function collectionHas(coll: NodeListOf<Element>, el: HTMLElement): boolean {
@@ -136,6 +132,10 @@ export function transformProp(): string {
   return cachedTransformProp
 }
 
+export function transform(el: HTMLElement, value: string): void {
+  (el.style as any)[transformProp()] = value
+}
+
 export function clearCachedViewportDim(): void {
   cachedViewportDim = null
   cachedIsPortrait = undefined
@@ -143,7 +143,7 @@ export function clearCachedViewportDim(): void {
 
 export function slidesInUp(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   const el = (vnode.dom as HTMLElement)
-  el.style.transform = 'translateY(100%)'
+  transform(el, 'translateY(100%)')
   // force reflow hack
   vnode.state.lol = el.offsetHeight
   return Zanimo(el, 'transform', 'translateY(0)', 250, 'ease-out')
@@ -161,7 +161,7 @@ export function slidesOutDown(callback: () => void, elID: string): () => Promise
 
 export function slidesInLeft(vnode: Mithril.DOMNode): Promise<HTMLElement> {
   const el = vnode.dom as HTMLElement
-  el.style.transform = 'translateX(100%)'
+  transform(el, 'translateX(100%)')
   // force reflow hack
   vnode.state.lol = el.offsetHeight
   return Zanimo(el, 'transform', 'translateX(0)', 250, 'ease-out')

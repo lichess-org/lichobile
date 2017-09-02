@@ -4,10 +4,10 @@ import hold from './hold'
 
 function removeDragElements(data) {
   if (data.domElements.shadow) {
-    data.domElements.shadow.style.transform = util.translate3dAway
+    data.domElements.shadow.style[data.transformProp] = util.translate3dAway
   }
   if (data.domElements.ghost) {
-    data.domElements.ghost.style.transform = util.translateAway
+    data.domElements.ghost.style[data.transformProp] = util.translateAway
   }
 }
 
@@ -98,7 +98,7 @@ function processDrag(data) {
         var translate = util.posToTranslate(cur.origPos, asWhite, data.bounds)
         translate[0] += cur.pos[0] + cur.dec[0]
         translate[1] += cur.pos[1] + cur.dec[1]
-        cur.draggingPiece.style.transform = util.transform(data, cur.piece.color, util.translate3d(translate))
+        cur.draggingPiece.style[data.transformProp] = util.transform(data, cur.piece.color, util.translate3d(translate))
 
         // move square target
         const shadow = data.domElements.shadow
@@ -107,12 +107,12 @@ function processDrag(data) {
             const sqSize = data.bounds.width / 8
             const pos =  util.key2pos(cur.over)
             const translate = util.posToTranslate(pos, asWhite, data.bounds)
-            shadow.style.transform = util.translate3d([
+            shadow.style[data.transformProp] = util.translate3d([
               translate[0] - sqSize / 2,
               translate[1] - sqSize / 2
             ])
           } else if (!cur.over) {
-            shadow.style.transform = util.translate3dAway
+            shadow.style[data.transformProp] = util.translate3dAway
           }
         }
       }
@@ -141,7 +141,7 @@ function move(data, e) {
         const translation = util.posToTranslate(
           util.key2pos(cur.orig), data.orientation === 'white', data.bounds
         )
-        ghost.style.transform = util.translate(translation)
+        ghost.style[data.transformProp] = util.translate(translation)
       }
       processDrag(data)
     }

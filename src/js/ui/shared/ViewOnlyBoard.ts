@@ -1,3 +1,4 @@
+import * as h from 'mithril/hyperscript'
 import chessground from '../../chessground'
 import { uciToMove } from '../../utils/chessFormat'
 import settings from '../../settings'
@@ -40,6 +41,10 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
     this.ground = new chessground.controller(config)
   },
 
+  oncreate({ dom }) {
+    chessground.render(dom, this.ground)
+  },
+
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
     if (
       attrs.fen !== oldattrs.fen ||
@@ -57,6 +62,18 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
     else return false
   },
 
+  onupdate({ attrs }) {
+    const conf = {
+      ...attrs,
+      lastMove: attrs.lastMove ? uciToMove(attrs.lastMove) : undefined
+    }
+    this.ground.set(conf)
+  },
+
+  onremove() {
+    this.ground.unload()
+  },
+
   view({ attrs }) {
 
     const boardClass = [
@@ -66,11 +83,7 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
       attrs.variant || 'standard'
     ].join(' ')
 
-    return (
-      <div className={boardClass}>
-        {chessground.view(this.ground)}
-      </div>
-    )
+    return h('div', { className: boardClass })
   }
 }
 

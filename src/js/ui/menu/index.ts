@@ -6,7 +6,7 @@ import redraw from '../../utils/redraw'
 import router from '../../router'
 import socket from '../../socket'
 import * as inboxXhr from '../inbox/inboxXhr'
-import { viewportDim, ontap } from '../helper'
+import { viewportDim, ontap, transform } from '../helper'
 
 export const OPEN_AFTER_SLIDE_RATIO = 0.65
 
@@ -124,7 +124,7 @@ export function getMenuWidth() {
 }
 
 export function translateMenu(el: HTMLElement, xPos: number) {
-  el.style.transform = `translate3d(${xPos}px, 0, 0)`
+  transform(el, `translate3d(${xPos}px, 0, 0)`)
 }
 
 export function backdropOpacity(el: HTMLElement, opacity: number) {

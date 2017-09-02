@@ -27,7 +27,7 @@
     "babel-plugin-transform-react-require": "~1.0.1",
     "babel-plugin-transform-remove-console": "~6.8.0",
     "gulp": "~3.9.1",
-    "gulp-autoprefixer": "~3.1.1",
+    "gulp-autoprefixer": "~4.0.0",
     "gulp-preprocess": "~2.0.0",
     "gulp-rename": "~1.2.2",
     "gulp-sourcemaps": "~2.4.0",

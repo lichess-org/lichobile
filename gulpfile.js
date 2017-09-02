@@ -44,7 +44,7 @@ function buildStyl(src, dest, mode) {
     .pipe(stylus({
       compress: mode === 'release'
     }))
-    .pipe(autoprefixer({ browsers: ['and_chr >= 33', 'ios_saf >= 9']}))
+    .pipe(autoprefixer({ browsers: ['Android >= 4.4', 'and_chr >= 53', 'ios_saf >= 9']}))
     .pipe(rename('app.css'))
     .pipe(gulp.dest(dest + '/css/compiled/'));
 }

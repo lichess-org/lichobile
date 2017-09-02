@@ -75,11 +75,7 @@
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#151A1E" />
     <preference name="BackgroundColor" value="0xFF151A1E" />
-    <preference name="xwalkVersion" value="23" />
-    <preference name="xwalkCommandLine" value="--enable-viewport-meta --disable-pull-to-refresh-effect" />
     <preference name="android-minSdkVersion" value="19" />
-    <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
     <universal-links>
         <host name="lichess.org" scheme="https">
@@ -104,10 +100,6 @@
     <engine name="ios" spec="^4.4.0" />
     <plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" spec="https://github.com/veloce/cordova-plugin-nativeaudio.git#old_interface" />
     <plugin name="cordova-plugin-appversion" spec="~1.0.0" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
-        <variable name="XWALK_MODE" value="embedded" />
-        <variable name="XWALK_MULTIPLEAPK" value="true" />
-    </plugin>
     <plugin name="cordova-plugin-customurlscheme" spec="~4.1.3">
         <variable name="URL_SCHEME" value="lichess" />
     </plugin>

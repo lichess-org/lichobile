@@ -20,6 +20,9 @@ const humanSetup = settings.gameSetup.human
 
 // cached tab preset
 let tabPreset: string = humanSetup.preset()
+// to restore previous if changed programmatically
+// null means don't restore previous on close
+let previousTabPreset: string | null = null
 
 export default {
   open,
@@ -32,6 +35,8 @@ export default {
   },
 
   openCorrespondence() {
+    previousTabPreset = tabPreset
+    tabPreset = 'custom'
     humanSetup.timeMode('2')
     open()
   },
@@ -58,6 +63,10 @@ function open() {
 function close(fromBB?: string) {
   if (fromBB !== 'backbutton' && isOpen) router.backbutton.stack.pop()
   isOpen = false
+  if (previousTabPreset) {
+    tabPreset = previousTabPreset
+    previousTabPreset = null
+  }
 }
 
 function goSeek(conf: PoolMember | HumanSeekSetup) {

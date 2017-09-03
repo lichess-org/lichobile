@@ -21,7 +21,8 @@ function getPieceByKey(data, key) {
 }
 
 function start(data, e) {
-  if (e.touches && e.touches.length > 1) return; // support one finger touch only
+  // support one finger touch only
+  if (e.touches && e.touches.length > 1) return
   e.preventDefault()
   var previouslySelected = data.selected
   var position = util.eventPosition(e)
@@ -149,23 +150,21 @@ function move(data, e) {
 }
 
 function end(data, e) {
+  const draggable = data.draggable
+  const orig = draggable.current ? draggable.current.orig : null
+  if (!orig) return
+  // one touch drag end event has 0 touches
+  if (e.touches && e.touches.length > 0) return
+  // we don't want that end event since the target is different from the drag
+  // touchstart
+  if (e.type === 'touchend' && draggable.current.originTarget !== e.target &&
+    !draggable.current.newPiece) {
+    return
+  }
   if (data.draggable.preventDefault) {
     e.preventDefault()
   }
-  var draggable = data.draggable
-  var orig = draggable.current ? draggable.current.orig : null
-  var dest = draggable.current.over
-  // comparing with the origin target is an easy way to test that the end event
-  // has the same touch origin
-  if (e && e.type === 'touchend' && draggable.current.originTarget !== e.target &&
-    !draggable.current.newPiece) {
-    draggable.current = {}
-    return
-  }
-  if (!orig) {
-    removeDragElements(data)
-    return
-  }
+  const dest = draggable.current.over
   removeDragElements(data)
   board.unsetPremove(data)
   board.unsetPredrop(data)

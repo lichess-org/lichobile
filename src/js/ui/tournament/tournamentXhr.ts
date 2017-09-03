@@ -26,11 +26,11 @@ export function join(id: string, password?: string): Promise<{}> {
   {
     method: 'POST',
     body: password ? JSON.stringify({p: password}) : undefined
-  })
+  }, true)
 }
 
 export function withdraw(id: string): Promise<{}> {
-  return fetchJSON('/tournament/' + id + '/withdraw', {method: 'POST'})
+  return fetchJSON('/tournament/' + id + '/withdraw', { method: 'POST' }, true)
 }
 
 export function playerInfo(tournamentId: string, playerId: string): Promise<PlayerInfo> {

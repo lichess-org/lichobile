@@ -129,6 +129,7 @@ export default class TournamentCtrl {
     if (!this.tournament.me) return
     this.focusOnMe = !this.focusOnMe
     if (this.focusOnMe) this.scrollToMe()
+    redraw()
   }
 
   myPage = (): number | undefined => {
@@ -179,6 +180,9 @@ export default class TournamentCtrl {
     }
     this.tournament = data
     this.setPageCache(data.standing)
+    if (this.pagesCache[this.page] !== undefined) {
+      this.currentPageResults = this.pagesCache[this.page]
+    }
     this.hasJoined = !!(data.me && !data.me.withdraw)
     if (this.focusOnMe) this.scrollToMe()
 

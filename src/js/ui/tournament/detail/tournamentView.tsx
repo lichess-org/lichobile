@@ -245,7 +245,7 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         <span class="pageInfo"> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
         {renderNavButton('X', !ctrl.isLoadingPage && forwardEnabled, ctrl.next)}
         {renderNavButton('V', !ctrl.isLoadingPage && forwardEnabled, ctrl.last)}
-        <button className={'navigationButton tournament-me' + (data.me ? '' : ' invisible ') + (ctrl.myPage() ? ' activated' : '')}
+        <button className={'navigationButton tournament-me' + (ctrl.focusOnMe ? ' activated' : '')}
           data-icon="7"
           oncreate={helper.ontap(ctrl.toggleFocusOnMe)}
         >

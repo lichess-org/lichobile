@@ -8,7 +8,7 @@ import socket from '../../socket'
 import * as inboxXhr from '../inbox/inboxXhr'
 import { viewportDim, ontap } from '../helper'
 
-export const OPEN_AFTER_SLIDE_RATIO = 0.65
+export const OPEN_AFTER_SLIDE_RATIO = 0.6
 
 let pingsTimeoutID: number
 
@@ -133,6 +133,5 @@ export function backdropOpacity(el: HTMLElement, opacity: number) {
 
 export const backdropCloseHandler = ontap((e: Event) => {
   e.preventDefault()
-  // e.stopPropagation()
   close()
 })

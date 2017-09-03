@@ -70,7 +70,7 @@ export default function OpenSlideHandler(
       const delta = e.deltaX
       if (
         velocity >= 0 &&
-        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.3)
+        (delta >= maxSlide * menu.OPEN_AFTER_SLIDE_RATIO || velocity > 0.2)
       ) {
         menu.open()
       } else {

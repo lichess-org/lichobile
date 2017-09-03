@@ -150,6 +150,8 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     document.addEventListener('resume', this.onResume)
     window.plugins.insomnia.keepAwake()
+
+    redraw()
   }
 
   private tournamentTick = () => {

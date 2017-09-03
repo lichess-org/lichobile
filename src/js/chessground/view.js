@@ -66,6 +66,9 @@ function diffBoard(ctrl) {
   const asWhite = d.orientation === 'white'
   const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation
   d.prevOrientation = d.orientation
+  const boundsChange = d.prevBounds && d.prevBounds !== d.bounds
+  d.prevBounds = d.bounds
+  const allChange = boundsChange || orientationChange
   const bounds = d.bounds
   const pieces = ctrl.data.pieces
   const anims = ctrl.data.animation.current.anims
@@ -79,12 +82,13 @@ function diffBoard(ctrl) {
   let el, squareClassAtKey, pieceAtKey, pieceClass, anim, captured, translate
   let mvdset, mvd
 
-  let otbTurnFlipChange, otbModeChange
+  let otbTurnFlipChange, otbModeChange, otbChange = false
   if (d.otb) {
     otbTurnFlipChange = d.prevTurnColor && d.prevTurnColor !== d.turnColor
     otbModeChange = d.prevOtbMode && d.prevOtbMode !== d.otbMode
     d.prevOtbMode = d.otbMode
     d.prevTurnColor = d.turnColor
+    otbChange = otbTurnFlipChange || otbModeChange
   }
 
   // walk over all board dom elements, apply animations and flag moved pieces
@@ -125,7 +129,7 @@ function diffBoard(ctrl) {
           el.cgAnimating = false
         }
         // same piece: flag as same
-        if (!orientationChange && !otbTurnFlipChange && !otbModeChange && el.cgColor === pieceAtKey.color && el.cgRole === pieceAtKey.role) {
+        if (!allChange && !otbChange && el.cgColor === pieceAtKey.color && el.cgRole === pieceAtKey.role) {
           samePieces.add(k)
         }
         // different piece: flag as moved unless it is a captured piece
@@ -144,7 +148,7 @@ function diffBoard(ctrl) {
       }
     }
     else if (el.tagName === 'SQUARE') {
-      if (!orientationChange && squareClassAtKey === el.className) {
+      if (!allChange && squareClassAtKey === el.className) {
         sameSquares.add(k)
       }
       else {

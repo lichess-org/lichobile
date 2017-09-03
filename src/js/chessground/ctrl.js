@@ -5,8 +5,6 @@ import fen from './fen'
 import anim from './anim'
 import drag from './drag'
 
-var ttId
-
 function setNewBoardState(d, config) {
   if (!config) return
 
@@ -132,21 +130,14 @@ export default function(cfg) {
   // no need to debounce: resizable only by orientation change
   var onresize = function() {
     if (this.data.element) {
-      // oh my what an ugly hack
-      clearTimeout(ttId)
-      ttId = setTimeout(function() {
-        this.data.bounds = this.data.element.getBoundingClientRect()
-      }.bind(this), 100)
+      this.data.bounds = this.data.element.getBoundingClientRect()
+      this.data.renderRAF()
     }
   }.bind(this)
 
-  if (!this.data.viewOnly) {
-    window.addEventListener('resize', onresize)
-  }
+  window.addEventListener('resize', onresize)
 
   this.unload = function() {
-    if (!this.data.viewOnly) {
-      window.removeEventListener('resize', onresize)
-    }
+    window.removeEventListener('resize', onresize)
   }
 }

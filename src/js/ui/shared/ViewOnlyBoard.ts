@@ -53,10 +53,6 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
       attrs.bounds.height !== oldattrs.bounds.height ||
       attrs.bounds.width !== oldattrs.bounds.width))
     ) {
-      this.ground.data.orientation = attrs.orientation || 'white'
-      this.ground.data.lastMove = attrs.lastMove && uciToMove(attrs.lastMove)
-      if (attrs.fen) this.ground.data.pieces = chessground.fen.read(attrs.fen)
-      if (attrs.bounds) this.ground.data.bounds = attrs.bounds
       return true
     }
     else return false

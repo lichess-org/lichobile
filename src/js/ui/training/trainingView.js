@@ -6,7 +6,7 @@ import { header, connectingHeader, viewOnlyBoardContent } from '../shared/common
 import Board from '../shared/Board'
 import { view as renderPromotion } from '../shared/offlineRound/promotion'
 import * as helper from '../helper'
-import menu, { renderUserInfos, renderSigninBox } from './menu'
+import menu from './menu'
 import * as h from 'mithril/hyperscript'
 
 export default function view(vnode) {
@@ -51,9 +51,6 @@ function renderContent(ctrl) {
       <section className="table">
         <section className="trainingTable">
           {ctrl.data.mode === 'view' ? renderProblemDetails(ctrl) : renderExplanation(ctrl)}
-          <div className="trainingUserInfos landscape">
-            { ctrl.data.user ? renderUserInfos(ctrl) : renderSigninBox()}
-          </div>
           {ctrl.data.mode === 'view' ? renderViewTable(ctrl) : renderPlayerTable(ctrl)}
         </section>
         {renderActionsBar(ctrl)}

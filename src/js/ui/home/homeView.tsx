@@ -66,6 +66,7 @@ function renderDailyPuzzle(ctrl: HomeState, isPortrait: boolean) {
     link: () => router.set('/training/' + puzzle.id),
   } : {
     bounds: miniBoardSize(isPortrait),
+    orientation: 'white' as Color,
     fen: emptyFen
   }
 

@@ -38,7 +38,7 @@ export function overlay(ctrl: AnalyseCtrl) {
   ].filter(noNull)
 }
 
-export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen?: string) {
+export function viewOnlyBoard(color: Color, bounds: ClientRect, isSmall: boolean, fen: string) {
   return h('section.board_wrapper', {
     className: isSmall ? 'halfsize' : ''
   }, h(ViewOnlyBoard, { orientation: color, bounds, fen }))

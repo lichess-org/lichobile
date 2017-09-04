@@ -127,11 +127,16 @@ export default function(cfg) {
     this.data.bounds = bounds
   }.bind(this)
 
+  let ttId
   // no need to debounce: resizable only by orientation change
-  var onresize = function() {
+  const onresize = function() {
     if (this.data.element) {
-      this.data.bounds = this.data.element.getBoundingClientRect()
-      this.data.renderRAF()
+      // yolo
+      clearTimeout(ttId)
+      ttId = setTimeout(function() {
+        this.data.bounds = this.data.element.getBoundingClientRect()
+        this.data.renderRAF()
+      }.bind(this), 100)
     }
   }.bind(this)
 

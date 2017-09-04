@@ -142,7 +142,7 @@ function renderForm() {
           if (setupFen) router.set(`/editor/${encodeURIComponent(setupFen)}`)
         })
       }, [
-        h(ViewOnlyBoard, { fen: setupFen, bounds: { width: 100, height: 100 }})
+        h(ViewOnlyBoard, { fen: setupFen, orientation: 'white', bounds: { width: 100, height: 100 }})
       ])
       ] : null
     ) : null,

@@ -1,18 +1,19 @@
+import * as h from 'mithril/hyperscript'
+import * as IScroll from 'iscroll'
 import * as utils from '../utils'
 import { syncWithNowPlayingGames, getOfflineGames } from '../utils/offlineGames'
 import { OnlineGameData } from '../lichess/interfaces/game'
+import { NowPlayingGame } from '../lichess/interfaces'
+import { Challenge } from '../lichess/interfaces/challenge'
+import * as gameApi from '../lichess/game'
+import challengesApi from '../lichess/challenges'
+import { standardFen } from '../lichess/variant'
 import router from '../router'
-import * as helper from './helper'
-import * as IScroll from 'iscroll'
 import session from '../session'
 import i18n from '../i18n'
 import * as xhr from '../xhr'
+import * as helper from './helper'
 import newGameForm from './newGameForm'
-import * as gameApi from '../lichess/game'
-import challengesApi from '../lichess/challenges'
-import { NowPlayingGame } from '../lichess/interfaces'
-import { Challenge } from '../lichess/interfaces/challenge'
-import * as h from 'mithril/hyperscript'
 import ViewOnlyBoard from './shared/ViewOnlyBoard'
 
 interface CardDim {
@@ -182,7 +183,7 @@ function cardDims(): CardDim {
   }
 }
 
-function renderViewOnlyBoard(cDim?: CardDim, fen?: string, lastMove?: string, orientation?: Color, variant?: VariantKey) {
+function renderViewOnlyBoard(fen: string, orientation: Color, cDim?: CardDim, lastMove?: string, variant?: VariantKey) {
   const style = cDim ? { height: cDim.innerW + 'px' } : {}
   const bounds = cDim ? { width: cDim.innerW, height: cDim.innerW } : undefined
   return (
@@ -244,7 +245,7 @@ function renderGame(g: NowPlayingGame, cDim: CardDim | undefined, cardStyle: Obj
     <div className={cardClass} key={'game.' + g.gameId} style={cardStyle}
       oncreate={oncreate}
     >
-      {renderViewOnlyBoard(cDim, g.fen, g.lastMove, g.color, g.variant.key)}
+      {renderViewOnlyBoard(g.fen, g.color, cDim, g.lastMove, g.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={icon ? icon : ''} />
         <div className="description">
@@ -271,7 +272,7 @@ function renderIncomingChallenge(c: Challenge, cDim: CardDim | undefined, cardSt
 
   return (
     <div className="card standard challenge" style={cardStyle}>
-      {renderViewOnlyBoard(cDim, c.initialFen, undefined, undefined, c.variant.key)}
+      {renderViewOnlyBoard(c.initialFen, c.color, cDim, undefined, c.variant.key)}
       <div className="infos">
         <div className="icon-game" data-icon={c.perf.icon}></div>
         <div className="description">
@@ -346,7 +347,7 @@ function renderAllGames(cDim?: CardDim) {
           newGameForm.open()
         })}
       >
-        {renderViewOnlyBoard(cDim)}
+        {renderViewOnlyBoard(standardFen, 'white', cDim)}
         <div className="infos">
           <div className="description">
             <h2 className="title">{i18n('createAGame')}</h2>

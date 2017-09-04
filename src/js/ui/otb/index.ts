@@ -2,6 +2,7 @@ import socket from '../../socket'
 import * as helper from '../helper'
 import { getCurrentOTBGame } from '../../utils/offlineGames'
 import { playerFromFen } from '../../utils/fen'
+import { standardFen } from '../../lichess/variant'
 import settings from '../../settings'
 import i18n from '../../i18n'
 import layout from '../layout'
@@ -43,10 +44,10 @@ const OtbScreen: Mithril.Component<Attrs, State> = {
       header = () => renderHeader(gameTitle(this.round.data))
       content = () => renderContent(this.round, pieceTheme)
     } else {
-      const fen = this.round.vm.setupFen || this.round.vm.savedFen
+      const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen
       const color = fen ? playerFromFen(fen) : 'white'
       header = () => renderHeader(i18n('playOnTheBoardOffline'))
-      content = () => viewOnlyBoardContent(fen, undefined, color, 'standard', undefined, pieceTheme)
+      content = () => viewOnlyBoardContent(fen, color, undefined, 'standard', undefined, pieceTheme)
     }
 
     return layout.board(

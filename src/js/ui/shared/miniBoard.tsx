@@ -11,11 +11,11 @@ interface Bounds {
 }
 
 export interface Attrs {
+  fen: string
+  orientation: Color
   link?: () => void
   gameObj?: MiniBoardGameObj
-  fen?: string
   lastMove?: string
-  orientation?: Color
   bounds: Bounds
   customPieceTheme?: string
   variant?: VariantKey

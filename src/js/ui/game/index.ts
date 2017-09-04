@@ -116,14 +116,14 @@ const GameScreen: Mithril.Component<Attrs, State> = {
     let board: () => Mithril.Child
 
     if (pov) {
-      board = () => viewOnlyBoardContent(pov.fen, pov.lastMove, pov.color,
+      board = () => viewOnlyBoardContent(pov.fen, pov.color, pov.lastMove,
         pov.variant.key)
     } else {
       const g = gamePosCache.get(attrs.id)
       if (g)
-        board = () => viewOnlyBoardContent(g.fen, undefined, g.orientation)
+        board = () => viewOnlyBoardContent(g.fen, g.orientation)
       else
-        board = () => viewOnlyBoardContent(emptyFen)
+        board = () => viewOnlyBoardContent(emptyFen, 'white')
     }
 
     return layout.board(connectingHeader, board)

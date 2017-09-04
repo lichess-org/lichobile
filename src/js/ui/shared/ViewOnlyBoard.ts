@@ -9,21 +9,21 @@ interface Bounds {
 }
 
 export interface Attrs {
-  fen?: string
+  fen: string
+  orientation: Color
   lastMove?: string
-  orientation?: Color
   bounds?: Bounds
   customPieceTheme?: string
   variant?: VariantKey
 }
 
 interface Config {
-  fen?: string
-  lastMove?: [Pos, Pos]
+  fen: string
+  orientation: Color
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
-  orientation: Color
+  lastMove?: [Pos, Pos]
   bounds?: Bounds
 }
 
@@ -63,6 +63,7 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
       ...attrs,
       lastMove: attrs.lastMove ? uciToMove(attrs.lastMove) : undefined
     }
+    if (attrs.bounds) this.ground.setBounds(attrs.bounds)
     this.ground.set(conf)
   },
 

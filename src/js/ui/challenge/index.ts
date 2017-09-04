@@ -1,17 +1,18 @@
+import * as throttle from 'lodash/throttle'
 import socket from '../../socket'
 import redraw from '../../utils/redraw'
 import * as helper from '../helper'
 import router from '../../router'
 import { handleXhrError } from '../../utils'
-import * as throttle from 'lodash/throttle'
 import { acceptChallenge, declineChallenge, cancelChallenge, getChallenge } from '../../xhr'
+import { Challenge } from '../../lichess/interfaces/challenge'
 import challengesApi from '../../lichess/challenges'
+import { standardFen } from '../../lichess/variant'
 import i18n from '../../i18n'
 import * as stream from 'mithril/stream'
 import layout from '../layout'
 import { viewOnlyBoardContent, header as headerWidget } from '../shared/common'
 import { joinPopup, awaitChallengePopup, awaitInvitePopup } from './challengeView'
-import { Challenge } from '../../lichess/interfaces/challenge'
 import { ChallengeState } from './interfaces'
 
 const throttledPing = throttle((): void => socket.send('ping'), 1000)
@@ -111,14 +112,14 @@ const ChallengeScreen: Mithril.Component<Attrs, ChallengeState> = {
 
   view() {
     let overlay: (() => Mithril.Children) | undefined = undefined
-    let board = viewOnlyBoardContent
+    let board = () => viewOnlyBoardContent(standardFen, 'white')
 
     const challenge = this.challenge()
 
     const header = () => headerWidget('lichess.org')
 
     if (challenge) {
-      board = () => viewOnlyBoardContent(challenge.initialFen, undefined, challenge.color)
+      board = () => viewOnlyBoardContent(challenge.initialFen, challenge.color)
 
       if (challenge.direction === 'in') {
         overlay = joinPopup(this, challenge)

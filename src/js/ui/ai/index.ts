@@ -2,6 +2,7 @@ import socket from '../../socket'
 import { getCurrentAIGame } from '../../utils/offlineGames'
 import * as helper from '../helper'
 import { playerFromFen } from '../../utils/fen'
+import { standardFen } from '../../lichess/variant'
 import i18n from '../../i18n'
 import layout from '../layout'
 import { gameTitle, header as renderHeader, viewOnlyBoardContent } from '../shared/common'
@@ -44,10 +45,10 @@ const AiScreen: Mithril.Component<Attrs, State> = {
       header = () => renderHeader(gameTitle(this.round.data))
       content = () => renderContent(this.round)
     } else {
-      const fen = this.round.vm.setupFen || this.round.vm.savedFen
+      const fen = this.round.vm.setupFen || this.round.vm.savedFen || standardFen
       const color = playerFromFen(fen)
       header = () => renderHeader(i18n('playOfflineComputer'))
-      content = () => viewOnlyBoardContent(fen, undefined, color)
+      content = () => viewOnlyBoardContent(fen, color, undefined)
     }
 
     return layout.board(

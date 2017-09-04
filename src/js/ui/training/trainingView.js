@@ -26,7 +26,7 @@ export default function view(vnode) {
 }
 
 function renderContent(ctrl) {
-  if (!ctrl.data) return viewOnlyBoardContent(emptyFen)
+  if (!ctrl.data) return viewOnlyBoardContent(emptyFen, 'white')
 
   const isPortrait = helper.isPortrait()
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')

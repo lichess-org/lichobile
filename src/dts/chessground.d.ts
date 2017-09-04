@@ -6,10 +6,10 @@ declare namespace Chessground {
     color: Color
   }
   type Bounds = {
-    top: number
-    left: number
     width: number
     height: number
+    top?: number
+    left?: number
   }
   interface Drop {
     role: Role

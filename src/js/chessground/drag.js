@@ -153,8 +153,6 @@ function end(data, e) {
   const draggable = data.draggable
   const orig = draggable.current ? draggable.current.orig : null
   if (!orig) return
-  // one touch drag end event has 0 touches
-  if (e.touches && e.touches.length > 0) return
   // we don't want that end event since the target is different from the drag
   // touchstart
   if (e.type === 'touchend' && draggable.current.originTarget !== e.target &&

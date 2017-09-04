@@ -245,12 +245,14 @@ function tournamentLeaderboard(ctrl: TournamentCtrl) {
         <span class="pageInfo"> {firstPlayer + '-' + lastPlayer + ' / ' + data.nbPlayers} </span>
         {renderNavButton('X', !ctrl.isLoadingPage && forwardEnabled, ctrl.next)}
         {renderNavButton('V', !ctrl.isLoadingPage && forwardEnabled, ctrl.last)}
-        <button className={'navigationButton tournament-me' + (ctrl.focusOnMe ? ' activated' : '')}
-          data-icon="7"
-          oncreate={helper.ontap(ctrl.toggleFocusOnMe)}
-        >
-          <span>Me</span>
-        </button>
+        {data.me ?
+          <button className={'navigationButton tournament-me' + (ctrl.focusOnMe ? ' activated' : '')}
+            data-icon="7"
+            oncreate={helper.ontap(ctrl.toggleFocusOnMe)}
+          >
+            <span>Me</span>
+          </button> : null
+        }
       </div>
     </div>
   )

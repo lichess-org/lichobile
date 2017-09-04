@@ -83,11 +83,11 @@ function processDrag(data) {
       }
 
       // cancel animations while dragging
-      if (data.animation.current.start &&
-        Object.keys(data.animation.current.anims).indexOf(cur.orig) !== -1)
+      if (data.animation.current.start && data.animation.current.anims[cur.orig]) {
         data.animation.current.start = false
+      }
 
-      else if (cur.started) {
+      if (cur.started) {
         cur.pos = [
           cur.epos[0] - cur.rel[0],
           cur.epos[1] - cur.rel[1]

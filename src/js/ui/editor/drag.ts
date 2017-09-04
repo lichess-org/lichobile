@@ -36,16 +36,12 @@ export default function(ctrl: Editor, e: TouchEvent) {
       [-squareBounds.width / 2, -squareBounds.height / 2],
     bounds: bounds,
     started: true,
+    showGhost: false,
     originTarget: e.target
   }
   ctrl.chessground.setDragPiece(key, piece, dragOpts)
   // must render synchronously to have dragging piece
   cgData.render()
   cgData.draggable.current.draggingPiece = chessground.drag.getPieceByKey(cgData, key)
-  cgData.draggable.current.draggingPiece.classList.add('dragging')
-  if (cgData.draggable.magnified) {
-    cgData.draggable.current.draggingPiece.classList.add('magnified')
-  }
-  cgData.draggable.current.draggingPiece.cgDragging = true
   chessground.drag.processDrag(cgData)
 }

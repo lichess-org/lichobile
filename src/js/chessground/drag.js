@@ -55,6 +55,7 @@ function start(data, e) {
       squareTarget: null,
       draggingPiece: getPieceByKey(data, orig),
       originTarget: e.target,
+      showGhost: data.draggable.showGhost,
       scheduledAnimationFrame: false
     }
     if (data.draggable.magnified && data.draggable.centerPiece) {
@@ -88,6 +89,23 @@ function processDrag(data) {
       }
 
       if (cur.started) {
+
+        if (!cur.draggingPiece.cgDragging) {
+          cur.draggingPiece.cgDragging = true
+          cur.draggingPiece.classList.add('dragging')
+          if (data.draggable.magnified) {
+            cur.draggingPiece.classList.add('magnified')
+          }
+          const ghost = data.domElements.ghost
+          if (ghost && cur.showGhost) {
+            ghost.className = `ghost ${cur.piece.color} ${cur.piece.role}`
+            const translation = util.posToTranslate(
+              util.key2pos(cur.orig), data.orientation === 'white', data.bounds
+            )
+            ghost.style.transform = util.translate(translation)
+          }
+        }
+
         cur.pos = [
           cur.epos[0] - cur.rel[0],
           cur.epos[1] - cur.rel[1]
@@ -131,19 +149,6 @@ function move(data, e) {
     data.draggable.current.epos = util.eventPosition(e)
     if (!cur.started && util.distance(cur.epos, cur.rel) >= data.draggable.distance) {
       cur.started = true
-      cur.draggingPiece.classList.add('dragging')
-      if (data.draggable.magnified) {
-        cur.draggingPiece.classList.add('magnified')
-      }
-      cur.draggingPiece.cgDragging = true
-      const ghost = data.domElements.ghost
-      if (ghost) {
-        ghost.className = `ghost ${cur.piece.color} ${cur.piece.role}`
-        const translation = util.posToTranslate(
-          util.key2pos(cur.orig), data.orientation === 'white', data.bounds
-        )
-        ghost.style.transform = util.translate(translation)
-      }
       processDrag(data)
     }
   }

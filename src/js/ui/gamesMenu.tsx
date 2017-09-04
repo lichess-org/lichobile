@@ -51,50 +51,14 @@ export default {
     const vh = helper.viewportDim().vh
     const cDim = cardDims()
     const wrapperStyle = helper.isWideScreen() ? {} : { top: ((vh - cDim.h) / 2) + 'px' }
-    function wrapperOnCreate(vnode: Mithril.DOMNode) {
-      const el = vnode.dom as HTMLElement
-      if (!helper.isWideScreen()) {
-        scroller = new IScroll(el, {
-          scrollX: true,
-          scrollY: false,
-          momentum: false,
-          snap: '.card',
-          preventDefaultException: {
-            tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
-          }
-        })
-      }
-    }
-
-    function wrapperOnRemove() {
-      if (scroller) {
-        scroller.destroy()
-        scroller = null
-      }
-    }
-
-    function wrapperOnUpdate(vnode: Mithril.DOMNode) {
-      // see https://github.com/cubiq/iscroll/issues/412
-      const el = vnode.dom
-      if (scroller) {
-        scroller.options.snap = el.querySelectorAll('.card')
-        scroller.refresh()
-      }
-    }
-
     const wrapperClass = helper.isWideScreen() ? 'overlay_popup' : ''
 
     return (
       <div id="games_menu" className="overlay_popup_wrapper"
-        onbeforeremove={(vnode: Mithril.DOMNode) => {
-          vnode.dom.classList.add('fading_out')
-          return new Promise((resolve) => {
-            setTimeout(resolve, 500)
-          })
-        }}
+        onbeforeremove={menuOnBeforeRemove}
       >
         <div className="wrapper_overlay_close"
-          oncreate={helper.ontap(() => close())}
+          oncreate={menuOnOverlayTap}
         />
         <div id="wrapper_games" className={wrapperClass} style={wrapperStyle}
           oncreate={wrapperOnCreate} onupdate={wrapperOnUpdate} onremove={wrapperOnRemove}>
@@ -112,6 +76,44 @@ export default {
         </div>
       </div>
     )
+  }
+}
+
+const menuOnOverlayTap = helper.ontap(() => close())
+
+function menuOnBeforeRemove({ dom }: Mithril.DOMNode) {
+  dom.classList.add('fading_out')
+  return new Promise((resolve) => {
+    setTimeout(resolve, 500)
+  })
+}
+
+function wrapperOnCreate({ dom }: Mithril.DOMNode) {
+  if (!helper.isWideScreen()) {
+    scroller = new IScroll(dom as HTMLElement, {
+      scrollX: true,
+      scrollY: false,
+      momentum: false,
+      snap: '.card',
+      preventDefaultException: {
+        tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|LABEL)$/
+      }
+    })
+  }
+}
+
+function wrapperOnRemove() {
+  if (scroller) {
+    scroller.destroy()
+    scroller = null
+  }
+}
+
+function wrapperOnUpdate({ dom }: Mithril.DOMNode) {
+  // see https://github.com/cubiq/iscroll/issues/412
+  if (scroller) {
+    scroller.options.snap = (dom as HTMLElement).querySelectorAll('.card')
+    scroller.refresh()
   }
 }
 

@@ -1,6 +1,5 @@
 import board from './board'
 import * as util from './util'
-import hold from './hold'
 
 function removeDragElements(data) {
   if (data.domElements.shadow) {
@@ -61,7 +60,6 @@ function start(data, e) {
     if (data.draggable.magnified && data.draggable.centerPiece) {
       data.draggable.current.dec[1] = position[1] - (squareBounds.top + squareBounds.height)
     }
-    hold.start()
   } else {
     if (hadPremove) board.unsetPremove(data)
     if (hadPredrop) board.unsetPredrop(data)

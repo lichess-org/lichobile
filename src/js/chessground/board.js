@@ -1,7 +1,6 @@
 import * as util from './util'
 import premove from './premove'
 import anim from './anim'
-import hold from './hold'
 
 function toggleOrientation(data) {
   data.orientation = util.opposite(data.orientation)
@@ -158,8 +157,7 @@ function userMove(data, orig, dest) {
       setSelected(data, null)
       setTimeout(function() {
         return data.movable.events.after(orig, dest, {
-          premove: false,
-          holdTime: hold.stop()
+          premove: false
         })
       })
     }

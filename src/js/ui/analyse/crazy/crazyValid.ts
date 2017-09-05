@@ -1,7 +1,7 @@
 import { PossibleDrops } from '../../../lichess/interfaces/game'
 
 export default {
-  drop(role: Role, key: Pos, possibleDrops?: PossibleDrops) {
+  drop(role: Role, key: Key, possibleDrops?: PossibleDrops) {
 
     if (role === 'pawn' && (key[1] === '1' || key[1] === '8')) return false
 

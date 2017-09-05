@@ -4,16 +4,16 @@ import settings from '../../../settings'
 import * as h from 'mithril/hyperscript'
 import { PromotingInterface } from '../round'
 
-type PromoteCallback = (orig: Pos, dest: Pos, prom: Role) => void
+type PromoteCallback = (orig: Key, dest: Key, prom: Role) => void
 interface Promoting {
-  orig: Pos
-  dest: Pos
+  orig: Key
+  dest: Key
   callback: PromoteCallback
 }
 
 let promoting: Promoting | null = null
 
-function promote(ground: Chessground.Controller, key: Pos, role: Role) {
+function promote(ground: Chessground.Controller, key: Key, role: Role) {
   const pieces: {[k: string]: Piece } = {}
   const piece = ground.data.pieces[key]
   if (piece && piece.role === 'pawn') {
@@ -25,7 +25,7 @@ function promote(ground: Chessground.Controller, key: Pos, role: Role) {
   }
 }
 
-function start(chessground: Chessground.Controller, orig: Pos, dest: Pos, callback: PromoteCallback) {
+function start(chessground: Chessground.Controller, orig: Key, dest: Key, callback: PromoteCallback) {
   const piece = chessground.data.pieces[dest]
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '1' && chessground.data.turnColor === 'white') ||

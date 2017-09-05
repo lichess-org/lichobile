@@ -8,8 +8,8 @@ function makeConfig(
   data: AnalysisData,
   config: Chessground.SetConfig,
   orientation: Color,
-  onMove: (orig: Pos, dest: Pos, capture: boolean) => void,
-  onNewPiece: (piece: Piece, pos: Pos) => void
+  onMove: (orig: Key, dest: Key, capture: boolean) => void,
+  onNewPiece: (piece: Piece, pos: Key) => void
 ) {
   return {
     fen: config.fen,
@@ -51,13 +51,13 @@ export default {
     data: AnalysisData,
     config: Chessground.SetConfig,
     orientation: Color,
-    onMove: (orig: Pos, dest: Pos, capture: boolean) => void,
-    onNewPiece: (piece: Piece, pos: Pos) => void
+    onMove: (orig: Key, dest: Key, capture: boolean) => void,
+    onNewPiece: (piece: Piece, pos: Key) => void
   ) {
     return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece))
   },
 
-  promote(ground: Chessground.Controller, key: Pos, role: Role) {
+  promote(ground: Chessground.Controller, key: Key, role: Role) {
     const pieces: {[i: string]: Piece } = {}
     const piece = ground.data.pieces[key]
     if (piece && piece.role === 'pawn') {

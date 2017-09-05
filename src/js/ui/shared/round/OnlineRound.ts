@@ -317,7 +317,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running)
   }
 
-  public sendMove(orig: Pos, dest: Pos, prom?: Role, isPremove: boolean = false) {
+  public sendMove(orig: Key, dest: Key, prom?: Role, isPremove: boolean = false) {
     const move = {
       u: orig + dest
     }
@@ -339,7 +339,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  public sendNewPiece(role: Role, key: Pos, isPredrop: boolean) {
+  public sendNewPiece(role: Role, key: Key, isPredrop: boolean) {
     const drop = {
       role: role,
       pos: key
@@ -630,14 +630,14 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
 
-  private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
+  private userMove = (orig: Key, dest: Key, meta: AfterMoveMeta) => {
     const hasPremove = !!meta.premove
     if (!promotion.start(this, orig, dest, hasPremove)) {
       this.sendMove(orig, dest, undefined, hasPremove)
     }
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
+  private onUserNewPiece = (role: Role, key: Key, meta: AfterMoveMeta) => {
     if (!this.replaying() && crazyValid.drop(this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, !!meta.predrop)
     } else {
@@ -645,7 +645,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onMove = (_: Pos, dest: Pos, capturedPiece: Piece) => {
+  private onMove = (_: Key, dest: Key, capturedPiece: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest)

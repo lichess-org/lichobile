@@ -1,4 +1,4 @@
-export const piotr2key: {[i: string]: Pos } = {
+export const piotr2key: {[i: string]: Key } = {
   'a': 'a1',
   'b': 'b1',
   'c': 'c1',

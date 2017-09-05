@@ -32,7 +32,7 @@ export interface OnlineRoundInterface extends RoundInterface {
 
   onReload(cfg: OnlineGameData): void
   reloadGameData(): void
-  sendMove(orig: Pos, dest: Pos, prom: Role, isPremove?: boolean): void
+  sendMove(orig: Key, dest: Key, prom: Role, isPremove?: boolean): void
 }
 
 export interface OfflineRoundInterface extends RoundInterface {

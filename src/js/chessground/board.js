@@ -1,4 +1,4 @@
-import util from './util'
+import * as util from './util'
 import premove from './premove'
 import anim from './anim'
 import hold from './hold'

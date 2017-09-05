@@ -51,9 +51,9 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): any {
 function make(
   data: OfflineGameData,
   sit: GameSituation,
-  userMove: (orig: Pos, dest: Pos, meta: AfterMoveMeta) => void,
-  userNewPiece: (role: Role, key: Pos, meta: AfterMoveMeta) => void,
-  onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
+  userMove: (orig: Key, dest: Key, meta: AfterMoveMeta) => void,
+  userNewPiece: (role: Role, key: Key, meta: AfterMoveMeta) => void,
+  onMove: (orig: Key, dest: Key, capturedPiece: Piece) => void,
   onNewPiece: () => void
 ) {
   const config = makeConfig(data, sit)
@@ -76,7 +76,7 @@ function changeOTBMode(ground: Chessground.Controller, flip: boolean) {
   ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' })
 }
 
-function promote(ground: Chessground.Controller, key: Pos, role: Role) {
+function promote(ground: Chessground.Controller, key: Key, role: Role) {
   const pieces: {[k: string]: Piece } = {}
   const piece = ground.data.pieces[key]
   if (piece && piece.role === 'pawn') {

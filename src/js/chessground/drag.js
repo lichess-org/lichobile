@@ -1,5 +1,5 @@
 import board from './board'
-import util from './util'
+import * as util from './util'
 import hold from './hold'
 
 function removeDragElements(data) {

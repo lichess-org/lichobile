@@ -71,9 +71,9 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
 function make(
   data: OnlineGameData,
   fen: string,
-  userMove: (orig: Pos, dest: Pos, meta: AfterMoveMeta) => void,
-  userNewPiece: (role: Role, key: Pos, meta: AfterMoveMeta) => void,
-  onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
+  userMove: (orig: Key, dest: Key, meta: AfterMoveMeta) => void,
+  userNewPiece: (role: Role, key: Key, meta: AfterMoveMeta) => void,
+  onMove: (orig: Key, dest: Key, capturedPiece: Piece) => void,
   onNewPiece: () => void
 ): Chessground.Controller {
   const config = makeConfig(data, fen)
@@ -93,7 +93,7 @@ function reload(ground: Chessground.Controller, data: OnlineGameData, fen: strin
   ground.reconfigure(makeConfig(data, fen, flip))
 }
 
-function promote(ground: Chessground.Controller, key: Pos, role: Role) {
+function promote(ground: Chessground.Controller, key: Key, role: Role) {
   const pieces: Chessground.Pieces = {}
   const piece = ground.data.pieces[key]
   if (piece && piece.role === 'pawn') {

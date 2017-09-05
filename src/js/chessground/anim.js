@@ -1,4 +1,4 @@
-import util from './util'
+import * as util from './util'
 
 // https://gist.github.com/gre/1650294
 var easing = {

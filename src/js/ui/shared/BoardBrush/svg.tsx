@@ -9,7 +9,7 @@ interface Bounds {
   height: number
 }
 
-const key2pos: (key: Pos) => BoardPos = chessground.util.key2pos
+const key2pos: (key: Key) => BoardPos = chessground.util.key2pos
 
 function circleWidth(current: boolean, bounds: Bounds) {
   return (current ? 2 : 4) / 512 * bounds.width

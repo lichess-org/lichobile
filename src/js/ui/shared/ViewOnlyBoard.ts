@@ -23,7 +23,7 @@ interface Config {
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
-  lastMove?: [Pos, Pos]
+  lastMove?: [Key, Key]
   bounds?: Bounds
 }
 

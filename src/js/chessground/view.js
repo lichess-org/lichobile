@@ -1,6 +1,6 @@
 import * as Vnode from 'mithril/render/vnode'
 import drag from './drag'
-import util from './util'
+import * as util from './util'
 
 export default function renderBoard(ctrl) {
   return Vnode(

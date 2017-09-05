@@ -36,7 +36,7 @@ export default class Replay {
     return this.situations[this.ply]
   }
 
-  public addMove = (orig: Pos, dest: Pos, promotion?: Role) => {
+  public addMove = (orig: Key, dest: Key, promotion?: Role) => {
     const sit = this.situation()
     chess.move({
       variant: this.variant,
@@ -51,7 +51,7 @@ export default class Replay {
     .catch(console.error.bind(console))
   }
 
-  public addDrop = (role: Role, key: Pos) => {
+  public addDrop = (role: Role, key: Key) => {
     const sit = this.situation()
     chess.drop({
       variant: this.variant,

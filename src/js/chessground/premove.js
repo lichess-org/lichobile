@@ -1,4 +1,4 @@
-import util from './util'
+import * as util from './util'
 
 function diff(a, b) {
   return Math.abs(a - b)

@@ -151,17 +151,17 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     )
   }
 
-  private onPromotion = (orig: Pos, dest: Pos, role: Role) => {
+  private onPromotion = (orig: Key, dest: Key, role: Role) => {
     this.replay.addMove(orig, dest, role)
   }
 
-  private userMove = (orig: Pos, dest: Pos) => {
+  private userMove = (orig: Key, dest: Key) => {
     if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }
 
-  private onMove = (_: Pos, dest: Pos, capturedPiece: Piece) => {
+  private onMove = (_: Key, dest: Key, capturedPiece: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest)
@@ -171,7 +171,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
     } else sound.move()
   }
 
-  private onUserNewPiece = (role: Role, key: Pos) => {
+  private onUserNewPiece = (role: Role, key: Key) => {
     const sit = this.replay.situation()
     if (crazyValid.drop(this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key)

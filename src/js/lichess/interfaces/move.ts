@@ -6,7 +6,7 @@ export interface MoveRequest {
 
 export interface DropRequest {
   role: Role
-  pos: Pos
+  pos: Key
 }
 
 export interface MoveOrDrop {
@@ -29,17 +29,17 @@ export interface MoveOrDrop {
     black: number
   }
   promotion?: {
-    key: Pos
+    key: Key
     pieceClass: Role
   }
   enpassant?: {
-    key: Pos
+    key: Key
     color: Color
   }
   drops?: Array<string>
   castle?: {
-    king: [Pos, Pos]
-    rook: [Pos, Pos]
+    king: KeyPair
+    rook: KeyPair
     color: Color
   }
 }

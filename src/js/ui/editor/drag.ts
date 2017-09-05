@@ -9,7 +9,7 @@ export default function(ctrl: Editor, e: TouchEvent) {
   e.stopPropagation()
   e.preventDefault()
   const cgData = ctrl.chessground.data
-  const key = chessground.util.allKeys.find((k: Pos) => {
+  const key = chessground.util.allKeys.find((k: Key) => {
     return !cgData.pieces[k]
   })
   if (!key) return

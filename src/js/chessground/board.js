@@ -18,7 +18,6 @@ function setPieces(data, pieces) {
     if (pieces[key]) data.pieces[key] = pieces[key]
     else delete data.pieces[key]
   })
-  data.movable.dropped = []
 }
 
 function setDragPiece(data, key, piece, dragOpts) {
@@ -118,7 +117,6 @@ function baseNewPiece(data, piece, key) {
   data.lastMove = [key, key]
   data.check = null
   setTimeout(data.events.change)
-  data.movable.dropped = []
   data.movable.dests = {}
   data.turnColor = util.opposite(data.turnColor)
   data.renderRAF()
@@ -132,7 +130,6 @@ function baseUserMove(data, orig, dest) {
   if (result) {
     data.movable.dests = {}
     data.turnColor = util.opposite(data.turnColor)
-    data.movable.dropped = []
   }
   return result
 }
@@ -174,7 +171,6 @@ function dropNewPiece(data, orig, dest) {
     var piece = data.pieces[orig]
     delete data.pieces[orig]
     baseNewPiece(data, piece, dest)
-    data.movable.dropped = []
     setTimeout(function() {
       return data.movable.events.afterNewPiece(piece.role, dest, {
         predrop: false

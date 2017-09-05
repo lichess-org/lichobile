@@ -75,7 +75,7 @@ const Board: Mithril.Component<Attrs, State> = {
           oncreate={this.boardOnCreate}
           onremove={this.boardOnRemove}
         />
-        { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current.key ?
+        { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current ?
           <div className="board_alert">
             {i18n('premoveEnabledClickAnywhereToCancel')}
           </div> : alert ?

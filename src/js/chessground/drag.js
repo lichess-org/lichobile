@@ -173,7 +173,6 @@ function end(data, e) {
     if (draggable.current.newPiece) {
       board.dropNewPiece(data, orig, dest)
     } else {
-      if (orig !== dest) data.movable.dropped = [orig, dest]
       board.userMove(data, orig, dest)
     }
     data.renderRAF()

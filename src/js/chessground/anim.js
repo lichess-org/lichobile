@@ -47,20 +47,18 @@ function computePlan(prev, current) {
   }
   for (var i = 0, ilen = util.allKeys.length; i < ilen; i++) {
     var key = util.allKeys[i]
-    if (key !== current.movable.dropped[1]) {
-      var curP = current.pieces[key]
-      var preP = prePieces[key]
-      if (curP) {
-        if (preP) {
-          if (!samePiece(curP, preP)) {
-            missings.push(preP)
-            news.push(makePiece(key, curP, false))
-          }
-        } else
+    var curP = current.pieces[key]
+    var preP = prePieces[key]
+    if (curP) {
+      if (preP) {
+        if (!samePiece(curP, preP)) {
+          missings.push(preP)
           news.push(makePiece(key, curP, false))
-      } else if (preP)
-        missings.push(preP)
-    }
+        }
+      } else
+        news.push(makePiece(key, curP, false))
+    } else if (preP)
+      missings.push(preP)
   }
   news.forEach(function(newP) {
     var nPreP = closer(newP, missings.filter(function(p) { return samePiece(newP, p); }))
@@ -73,7 +71,7 @@ function computePlan(prev, current) {
     }
   })
   missings.forEach(function(p) {
-    if (p.key !== current.movable.dropped[0] && !util.containsX(animedOrigs, p.key)) {
+    if (!util.containsX(animedOrigs, p.key)) {
       capturedPieces[p.key] = p
     }
   })

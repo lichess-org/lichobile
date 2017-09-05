@@ -1,47 +1,12 @@
 import board from './board'
-import configure from './configure'
-import data from './data'
+import { initBoard, configureBoard, setNewBoardState } from './configure'
 import fen from './fen'
 import anim from './anim'
 import drag from './drag'
 
-function setNewBoardState(d, config) {
-  if (!config) return
-
-  if (config.fen) {
-    d.pieces = fen.read(config.fen)
-  }
-
-  if (config.dests) {
-    d.movable.dests = config.dests
-  }
-
-  if (config.movableColor) {
-    d.movable.color = config.movableColor
-  }
-
-  ['orientation', 'turnColor', 'lastMove', 'check'].forEach(function (prop) {
-    if (config.hasOwnProperty(prop)) {
-      d[prop] = config[prop]
-    }
-  })
-
-  if (d.check === true) {
-    board.setCheck(d)
-  }
-
-  // fix move/premove dests
-  if (d.selected) {
-    board.setSelected(d, d.selected)
-  }
-
-  // forget about the last dropped piece
-  d.movable.dropped = []
-}
-
 export default function(cfg) {
 
-  this.data = data(cfg)
+  this.data = initBoard(cfg)
 
   this.vm = {
     exploding: null
@@ -53,7 +18,7 @@ export default function(cfg) {
 
   this.set = anim(setNewBoardState, this.data)
 
-  this.reconfigure = anim(configure, this.data)
+  this.reconfigure = anim(configureBoard, this.data)
 
   this.toggleOrientation = anim(board.toggleOrientation, this.data)
 

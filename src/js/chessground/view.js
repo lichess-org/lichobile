@@ -259,8 +259,6 @@ function computeSquareClassesMap(ctrl) {
   if (premove) premove.forEach((k) => {
     addSquare(squares, k, 'current-premove')
   })
-  else if (d.predroppable.current.key)
-    addSquare(squares, d.predroppable.current.key, 'current-premove')
 
   if (ctrl.vm.exploding) ctrl.vm.exploding.keys.forEach((k) => {
     addSquare(squares, k, 'exploding' + ctrl.vm.exploding.stage)

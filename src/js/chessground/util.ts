@@ -104,8 +104,8 @@ export function eventPosition(e: TouchEvent) {
 export function computeSquareBounds(orientation: Color, bounds: ClientRect, key: Key) {
   const pos = key2pos(key)
   if (orientation !== 'white') {
-    pos[0] = (9 - pos[0] as cg.Rank)
-    pos[1] = (9 - pos[1] as cg.Rank)
+    pos[0] = (9 - pos[0] as cg.Coord)
+    pos[1] = (9 - pos[1] as cg.Coord)
   }
   return {
     left: bounds.left + bounds.width * (pos[0] - 1) / 8,

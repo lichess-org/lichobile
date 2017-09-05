@@ -5,7 +5,7 @@ import fen from './fen'
 import * as util from './util'
 import configure from './configure'
 import anim from './anim'
-import board from './board'
+import * as board from './board'
 import drag from './drag'
 
 export default {

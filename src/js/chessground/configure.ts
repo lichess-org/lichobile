@@ -1,6 +1,6 @@
 import * as merge from 'lodash/merge'
 import { State, defaults } from './data'
-import board from './board'
+import * as board from './board'
 import fen from './fen'
 
 type InitConfig = Partial<State> & { fen: string }
@@ -63,10 +63,6 @@ export function setNewBoardState(d: State, config: SetConfig) {
   if (config.orientation !== undefined) d.orientation = config.orientation
   if (config.turnColor !== undefined) d.turnColor = config.turnColor
   if (config.lastMove !== undefined) d.lastMove = config.lastMove
-
-  if (config.check === true) {
-    board.setCheck(d)
-  }
 
   // fix move/premove dests
   if (d.selected) {

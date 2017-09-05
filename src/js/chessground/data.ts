@@ -24,7 +24,7 @@ export interface State {
   }
   movable: {
     free: boolean // all moves are valid - board editor
-    color?: Color | 'both' // color that can move. white | black | both
+    color: Color | 'both' | null // color that can move.
     dests: DestsMap | null // valid moves. {"a2" ["a3" "a4"] "b1" ["a3" "c3"]}
     showDests: boolean // whether to add the move-dest class on squares
     dropped: KeyPair | null // last dropped [orig, dest], not to be animated
@@ -60,6 +60,7 @@ export interface State {
     centerPiece: boolean // when magnified, center the piece under finger (otherwise shifted up)
     preventDefault: boolean // whether to prevent default on move and end
     showGhost: boolean // show ghost of piece being dragged
+    deleteOnDropOff: boolean // delete a piece when it is dropped off the board
     current: any | null // TODO DragCurrent
   }
   // selectable: {
@@ -135,6 +136,7 @@ export const defaults = {
     centerPiece: false,
     preventDefault: true,
     showGhost: true,
+    deleteOnDropOff: false,
     current: null
   },
   events: {}

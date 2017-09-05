@@ -1,7 +1,8 @@
+export type Coord = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 export type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'
-export type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+export type Rank = Coord
 
-export type Pos = [Rank, Rank]
+export type Pos = [Coord, Coord]
 
 export type Pieces = {[index: string]: Piece}
 
@@ -26,7 +27,7 @@ export interface Exploding {
 
 export interface Drop {
   role: Role
-  pos: Key
+  key: Key
 }
 
 export type OtbMode = 'facing' | 'flip'

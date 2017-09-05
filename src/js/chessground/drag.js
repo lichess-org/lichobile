@@ -1,4 +1,4 @@
-import board from './board'
+import * as board from './board'
 import * as util from './util'
 
 function removeDragElements(data) {
@@ -172,7 +172,12 @@ function end(data, e) {
   if (draggable.current.started) {
     if (draggable.current.newPiece) {
       board.dropNewPiece(data, orig, dest)
-    } else {
+    }
+    else if (draggable.deleteOnDropOff) {
+      delete data.pieces[orig]
+      setTimeout(data.events.change, 0)
+    }
+    else {
       board.userMove(data, orig, dest)
     }
     data.renderRAF()

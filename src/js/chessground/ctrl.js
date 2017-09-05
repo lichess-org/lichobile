@@ -1,4 +1,4 @@
-import board from './board'
+import * as board from './board'
 import { initBoard, configureBoard, setNewBoardState } from './configure'
 import fen from './fen'
 import anim from './anim'

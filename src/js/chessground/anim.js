@@ -1,5 +1,26 @@
 import * as util from './util'
 
+// transformation is a function
+// accepts board data and any number of arguments,
+// and mutates the board.
+export default function anim(transformation, data, skip) {
+  return function() {
+    var args = new Array(arguments.length)
+    for (var i = 0; i < args.length; ++i) {
+      args[i] = arguments[i]
+    }
+    const transformationArgs = [data].concat(args)
+    if (!data.render) return transformation.apply(null, transformationArgs)
+    else if (data.animation.enabled && !skip)
+      return animate(() => transformation.apply(null, transformationArgs), data)
+    else {
+      const result = transformation.apply(null, transformationArgs)
+      data.renderRAF()
+      return result
+    }
+  }
+}
+
 // https://gist.github.com/gre/1650294
 var easing = {
   easeInOutCubic: function(t) {
@@ -138,25 +159,4 @@ function animate(transformation, data) {
     data.renderRAF()
   }
   return result
-}
-
-// transformation is a function
-// accepts board data and any number of arguments,
-// and mutates the board.
-export default function anim(transformation, data, skip) {
-  return function() {
-    var args = new Array(arguments.length)
-    for (var i = 0; i < args.length; ++i) {
-      args[i] = arguments[i]
-    }
-    const transformationArgs = [data].concat(args)
-    if (!data.render) return transformation.apply(null, transformationArgs)
-    else if (data.animation.enabled && !skip)
-      return animate(() => transformation.apply(null, transformationArgs), data)
-    else {
-      const result = transformation.apply(null, transformationArgs)
-      data.renderRAF()
-      return result
-    }
-  }
 }

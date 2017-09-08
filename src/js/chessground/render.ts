@@ -145,7 +145,7 @@ export function renderBoard(d: State, dom: cg.DOM) {
 
   // walk over all squares in current set, apply dom changes to moved squares
   // or append new squares
-  squares.forEach((k: Key, squareClass: string) => {
+  squares.forEach((squareClass: string, k: Key) => {
     if (!sameSquares.has(k)) {
       mvdset = movedSquares.get(squareClass)
       mvd = mvdset && mvdset.pop()

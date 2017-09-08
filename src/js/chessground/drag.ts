@@ -139,7 +139,7 @@ function processDrag(ctrl: Chessground) {
         cur.over = board.getKeyAtDomPos(state, cur.epos, bounds)
 
         // move piece
-        var translate = util.posToTranslate(cur.origPos, asWhite, bounds)
+        const translate = util.posToTranslate(cur.origPos, asWhite, bounds)
         translate[0] += cur.pos[0] + cur.dec[0]
         translate[1] += cur.pos[1] + cur.dec[1]
         pieceEl.style.transform = util.transform(state, cur.piece.color, util.translate3d(translate))
@@ -167,7 +167,7 @@ function processDrag(ctrl: Chessground) {
 }
 
 function move(ctrl: Chessground, e: TouchEvent) {
-  if (e.touches && e.touches.length > 1) return; // support one finger touch only
+  if (e.touches && e.touches.length > 1) return
   const state = ctrl.state
 
   if (state.draggable.preventDefault) e.preventDefault()

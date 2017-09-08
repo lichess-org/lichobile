@@ -110,7 +110,7 @@ export function userMove(state: State, orig: Key, dest: Key): boolean {
 
 export function dropNewPiece(state: State, orig: Key, dest: Key) {
   if (canDrop(state, orig, dest)) {
-    var piece = state.pieces[orig]
+    const piece = state.pieces[orig]
     delete state.pieces[orig]
     baseNewPiece(state, piece, dest)
     setTimeout(() => {
@@ -166,7 +166,7 @@ export function canMove(state: State, orig: Key, dest: Key) {
 }
 
 export function canDrop(state: State, orig: Key, dest: Key) {
-  var piece = state.pieces[orig]
+  const piece = state.pieces[orig]
   return piece && dest && (orig === dest || !state.pieces[dest]) && (
     state.movable.color === 'both' || (
       state.movable.color === piece.color &&
@@ -175,7 +175,7 @@ export function canDrop(state: State, orig: Key, dest: Key) {
 }
 
 export function isPremovable(state: State, orig: Key) {
-  var piece = state.pieces[orig]
+  const piece = state.pieces[orig]
   return piece && state.premovable.enabled &&
     state.movable.color === piece.color &&
     state.turnColor !== piece.color
@@ -188,7 +188,7 @@ export function canPremove(state: State, orig: Key, dest: Key) {
 }
 
 export function canPredrop(state: State, orig: Key, dest: Key) {
-  var piece = state.pieces[orig]
+  const piece = state.pieces[orig]
   return piece && dest &&
     (!state.pieces[dest] || state.pieces[dest].color !== state.movable.color) &&
     state.predroppable.enabled &&
@@ -198,7 +198,7 @@ export function canPredrop(state: State, orig: Key, dest: Key) {
 }
 
 export function isDraggable(state: State, orig: Key) {
-  var piece = state.pieces[orig]
+  const piece = state.pieces[orig]
   return piece && state.draggable.enabled && (
     state.movable.color === 'both' || (
       state.movable.color === piece.color && (
@@ -319,13 +319,13 @@ function baseUserMove(state: State, orig: Key, dest: Key): boolean {
 
 function tryAutoCastle(state: State, orig: Key, dest: Key) {
   if (!state.autoCastle) return
-  var king = state.pieces[dest]
+  const king = state.pieces[dest]
   if (king.role !== 'king') return
-  var origPos = util.key2pos(orig)
+  const origPos = util.key2pos(orig)
   if (origPos[0] !== 5) return
   if (origPos[1] !== 1 && origPos[1] !== 8) return
-  var destPos = util.key2pos(dest),
-    oldRookPos, newRookPos, newKingPos
+  const destPos = util.key2pos(dest)
+  let oldRookPos, newRookPos, newKingPos
   if (destPos[0] === 7 || destPos[0] === 8) {
     oldRookPos = util.pos2key([8, origPos[1]])
     newRookPos = util.pos2key([6, origPos[1]])

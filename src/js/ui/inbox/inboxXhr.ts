@@ -42,5 +42,5 @@ export function deleteThread(id: string) {
 }
 
 export function autocomplete(term: string): Promise<Array<string>> {
-  return fetchJSON('/player/autocomplete?friend=1', { query: { term }});
+  return fetchJSON('/player/autocomplete?friend=1', { query: { term }})
 }

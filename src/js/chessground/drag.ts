@@ -2,6 +2,7 @@ import * as cg from './interfaces'
 import Chessground from './Chessground'
 import * as board from './board'
 import * as util from './util'
+import { anim } from './anim'
 
 export interface DragCurrent {
   orig: Key // orig key of dragging piece
@@ -45,7 +46,11 @@ function start(ctrl: Chessground, e: TouchEvent) {
   const previouslySelected = state.selected
   const hadPremove = !!state.premovable.current
   const hadPredrop = !!state.predroppable.current
-  board.selectSquare(state, orig)
+  if (state.selected && board.canMove(state, state.selected, orig)) {
+    anim(s => board.selectSquare(s, orig), ctrl)
+  } else {
+    board.selectSquare(state, orig)
+  }
   const stillSelected = state.selected === orig
   if (state.pieces[orig] && stillSelected && board.isDraggable(state, orig)) {
     const squareBounds = util.computeSquareBounds(state.orientation, bounds, orig)

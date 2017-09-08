@@ -204,6 +204,7 @@ function computeSquareClasses(d: State): Map<Key, string> {
   if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
     if (k) addSquare(squares, k, 'last-move')
   })
+
   if (d.check && d.highlight.check) addSquare(squares, d.check, 'check')
   if (d.selected) {
     addSquare(squares, d.selected, 'selected')

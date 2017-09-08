@@ -74,108 +74,38 @@ export function unsetPredrop(state: State) {
   }
 }
 
-export function tryAutoCastle(state: State, orig: Key, dest: Key) {
-  if (!state.autoCastle) return
-  var king = state.pieces[dest]
-  if (king.role !== 'king') return
-  var origPos = util.key2pos(orig)
-  if (origPos[0] !== 5) return
-  if (origPos[1] !== 1 && origPos[1] !== 8) return
-  var destPos = util.key2pos(dest),
-    oldRookPos, newRookPos, newKingPos
-  if (destPos[0] === 7 || destPos[0] === 8) {
-    oldRookPos = util.pos2key([8, origPos[1]])
-    newRookPos = util.pos2key([6, origPos[1]])
-    newKingPos = util.pos2key([7, origPos[1]])
-  } else if (destPos[0] === 3 || destPos[0] === 1) {
-    oldRookPos = util.pos2key([1, origPos[1]])
-    newRookPos = util.pos2key([4, origPos[1]])
-    newKingPos = util.pos2key([3, origPos[1]])
-  } else return
-  delete state.pieces[orig]
-  delete state.pieces[dest]
-  delete state.pieces[oldRookPos]
-  state.pieces[newKingPos] = {
-    role: 'king',
-    color: king.color
-  }
-  state.pieces[newRookPos] = {
-    role: 'rook',
-    color: king.color
-  }
-}
-
-export function baseMove(state: State, orig: Key, dest: Key) {
-  if (orig === dest || !state.pieces[orig]) return false
-  const captured = (
-    state.pieces[dest] &&
-    state.pieces[dest].color !== state.pieces[orig].color
-  ) ? state.pieces[dest] : undefined
-  // always call events.move
-  setTimeout(() => {
-    if (state.events.move) state.events.move(orig, dest, captured)
-  }, 0)
-  state.pieces[dest] = state.pieces[orig]
-  delete state.pieces[orig]
-  state.lastMove = [orig, dest]
-  state.check = null
-  tryAutoCastle(state, orig, dest)
-  setTimeout(state.events.change)
-  return true
-}
-
-export function baseNewPiece(state: State, piece: Piece, key: Key) {
-  if (state.pieces[key]) return false
-  setTimeout(() => {
-    if (state.events.dropNewPiece) state.events.dropNewPiece(piece, key)
-  })
-  state.pieces[key] = piece
-  state.lastMove = [key, key]
-  state.check = null
-  setTimeout(state.events.change)
-  state.movable.dests = {}
-  state.turnColor = util.opposite(state.turnColor)
-  // TODO check why it was here
-  // state.renderRAF()
-  return true
-}
-
-export function baseUserMove(state: State, orig: Key, dest: Key) {
-  const result = baseMove(state, orig, dest)
-  if (result) {
-    state.movable.dests = null
-    state.turnColor = util.opposite(state.turnColor)
-    state.animation.current = null
-  }
-  return result;
-}
-
-export function apiMove(state: State, orig: Key, dest: Key) {
+export function apiMove(state: State, orig: Key, dest: Key): boolean {
   return baseMove(state, orig, dest)
 }
 
-export function apiNewPiece(state: State, piece: Piece, key: Key) {
+export function apiNewPiece(state: State, piece: Piece, key: Key): boolean {
   return baseNewPiece(state, piece, key)
 }
 
-export function userMove(state: State, orig: Key, dest: Key) {
-  if (!dest) {
-    setSelected(state, null)
-  } else if (canMove(state, orig, dest)) {
-    if (baseUserMove(state, orig, dest)) {
+export function userMove(state: State, orig: Key, dest: Key): boolean {
+  if (canMove(state, orig, dest)) {
+    const result = baseUserMove(state, orig, dest)
+    if (result) {
       setSelected(state, null)
       setTimeout(() => {
         if (state.movable.events.after) state.movable.events.after(orig, dest, {
           premove: false
         })
       })
+      return true
     }
-  } else if (canPremove(state, orig, dest)) {
+  }
+  else if (canPremove(state, orig, dest)) {
     setPremove(state, orig, dest)
     setSelected(state, null)
-  } else if (isMovable(state, dest) || isPremovable(state, dest))
+  }
+  else if (isMovable(state, dest) || isPremovable(state, dest)) {
     setSelected(state, dest)
-  else setSelected(state, null)
+  } else {
+    unselect(state)
+  }
+
+  return false
 }
 
 export function dropNewPiece(state: State, orig: Key, dest: Key) {
@@ -343,3 +273,78 @@ export function getKeyAtDomPos(state: State, pos: NumberPair, bounds: ClientRect
   }
   return null
 }
+
+function baseMove(state: State, orig: Key, dest: Key): boolean {
+  if (orig === dest || !state.pieces[orig]) return false
+  const captured = (
+    state.pieces[dest] &&
+    state.pieces[dest].color !== state.pieces[orig].color
+  ) ? state.pieces[dest] : undefined
+  // always call events.move
+  setTimeout(() => {
+    if (state.events.move) state.events.move(orig, dest, captured)
+  }, 0)
+  state.pieces[dest] = state.pieces[orig]
+  delete state.pieces[orig]
+  state.lastMove = [orig, dest]
+  state.check = null
+  tryAutoCastle(state, orig, dest)
+  setTimeout(state.events.change)
+  return true
+}
+
+function baseNewPiece(state: State, piece: Piece, key: Key): boolean {
+  if (state.pieces[key]) return false
+  setTimeout(() => {
+    if (state.events.dropNewPiece) state.events.dropNewPiece(piece, key)
+  })
+  state.pieces[key] = piece
+  state.lastMove = [key, key]
+  state.check = null
+  setTimeout(state.events.change)
+  state.movable.dests = {}
+  state.turnColor = util.opposite(state.turnColor)
+  return true
+}
+
+function baseUserMove(state: State, orig: Key, dest: Key): boolean {
+  const result = baseMove(state, orig, dest)
+  if (result) {
+    state.movable.dests = null
+    state.turnColor = util.opposite(state.turnColor)
+    state.animation.current = null
+  }
+  return result
+}
+
+function tryAutoCastle(state: State, orig: Key, dest: Key) {
+  if (!state.autoCastle) return
+  var king = state.pieces[dest]
+  if (king.role !== 'king') return
+  var origPos = util.key2pos(orig)
+  if (origPos[0] !== 5) return
+  if (origPos[1] !== 1 && origPos[1] !== 8) return
+  var destPos = util.key2pos(dest),
+    oldRookPos, newRookPos, newKingPos
+  if (destPos[0] === 7 || destPos[0] === 8) {
+    oldRookPos = util.pos2key([8, origPos[1]])
+    newRookPos = util.pos2key([6, origPos[1]])
+    newKingPos = util.pos2key([7, origPos[1]])
+  } else if (destPos[0] === 3 || destPos[0] === 1) {
+    oldRookPos = util.pos2key([1, origPos[1]])
+    newRookPos = util.pos2key([4, origPos[1]])
+    newKingPos = util.pos2key([3, origPos[1]])
+  } else return
+  delete state.pieces[orig]
+  delete state.pieces[dest]
+  delete state.pieces[oldRookPos]
+  state.pieces[newKingPos] = {
+    role: 'king',
+    color: king.color
+  }
+  state.pieces[newRookPos] = {
+    role: 'rook',
+    color: king.color
+  }
+}
+

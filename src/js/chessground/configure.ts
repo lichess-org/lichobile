@@ -4,11 +4,9 @@ import { State, defaults } from './state'
 import * as board from './board'
 import fen from './fen'
 
-export type InitConfig = Partial<State> & {
-  fen?: string
-}
+// TODO type
+export type InitConfig = any
 
-// TODO make sth more robust
 export function initBoard(cfg: InitConfig): State {
   const defCopy = Object.assign({}, defaults) as State
 
@@ -24,12 +22,14 @@ export function configureBoard(state: State, config: InitConfig): void {
   // don't merge destinations. Just override.
   if (config.movable && config.movable.dests) state.movable.dests = null
 
+  merge(state, config)
+
   // if a fen was provided, replace the pieces
   if (config.fen) {
     state.pieces = fen.read(config.fen)
   }
 
-  merge(state, config)
+  if (config.check !== undefined) board.setCheck(state, config.check)
 
   // fix move/premove dests
   if (state.selected) board.setSelected(state, state.selected)
@@ -54,10 +54,12 @@ export function setNewBoardState(d: State, config: cg.SetConfig) {
     d.movable.color = config.movableColor
   }
 
-  if (config.check !== undefined) board.setCheck(d, config.check)
   if (config.orientation !== undefined) d.orientation = config.orientation
   if (config.turnColor !== undefined) d.turnColor = config.turnColor
   if (config.lastMove !== undefined) d.lastMove = config.lastMove
+
+  // set check after setting turn color
+  if (config.check !== undefined) board.setCheck(d, config.check)
 
   // fix move/premove dests
   if (d.selected) {

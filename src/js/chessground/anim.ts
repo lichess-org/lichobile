@@ -83,13 +83,11 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
     news: AnimPiece[] = [],
     prePieces: AnimPieces = {},
     white = state.orientation === 'white'
-  const pKs = Object.keys(prevPieces)
-  let pk: Key
-  for (let j = 0, jlen = pKs.length; j < jlen; j++) {
-    pk = pKs[j] as Key
-    const piece = makePiece(pk, prevPieces[pk])
-    prePieces[piece.key] = piece
+
+  for (const pk in prevPieces) {
+    prePieces[pk] = makePiece(pk as Key, prevPieces[pk])
   }
+
   for (let i = 0, ilen = util.allKeys.length; i < ilen; i++) {
     const key = util.allKeys[i]
     const curP = state.pieces[key]
@@ -100,10 +98,14 @@ function computePlan(prevPieces: cg.Pieces, state: State, dom: cg.DOM): AnimPlan
           missings.push(preP)
           news.push(makePiece(key, curP))
         }
-      } else
+      }
+      else {
         news.push(makePiece(key, curP))
-    } else if (preP)
+      }
+    }
+    else if (preP) {
       missings.push(preP)
+    }
   }
   news.forEach((newP) => {
     const nPreP = closer(newP, missings.filter((p) => samePiece(newP.piece, p.piece)))
@@ -157,18 +159,7 @@ function step(ctrl: Chessground) {
 
 function animate<A>(mutation: Mutation<A>, ctrl: Chessground) {
   const state = ctrl.state
-  // clone state
-  const prevPieces: cg.Pieces = {}
-  // clone pieces
-  const pKs = Object.keys(state.pieces)
-  let key
-  for (let i = 0, len = pKs.length; i < len; i++) {
-    key = pKs[i]
-    prevPieces[key] = {
-      role: state.pieces[key].role,
-      color: state.pieces[key].color
-    }
-  }
+  const prevPieces: cg.Pieces = {...state.pieces}
   const result = mutation(state)
   const plan = computePlan(prevPieces, state, ctrl.dom!)
   if (Object.keys(plan.anims).length > 0 || Object.keys(plan.captured).length > 0) {

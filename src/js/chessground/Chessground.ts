@@ -2,7 +2,7 @@ import * as cg from './interfaces'
 import * as util from './util'
 import * as board from './board'
 import { State } from './state'
-import { initBoard, configureBoard, setNewBoardState, InitConfig } from './configure'
+import { initBoard, configureBoard, setNewBoardState } from './configure'
 import fen from './fen'
 import { renderBoard, makeCoords, makeSymmCoords } from './render'
 import { anim, skip as skipAnim } from './anim'
@@ -14,7 +14,7 @@ export default class Chessground {
 
   private resizeTimeoutId: number
 
-  constructor(cfg: InitConfig) {
+  constructor(cfg: cg.InitConfig) {
     this.state = initBoard(cfg)
   }
 
@@ -120,12 +120,18 @@ export default class Chessground {
     anim(state => setNewBoardState(state, config), this)
   }
 
-  reconfigure(config: InitConfig): void {
+  reconfigure(config: cg.InitConfig): void {
     anim(state => configureBoard(state, config), this)
   }
 
   toggleOrientation(): void {
     anim(board.toggleOrientation, this)
+  }
+
+  setOtbMode(mode: 'flip' | 'facing'): void {
+    anim(state => {
+      state.otbMode = mode
+    }, this)
   }
 
   setPieces(pieces: cg.PiecesDiff): void {

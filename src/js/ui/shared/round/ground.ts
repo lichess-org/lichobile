@@ -9,8 +9,7 @@ import settings from '../../../settings'
 import { boardOrientation } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 
-// TODO remove any
-function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
+function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): cg.InitConfig {
   const lastStep = data.steps[data.steps.length - 1]
   const lastMove = data.game.lastMove ?
     chessFormat.uciToMove(data.game.lastMove) :
@@ -28,7 +27,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
     lastMove,
-    check: data.game.check,
+    check: lastStep.check,
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
@@ -63,7 +62,6 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
     },
     draggable: {
       distance: 3,
-      squareTarget: true,
       magnified: settings.game.magnified(),
       preventDefault: data.game.variant.key !== 'crazyhouse'
     }
@@ -75,11 +73,11 @@ function make(
   fen: string,
   userMove: (orig: Key, dest: Key, meta: AfterMoveMeta) => void,
   userNewPiece: (role: Role, key: Key, meta: AfterMoveMeta) => void,
-  onMove: (orig: Key, dest: Key, capturedPiece: Piece) => void,
+  onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
   onNewPiece: () => void
 ): Chessground {
   const config = makeConfig(data, fen)
-  config.movable.events = {
+  config.movable!.events = {
     after: userMove,
     afterNewPiece: userNewPiece
   }

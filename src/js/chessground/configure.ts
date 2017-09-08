@@ -4,10 +4,7 @@ import { State, defaults } from './state'
 import * as board from './board'
 import fen from './fen'
 
-// TODO type
-export type InitConfig = any
-
-export function initBoard(cfg: InitConfig): State {
+export function initBoard(cfg: cg.InitConfig): State {
   const defCopy = Object.assign({}, defaults) as State
 
   configureBoard(defCopy, cfg || {})
@@ -15,7 +12,7 @@ export function initBoard(cfg: InitConfig): State {
   return defCopy
 }
 
-export function configureBoard(state: State, config: InitConfig): void {
+export function configureBoard(state: State, config: cg.InitConfig): void {
 
   if (!config) return
 

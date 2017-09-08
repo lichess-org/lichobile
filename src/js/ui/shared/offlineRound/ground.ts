@@ -1,20 +1,22 @@
 import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import * as gameApi from '../../../lichess/game'
 import settings from '../../../settings'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
 import { AfterMoveMeta } from '../../../lichess/interfaces/move'
 import { boardOrientation } from '../../../utils'
+import { uciToMoveOrDrop } from '../../../utils/chessFormat'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import { GameSituation } from '../../../chess'
 
-function makeConfig(data: OfflineGameData, sit: GameSituation): any {
+function makeConfig(data: OfflineGameData, sit: GameSituation): cg.InitConfig {
   const lastUci = sit.uciMoves.length ? sit.uciMoves[sit.uciMoves.length - 1] : null
   return {
     batchRAF: batchRequestAnimationFrame,
     fen: sit.fen,
     orientation: boardOrientation(data),
     turnColor: sit.player,
-    lastMove: lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : null,
+    lastMove: lastUci ? uciToMoveOrDrop(lastUci) : null,
     check: sit.check,
     otb: data.game.id === 'offline_otb',
     coordinates: settings.game.coords(),
@@ -23,8 +25,7 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): any {
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
       lastMove: settings.game.highlights(),
-      check: settings.game.highlights(),
-      dragOver: false
+      check: settings.game.highlights()
     },
     movable: {
       free: false,
@@ -42,7 +43,6 @@ function makeConfig(data: OfflineGameData, sit: GameSituation): any {
     draggable: {
       centerPiece: data.pref.centerPiece,
       distance: 3,
-      squareTarget: true,
       magnified: settings.game.magnified()
     }
   }
@@ -57,7 +57,7 @@ function make(
   onNewPiece: () => void
 ) {
   const config = makeConfig(data, sit)
-  config.movable.events = {
+  config.movable!.events = {
     after: userMove,
     afterNewPiece: userNewPiece
   }
@@ -73,7 +73,7 @@ function reload(ground: Chessground, data: OfflineGameData, sit: GameSituation) 
 }
 
 function changeOTBMode(ground: Chessground, flip: boolean) {
-  ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' })
+  ground.setOtbMode(flip ? 'flip' : 'facing')
 }
 
 function promote(ground: Chessground, key: Key, role: Role) {

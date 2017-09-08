@@ -9,9 +9,9 @@ function makeConfig(
   data: AnalysisData,
   config: cg.SetConfig,
   orientation: Color,
-  onMove: (orig: Key, dest: Key, capture: boolean) => void,
+  onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
   onNewPiece: (piece: Piece, pos: Key) => void
-): any {
+): cg.InitConfig {
   return {
     fen: config.fen,
     batchRAF: batchRequestAnimationFrame,
@@ -52,7 +52,7 @@ export default {
     data: AnalysisData,
     config: cg.SetConfig,
     orientation: Color,
-    onMove: (orig: Key, dest: Key, capture: boolean) => void,
+    onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
     onNewPiece: (piece: Piece, pos: Key) => void
   ) {
     return new Chessground(makeConfig(data, config, orientation, onMove, onNewPiece))

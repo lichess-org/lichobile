@@ -61,7 +61,6 @@ export interface State {
   draggable: {
     enabled: boolean // allow moves & premoves to use drag'n drop
     distance: number // minimum distance to initiate a drag; in pixels
-    squareTarget: boolean // display a shadow target under piece
     magnified: boolean // whether dragging piece is magnified
     centerPiece: boolean // when magnified, center the piece under finger (otherwise shifted up)
     preventDefault: boolean // whether to prevent default on move and end
@@ -132,7 +131,6 @@ export const defaults: Partial<State> = {
   draggable: {
     enabled: true,
     distance: 3,
-    squareTarget: true,
     magnified: true,
     centerPiece: false,
     preventDefault: true,

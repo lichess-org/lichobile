@@ -33,12 +33,10 @@ export interface OnlineGame extends Game {
   speed: Speed
   perf: PerfKey
   startedAtTurn: number
-  check?: string
   importedBy?: string
 }
 
 export interface OfflineGame extends Game {
-  check?: boolean
 }
 
 export interface Player {

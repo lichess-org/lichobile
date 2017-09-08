@@ -266,7 +266,6 @@ export default function ctrl(vnode) {
       },
       draggable: {
         distance: 3,
-        squareTarget: true,
         magnified: settings.game.magnified()
       }
     }

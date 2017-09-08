@@ -1,4 +1,5 @@
 import * as h from 'mithril/hyperscript'
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 import Chessground from '../../chessground/Chessground'
 import { uciToMove } from '../../utils/chessFormat'
 import settings from '../../settings'
@@ -18,6 +19,7 @@ export interface Attrs {
 }
 
 interface Config {
+  batchRAF: (c: () => void) => void
   fen: string
   orientation: Color
   viewOnly: boolean
@@ -88,6 +90,7 @@ export default ViewOnlyBoard
 
 function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
   const conf: Config = {
+    batchRAF: batchRequestAnimationFrame,
     viewOnly: true,
     minimalDom: true,
     coordinates: false,

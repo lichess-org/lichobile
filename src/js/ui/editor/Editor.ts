@@ -103,8 +103,7 @@ export default class Editor {
       orientation: 'white',
       movable: {
         free: true,
-        color: 'both',
-        dropOff: 'trash'
+        color: 'both'
       },
       highlight: {
         lastMove: false,
@@ -117,8 +116,6 @@ export default class Editor {
         enabled: false
       },
       draggable: {
-        autoDistance: false,
-        squareTarget: true,
         magnified: settings.game.magnified()
       },
       events: {
@@ -131,7 +128,7 @@ export default class Editor {
           this.updateHref()
         }
       }
-    } as any)
+    })
   }
 
   private updateHref = debounce(() => {

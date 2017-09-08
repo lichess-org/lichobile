@@ -8,6 +8,71 @@ export type Pieces = {[index: string]: Piece}
 
 export type PiecesDiff = {[index: string]: Piece | null}
 
+export interface InitConfig {
+  batchRAF: (callback: () => void) => void
+  fen?: string
+  orientation?: Color
+  turnColor?: Color
+  check?: Color | boolean
+  lastMove?: Key[] | null
+  selected?: Key
+  coordinates?: boolean
+  symmetricCoordinates?: boolean
+  autoCastle?: boolean
+  viewOnly?: boolean
+  otb?: boolean
+  otbMode?: OtbMode
+  highlight?: {
+    lastMove?: boolean
+    check?: boolean
+  }
+  animation?: {
+    enabled?: boolean
+    duration?: number
+  }
+  movable?: {
+    free?: boolean
+    color?: Color | 'both' | null
+    dests?: DestsMap
+    showDests?: boolean
+    events?: {
+      after?: (orig: Key, dest: Key, metadata: MoveMetadata) => void
+      afterNewPiece?: (role: Role, key: Key, metadata: MoveMetadata) => void
+    }
+  }
+  premovable?: {
+    enabled?: boolean
+    showDests?: boolean
+    castle?: boolean
+    dests?: Key[]
+    events?: {
+      set?: (orig: Key, dest: Key, metadata?: SetPremoveMetadata) => void
+      unset?: () => void
+    }
+  }
+  predroppable?: {
+    enabled?: boolean
+    events?: {
+      set?: (role: Role, key: Key) => void
+      unset?: () => void
+    }
+  }
+  draggable?: {
+    enabled?: boolean
+    distance?: number
+    centerPiece?: boolean
+    preventDefault?: boolean
+    magnified?: boolean
+    showGhost?: boolean
+    deleteOnDropOff?: boolean
+  }
+  events?: {
+    change?: () => void
+    move?: (orig: Key, dest: Key, capturedPiece?: Piece) => void
+    dropNewPiece?: (piece: Piece, key: Key) => void
+  }
+}
+
 export interface SetConfig {
   orientation?: Color
   fen?: string

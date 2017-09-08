@@ -346,8 +346,8 @@ export default class AnalyseCtrl {
     }
   }
 
-  private userMove = (orig: Key, dest: Key, capture: boolean) => {
-    if (capture) sound.capture()
+  private userMove = (orig: Key, dest: Key, captured?: Piece) => {
+    if (captured) sound.capture()
     else sound.move()
     if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
   }

@@ -90,6 +90,32 @@ export default class Chessground {
     return fen.write(this.state.pieces)
   }
 
+  getMaterialDiff(): cg.MaterialDiff {
+    const counts: { [role: string]: number } = {
+      king: 0,
+      queen: 0,
+      rook: 0,
+      bishop: 0,
+      knight: 0,
+      pawn: 0
+    }
+    const piecesKeys = Object.keys(this.state.pieces)
+    for (let i = 0; i < piecesKeys.length; i++) {
+      const p = this.state.pieces[piecesKeys[i]]
+      counts[p.role] += (p.color === 'white') ? 1 : -1
+    }
+    const diff: cg.MaterialDiff = {
+      white: {},
+      black: {}
+    }
+    for (let role in counts) {
+      const c = counts[role]
+      if (c > 0) diff.white[role] = c
+      else if (c < 0) diff.black[role] = -c
+    }
+    return diff
+  }
+
   set(config: cg.SetConfig): void {
     anim(state => setNewBoardState(state, config), this)
   }

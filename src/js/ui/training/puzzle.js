@@ -3,7 +3,6 @@ import * as keys from 'lodash/keys'
 import * as toPairs from 'lodash/toPairs'
 import * as head from 'lodash/head'
 import * as tail from 'lodash/tail'
-import chessground from '../../chessground'
 import { noNull } from '../../utils'
 import chess from './chess'
 
@@ -91,10 +90,10 @@ function makeHistory(data) {
   })
 }
 
-function jump(chessgroundData, data, to) {
+function jump(chessground, data, to) {
   data.replay.step = Math.max(0, Math.min(data.replay.history.length - 1, to))
   var state = data.replay.history[data.replay.step]
-  chessground.configure(chessgroundData, {
+  chessground.set({
     fen: state.fen,
     lastMove: state.move,
     check: state.check,
@@ -102,8 +101,8 @@ function jump(chessgroundData, data, to) {
   })
 }
 
-function reload(chessgroundData, data) {
-  chessground.configure(chessgroundData, {
+function reload(chessground, data) {
+  chessground.set({
     orientation: data.puzzle.color,
     fen: data.chess.fen(),
     turnColor: data.puzzle.opponentColor,
@@ -116,7 +115,7 @@ function reload(chessgroundData, data) {
       step: 0,
       history: makeHistory(data)
     }
-    jump(chessgroundData, data, data.progress.length)
+    jump(chessground, data, data.progress.length)
   }
 }
 

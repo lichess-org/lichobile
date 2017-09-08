@@ -1,6 +1,5 @@
 import * as h from 'mithril/hyperscript'
 import * as range from 'lodash/range'
-import chessground from '../../../../chessground'
 import socket from '../../../../socket'
 import session from '../../../../session'
 import variantApi from '../../../../lichess/variant'
@@ -130,7 +129,7 @@ function renderHeader(ctrl: OnlineRound) {
 }
 
 function renderContent(ctrl: OnlineRound, isPortrait: boolean) {
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.state)
+  const material = ctrl.chessground.getMaterialDiff()
   const player = renderPlayTable(ctrl, ctrl.data.player, material[ctrl.data.player.color], 'player', isPortrait)
   const opponent = renderPlayTable(ctrl, ctrl.data.opponent, material[ctrl.data.opponent.color], 'opponent', isPortrait)
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'game')

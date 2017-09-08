@@ -1,5 +1,4 @@
 import * as last from 'lodash/last'
-import chessground from '../../chessground'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
@@ -205,7 +204,7 @@ export default function ctrl(vnode) {
     const step = this.data.replay.step
     const state = this.data.replay.history[to]
     if (!(step !== to && to >= 0 && to < history.length)) return false
-    chessground.anim(puzzle.jump, this.chessground.state)(this.data, to)
+    puzzle.jump(this.chessground, this.data, to)
     if (step + 1 === to) {
       if (state.capture) sound.capture()
       else sound.move()
@@ -229,8 +228,8 @@ export default function ctrl(vnode) {
 
   this.reload = function(cfg) {
     this.data = makeData(cfg)
-    chessground.board.reset(this.chessground.state)
-    chessground.anim(puzzle.reload, this.chessground.state)(this.data, cfg)
+    this.chessground.stop()
+    puzzle.reload(this.chessground, this.data, cfg)
     setTimeout(this.playInitialMove, 1000)
   }.bind(this)
 

@@ -1,7 +1,6 @@
 import * as h from 'mithril/hyperscript'
 import router from '../../router'
 import * as utils from '../../utils'
-import chessground from '../../chessground'
 import i18n from '../../i18n'
 import Board from '../shared/Board'
 import { renderAntagonist, renderReplayTable, renderBackwardButton, renderForwardButton } from '../shared/offlineRound/view'
@@ -31,7 +30,7 @@ export function renderContent(ctrl: OtbRound, pieceTheme?: string) {
     'turn_white': ctrl.chessground.state.turnColor === 'white',
     'turn_black': ctrl.chessground.state.turnColor === 'black'
   })
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.state)
+  const material = ctrl.chessground.getMaterialDiff()
   const playerName = i18n(ctrl.data.player.color)
   const opponentName = i18n(ctrl.data.opponent.color)
   const replayTable = renderReplayTable(ctrl.replay)

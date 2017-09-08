@@ -18,6 +18,12 @@ export interface SetConfig {
   dests?: DestsMap
 }
 
+// {white: {pawn: 3 queen: 1}, black: {bishop: 2}}
+export interface MaterialDiff {
+  white: { [k: string]: number }
+  black: { [k: string]: number }
+}
+
 export interface DOM {
   board: HTMLElement // cg base element for the board
   elements: { [k: string]: HTMLElement } // other dom elements

@@ -343,34 +343,3 @@ export function getKeyAtDomPos(state: State, pos: NumberPair, bounds: ClientRect
   }
   return null
 }
-
-// {white: {pawn: 3 queen: 1}, black: {bishop: 2}}
-interface MaterialDiff {
-  white: { [k: string]: number }
-  black: { [k: string]: number }
-}
-export function getMaterialDiff(state: State): MaterialDiff {
-  const counts: { [role: string]: number } = {
-    king: 0,
-    queen: 0,
-    rook: 0,
-    bishop: 0,
-    knight: 0,
-    pawn: 0
-  }
-  const piecesKeys = Object.keys(state.pieces)
-  for (let i = 0; i < piecesKeys.length; i++) {
-    const p = state.pieces[piecesKeys[i]]
-    counts[p.role] += (p.color === 'white') ? 1 : -1
-  }
-  const diff: MaterialDiff = {
-    white: {},
-    black: {}
-  }
-  for (let role in counts) {
-    const c = counts[role]
-    if (c > 0) diff.white[role] = c
-    else if (c < 0) diff.black[role] = -c
-  }
-  return diff
-}

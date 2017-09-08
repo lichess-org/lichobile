@@ -1,4 +1,6 @@
 import * as cg from './interfaces'
+import { AnimCurrent } from './anim'
+import { DragCurrent } from './drag'
 
 export interface State {
   pieces: cg.Pieces
@@ -8,19 +10,23 @@ export interface State {
   lastMove: Key[] | null // squares part of the last move ["c3", "c4"]
   selected: Key | null // square currently selected "a1"
   coordinates: boolean // include coords attributes
+  symmetricCoordinates: boolean // symmetric coords for otb
   autoCastle: boolean // immediately complete the castle by moving the rook after king move
   viewOnly: boolean // don't bind events: the user will never be able to move pieces around
+  exploding: cg.Exploding | null
   otb: boolean // is this an otb game?
   otbMode: cg.OtbMode
-  domElements: { [k: string]: HTMLElement }
   highlight: {
     lastMove: boolean // add last-move class to squares
     check: boolean // add check class to squares
   }
+  initBounds: ClientRect | null // set bounds here for perf improvement since they won't
+                                // be computed on dom attach with getBoundingClientRect
+  batchRAF: (renderFunction: () => void) => void
   animation: {
     enabled: boolean
     duration: number
-    current: any | null // TODO AnimCurrent
+    current: AnimCurrent | null
   }
   movable: {
     free: boolean // all moves are valid - board editor
@@ -61,7 +67,7 @@ export interface State {
     preventDefault: boolean // whether to prevent default on move and end
     showGhost: boolean // show ghost of piece being dragged
     deleteOnDropOff: boolean // delete a piece when it is dropped off the board
-    current: any | null // TODO DragCurrent
+    current: DragCurrent | null
   }
   // selectable: {
   //   // disable to enforce dragging over click-click move
@@ -74,10 +80,10 @@ export interface State {
     move?: (orig: Key, dest: Key, capturedPiece?: Piece) => void
     dropNewPiece?: (piece: Piece, key: Key) => void
   }
-  exploding?: cg.Exploding
+  prev: cg.PrevData
 }
 
-export const defaults = {
+export const defaults: Partial<State> = {
   pieces: {},
   orientation: 'white' as Color,
   turnColor: 'white' as Color,
@@ -88,15 +94,11 @@ export const defaults = {
   symmetricCoordinates: false,
   otb: false,
   otbMode: 'facing' as cg.OtbMode,
-  batchRAF: requestAnimationFrame.bind(window),
-  render: null,
-  renderRAF: null,
-  element: null,
-  bounds: null,
-  domElements: {},
   autoCastle: false,
   viewOnly: false,
-  minimalDom: false,
+  exploding: null,
+  batchRAF: requestAnimationFrame.bind(window),
+  initBounds: null,
   highlight: {
     lastMove: true,
     check: true
@@ -104,13 +106,12 @@ export const defaults = {
   animation: {
     enabled: true,
     duration: 200,
-    current: {}
+    current: null
   },
   movable: {
     free: true,
     color: 'both' as Color | 'both',
     dests: null,
-    dropOff: 'revert',
     dropped: null,
     showDests: true,
     events: {}
@@ -139,5 +140,11 @@ export const defaults = {
     deleteOnDropOff: false,
     current: null
   },
-  events: {}
+  events: {},
+  prev: {
+    orientation: null,
+    bounds: null,
+    turnColor: null,
+    otbMode: null
+  }
 }

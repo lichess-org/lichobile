@@ -1,4 +1,6 @@
 import * as throttle from 'lodash/throttle'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
@@ -47,7 +49,7 @@ interface VM {
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string
   public data: OnlineGameData
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public clock: ClockCtrl | null
   public correspondenceClock: CorresClockCtrl
   public chat: Chat | null
@@ -248,7 +250,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     const isFwd = ply > this.vm.ply
     this.vm.ply = ply
     const s = this.plyStep(ply)
-    const config: Chessground.SetConfig = {
+    const config: cg.SetConfig = {
       fen: s.fen,
       lastMove: s.uci ? chessFormat.uciToMove(s.uci) : undefined,
       check: s.check,
@@ -432,7 +434,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       const castlePieces: {[index: string]: Piece | null} = {}
-      if (o.castle && !this.chessground.data.autoCastle) {
+      if (o.castle && !this.chessground.state.autoCastle) {
         const c = o.castle
         castlePieces[c.king[0]] = null
         castlePieces[c.rook[0]] = null
@@ -495,7 +497,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     gameApi.setOnGame(d, playedColor, true)
 
     if (!this.replaying() && playedColor !== d.player.color &&
-      (this.chessground.data.premovable.current || this.chessground.data.predroppable.current.key)) {
+      (this.chessground.state.premovable.current || this.chessground.state.predroppable.current)) {
       // atrocious hack to prevent race condition
       // with explosions and premoves
       // https://github.com/ornicar/lila/issues/343
@@ -668,7 +670,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private playPredrop() {
-    return this.chessground.playPredrop((drop: Chessground.Drop) => {
+    return this.chessground.playPredrop((drop: cg.Drop) => {
       return crazyValid.drop(this.data, drop.role, drop.key, this.data.possibleDrops)
     })
   }

@@ -1,29 +1,23 @@
 import * as merge from 'lodash/merge'
-import { State, defaults } from './data'
+import * as cg from './interfaces'
+import { State, defaults } from './state'
 import * as board from './board'
 import fen from './fen'
 
-type InitConfig = Partial<State> & { fen: string }
-
-export interface SetConfig {
-  orientation?: Color
+export type InitConfig = Partial<State> & {
   fen?: string
-  lastMove?: KeyPair
-  check?: boolean
-  turnColor?: Color
-  movableColor?: Color
-  dests?: DestsMap
 }
 
-export function initBoard(cfg: InitConfig): Partial<State> {
-  const defCopy = Object.assign({}, defaults)
+// TODO make sth more robust
+export function initBoard(cfg: InitConfig): State {
+  const defCopy = Object.assign({}, defaults) as State
 
   configureBoard(defCopy, cfg || {})
 
   return defCopy
 }
 
-export function configureBoard(state: State, config: InitConfig) {
+export function configureBoard(state: State, config: InitConfig): void {
 
   if (!config) return
 
@@ -45,7 +39,7 @@ export function configureBoard(state: State, config: InitConfig) {
     state.animation.enabled = false
 }
 
-export function setNewBoardState(d: State, config: SetConfig) {
+export function setNewBoardState(d: State, config: cg.SetConfig) {
   if (!config) return
 
   if (config.fen) {
@@ -60,6 +54,7 @@ export function setNewBoardState(d: State, config: SetConfig) {
     d.movable.color = config.movableColor
   }
 
+  if (config.check !== undefined) board.setCheck(d, config.check)
   if (config.orientation !== undefined) d.orientation = config.orientation
   if (config.turnColor !== undefined) d.turnColor = config.turnColor
   if (config.lastMove !== undefined) d.lastMove = config.lastMove

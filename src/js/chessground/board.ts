@@ -1,8 +1,7 @@
-import { State } from './data'
+import { State } from './state'
 import * as cg from './interfaces'
 import * as util from './util'
 import premove from './premove'
-import anim from './anim'
 
 export function toggleOrientation(state: State) {
   state.orientation = util.opposite(state.orientation)
@@ -15,24 +14,29 @@ export function reset(state: State) {
   unsetPredrop(state)
 }
 
-export function setPieces(state: State, pieces: cg.Pieces) {
-  Object.keys(pieces).forEach(function(key) {
-    if (pieces[key]) state.pieces[key] = pieces[key]
+export function setPieces(state: State, pieces: cg.PiecesDiff) {
+  for (let key in pieces) {
+    const piece = pieces[key]
+    if (piece) state.pieces[key] = piece
     else delete state.pieces[key]
-  })
+  }
 }
 
+// TODO fixme
 export function setDragPiece(state: State, key: Key, piece: Piece, dragOpts: any) {
   state.pieces[key] = piece
   state.draggable.current = dragOpts
-  state.draggable.current.piece = piece
+  if (state.draggable.current) state.draggable.current.piece = piece
 }
 
 export function setCheck(state: State, color: Color | boolean) {
   if (color === true) color = state.turnColor
-  Object.keys(state.pieces).forEach((key: Key) => {
-    if (state.pieces[key].color === color && state.pieces[key].role === 'king') state.check = key
-  })
+  if (!color) state.check = null
+  else for (let k in state.pieces) {
+    if (state.pieces[k].role === 'king' && state.pieces[k].color === color) {
+      state.check = k as Key
+    }
+  }
 }
 
 export function setPremove(state: State, orig: Key, dest: Key) {
@@ -137,14 +141,13 @@ export function baseNewPiece(state: State, piece: Piece, key: Key) {
 }
 
 export function baseUserMove(state: State, orig: Key, dest: Key) {
-  var result = anim(function() {
-    return baseMove(state, orig, dest)
-  }, state)()
+  const result = baseMove(state, orig, dest)
   if (result) {
-    state.movable.dests = {}
+    state.movable.dests = null
     state.turnColor = util.opposite(state.turnColor)
+    state.animation.current = null
   }
-  return result
+  return result;
 }
 
 export function apiMove(state: State, orig: Key, dest: Key) {
@@ -210,6 +213,11 @@ export function setSelected(state: State, key: Key | null) {
     state.premovable.dests = premove(state.pieces, key, state.premovable.castle)
   else
     state.premovable.dests = null
+}
+
+export function unselect(state: State): void {
+  state.selected = null
+  state.premovable.dests = null
 }
 
 export function isMovable(state: State, orig: Key) {

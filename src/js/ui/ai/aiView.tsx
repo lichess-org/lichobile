@@ -15,7 +15,7 @@ import AiRound from './AiRound'
 
 export function renderContent(ctrl: AiRound) {
 
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data)
+  const material = chessground.board.getMaterialDiff(ctrl.chessground.state)
   const isPortrait = helper.isPortrait()
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game')
   const replayTable = renderReplayTable(ctrl.replay)
@@ -32,7 +32,7 @@ export function renderContent(ctrl: AiRound) {
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
-    chessgroundCtrl: ctrl.chessground,
+    chessground: ctrl.chessground,
     bounds,
     isPortrait
   })

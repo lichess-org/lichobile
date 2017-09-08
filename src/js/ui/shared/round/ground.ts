@@ -1,4 +1,5 @@
-import chessground from '../../../chessground'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as gameApi from '../../../lichess/game'
@@ -8,6 +9,7 @@ import settings from '../../../settings'
 import { boardOrientation } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 
+// TODO remove any
 function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
   const lastStep = data.steps[data.steps.length - 1]
   const lastMove = data.game.lastMove ?
@@ -75,7 +77,7 @@ function make(
   userNewPiece: (role: Role, key: Key, meta: AfterMoveMeta) => void,
   onMove: (orig: Key, dest: Key, capturedPiece: Piece) => void,
   onNewPiece: () => void
-): Chessground.Controller {
+): Chessground {
   const config = makeConfig(data, fen)
   config.movable.events = {
     after: userMove,
@@ -86,16 +88,16 @@ function make(
     dropNewPiece: onNewPiece
   }
   config.viewOnly = data.player.spectator
-  return new chessground.controller(config)
+  return new Chessground(config)
 }
 
-function reload(ground: Chessground.Controller, data: OnlineGameData, fen: string, flip: boolean) {
+function reload(ground: Chessground, data: OnlineGameData, fen: string, flip: boolean) {
   ground.reconfigure(makeConfig(data, fen, flip))
 }
 
-function promote(ground: Chessground.Controller, key: Key, role: Role) {
-  const pieces: Chessground.Pieces = {}
-  const piece = ground.data.pieces[key]
+function promote(ground: Chessground, key: Key, role: Role) {
+  const pieces: cg.Pieces = {}
+  const piece = ground.state.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,

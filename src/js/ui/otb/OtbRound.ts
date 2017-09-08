@@ -1,5 +1,6 @@
 import sound from '../../sound'
 import router from '../../router'
+import Chessground from '../../chessground/Chessground'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import settings from '../../settings'
@@ -34,7 +35,7 @@ export default class OtbRound implements OtbRoundInterface, PromotingInterface {
   public actions: any
   public newGameMenu: NewOtbGameCtrl
   public importGamePopup: ImportGameController
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public replay: Replay
   public vm: OtbVM
 

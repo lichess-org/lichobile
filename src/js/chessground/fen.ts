@@ -60,7 +60,7 @@ export function read(fen: string): { [k: string]: Piece } {
   return pieces
 }
 
-function write(pieces: Chessground.Pieces) {
+function write(pieces: cg.Pieces) {
   return [8, 7, 6, 5, 4, 3, 2].reduce(
     function(str, nb) {
       return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb))

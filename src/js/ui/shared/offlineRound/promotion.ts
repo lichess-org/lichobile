@@ -1,4 +1,6 @@
 import redraw from '../../../utils/redraw'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import * as helper from '../../helper'
 import settings from '../../../settings'
 import * as h from 'mithril/hyperscript'
@@ -13,9 +15,9 @@ interface Promoting {
 
 let promoting: Promoting | null = null
 
-function promote(ground: Chessground.Controller, key: Key, role: Role) {
+function promote(ground: Chessground, key: Key, role: Role) {
   const pieces: {[k: string]: Piece } = {}
-  const piece = ground.data.pieces[key]
+  const piece = ground.state.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
@@ -25,11 +27,11 @@ function promote(ground: Chessground.Controller, key: Key, role: Role) {
   }
 }
 
-function start(chessground: Chessground.Controller, orig: Key, dest: Key, callback: PromoteCallback) {
-  const piece = chessground.data.pieces[dest]
+function start(chessground: Chessground, orig: Key, dest: Key, callback: PromoteCallback) {
+  const piece = chessground.state.pieces[dest]
   if (piece && piece.role === 'pawn' && (
-    (dest[1] === '1' && chessground.data.turnColor === 'white') ||
-    (dest[1] === '8' && chessground.data.turnColor === 'black'))) {
+    (dest[1] === '1' && chessground.state.turnColor === 'white') ||
+    (dest[1] === '8' && chessground.state.turnColor === 'black'))) {
     promoting = {
       orig: orig,
       dest: dest,
@@ -41,16 +43,16 @@ function start(chessground: Chessground.Controller, orig: Key, dest: Key, callba
   return false
 }
 
-function finish(ground: Chessground.Controller, role: Role) {
+function finish(ground: Chessground, role: Role) {
   if (promoting) promote(ground, promoting.dest, role)
   if (promoting && promoting.callback) promoting.callback(promoting.orig, promoting.dest, role)
   promoting = null
 }
 
-function cancel(chessground: Chessground.Controller, cgConfig?: Chessground.SetConfig) {
+function cancel(chessground: Chessground, cgConfig?: cg.SetConfig) {
   if (promoting) {
     promoting = null
-    chessground.set(cgConfig)
+    if (cgConfig) chessground.set(cgConfig)
     redraw()
   }
 }

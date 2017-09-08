@@ -8,6 +8,22 @@ export type Pieces = {[index: string]: Piece}
 
 export type PiecesDiff = {[index: string]: Piece | null}
 
+export interface SetConfig {
+  orientation?: Color
+  fen?: string
+  lastMove?: KeyPair
+  check?: Color | boolean
+  turnColor?: Color
+  movableColor?: Color
+  dests?: DestsMap
+}
+
+export interface DOM {
+  board: HTMLElement // cg base element for the board
+  elements: { [k: string]: HTMLElement } // other dom elements
+  bounds: ClientRect
+}
+
 export interface MoveMetadata {
   premove: boolean
   ctrlKey?: boolean
@@ -31,3 +47,22 @@ export interface Drop {
 }
 
 export type OtbMode = 'facing' | 'flip'
+
+export interface KeyedNode extends HTMLElement {
+  cgKey: Key
+}
+export interface PieceNode extends KeyedNode {
+  cgRole: Role
+  cgColor: Color
+  cgAnimating?: boolean
+  cgCaptured?: boolean
+  cgDragging?: boolean
+}
+export interface SquareNode extends KeyedNode { }
+
+export interface PrevData {
+  orientation: Color | null
+  bounds: ClientRect | null
+  turnColor: Color | null
+  otbMode: OtbMode | null
+}

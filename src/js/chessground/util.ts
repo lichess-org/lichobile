@@ -36,11 +36,11 @@ export function posToTranslate(pos: cg.Pos, asWhite: boolean, bounds: ClientRect
   ]
 }
 
-export function invertKey(k: Key) {
-  return files[8 - fileNumbers[k[0]]] + (9 - Number(k[1]))
+export function invertKey(k: Key): Key {
+  return (files[8 - fileNumbers[k[0]]] + (9 - Number(k[1]))) as Key
 }
 
-export const allPos: cg.Pos[] = (function() {
+export const allPos: cg.Pos[] = (() => {
   const ps: cg.Pos[] = []
   invRanks.forEach((y) => {
     ranks.forEach((x) => {
@@ -63,7 +63,7 @@ export function containsX(xs: any[], x: any) {
   return xs && xs.indexOf(x) !== -1
 }
 
-export function distance(pos1: cg.Pos, pos2: cg.Pos) {
+export function distance(pos1: NumberPair, pos2: NumberPair) {
   return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2))
 }
 
@@ -97,7 +97,7 @@ export function translate3d(coord: NumberPair) {
 export const translateAway = translate([-99999, -99999])
 export const translate3dAway = translate3d([-99999, -99999])
 
-export function eventPosition(e: TouchEvent) {
+export function eventPosition(e: TouchEvent): NumberPair {
   return [e.targetTouches[0].clientX, e.targetTouches[0].clientY]
 }
 
@@ -114,3 +114,13 @@ export function computeSquareBounds(orientation: Color, bounds: ClientRect, key:
     height: bounds.height / 8
   }
 }
+
+export function getPieceByKey(dom: cg.DOM, key: Key): cg.PieceNode | null {
+  let el = dom.board.firstChild as cg.KeyedNode
+  while (el) {
+    if (el.tagName === 'PIECE' && el.cgKey === key) return el as cg.PieceNode
+    el = el.nextSibling as cg.KeyedNode
+  }
+  return null
+}
+

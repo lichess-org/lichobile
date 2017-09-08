@@ -18,8 +18,6 @@ export interface Game {
   turns?: number
   lastMove?: string
   perf?: PerfKey
-  // FIXM
-  check?: string | boolean
   tournamentId?: string
   createdAt?: Timestamp
   boosted?: boolean

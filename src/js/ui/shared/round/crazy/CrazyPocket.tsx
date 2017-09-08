@@ -26,8 +26,8 @@ const CrazyPocket: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
     const { ctrl } = vnode.attrs
     const onstart = (e: TouchEvent) => crazyDrag(ctrl, e)
-    const onmove = (e: TouchEvent) => chessgroundDrag.move(ctrl.chessground.data, e)
-    const onend = (e: TouchEvent) => chessgroundDrag.end(ctrl.chessground.data, e)
+    const onmove = (e: TouchEvent) => chessgroundDrag.move(ctrl.chessground, e)
+    const onend = (e: TouchEvent) => chessgroundDrag.end(ctrl.chessground, e)
 
     this.pocketOnCreate = function({ dom }: Mithril.DOMNode) {
       dom.addEventListener('touchstart', onstart)

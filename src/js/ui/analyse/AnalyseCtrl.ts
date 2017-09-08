@@ -1,5 +1,6 @@
 import * as debounce from 'lodash/debounce'
 import router from '../../router'
+import Chessground from '../../chessground/Chessground'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import redraw from '../../utils/redraw'
@@ -47,7 +48,7 @@ export default class AnalyseCtrl {
   public evalSummary: MenuInterface | null
   public notes: NotesCtrl | null
 
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public ceval: CevalCtrlInterface
   public explorer: ExplorerCtrlInterface
   private debouncedExplorerSetStep: () => void
@@ -378,7 +379,7 @@ export default class AnalyseCtrl {
     const move = AnalyseCtrl.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
-        color: this.chessground.data.movable.color,
+        color: this.chessground.state.movable.color as Color,
         role: sanToRole[uci[0]]
       }, move[1])
     } else if (!move[2]) {

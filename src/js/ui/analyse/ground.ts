@@ -1,4 +1,5 @@
-import chessground from '../../chessground'
+import Chessground from '../../chessground/Chessground'
+import * as cg from '../../chessground/interfaces'
 import settings from '../../settings'
 import { batchRequestAnimationFrame } from '../../utils/batchRAF'
 
@@ -6,11 +7,11 @@ import { AnalysisData } from './interfaces'
 
 function makeConfig(
   data: AnalysisData,
-  config: Chessground.SetConfig,
+  config: cg.SetConfig,
   orientation: Color,
   onMove: (orig: Key, dest: Key, capture: boolean) => void,
   onNewPiece: (piece: Piece, pos: Key) => void
-) {
+): any {
   return {
     fen: config.fen,
     batchRAF: batchRequestAnimationFrame,
@@ -49,17 +50,17 @@ function makeConfig(
 export default {
   make(
     data: AnalysisData,
-    config: Chessground.SetConfig,
+    config: cg.SetConfig,
     orientation: Color,
     onMove: (orig: Key, dest: Key, capture: boolean) => void,
     onNewPiece: (piece: Piece, pos: Key) => void
   ) {
-    return new chessground.controller(makeConfig(data, config, orientation, onMove, onNewPiece))
+    return new Chessground(makeConfig(data, config, orientation, onMove, onNewPiece))
   },
 
-  promote(ground: Chessground.Controller, key: Key, role: Role) {
+  promote(ground: Chessground, key: Key, role: Role) {
     const pieces: {[i: string]: Piece } = {}
-    const piece = ground.data.pieces[key]
+    const piece = ground.state.pieces[key]
     if (piece && piece.role === 'pawn') {
       pieces[key] = {
         color: piece.color,

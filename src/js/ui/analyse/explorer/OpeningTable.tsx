@@ -91,7 +91,7 @@ function showResult(w: Color) {
 }
 
 function link(ctrl: AnalyseCtrl, e: Event) {
-  const orientation = ctrl.chessground.data.orientation
+  const orientation = ctrl.chessground.state.orientation
   const el = getTR(e)
   const gameId = el && el.dataset['id']
   if (gameId && ctrl.explorer.config.data.db.selected() === 'lichess') {

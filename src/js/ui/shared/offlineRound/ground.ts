@@ -1,4 +1,4 @@
-import chessground from '../../../chessground'
+import Chessground from '../../../chessground/Chessground'
 import * as gameApi from '../../../lichess/game'
 import settings from '../../../settings'
 import { OfflineGameData } from '../../../lichess/interfaces/game'
@@ -65,20 +65,20 @@ function make(
     move: onMove,
     dropNewPiece: onNewPiece
   }
-  return new chessground.controller(config)
+  return new Chessground(config)
 }
 
-function reload(ground: Chessground.Controller, data: OfflineGameData, sit: GameSituation) {
+function reload(ground: Chessground, data: OfflineGameData, sit: GameSituation) {
   ground.reconfigure(makeConfig(data, sit))
 }
 
-function changeOTBMode(ground: Chessground.Controller, flip: boolean) {
+function changeOTBMode(ground: Chessground, flip: boolean) {
   ground.reconfigure({ otbMode: flip ? 'flip' : 'facing' })
 }
 
-function promote(ground: Chessground.Controller, key: Key, role: Role) {
+function promote(ground: Chessground, key: Key, role: Role) {
   const pieces: {[k: string]: Piece } = {}
-  const piece = ground.data.pieces[key]
+  const piece = ground.state.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,
@@ -88,7 +88,7 @@ function promote(ground: Chessground.Controller, key: Key, role: Role) {
   }
 }
 
-function end(ground: Chessground.Controller) {
+function end(ground: Chessground) {
   ground.stop()
 }
 

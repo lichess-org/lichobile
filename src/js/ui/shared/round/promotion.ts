@@ -8,7 +8,7 @@ import { OnlineRoundInterface } from '.'
 let promoting: KeyPair | null = null
 
 function start(ctrl: OnlineRoundInterface, orig: Key, dest: Key, isPremove: boolean) {
-  const piece = ctrl.chessground.data.pieces[dest]
+  const piece = ctrl.chessground.state.pieces[dest]
   if (piece && piece.role === 'pawn' && (
     (dest[1] === '8' && ctrl.data.player.color === 'white') ||
     (dest[1] === '1' && ctrl.data.player.color === 'black'))) {

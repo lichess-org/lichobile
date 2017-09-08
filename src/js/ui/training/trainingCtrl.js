@@ -159,7 +159,7 @@ export default function ctrl(vnode) {
   }.bind(this)
 
   this.playOpponentMove = function(move) {
-    onMove(move[0], move[1], this.chessground.data.pieces[move[1]])
+    onMove(move[0], move[1], this.chessground.state.pieces[move[1]])
     chess.move(this.data.chess, move)
     this.data.playHistory.push({
       move,
@@ -176,7 +176,7 @@ export default function ctrl(vnode) {
       check: null
     })
     if (this.data.chess.in_check()) this.chessground.setCheck()
-    setTimeout(this.chessground.playPremove, this.chessground.data.animation.duration)
+    setTimeout(this.chessground.playPremove, this.chessground.state.animation.duration)
     redraw()
   }.bind(this)
 
@@ -205,7 +205,7 @@ export default function ctrl(vnode) {
     const step = this.data.replay.step
     const state = this.data.replay.history[to]
     if (!(step !== to && to >= 0 && to < history.length)) return false
-    chessground.anim(puzzle.jump, this.chessground.data)(this.data, to)
+    chessground.anim(puzzle.jump, this.chessground.state)(this.data, to)
     if (step + 1 === to) {
       if (state.capture) sound.capture()
       else sound.move()
@@ -229,8 +229,8 @@ export default function ctrl(vnode) {
 
   this.reload = function(cfg) {
     this.data = makeData(cfg)
-    chessground.board.reset(this.chessground.data)
-    chessground.anim(puzzle.reload, this.chessground.data)(this.data, cfg)
+    chessground.board.reset(this.chessground.state)
+    chessground.anim(puzzle.reload, this.chessground.state)(this.data, cfg)
     setTimeout(this.playInitialMove, 1000)
   }.bind(this)
 

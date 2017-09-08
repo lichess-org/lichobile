@@ -1,108 +1,49 @@
-import * as Vnode from 'mithril/render/vnode'
-import drag from './drag'
+import * as cg from './interfaces'
+import { State } from './state'
 import * as util from './util'
 
-export default function renderBoard(ctrl) {
-  return Vnode(
-    'div',
-    undefined,
-    {
-      className: [
-        'cg-board',
-        ctrl.data.viewOnly ? 'view-only' : 'manipulable'
-      ].join(' '),
-      oncreate: function(vnode) {
-        ctrl.data.element = vnode.dom
-        ctrl.data.render = function() {
-          diffBoard(ctrl)
-        }
-        ctrl.data.renderRAF = function() {
-          ctrl.data.batchRAF(ctrl.data.render)
-        }
-
-        if (!ctrl.data.bounds) {
-          ctrl.data.bounds = vnode.dom.getBoundingClientRect()
-        }
-
-        ctrl.data.render()
-
-        if (!ctrl.data.viewOnly) {
-          bindEvents(ctrl, vnode.dom)
-        }
-
-        if (!ctrl.data.viewOnly) {
-          const shadow = document.createElement('div')
-          shadow.className = 'cg-square-target'
-          shadow.style.transform = util.translate3dAway
-          ctrl.data.element.parentNode.appendChild(shadow)
-          ctrl.data.domElements.shadow = shadow
-        }
-
-        if (!ctrl.data.viewOnly && ctrl.data.draggable.showGhost) {
-          const ghost = document.createElement('piece')
-          ghost.className = 'ghost'
-          ghost.style.transform = util.translateAway
-          ctrl.data.element.parentNode.appendChild(ghost)
-          ctrl.data.domElements.ghost = ghost
-        }
-
-        if (ctrl.data.coordinates) {
-          makeCoords(ctrl.data.element.parentNode, !!ctrl.data.symmetricCoordinates)
-          if (ctrl.data.symmetricCoordinates) {
-            makeSymmCoords(ctrl.data.element.parentNode)
-          }
-        }
-      }
-    },
-    [],
-    undefined,
-    undefined
-  )
-}
-
-function diffBoard(ctrl) {
-  const d = ctrl.data
-  const boardElement = d.element
+export function renderBoard(d: State, dom: cg.DOM) {
+  const boardElement = dom.board
   const asWhite = d.orientation === 'white'
-  const orientationChange = d.prevOrientation && d.prevOrientation !== d.orientation
-  d.prevOrientation = d.orientation
-  const boundsChange = d.prevBounds && d.prevBounds !== d.bounds
-  d.prevBounds = d.bounds
+  const orientationChange = d.prev.orientation && d.prev.orientation !== d.orientation
+  d.prev.orientation = d.orientation
+  const boundsChange = d.prev.bounds && d.prev.bounds !== dom.bounds
+  d.prev.bounds = dom.bounds
   const allChange = boundsChange || orientationChange
-  const bounds = d.bounds
-  const pieces = ctrl.data.pieces
-  const anims = ctrl.data.animation.current.anims
-  const capturedPieces = ctrl.data.animation.current.capturedPieces
-  const squares = computeSquareClassesMap(ctrl)
-  const samePieces = new Set()
-  const sameSquares = new Set()
-  const movedPieces = new Map()
-  const movedSquares = new Map()
-  const piecesKeys = Object.keys(pieces)
-  let el, squareClassAtKey, pieceAtKey, pieceClass, anim, captured, translate
+  const bounds = dom.bounds
+  const pieces = d.pieces
+  const anims = d.animation.current && d.animation.current.plan.anims
+  const capturedPieces = d.animation.current && d.animation.current.plan.captured
+  const squares: Map<Key, string> = computeSquareClasses(d)
+  const samePieces: Set<Key> = new Set()
+  const sameSquares: Set<Key> = new Set()
+  const movedPieces: Map<string, cg.PieceNode[]> = new Map()
+  const movedSquares: Map<string, cg.SquareNode[]> = new Map()
+  const piecesKeys = Object.keys(pieces) as Array<Key>
+  let squareClassAtKey, pieceAtKey, anim, captured, translate
   let mvdset, mvd
 
   let otbTurnFlipChange, otbModeChange, otbChange = false
   if (d.otb) {
-    otbTurnFlipChange = d.prevTurnColor && d.prevTurnColor !== d.turnColor
-    otbModeChange = d.prevOtbMode && d.prevOtbMode !== d.otbMode
-    d.prevOtbMode = d.otbMode
-    d.prevTurnColor = d.turnColor
-    otbChange = otbTurnFlipChange || otbModeChange
+    otbTurnFlipChange = d.prev.turnColor && d.prev.turnColor !== d.turnColor
+    otbModeChange = d.prev.otbMode && d.prev.otbMode !== d.otbMode
+    d.prev.otbMode = d.otbMode
+    d.prev.turnColor = d.turnColor
+    otbChange = !!(otbTurnFlipChange || otbModeChange)
   }
 
   // walk over all board dom elements, apply animations and flag moved pieces
-  el = ctrl.data.element.firstChild
+  let el = dom.board.firstChild as cg.KeyedNode
   while (el) {
     let k = el.cgKey
     pieceAtKey = pieces[k]
     squareClassAtKey = squares.get(k)
-    pieceClass = el.cgRole + el.cgColor
     anim = anims && anims[k]
     captured = capturedPieces && capturedPieces[k]
-    if (el.tagName === 'PIECE') {
+    if (isPieceNode(el)) {
+      const pieceClass = el.cgRole + el.cgColor
       // if piece not being dragged anymore, remove dragging style
-      if (el.cgDragging && d.draggable.current.orig !== k) {
+      if (el.cgDragging && (!d.draggable.current || d.draggable.current.orig !== k)) {
         el.classList.remove('dragging')
         el.classList.remove('magnified')
         translate = util.posToTranslate(util.key2pos(k), asWhite, bounds)
@@ -147,7 +88,7 @@ function diffBoard(ctrl) {
         movedPieces.set(pieceClass, (movedPieces.get(pieceClass) || []).concat(el))
       }
     }
-    else if (el.tagName === 'SQUARE') {
+    else if (isSquareNode(el)) {
       if (!allChange && squareClassAtKey === el.className) {
         sameSquares.add(k)
       }
@@ -158,15 +99,15 @@ function diffBoard(ctrl) {
         )
       }
     }
-    el = el.nextSibling
+    el = el.nextSibling as cg.KeyedNode
   }
 
   // walk over all pieces in current set, apply dom changes to moved pieces
   // or append new pieces
   for (let j = 0, jlen = piecesKeys.length; j < jlen; j++) {
-    let k = piecesKeys[j]
+    let k = piecesKeys[j] as Key
     let p = pieces[k]
-    pieceClass = p.role + p.color
+    const pieceClass = p.role + p.color
     anim = anims && anims[k]
     if (!samePieces.has(k)) {
       mvdset = movedPieces.get(pieceClass)
@@ -185,7 +126,7 @@ function diffBoard(ctrl) {
       }
       // no piece in moved obj: insert the new piece
       else {
-        const pe = document.createElement('piece')
+        const pe = document.createElement('piece') as cg.PieceNode
         pe.className = pieceClassOf(p)
         pe.cgRole = p.role
         pe.cgColor = p.color
@@ -196,7 +137,7 @@ function diffBoard(ctrl) {
           translate[0] += anim[1][0]
           translate[1] += anim[1][1]
         }
-        pe.style.transform = util.transform(d, pe.color, util.translate(translate))
+        pe.style.transform = util.transform(d, p.color, util.translate(translate))
         boardElement.appendChild(pe)
       }
     }
@@ -204,9 +145,9 @@ function diffBoard(ctrl) {
 
   // walk over all squares in current set, apply dom changes to moved squares
   // or append new squares
-  squares.forEach((v, k) => {
+  squares.forEach((k: Key, squareClass: string) => {
     if (!sameSquares.has(k)) {
-      mvdset = movedSquares.get(v)
+      mvdset = movedSquares.get(squareClass)
       mvd = mvdset && mvdset.pop()
       if (mvd) {
         mvd.cgKey = k
@@ -214,8 +155,8 @@ function diffBoard(ctrl) {
         mvd.style.transform = util.translate(translate)
       }
       else {
-        const se = document.createElement('square')
-        se.className = v
+        const se = document.createElement('square') as cg.SquareNode
+        se.className = squareClass
         se.cgKey = k
         se.style.transform = util.translate(util.posToTranslate(util.key2pos(k), asWhite, bounds))
         boardElement.appendChild(se)
@@ -224,21 +165,41 @@ function diffBoard(ctrl) {
   })
 
   // remove any dom el that remains in the moved sets
-  const rmEl = e => boardElement.removeChild(e)
+  const rmEl = (e: HTMLElement) => boardElement.removeChild(e)
   movedPieces.forEach(els => els.forEach(rmEl))
   movedSquares.forEach(els => els.forEach(rmEl))
 }
 
-function pieceClassOf(p) {
+export function makeCoords(el: HTMLElement, withSymm: boolean) {
+  const coords = document.createDocumentFragment()
+  coords.appendChild(renderCoords(util.ranks, 'ranks'))
+  coords.appendChild(renderCoords(util.files, 'files' + (withSymm ? ' withSymm' : '')))
+  el.appendChild(coords)
+}
+
+export function makeSymmCoords(el: HTMLElement) {
+  const coords = document.createDocumentFragment()
+  coords.appendChild(renderCoords(util.invRanks, 'ranks symm'))
+  coords.appendChild(renderCoords(util.invFiles, 'files symm'))
+  el.appendChild(coords)
+}
+
+function isPieceNode(el: cg.PieceNode | cg.SquareNode): el is cg.PieceNode {
+  return el.tagName === 'PIECE'
+}
+function isSquareNode(el: cg.PieceNode | cg.SquareNode): el is cg.SquareNode {
+  return el.tagName === 'SQUARE'
+}
+
+function pieceClassOf(p: Piece) {
   return p.role + ' ' + p.color
 }
 
-function addSquare(squares, key, klass) {
+function addSquare(squares: Map<Key, string>, key: Key, klass: string) {
   squares.set(key, (squares.get(key) || '') + ' ' + klass)
 }
 
-function computeSquareClassesMap(ctrl) {
-  const d = ctrl.data
+function computeSquareClasses(d: State): Map<Key, string> {
   const squares = new Map()
   if (d.lastMove && d.highlight.lastMove) d.lastMove.forEach((k) => {
     if (k) addSquare(squares, k, 'last-move')
@@ -246,7 +207,7 @@ function computeSquareClassesMap(ctrl) {
   if (d.check && d.highlight.check) addSquare(squares, d.check, 'check')
   if (d.selected) {
     addSquare(squares, d.selected, 'selected')
-    const dests = d.movable.dests[d.selected]
+    const dests = d.movable.dests && d.movable.dests[d.selected]
     if (dests) dests.forEach((k) => {
       if (d.movable.showDests) addSquare(squares, k, 'move-dest' + (d.pieces[k] ? ' occupied' : ''))
     })
@@ -260,45 +221,20 @@ function computeSquareClassesMap(ctrl) {
     addSquare(squares, k, 'current-premove')
   })
 
-  if (ctrl.vm.exploding) ctrl.vm.exploding.keys.forEach((k) => {
-    addSquare(squares, k, 'exploding' + ctrl.vm.exploding.stage)
+  if (d.exploding) d.exploding.keys.forEach((k) => {
+    addSquare(squares, k, 'exploding' + d.exploding!.stage)
   })
   return squares
 }
 
-function bindEvents(ctrl, el) {
-  var onstart = drag.start.bind(undefined, ctrl.data)
-  var onmove = drag.move.bind(undefined, ctrl.data)
-  var onend = drag.end.bind(undefined, ctrl.data)
-  var oncancel = drag.cancel.bind(undefined, ctrl.data)
-  el.addEventListener('touchstart', onstart)
-  el.addEventListener('touchmove', onmove)
-  el.addEventListener('touchend', onend)
-  el.addEventListener('touchcancel', oncancel)
-}
-
-function renderCoords(elems, klass) {
+function renderCoords(elems: Array<number | string>, klass: string) {
   const el = document.createElement('li-coords')
   el.className = klass
-  elems.forEach(function(content, i) {
+  elems.forEach((content: number | string, i: number) => {
     const f = document.createElement('li-coord')
     f.className = i % 2 === 0 ? 'coord-odd' : 'coord-even'
-    f.textContent = content
+    f.textContent = String(content)
     el.appendChild(f)
   })
   return el
-}
-
-function makeCoords(el, withSymm) {
-  const coords = document.createDocumentFragment()
-  coords.appendChild(renderCoords(util.ranks, 'ranks'))
-  coords.appendChild(renderCoords(util.files, 'files' + (withSymm ? ' withSymm' : '')))
-  el.appendChild(coords)
-}
-
-function makeSymmCoords(el) {
-  const coords = document.createDocumentFragment()
-  coords.appendChild(renderCoords(util.invRanks, 'ranks symm'))
-  coords.appendChild(renderCoords(util.invFiles, 'files symm'))
-  el.appendChild(coords)
 }

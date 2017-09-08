@@ -1,5 +1,5 @@
 import * as h from 'mithril/hyperscript'
-import chessground from '../../chessground'
+import Chessground from '../../chessground/Chessground'
 import { uciToMove } from '../../utils/chessFormat'
 import settings from '../../settings'
 
@@ -28,21 +28,20 @@ interface Config {
 }
 
 interface State {
-  ground: Chessground.Controller
+  ground: Chessground
   pieceTheme: string
   boardTheme: string
 }
 
 const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
-    const config = makeConfig(attrs)
     this.pieceTheme = settings.general.theme.piece()
     this.boardTheme = settings.general.theme.board()
-    this.ground = new chessground.controller(config)
+    this.ground = new Chessground(makeConfig(attrs))
   },
 
   oncreate({ dom }) {
-    chessground.render(dom, this.ground)
+    this.ground.attach(dom as HTMLElement)
   },
 
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
@@ -63,7 +62,8 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
       ...attrs,
       lastMove: attrs.lastMove ? uciToMove(attrs.lastMove) : undefined
     }
-    if (attrs.bounds) this.ground.setBounds(attrs.bounds)
+    // view only board care only about width and height
+    if (attrs.bounds) this.ground.setBounds(attrs.bounds as ClientRect)
     this.ground.set(conf)
   },
 

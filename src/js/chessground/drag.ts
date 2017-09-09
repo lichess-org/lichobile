@@ -214,12 +214,12 @@ function end(ctrl: Chessground, e: TouchEvent) {
     else {
       board.userMove(state, cur.orig, dest)
     }
-    ctrl.redraw()
-  } else if (cur.previouslySelected === cur.orig) {
+  }
+  else if (cur.previouslySelected === cur.orig) {
     board.setSelected(state, null)
-    ctrl.redraw()
   }
   state.draggable.current = null
+  ctrl.redraw()
 }
 
 function cancel(ctrl: Chessground) {

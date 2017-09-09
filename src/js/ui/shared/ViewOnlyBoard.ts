@@ -25,7 +25,7 @@ interface Config {
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
-  lastMove?: [Key, Key]
+  lastMove: KeyPair | null
   bounds?: Bounds
 }
 
@@ -95,7 +95,7 @@ function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
     minimalDom: true,
     coordinates: false,
     fen,
-    lastMove: lastMove ? uciToMove(lastMove) : undefined,
+    lastMove: lastMove ? uciToMove(lastMove) : null,
     orientation: orientation || 'white',
     bounds
   }

@@ -14,7 +14,7 @@ export interface InitConfig {
   orientation?: Color
   turnColor?: Color
   check?: Color | boolean
-  lastMove?: Key[] | null
+  lastMove?: KeyPair | null
   selected?: Key
   coordinates?: boolean
   symmetricCoordinates?: boolean

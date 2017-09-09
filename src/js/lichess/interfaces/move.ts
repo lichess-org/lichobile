@@ -27,6 +27,7 @@ export interface MoveOrDrop {
   clock?: {
     white: number
     black: number
+    lag?: number
   }
   promotion?: {
     key: Pos

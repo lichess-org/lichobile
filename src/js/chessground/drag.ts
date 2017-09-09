@@ -71,7 +71,7 @@ function start(ctrl: Chessground, e: TouchEvent) {
         position[1] - (squareBounds.top + squareBounds.height / 2)
       ],
       started: false,
-      over: null,
+      over: orig,
       prevOver: null,
       draggingPiece: util.getPieceByKey(dom, orig),
       originTarget: e.target,
@@ -203,21 +203,23 @@ function end(ctrl: Chessground, e: TouchEvent) {
   removeDragElements(dom)
   board.unsetPremove(state)
   board.unsetPredrop(state)
-  if (dest && cur.started) {
+  if (cur.started && dest) {
     if (cur.newPiece) {
       board.dropNewPiece(state, cur.orig, dest)
-    }
-    else if (draggable.deleteOnDropOff) {
-      delete state.pieces[cur.orig]
-      setTimeout(state.events.change, 0)
     }
     else {
       board.userMove(state, cur.orig, dest)
     }
   }
-  else if (cur.previouslySelected === cur.orig) {
-    board.setSelected(state, null)
+  else if (cur.started && draggable.deleteOnDropOff) {
+    delete state.pieces[cur.orig]
+    setTimeout(state.events.change, 0)
   }
+
+  if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
+    board.unselect(state)
+  }
+
   state.draggable.current = null
   ctrl.redraw()
 }

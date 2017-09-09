@@ -38,6 +38,7 @@ export default function(ctrl: Editor, e: TouchEvent) {
       [-squareBounds.width / 2, -squareBounds.height / 2],
     started: true,
     showGhost: false,
+    newPiece: true,
     originTarget: e.target
   }
   ctrl.chessground.setDragPiece(key, piece, dragOpts)

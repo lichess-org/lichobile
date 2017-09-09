@@ -52,6 +52,7 @@ export default function(ctrl: BoardInterface, e: TouchEvent) {
     origPos: cgUtil.key2pos(key),
     originTarget: e.target,
     started: true,
+    showGhost: false,
     newPiece: true
   }
   ctrl.chessground.setDragPiece(key, piece, dragOpts)

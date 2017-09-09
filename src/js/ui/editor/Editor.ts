@@ -116,7 +116,8 @@ export default class Editor {
         enabled: false
       },
       draggable: {
-        magnified: settings.game.magnified()
+        magnified: settings.game.magnified(),
+        deleteOnDropOff: true
       },
       events: {
         change: () => {

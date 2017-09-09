@@ -524,6 +524,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     this.makeCorrespondenceClock()
     if (this.clock && this.data.clock) this.clock.update(this.data.clock.white, this.data.clock.black)
+    this.lastMoveMillis = undefined
     this.setTitle()
     if (!this.replaying()) ground.reload(this.chessground, this.data, rCfg.game.fen, this.vm.flip)
     redraw()
@@ -617,7 +618,7 @@ export default class OnlineRound implements OnlineRoundInterface {
 
     const opts = {
       ackable: true,
-      withLag: !!this.clock && (millis === undefined),
+      withLag: !!this.clock && (millis === undefined || !this.isClockRunning()),
       millis
     }
 

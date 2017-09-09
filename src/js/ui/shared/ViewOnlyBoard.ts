@@ -70,7 +70,7 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
   },
 
   onremove() {
-    this.ground.unload()
+    this.ground.detach()
   },
 
   view({ attrs }) {

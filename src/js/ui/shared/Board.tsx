@@ -35,7 +35,7 @@ const Board: Mithril.Component<Attrs, State> = {
     }
 
     this.boardOnRemove = () => {
-      if (chessground) chessground.unload()
+      if (chessground) chessground.detach()
     }
 
     this.pieceTheme = settings.general.theme.piece()

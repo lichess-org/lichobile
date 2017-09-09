@@ -82,67 +82,69 @@ export interface State {
   prev: cg.PrevData
 }
 
-export const defaults: Partial<State> = {
-  pieces: {},
-  orientation: 'white' as Color,
-  turnColor: 'white' as Color,
-  check: null,
-  lastMove: null,
-  selected: null,
-  coordinates: true,
-  symmetricCoordinates: false,
-  otb: false,
-  otbMode: 'facing' as cg.OtbMode,
-  autoCastle: false,
-  viewOnly: false,
-  exploding: null,
-  batchRAF: requestAnimationFrame.bind(window),
-  initBounds: null,
-  highlight: {
-    lastMove: true,
-    check: true
-  },
-  animation: {
-    enabled: true,
-    duration: 200,
-    current: null
-  },
-  movable: {
-    free: true,
-    color: 'both' as Color | 'both',
-    dests: null,
-    dropped: null,
-    showDests: true,
-    events: {}
-  },
-  premovable: {
-    enabled: true,
-    showDests: true,
-    castle: true,
-    dests: null,
-    current: null,
-    events: {}
-  },
-  predroppable: {
-    enabled: false,
-    current: null,
-    events: {}
-  },
-  draggable: {
-    enabled: true,
-    distance: 3,
-    magnified: true,
-    centerPiece: false,
+export function makeDefaults(): State {
+  return {
+    pieces: {},
+    orientation: 'white' as Color,
+    turnColor: 'white' as Color,
+    check: null,
+    lastMove: null,
+    selected: null,
+    coordinates: true,
+    symmetricCoordinates: false,
+    otb: false,
+    otbMode: 'facing' as cg.OtbMode,
+    autoCastle: false,
+    viewOnly: false,
+    exploding: null,
+    batchRAF: requestAnimationFrame.bind(window),
+    initBounds: null,
+    highlight: {
+      lastMove: true,
+      check: true
+    },
+    animation: {
+      enabled: true,
+      duration: 200,
+      current: null
+    },
+    movable: {
+      free: true,
+      color: 'both' as Color | 'both',
+      dests: null,
+      dropped: null,
+      showDests: true,
+      events: {}
+    },
+    premovable: {
+      enabled: true,
+      showDests: true,
+      castle: true,
+      dests: null,
+      current: null,
+      events: {}
+    },
+    predroppable: {
+      enabled: false,
+      current: null,
+      events: {}
+    },
+    draggable: {
+      enabled: true,
+      distance: 3,
+      magnified: true,
+      centerPiece: false,
     preventDefault: true,
-    showGhost: true,
-    deleteOnDropOff: false,
-    current: null
-  },
-  events: {},
-  prev: {
-    orientation: null,
-    bounds: null,
-    turnColor: null,
-    otbMode: null
+      showGhost: true,
+      deleteOnDropOff: false,
+      current: null
+    },
+    events: {},
+    prev: {
+      orientation: null,
+      bounds: null,
+      turnColor: null,
+      otbMode: null
+    }
   }
 }

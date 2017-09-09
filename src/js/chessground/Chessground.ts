@@ -67,7 +67,7 @@ export default class Chessground {
     window.addEventListener('resize', this.onresize)
   }
 
-  unload = () => {
+  detach = () => {
     window.removeEventListener('resize', onresize)
   }
 

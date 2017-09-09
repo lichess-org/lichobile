@@ -1,15 +1,15 @@
 import * as merge from 'lodash/merge'
 import * as cg from './interfaces'
-import { State, defaults } from './state'
+import { State, makeDefaults } from './state'
 import * as board from './board'
 import fen from './fen'
 
 export function initBoard(cfg: cg.InitConfig): State {
-  const defCopy = Object.assign({}, defaults) as State
+  const defaults = makeDefaults()
 
-  configureBoard(defCopy, cfg || {})
+  configureBoard(defaults, cfg || {})
 
-  return defCopy
+  return defaults
 }
 
 export function configureBoard(state: State, config: cg.InitConfig): void {
@@ -36,7 +36,7 @@ export function configureBoard(state: State, config: cg.InitConfig): void {
     state.animation.enabled = false
 }
 
-export function setNewBoardState(d: State, config: cg.SetConfig) {
+export function setNewBoardState(d: State, config: cg.SetConfig): void {
   if (!config) return
 
   if (config.fen) {

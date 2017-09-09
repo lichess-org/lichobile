@@ -15,13 +15,13 @@ export interface DragCurrent {
   over: Key | null // square being moused over
   prevOver: Key | null// square previously moused over
   started: boolean // whether the drag has started; as per the distance setting
-  draggingPiece: cg.PieceNode | null
+  element: cg.PieceNode | null
   showGhost: boolean // whether to show ghost when dragging
+  originTarget: EventTarget,
+  previouslySelected: Key | null
   newPiece?: boolean // it it a new piece from outside the board
   force?: boolean // can the new piece replace an existing one (editor)
-  previouslySelected: Key | null
-  originTarget: EventTarget,
-  scheduledAnimationFrame: boolean
+  scheduledAnimationFrame?: boolean
 }
 
 function removeDragElements(dom: cg.DOM) {
@@ -31,6 +31,50 @@ function removeDragElements(dom: cg.DOM) {
   if (dom.elements.ghost) {
     dom.elements.ghost.style.transform = util.translateAway
   }
+}
+
+function dragNewPiece(ctrl: Chessground, piece: Piece, e: TouchEvent, force?: boolean): void {
+
+  const key: Key = 'a0'
+  const s = ctrl.state
+  const dom = ctrl.dom!
+
+  s.pieces[key] = piece
+
+  // we need the new piece to be in DOM immediately
+  ctrl.redrawSync()
+
+  const position = util.eventPosition(e) as NumberPair
+  const asWhite = s.orientation === 'white'
+  const bounds = dom.bounds
+  const squareBounds = util.computeSquareBounds(s.orientation, bounds, key)
+
+  const rel: NumberPair = [
+    (asWhite ? 0 : 7) * squareBounds.width + bounds.left,
+    (asWhite ? 8 : -1) * squareBounds.height + bounds.top
+  ]
+
+  s.draggable.current = {
+    orig: key,
+    origPos: util.key2pos(key),
+    piece,
+    rel,
+    epos: position,
+    pos: [position[0] - rel[0], position[1] - rel[1]],
+    dec: s.draggable.magnified ?
+      [-squareBounds.width, -squareBounds.height * 2] :
+      [-squareBounds.width / 2, -squareBounds.height / 2],
+    over: null,
+    prevOver: null,
+    started: true,
+    element: util.getPieceByKey(dom, key),
+    originTarget: e.target,
+    previouslySelected: null,
+    newPiece: true,
+    force: force || false,
+    showGhost: false
+  }
+  processDrag(ctrl)
 }
 
 function start(ctrl: Chessground, e: TouchEvent) {
@@ -73,7 +117,7 @@ function start(ctrl: Chessground, e: TouchEvent) {
       started: false,
       over: orig,
       prevOver: null,
-      draggingPiece: util.getPieceByKey(dom, orig),
+      element: util.getPieceByKey(dom, orig),
       originTarget: e.target,
       showGhost: state.draggable.showGhost,
       scheduledAnimationFrame: false
@@ -111,7 +155,7 @@ function processDrag(ctrl: Chessground) {
         state.animation.current = null
       }
 
-      const pieceEl = cur.draggingPiece
+      const pieceEl = cur.element
 
       if (cur.started && pieceEl) {
 
@@ -203,17 +247,23 @@ function end(ctrl: Chessground, e: TouchEvent) {
   removeDragElements(dom)
   board.unsetPremove(state)
   board.unsetPredrop(state)
+  // regular drag'n drop move (or crazy drop)
   if (cur.started && dest) {
     if (cur.newPiece) {
-      board.dropNewPiece(state, cur.orig, dest)
+      board.dropNewPiece(state, cur.orig, dest, cur.force)
     }
     else {
       board.userMove(state, cur.orig, dest)
     }
   }
+  // board editor mode: delete any piece dropped off the board
   else if (cur.started && draggable.deleteOnDropOff) {
     delete state.pieces[cur.orig]
     setTimeout(state.events.change, 0)
+  }
+  // crazy invalid drop (no dest): delete the piece
+  else if (cur.newPiece) {
+    delete state.pieces[cur.orig]
   }
 
   if (cur && cur.orig === cur.previouslySelected && (cur.orig === dest || !dest)) {
@@ -234,6 +284,7 @@ function cancel(ctrl: Chessground) {
 }
 
 export default {
+  dragNewPiece,
   start,
   move,
   end,

@@ -22,13 +22,6 @@ export function setPieces(state: State, pieces: cg.PiecesDiff) {
   }
 }
 
-// TODO fixme
-export function setDragPiece(state: State, key: Key, piece: Piece, dragOpts: any) {
-  state.pieces[key] = piece
-  state.draggable.current = dragOpts
-  if (state.draggable.current) state.draggable.current.piece = piece
-}
-
 export function setCheck(state: State, color: Color | boolean) {
   if (color === true) color = state.turnColor
   if (!color) state.check = null
@@ -108,11 +101,11 @@ export function userMove(state: State, orig: Key, dest: Key): boolean {
   return false
 }
 
-export function dropNewPiece(state: State, orig: Key, dest: Key) {
-  if (canDrop(state, orig, dest)) {
+export function dropNewPiece(state: State, orig: Key, dest: Key, force = false) {
+  if (canDrop(state, orig, dest) || force) {
     const piece = state.pieces[orig]
     delete state.pieces[orig]
-    baseNewPiece(state, piece, dest)
+    baseNewPiece(state, piece, dest, force)
     setTimeout(() => {
       if (state.movable.events.afterNewPiece) state.movable.events.afterNewPiece(piece.role, dest, {
         premove: false,
@@ -293,8 +286,11 @@ function baseMove(state: State, orig: Key, dest: Key): boolean {
   return true
 }
 
-function baseNewPiece(state: State, piece: Piece, key: Key): boolean {
-  if (state.pieces[key]) return false
+function baseNewPiece(state: State, piece: Piece, key: Key, force = false): boolean {
+  if (state.pieces[key]) {
+    if (force) delete state.pieces[key]
+    else return false
+  }
   setTimeout(() => {
     if (state.events.dropNewPiece) state.events.dropNewPiece(piece, key)
   })

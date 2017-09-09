@@ -138,9 +138,8 @@ export default class Chessground {
     anim(state => board.setPieces(state, pieces), this)
   }
 
-  // useful for board editor only as a workaround for ios issue
-  setDragPiece(key: Key, piece: Piece, dragOpts: any): void {
-    anim(state => board.setDragPiece(state, key, piece, dragOpts), this)
+  dragNewPiece(e: TouchEvent, piece: Piece, force = false): void {
+    drag.dragNewPiece(this, piece, e, force)
   }
 
   selectSquare(key: Key | null): void {

@@ -1,4 +1,5 @@
 import * as last from 'lodash/last'
+import Chessground from '../../chessground/Chessground'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import signals from '../../signals'
@@ -270,7 +271,7 @@ export default function ctrl(vnode) {
       }
     }
     if (this.chessground) this.chessground.reconfigure(chessgroundConf)
-    else this.chessground = new chessground.controller(chessgroundConf)
+    else this.chessground = new Chessground(chessgroundConf)
     redraw()
   }.bind(this)
 

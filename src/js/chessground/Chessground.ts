@@ -124,7 +124,7 @@ export default class Chessground {
     anim(state => configureBoard(state, config), this)
   }
 
-  toggleOrientation(): void {
+  toggleOrientation = (): void => {
     anim(board.toggleOrientation, this)
   }
 
@@ -175,7 +175,7 @@ export default class Chessground {
     }, this)
   }
 
-  playPremove(): boolean {
+  playPremove = (): boolean => {
 
     if (this.state.premovable.current) {
       if (anim(board.playPremove, this)) return true
@@ -185,7 +185,7 @@ export default class Chessground {
     return false
   }
 
-  playPredrop(validate: (d: cg.Drop) => boolean): boolean {
+  playPredrop = (validate: (d: cg.Drop) => boolean): boolean => {
 
     if (this.state.predroppable.current) {
       const result = board.playPredrop(this.state, validate)
@@ -195,24 +195,24 @@ export default class Chessground {
     return false
   }
 
-  cancelPremove(): void {
+  cancelPremove = (): void => {
     skipAnim(board.unsetPremove, this)
   }
 
-  cancelPredrop(): void {
+  cancelPredrop = (): void => {
     skipAnim(board.unsetPredrop, this)
   }
 
-  setCheck(a: Color | boolean) {
+  setCheck = (a: Color | boolean) => {
     skipAnim(state => board.setCheck(state, a), this)
   }
 
-  cancelMove(): void {
+  cancelMove = (): void => {
     drag.cancel(this)
     skipAnim(state => board.cancelMove(state), this)
   }
 
-  stop() {
+  stop = () => {
     drag.cancel(this)
     skipAnim(state => board.stop(state), this)
   }

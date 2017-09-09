@@ -35,7 +35,7 @@ function renderContent(ctrl) {
   const board = h(Board, {
     data: ctrl.data,
     bounds,
-    chessgroundCtrl: ctrl.chessground
+    chessground: ctrl.chessground
   })
 
   if (isPortrait) {

@@ -183,8 +183,8 @@ function renderLinks(user?: Session) {
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="tv" data-route="/tv">
-        <span data-icon="1"/>{i18n('watchLichessTV')}
+      <li className="side_link" key="tournament" data-route="/tournament">
+        <span className="fa fa-trophy"/>{i18n('tournament')}
       </li> : null
       }
       {hasNetwork() ?
@@ -193,13 +193,13 @@ function renderLinks(user?: Session) {
       </li> : null
       }
       {hasNetwork() ?
-      <li className="side_link" key="tournament" data-route="/tournament">
-        <span className="fa fa-trophy"/>{i18n('tournament')}
+      <li className="sep_link" key="sep_link_community">
+        {i18n('community')}
       </li> : null
       }
       {hasNetwork() ?
-      <li className="sep_link" key="sep_link_community">
-        {i18n('community')}
+      <li className="side_link" key="tv" data-route="/tv">
+        <span data-icon="1"/>{i18n('watchLichessTV')}
       </li> : null
       }
       {hasNetwork() ?

@@ -26,7 +26,7 @@ interface Config {
   minimalDom: boolean
   coordinates: boolean
   lastMove: KeyPair | null
-  bounds?: Bounds
+  initBounds?: ClientRect
 }
 
 interface State {
@@ -89,6 +89,18 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
 export default ViewOnlyBoard
 
 function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
+  // view only boards needs only width and height
+  let initBounds
+  if (bounds) {
+    initBounds = {
+      height: bounds.height,
+      width: bounds.width,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
+    }
+  }
   const conf: Config = {
     batchRAF: batchRequestAnimationFrame,
     viewOnly: true,
@@ -97,7 +109,7 @@ function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
     fen,
     lastMove: lastMove ? uciToMove(lastMove) : null,
     orientation: orientation || 'white',
-    bounds
+    initBounds
   }
 
   return conf

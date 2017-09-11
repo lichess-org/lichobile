@@ -26,16 +26,12 @@ const Board: Mithril.Component<Attrs, State> = {
 
     const { chessground, bounds } = vnode.attrs
 
-    chessground.setBounds(bounds)
-
     this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
-      if (chessground) {
-        chessground.attach(dom as HTMLElement)
-      }
+      chessground.attach(dom as HTMLElement, bounds)
     }
 
     this.boardOnRemove = () => {
-      if (chessground) chessground.detach()
+      chessground.detach()
     }
 
     this.pieceTheme = settings.general.theme.piece()

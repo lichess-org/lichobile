@@ -18,7 +18,7 @@ export default class Chessground {
     this.state = initBoard(cfg)
   }
 
-  attach(wrapper: HTMLElement) {
+  attach(wrapper: HTMLElement, bounds?: ClientRect) {
     const board = document.createElement('div')
     board.className = 'cg-board'
     if (this.state.viewOnly) board.className += ' view-only'
@@ -29,7 +29,7 @@ export default class Chessground {
     this.dom = {
       board,
       elements: {},
-      bounds: this.state.initBounds || wrapper.getBoundingClientRect()
+      bounds: bounds || this.state.initBounds || wrapper.getBoundingClientRect()
     }
 
     this.redrawSync()
@@ -71,9 +71,6 @@ export default class Chessground {
     window.removeEventListener('resize', onresize)
   }
 
-  // view-only needs only `width` and `height` props
-  // manipulables board needs also `top` and `left`
-  // TODO fixme
   setBounds = (bounds: ClientRect) => {
     if (this.dom) this.dom.bounds = bounds
   }

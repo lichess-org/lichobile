@@ -4,8 +4,8 @@ import { brushes } from './brushes'
 
 export interface Shape {
   brush: string
-  orig: Pos
-  dest?: Pos
+  orig: Key
+  dest?: Key
   piece?: Piece
 }
 

@@ -11,13 +11,13 @@ const uciRoleMap: {[k: string]: Role } = {
   q: 'queen',
 }
 
-export function uciToMove(uci: string): [Pos, Pos] {
-  return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)]
+export function uciToMove(uci: string): KeyPair {
+  return [<Key>uci.substr(0, 2), <Key>uci.substr(2, 2)]
 }
 
-export function uciToMoveOrDrop(uci: string): [Pos, Pos] {
-  if (uci[1] === '@') return [<Pos>uci.substr(2, 2), <Pos>uci.substr(2, 2)]
-  return [<Pos>uci.substr(0, 2), <Pos>uci.substr(2, 2)]
+export function uciToMoveOrDrop(uci: string): KeyPair {
+  if (uci[1] === '@') return [<Key>uci.substr(2, 2), <Key>uci.substr(2, 2)]
+  return [<Key>uci.substr(0, 2), <Key>uci.substr(2, 2)]
 }
 
 export function uciToProm(uci: string): Role | undefined {
@@ -25,14 +25,14 @@ export function uciToProm(uci: string): Role | undefined {
   return uciRoleMap[p]
 }
 
-export function uciToDropPos(uci: string): Pos {
-  return <Pos>uci.substr(2, 2)
+export function uciToDropPos(uci: string): Key {
+  return <Key>uci.substr(2, 2)
 }
 
 export function uciToDropRole(uci: string): Role {
   return uciRoleMap[uci.substr(0, 1)]
 }
 
-export function uciTolastDrop(uci: string): [Pos, Pos] {
-  return [<Pos>uci.substr(2, 2), <Pos>uci.substr(2, 2)]
+export function uciTolastDrop(uci: string): KeyPair {
+  return [<Key>uci.substr(2, 2), <Key>uci.substr(2, 2)]
 }

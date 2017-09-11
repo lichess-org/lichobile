@@ -1,3 +1,4 @@
+import Chessground from '../../../chessground/Chessground'
 import Replay from '../offlineRound/Replay'
 import { OnlineGameData, OfflineGameData, GameData, GameStatus } from '../../../lichess/interfaces/game'
 import { GameSituation } from '../../../chess'
@@ -6,12 +7,12 @@ export type Position = 'player' | 'opponent'
 export type Material = { [role: string]: number }
 
 export interface BoardInterface {
-  chessground: Chessground.Controller
+  chessground: Chessground
   canDrop(): boolean
 }
 
 export interface PromotingInterface {
-  chessground: Chessground.Controller
+  chessground: Chessground
   data: GameData
   player: () => Color
 }
@@ -32,7 +33,7 @@ export interface OnlineRoundInterface extends RoundInterface {
 
   onReload(cfg: OnlineGameData): void
   reloadGameData(): void
-  sendMove(orig: Pos, dest: Pos, prom: Role, isPremove?: boolean): void
+  sendMove(orig: Key, dest: Key, prom: Role, isPremove?: boolean): void
 }
 
 export interface OfflineRoundInterface extends RoundInterface {

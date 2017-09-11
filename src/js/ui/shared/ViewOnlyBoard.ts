@@ -1,5 +1,6 @@
 import * as h from 'mithril/hyperscript'
-import chessground from '../../chessground'
+import { batchRequestAnimationFrame } from '../../utils/batchRAF'
+import Chessground from '../../chessground/Chessground'
 import { uciToMove } from '../../utils/chessFormat'
 import settings from '../../settings'
 
@@ -18,31 +19,31 @@ export interface Attrs {
 }
 
 interface Config {
+  batchRAF: (c: () => void) => void
   fen: string
   orientation: Color
   viewOnly: boolean
   minimalDom: boolean
   coordinates: boolean
-  lastMove?: [Pos, Pos]
-  bounds?: Bounds
+  lastMove: KeyPair | null
+  initBounds?: ClientRect
 }
 
 interface State {
-  ground: Chessground.Controller
+  ground: Chessground
   pieceTheme: string
   boardTheme: string
 }
 
 const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
   oninit({ attrs }) {
-    const config = makeConfig(attrs)
     this.pieceTheme = settings.general.theme.piece()
     this.boardTheme = settings.general.theme.board()
-    this.ground = new chessground.controller(config)
+    this.ground = new Chessground(makeConfig(attrs))
   },
 
   oncreate({ dom }) {
-    chessground.render(dom, this.ground)
+    this.ground.attach(dom as HTMLElement)
   },
 
   onbeforeupdate({ attrs }, { attrs: oldattrs }) {
@@ -63,12 +64,13 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
       ...attrs,
       lastMove: attrs.lastMove ? uciToMove(attrs.lastMove) : undefined
     }
-    if (attrs.bounds) this.ground.setBounds(attrs.bounds)
+    // view only board care only about width and height
+    if (attrs.bounds) this.ground.setBounds(attrs.bounds as ClientRect)
     this.ground.set(conf)
   },
 
   onremove() {
-    this.ground.unload()
+    this.ground.detach()
   },
 
   view({ attrs }) {
@@ -87,14 +89,27 @@ const ViewOnlyBoard: Mithril.Component<Attrs, State> = {
 export default ViewOnlyBoard
 
 function makeConfig({ fen, lastMove, orientation, bounds }: Attrs) {
+  // view only boards needs only width and height
+  let initBounds
+  if (bounds) {
+    initBounds = {
+      height: bounds.height,
+      width: bounds.width,
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
+    }
+  }
   const conf: Config = {
+    batchRAF: batchRequestAnimationFrame,
     viewOnly: true,
     minimalDom: true,
     coordinates: false,
     fen,
-    lastMove: lastMove ? uciToMove(lastMove) : undefined,
+    lastMove: lastMove ? uciToMove(lastMove) : null,
     orientation: orientation || 'white',
-    bounds
+    initBounds
   }
 
   return conf

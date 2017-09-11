@@ -1,4 +1,5 @@
 import i18n from '../../i18n'
+import Chessground from '../../chessground/Chessground'
 import router from '../../router'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
@@ -34,7 +35,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   public data: OfflineGameData
   public actions: AiActionsCtrl
   public newGameMenu: NewAiGameCtrl
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public replay: Replay
   public vm: AiVM
 
@@ -201,8 +202,8 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
   }
 
   public onEngineMove = (bestmove: string) => {
-    const from = <Pos>bestmove.slice(0, 2)
-    const to = <Pos>bestmove.slice(2, 4)
+    const from = <Key>bestmove.slice(0, 2)
+    const to = <Key>bestmove.slice(2, 4)
     this.vm.engineSearching = false
     this.chessground.apiMove(from, to)
     this.replay.addMove(from, to)
@@ -237,17 +238,17 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     return !sit.end && sit.player !== this.data.player.color
   }
 
-  private onPromotion = (orig: Pos, dest: Pos, role: Role) => {
+  private onPromotion = (orig: Key, dest: Key, role: Role) => {
     this.replay.addMove(orig, dest, role)
   }
 
-  private userMove = (orig: Pos, dest: Pos) => {
+  private userMove = (orig: Key, dest: Key) => {
     if (!promotion.start(this.chessground, orig, dest, this.onPromotion)) {
       this.replay.addMove(orig, dest)
     }
   }
 
-  private onMove = (_: Pos, dest: Pos, capturedPiece: Piece) => {
+  private onMove = (_: Key, dest: Key, capturedPiece: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest)
@@ -260,7 +261,7 @@ export default class AiRound implements AiRoundInterface, PromotingInterface {
     vibrate.quick()
   }
 
-  private onUserNewPiece = (role: Role, key: Pos) => {
+  private onUserNewPiece = (role: Role, key: Key) => {
     const sit = this.replay.situation()
     if (crazyValid.drop(this.data, role, key, sit.drops)) {
       this.replay.addDrop(role, key)

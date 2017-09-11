@@ -1,5 +1,4 @@
 import * as h from 'mithril/hyperscript'
-import chessground from '../../chessground'
 import { getBoardBounds } from '../helper'
 import Board from '../shared/Board'
 import {
@@ -15,7 +14,7 @@ import AiRound from './AiRound'
 
 export function renderContent(ctrl: AiRound) {
 
-  const material = chessground.board.getMaterialDiff(ctrl.chessground.data)
+  const material = ctrl.chessground.getMaterialDiff()
   const isPortrait = helper.isPortrait()
   const bounds = getBoardBounds(helper.viewportDim(), isPortrait, 'game')
   const replayTable = renderReplayTable(ctrl.replay)
@@ -32,7 +31,7 @@ export function renderContent(ctrl: AiRound) {
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
-    chessgroundCtrl: ctrl.chessground,
+    chessground: ctrl.chessground,
     bounds,
     isPortrait
   })

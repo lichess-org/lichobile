@@ -18,8 +18,6 @@ export interface Game {
   turns?: number
   lastMove?: string
   perf?: PerfKey
-  // FIXM
-  check?: string | boolean
   tournamentId?: string
   createdAt?: Timestamp
   boosted?: boolean
@@ -35,12 +33,10 @@ export interface OnlineGame extends Game {
   speed: Speed
   perf: PerfKey
   startedAtTurn: number
-  check?: string
   importedBy?: string
 }
 
 export interface OfflineGame extends Game {
-  check?: boolean
 }
 
 export interface Player {

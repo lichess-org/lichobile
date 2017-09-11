@@ -1,3 +1,4 @@
+import * as cg from '../../chessground/interfaces'
 import { GameData, GameStep, Opening } from '../../lichess/interfaces/game'
 import AnalyseCtrl from './AnalyseCtrl'
 
@@ -126,7 +127,7 @@ export interface VM {
   path: Path
   pathStr: string
   step?: AnalysisStep
-  cgConfig?: Chessground.SetConfig
+  cgConfig?: cg.SetConfig
   variationMenu?: Path
   flip: boolean
   smallBoard: boolean

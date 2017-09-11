@@ -1,5 +1,6 @@
 import * as debounce from 'lodash/debounce'
-import chessground from '../../chessground'
+import Chessground from '../../chessground/Chessground'
+import cgDrag from '../../chessground/drag'
 import router from '../../router'
 import redraw from '../../utils/redraw'
 import settings from '../../settings'
@@ -50,7 +51,7 @@ export default class Editor {
   public menu: MenuInterface
   public pasteFenPopup: MenuInterface
   public continuePopup: ContinuePopupCtrl
-  public chessground: Chessground.Controller
+  public chessground: Chessground
 
   public positions: Mithril.Stream<Array<BoardPosition>>
   public endgamesPositions: Mithril.Stream<Array<BoardPosition>>
@@ -96,14 +97,13 @@ export default class Editor {
       redraw()
     })
 
-    this.chessground = new chessground.controller({
+    this.chessground = new Chessground({
       batchRAF: batchRequestAnimationFrame,
       fen: initFen,
       orientation: 'white',
       movable: {
         free: true,
-        color: 'both',
-        dropOff: 'trash'
+        color: 'both'
       },
       highlight: {
         lastMove: false,
@@ -115,13 +115,9 @@ export default class Editor {
       premovable: {
         enabled: false
       },
-      drawable: {
-        enabled: false
-      },
       draggable: {
-        autoDistance: false,
-        squareTarget: true,
-        magnified: settings.game.magnified()
+        magnified: settings.game.magnified(),
+        deleteOnDropOff: true
       },
       events: {
         change: () => {
@@ -132,8 +128,7 @@ export default class Editor {
           this.data.editor.moves('1')
           this.updateHref()
         }
-      },
-      disableContextMenu: true
+      }
     })
   }
 
@@ -148,8 +143,8 @@ export default class Editor {
   }, 250)
 
   public onstart = (e: TouchEvent) => drag(this, e)
-  public onmove = (e: TouchEvent) => chessground.drag.move(this.chessground.data, e)
-  public onend = (e: TouchEvent) => chessground.drag.end(this.chessground.data, e)
+  public onmove = (e: TouchEvent) => cgDrag.move(this.chessground, e)
+  public onend = (e: TouchEvent) => cgDrag.end(this.chessground, e)
 
   public editorOnCreate = (vn: Mithril.DOMNode) => {
     if (!vn.dom) return

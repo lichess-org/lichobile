@@ -12,14 +12,14 @@ import * as h from 'mithril/hyperscript'
 import Editor from './Editor'
 
 export default function view(ctrl: Editor) {
-  const color = ctrl.chessground.data.orientation
+  const color = ctrl.chessground.state.orientation
   const opposite = color === 'white' ? 'black' : 'white'
   const isPortrait = helper.isPortrait()
   const bounds = helper.getBoardBounds(helper.viewportDim(), isPortrait, 'editor')
 
   const board = h(Board, {
     variant: ctrl.data.game.variant.key,
-    chessgroundCtrl: ctrl.chessground,
+    chessground: ctrl.chessground,
     bounds,
     isPortrait: helper.isPortrait()
   })

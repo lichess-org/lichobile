@@ -2,7 +2,7 @@ import * as gameApi from '../../../../lichess/game'
 import { GameData, PossibleDrops } from '../../../../lichess/interfaces/game'
 
 export default {
-  drop(data: GameData, role: Role, key: Pos, possibleDrops?: PossibleDrops) {
+  drop(data: GameData, role: Role, key: Key, possibleDrops?: PossibleDrops) {
 
     if (!data.game.offline && !gameApi.isPlayerTurn(data)) return false
 

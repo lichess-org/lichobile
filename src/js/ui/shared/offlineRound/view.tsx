@@ -37,7 +37,7 @@ export function renderAntagonist(ctrl: OfflineRoundInterface, content: Mithril.C
     position,
     isCrazy ? 'crazy' : '',
     otbFlip !== undefined ? otbFlip ? 'mode_flip' : 'mode_facing' : '',
-    ctrl.chessground.data.turnColor === 'white' ? 'turn_white' : 'turn_black'
+    ctrl.chessground.state.turnColor === 'white' ? 'turn_white' : 'turn_black'
   ].join(' ')
 
   return (

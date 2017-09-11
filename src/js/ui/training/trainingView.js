@@ -35,7 +35,7 @@ function renderContent(ctrl) {
   const board = h(Board, {
     data: ctrl.data,
     bounds,
-    chessgroundCtrl: ctrl.chessground
+    chessground: ctrl.chessground
   })
 
   if (isPortrait) {
@@ -92,7 +92,7 @@ function renderPlayerTable(ctrl) {
   return (
     <section className="trainingSection">
       <div className="yourTurn">
-        {i18n(ctrl.chessground.data.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
+        {i18n(ctrl.chessground.state.turnColor === ctrl.data.puzzle.color ? 'yourTurn' : 'waiting')}
       </div>
       {renderCommentary(ctrl)}
       {renderResult(ctrl)}

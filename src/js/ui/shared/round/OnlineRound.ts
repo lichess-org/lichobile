@@ -1,4 +1,6 @@
 import * as throttle from 'lodash/throttle'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { saveOfflineGameData, removeOfflineGameData } from '../../../utils/offlineGames'
 import { hasNetwork, boardOrientation, formatTimeInSecs } from '../../../utils'
@@ -47,7 +49,7 @@ interface VM {
 export default class OnlineRound implements OnlineRoundInterface {
   public id: string
   public data: OnlineGameData
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public clock: ClockCtrl | null
   public correspondenceClock: CorresClockCtrl
   public chat: Chat | null
@@ -248,7 +250,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     const isFwd = ply > this.vm.ply
     this.vm.ply = ply
     const s = this.plyStep(ply)
-    const config: Chessground.SetConfig = {
+    const config: cg.SetConfig = {
       fen: s.fen,
       lastMove: s.uci ? chessFormat.uciToMove(s.uci) : undefined,
       check: s.check,
@@ -317,7 +319,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       ((this.data.game.turns - this.data.game.startedAtTurn) > 1 || this.data.clock.running)
   }
 
-  public sendMove(orig: Pos, dest: Pos, prom?: Role, isPremove: boolean = false) {
+  public sendMove(orig: Key, dest: Key, prom?: Role, isPremove: boolean = false) {
     const move = {
       u: orig + dest
     }
@@ -339,7 +341,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  public sendNewPiece(role: Role, key: Pos, isPredrop: boolean) {
+  public sendNewPiece(role: Role, key: Key, isPredrop: boolean) {
     const drop = {
       role: role,
       pos: key
@@ -432,7 +434,7 @@ export default class OnlineRound implements OnlineRoundInterface {
       }
 
       const castlePieces: {[index: string]: Piece | null} = {}
-      if (o.castle && !this.chessground.data.autoCastle) {
+      if (o.castle && !this.chessground.state.autoCastle) {
         const c = o.castle
         castlePieces[c.king[0]] = null
         castlePieces[c.rook[0]] = null
@@ -495,7 +497,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     gameApi.setOnGame(d, playedColor, true)
 
     if (!this.replaying() && playedColor !== d.player.color &&
-      (this.chessground.data.premovable.current || this.chessground.data.predroppable.current.key)) {
+      (this.chessground.state.premovable.current || this.chessground.state.predroppable.current)) {
       // atrocious hack to prevent race condition
       // with explosions and premoves
       // https://github.com/ornicar/lila/issues/343
@@ -630,14 +632,14 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
 
-  private userMove = (orig: Pos, dest: Pos, meta: AfterMoveMeta) => {
+  private userMove = (orig: Key, dest: Key, meta: AfterMoveMeta) => {
     const hasPremove = !!meta.premove
     if (!promotion.start(this, orig, dest, hasPremove)) {
       this.sendMove(orig, dest, undefined, hasPremove)
     }
   }
 
-  private onUserNewPiece = (role: Role, key: Pos, meta: AfterMoveMeta) => {
+  private onUserNewPiece = (role: Role, key: Key, meta: AfterMoveMeta) => {
     if (!this.replaying() && crazyValid.drop(this.data, role, key, this.data.possibleDrops)) {
       this.sendNewPiece(role, key, !!meta.predrop)
     } else {
@@ -645,7 +647,7 @@ export default class OnlineRound implements OnlineRoundInterface {
     }
   }
 
-  private onMove = (_: Pos, dest: Pos, capturedPiece: Piece) => {
+  private onMove = (_: Key, dest: Key, capturedPiece?: Piece) => {
     if (capturedPiece) {
       if (this.data.game.variant.key === 'atomic') {
         atomic.capture(this.chessground, dest)
@@ -668,7 +670,7 @@ export default class OnlineRound implements OnlineRoundInterface {
   }
 
   private playPredrop() {
-    return this.chessground.playPredrop((drop: Chessground.Drop) => {
+    return this.chessground.playPredrop((drop: cg.Drop) => {
       return crazyValid.drop(this.data, drop.role, drop.key, this.data.possibleDrops)
     })
   }

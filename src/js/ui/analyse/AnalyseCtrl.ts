@@ -1,5 +1,6 @@
 import * as debounce from 'lodash/debounce'
 import router from '../../router'
+import Chessground from '../../chessground/Chessground'
 import * as chess from '../../chess'
 import * as chessFormat from '../../utils/chessFormat'
 import redraw from '../../utils/redraw'
@@ -47,15 +48,15 @@ export default class AnalyseCtrl {
   public evalSummary: MenuInterface | null
   public notes: NotesCtrl | null
 
-  public chessground: Chessground.Controller
+  public chessground: Chessground
   public ceval: CevalCtrlInterface
   public explorer: ExplorerCtrlInterface
   private debouncedExplorerSetStep: () => void
 
   public analyse: Analyse
 
-  public static decomposeUci(uci: string): [Pos, Pos, SanChar] {
-    return [<Pos>uci.slice(0, 2), <Pos>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
+  public static decomposeUci(uci: string): [Key, Key, SanChar] {
+    return [<Key>uci.slice(0, 2), <Key>uci.slice(2, 4), <SanChar>uci.slice(4, 5)]
   }
 
   public constructor(data: AnalysisData, source: Source, orientation: Color, shouldGoBack: boolean, ply?: number) {
@@ -328,7 +329,7 @@ export default class AnalyseCtrl {
     return true
   }
 
-  private sendMove = (orig: Pos, dest: Pos, prom?: Role) => {
+  private sendMove = (orig: Key, dest: Key, prom?: Role) => {
     const step = this.vm.step
     if (step) {
       const move: chess.MoveRequest = {
@@ -345,13 +346,13 @@ export default class AnalyseCtrl {
     }
   }
 
-  private userMove = (orig: Pos, dest: Pos, capture: boolean) => {
-    if (capture) sound.capture()
+  private userMove = (orig: Key, dest: Key, captured?: Piece) => {
+    if (captured) sound.capture()
     else sound.move()
     if (!promotion.start(this.chessground, orig, dest, this.sendMove)) this.sendMove(orig, dest)
   }
 
-  private userNewPiece = (piece: Piece, pos: Pos) => {
+  private userNewPiece = (piece: Piece, pos: Key) => {
     const step = this.vm.step
     if (step) {
       if (crazyValid.drop(piece.role, pos, step.drops)) {
@@ -378,7 +379,7 @@ export default class AnalyseCtrl {
     const move = AnalyseCtrl.decomposeUci(uci)
     if (uci[1] === '@') {
       this.chessground.apiNewPiece({
-        color: this.chessground.data.movable.color,
+        color: this.chessground.state.movable.color as Color,
         role: sanToRole[uci[0]]
       }, move[1])
     } else if (!move[2]) {

@@ -1,11 +1,11 @@
 import i18n from '../../i18n'
 import settings from '../../settings'
-import chessground from '../../chessground'
+import Chessground from '../../chessground/Chessground'
 import BoardBrush, { Shape } from './BoardBrush'
 
 export interface Attrs {
   variant: VariantKey
-  chessgroundCtrl: Chessground.Controller
+  chessground: Chessground
   bounds: ClientRect
   isPortrait: boolean
   wrapperClasses?: string
@@ -24,18 +24,14 @@ interface State {
 const Board: Mithril.Component<Attrs, State> = {
   oninit(vnode) {
 
-    const { chessgroundCtrl, bounds } = vnode.attrs
-
-    chessgroundCtrl.setBounds(bounds)
+    const { chessground, bounds } = vnode.attrs
 
     this.boardOnCreate = ({ dom }: Mithril.DOMNode) => {
-      if (chessgroundCtrl) {
-        chessground.render(dom, chessgroundCtrl)
-      }
+      chessground.attach(dom as HTMLElement, bounds)
     }
 
     this.boardOnRemove = () => {
-      if (chessgroundCtrl) chessgroundCtrl.unload()
+      chessground.detach()
     }
 
     this.pieceTheme = settings.general.theme.piece()
@@ -43,11 +39,11 @@ const Board: Mithril.Component<Attrs, State> = {
   },
 
   view(vnode) {
-    const { variant, chessgroundCtrl, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs
+    const { variant, chessground, bounds, wrapperClasses, customPieceTheme, shapes, alert } = vnode.attrs
 
     const boardClass = [
       'display_board',
-      'orientation-' + chessgroundCtrl.data.orientation,
+      'orientation-' + chessground.state.orientation,
       this.boardTheme,
       customPieceTheme || this.pieceTheme,
       variant
@@ -65,17 +61,13 @@ const Board: Mithril.Component<Attrs, State> = {
       width: bounds.width + 'px'
     } : {}
 
-    // fix nasty race condition bug when going from analysis to otb
-    // TODO test that again
-    if (!chessgroundCtrl) return null
-
     return (
       <section className={wrapperClass} style={wrapperStyle}>
         <div className={boardClass}
           oncreate={this.boardOnCreate}
           onremove={this.boardOnRemove}
         />
-        { chessgroundCtrl.data.premovable.current || chessgroundCtrl.data.predroppable.current.key ?
+        { chessground.state.premovable.current || chessground.state.predroppable.current ?
           <div className="board_alert">
             {i18n('premoveEnabledClickAnywhereToCancel')}
           </div> : alert ?
@@ -87,7 +79,7 @@ const Board: Mithril.Component<Attrs, State> = {
           !!shapes ?
             BoardBrush(
               bounds,
-              chessgroundCtrl.data.orientation,
+              chessground.state.orientation,
               shapes,
               this.pieceTheme
             ) : null

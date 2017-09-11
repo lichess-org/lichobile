@@ -1,4 +1,5 @@
-import chessground from '../../../chessground'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
 import redraw from '../../../utils/redraw'
 import { batchRequestAnimationFrame } from '../../../utils/batchRAF'
 import * as gameApi from '../../../lichess/game'
@@ -8,7 +9,7 @@ import settings from '../../../settings'
 import { boardOrientation } from '../../../utils'
 import * as chessFormat from '../../../utils/chessFormat'
 
-function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): any {
+function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): cg.InitConfig {
   const lastStep = data.steps[data.steps.length - 1]
   const lastMove = data.game.lastMove ?
     chessFormat.uciToMove(data.game.lastMove) :
@@ -26,7 +27,7 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
     orientation: boardOrientation(data, flip),
     turnColor: data.game.player,
     lastMove,
-    check: data.game.check,
+    check: lastStep.check,
     coordinates: settings.game.coords(),
     autoCastle: data.game.variant.key === 'standard',
     highlight: {
@@ -61,7 +62,6 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
     },
     draggable: {
       distance: 3,
-      squareTarget: true,
       magnified: settings.game.magnified(),
       preventDefault: data.game.variant.key !== 'crazyhouse'
     }
@@ -71,13 +71,13 @@ function makeConfig(data: OnlineGameData, fen: string, flip: boolean = false): a
 function make(
   data: OnlineGameData,
   fen: string,
-  userMove: (orig: Pos, dest: Pos, meta: AfterMoveMeta) => void,
-  userNewPiece: (role: Role, key: Pos, meta: AfterMoveMeta) => void,
-  onMove: (orig: Pos, dest: Pos, capturedPiece: Piece) => void,
+  userMove: (orig: Key, dest: Key, meta: AfterMoveMeta) => void,
+  userNewPiece: (role: Role, key: Key, meta: AfterMoveMeta) => void,
+  onMove: (orig: Key, dest: Key, capturedPiece?: Piece) => void,
   onNewPiece: () => void
-): Chessground.Controller {
+): Chessground {
   const config = makeConfig(data, fen)
-  config.movable.events = {
+  config.movable!.events = {
     after: userMove,
     afterNewPiece: userNewPiece
   }
@@ -86,16 +86,16 @@ function make(
     dropNewPiece: onNewPiece
   }
   config.viewOnly = data.player.spectator
-  return new chessground.controller(config)
+  return new Chessground(config)
 }
 
-function reload(ground: Chessground.Controller, data: OnlineGameData, fen: string, flip: boolean) {
+function reload(ground: Chessground, data: OnlineGameData, fen: string, flip: boolean) {
   ground.reconfigure(makeConfig(data, fen, flip))
 }
 
-function promote(ground: Chessground.Controller, key: Pos, role: Role) {
-  const pieces: Chessground.Pieces = {}
-  const piece = ground.data.pieces[key]
+function promote(ground: Chessground, key: Key, role: Role) {
+  const pieces: cg.Pieces = {}
+  const piece = ground.state.pieces[key]
   if (piece && piece.role === 'pawn') {
     pieces[key] = {
       color: piece.color,

@@ -1,4 +1,5 @@
-import util from './util'
+import * as cg from './interfaces'
+import * as util from './util'
 
 const initial = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
@@ -41,7 +42,7 @@ export function read(fen: string): { [k: string]: Piece } {
         col = 0
         break
       case '~':
-        pieces[util.pos2key([col, row])].promoted = true
+        pieces[util.pos2key([col, row] as cg.Pos)].promoted = true
         break
       default:
         const nb = ~~c
@@ -49,7 +50,7 @@ export function read(fen: string): { [k: string]: Piece } {
         else {
           ++col
           const role = c.toLowerCase()
-          pieces[util.pos2key([col, row])] = {
+          pieces[util.pos2key([col, row] as cg.Pos)] = {
             role: roles[role],
             color: (c === role ? 'black' : 'white') as Color
           }
@@ -59,7 +60,7 @@ export function read(fen: string): { [k: string]: Piece } {
   return pieces
 }
 
-function write(pieces: Chessground.Pieces) {
+function write(pieces: cg.Pieces) {
   return [8, 7, 6, 5, 4, 3, 2].reduce(
     function(str, nb) {
       return str.replace(new RegExp(Array(nb + 1).join('1'), 'g'), String(nb))

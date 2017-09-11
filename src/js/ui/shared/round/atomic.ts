@@ -1,16 +1,18 @@
-import chessground from '../../../chessground'
+import Chessground from '../../../chessground/Chessground'
+import * as cg from '../../../chessground/interfaces'
+import { key2pos, pos2key } from '../../../chessground/util'
 
-function capture(chessgroundCtrl: Chessground.Controller, key: Pos) {
-  const exploding = []
-  const diff: Chessground.PiecesDiff = {}
-  const orig = chessground.util.key2pos(key)
+function capture(chessgroundCtrl: Chessground, key: Key) {
+  const exploding: Key[] = []
+  const diff: cg.PiecesDiff = {}
+  const orig = key2pos(key)
   for (let x = -1; x < 2; x++) {
     for (let y = -1; y < 2; y++) {
-      const k = chessground.util.pos2key([orig[0] + x, orig[1] + y])
+      const k = pos2key([orig[0] + x, orig[1] + y] as cg.Pos)
       if (k) {
         exploding.push(k)
-        const explodes = chessgroundCtrl.data.pieces[k] && (
-          k === key || chessgroundCtrl.data.pieces[k].role !== 'pawn')
+        const explodes = chessgroundCtrl.state.pieces[k] && (
+          k === key || chessgroundCtrl.state.pieces[k].role !== 'pawn')
         if (explodes) diff[k] = null
       }
     }
@@ -20,10 +22,10 @@ function capture(chessgroundCtrl: Chessground.Controller, key: Pos) {
 }
 
 // needs to explicitly destroy the capturing pawn
-function enpassant(chessgroundCtrl: Chessground.Controller, key: Pos, color: Color) {
-  const pos = chessground.util.key2pos(key)
-  const pawnPos = [pos[0], pos[1] + (color === 'white' ? -1 : 1)]
-  capture(chessgroundCtrl, chessground.util.pos2key(pawnPos))
+function enpassant(chessgroundCtrl: Chessground, key: Key, color: Color) {
+  const pos = key2pos(key)
+  const pawnPos = [pos[0], pos[1] + (color === 'white' ? -1 : 1)] as cg.Pos
+  capture(chessgroundCtrl, pos2key(pawnPos))
 }
 
 export default {

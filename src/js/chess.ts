@@ -63,8 +63,8 @@ export interface SituationResponse {
 export interface MoveRequest {
   variant: VariantKey
   fen: string
-  orig: Pos
-  dest: Pos
+  orig: Key
+  dest: Key
   pgnMoves?: Array<string>
   uciMoves?: Array<string>
   promotion?: Role
@@ -79,7 +79,7 @@ export interface MoveResponse {
 export interface DropRequest {
   variant: VariantKey
   fen: string
-  pos: Pos
+  pos: Key
   role: Role
   pgnMoves?: Array<string>
   uciMoves?: Array<string>

@@ -4,15 +4,15 @@ import redraw from './redraw'
 import { GameData } from '../lichess/interfaces/game'
 import { TournamentClock } from '../lichess/interfaces/tournament'
 
-let sri: string;
+let sri: string
 
 export function currentSri() {
-  return sri || newSri();
+  return sri || newSri()
 }
 
 export function newSri() {
-  sri = Math.random().toString(36).substring(2).slice(0, 10);
-  return sri;
+  sri = Math.random().toString(36).substring(2).slice(0, 10)
+  return sri
 }
 
 // game -> last pos fen
